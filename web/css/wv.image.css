@@ -1,65 +1,64 @@
 .wv-image .ui-dialog-content {
-    padding: 0 10px 0px 10px;
+  padding: 0 10px;
 }
 
 .wv-image select {
-    width: 6em;
-    margin-right: 1em;
+  width: 6em;
+  margin-right: 1em;
 }
 
 .wv-image-header {
-    padding: .5em 0 0 0;
-    font-size: 12px;
-    font-weight: 400;
+  padding: 0.5em 0 0;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .wv-image-download {
-    margin-top: 0.5em;
-    width: 100%;
-    border-collapse: collapse;
+  margin-top: 0.5em;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .wv-image-download th {
-    font-weight: 400;
-    font-size: 12px;
-    text-align: center;
-    padding: .1em;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: center;
+  padding: 0.1em;
 }
 
 .wv-image-download td {
-    border: 1px solid rgba(0, 0, 0, 0);
-    font-weight: 400;
-    font-size: 10px;
-    text-align: center;
-    padding: .1em;
-    width: 50%;
+  border: 1px solid rgba(0, 0, 0, 0);
+  font-weight: 400;
+  font-size: 10px;
+  text-align: center;
+  padding: 0.1em;
+  width: 50%;
 }
 
 .wv-image-download td.wv-image-size-invalid {
-    border: 1px solid #faa;
+  border: 1px solid #faa;
 }
 
 #wv-image-download-button .ui-button-text {
-    font-weight: bold;
-    font-size: 12px;
-    padding: 0.2em 1em;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 0.2em 1em;
 }
 
 .wv-image-coords {
-    position: absolute;
-    z-index: 500;
-    color: white;
-    white-space: pre;
-    color: #fff;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    padding: 5px;
+  position: absolute;
+  z-index: 500;
+  color: white;
+  white-space: pre;
+  color: #fff;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  padding: 5px;
 }
 
 #wv-image-bottom {
-    text-align: left;
+  text-align: left;
 }
 
 #wv-image-top {
-    text-align: right;
+  text-align: right;
 }
-

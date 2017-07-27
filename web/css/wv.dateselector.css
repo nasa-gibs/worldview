@@ -1,159 +1,175 @@
-.wv-date-selector-widget .input-wrapper{
-    background: transparent;
-    border: 1px solid transparent;
-    vertical-align:middle;
-    box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-}
-.wv-date-selector-widget .input-wrapper:nth-child(2){
-    max-width:60px;
-}
-.wv-date-selector-widget .input-wrapper:nth-child(3){
-    max-width:50px;
-}
-.wv-date-selector-widget .input-wrapper:nth-child(4){
-    max-width:35px;
-}
-.wv-date-selector-widget input{
-    height:40px;
-    color:#fff;
-    background:transparent;
-    border:0px;
-    font-family: 'Roboto Mono', monospace;
-    vertical-align:middle;
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    padding:0;
-}
-@media all{
-    .wv-date-selector-widget input::-moz-selection{
-
-    }
-    .wv-date-selector-widget input::selection{
-
-    }
-    .wv-date-selector-widget input::-moz-selection{
-        background:#ffffff;
-        color:#999;
-    }
-    .wv-date-selector-widget input::-webkit-selection{
-
-    }
+.wv-date-selector-widget .input-wrapper {
+  background: transparent;
+  border: 1px solid transparent;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
-.wv-date-selector-widget .focus-guard{
-/*    display:none;
-*/}
-.wv-date-selector-widget .input-wrapper:hover{
-    border-color: #666;
+.wv-date-selector-widget .input-wrapper:nth-child(2) {
+  max-width: 60px;
 }
-.wv-date-selector-widget .input-wrapper:hover .date-arrows{
-    visibility:visible;
+
+.wv-date-selector-widget .input-wrapper:nth-child(3) {
+  max-width: 50px;
 }
-.wv-date-selector-widget .input-wrapper:hover .date-arrows svg path{
-    /*fill: #fff;*/
-    fill: #888;
+
+.wv-date-selector-widget .input-wrapper:nth-child(4) {
+  max-width: 35px;
 }
-.wv-date-selector-widget .input-wrapper.selected{
-    border-color:#fff;
+
+.wv-date-selector-widget input {
+  height: 40px;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  font-family: 'Roboto Mono', monospace;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 0;
 }
-.wv-date-selector-widget .input-wrapper.selected .date-arrows svg path{
-    fill: #fff;
+
+@media all {
+  .wv-date-selector-widget input::-moz-selection {
+    background: #ffffff;
+    color: #999;
+  }
 }
-.wv-date-selector-widget div{
-    display:inline-block;
+
+.wv-date-selector-widget .input-wrapper:hover {
+  border-color: #666;
 }
-.button-action-group,.date-arrows{
+
+.wv-date-selector-widget .input-wrapper:hover .date-arrows {
+  visibility: visible;
+}
+
+.wv-date-selector-widget .input-wrapper:hover .date-arrows svg path {
+  fill: #888;
+}
+
+.wv-date-selector-widget .input-wrapper.selected {
+  border-color: #fff;
+}
+
+.wv-date-selector-widget .input-wrapper.selected .date-arrows svg path {
+  fill: #fff;
+}
+
+.wv-date-selector-widget div {
+  display: inline-block;
+}
+
+.button-action-group,
+.date-arrows {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-.button-action-group{
-  height:60px;
-  width:40px;
-  vertical-align:middle;
-  position:relative;
+
+.button-action-group {
+  height: 60px;
+  width: 40px;
+  vertical-align: middle;
+  position: relative;
 }
 
-
-.wv-date-selector-widget .button-action-group svg path{
-    fill:#fff;
+.wv-date-selector-widget .button-action-group svg path {
+  fill: #fff;
 }
 
-.wv-date-selector-widget .date-arrows-wrapper{
-    vertical-align:middle;
-    visibility:hidden;
-    display:inline-block;
+.wv-date-selector-widget .date-arrows-wrapper {
+  vertical-align: middle;
+  visibility: hidden;
+  display: inline-block;
 }
-.wv-date-selector-widget .date-arrows{
-    display:block;
-    height:10px;
+
+.wv-date-selector-widget .date-arrows {
+  display: block;
+  height: 10px;
 }
-.wv-date-selector-widget .date-arrows svg{
-    vertical-align:top;
-    display:block;
-    margin:0 auto;
+
+.wv-date-selector-widget .date-arrows svg {
+  vertical-align: top;
+  display: block;
+  margin: 0 auto;
 }
-.wv-date-selector-widget .date-arrows svg path{
-    fill:#444;
+
+.wv-date-selector-widget .date-arrows svg path {
+  fill: #444;
 }
+
 .wv-date-selector-widget .input-wrapper:hover .date-arrows:hover svg path {
-    fill:#1a1a1a;
+  fill: #1a1a1a;
 }
-.wv-date-selector-widget .date-arrow-up{
 
+.wv-date-selector-widget .date-arrow-down {
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+  -webkit-filter: FlipV;
+  filter: FlipV;
+  -ms-filter:  "FlipV";
 }
-.wv-date-selector-widget .date-arrow-down{
-    -webkit-transform: scaleY(-1);
-    transform: scaleY(-1);
-    -webkit-filter: FlipV;
-            filter: FlipV;
-    -ms-filter: "FlipV";
+
+.wv-date-selector-widget .date-arrows:hover,
+.wv-date-selector-widget > .button-action-group:hover {
+  background-color: #fff;
+  cursor: pointer;
 }
-.wv-date-selector-widget>.button-action-group:hover,.wv-date-selector-widget .date-arrows:hover{
-    background-color:#fff;
-    cursor:pointer;
+
+.wv-date-selector-widget > .button-action-group.button-disabled:hover {
+  background-color: transparent;
+  cursor: default;
 }
-.wv-date-selector-widget>.button-action-group.button-disabled:hover{
-    background-color:transparent;
-    cursor:default;
-}
+
 .wv-date-selector-widget .button-action-group svg {
-    position: absolute;
-    top: 50%;
-    margin-top: -15px;
-    left: 50%;
-    margin-left: -12px;
+  position: absolute;
+  top: 50%;
+  margin-top: -15px;
+  left: 50%;
+  margin-left: -12px;
 }
-.wv-date-selector-widget #left-arrow-group{
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
+
+.wv-date-selector-widget #left-arrow-group {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
-.wv-date-selector-widget #left-arrow-group svg{
-    -webkit-filter: FlipH;
-            filter: FlipH;
-    -ms-filter: "FlipH";
+
+.wv-date-selector-widget #left-arrow-group svg {
+  -webkit-filter: FlipH;
+  filter: FlipH;
+  -ms-filter:  "FlipH";
 }
-.wv-date-selector-widget>.button-action-group:hover .arrow{
-    fill:#1a1a1a;
-    fill-opacity:1;
-    stroke:none;
+
+.wv-date-selector-widget > .button-action-group:hover .arrow {
+  fill: #1a1a1a;
+  fill-opacity: 1;
+  stroke: none;
 }
-.wv-date-selector-widget>.button-action-group.button-disabled .arrow{
-    fill:#333;
+
+.wv-date-selector-widget > .button-action-group.button-disabled .arrow {
+  fill: #333;
 }
-.wv-date-selector-widget>.button-action-group.button-disabled:hover .arrow{
-    fill:#333;
+
+.wv-date-selector-widget > .button-action-group.button-disabled:hover .arrow {
+  fill: #333;
 }
-.wv-date-selector-widget,#timeline-footer,#timeline-zoom,#timeline-hide{
-    float:left;
+
+#timeline-footer,
+#timeline-hide,
+#timeline-zoom,
+.wv-date-selector-widget {
+  float: left;
 }
+
 .wv-date-selector-widget .wv-animate {
-    color: #fff;
-    font-size: 2.5em;
-    margin: 12px 0 0 2px;
+  color: #fff;
+  font-size: 2.5em;
+  margin: 12px 0 0 2px;
 }
+
 .wv-date-selector-widget .wv-animate:hover {
-    color: #1a1a1a;
+  color: #1a1a1a;
 }

@@ -10,68 +10,76 @@
  */
 
 #productsHolder {
-    border: 1px solid #333;
-    border-bottom-left-radius:5px;
-    border-bottom-right-radius:5px;
-    position:absolute;
-    z-index:2;
-    min-width:286px;
-    width:286px;
-    background: rgba(40,40,40,0.85);
-    left:10px;
-    top:68px;
-    -webkit-box-sizing:border-box;
-    -o-box-sizing:border-box;
-    box-sizing:border-box;
-    padding:0;
+  border: 1px solid #333;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: absolute;
+  z-index: 2;
+  min-width: 286px;
+  width: 286px;
+  background: rgba(40, 40, 40, 0.85);
+  left: 10px;
+  top: 68px;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
 }
 
-#productsHolder main#products{
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    -o-box-sizing:border-box;
-    padding:5px 0 0 0;
-    position:relative;
-    border:1px solid transparent;
+#productsHolder main#products {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  padding: 5px 0 0;
+  position: relative;
+  border: 1px solid transparent;
 }
 
-#productsHolder ul#overlays{
-    margin-bottom:10px;
+#productsHolder ul#overlays {
+  margin-bottom: 10px;
 }
-#productsHolder footer{
-    padding:10px 0;
+
+#productsHolder footer {
+  padding: 10px 0;
 }
+
 #productsHolder footer .action {
-    display:inline-block;
-    border-color:transparent;
-    color: #fff;
-    cursor: pointer;
-    border-radius:0;
-    background: #d54e21;
-    background-image:none;
+  display: inline-block;
+  border-color: transparent;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 0;
+  background: #d54e21;
+  background-image: none;
 }
-#productsHolder footer .action:hover{
-    background:#ccc;
+
+#productsHolder footer .action:hover {
+  background: #ccc;
 }
+
 #productsHolder footer .action.ui-button-disabled {
-    background-color: #000;
-    color: #bebebe;
-    opacity: 1.0;
-    border-color:#666;
+  background-color: #000;
+  color: #bebebe;
+  opacity: 1.0;
+  border-color: #666;
 }
+
 #productsHolder footer .action.ui-state-hover {
-    color: #333;
+  color: #333;
 }
+
 #productsHolder footer .action.ui-state-focus {
-    background: #d54e21;
-    background-image:none;
+  background: #d54e21;
+  background-image: none;
 }
+
 /* perfect scrollbars */
-#productsHolder .ps-scrollbar-y-rail{
-    background-color: transparent;
-    margin-top:5px;
+#productsHolder .ps-scrollbar-y-rail {
+  background-color: transparent;
+  margin-top: 5px;
 }
+
 #productsHolder .ps-scrollbar-y {
-    background:#ccc;
+  background: #ccc;
 }
