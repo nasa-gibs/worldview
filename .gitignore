@@ -3,6 +3,7 @@
 /node_modules
 /web/ext/node_modules
 python
+*.pyc
 .project
 .settings
 .pydevproject

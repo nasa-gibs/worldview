@@ -31,6 +31,9 @@
     margin-left: 25px;
     margin-top: 5px;
 }
+.map-item-list li.item ul {
+    list-style: none;
+}
 .map-item-list li.item:hover,
 .map-item-list li.item-selected {
     background:rgba(250,250,250,1);

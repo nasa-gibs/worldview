@@ -74,9 +74,10 @@
                             <link type="text/css" rel="Stylesheet" href="ext/map/openlayers-3.17.1.wv1/ol.css">
 
     <!-- link.prod --> <!-- <link type="text/css" href="css/wv.css?v=20131218215115174" rel="Stylesheet" /> -->
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.fonts.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.main.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.alert.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/bank.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.main.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.map.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.link.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.palettes.css">
@@ -275,14 +276,12 @@
 <body>
     <div data-role="page" id="app">
         <div data-role="content">
-
             <ul id="wv-toolbar">
                 <li id="wv-link-button" class="wv-toolbar-button"></li>
                 <li id="wv-proj-button" class="wv-toolbar-button"></li>
                 <li id="wv-image-button" class="wv-toolbar-button"></li>
-                <li id="wv-info-button" class="wv-toolbar-button"></li>
+                <li id="wv-info-button" class="wv-toolbar-button wv-status-hide"></li>
             </ul>
-
             <div id="wv-logo"></div>
             <section id="productsHolder">
               <ul id="productsHolder-tabs"></ul>
