@@ -39,6 +39,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var modalHeight;
     var sizeMultiplier;
     var searchBool;
+    var copy;
+    var props ={};
 
     //Visible Layers
     var visible = {};
@@ -95,7 +97,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
 
     //Update modal size
-    var redo = function(){
+    var redo = function() {
         setModalSize();
 
         $( self.selector ).dialog( "option", {
@@ -604,10 +606,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
 
     self.readySearch = function(){
+        copy = config.layerOrder;
         return layerList({
             onClick: function(){},
-            layerArray: config.layerOrder,
-            layers: config.layers
+            layerArray: copy,
+            layers: config.layers,
+            style: 'background: #000;'
         });
     };
     // TODO: Filter layers by settings with projections equal to current projection.
@@ -615,9 +619,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var layerWidget;
 
         $allLayers.empty();
+        $( '#layers-all' ).css( 'height', modalHeight - 40 - 30);
         layerWidget = self.readySearch();
 
-        ReactDOM.render(layerWidget, $allLayers[0]);
+        self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
 
         /*
         _.each( config.layerOrder, function( layerId ) {
@@ -861,6 +866,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         drawDefaultPage();
     };
 
+    //returns each term from search field
     var searchTerms = function() {
         var search = $("#layers-search-input").val().toLowerCase();
         var terms = search.split(/ +/);
@@ -883,6 +889,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         return !layer.projections[models.proj.selected.id];
     };
 
+    //Takes the terms and returns true if the layer isnt part of search
     var filterSearch = function(layer, terms) {
         var search = $(self.selector + "search").val();
         if ( search === "" ) {
@@ -890,6 +897,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
         var filtered = false;
         var names = models.layers.getTitles(layer.id);
+
         $.each(terms, function(index, term) {
             filtered = !names.title.toLowerCase().contains(term) &&
                 !names.subtitle.toLowerCase().contains(term) &&
@@ -902,22 +910,38 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
         return filtered;
     };
-
+    
     var runSearch = _.throttle( function() {
         var search = searchTerms();
+        var copy = [];
 
         $.each(config.layers, function(layerId, layer) {
 
             var fproj = filterProjections(layer);
             var fterms = filterSearch(layer, search);
 
+            //This will return true if the layer needs to be hidden
             var filtered = fproj || fterms;
 
-            var display = filtered ? "none": "block";
-            var selector = "#flat-layer-list li[data-layer='" +
-                wv.util.jqueryEscape(layerId) + "']";
-            $(selector).css("display", display);
+            if( !filtered ) {
+                copy.push(layerId);
+            }
+            //var display = filtered ? "none": "block";
+            //var selector = "#flat-layer-list li[data-layer='" +
+            //    wv.util.jqueryEscape(layerId) + "']";
+            //$(selector).css("display", display);
+            
         });
+
+        props.layerList = copy;
+        layerWidget = layerList({
+            onClick: function(){},
+            layerArray: copy,
+            layers: config.layers
+        });
+        self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
+
+        self.reactList.componentUpdate();
 
         redoScrollbar();
     }, 250, { trailing: true });
