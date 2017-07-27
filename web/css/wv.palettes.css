@@ -45,7 +45,7 @@
     padding-bottom: 2px;
 }
 .bank div.wv-palettes-legend {
-    margin-top: 5px;
+    margin-top: 0;
     position: relative;
 }
 .bank div.wv-palettes-ranges {
@@ -184,10 +184,10 @@
 }
 .wv-palettes-class {
     padding-left: 5px;
-    padding-right: 5px;
+    padding-right: 6px;
     margin-left: 3px;
     border: 1px solid #000;
-    font-size: 11px;
+    font-size: 9.5px;
 }
 .wv-palettes-class-detail {
     margin: 2px 5px 4px 0;
