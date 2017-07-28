@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "color-no-invalid-hex": true,
+    "max-empty-lines": 1,
+  }
+}
