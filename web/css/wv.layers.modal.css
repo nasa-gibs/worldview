@@ -604,7 +604,6 @@
 }
 
 #selected-category .ui-tabs-panel li.measurement-settings-item,
-#selected-category .ui-tabs-panel li.measurement-settings-item iCheck-checkbox,
 #selected-category .ui-tabs-panel li.measurement-settings-item label {
   cursor: pointer;
 }

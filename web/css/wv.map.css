@@ -158,7 +158,7 @@
 
 .wv-coords-map:hover div.coord-btn {
   background-image: none;
-  background: #fff;
+  background-color: #fff;
 }
 
 .wv-coords-map:hover div.coord-btn i {
@@ -193,7 +193,7 @@
 
 .wv-coords-map div.coord-btn:hover {
   background-image: none;
-  background: #fff;
+  background-color: #fff;
 }
 
 .wv-coords-map div.coord-btn:hover i {

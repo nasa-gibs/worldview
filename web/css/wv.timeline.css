@@ -14,14 +14,8 @@
 }
 
 #timeline-footer text {
-  font-size: 14px;
-  font-weight: normal;
-  font-family: 'Roboto Mono', monospace;
-  font-style: normal;
-  font-variant: normal;
-  font-stretch: normal;
+  font: 400 14px/125% 'Roboto Mono', monospace;
   text-align: start;
-  line-height: 125%;
   letter-spacing: 0;
   word-spacing: 0;
   -webkit-writing-mode: lr-tb;
