@@ -86,8 +86,6 @@ p.splash span.highlight {
 button.takeTour {
   font: 400 12px/18px 'Open Sans', sans-serif;
   border: 1px solid #d7dada;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
   border-radius: 6px;
   padding: 10px;
   text-align: center;
@@ -113,8 +111,6 @@ button.takeTour:hover {
 button.skipTour {
   font: 400 12px/18px 'Open Sans', sans-serif;
   border: 1px solid #d7dada;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
   border-radius: 6px;
   padding: 10px;
   text-align: center;

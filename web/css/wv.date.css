@@ -119,6 +119,7 @@ input.ui-slider-input {
 
 .slider {
   margin-bottom: 0;
+  background: --webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.6)), color-stop(50%, rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.8)));
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.6)), color-stop(50%, rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.8)));
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.8) 100%);
   height: 23px;
@@ -184,7 +185,6 @@ div.ui-slider {
 #wv-date-mobile-label {
   padding: 7px;
   border-radius: 5px;
-  border: 1px solid #333;
   position: absolute;
   left: 10px;
   bottom: 85px;

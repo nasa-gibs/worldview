@@ -9,8 +9,6 @@
   display: block;
   width: 20px;
   height: 20px;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
   border-radius: 50%;
   background-color: #69b6d5;
   position: absolute;
@@ -49,8 +47,6 @@
   width: 15px;
   height: 15px;
   line-height: 1.25;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
   border-radius: 50%;
   position: absolute;
   font-size: 12px;

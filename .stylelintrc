@@ -9,6 +9,9 @@
     "shorthand-property-no-redundant-values": true,
     "property-no-unknown": true,
     "keyframe-declaration-no-important": true,
+    "declaration-block-no-duplicate-properties": [true, {
+      "ignore": "consecutive-duplicates"
+    }],
     "max-empty-lines": 1,
   }
 }
