@@ -1,13 +1,13 @@
 ul.menuPicker {
   margin: 0;
   padding: 0;
-  color: white;
+  color: #fff;
   list-style: none;
   display: block;
 }
 
 ul.menuPicker li {
-  border: 1px solid black;
+  border: 1px solid #000;
   background: #666;
   padding: 0.2em 1em;
 }

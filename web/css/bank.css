@@ -89,9 +89,14 @@ h4 {
 .bank h3 {
   display: block;
   color: #ffffff;
-  font-size: 1em;
   border: none;
   text-decoration: none;
+  background: none;
+  padding: 1px 3px;
+  font-size: 0.9em;
+  margin-top: 0;
+  margin-left: 0;
+  text-transform: uppercase;
 }
 
 #callSelectorLink {
@@ -112,15 +117,6 @@ h4 {
 
 .bank .category {
   overflow: hidden;
-}
-
-.bank h3 {
-  background: none;
-  padding: 1px 3px;
-  font-size: 0.9em;
-  margin-top: 0;
-  margin-left: 0;
-  text-transform: uppercase;
 }
 
 .bank li.item {
@@ -240,10 +236,6 @@ img.hideReg {
 
 .bank li.item.productsitem:hover {
   border-color: #fff;
-}
-
-.bank li.item.productsitem .layer-main:hover a.hdanchor i {
-  background-position: 5px -36px;
 }
 
 .productsitem a.hdanchor.hideReg {

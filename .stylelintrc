@@ -24,6 +24,13 @@
     "max-nesting-depth": [1, {
       ignore: "blockless-at-rules"
     }],
+    "no-duplicate-selectors": true,
+    "no-empty-source": true,
+    "no-extra-semicolons": true,
+    "no-invalid-double-slash-comments": true,
+    "no-unknown-animations": true,
+    "color-named": never,
+    "number-max-precision": 6,
     "max-empty-lines": 1,
   }
 }

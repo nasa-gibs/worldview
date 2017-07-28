@@ -14,7 +14,6 @@
 }
 
 .layer-modal div,
-.layer-modal div,
 .layer-modal h1,
 .layer-modal h2,
 .layer-modal h3,
@@ -272,7 +271,7 @@
 #categories-nav {
   height: 35px;
   line-height: 35px;
-  margin: 0;
+  margin: 0 10px 0 0;
   border-bottom: 3px solid #00457b;
 }
 
@@ -300,7 +299,7 @@
 #category-breadcrumb a,
 #category-breadcrumb a:link,
 #category-breadcrumb a:visited {
-  color: blue;
+  color: #0000ff;
 }
 
 #selected-category {
@@ -634,10 +633,6 @@
 #layers-all,
 #selected-category {
   padding-right: 10px;
-}
-
-#categories-nav {
-  margin-right: 10px;
 }
 
 /* perfect-scrollbar */

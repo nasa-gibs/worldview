@@ -115,7 +115,7 @@
 
 .map-item-list li.item h4.mark {
   font-weight: bold;
-  color: red;
+  color: #ff0000;
 }
 
 #wv-events li i.map-marker {

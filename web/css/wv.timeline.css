@@ -349,7 +349,7 @@ g.plot rect.data-bar-invisible {
 
 .x.axis .selection {
   display: block;
-  stroke: steelblue;
+  stroke: #4682b4;
 }
 
 #timeline-zoom {

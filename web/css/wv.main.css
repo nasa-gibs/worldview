@@ -332,7 +332,7 @@ div.horizontalContainer {
   display: none;
   background: rgba(38, 43, 49, 0.45);
   text-shadow: none;
-  color: white;
+  color: #fff;
   float: left;
   font-size: 11px;
   text-align: left;
@@ -364,7 +364,7 @@ div.horizontalContainer {
 }
 
 #transition ul li:hover {
-  border-color: yellow;
+  border-color: #ffff00;
 }
 
 #wv-logo {
@@ -427,7 +427,7 @@ div.horizontalContainer {
 
 .ui-menu {
   position: absolute;
-  width: 100px;
+  width: 150px;
   z-index: 1000;
 }
 
@@ -518,10 +518,6 @@ a:hover {
 
 .error-body {
   margin-top: 10px;
-}
-
-.ui-menu {
-  width: 150px;
 }
 
 .ui-menu-item {
