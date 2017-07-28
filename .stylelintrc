@@ -1,6 +1,14 @@
 {
   "rules": {
     "color-no-invalid-hex": true,
+    "font-family-no-duplicate-names": true,
+    "function-calc-no-unspaced-operator": true,
+    "function-linear-gradient-no-nonstandard-direction": true,
+    "string-no-newline": true,
+    "unit-no-unknown": true,
+    "shorthand-property-no-redundant-values": true,
+    "property-no-unknown": true,
+    "keyframe-declaration-no-important": true,
     "max-empty-lines": 1,
   }
 }
