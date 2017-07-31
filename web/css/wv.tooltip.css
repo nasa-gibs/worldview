@@ -1,41 +1,47 @@
 .wv-tooltip-case {
-	display: inline-block;
-	position: relative;
+  display: inline-block;
+  position: relative;
 }
-	.wv-tooltip-case span {
-		z-index: 2;
-		cursor: pointer;
-		font-weight: bold;
-		color: #ce4c21;
-	}
-	.wv-tooltip-case .wv-tooltip {
-		visibility: hidden;
-		position: absolute;
-		bottom: 100%;
-		border-bottom: 10px solid transparent;
-	}
-	.wv-tooltip-case .wv-tooltip:after {
-		position: absolute;
-		top: 100%;
-		left: 15%;
-		content:"";
-		border-top: 5px solid #000;
-		border-top: 5px solid hsla(0, 0%, 20%, 0.9);
-		border-right: 5px solid transparent;
-		border-left: 5px solid transparent;
-	}
-	.wv-tooltip-case .wv-tooltip ul {
-		background-color: #000;
-  		background-color: hsla(0, 0%, 20%, 0.9);
-  		color: #fff;
-  		padding: 5px 10px;
-		list-style: none;
-	}
-	.wv-tooltip-case .wv-tooltip ul li:hover {
-		cursor: pointer;
-		color: #ce4c21;
-		opacity: 0.9;
-	}
-	.wv-tooltip-case .wv-tooltip ul li + li	{
-		margin-top: 5px;
-	}
+
+.wv-tooltip-case span {
+  z-index: 2;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ce4c21;
+}
+
+.wv-tooltip-case .wv-tooltip {
+  visibility: hidden;
+  position: absolute;
+  bottom: 100%;
+  border-bottom: 10px solid transparent;
+}
+
+.wv-tooltip-case .wv-tooltip:after {
+  position: absolute;
+  top: 100%;
+  left: 15%;
+  content: "";
+  border-top: 5px solid #000;
+  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}
+
+.wv-tooltip-case .wv-tooltip ul {
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  padding: 5px 10px;
+  list-style: none;
+}
+
+.wv-tooltip-case .wv-tooltip ul li:hover {
+  cursor: pointer;
+  color: #ce4c21;
+  opacity: 0.9;
+}
+
+.wv-tooltip-case .wv-tooltip ul li+li {
+  margin-top: 5px;
+}

@@ -85,58 +85,6 @@ module.exports = function(grunt) {
         opt: options,
         apache_version: grunt.option("apache-version") || "22",
 
-        buster: {
-            console: {},
-            report: {
-                test: {
-                    reporter: "xml"
-                }
-            }
-        },
-        nightwatch: {
-            options: {
-                // task options
-                src_folders: ["./e2e/tests"],
-                standalone: true,
-                // download settings
-                jar_version: '3.0.1',
-                globals_path: "./e2e/globals.js",
-                selenium_port: 4444,
-                server_path: "node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.0.1.jar",
-                test_settings: {
-                    firefox: {
-                        "desiredCapabilities": {
-                            "browserName": "firefox",
-                            // "marionette": false, - Windows users
-                            "marionette": true,
-                            "javascriptEnabled": true
-                        },
-                         "cli_args" : {
-                            "webdriver.gecko.driver" : "node_modules/geckodriver/bin/geckodriver"
-                        }
-                    },
-                    chrome: {
-                        "desiredCapabilities": {
-                            "browserName": "chrome"
-                        },
-                         "cli_args" : {
-                            // "webdriver.chrome.driver" : "node_modules/chromedriver/lib/chromedriver/chromedriver.exe" - Windows users
-                            "webdriver.chrome.driver" : "node_modules/chromedriver/lib/chromedriver/chromedriver"
-                        }
-                    }
-                }
-            }
-        },
-        coffee: {
-            build: {
-                expand: true,
-                cwd: "web/coffee",
-                src: ["**/*.coffee"],
-                dest: "web/js",
-                ext: ".js"
-            }
-        },
-
         autoprefix: {
             options: {
                 map: false,
@@ -146,6 +94,25 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: 'web/css/*.css'
+            }
+        },
+
+        buster: {
+            console: {},
+            report: {
+                test: {
+                    reporter: "xml"
+                }
+            }
+        },
+
+        coffee: {
+            build: {
+                expand: true,
+                cwd: "web/coffee",
+                src: ["**/*.coffee"],
+                dest: "web/js",
+                ext: ".js"
             }
         },
 
@@ -355,6 +322,17 @@ module.exports = function(grunt) {
             }
         },
 
+        eslint: {
+            options: {
+                configFile: ".eslintrc",
+                format: "stylish"
+            },
+            src: [
+                "web/js/**/wv.*.js",
+                "test/**/*.js",
+            ]
+        },
+
         exec: {
             config: {
                 command:"bash -c \"PATH=" + pythonPath + ":\"${PATH}\" bin/wv-options-build \"" + env
@@ -481,6 +459,41 @@ module.exports = function(grunt) {
             }
         },
 
+        nightwatch: {
+            options: {
+                // task options
+                src_folders: ["./e2e/tests"],
+                standalone: true,
+                // download settings
+                jar_version: '3.0.1',
+                globals_path: "./e2e/globals.js",
+                selenium_port: 4444,
+                server_path: "node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.0.1.jar",
+                test_settings: {
+                    firefox: {
+                        "desiredCapabilities": {
+                            "browserName": "firefox",
+                            // "marionette": false, - Windows users
+                            "marionette": true,
+                            "javascriptEnabled": true
+                        },
+                         "cli_args" : {
+                            "webdriver.gecko.driver" : "node_modules/geckodriver/bin/geckodriver"
+                        }
+                    },
+                    chrome: {
+                        "desiredCapabilities": {
+                            "browserName": "chrome"
+                        },
+                         "cli_args" : {
+                            // "webdriver.chrome.driver" : "node_modules/chromedriver/lib/chromedriver/chromedriver.exe" - Windows users
+                            "webdriver.chrome.driver" : "node_modules/chromedriver/lib/chromedriver/chromedriver"
+                        }
+                    }
+                }
+            }
+        },
+
         remove: {
             build: ["build"],
             dist: ["dist"],
@@ -492,7 +505,7 @@ module.exports = function(grunt) {
                 "build/worldview-debug/web/**/*.js",
                 "!build/worldview-debug/web/css/wv.css",
                 "!build/worldview-debug/web/js/wv.js",
-		"!build/worldview-debug/web/js/ol.js",
+		            "!build/worldview-debug/web/js/ol.js",
                 "!build/worldview-debug/web/css/bulkDownload.css",
                 "!build/worldview-debug/web/ext/**/*"
             ],
@@ -608,22 +621,27 @@ module.exports = function(grunt) {
                 }]
             },
         },
+
+        stylelint: {
+            options: {
+                configFile: '.stylelintrc',
+                formatter: 'string',
+                ignoreDisables: false,
+                failOnError: true,
+                outputFile: '',
+                reportNeedlessDisables: false,
+                syntax: ''
+              },
+              src: 'web/css/*.css'
+        },
+
         watch: {
             scripts: {
                 files: nodeModuleFiles,
                 tasks: ['update'],
             },
         },
-        eslint: {
-            options: {
-                configFile: ".eslintrc",
-                format: "stylish"
-            },
-            src: [
-                "web/js/**/wv.*.js",
-                "test/**/*.js",
-            ]
-        },
+
         uglify: {
             // Minifiy the concatenated Worldview JavaScript file.
             options: {
@@ -659,7 +677,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-contrib-copy");
-    grunt.loadNpmTasks("grunt-contrib-csslint");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("gruntify-eslint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
@@ -670,10 +687,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-markdown");
     grunt.loadNpmTasks("grunt-minjson");
     grunt.loadNpmTasks("grunt-mkdir");
-    grunt.loadNpmTasks('grunt-postcss');
+    grunt.loadNpmTasks("grunt-postcss");
+    grunt.loadNpmTasks("grunt-stylelint");
     grunt.loadNpmTasks("grunt-text-replace");
     grunt.loadNpmTasks("grunt-rename");
-    grunt.loadNpmTasks('grunt-nightwatch');
+    grunt.loadNpmTasks("grunt-nightwatch");
 
 
     // Lets use "clean" as a target instead of the name of the task
@@ -769,7 +787,7 @@ module.exports = function(grunt) {
     grunt.registerTask("check", ["lint", "test"]);
     grunt.registerTask("clean", ["remove:build"]);
     grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
-    grunt.registerTask("lint", ["eslint"]);
+    grunt.registerTask("lint", ["eslint"], ["stylelint"]);
     grunt.registerTask("test", ["buster:console"]);
     grunt.registerTask("chrome-tests", ["nightwatch:chrome"]);
     grunt.registerTask("firefox-tests", ["nightwatch:firefox"]);
