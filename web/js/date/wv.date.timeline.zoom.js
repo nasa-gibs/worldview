@@ -22,114 +22,116 @@ wv.date.timeline = wv.date.timeline || {};
  */
 wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
 
-    var tl = ui.timeline;
-    var model = models.date;
+  var tl = ui.timeline;
+  var model = models.date;
 
-    var self = {};
+  var self = {};
 
-    self.current = {
-        ticks: {
-            //Placeholders
-            boundary: {
-                
-            },
-            normal: {
-                
-            },
-        },
-        pick: {
-            //Placeholder
-        }
-    };
+  self.current = {
+    ticks: {
+      //Placeholders
+      boundary: {
 
-    self.change = function(amount, event) {
+      },
+      normal: {
 
-        var zoom = tl.config.currentZoom;
+      },
+    },
+    pick: {
+      //Placeholder
+    }
+  };
 
-        zoom += -amount;
-        if ( zoom < 1 ) {
-            zoom = 1;
-        }
-        if ( zoom > 3 ) {
-            zoom = 3;
-        }
+  self.change = function(amount, event) {
 
-        tl.config.zoom.call(this, zoom, event);
+    var zoom = tl.config.currentZoom;
 
-    };
+    zoom += -amount;
+    if (zoom < 1) {
+      zoom = 1;
+    }
+    if (zoom > 3) {
+      zoom = 3;
+    }
 
-    self.drawTicks = function(count, max, aEnd, w, i, s, f, e, p){
-        var mouseOffset, mousePos;
+    tl.config.zoom.call(this, zoom, event);
 
-        if(e){
-            var relX = e.clientX - $('#timeline-footer').offset().left;
-            mousePos = tl.x.invert(relX);
-            mouseOffset = (tl.width-tl.margin.left-tl.margin.right)/2 - relX;
-        }
+  };
 
-        var d1 = tl.data.start(),
-            d2,
-            r1 = (tl.width/2)-((count*w)/2),
-            r2 = (tl.width/2)+((count*w)/2);
+  self.drawTicks = function(count, max, aEnd, w, i, s, f, e, p) {
+    var mouseOffset, mousePos;
 
-        if (max > count){
-            
-            tl.isCropped = false;
-            d2 = tl.data.end();
-            r1 = (tl.width/2)-((count*w)/2);
-            r2 = (tl.width/2)+((count*w)/2);
-        }
-        else{
+    if (e) {
+      var relX = e.clientX - $('#timeline-footer')
+        .offset()
+        .left;
+      mousePos = tl.x.invert(relX);
+      mouseOffset = (tl.width - tl.margin.left - tl.margin.right) / 2 - relX;
+    }
 
-            tl.isCropped = true;
-            d2 = aEnd;
-            r1 = 0;
-            r2 = tl.width;
-        }
+    var d1 = tl.data.start(),
+      d2,
+      r1 = (tl.width / 2) - ((count * w) / 2),
+      r2 = (tl.width / 2) + ((count * w) / 2);
 
-        tl.x.domain([d1,d2])
-            .range([r1,r2]);
+    if (max > count) {
 
-        tl.xAxis.scale(tl.x)
-            .ticks(i, s)
-            .tickFormat(f);
+      tl.isCropped = false;
+      d2 = tl.data.end();
+      r1 = (tl.width / 2) - ((count * w) / 2);
+      r2 = (tl.width / 2) + ((count * w) / 2);
+    } else {
 
-        tl.axisZoom = d3.behavior.zoom()
-            .scale(1)
-            .scaleExtent([1,1])
-            .x(tl.x);
+      tl.isCropped = true;
+      d2 = aEnd;
+      r1 = 0;
+      r2 = tl.width;
+    }
 
-        if(tl.isCropped){
-            tl.axisZoom.xExtent(p);
-        }
-        else{
-            tl.axisZoom.xExtent([tl.data.start(),tl.data.end()]);
-        }
+    tl.x.domain([d1, d2])
+      .range([r1, r2]);
 
-        wv.ui.mouse.wheel(tl.axisZoom, ui).change(self.change);
+    tl.xAxis.scale(tl.x)
+      .ticks(i, s)
+      .tickFormat(f);
 
-        tl.svg.call(tl.axisZoom);
+    tl.axisZoom = d3.behavior.zoom()
+      .scale(1)
+      .scaleExtent([1, 1])
+      .x(tl.x);
 
-        if(e){
-            tl.pan.toCursor(mousePos, mouseOffset);
-        } else {
-            tl.pan.toSelection();
-        }
+    if (tl.isCropped) {
+      tl.axisZoom.xExtent(p);
+    } else {
+      tl.axisZoom.xExtent([tl.data.start(), tl.data.end()]);
+    }
 
-        tl.axis.selectAll('.tick').remove();
+    wv.ui.mouse.wheel(tl.axisZoom, ui)
+      .change(self.change);
 
-        tl.axis.call(tl.xAxis);
+    tl.svg.call(tl.axisZoom);
 
-    };
+    if (e) {
+      tl.pan.toCursor(mousePos, mouseOffset);
+    } else {
+      tl.pan.toSelection();
+    }
 
-    self.refresh = function(){
-        tl.config.zoom(tl.config.currentZoom);
-    };
+    tl.axis.selectAll('.tick')
+      .remove();
 
-    var init = function(){
-        
-    };
+    tl.axis.call(tl.xAxis);
 
-    init();
-    return self;
+  };
+
+  self.refresh = function() {
+    tl.config.zoom(tl.config.currentZoom);
+  };
+
+  var init = function() {
+
+  };
+
+  init();
+  return self;
 };

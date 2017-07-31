@@ -229,4 +229,5 @@
     };
   })(L, ns.Coordinate, ns.Arc, this.edsc.config);
 
-}).call(this);
+})
+.call(this);
