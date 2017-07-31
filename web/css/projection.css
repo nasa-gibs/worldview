@@ -1,57 +1,69 @@
 #projection {
-    overflow: hidden;
-    z-index: 1000;
+  overflow: hidden;
+  z-index: 1000;
 }
+
 #projection div {
-    display: block;
+  display: block;
 }
-#projection a, div.sw_current {
-    display: block !important;
-    width: 40px;
-    height: 40px;
+
+#projection a,
+div.sw_current {
+  display: block !important;
+  width: 40px;
+  height: 40px;
 }
+
 #projection div.sw_current {
-    background-image: url("../images/geographic.png");
+  background-image: url("../images/geographic.png");
 }
+
 #projection div.sw_current:hover {
-    background-image: url("../images/geographicon.png");
+  background-image: url("../images/geographicon.png");
 }
+
 #projection ul li {
-    margin: 0px !important;
+  margin: 0 !important;
 }
+
 #projection ul li div.hidden {
-    display: none;
-    margin-top: 2px;
+  display: none;
+  margin-top: 2px;
 }
+
 #projection ul li div.hidden a.sw_arctic {
-    background-image: url("../images/arctic.png");
+  background-image: url("../images/arctic.png");
 }
+
 #projection ul li div.hidden a.sw_antarctic {
-    background-image: url("../images/antarctic.png");
+  background-image: url("../images/antarctic.png");
 }
+
 #projection ul li div.hidden a.sw_geographic {
-    background-image: url("../images/geographic.png");
+  background-image: url("../images/geographic.png");
 }
+
 #projection ul li div.hidden a.sw_arctic:hover {
-    background-image: url("../images/arcticon.png");
+  background-image: url("../images/arcticon.png");
 }
+
 #projection ul li div.hidden a.sw_antarctic:hover {
-    background-image: url("../images/antarcticon.png");
+  background-image: url("../images/antarcticon.png");
 }
+
 #projection ul li div.hidden a.sw_geographic:hover {
-    background-image: url("../images/geographicon.png");
+  background-image: url("../images/geographicon.png");
 }
 
 #projection ul li:hover div.hidden {
-    z-index: 299;
-    display: block;
-    background: rgba(38, 43, 49, 0.45);
-    border-radius: 0 0 5px 5px;
-    position: relative;
-    top: -1px;
+  z-index: 299;
+  display: block;
+  background: rgba(38, 43, 49, 0.45);
+  border-radius: 0 0 5px 5px;
+  position: relative;
+  top: -1px;
 }
-/*#projection ul li:hover div.hidden a:hover img {border: #fff 1px solid; }*/
+
 #projectioncurrent {
-    border: transparent 1px solid;
+  border: transparent 1px solid;
 }
-/*#projection ul li div.hidden a:hover img {border:#155678 2px solid; }*/
