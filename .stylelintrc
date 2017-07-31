@@ -31,6 +31,7 @@
     "no-unknown-animations": true,
     "color-named": never,
     "number-max-precision": 6,
+    "unit-blacklist": ['rem'],
     "max-empty-lines": 1,
   }
 }

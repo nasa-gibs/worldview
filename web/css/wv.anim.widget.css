@@ -222,14 +222,14 @@
   border-radius: 100%;
   cursor: pointer;
   display: block;
-  height: 1rem;
-  margin-left: -0.5rem;
-  margin-top: -0.65rem;
+  height: 13px;
+  margin-left: -6.5px;
+  margin-top: -8.45px;
   outline: none;
   position: absolute;
   top: 50%;
   transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, -webkit-transform 0.3s ease-out, -webkit-box-shadow 0.3s ease-out;
-  width: 1rem;
+  width: 13px;
 }
 
 .input-range__slider:active {
@@ -259,7 +259,7 @@
 .input-range__label {
   color: #ffffff;
   font-family: 'Open Sans', san-serif;
-  font-size: 0.9rem;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -270,7 +270,7 @@
 
 .input-range__label--value {
   position: absolute;
-  top: -1.8rem;
+  top: -24px;
 }
 
 .input-range__label-container {
@@ -284,9 +284,9 @@
 
 .input-range__track {
   background: #eeeeee;
-  border-radius: 0.3rem;
+  border-radius: 4px;
   display: block;
-  height: 0.2rem;
+  height: 2.6px;
   position: relative;
   -webkit-transition: left 0.3s ease-out, width 0.3s ease-out;
   transition: left 0.3s ease-out, width 0.3s ease-out;
@@ -298,7 +298,7 @@
 
 .input-range__track--container {
   left: 0;
-  margin-top: -0.15rem;
+  margin-top: -2px;
   position: absolute;
   right: 0;
   top: 50%;
@@ -306,7 +306,7 @@
 
 .input-range {
   cursor: pointer;
-  height: 1rem;
+  height: 13px;
   position: relative;
   width: 152px;
 }
