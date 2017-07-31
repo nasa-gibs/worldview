@@ -129,4 +129,5 @@
     };
   })(L, window.edsc.map.geoutil.gcInterpolate);
 
-}).call(this);
+})
+.call(this);

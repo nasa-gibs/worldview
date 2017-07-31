@@ -63,4 +63,5 @@
     return exports = Arc;
   })(L, ns.Coordinate);
 
-}).call(this);
+})
+.call(this);
