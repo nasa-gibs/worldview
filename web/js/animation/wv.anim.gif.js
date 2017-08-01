@@ -213,8 +213,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
       return;
     }
     if (_.find(layers, {
-        id: "Graticule"
-      }) && models.proj.selected.id === "geographic") {
+      id: "Graticule"
+    }) && models.proj.selected.id === "geographic") {
       wv.ui.ask({
         header: "Notice",
         message: GRATICULE_WARNING,
@@ -322,7 +322,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
    */
   var getCoords = function() {
     return [ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]),
-            ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)])];
+      ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)])];
   };
   /*
    * Dimenions from zoom & projection
@@ -338,9 +338,9 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var conversionFactor = proj === "geographic" ? 0.002197 : 256;
     var res = calcRes(0);
     return [
-            Math.round((Math.abs(lonlat[1][0] - lonlat[0][0]) / conversionFactor) / Number(res)), // width
-            Math.round((Math.abs(lonlat[1][1] - lonlat[0][1]) / conversionFactor) / Number(res)) // height
-        ];
+      Math.round((Math.abs(lonlat[1][0] - lonlat[0][0]) / conversionFactor) / Number(res)), // width
+      Math.round((Math.abs(lonlat[1][1] - lonlat[0][1]) / conversionFactor) / Number(res)) // height
+    ];
   };
   /*
    * loops through dates and created image

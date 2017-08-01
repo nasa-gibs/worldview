@@ -39,8 +39,8 @@ wv.util.load = wv.util.load || (function() {
         }, 2000);
       }
       promise.done(function(result) {
-          root[attr] = result;
-        })
+        root[attr] = result;
+      })
         .always(function() {
           delete configPromises[url];
           loading -= 1;

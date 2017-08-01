@@ -482,7 +482,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       .outerHeight(true);
     var secSize = $("#productsHolder")
       .innerHeight() - $("#productsHolder")
-      .height();
+        .height();
     var offset = $("#productsHolder")
       .offset();
     var timeSize = $("#timeline")
@@ -500,7 +500,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     var childrenHeight =
       $('#wv-eventscontent')
-      .outerHeight(true);
+        .outerHeight(true);
 
     if ((maxHeight <= childrenHeight)) {
       $("#wv-events")

@@ -70,8 +70,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     $(self.selector)
       .height(
         $(self.selector)
-        .parent()
-        .outerHeight() - tabs_height
+          .parent()
+          .outerHeight() - tabs_height
       );
 
     var $form = $("<div></div>")
@@ -196,8 +196,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
       $checkbox.attr("name", group);
     }
     if (_.find(model.active, {
-        id: layer.id
-      })) {
+      id: layer.id
+    })) {
       $checkbox.attr("checked", "checked");
     }
 
@@ -213,10 +213,10 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     var heights = [];
     var facets_height =
       $(self.selector + "facetedSearch")
-      .outerHeight(true);
+        .outerHeight(true);
     var container_height =
       $(self.selector)
-      .outerHeight(true) - facets_height;
+        .outerHeight(true) - facets_height;
     $(self.selector + "content")
       .height(container_height);
     var labelHeight = 0;
@@ -368,7 +368,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     var aois = [];
     $.each(config.aoi, function(name, info) {
       if ($.inArray(models.proj.selected.id,
-          info.projections) >= 0) {
+        info.projections) >= 0) {
         if (info.index === 0 || info.index) {
           aois.splice(info.index, 0, name);
         } else {
@@ -426,9 +426,9 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
       filtered = !names.title.toLowerCase()
         .contains(term) &&
         !names.subtitle.toLowerCase()
-        .contains(term) &&
+          .contains(term) &&
         !names.tags.toLowerCase()
-        .contains(term);
+          .contains(term);
       if (filtered) {
         return false;
       }

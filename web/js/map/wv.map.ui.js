@@ -578,26 +578,26 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
       renderer: ["canvas"],
       logo: false,
       controls: [
-                scaleMetric,
-                scaleImperial
-            ],
+        scaleMetric,
+        scaleImperial
+      ],
       interactions: [
-                new ol.interaction.DoubleClickZoom({
+        new ol.interaction.DoubleClickZoom({
           duration: animationDuration
         }),
-                new ol.interaction.DragPan({
+        new ol.interaction.DragPan({
           kinetic: new ol.Kinetic(-0.005, 0.05, 100)
         }),
-                new ol.interaction.PinchZoom({
+        new ol.interaction.PinchZoom({
           duration: animationDuration
         }),
-                new ol.interaction.MouseWheelZoom({
+        new ol.interaction.MouseWheelZoom({
           duration: animationDuration
         }),
-                new ol.interaction.DragZoom({
+        new ol.interaction.DragZoom({
           duration: animationDuration
         })
-            ],
+      ],
       loadTilesWhileAnimating: true
     });
     map.wv = {
@@ -857,7 +857,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
       if ($(e.relatedTarget)
         .hasClass('map-coord') ||
         $(e.relatedTarget)
-        .hasClass('coord-btn')) {
+          .hasClass('coord-btn')) {
         return;
       }
       pixels = map.getEventPixel(e.originalEvent);
@@ -905,7 +905,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         if ($(e.relatedTarget)
           .hasClass('map-coord') ||
           $(e.relatedTarget)
-          .hasClass('coord-btn')) {
+            .hasClass('coord-btn')) {
           return;
         }
         $('#' + mapId)
@@ -915,7 +915,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
         if ($(e.relatedTarget)
           .hasClass('map-coord') ||
           $(e.relatedTarget)
-          .hasClass('coord-btn')) {
+            .hasClass('coord-btn')) {
           return;
         }
         $('#' + mapId)

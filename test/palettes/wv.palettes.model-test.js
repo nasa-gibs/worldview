@@ -40,8 +40,8 @@ buster.testCase("wv.palettes.model", function() {
 
   self["Palettte compresses color range"] = function() {
     config.palettes.custom["blue-1"].colors = [
-            "1", "2", "3", "4", "5", "6"
-        ];
+      "1", "2", "3", "4", "5", "6"
+    ];
     models = fixtures.models(config);
     models.layers.add("terra-aod");
     models.palettes.setCustom("terra-aod", "blue-1");
@@ -54,8 +54,8 @@ buster.testCase("wv.palettes.model", function() {
   self["Palette expands color range"] = function() {
 
     config.palettes.rendered["terra-aod"].maps[0].entries.colors = [
-            "1", "2", "3", "4", "5", "6"
-        ];
+      "1", "2", "3", "4", "5", "6"
+    ];
     models = fixtures.models(config);
     models.layers.add("terra-aod");
     models.palettes.setCustom("terra-aod", "blue-1");
@@ -161,7 +161,7 @@ buster.testCase("wv.palettes.model", function() {
           value: "red-1"
         }]
       }
-        ]);
+    ]);
   };
 
   self["Save threshold minimum"] = function() {
@@ -179,7 +179,7 @@ buster.testCase("wv.palettes.model", function() {
           value: 1
         }]
       }
-        ]);
+    ]);
   };
 
   self["Save threshold maximum"] = function() {
@@ -197,7 +197,7 @@ buster.testCase("wv.palettes.model", function() {
           value: 1
         }]
       }
-        ]);
+    ]);
   };
 
   self["Save threshold range"] = function() {
@@ -219,9 +219,9 @@ buster.testCase("wv.palettes.model", function() {
             id: "max",
             value: 1
           }
-            ]
+        ]
       }
-        ]);
+    ]);
   };
 
   self["No save when not active"] = function() {
@@ -235,7 +235,7 @@ buster.testCase("wv.palettes.model", function() {
         id: "terra-aod",
         attributes: []
       }
-        ]);
+    ]);
   };
 
   self["Load state"] = function() {
@@ -256,9 +256,9 @@ buster.testCase("wv.palettes.model", function() {
               id: "max",
               value: "1"
             }
-                ]
+          ]
         }
-            ]
+      ]
     };
     var errors = [];
     models.layers.load(state, errors);

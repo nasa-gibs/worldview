@@ -111,7 +111,7 @@ buster.testCase("wv.layers.model", function() {
       {
         id: "terra-aod"
       }
-        ];
+    ];
     models = fixtures.models(config);
     stack();
     l.reset();
@@ -334,7 +334,7 @@ buster.testCase("wv.layers.model", function() {
         id: "terra-aod",
         attributes: []
       }
-        ]);
+    ]);
   };
 
   self["Saves state with hidden layer"] = function() {
@@ -349,7 +349,7 @@ buster.testCase("wv.layers.model", function() {
           id: "hidden"
         }]
       }
-        ]);
+    ]);
   };
 
   self["Loads state"] = function() {
@@ -363,7 +363,7 @@ buster.testCase("wv.layers.model", function() {
           id: "terra-aod",
           attributes: []
         }
-            ]
+      ]
     };
     l.load(state, errors);
     buster.assert(_.find(l.active, {
@@ -385,7 +385,7 @@ buster.testCase("wv.layers.model", function() {
             value: true
           }]
         }
-            ]
+      ]
     };
     l.load(state, errors);
     var def = _.find(models.layers.active, {
@@ -406,7 +406,7 @@ buster.testCase("wv.layers.model", function() {
             value: 0.12
           }]
         }
-            ]
+      ]
     };
     l.load(state, errors);
     var def = _.find(models.layers.active, {
@@ -426,7 +426,7 @@ buster.testCase("wv.layers.model", function() {
             value: 5
           }]
         }
-            ]
+      ]
     };
     l.load(state, errors);
     var def = _.find(models.layers.active, {
@@ -446,7 +446,7 @@ buster.testCase("wv.layers.model", function() {
             value: -5
           }]
         }
-            ]
+      ]
     };
     l.load(state, errors);
     var def = _.find(models.layers.active, {
@@ -461,7 +461,7 @@ buster.testCase("wv.layers.model", function() {
       {
         id: "terra-cr"
       }
-        ];
+    ];
     l = wv.layers.model(models, config);
     l.load({});
     buster.assert(l.active[0].id, "terra-cr");
@@ -474,7 +474,7 @@ buster.testCase("wv.layers.model", function() {
         id: "terra-cr",
         hidden: true
       }
-        ];
+    ];
     l = wv.layers.model(models, config);
     l.load({});
     buster.assert(l.active[0].id, "terra-cr");

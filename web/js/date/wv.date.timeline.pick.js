@@ -54,16 +54,16 @@ wv.date.timeline.pick = wv.date.timeline.pick || function(models, config, ui) {
       } else if (nextChange > tl.data.end()) {
         tipDate = new Date(Date.UTC(tl.data.end()
           .getUTCFullYear(),
-          model.selected.getUTCMonth(),
-          model.selected.getUTCDate()));
+        model.selected.getUTCMonth(),
+        model.selected.getUTCDate()));
         self.offset = tl.x(tipDate) - width / 2;
         change.call(this);
         updateChanges(tempPickTipDate);
       } else if (nextChange < tl.data.start()) {
         nextChange = new Date(Date.UTC(tl.data.start()
           .getUTCFullYear(),
-          model.selected.getUTCMonth(),
-          model.selected.getUTCDate()));
+        model.selected.getUTCMonth(),
+        model.selected.getUTCDate()));
       }
     } else if (d3.event.dx < 0) {
       if (prevChange === undefined) {

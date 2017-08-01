@@ -250,7 +250,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
       .offset();
     var left = offset.left + parseInt($("#" + alignTo.id)
       .css("width")) - parseInt($("#" + id)
-      .css("width"));
+        .css("width"));
     $("#" + id)
       .css("left", left + "px");
   };

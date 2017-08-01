@@ -336,8 +336,8 @@ wv.data.model = wv.data.model || function(models, config) {
     var handlerFactory = wv.data.handler.getByName(productConfig.handler);
     var handler = handlerFactory(config, self);
     handler.events.on("query", function() {
-        self.events.trigger(self.EVENT_QUERY);
-      })
+      self.events.trigger(self.EVENT_QUERY);
+    })
       .on("results", function(results) {
         queryExecuting = false;
         if (self.active && !nextQuery) {

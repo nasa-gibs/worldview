@@ -86,7 +86,7 @@ wv.anim.widget = wv.anim.widget || function(models, config, ui) {
         if ((e.keyCode == 32 ||
             e.charCode == 32) && // space click
           !$("#layer-modal")
-          .dialog("isOpen")) { //layer selector is not open
+            .dialog("isOpen")) { //layer selector is not open
           e.preventDefault();
           self.onSpaceBar();
         }

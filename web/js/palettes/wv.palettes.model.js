@@ -52,11 +52,11 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     active.maps = active.maps || [];
     _.each(self.getRendered(layerId)
       .maps,
-      function(palette, index) {
-        if (!active.maps[index]) {
-          active.maps[index] = _.cloneDeep(palette);
-        }
-      });
+    function(palette, index) {
+      if (!active.maps[index]) {
+        active.maps[index] = _.cloneDeep(palette);
+      }
+    });
   };
 
   self.allowed = function(layerId) {
@@ -213,8 +213,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     }
     _.each(self.active, function(def, layerId) {
       if (!_.find(models.layers.get(), {
-          id: layerId
-        })) {
+        id: layerId
+      })) {
         return;
       }
       if (self.getCount(layerId) > 1) {
@@ -227,8 +227,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
 
   self.saveSingle = function(state, layerId) {
     var attr = _.find(state.l, {
-        id: layerId
-      })
+      id: layerId
+    })
       .attributes;
     var def = self.get(layerId);
     if (def.custom) {
@@ -300,8 +300,8 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     }
 
     var attr = _.find(state.l, {
-        id: layerId
-      })
+      id: layerId
+    })
       .attributes;
     if (hasPalettes) {
       attr.push({
@@ -513,7 +513,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
       var values = entries.values;
       var target = (palette.custom) ?
         self.getCustom(palette.custom)
-        .colors : source;
+          .colors : source;
 
       var min = palette.min || 0;
       var max = palette.max || source.length;

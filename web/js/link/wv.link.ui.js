@@ -35,8 +35,8 @@ wv.link.ui = wv.link.ui || function(models, config) {
     $(selector)
       .append($button);
     $button.button({
-        text: false
-      })
+      text: false
+    })
       .click(function() {
         var checked = $("#wv-link-button-check")
           .prop("checked");
@@ -112,11 +112,11 @@ wv.link.ui = wv.link.ui || function(models, config) {
         win = window.open('', '_blank');
       }
       promise.done(function(result) {
-          if (result.status_code === 200) {
-            href = getSharelink(type, result.data.url);
-            openPromisedSocial(href, win);
-          }
-        })
+        if (result.status_code === 200) {
+          href = getSharelink(type, result.data.url);
+          openPromisedSocial(href, win);
+        }
+      })
         .fail(function() {
           href = getSharelink(type, shareLink);
           openPromisedSocial(href, win);
@@ -165,19 +165,19 @@ wv.link.ui = wv.link.ui || function(models, config) {
     models.link.events.on("update", updateLink);
 
     $dialog.dialog({
-        dialogClass: "wv-panel wv-link-panel",
-        title: "Copy this link to share:",
-        show: {
-          effect: "slide",
-          direction: "up"
-        },
-        width: dialogWidth,
-        height: "auto",
-        minHeight: 10,
-        draggable: false,
-        resizable: false,
-        autoOpen: false
-      })
+      dialogClass: "wv-panel wv-link-panel",
+      title: "Copy this link to share:",
+      show: {
+        effect: "slide",
+        direction: "up"
+      },
+      width: dialogWidth,
+      height: "auto",
+      minHeight: 10,
+      draggable: false,
+      resizable: false,
+      autoOpen: false
+    })
       .on("dialogcreate",
         $dialog.prepend(item)
       )
@@ -218,13 +218,13 @@ wv.link.ui = wv.link.ui || function(models, config) {
           $("#permalink_content")
             .val("Please wait...");
           promise.done(function(result) {
-              if (result.status_code === 200) {
-                $('#permalink_content')
-                  .val(result.data.url);
-              } else {
-                error(result.status_code, result.status_txt);
-              }
-            })
+            if (result.status_code === 200) {
+              $('#permalink_content')
+                .val(result.data.url);
+            } else {
+              error(result.status_code, result.status_txt);
+            }
+          })
             .fail(function(jqXHR, textStatus, errorThrown) {
               error(textStatus, errorThrown);
             });

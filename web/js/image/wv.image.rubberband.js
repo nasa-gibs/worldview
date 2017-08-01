@@ -129,8 +129,8 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
       });
       var on = true;
       if (_.find(layers, {
-          id: "Graticule"
-        }) && geographic) {
+        id: "Graticule"
+      }) && geographic) {
         wv.ui.ask({
           header: "Notice",
           message: GRATICLE_WARNING,

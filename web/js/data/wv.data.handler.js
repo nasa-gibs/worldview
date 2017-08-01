@@ -78,20 +78,20 @@ wv.data.handler.base = function(config, model) {
 
     var queriedProduct = model.selectedProduct;
     promise.done(function(data) {
-        try {
-          if (model.selectedProduct !== queriedProduct) {
-            self.events.trigger("results", {
-              granules: [],
-              meta: {}
-            });
-            return;
-          }
-          var results = self._processResults(data);
-          self.events.trigger("results", results);
-        } catch (error) {
-          self.events.trigger("error", "exception", error);
+      try {
+        if (model.selectedProduct !== queriedProduct) {
+          self.events.trigger("results", {
+            granules: [],
+            meta: {}
+          });
+          return;
         }
-      })
+        var results = self._processResults(data);
+        self.events.trigger("results", results);
+      } catch (error) {
+        self.events.trigger("error", "exception", error);
+      }
+    })
       .fail(function(jqXHR, textStatus, errorThrown) {
         if (textStatus === "timeout") {
           self.events.trigger("timeout");
@@ -144,26 +144,26 @@ wv.data.handler.modisSwathMultiDay = function(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = ns.chain();
     chain.processes = [
-            ns.tagProduct(model.selectedProduct),
-            ns.tagNRT(productConfig.nrt),
-            ns.tagURS(productConfig.urs),
-            ns.collectPreferred(model.prefer),
-            ns.preferredFilter(model.prefer),
-            ns.tagVersion(),
-            ns.collectVersions(),
-            ns.versionFilter(),
-            ns.geometryFromCMR(),
-            ns.transform(model.crs),
-            ns.extentFilter(model.crs, self.extents[model.crs]),
-            ns.timeFilter({
+      ns.tagProduct(model.selectedProduct),
+      ns.tagNRT(productConfig.nrt),
+      ns.tagURS(productConfig.urs),
+      ns.collectPreferred(model.prefer),
+      ns.preferredFilter(model.prefer),
+      ns.tagVersion(),
+      ns.collectVersions(),
+      ns.versionFilter(),
+      ns.geometryFromCMR(),
+      ns.transform(model.crs),
+      ns.extentFilter(model.crs, self.extents[model.crs]),
+      ns.timeFilter({
         time: model.time,
         eastZone: spec.eastZone,
         westZone: spec.westZone,
         maxDistance: spec.maxDistance
       }),
-            ns.timeLabel(model.time),
-            ns.connectSwaths(model.crs)
-        ];
+      ns.timeLabel(model.time),
+      ns.connectSwaths(model.crs)
+    ];
     return chain.process(results);
   };
 
@@ -221,14 +221,14 @@ wv.data.handler.collectionList = function(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = ns.chain();
     chain.processes = [
-            ns.tagList(),
-            ns.tagProduct(model.selectedProduct),
-            ns.tagURS(productConfig.urs),
-            ns.tagVersion(),
-            ns.collectVersions(),
-            ns.versionFilter(),
-            ns.productLabel(config.products[model.selectedProduct].name)
-        ];
+      ns.tagList(),
+      ns.tagProduct(model.selectedProduct),
+      ns.tagURS(productConfig.urs),
+      ns.tagVersion(),
+      ns.collectVersions(),
+      ns.versionFilter(),
+      ns.productLabel(config.products[model.selectedProduct].name)
+    ];
     return chain.process(results);
   };
 
@@ -282,7 +282,7 @@ wv.data.handler.collectionMix = function(config, model, spec) {
         item: "science",
         promise: science
       }
-        ]);
+    ]);
   };
 
   self._processResults = function(data) {
@@ -329,17 +329,17 @@ wv.data.handler.list = function(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = ns.chain();
     chain.processes = [
-            ns.tagList(),
-            ns.tagProduct(model.selectedProduct),
-            ns.tagNRT(productConfig.nrt),
-            ns.tagURS(productConfig.urs),
-            ns.collectPreferred(model.prefer),
-            ns.preferredFilter(model.prefer),
-            ns.tagVersion(),
-            ns.collectVersions(),
-            ns.versionFilter(),
-            ns.dateTimeLabel(model.time)
-        ];
+      ns.tagList(),
+      ns.tagProduct(model.selectedProduct),
+      ns.tagNRT(productConfig.nrt),
+      ns.tagURS(productConfig.urs),
+      ns.collectPreferred(model.prefer),
+      ns.preferredFilter(model.prefer),
+      ns.tagVersion(),
+      ns.collectVersions(),
+      ns.versionFilter(),
+      ns.dateTimeLabel(model.time)
+    ];
     return chain.process(results);
   };
 
@@ -388,13 +388,13 @@ wv.data.handler.dailyAMSRE = function(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = ns.chain();
     chain.processes = [
-            ns.tagList(),
-            ns.tagProduct(model.selectedProduct),
-            ns.tagURS(productConfig.urs),
-            ns.tagVersion(),
-            ns.versionFilterExact(productConfig.version),
-            ns.dateTimeLabel(model.time)
-        ];
+      ns.tagList(),
+      ns.tagProduct(model.selectedProduct),
+      ns.tagURS(productConfig.urs),
+      ns.tagVersion(),
+      ns.versionFilterExact(productConfig.version),
+      ns.dateTimeLabel(model.time)
+    ];
     return chain.process(results);
   };
 
@@ -430,7 +430,7 @@ wv.data.handler.modisGrid = function(config, model, spec) {
         item: "grid",
         promise: grid
       }
-        ]);
+    ]);
   };
 
   self._processResults = function(data) {
@@ -445,16 +445,16 @@ wv.data.handler.modisGrid = function(config, model, spec) {
     var ns = wv.data.results;
     var chain = ns.chain();
     chain.processes = [
-            ns.tagProduct(model.selectedProduct),
-            ns.tagVersion(),
-            ns.tagURS(productConfig.urs),
-            ns.collectVersions(),
-            ns.versionFilter(),
-            ns.modisGridIndex(),
-            ns.geometryFromMODISGrid(model.crs),
-            ns.extentFilter(model.crs, self.extents[model.crs]),
-            ns.modisGridLabel()
-        ];
+      ns.tagProduct(model.selectedProduct),
+      ns.tagVersion(),
+      ns.tagURS(productConfig.urs),
+      ns.collectVersions(),
+      ns.versionFilter(),
+      ns.modisGridIndex(),
+      ns.geometryFromMODISGrid(model.crs),
+      ns.extentFilter(model.crs, self.extents[model.crs]),
+      ns.modisGridLabel()
+    ];
     return chain.process(results);
   };
 
@@ -517,7 +517,7 @@ wv.data.handler.modisMix = function(config, model, spec) {
         item: "grid",
         promise: grid
       }
-        ]);
+    ]);
   };
 
   self._processResults = function(data) {
@@ -575,22 +575,22 @@ wv.data.handler.modisSwath = function(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = ns.chain();
     chain.processes = [
-            ns.tagProduct(model.selectedProduct),
-            ns.tagNRT(productConfig.nrt),
-            ns.tagURS(productConfig.urs),
-            ns.collectPreferred(model.prefer),
-            ns.preferredFilter(model.prefer),
-            ns.tagVersion(),
-            ns.collectVersions(),
-            ns.versionFilter(),
-            ns.geometryFromCMR(),
-            ns.antiMeridianMulti(MAX_DISTANCE),
-            ns.densify(),
-            ns.transform(model.crs),
-            ns.extentFilter(model.crs, self.extents[model.crs]),
-            ns.timeLabel(model.time),
-            ns.connectSwaths(model.crs)
-        ];
+      ns.tagProduct(model.selectedProduct),
+      ns.tagNRT(productConfig.nrt),
+      ns.tagURS(productConfig.urs),
+      ns.collectPreferred(model.prefer),
+      ns.preferredFilter(model.prefer),
+      ns.tagVersion(),
+      ns.collectVersions(),
+      ns.versionFilter(),
+      ns.geometryFromCMR(),
+      ns.antiMeridianMulti(MAX_DISTANCE),
+      ns.densify(),
+      ns.transform(model.crs),
+      ns.extentFilter(model.crs, self.extents[model.crs]),
+      ns.timeLabel(model.time),
+      ns.connectSwaths(model.crs)
+    ];
     return chain.process(results);
   };
 
@@ -629,21 +629,21 @@ wv.data.handler.halfOrbit = function(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = ns.chain();
     chain.processes = [
-            ns.orbitFilter(productConfig.orbit),
-            ns.tagProduct(model.selectedProduct),
-            ns.tagNRT(productConfig.nrt),
-            ns.tagURS(productConfig.urs),
-            ns.collectPreferred(model.prefer),
-            ns.preferredFilter(model.prefer),
-            ns.tagVersion(),
-            ns.collectVersions(),
-            ns.versionFilter(),
-            ns.geometryFromCMR(),
-            ns.dividePolygon(),
-            ns.densify(),
-            ns.transform(model.crs),
-            ns.timeLabel(model.time)
-        ];
+      ns.orbitFilter(productConfig.orbit),
+      ns.tagProduct(model.selectedProduct),
+      ns.tagNRT(productConfig.nrt),
+      ns.tagURS(productConfig.urs),
+      ns.collectPreferred(model.prefer),
+      ns.preferredFilter(model.prefer),
+      ns.tagVersion(),
+      ns.collectVersions(),
+      ns.versionFilter(),
+      ns.geometryFromCMR(),
+      ns.dividePolygon(),
+      ns.densify(),
+      ns.transform(model.crs),
+      ns.timeLabel(model.time)
+    ];
     console.log("before process", results);
     return chain.process(results);
   };

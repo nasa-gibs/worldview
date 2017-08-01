@@ -131,8 +131,8 @@ wv.layers.model = wv.layers.model || function(models, config) {
     spec = spec || {};
     var projId = spec.projId || models.proj.selected.id;
     var layers = (spec.layer) ? [_.find(self.active, {
-        id: spec.layer
-      })] :
+      id: spec.layer
+    })] :
       self.active;
     var ignoreRange =
       config.parameters &&
@@ -187,8 +187,8 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
   self.add = function(id, spec) {
     if (_.find(self.active, {
-        id: id
-      })) {
+      id: id
+    })) {
       return;
     }
     spec = spec || {};

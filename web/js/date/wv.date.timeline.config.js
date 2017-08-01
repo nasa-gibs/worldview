@@ -41,22 +41,22 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         dateInterval = d3.time.year.utc;
         tickCount = tl.data.end()
           .getUTCFullYear() - tl.data.start()
-          .getUTCFullYear();
+            .getUTCFullYear();
         tickWidth = 15;
         tickCountMax = Math.ceil(tl.width / tickWidth);
 
         paddedRange = [new Date(tl.data.start()
-            .setUTCFullYear(tl.data.start()
-              .getUTCFullYear() - 10)),
-                           new Date(tl.data.end()
-            .setUTCFullYear(tl.data.end()
-              .getUTCFullYear() + 10))];
+          .setUTCFullYear(tl.data.start()
+            .getUTCFullYear() - 10)),
+        new Date(tl.data.end()
+          .setUTCFullYear(tl.data.end()
+            .getUTCFullYear() + 10))];
 
         altEnd = new Date(tl.data.start()
           .getUTCFullYear() + tickCountMax,
-          tl.data.start()
+        tl.data.start()
           .getUTCMonth(),
-          tl.data.start()
+        tl.data.start()
           .getUTCDate());
 
 
@@ -188,8 +188,6 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
             });
         };
 
-
-
         //Update placement of zoom buttons
         $('.zoom-btn')
           .removeClass(function(index, css) {
@@ -215,29 +213,29 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         dateInterval = d3.time.month.utc;
 
         tickCount = (tl.data.end()
-            .getUTCFullYear() -
+          .getUTCFullYear() -
             tl.data.start()
-            .getUTCFullYear()) * 12 +
+              .getUTCFullYear()) * 12 +
           tl.data.end()
-          .getUTCMonth() + 1 -
+            .getUTCMonth() + 1 -
           tl.data.start()
-          .getUTCMonth();
+            .getUTCMonth();
 
         tickWidth = 11;
         tickCountMax = Math.ceil(tl.width / tickWidth);
 
         paddedRange = [new Date(tl.data.start()
-            .setUTCFullYear(tl.data.start()
-              .getUTCFullYear() - 1)),
-                           new Date(tl.data.end()
-            .setUTCFullYear(tl.data.end()
-              .getUTCFullYear() + 1))];
+          .setUTCFullYear(tl.data.start()
+            .getUTCFullYear() - 1)),
+        new Date(tl.data.end()
+          .setUTCFullYear(tl.data.end()
+            .getUTCFullYear() + 1))];
 
         altEnd = new Date(tl.data.start()
           .getUTCFullYear(),
-          tl.data.start()
+        tl.data.start()
           .getUTCMonth() + tickCountMax,
-          tl.data.start()
+        tl.data.start()
           .getUTCDate());
 
         tl.zoom.drawTicks(tickCount,
@@ -385,17 +383,17 @@ wv.date.timeline.config = wv.date.timeline.config || function(models, config, ui
         tickCountMax = Math.ceil(tl.width / tickWidth);
 
         paddedRange = [new Date(tl.data.start()
-            .setUTCDate(tl.data.start()
-              .getUTCDate() - 15)),
-                           new Date(tl.data.end()
-            .setUTCDate(tl.data.end()
-              .getUTCDate() + 15))];
+          .setUTCDate(tl.data.start()
+            .getUTCDate() - 15)),
+        new Date(tl.data.end()
+          .setUTCDate(tl.data.end()
+            .getUTCDate() + 15))];
 
         altEnd = new Date(tl.data.start()
           .getUTCFullYear(),
-          tl.data.start()
+        tl.data.start()
           .getUTCMonth(),
-          tl.data.start()
+        tl.data.start()
           .getUTCDate() + tickCountMax);
 
         tl.zoom.drawTicks(tickCount,

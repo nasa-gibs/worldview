@@ -116,7 +116,7 @@ fixtures.config = function() {
               minLabel: "0",
               maxLabel: "2"
             }
-                }]
+          }]
         },
         "aqua-aod": {
           id: "aqua-aod",
@@ -131,7 +131,7 @@ fixtures.config = function() {
               minLabel: "0",
               maxLabel: "2"
             }
-                }]
+          }]
         }
       },
       custom: {

@@ -325,14 +325,14 @@ wv.util = (function(self) {
    */
   self.giveWeekDay = function(d) {
     var day = [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-        ];
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
 
     return day[d.getUTCDay()];
   };
@@ -346,19 +346,19 @@ wv.util = (function(self) {
    */
   self.giveMonth = function(d) {
     var month = [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-        ];
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
 
     return month[d.getUTCMonth()];
   };
@@ -709,12 +709,12 @@ wv.util = (function(self) {
 
     $.each(calls, function(index, call) {
       call.promise.done(function(data) {
-          result[call.item] = data;
-          completed += 1;
-          if (completed == calls.length) {
-            deferred.resolve(result);
-          }
-        })
+        result[call.item] = data;
+        completed += 1;
+        if (completed == calls.length) {
+          deferred.resolve(result);
+        }
+      })
         .fail(function(jqXHR, textStatus, errorThrown) {
           deferred.reject(jqXHR, textStatus, errorThrown);
         });

@@ -67,12 +67,12 @@ $(function() {
     wv.layers.validate(errors, config);
 
     parsers = [
-            wv.proj.parse,
-            wv.layers.parse,
-            wv.date.parse,
-            wv.map.parse,
-            wv.palettes.parse
-        ];
+      wv.proj.parse,
+      wv.layers.parse,
+      wv.date.parse,
+      wv.map.parse,
+      wv.palettes.parse
+    ];
     if (config.features.dataDownload) {
       parsers.push(wv.data.parse);
     }
@@ -83,8 +83,8 @@ $(function() {
       parser(state, errors, config);
     });
     requirements = [
-            wv.palettes.requirements(state, config)
-        ];
+      wv.palettes.requirements(state, config)
+    ];
 
     $.when.apply(null, requirements)
       .then(wv.util.wrap(init))
@@ -217,7 +217,6 @@ $(function() {
     if (config.features.alert) {
       ui.alert = wv.notifications.ui(ui, config);
     }
-
 
     //FIXME: Old hack
     $(window)
