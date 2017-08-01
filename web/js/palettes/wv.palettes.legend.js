@@ -159,14 +159,14 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
       $colorBox =
         $row.append(
           $("<span></span>")
-          .addClass("wv-palettes-class")
-          .html("&nbsp;")
-          .css("background-color", wv.util.hexToRGB(color)))
-        .append($("<span></span>")
-          .addClass("wv-palettes-class-label")
-          .attr("data-index", index)
-          .attr("data-class-index", classIndex)
-          .html(label));
+            .addClass("wv-palettes-class")
+            .html("&nbsp;")
+            .css("background-color", wv.util.hexToRGB(color)))
+          .append($("<span></span>")
+            .addClass("wv-palettes-class-label")
+            .attr("data-index", index)
+            .attr("data-class-index", classIndex)
+            .html(label));
       $detailPanel.append($row);
     });
     if (!rendered) {

@@ -169,14 +169,14 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
           if ((newInput > 1000) && (newInput < 9999))
             selectedDateObj = new Date(
               (new Date(model.selected))
-              .setUTCFullYear(newInput));
+                .setUTCFullYear(newInput));
           break;
         case 'month-input-group':
           if (($.isNumeric(newInput)) &&
             (newInput < 13) && (newInput > 0)) {
             selectedDateObj = new Date(
               (new Date(model.selected))
-              .setUTCMonth(newInput - 1));
+                .setUTCMonth(newInput - 1));
           } else {
             var validStr = false;
             var newIntInput;
@@ -191,18 +191,18 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
             if (validStr) {
               selectedDateObj = new Date(
                 (new Date(model.selected))
-                .setUTCMonth(newIntInput));
+                  .setUTCMonth(newIntInput));
             }
           }
           break;
         case 'day-input-group':
           if (newInput > 0 &&
             newInput <= (new Date(model.selected.getYear(),
-                model.selected.getMonth() + 1, 0)
+              model.selected.getMonth() + 1, 0)
               .getDate())) {
             selectedDateObj = new Date(
               (new Date(model.selected))
-              .setUTCDate(newInput));
+                .setUTCDate(newInput));
           }
           break;
       }

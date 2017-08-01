@@ -41,11 +41,11 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     self.width = $(window)
       .outerWidth(true) -
       $("#timeline-header")
-      .outerWidth(true) -
+        .outerWidth(true) -
       $("#timeline-zoom")
-      .outerWidth(true) -
+        .outerWidth(true) -
       $("#timeline-hide")
-      .outerWidth(true) -
+        .outerWidth(true) -
       self.margin.left - self.margin.right - 22;
 
     return self.width;

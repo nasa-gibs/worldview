@@ -14,5 +14,6 @@
   "rules": {
       "strict": 0,
       "semi": [2, "always"],
+      "indent": [2, 2, {"SwitchCase": 1}],
   }
 }

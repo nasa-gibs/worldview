@@ -194,7 +194,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
       .outerHeight(true);
     var secSize = $("#productsHolder")
       .innerHeight() - $("#productsHolder")
-      .height();
+        .height();
     var offset = $("#productsHolder")
       .offset();
     var timeSize = $("#timeline")
@@ -253,7 +253,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
       if (granule.centroid && granule.centroid[crs]) {
         hasCentroids = true;
         if (ol.extent.intersects(extent,
-            granule.centroid[crs].getExtent())) {
+          granule.centroid[crs].getExtent())) {
           inView = true;
           return true;
         }
@@ -808,31 +808,31 @@ wv.data.ui.downloadListPanel = function(config, model) {
     var elements;
     if (product.name !== granule.label) {
       elements = [
-                "<tr data-granule='" + granule.id + "'>",
-                    "<td><input type='button' class='remove' " +
-                        "data-granule='" + granule.id + "' " +
-                        "value='X'></input></td>",
-                    "<td><nobr><ul><li>" + granule.label + "</li></ul></nobr></td>",
-                    "<td class='wv-data-granule-link'>" + linksText(granule.links) + "</td>",
-                "</tr>"
-            ];
+        "<tr data-granule='" + granule.id + "'>",
+        "<td><input type='button' class='remove' " +
+          "data-granule='" + granule.id + "' " +
+          "value='X'></input></td>",
+        "<td><nobr><ul><li>" + granule.label + "</li></ul></nobr></td>",
+        "<td class='wv-data-granule-link'>" + linksText(granule.links) + "</td>",
+        "</tr>"
+      ];
     } else {
       elements = [
-                "<tr data-granule='" + granule.id + "'>",
-                    "<td><input type='button' class='remove' " +
-                        "data-granule='" + granule.id + "' " +
-                        "value='X'></input></td>",
-                    "<td colspan='2'>" + linksText(granule.links) + "</td>",
-                "</tr>"
-            ];
+        "<tr data-granule='" + granule.id + "'>",
+        "<td><input type='button' class='remove' " +
+          "data-granule='" + granule.id + "' " +
+          "value='X'></input></td>",
+        "<td colspan='2'>" + linksText(granule.links) + "</td>",
+        "</tr>"
+      ];
     }
     return elements.join("\n");
   };
 
   var productText = function(product) {
     var elements = [
-            "<h3>" + product.name + "</h3>"
-        ];
+      "<h3>" + product.name + "</h3>"
+    ];
 
     elements.push("<h5>Selected Data</h5>");
     elements.push("<table>");
@@ -997,12 +997,12 @@ wv.data.ui.selectionListPanel = function(model, results) {
 
   var bodyText = function() {
     var elements = [
-            "<div'>",
-            "<table>",
-            resultsText(),
-            "</table>",
-            "</div>"
-        ];
+      "<div'>",
+      "<table>",
+      resultsText(),
+      "</table>",
+      "</div>"
+    ];
     var text = elements.join("\n") + "<br/>";
     return text;
   };

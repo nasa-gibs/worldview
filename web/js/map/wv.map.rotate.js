@@ -93,8 +93,8 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
 
     //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
     $leftButton.button({
-        text: false
-      })
+      text: false
+    })
       .mousedown(function() {
         self.intervalId = setInterval(function() {
           self.rotate(10, dur, map);
@@ -107,8 +107,8 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
       });
 
     $rightButton.button({
-        text: false
-      })
+      text: false
+    })
       .mousedown(function() {
         self.intervalId = setInterval(function() {
           self.rotate(-10, dur, map);
@@ -121,9 +121,9 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
       });
 
     $resetButton.button({
-        label: Number(models.map.rotation * (180 / Math.PI))
-          .toFixed()
-      })
+      label: Number(models.map.rotation * (180 / Math.PI))
+        .toFixed()
+    })
       .mousedown(function() { //reset rotation
         clearInterval(self.intervalId); //stop repeating rotation on mobile
         map.getView()

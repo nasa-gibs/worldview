@@ -137,9 +137,9 @@ buster.testCase("wv.util", function() {
         .resolve("answer"));
     var cache = wv.util.ajaxCache();
     var promise = cache.submit({
-        url: "url",
-        data: "foo=bar"
-      })
+      url: "url",
+      data: "foo=bar"
+    })
       .done(function(data) {
         buster.assert.equals(data, "answer");
         done();

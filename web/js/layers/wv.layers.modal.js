@@ -292,8 +292,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           .on('ifUnchecked', removeLayer);
 
         if (_.find(model.active, {
-            id: current.id
-          })) {
+          id: current.id
+        })) {
           $checkbox.attr("checked", "checked");
         }
 
@@ -495,8 +495,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .on('ifUnchecked', removeLayer);
 
           if (_.find(model.active, {
-              id: layer.id
-            })) {
+            id: layer.id
+          })) {
             $setting.attr("checked", "checked");
           }
 
@@ -719,7 +719,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           $nav.find('.ui-button')
             .removeClass('nav-selected');
           $("label[for=" + $(this)
-              .attr("id") + "]")
+            .attr("id") + "]")
             .addClass('nav-selected');
         });
 
@@ -758,8 +758,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         order: '[data-sort]'
       },
       sortBy: [
-                'order', 'name'
-            ],
+        'order', 'name'
+      ],
       filter: '.layer-category-legacy',
       masonry: {
         gutter: 10
@@ -937,9 +937,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $.each(terms, function(index, term) {
       filtered = !names.title.toLowerCase()
         .contains(term) && !names.subtitle.toLowerCase()
-        .contains(term) && !names.tags.toLowerCase()
-        .contains(term) && !config.layers[layer.id].id.toLowerCase()
-        .contains(term);
+          .contains(term) && !names.tags.toLowerCase()
+          .contains(term) && !config.layers[layer.id].id.toLowerCase()
+          .contains(term);
 
       if (filtered) {
         return false;

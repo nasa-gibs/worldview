@@ -71,8 +71,8 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         nWidth = tl.x(nextData) - tl.x(currentData) + 1;
 
         if (($(this)
-            .find('line:first-child')
-            .attr('y1') !== '-2')) {
+          .find('line:first-child')
+          .attr('y1') !== '-2')) {
           current.select('line')
             .attr("y1", "-2");
         }
@@ -88,8 +88,8 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
           }
         }
         if (($(this)
-            .find('text')
-            .length)) {
+          .find('text')
+          .length)) {
           current.select("text")
             .remove();
         }
@@ -220,8 +220,8 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
         //end repeat
 
         if (($(this)
-            .find('line')
-            .attr('y1') !== '20')) {
+          .find('line')
+          .attr('y1') !== '20')) {
           current.select('line')
             .attr("y1", "20")
             .attr("y2", "-50");
@@ -244,7 +244,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
           .find('circle')
           .length)
           current.insert("svg:circle", "text")
-          .attr("r", "6");
+            .attr("r", "6");
 
         if (!$(this)
           .find('rect')
@@ -440,7 +440,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
   self.removePaddingData = function() {
     self.all.each(function() {
       if (((d3.select(this)
-            .data()[0] < tl.data.start()) ||
+        .data()[0] < tl.data.start()) ||
           (d3.select(this)
             .data()[0] > tl.data.end()))) {
         if (!d3.select(this)

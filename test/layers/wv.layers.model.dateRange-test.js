@@ -74,10 +74,10 @@ buster.testCase("wv.layers.model.dateRange", {
     var range = this.model.dateRange();
     buster.assert.equals(range.start.getTime(),
       new Date(Date.UTC(2000, 0, 1))
-      .getTime());
+        .getTime());
     buster.assert.equals(range.end.getTime(),
       new Date(Date.UTC(2010, 0, 1))
-      .getTime());
+        .getTime());
   },
 
   "Date range with two layers": function() {
@@ -86,10 +86,10 @@ buster.testCase("wv.layers.model.dateRange", {
     var range = this.model.dateRange();
     buster.assert.equals(range.start.getTime(),
       new Date(Date.UTC(2000, 0, 1))
-      .getTime());
+        .getTime());
     buster.assert.equals(range.end.getTime(),
       new Date(Date.UTC(2010, 0, 1))
-      .getTime());
+        .getTime());
   },
 
   "End of date range is today if no end date": function() {
@@ -97,10 +97,10 @@ buster.testCase("wv.layers.model.dateRange", {
     var range = this.model.dateRange();
     buster.assert.equals(range.start.getTime(),
       new Date(Date.UTC(2005, 0, 1))
-      .getTime());
+        .getTime());
     buster.assert.equals(range.end.getTime(),
       new Date(Date.UTC(2010, 0, 1))
-      .getTime());
+        .getTime());
   },
 
   "No date range with static": function() {

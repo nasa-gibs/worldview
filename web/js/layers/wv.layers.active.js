@@ -358,7 +358,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       .outerHeight(true);
     var secSize = $("#productsHolder")
       .innerHeight() - $("#productsHolder")
-      .height();
+        .height();
     var offset = $("#productsHolder")
       .offset();
     var timeSize = $("#timeline")
@@ -385,7 +385,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var childrenHeight = $('ul#overlays')
       .outerHeight(true) +
       $('ul#baselayers')
-      .outerHeight(true) + 26;
+        .outerHeight(true) + 26;
 
     if ((maxHeight <= childrenHeight)) {
       $("#products")

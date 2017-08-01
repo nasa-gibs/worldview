@@ -154,11 +154,11 @@ wv.ui = (function(self) {
       }
     };
     $dialog.dialog({
-        title: spec.header || "Notice",
-        resizable: false,
-        modal: true,
-        buttons: buttons
-      })
+      title: spec.header || "Notice",
+      resizable: false,
+      modal: true,
+      buttons: buttons
+    })
       .html(spec.message)
       .on("dialogclose", function() {
         if (spec.onCancel) {

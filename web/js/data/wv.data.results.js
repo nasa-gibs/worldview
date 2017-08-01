@@ -35,14 +35,14 @@ wv.data.results.antiMeridianMulti = function(maxDistance) {
       var centroidWest = geomWest.getInteriorPoint();
       var newGeom =
         new ol.geom.MultiPolygon([
-                    geomEast.getCoordinates(),
-                    geomWest.getCoordinates()
-                ]);
+          geomEast.getCoordinates(),
+          geomWest.getCoordinates()
+        ]);
       var newCentroid =
         new ol.geom.MultiPoint([
-                    centroidEast.getCoordinates(),
-                    centroidWest.getCoordinates()
-                ]);
+          centroidEast.getCoordinates(),
+          centroidWest.getCoordinates()
+        ]);
       granule.geometry[wv.map.CRS_WGS_84] = newGeom;
       granule.centroid[wv.map.CRS_WGS_84] = newCentroid;
     }
@@ -463,9 +463,9 @@ wv.data.results.geometryFromMODISGrid = function(projection) {
       var grid = meta.grid[granule.hv];
       var geom = parser.readGeometry(meta.grid[granule.hv].geometry);
       var centroid = new ol.geom.Point([
-                grid.properties.CENTER_X,
-                grid.properties.CENTER_Y
-            ]);
+        grid.properties.CENTER_X,
+        grid.properties.CENTER_Y
+      ]);
 
       granule.geometry[projection] = geom;
       granule.centroid[projection] = centroid;
@@ -827,7 +827,7 @@ wv.data.results.transform = function(projection) {
       // Assuming that projGeom is a ol.geom.MultiPolygon
       granule.centroid[projection] =
         projGeom.getInteriorPoints()
-        .getPoint(0);
+          .getPoint(0);
     }
 
     return granule;

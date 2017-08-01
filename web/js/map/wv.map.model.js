@@ -91,7 +91,7 @@ wv.map.model = wv.map.model || function(models, config) {
     state.v = _.clone(self.extent);
     if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic')
       state.r = (self.rotation * (180.0 / Math.PI))
-      .toPrecision(6); //convert from radians to degrees
+        .toPrecision(6); //convert from radians to degrees
   };
 
   /*

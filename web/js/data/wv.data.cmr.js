@@ -191,13 +191,13 @@ wv.data.cmr.mockClient = function(suffix) {
     var deferred = $.Deferred();
     if (!results) {
       $.getJSON(endpoint, function(data) {
-          try {
-            results = adjustResults(parameters, data);
-            deferred.resolve(results.feed.entry);
-          } catch (error) {
-            wv.util.error(error);
-          }
-        })
+        try {
+          results = adjustResults(parameters, data);
+          deferred.resolve(results.feed.entry);
+        } catch (error) {
+          wv.util.error(error);
+        }
+      })
         .fail(function(jqXHR, textStatus, errorThrown) {
           deferred.reject(jqXHR, textStatus, errorThrown);
         });
