@@ -6,7 +6,7 @@
 .wv-tooltip-case span {
   z-index: 2;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
   color: #ce4c21;
 }
 

@@ -42,7 +42,7 @@
 .ui-menu-item a::before {
   content: attr(data-content) '';
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   display: block;
   width: 15px;
   height: 15px;
@@ -73,7 +73,7 @@
   text-transform: capitalize;
   font-size: 18px;
   font-family: 'Open Sans', Sans-Serif;
-  font-weight: bold;
+  font-weight: 700;
   color: #eee;
   padding: 0.75em 10px;
 }

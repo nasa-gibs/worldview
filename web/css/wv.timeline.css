@@ -82,7 +82,7 @@
 
 .x.axis > .tick > line {
   fill: none;
-  stroke: #9B9b9b;
+  stroke: #9b9b9b;
   stroke-width: 1;
   stroke-linecap: butt;
   stroke-linejoin: miter;
@@ -160,13 +160,6 @@ g.plot rect.data-bar-invisible {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   padding: 0;
-}
-
-@media all {
-  #timeline-header input::-moz-selection {
-    background: #ffffff;
-    color: #999;
-  }
 }
 
 #timeline-header .input-wrapper:hover {
@@ -333,7 +326,7 @@ g.plot rect.data-bar-invisible {
 .x.axis line,
 .x.axis path {
   fill: none;
-  stroke: #ffffff;
+  stroke: #fff;
   shape-rendering: crispEdges;
 }
 
@@ -374,13 +367,13 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-zoom a.zoom-btn.depth-1 {
-  color: #ffffff;
+  color: #fff;
   font-size: 1.5em;
   line-height: 1.4em;
 }
 
 #timeline-zoom a.zoom-btn.depth-2 {
-  color: #999999;
+  color: #999;
   font-size: 1em;
   line-height: 1em;
 }
@@ -419,7 +412,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #guitarpick path {
-  fill: #cccccc;
+  fill: #ccc;
   fill-opacity: 1;
   stroke: #515151;
   stroke-width: 1;
@@ -434,13 +427,13 @@ g.plot rect.data-bar-invisible {
 
 #guitarpick.pick-clicked path,
 #guitarpick:hover path {
-  fill: #5E676F;
-  stroke: #999999;
+  fill: #5e676f;
+  stroke: #999;
 }
 
 #guitarpick.pick-clicked rect,
 #guitarpick:hover rect {
-  fill: #999999;
+  fill: #999;
 }
 
 #timeline-hide .hamburger {

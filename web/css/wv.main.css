@@ -151,7 +151,7 @@ section {
 body {
   line-height: 1;
   min-width: 320px;
-  background: #000000;
+  background: #000;
 }
 
 nav ul {
@@ -305,7 +305,7 @@ div.horizontalContainer {
   position: absolute !important;
   left: 0;
   top: 0;
-  background-color: #0000FF;
+  background-color: #00f;
   opacity: 0;
   width: 100%;
   height: 100%;
@@ -342,7 +342,7 @@ div.horizontalContainer {
 }
 
 #imgFileSize {
-  color: #D99694;
+  color: #d99694;
 }
 
 #transition ul {
@@ -355,7 +355,7 @@ div.horizontalContainer {
 #transition ul li.disabled:hover {
   background-color: rgb(76, 89, 92);
   border-color: rgb(112, 135, 136);
-  border-width: 0.75pt;
+  border-width: 1px;
 }
 
 #transition ul li.selected {
@@ -364,7 +364,7 @@ div.horizontalContainer {
 }
 
 #transition ul li:hover {
-  border-color: #ffff00;
+  border-color: #ff0;
 }
 
 #wv-logo {
@@ -417,7 +417,7 @@ div.horizontalContainer {
 }
 
 .ui-button {
-  color: #eeeeee;
+  color: #eee;
 }
 
 .wv-menu-item-selected {
@@ -579,7 +579,7 @@ label {
 }
 
 .wv-panel .ui-dialog-title {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .ui-menu .ui-menu-item {

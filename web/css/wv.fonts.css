@@ -50,7 +50,7 @@
 @font-face {
   font-family: 'Open Sans';
   font-style: italic;
-  font-weight: normal;
+  font-weight: 400;
   src: url("../font/OpenSans/Italic/OpenSans-Italic.eot"); /* IE9 Compat Modes */
   src: local('Open Sans Italic'), local('OpenSans-Italic'), url("../font/OpenSans/Italic/OpenSans-Italic.eot?#iefix") format("embedded-opentype"), /* IE Compat Modes */
   url("../font/OpenSans/Italic/OpenSans-Italic.woff2") format("woff2"), /* Super Modern Browsers */
@@ -62,7 +62,7 @@
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
-  font-weight: bold;
+  font-weight: 700;
   src: url("../font/OpenSans/Bold/OpenSans-Bold.eot"); /* IE9 Compat Modes */
   src: local('Open Sans Bold'), local('OpenSans-Bold'), url("../font/OpenSans/Bold/OpenSans-Bold.eot?#iefix") format("embedded-opentype"), /* IE Compat Modes */
   url("../font/OpenSans/Bold/OpenSans-Bold.woff2") format("woff2"), /* Super Modern Browsers */
@@ -74,7 +74,7 @@
 @font-face {
   font-family: 'Open Sans';
   font-style: italic;
-  font-weight: bold;
+  font-weight: 700;
   src: url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.eot"); /* IE9 Compat Modes */
   src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.eot?#iefix") format("embedded-opentype"), /* IE Compat Modes */
   url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.woff2") format("woff2"), /* Super Modern Browsers */

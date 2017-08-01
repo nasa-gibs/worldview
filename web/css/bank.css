@@ -76,7 +76,7 @@ h4 {
   font-size: 1.4em;
   display: inline-block;
   float: left;
-  color: #ffffff;
+  color: #fff;
   border: none;
   padding: 9px 30px;
 }
@@ -87,7 +87,7 @@ h4 {
 
 .bank h3 {
   display: block;
-  color: #ffffff;
+  color: #fff;
   border: none;
   text-decoration: none;
   background: none;
@@ -324,7 +324,7 @@ i.wv-layers-options-icon {
   top: 0;
   bottom: 0;
   width: 10px;
-  background: #DACF00;
+  background: #dacf00;
   cursor: default;
   display: none;
 }

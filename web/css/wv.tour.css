@@ -23,14 +23,14 @@
 }
 
 .tour .ui-dialog-content {
-  background: #AFB5C4;
+  background: #afb5c4;
   padding-top: 8px;
 }
 
 .tour .ui-dialog-titlebar {
   font-size: 20px;
   line-height: 24px;
-  background: #AFB5C4;
+  background: #afb5c4;
   color: rgb(38, 43, 49);
   border: 0;
   border-bottom-left-radius: 0;
@@ -38,8 +38,8 @@
 }
 
 .tour .ui-button {
-  background: #F4F5F5;
-  border-color: #F4F5F5;
+  background: #f4f5f5;
+  border-color: #f4f5f5;
 }
 
 .tour .ui-button:hover:enabled {
@@ -80,7 +80,7 @@ p.splash {
 }
 
 p.splash span.highlight {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 button.takeTour {
@@ -89,7 +89,7 @@ button.takeTour {
   border-radius: 6px;
   padding: 10px;
   text-align: center;
-  color: #000000;
+  color: #000;
   background-color: #f4f5f5;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
   background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
@@ -100,7 +100,7 @@ button.takeTour {
 }
 
 button.takeTour:hover {
-  color: #000000;
+  color: #000;
   background-color: #d9dddd;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
   background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
@@ -114,7 +114,7 @@ button.skipTour {
   border-radius: 6px;
   padding: 10px;
   text-align: center;
-  color: #000000;
+  color: #000;
   background-color: #f4f5f5;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
   background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
@@ -125,7 +125,7 @@ button.skipTour {
 }
 
 button.skipTour:hover {
-  color: #000000;
+  color: #000;
   background-color: #d9dddd;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
   background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
@@ -157,11 +157,11 @@ button.skipTour:hover {
 }
 
 .tour span.highlight {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .tour span.tryIt {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 button.repeatTour {
@@ -169,7 +169,7 @@ button.repeatTour {
   border-radius: 6px;
   padding: 10px;
   text-align: center;
-  color: #000000;
+  color: #000;
   background-color: #f4f5f5;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
   background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
@@ -180,7 +180,7 @@ button.repeatTour {
 }
 
 button.repeatTour:hover {
-  color: #000000;
+  color: #000;
   background-color: #d9dddd;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
   background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
@@ -193,7 +193,7 @@ button.done {
   border-radius: 6px;
   padding: 10px;
   text-align: center;
-  color: #000000;
+  color: #000;
   background-color: #f4f5f5;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
   background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
@@ -205,7 +205,7 @@ button.done {
 
 button.done:hover {
   background-color: #d9dddd;
-  color: #000000;
+  color: #000;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
   background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);

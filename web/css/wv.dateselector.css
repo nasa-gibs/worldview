@@ -31,13 +31,6 @@
   padding: 0;
 }
 
-@media all {
-  .wv-date-selector-widget input::-moz-selection {
-    background: #ffffff;
-    color: #999;
-  }
-}
-
 .wv-date-selector-widget .input-wrapper:hover {
   border-color: #666;
 }

@@ -7,16 +7,16 @@
 }
 
 #BulkDownload #page {
-  background-color: #ffffff;
+  background-color: #fff;
   margin: 20px;
   padding: 5px 20px 20px;
   border-radius: 5px;
 }
 
 #BulkDownload pre {
-  background-color: #eeeeee;
+  background-color: #eee;
   padding: 5px;
-  border: 1px dashed #dddddd;
+  border: 1px dashed #ddd;
 }
 
 #BulkDownload .label {

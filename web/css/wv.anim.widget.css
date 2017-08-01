@@ -56,7 +56,7 @@
 }
 
 #wv-animation-widget .active .wv-animation-widget-icon.fa-retweet {
-  color: #ffffff;
+  color: #fff;
   opacity: 1;
 }
 
@@ -143,7 +143,7 @@
 }
 
 .wv-animation-widget i.wv-close:hover {
-  color: #999999;
+  color: #999;
   cursor: pointer;
 }
 
@@ -243,8 +243,8 @@
 }
 
 .InputRange.is-disabled .input-range__slider {
-  background: #cccccc;
-  border: 1px solid #cccccc;
+  background: #ccc;
+  border: 1px solid #ccc;
   -webkit-box-shadow: none;
   box-shadow: none;
   -webkit-transform: none;
@@ -257,8 +257,8 @@
 }
 
 .input-range__label {
-  color: #ffffff;
-  font-family: 'Open Sans', san-serif;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
   font-size: 12px;
   white-space: nowrap;
 }
@@ -283,7 +283,7 @@
 }
 
 .input-range__track {
-  background: #eeeeee;
+  background: #eee;
   border-radius: 4px;
   display: block;
   height: 2.6px;
@@ -293,7 +293,7 @@
 }
 
 .InputRange.is-disabled .input-range__track {
-  background: #eeeeee;
+  background: #eee;
 }
 
 .input-range__track--container {
