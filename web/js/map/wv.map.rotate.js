@@ -22,31 +22,31 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
   var self = this;
 
   /*
-     * Initializes by triggering build methods
-     *
-     * @method init
-     * @static
-     *
-     * @param {object} map - openLayers map object
-     *
-     * @param {string} d - projection id string
-     *
-     * @returns {void}
-     */
+   * Initializes by triggering build methods
+   *
+   * @method init
+   * @static
+   *
+   * @param {object} map - openLayers map object
+   *
+   * @param {string} d - projection id string
+   *
+   * @returns {void}
+   */
   this.init = function(map, id) {
     this.buildRotationWidget(map);
     this.setRotationEvents(map, id);
   };
   /*
-     * Draws Rotation Widget
-     *
-     * @method createRotationWidget
-     * @static
-     *
-     * @param {object} map - openLayers map object
-     *
-     * @returns {void}
-     */
+   * Draws Rotation Widget
+   *
+   * @method createRotationWidget
+   * @static
+   *
+   * @param {object} map - openLayers map object
+   *
+   * @returns {void}
+   */
   this.buildRotationWidget = function(map) {
     var $map = $("#" + map.getTarget());
     var $rotateLeftButton = $("<button></button>").addClass("wv-map-rotate-left wv-map-zoom").attr("title", "You may also rotate by holding Alt and dragging the mouse");
@@ -62,17 +62,17 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     $map.append($rotateLeftButton).append($resetButton).append($rotateRightButton);
   };
   /*
-     * Applies Jquery click events to rotation-widget
-     *
-     * @method setRotationEvents
-     * @static
-     *
-     * @param {object} map - openLayers map object
-     *
-     * @param {string} d - projection id string
-     *
-     * @returns {void}
-     */
+   * Applies Jquery click events to rotation-widget
+   *
+   * @method setRotationEvents
+   * @static
+   *
+   * @param {object} map - openLayers map object
+   *
+   * @param {string} d - projection id string
+   *
+   * @returns {void}
+   */
   this.setRotationEvents = function(map, id) {
     var dur = 500;
     var $leftButton = $('#wv-map-' + id + ' .wv-map-rotate-left');
@@ -111,13 +111,13 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
   };
 
   /*
-     * Called as event listener when map is rotated. Update url to reflect rotation reset
-     *
-     * @method updateRotation
-     * @static
-     *
-     * @returns {void}
-     */
+   * Called as event listener when map is rotated. Update url to reflect rotation reset
+   *
+   * @method updateRotation
+   * @static
+   *
+   * @returns {void}
+   */
   this.updateRotation = function() {
     var deg,
       radians,
@@ -143,16 +143,16 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
   };
 
   /*
-     * examines the number of characters present in the
-     * reset button and reassigns padding accordingly
-     *
-     * @method setResetButtonWidth
-     * @static
-     *
-     * @param {number} deg - map rotation degree value
-     *
-     * @returns {void}
-     */
+   * examines the number of characters present in the
+   * reset button and reassigns padding accordingly
+   *
+   * @method setResetButtonWidth
+   * @static
+   *
+   * @param {number} deg - map rotation degree value
+   *
+   * @returns {void}
+   */
   this.setResetButton = function(radians) {
     var button = $(".wv-map-reset-rotation");
     var deg = radians * (180.0 / Math.PI);
@@ -175,19 +175,19 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
   };
 
   /*
-     * Called as event listener when map is rotated. Update url to reflect rotation reset
-     *
-     * @method rotate
-     * @static
-     *
-     * @param {number} amount - value of degrees to rotate
-     *
-     * @param {number} duration - how long the animation should last
-     *
-     * @param {object} map - openLayers map object
-     *
-     * @returns {void}
-     */
+   * Called as event listener when map is rotated. Update url to reflect rotation reset
+   *
+   * @method rotate
+   * @static
+   *
+   * @param {number} amount - value of degrees to rotate
+   *
+   * @param {number} duration - how long the animation should last
+   *
+   * @param {object} map - openLayers map object
+   *
+   * @returns {void}
+   */
   this.rotate = function(amount, duration, map) {
 
     var currentDeg = (map.getView().getRotation() * (180.0 / Math.PI));
