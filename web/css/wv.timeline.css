@@ -234,7 +234,7 @@ g.plot rect.data-bar-invisible {
   transform: scaleY(-1);
   -webkit-filter: FlipV;
   filter: FlipV;
-  -ms-filter:  "FlipV";
+  -ms-filter: "FlipV";
 }
 
 #timeline-header .date-arrows:hover,
@@ -264,7 +264,7 @@ g.plot rect.data-bar-invisible {
 #timeline-header #left-arrow-group svg {
   -webkit-filter: FlipH;
   filter: FlipH;
-  -ms-filter:  "FlipH";
+  -ms-filter: "FlipH";
 }
 
 #timeline-header > .button-action-group:hover .arrow {
@@ -354,7 +354,6 @@ g.plot rect.data-bar-invisible {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  /*float:right;*/
 }
 
 #timeline-zoom a.zoom-btn {

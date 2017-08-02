@@ -160,7 +160,7 @@ h4 {
 }
 
 .bank li.item h4 {
-  font-size: 0.90em;
+  font-size: 0.9em;
   line-height: 14px;
   padding: 3px 3px 0;
 }
@@ -168,7 +168,7 @@ h4 {
 .bank li.item p {
   padding: 0 3px 6px;
   color: #222;
-  font-size: 0.80em;
+  font-size: 0.8em;
   font-style: italic;
 }
 

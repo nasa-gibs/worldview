@@ -61,7 +61,7 @@
 #productsHolder footer .action.ui-button-disabled {
   background-color: #000;
   color: #bebebe;
-  opacity: 1.0;
+  opacity: 1;
   border-color: #666;
 }
 

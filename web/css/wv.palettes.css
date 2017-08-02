@@ -142,8 +142,8 @@
   background: #000;
 }
 
-.bank div .wv-palettes-panel .wv-running-bar:after,
-.bank div .wv-palettes-panel .wv-running-bar:before {
+.bank div .wv-palettes-panel .wv-running-bar::after,
+.bank div .wv-palettes-panel .wv-running-bar::before {
   content: "";
   position: absolute;
   width: 0;
@@ -152,7 +152,7 @@
   line-height: 0;
 }
 
-.bank div .wv-palettes-panel .wv-running-bar:before {
+.bank div .wv-palettes-panel .wv-running-bar::before {
   top: 6px;
   left: -5px;
   border-left: 5px solid transparent;
@@ -160,7 +160,7 @@
   border-bottom: 5.5px solid #000;
 }
 
-.bank div .wv-palettes-panel .wv-running-bar:after {
+.bank div .wv-palettes-panel .wv-running-bar::after {
   top: 7px;
   left: -4px;
   border-left: 4px solid transparent;

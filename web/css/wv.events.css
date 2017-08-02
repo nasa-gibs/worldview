@@ -166,6 +166,7 @@
   right: 10px !important;
   left: auto !important;
 }
+
 @media screen and (max-device-height: 720px) {
   .notify-alert {
     display: none;

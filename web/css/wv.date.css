@@ -170,7 +170,7 @@ a.ui-slider-handle {
   position: relative;
   height: 80%;
   top: -3%;
-  background: rgba(31, 143, 237, .26);
+  background: rgba(31, 143, 237, 0.26);
   border: #1f8fed 2px solid;
 }
 

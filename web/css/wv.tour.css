@@ -247,7 +247,7 @@ button.done:hover {
   height: 100%;
   background-color: #000;
   opacity: 0.5;
-  -ms-filter:  "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
   filter: alpha(opacity=50);
   z-index: 40001;
 }

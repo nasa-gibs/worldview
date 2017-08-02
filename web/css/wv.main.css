@@ -163,10 +163,10 @@ q {
   quotes: none;
 }
 
-blockquote:after,
-blockquote:before,
-q:after,
-q:before {
+blockquote::after,
+blockquote::before,
+q::after,
+q::before {
   content: '';
   content: none;
 }
@@ -431,11 +431,12 @@ div.horizontalContainer {
   z-index: 1000;
 }
 
-/* Allow Font Awesome Icons in lieu of jQuery UI and only apply when using a FA icon */
+/* Allow Font Awesome Icons in lieu of jQuery UI and only apply when using a FA icon
+ * Remove the jQuery UI Icon
+ * Remove the jQuery UI Text Indent
+ */
 .ui-icon[class*=" fa-"] {
-  /* Remove the jQuery UI Icon */
   background: none repeat scroll 0 0 transparent;
-  /* Remove the jQuery UI Text Indent */
   text-indent: 0;
 }
 

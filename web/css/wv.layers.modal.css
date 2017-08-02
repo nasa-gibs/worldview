@@ -380,7 +380,8 @@
   position: relative;
   display: inline;
 }
-@media (min-width:753px) {
+
+@media (min-width: 753px) {
   #layers-all .layers-all-layer h3,
   #selected-category .ui-accordion-header h3 {
     padding-right: 40px;
@@ -480,7 +481,7 @@
   font-size: 14px;
   line-height: 18px;
   margin: 16px 0 6px;
-  font-family: 'Open Sans', Sans-Serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .source-metadata h1:first-child {

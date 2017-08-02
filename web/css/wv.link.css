@@ -54,7 +54,7 @@
   margin-left: 1px;
 }
 
-#social-share .fa-reddit:before {
+#social-share .fa-reddit::before {
   border-radius: 50%;
   position: absolute;
   left: -1px;

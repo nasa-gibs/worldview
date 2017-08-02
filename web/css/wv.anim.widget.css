@@ -209,10 +209,11 @@
   color: #f4f5f5;
   cursor: pointer;
 }
-/* Animation GIF Styles */
-/* Slider styles */
-/* copied and modified from https://github.com/davidchin/react-input-range*/
 
+/* Animation GIF Styles
+ * Slider styles
+ * copied and modified from https://github.com/davidchin/react-input-range
+ */
 .input-range__slider {
   -webkit-appearance: none;
   -moz-appearance: none;

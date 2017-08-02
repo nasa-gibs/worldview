@@ -103,7 +103,7 @@
   transform: scaleY(-1);
   -webkit-filter: FlipV;
   filter: FlipV;
-  -ms-filter:  "FlipV";
+  -ms-filter: "FlipV";
 }
 
 .wv-date-selector-widget .date-arrows:hover,
@@ -133,7 +133,7 @@
 .wv-date-selector-widget #left-arrow-group svg {
   -webkit-filter: FlipH;
   filter: FlipH;
-  -ms-filter:  "FlipH";
+  -ms-filter: "FlipH";
 }
 
 .wv-date-selector-widget > .button-action-group:hover .arrow {

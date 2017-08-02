@@ -72,18 +72,18 @@
 .wv-notify-modal h2 {
   text-transform: capitalize;
   font-size: 18px;
-  font-family: 'Open Sans', Sans-Serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 700;
   color: #eee;
   padding: 0.75em 10px;
 }
 
 .wv-notify-modal .outage h2 {
-  background: rgba(179, 41, 43, .3);
+  background: rgba(179, 41, 43, 0.3);
 }
 
 .wv-notify-modal .alert h2 {
-  background: rgba(229, 201, 55, .3);
+  background: rgba(229, 201, 55, 0.3);
 }
 
 .wv-notify-modal h2 span {
