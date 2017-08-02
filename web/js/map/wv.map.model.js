@@ -25,32 +25,32 @@ wv.map.model = wv.map.model || function(models, config) {
   self.events = wv.util.events();
   self.rotation = 0;
   /*
-   * Emits update event
-   *
-   * @method update
-   * @static
-   *
-   * @param extent {object} Map Extent Array
-   *
-   * @returns {void}
-   */
+     * Emits update event
+     *
+     * @method update
+     * @static
+     *
+     * @param extent {object} Map Extent Array
+     *
+     * @returns {void}
+     */
   self.update = function(extent) {
     self.extent = extent;
     self.events.trigger("update", extent);
   };
 
   /*
-   * Sets map view from parsed URL
-   *
-   * @method load
-   * @static
-   *
-   * @param state {object} map state object from permalink
-   *
-   * @param errors {string} errors
-   *
-   * @returns {void}
-   */
+     * Sets map view from parsed URL
+     *
+     * @method load
+     * @static
+     *
+     * @param state {object} map state object from permalink
+     *
+     * @param errors {string} errors
+     *
+     * @returns {void}
+     */
   self.load = function(state, errors) {
     if (state.v) {
       var proj = models.proj.selected;
@@ -64,9 +64,7 @@ wv.map.model = wv.map.model || function(models, config) {
         self.extent = state.v;
       } else {
         self.extent = _.clone(proj.maxExtent);
-        errors.push({
-          message: "Extent outside of range"
-        });
+        errors.push({message: "Extent outside of range"});
       }
     }
     //get rotation if it exists
@@ -76,42 +74,40 @@ wv.map.model = wv.map.model || function(models, config) {
   };
 
   /*
-   * Saves extent and rotation When
-   * models.link.toQueryString() is called
-   *
-   * @method save
-   * @static
-   *
-   * @param state {object} map state object from permalink
-   *
-   *
-   * @returns {void}
-   */
+     * Saves extent and rotation When
+     * models.link.toQueryString() is called
+     *
+     * @method save
+     * @static
+     *
+     * @param state {object} map state object from permalink
+     *
+     *
+     * @returns {void}
+     */
   self.save = function(state) {
     state.v = _.clone(self.extent);
     if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic')
-      state.r = (self.rotation * (180.0 / Math.PI))
-        .toPrecision(6); //convert from radians to degrees
+      state.r = (self.rotation * (180.0 / Math.PI)).toPrecision(6); //convert from radians to degrees
   };
 
   /*
-   * Set default extent according to time of day:
-   *
-   * at 00:00 UTC, start at far eastern edge of
-   * map: "20.6015625,-46.546875,179.9296875,53.015625"
-   *
-   * at 23:00 UTC, start at far western edge of map:
-   * "-179.9296875,-46.546875,-20.6015625,53.015625"
-   *
-   * @method getLeadingExtent
-   * @static
-   *
-   *
-   * @returns {object} Extent Array
-   */
+     * Set default extent according to time of day:
+     *
+     * at 00:00 UTC, start at far eastern edge of
+     * map: "20.6015625,-46.546875,179.9296875,53.015625"
+     *
+     * at 23:00 UTC, start at far western edge of map:
+     * "-179.9296875,-46.546875,-20.6015625,53.015625"
+     *
+     * @method getLeadingExtent
+     * @static
+     *
+     *
+     * @returns {object} Extent Array
+     */
   self.getLeadingExtent = function() {
-    var curHour = wv.util.now()
-      .getUTCHours();
+    var curHour = wv.util.now().getUTCHours();
 
     // For earlier hours when data is still being filled in, force a far eastern perspective
     if (curHour < 3) {
