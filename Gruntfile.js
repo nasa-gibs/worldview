@@ -795,8 +795,8 @@ module.exports = function(grunt) {
   grunt.registerTask("e2e", ["firefox-tests", "chrome-tests"]);
 
   grunt.registerTask("default", [
-    "fetch",
     "update-packages",
+    "fetch",
     "update",
     "build",
     "config",
