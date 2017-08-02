@@ -64,7 +64,9 @@ wv.map.model = wv.map.model || function(models, config) {
         self.extent = state.v;
       } else {
         self.extent = _.clone(proj.maxExtent);
-        errors.push({message: "Extent outside of range"});
+        errors.push({
+          message: "Extent outside of range"
+        });
       }
     }
     //get rotation if it exists
@@ -88,7 +90,8 @@ wv.map.model = wv.map.model || function(models, config) {
   self.save = function(state) {
     state.v = _.clone(self.extent);
     if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic')
-      state.r = (self.rotation * (180.0 / Math.PI)).toPrecision(6); //convert from radians to degrees
+      state.r = (self.rotation * (180.0 / Math.PI))
+        .toPrecision(6); //convert from radians to degrees
   };
 
   /*
@@ -107,7 +110,8 @@ wv.map.model = wv.map.model || function(models, config) {
    * @returns {object} Extent Array
    */
   self.getLeadingExtent = function() {
-    var curHour = wv.util.now().getUTCHours();
+    var curHour = wv.util.now()
+      .getUTCHours();
 
     // For earlier hours when data is still being filled in, force a far eastern perspective
     if (curHour < 3) {

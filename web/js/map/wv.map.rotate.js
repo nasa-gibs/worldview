@@ -49,17 +49,28 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    */
   this.buildRotationWidget = function(map) {
     var $map = $("#" + map.getTarget());
-    var $rotateLeftButton = $("<button></button>").addClass("wv-map-rotate-left wv-map-zoom").attr("title", "You may also rotate by holding Alt and dragging the mouse");
-    var $lefticon = $("<i></i>").addClass("fa fa-undo");
+    var $rotateLeftButton = $("<button></button>")
+      .addClass("wv-map-rotate-left wv-map-zoom")
+      .attr("title", "You may also rotate by holding Alt and dragging the mouse");
+    var $lefticon = $("<i></i>")
+      .addClass("fa fa-undo");
 
-    var $rotateRightButton = $("<button></button>").addClass("wv-map-rotate-right wv-map-zoom").attr("title", "You may also rotate by holding Alt and dragging the mouse");
-    var $righticon = $("<i></i>").addClass("fa fa-repeat");
+    var $rotateRightButton = $("<button></button>")
+      .addClass("wv-map-rotate-right wv-map-zoom")
+      .attr("title", "You may also rotate by holding Alt and dragging the mouse");
+    var $righticon = $("<i></i>")
+      .addClass("fa fa-repeat");
 
-    var $resetButton = $("<button></button>").addClass("wv-map-reset-rotation wv-map-zoom").attr("title", "Click to reset").attr("style", "width: 43px");
+    var $resetButton = $("<button></button>")
+      .addClass("wv-map-reset-rotation wv-map-zoom")
+      .attr("title", "Click to reset")
+      .attr("style", "width: 43px");
 
     $rotateLeftButton.append($lefticon);
     $rotateRightButton.append($righticon);
-    $map.append($rotateLeftButton).append($resetButton).append($rotateRightButton);
+    $map.append($rotateLeftButton)
+      .append($resetButton)
+      .append($rotateRightButton);
   };
   /*
    * Applies Jquery click events to rotation-widget
@@ -80,34 +91,48 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     var $resetButton = $('#wv-map-' + id + ' .wv-map-reset-rotation');
 
     //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
-    $leftButton.button({text: false}).mousedown(function() {
-      self.intervalId = setInterval(function() {
+    $leftButton.button({
+      text: false
+    })
+      .mousedown(function() {
+        self.intervalId = setInterval(function() {
+          self.rotate(10, dur, map);
+        }, dur);
         self.rotate(10, dur, map);
-      }, dur);
-      self.rotate(10, dur, map);
 
-    }).mouseup(function() {
-      clearInterval(self.intervalId);
-    });
+      })
+      .mouseup(function() {
+        clearInterval(self.intervalId);
+      });
 
-    $rightButton.button({text: false}).mousedown(function() {
-      self.intervalId = setInterval(function() {
+    $rightButton.button({
+      text: false
+    })
+      .mousedown(function() {
+        self.intervalId = setInterval(function() {
+          self.rotate(-10, dur, map);
+        }, dur);
         self.rotate(-10, dur, map);
-      }, dur);
-      self.rotate(-10, dur, map);
 
-    }).mouseup(function() {
-      clearInterval(self.intervalId);
-    });
+      })
+      .mouseup(function() {
+        clearInterval(self.intervalId);
+      });
 
     $resetButton.button({
-      label: Number(models.map.rotation * (180 / Math.PI)).toFixed()
-    }).mousedown(function() { //reset rotation
-      clearInterval(self.intervalId); //stop repeating rotation on mobile
-      map.getView().animate({duration: 500, rotation: 0});
+      label: Number(models.map.rotation * (180 / Math.PI))
+        .toFixed()
+    })
+      .mousedown(function() { //reset rotation
+        clearInterval(self.intervalId); //stop repeating rotation on mobile
+        map.getView()
+          .animate({
+            duration: 500,
+            rotation: 0
+          });
 
-      $resetButton.button("option", "label", "0");
-    });
+        $resetButton.button("option", "label", "0");
+      });
   };
 
   /*
@@ -157,19 +182,24 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     var button = $(".wv-map-reset-rotation");
     var deg = radians * (180.0 / Math.PI);
     //Set reset button content
-    button.button("option", "label", Number(deg % 360).toFixed());
+    button.button("option", "label", Number(deg % 360)
+      .toFixed());
     switch (true) {
-      case(deg >= 100.0):
-        button.find("span").attr("style", "padding-left: 9px");
+      case (deg >= 100.0):
+        button.find("span")
+          .attr("style", "padding-left: 9px");
         break;
-      case(deg <= -100.0):
-        button.find("span").attr("style", "padding-left: 6px");
+      case (deg <= -100.0):
+        button.find("span")
+          .attr("style", "padding-left: 6px");
         break;
-      case(deg <= -10.0):
-        button.find("span").attr("style", "padding-left: 10px");
+      case (deg <= -10.0):
+        button.find("span")
+          .attr("style", "padding-left: 10px");
         break;
       default:
-        button.find("span").attr("style", "padding-left: 14px");
+        button.find("span")
+          .attr("style", "padding-left: 14px");
         break;
     }
   };
@@ -190,20 +220,26 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    */
   this.rotate = function(amount, duration, map) {
 
-    var currentDeg = (map.getView().getRotation() * (180.0 / Math.PI));
+    var currentDeg = (map.getView()
+      .getRotation() * (180.0 / Math.PI));
     if (Math.abs(currentDeg) === 360) {
-      map.getView().setRotation(0);
+      map.getView()
+        .setRotation(0);
     } else if (Math.abs(currentDeg) >= 360) {
       var newNadVal = ((360 - Math.abs(currentDeg)) * (Math.PI / 180));
       if (currentDeg < 0) {
-        map.getView().setRotation(newNadVal);
+        map.getView()
+          .setRotation(newNadVal);
       } else {
-        map.getView().setRotation(-newNadVal);
+        map.getView()
+          .setRotation(-newNadVal);
       }
     }
-    map.getView().animate({
-      rotation: map.getView().getRotation() - (Math.PI / amount),
-      duration: duration
-    });
+    map.getView()
+      .animate({
+        rotation: map.getView()
+          .getRotation() - (Math.PI / amount),
+        duration: duration
+      });
   };
 };
