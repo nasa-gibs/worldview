@@ -32,7 +32,7 @@ services.
 This code was originally developed at NASA/Goddard Space Flight Center for
 the Earth Science Data and Information System (ESDIS) project.
 
-Copyright &copy; 2013 - 2016 United States Government as represented by the
+Copyright &copy; 2013 - 2017 United States Government as represented by the
 Administrator of the National Aeronautics and Space Administration.
 All Rights Reserved.
 
