@@ -647,6 +647,18 @@ module.exports = function(grunt) {
       src: 'web/css/*.css'
     },
 
+    stylefmt: {
+      format: {
+        files:[
+          {
+            expand: true,
+            src: 'web/css/*.css',
+            dest: './'
+          }
+        ]
+      },
+    },
+
     watch: {
       scripts: {
         files: nodeModuleFiles,
@@ -696,6 +708,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-mkdir");
   grunt.loadNpmTasks("grunt-postcss");
   grunt.loadNpmTasks("grunt-stylelint");
+  grunt.loadNpmTasks("grunt-stylefmt");
   grunt.loadNpmTasks("grunt-text-replace");
   grunt.loadNpmTasks("grunt-rename");
   grunt.loadNpmTasks("grunt-nightwatch");
