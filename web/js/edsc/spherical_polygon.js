@@ -37,29 +37,27 @@
     ll2s = function(latlngs) {
       var ll;
       return ((function() {
-          var j, len1, results;
-          results = [];
-          for (j = 0, len1 = latlngs.length; j < len1; j++) {
-            ll = latlngs[j];
-            results.push("(" + ll.lat + ", " + ll.lng + ")");
-          }
-          return results;
-        })())
-        .join(', ');
+        var j, len1, results;
+        results = [];
+        for (j = 0, len1 = latlngs.length; j < len1; j++) {
+          ll = latlngs[j];
+          results.push("(" + ll.lat + ", " + ll.lng + ")");
+        }
+        return results;
+      })()).join(', ');
     };
     ll2j = function(latlngs) {
       var ll;
       return ((function() {
-          var j, len1, ref, results;
-          ref = latlngs.concat(latlngs[0]);
-          results = [];
-          for (j = 0, len1 = ref.length; j < len1; j++) {
-            ll = ref[j];
-            results.push(ll.lng + "," + ll.lat);
-          }
-          return results;
-        })())
-        .join(', ');
+        var j, len1, ref, results;
+        ref = latlngs.concat(latlngs[0]);
+        results = [];
+        for (j = 0, len1 = ref.length; j < len1; j++) {
+          ll = ref[j];
+          results.push(ll.lng + "," + ll.lat);
+        }
+        return results;
+      })()).join(', ');
     };
     dividePolygon = function(latlngs) {
       var boundaries, boundary, containedPoles, containsNorthPole, containsSouthPole, crossing, extra, extras, hasInsertions, hasPole, hole, holes, i, inc, interior, interiors, j, k, l, lat, latlng, latlng1, latlng2, len, len1, len2, len3, lng, m, maxCrossingLat, minCrossingLat, n, next, o, p, q, ref, ref1, split;
@@ -283,5 +281,4 @@
     };
   })(L, ns.geoutil, ns.Arc, ns.Coordinate);
 
-})
-.call(this);
+}).call(this);

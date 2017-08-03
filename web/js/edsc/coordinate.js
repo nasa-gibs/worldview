@@ -110,5 +110,4 @@
     return exports = Coordinate;
   })(L);
 
-})
-.call(this);
+}).call(this);
