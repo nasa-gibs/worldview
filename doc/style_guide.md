@@ -2,16 +2,45 @@
 
 This document is an attempt to normalize the code.
 
-## JavaScript
+## Writing code
+
+### CSS
+
+We use stylelint to enforce our CSS code standards. You can run `grunt stylelint` to check your CSS code. CSS that does not adhere to this standard will not pass the Travis CI build. Please use a linter while developer to catch any issues as they occur. We provide an additional tool to auto-correct your CSS, `grunt stylefmt`.
+
+#### Main Focus
+* CSS should be written in a clean, consistent manner with equal spaced rules and properties.
+* **Class based cascading specificity.** ID and chained type (i.e. span.icon) selectors are highly discouraged and will be forbidden in the future.
+
+#### Selectors
+* Selector pseudo classes
+* Declaration
+
+#### At rules
+* No import rules. If you want to add a css file, include it via a def link in the html, then add it to the css.json file;
+* We are only allowing these at rules:
+* At media rules ...
+
+#### Units / Fonts / Colors
+* Units not allowed: c, ex, in, mm, pc, pt, rem, vh, vmin, vw
+* Colors can only be hexadecimal and if a shorthand is available, this must be used.
+* `0px` must be `0`
+
+Examples
+```css
+
+```
+
+### JavaScript
 
 * Functions should be pure when possible; pass paramaters that are used to return a result
-```
+```js
 function getWordArray(str) {
     return str.split(' ');
 }
 ```
 * Keep variable declaration at the top of the scope to be a more literal representation of where variables are declared
-```
+```js
 function varDeclare() {
     var all, variables, here;
 
