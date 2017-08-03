@@ -72,6 +72,11 @@ tree to take effect:
 
     grunt brand
 
+### Edit Libraries and sync changes on save
+
+Make edits to node_modules that are [npm linked](https://docs.npmjs.com/cli/link) and have them relocate to the web directory automatically.
+
+    grunt watch
 
 ### Configuration
 
@@ -84,12 +89,34 @@ an edit, issue the following command:
     grunt config
 
 
+### Autoprefix CSS
+
+Parse all CSS files and automatically add vendor prefixes to CSS rules using values from Can I Use.
+
+Run autoprefix with the following:
+
+    grunt autoprefix
+
+
 ### Linting
 
 Check for common errors in the JavaScript and CSS files with:
 
     grunt lint
 
+[eslint](http://eslint.org) is used for JavaScript linting.
+Run the following to check only check Javascript errors:
+
+    grunt eslint
+
+[stylelint] is used for CSS linting.
+Run the following to checkout only CSS errors:
+
+    grunt stylelint
+
+Run the following to automatically fix stylelint errors
+
+    grunt stylefmt
 
 ### Documentation
 
