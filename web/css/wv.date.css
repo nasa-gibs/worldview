@@ -127,7 +127,7 @@ input.ui-slider-input {
 }
 
 :root ul.sliderLabel {
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr= '#99000000', endColorstr='#cc000000', GradientType=0) \0/IE9;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr= '#90000', endColorstr='#c0000', GradientType=0) \0/IE9;
 }
 
 /* IE9 */
