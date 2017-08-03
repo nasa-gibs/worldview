@@ -11,6 +11,7 @@
 
 var wvx = wvx || {};
 
+// Document ready function
 $(function() {
 
   var config;
@@ -273,6 +274,18 @@ $(function() {
 
     models.wv.events.trigger("startup");
     elapsed("done");
+
+    // Reset Worldview when clicking on logo
+    $(document).click(function(e) {
+      if (e.target.id == "wv-logo") resetWorldview(e);
+    });
+  };
+
+  var resetWorldview = function(e){
+    e.preventDefault();
+    if (window.location.search === "") return; // Nothing to reset
+    var msg = "Do you want to reset Worldview to it's defaults? You will lose your current state.";
+    if (confirm(msg)) document.location.href = "/";
   };
 
   var errorReport = function() {
