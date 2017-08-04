@@ -21,7 +21,6 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
   this.intervalId = null;
   var self = this;
 
-
   /*
    * Initializes by triggering build methods
    *
@@ -136,6 +135,27 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
       });
   };
 
+  /**
+   * Saves the rotation degrees as a number within -360 & 360 degrees
+   *
+   * @param  {type} currentDeg  The current rotation degrees
+   * @param  {type} currentView The current rotation view
+   * @return {type}             Compare the current degrees to 360 degrees minus the new view's degree value.
+   *                            This ensures the maximum degrees never exceeds +/- 360.
+   *                            The current view is then set to this new value.
+   */
+  this.saveRotation = function(currentDeg, currentView) {
+    if (Math.abs(currentDeg) === 360) {
+      currentView.setRotation(0);
+    } else if (Math.abs(currentDeg) >= 360) {
+      var newNadVal = ((360 - Math.abs(currentDeg)) * (Math.PI / 180));
+      if (currentDeg < 0) {
+        currentView.setRotation(newNadVal);
+      } else {
+        currentView.setRotation(-newNadVal);
+      }
+    }
+  };
 
   /*
    * Called as event listener when map is rotated. Update url to reflect rotation reset
@@ -146,15 +166,19 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    * @returns {void}
    */
   this.updateRotation = function() {
-    var deg, radians, view;
+    var deg,
+      radians,
+      currentView,
+      currentDeg;
 
-    view = ui.selected.getView();
-    radians = view.getRotation();
+    currentView = ui.selected.getView();
+    radians = currentView.getRotation();
     models.map.rotation = radians;
     self.setResetButton(radians);
+
+    currentDeg = (currentView.getRotation() * (180.0 / Math.PI));
+    this.saveRotation(currentDeg, currentView);
   };
-
-
 
   /*
    * examines the number of characters present in the
@@ -171,7 +195,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     var button = $(".wv-map-reset-rotation");
     var deg = radians * (180.0 / Math.PI);
     //Set reset button content
-    button.button("option", "label", Number(deg)
+    button.button("option", "label", Number(deg % 360)
       .toFixed());
     switch (true) {
       case (deg >= 100.0):
@@ -211,24 +235,14 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
 
     var currentDeg = (map.getView()
       .getRotation() * (180.0 / Math.PI));
-    if (Math.abs(currentDeg) === 360) {
-      map.getView()
-        .setRotation(0);
-    } else if (Math.abs(currentDeg) >= 360) {
-      var newNadVal = ((360 - Math.abs(currentDeg)) * (Math.PI / 180));
-      if (currentDeg < 0) {
-        map.getView()
-          .setRotation(newNadVal);
-      } else {
-        map.getView()
-          .setRotation(-newNadVal);
-      }
-    }
+
+    this.saveRotation(currentDeg, currentView);
+
     map.getView()
       .animate({
         rotation: map.getView()
           .getRotation() - (Math.PI / amount),
-        duration: duration,
+        duration: duration
       });
   };
 };
