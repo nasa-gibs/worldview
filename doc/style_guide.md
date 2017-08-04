@@ -9,25 +9,83 @@ This document is an attempt to normalize the code.
 We use stylelint to enforce our CSS code standards. You can run `grunt stylelint` to check your CSS code. CSS that does not adhere to this standard will not pass the Travis CI build. Please use a linter while developer to catch any issues as they occur. We provide an additional tool to auto-correct your CSS, `grunt stylefmt`.
 
 #### Main Focus
-* CSS should be written in a clean, consistent manner with equal spaced rules and properties.
-* **Class based cascading specificity.** ID and chained type (i.e. span.icon) selectors are highly discouraged and will be forbidden in the future.
+* CSS should be written in a clean, consistent, cascading manner with equal spaced rules and properties.
+* **Class based cascading specificity.** ID and chained type selectors (i.e. span.icon) are highly discouraged and will be forbidden in the future.
+* Do no over comment the code; comments are not allowed in rules
 
-#### Selectors
-* Selector pseudo classes
-* Declaration
+#### Syntax
+* Always use 2 space indenting
+* Always use a newline for multiple selectors
+* Always use 1 space before the opening bracket
+* Always use a newline after the opening bracket
+* Always use a newline after closing bracket
+* Never use spaces between function brackets i.e. url('here.gif');
+* Never use spaces before semicolons or commas
+* Always use 1 space after commas
+* Operators must use spaces i.e. (`this + that`)
+* Single or double quotations can be used for strings
+* Never use a newline between strings
 
 #### At rules
+* We only allow the following at rules: "media", "charset", "font-face"
 * No import rules. If you want to add a css file, include it via a def link in the html, then add it to the css.json file;
-* We are only allowing these at rules:
 * At media rules ...
 
-#### Units / Fonts / Colors
-* Units not allowed: c, ex, in, mm, pc, pt, rem, vh, vmin, vw
+#### Selectors
+* Selector pseudo classes use a single color, pseudo elements use a double colon
+
+#### Properties
+* No duplicate properties (except beside each other for fallbacks)
+
+#### Fonts
+* Don't declare duplicate font-family names in properties.
+
+#### Colors
 * Colors can only be hexadecimal and if a shorthand is available, this must be used.
+
+#### Units
+* Always use `px` units
+* Units not allowed: `c`, `ex`, `in`, `mm`, `pc`, `pt`, `rem`, `vh`, `vmin`, `vw`
+* Avoid using `em` units as these will be forbidden in the future
 * `0px` must be `0`
 
-Examples
+#### Example
 ```css
+
+  /* There must always be an empty line before a comment, except on the first line of a file.
+   * Multiline comments are ok
+   * js style (//) comments are forbidden
+   * Comments must include a space at the beginning
+   * Comments cannot be inside rules
+   * Comments must come directly before a rule with no newlines in between
+   */
+
+  /* Rules must be on newlines */
+  h1,
+  .h1 {
+    font-size: 16px; /* Only use px units */
+    line-height: 0; /* When a zero unit is present you must use 0, not 0px */
+  }
+
+  /* Only one newline between rules; the above would be incorrect */
+  .main { /* No empty rules allowed */
+  }
+
+  .main .subclass {
+    background: #fff; /* shorthand color, hex only no color names */
+  }
+
+  .main .subclass::before { /* pseudo elements use 2 colons */
+    content: url('smiley.gif'); /* no spacing in url, (either quote type is fine) */
+  }
+
+  .main .subclass:hover { /* pseudo classes use 1 colon */
+    background: #ccc;
+  }
+
+  .main .subclass:hover::before {
+    content: '';
+  }
 
 ```
 
