@@ -84,12 +84,27 @@ module.exports = function(grunt) {
     opt: options,
     apache_version: grunt.option("apache-version") || "22",
 
-    autoprefix: {
-      options: {
-        map: false,
-        processors: [require('autoprefixer')]
+    postcss: {
+      stylelint: {
+          options: {
+            map: false,
+            processors: [require('stylelint')({
+              configFile: '.stylelintrc',
+              formatter: 'string',
+              ignoreDisables: false,
+              failOnError: true,
+              outputFile: '',
+              reportNeedlessDisables: false,
+              syntax: ''
+            })]
+          },
+          src: 'web/css/*.css'
       },
-      dist: {
+      autoprefix: {
+        options: {
+          map: false,
+          processors: [require('autoprefixer')]
+        },
         src: 'web/css/*.css'
       }
     },
@@ -634,19 +649,6 @@ module.exports = function(grunt) {
       }
     },
 
-    stylelint: {
-      options: {
-        configFile: '.stylelintrc',
-        formatter: 'string',
-        ignoreDisables: false,
-        failOnError: true,
-        outputFile: '',
-        reportNeedlessDisables: false,
-        syntax: ''
-      },
-      src: 'web/css/*.css'
-    },
-
     stylefmt: {
       format: {
         files:[
@@ -707,7 +709,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-minjson");
   grunt.loadNpmTasks("grunt-mkdir");
   grunt.loadNpmTasks("grunt-postcss");
-  grunt.loadNpmTasks("grunt-stylelint");
   grunt.loadNpmTasks("grunt-stylefmt");
   grunt.loadNpmTasks("grunt-text-replace");
   grunt.loadNpmTasks("grunt-rename");
@@ -715,7 +716,6 @@ module.exports = function(grunt) {
 
   // Lets use "clean" as a target instead of the name of the task
   grunt.renameTask("clean", "remove");
-  grunt.renameTask("postcss", "autoprefix");
 
   grunt.registerTask("load_branding", "Load branding", function() {
     var brand = grunt.file.readJSON("build/options/brand.json");
@@ -735,6 +735,8 @@ module.exports = function(grunt) {
     grunt.option("packageName", brand.packageName);
     grunt.option("email", brand.email);
   });
+
+  grunt.registerTask("autoprefix", ["postcss:autoprefix"]);
 
   grunt.registerTask("build", [
     "coffee",
@@ -781,6 +783,8 @@ module.exports = function(grunt) {
     "exec:tar_site_release",
     "copy:dist_site_release_versioned"
   ]);
+
+  grunt.registerTask("stylelint", ["postcss:stylelint"]);
 
   grunt.registerTask("rpm-only", [
     "load_branding",
