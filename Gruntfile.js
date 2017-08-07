@@ -86,19 +86,19 @@ module.exports = function(grunt) {
 
     postcss: {
       stylelint: {
-          options: {
-            map: false,
-            processors: [require('stylelint')({
-              configFile: '.stylelintrc',
-              formatter: 'string',
-              ignoreDisables: false,
-              failOnError: true,
-              outputFile: '',
-              reportNeedlessDisables: false,
-              syntax: ''
-            })]
-          },
-          src: 'web/css/*.css'
+        options: {
+          map: false,
+          processors: [require('stylelint')({
+            configFile: '.stylelintrc',
+            formatter: 'string',
+            ignoreDisables: false,
+            failOnError: true,
+            outputFile: '',
+            reportNeedlessDisables: false,
+            syntax: ''
+          })]
+        },
+        src: 'web/css/*.css'
       },
       autoprefix: {
         options: {
