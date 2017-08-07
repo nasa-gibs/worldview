@@ -669,7 +669,6 @@ module.exports = function(grunt) {
         }
       },
       wv_js: {
-
         files: {
           "build/worldview/web/js/wv.js": ["build/worldview/web/js/wv.js"]
         }
