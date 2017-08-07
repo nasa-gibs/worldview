@@ -29,7 +29,7 @@
         var abs, x, xN, y, yA, yN, z, zN;
         abs = Math.abs;
 
-        // # Doesn't cross the meridian
+        // Doesn't cross the meridian
         if (this.coordA.theta < this.coordB.theta) {
           return null;
         }
@@ -50,11 +50,11 @@
          * vector which passes through the (anti-)meridian (y = 0) and whose
          * normal vector with either @coordA or @coordB is @normal (or at least
          * points in the same direction).
-         * #
+         *
          * xN = yA * z - zA * y
          * yN = zA * x - xA * z
          * zN = xA * y - yA * x
-         * #
+         *
          * x = - zN / yA
          * y = 0
          * z = xN / yA
