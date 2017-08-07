@@ -244,7 +244,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     eventItem = null;
     if (event.geometries.length > 1) {
-      eventItem = event.geometries[dateIndex || 0];
+      eventItem = event.geometries[dateIndex] || event.geometries[0];
     } else {
       eventItem = event.geometries[0];
     }
