@@ -86,19 +86,19 @@ module.exports = function(grunt) {
 
     postcss: {
       stylelint: {
-          options: {
-            map: false,
-            processors: [require('stylelint')({
-              configFile: '.stylelintrc',
-              formatter: 'string',
-              ignoreDisables: false,
-              failOnError: true,
-              outputFile: '',
-              reportNeedlessDisables: false,
-              syntax: ''
-            })]
-          },
-          src: 'web/css/*.css'
+        options: {
+          map: false,
+          processors: [require('stylelint')({
+            configFile: '.stylelintrc',
+            formatter: 'string',
+            ignoreDisables: false,
+            failOnError: true,
+            outputFile: '',
+            reportNeedlessDisables: false,
+            syntax: ''
+          })]
+        },
+        src: 'web/css/*.css'
       },
       autoprefix: {
         options: {
@@ -115,16 +115,6 @@ module.exports = function(grunt) {
         test: {
           reporter: "xml"
         }
-      }
-    },
-
-    coffee: {
-      build: {
-        expand: true,
-        cwd: "web/coffee",
-        src: ["**/*.coffee"],
-        dest: "web/js",
-        ext: ".js"
       }
     },
 
@@ -679,7 +669,6 @@ module.exports = function(grunt) {
         }
       },
       wv_js: {
-
         files: {
           "build/worldview/web/js/wv.js": ["build/worldview/web/js/wv.js"]
         }
@@ -694,7 +683,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-buster");
   grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-contrib-coffee");
   grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-contrib-compress");
   grunt.loadNpmTasks("grunt-contrib-copy");
@@ -739,7 +727,6 @@ module.exports = function(grunt) {
   grunt.registerTask("autoprefix", ["postcss:autoprefix"]);
 
   grunt.registerTask("build", [
-    "coffee",
     "remove:build_source",
     "git-rev-parse:source",
     "copy:source",

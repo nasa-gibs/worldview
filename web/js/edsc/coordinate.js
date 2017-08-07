@@ -6,8 +6,16 @@
 
   ns.Coordinate = (function(L) {
     var Coordinate, DEG_TO_RAD, RAD_TO_DEG, exports;
+    
     DEG_TO_RAD = Math.PI / 180;
     RAD_TO_DEG = 180 / Math.PI;
+
+    /**
+     * Method for dealing with conversions between lat/lng, phi/theta, and x/y/z as well
+     * as operations on the various forms.
+     * Consider properties on this class to be immutable.  Changing, say, 'x' will not
+     * update `phi` or `theta` and will throw normalization out of whack.
+     */
     Coordinate = (function() {
       Coordinate.fromLatLng = function() {
         var args, lat, lng, ref;
@@ -25,6 +33,8 @@
         PI = Math.PI;
         cos = Math.cos;
         sin = Math.sin;
+
+        // Normalize phi to the interval [-PI / 2, PI / 2]
         while (phi >= PI) {
           phi -= 2 * PI;
         }
@@ -51,12 +61,18 @@
         return new Coordinate(phi, theta, x, y, z);
       };
 
+      /**
+       * +X axis passes through the (anti-)meridian at the equator
+       * +Y axis passes through 90 degrees longitude at the equator
+       * +Z axis passes through the north pole
+       */
       Coordinate.fromXYZ = function(x, y, z) {
         var d, phi, scale, theta;
         d = x * x + y * y + z * z;
-        if (d === 0) {
+        if (d === 0) { // Should never happen, but stay safe
           d = x = 1;
         }
+        // We normalize so that x, y, and z fall on a unit sphere
         scale = 1 / Math.sqrt(d);
         x *= scale;
         y *= scale;
@@ -74,10 +90,12 @@
         this.z = z1;
       }
 
+      // Dot product
       Coordinate.prototype.dot = function(other) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
       };
 
+      // Normalized cross product
       Coordinate.prototype.cross = function(other) {
         var x, y, z;
         x = this.y * other.z - this.z * other.y;
@@ -86,6 +104,7 @@
         return Coordinate.fromXYZ(x, y, z);
       };
 
+      // Distance to other coordinate on a unit sphere.  Same as the angle between the two points at the origin.
       Coordinate.prototype.distanceTo = function(other) {
         return Math.acos(this.dot(other));
       };
@@ -110,5 +129,4 @@
     return exports = Coordinate;
   })(L);
 
-})
-.call(this);
+}).call(this);
