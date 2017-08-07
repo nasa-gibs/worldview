@@ -42,7 +42,6 @@
     "grunt-postcss": "^0.8.0",
     "grunt-rename": "0.1.x",
     "grunt-stylefmt": "^3.0.0",
-    "grunt-stylelint": "^0.8.0",
     "grunt-text-replace": "0.4.x",
     "gruntify-eslint": "^4.0.0",
     "lodash": "4.15.0",
