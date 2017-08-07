@@ -26,7 +26,6 @@
     "grunt": "0.4.x",
     "grunt-buster": "0.4.x",
     "grunt-contrib-clean": "1.0.x",
-    "grunt-contrib-coffee": "1.0.x",
     "grunt-contrib-compress": "0.5.x",
     "grunt-contrib-concat": "1.0.x",
     "grunt-contrib-copy": "1.0.x",
