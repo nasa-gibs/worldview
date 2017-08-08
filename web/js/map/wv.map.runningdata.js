@@ -157,7 +157,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    *
    */
   self.getPalette = function(id) {
-    return $('#' + id);
+    return $(document.getElementById(id));
   };
 
   /*
@@ -224,6 +224,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
       var palette;
       var legend;
       var layerId;
+
       if (!layer.wv) {
         return;
       }
@@ -234,6 +235,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         }
         legends = models.palettes.getLegends(layerId);
         hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
+
         _.each(legends, function(legend) {
           if (legend) {
             self.createRunnerFromLegend(legend, hex);
@@ -294,6 +296,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    */
   self.createRunnerFromLegend = function(legend, hex) {
     var paletteInfo;
+
     if (legend.type === 'continuous' || legend.type === 'discrete') {
       paletteInfo = self.getDataLabel(legend, hex);
       if (paletteInfo) {
@@ -414,7 +417,6 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
     percent = self.getPercent(data.len, data.index, $paletteWidth);
     margin = (($paletteCaseWidth - $paletteWidth) / 2);
     location = ($paletteWidth * percent + margin);
-
 
     $paletteLabel.text(data.label);
     labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
