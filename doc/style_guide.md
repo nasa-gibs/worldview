@@ -130,17 +130,19 @@ h1,
 ### JavaScript
 
 * Functions should be pure when possible; pass parameters that are used to return a result
+
 ```js
 function getWordArray(str) {
-    return str.split(' ');
+  return str.split(' ');
 }
 ```
 * Keep variable declaration at the top of the scope to be a more literal representation of where variables are declared
+
 ```js
 function varDeclare() {
-    var all, variables, here;
+  var all, variables, here;
 
-    // then do something with vars
+  // then do something with vars
 }
 ```
 * If a variable is a jQuery object use a $ at the start of the variable
