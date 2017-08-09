@@ -45,7 +45,7 @@ We'd be quite excited if you'd like to contribute to Worldview! Whether it's fin
 
 Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-Roadmap) for a list of features currently in progress or planned in the reasonably near future.  We're also working to synchronize our (currently internal) sprint planning and issue tracking systems with GitHub.  
 
-Here are the tickets we are currently working on: 
+Here are the tickets we are currently working on:
 [![Stories in Ready](https://badge.waffle.io/nasa-gibs/worldview.svg?label=ready&title=Ready)](http://waffle.io/nasa-gibs/worldview)
 [![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/nasa-gibs/worldview)
 
@@ -108,8 +108,10 @@ http://localhost:8182/example-map
 * [Manual Setup](doc/manual_setup.md)
 * [Branding](doc/branding.md)
 * [Optional Features](doc/features.md)
-* [Development Notes](doc/developing.md)
 * [Configuration](doc/config.md)
+* [Development Notes](doc/developing.md)
+* [Coding Style Guide](doc/style_guide.md)
+* [Contributing](doc/contributing.md)
 * [Third-Party Library Use](THIRD_PARTY.md)
 
 
