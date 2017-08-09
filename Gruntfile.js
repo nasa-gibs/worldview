@@ -28,6 +28,8 @@ var nodeModuleFiles = [
   "node_modules/gifshot/build/custom/gifshot.custom.min.js",
   "node_modules/promise-queue/lib/index.js",
   "node_modules/openlayers/dist/ol-debug.js",
+  "node_modules/openlayers/dist/ol.js",
+  "node_modules/openlayers/dist/ol.css",
   "node_modules/font-awesome/css/font-awesome.min.css",
   "node_modules/font-awesome/fonts/*",
   "node_modules/clipboard/dist/clipboard.js",

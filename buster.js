@@ -20,7 +20,7 @@ config["wv"] = {
     "web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js",
     "web/ext/main/jscache-gitba01cdc/cache.js",
     "web/ext/proj/proj4js-2.3.3-1/proj4.js",
-    "web/ext/map/openlayers-3.17.1.wv1/ol.js",
+    "node_modules/openlayers/dist/ol.js",
     "test/fixtures.js"
   ],
   src: [
