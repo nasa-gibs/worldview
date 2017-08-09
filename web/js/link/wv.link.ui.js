@@ -19,6 +19,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var selector = "#" + id;
   var $button, $label;
   var widgetFactory = React.createFactory(WVC.Share);
+  var clipboard = new Clipboard('.copy-btn');
 
   var init = function() {
     $button = $("<input></input>")
@@ -131,14 +132,22 @@ wv.link.ui = wv.link.ui || function(models, config) {
   self.show = function() {
     var $dialog = wv.ui.getDialog();
     var item = "<div id='wv-link' class='wv-link'>" +
-      "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>";
+      "<div class='input-group'>" +
+      "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>" +
+      "<span class='input-group-button hide-icon' data-balloon-visible data-tooltip='Copied!' data-tooltip-pos='up' data-tooltip-length='xsmall'>" +
+      "<button title='Copy to clipboard' class='copy-btn' data-clipboard-target='#permalink_content'>" +
+      "<span class='clip-icon fa fa-clipboard' aria-hidden='true'></span>" +
+      "</button>" +
+      "</span>" +
+      "</div>";
     if (config.features.urlShortening) {
       item += "<span autofocus></span><div id='wv-link-shorten'>" +
         "<input type='checkbox' value='' id='wv-link-shorten-check' />" +
-        "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label>" +
+        "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten link</label>" +
         "</div>";
     }
     item += "</div>";
+
     var dialogWidth = '300';
     if (wv.util.browser.small) {
       dialogWidth = '242';
@@ -166,7 +175,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     $dialog.dialog({
       dialogClass: "wv-panel wv-link-panel",
-      title: "Copy this link to share:",
+      title: "Copy link to share:",
       show: {
         effect: "slide",
         direction: "up"
@@ -248,6 +257,24 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     $("#wv-link-shorten-check")
       .prop("checked", false);
+
+    clipboard.on('success', function(e) {
+      e.clearSelection();
+
+      $('.wv-link .input-group-button')
+        .removeClass('hide-icon');
+
+      setTimeout(function(){
+        $('.wv-link .input-group-button')
+          .addClass('hide-icon');
+      }, 1000);
+    });
+
+    clipboard.on('error', function(e) {
+      console.error('Link could not be copied!');
+      console.error('Action:', e.action);
+      console.error('Trigger:', e.trigger);
+    });
   };
 
   self.initWidget = function() {
