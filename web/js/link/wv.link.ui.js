@@ -135,9 +135,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
       "<div class='input-group'>" +
       "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>" +
       "<span class='input-group-button hide-icon' data-balloon-visible data-tooltip='Copied!' data-tooltip-pos='up' data-tooltip-length='xsmall'>" +
-      "<button title='Copy to clipboard' class='copy-btn' data-clipboard-target='#permalink_content'>" +
-      "<span class='clip-icon fa fa-clipboard' aria-hidden='true'></span>" +
-      "</button>" +
+      "<button title='Copy to clipboard' class='copy-btn' data-clipboard-target='#permalink_content'>COPY</button>" +
       "</span>" +
       "</div>";
     if (config.features.urlShortening) {
