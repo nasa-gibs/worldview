@@ -284,7 +284,7 @@ $(function() {
   var resetWorldview = function(e){
     e.preventDefault();
     if (window.location.search === "") return; // Nothing to reset
-    var msg = "Do you want to reset Worldview to it's defaults? You will lose your current state.";
+    var msg = "Do you want to reset Worldview to its defaults? You will lose your current state.";
     if (confirm(msg)) document.location.href = "/";
   };
 
