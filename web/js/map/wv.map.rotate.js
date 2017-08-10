@@ -236,6 +236,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
     var currentDeg = (map.getView()
       .getRotation() * (180.0 / Math.PI));
 
+    var currentView = ui.selected.getView();
     this.saveRotation(currentDeg, currentView);
 
     map.getView()
