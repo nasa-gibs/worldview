@@ -133,9 +133,11 @@ You can end the session by pressing `control-C`
 * [Alternate Installation using Apache](doc/apache_setup.md)
 * [Branding](doc/branding.md)
 * [Optional Features](doc/features.md)
-* [Development Notes](doc/developing.md)
 * [Configuration](doc/config.md)
+* [Development Notes](doc/developing.md)
+* [Coding Style Guide](doc/style_guide.md)
 * [Testing](doc/testing.md)
+* [Contributing](doc/contributing.md)
 * [Third-Party Library Use](THIRD_PARTY.md)
 
 

@@ -1,6 +1,6 @@
 ## Development
 
-*Please Note*: There is litte to no documentation at ths time and any
+*Please Note*: There is little to no documentation at this time and any
 comments in the code may be out of date.
 
 ### Minification of CSS and JavaScript files
@@ -104,6 +104,19 @@ Check for common errors in the JavaScript and CSS files with:
 
     grunt lint
 
+[eslint](http://eslint.org) is used for JavaScript linting.
+Run the following to check only check Javascript errors:
+
+    grunt eslint
+
+[stylelint](https://stylelint.io) is used for CSS linting.
+Run the following to checkout only CSS errors:
+
+    grunt stylelint
+
+Run the following to automatically fix stylelint errors:
+
+    grunt stylefmt
 
 ### Documentation
 
