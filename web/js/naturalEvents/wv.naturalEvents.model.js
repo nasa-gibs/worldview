@@ -20,47 +20,47 @@ wv.naturalEvents = wv.naturalEvents || {};
  */
 wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
 
-    var self = {};
-    self.selected = null;
-    self.active = false;
-    self.layers = config.naturalEvents.layers;
-    var state = {
-        layersString: null,
-        projection: null,
-        epsg: null,
-        time: null
-    };
+  var self = {};
+  self.selected = null;
+  self.active = false;
+  self.layers = config.naturalEvents.layers;
+  var state = {
+    layersString: null,
+    projection: null,
+    epsg: null,
+    time: null
+  };
 
-    /**
-     * Handler for events fired by this class.
-     *
-     * @attribute events {Events}
-     * @readOnly
-     * @type Events
-     */
-    self.events = wv.util.events();
+  /**
+   * Handler for events fired by this class.
+   *
+   * @attribute events {Events}
+   * @readOnly
+   * @type Events
+   */
+  self.events = wv.util.events();
 
-    self.save = function(state) {
-        if ( self.active ){
-            state.e = 't';
-        }
-    };
+  self.save = function(state) {
+    if (self.active) {
+      state.e = 't';
+    }
+  };
 
-    self.load = function(state) {
-        if (state.e == 't') {
-            models.wv.events.on("startup", function() {
-                wvx.ui.sidebar.selectTab("events");
-            });
-        }
-    };
-    /*
-    self.register = function(crs, def) {
-        if ( def && window.proj4 ) {
-            proj4.defs(crs, def);
-        }
-    };
-    */
+  self.load = function(state) {
+    if (state.e == 't') {
+      models.wv.events.on("startup", function() {
+        wvx.ui.sidebar.selectTab("events");
+      });
+    }
+  };
+  /*
+  self.register = function(crs, def) {
+      if ( def && window.proj4 ) {
+          proj4.defs(crs, def);
+      }
+  };
+  */
 
 
-    return self;
+  return self;
 };

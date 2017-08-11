@@ -1,418 +1,464 @@
+/*
+ * NASA Worldview
+ *
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 - 2017 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the NASA Open Source Agreement, Version 1.3
+ * http://opensource.gsfc.nasa.gov/nosa.php
+ */
 
 *:focus {
-    outline: 0;
+  outline: 0;
 }
 
-
-/************************Timeline****************************/
-#timeline{
-    position:absolute;
-    bottom:10px;
-    left:10px;
-    right:10px;
-    border:1px solid #333;
-    background: rgba(40,40,40,0.9);
-    min-width:286px;
-    border-radius:5px;
-}
-#timeline-footer text{
-    font-size:14px;
-    font-weight:normal;
-    font-family:‘Lucida Console’, Monaco, monospace;
-    font-style:normal;
-    font-variant:normal;
-    font-stretch:normal;
-    text-align:start;
-    line-height:125%;
-    letter-spacing:0px;
-    word-spacing:0px;
-    writing-mode:lr-tb;
-    text-anchor:start;
-    fill-opacity:1;
-    stroke:none;
-}
-.x.axis .tick{
-    cursor:pointer;
+#timeline {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  border: 1px solid #333;
+  background: rgba(40, 40, 40, 0.9);
+  min-width: 286px;
+  border-radius: 5px;
 }
 
-.x.axis .tick text{
-    fill:#fff;
-    text-transform:uppercase;
+#timeline-footer text {
+  font: 400 14px/125% 'Roboto Mono', monospace;
+  text-align: start;
+  letter-spacing: 0;
+  word-spacing: 0;
+  -webkit-writing-mode: lr-tb;
+  -ms-writing-mode: lr-tb;
+  writing-mode: lr-tb;
+  text-anchor: start;
+  fill-opacity: 1;
+  stroke: none;
 }
 
-.x.axis > .tick circle{
-    fill:#fff;
-}
-.x.axis> g.tick rect {
-    fill:#e2e2e2;
-    fill-opacity:0;
-}
-.x.axis> g.tick:hover rect.boundarytick-background,
-.x.axis> g.tick rect.boundarytick-background.bg-hover{
-    fill:#fff;
-    fill-opacity:1;
-}
-.x.axis> g.tick.tick-labeled-disabled:hover rect.boundarytick-background{
-    fill-opacity:0;
-}
-.x.axis> g.tick.tick-labeled-disabled{
-    cursor:default;
-}
-.x.axis> g.tick.label-only text{
-    cursor:default;
+.x.axis .tick {
+  cursor: pointer;
 }
 
-.x.axis> g.tick rect.normaltick-background:hover{
-    fill-opacity:0.3;
-    fill:#fff;
+.x.axis .tick text {
+  fill: #fff;
+  text-transform: uppercase;
 }
 
-.x.axis> g.tick text.hover-tick-label {
-    fill:#1a1a1a;
-    pointer-events:none;
+.x.axis > .tick circle {
+  fill: #fff;
 }
-.x.axis > g.tick > text > .sub-label{
-    fill:#555;
+
+.x.axis > g.tick rect {
+  fill: #e2e2e2;
+  fill-opacity: 0;
 }
-.x.axis > g.tick:hover > text > .sub-label{
-    fill:#1a1a1a;
+
+.x.axis > g.tick rect.boundarytick-background.bg-hover,
+.x.axis > g.tick:hover rect.boundarytick-background {
+  fill: #fff;
+  fill-opacity: 1;
 }
-.x.axis > .tick > line{
-    fill:none;
-    stroke:#9B9b9b;
-    stroke-width:1;
-    stroke-linecap:butt;
-    stroke-linejoin:miter;
-    stroke-miterlimit:4;
-    stroke-opacity:1;
-    stroke-dasharray:2, 4;
-    stroke-dashoffset:0;
+
+.x.axis > g.tick.tick-labeled-disabled:hover rect.boundarytick-background {
+  fill-opacity: 0;
 }
-.x.axis>.tick-labeled>line {
-    stroke-width:1;
-    stroke-miterlimit:4;
-    stroke-dasharray:none;
-    stroke:#fff;
-    stroke-linecap:butt;
-    stroke-linejoin:miter;
-    stroke-miterlimit:4;
+
+.x.axis > g.tick.tick-labeled-disabled {
+  cursor: default;
 }
-.x.axis>.tick>line.tick-week{
-    stroke:#cfcfcf;
-    stroke-width:1;
-    stroke-dasharray:0;
+
+.x.axis > g.tick.label-only text {
+  cursor: default;
 }
+
+.x.axis > g.tick rect.normaltick-background:hover {
+  fill-opacity: 0.3;
+  fill: #fff;
+}
+
+.x.axis > g.tick text.hover-tick-label {
+  fill: #1a1a1a;
+  pointer-events: none;
+}
+
+.x.axis > g.tick > text > .sub-label {
+  fill: #555;
+}
+
+.x.axis > g.tick:hover > text > .sub-label {
+  fill: #1a1a1a;
+}
+
+.x.axis > .tick > line {
+  fill: none;
+  stroke: #9b9b9b;
+  stroke-width: 1;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-miterlimit: 4;
+  stroke-opacity: 1;
+  stroke-dasharray: 2, 4;
+  stroke-dashoffset: 0;
+}
+
+.x.axis > .tick-labeled > line {
+  stroke-width: 1;
+  stroke-dasharray: none;
+  stroke: #fff;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-miterlimit: 4;
+}
+
+.x.axis > .tick > line.tick-week {
+  stroke: #cfcfcf;
+  stroke-width: 1;
+  stroke-dasharray: 0;
+}
+
 g.plot rect.data-bar {
-    fill:#4e5e87;
-    stroke:transparent;
-    stroke-width:1px;
-
-    /*    stroke:#ccc;
-
-    stroke-width:2px;
-    stroke-linecap:round;
-    stroke-linejoin:miter;
-    stroke-opacity:0.8;
-*/
-    pointer-events:none;
-}
-g.plot rect.data-bar-hovered{
-    stroke:#999;
-}
-g.plot rect.data-bar-invisible{
-    fill:#777;
-    fill-opacity:0.5;
-}
-#timeline-header{
-    margin-top:2px;
-}
-#timeline-header .input-wrapper{
-    background: transparent;
-    border: 1px solid transparent;
-    vertical-align:middle;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-}
-#timeline-header .input-wrapper:nth-child(2){
-    max-width:60px;
-}
-#timeline-header .input-wrapper:nth-child(3){
-    max-width:50px;
-}
-#timeline-header .input-wrapper:nth-child(4){
-    max-width:35px;
-}
-#timeline-header input{
-    height:40px;
-    color:#fff;
-    font-size:24px;
-    background:transparent;
-    border:0px;
-    font-family:‘Lucida Console’, Monaco, monospace;
-    vertical-align:middle;
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    padding:0;
-}
-@media all{
-    #timeline-header input::selection{
-
-    }
-    #timeline-header input::-moz-selection{
-        background:#ffffff;
-        color:#999;
-    }
-    #timeline-header input::-webkit-selection{
-
-    }
+  fill: #4e5e87;
+  stroke: transparent;
+  stroke-width: 1px;
+  pointer-events: none;
 }
 
-#timeline-header .focus-guard{
-/*    display:none;
-*/}
-#timeline-header .input-wrapper:hover{
-    border-color: #666;
+g.plot rect.data-bar-hovered {
+  stroke: #999;
 }
-#timeline-header .input-wrapper:hover .date-arrows{
-    visibility:visible;
+
+g.plot rect.data-bar-invisible {
+  fill: #777;
+  fill-opacity: 0.5;
 }
-#timeline-header .input-wrapper:hover .date-arrows svg path{
-    /*fill: #fff;*/
-    fill: #888;
+
+#timeline-header {
+  margin-top: 2px;
+  width: 296px;
 }
-#timeline-header .input-wrapper.selected{
-    border-color:#fff;
+
+#timeline-header .input-wrapper {
+  background: transparent;
+  border: 1px solid transparent;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
-#timeline-header .input-wrapper.selected .date-arrows svg path{
-    fill: #fff;
+
+#timeline-header .input-wrapper:nth-child(2) {
+  max-width: 60px;
 }
-#timeline-header div{
-    display:inline-block;
+
+#timeline-header .input-wrapper:nth-child(3) {
+  max-width: 50px;
 }
-.button-action-group,.date-arrows{
+
+#timeline-header .input-wrapper:nth-child(4) {
+  max-width: 35px;
+}
+
+#timeline-header input {
+  height: 40px;
+  color: #fff;
+  font-size: 24px;
+  background: transparent;
+  border: 0;
+  font-family: 'Roboto Mono', monospace;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 0;
+}
+
+#timeline-header .input-wrapper:hover {
+  border-color: #666;
+}
+
+#timeline-header .input-wrapper:hover .date-arrows {
+  visibility: visible;
+}
+
+#timeline-header .input-wrapper:hover .date-arrows svg path {
+  fill: #888;
+}
+
+#timeline-header .input-wrapper.selected {
+  border-color: #fff;
+}
+
+#timeline-header .input-wrapper.selected .date-arrows svg path {
+  fill: #fff;
+}
+
+#timeline-header div {
+  display: inline-block;
+}
+
+.button-action-group,
+.date-arrows {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-.button-action-group{
-  height:60px;
-  width:40px;
-  vertical-align:middle;
-  position:relative;
+
+.button-action-group {
+  height: 60px;
+  width: 40px;
+  vertical-align: middle;
+  position: relative;
 }
 
-
-#timeline-header .button-action-group svg path{
-    fill:#fff;
+#timeline-header .button-action-group svg path {
+  fill: #fff;
 }
 
-#timeline-header .date-arrows-wrapper{
-    vertical-align:middle;
-    visibility:hidden;
-    display:inline-block;
+#timeline-header .date-arrows-wrapper {
+  vertical-align: middle;
+  visibility: hidden;
+  display: inline-block;
 }
-#timeline-header .date-arrows{
-    display:block;
-    height:10px;
+
+#timeline-header .date-arrows {
+  display: block;
+  height: 10px;
 }
-#timeline-header .date-arrows svg{
-    vertical-align:top;
-    display:block;
-    margin:0 auto;
+
+#timeline-header .date-arrows svg {
+  vertical-align: top;
+  display: block;
+  margin: 0 auto;
 }
-#timeline-header .date-arrows svg path{
-    fill:#444;
+
+#timeline-header .date-arrows svg path {
+  fill: #444;
 }
+
 #timeline-header .input-wrapper:hover .date-arrows:hover svg path {
-    fill:#1a1a1a;
+  fill: #1a1a1a;
 }
-#timeline-header .date-arrow-up{
 
+#timeline-header .date-arrow-down {
+  -webkit-transform: scaleY(-1);
+  transform: scaleY(-1);
+  -webkit-filter: FlipV;
+  filter: FlipV;
+  -ms-filter: "FlipV";
 }
-#timeline-header .date-arrow-down{
-    -moz-transform: scaleY(-1);
-    -o-transform: scaleY(-1);
-    -webkit-transform: scaleY(-1);
-    transform: scaleY(-1);
-    filter: FlipV;
-    -ms-filter: "FlipV";
+
+#timeline-header .date-arrows:hover,
+#timeline-header > .button-action-group:hover {
+  background-color: #fff;
+  cursor: pointer;
 }
-#timeline-header>.button-action-group:hover,#timeline-header .date-arrows:hover{
-    background-color:#fff;
-    cursor:pointer;
+
+#timeline-header > .button-action-group.button-disabled:hover {
+  background-color: transparent;
+  cursor: default;
 }
-#timeline-header>.button-action-group.button-disabled:hover{
-    background-color:transparent;
-    cursor:default;
-}
+
 #timeline-header .button-action-group svg {
-    position: absolute;
-    top: 50%;
-    margin-top: -15px;
-    left: 50%;
-    margin-left: -12px;
+  position: absolute;
+  top: 50%;
+  margin-top: -15px;
+  left: 50%;
+  margin-left: -12px;
 }
-#timeline-header #left-arrow-group{
-     -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-}
-#timeline-header #left-arrow-group svg{
-    filter: FlipH;
-    -ms-filter: "FlipH";
-}
-#timeline-header>.button-action-group:hover .arrow{
-    fill:#1a1a1a;
-    fill-opacity:1;
-    stroke:none;
-}
-#timeline-header>.button-action-group.button-disabled .arrow{
-    fill:#333;
-}
-#timeline-header>.button-action-group.button-disabled:hover .arrow{
-    fill:#333;
-}
-#timeline-header,#timeline-footer,#timeline-zoom,#timeline-hide{
-    float:left;
-}
-#timeline-header .animate-button .wv-animate {
-    color: #fff;
-    font-size: 2.5em;
-    margin: 12px 0 0 2px;
-}
-#timeline-header .animate-button:hover .wv-animate {
-    color: #1a1a1a;
-}
-#timeline-header .animate-button.wv-disabled-button {
-    cursor: auto;
-    pointer-events: none;
-}
-#timeline-header .animate-button.wv-disabled-button .wv-animate {
-    color: #ccc;
-}
-#timeline-footer{
-    height:65px;
-    border-left:1px solid #666;
-    border-right:1px solid #666;
 
+#timeline-header #left-arrow-group {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
+
+#timeline-header #left-arrow-group svg {
+  -webkit-filter: FlipH;
+  filter: FlipH;
+  -ms-filter: "FlipH";
+}
+
+#timeline-header > .button-action-group:hover .arrow {
+  fill: #1a1a1a;
+  fill-opacity: 1;
+  stroke: none;
+}
+
+#timeline-header > .button-action-group.button-disabled .arrow {
+  fill: #333;
+}
+
+#timeline-header > .button-action-group.button-disabled:hover .arrow {
+  fill: #333;
+}
+
+#timeline-footer,
+#timeline-header,
+#timeline-hide,
+#timeline-zoom {
+  float: left;
+}
+
+#timeline-header .animate-button .wv-animate {
+  color: #fff;
+  font-size: 2.5em;
+  margin: 12px 0 0 2px;
+}
+
+#timeline-header .animate-button:hover .wv-animate {
+  color: #1a1a1a;
+}
+
+#timeline-header .animate-button.wv-disabled-button {
+  cursor: auto;
+  pointer-events: none;
+}
+
+#timeline-header .animate-button.wv-disabled-button .wv-animate {
+  color: #ccc;
+}
+
+#timeline-footer {
+  height: 65px;
+  border-left: 1px solid #666;
+  border-right: 1px solid #666;
+}
+
 #timeline-footer svg {
-    overflow:visible;
-    margin-top:-16px;
+  overflow: visible;
+  margin-top: -16px;
 }
-#timeline-footer svg > g{
-    overflow:hidden;
+
+#timeline-footer svg > g {
+  overflow: hidden;
 }
 
 /* Timeline svg classes */
-
-
-.x.axis path, .x.axis line {
-    fill: none;
-    stroke: #ffffff;
-    shape-rendering: crispEdges;
-}
-.y.axis path, .y.axis line {
-    fill:none;
-    stroke:none;
-}
+.x.axis line,
 .x.axis path {
-    display: none;
-}
-.x.axis .selection{
-    display:block;
-    stroke:steelblue;
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
 }
 
-#timeline-zoom{
-    display:inline-block;
-    vertical-align:middle;
-    overflow:hidden;
-    height:65px;
-    width:100px;
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
+.y.axis line,
+.y.axis path {
+  fill: none;
+  stroke: none;
+}
 
-    /*float:right;*/
+.x.axis path {
+  display: none;
 }
-#timeline-zoom a.zoom-btn{
-    display:block;
-    clear:both;
-    cursor:pointer;
-    text-transform:uppercase;
-    text-align:center;
-    font-family:‘Lucida Console’, Monaco, monospace;
+
+.x.axis .selection {
+  display: block;
+  stroke: #4682b4;
 }
-#timeline-zoom a.zoom-btn.depth-1{
-    color:#ffffff;
-    font-size:1.5em;
-    line-height:1.4em;
+
+#timeline-zoom {
+  display: inline-block;
+  vertical-align: middle;
+  overflow: hidden;
+  height: 65px;
+  width: 100px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
-#timeline-zoom a.zoom-btn.depth-2{
-    color:#999999;
-    font-size:1em;
-    line-height:1em;
+
+#timeline-zoom a.zoom-btn {
+  display: block;
+  clear: both;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: 'Roboto Mono', monospace;
 }
-#timeline-zoom a.zoom-btn.depth-3{
-    color:#666;
-    font-size:0.8em;
-    line-height:1em;
+
+#timeline-zoom a.zoom-btn.depth-1 {
+  color: #fff;
+  font-size: 1.5em;
+  line-height: 1.4em;
 }
-#timeline-zoom a.zoom-btn.depth-4{
-    display:none;
+
+#timeline-zoom a.zoom-btn.depth-2 {
+  color: #999;
+  font-size: 1em;
+  line-height: 1em;
 }
-#timeline-zoom a.zoom-btn:hover{
-    background-color:#fff;
-    color:#1a1a1a;
+
+#timeline-zoom a.zoom-btn.depth-3 {
+  color: #666;
+  font-size: 0.8em;
+  line-height: 1em;
 }
+
+#timeline-zoom a.zoom-btn.depth-4 {
+  display: none;
+}
+
+#timeline-zoom a.zoom-btn:hover {
+  background-color: #fff;
+  color: #1a1a1a;
+}
+
 #timeline-hide {
-    height:65px;
-    width:20px;
-    cursor:pointer;
-    float:right;
-    border-left:1px solid #1a1a1a;
-}
-#timeline-hide:hover{
-    background-color:#fff;
+  height: 65px;
+  width: 20px;
+  cursor: pointer;
+  float: right;
+  border-left: 1px solid #1a1a1a;
 }
 
-#guitarpick{
-    cursor:pointer;
-    clip-path:url(#guitarpick-boundary);
+#timeline-hide:hover {
+  background-color: #fff;
 }
-#guitarpick path{
-    fill:#cccccc;
-    fill-opacity:1;
-    stroke:#515151;
-    stroke-width:1;
-    stroke-opacity:1;
 
+#guitarpick {
+  cursor: pointer;
+  -webkit-clip-path: url("#guitarpick-boundary");
+  clip-path: url("#guitarpick-boundary");
 }
+
+#guitarpick path {
+  fill: #ccc;
+  fill-opacity: 1;
+  stroke: #515151;
+  stroke-width: 1;
+  stroke-opacity: 1;
+}
+
 #guitarpick rect {
-    fill:#515151;
-    fill-opacity:1;
-    stroke:none;
+  fill: #515151;
+  fill-opacity: 1;
+  stroke: none;
+}
 
+#guitarpick.pick-clicked path,
+#guitarpick:hover path {
+  fill: #5e676f;
+  stroke: #999;
 }
-#guitarpick:hover path, #guitarpick.pick-clicked path{
-    fill:#5E676F;
-    stroke:#999999;
+
+#guitarpick.pick-clicked rect,
+#guitarpick:hover rect {
+  fill: #999;
 }
-#guitarpick:hover rect, #guitarpick.pick-clicked rect{
-    fill:#999999;
+
+#timeline-hide .hamburger {
+  vertical-align: middle;
+  display: block;
+  margin: 26px auto 0;
 }
-#timeline-hide .hamburger{
-    vertical-align:middle;
-    display:block;
-    margin:26px auto 0 auto;
+
+#timeline-hide .hamburger path {
+  fill: #fff;
 }
-#timeline-hide .hamburger path{
-    fill:#fff;
-}
+
 #timeline-hide:hover .hamburger path {
-    fill:#1a1a1a;
+  fill: #1a1a1a;
 }

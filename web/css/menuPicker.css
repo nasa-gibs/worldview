@@ -1,21 +1,35 @@
+/*
+ * NASA Worldview
+ *
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 - 2017 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the NASA Open Source Agreement, Version 1.3
+ * http://opensource.gsfc.nasa.gov/nosa.php
+ */
+
 ul.menuPicker {
-	margin: 0;
-	padding: 0;
-	color: white;
-	list-style: none;
-	display: block;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  list-style: none;
+  display: block;
 }
 
 ul.menuPicker li {
-	border: 1px solid black;
-	background: #666;
-	padding: .2em 1em;
+  border: 1px solid #000;
+  background: #666;
+  padding: 0.2em 1em;
 }
 
 ul.menuPicker li:hover {
-	background: #9B1C26;
+  background: #9b1c26;
 }
 
 ul.menuPicker li.disabled {
-	background: #999;
+  background: #999;
 }
