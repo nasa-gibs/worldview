@@ -94,7 +94,7 @@
         "web/js/naturalEvents/wv.naturalEvents.request.js",
         "web/js/naturalEvents/wv.naturalEvents.model.js",
         "web/js/naturalEvents/wv.naturalEvents.ui.js",
-        "web/js/naturalEvents/wv.naturalEvents.map.js",
+        "web/js/naturalEvents/wv.naturalEvents.markers.js",
 
         "web/js/wv.feedback.js",
         "web/js/wv.tour.js",

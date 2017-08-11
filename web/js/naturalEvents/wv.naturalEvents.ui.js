@@ -21,8 +21,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   self.id = "wv-events";
   var maps = ui.map;
   var map = ui.map.selected;
-  //load naturalEvents.map
-  var mapController = wv.naturalEvents.map(models, maps, config);
+  var naturalEventMarkers = wv.naturalEvents.markers(models, maps, config);
 
   //Local storage may not be a good idea because they'll never see it again
   //wv.util.localStorage('notified') || false;
@@ -38,12 +37,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       if (tab === "events") {
         model.active = true;
         resize();
-        if (mapController.current) {
-          mapController.draw(mapController.current);
+        if (naturalEventMarkers.location) {
+          naturalEventMarkers.draw(naturalEventMarkers.location);
         }
       } else {
         model.active = false;
-        mapController.dispose();
+        naturalEventMarkers.dispose();
         $notification.dialog('close');
       }
       model.events.trigger('change');
@@ -191,8 +190,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         $(self.selector + "content ul li.dates a")
           .removeClass('active');
         hideEvent();
-        mapController.dispose();
-        mapController.current = null;
+        naturalEventMarkers.dispose();
+        naturalEventMarkers.location = null;
         $current = null;
       });
 
@@ -313,7 +312,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       zoomLevel = 6;
     }
     var callback = function() {
-      mapController.draw(eventItem.coordinates);
+      naturalEventMarkers.draw(eventItem.coordinates);
     };
     if (eventItem.type === "Point") {
       ui.map.animate.move(method, eventItem.coordinates, zoomLevel, callback);
