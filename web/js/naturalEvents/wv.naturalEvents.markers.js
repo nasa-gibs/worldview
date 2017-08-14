@@ -12,7 +12,6 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
   self.draw = function(coordinates) {
     var hasPolygon = Array.isArray(coordinates[0]);
     self.remove();
-
     if (hasPolygon) {
       boundingBox = createBoundingBox(coordinates);
       map.addLayer(boundingBox);
@@ -21,15 +20,13 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
       marker.setPosition(coordinates);
       map.addOverlay(marker);
     }
-
-    self.activeMarker = coordinates;
   };
 
   self.remove = function() {
     map.removeOverlay(marker);
     map.removeLayer(boundingBox);
-    self.activeMarker = null;
   };
+
   return self;
 };
 

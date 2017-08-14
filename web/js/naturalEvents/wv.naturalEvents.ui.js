@@ -24,8 +24,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       if (tab === "events") {
         model.active = true;
         resize();
-        if (naturalEventMarkers.activeMarker) {
-          naturalEventMarkers.draw(naturalEventMarkers.activeMarker);
+        if (self.selected) {
+          self.select(self.selected.index, self.selected.dateIndex||null);
         }
       } else {
         model.active = false;
@@ -177,7 +177,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           .removeClass('active');
         hideEvent();
         naturalEventMarkers.remove();
-        naturalEventMarkers.activeMarker = null;
+        self.selected = null;
         $current = null;
       });
 
@@ -220,9 +220,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     if (models.proj.selected.id !== 'geographic') {
       models.proj.select('geographic');
     }
-    self.selected = index;
-    event = model.data.events[index];
 
+    self.selected = {
+      index: index
+    };
+    if (dateIndex) self.selected.dateIndex = dateIndex;
+
+    event = model.data.events[index];
     eventItem = event.geometries[dateIndex] || event.geometries[0];
 
     category = "Default";
