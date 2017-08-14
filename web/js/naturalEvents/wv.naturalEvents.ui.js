@@ -12,8 +12,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   var map = ui.map.selected;
   var naturalEventMarkers = wv.naturalEvents.markers(models, maps, config);
 
-  //Local storage may not be a good idea because they'll never see it again
-  //wv.util.localStorage('notified') || false;
   var notified = false;
   var lastIndex = -1;
   var lastDateIndex = -1;
@@ -109,7 +107,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         },
         dialogClass: 'no-titlebar notify-alert',
         close: function(event, ui) {
-          //wv.util.localStorage( 'notified', !notified );
           notified = true;
         }
       });
@@ -226,12 +223,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     self.selected = index;
     event = model.data.events[index];
 
-    eventItem = null;
-    if (event.geometries.length > 1) {
-      eventItem = event.geometries[dateIndex] || event.geometries[0];
-    } else {
-      eventItem = event.geometries[0];
-    }
+    eventItem = event.geometries[dateIndex] || event.geometries[0];
 
     category = "Default";
     categories = event.categories;
@@ -456,8 +448,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var winSize = $(window)
       .outerHeight(true);
     var headSize = $("ul#productsHolder-tabs")
-      .outerHeight(true); //
-    //var footSize = $("section#productsHolder footer").outerHeight(true);
+      .outerHeight(true);
     var head2Size = $('#wv-events-facets')
       .outerHeight(true);
     var secSize = $("#productsHolder")
@@ -466,7 +457,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var offset = $("#productsHolder")
       .offset();
     var timeSize = $("#timeline")
-      .outerHeight(true); // + $("#timeline").offset()['top'];
+      .outerHeight(true);
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
@@ -507,7 +498,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   var resize = function() {
-    //resizePane($(self.selector + "content"));
     sizeEventsTab();
   };
 
