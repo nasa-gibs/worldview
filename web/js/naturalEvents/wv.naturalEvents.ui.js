@@ -37,12 +37,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       if (tab === "events") {
         model.active = true;
         resize();
-        if (naturalEventMarkers.location) {
-          naturalEventMarkers.draw(naturalEventMarkers.location);
+        if (naturalEventMarkers.activeMarker) {
+          naturalEventMarkers.draw(naturalEventMarkers.activeMarker);
         }
       } else {
         model.active = false;
-        naturalEventMarkers.dispose();
+        naturalEventMarkers.remove();
         $notification.dialog('close');
       }
       model.events.trigger('change');
@@ -190,8 +190,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         $(self.selector + "content ul li.dates a")
           .removeClass('active');
         hideEvent();
-        naturalEventMarkers.dispose();
-        naturalEventMarkers.location = null;
+        naturalEventMarkers.remove();
+        naturalEventMarkers.activeMarker = null;
         $current = null;
       });
 
@@ -223,15 +223,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   self.select = function(index, dateIndex) {
     var event, method, zoomLevel;
+    var hasSameIndex = index === lastIndex;
+    var hasSameDate = lastDateIndex === dateIndex;
+    if (hasSameIndex && hasSameDate) return;
+    var method = (hasSameIndex && !hasSameDate)?'pan':'fly';
 
-    if (index === lastIndex && lastDateIndex === dateIndex) {
-      return;
-    }
-
-    method = "fly";
-    if (index == lastIndex && dateIndex != lastDateIndex) {
-      method = "pan";
-    }
     lastIndex = index;
     lastDateIndex = lastDateIndex;
 
@@ -250,9 +246,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     category = "Default";
     categories = event.categories;
-    if (categories.constructor !== Array) {
-      categories = [categories];
-    }
+    if (!Array.isArray(categories)) categories = [categories];
+
     _.each(categories, function(c) {
       if (model.layers[c.title]) {
         category = c.title;
@@ -261,9 +256,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
 
     layers = model.layers[category];
-    if (!layers) {
-      layers = model.layers.Default;
-    }
+    if (!layers) layers = model.layers.Default;
 
     // Turn off all layers in list first
     _.each(models.layers.active, function(layer) {
@@ -292,12 +285,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     // functionality may do more harm than good
     eventDate = wv.util.parseTimestampUTC(eventItem.date);
 
-    var eventDateISOString = wv.util.toISOStringDate(eventDate);
-    var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
-    var eventCategoryName = event.categories[0].title || null;
+    var eventISO = wv.util.toISOStringDate(eventDate);
+    var todayISO = wv.util.toISOStringDate(wv.util.today());
+    var isToday = eventISO === todayISO;
+    var eventCategory = event.categories[0].title || null;
+    var isWildfire = eventCategory === 'Wildfires';
+    var isVolcano = eventCategory === 'Volcanoes';
 
-    if ((eventDateISOString !== todayDateISOString) &&
-      ((eventCategoryName !== null) && (eventCategoryName == "Wildfires"))) {
+    if (isWildfire && !isToday) {
       var eventDatePlusOne =
         wv.util.dateAdd(wv.util.parseDateUTC(eventItem.date), "day", 1);
       models.date.select(eventDatePlusOne);
@@ -306,11 +301,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
 
     // If an event is a Wildfire or Volcano, zoom in more
-    if ((eventCategoryName !== null) && (eventCategoryName == "Wildfires")) {
-      zoomLevel = 8;
-    } else if (eventCategoryName == "Volcanoes") {
-      zoomLevel = 6;
-    }
+    zoomLevel = isWildfire?8:isVolcano?6:zoomLevel;
+
     var callback = function() {
       naturalEventMarkers.draw(eventItem.coordinates);
     };
