@@ -280,7 +280,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
     // If an event is a Wildfire or Volcano, zoom in more
     zoomLevel = isWildfire?8:isVolcano?6:5;
-    method = (hasSameIndex && !hasSameDate)?'pan':'fly';
+    method = (hasSameIndex && !hasSameDateIndex)?'pan':'fly';
     // Determine where to zoom to
     eventType = eventItem.type;
     if (eventType === 'Polygon') {
