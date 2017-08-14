@@ -25,7 +25,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
 
   };
   /*
-   * Pan and zooms the map to a new location 
+   * Pan and zooms the map to a new location
    *
    * @function move
    * @static
@@ -78,7 +78,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
       } else {
         fly(view, duration, location, newZoom);
       }
-      callback();
+      if (callback) callback();
     }, wait);
 
     lastLocation = location;

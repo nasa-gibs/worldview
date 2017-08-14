@@ -208,46 +208,40 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   self.select = function(index, dateIndex) {
-    var event, method, zoomLevel;
+    var event, eventItem, eventType, method, zoomCenter, zoomLevel;
     var hasSameIndex = index === lastIndex;
-    var hasSameDate = lastDateIndex === dateIndex;
-    if (hasSameIndex && hasSameDate) return;
-    var method = (hasSameIndex && !hasSameDate)?'pan':'fly';
-
+    var hasSameDateIndex = lastDateIndex === dateIndex;
+    if (hasSameIndex && hasSameDateIndex) return;
     lastIndex = index;
     lastDateIndex = lastDateIndex;
 
+    // Set the correct map projection
     if (models.proj.selected.id !== 'geographic') {
       models.proj.select('geographic');
     }
 
-    self.selected = {
-      index: index
-    };
+    // Store selected item state in self object
+    self.selected = {index: index};
     if (dateIndex) self.selected.dateIndex = dateIndex;
 
+    // Turn on the relevant layers for the event type
     event = model.data.events[index];
     eventItem = event.geometries[dateIndex] || event.geometries[0];
-
     category = "Default";
     categories = event.categories;
     if (!Array.isArray(categories)) categories = [categories];
-
     _.each(categories, function(c) {
       if (model.layers[c.title]) {
         category = c.title;
         return;
       }
     });
-
     layers = model.layers[category];
     if (!layers) layers = model.layers.Default;
-
     // Turn off all layers in list first
     _.each(models.layers.active, function(layer) {
       models.layers.setVisibility(layer.id, false);
     });
-
     // Turn on or add new layers
     _.each(layers, function(layer) {
       var id = layer[0];
@@ -261,22 +255,22 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       }
     });
 
-    // If an event is a Wildfire and the event date isn't "today", select
-    // the following day to greatly improve the chance of the satellite
-    // seeing the event
-    //
-    // NOTE: there is a risk that if the fire happened "yesterday" and
-    // the satellite imagery is not yet available for "today", this
-    // functionality may do more harm than good
-    eventDate = wv.util.parseTimestampUTC(eventItem.date);
+    // Turn on the right markers
+    naturalEventMarkers.draw(eventItem.coordinates);
 
+    // Animate to the right place on the map
+    eventDate = wv.util.parseTimestampUTC(eventItem.date);
     var eventISO = wv.util.toISOStringDate(eventDate);
     var todayISO = wv.util.toISOStringDate(wv.util.today());
     var isToday = eventISO === todayISO;
     var eventCategory = event.categories[0].title || null;
     var isWildfire = eventCategory === 'Wildfires';
     var isVolcano = eventCategory === 'Volcanoes';
-
+    /* If an event is a Wildfire and the event date isn't "today", select
+    the following day to greatly improve the chance of the satellite
+    seeing the event. NOTE: there is a risk that if the fire happened "yesterday" and
+    the satellite imagery is not yet available for "today", this
+    functionality may do more harm than good. */
     if (isWildfire && !isToday) {
       var eventDatePlusOne =
         wv.util.dateAdd(wv.util.parseDateUTC(eventItem.date), "day", 1);
@@ -284,20 +278,20 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     } else {
       models.date.select(eventDate);
     }
-
     // If an event is a Wildfire or Volcano, zoom in more
-    zoomLevel = isWildfire?8:isVolcano?6:zoomLevel;
-
-    var callback = function() {
-      naturalEventMarkers.draw(eventItem.coordinates);
-    };
-    if (eventItem.type === "Point") {
-      ui.map.animate.move(method, eventItem.coordinates, zoomLevel, callback);
-    } else if (eventItem.type === "Polygon" && eventItem.coordinates[0].length == 5) {
-      c = eventItem.coordinates[0];
-      var extent = [c[0][0], c[0][1], c[2][0], c[2][1]];
-      ui.map.animate.move(method, extent, zoomLevel, callback);
+    zoomLevel = isWildfire?8:isVolcano?6:5;
+    method = (hasSameIndex && !hasSameDate)?'pan':'fly';
+    // Determine where to zoom to
+    eventType = eventItem.type;
+    if (eventType === 'Polygon') {
+      zoomCenter = ol.extent.boundingExtent(eventItem.coordinates[0]);
+      console.log('zoomCenter', zoomCenter, eventType);
+    } else {
+      zoomCenter = eventItem.coordinates;
+      console.log('zoomCenter', zoomCenter, eventType);
     }
+    ui.map.animate.move(method, zoomCenter, zoomLevel);
+
   };
 
   var refreshEvent = function($content, event, index) {
