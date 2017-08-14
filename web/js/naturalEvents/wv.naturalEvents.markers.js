@@ -4,24 +4,27 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
 
   var self = {},
     boundingBox,
-    map,
-    pin;
+    map;
 
   map = map || maps.selected;
 
-  self.draw = function(coordinates) {
-    var hasPolygon = Array.isArray(coordinates[0]);
-    self.remove();
-    if (hasPolygon) {
-      boundingBox = createBoundingBox(coordinates);
-      map.addLayer(boundingBox);
-      return {boundingBox: boundingBox};
-    } else {
-      pin = pin || createPin();
-      pin.setPosition(coordinates);
-      map.addOverlay(pin);
-      return {pin: pin};;
-    }
+  self.draw = function(events, dateIndex) {
+    if (!events) return null;
+    return events.map(function(event){
+      var eventItem = event.geometries[dateIndex] || event.geometries[0];
+      var coordinates = eventItem.coordinates;
+      var hasPolygon = Array.isArray(coordinates[0]);
+      if (hasPolygon) {
+        boundingBox = createBoundingBox(coordinates);
+        map.addLayer(boundingBox);
+        return {boundingBox: boundingBox};
+      } else {
+        pin = createPin(event.id);
+        pin.setPosition(coordinates);
+        map.addOverlay(pin);
+        return {pin: pin};;
+      }
+    });
   };
 
   self.remove = function(markers) {
@@ -36,10 +39,10 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
   return self;
 };
 
-var createPin = function(){
+var createPin = function(id){
   var pinEl = document.createElement('div');
   pinEl.className = 'map-pin';
-  pinEl.appendChild(document.createTextNode('x'));
+  pinEl.appendChild(document.createTextNode(id||'x'));
   return new ol.Overlay({
     element: pinEl
   });

@@ -139,6 +139,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     _.each(data, function(event, index) {
       refreshEvent($content, event, index);
     });
+    self.markers = naturalEventMarkers.draw(data);
 
     // Bind click event to each event
     var $current;
@@ -256,8 +257,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       }
     });
 
-    // Turn on the right markers
-    self.markers.push(naturalEventMarkers.draw(eventItem.coordinates));
+    // Turn on the right markers, and store references in the model
+    naturalEventMarkers.remove(self.markers);
+    self.markers = naturalEventMarkers.draw([event], dateIndex);
 
     // Animate to the right place on the map
     eventDate = wv.util.parseTimestampUTC(eventItem.date);
