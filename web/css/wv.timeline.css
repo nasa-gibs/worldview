@@ -1,3 +1,17 @@
+/*
+ * NASA Worldview
+ *
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 - 2017 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the NASA Open Source Agreement, Version 1.3
+ * http://opensource.gsfc.nasa.gov/nosa.php
+ */
+
 *:focus {
   outline: 0;
 }
@@ -82,7 +96,7 @@
 
 .x.axis > .tick > line {
   fill: none;
-  stroke: #9B9b9b;
+  stroke: #9b9b9b;
   stroke-width: 1;
   stroke-linecap: butt;
   stroke-linejoin: miter;
@@ -162,13 +176,6 @@ g.plot rect.data-bar-invisible {
   padding: 0;
 }
 
-@media all {
-  #timeline-header input::-moz-selection {
-    background: #ffffff;
-    color: #999;
-  }
-}
-
 #timeline-header .input-wrapper:hover {
   border-color: #666;
 }
@@ -241,7 +248,7 @@ g.plot rect.data-bar-invisible {
   transform: scaleY(-1);
   -webkit-filter: FlipV;
   filter: FlipV;
-  -ms-filter:  "FlipV";
+  -ms-filter: "FlipV";
 }
 
 #timeline-header .date-arrows:hover,
@@ -271,7 +278,7 @@ g.plot rect.data-bar-invisible {
 #timeline-header #left-arrow-group svg {
   -webkit-filter: FlipH;
   filter: FlipH;
-  -ms-filter:  "FlipH";
+  -ms-filter: "FlipH";
 }
 
 #timeline-header > .button-action-group:hover .arrow {
@@ -333,7 +340,7 @@ g.plot rect.data-bar-invisible {
 .x.axis line,
 .x.axis path {
   fill: none;
-  stroke: #ffffff;
+  stroke: #fff;
   shape-rendering: crispEdges;
 }
 
@@ -361,7 +368,6 @@ g.plot rect.data-bar-invisible {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  /*float:right;*/
 }
 
 #timeline-zoom a.zoom-btn {
@@ -374,13 +380,13 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-zoom a.zoom-btn.depth-1 {
-  color: #ffffff;
+  color: #fff;
   font-size: 1.5em;
   line-height: 1.4em;
 }
 
 #timeline-zoom a.zoom-btn.depth-2 {
-  color: #999999;
+  color: #999;
   font-size: 1em;
   line-height: 1em;
 }
@@ -419,7 +425,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #guitarpick path {
-  fill: #cccccc;
+  fill: #ccc;
   fill-opacity: 1;
   stroke: #515151;
   stroke-width: 1;
@@ -434,13 +440,13 @@ g.plot rect.data-bar-invisible {
 
 #guitarpick.pick-clicked path,
 #guitarpick:hover path {
-  fill: #5E676F;
-  stroke: #999999;
+  fill: #5e676f;
+  stroke: #999;
 }
 
 #guitarpick.pick-clicked rect,
 #guitarpick:hover rect {
-  fill: #999999;
+  fill: #999;
 }
 
 #timeline-hide .hamburger {
