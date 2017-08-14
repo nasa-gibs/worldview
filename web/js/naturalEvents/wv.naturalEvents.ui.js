@@ -8,6 +8,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   var data;
   self.selector = "#wv-events";
   self.id = "wv-events";
+  self.markers = [];
+  self.selected = {};
   var maps = ui.map;
   var map = ui.map.selected;
   var naturalEventMarkers = wv.naturalEvents.markers(models, maps, config);
@@ -24,12 +26,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       if (tab === "events") {
         model.active = true;
         resize();
-        if (self.selected) {
+        if (self.selected.index) {
           self.select(self.selected.index, self.selected.dateIndex||null);
         }
       } else {
         model.active = false;
-        naturalEventMarkers.remove();
+        naturalEventMarkers.remove(self.markers);
         $notification.dialog('close');
       }
       model.events.trigger('change');
@@ -176,8 +178,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         $(self.selector + "content ul li.dates a")
           .removeClass('active');
         hideEvent();
-        naturalEventMarkers.remove();
-        self.selected = null;
+        naturalEventMarkers.remove(self.markers);
         $current = null;
       });
 
@@ -208,24 +209,24 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   self.select = function(index, dateIndex) {
-    var event, eventItem, eventType, method, zoomCenter, zoomLevel;
+    var eventItem, eventType, method, zoomCenter, zoomLevel, markers;
     var hasSameIndex = index === lastIndex;
     var hasSameDateIndex = lastDateIndex === dateIndex;
     if (hasSameIndex && hasSameDateIndex) return;
     lastIndex = index;
     lastDateIndex = lastDateIndex;
+    var event = model.data.events[index];
 
     // Set the correct map projection
     if (models.proj.selected.id !== 'geographic') {
       models.proj.select('geographic');
     }
 
-    // Store selected item state in self object
+    // Store selected indexes in self object
     self.selected = {index: index};
     if (dateIndex) self.selected.dateIndex = dateIndex;
 
     // Turn on the relevant layers for the event type
-    event = model.data.events[index];
     eventItem = event.geometries[dateIndex] || event.geometries[0];
     category = "Default";
     categories = event.categories;
@@ -256,7 +257,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
 
     // Turn on the right markers
-    naturalEventMarkers.draw(eventItem.coordinates);
+    self.markers.push(naturalEventMarkers.draw(eventItem.coordinates));
 
     // Animate to the right place on the map
     eventDate = wv.util.parseTimestampUTC(eventItem.date);

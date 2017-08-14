@@ -5,7 +5,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
   var self = {},
     boundingBox,
     map,
-    marker;
+    pin;
 
   map = map || maps.selected;
 
@@ -15,27 +15,33 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
     if (hasPolygon) {
       boundingBox = createBoundingBox(coordinates);
       map.addLayer(boundingBox);
+      return {boundingBox: boundingBox};
     } else {
-      marker = marker || createMarker();
-      marker.setPosition(coordinates);
-      map.addOverlay(marker);
+      pin = pin || createPin();
+      pin.setPosition(coordinates);
+      map.addOverlay(pin);
+      return {pin: pin};;
     }
   };
 
-  self.remove = function() {
-    map.removeOverlay(marker);
-    map.removeLayer(boundingBox);
+  self.remove = function(markers) {
+    markers = markers || [];
+    if (markers.length<1) return;
+    markers.forEach(function(marker){
+      if (marker.boundingBox) map.removeLayer(marker.boundingBox);
+      if (marker.pin) map.removeLayer(marker.pin);
+    });
   };
 
   return self;
 };
 
-var createMarker = function(){
-  markerEl = document.createElement('div');
-  markerEl.className = 'map-marker';
-  markerEl.appendChild(document.createTextNode('x'));
+var createPin = function(){
+  var pinEl = document.createElement('div');
+  pinEl.className = 'map-pin';
+  pinEl.appendChild(document.createTextNode('x'));
   return new ol.Overlay({
-    element: markerEl
+    element: pinEl
   });
 };
 
