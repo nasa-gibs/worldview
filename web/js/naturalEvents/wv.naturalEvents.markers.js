@@ -10,25 +10,26 @@
  */
 
 var naturalEventsMarkers = function(models, maps, config) {
-  var self = {}, vectorLayer, map;
+  var self = {}, marker, boundingBox, map;
   map = map || maps.selected;
 
   self.draw = function(location) {
     var markerEl = document.createElement('div');
-    var hasBoundingBox = location[0].length > 2;
+    var hasPolygon = Array.isArray(location[0]);
 
-    map.removeLayer(vectorLayer); // Clear previous events
+    // Clear previous markers
+    map.addOverlay(marker);
+    map.removeLayer(boundingBox);
 
     markerEl.className = 'map-marker';
     markerEl.appendChild(document.createTextNode('x'));
-    var marker = new ol.Overlay({
+    marker = new ol.Overlay({
       element: markerEl
     });
     marker.setPosition(location);
-    map.addOverlay(marker);
 
-    if (hasBoundingBox) {
-      vectorLayer = new ol.layer.Vector({
+    if (hasPolygon) {
+      boundingBox = new ol.layer.Vector({
         source: new ol.source.Vector({
           features: [new ol.Feature({
             geometry: new ol.geom.Polygon(location),
@@ -46,14 +47,14 @@ var naturalEventsMarkers = function(models, maps, config) {
           })
         })
       });
-      map.addLayer(vectorLayer);
+      map.addLayer(boundingBox);
     }
 
     self.location = location;
   };
 
   self.dispose = function() {
-    map.removeLayer(vectorLayer);
+    map.removeLayer(boundingBox);
   };
   return self;
 };
