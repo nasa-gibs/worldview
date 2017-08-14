@@ -285,10 +285,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     eventType = eventItem.type;
     if (eventType === 'Polygon') {
       zoomCenter = ol.extent.boundingExtent(eventItem.coordinates[0]);
-      console.log('zoomCenter', zoomCenter, eventType);
     } else {
       zoomCenter = eventItem.coordinates;
-      console.log('zoomCenter', zoomCenter, eventType);
     }
     ui.map.animate.move(method, zoomCenter, zoomLevel);
 
