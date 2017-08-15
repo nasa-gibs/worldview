@@ -24,6 +24,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     request.events.on("queryResults", onQueryResults);
     ui.sidebar.events.on("select", function(tab) {
       if (tab === "events") {
+        naturalEventMarkers.remove(self.markers);
+        self.markers = naturalEventMarkers.draw(data);
         model.active = true;
         resize();
         if (self.selected.index) {
@@ -139,7 +141,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     _.each(data, function(event, index) {
       refreshEvent($content, event, index);
     });
-    self.markers = naturalEventMarkers.draw(data);
 
     // Bind click event to each event
     var $current;
