@@ -32,7 +32,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
     if (markers.length<1) return;
     markers.forEach(function(marker){
       if (marker.boundingBox) map.removeLayer(marker.boundingBox);
-      if (marker.pin) map.removeLayer(marker.pin);
+      if (marker.pin) map.removeOverlay(marker.pin);
     });
   };
 
