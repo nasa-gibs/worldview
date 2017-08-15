@@ -118,6 +118,34 @@
   color: #f00;
 }
 
+.marker-wildfires use {
+  fill: #8d3b36;
+}
+.marker-wildfires:hover use {
+  fill: #a6443f;
+}
+
+.marker-sea-and-lake-ice use {
+  fill: #3889ad;
+}
+.marker-sea-and-lake-ice:hover use {
+  fill: #3889ad;
+}
+
+.marker-severe-storms use {
+  fill: #465a64;
+}
+.marker-severe-storms:hover use {
+  fill: #465a64;
+}
+
+.marker-volcanoes use {
+  fill: rgb(166, 116, 74);
+}
+.marker-volcanoes:hover use {
+  fill: rgb(166, 116, 74);
+}
+
 #wv-events li i.map-marker {
   background: url('../images/natural-events/event-other.svg');
   height: 26px;

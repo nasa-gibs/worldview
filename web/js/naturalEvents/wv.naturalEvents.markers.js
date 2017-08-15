@@ -11,16 +11,17 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
   self.draw = function(events, dateIndex) {
     if (!events) return null;
     return events.map(function(event){
-      var eventItem = event.geometries[dateIndex] || event.geometries[0];
-      var coordinates = eventItem.coordinates;
-      var hasPolygon = Array.isArray(coordinates[0]);
-      if (hasPolygon) {
-        boundingBox = createBoundingBox(coordinates);
+      var geometry = event.geometries[dateIndex] || event.geometries[0];
+      var category = Array.isArray(event.categories)
+        ? event.categories[0]
+        : event.categories;
+      if (geometry.type === 'Polygon') {
+        boundingBox = createBoundingBox(geometry.coordinates);
         map.addLayer(boundingBox);
         return {boundingBox: boundingBox};
       } else {
-        pin = createPin(event.id);
-        pin.setPosition(coordinates);
+        pin = createPin(event.id, category.slug);
+        pin.setPosition(geometry.coordinates);
         map.addOverlay(pin);
         return {pin: pin};;
       }
@@ -39,12 +40,26 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
   return self;
 };
 
-var createPin = function(id){
-  var pinEl = document.createElement('div');
-  pinEl.className = 'map-pin';
-  pinEl.appendChild(document.createTextNode(id||'x'));
+var createPin = function(id, eventCategory){
+  // Build SVG Element, using this instead of an img element allows styling with CSS
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var svgEl = document.createElementNS(svgNS, 'svg');
+  var eventSymbol = document.createElementNS(svgNS, 'use');
+  var markerSymbol = eventSymbol.cloneNode(true);
+
+  svgEl.setAttribute('width', 26);
+  svgEl.setAttribute('height', 41);
+  svgEl.setAttribute('class', 'marker marker-' + eventCategory);
+
+  eventSymbol.setAttribute('href', '/images/natural-events/markers.svg#marker-' + eventCategory);
+  markerSymbol.setAttribute('href', '/images/natural-events/markers.svg#marker');
+
+  svgEl.appendChild(markerSymbol);
+  svgEl.appendChild(eventSymbol);
+
+  // Create Overlay
   return new ol.Overlay({
-    element: pinEl
+    element: svgEl
   });
 };
 

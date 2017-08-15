@@ -45,8 +45,8 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
         // this is assuming there is ever only one category per event.
         // may need to be updated if any events have multiple categories
         if (!self.ignored.includes(event.categories[0].title)) {
-          // make a usuable css class from category name
-          event.categories[0].css = event.categories[0].title
+          // make a slug from category name
+          event.categories[0].slug = event.categories[0].title
             .toLowerCase()
             .split(' ')
             .join('-');

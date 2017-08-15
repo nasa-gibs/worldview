@@ -211,7 +211,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   self.select = function(index, dateIndex) {
-    var eventItem, eventType, method, zoomCenter, zoomLevel, markers;
+    var eventItem, eventCategory, eventType, method, zoomCenter, zoomLevel, markers;
     var hasSameIndex = index === lastIndex;
     var hasSameDateIndex = lastDateIndex === dateIndex;
     if (hasSameIndex && hasSameDateIndex) return;
@@ -230,16 +230,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     // Turn on the relevant layers for the event type
     eventItem = event.geometries[dateIndex] || event.geometries[0];
-    category = "Default";
-    categories = event.categories;
-    if (!Array.isArray(categories)) categories = [categories];
-    _.each(categories, function(c) {
-      if (model.layers[c.title]) {
-        category = c.title;
-        return;
-      }
-    });
-    layers = model.layers[category];
+    eventCategory = (Array.isArray(event.categories)
+      ? event.categories[0]
+      : event.categories||'Default').title;
+    layers = model.layers[eventCategory];
     if (!layers) layers = model.layers.Default;
     // Turn off all layers in list first
     _.each(models.layers.active, function(layer) {
@@ -267,7 +261,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var eventISO = wv.util.toISOStringDate(eventDate);
     var todayISO = wv.util.toISOStringDate(wv.util.today());
     var isToday = eventISO === todayISO;
-    var eventCategory = event.categories[0].title || null;
     var isWildfire = eventCategory === 'Wildfires';
     var isVolcano = eventCategory === 'Volcanoes';
     /* If an event is a Wildfire and the event date isn't "today", select
@@ -316,7 +309,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var $item = $("<li></li>")
       .addClass("selectorItem")
       .addClass("item")
-      .addClass(event.categories[0].css)
+      .addClass(event.categories[0].slug)
       .attr("data-index", index);
     var $title = $("<h4></h4>")
       .addClass("title")
