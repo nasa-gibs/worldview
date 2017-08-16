@@ -153,6 +153,8 @@
 }
 .marker:hover {
   transform: scale(1.2);
+  position: relative;
+  z-index: 100;
 }
 .marker:hover use {
   fill: #7e7e7e;
