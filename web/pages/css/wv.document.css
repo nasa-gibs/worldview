@@ -1,105 +1,118 @@
+/*
+ * NASA Worldview
+ *
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 - 2017 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the NASA Open Source Agreement, Version 1.3
+ * http://opensource.gsfc.nasa.gov/nosa.php
+ */
 
 .wv-document {
-    background-color: #222;
+  background-color: #222;
 }
 
-.wv-document p,
-.wv-document li,
 .wv-document div,
 .wv-document h1,
-.wv-document h2 {
-    color: #eee;
-    font-weight: 100;
-    font-family: "helvetica",sans-serif;
+.wv-document h2,
+.wv-document li,
+.wv-document p {
+  color: #eee;
+  font-weight: 100;
+  font-family: 'Open Sans', sans-serif;
 }
 
-.wv-document p,
+.wv-document div,
 .wv-document li,
-.wv-document div {
-    font-size: 16px;
-    line-height: 22px;
+.wv-document p {
+  font-size: 16px;
+  line-height: 22px;
 }
 
 .wv-document h1 {
-    font-size: 20px;
-    margin: .67em 0;
-    font-weight: bold;
+  font-size: 20px;
+  margin: 0.67em 0;
+  font-weight: bold;
 }
 
 .wv-document h2 {
-    font-size: 18px;
-    margin: .75em 0;
-    font-weight: bold;
+  font-size: 18px;
+  margin: 0.75em 0;
+  font-weight: bold;
 }
 
 .wv-document p {
-    margin: 1.12em 0;
+  margin: 1.12em 0;
 }
 
 .wv-document hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #404040;
-    margin: 1em 0;
-    padding: 0;
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #404040;
+  margin: 1em 0;
+  padding: 0;
 }
 
 .wv-document ul {
-    margin-left: 2em;
+  margin-left: 2em;
 }
 
 .wv-document li {
-    display: list-item;
+  display: list-item;
 }
 
 .wv-document a {
-    color: #7bf;
-    text-decoration: none;
+  color: #7bf;
+  text-decoration: none;
 }
 
 .wv-document a:visted {
-    color: #7bf;
-    text-decoration: none;
+  color: #7bf;
+  text-decoration: none;
 }
 
 .wv-document a:hover {
-    color: #7df;
-    text-decoration: none;
+  color: #7df;
+  text-decoration: none;
 }
 
 .wv-document .right {
-    float: right;
-    margin: 0em 1em 1em 1em;
+  float: right;
+  margin: 0 1em 1em;
 }
 
 .wv-document strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .wv-document .underline {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .version {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .gibs-logo {
-    background-image: url("../images/gibs.png");
-    width: 64px;
-    height: 64px;
-    display: block;
+  background-image: url("../images/gibs.png");
+  width: 64px;
+  height: 64px;
+  display: block;
 }
 
 .wv-document .caption {
-    font-size: 12px;
-    line-height: 18px;
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .wv-document .gibs-caption {
-    margin-top: 3px;
-    width: 64px;
-    font-style: italic;
-    text-align: center;
+  margin-top: 3px;
+  width: 64px;
+  font-style: italic;
+  text-align: center;
 }

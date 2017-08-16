@@ -1,209 +1,243 @@
+/*
+ * NASA Worldview
+ *
+ * This code was originally developed at NASA/Goddard Space Flight Center for
+ * the Earth Science Data and Information System (ESDIS) project.
+ *
+ * Copyright (C) 2013 - 2017 United States Government as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All Rights Reserved.
+ *
+ * Licensed under the NASA Open Source Agreement, Version 1.3
+ * http://opensource.gsfc.nasa.gov/nosa.php
+ */
+
 #wv-events {
-    position: relative;
+  position: relative;
 }
-#wv-events li.item i{
-    float: left;
-    margin: 0 10px 5px 5px;
+
+#wv-events li.item i {
+  float: left;
+  margin: 0 10px 5px 5px;
 }
 
 .map-item-list li.item {
-    padding:6px 0px;
-    width:auto;
-    margin:0;
-    display:block;
-    overflow:hidden;
-    cursor:pointer;
-    color:#d54e21;
-    background: transparent;
+  padding: 6px 0;
+  width: auto;
+  margin: 0;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  color: #d54e21;
+  background: transparent;
 }
 
 .map-item-list li.item h4 {
-    font-size:0.85em;
-    color:#ccc;
-    padding: 0 3px;
-}
-.map-item-list li.item p,
-.map-item-list li.item ul {
-    padding: 0 3px;
-    font-size:0.78em;
-    color: #bbb;
-    font-style:italic;
-    margin-left: 25px;
-    margin-top: 5px;
-}
-.map-item-list li.item:hover,
-.map-item-list li.item-selected {
-    background:rgba(250,250,250,1);
-}
-.map-item-list li.item:hover h4,
-.map-item-list li.item:hover p,
-.map-item-list li.item-selected h4,
-.map-item-list li.item-selected p{
-    color:#666;
-}
-.map-item-list li.item input {
-    float:right;
+  font-size: 0.85em;
+  color: #ccc;
+  padding: 0 3px;
 }
 
-.map-item-list li.item p{
-    color: #666;
+.map-item-list li.item p,
+.map-item-list li.item ul {
+  padding: 0 3px;
+  font-size: 0.78em;
+  color: #bbb;
+  font-style: italic;
+  margin-left: 25px;
+  margin-top: 5px;
 }
+
+.map-item-list li.item ul {
+  list-style: none;
+}
+
+.map-item-list li.item-selected,
+.map-item-list li.item:hover {
+  background: rgba(250, 250, 250, 1);
+}
+
+.map-item-list li.item-selected h4,
+.map-item-list li.item-selected p,
+.map-item-list li.item:hover h4,
+.map-item-list li.item:hover p {
+  color: #666;
+}
+
+.map-item-list li.item input {
+  float: right;
+}
+
+.map-item-list li.item p {
+  color: #666;
+}
+
 .map-item-list li.item p a {
-    display: block;
-    clear:both;
-    margin-top: 7px;
-    position: relative;
-    padding-left: 15px;
+  display: block;
+  clear: both;
+  margin-top: 7px;
+  position: relative;
+  padding-left: 15px;
 }
 
 #wv-events li.item ul li.dates a.active {
-    font-weight: bold;
+  font-weight: 700;
 }
 
-#wv-events .map-item-list li.item p a i.fa-external-link {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    margin-top: -5px;
-    left: 0;
+#wv-events .map-item-list li.item .fa-external-link {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  margin-top: -5px;
+  left: 0;
 }
+
 .map-item-list ul.selectorboxcategory {
-    outline:none !important;
-    float:left;
-    overflow:auto;
+  outline: none !important;
+  float: left;
+  overflow: auto;
 }
+
 .map-item-list h3.head {
-    display:block;
-    float: left;
-    color:#fff;
-    width:100%;
-    border:none;
-    text-decoration:none;
-    background: none;
-    padding: 1px 3px;
-    margin:10px 0 0 2%;
-    text-transform:uppercase;
+  display: block;
+  float: left;
+  color: #fff;
+  width: 100%;
+  border: none;
+  text-decoration: none;
+  background: none;
+  padding: 1px 3px;
+  margin: 10px 0 0 2%;
+  text-transform: uppercase;
 }
+
 .map-item-list a.flowbutton {
-    text-decoration:none;
-    display:inline-block;
-    float: left;
-    color:#ffffff;
-    font-size: 1.4em;
-    border:none;
-    padding:6px 0;
-    margin-top:20px;
-    margin-left:5px;
+  text-decoration: none;
+  display: inline-block;
+  float: left;
+  color: #fff;
+  font-size: 1.4em;
+  border: none;
+  padding: 6px 0;
+  margin-top: 20px;
+  margin-left: 5px;
 }
+
 .map-item-list ul li div {
-    padding:0 !important;
+  padding: 0 !important;
 }
 
 .map-item-list li.item h4.mark {
-    font-weight: bold;
-    color: red;
+  font-weight: 700;
+  color: #f00;
 }
-
-/******************** Categories *************************/
 
 #wv-events li i.map-marker {
-    background: url('../images/natural-events/event-other.svg');
-    height:26px;
-    width:26px;
-}
-#wv-events li.volcanoes i.map-marker{
-    background: url('../images/natural-events/event-volcano.svg');
-}
-#wv-events li.dust-and-haze i.map-marker{
-    background: url('../images/natural-events/event-sandstorm.svg');
-}
-#wv-events li.severe-storms i.map-marker{
-    background: url('../images/natural-events/event-weather.svg');
-}
-#wv-events li.wildfires i.map-marker{
-    background: url('../images/natural-events/event-fire.svg');
-}
-#wv-events li.manmade i.map-marker{
-    background: url('../images/natural-events/event-manmade.svg');
-}
-/* sea-and-lake-ice and icebergs are currently one category
- * and we are temp using the Iceberg icons
- */
-#wv-events li.sea-and-lake-ice i.map-marker{
-    background: url('../images/natural-events/event-iceberg.svg');
-}
-#wv-events li.snow i.map-marker{
-    background: url('../images/natural-events/event-snow.svg');
-}
-#wv-events li.water-color i.map-marker{
-    background: url('../images/natural-events/event-water-color.svg');
-}
-#wv-events li.icebergs i.map-marker{
-    background: url('../images/natural-events/event-iceberg.svg');
+  background: url('../images/natural-events/event-other.svg');
+  height: 26px;
+  width: 26px;
 }
 
-/*********************************************************/
+#wv-events li.volcanoes i.map-marker {
+  background: url('../images/natural-events/event-volcano.svg');
+}
 
-/******************** Notifications **********************/
+#wv-events li.dust-and-haze i.map-marker {
+  background: url('../images/natural-events/event-sandstorm.svg');
+}
+
+#wv-events li.severe-storms i.map-marker {
+  background: url('../images/natural-events/event-weather.svg');
+}
+
+#wv-events li.wildfires i.map-marker {
+  background: url('../images/natural-events/event-fire.svg');
+}
+
+#wv-events li.manmade i.map-marker {
+  background: url('../images/natural-events/event-manmade.svg');
+}
+
+#wv-events li.sea-and-lake-ice i.map-marker {
+  background: url('../images/natural-events/event-iceberg.svg');
+}
+
+#wv-events li.snow i.map-marker {
+  background: url('../images/natural-events/event-snow.svg');
+}
+
+#wv-events li.water-color i.map-marker {
+  background: url('../images/natural-events/event-water-color.svg');
+}
+
+#wv-events li.icebergs i.map-marker {
+  background: url('../images/natural-events/event-iceberg.svg');
+}
 
 .notify-alert {
-    position: absolute;
-    top: 60px !important;
-    right: 10px !important;
-    left: auto !important;
+  position: absolute;
+  top: 60px !important;
+  right: 10px !important;
+  left: auto !important;
 }
+
 @media screen and (max-device-height: 720px) {
-    .notify-alert {
-        display:none;
-    }
+  .notify-alert {
+    display: none;
+  }
 }
 
-.notify-alert div {
+.notify-alert i {
+  font-size: 1.4em;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 40px;
+}
 
+.notify-alert .ui-dialog-content div > i {
+  color: #d54e21;
+  margin-right: 10px;
+  margin-left: 10px;
 }
-.notify-alert i{
-    font-size: 1.4em;
-    box-sizing: border-box;
-    line-height: 40px;
-}
-.notify-alert .ui-dialog-content div> i{
-    color: #d54e21;
-    margin-right: 10px;
-    margin-left: 10px;
-}
-.notify-alert .ui-dialog-content div{
-    margin-right: 40px;
 
+.notify-alert .ui-dialog-content div {
+  margin-right: 40px;
 }
-.notify-alert .ui-dialog-content div:hover{
-    background:#ccc;
-    cursor:pointer;
+
+.notify-alert .ui-dialog-content div:hover {
+  background: #ccc;
+  cursor: pointer;
 }
-.notify-alert .ui-dialog-content div:hover span{
-    color:#000;
+
+.notify-alert .ui-dialog-content div:hover span {
+  color: #000;
 }
-.notify-alert .ui-dialog-content>i{
-    float: right;
-    padding:0 10px;
+
+.notify-alert .ui-dialog-content > i {
+  float: right;
+  padding: 0 10px;
 }
-.notify-alert .ui-dialog-content>i:hover {
-    cursor: pointer;
-    background: #ccc;
-    color: #333;
+
+.notify-alert .ui-dialog-content > i:hover {
+  cursor: pointer;
+  background: #ccc;
+  color: #333;
 }
+
 .notify-alert .ui-dialog-content {
-    padding: 0 0 0 0px;
-    box-sizing: border-box;
-    line-height: 40px;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 40px;
 }
-.wv-dialog ul {
-    padding-left:20px;
-    margin:10px 0;
-}
-.wv-dialog ul li{
-    list-style-type: disc;
-    display: list-item;
-    margin: 2px 0 2px 20px;
 
+.wv-dialog ul {
+  padding-left: 20px;
+  margin: 10px 0;
 }
-/****************** End Notifications ********************/
+
+.wv-dialog ul li {
+  list-style-type: disc;
+  display: list-item;
+  margin: 2px 0 2px 20px;
+}
