@@ -39,24 +39,19 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
     if (model.data.sources && model.data.types && model.data.events) {
       querySuccessFlag = true;
 
-      // prune the events of types we don't want
-      var pruned = [];
-      _.each(model.data.events, function(event) {
-        // this is assuming there is ever only one category per event.
-        // may need to be updated if any events have multiple categories
-        if (!self.ignored.includes(event.categories[0].title)) {
-          // make a slug from category name
-          event.categories[0].slug = event.categories[0].title
-            .toLowerCase()
-            .split(' ')
-            .join('-');
-          pruned.push(event);
+      // Remove types and events for ignored event categories
+      var removeIgnoredItems = function(item){
+        if (item.categories) {
+          var category = Array.isArray(event.categories)
+            ? event.categories[0]
+            : event.categories;
+          return !self.ignored.includes(category);
+        } else {
+          return !self.ignored.includes(item.title);
         }
-      });
-      model.data.events = pruned;
-      // TODO: Reuse permalinks when we have historical events
-      //models.link.register(self);
-      //models.link.load(self);
+      };
+      model.data.events = model.data.events.filter(removeIgnoredItems);
+      model.data.types = model.data.types.filter(removeIgnoredItems);
     }
   };
 
