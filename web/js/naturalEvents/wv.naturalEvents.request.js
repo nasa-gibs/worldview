@@ -42,10 +42,12 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
       // Remove types and events for ignored event categories
       var removeIgnoredItems = function(item){
         if (item.categories) {
-          var category = Array.isArray(event.categories)
-            ? event.categories[0]
-            : event.categories;
-          return !self.ignored.includes(category);
+          var category = Array.isArray(item.categories)
+            ? item.categories[0]
+            : item.categories;
+          // Add slug to categories
+          category.slug = category.title.toLowerCase().split(' ').join('-');
+          return !self.ignored.includes(category.title);
         } else {
           return !self.ignored.includes(item.title);
         }

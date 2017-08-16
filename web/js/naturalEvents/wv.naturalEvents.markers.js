@@ -15,6 +15,22 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
       var category = Array.isArray(event.categories)
         ? event.categories[0]
         : event.categories;
+      // Assign a default category if we don't have an icon
+      var icons = [
+        "Dust and Haze",
+        "Icebergs",
+        "Manmade",
+        "Sea and Lake Ice",
+        "Severe Storms",
+        "Snow",
+        "Temperature Extremes",
+        "Volcanoes",
+        "Water Color",
+        "Wildfires"
+      ];
+      category = icons.includes(category.title)
+        ? category
+        : {title: 'Default', slug: 'default'};
       if (geometry.type === 'Polygon') {
         boundingBox = createBoundingBox(geometry.coordinates);
         map.addLayer(boundingBox);
@@ -42,24 +58,27 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
 
 var createPin = function(id, eventCategory){
   // Build SVG Element, using this instead of an img element allows styling with CSS
+  var wrapper = document.createElement('div');
   var svgNS = 'http://www.w3.org/2000/svg';
   var svgEl = document.createElementNS(svgNS, 'svg');
   var eventSymbol = document.createElementNS(svgNS, 'use');
   var markerSymbol = eventSymbol.cloneNode(true);
 
-  svgEl.setAttribute('width', 26);
-  svgEl.setAttribute('height', 41);
-  svgEl.setAttribute('class', 'marker marker-' + eventCategory);
+  svgEl.setAttribute('width', 30);
+  svgEl.setAttribute('height', 35);
 
-  eventSymbol.setAttribute('href', '/images/natural-events/markers.svg#marker-' + eventCategory);
   markerSymbol.setAttribute('href', '/images/natural-events/markers.svg#marker');
+  eventSymbol.setAttribute('href', '/images/natural-events/markers.svg#' + eventCategory);
+
+  wrapper.setAttribute('class', 'marker marker-' + eventCategory);
 
   svgEl.appendChild(markerSymbol);
   svgEl.appendChild(eventSymbol);
+  wrapper.appendChild(svgEl);
 
   // Create Overlay
   return new ol.Overlay({
-    element: svgEl
+    element: wrapper
   });
 };
 

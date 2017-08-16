@@ -118,32 +118,74 @@
   color: #f00;
 }
 
-.marker-wildfires use {
-  fill: #8d3b36;
+.marker use {
+  fill: #585858;
 }
-.marker-wildfires:hover use {
-  fill: #a6443f;
+.marker-dust-and-haze use {
+  fill: #a09758;
 }
-
+.marker-icebergs use {
+  fill: #3889ad;
+}
+.marker-manmade use {
+  fill: #3e3e3e;
+}
 .marker-sea-and-lake-ice use {
-  fill: #3889ad;
+  fill: #328697;
 }
-.marker-sea-and-lake-ice:hover use {
-  fill: #3889ad;
-}
-
 .marker-severe-storms use {
   fill: #465a64;
 }
-.marker-severe-storms:hover use {
-  fill: #465a64;
+.marker-snow use {
+  fill: #5a7784;
 }
-
+.marker-temperature-extremes use {
+  fill: #b1603c;
+}
 .marker-volcanoes use {
-  fill: rgb(166, 116, 74);
+  fill: #a6744a;
+}
+.marker-water-color use {
+  fill: #457d73;
+}
+.marker-wildfires use {
+  fill: #8d3b36;
+}
+.marker:hover {
+  transform: scale(1.2);
+}
+.marker:hover use {
+  fill: #7e7e7e;
+}
+.marker-dust-and-haze:hover use {
+  fill: #bdb687;
+}
+.marker-icebergs:hover use {
+  fill: #65adcd;
+}
+.marker-manmade:hover use {
+  fill: #646464;
+}
+.marker-sea-and-lake-ice:hover use {
+  fill: #50b2c5;
+}
+.marker-severe-storms:hover use {
+  fill: #668391;
+}
+.marker-snow:hover use {
+  fill: #819da9;
+}
+.marker-temperature-extremes:hover use {
+  fill: #cd8a6c;
 }
 .marker-volcanoes:hover use {
-  fill: rgb(166, 116, 74);
+  fill: #c39b79;
+}
+.marker-water-color:hover use {
+  fill: #65aa9d;
+}
+.marker-wildfires:hover use {
+  fill: #bd5953;
 }
 
 #wv-events li i.map-marker {
