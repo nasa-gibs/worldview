@@ -78,7 +78,8 @@ var createPin = function(id, eventCategory){
 
   // Create Overlay
   return new ol.Overlay({
-    element: wrapper
+    element: wrapper,
+    positioning: 'bottom-center'
   });
 };
 

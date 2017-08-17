@@ -153,6 +153,7 @@
 }
 .marker:hover {
   transform: scale(1.2);
+  transform-origin: center bottom;
   position: relative;
   z-index: 100;
 }
