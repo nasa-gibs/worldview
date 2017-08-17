@@ -76,7 +76,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       .addClass('fa fa-warning fa-1x');
 
     var $messageWrapper = $('<div></div>')
-      .click(function(e) {
+      .click(function() {
         showNotificationHelp();
       });
 
@@ -86,7 +86,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     var $close = $('<i></i>')
       .addClass('fa fa-times fa-1x')
-      .click(function(e) {
+      .click(function() {
         $notification.dialog('close');
       });
 
@@ -108,7 +108,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           duration: 200
         },
         dialogClass: 'no-titlebar notify-alert',
-        close: function(event, ui) {
+        close: function() {
           notified = true;
         }
       });
@@ -209,7 +209,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   self.select = function(id, dateIndex) {
-    var eventItem, eventCategory, eventType, method, zoomCenter, zoomLevel, markers;
+    var eventItem, eventCategory, eventType, method, zoomCenter, zoomLevel;
     var hasSameId = id === lastId;
     var hasSameDateIndex = lastDateIndex === dateIndex;
     if (hasSameId && hasSameDateIndex) return;
@@ -388,13 +388,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       .click(function(e) {
         e.stopPropagation();
       });
-  };
-
-  var eventList = function(events) {
-    _.each(events, function(event) {
-      $("#wv-events")
-        .append(createEvent(event));
-    });
   };
 
   var showEvent = function(id, dateIndex) {

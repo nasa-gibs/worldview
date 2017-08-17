@@ -1,10 +1,7 @@
 var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
 wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, config) {
-
-  var self = {},
-    boundingBox,
-    map;
+  var self = {}, map;
 
   map = map || ui.map.selected;
 
