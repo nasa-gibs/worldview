@@ -11,7 +11,9 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
   self.draw = function(events, dateIndex) {
     if (!events) return null;
     return events.map(function(event){
+      var marker = {};
       var geometry = event.geometries[dateIndex] || event.geometries[0];
+      var coordinates = geometry.coordinates;
       var category = Array.isArray(event.categories)
         ? event.categories[0]
         : event.categories;
@@ -31,16 +33,18 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
       category = icons.includes(category.title)
         ? category
         : {title: 'Default', slug: 'default'};
+
       if (geometry.type === 'Polygon') {
-        boundingBox = createBoundingBox(geometry.coordinates);
-        map.addLayer(boundingBox);
-        return {boundingBox: boundingBox};
-      } else {
-        pin = createPin(event.id, category.slug);
-        pin.setPosition(geometry.coordinates);
-        map.addOverlay(pin);
-        return {pin: pin};;
+        var extent = ol.extent.boundingExtent(geometry.coordinates[0]);
+        coordinates = ol.extent.getCenter(extent);
+        marker.boundingBox = createBoundingBox(geometry.coordinates);
+        map.addLayer(marker.boundingBox);
       }
+
+      marker.pin = createPin(event.id, category.slug);
+      marker.pin.setPosition(coordinates);
+      map.addOverlay(marker.pin);
+      return marker;
     });
   };
 
@@ -84,6 +88,21 @@ var createPin = function(id, eventCategory){
 };
 
 var createBoundingBox = function(coordinates){
+  var lightStroke = new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: [255, 255, 255, 0.6],
+      width: 2,
+      lineDash: [4,8],
+      lineDashOffset: 6
+    })
+  });
+  var darkStroke = new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: [0, 0, 0, 0.6],
+      width: 2,
+      lineDash: [4,8]
+    })
+  });
   return new ol.layer.Vector({
     source: new ol.source.Vector({
       features: [new ol.Feature({
@@ -92,14 +111,6 @@ var createBoundingBox = function(coordinates){
       })],
       wrapX: false
     }),
-    style: new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: [255, 255, 255, 0.1]
-      }),
-      stroke: new ol.style.Stroke({
-        color: [212, 85, 0, 0.8],
-        width: 2
-      })
-    })
+    style: [lightStroke, darkStroke]
   });
 };
