@@ -635,13 +635,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                     console.warn("In layer order but not defined", layerId);
                 }
                 else {
-                    layerComponent = components({
-                        layerId: encodeURIComponent(current.id),
-                        onClick: function(e){console.log('test')},
-                        title: current.title,
-                        subtitle: current.subtitle
-                    });
-
                     /*
                     var $layerItem = $( '<li></li>' )
                         .attr('id', 'layer-flat-' + current.id )
@@ -935,13 +928,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         props.layerList = copy;
         layerWidget = layerList({
-            onClick: function(){},
+            onState: model.add,
+            offState: model.remove,
             layerArray: copy,
             layers: config.layers
         });
         self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
-
-        self.reactList.componentUpdate();
 
         redoScrollbar();
     }, 250, { trailing: true });

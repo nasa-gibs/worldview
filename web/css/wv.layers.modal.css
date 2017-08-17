@@ -274,13 +274,20 @@
 #selected-category{
     color: #ddd;
 }
+.margin-as-padding{
+    padding-top: 5px;
+}
 #layers-all .layers-all-layer {
     padding: .5em .5em .5em .7em;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    height:48px;
 }
 #selected-category .ui-accordion-header,
 #layers-all .layers-all-layer {
     border:0;
-    margin-top:5px;
     cursor:pointer;
 }
 #selected-category .ui-accordion-header,
@@ -495,8 +502,7 @@
 /*lazy code to put scrollbar in the right place*/
 
 #layer-categories,
-#selected-category,
-#layers-all
+#selected-category
 {
     padding-right:10px;
 }
