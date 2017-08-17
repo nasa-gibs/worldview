@@ -5,12 +5,21 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
 
   map = map || ui.map.selected;
 
-  self.draw = function(events, dateIndex) {
+  self.draw = function(events, date) {
     if (!events) return null;
     return events.map(function(event){
       var marker = {};
       var isSelected = event.id === ui.naturalEvents.selected.id;
-      var geometry = event.geometries[dateIndex] || event.geometries[0];
+
+      var geometry;
+      if (date) {
+        geometry = _.find(event.geometries, function(geom){
+          return geom.date.split('T')[0] === date;
+        });
+      } else {
+        geometry = event.geometries[0];
+      }
+
       var coordinates = geometry.coordinates;
       var category = Array.isArray(event.categories)
         ? event.categories[0]

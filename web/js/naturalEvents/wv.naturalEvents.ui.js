@@ -14,7 +14,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   var notified = false;
   var lastId = false;
-  var lastDateIndex = -1;
+  var lastDate = false;
 
   var $notification;
 
@@ -27,7 +27,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         model.active = true;
         resize();
         if (self.selected.id) {
-          self.select(self.selected.id, self.selected.dateIndex||null);
+          self.select(self.selected.id, self.selected.date||null);
         }
       } else {
         model.active = false;
@@ -153,11 +153,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           .find("ul li.dates a")
           .first()
           .hasClass("date-today")) {
-          var nextDateIndex = $(self.selector + "content ul li.dates")
+          var nextDate = $(self.selector + "content ul li.dates")
             .next()
             .children("a")
-            .attr("data-date-index");
-          showEvent(dataId, nextDateIndex);
+            .attr("data-date");
+          showEvent(dataId, nextDate);
         } else {
           showEvent(dataId);
         }
@@ -197,7 +197,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         var dataId = $(this)
           .attr("data-id");
         showEvent(dataId, $(this)
-          .attr("data-date-index"));
+          .attr("data-date"));
         $(self.selector + "content ul li.dates a")
           .not(this)
           .removeClass('active');
@@ -208,31 +208,40 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     resize();
   };
 
-  self.select = function(id, dateIndex) {
-    var eventItem, eventCategory, eventType, method, zoomCenter, zoomLevel;
+  self.select = function(id, date) {
+    var eventCategory, geometry, method, zoomCenter, zoomLevel;
     var hasSameId = id === lastId;
-    var hasSameDateIndex = lastDateIndex === dateIndex;
-    if (hasSameId && hasSameDateIndex) return;
+    var hasSameDate = lastDate === date;
     lastId = id;
-    lastDateIndex = lastDateIndex;
-    var event = _.find(model.data.events, function(e){
-      return e.id === id;
-    });
+    lastDate = date;
+    // Store selected id and date in model
+    self.selected = {id: id};
+    if (date) self.selected.date = date;
 
     // Set the correct map projection
     if (models.proj.selected.id !== 'geographic') {
       models.proj.select('geographic');
     }
 
-    // Store selected indexes in self object
-    self.selected = {id: id};
-    if (dateIndex) self.selected.dateIndex = dateIndex;
+    var event = _.find(model.data.events, function(e){
+      return e.id === id;
+    });
 
-    // Turn on the relevant layers for the event type
-    eventItem = event.geometries[dateIndex] || event.geometries[0];
+    // Get event geometry and category
+    var geometry;
+    if (date) {
+      geometry = _.find(event.geometries, function(geom){
+        return geom.date.split('T')[0] === date;
+      });
+    } else {
+      geometry = event.geometries[0];
+    }
+
     eventCategory = (Array.isArray(event.categories)
       ? event.categories[0]
       : event.categories||'Default').title;
+
+    // Turn on the relevant layers for the event type
     layers = model.layers[eventCategory];
     if (!layers) layers = model.layers.Default;
     // Turn off all layers in list first
@@ -254,13 +263,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     // Turn on the right markers, and store references in the model
     naturalEventMarkers.remove(self.markers);
-    self.markers = naturalEventMarkers.draw([event], dateIndex);
+    self.markers = naturalEventMarkers.draw([event], date);
 
     // Animate to the right place on the map
-    eventDate = wv.util.parseTimestampUTC(eventItem.date);
-    var eventISO = wv.util.toISOStringDate(eventDate);
+    geometryDate = wv.util.parseTimestampUTC(geometry.date);
+    var geometryISO = wv.util.toISOStringDate(geometryDate);
     var todayISO = wv.util.toISOStringDate(wv.util.today());
-    var isToday = eventISO === todayISO;
+    var isToday = geometryISO === todayISO;
     var isWildfire = eventCategory === 'Wildfires';
     var isVolcano = eventCategory === 'Volcanoes';
     /* If an event is a Wildfire and the event date isn't "today", select
@@ -269,21 +278,20 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     the satellite imagery is not yet available for "today", this
     functionality may do more harm than good. */
     if (isWildfire && !isToday) {
-      var eventDatePlusOne =
-        wv.util.dateAdd(wv.util.parseDateUTC(eventItem.date), "day", 1);
-      models.date.select(eventDatePlusOne);
+      var geometryDatePlusOne =
+        wv.util.dateAdd(wv.util.parseDateUTC(geometry.date), "day", 1);
+      models.date.select(geometryDatePlusOne);
     } else {
-      models.date.select(eventDate);
+      models.date.select(geometryDate);
     }
     // If an event is a Wildfire or Volcano, zoom in more
     zoomLevel = isWildfire?8:isVolcano?6:5;
-    method = (hasSameId && !hasSameDateIndex)?'pan':'fly';
+    method = (hasSameId && !hasSameDate)?'pan':'fly';
     // Determine where to zoom to
-    eventType = eventItem.type;
-    if (eventType === 'Polygon') {
-      zoomCenter = ol.extent.boundingExtent(eventItem.coordinates[0]);
+    if (geometry.type === 'Polygon') {
+      zoomCenter = ol.extent.boundingExtent(geometry.coordinates[0]);
     } else {
-      zoomCenter = eventItem.coordinates;
+      zoomCenter = geometry.coordinates;
     }
     ui.map.animate.move(method, zoomCenter, zoomLevel);
 
@@ -329,18 +337,16 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     if (event.geometries.length > 1) {
       var lastDate;
       var eventIndex = 0;
-      _.each(event.geometries, function(geometry, dateIndex) {
+      _.each(event.geometries, function(geometry) {
         eventIndex++;
-        date = geometry.date.split(/T/)[0];
+        date = geometry.date.split('T')[0];
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
-        if (date === lastDate) {
-          return;
-        }
+        if (date === lastDate) return;
 
         $date = $("<a></a>")
           .addClass("date")
-          .attr("data-date-index", dateIndex)
+          .attr("data-date", date)
           .attr("data-id", event.id)
           .html(date);
 
@@ -390,9 +396,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       });
   };
 
-  var showEvent = function(id, dateIndex) {
+  var showEvent = function(id, date) {
 
-    self.select(id, dateIndex);
+    self.select(id, date);
     $("#wv-eventscontent .subtitle")
       .hide();
     $("#wv-eventscontent .dates")
