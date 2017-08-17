@@ -1,17 +1,18 @@
 var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
-wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, config) {
+wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, config) {
 
   var self = {},
     boundingBox,
     map;
 
-  map = map || maps.selected;
+  map = map || ui.map.selected;
 
   self.draw = function(events, dateIndex) {
     if (!events) return null;
     return events.map(function(event){
       var marker = {};
+      var isSelected = event.id === ui.naturalEvents.selected.id;
       var geometry = event.geometries[dateIndex] || event.geometries[0];
       var coordinates = geometry.coordinates;
       var category = Array.isArray(event.categories)
@@ -37,8 +38,10 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, maps, co
       if (geometry.type === 'Polygon') {
         var extent = ol.extent.boundingExtent(geometry.coordinates[0]);
         coordinates = ol.extent.getCenter(extent);
-        marker.boundingBox = createBoundingBox(geometry.coordinates);
-        map.addLayer(marker.boundingBox);
+        if (isSelected) {
+          marker.boundingBox = createBoundingBox(geometry.coordinates);
+          map.addLayer(marker.boundingBox);
+        }
       }
 
       marker.pin = createPin(event.id, category.slug);

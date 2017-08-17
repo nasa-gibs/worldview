@@ -10,9 +10,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   self.id = "wv-events";
   self.markers = [];
   self.selected = {};
-  var maps = ui.map;
-  var map = ui.map.selected;
-  var naturalEventMarkers = wv.naturalEvents.markers(models, maps, config);
+  var naturalEventMarkers = wv.naturalEvents.markers(models, ui, config);
 
   var notified = false;
   var lastIndex = -1;
@@ -225,7 +223,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
 
     // Store selected indexes in self object
-    self.selected = {index: index};
+    self.selected = {id: event.id, index: index};
     if (dateIndex) self.selected.dateIndex = dateIndex;
 
     // Turn on the relevant layers for the event type
