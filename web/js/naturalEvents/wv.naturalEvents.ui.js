@@ -13,7 +13,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   var naturalEventMarkers = wv.naturalEvents.markers(models, ui, config);
 
   var notified = false;
-  var lastIndex = -1;
+  var lastId = false;
   var lastDateIndex = -1;
 
   var $notification;
@@ -26,8 +26,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         self.markers = naturalEventMarkers.draw(data);
         model.active = true;
         resize();
-        if (self.selected.index) {
-          self.select(self.selected.index, self.selected.dateIndex||null);
+        if (self.selected.id) {
+          self.select(self.selected.id, self.selected.dateIndex||null);
         }
       } else {
         model.active = false;
@@ -136,8 +136,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $content = $(self.selector + "content")
       .empty();
     // iterate through events
-    _.each(data, function(event, index) {
-      refreshEvent($content, event, index);
+    _.each(data, function(event) {
+      refreshEvent($content, event);
     });
 
     // Bind click event to each event
@@ -147,19 +147,19 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         if ($current) {
           $current.click();
         }
-        var dataIndex = $(this)
-          .attr("data-index");
+        var dataId = $(this)
+          .attr("data-id");
         if ($(this)
           .find("ul li.dates a")
           .first()
           .hasClass("date-today")) {
-          var nextID = $(self.selector + "content ul li.dates")
+          var nextDateIndex = $(self.selector + "content ul li.dates")
             .next()
             .children("a")
             .attr("data-date-index");
-          showEvent(dataIndex, nextID);
+          showEvent(dataId, nextDateIndex);
         } else {
-          showEvent(dataIndex);
+          showEvent(dataId);
         }
         $(self.selector + "content li")
           .removeClass('item-selected');
@@ -194,9 +194,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $(self.selector + "content ul li.dates a")
       .click(function(event) {
         event.stopPropagation();
-        var dataIndex = $(this)
-          .attr("data-index");
-        showEvent(dataIndex, $(this)
+        var dataId = $(this)
+          .attr("data-id");
+        showEvent(dataId, $(this)
           .attr("data-date-index"));
         $(self.selector + "content ul li.dates a")
           .not(this)
@@ -208,14 +208,16 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     resize();
   };
 
-  self.select = function(index, dateIndex) {
+  self.select = function(id, dateIndex) {
     var eventItem, eventCategory, eventType, method, zoomCenter, zoomLevel, markers;
-    var hasSameIndex = index === lastIndex;
+    var hasSameId = id === lastId;
     var hasSameDateIndex = lastDateIndex === dateIndex;
-    if (hasSameIndex && hasSameDateIndex) return;
-    lastIndex = index;
+    if (hasSameId && hasSameDateIndex) return;
+    lastId = id;
     lastDateIndex = lastDateIndex;
-    var event = model.data.events[index];
+    var event = _.find(model.data.events, function(e){
+      return e.id === id;
+    });
 
     // Set the correct map projection
     if (models.proj.selected.id !== 'geographic') {
@@ -223,7 +225,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
 
     // Store selected indexes in self object
-    self.selected = {id: event.id, index: index};
+    self.selected = {id: id};
     if (dateIndex) self.selected.dateIndex = dateIndex;
 
     // Turn on the relevant layers for the event type
@@ -275,7 +277,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
     // If an event is a Wildfire or Volcano, zoom in more
     zoomLevel = isWildfire?8:isVolcano?6:5;
-    method = (hasSameIndex && !hasSameDateIndex)?'pan':'fly';
+    method = (hasSameId && !hasSameDateIndex)?'pan':'fly';
     // Determine where to zoom to
     eventType = eventItem.type;
     if (eventType === 'Polygon') {
@@ -287,7 +289,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   };
 
-  var refreshEvent = function($content, event, index) {
+  var refreshEvent = function($content, event) {
     var eventCategoryID = event.categories[0].id || null;
     // Sort by latest dates first
     var geoms = toArray(event.geometries)
@@ -308,7 +310,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       .addClass("selectorItem")
       .addClass("item")
       .addClass(event.categories[0].slug)
-      .attr("data-index", index);
+      .attr("data-id", event.id);
     var $title = $("<h4></h4>")
       .addClass("title")
       .html(event.title + "<br/>" + dateString);
@@ -339,7 +341,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         $date = $("<a></a>")
           .addClass("date")
           .attr("data-date-index", dateIndex)
-          .attr("data-index", index)
+          .attr("data-id", event.id)
           .html(date);
 
         // Check first multi-day event
@@ -395,16 +397,16 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
   };
 
-  var showEvent = function(index, dateIndex) {
+  var showEvent = function(id, dateIndex) {
 
-    self.select(index, dateIndex);
+    self.select(id, dateIndex);
     $("#wv-eventscontent .subtitle")
       .hide();
     $("#wv-eventscontent .dates")
       .hide();
-    $("#wv-eventscontent [data-index='" + index + "'] .subtitle")
+    $("#wv-eventscontent [data-id='" + id + "'] .subtitle")
       .show();
-    $("#wv-eventscontent [data-index='" + index + "'] .dates")
+    $("#wv-eventscontent [data-id='" + id + "'] .dates")
       .show();
     resize();
 
