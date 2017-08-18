@@ -207,13 +207,15 @@ wv.util.browser = wv.util.browser || (function() {
       return false;
     }
     try {
-      localStorage.setItem("available", "true");
-      localStorage.getItem('available');
-      localStorage.removeItem('available');
+      var uid = new Date();
+      var result;
+      localStorage.setItem(uid, uid);
+      result = localStorage.getItem(uid) == uid;
+      localStorage.removeItem(uid);
+      return result && true;
     } catch (error) {
       return false;
     }
-    return true;
   };
 
   self.tests.small = function() {
