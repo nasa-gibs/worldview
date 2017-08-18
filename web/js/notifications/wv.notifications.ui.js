@@ -151,7 +151,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *  in LocalStorage
    */
   var getNumberOfTypeNotseen = function(type, arra) {
-    var storageItem = wv.util.isInLocalStorage(type);
+    var storageItem = wv.util.browser.localStorage?!!localStorage.getItem(type):false;
     var count, len;
 
     len = arra.length;
@@ -185,7 +185,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
 
     type = obj.notification_type;
     idString = obj.created_at.toString();
-    fieldExists = wv.util.isInLocalStorage(type);
+    fieldExists = wv.util.browser.localStorage?!!localStorage.getItem(type):false;
     fieldValueMatches = false;
 
     if (fieldExists) {
@@ -344,7 +344,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     var messages;
     this.className = 'ui-icon fa fa-fw fa-gift';
     self.messageIconActive = false;
-    wv.util.localStorage('message', activeMessageId);
+    if (wv.util.browser.localStorage) localStorage.setItem('message', activeMessageId);
     activeMessageId = null;
 
     messages = sortedNotifications.messages[0];
@@ -373,11 +373,11 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     self.notifyIconActive = false;
     mainNotification = null;
     createNotifyDialog();
-    if (activeNotifications.outage) {
-      wv.util.localStorage('outage', activeNotifications.outage);
+    if (activeNotifications.outage && wv.util.browser.localStorage) {
+      localStorage.setItem('outage', activeNotifications.outage);
     }
-    if (activeNotifications.alert) {
-      wv.util.localStorage('alert', activeNotifications.alert);
+    if (activeNotifications.alert && wv.util.browser.localStorage) {
+      localStorage.setItem('alert', activeNotifications.alert);
     }
     activeNotifications = {};
     if (self.messageIconActive) {
@@ -486,6 +486,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    * @returns {Boolean}
    */
   var localStorageValueMatches = function(property, value) {
+    if (!wv.util.browser.localStorage) return;
     var oldValue = localStorage.getItem(property);
     return new Date(value) <= new Date(oldValue);
   };

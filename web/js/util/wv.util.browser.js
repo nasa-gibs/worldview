@@ -91,7 +91,7 @@ wv.util.browser = wv.util.browser || (function() {
    * @attribute localStorage
    * @type Boolean
    */
-  self.localStorage = true;
+  self.localStorage = false;
   self.history = true;
   self.touchDevice = false;
 
@@ -138,8 +138,12 @@ wv.util.browser = wv.util.browser || (function() {
   };
 
   self.tests.window = function(property) {
-    return window[property];
-
+    // Some browsers throw an error when attempting to access restricted Window objects
+    try {
+      return window[property];
+    } catch (error) {
+      return false;
+    }
   };
 
   self.tests.safari = function() {
@@ -204,6 +208,8 @@ wv.util.browser = wv.util.browser || (function() {
     }
     try {
       localStorage.setItem("available", "true");
+      localStorage.getItem('available');
+      localStorage.removeItem('available');
     } catch (error) {
       return false;
     }
