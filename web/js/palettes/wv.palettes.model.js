@@ -185,6 +185,7 @@ wv.palettes.model = wv.palettes.model || function(models, config) {
     return self.active[layerId];
   };
 
+  // Looks up in options / colormaps / layer.xml colormap entry
   self.getLookup = function(layerId) {
     return self.active[layerId].lookup;
   };
