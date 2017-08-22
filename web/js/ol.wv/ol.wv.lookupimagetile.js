@@ -147,7 +147,7 @@ ol.wv.LookupWMS.prototype.load = function() {
       for (var i = 0; i < octets; i += 4) {
         var hexSource = wv.util.rgbaToHex(pixels[i + 0], pixels[i + 1], pixels[i + 2]);
 
-        if (wv.util.hexColorDelta(hexSource, defaultLookupHex) < 5) { // If the two colors are close
+        if (wv.util.hexColorDelta(hexSource, defaultLookupHex) < 125) { // If the two colors are close
           if (newLookup) {
             pixels[i + 0] = newLookup.r;
             pixels[i + 1] = newLookup.g;
