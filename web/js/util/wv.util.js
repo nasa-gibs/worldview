@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.util
  */
@@ -73,22 +62,17 @@ wv.util = (function(self) {
    * object.
    * @return {object} object representation of the query string.
    */
-  self.fromQueryString = function(queryString) {
-    if (!queryString) {
-      return {};
-    }
-    if (queryString[0] === "?") {
-      queryString = queryString.substring(1);
-    }
-    var parameters = queryString.split("&");
-    var result = {};
-    for (var i = 0; i < parameters.length; i++) {
-      var index = parameters[i].indexOf("=");
-      var key = parameters[i].substring(0, index);
-      var value = parameters[i].substring(index + 1);
-      result[key] = decodeURIComponent(value);
-    }
-    return result;
+  self.fromQueryString = function(qs) {
+    var res = {};
+    if (!qs) return res;
+    if (qs[0] === '?') qs = qs.substring(1);
+    qs.split('&').forEach(function(param){
+      param = param.split('=').map(function(comp){
+        return decodeURIComponent(comp);
+      });
+      res[param[0]] = param[1];
+    });
+    return res;
   };
 
   /**
@@ -170,30 +154,7 @@ wv.util = (function(self) {
    */
   // NOTE: Older Safari doesn't like Date.parse
   self.parseDateUTC = function(dateAsString) {
-    var dateTimeArr = dateAsString.split(/T/);
-
-    var yyyymmdd = dateTimeArr[0].split("-");
-
-    // Parse elements of date and time
-    var year = yyyymmdd[0];
-    var month = yyyymmdd[1] - 1;
-    var day = yyyymmdd[2];
-
-    var hour = 0;
-    var minute = 0;
-    var second = 0;
-    var millisecond = 0;
-
-    // Use default of midnight if time is not specified
-    if (dateTimeArr.length > 1) {
-      var hhmmss = dateTimeArr[1].split(/[:\.Z]/);
-      hour = hhmmss[0] || 0;
-      minute = hhmmss[1] || 0;
-      second = hhmmss[2] || 0;
-      millisecond = hhmmss[3] || 0;
-    }
-    var date = new Date(Date.UTC(year, month, day, hour, minute, second,
-      millisecond));
+    var date = new Date(dateAsString);
     if (isNaN(date.getTime())) {
       throw new Error("Invalid date: " + dateAsString);
     }

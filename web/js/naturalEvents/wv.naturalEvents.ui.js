@@ -24,6 +24,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       if (tab === "events") {
         naturalEventMarkers.remove(self.markers);
         self.markers = naturalEventMarkers.draw(data);
+        if (self.markers && Array.isArray(self.markers)) {
+          self.markers.forEach(function(marker){
+            marker.pin.element_.onclick = function(){
+              self.select(marker.pin.id_);
+            };
+          });
+        }
         model.active = true;
         resize();
         if (self.selected.id) {

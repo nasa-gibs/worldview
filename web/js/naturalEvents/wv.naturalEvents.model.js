@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2016 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.naturalEvents
  */
@@ -24,12 +13,6 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
   self.selected = null;
   self.active = false;
   self.layers = config.naturalEvents.layers;
-  var state = {
-    layersString: null,
-    projection: null,
-    epsg: null,
-    time: null
-  };
 
   /**
    * Handler for events fired by this class.
@@ -42,25 +25,27 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
 
   self.save = function(state) {
     if (self.active) {
-      state.e = 't';
+      var id = wvx.ui.naturalEvents.selected.id;
+      var date = wvx.ui.naturalEvents.selected.date;
+      var value = id?date?[id, date].join(','):id:true;
+      state.e = value;
     }
   };
 
   self.load = function(state) {
-    if (state.e == 't') {
-      models.wv.events.on("startup", function() {
-        wvx.ui.sidebar.selectTab("events");
+    if (!state.e) return;
+    var values = state.e.split(',');
+    var id = values[0];
+    var date = values[1];
+    if (values) {
+      models.wv.events.on('startup', function() {
+        wvx.ui.sidebar.selectTab('events');
+      });
+      self.events.on('hasData', function() {
+        wvx.ui.naturalEvents.select(id, date);
       });
     }
   };
-  /*
-  self.register = function(crs, def) {
-      if ( def && window.proj4 ) {
-          proj4.defs(crs, def);
-      }
-  };
-  */
-
 
   return self;
 };

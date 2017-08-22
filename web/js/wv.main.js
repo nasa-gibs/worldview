@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wvx = wvx || {};
 
 // Document ready function
@@ -21,26 +10,14 @@ $(function() {
   var startTime;
 
   var main = function() {
-    if (parameters.elapsed) {
-      startTime = new Date()
-        .getTime();
-    } else {
-      elapsed = function() {};
-    }
-    elapsed("start");
-    /* May be included in next version
-    yepnope({
-        test: parameters.debug,
-        yep: ['js/wv.debug.js'],
-        complete: loadConfig
-    });
-    */
+    if (parameters.elapsed) startTime = new Date().getTime();
+    elapsed('start');
     loadConfig();
   };
 
   var loadConfig = function() {
-    elapsed("loading config");
-    var configURI = wv.brand.url("config/wv.json");
+    elapsed('loading config');
+    var configURI = wv.brand.url('config/wv.json');
     var promise = $.getJSON(configURI);
     promise
       .done(wv.util.wrap(onConfigLoaded))
@@ -49,7 +26,7 @@ $(function() {
   };
 
   var onConfigLoaded = function(data) {
-    elapsed("config loaded");
+    elapsed('config loaded');
     config = data;
     config.parameters = parameters;
 
@@ -93,7 +70,7 @@ $(function() {
   };
 
   var init = function() {
-    elapsed("init");
+    elapsed('init');
     // If at the beginning of the day, wait on the previous day until GIBS
     // catches up (about three hours)
     var initialDate;
@@ -168,7 +145,7 @@ $(function() {
       models.proj.change = wv.proj.change(models, config);
     }
 
-    elapsed("ui");
+    elapsed('ui');
     // Create widgets
     ui.proj = wv.proj.ui(models, config);
     ui.sidebar = wv.layers.sidebar(models, config);
@@ -232,112 +209,79 @@ $(function() {
       });
 
     document.activeElement.blur();
-    $("input")
+    $('input')
       .blur();
-    $("#eventsHolder")
+    $('#eventsHolder')
       .hide();
 
     if (config.features.dataDownload) {
       models.data.events
-        .on("activate", function() {
-          ui.sidebar.selectTab("download");
+        .on('activate', function() {
+          ui.sidebar.selectTab('download');
         })
-        .on("queryResults", function() {
+        .on('queryResults', function() {
           ui.data.onViewChange();
         });
-      ui.map.events.on("extent", function() {
+      ui.map.events.on('extent', function() {
         ui.data.onViewChange();
       });
       // FIXME: This is a hack
-      models.map.events.on("projection", models.data.updateProjection);
+      models.map.events.on('projection', models.data.updateProjection);
     }
     // Sink all focus on inputs if click unhandled
     $(document)
       .click(function(event) {
-        if (event.target.nodeName !== "INPUT") {
-          $("input")
+        if (event.target.nodeName !== 'INPUT') {
+          $('input')
             .blur();
         }
       });
 
     // Console notifications
     if (wv.brand.release()) {
-      console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
-        " - " + wv.brand.BUILD_TIMESTAMP);
+      console.info(wv.brand.NAME + ' - Version ' + wv.brand.VERSION +
+        ' - ' + wv.brand.BUILD_TIMESTAMP);
     } else {
-      console.warn("Development version");
+      console.warn('Development version');
     }
     wv.debug.layers(ui, models, config);
 
     errorReport();
     //wv.debug.error(parameters);
 
-    models.wv.events.trigger("startup");
-    elapsed("done");
+    models.wv.events.trigger('startup');
+    elapsed('done');
 
     // Reset Worldview when clicking on logo
     $(document).click(function(e) {
-      if (e.target.id == "wv-logo") resetWorldview(e);
+      if (e.target.id == 'wv-logo') resetWorldview(e);
     });
   };
 
   var resetWorldview = function(e){
     e.preventDefault();
-    if (window.location.search === "") return; // Nothing to reset
-    var msg = "Do you want to reset Worldview to its defaults? You will lose your current state.";
-    if (confirm(msg)) document.location.href = "/";
+    if (window.location.search === '') return; // Nothing to reset
+    var msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
+    if (confirm(msg)) document.location.href = '/';
   };
 
   var errorReport = function() {
     var layersRemoved = 0;
 
     _.each(errors, function(error) {
-      var cause = (error.cause) ? ": " + error.cause : "";
+      var cause = (error.cause) ? ': ' + error.cause : '';
       wv.util.warn(error.message + cause);
       if (error.layerRemoved) {
         layersRemoved = layersRemoved + 1;
       }
     });
-
-    if (layersRemoved > 0) {
-      // Remove for now until new GIBS has settled down.
-      /*
-      wv.ui.notify(
-          "Incomplete configuration<br><br>" +
-          layersRemoved + " layer(s) were removed<br><br>" +
-          "Contact us at " +
-          "<a href='mailto:@MAIL@'>" +
-          "@MAIL@</a>");
-      */
-    }
   };
 
   var elapsed = function(message) {
-    var t = new Date()
-      .getTime() - startTime;
+    if (!parameters.elapsed) return;
+    var t = new Date().getTime() - startTime;
     console.log(t, message);
   };
-
-  /*
-  var debuggingFeatures = function(config) {
-      // Install a black palette which can be used to find "holes" in
-      // LUT mappings.
-      if ( config.parameters.debugPalette ) {
-          var debugPalette = Worldview.Palette.Palette({
-              id: "__DEBUG",
-              name: "Debug",
-              stops: [{at: 0, r: 0, g: 0, b: 0, a: 0}]
-          });
-          config.palettes["__DEBUG"] = debugPalette;
-          config.paletteOrder.unshift("__DEBUG");
-      }
-
-      // Test error dialog
-      if ( config.parameters.showError ) {
-          *** SHOW ERROR
-      }
-  };
-  */
 
   wv.util.wrap(main)();
 
