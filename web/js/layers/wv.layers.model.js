@@ -50,7 +50,15 @@ wv.layers.model = wv.layers.model || function(models, config) {
           thisSetting = setting;
           description = source.description;
           _.each(config.layers, function(layer, layerKey) {
-            if (layer.id == thisSetting) {
+            // If a layer is an orbit track (based on layer title)
+            if (layer.title.indexOf("Orbital Track") !== -1) {
+              // And if a source is a
+              if (source.title.indexOf("Space-Track.org") !== -1) {
+                if (layer.id == thisSetting) {
+                  layer.description = description || "";
+                }
+              }
+            } else if (layer.id == thisSetting) {
               layer.description = description || "";
             }
           });
