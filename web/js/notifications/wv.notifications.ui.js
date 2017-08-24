@@ -493,7 +493,6 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    * @returns {Boolean}
    */
   var localStorageValueMatches = function(property, value) {
-    if (!wv.util.browser.localStorage) return;
     var oldValue = localStorage.getItem(property);
     return new Date(value) <= new Date(oldValue);
   };
