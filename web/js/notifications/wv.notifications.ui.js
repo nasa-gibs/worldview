@@ -89,8 +89,11 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     message = sortedNotifications.messages[0];
     outage = sortedNotifications.outages[0];
     alert = sortedNotifications.alerts[0];
-    if (outage || outage) {
+    if (outage || alert) {
       alertBlockExists = true;
+    }
+    if (message) {
+      messageBlockExists = true;
     }
 
     if (message && !objectAlreadySeen(message)) {
@@ -272,7 +275,6 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    */
   self.getMessages = function() {
     var $message, messageNumber, messages, hide;
-
     hide = '';
     messages = sortedNotifications.messages;
 
