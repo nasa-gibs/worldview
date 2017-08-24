@@ -508,8 +508,23 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .append($label);
 
           // If this is an orbit track.... put it in the orbit track list
-          if (layer.title.indexOf("Orbital Track") !== -1) {
+          if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
             var orbitTitle;
+
+            if (layer.time && layer.track) {
+              orbitTitle = wv.util.capitalizeFirstLetter(layer.time) + "/" + wv.util.capitalizeFirstLetter(layer.track);
+            }
+
+            $label.empty()
+              .text(orbitTitle);
+            $sourceOrbits.append($wrapper);
+
+          /**
+           * @deprecated since version 1.8.0 If the data set is old and doesn't have
+           * layergroup's set then we will need to track the layer title to determine
+           * if it is a Orbital Track
+           */
+          } else if (layer.title.indexOf("Orbital Track") !== -1) {
 
             // The following complex if statement is a placeholder
             // for truncating the layer names, until the rest of
