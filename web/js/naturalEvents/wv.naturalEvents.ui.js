@@ -3,25 +3,26 @@ wv.naturalEvents = wv.naturalEvents || {};
 
 wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
-  var self = {};
+  var self = {}, data, $notification, notified = false, lastId = false, lastDate = false;
   var model = models.naturalEvents;
-  var data;
-  self.selector = "#wv-events";
-  self.id = "wv-events";
+  self.selector = '#wv-events';
+  self.id = 'wv-events';
   self.markers = [];
   self.selected = {};
   var naturalEventMarkers = wv.naturalEvents.markers(models, ui, config);
 
-  var notified = false;
-  var lastId = false;
-  var lastDate = false;
-
-  var $notification;
-
   var init = function() {
-    request.events.on("queryResults", onQueryResults);
-    ui.sidebar.events.on("select", function(tab) {
-      if (tab === "events") {
+    request.events.on('queryResults', function() {
+      if (model.data.sources) {
+        data = model.data.events;
+        self.refresh();
+      }
+    });
+    ui.sidebar.events.on('select', function(tab) {
+      if (tab === 'events') {
+        model.active = true;
+        showEventMessage();
+        // Draw markers
         naturalEventMarkers.remove(self.markers);
         self.markers = naturalEventMarkers.draw(data);
         if (self.markers && Array.isArray(self.markers)) {
@@ -31,8 +32,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             };
           });
         }
-        model.active = true;
-        resize();
+
+        sizeEventsTab();
         if (self.selected.id) {
           self.select(self.selected.id, self.selected.date||null);
         }
@@ -43,176 +44,63 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       }
       model.events.trigger('change');
     });
-    $(window)
-      .resize(resize);
-    render();
-
-  };
-  var onQueryResults = function() {
-    //FIXME: this if check needs to be reworked
-    if (model.data.sources) {
-      data = model.data.events;
-      self.refresh();
-    }
-  };
-  var render = function() {
-    var $panels = $(self.selector)
-      .empty()
-      .addClass(self.id + "list")
-      .addClass("bank");
-
-    var $list = $("<ul></ul>")
-      .attr("id", self.id + "content")
-      .addClass("content")
-      .addClass("map-item-list");
-
-    $panels.append($list);
-
-    var $detailContainer = $("<div></div>")
-      .attr("id", "wv-events-detail")
-      .hide();
-
-    $panels.append($detailContainer);
-
-    //******************************************
-    //TODO: This should be moved to wv.ui.notify
-    var $message = $('<span></span>')
-      .addClass('notify-message');
-
-    var $icon = $('<i></i>')
-      .addClass('fa fa-warning fa-1x');
-
-    var $messageWrapper = $('<div></div>')
-      .click(function() {
-        showNotificationHelp();
-      });
-
-    $messageWrapper
-      .append($icon)
-      .append($message);
-
-    var $close = $('<i></i>')
-      .addClass('fa fa-times fa-1x')
-      .click(function() {
-        $notification.dialog('close');
-      });
-
-    $notification = $('<div></div>')
-      .append($close)
-      .append($messageWrapper)
-      .dialog({
-        autoOpen: false,
-        resizable: false,
-        height: 40,
-        width: 420,
-        draggable: false,
-        show: {
-          effect: "fade",
-          duration: 400
-        },
-        hide: {
-          effect: "fade",
-          duration: 200
-        },
-        dialogClass: 'no-titlebar notify-alert',
-        close: function() {
-          notified = true;
-        }
-      });
-    //**************************************
-
-  };
-  var showNotificationHelp = function() {
-    var headerMsg = "<h3 class='wv-data-unavailable-header'>Why can’t I see an event?</h3>";
-    var bodyMsg = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
-      '<ul>' +
-      '<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
-      '<li>Cloud cover may obscure the event.</li>' +
-      '<li>Some events don’t appear on the day that they are reported, you may have to wait a day or two for an event to become visible. Try and scroll through the days to see an event’s progression and/or change the satellite/sensor. NOTE: Wildfire events are currently set to automatically display the next day, as fire events often do not appear in the satellite imagery on the day they are reported.</li>' +
-      '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
-      '<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
-      '</ul>' +
-      'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
-
-    wv.ui.notify(headerMsg + bodyMsg, "Notice", 800);
+    $(window).resize(sizeEventsTab);
+    renderEventList();
   };
 
   self.refresh = function() {
-    var $content = $(self.selector + "content");
-
-    $content = $(self.selector + "content")
-      .empty();
-    // iterate through events
+    var $content = $(self.selector + 'content').empty();
     _.each(data, function(event) {
-      refreshEvent($content, event);
+      renderEvent($content, event);
     });
 
     // Bind click event to each event
     var $current;
-    $(self.selector + "content li")
-      .toggle(function() {
-        if ($current) {
-          $current.click();
-        }
-        var dataId = $(this)
-          .attr("data-id");
-        if ($(this)
-          .find("ul li.dates a")
-          .first()
-          .hasClass("date-today")) {
-          var nextDate = $(self.selector + "content ul li.dates")
-            .next()
-            .children("a")
-            .attr("data-date");
-          showEvent(dataId, nextDate);
-        } else {
-          showEvent(dataId);
-        }
-        $(self.selector + "content li")
-          .removeClass('item-selected');
-        $(self.selector + "content ul li.dates a")
-          .removeClass('active');
-        $(this)
-          .addClass('item-selected');
-        if (wv.util.browser.small) {
-          ui.sidebar.collapseNow();
-        }
-        notify();
-        $current = $(this);
-      }, function() {
-        $(self.selector + "content li")
-          .removeClass('item-selected');
-        $(self.selector + "content ul li.dates a")
-          .removeClass('active');
-        hideEvent();
-        naturalEventMarkers.remove(self.markers);
-        $current = null;
-      });
+    $(self.selector + 'content li').toggle(function() {
+      console.log('first cb');
+      if ($current) $current.click();
+      var dataId = $(this).attr('data-id');
 
-    $(self.selector + "content li")
-      .click(function() {
-        $(this)
-          .find("ul li.dates a.date")
-          .first()
-          .addClass('active');
-      });
+      if ($(this).find('ul li.dates a').first().hasClass('date-today')) {
+        var nextDate = $(self.selector + 'content ul li.dates').next().children('a').attr('data-date');
+        self.select(dataId, nextDate);
+      } else { self.select(dataId);}
+
+      $(self.selector + 'content li').removeClass('item-selected');
+      $(self.selector + 'content ul li.dates a').removeClass('active');
+      $(this).addClass('item-selected');
+      if (wv.util.browser.small) ui.sidebar.collapseNow();
+      $current = $(this);
+    }, function() {
+      console.log('second cb');
+      $(self.selector + 'content li').removeClass('item-selected');
+      $(self.selector + 'content ul li.dates a').removeClass('active');
+
+      // Hide event
+      $('#wv-eventscontent .subtitle').hide();
+      $('#wv-eventscontent .dates').hide();
+      sizeEventsTab();
+
+      naturalEventMarkers.remove(self.markers);
+      $current = null;
+    });
+
+    // Add active class to first date on selecting event
+    $(self.selector + 'content li').click(function() {
+      $(this).find('ul li.dates a.date').first().addClass('active');
+    });
 
     //Bind click event to each date contained in events with dates
-    $(self.selector + "content ul li.dates a")
-      .click(function(event) {
-        event.stopPropagation();
-        var dataId = $(this)
-          .attr("data-id");
-        showEvent(dataId, $(this)
-          .attr("data-date"));
-        $(self.selector + "content ul li.dates a")
-          .not(this)
-          .removeClass('active');
-        $(this)
-          .addClass('active');
-      });
+    $(self.selector + 'content ul li.dates a').click(function(e) {
+      e.stopPropagation();
+      var id = $(this).attr('data-id');
+      var date = $(this).attr('data-date');
+      self.select(id, date);
+      $(self.selector + 'content ul li.dates a').removeClass('active');
+      $(this).addClass('active');
+    });
 
-    resize();
+    sizeEventsTab();
   };
 
   self.select = function(id, date) {
@@ -233,6 +121,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var event = _.find(model.data.events, function(e){
       return e.id === id;
     });
+    if (!event) {
+      wv.ui.notify('Metadata for event ' + id + ' is not available.');
+      return;
+    }
 
     // Get event geometry and category
     var geometry;
@@ -243,6 +135,18 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     } else {
       geometry = event.geometries[0];
     }
+
+    if (!geometry) {
+      wv.ui.notify('Metadata for event ' + id + ' is not available.');
+      return;
+    }
+
+    // Select event in sidebar
+    $('#wv-eventscontent .subtitle').hide();
+    $('#wv-eventscontent .dates').hide();
+    $('#wv-eventscontent [data-id="' + id + '"] .subtitle').show();
+    $('#wv-eventscontent [data-id="' + id + '"] .dates').show();
+    sizeEventsTab();
 
     eventCategory = (Array.isArray(event.categories)
       ? event.categories[0]
@@ -286,7 +190,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     functionality may do more harm than good. */
     if (isWildfire && !isToday) {
       var geometryDatePlusOne =
-        wv.util.dateAdd(wv.util.parseDateUTC(geometry.date), "day", 1);
+        wv.util.dateAdd(wv.util.parseDateUTC(geometry.date), 'day', 1);
       models.date.select(geometryDatePlusOne);
     } else {
       models.date.select(geometryDate);
@@ -304,42 +208,32 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   };
 
-  var refreshEvent = function($content, event) {
+  var renderEventList = function() {
+    var $panels = $(self.selector).empty().addClass(self.id + 'list').addClass('bank');
+    var $list = $('<ul></ul>').attr('id', self.id + 'content').addClass('content').addClass('map-item-list');
+    var $detailContainer = $('<div></div>').attr('id', 'wv-events-detail').hide();
+    $panels.append($list);
+    $panels.append($detailContainer);
+  };
+
+  var renderEvent = function($content, event) {
     var eventCategoryID = event.categories[0].id || null;
-    // Sort by latest dates first
-    var geoms = toArray(event.geometries)
-      .reverse();
-
-    eventDate = wv.util.parseDateUTC(geoms[0].date);
-
-    dateString = wv.util.giveWeekDay(eventDate) + ", " +
-      wv.util.giveMonth(eventDate) + " " +
+    event.geometries.reverse();
+    eventDate = wv.util.parseDateUTC(event.geometries[0].date);
+    dateString = wv.util.giveWeekDay(eventDate) + ', ' +
+      wv.util.giveMonth(eventDate) + ' ' +
       eventDate.getUTCDate();
 
-    if (eventDate.getUTCFullYear() !== wv.util.today()
-      .getUTCFullYear()) {
-      dateString += ", " + eventDate.getUTCFullYear();
+    if (eventDate.getUTCFullYear() !== wv.util.today().getUTCFullYear()) {
+      dateString += ', ' + eventDate.getUTCFullYear();
     }
 
-    var $item = $("<li></li>")
-      .addClass("selectorItem")
-      .addClass("item")
-      .addClass(event.categories[0].slug)
-      .attr("data-id", event.id);
-    var $title = $("<h4></h4>")
-      .addClass("title")
-      .html(event.title + "<br/>" + dateString);
-    var $subtitle = $("<p></p>")
-      .addClass("subtitle")
-      .html(event.description)
-      .hide();
-    var $mapMarker = $("<i></i>")
-      .addClass('map-marker')
-      .attr('title', event.categories[0].title);
+    var $item = $('<li></li>').addClass('selectorItem').addClass('item').addClass(event.categories[0].slug).attr('data-id', event.id);
+    var $title = $('<h4></h4>').addClass('title').html(event.title + '<br/>' + dateString);
+    var $subtitle = $('<p></p>').addClass('subtitle').html(event.description).hide();
+    var $mapMarker = $('<i></i>').addClass('map-marker').attr('title', event.categories[0].title);
 
-    var $dates = $("<ul></ul>")
-      .addClass("dates")
-      .hide();
+    var $dates = $('<ul></ul>').addClass('dates').hide();
 
     if (event.geometries.length > 1) {
       var lastDate;
@@ -351,34 +245,25 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
         if (date === lastDate) return;
 
-        $date = $("<a></a>")
-          .addClass("date")
-          .attr("data-date", date)
-          .attr("data-id", event.id)
-          .html(date);
+        $date = $('<a></a>').addClass('date').attr('data-date', date).attr('data-id', event.id).html(date);
 
         // Check first multi-day event
         if (eventIndex == 1) {
           // If it's date is today and it is a Severe Storm, mark it
           // and don't make it active.
           if ((date === todayDateISOString) && (eventCategoryID == 10)) {
-            $date.removeClass("date")
-              .addClass("date-today");
+            $date.removeClass('date').addClass('date-today');
           } else {
-            $date.addClass("active");
+            $date.addClass('active');
           }
         }
-        $dates.append($("<li class='dates'></li>")
-          .append($date));
+        $dates.append($('<li class="dates"></li>').append($date));
         lastDate = date;
       });
     }
 
-    $item.append($mapMarker)
-      .append($title)
-      .append($subtitle)
-      .append($dates);
-    var references = toArray(event.sources);
+    $item.append($mapMarker).append($title).append($subtitle).append($dates);
+    var references = Array.isArray(event.sources)?event.sources:[event.sources];
     if (references.length > 0) {
       items = [];
       _.each(references, function(reference) {
@@ -386,55 +271,83 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           id: reference.id
         });
         if (reference.url) {
-          items.push("<a target='event' class='natural-event-link' href='" + reference.url + "'>" +
-            "<i class='fa fa-external-link fa-1'></i>" +
-            source.title + "</a>");
+          items.push('<a target="event" class="natural-event-link" href="' + reference.url + '">' +
+            '<i class="fa fa-external-link fa-1"></i>' +
+            source.title + '</a>');
         } else {
           items.push(source.title);
         }
       });
-      $subtitle.append(items.join(" "));
+      $subtitle.append(items.join(' '));
     }
 
     $content.append($item);
-    $('.natural-event-link')
-      .click(function(e) {
-        e.stopPropagation();
-      });
+    $('.natural-event-link').click(function(e) {
+      e.stopPropagation();
+    });
   };
 
-  var showEvent = function(id, date) {
+  var showEventMessage = function() {
 
-    self.select(id, date);
-    $("#wv-eventscontent .subtitle")
-      .hide();
-    $("#wv-eventscontent .dates")
-      .hide();
-    $("#wv-eventscontent [data-id='" + id + "'] .subtitle")
-      .show();
-    $("#wv-eventscontent [data-id='" + id + "'] .dates")
-      .show();
-    resize();
+    var showNotificationHelp = function() {
+      var headerMsg = '<h3 class="wv-data-unavailable-header">Why can’t I see an event?</h3>';
+      var bodyMsg = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
+        '<ul>' +
+        '<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
+        '<li>Cloud cover may obscure the event.</li>' +
+        '<li>Some events don’t appear on the day that they are reported, you may have to wait a day or two for an event to become visible. Try and scroll through the days to see an event’s progression and/or change the satellite/sensor. NOTE: Wildfire events are currently set to automatically display the next day, as fire events often do not appear in the satellite imagery on the day they are reported.</li>' +
+        '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
+        '<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
+        '</ul>' +
+        'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
 
-  };
-  var hideEvent = function() {
-    $("#wv-eventscontent .subtitle")
-      .hide();
-    $("#wv-eventscontent .dates")
-      .hide();
-    resize();
-  };
-  var notify = function(text) {
+      wv.ui.notify(headerMsg + bodyMsg, 'Notice', 800);
+    };
 
-    var message = text || 'Events may not be visible at all times.  Read more...';
+    //******************************************
+    //TODO: This should be moved to wv.ui.notify
+    var $message = $('<span></span>').addClass('notify-message');
 
+    var $icon = $('<i></i>').addClass('fa fa-warning fa-1x');
+
+    var $messageWrapper = $('<div></div>').click(function() {
+      showNotificationHelp();
+    });
+
+    $messageWrapper.append($icon).append($message);
+
+    var $close = $('<i></i>').addClass('fa fa-times fa-1x').click(function() {
+      $notification.dialog('close');
+    });
+
+    $notification = $('<div></div>').append($close).append($messageWrapper).dialog({
+      autoOpen: false,
+      resizable: false,
+      height: 40,
+      width: 420,
+      draggable: false,
+      show: {
+        effect: 'fade',
+        duration: 400
+      },
+      hide: {
+        effect: 'fade',
+        duration: 200
+      },
+      dialogClass: 'no-titlebar notify-alert',
+      close: function() {
+        notified = true;
+      }
+    });
+    //**************************************
+
+    var message = 'Events may not be visible at all times.  Read more...';
     var $message = $('.notify-message');
 
     $message.empty();
     $message.append(message);
 
-    $notification.find('i:first-child')
-      .attr('title', message);
+    $notification.find('i:first-child').attr('title', message);
 
     if (!notified) {
       $notification.dialog('open');
@@ -444,19 +357,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   //TODO: Move to wv.ui.sidebar
   var productsIsOverflow = false;
   var sizeEventsTab = function() {
-    var winSize = $(window)
-      .outerHeight(true);
-    var headSize = $("ul#productsHolder-tabs")
-      .outerHeight(true);
-    var head2Size = $('#wv-events-facets')
-      .outerHeight(true);
-    var secSize = $("#productsHolder")
-      .innerHeight() - $("#productsHolder")
-        .height();
-    var offset = $("#productsHolder")
-      .offset();
-    var timeSize = $("#timeline")
-      .outerHeight(true);
+    var winSize = $(window).outerHeight(true);
+    var headSize = $('ul#productsHolder-tabs').outerHeight(true);
+    var head2Size = $('#wv-events-facets').outerHeight(true);
+    var secSize = $('#productsHolder').innerHeight() - $('#productsHolder').height();
+    var offset = $('#productsHolder').offset();
+    var timeSize = $('#timeline').outerHeight(true);
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
@@ -465,49 +371,26 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     if (!wv.util.browser.small) {
       maxHeight = maxHeight - timeSize - 10 - 5;
     }
-    $(self.selector)
-      .css("max-height", maxHeight);
+    $(self.selector).css('max-height', maxHeight);
 
     var childrenHeight =
-      $('#wv-eventscontent')
-        .outerHeight(true);
+      $('#wv-eventscontent').outerHeight(true);
 
     if ((maxHeight <= childrenHeight)) {
-      $("#wv-events")
-        .css('height', maxHeight)
-        .css('padding-right', '10px');
+      $('#wv-events').css('height', maxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
-        $(self.selector)
-          .perfectScrollbar('update');
+        $(self.selector).perfectScrollbar('update');
       } else {
-        $(self.selector)
-          .perfectScrollbar();
+        $(self.selector).perfectScrollbar();
         productsIsOverflow = true;
       }
     } else {
-      $("#wv-events")
-        .css('height', '')
-        .css('padding-right', '');
+      $('#wv-events').css('height', '').css('padding-right', '');
       if (productsIsOverflow) {
-        $(self.selector)
-          .perfectScrollbar('destroy');
+        $(self.selector).perfectScrollbar('destroy');
         productsIsOverflow = false;
       }
     }
-  };
-
-  var resize = function() {
-    sizeEventsTab();
-  };
-
-  var toArray = function(value) {
-    if (!value) {
-      return [];
-    }
-    if (value.constructor !== Array) {
-      value = [value];
-    }
-    return value;
   };
 
   init();

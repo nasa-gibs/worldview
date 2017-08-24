@@ -40,7 +40,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
       };
       model.data.events = model.data.events.filter(removeIgnoredItems);
       model.data.types = model.data.types.filter(removeIgnoredItems);
-      model.events.trigger('hasData');
+      if (model.active) model.events.trigger('hasData');
     }
   };
 

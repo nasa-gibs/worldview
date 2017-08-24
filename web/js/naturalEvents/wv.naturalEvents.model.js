@@ -34,13 +34,15 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
 
   self.load = function(state) {
     if (!state.e) return;
+    models.wv.events.on('startup', function() {
+      wvx.ui.sidebar.selectTab('events');
+    });
     var values = state.e.split(',');
-    var id = values[0];
-    var date = values[1];
-    if (values) {
-      models.wv.events.on('startup', function() {
-        wvx.ui.sidebar.selectTab('events');
-      });
+    var id = values[0] || '';
+    var date = values[1] || '';
+    id = id.match(/^EONET_[0-9]+/i) ? values[0] : null;
+    date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
+    if (id) {
       self.events.on('hasData', function() {
         wvx.ui.naturalEvents.select(id, date);
       });
