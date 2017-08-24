@@ -33,7 +33,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           });
         }
 
-        sizeEventsTab();
+        ui.sidebar.sizeEventsTab();
         if (self.selected.id) {
           self.select(self.selected.id, self.selected.date||null);
         }
@@ -44,7 +44,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       }
       model.events.trigger('change');
     });
-    $(window).resize(sizeEventsTab);
+    $(window).resize(ui.sidebar.sizeEventsTab);
     renderEventList();
   };
 
@@ -79,7 +79,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       // Hide event
       $('#wv-eventscontent .subtitle').hide();
       $('#wv-eventscontent .dates').hide();
-      sizeEventsTab();
+      ui.sidebar.sizeEventsTab();
 
       naturalEventMarkers.remove(self.markers);
       $current = null;
@@ -100,7 +100,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       $(this).addClass('active');
     });
 
-    sizeEventsTab();
+    ui.sidebar.sizeEventsTab();
   };
 
   self.select = function(id, date) {
@@ -146,7 +146,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $('#wv-eventscontent .dates').hide();
     $('#wv-eventscontent [data-id="' + id + '"] .subtitle').show();
     $('#wv-eventscontent [data-id="' + id + '"] .dates').show();
-    sizeEventsTab();
+    ui.sidebar.sizeEventsTab();
 
     eventCategory = (Array.isArray(event.categories)
       ? event.categories[0]
@@ -351,45 +351,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     if (!notified) {
       $notification.dialog('open');
-    }
-  };
-
-  //TODO: Move to wv.ui.sidebar
-  var productsIsOverflow = false;
-  var sizeEventsTab = function() {
-    var winSize = $(window).outerHeight(true);
-    var headSize = $('ul#productsHolder-tabs').outerHeight(true);
-    var head2Size = $('#wv-events-facets').outerHeight(true);
-    var secSize = $('#productsHolder').innerHeight() - $('#productsHolder').height();
-    var offset = $('#productsHolder').offset();
-    var timeSize = $('#timeline').outerHeight(true);
-
-    //FIXME: -10 here is the timeline's bottom position from page, fix
-    // after timeline markup is corrected to be loaded first
-    var maxHeight = winSize - headSize - head2Size -
-      offset.top - secSize;
-    if (!wv.util.browser.small) {
-      maxHeight = maxHeight - timeSize - 10 - 5;
-    }
-    $(self.selector).css('max-height', maxHeight);
-
-    var childrenHeight =
-      $('#wv-eventscontent').outerHeight(true);
-
-    if ((maxHeight <= childrenHeight)) {
-      $('#wv-events').css('height', maxHeight).css('padding-right', '10px');
-      if (productsIsOverflow) {
-        $(self.selector).perfectScrollbar('update');
-      } else {
-        $(self.selector).perfectScrollbar();
-        productsIsOverflow = true;
-      }
-    } else {
-      $('#wv-events').css('height', '').css('padding-right', '');
-      if (productsIsOverflow) {
-        $(self.selector).perfectScrollbar('destroy');
-        productsIsOverflow = false;
-      }
     }
   };
 
