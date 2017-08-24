@@ -158,7 +158,7 @@ buster.testCase("wv.proj.change", {
   },
 
   "Not notified if 'Dont show again' selected": function() {
-    this.stub(wv.util, "localStorage")
+    this.stub(window.localStorage, 'getItem')
       .withArgs("arcticProjectionChangeNotification")
       .returns("true");
     this.models.date.select(new Date(Date.UTC(2013, 0, 1)));

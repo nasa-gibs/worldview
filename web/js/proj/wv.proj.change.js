@@ -78,7 +78,7 @@ wv.proj.change = wv.proj.change || function(models) {
     if (!wv.util.browser.localStorage) {
       return;
     }
-    if (wv.util.localStorage(DO_NOT_SHOW_AGAIN) === "true") {
+    if (localStorage.getItem(DO_NOT_SHOW_AGAIN) === "true") {
       return;
     }
     if (notified) {
@@ -128,8 +128,8 @@ wv.proj.change = wv.proj.change || function(models) {
     wv.ui.notify(message, "Notice", 400);
     var $check = $("#arcticChangeNoticeDontShowAgain");
     $check.on("click", function() {
-      if ($check.is(":checked")) {
-        wv.util.localStorage(DO_NOT_SHOW_AGAIN, "true");
+      if ($check.is(":checked") && wv.util.browser.localStorage) {
+        localStorage.setItem(DO_NOT_SHOW_AGAIN, "true");
       }
     });
   };

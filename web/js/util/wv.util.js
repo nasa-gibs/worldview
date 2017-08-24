@@ -639,16 +639,6 @@ wv.util = (function(self) {
     };
   };
 
-  self.localStorage = function(property, value) {
-    if (_.isUndefined(value)) {
-      return localStorage.getItem(property);
-    } else {
-      localStorage.setItem(property, value);
-    }
-  };
-  self.isInLocalStorage = function(property) {
-    return localStorage.getItem(property);
-  };
   /**
    * Wraps a function in a try/catch block that invokes wv.util.error
    * if an exception is thrown.
@@ -766,14 +756,16 @@ wv.util = (function(self) {
   };
 
   self.setCoordinateFormat = function(type) {
+    if (!wv.util.browser.localStorage) return;
     if (type !== "latlon-dd" && type !== "latlon-dms") {
       throw new Error("Invalid coordinate format: " + type);
     }
-    self.localStorage("coordinateFormat", type);
+    localStorage.setItem('coordinateFormat', type);
   };
 
   self.getCoordinateFormat = function() {
-    return self.localStorage("coordinateFormat") || "latlon-dd";
+    if (!wv.util.browser.localStorage) return 'latlon-dd';
+    return localStorage.getItem("coordinateFormat") || "latlon-dd";
   };
 
   self.formatCoordinate = function(coord, format) {

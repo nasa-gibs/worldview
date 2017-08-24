@@ -47,7 +47,7 @@ wv.tour = wv.tour || function(models, ui, config) {
     }
 
     // Don't show tour if the user has opted out
-    if (wv.util.localStorage("hideSplash")) {
+    if (localStorage.getItem("hideSplash")) {
       return;
     }
 
@@ -213,8 +213,9 @@ wv.tour = wv.tour || function(models, ui, config) {
      * Toggle the value of the "hideSplash" flag.
      */
     var setDoNotShow = function() {
-      var hideSplash = wv.util.localStorage('hideSplash');
-      wv.util.localStorage('hideSplash', !hideSplash);
+      if (!wv.util.browser.localStorage) return;
+      var hideSplash = localStorage.getItem('hideSplash');
+      localStorage.setItem('hideSplash', !hideSplash);
     };
 
     // assign events and start
