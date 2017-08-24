@@ -58,6 +58,10 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    */
   var init = function() {
     var reactComponent, options, p, alertUser;
+    if(!wv.util.browser.localStorage) {
+      console.warn('User does not have localStorage');
+      return;
+    }
     mainIcon = $('#wv-info-button')[0];
     mainIconLabel = $('#wv-info-button label')[0];
     p = wv.util.get(url);
@@ -95,7 +99,6 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     if (message) {
       messageBlockExists = true;
     }
-
     if (message && !objectAlreadySeen(message)) {
       priority = 'message';
       mainNotification = 'message';
@@ -154,7 +157,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *  in LocalStorage
    */
   var getNumberOfTypeNotseen = function(type, arra) {
-    var storageItem = wv.util.browser.localStorage?!!localStorage.getItem(type):false;
+    var storageItem = localStorage.getItem(type);
     var count, len;
 
     len = arra.length;
@@ -188,9 +191,9 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
 
     type = obj.notification_type;
     idString = obj.created_at.toString();
-    fieldExists = wv.util.browser.localStorage?!!localStorage.getItem(type):false;
+    fieldExists = false;
     fieldValueMatches = false;
-
+    fieldExists = localStorage.getItem(type);
     if (fieldExists) {
       fieldValueMatches = localStorageValueMatches(type, idString);
     }
@@ -346,9 +349,10 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     var messages;
     this.className = 'ui-icon fa fa-fw fa-gift';
     self.messageIconActive = false;
-    if (wv.util.browser.localStorage) localStorage.setItem('message', activeMessageId);
+    if (activeMessageId) {
+      localStorage.setItem('message', activeMessageId);
+    }
     activeMessageId = null;
-
     messages = sortedNotifications.messages[0];
     if (messages) {
       create$whatsNew(messages, 'Latest Release');
@@ -374,11 +378,12 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     self.infoIconActive = false;
     self.notifyIconActive = false;
     mainNotification = null;
+
     createNotifyDialog();
-    if (activeNotifications.outage && wv.util.browser.localStorage) {
+    if (activeNotifications.outage ) {
       localStorage.setItem('outage', activeNotifications.outage);
     }
-    if (activeNotifications.alert && wv.util.browser.localStorage) {
+    if (activeNotifications.alert) {
       localStorage.setItem('alert', activeNotifications.alert);
     }
     activeNotifications = {};
