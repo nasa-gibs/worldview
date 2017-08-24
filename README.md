@@ -112,7 +112,6 @@ You can end the session by pressing `control-C`
 * [Development Notes](doc/developing.md)
 * [Coding Style Guide](doc/style_guide.md)
 * [Testing](doc/testing.md)
-* [Contributing](doc/contributing.md)
 * [Third-Party Library Use](THIRD_PARTY.md)
 
 ## Contributing
