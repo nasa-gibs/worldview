@@ -510,9 +510,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           // If this is an orbit track.... put it in the orbit track list
           if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
             var orbitTitle;
-
-            if (layer.time && layer.track) {
-              orbitTitle = wv.util.capitalizeFirstLetter(layer.time) + "/" + wv.util.capitalizeFirstLetter(layer.track);
+            if (layer.daynight && layer.track) {
+              orbitTitle = wv.util.capitalizeFirstLetter(layer.daynight) + "/" + wv.util.capitalizeFirstLetter(layer.track);
             }
 
             $label.empty()
