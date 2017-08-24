@@ -63,13 +63,6 @@ wv.ui = (function(self) {
     var $dialog = self.getDialog();
     title = title || "Notice";
     width = width || 300;
-    // var $close = $('<i></i>')
-    //     .addClass('fa fa-times fa-1x')
-    //     .click(function(e){
-    //         $(this).dialog( 'close' );
-    // });
-    // debugger
-    //message = $(message).append($close);
     $dialog.html(message)
       .dialog({
         title: title,
@@ -94,21 +87,50 @@ wv.ui = (function(self) {
       });
   };
 
-  /**
-   * Displays a non-obtrusive message to the end user in the top right.
-   *
-   * @method notify
-   * @static
-   *
-   * @param {string} message The message to display to the user.
-   *
-   * @param [title="Notice"] {string} Title for the dialog box.
-   */
-  self.notify.small = function(title, link, width, callback) {
+  self.alert = function(body, title, size, glyph) {
+    var $message = $('<span></span>').addClass('notify-message');
+    var $icon = $('<i></i>').addClass('fa fa-' + glyph + ' fa-1x');
+    var $messageWrapper = $('<div></div>').click(function() {
+      self.notify(body, title, size);
+    });
+    $messageWrapper.append($icon).append($message);
 
-    var $dialog = self.getDialog();
-    title = title || "Notice";
-    width = width || 200;
+    var $close = $('<i></i>').addClass('fa fa-times fa-1x').click(function() {
+      $alert.dialog('close');
+    });
+
+    $alert = $('<div></div>').append($close).append($messageWrapper).dialog({
+      autoOpen: false,
+      resizable: false,
+      height: 40,
+      width: 420,
+      draggable: false,
+      show: {
+        effect: 'fade',
+        duration: 400
+      },
+      hide: {
+        effect: 'fade',
+        duration: 200
+      },
+      dialogClass: 'no-titlebar notify-alert',
+      close: function() {
+        if (wv.util.browser.localStorage) localStorage.setItem('dismissedEventAlert', true);
+      }
+    });
+
+    var $message = $('.notify-message');
+    $message.empty();
+    $message.append(title);
+
+    $alert.find('i:first-child').attr('title', title);
+
+    if (wv.util.browser.localStorage && !localStorage.getItem('dismissedEventAlert')) {
+      $alert.dialog('open');
+    }
+
+    return $alert;
+
   };
 
   /**

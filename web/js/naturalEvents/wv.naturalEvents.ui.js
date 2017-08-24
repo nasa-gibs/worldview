@@ -3,7 +3,7 @@ wv.naturalEvents = wv.naturalEvents || {};
 
 wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
-  var self = {}, data, $notification, notified = false, lastId = false, lastDate = false;
+  var self = {}, data, eventAlert, lastId = false, lastDate = false;
   var model = models.naturalEvents;
   self.selector = '#wv-events';
   self.id = 'wv-events';
@@ -12,16 +12,18 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   var naturalEventMarkers = wv.naturalEvents.markers(models, ui, config);
 
   var init = function() {
+
     request.events.on('queryResults', function() {
       if (model.data.sources) {
         data = model.data.events;
         self.refresh();
       }
     });
+
     ui.sidebar.events.on('select', function(tab) {
       if (tab === 'events') {
         model.active = true;
-        showEventMessage();
+        eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times', 800, 'warning');
         // Draw markers
         naturalEventMarkers.remove(self.markers);
         self.markers = naturalEventMarkers.draw(data);
@@ -32,7 +34,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
             };
           });
         }
-
         ui.sidebar.sizeEventsTab();
         if (self.selected.id) {
           self.select(self.selected.id, self.selected.date||null);
@@ -40,10 +41,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       } else {
         model.active = false;
         naturalEventMarkers.remove(self.markers);
-        $notification.dialog('close');
+        eventAlert.dialog('close');
       }
       model.events.trigger('change');
     });
+
     $(window).resize(ui.sidebar.sizeEventsTab);
     renderEventList();
   };
@@ -287,74 +289,17 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
   };
 
-  var showEventMessage = function() {
-
-    var showNotificationHelp = function() {
-      var headerMsg = '<h3 class="wv-data-unavailable-header">Why can’t I see an event?</h3>';
-      var bodyMsg = 'There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.' +
-        '<ul>' +
-        '<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
-        '<li>Cloud cover may obscure the event.</li>' +
-        '<li>Some events don’t appear on the day that they are reported, you may have to wait a day or two for an event to become visible. Try and scroll through the days to see an event’s progression and/or change the satellite/sensor. NOTE: Wildfire events are currently set to automatically display the next day, as fire events often do not appear in the satellite imagery on the day they are reported.</li>' +
-        '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
-        '<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
-        '</ul>' +
-        'This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.';
-
-      wv.ui.notify(headerMsg + bodyMsg, 'Notice', 800);
-    };
-
-    //******************************************
-    //TODO: This should be moved to wv.ui.notify
-    var $message = $('<span></span>').addClass('notify-message');
-
-    var $icon = $('<i></i>').addClass('fa fa-warning fa-1x');
-
-    var $messageWrapper = $('<div></div>').click(function() {
-      showNotificationHelp();
-    });
-
-    $messageWrapper.append($icon).append($message);
-
-    var $close = $('<i></i>').addClass('fa fa-times fa-1x').click(function() {
-      $notification.dialog('close');
-    });
-
-    $notification = $('<div></div>').append($close).append($messageWrapper).dialog({
-      autoOpen: false,
-      resizable: false,
-      height: 40,
-      width: 420,
-      draggable: false,
-      show: {
-        effect: 'fade',
-        duration: 400
-      },
-      hide: {
-        effect: 'fade',
-        duration: 200
-      },
-      dialogClass: 'no-titlebar notify-alert',
-      close: function() {
-        notified = true;
-      }
-    });
-    //**************************************
-
-    var message = 'Events may not be visible at all times.  Read more...';
-    var $message = $('.notify-message');
-
-    $message.empty();
-    $message.append(message);
-
-    $notification.find('i:first-child').attr('title', message);
-
-    if (!notified) {
-      $notification.dialog('open');
-    }
-  };
-
   init();
   return self;
 
 };
+
+var eventAlertBody = '<h3 class="wv-data-unavailable-header">Why can’t I see an event?</h3><p>There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.</p>' +
+'<ul>' +
+'<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
+'<li>Cloud cover may obscure the event.</li>' +
+'<li>Some events don’t appear on the day that they are reported, you may have to wait a day or two for an event to become visible. Try and scroll through the days to see an event’s progression and/or change the satellite/sensor. NOTE: Wildfire events are currently set to automatically display the next day, as fire events often do not appear in the satellite imagery on the day they are reported.</li>' +
+'<li>The resolution of the imagery may be too coarse to see an event.</li>' +
+'<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
+'</ul>' +
+'<p>This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.</p>';
