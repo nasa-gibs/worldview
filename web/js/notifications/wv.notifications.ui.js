@@ -59,7 +59,6 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
   var init = function() {
     var reactComponent, options, p, alertUser;
     if(!wv.util.browser.localStorage) {
-      console.warn('User does not have localStorage');
       return;
     }
     mainIcon = $('#wv-info-button')[0];
@@ -191,9 +190,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
 
     type = obj.notification_type;
     idString = obj.created_at.toString();
-    fieldExists = false;
     fieldValueMatches = false;
-    fieldExists = localStorage.getItem(type);
+    fieldExists = !!localStorage.getItem(type);
     if (fieldExists) {
       fieldValueMatches = localStorageValueMatches(type, idString);
     }
