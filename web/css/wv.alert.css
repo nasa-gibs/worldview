@@ -66,6 +66,7 @@
   font-size: 12px;
   right: 10px;
   top: 4px;
+  z-index: 33;
 }
 
 .ui-menu-item.exclamation-circle a::before {
