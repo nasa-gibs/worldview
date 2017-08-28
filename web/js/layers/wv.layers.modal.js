@@ -332,7 +332,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         // Check if measurements have settings with the same projection.
         var measurementHasSetting;
         _.each( current.sources, function( source, sourceName ) {
-          console.log(sourceName);
             _.each( source.settings, function( setting ) {
                 var layer = config.layers[setting];
                 var proj = layer.projections;
