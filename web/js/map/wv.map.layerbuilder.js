@@ -102,17 +102,17 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
     return layer;
   };
   /*
-	* Create a layer key
-	*
-	* @function layerKey
-	* @static
-	*
-	* @param {Object} def - Layer properties
-	*
-	* @param {number} options - Layer options
-	*
-	* @returns {object} layer key Object
-	*/
+   * Create a layer key
+   *
+   * @function layerKey
+   * @static
+   *
+   * @param {Object} def - Layer properties
+   *
+   * @param {number} options - Layer options
+   *
+   * @returns {object} layer key Object
+   */
   self.layerKey = function(def, options) {
     var layerId = def.id;
     var projId = models.proj.selected.id;
@@ -130,27 +130,21 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
     return [layerId, projId, dateId, palette].join(":");
   };
   /*
-	* Create a new WMTS Layer
-	*
-	* @method createLayerWMTS
-	* @static
-	*
-	* @param {object} def - Layer Specs
-	*
-	* @param {object} options - Layer options
-	*
-	*
-	* @returns {object} OpenLayers WMTS layer
-	*/
+   * Create a new WMTS Layer
+   *
+   * @method createLayerWMTS
+   * @static
+   *
+   * @param {object} def - Layer Specs
+   *
+   * @param {object} options - Layer options
+   *
+   *
+   * @returns {object} OpenLayers WMTS layer
+   */
   var createLayerWMTS = function(def, options, day) {
-    var proj,
-      source,
-      matrixSet,
-      matrixIds,
-      extra,
-      date,
-      extent,
-      start;
+    var proj, source,  matrixSet, matrixIds, extra,
+      date, extent, start;
     proj = models.proj.selected;
     source = config.sources[def.source];
     extent = proj.maxExtent;
@@ -196,7 +190,12 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
       crossOrigin: "anonymous",
       format: def.format,
       matrixSet: matrixSet.id,
-      tileGrid: new ol.tilegrid.WMTS({origin: start, resolutions: matrixSet.resolutions, matrixIds: matrixIds, tileSize: matrixSet.tileSize[0]}),
+      tileGrid: new ol.tilegrid.WMTS({
+        origin: start,
+        resolutions: matrixSet.resolutions,
+        matrixIds: matrixIds,
+        tileSize: matrixSet.tileSize[0]
+      }),
       wrapX: false,
       style: "undefined" === typeof def.style ? 'default' : def.style
     };
@@ -204,7 +203,10 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
       var lookup = models.palettes.getLookup(def.id);
       sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
     }
-    var layer = new ol.layer.Tile({extent: extent, source: new ol.source.WMTS(sourceOptions)});
+    var layer = new ol.layer.Tile({
+      extent: extent,
+      source: new ol.source.WMTS(sourceOptions)
+    });
     return layer;
   };
 
@@ -222,17 +224,8 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
    * @returns {object} OpenLayers WMS layer
    */
   var createLayerWMS = function(def, options, day) {
-    var proj,
-      source,
-      matrixSet,
-      matrixIds,
-      extra,
-      transparent,
-      date,
-      extent,
-      start,
-      bbox,
-      res;
+    var proj, source, matrixSet, matrixIds, extra, transparent,
+      date, extent, start, bbox, res;
     proj = models.proj.selected;
     source = config.sources[def.source];
     extent = proj.maxExtent;
@@ -243,19 +236,8 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
 
     transparent = (def.format === "image/png");
     if (proj.id === "geographic") {
-      res = [
-        0.28125,
-        0.140625,
-        0.0703125,
-        0.03515625,
-        0.017578125,
-        0.0087890625,
-        0.00439453125,
-        0.002197265625,
-        0.0010986328125,
-        0.00054931640625,
-        0.00027465820313
-      ];
+      res = [0.28125, 0.140625, 0.0703125, 0.03515625, 0.017578125, 0.0087890625, 0.00439453125,
+        0.002197265625, 0.0010986328125, 0.00054931640625, 0.00027465820313];
     }
     if (day) {
       if (day === 1) {
@@ -290,14 +272,20 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
       style: 'default',
       crossOrigin: "anonymous",
       params: parameters,
-      tileGrid: new ol.tilegrid.TileGrid({origin: start, resolutions: res})
+      tileGrid: new ol.tilegrid.TileGrid({
+        origin: start,
+        resolutions: res
+      })
     };
 
     if (models.palettes.isActive(def.id)) {
       var lookup = models.palettes.getLookup(def.id);
       sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
     }
-    var layer = new ol.layer.Tile({extent: extent, source: new ol.source.TileWMS(sourceOptions)});
+    var layer = new ol.layer.Tile({
+      extent: extent,
+      source: new ol.source.TileWMS(sourceOptions)
+    });
     return layer;
   };
   var hideWrap = function() {
@@ -310,7 +298,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
     for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
       if (layer.wrapadjacentdays && layer.visible) {
-        key = self.layerKey(layer, {date: models.date.selected});
+        key = self.layerKey(layer, {
+          date: models.date.selected
+        });
         layer = cache.getItem(key);
         layer.setExtent([-180, -90, 180, 90]);
       }
@@ -326,7 +316,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
 
       layer = layers[i];
       if (layer.wrapadjacentdays && layer.visible) {
-        key = self.layerKey(layer, {date: models.date.selected});
+        key = self.layerKey(layer, {
+          date: models.date.selected
+        });
         layer = cache.getItem(key);
         layer.setExtent([-250, -90, 250, 90]);
       }
