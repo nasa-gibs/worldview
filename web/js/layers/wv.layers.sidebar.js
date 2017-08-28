@@ -258,12 +258,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
     $collapseContainer.append($collapseButton);
 
-    //$container.append($collapseContainer);
-
-    //$container//.append($("<div id='products'></div>"))
-    //.append($("<div id='selectorbox'></div>"))
-    //.append($("<div id='wv-data'></div>"));
-
     $container.tabs({
       beforeActivate: onBeforeTabChange,
       activate: onTabChange
@@ -279,7 +273,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
       $("#wv-layers-options-dialog")
         .dialog("close");
     }
-    self.events.trigger("select", ui.newTab.attr("data-tab"));
+    self.events.trigger('selectTab', ui.newTab.attr("data-tab"));
     if (e.currentTarget) {
       e.currentTarget.blur();
     }

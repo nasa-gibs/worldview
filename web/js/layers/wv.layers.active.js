@@ -52,7 +52,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     models.wv.events.on("sidebar-expand", resize);
     $(window)
       .resize(resize);
-    ui.sidebar.events.on("select", function(tab) {
+    ui.sidebar.events.on("selectTab", function(tab) {
       if (tab === "active") {
         resize();
       }

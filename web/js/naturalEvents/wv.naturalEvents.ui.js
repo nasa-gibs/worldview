@@ -14,13 +14,63 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   var init = function() {
 
     request.events.on('queryResults', function() {
-      if (model.data.sources) {
-        data = model.data.events;
-        self.refresh();
-      }
+      if (!model.data.sources) return;
+      data = model.data.events;
+      // Create all events in the list
+      var $content = $(self.selector + 'content').empty();
+      _.each(data, function(event) {
+        createEventElement($content, event);
+      });
+
+      // Here to line 68ish is just setting up click listeners on event list
+      var $current;
+      $(self.selector + 'content li').toggle(function() {
+        if ($current) $current.click();
+        var dataId = $(this).attr('data-id');
+
+        // Select the correct event in the model based on it's data-id
+        if ($(this).find('ul li.dates a').first().hasClass('date-today')) {
+          var nextDate = $(self.selector + 'content ul li.dates').next().children('a').attr('data-date');
+          self.selectEvent(dataId, nextDate);
+        } else { self.selectEvent(dataId);}
+
+        $(self.selector + 'content li').removeClass('item-selected');
+        $(self.selector + 'content ul li.dates a').removeClass('active');
+        $(this).addClass('item-selected');
+        if (wv.util.browser.small) ui.sidebar.collapseNow();
+        $current = $(this);
+      }, function() {
+        $(self.selector + 'content li').removeClass('item-selected');
+        $(self.selector + 'content ul li.dates a').removeClass('active');
+
+        // Hide event
+        $('#wv-eventscontent .subtitle').hide();
+        $('#wv-eventscontent .dates').hide();
+        ui.sidebar.sizeEventsTab();
+
+        naturalEventMarkers.remove(self.markers);
+        $current = null;
+      });
+
+      // Add active class to first date on selecting event
+      $(self.selector + 'content li').click(function() {
+        $(this).find('ul li.dates a.date').first().addClass('active');
+      });
+
+      //Bind click event to each date contained in events with dates
+      $(self.selector + 'content ul li.dates a').click(function(e) {
+        e.stopPropagation();
+        var id = $(this).attr('data-id');
+        var date = $(this).attr('data-date');
+        self.selectEvent(id, date);
+        $(self.selector + 'content ul li.dates a').removeClass('active');
+        $(this).addClass('active');
+      });
+
+      ui.sidebar.sizeEventsTab();
     });
 
-    ui.sidebar.events.on('select', function(tab) {
+    ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'events') {
         model.active = true;
         eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times', 800, 'warning');
@@ -30,13 +80,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         if (self.markers && Array.isArray(self.markers)) {
           self.markers.forEach(function(marker){
             marker.pin.element_.onclick = function(){
-              self.select(marker.pin.id_);
+              self.selectEvent(marker.pin.id_);
             };
           });
         }
         ui.sidebar.sizeEventsTab();
         if (self.selected.id) {
-          self.select(self.selected.id, self.selected.date||null);
+          self.selectEvent(self.selected.id, self.selected.date||null);
         }
       } else {
         model.active = false;
@@ -47,65 +97,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
 
     $(window).resize(ui.sidebar.sizeEventsTab);
-    renderEventList();
+    createEventListElement();
   };
 
-  self.refresh = function() {
-    var $content = $(self.selector + 'content').empty();
-    _.each(data, function(event) {
-      renderEvent($content, event);
-    });
-
-    // Bind click event to each event
-    var $current;
-    $(self.selector + 'content li').toggle(function() {
-      console.log('first cb');
-      if ($current) $current.click();
-      var dataId = $(this).attr('data-id');
-
-      if ($(this).find('ul li.dates a').first().hasClass('date-today')) {
-        var nextDate = $(self.selector + 'content ul li.dates').next().children('a').attr('data-date');
-        self.select(dataId, nextDate);
-      } else { self.select(dataId);}
-
-      $(self.selector + 'content li').removeClass('item-selected');
-      $(self.selector + 'content ul li.dates a').removeClass('active');
-      $(this).addClass('item-selected');
-      if (wv.util.browser.small) ui.sidebar.collapseNow();
-      $current = $(this);
-    }, function() {
-      console.log('second cb');
-      $(self.selector + 'content li').removeClass('item-selected');
-      $(self.selector + 'content ul li.dates a').removeClass('active');
-
-      // Hide event
-      $('#wv-eventscontent .subtitle').hide();
-      $('#wv-eventscontent .dates').hide();
-      ui.sidebar.sizeEventsTab();
-
-      naturalEventMarkers.remove(self.markers);
-      $current = null;
-    });
-
-    // Add active class to first date on selecting event
-    $(self.selector + 'content li').click(function() {
-      $(this).find('ul li.dates a.date').first().addClass('active');
-    });
-
-    //Bind click event to each date contained in events with dates
-    $(self.selector + 'content ul li.dates a').click(function(e) {
-      e.stopPropagation();
-      var id = $(this).attr('data-id');
-      var date = $(this).attr('data-date');
-      self.select(id, date);
-      $(self.selector + 'content ul li.dates a').removeClass('active');
-      $(this).addClass('active');
-    });
-
-    ui.sidebar.sizeEventsTab();
-  };
-
-  self.select = function(id, date) {
+  self.selectEvent = function(id, date) {
     var eventCategory, geometry, method, zoomCenter, zoomLevel;
     var hasSameId = id === lastId;
     var hasSameDate = lastDate === date;
@@ -210,7 +205,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   };
 
-  var renderEventList = function() {
+  var createEventListElement = function() {
     var $panels = $(self.selector).empty().addClass(self.id + 'list').addClass('bank');
     var $list = $('<ul></ul>').attr('id', self.id + 'content').addClass('content').addClass('map-item-list');
     var $detailContainer = $('<div></div>').attr('id', 'wv-events-detail').hide();
@@ -218,7 +213,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $panels.append($detailContainer);
   };
 
-  var renderEvent = function($content, event) {
+  var createEventElement = function($content, event) {
     var eventCategoryID = event.categories[0].id || null;
     event.geometries.reverse();
     eventDate = wv.util.parseDateUTC(event.geometries[0].date);
