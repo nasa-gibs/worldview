@@ -36,14 +36,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
    * @returns {object} OpenLayers layer
    */
   self.createLayer = function(def, options) {
-    var date,
-      key,
-      proj,
-      layer,
-      layerNext,
-      layerPrior,
-      group,
-      attributes;
+    var date, key, proj, layer, layerNext, layerPrior, group, attributes;
 
     group = null;
     options = options || {};
@@ -143,7 +136,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
    * @returns {object} OpenLayers WMTS layer
    */
   var createLayerWMTS = function(def, options, day) {
-    var proj, source,  matrixSet, matrixIds, extra,
+    var proj, source, matrixSet, matrixIds, extra,
       date, extent, start;
     proj = models.proj.selected;
     source = config.sources[def.source];
