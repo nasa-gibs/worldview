@@ -3,7 +3,7 @@ wv.naturalEvents = wv.naturalEvents || {};
 
 wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
-  var self = {}, eventAlert, lastId = false, lastDate = false;
+  var self = {}, eventAlert;
   var model = models.naturalEvents;
   self.selector = '#wv-events';
   self.id = 'wv-events';
@@ -25,19 +25,15 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       if (tab === 'events') {
         model.active = true;
 
+        // Set the correct map projection
+        if (models.proj.selected.id !== 'geographic') {
+          models.proj.select('geographic');
+        }
+
         // Show message about events not being visible
         eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times', 800, 'warning');
 
-        // Draw markers
-        naturalEventMarkers.remove(self.markers);
-        self.markers = naturalEventMarkers.draw(model.data.events);
-        if (self.markers && Array.isArray(self.markers)) {
-          self.markers.forEach(function(marker){
-            marker.pin.element_.onclick = function(){
-              self.selectEvent(marker.pin.id_);
-            };
-          });
-        }
+        drawAllMarkers();
 
         // Reselect previously selected event
         if (self.selected.id) {
@@ -55,20 +51,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   self.selectEvent = function(id, date) {
-    var eventCategory, geometry, method, zoomCenter, zoomLevel;
-    var hasSameId = id === lastId;
-    var hasSameDate = lastDate === date;
-    lastId = id;
-    lastDate = date;
-    // Store selected id and date in model
-    self.selected = {id: id};
-    if (date) self.selected.date = date;
 
-    // Set the correct map projection
-    if (models.proj.selected.id !== 'geographic') {
-      models.proj.select('geographic');
-    }
-
+    // Find the event
     var event = _.find(model.data.events, function(e){
       return e.id === id;
     });
@@ -77,85 +61,18 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       return;
     }
 
-    // Get event geometry and category
-    var geometry;
-    if (date) {
-      geometry = _.find(event.geometries, function(geom){
-        return geom.date.split('T')[0] === date;
-      });
-    } else {
-      geometry = event.geometries[0];
-    }
+    highlightEventInList(id, date);
 
-    if (!geometry) {
-      wv.ui.notify('Metadata for event ' + id + ' is not available.');
-      return;
-    }
+    activateLayersForCategory(event.categories);
+    zoomToEvent(event, date);
 
-    // Select event in sidebar
-    $('#wv-eventscontent .subtitle').hide();
-    $('#wv-eventscontent .dates').hide();
-    $('#wv-eventscontent [data-id="' + id + '"] .subtitle').show();
-    $('#wv-eventscontent [data-id="' + id + '"] .dates').show();
-    ui.sidebar.sizeEventsTab();
-
-    eventCategory = (Array.isArray(event.categories)
-      ? event.categories[0]
-      : event.categories||'Default').title;
-
-    // Turn on the relevant layers for the event type
-    layers = model.layers[eventCategory];
-    if (!layers) layers = model.layers.Default;
-    // Turn off all layers in list first
-    _.each(models.layers.active, function(layer) {
-      models.layers.setVisibility(layer.id, false);
-    });
-    // Turn on or add new layers
-    _.each(layers, function(layer) {
-      var id = layer[0];
-      var visible = layer[1];
-      if (models.layers.exists(id)) {
-        models.layers.setVisibility(id, visible);
-      } else {
-        models.layers.add(id, {
-          visible: visible
-        });
-      }
-    });
-
-    // Turn on the right markers, and store references in the model
+    // Remove old markers and set new ones
     naturalEventMarkers.remove(self.markers);
     self.markers = naturalEventMarkers.draw([event], date);
 
-    // Animate to the right place on the map
-    geometryDate = wv.util.parseTimestampUTC(geometry.date);
-    var geometryISO = wv.util.toISOStringDate(geometryDate);
-    var todayISO = wv.util.toISOStringDate(wv.util.today());
-    var isToday = geometryISO === todayISO;
-    var isWildfire = eventCategory === 'Wildfires';
-    var isVolcano = eventCategory === 'Volcanoes';
-    /* If an event is a Wildfire and the event date isn't "today", select
-    the following day to greatly improve the chance of the satellite
-    seeing the event. NOTE: there is a risk that if the fire happened "yesterday" and
-    the satellite imagery is not yet available for "today", this
-    functionality may do more harm than good. */
-    if (isWildfire && !isToday) {
-      var geometryDatePlusOne =
-        wv.util.dateAdd(wv.util.parseDateUTC(geometry.date), 'day', 1);
-      models.date.select(geometryDatePlusOne);
-    } else {
-      models.date.select(geometryDate);
-    }
-    // If an event is a Wildfire or Volcano, zoom in more
-    zoomLevel = isWildfire?8:isVolcano?6:5;
-    method = (hasSameId && !hasSameDate)?'pan':'fly';
-    // Determine where to zoom to
-    if (geometry.type === 'Polygon') {
-      zoomCenter = ol.extent.boundingExtent(geometry.coordinates[0]);
-    } else {
-      zoomCenter = geometry.coordinates;
-    }
-    ui.map.animate.move(method, zoomCenter, zoomLevel);
+    // Store selected id and date in model
+    self.selected = {id: id};
+    if (date) self.selected.date = date;
 
   };
 
@@ -202,16 +119,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
         $date = $('<a></a>').addClass('date').attr('data-date', date).attr('data-id', event.id).html(date);
 
-        // Check first multi-day event
-        if (eventIndex == 1) {
-          // If it's date is today and it is a Severe Storm, mark it
-          // and don't make it active.
-          if ((date === todayDateISOString) && (eventCategoryID == 10)) {
-            $date.removeClass('date').addClass('date-today');
-          } else {
-            $date.addClass('active');
-          }
-        }
         $dates.append($('<li class="dates"></li>').append($date));
         lastDate = date;
       });
@@ -243,56 +150,128 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   var addClickListeners = function() {
-    var $current;
-
-    $(self.selector + 'content li').toggle(function() {
-      if ($current) $current.click();
-      var dataId = $(this).attr('data-id');
-
-      // Select the correct event in the model based on it's data-id
-      if ($(this).find('ul li.dates a').first().hasClass('date-today')) {
-        var nextDate = $(self.selector + 'content ul li.dates').next().children('a').attr('data-date');
-        self.selectEvent(dataId, nextDate);
-      } else { self.selectEvent(dataId);}
-
-      $(self.selector + 'content li').removeClass('item-selected');
-      $(self.selector + 'content ul li.dates a').removeClass('active');
-      $(this).addClass('item-selected');
-      if (wv.util.browser.small) ui.sidebar.collapseNow();
-      $current = $(this);
-    }, function() {
-      $(self.selector + 'content li').removeClass('item-selected');
-      $(self.selector + 'content ul li.dates a').removeClass('active');
-
-      // Hide event
-      $('#wv-eventscontent .subtitle').hide();
-      $('#wv-eventscontent .dates').hide();
-      ui.sidebar.sizeEventsTab();
-
-      naturalEventMarkers.remove(self.markers);
-      $current = null;
-    });
-
-    // Add active class to first date on selecting event
     $(self.selector + 'content li').click(function() {
-      $(this).find('ul li.dates a.date').first().addClass('active');
+      var dataId = $(this).attr('data-id');
+      self.selectEvent(dataId);
     });
-
-
-    //Bind click event to each date contained in events with dates
     $(self.selector + 'content ul li.dates a').click(function(e) {
       e.stopPropagation();
       var id = $(this).attr('data-id');
       var date = $(this).attr('data-date');
       self.selectEvent(id, date);
-      $(self.selector + 'content ul li.dates a').removeClass('active');
-      $(this).addClass('active');
     });
+  };
+
+  var highlightEventInList = function(id, date) {
+    // Undo previous highlights
+    $('#wv-eventscontent .subtitle').hide();
+    $('#wv-eventscontent .dates').hide();
+    $(self.selector + 'content li').removeClass('item-selected');
+    $(self.selector + 'content ul li.dates a').removeClass('active');
+
+    // Highlight current event
+    $('#wv-eventscontent [data-id="' + id + '"]').addClass('item-selected');
+    if (date) {
+      $('#wv-eventscontent [data-date="' + date + '"]').addClass('active');
+    } else {
+      $('#wv-eventscontent [data-id="' + id + '"]').find('a.date').first().addClass('active');
+    }
+    $('#wv-eventscontent [data-id="' + id + '"] .subtitle').show();
+    $('#wv-eventscontent [data-id="' + id + '"] .dates').show();
+
+    // Adjust tab layout to fit
+    if (wv.util.browser.small) ui.sidebar.collapseNow();
+    ui.sidebar.sizeEventsTab();
+  };
+
+  var drawAllMarkers = function(){
+    // Remove old markers
+    naturalEventMarkers.remove(self.markers);
+
+    // Draw markers for all events in the model
+    self.markers = naturalEventMarkers.draw(model.data.events);
+    if (self.markers && Array.isArray(self.markers)) {
+      self.markers.forEach(function(marker){
+        marker.pin.element_.onclick = function(){
+          self.selectEvent(marker.pin.id_);
+        };
+      });
+    }
+  };
+
+  var activateLayersForCategory = function(categories){
+
+    category = categories.title || categories[0].title || 'Default';
+
+    // Turn on the relevant layers for the event type
+    layers = model.layers[category];
+    if (!layers) layers = model.layers.Default;
+    // Turn off all layers in list first
+    _.each(models.layers.active, function(layer) {
+      models.layers.setVisibility(layer.id, false);
+    });
+    // Turn on or add new layers
+    _.each(layers, function(layer) {
+      var id = layer[0];
+      var visible = layer[1];
+      if (models.layers.exists(id)) {
+        models.layers.setVisibility(id, visible);
+      } else {
+        models.layers.add(id, {
+          visible: visible
+        });
+      }
+    });
+  };
+
+  var zoomToEvent = function(event, date) {
+    var eventCenter, geometryDate, geometryISO, isToday;
+    var hasSameId = self.selected && event.id === self.selected.id;
+    var hasSameDate = self.selected && date === self.selected.date;
+
+    // Get event coordinates or bounding box
+    if (date) {
+      geometry = _.find(event.geometries, function(geom){
+        return geom.date.split('T')[0] === date;
+      });
+    } else {
+      geometry = event.geometries[0];
+    }
+
+    // Determine center of the event
+    if (geometry.type === 'Polygon') {
+      eventCenter = ol.extent.boundingExtent(geometry.coordinates[0]);
+    } else {
+      eventCenter = geometry.coordinates;
+    }
+
+    geometryDate = wv.util.parseTimestampUTC(geometry.date);
+    geometryISO = wv.util.toISOStringDate(geometryDate);
+    isToday = geometryISO === wv.util.toISOStringDate(wv.util.today());
+    category = event.categories.title || event.categories[0].title || 'Default';
+
+    /* If an event is a Wildfire and the event date isn't "today", select
+    the following day to greatly improve the chance of the satellite
+    seeing the event. NOTE: there is a risk that if the fire happened "yesterday" and
+    the satellite imagery is not yet available for "today", this
+    functionality may do more harm than good. */
+    if (!isToday && category === 'Wildfires') {
+      var geometryDatePlusOne =
+        wv.util.dateAdd(wv.util.parseDateUTC(geometry.date), 'day', 1);
+      models.date.select(geometryDatePlusOne);
+    } else {
+      models.date.select(geometryDate);
+    }
+
+    ui.map.animate.move(
+      hasSameId && !hasSameDate?'pan':'fly',
+      eventCenter,
+      category === 'Wildfires' ? 8 : category === 'Volcanoes' ? 6 : 5
+    );
   };
 
   init();
   return self;
-
 };
 
 var eventAlertBody = '<h3 class="wv-data-unavailable-header">Why can’t I see an event?</h3><p>There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.</p>' +
