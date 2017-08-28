@@ -45,45 +45,55 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
   };
 
   var queryEvents = function() {
-    var url = self.apiURL + "/events";
-    if (config.parameters.mockEvents) {
-      console.warn("Using mock events data: " + config.parameters.mockEvents);
-      url = "mock/events_data.json-" + config.parameters.mockEvents;
-    }
-    $.getJSON(url, function(data) {
-      model.data.events = data.events;
-      self.events.trigger('queryResults');
+    return new Promise(function(resolve) {
+      var url = self.apiURL + "/events";
+      if (config.parameters.mockEvents) {
+        console.warn("Using mock events data: " + config.parameters.mockEvents);
+        url = "mock/events_data.json-" + config.parameters.mockEvents;
+      }
+      $.getJSON(url, function(data) {
+        resolve(data);
+      });
     });
   };
 
   var queryTypes = function() {
-    var url = self.apiURL + "/categories";
-    if (config.parameters.mockCategories) {
-      console.warn("Using mock categories data: " + config.parameters.mockEvents);
-      url = "mock/categories_data.json-" + config.parameters.mockCategories;
-    }
-    $.getJSON(url, function(data) {
-      model.data.types = data.categories;
-      self.events.trigger('queryResults');
+    return new Promise(function(resolve) {
+      var url = self.apiURL + "/categories";
+      if (config.parameters.mockCategories) {
+        console.warn("Using mock categories data: " + config.parameters.mockEvents);
+        url = "mock/categories_data.json-" + config.parameters.mockCategories;
+      }
+      $.getJSON(url, function(data) {
+        resolve(data);
+      });
     });
   };
 
   var querySources = function() {
-    var url = self.apiURL + "/sources";
-    if (config.parameters.mockSources) {
-      console.warn("Using mock sources data: " + config.parameters.mockEvents);
-      url = "mock/sources_data.json-" + config.parameters.mockSources;
-    }
-    $.getJSON(url, function(data) {
-      model.data.sources = data.sources;
-      self.events.trigger('queryResults');
+    return new Promise(function(resolve) {
+      var url = self.apiURL + "/sources";
+      if (config.parameters.mockSources) {
+        console.warn("Using mock sources data: " + config.parameters.mockEvents);
+        url = "mock/sources_data.json-" + config.parameters.mockSources;
+      }
+      $.getJSON(url, function(data) {
+        resolve(data);
+      });
     });
   };
 
   self.query = function() {
-    queryTypes();
-    queryEvents();
-    querySources();
+    Promise.all([
+      queryTypes(),
+      queryEvents(),
+      querySources()
+    ]).then(function(res) {
+      model.data.types = res[0].categories;
+      model.data.events = res[1].events;
+      model.data.sources = res[2].sources;
+      self.events.trigger('queryResults');
+    });
   };
 
   init();
