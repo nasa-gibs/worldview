@@ -295,7 +295,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function(models, config, cache, Par
 
     if (models.palettes.isActive(def.id)) {
       var lookup = models.palettes.getLookup(def.id);
-      sourceOptions.tileClass = ol.wv.LookupWMS.factory(lookup);
+      sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
     }
     var layer = new ol.layer.Tile({extent: extent, source: new ol.source.TileWMS(sourceOptions)});
     return layer;
