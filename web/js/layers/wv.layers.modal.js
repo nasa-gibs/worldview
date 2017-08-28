@@ -324,7 +324,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var layer = config.layers[setting];
                 var proj = layer.projections;
                 if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+                  if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+                    // Don't output measurements with only orbits
+                  } else {
                     measurementHasSetting = true;
+                  }
                 }
             });
         });
@@ -351,7 +355,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var layer = config.layers[setting];
                 var proj = layer.projections;
                 if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+                  if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) { } else {
                     sourceHasSetting = true;
+                  }
                 }
             });
 
