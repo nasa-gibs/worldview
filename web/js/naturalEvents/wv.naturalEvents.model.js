@@ -44,7 +44,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
     date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
     if (id) {
       self.events.on('hasData', function() {
-        wvx.ui.naturalEvents.select(id, date);
+        wvx.ui.naturalEvents.selectEvent(id, date);
       });
     }
   };
