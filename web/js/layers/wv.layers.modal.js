@@ -174,12 +174,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         _.each( category.measurements, function( measurement, index ) {
             var projection = models.proj.selected.id;
             var current = config.measurements[measurement];
-            _.each( current.sources, function( source, souceName ) {
+            _.each( current.sources, function( source, sourceName ) {
                 _.each( source.settings, function( setting ) {
                     var layer = config.layers[setting];
                     var proj = layer.projections;
-                    if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-                        categoryHasSetting = true;
+                    if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+                      if(current.id === "orbital-track") {
+                          categoryHasSetting = true;
+                      }
+                      // Don't output categories with only orbits
+                    } else {
+                      categoryHasSetting = true;
                     }
                 });
             });
@@ -219,12 +224,19 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             var current = config.measurements[measurement];
             // Check if measurements have settings with the same projection.
             var measurementHasSetting;
-            _.each( current.sources, function( source, souceName ) {
+            _.each( current.sources, function( source, sourceName ) {
                 _.each( source.settings, function( setting ) {
                     var layer = config.layers[setting];
                     var proj = layer.projections;
                     if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-                        measurementHasSetting = true;
+                        if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+                          if(current.id === "orbital-track") {
+                              measurementHasSetting = true;
+                          }
+                          // Don't output measurements with only orbits
+                        } else {
+                          measurementHasSetting = true;
+                        }
                     }
                 });
             });
@@ -319,12 +331,16 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         // Check if measurements have settings with the same projection.
         var measurementHasSetting;
-        _.each( current.sources, function( source, souceName ) {
+        _.each( current.sources, function( source, sourceName ) {
+          console.log(sourceName);
             _.each( source.settings, function( setting ) {
                 var layer = config.layers[setting];
                 var proj = layer.projections;
                 if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
                   if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+                    if(current.id === "orbital-track") {
+                        measurementHasSetting = true;
+                    }
                     // Don't output measurements with only orbits
                   } else {
                     measurementHasSetting = true;
@@ -347,7 +363,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $measurementContent.append($sourceTabs);
 
         //Begin source level
-        _.each( current.sources, function( source, souceName ) {
+        _.each( current.sources, function( source, sourceName ) {
 
             // Check if sources have settings with the same projection.
             var sourceHasSetting;
@@ -355,7 +371,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 var layer = config.layers[setting];
                 var proj = layer.projections;
                 if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-                  if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) { } else {
+                  if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+                    if(current.id === "orbital-track") {
+                        sourceHasSetting = true;
+                    }
+                  // Don't output sources with only orbit tracks
+                  } else {
                     sourceHasSetting = true;
                   }
                 }
