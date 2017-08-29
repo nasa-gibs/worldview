@@ -15,6 +15,18 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     request.events.on('queryResults', function() {
       if (!(model.data.events || model.data.sources)) return;
+
+      // Sort event geometries by descending date
+      model.data.events = model.data.events.map(function(e){
+        e.geometries = _.orderBy(e.geometries, 'date', 'desc');
+        return e;
+      });
+
+      // Sort events by descending date
+      model.data.events = _.orderBy(model.data.events, function (e) {
+        return e.geometries[0].date;
+      }, 'desc');
+
       createEventList();
       addClickListeners();
       ui.sidebar.sizeEventsTab();
@@ -101,7 +113,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   var createEventElement = function($content, event) {
     var eventCategoryID = event.categories[0].id || null;
-    event.geometries.reverse();
     eventDate = wv.util.parseDateUTC(event.geometries[0].date);
     dateString = wv.util.giveWeekDay(eventDate) + ', ' +
       wv.util.giveMonth(eventDate) + ' ' +
