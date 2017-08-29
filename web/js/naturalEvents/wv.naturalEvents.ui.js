@@ -130,17 +130,19 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var $dates = $('<ul></ul>').addClass('dates').hide();
 
     if (event.geometries.length > 1) {
+      var lastDate;
       var eventIndex = 0;
       _.each(event.geometries, function(geometry) {
         eventIndex++;
         date = geometry.date.split('T')[0];
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
-        if (self.selected && date === self.selected.date) return;
+        if (date === lastDate) return;
 
         $date = $('<a></a>').addClass('date').attr('data-date', date).attr('data-id', event.id).html(date);
 
         $dates.append($('<li class="dates"></li>').append($date));
+        lastDate = date;
       });
     }
 
