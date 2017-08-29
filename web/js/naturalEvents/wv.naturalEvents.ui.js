@@ -61,6 +61,17 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       return;
     }
 
+    // If multi-day and no explicit date, select appropriate day
+    if (!date && event.geometries.length >= 2) {
+      var category = event.categories.title || event.categories[0].title;
+      var today = new Date().toISOString().split('T')[0];
+      date = new Date(event.geometries[0].date).toISOString().split('T')[0];
+      // For storms that happened today, select previous date
+      if (date === today && category === 'Severe Storms') {
+        date = new Date(event.geometries[1].date).toISOString().split('T')[0];
+      }
+    }
+
     highlightEventInList(id, date);
 
     activateLayersForCategory(event.categories);
@@ -108,19 +119,17 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var $dates = $('<ul></ul>').addClass('dates').hide();
 
     if (event.geometries.length > 1) {
-      var lastDate;
       var eventIndex = 0;
       _.each(event.geometries, function(geometry) {
         eventIndex++;
         date = geometry.date.split('T')[0];
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
-        if (date === lastDate) return;
+        if (self.selected && date === self.selected.date) return;
 
         $date = $('<a></a>').addClass('date').attr('data-date', date).attr('data-id', event.id).html(date);
 
         $dates.append($('<li class="dates"></li>').append($date));
-        lastDate = date;
       });
     }
 
@@ -173,8 +182,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $('#wv-eventscontent [data-id="' + id + '"]').addClass('item-selected');
     if (date) {
       $('#wv-eventscontent [data-date="' + date + '"]').addClass('active');
-    } else {
-      $('#wv-eventscontent [data-id="' + id + '"]').find('a.date').first().addClass('active');
     }
     $('#wv-eventscontent [data-id="' + id + '"] .subtitle').show();
     $('#wv-eventscontent [data-id="' + id + '"] .dates').show();
@@ -236,6 +243,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       });
     } else {
       geometry = event.geometries[0];
+      date = new Date(event.geometries[0].date).toISOString().split('T')[0];
     }
 
     // Determine center of the event
@@ -245,22 +253,20 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       eventCenter = geometry.coordinates;
     }
 
-    geometryDate = wv.util.parseTimestampUTC(geometry.date);
-    geometryISO = wv.util.toISOStringDate(geometryDate);
-    isToday = geometryISO === wv.util.toISOStringDate(wv.util.today());
-    category = event.categories.title || event.categories[0].title || 'Default';
-
-    /* If an event is a Wildfire and the event date isn't "today", select
-    the following day to greatly improve the chance of the satellite
-    seeing the event. NOTE: there is a risk that if the fire happened "yesterday" and
-    the satellite imagery is not yet available for "today", this
-    functionality may do more harm than good. */
-    if (!isToday && category === 'Wildfires') {
-      var geometryDatePlusOne =
-        wv.util.dateAdd(wv.util.parseDateUTC(geometry.date), 'day', 1);
-      models.date.select(geometryDatePlusOne);
+    /* For Wildfires that didn't happen today, move the timeline forward a day
+     * to improve the chance that the fire is visible.
+     * NOTE: If the fire happened yesterday and the imagery isn't yet available
+     *  for today, this may not help. */
+    var now = new Date();
+    var today = now.toISOString().split('T')[0];
+    var yesterday = new Date(now.setDate(now.getDate()-1)).toISOString().split('T')[0];
+    var isRecent = date === today || date === yesterday;
+    category = event.categories.title || event.categories[0].title;
+    if (!isRecent && category === 'Wildfires') {
+      var nextDate = wv.util.dateAdd(wv.util.parseDateUTC(geometry.date), 'day', 1);
+      models.date.select(nextDate);
     } else {
-      models.date.select(geometryDate);
+      models.date.select(wv.util.parseDateUTC(geometry.date));
     }
 
     ui.map.animate.move(
