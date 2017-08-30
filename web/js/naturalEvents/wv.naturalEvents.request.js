@@ -40,6 +40,22 @@ wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, conf
       };
       model.data.events = model.data.events.filter(removeIgnoredItems);
       model.data.types = model.data.types.filter(removeIgnoredItems);
+
+      // Sort event geometries by descending date
+      model.data.events = model.data.events.map(function(e){
+        e.geometries = _.orderBy(e.geometries, 'date', 'desc');
+        // Discard duplicate geometry dates
+        e.geometries = _.uniqBy(e.geometries, function(g){
+          return g.date.split('T')[0];
+        });
+        return e;
+      });
+
+      // Sort events by descending date
+      model.data.events = _.orderBy(model.data.events, function (e) {
+        return e.geometries[0].date;
+      }, 'desc');
+
       if (model.active) model.events.trigger('hasData');
     }
   };
