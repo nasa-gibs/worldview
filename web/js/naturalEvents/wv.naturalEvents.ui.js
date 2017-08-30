@@ -5,8 +5,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   var self = {}, eventAlert;
   var model = models.naturalEvents;
-  self.selector = '#wv-events';
-  self.id = 'wv-events';
   self.markers = [];
   self.selected = {};
   var naturalEventMarkers = wv.naturalEvents.markers(models, ui, config);
@@ -100,12 +98,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   var createEventList = function() {
-    var $panels = $(self.selector).empty().addClass(self.id + 'list').addClass('bank');
-    var $list = $('<ul></ul>').attr('id', self.id + 'content').addClass('content').addClass('map-item-list');
+    var $panels = $('#wv-events').empty().addClass('wv-eventslist').addClass('bank');
+    var $list = $('<ul></ul>').attr('id', 'wv-eventscontent').addClass('content').addClass('map-item-list');
     var $detailContainer = $('<div></div>').attr('id', 'wv-events-detail').hide();
     $panels.append($list);
     $panels.append($detailContainer);
-    var $content = $(self.selector + 'content').empty();
+    var $content = $('#wv-eventscontent').empty();
     _.each(model.data.events, function(event) {
       createEventElement($content, event);
     });
@@ -172,11 +170,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   var addClickListeners = function() {
-    $(self.selector + 'content li').click(function() {
+    $('#wv-eventscontent li').click(function() {
       var dataId = $(this).attr('data-id');
       self.selectEvent(dataId);
     });
-    $(self.selector + 'content ul li.dates a').click(function(e) {
+    $('#wv-eventscontent ul li.dates a').click(function(e) {
       e.stopPropagation();
       var id = $(this).attr('data-id');
       var date = $(this).attr('data-date');
@@ -188,8 +186,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     // Undo previous highlights
     $('#wv-eventscontent .subtitle').hide();
     $('#wv-eventscontent .dates').hide();
-    $(self.selector + 'content li').removeClass('item-selected');
-    $(self.selector + 'content ul li.dates a').removeClass('active');
+    $('#wv-eventscontent li').removeClass('item-selected');
+    $('#wv-eventscontent ul li.dates a').removeClass('active');
 
     // Highlight current event
     $('#wv-eventscontent [data-id="' + id + '"]').addClass('item-selected');
