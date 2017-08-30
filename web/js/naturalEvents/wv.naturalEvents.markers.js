@@ -19,6 +19,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
       } else {
         geometry = event.geometries[0];
       }
+      if (!geometry) return;
 
       var coordinates = geometry.coordinates;
       var category = Array.isArray(event.categories)

@@ -16,6 +16,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
       createEventList();
       addClickListeners();
+
+      // Reselect previously selected event
+      if (self.selected.id) {
+        self.selectEvent(self.selected.id, self.selected.date||null);
+      }
+
       ui.sidebar.sizeEventsTab();
       $(window).resize(ui.sidebar.sizeEventsTab);
     });
@@ -32,11 +38,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         // Show message about events not being visible
         eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times', 800, 'warning');
 
-        drawAllMarkers();
-
-        // Reselect previously selected event
+        // Draw active markers
         if (self.selected.id) {
-          self.selectEvent(self.selected.id, self.selected.date||null);
+          var event = getEventById(self.selected.id);
+          drawMarkers(event, self.selected.date || getDefaultEventDate(event));
+        } else {
+          drawMarkers(model.data.events);
         }
 
         ui.sidebar.sizeEventsTab();
@@ -51,39 +58,41 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   self.selectEvent = function(id, date) {
 
-    // Find the event
-    var event = _.find(model.data.events, function(e){
-      return e.id === id;
-    });
+    // Store selected id and date in model
+    self.selected = {id: id};
+    if (date) self.selected.date = date;
+
+    var event = getEventById(id);
     if (!event) {
       wv.ui.notify('Metadata for event ' + id + ' is not available.');
       return;
     }
 
-    // If multi-day and no explicit date, select appropriate day
-    if (!date && event.geometries.length >= 2) {
-      var category = event.categories.title || event.categories[0].title;
-      var today = new Date().toISOString().split('T')[0];
-      date = new Date(event.geometries[0].date).toISOString().split('T')[0];
-      // For storms that happened today, select previous date
-      if (date === today && category === 'Severe Storms') {
-        date = new Date(event.geometries[1].date).toISOString().split('T')[0];
-      }
-    }
+    date = date || getDefaultEventDate(event);
 
     highlightEventInList(id, date);
-
+    drawMarkers(event, date);
     activateLayersForCategory(event.categories);
     zoomToEvent(event, date);
 
-    // Remove old markers and set new ones
-    naturalEventMarkers.remove(self.markers);
-    self.markers = naturalEventMarkers.draw([event], date);
+  };
 
-    // Store selected id and date in model
-    self.selected = {id: id};
-    if (date) self.selected.date = date;
+  var getEventById = function(id) {
+    return _.find(model.data.events, function(e){
+      return e.id === id;
+    });
+  };
 
+  var getDefaultEventDate = function(event) {
+    date = new Date(event.geometries[0].date).toISOString().split('T')[0];
+    if (event.geometries.length < 2) return date;
+    var category = event.categories.title || event.categories[0].title;
+    var today = new Date().toISOString().split('T')[0];
+    // For storms that happened today, get previous date
+    if (date === today && category === 'Severe Storms') {
+      date = new Date(event.geometries[1].date).toISOString().split('T')[0];
+    }
+    return date;
   };
 
   var createEventList = function() {
@@ -187,12 +196,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     ui.sidebar.sizeEventsTab();
   };
 
-  var drawAllMarkers = function(){
+  var drawMarkers = function(events, date){
+    if (!events) return;
+    events = Array.isArray(events)?events:[events];
     // Remove old markers
     naturalEventMarkers.remove(self.markers);
 
     // Draw markers for all events in the model
-    self.markers = naturalEventMarkers.draw(model.data.events);
+    self.markers = naturalEventMarkers.draw(events, date);
     if (self.markers && Array.isArray(self.markers)) {
       self.markers.forEach(function(marker){
         marker.pin.element_.onclick = function(){
