@@ -69,10 +69,24 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
 
     date = date || getDefaultEventDate(event);
+    models.date.select(wv.util.parseDateUTC(date));
+    /* For Wildfires that didn't happen today, move the timeline forward a day
+     * to improve the chance that the fire is visible.
+     * NOTE: If the fire happened yesterday and the imagery isn't yet available
+     * for today, this may not help.
+     */
+    if (event.categories[0].title === 'Wildfires') {
+      var now = new Date();
+      var today = now.toISOString().split('T')[0];
+      var yesterday = new Date(now.setDate(now.getDate()-1)).toISOString().split('T')[0];
+      if (date !== today || date !== yesterday) {
+        models.date.select(wv.util.dateAdd(wv.util.parseDateUTC(date), 'day', 1));
+      }
+    }
 
     highlightEventInList(id, date);
     drawMarkers(event, date);
-    activateLayersForCategory(event.categories);
+    activateLayersForCategory(event.categories[0].title);
     zoomToEvent(event, date);
 
   };
@@ -213,9 +227,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
   };
 
-  var activateLayersForCategory = function(categories){
+  var activateLayersForCategory = function(category){
 
-    category = categories.title || categories[0].title || 'Default';
+    category = category || 'Default';
 
     // Turn on the relevant layers for the event type
     layers = model.layers[category];
@@ -239,48 +253,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   var zoomToEvent = function(event, date) {
-    var eventCenter, geometryDate, geometryISO, isToday;
-    var hasSameId = self.selected && event.id === self.selected.id;
-    var hasSameDate = self.selected && date === self.selected.date;
+    var category = event.categories[0].title;
+    var zoomLevel = category === 'Wildfires' ? 8 : category === 'Volcanoes' ? 6 : 5;
+    var geometry = _.find(event.geometries, function(geom){
+      return geom.date.split('T')[0] === date;
+    });
+    var coordinates = (geometry.type === 'Polygon') ? geometry.coordinates[0] : geometry.coordinates;
 
-    // Get event coordinates or bounding box
-    if (date) {
-      geometry = _.find(event.geometries, function(geom){
-        return geom.date.split('T')[0] === date;
-      });
-    } else {
-      geometry = event.geometries[0];
-      date = new Date(event.geometries[0].date).toISOString().split('T')[0];
-    }
-
-    // Determine center of the event
-    if (geometry.type === 'Polygon') {
-      eventCenter = ol.extent.boundingExtent(geometry.coordinates[0]);
-    } else {
-      eventCenter = geometry.coordinates;
-    }
-
-    /* For Wildfires that didn't happen today, move the timeline forward a day
-     * to improve the chance that the fire is visible.
-     * NOTE: If the fire happened yesterday and the imagery isn't yet available
-     *  for today, this may not help. */
-    var now = new Date();
-    var today = now.toISOString().split('T')[0];
-    var yesterday = new Date(now.setDate(now.getDate()-1)).toISOString().split('T')[0];
-    var isRecent = date === today || date === yesterday;
-    category = event.categories.title || event.categories[0].title;
-    if (!isRecent && category === 'Wildfires') {
-      var nextDate = wv.util.dateAdd(wv.util.parseDateUTC(geometry.date), 'day', 1);
-      models.date.select(nextDate);
-    } else {
-      models.date.select(wv.util.parseDateUTC(geometry.date));
-    }
-
-    ui.map.animate.move(
-      hasSameId && !hasSameDate?'pan':'fly',
-      eventCenter,
-      category === 'Wildfires' ? 8 : category === 'Volcanoes' ? 6 : 5
-    );
+    ui.map.animate.move('fly', coordinates, zoomLevel);
   };
 
   init();
