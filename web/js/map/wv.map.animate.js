@@ -30,8 +30,9 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
    *
    * @param  {Array} endPoint  Ending coordinates
    * @param  {integer} endZoom Ending Zoom Level
+   * @return {Promise}          best zoom level for flight animation
    */
-  self.fly = function(endPoint, endZoom) {
+  self.fly = function(endPoint, endZoom, cb) {
     var view = ui.map.selected.getView();
     view.cancelAnimations();
     var startPoint = view.getCenter();
@@ -42,16 +43,26 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
     var projection = view.getProjection();
     var hasEndInView = ol.extent.containsCoordinate(extent, endPoint);
     var line = new ol.geom.LineString([startPoint, endPoint]);
-    var distance = line.getLength();
-    var duration = (distance * 20)+1000; // 4.6 seconds to go around earth
+    var distance = line.getLength(); // In map units, which is usually degrees
+    var duration = (distance * 20)+1000; // 4.6 seconds to go 360 degrees
     var zoomOut = endZoom;
     var zoomDifference = Math.abs(startZoom-endZoom);
     if (zoomDifference > 2 || !hasEndInView) {
       zoomOut = getBestZoom(distance, startZoom, endZoom, view);
     }
-    Promise.all([
-      view.animate({center: endPoint, duration: duration}),
-      view.animate(
+    var animationPromise = function() {
+      var args = Array.prototype.slice.call(arguments);
+      return new Promise(function(resolve, reject){
+        args.push(function(complete){
+          if (complete) resolve();
+          if (!complete) reject();
+        });
+        view.animate.apply(view, args);
+      });
+    };
+    return Promise.all([
+      animationPromise({center: endPoint, duration: duration}),
+      animationPromise(
         {zoom: zoomOut, duration: duration/2},
         {zoom: endZoom, duration: duration/2}
       )

@@ -69,25 +69,26 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
 
     date = date || getDefaultEventDate(event);
-    models.date.select(wv.util.parseDateUTC(date));
-    /* For Wildfires that didn't happen today, move the timeline forward a day
-     * to improve the chance that the fire is visible.
-     * NOTE: If the fire happened yesterday and the imagery isn't yet available
-     * for today, this may not help.
-     */
-    if (event.categories[0].title === 'Wildfires') {
-      var now = new Date();
-      var today = now.toISOString().split('T')[0];
-      var yesterday = new Date(now.setDate(now.getDate()-1)).toISOString().split('T')[0];
-      if (date !== today || date !== yesterday) {
-        models.date.select(wv.util.dateAdd(wv.util.parseDateUTC(date), 'day', 1));
-      }
-    }
 
     highlightEventInList(id, date);
     drawMarkers(event, date);
-    activateLayersForCategory(event.categories[0].title);
-    zoomToEvent(event, date);
+    zoomToEvent(event, date).then(function(){
+      activateLayersForCategory(event.categories[0].title);
+      models.date.select(wv.util.parseDateUTC(date));
+      /* For Wildfires that didn't happen today, move the timeline forward a day
+       * to improve the chance that the fire is visible.
+       * NOTE: If the fire happened yesterday and the imagery isn't yet available
+       * for today, this may not help.
+       */
+      if (event.categories[0].title === 'Wildfires') {
+        var now = new Date();
+        var today = now.toISOString().split('T')[0];
+        var yesterday = new Date(now.setDate(now.getDate()-1)).toISOString().split('T')[0];
+        if (date !== today || date !== yesterday) {
+          models.date.select(wv.util.dateAdd(wv.util.parseDateUTC(date), 'day', 1));
+        }
+      }
+    });
 
   };
 
@@ -259,7 +260,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
     var coordinates = (geometry.type === 'Polygon') ? geometry.coordinates[0] : geometry.coordinates;
 
-    ui.map.animate.fly(coordinates, ({
+    return ui.map.animate.fly(coordinates, ({
       'Wildfires': 8,
       'Volcanoes': 6
     })[category]);
