@@ -254,13 +254,15 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   var zoomToEvent = function(event, date) {
     var category = event.categories[0].title;
-    var zoomLevel = category === 'Wildfires' ? 8 : category === 'Volcanoes' ? 6 : 5;
     var geometry = _.find(event.geometries, function(geom){
       return geom.date.split('T')[0] === date;
     });
     var coordinates = (geometry.type === 'Polygon') ? geometry.coordinates[0] : geometry.coordinates;
 
-    ui.map.animate.move('fly', coordinates, zoomLevel);
+    ui.map.animate.fly(coordinates, ({
+      'Wildfires': 8,
+      'Volcanoes': 6
+    })[category]);
   };
 
   init();

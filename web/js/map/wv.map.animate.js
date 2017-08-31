@@ -24,65 +24,63 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
   var init = function() {
 
   };
-  /*
-   * Pan and zooms the map to a new location
+
+  /**
+   * Moves the map with a "flying" animation
    *
-   * @function move
-   * @static
-   *
-   * @param {String} method - "fly" "pan" or "zoom"
-   * @param {Array} location - Geographical coordinates
-   * @param {Number} zoom - desired zoom level, if any
-   *
-   * @returns {void}
+   * @param  {Array} endPoint  Ending coordinates
+   * @param  {integer} endZoom Ending Zoom Level
    */
-  self.move = function(method, location, zoomLevel, callback) {
-    var start, currentZoom, newZoom, duration, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams, map;
-
-    map = ui.map.selected;
-    start = lastLocation || map.getView()
-      .getCenter();
-    //Determine zoom and pan levels depending on distance to new point
-    //var distance = ol.sphere.ESPG4326.haversineDistance(start, location);
-
-    currentZoom = map.getView()
-      .getZoom();
-    newZoom = zoomLevel || 5;
-
-    duration = (method == "fly") ? 5000 : 1000;
-    wait = (method == "fly") ? 1000 : 1;
-    view = map.getView();
-    if (location.length > 2) {
-      location = ol.extent.getCenter(location);
+  self.fly = function(endPoint, endZoom) {
+    var view = ui.map.selected.getView();
+    view.cancelAnimations();
+    var startPoint = view.getCenter();
+    var startZoom = Math.floor(view.getZoom());
+    endZoom = endZoom || 5;
+    if (endPoint.length > 2) endPoint = ol.extent.getCenter(endPoint);
+    var extent = view.calculateExtent();
+    var projection = view.getProjection();
+    var hasEndInView = ol.extent.containsCoordinate(extent, endPoint);
+    var line = new ol.geom.LineString([startPoint, endPoint]);
+    var distance = line.getLength();
+    var duration = (distance * 20)+1000; // 4.6 seconds to go around earth
+    var zoomOut = endZoom;
+    var zoomDifference = Math.abs(startZoom-endZoom);
+    if (zoomDifference > 2 || !hasEndInView) {
+      zoomOut = getBestZoom(distance, startZoom, endZoom, view);
     }
-
-    // use this to set proper zoom/res
-
-    // For bounce, if zoom is too high, it bounces "in" insteade of "out";
-    // force it to zoom out by starting at zoom 4
-    bounceZoom = (currentZoom >= 8) ? 4 : currentZoom - 3;
-    if (bounceZoom < 0) {
-      bounceZoom = 0;
-    }
-
-    if (currentZoom < 4) {
-      method = 'zoom';
-    }
-    setTimeout(function() {
-      if (method === "fly") {
-        bounce(view, duration, bounceZoom, newZoom);
-        fly(view, duration, location, newZoom);
-      } else if (method === 'zoom') {
-        zoom(view, duration, newZoom);
-        fly(view, duration, location, newZoom);
-      } else {
-        fly(view, duration, location, newZoom);
-      }
-      if (callback) callback();
-    }, wait);
-
-    lastLocation = location;
+    Promise.all([
+      view.animate({center: endPoint, duration: duration}),
+      view.animate(
+        {zoom: zoomOut, duration: duration/2},
+        {zoom: endZoom, duration: duration/2}
+      )
+    ]);
   };
+
+  /**
+   * Gets the best zoom level for the middle of the flight animation
+   *
+   * @param  {integer} distance distance of the animation in map units
+   * @param  {integer} start    starting zoom level
+   * @param  {integer} end      ending zoom level
+   * @param  {object} view     map view
+   * @return {integer}          best zoom level for flight animation
+   */
+  var getBestZoom = function(distance, start, end, view) {
+    var idealLength = 1500;
+    var lines = [2,3,4,5,6,7,8].map(function(zoom){
+      return {
+        zoom: zoom,
+        pixels: distance/view.getResolutionForZoom(zoom)
+      };
+    });
+    var bestFit = lines.sort(function(a, b) {
+      return Math.abs(idealLength - a.pixels) - Math.abs(idealLength - b.pixels);
+    })[0];
+    return Math.max(2, Math.min(bestFit.zoom, start-1, end-1));
+  };
+
   /*
    * Zooms in to next event location
    *
