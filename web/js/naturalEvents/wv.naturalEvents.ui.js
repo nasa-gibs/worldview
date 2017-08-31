@@ -258,7 +258,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var geometry = _.find(event.geometries, function(geom){
       return geom.date.split('T')[0] === date;
     });
-    var coordinates = (geometry.type === 'Polygon') ? geometry.coordinates[0] : geometry.coordinates;
+    var coordinates = (geometry.type === 'Polygon') ? ol.extent.boundingExtent(geometry.coordinates[0]) : geometry.coordinates;
 
     return ui.map.animate.fly(coordinates, ({
       'Wildfires': 8,
