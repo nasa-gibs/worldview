@@ -57,7 +57,6 @@
     "grunt-git-rev-parse": "0.1.x",
     "grunt-line-remover": "0.0.x",
     "grunt-markdown": "0.7.x",
-    "grunt-minjson": "0.4.x",
     "grunt-mkdir": "0.1.x",
     "grunt-nightwatch": "^0.5.4",
     "grunt-postcss": "^0.8.0",
