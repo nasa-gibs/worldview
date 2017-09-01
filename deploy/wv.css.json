@@ -1,6 +1,7 @@
 [
     "web/css/wv.fonts.css",
     "web/css/wv.main.css",
+    "web/css/util.css",
     "web/css/wv.alert.css",
     "web/css/bank.css",
     "web/css/wv.map.css",

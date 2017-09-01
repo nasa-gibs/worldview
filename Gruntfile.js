@@ -29,7 +29,9 @@ var nodeModuleFiles = [
   "node_modules/promise-queue/lib/index.js",
   "node_modules/openlayers/dist/ol-debug.js",
   "node_modules/font-awesome/css/font-awesome.min.css",
-  "node_modules/font-awesome/fonts/*"
+  "node_modules/font-awesome/fonts/*",
+  "node_modules/clipboard/dist/clipboard.js",
+  "node_modules/clipboard/dist/clipboard.min.js"
 ];
 
 // Build date shown in the About box
