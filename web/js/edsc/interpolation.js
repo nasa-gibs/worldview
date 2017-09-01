@@ -8,12 +8,12 @@
 (function() {
   var ns;
 
-  ns = this.edsc.map.L;
+  ns = edsc.map.L;
 
   // Cartesian interpolation.  Averages lat and lng
   ns.interpolation = (function(L, gcInterpolate) {
     var exports, interpolateCartesian, interpolateGeodetic, projectLatLngPath, projectLatlngs, projectPath;
-    
+
     interpolateCartesian = function(ll0, ll1) {
       return L.latLng((ll0.lat + ll1.lat) / 2, (ll0.lng + ll1.lng) / 2);
     };

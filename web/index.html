@@ -43,9 +43,6 @@
     <meta property="og:image" content="images/preview.png" />
     <meta property="og:description" content="The NASA Worldview app provides a satellite's perspective of the planet as it looks today and as it has in the past. Worldview is part of NASA’s Earth Observing System Data and Information System. EOSDIS makes the agency's large repository of data accessible and freely available to the public.">
 
-    <!-- Webpack Bundle -->
-    <script type="text/javascript" src="dist/bundle.js"></script>
-
     <!-- CSS resources ==================================================== -->
 
     <link type="text/css" rel="Stylesheet" href="ext/node_modules/font-awesome/css/font-awesome.min.css">
@@ -185,98 +182,8 @@
 
     <!-- link.prod --> <!-- <script type="text/javascript" src="js/wv.js?v=20131218215115174&mobile"></script> -->
 
-    <!-- link.dev --> <script type="text/javascript" src="js/edsc.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/edsc/coordinate.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/edsc/arc.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/edsc/geoutil.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/edsc/interpolation.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/edsc/spherical_polygon.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/wv.brand.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/util/wv.util.browser.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/util/wv.util.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/util/wv.util.load.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/util/wv.util.events.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/ui/wv.ui.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/ui/wv.ui.mouse.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/ui/wv.ui.indicator.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/ui/wv.ui.info.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/notifications/wv.notifications.ui.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/proj/wv.proj.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/proj/wv.proj.change.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/proj/wv.proj.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/proj/wv.proj.ui.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.gif.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.ui.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.rangeselect.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/animation/wv.anim.widget.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.label.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.data.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.ticks.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.zoom.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.pick.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.pan.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.input.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.timeline.config.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/date/wv.date.wheels.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.sidebar.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.active.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.modal.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.options.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/layers/wv.layers.info.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/image/wv.image.rubberband.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/image/wv.image.panel.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/palettes/wv.palettes.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/palettes/wv.palettes.legend.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/palettes/wv.palettes.model.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.cmr.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.handler.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.map.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.results.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/data/wv.data.ui.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.request.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.ui.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.map.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.rotate.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.runningdata.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.layerbuilder.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.datelinebuilder.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.precachetile.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.ui.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.animate.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/link/wv.link.model.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/link/wv.link.ui.js"></script>
-
-    <!-- link.dev --> <script type="text/javascript" src="js/wv.feedback.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/wv.tour.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/wv.debug.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/wv.main.js"></script>
+  
+    <!-- link.dev --> <script type="text/javascript" src="dist/bundle.js"></script>
 
 </head>
 

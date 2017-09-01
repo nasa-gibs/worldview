@@ -1,7 +1,7 @@
-var edsc = {};
+var edsc = window.edsc = {};
 edsc.map = {};
 
-var L = {};
+var L = window.L = {};
 edsc.map.L = L;
 
 L.Polyline = {
