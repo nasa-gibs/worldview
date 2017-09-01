@@ -1,5 +1,6 @@
 const path = require('path');
 const glob = require('glob');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 var modules = glob.sync('./web/js/**/!(wv.)*.js');
 var legacy = [
@@ -93,5 +94,8 @@ module.exports = {
         use: [ 'script-loader' ]
       }
     ]
-  }
+  },
+  plugins: [
+    new UglifyJSPlugin()
+  ]
 };
