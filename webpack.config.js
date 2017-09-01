@@ -81,10 +81,11 @@ modules = modules.concat(legacy);
 
 module.exports = {
   entry: {
-    js: modules
+    js: modules,
+    css: './web/sample/sample.css'
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'web/dist')
   },
   module: {
@@ -92,8 +93,17 @@ module.exports = {
       {
         test: /wv\..*\.js$/,
         use: [ 'script-loader' ]
+      },
+      {
+        test: /.*\.css$/,
+        use: [ 'css-loader', { loader: 'shell-loader', options: {
+          script: 'node_modules/.bin/postcss --use autoprefixer'
+        }} ]
       }
     ]
+  },
+  resolveLoader: {
+    modules: ['node_modules',path.resolve(__dirname, 'tasks')]
   },
   plugins: [
     new UglifyJSPlugin()
