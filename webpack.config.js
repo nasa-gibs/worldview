@@ -2,8 +2,11 @@ const path = require('path');
 const glob = require('glob');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-var modules = glob.sync('./web/js/**/!(wv.)*.js');
-var legacy = [
+var legacyVendorScripts = [
+  './web/ext/main/jquery-2.1.4/jquery.js'
+];
+
+var legacyAppScripts = [
   './web/js/wv.brand.js',
   './web/js/util/wv.util.browser.js',
   './web/js/util/wv.util.js',
@@ -76,12 +79,10 @@ var legacy = [
   './web/js/wv.main.js'
 ];
 
-// Add legacy scripts, in order, to the end
-modules = modules.concat(legacy);
-
 module.exports = {
   entry: {
-    js: modules,
+    app: glob.sync('./web/js/**/!(wv.)*.js').concat(legacyAppScripts),
+    vendor: legacyVendorScripts,
     css: './web/sample/sample.css'
   },
   output: {
@@ -91,7 +92,15 @@ module.exports = {
   module: {
     rules: [
       {
+        // Legacy app scripts
         test: /wv\..*\.js$/,
+        include: [ path.resolve(__dirname, 'web/js') ],
+        use: [ 'script-loader' ]
+      },
+      {
+        // Legacy vendor scripts
+        test: /.*\.js$/,
+        include: [ path.resolve(__dirname, 'web/ext') ],
         use: [ 'script-loader' ]
       },
       {
