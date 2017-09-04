@@ -57,6 +57,7 @@
     "react-dom": "15.3.1",
     "script-loader": "^0.7.0",
     "selenium-server-standalone-jar": "3.0.1",
+    "shell-loader": "^1.1.1",
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",
     "uglifyjs-webpack-plugin": "^0.4.6",
