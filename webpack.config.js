@@ -5,6 +5,17 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 var legacyVendorAssets = [
   './web/ext/ui/jquery-ui-1.11.4/jquery-ui.css',
+  './web/ext/node_modules/font-awesome/css/font-awesome.min.css',
+  './web/ext/ui/iCheck-1.0.2-patch/skins/square/grey.css',
+  './web/ext/ui/iCheck-1.0.2-patch/skins/square/red.css',
+  './web/ext/ui/iCheck-1.0.2-patch/skins/line/red.css',
+  './web/ext/ui/jquery.jscrollpane-2.0.22/jquery.jscrollpane.css',
+  './web/ext/ui/perfect-scrollbar/perfect-scrollbar.css',
+  './web/ext/date/mobiscroll-2.6.0/mobiscroll.css',
+  './web/ext/tour/joyride-2.0.3-3/joyride.css',
+  './web/ext/image/jcrop-0.9.12/jquery.Jcrop.css',
+  './web/ext/ui/noUiSlider-6.1.10/jquery.nouislider.css',
+  './web/ext/map/openlayers-3.17.1.wv1/ol.css',
   './web/ext/main/jquery-2.1.4/jquery.js',
   './web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js',
   './web/ext/ui/jquery-ui-1.11.4/jquery-ui.js'
@@ -113,7 +124,7 @@ module.exports = {
         use: [ 'style-loader', 'css-loader' ]
       },
       {
-        test: /\.(png|jpg|gif|woff|woff2|ttf|eot)$/,
+        test: /\.(png|jpg|gif|woff|woff2|ttf|eot|svg)$/,
         use: [ 'url-loader' ]
       }
     ]
