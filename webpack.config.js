@@ -16,9 +16,32 @@ var legacyVendorAssets = [
   './web/ext/image/jcrop-0.9.12/jquery.Jcrop.css',
   './web/ext/ui/noUiSlider-6.1.10/jquery.nouislider.css',
   './web/ext/map/openlayers-3.17.1.wv1/ol.css',
+  './web/ext/node_modules/babel-polyfill/dist/polyfill.js',
   './web/ext/main/jquery-2.1.4/jquery.js',
   './web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js',
-  './web/ext/ui/jquery-ui-1.11.4/jquery-ui.js'
+  './web/ext/ui/jquery-ui-1.11.4/jquery-ui.js',
+  './web/ext/node_modules/react/dist/react.js',
+  './web/ext/node_modules/react-dom/dist/react-dom.js',
+  './web/ext/node_modules/worldview-components/browser/wvc.js',
+  './web/ext/node_modules/lodash/lodash.js',
+  './web/ext/node_modules/bluebird/js/browser/bluebird.js',
+  './web/ext/node_modules/promise-queue/lib/index.js',
+  './web/ext/node_modules/openlayers/dist/ol-debug.js',
+  './web/ext/node_modules/gifshot/build/custom/gifshot.custom.js',
+  './web/ext/node_modules/clipboard/dist/clipboard.js',
+  './web/ext/main/jscache-gitba01cdc/cache.js',
+  './web/ext/ui/iCheck-1.0.2-patch/icheck.js',
+  './web/ext/ui/jquery.jscrollpane-2.0.22/jquery.jscrollpane.js',
+  './web/ext/ui/perfect-scrollbar/perfect-scrollbar.jquery.js',
+  './web/ext/date/mobiscroll-2.6.0/mobiscroll.js',
+  './web/ext/tour/joyride-2.0.3-3/joyride.js',
+  './web/ext/proj/proj4js-2.3.3-1/proj4.js',
+  './web/ext/image/jcrop-0.9.12/jquery.Jcrop.js',
+  './web/ext/ui/noUiSlider-6.1.10/jquery.nouislider.min.js',
+  './web/ext/ui/d3/d3.js',
+  './web/ext/layers/isotope/isotope.pkgd.js',
+  './web/ext/layers/isotope/packery-mode.pkgd.js',
+  './web/ext/layers/jcarousel/jcarousel.js',
 ];
 
 var legacyAppAssets = [
@@ -124,7 +147,7 @@ var legacyAppAssets = [
 
 module.exports = {
   entry: {
-    app: glob.sync('./web/js/**/!(wv.)*.(js|css)').concat(legacyAppAssets),
+    app: glob.sync('./web/js/**/!(wv.)*.js').concat(legacyAppAssets),
     vendor: Object.keys(pkg.dependencies).concat(legacyVendorAssets)
   },
   output: {
