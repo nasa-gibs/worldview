@@ -1,12 +1,16 @@
 const path = require('path');
 const glob = require('glob');
+const pkg = require('./package.json');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-var legacyVendorScripts = [
-  './web/ext/main/jquery-2.1.4/jquery.js'
+var legacyVendorAssets = [
+  './web/ext/ui/jquery-ui-1.11.4/jquery-ui.css',
+  './web/ext/main/jquery-2.1.4/jquery.js',
+  './web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js',
+  './web/ext/ui/jquery-ui-1.11.4/jquery-ui.js'
 ];
 
-var legacyAppScripts = [
+var legacyAppAssets = [
   './web/js/wv.brand.js',
   './web/js/util/wv.util.browser.js',
   './web/js/util/wv.util.js',
@@ -81,9 +85,8 @@ var legacyAppScripts = [
 
 module.exports = {
   entry: {
-    app: glob.sync('./web/js/**/!(wv.)*.js').concat(legacyAppScripts),
-    vendor: legacyVendorScripts,
-    css: './web/sample/sample.css'
+    app: glob.sync('./web/js/**/!(wv.)*.js').concat(legacyAppAssets),
+    vendor: Object.keys(pkg.dependencies).concat(legacyVendorAssets)
   },
   output: {
     filename: '[name].bundle.js',
@@ -104,10 +107,14 @@ module.exports = {
         use: [ 'script-loader' ]
       },
       {
+        // Legacy vendor stylesheets
         test: /.*\.css$/,
-        use: [ 'css-loader', { loader: 'shell-loader', options: {
-          script: 'node_modules/.bin/postcss --use autoprefixer'
-        }} ]
+        include: [ path.resolve(__dirname, 'web/ext') ],
+        use: [ 'style-loader', 'css-loader' ]
+      },
+      {
+        test: /\.(png|jpg|gif|woff|woff2|ttf|eot)$/,
+        use: [ 'url-loader' ]
       }
     ]
   },
