@@ -22,6 +22,34 @@ var legacyVendorAssets = [
 ];
 
 var legacyAppAssets = [
+  './web/css/wv.fonts.css',
+  './web/css/wv.main.css',
+  './web/css/util.css',
+  './web/css/wv.alert.css',
+  './web/css/bank.css',
+  './web/css/wv.map.css',
+  './web/css/wv.link.css',
+  './web/css/wv.palettes.css',
+  './web/css/wv.image.css',
+  './web/css/wv.debug.css',
+  './web/css/projection.css',
+  './web/css/wv.date.css',
+  './web/css/menuPicker.css',
+  './web/css/wv.tour.css',
+  './web/css/products.css',
+  './web/css/indicator.css',
+  './web/css/wv.events.css',
+  './web/css/dataDownload.css',
+  './web/css/wv.sidebar.css',
+  './web/css/wv.layers.modal.css',
+  './web/css/wv.layers.options.css',
+  './web/css/wv.layers.info.css',
+  './web/css/wv.timeline.css',
+  './web/css/wv.anim.widget.css',
+  './web/css/wv.dateselector.css',
+  './web/css/wv.tooltip.css',
+  './web/css/wv.mobile.css',
+  './web/pages/css/wv.document.css',
   './web/js/wv.brand.js',
   './web/js/util/wv.util.browser.js',
   './web/js/util/wv.util.js',
@@ -96,7 +124,7 @@ var legacyAppAssets = [
 
 module.exports = {
   entry: {
-    app: glob.sync('./web/js/**/!(wv.)*.js').concat(legacyAppAssets),
+    app: glob.sync('./web/js/**/!(wv.)*.(js|css)').concat(legacyAppAssets),
     vendor: Object.keys(pkg.dependencies).concat(legacyVendorAssets)
   },
   output: {
@@ -116,6 +144,12 @@ module.exports = {
         test: /.*\.js$/,
         include: [ path.resolve(__dirname, 'web/ext') ],
         use: [ 'script-loader' ]
+      },
+      {
+        // Legacy app stylesheets
+        test: /.*\.css$/,
+        include: [ path.resolve(__dirname, 'web/css'), path.resolve(__dirname, 'web/pages/css') ],
+        use: [ 'style-loader', 'css-loader' ]
       },
       {
         // Legacy vendor stylesheets
