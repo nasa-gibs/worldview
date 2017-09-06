@@ -8,6 +8,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
   self.draw = function() {
     if (!(models.naturalEvents && models.naturalEvents.data)) return null;
     var events = models.naturalEvents.data.events;
+    if (!events) return null;
     var markers = events.map(function(event){
       var marker = {};
       var selected = ui.naturalEvents.selected;
@@ -87,14 +88,15 @@ var createPin = function(id, eventCategory, isSelected){
   if (isSelected) {
     var pinSymbol = eventSymbol.cloneNode(true);
     pinSymbol.setAttribute('href', '/images/natural-events/markers.svg#pin');
-    svgEl.setAttribute('width', 30);
-    svgEl.setAttribute('height', 35);
+    wrapper.classList.add('marker-selected');
+    svgEl.setAttribute('width', 36);
+    svgEl.setAttribute('height', 42);
     svgEl.appendChild(pinSymbol);
   } else {
     var dotSymbol = eventSymbol.cloneNode(true);
     dotSymbol.setAttribute('href', '/images/natural-events/markers.svg#dot');
-    svgEl.setAttribute('width', 20);
-    svgEl.setAttribute('height', 24);
+    svgEl.setAttribute('width', 25);
+    svgEl.setAttribute('height', 29);
     svgEl.appendChild(dotSymbol);
   }
 

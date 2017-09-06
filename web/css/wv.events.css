@@ -157,37 +157,48 @@
   position: relative;
   z-index: 100;
 }
-.marker:hover use {
+.marker:hover use,
+.marker-selected use {
   fill: #7e7e7e;
 }
-.marker-dust-and-haze:hover use {
+.marker-dust-and-haze:hover use,
+.marker-dust-and-haze.marker-selected use {
   fill: #bdb687;
 }
-.marker-icebergs:hover use {
+.marker-icebergs:hover use,
+.marker-icebergs.marker-selected use {
   fill: #65adcd;
 }
-.marker-manmade:hover use {
+.marker-manmade:hover use,
+.marker-manmade.marker-selected use {
   fill: #646464;
 }
-.marker-sea-and-lake-ice:hover use {
+.marker-sea-and-lake-ice:hover use,
+.marker-sea-and-lake-ice.marker-selected use {
   fill: #50b2c5;
 }
-.marker-severe-storms:hover use {
+.marker-severe-storms:hover use,
+.marker-severe-storms.marker-selected use {
   fill: #668391;
 }
-.marker-snow:hover use {
+.marker-snow:hover use,
+.marker-snow.marker-selected use {
   fill: #819da9;
 }
-.marker-temperature-extremes:hover use {
+.marker-temperature-extremes:hover use,
+.marker-temperature-extremes.marker-selected use {
   fill: #cd8a6c;
 }
-.marker-volcanoes:hover use {
+.marker-volcanoes:hover use,
+.marker-volcanoes.marker-selected use {
   fill: #c39b79;
 }
-.marker-water-color:hover use {
+.marker-water-color:hover use,
+.marker-water-color.marker-selected use {
   fill: #65aa9d;
 }
-.marker-wildfires:hover use {
+.marker-wildfires:hover use,
+.marker-wildfires.marker-selected use {
   fill: #bd5953;
 }
 
