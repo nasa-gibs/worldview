@@ -70,7 +70,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     var $actionButton = $("<button></button>")
       .attr("id", "wv-data-download-button")
-      .addClass("action")
+      .addClass("action footer-content")
       .attr("type", "button")
       .attr("value", "")
       .on("click", showDownloadList);

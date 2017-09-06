@@ -30,7 +30,11 @@
 }
 
 #productsHolder footer {
-  padding: 10px 0;
+  padding: 10px;
+}
+
+#productsHolder footer p {
+  margin: 0.5em 0;
 }
 
 #productsHolder footer .action {

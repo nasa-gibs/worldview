@@ -165,11 +165,12 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     var secSize = $('#productsHolder').innerHeight() - $('#productsHolder').height();
     var offset = $('#productsHolder').offset();
     var timeSize = $('#timeline').outerHeight(true);
+    var footerSize = $('#productsHolder footer').outerHeight(true);
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
     var maxHeight = winSize - headSize - head2Size -
-      offset.top - secSize;
+      offset.top - secSize - footerSize;
     if (!wv.util.browser.small) {
       maxHeight = maxHeight - timeSize - 10 - 5;
     }
@@ -294,11 +295,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         .removeClass("ui-state-active");
       $('.ui-tabs-nav li.third')
         .removeClass("ui-state-active");
-      $footerBtns.show();
-      $footerBtns.find("button")
-        .hide();
-      $("#layers-add")
-        .show();
+      $footerBtns.find('.footer-content').hide();
+      $("#layers-add").show();
     } else if (tab === "events") {
       WVC.GA.event('Natural Events', 'Click', 'Events Tab');
       $('.ui-tabs-nav')
@@ -311,7 +309,9 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         .addClass("ui-state-active");
       $('.ui-tabs-nav li.third')
         .removeClass("ui-state-active");
-      $footerBtns.hide();
+      $footerBtns.find('.footer-content').hide();
+      $("#show-all-events").show();
+      $("#show-all-events-note").show();
     } else if (tab === "download") {
       $('.ui-tabs-nav')
         .removeClass('firstselected')
@@ -323,11 +323,8 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
         .removeClass("ui-state-active");
       $('.ui-tabs-nav li.third')
         .addClass("ui-state-active");
-      $footerBtns.show();
-      $footerBtns.find("button")
-        .hide();
-      $("#wv-data-download-button")
-        .show();
+      $footerBtns.find('.footer-content').hide();
+      $("#wv-data-download-button").show();
     } else {
       throw new Error("Invalid tab index: " + ui.index);
     }

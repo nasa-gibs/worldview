@@ -3,7 +3,7 @@ wv.naturalEvents = wv.naturalEvents || {};
 
 wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
-  var self = {}, eventAlert;
+  var self = {}, eventAlert, $showButton, view;
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
@@ -25,6 +25,23 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       ui.sidebar.sizeEventsTab();
       $(window).resize(ui.sidebar.sizeEventsTab);
     });
+
+    view = ui.map.selected.getView();
+    ui.map.selected.on('moveend', function(e) {
+      var isZoomed = Math.floor(view.getZoom()) >= 3;
+      if (isZoomed){
+        self.filterEventList();
+        $showButton.show();
+        ui.sidebar.sizeEventsTab();
+      } else {
+        $('.map-item-list .item').show();
+        $showButton.hide();
+        ui.sidebar.sizeEventsTab();
+      }
+    });
+
+    $showButton = addShowAllButton();
+    $showButton.hide();
 
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'events') {
@@ -96,6 +113,50 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       date = new Date(event.geometries[1].date).toISOString().split('T')[0];
     }
     return date;
+  };
+
+  self.filterEventList = function(){
+    if (!model.data.events) return;
+    var extent = view.calculateExtent();
+    model.data.events.forEach(function(naturalEvent){
+      var date = self.getDefaultEventDate(naturalEvent);
+      var geometry = _.find(naturalEvent.geometries, function(geometry){
+        return geometry.date == date;
+      }) || naturalEvent.geometries[0];
+      var coordinates = geometry.type == 'Point'
+        ? geometry.coordinates
+        : ol.extent.getCenter(geometry.coordinates[0]);
+      var isVisible = ol.extent.containsCoordinate(extent, coordinates);
+      var $thisItem = $('.map-item-list .item[data-id='+naturalEvent.id);
+      if (isVisible) {
+        $thisItem.show();
+      } else {
+        $thisItem.hide();
+      }
+    });
+    ui.sidebar.sizeEventsTab();
+  };
+
+  var addShowAllButton = function(){
+    var $footer = $("#productsHolder footer");
+    var $note = $('<p />', {
+      text: 'Only showing events in view.'
+    });
+    var $showAllBtn = $('<button />', {
+      html: '<span class="ui-button-text">Show All</span>',
+      class: 'action ui-state-default ui-button ui-button-text-only',
+      id: 'show-all-events',
+      click: function(){
+        $('.map-item-list .item').show();
+        $showButton.hide();
+        ui.sidebar.sizeEventsTab();
+      }
+    });
+    $showAll = $('<div />', {class: 'footer-content'});
+    $showAll.append($note);
+    $showAll.append($showAllBtn);
+    $footer.append($showAll);
+    return $showAll;
   };
 
   var getEventById = function(id) {
