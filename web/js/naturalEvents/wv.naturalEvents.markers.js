@@ -51,7 +51,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
         }
       }
 
-      marker.pin = createPin(event.id, category.slug);
+      marker.pin = createPin(event.id, category.slug, isSelected);
       marker.pin.setPosition(coordinates);
       map.addOverlay(marker.pin);
       return marker;
@@ -70,23 +70,30 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
   return self;
 };
 
-var createPin = function(id, eventCategory){
+var createPin = function(id, eventCategory, isSelected){
   // Build SVG Element, using this instead of an img element allows styling with CSS
   var wrapper = document.createElement('div');
   var svgNS = 'http://www.w3.org/2000/svg';
   var svgEl = document.createElementNS(svgNS, 'svg');
   var eventSymbol = document.createElementNS(svgNS, 'use');
-  var markerSymbol = eventSymbol.cloneNode(true);
 
-  svgEl.setAttribute('width', 30);
-  svgEl.setAttribute('height', 35);
-
-  markerSymbol.setAttribute('href', '/images/natural-events/markers.svg#marker');
   eventSymbol.setAttribute('href', '/images/natural-events/markers.svg#' + eventCategory);
-
   wrapper.setAttribute('class', 'marker marker-' + eventCategory);
 
-  svgEl.appendChild(markerSymbol);
+  if (isSelected) {
+    var pinSymbol = eventSymbol.cloneNode(true);
+    pinSymbol.setAttribute('href', '/images/natural-events/markers.svg#pin');
+    svgEl.setAttribute('width', 30);
+    svgEl.setAttribute('height', 35);
+    svgEl.appendChild(pinSymbol);
+  } else {
+    var dotSymbol = eventSymbol.cloneNode(true);
+    dotSymbol.setAttribute('href', '/images/natural-events/markers.svg#dot');
+    svgEl.setAttribute('width', 20);
+    svgEl.setAttribute('height', 24);
+    svgEl.appendChild(dotSymbol);
+  }
+
   svgEl.appendChild(eventSymbol);
   wrapper.appendChild(svgEl);
 

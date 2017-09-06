@@ -41,7 +41,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         // Draw active markers
         if (self.selected.id) {
           var event = getEventById(self.selected.id);
-          drawMarkers(event, self.selected.date || getDefaultEventDate(event));
+          drawMarkers(event, self.selected.date || self.getDefaultEventDate(event));
         } else {
           drawMarkers(model.data.events);
         }
@@ -68,7 +68,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       return;
     }
 
-    date = date || getDefaultEventDate(event);
+    date = date || self.getDefaultEventDate(event);
 
     highlightEventInList(id, date);
     drawMarkers(event, date);
@@ -92,13 +92,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   };
 
-  var getEventById = function(id) {
-    return _.find(model.data.events, function(e){
-      return e.id === id;
-    });
-  };
-
-  var getDefaultEventDate = function(event) {
+  self.getDefaultEventDate = function(event) {
     date = new Date(event.geometries[0].date).toISOString().split('T')[0];
     if (event.geometries.length < 2) return date;
     var category = event.categories.title || event.categories[0].title;
@@ -108,6 +102,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       date = new Date(event.geometries[1].date).toISOString().split('T')[0];
     }
     return date;
+  };
+
+  var getEventById = function(id) {
+    return _.find(model.data.events, function(e){
+      return e.id === id;
+    });
   };
 
   var createEventList = function() {
