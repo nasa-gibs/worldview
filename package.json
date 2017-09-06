@@ -11,12 +11,17 @@
   "scripts": {
     "test": "grunt test lint",
     "start": "node ./bin/www",
-    "preinstall": "node version-check.js"
+    "preinstall": "node version-check.js",
+    "build-js": "node ./tasks/build-js"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
     "babel-polyfill": "6.16.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babelify": "^7.3.0",
     "bluebird": "3.4.6",
+    "browserify": "^14.4.0",
     "buster": "0.7.12",
     "chromedriver": "2.25.1",
     "express": "4.15.2",
@@ -55,6 +60,7 @@
     "selenium-server-standalone-jar": "3.0.1",
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",
+    "watchify": "^3.9.0",
     "worldview-components": "1.3.3"
   }
 }
