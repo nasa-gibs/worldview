@@ -41,21 +41,59 @@ wv.layers.model = wv.layers.model || function(models, config) {
     }
   };
 
+
+  /**
+   * Map source descriptions to the layer objects based on their measurement relationship.
+   * There is a special check for Orbit Tracks since these layers are attached
+   * to sources in multiple measurment files.
+   * @deprecated since version 1.8.0 - Add a description flag to individual layer option files
+   *
+   * @return {type}
+   */
   self.addDescriptions = function() {
     var thisSetting;
     var description;
     _.each(config.measurements, function(measurement, measurementKey) {
-      _.each(measurement.sources, function(source, sourceKey) {
-        _.each(source.settings, function(setting, settingKey) {
-          thisSetting = setting;
-          description = source.description;
-          _.each(config.layers, function(layer, layerKey) {
-            if (layer.id == thisSetting) {
-              layer.description = description || "";
-            }
+      if(measurementKey == "Orbital Track") {
+        _.each(measurement.sources, function(source, sourceKey) {
+          _.each(source.settings, function(setting, settingKey) {
+            thisSetting = setting;
+            description = source.description;
+            _.each(config.layers, function(layer, layerKey) {
+              // If a layer is an orbit track
+              if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+                // Set the description
+                if (layer.id == thisSetting) {
+                  // If there has not been a layer description set in the file, then set it based on measurement description.
+                  if(!layer.description) {
+                    layer.description = description || "";
+                  }
+                }
+              }
+            });
           });
         });
-      });
+      } else {
+        _.each(measurement.sources, function(source, sourceKey) {
+          _.each(source.settings, function(setting, settingKey) {
+            thisSetting = setting;
+            description = source.description;
+            _.each(config.layers, function(layer, layerKey) {
+              if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+                // Do nothing
+              } else {
+                // If a layer is not an orbit track
+                if (layer.id == thisSetting) {
+                  // If there has not been a layer description set in the file, then set it based on measurement description.
+                  if(!layer.description) {
+                    layer.description = description || "";
+                  }
+                }
+              }
+            });
+          });
+        });
+      }
     });
   };
 
