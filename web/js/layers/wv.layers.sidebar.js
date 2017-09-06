@@ -173,7 +173,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     if (!wv.util.browser.small) {
       maxHeight = maxHeight - timeSize - 10 - 5;
     }
-    $(self.selector).css('max-height', maxHeight);
+    $('#wv-events').css('max-height', maxHeight);
 
     var childrenHeight =
       $('#wv-eventscontent').outerHeight(true);
@@ -181,15 +181,15 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     if ((maxHeight <= childrenHeight)) {
       $('#wv-events').css('height', maxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
-        $(self.selector).perfectScrollbar('update');
+        $('#wv-events').perfectScrollbar('update');
       } else {
-        $(self.selector).perfectScrollbar();
+        $('#wv-events').perfectScrollbar();
         productsIsOverflow = true;
       }
     } else {
       $('#wv-events').css('height', '').css('padding-right', '');
       if (productsIsOverflow) {
-        $(self.selector).perfectScrollbar('destroy');
+        $('#wv-events').perfectScrollbar('destroy');
         productsIsOverflow = false;
       }
     }
