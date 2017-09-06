@@ -55,9 +55,11 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
       return new Promise(function(resolve, reject){
         args.push(function(complete){
           if (complete) resolve();
-          if (!complete) reject();
+          if (!complete) reject(new Error('Animation interrupted!'));
         });
         view.animate.apply(view, args);
+      }).catch(function(err){
+        // Do nothing
       });
     };
     return Promise.all([
