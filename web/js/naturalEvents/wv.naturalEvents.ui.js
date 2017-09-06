@@ -38,13 +38,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         // Show message about events not being visible
         eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times', 800, 'warning');
 
-        // Draw active markers
-        if (self.selected.id) {
-          var event = getEventById(self.selected.id);
-          drawMarkers(event, self.selected.date || self.getDefaultEventDate(event));
-        } else {
-          drawMarkers(model.data.events);
-        }
+        drawMarkers();
 
         ui.sidebar.sizeEventsTab();
       } else {
@@ -71,7 +65,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     date = date || self.getDefaultEventDate(event);
 
     highlightEventInList(id, date);
-    drawMarkers(event, date);
+    drawMarkers();
     zoomToEvent(event, date).then(function(){
       activateLayersForCategory(event.categories[0].title);
       models.date.select(wv.util.parseDateUTC(date));
@@ -211,14 +205,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     ui.sidebar.sizeEventsTab();
   };
 
-  var drawMarkers = function(events, date){
-    if (!events) return;
-    events = Array.isArray(events)?events:[events];
-    // Remove old markers
+  var drawMarkers = function(){
+    // Remove previously stored markers
     naturalEventMarkers.remove(self.markers);
-
-    // Draw markers for all events in the model
-    self.markers = naturalEventMarkers.draw(events, date);
+    // Store markers so the can be referenced later
+    self.markers = naturalEventMarkers.draw();
     if (self.markers && Array.isArray(self.markers)) {
       self.markers.forEach(function(marker){
         marker.pin.element_.onclick = function(){

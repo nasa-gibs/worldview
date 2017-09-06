@@ -5,21 +5,24 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
 
   map = map || ui.map.selected;
 
-  self.draw = function(events, date) {
-    if (!events) return null;
-    return events.map(function(event){
+  self.draw = function() {
+    if (!(models.naturalEvents && models.naturalEvents.data)) return null;
+    var events = models.naturalEvents.data.events;
+    var markers = events.map(function(event){
       var marker = {};
-      var isSelected = event.id === ui.naturalEvents.selected.id;
+      var selected = ui.naturalEvents.selected;
+      var isSelected = event.id === selected.id;
+      var date = ui.naturalEvents.getDefaultEventDate(event);
 
-      var geometry;
-      if (date) {
-        geometry = _.find(event.geometries, function(geom){
-          return geom.date.split('T')[0] === date;
-        });
-      } else {
-        geometry = event.geometries[0];
+      if (isSelected && selected.date) {
+        date = selected.date;
       }
-      if (!geometry) return;
+
+      var geometry = _.find(event.geometries, function(geom){
+        return geom.date.split('T')[0] === date;
+      }) || event.geometries[0];
+
+      if (!geometry) return marker;
 
       var coordinates = geometry.coordinates;
       var category = Array.isArray(event.categories)
@@ -54,8 +57,9 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
       marker.pin = createPin(event.id, category.slug, isSelected);
       marker.pin.setPosition(coordinates);
       map.addOverlay(marker.pin);
-      return marker;
+      return marker; // Why is this returning undefined?
     });
+    return markers;
   };
 
   self.remove = function(markers) {
