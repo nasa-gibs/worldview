@@ -13,6 +13,7 @@
     "start": "node ./bin/www",
     "preinstall": "node version-check.js"
   },
+  "dependencies": {},
   "devDependencies": {
     "autoprefixer": "7.1.1",
     "babel-polyfill": "6.16.0",
@@ -20,6 +21,7 @@
     "buster": "0.7.12",
     "chromedriver": "2.25.1",
     "clipboard": "^1.7.1",
+    "css-loader": "^0.28.7",
     "express": "4.15.2",
     "font-awesome": "4.7.0",
     "geckodriver": "1.2.0",
@@ -50,12 +52,18 @@
     "nightwatch": "^0.9.9",
     "openlayers": "4.3.1",
     "phantomjs": "2.1.x",
+    "postcss-cli": "^4.1.0",
     "promise-queue": "2.2.3",
     "react": "15.3.1",
     "react-dom": "15.3.1",
+    "script-loader": "^0.7.0",
     "selenium-server-standalone-jar": "3.0.1",
+    "shell-loader": "^1.1.1",
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.5.5",
     "worldview-components": "1.3.3"
   }
 }

@@ -87,16 +87,6 @@ a.ecbutton {
   top: 3px;
 }
 
-a.collapse {
-  background-image: url("../images/collapseDown.png");
-  background-repeat: no-repeat;
-}
-
-a.expand {
-  background-image: url("../images/expandUp.png");
-  background-repeat: no-repeat;
-}
-
 .dateSpanSlider {
   display: none !important;
 }

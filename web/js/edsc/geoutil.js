@@ -5,7 +5,7 @@
 
   ns.geoutil = (function(L, Coordinate, Arc, config) {
     var DEG_TO_RAD, EPSILON, NORTH_POLE, RAD_TO_DEG, SOUTH_POLE, _angleDelta, _course, _rotationDirection, area, containsPole, exports, gcInterpolate;
-    
+
     // A small number for dealing with near-0
     EPSILON = 0.00000001;
     NORTH_POLE = 1;
@@ -279,6 +279,6 @@
       NORTH_POLE: NORTH_POLE,
       SOUTH_POLE: SOUTH_POLE
     };
-  })(L, ns.Coordinate, ns.Arc, this.edsc.config);
+  })(L, ns.Coordinate, ns.Arc, edsc.config);
 
 }).call(this);
