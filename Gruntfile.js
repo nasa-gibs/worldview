@@ -14,6 +14,8 @@ var moment = require("moment");
 var nodeModuleFiles = [
   "node_modules/babel-polyfill/dist/polyfill.js",
   "node_modules/babel-polyfill/dist/polyfill.min.js",
+  "node_modules/svg4everybody/dist/svg4everybody.js",
+  "node_modules/svg4everybody/dist/svg4everybody.min.js",
   "node_modules/react/dist/react.js",
   "node_modules/react/dist/react.min.js",
   "node_modules/react-dom/dist/react-dom.js",
