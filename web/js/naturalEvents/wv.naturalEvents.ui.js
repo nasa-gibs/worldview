@@ -122,9 +122,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       var geometry = _.find(naturalEvent.geometries, function(geometry){
         return geometry.date == date;
       }) || naturalEvent.geometries[0];
-      var coordinates = geometry.type == 'Point'
-        ? geometry.coordinates
-        : ol.extent.getCenter(geometry.coordinates[0]);
+
+      var coordinates = geometry.coordinates;
+      if (geometry.type == 'Polygon') {
+        var geomExtent = ol.extent.boundingExtent(geometry.coordinates[0]);
+        coordinates =  ol.extent.getCenter(geomExtent);
+      }
+
       var isVisible = ol.extent.containsCoordinate(extent, coordinates);
       var $thisItem = $('.map-item-list .item[data-id='+naturalEvent.id);
       if (isVisible) {
