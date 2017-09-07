@@ -81,20 +81,21 @@ var createPin = function(id, eventCategory, isSelected){
   var svgNS = 'http://www.w3.org/2000/svg';
   var svgEl = document.createElementNS(svgNS, 'svg');
   var eventSymbol = document.createElementNS(svgNS, 'use');
+  var root = window.location.origin + window.location.pathname;
 
-  eventSymbol.setAttribute('href', '/images/natural-events/markers.svg#' + eventCategory);
+  eventSymbol.setAttribute('href', root+'images/natural-events/markers.svg#' + eventCategory);
   wrapper.setAttribute('class', 'marker marker-' + eventCategory);
 
   if (isSelected) {
     var pinSymbol = eventSymbol.cloneNode(true);
-    pinSymbol.setAttribute('href', '/images/natural-events/markers.svg#pin');
+    pinSymbol.setAttribute('href', root+'images/natural-events/markers.svg#pin');
     wrapper.classList.add('marker-selected');
     svgEl.setAttribute('width', 36);
     svgEl.setAttribute('height', 42);
     svgEl.appendChild(pinSymbol);
   } else {
     var dotSymbol = eventSymbol.cloneNode(true);
-    dotSymbol.setAttribute('href', '/images/natural-events/markers.svg#dot');
+    dotSymbol.setAttribute('href', root+'images/natural-events/markers.svg#dot');
     svgEl.setAttribute('width', 25);
     svgEl.setAttribute('height', 29);
     svgEl.appendChild(dotSymbol);
