@@ -315,10 +315,12 @@ if (!window.console) {
 (function() {
   var execute = function() {
     window.scrollTo(0, 0);
-    document.body.style.height = '100%';
-    if (!(/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()))) {
-      if (document.body.parentNode) {
-        document.body.parentNode.style.height = '100%';
+    if (document.body) {
+      document.body.style.height = '100%';
+      if (!(/(iphone|ipod)/.test(navigator.userAgent.toLowerCase()))) {
+        if (document.body.parentNode) {
+          document.body.parentNode.style.height = '100%';
+        }
       }
     }
   };
