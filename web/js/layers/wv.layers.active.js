@@ -65,17 +65,23 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
   var render = function() {
     legends = {};
     var $container = $(self.selector);
-    var $addBtn = $("#layers-add");
     $container.empty();
-
-    $addBtn.button();
-
-
     $container.addClass('bank');
 
     _.eachRight(groups, function(group) {
       renderGroup($container, group);
     });
+
+    var $footer = $('<footer />');
+    $footer.append($('<button />', {
+      id: 'layers-add',
+      class: 'action',
+      text: '+ Add Layers'
+    }));
+    $container.append($footer);
+
+    var $addBtn = $("#layers-add");
+    $addBtn.button();
 
     $(self.selector + ' .close')
       .off('click');

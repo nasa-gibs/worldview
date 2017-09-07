@@ -3,7 +3,7 @@ wv.naturalEvents = wv.naturalEvents || {};
 
 wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
-  var self = {}, eventAlert, $showButton, view;
+  var self = {}, eventAlert, $footer, view;
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
@@ -11,11 +11,27 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   var init = function() {
 
+    view = ui.map.selected.getView();
+
     request.events.on('queryResults', function() {
       if (!(model.data.events || model.data.sources)) return;
+      var isZoomed = Math.floor(view.getZoom()) >= 3;
 
       createEventList();
       addClickListeners();
+      if (isZoomed) self.filterEventList();
+      if (model.active) drawMarkers();
+
+      ui.map.selected.on('moveend', function(e) {
+        var isZoomed = Math.floor(view.getZoom()) >= 3;
+        if (isZoomed){
+          self.filterEventList();
+        } else {
+          $('.map-item-list .item').show();
+          $footer.hide();
+          ui.sidebar.sizeEventsTab();
+        }
+      });
 
       // Reselect previously selected event
       if (self.selected.id) {
@@ -25,23 +41,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       ui.sidebar.sizeEventsTab();
       $(window).resize(ui.sidebar.sizeEventsTab);
     });
-
-    view = ui.map.selected.getView();
-    ui.map.selected.on('moveend', function(e) {
-      var isZoomed = Math.floor(view.getZoom()) >= 3;
-      if (isZoomed){
-        self.filterEventList();
-        $showButton.show();
-        ui.sidebar.sizeEventsTab();
-      } else {
-        $('.map-item-list .item').show();
-        $showButton.hide();
-        ui.sidebar.sizeEventsTab();
-      }
-    });
-
-    $showButton = addShowAllButton();
-    $showButton.hide();
 
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'events') {
@@ -134,11 +133,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         $thisItem.hide();
       }
     });
+    $footer.show();
     ui.sidebar.sizeEventsTab();
   };
 
-  var addShowAllButton = function(){
-    var $footer = $("#productsHolder footer");
+  var addFooter = function(){
+    var $container = $('#wv-events');
+    var $footer = $('<footer />');
     var $note = $('<p />', {
       text: 'Only showing events in view.'
     });
@@ -148,15 +149,15 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       id: 'show-all-events',
       click: function(){
         $('.map-item-list .item').show();
-        $showButton.hide();
+        $footer.hide();
         ui.sidebar.sizeEventsTab();
       }
     });
-    $showAll = $('<div />', {class: 'footer-content'});
-    $showAll.append($note);
-    $showAll.append($showAllBtn);
-    $footer.append($showAll);
-    return $showAll;
+    $footer.append($note);
+    $footer.append($showAllBtn);
+    $container.append($footer);
+    $footer.hide();
+    return $footer;
   };
 
   var getEventById = function(id) {
@@ -175,6 +176,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     _.each(model.data.events, function(event) {
       createEventElement($content, event);
     });
+    $footer = addFooter();
   };
 
   var createEventElement = function($content, event) {

@@ -61,7 +61,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
   };
 
   self.render = function() {
-    var $footer = $("#productsHolder footer");
+    var $footer = $('<footer />');
 
     var $container = $(self.selector)
       .empty()
@@ -77,19 +77,16 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     $footer.append($actionButton);
 
-    $actionButton.hide();
-
     var $list = $("<div></div>")
       .attr("id", self.id + "content")
       .addClass("content");
     $container.append($list);
+    $container.append($footer);
 
     $("#wv-data-download-button")
       .button();
 
     self.refresh();
-
-    //sizeDownloadTab();
 
   };
 
