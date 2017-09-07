@@ -1,24 +1,92 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
+// Utils
+import util from './util/wv.util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
+import browser from './util/wv.util.browser';
+// Date
+import {dateParse} from './date/wv.date'; // export default function parse!!!
+import dateModel from './date/wv.date.model';
+import DateLabel from './date/wv.date.label';
+import DateWheels from './date/wv.date.wheels';
+//Timeline
+import Timeline from  './date/wv.date.timeline';
+import TimelineData from './date/wv.date.timeline.data';
+import TimelineConfig from './date/wv.date.timeline.config';
+import TimelineZoom from './date/wv.date.timeline.zoom';
+import TimelineTicks from './date/wv.date.timeline.ticks';
+import TimelinePick from './date/wv.date.timeline.pick';
+import TimelinePan from './date/wv.date.timeline.pan';
+import TimelineConfig from './date/wv.date.timeline.config';
+import TimelineInput from './date/wv.date.timeline.input';
+// Layers
+import {layerParse, layerValidate} from './layers/wv.layers';// export parse as layerParse. etc...
+import LayersModel from './layers/wv.layers.model';
+import LayersModal from './layers/wv.layers.modal';
+import LayersSidebar from './layers/wv.layers.sidebar';
+import LayersActive from './layers/wv.layers.active';
+// Map
+import {mapParse} from './map/wv.map';
+import MapModel from './map/wv.map.model';
+import MapUI from './map/wv.map.ui';
+import MapRotate from './map/wv.map.rotate';
+import MapRunningData from './map/wv.map.runningdata';
+import MapLayerBuilder from './map/wv.map.layerbuilder';
+import MapDatelineBuilder from './map/wv.map.datelinebuilder';
+import MapPrecacheTile from './map/wv.map.precachetile';
+import MapAnimate from './map/wv.map.animate';
+// Animation
+import {animParse} from './animation/wv.anim';
+import AnimModel from './animation/wv.anim.model';
+import AnimUI from './animation/wv.anim.ui';
+import AnimWidget from './animation/animation-widget';
+import AnimRangeselect from './animation/wv.anim.rangeselect';
+import AnimGIF from './animation/wv.anim.gif';
+// palettes
+import {palettesParse, paletteRequirements} from './palettes/wv.palettes';
+import PalettesModel from './palettes/wv.palettes.model';
+// Data
+import DataParse from './data/wv.data';
+import DataModel from './data/wv.data.model';
+import DataUI from './data/wv.data.ui';
+// NaturalEvents
+import EventsModel from './naturalEvents/wv.naturalEvents.model';
+import EventsUI from './naturalEvents/wv.naturalEvents.ui';
+import EventsRequest from './naturalEvents/wv.naturalEvents.request';
+// Image
+import ImageRubberband from './image/wv.image.rubberband';
+import ImagePanel from './image/wv.image.panel';
+// notifications
+import NotificationsUI from './notifications/wv.notifications.ui';
+// UI
+import {indicateDelayed} from './ui/wv.ui.indicator'; // not a class, export object
+// Link
+import LinkModel from './link/wv.link.model';
+import LinkUI from './link/wv.link.ui';
+import LinkInfo from './link/wv.link.info';
 
-var wvx = wvx || {};
+// projections
+import projParse from './proj/wv.proj';
+import ProjModel from './proj/wv.proj.model';
+import ProjUI from './proj/wv.proj.ui';
+import ProjChange from './proj/wv.proj.change';
+// other
+import {debugConfig, debug} from './wv.debug';
+import Brand from './wv.brand';
+import Tour from './wv.tour';
+// External Dependencies
+import $ from 'Jquery';
+import _ from 'lodash';
+import {GA as googleAnalytics} from 'worldview-components';
 
 // Document ready function
-$(function() {
-
-  var config;
-  var state = wv.util.fromQueryString(location.search);
-  var parameters = wv.util.fromQueryString(location.search);
+window.onload = () => {
   var errors = [];
+  var requirements;
   var startTime;
+  var wvx = {};
+  var config;
+  var parsers;
+  var state = util.fromQueryString(location.search);
+  var parameters = util.fromQueryString(location.search);
+
 
   var main = function() {
     if (parameters.elapsed) {
@@ -40,12 +108,12 @@ $(function() {
 
   var loadConfig = function() {
     elapsed("loading config");
-    var configURI = wv.brand.url("config/wv.json");
+    var configURI = Brand.url("config/wv.json");
     var promise = $.getJSON(configURI);
     promise
-      .done(wv.util.wrap(onConfigLoaded))
-      .fail(wv.util.error);
-    wv.ui.indicator.delayed(promise, 1000);
+      .done(util.wrap(onConfigLoaded))
+      .fail(util.error);
+    indicateDelayed(promise, 1000);
   };
 
   var onConfigLoaded = function(data) {
@@ -56,7 +124,7 @@ $(function() {
     // Export for debugging
     wvx.config = config;
 
-    wv.debug.config(config);
+    debugConfig(config);
 
     // Load any additional scripts as needed
     if (config.scripts) {
@@ -65,31 +133,31 @@ $(function() {
       });
     }
 
-    wv.layers.validate(errors, config);
+    layerValidate(errors, config);
 
     parsers = [
-      wv.proj.parse,
-      wv.layers.parse,
-      wv.date.parse,
-      wv.map.parse,
-      wv.palettes.parse
+      projParse,
+      layerParse,
+      dateParse,
+      mapParse,
+      palettesParse
     ];
     if (config.features.dataDownload) {
-      parsers.push(wv.data.parse);
+      parsers.push(DataParse);
     }
     if (config.features.animation) {
-      parsers.push(wv.anim.parse);
+      parsers.push(animParse);
     }
     _.each(parsers, function(parser) {
       parser(state, errors, config);
     });
     requirements = [
-      wv.palettes.requirements(state, config)
+      paletteRequirements(state, config)
     ];
 
     $.when.apply(null, requirements)
-      .then(wv.util.wrap(init))
-      .fail(wv.util.error);
+      .then(util.wrap(init))
+      .fail(util.error);
   };
 
   var init = function() {
@@ -98,9 +166,9 @@ $(function() {
     // catches up (about three hours)
     var initialDate;
     if (config.defaults.startDate) {
-      initialDate = wv.util.parseDateUTC(config.defaults.startDate);
+      initialDate = util.parseDateUTC(config.defaults.startDate);
     } else {
-      initialDate = wv.util.now();
+      initialDate = util.now();
       if (initialDate.getUTCHours() < 3) {
         initialDate.setUTCDate(initialDate.getUTCDate() - 1);
       }
@@ -109,7 +177,7 @@ $(function() {
     // Models
     var models = {
       wv: {
-        events: wv.util.events()
+        events: util.events()
       }
     };
     var ui = {};
@@ -117,14 +185,14 @@ $(function() {
     wvx.models = models;
     wvx.ui = ui;
 
-    models.proj = wv.proj.model(config);
-    models.palettes = wv.palettes.model(models, config);
-    models.layers = wv.layers.model(models, config);
-    models.date = wv.date.model(config, {
+    models.proj = ProjModel(config);
+    models.palettes = PalettesModel(models, config);
+    models.layers = LayersModel(models, config);
+    models.date = dateModel(config, {
       initial: initialDate
     });
-    models.map = wv.map.model(models, config);
-    models.link = wv.link.model(config);
+    models.map = MapModel(models, config);
+    models.link = LinkModel(config);
 
     models.link
       .register(models.proj)
@@ -134,30 +202,28 @@ $(function() {
       .register(models.map);
     models.link.load(state);
     if (config.features.googleAnalytics) {
-      WVC.GA.init(config.features.googleAnalytics.id); // Insert google tracking
+      googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
     }
     // HACK: Map needs to be created before the data download model
     var mapComponents = {
-      Rotation: wv.map.rotate,
-      Runningdata: wv.map.runningdata,
-      Layerbuilder: wv.map.layerbuilder,
-      Dateline: wv.map.datelinebuilder,
-      Precache: wv.map.precachetile
+      Rotation: MapRotate,
+      Runningdata: MapRunningData,
+      Layerbuilder: MapLayerBuilder,
+      Dateline: MapDatelineBuilder,
+      Precache: MapPrecacheTile
     };
-    ui.map = wv.map.ui(models, config, mapComponents);
-    ui.map.animate = wv.map.animate(models, config, ui);
+    ui.map = MapUI(models, config, mapComponents);
+    ui.map.animate = MapAnimate(models, config, ui);
     if (config.features.animation) {
-      models.anim = wv.anim.model(models, config);
+      models.anim = AnimModel(models, config);
       models.link.register(models.anim);
     }
     if (config.features.dataDownload) {
-      models.data = wv.data.model(models, config);
-    }
-    if (config.features.dataDownload) {
+      models.data = DataModel(models, config);
       models.link.register(models.data);
     }
     if (config.features.naturalEvents) {
-      models.naturalEvents = wv.naturalEvents.model(models, config);
+      models.naturalEvents = EventsModel(models, config);
       models.link.register(models.naturalEvents);
     }
     // HACK: Map needs permalink state loaded before starting. But
@@ -165,64 +231,64 @@ $(function() {
     models.link.load(state); // needs to be loaded twice
 
     if (config.features.arcticProjectionChange) {
-      models.proj.change = wv.proj.change(models, config);
+      models.proj.change = ProjChange(models, config);
     }
 
     elapsed("ui");
     // Create widgets
-    ui.proj = wv.proj.ui(models, config);
-    ui.sidebar = wv.layers.sidebar(models, config);
-    ui.activeLayers = wv.layers.active(models, ui, config);
-    ui.addModal = wv.layers.modal(models, ui, config);
+    ui.proj = ProjUI(models, config);
+    ui.sidebar = LayersSidebar(models, config);
+    ui.activeLayers = LayersActive(models, ui, config);
+    ui.addModal = LayersModal(models, ui, config);
 
 
     function timelineInit() {
-      ui.timeline = wv.date.timeline(models, config, ui);
-      ui.timeline.data = wv.date.timeline.data(models, config, ui);
-      ui.timeline.zoom = wv.date.timeline.zoom(models, config, ui);
-      ui.timeline.ticks = wv.date.timeline.ticks(models, config, ui);
-      ui.timeline.pick = wv.date.timeline.pick(models, config, ui);
-      ui.timeline.pan = wv.date.timeline.pan(models, config, ui);
-      ui.timeline.config = wv.date.timeline.config(models, config, ui);
-      ui.timeline.input = wv.date.timeline.input(models, config, ui);
+      ui.timeline = Timeline(models, config, ui);
+      ui.timeline.data = TimelineData(models, config, ui);
+      ui.timeline.zoom = TimelineZoom(models, config, ui);
+      ui.timeline.ticks = TimelineTicks(models, config, ui);
+      ui.timeline.pick = TimelinePick(models, config, ui);
+      ui.timeline.pan = TimelinePan(models, config, ui);
+      ui.timeline.config = TimelineConfig(models, config, ui);
+      ui.timeline.input = TimelineInput(models, config, ui);
       if (config.features.animation) {
         ui.anim = {};
-        ui.anim.rangeselect = wv.anim.rangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-        ui.anim.widget = wv.anim.widget(models, config, ui);
-        ui.anim.gif = wv.anim.gif(models, config, ui);
-        ui.anim.ui = wv.anim.ui(models, ui);
+        ui.anim.rangeselect = AnimRangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+        ui.anim.widget = AnimWidget(models, config, ui);
+        ui.anim.gif = AnimGIF(models, config, ui);
+        ui.anim.ui = AnimUI(models, ui);
       }
 
-      ui.dateLabel = wv.date.label(models);
+      ui.dateLabel = DateLabel(models);
     }
     if (config.startDate) {
-      if (!wv.util.browser.small) { // If mobile device, do not build timeline
+      if (!browser.small) { // If mobile device, do not build timeline
         timelineInit();
       }
-      ui.dateWheels = wv.date.wheels(models, config);
+      ui.dateWheels = DateWheels(models, config);
     }
 
-    ui.rubberband = wv.image.rubberband(models, ui, config);
-    ui.image = wv.image.panel(models, ui, config);
+    ui.rubberband = ImageRubberband(models, ui, config);
+    ui.image = ImagePanel(models, ui, config);
     if (config.features.dataDownload) {
-      ui.data = wv.data.ui(models, ui, config);
+      ui.data = DataUI(models, ui, config);
       // FIXME: Why is this here?
       ui.data.render();
     }
     if (config.features.naturalEvents) {
-      ui.naturalEvents = wv.naturalEvents.ui(models, ui, config, wv.naturalEvents.request(models, ui, config));
+      ui.naturalEvents = EventsUI(models, ui, config, EventsRequest(models, ui, config));
     }
-    ui.link = wv.link.ui(models, config);
-    ui.tour = wv.tour(models, ui, config);
-    ui.info = wv.ui.info(ui, config);
+    ui.link = LinkUI(models, config);
+    ui.tour = Tour(models, ui, config);
+    ui.info = LinkInfo(ui, config);
     if (config.features.alert) {
-      ui.alert = wv.notifications.ui(ui, config);
+      ui.alert = NotificationsUI(ui, config);
     }
 
     //FIXME: Old hack
     $(window)
       .resize(function() {
-        if (wv.util.browser.small) {
+        if (browser.small) {
           $('#productsHoldertabs li.first a')
             .trigger('click');
         }
@@ -261,13 +327,13 @@ $(function() {
       });
 
     // Console notifications
-    if (wv.brand.release()) {
-      console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
-        " - " + wv.brand.BUILD_TIMESTAMP);
+    if (Brand.release()) {
+      console.info(Brand.NAME + " - Version " + Brand.VERSION +
+        " - " + Brand.BUILD_TIMESTAMP);
     } else {
       console.warn("Development version");
     }
-    wv.debug.layers(ui, models, config);
+    debug.layers(ui, models, config);
 
     errorReport();
     //wv.debug.error(parameters);
@@ -293,7 +359,7 @@ $(function() {
 
     _.each(errors, function(error) {
       var cause = (error.cause) ? ": " + error.cause : "";
-      wv.util.warn(error.message + cause);
+      util.warn(error.message + cause);
       if (error.layerRemoved) {
         layersRemoved = layersRemoved + 1;
       }
@@ -339,6 +405,6 @@ $(function() {
   };
   */
 
-  wv.util.wrap(main)();
+  util.wrap(main)();
 
-});
+};
