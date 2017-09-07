@@ -4,16 +4,42 @@
     "browser": true,
     "node": true
   },
-  "parserOptions": {
-      "ecmaVersion": 5,
-      "sourceType": "script",
-      "ecmaFeatures": {
-          "jsx": false
-      }
+  "ecmaFeatures": {
+    "jsx": true
   },
+  "parser": "babel-eslint",
+  "plugins": [
+    "react"
+  ],
   "rules": {
-      "strict": 0,
-      "semi": [2, "always"],
-      "indent": [2, 2, {"SwitchCase": 1}],
+    "strict": 0,
+    "valid-jsdoc": 0,
+    "comma-spacing": 1,
+    "key-spacing": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": [1, { "vars": "all", "args": "none" }],
+    "no-undef": 1,
+    "new-cap": 0,
+    "no-param-reassign": 0,
+    "no-spaced-func": 1,
+    "padded-blocks": 0,
+    "camelcase": 1,
+    "semi": 1,
+    "no-extra-semi": 1,
+    "no-mixed-spaces-and-tabs": 1,
+    "no-trailing-spaces": 1,
+    "space-before-function-paren": 0,
+    "space-in-parens": 1,
+    "indent": [2, 2, {"SwitchCase": 1}],
+    "react/display-name": 0,
+    "react/jsx-uses-react": 1,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 1,
+    "react/no-multi-comp": 1,
+    "react/prop-types": [0, { ignore: [children, className] }],
+    "react/react-in-jsx-scope": 1,
+    "react/self-closing-comp": 1,
+    "react/wrap-multilines": 1,
+    "react/jsx-uses-vars": 1
   }
 }
