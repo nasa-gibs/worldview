@@ -60,40 +60,16 @@
   color: #000;
 }
 
-.ui-tabs-nav li.first.ui-state-active a {
+.ui-tabs .ui-tabs-nav li.ui-state-active a {
   background-color: #00457b;
 }
 
-.ui-tabs-nav li.first.ui-state-active a:hover {
+.ui-tabs .ui-tabs-nav li.ui-state-active .ui-tabs-anchor {
+  cursor: default;
+}
+
+.ui-tabs-nav li.ui-state-active a:hover {
   background-color: #00457b;
-}
-
-.ui-tabs-nav li.second.ui-state-active a {
-  background-color: #906a00;
-}
-
-.ui-tabs-nav li.second.ui-state-active a:hover {
-  background-color: #906a00;
-}
-
-.ui-tabs-nav li.third.ui-state-active a {
-  background: rgb(99, 53, 45);
-}
-
-.ui-tabs-nav li.third.ui-state-active a:hover {
-  background: rgb(99, 53, 45);
-}
-
-.firstselected {
-  border-bottom: 3px #00457b solid;
-}
-
-.secondselected {
-  border-bottom: 3px #906a00 solid;
-}
-
-.thirdselected {
-  border-bottom: 3px rgb(99, 53, 45) solid;
 }
 
 .cats {
