@@ -59,8 +59,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         ui.sidebar.sizeEventsTab();
       } else {
         model.active = false;
-        naturalEventMarkers.remove(self.markers);
-        eventAlert.dialog('close');
+        if (naturalEventMarkers) naturalEventMarkers.remove(self.markers);
+        if (eventAlert) eventAlert.dialog('close');
       }
       model.events.trigger('change');
     });
