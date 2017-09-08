@@ -197,8 +197,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             } else if (category.placement === 'last') {
               sortNumber = 3;
             }
-          } else
+          } else {
             sortNumber = 2;
+          }
           var $category = $('<div></div>').attr('data-sort', sortNumber).addClass('layer-category layer-category-' + interestCssName(metaCategoryName)).attr('id', category.id);
           if (category.image) {
             $category.css('background-image', 'url("images/wv.layers/categories/' + category.image + '")');
@@ -262,12 +263,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
               $measurementItem.append($measurement);
 
               $measurements.append($measurementItem);
+
+              $categoryOpaque.append($measurements);
+
+              $categories.append($category);
             }
           });
-
-          $categoryOpaque.append($measurements);
-
-          $categories.append($category);
 
           $breadcrumb.show();
 
