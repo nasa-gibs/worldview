@@ -38,6 +38,11 @@
     <meta http-equiv="Cache-control" content="no-store">
     <meta http-equiv="Pragma" content="no-cache">
 
+    <!-- open graph for social sharing -->
+    <meta property="og:title" content="Worldview: Explore Your Dynamic Planet">
+    <meta property="og:image" content="images/preview.png" />
+    <meta property="og:description" content="The NASA Worldview app provides a satellite's perspective of the planet as it looks today and as it has in the past. Worldview is part of NASA’s Earth Observing System Data and Information System. EOSDIS makes the agency's large repository of data accessible and freely available to the public.">
+
     <!-- CSS resources ==================================================== -->
 
     <link type="text/css" rel="Stylesheet" href="ext/node_modules/font-awesome/css/font-awesome.min.css">
@@ -69,9 +74,11 @@
                             <link type="text/css" rel="Stylesheet" href="ext/map/openlayers-3.17.1.wv1/ol.css">
 
     <!-- link.prod --> <!-- <link type="text/css" href="css/wv.css?v=20131218215115174" rel="Stylesheet" /> -->
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.fonts.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.main.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/util.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.alert.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/bank.css">
-    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.main.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.map.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.link.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.palettes.css">
@@ -123,6 +130,9 @@
 
     <!-- link.dev  -->      <script type="text/javascript" src="ext/node_modules/gifshot/build/custom/gifshot.custom.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/node_modules/gifshot/build/custom/gifshot.custom.min.js"></script> -->
+
+    <!-- link.dev -->       <script type="text/javascript" src="ext/node_modules/clipboard/dist/clipboard.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/node_modules/clipboard/dist/clipboard.min.js"></script> -->
 
 
     <!-- link.dev  -->      <script type="text/javascript" src="ext/main/jquery-2.1.4/jquery.js"></script>
@@ -270,15 +280,13 @@
 <body>
     <div data-role="page" id="app">
         <div data-role="content">
-
             <ul id="wv-toolbar">
                 <li id="wv-link-button" class="wv-toolbar-button"></li>
                 <li id="wv-proj-button" class="wv-toolbar-button"></li>
                 <li id="wv-image-button" class="wv-toolbar-button"></li>
-                <li id="wv-info-button" class="wv-toolbar-button"></li>
+                <li id="wv-info-button" class="wv-toolbar-button wv-status-hide"></li>
             </ul>
-
-            <div id="wv-logo"></div>
+            <a href="/" title="Click to Reset Worldview to Defaults" id="wv-logo"></a>
             <section id="productsHolder">
               <ul id="productsHolder-tabs"></ul>
               <div id="productsHoldertoggleButtonHolder"></div> <!-- bad -->
@@ -396,5 +404,34 @@
     <div id="wv-image-right" class="wv-image-coords"></div>
     <div id="wv-image-bottom" class="wv-image-coords"></div>
     <div id="wv-image-left" class="wv-image-coords"></div>
+
+    <style>
+      /*.backdrop {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9998;
+        background: rgba(0, 0, 0, 0.3);
+      }*/
+    </style>
+
+    <div class="backdrop"></div>
+
+    <style>
+      /*.modal {
+        width: 300px;
+        height: 300px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -150px;
+        margin-left: -150px;
+        z-index: 9999;
+        background: yellow;
+      }*/
+    </style>
+
 </body>
 </html>

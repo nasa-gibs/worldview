@@ -1,44 +1,32 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 #wv-layers-options-dialog .wv-header {
-    margin-top: 1em;
-    font-size: 14px;
-    margin-bottom: 1em;
+  margin-top: 1em;
+  font-size: 14px;
+  margin-bottom: 1em;
 }
 
 #wv-layers-options-dialog .wv-header.wv-color-palette-label {
-    margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 #wv-layers-options-dialog .wv-label {
-    width: 100%;
+  width: 100%;
 }
 
 #wv-layers-options-dialog .wv-label-opacity {
-    text-align: right;
+  text-align: right;
 }
 
 #wv-layers-options-dialog .wv-label-range-min {
-    float: left;
-    text-align: left;
+  float: left;
+  text-align: left;
 }
 
 #wv-layers-options-dialog .wv-label-range-max {
-    float: right;
-    text-align: right;
+  float: right;
+  text-align: right;
 }
 
 #wv-layers-options-dialog .wv-palette-squash {
-    float: right;
-    margin-top: -2.4em;
+  float: right;
+  margin-top: -2.4em;
 }
-

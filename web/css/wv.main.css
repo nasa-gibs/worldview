@@ -1,381 +1,607 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2016 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-@font-face {
-    font-family: open_sans_light;
-    src: local(open_sans_light), url('../font/OpenSans-Light.ttf') format('truetype');
-    font-weight:300;
-}
-@font-face {
-    font-family: open_sans_regular;
-    src: local(open_sans_regulat), url('../font/OpenSans-Regular.ttf') format('truetype');
-    font-weight:400;
-}
-html,body, div, ul, li, p, h1, h2, h3, h4, h5, h6 {
-    display:block;
-    margin:0;
-    padding:0;
-    font: 100 13px/13px 'Lucida Sans', 'Arial', sans-serif;
+a,
+abbr,
+acronym,
+address,
+applet,
+article,
+aside,
+audio,
+b,
+big,
+blockquote,
+body,
+canvas,
+caption,
+center,
+cite,
+code,
+dd,
+del,
+details,
+dfn,
+div,
+dl,
+dt,
+em,
+embed,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+hgroup,
+html,
+i,
+iframe,
+img,
+ins,
+kbd,
+label,
+legend,
+li,
+mark,
+menu,
+nav,
+object,
+ol,
+output,
+p,
+pre,
+q,
+ruby,
+s,
+samp,
+section,
+small,
+span,
+strike,
+strong,
+sub,
+summary,
+sup,
+table,
+tbody,
+td,
+tfoot,
+th,
+thead,
+time,
+tr,
+tt,
+u,
+ul,
+var,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+/* This needs reworked */
+body,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+html,
+li,
+p,
+ul {
+  font: 400 13px/13px 'Open Sans', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+p,
+ul {
+  letter-spacing: 0.3px;
+}
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 
 body {
-    min-width: 320px;
-    background: #000000;
+  line-height: 1;
+  min-width: 320px;
+  background: #000;
 }
 
-div {display:block;}
-h1, h2, h3, h4, h5, h6 { font-weight:400; }
+nav ul {
+  list-style: none;
+}
 
+blockquote,
+q {
+  quotes: none;
+}
 
-#info_drop { border:none; margin: 0;}
-#info_drop div.hidden a {display:block; color:#fff; font-weight:100; line-height:1em; font-size: 11px; width:70px; padding: 2px 5px; text-align:right; text-decoration:none;}
-#info_drop div.hidden a:hover {background: rgba(38,43,49,0.45); }
-#info_drop:hover div.hidden {display:block; background: rgba(38,43,49,0.45); width:80px; margin-left:-40px; margin-top:2px;}
+blockquote::after,
+blockquote::before,
+q::after,
+q::before {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+#info_drop {
+  border: none;
+  margin: 0;
+}
+
+#info_drop div.hidden a {
+  display: block;
+  color: #fff;
+  font-weight: 100;
+  line-height: 1em;
+  font-size: 11px;
+  width: 70px;
+  padding: 2px 5px;
+  text-align: right;
+  text-decoration: none;
+}
+
+#info_drop div.hidden a:hover {
+  background: rgba(38, 43, 49, 0.45);
+}
+
+#info_drop:hover div.hidden {
+  display: block;
+  background: rgba(38, 43, 49, 0.45);
+  width: 80px;
+  margin-left: -40px;
+  margin-top: 2px;
+}
+
 #info {
-    display:block;
-    width:40px;
-    height:40px;
-    border:none;
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: none;
 }
-div.horizontalContainer {
-    width:100%;
-    display:block;
-    float:left;
-    position:absolute;
-    bottom:10px;
-    overflow:hidden;
-    z-index:200;
-    padding: 0;
-}
-#permalink_content {margin-top:10px;}
 
-.hidden {display:none;}
+div.horizontalContainer {
+  width: 100%;
+  display: block;
+  float: left;
+  position: absolute;
+  bottom: 10px;
+  overflow: hidden;
+  z-index: 200;
+  padding: 0;
+}
+
+.hidden {
+  display: none;
+}
 
 #banner {
-    display:block;
-    z-index:294;
-    float:left;
-    position:relative;
-    width:100%;
-    height:45px;
-    /*background: rgba(65,65,65,0.5);*/
-    /*border-bottom: 1px solid #000;*/
+  display: block;
+  z-index: 294;
+  float: left;
+  position: relative;
+  width: 100%;
+  height: 45px;
 }
 
-
-
-#banner img.logo {padding:11px 5px;}
-#banner ul {float:right; }
-#banner ul li {display:block; float:right; margin:3px 3px; line-height:0; }
-#banner ul li div {line-height:0;}
-#banner .toolbar-link {display:inline-block; line-height:0; }
-
-#hazard, #transition {z-index:1007; clear:both; float:left; display:block; position:relative; }
-
-#transition {width:22%; height:100px; text-shadow:none; color: #262626; margin-top:55px;}
-#hazard {top:-13px; }
-
-/* #map {position:absolute !important; left:0; top:0;} */
-
-#dlMap {position:absolute !important; left:0; top:0; background-color:#0000FF; opacity:0; width:100%; height:100%;z-index:-1; overflow:hidden;
+#banner img.logo {
+  padding: 11px 5px;
 }
 
-#rubberband {position:absolute !important; left:0; top:0; width:100%;  height:100%;  z-index:-3; display:none; overflow:hidden; }
-#imagedownload {z-index:1005; width:180px; min-height:100px; position:absolute; display:none; background: rgba(38, 43, 49, 0.45);
-                text-shadow:none; color:white; float:left; font-size:11px; text-align: left; top:44px; padding:5px; border-radius: 0 0 5px 5px;}
-#imgFileSize {color:#D99694;}
+#banner ul {
+  float: right;
+}
+
+#banner ul li {
+  display: block;
+  float: right;
+  margin: 3px;
+  line-height: 0;
+}
+
+#banner ul li div {
+  line-height: 0;
+}
+
+#banner .toolbar-link {
+  display: inline-block;
+  line-height: 0;
+}
+
+#hazard,
+#transition {
+  z-index: 1007;
+  clear: both;
+  float: left;
+  display: block;
+  position: relative;
+}
+
+#transition {
+  width: 22%;
+  height: 100px;
+  text-shadow: none;
+  color: #262626;
+  margin-top: 55px;
+}
+
+#hazard {
+  top: -13px;
+}
+
+#dlMap {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  background-color: #00f;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+#rubberband {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+  display: none;
+  overflow: hidden;
+}
+
+#imagedownload {
+  z-index: 1005;
+  width: 180px;
+  min-height: 100px;
+  position: absolute;
+  display: none;
+  background: rgba(38, 43, 49, 0.45);
+  text-shadow: none;
+  color: #fff;
+  float: left;
+  font-size: 11px;
+  text-align: left;
+  top: 44px;
+  padding: 5px;
+  border-radius: 0 0 5px 5px;
+}
+
+#imgFileSize {
+  color: #d99694;
+}
 
 #transition ul {
-    font: 10px 'Gill Sans', sans-serif;
-    text-align: center;
+  font: 10px 'Open Sans', sans-serif;
+  text-align: center;
 }
 
-#transition ul li, #transition ul li.disabled, #transition ul li.disabled:hover {
-    background-color: rgb(76,89,92);
-    border-color: rgb(112,135,136);
-    border-width: .75pt;
+#transition ul li,
+#transition ul li.disabled,
+#transition ul li.disabled:hover {
+  background-color: rgb(76, 89, 92);
+  border-color: rgb(112, 135, 136);
+  border-width: 1px;
 }
 
 #transition ul li.selected {
-    background-color: rgb(152,72,7);
-    border-color: rgb(250,192,144);
+  background-color: rgb(152, 72, 7);
+  border-color: rgb(250, 192, 144);
 }
 
 #transition ul li:hover {
-    border-color: yellow;
+  border-color: #ff0;
 }
 
 #wv-logo {
-    background: url('../brand/images/wv-logo.svg?v=@BUILD_NONCE@') no-repeat center rgba(40,40,40,0.85);
-    width: 286px;
-    height:55px;
-    padding:5px 0;
-    position:absolute;
-    top:10px;
-    left:10px;
-    border:1px solid #333;
-    border-top-right-radius:5px;
-    border-top-left-radius:5px;
-    z-index:1;
-    -webkit-box-sizing:border-box;
-    -o-box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
+  background: url('../brand/images/wv-logo.svg?v=@BUILD_NONCE@') no-repeat center rgba(40, 40, 40, 0.85);
+  display: block;
+  width: 286px;
+  height: 55px;
+  padding: 5px 0;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border: 1px solid #333;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  z-index: 1;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-#wv-toolbar{
-    position:absolute;
-    right:10px;
-    top:10px;
-    z-index:1;
-
-    border-radius:0;
-
+#wv-toolbar {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+  border-radius: 0;
 }
-#wv-toolbar li{
-    display:inline-block;
-    margin:0;
-    background:rgba(40,40,40,0.85);
-    border:1px solid #333;
-    border-radius:5px;
+
+#wv-toolbar li {
+  display: inline-block;
+  margin: 0;
+  background: rgba(40, 40, 40, 0.85);
+  border: 1px solid #333;
+  border-radius: 5px;
 }
 
 #wv-toolbar li label {
-    border-radius:5px;
-    margin:0;
-    border:0;
-}
-#wv-toolbar li .ui-state-default{
-    background-color:transparent;
-    background-image:none;
-}
-#wv-toolbar li .ui-state-hover{
-    background-color:#fff;
-    color:#1a1a1a;
-}
-.ui-button {
-    color: #eeeeee;
+  border-radius: 5px;
+  margin: 0;
+  border: 0;
 }
 
-.ui-state-active {
+#wv-toolbar li .ui-state-default {
+  background-color: transparent;
+  background-image: none;
+}
+
+#wv-toolbar li .ui-state-hover {
+  background-color: #fff;
+  color: #1a1a1a;
+}
+
+.ui-button {
+  color: #eee;
 }
 
 .wv-menu-item-selected {
-    background: #888;
-    color: #eee;
+  background: #888;
+  color: #eee;
 }
 
-.ui-menu { position: absolute; width: 100px; z-index: 1000; }
+.ui-menu {
+  position: absolute;
+  width: 150px;
+  z-index: 1000;
+}
 
-/* Allow Font Awesome Icons in lieu of jQuery UI and only apply when using a FA icon */
+/* Allow Font Awesome Icons in lieu of jQuery UI and only apply when using a FA icon
+ * Remove the jQuery UI Icon
+ * Remove the jQuery UI Text Indent
+ */
 .ui-icon[class*=" fa-"] {
-    /* Remove the jQuery UI Icon */
-    background: none repeat scroll 0 0 transparent;
-    /* Remove the jQuery UI Text Indent */
-    text-indent: 0;
-    /* Bump it up - jQuery UI is -8px */
-    /*margin-top: -0.5em; */
-
-}
-
-/* Allow use of icon-large to be properly aligned */
-.ui-icon.icon-large {
-    /*margin-top: -0.75em;*/
+  background: none repeat scroll 0 0 transparent;
+  text-indent: 0;
 }
 
 .ui-button-icon-only .ui-icon[class*=" fa-"] {
-    /* Bump it - jQuery UI is -8px */
-    margin-left: -7px;
+  margin-left: -7px;
 }
 
 .ui-widget-content {
-    background: rgb(40, 40, 40);
-    border:0;
-    border-radius:0;
+  background: rgb(40, 40, 40);
+  border: 0;
+  border-radius: 0;
 }
 
 .ui-widget-content.wv-opaque {
-    background: #222;
+  background: #222;
 }
 
 .ui-dialog {
-    padding: 0;
-    z-index: 600;
+  padding: 0;
+  z-index: 600;
 }
 
 .ui-dialog .ui-dialog-content {
-    background-image: none;
-    padding-top: 15px;
-    padding-bottom: 15px;
+  background-image: none;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
-.ui-corner-all{
-border-radius:0;
+
+.ui-corner-all {
+  border-radius: 0;
 }
 
 .ui-state-default .ui-icon-closethick {
-    background-position: 0 0;
-    background-image: url("../images/close.png");
+  background-position: 0 0;
+  background-image: url("../images/close.png");
 }
 
 .ui-state-hover .ui-icon-closethick {
-    background-position: 0 0;
-    background-image: url("../images/close-highlight.png");
+  background-position: 0 0;
+  background-image: url("../images/close-highlight.png");
 }
 
 .ui-tooltip {
-    /* background: #FFFBE7; */
-    background: #eee;
+  background: #eee;
 }
 
 .ui-tooltip-content {
-    color: #000;
+  color: #000;
 }
 
 .link,
-a,
-.ui-widget-content a {
-    color: #7bf;
-    text-decoration: none;
-    cursor: pointer;
+.ui-widget-content a,
+a {
+  color: #7bf;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .link:hover,
 a:hover {
-    color: #9df;
+  color: #9df;
 }
 
 .ui-menu-item a {
-    color: #fff;
+  color: #fff;
 }
 
 .ui-accordion .ui-accordion-content {
-    background: rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0);
 }
 
 .error-icon {
-    margin-right: 10px;
-    vertical-align: middle;
+  margin-right: 10px;
+  vertical-align: middle;
 }
 
 .error-header {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .error-body {
-    margin-top: 10px;
-}
-
-.ui-menu {
-    width: 150px;
+  margin-top: 10px;
 }
 
 .ui-menu-item {
-    font-size: 13px;
+  font-size: 13px;
 }
-.ui-menu-item i{
-    font-size:15px;
+
+.ui-menu-item i {
+  font-size: 15px;
 }
 
 .iCheck-checkbox {
-    margin: 0 10px;
-    background-position: -24px 0;
+  margin: 0 10px;
+  background-position: -24px 0;
 }
 
 .iCheck-radio {
-    background-position: -144px 0;
+  background-position: -144px 0;
 }
 
 label {
-    -webkit-user-select: none; /* Chrome/Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+ */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
 
-    /* Rules below not implemented in browsers yet */
-    -o-user-select: none;
-    user-select: none;
+.wv-panel {
+  border: 1px solid #333;
 }
-.wv-panel{
-    border:1px solid #333;
-}
+
 .wv-panel .ui-dialog-titlebar {
-    background: rgb(40, 40, 40);
-    border: 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+  background: rgb(40, 40, 40);
+  border: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
-.ui-widget-overlay{
-    background:#000;
-    opacity:0.4;
+
+.ui-widget-overlay {
+  background: #000;
+  opacity: 0.4;
 }
+
 .ui-widget-header {
-    background: rgb(40, 40, 40);
+  background: rgb(40, 40, 40);
 }
 
-.ui-widget-header .ui-state-default{
-    background:none transparent;
-    border:0;
+.ui-widget-header .ui-state-default {
+  background: none transparent;
+  border: 0;
 }
 
-.ui-widget-header .ui-state-hover{
-    background:#fff;
+.ui-widget-header .ui-state-hover {
+  background: #fff;
 }
 
 .wv-panel .ui-dialog-content {
-    padding: 0em 1em 1em 1em;
+  padding: 0 1em 1em;
 }
 
 .wv-panel .ui-dialog-title {
-    font-weight: normal;
+  font-weight: 400;
 }
 
-/* Chrome wants to put a blue border around items when they have focus.
- * Remove it */
 .ui-menu .ui-menu-item {
-    padding-top: 5px;
-    padding-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 /* style for UI dialog buttons that are hovered over */
 .ui-widget-content .ui-state-hover {
-    border-color: #eee;
-    background-color: #eee;
-    background-image: none;
-    color: #404040;
+  border-color: #eee;
+  background-color: #eee;
+  background-image: none;
+  color: #404040;
 }
 
 /* style for UI info select menu that are hovered over */
-
 .ui-widget-content .ui-state-focus {
-    border-color: #eee;
-    background-color: #eee;
-    background-image: none;
-    color: #404040;
+  border-color: #eee;
+  background-color: #eee;
+  background-image: none;
+  color: #404040;
 }
 
 .ui-widget-content .ui-state-focus.ui-menu-item a {
-    color: #404040;
+  color: #404040;
 }
 
 .ui-state-focus:focus {
-    outline: none !important ;
+  outline: none !important;
 }
+
 .ui-state-focus a:focus {
-    outline: none !important;
+  outline: none !important;
 }
 
 .ui-widget-content .ui-dialog-titlebar-close.ui-state-focus {
-    background:none;
+  background: none;
 }

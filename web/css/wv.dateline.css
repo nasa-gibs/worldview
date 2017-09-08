@@ -1,12 +1,14 @@
 .dateline {
-	stroke:rgb(0, 0, 0);
-	stroke-width: 2;
-	stroke-dasharray: 10, 5;
+  stroke: rgb(0, 0, 0);
+  stroke-width: 2;
+  stroke-dasharray: 10, 5;
 }
+
 .dateline-text {
-	pointer-events: none;
-	display: block;
+  pointer-events: none;
+  display: block;
 }
+
 .ol-overlay-container {
-	pointer-events: none;
+  pointer-events: none;
 }

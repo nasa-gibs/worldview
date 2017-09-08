@@ -1,179 +1,179 @@
 #productsHolder .ui-tabs-panel {
-    padding: 0;
+  padding: 0;
 }
-#productsHolder-tabs{
-    padding:0;
-    background: rgba(0,0,0,0);
+
+#productsHolder-tabs {
+  padding: 0;
+  background: rgba(0, 0, 0, 0);
 }
 
 #productsHolder-tabs .ui-state-default {
-    background: rgba(0, 0, 0, 0);
-    border: 0;
-    margin: 0;
-    padding:0;
-}
-
-#productsHolder-tabs .ui-state-active {
-    
+  background: rgba(0, 0, 0, 0);
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
 #productsHolder-tabs .ui-state-active a {
-    color: #FFFFFF;
+  color: #fff;
 }
 
 #productsHolder-tabs .ui-tabs-anchor {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    padding: 0.5em .7em;
-    float: none;
-    
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  padding: 0.5em 0.7em;
+  float: none;
 }
 
 .ui-tabs-nav {
-    border-radius:0;
-    border:0;
-    border-bottom: 3px #00457b solid;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 3px #00457b solid;
 }
-.ui-tabs-nav li.layerPicker {
-    display:inline-block;
-    float:none;
-}
-.ui-tabs-nav li.layerPicker.ui-state-active {
 
+.ui-tabs-nav li.layerPicker {
+  display: inline-block;
+  float: none;
 }
 
 .ui-tabs-nav li a {
-    /*border-radius: 10px 10px 0 0;*/
-    color: #fff;
-    font-size: 1em;
-    font-weight: 400;
-    border: none;
-    padding: 0.5em 0;
-    width: 100%;
-    text-align: center;
-    text-decoration: none;
-    text-shadow: none;
-    display: block;
+  color: #fff;
+  font-size: 1em;
+  font-weight: 400;
+  border: none;
+  padding: 0.5em 0;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  display: block;
 }
-.ui-tabs-nav li.ui-state-default:hover a{
-    background-color:#ccc;
-    color: #000;
+
+.ui-tabs-nav li.ui-state-default:hover a {
+  background-color: #ccc;
+  color: #000;
 }
-.ui-tabs-nav li.ui-state-default:hover a i{
-    color: #000;
+
+.ui-tabs-nav li.ui-state-default:hover a i {
+  color: #000;
 }
+
 .ui-tabs-nav li.first.ui-state-active a {
-    background-color:#00457b;
+  background-color: #00457b;
 }
+
 .ui-tabs-nav li.first.ui-state-active a:hover {
-    background-color:#00457b;
+  background-color: #00457b;
 }
 
 .ui-tabs-nav li.second.ui-state-active a {
-    background-color:#906a00;
+  background-color: #906a00;
 }
+
 .ui-tabs-nav li.second.ui-state-active a:hover {
-    background-color:#906a00;
+  background-color: #906a00;
 }
 
 .ui-tabs-nav li.third.ui-state-active a {
-    background: rgb(99,53,45);
+  background: rgb(99, 53, 45);
 }
+
 .ui-tabs-nav li.third.ui-state-active a:hover {
-    background: rgb(99,53,45);
+  background: rgb(99, 53, 45);
 }
 
 .firstselected {
-    border-bottom: 3px #00457b solid;
+  border-bottom: 3px #00457b solid;
 }
 
 .secondselected {
-    border-bottom: 3px #906a00 solid;
+  border-bottom: 3px #906a00 solid;
 }
 
 .thirdselected {
-    border-bottom: 3px rgb(99,53,45) solid;
+  border-bottom: 3px rgb(99, 53, 45) solid;
 }
 
 .cats {
-    float: right;
-    margin-right:20px;
+  float: right;
+  margin-right: 20px;
 }
 
 .productsIcon {
-    display:inline-block;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    background:url(../images/wv-icons.svg) transparent 0 -10px;
-    margin:0 7px 0 0;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  background: url("../images/wv-icons.svg") transparent 0 -10px;
+  margin: 0 7px 0 0;
 }
-/*ul#productsHoldertabs li.ui-state-active .tab:hover i.productsIcon{
-    background-position:0 -10px;
-}*/
+
 /***********************************Icons***********************************/
 .icon-layers {
-    background-position:0 -10px;
+  background-position: 0 -10px;
 }
+
 ul#productsHolder-tabs .tab:hover i.icon-layers {
-    background-position:0 20px;
+  background-position: 0 20px;
 }
+
 ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-layers {
-    background-position: 0 -10px;
+  background-position: 0 -10px;
 }
+
 .icon-download {
-    background-position:-30px -10px;
+  background-position: -30px -10px;
 }
-ul#productsHolder-tabs .tab:hover i.icon-download    {
-    background-position:-30px 20px;
+
+ul#productsHolder-tabs .tab:hover i.icon-download {
+  background-position: -30px 20px;
 }
+
 ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {
-    background-position:-30px -10px;
+  background-position: -30px -10px;
 }
+
 .icon-download-alt {
-    background-position:-60px -10px;
+  background-position: -60px -10px;
 }
+
 .icon-add {
-    background-position:-90px -10px;
+  background-position: -90px -10px;
 }
+
 ul#productsHolder-tabs .tab:hover i.icon-add {
-    background-position:-90px 20px;
+  background-position: -90px 20px;
 }
+
 ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-add {
-    background-position:-90px -10px;
+  background-position: -90px -10px;
 }
+
 .icon-add-alt {
-    background-position:-120px -10px;
+  background-position: -120px -10px;
 }
 
 .icon-events,
 ul#productsHolder-tabs li.ui-state-active.ui-state-hover i.icon-events {
-    display:inline-block;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    background: url(../images/events-icon.png);
-    margin:0;
-    margin-right: 5px;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  background: url("../images/events-icon.png");
+  margin: 0 5px 0 0;
 }
 
 ul#productsHoldertabs li.ui-state-active i.icon-events {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 ul#productsHolder-tabs li.ui-state-hover i.icon-events {
-    background: url(../images/events-icon-highlight.png);
-    margin-right: 5px;
+  background: url("../images/events-icon-highlight.png");
+  margin-right: 5px;
 }
-ul#productsHolder
 
-
-/***********************************End Icons***********************************/
 ul#productsHoldertabs li.ui-state-active i.productsIcon {
-    margin-right: 10px;
-}
-
-@media screen and (max-device-height: 720px) and (orientation: landscape){
+  margin-right: 10px;
 }
