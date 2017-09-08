@@ -74,10 +74,10 @@
   white-space: nowrap;
   vertical-align: middle;
   cursor: pointer;
-  background-color: #eee;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#eee));
-  background-image: linear-gradient(#fcfcfc, #eee);
-  border: 1px solid #d5d5d5;
+  background-color: #ccc;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#ccc));
+  background-image: linear-gradient(#dcdcdc, #ccc);
+  border: 1px solid #ccc;
   border-radius: 3px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -92,10 +92,10 @@
 
 .wv-link .copy-btn:hover {
   text-decoration: none;
-  background-color: #ddd;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ddd));
-  background-image: linear-gradient(#eee, #ddd);
-  border-color: #ccc;
+  background-color: #bbb;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#bbb));
+  background-image: linear-gradient(#ccc, #bbb);
+  border-color: #bbb;
 }
 
 .wv-link .copy-btn:hover::before {
