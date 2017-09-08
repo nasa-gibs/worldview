@@ -511,7 +511,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
             var orbitTitle;
             if (layer.daynight && layer.track) {
-              orbitTitle = wv.util.capitalizeFirstLetter(layer.daynight) + "/" + wv.util.capitalizeFirstLetter(layer.track);
+              orbitTitle = _.startCase(layer.track) + "/" + _.startCase(layer.daynight);
             }
 
             $label.empty()
