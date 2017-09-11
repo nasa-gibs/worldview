@@ -151,7 +151,7 @@
 .marker-wildfires use {
   fill: #8d3b36;
 }
-.marker:hover {
+.marker:not(.marker-selected):hover {
   transform: scale(1.2);
   transform-origin: center bottom;
   position: relative;

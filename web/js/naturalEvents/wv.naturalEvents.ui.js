@@ -20,7 +20,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       createEventList();
       addClickListeners();
       if (isZoomed) self.filterEventList();
-      if (model.active) drawMarkers();
+      if (model.active) {
+        // Remove previously stored markers
+        naturalEventMarkers.remove(self.markers);
+        // Store markers so the can be referenced later
+        self.markers = naturalEventMarkers.draw();
+      }
 
       ui.map.selected.on('moveend', function(e) {
         var isZoomed = Math.floor(view.getZoom()) >= 3;
@@ -54,7 +59,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         // Show message about events not being visible
         eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times', 800, 'warning');
 
-        drawMarkers();
+        // Remove previously stored markers
+        naturalEventMarkers.remove(self.markers);
+        // Store markers so the can be referenced later
+        self.markers = naturalEventMarkers.draw();
 
         ui.sidebar.sizeEventsTab();
       } else {
@@ -81,7 +89,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     date = date || self.getDefaultEventDate(event);
 
     highlightEventInList(id, date);
-    drawMarkers();
+    // Remove previously stored markers
+    naturalEventMarkers.remove(self.markers);
+    // Store markers so the can be referenced later
+    self.markers = naturalEventMarkers.draw();
     zoomToEvent(event, date).then(function(){
       activateLayersForCategory(event.categories[0].title);
       models.date.select(wv.util.parseDateUTC(date));
@@ -119,8 +130,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var extent = view.calculateExtent();
     model.data.events.forEach(function(naturalEvent){
       var date = self.getDefaultEventDate(naturalEvent);
+      if (self.selected && self.selected.date) {
+        date = self.selected.date;
+      }
       var geometry = _.find(naturalEvent.geometries, function(geometry){
-        return geometry.date == date;
+        return geometry.date.split('T')[0] == date;
       }) || naturalEvent.geometries[0];
 
       var coordinates = geometry.coordinates;
@@ -270,47 +284,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     // Adjust tab layout to fit
     if (wv.util.browser.small) ui.sidebar.collapseNow();
     ui.sidebar.sizeEventsTab();
-  };
-
-  var drawMarkers = function(){
-    // Remove previously stored markers
-    naturalEventMarkers.remove(self.markers);
-    // Store markers so the can be referenced later
-    self.markers = naturalEventMarkers.draw();
-    if (self.markers && Array.isArray(self.markers)) {
-      var olViewport = self.markers[0].pin.element_.parentNode.parentNode;
-      self.markers.forEach(function(marker){
-        var willSelect = true;
-        [
-          'click',
-          'wheel',
-          'pointerdrag',
-          'pointerdown',
-          'pointerup',
-          'pointermove'
-        ].forEach(function(type){
-          marker.pin.element_.addEventListener(type, function(e){
-            if (type === 'pointerdown') {
-              willSelect = true;
-            }
-            if (type === 'pointermove' || type === 'wheel') {
-              willSelect = false;
-            }
-            if (type === 'click' && willSelect) {
-              self.selectEvent(marker.pin.id_);
-            } else {
-              passEventToTarget(e, olViewport);
-            }
-          });
-        });
-
-      });
-    }
-  };
-
-  var passEventToTarget = function(event, target) {
-    var eventCopy = new event.constructor(event.type, event);
-    target.dispatchEvent(eventCopy);
   };
 
   var activateLayersForCategory = function(category){

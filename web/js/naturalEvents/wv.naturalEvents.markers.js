@@ -58,7 +58,36 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
       marker.pin = createPin(event.id, category.slug, isSelected);
       marker.pin.setPosition(coordinates);
       map.addOverlay(marker.pin);
-      return marker; // Why is this returning undefined?
+      map.renderSync(); // Marker position will be off until this is called
+
+      // Add event listeners
+      var willSelect = true;
+      [
+        'click',
+        'wheel',
+        'pointerdrag',
+        'pointerdown',
+        'pointerup',
+        'pointermove'
+      ].forEach(function(type){
+        var pinEl = marker.pin.element_;
+        var olViewport = pinEl.parentNode.parentNode;
+        pinEl.addEventListener(type, function(e){
+          if (type === 'pointerdown') {
+            willSelect = true;
+          }
+          if (type === 'pointermove' || type === 'wheel') {
+            willSelect = false;
+          }
+          if (type === 'click' && willSelect && !isSelected) {
+            ui.naturalEvents.selectEvent(event.id,date);
+          } else {
+            passEventToTarget(e, olViewport);
+          }
+        });
+      });
+
+      return marker;
     });
     return markers;
   };
@@ -73,6 +102,11 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
   };
 
   return self;
+};
+
+var passEventToTarget = function(event, target) {
+  var eventCopy = new event.constructor(event.type, event);
+  target.dispatchEvent(eventCopy);
 };
 
 var createPin = function(id, eventCategory, isSelected){
