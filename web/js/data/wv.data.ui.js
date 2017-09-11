@@ -63,10 +63,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
   self.render = function() {
     var $footer = $('<footer />');
 
-    var $container = $(self.selector)
-      .empty()
-      .addClass(self.id + "list")
-      .addClass("bank");
+    var $container = $(self.selector).empty();
 
     var $actionButton = $("<button></button>")
       .attr("id", "wv-data-download-button")
@@ -77,9 +74,10 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     $footer.append($actionButton);
 
-    var $list = $("<div></div>")
-      .attr("id", self.id + "content")
-      .addClass("content");
+    var $list = $("<div />", {
+      class: 'wv-datalist bank content',
+      id: 'wv-datacontent'
+    });
     $container.append($list);
     $container.append($footer);
 
@@ -91,9 +89,9 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
   };
 
   self.refresh = function() {
-    var $content = $(self.selector + "content");
+    var $content = $("#wv-datacontent");
 
-    $content = $(self.selector + "content")
+    $content = $("#wv-datacontent")
       .empty();
     var data = model.groupByProducts();
     $.each(data, function(key, value) {
@@ -199,7 +197,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
-    var maxHeight = winSize - headSize - footSize -
+    var maxHeight = winSize - headSize -
       offset.top - timeSize - secSize - 10 - 5;
     $(self.selector)
       .css("max-height", maxHeight);
@@ -208,23 +206,23 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
       .outerHeight(true);
 
     if ((maxHeight <= childrenHeight)) {
-      $("#wv-data")
+      $("#wv-datacontent")
         .css('height', maxHeight)
         .css('padding-right', '10px');
       if (productsIsOverflow) {
-        $(self.selector)
+        $("#wv-datacontent")
           .perfectScrollbar('update');
       } else {
-        $(self.selector)
+        $("#wv-datacontent")
           .perfectScrollbar();
         productsIsOverflow = true;
       }
     } else {
-      $("#wv-data")
+      $("#wv-datacontent")
         .css('height', '')
         .css('padding-right', '');
       if (productsIsOverflow) {
-        $(self.selector)
+        $("#wv-datacontent")
           .perfectScrollbar('destroy');
         productsIsOverflow = false;
       }

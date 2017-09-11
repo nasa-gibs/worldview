@@ -1,8 +1,8 @@
-#wv-events {
+.wv-eventslist {
   position: relative;
 }
 
-#wv-events li.item i {
+.wv-eventslist li.item i {
   float: left;
   margin: 0 10px 5px 5px;
 }
@@ -66,11 +66,11 @@
   padding-left: 15px;
 }
 
-#wv-events li.item ul li.dates a.active {
+.wv-eventslist li.item ul li.dates a.active {
   font-weight: 700;
 }
 
-#wv-events .map-item-list li.item .fa-external-link {
+.wv-eventslist .map-item-list li.item .fa-external-link {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -203,45 +203,45 @@
   fill: #bd5953;
 }
 
-#wv-events li i.map-marker {
+.wv-eventslist li i.map-marker {
   background: url('../images/natural-events/event-other.svg');
   height: 26px;
   width: 26px;
 }
 
-#wv-events li.volcanoes i.map-marker {
+.wv-eventslist li.volcanoes i.map-marker {
   background: url('../images/natural-events/event-volcano.svg');
 }
 
-#wv-events li.dust-and-haze i.map-marker {
+.wv-eventslist li.dust-and-haze i.map-marker {
   background: url('../images/natural-events/event-sandstorm.svg');
 }
 
-#wv-events li.severe-storms i.map-marker {
+.wv-eventslist li.severe-storms i.map-marker {
   background: url('../images/natural-events/event-weather.svg');
 }
 
-#wv-events li.wildfires i.map-marker {
+.wv-eventslist li.wildfires i.map-marker {
   background: url('../images/natural-events/event-fire.svg');
 }
 
-#wv-events li.manmade i.map-marker {
+.wv-eventslist li.manmade i.map-marker {
   background: url('../images/natural-events/event-manmade.svg');
 }
 
-#wv-events li.sea-and-lake-ice i.map-marker {
+.wv-eventslist li.sea-and-lake-ice i.map-marker {
   background: url('../images/natural-events/event-iceberg.svg');
 }
 
-#wv-events li.snow i.map-marker {
+.wv-eventslist li.snow i.map-marker {
   background: url('../images/natural-events/event-snow.svg');
 }
 
-#wv-events li.water-color i.map-marker {
+.wv-eventslist li.water-color i.map-marker {
   background: url('../images/natural-events/event-water-color.svg');
 }
 
-#wv-events li.icebergs i.map-marker {
+.wv-eventslist li.icebergs i.map-marker {
   background: url('../images/natural-events/event-iceberg.svg');
 }
 

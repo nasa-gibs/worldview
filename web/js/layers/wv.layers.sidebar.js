@@ -155,17 +155,17 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
       $('#wv-eventscontent').outerHeight(true);
 
     if ((maxHeight <= childrenHeight)) {
-      $('#wv-events').css('height', maxHeight).css('padding-right', '10px');
+      $('.wv-eventslist').css('height', maxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
-        $('#wv-events').perfectScrollbar('update');
+        $('.wv-eventslist').perfectScrollbar('update');
       } else {
-        $('#wv-events').perfectScrollbar();
+        $('.wv-eventslist').perfectScrollbar();
         productsIsOverflow = true;
       }
     } else {
-      $('#wv-events').css('height', '').css('padding-right', '');
+      $('.wv-eventslist').css('height', '').css('padding-right', '');
       if (productsIsOverflow) {
-        $('#wv-events').perfectScrollbar('destroy');
+        $('.wv-eventslist').perfectScrollbar('destroy');
         productsIsOverflow = false;
       }
     }

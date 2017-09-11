@@ -13,9 +13,10 @@
   -o-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0;
+  padding-bottom: 40px;
 }
 
-#productsHolder main#products {
+#productsHolder .layer-container {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -30,12 +31,16 @@
 }
 
 #productsHolder footer {
+  bottom: -40px;
+  position: absolute;
   padding: 5px;
 }
 
 #productsHolder footer p {
   margin: 0.5em 0;
-  color: #fff;
+  color: #eee;
+  float: right;
+  overflow: hidden;
 }
 
 #productsHolder footer .action {
@@ -46,6 +51,7 @@
   border-radius: 0;
   background: #d54e21;
   background-image: none;
+  margin-right: 5px;
 }
 
 #productsHolder footer .action:hover {

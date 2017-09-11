@@ -162,15 +162,16 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       text: 'Only showing events in view.'
     });
     var $showAllBtn = $('<button />', {
-      html: '<span class="ui-button-text">Show All</span>',
-      class: 'action ui-state-default ui-button ui-button-text-only',
+      class: 'action',
       id: 'show-all-events',
+      text: 'List All',
       click: function(){
         $('.map-item-list .item').show();
         $footer.hide();
         ui.sidebar.sizeEventsTab();
       }
     });
+    $showAllBtn.button();
     $footer.append($note);
     $footer.append($showAllBtn);
     $container.append($footer);
@@ -185,7 +186,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   var createEventList = function() {
-    var $panels = $('#wv-events').empty().addClass('wv-eventslist').addClass('bank');
+    var $panels = $('<div />', {class: 'wv-eventslist bank'});
+    $('#wv-events').empty().append($panels);
     var $list = $('<ul></ul>').attr('id', 'wv-eventscontent').addClass('content').addClass('map-item-list');
     var $detailContainer = $('<div></div>').attr('id', 'wv-events-detail').hide();
     $panels.append($list);

@@ -64,9 +64,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
   var render = function() {
     legends = {};
-    var $container = $(self.selector);
-    $container.empty();
-    $container.addClass('bank');
+    var $container = $('<div />', {class: 'layer-container bank'});
+    $(self.selector).empty().append($container);
 
     _.eachRight(groups, function(group) {
       renderGroup($container, group);
@@ -78,22 +77,22 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       class: 'action',
       text: '+ Add Layers'
     }));
-    $container.append($footer);
+    $('#products').append($footer);
 
     var $addBtn = $("#layers-add");
     $addBtn.button();
 
-    $(self.selector + ' .close')
+    $('.layer-container .close')
       .off('click');
-    $(self.selector + ' .hideReg')
+    $('.layer-container .hideReg')
       .off('click');
 
-    $(self.selector + ' .close')
+    $('.layer-container .close')
       .on('click', removeLayer);
-    $(self.selector + " .hideReg")
+    $(".layer-container .hideReg")
       .on('click', toggleVisibility);
 
-    $("#" + self.id + " ul.category")
+    $(".layer-container ul.category")
       .sortable({
         items: "li:not(.head)",
         axis: "y",
@@ -101,9 +100,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         tolerance: "pointer",
         placeholder: "state-saver"
       });
-    $("#" + self.id + " ul.category li")
+    $(".layer-container ul.category li")
       .disableSelection();
-    $("#" + self.id + " ul.category")
+    $(".layer-container ul.category")
       .bind('sortstop', moveLayer);
 
     _.each(model.get({
@@ -375,12 +374,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     // after timeline markup is corrected to be loaded first
 
     if (wv.util.browser.small) {
-      maxHeight = winSize - headSize - footSize -
+      maxHeight = winSize - headSize -
         offset.top - secSize - 10 - 5;
     } else {
       //FIXME: Hack, the timeline sometimes renders twice as large of a height and
       //creates a miscalculation here for timeSize
-      maxHeight = winSize - headSize - footSize -
+      maxHeight = winSize - headSize -
         offset.top - /*timeSize*/ 67 - secSize - 10 - 5;
     }
 
@@ -394,23 +393,23 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         .outerHeight(true) + 26;
 
     if ((maxHeight <= childrenHeight)) {
-      $("#products")
+      $(".layer-container")
         .css('height', maxHeight)
         .css('padding-right', '10px');
       if (productsIsOverflow) {
-        $(self.selector)
+        $('.layer-container')
           .perfectScrollbar('update');
       } else {
-        $(self.selector)
+        $('.layer-container')
           .perfectScrollbar();
         productsIsOverflow = true;
       }
     } else {
-      $("#products")
+      $(".layer-container")
         .css('height', '')
         .css('padding-right', '');
       if (productsIsOverflow) {
-        $(self.selector)
+        $('.layer-container')
           .perfectScrollbar('destroy');
         productsIsOverflow = false;
       }
@@ -556,7 +555,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     // Timeout prevents redraw artifacts
     // setTimeout(render, 1);
 
-    var $container = $(self.selector);
+    var $container = $('.layer-container');
 
     _.each(groups, function(group) {
       var $group = $('#' + group.id);
