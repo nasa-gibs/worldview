@@ -1,5 +1,5 @@
 {
-  "version": "1.7.1",
+  "version": "1.8.0",
   "release": "1",
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
     "bluebird": "3.4.6",
     "buster": "0.7.12",
     "chromedriver": "2.25.1",
+    "clipboard": "^1.7.1",
     "express": "4.15.2",
     "font-awesome": "4.7.0",
     "geckodriver": "1.2.0",
@@ -47,7 +48,7 @@
     "lodash": "4.15.0",
     "moment": "2.13.x",
     "nightwatch": "^0.9.9",
-    "openlayers": "4.0.1",
+    "openlayers": "4.3.1",
     "phantomjs": "2.1.x",
     "promise-queue": "2.2.3",
     "react": "15.3.1",
