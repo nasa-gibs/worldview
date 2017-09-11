@@ -156,6 +156,7 @@
   transform-origin: center bottom;
   position: relative;
   z-index: 100;
+  cursor: pointer;
 }
 .marker:hover use,
 .marker-selected use {
