@@ -278,12 +278,27 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
     if (self.markers && Array.isArray(self.markers)) {
+      var canvas = self.markers[0].pin.element_.parentNode.parentNode.firstChild;
       self.markers.forEach(function(marker){
-        marker.pin.element_.onclick = function(){
+        marker.pin.element_.onclick = function(e){
           self.selectEvent(marker.pin.id_);
         };
+        [
+          'click',
+          'wheel'
+        ].forEach(function(type){
+          marker.pin.element_.addEventListener(type, function(e){
+            passEventToTarget(e, canvas);
+          });
+        });
+
       });
     }
+  };
+
+  var passEventToTarget = function(event, target) {
+    var eventCopy = new event.constructor(event.type, event);
+    target.dispatchEvent(eventCopy);
   };
 
   var activateLayersForCategory = function(category){
