@@ -280,16 +280,27 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     if (self.markers && Array.isArray(self.markers)) {
       var olViewport = self.markers[0].pin.element_.parentNode.parentNode;
       self.markers.forEach(function(marker){
+        var willSelect = true;
         [
           'click',
           'wheel',
           'pointerdrag',
           'pointerdown',
-          'pointerup'
+          'pointerup',
+          'pointermove'
         ].forEach(function(type){
           marker.pin.element_.addEventListener(type, function(e){
-            passEventToTarget(e, olViewport);
-            if (type === 'click') self.selectEvent(marker.pin.id_);
+            if (type === 'pointerdown') {
+              willSelect = true;
+            }
+            if (type === 'pointermove' || type === 'wheel') {
+              willSelect = false;
+            }
+            if (type === 'click' && willSelect) {
+              self.selectEvent(marker.pin.id_);
+            } else {
+              passEventToTarget(e, olViewport);
+            }
           });
         });
 
