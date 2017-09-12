@@ -60,11 +60,14 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
       // Add event listeners
       var willSelect = true;
       var pinEl = marker.pin.element_;
-      pinEl.addEventListener('pointerdown', function(e){
-        willSelect = true;
-        passEventToTarget(e, olViewport);
+      ['pointerdown', 'mousedown', 'touchstart'].forEach(function(type){
+        pinEl.addEventListener(type, function(e){
+          willSelect = true;
+          passEventToTarget(e, olViewport);
+        });
       });
-      ['pointermove', 'wheel', 'pointerdrag', 'pointerup'].forEach(function(type){
+      ['pointermove', 'wheel', 'pointerdrag',
+        'pointerup', 'mousemove', 'touchmove'].forEach(function(type){
         pinEl.addEventListener(type, function(e){
           if (type === 'pointermove' || type === 'wheel') willSelect = false;
           passEventToTarget(e, olViewport);
