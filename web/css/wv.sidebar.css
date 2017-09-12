@@ -37,10 +37,14 @@
 }
 
 #productsHolder footer p {
-  margin: 0.5em 0;
-  color: #eee;
+  padding: 4px;
+  background: #bbb;
+  margin: 0;
+  color: #000;
   float: right;
   overflow: hidden;
+  height: 19px;
+  line-height: 21px;
 }
 
 #productsHolder footer .action {

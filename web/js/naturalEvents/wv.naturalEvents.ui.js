@@ -3,7 +3,7 @@ wv.naturalEvents = wv.naturalEvents || {};
 
 wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
-  var self = {}, eventAlert, $footer, view;
+  var self = {}, eventAlert, $footerNote, $showAllBtn, view;
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
@@ -33,7 +33,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           self.filterEventList();
         } else {
           $('.map-item-list .item').show();
-          $footer.hide();
+          $showAllBtn.hide();
+          $footerNote.text('Showing all active events in list.');
           ui.sidebar.sizeEventsTab();
         }
       });
@@ -152,32 +153,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         $thisItem.hide();
       }
     });
-    $footer.show();
+    $showAllBtn.show();
+    $footerNote.text('Off-map events are hidden.');
     ui.sidebar.sizeEventsTab();
-  };
-
-  var addFooter = function(){
-    var $container = $('#wv-events');
-    var $footer = $('<footer />');
-    var $note = $('<p />', {
-      text: 'Only showing events in view.'
-    });
-    var $showAllBtn = $('<button />', {
-      class: 'action',
-      id: 'show-all-events',
-      text: 'List All',
-      click: function(){
-        $('.map-item-list .item').show();
-        $footer.hide();
-        ui.sidebar.sizeEventsTab();
-      }
-    });
-    $showAllBtn.button();
-    $footer.append($note);
-    $footer.append($showAllBtn);
-    $container.append($footer);
-    $footer.hide();
-    return $footer;
   };
 
   var getEventById = function(id) {
@@ -197,7 +175,27 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     _.each(model.data.events, function(event) {
       createEventElement($content, event);
     });
-    $footer = addFooter();
+
+    var $footer = $('<footer />');
+    $footerNote = $('<p />', {
+      text: 'Showing all active events in list.'
+    });
+    $showAllBtn = $('<button />', {
+      class: 'action',
+      id: 'show-all-events',
+      text: 'Show All',
+      click: function(){
+        $('.map-item-list .item').show();
+        $showAllBtn.hide();
+        $footerNote.text('Showing all active events in list.');
+        ui.sidebar.sizeEventsTab();
+      }
+    });
+    $showAllBtn.button();
+    $footer.append($footerNote);
+    $footer.append($showAllBtn);
+    $('#wv-events').append($footer);
+    $showAllBtn.hide();
   };
 
   var createEventElement = function($content, event) {
