@@ -154,6 +154,9 @@
 .marker-wildfires use {
   fill: #8d3b36;
 }
+.wv-map .marker:not(.marker-selected) {
+  height: 25px;
+}
 .wv-map .marker:not(.marker-selected):hover {
   transform: scale(1.2);
   transform-origin: center bottom;
