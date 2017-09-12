@@ -99,8 +99,15 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
 };
 
 var passEventToTarget = function(event, target) {
-  var eventCopy = new event.constructor(event.type, event);
-  target.dispatchEvent(eventCopy);
+  var eventCopy;
+  try {
+    eventCopy = new event.constructor(event.type, event);
+    target.dispatchEvent(eventCopy);
+  } catch (e) {
+    // The event that this forwards is significantly different than the original
+    eventCopy = new CustomEvent(event.type, event);
+    target.dispatchEvent(eventCopy);
+  }
 };
 
 var createPin = function(id, eventCategory, isSelected){
