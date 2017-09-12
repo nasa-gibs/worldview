@@ -213,6 +213,24 @@
   left: auto !important;
 }
 
+.notify-alert .ui-dialog-content div::after {
+  pointer-events: none;
+  transform: translateY(50%);
+  bottom: 50%;
+  height: 10px;
+  content: 'Read more \002026 ';
+  float: right;
+  position: absolute;
+  display: block;
+  z-index: 999;
+  right: 45px;
+  font-size: 13px;
+}
+
+.notify-alert .ui-dialog-content div:hover::after {
+  color: #000;
+}
+
 @media screen and (max-device-height: 720px) {
   .notify-alert {
     display: none;

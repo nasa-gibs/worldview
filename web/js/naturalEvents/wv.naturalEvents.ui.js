@@ -57,7 +57,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         }
 
         // Show message about events not being visible
-        eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times', 800, 'warning');
+        eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times.', 800, 'warning');
 
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
