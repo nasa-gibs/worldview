@@ -75,6 +75,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   };
 
   self.selectEvent = function(id, date) {
+    var isIdChange = (!self.selected || self.selected.id !== id);
 
     // Store selected id and date in model
     self.selected = {id: id};
@@ -94,7 +95,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
     zoomToEvent(event, date).then(function(){
-      activateLayersForCategory(event.categories[0].title);
+      if (isIdChange) activateLayersForCategory(event.categories[0].title);
       models.date.select(wv.util.parseDateUTC(date));
       /* For Wildfires that didn't happen today, move the timeline forward a day
        * to improve the chance that the fire is visible.
