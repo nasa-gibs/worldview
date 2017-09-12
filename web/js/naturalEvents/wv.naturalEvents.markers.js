@@ -102,17 +102,21 @@ var passEventToTarget = function(event, target) {
 
 var createPin = function(id, eventCategory, isSelected){
   // Build SVG Element, using this instead of an img element allows styling with CSS
+  // Note xlink:href is required by Safari, href by other browsers
   var wrapper = document.createElement('div');
   var svgNS = 'http://www.w3.org/2000/svg';
+  var xlinkNS = 'http://www.w3.org/1999/xlink';
   var svgEl = document.createElementNS(svgNS, 'svg');
   var eventSymbol = document.createElementNS(svgNS, 'use');
 
   eventSymbol.setAttribute('href', '#marker-' + eventCategory);
+  eventSymbol.setAttributeNS(xlinkNS, 'xlink:href', '#marker-' + eventCategory);
   wrapper.setAttribute('class', 'marker marker-' + eventCategory);
 
   if (isSelected) {
     var pinSymbol = eventSymbol.cloneNode(true);
     pinSymbol.setAttribute('href', '#marker-pin');
+    pinSymbol.setAttributeNS(xlinkNS, 'xlink:href', '#marker-pin');
     wrapper.classList.add('marker-selected');
     svgEl.setAttribute('width', 36);
     svgEl.setAttribute('height', 42);
@@ -120,6 +124,7 @@ var createPin = function(id, eventCategory, isSelected){
   } else {
     var dotSymbol = eventSymbol.cloneNode(true);
     dotSymbol.setAttribute('href', '#marker-dot');
+    dotSymbol.setAttributeNS(xlinkNS, 'xlink:href', '#marker-dot');
     svgEl.setAttribute('width', 25);
     svgEl.setAttribute('height', 29);
     svgEl.appendChild(dotSymbol);

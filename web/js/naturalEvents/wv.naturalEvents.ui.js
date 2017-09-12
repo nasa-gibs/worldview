@@ -216,11 +216,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     // Build SVG Element, using this instead of an img element allows styling with CSS
     var wrapper = document.createElement('div');
     var svgNS = 'http://www.w3.org/2000/svg';
+    var xlinkNS = 'http://www.w3.org/1999/xlink';
     var svgEl = document.createElementNS(svgNS, 'svg');
     var eventSymbol = document.createElementNS(svgNS, 'use');
     eventSymbol.setAttribute('href', '#marker-' + event.categories[0].slug);
+    eventSymbol.setAttributeNS(xlinkNS, 'xlink:href', '#marker-' + event.categories[0].slug);
     var dotSymbol = eventSymbol.cloneNode(true);
     dotSymbol.setAttribute('href', '#marker-dot-2');
+    dotSymbol.setAttributeNS(xlinkNS, 'xlink:href', '#marker-dot-2');
     svgEl.setAttribute('width', 35);
     svgEl.setAttribute('height', 35);
     svgEl.appendChild(dotSymbol);
