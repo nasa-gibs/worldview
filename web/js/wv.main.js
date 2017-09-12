@@ -231,7 +231,6 @@ $(function() {
         }
       });
 
-    svg4everybody(); // Polyfill SVG features for IE
     document.activeElement.blur();
     $("input")
       .blur();

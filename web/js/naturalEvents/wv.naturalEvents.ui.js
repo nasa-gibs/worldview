@@ -213,7 +213,21 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     var $item = $('<li></li>').addClass('selectorItem').addClass('item').addClass(event.categories[0].slug).attr('data-id', event.id);
     var $title = $('<h4></h4>').addClass('title').html(event.title + '<br/>' + dateString);
     var $subtitle = $('<p></p>').addClass('subtitle').html(event.description).hide();
-    var $mapMarker = $('<i></i>').addClass('map-marker').attr('title', event.categories[0].title);
+
+    // Build SVG Element, using this instead of an img element allows styling with CSS
+    var wrapper = document.createElement('div');
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var svgEl = document.createElementNS(svgNS, 'svg');
+    var eventSymbol = document.createElementNS(svgNS, 'use');
+    eventSymbol.setAttribute('href', '#marker-' + event.categories[0].slug);
+    var dotSymbol = eventSymbol.cloneNode(true);
+    dotSymbol.setAttribute('href', '#marker-dot-2');
+    svgEl.setAttribute('width', 35);
+    svgEl.setAttribute('height', 35);
+    svgEl.appendChild(dotSymbol);
+    svgEl.appendChild(eventSymbol);
+    wrapper.setAttribute('class', 'marker marker-' + event.categories[0].slug);
+    wrapper.appendChild(svgEl);
 
     var $dates = $('<ul></ul>').addClass('dates').hide();
 
@@ -230,7 +244,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       });
     }
 
-    $item.append($mapMarker).append($title).append($subtitle).append($dates);
+    $item.append(wrapper).append($title).append($subtitle).append($dates);
     var references = Array.isArray(event.sources)?event.sources:[event.sources];
     if (references.length > 0) {
       items = [];
