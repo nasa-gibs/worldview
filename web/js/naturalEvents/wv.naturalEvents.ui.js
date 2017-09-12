@@ -146,7 +146,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       }
 
       var isVisible = ol.extent.containsCoordinate(extent, coordinates);
-      var $thisItem = $('.map-item-list .item[data-id='+naturalEvent.id);
+      var $thisItem = $('.map-item-list .item[data-id='+naturalEvent.id+']');
       if (isVisible) {
         $thisItem.show();
       } else {
