@@ -2,8 +2,8 @@ var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
 wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, config) {
   var self = {}, map;
-
   map = map || ui.map.selected;
+  var olViewport = map.getViewport();
 
   self.draw = function() {
     if (!(models.naturalEvents && models.naturalEvents.data)) return null;
@@ -26,9 +26,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
       if (!geometry) return marker;
 
       var coordinates = geometry.coordinates;
-      var category = Array.isArray(event.categories)
-        ? event.categories[0]
-        : event.categories;
+      var category = event.categories[0];
       // Assign a default category if we don't have an icon
       var icons = [
         "Dust and Haze",
@@ -58,37 +56,30 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
       marker.pin = createPin(event.id, category.slug, isSelected);
       marker.pin.setPosition(coordinates);
       map.addOverlay(marker.pin);
-      map.renderSync(); // Marker position will be off until this is called
 
       // Add event listeners
       var willSelect = true;
-      [
-        'click',
-        'wheel',
-        'pointerdrag',
-        'pointerdown',
-        'pointerup',
-        'pointermove'
-      ].forEach(function(type){
-        var pinEl = marker.pin.element_;
-        var olViewport = pinEl.parentNode.parentNode;
+      var pinEl = marker.pin.element_;
+      pinEl.addEventListener('pointerdown', function(e){
+        willSelect = true;
+        passEventToTarget(e, olViewport);
+      });
+      ['pointermove', 'wheel', 'pointerdrag', 'pointerup'].forEach(function(type){
         pinEl.addEventListener(type, function(e){
-          if (type === 'pointerdown') {
-            willSelect = true;
-          }
-          if (type === 'pointermove' || type === 'wheel') {
-            willSelect = false;
-          }
-          if (type === 'click' && willSelect && !isSelected) {
-            ui.naturalEvents.selectEvent(event.id,date);
-          } else {
-            passEventToTarget(e, olViewport);
-          }
+          if (type === 'pointermove' || type === 'wheel') willSelect = false;
+          passEventToTarget(e, olViewport);
         });
       });
-
+      pinEl.addEventListener('click', function(e){
+        if (willSelect && !isSelected) {
+          ui.naturalEvents.selectEvent(event.id,date);
+        } else {
+          passEventToTarget(e, olViewport);
+        }
+      });
       return marker;
     });
+    map.renderSync(); // Marker position will be off until this is called
     return markers;
   };
 
