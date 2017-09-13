@@ -48,11 +48,11 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
       .on("granuleSelect", updateSelection)
       .on("granuleUnselect", updateSelection);
     $(window)
-      .resize(resize);
+      .resize(sizeDownloadTab);
 
     ui.sidebar.events.on("selectTab", function(tab) {
       if (tab === "download") {
-        resize();
+        sizeDownloadTab();
         model.activate();
       } else {
         model.deactivate();
@@ -62,27 +62,23 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
   self.render = function() {
     var $footer = $('<footer />');
-
     var $container = $(self.selector).empty();
-
-    var $actionButton = $("<button></button>")
-      .attr("id", "wv-data-download-button")
-      .addClass("action footer-content")
-      .attr("type", "button")
-      .attr("value", "")
-      .on("click", showDownloadList);
-
-    $footer.append($actionButton);
-
-    var $list = $("<div />", {
+    var $actionButton = $('<button />', {
+      id: 'wv-data-download-button',
+      class: 'action',
+      type: 'button',
+      value: '',
+      click: showDownloadList,
+      text: 'No Data Selected'
+    });
+    var $list = $('<div />', {
       class: 'wv-datalist bank content',
       id: 'wv-datacontent'
     });
+    $actionButton.button();
+    $footer.append($actionButton);
     $container.append($list);
     $container.append($footer);
-
-    $("#wv-data-download-button")
-      .button();
 
     self.refresh();
 
@@ -176,31 +172,20 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     $container.append($item);
   };
 
-  var resize = function() {
-    sizeDownloadTab();
-  };
   var productsIsOverflow = false;
   var sizeDownloadTab = function() {
-    var winSize = $(window)
-      .outerHeight(true);
-    var headSize = $("ul#productsHolder-tabs")
-      .outerHeight(true); //
-    var footSize = $("section#productsHolder footer")
-      .outerHeight(true);
-    var secSize = $("#productsHolder")
-      .innerHeight() - $("#productsHolder")
-        .height();
-    var offset = $("#productsHolder")
-      .offset();
-    var timeSize = $("#timeline")
-      .outerHeight(true); // + $("#timeline").offset()['top'];
+    var $tabPanel = $('#wv-data');
+    var $tabFooter = $tabPanel.find('footer');
+    var windowHeight = $(window).outerHeight(true);
+    var tabBarHeight = $('ul#productsHolder-tabs').outerHeight(true);
+    var footerHeight = $tabFooter.outerHeight(true);
+    var distanceFromTop = $("#productsHolder").offset().top;
+    var timelineHeight = $("#timeline").outerHeight(true);
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
-    var maxHeight = winSize - headSize -
-      offset.top - timeSize - secSize - 10 - 5;
-    $(self.selector)
-      .css("max-height", maxHeight);
+    var maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - timelineHeight - 10 - 5;
+    $tabPanel.css("max-height", maxHeight);
 
     var childrenHeight = $('#wv-datacontent')
       .outerHeight(true);

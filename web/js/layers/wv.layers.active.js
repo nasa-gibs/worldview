@@ -355,36 +355,26 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
   };
   var productsIsOverflow = false;
   var sizeProducts = function() {
-    var winSize = $(window)
-      .outerHeight(true);
-    var headSize = $("ul#productsHolder-tabs")
-      .outerHeight(true); //
-    var footSize = $("section#productsHolder footer")
-      .outerHeight(true);
-    var secSize = $("#productsHolder")
-      .innerHeight() - $("#productsHolder")
-        .height();
-    var offset = $("#productsHolder")
-      .offset();
-    var timeSize = $("#timeline")
-      .outerHeight(true);
+    var $tabPanel = $('section#productsHolder #products');
+    var $tabFooter = $tabPanel.find('footer');
+    var windowHeight = $(window).outerHeight(true);
+    var tabBarHeight = $("ul#productsHolder-tabs").outerHeight(true); //
+    var footerHeight = $tabFooter.outerHeight(true);
+    var distanceFromTop = $("#productsHolder").offset().top;
+    var timelineHeight = $("#timeline").outerHeight(true);
     var maxHeight;
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
-
     if (wv.util.browser.small) {
-      maxHeight = winSize - headSize -
-        offset.top - secSize - 10 - 5;
+      maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - 10 - 5;
     } else {
       //FIXME: Hack, the timeline sometimes renders twice as large of a height and
-      //creates a miscalculation here for timeSize
-      maxHeight = winSize - headSize -
-        offset.top - /*timeSize*/ 67 - secSize - 10 - 5;
+      //creates a miscalculation here for timelineHeight
+      maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - /*timelineHeight*/ 67 - 10 - 5;
     }
 
-    $("section#productsHolder #products")
-      .css("max-height", maxHeight);
+    $tabPanel.css("max-height", maxHeight);
 
     // 26 is the combined height of the OVERLAYS and BASE LAYERS titles.
     var childrenHeight = $('ul#overlays')
