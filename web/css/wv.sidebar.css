@@ -13,7 +13,6 @@
   -o-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0;
-  padding-bottom: 40px;
 }
 
 #productsHolder .layer-container {
@@ -31,7 +30,7 @@
 }
 
 #productsHolder footer {
-  bottom: -40px;
+  bottom: 0;
   position: absolute;
   padding: 5px;
 }

@@ -3,7 +3,7 @@ wv.naturalEvents = wv.naturalEvents || {};
 
 wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
-  var self = {}, eventAlert, $footerNote, $showAllBtn, view;
+  var self = {}, eventAlert, $footer, view;
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
@@ -33,8 +33,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           self.filterEventList();
         } else {
           $('.map-item-list .item').show();
-          $showAllBtn.hide();
-          $footerNote.text('Showing all active events in list.');
+          $footer.hide();
           ui.sidebar.sizeEventsTab();
         }
       });
@@ -153,8 +152,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         $thisItem.hide();
       }
     });
-    $showAllBtn.show();
-    $footerNote.text('Off-map events are hidden.');
+    $footer.show();
     ui.sidebar.sizeEventsTab();
   };
 
@@ -176,18 +174,17 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       createEventElement($content, event);
     });
 
-    var $footer = $('<footer />');
-    $footerNote = $('<p />', {
-      text: 'Showing all active events in list.'
+    $footer = $('<footer />');
+    var $footerNote = $('<p />', {
+      text: 'Off-map events are hidden.'
     });
-    $showAllBtn = $('<button />', {
+    var $showAllBtn = $('<button />', {
       class: 'action',
       id: 'show-all-events',
       text: 'Show All',
       click: function(){
         $('.map-item-list .item').show();
-        $showAllBtn.hide();
-        $footerNote.text('Showing all active events in list.');
+        $footer.hide();
         ui.sidebar.sizeEventsTab();
       }
     });
@@ -195,7 +192,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $footer.append($footerNote);
     $footer.append($showAllBtn);
     $('#wv-events').append($footer);
-    $showAllBtn.hide();
+    $footer.hide();
   };
 
   var createEventElement = function($content, event) {

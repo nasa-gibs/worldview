@@ -118,6 +118,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     if (wv.util.browser.localStorage) {
       localStorage.setItem("sidebarState", "expanded");
     }
+    // Resize after browser repaints
+    setTimeout(function(){
+      self.sizeEventsTab();
+    }, 100);
   };
 
   self.expandNow = function() {
@@ -135,24 +139,27 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
   };
 
   self.sizeEventsTab = function() {
-    var winSize = $(window).outerHeight(true);
-    var headSize = $('ul#productsHolder-tabs').outerHeight(true);
-    var head2Size = $('#wv-events-facets').outerHeight(true);
-    var secSize = $('#productsHolder').innerHeight() - $('#productsHolder').height();
-    var offset = $('#productsHolder').offset();
-    var timeSize = $('#timeline').outerHeight(true);
+    var $tabPanel = $('#wv-events');
+    var $tabFooter = $tabPanel.find('footer');
+    var footerIsVisible = $tabFooter.css('display') === 'block';
+    var windowHeight = $(window).outerHeight(true);
+    var tabBarHeight = $('ul#productsHolder-tabs').outerHeight(true);
+    var distanceFromTop = $('#productsHolder').offset().top;
+    var timelineHeight = $('#timeline').outerHeight(true);
+    var footerHeight = footerIsVisible ? $tabFooter.outerHeight(true) : 0;
+    $tabPanel.css('padding-bottom', footerHeight);
+    var tabPadding = $tabPanel.outerHeight(true) - $tabPanel.height();
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
-    var maxHeight = winSize - headSize - head2Size -
-      offset.top - secSize;
+    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding;
     if (!wv.util.browser.small) {
-      maxHeight = maxHeight - timeSize - 10 - 5;
+      maxHeight = maxHeight - timelineHeight - 10 - 5;
     }
-    $('#wv-events').css('max-height', maxHeight);
+    $tabPanel.css('max-height', maxHeight);
+    $('.wv-eventslist').css('min-height', 1);
 
-    var childrenHeight =
-      $('#wv-eventscontent').outerHeight(true);
+    var childrenHeight = $('#wv-eventscontent').outerHeight(true);
 
     if ((maxHeight <= childrenHeight)) {
       $('.wv-eventslist').css('height', maxHeight).css('padding-right', '10px');
