@@ -11,7 +11,8 @@
   "scripts": {
     "test": "grunt test lint",
     "start": "node ./bin/www",
-    "preinstall": "node version-check.js"
+    "preinstall": "node version-check.js",
+    "options-check": "git-check.sh"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
