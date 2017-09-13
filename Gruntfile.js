@@ -378,10 +378,6 @@ module.exports = function(grunt) {
         command: findCmd
       },
 
-      options_check: {
-        command: 'options-check.sh'
-      },
-
       fetch: {
         command: "bash -c \"PATH=" + pythonPath + ":\"${PATH}\" FETCH_GC=1 bin/wv-options-build \"" + env
       },
@@ -764,8 +760,6 @@ module.exports = function(grunt) {
     "copy:dist_config_versioned"
   ]);
 
-  grunt.registerTask("options-check", ["exec:options_check"]);
-
   grunt.registerTask("fetch", ["exec:fetch"]);
 
   grunt.registerTask("site", [
@@ -808,7 +802,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask("default", [
     "update-packages",
-    "options-check",
     "fetch",
     "update",
     "build",
