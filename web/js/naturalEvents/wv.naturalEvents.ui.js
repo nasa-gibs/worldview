@@ -206,29 +206,20 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       dateString += ', ' + eventDate.getUTCFullYear();
     }
 
-    var $item = $('<li></li>').addClass('selectorItem').addClass('item').addClass(event.categories[0].slug).attr('data-id', event.id);
-    var $title = $('<h4></h4>').addClass('title').html(event.title + '<br/>' + dateString);
-    var $subtitle = $('<p></p>').addClass('subtitle').html(event.description).hide();
-
-    // Build SVG Element, using this instead of an img element allows styling with CSS
-    var wrapper = document.createElement('div');
-    var svgNS = 'http://www.w3.org/2000/svg';
-    var xlinkNS = 'http://www.w3.org/1999/xlink';
-    var svgEl = document.createElementNS(svgNS, 'svg');
-    var eventSymbol = document.createElementNS(svgNS, 'use');
-    eventSymbol.setAttribute('href', '#marker-' + event.categories[0].slug);
-    eventSymbol.setAttributeNS(xlinkNS, 'xlink:href', '#marker-' + event.categories[0].slug);
-    var dotSymbol = eventSymbol.cloneNode(true);
-    dotSymbol.setAttribute('href', '#marker-dot-2');
-    dotSymbol.setAttributeNS(xlinkNS, 'xlink:href', '#marker-dot-2');
-    svgEl.setAttribute('width', 35);
-    svgEl.setAttribute('height', 35);
-    svgEl.appendChild(dotSymbol);
-    svgEl.appendChild(eventSymbol);
-    wrapper.setAttribute('class', 'marker marker-' + event.categories[0].slug);
-    wrapper.appendChild(svgEl);
-
-    var $dates = $('<ul></ul>').addClass('dates').hide();
+    var $item = $('<li/>', { class: 'selectorItem item', 'data-id': event.id });
+    var $title = $('<h4/>', {
+      class: 'title',
+      html: event.title + '<br/>' + dateString
+    });
+    var $subtitle = $('<p/>', {
+      class: 'subtitle',
+      html: event.description
+    }).hide();
+    var $eventIcon = $('<i />', {
+      class: 'event-icon event-icon-' + event.categories[0].slug,
+      title: event.categories[0].title
+    });
+    var $dates = $('<ul/>', { class: 'dates' }).hide();
 
     if (event.geometries.length > 1) {
       var eventIndex = 0;
@@ -237,13 +228,18 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         date = geometry.date.split('T')[0];
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
-        $date = $('<a></a>').addClass('date').attr('data-date', date).attr('data-id', event.id).html(date);
+        $date = $('<a/>', {
+          class: 'date',
+          'data-id': event.id,
+          'data-date': date,
+          html: date
+        });
 
         $dates.append($('<li class="dates"></li>').append($date));
       });
     }
 
-    $item.append(wrapper).append($title).append($subtitle).append($dates);
+    $item.append($eventIcon).append($title).append($subtitle).append($dates);
     var references = Array.isArray(event.sources)?event.sources:[event.sources];
     if (references.length > 0) {
       items = [];
