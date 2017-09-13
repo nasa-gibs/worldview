@@ -176,12 +176,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     $footer = $('<footer />');
     var $footerNote = $('<p />', {
-      text: 'Off-map events are hidden.'
+      text: 'Only events in current map view are listed'
     });
     var $showAllBtn = $('<button />', {
       class: 'action',
       id: 'show-all-events',
-      text: 'Show All',
+      text: 'List All',
       click: function(){
         $('.map-item-list .item').show();
         $footer.hide();
