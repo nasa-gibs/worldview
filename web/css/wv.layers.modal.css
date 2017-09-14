@@ -283,7 +283,7 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -o-box-sizing: border-box;
-    height:48px;
+
 }
 #selected-category .ui-accordion-header,
 #layers-all .layers-all-layer {

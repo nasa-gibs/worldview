@@ -37,10 +37,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var projection = models.proj.selected.id;
     var layerList = React.createFactory(WVC.LayerList);
     var modalHeight;
+    var modalWidth;
     var sizeMultiplier;
     var searchBool;
-    var copy;
-    var props ={};
+    var copy = [];
 
     //Visible Layers
     var visible = {};
@@ -90,6 +90,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         if(sizeMultiplier < 1) sizeMultiplier = 1;
         if(sizeMultiplier > 3) sizeMultiplier = 3;
         modalHeight = $( window ).height() - 100;
+        modalWidth = gridItemWidth * sizeMultiplier + 10;
+        if(self.reactList){
+            self.reactList.setState({width: modalWidth});
+        }
     };
 
     $.fn.hasScrollBar = function() {
@@ -102,7 +106,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         $( self.selector ).dialog( "option", {
             height: modalHeight,
-            width: gridItemWidth * sizeMultiplier + 10,
+            width: modalWidth,
         });
 
         $( '#layer-modal-main' ).css( 'height', modalHeight - 40 )
@@ -606,12 +610,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     };
 
     self.readySearch = function(){
-        copy = config.layerOrder;
         return layerList({
-            onClick: function(){},
-            layerArray: copy,
+            layerArray: config.layerOrder,
             layers: config.layers,
-            style: 'background: #000;'
+            onState: model.add,
+            offState: model.remove
         });
     };
     // TODO: Filter layers by settings with projections equal to current projection.
@@ -623,65 +626,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         layerWidget = self.readySearch();
 
         self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
-
-        /*
-        _.each( config.layerOrder, function( layerId ) {
-
-            var current = config.layers[layerId];
-
-            //Check if layer is equal to the current projection, then output
-            if(Object.keys(current.projections).indexOf(projection) > -1) {
-                if ( !current ) {
-                    console.warn("In layer order but not defined", layerId);
-                }
-                else {
-                    /*
-                    var $layerItem = $( '<li></li>' )
-                        .attr('id', 'layer-flat-' + current.id )
-                        .attr("data-layer", encodeURIComponent(current.id))
-                        .addClass('layers-all-layer')
-                        .click( function( e ){
-                            $( this ).find('input#' + encodeURIComponent(current.id))
-                                .iCheck('toggle');
-                        });
-
-                    var $layerTitle = $( '<h3></h3>' )
-                        .text( current.title );
-
-                    var $layerSubtitle = $('<h5></h5>')
-                        .append( current.subtitle );
-
-                    var $checkbox = $("<input></input>")
-                        .attr("id", encodeURIComponent(current.id))
-                        .attr("value", current.id)
-                        .attr("type", "checkbox")
-                        .attr("data-layer", current.id)
-                        .on('ifChecked', addLayer)
-                        .on('ifUnchecked', removeLayer);
-
-                    if ( _.find(model.active, {id: current.id}) ) {
-                        $checkbox.attr("checked", "checked");
-
-                    }
-
-                    $layerItem.append( $checkbox );
-                    $layerItem.append( $layerTitle );
-                    $layerItem.append( $layerSubtitle );
-
-                    $fullLayerList.append( $layerItem );
-                }
-            }
-        });
-
-        */
-
+        self.reactList.setState({showLayers: true});
 
         $selectedCategory.hide();
         $categories.hide();
         $nav.hide();
         $allLayers.show();
-
-        //$allLayers.iCheck( { checkboxClass: 'icheckbox_square-red' } );
 
         // Create breadcrumb crumbs
         $breadcrumb.empty();
@@ -808,11 +758,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
         //Create dialog/modal
         //TODO: move to general dialog creator (wv.ui)
+
         $( self.selector ).dialog({
             autoOpen: false,
             resizable: false,
             height: modalHeight,
-            width: gridItemWidth * sizeMultiplier + 10,
+            width: modalWidth,
             modal: true,
             dialogClass: "layer-modal no-titlebar",
             draggable: false,
@@ -906,8 +857,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     
     var runSearch = _.throttle( function() {
         var search = searchTerms();
-        var copy = [];
-
+        copy = [];
         $.each(config.layers, function(layerId, layer) {
 
             var fproj = filterProjections(layer);
@@ -919,21 +869,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             if( !filtered ) {
                 copy.push(layerId);
             }
-            //var display = filtered ? "none": "block";
-            //var selector = "#flat-layer-list li[data-layer='" +
-            //    wv.util.jqueryEscape(layerId) + "']";
-            //$(selector).css("display", display);
-            
         });
 
-        props.layerList = copy;
-        layerWidget = layerList({
-            onState: model.add,
-            offState: model.remove,
-            layerArray: copy,
-            layers: config.layers
-        });
-        self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
+        self.reactList.setState({layerFilter: copy});
 
         redoScrollbar();
     }, 250, { trailing: true });
@@ -955,9 +893,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                 drawAllLayers();
             }
             runSearch();
+
         }
         else {
             drawModal();
+            copy = config.layerOrder;
         }
     };
 
