@@ -188,9 +188,10 @@ g.plot rect.data-bar-invisible {
 
 .button-action-group,
 .date-arrows {
-  -moz-user-select: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
   -ms-user-select: none;
+  user-select: none;
 }
 
 .button-action-group {

@@ -27,6 +27,10 @@
   -o-box-sizing: border-box;
   padding: 0.5em 0.7em;
   float: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .ui-tabs-nav {
@@ -83,8 +87,8 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  vertical-align: middle;
-  background: url("../images/wv-icons.svg") transparent 0 -10px;
+  vertical-align: text-bottom;
+  background: url("../images/icon-sprite.svg") transparent 0 -10px;
   margin: 0 7px 0 0;
 }
 
@@ -109,7 +113,7 @@ ul#productsHolder-tabs .tab:hover i.icon-download {
   background-position: -30px 20px;
 }
 
-ul#productsHoldertabs li.ui-state-active .tab:hover i.icon-download {
+ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-download {
   background-position: -30px -10px;
 }
 
@@ -133,23 +137,16 @@ ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-add {
   background-position: -120px -10px;
 }
 
-.icon-events,
-ul#productsHolder-tabs li.ui-state-active.ui-state-hover i.icon-events {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-  background: url("../images/events-icon.png");
-  margin: 0 5px 0 0;
+.icon-events {
+  background-position: -150px -10px;
 }
 
-ul#productsHoldertabs li.ui-state-active i.icon-events {
-  margin-right: 5px;
+ul#productsHolder-tabs .tab:hover i.icon-events {
+  background-position: -150px 20px;
 }
 
-ul#productsHolder-tabs li.ui-state-hover i.icon-events {
-  background: url("../images/events-icon-highlight.png");
-  margin-right: 5px;
+ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-events {
+  background-position: -150px -10px;
 }
 
 ul#productsHoldertabs li.ui-state-active i.productsIcon {
