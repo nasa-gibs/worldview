@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.layers
  */
@@ -262,7 +251,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
   };
 
   var reinitializeScrollbars = function() {
-    var pane = $("." + self.id + "category")
+    $("." + self.id + "category")
       .each(function() {
         var api = $(this)
           .data('jsp');
@@ -281,41 +270,38 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
         .parent()
         .outerHeight() - tabs_height);
 
-    if (!wv.util.browser.small || true /* Use on mobile too for now */ ) {
-      if (jsp) {
-        var api = jsp.data('jsp');
-        if (api) {
-          api.destroy();
-        }
-      }
-      if (wv.util.browser.ie) {
-        jsp = $("." + self.id + "category")
-          .jScrollPane({
-            verticalDragMinHeight: 20,
-            autoReinitialise: false,
-            verticalGutter: 0,
-            mouseWheelSpeed: 60
-          });
-      } else {
-        jsp = $("." + self.id + "category")
-          .jScrollPane({
-            verticalDragMinHeight: 20,
-            autoReinitialise: false,
-            verticalGutter: 0
-          });
+    if (jsp) {
+      var api = jsp.data('jsp');
+      if (api) {
+        api.destroy();
       }
     }
-    //setTimeout(adjustCategoryHeights, 1);
+    if (wv.util.browser.ie) {
+      jsp = $("." + self.id + "category")
+        .jScrollPane({
+          verticalDragMinHeight: 20,
+          autoReinitialise: false,
+          verticalGutter: 0,
+          mouseWheelSpeed: 60
+        });
+    } else {
+      jsp = $("." + self.id + "category")
+        .jScrollPane({
+          verticalDragMinHeight: 20,
+          autoReinitialise: false,
+          verticalGutter: 0
+        });
+    }
     adjustCategoryHeights();
   };
 
-  var addLayer = function(event) {
+  var addLayer = function() {
     model.add(decodeURIComponent($(this)
       .attr("data-layer")));
 
   };
 
-  var removeLayer = function(event) {
+  var removeLayer = function() {
     model.remove(decodeURIComponent($(this)
       .attr("data-layer")));
   };
@@ -339,7 +325,6 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
   };
 
   var adjustTitles = function() {
-    var proj = models.proj.selected.id;
     _.each(config.layers, function(def) {
       var names = models.layers.getTitles(def.id);
       $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
@@ -355,7 +340,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     if (!config.aoi) {
       return;
     }
-    $select = $("#" + self.id + "select");
+    var $select = $("#" + self.id + "select");
     var previous = $(self.selector + "select")
       .val();
 
@@ -397,19 +382,6 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     return terms;
   };
 
-  var filterAreaOfInterest = function(layerId) {
-    if (!config.aoi) {
-      return false;
-    }
-    var aoi = $(self.selector + "select")
-      .val();
-    if (aoi === "All") {
-      return false;
-    }
-    return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 &&
-      $.inArray(layerId, config.aoi[aoi].overlays) < 0;
-  };
-
   var filterProjection = function(layer) {
     return !layer.projections[models.proj.selected.id];
   };
@@ -439,15 +411,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
   var filter = _.throttle(function() {
     var search = searchTerms();
     $.each(config.layers, function(layerId, layer) {
-      //var faoi = filterAreaOfInterest(layerId);
       var fproj = filterProjection(layer);
       var fterms = filterSearch(layer, search);
-      /*
-      if ( layerId.startsWith("carto") ) {
-          console.log(layerId, "faoi", faoi, "fproj", fproj, "fterms", fterms);
-          console.log(wv.util.jqueryEscape(layerId));
-      }
-      */
       var filtered = fproj || fterms;
       var display = filtered ? "none" : "block";
       var selector = "#selectorbox li[data-layer='" +

@@ -1,29 +1,8 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
 var wv = wv || {};
 wv.map = wv.map || {};
-
-/*
- * @Class
- */
 wv.map.animate = wv.map.animate || function(models, config, ui) {
 
-  var model = models.map;
   var self = {};
-
-  var lastLocation;
-
-  var init = function() {
-
-  };
 
   /**
    * Moves the map with a "flying" animation
@@ -32,7 +11,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
    * @param  {integer} endZoom Ending Zoom Level
    * @return {Promise}         Promise that is fulfilled when animation completes
    */
-  self.fly = function(endPoint, endZoom, cb) {
+  self.fly = function(endPoint, endZoom) {
     var view = ui.map.selected.getView();
     view.cancelAnimations();
     var startPoint = view.getCenter();
@@ -40,7 +19,6 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
     endZoom = endZoom || 5;
     if (endPoint.length > 2) endPoint = ol.extent.getCenter(endPoint);
     var extent = view.calculateExtent();
-    var projection = view.getProjection();
     var hasEndInView = ol.extent.containsCoordinate(extent, endPoint);
     var line = new ol.geom.LineString([startPoint, endPoint]);
     var distance = line.getLength(); // In map units, which is usually degrees
@@ -53,9 +31,7 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
           if (!complete) reject(new Error('Animation interrupted!'));
         });
         view.animate.apply(view, args);
-      }).catch(function(err){
-        // Do nothing
-      });
+      }).catch(function(){});
     };
     if (hasEndInView) {
       // If the event is already visible, don't zoom out
@@ -97,68 +73,5 @@ wv.map.animate = wv.map.animate || function(models, config, ui) {
     return Math.max(2, Math.min(bestFit.zoom, start-1, end-1));
   };
 
-  /*
-   * Zooms in to next event location
-   *
-   * @method zoom
-   * @private
-   *
-   * @param {object} view - OL view Object
-   * @param {number} duration - time of map animation
-   * @param {Object} newZoom - Zoom level at the end of animation
-   *
-   * @returns {void}
-   */
-  var zoom = function(view, duration, newZoom) {
-    view.animate({
-      duration: duration,
-      zoom: newZoom,
-    });
-  };
-  /*
-   * A method that zooms of a current zoom level and then
-   *  back down into the zoom level of the next event
-   *
-   * @method bouce
-   * @private
-   *
-   * @param {object} view - OL view Object
-   * @param {number} duration - time of map animation
-   * @param {array} bounceZoom - Outmost zoom level of animation
-   * @param {Object} newZoom - Zoom level at the end of animation
-   *
-   * @returns {void}
-   */
-  var bounce = function(view, duration, bounceZoom, newZoom) {
-    view.animate({
-      zoom: bounceZoom,
-      duration: duration / 2
-    }, {
-      zoom: newZoom,
-      duration: duration / 2
-    });
-  };
-
-  /*
-   * Animates in direction of new coordinates
-   *
-   * @method fly
-   * @private
-   *
-   * @param {object} view - OL view Object
-   * @param {number} duration - time of map animation
-   * @param {array} location - Coordinates of Event
-   *
-   * @returns {void}
-   */
-  var fly = function(view, duration, location) {
-    view.animate({
-      duration: duration,
-      center: location
-    });
-  };
-
-  init();
   return self;
-
 };

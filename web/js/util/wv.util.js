@@ -355,7 +355,6 @@ wv.util = (function(self) {
   self.rollRange = function(date, interval, minDate, maxDate) {
     var y = date.getUTCFullYear();
     var m = date.getUTCMonth();
-    var d = date.getUTCDate();
     var first, last;
     switch (interval) {
       case "day":

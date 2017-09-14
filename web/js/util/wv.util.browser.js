@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.util
  */
@@ -284,30 +273,6 @@ if (!window.console) {
     };
   })();
 }
-
-/*
- * jQuery version 1.6 causes thousands of warnings to be emitted to the
- * console on WebKit based browsers with the following message:
- *
- * event.layerX and event.layerY are broken and deprecated in WebKit. They
- * will be removed from the engine in the near future.
- *
- * This has been fixed in jQuery 1.8 but Worldview currently doesn't
- * support that version. This fix copied from:
- *
- * http://stackoverflow.com/questions/7825448/webkit-issues-with-event-layerx-and-event-layery
- */
-(function() {
-  // remove layerX and layerY
-  var all = $.event.props,
-    len = all.length,
-    res = [];
-  while (len--) {
-    var el = all[len];
-    if (el != 'layerX' && el != 'layerY') res.push(el);
-  }
-  $.event.props = res;
-})();
 
 /*
  * Get rid of address bar on iphone/ipod

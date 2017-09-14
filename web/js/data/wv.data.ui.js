@@ -1,21 +1,9 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wv = wv || {};
 wv.data = wv.data || {};
 
 wv.data.ui = wv.data.ui || function(models, ui, config) {
 
   var queryActive = false;
-  var list = null;
   var model = models.data;
   var mapController = null;
   var selectionListPanel = null;
@@ -81,7 +69,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     $container.append($footer);
 
     self.refresh();
-
   };
 
   self.refresh = function() {
@@ -95,7 +82,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     });
 
     $('.dl-group[value="__NO_PRODUCT"] h3 span')
-      .click(function(e) {
+      .click(function() {
         showUnavailableReason();
       });
 
@@ -215,7 +202,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
   };
   self.onViewChange = function() {
-    var indicator;
     var map = ui.map.selected;
 
     if (!model.active || queryActive || !lastResults) {
@@ -244,10 +230,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
       indicators.noneInView =
         wv.ui.indicator.show("Zoom out or move map");
     }
-  };
-
-  var toggleMode = function() {
-    model.toggleMode();
   };
 
   var onActivate = function() {
@@ -339,7 +321,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
   };
 
   var updateSelection = function() {
-    $button = $("#wv-data-download-button");
+    var $button = $("#wv-data-download-button");
     var selected = _.size(model.selectedGranules);
     if (selected > 0) {
       $button.button("enable");
@@ -366,7 +348,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     if (downloadListPanel && downloadListPanel.visible()) {
       downloadListPanel.refresh();
     }
-
   };
 
   var showDownloadList = function() {
@@ -386,34 +367,20 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     downloadListPanel.show();
   };
 
-  var updatePreference = function(event, ui) {
-    model.setPreference(event.target.value);
-  };
-
   var showUnavailableReason = function() {
     var headerMsg = "<h3 class='wv-data-unavailable-header'>Why are these layers not available for downloading?</h3>";
     var bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.<br><br> Data download will not work for "Terra and Aqua" Fires, select Terra only Fires and/or Aqua only Fires to download the associated data files.';
 
     wv.ui.notify(headerMsg + bodyMsg, "Notice", 600);
-    /*
-    wv.ui.notify(headerMsg + bodyMsg, {
-        width: 600,
-        height: 275
-    });
-    */
   };
 
   init();
   return self;
-
 };
-
 
 wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
   (function() {
-
     var ns = {};
-
     var pages = {
       wget: "pages/wget.html",
       curl: "pages/curl.html"
@@ -486,15 +453,12 @@ wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
         });
       });
       var links = page.document.getElementById("links");
-      if (!links) {
-        // Page is not ready
-        return false;
-      }
+      if (!links) return false;
       links.innerHTML = "<pre>" + downloadLinks.join("\n") + "</pre>";
 
       var netrcEntries = [];
       var hostnames = [];
-      $.each(hosts, function(host, value) {
+      $.each(hosts, function(host) {
         netrcEntries.push("machine " + host + " login URS_USER " +
           "password URS_PASSWORD");
         hostnames.push(host);
@@ -530,14 +494,10 @@ wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
     };
 
     return ns;
-
   })();
 
-
 wv.data.ui.downloadListPanel = function(config, model) {
-
   var cmr = wv.data.cmr;
-
   var NOTICE =
     "<div id='wv-data-selection-notice'>" +
     "<i class='icon fa fa-info-circle fa-3x'></i>" +
@@ -636,12 +596,6 @@ wv.data.ui.downloadListPanel = function(config, model) {
     return false;
   };
 
-  var dispose = function() {
-    self.events.trigger("close");
-    panel.destroy();
-    panel = null;
-  };
-
   var reformatSelection = function() {
     var selection = {};
 
@@ -651,7 +605,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
         urs = true;
       }
       if (!selection[granule.product]) {
-        productConfig = config.products[granule.product];
+        var productConfig = config.products[granule.product];
         selection[granule.product] = {
           name: productConfig.name,
           granules: [granule],
@@ -663,7 +617,6 @@ wv.data.ui.downloadListPanel = function(config, model) {
       }
 
       var product = selection[granule.product];
-      var id = granule.product;
 
       // For each link that looks like metadata, see if that link is
       // repeated in all granules for that product. If so, we want to
@@ -758,8 +711,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
       titleVal = link.href.split("/")
         .slice(-1);
 
-      // Handle special case where link is a directory which ends with
-      // a '/'
+      // Handle special case where link is a directory which ends with /
       if (titleVal && titleVal.length && titleVal[0] === "") {
         titleVal = link.href;
       }
@@ -893,9 +845,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
   };
 
   return self;
-
 };
-
 
 wv.data.ui.selectionListPanel = function(model, results) {
 
@@ -950,13 +900,6 @@ wv.data.ui.selectionListPanel = function(model, results) {
     }
   };
 
-  var dispose = function() {
-    panel.destroy();
-    panel = null;
-    $("#wv-data-selection_GranuleList input")
-      .off("click", toggleSelection);
-  };
-
   var resultsText = function() {
     var elements = [];
     $.each(results.granules, function(index, granule) {
@@ -987,7 +930,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
     return text;
   };
 
-  var toggleSelection = function(event, ui) {
+  var toggleSelection = function() {
     var granule = granules[$(this)
       .attr("value")];
     var selected = $(this)
@@ -1004,8 +947,6 @@ wv.data.ui.selectionListPanel = function(model, results) {
       .removeAttr("checked");
   };
 
-
   init();
   return self;
-
 };

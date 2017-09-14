@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.ui
  */
@@ -95,11 +84,7 @@ wv.ui = (function(self) {
     });
     $messageWrapper.append($icon).append($message);
 
-    var $close = $('<i></i>').addClass('fa fa-times fa-1x').click(function() {
-      $alert.dialog('close');
-    });
-
-    $alert = $('<div></div>').append($close).append($messageWrapper).dialog({
+    var $alert = $('<div></div>').append($close).append($messageWrapper).dialog({
       autoOpen: false,
       resizable: false,
       height: 40,
@@ -119,7 +104,10 @@ wv.ui = (function(self) {
       }
     });
 
-    var $message = $('.notify-message');
+    var $close = $('<i></i>').addClass('fa fa-times fa-1x').click(function() {
+      $alert.dialog('close');
+    });
+
     $message.empty();
     $message.append(title);
 
@@ -130,7 +118,6 @@ wv.ui = (function(self) {
     }
 
     return $alert;
-
   };
 
   /**
@@ -211,8 +198,8 @@ wv.ui = (function(self) {
       "browser. Upgrade or try again in a different browser.");
   };
 
-  var getComponent = function(marker, fnClose) {
-    $element = $("<div></div>")
+  var getComponent = function(marker) {
+    var $element = $("<div></div>")
       .addClass(marker);
     $("body")
       .append($element);
@@ -247,7 +234,7 @@ wv.ui = (function(self) {
     closeComponent("wv-menu", closeMenu);
   };
 
-  self.getDialog = function(marker, exclusive) {
+  self.getDialog = function(marker) {
     self.close(marker);
     return getComponent(marker || "wv-dialog", closeDialog);
   };

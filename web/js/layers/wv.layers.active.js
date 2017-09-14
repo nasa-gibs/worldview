@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represe`nted by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.layers
  */
@@ -20,15 +9,9 @@ wv.layers = wv.layers || {};
  */
 wv.layers.active = wv.layers.active || function(models, ui, config) {
 
-  var aoi = config.aoi;
   var model = models.layers;
   var groups = wv.util.LAYER_GROUPS;
-  var jsp;
   var legends = {};
-
-  //    var ICON_VISIBLE = "images/wv.layers/show-hide.png";
-  //    var ICON_HIDDEN = "images/wv.layers/show-hide.png";
-
   var self = {};
   self.id = "products";
   self.selector = "#products";
@@ -134,12 +117,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     }), function(layer) {
       renderLayer($container, group, layer);
     });
-
-
-    //$contain.append($layers);
-
     $parent.append($container);
-
   };
 
   var renderLayer = function($parent, group, layer, top) {
@@ -294,19 +272,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var thisLayerId = $(this)
       .attr("data-layer");
     var thisLayer = config.layers[thisLayerId];
-    var $layerMeta = $('<div></div>')
-      .addClass('layer-metadata');
-
-    var $layerMetaTitle = $('<a>Layer Description</a>')
-      .addClass('layer-metadata-title')
-      .on('click', function() {
-        $(this)
-          .next('.layer-metadata')
-          .toggleClass('overflow');
-      });
-
-    var $showMore = $('<div></div>')
-      .addClass('metadata-more');
 
     if ($i.length === 0) {
       wv.layers.info(config, models, thisLayer);
@@ -350,7 +315,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       models: models,
       layer: layer,
       ui: ui
-      //onLoad: //adjustCategoryHeights
     });
   };
   var productsIsOverflow = false;
@@ -361,7 +325,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var tabBarHeight = $("ul#productsHolder-tabs").outerHeight(true); //
     var footerHeight = $tabFooter.outerHeight(true);
     var distanceFromTop = $("#productsHolder").offset().top;
-    var timelineHeight = $("#timeline").outerHeight(true);
     var maxHeight;
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
@@ -454,9 +417,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     resize();
   };
 
-  var toggleVisibility = function(event) {
-    var $action = $(this)
-      .find('.hideReg');
+  var toggleVisibility = function() {
     if ($(this)
       .parent()
       .hasClass('disabled'))
@@ -483,18 +444,13 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     }
   };
 
-  var onLayerUpdate = function(group, layer, newIndex) {
-    // Scroll pane can be kind of glitchy, so just show what the
-    // current state is.
+  var onLayerUpdate = function() {
     // Timeout prevents redraw artifacts
-
     setTimeout(render, 1);
   };
 
   var onLayerVisibility = function(layer, visible) {
     var $element = $(".hideReg[data-layer='" + layer.id + "']");
-    //if ($element.parent().hasClass('disabled'))
-    //    return;
     if (visible) {
       $element.attr("data-action", "hide")
         .attr("title", 'Hide Layer')
@@ -529,7 +485,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       .on("change:resolution", onZoomChange);
     setTimeout(render, 1);
   };
-  var onZoomChange = function(layers) {
+  var onZoomChange = function() {
 
     _.each(groups, function(group) {
       _.each(model.get({
@@ -542,13 +498,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     });
   };
   var onDateChange = function() {
-    // Timeout prevents redraw artifacts
-    // setTimeout(render, 1);
-
-    var $container = $('.layer-container');
-
     _.each(groups, function(group) {
-      var $group = $('#' + group.id);
       _.each(model.get({
         group: group.id
       }), function(layer) {

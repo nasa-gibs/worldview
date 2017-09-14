@@ -4,7 +4,7 @@ wv.naturalEvents = wv.naturalEvents || {};
  * @module wv.naturalEvents.request
  */
 wv.naturalEvents.request = wv.naturalEvents.request || function(models, ui, config) {
-  self = {};
+  var self = {};
   self.events = wv.util.events();
 
   self.EVENT_QUERY_RESULTS = "queryResults";

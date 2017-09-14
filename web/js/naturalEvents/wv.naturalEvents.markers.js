@@ -1,6 +1,6 @@
 var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
-wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, config) {
+wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
   var self = {}, map;
   map = map || ui.map.selected;
   var olViewport = map.getViewport();
