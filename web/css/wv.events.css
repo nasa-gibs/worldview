@@ -129,7 +129,7 @@
   transform-origin: center bottom;
   position: relative;
   z-index: 100;
-  height: 30px;
+  height: 31px;
   background: url('../images/natural-events/pin.svg');
 }
 
