@@ -8,7 +8,7 @@ a.accordionToggler {
   display: block;
   overflow: hidden;
   z-index: 1;
-  height: 35px;
+  height: 33px;
   width: 30px;
   background: none no-repeat scroll left;
 }
@@ -34,7 +34,7 @@ a.staticLayers {
   color: #fff;
 }
 a.staticLayers:hover {
-  background-color: #fff;
+  background-color: #ccc;
   color: rgb(40, 40, 40);
 }
 
@@ -62,7 +62,7 @@ a.atcollapse {
 
 a.atcollapse:hover {
   background-position: -205px -60px;
-  background-color: #fff;
+  background-color: #ccc;
   cursor: pointer;
 }
 
