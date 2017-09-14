@@ -95,55 +95,55 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui, conf
     });
   };
 
+  var passEventToTarget = function(event, target) {
+    try {
+      var eventCopy = new event.constructor(event.type, event);
+      target.dispatchEvent(eventCopy);
+    } catch (err) {} // Nothing to do, the try/catch prevents IE from crashing
+  };
+
+  var createPin = function(id, category, isSelected){
+    var overlayEl = document.createElement('div');
+    var icon = document.createElement('i');
+    overlayEl.className = 'marker';
+    if (isSelected) overlayEl.classList.add('marker-selected');
+    icon.className = 'event-icon event-icon-' + category.slug;
+    icon.title = category.title;
+    overlayEl.appendChild(icon);
+    return new ol.Overlay({
+      element: overlayEl,
+      positioning: 'bottom-center',
+      id: id
+    });
+  };
+
+  var createBoundingBox = function(coordinates){
+    var lightStroke = new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: [255, 255, 255, 0.6],
+        width: 2,
+        lineDash: [4,8],
+        lineDashOffset: 6
+      })
+    });
+    var darkStroke = new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        color: [0, 0, 0, 0.6],
+        width: 2,
+        lineDash: [4,8]
+      })
+    });
+    return new ol.layer.Vector({
+      source: new ol.source.Vector({
+        features: [new ol.Feature({
+          geometry: new ol.geom.Polygon(coordinates),
+          name: 'NaturalEvent'
+        })],
+        wrapX: false
+      }),
+      style: [lightStroke, darkStroke]
+    });
+  };
+
   return self;
-};
-
-var passEventToTarget = function(event, target) {
-  try {
-    var eventCopy = new event.constructor(event.type, event);
-    target.dispatchEvent(eventCopy);
-  } catch (err) {} // Nothing to do, the try/catch prevents IE from crashing
-};
-
-var createPin = function(id, category, isSelected){
-  var overlayEl = document.createElement('div');
-  var icon = document.createElement('i');
-  overlayEl.className = 'marker';
-  if (isSelected) overlayEl.classList.add('marker-selected');
-  icon.className = 'event-icon event-icon-' + category.slug;
-  icon.title = category.title;
-  overlayEl.appendChild(icon);
-  return new ol.Overlay({
-    element: overlayEl,
-    positioning: 'bottom-center',
-    id: id
-  });
-};
-
-var createBoundingBox = function(coordinates){
-  var lightStroke = new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: [255, 255, 255, 0.6],
-      width: 2,
-      lineDash: [4,8],
-      lineDashOffset: 6
-    })
-  });
-  var darkStroke = new ol.style.Style({
-    stroke: new ol.style.Stroke({
-      color: [0, 0, 0, 0.6],
-      width: 2,
-      lineDash: [4,8]
-    })
-  });
-  return new ol.layer.Vector({
-    source: new ol.source.Vector({
-      features: [new ol.Feature({
-        geometry: new ol.geom.Polygon(coordinates),
-        name: 'NaturalEvent'
-      })],
-      wrapX: false
-    }),
-    style: [lightStroke, darkStroke]
-  });
 };
