@@ -45,15 +45,27 @@ module.exports = function(grunt) {
 
   var env = grunt.option("env") || "release";
 
+  var pkg = grunt.file.readJSON("package.json");
+
+  var optionsPath;
+
+  if (fs.existsSync("options")) {
+    optionsPath = "options";
+  }
+  else if (fs.existsSync("node_modules/worldview-options-eosdis")) {
+    optionsPath = "node_modules/worldview-options-eosdis";
+  }
+
   var options = {
     version: 0,
     release: 0
   };
 
-  var pkg = grunt.file.readJSON("package.json");
-
   if (fs.existsSync("options/version.json")) {
     options = grunt.file.readJSON("options/version.json");
+  }
+  else if (fs.existsSync("node_modules/worldview-options-eosdis/version.json")) {
+    options = grunt.file.readJSON("node_modules/worldview-options-eosdis/version.json");
   }
 
   // Lists of JavaScript and CSS files to include and in the correct
@@ -84,6 +96,7 @@ module.exports = function(grunt) {
 
     pkg: pkg,
     opt: options,
+    optionsPath: optionsPath,
     apache_version: grunt.option("apache-version") || "22",
 
     postcss: {
@@ -147,7 +160,7 @@ module.exports = function(grunt) {
       brand_info: {
         files: [
           {
-            src: "options/brand.json",
+            src: "<%= optionsPath %>/brand.json",
             dest: "build/options/brand.json"
           }
         ]
@@ -424,7 +437,7 @@ module.exports = function(grunt) {
       config: {
         options: {
           prop: "config-revision",
-          cwd: "options",
+          cwd: "<%= optionsPath %>",
           number: 6
         }
       }

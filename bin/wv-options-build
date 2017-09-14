@@ -19,6 +19,11 @@ BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
 OPT_DIR="$BASE/options"
 
+if [ -d "$BASE/node_modules/worldview-options-eosdis" ]; then
+    SRC_DIR="$BASE/node_modules/worldview-options-eosdis"
+    OPT_DIR="$BASE/node_modules/worldview-options-eosdis"
+fi
+
 [ "$FORCE" ] || set -e
 
 die() {
