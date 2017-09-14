@@ -19,7 +19,7 @@ a.staticLayers {
   position: absolute;
   top: 67px;
   height: auto;
-  background: no-repeat 80px 50% url("../images/angle-double-down.png") rgba(40, 40, 40, 0.85);
+  background: rgba(40, 40, 40, 0.85);
   border-radius: 0;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -33,15 +33,27 @@ a.staticLayers {
   text-align: center;
   color: #fff;
 }
-
 a.staticLayers:hover {
-  background-image: url("../images/angle-double-down-highlight.png");
   background-color: #fff;
   color: rgb(40, 40, 40);
 }
 
+a.staticLayers::after {
+  position: absolute;
+  content: '';
+  height: 20px;
+  width: 20px;
+  background: url("../images/icon-sprite.svg") -180px -10px;
+  display: block;
+  right: 5px;
+  top: 6px;
+}
+a.staticLayers:hover::after {
+  background-position: -180px -70px;
+}
+
 a.atcollapse {
-  background: 50% 50% no-repeat url("../images/angle-double-up.png");
+  background: url("../images/icon-sprite.svg") -205px 0;
   border-radius: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -49,13 +61,13 @@ a.atcollapse {
 }
 
 a.atcollapse:hover {
-  background-image: url("../images/angle-double-up-highlight.png");
+  background-position: -205px -60px;
   background-color: #fff;
   cursor: pointer;
 }
 
 a.atexpand {
-  background-image: url("../images/angle-double-down.png");
+  background: url("../images/icon-sprite.svg") -175px 0;
 }
 
 .bank {
