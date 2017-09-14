@@ -68,15 +68,6 @@ git clone https://github.com/nasa-gibs/worldview.git
 cd worldview
 ```
 
-Select one of the following configuration repositories:
-
-```bash
-# Official EOSDIS configurations
-git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
-
-# Or a blank repository with only Corrected Reflectance and no branding
-git clone https://github.com/nasa-gibs/worldview-options-template.git options
-```
 Install dependencies (NOTE for Windows users: omit the "sudo" part of the following commands as it [isn't available](https://stackoverflow.com/questions/22527668/sudo-command-not-found-on-cygwin)):
 ```bash
 # install local version of grunt
@@ -102,6 +93,21 @@ http://localhost:3000
 ```
 A node server will continue running until you end the session.
 You can end the session by pressing `control-C`
+
+
+### Additional Configuration Options
+
+The [Official EOSDIS configurations](https://github.com/nasa-gibs/worldview-options-eosdis) are installed by default.   
+To use custom options, clone the template repository into an options directory in the root using the following git command.   
+Optionally, you can clone the official options and make changes as needed.
+
+```bash
+# A blank repository with only Corrected Reflectance and no branding
+git clone https://github.com/nasa-gibs/worldview-options-template.git options
+
+# or the Official EOSDIS configurations
+git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
+```
 
 ## Other Information
 
