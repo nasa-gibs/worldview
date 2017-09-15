@@ -15,10 +15,8 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     request.events.on('queryResults', function() {
       if (!(model.data.events || model.data.sources)) return;
-      var isZoomed = Math.floor(view.getZoom()) >= 3;
-
       createEventList();
-      addClickListeners();
+      var isZoomed = Math.floor(view.getZoom()) >= 3;
       if (isZoomed) self.filterEventList();
       if (model.active) {
         // Remove previously stored markers
@@ -126,6 +124,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
   };
 
+  self.deselectEvent = function() {
+    self.selected = {};
+    naturalEventMarkers.remove(self.markers);
+    self.markers = naturalEventMarkers.draw();
+    highlightEventInList();
+    model.events.trigger('change');
+  };
+
   self.getDefaultEventDate = function(event) {
     date = new Date(event.geometries[0].date).toISOString().split('T')[0];
     if (event.geometries.length < 2) return date;
@@ -183,7 +189,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $panels.append($detailContainer);
     var $content = $('#wv-eventscontent').empty();
     _.each(model.data.events, function(event) {
-      createEventElement($content, event);
+      $content.append(createEventElement($content, event));
     });
 
     $footer = $('<footer />');
@@ -237,14 +243,18 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       var eventIndex = 0;
       _.each(event.geometries, function(geometry) {
         eventIndex++;
-        date = geometry.date.split('T')[0];
+        var date = geometry.date.split('T')[0];
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
         $date = $('<a/>', {
           class: 'date',
           'data-id': event.id,
           'data-date': date,
-          html: date
+          html: date,
+          click: function(e) {
+            e.stopPropagation();
+            self.selectEvent(event.id, date);
+          }
         });
 
         $dates.append($('<li class="dates"></li>').append($date));
@@ -269,24 +279,20 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       });
       $subtitle.append(items.join(' '));
     }
-
-    $content.append($item);
     $('.natural-event-link').click(function(e) {
       e.stopPropagation();
     });
-  };
 
-  var addClickListeners = function() {
-    $('#wv-eventscontent li').click(function() {
-      var dataId = $(this).attr('data-id');
-      self.selectEvent(dataId);
+    $item.on('click', function() {
+      var isSelected = self.selected && self.selected.id && (self.selected.id === event.id);
+      if (isSelected) {
+        self.deselectEvent();
+      } else {
+        self.selectEvent(event.id);
+      }
     });
-    $('#wv-eventscontent ul li.dates a').click(function(e) {
-      e.stopPropagation();
-      var id = $(this).attr('data-id');
-      var date = $(this).attr('data-date');
-      self.selectEvent(id, date);
-    });
+
+    return $item;
   };
 
   var highlightEventInList = function(id, date) {
@@ -295,12 +301,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $('#wv-eventscontent .dates').hide();
     $('#wv-eventscontent li').removeClass('item-selected');
     $('#wv-eventscontent ul li.dates a').removeClass('active');
+    if (!id) return;
 
     // Highlight current event
     $('#wv-eventscontent [data-id="' + id + '"]').addClass('item-selected');
-    if (date) {
-      $('#wv-eventscontent [data-date="' + date + '"]').addClass('active');
-    }
+    if (date) $('#wv-eventscontent [data-date="' + date + '"]').addClass('active');
     $('#wv-eventscontent [data-id="' + id + '"] .subtitle').show();
     $('#wv-eventscontent [data-id="' + id + '"] .dates').show();
 
