@@ -76,15 +76,14 @@ wv.ui = (function(self) {
       });
   };
 
-  self.alert = function(body, title, size, glyph) {
-    var $message = $('<span></span>').addClass('notify-message');
-    var $icon = $('<i></i>').addClass('fa fa-' + glyph + ' fa-1x');
-    var $messageWrapper = $('<div></div>').click(function() {
+  self.alert = function(body, title, size, glyph, closeFn) {
+    var $message = $('<span/>', {class: 'notify-message'});
+    var $icon = $('<i/>', { class: 'fa fa-' + glyph + ' fa-1x', title: title });
+    var $messageWrapper = $('<div/>').click(function() {
       self.notify(body, title, size);
-    });
-    $messageWrapper.append($icon).append($message);
-
-    var $alert = $('<div></div>').append($close).append($messageWrapper).dialog({
+    }).append($icon).append($message);
+    var $close = $('<i/>', {class: 'fa fa-times fa-1x'}).click(closeFn);
+    var $alert = $('<div/>').append($close).append($messageWrapper).dialog({
       autoOpen: false,
       resizable: false,
       height: 40,
@@ -98,25 +97,9 @@ wv.ui = (function(self) {
         effect: 'fade',
         duration: 200
       },
-      dialogClass: 'no-titlebar notify-alert',
-      close: function() {
-        if (wv.util.browser.localStorage) localStorage.setItem('dismissedEventAlert', true);
-      }
+      dialogClass: 'no-titlebar notify-alert'
     });
-
-    var $close = $('<i></i>').addClass('fa fa-times fa-1x').click(function() {
-      $alert.dialog('close');
-    });
-
-    $message.empty();
-    $message.append(title);
-
-    $alert.find('i:first-child').attr('title', title);
-
-    if (wv.util.browser.localStorage && !localStorage.getItem('dismissedEventAlert')) {
-      $alert.dialog('open');
-    }
-
+    $message.empty().append(title);
     return $alert;
   };
 

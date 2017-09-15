@@ -3,7 +3,7 @@ wv.naturalEvents = wv.naturalEvents || {};
 
 wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
 
-  var self = {}, eventAlert, $footer, view;
+  var self = {}, eventVisibilityAlert, $footer, view;
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
@@ -56,9 +56,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           models.proj.select('geographic');
         }
 
-        // Show message about events not being visible
-        eventAlert = wv.ui.alert(eventAlertBody, 'Events may not be visible at all times.', 800, 'warning');
-
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
@@ -68,7 +65,6 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       } else {
         model.active = false;
         if (naturalEventMarkers) naturalEventMarkers.remove(self.markers);
-        if (eventAlert) eventAlert.dialog('close');
       }
       model.events.trigger('change');
     });
@@ -110,8 +106,24 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           models.date.select(wv.util.dateAdd(wv.util.parseDateUTC(date), 'day', 1));
         }
       }
-    });
 
+      // Show event visiblity alert
+      if (!eventVisibilityAlert) {
+        eventVisibilityAlert = wv.ui.alert(
+          eventVisibilityAlertBody,
+          'Events may not be visible at all times.',
+          800,
+          'warning',
+          function() {
+            if (wv.util.browser.localStorage) localStorage.setItem('dismissedEventVisibilityAlert', true);
+            eventVisibilityAlert.dialog('close');
+          }
+        );
+      }
+      if (wv.util.browser.localStorage && !localStorage.getItem('dismissedEventVisibilityAlert')) {
+        eventVisibilityAlert.dialog('open');
+      }
+    });
   };
 
   self.getDefaultEventDate = function(event) {
@@ -339,7 +351,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
   return self;
 };
 
-var eventAlertBody = '<h3 class="wv-data-unavailable-header">Why can’t I see an event?</h3><p>There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.</p>' +
+var eventVisibilityAlertBody = '<h3 class="wv-data-unavailable-header">Why can’t I see an event?</h3><p>There are a variety of factors as to why you may not be seeing an event in Worldview at the moment.</p>' +
 '<ul>' +
 '<li>Satellite overpass may have occurred before the event. Check out subsequent days or try a different satellite/sensor which has a different overpass time.</li>' +
 '<li>Cloud cover may obscure the event.</li>' +
