@@ -97,14 +97,15 @@ You can end the session by pressing `control-C`
 
 ### Additional Configuration Options
 
-The [Official EOSDIS configurations](https://github.com/nasa-gibs/worldview-options-eosdis) are installed by default.   
-To use custom options, clone the template repository into an options directory in the root using the following git command.   
-Optionally, you can clone the official options and make changes as needed.
+The [Official EOSDIS configurations](https://github.com/nasa-gibs/worldview-options-eosdis) are installed by default in the `node_modules` directory.   
+To use custom options, clone the template repository into a new `options` directory in the root using the following git command.   
 
 ```bash
 # A blank repository with only Corrected Reflectance and no branding
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
-
+```
+Optionally, you can clone the official options and make changes as needed.
+```bash
 # or the Official EOSDIS configurations
 git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 ```
