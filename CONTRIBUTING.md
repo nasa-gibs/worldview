@@ -43,7 +43,7 @@ Improve contributing docs and consolidate them in the standard location https://
 
 ## What We're Working On
 
-Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-Roadmap) for an overview of what we're planning.
+Please see our [Roadmap](https://github.com/nasa-gibs/worldview/projects/7) for an overview of what we're planning.
 
 We use GitHub labels to organize issues we're working on. Here are the labels we use, along with descriptions of what they mean. Click on the headings or badges below to see the GitHub issues tagged with each label.
 
