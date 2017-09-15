@@ -77,7 +77,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     var event = getEventById(id);
     if (!event) {
-      wv.ui.notify('Metadata for event ' + id + ' is not available.');
+      wv.ui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
     }
 
