@@ -43,18 +43,11 @@ var buildNumber = moment.utc().format("YYMMDDHHmmss");
 
 module.exports = function(grunt) {
 
+  var pkg = require("./package.json");
   var env = grunt.option("env") || "release";
 
-  var pkg = grunt.file.readJSON("package.json");
-
-  var optionsPath;
-
-  if (fs.existsSync("options")) {
-    optionsPath = "options";
-  }
-  else if (fs.existsSync("node_modules/worldview-options-eosdis")) {
-    optionsPath = "node_modules/worldview-options-eosdis";
-  }
+  var hasOptionsDirectory = fs.existsSync('options');
+  var optionsPath = hasOptionsDirectory ? 'options' : 'node_modules/worldview-options-eosdis';
 
   var options = {
     version: 0,
