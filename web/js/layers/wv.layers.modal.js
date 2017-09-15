@@ -36,6 +36,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var modalHeight;
   var sizeMultiplier;
   var searchBool;
+  var hasSetting;
 
   //Visible Layers
   var visible = {};
@@ -66,6 +67,30 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   //Create container for breadcrumb
   var $breadcrumb = $('<nav></nav>').attr('id', 'category-breadcrumb');
+
+  var checkSettings = function(current, source) {
+    _.each( source.settings, function( setting ) {
+      var layer = config.layers[setting];
+      var proj = layer.projections;
+      if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+        if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+          if(current.id === "orbital-track") {
+            hasSetting = true;
+          }
+        // Don't output sources with only orbit tracks
+        } else {
+          hasSetting = true;
+        }
+      }
+    });
+  };
+
+  // Checks to see if the current view has sources with settings.
+  var checkSourceSettings = function(current) {
+    _.each( current.sources, function( source, sourceName ) {
+      checkSettings(current, source);
+    });
+  };
 
   var checkModalView = function() {
     if (config.parameters.modalView == 'categories') {
@@ -170,27 +195,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var sortNumber;
 
         // Check if categories have settings with the same projection.
-        var categoryHasSetting;
+        hasSetting = false;
         _.each( category.measurements, function( measurement, index ) {
           var projection = models.proj.selected.id;
           var current = config.measurements[measurement];
-          _.each( current.sources, function( source, sourceName ) {
-            _.each( source.settings, function( setting ) {
-              var layer = config.layers[setting];
-              var proj = layer.projections;
-              if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
-                if(current.id === "orbital-track") {
-                  categoryHasSetting = true;
-                }
-                // Don't output categories with only orbits
-              } else {
-                categoryHasSetting = true;
-              }
-            });
-          });
+          checkSourceSettings(current);
         });
 
-        if (categoryHasSetting === true) {
+        if (hasSetting === true) {
           if (category.placement) {
             if (category.placement === 'first') {
               sortNumber = 1;
@@ -224,24 +236,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             var projection = models.proj.selected.id;
             var current = config.measurements[measurement];
             // Check if measurements have settings with the same projection.
-            var measurementHasSetting;
-            _.each( current.sources, function( source, sourceName ) {
-              _.each( source.settings, function( setting ) {
-                var layer = config.layers[setting];
-                var proj = layer.projections;
-                if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-                  if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
-                    if(current.id === "orbital-track") {
-                      measurementHasSetting = true;
-                    }
-                    // Don't output measurements with only orbits
-                  } else {
-                    measurementHasSetting = true;
-                  }
-                }
-              });
-            });
-            if(measurementHasSetting === true) {
+            hasSetting = false;
+            checkSourceSettings(current);
+            if(hasSetting === true) {
               $i++;
 
               if ($i > 6) {
@@ -331,25 +328,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       var current = config.measurements[measurement];
 
       // Check if measurements have settings with the same projection.
-      var measurementHasSetting;
-      _.each( current.sources, function( source, sourceName ) {
-        _.each( source.settings, function( setting ) {
-          var layer = config.layers[setting];
-          var proj = layer.projections;
-          if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-            if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
-              if(current.id === "orbital-track") {
-                measurementHasSetting = true;
-              }
-              // Don't output measurements with only orbits
-            } else {
-              measurementHasSetting = true;
-            }
-          }
-        });
-      });
+      hasSetting = false;
+      checkSourceSettings(current);
 
-      if (measurementHasSetting === true) {
+      if (hasSetting === true) {
         var $measurementHeader = $('<div></div>').attr('id', 'accordion-' + category.id + '-' + current.id);
 
         var $measurementTitle = $('<h3></h3>').text(current.title);
@@ -366,23 +348,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         _.each( current.sources, function( source, sourceName ) {
 
           // Check if sources have settings with the same projection.
-          var sourceHasSetting;
-          _.each( source.settings, function( setting ) {
-            var layer = config.layers[setting];
-            var proj = layer.projections;
-            if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-              if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
-                if(current.id === "orbital-track") {
-                  sourceHasSetting = true;
-                }
-              // Don't output sources with only orbit tracks
-              } else {
-                sourceHasSetting = true;
-              }
-            }
-          });
+          hasSetting = false;
+          checkSettings(current, source);
 
-          if(sourceHasSetting === true) {
+          if(hasSetting === true) {
             var $sourceTab = $('<li></li>');
 
             var $sourceLink = $('<a></a>').text(source.title).attr('href', '#' + current.id + '-' + source.id);
