@@ -64,6 +64,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     var $addBtn = $("#layers-add");
     $addBtn.button();
+    $addBtn.click(function(e) {
+      $('#layer-modal').dialog("open");
+    });
 
     $('.layer-container .close')
       .off('click');
