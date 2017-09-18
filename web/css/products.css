@@ -6,11 +6,13 @@
 
 #productsHolder-tabs {
   padding: 0;
-  background: rgba(0, 0, 0, 0);
+  background: none;
+  border: 0;
+  border-bottom: 3px #00457b solid;
 }
 
 #productsHolder-tabs .ui-state-default {
-  background: rgba(0, 0, 0, 0);
+  background: none;
   border: 0;
   margin: 0;
   padding: 0;
@@ -18,25 +20,20 @@
 
 #productsHolder-tabs .ui-state-active a {
   color: #fff;
+  background-color: #00457b;
 }
 
 #productsHolder-tabs .ui-tabs-anchor {
-  box-sizing: border-box;
+  padding: 0.5em 0.7em;
+  float: none;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -o-box-sizing: border-box;
-  padding: 0.5em 0.7em;
-  float: none;
+  box-sizing: border-box;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-.ui-tabs-nav {
-  border-radius: 0;
-  border: 0;
-  border-bottom: 3px #00457b solid;
 }
 
 .ui-tabs-nav li.layerPicker {
@@ -57,25 +54,22 @@
   display: block;
 }
 
-.ui-tabs-nav li.ui-state-default:hover a {
+#productsHolder-tabs .ui-state-default:hover a {
   background-color: #ccc;
   color: #000;
 }
 
-.ui-tabs-nav li.ui-state-default:hover a i {
+#productsHolder-tabs .ui-state-default:hover i {
   color: #000;
 }
 
-.ui-tabs .ui-tabs-nav li.ui-state-active a {
-  background-color: #00457b;
-}
-
-.ui-tabs .ui-tabs-nav li.ui-state-active .ui-tabs-anchor {
+#productsHolder-tabs .ui-state-active .ui-tabs-anchor {
   cursor: default;
 }
 
-.ui-tabs-nav li.ui-state-active a:hover {
+#productsHolder-tabs .ui-state-active a:hover {
   background-color: #00457b;
+  color: #fff;
 }
 
 .cats {
@@ -97,11 +91,11 @@
   background-position: 0 -10px;
 }
 
-ul#productsHolder-tabs .tab:hover i.icon-layers {
+.tab:hover .icon-layers {
   background-position: 0 20px;
 }
 
-ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-layers {
+.ui-state-active .tab:hover .icon-layers {
   background-position: 0 -10px;
 }
 
@@ -109,11 +103,11 @@ ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-layers {
   background-position: -30px -10px;
 }
 
-ul#productsHolder-tabs .tab:hover i.icon-download {
+.tab:hover .icon-download {
   background-position: -30px 20px;
 }
 
-ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-download {
+.ui-state-active .tab:hover .icon-download {
   background-position: -30px -10px;
 }
 
@@ -125,11 +119,11 @@ ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-download {
   background-position: -90px -10px;
 }
 
-ul#productsHolder-tabs .tab:hover i.icon-add {
+.tab:hover .icon-add {
   background-position: -90px 20px;
 }
 
-ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-add {
+.ui-state-active .tab:hover .icon-add {
   background-position: -90px -10px;
 }
 
@@ -141,14 +135,10 @@ ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-add {
   background-position: -150px -10px;
 }
 
-ul#productsHolder-tabs .tab:hover i.icon-events {
+.tab:hover .icon-events {
   background-position: -150px 20px;
 }
 
-ul#productsHolder-tabs li.ui-state-active .tab:hover i.icon-events {
+.ui-state-active .tab:hover .icon-events {
   background-position: -150px -10px;
-}
-
-ul#productsHoldertabs li.ui-state-active i.productsIcon {
-  margin-right: 10px;
 }
