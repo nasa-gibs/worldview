@@ -32,12 +32,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       .on("update", onPaletteUpdateAll);
     models.date.events
       .on("select", onDateChange);
-    models.wv.events.on("sidebar-expand", resize);
+    models.wv.events.on("sidebar-expand", sizeProductsTab);
     $(window)
-      .resize(resize);
+      .resize(sizeProductsTab);
     ui.sidebar.events.on("selectTab", function(tab) {
       if (tab === "active") {
-        resize();
+        sizeProductsTab();
       }
     });
 
@@ -99,7 +99,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       }
     });
 
-    setTimeout(resize, 1000);
+    setTimeout(sizeProductsTab, 1000);
 
   };
 
@@ -321,14 +321,28 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     });
   };
   var productsIsOverflow = false;
-  var sizeProducts = function() {
-    var $tabPanel = $('section#productsHolder #products');
+  var sizeProductsTab = function() {
+    var $tabPanel = $('#products');
     var $tabFooter = $tabPanel.find('footer');
     var windowHeight = $(window).outerHeight(true);
-    var tabBarHeight = $("ul#productsHolder-tabs").outerHeight(true); //
+    var tabBarHeight = $("#productsHolder-tabs").outerHeight(true);
     var footerHeight = $tabFooter.outerHeight(true);
     var distanceFromTop = $("#productsHolder").offset().top;
+    var overlaysHeight = $('#overlays').outerHeight(true);
+    var baseLayersHeight = $('#baselayers').outerHeight(true);
+    var layerGroupHeight = 26; // Height of layer group titles
+    var contentHeight = overlaysHeight + baseLayersHeight + layerGroupHeight;
     var maxHeight;
+
+    // If on a mobile device, use the native scroll bars
+    if (!wv.util.browser.small) {
+      $(".wv-layers-options").show();
+      $(".wv-layers-info").show();
+    } else {
+      $(".wv-layers-options").hide();
+      $(".wv-layers-info").hide();
+      wv.ui.closeDialog();
+    }
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
@@ -342,53 +356,21 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     $tabPanel.css("max-height", maxHeight);
 
-    // 26 is the combined height of the OVERLAYS and BASE LAYERS titles.
-    var childrenHeight = $('ul#overlays')
-      .outerHeight(true) +
-      $('ul#baselayers')
-        .outerHeight(true) + 26;
-
-    if ((maxHeight <= childrenHeight)) {
-      $(".layer-container")
-        .css('height', maxHeight)
-        .css('padding-right', '10px');
+    if ((maxHeight <= contentHeight)) {
+      $(".layer-container").css('height', maxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
-        $('.layer-container')
-          .perfectScrollbar('update');
+        $('.layer-container').perfectScrollbar('update');
       } else {
-        $('.layer-container')
-          .perfectScrollbar();
+        $('.layer-container').perfectScrollbar();
         productsIsOverflow = true;
       }
     } else {
-      $(".layer-container")
-        .css('height', '')
-        .css('padding-right', '');
+      $(".layer-container").css('height', '').css('padding-right', '');
       if (productsIsOverflow) {
-        $('.layer-container')
-          .perfectScrollbar('destroy');
+        $('.layer-container').perfectScrollbar('destroy');
         productsIsOverflow = false;
       }
     }
-  };
-
-  var resize = function() {
-    // If on a mobile device, use the native scroll bars
-    if (!wv.util.browser.small) {
-      $(".wv-layers-options")
-        .show();
-      $(".wv-layers-info")
-        .show();
-    } else {
-      $(".wv-layers-options")
-        .hide();
-      $(".wv-layers-info")
-        .hide();
-      wv.ui.closeDialog();
-    }
-
-    sizeProducts();
-
   };
 
   var removeLayer = function(event) {
@@ -407,7 +389,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     if (legends[layer.id]) {
       delete legends[layer.id];
     }
-    resize();
+    sizeProductsTab();
   };
 
   var onLayerAdded = function(layer) {
@@ -417,7 +399,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     if (layer.palette) {
       renderLegendCanvas(layer);
     }
-    resize();
+    sizeProductsTab();
   };
 
   var toggleVisibility = function() {
