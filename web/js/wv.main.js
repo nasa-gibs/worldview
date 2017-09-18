@@ -157,7 +157,7 @@ $(function() {
       models.link.register(models.data);
     }
     if (config.features.naturalEvents) {
-      models.naturalEvents = wv.naturalEvents.model(models, config);
+      models.naturalEvents = wv.naturalEvents.model(models, config, ui);
       models.link.register(models.naturalEvents);
     }
     // HACK: Map needs permalink state loaded before starting. But
