@@ -358,12 +358,8 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
     if ((maxHeight <= contentHeight)) {
       $(".layer-container").css('height', maxHeight).css('padding-right', '10px');
-      if (productsIsOverflow) {
-        $('.layer-container').perfectScrollbar('update');
-      } else {
-        $('.layer-container').perfectScrollbar();
-        productsIsOverflow = true;
-      }
+      $('.layer-container').perfectScrollbar();
+      if (productsIsOverflow === false) productsIsOverflow = true;
     } else {
       $(".layer-container").css('height', '').css('padding-right', '');
       if (productsIsOverflow) {
