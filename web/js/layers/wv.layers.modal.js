@@ -26,7 +26,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   self.selector = '#layer-modal';
   self.id = 'layer-modal';
 
-  var $addBtn = $('#layers-add');
   var $header = $(self.selector + ' header');
   var $categories = $(' #layer-categories ');
   var $selectedCategory = $(self.selector + " #selected-category");
@@ -52,11 +51,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     // Create tiles
     render();
-
-    $addBtn.click(function(e) {
-      $(self.selector)
-        .dialog("open");
-    });
 
     $(window)
       .resize(resize);
@@ -508,8 +502,22 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             .append($label);
 
           // If this is an orbit track.... put it in the orbit track list
-          if (layer.title.indexOf("Orbital Track") !== -1) {
+          if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
             var orbitTitle;
+            if (layer.daynight && layer.track) {
+              orbitTitle = _.startCase(layer.track) + "/" + _.startCase(layer.daynight);
+            }
+
+            $label.empty()
+              .text(orbitTitle);
+            $sourceOrbits.append($wrapper);
+
+          /**
+           * @deprecated since version 1.8.0 If the data set is old and doesn't have
+           * layergroup's set then we will need to track the layer title to determine
+           * if it is a Orbital Track
+           */
+          } else if (layer.title.indexOf("Orbital Track") !== -1) {
 
             // The following complex if statement is a placeholder
             // for truncating the layer names, until the rest of

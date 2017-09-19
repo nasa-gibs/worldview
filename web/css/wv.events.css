@@ -1,24 +1,10 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2017 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- *
- * Licensed under the NASA Open Source Agreement, Version 1.3
- * http://opensource.gsfc.nasa.gov/nosa.php
- */
-
-#wv-events {
+.wv-eventslist {
   position: relative;
 }
 
-#wv-events li.item i {
+.wv-eventslist li.item .event-icon {
   float: left;
-  margin: 0 10px 5px 5px;
+  margin: 0 8px 1px 5px;
 }
 
 .map-item-list li.item {
@@ -28,7 +14,6 @@
   display: block;
   overflow: hidden;
   cursor: pointer;
-  color: #d54e21;
   background: transparent;
 }
 
@@ -80,11 +65,11 @@
   padding-left: 15px;
 }
 
-#wv-events li.item ul li.dates a.active {
+.wv-eventslist li.item ul li.dates a.active {
   font-weight: 700;
 }
 
-#wv-events .map-item-list li.item .fa-external-link {
+.wv-eventslist .map-item-list li.item .fa-external-link {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -132,46 +117,76 @@
   color: #f00;
 }
 
-#wv-events li i.map-marker {
-  background: url('../images/natural-events/event-other.svg');
+.marker {
+  display: block;
+  height: 26px;
+  width: 26px;
+  background: url('../images/natural-events/dot.svg');
+}
+
+.marker-selected {
+  transform: scale(1.4);
+  transform-origin: center bottom;
+  position: relative;
+  z-index: 100;
+  height: 31px;
+  background: url('../images/natural-events/pin.svg');
+}
+
+.marker:not(.marker-selected):hover {
+  transform: scale(1.2);
+  transform-origin: center bottom;
+  position: relative;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.event-icon {
+  display: block;
+  height: 30px;
+  width: 30px;
+  background: url('../images/natural-events/icon-default.svg');
+}
+
+.wv-map .event-icon {
   height: 26px;
   width: 26px;
 }
 
-#wv-events li.volcanoes i.map-marker {
-  background: url('../images/natural-events/event-volcano.svg');
+.event-icon-dust-and-haze {
+  background: url('../images/natural-events/icon-dust-and-haze.svg');
 }
 
-#wv-events li.dust-and-haze i.map-marker {
-  background: url('../images/natural-events/event-sandstorm.svg');
+.event-icon-icebergs {
+  background: url('../images/natural-events/icon-icebergs.svg');
 }
 
-#wv-events li.severe-storms i.map-marker {
-  background: url('../images/natural-events/event-weather.svg');
+.event-icon-manmade {
+  background: url('../images/natural-events/icon-manmade.svg');
 }
 
-#wv-events li.wildfires i.map-marker {
-  background: url('../images/natural-events/event-fire.svg');
+.event-icon-sea-and-lake-ice {
+  background: url('../images/natural-events/icon-sea-and-lake-ice.svg');
 }
 
-#wv-events li.manmade i.map-marker {
-  background: url('../images/natural-events/event-manmade.svg');
+.event-icon-severe-storms {
+  background: url('../images/natural-events/icon-severe-storms.svg');
 }
 
-#wv-events li.sea-and-lake-ice i.map-marker {
-  background: url('../images/natural-events/event-iceberg.svg');
+.event-icon-snow {
+  background: url('../images/natural-events/icon-snow.svg');
 }
 
-#wv-events li.snow i.map-marker {
-  background: url('../images/natural-events/event-snow.svg');
+.event-icon-volcanoes {
+  background: url('../images/natural-events/icon-volcanoes.svg');
 }
 
-#wv-events li.water-color i.map-marker {
-  background: url('../images/natural-events/event-water-color.svg');
+.event-icon-water-color {
+  background: url('../images/natural-events/icon-water-color.svg');
 }
 
-#wv-events li.icebergs i.map-marker {
-  background: url('../images/natural-events/event-iceberg.svg');
+.event-icon-wildfires {
+  background: url('../images/natural-events/icon-wildfires.svg');
 }
 
 .notify-alert {
@@ -179,6 +194,24 @@
   top: 60px !important;
   right: 10px !important;
   left: auto !important;
+}
+
+.notify-alert .ui-dialog-content div::after {
+  pointer-events: none;
+  transform: translateY(50%);
+  bottom: 50%;
+  height: 10px;
+  content: 'Read more \002026 ';
+  float: right;
+  position: absolute;
+  display: block;
+  z-index: 999;
+  right: 45px;
+  font-size: 13px;
+}
+
+.notify-alert .ui-dialog-content div:hover::after {
+  color: #000;
 }
 
 @media screen and (max-device-height: 720px) {

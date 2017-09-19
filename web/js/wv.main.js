@@ -223,7 +223,7 @@ window.onload = () => {
       models.link.register(models.data);
     }
     if (config.features.naturalEvents) {
-      models.naturalEvents = EventsModel(models, config);
+      models.naturalEvents = EventsModel(models, config, ui);
       models.link.register(models.naturalEvents);
     }
     // HACK: Map needs permalink state loaded before starting. But
@@ -379,6 +379,7 @@ window.onload = () => {
   };
 
   var elapsed = function(message) {
+    if (!parameters.elapsed) return;
     var t = new Date()
       .getTime() - startTime;
     console.log(t, message);

@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
+  "version": "1.8.0",
   "release": "1",
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "browserify": "^14.4.0",
     "buster": "0.7.12",
     "chromedriver": "2.25.1",
+    "clipboard": "^1.7.1",
     "eslint-plugin-react": "^7.3.0",
     "express": "4.15.2",
     "font-awesome": "4.7.0",
@@ -54,7 +55,7 @@
     "lodash": "4.15.0",
     "moment": "2.13.x",
     "nightwatch": "^0.9.9",
-    "openlayers": "4.0.1",
+    "openlayers": "4.3.1",
     "phantomjs": "2.1.x",
     "promise-queue": "2.2.3",
     "react": "15.3.1",

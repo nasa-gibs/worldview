@@ -1,17 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2017 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- *
- * Licensed under the NASA Open Source Agreement, Version 1.3
- * http://opensource.gsfc.nasa.gov/nosa.php
- */
-
 a,
 abbr,
 acronym,
@@ -240,10 +226,6 @@ div.horizontalContainer {
   overflow: hidden;
   z-index: 200;
   padding: 0;
-}
-
-#permalink_content {
-  margin-top: 10px;
 }
 
 .hidden {
@@ -546,7 +528,6 @@ label {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  -o-user-select: none;
   user-select: none;
 }
 
@@ -622,4 +603,14 @@ label {
 
 .ui-widget-content .ui-dialog-titlebar-close.ui-state-focus {
   background: none;
+}
+
+/* Counter intuitive override: All OpenLayers overlays get the
+ol-selectable class added automatically, but we don't want map markers
+or dateline overlays to be selectable. */
+.ol-selectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
 }

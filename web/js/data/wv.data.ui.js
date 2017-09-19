@@ -1,21 +1,9 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wv = wv || {};
 wv.data = wv.data || {};
 
 wv.data.ui = wv.data.ui || function(models, ui, config) {
 
   var queryActive = false;
-  var list = null;
   var model = models.data;
   var mapController = null;
   var selectionListPanel = null;
@@ -48,11 +36,11 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
       .on("granuleSelect", updateSelection)
       .on("granuleUnselect", updateSelection);
     $(window)
-      .resize(resize);
+      .resize(sizeDownloadTab);
 
-    ui.sidebar.events.on("select", function(tab) {
+    ui.sidebar.events.on("selectTab", function(tab) {
       if (tab === "download") {
-        resize();
+        sizeDownloadTab();
         model.activate();
       } else {
         model.deactivate();
@@ -61,42 +49,32 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
   };
 
   self.render = function() {
-    var $footer = $("#productsHolder footer");
-
-    var $container = $(self.selector)
-      .empty()
-      .addClass(self.id + "list")
-      .addClass("bank");
-
-    var $actionButton = $("<button></button>")
-      .attr("id", "wv-data-download-button")
-      .addClass("action")
-      .attr("type", "button")
-      .attr("value", "")
-      .on("click", showDownloadList);
-
+    var $footer = $('<footer />');
+    var $container = $(self.selector).empty();
+    var $actionButton = $('<button />', {
+      id: 'wv-data-download-button',
+      class: 'action',
+      type: 'button',
+      value: '',
+      click: showDownloadList,
+      text: 'No Data Selected'
+    });
+    var $list = $('<div />', {
+      class: 'wv-datalist bank content',
+      id: 'wv-datacontent'
+    });
+    $actionButton.button();
     $footer.append($actionButton);
-
-    $actionButton.hide();
-
-    var $list = $("<div></div>")
-      .attr("id", self.id + "content")
-      .addClass("content");
     $container.append($list);
-
-    $("#wv-data-download-button")
-      .button();
+    $container.append($footer);
 
     self.refresh();
-
-    //sizeDownloadTab();
-
   };
 
   self.refresh = function() {
-    var $content = $(self.selector + "content");
+    var $content = $("#wv-datacontent");
 
-    $content = $(self.selector + "content")
+    $content = $("#wv-datacontent")
       .empty();
     var data = model.groupByProducts();
     $.each(data, function(key, value) {
@@ -104,7 +82,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     });
 
     $('.dl-group[value="__NO_PRODUCT"] h3 span')
-      .click(function(e) {
+      .click(function() {
         showUnavailableReason();
       });
 
@@ -181,53 +159,42 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     $container.append($item);
   };
 
-  var resize = function() {
-    sizeDownloadTab();
-  };
   var productsIsOverflow = false;
   var sizeDownloadTab = function() {
-    var winSize = $(window)
-      .outerHeight(true);
-    var headSize = $("ul#productsHolder-tabs")
-      .outerHeight(true); //
-    var footSize = $("section#productsHolder footer")
-      .outerHeight(true);
-    var secSize = $("#productsHolder")
-      .innerHeight() - $("#productsHolder")
-        .height();
-    var offset = $("#productsHolder")
-      .offset();
-    var timeSize = $("#timeline")
-      .outerHeight(true); // + $("#timeline").offset()['top'];
+    var $tabPanel = $('#wv-data');
+    var $tabFooter = $tabPanel.find('footer');
+    var windowHeight = $(window).outerHeight(true);
+    var tabBarHeight = $('ul#productsHolder-tabs').outerHeight(true);
+    var footerHeight = $tabFooter.outerHeight(true);
+    var distanceFromTop = $("#productsHolder").offset().top;
+    var timelineHeight = $("#timeline").outerHeight(true);
 
     //FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
-    var maxHeight = winSize - headSize - footSize -
-      offset.top - timeSize - secSize - 10 - 5;
-    $(self.selector)
-      .css("max-height", maxHeight);
+    var maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - timelineHeight - 10 - 5;
+    $tabPanel.css("max-height", maxHeight);
 
     var childrenHeight = $('#wv-datacontent')
       .outerHeight(true);
 
     if ((maxHeight <= childrenHeight)) {
-      $("#wv-data")
+      $("#wv-datacontent")
         .css('height', maxHeight)
         .css('padding-right', '10px');
       if (productsIsOverflow) {
-        $(self.selector)
+        $("#wv-datacontent")
           .perfectScrollbar('update');
       } else {
-        $(self.selector)
+        $("#wv-datacontent")
           .perfectScrollbar();
         productsIsOverflow = true;
       }
     } else {
-      $("#wv-data")
+      $("#wv-datacontent")
         .css('height', '')
         .css('padding-right', '');
       if (productsIsOverflow) {
-        $(self.selector)
+        $("#wv-datacontent")
           .perfectScrollbar('destroy');
         productsIsOverflow = false;
       }
@@ -235,7 +202,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
 
   };
   self.onViewChange = function() {
-    var indicator;
     var map = ui.map.selected;
 
     if (!model.active || queryActive || !lastResults) {
@@ -264,10 +230,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
       indicators.noneInView =
         wv.ui.indicator.show("Zoom out or move map");
     }
-  };
-
-  var toggleMode = function() {
-    model.toggleMode();
   };
 
   var onActivate = function() {
@@ -359,7 +321,7 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
   };
 
   var updateSelection = function() {
-    $button = $("#wv-data-download-button");
+    var $button = $("#wv-data-download-button");
     var selected = _.size(model.selectedGranules);
     if (selected > 0) {
       $button.button("enable");
@@ -386,7 +348,6 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     if (downloadListPanel && downloadListPanel.visible()) {
       downloadListPanel.refresh();
     }
-
   };
 
   var showDownloadList = function() {
@@ -406,34 +367,20 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     downloadListPanel.show();
   };
 
-  var updatePreference = function(event, ui) {
-    model.setPreference(event.target.value);
-  };
-
   var showUnavailableReason = function() {
     var headerMsg = "<h3 class='wv-data-unavailable-header'>Why are these layers not available for downloading?</h3>";
     var bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.<br><br> Data download will not work for "Terra and Aqua" Fires, select Terra only Fires and/or Aqua only Fires to download the associated data files.';
 
     wv.ui.notify(headerMsg + bodyMsg, "Notice", 600);
-    /*
-    wv.ui.notify(headerMsg + bodyMsg, {
-        width: 600,
-        height: 275
-    });
-    */
   };
 
   init();
   return self;
-
 };
-
 
 wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
   (function() {
-
     var ns = {};
-
     var pages = {
       wget: "pages/wget.html",
       curl: "pages/curl.html"
@@ -506,15 +453,12 @@ wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
         });
       });
       var links = page.document.getElementById("links");
-      if (!links) {
-        // Page is not ready
-        return false;
-      }
+      if (!links) return false;
       links.innerHTML = "<pre>" + downloadLinks.join("\n") + "</pre>";
 
       var netrcEntries = [];
       var hostnames = [];
-      $.each(hosts, function(host, value) {
+      $.each(hosts, function(host) {
         netrcEntries.push("machine " + host + " login URS_USER " +
           "password URS_PASSWORD");
         hostnames.push(host);
@@ -550,14 +494,10 @@ wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
     };
 
     return ns;
-
   })();
 
-
 wv.data.ui.downloadListPanel = function(config, model) {
-
   var cmr = wv.data.cmr;
-
   var NOTICE =
     "<div id='wv-data-selection-notice'>" +
     "<i class='icon fa fa-info-circle fa-3x'></i>" +
@@ -656,12 +596,6 @@ wv.data.ui.downloadListPanel = function(config, model) {
     return false;
   };
 
-  var dispose = function() {
-    self.events.trigger("close");
-    panel.destroy();
-    panel = null;
-  };
-
   var reformatSelection = function() {
     var selection = {};
 
@@ -671,7 +605,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
         urs = true;
       }
       if (!selection[granule.product]) {
-        productConfig = config.products[granule.product];
+        var productConfig = config.products[granule.product];
         selection[granule.product] = {
           name: productConfig.name,
           granules: [granule],
@@ -683,7 +617,6 @@ wv.data.ui.downloadListPanel = function(config, model) {
       }
 
       var product = selection[granule.product];
-      var id = granule.product;
 
       // For each link that looks like metadata, see if that link is
       // repeated in all granules for that product. If so, we want to
@@ -778,8 +711,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
       titleVal = link.href.split("/")
         .slice(-1);
 
-      // Handle special case where link is a directory which ends with
-      // a '/'
+      // Handle special case where link is a directory which ends with /
       if (titleVal && titleVal.length && titleVal[0] === "") {
         titleVal = link.href;
       }
@@ -913,9 +845,7 @@ wv.data.ui.downloadListPanel = function(config, model) {
   };
 
   return self;
-
 };
-
 
 wv.data.ui.selectionListPanel = function(model, results) {
 
@@ -970,13 +900,6 @@ wv.data.ui.selectionListPanel = function(model, results) {
     }
   };
 
-  var dispose = function() {
-    panel.destroy();
-    panel = null;
-    $("#wv-data-selection_GranuleList input")
-      .off("click", toggleSelection);
-  };
-
   var resultsText = function() {
     var elements = [];
     $.each(results.granules, function(index, granule) {
@@ -1007,7 +930,7 @@ wv.data.ui.selectionListPanel = function(model, results) {
     return text;
   };
 
-  var toggleSelection = function(event, ui) {
+  var toggleSelection = function() {
     var granule = granules[$(this)
       .attr("value")];
     var selected = $(this)
@@ -1024,8 +947,6 @@ wv.data.ui.selectionListPanel = function(model, results) {
       .removeAttr("checked");
   };
 
-
   init();
   return self;
-
 };

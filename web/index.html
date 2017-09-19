@@ -71,11 +71,11 @@
     <!-- link.prod --> <!-- <link type="text/css" rel="Stylesheet" href="ext/image/jcrop-0.9.12/jquery.Jcrop.min.css"> -->
 
                             <link type="text/css" rel="Stylesheet" href="ext/ui/noUiSlider-6.1.10/jquery.nouislider.css">
-                            <link type="text/css" rel="Stylesheet" href="ext/map/openlayers-3.17.1.wv1/ol.css">
 
     <!-- link.prod --> <!-- <link type="text/css" href="css/wv.css?v=20131218215115174" rel="Stylesheet" /> -->
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.fonts.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.main.css">
+    <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/util.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.alert.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/bank.css">
     <!-- link.dev --> <link type="text/css" rel="Stylesheet" href="css/wv.map.css">
@@ -129,6 +129,9 @@
 
     <!-- link.dev  -->      <script type="text/javascript" src="ext/node_modules/gifshot/build/custom/gifshot.custom.js"></script>
     <!-- link.prod --> <!-- <script type="text/javascript" src="ext/node_modules/gifshot/build/custom/gifshot.custom.min.js"></script> -->
+
+    <!-- link.dev -->       <script type="text/javascript" src="ext/node_modules/clipboard/dist/clipboard.js"></script>
+    <!-- link.prod --> <!-- <script type="text/javascript" src="ext/node_modules/clipboard/dist/clipboard.min.js"></script> -->
 
 
     <!-- link.dev  -->      <script type="text/javascript" src="ext/main/jquery-2.1.4/jquery.js"></script>
@@ -251,7 +254,7 @@
     <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.request.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.model.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.ui.js"></script>
-    <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.map.js"></script>
+    <!-- link.dev --> <script type="text/javascript" src="js/naturalEvents/wv.naturalEvents.markers.js"></script>
 
     <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.js"></script>
     <!-- link.dev --> <script type="text/javascript" src="js/map/wv.map.model.js"></script>
@@ -285,13 +288,10 @@
             <a href="/" title="Click to Reset Worldview to Defaults" id="wv-logo"></a>
             <section id="productsHolder">
               <ul id="productsHolder-tabs"></ul>
-              <div id="productsHoldertoggleButtonHolder"></div> <!-- bad -->
-              <main id="products"></main>
-              <div id="wv-events"></div>
+              <div id="productsHoldertoggleButtonHolder"></div>
+              <div id="products"></div>
+              <div id="wv-events">Loading...</div>
               <div id="wv-data"></div>
-              <footer>
-                <button id="layers-add" class="action">+ Add Layers</button>
-              </footer>
             </section>
             <div id="wv-map" class="wv-map"></div>
             <div id="eventsHolder"></div>
@@ -400,34 +400,6 @@
     <div id="wv-image-right" class="wv-image-coords"></div>
     <div id="wv-image-bottom" class="wv-image-coords"></div>
     <div id="wv-image-left" class="wv-image-coords"></div>
-
-    <style>
-      /*.backdrop {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 9998;
-        background: rgba(0, 0, 0, 0.3);
-      }*/
-    </style>
-
     <div class="backdrop"></div>
-
-    <style>
-      /*.modal {
-        width: 300px;
-        height: 300px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -150px;
-        margin-left: -150px;
-        z-index: 9999;
-        background: yellow;
-      }*/
-    </style>
-
 </body>
 </html>

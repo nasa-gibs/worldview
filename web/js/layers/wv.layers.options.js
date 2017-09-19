@@ -55,10 +55,14 @@ wv.layers.options = wv.layers.options || function(config, models, layer) {
         if ((legend.type === "continuous") ||
           (legend.type === "discrete")) {
           renderRange($dialog);
-          renderPaletteSelector($dialog);
+          if (config.layers[layer.id].type !== "wms") {
+            renderPaletteSelector($dialog);
+          }
         } else if (models.palettes.getDefaultLegend(layer.id, index)
           .colors.length === 1) {
-          renderPaletteSelector($dialog);
+          if (config.layers[layer.id].type !== "wms") {
+            renderPaletteSelector($dialog);
+          }
         }
       }
     }
