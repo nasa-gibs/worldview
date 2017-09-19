@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2016 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.naturalEvents
  */
@@ -18,18 +7,12 @@ wv.naturalEvents = wv.naturalEvents || {};
 /**
  * @class wv.naturalEvents.model
  */
-wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
+wv.naturalEvents.model = wv.naturalEvents.model || function(models, config, ui) {
 
   var self = {};
   self.selected = null;
   self.active = false;
   self.layers = config.naturalEvents.layers;
-  var state = {
-    layersString: null,
-    projection: null,
-    epsg: null,
-    time: null
-  };
 
   /**
    * Handler for events fired by this class.
@@ -42,25 +25,29 @@ wv.naturalEvents.model = wv.naturalEvents.model || function(models, config) {
 
   self.save = function(state) {
     if (self.active) {
-      state.e = 't';
+      var id = ui.naturalEvents.selected.id;
+      var date = ui.naturalEvents.selected.date;
+      var value = id?date?[id, date].join(','):id:true;
+      state.e = value;
     }
   };
 
   self.load = function(state) {
-    if (state.e == 't') {
-      models.wv.events.on("startup", function() {
-        wvx.ui.sidebar.selectTab("events");
+    if (!state.e) return;
+    models.wv.events.on('startup', function() {
+      ui.sidebar.selectTab('events');
+    });
+    var values = state.e.split(',');
+    var id = values[0] || '';
+    var date = values[1] || '';
+    id = id.match(/^EONET_[0-9]+/i) ? values[0] : null;
+    date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
+    if (id) {
+      self.events.on('hasData', function() {
+        ui.naturalEvents.selectEvent(id, date);
       });
     }
   };
-  /*
-  self.register = function(crs, def) {
-      if ( def && window.proj4 ) {
-          proj4.defs(crs, def);
-      }
-  };
-  */
-
 
   return self;
 };

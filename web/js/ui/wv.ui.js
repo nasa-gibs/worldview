@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.ui
  */
@@ -63,13 +52,6 @@ wv.ui = (function(self) {
     var $dialog = self.getDialog();
     title = title || "Notice";
     width = width || 300;
-    // var $close = $('<i></i>')
-    //     .addClass('fa fa-times fa-1x')
-    //     .click(function(e){
-    //         $(this).dialog( 'close' );
-    // });
-    // debugger
-    //message = $(message).append($close);
     $dialog.html(message)
       .dialog({
         title: title,
@@ -94,21 +76,31 @@ wv.ui = (function(self) {
       });
   };
 
-  /**
-   * Displays a non-obtrusive message to the end user in the top right.
-   *
-   * @method notify
-   * @static
-   *
-   * @param {string} message The message to display to the user.
-   *
-   * @param [title="Notice"] {string} Title for the dialog box.
-   */
-  self.notify.small = function(title, link, width, callback) {
-
-    var $dialog = self.getDialog();
-    title = title || "Notice";
-    width = width || 200;
+  self.alert = function(body, title, size, glyph, closeFn) {
+    var $message = $('<span/>', {class: 'notify-message'});
+    var $icon = $('<i/>', { class: 'fa fa-' + glyph + ' fa-1x', title: title });
+    var $messageWrapper = $('<div/>').click(function() {
+      self.notify(body, title, size);
+    }).append($icon).append($message);
+    var $close = $('<i/>', {class: 'fa fa-times fa-1x'}).click(closeFn);
+    var $alert = $('<div/>').append($close).append($messageWrapper).dialog({
+      autoOpen: false,
+      resizable: false,
+      height: 40,
+      width: 420,
+      draggable: false,
+      show: {
+        effect: 'fade',
+        duration: 400
+      },
+      hide: {
+        effect: 'fade',
+        duration: 200
+      },
+      dialogClass: 'no-titlebar notify-alert'
+    });
+    $message.empty().append(title);
+    return $alert;
   };
 
   /**
@@ -189,8 +181,8 @@ wv.ui = (function(self) {
       "browser. Upgrade or try again in a different browser.");
   };
 
-  var getComponent = function(marker, fnClose) {
-    $element = $("<div></div>")
+  var getComponent = function(marker) {
+    var $element = $("<div></div>")
       .addClass(marker);
     $("body")
       .append($element);
@@ -225,7 +217,7 @@ wv.ui = (function(self) {
     closeComponent("wv-menu", closeMenu);
   };
 
-  self.getDialog = function(marker, exclusive) {
+  self.getDialog = function(marker) {
     self.close(marker);
     return getComponent(marker || "wv-dialog", closeDialog);
   };

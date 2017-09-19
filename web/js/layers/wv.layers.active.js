@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represe`nted by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.layers
  */
@@ -20,15 +9,9 @@ wv.layers = wv.layers || {};
  */
 wv.layers.active = wv.layers.active || function(models, ui, config) {
 
-  var aoi = config.aoi;
   var model = models.layers;
   var groups = wv.util.LAYER_GROUPS;
-  var jsp;
   var legends = {};
-
-  //    var ICON_VISIBLE = "images/wv.layers/show-hide.png";
-  //    var ICON_HIDDEN = "images/wv.layers/show-hide.png";
-
   var self = {};
   self.id = "products";
   self.selector = "#products";
@@ -49,12 +32,12 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       .on("update", onPaletteUpdateAll);
     models.date.events
       .on("select", onDateChange);
-    models.wv.events.on("sidebar-expand", resize);
+    models.wv.events.on("sidebar-expand", sizeProductsTab);
     $(window)
-      .resize(resize);
-    ui.sidebar.events.on("select", function(tab) {
+      .resize(sizeProductsTab);
+    ui.sidebar.events.on("selectTab", function(tab) {
       if (tab === "active") {
-        resize();
+        sizeProductsTab();
       }
     });
 
@@ -64,30 +47,38 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
 
   var render = function() {
     legends = {};
-    var $container = $(self.selector);
-    var $addBtn = $("#layers-add");
-    $container.empty();
-
-    $addBtn.button();
-
-
-    $container.addClass('bank');
+    var $container = $('<div />', {class: 'layer-container bank'});
+    $(self.selector).empty().append($container);
 
     _.eachRight(groups, function(group) {
       renderGroup($container, group);
     });
 
-    $(self.selector + ' .close')
+    var $footer = $('<footer />');
+    $footer.append($('<button />', {
+      id: 'layers-add',
+      class: 'action',
+      text: '+ Add Layers'
+    }));
+    $('#products').append($footer);
+
+    var $addBtn = $("#layers-add");
+    $addBtn.button();
+    $addBtn.click(function(e) {
+      $('#layer-modal').dialog("open");
+    });
+
+    $('.layer-container .close')
       .off('click');
-    $(self.selector + ' .hideReg')
+    $('.layer-container .hideReg')
       .off('click');
 
-    $(self.selector + ' .close')
+    $('.layer-container .close')
       .on('click', removeLayer);
-    $(self.selector + " .hideReg")
+    $(".layer-container .hideReg")
       .on('click', toggleVisibility);
 
-    $("#" + self.id + " ul.category")
+    $(".layer-container ul.category")
       .sortable({
         items: "li:not(.head)",
         axis: "y",
@@ -95,9 +86,9 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
         tolerance: "pointer",
         placeholder: "state-saver"
       });
-    $("#" + self.id + " ul.category li")
+    $(".layer-container ul.category li")
       .disableSelection();
-    $("#" + self.id + " ul.category")
+    $(".layer-container ul.category")
       .bind('sortstop', moveLayer);
 
     _.each(model.get({
@@ -108,7 +99,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       }
     });
 
-    setTimeout(resize, 1000);
+    setTimeout(sizeProductsTab, 1000);
 
   };
 
@@ -129,12 +120,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     }), function(layer) {
       renderLayer($container, group, layer);
     });
-
-
-    //$contain.append($layers);
-
     $parent.append($container);
-
   };
 
   var renderLayer = function($parent, group, layer, top) {
@@ -289,19 +275,6 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     var thisLayerId = $(this)
       .attr("data-layer");
     var thisLayer = config.layers[thisLayerId];
-    var $layerMeta = $('<div></div>')
-      .addClass('layer-metadata');
-
-    var $layerMetaTitle = $('<a>Layer Description</a>')
-      .addClass('layer-metadata-title')
-      .on('click', function() {
-        $(this)
-          .next('.layer-metadata')
-          .toggleClass('overflow');
-      });
-
-    var $showMore = $('<div></div>')
-      .addClass('metadata-more');
 
     if ($i.length === 0) {
       wv.layers.info(config, models, thisLayer);
@@ -345,89 +318,55 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       models: models,
       layer: layer,
       ui: ui
-      //onLoad: //adjustCategoryHeights
     });
   };
   var productsIsOverflow = false;
-  var sizeProducts = function() {
-    var winSize = $(window)
-      .outerHeight(true);
-    var headSize = $("ul#productsHolder-tabs")
-      .outerHeight(true); //
-    var footSize = $("section#productsHolder footer")
-      .outerHeight(true);
-    var secSize = $("#productsHolder")
-      .innerHeight() - $("#productsHolder")
-        .height();
-    var offset = $("#productsHolder")
-      .offset();
-    var timeSize = $("#timeline")
-      .outerHeight(true);
+  var sizeProductsTab = function() {
+    var $tabPanel = $('#products');
+    var $tabFooter = $tabPanel.find('footer');
+    var windowHeight = $(window).outerHeight(true);
+    var tabBarHeight = $("#productsHolder-tabs").outerHeight(true);
+    var footerHeight = $tabFooter.outerHeight(true);
+    var distanceFromTop = $("#productsHolder").offset().top;
+    var overlaysHeight = $('#overlays').outerHeight(true);
+    var baseLayersHeight = $('#baselayers').outerHeight(true);
+    var layerGroupHeight = 26; // Height of layer group titles
+    var contentHeight = overlaysHeight + baseLayersHeight + layerGroupHeight;
     var maxHeight;
 
-    //FIXME: -10 here is the timeline's bottom position from page, fix
-    // after timeline markup is corrected to be loaded first
-
-    if (wv.util.browser.small) {
-      maxHeight = winSize - headSize - footSize -
-        offset.top - secSize - 10 - 5;
-    } else {
-      //FIXME: Hack, the timeline sometimes renders twice as large of a height and
-      //creates a miscalculation here for timeSize
-      maxHeight = winSize - headSize - footSize -
-        offset.top - /*timeSize*/ 67 - secSize - 10 - 5;
-    }
-
-    $("section#productsHolder #products")
-      .css("max-height", maxHeight);
-
-    // 26 is the combined height of the OVERLAYS and BASE LAYERS titles.
-    var childrenHeight = $('ul#overlays')
-      .outerHeight(true) +
-      $('ul#baselayers')
-        .outerHeight(true) + 26;
-
-    if ((maxHeight <= childrenHeight)) {
-      $("#products")
-        .css('height', maxHeight)
-        .css('padding-right', '10px');
-      if (productsIsOverflow) {
-        $(self.selector)
-          .perfectScrollbar('update');
-      } else {
-        $(self.selector)
-          .perfectScrollbar();
-        productsIsOverflow = true;
-      }
-    } else {
-      $("#products")
-        .css('height', '')
-        .css('padding-right', '');
-      if (productsIsOverflow) {
-        $(self.selector)
-          .perfectScrollbar('destroy');
-        productsIsOverflow = false;
-      }
-    }
-  };
-
-  var resize = function() {
     // If on a mobile device, use the native scroll bars
     if (!wv.util.browser.small) {
-      $(".wv-layers-options")
-        .show();
-      $(".wv-layers-info")
-        .show();
+      $(".wv-layers-options").show();
+      $(".wv-layers-info").show();
     } else {
-      $(".wv-layers-options")
-        .hide();
-      $(".wv-layers-info")
-        .hide();
+      $(".wv-layers-options").hide();
+      $(".wv-layers-info").hide();
       wv.ui.closeDialog();
     }
 
-    sizeProducts();
+    //FIXME: -10 here is the timeline's bottom position from page, fix
+    // after timeline markup is corrected to be loaded first
+    if (wv.util.browser.small) {
+      maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - 10 - 5;
+    } else {
+      //FIXME: Hack, the timeline sometimes renders twice as large of a height and
+      //creates a miscalculation here for timelineHeight
+      maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - /*timelineHeight*/ 67 - 10 - 5;
+    }
 
+    $tabPanel.css("max-height", maxHeight);
+
+    if ((maxHeight <= contentHeight)) {
+      $(".layer-container").css('height', maxHeight).css('padding-right', '10px');
+      $('.layer-container').perfectScrollbar();
+      if (productsIsOverflow === false) productsIsOverflow = true;
+    } else {
+      $(".layer-container").css('height', '').css('padding-right', '');
+      if (productsIsOverflow) {
+        $('.layer-container').perfectScrollbar('destroy');
+        productsIsOverflow = false;
+      }
+    }
   };
 
   var removeLayer = function(event) {
@@ -446,7 +385,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     if (legends[layer.id]) {
       delete legends[layer.id];
     }
-    resize();
+    sizeProductsTab();
   };
 
   var onLayerAdded = function(layer) {
@@ -456,12 +395,10 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     if (layer.palette) {
       renderLegendCanvas(layer);
     }
-    resize();
+    sizeProductsTab();
   };
 
-  var toggleVisibility = function(event) {
-    var $action = $(this)
-      .find('.hideReg');
+  var toggleVisibility = function() {
     if ($(this)
       .parent()
       .hasClass('disabled'))
@@ -488,18 +425,13 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     }
   };
 
-  var onLayerUpdate = function(group, layer, newIndex) {
-    // Scroll pane can be kind of glitchy, so just show what the
-    // current state is.
+  var onLayerUpdate = function() {
     // Timeout prevents redraw artifacts
-
     setTimeout(render, 1);
   };
 
   var onLayerVisibility = function(layer, visible) {
     var $element = $(".hideReg[data-layer='" + layer.id + "']");
-    //if ($element.parent().hasClass('disabled'))
-    //    return;
     if (visible) {
       $element.attr("data-action", "hide")
         .attr("title", 'Hide Layer')
@@ -534,7 +466,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
       .on("change:resolution", onZoomChange);
     setTimeout(render, 1);
   };
-  var onZoomChange = function(layers) {
+  var onZoomChange = function() {
 
     _.each(groups, function(group) {
       _.each(model.get({
@@ -547,13 +479,7 @@ wv.layers.active = wv.layers.active || function(models, ui, config) {
     });
   };
   var onDateChange = function() {
-    // Timeout prevents redraw artifacts
-    // setTimeout(render, 1);
-
-    var $container = $(self.selector);
-
     _.each(groups, function(group) {
-      var $group = $('#' + group.id);
       _.each(model.get({
         group: group.id
       }), function(layer) {

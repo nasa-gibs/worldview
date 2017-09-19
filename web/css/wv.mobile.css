@@ -48,6 +48,9 @@
     border-radius: 5px;
     top: 55px;
   }
+  a.staticLayers::after {
+    display: none;
+  }
 
   a.staticLayers:hover {
     background-image: none;
