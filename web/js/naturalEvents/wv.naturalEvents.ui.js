@@ -70,6 +70,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
   self.selectEvent = function(id, date) {
     var isIdChange = (!self.selected || self.selected.id !== id);
+    var prevId = self.selected.id ? self.selected.id : false;
+    var prevEvent = prevId ? getEventById(prevId) : false;
+    var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
 
     // Store selected id and date in model
     self.selected = {id: id};
@@ -80,6 +83,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       wv.ui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
     }
+
+    var category = event.categories[0].title;
+    var isSameCategory = category === prevCategory;
 
     if (models.proj.selected.id !== 'geographic') {
       models.proj.select('geographic');
@@ -93,7 +99,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
     zoomToEvent(event, date).then(function(){
-      if (isIdChange) activateLayersForCategory(event.categories[0].title);
+      if (isIdChange && !isSameCategory) {
+        activateLayersForCategory(event.categories[0].title);
+      }
       models.date.select(wv.util.parseDateUTC(date));
       /* For Wildfires that didn't happen today, move the timeline forward a day
        * to improve the chance that the fire is visible.
