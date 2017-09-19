@@ -528,7 +528,6 @@ label {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  -o-user-select: none;
   user-select: none;
 }
 
@@ -604,4 +603,14 @@ label {
 
 .ui-widget-content .ui-dialog-titlebar-close.ui-state-focus {
   background: none;
+}
+
+/* Counter intuitive override: All OpenLayers overlays get the
+ol-selectable class added automatically, but we don't want map markers
+or dateline overlays to be selectable. */
+.ol-selectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
 }

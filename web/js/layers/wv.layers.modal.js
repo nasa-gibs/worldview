@@ -26,7 +26,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   self.selector = '#layer-modal';
   self.id = 'layer-modal';
 
-  var $addBtn = $('#layers-add');
   var $header = $(self.selector + ' header');
   var $categories = $(' #layer-categories ');
   var $selectedCategory = $(self.selector + " #selected-category");
@@ -54,11 +53,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     // Create tiles
     render();
 
-    $addBtn.click(function(e) {
-      $(self.selector).dialog("open");
-    });
-
-    $(window).resize(resize);
+    $(window)
+      .resize(resize);
   };
 
   // Create container for 'by interest' filters buttons
