@@ -32,7 +32,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var $selectedCategory = $(self.selector + " #selected-category");
   var $allLayers = $(self.selector + " #layers-all");
   var gridItemWidth = 320; //with of grid item + spacing
-  var projection = models.proj.selected.id;
   var modalHeight;
   var sizeMultiplier;
   var searchBool;
@@ -82,6 +81,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    *
    */
   var hasMeasurementSetting = function(current, source) {
+    var projection = models.proj.selected.id;
     var hasSetting;
     Object.values(source.settings).forEach(function(setting) {
       var layer = config.layers[setting];
@@ -118,18 +118,29 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     return hasSource ? true : false;
   };
 
+
+  /**
+   * var checkModalView - If modalView is set, then output a console message describing
+   *  which layer is being shown.
+   *
+   * @return {type}  description
+   */
   var checkModalView = function() {
     var modalView = config.parameters.modalView;
-    switch(modalView) {
-      case('categories'):
-        console.warn("'Add Layers' view changed to Categories");
-        break;
-      case('measurements'):
-        console.warn("'Add Layers' view changed to Measurements");
-        break;
-      case('layers'):
-        console.warn("'Add Layers' view changed to Layers");
-        break;
+    if (modalView) {
+      switch(modalView) {
+        case('categories'):
+          console.warn("'Add Layers' view changed to Categories");
+          break;
+        case('measurements'):
+          console.warn("'Add Layers' view changed to Measurements");
+          break;
+        case('layers'):
+          console.warn("'Add Layers' view changed to Layers");
+          break;
+        default:
+          console.warn("Invalid parameter; showing Categories view");
+      }
     }
   };
 
@@ -186,9 +197,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
 
   var drawModal = function() {
-    var crumbtext;
+    var projection = models.proj.selected.id;
     var modalView = config.parameters.modalView;
-    projection = models.proj.selected.id;
 
     // If URL parameter is set, draw that type of modal view.
     if (modalView) {
@@ -205,13 +215,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           crumbText = 'Layers';
           drawAllLayers();
           break;
+        default:
+          crumbText = 'Categories';
+          drawCategories();
+          break;
       }
     // Else set the default views per projection.
     } else if (projection == 'geographic') {
       crumbText = 'Categories';
       drawCategories();
     } else {
-      crumbText = 'All Measurements';
+      crumbText = 'Measurements';
       drawAllMeasurements();
     }
   };
@@ -371,6 +385,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
 
   var drawMeasurements = function(category, selectedMeasurement, selectedIndex) {
+    var projection = models.proj.selected.id;
     var tabIndex;
     var currentTab = -1;
 
@@ -476,7 +491,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
             Object.values(source.settings).forEach(function(setting) {
               var layer = config.layers[setting];
-
               // If a setting matches the current projection, then output it.
               if (layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
 
@@ -627,6 +641,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   // TODO: Filter layers by settings with projections equal to current projection.
   var drawAllLayers = function() {
+    var projection = models.proj.selected.id;
 
     $allLayers.empty();
 
