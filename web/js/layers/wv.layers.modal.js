@@ -156,8 +156,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     });
 
     $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
-
-    //$( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
   };
 
   var redoScrollbar = function() {
@@ -229,7 +227,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     Object.keys(config.categories).forEach(function(metaCategoryName) {
 
       Object.values(config.categories[metaCategoryName]).forEach(function(category) {
-        var sortNumber;
+        var sortNumber = 2;
 
         // Check if categories have settings with the same projection.
         hasMeasurement = false;
@@ -238,21 +236,19 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           hasMeasurementSource(current);
         });
 
-        if (hasMeasurement === true) {
-          if (category.placement) {
-            if (category.placement === 'first') {
-              sortNumber = 1;
-            } else if (category.placement === 'last') {
-              sortNumber = 3;
-            }
-          } else {
-            sortNumber = 2;
+        if (hasMeasurement) {
+          if (category.placement === 'first') {
+            sortNumber = 1;
+          } else if (category.placement === 'last') {
+            sortNumber = 3;
           }
+
           var $category = $('<div />', {
             id: category.id,
             'class': 'layer-category layer-category-' + interestCssName(metaCategoryName),
             'data-sort': sortNumber
           });
+
           if (category.image) {
             $category.css('background-image', 'url("images/wv.layers/categories/' + category.image + '")');
           }
