@@ -228,12 +228,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
       Object.values(config.categories[metaCategoryName]).forEach(function(category) {
         var sortNumber = 2;
+        var $i = 0;
 
         // Check if categories have settings with the same projection.
         hasMeasurement = false;
         Object.values(category.measurements).forEach(function(measurement) {
-          var current = config.measurements[measurement];
-          hasMeasurementSource(current);
+          hasMeasurementSource(config.measurements[measurement]);
         });
 
         if (hasMeasurement) {
@@ -273,7 +273,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           $categoryOpaque.append($categoryTitle);
 
           var $measurements = $('<ul />');
-          $i = 0;
+
           Object.values(category.measurements).forEach(function(measurement, index) {
             var projection = models.proj.selected.id;
             var current = config.measurements[measurement];
@@ -371,18 +371,24 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
 
   var drawMeasurements = function(category, selectedMeasurement, selectedIndex) {
+    var tabIndex;
+    var currentTab = -1;
+
     $selectedCategory.empty();
     $breadcrumb.empty();
     var $categoryList = $('<div />', {
       id: category.id + '-list'
     });
-
     // Begin Measurement Level
     Object.values(category.measurements).forEach(function(measurement) {
       var current = config.measurements[measurement];
-
       // Check if measurements have settings with the same projection.
       if(hasMeasurementSource(current)) {
+        currentTab++;
+        if (selectedMeasurement == current.id) {
+          tabIndex = currentTab;
+        }
+
         var $measurementHeader = $('<div />', {
           id: 'accordion-' + category.id + '-' + current.id
         });
@@ -580,7 +586,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     });
 
     if (selectedMeasurement) {
-      $categoryList.accordion("option", "active", selectedIndex);
+      $categoryList.accordion("option", "active", tabIndex);
     }
 
     $selectedCategory.append($categoryList);
