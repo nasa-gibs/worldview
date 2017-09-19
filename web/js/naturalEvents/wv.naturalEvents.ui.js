@@ -81,6 +81,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       return;
     }
 
+    if (models.proj.selected.id !== 'geographic') {
+      models.proj.select('geographic');
+    }
+
     date = date || self.getDefaultEventDate(event);
 
     highlightEventInList(id, date);
