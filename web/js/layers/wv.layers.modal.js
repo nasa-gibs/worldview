@@ -36,7 +36,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var modalHeight;
   var sizeMultiplier;
   var searchBool;
-  var hasSetting;
+  var hasMeasurement;
 
   // Visible Layers
   var visible = {};
@@ -73,7 +73,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   });
 
   /**
-   * var checkMeasurementSettings - Checks the (current) measurement's source
+   * var hasMeasurementSetting - Checks the (current) measurement's source
    *  for a setting and returns true if present.
    *
    * @param  {type} current The current config.measurements measurement.
@@ -81,7 +81,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * @return {type}         Return true if the source contains settings.
    *
    */
-  var checkMeasurementSettings = function(current, source) {
+  var hasMeasurementSetting = function(current, source) {
+    var hasSetting;
     Object.values(source.settings).forEach(function(setting) {
       var layer = config.layers[setting];
       var proj = layer.projections;
@@ -96,19 +97,25 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
       }
     });
+    return hasSetting ? true : false;
   };
 
   /**
-   * var checkMeasurementSourceSettings - Checks each (current) measurement's sources
-   *  and runs checkMeasurementSettings to see if these sources contain settings.
+   * var hasMeasurementSource - Checks each (current) measurement's sources
+   *  and run hasMeasurementSetting to see if these sources contain settings.
+   *  If a source contains settings, also sets a hasMeasurement flag to be checked
+   *  when drawing categories.
    *
    * @param  {type} current The current config.measurements measurement.
    * @return {type}         Return true if the measurement has sources with settings.
    */
-  var checkMeasurementSourceSettings = function(current) {
+
+  var hasMeasurementSource = function(current) {
+    var hasSource;
     Object.values(current.sources).forEach(function(source) {
-      checkMeasurementSettings(current, source);
+      if(hasMeasurementSetting(current, source)) { hasSource = true; hasMeasurement = true; };
     });
+    return hasSource ? true : false;
   };
 
   var checkModalView = function() {
@@ -225,13 +232,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         var sortNumber;
 
         // Check if categories have settings with the same projection.
-        hasSetting = false;
+        hasMeasurement = false;
         Object.values(category.measurements).forEach(function(measurement) {
           var current = config.measurements[measurement];
-          checkMeasurementSourceSettings(current);
+          hasMeasurementSource(current);
         });
 
-        if (hasSetting === true) {
+        if (hasMeasurement === true) {
           if (category.placement) {
             if (category.placement === 'first') {
               sortNumber = 1;
@@ -275,9 +282,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             var projection = models.proj.selected.id;
             var current = config.measurements[measurement];
             // Check if measurements have settings with the same projection.
-            hasSetting = false;
-            checkMeasurementSourceSettings(current);
-            if(hasSetting === true) {
+            if(hasMeasurementSource(current)) {
               $i++;
 
               if ($i > 6) {
@@ -381,10 +386,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       var current = config.measurements[measurement];
 
       // Check if measurements have settings with the same projection.
-      hasSetting = false;
-      checkMeasurementSourceSettings(current);
-
-      if (hasSetting === true) {
+      if(hasMeasurementSource(current)) {
         var $measurementHeader = $('<div />', {
           id: 'accordion-' + category.id + '-' + current.id
         });
@@ -406,10 +408,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         // Begin source level
         Object.values(current.sources).forEach(function(source) {
           // Check if sources have settings with the same projection.
-          hasSetting = false;
-          checkMeasurementSettings(current, source);
-
-          if(hasSetting === true) {
+          if(hasMeasurementSetting(current, source)) {
             var $sourceTab = $('<li />');
 
             var $sourceLink = $('<a />', {
