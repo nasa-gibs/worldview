@@ -58,7 +58,7 @@
     "stylelint": "^8.0.0",
     "worldview-components": "1.3.3",
     "isotope-layout": "3.0.x",
-    "isotope-packery": "2.1.x",
+    "isotope-packery": "2.x.x",
     "perfect-scrollbar": "0.7.x"
   }
 }
