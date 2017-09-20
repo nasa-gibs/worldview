@@ -39,7 +39,8 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
         direction: "left"
       },
       width: 450,
-      height: 300,
+      minHeight: 150,
+      maxHeight: 300,
       resizable: false,
       draggable: false,
       position: {

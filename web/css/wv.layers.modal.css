@@ -347,6 +347,7 @@
 #layers-all .layers-all-layer,
 #selected-category .ui-accordion .ui-accordion-icons {
   padding-left: 1.2em;
+  line-height: 0;
 }
 
 #layers-all .layers-all-layer .layers-all-layer-icon,
@@ -371,8 +372,8 @@
   background-position: 30px 0;
 }
 
-#layers-all .layers-all-layer h3,
-#selected-category .ui-accordion-header h3 {
+.layers-all-layer h3,
+.ui-accordion-header h3 {
   color: #ddd;
   font-size: 20px;
   line-height: 100%;
@@ -381,8 +382,8 @@
 }
 
 @media (min-width: 753px) {
-  #layers-all .layers-all-layer h3,
-  #selected-category .ui-accordion-header h3 {
+  .layers-all-layer h3,
+  .ui-accordion-header h3 {
     padding-right: 40px;
   }
 }
@@ -474,7 +475,9 @@
   margin-top: 0;
 }
 
-.source-metadata h1 {
+.source-metadata h1,
+.source-metadata h3 {
+  display: block;
   color: #ddd;
   font-weight: 700;
   font-size: 14px;
@@ -483,11 +486,13 @@
   font-family: 'Open Sans', sans-serif;
 }
 
-.source-metadata h1:first-child {
+.source-metadata h1:first-child,
+.source-metadata h3:first-child {
   margin-top: 4px;
 }
 
-.source-metadata h2 {
+.source-metadata h2,
+.source-metadata h4 {
   color: #ddd;
   font-weight: 700;
   margin-bottom: 5px;
