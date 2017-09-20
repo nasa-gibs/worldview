@@ -154,6 +154,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     if (sizeMultiplier > 3)
       sizeMultiplier = 3;
     modalHeight = $(window).height() - 100;
+    modalWidth = gridItemWidth * sizeMultiplier + 10;
+    if(self.reactList)
+      self.reactList.setState({width:modalWidth});
   };
 
   $.fn.hasScrollBar = function() {
@@ -165,7 +168,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     $(self.selector).dialog("option", {
       height: modalHeight,
-      width: gridItemWidth * sizeMultiplier + 10
+      width: modalWidth
     });
 
     $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
@@ -899,7 +902,7 @@ n  };
       autoOpen: false,
       resizable: false,
       height: modalHeight,
-      width: gridItemWidth * sizeMultiplier + 10,
+      width: modalWidth,
       modal: true,
       dialogClass: "layer-modal no-titlebar",
       draggable: false,
