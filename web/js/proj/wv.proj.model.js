@@ -20,56 +20,57 @@ wv.proj = wv.proj || {};
  */
 wv.proj.model = wv.proj.model || function(config) {
 
-    var self = {};
-    self.selected = null;
-    self.events = wv.util.events();
+  var self = {};
+  self.selected = null;
+  self.events = wv.util.events();
 
-    var init = function() {
-        self.selectDefault();
-        _.each(config.projections, function(proj) {
-            if ( proj.crs && proj.proj4 ) {
-                self.register(proj.crs, proj.proj4);
-                ol.proj.get(proj.crs).setExtent(proj.maxExtent);
-            }
-        });
-    };
+  var init = function() {
+    self.selectDefault();
+    _.each(config.projections, function(proj) {
+      if (proj.crs && proj.proj4) {
+        self.register(proj.crs, proj.proj4);
+        ol.proj.get(proj.crs)
+          .setExtent(proj.maxExtent);
+      }
+    });
+  };
 
-    self.select = function(id) {
-        var proj = config.projections[id];
-        if ( !proj ) {
-            throw new Error("Invalid projection: " + id);
-        }
-        var updated = false;
-        if ( !self.selected || self.selected.id !== id ) {
-            self.selected = proj;
-            self.events.trigger("select", proj);
-        }
-        return updated;
-    };
+  self.select = function(id) {
+    var proj = config.projections[id];
+    if (!proj) {
+      throw new Error("Invalid projection: " + id);
+    }
+    var updated = false;
+    if (!self.selected || self.selected.id !== id) {
+      self.selected = proj;
+      self.events.trigger("select", proj);
+    }
+    return updated;
+  };
 
-    self.selectDefault = function() {
-        if ( config.defaults && config.defaults.projection ) {
-            self.select(config.defaults.projection);
-        }
-    };
+  self.selectDefault = function() {
+    if (config.defaults && config.defaults.projection) {
+      self.select(config.defaults.projection);
+    }
+  };
 
-    self.save = function(state) {
-        state.p = self.selected.id;
-    };
+  self.save = function(state) {
+    state.p = self.selected.id;
+  };
 
-    self.load = function(state) {
-        var projId = state.p;
-        if ( projId ) {
-            self.select(projId);
-        }
-    };
+  self.load = function(state) {
+    var projId = state.p;
+    if (projId) {
+      self.select(projId);
+    }
+  };
 
-    self.register = function(crs, def) {
-        if ( def && window.proj4 ) {
-            proj4.defs(crs, def);
-        }
-    };
+  self.register = function(crs, def) {
+    if (def && window.proj4) {
+      proj4.defs(crs, def);
+    }
+  };
 
-    init();
-    return self;
+  init();
+  return self;
 };

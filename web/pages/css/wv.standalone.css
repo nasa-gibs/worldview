@@ -1,19 +1,16 @@
 body {
-    margin: 0px;
-    background-color: #000000;
-    color: #FFFBE7;
+  margin: 0;
+  background-color: #000;
+  color: #fffbe7;
 }
 
 #page {
-    margin: 10px auto;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 5px;
-    max-width: 600px;
+  margin: 10px auto;
+  padding: 10px 20px;
+  border-radius: 5px;
+  max-width: 600px;
 }
 
 .wv-document ul {
-    margin-left: auto;
+  margin-left: auto;
 }

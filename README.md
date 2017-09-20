@@ -5,7 +5,6 @@
 Visit Worldview at
 [https://worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
 
-**We're hiring! If you're interested in joining our team, we're looking for a [Javascript Web Developer](https://www.ssaihq.com/employment/careers/Careers.aspx?adata=EG8FfWFUTsrjoBu9rAXRJa%2flnn%2fS1bDbU2WqXYiLCC0Q4BLQzr3LEKS%2bUp%2bNdoDQVLZOGagcvG%2f25E7Qk01zyxF0zIcYdce00orz95xFrmZd1aAoZmvdv5499dCV1RowoxrvKXgdJ6ZQZ9ECkz9KEHaC%2f0xNpGwTCB11NbAGPAdvfU1%2fA9Ckl4m%2fWK8x7js0OA%3d%3d)!**
 
 ## About
 
@@ -28,31 +27,6 @@ several other clients. We encourage interested developers to build their own
 clients or integrate NASA imagery into their existing ones using these
 services.
 
-## License
-
-This code was originally developed at NASA/Goddard Space Flight Center for
-the Earth Science Data and Information System (ESDIS) project.
-
-Copyright &copy; 2013 - 2016 United States Government as represented by the
-Administrator of the National Aeronautics and Space Administration.
-All Rights Reserved.
-
-Licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE.md).
-
-## Contributing
-
-We'd be quite excited if you'd like to contribute to Worldview! Whether it's finding bugs, adding new features, fixing anything broken, or improving documentation, get started by submitting an issue or pull request!
-
-Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-Roadmap) for a list of features currently in progress or planned in the reasonably near future.  We're also working to synchronize our (currently internal) sprint planning and issue tracking systems with GitHub.  
-
-Here are the tickets we are currently working on:
-[![Stories in Ready](https://badge.waffle.io/nasa-gibs/worldview.svg?label=ready&title=Ready)](http://waffle.io/nasa-gibs/worldview)
-[![Stories in In Progress](https://badge.waffle.io/nasa-gibs/worldview.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/nasa-gibs/worldview)
-
-To get your instance of Worldview running, follow the [Installation](https://github.com/nasa-gibs/worldview#installation) guide below.
-
-Thanks for considering contributing and making our planet easier to explore!
-
 ## Installation
 
 These instructions install a development version of Worldview using [Node.js](https://nodejs.org/)
@@ -63,8 +37,28 @@ to serve the app locally.  If you prefer to use Apache, follow the directions in
 Prerequisites:
 - [Node.js](https://nodejs.org/)  
   - *Note to Ubuntu users:* After installing Node.js, ensure that it is available as `node` on the command line.  If not, [see here](https://github.com/nasa-gibs/worldview/issues/249#issuecomment-302172817) for more information.
-- Windows users: .NET Framework 2.0 or Visual Studio 2005 or newer installed. Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
-- Python 2.7.x
+  - A later version of Node (>v6) is required and is not available on some distributions.  To make sure you have a later version, [visit the Node download page](https://nodejs.org/en/download/)
+- Windows users:
+  - Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
+  - .NET Framework 2.0 or Visual Studio 2005 or newer installed with Visual C++ compilers.  
+  It is HIGHLY recommended you install the Windows Build Tools npm package to ensure the correct compilers have been installed.  
+  To install this package:
+  ```
+  # run in administrator privileged command prompt window
+  npm install --global --production windows-build-tools
+  ```
+  - Python 2.7.x (included with Windows Build Tools)
+  - Python path added to Windows environmental variables (to use within cmd.exe and powershell)  
+  To add environmental variables:
+    - Right-click the Windows icon in bottom-left corner of the screen.
+    - Click System, click Advanced System Settings, click Environmental Variables.
+    - Highlight the Path row and click edit.
+    - Each path is seperated with a semicolon ";"
+    - Add your python directory path here.\*  
+   \*Windows Build Tools includes python, the included python path is:  
+   `%USERPROFILE%\.windows-build-tools\python27`  
+   Otherwise the path is most likely:
+   `C:\Python27`
 
 
 Clone this repository:
@@ -114,10 +108,26 @@ You can end the session by pressing `control-C`
 * [Alternate Installation using Apache](doc/apache_setup.md)
 * [Branding](doc/branding.md)
 * [Optional Features](doc/features.md)
-* [Development Notes](doc/developing.md)
 * [Configuration](doc/config.md)
+* [Development Notes](doc/developing.md)
+* [Coding Style Guide](doc/style_guide.md)
+* [Testing](doc/testing.md)
 * [Third-Party Library Use](THIRD_PARTY.md)
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+This code was originally developed at NASA/Goddard Space Flight Center for
+the Earth Science Data and Information System (ESDIS) project.
+
+Copyright &copy; 2013 - 2017 United States Government as represented by the
+Administrator of the National Aeronautics and Space Administration.
+All Rights Reserved.
+
+Licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE.md).
 
 ## Contact
 

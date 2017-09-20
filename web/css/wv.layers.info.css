@@ -1,0 +1,37 @@
+.bank li.item a.wv-layers-info {
+  color: #333;
+  text-align: center;
+}
+
+.bank li.item a.wv-layers-info .wv-layers-info-icon {
+  border-color: #333;
+}
+
+.bank li.item a.wv-layers-info.disabled {
+  color: #aaa;
+}
+
+.bank li.item a.wv-layers-info.disabled .wv-layers-info-icon {
+  border-color: #aaa;
+}
+
+.bank li.item a.wv-layers-info.disabled:hover {
+  cursor: no-drop;
+  background-color: transparent;
+}
+
+.bank li.layer-hidden a.wv-layers-info {
+  color: #999;
+}
+
+.bank li.layer-hidden a.wv-layers-info .wv-layers-info-icon {
+  border-color: #999;
+}
+
+.bank li.layer-hidden a.wv-layers-info.disabled {
+  color: #666;
+}
+
+.bank li.layer-hidden a.wv-layers-info.disabled .wv-layers-info-icon {
+  border-color: #666;
+}

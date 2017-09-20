@@ -26,125 +26,152 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   self.selector = '#layer-modal';
   self.id = 'layer-modal';
 
-  var $addBtn = $('#layers-add');
-  var $header = $( self.selector + ' header' );
+  var $header = $(self.selector + ' header');
   var $categories = $(' #layer-categories ');
-  //var $categoriesNav = $(' #categories-nav ');
-
   var $selectedCategory = $(self.selector + " #selected-category");
   var $allLayers = $(self.selector + " #layers-all");
   var gridItemWidth = 320; //with of grid item + spacing
-  var projection = models.proj.selected.id;
   var layerList = React.createFactory(WVC.LayerList);
   var modalHeight;
-  var modalWidth;
+  var modalWidth;  
   var sizeMultiplier;
   var searchBool;
+  var hasMeasurement;
   var copy = [];
 
-  //Visible Layers
+  // Visible Layers
   var visible = {};
 
   var init = function() {
-    _.each(config.layers, function(layer) {
+    Object.values(config.layers).forEach(function(layer) {
       visible[layer.id] = true;
     });
     model.events
-    //FIXME: on "add" needs to be present without trying to add a product
-    // multiple times
-    //.on("add", onLayerAdded)
+    // FIXME: on "add" needs to be present without trying to add a product
+      // multiple times
+      //.on("add", onLayerAdded)
       .on("remove", onLayerRemoved);
-    models.proj.events.on("select", drawDefaultPage );
+    models.proj.events.on("select", drawDefaultPage);
 
-    //Create tiles
+    // Create tiles
     render();
 
-    $addBtn.click(function(e){
-      $( self.selector ).dialog("open");
+    $(window)
+      .resize(resize);
+  };
+
+  // Create container for 'by interest' filters buttons
+  var $nav = $('<nav />', {
+    id: 'categories-nav'
+  });
+
+  // Create container for breadcrumb
+  var $breadcrumb = $('<nav />', {
+    id: 'category-breadcrumb'
+  });
+
+  /**
+   * var hasMeasurementSetting - Checks the (current) measurement's source
+   *  for a setting and returns true if present.
+   *
+   * @param  {type} current The current config.measurements measurement.
+   * @param  {type} source  The current measurement source.
+   * @return {type}         Return true if the source contains settings.
+   *
+   */
+  var hasMeasurementSetting = function(current, source) {
+    var projection = models.proj.selected.id;
+    var hasSetting;
+    Object.values(source.settings).forEach(function(setting) {
+      var layer = config.layers[setting];
+      if(layer) {
+        var proj = layer.projections;
+        if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+          if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+            if(current.id === "orbital-track") {
+              hasSetting = true;
+            }
+          // Don't output sources with only orbit tracks
+          } else {
+            hasSetting = true;
+          }
+        }
+      }
     });
-
-    $(window).resize(resize);
+    return hasSetting ? true : false;
   };
 
-  //Create container for 'by interest' filters buttons
-  var $nav = $('<nav></nav>')
-      .attr( 'id', 'categories-nav' );
+  /**
+   * var hasMeasurementSource - Checks each (current) measurement's sources
+   *  and run hasMeasurementSetting to see if these sources contain settings.
+   *  If a source contains settings, also sets a hasMeasurement flag to be checked
+   *  when drawing categories.
+   *
+   * @param  {type} current The current config.measurements measurement.
+   * @return {type}         Return true if the measurement has sources with settings.
+   */
 
-  //Create container for breadcrumb
-  var $breadcrumb = $('<nav></nav>')
-      .attr( 'id', 'category-breadcrumb' );
+  var hasMeasurementSource = function(current) {
+    var hasSource;
+    Object.values(current.sources).forEach(function(source) {
+      if(hasMeasurementSetting(current, source)) { hasSource = true; hasMeasurement = true; };
+    });
+    return hasSource ? true : false;
+  };
 
-  var checkModalView = function(){
-    if(config.parameters.modalView == 'categories') {
-      console.warn("'Add Layers' view changed to Categories");
-    } else if (config.parameters.modalView == 'measurements') {
-      console.warn("'Add Layers' view changed to Measurements");
-    } else if (config.parameters.modalView == 'layers') {
-      console.warn("'Add Layers' view changed to Layers");
+
+  /**
+   * var checkModalView - If modalView is set, then output a console message describing
+   *  which layer is being shown.
+   *
+   * @return {type}  description
+   */
+  var checkModalView = function() {
+    var modalView = config.parameters.modalView;
+    if (modalView) {
+      switch(modalView) {
+        case('categories'):
+          console.warn("'Add Layers' view changed to Categories");
+          break;
+        case('measurements'):
+          console.warn("'Add Layers' view changed to Measurements");
+          break;
+        case('layers'):
+          console.warn("'Add Layers' view changed to Layers");
+          break;
+        default:
+          console.warn("Invalid parameter; showing Categories view");
+      }
     }
   };
 
-  var setModalSize = function(){
-    var availableWidth = $( window ).width() - ( $( window ).width() * 0.15 );
-    sizeMultiplier = Math.floor( availableWidth / gridItemWidth );
-    if(sizeMultiplier < 1) sizeMultiplier = 1;
-    if(sizeMultiplier > 3) sizeMultiplier = 3;
-    modalHeight = $( window ).height() - 100;
-    modalWidth = gridItemWidth * sizeMultiplier + 10;
-    if(self.reactList){
-      self.reactList.setState({width: modalWidth});
-    }
+  var setModalSize = function() {
+    var availableWidth = $(window).width() - ($(window).width() * 0.15);
+    sizeMultiplier = Math.floor(availableWidth / gridItemWidth);
+    if (sizeMultiplier < 1)
+      sizeMultiplier = 1;
+    if (sizeMultiplier > 3)
+      sizeMultiplier = 3;
+    modalHeight = $(window).height() - 100;
   };
 
   $.fn.hasScrollBar = function() {
     return this.get(0).scrollHeight > this.height();
   };
-
   //Update modal size
   var redo = function() {
     setModalSize();
 
-    $( self.selector ).dialog( "option", {
+    $(self.selector).dialog("option", {
       height: modalHeight,
-      width: modalWidth,
+      width: gridItemWidth * sizeMultiplier + 10
     });
 
-    $( '#layer-modal-main' ).css( 'height', modalHeight - 40 )
-      .perfectScrollbar('update');
-
-    //$( '.stamp' ).css("width", sizeMultiplier * gridItemWidth - 10 + "px");
+    $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
   };
 
-  var redoScrollbar = function(){
-    $( '#layer-modal-main' ).perfectScrollbar('update');
-  };
-
-  var getSetting = function(measurement) {
-    var result = null;
-    if(measurement instanceof Array) {
-      for(var i = 0; i < measurement.length; i++) {
-        result = getSetting(measurement[i]);
-        if (result) {
-          break;
-        }
-      }
-    } else {
-      for(var prop in measurement) {
-        if(prop == 'settings') {
-          for (var x = 0; x < prop.length; x += 1) {
-            var setting = measurement[prop][x];
-            return setting;
-          }
-        }
-        if(measurement[prop] instanceof Object || measurement[prop] instanceof Array) {
-          result = getSetting(measurement[prop]);
-          if (result) {
-            break;
-          }
-        }
-      }
-    }
-    return result;
+  var redoScrollbar = function() {
+    $('#layer-modal-main').perfectScrollbar('update');
   };
 
   // This draws the default page, depending on projection
@@ -170,27 +197,36 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     redoScrollbar();
   };
 
-  var drawModal = function(){
-    projection = models.proj.selected.id;
-    var crumbtext;
+  var drawModal = function() {
+    var projection = models.proj.selected.id;
+    var modalView = config.parameters.modalView;
 
     // If URL parameter is set, draw that type of modal view.
-    if(config.parameters.modalView == 'categories') {
-      crumbText = 'Categories';
-      drawCategories();
-    } else if (config.parameters.modalView == 'measurements') {
-      crumbText = 'All Measurements';
-      drawAllMeasurements();
-    } else if (config.parameters.modalView == 'layers') {
-      crumbText = 'All Layers';
-      drawAllLayers();
-
-      // Else set the default views per projection.
-    } else if(projection == 'geographic') {
+    if (modalView) {
+      switch(modalView) {
+        case('categories'):
+          crumbText = 'Categories';
+          drawCategories();
+          break;
+        case('measurements'):
+          crumbText = 'Measurements';
+          drawAllMeasurements();
+          break;
+        case('layers'):
+          crumbText = 'Layers';
+          drawAllLayers();
+          break;
+        default:
+          crumbText = 'Categories';
+          drawCategories();
+          break;
+      }
+    // Else set the default views per projection.
+    } else if (projection == 'geographic') {
       crumbText = 'Categories';
       drawCategories();
     } else {
-      crumbText = 'All Measurements';
+      crumbText = 'Measurements';
       drawAllMeasurements();
     }
   };
@@ -203,109 +239,96 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $allLayers.hide();
     $nav.empty();
 
-    _.each( config.categories, function( metaCategory, metaCategoryName ) {
+    Object.keys(config.categories).forEach(function(metaCategoryName) {
 
-      _.each(config.categories[metaCategoryName], function( category, name ) {
-        var sortNumber;
+      Object.values(config.categories[metaCategoryName]).forEach(function(category) {
+        var sortNumber = 2;
+        var $i = 0;
 
         // Check if categories have settings with the same projection.
-        var hasSetting;
-        _.each( category.measurements, function( measurement, index ) {
-          var current = config.measurements[measurement];
-          var currentId = getSetting(current);
-          var layer = config.layers[currentId];
-
-          if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-            hasSetting = true;
-          }
+        hasMeasurement = false;
+        Object.values(category.measurements).forEach(function(measurement) {
+          hasMeasurementSource(config.measurements[measurement]);
         });
 
-        if(hasSetting === true) {
-          if(category.placement){
-            if (category.placement === 'first'){
-              sortNumber = 1;
-            }
-            else if(category.placement === 'last'){
-              sortNumber = 3;
-            }
-          }
-          else sortNumber = 2;
-          var $category = $( '<div></div>' )
-              .attr('data-sort', sortNumber)
-              .addClass( 'layer-category layer-category-' + interestCssName(metaCategoryName) )
-              .attr( 'id', category.id );
-          if(category.image){
-            $category
-              .css('background-image','url("images/wv.layers/categories/' + category.image + '")');
+        if (hasMeasurement) {
+          if (category.placement === 'first') {
+            sortNumber = 1;
+          } else if (category.placement === 'last') {
+            sortNumber = 3;
           }
 
-          var $categoryOpaque = $('<div></div>')
-              .addClass('category-background-cover');
+          var $category = $('<div />', {
+            id: category.id,
+            'class': 'layer-category layer-category-' + interestCssName(metaCategoryName),
+            'data-sort': sortNumber
+          });
 
-          $category.append( $categoryOpaque );
+          if (category.image) {
+            $category.css('background-image', 'url("images/wv.layers/categories/' + category.image + '")');
+          }
 
-          var $categoryTitle = $( '<h3></h3>' );
+          var $categoryOpaque = $('<div />', {
+            'class': 'category-background-cover'
+          });
 
-          var $categoryLink = $( '<a></a>' )
-              .text( category.title )
-              .attr( 'alt', category.title )
-              .addClass('layer-category-name')
-              .click( function( e ) {
-                drawMeasurements( category );
-              });
+          $category.append($categoryOpaque);
 
-          $categoryTitle.append( $categoryLink );
-          $categoryOpaque.append( $categoryTitle );
+          var $categoryTitle = $('<h3 />');
 
-          var $measurements = $('<ul></ul>');
-          $i = 0;
-          _.each( category.measurements, function( measurement, index ) {
+          var $categoryLink = $('<a />', {
+            text: category.title,
+            'class': 'layer-category-name',
+            'alt': category.title
+          }).click(function(e) {
+            drawMeasurements(category);
+          });
+
+          $categoryTitle.append($categoryLink);
+          $categoryOpaque.append($categoryTitle);
+
+          var $measurements = $('<ul />');
+
+          Object.values(category.measurements).forEach(function(measurement, index) {
+            var projection = models.proj.selected.id;
             var current = config.measurements[measurement];
-            var currentId = getSetting(current);
-            var layer = config.layers[currentId];
-
             // Check if measurements have settings with the same projection.
-            var hasSetting;
-            if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-              hasSetting = true;
-            }
-
-            if(hasSetting === true) {
+            if(hasMeasurementSource(current)) {
               $i++;
 
-              if($i > 6){
+              if ($i > 6) {
                 setCategoryOverflow(category, $measurements);
               }
 
-              if (config.measurements[measurement] === undefined){
-                throw new Error("Error: Measurement '" + measurement +
-                                "' stated in category '" +
-                                category.title + "' does not exist " +
-                                "in measurement list!");
+              if (config.measurements[measurement] === undefined) {
+                throw new Error("Error: Measurement '" + measurement + "' stated in category '" + category.title + "' does not exist " + "in measurement list!");
               }
 
-              var $measurement = $( '<a></a>' )
-                  .attr( 'data-category', category.id )
-                  .attr( 'data-measurement', current.id )
-                  .attr( 'title', category.title + ' - ' + current.title )
-                  .text( current.title );
-
-              $measurement.click( function( e ) {
-                drawMeasurements( category, current.id, index );
+              var $measurement = $('<a />', {
+                text: current.title,
+                'class': 'layer-category-name',
+                'data-category': category.id,
+                'data-measurement': current.id,
+                'title': category.title + ' - ' + current.title
               });
 
-              var $measurementItem = $( '<li></li>' )
-                  .addClass( 'layer-category-item' );
+              $measurement.click(function(e) {
+                drawMeasurements(category, current.id, index);
+              });
 
-              $measurementItem.append( $measurement );
+              var $measurementItem = $('<li />', {
+                'class': 'layer-category-item'
+              });
 
-              $measurements.append( $measurementItem );
+              $measurementItem.append($measurement);
+
+              $measurements.append($measurementItem);
+
+              $categoryOpaque.append($measurements);
+
+              $categories.append($category);
             }
           });
-
-          $categoryOpaque.append( $measurements );
-
-          $categories.append( $category );
 
           $breadcrumb.show();
 
@@ -315,279 +338,287 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
       $categories.show();
 
-      var $filterButton = $( '<input />' )
-          .attr( 'type', 'radio')
-          .text( interestLabelName( metaCategoryName ) );
-
-      var $label = $( '<label></label>' )
-          .text( interestLabelName( metaCategoryName ) );
-
-      $filterButton
-        .attr( 'id', 'button-filter-' + interestCssName( metaCategoryName ) )
-        .attr( 'data-filter', interestCssName( metaCategoryName ) )
-        .click( function( e ) {
-          $categories.isotope({
-            filter: '.layer-category-' + interestCssName( metaCategoryName )
-          });
-          $nav.find('.ui-button').removeClass( 'nav-selected' );
-          $("label[for=" + $(this).attr("id") + "]")
-            .addClass('nav-selected');
+      var $filterButton = $('<input />', {
+        text: interestLabelName(metaCategoryName),
+        id: 'button-filter-' + interestCssName(metaCategoryName),
+        'data-filter': interestCssName(metaCategoryName),
+        'type': 'radio'
+      }).click(function(e) {
+        $categories.isotope({
+          filter: '.layer-category-' + interestCssName(metaCategoryName)
         });
+        $nav.find('.ui-button').removeClass('nav-selected');
+        $("label[for=" + $(this).attr("id") + "]").addClass('nav-selected');
+      });
 
-      $label.attr('for', 'button-filter-' + interestCssName( metaCategoryName ) );
+      var $label = $('<label />', {
+        text: interestLabelName(metaCategoryName),
+        'for': 'button-filter-' + interestCssName(metaCategoryName)
+      });
 
-      $nav.append( $filterButton );
-      $nav.append( $label );
-      //Create radiobuttons with filter buttons
+      $nav.append($filterButton);
+      $nav.append($label);
+      // Create radiobuttons with filter buttons
       $nav.buttonset();
       $nav.show();
     });
 
-    $categories.isotope( {
+    $categories.isotope({
       itemSelector: '.layer-category',
       //stamp: '.stamp',
       getSortData: {
         name: '.layer-category-name', // text from querySelector
         order: '[data-sort]'
       },
-      sortBy: [ 'order', 'name' ],
+      sortBy: [
+        'order', 'name'
+      ],
       filter: '.layer-category-legacy',
       masonry: {
         gutter: 10
       }
 
-    } );
+    });
 
-    $('#layer-modal-main').prepend( $nav );
+    $('#layer-modal-main').prepend($nav);
 
     $('label[for=button-filter-legacy]').addClass('nav-selected');
   };
 
-  var drawMeasurements = function(category, selectedMeasurement, selectedIndex){
+  var drawMeasurements = function(category, selectedMeasurement, selectedIndex) {
+    var projection = models.proj.selected.id;
+    var tabIndex;
+    var currentTab = -1;
+
     $selectedCategory.empty();
     $breadcrumb.empty();
-    var $categoryList = $( '<div></div>' )
-        .attr( 'id', category.id + '-list' );
-
-    //Begin Measurement Level
-    _.each( category.measurements, function( measurement, measurementName ) {
+    var $categoryList = $('<div />', {
+      id: category.id + '-list'
+    });
+    // Begin Measurement Level
+    Object.values(category.measurements).forEach(function(measurement) {
       var current = config.measurements[measurement];
-      var currentId = getSetting(current);
-      var layer = config.layers[currentId];
-
       // Check if measurements have settings with the same projection.
-      var hasSetting;
-      if(currentId == layer.id && Object.keys(layer.projections).indexOf(projection) > -1) {
-        hasSetting = true;
-      }
+      if(hasMeasurementSource(current)) {
+        currentTab++;
+        if (selectedMeasurement == current.id) {
+          tabIndex = currentTab;
+        }
 
-      if(hasSetting === true) {
-        var $measurementHeader = $( '<div></div>' )
-            .attr('id', 'accordion-' + category.id + '-' + current.id );
+        var $measurementHeader = $('<div />', {
+          id: 'accordion-' + category.id + '-' + current.id
+        });
 
-        var $measurementTitle = $( '<h3></h3>' )
-            .text( current.title );
+        var $measurementTitle = $('<h3 />', {
+          text: current.title
+        });
 
-        var $measurementSubtitle = $('<h5></h5>')
-            .text( current.subtitle );
+        var $measurementSubtitle = $('<h5 />', {
+          text: current.subtitle
+        });
 
-        var $sourceTabs = $( '<ul></ul>' );
+        var $sourceTabs = $('<ul />');
 
-        var $measurementContent = $( '<div></div>' );
+        var $measurementContent = $('<div />');
 
-        $measurementContent.append( $sourceTabs );
+        $measurementContent.append($sourceTabs);
 
-        //Begin source level
-        _.each( current.sources, function( source, souceName ) {
-
+        // Begin source level
+        Object.values(current.sources).forEach(function(source) {
           // Check if sources have settings with the same projection.
-          var hasSetting;
-          _.each( source.settings, function( setting ) {
-            var layer = config.layers[setting];
+          if(hasMeasurementSetting(current, source)) {
+            var $sourceTab = $('<li />');
 
-            if(layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
-              hasSetting = true;
-            }
-          });
+            var $sourceLink = $('<a />', {
+              text: source.title,
+              'href': '#' + current.id + '-' + source.id
+            });
 
-          if(hasSetting === true) {
-            var $sourceTab = $( '<li></li>' );
+            $sourceTab.append($sourceLink);
+            $sourceTabs.append($sourceTab);
 
-            var $sourceLink = $( '<a></a>' )
-                .text( source.title )
-                .attr( 'href', '#' + current.id + '-' + source.id );
+            var $sourceContent = $('<div />', {
+              id: current.id + '-' + source.id
+            });
 
-            $sourceTab.append( $sourceLink );
-            $sourceTabs.append( $sourceTab );
+            // Metadata
+            var $sourceMeta = $('<div />', {
+              'class': 'source-metadata'
+            });
 
-            var $sourceContent = $( '<div></div>' )
-                .attr( 'id', current.id + '-' + source.id );
+            var $showMore = $('<div />', {
+              'class': 'metadata-more'
+            });
 
-            //Metadata
+            var $moreElps = $('<span />', {
+              text: '...',
+              'class': 'ellipsis'
+            });
 
-            var $sourceMeta = $( '<div></div>' )
-                .addClass('source-metadata');
+            $showMore.append($moreElps);
 
-            var $showMore = $('<div></div>')
-                .addClass('metadata-more');
-
-            var $moreElps = $('<span></span>')
-                .addClass('ellipsis')
-                .text('...');
-
-            $showMore.append( $moreElps );
-
-            $showMore.toggle( function(e){
+            $showMore.toggle(function(e) {
               $sourceMeta.removeClass('overflow');
               $moreElps.text('^').addClass('up');
               redoScrollbar();
-            }, function(e){
+            }, function(e) {
               $sourceMeta.addClass('overflow');
               $moreElps.text('...').removeClass('up');
               redoScrollbar();
             });
 
-            //Simple test to see if theres a link to some metadata
-            if( source.description ) {
-              $.get('config/metadata/' + source.description + '.html')
-                .success(function(data) {
-                  $sourceMeta.html(data);
-                  $sourceContent.append( $sourceMeta );
+            // Simple test to see if theres a link to some metadata
+            if (source.description) {
+              $.get('config/metadata/' + source.description + '.html').success(function(data) {
+                $sourceMeta.html(data);
+                $sourceContent.append($sourceMeta);
 
-                  $sourceMeta.find('a')
-                    .attr('target','_blank');
-                  //More than a thousand chars add show more widget
-                  if ( $sourceMeta.text().length > 1000 ) {
-                    $sourceMeta.addClass('overflow')
-                      .after($showMore);
-                  }
-                });
+                $sourceMeta.find('a').attr('target', '_blank');
+                // More than a thousand chars add show more widget
+                if ($sourceMeta.text().length > 1000) {
+                  $sourceMeta.addClass('overflow').after($showMore);
+                }
+              });
             }
 
-            var $sourceSettings = $( '<ul></ul>' )
-                .addClass('source-settings');
+            var $sourceSettings = $('<ul />', {
+              'class': 'source-settings'
+            });
 
-            var $sourceOrbits = $( '<ul></ul>' )
-                .addClass('source-orbit-tracks')
-                .attr('id', source.id + '-orbit-tracks');
+            var $sourceOrbits = $('<ul />', {
+              id: source.id + '-orbit-tracks',
+              'class': 'source-orbit-tracks'
+            });
 
-            _.each( source.settings, function( setting ) {
+            Object.values(source.settings).forEach(function(setting) {
               var layer = config.layers[setting];
-
               // If a setting matches the current projection, then output it.
-              if(layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
+              if (layer && layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
 
-                var $wrapper = $('<li></li>')
-                    .attr('data-layer', encodeURIComponent(layer.id) )
-                    .attr( 'value', encodeURIComponent( layer.id ) )
-                    .addClass('measurement-settings-item');
+                var $wrapper = $('<li />', {
+                  'class': 'measurement-settings-item',
+                  'data-layer': encodeURIComponent(layer.id),
+                  'value': encodeURIComponent(layer.id)
+                });
 
-                var $setting = $( '<input></input>' )
-                    .attr( 'type', 'checkbox' )
-                    .addClass( 'settings-check')
-                    .attr( 'id', 'setting-' + layer.id )
-                    .attr( 'value', encodeURIComponent( layer.id ) )
-                //maybe dont need value and data-layer both
-                    .attr( 'data-layer', encodeURIComponent( layer.id ) )
-                    .on('ifChecked', addLayer)
-                    .on('ifUnchecked', removeLayer);
+                var $setting = $('<input />', {
+                  id: 'setting-' + layer.id,
+                  'class': 'settings-check',
+                  'type': 'checkbox',
+                  'data-layer': encodeURIComponent(layer.id),
+                  'value': encodeURIComponent(layer.id)
+                }).on('ifChecked', addLayer)
+                  .on('ifUnchecked', removeLayer);
 
-                if ( _.find(model.active, {id: layer.id}) ) {
+                if (_.find(model.active, {id: layer.id})) {
                   $setting.attr("checked", "checked");
                 }
 
-                var $label = $( '<label></label>' )
-                    .attr( 'for', 'setting-' + encodeURIComponent( layer.id ) )
-                    .text( layer.title );
+                var $label = $('<label />', {
+                  text: layer.title,
+                  'for': 'setting-' + encodeURIComponent(layer.id)
+                });
 
-                $wrapper.append( $setting )
-                  .append( $label );
+                $wrapper.append($setting).append($label);
 
-                //If this is an orbit track.... put it in the orbit track list
-                if(layer.title.indexOf("Orbital Track") !== -1){
+                // If this is an orbit track.... put it in the orbit track list
+                if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
                   var orbitTitle;
+                  if (layer.daynight && layer.track) {
+                    orbitTitle = _.startCase(layer.track) + "/" + _.startCase(layer.daynight);
+                  }
+
+                  $label.empty()
+                    .text(orbitTitle);
+                  $sourceOrbits.append($wrapper);
+
+                /**
+                 * @deprecated since version 1.8.0 If the data set is old and doesn't have
+                 * layergroup's set then we will need to track the layer title to determine
+                 * if it is a Orbital Track
+                 */
+                } else if (layer.title.indexOf("Orbital Track") !== -1) {
+
                   // The following complex if statement is a placeholder
                   // for truncating the layer names, until the rest of
                   // the interface is implemented
-
-                  if( layer.title.indexOf('(') !== -1 ) {
+                  if (layer.title.indexOf('(') !== -1) {
                     var regExp = /\(([^)]+)\)/;
                     var matches = regExp.exec(layer.title);
                     orbitTitle = matches[1];
                   }
-                  $label.empty().text(orbitTitle);
-                  $sourceOrbits.append( $wrapper );
+                  $label.empty()
+                    .text(orbitTitle);
+                  $sourceOrbits.append($wrapper);
+                } else {
+                  $sourceSettings.append($wrapper);
                 }
-                else{
-                  $sourceSettings.append( $wrapper );
-                }
-                $wrapper.click( function( e ){
+                $wrapper.click(function(e) {
                   e.stopPropagation();
-                  var $checkbox = $( this )
-                      .find( 'input#setting-' + layer.id );
+                  var $checkbox = $(this).find('input#setting-' + layer.id);
 
                   $checkbox.iCheck('toggle');
                 });
               }
             });
-            //End setting level
-            $sourceContent.append( $sourceSettings );
+            // End setting level
+            $sourceContent.append($sourceSettings);
 
-            if($sourceOrbits.children().length > 0){
-              var $orbitsTitle = $('<h3></h3>')
-                  .addClass('source-orbits-title')
-                  .text('Orbital Tracks:');
+            if ($sourceOrbits.children().length > 0) {
+              var $orbitsTitle = $('<h3 />', {
+                text: 'Orbital Tracks:',
+                'class': 'source-orbits-title'
+              });
 
-              $sourceContent.append( $orbitsTitle );
-              $sourceContent.append( $sourceOrbits );
+              $sourceContent.append($orbitsTitle);
+              $sourceContent.append($sourceOrbits);
             }
 
             //$sourceContent.append( $addButton, $removeButton );
-            $measurementContent.append( $sourceContent );
+            $measurementContent.append($sourceContent);
           }
         });
-        //End source level
+        // End source level
         $measurementContent.tabs();
 
-        $measurementHeader.append( $measurementTitle );
-        $measurementHeader.append( $measurementSubtitle );
+        $measurementHeader.append($measurementTitle);
+        $measurementHeader.append($measurementSubtitle);
 
-        $categoryList.append( $measurementHeader );
-        $categoryList.append( $measurementContent );
+        $categoryList.append($measurementHeader);
+        $categoryList.append($measurementContent);
       }
     });
-    //End measurement level
+    // End measurement level
 
     $categoryList.accordion({
       collapsible: true,
       heightStyle: "content",
       animate: false,
       active: false,
-      activate: function( event, ui ) {
+      activate: function(event, ui) {
         redoScrollbar();
       }
     });
 
-    if( selectedMeasurement ) {
-      $categoryList.accordion( "option", "active", selectedIndex);
+    if (selectedMeasurement) {
+      $categoryList.accordion("option", "active", tabIndex);
     }
 
-    $selectedCategory.append( $categoryList );
+    $selectedCategory.append($categoryList);
 
     // Create breadcrumb crumbs but do not show by default, only show within
     // drawCategories and searching
-    var $homeCrumb = $( '<a></a>' )
-        .text(crumbText)
-        .attr( 'alt', 'categories' )
-        .attr( 'title', 'Back to Layer Categories')
-        .click( drawDefaultPage );
+    var $homeCrumb = $('<a />', {
+      text: crumbText,
+      'alt': 'categories',
+      'title': 'Back to Layer Categories'
+    }).click(drawDefaultPage);
 
-    $breadcrumb.append( $homeCrumb )
-      .append('<b> / ' + category.title + '</b>' );
-    $selectedCategory.prepend( $breadcrumb );
+    $breadcrumb.append($homeCrumb).append('<span> / ' + category.title + '</span>');
+    $selectedCategory.prepend($breadcrumb);
     $('#layers-search-input').show();
 
-    //Switch navs
+    // Switch navs
     $categories.hide();
     $nav.hide();
     $allLayers.hide();
@@ -600,15 +631,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   // Show all the measurments within the legacy-all category
   var drawAllMeasurements = function() {
-    _.each( config.categories, function( metaCategory, metaCategoryName ) {
-      _.each(config.categories[metaCategoryName], function( category, name ) {
-        if (category.id == "legacy-all")  {
+    Object.keys(config.categories).forEach(function(metaCategoryName) {
+      Object.values(config.categories[metaCategoryName]).forEach(function(category) {
+        if (category.id == "legacy-all") {
           drawMeasurements(category);
         }
       });
     });
   };
-
   self.readySearch = function(){
     return layerList({
       layerArray: config.layerOrder,
@@ -620,6 +650,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   // TODO: Filter layers by settings with projections equal to current projection.
   var drawAllLayers = function() {
     var layerWidget;
+    var projection = models.proj.selected.id;
 
     $allLayers.empty();
     $( '#layers-all' ).css( 'height', modalHeight - 40 - 30);
@@ -628,6 +659,110 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
     self.reactList.setState({showLayers: true});
 
+    //var $fullLayerList = $('<ul />', {
+    //  id: 'flat-layer-list'
+    //});
+    /*
+    Object.values(config.layerOrder).forEach(function(layerId) {
+      var current = config.layers[layerId];
+
+      // Check if layer is equal to the current projection, then output
+      if (Object.keys(current.projections).indexOf(projection) > -1) {
+        if (!current) {
+          console.warn("In layer order but not defined", layerId);
+        } else {
+          var $layerItem = $('<li />', {
+            id: 'layer-flat-' + current.id,
+            'class': 'layers-all-layer',
+            'data-layer': encodeURIComponent(current.id)
+          });
+
+          var $layerHeader = $('<div />', {
+            'class': 'layers-all-header'
+          }).click(function(e) {
+            $(this).find('input#' + encodeURIComponent(current.id))
+              .iCheck('toggle');
+          });
+
+          var $layerTitleWrap = $('<div />', {
+            'class': 'layers-all-title-wrap'
+          });
+
+          var $layerTitle = $('<h3 />', {
+            text: current.title
+          });
+
+          var $layerSubtitle = $('<h5 />', {
+            text: current.subtitle
+          });
+
+          var $checkbox = $('<input />', {
+            id: encodeURIComponent(current.id),
+            'value': current.id,
+            'type': 'checkbox',
+            'data-layer': current.id
+          }).on('ifChecked', addLayer)
+            .on('ifUnchecked', removeLayer);
+
+          if ( _.find(model.active, {id: current.id}) ) {
+            $checkbox.attr("checked", "checked");
+          }
+
+          // Metadata
+          var $sourceMeta = $('<div />', {
+            'class': 'source-metadata hidden'
+          });
+
+          var $showMore = $('<span />', {
+            'class': 'fa fa-info-circle'
+          });
+
+          var $moreTab = $('<div />', {
+            'class': 'metadata-more'
+          });
+
+          var $moreElps = $('<span />', {
+            text: '^',
+            'class': 'ellipsis up'
+          });
+
+          $moreTab.append( $moreElps );
+
+          $showMore.add($moreTab).toggle( function(e){
+            $sourceMeta.toggleClass('hidden');
+            redoScrollbar();
+          }, function(e){
+            $sourceMeta.toggleClass('hidden');
+            redoScrollbar();
+          });
+
+          $layerItem.append( $layerHeader );
+          $layerHeader.append( $checkbox );
+          $layerHeader.append( $layerTitleWrap );
+          $layerTitleWrap.append( $layerTitle );
+          if( current.description ) {
+            $layerTitle.append( $showMore );
+          }
+          $layerTitleWrap.append( $layerSubtitle );
+
+          if( current.description ) {
+            $.get('config/metadata/' + current.description + '.html')
+              .success(function(data) {
+                $sourceMeta.html(data);
+                $layerItem.append( $sourceMeta );
+                $sourceMeta.append( $moreTab );
+                $sourceMeta.find('a')
+                  .attr('target','_blank');
+              });
+          }
+
+          $fullLayerList.append( $layerItem );
+        }
+      }
+    });
+
+    $allLayers.append($fullLayerList);
+    */
     $selectedCategory.hide();
     $categories.hide();
     $nav.hide();
@@ -636,134 +771,130 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     // Create breadcrumb crumbs
     $breadcrumb.empty();
 
-    if( searchBool ) {
-      var $homeCrumb = $( '<a></a>' )
-          .text( crumbText )
-          .attr( 'alt', crumbText )
-          .attr( 'title', 'Back to ' + crumbText )
-          .click( drawDefaultPage );
+    if (searchBool) {
 
-      $breadcrumb.append( $homeCrumb )
-        .append('<b> / Search Results</b>' );
+      var $homeCrumb = $('<a />', {
+        text: crumbText,
+        'alt': crumbText,
+        'title': 'Back to ' + crumbText
+      }).click(drawDefaultPage);
 
-      $allLayers.prepend( $breadcrumb );
-      $( '#layers-search-input' ).show();
+      $breadcrumb.append($homeCrumb).append('<span> / Search Results</span>');
 
-      $( 'label.search-icon' ).addClass( 'search-on' );
-      $( 'label.search-on' ).click( drawDefaultPage );
+      $allLayers.prepend($breadcrumb);
+      $('#layers-search-input').show();
+
+      $('label.search-icon').addClass('search-on');
+      $('label.search-on').click(drawDefaultPage);
 
       $breadcrumb.show();
     }
   };
 
-  var interestCssName = function(name){
-    if ( name === 'hazards and disasters' ) {
+  var interestCssName = function(name) {
+    if (name === 'hazards and disasters') {
       return 'legacy';
+    } else {
+      return name;
     }
-    else return name;
   };
 
-  var interestLabelName = function(name){
-    if(name === 'scientific'){
+  var interestLabelName = function(name) {
+    if (name === 'scientific') {
       return 'science disciplines';
+    } else {
+      return name;
     }
-    else return name;
   };
 
   // Apend ellipsis to category overview measurement list.
-  var setCategoryOverflow = function(category, $measurements){
-    var $dotContinueItem = $('<li></li>')
-        .addClass('layer-category-item');
-
-    var $dotContinueLink = $('<a></a>')
-        .attr('data-category', category.id)
-        .text('...');
-
-    $dotContinueLink.click( function( e ) {
-      drawMeasurements( category );
+  var setCategoryOverflow = function(category, $measurements) {
+    var $dotContinueItem = $('<li />', {
+      'class': 'layer-category-item'
     });
 
-    $dotContinueItem.append( $dotContinueLink );
-    $measurements.append( $dotContinueItem );
+    var $dotContinueLink = $('<a />', {
+      text: '...',
+      'data-category': category.id
+    });
+
+    $dotContinueLink.click(function(e) {
+      drawMeasurements(category);
+    });
+
+    $dotContinueItem.append($dotContinueLink);
+    $measurements.append($dotContinueItem);
   };
 
   var addLayer = function(event) {
     event.stopPropagation();
-    model.add( decodeURIComponent( $( this ).val() ) );
+    model.add(decodeURIComponent($(this).val()));
   };
 
   var removeLayer = function(event) {
     event.stopPropagation();
-    model.remove( decodeURIComponent( $( this ).val() ) );
-  };
+    model.remove(decodeURIComponent($(this).val()));
+n  };
 
   var onLayerAdded = function(layer) {
-    var $element = $( self.selector + " [data-layer='" +
-                      wv.util.jqueryEscape(layer.id) + "']");
+    var $element = $(self.selector + " [data-layer='" + wv.util.jqueryEscape(layer.id) + "']");
     $element.iCheck("check");
   };
 
   var onLayerRemoved = function(layer) {
-    var $element = $( self.selector + " [data-layer='" +
-                      wv.util.jqueryEscape(layer.id) + "']");
+    var $element = $(self.selector + " [data-layer='" + wv.util.jqueryEscape(layer.id) + "']");
     $element.iCheck("uncheck");
   };
 
-  var unfocusInput = function(){
-    if(!wv.util.browser.small){
+  var unfocusInput = function() {
+    if (!wv.util.browser.small) {
       $('#layers-search-input').focus();
-    }
-    else {
+    } else {
       $('#layers-search-input').blur();
       $('#layer-modal-main').focus();
     }
   };
 
-  var render = function(){
+  var render = function() {
     checkModalView();
     setModalSize();
 
-    $( '#layer-modal-main' )
-      .css( 'height', modalHeight - 40 )
-      .perfectScrollbar();
+    $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar();
 
-    var $search = $( "<div></div>" )
-        .attr( "id", "layer-search" );
+    var $search = $('<div />', {
+      id: 'layer-search'
+    });
 
-    var $searchInput = $( "<input></input>" )
-        .attr( "id", "layers-search-input" )
-        .attr( 'placeholder', 'Search');
+    var $searchInput = $('<input />', {
+      id: 'layers-search-input',
+      'placeholder': 'Search'
+    });
 
-    var $searchBtn = $("<label></label>")
-        .addClass( "search-icon" )
-        .click( function( e ) {
-          var that = this;
-          //TODO: Click for search icon
-        } )
-        .append( "<i></i>" );
+    var $searchBtn = $('<label />', {
+      'class': 'search-icon'
+    }).click(function(e) {
+      var that = this;
+      //TODO: Click for search icon
+    }).append("<i />");
 
     $search.append( $searchBtn )
       .append( $searchInput );
 
     $header.append( $search );
 
-    var $closeButton = $('<div></div>')
-        .attr('id', 'layers-modal-close')
-        .click( function( e ) {
-          $( self.selector ).dialog( "close" );
-        })
-        .append('<i></i>');
+    var $closeButton = $('<div />', {
+      'id': 'layers-modal-close'
+    }).click( function( e ) {
+      $( self.selector ).dialog( "close" );
+    }).append('<i></i>');
 
     $header.append ( $closeButton );
 
-    //Create dialog/modal
-    //TODO: move to general dialog creator (wv.ui)
-
-    $( self.selector ).dialog({
+    $(self.selector).dialog({
       autoOpen: false,
       resizable: false,
       height: modalHeight,
-      width: modalWidth,
+      width: gridItemWidth * sizeMultiplier + 10,
       modal: true,
       dialogClass: "layer-modal no-titlebar",
       draggable: false,
@@ -776,25 +907,19 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         effect: "fade",
         duration: 200
       },
-      open: function( event, ui ) {
+      open: function(event, ui) {
         redo();
 
-        //Check for isotope
-        if( $categories.data('isotope') ) {
-          //Update isotope
-          $categories.isotope()
-            .on('layoutComplete',
-                function( event, laidOutItems ) {
-                  //Update scrollbar sizing
-                  redoScrollbar();
-                });
+        if ($categories.data('isotope')) {
+          $categories.isotope();
         }
-        //Bind click outside modal as close
-        $( ".ui-widget-overlay" ).click( function( e ) {
-          $( self.selector ).dialog( "close" );
-        } );
 
-        //FIXME: Mobile keyboard needs to disappear,
+        redoScrollbar();
+
+        $(".ui-widget-overlay").click(function(e) {
+          $(self.selector).dialog("close");
+        });
+
         //fade in time for show is 400 above, so after that
         setTimeout(unfocusInput, 410);
 
@@ -806,7 +931,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     //$(self.selector + "select").on('change', filter);
     $searchInput.keyup( filter );
-
     drawDefaultPage();
   };
 
@@ -887,15 +1011,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       removeSearch();
     }
     // Ran on every keystroke in search
-    if( searchBool ) {
-      if( ( $allLayers.css('display') === 'none' ) ||
-          ( $breadcrumb.css('display') === 'none') ) {
+    if (searchBool) {
+      if (($allLayers.css('display') === 'none') || ($breadcrumb.css('display') === 'none')) {
         drawAllLayers();
       }
       runSearch();
-
-    }
-    else {
+    } else {
       drawModal();
       copy = config.layerOrder;
     }

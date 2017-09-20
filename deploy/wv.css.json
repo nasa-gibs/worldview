@@ -1,7 +1,9 @@
 [
+    "web/css/wv.fonts.css",
+    "web/css/wv.main.css",
+    "web/css/util.css",
     "web/css/wv.alert.css",
     "web/css/bank.css",
-    "web/css/wv.main.css",
     "web/css/wv.map.css",
     "web/css/wv.link.css",
     "web/css/wv.palettes.css",
@@ -19,6 +21,7 @@
     "web/css/wv.layers.modal.css",
     "web/css/wv.scrollbar.css",
     "web/css/wv.layers.options.css",
+    "web/css/wv.layers.info.css",
     "web/css/wv.timeline.css",
     "web/css/wv.anim.widget.css",
     "web/css/wv.dateselector.css",

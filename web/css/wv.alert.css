@@ -1,61 +1,114 @@
 #wv-info-button {
-     -webkit-transition: background 1s;
-    transition: background 500;
+  -webkit-transition: background 500;
+  transition: background 500;
+  position: relative;
 }
-    #wv-info-button.exclamation-circle {
-        background: #b3292b
-    }
-    #wv-info-button.bolt {
-        background: #e5c937
-    }
-    #wv-info-button.gift {
-        background: #40a9db
-    }
-.ui-menu-item {}
-    .ui-menu-item.exclamation-circle {
-        background: #b3292b
-    }
-    .ui-menu-item.bolt {
-        background: #e5c937
-    }
-    .ui-menu-item.gift {
-        background: #40a9db
-    }
-.wv-notify-modal {
-    padding:0 20px;
+
+#wv-info-button label::before {
+  content: attr(data-content) '';
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #69b6d5;
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.45;
 }
-    .wv-notify-modal h2 {
-        text-transform: capitalize;
-        font-size: 18px;
-        font-family: "Lucida Sans", "Arial", Sans-Serif;
-        font-weight: bold;
-        color: #eee;
-        padding: .75em 10px;
-    }
-    .wv-notify-modal .outage h2 {
-        background: rgba(179, 41, 43, .3);
-    }
-    .wv-notify-modal .alert h2 {
-        background: rgba(229, 201, 55, .3);
-    }
-    .wv-notify-modal h2 span {
-        font-size: 13px;
-        font-weight: 100;
-        margin-left: 5px;
-        color: #999;
-    }
-    .wv-notify-modal p {
-        font-family: "helvetica",sans-serif;
-        font-size: 16px;
-        line-height: 22px;
-        margin: 10px 10px;
-    }
+
+#wv-info-button.wv-status-outage label::before {
+  background: #ff1a1e;
+}
+
+#wv-info-button.wv-status-alert label::before {
+  background: #e5c937;
+}
+
+#wv-info-button.wv-status-message label::before {
+  background: #40a9db;
+}
+
+#wv-info-button.wv-status-hide label::before {
+  display: none;
+}
+
+.ui-menu-item {
+  position: relative;
+}
+
+.ui-menu-item a::before {
+  content: attr(data-content) '';
+  text-align: center;
+  font-weight: 700;
+  display: block;
+  width: 15px;
+  height: 15px;
+  line-height: 1.25;
+  border-radius: 50%;
+  position: absolute;
+  font-size: 12px;
+  right: 10px;
+  top: 4px;
+  z-index: 33;
+}
+
+.ui-menu-item.exclamation-circle a::before {
+  background: #ff1a1e;
+}
+
+.ui-menu-item.bolt a::before {
+  background: #e5c937;
+}
+
+.ui-menu-item.gift a::before {
+  background: #40a9db;
+}
+
+.ui-menu-item a.wv-status-hide::before {
+  display: none;
+}
+
+.wv-notify-modal h2 {
+  text-transform: capitalize;
+  font-size: 18px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  color: #eee;
+  padding: 0.75em 10px;
+}
+
+.wv-notify-modal .outage h2 {
+  background: rgba(179, 41, 43, 0.3);
+}
+
+.wv-notify-modal .alert h2 {
+  background: rgba(229, 201, 55, 0.3);
+}
+
+.wv-notify-modal h2 span {
+  font-size: 13px;
+  font-weight: 300;
+  margin-left: 5px;
+  color: #999;
+}
+
+.wv-notify-modal p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  line-height: 22px;
+  margin: 10px;
+}
+
 .wv-dialog .wv-notify-modal ul {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
+
 .wv-dialog .wv-notify-modal ul li {
-    list-style-type: none;
-    border-bottom: 1px solid #404040;
-    margin: 0;
+  list-style-type: none;
+  border-bottom: 1px solid #404040;
+  margin: 0;
 }
