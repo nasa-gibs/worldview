@@ -125,20 +125,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    */
   var checkModalView = function() {
     var modalView = config.parameters.modalView;
-    if (modalView) {
-      switch(modalView) {
-        case('categories'):
-          console.warn("'Add Layers' view changed to Categories");
-          break;
-        case('measurements'):
-          console.warn("'Add Layers' view changed to Measurements");
-          break;
-        case('layers'):
-          console.warn("'Add Layers' view changed to Layers");
-          break;
-        default:
-          console.warn("Invalid parameter; showing Categories view");
-      }
+    switch(modalView) {
+      case('categories'):
+        console.warn("'Add Layers' view changed to Categories");
+        break;
+      case('measurements'):
+        console.warn("'Add Layers' view changed to Measurements");
+        break;
+      case('layers'):
+        console.warn("'Add Layers' view changed to Layers");
+        break;
+      case undefined:
+        break;
+      default:
+        console.warn("Invalid parameter; showing Categories view");
     }
   };
 
@@ -199,32 +199,33 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var modalView = config.parameters.modalView;
 
     // If URL parameter is set, draw that type of modal view.
-    if (modalView) {
-      switch(modalView) {
-        case('categories'):
+    switch(modalView) {
+      case('categories'):
+        crumbText = 'Categories';
+        drawCategories();
+        break;
+      case('measurements'):
+        crumbText = 'Measurements';
+        drawAllMeasurements();
+        break;
+      case('layers'):
+        crumbText = 'Layers';
+        drawAllLayers();
+        break;
+      case undefined:
+        // Set the default views per projection if modalView is not defined.
+        if (projection == 'geographic') {
           crumbText = 'Categories';
           drawCategories();
-          break;
-        case('measurements'):
+        } else {
           crumbText = 'Measurements';
           drawAllMeasurements();
-          break;
-        case('layers'):
-          crumbText = 'Layers';
-          drawAllLayers();
-          break;
-        default:
-          crumbText = 'Categories';
-          drawCategories();
-          break;
-      }
-    // Else set the default views per projection.
-    } else if (projection == 'geographic') {
-      crumbText = 'Categories';
-      drawCategories();
-    } else {
-      crumbText = 'Measurements';
-      drawAllMeasurements();
+        }
+        break;
+      default:
+        crumbText = 'Categories';
+        drawCategories();
+        break;
     }
   };
 
