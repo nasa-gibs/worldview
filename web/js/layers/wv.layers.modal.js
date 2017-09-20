@@ -81,15 +81,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var hasSetting;
     Object.values(source.settings).forEach(function(setting) {
       var layer = config.layers[setting];
-      var proj = layer.projections;
-      if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
-        if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
-          if(current.id === "orbital-track") {
+      if(layer) {
+        var proj = layer.projections;
+        if(layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+          if (layer.layergroup && layer.layergroup.indexOf("reference_orbits") !== -1) {
+            if(current.id === "orbital-track") {
+              hasSetting = true;
+            }
+          // Don't output sources with only orbit tracks
+          } else {
             hasSetting = true;
           }
-        // Don't output sources with only orbit tracks
-        } else {
-          hasSetting = true;
         }
       }
     });
@@ -488,7 +490,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
             Object.values(source.settings).forEach(function(setting) {
               var layer = config.layers[setting];
               // If a setting matches the current projection, then output it.
-              if (layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
+              if (layer && layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
 
                 var $wrapper = $('<li />', {
                   'class': 'measurement-settings-item',
