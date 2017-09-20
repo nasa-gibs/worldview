@@ -32,6 +32,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var $allLayers = $(self.selector + " #layers-all");
   var gridItemWidth = 320; //with of grid item + spacing
   var layerList = React.createFactory(WVC.LayerList);
+  var layerWidget;
   var modalHeight;
   var modalWidth;  
   var sizeMultiplier;
@@ -181,6 +182,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $selectedCategory.hide();
     $breadcrumb.hide();
     searchBool = false;
+    copy = config.layerOrder;
+    if(self.reactList){
+      self.reactList.setState({layerFilter: copy});
+    }
     $( '#layers-search-input' ).val('');
     $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
   };
@@ -649,14 +654,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
   // TODO: Filter layers by settings with projections equal to current projection.
   var drawAllLayers = function() {
-    var layerWidget;
     var projection = models.proj.selected.id;
 
-    $allLayers.empty();
+    //$allLayers.empty();
     $( '#layers-all' ).css( 'height', modalHeight - 40 - 30);
-    layerWidget = self.readySearch();
 
-    self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
+    if(!self.reactList){
+      self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
+    }
     self.reactList.setState({showLayers: true});
 
     //var $fullLayerList = $('<ul />', {
@@ -928,6 +933,9 @@ n  };
         $( ".ui-widget-overlay" ).unbind( "click" );
       }
     });
+
+    //Ready the layer search compontents
+    layerWidget = self.readySearch();
 
     //$(self.selector + "select").on('change', filter);
     $searchInput.keyup( filter );
