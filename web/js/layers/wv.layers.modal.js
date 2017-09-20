@@ -71,9 +71,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * var hasMeasurementSetting - Checks the (current) measurement's source
    *  for a setting and returns true if present.
    *
-   * @param  {type} current The current config.measurements measurement.
-   * @param  {type} source  The current measurement source.
-   * @return {type}         Return true if the source contains settings.
+   * @param  {string} current The current config.measurements measurement.
+   * @param  {string} source  The current measurement source.
+   * @return {boolean}         Return true if the source contains settings.
    *
    */
   var hasMeasurementSetting = function(current, source) {
@@ -95,7 +95,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
       }
     });
-    return hasSetting ? true : false;
+    return hasSetting;
   };
 
   /**
@@ -104,8 +104,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    *  If a source contains settings, also sets a hasMeasurement flag to be checked
    *  when drawing categories.
    *
-   * @param  {type} current The current config.measurements measurement.
-   * @return {type}         Return true if the measurement has sources with settings.
+   * @param  {string} current The current config.measurements measurement.
+   * @return {boolean}         Return true if the measurement has sources with settings.
    */
 
   var hasMeasurementSource = function(current) {
@@ -113,7 +113,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     Object.values(current.sources).forEach(function(source) {
       if(hasMeasurementSetting(current, source)) { hasSource = true; hasMeasurement = true; };
     });
-    return hasSource ? true : false;
+    return hasSource;
   };
 
 
@@ -121,7 +121,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * var checkModalView - If modalView is set, then output a console message describing
    *  which layer is being shown.
    *
-   * @return {type}  description
+   * @return {string}  Returns a console warn message.
    */
   var checkModalView = function() {
     var modalView = config.parameters.modalView;
@@ -198,7 +198,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * var drawModal - Draws the contents of the layers modal based on the
    *  modalView parameter or the current projection.
    *
-   * @return {type}  Calls the categories, measurements, or layers view functions
+   * @return {void}  Calls the categories, measurements, or layers view functions
    *  to which renders the html. Also sets the breadcrumb text based on the view.
    */
   var drawModal = function() {
@@ -243,7 +243,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    *  there are more than 6 measurements ina category, an ellipsis is output.
    *  Categories are grouped in one of two interests tabs. Each category has a unique image.
    *
-   * @return {type}  Returns html to output measurements grouped by categories with
+   * @return {HTMLElement}  Returns html to output measurements grouped by categories with
    *  categories grouped by interest.
    */
   var drawCategories = function() {
@@ -403,11 +403,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   /**
    * var drawMeasurements - Draws a measurement if it contains sources with settings.
    *
-   * @param  {type} category            Return a measurement from a particular category.
-   * @param  {type} selectedMeasurement Select a specificy measurement to interact with.
-   * @param  {type} selectedIndex       An index of the output measurement; pass
+   * @param  {string} category            Return a measurement from a particular category.
+   * @param  {string} selectedMeasurement Select a specificy measurement to interact with.
+   * @param  {number} selectedIndex       An index of the output measurement; pass
    *  in the index to select that measurement.
-   * @return {type}  Returns a list of measurements with a dropdown containing
+   * @return {HTMLElement}  Returns a list of measurements with a dropdown containing
    *  sources which contain settings. Each source has a description. Layers
    *  can be added to the map using a checkbox.
    */
@@ -559,9 +559,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                   $sourceOrbits.append($wrapper);
 
                 /**
-                 * @deprecated since version 1.8.0 If the data set is old and doesn't have
-                 * layergroup's set then we will need to track the layer title to determine
-                 * if it is a Orbital Track
+                 * @deprecated conditional since version 1.8.0 If the data
+                 * set doesn't have the layergroup parameter set then use the
+                 * layer title to determine if it is a Orbital Track.
                  */
                 } else if (layer.title.indexOf("Orbital Track") !== -1) {
 
@@ -659,7 +659,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * var drawAllMeasurements - Shows all the measurments within the legacy-all
    *  category. This is used for outputting the measurement view.
    *
-   * @return {type}  Returns a list of measurements with a dropdown containing
+   * @return {void}  Returns a list of measurements with a dropdown containing
    *  sources which contain settings. Each source has a description.
    */
   var drawAllMeasurements = function() {
@@ -676,7 +676,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * var drawAllLayers - Draws all layers contained within a specific projection
    *  and contained within the layerOrder file.
    *
-   * @return {type}  Returns html with title, substitle, description and option to
+   * @return {HTMLElement}  Returns html with title, substitle, description and option to
    *  add layer to the map.
    */
   var drawAllLayers = function() {
@@ -837,9 +837,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   /**
    * var setCategoryOverflow - Apends an ellipsis to category overview measurement list.
    *
-   * @param  {type} category      The category to append the ellipsis to.
-   * @param  {type} $measurements The measurements contained within the category.
-   * @return {type}               Returns html to add the ellipsis to the category list.
+   * @param  {string} category      The category to append the ellipsis to.
+   * @param  {string} $measurements The measurements contained within the category.
+   * @return {HTMLElement}               Returns html to add the ellipsis to the category list.
    */
   var setCategoryOverflow = function(category, $measurements) {
     var $dotContinueItem = $('<li />', {
