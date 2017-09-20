@@ -194,6 +194,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     redoScrollbar();
   };
 
+  /**
+   * var drawModal - Draws the contents of the layers modal based on the
+   *  modalView parameter or the current projection.
+   *
+   * @return {type}  Calls the categories, measurements, or layers view functions
+   *  to which renders the html. Also sets the breadcrumb text based on the view.
+   */
   var drawModal = function() {
     var projection = models.proj.selected.id;
     var modalView = config.parameters.modalView;
@@ -229,6 +236,16 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     }
   };
 
+
+  /**
+   * var drawCategories - Draws all categories if it has non-empty measurements.
+   *  If it has a placement flag, that category will display first or last. If
+   *  there are more than 6 measurements ina category, an ellipsis is output.
+   *  Categories are grouped in one of two interests tabs. Each category has a unique image.
+   *
+   * @return {type}  Returns html to output measurements grouped by categories with
+   *  categories grouped by interest.
+   */
   var drawCategories = function() {
     $categories.empty();
     if ($categories.data('isotope')) {
@@ -383,6 +400,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $('label[for=button-filter-legacy]').addClass('nav-selected');
   };
 
+  /**
+   * var drawMeasurements - Draws a measurement if it contains sources with settings.
+   *
+   * @param  {type} category            Return a measurement from a particular category.
+   * @param  {type} selectedMeasurement Select a specificy measurement to interact with.
+   * @param  {type} selectedIndex       An index of the output measurement; pass
+   *  in the index to select that measurement.
+   * @return {type}  Returns a list of measurements with a dropdown containing
+   *  sources which contain settings. Each source has a description. Layers
+   *  can be added to the map using a checkbox.
+   */
   var drawMeasurements = function(category, selectedMeasurement, selectedIndex) {
     var projection = models.proj.selected.id;
     var tabIndex;
@@ -627,7 +655,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   };
 
-  // Show all the measurments within the legacy-all category
+  /**
+   * var drawAllMeasurements - Shows all the measurments within the legacy-all
+   *  category. This is used for outputting the measurement view.
+   *
+   * @return {type}  Returns a list of measurements with a dropdown containing
+   *  sources which contain settings. Each source has a description.
+   */
   var drawAllMeasurements = function() {
     Object.keys(config.categories).forEach(function(metaCategoryName) {
       Object.values(config.categories[metaCategoryName]).forEach(function(category) {
@@ -638,7 +672,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     });
   };
 
-  // TODO: Filter layers by settings with projections equal to current projection.
+  /**
+   * var drawAllLayers - Draws all layers contained within a specific projection
+   *  and contained within the layerOrder file.
+   *
+   * @return {type}  Returns html with title, substitle, description and option to
+   *  add layer to the map.
+   */
   var drawAllLayers = function() {
     var projection = models.proj.selected.id;
 
@@ -794,7 +834,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     }
   };
 
-  // Apend ellipsis to category overview measurement list.
+  /**
+   * var setCategoryOverflow - Apends an ellipsis to category overview measurement list.
+   *
+   * @param  {type} category      The category to append the ellipsis to.
+   * @param  {type} $measurements The measurements contained within the category.
+   * @return {type}               Returns html to add the ellipsis to the category list.
+   */
   var setCategoryOverflow = function(category, $measurements) {
     var $dotContinueItem = $('<li />', {
       'class': 'layer-category-item'
@@ -980,7 +1026,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   }, 250, {trailing: true});
 
   var filter = function(e) {
-
     if ($('#layers-search-input').val().length !== 0) {
       searchBool = true;
     } else {
