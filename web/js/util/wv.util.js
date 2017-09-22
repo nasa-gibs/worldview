@@ -62,17 +62,22 @@ wv.util = (function(self) {
    * object.
    * @return {object} object representation of the query string.
    */
-  self.fromQueryString = function(qs) {
-    var res = {};
-    if (!qs) return res;
-    if (qs[0] === '?') qs = qs.substring(1);
-    qs.split('&').forEach(function(param){
-      param = param.split('=').map(function(comp){
-        return decodeURIComponent(comp);
-      });
-      res[param[0]] = param[1];
-    });
-    return res;
+  self.fromQueryString = function(queryString) {
+    if (!queryString) {
+      return {};
+    }
+    if (queryString[0] === "?") {
+      queryString = queryString.substring(1);
+    }
+    var parameters = queryString.split("&");
+    var result = {};
+    for (var i = 0; i < parameters.length; i++) {
+      var index = parameters[i].indexOf("=");
+      var key = parameters[i].substring(0, index);
+      var value = parameters[i].substring(index + 1);
+      result[key] = decodeURIComponent(value);
+    }
+    return result;
   };
 
   /**
