@@ -4,7 +4,7 @@ Feature: Tour
   So that I can learn how to use Worldview
 
 Background:
-  Given Worldview is in initial state
+  Given Worldview is in "initial" state
   Then I should see "Take Tour"
 
   Scenario: Skipping Tour

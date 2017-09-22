@@ -2,7 +2,7 @@ Feature: Layers
   The layers sidebar tab
 
 Background:
-  Given Worldview is in initial state
+  Given Worldview is in "initial" state
   And I click "Skip Tour"
 
 Scenario: Getting Layer Info
@@ -10,14 +10,14 @@ Scenario: Getting Layer Info
   When I click the "info button"
   Then I should see the "info dialog"
   When I click the "info button"
-  Then I should not see the "info dialog"
+  Then the page should not have the "info dialog"
   When I click the "info button"
   Then I should see the "info dialog"
 
 Scenario: Changing Layer Options
 
   When I click the "options button"
-  Then I should not see the "info dialog"
+  Then the page should not have the "info dialog"
   Then I should see the "options dialog"
 
 Scenario: Adding Layers and Layer Search

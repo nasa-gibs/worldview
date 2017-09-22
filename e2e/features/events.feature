@@ -4,7 +4,7 @@ Feature: Natural Events
   So that I can see imagery related to events
 
 Background:
-  Given Worldview is in initial state
+  Given Worldview is in "initial" state
   And I click "Skip Tour"
 
 Scenario: Selecting Events Tab

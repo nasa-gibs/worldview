@@ -1,5 +1,8 @@
 module.exports = {
-  url: 'http://localhost:3000',
+  url: 'http://localhost:3000/',
+  querystrings: {
+    'custom colormap active': '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,AIRS_CO_Total_Column_Day(palette=red_1),Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2016-04-08&z=3&v=-223.875,-91.828125,162.84375,98.296875&ab=on&as=2016-03-25&ae=2016-04-08&av=3&al=false'
+  },
   selectors: {
     'info button': '.wv-layers-info',
     'options button': '.wv-layers-options',
@@ -7,7 +10,16 @@ module.exports = {
     'options dialog': '[aria-describedby="wv-layers-options-dialog"]',
     'layers search field': '#layers-search-input',
     'source info icon': '.layers-all-layer .fa-info-circle',
-    'source metadata close button': '.source-metadata .metadata-more'
+    'source metadata close button': '.source-metadata .metadata-more',
+    'animation widget': '#wv-animation-widget',
+    'animation button': '#animate-button',
+    'animation resolution tooltip': '.wv-tooltip-case:first-child',
+    'yearly resolution tooltip': '.wv-tooltip #yearly',
+    'timeline set to years':'#zoom-years.depth-1',
+    'create GIF button': '.fa-file-video-o.wv-animation-widget-icon',
+    'GIF download icon': '.jcrop-holder .fa-download',
+    'GIF results': '.gif-results-dialog-case img',
+    'GIF results close button': '.wv-gif-results button.ui-dialog-titlebar-close'
   },
   delay: 3000 // Acceptable delay in ms between performing actions and seeing results
 };
