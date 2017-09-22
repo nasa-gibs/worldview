@@ -35,3 +35,10 @@ Scenario: Adding Layers and Layer Search
   When I scroll to the "source metadata close button"
   And I click the "source metadata close button"
   Then I should not see "VIIRS Corrected Reflectance"
+
+Scenario: Browsing Layers by Category
+
+  When I click "Add Layers"
+  And I click "Aerosol Optical Depth"
+  And I click the "Aqua and Terra/MODIS" link
+  Then I should see "MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth"
