@@ -59,13 +59,16 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
       click: showDownloadList,
       text: 'No Data Selected'
     });
+    var $wrapper = $('<div />', {
+      class: 'wv-datalist bank content'
+    });
     var $list = $('<div />', {
-      class: 'wv-datalist bank content',
       id: 'wv-datacontent'
     });
     $actionButton.button();
     $footer.append($actionButton);
-    $container.append($list);
+    $wrapper.append($list);
+    $container.append($wrapper);
     $container.append($footer);
 
     self.refresh();
@@ -174,30 +177,22 @@ wv.data.ui = wv.data.ui || function(models, ui, config) {
     var maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - timelineHeight - 10 - 5;
     $tabPanel.css("max-height", maxHeight);
 
-    var childrenHeight = $('#wv-datacontent')
-      .outerHeight(true);
+    var childrenHeight = $('#wv-datacontent').outerHeight(true);
 
-    if ((maxHeight <= childrenHeight)) {
-      $("#wv-datacontent")
-        .css('height', maxHeight)
-        .css('padding-right', '10px');
+    var isTallerThanContainer = childrenHeight > maxHeight;
+
+    if (isTallerThanContainer) {
+      $(".wv-datalist").css('height', maxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
-        $("#wv-datacontent")
-          .perfectScrollbar('update');
+        $(".wv-datalist").perfectScrollbar('update');
       } else {
-        $("#wv-datacontent")
-          .perfectScrollbar();
+        $(".wv-datalist").perfectScrollbar();
         productsIsOverflow = true;
       }
-    } else {
-      $("#wv-datacontent")
-        .css('height', '')
-        .css('padding-right', '');
-      if (productsIsOverflow) {
-        $("#wv-datacontent")
-          .perfectScrollbar('destroy');
-        productsIsOverflow = false;
-      }
+    } else if (productsIsOverflow) {
+      $(".wv-datalist").css('height', '').css('padding-right', '');
+      $(".wv-datalist").perfectScrollbar('destroy');
+      productsIsOverflow = false;
     }
 
   };
