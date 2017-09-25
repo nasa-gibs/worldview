@@ -1,7 +1,8 @@
 module.exports = {
   url: 'http://localhost:3000/',
   querystrings: {
-    'custom colormap active': '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,AIRS_CO_Total_Column_Day(palette=red_1),Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2016-04-08&z=3&v=-223.875,-91.828125,162.84375,98.296875&ab=on&as=2016-03-25&ae=2016-04-08&av=3&al=false'
+    'animation with custom colormap active': '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,AIRS_CO_Total_Column_Day(palette=red_1),Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2016-04-08&z=3&v=-223.875,-91.828125,162.84375,98.296875&ab=on&as=2016-03-25&ae=2016-04-08&av=3&al=false',
+    'animation with polar projection rotated': '?p=arctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2016-12-09&z=3&v=-2764195.2298414493,-88762.12734933128,2589496.903095221,3893331.478195751&r=-18.0000&ab=on&as=2016-12-02&ae=2016-12-09&av=3&al=true'
   },
   selectors: {
     'info button': '.wv-layers-info',
