@@ -8,7 +8,7 @@ require('nightwatch-cucumber')({
 });
 
 module.exports = {
-  src_folders: ['./e2e/tests'],
+  // src_folders: ['./e2e/tests'],
   output_folder: './e2e/reports',
   globals_path: './e2e/globals.js',
   selenium: {

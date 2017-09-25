@@ -480,41 +480,6 @@ module.exports = function(grunt) {
       }
     },
 
-    nightwatch: {
-      options: {
-        // task options
-        src_folders: ["./e2e/tests"],
-        standalone: true,
-        // download settings
-        jar_version: '3.0.1',
-        globals_path: "./e2e/globals.js",
-        selenium_port: 4444,
-        server_path: "node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.0.1.jar",
-        test_settings: {
-          firefox: {
-            "desiredCapabilities": {
-              "browserName": "firefox",
-              // "marionette": false, - Windows users
-              "marionette": true,
-              "javascriptEnabled": true
-            },
-            "cli_args": {
-              "webdriver.gecko.driver": "node_modules/geckodriver/bin/geckodriver"
-            }
-          },
-          chrome: {
-            "desiredCapabilities": {
-              "browserName": "chrome"
-            },
-            "cli_args": {
-              // "webdriver.chrome.driver" : "node_modules/chromedriver/lib/chromedriver/chromedriver.exe" - Windows users
-              "webdriver.chrome.driver": "node_modules/chromedriver/lib/chromedriver/chromedriver"
-            }
-          }
-        }
-      }
-    },
-
     remove: {
       build: ["build"],
       dist: ["dist"],
@@ -692,7 +657,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-stylefmt");
   grunt.loadNpmTasks("grunt-text-replace");
   grunt.loadNpmTasks("grunt-rename");
-  grunt.loadNpmTasks("grunt-nightwatch");
 
   // Lets use "clean" as a target instead of the name of the task
   grunt.renameTask("clean", "remove");
@@ -786,9 +750,6 @@ module.exports = function(grunt) {
   grunt.registerTask("distclean", ["remove:build", "remove:dist"]);
   grunt.registerTask("lint", ["eslint"], ["stylelint"]);
   grunt.registerTask("test", ["buster:console"]);
-  grunt.registerTask("chrome-tests", ["nightwatch:chrome"]);
-  grunt.registerTask("firefox-tests", ["nightwatch:firefox"]);
-  grunt.registerTask("e2e", ["firefox-tests", "chrome-tests"]);
 
   grunt.registerTask("default", [
     "update-packages",

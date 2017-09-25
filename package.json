@@ -14,8 +14,8 @@
   },
   "scripts": {
     "test": "grunt test lint",
-    "e2e-test": "nightwatch -e default,firefox",
-    "poste2e-test": "node e2e/create-html-report.js",
+    "e2e": "nightwatch -e default,firefox",
+    "poste2e": "node e2e/create-html-report.js",
     "start": "node ./bin/www",
     "preinstall": "node version-check.js"
   },
@@ -48,7 +48,6 @@
     "grunt-markdown": "0.7.x",
     "grunt-minjson": "0.4.x",
     "grunt-mkdir": "0.1.x",
-    "grunt-nightwatch": "^0.5.4",
     "grunt-postcss": "^0.8.0",
     "grunt-rename": "0.1.x",
     "grunt-stylefmt": "^3.0.0",
