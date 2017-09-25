@@ -59,18 +59,27 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
 
       // Add event listeners
       var willSelect = true;
+      var moveCount = 0;
       var pinEl = marker.pin.element_;
       ['pointerdown', 'mousedown', 'touchstart'].forEach(function(type){
         pinEl.addEventListener(type, function(e){
           willSelect = true;
+          moveCount = 0;
           passEventToTarget(e, olViewport);
         });
       });
       ['pointermove', 'wheel', 'pointerdrag',
         'pointerup', 'mousemove', 'touchmove'].forEach(function(type){
         pinEl.addEventListener(type, function(e){
-          if (type === 'pointermove' || type === 'wheel') willSelect = false;
           passEventToTarget(e, olViewport);
+        });
+      });
+      ['pointermove', 'mousemove'].forEach(function(type){
+        pinEl.addEventListener(type, function(e){
+          moveCount++;
+          if (moveCount > 2) {
+            willSelect = false;
+          }
         });
       });
       pinEl.addEventListener('click', function(e){
