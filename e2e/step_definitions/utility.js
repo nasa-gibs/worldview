@@ -5,9 +5,13 @@ const selectors = client.globals.selectors;
 const querystrings = client.globals.querystrings;
 
 defineSupportCode(({Given, Then, When}) => {
+  Given('Worldview production has been loaded', () => {
+    return client.url(client.globals.production).waitForElementVisible('body', delay).acceptAlert().pause(100).acceptAlert();
+  });
+
   Given('Worldview is in {string} state', (state) => {
     var stateUrl = client.globals.url + (querystrings[state]||'');
-    return client.url(stateUrl).waitForElementVisible('body', delay);
+    return client.url(stateUrl).waitForElementVisible('body', delay).acceptAlert().pause(100).acceptAlert();
   });
 
   // Scroll to an element by predefined selector
