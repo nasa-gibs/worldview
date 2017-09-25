@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var fs = require("fs");
 var moment = require("moment");
 var nodeModuleFiles = [
@@ -28,6 +17,8 @@ var nodeModuleFiles = [
   "node_modules/gifshot/build/custom/gifshot.custom.min.js",
   "node_modules/promise-queue/lib/index.js",
   "node_modules/openlayers/dist/ol-debug.js",
+  "node_modules/openlayers/dist/ol.css",
+  "node_modules/openlayers/dist/ol-debug.css",
   "node_modules/font-awesome/css/font-awesome.min.css",
   "node_modules/font-awesome/fonts/*",
   "node_modules/clipboard/dist/clipboard.js",

@@ -74,6 +74,7 @@
 .layer-hidden .wv-palettes-max,
 .layer-hidden .wv-palettes-min,
 .layer-hidden .wv-palettes-title,
+.layer-hidden .wv-running-category-label,
 .layer-hidden .wv-running-label {
   color: #999;
   font-size: 0.7em;
