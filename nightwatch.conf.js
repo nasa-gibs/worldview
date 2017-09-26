@@ -1,3 +1,7 @@
+const seleniumServer = require('selenium-server-standalone-jar');
+const chromedriver = require('chromedriver');
+const geckodriver = require('geckodriver');
+
 require('nightwatch-cucumber')({
   cucumberArgs: [
     '--compiler', 'js:babel-core/register',
@@ -8,16 +12,18 @@ require('nightwatch-cucumber')({
 });
 
 module.exports = {
-  // src_folders: ['./e2e/tests'],
   output_folder: './e2e/reports',
   globals_path: './e2e/globals.js',
+  live_output: false,
   selenium: {
     start_process: true,
-    server_path: 'node_modules/selenium-server-standalone-jar/jar/selenium-server-standalone-3.0.1.jar',
+    server_path: seleniumServer.path,
     port: 4444,
     cli_args: {
-      'webdriver.chrome.driver': 'node_modules/chromedriver/lib/chromedriver/chromedriver',
-      'webdriver.gecko.driver': 'node_modules/geckodriver/bin/geckodriver'
+      'webdriver.chrome.driver': chromedriver.path,
+      'webdriver.gecko.driver': geckodriver.path,
+      'webdriver.firefox.profile': 'nightwatch',
+      'webdriver.gecko.profile': 'nightwatch'
     }
   },
   test_settings: {
