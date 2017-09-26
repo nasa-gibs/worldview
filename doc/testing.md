@@ -159,6 +159,16 @@ Append the following parameters to the URL to test using mock data.
       <td colspan="1">Use the static JSON file with sources feeds found at mock/sources\_data.json-X</td>
     </tr>
     <tr>
+      <td colspan="1">modalView</td>
+      <td colspan="1">
+        categories,    
+        measurements,    
+        layers
+      </td>
+      <td colspan="1">Forces the 'Add Layers' modal to display categories, measurements or layers.   
+      By default Artic/Antarctic shows measurements and Geographic shows categories.</td>
+    </tr>
+    <tr>
       <td colspan="1">imagegen</td>
       <td colspan="1">X</td>
       <td colspan="1">Use the endpoint

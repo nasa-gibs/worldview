@@ -1,211 +1,276 @@
-#wv-events {
-    position: relative;
+.wv-eventslist {
+  position: relative;
 }
-#wv-events li.item i{
-    float: left;
-    margin: 0 10px 5px 5px;
+
+.wv-eventslist li.item .event-icon {
+  float: left;
+  margin: 0 8px 1px 5px;
 }
 
 .map-item-list li.item {
-    padding:6px 0px;
-    width:auto;
-    margin:0;
-    display:block;
-    overflow:hidden;
-    cursor:pointer;
-    color:#d54e21;
-    background: transparent;
+  padding: 6px 0;
+  width: auto;
+  margin: 0;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  background: transparent;
 }
 
 .map-item-list li.item h4 {
-    font-size:0.85em;
-    color:#ccc;
-    padding: 0 3px;
+  font-size: 0.85em;
+  color: #ccc;
+  padding: 0 3px;
 }
+
 .map-item-list li.item p,
 .map-item-list li.item ul {
-    padding: 0 3px;
-    font-size:0.78em;
-    color: #bbb;
-    font-style:italic;
-    margin-left: 25px;
-    margin-top: 5px;
+  padding: 0 3px;
+  font-size: 0.78em;
+  color: #bbb;
+  font-style: italic;
+  margin-left: 25px;
+  margin-top: 5px;
 }
-.map-item-list li.item:hover,
-.map-item-list li.item-selected {
-    background:rgba(250,250,250,1);
+
+.map-item-list li.item ul {
+  list-style: none;
 }
-.map-item-list li.item:hover h4,
-.map-item-list li.item:hover p,
+
+.map-item-list li.item-selected,
+.map-item-list li.item:hover {
+  background: rgba(250, 250, 250, 1);
+}
+
 .map-item-list li.item-selected h4,
-.map-item-list li.item-selected p{
-    color:#666;
+.map-item-list li.item-selected p,
+.map-item-list li.item:hover h4,
+.map-item-list li.item:hover p {
+  color: #666;
 }
+
 .map-item-list li.item input {
-    float:right;
+  float: right;
 }
 
-.map-item-list li.item p{
-    color: #666;
+.map-item-list li.item p {
+  color: #666;
 }
+
 .map-item-list li.item p a {
-    display: block;
-    clear:both;
-    margin-top: 7px;
-    position: relative;
-    padding-left: 15px;
+  display: block;
+  clear: both;
+  margin-top: 7px;
+  position: relative;
+  padding-left: 15px;
 }
 
-#wv-events li.item ul li.dates a.active {
-    font-weight: bold;
+.wv-eventslist li.item ul li.dates a.active {
+  font-weight: 700;
 }
 
-#wv-events .map-item-list li.item p a i.fa-external-link {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    margin-top: -5px;
-    left: 0;
+.wv-eventslist .map-item-list li.item .fa-external-link {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  margin-top: -5px;
+  left: 0;
 }
+
 .map-item-list ul.selectorboxcategory {
-    outline:none !important;
-    float:left;
-    overflow:auto;
+  outline: none !important;
+  float: left;
+  overflow: auto;
 }
+
 .map-item-list h3.head {
-    display:block;
-    float: left;
-    color:#fff;
-    width:100%;
-    border:none;
-    text-decoration:none;
-    background: none;
-    padding: 1px 3px;
-    margin:10px 0 0 2%;
-    text-transform:uppercase;
+  display: block;
+  float: left;
+  color: #fff;
+  width: 100%;
+  border: none;
+  text-decoration: none;
+  background: none;
+  padding: 1px 3px;
+  margin: 10px 0 0 2%;
+  text-transform: uppercase;
 }
+
 .map-item-list a.flowbutton {
-    text-decoration:none;
-    display:inline-block;
-    float: left;
-    color:#ffffff;
-    font-size: 1.4em;
-    border:none;
-    padding:6px 0;
-    margin-top:20px;
-    margin-left:5px;
+  text-decoration: none;
+  display: inline-block;
+  float: left;
+  color: #fff;
+  font-size: 1.4em;
+  border: none;
+  padding: 6px 0;
+  margin-top: 20px;
+  margin-left: 5px;
 }
+
 .map-item-list ul li div {
-    padding:0 !important;
+  padding: 0 !important;
 }
 
 .map-item-list li.item h4.mark {
-    font-weight: bold;
-    color: red;
+  font-weight: 700;
+  color: #f00;
 }
 
-/******************** Categories *************************/
-
-#wv-events li i.map-marker {
-    background: url('../images/natural-events/event-other.svg');
-    height:26px;
-    width:26px;
-}
-#wv-events li.volcanoes i.map-marker{
-    background: url('../images/natural-events/event-volcano.svg');
-}
-#wv-events li.dust-and-haze i.map-marker{
-    background: url('../images/natural-events/event-sandstorm.svg');
-}
-#wv-events li.severe-storms i.map-marker{
-    background: url('../images/natural-events/event-weather.svg');
-}
-#wv-events li.wildfires i.map-marker{
-    background: url('../images/natural-events/event-fire.svg');
-}
-#wv-events li.manmade i.map-marker{
-    background: url('../images/natural-events/event-manmade.svg');
-}
-/* sea-and-lake-ice and icebergs are currently one category
- * and we are temp using the Iceberg icons
- */
-#wv-events li.sea-and-lake-ice i.map-marker{
-    background: url('../images/natural-events/event-iceberg.svg');
-}
-#wv-events li.snow i.map-marker{
-    background: url('../images/natural-events/event-snow.svg');
-}
-#wv-events li.water-color i.map-marker{
-    background: url('../images/natural-events/event-water-color.svg');
-}
-#wv-events li.icebergs i.map-marker{
-    background: url('../images/natural-events/event-iceberg.svg');
+.marker {
+  display: block;
+  height: 26px;
+  width: 26px;
+  background: url('../images/natural-events/dot.svg');
 }
 
-/*********************************************************/
+.marker-selected {
+  transform: scale(1.4);
+  transform-origin: center bottom;
+  position: relative;
+  z-index: 100;
+  height: 31px;
+  background: url('../images/natural-events/pin.svg');
+}
 
-/******************** Notifications **********************/
+.marker:not(.marker-selected):hover {
+  transform: scale(1.2);
+  transform-origin: center bottom;
+  position: relative;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.event-icon {
+  display: block;
+  height: 30px;
+  width: 30px;
+  background: url('../images/natural-events/icon-default.svg');
+}
+
+.wv-map .event-icon {
+  height: 26px;
+  width: 26px;
+}
+
+.event-icon-dust-and-haze {
+  background: url('../images/natural-events/icon-dust-and-haze.svg');
+}
+
+.event-icon-icebergs {
+  background: url('../images/natural-events/icon-icebergs.svg');
+}
+
+.event-icon-manmade {
+  background: url('../images/natural-events/icon-manmade.svg');
+}
+
+.event-icon-sea-and-lake-ice {
+  background: url('../images/natural-events/icon-sea-and-lake-ice.svg');
+}
+
+.event-icon-severe-storms {
+  background: url('../images/natural-events/icon-severe-storms.svg');
+}
+
+.event-icon-snow {
+  background: url('../images/natural-events/icon-snow.svg');
+}
+
+.event-icon-volcanoes {
+  background: url('../images/natural-events/icon-volcanoes.svg');
+}
+
+.event-icon-water-color {
+  background: url('../images/natural-events/icon-water-color.svg');
+}
+
+.event-icon-wildfires {
+  background: url('../images/natural-events/icon-wildfires.svg');
+}
 
 .notify-alert {
-    position: absolute;
-    top: 60px !important;
-    right: 10px !important;
-    left: auto !important;
+  position: absolute;
+  top: 60px !important;
+  right: 10px !important;
+  left: auto !important;
 }
+
+.notify-alert .ui-dialog-content div::after {
+  pointer-events: none;
+  transform: translateY(50%);
+  bottom: 50%;
+  height: 10px;
+  content: 'Read more \002026 ';
+  float: right;
+  position: absolute;
+  display: block;
+  z-index: 999;
+  right: 45px;
+  font-size: 13px;
+}
+
+.notify-alert .ui-dialog-content div:hover::after {
+  color: #000;
+}
+
 @media screen and (max-device-height: 720px) {
-    .notify-alert {
-        display:none;
-    }
+  .notify-alert {
+    display: none;
+  }
 }
 
-.notify-alert div {
+.notify-alert i {
+  font-size: 1.4em;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 40px;
+}
 
+.notify-alert .ui-dialog-content div > i {
+  color: #d54e21;
+  margin-right: 10px;
+  margin-left: 10px;
 }
-.notify-alert i{
-    font-size: 1.4em;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-    line-height: 40px;
-}
-.notify-alert .ui-dialog-content div> i{
-    color: #d54e21;
-    margin-right: 10px;
-    margin-left: 10px;
-}
-.notify-alert .ui-dialog-content div{
-    margin-right: 40px;
 
+.notify-alert .ui-dialog-content div {
+  margin-right: 40px;
 }
-.notify-alert .ui-dialog-content div:hover{
-    background:#ccc;
-    cursor:pointer;
+
+.notify-alert .ui-dialog-content div:hover {
+  background: #ccc;
+  cursor: pointer;
 }
-.notify-alert .ui-dialog-content div:hover span{
-    color:#000;
+
+.notify-alert .ui-dialog-content div:hover span {
+  color: #000;
 }
-.notify-alert .ui-dialog-content>i{
-    float: right;
-    padding:0 10px;
+
+.notify-alert .ui-dialog-content > i {
+  float: right;
+  padding: 0 10px;
 }
-.notify-alert .ui-dialog-content>i:hover {
-    cursor: pointer;
-    background: #ccc;
-    color: #333;
+
+.notify-alert .ui-dialog-content > i:hover {
+  cursor: pointer;
+  background: #ccc;
+  color: #333;
 }
+
 .notify-alert .ui-dialog-content {
-    padding: 0 0 0 0px;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-    line-height: 40px;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 40px;
 }
-.wv-dialog ul {
-    padding-left:20px;
-    margin:10px 0;
-}
-.wv-dialog ul li{
-    list-style-type: disc;
-    display: list-item;
-    margin: 2px 0 2px 20px;
 
+.wv-dialog ul {
+  padding-left: 20px;
+  margin: 10px 0;
 }
-/****************** End Notifications ********************/
+
+.wv-dialog ul li {
+  list-style-type: disc;
+  display: list-item;
+  margin: 2px 0 2px 20px;
+}

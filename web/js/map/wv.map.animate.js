@@ -1,148 +1,77 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
 var wv = wv || {};
 wv.map = wv.map || {};
-
-/*
- * @Class
- */
 wv.map.animate = wv.map.animate || function(models, config, ui) {
 
-    var model = models.map;
-    var self = {};
+  var self = {};
 
-    var lastLocation;
-
-    var init = function(){
-
-    };
-    /*
-     * Pan and zooms the map to a new location 
-     *
-     * @function move
-     * @static
-     *
-     * @param {String} method - "fly" "pan" or "zoom"
-     * @param {Array} location - Geographical coordinates
-     * @param {Number} zoom - desired zoom level, if any
-     *
-     * @returns {void}
-     */
-    self.move = function(method, location, zoomLevel, callback) {
-        var start, currentZoom, newZoom, duration, wait, startTime, pan, bounceZoom, view, zoomTo, needsToZoomOut, flyParams, map;
-        
-        map = ui.map.selected;
-        start = lastLocation || map.getView().getCenter();
-        //Determine zoom and pan levels depending on distance to new point
-        //var distance = ol.sphere.ESPG4326.haversineDistance(start, location);
-        
-        currentZoom = map.getView().getZoom();
-        newZoom = zoomLevel || 5;
-        
-        duration = ( method == "fly" ) ? 5000 : 1000;
-        wait = ( method == "fly" ) ? 1000 : 1;
-        view = map.getView();
-        if(location.length > 2) {
-            location = ol.extent.getCenter(location);
-        }
-
-        // use this to set proper zoom/res
-
-        // For bounce, if zoom is too high, it bounces "in" insteade of "out";
-        // force it to zoom out by starting at zoom 4
-        bounceZoom = (currentZoom >= 8) ? 4 : currentZoom - 3;
-        if (bounceZoom < 0) {
-            bounceZoom = 0;
-        }
-
-        if(currentZoom < 4) {
-            method = 'zoom';
-        }
-        setTimeout(function() {
-            if ( method === "fly" ) {
-                bounce(view, duration, bounceZoom, newZoom);
-                fly(view, duration, location, newZoom);
-            } else if ( method === 'zoom' ) {
-                zoom(view, duration, newZoom);
-                fly(view, duration, location, newZoom);
-            } else {
-                fly(view, duration, location, newZoom);
-            }
-            callback();
-        }, wait);
-
-        lastLocation = location;
-    };
-    /*
-     * Zooms in to next event location
-     *
-     * @method zoom
-     * @private
-     *
-     * @param {object} view - OL view Object
-     * @param {number} duration - time of map animation
-     * @param {Object} newZoom - Zoom level at the end of animation
-     *
-     * @returns {void}
-     */
-    var zoom = function(view, duration, newZoom) {
-        view.animate({
-            duration: duration,
-            zoom: newZoom,
+  /**
+   * Moves the map with a "flying" animation
+   *
+   * @param  {Array} endPoint  Ending coordinates
+   * @param  {integer} endZoom Ending Zoom Level
+   * @return {Promise}         Promise that is fulfilled when animation completes
+   */
+  self.fly = function(endPoint, endZoom) {
+    var view = ui.map.selected.getView();
+    view.cancelAnimations();
+    var startPoint = view.getCenter();
+    var startZoom = Math.floor(view.getZoom());
+    endZoom = endZoom || 5;
+    if (endPoint.length > 2) endPoint = ol.extent.getCenter(endPoint);
+    var extent = view.calculateExtent();
+    var hasEndInView = ol.extent.containsCoordinate(extent, endPoint);
+    var line = new ol.geom.LineString([startPoint, endPoint]);
+    var distance = line.getLength(); // In map units, which is usually degrees
+    var duration = (distance * 20)+1000; // 4.6 seconds to go 360 degrees
+    var animationPromise = function() {
+      var args = Array.prototype.slice.call(arguments);
+      return new Promise(function(resolve, reject){
+        args.push(function(complete){
+          if (complete) resolve();
+          if (!complete) reject(new Error('Animation interrupted!'));
         });
+        view.animate.apply(view, args);
+      }).catch(function(){});
     };
-    /*
-     * A method that zooms of a current zoom level and then
-     *  back down into the zoom level of the next event
-     *
-     * @method bouce
-     * @private
-     *
-     * @param {object} view - OL view Object
-     * @param {number} duration - time of map animation
-     * @param {array} bounceZoom - Outmost zoom level of animation
-     * @param {Object} newZoom - Zoom level at the end of animation
-     *
-     * @returns {void}
-     */
-    var bounce = function(view, duration, bounceZoom, newZoom) {
-        view.animate({
-          zoom: bounceZoom,
-          duration: duration / 2
-        }, {
-          zoom: newZoom,
-          duration: duration / 2
-        });
-    };
+    if (hasEndInView) {
+      // If the event is already visible, don't zoom out
+      return Promise.all([
+        animationPromise({center: endPoint, duration: duration}),
+        animationPromise({zoom: endZoom, duration: duration})
+      ]);
+    }
+    // Default animation zooms out to arc
+    return Promise.all([
+      animationPromise({center: endPoint, duration: duration}),
+      animationPromise(
+        {zoom: getBestZoom(distance, startZoom, endZoom, view), duration: duration/2},
+        {zoom: endZoom, duration: duration/2}
+      )
+    ]);
+  };
 
-    /*
-     * Animates in direction of new coordinates
-     *
-     * @method fly
-     * @private
-     *
-     * @param {object} view - OL view Object
-     * @param {number} duration - time of map animation
-     * @param {array} location - Coordinates of Event
-     *
-     * @returns {void}
-     */
-    var fly = function(view, duration, location) {
-        view.animate({
-            duration: duration,
-            center: location
-        });
-    };
+  /**
+   * Gets the best zoom level for the middle of the flight animation
+   *
+   * @param  {integer} distance distance of the animation in map units
+   * @param  {integer} start    starting zoom level
+   * @param  {integer} end      ending zoom level
+   * @param  {object} view     map view
+   * @return {integer}          best zoom level for flight animation
+   */
+  var getBestZoom = function(distance, start, end, view) {
+    var idealLength = 1500;
+    var lines = [2,3,4,5,6,7,8].map(function(zoom){
+      return {
+        zoom: zoom,
+        pixels: distance/view.getResolutionForZoom(zoom)
+      };
+    });
+    var bestFit = lines.sort(function(a, b) {
+      return Math.abs(idealLength - a.pixels) - Math.abs(idealLength - b.pixels);
+    })[0];
+    return Math.max(2, Math.min(bestFit.zoom, start-1, end-1));
+  };
 
-    init();
-    return self;
-
+  return self;
 };

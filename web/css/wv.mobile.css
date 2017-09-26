@@ -1,105 +1,116 @@
-/*@media only screen and (max-width: 720px) and (orientation: portrait), only screen and (max-height: 320px) and (orientation: landscape), only screen and (device-aspect-ratio: 2/3) and (orientation:portrait), only screen and (device-aspect-ratio:40/71) and (orientation:portrait){ */
 @media only screen and (max-width: 739px) {
-    #productsHolder {
-        display:block;
-        float:left;
-        left: 0;
-        min-width:238px;
-        width:100%;
-        height:100%;
-        position:absolute !important;
-        overflow:hidden;
-        background: rgb(38,43,49);
-        border-radius:0 10px 10px 0;
-        top:0; z-index: 10100;
-    }
-    #productsHolder footer {
+  #productsHolder {
+    display: block;
+    float: left;
+    left: 0;
+    min-width: 238px;
+    width: 100%;
+    height: 100%;
+    position: absolute !important;
+    overflow: hidden;
+    background: rgb(38, 43, 49);
+    border-radius: 0 10px 10px 0;
+    top: 0;
+    z-index: 10100;
+  }
 
-    }
-    .bank {
-        height:96%;
-    }
+  .bank {
+    height: 96%;
+  }
 
-    #selectorboxcontent {
-        max-height:97%;
-    }
+  #selectorboxcontent {
+    max-height: 97%;
+  }
 
-    img.bank-item-img {
-        display:block;
-        height: 1.6em;
-        width:auto;
-    }
+  img.bank-item-img {
+    display: block;
+    height: 1.6em;
+    width: auto;
+  }
 
-    #productsHolder li.third {
-        display:none;
-    }
+  #productsHolder li.third {
+    display: none;
+  }
 
-    #wv-logo {
-        background: url("../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@") no-repeat center rgba(40, 40, 40, 0.85);
-        height: 42px;
-        width: 56px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid #333;
-    }
+  #wv-logo {
+    background: url("../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@") no-repeat center rgba(40, 40, 40, 0.85);
+    display: block;
+    height: 42px;
+    width: 56px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #333;
+  }
 
-    a.staticLayers {
-        width: 100px;
-        background-image: none;
-        border-radius: 5px;
-        top: 55px;
-    }
+  a.staticLayers {
+    width: 100px;
+    background-image: none;
+    border-radius: 5px;
+    top: 55px;
+  }
+  a.staticLayers::after {
+    display: none;
+  }
 
-    a.staticLayers:hover {
-        background-image: none;
-    }
+  a.staticLayers:hover {
+    background-image: none;
+  }
 
-    #wv-toolbar li {
-        display: block;
-        float: left;
-        margin: 1px;
-    }
+  #wv-toolbar li {
+    display: block;
+    float: left;
+    margin: 1px;
+  }
 
-    #wv-toolbar #wv-image-button {
-        display: none;
-    }
+  #wv-toolbar #wv-image-button {
+    display: none;
+  }
 
-    div.olControlScaleLineCustom {
-        bottom: 10px;
-    }
+  div.olControlScaleLineCustom {
+    bottom: 10px;
+  }
 
-    .olControlScaleLineCustomBottom {
-        display: none;
-    }
+  .olControlScaleLineCustomBottom {
+    display: none;
+  }
 
-    div.olControlMousePosition {
-        display: none;
-    }
+  div.olControlMousePosition {
+    display: none;
+  }
 
-    div.olControlMousePosition, div.olControlScaleLineCustom {display:none !important;}
+  div.olControlMousePosition,
+  div.olControlScaleLineCustom {
+    display: none !important;
+  }
 
-    .wv-coords-map{
-        display: none !important;
-    }
-    button#layers-add{
-        width:100%;
-    }
-    #selected-category .ui-tabs-panel{
-        clear:both;
-        margin-left:0;
-        border-top: 2px solid #d54e21;
-        padding: 10px 0 0 0;
-    }
-    #selected-category .ui-tabs .ui-tabs-nav{
-        margin-bottom:15px;
-    }
-    #categories-nav label span {
-        font-size: 1em;
-    }
-    #selected-category .ui-tabs-panel li.measurement-settings-item{
-        margin-left:0px;
-    }
-    .notify-alert{
-        visibility: hidden;
-    }
+  .wv-coords-map {
+    display: none !important;
+  }
+
+  button#layers-add {
+    width: 100%;
+  }
+
+  #selected-category .ui-tabs-panel {
+    clear: both;
+    margin-left: 0;
+    border-top: 2px solid #d54e21;
+    padding: 10px 0 0;
+  }
+
+  #selected-category .ui-tabs .ui-tabs-nav {
+    margin-bottom: 15px;
+  }
+
+  #categories-nav label span {
+    font-size: 1em;
+  }
+
+  #selected-category .ui-tabs-panel li.measurement-settings-item {
+    margin-left: 0;
+  }
+
+  .notify-alert {
+    visibility: hidden;
+  }
 }

@@ -1,21 +1,21 @@
 ul.menuPicker {
-	margin: 0;
-	padding: 0;
-	color: white;
-	list-style: none;
-	display: block;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  list-style: none;
+  display: block;
 }
 
 ul.menuPicker li {
-	border: 1px solid black;
-	background: #666;
-	padding: .2em 1em;
+  border: 1px solid #000;
+  background: #666;
+  padding: 0.2em 1em;
 }
 
 ul.menuPicker li:hover {
-	background: #9B1C26;
+  background: #9b1c26;
 }
 
 ul.menuPicker li.disabled {
-	background: #999;
+  background: #999;
 }

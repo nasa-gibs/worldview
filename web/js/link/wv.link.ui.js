@@ -19,23 +19,35 @@ wv.link.ui = wv.link.ui || function(models, config) {
   var selector = "#" + id;
   var $button, $label;
   var widgetFactory = React.createFactory(WVC.Share);
+  var clipboard = new Clipboard('.copy-btn');
 
   var init = function() {
-    $button = $("<input></input>").attr("type", "checkbox").attr("id", "wv-link-button-check");
-    $label = $("<label></label>").attr("for", "wv-link-button-check").attr("title", "Share this map");
-    var $icon = $("<i></i>").addClass("fa fa-share-square-o fa-2x");
+    $button = $("<input></input>")
+      .attr("type", "checkbox")
+      .attr("id", "wv-link-button-check");
+    $label = $("<label></label>")
+      .attr("for", "wv-link-button-check")
+      .attr("title", "Share this map");
+    var $icon = $("<i></i>")
+      .addClass("fa fa-share-square-o fa-2x");
     $label.append($icon);
-    $(selector).append($label);
-    $(selector).append($button);
-    $button.button({text: false}).click(function() {
-      var checked = $("#wv-link-button-check").prop("checked");
-      WVC.GA.event('Link', 'Click', 'Share link Button');
-      if (checked) {
-        self.show();
-      } else {
-        wv.ui.closeDialog();
-      }
-    });
+    $(selector)
+      .append($label);
+    $(selector)
+      .append($button);
+    $button.button({
+      text: false
+    })
+      .click(function() {
+        var checked = $("#wv-link-button-check")
+          .prop("checked");
+        WVC.GA.event('Link', 'Click', 'Share link Button');
+        if (checked) {
+          self.show();
+        } else {
+          wv.ui.closeDialog();
+        }
+      });
     models.link.events.on("update", replaceHistoryState);
   };
 
@@ -74,11 +86,15 @@ wv.link.ui = wv.link.ui || function(models, config) {
     var twMessage = 'Check out what I found in #NASAWorldview -';
     var emailBody = shareMessage + " - " + url;
 
-    switch(type) {
-      case 'twitter': return twitterUrlParams(url, twMessage);
-      case 'facebook': return facebookUrlParams('121285908450463', url, url, 'popup');
-      case 'reddit': return redditUrlParams(url, shareMessage);
-      case 'email': return emailUrlParams(shareMessage, emailBody);
+    switch (type) {
+      case 'twitter':
+        return twitterUrlParams(url, twMessage);
+      case 'facebook':
+        return facebookUrlParams('121285908450463', url, url, 'popup');
+      case 'reddit':
+        return redditUrlParams(url, shareMessage);
+      case 'email':
+        return emailUrlParams(shareMessage, emailBody);
     }
     return undefined;
   };
@@ -91,9 +107,9 @@ wv.link.ui = wv.link.ui || function(models, config) {
     var promise = models.link.shorten();
 
     // If a short link can be generated, replace the full link.
-    if(type === 'twitter' || type === 'email') {
+    if (type === 'twitter' || type === 'email') {
       win = window;
-      if(type === 'twitter') {
+      if (type === 'twitter') {
         win = window.open('', '_blank');
       }
       promise.done(function(result) {
@@ -101,11 +117,12 @@ wv.link.ui = wv.link.ui || function(models, config) {
           href = getSharelink(type, result.data.url);
           openPromisedSocial(href, win);
         }
-      }).fail(function() {
-        href = getSharelink(type, shareLink);
-        openPromisedSocial(href, win);
-        console.warn("Unable to shorten URL, full link generated.");
-      });
+      })
+        .fail(function() {
+          href = getSharelink(type, shareLink);
+          openPromisedSocial(href, win);
+          console.warn("Unable to shorten URL, full link generated.");
+        });
     } else {
       href = getSharelink(type, shareLink);
       window.open(href, '_blank');
@@ -114,17 +131,23 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   self.show = function() {
     var $dialog = wv.ui.getDialog();
-    var item =  "<div id='wv-link' class='wv-link'>" +
-        "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>";
-    if ( config.features.urlShortening ) {
-        item += "<span autofocus></span><div id='wv-link-shorten'>" +
-            "<input type='checkbox' value='' id='wv-link-shorten-check' />" +
-            "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten this link</label>" +
-            "</div>";
+    var item = "<div id='wv-link' class='wv-link'>" +
+      "<div class='input-group'>" +
+      "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>" +
+      "<span class='input-group-button hide-icon' data-balloon-visible data-tooltip='Copied!' data-tooltip-pos='up' data-tooltip-length='xsmall'>" +
+      "<button title='Copy to clipboard' class='copy-btn' data-clipboard-target='#permalink_content'>COPY</button>" +
+      "</span>" +
+      "</div>";
+    if (config.features.urlShortening) {
+      item += "<span autofocus></span><div id='wv-link-shorten'>" +
+        "<input type='checkbox' value='' id='wv-link-shorten-check' />" +
+        "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten link</label>" +
+        "</div>";
     }
     item += "</div>";
+
     var dialogWidth = '300';
-    if ( wv.util.browser.small ) {
+    if (wv.util.browser.small) {
       dialogWidth = '242';
     }
 
@@ -136,17 +159,21 @@ wv.link.ui = wv.link.ui || function(models, config) {
     // If selected during the animation, the cursor will go to the
     // end of the input box
     var updateLink = function() {
-      $('#permalink_content').val(models.link.get());
-      $("#wv-link-shorten-check").iCheck("uncheck");
-      $('#permalink_content').focus();
-      $('#permalink_content').select();
+      $('#permalink_content')
+        .val(models.link.get());
+      $("#wv-link-shorten-check")
+        .iCheck("uncheck");
+      $('#permalink_content')
+        .focus();
+      $('#permalink_content')
+        .select();
     };
 
     models.link.events.on("update", updateLink);
 
     $dialog.dialog({
       dialogClass: "wv-panel wv-link-panel",
-      title: "Copy this link to share:",
+      title: "Copy link to share:",
       show: {
         effect: "slide",
         direction: "up"
@@ -157,54 +184,67 @@ wv.link.ui = wv.link.ui || function(models, config) {
       draggable: false,
       resizable: false,
       autoOpen: false
-    }).on("dialogcreate",
-      $dialog.prepend(item)
-    ).on("dialogclose", function() {
-      $("#wv-link-button-check").prop("checked", false);
-      $button.button("refresh");
-      models.link.events.off("update", updateLink);
-    });
-    if ( wv.util.browser.small ) {
+    })
+      .on("dialogcreate",
+        $dialog.prepend(item)
+      )
+      .on("dialogclose", function() {
+        $("#wv-link-button-check")
+          .prop("checked", false);
+        $button.button("refresh");
+        models.link.events.off("update", updateLink);
+      });
+    if (wv.util.browser.small) {
       wv.ui.positionDialog($dialog, {
-          my: "left top",
-          at: "left+58 bottom+5",
-          of: "#wv-toolbar"
+        my: "left top",
+        at: "left+58 bottom+5",
+        of: "#wv-toolbar"
       });
     } else {
       wv.ui.positionDialog($dialog, {
-          my: "left top",
-          at: "left bottom+5",
-          of: $label
+        my: "left top",
+        at: "left bottom+5",
+        of: $label
       });
     }
-    $(".ui-dialog").zIndex(600);
+    $(".ui-dialog")
+      .zIndex(600);
 
-    $('#permalink_content').val(models.link.get());
+    $('#permalink_content')
+      .val(models.link.get());
     $dialog.dialog("open");
     setTimeout(updateLink, 500);
 
-    $("#wv-link-shorten-check").on("change", function() {
-      var checked = $("#wv-link-shorten-check").prop("checked");
-      if (checked) {
-        var promise = models.link.shorten();
-        WVC.GA.event('Link', 'Check', 'Shorten');
-        $("#permalink_content").val("Please wait...");
-        promise.done(function(result) {
-          if (result.status_code === 200) {
-            $('#permalink_content').val(result.data.url);
-          } else {
-            error(result.status_code, result.status_txt);
-          }
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-          error(textStatus, errorThrown);
-        });
-      } else {
-        $('#permalink_content').val(models.link.get());
-        WVC.GA.event('Link', 'Check', 'Lengthen');
-      }
-      $('#permalink_content').focus();
-      $('#permalink_content').select();
-    });
+    $("#wv-link-shorten-check")
+      .on("change", function() {
+        var checked = $("#wv-link-shorten-check")
+          .prop("checked");
+        if (checked) {
+          var promise = models.link.shorten();
+          WVC.GA.event('Link', 'Check', 'Shorten');
+          $("#permalink_content")
+            .val("Please wait...");
+          promise.done(function(result) {
+            if (result.status_code === 200) {
+              $('#permalink_content')
+                .val(result.data.url);
+            } else {
+              error(result.status_code, result.status_txt);
+            }
+          })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              error(textStatus, errorThrown);
+            });
+        } else {
+          $('#permalink_content')
+            .val(models.link.get());
+          WVC.GA.event('Link', 'Check', 'Lengthen');
+        }
+        $('#permalink_content')
+          .focus();
+        $('#permalink_content')
+          .select();
+      });
 
     var error = function() {
       console.warn("Unable to shorten URL");
@@ -213,16 +253,35 @@ wv.link.ui = wv.link.ui || function(models, config) {
         "Please try again later.");
     };
 
-    $("#wv-link-shorten-check").prop("checked", false);
+    $("#wv-link-shorten-check")
+      .prop("checked", false);
+
+    clipboard.on('success', function(e) {
+      e.clearSelection();
+
+      $('.wv-link .input-group-button')
+        .removeClass('hide-icon');
+
+      setTimeout(function(){
+        $('.wv-link .input-group-button')
+          .addClass('hide-icon');
+      }, 1000);
+    });
+
+    clipboard.on('error', function(e) {
+      console.error('Link could not be copied!');
+      console.error('Action:', e.action);
+      console.error('Trigger:', e.trigger);
+    });
   };
 
   self.initWidget = function() {
     return widgetFactory({
       clickFunction: clickFunction,
       fbLink: '#',
-    	twLink: '#',
-    	rdLink: '#',
-    	emailLink: '#'
+      twLink: '#',
+      rdLink: '#',
+      emailLink: '#'
     });
   };
 

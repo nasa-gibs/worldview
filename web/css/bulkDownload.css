@@ -1,42 +1,42 @@
 #BulkDownload body {
-    background-color: rgb(25, 28, 32);
+  background-color: rgb(25, 28, 32);
 }
 
 #BulkDownload h4 {
-    margin-bottom: 0
+  margin-bottom: 0;
 }
 
 #BulkDownload #page {
-    background-color: #ffffff;
-    margin: 20px;
-    padding: 5px 20px 20px 20px;
-    border-radius: 5px;
+  background-color: #fff;
+  margin: 20px;
+  padding: 5px 20px 20px;
+  border-radius: 5px;
 }
 
 #BulkDownload pre {
-    background-color: #eeeeee;
-    padding: 5px;
-    border: 1px dashed #dddddd;
+  background-color: #eee;
+  padding: 5px;
+  border: 1px dashed #ddd;
 }
 
 #BulkDownload .label {
-    margin-top: 10px;
-    font-style: italic;
-    color: #808080;
+  margin-top: 10px;
+  font-style: italic;
+  color: #808080;
 }
 
 #BulkDownload #bulk-password-notice {
-	display: none;
+  display: none;
 }
 
 #BulkDownload #netrc-instructions {
-    display: none;
+  display: none;
 }
 
 #BulkDownload #fdm-password-instructions {
-    display: none;
+  display: none;
 }
 
 #BulkDownload #indirect-instructions {
-    display: none;
+  display: none;
 }

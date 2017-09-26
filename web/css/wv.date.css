@@ -1,211 +1,207 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
-#timeds, #timemds {
-    position: relative;
+#timeds,
+#timemds {
+  position: relative;
 }
 
 #timemds {
-    display: none;
+  display: none;
 }
 
-.dwv, .dwl, .dw-i {
-    font-weight: 700;
+.dw-i,
+.dwl,
+.dwv {
+  font-weight: 700;
 }
 
 .dwbw {
-    width: 40%;
+  width: 40%;
 }
 
 .dwb-c {
-    display: none;
+  display: none;
 }
 
-.datespan ul, menu, dir {
-    -webkit-margin-before: 0em;
-    -webkit-margin-after: 0em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    -webkit-padding-start: 0px;
+.datespan ul,
+dir,
+menu {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  -webkit-padding-start: 0;
 }
 
 .spanContainerLabel {
-    width: 25%;
-    float: left;
-    text-shadow: none;
-    display: block;
-    margin-top: 20px;
-    text-align: center;
-    font-size: .1em;
-    color: #fff;
+  width: 25%;
+  float: left;
+  text-shadow: none;
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.1em;
+  color: #fff;
 }
 
-.spanContainerLabelDate, .spanContainerLabelDay {
-    display: block;
-    font-size: .25em;
+.spanContainerLabelDate,
+.spanContainerLabelDay {
+  display: block;
+  font-size: 0.25em;
 }
 
 .spanContainerLabelDay {
-    font-size: .16em;
+  font-size: 0.16em;
 }
 
 .spanContainer {
-    float: left;
-    min-height: 100%;
-    width: 100%;
+  float: left;
+  min-height: 100%;
+  width: 100%;
 }
 
 div.datespan {
-    width: auto;
-    overflow: hidden;
-    background: none;
+  width: auto;
+  overflow: hidden;
+  background: none;
 }
 
 .datespan div.olMap {
-    width: 11.78%;
-    height: 100px;
-    float: left;
-    -webkit-box-shadow: 0 0 5px 5px #111;
-    box-shadow: 0 0 5px 5px #111;
-    margin: 20px 0 0 2.5% !important;
-    position: relative;
-    left: -1.25%;
-    display: block;
+  width: 11.78%;
+  height: 100px;
+  float: left;
+  -webkit-box-shadow: 0 0 5px 5px #111;
+  box-shadow: 0 0 5px 5px #111;
+  margin: 20px 0 0 2.5% !important;
+  position: relative;
+  left: -1.25%;
+  display: block;
 }
 
 a.ecbutton {
-    display: block;
-    width: 24px;
-    height: 24px;
-    float: left;
-    position: relative;
-    background: transparent;
-    left: -28px;
-    top: 3px;
+  display: block;
+  width: 24px;
+  height: 24px;
+  float: left;
+  position: relative;
+  background: transparent;
+  left: -28px;
+  top: 3px;
 }
 
 a.collapse {
-    background-image: url("../images/collapseDown.png");
-    background-repeat: no-repeat;
+  background-image: url("../images/collapseDown.png");
+  background-repeat: no-repeat;
 }
 
 a.expand {
-    background-image: url("../images/expandUp.png");
-    background-repeat: no-repeat;
+  background-image: url("../images/expandUp.png");
+  background-repeat: no-repeat;
 }
 
 .dateSpanSlider {
-    display: none !important;
+  display: none !important;
 }
 
 input.ui-slider-input {
-    width: 0px;
-    margin: 0px;
+  width: 0;
+  margin: 0;
 }
 
-.slider {/*background: rgba(45,50,55,.75);*/
-    margin-bottom: 0px; /*box-shadow: 0px 0px 4px 1px #bbb;*/ /* FF3.6+ */ /* Chrome,Safari4+ */ /* Chrome10+,Safari5.1+ */ /* Opera 11.10+ */ /* IE10+ */
-    background: -webkit-gradient(linear,  left top, left bottom,  from(rgba(0,0,0,0.6)),color-stop(50%, rgba(0,0,0,0.7)),to(rgba(0,0,0,0.8)));
-    background: linear-gradient(to bottom,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.7) 50%,rgba(0,0,0,0.8) 100%); /* W3C */
-    height: 23px;
-    cursor: pointer;
+.slider {
+  margin-bottom: 0;
+  background: --webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.6)), color-stop(50%, rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.8)));
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.6)), color-stop(50%, rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.8)));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.8) 100%);
+  height: 23px;
+  cursor: pointer;
 }
 
 :root ul.sliderLabel {
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99000000', endColorstr='#cc000000',GradientType=0 ) \0/IE9;
-}/* IE9 */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr= '#90000', endColorstr='#c0000', GradientType=0) \0/IE9;
+}
 
+/* IE9 */
 ul.sliderLabel {
-    text-shadow: none;
-    color: #fff;
-    margin: -20px 0 0 0;
-    background: none;
-    overflow: hidden;
+  text-shadow: none;
+  color: #fff;
+  margin: -20px 0 0;
+  background: none;
+  overflow: hidden;
 }
 
 ul.sliderLabel li {
-    float: left;
-    background: none;
-    margin: 0px;
-    text-align: center;
-    overflow: hidden;
-    font-weight: 700;
-    font-size: 0.9em;
-    padding: 0.1em 0;
+  float: left;
+  background: none;
+  margin: 0;
+  text-align: center;
+  overflow: hidden;
+  font-weight: 700;
+  font-size: 0.9em;
+  padding: 0.1em 0;
 }
 
 div.sliderDivYear {
-    clear: both;
+  clear: both;
 }
 
 div.sliderDivMonth {
-    background: rgba(25,30,35,0.5);
+  background: rgba(25, 30, 35, 0.5);
 }
 
 #timesliderLabelDay {
-    margin: -24px 0 0;
+  margin: -24px 0 0;
 }
 
 .disabledItem {
-    color: rgba(125,125,125,0.9) !important;
+  color: rgba(125, 125, 125, 0.9) !important;
 }
 
 a.ui-slider-handle {
-    position: relative;
-    height: 80%;
-    top: -3%;
-    background: rgba(31,143,237,.26);
-    border: #1f8fed 2px solid;
+  position: relative;
+  height: 80%;
+  top: -3%;
+  background: rgba(31, 143, 237, 0.26);
+  border: #1f8fed 2px solid;
 }
 
 div.ui-slider {
-    border: none;
-    background: rgba(0,0,0,0.05); /*<-----Fix for IE10*/
-    margin: 0px;
-    top: 0px;
-    height: 23px;
+  border: none;
+  background: rgba(0, 0, 0, 0.05);
+  margin: 0;
+  top: 0;
+  height: 23px;
 }
 
 #wv-date-mobile-label {
-    padding: 7px;
-    border-radius: 5px;
-    border: 1px solid #333;
-    position: absolute;
-    left: 10px;
-    bottom: 85px;
-    border: none;
-    text-shadow: none;
-    font-family: 'Open Sans', sans-serif;
-    color: white;
-    background-color: rgba(40, 40, 40, 0.85);
-    text-align: center;
-    width: 100px;
+  padding: 7px;
+  border-radius: 5px;
+  position: absolute;
+  left: 10px;
+  bottom: 85px;
+  border: none;
+  text-shadow: none;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  background-color: rgba(40, 40, 40, 0.85);
+  text-align: center;
+  width: 100px;
 }
 
 a.ui-btn {
-    margin: 0;
+  margin: 0;
 }
 
 a.ui-shadow {
-    -webkit-box-shadow: none;
-            box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 a.ui-btn-up-c {
-    -webkit-box-shadow: none;
-            box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 #mapdiv {
-    margin: 0;
-    padding: 0;
-    left: 0;
+  margin: 0;
+  padding: 0;
+  left: 0;
 }
