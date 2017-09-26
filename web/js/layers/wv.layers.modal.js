@@ -691,11 +691,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     Object.values(config.layerOrder).forEach(function(layerId) {
       var current = config.layers[layerId];
 
-      // Check if layer is equal to the current projection, then output
-      if (Object.keys(current.projections).indexOf(projection) > -1) {
-        if (!current) {
-          console.warn("In layer order but not defined", layerId);
-        } else {
+      if (!current) {
+        console.warn("In layer order but not defined", layerId);
+      } else {
+        // Check if layer is equal to the current projection, then output
+        if (Object.keys(current.projections).indexOf(projection) > -1) {
           var $layerItem = $('<li />', {
             id: 'layer-flat-' + current.id,
             'class': 'layers-all-layer',
