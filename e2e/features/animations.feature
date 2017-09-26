@@ -10,10 +10,12 @@ Scenario: Toggling animation mode
   When I click the "animation button"
   Then I should see the "animation widget"
 
+@hover
 Scenario: Changing date range of animation
   When I click the "animation button"
   Then the animation range selector works
 
+@hover
 Scenario: Changing animation time resolution
   When I click the "animation button"
   And I scroll to the "animation resolution tooltip"

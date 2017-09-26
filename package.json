@@ -14,8 +14,10 @@
   },
   "scripts": {
     "test": "grunt test lint",
-    "e2e": "nightwatch -e default,firefox",
-    "poste2e": "node e2e/create-html-report.js",
+    "e2e-test": "run-s --continue-on-error e2e:*",
+    "e2e:chrome": "nightwatch -e default",
+    "e2e:firefox": "nightwatch -e firefox --skiptags hover",
+    "e2e:report": "node e2e/create-html-report.js",
     "start": "node ./bin/www",
     "preinstall": "node version-check.js"
   },
@@ -59,6 +61,7 @@
     "moment": "2.13.x",
     "nightwatch": "^0.9.16",
     "nightwatch-cucumber": "^8.1.0",
+    "npm-run-all": "^4.1.1",
     "openlayers": "4.3.1",
     "perfect-scrollbar": "0.7.x",
     "phantomjs": "2.1.x",
