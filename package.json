@@ -22,13 +22,15 @@
     "e2e:chrome:report": "node e2e/create-report.js chrome",
     "e2e:firefox": "run-s --continue-on-error e2e:firefox:*",
     "e2e:firefox:test": "nightwatch -e firefox --skiptags hover",
-    "e2e:firefox:report": "node e2e/create-report.js firefox"
+    "e2e:firefox:report": "node e2e/create-report.js firefox",
+    "e2e:browserstack": "node e2e/browserstack.js -c e2e/nightwatch-browserstack.conf.js"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
     "babel-core": "^6.26.0",
     "babel-polyfill": "6.16.0",
     "bluebird": "3.4.6",
+    "browserstack-local": "^1.3.0",
     "buster": "0.7.12",
     "chromedriver": "2.25.1",
     "clipboard": "^1.7.1",
