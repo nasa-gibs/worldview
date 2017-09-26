@@ -10,7 +10,7 @@ Background:
 Scenario: Selecting Events Tab
 
   When I click the "events" tab
-  Then the tab should have a list of events
+  Then I should see the "list of events" within 3 seconds
   And I should see "Fire"
   And I should see "Iceberg"
   And I should see "Hurricane"

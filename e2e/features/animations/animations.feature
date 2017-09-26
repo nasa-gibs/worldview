@@ -1,5 +1,5 @@
-Feature: Animations
-  Animating the map date
+Feature: Animation Widget
+  The widget that controls animation mode
 
 Background:
   Given Worldview is in "initial" state
