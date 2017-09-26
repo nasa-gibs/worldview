@@ -6,14 +6,14 @@ require('nightwatch-cucumber')({
   cucumberArgs: [
     '--compiler', 'js:babel-core/register',
     '--require', 'e2e/step_definitions',
-    '--format', 'json:e2e/reports/cucumber.json',
+    '--format', `json:e2e/reports/cucumber-${process.argv[3]}.json`,
     'e2e/features'
   ]
 });
 
 module.exports = {
-  output_folder: './e2e/reports',
-  globals_path: './e2e/globals.js',
+  output_folder: 'e2e/reports',
+  globals_path: 'e2e/globals.js',
   live_output: false,
   selenium: {
     start_process: true,
@@ -35,6 +35,11 @@ module.exports = {
       desiredCapabilities: {
         browserName: 'chrome',
         marionette: true
+      }
+    },
+    chrome: {
+      desiredCapabilities: {
+        browserName: 'chrome'
       }
     },
     firefox: {

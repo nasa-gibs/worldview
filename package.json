@@ -13,13 +13,16 @@
     "node": "6.8.1"
   },
   "scripts": {
-    "test": "grunt test lint",
-    "e2e-test": "run-s --continue-on-error e2e:*",
-    "e2e:chrome": "nightwatch -e default",
-    "e2e:firefox": "nightwatch -e firefox --skiptags hover",
-    "e2e:report": "node e2e/create-html-report.js",
+    "preinstall": "node version-check.js",
     "start": "node ./bin/www",
-    "preinstall": "node version-check.js"
+    "test": "grunt test lint",
+    "e2e": "run-s --continue-on-error e2e:*",
+    "e2e:chrome": "run-s --continue-on-error e2e:chrome:*",
+    "e2e:chrome:test": "nightwatch -e chrome",
+    "e2e:chrome:report": "node e2e/create-report.js chrome",
+    "e2e:firefox": "run-s --continue-on-error e2e:firefox:*",
+    "e2e:firefox:test": "nightwatch -e firefox --skiptags hover",
+    "e2e:firefox:report": "node e2e/create-report.js firefox"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
