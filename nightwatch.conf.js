@@ -3,10 +3,12 @@ const chromedriver = require('chromedriver');
 const geckodriver = require('geckodriver');
 
 require('nightwatch-cucumber')({
+  nightwatchOutput: false,
   cucumberArgs: [
     '--compiler', 'js:babel-core/register',
     '--require', 'e2e/step_definitions',
     '--format', `json:e2e/reports/cucumber-${process.argv[3]}.json`,
+    '--format', 'progress-bar',
     'e2e/features'
   ]
 });
@@ -14,7 +16,6 @@ require('nightwatch-cucumber')({
 module.exports = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
-  live_output: false,
   selenium: {
     start_process: true,
     server_path: seleniumServer.path,
@@ -31,7 +32,6 @@ module.exports = {
       launch_url: 'http://localhost',
       selenium_port: 4444,
       selenium_host: 'localhost',
-      silent: true,
       desiredCapabilities: {
         browserName: 'chrome',
         marionette: true

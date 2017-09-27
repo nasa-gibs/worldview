@@ -5,15 +5,16 @@ var browserstack = require('browserstack-local');
 var bs_local;
 
 try {
-  process.mainModule.filename = "./node_modules/.bin/nightwatch"
+  process.mainModule.filename = './node_modules/.bin/nightwatch'
 
   // Code to start browserstack local before start of test
-  console.log("Connecting local");
+  console.log('Connecting localhost to Browserstack...');
   Nightwatch.bs_local = bs_local = new browserstack.Local();
   bs_local.start({'key': process.env.BROWSERSTACK_ACCESS_KEY }, function(error) {
     if (error) throw error;
 
-    console.log('Connected. Now testing...');
+    console.log('Connected. Running tests...');
+    console.log('Go to https://www.browserstack.com/automate to view tests in progress.');
     Nightwatch.cli(function(argv) {
       Nightwatch.CliRunner(argv)
         .setup(null, function(){
