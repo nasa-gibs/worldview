@@ -8,7 +8,14 @@
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
-
+/*global $*/
+/*global _*/
+/*global React*/
+/*global WVC*/
+/*global ReactDOM*/
+/*global ol*/
+/*eslint no-unused-vars: "error"*/
+/*eslint no-undef: "error"*/
 var wv = wv || {};
 wv.image = wv.image || {};
 
@@ -25,29 +32,57 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
   var format = "image/jpeg";
   var worldfile = "false";
   var lastZoom = -1;
-
-  var host, path;
-
-  if (config.features.imageDownload) {
-    host = config.features.imageDownload.host;
-    path = config.parameters.imagegen || config.features.imageDownload.path;
-  } else {
-    host = "http://map2.vis.earthdata.nasa.gov";
-    path = "imagegen/index.php";
-  }
-  url = host + "/" + path + "?";
-
-  if (config.parameters.imagegen) {
-    wv.util.warn("Redirecting image download to: " + url);
-
-  }
-
+  var rangeSelectionFactory = React.createFactory(WVC.ResolutionSelection);
+  var htmlElements;
+  var host;
+  var path;
+  var url;
 
   var init = function() {
+    var options;
+
+    checkConfig();
     ui.rubberband.events.on("update", update);
     ui.rubberband.events.on("show", show);
-  };
+    htmlElements = document.createElement('div');
+    options ={
+      resolution: resolution,
+      proj: models.proj.selected.id,
+      worldfile: worldfile,
+      onClick: onDownload,
+      format: format
+    };
 
+    self.reactComponent = renderPanel(options, htmlElements);
+  };
+  var checkConfig = function() {
+    if (config.features.imageDownload) {
+      host = config.features.imageDownload.host;
+      path = config.parameters.imagegen || config.features.imageDownload.path;
+    } else {
+      host = "http://map2.vis.earthdata.nasa.gov";
+      path = "imagegen/index.php";
+    }
+    url = host + "/" + path + "?";
+
+    if (config.parameters.imagegen) {
+      wv.util.warn("Redirecting image download to: " + url);
+    }
+  };
+  var getUpdatedProps = function(resolution, proj, worldfile, valid) {
+    return {
+      resolution: resolution,
+      proj: models.proj.selected.id,
+      worldfile: worldfile,
+      valid: valid
+    };
+  };
+  var renderPanel = function(options, mountEl) {
+    return ReactDOM.render(rangeSelectionFactory(options), mountEl);
+  };
+  var updatePanel = function(options) {
+    self.reactComponent.setState(options);
+  };
   /**
    * Initialize a map object in Lat/Long projection, and add a "fake" layer to compute the map math.
    * Display the HTML UI with UI options.   *
@@ -68,46 +103,6 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     setPosition();
     $(window)
       .resize(setPosition);
-
-    var htmlElements =
-      "<div class='wv-image-header'>" +
-      "<select id='wv-image-resolution'>" +
-      "<option value='0.125'>30m</option>" +
-      "<option value='0.25'>60m</option>" +
-      "<option value='0.5'>125m</option>" +
-      "<option value='1' selected>250m</option>" +
-      "<option value='2'>500m</option>" +
-      "<option value='4'>1km</option>" +
-      "<option value='20'>5km</option>" +
-      "<option value='40'>10km</option>" +
-      "</select>Resolution (per pixel)</div>" +
-      "<div class='wv-image-header'>" +
-      "<select id='wv-image-format'>" +
-      "<option value='image/jpeg'>JPEG</option>" +
-      "<option value='image/png'>PNG</option>" +
-      "<option value='image/geotiff'>GeoTIFF</option>" +
-      "<option value='image/kmz'>KMZ</option>" +
-      "</select>Format</div>" +
-      "<div class='wv-image-header'>" +
-      "<select id='wv-image-worldfile' > " +
-      "<option value='false'>No</option>" +
-      "<option value='true'>Yes</option>" +
-      "</select>Worldfile (.zip)</div>" +
-      "<table class='wv-image-download'>" +
-      "<tr>" +
-      "<th>Raw Size</th>" +
-      "<th>Maximum</th>" +
-      "</tr>" +
-      "<tr>" +
-      "<td id='wv-image-size' class='wv-image-size'>000.00MB</td>" +
-      "<td class='wv-image-size'>250 MB</td>" +
-      "</tr>" +
-      "<tr>" +
-      "<td><span id='wv-image-width'>0000</span> x <span id='wv-image-height'>0000</span> px</td>" +
-      "<td><button id='wv-image-download-button'>Download</button>" +
-      "</tr>" +
-      "</table>" +
-      "</div>";
 
     var $dialog = wv.ui.getDialog()
       .html(htmlElements);
@@ -136,22 +131,10 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     $(".ui-dialog")
       .zIndex(600);
 
-    // Remove higher resolution options from polar views since no higher
-    // resolution polar layers currenly exist
-    if (models.proj.selected.id !== "geographic") {
-      $("#wv-image-format [value='image/kmz']")
-        .remove();
-      $("#wv-image-resolution [value='0.5']")
-        .remove();
-      $("#wv-image-resolution [value='0.25']")
-        .remove();
-      $("#wv-image-resolution [value='0.125']")
-        .remove();
-    }
 
     // Auto-set default resolution to map's current zoom level; round it
     // for incremental zoom steps
-    var curZoom = Math.round(wvx.ui.map.selected.getView()
+    var curZoom = Math.round(ui.map.selected.getView()
       .getZoom());
 
     // Don't do anything if the user hasn't changed zoom levels; we want to
@@ -201,38 +184,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
           }
         }
       }
+      updatePanel(getUpdatedProps());
     }
-
-
-    $("#wv-image-format")
-      .change(function() {
-        format = $("#wv-image-format option:checked")
-          .val();
-        update(coords);
-      });
-
-
-    $("#wv-image-worldfile")
-      .change(function() {
-        worldfile = $("#wv-image-worldfile option:checked")
-          .val();
-        update(coords);
-      });
-
-    $("#wv-image-resolution option")
-      .removeAttr("selected");
-    $("#wv-image-resolution option[value='" + resolution + "']")
-      .attr("selected", "selected");
-
-    $("#wv-image-format option")
-      .removeAttr("selected");
-    $("#wv-image-format option[value='" + format + "']")
-      .attr("selected", "selected");
-
-    $("#wv-image-worldfile option")
-      .removeAttr("selected");
-    $("#wv-image-worldfile option[value='" + worldfile + "']")
-      .attr("selected", "selected");
 
     wv.ui.positionDialog($dialog, {
       my: "left top",
@@ -254,47 +207,38 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     $("#" + id)
       .css("left", left + "px");
   };
-
-
   var update = function(c) {
+    var opacities, time, pixels, s, products, map, lonlats;
+    var px, x1, y1, x2, y2, crs, dlURL;
+
     try {
       coords = c;
-      var map = ui.map.selected;
-      //What's this for?
-      //var bbox = map.getExtent();
-      var time = models.date.selected;
-      var pixels = coords;
-      var s = models.proj.selected.id;
-      var products = models.layers.get({
+      map = ui.map.selected;
+      time = models.date.selected;
+      pixels = coords;
+      px = pixels;
+      x1 = px.x;
+      y1 = px.y;
+      x2 = px.x2;
+      y2 = px.y2;
+      s = models.proj.selected.id;
+      crs = models.proj.selected.crs;
+      products = models.layers.get({
         reverse: true,
         renderable: true
       });
+
       // NOTE: This needs to be changed back to the projection model
       // when the backfill removes the old projection.
       var epsg = (models.proj.change) ? models.proj.change.epsg :
         models.proj.selected.epsg;
 
       // get layer transparencies (opacities)
-      var opacities = [];
-      _(products)
-        .each(function(product) {
-          opacities.push((_.isUndefined(product.opacity)) ? 1 : product.opacity);
-        });
+      opacities = getLayerOpacities(products);
+      lonlats = getCoordsFromPixelValues(x1, x2, y1, y2, map);
 
-      //console.log("EPSG: " + epsg);
-
-      var px = pixels;
-      var x1 = px.x;
-      var y1 = px.y;
-      var x2 = px.x2;
-      var y2 = px.y2;
-
-      var crs = models.proj.selected.crs;
-      var lonlat1 = map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]);
-      var lonlat2 = map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]);
-
-      var geolonlat1 = ol.proj.transform(lonlat1, crs, "EPSG:4326");
-      var geolonlat2 = ol.proj.transform(lonlat2, crs, "EPSG:4326");
+      var geolonlat1 = ol.proj.transform(lonlats[0], crs, "EPSG:4326");
+      var geolonlat2 = ol.proj.transform(lonlats[1], crs, "EPSG:4326");
 
       var minLon = geolonlat1[0];
       var maxLon = geolonlat2[0];
@@ -303,77 +247,23 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
 
       var ll = wv.util.formatCoordinate([minLon, maxLat]);
       var ur = wv.util.formatCoordinate([maxLon, minLat]);
+      
 
-      if (x2 - x1 < 150) {
-        ll = "";
-        ur = "";
-      }
+      setBoundingBoxLabels(x1, x2, y1, y2, ll, ur);
 
-      $("#wv-image-top")
-        .css({
-          left: x1 - 10,
-          top: y1 - 20,
-          width: x2 - x1
-        })
-        .html(ur);
-      $("#wv-image-bottom")
-        .css({
-          left: x1,
-          top: y2,
-          width: x2 - x1
-        })
-        .html(ll);
-
-      var dlURL = url;
-      var conversionFactor = 256;
-      if (s == "geographic") {
-        conversionFactor = 0.002197;
-      }
-
-      var dTime = time;
-      //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-      var jStart = wv.util.parseDateUTC(dTime.getUTCFullYear() + "-01-01");
-      var jDate = "00" + (1 + Math.ceil((dTime.getTime() - jStart) / 86400000));
-      dlURL += "TIME=" + dTime.getUTCFullYear() + (jDate)
-        .substr((jDate.length) - 3);
-
-
-
-      dlURL += "&extent=" + lonlat1[0] + "," + lonlat1[1] + "," + lonlat2[0] + "," + lonlat2[1];
-
-      //dlURL += "&switch="+s;
-      dlURL += "&epsg=" + epsg;
-      var layers = [];
-      _.each(products, function(layer) {
-        if (layer.projections[s].layer) {
-          layers.push(layer.projections[s].layer);
-        } else {
-          layers.push(layer.id);
-        }
-      });
-      dlURL += "&layers=" + layers.join(",");
-      dlURL += "&opacities=" + opacities.join(",");
 
       var imgWidth = 0;
       var imgHeight = 0;
-      var imageRes, imgFileSize, imgFormat, imgWorldfile;
+      
+      dlURL = createDownloadURL(time, lonlats, epsg, products, opacities, s);
 
       $("#wv-image-resolution")
         .unbind("change")
         .change(function() {
-          imgRes = $("#wv-image-resolution option:checked")
-            .val();
-          resolution = imgRes;
-          imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
-          imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
-          imgFilesize = ((imgWidth * imgHeight * 24) / 8388608)
-            .toFixed(2);
           imgFormat = $("#wv-image-format option:checked")
             .val();
           imgWorldfile = $("#wv-image-worldfile option:checked")
             .val();
-          var invalid = (imgFilesize > 250 || imgHeight === 0 || imgWidth === 0);
-          var icon;
           if (invalid) {
             icon = "<i class='fa fa-times fa-fw'></i>";
             $(".wv-image-size")
@@ -396,19 +286,112 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         })
         .change();
 
-
-      $("#wv-image-download-button")
-        .unbind('click')
-        .click(function() {
-          WVC.GA.event('Image Download', 'Click', 'Download');
-          wv.util.metrics('lc=' + encodeURIComponent(dlURL + "&worldfile=" + imgWorldfile + "&format=" + imgFormat + "&width=" + imgWidth + "&height=" + imgHeight));
-          window.open(dlURL + "&worldfile=" + imgWorldfile + "&format=" + imgFormat + "&width=" + imgWidth + "&height=" + imgHeight, "_blank");
-        });
     } catch (cause) {
       wv.util.error(cause);
     }
   };
+  /*
+   * Sets labels of bounding box of Jcrop
+   * selector
+   *
+   * @method setBoundingBoxLabels
+   *
+   * @param {Number} x1 - right x pixel value
+   * @param {Number} x2 - left x pixel value
+   * @param {Number} y1 - top y pixel value
+   * @param {Number} y2 - bottom y pixel value
+   *
+   * @returns {void}
+   */
+  var setBoundingBoxLabels = function(x1, x2, y1, y2, ur, ll) {
+    if (x2 - x1 < 150) {
+      ll = "";
+      ur = "";
+    }
+    $("#wv-image-top")
+      .css({
+        left: x1 - 10,
+        top: y1 - 20,
+        width: x2 - x1
+      }).html(ur);
+      
+    $("#wv-image-bottom")
+      .css({
+        left: x1,
+        top: y2,
+        width: x2 - x1
+      }).html(ll);
 
+  };
+  self.onResolutionChange = function() {
+
+  };
+  var getCoordsFromPixelValues =  function(x1, x2, y1, y2, map) {
+    return  [
+      map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]),
+      map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)])
+    ];
+  };
+  var getLayerOpacities = function(products) {
+    var opacities = [];
+    _(products)
+      .each(function(product) {
+        opacities.push((_.isUndefined(product.opacity)) ? 1 : product.opacity);
+      });
+    return opacities;
+  };
+  var getConversionFactor = function(proj) {
+    if(proj === 'geographic') return 0.002197;
+    return 256;
+  };
+  var calulateFileSize = function(imgRes, conversionFactor, lonlat1, lonlat2) {
+    var imgWidth, imgHeight;
+
+    resolution = imgRes;
+    imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
+    imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
+
+    return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
+  };
+  var fileSizeInvalid = function(imgFilesize, imgHeight, imgWidth) {
+    return (imgFilesize > 250 || imgHeight === 0 || imgWidth === 0);
+  };
+  var onDownload = function() {
+    WVC.GA.event('Image Download', 'Click', 'Download');
+    wv.util.metrics('lc=' + encodeURIComponent(dlURL + "&worldfile=" + imgWorldfile + "&format=" + imgFormat + "&width=" + imgWidth + "&height=" + imgHeight));
+    window.open(dlURL + "&worldfile=" + imgWorldfile + "&format=" + imgFormat + "&width=" + imgWidth + "&height=" + imgHeight, "_blank");   
+  };
+  var createDownloadURL = function(time, lonlats, epsg, products, opacities) {
+    var layers;
+    var dlURL = url;
+    var dTime = time;
+
+    //Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
+    var jStart = wv.util.parseDateUTC(dTime.getUTCFullYear() + "-01-01");
+    var jDate = "00" + (1 + Math.ceil((dTime.getTime() - jStart) / 86400000));
+    dlURL += "TIME=" + dTime.getUTCFullYear() + (jDate)
+      .substr((jDate.length) - 3);
+
+    dlURL += "&extent=" + lonlats[0][0] + "," + lonlats[0][1] + "," + lonlats[1][0] + "," + lonlats[1][1];
+
+    //dlURL += "&switch="+s;
+    dlURL += "&epsg=" + epsg;
+    layers = getLayers(products);
+    dlURL += "&layers=" + layers.join(",");
+    dlURL += "&opacities=" + opacities.join(",");
+
+    return dlURL;
+  };
+  var getLayers = function(products, s) {
+    var layers = [];
+    _.each(products, function(layer) {
+      if (layer.projections[s].layer) {
+        layers.push(layer.projections[s].layer);
+      } else {
+        layers.push(layer.id);
+      }
+    });
+  };
   init();
 
   return self;
