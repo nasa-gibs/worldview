@@ -505,23 +505,16 @@
   margin-bottom: 5px;
 }
 
-.layers-all-layer .layers-all-header .fa {
+.layers-all-header .fa {
   color: #ddd;
   font-family: "FontAwesome";
   font-size: 14px;
-  padding: 12px 16px;
-  position: absolute;
-  margin-left: -8px;
-  margin-top: -8px;
+  margin-left: 10px;
 }
 
 @media (min-width: 753px) {
-  .layers-all-layer .layers-all-header .fa {
-    padding: 10px 18px 16px;
-    top: auto;
-    right: 0;
-    margin-top: -6px;
-    margin-left: 0;
+  .layers-all-header .fa {
+
   }
 }
 

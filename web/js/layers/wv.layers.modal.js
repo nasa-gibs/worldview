@@ -34,7 +34,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var layerList = React.createFactory(WVC.LayerList);
   var layerWidget;
   var modalHeight;
-  var modalWidth;  
+  var modalWidth;
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
@@ -156,7 +156,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     modalHeight = $(window).height() - 100;
     modalWidth = gridItemWidth * sizeMultiplier + 10;
     if(self.reactList)
-      self.reactList.setState({width:modalWidth});
+      self.reactList.setState({
+        width:modalWidth,
+        height:modalHeight
+      });
   };
 
   $.fn.hasScrollBar = function() {
@@ -649,10 +652,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
   self.readySearch = function(){
     return layerList({
-      layerArray: config.layerOrder,
-      layers: config.layers,
-      onState: model.add,
-      offState: model.remove
+      config: config,
+      model: model,
+      width: modalWidth
     });
   };
   // TODO: Filter layers by settings with projections equal to current projection.
