@@ -25,6 +25,7 @@ var nightwatch_config = {
     'browserstack.user': process.env.BROWSERSTACK_USER,
     'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
     'browserstack.local': true,
+    'browserstack.selenium_version': '3.5.2',
     applicationCacheEnabled: false,
     webStorageEnabled: false
   },
