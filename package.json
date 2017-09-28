@@ -16,14 +16,11 @@
     "preinstall": "node version-check.js",
     "start": "node ./bin/www",
     "test": "grunt test lint",
-    "e2e": "run-s --continue-on-error --silent e2e:*",
-    "e2e:chrome": "run-s --continue-on-error --silent e2e:chrome:*",
-    "e2e:chrome:test": "nightwatch -e chrome",
-    "e2e:chrome:report": "node e2e/create-report.js chrome",
-    "e2e:firefox": "run-s --continue-on-error --silent e2e:firefox:*",
-    "e2e:firefox:test": "nightwatch -e firefox --skiptags hover",
-    "e2e:firefox:report": "node e2e/create-report.js firefox",
-    "e2e:browserstack": "node e2e/browserstack.js -c e2e/nightwatch-browserstack.conf.js -e chrome,firefox,safari,ie"
+    "e2e": "run-s --print-name --continue-on-error --silent e2e:*",
+    "e2e:chrome": "nightwatch -e chrome e2e/features/animations/animations.gif",
+    "e2e:firefox": "nightwatch -e firefox --skiptags hover",
+    "browserstack": "node e2e/browserstack.js -c e2e/nightwatch-browserstack.conf.js -e chrome,firefox,safari,ie",
+    "report": "node e2e/create-report.js"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",

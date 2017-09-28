@@ -11,7 +11,7 @@ try {
   console.log('Connecting localhost to Browserstack...');
   Nightwatch.bs_local = bs_local = new browserstack.Local();
   bs_local.start({'key': process.env.BROWSERSTACK_ACCESS_KEY }, function(error) {
-    if (error) throw error;
+    if (error) throw new Error(error);
 
     console.log('Connected. Running tests...');
     console.log('Go to https://www.browserstack.com/automate to view tests in progress.');
