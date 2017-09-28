@@ -1,6 +1,7 @@
 const seleniumServer = require('selenium-server-standalone-jar');
 const chromedriver = require('chromedriver');
 const geckodriver = require('geckodriver');
+const environments = require('./environments.json');
 
 require('nightwatch-cucumber')({
   nightwatchOutput: false,
@@ -27,34 +28,18 @@ var nightwatch_config = {
     applicationCacheEnabled: false,
     webStorageEnabled: false
   },
-  test_settings: {
-    default: {},
-    chrome: {
-      desiredCapabilities: {
-        os: 'OS X',
-        os_version: 'El Capitan',
-        browser: 'Chrome',
-        browser_version: '61.0',
-        resolution: '1920x1080'
-      }
-    },
-    firefox: {
-      desiredCapabilities: {
-        browser: "firefox"
-      }
-    },
-    safari: {
-      desiredCapabilities: {
-        browser: "safari"
-      }
-    },
-    ie: {
-      desiredCapabilities: {
-        browser: "internet explorer"
-      }
-    }
-  }
+  test_settings: { default: {} }
 };
+
+environments.forEach(e=>{
+  var env = [
+    e.browser,
+    e.browser_version,
+    e.os,
+    e.os_version
+  ].join('_').replace(/\./g, '-').replace(/ /g, '_');
+  nightwatch_config.test_settings[env] = {desiredCapabilities: e}
+});
 
 // Merge common_capabilities with each test_settings key
 for(var i in nightwatch_config.test_settings){
