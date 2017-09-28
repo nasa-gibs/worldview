@@ -8,7 +8,7 @@ require('nightwatch-cucumber')({
   cucumberArgs: [
     '--compiler', 'js:babel-core/register',
     '--require', 'e2e/step_definitions',
-    '--format', `json:e2e/reports/cucumber-${process.argv[3]}.json`,
+    '--format', `json:e2e/reports/cucumber-${process.argv[5]}.json`,
     'e2e/features'
   ]
 });
@@ -28,7 +28,24 @@ var nightwatch_config = {
     applicationCacheEnabled: false,
     webStorageEnabled: false
   },
-  test_settings: { default: {} }
+  test_settings: {
+    default: {},
+    browserstack: {
+      desiredCapabilities: {
+        browser: 'chrome'
+      }
+    },
+    chrome: {
+      desiredCapabilities: {
+        browser: 'chrome'
+      }
+    },
+    firefox: {
+      desiredCapabilities: {
+        browser: 'firefox'
+      }
+    }
+  }
 };
 
 environments.forEach(e=>{
