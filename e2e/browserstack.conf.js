@@ -27,7 +27,8 @@ var nightwatch_config = {
     'browserstack.local': true,
     'browserstack.selenium_version': '3.5.2',
     applicationCacheEnabled: false,
-    webStorageEnabled: false
+    webStorageEnabled: false,
+    marionette: true
   },
   test_settings: {
     default: {},
@@ -38,12 +39,14 @@ var nightwatch_config = {
     },
     chrome: {
       desiredCapabilities: {
-        browser: 'chrome'
+        browser: 'chrome',
+        marionette: true
       }
     },
     firefox: {
       desiredCapabilities: {
-        browser: 'firefox'
+        browser: 'firefox',
+        marionette: true
       }
     }
   }
