@@ -75,9 +75,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * var hasMeasurementSetting - Checks the (current) measurement's source
    *  for a setting and returns true if present.
    *
-   * @param  {type} current The current config.measurements measurement.
-   * @param  {type} source  The current measurement source.
-   * @return {type}         Return true if the source contains settings.
+   * @param  {string} current The current config.measurements measurement.
+   * @param  {string} source  The current measurement source.
+   * @return {boolean}         Return true if the source contains settings.
    *
    */
   var hasMeasurementSetting = function(current, source) {
@@ -99,7 +99,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         }
       }
     });
-    return hasSetting ? true : false;
+    return hasSetting;
   };
 
   /**
@@ -108,8 +108,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    *  If a source contains settings, also sets a hasMeasurement flag to be checked
    *  when drawing categories.
    *
-   * @param  {type} current The current config.measurements measurement.
-   * @return {type}         Return true if the measurement has sources with settings.
+   * @param  {string} current The current config.measurements measurement.
+   * @return {boolean}         Return true if the measurement has sources with settings.
    */
 
   var hasMeasurementSource = function(current) {
@@ -117,7 +117,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     Object.values(current.sources).forEach(function(source) {
       if(hasMeasurementSetting(current, source)) { hasSource = true; hasMeasurement = true; };
     });
-    return hasSource ? true : false;
+    return hasSource;
   };
 
 
@@ -125,24 +125,24 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * var checkModalView - If modalView is set, then output a console message describing
    *  which layer is being shown.
    *
-   * @return {type}  description
+   * @return {string}  Returns a console warn message.
    */
   var checkModalView = function() {
     var modalView = config.parameters.modalView;
-    if (modalView) {
-      switch(modalView) {
-        case('categories'):
-          console.warn("'Add Layers' view changed to Categories");
-          break;
-        case('measurements'):
-          console.warn("'Add Layers' view changed to Measurements");
-          break;
-        case('layers'):
-          console.warn("'Add Layers' view changed to Layers");
-          break;
-        default:
-          console.warn("Invalid parameter; showing Categories view");
-      }
+    switch(modalView) {
+      case('categories'):
+        console.warn("'Add Layers' view changed to Categories");
+        break;
+      case('measurements'):
+        console.warn("'Add Layers' view changed to Measurements");
+        break;
+      case('layers'):
+        console.warn("'Add Layers' view changed to Layers");
+        break;
+      case undefined:
+        break;
+      default:
+        console.warn("Invalid parameter; showing Categories view");
     }
   };
 
@@ -208,41 +208,58 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     redoScrollbar();
   };
 
+  /**
+   * var drawModal - Draws the contents of the layers modal based on the
+   *  modalView parameter or the current projection.
+   *
+   * @return {void}  Calls the categories, measurements, or layers view functions
+   *  to which renders the html. Also sets the breadcrumb text based on the view.
+   */
   var drawModal = function() {
     var projection = models.proj.selected.id;
     var modalView = config.parameters.modalView;
 
     // If URL parameter is set, draw that type of modal view.
-    if (modalView) {
-      switch(modalView) {
-        case('categories'):
+    switch(modalView) {
+      case('categories'):
+        crumbText = 'Categories';
+        drawCategories();
+        break;
+      case('measurements'):
+        crumbText = 'Measurements';
+        drawAllMeasurements();
+        break;
+      case('layers'):
+        crumbText = 'Layers';
+        drawAllLayers();
+        break;
+      case undefined:
+        // Set the default views per projection if modalView is not defined.
+        if (projection == 'geographic') {
           crumbText = 'Categories';
           drawCategories();
-          break;
-        case('measurements'):
+        } else {
           crumbText = 'Measurements';
           drawAllMeasurements();
-          break;
-        case('layers'):
-          crumbText = 'Layers';
-          drawAllLayers();
-          break;
-        default:
-          crumbText = 'Categories';
-          drawCategories();
-          break;
-      }
-    // Else set the default views per projection.
-    } else if (projection == 'geographic') {
-      crumbText = 'Categories';
-      drawCategories();
-    } else {
-      crumbText = 'Measurements';
-      drawAllMeasurements();
+        }
+        break;
+      default:
+        crumbText = 'Categories';
+        drawCategories();
+        break;
     }
   };
 
-  var drawCategories = function(){
+  /**
+   * var drawCategories - Draws all categories if it has non-empty measurements.
+   *  If it has a placement flag, that category will display first or last. If
+   *  there are more than 6 measurements ina category, an ellipsis is output.
+   *  Categories are grouped in one of two interests tabs. Each category has a unique image.
+   *
+   * @return {HTMLElement}  Returns html to output measurements grouped by categories with
+   *  categories grouped by interest.
+   */
+  var drawCategories = function() {
     $categories.empty();
     if( $categories.data('isotope') ) {
       $categories.isotope('destroy');
@@ -396,6 +413,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $('label[for=button-filter-legacy]').addClass('nav-selected');
   };
 
+  /**
+   * var drawMeasurements - Draws a measurement if it contains sources with settings.
+   *
+   * @param  {string} category            Return a measurement from a particular category.
+   * @param  {string} selectedMeasurement Select a specificy measurement to interact with.
+   * @param  {number} selectedIndex       An index of the output measurement; pass
+   *  in the index to select that measurement.
+   * @return {HTMLElement}  Returns a list of measurements with a dropdown containing
+   *  sources which contain settings. Each source has a description. Layers
+   *  can be added to the map using a checkbox.
+   */
   var drawMeasurements = function(category, selectedMeasurement, selectedIndex) {
     var projection = models.proj.selected.id;
     var tabIndex;
@@ -544,9 +572,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
                   $sourceOrbits.append($wrapper);
 
                 /**
-                 * @deprecated since version 1.8.0 If the data set is old and doesn't have
-                 * layergroup's set then we will need to track the layer title to determine
-                 * if it is a Orbital Track
+                 * @deprecated conditional since version 1.8.0 If the data
+                 * set doesn't have the layergroup parameter set then use the
+                 * layer title to determine if it is a Orbital Track.
                  */
                 } else if (layer.title.indexOf("Orbital Track") !== -1) {
 
@@ -640,7 +668,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   };
 
-  // Show all the measurments within the legacy-all category
+  /**
+   * var drawAllMeasurements - Shows all the measurments within the legacy-all
+   *  category. This is used for outputting the measurement view.
+   *
+   * @return {void}  Returns a list of measurements with a dropdown containing
+   *  sources which contain settings. Each source has a description.
+   */
   var drawAllMeasurements = function() {
     Object.keys(config.categories).forEach(function(metaCategoryName) {
       Object.values(config.categories[metaCategoryName]).forEach(function(category) {
@@ -657,7 +691,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       width: modalWidth
     });
   };
-  // TODO: Filter layers by settings with projections equal to current projection.
+
+  /**
+   * var drawAllLayers - Draws all layers contained within a specific projection
+   *  and contained within the layerOrder file.
+   *
+   * @return {HTMLElement}  Returns html with title, substitle, description and option to
+   *  add layer to the map.
+   */
   var drawAllLayers = function() {
     var projection = models.proj.selected.id;
 
@@ -817,7 +858,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     }
   };
 
-  // Apend ellipsis to category overview measurement list.
+  /**
+   * var setCategoryOverflow - Apends an ellipsis to category overview measurement list.
+   *
+   * @param  {string} category      The category to append the ellipsis to.
+   * @param  {string} $measurements The measurements contained within the category.
+   * @return {HTMLElement}               Returns html to add the ellipsis to the category list.
+   */
   var setCategoryOverflow = function(category, $measurements) {
     var $dotContinueItem = $('<li />', {
       'class': 'layer-category-item'
@@ -844,7 +891,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var removeLayer = function(event) {
     event.stopPropagation();
     model.remove(decodeURIComponent($(this).val()));
-n  };
+  };
 
   var onLayerAdded = function(layer) {
     var $element = $(self.selector + " [data-layer='" + wv.util.jqueryEscape(layer.id) + "']");
@@ -1013,9 +1060,8 @@ n  };
     redoScrollbar();
   }, 250, { trailing: true });
 
-  var filter = function( e ) {
-
-    if( $( '#layers-search-input' ).val().length !== 0 ) {
+  var filter = function(e) {
+    if ($('#layers-search-input').val().length !== 0) {
       searchBool = true;
     }
     else{
