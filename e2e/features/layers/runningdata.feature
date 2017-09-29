@@ -2,11 +2,16 @@ Feature: Running Data
   When I hover over a data layer, I should see the values I'm hovering over displayed in the layers tab
 
 @hover
-Scenario: Running data on continuous layers
+Scenario Outline: Running data on continuous layers
   Given Worldview production has been loaded
   And Worldview is in "continuous data layers" state
-  Then label should say "267.2 – 267.8 K" when hovering at 320,320
-  And label should say "260.9 – 261.5 K" when hovering on colorbar
+  Then label should say "260.9 – 261.5 K" when hovering on colorbar
+  And label should say "<value>" when hovering at <coordinates>
+
+  Examples:
+    | coordinates | value           |
+    | 320,320     | 267.2 – 267.8 K |
+    | 400,400     | 271.6 – 272.2 K |
 
 @hover
 Scenario: Running data on multiple data layers
