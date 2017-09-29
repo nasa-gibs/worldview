@@ -19,20 +19,17 @@
 var wv = wv || {};
 wv.image = wv.image || {};
 
-wv.image.panel = wv.image.panel || function(models, ui, config) {
+wv.image.panel = wv.image.panel || function(models, ui, config, dialogConfig) {
 
-  var self = {};
-  self.events = wv.util.events();
-  var container;
-  var alignTo = config.alignTo;
+  var self = this;
+  var container;  
   var containerId = "imagedownload";
-  var id = containerId;
   var coords;
   var resolution = "1";
   var format = "image/jpeg";
   var worldfile = "false";
   var lastZoom = -1;
-  var rangeSelectionFactory = React.createFactory(WVC.ResolutionSelection);
+  var rangeSelectionFactory = React.createFactory(WVC.ImageResSelection);
   var htmlElements;
   var host;
   var path;
@@ -87,14 +84,11 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     var options;
 
     checkConfig();
-    ui.rubberband.events.on("update", update);
-    ui.rubberband.events.on("show", show);
     htmlElements = document.createElement('div');
     setProjectionGlobals();
     options = {
       resolution: resolution,
       worldfile: worldfile,
-      onClick: onDownload,
       onSelectionChange: onSelectionChange,
       onDownloadClick: onDownload,
       fileType: format,
@@ -114,11 +108,11 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
       fileTypes = fileTypesPolar;
     }
   };
-  var onSelectionChange = function(worldfile, format, res) {
+  var onSelectionChange = function(res, worldfile, format) {
     imgWorldfile = worldfile;
     imgFormat = format;
     imgRes = res;
-    update(coords);
+    self.update(coords);
   };
 
   var checkConfig = function() {
@@ -159,10 +153,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
    * Display the HTML UI with UI options.   *
    * @this {Download}
    */
-  var show = function() {
-    alignTo = {
-      id: "wv-image-button"
-    };
+  self.show = function() {
     container = document.getElementById(containerId);
 
     if (container === null) {
@@ -170,31 +161,11 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
     }
 
     container.setAttribute("class", "imagedownload");
-
-    setPosition();
-    $(window)
-      .resize(setPosition);
+    
 
     var $dialog = wv.ui.getDialog()
       .html(htmlElements);
-    $dialog.dialog({
-      dialogClass: "wv-panel wv-image",
-      title: "Take a snapshot",
-      show: {
-        effect: "slide",
-        direction: "up"
-      },
-      hide: {
-        effect: "slide",
-        direction: "up"
-      },
-      width: 230,
-      height: "auto",
-      minHeight: 10,
-      draggable: false,
-      resizable: false,
-      autoOpen: false
-    });
+    $dialog.dialog(dialogConfig);
     //$("#wv-image-resolution").buttonset();
     //$("#wv-image-format").buttonset();
     $("#wv-image-download-button")
@@ -270,16 +241,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
       .show();
   };
 
-  var setPosition = function() {
-    var offset = $("#" + alignTo.id)
-      .offset();
-    var left = offset.left + parseInt($("#" + alignTo.id)
-      .css("width")) - parseInt($("#" + id)
-        .css("width"));
-    $("#" + id)
-      .css("left", left + "px");
-  };
-  var update = function(c) {
+
+  self.update = function(c) {
     var pixels, map, px, x1, y1, x2, y2, crs;
 
     try {
@@ -408,7 +371,6 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
       .substr((jDate.length) - 3);
 
     dlURL += "&extent=" + lonlats[0][0] + "," + lonlats[0][1] + "," + lonlats[1][0] + "," + lonlats[1][1];
-
     //dlURL += "&switch="+s;
     dlURL += "&epsg=" + epsg;
     dlURL += "&layers=" + layers.join(",");
@@ -425,9 +387,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config) {
         layers.push(layer.id);
       }
     });
+    return layers;
   };
   init();
-
-  return self;
-
 };

@@ -27,6 +27,9 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
   var loader;
   var showDates = true; // show date stamp
   var progressing = false; //if progress bar has started
+  var rangeSelectionFactory = React.createFactory(WVC.GifResSelection);
+  var panelCase;
+  var resolution = 1;
   var GRATICLE_WARNING =
     "The graticule layer cannot be used to take a snapshot. Would you " +
     "like to hide this layer?";
@@ -36,6 +39,37 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     "snapshot. Would you like to temporarily revert to the original " +
     "layer(s)?";
   var ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
+  var resolutionsGeo = {
+    values:  [
+      {value: '0.125', text: '30m'},
+      {value: '0.25', text: '60m'},
+      {value: '0.5', text: '125m'},
+      {value: '1', text: '250m'},
+      {value: '2', text: '500m'},
+      {value: '4', text: '1km'},
+      {value: '20', text: '5km'},
+      {value: '40', text: '10km'}
+    ]
+  };
+  var resolutionsPolar = {
+    values:  [
+      {value: '1', text: '250m'},
+      {value: '2', text: '500m'},
+      {value: '4', text: '1km'},
+      {value: '20', text: '5km'},
+      {value: '40', text: '10km'}
+    ]
+  };
+  var setProjectionGlobals = function() {
+    if(models.proj.selected.id === 'geographic') {
+      resolutions = resolutionsGeo;
+    } else {
+      resolutions = resolutionsPolar;
+    }
+  };
+  var renderPanel = function(options, mountEl) {
+    return ReactDOM.render(rangeSelectionFactory(options), mountEl);
+  };
 
   /*
    * sets listeners
@@ -48,9 +82,25 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
    *
    */
   self.init = function() {
+    var options;
     models.anim.events.on('gif-click', setImageCoords);
-  };
+    htmlElements = document.createElement('div');
+    htmlElements.className = 'gif-dialog';
+    setProjectionGlobals();
+    options = {
+      resolution: resolution,
+      onSelectionChange: onSelectionChange,
+      onClick: getGif,
+      valid: true,
+      resolutions: resolutions
+    };
 
+    self.reactComponent = renderPanel(options, htmlElements);
+
+  };
+  var onSelectionChange = function() {
+
+  };
   /*
    * Uses, frameUrl array and gifShot
    * Library to create GIF
@@ -192,7 +242,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
    * @returns {void}
    *
    */
-  self.getGif = function() {
+  var getGif = function() {
     var layers;
     //check for rotation, changed palettes, and graticule layers and ask for reset if so
 
@@ -207,7 +257,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         onOk: function() {
           previousPalettes = models.palettes.active;
           models.palettes.clear();
-          self.getGif();
+          getGif();
         }
       });
       return;
@@ -594,6 +644,56 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
       wv.ui.notify(headerMsg + bodyMsg, "Notice", 600, callback);
     }
   };
+    /*
+   * Builds selector dialog
+   *
+   * @method getSelectorDialog
+   * @private
+   *
+   * @param width {number}
+   *
+   * @returns {JQuery} Selector diaglog element
+   *
+   */
+  var getSelectorDialog = function(width) {
+    var $dialogBox;
+    var $createButton;
+    var $footer;
+    var $checkBox;
+    $dialogBox = wv.ui.getDialog();
+    $dialogBox.html(htmlElements);
+    $dialogBox.css({
+      paddingBottom: '10px'
+    });
+    $dialogBox.dialog({
+      dialogClass: "wv-panel wv-image",
+      title: "Generate GIF",
+      height: 'auto',
+      width: width,
+      minHeight: 40,
+      minWidth: 287,
+      resizable: false,
+      show: {
+        effect: "slide",
+        direction: "down"
+      },
+      position: {
+        my: "left top",
+        at: "left bottom+10",
+        of: $(".jcrop-tracker")
+      },
+
+      close: function(event) {
+        destoryCheckboxListeners($checkBox);
+        $("#wv-map")
+          .insertAfter('#productsHolder'); //retain map element before disabling jcrop
+        jcropAPI.destroy();
+        if (models.proj.selected.id === "geographic")
+          ui.map.events.trigger('selectiondone');
+      }
+    });
+    return $dialogBox;
+  };
 
   /*
    * uses resolution and dimension to
@@ -654,47 +754,8 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
    */
   self.getSelectorDialog = function(width) {
     var $dialogBox;
-    var $createButton;
-    var $footer;
-    var $dialog = $("<div class='gif-dialog'></div>");
-    var $checkBox;
-    var dialog =
-      "<div class='content'>" +
-      "Create an animation from " +
-      "<b>" +
-      animModel.rangeState.startDate +
-      "</b>" +
-      " to " +
-      "<b>" +
-      animModel.rangeState.endDate +
-      "</b>" +
-      " at a rate of " +
-      animModel.rangeState.speed +
-      " frames per second" +
-      "</div>";
-    $createButton = $("<a><span class=ui-button-text>Create GIF</span></a>")
-      .attr("type", "button")
-      .attr("role", "button")
-      .attr("class", "ui-button ui-widget ui-state-default ui-button-text-only")
-      .hover(function() {
-        $(this)
-          .addClass("ui-state-hover");
-      }, function() {
-        $(this)
-          .removeClass("ui-state-hover");
-      });
-    $checkBox = $("<div class='wv-checkbox-date'><label for='checkbox-date'><input type='checkbox' title='Check box to remove dates from Animating GIF' name='checkbox-date' class='checkbox-date-input' id='checkbox-date-input'>Include Date Stamps</label></div>");
-    $footer = $('<div></div>');
-    $footer.append($createButton)
-      .append($checkBox);
-    $dialog.html(dialog)
-      .append($footer);
-    // init Checkbox state and listeners
-    initCheckBox($checkBox);
-
-    $createButton.on('click', self.getGif);
-    $dialogBox = wv.ui.getDialog();
-    $dialogBox.html($dialog);
+    $dialogBox = ui.getDialog();
+    $dialogBox.html(htmlElements);
     $dialogBox.css({
       paddingBottom: '10px'
     });
@@ -917,12 +978,12 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         jcropAPI = this;
         $('#timeline-footer')
           .toggleClass('wv-anim-active');
-        $dialog = self.getSelectorDialog();
+        $dialog = getSelectorDialog();
         $tracker = this.ui.selection.find('.jcrop-tracker');
         $tracker.append($dlButton);
         $dlButton = $('.wv-dl-gif-bt-case i');
         setIconFontSize($dlButton, starterWidth);
-        $dlButton.on('click', self.getGif);
+        $dlButton.on('click', getGif);
 
 
       });

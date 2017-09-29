@@ -202,8 +202,7 @@ $(function() {
       ui.dateWheels = wv.date.wheels(models, config);
     }
 
-    ui.rubberband = wv.image.rubberband(models, ui, config);
-    ui.image = wv.image.panel(models, ui, config);
+    ui.rubberband = wv.image.rubberband(models, ui, config, wv.image.panel);
     if (config.features.dataDownload) {
       ui.data = wv.data.ui(models, ui, config);
       // FIXME: Why is this here?
