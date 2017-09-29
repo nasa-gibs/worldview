@@ -39,13 +39,23 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var searchBool;
   var hasMeasurement;
   var copy = [];
-
+  self.metadata = {};
+  
   // Visible Layers
   var visible = {};
 
   var init = function() {
     Object.values(config.layers).forEach(function(layer) {
       visible[layer.id] = true;
+      if(layer.description){
+        $.get('config/metadata/' + layer.description + '.html')
+          .success(function(data) {
+            self.metadata[layer.id] = data;
+            //$sourceMeta.html(data);
+            //$sourceMeta.find('a')
+            //  .attr('target','_blank');
+          });
+      }
     });
     model.events
     // FIXME: on "add" needs to be present without trying to add a product
@@ -191,6 +201,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     copy = config.layerOrder;
     if(self.reactList){
       self.reactList.setState({layerFilter: copy});
+      $('#layer-modal-main').perfectScrollbar();
     }
     $( '#layers-search-input' ).val('');
     $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
@@ -687,6 +698,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   self.readySearch = function(){
     return layerList({
       config: config,
+      metadata: self.metadata,
       model: model,
       width: modalWidth
     });
@@ -702,118 +714,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var drawAllLayers = function() {
     var projection = models.proj.selected.id;
 
-    //$allLayers.empty();
     $( '#layers-all' ).css( 'height', modalHeight - 40 - 30);
-
+    $('#layer-modal-main').perfectScrollbar('destroy');
     if(!self.reactList){
       self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
     }
     self.reactList.setState({showLayers: true});
 
-    //var $fullLayerList = $('<ul />', {
-    //  id: 'flat-layer-list'
-    //});
-    /*
-    Object.values(config.layerOrder).forEach(function(layerId) {
-      var current = config.layers[layerId];
-
-      // Check if layer is equal to the current projection, then output
-      if (Object.keys(current.projections).indexOf(projection) > -1) {
-        if (!current) {
-          console.warn("In layer order but not defined", layerId);
-        } else {
-          var $layerItem = $('<li />', {
-            id: 'layer-flat-' + current.id,
-            'class': 'layers-all-layer',
-            'data-layer': encodeURIComponent(current.id)
-          });
-
-          var $layerHeader = $('<div />', {
-            'class': 'layers-all-header'
-          }).click(function(e) {
-            $(this).find('input#' + encodeURIComponent(current.id))
-              .iCheck('toggle');
-          });
-
-          var $layerTitleWrap = $('<div />', {
-            'class': 'layers-all-title-wrap'
-          });
-
-          var $layerTitle = $('<h3 />', {
-            text: current.title
-          });
-
-          var $layerSubtitle = $('<h5 />', {
-            text: current.subtitle
-          });
-
-          var $checkbox = $('<input />', {
-            id: encodeURIComponent(current.id),
-            'value': current.id,
-            'type': 'checkbox',
-            'data-layer': current.id
-          }).on('ifChecked', addLayer)
-            .on('ifUnchecked', removeLayer);
-
-          if ( _.find(model.active, {id: current.id}) ) {
-            $checkbox.attr("checked", "checked");
-          }
-
-          // Metadata
-          var $sourceMeta = $('<div />', {
-            'class': 'source-metadata hidden'
-          });
-
-          var $showMore = $('<span />', {
-            'class': 'fa fa-info-circle'
-          });
-
-          var $moreTab = $('<div />', {
-            'class': 'metadata-more'
-          });
-
-          var $moreElps = $('<span />', {
-            text: '^',
-            'class': 'ellipsis up'
-          });
-
-          $moreTab.append( $moreElps );
-
-          $showMore.add($moreTab).toggle( function(e){
-            $sourceMeta.toggleClass('hidden');
-            redoScrollbar();
-          }, function(e){
-            $sourceMeta.toggleClass('hidden');
-            redoScrollbar();
-          });
-
-          $layerItem.append( $layerHeader );
-          $layerHeader.append( $checkbox );
-          $layerHeader.append( $layerTitleWrap );
-          $layerTitleWrap.append( $layerTitle );
-          if( current.description ) {
-            $layerTitle.append( $showMore );
-          }
-          $layerTitleWrap.append( $layerSubtitle );
-
-          if( current.description ) {
-            $.get('config/metadata/' + current.description + '.html')
-              .success(function(data) {
-                $sourceMeta.html(data);
-                $layerItem.append( $sourceMeta );
-                $sourceMeta.append( $moreTab );
-                $sourceMeta.find('a')
-                  .attr('target','_blank');
-              });
-          }
-
-          $fullLayerList.append( $layerItem );
-        }
-      }
-    });
-
-    $allLayers.append($fullLayerList);
-    */
     $selectedCategory.hide();
     $categories.hide();
     $nav.hide();
