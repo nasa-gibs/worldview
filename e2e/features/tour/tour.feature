@@ -5,8 +5,8 @@ Feature: Tour
 
 Background:
   Given Worldview is in "initial" state
-  Then I should see "Take Tour"
+  Then I see "Take Tour"
 
   Scenario: Skipping Tour
     When I click "Skip Tour"
-    Then I should not see "Take Tour"
+    Then I don't see "Take Tour"

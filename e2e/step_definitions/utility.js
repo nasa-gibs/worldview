@@ -50,37 +50,37 @@ defineSupportCode(({Given, Then, When}) => {
   });
 
   // Check for a string
-  Then('I should see {string}', (text) => {
+  Then('I see {string}', (text) => {
     return client.useCss().assert.containsText('body', text);
   });
 
   // Check for a string
-  Then('I should not see {string}', (text) => {
+  Then('I don\'t see {string}', (text) => {
     return client.useCss().expect.element('body').text.not.contains(text);
   });
 
   // Check that an element is visible by predefined selector
-  Then('I should see the {string}', (key) => {
+  Then('I see the {string}', (key) => {
     return client.useCss().expect.element(selectors[key]||key).to.be.visible;
   });
 
   // Wait for an element to be visible
-  Then('I should see the {string} within {int} seconds', (key, seconds) => {
+  Then('I see the {string} within {int} seconds', (key, seconds) => {
     return client.useCss().expect.element(selectors[key]||key).to.be.visible.before(seconds*1000);
   });
 
   // Check for an element by predefined selector
-  Then('the page should have the {string}', (key) => {
+  Then('the page has the {string}', (key) => {
     return client.useCss().expect.element(selectors[key]||key).to.be.present;
   });
 
   // Check for abscense of an element by predefined selector
-  Then('the page should not have the {string}', (key) => {
+  Then('the page doesn\'t have the {string}', (key) => {
     return client.useCss().expect.element(selectors[key]||key).to.not.be.present;
   });
 
   // Check that an element is hidden
-  Then('I should not see the {string}', (key) => {
+  Then('I don\'t see the {string}', (key) => {
     return client.useCss().expect.element(selectors[key]||key).to.not.be.visible;
   });
 

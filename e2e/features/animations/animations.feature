@@ -6,9 +6,9 @@ Background:
   And I click "Skip Tour"
 
 Scenario: Toggling animation mode
-  Then I should not see the "animation widget"
+  Then I don't see the "animation widget"
   When I click the "animation button"
-  Then I should see the "animation widget"
+  Then I see the "animation widget"
 
 @hover
 Scenario: Changing date range of animation
@@ -21,4 +21,4 @@ Scenario: Changing animation time resolution
   And I scroll to the "animation resolution tooltip"
   And I click the "yearly resolution tooltip"
   And I wait 1 seconds
-  Then the page should have the "timeline set to years"
+  Then the page has the "timeline set to years"
