@@ -16,6 +16,7 @@ require('nightwatch-cucumber')({
 module.exports = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
+  custom_assertions_path: ['e2e/custom-assertions'],
   selenium: {
     start_process: true,
     server_path: seleniumServer.path,

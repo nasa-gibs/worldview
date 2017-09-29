@@ -24,7 +24,11 @@ module.exports = {
     'GIF download icon': '.jcrop-holder .fa-download',
     'GIF results': '.gif-results-dialog-case img',
     'GIF results close button': '.wv-gif-results button.ui-dialog-titlebar-close',
-    'list of events': '#wv-events ul.map-item-list'
+    'list of events': '#wv-events ul.map-item-list',
+    'first event': '#wv-events ul.map-item-list .item:first-child',
+    'selected first event': '#wv-events ul.map-item-list .item-selected:first-child',
+    'selected marker': '.marker-selected',
+    'map marker': '.ol-viewport .marker'
   },
   delay: 3000 // Acceptable delay in ms between performing actions and seeing results
 };
