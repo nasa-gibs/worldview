@@ -108,7 +108,9 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
     try {
       var eventCopy = new event.constructor(event.type, event);
       target.dispatchEvent(eventCopy);
-    } catch (err) {} // Nothing to do, the try/catch prevents IE from crashing
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   var createPin = function(id, category, isSelected){

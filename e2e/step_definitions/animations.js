@@ -1,8 +1,7 @@
 const {client} = require('nightwatch-cucumber');
 const {defineSupportCode} = require('cucumber');
-const delay = client.globals.delay;
 
-defineSupportCode(({Given, Then, When}) => {
+defineSupportCode(({Then}) => {
 
   Then('the animation range selector works', () => {
     return client
@@ -16,7 +15,7 @@ defineSupportCode(({Given, Then, When}) => {
         .mouseButtonUp(0)
         .pause(100);
       client.getValue('.wv-anim-dates-case .wv-date-selector-widget:first-child #day-input-group', function(result) {
-        newDay = result.value;
+        var newDay = result.value;
         this.assert.notEqual(startDay, newDay);
       });
     });

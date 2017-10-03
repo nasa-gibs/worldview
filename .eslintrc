@@ -1,19 +1,46 @@
-
 {
   "env": {
     "browser": true,
     "node": true
   },
   "parserOptions": {
-      "ecmaVersion": 5,
-      "sourceType": "script",
-      "ecmaFeatures": {
-          "jsx": false
-      }
+    "ecmaVersion": 6,
+    "sourceType": "script"
   },
+  "extends": "eslint:recommended",
   "rules": {
-      "strict": 0,
-      "semi": [2, "always"],
-      "indent": [2, 2, {"SwitchCase": 1}],
-  }
+    "quotes": [ 2, "single" ]
+  },
+  "overrides": [
+    {
+      "files": [ "web/**/*.js", "test/**/*.js" ],
+      "parserOptions": {
+        "ecmaVersion": 5,
+        "sourceType": "script",
+        "ecmaFeatures": {
+          "jsx": false
+        }
+      },
+      "rules": {
+        "strict": 0,
+        "semi": [2, "always"],
+        "indent": [2, 2, {"SwitchCase": 1}],
+        "quotes": "off",
+        "no-octal": "off",
+        "no-unused-vars": "off",
+        "no-console": "off",
+        "no-undef": "off",
+        "no-useless-escape": "off"
+      },
+      "globals": {
+        "wv": true,
+        "wvx": true,
+        "WVC": true,
+        "buster": true,
+        "jQuery": true,
+        "$": true,
+        "_": true
+      }
+    }
+  ]
 }

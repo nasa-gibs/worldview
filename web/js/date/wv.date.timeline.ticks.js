@@ -484,9 +484,6 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function(models, config, ui) 
       self.add(end, 'path.domain');
 
     }
-    if (sibElem.classed('end-tick')) {
-
-    }
     // } End terrible
 
     self.setAll();

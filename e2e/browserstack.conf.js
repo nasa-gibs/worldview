@@ -1,6 +1,3 @@
-const seleniumServer = require('selenium-server-standalone-jar');
-const chromedriver = require('chromedriver');
-const geckodriver = require('geckodriver');
 const environments = require('./environments.json');
 
 require('nightwatch-cucumber')({
