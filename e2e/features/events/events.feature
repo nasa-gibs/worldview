@@ -1,23 +1,26 @@
 Feature: Natural Events
   Users should be able to find imagery related to recent natural events via a list and markers on the map
 
-Background:
+Scenario: Selecting Events Tab
+  Users should be able to see all available natural events
+
   Given Worldview is in "initial" state
   And I click "Skip Tour"
   And I click the "events" tab
   Then I see the "list of events" within 3 seconds
-
-Scenario: Selecting Events Tab
-  Users should be able to see all available natural events
-
-  Given I see "Fire"
+  And I see "Fire"
   And I see "Iceberg"
   And I see "Hurricane"
   And I see "Volcano"
   And I see 50+ markers on the map
 
 Scenario: Selecting an Event from the List
+  Selecting and deselecting events should change the state of the app to display the state related to the event
 
+  Given Worldview is in "initial" state
+  And I click "Skip Tour"
+  And I click the "events" tab
+  Then I see the "list of events" within 3 seconds
   When I click the "first event"
   Then I see the "selected marker"
   And I see the "selected first event"
@@ -35,4 +38,20 @@ Scenario: Selecting an Event from the List
   Then I don't see "Why can’t I see an event?"
   When I click the "notification dismiss button"
   And I wait 2 seconds
-  And I don't see "Events may not be visible at all times"
+  Then I don't see "Events may not be visible at all times"
+  Then there are 1 tabs open
+  When I click the "first external event link"
+  Then there are 2 tabs open
+  When I close tab number 2
+  Then there are 1 tabs open
+  And I click the "selected first event"
+  Then the page doesn't have the "selected first event"
+
+Scenario: Permalink with events tab
+  Given Worldview is in "events tab active" state
+  Then I see the "list of events" within 3 seconds
+  And I see "Fire"
+  And I see "Iceberg"
+  And I see "Hurricane"
+  And I see "Volcano"
+  And I see 50+ markers on the map

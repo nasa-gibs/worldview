@@ -57,6 +57,23 @@ defineSupportCode(({Given, Then, When}) => {
     return client;
   });
 
+  // Check the number of tabs open
+  Then('there are {int} tabs open', (count) => {
+    return client.windowHandles(function(tabs) {
+      client.assert.equal(tabs.value.length, count);
+    });
+  });
+
+  // Close a tab by index
+  Then('I close tab number {int}', (index) => {
+    index--;
+    return client.windowHandles(function(tabs) {
+      client.switchWindow(tabs.value[index]);
+      client.closeWindow();
+      client.switchWindow(tabs.value[0]);
+    });
+  });
+
   // Check for a string
   Then('I see {string}', (text) => {
     return client.useCss().assert.containsText('body', text);
