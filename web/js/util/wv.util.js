@@ -42,6 +42,15 @@ wv.util = (function(self) {
     return value;
   };
 
+  self.getNumberOfDays = function(start, end, interval) {
+    var i = 0;
+    var currentDate = start;
+    while(start < end) {
+      i++;
+      currentDate = self.dateAdd(currentDate, interval, 1);
+    }
+    return currentDate;
+  };
   /**
    * Creates an object representation of a query string.
    *
