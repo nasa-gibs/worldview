@@ -49,6 +49,14 @@ defineSupportCode(({Given, Then, When}) => {
     return client.pause(seconds*1000);
   });
 
+  // Check the url
+  Then('the url has these values:', (table) => {
+    table.rawTable.forEach(function(row){
+      client.assert.urlParameterEquals(row[0], row[1]);
+    });
+    return client;
+  });
+
   // Check for a string
   Then('I see {string}', (text) => {
     return client.useCss().assert.containsText('body', text);

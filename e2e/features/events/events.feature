@@ -21,6 +21,12 @@ Scenario: Selecting an Event from the List
   When I click the "first event"
   Then I see the "selected marker"
   And I see the "selected first event"
+  And the url has these values:
+    | l | true |
+    | t | true |
+    | z | true |
+    | v | true |
+    | e | true |
   And I see "Events may not be visible at all times" within 4 seconds
   When I click "Events may not be visible at all times"
   Then I see "Why can’t I see an event?"
