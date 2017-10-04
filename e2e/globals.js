@@ -29,10 +29,11 @@ module.exports = {
     'first event': '#wv-events ul.map-item-list .item:first-child',
     'selected first event': '#wv-events ul.map-item-list .item-selected:first-child',
     'selected marker': '.marker-selected',
-    'map marker': '.ol-viewport .marker',
+    'map markers': '.ol-viewport .marker',
     'modal close button': '.ui-dialog.ui-draggable.ui-resizable .ui-dialog-titlebar-close',
     'notification dismiss button': '.ui-dialog.notify-alert .fa-times',
-    'first external event link': '#wv-events ul.map-item-list .item:first-child .natural-event-link:first-child'
+    'first external event link': '#wv-events ul.map-item-list .item:first-child .natural-event-link:first-child',
+    'overlay layer items': '#overlays li'
   },
   delay: 3000 // Acceptable delay in ms between performing actions and seeing results
 };

@@ -109,6 +109,11 @@ defineSupportCode(({Given, Then, When}) => {
     return client.useCss().expect.element(selectors[key]||key).to.not.be.present;
   });
 
+  // Check for a count of elements
+  Then('the page has at least {int} {string}', (count, selector) => {
+    return client.assert.elementCountGreater(client.globals.selectors[selector], count);
+  });
+
   // Check that an element is hidden
   Then('I don\'t see the {string}', (key) => {
     return client.useCss().expect.element(selectors[key]||key).to.not.be.visible;

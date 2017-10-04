@@ -12,7 +12,7 @@ Scenario: Selecting Events Tab
   And I see "Iceberg"
   And I see "Hurricane"
   And I see "Volcano"
-  And I see 50+ markers on the map
+  And the page has at least 50 "map markers"
 
 Scenario: Selecting an Event from the List
   Selecting and deselecting events should change the state of the app to display the state related to the event
@@ -39,6 +39,7 @@ Scenario: Selecting an Event from the List
   When I click the "notification dismiss button"
   And I wait 2 seconds
   Then I don't see "Events may not be visible at all times"
+  And the page has at least 4 "overlay layer items"
   Then there are 1 tabs open
   When I click the "first external event link"
   Then there are 2 tabs open
@@ -54,4 +55,4 @@ Scenario: Permalink with events tab
   And I see "Iceberg"
   And I see "Hurricane"
   And I see "Volcano"
-  And I see 50+ markers on the map
+  And the page has at least 50 "map markers"
