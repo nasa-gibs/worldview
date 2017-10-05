@@ -1,4 +1,4 @@
-const { URL, URLSearchParams } = require('url');
+const { URL } = require('url');
 
 exports.assertion = function(parameter, value) {
   this.message = 'Testing if URL parameter "' + parameter + '" has value: ' + value;

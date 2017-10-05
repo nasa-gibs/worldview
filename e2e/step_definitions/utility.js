@@ -11,7 +11,7 @@ defineSupportCode(({Given, Then, When}) => {
 
   Given('Worldview is in {string} state', (state) => {
     var stateUrl = client.globals.url + (querystrings[state]||'');
-    return client.url(stateUrl).waitForElementVisible('body', delay);
+    return client.url(stateUrl).execute('if (window.localStorage) window.localStorage.clear()').waitForElementVisible('body', delay);
   });
 
   // Scroll to an element by predefined selector
@@ -69,8 +69,9 @@ defineSupportCode(({Given, Then, When}) => {
     index--;
     return client.windowHandles(function(tabs) {
       client.switchWindow(tabs.value[index]);
-      client.closeWindow();
-      client.switchWindow(tabs.value[0]);
+      client.closeWindow(function(){
+        return client.switchWindow(tabs.value[0]);
+      });
     });
   });
 

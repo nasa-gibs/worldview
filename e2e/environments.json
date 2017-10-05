@@ -3,12 +3,14 @@
     "os": "OS X",
     "os_version": "El Capitan",
     "browser": "Chrome",
-    "browser_version": "61.0"
+    "browser_version": "61.0",
+    "resolution": "1280x1024"
   },
   {
     "os": "Windows",
     "os_version": "8",
     "browser": "Chrome",
-    "browser_version": "61.0"
+    "browser_version": "61.0",
+    "resolution": "1280x1024"
   }
 ]
