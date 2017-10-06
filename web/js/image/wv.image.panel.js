@@ -27,6 +27,7 @@ wv.image.panel = wv.image.panel || function(models, ui, config, dialogConfig) {
   var coords;
   var resolution = "1";
   var format = "image/jpeg";
+  var alignTo = config.alignTo;
   var worldfile = "false";
   var lastZoom = -1;
   var rangeSelectionFactory = React.createFactory(WVC.ImageResSelection);
@@ -34,6 +35,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config, dialogConfig) {
   var host;
   var path;
   var url;
+  var containerId = "wv-image-button";
+  var id = containerId;
+  var container;
   // state items as global vars
   var lonlats;
   var imgWorldfile;
@@ -154,6 +158,9 @@ wv.image.panel = wv.image.panel || function(models, ui, config, dialogConfig) {
    * @this {Download}
    */
   self.show = function() {
+    alignTo = {
+      id: "wv-image-button"
+    };
     container = document.getElementById(containerId);
 
     if (container === null) {
@@ -172,7 +179,8 @@ wv.image.panel = wv.image.panel || function(models, ui, config, dialogConfig) {
       .button();
     $(".ui-dialog")
       .zIndex(600);
-
+    $(window)
+      .resize(setPosition);
 
     // Auto-set default resolution to map's current zoom level; round it
     // for incremental zoom steps
@@ -359,6 +367,17 @@ wv.image.panel = wv.image.panel || function(models, ui, config, dialogConfig) {
     wv.util.metrics('lc=' + encodeURIComponent(dlURL + "&worldfile=" + imgWorldfile + "&format=" + imgFormat + "&width=" + imgWidth + "&height=" + imgHeight));
     window.open(dlURL + "&worldfile=" + imgWorldfile + "&format=" + imgFormat + "&width=" + imgWidth + "&height=" + imgHeight, "_blank");   
   };
+
+  var setPosition = function() {
+    var offset = $("#" + alignTo.id)
+      .offset();
+    var left = offset.left + parseInt($("#" + alignTo.id)
+      .css("width")) - parseInt($("#" + id)
+        .css("width"));
+    $("#" + id)
+      .css("left", left + "px");
+  };
+
   var createDownloadURL = function(time, lonlats, epsg, products, opacities, dlURL) {
     var layers, jStart, jDate;
     var dTime = time;

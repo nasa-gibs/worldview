@@ -54,7 +54,6 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config, Panel)
   var icon = "images/camera.png";
   var onicon = "images/cameraon.png";
   var $cropee = $("#wv-map"); //TODO: Test on non-canvas
-  var id = containerId;
   var state = "off";
   var jcropAPI = null;
   var previousPalettes = null;
@@ -92,8 +91,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config, Panel)
       text: false
     });
     $button.on('click', toggle);
-    $(window)
-      .resize(setPosition);
+
   };
 
   var toolbarButtons = function(action) {
@@ -221,20 +219,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config, Panel)
     coords = c;
     self.panel.update(coords);
   };
-  
-  var setPosition = function() {
-    var id = imagedownload;
-    var alignTo = {
-      id: "wv-image-button"
-    };
-    var offset = $("#" + alignTo.id)
-      .offset();
-    var left = offset.left + parseInt($("#" + alignTo.id)
-      .css("width")) - parseInt($("#" + id)
-        .css("width"));
-    $("#" + id)
-      .css("left", left + "px");
-  };
+
   /**
    * Activates the drawing on the map.
    *
