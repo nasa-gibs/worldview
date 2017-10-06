@@ -725,10 +725,15 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var projection = models.proj.selected.id;
 
     $( '#layers-all' ).css( 'height', modalHeight - 40 - 30);
+
+    //Remove perfectScrollbar for the search list window
     $('#layer-modal-main').perfectScrollbar('destroy');
+
+    //Check if the component already exists first
     if(!self.reactList){
       self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
     }
+
     self.reactList.setState({showLayers: true});
 
     $selectedCategory.hide();
