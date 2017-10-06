@@ -1,4 +1,4 @@
-const environments = require('./environments.json');
+const environments = require('./environments.js');
 
 require('nightwatch-cucumber')({
   nightwatchOutput: false,

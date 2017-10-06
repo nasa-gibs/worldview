@@ -3,7 +3,7 @@
 
 var Nightwatch = require('nightwatch');
 var browserstack = require('browserstack-local');
-var environments = require('./environments.json');
+var environments = require('./environments.js');
 var bs_local;
 
 var environment_names = environments.map(
