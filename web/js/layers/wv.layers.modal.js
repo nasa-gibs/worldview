@@ -167,8 +167,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     modalWidth = gridItemWidth * sizeMultiplier + 10;
     if(self.reactList)
       self.reactList.setState({
-        width:modalWidth,
-        height:modalHeight
+        width:  modalWidth,
+        height: modalHeight - $('#layer-modal > header').outerHeight() -
+          $breadcrumb.outerHeight()
+
       });
   };
 
@@ -695,12 +697,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       });
     });
   };
+  /**
+   * self.readySearch - Readies the search component
+   *
+   * @return {func}  Returns a function call with the correct parameters to
+   *  initialize the layer list React component
+   */
   self.readySearch = function(){
     return layerList({
       config: config,
       metadata: self.metadata,
       model: model,
-      width: modalWidth
+      width: modalWidth,
+      height: modalHeight - $('#layer-modal > header').outerHeight() -
+          $breadcrumb.outerHeight()
     });
   };
 

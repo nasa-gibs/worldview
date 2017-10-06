@@ -318,7 +318,6 @@
 #selected-category .ui-accordion-header,
 #layers-all .layers-all-layer {
   border:0;
-  cursor:pointer;
 }
 
 #layers-all .layers-all-title-wrap {
@@ -505,6 +504,10 @@
   margin-bottom: 5px;
 }
 
+.layers-all-header {
+  cursor: pointer;
+}
+
 .layers-all-header .fa {
   color: #ddd;
   font-family: "FontAwesome";
@@ -573,6 +576,7 @@
 }
 
 #layers-all .metadata-more {
+  cursor: pointer;
   height: 8px;
   margin-top: 4px;
 }
