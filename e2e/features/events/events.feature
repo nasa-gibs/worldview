@@ -45,7 +45,7 @@ Scenario: Selecting an Event from the List
   Then there are 2 tabs open
   When I close tab number 2
   Then there are 1 tabs open
-  And I click the "selected first event"
+  When I click the "selected first event"
   Then the page doesn't have the "selected first event"
 
 Scenario: Permalink with events tab
