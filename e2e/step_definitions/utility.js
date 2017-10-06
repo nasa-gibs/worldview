@@ -8,7 +8,9 @@ defineSupportCode(({Given, Then, When}) => {
 
   Given('Worldview is in {string} state', (state) => {
     var stateUrl = client.globals.url + (querystrings[state]||'');
-    return client.url(stateUrl).execute('if (window.localStorage) window.localStorage.clear()').waitForElementVisible('body', delay);
+    client.url(stateUrl).execute('if (window.localStorage) window.localStorage.clear()');
+    client.pause(delay); // Give the page some time to load
+    return client.waitForElementVisible('body', delay/2);
   });
 
   // Scroll to an element by predefined selector
