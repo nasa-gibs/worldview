@@ -8,10 +8,6 @@ Scenario: Selecting Events Tab
   And I click "Skip Tour"
   And I click the "events" tab
   Then I see the "list of events" within 3 seconds
-  And I see "Fire"
-  And I see "Iceberg"
-  And I see "Hurricane"
-  And I see "Volcano"
   And the page has at least 50 "map markers"
 
 Scenario: Selecting an Event from the List
@@ -51,8 +47,4 @@ Scenario: Selecting an Event from the List
 Scenario: Permalink with events tab
   Given Worldview is in "events tab active" state
   Then I see the "list of events" within 3 seconds
-  And I see "Fire"
-  And I see "Iceberg"
-  And I see "Hurricane"
-  And I see "Volcano"
   And the page has at least 50 "map markers"

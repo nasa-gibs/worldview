@@ -17,9 +17,9 @@
     "start": "node ./bin/www",
     "test": "grunt test lint",
     "e2e": "run-s --print-name --continue-on-error --silent e2e:*",
-    "e2e:chrome": "nightwatch -e chrome --skiptags hover",
-    "e2e:firefox": "nightwatch -e firefox --skiptags hover",
-    "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack",
+    "e2e:chrome": "nightwatch -e chrome",
+    "e2e:firefox": "nightwatch -e firefox --skiptags wip",
+    "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
     "report": "node e2e/create-report.js"
   },
   "devDependencies": {
