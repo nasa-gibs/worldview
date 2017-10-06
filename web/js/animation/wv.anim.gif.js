@@ -35,7 +35,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
   var progressing = false; //if progress bar has started
   var rangeSelectionFactory = React.createFactory(WVC.GifResSelection);
   var panelCase;
-  var resolution = 0;
+  var resolution = null;
   var imgWidth;
   var imgHeight;
   var imgFilesize;
@@ -52,7 +52,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
   var ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
   var resolutionsGeo = {
     values:  [
-      {value: '0', text: 'default'},
       {value: '1', text: '250m'},
       {value: '2', text: '500m'},
       {value: '4', text: '1km'},
@@ -62,7 +61,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
   };
   var resolutionsPolar = {
     values:  [
-      {value: '0', text: 'default'},
       {value: '1', text: '250m'},
       {value: '2', text: '500m'},
       {value: '4', text: '1km'},
@@ -98,7 +96,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     panelCase.className = 'gif-dialog';
     setProjectionGlobals();
     options = {
-      resolution: resolution,
+      resolution: 1,
       onSelectionChange: onSelectionChange,
       onClick: getGif,
       valid: true,
@@ -128,18 +126,26 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     };
   };
   var update = function(selectedRes, lonlats) {
+    if(!animCoords) return;
     var numDays, lonlats, stateObj, dimensions;
-
+    
+    resolution = selectedRes;
     stateObj = animModel.rangeState;
     numDays = wv.util.getNumberOfDays(new Date(stateObj.startDate), new Date(stateObj.endDate), ui.anim.ui.getInterval());
-    imgFilesize = calulateFileSize(selectedRes, lonlats[0], lonlats[1], numDays);
-    resolution = selectedRes;
-    imgSizeValid = dimensionsAreValid();
-    if(resolution == '0') {
-      dimensions = getDimensions(lonlats, models.proj.selected.id);
+    
+    if(!resolution) {
+      resolution = calcRes(0);
+      imgWidth = animCoords.w;
+      imgHeight = animCoords.h;
+    } else{
+      dimensions = getDimensions(lonlats, models.proj.selected.id, resolution);  
       imgWidth = dimensions[0];
       imgHeight = dimensions[1];
     }
+
+    imgFilesize = calulateFileSize(resolution, lonlats[0], lonlats[1], numDays, imgWidth, imgHeight);
+    
+    imgSizeValid = dimensionsAreValid();
     updatePanel(getUpdatedProps());
   };
   var updatePanel = function(options) {
@@ -438,13 +444,11 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
    * @returns {array} array with dimensions
    *
    */
-  var getDimensions = function(lonlat, proj) {
-
+  var getDimensions = function(lonlat, proj, res) {
     var conversionFactor = proj === "geographic" ? 0.002197 : 256;
-    resolution = calcRes(0);
     return [
-      Math.round((Math.abs(lonlat[1][0] - lonlat[0][0]) / conversionFactor) / Number(resolution)), // width
-      Math.round((Math.abs(lonlat[1][1] - lonlat[0][1]) / conversionFactor) / Number(resolution)) // height
+      Math.round((Math.abs(lonlat[1][0] - lonlat[0][0]) / conversionFactor) / Number(res)), // width
+      Math.round((Math.abs(lonlat[1][1] - lonlat[0][1]) / conversionFactor) / Number(res)) // height
     ];
   };
   /*
@@ -472,7 +476,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
     var lonlat = getCoords();
     var layers;
     var proj = models.proj.selected.id;
-    var dimensions = getDimensions(lonlat, proj);
+    var dimensions = getDimensions(lonlat, proj, resolution);
     var opacities;
     var epsg = (models.proj.change) ? models.proj.change.epsg : models.proj.selected.epsg;
     var products = getProducts();
@@ -765,17 +769,16 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
    * @returns {number} Size of frame
    *
    */
-  var calulateFileSize = function(imgRes, lonlat1, lonlat2, numDays) {
-    var conversionFactor, conversionConstant;
-    conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
-    conversionFactor = getConversionFactor(models.proj.selected.id);
-    resolution = imgRes;
-    imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
-    imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
-
+  var calulateFileSize = function(imgRes, lonlat1, lonlat2, numDays, imgWidth, imgHeight) {
+    var conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
     return (((imgWidth * imgHeight * 24) / 8388608).toFixed(2) * numDays + 1) / conversionConstant;
   };
-
+  var setDimensions = function(imgRes, lonlat1, lonlat2) {
+    var conversionFactor;
+    conversionFactor = getConversionFactor(models.proj.selected.id);
+    imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
+    imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
+  };
   /*
    * removes jquery JCrop
    *
@@ -955,8 +958,6 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         setSelect: previousCoords,
         onSelect: function(e){
           onBoundingBoxChange(e, $dialog, $dlButton);
-          update(resolution, getCoords());
-          console.log(getCoords());
         },
         onChange: function(e){
           onBoundingBoxChange(e, $dialog, $dlButton);
@@ -986,10 +987,7 @@ wv.anim.gif = wv.anim.gif || function(models, config, ui) {
         setIconFontSize($dlButton, starterWidth);
         $dlButton.on('click', getGif);
       });
-    // if(!resolution) {
-    //   resolution = calcRes(0);
-    // }
-    //update(resolution, getCoords());
+    update(null, getCoords());
   };
   self.init();
   return self;
