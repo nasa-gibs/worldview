@@ -700,8 +700,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   /**
    * self.readySearch - Readies the search component
    *
-   * @return {func}  Returns a function call with the correct parameters to
-   *  initialize the layer list React component
+   * @return {reactComponent}  Returns a react component with the correct parameters to
+   *  initialize the layer list.
    */
   self.readySearch = function(){
     return layerList({
