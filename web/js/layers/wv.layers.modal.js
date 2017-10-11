@@ -155,7 +155,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         console.warn("Invalid parameter; showing Categories view");
     }
   };
-
   var setModalSize = function() {
     var availableWidth = $(window).width() - ($(window).width() * 0.15);
     sizeMultiplier = Math.floor(availableWidth / gridItemWidth);
@@ -170,7 +169,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         width:  modalWidth,
         height: modalHeight - $('#layer-modal > header').outerHeight() -
           $breadcrumb.outerHeight()
-
       });
   };
 
@@ -710,7 +708,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       model: model,
       width: modalWidth,
       height: modalHeight - $('#layer-modal > header').outerHeight() -
-          $breadcrumb.outerHeight()
+        30 // size of breadcrumb, on initial render it doesnt have a height
     });
   };
 
