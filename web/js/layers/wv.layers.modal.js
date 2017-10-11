@@ -215,7 +215,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     }
   };
 
-  var drawDefaultPage = function( e ) {
+  var drawDefaultPage = function() {
     removeSearch();
     drawModal();
     redoScrollbar();
@@ -863,7 +863,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     var $closeButton = $('<div />', {
       'id': 'layers-modal-close'
-    }).click( function( e ) {
+    }).click( function() {
       $( self.selector ).dialog( "close" );
     }).append('<i></i>');
 
