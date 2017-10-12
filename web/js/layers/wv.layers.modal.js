@@ -166,7 +166,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     modalWidth = gridItemWidth * sizeMultiplier + 10;
     if(self.reactList)
       self.reactList.setState({
-        width:  modalWidth,
+        width:  modalWidth - 20,
         height: modalHeight - $('#layer-modal > header').outerHeight() -
           $breadcrumb.outerHeight()
       });
@@ -706,7 +706,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       config: config,
       metadata: self.metadata,
       model: model,
-      width: modalWidth,
+      width: modalWidth - 20, //padding
       height: modalHeight - $('#layer-modal > header').outerHeight() -
         30 // size of breadcrumb, on initial render it doesnt have a height
     });
