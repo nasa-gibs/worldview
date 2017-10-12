@@ -10,7 +10,7 @@ Visit Worldview at
 
 This tool from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
 provides the capability to interactively browse global, full-resolution
-satellite imagery and then download the underlying data. Most of the 200+
+satellite imagery and then download the underlying data. Most of the 600+
 available products are updated within three hours of observation, essentially
 showing the entire Earth as it looks "right now". This supports time-critical
 application areas such as wildfire management, air quality measurements, and
