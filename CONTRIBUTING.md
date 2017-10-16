@@ -55,11 +55,11 @@ Things that appear to be broken or are not working as intended.
 
 An enhancement to an existing feature.
 
-### [`external dependency` ![Issues tagged with 'external dependency'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/external%20dependency.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aexternal%20dependency)
+### [`external dependency` ![Issues tagged with 'external dependency'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22external%20dependency%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen%20is%3Aissue%20label%3A%22external%20dependency%22)
 
 Issues that are waiting on something out of our control.
 
-### [`help wanted` ![Issues tagged with 'help wanted'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/help%20wanted.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Ahelp%20wanted)
+### [`help wanted` ![Issues tagged with 'help wanted'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22help%20wanted%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22help%20wanted%22)
 
 These issues might be a good place to start if you want to contribute.
 
@@ -67,15 +67,15 @@ These issues might be a good place to start if you want to contribute.
 
 These are ideas, user stories, or feature requests that don't yet qualify as a new feature, probably because the specifics haven't been worked out yet.
 
-### [`new feature` ![Issues tagged with 'new feature'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/new%20feature.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Anew%20feature)
+### [`new feature` ![Issues tagged with 'new feature'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22new%20feature%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22new%20feature%22)
 
 These are new features to be developed at some point in the future.
 
-### [`ready for development` ![Issues tagged with 'ready for development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/ready%20for%20development.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aready%20for%20development)
+### [`ready for development` ![Issues tagged with 'ready for development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22ready%20for%20development%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22ready%20for%20development%22)
 
 These are issues that are "on deck" for development. We're planning to work on these next.
 
-### [`ready for test` ![Issues tagged with 'ready for test'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/ready%20for%20test.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aready%20for%20test)
+### [`testing` ![Issues tagged with 'testing'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/testing.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Atesting)
 
 These are issues that have a PR ready to resolve them, and are just waiting to be fully tested.
 
@@ -83,7 +83,7 @@ These are issues that have a PR ready to resolve them, and are just waiting to b
 
 These issues are related to our technical implementation (refactoring, dependency changes, etc), they're developer focused, and don't directly add new features for end users.
 
-### [`under development` ![Issues tagged with 'under development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/under%20development.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aunder%20development)
+### [`under development` ![Issues tagged with 'under development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22under%20development%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22under%20development%22)
 
 These are ideas, user stories, or feature requests that don't yet qualify as a new feature, probably because the specifics haven't been worked out yet.
 
