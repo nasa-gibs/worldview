@@ -304,19 +304,20 @@
 #selected-category {
   color: #ddd;
 }
+
 #layers-all .layers-all-layer {
-  padding: 0 0 .5em .7em;
+  padding: 0 0 0.5em 0.7em;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
-  border:0;
-  position:relative;
-
+  border: 0;
+  position: relative;
 }
+
 #selected-category .ui-accordion-header {
-  border:0;
-  position:relative;
+  border: 0;
+  position: relative;
   margin-top: 5px;
 }
 
@@ -502,15 +503,22 @@
 }
 
 .layers-all-header .fa {
+  position: absolute;
   color: #ddd;
   font-family: "FontAwesome";
   font-size: 14px;
-  margin-left: 10px;
+  padding: 12px 16px;
+  margin-left: -8px;
+  margin-top: -8px;
 }
 
 @media (min-width: 753px) {
   .layers-all-header .fa {
-
+    padding: 10px 18px 16px;
+    top: auto;
+    right: 0;
+    margin-top: -6px;
+    margin-left: 0;
   }
 }
 
@@ -632,10 +640,6 @@
 
 /*lazy code to put scrollbar in the right place*/
 #layer-categories,
-#selected-category
-  {
-    padding-right:10px;
-  }
-#categories-nav {
-  margin-right:10px;
+#selected-category {
+  padding-right: 10px;
 }
