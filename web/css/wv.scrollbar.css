@@ -36,3 +36,8 @@
 .ps:hover > .ps__scrollbar-y-rail:hover > .ps__scrollbar-y {
   background-color: #999;
 }
+
+/* Override Perfect Scrollbar styles in react-virtualized lists */
+.ps .ReactVirtualized__List {
+  -ms-overflow-style: scrollbar; /* Turn scroll bars back on in IE */
+}
