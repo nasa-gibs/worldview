@@ -9,7 +9,7 @@
   },
   "extends": "eslint:recommended",
   "rules": {
-    "quotes": [ 2, "single" ]
+    "quotes": [ "warn", "single" ]
   },
   "overrides": [
     {
@@ -22,15 +22,15 @@
         }
       },
       "rules": {
-        "strict": 0,
-        "semi": [2, "always"],
-        "indent": [2, 2, {"SwitchCase": 1}],
-        "quotes": "off",
-        "no-octal": "off",
-        "no-unused-vars": "off",
-        "no-console": "off",
-        "no-undef": "off",
-        "no-useless-escape": "off"
+        "strict": "off",
+        "semi": ["error", "always"],
+        "indent": ["error", 2, {"SwitchCase": 1}],
+        "quotes": "warn",
+        "no-octal": "warn",
+        "no-unused-vars": "warn",
+        "no-console": "warn",
+        "no-undef": "warn",
+        "no-useless-escape": "warn"
       },
       "globals": {
         "wv": true,
