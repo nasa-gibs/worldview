@@ -441,11 +441,4 @@ if (!String.prototype.endsWith) {
     }
   }
 
-  $(window)
-    .on("touchmove", function(event) {
-      if (!event.target.classList.contains("scrollable")) {
-        event.preventDefault();
-      }
-    }, false);
-
 })();
