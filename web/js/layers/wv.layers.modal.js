@@ -34,6 +34,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var visible = {};
 
   var init = function() {
+    $(document).ready(function() {
+      Object.values(config.layers).forEach(function(layer) {
+        visible[layer.id] = true;
+        if(layer.description){
+          $.get('config/metadata/' + layer.description + '.html')
+            .success(function(data) {
+              self.metadata[layer.id] = data;
+            //$sourceMeta.html(data);
+            //$sourceMeta.find('a')
+            //  .attr('target','_blank');
+            });
+        }
+      });
+    });
     model.events
     // FIXME: on "add" needs to be present without trying to add a product
       // multiple times
