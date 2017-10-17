@@ -60,7 +60,7 @@
     "selenium-server-standalone-jar": "3.0.1",
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",
-    "worldview-components": "1.4.1",
+    "worldview-components": "1.4.2",
     "isotope-layout": "3.0.x",
     "isotope-packery": "2.x.x",
     "perfect-scrollbar": "0.7.x"
