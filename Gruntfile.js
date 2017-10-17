@@ -57,10 +57,6 @@ module.exports = function(grunt) {
   var js = grunt.file.readJSON("deploy/wv.js.json");
   var css = grunt.file.readJSON("deploy/wv.css.json");
 
-  // Copyright notice to place at the top of the minified JavaScript and
-  // CSS files
-  var banner = grunt.file.read("deploy/banner.txt");
-
   //Platform specific command for find
   var findCmd;
   if (process.platform === 'win32')
@@ -345,7 +341,6 @@ module.exports = function(grunt) {
       // Minifiy the concatenated Worldview CSS file.
       wv_css: {
         options: {
-          banner: banner,
           keepSpecialComments: false
         },
         files: {
@@ -659,7 +654,6 @@ module.exports = function(grunt) {
     uglify: {
       // Minifiy the concatenated Worldview JavaScript file.
       options: {
-        banner: banner,
         compress: {
           //drop_console: true,
           //drop_debugger: true,
