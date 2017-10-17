@@ -21,6 +21,11 @@ var nodeModuleFiles = [
   "node_modules/openlayers/dist/ol-debug.css",
   "node_modules/font-awesome/css/font-awesome.min.css",
   "node_modules/font-awesome/fonts/*",
+  "node_modules/isotope-layout/dist/*",
+  "node_modules/isotope-packery/packery-mode.pkgd.js",
+  "node_modules/isotope-packery/packery-mode.pkgd.min.js",
+  "node_modules/perfect-scrollbar/dist/js/*",
+  "node_modules/perfect-scrollbar/dist/css/*",
   "node_modules/clipboard/dist/clipboard.js",
   "node_modules/clipboard/dist/clipboard.min.js"
 ];

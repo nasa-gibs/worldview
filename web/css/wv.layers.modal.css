@@ -306,12 +306,19 @@
 }
 
 #layers-all .layers-all-layer {
-  padding-bottom: 0.5em;
+  padding: 0 0 0.5em 0.7em;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 0;
+  position: relative;
 }
 
-#layers-all .layers-all-header {
-  padding: 0 0.5em 0 0;
-  overflow: hidden;
+#selected-category .ui-accordion-header {
+  border: 0;
+  position: relative;
+  margin-top: 5px;
 }
 
 #layers-all .layers-all-title-wrap {
@@ -319,13 +326,6 @@
   display: block;
   margin-right: 66px;
   padding-top: 0.5em;
-}
-
-#layers-all .layers-all-layer,
-#selected-category .ui-accordion-header {
-  position: relative;
-  border: 0;
-  margin-top: 5px;
 }
 
 #layers-all .layers-all-layer,
@@ -498,18 +498,22 @@
   margin-bottom: 5px;
 }
 
-.layers-all-layer .layers-all-header .fa {
+.layers-all-header {
+  cursor: pointer;
+}
+
+.layers-all-header .fa {
+  position: absolute;
   color: #ddd;
   font-family: "FontAwesome";
   font-size: 14px;
   padding: 12px 16px;
-  position: absolute;
   margin-left: -8px;
   margin-top: -8px;
 }
 
 @media (min-width: 753px) {
-  .layers-all-layer .layers-all-header .fa {
+  .layers-all-header .fa {
     padding: 10px 18px 16px;
     top: auto;
     right: 0;
@@ -573,6 +577,7 @@
 }
 
 #layers-all .metadata-more {
+  cursor: pointer;
   height: 8px;
   margin-top: 4px;
 }
@@ -635,72 +640,6 @@
 
 /*lazy code to put scrollbar in the right place*/
 #layer-categories,
-#layers-all,
 #selected-category {
   padding-right: 10px;
-}
-
-/* perfect-scrollbar */
-.ps-container > .ps-scrollbar-y-rail,
-.ps-container > .ps-scrollbar-y-rail .ps-scrollbar-y {
-  border-radius: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  -o-border-radius: 0;
-  -webkit-transition: none;
-  transition: none;
-  opacity: 1;
-}
-
-.ps-container > .ps-scrollbar-y-rail {
-  right: 0;
-}
-
-.ps-container > .ps-scrollbar-y-rail .ps-scrollbar-y {
-  background-color: #666;
-}
-
-.ps-container:hover.ps-in-scrolling {
-  pointer-events: none;
-}
-
-.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
-  background-color: #eee;
-  opacity: 1;
-}
-
-.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
-  background-color: #999;
-}
-
-.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
-  background-color: #eee;
-  opacity: 1;
-}
-
-.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
-  background-color: #999;
-}
-
-.ps-container:hover > .ps-scrollbar-x-rail,
-.ps-container:hover > .ps-scrollbar-y-rail {
-  opacity: 1;
-}
-
-.ps-container:hover > .ps-scrollbar-x-rail:hover {
-  background-color: #eee;
-  opacity: 1;
-}
-
-.ps-container:hover > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x {
-  background-color: #999;
-}
-
-.ps-container:hover > .ps-scrollbar-y-rail:hover {
-  background-color: #eee;
-  opacity: 1;
-}
-
-.ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y {
-  background-color: #999;
 }

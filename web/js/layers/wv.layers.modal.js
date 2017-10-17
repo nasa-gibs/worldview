@@ -4,7 +4,7 @@
  * This code was originally developed at NASA/Goddard Space Flight Center for
  * the Earth Science Data and Information System (ESDIS) project.
  *
- * Copyright (C) 2013 United States Government as represented by the
+ * Copyright (C) 2013-2017 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  */
@@ -31,17 +31,31 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var $selectedCategory = $(self.selector + " #selected-category");
   var $allLayers = $(self.selector + " #layers-all");
   var gridItemWidth = 320; //with of grid item + spacing
+  var layerList = React.createFactory(WVC.LayerList);
+  var layerWidget;
   var modalHeight;
+  var modalWidth;
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-
+  var copy = [];
+  self.metadata = {};
+  
   // Visible Layers
   var visible = {};
 
   var init = function() {
     Object.values(config.layers).forEach(function(layer) {
       visible[layer.id] = true;
+      if(layer.description){
+        $.get('config/metadata/' + layer.description + '.html')
+          .success(function(data) {
+            self.metadata[layer.id] = data;
+            //$sourceMeta.html(data);
+            //$sourceMeta.find('a')
+            //  .attr('target','_blank');
+          });
+      }
     });
     model.events
     // FIXME: on "add" needs to be present without trying to add a product
@@ -141,7 +155,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         console.warn("Invalid parameter; showing Categories view");
     }
   };
-
   var setModalSize = function() {
     var availableWidth = $(window).width() - ($(window).width() * 0.15);
     sizeMultiplier = Math.floor(availableWidth / gridItemWidth);
@@ -150,18 +163,25 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     if (sizeMultiplier > 3)
       sizeMultiplier = 3;
     modalHeight = $(window).height() - 100;
+    modalWidth = gridItemWidth * sizeMultiplier + 10;
+    if(self.reactList)
+      self.reactList.setState({
+        width:  modalWidth - 20,
+        height: modalHeight - $('#layer-modal > header').outerHeight() -
+          $breadcrumb.outerHeight()
+      });
   };
 
   $.fn.hasScrollBar = function() {
     return this.get(0).scrollHeight > this.height();
   };
-
+  //Update modal size
   var redo = function() {
     setModalSize();
 
     $(self.selector).dialog("option", {
       height: modalHeight,
-      width: gridItemWidth * sizeMultiplier + 10
+      width: modalWidth
     });
 
     $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
@@ -174,21 +194,26 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   // This draws the default page, depending on projection
   // and hides the breadcrumb, and sets the search back to normal
   // and updates the scrollbar.
-  var removeSearch = function() {
+  var removeSearch = function(){
     $selectedCategory.hide();
     $breadcrumb.hide();
     searchBool = false;
-    $('#layers-search-input').val('');
-    $('#layer-search label.search-icon').removeClass('search-on').off('click');
+    copy = config.layerOrder;
+    if(self.reactList){
+      self.reactList.setState({layerFilter: copy});
+      $('#layer-modal-main').perfectScrollbar();
+    }
+    $( '#layers-search-input' ).val('');
+    $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
   };
 
-  var resize = function() {
-    if ($(self.selector).dialog("isOpen")) {
+  var resize = function(){
+    if( $( self.selector ).dialog( "isOpen" ) ) {
       redo();
     }
   };
 
-  var drawDefaultPage = function(e) {
+  var drawDefaultPage = function() {
     removeSearch();
     drawModal();
     redoScrollbar();
@@ -236,7 +261,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     }
   };
 
-
   /**
    * var drawCategories - Draws all categories if it has non-empty measurements.
    *  If it has a placement flag, that category will display first or last. If
@@ -248,7 +272,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    */
   var drawCategories = function() {
     $categories.empty();
-    if ($categories.data('isotope')) {
+    if( $categories.data('isotope') ) {
       $categories.isotope('destroy');
     }
     $allLayers.hide();
@@ -671,6 +695,22 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       });
     });
   };
+  /**
+   * self.readySearch - Readies the search component
+   *
+   * @return {reactComponent}  Returns a react component with the correct parameters to
+   *  initialize the layer list.
+   */
+  self.readySearch = function(){
+    return layerList({
+      config: config,
+      metadata: self.metadata,
+      model: model,
+      width: modalWidth - 20, //padding
+      height: modalHeight - $('#layer-modal > header').outerHeight() -
+        30 // size of breadcrumb, on initial render it doesnt have a height
+    });
+  };
 
   /**
    * var drawAllLayers - Draws all layers contained within a specific projection
@@ -682,118 +722,22 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var drawAllLayers = function() {
     var projection = models.proj.selected.id;
 
-    $allLayers.empty();
+    $( '#layers-all' ).css( 'height', modalHeight - 40 - 30);
 
-    var $fullLayerList = $('<ul />', {
-      id: 'flat-layer-list'
-    });
+    //Remove perfectScrollbar for the search list window
+    $('#layer-modal-main').perfectScrollbar('destroy');
 
-    Object.values(config.layerOrder).forEach(function(layerId) {
-      var current = config.layers[layerId];
+    //Check if the component already exists first
+    if(!self.reactList){
+      self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
+    }
 
-      // Check if layer is equal to the current projection, then output
-      if (Object.keys(current.projections).indexOf(projection) > -1) {
-        if (!current) {
-          console.warn("In layer order but not defined", layerId);
-        } else {
-          var $layerItem = $('<li />', {
-            id: 'layer-flat-' + current.id,
-            'class': 'layers-all-layer',
-            'data-layer': encodeURIComponent(current.id)
-          });
-
-          var $layerHeader = $('<div />', {
-            'class': 'layers-all-header'
-          }).click(function(e) {
-            $(this).find('input#' + encodeURIComponent(current.id))
-              .iCheck('toggle');
-          });
-
-          var $layerTitleWrap = $('<div />', {
-            'class': 'layers-all-title-wrap'
-          });
-
-          var $layerTitle = $('<h3 />', {
-            text: current.title
-          });
-
-          var $layerSubtitle = $('<h5 />', {
-            text: current.subtitle
-          });
-
-          var $checkbox = $('<input />', {
-            id: encodeURIComponent(current.id),
-            'value': current.id,
-            'type': 'checkbox',
-            'data-layer': current.id
-          }).on('ifChecked', addLayer)
-            .on('ifUnchecked', removeLayer);
-
-          if ( _.find(model.active, {id: current.id}) ) {
-            $checkbox.attr("checked", "checked");
-          }
-
-          // Metadata
-          var $sourceMeta = $('<div />', {
-            'class': 'source-metadata hidden'
-          });
-
-          var $showMore = $('<span />', {
-            'class': 'fa fa-info-circle'
-          });
-
-          var $moreTab = $('<div />', {
-            'class': 'metadata-more'
-          });
-
-          var $moreElps = $('<span />', {
-            text: '^',
-            'class': 'ellipsis up'
-          });
-
-          $moreTab.append( $moreElps );
-
-          $showMore.add($moreTab).toggle( function(e){
-            $sourceMeta.toggleClass('hidden');
-            redoScrollbar();
-          }, function(e){
-            $sourceMeta.toggleClass('hidden');
-            redoScrollbar();
-          });
-
-          $layerItem.append( $layerHeader );
-          $layerHeader.append( $checkbox );
-          $layerHeader.append( $layerTitleWrap );
-          $layerTitleWrap.append( $layerTitle );
-          if( current.description ) {
-            $layerTitle.append( $showMore );
-          }
-          $layerTitleWrap.append( $layerSubtitle );
-
-          if( current.description ) {
-            $.get('config/metadata/' + current.description + '.html')
-              .success(function(data) {
-                $sourceMeta.html(data);
-                $layerItem.append( $sourceMeta );
-                $sourceMeta.append( $moreTab );
-                $sourceMeta.find('a')
-                  .attr('target','_blank');
-              });
-          }
-
-          $fullLayerList.append( $layerItem );
-        }
-      }
-    });
-
-    $allLayers.append($fullLayerList);
+    self.reactList.setState({showLayers: true});
 
     $selectedCategory.hide();
     $categories.hide();
     $nav.hide();
     $allLayers.show();
-
-    $allLayers.iCheck({checkboxClass: 'icheckbox_square-red'});
 
     // Create breadcrumb crumbs
     $breadcrumb.empty();
@@ -910,11 +854,24 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       //TODO: Click for search icon
     }).append("<i />");
 
+    $search.append( $searchBtn )
+      .append( $searchInput );
+
+    $header.append( $search );
+
+    var $closeButton = $('<div />', {
+      'id': 'layers-modal-close'
+    }).click( function() {
+      $( self.selector ).dialog( "close" );
+    }).append('<i></i>');
+
+    $header.append ( $closeButton );
+
     $(self.selector).dialog({
       autoOpen: false,
       resizable: false,
       height: modalHeight,
-      width: gridItemWidth * sizeMultiplier + 10,
+      width: modalWidth,
       modal: true,
       dialogClass: "layer-modal no-titlebar",
       draggable: false,
@@ -944,29 +901,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         setTimeout(unfocusInput, 410);
 
       },
-      close: function(event, ui) {
-        $(".ui-widget-overlay").unbind("click");
+      close: function( event, ui ) {
+        $( ".ui-widget-overlay" ).unbind( "click" );
       }
     });
 
-    $search.append($searchBtn).append($searchInput);
-
-    $header.append($search);
-
-    var $closeButton = $('<div />', {
-      id: 'layers-modal-close'
-    }).click(function(e) {
-      $(self.selector).dialog("close");
-    }).append('<i />');
-
-    $header.append($closeButton);
+    //Ready the layer search compontents
+    layerWidget = self.readySearch();
 
     //$(self.selector + "select").on('change', filter);
-    $searchInput.keyup(filter);
-
+    $searchInput.keyup( filter );
     drawDefaultPage();
   };
 
+  //returns each term from search field
   var searchTerms = function() {
     var search = $("#layers-search-input").val().toLowerCase();
     var terms = search.split(/ +/);
@@ -974,61 +922,69 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
 
   var filterAreaOfInterest = function(layerId) {
-    if (!config.aoi) {
+    if ( !config.aoi ) {
       return false;
     }
     var aoi = $(self.selector + "select").val();
-    if (aoi === "All") {
+    if ( aoi === "All" ) {
       return false;
     }
-    return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 && $.inArray(layerId, config.aoi[aoi].overlays) < 0;
+    return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 &&
+      $.inArray(layerId, config.aoi[aoi].overlays) < 0;
   };
 
   var filterProjections = function(layer) {
     return !layer.projections[models.proj.selected.id];
   };
 
+  //Takes the terms and returns true if the layer isnt part of search
   var filterSearch = function(layer, terms) {
     var search = $(self.selector + "search").val();
-    if (search === "") {
+    if ( search === "" ) {
       return false;
     }
     var filtered = false;
     var names = models.layers.getTitles(layer.id);
-    $.each(terms, function(index, term) {
-      filtered = !names.title.toLowerCase().contains(term) && !names.subtitle.toLowerCase().contains(term) && !names.tags.toLowerCase().contains(term) && !config.layers[layer.id].id.toLowerCase().contains(term);
 
-      if (filtered) {
+    $.each(terms, function(index, term) {
+      filtered = !names.title.toLowerCase().contains(term) &&
+        !names.subtitle.toLowerCase().contains(term) &&
+        !names.tags.toLowerCase().contains(term) &&
+        !config.layers[layer.id].id.toLowerCase().contains(term);
+
+      if ( filtered ) {
         return false;
       }
     });
     return filtered;
   };
 
-  var runSearch = _.throttle(function() {
+  var runSearch = _.throttle( function() {
     var search = searchTerms();
-
+    copy = [];
     $.each(config.layers, function(layerId, layer) {
 
       var fproj = filterProjections(layer);
       var fterms = filterSearch(layer, search);
 
+      //This will return true if the layer needs to be hidden
       var filtered = fproj || fterms;
 
-      visible[layer.id] = !filtered;
-
-      var display = filtered ? "none" : "block";
-      var selector = "#flat-layer-list li[data-layer='" + wv.util.jqueryEscape(layerId) + "']";
-      $(selector).css("display", display);
+      if( !filtered ) {
+        copy.push(layerId);
+      }
     });
 
+    self.reactList.setState({layerFilter: copy});
+
     redoScrollbar();
-  }, 250, {trailing: true});
+  }, 250, { trailing: true });
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
       searchBool = true;
-    } else {
+    }
+    else{
       searchBool = false;
       drawModal();
       removeSearch();
@@ -1041,6 +997,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       runSearch();
     } else {
       drawModal();
+      copy = config.layerOrder;
     }
   };
 
