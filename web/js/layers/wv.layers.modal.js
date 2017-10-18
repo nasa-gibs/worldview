@@ -28,24 +28,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var searchBool;
   var hasMeasurement;
   var copy = [];
+  var metadataLoaded = false;
   self.metadata = {};
 
   // Visible Layers
   var visible = {};
 
   var init = function() {
-    Object.values(config.layers).forEach(function(layer) {
-      visible[layer.id] = true;
-      if(layer.description){
-        $.get('config/metadata/' + layer.description + '.html')
-          .success(function(data) {
-            self.metadata[layer.id] = data;
-            //$sourceMeta.html(data);
-            //$sourceMeta.find('a')
-            //  .attr('target','_blank');
-          });
-      }
-    });
     model.events
     // FIXME: on "add" needs to be present without trying to add a product
       // multiple times
@@ -59,6 +48,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $(window)
       .resize(resize);
   };
+  var loadMetadata = function() {
+    if(metadataLoaded) return;
+    Object.values(config.layers).forEach(function(layer) {
+      visible[layer.id] = true;
+      if(layer.description){
+        $.get('config/metadata/' + layer.description + '.html')
+          .success(function(data) {
+            self.metadata[layer.id] = data;
+          });
+      }
+    });
+    metadataLoaded = true;
+  };
+
 
   // Create container for 'by interest' filters buttons
   var $nav = $('<nav />', {
@@ -874,7 +877,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       },
       open: function(event, ui) {
         redo();
-
+        loadMetadata();
         if ($categories.data('isotope')) {
           $categories.isotope();
         }
