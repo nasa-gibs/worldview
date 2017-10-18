@@ -28,7 +28,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var searchBool;
   var hasMeasurement;
   var copy = [];
-  var metaLoaded = false;
+  var metadataLoaded = false;
   self.metadata = {};
 
   // Visible Layers
@@ -48,21 +48,18 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $(window)
       .resize(resize);
   };
-  var loadMeta = function() {
-    if(metaLoaded) return;
+  var loadMetadata = function() {
+    if(metadataLoaded) return;
     Object.values(config.layers).forEach(function(layer) {
       visible[layer.id] = true;
       if(layer.description){
         $.get('config/metadata/' + layer.description + '.html')
           .success(function(data) {
             self.metadata[layer.id] = data;
-          //$sourceMeta.html(data);
-          //$sourceMeta.find('a')
-          //  .attr('target','_blank');
           });
       }
     });
-    metaLoaded = true;
+    metadataLoaded = true;
   };
 
 
@@ -880,7 +877,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       },
       open: function(event, ui) {
         redo();
-        loadMeta();
+        loadMetadata();
         if ($categories.data('isotope')) {
           $categories.isotope();
         }
