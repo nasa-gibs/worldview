@@ -117,6 +117,7 @@ You can end the session by pressing `control-C`
 * [Development Notes](doc/developing.md)
 * [Coding Style Guide](doc/style_guide.md)
 * [Testing](doc/testing.md)
+* [Project Roadmap](https://github.com/nasa-gibs/worldview/projects/7)
 * [Third-Party Library Use](THIRD_PARTY.md)
 
 ## Contributing
