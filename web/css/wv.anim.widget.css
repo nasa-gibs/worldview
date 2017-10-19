@@ -150,6 +150,9 @@
 .gif-dialog .content {
   line-height: 15px;
 }
+.gif-dialog .wv-checkbox {
+  position: relative;
+}
 
 .gif-dialog .ui-button {
   margin-top: 5px;

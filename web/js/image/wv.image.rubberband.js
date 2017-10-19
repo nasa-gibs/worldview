@@ -12,14 +12,14 @@
 var wv = wv || {};
 wv.image = wv.image || {};
 
-wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
+wv.image.rubberband = wv.image.rubberband || function(models, ui, config, Panel) {
 
   var self = {};
-
+  var alignTo = config.alignTo;
   var PALETTE_WARNING =
     "One or more layers on the map have been modified (changed palette, " +
-    "thresholds, etc.). These modifications cannot be used to take a " +
-    "snapshot. Would you like to temporarily revert to the original " +
+    "thresholds, etc.). These modifications cannot be used to take a " +
+    "snapshot. Would you like to temporarily revert to the original " +
     "layer(s)?";
 
   var GRATICLE_WARNING =
@@ -27,7 +27,24 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     "like to hide this layer?";
 
   var ROTATE_WARNING = "Image may not be downloaded when rotated. Would you like to reset rotation?";
-
+  var dialogConfig = {
+    dialogClass: "wv-panel wv-image",
+    title: "Take a snapshot",
+    show: {
+      effect: "slide",
+      direction: "up"
+    },
+    hide: {
+      effect: "slide",
+      direction: "up"
+    },
+    width: 230,
+    height: "auto",
+    minHeight: 10,
+    draggable: false,
+    resizable: false,
+    autoOpen: false
+  };
 
   var containerId = "wv-image-button";
   var container;
@@ -37,11 +54,11 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
   var icon = "images/camera.png";
   var onicon = "images/cameraon.png";
   var $cropee = $("#wv-map"); //TODO: Test on non-canvas
-  var id = containerId;
   var state = "off";
   var jcropAPI = null;
   var previousPalettes = null;
   var $button;
+  self.panel = new Panel(models, ui, config, dialogConfig);
   self.events = wv.util.events();
 
   /**
@@ -74,6 +91,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
       text: false
     });
     $button.on('click', toggle);
+
   };
 
   var toolbarButtons = function(action) {
@@ -93,7 +111,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
     var toggleOn = function() {
       state = "on";
       toolbarButtons("disable");
-      self.events.trigger("show");
+      self.panel.show();
       $(".ui-dialog")
         .on("dialogclose", function() {
           if (state === "on") {
@@ -199,7 +217,7 @@ wv.image.rubberband = wv.image.rubberband || function(models, ui, config) {
   var setCoords = function(c) {
     previousCoords = coords;
     coords = c;
-    self.events.trigger("update", coords);
+    self.panel.update(coords);
   };
 
   /**
