@@ -378,7 +378,7 @@
   font-size: 20px;
   line-height: 100%;
   position: relative;
-  display: inline-block;
+  display: block;
 }
 
 @media (min-width: 753px) {
@@ -510,16 +510,6 @@
   padding: 12px 16px;
   margin-left: -8px;
   margin-top: -8px;
-}
-
-@media (min-width: 753px) {
-  .layers-all-header .fa {
-    padding: 10px 18px 16px;
-    top: auto;
-    right: 0;
-    margin-top: -6px;
-    margin-left: 0;
-  }
 }
 
 .layers-all-layer .fa:hover {
