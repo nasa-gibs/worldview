@@ -20,8 +20,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var $selectedCategory = $(self.selector + " #selected-category");
   var $allLayers = $(self.selector + " #layers-all");
   var gridItemWidth = 320; //with of grid item + spacing
-  var layerList = React.createFactory(WVC.LayerList);
-  var layerWidget;
   var modalHeight;
   var modalWidth;
   var sizeMultiplier;
@@ -156,12 +154,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       sizeMultiplier = 3;
     modalHeight = $(window).height() - 100;
     modalWidth = gridItemWidth * sizeMultiplier + 10;
-    if(self.reactList)
-      self.reactList.setState({
-        width:  modalWidth - 20,
-        height: modalHeight - $('#layer-modal > header').outerHeight() -
-          $breadcrumb.outerHeight()
-      });
   };
 
   $.fn.hasScrollBar = function() {
@@ -170,12 +162,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   //Update modal size
   var redo = function() {
     setModalSize();
-
     $(self.selector).dialog("option", {
       height: modalHeight,
       width: modalWidth
+    }).promise().done(function() {
+      // Set reactList width to modalWidth, minus padding
+      if(self.reactList) self.reactList.setState({width:  modalWidth - 20});
     });
-
     $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
   };
 
@@ -687,22 +680,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       });
     });
   };
-  /**
-   * self.readySearch - Readies the search component
-   *
-   * @return {reactComponent}  Returns a react component with the correct parameters to
-   *  initialize the layer list.
-   */
-  self.readySearch = function(){
-    return layerList({
-      config: config,
-      metadata: self.metadata,
-      model: model,
-      width: modalWidth - 20, //padding
-      height: modalHeight - $('#layer-modal > header').outerHeight() -
-        30 // size of breadcrumb, on initial render it doesnt have a height
-    });
-  };
 
   /**
    * var drawAllLayers - Draws all layers contained within a specific projection
@@ -714,16 +691,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var drawAllLayers = function() {
     var projection = models.proj.selected.id;
 
-    $( '#layers-all' ).css( 'height', modalHeight - 40 - 30);
+    $( '#layers-all' ).css( 'height', modalHeight - 40 - 30); // 40 is search box height, 30 is breadcrub height
     //Remove perfectScrollbar for the search list window
     $('#layer-modal-main').perfectScrollbar('destroy');
 
-    //Check if the component already exists first
     if(!self.reactList){
-      self.reactList = ReactDOM.render(layerWidget, $allLayers[0]);
+      self.reactList = ReactDOM.render(
+        React.createElement(WVC.LayerList ,{
+          config: config,
+          metadata: self.metadata,
+          model: model,
+          initialWidth: modalWidth - 20, // modalWidth, minus padding
+          initialHeight: modalHeight - $('#layer-modal > header').outerHeight() - 30 // modalHeight minus header & breadcrumb
+        }), $allLayers[0]
+      );
     }
-
-    self.reactList.setState({showLayers: true});
 
     $selectedCategory.hide();
     $categories.hide();
@@ -896,9 +878,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         $( ".ui-widget-overlay" ).unbind( "click" );
       }
     });
-
-    //Ready the layer search compontents
-    layerWidget = self.readySearch();
 
     //$(self.selector + "select").on('change', filter);
     $searchInput.keyup( filter );

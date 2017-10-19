@@ -49,10 +49,13 @@
     "grunt-stylefmt": "^3.0.0",
     "grunt-text-replace": "0.4.x",
     "gruntify-eslint": "^4.0.0",
+    "isotope-layout": "3.0.x",
+    "isotope-packery": "2.x.x",
     "lodash": "4.15.0",
     "moment": "2.13.x",
     "nightwatch": "^0.9.9",
     "openlayers": "4.3.1",
+    "perfect-scrollbar": "0.7.x",
     "phantomjs": "2.1.x",
     "promise-queue": "2.2.3",
     "react": "15.3.1",
@@ -60,9 +63,6 @@
     "selenium-server-standalone-jar": "3.0.1",
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",
-    "worldview-components": "^1.4.3",
-    "isotope-layout": "3.0.x",
-    "isotope-packery": "2.x.x",
-    "perfect-scrollbar": "0.7.x"
+    "worldview-components": "^1.4.5"
   }
 }
