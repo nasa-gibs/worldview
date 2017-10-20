@@ -268,6 +268,7 @@ $(function() {
     $(document).click(function(e) {
       if (e.target.id == "wv-logo") resetWorldview(e);
     });
+    ui.addModal.loadMetadata(); // start loading metaData for layer search
   };
 
   var resetWorldview = function(e){

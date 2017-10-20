@@ -46,7 +46,13 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $(window)
       .resize(resize);
   };
-  var loadMetadata = function() {
+  /**
+   * Initializes load of layer metadata
+   * 
+   * @method loadMetadata
+   * @return {void}
+   */
+  self.loadMetadata = function() {
     if(metadataLoaded) return;
     Object.values(config.layers).forEach(function(layer) {
       visible[layer.id] = true;
@@ -58,8 +64,32 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       }
     });
     metadataLoaded = true;
+
+    // add metadata if component is already rendered
+    if(self.reactList) {
+      self.reactList.setState({
+        metadataLoaded: metadataLoaded,
+        metadata: self.metadata
+      });
+    }
   };
 
+  /**
+   * Returns props to be added to React component 
+   * 
+   * @method getProps
+   * @return {Object} React component Props
+   */
+  var getProps = function() {
+    return {
+      config: config,
+      metadata: self.metadata,
+      model: model,
+      width: modalWidth - 20, // modalWidth, minus padding
+      height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
+      metadataLoaded: metadataLoaded
+    };
+  };
 
   // Create container for 'by interest' filters buttons
   var $nav = $('<nav />', {
@@ -691,6 +721,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    *  add layer to the map.
    */
   var drawAllLayers = function() {
+    var props;
     var projection = models.proj.selected.id;
 
     $( '#layers-all' ).css( 'height', modalHeight - 40 - 30); // 40 is search box height, 30 is breadcrub height
@@ -698,17 +729,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $('#layer-modal-main').perfectScrollbar('destroy');
 
     if(!self.reactList){
+      props = getProps();
       self.reactList = ReactDOM.render(
-        React.createElement(WVC.LayerList ,{
-          config: config,
-          metadata: self.metadata,
-          model: model,
-          initialWidth: modalWidth - 20, // modalWidth, minus padding
-          initialHeight: modalHeight - $('#layer-modal > header').outerHeight() - 30 // modalHeight minus header & breadcrumb
-        }), $allLayers[0]
+        React.createElement(WVC.LayerList , props),
+        $allLayers[0]
       );
     }
-
     $selectedCategory.hide();
     $categories.hide();
     $nav.hide();
@@ -861,7 +887,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       },
       open: function(event, ui) {
         redo();
-        loadMetadata();
         if ($categories.data('isotope')) {
           $categories.isotope();
         }
