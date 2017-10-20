@@ -726,7 +726,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    *  add layer to the map.
    */
   var drawAllLayers = function() {
-    var props;
     var projection = models.proj.selected.id;
 
     $( '#layers-all' ).css( 'height', modalHeight - 40 - 30); // 40 is search box height, 30 is breadcrub height
