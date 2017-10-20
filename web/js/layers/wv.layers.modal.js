@@ -26,7 +26,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var searchBool;
   var hasMeasurement;
   var copy = [];
-  var metadataLoaded = false;
+  var isMetadataLoaded = false;
   self.metadata = {};
 
   // Visible Layers
@@ -46,8 +46,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $(window)
       .resize(resize);
   };
-  var loadMetadata = function() {
-    if(metadataLoaded) return;
+  /**
+   * Initializes load of layer metadata
+   * 
+   * @method loadMetadata
+   * @return {void}
+   */
+  self.loadMetadata = function() {
+    if(isMetadataLoaded) return;
     Object.values(config.layers).forEach(function(layer) {
       visible[layer.id] = true;
       if(layer.description){
@@ -57,9 +63,38 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           });
       }
     });
-    metadataLoaded = true;
+    isMetadataLoaded = true;
+
+    // add metadata if component is already rendered
+    if(self.reactList) {
+      self.reactList.setState({
+        isMetadataLoaded: isMetadataLoaded,
+        metadata: self.metadata
+      });
+    }
   };
 
+  /**
+   * Uses props the render react component to
+   *  modal
+   * 
+   * @method renderComponent
+   * @return {Object} React component
+   */
+  var renderComponent = function() {
+    var props =  {
+      config: config,
+      metadata: self.metadata,
+      model: model,
+      width: modalWidth - 20, // modalWidth, minus padding
+      height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
+      isMetadataLoaded: isMetadataLoaded
+    };
+    return ReactDOM.render(
+      React.createElement(WVC.LayerList , props),
+      $allLayers[0]
+    );
+  };
 
   // Create container for 'by interest' filters buttons
   var $nav = $('<nav />', {
@@ -697,17 +732,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     //Remove perfectScrollbar for the search list window
     $('#layer-modal-main').perfectScrollbar('destroy');
 
-    if(!self.reactList){
-      self.reactList = ReactDOM.render(
-        React.createElement(WVC.LayerList ,{
-          config: config,
-          metadata: self.metadata,
-          model: model,
-          initialWidth: modalWidth - 20, // modalWidth, minus padding
-          initialHeight: modalHeight - $('#layer-modal > header').outerHeight() - 30 // modalHeight minus header & breadcrumb
-        }), $allLayers[0]
-      );
-    }
+    if(!self.reactList) self.reactList = renderComponent();
 
     $selectedCategory.hide();
     $categories.hide();
@@ -861,7 +886,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       },
       open: function(event, ui) {
         redo();
-        loadMetadata();
         if ($categories.data('isotope')) {
           $categories.isotope();
         }
