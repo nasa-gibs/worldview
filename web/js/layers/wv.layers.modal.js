@@ -75,13 +75,14 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
 
   /**
-   * Returns props to be added to React component 
+   * Uses props the render react component to
+   *  modal
    * 
-   * @method getProps
-   * @return {Object} React component Props
+   * @method renderComponent
+   * @return {Object} React component
    */
-  var getProps = function() {
-    return {
+  var renderComponent = function() {
+    var props =  {
       config: config,
       metadata: self.metadata,
       model: model,
@@ -89,6 +90,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
       isMetadataLoaded: isMetadataLoaded
     };
+    return ReactDOM.render(
+      React.createElement(WVC.LayerList , props),
+      $allLayers[0]
+    );
   };
 
   // Create container for 'by interest' filters buttons
@@ -728,13 +733,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     //Remove perfectScrollbar for the search list window
     $('#layer-modal-main').perfectScrollbar('destroy');
 
-    if(!self.reactList){
-      props = getProps();
-      self.reactList = ReactDOM.render(
-        React.createElement(WVC.LayerList , props),
-        $allLayers[0]
-      );
-    }
+    if(!self.reactList) self.reactList = renderComponent();
+
     $selectedCategory.hide();
     $categories.hide();
     $nav.hide();
