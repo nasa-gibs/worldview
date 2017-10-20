@@ -26,7 +26,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var searchBool;
   var hasMeasurement;
   var copy = [];
-  var metadataLoaded = false;
+  var isMetadataLoaded = false;
   self.metadata = {};
 
   // Visible Layers
@@ -53,7 +53,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    * @return {void}
    */
   self.loadMetadata = function() {
-    if(metadataLoaded) return;
+    if(isMetadataLoaded) return;
     Object.values(config.layers).forEach(function(layer) {
       visible[layer.id] = true;
       if(layer.description){
@@ -63,12 +63,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
           });
       }
     });
-    metadataLoaded = true;
+    isMetadataLoaded = true;
 
     // add metadata if component is already rendered
     if(self.reactList) {
       self.reactList.setState({
-        metadataLoaded: metadataLoaded,
+        isMetadataLoaded: isMetadataLoaded,
         metadata: self.metadata
       });
     }
@@ -87,7 +87,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       model: model,
       width: modalWidth - 20, // modalWidth, minus padding
       height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
-      metadataLoaded: metadataLoaded
+      isMetadataLoaded: isMetadataLoaded
     };
   };
 
