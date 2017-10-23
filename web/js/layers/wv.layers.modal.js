@@ -30,7 +30,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   self.metadata = {};
 
   // Visible Layers
-  var visible = {};
+  var visible = {}; // Why is this an object rather than an array and where is it used?
 
   var init = function() {
     model.events
@@ -48,36 +48,42 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
   /**
    * Initializes load of layer metadata
-   * 
+   *
    * @method loadMetadata
    * @return {void}
    */
   self.loadMetadata = function() {
     if(isMetadataLoaded) return;
-    Object.values(config.layers).forEach(function(layer) {
-      visible[layer.id] = true;
+    var layersProcessed = 0;
+    var layersWithMetadata = Object.values(config.layers).filter(function(layer){
+      visible[layer.id] = true; // What does this line do?
+      return layer.description;
+    });
+    layersWithMetadata.forEach(function(layer) {
       if(layer.description){
-        $.get('config/metadata/' + layer.description + '.html')
-          .success(function(data) {
-            self.metadata[layer.id] = data;
-          });
+        $.get('config/metadata/' + layer.description + '.html').always(function(){
+          layersProcessed++;
+        }).success(function(data) {
+          self.metadata[layer.id] = data;
+          if (layersProcessed === layersWithMetadata.length) {
+            isMetadataLoaded = true;
+            // add metadata if component is already rendered
+            if(self.reactList) {
+              self.reactList.setState({
+                isMetadataLoaded: isMetadataLoaded,
+                metadata: self.metadata
+              });
+            }
+          }
+        });
       }
     });
-    isMetadataLoaded = true;
-
-    // add metadata if component is already rendered
-    if(self.reactList) {
-      self.reactList.setState({
-        isMetadataLoaded: isMetadataLoaded,
-        metadata: self.metadata
-      });
-    }
   };
 
   /**
    * Uses props the render react component to
    *  modal
-   * 
+   *
    * @method renderComponent
    * @return {Object} React component
    */

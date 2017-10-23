@@ -113,7 +113,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 26px;
+  width: 25px;
   height: 26px;
   margin: -13px 0 0 -13px;
   background: url('../images/wv-icons.png') 0 26px;
@@ -292,7 +292,6 @@
   font-weight: 300;
   font-size: 16px;
   color: #000;
-  margin-left: 10px;
 }
 
 #category-breadcrumb a,
