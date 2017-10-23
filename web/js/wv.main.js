@@ -268,7 +268,6 @@ $(function() {
     $(document).click(function(e) {
       if (e.target.id == "wv-logo") resetWorldview(e);
     });
-    ui.addModal.loadMetadata(); // start loading metaData for layer search
   };
 
   var resetWorldview = function(e){
@@ -332,4 +331,25 @@ $(function() {
 
   wv.util.wrap(main)();
 
+});
+
+/**
+ * Waits for ui.addModal.loadMetadata to be defined, then calls it
+ *
+ * @method loadSearchMetadata
+ * @return {void}
+ */
+function loadSearchMetadata() {
+  var ui = wvx.ui || false;
+  if (ui && ui.addModal && ui.addModal.loadMetadata) {
+    ui.addModal.loadMetadata();
+  } else {
+    window.setTimeout(loadSearchMetadata,200);
+  }
+}
+
+// Load layer descriptions for search after all other resources have finished downloading
+// Doing this here prevents it from blocking images from being loaded
+$(window).on('load', function(){
+  loadSearchMetadata();
 });

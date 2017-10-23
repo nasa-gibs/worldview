@@ -55,17 +55,18 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   self.loadMetadata = function() {
     if(isMetadataLoaded) return;
     var layersProcessed = 0;
-    var layersWithMetadata = Object.values(config.layers).filter(function(layer){
+    var layersMissingMetadata = Object.values(config.layers).filter(function(layer){
       visible[layer.id] = true; // What does this line do?
-      return layer.description;
+      // We only want to request metadata for layers with a description but no metadata
+      return layer.description && !self.metadata[layer.id];
     });
-    layersWithMetadata.forEach(function(layer) {
+    layersMissingMetadata.forEach(function(layer) {
       if(layer.description){
         $.get('config/metadata/' + layer.description + '.html').always(function(){
           layersProcessed++;
         }).success(function(data) {
           self.metadata[layer.id] = data;
-          if (layersProcessed === layersWithMetadata.length) {
+          if (layersProcessed === layersMissingMetadata.length) {
             isMetadataLoaded = true;
             // add metadata if component is already rendered
             if(self.reactList) {
