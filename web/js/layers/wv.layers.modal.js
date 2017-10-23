@@ -25,12 +25,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-  var copy = [];
+  var visible = [];
   var isMetadataLoaded = false;
   self.metadata = {};
-
-  // Visible Layers
-  var visible = {}; // Why is this an object rather than an array and where is it used?
 
   var init = function() {
     model.events
@@ -193,9 +190,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $selectedCategory.hide();
     $breadcrumb.hide();
     searchBool = false;
-    copy = config.layerOrder;
+    visible = config.layerOrder;
     if(self.reactList){
-      self.reactList.setState({layerFilter: copy});
+      self.reactList.setState({layerFilter: visible});
       $('#layer-modal-main').perfectScrollbar();
     }
     $( '#layers-search-input' ).val('');
@@ -930,7 +927,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   var runSearch = _.throttle( function() {
     var search = searchTerms();
-    copy = [];
+    visible = [];
     $.each(config.layers, function(layerId, layer) {
 
       var fproj = filterProjections(layer);
@@ -940,7 +937,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       var filtered = fproj || fterms;
 
       if( !filtered ) {
-        copy.push(layerId);
+        visible.push(layerId);
         if(config.layers[layerId].description){
           $.get('config/metadata/' + config.layers[layerId].description + '.html').always(function(){
           }).success(function(data) {
@@ -959,7 +956,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       }
     });
 
-    self.reactList.setState({layerFilter: copy});
+    self.reactList.setState({layerFilter: visible});
 
     redoScrollbar();
   }, 250, { trailing: true });
@@ -981,7 +978,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       runSearch();
     } else {
       drawModal();
-      copy = config.layerOrder;
+      visible = config.layerOrder;
     }
   };
 
