@@ -25,7 +25,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-  var visible = [];
+  var visibleLayers = [];
   var isMetadataLoaded = false;
   self.metadata = {};
 
@@ -190,9 +190,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $selectedCategory.hide();
     $breadcrumb.hide();
     searchBool = false;
-    visible = config.layerOrder;
+    visibleLayers = config.layerOrder;
     if(self.reactList){
-      self.reactList.setState({layerFilter: visible});
+      self.reactList.setState({layerFilter: visibleLayers});
       $('#layer-modal-main').perfectScrollbar();
     }
     $( '#layers-search-input' ).val('');
@@ -927,7 +927,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   var runSearch = _.throttle( function() {
     var search = searchTerms();
-    visible = [];
+    visibleLayers = [];
     $.each(config.layers, function(layerId, layer) {
 
       var fproj = filterProjections(layer);
@@ -937,18 +937,18 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       var filtered = fproj || fterms;
 
       if( !filtered ) {
-        visible.push(layerId);
+        visibleLayers.push(layerId);
         addDescription();
       }
     });
 
-    self.reactList.setState({layerFilter: visible});
+    self.reactList.setState({layerFilter: visibleLayers});
     redoScrollbar();
   });
 
 
   var addDescription = _.throttle( function() {
-    Object.values(visible).forEach(function(layerId) {
+    Object.values(visibleLayers).forEach(function(layerId) {
       if(config.layers[layerId].description){
         $.get('config/metadata/' + config.layers[layerId].description + '.html').always(function(){
         }).success(function(data) {
@@ -964,7 +964,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         });
       }
     });
-  }, 1000, { trailing: true });
+  }, 250, { trailing: true });
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
@@ -983,7 +983,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       runSearch();
     } else {
       drawModal();
-      visible = config.layerOrder;
+      visibleLayers = config.layerOrder;
     }
   };
 
