@@ -46,39 +46,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $(window)
       .resize(resize);
   };
-  /**
-   * Initializes load of layer metadata
-   *
-   * @method loadMetadata
-   * @return {void}
-   */
-  self.loadMetadata = function() {
-    if(isMetadataLoaded) return;
-    var layersProcessed = 0;
-    var layersWithMetadata = Object.values(config.layers).filter(function(layer){
-      visible[layer.id] = true; // What does this line do?
-      return layer.description;
-    });
-    layersWithMetadata.forEach(function(layer) {
-      if(layer.description){
-        $.get('config/metadata/' + layer.description + '.html').always(function(){
-          layersProcessed++;
-        }).success(function(data) {
-          self.metadata[layer.id] = data;
-          if (layersProcessed === layersWithMetadata.length) {
-            isMetadataLoaded = true;
-            // add metadata if component is already rendered
-            if(self.reactList) {
-              self.reactList.setState({
-                isMetadataLoaded: isMetadataLoaded,
-                metadata: self.metadata
-              });
-            }
-          }
-        });
-      }
-    });
-  };
 
   /**
    * Uses props the render react component to
@@ -974,6 +941,21 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
       if( !filtered ) {
         copy.push(layerId);
+        if(config.layers[layerId].description){
+          $.get('config/metadata/' + config.layers[layerId].description + '.html').always(function(){
+          }).success(function(data) {
+            self.metadata[layer.id] = data;
+            isMetadataLoaded = true;
+            // add metadata if component is already rendered
+            if(self.reactList) {
+              self.reactList.setState({
+                isMetadataLoaded: isMetadataLoaded,
+                metadata: self.metadata
+              });
+            }
+          });
+        }
+
       }
     });
 
