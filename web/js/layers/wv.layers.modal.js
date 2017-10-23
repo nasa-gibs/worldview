@@ -938,6 +938,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
       if( !filtered ) {
         visible.push(layerId);
+        addDescription();
       }
     });
 
@@ -980,7 +981,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         drawAllLayers();
       }
       runSearch();
-      addDescription();
     } else {
       drawModal();
       visible = config.layerOrder;
