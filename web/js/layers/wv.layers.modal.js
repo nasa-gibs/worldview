@@ -938,28 +938,32 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
       if( !filtered ) {
         visible.push(layerId);
-        if(config.layers[layerId].description){
-          $.get('config/metadata/' + config.layers[layerId].description + '.html').always(function(){
-          }).success(function(data) {
-            self.metadata[layer.id] = data;
-            isMetadataLoaded = true;
-            // add metadata if component is already rendered
-            if(self.reactList) {
-              self.reactList.setState({
-                isMetadataLoaded: isMetadataLoaded,
-                metadata: self.metadata
-              });
-            }
-          });
-        }
-
       }
     });
 
     self.reactList.setState({layerFilter: visible});
-
     redoScrollbar();
-  }, 250, { trailing: true });
+  });
+
+
+  var addDescription = _.throttle( function() {
+    Object.values(visible).forEach(function(layerId) {
+      if(config.layers[layerId].description){
+        $.get('config/metadata/' + config.layers[layerId].description + '.html').always(function(){
+        }).success(function(data) {
+          self.metadata[layerId] = data;
+          isMetadataLoaded = true;
+          // add metadata if component is already rendered
+          if(self.reactList) {
+            self.reactList.setState({
+              isMetadataLoaded: isMetadataLoaded,
+              metadata: self.metadata
+            });
+          }
+        });
+      }
+    });
+  }, 1000, { trailing: true });
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
@@ -976,6 +980,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         drawAllLayers();
       }
       runSearch();
+      addDescription();
     } else {
       drawModal();
       visible = config.layerOrder;
