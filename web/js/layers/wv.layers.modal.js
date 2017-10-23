@@ -26,7 +26,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var searchBool;
   var hasMeasurement;
   var visibleLayers = [];
-  var isMetadataLoaded = false;
   self.metadata = {};
 
   var init = function() {
@@ -58,7 +57,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       model: model,
       width: modalWidth - 20, // modalWidth, minus padding
       height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
-      isMetadataLoaded: isMetadataLoaded
+      isMetadataLoaded: false
     };
     return ReactDOM.render(
       React.createElement(WVC.LayerList , props),
@@ -905,22 +904,16 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   //Takes the terms and returns true if the layer isnt part of search
   var filterSearch = function(layer, terms) {
-    var search = $(self.selector + "search").val();
-    if ( search === "" ) {
-      return false;
-    }
+    var search = $(self.selector + 'search').val();
+    if (search === '') return false;
     var filtered = false;
     var names = models.layers.getTitles(layer.id);
-
     $.each(terms, function(index, term) {
       filtered = !names.title.toLowerCase().contains(term) &&
         !names.subtitle.toLowerCase().contains(term) &&
         !names.tags.toLowerCase().contains(term) &&
         !config.layers[layer.id].id.toLowerCase().contains(term);
-
-      if ( filtered ) {
-        return false;
-      }
+      if (filtered) return false;
     });
     return filtered;
   };
@@ -929,42 +922,43 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var search = searchTerms();
     visibleLayers = [];
     $.each(config.layers, function(layerId, layer) {
-
-      var fproj = filterProjections(layer);
-      var fterms = filterSearch(layer, search);
-
-      //This will return true if the layer needs to be hidden
-      var filtered = fproj || fterms;
-
-      if( !filtered ) {
+      var isFiltered = filterProjections(layer) || filterSearch(layer, search);
+      if (!isFiltered) {
         visibleLayers.push(layerId);
-        addDescription();
+        addMetadata();
       }
     });
-
     self.reactList.setState({layerFilter: visibleLayers});
     redoScrollbar();
   });
 
-
-  var addDescription = _.throttle( function() {
-    Object.values(visibleLayers).forEach(function(layerId) {
-      if(config.layers[layerId].description){
-        $.get('config/metadata/' + config.layers[layerId].description + '.html').always(function(){
-        }).success(function(data) {
-          self.metadata[layerId] = data;
-          isMetadataLoaded = true;
-          // add metadata if component is already rendered
-          if(self.reactList) {
-            self.reactList.setState({
-              isMetadataLoaded: isMetadataLoaded,
-              metadata: self.metadata
-            });
+  var addMetadata = _.throttle( function() {
+    var layersProcessed = 0;
+    var reactEl = self.reactList;
+    var layersMissingMetadata = Object.values(config.layers).filter(function(layer){
+      // We only want to request metadata for layers with a description but no metadata
+      return visibleLayers.includes(layer.id) &&
+        layer.description &&
+        !self.metadata[layer.id];
+    });
+    if (layersMissingMetadata.length > 0 && reactEl) {
+      reactEl.setState({isMetadataLoaded: false});
+    }
+    Object.values(layersMissingMetadata).forEach(function(layer) {
+      var layerName = layer.description;
+      if(layerName){
+        $.get('config/metadata/' + layerName + '.html').always(function(){
+          layersProcessed++;
+          if (layersProcessed === layersMissingMetadata.length) {
+            if (reactEl) reactEl.setState({isMetadataLoaded: true});
           }
+        }).success(function(data) {
+          self.metadata[layer.id] = data;
+          if (reactEl) reactEl.setState({metadata: self.metadata});
         });
       }
     });
-  }, 250, { trailing: true });
+  }, 500, { trailing: true });
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
