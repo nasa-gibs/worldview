@@ -25,8 +25,12 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-  var visibleLayers = [];
+  var copy = [];
+  var isMetadataLoaded = false;
   self.metadata = {};
+
+  // Visible Layers
+  var visible = {}; // Why is this an object rather than an array and where is it used?
 
   var init = function() {
     model.events
@@ -41,6 +45,39 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     $(window)
       .resize(resize);
+  };
+  /**
+   * Initializes load of layer metadata
+   *
+   * @method loadMetadata
+   * @return {void}
+   */
+  self.loadMetadata = function() {
+    if(isMetadataLoaded) return;
+    var layersProcessed = 0;
+    var layersWithMetadata = Object.values(config.layers).filter(function(layer){
+      visible[layer.id] = true; // What does this line do?
+      return layer.description;
+    });
+    layersWithMetadata.forEach(function(layer) {
+      if(layer.description){
+        $.get('config/metadata/' + layer.description + '.html').always(function(){
+          layersProcessed++;
+        }).success(function(data) {
+          self.metadata[layer.id] = data;
+          if (layersProcessed === layersWithMetadata.length) {
+            isMetadataLoaded = true;
+            // add metadata if component is already rendered
+            if(self.reactList) {
+              self.reactList.setState({
+                isMetadataLoaded: isMetadataLoaded,
+                metadata: self.metadata
+              });
+            }
+          }
+        });
+      }
+    });
   };
 
   /**
@@ -57,7 +94,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       model: model,
       width: modalWidth - 20, // modalWidth, minus padding
       height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
-      isMetadataLoaded: false
+      isMetadataLoaded: isMetadataLoaded
     };
     return ReactDOM.render(
       React.createElement(WVC.LayerList , props),
@@ -189,9 +226,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $selectedCategory.hide();
     $breadcrumb.hide();
     searchBool = false;
-    visibleLayers = config.layerOrder;
+    copy = config.layerOrder;
     if(self.reactList){
-      self.reactList.setState({layerFilter: visibleLayers});
+      self.reactList.setState({layerFilter: copy});
       $('#layer-modal-main').perfectScrollbar();
     }
     $( '#layers-search-input' ).val('');
@@ -904,32 +941,46 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   //Takes the terms and returns true if the layer isnt part of search
   var filterSearch = function(layer, terms) {
-    var search = $(self.selector + 'search').val();
-    if (search === '') return false;
+    var search = $(self.selector + "search").val();
+    if ( search === "" ) {
+      return false;
+    }
     var filtered = false;
     var names = models.layers.getTitles(layer.id);
+
     $.each(terms, function(index, term) {
       filtered = !names.title.toLowerCase().contains(term) &&
         !names.subtitle.toLowerCase().contains(term) &&
         !names.tags.toLowerCase().contains(term) &&
         !config.layers[layer.id].id.toLowerCase().contains(term);
-      if (filtered) return false;
+
+      if ( filtered ) {
+        return false;
+      }
     });
     return filtered;
   };
 
   var runSearch = _.throttle( function() {
     var search = searchTerms();
-    visibleLayers = [];
+    copy = [];
     $.each(config.layers, function(layerId, layer) {
-      var isFiltered = filterProjections(layer) || filterSearch(layer, search);
-      if (!isFiltered) {
-        visibleLayers.push(layerId);
+
+      var fproj = filterProjections(layer);
+      var fterms = filterSearch(layer, search);
+
+      //This will return true if the layer needs to be hidden
+      var filtered = fproj || fterms;
+
+      if( !filtered ) {
+        copy.push(layerId);
       }
     });
-    self.reactList.setState({layerFilter: visibleLayers});
+
+    self.reactList.setState({layerFilter: copy});
+
     redoScrollbar();
-  }, 500, { leading: false, trailing: true });
+  }, 250, { trailing: true });
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
@@ -948,7 +999,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       runSearch();
     } else {
       drawModal();
-      visibleLayers = config.layerOrder;
+      copy = config.layerOrder;
     }
   };
 
