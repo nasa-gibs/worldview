@@ -925,40 +925,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       var isFiltered = filterProjections(layer) || filterSearch(layer, search);
       if (!isFiltered) {
         visibleLayers.push(layerId);
-        addMetadata();
       }
     });
     self.reactList.setState({layerFilter: visibleLayers});
     redoScrollbar();
-  });
-
-  var addMetadata = _.throttle( function() {
-    var layersProcessed = 0;
-    var reactEl = self.reactList;
-    var layersMissingMetadata = Object.values(config.layers).filter(function(layer){
-      // We only want to request metadata for layers with a description but no metadata
-      return visibleLayers.includes(layer.id) &&
-        layer.description &&
-        !self.metadata[layer.id];
-    });
-    if (layersMissingMetadata.length > 0 && reactEl) {
-      reactEl.setState({isMetadataLoaded: false});
-    }
-    Object.values(layersMissingMetadata).forEach(function(layer) {
-      var layerName = layer.description;
-      if(layerName){
-        $.get('config/metadata/' + layerName + '.html').always(function(){
-          layersProcessed++;
-          if (layersProcessed === layersMissingMetadata.length) {
-            if (reactEl) reactEl.setState({isMetadataLoaded: true});
-          }
-        }).success(function(data) {
-          self.metadata[layer.id] = data;
-          if (reactEl) reactEl.setState({metadata: self.metadata});
-        });
-      }
-    });
-  }, 500, { trailing: true });
+  }, 500, { leading: false, trailing: true });
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
