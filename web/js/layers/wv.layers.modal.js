@@ -25,7 +25,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-  var visibleLayers = [];
+  var allLayers = Object.values(config.layers);
   self.metadata = {};
 
   var init = function() {
@@ -53,11 +53,11 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var renderComponent = function() {
     var props =  {
       config: config,
-      metadata: self.metadata,
       model: model,
       width: modalWidth - 20, // modalWidth, minus padding
       height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
-      isMetadataLoaded: false
+      isMetadataLoaded: false,
+      layers: []
     };
     return ReactDOM.render(
       React.createElement(WVC.LayerList , props),
@@ -189,9 +189,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $selectedCategory.hide();
     $breadcrumb.hide();
     searchBool = false;
-    visibleLayers = config.layerOrder;
     if(self.reactList){
-      self.reactList.setState({layerFilter: visibleLayers});
       $('#layer-modal-main').perfectScrollbar();
     }
     $( '#layers-search-input' ).val('');
@@ -918,47 +916,30 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     return filtered;
   };
 
+  var addLayerMetadata = function(layer) {
+    return new Promise(function(resolve, reject){
+      $.get('config/metadata/' + layer.description + '.html').then(function(body){
+        // Add metadata to allLayers so we don't request it again
+        _.find(allLayers, function(allLayer) {
+          return allLayer.id === layer.id;
+        }).metadata = body;
+        resolve();
+      });
+    });
+  };
+
   var runSearch = _.throttle( function() {
     var search = searchTerms();
-    visibleLayers = [];
-    $.each(config.layers, function(layerId, layer) {
-      var isFiltered = filterProjections(layer) || filterSearch(layer, search);
-      if (!isFiltered) {
-        visibleLayers.push(layerId);
-        addMetadata();
-      }
+    filteredLayers = allLayers.filter(function(layer){
+      return !(filterProjections(layer) || filterSearch(layer, search));
     });
-    self.reactList.setState({layerFilter: visibleLayers});
-    redoScrollbar();
-  });
-
-  var addMetadata = _.throttle( function() {
-    var layersProcessed = 0;
-    var reactEl = self.reactList;
-    var layersMissingMetadata = Object.values(config.layers).filter(function(layer){
-      // We only want to request metadata for layers with a description but no metadata
-      return _.includes(visibleLayers, layer.id) &&
-        layer.description &&
-        !self.metadata[layer.id];
+    var layersMissingMetadata = filteredLayers.filter(function(layer){
+      return layer.description && !layer.metadata; // Layers with a description but no metadata
+    }).map(addLayerMetadata);
+    Promise.all(layersMissingMetadata).then(function(){
+      self.reactList.setState({layers: filteredLayers, isMetadataLoaded: true});
     });
-    if (layersMissingMetadata.length > 0 && reactEl) {
-      reactEl.setState({isMetadataLoaded: false});
-    }
-    Object.values(layersMissingMetadata).forEach(function(layer) {
-      var layerName = layer.description;
-      if(layerName){
-        $.get('config/metadata/' + layerName + '.html').always(function(){
-          layersProcessed++;
-          if (layersProcessed === layersMissingMetadata.length) {
-            if (reactEl) reactEl.setState({isMetadataLoaded: true});
-          }
-        }).success(function(data) {
-          self.metadata[layer.id] = data;
-          if (reactEl) reactEl.setState({metadata: self.metadata});
-        });
-      }
-    });
-  }, 500, { trailing: true });
+  }, 500, { leading: false, trailing: true });
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
@@ -977,7 +958,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       runSearch();
     } else {
       drawModal();
-      visibleLayers = config.layerOrder;
     }
   };
 
