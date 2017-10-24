@@ -937,7 +937,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var reactEl = self.reactList;
     var layersMissingMetadata = Object.values(config.layers).filter(function(layer){
       // We only want to request metadata for layers with a description but no metadata
-      return visibleLayers.includes(layer.id) &&
+      return _.includes(visibleLayers, layer.id) &&
         layer.description &&
         !self.metadata[layer.id];
     });
