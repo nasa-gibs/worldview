@@ -54,8 +54,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var props =  {
       config: config,
       model: model,
-      width: modalWidth - 20, // modalWidth, minus padding
-      height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
       isMetadataLoaded: false,
       layers: []
     };
@@ -169,11 +167,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $(self.selector).dialog("option", {
       height: modalHeight,
       width: modalWidth
-    }).promise().done(function() {
-      if(self.reactList) self.reactList.setState({
-        width:  modalWidth - 20, // Set reactList width to modalWidth, minus padding
-        height: modalHeight - $('#layer-modal > header').outerHeight() - $breadcrumb.outerHeight()
-      });
     });
     $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
   };
