@@ -54,7 +54,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var props =  {
       config: config,
       model: model,
-      isMetadataLoaded: false,
       layers: []
     };
     return ReactDOM.render(
