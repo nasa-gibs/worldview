@@ -909,18 +909,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     return filtered;
   };
 
-  var addLayerMetadata = function(layer) {
-    return new Promise(function(resolve, reject){
-      $.get('config/metadata/' + layer.description + '.html').then(function(body){
-        // Add metadata to allLayers so we don't request it again
-        _.find(allLayers, function(allLayer) {
-          return allLayer.id === layer.id;
-        }).metadata = body;
-        resolve();
-      });
-    });
-  };
-
   var runSearch = _.throttle( function() {
     var search = searchTerms();
     self.reactList.setState({layers: allLayers.filter(function(layer){
