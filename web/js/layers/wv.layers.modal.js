@@ -54,7 +54,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     var props =  {
       config: config,
       model: model,
-      layers: []
+      layers: allLayers
     };
     return ReactDOM.render(
       React.createElement(WVC.LayerList , props),
