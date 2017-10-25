@@ -25,7 +25,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-  var allLayers = Object.values(config.layers);
+  var allLayers = Object.values(config.layers).filter(function(layer){
+    return layer.projections[models.proj.selected.id];
+  });
+
   self.metadata = {};
 
   var init = function() {
@@ -887,24 +890,29 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var filterSearch = function(layer, terms) {
     var search = $(self.selector + 'search').val();
     if (search === '') return false;
-    var filtered = false;
     var names = models.layers.getTitles(layer.id);
-    $.each(terms, function(index, term) {
-      filtered = !names.title.toLowerCase().contains(term) &&
-        !names.subtitle.toLowerCase().contains(term) &&
-        !names.tags.toLowerCase().contains(term) &&
-        !config.layers[layer.id].id.toLowerCase().contains(term);
-      if (filtered) return false;
+    return !terms.some(function(term){
+      var fieldsToSearch = [
+        names.title,
+        names.subtitle,
+        names.tags,
+        config.layers[layer.id].id
+      ];
+      return fieldsToSearch.some(function(field){
+        return field.toLowerCase().contains(term);
+      });
     });
-    return filtered;
   };
 
-  var runSearch = _.throttle( function() {
+  var runSearch = function() {
     var search = searchTerms();
-    self.reactList.setState({filteredLayers: allLayers.filter(function(layer){
+    var filteredLayers = allLayers.filter(function(layer){
       return !(filterProjections(layer) || filterSearch(layer, search));
-    })});
-  }, 500, { leading: false, trailing: true });
+    });
+    self.reactList.setState({
+      filteredLayers: filteredLayers
+    });
+  };
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
