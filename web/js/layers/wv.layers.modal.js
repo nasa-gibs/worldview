@@ -923,16 +923,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   var runSearch = _.throttle( function() {
     var search = searchTerms();
-    filteredLayers = allLayers.filter(function(layer){
+    self.reactList.setState({layers: allLayers.filter(function(layer){
       return !(filterProjections(layer) || filterSearch(layer, search));
-    });
-    self.reactList.setState({layers: filteredLayers, isMetadataLoaded: false});
-    var layersMissingMetadata = filteredLayers.filter(function(layer){
-      return layer.description && !layer.metadata; // Layers with a description but no metadata
-    }).map(addLayerMetadata);
-    Promise.all(layersMissingMetadata).then(function(){
-      self.reactList.setState({layers: filteredLayers, isMetadataLoaded: true});
-    });
+    })});
   }, 500, { leading: false, trailing: true });
 
   var filter = function(e) {
