@@ -43,25 +43,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       .resize(resize);
   };
 
-  /**
-   * Uses props the render react component to
-   *  modal
-   *
-   * @method renderComponent
-   * @return {Object} React component
-   */
-  var renderComponent = function() {
-    var props =  {
-      config: config,
-      model: model,
-      layers: allLayers
-    };
-    return ReactDOM.render(
-      React.createElement(WVC.LayerList , props),
-      $allLayers[0]
-    );
-  };
-
   // Create container for 'by interest' filters buttons
   var $nav = $('<nav />', {
     id: 'categories-nav'
@@ -691,7 +672,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     //Remove perfectScrollbar for the search list window
     $('#layer-modal-main').perfectScrollbar('destroy');
 
-    if(!self.reactList) self.reactList = renderComponent();
+    var props =  {
+      addLayer: model.add,
+      removeLayer: model.remove,
+      activeLayers: model.active,
+      selectedProjection: projection,
+      filteredLayers: allLayers
+    };
+    self.reactList = ReactDOM.render(
+      React.createElement(WVC.LayerList , props),
+      $allLayers[0]
+    );
 
     $selectedCategory.hide();
     $categories.hide();
@@ -910,7 +901,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   var runSearch = _.throttle( function() {
     var search = searchTerms();
-    self.reactList.setState({layers: allLayers.filter(function(layer){
+    self.reactList.setState({filteredLayers: allLayers.filter(function(layer){
       return !(filterProjections(layer) || filterSearch(layer, search));
     })});
   }, 500, { leading: false, trailing: true });
