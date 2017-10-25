@@ -926,6 +926,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     filteredLayers = allLayers.filter(function(layer){
       return !(filterProjections(layer) || filterSearch(layer, search));
     });
+    self.reactList.setState({layers: filteredLayers, isMetadataLoaded: false});
     var layersMissingMetadata = filteredLayers.filter(function(layer){
       return layer.description && !layer.metadata; // Layers with a description but no metadata
     }).map(addLayerMetadata);
