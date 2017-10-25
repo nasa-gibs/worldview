@@ -644,7 +644,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     if (selectedMeasurement) {
       $categoryList.accordion("option", "active", tabIndex);
     }
-
     $selectedCategory.append($categoryList);
 
     // Create breadcrumb crumbs but do not show by default, only show within
@@ -928,8 +927,8 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       }
     });
     self.reactList.setState({layerFilter: visibleLayers});
-    redoScrollbar();
-  }, 500, { leading: false, trailing: true });
+    //redoScrollbar();
+  }, 500, { leading: true, trailing: true });
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
