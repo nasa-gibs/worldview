@@ -33,6 +33,7 @@ a.staticLayers {
   text-align: center;
   color: #fff;
 }
+
 a.staticLayers:hover {
   background-color: #ccc;
   color: rgb(40, 40, 40);
@@ -48,6 +49,7 @@ a.staticLayers::after {
   right: 5px;
   top: 6px;
 }
+
 a.staticLayers:hover::after {
   background-position: -180px -70px;
 }
