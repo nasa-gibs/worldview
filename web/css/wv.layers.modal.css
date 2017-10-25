@@ -305,6 +305,7 @@
 }
 
 #layers-all .layers-all-layer {
+  margin-top: 5px;
   padding: 0 0 0.5em 0.7em;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
