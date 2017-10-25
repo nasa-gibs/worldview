@@ -321,13 +321,6 @@
   margin-top: 5px;
 }
 
-#layers-all .layers-all-title-wrap {
-  position: relative;
-  display: block;
-  margin-right: 66px;
-  padding-top: 0.5em;
-}
-
 #layers-all .layers-all-layer,
 #selected-category .ui-accordion-header,
 #selected-category .ui-state-focus {
@@ -500,6 +493,8 @@
 
 .layers-all-header {
   cursor: pointer;
+  padding-right: 66px;
+  padding-top: 0.5em;
 }
 
 .layers-all-header.has-checkbox::before {
