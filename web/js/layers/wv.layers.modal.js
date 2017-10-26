@@ -200,6 +200,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     removeSearch();
     drawModal();
     redoScrollbar();
+    allLayers = getLayersForProjection(models.proj.selected.id);
   };
 
   /**
@@ -901,23 +902,22 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var filterProjections = function(layer) {
     return !layer.projections[models.proj.selected.id];
   };
-
   //Takes the terms and returns true if the layer isnt part of search
   var filterSearch = function(layer, terms) {
-    var search = $(self.selector + 'search').val();
-    if (search === '') return false;
+    var search = $(self.selector + "search").val();
+    if ( search === '' ) return false;
+    var filtered = false;
     var names = models.layers.getTitles(layer.id);
-    return !terms.some(function(term){
-      var fieldsToSearch = [
-        names.title,
-        names.subtitle,
-        names.tags,
-        config.layers[layer.id].id
-      ];
-      return fieldsToSearch.some(function(field){
-        return field.toLowerCase().contains(term);
-      });
+
+    $.each(terms, function(index, term) {
+      filtered = !names.title.toLowerCase().contains(term) &&
+        !names.subtitle.toLowerCase().contains(term) &&
+        !names.tags.toLowerCase().contains(term) &&
+        !config.layers[layer.id].id.toLowerCase().contains(term);
+
+      if ( filtered ) return false;
     });
+    return filtered;
   };
 
   var runSearch = function() {
