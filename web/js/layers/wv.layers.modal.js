@@ -688,8 +688,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    */
   var drawAllLayers = function() {
     var projection = models.proj.selected.id;
-
-    $( '#layers-all' ).css( 'height', modalHeight - 70); // 40 search box height + 30 breadcrub height
     //Remove perfectScrollbar for the search list window
     $('#layer-modal-main').perfectScrollbar('destroy');
 

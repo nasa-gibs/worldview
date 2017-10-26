@@ -306,6 +306,7 @@
 
 #layers-all {
   padding-right: 10px;
+  height: 100%;
 }
 
 #layers-all .layers-all-layer {
@@ -317,6 +318,10 @@
   box-sizing: border-box;
   border: 0;
   position: relative;
+}
+
+#layers-all .layers-all-layer:last-child {
+  margin-bottom: 40px;
 }
 
 #selected-category .ui-accordion-header {
