@@ -304,6 +304,10 @@
   color: #ddd;
 }
 
+#layers-all {
+  padding-right: 10px;
+}
+
 #layers-all .layers-all-layer {
   margin-top: 5px;
   padding: 0 0 0.5em 0.7em;
