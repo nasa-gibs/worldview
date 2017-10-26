@@ -26,8 +26,23 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var searchBool;
   var hasMeasurement;
   var allLayers = Object.values(config.layers).filter(function(layer){
+    // Only use the layers for the active projection
     return layer.projections[models.proj.selected.id];
+  }).map(function(layer){
+    // If there is metadata for the current projection, use that
+    var projectionMeta = layer.projections[models.proj.selected.id];
+    if (projectionMeta.title) layer.title = projectionMeta.title;
+    if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
+    // Decode HTML entities in the subtitle
+    if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
+    return layer;
   });
+
+  function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
 
   self.metadata = {};
 
