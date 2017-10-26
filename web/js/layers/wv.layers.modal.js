@@ -11,9 +11,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   var model = models.layers;
   var self = {};
-
   self.selector = '#layer-modal';
   self.id = 'layer-modal';
+  self.metadata = {};
 
   var $header = $(self.selector + ' header');
   var $categories = $(' #layer-categories ');
@@ -25,12 +25,29 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-  var copy = [];
-  var isMetadataLoaded = false;
-  self.metadata = {};
 
-  // Visible Layers
-  var visible = {}; // Why is this an object rather than an array and where is it used?
+  var getLayersForProjection = function(projection) {
+    return Object.values(config.layers).filter(function(layer){
+      // Only use the layers for the active projection
+      return layer.projections[projection];
+    }).map(function(layer){
+      // If there is metadata for the current projection, use that
+      var projectionMeta = layer.projections[projection];
+      if (projectionMeta.title) layer.title = projectionMeta.title;
+      if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
+      // Decode HTML entities in the subtitle
+      if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
+      return layer;
+    });
+  };
+
+  var decodeHtml = function(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  };
+
+  var allLayers = getLayersForProjection(models.proj.selected.id);
 
   var init = function() {
     model.events
@@ -45,61 +62,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
     $(window)
       .resize(resize);
-  };
-  /**
-   * Initializes load of layer metadata
-   *
-   * @method loadMetadata
-   * @return {void}
-   */
-  self.loadMetadata = function() {
-    if(isMetadataLoaded) return;
-    var layersProcessed = 0;
-    var layersWithMetadata = Object.values(config.layers).filter(function(layer){
-      visible[layer.id] = true; // What does this line do?
-      return layer.description;
-    });
-    layersWithMetadata.forEach(function(layer) {
-      if(layer.description){
-        $.get('config/metadata/' + layer.description + '.html').always(function(){
-          layersProcessed++;
-        }).success(function(data) {
-          self.metadata[layer.id] = data;
-          if (layersProcessed === layersWithMetadata.length) {
-            isMetadataLoaded = true;
-            // add metadata if component is already rendered
-            if(self.reactList) {
-              self.reactList.setState({
-                isMetadataLoaded: isMetadataLoaded,
-                metadata: self.metadata
-              });
-            }
-          }
-        });
-      }
-    });
-  };
-
-  /**
-   * Uses props the render react component to
-   *  modal
-   *
-   * @method renderComponent
-   * @return {Object} React component
-   */
-  var renderComponent = function() {
-    var props =  {
-      config: config,
-      metadata: self.metadata,
-      model: model,
-      width: modalWidth - 20, // modalWidth, minus padding
-      height: modalHeight - $('#layer-modal > header').outerHeight() - 30,
-      isMetadataLoaded: isMetadataLoaded
-    };
-    return ReactDOM.render(
-      React.createElement(WVC.LayerList , props),
-      $allLayers[0]
-    );
   };
 
   // Create container for 'by interest' filters buttons
@@ -206,11 +168,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $(self.selector).dialog("option", {
       height: modalHeight,
       width: modalWidth
-    }).promise().done(function() {
-      if(self.reactList) self.reactList.setState({
-        width:  modalWidth - 20, // Set reactList width to modalWidth, minus padding
-        height: modalHeight - $('#layer-modal > header').outerHeight() - $breadcrumb.outerHeight()
-      });
     });
     $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
   };
@@ -226,9 +183,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     $selectedCategory.hide();
     $breadcrumb.hide();
     searchBool = false;
-    copy = config.layerOrder;
     if(self.reactList){
-      self.reactList.setState({layerFilter: copy});
       $('#layer-modal-main').perfectScrollbar();
     }
     $( '#layers-search-input' ).val('');
@@ -733,12 +688,20 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    */
   var drawAllLayers = function() {
     var projection = models.proj.selected.id;
-
-    $( '#layers-all' ).css( 'height', modalHeight - 40 - 30); // 40 is search box height, 30 is breadcrub height
     //Remove perfectScrollbar for the search list window
     $('#layer-modal-main').perfectScrollbar('destroy');
 
-    if(!self.reactList) self.reactList = renderComponent();
+    var props =  {
+      addLayer: model.add,
+      removeLayer: model.remove,
+      activeLayers: model.active,
+      selectedProjection: projection,
+      filteredLayers: getLayersForProjection(projection)
+    };
+    self.reactList = ReactDOM.render(
+      React.createElement(WVC.LayerList , props),
+      $allLayers[0]
+    );
 
     $selectedCategory.hide();
     $categories.hide();
@@ -941,46 +904,31 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   //Takes the terms and returns true if the layer isnt part of search
   var filterSearch = function(layer, terms) {
-    var search = $(self.selector + "search").val();
-    if ( search === "" ) {
-      return false;
-    }
-    var filtered = false;
+    var search = $(self.selector + 'search').val();
+    if (search === '') return false;
     var names = models.layers.getTitles(layer.id);
-
-    $.each(terms, function(index, term) {
-      filtered = !names.title.toLowerCase().contains(term) &&
-        !names.subtitle.toLowerCase().contains(term) &&
-        !names.tags.toLowerCase().contains(term) &&
-        !config.layers[layer.id].id.toLowerCase().contains(term);
-
-      if ( filtered ) {
-        return false;
-      }
+    return !terms.some(function(term){
+      var fieldsToSearch = [
+        names.title,
+        names.subtitle,
+        names.tags,
+        config.layers[layer.id].id
+      ];
+      return fieldsToSearch.some(function(field){
+        return field.toLowerCase().contains(term);
+      });
     });
-    return filtered;
   };
 
-  var runSearch = _.throttle( function() {
+  var runSearch = function() {
     var search = searchTerms();
-    copy = [];
-    $.each(config.layers, function(layerId, layer) {
-
-      var fproj = filterProjections(layer);
-      var fterms = filterSearch(layer, search);
-
-      //This will return true if the layer needs to be hidden
-      var filtered = fproj || fterms;
-
-      if( !filtered ) {
-        copy.push(layerId);
-      }
+    var filteredLayers = allLayers.filter(function(layer){
+      return !(filterProjections(layer) || filterSearch(layer, search));
     });
-
-    self.reactList.setState({layerFilter: copy});
-
-    redoScrollbar();
-  }, 250, { trailing: true });
+    self.reactList.setState({
+      filteredLayers: filteredLayers
+    });
+  };
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
@@ -999,7 +947,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       runSearch();
     } else {
       drawModal();
-      copy = config.layerOrder;
     }
   };
 
