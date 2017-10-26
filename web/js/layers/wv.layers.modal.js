@@ -11,9 +11,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   var model = models.layers;
   var self = {};
-
   self.selector = '#layer-modal';
   self.id = 'layer-modal';
+  self.metadata = {};
 
   var $header = $(self.selector + ' header');
   var $categories = $(' #layer-categories ');
@@ -25,26 +25,29 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-  var allLayers = Object.values(config.layers).filter(function(layer){
-    // Only use the layers for the active projection
-    return layer.projections[models.proj.selected.id];
-  }).map(function(layer){
-    // If there is metadata for the current projection, use that
-    var projectionMeta = layer.projections[models.proj.selected.id];
-    if (projectionMeta.title) layer.title = projectionMeta.title;
-    if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
-    // Decode HTML entities in the subtitle
-    if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
-    return layer;
-  });
 
-  function decodeHtml(html) {
+  var getLayersForProjection = function(projection) {
+    return Object.values(config.layers).filter(function(layer){
+      // Only use the layers for the active projection
+      return layer.projections[projection];
+    }).map(function(layer){
+      // If there is metadata for the current projection, use that
+      var projectionMeta = layer.projections[projection];
+      if (projectionMeta.title) layer.title = projectionMeta.title;
+      if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
+      // Decode HTML entities in the subtitle
+      if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
+      return layer;
+    });
+  };
+
+  var decodeHtml = function(html) {
     var txt = document.createElement("textarea");
     txt.innerHTML = html;
     return txt.value;
-  }
+  };
 
-  self.metadata = {};
+  var allLayers = getLayersForProjection(models.proj.selected.id);
 
   var init = function() {
     model.events
@@ -695,7 +698,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       removeLayer: model.remove,
       activeLayers: model.active,
       selectedProjection: projection,
-      filteredLayers: allLayers
+      filteredLayers: getLayersForProjection(projection)
     };
     self.reactList = ReactDOM.render(
       React.createElement(WVC.LayerList , props),
