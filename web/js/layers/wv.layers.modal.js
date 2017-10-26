@@ -200,6 +200,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     removeSearch();
     drawModal();
     redoScrollbar();
+    allLayers = getLayersForProjection(models.proj.selected.id);
   };
 
   /**
