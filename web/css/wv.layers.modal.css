@@ -113,7 +113,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 26px;
+  width: 25px;
   height: 26px;
   margin: -13px 0 0 -13px;
   background: url('../images/wv-icons.png') 0 26px;
@@ -292,7 +292,6 @@
   font-weight: 300;
   font-size: 16px;
   color: #000;
-  margin-left: 10px;
 }
 
 #category-breadcrumb a,
@@ -305,26 +304,29 @@
   color: #ddd;
 }
 
+#layers-all {
+  padding-right: 10px;
+  height: 100%;
+}
+
 #layers-all .layers-all-layer {
-  padding-bottom: 0.5em;
-}
-
-#layers-all .layers-all-header {
-  padding: 0 0.5em 0 0;
-  overflow: hidden;
-}
-
-#layers-all .layers-all-title-wrap {
-  position: relative;
-  display: block;
-  margin-right: 66px;
-  padding-top: 0.5em;
-}
-
-#layers-all .layers-all-layer,
-#selected-category .ui-accordion-header {
-  position: relative;
+  margin-top: 5px;
+  padding: 0 0 0.5em 0.7em;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
   border: 0;
+  position: relative;
+}
+
+#layers-all .layers-all-layer:last-child {
+  margin-bottom: 40px;
+}
+
+#selected-category .ui-accordion-header {
+  border: 0;
+  position: relative;
   margin-top: 5px;
 }
 
@@ -378,7 +380,7 @@
   font-size: 20px;
   line-height: 100%;
   position: relative;
-  display: inline;
+  display: block;
 }
 
 @media (min-width: 753px) {
@@ -498,24 +500,40 @@
   margin-bottom: 5px;
 }
 
-.layers-all-layer .layers-all-header .fa {
+.layers-all-header {
+  cursor: pointer;
+  padding-right: 66px;
+  padding-top: 0.5em;
+}
+
+.layers-all-header.has-checkbox::before {
+  content: '';
+  display: block;
+  height: 20px;
+  width: 20px;
+  border: 2px solid #d54f21;
+  position: absolute;
+  top: 7px;
+  right: 10px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.layers-all-header.has-checkbox.checked::before {color: white;
+  content: '\2713';
+  background-color: #d54f21;
+}
+
+.layers-all-header .fa {
+  position: absolute;
   color: #ddd;
   font-family: "FontAwesome";
   font-size: 14px;
   padding: 12px 16px;
-  position: absolute;
   margin-left: -8px;
   margin-top: -8px;
-}
-
-@media (min-width: 753px) {
-  .layers-all-layer .layers-all-header .fa {
-    padding: 10px 18px 16px;
-    top: auto;
-    right: 0;
-    margin-top: -6px;
-    margin-left: 0;
-  }
 }
 
 .layers-all-layer .fa:hover {
@@ -573,6 +591,7 @@
 }
 
 #layers-all .metadata-more {
+  cursor: pointer;
   height: 8px;
   margin-top: 4px;
 }
@@ -635,72 +654,6 @@
 
 /*lazy code to put scrollbar in the right place*/
 #layer-categories,
-#layers-all,
 #selected-category {
   padding-right: 10px;
-}
-
-/* perfect-scrollbar */
-.ps-container > .ps-scrollbar-y-rail,
-.ps-container > .ps-scrollbar-y-rail .ps-scrollbar-y {
-  border-radius: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  -o-border-radius: 0;
-  -webkit-transition: none;
-  transition: none;
-  opacity: 1;
-}
-
-.ps-container > .ps-scrollbar-y-rail {
-  right: 0;
-}
-
-.ps-container > .ps-scrollbar-y-rail .ps-scrollbar-y {
-  background-color: #666;
-}
-
-.ps-container:hover.ps-in-scrolling {
-  pointer-events: none;
-}
-
-.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail {
-  background-color: #eee;
-  opacity: 1;
-}
-
-.ps-container:hover.ps-in-scrolling.ps-x > .ps-scrollbar-x-rail > .ps-scrollbar-x {
-  background-color: #999;
-}
-
-.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail {
-  background-color: #eee;
-  opacity: 1;
-}
-
-.ps-container:hover.ps-in-scrolling.ps-y > .ps-scrollbar-y-rail > .ps-scrollbar-y {
-  background-color: #999;
-}
-
-.ps-container:hover > .ps-scrollbar-x-rail,
-.ps-container:hover > .ps-scrollbar-y-rail {
-  opacity: 1;
-}
-
-.ps-container:hover > .ps-scrollbar-x-rail:hover {
-  background-color: #eee;
-  opacity: 1;
-}
-
-.ps-container:hover > .ps-scrollbar-x-rail:hover > .ps-scrollbar-x {
-  background-color: #999;
-}
-
-.ps-container:hover > .ps-scrollbar-y-rail:hover {
-  background-color: #eee;
-  opacity: 1;
-}
-
-.ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y {
-  background-color: #999;
 }

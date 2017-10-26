@@ -19,6 +19,7 @@
     "web/css/dataDownload.css",
     "web/css/wv.sidebar.css",
     "web/css/wv.layers.modal.css",
+    "web/css/wv.scrollbar.css",
     "web/css/wv.layers.options.css",
     "web/css/wv.layers.info.css",
     "web/css/wv.timeline.css",

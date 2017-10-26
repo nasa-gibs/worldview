@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.layers
  */
@@ -22,9 +11,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
 
   var model = models.layers;
   var self = {};
-
   self.selector = '#layer-modal';
   self.id = 'layer-modal';
+  self.metadata = {};
 
   var $header = $(self.selector + ' header');
   var $categories = $(' #layer-categories ');
@@ -32,17 +21,35 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var $allLayers = $(self.selector + " #layers-all");
   var gridItemWidth = 320; //with of grid item + spacing
   var modalHeight;
+  var modalWidth;
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
 
-  // Visible Layers
-  var visible = {};
+  var getLayersForProjection = function(projection) {
+    return Object.values(config.layers).filter(function(layer){
+      // Only use the layers for the active projection
+      return layer.projections[projection];
+    }).map(function(layer){
+      // If there is metadata for the current projection, use that
+      var projectionMeta = layer.projections[projection];
+      if (projectionMeta.title) layer.title = projectionMeta.title;
+      if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
+      // Decode HTML entities in the subtitle
+      if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
+      return layer;
+    });
+  };
+
+  var decodeHtml = function(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  };
+
+  var allLayers = getLayersForProjection(models.proj.selected.id);
 
   var init = function() {
-    Object.values(config.layers).forEach(function(layer) {
-      visible[layer.id] = true;
-    });
     model.events
     // FIXME: on "add" needs to be present without trying to add a product
       // multiple times
@@ -141,7 +148,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         console.warn("Invalid parameter; showing Categories view");
     }
   };
-
   var setModalSize = function() {
     var availableWidth = $(window).width() - ($(window).width() * 0.15);
     sizeMultiplier = Math.floor(availableWidth / gridItemWidth);
@@ -150,20 +156,19 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     if (sizeMultiplier > 3)
       sizeMultiplier = 3;
     modalHeight = $(window).height() - 100;
+    modalWidth = gridItemWidth * sizeMultiplier + 10;
   };
 
   $.fn.hasScrollBar = function() {
     return this.get(0).scrollHeight > this.height();
   };
-
+  //Update modal size
   var redo = function() {
     setModalSize();
-
     $(self.selector).dialog("option", {
       height: modalHeight,
-      width: gridItemWidth * sizeMultiplier + 10
+      width: modalWidth
     });
-
     $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
   };
 
@@ -174,21 +179,24 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   // This draws the default page, depending on projection
   // and hides the breadcrumb, and sets the search back to normal
   // and updates the scrollbar.
-  var removeSearch = function() {
+  var removeSearch = function(){
     $selectedCategory.hide();
     $breadcrumb.hide();
     searchBool = false;
-    $('#layers-search-input').val('');
-    $('#layer-search label.search-icon').removeClass('search-on').off('click');
+    if(self.reactList){
+      $('#layer-modal-main').perfectScrollbar();
+    }
+    $( '#layers-search-input' ).val('');
+    $( '#layer-search label.search-icon' ).removeClass('search-on').off('click');
   };
 
-  var resize = function() {
-    if ($(self.selector).dialog("isOpen")) {
+  var resize = function(){
+    if( $( self.selector ).dialog( "isOpen" ) ) {
       redo();
     }
   };
 
-  var drawDefaultPage = function(e) {
+  var drawDefaultPage = function() {
     removeSearch();
     drawModal();
     redoScrollbar();
@@ -236,7 +244,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
     }
   };
 
-
   /**
    * var drawCategories - Draws all categories if it has non-empty measurements.
    *  If it has a placement flag, that category will display first or last. If
@@ -248,7 +255,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    */
   var drawCategories = function() {
     $categories.empty();
-    if ($categories.data('isotope')) {
+    if( $categories.data('isotope') ) {
       $categories.isotope('destroy');
     }
     $allLayers.hide();
@@ -681,119 +688,25 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
    */
   var drawAllLayers = function() {
     var projection = models.proj.selected.id;
+    //Remove perfectScrollbar for the search list window
+    $('#layer-modal-main').perfectScrollbar('destroy');
 
-    $allLayers.empty();
-
-    var $fullLayerList = $('<ul />', {
-      id: 'flat-layer-list'
-    });
-
-    Object.values(config.layerOrder).forEach(function(layerId) {
-      var current = config.layers[layerId];
-
-      if (!current) {
-        console.warn("In layer order but not defined", layerId);
-      } else {
-        // Check if layer is equal to the current projection, then output
-        if (Object.keys(current.projections).indexOf(projection) > -1) {
-          var $layerItem = $('<li />', {
-            id: 'layer-flat-' + current.id,
-            'class': 'layers-all-layer',
-            'data-layer': encodeURIComponent(current.id)
-          });
-
-          var $layerHeader = $('<div />', {
-            'class': 'layers-all-header'
-          }).click(function(e) {
-            $(this).find('input#' + encodeURIComponent(current.id))
-              .iCheck('toggle');
-          });
-
-          var $layerTitleWrap = $('<div />', {
-            'class': 'layers-all-title-wrap'
-          });
-
-          var $layerTitle = $('<h3 />', {
-            text: current.title
-          });
-
-          var $layerSubtitle = $('<h5 />', {
-            text: current.subtitle
-          });
-
-          var $checkbox = $('<input />', {
-            id: encodeURIComponent(current.id),
-            'value': current.id,
-            'type': 'checkbox',
-            'data-layer': current.id
-          }).on('ifChecked', addLayer)
-            .on('ifUnchecked', removeLayer);
-
-          if ( _.find(model.active, {id: current.id}) ) {
-            $checkbox.attr("checked", "checked");
-          }
-
-          // Metadata
-          var $sourceMeta = $('<div />', {
-            'class': 'source-metadata hidden'
-          });
-
-          var $showMore = $('<span />', {
-            'class': 'fa fa-info-circle'
-          });
-
-          var $moreTab = $('<div />', {
-            'class': 'metadata-more'
-          });
-
-          var $moreElps = $('<span />', {
-            text: '^',
-            'class': 'ellipsis up'
-          });
-
-          $moreTab.append( $moreElps );
-
-          $showMore.add($moreTab).toggle( function(e){
-            $sourceMeta.toggleClass('hidden');
-            redoScrollbar();
-          }, function(e){
-            $sourceMeta.toggleClass('hidden');
-            redoScrollbar();
-          });
-
-          $layerItem.append( $layerHeader );
-          $layerHeader.append( $checkbox );
-          $layerHeader.append( $layerTitleWrap );
-          $layerTitleWrap.append( $layerTitle );
-          if( current.description ) {
-            $layerTitle.append( $showMore );
-          }
-          $layerTitleWrap.append( $layerSubtitle );
-
-          if( current.description ) {
-            $.get('config/metadata/' + current.description + '.html')
-              .success(function(data) {
-                $sourceMeta.html(data);
-                $layerItem.append( $sourceMeta );
-                $sourceMeta.append( $moreTab );
-                $sourceMeta.find('a')
-                  .attr('target','_blank');
-              });
-          }
-
-          $fullLayerList.append( $layerItem );
-        }
-      }
-    });
-
-    $allLayers.append($fullLayerList);
+    var props =  {
+      addLayer: model.add,
+      removeLayer: model.remove,
+      activeLayers: model.active,
+      selectedProjection: projection,
+      filteredLayers: getLayersForProjection(projection)
+    };
+    self.reactList = ReactDOM.render(
+      React.createElement(WVC.LayerList , props),
+      $allLayers[0]
+    );
 
     $selectedCategory.hide();
     $categories.hide();
     $nav.hide();
     $allLayers.show();
-
-    $allLayers.iCheck({checkboxClass: 'icheckbox_square-red'});
 
     // Create breadcrumb crumbs
     $breadcrumb.empty();
@@ -910,11 +823,24 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       //TODO: Click for search icon
     }).append("<i />");
 
+    $search.append( $searchBtn )
+      .append( $searchInput );
+
+    $header.append( $search );
+
+    var $closeButton = $('<div />', {
+      'id': 'layers-modal-close'
+    }).click( function() {
+      $( self.selector ).dialog( "close" );
+    }).append('<i></i>');
+
+    $header.append ( $closeButton );
+
     $(self.selector).dialog({
       autoOpen: false,
       resizable: false,
       height: modalHeight,
-      width: gridItemWidth * sizeMultiplier + 10,
+      width: modalWidth,
       modal: true,
       dialogClass: "layer-modal no-titlebar",
       draggable: false,
@@ -929,7 +855,6 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       },
       open: function(event, ui) {
         redo();
-
         if ($categories.data('isotope')) {
           $categories.isotope();
         }
@@ -944,29 +869,17 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
         setTimeout(unfocusInput, 410);
 
       },
-      close: function(event, ui) {
-        $(".ui-widget-overlay").unbind("click");
+      close: function( event, ui ) {
+        $( ".ui-widget-overlay" ).unbind( "click" );
       }
     });
 
-    $search.append($searchBtn).append($searchInput);
-
-    $header.append($search);
-
-    var $closeButton = $('<div />', {
-      id: 'layers-modal-close'
-    }).click(function(e) {
-      $(self.selector).dialog("close");
-    }).append('<i />');
-
-    $header.append($closeButton);
-
     //$(self.selector + "select").on('change', filter);
-    $searchInput.keyup(filter);
-
+    $searchInput.keyup( filter );
     drawDefaultPage();
   };
 
+  //returns each term from search field
   var searchTerms = function() {
     var search = $("#layers-search-input").val().toLowerCase();
     var terms = search.split(/ +/);
@@ -974,61 +887,54 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   };
 
   var filterAreaOfInterest = function(layerId) {
-    if (!config.aoi) {
+    if ( !config.aoi ) {
       return false;
     }
     var aoi = $(self.selector + "select").val();
-    if (aoi === "All") {
+    if ( aoi === "All" ) {
       return false;
     }
-    return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 && $.inArray(layerId, config.aoi[aoi].overlays) < 0;
+    return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 &&
+      $.inArray(layerId, config.aoi[aoi].overlays) < 0;
   };
 
   var filterProjections = function(layer) {
     return !layer.projections[models.proj.selected.id];
   };
 
+  //Takes the terms and returns true if the layer isnt part of search
   var filterSearch = function(layer, terms) {
-    var search = $(self.selector + "search").val();
-    if (search === "") {
-      return false;
-    }
-    var filtered = false;
+    var search = $(self.selector + 'search').val();
+    if (search === '') return false;
     var names = models.layers.getTitles(layer.id);
-    $.each(terms, function(index, term) {
-      filtered = !names.title.toLowerCase().contains(term) && !names.subtitle.toLowerCase().contains(term) && !names.tags.toLowerCase().contains(term) && !config.layers[layer.id].id.toLowerCase().contains(term);
-
-      if (filtered) {
-        return false;
-      }
+    return !terms.some(function(term){
+      var fieldsToSearch = [
+        names.title,
+        names.subtitle,
+        names.tags,
+        config.layers[layer.id].id
+      ];
+      return fieldsToSearch.some(function(field){
+        return field.toLowerCase().contains(term);
+      });
     });
-    return filtered;
   };
 
-  var runSearch = _.throttle(function() {
+  var runSearch = function() {
     var search = searchTerms();
-
-    $.each(config.layers, function(layerId, layer) {
-
-      var fproj = filterProjections(layer);
-      var fterms = filterSearch(layer, search);
-
-      var filtered = fproj || fterms;
-
-      visible[layer.id] = !filtered;
-
-      var display = filtered ? "none" : "block";
-      var selector = "#flat-layer-list li[data-layer='" + wv.util.jqueryEscape(layerId) + "']";
-      $(selector).css("display", display);
+    var filteredLayers = allLayers.filter(function(layer){
+      return !(filterProjections(layer) || filterSearch(layer, search));
     });
-
-    redoScrollbar();
-  }, 250, {trailing: true});
+    self.reactList.setState({
+      filteredLayers: filteredLayers
+    });
+  };
 
   var filter = function(e) {
     if ($('#layers-search-input').val().length !== 0) {
       searchBool = true;
-    } else {
+    }
+    else{
       searchBool = false;
       drawModal();
       removeSearch();

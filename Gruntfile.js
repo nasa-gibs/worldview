@@ -21,6 +21,11 @@ var nodeModuleFiles = [
   "node_modules/openlayers/dist/ol-debug.css",
   "node_modules/font-awesome/css/font-awesome.min.css",
   "node_modules/font-awesome/fonts/*",
+  "node_modules/isotope-layout/dist/*",
+  "node_modules/isotope-packery/packery-mode.pkgd.js",
+  "node_modules/isotope-packery/packery-mode.pkgd.min.js",
+  "node_modules/perfect-scrollbar/dist/js/*",
+  "node_modules/perfect-scrollbar/dist/css/*",
   "node_modules/clipboard/dist/clipboard.js",
   "node_modules/clipboard/dist/clipboard.min.js"
 ];
@@ -51,10 +56,6 @@ module.exports = function(grunt) {
   // order
   var js = grunt.file.readJSON("deploy/wv.js.json");
   var css = grunt.file.readJSON("deploy/wv.css.json");
-
-  // Copyright notice to place at the top of the minified JavaScript and
-  // CSS files
-  var banner = grunt.file.read("deploy/banner.txt");
 
   //Platform specific command for find
   var findCmd;
@@ -340,7 +341,6 @@ module.exports = function(grunt) {
       // Minifiy the concatenated Worldview CSS file.
       wv_css: {
         options: {
-          banner: banner,
           keepSpecialComments: false
         },
         files: {
@@ -654,7 +654,6 @@ module.exports = function(grunt) {
     uglify: {
       // Minifiy the concatenated Worldview JavaScript file.
       options: {
-        banner: banner,
         compress: {
           //drop_console: true,
           //drop_debugger: true,
