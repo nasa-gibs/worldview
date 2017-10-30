@@ -1,7 +1,7 @@
 var wv = wv || {};
 wv.anim = wv.anim || {};
-wv.anim.model = wv.anim.model || function(models, config) {
-  //state.a is now an object, check input and set values
+wv.anim.model = wv.anim.model || function (models, config) {
+  // state.a is now an object, check input and set values
   var self = {};
   self.delay = 500;
   self.events = wv.util.events();
@@ -25,7 +25,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
    * @returns {void}
    *
    */
-  self.load = function(state, errors) {
+  self.load = function (state, errors) {
     self.rangeState = self.rangeState || {};
     // self.rangeState.playing = false;
     // if(state.a) {
@@ -40,7 +40,6 @@ wv.anim.model = wv.anim.model || function(models, config) {
       self.rangeState.state = state.ab;
     }
     if (state.as && state.ae) {
-
       if (state.ae.length == 10 && state.as.length == 10) {
         self.rangeState.startDate = state.as;
         self.rangeState.endDate = state.ae;
@@ -64,7 +63,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
    * @returns {void}
    *
    */
-  self.toggleActive = function() {
+  self.toggleActive = function () {
     if (self.rangeState.state === 'off') {
       self.rangeState.state = 'on';
     } else {
@@ -82,7 +81,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
    *
    */
 
-  self.add = function(arra) {
+  self.add = function (arra) {
     // var updatedState = _.clone(self.state);
     // arra.forEach(function(prop) {
     //     updatedState[prop.id] = prop.value;
@@ -99,7 +98,7 @@ wv.anim.model = wv.anim.model || function(models, config) {
    * @returns {void}
    *
    */
-  self.save = function(state) {
+  self.save = function (state) {
     var activeState;
     var playStates;
     var options;

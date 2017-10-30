@@ -1,15 +1,15 @@
 var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
-wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
+wv.naturalEvents.markers = wv.naturalEvents.markers || function (models, ui) {
   var self = {}, map;
   map = map || ui.map.selected;
   var olViewport = map.getViewport();
 
-  self.draw = function() {
+  self.draw = function () {
     if (!(models.naturalEvents && models.naturalEvents.data)) return null;
     var events = models.naturalEvents.data.events;
     if (!events) return null;
-    var markers = events.map(function(event){
+    var markers = events.map(function (event) {
       var marker = {};
       var selected = ui.naturalEvents.selected;
       var isSelected = event.id === selected.id;
@@ -19,7 +19,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
         date = selected.date;
       }
 
-      var geometry = _.find(event.geometries, function(geom){
+      var geometry = _.find(event.geometries, function (geom) {
         return geom.date.split('T')[0] === date;
       }) || event.geometries[0];
 
@@ -29,16 +29,16 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
       var category = event.categories[0];
       // Assign a default category if we don't have an icon
       var icons = [
-        "Dust and Haze",
-        "Icebergs",
-        "Manmade",
-        "Sea and Lake Ice",
-        "Severe Storms",
-        "Snow",
-        "Temperature Extremes",
-        "Volcanoes",
-        "Water Color",
-        "Wildfires"
+        'Dust and Haze',
+        'Icebergs',
+        'Manmade',
+        'Sea and Lake Ice',
+        'Severe Storms',
+        'Snow',
+        'Temperature Extremes',
+        'Volcanoes',
+        'Water Color',
+        'Wildfires'
       ];
       category = icons.includes(category.title)
         ? category
@@ -61,30 +61,40 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
       var willSelect = true;
       var moveCount = 0;
       var pinEl = marker.pin.element_;
-      ['pointerdown', 'mousedown', 'touchstart'].forEach(function(type){
-        pinEl.addEventListener(type, function(e){
+
+      ['pointerdown', 'mousedown', 'touchstart'].forEach(function (type) {
+        pinEl.addEventListener(type, function (e) {
           willSelect = true;
           moveCount = 0;
           passEventToTarget(e, olViewport);
         });
       });
-      ['pointermove', 'wheel', 'pointerdrag',
-        'pointerup', 'mousemove', 'touchmove'].forEach(function(type){
-        pinEl.addEventListener(type, function(e){
+
+      [
+        'pointermove',
+        'wheel',
+        'pointerdrag',
+        'pointerup',
+        'mousemove',
+        'touchmove'
+      ].forEach(function (type) {
+        pinEl.addEventListener(type, function (e) {
           passEventToTarget(e, olViewport);
         });
       });
-      ['pointermove', 'mousemove'].forEach(function(type){
-        pinEl.addEventListener(type, function(e){
+
+      ['pointermove', 'mousemove'].forEach(function (type) {
+        pinEl.addEventListener(type, function (e) {
           moveCount++;
           if (moveCount > 2) {
             willSelect = false;
           }
         });
       });
-      pinEl.addEventListener('click', function(e){
+
+      pinEl.addEventListener('click', function (e) {
         if (willSelect && !isSelected) {
-          ui.naturalEvents.selectEvent(event.id,date);
+          ui.naturalEvents.selectEvent(event.id, date);
         } else {
           passEventToTarget(e, olViewport);
         }
@@ -95,16 +105,16 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
     return markers;
   };
 
-  self.remove = function(markers) {
+  self.remove = function (markers) {
     markers = markers || [];
-    if (markers.length<1) return;
-    markers.forEach(function(marker){
+    if (markers.length < 1) return;
+    markers.forEach(function (marker) {
       if (marker.boundingBox) map.removeLayer(marker.boundingBox);
       if (marker.pin) map.removeOverlay(marker.pin);
     });
   };
 
-  var passEventToTarget = function(event, target) {
+  var passEventToTarget = function (event, target) {
     try {
       var eventCopy = new event.constructor(event.type, event);
       target.dispatchEvent(eventCopy);
@@ -113,7 +123,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
     }
   };
 
-  var createPin = function(id, category, isSelected){
+  var createPin = function (id, category, isSelected) {
     var overlayEl = document.createElement('div');
     var icon = document.createElement('i');
     overlayEl.className = 'marker';
@@ -128,12 +138,12 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
     });
   };
 
-  var createBoundingBox = function(coordinates){
+  var createBoundingBox = function (coordinates) {
     var lightStroke = new ol.style.Style({
       stroke: new ol.style.Stroke({
         color: [255, 255, 255, 0.6],
         width: 2,
-        lineDash: [4,8],
+        lineDash: [4, 8],
         lineDashOffset: 6
       })
     });
@@ -141,7 +151,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function(models, ui) {
       stroke: new ol.style.Stroke({
         color: [0, 0, 0, 0.6],
         width: 2,
-        lineDash: [4,8]
+        lineDash: [4, 8]
       })
     });
     return new ol.layer.Vector({

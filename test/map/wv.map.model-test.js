@@ -1,10 +1,9 @@
-buster.testCase("wv.map.model", function() {
-
+buster.testCase('wv.map.model', (function () {
   var self = {};
   var config;
   var errors;
 
-  self.setUp = function() {
+  self.setUp = function () {
     config = fixtures.config();
     models = fixtures.models(config);
     errors = [];
@@ -24,5 +23,4 @@ buster.testCase("wv.map.model", function() {
   };
   */
   return self;
-
-}());
+}()));

@@ -4,7 +4,7 @@ wv.notifications = wv.notifications || {};
 /*
  * @Class
  */
-wv.notifications.ui = wv.notifications.ui || function(models, config) {
+wv.notifications.ui = wv.notifications.ui || function (models, config) {
   var self = {};
   var mainNotification;
   var mainIcon;
@@ -17,7 +17,6 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
   var url;
   var alertBlockExists;
   var messageBlockExists;
-
 
   url = config.features.alert.url;
   messageBlockExists = false;
@@ -42,22 +41,22 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var init = function() {
+  var init = function () {
     var reactComponent, options, p, alertUser;
-    if(!wv.util.browser.localStorage) {
+    if (!wv.util.browser.localStorage) {
       return;
     }
     mainIcon = $('#wv-info-button')[0];
     mainIconLabel = $('#wv-info-button label')[0];
     p = wv.util.get(url);
-    p.then(function(response) {
+    p.then(function (response) {
       var obj, notifications, alert;
 
       obj = JSON.parse(response);
       notifications = obj.notifications;
       sortedNotifications = separateByType(notifications);
       update(sortedNotifications);
-    }, function(error) {
+    }, function (error) {
       console.warn(error);
     });
   };
@@ -72,7 +71,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var getPriority = function(sortedNotifications) {
+  var getPriority = function (sortedNotifications) {
     var priority, message, outage, alert;
     priority = null;
     message = sortedNotifications.messages[0];
@@ -101,7 +100,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
     }
     return priority;
   };
-  var getCounts = function() {
+  var getCounts = function () {
     var outageCount, messageCount, alertsAndOutages;
 
     messageCount = getNumberOfTypeNotseen('message', sortedNotifications.messages);
@@ -119,7 +118,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
   /**
    * @return {void}
    */
-  var update = function() {
+  var update = function () {
     var alertCount, messageCount, counts, priority;
     counts = getCounts();
     alertCount = counts.alertCount;
@@ -141,7 +140,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    * @returns {Number} count - number of unseen messages
    *  in LocalStorage
    */
-  var getNumberOfTypeNotseen = function(type, arra) {
+  var getNumberOfTypeNotseen = function (type, arra) {
     var storageItem = localStorage.getItem(type);
     var count, len;
 
@@ -171,7 +170,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var objectAlreadySeen = function(obj) {
+  var objectAlreadySeen = function (obj) {
     var fieldExists, fieldValueMatches, type, idString;
 
     type = obj.notification_type;
@@ -194,7 +193,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var separateByType = function(obj) {
+  var separateByType = function (obj) {
     var messages = [],
       alerts = [],
       outages = [],
@@ -228,8 +227,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var orderByDate = function(obj) {
-    obj.sort(function(a, b) {
+  var orderByDate = function (obj) {
+    obj.sort(function (a, b) {
       return new Date(b.created_at) - new Date(a.created_at);
     });
     return obj;
@@ -243,7 +242,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var updateMainIcon = function(type, numberOfAlerts) {
+  var updateMainIcon = function (type, numberOfAlerts) {
     mainIconLabel.setAttribute('data-content', numberOfAlerts);
     if (type) {
       mainIcon.className = 'wv-toolbar-button wv-status-' + type;
@@ -260,7 +259,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {object} a jquery element
    */
-  self.getMessages = function() {
+  self.getMessages = function () {
     var $message, messageNumber, messages, hide;
     hide = '';
     messages = sortedNotifications.messages;
@@ -293,7 +292,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {object} a jquery element
    */
-  self.getAlert = function() {
+  self.getAlert = function () {
     var $notifyMenuItem, alertsNumber, outageNumber, count, hide;
 
     if (!_.isEmpty(activeNotifications)) {
@@ -329,7 +328,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var deactivateMessage = function(e) {
+  var deactivateMessage = function (e) {
     var messages;
     this.className = 'ui-icon fa fa-fw fa-gift';
     self.messageIconActive = false;
@@ -357,14 +356,14 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var notify = function(e) {
+  var notify = function (e) {
     this.className = 'ui-icon fa fa-fw fa-bolt';
     self.infoIconActive = false;
     self.notifyIconActive = false;
     mainNotification = null;
 
     createNotifyDialog();
-    if (activeNotifications.outage ) {
+    if (activeNotifications.outage) {
       localStorage.setItem('outage', activeNotifications.outage);
     }
     if (activeNotifications.alert) {
@@ -387,7 +386,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var createNotifyDialog = function() {
+  var createNotifyDialog = function () {
     var $dialog, dimensions;
     var $notifyContent = $('<div class="wv-notify-modal"></div>');
     if (!sortedNotifications.alerts && !sortedNotifications.outages) {
@@ -401,15 +400,15 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
       .append($notifyContent);
 
     $dialog.dialog({
-      title: "Notifications",
+      title: 'Notifications',
       width: dimensions[0],
       height: dimensions[1],
       maxHeight: 525,
       show: {
-        effect: "fade"
+        effect: 'fade'
       },
       hide: {
-        effect: "fade"
+        effect: 'fade'
       }
     });
   };
@@ -422,11 +421,11 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {Object} Dimension array
    */
-  var getModalDimensions = function() {
+  var getModalDimensions = function () {
     var width, height;
 
     width = 625;
-    height = "auto";
+    height = 'auto';
     if (wv.util.browser.small || wv.util.browser.touchDevice) {
       width = $(window)
         .width();
@@ -447,7 +446,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {Object} Jquery ul element
    */
-  var create$block = function(arra, title) {
+  var create$block = function (arra, title) {
     var $li, date, numNotSeen, activeClass, $ul = $('<ul></ul>');
 
     numNotSeen = getNumberOfTypeNotseen(title, sortedNotifications[title + 's']);
@@ -458,8 +457,8 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
         activeClass = title;
       }
       date = new Date(arra[i].created_at);
-      date = date.getDate() + " " + wv.util.giveMonth(date) + " " + date.getFullYear();
-      $li = $("<li><div class='" + activeClass + "'><h2> <i class='fa fa-" + classes[title] + "'/> " + title + "<span> Posted " + date + "</span></h2><p>" + arra[i].message + "</p></div></li>");
+      date = date.getDate() + ' ' + wv.util.giveMonth(date) + ' ' + date.getFullYear();
+      $li = $("<li><div class='" + activeClass + "'><h2> <i class='fa fa-" + classes[title] + "'/> " + title + '<span> Posted ' + date + '</span></h2><p>' + arra[i].message + '</p></div></li>');
       $ul.append($li);
     }
     return $ul;
@@ -476,7 +475,7 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {Boolean}
    */
-  var localStorageValueMatches = function(property, value) {
+  var localStorageValueMatches = function (property, value) {
     var oldValue = localStorage.getItem(property);
     return new Date(value) <= new Date(oldValue);
   };
@@ -492,14 +491,14 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
    *
    * @returns {void}
    */
-  var create$whatsNew = function(obj, title) {
+  var create$whatsNew = function (obj, title) {
     var $dialog, width, height, $notifyContent, releasePageUrl, date, dimensions;
 
     date = new Date(obj.created_at);
-    date = date.getDate() + " " + wv.util.giveMonth(date) + " " + date.getFullYear();
-    releasePageUrl = config.features.alert.releases || "https://github.com/nasa-gibs/worldview/releases";
+    date = date.getDate() + ' ' + wv.util.giveMonth(date) + ' ' + date.getFullYear();
+    releasePageUrl = config.features.alert.releases || 'https://github.com/nasa-gibs/worldview/releases';
     dimensions = getModalDimensions();
-    $notifyContent = $("<div class='wv-notify-modal'><div><h2>" + title + "<span> Posted " + date + "</span></h2><p>" + obj.message + "</p></div></div>");
+    $notifyContent = $("<div class='wv-notify-modal'><div><h2>" + title + '<span> Posted ' + date + '</span></h2><p>' + obj.message + '</p></div></div>');
     $footer = $('<div class="wv-notify-footer"><p> Check out our <a target="_blank" href="' + releasePageUrl + '">release notes</a> for a complete list of new additions.</p></div>');
     $notifyContent.append($footer);
     $dialog = wv.ui.getDialog()
@@ -510,10 +509,10 @@ wv.notifications.ui = wv.notifications.ui || function(models, config) {
       height: dimensions[1],
       maxHeight: 525,
       show: {
-        effect: "fade"
+        effect: 'fade'
       },
       hide: {
-        effect: "fade"
+        effect: 'fade'
       }
     });
   };

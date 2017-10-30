@@ -1,24 +1,23 @@
 var wv = wv || {};
 wv.link = wv.link || {};
 
-wv.link.ui = wv.link.ui || function(models, config) {
-
+wv.link.ui = wv.link.ui || function (models, config) {
   var self = {};
-  var id = "wv-link-button";
-  var selector = "#" + id;
+  var id = 'wv-link-button';
+  var selector = '#' + id;
   var $button, $label;
   var widgetFactory = React.createFactory(WVC.Share);
   var clipboard = new Clipboard('.copy-btn');
 
-  var init = function() {
-    $button = $("<input></input>")
-      .attr("type", "checkbox")
-      .attr("id", "wv-link-button-check");
-    $label = $("<label></label>")
-      .attr("for", "wv-link-button-check")
-      .attr("title", "Share this map");
-    var $icon = $("<i></i>")
-      .addClass("fa fa-share-square-o fa-2x");
+  var init = function () {
+    $button = $('<input></input>')
+      .attr('type', 'checkbox')
+      .attr('id', 'wv-link-button-check');
+    $label = $('<label></label>')
+      .attr('for', 'wv-link-button-check')
+      .attr('title', 'Share this map');
+    var $icon = $('<i></i>')
+      .addClass('fa fa-share-square-o fa-2x');
     $label.append($icon);
     $(selector)
       .append($label);
@@ -27,9 +26,9 @@ wv.link.ui = wv.link.ui || function(models, config) {
     $button.button({
       text: false
     })
-      .click(function() {
-        var checked = $("#wv-link-button-check")
-          .prop("checked");
+      .click(function () {
+        var checked = $('#wv-link-button-check')
+          .prop('checked');
         WVC.GA.event('Link', 'Click', 'Share link Button');
         if (checked) {
           self.show();
@@ -37,13 +36,13 @@ wv.link.ui = wv.link.ui || function(models, config) {
           wv.ui.closeDialog();
         }
       });
-    models.link.events.on("update", replaceHistoryState);
+    models.link.events.on('update', replaceHistoryState);
   };
 
-  //Calls toQueryString to fetch updated state and returns URL
-  var replaceHistoryState = _.throttle(function() {
+  // Calls toQueryString to fetch updated state and returns URL
+  var replaceHistoryState = _.throttle(function () {
     if (wv.util.browser.history) {
-      window.history.replaceState("", "@OFFICIAL_NAME@", "?" + models.link.toQueryString());
+      window.history.replaceState('', '@OFFICIAL_NAME@', '?' + models.link.toQueryString());
     }
   }, 2000, {
     leading: true,
@@ -51,29 +50,29 @@ wv.link.ui = wv.link.ui || function(models, config) {
   });
 
   // Facebook: https://developers.facebook.com/docs/sharing/reference/share-dialog#redirect
-  var facebookUrlParams = function(appId, href, redirectUri, display) {
-    return "https://www.facebook.com/dialog/share?" + "app_id=" + encodeURIComponent(appId) + "&href=" + encodeURIComponent(href) + "&redirect_uri=" + encodeURIComponent(redirectUri) + "&display=" + encodeURIComponent(display);
+  var facebookUrlParams = function (appId, href, redirectUri, display) {
+    return 'https://www.facebook.com/dialog/share?' + 'app_id=' + encodeURIComponent(appId) + '&href=' + encodeURIComponent(href) + '&redirect_uri=' + encodeURIComponent(redirectUri) + '&display=' + encodeURIComponent(display);
   };
 
   // Twitter: https://dev.twitter.com/web/tweet-button/parameters#web-intent-example
-  var twitterUrlParams = function(url, text) {
-    return "https://twitter.com/intent/tweet?" + "url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text);
+  var twitterUrlParams = function (url, text) {
+    return 'https://twitter.com/intent/tweet?' + 'url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
   };
 
   // Reddit: https://www.reddit.com/r/nasa/submit?url=[URL]&title=[TITLE]
-  var redditUrlParams = function(url, title) {
-    return "https://www.reddit.com/r/nasa/submit?" + "url=" + encodeURIComponent(url) + "&title=" + encodeURIComponent(title);
+  var redditUrlParams = function (url, title) {
+    return 'https://www.reddit.com/r/nasa/submit?' + 'url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
   };
 
   // Email: mailto:?subject=[SUBJECT]&body=[BODY]
-  var emailUrlParams = function(subject, body) {
-    return "mailto:?" + "subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  var emailUrlParams = function (subject, body) {
+    return 'mailto:?' + 'subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   };
 
-  var getSharelink = function(type, url) {
+  var getSharelink = function (type, url) {
     var shareMessage = 'Check out what I found in NASA Worldview!';
     var twMessage = 'Check out what I found in #NASAWorldview -';
-    var emailBody = shareMessage + " - " + url;
+    var emailBody = shareMessage + ' - ' + url;
 
     switch (type) {
       case 'twitter':
@@ -87,10 +86,10 @@ wv.link.ui = wv.link.ui || function(models, config) {
     }
     return undefined;
   };
-  var openPromisedSocial = function(url, win) {
+  var openPromisedSocial = function (url, win) {
     win.location.assign(url);
   };
-  var clickFunction = function(type) {
+  var clickFunction = function (type) {
     var href, win;
     var shareLink = models.link.get();
     var promise = models.link.shorten();
@@ -101,16 +100,16 @@ wv.link.ui = wv.link.ui || function(models, config) {
       if (type === 'twitter') {
         win = window.open('', '_blank');
       }
-      promise.done(function(result) {
+      promise.done(function (result) {
         if (result.status_code === 200) {
           href = getSharelink(type, result.data.url);
           openPromisedSocial(href, win);
         }
       })
-        .fail(function() {
+        .fail(function () {
           href = getSharelink(type, shareLink);
           openPromisedSocial(href, win);
-          console.warn("Unable to shorten URL, full link generated.");
+          console.warn('Unable to shorten URL, full link generated.');
         });
     } else {
       href = getSharelink(type, shareLink);
@@ -118,22 +117,22 @@ wv.link.ui = wv.link.ui || function(models, config) {
     }
   };
 
-  self.show = function() {
+  self.show = function () {
     var $dialog = wv.ui.getDialog();
     var item = "<div id='wv-link' class='wv-link'>" +
       "<div class='input-group'>" +
       "<input type='text' value='' name='permalink_content' id='permalink_content' readonly/>" +
       "<span class='input-group-button hide-icon' data-balloon-visible data-tooltip='Copied!' data-tooltip-pos='up' data-tooltip-length='xsmall'>" +
       "<button title='Copy to clipboard' class='copy-btn' data-clipboard-target='#permalink_content'>COPY</button>" +
-      "</span>" +
-      "</div>";
+      '</span>' +
+      '</div>';
     if (config.features.urlShortening) {
       item += "<span autofocus></span><div id='wv-link-shorten'>" +
         "<input type='checkbox' value='' id='wv-link-shorten-check' />" +
         "<label id='wv-link-shorten-label' for='wv-link-shorten-check'>Shorten link</label>" +
-        "</div>";
+        '</div>';
     }
-    item += "</div>";
+    item += '</div>';
 
     var dialogWidth = '300';
     if (wv.util.browser.small) {
@@ -147,73 +146,73 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
     // If selected during the animation, the cursor will go to the
     // end of the input box
-    var updateLink = function() {
+    var updateLink = function () {
       $('#permalink_content')
         .val(models.link.get());
-      $("#wv-link-shorten-check")
-        .iCheck("uncheck");
+      $('#wv-link-shorten-check')
+        .iCheck('uncheck');
       $('#permalink_content')
         .focus();
       $('#permalink_content')
         .select();
     };
 
-    models.link.events.on("update", updateLink);
+    models.link.events.on('update', updateLink);
 
     $dialog.dialog({
-      dialogClass: "wv-panel wv-link-panel",
-      title: "Copy link to share:",
+      dialogClass: 'wv-panel wv-link-panel',
+      title: 'Copy link to share:',
       show: {
-        effect: "slide",
-        direction: "up"
+        effect: 'slide',
+        direction: 'up'
       },
       width: dialogWidth,
-      height: "auto",
+      height: 'auto',
       minHeight: 10,
       draggable: false,
       resizable: false,
       autoOpen: false
     })
-      .on("dialogcreate",
+      .on('dialogcreate',
         $dialog.prepend(item)
       )
-      .on("dialogclose", function() {
-        $("#wv-link-button-check")
-          .prop("checked", false);
-        $button.button("refresh");
-        models.link.events.off("update", updateLink);
+      .on('dialogclose', function () {
+        $('#wv-link-button-check')
+          .prop('checked', false);
+        $button.button('refresh');
+        models.link.events.off('update', updateLink);
       });
     if (wv.util.browser.small) {
       wv.ui.positionDialog($dialog, {
-        my: "left top",
-        at: "left+58 bottom+5",
-        of: "#wv-toolbar"
+        my: 'left top',
+        at: 'left+58 bottom+5',
+        of: '#wv-toolbar'
       });
     } else {
       wv.ui.positionDialog($dialog, {
-        my: "left top",
-        at: "left bottom+5",
+        my: 'left top',
+        at: 'left bottom+5',
         of: $label
       });
     }
-    $(".ui-dialog")
+    $('.ui-dialog')
       .zIndex(600);
 
     $('#permalink_content')
       .val(models.link.get());
-    $dialog.dialog("open");
+    $dialog.dialog('open');
     setTimeout(updateLink, 500);
 
-    $("#wv-link-shorten-check")
-      .on("change", function() {
-        var checked = $("#wv-link-shorten-check")
-          .prop("checked");
+    $('#wv-link-shorten-check')
+      .on('change', function () {
+        var checked = $('#wv-link-shorten-check')
+          .prop('checked');
         if (checked) {
           var promise = models.link.shorten();
           WVC.GA.event('Link', 'Check', 'Shorten');
-          $("#permalink_content")
-            .val("Please wait...");
-          promise.done(function(result) {
+          $('#permalink_content')
+            .val('Please wait...');
+          promise.done(function (result) {
             if (result.status_code === 200) {
               $('#permalink_content')
                 .val(result.data.url);
@@ -221,7 +220,7 @@ wv.link.ui = wv.link.ui || function(models, config) {
               error(result.status_code, result.status_txt);
             }
           })
-            .fail(function(jqXHR, textStatus, errorThrown) {
+            .fail(function (jqXHR, textStatus, errorThrown) {
               error(textStatus, errorThrown);
             });
         } else {
@@ -235,36 +234,36 @@ wv.link.ui = wv.link.ui || function(models, config) {
           .select();
       });
 
-    var error = function() {
-      console.warn("Unable to shorten URL");
+    var error = function () {
+      console.warn('Unable to shorten URL');
       console.warn.apply(console, arguments);
-      wv.ui.notify("Unable to shorten the permalink at this time. " +
-        "Please try again later.");
+      wv.ui.notify('Unable to shorten the permalink at this time. ' +
+        'Please try again later.');
     };
 
-    $("#wv-link-shorten-check")
-      .prop("checked", false);
+    $('#wv-link-shorten-check')
+      .prop('checked', false);
 
-    clipboard.on('success', function(e) {
+    clipboard.on('success', function (e) {
       e.clearSelection();
 
       $('.wv-link .input-group-button')
         .removeClass('hide-icon');
 
-      setTimeout(function(){
+      setTimeout(function () {
         $('.wv-link .input-group-button')
           .addClass('hide-icon');
       }, 1000);
     });
 
-    clipboard.on('error', function(e) {
+    clipboard.on('error', function (e) {
       console.error('Link could not be copied!');
       console.error('Action:', e.action);
       console.error('Trigger:', e.trigger);
     });
   };
 
-  self.initWidget = function() {
+  self.initWidget = function () {
     return widgetFactory({
       clickFunction: clickFunction,
       fbLink: '#',
@@ -276,5 +275,4 @@ wv.link.ui = wv.link.ui || function(models, config) {
 
   init();
   return self;
-
 };

@@ -5,29 +5,29 @@
  * have a curved shape despite only having 4 vertices.
  */
 
-(function() {
+(function () {
   var ns;
 
   ns = this.edsc.map.L;
 
   // Cartesian interpolation.  Averages lat and lng
-  ns.interpolation = (function(L, gcInterpolate) {
+  ns.interpolation = (function (L, gcInterpolate) {
     var exports, interpolateCartesian, interpolateGeodetic, projectLatLngPath, projectLatlngs, projectPath;
-    
-    interpolateCartesian = function(ll0, ll1) {
+
+    interpolateCartesian = function (ll0, ll1) {
       return L.latLng((ll0.lat + ll1.lat) / 2, (ll0.lng + ll1.lng) / 2);
     };
 
     // Geodetic interpolation.  Finds great circle path between the given points.
     // See geoutil.gcInterpolate
-    interpolateGeodetic = function(ll0, ll1) {
+    interpolateGeodetic = function (ll0, ll1) {
       return gcInterpolate(ll0, ll1);
     };
 
     // Given a path defined by latLngs, a projection defined by proj, and an interpolation
     // function that takes two pionts and returns their midpoint, finds a set of projected
     // (x, y) points defining the path between the points in the given projection
-    projectLatLngPath = function(latLngs, proj, interpolateFn, tolerance, maxDepth) {
+    projectLatLngPath = function (latLngs, proj, interpolateFn, tolerance, maxDepth) {
       var d, depth, depth0, depth1, interpolatedLatLngs, interpolatedPoints, ll, ll0, ll1, maxDepthReached, p, p0, p1, points, ref;
       if (tolerance == null) {
         tolerance = 1;
@@ -46,7 +46,7 @@
       } else {
         latLngs = latLngs.concat(latLngs[0]);
       }
-      points = (function() {
+      points = (function () {
         var i, len, results;
         results = [];
         for (i = 0, len = latLngs.length; i < len; i++) {
@@ -93,12 +93,12 @@
         }
       }
       if (maxDepthReached && config.debug) {
-        console.log("Max interpolation depth reached.");
+        console.log('Max interpolation depth reached.');
       }
       return interpolatedPoints;
     };
 
-    projectPath = function(map, latlngs, holes, fn, tolerance, maxDepth) {
+    projectPath = function (map, latlngs, holes, fn, tolerance, maxDepth) {
       var hole, proj, result;
       if (holes == null) {
         holes = [];
@@ -118,7 +118,7 @@
       if (fn === 'cartesian') {
         fn = interpolateCartesian;
       }
-      proj = function(ll) {
+      proj = function (ll) {
         // Avoid weird precision problems near infinity by clamping to a high min/max pixel value
         var MAX_RES, result;
         MAX_RES = 10000000;
@@ -133,7 +133,7 @@
       };
       return result = {
         boundary: projectLatLngPath(latlngs, proj, fn, tolerance, maxDepth),
-        holes: (function() {
+        holes: (function () {
           var i, len, ref, results;
           ref = holes != null ? holes : [];
           results = [];
@@ -148,7 +148,7 @@
 
     // Overrides the default projectLatLngs in Polyline and Polygon to project and interpolate the
     // path instead of just projecting it
-    projectLatlngs = function() {
+    projectLatlngs = function () {
       var interpolated;
       interpolated = projectPath(this._map, this._latlngs, this._holes, this._interpolationFn);
       this._originalPoints = interpolated.boundary;
@@ -166,5 +166,4 @@
       projectPath: projectPath
     };
   })(L, window.edsc.map.geoutil.gcInterpolate);
-
 }).call(this);

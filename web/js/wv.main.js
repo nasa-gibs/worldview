@@ -1,22 +1,21 @@
 var wvx = wvx || {};
 
 // Document ready function
-$(function() {
-
+$(function () {
   var config;
   var state = wv.util.fromQueryString(location.search);
   var parameters = wv.util.fromQueryString(location.search);
   var errors = [];
   var startTime;
 
-  var main = function() {
+  var main = function () {
     if (parameters.elapsed) {
       startTime = new Date()
         .getTime();
     } else {
-      elapsed = function() {};
+      elapsed = function () {};
     }
-    elapsed("start");
+    elapsed('start');
     /* May be included in next version
     yepnope({
         test: parameters.debug,
@@ -27,9 +26,9 @@ $(function() {
     loadConfig();
   };
 
-  var loadConfig = function() {
-    elapsed("loading config");
-    var configURI = wv.brand.url("config/wv.json");
+  var loadConfig = function () {
+    elapsed('loading config');
+    var configURI = wv.brand.url('config/wv.json');
     var promise = $.getJSON(configURI);
     promise
       .done(wv.util.wrap(onConfigLoaded))
@@ -37,8 +36,8 @@ $(function() {
     wv.ui.indicator.delayed(promise, 1000);
   };
 
-  var onConfigLoaded = function(data) {
-    elapsed("config loaded");
+  var onConfigLoaded = function (data) {
+    elapsed('config loaded');
     config = data;
     config.parameters = parameters;
 
@@ -49,7 +48,7 @@ $(function() {
 
     // Load any additional scripts as needed
     if (config.scripts) {
-      _.each(config.scripts, function(script) {
+      _.each(config.scripts, function (script) {
         $.getScript(script);
       });
     }
@@ -69,7 +68,7 @@ $(function() {
     if (config.features.animation) {
       parsers.push(wv.anim.parse);
     }
-    _.each(parsers, function(parser) {
+    _.each(parsers, function (parser) {
       parser(state, errors, config);
     });
     requirements = [
@@ -81,8 +80,8 @@ $(function() {
       .fail(wv.util.error);
   };
 
-  var init = function() {
-    elapsed("init");
+  var init = function () {
+    elapsed('init');
     // If at the beginning of the day, wait on the previous day until GIBS
     // catches up (about three hours)
     var initialDate;
@@ -157,15 +156,14 @@ $(function() {
       models.proj.change = wv.proj.change(models, config);
     }
 
-    elapsed("ui");
+    elapsed('ui');
     // Create widgets
     ui.proj = wv.proj.ui(models, config);
     ui.sidebar = wv.layers.sidebar(models, config);
     ui.activeLayers = wv.layers.active(models, ui, config);
     ui.addModal = wv.layers.modal(models, ui, config);
 
-
-    function timelineInit() {
+    function timelineInit () {
       ui.timeline = wv.date.timeline(models, config, ui);
       ui.timeline.data = wv.date.timeline.data(models, config, ui);
       ui.timeline.zoom = wv.date.timeline.zoom(models, config, ui);
@@ -208,9 +206,9 @@ $(function() {
       ui.alert = wv.notifications.ui(ui, config);
     }
 
-    //FIXME: Old hack
+    // FIXME: Old hack
     $(window)
-      .resize(function() {
+      .resize(function () {
         if (wv.util.browser.small) {
           $('#productsHoldertabs li.first a')
             .trigger('click');
@@ -221,67 +219,67 @@ $(function() {
       });
 
     document.activeElement.blur();
-    $("input")
+    $('input')
       .blur();
-    $("#eventsHolder")
+    $('#eventsHolder')
       .hide();
 
     if (config.features.dataDownload) {
       models.data.events
-        .on("activate", function() {
-          ui.sidebar.selectTab("download");
+        .on('activate', function () {
+          ui.sidebar.selectTab('download');
         })
-        .on("queryResults", function() {
+        .on('queryResults', function () {
           ui.data.onViewChange();
         });
-      ui.map.events.on("extent", function() {
+      ui.map.events.on('extent', function () {
         ui.data.onViewChange();
       });
       // FIXME: This is a hack
-      models.map.events.on("projection", models.data.updateProjection);
+      models.map.events.on('projection', models.data.updateProjection);
     }
     // Sink all focus on inputs if click unhandled
     $(document)
-      .click(function(event) {
-        if (event.target.nodeName !== "INPUT") {
-          $("input")
+      .click(function (event) {
+        if (event.target.nodeName !== 'INPUT') {
+          $('input')
             .blur();
         }
       });
 
     // Console notifications
     if (wv.brand.release()) {
-      console.info(wv.brand.NAME + " - Version " + wv.brand.VERSION +
-        " - " + wv.brand.BUILD_TIMESTAMP);
+      console.info(wv.brand.NAME + ' - Version ' + wv.brand.VERSION +
+        ' - ' + wv.brand.BUILD_TIMESTAMP);
     } else {
-      console.warn("Development version");
+      console.warn('Development version');
     }
     wv.debug.layers(ui, models, config);
 
     errorReport();
-    //wv.debug.error(parameters);
+    // wv.debug.error(parameters);
 
-    models.wv.events.trigger("startup");
-    elapsed("done");
+    models.wv.events.trigger('startup');
+    elapsed('done');
 
     // Reset Worldview when clicking on logo
-    $(document).click(function(e) {
-      if (e.target.id == "wv-logo") resetWorldview(e);
+    $(document).click(function (e) {
+      if (e.target.id == 'wv-logo') resetWorldview(e);
     });
   };
 
-  var resetWorldview = function(e){
+  var resetWorldview = function (e) {
     e.preventDefault();
-    if (window.location.search === "") return; // Nothing to reset
-    var msg = "Do you want to reset Worldview to its defaults? You will lose your current state.";
-    if (confirm(msg)) document.location.href = "/";
+    if (window.location.search === '') return; // Nothing to reset
+    var msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
+    if (confirm(msg)) document.location.href = '/';
   };
 
-  var errorReport = function() {
+  var errorReport = function () {
     var layersRemoved = 0;
 
-    _.each(errors, function(error) {
-      var cause = (error.cause) ? ": " + error.cause : "";
+    _.each(errors, function (error) {
+      var cause = (error.cause) ? ': ' + error.cause : '';
       wv.util.warn(error.message + cause);
       if (error.layerRemoved) {
         layersRemoved = layersRemoved + 1;
@@ -301,7 +299,7 @@ $(function() {
     }
   };
 
-  var elapsed = function(message) {
+  var elapsed = function (message) {
     if (!parameters.elapsed) return;
     var t = new Date()
       .getTime() - startTime;
@@ -330,5 +328,4 @@ $(function() {
   */
 
   wv.util.wrap(main)();
-
 });

@@ -4,7 +4,7 @@ wv.map = wv.map || {};
 /*
  * @Class
  */
-wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
+wv.map.datelinebuilder = wv.map.datelinebuilder || function (models, config) {
   var self = {};
   var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
     lineLeft, lineRight, textLeft, textRight, proj;
@@ -21,7 +21,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {object} React Component
    */
-  self.init = function(Parent, olMap, date) {
+  self.init = function (Parent, olMap, date) {
     var dimensions;
     map = olMap;
     lineFactory = React.createFactory(WVC.DateLine);
@@ -29,31 +29,28 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
     drawDatelines(map, date);
     proj = models.proj.selected.id;
 
-    Parent.events.on('moveend', function() {
-      if (!isGeoProjection())
-        return;
+    Parent.events.on('moveend', function () {
+      if (!isGeoProjection()) { return; }
       updateLineVisibility(true);
       dimensions = position(map);
       update(dimensions);
     });
-    Parent.events.on('drag', function() {
-      if (!isGeoProjection())
-        return;
+    Parent.events.on('drag', function () {
+      if (!isGeoProjection()) { return; }
       updateLineVisibility(false);
     });
-    Parent.events.on('movestart', function() {
-      if (!isGeoProjection())
-        return;
+    Parent.events.on('movestart', function () {
+      if (!isGeoProjection()) { return; }
       updateLineVisibility(false);
     });
-    models.date.events.on('select', function() {
+    models.date.events.on('select', function () {
       updateDate(models.date.selected);
     });
-    models.proj.events.on('select', function() {
+    models.proj.events.on('select', function () {
       proj = models.proj.selected.id;
     });
   };
-  var isGeoProjection = function() {
+  var isGeoProjection = function () {
     if (proj === 'geographic') {
       return true;
     }
@@ -75,7 +72,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {object} React Component
    */
-  var setLineDefaults = function(Factory, height, lineX, overlay, reactCase, tooltip) {
+  var setLineDefaults = function (Factory, height, lineX, overlay, reactCase, tooltip) {
     var props = {
       height: height,
       lineOver: onHover,
@@ -100,7 +97,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {object} React Component
    */
-  var setTextDefaults = function(Factory, reactCase, date) {
+  var setTextDefaults = function (Factory, reactCase, date) {
     var props = {
       dateLeft: wv.util.toISOStringDate(wv.util.dateAdd(date, 'day', 1)),
       dateRight: wv.util.toISOStringDate(date)
@@ -119,7 +116,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {object} React Component
    */
-  var initWidget = function(Factory, props) {
+  var initWidget = function (Factory, props) {
     return Factory(props);
   };
 
@@ -133,7 +130,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {void}
    */
-  var updateLineVisibility = function(boo) {
+  var updateLineVisibility = function (boo) {
     var state = {
       active: boo
     };
@@ -151,13 +148,13 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {void}
    */
-  var drawDatelines = function(map, date) {
+  var drawDatelines = function (map, date) {
     var height, leftLineCase, rightLineCase, leftTextCase, rightTextCase;
 
-    leftLineCase = document.createElement("div");
-    rightLineCase = document.createElement("div");
-    leftTextCase = document.createElement("div");
-    rightTextCase = document.createElement("div");
+    leftLineCase = document.createElement('div');
+    rightLineCase = document.createElement('div');
+    leftTextCase = document.createElement('div');
+    rightTextCase = document.createElement('div');
     height = 0;
 
     overlay1 = drawOverlay([-180, 90], leftLineCase);
@@ -189,7 +186,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {void}
    */
-  var onHover = function(pixels, overlay, lineX, tooltip) {
+  var onHover = function (pixels, overlay, lineX, tooltip) {
     var coords;
     coords = map.getCoordinateFromPixel(pixels);
     overlay.setPosition([lineX, coords[1]]);
@@ -209,7 +206,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {void}
    */
-  var onMouseOut = function(tooltip) {
+  var onMouseOut = function (tooltip) {
     tooltip.setState({
       active: false
     });
@@ -225,7 +222,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {void}
    */
-  var updateDate = function(date) {
+  var updateDate = function (date) {
     var leftState, rightState;
     leftState = {
       dateLeft: wv.util.toISOStringDate(wv.util.dateAdd(date, 'day', 1)),
@@ -237,7 +234,6 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
     };
     textLeft.setState(leftState);
     textRight.setState(rightState);
-
   };
 
   /*
@@ -250,7 +246,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {void}
    */
-  var position = function(map) {
+  var position = function (map) {
     var extent, top, topY, bottomY, bottom, height, startY, topExtent, bottomExtent;
 
     if (map.getSize()[0] === 0) {
@@ -291,7 +287,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {void}
    */
-  var update = function(dimensions) {
+  var update = function (dimensions) {
     var state = {
       height: dimensions[0]
     };
@@ -312,7 +308,7 @@ wv.map.datelinebuilder = wv.map.datelinebuilder || function(models, config) {
    *
    * @returns {void}
    */
-  var drawOverlay = function(coordinate, el) {
+  var drawOverlay = function (coordinate, el) {
     var overlay = new ol.Overlay({
       element: el,
       stopEvent: false

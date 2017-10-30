@@ -7,20 +7,19 @@ wv.layers = wv.layers || {};
 /**
  * @class wv.layers.add
  */
-wv.layers.add = wv.layers.add || function(models, ui, config) {
-
+wv.layers.add = wv.layers.add || function (models, ui, config) {
   var jsp = null;
 
   var model = models.layers;
   var self = {};
 
-  self.selector = "#selectorbox";
-  self.id = "selectorbox";
+  self.selector = '#selectorbox';
+  self.id = 'selectorbox';
 
   var visible = {};
 
-  var init = function() {
-    _.each(config.layers, function(layer) {
+  var init = function () {
+    _.each(config.layers, function (layer) {
       visible[layer.id] = true;
     });
 
@@ -28,30 +27,30 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
       .resize(resize);
 
     model.events
-      .on("add", onLayerAdded)
-      .on("remove", onLayerRemoved);
-    models.proj.events.on("select", onProjectionChange);
-    models.wv.events.on("sidebar-expand", resize);
-    ui.sidebar.events.on("selectTab", function(tab) {
-      if (tab === "add") {
+      .on('add', onLayerAdded)
+      .on('remove', onLayerRemoved);
+    models.proj.events.on('select', onProjectionChange);
+    models.wv.events.on('sidebar-expand', resize);
+    ui.sidebar.events.on('selectTab', function (tab) {
+      if (tab === 'add') {
         resize();
       }
     });
     // Rendering all the layers can take a half second or so. Place
     // in a timeout to make startup look fast. This should all be
     // replaced in the next version.
-    setTimeout(function() {
+    setTimeout(function () {
       render();
       filter();
       resize();
     }, 1);
   };
 
-  var render = function() {
+  var render = function () {
     $(self.selector)
       .empty();
 
-    var tabs_height = $(".ui-tabs-nav")
+    var tabs_height = $('.ui-tabs-nav')
       .outerHeight(true);
     $(self.selector)
       .addClass('selector');
@@ -63,48 +62,48 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
           .outerHeight() - tabs_height
       );
 
-    var $form = $("<div></div>")
-      .attr("id", self.id + "facetedSearch")
-      .addClass("facetedSearch");
+    var $form = $('<div></div>')
+      .attr('id', self.id + 'facetedSearch')
+      .addClass('facetedSearch');
 
     if (config.aoi) {
-      var $select = $("<select></select>")
-        .attr("id", self.id + "select")
-        .addClass("select");
+      var $select = $('<select></select>')
+        .attr('id', self.id + 'select')
+        .addClass('select');
 
       $form.append($select);
     }
 
-    var $search = $("<input>")
-      .attr("id", self.id + "search")
-      .addClass("search")
-      .attr("type", "text")
-      .attr("name", "search")
-      .attr("placeholder", 'Search ("aqua", "fire")')
-      .attr("autocomplete", "off");
+    var $search = $('<input>')
+      .attr('id', self.id + 'search')
+      .addClass('search')
+      .attr('type', 'text')
+      .attr('name', 'search')
+      .attr('placeholder', 'Search ("aqua", "fire")')
+      .attr('autocomplete', 'off');
 
     $form.append($search);
     $(self.selector)
       .append($form);
 
-    var $content = $("<div></div>")
-      .attr("id", self.id + "content");
+    var $content = $('<div></div>')
+      .attr('id', self.id + 'content');
 
-    renderType($content, "baselayers", "Base Layers", "BaseLayers");
-    renderType($content, "overlays", "Overlays", "Overlays");
+    renderType($content, 'baselayers', 'Base Layers', 'BaseLayers');
+    renderType($content, 'overlays', 'Overlays', 'Overlays');
     $(self.selector)
       .append($content);
-    $(self.selector + " .selectorItem, " + self.selector +
-        " .selectorItem input")
+    $(self.selector + ' .selectorItem, ' + self.selector +
+        ' .selectorItem input')
       .on('ifChecked', addLayer);
-    $(self.selector + " .selectorItem, " + self.selector +
-        " .selectorItem input")
+    $(self.selector + ' .selectorItem, ' + self.selector +
+        ' .selectorItem input')
       .on('ifUnchecked', removeLayer);
-    $(self.selector + "select")
+    $(self.selector + 'select')
       .on('change', filter);
-    $(self.selector + "search")
+    $(self.selector + 'search')
       .on('keyup', filter);
-    $(self.selector + "search")
+    $(self.selector + 'search')
       .focus();
 
     $(self.selector)
@@ -116,25 +115,25 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     setTimeout(resize, 1);
   };
 
-  var renderType = function($parent, group, header, camelCase) {
-    var $container = $("<div></div>")
-      .attr("id", self.id + camelCase)
-      .addClass("categoryContainer");
+  var renderType = function ($parent, group, header, camelCase) {
+    var $container = $('<div></div>')
+      .attr('id', self.id + camelCase)
+      .addClass('categoryContainer');
 
-    var $header = $("<h3></h3>")
-      .addClass("head")
+    var $header = $('<h3></h3>')
+      .addClass('head')
       .html(header);
 
-    var $element = $("<ul></ul>")
-      .attr("id", self.id + group)
-      .addClass(self.id + "category")
-      .addClass("category")
-      .addClass("scroll-pane");
+    var $element = $('<ul></ul>')
+      .attr('id', self.id + group)
+      .addClass(self.id + 'category')
+      .addClass('category')
+      .addClass('scroll-pane');
 
-    _.each(config.layerOrder, function(layerId) {
+    _.each(config.layerOrder, function (layerId) {
       var layer = config.layers[layerId];
       if (!layer) {
-        console.warn("In layer order but not defined", layerId);
+        console.warn('In layer order but not defined', layerId);
       } else if (layer.group === group) {
         renderLayer($element, group, layerId);
       }
@@ -145,49 +144,49 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     $parent.append($container);
   };
 
-  var renderLayer = function($parent, group, layerId) {
+  var renderLayer = function ($parent, group, layerId) {
     var layer = config.layers[layerId];
     if (!layer) {
-      console.warn("Skipping unknown layer", layerId);
+      console.warn('Skipping unknown layer', layerId);
       return;
     }
-    var $label = $("<label></label>")
-      .attr("data-layer", encodeURIComponent(layer.id));
-    var $element = $("<li></li>")
-      .addClass("selectorItem")
-      .attr("data-layer", encodeURIComponent(layer.id))
-      .addClass("item");
+    var $label = $('<label></label>')
+      .attr('data-layer', encodeURIComponent(layer.id));
+    var $element = $('<li></li>')
+      .addClass('selectorItem')
+      .attr('data-layer', encodeURIComponent(layer.id))
+      .addClass('item');
 
     var names = models.layers.getTitles(layer.id);
-    var $name = $("<h4></h4>")
-      .addClass("title")
+    var $name = $('<h4></h4>')
+      .addClass('title')
       .html(names.title);
     if (config.parameters.markPalettes) {
       if (layer.palette) {
-        $name.addClass("mark");
+        $name.addClass('mark');
       }
     }
     if (config.parameters.markDownloads) {
       if (layer.product) {
-        $name.addClass("mark");
+        $name.addClass('mark');
       }
     }
-    var $description = $("<p></p>")
-      .addClass("subtitle")
+    var $description = $('<p></p>')
+      .addClass('subtitle')
       .html(names.subtitle);
 
-    var $checkbox = $("<input></input>")
-      .attr("id", encodeURIComponent(layer.id))
-      .attr("value", layer.id)
-      .attr("type", "checkbox")
-      .attr("data-layer", layer.id);
-    if (group === "baselayers") {
-      $checkbox.attr("name", group);
+    var $checkbox = $('<input></input>')
+      .attr('id', encodeURIComponent(layer.id))
+      .attr('value', layer.id)
+      .attr('type', 'checkbox')
+      .attr('data-layer', layer.id);
+    if (group === 'baselayers') {
+      $checkbox.attr('name', group);
     }
     if (_.find(model.active, {
       id: layer.id
     })) {
-      $checkbox.attr("checked", "checked");
+      $checkbox.attr('checked', 'checked');
     }
 
     $element.append($checkbox);
@@ -198,31 +197,31 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     $parent.append($label);
   };
 
-  var adjustCategoryHeights = function() {
+  var adjustCategoryHeights = function () {
     var heights = [];
     var facets_height =
-      $(self.selector + "facetedSearch")
+      $(self.selector + 'facetedSearch')
         .outerHeight(true);
     var container_height =
       $(self.selector)
         .outerHeight(true) - facets_height;
-    $(self.selector + "content")
+    $(self.selector + 'content')
       .height(container_height);
     var labelHeight = 0;
     $(self.selector + 'content .head')
-      .each(function() {
+      .each(function () {
         labelHeight += $(this)
           .outerHeight(true);
       });
     container_height -= labelHeight;
 
-    $.each(["baselayers", "overlays"], function(i, group) {
+    $.each(['baselayers', 'overlays'], function (i, group) {
       var actual_height = 0;
       var count = 0;
       $(self.selector + group + ' li')
-        .each(function() {
+        .each(function () {
           var layerId = decodeURIComponent($(this)
-            .attr("data-layer"));
+            .attr('data-layer'));
           if (visible[layerId]) {
             actual_height += $(this)
               .outerHeight(true);
@@ -243,16 +242,16 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
       }
       heights[1].height = container_height - heights[0].height;
     }
-    $("#" + heights[0].name)
-      .css("height", heights[0].height + "px");
-    $("#" + heights[1].name)
-      .css("height", heights[1].height + "px");
+    $('#' + heights[0].name)
+      .css('height', heights[0].height + 'px');
+    $('#' + heights[1].name)
+      .css('height', heights[1].height + 'px');
     reinitializeScrollbars();
   };
 
-  var reinitializeScrollbars = function() {
-    $("." + self.id + "category")
-      .each(function() {
+  var reinitializeScrollbars = function () {
+    $('.' + self.id + 'category')
+      .each(function () {
         var api = $(this)
           .data('jsp');
         if (api) {
@@ -261,9 +260,8 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
       });
   };
 
-  var resize = function() {
-
-    var tabs_height = $(".ui-tabs-nav")
+  var resize = function () {
+    var tabs_height = $('.ui-tabs-nav')
       .outerHeight(true);
     $(self.selector)
       .height($(self.selector)
@@ -277,7 +275,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
       }
     }
     if (wv.util.browser.ie) {
-      jsp = $("." + self.id + "category")
+      jsp = $('.' + self.id + 'category')
         .jScrollPane({
           verticalDragMinHeight: 20,
           autoReinitialise: false,
@@ -285,7 +283,7 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
           mouseWheelSpeed: 60
         });
     } else {
-      jsp = $("." + self.id + "category")
+      jsp = $('.' + self.id + 'category')
         .jScrollPane({
           verticalDragMinHeight: 20,
           autoReinitialise: false,
@@ -295,37 +293,36 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     adjustCategoryHeights();
   };
 
-  var addLayer = function() {
+  var addLayer = function () {
     model.add(decodeURIComponent($(this)
-      .attr("data-layer")));
-
+      .attr('data-layer')));
   };
 
-  var removeLayer = function() {
+  var removeLayer = function () {
     model.remove(decodeURIComponent($(this)
-      .attr("data-layer")));
+      .attr('data-layer')));
   };
 
-  var onLayerAdded = function(layer) {
+  var onLayerAdded = function (layer) {
     var $element = $("#selectorbox [data-layer='" +
       wv.util.jqueryEscape(layer.id) + "']");
-    $element.iCheck("check");
+    $element.iCheck('check');
   };
 
-  var onLayerRemoved = function(layer) {
+  var onLayerRemoved = function (layer) {
     var $element = $("#selectorbox [data-layer='" +
       wv.util.jqueryEscape(layer.id) + "']");
-    $element.iCheck("uncheck");
+    $element.iCheck('uncheck');
   };
 
-  var onProjectionChange = function() {
+  var onProjectionChange = function () {
     adjustTitles();
     updateAreasOfInterest();
     filter();
   };
 
-  var adjustTitles = function() {
-    _.each(config.layers, function(def) {
+  var adjustTitles = function () {
+    _.each(config.layers, function (def) {
       var names = models.layers.getTitles(def.id);
       $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
           "'] .title")
@@ -336,22 +333,22 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     });
   };
 
-  var updateAreasOfInterest = function() {
+  var updateAreasOfInterest = function () {
     if (!config.aoi) {
       return;
     }
-    var $select = $("#" + self.id + "select");
-    var previous = $(self.selector + "select")
+    var $select = $('#' + self.id + 'select');
+    var previous = $(self.selector + 'select')
       .val();
 
     $select.empty();
-    var $option = $("<option></option>")
-      .attr("value", "All")
-      .html("All");
+    var $option = $('<option></option>')
+      .attr('value', 'All')
+      .html('All');
     $select.append($option);
 
     var aois = [];
-    $.each(config.aoi, function(name, info) {
+    $.each(config.aoi, function (name, info) {
       if ($.inArray(models.proj.selected.id,
         info.projections) >= 0) {
         if (info.index === 0 || info.index) {
@@ -362,39 +359,39 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
       }
     });
 
-    $.each(aois, function(index, name) {
-      var $option = $("<option></option>")
-        .attr("value", name)
+    $.each(aois, function (index, name) {
+      var $option = $('<option></option>')
+        .attr('value', name)
         .html(name);
       if (previous === name) {
-        $option.attr("selected", "selected");
+        $option.attr('selected', 'selected');
       }
       $select.append($option);
     });
     filter();
   };
 
-  var searchTerms = function() {
-    var search = $(self.selector + "search")
+  var searchTerms = function () {
+    var search = $(self.selector + 'search')
       .val()
       .toLowerCase();
     var terms = search.split(/ +/);
     return terms;
   };
 
-  var filterProjection = function(layer) {
+  var filterProjection = function (layer) {
     return !layer.projections[models.proj.selected.id];
   };
 
-  var filterSearch = function(layer, terms) {
-    var search = $(self.selector + "search")
+  var filterSearch = function (layer, terms) {
+    var search = $(self.selector + 'search')
       .val();
-    if (search === "") {
+    if (search === '') {
       return false;
     }
     var filtered = false;
     var names = models.layers.getTitles(layer.id);
-    $.each(terms, function(index, term) {
+    $.each(terms, function (index, term) {
       filtered = !names.title.toLowerCase()
         .contains(term) &&
         !names.subtitle.toLowerCase()
@@ -408,17 +405,17 @@ wv.layers.add = wv.layers.add || function(models, ui, config) {
     return filtered;
   };
 
-  var filter = _.throttle(function() {
+  var filter = _.throttle(function () {
     var search = searchTerms();
-    $.each(config.layers, function(layerId, layer) {
+    $.each(config.layers, function (layerId, layer) {
       var fproj = filterProjection(layer);
       var fterms = filterSearch(layer, search);
       var filtered = fproj || fterms;
-      var display = filtered ? "none" : "block";
+      var display = filtered ? 'none' : 'block';
       var selector = "#selectorbox li[data-layer='" +
         wv.util.jqueryEscape(layerId) + "']";
       $(selector)
-        .css("display", display);
+        .css('display', display);
       visible[layer.id] = !filtered;
     });
     adjustCategoryHeights();
