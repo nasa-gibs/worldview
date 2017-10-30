@@ -10,7 +10,7 @@ require('nightwatch-cucumber')({
   ]
 });
 
-var nightwatch_config = {
+var nightwatchConfig = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
   custom_assertions_path: ['e2e/custom-assertions'],
@@ -50,25 +50,25 @@ var nightwatch_config = {
   }
 };
 
-environments.forEach(e=>{
+environments.forEach(e => {
   var env = [
     e.browser,
     e.browser_version,
     e.os,
     e.os_version
   ].join('_').replace(/\./g, '-').replace(/ /g, '_');
-  nightwatch_config.test_settings[env] = {desiredCapabilities: e}
+  nightwatchConfig.test_settings[env] = {desiredCapabilities: e};
 });
 
 // Merge common_capabilities with each test_settings key
-for(var i in nightwatch_config.test_settings){
-  var config = nightwatch_config.test_settings[i];
-  config['selenium_host'] = nightwatch_config.selenium.host;
-  config['selenium_port'] = nightwatch_config.selenium.port;
+for (var i in nightwatchConfig.test_settings) {
+  var config = nightwatchConfig.test_settings[i];
+  config['selenium_host'] = nightwatchConfig.selenium.host;
+  config['selenium_port'] = nightwatchConfig.selenium.port;
   config['desiredCapabilities'] = config['desiredCapabilities'] || {};
-  for(var j in nightwatch_config.common_capabilities){
-    config['desiredCapabilities'][j] = config['desiredCapabilities'][j] || nightwatch_config.common_capabilities[j];
+  for (var j in nightwatchConfig.common_capabilities) {
+    config['desiredCapabilities'][j] = config['desiredCapabilities'][j] || nightwatchConfig.common_capabilities[j];
   }
 }
 
-module.exports = nightwatch_config;
+module.exports = nightwatchConfig;

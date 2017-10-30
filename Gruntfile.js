@@ -1,3 +1,5 @@
+/* eslint no-template-curly-in-string: "off" */
+
 var fs = require('fs');
 var moment = require('moment');
 var nodeModuleFiles = [
@@ -37,8 +39,7 @@ var buildTimestamp = moment.utc().format('MMMM DD, YYYY [-] HH:mm [UTC]');
 var buildNonce = moment.utc().format('YYYYMMDDHHmmssSSS');
 var buildNumber = moment.utc().format('YYMMDDHHmmss');
 
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
   var env = grunt.option('env') || 'release';
 
   var options = {
@@ -57,12 +58,13 @@ module.exports = function(grunt) {
   var js = grunt.file.readJSON('deploy/wv.js.json');
   var css = grunt.file.readJSON('deploy/wv.css.json');
 
-  //Platform specific command for find
+  // Platform specific command for find
   var findCmd;
-  if (process.platform === 'win32')
-    findCmd = ';'; //cygwin find doesn't really work in Windows compared to CentOS
-  else
+  if (process.platform === 'win32') {
+    findCmd = ';'; // cygwin find doesn't really work in Windows compared to CentOS
+  } else {
     findCmd = 'find build -type d -empty -delete';
+  }
 
   // Platform specific location for Python
   var pythonPath;
@@ -352,7 +354,8 @@ module.exports = function(grunt) {
     eslint: {
       options: {
         configFile: '.eslintrc',
-        format: 'stylish'
+        format: 'stylish',
+        quiet: true
       },
       src: ['**/*.js', '!node_modules/**/*', '!build/**/*', '!dist/**/*', '!lib/**/*', '!options/**/*', '!web/dist/**/*', '!web/ext/**/*', '!etc/**/*']
     },
@@ -599,14 +602,14 @@ module.exports = function(grunt) {
 
     stylefmt: {
       format: {
-        files:[
+        files: [
           {
             expand: true,
             src: 'web/css/*.css',
             dest: './'
           }
         ]
-      },
+      }
     },
 
     watch: {
@@ -620,8 +623,8 @@ module.exports = function(grunt) {
       // Minifiy the concatenated Worldview JavaScript file.
       options: {
         compress: {
-          //drop_console: true,
-          //drop_debugger: true,
+          // drop_console: true,
+          // drop_debugger: true,
           unused: true
         }
       },
@@ -661,7 +664,7 @@ module.exports = function(grunt) {
   // Lets use 'clean' as a target instead of the name of the task
   grunt.renameTask('clean', 'remove');
 
-  grunt.registerTask('load_branding', 'Load branding', function() {
+  grunt.registerTask('load_branding', 'Load branding', function () {
     var brand = grunt.file.readJSON('build/options/brand.json');
     brand.officialName = brand.officialName || brand.name;
     brand.longName = brand.longName || brand.name;
