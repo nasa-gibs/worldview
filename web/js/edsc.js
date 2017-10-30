@@ -62,7 +62,7 @@ L.Util = {
       this.lat = lat;
       this.lng = lng;
     }
-  };
+  }
 
   L.LatLng = LatLng;
   L.latLng = function(lat, lng) {

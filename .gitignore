@@ -20,3 +20,4 @@ npm-debug.log
 reports
 selenium-debug.log
 *.jar
+local.log

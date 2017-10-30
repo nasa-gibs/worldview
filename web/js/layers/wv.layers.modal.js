@@ -121,7 +121,10 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var hasMeasurementSource = function(current) {
     var hasSource;
     Object.values(current.sources).forEach(function(source) {
-      if(hasMeasurementSetting(current, source)) { hasSource = true; hasMeasurement = true; };
+      if (hasMeasurementSetting(current, source)) {
+        hasSource = true;
+        hasMeasurement = true;
+      }
     });
     return hasSource;
   };
