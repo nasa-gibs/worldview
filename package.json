@@ -58,6 +58,6 @@
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",
     "worldview-components": "1.3.3",
-    "worldview-options-eosdis": "nasa-gibs/worldview-options-eosdis#2.0.0"
+    "worldview-options-eosdis": "nasa-gibs/worldview-options-eosdis#2.1.0"
   }
 }
