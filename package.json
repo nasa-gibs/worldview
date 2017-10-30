@@ -10,7 +10,7 @@
   "license": "NASA-1.3",
   "repository": "nasa-gibs/worldview",
   "engines": {
-    "node": "6.8.1"
+    "node": "8.8.1"
   },
   "scripts": {
     "preinstall": "node version-check.js",
