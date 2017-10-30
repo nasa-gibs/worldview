@@ -103,7 +103,7 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
         .attr('id', key + 'dynamictext')
         .addClass('dynamic')
         .html('0 selected');
-      $productSelector = $("<input type='radio'></input>")
+      $productSelector = $('<input type=\'radio\'></input>')
         .attr('value', key)
         .attr('data-product', key);
 
@@ -115,7 +115,7 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
         this.checked = true;
       });
     }
-    var $contentDlGroup = $("<div class='dl-group'></div>")
+    var $contentDlGroup = $('<div class=\'dl-group\'></div>')
       .attr('value', key)
       .attr('data-product', key)
       .click(function () {
@@ -245,7 +245,7 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
   };
 
   var onProductSelect = function (product) {
-    $(self.selector + " input[value='" + product + "']")
+    $(self.selector + ' input[value=\'' + product + '\']')
       .prop('checked', 'true');
   };
 
@@ -360,7 +360,7 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
   };
 
   var showUnavailableReason = function () {
-    var headerMsg = "<h3 class='wv-data-unavailable-header'>Why are these layers not available for downloading?</h3>";
+    var headerMsg = '<h3 class=\'wv-data-unavailable-header\'>Why are these layers not available for downloading?</h3>';
     var bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.<br><br> Data download will not work for "Terra and Aqua" Fires, select Terra only Fires and/or Aqua only Fires to download the associated data files.';
 
     wv.ui.notify(headerMsg + bodyMsg, 'Notice', 600);
@@ -423,7 +423,7 @@ wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
               return;
             }
             if (product.noBulkDownload) {
-              indirectLinks.push("<li><a href='" + link.href + "'>" +
+              indirectLinks.push('<li><a href=\'' + link.href + '\'>' +
                 link.href + '</a></li>');
               return;
             }
@@ -491,13 +491,13 @@ wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
 wv.data.ui.downloadListPanel = function (config, model) {
   var cmr = wv.data.cmr;
   var NOTICE =
-    "<div id='wv-data-selection-notice'>" +
-    "<i class='icon fa fa-info-circle fa-3x'></i>" +
-    "<p class='text'>" +
+    '<div id=\'wv-data-selection-notice\'>' +
+    '<i class=\'icon fa fa-info-circle fa-3x\'></i>' +
+    '<p class=\'text\'>' +
     'Some items you have selected require a profile with ' +
     'Earthdata Login to download. ' +
     'It is simple and free to sign up! ' +
-    "<a href='https://urs.earthdata.nasa.gov/users/new' target='urs'>" +
+    '<a href=\'https://urs.earthdata.nasa.gov/users/new\' target=\'urs\'>' +
     'Click to register for a profile.</a>' +
     '</p>' +
     '</div>';
@@ -721,7 +721,7 @@ wv.data.ui.downloadListPanel = function (config, model) {
     elements.push('<ul>');
     $.each(links, function (index, link) {
       elements.push(
-        "<li class='link'><a href='" + link.href + "' target='_blank'>" +
+        '<li class=\'link\'><a href=\'' + link.href + '\' target=\'_blank\'>' +
         link.title + '</a></li>');
     });
     elements.push('</ul>');
@@ -732,21 +732,21 @@ wv.data.ui.downloadListPanel = function (config, model) {
     var elements;
     if (product.name !== granule.label) {
       elements = [
-        "<tr data-granule='" + granule.id + "'>",
-        "<td><input type='button' class='remove' " +
-          "data-granule='" + granule.id + "' " +
-          "value='X'></input></td>",
+        '<tr data-granule=\'' + granule.id + '\'>',
+        '<td><input type=\'button\' class=\'remove\' ' +
+          'data-granule=\'' + granule.id + '\' ' +
+          'value=\'X\'></input></td>',
         '<td><nobr><ul><li>' + granule.label + '</li></ul></nobr></td>',
-        "<td class='wv-data-granule-link'>" + linksText(granule.links) + '</td>',
+        '<td class=\'wv-data-granule-link\'>' + linksText(granule.links) + '</td>',
         '</tr>'
       ];
     } else {
       elements = [
-        "<tr data-granule='" + granule.id + "'>",
-        "<td><input type='button' class='remove' " +
-          "data-granule='" + granule.id + "' " +
-          "value='X'></input></td>",
-        "<td colspan='2'>" + linksText(granule.links) + '</td>',
+        '<tr data-granule=\'' + granule.id + '\'>',
+        '<td><input type=\'button\' class=\'remove\' ' +
+          'data-granule=\'' + granule.id + '\' ' +
+          'value=\'X\'></input></td>',
+        '<td colspan=\'2\'>' + linksText(granule.links) + '</td>',
         '</tr>'
       ];
     }
@@ -768,7 +768,7 @@ wv.data.ui.downloadListPanel = function (config, model) {
 
     if (product.links && product.links.length > 0) {
       elements.push('<h5>Data Collection Information</h5>');
-      elements.push("<div class='product'>");
+      elements.push('<div class=\'product\'>');
       elements.push(linksText(product.links));
       elements.push('</div>');
     }
@@ -795,13 +795,13 @@ wv.data.ui.downloadListPanel = function (config, model) {
 
   var bulkDownloadText = function () {
     var bulk =
-      "<div class='bulk collapse'>" +
+      '<div class=\'bulk collapse\'>' +
       '<h5>Bulk Download</h5>' +
-      "<ul class='BulkDownload'>" +
-      "<li><a class='wget' href='#'>List of Links</a>: " +
+      '<ul class=\'BulkDownload\'>' +
+      '<li><a class=\'wget\' href=\'#\'>List of Links</a>: ' +
       'for wget or download managers that accept a list of ' +
       'URLs</li>' +
-      "<li><a class='curl' href='#'>List of cURL Commands</a>: " +
+      '<li><a class=\'curl\' href=\'#\'>List of cURL Commands</a>: ' +
       'can be copied and pasted to ' +
       'a terminal window to download using cURL.</li>' +
       '</ul>' +
@@ -894,14 +894,14 @@ wv.data.ui.selectionListPanel = function (model, results) {
   var resultsText = function () {
     var elements = [];
     $.each(results.granules, function (index, granule) {
-      var selected = model.isSelected(granule) ? "checked='true'" : '';
+      var selected = model.isSelected(granule) ? 'checked=\'true\'' : '';
       elements.push(
         '<tr>' +
         '<td>' +
-        "<input type='checkbox' value='" + granule.id + "' " +
+        '<input type=\'checkbox\' value=\'' + granule.id + '\' ' +
         selected + '>' +
         '</td>' +
-        "<td class='label'>" + granule.label + '</td>' +
+        '<td class=\'label\'>' + granule.label + '</td>' +
         '</tr>'
       );
     });
@@ -911,7 +911,7 @@ wv.data.ui.selectionListPanel = function (model, results) {
 
   var bodyText = function () {
     var elements = [
-      "<div'>",
+      '<div\'>',
       '<table>',
       resultsText(),
       '</table>',
@@ -934,7 +934,7 @@ wv.data.ui.selectionListPanel = function (model, results) {
   };
 
   var onGranuleUnselect = function (granule) {
-    $("#wv-data-list input[value='" + granule.id + "']")
+    $('#wv-data-list input[value=\'' + granule.id + '\']')
       .removeAttr('checked');
   };
 

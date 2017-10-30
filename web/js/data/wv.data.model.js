@@ -12,7 +12,7 @@ wv.data = wv.data || {};
 wv.data.model = wv.data.model || function (models, config) {
   var NO_PRODUCT_ID = '__NO_PRODUCT';
   var NO_PRODUCT = {
-    name: "Not available for download &nbsp;&nbsp;<span class='link'>(?)</span>",
+    name: 'Not available for download &nbsp;&nbsp;<span class=\'link\'>(?)</span>',
     notSelectable: true
   };
 

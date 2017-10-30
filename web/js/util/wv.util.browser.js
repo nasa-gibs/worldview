@@ -406,7 +406,7 @@ if (!String.prototype.endsWith) {
     }
     addEventListener('load', function () {
       if (mobile) {
-        $(".layerPicker a[href='#DataDownload']")
+        $('.layerPicker a[href=\'#DataDownload\']')
           .hide();
       }
       setHeight();

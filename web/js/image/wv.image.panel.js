@@ -46,7 +46,7 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
     container = document.getElementById(containerId);
 
     if (container === null) {
-      throw new Error("Error: element '" + containerId + "' not found!");
+      throw new Error('Error: element \'' + containerId + '\' not found!');
     }
 
     container.setAttribute('class', 'imagedownload');
@@ -56,41 +56,41 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
       .resize(setPosition);
 
     var htmlElements =
-      "<div class='wv-image-header'>" +
-      "<select id='wv-image-resolution'>" +
-      "<option value='0.125'>30m</option>" +
-      "<option value='0.25'>60m</option>" +
-      "<option value='0.5'>125m</option>" +
-      "<option value='1' selected>250m</option>" +
-      "<option value='2'>500m</option>" +
-      "<option value='4'>1km</option>" +
-      "<option value='20'>5km</option>" +
-      "<option value='40'>10km</option>" +
+      '<div class=\'wv-image-header\'>' +
+      '<select id=\'wv-image-resolution\'>' +
+      '<option value=\'0.125\'>30m</option>' +
+      '<option value=\'0.25\'>60m</option>' +
+      '<option value=\'0.5\'>125m</option>' +
+      '<option value=\'1\' selected>250m</option>' +
+      '<option value=\'2\'>500m</option>' +
+      '<option value=\'4\'>1km</option>' +
+      '<option value=\'20\'>5km</option>' +
+      '<option value=\'40\'>10km</option>' +
       '</select>Resolution (per pixel)</div>' +
-      "<div class='wv-image-header'>" +
-      "<select id='wv-image-format'>" +
-      "<option value='image/jpeg'>JPEG</option>" +
-      "<option value='image/png'>PNG</option>" +
-      "<option value='image/geotiff'>GeoTIFF</option>" +
-      "<option value='image/kmz'>KMZ</option>" +
+      '<div class=\'wv-image-header\'>' +
+      '<select id=\'wv-image-format\'>' +
+      '<option value=\'image/jpeg\'>JPEG</option>' +
+      '<option value=\'image/png\'>PNG</option>' +
+      '<option value=\'image/geotiff\'>GeoTIFF</option>' +
+      '<option value=\'image/kmz\'>KMZ</option>' +
       '</select>Format</div>' +
-      "<div class='wv-image-header'>" +
-      "<select id='wv-image-worldfile' > " +
-      "<option value='false'>No</option>" +
-      "<option value='true'>Yes</option>" +
+      '<div class=\'wv-image-header\'>' +
+      '<select id=\'wv-image-worldfile\' > ' +
+      '<option value=\'false\'>No</option>' +
+      '<option value=\'true\'>Yes</option>' +
       '</select>Worldfile (.zip)</div>' +
-      "<table class='wv-image-download'>" +
+      '<table class=\'wv-image-download\'>' +
       '<tr>' +
       '<th>Raw Size</th>' +
       '<th>Maximum</th>' +
       '</tr>' +
       '<tr>' +
-      "<td id='wv-image-size' class='wv-image-size'>000.00MB</td>" +
-      "<td class='wv-image-size'>250 MB</td>" +
+      '<td id=\'wv-image-size\' class=\'wv-image-size\'>000.00MB</td>' +
+      '<td class=\'wv-image-size\'>250 MB</td>' +
       '</tr>' +
       '<tr>' +
-      "<td><span id='wv-image-width'>0000</span> x <span id='wv-image-height'>0000</span> px</td>" +
-      "<td><button id='wv-image-download-button'>Download</button>" +
+      '<td><span id=\'wv-image-width\'>0000</span> x <span id=\'wv-image-height\'>0000</span> px</td>' +
+      '<td><button id=\'wv-image-download-button\'>Download</button>' +
       '</tr>' +
       '</table>' +
       '</div>';
@@ -125,13 +125,13 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
     // Remove higher resolution options from polar views since no higher
     // resolution polar layers currenly exist
     if (models.proj.selected.id !== 'geographic') {
-      $("#wv-image-format [value='image/kmz']")
+      $('#wv-image-format [value=\'image/kmz\']')
         .remove();
-      $("#wv-image-resolution [value='0.5']")
+      $('#wv-image-resolution [value=\'0.5\']')
         .remove();
-      $("#wv-image-resolution [value='0.25']")
+      $('#wv-image-resolution [value=\'0.25\']')
         .remove();
-      $("#wv-image-resolution [value='0.125']")
+      $('#wv-image-resolution [value=\'0.125\']')
         .remove();
     }
 
@@ -205,17 +205,17 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
 
     $('#wv-image-resolution option')
       .removeAttr('selected');
-    $("#wv-image-resolution option[value='" + resolution + "']")
+    $('#wv-image-resolution option[value=\'' + resolution + '\']')
       .attr('selected', 'selected');
 
     $('#wv-image-format option')
       .removeAttr('selected');
-    $("#wv-image-format option[value='" + format + "']")
+    $('#wv-image-format option[value=\'' + format + '\']')
       .attr('selected', 'selected');
 
     $('#wv-image-worldfile option')
       .removeAttr('selected');
-    $("#wv-image-worldfile option[value='" + worldfile + "']")
+    $('#wv-image-worldfile option[value=\'' + worldfile + '\']')
       .attr('selected', 'selected');
 
     wv.ui.positionDialog($dialog, {
@@ -356,13 +356,13 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
           var invalid = (imgFilesize > 250 || imgHeight === 0 || imgWidth === 0);
           var icon;
           if (invalid) {
-            icon = "<i class='fa fa-times fa-fw'></i>";
+            icon = '<i class=\'fa fa-times fa-fw\'></i>';
             $('.wv-image-size')
               .addClass('wv-image-size-invalid');
             $('#wv-image-download-button')
               .button('disable');
           } else {
-            icon = "<i class='fa fa-check fa-fw'></i>";
+            icon = '<i class=\'fa fa-check fa-fw\'></i>';
             $('.wv-image-size')
               .removeClass('wv-image-size-invalid');
             $('#wv-image-download-button')

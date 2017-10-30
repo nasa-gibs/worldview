@@ -99,7 +99,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
     $colorbar.on('mouseout', hideUnitsOnMouseOut);
     $legendPanel.append($container);
     wv.palettes.colorbar(selector + ' ' +
-      "[data-index='" + index + "'] canvas", legend.colors);
+      '[data-index=\'' + index + '\'] canvas', legend.colors);
   };
   var renderClasses = function ($legendPanel, legend, index) {
     // var $runningDataPointLabel = $("<span></span>")
@@ -115,7 +115,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
   };
 
   var updateClasses = function (legend, index) {
-    var $panel = $(selector + " [data-index='" + index + "']");
+    var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
     _.each(legend.colors, function (color, classIndex) {
       var $colorBox;
@@ -169,7 +169,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       if ((legend.type === 'continuous') ||
         (legend.type === 'discrete')) {
         wv.palettes.colorbar(selector + ' ' +
-          "[data-index='" + index + "'] canvas", legend.colors);
+          '[data-index=\'' + index + '\'] canvas', legend.colors);
         showUnitRange(index);
       } else if (legend.type === 'classification') {
         updateClasses(legend, index);
@@ -189,16 +189,16 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       var max = legend.maxLabel || _.last(legend.tooltips);
       min = (legend.units) ? min + ' ' + legend.units : min;
       max = (legend.units) ? max + ' ' + legend.units : max;
-      $(selector + " [data-index='" + index + "'] .wv-palettes-min")
+      $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-min')
         .html(min);
-      $(selector + " [data-index='" + index + "'] .wv-palettes-max")
+      $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-max')
         .html(max);
       var title = legend.title || '&nbsp;';
       if (legends.length === 1) {
-        $(selector + " [data-index='" + index + "'] .wv-palettes-title")
+        $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-title')
           .hide();
       } else {
-        $(selector + " [data-index='" + index + "'] .wv-palettes-title")
+        $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-title')
           .html(title);
       }
     });
@@ -268,8 +268,8 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       .attr('data-index');
     classIndex = $(this)
       .attr('data-class-index');
-    $(".wv-palettes-class-label[data-index='" + legendIndex + "']" +
-        "[data-class-index='" + classIndex + "']")
+    $('.wv-palettes-class-label[data-index=\'' + legendIndex + '\']' +
+        '[data-class-index=\'' + classIndex + '\']')
       .addClass('wv-palettes-class-highlight');
   };
 
@@ -278,8 +278,8 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       .attr('data-index');
     classIndex = $(this)
       .attr('data-class-index');
-    $(".wv-palettes-class-label[data-index='" + legendIndex + "']" +
-        "[data-class-index='" + classIndex + "']")
+    $('.wv-palettes-class-label[data-index=\'' + legendIndex + '\']' +
+        '[data-class-index=\'' + classIndex + '\']')
       .removeClass('wv-palettes-class-highlight');
   };
 

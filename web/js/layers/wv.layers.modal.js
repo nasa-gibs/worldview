@@ -138,13 +138,13 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
     var modalView = config.parameters.modalView;
     switch (modalView) {
       case ('categories'):
-        console.warn("'Add Layers' view changed to Categories");
+        console.warn('\'Add Layers\' view changed to Categories');
         break;
       case ('measurements'):
-        console.warn("'Add Layers' view changed to Measurements");
+        console.warn('\'Add Layers\' view changed to Measurements');
         break;
       case ('layers'):
-        console.warn("'Add Layers' view changed to Layers");
+        console.warn('\'Add Layers\' view changed to Layers');
         break;
       case undefined:
         break;
@@ -326,7 +326,7 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
               }
 
               if (config.measurements[measurement] === undefined) {
-                throw new Error("Error: Measurement '" + measurement + "' stated in category '" + category.title + "' does not exist " + 'in measurement list!');
+                throw new Error('Error: Measurement \'' + measurement + '\' stated in category \'' + category.title + '\' does not exist ' + 'in measurement list!');
               }
 
               var $measurement = $('<a />', {
@@ -780,12 +780,12 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
   };
 
   var onLayerAdded = function (layer) {
-    var $element = $(self.selector + " [data-layer='" + wv.util.jqueryEscape(layer.id) + "']");
+    var $element = $(self.selector + ' [data-layer=\'' + wv.util.jqueryEscape(layer.id) + '\']');
     $element.iCheck('check');
   };
 
   var onLayerRemoved = function (layer) {
-    var $element = $(self.selector + " [data-layer='" + wv.util.jqueryEscape(layer.id) + "']");
+    var $element = $(self.selector + ' [data-layer=\'' + wv.util.jqueryEscape(layer.id) + '\']');
     $element.iCheck('uncheck');
   };
 

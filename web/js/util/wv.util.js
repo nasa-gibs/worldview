@@ -738,7 +738,7 @@ wv.util = (function (self) {
     var sdegrees = self.pad(degrees, width, ' ');
     var sminutes = self.pad(minutes, 2, '0');
     var sseconds = self.pad(seconds, 2, '0');
-    return sdegrees + '&deg;' + sminutes + "'" + sseconds + '"' + sign;
+    return sdegrees + '&deg;' + sminutes + '\'' + sseconds + '"' + sign;
   };
 
   self.setCoordinateFormat = function (type) {

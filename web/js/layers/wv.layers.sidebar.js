@@ -179,7 +179,7 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
       .attr('href', '#products')
       .addClass('activetab')
       .addClass('tab')
-      .html("<i class='productsIcon selected icon-layers' title='Layers'></i> Layers");
+      .html('<i class=\'productsIcon selected icon-layers\' title=\'Layers\'></i> Layers');
 
     $activeTab.append($activeLink);
     $tabs.append($activeTab);
@@ -192,7 +192,7 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
       var $eventsLink = $('<a></a>')
         .attr('href', '#wv-events')
         .addClass('tab')
-        .html("<i class='productsIcon selected icon-events' title='Events'></i> Events");
+        .html('<i class=\'productsIcon selected icon-events\' title=\'Events\'></i> Events');
       $eventsTab.append($eventsLink);
       $tabs.append($eventsTab);
     }
@@ -204,7 +204,7 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
       var $downloadLink = $('<a></a>')
         .attr('href', '#wv-data')
         .addClass('tab')
-        .html("<i class='productsIcon selected icon-download' title='Data'></i> Data");
+        .html('<i class=\'productsIcon selected icon-download\' title=\'Data\'></i> Data');
       $downloadTab.append($downloadLink);
       $tabs.append($downloadTab);
     }

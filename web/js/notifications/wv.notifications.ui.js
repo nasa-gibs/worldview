@@ -272,12 +272,12 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
       if (messageNumber === 0) {
         hide = 'wv-status-hide'; // hides number value when === zero
       }
-      $message = $("<li class='gift'><a class='" + hide + "' data-content='" + messageNumber + "'><i class='ui-icon fa fa-fw fa-gift active'></i>What's New</a></li>");
+      $message = $('<li class=\'gift\'><a class=\'' + hide + '\' data-content=\'' + messageNumber + '\'><i class=\'ui-icon fa fa-fw fa-gift active\'></i>What\'s New</a></li>');
       $message.on('click', deactivateMessage);
       self.messageIconActive = true;
       return $message;
     } else {
-      $message = $("<li><a class='wv-status-hide'><i class='ui-icon fa fa-fw fa-gift'></i>What's New</a></li>");
+      $message = $('<li><a class=\'wv-status-hide\'><i class=\'ui-icon fa fa-fw fa-gift\'></i>What\'s New</a></li>');
       $message.on('click', deactivateMessage);
       return $message;
     }
@@ -303,14 +303,14 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
       if (count === 0) {
         hide = 'wv-status-hide'; // hides number value when === zero
       }
-      $notifyMenuItem = $("<li class='" + classes[mainNotification] + "'><a class='" + hide + "' data-content='" + count + "'><i class='ui-icon fa fa-fw active fa-" + classes[mainNotification] + "'></i>Notifications</a></li>");
+      $notifyMenuItem = $('<li class=\'' + classes[mainNotification] + '\'><a class=\'' + hide + '\' data-content=\'' + count + '\'><i class=\'ui-icon fa fa-fw active fa-' + classes[mainNotification] + '\'></i>Notifications</a></li>');
       self.infoIconActive = true;
       self.notifyIconActive = true;
 
       $notifyMenuItem.on('click', notify);
       return $notifyMenuItem;
     } else if (alertBlockExists) {
-      $notifyMenuItem = $("<li><a class='wv-status-hide'><i class='ui-icon fa fa-fw fa-bolt'></i>Notifications</a></li>");
+      $notifyMenuItem = $('<li><a class=\'wv-status-hide\'><i class=\'ui-icon fa fa-fw fa-bolt\'></i>Notifications</a></li>');
       $notifyMenuItem.on('click', notify);
       return $notifyMenuItem;
     } else {
@@ -458,7 +458,7 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
       }
       date = new Date(arra[i].created_at);
       date = date.getDate() + ' ' + wv.util.giveMonth(date) + ' ' + date.getFullYear();
-      $li = $("<li><div class='" + activeClass + "'><h2> <i class='fa fa-" + classes[title] + "'/> " + title + '<span> Posted ' + date + '</span></h2><p>' + arra[i].message + '</p></div></li>');
+      $li = $('<li><div class=\'' + activeClass + '\'><h2> <i class=\'fa fa-' + classes[title] + '\'/> ' + title + '<span> Posted ' + date + '</span></h2><p>' + arra[i].message + '</p></div></li>');
       $ul.append($li);
     }
     return $ul;
@@ -498,13 +498,13 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
     date = date.getDate() + ' ' + wv.util.giveMonth(date) + ' ' + date.getFullYear();
     releasePageUrl = config.features.alert.releases || 'https://github.com/nasa-gibs/worldview/releases';
     dimensions = getModalDimensions();
-    $notifyContent = $("<div class='wv-notify-modal'><div><h2>" + title + '<span> Posted ' + date + '</span></h2><p>' + obj.message + '</p></div></div>');
+    $notifyContent = $('<div class=\'wv-notify-modal\'><div><h2>' + title + '<span> Posted ' + date + '</span></h2><p>' + obj.message + '</p></div></div>');
     $footer = $('<div class="wv-notify-footer"><p> Check out our <a target="_blank" href="' + releasePageUrl + '">release notes</a> for a complete list of new additions.</p></div>');
     $notifyContent.append($footer);
     $dialog = wv.ui.getDialog()
       .append($notifyContent);
     $dialog.dialog({
-      title: "What's New",
+      title: 'What\'s New',
       width: dimensions[0],
       height: dimensions[1],
       maxHeight: 525,

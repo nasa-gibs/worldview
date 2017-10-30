@@ -169,14 +169,14 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
 
     _.each(legends, function (legend, index) {
       id = 'wv-legend-' + index;
-      $panel.append("<input type='radio' id='" + id + "' " +
-        "name='legend' value='" + index + "'>" +
-        "<label for='" + id + "'>" + legend.title + '</label>');
+      $panel.append('<input type=\'radio\' id=\'' + id + '\' ' +
+        'name=\'legend\' value=\'' + index + '\'>' +
+        '<label for=\'' + id + '\'>' + legend.title + '</label>');
     });
     $panel.buttonset();
     $dialog.append($panel);
 
-    $(".wv-legend-buttons input[type='radio']")
+    $('.wv-legend-buttons input[type=\'radio\']')
       .change(function () {
         index = _.parseInt($(this)
           .val());
@@ -336,11 +336,11 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
 
     var palette = models.palettes.get(layer.id, index);
     if (palette.custom) {
-      $(".wv-palette-selector-row input[data-palette='" +
-          palette.custom + "']")
+      $('.wv-palette-selector-row input[data-palette=\'' +
+          palette.custom + '\']')
         .iCheck('check');
     } else {
-      $(".wv-palette-selector-row input[data-palette='__default']")
+      $('.wv-palette-selector-row input[data-palette=\'__default\']')
         .iCheck('check');
     }
 
@@ -369,10 +369,10 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
   var onPaletteUpdate = function () {
     var palette = models.palettes.get(layer.id, index);
     if (palette.custom) {
-      $("#wv-palette-selector input[data-palette='" + palette.custom + "']")
+      $('#wv-palette-selector input[data-palette=\'' + palette.custom + '\']')
         .iCheck('check');
     } else {
-      $("#wv-palette-selector input[data-palette='__default']")
+      $('#wv-palette-selector input[data-palette=\'__default\']')
         .iCheck('check');
     }
   };

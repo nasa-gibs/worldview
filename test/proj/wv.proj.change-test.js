@@ -146,7 +146,7 @@ buster.testCase('wv.proj.change', {
     buster.assert.calledOnce(wv.ui.notify);
   },
 
-  "Not notified if 'Dont show again' selected": function () {
+  'Not notified if \'Dont show again\' selected': function () {
     this.stub(window.localStorage, 'getItem')
       .withArgs('arcticProjectionChangeNotification')
       .returns('true');

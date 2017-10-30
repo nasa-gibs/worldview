@@ -39,7 +39,7 @@ wv.image.rubberband = wv.image.rubberband || function (models, ui, config) {
   var init = function () {
     container = document.getElementById(containerId);
     if (container === null) {
-      throw new Error("Error: element '" + containerId + "' not found!");
+      throw new Error('Error: element \'' + containerId + '\' not found!');
     }
     $button = $('<input></input>')
       .attr('type', 'checkbox')

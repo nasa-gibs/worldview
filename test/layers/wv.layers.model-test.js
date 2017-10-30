@@ -43,7 +43,7 @@ buster.testCase('wv.layers.model', (function () {
     buster.assert.called(changeListener);
   };
 
-  self["Doesn't add duplicate layer"] = function () {
+  self['Doesn\'t add duplicate layer'] = function () {
     stack();
     l.events.on('add', listener);
     l.events.on('change', changeListener);

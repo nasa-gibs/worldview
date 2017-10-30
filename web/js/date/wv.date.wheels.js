@@ -31,7 +31,7 @@ wv.date.wheels = wv.date.wheels || function (models, config) {
   var render = function () {
     $container
       .addClass('datespan')
-      .html("<div id='wv-date-mobile-label'></div><input type='hidden' id='linkmode' readonly>");
+      .html('<div id=\'wv-date-mobile-label\'></div><input type=\'hidden\' id=\'linkmode\' readonly>');
 
     $('#linkmode')
       .mobiscroll()

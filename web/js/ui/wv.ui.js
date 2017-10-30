@@ -25,13 +25,13 @@ wv.ui = (function (self) {
     console.error.apply(console, arguments);
 
     self.notify(
-      "<div class='error-header'>" +
-      "<i class='error-icon fa fa-exclamation-triangle fa-3x'></i>" +
+      '<div class=\'error-header\'>' +
+      '<i class=\'error-icon fa fa-exclamation-triangle fa-3x\'></i>' +
       'An unexpected error has occurred' +
       '</div>' +
-      "<div class='error-body'>Please reload the page and try " +
+      '<div class=\'error-body\'>Please reload the page and try ' +
       'again. If you continue to have problems, contact us at ' +
-      "<a href='mailto:@MAIL@'>" +
+      '<a href=\'mailto:@MAIL@\'>' +
       '@MAIL@</a>' +
       '</div>', 'Error'
     );

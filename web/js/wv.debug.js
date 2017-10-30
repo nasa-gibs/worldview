@@ -139,16 +139,16 @@ wv.debug.layers = wv.debug.layers || function (ui, models, config) {
 
   var render = function (type) {
     var $div = $(
-      "<div id='wv-debug-gibs'>" +
-      "<div class='wv-debug-gibs-layer'>" +
-      "<button class='wv-debug-gibs-previous-layer'>-</button>" +
-      "<button class='wv-debug-gibs-next-layer'>+</button>" +
-      "<select class='wv-debug-gibs-layerlist'></select>" +
+      '<div id=\'wv-debug-gibs\'>' +
+      '<div class=\'wv-debug-gibs-layer\'>' +
+      '<button class=\'wv-debug-gibs-previous-layer\'>-</button>' +
+      '<button class=\'wv-debug-gibs-next-layer\'>+</button>' +
+      '<select class=\'wv-debug-gibs-layerlist\'></select>' +
       '</div>' +
-      "<div class='wv-debug-gibs-date'>" +
-      "<button class='wv-debug-gibs-previous-date'>-</button>" +
-      "<button class='wv-debug-gibs-next-date'>+</button>" +
-      "<span class='wv-debug-gibs-date-label'>Date</span>" +
+      '<div class=\'wv-debug-gibs-date\'>' +
+      '<button class=\'wv-debug-gibs-previous-date\'>-</button>' +
+      '<button class=\'wv-debug-gibs-next-date\'>+</button>' +
+      '<span class=\'wv-debug-gibs-date-label\'>Date</span>' +
       '</div>' +
       '</div>');
     $('body')

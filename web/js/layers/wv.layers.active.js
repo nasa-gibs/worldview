@@ -307,8 +307,8 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
   };
 
   var renderLegendCanvas = function (layer) {
-    var selector = ".wv-palette[data-layer='" +
-      wv.util.jqueryEscape(layer.id) + "']";
+    var selector = '.wv-palette[data-layer=\'' +
+      wv.util.jqueryEscape(layer.id) + '\']';
     legends[layer.id] = wv.palettes.legend({
       selector: selector,
       config: config,
@@ -426,7 +426,7 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
   };
 
   var onLayerVisibility = function (layer, visible) {
-    var $element = $(".hideReg[data-layer='" + layer.id + "']");
+    var $element = $('.hideReg[data-layer=\'' + layer.id + '\']');
     if (visible) {
       $element.attr('data-action', 'hide')
         .attr('title', 'Hide Layer')

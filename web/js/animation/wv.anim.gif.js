@@ -402,7 +402,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
    *
    */
   var showUnavailableReason = function () {
-    var headerMsg = "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
+    var headerMsg = '<h3 class=\'wv-data-unavailable-header\'>GIF Not Available</h3>';
     var bodyMsg = 'Too many frames were selected. Please request less than 40 frames if you would like to generate a GIF';
     callback = function () {
       $('#timeline-footer')
@@ -489,7 +489,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
         });
 
       var $catalog =
-        "<div class='gif-results-dialog' style='height: " + animCoords.h + "px; min-height: 210px;' >" +
+        '<div class=\'gif-results-dialog\' style=\'height: ' + animCoords.h + 'px; min-height: 210px;\' >' +
         '<div>' +
         '<div><b>' +
         'Size: ' +
@@ -565,7 +565,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
         }
       });
     } else {
-      var headerMsg = "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
+      var headerMsg = '<h3 class=\'wv-data-unavailable-header\'>GIF Not Available</h3>';
       var bodyMsg = 'One or more of the frames requested was unable to be processed';
       wv.ui.indicator.hide(loader);
       callback = function () {
@@ -636,10 +636,10 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
     var $dialogBox;
     var $createButton;
     var $footer;
-    var $dialog = $("<div class='gif-dialog'></div>");
+    var $dialog = $('<div class=\'gif-dialog\'></div>');
     var $checkBox;
     var dialog =
-      "<div class='content'>" +
+      '<div class=\'content\'>' +
       'Create an animation from ' +
       '<b>' +
       animModel.rangeState.startDate +
@@ -663,7 +663,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
         $(this)
           .removeClass('ui-state-hover');
       });
-    $checkBox = $("<div class='wv-checkbox-date'><label for='checkbox-date'><input type='checkbox' title='Check box to remove dates from Animating GIF' name='checkbox-date' class='checkbox-date-input' id='checkbox-date-input'>Include Date Stamps</label></div>");
+    $checkBox = $('<div class=\'wv-checkbox-date\'><label for=\'checkbox-date\'><input type=\'checkbox\' title=\'Check box to remove dates from Animating GIF\' name=\'checkbox-date\' class=\'checkbox-date-input\' id=\'checkbox-date-input\'>Include Date Stamps</label></div>');
     $footer = $('<div></div>');
     $footer.append($createButton)
       .append($checkBox);
@@ -886,8 +886,8 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
       }, function () {
         var $tracker;
         $dlButton =
-          "<div class='wv-dl-gif-bt-case'>" +
-          "<i class='fa fa-download'>" +
+          '<div class=\'wv-dl-gif-bt-case\'>' +
+          '<i class=\'fa fa-download\'>' +
           '</div>';
         jcropAPI = this;
         $('#timeline-footer')

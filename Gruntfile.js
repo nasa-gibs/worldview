@@ -354,8 +354,7 @@ module.exports = function (grunt) {
     eslint: {
       options: {
         configFile: '.eslintrc',
-        format: 'stylish',
-        quiet: true
+        format: 'stylish'
       },
       src: ['**/*.js', '!node_modules/**/*', '!build/**/*', '!dist/**/*', '!lib/**/*', '!options/**/*', '!web/dist/**/*', '!web/ext/**/*', '!etc/**/*']
     },

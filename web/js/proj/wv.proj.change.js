@@ -110,8 +110,8 @@ wv.proj.change = wv.proj.change || function (models) {
       'imagery archive.',
       '<br/><br/>',
 
-      "<input id='arcticChangeNoticeDontShowAgain' value='false' ",
-      "type='checkbox'>Do not show again"
+      '<input id=\'arcticChangeNoticeDontShowAgain\' value=\'false\' ',
+      'type=\'checkbox\'>Do not show again'
     ].join('');
     wv.ui.notify(message, 'Notice', 400);
     var $check = $('#arcticChangeNoticeDontShowAgain');

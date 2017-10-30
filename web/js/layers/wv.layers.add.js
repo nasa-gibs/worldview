@@ -304,14 +304,14 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
   };
 
   var onLayerAdded = function (layer) {
-    var $element = $("#selectorbox [data-layer='" +
-      wv.util.jqueryEscape(layer.id) + "']");
+    var $element = $('#selectorbox [data-layer=\'' +
+      wv.util.jqueryEscape(layer.id) + '\']');
     $element.iCheck('check');
   };
 
   var onLayerRemoved = function (layer) {
-    var $element = $("#selectorbox [data-layer='" +
-      wv.util.jqueryEscape(layer.id) + "']");
+    var $element = $('#selectorbox [data-layer=\'' +
+      wv.util.jqueryEscape(layer.id) + '\']');
     $element.iCheck('uncheck');
   };
 
@@ -324,11 +324,11 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
   var adjustTitles = function () {
     _.each(config.layers, function (def) {
       var names = models.layers.getTitles(def.id);
-      $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
-          "'] .title")
+      $('#selectorbox [data-layer=\'' + encodeURIComponent(def.id) +
+          '\'] .title')
         .html(names.title);
-      $("#selectorbox [data-layer='" + encodeURIComponent(def.id) +
-          "'] .subtitle")
+      $('#selectorbox [data-layer=\'' + encodeURIComponent(def.id) +
+          '\'] .subtitle')
         .html(names.subtitle);
     });
   };
@@ -412,8 +412,8 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
       var fterms = filterSearch(layer, search);
       var filtered = fproj || fterms;
       var display = filtered ? 'none' : 'block';
-      var selector = "#selectorbox li[data-layer='" +
-        wv.util.jqueryEscape(layerId) + "']";
+      var selector = '#selectorbox li[data-layer=\'' +
+        wv.util.jqueryEscape(layerId) + '\']';
       $(selector)
         .css('display', display);
       visible[layer.id] = !filtered;

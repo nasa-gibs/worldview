@@ -116,7 +116,7 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
   var layerIsInView = function (layerID) {
     var elTop;
     var elBottom;
-    var $case = $(".productsitem[data-layer='" + layerID + "']");
+    var $case = $('.productsitem[data-layer=\'' + layerID + '\']');
     if ($case[0]) {
       elTop = $case[0].offsetTop;
       elBottom = elTop + $case.height();
@@ -344,7 +344,7 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
     squareWidth = 15;
 
     $categoryPaletteCase = $('#' + id);
-    $colorSquare = $categoryPaletteCase.find("[data-class-index='" + data.index + "']");
+    $colorSquare = $categoryPaletteCase.find('[data-class-index=\'' + data.index + '\']');
     $paletteLabel = $categoryPaletteCase.find('.wv-running-category-label');
 
     $caseWidth = $categoryPaletteCase.width();

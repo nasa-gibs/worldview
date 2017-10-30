@@ -33,7 +33,7 @@ buster.testCase('wv.data.model', {
     this.errors = [];
   },
 
-  "Doesn't save state when not active": function () {
+  'Doesn\'t save state when not active': function () {
     this.model.selectProduct('product1');
     var state = {};
     this.model.save(state);
