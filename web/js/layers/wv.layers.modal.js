@@ -27,7 +27,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
   var hasMeasurement;
 
   var getLayersForProjection = function(projection) {
-    return Object.values(config.layers).filter(function(layer){
+    var filteredLayers = Object.values(config.layers).filter(function(layer){
       // Only use the layers for the active projection
       return layer.projections[projection];
     }).map(function(layer){
@@ -38,6 +38,9 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       // Decode HTML entities in the subtitle
       if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
       return layer;
+    });
+    return _.sortBy(filteredLayers, function(layer) {
+      return _.indexOf(config.layerOrder, layer.id);
     });
   };
 
