@@ -169,6 +169,7 @@ wv.layers.modal = wv.layers.modal || function(models, ui, config) {
       height: modalHeight,
       width: modalWidth
     });
+    $( '#layers-all' ).css( 'height', modalHeight - 70); // 40 search box height + 30 breadcrub height
     $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
   };
 

@@ -320,10 +320,6 @@
   position: relative;
 }
 
-#layers-all .layers-all-layer:last-child {
-  margin-bottom: 40px;
-}
-
 #selected-category .ui-accordion-header {
   border: 0;
   position: relative;
