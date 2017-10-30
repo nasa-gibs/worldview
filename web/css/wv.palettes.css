@@ -6,11 +6,11 @@
 }
 
 /* perfect scrollbars */
-#wv-palette-selector .ps-scrollbar-y-rail {
+#wv-palette-selector .ps__scrollbar-y-rail {
   background-color: transparent;
 }
 
-#wv-palette-selector .ps-scrollbar-y {
+#wv-palette-selector .ps__scrollbar-y {
   background: #ccc;
 }
 
@@ -74,6 +74,7 @@
 .layer-hidden .wv-palettes-max,
 .layer-hidden .wv-palettes-min,
 .layer-hidden .wv-palettes-title,
+.layer-hidden .wv-running-category-label,
 .layer-hidden .wv-running-label {
   color: #999;
   font-size: 0.7em;

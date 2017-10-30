@@ -24,9 +24,39 @@ If you want to submit your own contributions, follow these steps;
 
 We ask that you follow these guidelines with your contributions;
 
-### Tests
+### Unit Tests
 
-All of the automated tests for this project need to pass before your submission will be accepted. You can run `npm test` in the command line after making changes to verify that the tests pass. If you add new functionality, please consider adding tests for that functionality as well.
+All of the unit tests for this project need to pass before your submission will be accepted. You can run `npm test` in the command line after making changes to verify that the tests pass. If you add new functionality, please consider adding tests for that functionality as well.
+
+### End-to-end Tests
+
+You can run the included end-to-end tests to test the app in Chrome and Firefox. The tests run the Cucumber features in the `./e2e/features` using Nightwatch and Selenium.
+
+To run tests in Chrome;
+
+1) Run `npm run e2e:chrome`
+
+To run tests in Firefox;
+
+1) [Create a new Firefox profile](https://developer.mozilla.org/en-US/Firefox/Multiple_profiles) called 'nightwatch'
+2) Run `npm run e2e:firefox`
+
+You can run tests for both browsers in sequence by running `npm run e2e`,
+
+To run tests in Browserstack;
+
+1) Log into your [Browserstack automation](https://www.browserstack.com/automate) and get your username and access key from the upper left
+2) Set these environmental variables in your shell;
+ - `export BROWSERSTACK_ACCESS_KEY=yourkeyhere`
+ - `export BROWSERSTACK_USER=yourusernamehere`
+3) Configure `./e2e/environments.json` with the browsers you want to test.
+4) Run `npm run browserstack`
+
+#### End-to-end Test Reports
+
+After running end-to-end tests, reports are generated and saved in `./e2e/reports`. You can convert these to HTML by running `npm run report <environment>` where `<environment>` is either the lowercase name of the browser for local tests (`chrome` or `firefox`) or the name of the Browserstack environment, such as `Chrome_61-0_OS_X_El_Capitan-1` (you can get this name from the JSON files in `./e2e/reports`).
+
+The end-to-end tests are a little bit flaky, so they aren't required to pass before a submission will be accepted, but you should run them and read through the results to make sure that you haven't broken any functionality. Please also consider adding end-to-end tests to cover any functionality you add.
 
 ### Commits
 
@@ -43,7 +73,7 @@ Improve contributing docs and consolidate them in the standard location https://
 
 ## What We're Working On
 
-Please see our [Roadmap](https://github.com/nasa-gibs/worldview/wiki/Worldview-Roadmap) for an overview of what we're planning.
+Please see our [Roadmap](https://github.com/nasa-gibs/worldview/projects/7) for an overview of what we're planning.
 
 We use GitHub labels to organize issues we're working on. Here are the labels we use, along with descriptions of what they mean. Click on the headings or badges below to see the GitHub issues tagged with each label.
 
@@ -55,11 +85,11 @@ Things that appear to be broken or are not working as intended.
 
 An enhancement to an existing feature.
 
-### [`external dependency` ![Issues tagged with 'external dependency'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/external%20dependency.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aexternal%20dependency)
+### [`external dependency` ![Issues tagged with 'external dependency'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22external%20dependency%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen%20is%3Aissue%20label%3A%22external%20dependency%22)
 
 Issues that are waiting on something out of our control.
 
-### [`help wanted` ![Issues tagged with 'help wanted'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/help%20wanted.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Ahelp%20wanted)
+### [`help wanted` ![Issues tagged with 'help wanted'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22help%20wanted%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22help%20wanted%22)
 
 These issues might be a good place to start if you want to contribute.
 
@@ -67,15 +97,15 @@ These issues might be a good place to start if you want to contribute.
 
 These are ideas, user stories, or feature requests that don't yet qualify as a new feature, probably because the specifics haven't been worked out yet.
 
-### [`new feature` ![Issues tagged with 'new feature'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/new%20feature.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Anew%20feature)
+### [`new feature` ![Issues tagged with 'new feature'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22new%20feature%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22new%20feature%22)
 
 These are new features to be developed at some point in the future.
 
-### [`ready for development` ![Issues tagged with 'ready for development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/ready%20for%20development.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aready%20for%20development)
+### [`ready for development` ![Issues tagged with 'ready for development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22ready%20for%20development%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22ready%20for%20development%22)
 
 These are issues that are "on deck" for development. We're planning to work on these next.
 
-### [`ready for test` ![Issues tagged with 'ready for test'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/ready%20for%20test.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aready%20for%20test)
+### [`testing` ![Issues tagged with 'testing'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/testing.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Atesting)
 
 These are issues that have a PR ready to resolve them, and are just waiting to be fully tested.
 
@@ -83,7 +113,7 @@ These are issues that have a PR ready to resolve them, and are just waiting to b
 
 These issues are related to our technical implementation (refactoring, dependency changes, etc), they're developer focused, and don't directly add new features for end users.
 
-### [`under development` ![Issues tagged with 'under development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/under%20development.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Aunder%20development)
+### [`under development` ![Issues tagged with 'under development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22under%20development%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22under%20development%22)
 
 These are ideas, user stories, or feature requests that don't yet qualify as a new feature, probably because the specifics haven't been worked out yet.
 

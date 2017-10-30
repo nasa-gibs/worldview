@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.layers
  */
@@ -20,33 +9,9 @@ wv.layers = wv.layers || {};
  */
 wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
-  var HTML_TAB_ACTIVE_SELECTED =
-    "<i class='productsIcon selected icon-layers'></i>" +
-    "Layers";
-
-  var HTML_TAB_ACTIVE_UNSELECTED =
-    "<i class='productsIcon selected icon-layers' title='Active Layers'></i>" +
-    "Layers";
-
-  var HTML_TAB_EVENTS_SELECTED =
-    "<i class='selected icon-events'></i>" +
-    "Events";
-
-  var HTML_TAB_EVENTS_UNSELECTED =
-    "<i class='selected icon-events' title='Events'></i>" +
-    "Events";
-
-  var HTML_TAB_DOWNLOAD_SELECTED =
-    "<i class='productsIcon selected icon-download'></i>" +
-    "Data";
-
-  var HTML_TAB_DOWNLOAD_UNSELECTED =
-    "<i class='productsIcon selected icon-download' title='Data'></i>" +
-    "Data";
-
   var collapsed = false;
   var collapseRequested = false;
-  var portrait = false;
+  var productsIsOverflow = false;
   var mobile = false;
   var self = {};
 
@@ -141,6 +106,10 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     if (wv.util.browser.localStorage) {
       localStorage.setItem("sidebarState", "expanded");
     }
+    // Resize after browser repaints
+    setTimeout(function(){
+      self.sizeEventsTab();
+    }, 100);
   };
 
   self.expandNow = function() {
@@ -157,6 +126,46 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
     }
   };
 
+  self.sizeEventsTab = function() {
+    var $tabPanel = $('#wv-events');
+    var $tabFooter = $tabPanel.find('footer');
+    var footerIsVisible = $tabFooter.css('display') === 'block';
+    var windowHeight = $(window).outerHeight(true);
+    var tabBarHeight = $('ul#productsHolder-tabs').outerHeight(true);
+    var distanceFromTop = $('#productsHolder').offset().top;
+    var timelineHeight = $('#timeline').outerHeight(true);
+    var footerHeight = footerIsVisible ? $tabFooter.outerHeight(true) : 0;
+    $tabPanel.css('padding-bottom', footerHeight);
+    var tabPadding = $tabPanel.outerHeight(true) - $tabPanel.height();
+
+    //FIXME: -10 here is the timeline's bottom position from page, fix
+    // after timeline markup is corrected to be loaded first
+    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding;
+    if (!wv.util.browser.small) {
+      maxHeight = maxHeight - timelineHeight - 10 - 5;
+    }
+    $tabPanel.css('max-height', maxHeight);
+    $('.wv-eventslist').css('min-height', 1);
+
+    var childrenHeight = $('#wv-eventscontent').outerHeight(true);
+
+    if ((maxHeight <= childrenHeight)) {
+      $('.wv-eventslist').css('height', maxHeight).css('padding-right', '10px');
+      if (productsIsOverflow) {
+        $('.wv-eventslist').perfectScrollbar('update');
+      } else {
+        $('.wv-eventslist').perfectScrollbar();
+        productsIsOverflow = true;
+      }
+    } else {
+      $('.wv-eventslist').css('height', '').css('padding-right', '');
+      if (productsIsOverflow) {
+        $('.wv-eventslist').perfectScrollbar('destroy');
+        productsIsOverflow = false;
+      }
+    }
+  };
+
   var render = function() {
 
     var $container = $(self.selector);
@@ -169,16 +178,11 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
       .addClass("first")
       .attr("data-tab", "active");
 
-    $(self.selector + " footer button")
-      .hide();
-    $("#layers-add")
-      .show();
-
     var $activeLink = $("<a></a>")
       .attr("href", "#products")
       .addClass("activetab")
       .addClass("tab")
-      .html(HTML_TAB_ACTIVE_SELECTED);
+      .html("<i class='productsIcon selected icon-layers' title='Layers'></i> Layers");
 
     $activeTab.append($activeLink);
     $tabs.append($activeTab);
@@ -191,7 +195,7 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
       var $eventsLink = $("<a></a>")
         .attr("href", "#wv-events")
         .addClass("tab")
-        .html(HTML_TAB_EVENTS_UNSELECTED);
+        .html("<i class='productsIcon selected icon-events' title='Events'></i> Events");
       $eventsTab.append($eventsLink);
       $tabs.append($eventsTab);
     }
@@ -203,12 +207,11 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
       var $downloadLink = $("<a></a>")
         .attr("href", "#wv-data")
         .addClass("tab")
-        .html(HTML_TAB_DOWNLOAD_UNSELECTED);
+        .html("<i class='productsIcon selected icon-download' title='Data'></i> Data");
       $downloadTab.append($downloadLink);
       $tabs.append($downloadTab);
     }
 
-    //$container.append($tabs);
     var $collapseContainer = $("div#productsHoldertoggleButtonHolder")
       .addClass("toggleButtonHolder");
 
@@ -219,12 +222,6 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
       .attr("title", "Hide");
 
     $collapseContainer.append($collapseButton);
-
-    //$container.append($collapseContainer);
-
-    //$container//.append($("<div id='products'></div>"))
-    //.append($("<div id='selectorbox'></div>"))
-    //.append($("<div id='wv-data'></div>"));
 
     $container.tabs({
       beforeActivate: onBeforeTabChange,
@@ -241,81 +238,26 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
       $("#wv-layers-options-dialog")
         .dialog("close");
     }
-    self.events.trigger("select", ui.newTab.attr("data-tab"));
+    self.events.trigger('selectTab', ui.newTab.attr("data-tab"));
     if (e.currentTarget) {
       e.currentTarget.blur();
     }
   };
 
   var onBeforeTabChange = function(e, ui) {
-    var $footerBtns = $(self.selector + " footer");
-    // FIXME: This code is very clunky.
     var tab = ui.newTab.attr("data-tab");
+    $('.ui-tabs-nav li.second').removeClass("ui-state-active");
     if (tab === "active") {
-      $('.ui-tabs-nav')
-        .addClass('firstselected')
-        .removeClass('secondselected')
-        .removeClass('thirdselected');
-      $('.ui-tabs-nav li.first')
-        .addClass("ui-state-active");
-      $('.ui-tabs-nav li.second')
-        .removeClass("ui-state-active");
-      $('.ui-tabs-nav li.third')
-        .removeClass("ui-state-active");
-      $footerBtns.show();
-      $footerBtns.find("button")
-        .hide();
-      $("#layers-add")
-        .show();
+      $('.ui-tabs-nav li.first').addClass("ui-state-active");
     } else if (tab === "events") {
       WVC.GA.event('Natural Events', 'Click', 'Events Tab');
-      $('.ui-tabs-nav')
-        .removeClass('firstselected')
-        .addClass('secondselected')
-        .removeClass('thirdselected');
-      $('.ui-tabs-nav li.first')
-        .removeClass("ui-state-active");
-      $('.ui-tabs-nav li.second')
-        .addClass("ui-state-active");
-      $('.ui-tabs-nav li.third')
-        .removeClass("ui-state-active");
-      $footerBtns.hide();
+      $('.ui-tabs-nav li.second').addClass("ui-state-active");
     } else if (tab === "download") {
-      $('.ui-tabs-nav')
-        .removeClass('firstselected')
-        .removeClass('secondselected')
-        .addClass('thirdselected');
-      $('.ui-tabs-nav li.first')
-        .removeClass("ui-state-active");
-      $('.ui-tabs-nav li.second')
-        .removeClass("ui-state-active");
-      $('.ui-tabs-nav li.third')
-        .addClass("ui-state-active");
-      $footerBtns.show();
-      $footerBtns.find("button")
-        .hide();
-      $("#wv-data-download-button")
-        .show();
+      $('.ui-tabs-nav li.third').addClass("ui-state-active");
     } else {
       throw new Error("Invalid tab index: " + ui.index);
     }
-
-    var tab1 = (tab === "active") ?
-      HTML_TAB_ACTIVE_SELECTED : HTML_TAB_ACTIVE_UNSELECTED;
-    var tab2 = (tab === "events") ?
-      HTML_TAB_EVENTS_SELECTED : HTML_TAB_EVENTS_UNSELECTED;
-    var tab3 = (tab === "download") ?
-      HTML_TAB_DOWNLOAD_SELECTED : HTML_TAB_DOWNLOAD_UNSELECTED;
-
     self.events.trigger("before-select", tab);
-
-    $('.ui-tabs-nav li.first a')
-      .html(tab1);
-    $('.ui-tabs-nav li.second a')
-      .html(tab2);
-    $('.ui-tabs-nav li.third a')
-      .html(tab3);
-
     return true;
   };
 
@@ -339,5 +281,4 @@ wv.layers.sidebar = wv.layers.sidebar || function(models, config) {
 
   init();
   return self;
-
 };

@@ -1,20 +1,6 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wv = wv || {};
 
 wv.map = wv.map || {};
-/*
- * @Class
- */
 wv.map.runningdata = wv.map.runningdata || function(models) {
   var self;
   var $productsBox;
@@ -57,7 +43,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
   /*
    * Retrieves the label, length and index of
-   * of the label from the palette scale object  
+   * of the label from the palette scale object
    *
    * @method getDataLabel
    *
@@ -97,7 +83,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
   /*
    * Gets the point in which to place the running
-   * data value label  
+   * data value label
    *
    * @method getLabelMarginLeft
    *
@@ -147,7 +133,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
   /*
    * Gets the point in which to place the running
-   * data value label  
+   * data value label
    *
    * @method getPalette
    *
@@ -170,7 +156,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @param {Number} Index - Index of color value in
    *  palette.scale.colors array
    *
-   * @return {number} Percent of color index in 
+   * @return {number} Percent of color index in
    *  palette.scale.colors array
    *
    */
@@ -343,7 +329,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @param {String} id - Pallete id
    *
    * @param {Object} data - Object that contains
-   *  the index, length and label of running data 
+   *  the index, length and label of running data
    *  value
    *
    * @return {Void}
@@ -391,7 +377,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @param {String} id - Pallete id
    *
    * @param {Object} data - Object that contains
-   *  the index, length and label of running data 
+   *  the index, length and label of running data
    *  value
    *
    * @return {Void}

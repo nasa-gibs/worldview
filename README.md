@@ -10,22 +10,27 @@ Visit Worldview at
 
 This tool from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
 provides the capability to interactively browse global, full-resolution
-satellite imagery and then download the underlying data. Most of the 200+
+satellite imagery and then download the underlying data. Most of the 600+
 available products are updated within three hours of observation, essentially
 showing the entire Earth as it looks "right now". This supports time-critical
 application areas such as wildfire management, air quality measurements, and
 flood monitoring. Arctic and Antarctic views of several products are also
-available for a "full globe" perspective. Browsing on tablet and smartphone
-devices is generally supported for mobile access to the imagery.
+available for a "full globe" perspective. Browsing on mobile devices is
+generally supported for portable access to the imagery.
 
 Worldview uses the
 [Global Imagery Browse Services (GIBS)](https://earthdata.nasa.gov/gibs) to
 rapidly retrieve its imagery for an interactive browsing experience. While
 Worldview uses [OpenLayers](http://openlayers.org/) as its mapping library,
-GIBS imagery can also be accessed from Google Earth, NASA World Wind, and
-several other clients. We encourage interested developers to build their own
-clients or integrate NASA imagery into their existing ones using these
-services.
+GIBS imagery can also be accessed from Leaflet, Cesium, and several other
+clients as well as [scripts](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage#expand-GDALBasics).
+We encourage interested developers to build their own clients or integrate
+NASA imagery into their existing ones using these services.
+
+Check out our [roadmap](https://github.com/nasa-gibs/worldview/projects/7)
+to see where we're going or follow our [blog](https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS)
+to find out the latest features and imagery available!
+
 
 ## Installation
 
@@ -119,6 +124,7 @@ git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 * [Development Notes](doc/developing.md)
 * [Coding Style Guide](doc/style_guide.md)
 * [Testing](doc/testing.md)
+* [Project Roadmap](https://github.com/nasa-gibs/worldview/projects/7)
 * [Third-Party Library Use](THIRD_PARTY.md)
 
 ## Contributing
@@ -127,14 +133,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-This code was originally developed at NASA/Goddard Space Flight Center for
-the Earth Science Data and Information System (ESDIS) project.
-
-Copyright &copy; 2013 - 2017 United States Government as represented by the
-Administrator of the National Aeronautics and Space Administration.
-All Rights Reserved.
-
-Licensed under the [NASA Open Source Agreement, Version 1.3](LICENSE.md).
+See [LICENSE.md](LICENSE.md)
 
 ## Contact
 

@@ -314,7 +314,7 @@ p.wv-tour-page-count {
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: url('../images/wv-icons.svg?v=@BUILD_NONCE@');
+  background: url('../images/icon-sprite.svg?v=@BUILD_NONCE@');
   background-position: 0 -70px;
 }
 
