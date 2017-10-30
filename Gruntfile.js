@@ -744,7 +744,7 @@ module.exports = function(grunt) {
   grunt.registerTask('check', ['lint', 'test']);
   grunt.registerTask('clean', ['remove:build']);
   grunt.registerTask('distclean', ['remove:build', 'remove:dist']);
-  grunt.registerTask('lint', ['eslint'], ['stylelint']);
+  grunt.registerTask('lint', ['eslint', 'stylelint']);
   grunt.registerTask('test', ['buster:console']);
 
   grunt.registerTask('default', [
