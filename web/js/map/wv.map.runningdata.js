@@ -1,21 +1,7 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wv = wv || {};
 
 wv.map = wv.map || {};
-/*
- * @Class
- */
-wv.map.runningdata = wv.map.runningdata || function(models) {
+wv.map.runningdata = wv.map.runningdata || function (models) {
   var self;
   var $productsBox;
   var productsBoxHeight;
@@ -24,21 +10,19 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
   self = this;
 
-
   self.layers = [];
   self.prePixelData = [];
   self.pixel = null;
   self.oldLayers = [];
 
-
-  self.init = function() {
+  self.init = function () {
     $productsBox = $('#products');
     productsBoxHeight = $productsBox.height();
     productsBoxTop = $productsBox.scrollTop();
     productsBoxBottom = productsBoxTop + productsBoxHeight;
-    models.layers.events.on('change', function() { //when layers are added or removed
-      //hacky timeout that allows onchange changes to render
-      setTimeout(function() {
+    models.layers.events.on('change', function () { // when layers are added or removed
+      // hacky timeout that allows onchange changes to render
+      setTimeout(function () {
         productsBoxHeight = $productsBox.height();
         productsBoxBottom = productsBoxTop + productsBoxHeight;
       }, 300);
@@ -48,16 +32,15 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
      * A scroll event listener that updates
      * the location of scroller
      */
-    $productsBox.on('scroll', function() {
+    $productsBox.on('scroll', function () {
       productsBoxTop = $productsBox.scrollTop();
       productsBoxBottom = productsBoxTop + productsBoxHeight;
-
     });
   };
 
   /*
    * Retrieves the label, length and index of
-   * of the label from the palette scale object  
+   * of the label from the palette scale object
    *
    * @method getDataLabel
    *
@@ -71,7 +54,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    *
    * @return {object}
    */
-  self.getDataLabel = function(legend, hex) {
+  self.getDataLabel = function (legend, hex) {
     var units = legend.units || '';
     // for(var i = 0, len = legend.colors.length; i < len; i++)  {
     //     if(legend.colors[i] === hex) {
@@ -97,7 +80,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
   /*
    * Gets the point in which to place the running
-   * data value label  
+   * data value label
    *
    * @method getLabelMarginLeft
    *
@@ -110,7 +93,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {number} margin-left value of label
    *
    */
-  self.getLabelMarginLeft = function(labelWidth, caseWidth, location) {
+  self.getLabelMarginLeft = function (labelWidth, caseWidth, location) {
     if (location + (labelWidth / 2) > caseWidth) {
       return (caseWidth - labelWidth) - 5;
     } else if (location - (labelWidth / 2) < 0) {
@@ -130,10 +113,10 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Boolean} legend is visible
    *
    */
-  var layerIsInView = function(layerID) {
+  var layerIsInView = function (layerID) {
     var elTop;
     var elBottom;
-    var $case = $(".productsitem[data-layer='" + layerID + "']");
+    var $case = $('.productsitem[data-layer=\'' + layerID + '\']');
     if ($case[0]) {
       elTop = $case[0].offsetTop;
       elBottom = elTop + $case.height();
@@ -147,7 +130,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
 
   /*
    * Gets the point in which to place the running
-   * data value label  
+   * data value label
    *
    * @method getPalette
    *
@@ -156,7 +139,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Object} Jquery palette dom object
    *
    */
-  self.getPalette = function(id) {
+  self.getPalette = function (id) {
     return $(document.getElementById(id));
   };
 
@@ -170,11 +153,11 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @param {Number} Index - Index of color value in
    *  palette.scale.colors array
    *
-   * @return {number} Percent of color index in 
+   * @return {number} Percent of color index in
    *  palette.scale.colors array
    *
    */
-  self.getPercent = function(len, index, caseWidth) {
+  self.getPercent = function (len, index, caseWidth) {
     var segmentWidth;
     var location;
     if (len < 250) {
@@ -200,7 +183,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Array} Array of layers to remove
    *
    */
-  self.LayersToRemove = function(oldArray, newArray) {
+  self.LayersToRemove = function (oldArray, newArray) {
     return _.difference(oldArray, newArray);
   };
 
@@ -217,9 +200,9 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Void}
    *
    */
-  self.newPoint = function(coords, map) {
+  self.newPoint = function (coords, map) {
     self.activeLayers = [];
-    map.forEachLayerAtPixel(coords, function(layer, data) {
+    map.forEachLayerAtPixel(coords, function (layer, data) {
       var hex;
       var palette;
       var legend;
@@ -236,10 +219,9 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
         legends = models.palettes.getLegends(layerId);
         hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
 
-        _.each(legends, function(legend) {
+        _.each(legends, function (legend) {
           if (legend) {
             self.createRunnerFromLegend(legend, hex);
-
           }
         });
       }
@@ -255,12 +237,11 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Void}
    *
    */
-  self.update = function() {
+  self.update = function () {
     if (self.oldLayers.length) {
       self.updateRunners(self.LayersToRemove(self.oldLayers, self.activeLayers));
     }
     self.oldLayers = self.activeLayers;
-
   };
   /*
    * Initiates new legend
@@ -274,7 +255,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Void}
    *
    */
-  self.newLegend = function(legends, hex) {
+  self.newLegend = function (legends, hex) {
     self.activeLayers = [legends.id];
     $productsBox.addClass('active-lengend');
     self.createRunnerFromLegend(legends, hex);
@@ -294,7 +275,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Void}
    *
    */
-  self.createRunnerFromLegend = function(legend, hex) {
+  self.createRunnerFromLegend = function (legend, hex) {
     var paletteInfo;
 
     if (legend.type === 'continuous' || legend.type === 'discrete') {
@@ -323,13 +304,13 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Void}
    *
    */
-  self.remove = function(id) {
+  self.remove = function (id) {
     var $palette = $('#' + id);
     var $paletteCase = $palette.parent();
     $paletteCase.removeClass('wv-running');
     $palette.removeClass('wv-running');
   };
-  self.clearAll = function() {
+  self.clearAll = function () {
     $productsBox.removeClass('active-lengend');
     $('.wv-running')
       .removeClass('wv-running');
@@ -343,13 +324,13 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @param {String} id - Pallete id
    *
    * @param {Object} data - Object that contains
-   *  the index, length and label of running data 
+   *  the index, length and label of running data
    *  value
    *
    * @return {Void}
    *
    */
-  self.setCategoryValue = function(id, data) {
+  self.setCategoryValue = function (id, data) {
     var $categoryPaletteCase;
     var $caseWidth;
     var $labelWidth;
@@ -363,7 +344,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
     squareWidth = 15;
 
     $categoryPaletteCase = $('#' + id);
-    $colorSquare = $categoryPaletteCase.find("[data-class-index='" + data.index + "']");
+    $colorSquare = $categoryPaletteCase.find('[data-class-index=\'' + data.index + '\']');
     $paletteLabel = $categoryPaletteCase.find('.wv-running-category-label');
 
     $caseWidth = $categoryPaletteCase.width();
@@ -391,13 +372,13 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @param {String} id - Pallete id
    *
    * @param {Object} data - Object that contains
-   *  the index, length and label of running data 
+   *  the index, length and label of running data
    *  value
    *
    * @return {Void}
    *
    */
-  self.setLayerValue = function(id, data) {
+  self.setLayerValue = function (id, data) {
     var $palette;
     var $paletteCase;
     var $paletteWidth;
@@ -437,7 +418,7 @@ wv.map.runningdata = wv.map.runningdata || function(models) {
    * @return {Void}
    *
    */
-  self.updateRunners = function(layers) {
+  self.updateRunners = function (layers) {
     if (layers.length) {
       for (var i = 0, len = layers.length; i < len; i++) {
         self.remove(layers[i]);

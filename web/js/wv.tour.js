@@ -1,32 +1,20 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wv = wv || {};
 
-wv.tour = wv.tour || function(models, ui, config) {
-
+wv.tour = wv.tour || function (models, ui, config) {
   var self = {};
 
   var conclusionPanel = null;
   var splashOverlay = null;
 
-  var init = function() {
-    $("#wv-tour")
-      .click(function() {
+  var init = function () {
+    $('#wv-tour')
+      .click(function () {
         self.start();
       });
     self.introduction();
   };
 
-  self.introduction = function() {
+  self.introduction = function () {
     if (!config.features.tour) {
       return;
     }
@@ -47,7 +35,7 @@ wv.tour = wv.tour || function(models, ui, config) {
     }
 
     // Don't show tour if the user has opted out
-    if (localStorage.getItem("hideSplash")) {
+    if (localStorage.getItem('hideSplash')) {
       return;
     }
 
@@ -62,21 +50,21 @@ wv.tour = wv.tour || function(models, ui, config) {
   /**
    * Create the splash screen and tour panels and control iteration over them.
    */
-  self.start = function(introduction) {
+  self.start = function (introduction) {
     if (wv.util.browser.ie && wv.util.browser.version <= 9) {
-      wv.ui.unsupported("tour");
+      wv.ui.unsupported('tour');
       return;
     }
 
     if (!validScreenSize()) {
-      wv.ui.notify("Unfortunately the @NAME@ tour can only be viewed in larger web browser windows.");
+      wv.ui.notify('Unfortunately the @NAME@ tour can only be viewed in larger web browser windows.');
       return;
     }
 
-    $content = $("#wv-tour-content");
+    $content = $('#wv-tour-content');
     if ($content.children()
       .length === 0) {
-      $content.load("pages/tour.html", function() {
+      $content.load('pages/tour.html', function () {
         onLoad(introduction);
       });
     } else {
@@ -84,68 +72,68 @@ wv.tour = wv.tour || function(models, ui, config) {
     }
   };
 
-  var onLoad = function(introduction) {
+  var onLoad = function (introduction) {
     var padding = 15; // padding - used for all of the tour windows
     var pos, width, height, xval, yval; // helpful calculation vars
 
     wv.ui.close();
-    var $startDialog = $("#wv-tour-intro");
+    var $startDialog = $('#wv-tour-intro');
     $startDialog
       .dialog({
-        title: "Welcome to @NAME@!",
-        dialogClass: "tour",
+        title: 'Welcome to @NAME@!',
+        dialogClass: 'tour',
         modal: true,
         width: 700,
-        height: "auto",
+        height: 'auto',
         draggable: false,
         resizable: false
       });
 
     if (introduction) {
-      $("#wv-tour-skip")
+      $('#wv-tour-skip')
         .show();
     } else {
-      $("#wv-tour-skip")
+      $('#wv-tour-skip')
         .hide();
     }
 
-    var mapAnchor = document.getElementById("mapPanelTourAnchor");
+    var mapAnchor = document.getElementById('mapPanelTourAnchor');
     if (!mapAnchor) {
-      //console.log("creating mapanchor");
-      var owner = document.getElementById("wv-map");
-      mapAnchor = document.createElement("div");
-      mapAnchor.setAttribute("id", "mapPanelTourAnchor");
-      mapAnchor.setAttribute("style", "float:right; height:68px; right:14px; top:90px; width:36px; position:relative; z-index:-1");
+      // console.log("creating mapanchor");
+      var owner = document.getElementById('wv-map');
+      mapAnchor = document.createElement('div');
+      mapAnchor.setAttribute('id', 'mapPanelTourAnchor');
+      mapAnchor.setAttribute('style', 'float:right; height:68px; right:14px; top:90px; width:36px; position:relative; z-index:-1');
       owner.appendChild(mapAnchor);
     }
 
-    var endTour = function() {
+    var endTour = function () {
       wv.ui.close();
-      $dialog = $("#wv-tour-end");
+      $dialog = $('#wv-tour-end');
       $dialog
         .dialog({
-          title: "Finished!",
-          dialogClass: "tour",
+          title: 'Finished!',
+          dialogClass: 'tour',
           modal: true,
           width: 600,
-          height: "auto",
+          height: 'auto',
           draggable: false,
           resizable: false
         });
-      wv.feedback.decorate($dialog.find(".feedback"));
-      $("#repeat")
+      wv.feedback.decorate($dialog.find('.feedback'));
+      $('#repeat')
         .click(repeatTour);
-      $("#done")
+      $('#done')
         .click(handleDone);
     };
 
     /*
      * Restart the tour at the beginning.
      */
-    var repeatTour = function(e) {
+    var repeatTour = function (e) {
       e.stopPropagation();
-      $(".ui-dialog-content")
-        .dialog("close");
+      $('.ui-dialog-content')
+        .dialog('close');
       $('#joyRideTipContent')
         .joyride({
           adjustForPhone: false,
@@ -154,7 +142,7 @@ wv.tour = wv.tour || function(models, ui, config) {
           template: {
             'link': '<a href="#" class="joyride-close-tip">X</a>'
           },
-          postStepCallback: function(index, tip) {
+          postStepCallback: function (index, tip) {
             if (index == 5) {
               endTour();
             }
@@ -165,25 +153,25 @@ wv.tour = wv.tour || function(models, ui, config) {
     /*
      * Hide the tour.
      */
-    var handleDone = function(e) {
+    var handleDone = function (e) {
       e.stopPropagation();
-      $(".ui-dialog-content")
-        .dialog("close");
+      $('.ui-dialog-content')
+        .dialog('close');
     };
 
     /*
      * Close the splash and go straight to worldview.
      */
-    var handleSkipTour = function() {
-      $(".ui-dialog-content")
-        .dialog("close");
+    var handleSkipTour = function () {
+      $('.ui-dialog-content')
+        .dialog('close');
     };
 
-    var onStop = function(index, tip, button) {
-      //console.log(index, tip, button);
+    var onStop = function (index, tip, button) {
+      // console.log(index, tip, button);
       setTourState();
       WVC.GA.event('Tour', 'Click', 'Post Tour View', index + 1);
-      if (index == 5 && button !== "previous") {
+      if (index == 5 && button !== 'previous') {
         endTour();
       }
     };
@@ -191,10 +179,10 @@ wv.tour = wv.tour || function(models, ui, config) {
     /*
      * Close the splash and start the tour.
      */
-    var handleTakeTour = function(e) {
+    var handleTakeTour = function (e) {
       e.stopPropagation();
-      $(".ui-dialog-content")
-        .dialog("close");
+      $('.ui-dialog-content')
+        .dialog('close');
       initTourState();
       WVC.GA.event('Tour', 'Click', 'Take Tour');
       $('#joyRideTipContent')
@@ -212,23 +200,22 @@ wv.tour = wv.tour || function(models, ui, config) {
     /*
      * Toggle the value of the "hideSplash" flag.
      */
-    var setDoNotShow = function() {
+    var setDoNotShow = function () {
       if (!wv.util.browser.localStorage) return;
       var hideSplash = localStorage.getItem('hideSplash');
       localStorage.setItem('hideSplash', !hideSplash);
     };
 
     // assign events and start
-    $("#takeTour")
+    $('#takeTour')
       .click(handleTakeTour);
-    $("#skipTour")
+    $('#skipTour')
       .click(handleSkipTour);
-    $("#dontShowAgain")
+    $('#dontShowAgain')
       .click(setDoNotShow);
-
   };
 
-  var initTourState = function() {
+  var initTourState = function () {
     var map = ui.map.selected;
     models.proj.selectDefault();
     models.date.select(wv.util.today());
@@ -239,14 +226,14 @@ wv.tour = wv.tour || function(models, ui, config) {
     setTourState();
   };
 
-  var setTourState = function() {
+  var setTourState = function () {
     ui.sidebar.expandNow();
-    ui.sidebar.selectTab("active");
+    ui.sidebar.selectTab('active');
     ui.timeline.expandNow();
     models.proj.selectDefault();
   };
 
-  var validScreenSize = function() {
+  var validScreenSize = function () {
     var viewWidth = $(window)
       .width();
     var viewHeight = $(window)

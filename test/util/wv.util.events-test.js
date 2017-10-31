@@ -1,54 +1,43 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
-buster.testCase("wv.util.events", {
+buster.testCase('wv.util.events', {
 
   events: null,
 
-  setUp: function() {
+  setUp: function () {
     this.events = wv.util.events();
   },
 
-  "Triggers an event": function() {
+  'Triggers an event': function () {
     var listener1 = this.stub();
     var listener2 = this.stub();
-    this.events.on("test", listener1);
-    this.events.on("test", listener2);
-    this.events.trigger("test", "a", 2);
-    buster.assert.calledWith(listener1, "a", 2);
-    buster.assert.calledWith(listener2, "a", 2);
+    this.events.on('test', listener1);
+    this.events.on('test', listener2);
+    this.events.trigger('test', 'a', 2);
+    buster.assert.calledWith(listener1, 'a', 2);
+    buster.assert.calledWith(listener2, 'a', 2);
   },
 
-  "Exception thrown when trying to register a null listener": function() {
+  'Exception thrown when trying to register a null listener': function () {
     var self = this;
-    buster.assert.exception(function() {
-      self.events.on("foo");
+    buster.assert.exception(function () {
+      self.events.on('foo');
     });
   },
 
-  "Removes listener": function() {
+  'Removes listener': function () {
     var listener = this.stub();
-    this.events.on("test", listener);
-    this.events.trigger("test");
-    this.events.off("test", listener);
-    this.events.trigger("test");
+    this.events.on('test', listener);
+    this.events.trigger('test');
+    this.events.off('test', listener);
+    this.events.trigger('test');
     buster.assert.calledOnce(listener);
   },
 
-  "Any listener called on any event": function() {
+  'Any listener called on any event': function () {
     var listener = this.stub();
-    this.events.on("event1", listener);
-    this.events.on("event2", listener);
-    this.events.trigger("event1");
-    this.events.trigger("event2");
+    this.events.on('event1', listener);
+    this.events.on('event2', listener);
+    this.events.trigger('event1');
+    this.events.trigger('event2');
     buster.assert.calledTwice(listener);
   }
 });

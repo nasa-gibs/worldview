@@ -1,29 +1,16 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.data
  */
 var wv = wv || {};
 wv.data = wv.data || {};
 
-
 wv.data.results = wv.data.results || {};
 
-wv.data.results.antiMeridianMulti = function(maxDistance) {
-
+wv.data.results.antiMeridianMulti = function (maxDistance) {
   var self = {};
-  self.name = "AntiMeridianMulti";
+  self.name = 'AntiMeridianMulti';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     var geom = granule.geometry[wv.map.CRS_WGS_84];
     // Semi-hack of ensuring geometry isn't a MultiPolygon since
     // isPolygonValid can't handle it; addresses WV-1574
@@ -52,20 +39,18 @@ wv.data.results.antiMeridianMulti = function(maxDistance) {
   return self;
 };
 
-
-wv.data.results.chain = function() {
-
+wv.data.results.chain = function () {
   var self = {};
 
   self.processes = [];
 
-  self.process = function(results) {
-    $.each(results.granules, function(index, granule) {
+  self.process = function (results) {
+    $.each(results.granules, function (index, granule) {
       delete granule.filtered;
       delete granule.filteredBy;
     });
-    $.each(self.processes, function(index, process) {
-      $.each(results.granules, function(index2, granule) {
+    $.each(self.processes, function (index, process) {
+      $.each(results.granules, function (index2, granule) {
         if (!granule.filtered) {
           var result = process.process(results.meta, granule);
           if (!result) {
@@ -81,7 +66,7 @@ wv.data.results.chain = function() {
 
     newGranules = [];
     filteredGranules = {};
-    $.each(results.granules, function(index, granule) {
+    $.each(results.granules, function (index, granule) {
       if (!granule.filtered) {
         newGranules.push(granule);
       } else {
@@ -102,20 +87,18 @@ wv.data.results.chain = function() {
   return self;
 };
 
-
-wv.data.results.collectPreferred = function(prefer) {
-
+wv.data.results.collectPreferred = function (prefer) {
   var self = {};
 
-  self.name = "CollectPreferred";
+  self.name = 'CollectPreferred';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (!meta.preferred) {
       meta.preferred = {};
     }
     var preferred =
-      (prefer === "nrt" && granule.nrt) ||
-      (prefer === "science" && !granule.nrt);
+      (prefer === 'nrt' && granule.nrt) ||
+      (prefer === 'science' && !granule.nrt);
     if (preferred) {
       var timeStart = wv.data.cmr.roundTime(granule.time_start);
       meta.preferred[timeStart] = granule;
@@ -126,14 +109,12 @@ wv.data.results.collectPreferred = function(prefer) {
   return self;
 };
 
-
-wv.data.results.collectVersions = function() {
-
+wv.data.results.collectVersions = function () {
   var self = {};
 
-  self.name = "CollectVersions";
+  self.name = 'CollectVersions';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (!meta.versions) {
       meta.versions = {};
     }
@@ -149,17 +130,15 @@ wv.data.results.collectVersions = function() {
   return self;
 };
 
-
-wv.data.results.connectSwaths = function(projection) {
-
+wv.data.results.connectSwaths = function (projection) {
   var MAX_DISTANCE_GEO = 270;
   var startTimes = {};
   var endTimes = {};
 
   var self = {};
-  self.name = "ConnectSwaths";
+  self.name = 'ConnectSwaths';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (!granule.centroid[projection]) {
       return;
     }
@@ -167,12 +146,12 @@ wv.data.results.connectSwaths = function(projection) {
     var timeEnd = roundTime(granule.time_end);
 
     if (startTimes[timeStart]) {
-      console.warn("Discarding duplicate start time", timeStart,
+      console.warn('Discarding duplicate start time', timeStart,
         granule, startTimes[timeStart]);
       return;
     }
     if (endTimes[timeEnd]) {
-      console.warn("Discarding duplicate end time", timeEnd,
+      console.warn('Discarding duplicate end time', timeEnd,
         granule, endTimes[timeEnd]);
       return;
     }
@@ -184,20 +163,20 @@ wv.data.results.connectSwaths = function(projection) {
     return granule;
   };
 
-  self.after = function(results) {
+  self.after = function (results) {
     results.meta.swaths = [];
-    $.each(startTimes, function(index, swath) {
+    $.each(startTimes, function (index, swath) {
       if (swath.length > 1) {
         results.meta.swaths.push(swath);
       }
     });
   };
 
-  var combineSwath = function(swath) {
+  var combineSwath = function (swath) {
     var combined = false;
 
-    var maxDistance = (projection === wv.map.CRS_WGS_84) ?
-      MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY;
+    var maxDistance = (projection === wv.map.CRS_WGS_84)
+      ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY;
     var thisTimeStart = roundTime(swath[0].time_start);
     var thisTimeEnd = roundTime(swath[swath.length - 1].time_end);
     var otherSwath = endTimes[thisTimeStart];
@@ -239,12 +218,12 @@ wv.data.results.connectSwaths = function(projection) {
 
   // Connection is allowed as long as there is at least one path between
   // centroids that is less than the max distance
-  var connectionAllowed = function(g1, g2, maxDistance) {
+  var connectionAllowed = function (g1, g2, maxDistance) {
     var polys1 = wv.map.toPolys(g1.geometry[projection]);
     var polys2 = wv.map.toPolys(g2.geometry[projection]);
     var allowed = false;
-    $.each(polys1, function(index, poly1) {
-      $.each(polys2, function(index, poly2) {
+    $.each(polys1, function (index, poly1) {
+      $.each(polys2, function (index, poly2) {
         var x1 = poly1.getInteriorPoint()
           .getCoordinates()[0];
         var x2 = poly2.getInteriorPoint()
@@ -258,52 +237,45 @@ wv.data.results.connectSwaths = function(projection) {
     return allowed;
   };
 
-
-  var roundTime = function(timeString) {
+  var roundTime = function (timeString) {
     return wv.data.cmr.roundTime(timeString);
   };
 
   return self;
-
 };
 
-
-wv.data.results.dateTimeLabel = function(time) {
-
+wv.data.results.dateTimeLabel = function (time) {
   var self = {};
 
-  self.name = "DateTimeLabel";
+  self.name = 'DateTimeLabel';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     var timeStart = wv.util.parseTimestampUTC(granule.time_start);
 
     // Some granules may not have an end time
     if (granule.time_end) {
       var timeEnd = wv.util.parseTimestampUTC(granule.time_end);
-      granule.label = wv.util.toISOStringDate(timeStart) + ": " +
-        wv.util.toISOStringTimeHM(timeStart) + "-" +
-        wv.util.toISOStringTimeHM(timeEnd) + " UTC";
+      granule.label = wv.util.toISOStringDate(timeStart) + ': ' +
+        wv.util.toISOStringTimeHM(timeStart) + '-' +
+        wv.util.toISOStringTimeHM(timeEnd) + ' UTC';
     } else {
-      granule.label = wv.util.toISOStringDate(timeStart) + ": " +
-        wv.util.toISOStringTimeHM(timeStart) + " UTC";
+      granule.label = wv.util.toISOStringDate(timeStart) + ': ' +
+        wv.util.toISOStringTimeHM(timeStart) + ' UTC';
     }
 
     return granule;
   };
 
   return self;
-
 };
 
-
-wv.data.results.densify = function() {
-
+wv.data.results.densify = function () {
   var MAX_DISTANCE = 5;
   var self = {};
 
-  self.name = "Densify";
+  self.name = 'Densify';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     // There is a bug exposed here discovered when switching to OL3. Since this
     // function isn't needed for any of the data that we have, just skip it
     // for now and fix it later.
@@ -327,7 +299,7 @@ wv.data.results.densify = function() {
     */
   };
 
-  var densifyPolygon = function(poly) {
+  var densifyPolygon = function (poly) {
     // Get the outer ring and then get an array of all the points
     var ring = poly.getLinearRing(0)
       .getCoordinates();
@@ -353,34 +325,33 @@ wv.data.results.densify = function() {
   return self;
 };
 
-wv.data.results.dividePolygon = function() {
-
+wv.data.results.dividePolygon = function () {
   var self = {};
 
-  self.name = "DividePolygon";
+  self.name = 'DividePolygon';
 
-  self.process = function(meta, granule) {
-    if (granule.geometry["EPSG:4326"].getPolygons) {
+  self.process = function (meta, granule) {
+    if (granule.geometry['EPSG:4326'].getPolygons) {
       return granule;
     }
-    var ring = granule.geometry["EPSG:4326"].getLinearRing(0);
+    var ring = granule.geometry['EPSG:4326'].getLinearRing(0);
     var coords = ring.getCoordinates();
     var latlons = [];
-    _.each(coords, function(coord) {
+    _.each(coords, function (coord) {
       var latlon = new L.LatLng(coord[1], coord[0]);
       latlons.push(latlon);
     });
     var result = L.sphericalPolygon.dividePolygon(latlons);
     var newPolys = result.interiors;
     var resultMultiPoly = [];
-    _.each(newPolys, function(newPoly) {
+    _.each(newPolys, function (newPoly) {
       var resultPoly = [];
-      _.each(newPoly, function(newCoord) {
+      _.each(newPoly, function (newCoord) {
         resultPoly.push([newCoord.lng, newCoord.lat]);
       });
       resultMultiPoly.push(resultPoly);
     });
-    granule.geometry["EPSG:4326"] =
+    granule.geometry['EPSG:4326'] =
       new ol.geom.MultiPolygon([resultMultiPoly]);
     return granule;
   };
@@ -388,13 +359,12 @@ wv.data.results.dividePolygon = function() {
   return self;
 };
 
-wv.data.results.extentFilter = function(projection, extent) {
-
+wv.data.results.extentFilter = function (projection, extent) {
   var self = {};
 
-  self.name = "ExtentFilter";
+  self.name = 'ExtentFilter';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     var geom = granule.geometry[projection];
     if (!geom) {
       return result;
@@ -406,20 +376,18 @@ wv.data.results.extentFilter = function(projection, extent) {
   };
 
   if (!extent) {
-    throw new Error("No extent");
+    throw new Error('No extent');
   }
 
   return self;
 };
 
-
-wv.data.results.geometryFromCMR = function(densify) {
-
+wv.data.results.geometryFromCMR = function (densify) {
   var self = {};
 
-  self.name = "GeometryFromCMR";
+  self.name = 'GeometryFromCMR';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (!granule.geometry) {
       granule.geometry = {};
     }
@@ -440,16 +408,14 @@ wv.data.results.geometryFromCMR = function(densify) {
   return self;
 };
 
-
-wv.data.results.geometryFromMODISGrid = function(projection) {
-
+wv.data.results.geometryFromMODISGrid = function (projection) {
   var parser = new ol.format.GeoJSON();
 
   var self = {};
 
-  self.name = "GeoemtryFromMODISGrid";
+  self.name = 'GeoemtryFromMODISGrid';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (!granule.geometry) {
       granule.geometry = {};
       granule.centroid = {};
@@ -476,25 +442,24 @@ wv.data.results.geometryFromMODISGrid = function(projection) {
   return self;
 };
 
-wv.data.results.modisGridIndex = function() {
-
+wv.data.results.modisGridIndex = function () {
   var self = {};
 
-  self.name = "MODISGridIndex";
+  self.name = 'MODISGridIndex';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     var id = granule.producer_granule_id;
     var matches = id.match(/\.h(\d+)v(\d+)\./);
     granule.h = parseInt(matches[1], 10);
     granule.v = parseInt(matches[2], 10);
-    granule.hv = "h" + granule.h + "v" + granule.v;
+    granule.hv = 'h' + granule.h + 'v' + granule.v;
     return granule;
   };
 
-  self.after = function(results) {
+  self.after = function (results) {
     results.meta.grid = {};
-    $.each(results.meta.gridFetched.features, function(index, feature) {
-      var key = "h" + feature.properties.H + "v" + feature.properties.V;
+    $.each(results.meta.gridFetched.features, function (index, feature) {
+      var key = 'h' + feature.properties.H + 'v' + feature.properties.V;
       results.meta.grid[key] = feature;
     });
   };
@@ -502,20 +467,18 @@ wv.data.results.modisGridIndex = function() {
   return self;
 };
 
-
-wv.data.results.modisGridLabel = function() {
-
+wv.data.results.modisGridLabel = function () {
   var self = {};
 
-  self.name = "MODISGridLabel";
+  self.name = 'MODISGridLabel';
 
-  self.process = function(meta, granule) {
-    granule.label = "h" + granule.h + " - " + "v" + granule.v;
+  self.process = function (meta, granule) {
+    granule.label = 'h' + granule.h + ' - ' + 'v' + granule.v;
 
     var timeStart = wv.util.parseTimestampUTC(granule.time_start);
     var date = wv.util.toISOStringDate(timeStart);
 
-    granule.downloadLabel = date + ": h" + granule.h + "-" + granule.v;
+    granule.downloadLabel = date + ': h' + granule.h + '-' + granule.v;
 
     return granule;
   };
@@ -523,13 +486,12 @@ wv.data.results.modisGridLabel = function() {
   return self;
 };
 
-wv.data.results.orbitFilter = function(spec) {
-
+wv.data.results.orbitFilter = function (spec) {
   var self = {};
 
-  self.name = "OrbitFilter";
+  self.name = 'OrbitFilter';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (spec) {
       var regex = new RegExp(spec.regex);
       var text = granule[spec.field];
@@ -545,20 +507,18 @@ wv.data.results.orbitFilter = function(spec) {
   return self;
 };
 
-
-wv.data.results.preferredFilter = function(prefer) {
-
+wv.data.results.preferredFilter = function (prefer) {
   var self = {};
 
-  self.name = "PreferredFilter";
+  self.name = 'PreferredFilter';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     var timeStart = wv.data.cmr.roundTime(granule.time_start);
     if (meta.preferred[timeStart]) {
-      if (prefer === "nrt" && !granule.nrt) {
+      if (prefer === 'nrt' && !granule.nrt) {
         return;
       }
-      if (prefer === "science" && granule.nrt) {
+      if (prefer === 'science' && granule.nrt) {
         return;
       }
     }
@@ -568,14 +528,12 @@ wv.data.results.preferredFilter = function(prefer) {
   return self;
 };
 
-
-wv.data.results.productLabel = function(name) {
-
+wv.data.results.productLabel = function (name) {
   var self = {};
 
-  self.name = "ProductLabel";
+  self.name = 'ProductLabel';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     granule.label = name;
     return granule;
   };
@@ -583,44 +541,40 @@ wv.data.results.productLabel = function(name) {
   return self;
 };
 
-
-wv.data.results.tagList = function(spec) {
-
+wv.data.results.tagList = function (spec) {
   var self = {};
 
-  self.name = "TagList";
+  self.name = 'TagList';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     return granule;
   };
 
-  self.after = function(results) {
+  self.after = function (results) {
     results.meta.showList = true;
   };
 
   return self;
 };
 
-
-wv.data.results.tagNRT = function(spec) {
-
+wv.data.results.tagNRT = function (spec) {
   var self = {};
 
-  self.name = "TagNRT";
+  self.name = 'TagNRT';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     // Exit now if this product doesn't have information about NRT
     if (!spec) {
       return granule;
     }
     var isNRT;
-    if (spec.by === "value") {
+    if (spec.by === 'value') {
       isNRT = granule[spec.field] === spec.value;
-    } else if (spec.by === "regex") {
+    } else if (spec.by === 'regex') {
       var re = new RegExp(spec.value);
       isNRT = re.test(granule[spec.field]);
     } else {
-      throw new Error("Unknown TagNRT method: " + spec.by);
+      throw new Error('Unknown TagNRT method: ' + spec.by);
     }
     if (isNRT) {
       granule.nrt = true;
@@ -632,44 +586,40 @@ wv.data.results.tagNRT = function(spec) {
   return self;
 };
 
-
-wv.data.results.tagProduct = function(product) {
-
+wv.data.results.tagProduct = function (product) {
   var self = {};
 
-  self.name = "TagProduct";
+  self.name = 'TagProduct';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     granule.product = product;
     return granule;
   };
 
   return self;
-
 };
 
 // FIXME: Code copy and pasted from TagNRT, maybe consoldate this?
-wv.data.results.tagURS = function(spec) {
-
+wv.data.results.tagURS = function (spec) {
   var self = {};
 
-  self.name = "TagURS";
+  self.name = 'TagURS';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     // Exit now if this product doesn't have information about NRT
     if (!spec) {
       return granule;
     }
     var isURS;
-    if (spec.by === "constant") {
+    if (spec.by === 'constant') {
       isURS = spec.value;
-    } else if (spec.by === "value") {
+    } else if (spec.by === 'value') {
       isURS = granule[spec.field] === spec.value;
-    } else if (spec.by === "regex") {
+    } else if (spec.by === 'regex') {
       var re = new RegExp(spec.value);
       isURS = re.test(granule[spec.field]);
     } else {
-      throw new Error("Unknown TagURS method: " + spec.by);
+      throw new Error('Unknown TagURS method: ' + spec.by);
     }
     granule.urs = isURS;
     if (isURS) {
@@ -681,23 +631,21 @@ wv.data.results.tagURS = function(spec) {
   return self;
 };
 
-
-wv.data.results.tagVersion = function() {
-
+wv.data.results.tagVersion = function () {
   var self = {};
 
-  self.name = "TagVersion";
+  self.name = 'TagVersion';
 
-  self.process = function(meta, granule) {
-    var match = granule.dataset_id.match("V(\\d{3})(\\d*)");
+  self.process = function (meta, granule) {
+    var match = granule.dataset_id.match('V(\\d{3})(\\d*)');
     if (match) {
       var major = match[1];
       var minor = match[2] || 0;
-      granule.version = parseFloat(major + "." + minor);
+      granule.version = parseFloat(major + '.' + minor);
       return granule;
     }
 
-    match = granule.dataset_id.match("V([\\d\\.]+)");
+    match = granule.dataset_id.match('V([\\d\\.]+)');
     if (match) {
       granule.version = parseFloat(match[1]);
       return granule;
@@ -709,18 +657,16 @@ wv.data.results.tagVersion = function() {
   return self;
 };
 
-
-wv.data.results.timeFilter = function(spec) {
-
+wv.data.results.timeFilter = function (spec) {
   var westZone = null;
   var eastZone = null;
   var maxDistance = null;
 
   var self = {};
 
-  self.name = "TimeFilter";
+  self.name = 'TimeFilter';
 
-  var init = function() {
+  var init = function () {
     westZone = new Date(spec.time.getTime())
       .setUTCMinutes(spec.westZone);
     eastZone = new Date(spec.time.getTime())
@@ -729,7 +675,7 @@ wv.data.results.timeFilter = function(spec) {
     timeOffset = spec.timeOffset || 0;
   };
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     var geom = granule.geometry[wv.map.CRS_WGS_84];
     var time = wv.util.parseTimestampUTC(granule.time_start);
     time.setUTCMinutes(time.getUTCMinutes() + timeOffset);
@@ -759,14 +705,12 @@ wv.data.results.timeFilter = function(spec) {
   return self;
 };
 
-
-wv.data.results.timeLabel = function(time) {
-
+wv.data.results.timeLabel = function (time) {
   var self = {};
 
-  self.name = "TimeLabel";
+  self.name = 'TimeLabel';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     var timeStart = wv.util.parseTimestampUTC(granule.time_start);
 
     // Sometimes an end time is not provided by CMR
@@ -779,12 +723,12 @@ wv.data.results.timeLabel = function(time) {
       (timeStart.getTime() - time.getTime()) / (1000 * 60 * 60 * 24)
     );
 
-    var suffix = "";
+    var suffix = '';
     if (diff !== 0) {
       if (diff < 0) {
-        suffix = " (" + diff + " day)";
+        suffix = ' (' + diff + ' day)';
       } else {
-        suffix = " (+" + diff + " day)";
+        suffix = ' (+' + diff + ' day)';
       }
     }
     var displayStart = wv.util.toISOStringTimeHM(timeStart);
@@ -792,12 +736,12 @@ wv.data.results.timeLabel = function(time) {
     if (timeEnd) {
       displayEnd = wv.util.toISOStringTimeHM(timeEnd);
     } else {
-      displayEnd = "?";
+      displayEnd = '?';
     }
-    granule.label = displayStart + " - " + displayEnd + " UTC" + suffix;
+    granule.label = displayStart + ' - ' + displayEnd + ' UTC' + suffix;
 
-    granule.downloadLabel = wv.util.toISOStringDate(timeStart) + ": " +
-      displayStart + "-" + displayEnd + " UTC";
+    granule.downloadLabel = wv.util.toISOStringDate(timeStart) + ': ' +
+      displayStart + '-' + displayEnd + ' UTC';
 
     return granule;
   };
@@ -805,14 +749,12 @@ wv.data.results.timeLabel = function(time) {
   return self;
 };
 
-
-wv.data.results.transform = function(projection) {
-
+wv.data.results.transform = function (projection) {
   var self = {};
 
-  self.name = "Transform";
+  self.name = 'Transform';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (granule.geometry[projection]) {
       return granule;
     }
@@ -836,14 +778,12 @@ wv.data.results.transform = function(projection) {
   return self;
 };
 
-
-wv.data.results.versionFilter = function() {
-
+wv.data.results.versionFilter = function () {
   var self = {};
 
-  self.name = "VersionFilter";
+  self.name = 'VersionFilter';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (granule.version) {
       var timeStart = wv.data.cmr.roundTime(granule.time_start);
       if (meta.versions[timeStart]) {
@@ -858,13 +798,12 @@ wv.data.results.versionFilter = function() {
   return self;
 };
 
-wv.data.results.versionFilterExact = function(version) {
-
+wv.data.results.versionFilterExact = function (version) {
   var self = {};
 
-  self.name = "versionFilterExact";
+  self.name = 'versionFilterExact';
 
-  self.process = function(meta, granule) {
+  self.process = function (meta, granule) {
     if (granule.version && granule.version === version) {
       return granule;
     }

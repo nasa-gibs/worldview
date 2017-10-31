@@ -1,14 +1,4 @@
 #!/usr/bin/env python
-#
-# NASA Worldview
-#
-# This code was originally developed at NASA/Goddard Space Flight Center for
-# the Earth Science Data and Information System (ESDIS) project.
-#
-# Copyright (C) 2013 - 2014 United States Government as represented by the
-# Administrator of the National Aeronautics and Space Administration.
-# All Rights Reserved.
-#
 
 from optparse import OptionParser
 import os
@@ -159,7 +149,7 @@ def process_entries(colormap):
                 if (map_type == "continuous") or (map_type == "discrete"):
                     matches += [entry["@rgb"]]
         tooltips += [tooltip]
-            
+
         if (map_type == "continuous") or (map_type == "discrete"):
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:

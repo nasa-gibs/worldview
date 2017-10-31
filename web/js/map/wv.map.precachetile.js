@@ -1,20 +1,10 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
 var wv = wv || {};
 wv.map = wv.map || {};
 
 /*
  * @Class
  */
-wv.map.precachetile = wv.map.precachetile || function(models, config, cache, parent) {
+wv.map.precachetile = wv.map.precachetile || function (models, config, cache, parent) {
   /*
    * Loaded the layers that are needed for any one date.
    * Checks the cache to see if a layer has already
@@ -28,7 +18,7 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
    *
    * @returns {object} Promise.all
    */
-  self.promiseDay = function(date) {
+  self.promiseDay = function (date) {
     var viewState;
     var currentZ;
     var frameState;
@@ -39,13 +29,12 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
     var promiseArray;
     var projExtent;
 
-
     layers = getActiveLayersWithData(date);
     map = parent.selected;
     frameState = parent.selected.frameState_;
     pixelRatio = frameState.pixelRatio;
     viewState = frameState.viewState;
-    promiseArray = layers.map(function(def) {
+    promiseArray = layers.map(function (def) {
       var key;
       var layer;
       var renderer;
@@ -64,18 +53,18 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
       });
       return promiseLayerGroup(layer, extent, viewState, pixelRatio, map);
     });
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
       Promise.all(promiseArray)
-        .then(function(yo) {
+        .then(function (yo) {
           resolve(date);
         });
     });
   };
-  var getActiveLayersWithData = function(date) {
+  var getActiveLayersWithData = function (date) {
     var layers;
     var arra = [];
     layers = models.layers.get();
-    _.each(layers, function(layer) {
+    _.each(layers, function (layer) {
       if (layer.visible && new Date(layer.startDate > date)) {
         arra.push(layer);
       }
@@ -83,7 +72,7 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
     return arra;
   };
 
-  var calculateExtent = function(extent, viewportExtent) {
+  var calculateExtent = function (extent, viewportExtent) {
     if (extent[1] < -180) {
       extent = getExtent(viewportExtent, extent);
       extent[1] = extent[1] + 360;
@@ -100,11 +89,11 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
     }
     return extent;
   };
-  var getExtent = function(extent1, extent2) {
+  var getExtent = function (extent1, extent2) {
     return ol.extent.getIntersection(extent1, extent2);
   };
-  var promiseLayerGroup = function(layer, extent, viewState, pixelRatio, map) {
-    return new Promise(function(resolve, reject) {
+  var promiseLayerGroup = function (layer, extent, viewState, pixelRatio, map) {
+    return new Promise(function (resolve, reject) {
       var layers, layerPromiseArray;
       layers = layer.values_.layers;
       if (layer.values_.layers) {
@@ -113,21 +102,21 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
       } else {
         layers = [layer];
       }
-      layerPromiseArray = layers.map(function(layer) {
+      layerPromiseArray = layers.map(function (layer) {
         extent = calculateExtent(layer.getExtent(), map.getView()
           .calculateExtent(map.getSize()));
         return promiseTileLayer(layer, extent, viewState, pixelRatio);
       });
       Promise.all(layerPromiseArray)
-        .then(function(yo) {
+        .then(function (yo) {
           resolve('reslove layer group');
         });
     });
   };
-  var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
+  var promiseTileLayer = function (layer, extent, viewState, pixelRatio) {
     var renderer, tileSource, currentZ, i, tileGrid, projection;
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       if (!extent) {
         resolve('reslove tile layer');
       }
@@ -137,11 +126,11 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
       tileSource = layer.getSource();
       tileGrid = tileSource.getTileGridForProjection(projection);
       currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-      tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
+      tileGrid.forEachTileCoord(extent, currentZ, function (tileCoord) {
         var tile;
         tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
         tile.load();
-        var loader = function(e) {
+        var loader = function (e) {
           if (e.type === 'tileloadend') {
             --i;
             if (i === 0) {
@@ -149,7 +138,7 @@ wv.map.precachetile = wv.map.precachetile || function(models, config, cache, par
             }
           } else {
             reject(new Error('No response at this URL'));
-            //resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
+            // resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
           }
           this.un('tileloadend', loader); // remove event listeners from memory
           this.un('tileloaderror', loader);

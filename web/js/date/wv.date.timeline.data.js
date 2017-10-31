@@ -1,14 +1,3 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.date.timeline
  */
@@ -21,33 +10,31 @@ wv.date.timeline = wv.date.timeline || {};
  *
  * @class wv.date.timeline.data
  */
-wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
-
+wv.date.timeline.data = wv.date.timeline.data || function (models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
 
   var self = {};
 
-  self.start = function() {
+  self.start = function () {
     return new Date(config.startDate);
   };
 
-  self.end = function() {
+  self.end = function () {
     return new Date(
       new Date(wv.util.today())
         .setUTCDate(wv.util.today()
           .getUTCDate()));
   };
 
-  self.set = function() {
-
+  self.set = function () {
     var activeLayers = models.layers.get();
-    var activeLayersDynamic = activeLayers.filter(function(al) {
+    var activeLayersDynamic = activeLayers.filter(function (al) {
       return al.startDate;
     });
     /* var activeLayersInvisible = activeLayers.filter(function(al){
         return al.visible === false;
-    });*/
+    }); */
     var activeLayersTitles = [];
     var layerCount = activeLayersDynamic.length;
 
@@ -55,7 +42,7 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
       .remove();
 
     $(activeLayersDynamic)
-      .each(function(i) {
+      .each(function (i) {
         activeLayersTitles[i] = this.id;
       });
 
@@ -65,11 +52,11 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
 
     tl.yAxis = d3.svg.axis()
       .scale(tl.y)
-      .orient("left")
+      .orient('left')
       .ticks(layerCount);
 
     $(activeLayersDynamic)
-      .each(function(al) {
+      .each(function (al) {
         var layerStart, layerEnd, layerXY;
         var layerVisible = true;
         var staticLayer = true;
@@ -89,15 +76,15 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
               .getUTCDate() + 1));
         }
 
-        var currentDB = tl.dataBars.append("svg:rect")
+        var currentDB = tl.dataBars.append('svg:rect')
           .attr('x', tl.x(layerStart))
           .attr('width', tl.x(layerEnd) - tl.x(layerStart))
-          //.attr('height',2)
+          // .attr('height',2)
           .attr('y', tl.y(layerId) - 2.5)
           .attr('rx', 4)
           .attr('ry', 4)
           .attr('data-layer', layerId)
-          .attr("class", "data-bar");
+          .attr('class', 'data-bar');
         //                .attr("d", selection);
         if (!staticLayer) {
           currentDB.classed('data-bar-dyn', true);
@@ -106,7 +93,6 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
           layerVisible = false;
           currentDB.classed('data-bar-invisible', true);
         }
-
       });
     tl.dataBars.selectAll('rect')
       .attr('height', (tl.height - 22) / layerCount);
@@ -116,8 +102,7 @@ wv.date.timeline.data = wv.date.timeline.data || function(models, config, ui) {
     }
   };
 
-  var init = function() {
-
+  var init = function () {
 
   };
 

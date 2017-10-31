@@ -1,74 +1,63 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wv = wv || {};
 wv.layers = wv.layers || {};
 
-wv.layers.info = wv.layers.info || function(config, models, layer) {
-
+wv.layers.info = wv.layers.info || function (config, models, layer) {
   var $dialog;
   var self = {};
 
-  var init = function() {
+  var init = function () {
     loaded();
   };
 
-  var loaded = function(custom) {
+  var loaded = function (custom) {
     var names;
 
     $dialog = wv.ui.getDialog();
     $dialog
-      .attr("id", "wv-layers-info-dialog")
-      .attr("data-layer", layer.id);
+      .attr('id', 'wv-layers-info-dialog')
+      .attr('data-layer', layer.id);
     renderDescription($dialog);
 
     names = models.layers.getTitles(layer.id);
     $dialog.dialog({
-      dialogClass: "wv-panel",
+      dialogClass: 'wv-panel',
       title: names.title,
       show: {
-        effect: "slide",
-        direction: "left"
+        effect: 'slide',
+        direction: 'left'
       },
       width: 450,
-      height: 300,
+      minHeight: 150,
+      maxHeight: 300,
       resizable: false,
       draggable: false,
       position: {
-        my: "left top",
-        at: "right+5 top",
-        of: $("#products")
+        my: 'left top',
+        at: 'right+5 top',
+        of: $('#products')
       },
       // Wait for the dialog box to load, then force scroll to top
-      open: function() {
+      open: function () {
         $(this)
           .parent()
           .promise()
-          .done(function() {
+          .done(function () {
             $('.ui-dialog-content')
               .scrollTop('0');
           });
       },
       close: dispose
     });
-    $("#wv-layers-info-dialog")
+    $('#wv-layers-info-dialog')
       .perfectScrollbar();
   };
 
-  var dispose = function() {
+  var dispose = function () {
     $dialog = null;
     wv.ui.closeDialog();
   };
 
-  var renderDescription = function($dialog) {
+  var renderDescription = function ($dialog) {
     var $layerMeta = $('<div></div>')
       .addClass('layer-metadata source-metadata');
     var $layerMetaTitle = $('<a>Layer Description</a>')
@@ -76,7 +65,7 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
 
     if (layer.description) {
       $.get('config/metadata/' + layer.description + '.html')
-        .success(function(data) {
+        .success(function (data) {
           $layerMeta.html(data);
           $dialog.append($layerMeta);
           $layerMeta.find('a')
@@ -85,13 +74,12 @@ wv.layers.info = wv.layers.info || function(config, models, layer) {
     }
   };
 
-  var onLayerRemoved = function(removedLayer) {
+  var onLayerRemoved = function (removedLayer) {
     if (layer.id === removedLayer.id && $dialog) {
-      $dialog.dialog("close");
+      $dialog.dialog('close');
     }
   };
 
   init();
   return self;
-
 };

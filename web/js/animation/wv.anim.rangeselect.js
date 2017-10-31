@@ -1,21 +1,8 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2016 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- *
- * Licensed under the NASA Open Source Agreement, Version 1.3
- * http://opensource.gsfc.nasa.gov/nosa.php
- */
 var wv = wv || {};
 
 wv.anim = wv.anim || {};
 
-wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
+wv.anim.rangeselect = wv.anim.rangeselect || function (models, config, ui) {
   var self = {};
   var model;
   var timeline = ui.timeline;
@@ -38,7 +25,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {void}
    *
    */
-  self.init = function() {
+  self.init = function () {
     var $animateButton = $('#animate-button');
     var options;
 
@@ -58,7 +45,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {void}
    *
    */
-  self.setDefaults = function() {
+  self.setDefaults = function () {
     /*
      * Set some defaults
      */
@@ -80,7 +67,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {void}
    *
    */
-  self.render = function() {
+  self.render = function () {
     var options;
     var startLocation;
     var EndLocation;
@@ -90,7 +77,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
       .width;
     var ticHeight = $('.end-tick')
       .height();
-    var animEndLocation = (d3.transform(pick.attr("transform"))
+    var animEndLocation = (d3.transform(pick.attr('transform'))
       .translate[0] - (pickWidth / 2)); // getting guitar pick location
 
     if (model.rangeState.startDate) {
@@ -129,10 +116,10 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {number} OffsetX
    *
    */
-  self.getHeaderOffset = function() {
+  self.getHeaderOffset = function () {
     return $header.width() + Number($timeline.css('left')
-      .replace("px", "")) + Number($footer.css('margin-left')
-      .replace("px", ""));
+      .replace('px', '')) + Number($footer.css('margin-left')
+      .replace('px', ''));
   };
 
   /*
@@ -146,7 +133,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {number} OffsetX
    *
    */
-  self.getLocationFromStringDate = function(date) {
+  self.getLocationFromStringDate = function (date) {
     return timeline.x(new Date(date));
   };
 
@@ -160,7 +147,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {void}
    *
    */
-  self.update = function() { // being called from timeline.config.js
+  self.update = function () { // being called from timeline.config.js
     var props = self.updateOptions();
     self.reactComponent.setState(props);
   };
@@ -174,7 +161,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {number} max width
    *
    */
-  self.getMaxWidth = function() {
+  self.getMaxWidth = function () {
     var $elWidth = $footer.width();
     var $dataWidth = timeline.x(timeline.data.end());
     if ($elWidth > $dataWidth) {
@@ -192,7 +179,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {object} props
    *
    */
-  self.updateOptions = function() {
+  self.updateOptions = function () {
     var max;
     var state = model.rangeState;
     var props = {};
@@ -216,7 +203,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {object} props
    *
    */
-  self.onRangeClick = function(e) {
+  self.onRangeClick = function (e) {
     var headerOffset = self.getHeaderOffset();
     var offsetX = (e.pageX - headerOffset);
     var date = timeline.x.invert(offsetX);
@@ -236,7 +223,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function(models, config, ui) {
    * @returns {object} props
    *
    */
-  self.updateRange = function(startLocation, EndLocation) {
+  self.updateRange = function (startLocation, EndLocation) {
     var startDate = timeline.x.invert(startLocation);
     var endDate = timeline.x.invert(EndLocation);
     var state = model.rangeState;

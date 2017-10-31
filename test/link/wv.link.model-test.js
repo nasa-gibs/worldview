@@ -1,91 +1,80 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
+buster.testCase('wv.link.model', {
 
-buster.testCase("wv.link.model", {
-
-  "Query string from registered components": function() {
+  'Query string from registered components': function () {
     var c1 = {
-      save: function(state) {
+      save: function (state) {
         state.foo = 1;
       }
     };
     var c2 = {
-      save: function(state) {
+      save: function (state) {
         state.bar = 2;
       }
     };
     var model = wv.link.model();
     model.register(c1)
       .register(c2);
-    buster.assert.equals(model.toQueryString(), "foo=1&bar=2");
+    buster.assert.equals(model.toQueryString(), 'foo=1&bar=2');
   },
 
-  "Values encoded": function() {
+  'Values encoded': function () {
     var c1 = {
-      save: function(state) {
-        state.foo = "?";
+      save: function (state) {
+        state.foo = '?';
       }
     };
     var model = wv.link.model();
     model.register(c1);
-    buster.assert.equals(model.toQueryString(), "foo=%3F");
+    buster.assert.equals(model.toQueryString(), 'foo=%3F');
   },
 
-  "Exceptions not encoded": function() {
+  'Exceptions not encoded': function () {
     var c1 = {
-      save: function(state) {
-        state.foo = ",";
+      save: function (state) {
+        state.foo = ',';
       }
     };
     var model = wv.link.model();
     model.register(c1);
-    buster.assert.equals(model.toQueryString(), "foo=,");
+    buster.assert.equals(model.toQueryString(), 'foo=,');
   },
 
-  "Shorten calls cgi script": function(done) {
+  'Shorten calls cgi script': function (done) {
     var link = wv.link.model();
-    var call = this.stub(jQuery, "getJSON");
+    var call = this.stub(jQuery, 'getJSON');
     call.returns(jQuery.Deferred()
       .resolve({
         data: {
-          url: "shorten"
+          url: 'shorten'
         }
       }));
-    var promise = link.shorten("foo");
-    promise.done(function(result) {
-      buster.assert.calledWith(call, "service/link/shorten.cgi?url=foo");
-      buster.assert.equals(result.data.url, "shorten");
+    var promise = link.shorten('foo');
+    promise.done(function (result) {
+      buster.assert.calledWith(call, 'service/link/shorten.cgi?url=foo');
+      buster.assert.equals(result.data.url, 'shorten');
       done();
     });
   },
 
-  "Repeated call cached": function(done) {
+  'Repeated call cached': function (done) {
     var link = wv.link.model();
-    var call = this.stub(jQuery, "getJSON");
+    var call = this.stub(jQuery, 'getJSON');
     call.returns(jQuery.Deferred()
       .resolve({
         data: {
-          url: "shorten"
+          url: 'shorten'
         }
       }));
-    link.shorten("foo");
-    var promise = link.shorten("foo");
-    promise.done(function(result) {
-      buster.assert.equals(result.data.url, "shorten");
+    link.shorten('foo');
+    var promise = link.shorten('foo');
+    promise.done(function (result) {
+      buster.assert.equals(result.data.url, 'shorten');
       buster.assert.calledOnce(call);
       done();
     });
   },
 
-  "Update on any event": function() {
+  'Update on any event': function () {
     var c1 = {
       events: wv.util.events()
     };
@@ -96,9 +85,9 @@ buster.testCase("wv.link.model", {
     link.register(c1);
     link.register(c2);
     var call = this.stub();
-    link.events.on("update", call);
-    c1.events.trigger("event");
-    c2.events.trigger("event");
+    link.events.on('update', call);
+    c1.events.trigger('event');
+    c2.events.trigger('event');
     buster.assert.calledTwice(call);
   }
 

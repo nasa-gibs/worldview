@@ -9,32 +9,32 @@ var wv = wv || {};
  * @class wv.util
  * @static
  */
-wv.util = (function(self) {
+wv.util = (function (self) {
   var canvas = null;
   // Needed anymore?
   self.LAYER_GROUPS = {
     baselayers: {
-      id: "baselayers",
-      camel: "BaseLayers",
-      description: "Base Layers"
+      id: 'baselayers',
+      camel: 'BaseLayers',
+      description: 'Base Layers'
     },
     overlays: {
-      id: "overlays",
-      camel: "Overlays",
-      description: "Overlays"
+      id: 'overlays',
+      camel: 'Overlays',
+      description: 'Overlays'
     }
   };
 
-  self.repeat = function(value, length) {
-    var result = "";
+  self.repeat = function (value, length) {
+    var result = '';
     for (var i = 0; i < length; i++) {
       result += value;
     }
     return result;
   };
 
-  self.pad = function(value, width, padding) {
-    value = "" + value;
+  self.pad = function (value, width, padding) {
+    value = '' + value;
     if (value.length < width) {
       var add = width - value.length;
       value = self.repeat(padding, add) + value;
@@ -62,17 +62,22 @@ wv.util = (function(self) {
    * object.
    * @return {object} object representation of the query string.
    */
-  self.fromQueryString = function(qs) {
-    var res = {};
-    if (!qs) return res;
-    if (qs[0] === '?') qs = qs.substring(1);
-    qs.split('&').forEach(function(param){
-      param = param.split('=').map(function(comp){
-        return decodeURIComponent(comp);
-      });
-      res[param[0]] = param[1];
-    });
-    return res;
+  self.fromQueryString = function (queryString) {
+    if (!queryString) {
+      return {};
+    }
+    if (queryString[0] === '?') {
+      queryString = queryString.substring(1);
+    }
+    var parameters = queryString.split('&');
+    var result = {};
+    for (var i = 0; i < parameters.length; i++) {
+      var index = parameters[i].indexOf('=');
+      var key = parameters[i].substring(0, index);
+      var value = parameters[i].substring(index + 1);
+      result[key] = decodeURIComponent(value);
+    }
+    return result;
   };
 
   /**
@@ -96,22 +101,22 @@ wv.util = (function(self) {
    *     "format=image/png"
    * @return {String} converted query string
    */
-  self.toQueryString = function(kvps, exceptions) {
+  self.toQueryString = function (kvps, exceptions) {
     exceptions = exceptions || {};
     var parts = [];
-    _.each(kvps, function(value, key) {
-      var part = key + "=" + encodeURIComponent(value);
-      _.each(exceptions, function(exception) {
-        var regexp = new RegExp(exception, "ig");
+    _.each(kvps, function (value, key) {
+      var part = key + '=' + encodeURIComponent(value);
+      _.each(exceptions, function (exception) {
+        var regexp = new RegExp(exception, 'ig');
         var decoded = decodeURIComponent(exception);
         part = part.replace(regexp, decoded);
       });
       parts.push(part);
     });
     if (parts.length === 0) {
-      return "";
+      return '';
     }
-    return "?" + parts.join("&");
+    return '?' + parts.join('&');
   };
 
   /**
@@ -125,7 +130,7 @@ wv.util = (function(self) {
    * @return {Date} converted string as a datetime object, throws an
    * exception if the string is invalid.
    */
-  self.parseTimestampUTC = function(str) {
+  self.parseTimestampUTC = function (str) {
     return self.parseDateUTC(str);
   };
   /**
@@ -138,8 +143,8 @@ wv.util = (function(self) {
    * @return y {Number} Y value on canvas
    * @return {Object} Canvas image data.
    */
-  self.getCanvasPixelData = function(canvas, x, y) {
-    var context = canvas.getContext("2d");
+  self.getCanvasPixelData = function (canvas, x, y) {
+    var context = canvas.getContext('2d');
     return context.getImageData(x, y, 1, 1)
       .data;
   };
@@ -153,10 +158,33 @@ wv.util = (function(self) {
    * the string is invalid
    */
   // NOTE: Older Safari doesn't like Date.parse
-  self.parseDateUTC = function(dateAsString) {
-    var date = new Date(dateAsString);
+  self.parseDateUTC = function (dateAsString) {
+    var dateTimeArr = dateAsString.split(/T/);
+
+    var yyyymmdd = dateTimeArr[0].split('-');
+
+    // Parse elements of date and time
+    var year = yyyymmdd[0];
+    var month = yyyymmdd[1] - 1;
+    var day = yyyymmdd[2];
+
+    var hour = 0;
+    var minute = 0;
+    var second = 0;
+    var millisecond = 0;
+
+    // Use default of midnight if time is not specified
+    if (dateTimeArr.length > 1) {
+      var hhmmss = dateTimeArr[1].split(/[:\.Z]/);
+      hour = hhmmss[0] || 0;
+      minute = hhmmss[1] || 0;
+      second = hhmmss[2] || 0;
+      millisecond = hhmmss[3] || 0;
+    }
+    var date = new Date(Date.UTC(year, month, day, hour, minute, second,
+      millisecond));
     if (isNaN(date.getTime())) {
-      throw new Error("Invalid date: " + dateAsString);
+      throw new Error('Invalid date: ' + dateAsString);
     }
     return date;
   };
@@ -168,10 +196,10 @@ wv.util = (function(self) {
    *
    * @see http://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
    */
-  self.getTextWidth = function(text, font) {
+  self.getTextWidth = function (text, font) {
     // re-use canvas object for better performance
-    canvas = canvas || document.createElement("canvas");
-    var context = canvas.getContext("2d");
+    canvas = canvas || document.createElement('canvas');
+    var context = canvas.getContext('2d');
     context.font = font;
     var metrics = context.measureText(text);
     return metrics.width;
@@ -184,9 +212,9 @@ wv.util = (function(self) {
    * @param date {Date} the date to convert
    * @return {string} ISO string in the form of ``YYYY-MM-DD``.
    */
-  self.toISOStringDate = function(date) {
+  self.toISOStringDate = function (date) {
     return date.toISOString()
-      .split("T")[0];
+      .split('T')[0];
   };
 
   /**
@@ -197,11 +225,11 @@ wv.util = (function(self) {
    * @param date {Date} the date to convert
    * @return {string} ISO string in the form of ``HH:MM``.
    */
-  self.toISOStringTimeHM = function(date) {
+  self.toISOStringTimeHM = function (date) {
     var time = date.toISOString()
-      .split("T")[1];
-    var parts = time.split(".")[0].split(":");
-    return parts[0] + ":" + parts[1];
+      .split('T')[1];
+    var parts = time.split('.')[0].split(':');
+    return parts[0] + ':' + parts[1];
   };
   /**
    * Calculates percent of date between two other dates
@@ -213,7 +241,7 @@ wv.util = (function(self) {
    * @param end {Date} end date
    * @return {number} decimal percent
    */
-  self.getDatePercent = function(current, start, end) {
+  self.getDatePercent = function (current, start, end) {
     return Math.round((current - start) / (end - start));
   };
   /**
@@ -225,7 +253,7 @@ wv.util = (function(self) {
    * to zero.
    * @return {Date} the date object
    */
-  self.clearTimeUTC = function(date) {
+  self.clearTimeUTC = function (date) {
     date.setUTCHours(0);
     date.setUTCMinutes(0);
     date.setUTCSeconds(0);
@@ -233,14 +261,14 @@ wv.util = (function(self) {
     return date;
   };
 
-  self.dateAdd = function(date, interval, amount) {
+  self.dateAdd = function (date, interval, amount) {
     var month, maxDay, year;
     var newDate = new Date(date.getTime());
     switch (interval) {
-      case "day":
+      case 'day':
         newDate.setUTCDate(newDate.getUTCDate() + amount);
         break;
-      case "month":
+      case 'month':
         year = newDate.getUTCFullYear();
         month = newDate.getUTCMonth();
         maxDay = new Date(year, month + amount + 1, 0)
@@ -250,15 +278,15 @@ wv.util = (function(self) {
         }
         newDate.setUTCMonth(month + amount);
         break;
-      case "year":
+      case 'year':
         newDate.setUTCFullYear(newDate.getUTCFullYear() + amount);
         break;
       default:
-        throw new Error("[dateAdd] Invalid interval: " + interval);
+        throw new Error('[dateAdd] Invalid interval: ' + interval);
     }
     return newDate;
   };
-  self.daysInMonth = function(d) {
+  self.daysInMonth = function (d) {
     var y;
     var m;
     if (d.getUTCFullYear) {
@@ -271,7 +299,7 @@ wv.util = (function(self) {
     var lastDay = new Date(Date.UTC(y, m + 1, 0));
     return lastDay.getUTCDate();
   };
-  self.objectLength = function(obj) {
+  self.objectLength = function (obj) {
     return Object.keys(obj)
       .length;
   };
@@ -284,15 +312,15 @@ wv.util = (function(self) {
    * @param date {Date} date object of which to determine week day
    * @return {String} the full name of the day of the week
    */
-  self.giveWeekDay = function(d) {
+  self.giveWeekDay = function (d) {
     var day = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
     ];
 
     return day[d.getUTCDay()];
@@ -305,26 +333,26 @@ wv.util = (function(self) {
    * @param date {Date} date object of which to determine the Month name
    * @return {String} the full name of the month
    */
-  self.giveMonth = function(d) {
+  self.giveMonth = function (d) {
     var month = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
     ];
 
     return month[d.getUTCMonth()];
   };
 
-  self.clamp = function(val, min, max) {
+  self.clamp = function (val, min, max) {
     if (val < min) {
       return min;
     }
@@ -334,7 +362,7 @@ wv.util = (function(self) {
     return val;
   };
 
-  self.roll = function(val, min, max) {
+  self.roll = function (val, min, max) {
     if (val < min) {
       return max - (min - val) + 1;
     }
@@ -344,20 +372,20 @@ wv.util = (function(self) {
     return val;
   };
 
-  self.minDate = function() {
+  self.minDate = function () {
     return new Date(Date.UTC(1000, 0, 1));
   };
 
-  self.maxDate = function() {
+  self.maxDate = function () {
     return new Date(Date.UTC(3000, 11, 31));
   };
 
-  self.rollRange = function(date, interval, minDate, maxDate) {
+  self.rollRange = function (date, interval, minDate, maxDate) {
     var y = date.getUTCFullYear();
     var m = date.getUTCMonth();
     var first, last;
     switch (interval) {
-      case "day":
+      case 'day':
         var firstDay = new Date(Date.UTC(y, m, 1));
         var lastDay = new Date(Date.UTC(y, m, self.daysInMonth(date)));
         first = new Date(Math.max(firstDay, minDate))
@@ -365,7 +393,7 @@ wv.util = (function(self) {
         last = new Date(Math.min(lastDay, maxDate))
           .getUTCDate();
         break;
-      case "month":
+      case 'month':
         var firstMonth = new Date(Date.UTC(y, 0, 1));
         var lastMonth = new Date(Date.UTC(y, 11, 31));
         first = new Date(Math.max(firstMonth, minDate))
@@ -373,7 +401,7 @@ wv.util = (function(self) {
         last = new Date(Math.min(lastMonth, maxDate))
           .getUTCMonth();
         break;
-      case "year":
+      case 'year':
         var firstYear = self.minDate();
         var lastYear = self.maxDate();
         first = new Date(Math.max(firstYear, minDate))
@@ -388,7 +416,7 @@ wv.util = (function(self) {
     };
   };
 
-  self.rollDate = function(date, interval, amount, minDate, maxDate) {
+  self.rollDate = function (date, interval, amount, minDate, maxDate) {
     minDate = minDate || self.minDate();
     maxDate = maxDate || self.maxDate();
     var range = self.rollRange(date, interval, minDate, maxDate);
@@ -398,17 +426,17 @@ wv.util = (function(self) {
     var month = date.getUTCMonth();
     var year = date.getUTCFullYear();
     switch (interval) {
-      case "day":
+      case 'day':
         day = self.roll(day + amount, min, max);
         break;
-      case "month":
+      case 'month':
         month = self.roll(month + amount, min, max);
         break;
-      case "year":
+      case 'year':
         year = self.roll(year + amount, min, max);
         break;
       default:
-        throw new Error("[rollDate] Invalid interval: " + interval);
+        throw new Error('[rollDate] Invalid interval: ' + interval);
     }
     var daysInMonth = self.daysInMonth({
       year: year,
@@ -431,9 +459,9 @@ wv.util = (function(self) {
    * @return {String} string representation in the form of
    * ``YYYYMMDDHHMMSSsss``
    */
-  self.toCompactTimestamp = function(date) {
+  self.toCompactTimestamp = function (date) {
     return date.toISOString()
-      .replace(/[-:TZ\.]/g, "");
+      .replace(/[-:TZ\.]/g, '');
   };
 
   /**
@@ -445,10 +473,10 @@ wv.util = (function(self) {
    * ``YYYYMMDDHHMMSSsss``.
    * @return {Date} the converted date object.
    */
-  self.fromCompactTimestamp = function(str) {
+  self.fromCompactTimestamp = function (str) {
     var v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
     if (_.isNull(v)) {
-      throw new Error("Invalid timestamp:" + str);
+      throw new Error('Invalid timestamp:' + str);
     }
     return new Date(Date.UTC(
       parseInt(v[1], 10),
@@ -468,11 +496,11 @@ wv.util = (function(self) {
    * @static
    * @return {Date} The current time or an overriden value.
    */
-  var now = function() {
+  var now = function () {
     return new Date();
   };
   self.now = now;
-  self.resetNow = function() {
+  self.resetNow = function () {
     self.now = now;
   };
 
@@ -485,7 +513,7 @@ wv.util = (function(self) {
    * @return {Date} The current time with the UTC hours, minutes, and seconds
    * fields set to zero or an overriden value.
    */
-  self.today = function() {
+  self.today = function () {
     return self.clearTimeUTC(self.now());
   };
 
@@ -501,7 +529,7 @@ wv.util = (function(self) {
    * @param {string} message Message to display to the end user.
    * @param {Exception} cause The exception object that caused the error
    */
-  self.error = function(message, cause) {
+  self.error = function (message, cause) {
     wv.ui.error(message, cause);
   };
 
@@ -514,32 +542,31 @@ wv.util = (function(self) {
    * @static
    * @param {object*} messages Messages to display to the end user.
    */
-  self.warn = (console && console.warn && console.warn.bind) ?
-    console.warn.bind(console) : function() {};
+  self.warn = (console && console.warn && console.warn.bind)
+    ? console.warn.bind(console) : function () {};
 
-
-  self.hexToRGB = function(str) {
-    return "rgb(" +
-      parseInt(str.substring(0, 2), 16) + "," +
-      parseInt(str.substring(2, 4), 16) + "," +
-      parseInt(str.substring(4, 6), 16) + ")";
+  self.hexToRGB = function (str) {
+    return 'rgb(' +
+      parseInt(str.substring(0, 2), 16) + ',' +
+      parseInt(str.substring(2, 4), 16) + ',' +
+      parseInt(str.substring(4, 6), 16) + ')';
   };
 
-  self.hexToRGBA = function(str) {
-    return "rgba(" +
-      parseInt(str.substring(0, 2), 16) + "," +
-      parseInt(str.substring(2, 4), 16) + "," +
-      parseInt(str.substring(4, 6), 16) + "," +
-      parseInt(str.substring(6, 8), 16) + ")";
+  self.hexToRGBA = function (str) {
+    return 'rgba(' +
+      parseInt(str.substring(0, 2), 16) + ',' +
+      parseInt(str.substring(2, 4), 16) + ',' +
+      parseInt(str.substring(4, 6), 16) + ',' +
+      parseInt(str.substring(6, 8), 16) + ')';
   };
-  self.rgbaToHex = function(r, g, b) {
-    function hex(c) {
+  self.rgbaToHex = function (r, g, b) {
+    function hex (c) {
       var strHex = c.toString(16);
-      return strHex.length == 1 ? "0" + strHex : strHex;
+      return strHex.length == 1 ? '0' + strHex : strHex;
     }
     return hex(r) + hex(g) + hex(b) + 'ff';
   };
-  self.hexColorDelta = function(hex1, hex2) {
+  self.hexColorDelta = function (hex1, hex2) {
     var r1 = parseInt(hex1.substring(0, 2), 16);
     var g1 = parseInt(hex1.substring(2, 4), 16);
     var b1 = parseInt(hex1.substring(4, 6), 16);
@@ -559,7 +586,7 @@ wv.util = (function(self) {
    * @param {Object} [spec.options] options to pass to jscache on setItem.
    *
    */
-  self.ajaxCache = function(spec) {
+  self.ajaxCache = function (spec) {
     spec = spec || {};
     var size = spec.size || null;
     var options = spec.options || {};
@@ -577,10 +604,10 @@ wv.util = (function(self) {
        * when the query returns, or resolves immedately if the results
        * are cached.
        */
-      submit: function(parameters) {
-        var key = "url=" + parameters.url;
+      submit: function (parameters) {
+        var key = 'url=' + parameters.url;
         if (parameters.data) {
-          key += "&query=" + $.param(parameters.data, true);
+          key += '&query=' + $.param(parameters.data, true);
         }
         var results = cache.getItem(key);
 
@@ -590,7 +617,7 @@ wv.util = (function(self) {
             .promise();
         } else {
           var promise = $.ajax(parameters);
-          promise.done(function(results) {
+          promise.done(function (results) {
             cache.setItem(key, results, options);
           });
           return promise;
@@ -606,8 +633,8 @@ wv.util = (function(self) {
    * @param {function} func the function to wrap
    * @return the function wrapped in a try/catch block.
    */
-  self.wrap = function(func) {
-    return function() {
+  self.wrap = function (func) {
+    return function () {
       try {
         return func.apply(func, arguments);
       } catch (error) {
@@ -623,14 +650,14 @@ wv.util = (function(self) {
    * @param {url} func the function to wrap
    * @return {object} Promise
    */
-  self.get = function(url) {
+  self.get = function (url) {
     // Return a new promise.
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       // Do the usual XHR stuff
       var req = new XMLHttpRequest();
       req.open('GET', url);
 
-      req.onload = function() {
+      req.onload = function () {
         // This is called even on 404 etc
         // so check the status
         if (req.status == 200) {
@@ -643,29 +670,28 @@ wv.util = (function(self) {
         }
       };
       // Handle network errors
-      req.onerror = function() {
-        reject(Error("Network Error"));
+      req.onerror = function () {
+        reject(Error('Network Error'));
       };
       // Make the request
       req.send();
     });
   };
   // FIXME: Should be replaced with $.when
-  self.ajaxJoin = function(calls) {
-
+  self.ajaxJoin = function (calls) {
     var completed = 0;
     var result = {};
     var deferred = $.Deferred();
 
-    $.each(calls, function(index, call) {
-      call.promise.done(function(data) {
+    $.each(calls, function (index, call) {
+      call.promise.done(function (data) {
         result[call.item] = data;
         completed += 1;
         if (completed == calls.length) {
           deferred.resolve(result);
         }
       })
-        .fail(function(jqXHR, textStatus, errorThrown) {
+        .fail(function (jqXHR, textStatus, errorThrown) {
           deferred.reject(jqXHR, textStatus, errorThrown);
         });
     });
@@ -674,16 +700,16 @@ wv.util = (function(self) {
   };
 
   // http://totaldev.com/content/escaping-characters-get-valid-jquery-id
-  self.jqueryEscape = function(str) {
+  self.jqueryEscape = function (str) {
     return encodeURIComponent(str)
       .replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
   };
 
-  self.metrics = function() {
+  self.metrics = function () {
     if (window.ntptEventTag) {
       ntptEventTag.apply(null, arguments);
     } else {
-      console.log("no metrics");
+      console.log('no metrics');
     }
   };
 
@@ -694,14 +720,14 @@ wv.util = (function(self) {
     DOWN: 40
   };
 
-  self.formatDMS = function(value, type) {
+  self.formatDMS = function (value, type) {
     var width, signs;
-    if (type === "longitude") {
+    if (type === 'longitude') {
       width = 3;
-      signs = "EW";
+      signs = 'EW';
     } else {
       width = 2;
-      signs = "NS";
+      signs = 'NS';
     }
     var sign = (value >= 0) ? signs[0] : signs[1];
     value = Math.abs(value);
@@ -709,39 +735,39 @@ wv.util = (function(self) {
     var minutes = Math.floor((value * 60) - (degrees * 60));
     var seconds = Math.floor((value * 3600) - (degrees * 3600) - (minutes * 60));
 
-    var sdegrees = self.pad(degrees, width, " ");
-    var sminutes = self.pad(minutes, 2, "0");
-    var sseconds = self.pad(seconds, 2, "0");
-    return sdegrees + "&deg;" + sminutes + "'" + sseconds + '"' + sign;
+    var sdegrees = self.pad(degrees, width, ' ');
+    var sminutes = self.pad(minutes, 2, '0');
+    var sseconds = self.pad(seconds, 2, '0');
+    return sdegrees + '&deg;' + sminutes + '\'' + sseconds + '"' + sign;
   };
 
-  self.setCoordinateFormat = function(type) {
+  self.setCoordinateFormat = function (type) {
     if (!wv.util.browser.localStorage) return;
-    if (type !== "latlon-dd" && type !== "latlon-dms") {
-      throw new Error("Invalid coordinate format: " + type);
+    if (type !== 'latlon-dd' && type !== 'latlon-dms') {
+      throw new Error('Invalid coordinate format: ' + type);
     }
     localStorage.setItem('coordinateFormat', type);
   };
 
-  self.getCoordinateFormat = function() {
+  self.getCoordinateFormat = function () {
     if (!wv.util.browser.localStorage) return 'latlon-dd';
-    return localStorage.getItem("coordinateFormat") || "latlon-dd";
+    return localStorage.getItem('coordinateFormat') || 'latlon-dd';
   };
 
-  self.formatCoordinate = function(coord, format) {
+  self.formatCoordinate = function (coord, format) {
     var type = format || self.getCoordinateFormat();
-    if (type === "latlon-dms") {
-      return self.formatDMS(coord[1], "latitude") + ", " +
-        self.formatDMS(coord[0], "longitude");
+    if (type === 'latlon-dms') {
+      return self.formatDMS(coord[1], 'latitude') + ', ' +
+        self.formatDMS(coord[0], 'longitude');
     } else {
-      return coord[1].toFixed(4) + "&deg;, " +
-        coord[0].toFixed(4) + "&deg;";
+      return coord[1].toFixed(4) + '&deg;, ' +
+        coord[0].toFixed(4) + '&deg;';
     }
   };
-  //allows simple printf functionality with strings
-  //arguments array contains all args passed. String must be formatted so that first replacement starts with "{1}"
-  //usage example: wv.util.format("{1}{2}",'World','view')
-  self.format = function() {
+  // allows simple printf functionality with strings
+  // arguments array contains all args passed. String must be formatted so that first replacement starts with "{1}"
+  // usage example: wv.util.format("{1}{2}",'World','view')
+  self.format = function () {
     var formatted = arguments[0];
     for (var i = 1; i < arguments.length; i++) {
       var regexp = new RegExp('\\{' + i + '\\}', 'gi');
@@ -749,7 +775,7 @@ wv.util = (function(self) {
     }
     return formatted;
   };
-  self.toArray = function(value) {
+  self.toArray = function (value) {
     if (!value) {
       return [];
     }
@@ -760,5 +786,4 @@ wv.util = (function(self) {
   };
 
   return self;
-
 })(wv.util || {});

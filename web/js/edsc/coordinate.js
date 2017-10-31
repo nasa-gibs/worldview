@@ -1,12 +1,12 @@
-(function() {
+(function () {
   var ns,
     slice = [].slice;
 
   ns = window.edsc.map;
 
-  ns.Coordinate = (function(L) {
+  ns.Coordinate = (function (L) {
     var Coordinate, DEG_TO_RAD, RAD_TO_DEG, exports;
-    
+
     DEG_TO_RAD = Math.PI / 180;
     RAD_TO_DEG = 180 / Math.PI;
 
@@ -16,10 +16,10 @@
      * Consider properties on this class to be immutable.  Changing, say, 'x' will not
      * update `phi` or `theta` and will throw normalization out of whack.
      */
-    Coordinate = (function() {
-      Coordinate.fromLatLng = function() {
+    Coordinate = (function () {
+      Coordinate.fromLatLng = function () {
         var args, lat, lng, ref;
-        args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+        args = arguments.length >= 1 ? slice.call(arguments, 0) : [];
         if (args.length === 1) {
           ref = args[0], lat = ref.lat, lng = ref.lng;
         } else {
@@ -28,7 +28,7 @@
         return Coordinate.fromPhiTheta(lat * DEG_TO_RAD, lng * DEG_TO_RAD);
       };
 
-      Coordinate.fromPhiTheta = function(phi, theta) {
+      Coordinate.fromPhiTheta = function (phi, theta) {
         var PI, cos, sin, x, y, z;
         PI = Math.PI;
         cos = Math.cos;
@@ -66,7 +66,7 @@
        * +Y axis passes through 90 degrees longitude at the equator
        * +Z axis passes through the north pole
        */
-      Coordinate.fromXYZ = function(x, y, z) {
+      Coordinate.fromXYZ = function (x, y, z) {
         var d, phi, scale, theta;
         d = x * x + y * y + z * z;
         if (d === 0) { // Should never happen, but stay safe
@@ -82,7 +82,7 @@
         return new Coordinate(phi, theta, x, y, z);
       };
 
-      function Coordinate(phi1, theta1, x1, y1, z1) {
+      function Coordinate (phi1, theta1, x1, y1, z1) {
         this.phi = phi1;
         this.theta = theta1;
         this.x = x1;
@@ -91,12 +91,12 @@
       }
 
       // Dot product
-      Coordinate.prototype.dot = function(other) {
+      Coordinate.prototype.dot = function (other) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
       };
 
       // Normalized cross product
-      Coordinate.prototype.cross = function(other) {
+      Coordinate.prototype.cross = function (other) {
         var x, y, z;
         x = this.y * other.z - this.z * other.y;
         y = this.z * other.x - this.x * other.z;
@@ -105,28 +105,26 @@
       };
 
       // Distance to other coordinate on a unit sphere.  Same as the angle between the two points at the origin.
-      Coordinate.prototype.distanceTo = function(other) {
+      Coordinate.prototype.distanceTo = function (other) {
         return Math.acos(this.dot(other));
       };
 
-      Coordinate.prototype.toLatLng = function() {
+      Coordinate.prototype.toLatLng = function () {
         return new L.LatLng(RAD_TO_DEG * this.phi, RAD_TO_DEG * this.theta);
       };
 
-      Coordinate.prototype.toString = function() {
+      Coordinate.prototype.toString = function () {
         var latlng;
         latlng = this.toLatLng();
-        return "(" + (latlng.lat.toFixed(3)) + ", " + (latlng.lng.toFixed(3)) + ")";
+        return '(' + (latlng.lat.toFixed(3)) + ', ' + (latlng.lng.toFixed(3)) + ')';
       };
 
-      Coordinate.prototype.toXYZString = function() {
-        return "<" + (this.x.toFixed(3)) + ", " + (this.y.toFixed(3)) + ", " + (this.z.toFixed(3)) + ">";
+      Coordinate.prototype.toXYZString = function () {
+        return '<' + (this.x.toFixed(3)) + ', ' + (this.y.toFixed(3)) + ', ' + (this.z.toFixed(3)) + '>';
       };
 
       return Coordinate;
-
     })();
     return exports = Coordinate;
   })(L);
-
 }).call(this);

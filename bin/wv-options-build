@@ -1,23 +1,19 @@
 #!/bin/bash
-#
-# NASA Worldview
-#
-# This code was originally developed at NASA/Goddard Space Flight Center for
-# the Earth Science Data and Information System (ESDIS) project.
-#
-# Copyright (C) 2013 - 2014 United States Government as represented by the
-# Administrator of the National Aeronautics and Space Administration.
-# All Rights Reserved.
-#
 
 PROG=$(basename "$0")
 BASE=$(dirname "$0")/..
 
 BIN_DIR="$BASE/bin"
-SRC_DIR="$BASE/options"
+SRC_DIR="$BASE/node_modules/worldview-options-eosdis"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
-OPT_DIR="$BASE/options"
+OPT_DIR="$BASE/node_modules/worldview-options-eosdis"
+
+# If there is an options directory, use instead of node_modules
+if [ -d "$BASE/options" ]; then
+    SRC_DIR="$BASE/options"
+    OPT_DIR="$BASE/options"
+fi
 
 [ "$FORCE" ] || set -e
 

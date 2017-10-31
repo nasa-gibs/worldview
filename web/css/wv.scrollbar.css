@@ -1,0 +1,43 @@
+/***************** perfect-scrollbar overrides ***********************/
+.ps > .ps__scrollbar-y-rail,
+.ps > .ps__scrollbar-y-rail .ps__scrollbar-y,
+.ps > .ps__scrollbar-y-rail:hover > .ps__scrollbar-y,
+.ps > .ps__scrollbar-y-rail:active > .ps__scrollbar-y {
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -o-border-radius: 0;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+  opacity: 1;
+  width: 8px;
+  right: 0;
+}
+
+.ps > .ps__scrollbar-y-rail .ps__scrollbar-y {
+  background-color: #666;
+}
+
+/* Remove disappear and modify colors */
+.ps:hover > .ps__scrollbar-x-rail,
+.ps:hover > .ps__scrollbar-y-rail {
+  opacity: 1;
+}
+
+.ps:hover > .ps__scrollbar-x-rail:hover,
+.ps:hover > .ps__scrollbar-y-rail:hover {
+  background-color: #eee;
+  opacity: 1;
+}
+
+.ps:hover > .ps__scrollbar-x-rail:hover > .ps__scrollbar-x,
+.ps:hover > .ps__scrollbar-y-rail:hover > .ps__scrollbar-y {
+  background-color: #999;
+}
+
+/* Override Perfect Scrollbar styles in react-virtualized lists */
+.ps .ReactVirtualized__List {
+  -ms-overflow-style: scrollbar; /* Turn scroll bars back on in IE */
+}

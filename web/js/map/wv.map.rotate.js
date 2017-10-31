@@ -1,21 +1,10 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wv = wv || {};
 
 wv.map = wv.map || {};
 /*
  * @Class
  */
-wv.map.rotate = wv.map.rotate || function(ui, models, map) {
+wv.map.rotate = wv.map.rotate || function (ui, models, map) {
   this.evts = wv.util.events();
   var model = models.map;
   this.intervalId = null;
@@ -33,7 +22,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    *
    * @returns {void}
    */
-  this.init = function(map, id) {
+  this.init = function (map, id) {
     this.buildRotationWidget(map);
     this.setRotationEvents(map, id);
   };
@@ -47,24 +36,24 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    *
    * @returns {void}
    */
-  this.buildRotationWidget = function(map) {
-    var $map = $("#" + map.getTarget());
-    var $rotateLeftButton = $("<button></button>")
-      .addClass("wv-map-rotate-left wv-map-zoom")
-      .attr("title", "You may also rotate by holding Alt and dragging the mouse");
-    var $lefticon = $("<i></i>")
-      .addClass("fa fa-undo");
+  this.buildRotationWidget = function (map) {
+    var $map = $('#' + map.getTarget());
+    var $rotateLeftButton = $('<button></button>')
+      .addClass('wv-map-rotate-left wv-map-zoom')
+      .attr('title', 'You may also rotate by holding Alt and dragging the mouse');
+    var $lefticon = $('<i></i>')
+      .addClass('fa fa-undo');
 
-    var $rotateRightButton = $("<button></button>")
-      .addClass("wv-map-rotate-right wv-map-zoom")
-      .attr("title", "You may also rotate by holding Alt and dragging the mouse");
-    var $righticon = $("<i></i>")
-      .addClass("fa fa-repeat");
+    var $rotateRightButton = $('<button></button>')
+      .addClass('wv-map-rotate-right wv-map-zoom')
+      .attr('title', 'You may also rotate by holding Alt and dragging the mouse');
+    var $righticon = $('<i></i>')
+      .addClass('fa fa-repeat');
 
-    var $resetButton = $("<button></button>")
-      .addClass("wv-map-reset-rotation wv-map-zoom")
-      .attr("title", "Click to reset")
-      .attr("style", "width: 43px");
+    var $resetButton = $('<button></button>')
+      .addClass('wv-map-reset-rotation wv-map-zoom')
+      .attr('title', 'Click to reset')
+      .attr('style', 'width: 43px');
 
     $rotateLeftButton.append($lefticon);
     $rotateRightButton.append($righticon);
@@ -84,38 +73,36 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    *
    * @returns {void}
    */
-  this.setRotationEvents = function(map, id) {
+  this.setRotationEvents = function (map, id) {
     var dur = 500;
     var $leftButton = $('#wv-map-' + id + ' .wv-map-rotate-left');
     var $rightButton = $('#wv-map-' + id + ' .wv-map-rotate-right');
     var $resetButton = $('#wv-map-' + id + ' .wv-map-reset-rotation');
 
-    //Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
+    // Set buttons to animate rotation by 18 degrees. use setInterval to repeat the rotation when mouse button is held
     $leftButton.button({
       text: false
     })
-      .mousedown(function() {
-        self.intervalId = setInterval(function() {
+      .mousedown(function () {
+        self.intervalId = setInterval(function () {
           self.rotate(10, dur, map);
         }, dur);
         self.rotate(10, dur, map);
-
       })
-      .mouseup(function() {
+      .mouseup(function () {
         clearInterval(self.intervalId);
       });
 
     $rightButton.button({
       text: false
     })
-      .mousedown(function() {
-        self.intervalId = setInterval(function() {
+      .mousedown(function () {
+        self.intervalId = setInterval(function () {
           self.rotate(-10, dur, map);
         }, dur);
         self.rotate(-10, dur, map);
-
       })
-      .mouseup(function() {
+      .mouseup(function () {
         clearInterval(self.intervalId);
       });
 
@@ -123,15 +110,15 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
       label: Number(models.map.rotation * (180 / Math.PI))
         .toFixed()
     })
-      .mousedown(function() { //reset rotation
-        clearInterval(self.intervalId); //stop repeating rotation on mobile
+      .mousedown(function () { // reset rotation
+        clearInterval(self.intervalId); // stop repeating rotation on mobile
         map.getView()
           .animate({
             duration: 500,
             rotation: 0
           });
 
-        $resetButton.button("option", "label", "0");
+        $resetButton.button('option', 'label', '0');
       });
   };
 
@@ -144,7 +131,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    *                            This ensures the maximum degrees never exceeds +/- 360.
    *                            The current view is then set to this new value.
    */
-  this.saveRotation = function(currentDeg, currentView) {
+  this.saveRotation = function (currentDeg, currentView) {
     if (Math.abs(currentDeg) === 360) {
       currentView.setRotation(0);
     } else if (Math.abs(currentDeg) >= 360) {
@@ -165,7 +152,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    *
    * @returns {void}
    */
-  this.updateRotation = function() {
+  this.updateRotation = function () {
     var deg,
       radians,
       currentView,
@@ -191,28 +178,28 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    *
    * @returns {void}
    */
-  this.setResetButton = function(radians) {
-    var button = $(".wv-map-reset-rotation");
+  this.setResetButton = function (radians) {
+    var button = $('.wv-map-reset-rotation');
     var deg = radians * (180.0 / Math.PI);
-    //Set reset button content
-    button.button("option", "label", Number(deg % 360)
+    // Set reset button content
+    button.button('option', 'label', Number(deg % 360)
       .toFixed());
     switch (true) {
       case (deg >= 100.0):
-        button.find("span")
-          .attr("style", "padding-left: 9px");
+        button.find('span')
+          .attr('style', 'padding-left: 9px');
         break;
       case (deg <= -100.0):
-        button.find("span")
-          .attr("style", "padding-left: 6px");
+        button.find('span')
+          .attr('style', 'padding-left: 6px');
         break;
       case (deg <= -10.0):
-        button.find("span")
-          .attr("style", "padding-left: 10px");
+        button.find('span')
+          .attr('style', 'padding-left: 10px');
         break;
       default:
-        button.find("span")
-          .attr("style", "padding-left: 14px");
+        button.find('span')
+          .attr('style', 'padding-left: 14px');
         break;
     }
   };
@@ -231,8 +218,7 @@ wv.map.rotate = wv.map.rotate || function(ui, models, map) {
    *
    * @returns {void}
    */
-  this.rotate = function(amount, duration, map) {
-
+  this.rotate = function (amount, duration, map) {
     var currentDeg = (map.getView()
       .getRotation() * (180.0 / Math.PI));
 

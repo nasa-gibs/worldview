@@ -1,44 +1,71 @@
-
 {
   "env": {
     "browser": true,
     "node": true
   },
-  "ecmaFeatures": {
-    "jsx": true
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "script"
   },
-  "parser": "babel-eslint",
-  "plugins": [
-    "react"
-  ],
+  "extends": "standard",
   "rules": {
-    "strict": 0,
-    "valid-jsdoc": 0,
-    "comma-spacing": 1,
-    "key-spacing": 0,
-    "no-underscore-dangle": 0,
-    "no-unused-vars": [1, { "vars": "all", "args": "none" }],
-    "no-undef": 1,
-    "new-cap": 0,
-    "no-param-reassign": 0,
-    "no-spaced-func": 1,
-    "padded-blocks": 0,
-    "camelcase": 1,
-    "semi": 1,
-    "no-extra-semi": 1,
-    "no-mixed-spaces-and-tabs": 1,
-    "no-trailing-spaces": 1,
-    "space-before-function-paren": 0,
-    "space-in-parens": 1,
-    "indent": [2, 2, {"SwitchCase": 1}],
-    "react/display-name": 0,
-    "react/jsx-uses-react": 1,
-    "react/no-did-mount-set-state": 1,
-    "react/no-did-update-set-state": 1,
-    "react/no-multi-comp": 1,
-    "react/prop-types": [0, { ignore: [children, className] }],
-    "react/react-in-jsx-scope": 1,
-    "react/self-closing-comp": 1,
-    "react/jsx-uses-vars": 1
-  }
+    "semi": ["error", "always"],
+    "space-before-function-paren": "off"
+  },
+  "overrides": [
+    {
+      "files": [ "web/**/*.js", "test/**/*.js" ],
+      "parserOptions": {
+        "ecmaVersion": 5,
+        "sourceType": "script",
+        "ecmaFeatures": {
+          "jsx": false
+        }
+      },
+      "rules": {
+        "no-octal": "warn",
+        "no-unused-vars": "warn",
+        "no-undef": "warn",
+        "no-useless-escape": "warn",
+        "eqeqeq": "warn",
+        "padded-blocks": "warn",
+        "space-before-blocks": "warn",
+        "spaced-comment": "warn",
+        "no-multiple-empty-lines": "warn",
+        "operator-linebreak": "warn",
+        "comma-dangle": "warn",
+        "no-use-before-define": "warn",
+        "camelcase": "warn",
+        "no-extend-native": "warn",
+        "one-var": "warn",
+        "no-extra-parens": "warn",
+        "space-in-parens": "warn",
+        "space-infix-ops": "warn",
+        "no-multi-spaces": "warn",
+        "comma-spacing": "warn",
+        "yoda": "warn",
+        "no-useless-return": "warn",
+        "keyword-spacing": "warn",
+        "brace-style": "warn",
+        "func-call-spacing": "warn",
+        "no-return-assign": "warn",
+        "no-sequences": "warn",
+        "no-unused-expressions": "warn",
+        "no-useless-call": "warn",
+        "no-trailing-spaces": "warn",
+        "standard/computed-property-even-spacing": "warn",
+        "wrap-iife": "warn",
+        "new-cap": "warn"
+      },
+      "globals": {
+        "wv": true,
+        "wvx": true,
+        "WVC": true,
+        "buster": true,
+        "jQuery": true,
+        "$": true,
+        "_": true
+      }
+    }
+  ]
 }

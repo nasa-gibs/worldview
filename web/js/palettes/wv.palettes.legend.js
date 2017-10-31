@@ -1,22 +1,10 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 /**
  * @module wv.palettes
  */
 var wv = wv || {};
 wv.palettes = wv.palettes || {};
 
-wv.palettes.legend = wv.palettes.legend || function(spec) {
-
+wv.palettes.legend = wv.palettes.legend || function (spec) {
   var selector = spec.selector;
   var config = spec.config;
   var models = spec.models;
@@ -28,14 +16,14 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
 
   var self = {};
 
-  var init = function() {
+  var init = function () {
     var paletteId = layer.palette.id;
     if (config.palettes.rendered[paletteId]) {
       loaded = true;
       render();
     } else {
       wv.palettes.loadRendered(config, layer.id)
-        .done(function() {
+        .done(function () {
           if (!loaded) {
             loaded = true;
             render();
@@ -47,56 +35,55 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     }
   };
 
-  var render = function() {
+  var render = function () {
     var $parent = $(selector);
     var paletteId = layer.palette.id;
     var palette = config.palettes.rendered[paletteId];
 
-    var $legendPanel = $("<div></div>")
-      .addClass("wv-palettes-panel")
-      .attr("data-layer", layer.id);
+    var $legendPanel = $('<div></div>')
+      .addClass('wv-palettes-panel')
+      .attr('data-layer', layer.id);
     $parent.append($legendPanel);
     var legends = model.getLegends(layer.id);
-    _.each(legends, function(legend, index) {
-      if ((legend.type === "continuous") ||
-        (legend.type === "discrete")) {
+    _.each(legends, function (legend, index) {
+      if ((legend.type === 'continuous') ||
+        (legend.type === 'discrete')) {
         renderScale($legendPanel, legend, index, layer.id);
       }
-      if (legend.type === "classification") {
+      if (legend.type === 'classification') {
         renderClasses($legendPanel, legend, index);
       }
     });
     self.update();
   };
 
-  var renderScale = function($legendPanel, legend, index, layerId) {
-    $container = $("<div></div>")
-      .addClass("wv-palettes-legend")
-      .attr("data-index", index);
-    $colorbar = $("<canvas></canvas>")
-      .addClass("wv-palettes-colorbar")
-      .attr("id", legend.id)
-      .attr("data-index", index);
-    //set fixed canvas dimensions
+  var renderScale = function ($legendPanel, legend, index, layerId) {
+    $container = $('<div></div>')
+      .addClass('wv-palettes-legend')
+      .attr('data-index', index);
+    $colorbar = $('<canvas></canvas>')
+      .addClass('wv-palettes-colorbar')
+      .attr('id', legend.id)
+      .attr('data-index', index);
+    // set fixed canvas dimensions
     $colorbar[0].width = 235;
     $colorbar[0].height = 12;
 
     $container.append($colorbar);
 
-    var $runningDataPointBar = $("<div></div>")
-      .addClass("wv-running-bar");
-    var $runningDataPointLabel = $("<span></span>")
-      .addClass("wv-running-label");
+    var $runningDataPointBar = $('<div></div>')
+      .addClass('wv-running-bar');
+    var $runningDataPointLabel = $('<span></span>')
+      .addClass('wv-running-label');
 
-
-    var $ranges = $("<div></div>")
-      .addClass("wv-palettes-ranges");
-    var $min = $("<div></div>")
-      .addClass("wv-palettes-min");
-    var $max = $("<div></div>")
-      .addClass("wv-palettes-max");
-    var $title = $("<div></div>")
-      .addClass("wv-palettes-title");
+    var $ranges = $('<div></div>')
+      .addClass('wv-palettes-ranges');
+    var $min = $('<div></div>')
+      .addClass('wv-palettes-min');
+    var $max = $('<div></div>')
+      .addClass('wv-palettes-max');
+    var $title = $('<div></div>')
+      .addClass('wv-palettes-title');
     $container.prepend($title);
     $ranges
       .append($min)
@@ -106,66 +93,65 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
       .append($ranges)
       .append($runningDataPointBar);
 
-    $colorbar.on("mousemove", function(e) {
+    $colorbar.on('mousemove', function (e) {
       showUnitHover(e, index);
     });
-    $colorbar.on("mouseout", hideUnitsOnMouseOut);
+    $colorbar.on('mouseout', hideUnitsOnMouseOut);
     $legendPanel.append($container);
-    wv.palettes.colorbar(selector + " " +
-      "[data-index='" + index + "'] canvas", legend.colors);
+    wv.palettes.colorbar(selector + ' ' +
+      '[data-index=\'' + index + '\'] canvas', legend.colors);
   };
-  var renderClasses = function($legendPanel, legend, index) {
+  var renderClasses = function ($legendPanel, legend, index) {
     // var $runningDataPointLabel = $("<span></span>")
     //     .addClass("wv-running-category-label");
-    var $panel = $("<div></div>")
-      .addClass("wv-palettes-legend")
-      .addClass("wv-palettes-classes")
-      //.append($runningDataPointLabel)
-      .attr("data-index", index);
+    var $panel = $('<div></div>')
+      .addClass('wv-palettes-legend')
+      .addClass('wv-palettes-classes')
+      // .append($runningDataPointLabel)
+      .attr('data-index', index);
     $legendPanel
-      .attr("id", legend.id)
+      .attr('id', legend.id)
       .append($panel);
-
   };
 
-  var updateClasses = function(legend, index) {
-    var $panel = $(selector + " [data-index='" + index + "']");
+  var updateClasses = function (legend, index) {
+    var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
-    _.each(legend.colors, function(color, classIndex) {
+    _.each(legend.colors, function (color, classIndex) {
       var $colorBox;
-      var $runningDataPointLabel = $("<span></span>")
-        .addClass("wv-running-category-label");
-      $colorBox = $("<span></span>")
-        .attr("data-index", index)
-        .attr("data-class-index", classIndex)
-        .attr("data-hex", color)
-        .addClass("wv-palettes-class")
-        .html("&nbsp;")
-        .css("background-color", wv.util.hexToRGB(color))
+      var $runningDataPointLabel = $('<span></span>')
+        .addClass('wv-running-category-label');
+      $colorBox = $('<span></span>')
+        .attr('data-index', index)
+        .attr('data-class-index', classIndex)
+        .attr('data-hex', color)
+        .addClass('wv-palettes-class')
+        .html('&nbsp;')
+        .css('background-color', wv.util.hexToRGB(color))
         .hover(highlightClass, unhighlightClass);
       $panel.append($colorBox);
       $panel.append($runningDataPointLabel);
-      //Calls running data
+      // Calls running data
       $colorBox.on('mouseenter', showClassUnitHover);
       $colorBox.on('mouseout', hideUnitsOnMouseOut);
     });
-    var $detailPanel = $("<div></div>");
-    _.each(legend.colors, function(color, classIndex) {
+    var $detailPanel = $('<div></div>');
+    _.each(legend.colors, function (color, classIndex) {
       var label = legend.tooltips[classIndex];
-      label = (legend.units) ? label + " " + legend.units : label;
-      var $row = $("<div></div>")
-        .addClass("wv-palettes-class-detail")
-        .attr("data-class-index", classIndex);
+      label = (legend.units) ? label + ' ' + legend.units : label;
+      var $row = $('<div></div>')
+        .addClass('wv-palettes-class-detail')
+        .attr('data-class-index', classIndex);
       $colorBox =
         $row.append(
-          $("<span></span>")
-            .addClass("wv-palettes-class")
-            .html("&nbsp;")
-            .css("background-color", wv.util.hexToRGB(color)))
-          .append($("<span></span>")
-            .addClass("wv-palettes-class-label")
-            .attr("data-index", index)
-            .attr("data-class-index", classIndex)
+          $('<span></span>')
+            .addClass('wv-palettes-class')
+            .html('&nbsp;')
+            .css('background-color', wv.util.hexToRGB(color)))
+          .append($('<span></span>')
+            .addClass('wv-palettes-class-label')
+            .attr('data-index', index)
+            .attr('data-class-index', classIndex)
             .html(label));
       $detailPanel.append($row);
     });
@@ -174,45 +160,45 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
     }
   };
 
-  self.update = function() {
+  self.update = function () {
     if (!loaded) {
       return;
     }
     var legends = model.getLegends(layer.id);
-    _.each(legends, function(legend, index) {
-      if ((legend.type === "continuous") ||
-        (legend.type === "discrete")) {
-        wv.palettes.colorbar(selector + " " +
-          "[data-index='" + index + "'] canvas", legend.colors);
+    _.each(legends, function (legend, index) {
+      if ((legend.type === 'continuous') ||
+        (legend.type === 'discrete')) {
+        wv.palettes.colorbar(selector + ' ' +
+          '[data-index=\'' + index + '\'] canvas', legend.colors);
         showUnitRange(index);
-      } else if (legend.type === "classification") {
+      } else if (legend.type === 'classification') {
         updateClasses(legend, index);
       }
     });
   };
 
-  var showUnitRange = function(index) {
+  var showUnitRange = function (index) {
     if (!loaded) {
       return;
     }
     var legends = model.getLegends(layer.id, index);
     var entries = model.get(layer.id, index)
       .entries;
-    _.each(legends, function(legend, index) {
+    _.each(legends, function (legend, index) {
       var min = legend.minLabel || _.first(legend.tooltips);
       var max = legend.maxLabel || _.last(legend.tooltips);
-      min = (legend.units) ? min + " " + legend.units : min;
-      max = (legend.units) ? max + " " + legend.units : max;
-      $(selector + " [data-index='" + index + "'] .wv-palettes-min")
+      min = (legend.units) ? min + ' ' + legend.units : min;
+      max = (legend.units) ? max + ' ' + legend.units : max;
+      $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-min')
         .html(min);
-      $(selector + " [data-index='" + index + "'] .wv-palettes-max")
+      $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-max')
         .html(max);
-      var title = legend.title || "&nbsp;";
+      var title = legend.title || '&nbsp;';
       if (legends.length === 1) {
-        $(selector + " [data-index='" + index + "'] .wv-palettes-title")
+        $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-title')
           .hide();
       } else {
-        $(selector + " [data-index='" + index + "'] .wv-palettes-title")
+        $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-title')
           .html(title);
       }
     });
@@ -226,7 +212,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
    * @param {MouseEvent} e
    * @return {void}
    */
-  var showUnitHover = function(e, index) {
+  var showUnitHover = function (e, index) {
     var rgba;
     var pos;
     var x;
@@ -256,7 +242,7 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
    * @param {MouseEvent} e
    * @return {void}
    */
-  var showClassUnitHover = function(e) {
+  var showClassUnitHover = function (e) {
     var hex = $(this)
       .data('hex');
     var legends = model.getLegends(layer.id)[0];
@@ -273,31 +259,29 @@ wv.palettes.legend = wv.palettes.legend || function(spec) {
    * @param {MouseEvent} e
    * @return {void}
    */
-  var hideUnitsOnMouseOut = function() {
+  var hideUnitsOnMouseOut = function () {
     ui.map.runningdata.clearAll();
   };
 
-
-  var highlightClass = function() {
+  var highlightClass = function () {
     legendIndex = $(this)
-      .attr("data-index");
+      .attr('data-index');
     classIndex = $(this)
-      .attr("data-class-index");
-    $(".wv-palettes-class-label[data-index='" + legendIndex + "']" +
-        "[data-class-index='" + classIndex + "']")
-      .addClass("wv-palettes-class-highlight");
+      .attr('data-class-index');
+    $('.wv-palettes-class-label[data-index=\'' + legendIndex + '\']' +
+        '[data-class-index=\'' + classIndex + '\']')
+      .addClass('wv-palettes-class-highlight');
   };
 
-  var unhighlightClass = function() {
+  var unhighlightClass = function () {
     legendIndex = $(this)
-      .attr("data-index");
+      .attr('data-index');
     classIndex = $(this)
-      .attr("data-class-index");
-    $(".wv-palettes-class-label[data-index='" + legendIndex + "']" +
-        "[data-class-index='" + classIndex + "']")
-      .removeClass("wv-palettes-class-highlight");
+      .attr('data-class-index');
+    $('.wv-palettes-class-label[data-index=\'' + legendIndex + '\']' +
+        '[data-class-index=\'' + classIndex + '\']')
+      .removeClass('wv-palettes-class-highlight');
   };
-
 
   init();
   return self;

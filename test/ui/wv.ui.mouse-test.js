@@ -1,31 +1,19 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2014 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
-buster.testCase("wv.ui.mouse.click", function() {
-
+buster.testCase('wv.ui.mouse.click', (function () {
   var self = {};
   var element, down, up;
 
-  self.setUp = function() {
+  self.setUp = function () {
     element = {
-      mousedown: function(handler) {
+      mousedown: function (handler) {
         down = handler;
       },
-      mouseup: function(handler) {
+      mouseup: function (handler) {
         up = handler;
       }
     };
   };
 
-  self["Within click limit"] = function() {
+  self['Within click limit'] = function () {
     var callback = this.stub();
     wv.ui.mouse.click(element, callback);
     down({
@@ -39,7 +27,7 @@ buster.testCase("wv.ui.mouse.click", function() {
     buster.assert.called(callback);
   };
 
-  self["Outside click limit"] = function() {
+  self['Outside click limit'] = function () {
     var callback = this.stub();
     wv.ui.mouse.click(element, callback);
     down({
@@ -54,5 +42,4 @@ buster.testCase("wv.ui.mouse.click", function() {
   };
 
   return self;
-
-}());
+}()));

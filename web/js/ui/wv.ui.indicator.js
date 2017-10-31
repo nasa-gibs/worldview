@@ -1,19 +1,6 @@
-/*
- * NASA Worldview
- *
- * This code was originally developed at NASA/Goddard Space Flight Center for
- * the Earth Science Data and Information System (ESDIS) project.
- *
- * Copyright (C) 2013 - 2016 United States Government as represented by the
- * Administrator of the National Aeronautics and Space Administration.
- * All Rights Reserved.
- */
-
 var wv = wv || {};
 wv.ui = wv.ui || {};
-
-wv.ui.indicator = wv.ui.indicator || (function() {
-
+wv.ui.indicator = wv.ui.indicator || (function () {
   var self = {};
 
   var $indicator;
@@ -22,20 +9,20 @@ wv.ui.indicator = wv.ui.indicator || (function() {
 
   self.active = [];
 
-  var init = function() {
-    $indicator = $("<div></div>")
-      .attr("id", "indicator");
-    $icon = $("<img />");
-    $message = $("<span></span>");
+  var init = function () {
+    $indicator = $('<div></div>')
+      .attr('id', 'indicator');
+    $icon = $('<img />');
+    $message = $('<span></span>');
 
     $indicator.append($icon)
       .append($message)
       .hide();
-    $("body")
+    $('body')
       .append($indicator);
   };
 
-  self.show = function(message, icon) {
+  self.show = function (message, icon) {
     self._show(message, icon);
     var id = _.uniqueId();
     self.active.push({
@@ -46,11 +33,11 @@ wv.ui.indicator = wv.ui.indicator || (function() {
     return id;
   };
 
-  self.hide = function(hides) {
+  self.hide = function (hides) {
     if (_.isString(hides)) {
       hides = [hides];
     }
-    _.each(hides, function(id) {
+    _.each(hides, function (id) {
       _.remove(self.active, {
         id: id
       });
@@ -63,62 +50,62 @@ wv.ui.indicator = wv.ui.indicator || (function() {
     }
   };
 
-  self.replace = function(hides, message, icon) {
+  self.replace = function (hides, message, icon) {
     self.hide(hides);
     return self.show(message, icon);
   };
 
-  self._show = function(message, icon) {
+  self._show = function (message, icon) {
     if (!$indicator) {
       init();
     }
     if (icon) {
-      $indicator.removeClass("message");
-      $icon.attr("src", icon)
+      $indicator.removeClass('message');
+      $icon.attr('src', icon)
         .show();
     } else {
-      $indicator.addClass("message");
-      $icon.removeAttr("src")
+      $indicator.addClass('message');
+      $icon.removeAttr('src')
         .hide();
     }
     $message.html(message);
     $indicator.show();
   };
 
-  self._hide = function() {
+  self._hide = function () {
     if ($indicator) {
       $indicator.hide();
     }
   };
 
-  self.searching = function(hides) {
+  self.searching = function (hides) {
     if (hides) {
       self.hide(hides);
     }
-    return self.show("Searching for Data", "images/activity.gif");
+    return self.show('Searching for Data', 'images/activity.gif');
   };
 
-  self.loading = function(hides) {
+  self.loading = function (hides) {
     if (hides) {
       self.hide(hides);
     }
-    return self.show("Loading", "images/activity.gif");
+    return self.show('Loading', 'images/activity.gif');
   };
 
-  self.noData = function(hides) {
+  self.noData = function (hides) {
     if (hides) {
       self.hide(hides);
     }
-    return self.show("No Data Available", "images/red-x.svg");
+    return self.show('No Data Available', 'images/red-x.svg');
   };
 
-  self.delayed = function(promise, delay) {
+  self.delayed = function (promise, delay) {
     delay = delay || 1000;
     var id;
-    var timeout = setTimeout(function() {
+    var timeout = setTimeout(function () {
       id = self.loading();
     }, delay);
-    promise.always(function() {
+    promise.always(function () {
       clearTimeout(timeout);
       if (id) {
         self.hide(id);
@@ -127,5 +114,4 @@ wv.ui.indicator = wv.ui.indicator || (function() {
   };
 
   return self;
-
 })();
