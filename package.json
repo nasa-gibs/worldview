@@ -81,6 +81,7 @@
     "promise-queue": "2.2.3",
     "react": "15.3.1",
     "react-dom": "15.3.1",
-    "worldview-components": "^1.4.5"
+    "worldview-components": "^1.5.1",
+    "worldview-options-eosdis": "nasa-gibs/worldview-options-eosdis#v2.1.2"
   }
 }
