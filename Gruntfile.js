@@ -39,18 +39,12 @@ var buildNumber = moment.utc().format('YYMMDDHHmmss');
 
 module.exports = function(grunt) {
 
-  var env = grunt.option('env') || 'release';
+  var pkg = require("./package.json");
+  var env = grunt.option("env") || "release";
 
-  var options = {
-    version: 0,
-    release: 0
-  };
-
-  var pkg = grunt.file.readJSON('package.json');
-
-  if (fs.existsSync('options/version.json')) {
-    options = grunt.file.readJSON('options/version.json');
-  }
+  var hasOptionsDirectory = fs.existsSync('options');
+  var optionsPath = hasOptionsDirectory ? 'options' : 'node_modules/worldview-options-eosdis';
+  var options = hasOptionsDirectory ? grunt.file.readJSON("options/package.json") : grunt.file.readJSON("node_modules/worldview-options-eosdis/package.json");
 
   // Lists of JavaScript and CSS files to include and in the correct
   // order
@@ -76,6 +70,7 @@ module.exports = function(grunt) {
 
     pkg: pkg,
     opt: options,
+    optionsPath: optionsPath,
     apache_version: grunt.option('apache-version') || '22',
 
     postcss: {
@@ -139,7 +134,7 @@ module.exports = function(grunt) {
       brand_info: {
         files: [
           {
-            src: 'options/brand.json',
+            src: '<%= optionsPath %>/brand.json',
             dest: 'build/options/brand.json'
           }
         ]
@@ -415,7 +410,7 @@ module.exports = function(grunt) {
       config: {
         options: {
           prop: 'config-revision',
-          cwd: 'options',
+          cwd: '<%= optionsPath %>',
           number: 6
         }
       }
