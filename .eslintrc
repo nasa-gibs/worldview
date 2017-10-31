@@ -8,9 +8,6 @@
     "sourceType": "script"
   },
   "extends": "semistandard",
-  "rules": {
-    "quotes": [ "warn", "single" ]
-  },
   "overrides": [
     {
       "files": [ "web/**/*.js", "test/**/*.js" ],
@@ -22,14 +19,8 @@
         }
       },
       "rules": {
-        "strict": "off",
-        "curly": "off",
-        "semi": ["error", "always"],
-        "indent": ["error", 2, {"SwitchCase": 1}],
-        "quotes": "warn",
         "no-octal": "warn",
         "no-unused-vars": "warn",
-        "no-console": "warn",
         "no-undef": "warn",
         "no-useless-escape": "warn",
         "space-before-function-paren": "warn",
