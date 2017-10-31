@@ -1,23 +1,22 @@
-buster.testCase("wv.date.model", function() {
-
+buster.testCase('wv.date.model', (function () {
   var self = {};
   var config, models, now;
 
-  self.setUp = function() {
+  self.setUp = function () {
     now = new Date(Date.UTC(2013, 0, 15));
-    this.stub(wv.util, "now")
+    this.stub(wv.util, 'now')
       .returns(now);
     config = fixtures.config();
     models = fixtures.models(config);
   };
 
-  self["Initializes to today"] = function() {
+  self['Initializes to today'] = function () {
     buster.assert.equals(models.date.selected.getUTCFullYear(), 2013);
     buster.assert.equals(models.date.selected.getUTCMonth(), 0);
     buster.assert.equals(models.date.selected.getUTCDate(), 15);
   };
 
-  self["Initializes with a specified date"] = function() {
+  self['Initializes with a specified date'] = function () {
     var initial = new Date(Date.UTC(2013, 0, 5));
     var date = wv.date.model(config, {
       initial: initial
@@ -25,24 +24,24 @@ buster.testCase("wv.date.model", function() {
     buster.assert.equals(date.selected, initial);
   };
 
-  self["Select new date"] = function() {
+  self['Select new date'] = function () {
     var d = new Date(Date.UTC(2013, 0, 5));
     var listener = this.stub();
-    models.date.events.on("select", listener);
+    models.date.events.on('select', listener);
     models.date.select(d);
     buster.assert.equals(models.date.selected, d);
     buster.assert.calledWith(listener, d);
   };
 
-  self["Saves state"] = function() {
+  self['Saves state'] = function () {
     var d = new Date(Date.UTC(2013, 0, 5));
     models.date.select(d);
     var state = {};
     models.date.save(state);
-    buster.assert.equals(state.t, "2013-01-05");
+    buster.assert.equals(state.t, '2013-01-05');
   };
 
-  self["Loads state"] = function() {
+  self['Loads state'] = function () {
     var date = new Date(Date.UTC(2013, 0, 5));
     var state = {
       t: date
@@ -51,12 +50,12 @@ buster.testCase("wv.date.model", function() {
     buster.assert.equals(models.date.selected, date);
   };
 
-  self["Nothing selected when missing in state"] = function() {
+  self['Nothing selected when missing in state'] = function () {
     models.date.load({});
     buster.assert.equals(models.date.selected, now);
   };
 
-  self["Clears time to UTC midnight when selecting"] = function() {
+  self['Clears time to UTC midnight when selecting'] = function () {
     var date = new Date(Date.UTC(2012, 1, 2, 3, 4, 5));
     models.date.select(date);
     var selected = models.date.selected;
@@ -69,5 +68,4 @@ buster.testCase("wv.date.model", function() {
   };
 
   return self;
-
-}());
+}()));

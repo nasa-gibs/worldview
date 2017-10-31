@@ -1,8 +1,7 @@
 var wv = wv || {};
 
-wv.data = (function(self) {
-
-  self.parse = function(state, errors, config) {
+wv.data = (function (self) {
+  self.parse = function (state, errors, config) {
     if (state.dataDownload) {
       state.download = state.dataDownload;
       delete state.dataDownload;
@@ -12,12 +11,11 @@ wv.data = (function(self) {
       if (!config.products[productId]) {
         delete state.download;
         errors.push({
-          message: "No such product: " + productId
+          message: 'No such product: ' + productId
         });
       }
     }
   };
 
   return self;
-
 })(wv.data || {});

@@ -7,15 +7,14 @@ wv.proj = wv.proj || {};
 /**
  * @class wv.proj.model
  */
-wv.proj.model = wv.proj.model || function(config) {
-
+wv.proj.model = wv.proj.model || function (config) {
   var self = {};
   self.selected = null;
   self.events = wv.util.events();
 
-  var init = function() {
+  var init = function () {
     self.selectDefault();
-    _.each(config.projections, function(proj) {
+    _.each(config.projections, function (proj) {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
         ol.proj.get(proj.crs)
@@ -24,37 +23,37 @@ wv.proj.model = wv.proj.model || function(config) {
     });
   };
 
-  self.select = function(id) {
+  self.select = function (id) {
     var proj = config.projections[id];
     if (!proj) {
-      throw new Error("Invalid projection: " + id);
+      throw new Error('Invalid projection: ' + id);
     }
     var updated = false;
     if (!self.selected || self.selected.id !== id) {
       self.selected = proj;
-      self.events.trigger("select", proj);
+      self.events.trigger('select', proj);
     }
     return updated;
   };
 
-  self.selectDefault = function() {
+  self.selectDefault = function () {
     if (config.defaults && config.defaults.projection) {
       self.select(config.defaults.projection);
     }
   };
 
-  self.save = function(state) {
+  self.save = function (state) {
     state.p = self.selected.id;
   };
 
-  self.load = function(state) {
+  self.load = function (state) {
     var projId = state.p;
     if (projId) {
       self.select(projId);
     }
   };
 
-  self.register = function(crs, def) {
+  self.register = function (crs, def) {
     if (def && window.proj4) {
       proj4.defs(crs, def);
     }

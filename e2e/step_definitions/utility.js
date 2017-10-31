@@ -5,17 +5,16 @@ const selectors = client.globals.selectors;
 const querystrings = client.globals.querystrings;
 
 defineSupportCode(({Given, Then, When}) => {
-
   Given('Worldview is in {string} state', (state) => {
-    var stateUrl = client.globals.url + (querystrings[state]||'');
+    var stateUrl = client.globals.url + (querystrings[state] || '');
     client.url(stateUrl).execute('if (window.localStorage) window.localStorage.clear()');
     client.pause(delay); // Give the page some time to load
-    return client.waitForElementVisible('body', delay/2);
+    return client.waitForElementVisible('body', delay / 2);
   });
 
   // Scroll to an element by predefined selector
   When('I scroll to the {string}', (key) => {
-    return client.useCss().moveToElement(selectors[key]||key, 10, 10);
+    return client.useCss().moveToElement(selectors[key] || key, 10, 10);
   });
 
   // Click any element that contains the string
@@ -25,12 +24,12 @@ defineSupportCode(({Given, Then, When}) => {
 
   // Click a link by link text
   When('I click the {string} link', (text) => {
-    return client.useXpath().click('//a[text()="'+ text +'"]');
+    return client.useXpath().click('//a[text()="' + text + '"]');
   });
 
   // Click an element by predefined selector
   When('I click the {string}', (key) => {
-    return client.useCss().click(selectors[key]||key);
+    return client.useCss().click(selectors[key] || key);
   });
 
   // Click a Worldview tab
@@ -40,17 +39,17 @@ defineSupportCode(({Given, Then, When}) => {
 
   // Input a value into a keyed element
   When('I input {string} in the {string}', (value, key) => {
-    return client.useCss().setValue(selectors[key]||key, value);
+    return client.useCss().setValue(selectors[key] || key, value);
   });
 
   // Pause for n seconds
   When('I wait {int} seconds', (seconds) => {
-    return client.pause(seconds*1000);
+    return client.pause(seconds * 1000);
   });
 
   // Check the url
   Then('the url has these values:', (table) => {
-    table.rawTable.forEach(function(row){
+    table.rawTable.forEach(function (row) {
       client.assert.urlParameterEquals(row[0], row[1]);
     });
     return client;
@@ -58,7 +57,7 @@ defineSupportCode(({Given, Then, When}) => {
 
   // Check the number of tabs open
   Then('there are {int} tabs open', (count) => {
-    return client.windowHandles(function(tabs) {
+    return client.windowHandles(function (tabs) {
       client.assert.equal(tabs.value.length, count);
     });
   });
@@ -66,9 +65,9 @@ defineSupportCode(({Given, Then, When}) => {
   // Close a tab by index
   Then('I close tab number {int}', (index) => {
     index--;
-    return client.windowHandles(function(tabs) {
+    return client.windowHandles(function (tabs) {
       client.switchWindow(tabs.value[index]);
-      client.closeWindow(function(){
+      client.closeWindow(function () {
         return client.switchWindow(tabs.value[0]);
       });
     });
@@ -81,7 +80,7 @@ defineSupportCode(({Given, Then, When}) => {
 
   // Wait for an element to be visible
   Then('I see {string} within {int} seconds', (text, seconds) => {
-    return client.useCss().expect.element('body').text.to.contain(text).before(seconds*1000);
+    return client.useCss().expect.element('body').text.to.contain(text).before(seconds * 1000);
   });
 
   // Check for a string
@@ -91,22 +90,22 @@ defineSupportCode(({Given, Then, When}) => {
 
   // Check that an element is visible by predefined selector
   Then('I see the {string}', (key) => {
-    return client.useCss().expect.element(selectors[key]||key).to.be.visible;
+    return client.useCss().expect.element(selectors[key] || key).to.be.visible;
   });
 
   // Wait for an element to be visible
   Then('I see the {string} within {int} seconds', (key, seconds) => {
-    return client.useCss().expect.element(selectors[key]||key).to.be.visible.before(seconds*1000);
+    return client.useCss().expect.element(selectors[key] || key).to.be.visible.before(seconds * 1000);
   });
 
   // Check for an element by predefined selector
   Then('the page has the {string}', (key) => {
-    return client.useCss().expect.element(selectors[key]||key).to.be.present;
+    return client.useCss().expect.element(selectors[key] || key).to.be.present;
   });
 
   // Check for abscense of an element by predefined selector
   Then('the page doesn\'t have the {string}', (key) => {
-    return client.useCss().expect.element(selectors[key]||key).to.not.be.present;
+    return client.useCss().expect.element(selectors[key] || key).to.not.be.present;
   });
 
   // Check for a count of elements
@@ -116,7 +115,6 @@ defineSupportCode(({Given, Then, When}) => {
 
   // Check that an element is hidden
   Then('I don\'t see the {string}', (key) => {
-    return client.useCss().expect.element(selectors[key]||key).to.not.be.visible;
+    return client.useCss().expect.element(selectors[key] || key).to.not.be.visible;
   });
-
 });

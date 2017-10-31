@@ -1,6 +1,6 @@
 var wv = wv || {};
 wv.anim = wv.anim || {};
-wv.anim.ui = wv.anim.ui || function(models, ui) {
+wv.anim.ui = wv.anim.ui || function (models, ui) {
   var self = {};
   self.events = wv.util.events();
   var dateModel = models.date;
@@ -26,14 +26,14 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.init = function() {
+  self.init = function () {
     self.refreshState();
     animModel.events.on('play', self.onPushedPlay);
     animModel.events.on('gif-click', self.refreshState);
     animModel.events.on('datechange', self.refreshState);
     animModel.events.on('toggle-widget', self.refreshState);
     if (models.proj) {
-      models.proj.events.on("select", self.refreshState);
+      models.proj.events.on('select', self.refreshState);
     }
     if (models.palettes) {
       models.palettes.events.on('update', self.refreshState);
@@ -41,12 +41,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
     if (models.data) {
       models.data.events.on('activate', self.refreshState);
       models.date.events.on('zoom-change', self.refreshState);
-      models.date.events.on("select", self.dateChange);
+      models.date.events.on('select', self.dateChange);
     }
     if (ui.map) {
       ui.map.events.on('added-layer', self.refreshState);
     }
-    //map.on('moveend', self.refreshState);
+    // map.on('moveend', self.refreshState);
   };
 
   /*
@@ -60,7 +60,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.dateChange = function() {
+  self.dateChange = function () {
     if (!self.state.playing) {
       self.refreshState();
     }
@@ -77,7 +77,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    *
    */
 
-  self.refreshState = function() {
+  self.refreshState = function () {
     preloadArray = [];
     preload = {};
     pastDates = {};
@@ -105,7 +105,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {string} ISO string Date
    *
    */
-  self.getStartDate = function() {
+  self.getStartDate = function () {
     var state;
     var endDate;
     var startDate;
@@ -129,7 +129,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.onPushedPlay = function() {
+  self.onPushedPlay = function () {
     self.checkQueue(queueLength, self.state.playIndex);
     self.checkShouldPlay();
   };
@@ -143,7 +143,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {string} Zoom increment
    *
    */
-  self.getInterval = function() {
+  self.getInterval = function () {
     return zooms[ui.timeline.config.currentZoom - 1];
   };
 
@@ -159,7 +159,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {object} JS Date
    *
    */
-  self.nextDate = function(date) {
+  self.nextDate = function (date) {
     return wv.util.dateAdd(date, self.getInterval(), 1);
   };
 
@@ -175,12 +175,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {object} JS Date
    *
    */
-  self.addDate = function(date) {
+  self.addDate = function (date) {
     self.addToInQueue(date);
-    queue.add(function() {
+    queue.add(function () {
       return ui.map.promiseDay(date);
     })
-      .then(function(date) {
+      .then(function (date) {
         self.addDateToCache(date);
         self.shiftCache();
         self.checkQueue(queueLength, self.state.playIndex);
@@ -200,7 +200,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.addToInQueue = function(date) {
+  self.addToInQueue = function (date) {
     var strDate = wv.util.toISOStringDate(date);
     inQueue[strDate] = date;
     preloadArray.push(strDate);
@@ -219,7 +219,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.addDateToCache = function(date) {
+  self.addDateToCache = function (date) {
     var strDate = wv.util.toISOStringDate(date);
     preload[strDate] = date;
     delete inQueue[strDate];
@@ -236,7 +236,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.shiftCache = function() {
+  self.shiftCache = function () {
     var key;
     if (preload[preloadArray[0]] &&
       wv.util.objectLength(preload) > queueLength + (queueLength / 2) + 1 &&
@@ -262,7 +262,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {boolean}
    *
    */
-  self.isInToPlayGroup = function(testDate) {
+  self.isInToPlayGroup = function (testDate) {
     var loop = animModel.rangeState.loop;
     var i = 0;
     var day = new Date(self.state.playIndex);
@@ -296,7 +296,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.clearCache = function() {
+  self.clearCache = function () {
     preload = {};
     preloadArray = [];
   };
@@ -313,7 +313,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.checkQueue = function(bufferLength, index) {
+  self.checkQueue = function (bufferLength, index) {
     var date;
     var currentDate;
     var startDate = wv.util.parseDateUTC(animModel.rangeState.startDate);
@@ -346,7 +346,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {boolean}
    *
    */
-  self.hasCustomLayers = function() {
+  self.hasCustomLayers = function () {
     var layer;
     var layers = models.layers.get();
 
@@ -373,7 +373,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.customQueuer = function(currentDate, startDate, endDate) {
+  self.customQueuer = function (currentDate, startDate, endDate) {
     var nextDateStr;
     var nextDate = self.nextDate(currentDate);
     if (nextDate > endDate) {
@@ -402,13 +402,13 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.initialPreload = function(currentDate, startDate, endDate, lastToQueue) {
+  self.initialPreload = function (currentDate, startDate, endDate, lastToQueue) {
     var day = currentDate;
     queueLength = self.getQueueLength(startDate, endDate);
     if (queueLength <= 1) { // if only one frame will play just move to that date
       dateModel.select(startDate);
       animModel.rangeState.playing = false;
-      setTimeout(function() {
+      setTimeout(function () {
         self.refreshState();
       }, 100);
       return;
@@ -443,7 +443,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {number} new buffer length
    *
    */
-  self.getQueueLength = function(startDate, endDate) {
+  self.getQueueLength = function (startDate, endDate) {
     var day = startDate;
     var i = 0;
     while (i < queueLength) {
@@ -469,7 +469,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.addItemToQueue = function(currentDate, startDate, endDate) {
+  self.addItemToQueue = function (currentDate, startDate, endDate) {
     var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
     var nextDateStr = wv.util.toISOStringDate(nextDate);
 
@@ -496,7 +496,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {object} JS Date
    *
    */
-  self.getNextBufferDate = function(currentDate, startDate, endDate) {
+  self.getNextBufferDate = function (currentDate, startDate, endDate) {
     var lastInBuffer = wv.util.parseDateUTC(preloadArray[preloadArray.length - 1]);
     var nextDate = self.nextDate(lastInBuffer);
     if (lastInBuffer >= endDate || self.nextDate(lastInBuffer) > endDate) {
@@ -519,7 +519,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {string} Date string
    *
    */
-  self.getLastBufferDateStr = function(currentDate, startDate, endDate) {
+  self.getLastBufferDateStr = function (currentDate, startDate, endDate) {
     var day = currentDate;
     var loop = animModel.rangeState.loop;
     var i = 1;
@@ -530,7 +530,6 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
           return wv.util.toISOStringDate(day);
         }
         day = self.setNewDate(day, startDate);
-
       } else {
         day = self.nextDate(day);
       }
@@ -552,11 +551,11 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.checkShouldLoop = function(playIndexJSDate) {
+  self.checkShouldLoop = function (playIndexJSDate) {
     if (animModel.rangeState.loop) {
       self.shiftCache();
       self.state.playIndex = wv.util.toISOStringDate(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
-      setTimeout(function() {
+      setTimeout(function () {
         self.checkShouldPlay();
         self.checkQueue(queueLength, self.state.playIndex);
       }, 1000);
@@ -578,7 +577,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.checkShouldPlay = function() {
+  self.checkShouldPlay = function () {
     var currentDate = wv.util.parseDateUTC(self.state.playIndex);
     var fps = 1000 / animModel.rangeState.speed;
     var endDate = wv.util.parseDateUTC(animModel.rangeState.endDate);
@@ -612,12 +611,11 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.play = function(index) {
+  self.play = function (index) {
     self.state.playing = true;
     wv.ui.indicator.hide(loader);
     wv.ui.indicator._hide(loader);
     self.animate(index);
-    return;
   };
 
   /*
@@ -633,7 +631,7 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.setNewDate = function(date, newDate) {
+  self.setNewDate = function (date, newDate) {
     return newDate;
   };
 
@@ -648,12 +646,12 @@ wv.anim.ui = wv.anim.ui || function(models, ui) {
    * @returns {void}
    *
    */
-  self.animate = function(index) {
+  self.animate = function (index) {
     var interval;
     var playIndex = index;
     var playIndexJSDate;
     var endDate = wv.util.parseDateUTC(animModel.rangeState.endDate);
-    var player = function() {
+    var player = function () {
       self.shiftCache();
       self.checkQueue(queueLength, playIndex);
 

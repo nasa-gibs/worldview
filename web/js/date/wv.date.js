@@ -1,8 +1,7 @@
 var wv = wv || {};
 
-wv.date = (function(self) {
-
-  self.parse = function(state, errors) {
+wv.date = (function (self) {
+  self.parse = function (state, errors) {
     if (state.time) {
       state.t = state.time;
       delete state.time;
@@ -13,7 +12,7 @@ wv.date = (function(self) {
       } catch (error) {
         delete state.t;
         errors.push({
-          message: "Invalid date: " + state.t,
+          message: 'Invalid date: ' + state.t,
           cause: error
         });
       }
@@ -22,14 +21,14 @@ wv.date = (function(self) {
     if (state.now) {
       try {
         state.now = wv.util.parseDateUTC(state.now);
-        wv.util.now = function() {
+        wv.util.now = function () {
           return new Date(state.now.getTime());
         };
-        wv.util.warn("Overriding now: " + state.now.toISOString());
+        wv.util.warn('Overriding now: ' + state.now.toISOString());
       } catch (error) {
         delete state.now;
         errors.push({
-          message: "Invalid now: " + state.now,
+          message: 'Invalid now: ' + state.now,
           cause: error
         });
       }
@@ -37,5 +36,4 @@ wv.date = (function(self) {
   };
 
   return self;
-
 })(wv.date || {});
