@@ -5,7 +5,10 @@
   },
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "script"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": false
+    }
   },
   "extends": "standard",
   "rules": {
@@ -15,13 +18,6 @@
   "overrides": [
     {
       "files": [ "web/**/*.js", "test/**/*.js" ],
-      "parserOptions": {
-        "ecmaVersion": 5,
-        "sourceType": "script",
-        "ecmaFeatures": {
-          "jsx": false
-        }
-      },
       "rules": {
         "no-octal": "warn",
         "no-unused-vars": "warn",
