@@ -10,6 +10,7 @@
   "extends": "standard",
   "rules": {
     "semi": ["error", "always"],
+    "space-before-function-paren": "off"
   },
   "overrides": [
     {
@@ -26,7 +27,6 @@
         "no-unused-vars": "warn",
         "no-undef": "warn",
         "no-useless-escape": "warn",
-        "space-before-function-paren": "warn",
         "eqeqeq": "warn",
         "padded-blocks": "warn",
         "space-before-blocks": "warn",
