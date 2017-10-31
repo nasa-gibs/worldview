@@ -1,79 +1,79 @@
-// Utils
-import util from './util/wv.util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
-import browser from './util/wv.util.browser';
-// Date
-import {dateParse} from './date/wv.date'; // export default function parse!!!
-import dateModel from './date/wv.date.model';
-import DateLabel from './date/wv.date.label';
-import DateWheels from './date/wv.date.wheels';
-// Timeline
-import Timeline from './date/wv.date.timeline';
-import TimelineData from './date/wv.date.timeline.data';
-import TimelineConfig from './date/wv.date.timeline.config';
-import TimelineZoom from './date/wv.date.timeline.zoom';
-import TimelineTicks from './date/wv.date.timeline.ticks';
-import TimelinePick from './date/wv.date.timeline.pick';
-import TimelinePan from './date/wv.date.timeline.pan';
-import TimelineInput from './date/wv.date.timeline.input';
-// Layers
-import {layerParse, layerValidate} from './layers/wv.layers';// export parse as layerParse. etc...
-import LayersModel from './layers/wv.layers.model';
-import LayersModal from './layers/wv.layers.modal';
-import LayersSidebar from './layers/wv.layers.sidebar';
-import LayersActive from './layers/wv.layers.active';
-// Map
-import {mapParse} from './map/wv.map';
-import MapModel from './map/wv.map.model';
-import MapUI from './map/wv.map.ui';
-import MapRotate from './map/wv.map.rotate';
-import MapRunningData from './map/wv.map.runningdata';
-import MapLayerBuilder from './map/wv.map.layerbuilder';
-import MapDatelineBuilder from './map/wv.map.datelinebuilder';
-import MapPrecacheTile from './map/wv.map.precachetile';
-import MapAnimate from './map/wv.map.animate';
-// Animation
-import {animParse} from './animation/wv.anim';
-import AnimModel from './animation/wv.anim.model';
-import AnimUI from './animation/wv.anim.ui';
-import AnimWidget from './animation/animation-widget';
-import AnimRangeselect from './animation/wv.anim.rangeselect';
-import AnimGIF from './animation/wv.anim.gif';
-// palettes
-import {palettesParse, paletteRequirements} from './palettes/wv.palettes';
-import PalettesModel from './palettes/wv.palettes.model';
-// Data
-import DataParse from './data/wv.data';
-import DataModel from './data/wv.data.model';
-import DataUI from './data/wv.data.ui';
-// NaturalEvents
-import EventsModel from './naturalEvents/wv.naturalEvents.model';
-import EventsUI from './naturalEvents/wv.naturalEvents.ui';
-import EventsRequest from './naturalEvents/wv.naturalEvents.request';
-// Image
-import ImageRubberband from './image/wv.image.rubberband';
-import ImagePanel from './image/wv.image.panel';
-// notifications
-import NotificationsUI from './notifications/wv.notifications.ui';
-// UI
-import {indicateDelayed} from './ui/wv.ui.indicator'; // not a class, export object
-// Link
-import LinkModel from './link/wv.link.model';
-import LinkUI from './link/wv.link.ui';
-import LinkInfo from './link/wv.link.info';
-
-// projections
-import projParse from './proj/wv.proj';
-import ProjModel from './proj/wv.proj.model';
-import ProjUI from './proj/wv.proj.ui';
-import ProjChange from './proj/wv.proj.change';
-// other
-import {debugConfig, debug} from './wv.debug';
-import Brand from './wv.brand';
-import Tour from './wv.tour';
 // External Dependencies
-import $ from 'Jquery';
+import $ from 'jquery';
 import _ from 'lodash';
 import {GA as googleAnalytics} from 'worldview-components';
+
+// Utils
+import util from './util/util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
+import browser from './util/util.browser';
+// Date
+import {dateParser} from './date/date'; // export default function parse!!!
+import DateModel from './date/date.model';
+import DateLabel from './date/date.label';
+import DateWheels from './date/date.wheels';
+// Timeline
+import Timeline from './date/date.timeline';
+import TimelineData from './date/date.timeline.data';
+import TimelineConfig from './date/date.timeline.config';
+import TimelineZoom from './date/date.timeline.zoom';
+import TimelineTicks from './date/date.timeline.ticks';
+import TimelinePick from './date/date.timeline.pick';
+import TimelinePan from './date/date.timeline.pan';
+import TimelineInput from './date/date.timeline.input';
+// Layers
+import {layerParser, layerValidate} from './layers/layers'; // export parse as layerParser. etc...
+import LayersModel from './layers/layers.model';
+import LayersModal from './layers/layers.modal';
+import LayersSidebar from './layers/layers.sidebar';
+import LayersActive from './layers/layers.active';
+// Map
+import {mapParser} from './map/map';
+import MapModel from './map/map.model';
+import MapUI from './map/map.ui';
+import MapRotate from './map/map.rotate';
+import MapRunningData from './map/map.runningdata';
+import MapLayerBuilder from './map/map.layerbuilder';
+import MapDatelineBuilder from './map/map.datelinebuilder';
+import MapPrecacheTile from './map/map.precachetile';
+import MapAnimate from './map/map.animate';
+// Animation
+import {animationParser} from './animation/anim';
+import AnimationModel from './animation/anim.model';
+import AnimationUI from './animation/anim.ui';
+import AnimationWidget from './animation/animation-widget';
+import AnimationRangeselect from './animation/anim.rangeselect';
+import AnimationGIF from './animation/anim.gif';
+// Palettes
+import {palettesParser, paletteRequirements} from './palettes/palettes';
+import PalettesModel from './palettes/palettes.model';
+// Data
+import dataParser from './data/data';
+import DataModel from './data/data.model';
+import DataUI from './data/data.ui';
+// NaturalEvents
+import EventsModel from './naturalEvents/naturalEvents.model';
+import EventsUI from './naturalEvents/naturalEvents.ui';
+import EventsRequest from './naturalEvents/naturalEvents.request';
+// Image
+import ImageRubberband from './image/image.rubberband';
+import ImagePanel from './image/image.panel';
+// Notifications
+import NotificationsUI from './notifications/notifications.ui';
+// UI
+import {loadingIndicator} from './ui/ui.indicator'; // not a class, export object
+// Link
+import LinkModel from './link/link.model';
+import LinkUI from './link/link.ui';
+import LinkInfo from './link/link.info';
+// Projections
+import projectionParser from './proj/proj';
+import ProjectionModel from './proj/proj.model';
+import ProjectionUI from './proj/proj.ui';
+import ProjectionChange from './proj/proj.change';
+// Other
+import {debugConfig, debug} from './debug';
+import Brand from './brand';
+import Tour from './tour';
 
 // Document ready function
 window.onload = () => {
@@ -104,7 +104,7 @@ window.onload = () => {
     promise
       .done(util.wrap(onConfigLoaded))
       .fail(util.error);
-    indicateDelayed(promise, 1000);
+    loadingIndicator(promise, 1000);
   };
 
   var onConfigLoaded = function(data) {
@@ -127,17 +127,17 @@ window.onload = () => {
     layerValidate(errors, config);
 
     parsers = [
-      projParse,
-      layerParse,
-      dateParse,
-      mapParse,
-      palettesParse
+      projectionParser,
+      layerParser,
+      dateParser,
+      mapParser,
+      palettesParser
     ];
     if (config.features.dataDownload) {
-      parsers.push(DataParse);
+      parsers.push(dataParser);
     }
     if (config.features.animation) {
-      parsers.push(animParse);
+      parsers.push(animationParser);
     }
     _.each(parsers, function(parser) {
       parser(state, errors, config);
@@ -176,10 +176,10 @@ window.onload = () => {
     wvx.models = models;
     wvx.ui = ui;
 
-    models.proj = ProjModel(config);
+    models.proj = ProjectionModel(config);
     models.palettes = PalettesModel(models, config);
     models.layers = LayersModel(models, config);
-    models.date = dateModel(config, {
+    models.date = DateModel(config, {
       initial: initialDate
     });
     models.map = MapModel(models, config);
@@ -206,7 +206,7 @@ window.onload = () => {
     ui.map = MapUI(models, config, mapComponents);
     ui.map.animate = MapAnimate(models, config, ui);
     if (config.features.animation) {
-      models.anim = AnimModel(models, config);
+      models.anim = AnimationModel(models, config);
       models.link.register(models.anim);
     }
     if (config.features.dataDownload) {
@@ -222,12 +222,12 @@ window.onload = () => {
     models.link.load(state); // needs to be loaded twice
 
     if (config.features.arcticProjectionChange) {
-      models.proj.change = ProjChange(models, config);
+      models.proj.change = ProjectionChange(models, config);
     }
 
     elapsed('ui');
     // Create widgets
-    ui.proj = ProjUI(models, config);
+    ui.proj = ProjectionUI(models, config);
     ui.sidebar = LayersSidebar(models, config);
     ui.activeLayers = LayersActive(models, ui, config);
     ui.addModal = LayersModal(models, ui, config);
@@ -243,10 +243,10 @@ window.onload = () => {
       ui.timeline.input = TimelineInput(models, config, ui);
       if (config.features.animation) {
         ui.anim = {};
-        ui.anim.rangeselect = AnimRangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-        ui.anim.widget = AnimWidget(models, config, ui);
-        ui.anim.gif = AnimGIF(models, config, ui);
-        ui.anim.ui = AnimUI(models, ui);
+        ui.anim.rangeselect = AnimationRangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+        ui.anim.widget = AnimationWidget(models, config, ui);
+        ui.anim.gif = AnimationGIF(models, config, ui);
+        ui.anim.ui = AnimationUI(models, ui);
       }
 
       ui.dateLabel = DateLabel(models);
