@@ -51,9 +51,9 @@ import dataParser from './data/data';
 import DataModel from './data/data.model';
 import DataUI from './data/data.ui';
 // NaturalEvents
-import EventsModel from './naturalEvents/naturalEvents.model';
-import EventsUI from './naturalEvents/naturalEvents.ui';
-import EventsRequest from './naturalEvents/naturalEvents.request';
+import NaturalEventsModel from './naturalEvents/naturalEvents.model';
+import NaturalEventsUI from './naturalEvents/naturalEvents.ui';
+import NaturalEventsRequest from './naturalEvents/naturalEvents.request';
 // Image
 import ImageRubberband from './image/image.rubberband';
 import ImagePanel from './image/image.panel';
@@ -214,7 +214,7 @@ window.onload = () => {
       models.link.register(models.data);
     }
     if (config.features.naturalEvents) {
-      models.naturalEvents = EventsModel(models, config, ui);
+      models.naturalEvents = NaturalEventsModel(models, config, ui);
       models.link.register(models.naturalEvents);
     }
     // HACK: Map needs permalink state loaded before starting. But
@@ -266,7 +266,7 @@ window.onload = () => {
       ui.data.render();
     }
     if (config.features.naturalEvents) {
-      ui.naturalEvents = EventsUI(models, ui, config, EventsRequest(models, ui, config));
+      ui.naturalEvents = NaturalEventsUI(models, ui, config, NaturalEventsRequest(models, ui, config));
     }
     ui.link = LinkUI(models, config);
     ui.tour = Tour(models, ui, config);
