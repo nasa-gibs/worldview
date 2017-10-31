@@ -71,8 +71,7 @@
     "selenium-server-standalone-jar": "3.0.1",
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",
-    "watchify": "^3.9.0",
-
+    "watchify": "^3.9.0"
   },
   "dependencies": {
     "babel-polyfill": "6.16.0",
