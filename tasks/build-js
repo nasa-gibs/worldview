@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // template from https://github.com/petesaia/node-native-task-runner/blob/master/bin/build-js
 
-//const UglifyJS = require('uglify-js');
+// const UglifyJS = require('uglify-js');
 const fs = require('fs');
 const browserify = require('browserify');
 const watchify = require('watchify');
 
-const entry = 'wv.main.js';
+const entry = 'index.js';
 const output = './build/js.js';
 const outputMin = './build/js.mins.js';
 
@@ -15,20 +15,12 @@ const outputMin = './build/js.mins.js';
 process.env.NODE_ENV = 'development';
 
 const b = browserify(entry, {
-  debug: true,
-  sourceMaps: true,
+  debug: true, // Makes bundle size larger
   cache: {},
   packageCache: {},
   plugin: [process.env.NODE_ENV !== 'production' ? watchify : null],
   basedir: './web/js'
-})
-  .transform('babelify', {
-    plugins: [ ],
-    presets: [
-      'es2015',
-      'react'
-    ]
-  });
+}).transform('babelify', { presets: ['env'] });
 
 function bundle() {
   const stream = fs.createWriteStream(output);
@@ -46,7 +38,7 @@ function bundle() {
       console.error(err);
       this.emit('end');
     })
-    .pipe(stream)
+    .pipe(stream);
 
   stream.on('finish', function() {
     if (process.env.NODE_ENV === 'production') {
