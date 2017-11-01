@@ -27,7 +27,7 @@ import LayersModal from './layers/layers.modal';
 import LayersSidebar from './layers/layers.sidebar';
 import LayersActive from './layers/layers.active';
 // Map
-import {mapParser} from './map/map';
+import {parse as mapParser} from './map/map';
 import MapModel from './map/map.model';
 import MapUI from './map/map.ui';
 import MapRotate from './map/map.rotate';

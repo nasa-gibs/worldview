@@ -52,15 +52,6 @@
         "standard/computed-property-even-spacing": "warn",
         "wrap-iife": "warn",
         "new-cap": "warn"
-      },
-      "globals": {
-        "wv": true,
-        "wvx": true,
-        "WVC": true,
-        "buster": true,
-        "jQuery": true,
-        "$": true,
-        "_": true
       }
     }
   ]
