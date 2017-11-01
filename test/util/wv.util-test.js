@@ -56,19 +56,19 @@ buster.testCase('wv.util', (function () {
   };
 
   self['parseTimestampUTC: Parses valid timestamp'] = function () {
-    var answer = new Date(Date.UTC(2013, 02, 15, 11, 22, 33));
+    var answer = new Date(Date.UTC(2013, 2, 15, 11, 22, 33));
     var result = wv.util.parseTimestampUTC('2013-03-15T11:22:33Z');
     buster.assert.equals(result.getTime(), answer.getTime());
   };
 
   self['parseTimestampUTC: Parses valid timestamp without Z'] = function () {
-    var answer = new Date(Date.UTC(2013, 02, 15, 11, 22, 33));
+    var answer = new Date(Date.UTC(2013, 2, 15, 11, 22, 33));
     var result = wv.util.parseTimestampUTC('2013-03-15T11:22:33');
     buster.assert.equals(result.getTime(), answer.getTime());
   };
 
   self['parseDateUTC: Parses valid date'] = function () {
-    var answer = new Date(Date.UTC(2013, 02, 15));
+    var answer = new Date(Date.UTC(2013, 2, 15));
     var result = wv.util.parseDateUTC('2013-03-15');
     buster.assert.equals(result.getTime(), answer.getTime());
   };
@@ -109,7 +109,7 @@ buster.testCase('wv.util', (function () {
   };
 
   self['clearTimeUTC: Time set to UTC midnight'] = function () {
-    var d = new Date(2013, 02, 15, 12, 34, 56, 789);
+    var d = new Date(2013, 2, 15, 12, 34, 56, 789);
     wv.util.clearTimeUTC(d);
     buster.assert.equals(2013, d.getUTCFullYear());
     buster.assert.equals(2, d.getUTCMonth());
@@ -153,37 +153,37 @@ buster.testCase('wv.util', (function () {
   };
 
   self['dateAdd: Adds days'] = function () {
-    var d = new Date(2011, 01, 01);
+    var d = new Date(2011, 1, 1);
     var result = wv.util.dateAdd(d, 'day', 4);
     buster.assert.equals(result.getDate(), 5);
   };
 
   self['dateAdd: Adds months'] = function () {
-    var d = new Date(2011, 01, 01);
+    var d = new Date(2011, 1, 1);
     var result = wv.util.dateAdd(d, 'month', 4);
     buster.assert.equals(result.getMonth(), 5);
   };
 
   self['dateAdd: Adds years'] = function () {
-    var d = new Date(2011, 01, 01);
+    var d = new Date(2011, 1, 1);
     var result = wv.util.dateAdd(d, 'year', 4);
     buster.assert.equals(result.getFullYear(), 2015);
   };
 
   self['dateAdd: Throws error on invalid interval'] = function () {
-    var d = new Date(2011, 01, 01);
+    var d = new Date(2011, 1, 1);
     buster.assert.exception(function () {
       wv.util.dateAdd(d, 'foo', 5);
     });
   };
 
   self['daysInMonth: Feb, non-leap'] = function () {
-    var d = new Date(2015, 01, 15);
+    var d = new Date(2015, 1, 15);
     buster.assert.equals(wv.util.daysInMonth(d), 28);
   };
 
   self['daysInMonth: Feb, leap'] = function () {
-    var d = new Date(2016, 01, 15);
+    var d = new Date(2016, 1, 15);
     buster.assert.equals(wv.util.daysInMonth(d), 29);
   };
 
@@ -212,27 +212,27 @@ buster.testCase('wv.util', (function () {
   };
 
   self['rollDate: Day up'] = function () {
-    var d = new Date(Date.UTC(2014, 01, 15));
+    var d = new Date(Date.UTC(2014, 1, 15));
     d = wv.util.rollDate(d, 'day', 1);
-    buster.assert.equals(d, new Date(Date.UTC(2014, 01, 16)));
+    buster.assert.equals(d, new Date(Date.UTC(2014, 1, 16)));
   };
 
   self['rollDate: Day up, roll'] = function () {
-    var d = new Date(Date.UTC(2014, 01, 28));
+    var d = new Date(Date.UTC(2014, 1, 28));
     d = wv.util.rollDate(d, 'day', 1);
-    buster.assert.equals(d, new Date(Date.UTC(2014, 01, 1)));
+    buster.assert.equals(d, new Date(Date.UTC(2014, 1, 1)));
   };
 
   self['rollDate: Day down'] = function () {
-    var d = new Date(Date.UTC(2014, 01, 15));
+    var d = new Date(Date.UTC(2014, 1, 15));
     d = wv.util.rollDate(d, 'day', -1);
-    buster.assert.equals(d, new Date(Date.UTC(2014, 01, 14)));
+    buster.assert.equals(d, new Date(Date.UTC(2014, 1, 14)));
   };
 
   self['rollDate: Day down, roll'] = function () {
-    var d = new Date(Date.UTC(2014, 01, 01));
+    var d = new Date(Date.UTC(2014, 1, 1));
     d = wv.util.rollDate(d, 'day', -1);
-    buster.assert.equals(d, new Date(Date.UTC(2014, 01, 28)));
+    buster.assert.equals(d, new Date(Date.UTC(2014, 1, 28)));
   };
 
   self['rollDate: Day up, roll over max'] = function () {
@@ -264,9 +264,9 @@ buster.testCase('wv.util', (function () {
   };
 
   self['rollDate: Month up'] = function () {
-    var d = new Date(Date.UTC(2014, 05, 15));
+    var d = new Date(Date.UTC(2014, 5, 15));
     d = wv.util.rollDate(d, 'month', 1);
-    buster.assert.equals(d, new Date(Date.UTC(2014, 06, 15)));
+    buster.assert.equals(d, new Date(Date.UTC(2014, 6, 15)));
   };
 
   self['rollDate: Month up, roll'] = function () {
@@ -276,9 +276,9 @@ buster.testCase('wv.util', (function () {
   };
 
   self['rollDate: Month down'] = function () {
-    var d = new Date(Date.UTC(2014, 05, 15));
+    var d = new Date(Date.UTC(2014, 5, 15));
     d = wv.util.rollDate(d, 'month', -1);
-    buster.assert.equals(d, new Date(Date.UTC(2014, 04, 15)));
+    buster.assert.equals(d, new Date(Date.UTC(2014, 4, 15)));
   };
 
   self['rollDate: Month down, roll'] = function () {
@@ -336,31 +336,31 @@ buster.testCase('wv.util', (function () {
   };
 
   self['rollDate: Year up'] = function () {
-    var d = new Date(Date.UTC(2014, 05, 15));
+    var d = new Date(Date.UTC(2014, 5, 15));
     d = wv.util.rollDate(d, 'year', 1);
-    buster.assert.equals(d, new Date(Date.UTC(2015, 05, 15)));
+    buster.assert.equals(d, new Date(Date.UTC(2015, 5, 15)));
   };
 
   self['rollDate: Year down'] = function () {
-    var d = new Date(Date.UTC(2014, 05, 15));
+    var d = new Date(Date.UTC(2014, 5, 15));
     d = wv.util.rollDate(d, 'year', -1);
-    buster.assert.equals(d, new Date(Date.UTC(2013, 05, 15)));
+    buster.assert.equals(d, new Date(Date.UTC(2013, 5, 15)));
   };
 
   self['rollDate: Year up, roll over max'] = function () {
-    var minDate = new Date(Date.UTC(2000, 03, 12));
-    var maxDate = new Date(Date.UTC(2015, 06, 16));
+    var minDate = new Date(Date.UTC(2000, 3, 12));
+    var maxDate = new Date(Date.UTC(2015, 6, 16));
     var d = new Date(Date.UTC(2015, 0, 1));
     d = wv.util.rollDate(d, 'year', 1, minDate, maxDate);
-    buster.assert.equals(d, new Date(Date.UTC(2000, 03, 12)));
+    buster.assert.equals(d, new Date(Date.UTC(2000, 3, 12)));
   };
 
   self['rollDate: Year down, roll over min'] = function () {
-    var minDate = new Date(Date.UTC(2000, 03, 12));
-    var maxDate = new Date(Date.UTC(2015, 06, 16));
+    var minDate = new Date(Date.UTC(2000, 3, 12));
+    var maxDate = new Date(Date.UTC(2015, 6, 16));
     var d = new Date(Date.UTC(2000, 8, 1));
     d = wv.util.rollDate(d, 'year', -1, minDate, maxDate);
-    buster.assert.equals(d, new Date(Date.UTC(2015, 06, 16)));
+    buster.assert.equals(d, new Date(Date.UTC(2015, 6, 16)));
   };
 
   self['formatDMS: zero'] = function () {
