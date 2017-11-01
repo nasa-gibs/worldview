@@ -1,7 +1,8 @@
-var wv = wv || {};
-wv.link = wv.link || {};
+import $ from 'jquery';
+import _ from 'lodash';
+import util from './util/util';
 
-wv.link.model = wv.link.model || function (config) {
+export function linkModel(config) {
   var self = {};
   var DEBUG_SHORTEN_LINK = 'http://go.nasa.gov/1iKIZ4j';
   var ENCODING_EXCEPTIONS = [
@@ -21,7 +22,7 @@ wv.link.model = wv.link.model || function (config) {
   var mock = '';
   var components = [];
 
-  self.events = wv.util.events();
+  self.events = util.events();
 
   var init = function () {
     if (config && config.parameters && config.parameters.shorten) {
