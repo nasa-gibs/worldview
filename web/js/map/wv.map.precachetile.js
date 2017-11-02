@@ -1,7 +1,7 @@
 import _each from 'lodash/each';
 import ol from 'openlayers';
 
-export default function (models, config, cache, parent) {
+export function mapPrecacheTile(models, config, cache, parent) {
   /*
    * Loaded the layers that are needed for any one date.
    * Checks the cache to see if a layer has already

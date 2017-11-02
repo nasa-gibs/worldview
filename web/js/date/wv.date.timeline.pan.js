@@ -2,7 +2,7 @@
 /**
  * Perform timeline panning functions
  */
-export default function(models, config, ui) {
+export function timelinePan(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
   var self = {};

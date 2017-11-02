@@ -2,7 +2,7 @@ import $ from 'jquery';
 /**
  * Implements the timeline pick
  */
-export default function(models, config, ui) {
+export function timelinePick(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
 

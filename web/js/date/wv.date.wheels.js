@@ -1,8 +1,7 @@
 import $ from 'jquery';
 import util from '../util/util';
-import browserUtil from '../util/browser';
 
-export default function (models, config) {
+export function dateWheel(models, config) {
   var id = 'timewheels';
   var $container = $('#' + id);
   var MSEC_TO_MIN = 1000 * 60;
@@ -60,10 +59,10 @@ export default function (models, config) {
   };
 
   var resize = function () {
-    if (!self.enabled && browserUtil.small) {
+    if (!self.enabled && util.browser.small) {
       self.enabled = true;
       $container.show();
-    } else if (self.enabled && !browserUtil.small) {
+    } else if (self.enabled && !util.browser.small) {
       self.enabled = false;
       $container.hide();
     }

@@ -7,7 +7,7 @@ import $ from 'jquery';
  *
  * @class wv.date.timeline.config
  */
-export default function(models, config, ui) {
+export function timelineConfig(models, config, ui) {
   var self = {};
   var tl = ui.timeline;
   var model = models.date;

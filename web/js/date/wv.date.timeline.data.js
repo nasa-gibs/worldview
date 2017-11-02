@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import util from '../util/util';
 
-export default function(models, config, ui) {
+export function timelineData(models, config, ui) {
   var tl = ui.timeline;
 
   var self = {};

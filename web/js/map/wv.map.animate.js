@@ -1,6 +1,6 @@
 import ol from 'openlayers';
 
-export default function (models, config, ui) {
+export function mapAnimate(models, config, ui) {
   var self = {};
 
   /**

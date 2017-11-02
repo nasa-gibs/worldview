@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import browserUtil from '../util/browser';
+import util from '../util/util';
 
-export default function(models, config, ui) {
+export function timeline(models, config, ui) {
   var self = {};
   var model = models.date;
 
@@ -90,7 +90,7 @@ export default function(models, config, ui) {
   };
 
   self.resize = function () {
-    var small = browserUtil.small || browserUtil.constrained;
+    var small = util.browser.small || util.browser.constrained;
     if (self.enabled && small) {
       self.enabled = false;
       $('#timeline')
@@ -214,7 +214,7 @@ export default function(models, config, ui) {
 
     self.resize();
 
-    if (browserUtil.localStorage) {
+    if (util.browser.localStorage) {
       if (localStorage.getItem('timesliderState') === 'collapsed') {
         self.collapseNow();
       }

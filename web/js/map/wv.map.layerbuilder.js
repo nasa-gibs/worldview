@@ -1,10 +1,10 @@
 import util from '../util/util';
 import ol from 'openlayers';
-import _cloneDeep from 'lodash/cloneDeep';
-import _merge from 'lodash/merge';
-import _each from 'lodash/each';
+import cloneDeep from 'lodash/cloneDeep';
+import merge from 'lodash/merge';
+import each from 'lodash/each';
 
-export default function(models, config, cache, Parent) {
+export function mapLayerBuilder(models, config, cache, Parent) {
   var self = {};
   self.init = function (Parent) {
     self.extentLayers = [];
@@ -40,8 +40,8 @@ export default function(models, config, cache, Parent) {
         proj: proj.id,
         def: def
       };
-      def = _cloneDeep(def);
-      _merge(def, def.projections[proj.id]);
+      def = cloneDeep(def);
+      merge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
         layer = createLayerWMTS(def, options);
         if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
@@ -137,7 +137,7 @@ export default function(models, config, cache, Parent) {
     }
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
-      _each(matrixSet.resolutions, function (resolution, index) {
+      each(matrixSet.resolutions, function (resolution, index) {
         matrixIds.push(index);
       });
     } else {

@@ -6,7 +6,7 @@ import util from '../util/util';
  *
  * @class wv.date.label
  */
-export default function (models) {
+export function dateLabel(models) {
   var id = 'timedsdateHolder';
   var $container = $('#' + id);
   var model = models.date;

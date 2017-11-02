@@ -2,7 +2,7 @@ import $ from 'jquery';
 /**
  * Perform timeline tick functions
  */
-export default function(models, config, ui) {
+export function timelineTick(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
 

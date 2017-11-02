@@ -1,8 +1,8 @@
 import ol from 'openlayers';
 import util from '../util/util';
-import _clone from 'lodash/clone';
+import clone from 'lodash/clone';
 
-export default function(models, config) {
+export function mapModel(models, config) {
   var self = {};
 
   self.extent = null;
@@ -47,7 +47,7 @@ export default function(models, config) {
       if (ol.extent.intersects(extent, maxExtent)) {
         self.extent = state.v;
       } else {
-        self.extent = _clone(proj.maxExtent);
+        self.extent = clone(proj.maxExtent);
         errors.push({
           message: 'Extent outside of range'
         });
@@ -72,7 +72,7 @@ export default function(models, config) {
    * @returns {void}
    */
   self.save = function (state) {
-    state.v = _clone(self.extent);
+    state.v = clone(self.extent);
     if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic') {
       state.r = (self.rotation * (180.0 / Math.PI))
         .toPrecision(6);

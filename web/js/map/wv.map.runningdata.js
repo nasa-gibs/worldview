@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import util from '../util/util';
-import _difference from 'lodash/difference';
-import _each from 'lodash/each';
+import difference from 'lodash/difference';
+import each from 'lodash/each';
 
-export default function(models) {
+export function mapRunningData(models) {
   var self;
   var $productsBox;
   var productsBoxHeight;
@@ -186,7 +186,7 @@ export default function(models) {
    *
    */
   self.LayersToRemove = function (oldArray, newArray) {
-    return _difference(oldArray, newArray);
+    return difference(oldArray, newArray);
   };
 
   /*
@@ -220,7 +220,7 @@ export default function(models) {
         legends = models.palettes.getLegends(layerId);
         hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
 
-        _each(legends, function (legend) {
+        each(legends, function (legend) {
           if (legend) {
             self.createRunnerFromLegend(legend, hex);
           }

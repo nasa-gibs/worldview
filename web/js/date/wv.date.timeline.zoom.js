@@ -4,7 +4,7 @@ import uiMouse from '../ui/wv.ui.mouse';
  * Perform timeline zooming functions
 
  */
-export default function(models, config, ui) {
+export function timelineZoom(models, config, ui) {
   var tl = ui.timeline;
   var self = {};
 

@@ -1,14 +1,13 @@
 import $ from 'jquery';
 import util from '../util/util';
-import browserUtil from '../util/browser';
-import _parseInt from 'lodash/parseInt';
+import parseInt from 'lodash/parseInt';
 
 /**
  * Implements the date input
  *
  * @class wv.date.timeline.input
  */
-export default function(models, config, ui) {
+export function timelineInput(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
   var timer;
@@ -111,7 +110,7 @@ export default function(models, config, ui) {
     }
     var interval = $(this)
       .attr('data-interval') || dataInterval;
-    var amount = _parseInt($(this)
+    var amount = parseInt($(this)
       .attr('data-value')) || amt;
     var date = rollingDate || models.date.selected;
     var min = models.date.minDate();
@@ -434,7 +433,7 @@ export default function(models, config, ui) {
           .select();
       });
 
-    if (browserUtil.tests.touchDevice()) {
+    if (util.browser.tests.touchDevice()) {
       $('.button-input-group')
         .prop('disabled', true);
     }

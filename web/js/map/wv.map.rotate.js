@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import util from '../util/util';
 
-export default function(ui, models, map) {
+export function mapRotate(ui, models, map) {
   this.evts = util.events();
   this.intervalId = null;
   var self = this;

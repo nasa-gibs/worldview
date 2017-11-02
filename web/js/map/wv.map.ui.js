@@ -1,13 +1,13 @@
 import $ from 'jquery';
 import ol from 'openlayers';
-import _findIndex from 'lodash/findIndex';
-import _each from 'lodash/each';
-import _forOwn from 'lodash/forOwn';
-import _throttle from 'lodash/throttle';
-import _find from 'lodash/find';
+import findIndex from 'lodash/findIndex';
+import each from 'lodash/each';
+import forOwn from 'lodash/forOwn';
+import throttle from 'lodash/throttle';
+import find from 'lodash/find';
 import util from '../util/util';
 
-export default function(models, config, components) {
+export function mapui(models, config, components) {
   var id = 'wv-map';
   var selector = '#' + id;
   var cache = new Cache(400); // Save layers from days visited
@@ -45,7 +45,7 @@ export default function(models, config, components) {
     }
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
-    _forOwn(config.projections, function (proj) {
+    forOwn(config.projections, function (proj) {
       var map = createMap(proj);
       self.proj[proj.id] = map;
     });
@@ -187,7 +187,7 @@ export default function(models, config, components) {
     var activeLayers = map.getLayers()
       .getArray()
       .slice(0);
-    _each(activeLayers, function (mapLayer) {
+    each(activeLayers, function (mapLayer) {
       if (mapLayer.wv) {
         map.removeLayer(mapLayer);
       }
@@ -213,7 +213,7 @@ export default function(models, config, components) {
     var defs = models.layers.get({
       reverse: true
     });
-    _each(defs, function (def) {
+    each(defs, function (def) {
       if (isGraticule(def)) {
         addGraticule();
       } else {
@@ -240,7 +240,7 @@ export default function(models, config, components) {
       }
     });
     var defs = models.layers.get();
-    _each(defs, function (def) {
+    each(defs, function (def) {
       if (isGraticule(def)) {
         var renderable = models.layers.isRenderable(def.id);
         if (renderable) {
@@ -280,7 +280,7 @@ export default function(models, config, components) {
    */
 
   var addLayer = function (def) {
-    var mapIndex = _findIndex(models.layers.get({
+    var mapIndex = findIndex(models.layers.get({
       reverse: true
     }), {
       id: def.id
@@ -338,7 +338,7 @@ export default function(models, config, components) {
    */
   var updateDate = function () {
     var defs = models.layers.get();
-    _each(defs, function (def) {
+    each(defs, function (def) {
       if (def.period !== 'daily') {
         return;
       }
@@ -395,7 +395,7 @@ export default function(models, config, components) {
   var findLayer = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = _find(layers, {
+    var layer = find(layers, {
       wv: {
         id: def.id
       }
@@ -417,7 +417,7 @@ export default function(models, config, components) {
   var findLayerIndex = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = _findIndex(layers, {
+    var layer = findIndex(layers, {
       wv: {
         id: def.id
       }
@@ -484,7 +484,7 @@ export default function(models, config, components) {
     self.selected.graticule = null;
   };
 
-  var triggerExtent = _throttle(function () {
+  var triggerExtent = throttle(function () {
     self.events.trigger('extent');
   }, 500, {
     trailing: true
@@ -607,7 +607,7 @@ export default function(models, config, components) {
     map.getView()
       .on('change:resolution', updateExtent);
     map.getView()
-      .on('change:rotation', _throttle(onRotate, 300));
+      .on('change:rotation', throttle(onRotate, 300));
     map.on('pointerdrag', function () {
       self.mapIsbeingDragged = true;
       self.events.trigger('drag');
@@ -903,7 +903,7 @@ export default function(models, config, components) {
         hoverThrottle.cancel();
         dataRunner.clearAll();
       })
-      .mousemove(hoverThrottle = _throttle(onMouseMove, 300));
+      .mousemove(hoverThrottle = throttle(onMouseMove, 300));
   };
 
   /*

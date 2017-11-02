@@ -1,6 +1,6 @@
 import util from '../util/util';
 
-export default function(config, spec) {
+export function dateModel(config, spec) {
   spec = spec || {};
 
   var self = {};
