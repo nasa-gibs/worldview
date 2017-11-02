@@ -1,7 +1,9 @@
-var wv = wv || {};
-wv.util = wv.util || {};
+import $ from 'jquery';
+import size from 'lodash/size';
+import wvui from '../ui/ui.js';
+import brand from '../brand.js';
 
-wv.util.load = wv.util.load || (function () {
+export const load = (function () {
   var self = {};
   var configPromises = {};
   var loading = 0;
@@ -16,14 +18,14 @@ wv.util.load = wv.util.load || (function () {
         .fail(promise.reject);
       return promise;
     }
-    if (root[attr] && _.size(root[attr]) > 0) {
+    if (root[attr] && size(root[attr]) > 0) {
       promise.resolve(root[attr]);
     } else {
       loading += 1;
-      promise = $.getJSON(wv.brand.url(url));
+      promise = $.getJSON(brand.url(url));
       if (loading === 1) {
         indicatorTimeout = setTimeout(function () {
-          indicatorId = wv.ui.indicator.loading();
+          indicatorId = wvui.indicator.loading();
         }, 2000);
       }
       promise.done(function (result) {
@@ -35,10 +37,10 @@ wv.util.load = wv.util.load || (function () {
           if (loading === 0) {
             clearTimeout(indicatorTimeout);
             indicatorTimeout = null;
-            wv.ui.indicator.hide(indicatorId);
+            wvui.indicator.hide(indicatorId);
           }
         })
-        .fail(wv.util.error);
+        .fail(wvui.error);
 
       configPromises[url] = promise;
     }
