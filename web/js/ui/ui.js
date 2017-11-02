@@ -1,11 +1,11 @@
 import $ from 'jquery';
-import indicator from './indicator.js';
+import loadingIndicator from './indicator.js';
 import info from './info.js';
 import mouse from './mouse.js';
 
 export const wvui = (function (self) {
   // Export other ui methods
-  self.indicator = indicator;
+  self.loadingIndicator = loadingIndicator;
   self.info = info;
   self.mouse = mouse;
   /**

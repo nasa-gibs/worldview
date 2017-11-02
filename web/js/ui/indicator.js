@@ -6,7 +6,7 @@ import remove from 'lodash/remove';
 import isEmpty from 'lodash/isEmpty';
 import last from 'lodash/last';
 
-export const indicator = (function () {
+export const loadingIndicator = (function () {
   var self = {};
 
   var $indicator;
