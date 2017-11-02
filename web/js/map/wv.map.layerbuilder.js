@@ -1,12 +1,13 @@
-var wv = wv || {};
-wv.map = wv.map || {};
+import util from '../util/wv.util';
+import ol from 'openlayers';
+import {
+  cloneDeep as _cloneDeep,
+  merge as _merge,
+  each as _each
+} from 'lodash';
 
-/*
- * @Class
- */
-wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Parent) {
+export default function(models, config, cache, Parent) {
   var self = {};
-  var map;
   self.init = function (Parent) {
     self.extentLayers = [];
     Parent.events.on('selecting', hideWrap);
@@ -26,9 +27,8 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
    * @returns {object} OpenLayers layer
    */
   self.createLayer = function (def, options) {
-    var date, key, proj, layer, layerNext, layerPrior, group, attributes;
+    var date, key, proj, layer, layerNext, layerPrior, attributes;
 
-    group = null;
     options = options || {};
     key = self.layerKey(def, options);
     proj = models.proj.selected;
@@ -38,12 +38,12 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
       attributes = {
         id: def.id,
         key: key,
-        date: wv.util.toISOStringDate(date),
+        date: util.toISOStringDate(date),
         proj: proj.id,
         def: def
       };
-      def = _.cloneDeep(def);
-      _.merge(def, def.projections[proj.id]);
+      def = _cloneDeep(def);
+      _merge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
         layer = createLayerWMTS(def, options);
         if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
@@ -99,9 +99,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     var projId = models.proj.selected.id;
     var date;
     if (options.date) {
-      date = wv.util.toISOStringDate(options.date);
+      date = util.toISOStringDate(options.date);
     } else {
-      date = wv.util.toISOStringDate(models.date.selected);
+      date = util.toISOStringDate(models.date.selected);
     }
     var dateId = (def.period === 'daily') ? date : '';
     var palette = '';
@@ -139,7 +139,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     }
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
-      _.each(matrixSet.resolutions, function (resolution, index) {
+      _each(matrixSet.resolutions, function (resolution, index) {
         matrixIds.push(index);
       });
     } else {
@@ -161,9 +161,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     if (def.period === 'daily') {
       date = options.date || models.date.selected;
       if (day) {
-        date = wv.util.dateAdd(date, 'day', day);
+        date = util.dateAdd(date, 'day', day);
       }
-      extra = '?TIME=' + wv.util.toISOStringDate(date);
+      extra = '?TIME=' + util.toISOStringDate(date);
     }
     var sourceOptions = {
       url: source.url + extra,
@@ -205,8 +205,8 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
    * @returns {object} OpenLayers WMS layer
    */
   var createLayerWMS = function (def, options, day) {
-    var proj, source, matrixSet, matrixIds, extra, transparent,
-      date, extent, start, bbox, res;
+    var proj, source, extra, transparent,
+      date, extent, start, res, parameters;
     proj = models.proj.selected;
     source = config.sources[def.source];
     extent = proj.maxExtent;
@@ -241,9 +241,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     if (def.period === 'daily') {
       date = options.date || models.date.selected;
       if (day) {
-        date = wv.util.dateAdd(date, 'day', day);
+        date = util.dateAdd(date, 'day', day);
       }
-      extra = '?TIME=' + wv.util.toISOStringDate(date);
+      extra = '?TIME=' + util.toISOStringDate(date);
     }
     var sourceOptions = {
       url: source.url + extra,
