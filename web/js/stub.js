@@ -14,7 +14,8 @@ import layersOptions from './layers/layers.options';
 import layersSidebar from './layers/layers.sidebar';
 import palettes from './palettes/palettes';
 import palettesLegend from './palettes/palettes.legend';
+import palettesModel from './palettes/palettes.model';
 
 export default function () {
-  console.log($, GA, linkUi, linkModel, layerParser, layerValidate, layersAdd, layersActive, layersInfo, layersModal, layersModel, layersOptions, layersSidebar, palettes, palettesLegend);
+  console.log($, GA, linkUi, linkModel, layerParser, layerValidate, layersAdd, layersActive, layersInfo, layersModal, layersModel, layersOptions, layersSidebar, palettes, palettesLegend, palettesModel);
 };

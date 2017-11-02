@@ -1,26 +1,26 @@
-/**
- * @module wv.palette
- */
-var wv = wv || {};
-wv.palettes = wv.palettes || {};
+import each from 'lodash/each';
+import find from 'lodash/find';
+import cloneDeep from 'lodash/cloneDeep';
+import isNaN from 'lodash/isNaN';
+import isUndefined from 'lodash/isUndefined';
+import parseInt from 'lodash/parseInt';
+import util from '../util/util';
+import palettes from '../palettes/palettes';
 
-/**
- * @class wv.palette.model
- */
-wv.palettes.model = wv.palettes.model || function (models, config) {
+export function palettesModel(models, config) {
   config.palettes = config.palettes || {
     rendered: {},
     custom: {}
   };
 
   var self = {};
-  self.events = wv.util.events();
+  self.events = util.events();
   self.active = {};
 
   self.getRendered = function (layerId, index) {
     var name = config.layers[layerId].palette.id;
     var palette = config.palettes.rendered[name];
-    if (!_.isUndefined(index)) {
+    if (!isUndefined(index)) {
       palette = palette.maps[index];
     }
     return palette;
@@ -38,17 +38,17 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
     self.active[layerId] = self.active[layerId] || {};
     var active = self.active[layerId];
     active.maps = active.maps || [];
-    _.each(self.getRendered(layerId)
+    each(self.getRendered(layerId)
       .maps,
     function (palette, index) {
       if (!active.maps[index]) {
-        active.maps[index] = _.cloneDeep(palette);
+        active.maps[index] = cloneDeep(palette);
       }
     });
   };
 
   self.allowed = function (layerId) {
-    if (!wv.palettes.supported) {
+    if (!palettes.supported) {
       return false;
     }
     return config.layers[layerId].palette;
@@ -59,7 +59,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
       throw new Error('Invalid layer: ' + layerId);
     }
     prepare(layerId);
-    index = (_.isUndefined(index)) ? 0 : index;
+    index = (isUndefined(index)) ? 0 : index;
     var active = self.active[layerId];
     var palette = active.maps[index];
     if (palette.custom === paletteId) {
@@ -72,7 +72,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
   };
 
   self.clearCustom = function (layerId, index) {
-    index = (_.isUndefined(index)) ? 0 : index;
+    index = (isUndefined(index)) ? 0 : index;
     var active = self.active[layerId];
     if (!active) {
       return;
@@ -89,7 +89,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
 
   self.setRange = function (layerId, min, max, squash, index) {
     prepare(layerId);
-    index = (_.isUndefined(index)) ? 0 : index;
+    index = (isUndefined(index)) ? 0 : index;
     var palette = self.active[layerId].maps[index];
     if (min === 0) {
       min = undefined;
@@ -122,7 +122,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
    * @return {object} object including the entries and legend
    */
   self.get = function (layerId, index) {
-    index = (_.isUndefined(index)) ? 0 : index;
+    index = (isUndefined(index)) ? 0 : index;
     if (self.active[layerId]) {
       return self.active[layerId].maps[index];
     }
@@ -200,8 +200,8 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
     if (self.inUse() && !state.l) {
       throw new Error('No layers in state');
     }
-    _.each(self.active, function (def, layerId) {
-      if (!_.find(models.layers.get(), {
+    each(self.active, function (def, layerId) {
+      if (!find(models.layers.get(), {
         id: layerId
       })) {
         return;
@@ -215,7 +215,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
   };
 
   self.saveSingle = function (state, layerId) {
-    var attr = _.find(state.l, {
+    var attr = find(state.l, {
       id: layerId
     })
       .attributes;
@@ -288,7 +288,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
       }
     }
 
-    var attr = _.find(state.l, {
+    var attr = find(state.l, {
       id: layerId
     })
       .attributes;
@@ -340,22 +340,22 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
   };
 
   self.load = function (state, errors) {
-    if (!wv.palettes.supported) {
+    if (!palettes.supported) {
       return;
     }
 
-    _.each(state.l, function (layerDef) {
+    each(state.l, function (layerDef) {
       var layerId = layerDef.id;
       var minValue, maxValue;
       var min = [],
         max = [];
       var squash = [];
       var count = 0;
-      _.each(layerDef.attributes, function (attr) {
+      each(layerDef.attributes, function (attr) {
         if (attr.id === 'palette') {
           count = self.getCount(layerId);
-          values = wv.util.toArray(attr.value.split(';'));
-          _.each(values, function (value, index) {
+          values = util.toArray(attr.value.split(';'));
+          each(values, function (value, index) {
             try {
               self.setCustom(layerId, value, index);
             } catch (error) {
@@ -365,14 +365,14 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
         }
         if (attr.id === 'min') {
           count = self.getCount(layerId);
-          values = wv.util.toArray(attr.value.split(';'));
-          _.each(values, function (value, index) {
+          values = util.toArray(attr.value.split(';'));
+          each(values, function (value, index) {
             if (value === '') {
               min.push(undefined);
               return;
             }
             minValue = parseFloat(value);
-            if (_.isNaN(minValue)) {
+            if (isNaN(minValue)) {
               errors.push('Invalid min value: ' + value);
             } else {
               min.push(findIndex(layerId, 'min', minValue, index));
@@ -381,14 +381,14 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
         }
         if (attr.id === 'max') {
           count = self.getCount(layerId);
-          values = wv.util.toArray(attr.value.split(';'));
-          _.each(values, function (value, index) {
+          values = util.toArray(attr.value.split(';'));
+          each(values, function (value, index) {
             if (value === '') {
               max.push(undefined);
               return;
             }
             maxValue = parseFloat(value);
-            if (_.isNaN(maxValue)) {
+            if (isNaN(maxValue)) {
               errors.push('Invalid max value: ' + value);
             } else {
               max.push(findIndex(layerId, 'max', maxValue, index));
@@ -400,8 +400,8 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
           if (attr.value === true) {
             squash[0] = true;
           } else {
-            values = wv.util.toArray(attr.value.split(';'));
-            _.each(values, function (value) {
+            values = util.toArray(attr.value.split(';'));
+            each(values, function (value) {
               squash.push(value === 'true');
             });
           }
@@ -423,7 +423,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
     var values = self.get(layerId, index)
       .entries.values;
     var result;
-    _.each(values, function (check, index) {
+    each(values, function (check, index) {
       var min = getMinValue(check);
       var max = getMaxValue(check);
       if (type === 'min' && value === min) {
@@ -443,7 +443,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
   self.inUse = function () {
     var layers = models.layers.get();
     var found = false;
-    _.each(layers, function (layer) {
+    each(layers, function (layer) {
       if (self.active[layer.id]) {
         found = true;
         return false;
@@ -456,7 +456,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
     var use = false;
     var active = self.active[layerId].maps;
 
-    _.each(active, function (palette, index) {
+    each(active, function (palette, index) {
       if (palette.custom) {
         use = true;
         return false;
@@ -469,7 +469,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
         if (palette.max >= rendered.entries.values.length) {
           delete palette.max;
         }
-        if (!_.isUndefined(palette.min) || !_.isUndefined(palette.max)) {
+        if (!isUndefined(palette.min) || !isUndefined(palette.max)) {
           use = true;
           return false;
         }
@@ -485,7 +485,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
     }
     var active = self.active[layerId].maps;
     var lookup = {};
-    _.each(active, function (palette, index) {
+    each(active, function (palette, index) {
       oldLegend = palette.legend;
       entries = palette.entries;
       legend = {
@@ -511,7 +511,7 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
       var targetCount = target.length;
       var indexCount = max - min;
 
-      _.each(source, function (color, index) {
+      each(source, function (color, index) {
         var newColor;
         if (index < min || index > max) {
           targetColor = '00000000';
@@ -534,15 +534,15 @@ wv.palettes.model = wv.palettes.model || function (models, config) {
         }
         legend.colors.push(targetColor);
         var lookupSource =
-          _.parseInt(color.substring(0, 2), 16) + ',' +
-          _.parseInt(color.substring(2, 4), 16) + ',' +
-          _.parseInt(color.substring(4, 6), 16) + ',' +
-          _.parseInt(color.substring(6, 8), 16);
+          parseInt(color.substring(0, 2), 16) + ',' +
+          parseInt(color.substring(2, 4), 16) + ',' +
+          parseInt(color.substring(4, 6), 16) + ',' +
+          parseInt(color.substring(6, 8), 16);
         var lookupTarget = {
-          r: _.parseInt(targetColor.substring(0, 2), 16),
-          g: _.parseInt(targetColor.substring(2, 4), 16),
-          b: _.parseInt(targetColor.substring(4, 6), 16),
-          a: _.parseInt(targetColor.substring(6, 8), 16)
+          r: parseInt(targetColor.substring(0, 2), 16),
+          g: parseInt(targetColor.substring(2, 4), 16),
+          b: parseInt(targetColor.substring(4, 6), 16),
+          a: parseInt(targetColor.substring(6, 8), 16)
         };
         lookup[lookupSource] = lookupTarget;
       });
