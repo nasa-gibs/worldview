@@ -75,6 +75,9 @@ import {debugConfig, debug} from './debug';
 import Brand from './brand';
 import Tour from './tour';
 
+import { default as polyfill } from './polyfill';
+polyfill(); // Polyfills some browser features
+
 // Document ready function
 window.onload = () => {
   var errors = [];
