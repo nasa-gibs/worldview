@@ -1,20 +1,16 @@
-/**
- * @module wv.proj
- */
-var wv = wv || {};
-wv.proj = wv.proj || {};
+import each from 'lodash/each';
+import util from '../util/util';
+import ol from 'openlayers';
+import proj4 from 'proj4';
 
-/**
- * @class wv.proj.model
- */
-wv.proj.model = wv.proj.model || function (config) {
+export function projectionModel(config) {
   var self = {};
   self.selected = null;
-  self.events = wv.util.events();
+  self.events = util.events();
 
   var init = function () {
     self.selectDefault();
-    _.each(config.projections, function (proj) {
+    each(config.projections, function (proj) {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
         ol.proj.get(proj.crs)

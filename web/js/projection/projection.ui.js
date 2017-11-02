@@ -1,15 +1,8 @@
-/**
- * @module wv.proj
- */
-var wv = wv || {};
-wv.proj = wv.proj || {};
+import $ from 'jquery';
+import each from 'lodash/each';
+import wvui from '../ui/ui';
 
-/**
- * Undocumented.
- *
- * @class wv.proj.ui
- */
-wv.proj.ui = wv.proj.ui || function (models, config) {
+export function projectionUi(models, config) {
   var model = models.proj;
 
   var self = {};
@@ -48,7 +41,7 @@ wv.proj.ui = wv.proj.ui || function (models, config) {
 
     $button.click(function (event) {
       event.stopPropagation();
-      wv.ui.close();
+      wvui.close();
       var checked = $('#wv-proj-button-check')
         .prop('checked');
       if (checked) {
@@ -58,11 +51,11 @@ wv.proj.ui = wv.proj.ui || function (models, config) {
   };
 
   var show = function () {
-    var $menu = wv.ui.getMenu()
+    var $menu = wvui.getMenu()
       .attr('id', 'wv-proj-menu');
     $menuItems = $('<ul></ul>');
 
-    _.each(config.ui.projections, function (ui) {
+    each(config.ui.projections, function (ui) {
       var $item = $(
         '<li data-proj=\'' + ui.id + '\'>' +
         '<a data-proj=\'' + ui.id + '\'>' +
@@ -79,7 +72,7 @@ wv.proj.ui = wv.proj.ui || function (models, config) {
     $menu.append($menuItems);
 
     $menuItems.menu();
-    wv.ui.positionMenu($menuItems, {
+    wvui.positionMenu($menuItems, {
       my: 'left top',
       at: 'left bottom+5',
       of: $label

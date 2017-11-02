@@ -64,10 +64,10 @@ import {loadingIndicator} from './ui/ui.indicator'; // not a class, export objec
 import linkModel from './link/link.model';
 import linkUi from './link/link.ui';
 // Projections
-import projectionParser from './proj/proj';
-import ProjectionModel from './proj/proj.model';
-import ProjectionUI from './proj/proj.ui';
-import ProjectionChange from './proj/proj.change';
+import projectionParser from './projection/projection';
+import ProjectionModel from './projection/projection.model';
+import ProjectionUi from './projection/projection.ui';
+import ProjectionChange from './projection/projection.change';
 // Other
 import {debugConfig, debug} from './debug';
 import Brand from './brand';
@@ -228,7 +228,7 @@ window.onload = () => {
 
     elapsed('ui');
     // Create widgets
-    ui.proj = ProjectionUI(models, config);
+    ui.proj = ProjectionUi(models, config);
     ui.sidebar = LayersSidebar(models, config);
     ui.activeLayers = LayersActive(models, ui, config);
     ui.addModal = LayersModal(models, ui, config);

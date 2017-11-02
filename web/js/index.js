@@ -16,3 +16,7 @@ export { layersSidebar } from './layers/layers.sidebar';
 export { palettes } from './palettes/palettes';
 export { palettesLegend } from './palettes/palettes.legend';
 export { palettesModel } from './palettes/palettes.model';
+export { projectionParse } from './projection/projection';
+export { projectionChange } from './projection/projection.change';
+export { projectionModel } from './projection/projection.model';
+export { projectionUi } from './projection/projection.ui';
