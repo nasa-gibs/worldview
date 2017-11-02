@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import wvui from '../ui/ui';
+import uiUtils from '../ui/ui';
 
 export function layersInfo(config, models, layer) {
   var $dialog;
@@ -12,7 +12,7 @@ export function layersInfo(config, models, layer) {
   var loaded = function (custom) {
     var names;
 
-    $dialog = wvui.getDialog();
+    $dialog = uiUtils.getDialog();
     $dialog
       .attr('id', 'wv-layers-info-dialog')
       .attr('data-layer', layer.id);
@@ -54,7 +54,7 @@ export function layersInfo(config, models, layer) {
 
   var dispose = function () {
     $dialog = null;
-    wvui.closeDialog();
+    uiUtils.closeDialog();
   };
 
   var renderDescription = function ($dialog) {
