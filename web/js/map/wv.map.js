@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import {
+  map as _map, each as _each,
+  isUndefined as _isUndefined, find as _find
+} from 'lodash';
 import ol from 'openlayers';
 /*
  * Checks to see if an extents string is found. If it exist
@@ -23,7 +26,7 @@ export function parse(state, errors) {
     delete state.map;
   }
   if (state.v) {
-    var extent = _.map(state.v.split(','), function (str) {
+    var extent = _map(state.v.split(','), function (str) {
       return parseFloat(str);
     });
     var valid = isExtentValid(extent);
@@ -50,14 +53,14 @@ export function parse(state, errors) {
  * true.
  */
 var isExtentValid = function(extent) {
-  if (_.isUndefined(extent)) {
+  if (_isUndefined(extent)) {
     return false;
   }
   var valid = true;
   if (extent.toArray) {
     extent = extent.toArray();
   }
-  _.each(extent, function (value) {
+  _each(extent, function (value) {
     if (isNaN(value)) {
       valid = false;
       return false;
@@ -132,7 +135,7 @@ export function setVisibility(layer, visible, opacity) {
 export function getLayerByName(map, name) {
   var layers = map.getLayers()
     .getArray();
-  return _.find(layers, {
+  return _find(layers, {
     'wvname': name
   });
 };
