@@ -1,4 +1,5 @@
-import { each, pull } from 'lodash';
+import each from 'lodash/each';
+import pull from 'lodash/pull';
 
 export function events () {
   var self = {};

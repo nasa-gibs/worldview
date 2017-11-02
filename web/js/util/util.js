@@ -1,7 +1,8 @@
 /* global ntptEventTag */
 
 import $ from 'jquery';
-import { each, isNull } from 'lodash';
+import each from 'lodash/each';
+import isNull from 'lodash/isNull';
 import wvui from '../ui/ui.js';
 import browser from './browser.js';
 import events from './events.js';
