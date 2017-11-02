@@ -3,7 +3,7 @@ import ReactDOM from 'React-dom';
 import WVC from 'worldview-components';
 import ol from 'openlayers';
 
-import util from '../util/util.js';
+import util from '../util/util';
 
 var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
   lineLeft, lineRight, textLeft, textRight, proj;

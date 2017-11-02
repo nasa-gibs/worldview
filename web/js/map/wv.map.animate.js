@@ -1,6 +1,6 @@
-var wv = wv || {};
-wv.map = wv.map || {};
-wv.map.animate = wv.map.animate || function (models, config, ui) {
+import ol from 'openlayers';
+
+export default function (models, config, ui) {
   var self = {};
 
   /**
@@ -71,6 +71,5 @@ wv.map.animate = wv.map.animate || function (models, config, ui) {
     })[0];
     return Math.max(2, Math.min(bestFit.zoom, start - 1, end - 1));
   };
-
   return self;
 };

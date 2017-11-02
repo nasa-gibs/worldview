@@ -1,4 +1,4 @@
-import util from '../util/wv.util';
+import util from '../util/util';
 import ol from 'openlayers';
 import {
   cloneDeep as _cloneDeep,
