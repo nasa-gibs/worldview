@@ -145,7 +145,7 @@ export function linkUI(models, config) {
       dialogWidth = '242';
     }
 
-    var Widget = self.initWidget();
+    Widget = self.initWidget();
 
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
