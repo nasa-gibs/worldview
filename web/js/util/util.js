@@ -1,16 +1,21 @@
-/**
- * @module wv.util
- */
-var wv = wv || {};
+/* global ntptEventTag */
 
-/**
- * General utilities
- *
- * @class wv.util
- * @static
- */
-wv.util = (function (self) {
+import $ from 'jquery';
+import { each, isNull } from 'lodash';
+import wvui from '../ui/ui.js';
+import browser from './browser.js';
+import events from './events.js';
+import load from './load.js';
+
+export const util = (function () {
+  var self = {};
   var canvas = null;
+
+  // Export other util methods
+  self.browser = browser;
+  self.events = events;
+  self.load = load;
+
   // Needed anymore?
   self.LAYER_GROUPS = {
     baselayers: {
@@ -104,9 +109,9 @@ wv.util = (function (self) {
   self.toQueryString = function (kvps, exceptions) {
     exceptions = exceptions || {};
     var parts = [];
-    _.each(kvps, function (value, key) {
+    each(kvps, function (value, key) {
       var part = key + '=' + encodeURIComponent(value);
-      _.each(exceptions, function (exception) {
+      each(exceptions, function (exception) {
         var regexp = new RegExp(exception, 'ig');
         var decoded = decodeURIComponent(exception);
         part = part.replace(regexp, decoded);
@@ -446,7 +451,7 @@ wv.util = (function (self) {
       day = daysInMonth;
     }
     var newDate = new Date(Date.UTC(year, month, day));
-    newDate = new Date(wv.util.clamp(newDate, minDate, maxDate));
+    newDate = new Date(self.clamp(newDate, minDate, maxDate));
     return newDate;
   };
 
@@ -475,7 +480,7 @@ wv.util = (function (self) {
    */
   self.fromCompactTimestamp = function (str) {
     var v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
-    if (_.isNull(v)) {
+    if (isNull(v)) {
       throw new Error('Invalid timestamp:' + str);
     }
     return new Date(Date.UTC(
@@ -530,7 +535,7 @@ wv.util = (function (self) {
    * @param {Exception} cause The exception object that caused the error
    */
   self.error = function (message, cause) {
-    wv.ui.error(message, cause);
+    wvui.error(message, cause);
   };
 
   /**
@@ -638,7 +643,7 @@ wv.util = (function (self) {
       try {
         return func.apply(func, arguments);
       } catch (error) {
-        wv.util.error(error);
+        self.error(error);
       }
     };
   };
@@ -742,7 +747,7 @@ wv.util = (function (self) {
   };
 
   self.setCoordinateFormat = function (type) {
-    if (!wv.util.browser.localStorage) return;
+    if (!browser.localStorage) return;
     if (type !== 'latlon-dd' && type !== 'latlon-dms') {
       throw new Error('Invalid coordinate format: ' + type);
     }
@@ -750,7 +755,7 @@ wv.util = (function (self) {
   };
 
   self.getCoordinateFormat = function () {
-    if (!wv.util.browser.localStorage) return 'latlon-dd';
+    if (!browser.localStorage) return 'latlon-dd';
     return localStorage.getItem('coordinateFormat') || 'latlon-dd';
   };
 
@@ -786,4 +791,4 @@ wv.util = (function (self) {
   };
 
   return self;
-})(wv.util || {});
+})();

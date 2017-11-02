@@ -1,7 +1,6 @@
-var wv = wv || {};
-wv.util = wv.util || {};
+import { each, pull } from 'lodash';
 
-wv.util.events = wv.util.events || function () {
+export function events () {
   var self = {};
 
   // Object of event types. Each event type is an array of listeners.
@@ -24,7 +23,7 @@ wv.util.events = wv.util.events || function () {
   self.off = function (event, callback) {
     var listeners = events[event];
     if (listeners) {
-      _.pull(listeners, callback);
+      pull(listeners, callback);
     }
     return self;
   };
@@ -42,10 +41,10 @@ wv.util.events = wv.util.events || function () {
       return;
     }
     var eventArguments = Array.prototype.slice.call(arguments, 1);
-    _.each(events[event], function (listener) {
+    each(events[event], function (listener) {
       listener.apply(self, eventArguments);
     });
-    _.each(allListeners, function (listener) {
+    each(allListeners, function (listener) {
       listener.apply(self, eventArguments);
     });
     return self;
