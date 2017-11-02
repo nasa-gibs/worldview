@@ -1,5 +1,10 @@
 /* global ntptEventTag */
 
+/* The ntptEventTag global variable is defined by
+ * https://earthdata.nasa.gov/lib/ntpagetag.js
+ * which is included via config.scripts in web/config/wv.json
+*/
+
 import $ from 'jquery';
 import each from 'lodash/each';
 import isNull from 'lodash/isNull';

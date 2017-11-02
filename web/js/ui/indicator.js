@@ -1,6 +1,12 @@
-var wv = wv || {};
-wv.ui = wv.ui || {};
-wv.ui.indicator = wv.ui.indicator || (function () {
+import $ from 'jquery';
+import uniqueId from 'lodash/uniqueId';
+import isString from 'lodash/isString';
+import each from 'lodash/each';
+import remove from 'lodash/remove';
+import isEmpty from 'lodash/isEmpty';
+import last from 'lodash/last';
+
+export const indicator = (function () {
   var self = {};
 
   var $indicator;
@@ -24,7 +30,7 @@ wv.ui.indicator = wv.ui.indicator || (function () {
 
   self.show = function (message, icon) {
     self._show(message, icon);
-    var id = _.uniqueId();
+    var id = uniqueId();
     self.active.push({
       id: id,
       message: message,
@@ -34,18 +40,18 @@ wv.ui.indicator = wv.ui.indicator || (function () {
   };
 
   self.hide = function (hides) {
-    if (_.isString(hides)) {
+    if (isString(hides)) {
       hides = [hides];
     }
-    _.each(hides, function (id) {
-      _.remove(self.active, {
+    each(hides, function (id) {
+      remove(self.active, {
         id: id
       });
     });
-    if (_.isEmpty(self.active)) {
+    if (isEmpty(self.active)) {
       self._hide();
     } else {
-      var def = _.last(self.active);
+      var def = last(self.active);
       self._show(def.message, def.icon);
     }
   };
