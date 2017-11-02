@@ -52,7 +52,10 @@
         "standard/computed-property-even-spacing": "warn",
         "wrap-iife": "warn",
         "new-cap": "warn"
-      }
+      },
+      "globals": {
+        "d3": true,
+      },
     }
   ]
 }
