@@ -1,15 +1,8 @@
-/**
- * @module wv.date
- */
-var wv = wv || {};
-wv.date = wv.date || {};
+import $ from 'jquery';
+import util from '../util/util';
+import browserUtil from '../util/browser';
 
-/**
- * Undocumented.
- *
- * @class wv.date.wheels
- */
-wv.date.wheels = wv.date.wheels || function (models, config) {
+export default function (models, config) {
   var id = 'timewheels';
   var $container = $('#' + id);
   var MSEC_TO_MIN = 1000 * 60;
@@ -38,7 +31,7 @@ wv.date.wheels = wv.date.wheels || function (models, config) {
       .date({
         display: 'bottom',
         onChange: function (valueText) {
-          var d = wv.util.parseDateUTC(valueText);
+          var d = util.parseDateUTC(valueText);
           model.select(d);
         },
         onShow: function () {
@@ -67,18 +60,18 @@ wv.date.wheels = wv.date.wheels || function (models, config) {
   };
 
   var resize = function () {
-    if (!self.enabled && wv.util.browser.small) {
+    if (!self.enabled && browserUtil.small) {
       self.enabled = true;
       $container.show();
-    } else if (self.enabled && !wv.util.browser.small) {
+    } else if (self.enabled && !browserUtil.small) {
       self.enabled = false;
       $container.hide();
     }
   };
 
   var updateRange = function () {
-    startDate = wv.util.parseDateUTC(config.startDate);
-    endDate = wv.util.today();
+    var startDate = util.parseDateUTC(config.startDate);
+    var endDate = util.today();
     $('#linkmode')
       .mobiscroll('option', 'disabled', false);
     $('#linkmode')
@@ -89,7 +82,7 @@ wv.date.wheels = wv.date.wheels || function (models, config) {
 
   var update = function () {
     $('#wv-date-mobile-label')
-      .html(wv.util.toISOStringDate(model.selected));
+      .html(util.toISOStringDate(model.selected));
     $('#linkmode')
       .mobiscroll('setDate', UTCToLocal(model.selected), true);
   };

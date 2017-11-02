@@ -1,16 +1,8 @@
-/**
- * @module wv.date.timeline
- */
-var wv = wv || {};
-wv.date = wv.date || {};
-wv.date.timeline = wv.date.timeline || {};
-
+import $ from 'jquery';
 /**
  * Perform timeline tick functions
- *
- * @class wv.date.timeline.ticks
  */
-wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui) {
+export default function(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
 
@@ -28,8 +20,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui)
     self.all = d3.selectAll('.x.axis>g.tick');
     self.firstElem = self.all[0][0];
     self.firstDate = self.all.data()[0];
-    self.lastDate = self.all.data()[self.all.data()
-      .length - 1];
+    self.lastDate = self.all.data()[self.all.data().length - 1];
     // remove previous classes for labels
     self.all.classed('tick-labeled', false);
   };
@@ -39,13 +30,13 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui)
       self.normal.all.classed('end-tick', false);
       self.normal.firstDate = all.data()[0];
       self.normal.firstElem = all[0][0];
-      self.normal.lastDate = all.data()[all.data()
-        .length - 1];
+      self.normal.lastDate = all.data()[all.data().length - 1];
       self.normal.lastElem = all[0][all[0].length - 1];
       d3.select(self.normal.lastElem)
         .classed('end-tick', true);
     },
     update: function () {
+      var nWidth;
       var ticks = self.normal.all;
 
       ticks.each(function () {
@@ -112,6 +103,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui)
       self.normal.bind();
     },
     init: function () {
+      var nWidth;
       var ticks = self.normal.all;
 
       ticks.selectAll('line')
@@ -158,6 +150,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui)
       self.normal.background = self.all.selectAll('rect.normaltick-background');
     },
     bind: function () {
+      var d;
       self.normal.background
         .on('mouseenter', function () {
           d = d3.select(this.parentNode)
@@ -314,6 +307,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui)
         .selectAll('rect.boundarytick-foreground');
     },
     bind: function () {
+      var d;
       self.boundary.background
         .on('mouseenter', function () {
           d = d3.select(this.parentNode)
@@ -344,7 +338,8 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui)
       model.select(date);
     },
     labelOnly: function (d) {
-      var labeled = d3.selectAll('.x.axis>g.label-only');
+      // not needed ?!?
+      d3.selectAll('.x.axis>g.label-only');
     }
   };
 
@@ -369,6 +364,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui)
 
   self.label = { // TODO: Update, this is just copied over
     show: function (d) {
+      var $boundaryTick;
       var tick = this.parentNode;
       var boundaryTick, boundaryTickWidth;
 
@@ -440,7 +436,7 @@ wv.date.timeline.ticks = wv.date.timeline.ticks || function (models, config, ui)
   };
 
   self.check = function () {
-    var first, last, proto, end;
+    var proto, end, protoNorm;
     self.setAll();
     tl.ticks.removePaddingData();
     self.setAll();

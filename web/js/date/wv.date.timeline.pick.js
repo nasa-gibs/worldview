@@ -1,16 +1,8 @@
-/**
- * @module wv.date.timeline
- */
-var wv = wv || {};
-wv.date = wv.date || {};
-wv.date.timeline = wv.date.timeline || {};
-
+import $ from 'jquery';
 /**
  * Implements the timeline pick
- *
- * @class wv.date.timeline.pick
  */
-wv.date.timeline.pick = wv.date.timeline.pick || function (models, config, ui) {
+export default function(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
 
@@ -88,9 +80,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function (models, config, ui) {
     });
 
   var change = function () {
-    var d;
     var newDate = tipDate;
-    var tick, tickBg;
 
     tl.guitarPick
       .attr('transform', 'translate(' + self.offset + ',' + 0 + ')');
@@ -106,7 +96,7 @@ wv.date.timeline.pick = wv.date.timeline.pick || function (models, config, ui) {
     self.hoverDate(newDate);
   };
   self.hoverDate = function (date) {
-    var d;
+    var d, tickBg;
 
     tl.zoom.current.pick.hoverTick(date);
     tickBg = tl.zoom.current.pick.hoveredTick

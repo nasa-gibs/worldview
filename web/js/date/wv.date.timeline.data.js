@@ -1,18 +1,8 @@
-/**
- * @module wv.date.timeline
- */
-var wv = wv || {};
-wv.date = wv.date || {};
-wv.date.timeline = wv.date.timeline || {};
+import $ from 'jquery';
+import util from '../util/util';
 
-/**
- * Perform timeline data functions
- *
- * @class wv.date.timeline.data
- */
-wv.date.timeline.data = wv.date.timeline.data || function (models, config, ui) {
+export default function(models, config, ui) {
   var tl = ui.timeline;
-  var model = models.date;
 
   var self = {};
 
@@ -22,8 +12,8 @@ wv.date.timeline.data = wv.date.timeline.data || function (models, config, ui) {
 
   self.end = function () {
     return new Date(
-      new Date(wv.util.today())
-        .setUTCDate(wv.util.today()
+      new Date(util.today())
+        .setUTCDate(util.today()
           .getUTCDate()));
   };
 
@@ -57,8 +47,7 @@ wv.date.timeline.data = wv.date.timeline.data || function (models, config, ui) {
 
     $(activeLayersDynamic)
       .each(function (al) {
-        var layerStart, layerEnd, layerXY;
-        var layerVisible = true;
+        var layerStart, layerEnd;
         var staticLayer = true;
         var layerId = this.id;
 
@@ -90,7 +79,6 @@ wv.date.timeline.data = wv.date.timeline.data || function (models, config, ui) {
           currentDB.classed('data-bar-dyn', true);
         }
         if (this.visible === false) {
-          layerVisible = false;
           currentDB.classed('data-bar-invisible', true);
         }
       });

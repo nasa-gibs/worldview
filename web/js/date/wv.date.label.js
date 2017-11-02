@@ -1,15 +1,12 @@
-/**
- * @module wv.date
- */
-var wv = wv || {};
-wv.date = wv.date || {};
+import $ from 'jquery';
+import util from '../util/util';
 
 /**
  * Undocumented.
  *
  * @class wv.date.label
  */
-wv.date.label = wv.date.label || function (models) {
+export default function (models) {
   var id = 'timedsdateHolder';
   var $container = $('#' + id);
   var model = models.date;
@@ -22,7 +19,7 @@ wv.date.label = wv.date.label || function (models) {
   };
 
   var update = function () {
-    $container.html(wv.util.toISOStringDate(model.selected));
+    $container.html(util.toISOStringDate(model.selected));
   };
 
   init();
