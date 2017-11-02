@@ -1,6 +1,6 @@
 // External Dependencies
 import $ from 'jquery';
-import { each } from 'lodash';
+import each from 'lodash/each';
 import {GA as googleAnalytics} from 'worldview-components';
 
 // Utils
