@@ -3,7 +3,7 @@ import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
-import {GA as googleAnalytics} from 'worldview-components';
+import Share, {GA as googleAnalytics} from 'worldview-components';
 import util from './util/util';
 import wvui from './ui/ui';
 
@@ -12,7 +12,7 @@ export function linkUI(models, config) {
   var id = 'wv-link-button';
   var selector = '#' + id;
   var $button, $label;
-  var widgetFactory = React.createFactory(WVC.Share);
+  var widgetFactory = React.createFactory(Share);
   var clipboard = new Clipboard('.copy-btn');
 
   var init = function () {
@@ -145,7 +145,7 @@ export function linkUI(models, config) {
       dialogWidth = '242';
     }
 
-    var Widget = self.initWidget();
+    Widget = self.initWidget();
 
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
