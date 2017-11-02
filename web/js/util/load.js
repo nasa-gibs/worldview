@@ -1,9 +1,9 @@
 import $ from 'jquery';
-import { size } from 'lodash';
-import { default as uiUtils } from '../ui/ui.js';
-import { default as brand } from '../brand.js';
+import size from 'lodash';
+import wvui from '../ui/ui.js';
+import brand from '../brand.js';
 
-export default (function () {
+export const load = (function () {
   var self = {};
   var configPromises = {};
   var loading = 0;
@@ -25,7 +25,7 @@ export default (function () {
       promise = $.getJSON(brand.url(url));
       if (loading === 1) {
         indicatorTimeout = setTimeout(function () {
-          indicatorId = uiUtils.indicator.loading();
+          indicatorId = wvui.indicator.loading();
         }, 2000);
       }
       promise.done(function (result) {
@@ -37,10 +37,10 @@ export default (function () {
           if (loading === 0) {
             clearTimeout(indicatorTimeout);
             indicatorTimeout = null;
-            uiUtils.indicator.hide(indicatorId);
+            wvui.indicator.hide(indicatorId);
           }
         })
-        .fail(uiUtils.error);
+        .fail(wvui.error);
 
       configPromises[url] = promise;
     }

@@ -1,6 +1,6 @@
 import { each, pull } from 'lodash';
 
-export default function () {
+export function events () {
   var self = {};
 
   // Object of event types. Each event type is an array of listeners.

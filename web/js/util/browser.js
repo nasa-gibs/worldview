@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-export default (function () {
+export const browser = (function () {
   var self = {};
 
   /**

@@ -1,2 +1,2 @@
 /* This file is just a stub to test the browserify build task */
-export default function () {};
+export function brand () {};

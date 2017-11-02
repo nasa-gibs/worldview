@@ -2,12 +2,12 @@
 
 import $ from 'jquery';
 import { each, isNull } from 'lodash';
-import { default as uiUtils } from '../ui/ui.js';
-import { default as browser } from './browser.js';
-import { default as events } from './events.js';
-import { default as load } from './load.js';
+import wvui from '../ui/ui.js';
+import browser from './browser.js';
+import events from './events.js';
+import load from './load.js';
 
-export default (function () {
+export const util = (function () {
   var self = {};
   var canvas = null;
 
@@ -535,7 +535,7 @@ export default (function () {
    * @param {Exception} cause The exception object that caused the error
    */
   self.error = function (message, cause) {
-    uiUtils.error(message, cause);
+    wvui.error(message, cause);
   };
 
   /**

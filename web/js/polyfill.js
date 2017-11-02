@@ -6,9 +6,9 @@
 // ===========================================================================
 
 import $ from 'jquery';
-import { default as browser } from './util/browser.js';
+import util from './util/util.js';
 
-export default function () {
+export function polyfill () {
   /*
    * Date.toISOString
    *
@@ -84,7 +84,7 @@ export default function () {
    *
    * https://developer.mozilla.org/en-US/docs/Web/API/Window.setTimeout
    */
-  if (browser.ie && browser.version <= 9) {
+  if (util.browser.ie && util.browser.version <= 9) {
     (function () {
       var __nativeST__ = window.setTimeout,
         __nativeSI__ = window.setInterval;
