@@ -1,6 +1,8 @@
 export { stub, stub2 } from './stub';
 export { polyfill } from './polyfill';
 export { util } from './util/util';
+export { imagePanel } from './image/image.panel';
+export { imageRubberband } from './image/image.rubberband';
 export { linkModel } from './link/link.model';
 export { linkUi } from './link/link.ui';
 export { parse as layerParser, validate as layerValidate } from './layers/layers';
