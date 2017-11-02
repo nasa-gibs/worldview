@@ -1,13 +1,11 @@
-/**
- * @module wv.layers
- */
-var wv = wv || {};
-wv.layers = wv.layers || {};
+import $ from 'jquery';
+import find from 'lodash/find';
+import indexOf from 'lodash/indexOf';
+import sortBy from 'lodash/sortBy';
+import startCase from 'lodash/startCase';
+import util from '../util/util';
 
-/**
- * @class wv.layers.modal
- */
-wv.layers.modal = wv.layers.modal || function (models, ui, config) {
+export function layersModal(models, ui, config) {
   var model = models.layers;
   var self = {};
   self.selector = '#layer-modal';
@@ -38,8 +36,8 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
       if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
       return layer;
     });
-    return _.sortBy(filteredLayers, function (layer) {
-      return _.indexOf(config.layerOrder, layer.id);
+    return sortBy(filteredLayers, function (layer) {
+      return indexOf(config.layerOrder, layer.id);
     });
   };
 
@@ -543,7 +541,7 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
                 }).on('ifChecked', addLayer)
                   .on('ifUnchecked', removeLayer);
 
-                if (_.find(model.active, {id: layer.id})) {
+                if (find(model.active, {id: layer.id})) {
                   $setting.attr('checked', 'checked');
                 }
 
@@ -558,7 +556,7 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
                 if (layer.layergroup && layer.layergroup.indexOf('reference_orbits') !== -1) {
                   var orbitTitle;
                   if (layer.daynight && layer.track) {
-                    orbitTitle = _.startCase(layer.track) + '/' + _.startCase(layer.daynight);
+                    orbitTitle = startCase(layer.track) + '/' + startCase(layer.daynight);
                   }
 
                   $label.empty()
@@ -780,17 +778,17 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
   };
 
   var onLayerAdded = function (layer) {
-    var $element = $(self.selector + ' [data-layer=\'' + wv.util.jqueryEscape(layer.id) + '\']');
+    var $element = $(self.selector + ' [data-layer=\'' + util.jqueryEscape(layer.id) + '\']');
     $element.iCheck('check');
   };
 
   var onLayerRemoved = function (layer) {
-    var $element = $(self.selector + ' [data-layer=\'' + wv.util.jqueryEscape(layer.id) + '\']');
+    var $element = $(self.selector + ' [data-layer=\'' + util.jqueryEscape(layer.id) + '\']');
     $element.iCheck('uncheck');
   };
 
   var unfocusInput = function () {
-    if (!wv.util.browser.small) {
+    if (!util.browser.small) {
       $('#layers-search-input').focus();
     } else {
       $('#layers-search-input').blur();

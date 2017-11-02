@@ -1,17 +1,16 @@
-/**
- * @module wv.layers
- */
-var wv = wv || {};
-wv.layers = wv.layers || {};
+import each from 'lodash/each';
+import eachRight from 'lodash/eachRight';
+import filter from 'lodash/filter';
+import find from 'lodash/find';
+import findIndex from 'lodash/findIndex';
+import isUndefined from 'lodash/isUndefined';
+import util from '../util/util';
 
-/**
- * @class wv.layers.model
- */
-wv.layers.model = wv.layers.model || function (models, config) {
+export function layersModel(models, config) {
   var self = {};
 
   var split = 0;
-  self.events = wv.util.events();
+  self.events = util.events();
 
   self.active = [];
 
@@ -22,7 +21,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   self.reset = function () {
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
-      _.each(config.defaults.startingLayers, function (start) {
+      each(config.defaults.startingLayers, function (start) {
         self.add(start.id, start);
       });
     }
@@ -87,7 +86,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   // if the layer exists in the active layer list
   self.exists = function (layer) {
     var found = false;
-    _.each(self.active, function (current) {
+    each(self.active, function (current) {
       if (layer === current.id) {
         found = true;
       }
@@ -98,7 +97,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   self.dateRange = function (spec) {
     spec = spec || {};
     var projId = spec.projId || models.proj.selected.id;
-    var layers = (spec.layer) ? [_.find(self.active, {
+    var layers = (spec.layer) ? [find(self.active, {
       id: spec.layer
     })]
       : self.active;
@@ -108,16 +107,16 @@ wv.layers.model = wv.layers.model || function (models, config) {
     if (ignoreRange) {
       return {
         start: new Date(Date.UTC(1970, 0, 1)),
-        end: wv.util.today()
+        end: util.today()
       };
     }
     var min = Number.MAX_VALUE;
     var max = 0;
     var range = false;
-    _.each(layers, function (def) {
+    each(layers, function (def) {
       if (def.startDate) {
         range = true;
-        var start = wv.util.parseDateUTC(def.startDate)
+        var start = util.parseDateUTC(def.startDate)
           .getTime();
         min = Math.min(min, start);
       }
@@ -125,25 +124,25 @@ wv.layers.model = wv.layers.model || function (models, config) {
       // an ongoing product unless it is marked as inactive.
       if (def.inactive && def.endDate) {
         range = true;
-        var end = wv.util.parseDateUTC(def.endDate)
+        var end = util.parseDateUTC(def.endDate)
           .getTime();
         max = Math.max(max, end);
       } else if (def.endDate) {
         range = true;
-        max = wv.util.today()
+        max = util.today()
           .getTime();
       }
       // If there is a start date but no end date, this is a
       // product that is currently being created each day, set
       // the max day to today.
       if (def.startDate && !def.endDate) {
-        max = wv.util.today()
+        max = util.today()
           .getTime();
       }
     });
     if (range) {
       if (max === 0) {
-        max = wv.util.today()
+        max = util.today()
           .getTime();
       }
       return {
@@ -154,7 +153,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.add = function (id, spec) {
-    if (_.find(self.active, {
+    if (find(self.active, {
       id: id
     })) {
       return;
@@ -165,12 +164,12 @@ wv.layers.model = wv.layers.model || function (models, config) {
       throw new Error('No such layer: ' + id);
     }
     def.visible = true;
-    if (!_.isUndefined(spec.visible)) {
+    if (!isUndefined(spec.visible)) {
       def.visible = spec.visible;
-    } else if (!_.isUndefined(spec.hidden)) {
+    } else if (!isUndefined(spec.hidden)) {
       def.visible = !spec.hidden;
     }
-    def.opacity = (_.isUndefined(spec.opacity)) ? 1.0 : spec.opacity;
+    def.opacity = (isUndefined(spec.opacity)) ? 1.0 : spec.opacity;
     if (def.group === 'overlays') {
       self.active.unshift(def);
       split += 1;
@@ -182,7 +181,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.remove = function (id) {
-    var index = _.findIndex(self.active, {
+    var index = findIndex(self.active, {
       id: id
     });
     var def = self.active[index];
@@ -197,7 +196,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.replace = function (idOld, idNew) {
-    var index = _.findIndex(self.active, {
+    var index = findIndex(self.active, {
       id: idOld
     });
     if (index < 0) {
@@ -215,7 +214,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   self.clear = function (projId) {
     projId = projId || models.proj.selected.id;
     var defs = self.active.slice(0);
-    _.each(defs, function (def) {
+    each(defs, function (def) {
       if (projId && def.projections[projId]) {
         self.remove(def.id);
       }
@@ -223,7 +222,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.pushToBottom = function (id) {
-    var oldIndex = _.findIndex(self.active, {
+    var oldIndex = findIndex(self.active, {
       id: id
     });
     if (oldIndex < 0) {
@@ -241,7 +240,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.moveBefore = function (sourceId, targetId) {
-    var sourceIndex = _.findIndex(self.active, {
+    var sourceIndex = findIndex(self.active, {
       id: sourceId
     });
     if (sourceIndex < 0) {
@@ -249,7 +248,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
     }
     var sourceDef = self.active[sourceIndex];
 
-    var targetIndex = _.findIndex(self.active, {
+    var targetIndex = findIndex(self.active, {
       id: targetId
     });
     if (targetIndex < 0) {
@@ -266,7 +265,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.setVisibility = function (id, visible) {
-    var def = _.find(self.active, {
+    var def = find(self.active, {
       id: id
     });
     if (def.visible !== visible) {
@@ -277,7 +276,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.setOpacity = function (id, opacity) {
-    var def = _.find(self.active, {
+    var def = find(self.active, {
       id: id
     });
     if (def.opacity !== opacity) {
@@ -288,7 +287,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.isRenderable = function (id) {
-    var def = _.find(self.active, {
+    var def = find(self.active, {
       id: id
     });
     if (!def) {
@@ -304,7 +303,7 @@ wv.layers.model = wv.layers.model || function (models, config) {
       return true;
     }
     var obscured = false;
-    _.each(self.get({
+    each(self.get({
       group: 'baselayers'
     }), function (otherDef) {
       if (otherDef.id === def.id) {
@@ -322,8 +321,8 @@ wv.layers.model = wv.layers.model || function (models, config) {
   self.save = function (state) {
     var defs = self.get();
     state.l = state.l || [];
-    _.each(self.get(), function (def) {
-      var lstate = _.find(state.l, {
+    each(self.get(), function (def) {
+      var lstate = find(state.l, {
         id: def.id
       });
       if (!lstate) {
@@ -350,9 +349,9 @@ wv.layers.model = wv.layers.model || function (models, config) {
   };
 
   self.load = function (state, errors) {
-    if (!_.isUndefined(state.l)) {
+    if (!isUndefined(state.l)) {
       self.clear(models.proj.selected.id);
-      _.eachRight(state.l, function (layerDef) {
+      eachRight(state.l, function (layerDef) {
         if (!config.layers[layerDef.id]) {
           errors.push({
             message: 'No such layer: ' + layerDef.id
@@ -361,12 +360,12 @@ wv.layers.model = wv.layers.model || function (models, config) {
         }
         var hidden = false;
         var opacity = 1.0;
-        _.each(layerDef.attributes, function (attr) {
+        each(layerDef.attributes, function (attr) {
           if (attr.id === 'hidden') {
             hidden = true;
           }
           if (attr.id === 'opacity') {
-            opacity = wv.util.clamp(parseFloat(attr.value), 0, 1);
+            opacity = util.clamp(parseFloat(attr.value), 0, 1);
             if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
           }
         });
@@ -382,10 +381,10 @@ wv.layers.model = wv.layers.model || function (models, config) {
     spec = spec || {};
     var projId = spec.proj || models.proj.selected.id;
     var results = [];
-    var defs = _.filter(self.active, {
+    var defs = filter(self.active, {
       group: group
     });
-    _.each(defs, function (def) {
+    each(defs, function (def) {
       // Skip if this layer isn't available for the selected projection
       if (!def.projections[projId]) {
         return;

@@ -1,10 +1,11 @@
 import $ from 'jquery';
-import { each, eachRight } from 'lodash';
+import each from 'lodash/each';
+import eachRight from 'lodash/eachRight';
 import util from '../util/util';
-import uiUtils from '../ui/ui';
+import wvui from '../ui/ui';
 import layersInfo from '../layers/layers.info';
 import layersOptions from '../layers/layers.options';
-import palettesLegend from './palettes/palettes.legend';
+import palettesLegend from '../palettes/palettes.legend';
 
 export function layersActive(models, ui, config) {
   var model = models.layers;
@@ -275,10 +276,10 @@ export function layersActive(models, ui, config) {
     if ($i.length === 0) {
       layersInfo(config, models, thisLayer);
     } else if ($i.attr('data-layer') !== thisLayerId) {
-      uiUtils.closeDialog();
+      wvui.closeDialog();
       layersInfo(config, models, thisLayer);
     } else {
-      uiUtils.closeDialog();
+      wvui.closeDialog();
     }
   };
 
@@ -291,10 +292,10 @@ export function layersActive(models, ui, config) {
     if ($d.length === 0) {
       layersOptions(config, models, thisLayer);
     } else if ($d.attr('data-layer') !== thisLayerId) {
-      uiUtils.closeDialog();
+      wvui.closeDialog();
       layersOptions(config, models, thisLayer);
     } else {
-      uiUtils.closeDialog();
+      wvui.closeDialog();
     }
   };
 
@@ -337,7 +338,7 @@ export function layersActive(models, ui, config) {
     } else {
       $('.wv-layers-options').hide();
       $('.wv-layers-info').hide();
-      uiUtils.closeDialog();
+      wvui.closeDialog();
     }
 
     // FIXME: -10 here is the timeline's bottom position from page, fix

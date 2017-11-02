@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import { each, find, throttle } from 'lodash';
+import each from 'lodash/each';
+import find from 'lodash/find';
+import throttle from 'lodash/throttle';
 import util from '../util/util';
 
 export function layersAdd(models, ui, config) {

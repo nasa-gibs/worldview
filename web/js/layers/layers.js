@@ -1,4 +1,6 @@
-import { cloneDeep, each, remove } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import each from 'lodash/each';
+import remove from 'lodash/remove';
 
 // Permalink versions 1.0 and 1.1
 var parse11 = function (state, errors, config) {

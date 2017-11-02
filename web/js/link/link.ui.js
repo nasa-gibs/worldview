@@ -1,11 +1,11 @@
 import $ from 'jquery';
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
 import Share, {GA as googleAnalytics} from 'worldview-components';
 import util from '../util/util';
-import uiUtils from '../ui/ui';
+import wvui from '../ui/ui';
 
 export function linkUi(models, config) {
   var self = {};
@@ -39,7 +39,7 @@ export function linkUi(models, config) {
         if (checked) {
           self.show();
         } else {
-          uiUtils.closeDialog();
+          wvui.closeDialog();
         }
       });
     models.link.events.on('update', replaceHistoryState);
@@ -124,7 +124,7 @@ export function linkUi(models, config) {
   };
 
   self.show = function () {
-    var $dialog = uiUtils.getDialog();
+    var $dialog = wvui.getDialog();
     var item = '<div id=\'wv-link\' class=\'wv-link\'>' +
       '<div class=\'input-group\'>' +
       '<input type=\'text\' value=\'\' name=\'permalink_content\' id=\'permalink_content\' readonly/>' +
@@ -189,13 +189,13 @@ export function linkUi(models, config) {
         models.link.events.off('update', updateLink);
       });
     if (util.browser.small) {
-      uiUtils.positionDialog($dialog, {
+      wvui.positionDialog($dialog, {
         my: 'left top',
         at: 'left+58 bottom+5',
         of: '#wv-toolbar'
       });
     } else {
-      uiUtils.positionDialog($dialog, {
+      wvui.positionDialog($dialog, {
         my: 'left top',
         at: 'left bottom+5',
         of: $label
@@ -243,7 +243,7 @@ export function linkUi(models, config) {
     var error = function () {
       console.warn('Unable to shorten URL');
       console.warn.apply(console, arguments);
-      uiUtils.notify('Unable to shorten the permalink at this time. ' +
+      wvui.notify('Unable to shorten the permalink at this time. ' +
         'Please try again later.');
     };
 

@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import { each, map, isArray, isObject } from 'lodash';
+import each from 'lodash/each';
+import map from 'lodash/map';
+import isArray from 'lodash/isArray';
+import isObject from 'lodash/isObject';
 import util from '../util/util';
 
 export function linkModel(config) {
