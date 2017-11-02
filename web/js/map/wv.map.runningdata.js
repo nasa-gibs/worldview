@@ -1,9 +1,7 @@
 import $ from 'jquery';
 import util from '../util/util';
-import {
-  differenced as _difference,
-  each as _each
-} from 'lodash';
+import _difference from 'lodash/difference';
+import _each from 'lodash/each';
 
 export default function(models) {
   var self;

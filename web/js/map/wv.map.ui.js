@@ -1,12 +1,10 @@
 import $ from 'jquery';
 import ol from 'openlayers';
-import {
-  forOwn as _forOwn,
-  each as _each,
-  findIndex as _findIndex,
-  find as _find,
-  throttle as _throttle
-} from 'lodash';
+import _findIndex from 'lodash/findIndex';
+import _each from 'lodash/each';
+import _forOwn from 'lodash/forOwn';
+import _throttle from 'lodash/throttle';
+import _find from 'lodash/find';
 import util from '../util/util';
 
 export default function(models, config, components) {

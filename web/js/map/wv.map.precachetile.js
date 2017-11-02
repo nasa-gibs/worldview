@@ -1,4 +1,4 @@
-import {each as _each} from 'lodash';
+import _each from 'lodash/each';
 import ol from 'openlayers';
 
 export default function (models, config, cache, parent) {

@@ -1,7 +1,8 @@
-import {
-  map as _map, each as _each,
-  isUndefined as _isUndefined, find as _find
-} from 'lodash';
+
+import _map from 'lodash/map';
+import _each from 'lodash/each';
+import _isUndefined from 'lodash/isUndefined';
+import _find from 'lodash/find';
 import ol from 'openlayers';
 /*
  * Checks to see if an extents string is found. If it exist

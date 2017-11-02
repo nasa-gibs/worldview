@@ -1,10 +1,8 @@
 import util from '../util/util';
 import ol from 'openlayers';
-import {
-  cloneDeep as _cloneDeep,
-  merge as _merge,
-  each as _each
-} from 'lodash';
+import _cloneDeep from 'lodash/cloneDeep';
+import _merge from 'lodash/merge';
+import _each from 'lodash/each';
 
 export default function(models, config, cache, Parent) {
   var self = {};

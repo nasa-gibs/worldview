@@ -1,6 +1,6 @@
 import ol from 'openlayers';
 import util from '../util/util';
-import { clone as _clone } from 'lodash';
+import _clone from 'lodash/clone';
 
 export default function(models, config) {
   var self = {};
