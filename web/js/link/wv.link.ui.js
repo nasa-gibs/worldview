@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import { throttle } from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
@@ -46,7 +46,7 @@ export function linkUI(models, config) {
   };
 
   // Calls toQueryString to fetch updated state and returns URL
-  var replaceHistoryState = _.throttle(function () {
+  var replaceHistoryState = throttle(function () {
     if (util.browser.history) {
       window.history.replaceState('', '@OFFICIAL_NAME@', '?' + models.link.toQueryString());
     }
@@ -145,7 +145,7 @@ export function linkUI(models, config) {
       dialogWidth = '242';
     }
 
-    Widget = self.initWidget();
+    var Widget = self.initWidget();
 
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);

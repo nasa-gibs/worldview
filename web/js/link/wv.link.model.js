@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import _ from 'lodash';
+import { each, map, isArray, isObject } from 'lodash';
 import util from './util/util';
 
 export function linkModel(config) {
@@ -43,19 +43,19 @@ export function linkModel(config) {
   // Returns a serialized string containing information of the current session
   self.toQueryString = function () {
     var state = {};
-    _.each(components, function (component) {
+    each(components, function (component) {
       component.save(state);
     });
-    var strings = _.map(state, function (value, key) {
-      if (_.isArray(value)) {
+    var strings = map(state, function (value, key) {
+      if (isArray(value)) {
         var parts = [];
-        _.each(value, function (item) {
+        each(value, function (item) {
           var part = '';
-          if (_.isObject(item)) {
+          if (isObject(item)) {
             part = item.id;
             if (item.attributes && item.attributes.length > 0) {
               var attributes = [];
-              _.each(item.attributes, function (attribute) {
+              each(item.attributes, function (attribute) {
                 if (attribute.value) {
                   attributes.push(attribute.id + '=' + attribute.value);
                 } else {
@@ -108,14 +108,14 @@ export function linkModel(config) {
 
   self.load = function (state, errors) {
     errors = errors || [];
-    _.each(components, function (component) {
+    each(components, function (component) {
       component.load(state, errors);
     });
   };
 
   var encode = function (value) {
     var encoded = encodeURIComponent(value);
-    _.each(ENCODING_EXCEPTIONS, function (exception) {
+    each(ENCODING_EXCEPTIONS, function (exception) {
       encoded = encoded.replace(exception.match, exception.replace);
     });
     return encoded;
