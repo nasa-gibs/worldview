@@ -62,9 +62,8 @@ import NotificationsUI from './notifications/notifications.ui';
 // UI
 import {loadingIndicator} from './ui/ui.indicator'; // not a class, export object
 // Link
-import LinkModel from './link/link.model';
-import LinkUI from './link/link.ui';
-import LinkInfo from './link/link.info';
+import linkModel from './link/link.model';
+import linkUI from './link/link.ui';
 // Projections
 import projectionParser from './proj/proj';
 import ProjectionModel from './proj/proj.model';
@@ -183,7 +182,7 @@ window.onload = () => {
       initial: initialDate
     });
     models.map = MapModel(models, config);
-    models.link = LinkModel(config);
+    models.link = linkModel(config);
 
     models.link
       .register(models.proj)
@@ -268,7 +267,7 @@ window.onload = () => {
     if (config.features.naturalEvents) {
       ui.naturalEvents = NaturalEventsUI(models, ui, config, NaturalEventsRequest(models, ui, config));
     }
-    ui.link = LinkUI(models, config);
+    ui.link = linkUI(models, config);
     ui.tour = Tour(models, ui, config);
     ui.info = LinkInfo(ui, config);
     if (config.features.alert) {

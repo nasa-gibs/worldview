@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { each, map, isArray, isObject } from 'lodash';
-import util from './util/util';
+import util from '../util/util';
 
 export function linkModel(config) {
   var self = {};

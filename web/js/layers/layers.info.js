@@ -1,7 +1,7 @@
-var wv = wv || {};
-wv.layers = wv.layers || {};
+import $ from 'jquery';
+import wvui from '../ui/ui';
 
-wv.layers.info = wv.layers.info || function (config, models, layer) {
+export function layersInfo(config, models, layer) {
   var $dialog;
   var self = {};
 
@@ -12,7 +12,7 @@ wv.layers.info = wv.layers.info || function (config, models, layer) {
   var loaded = function (custom) {
     var names;
 
-    $dialog = wv.ui.getDialog();
+    $dialog = wvui.getDialog();
     $dialog
       .attr('id', 'wv-layers-info-dialog')
       .attr('data-layer', layer.id);
@@ -54,14 +54,12 @@ wv.layers.info = wv.layers.info || function (config, models, layer) {
 
   var dispose = function () {
     $dialog = null;
-    wv.ui.closeDialog();
+    wvui.closeDialog();
   };
 
   var renderDescription = function ($dialog) {
     var $layerMeta = $('<div></div>')
       .addClass('layer-metadata source-metadata');
-    var $layerMetaTitle = $('<a>Layer Description</a>')
-      .addClass('layer-metadata-title');
 
     if (layer.description) {
       $.get('config/metadata/' + layer.description + '.html')
