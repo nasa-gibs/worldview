@@ -1,4 +1,5 @@
-
+import _ from 'lodash';
+import ol from 'openlayers';
 /*
  * Checks to see if an extents string is found. If it exist
  * then it is changed from a string to an array which is then
@@ -25,7 +26,7 @@ export function parse(state, errors) {
     var extent = _.map(state.v.split(','), function (str) {
       return parseFloat(str);
     });
-    var valid = wv.map.isExtentValid(extent);
+    var valid = isExtentValid(extent);
     if (!valid) {
       errors.push({
         message: 'Invalid extent: ' + state.v
@@ -48,7 +49,7 @@ export function parse(state, errors) {
  * @return {boolean} False if any of the values is NaN, otherwise returns
  * true.
  */
-export function isExtentValid(extent) {
+var isExtentValid = function(extent) {
   if (_.isUndefined(extent)) {
     return false;
   }
@@ -284,7 +285,6 @@ export function toPolys(geom) {
   }
   return [geom];
 };
-
 
 /* FIXME OL3
 wv.map.mock = function() {
