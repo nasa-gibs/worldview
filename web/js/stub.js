@@ -3,9 +3,11 @@
 import { jQuery as $ } from 'jquery';
 import { GA } from 'worldview-components';
 import linkModel from './link/link.model';
-import linkUI from './link/link.ui';
+import linkUi from './link/link.ui';
+import { parse as layerParse, validate as layerValidate } from './layers/layers';
+import layersAdd from './layers/layers.add';
 import layersInfo from './layers/layers.info';
 
 export default function () {
-  console.log($, GA, linkUI, linkModel, layersInfo);
+  console.log($, GA, linkUi, linkModel, layerParse, layerValidate, layersAdd, layersInfo);
 };

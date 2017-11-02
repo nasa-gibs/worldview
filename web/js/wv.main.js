@@ -21,7 +21,7 @@ import TimelinePick from './date/date.timeline.pick';
 import TimelinePan from './date/date.timeline.pan';
 import TimelineInput from './date/date.timeline.input';
 // Layers
-import {layerParser, layerValidate} from './layers/layers'; // export parse as layerParser. etc...
+import {parse as layerParser, validate as layerValidate} from './layers/layers'; // export parse as layerParser. etc...
 import LayersModel from './layers/layers.model';
 import LayersModal from './layers/layers.modal';
 import LayersSidebar from './layers/layers.sidebar';
@@ -63,7 +63,7 @@ import NotificationsUI from './notifications/notifications.ui';
 import {loadingIndicator} from './ui/ui.indicator'; // not a class, export object
 // Link
 import linkModel from './link/link.model';
-import linkUI from './link/link.ui';
+import linkUi from './link/link.ui';
 // Projections
 import projectionParser from './proj/proj';
 import ProjectionModel from './proj/proj.model';
@@ -267,7 +267,7 @@ window.onload = () => {
     if (config.features.naturalEvents) {
       ui.naturalEvents = NaturalEventsUI(models, ui, config, NaturalEventsRequest(models, ui, config));
     }
-    ui.link = linkUI(models, config);
+    ui.link = linkUi(models, config);
     ui.tour = Tour(models, ui, config);
     ui.info = LinkInfo(ui, config);
     if (config.features.alert) {

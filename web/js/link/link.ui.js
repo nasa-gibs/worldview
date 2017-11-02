@@ -7,7 +7,7 @@ import Share, {GA as googleAnalytics} from 'worldview-components';
 import util from '../util/util';
 import wvui from '../ui/ui';
 
-export function linkUI(models, config) {
+export function linkUi(models, config) {
   var self = {};
   var id = 'wv-link-button';
   var selector = '#' + id;
