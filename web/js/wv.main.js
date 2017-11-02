@@ -5,7 +5,6 @@ import {GA as googleAnalytics} from 'worldview-components';
 
 // Utils
 import util from './util/util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
-import browser from './util/util.browser';
 // Date
 import {dateParser} from './date/date'; // export default function parse!!!
 import DateModel from './date/date.model';
@@ -73,6 +72,9 @@ import ProjectionChange from './proj/proj.change';
 import {debugConfig, debug} from './debug';
 import Brand from './brand';
 import Tour from './tour';
+
+import polyfill from './polyfill';
+polyfill(); // Polyfills some browser features
 
 // Document ready function
 window.onload = () => {
@@ -251,7 +253,7 @@ window.onload = () => {
       ui.dateLabel = DateLabel(models);
     }
     if (config.startDate) {
-      if (!browser.small) { // If mobile device, do not build timeline
+      if (!util.browser.small) { // If mobile device, do not build timeline
         timelineInit();
       }
       ui.dateWheels = DateWheels(models, config);
@@ -277,7 +279,7 @@ window.onload = () => {
     // FIXME: Old hack
     $(window)
       .resize(function() {
-        if (browser.small) {
+        if (util.browser.small) {
           $('#productsHoldertabs li.first a')
             .trigger('click');
         }

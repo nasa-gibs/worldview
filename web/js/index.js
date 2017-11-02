@@ -1,1 +1,16 @@
-export { default as stub } from './stub';
+export { stub, stub2 } from './stub';
+export { polyfill } from './polyfill';
+export { util } from './util/util';
+export { linkModel } from './link/link.model';
+export { linkUi } from './link/link.ui';
+export { parse as layerParser, validate as layerValidate } from './layers/layers';
+export { layersAdd } from './layers/layers.add';
+export { layersActive } from './layers/layers.active';
+export { layersInfo } from './layers/layers.info';
+export { layersModal } from './layers/layers.modal';
+export { layersModel } from './layers/layers.model';
+export { layersOptions } from './layers/layers.options';
+export { layersSidebar } from './layers/layers.sidebar';
+export { palettes } from './palettes/palettes';
+export { palettesLegend } from './palettes/palettes.legend';
+export { palettesModel } from './palettes/palettes.model';
