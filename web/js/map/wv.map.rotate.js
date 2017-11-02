@@ -1,12 +1,8 @@
-var wv = wv || {};
+import $ from 'jquery';
+import util from '../util/util';
 
-wv.map = wv.map || {};
-/*
- * @Class
- */
-wv.map.rotate = wv.map.rotate || function (ui, models, map) {
-  this.evts = wv.util.events();
-  var model = models.map;
+export default function(ui, models, map) {
+  this.evts = util.events();
   this.intervalId = null;
   var self = this;
 
@@ -153,8 +149,7 @@ wv.map.rotate = wv.map.rotate || function (ui, models, map) {
    * @returns {void}
    */
   this.updateRotation = function () {
-    var deg,
-      radians,
+    var radians,
       currentView,
       currentDeg;
 

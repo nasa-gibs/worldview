@@ -8,7 +8,7 @@ import util from '../util/util';
 var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
   lineLeft, lineRight, textLeft, textRight, proj;
 
-export default function datelinebuilder(models, config) {
+export default function (models, config) {
   var self = {};
   /*
    * Sets globals and event listeners

@@ -1,16 +1,12 @@
-var wv = wv || {};
-wv.map = wv.map || {};
+import ol from 'openlayers';
+import util from '../util/util';
+import { clone as _clone } from 'lodash';
 
-// FIXME: The code is like this for historical reasons and should be refactored
-// at some point.
-/*
- * @Class
- */
-wv.map.model = wv.map.model || function (models, config) {
+export default function(models, config) {
   var self = {};
 
   self.extent = null;
-  self.events = wv.util.events();
+  self.events = util.events();
   self.rotation = 0;
   /*
    * Emits update event
@@ -51,7 +47,7 @@ wv.map.model = wv.map.model || function (models, config) {
       if (ol.extent.intersects(extent, maxExtent)) {
         self.extent = state.v;
       } else {
-        self.extent = _.clone(proj.maxExtent);
+        self.extent = _clone(proj.maxExtent);
         errors.push({
           message: 'Extent outside of range'
         });
@@ -76,7 +72,7 @@ wv.map.model = wv.map.model || function (models, config) {
    * @returns {void}
    */
   self.save = function (state) {
-    state.v = _.clone(self.extent);
+    state.v = _clone(self.extent);
     if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic') {
       state.r = (self.rotation * (180.0 / Math.PI))
         .toPrecision(6);
@@ -99,7 +95,7 @@ wv.map.model = wv.map.model || function (models, config) {
    * @returns {object} Extent Array
    */
   self.getLeadingExtent = function () {
-    var curHour = wv.util.now()
+    var curHour = util.now()
       .getUTCHours();
 
     // For earlier hours when data is still being filled in, force a far eastern perspective

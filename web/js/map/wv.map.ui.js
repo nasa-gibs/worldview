@@ -1,10 +1,15 @@
-var wv = wv || {};
-wv.map = wv.map || {};
+import $ from 'jquery';
+import ol from 'openlayers';
+import {
+  forOwn as _forOwn,
+  each as _each,
+  findIndex as _findIndex,
+  find as _find,
+  throttle as _throttle
+} from 'lodash';
+import util from '../util/util';
 
-/*
- * @Class
- */
-wv.map.ui = wv.map.ui || function (models, config, components) {
+export default function(models, config, components) {
   var id = 'wv-map';
   var selector = '#' + id;
   var cache = new Cache(400); // Save layers from days visited
@@ -13,21 +18,18 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var rotation = new components.Rotation(self, models);
   var layerBuilder;
   var dateline = components.Dateline(models, config);
-  var layerKey;
   var createLayer;
   var precache = components.Precache(models, config, cache, self);
 
   var dataRunner = self.runningdata = new components.Runningdata(models);
-  var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
-  var pixelRatio = hiDPI ? 2 : 1;
 
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
-  self.events = wv.util.events();
+  self.events = util.events();
   layerBuilder = self.layerBuilder = components.Layerbuilder(models, config, cache, self);
-  layerKey = self.layerKey = layerBuilder.layerKey;
+  self.layerKey = layerBuilder.layerKey;
   createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
 
@@ -45,7 +47,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     }
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
-    _.forOwn(config.projections, function (proj) {
+    _forOwn(config.projections, function (proj) {
       var map = createMap(proj);
       self.proj[proj.id] = map;
     });
@@ -131,8 +133,8 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
    */
   var onResize = function () {
     var map = self.selected;
-    if (map.small !== wv.util.browser.small) {
-      if (wv.util.browser.small) {
+    if (map.small !== util.browser.small) {
+      if (util.browser.small) {
         map.removeControl(map.wv.scaleImperial);
         map.removeControl(map.wv.scaleMetric);
         $('#' + map.getTarget() + ' .select-wrapper')
@@ -187,7 +189,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     var activeLayers = map.getLayers()
       .getArray()
       .slice(0);
-    _.each(activeLayers, function (mapLayer) {
+    _each(activeLayers, function (mapLayer) {
       if (mapLayer.wv) {
         map.removeLayer(mapLayer);
       }
@@ -213,7 +215,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     var defs = models.layers.get({
       reverse: true
     });
-    _.each(defs, function (def) {
+    _each(defs, function (def) {
       if (isGraticule(def)) {
         addGraticule();
       } else {
@@ -240,7 +242,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       }
     });
     var defs = models.layers.get();
-    _.each(defs, function (def) {
+    _each(defs, function (def) {
       if (isGraticule(def)) {
         var renderable = models.layers.isRenderable(def.id);
         if (renderable) {
@@ -280,7 +282,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
    */
 
   var addLayer = function (def) {
-    var mapIndex = _.findIndex(models.layers.get({
+    var mapIndex = _findIndex(models.layers.get({
       reverse: true
     }), {
       id: def.id
@@ -338,7 +340,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
    */
   var updateDate = function () {
     var defs = models.layers.get();
-    _.each(defs, function (def) {
+    _each(defs, function (def) {
       if (def.period !== 'daily') {
         return;
       }
@@ -362,7 +364,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var updateLookup = function (layerId) {
     // If the lookup changes, all layers in the cache are now stale
     // since the tiles need to be rerendered. Remove from cache.
-    var selectedDate = wv.util.toISOStringDate(models.date.selected);
+    var selectedDate = util.toISOStringDate(models.date.selected);
     var selectedProj = models.proj.selected.id;
     cache.removeWhere(function (key, mapLayer) {
       if (mapLayer.wvid === layerId &&
@@ -395,7 +397,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var findLayer = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = _.find(layers, {
+    var layer = _find(layers, {
       wv: {
         id: def.id
       }
@@ -417,7 +419,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var findLayerIndex = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = _.findIndex(layers, {
+    var layer = _findIndex(layers, {
       wv: {
         id: def.id
       }
@@ -484,7 +486,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     self.selected.graticule = null;
   };
 
-  var triggerExtent = _.throttle(function () {
+  var triggerExtent = _throttle(function () {
     self.events.trigger('extent');
   }, 500, {
     trailing: true
@@ -519,7 +521,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
    */
   var createMap = function (proj) {
     var id, $map, scaleMetric, scaleImperial, rotateInteraction,
-      map, mobileRotation, lineSvgs, resolution;
+      map, mobileRotation;
 
     id = 'wv-map-' + proj.id;
     $map = $('<div></div>')
@@ -598,7 +600,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       map.addInteraction(rotateInteraction);
       map.addInteraction(mobileRotation);
     } else {
-      lineSvgs = dateline.init(self, map, models.date.selected);
+      dateline.init(self, map, models.date.selected);
     }
 
     // Set event listeners for changes on the map view (when rotated, zoomed, panned)
@@ -607,7 +609,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     map.getView()
       .on('change:resolution', updateExtent);
     map.getView()
-      .on('change:rotation', _.throttle(onRotate, 300));
+      .on('change:rotation', _throttle(onRotate, 300));
     map.on('pointerdrag', function () {
       self.mapIsbeingDragged = true;
       self.events.trigger('drag');
@@ -770,7 +772,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
         return crs;
       }
       target = ol.proj.transform(source, proj.crs, 'EPSG:4326');
-      return wv.util.formatCoordinate(target, format) + ' ' + crs;
+      return util.formatCoordinate(target, format) + ' ' + crs;
     };
 
     $map.append($mousePosition);
@@ -784,7 +786,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       .attr('data-format', 'latlon-dms')
       .addClass('map-coord');
 
-    if (wv.util.getCoordinateFormat() === 'latlon-dd') {
+    if (util.getCoordinateFormat() === 'latlon-dd') {
       $('div.map-coord')
         .removeClass('latlon-selected');
       $latlonDD.addClass('latlon-selected');
@@ -814,13 +816,13 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
             .removeClass('latlon-selected');
           $('span.map-coord[data-format="latlon-dms"]')
             .addClass('latlon-selected');
-          wv.util.setCoordinateFormat('latlon-dms');
+          util.setCoordinateFormat('latlon-dms');
         } else {
           $('span.map-coord')
             .removeClass('latlon-selected');
           $('span.map-coord[data-format="latlon-dd"]')
             .addClass('latlon-selected');
-          wv.util.setCoordinateFormat('latlon-dd');
+          util.setCoordinateFormat('latlon-dd');
         }
       });
 
@@ -830,7 +832,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       var outside;
 
       // if mobile return
-      if (wv.util.browser.small) {
+      if (util.browser.small) {
         return;
       }
       // if over coords return
@@ -865,7 +867,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
         });
 
       // setting a limit on running-data retrievel
-      if (self.mapIsbeingDragged || wv.util.browser.small) {
+      if (self.mapIsbeingDragged || util.browser.small) {
         return;
       }
       if (typeof models.naturalEvents === 'undefined' ||
@@ -903,7 +905,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
         hoverThrottle.cancel();
         dataRunner.clearAll();
       })
-      .mousemove(hoverThrottle = _.throttle(onMouseMove, 300));
+      .mousemove(hoverThrottle = _throttle(onMouseMove, 300));
   };
 
   /*
