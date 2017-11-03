@@ -21,10 +21,10 @@ import TimelinePan from './date/date.timeline.pan';
 import TimelineInput from './date/date.timeline.input';
 // Layers
 import {parse as layerParser, validate as layerValidate} from './layers/layers'; // export parse as layerParser. etc...
-import LayersModel from './layers/layers.model';
-import LayersModal from './layers/layers.modal';
-import LayersSidebar from './layers/layers.sidebar';
-import LayersActive from './layers/layers.active';
+import layersModel from './layers/model';
+import layersModal from './layers/modal';
+import layersSidebar from './layers/sidebar';
+import layersActive from './layers/active';
 // Map
 import {mapParser} from './map/map';
 import MapModel from './map/map.model';
@@ -44,7 +44,7 @@ import AnimationRangeselect from './animation/anim.rangeselect';
 import AnimationGIF from './animation/anim.gif';
 // Palettes
 import {palettesParser, paletteRequirements} from './palettes/palettes';
-import PalettesModel from './palettes/palettes.model';
+import palettesModel from './palettes/model';
 // Data
 import dataParser from './data/data';
 import DataModel from './data/data.model';
@@ -54,20 +54,20 @@ import NaturalEventsModel from './naturalEvents/naturalEvents.model';
 import NaturalEventsUI from './naturalEvents/naturalEvents.ui';
 import NaturalEventsRequest from './naturalEvents/naturalEvents.request';
 // Image
-import ImageRubberband from './image/image.rubberband';
-import ImagePanel from './image/image.panel';
+import imageRubberband from './image/rubberband';
+import imagePanel from './image/panel';
 // Notifications
 import NotificationsUI from './notifications/notifications.ui';
 // UI
 import {loadingIndicator} from './ui/ui.indicator'; // not a class, export object
 // Link
-import linkModel from './link/link.model';
-import linkUi from './link/link.ui';
+import linkModel from './link/model';
+import linkUi from './link/ui';
 // Projections
 import projectionParser from './projection/projection';
-import ProjectionModel from './projection/projection.model';
-import ProjectionUi from './projection/projection.ui';
-import ProjectionChange from './projection/projection.change';
+import projectionModel from './projection/model';
+import projectionUi from './projection/ui';
+import projectionChange from './projection/change';
 // Other
 import {debugConfig, debug} from './debug';
 import Brand from './brand';
@@ -177,9 +177,9 @@ window.onload = () => {
     wvx.models = models;
     wvx.ui = ui;
 
-    models.proj = ProjectionModel(config);
-    models.palettes = PalettesModel(models, config);
-    models.layers = LayersModel(models, config);
+    models.proj = projectionModel(config);
+    models.palettes = palettesModel(models, config);
+    models.layers = layersModel(models, config);
     models.date = DateModel(config, {
       initial: initialDate
     });
@@ -223,15 +223,15 @@ window.onload = () => {
     models.link.load(state); // needs to be loaded twice
 
     if (config.features.arcticProjectionChange) {
-      models.proj.change = ProjectionChange(models, config);
+      models.proj.change = projectionChange(models, config);
     }
 
     elapsed('ui');
     // Create widgets
-    ui.proj = ProjectionUi(models, config);
-    ui.sidebar = LayersSidebar(models, config);
-    ui.activeLayers = LayersActive(models, ui, config);
-    ui.addModal = LayersModal(models, ui, config);
+    ui.proj = projectionUi(models, config);
+    ui.sidebar = layersSidebar(models, config);
+    ui.activeLayers = layersActive(models, ui, config);
+    ui.addModal = layersModal(models, ui, config);
 
     function timelineInit() {
       ui.timeline = Timeline(models, config, ui);
@@ -259,8 +259,8 @@ window.onload = () => {
       ui.dateWheels = DateWheels(models, config);
     }
 
-    ui.rubberband = ImageRubberband(models, ui, config);
-    ui.image = ImagePanel(models, ui, config);
+    ui.rubberband = imageRubberband(models, ui, config);
+    ui.image = imagePanel(models, ui, config);
     if (config.features.dataDownload) {
       ui.data = DataUI(models, ui, config);
       // FIXME: Why is this here?

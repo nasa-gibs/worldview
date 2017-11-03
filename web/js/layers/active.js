@@ -3,9 +3,9 @@ import each from 'lodash/each';
 import eachRight from 'lodash/eachRight';
 import util from '../util/util';
 import wvui from '../ui/ui';
-import layersInfo from '../layers/layers.info';
-import layersOptions from '../layers/layers.options';
-import palettesLegend from '../palettes/palettes.legend';
+import layersInfo from './info';
+import layersOptions from './options';
+import palettesLegend from '../palettes/legend';
 
 export function layersActive(models, ui, config) {
   var model = models.layers;

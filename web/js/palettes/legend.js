@@ -3,7 +3,7 @@ import each from 'lodash/each';
 import first from 'lodash/first';
 import last from 'lodash/last';
 import util from '../util/util';
-import palettes from '../palettes/palettes';
+import palettes from './palettes';
 
 export function palettesLegend(spec) {
   var selector = spec.selector;

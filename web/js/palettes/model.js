@@ -5,7 +5,7 @@ import isNaN from 'lodash/isNaN';
 import isUndefined from 'lodash/isUndefined';
 import parseInt from 'lodash/parseInt';
 import util from '../util/util';
-import palettes from '../palettes/palettes';
+import palettes from './palettes';
 
 export function palettesModel(models, config) {
   config.palettes = config.palettes || {
