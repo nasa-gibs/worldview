@@ -784,7 +784,7 @@ export function mapui(models, config, components) {
       if (outsideExtent) {
         return crs;
       }
-      target = ol.proj.transform(source, proj.crs, 'EPSG:4326');
+      target = olProj.transform(source, proj.crs, 'EPSG:4326');
       return util.formatCoordinate(target, format) + ' ' + crs;
     };
 
