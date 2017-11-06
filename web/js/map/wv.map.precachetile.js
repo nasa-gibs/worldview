@@ -1,5 +1,6 @@
-import _each from 'lodash/each';
-import ol from 'openlayers';
+import loEach from 'lodash/each';
+import olExtent from 'ol/extent';
+import OlRendererCanvasTileLayer from 'ol/renderer/canvas/tilelayer';
 
 export function mapPrecacheTile(models, config, cache, parent) {
   /*
@@ -56,7 +57,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
     var layers;
     var arra = [];
     layers = models.layers.get();
-    _each(layers, function (layer) {
+    loEach(layers, function (layer) {
       if (layer.visible && new Date(layer.startDate > date)) {
         arra.push(layer);
       }
@@ -82,7 +83,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
     return extent;
   };
   var getExtent = function (extent1, extent2) {
-    return ol.extent.getIntersection(extent1, extent2);
+    return olExtent.getIntersection(extent1, extent2);
   };
   var promiseLayerGroup = function (layer, extent, viewState, pixelRatio, map) {
     return new Promise(function (resolve, reject) {
@@ -114,7 +115,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
       }
       projection = viewState.projection;
       i = 0;
-      renderer = new ol.renderer.canvas.TileLayer(layer);
+      renderer = new OlRendererCanvasTileLayer(layer);
       tileSource = layer.getSource();
       tileGrid = tileSource.getTileGridForProjection(projection);
       currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);

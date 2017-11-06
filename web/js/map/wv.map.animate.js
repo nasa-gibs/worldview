@@ -1,5 +1,5 @@
-import ol from 'openlayers';
-
+import olExtent from 'ol/extent';
+import OlGeomLineString from 'ol/geom/linestring';
 export function mapAnimate(models, config, ui) {
   var self = {};
 
@@ -16,10 +16,10 @@ export function mapAnimate(models, config, ui) {
     var startPoint = view.getCenter();
     var startZoom = Math.floor(view.getZoom());
     endZoom = endZoom || 5;
-    if (endPoint.length > 2) endPoint = ol.extent.getCenter(endPoint);
+    if (endPoint.length > 2) endPoint = olExtent.getCenter(endPoint);
     var extent = view.calculateExtent();
-    var hasEndInView = ol.extent.containsCoordinate(extent, endPoint);
-    var line = new ol.geom.LineString([startPoint, endPoint]);
+    var hasEndInView = olExtent.containsCoordinate(extent, endPoint);
+    var line = new OlGeomLineString([startPoint, endPoint]);
     var distance = line.getLength(); // In map units, which is usually degrees
     var duration = (distance * 20) + 1000; // 4.6 seconds to go 360 degrees
     var animationPromise = function () {

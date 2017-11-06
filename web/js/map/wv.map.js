@@ -1,8 +1,9 @@
-import map from 'lodash/map';
-import each from 'lodash/each';
-import isUndefined from 'lodash/isUndefined';
-import find from 'lodash/find';
-import ol from 'openlayers';
+import loMap from 'lodash/map';
+import loEach from 'lodash/each';
+import loIsUndefined from 'lodash/isUndefined';
+import loFind from 'lodash/find';
+import OlGeomPolygon from 'ol/geom/polygon';
+
 /*
  * Checks to see if an extents string is found. If it exist
  * then it is changed from a string to an array which is then
@@ -26,7 +27,7 @@ export function parse(state, errors) {
     delete state.map;
   }
   if (state.v) {
-    var extent = map(state.v.split(','), function (str) {
+    var extent = loMap(state.v.split(','), function (str) {
       return parseFloat(str);
     });
     var valid = isExtentValid(extent);
@@ -53,14 +54,14 @@ export function parse(state, errors) {
  * true.
  */
 var isExtentValid = function(extent) {
-  if (isUndefined(extent)) {
+  if (loIsUndefined(extent)) {
     return false;
   }
   var valid = true;
   if (extent.toArray) {
     extent = extent.toArray();
   }
-  each(extent, function (value) {
+  loEach(extent, function (value) {
     if (isNaN(value)) {
       valid = false;
       return false;
@@ -135,7 +136,7 @@ export function setVisibility(layer, visible, opacity) {
 export function getLayerByName(map, name) {
   var layers = map.getLayers()
     .getArray();
-  return find(layers, {
+  return loFind(layers, {
     'wvname': name
   });
 };
@@ -201,7 +202,7 @@ export function adjustAntiMeridian(polygon, adjustSign) {
       points[i] = [points[i][0] - 360, points[i][1]];
     }
   }
-  return new ol.geom.Polygon([points]);
+  return new OlGeomPolygon([points]);
 };
 
 /**

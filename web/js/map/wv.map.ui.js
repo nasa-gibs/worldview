@@ -1,11 +1,26 @@
 import $ from 'jquery';
-import ol from 'openlayers';
-import findIndex from 'lodash/findIndex';
-import each from 'lodash/each';
-import forOwn from 'lodash/forOwn';
-import throttle from 'lodash/throttle';
-import find from 'lodash/find';
+import loFindIndex from 'lodash/findIndex';
+import loEach from 'lodash/each';
+import loForOwn from 'lodash/forOwn';
+import loThrottle from 'lodash/throttle';
+import loFind from 'lodash/find';
 import util from '../util/util';
+import OlMap from 'ol/map';
+import OlView from 'ol/view';
+import OlKinetic from 'ol/kinetic';
+import OlGraticule from 'ol/graticule';
+import OlStyleStroke from 'ol/style/stroke';
+import OlControlScaleLine from 'ol/control/scaleline';
+import olEventsCondition from 'ol/events/condition';
+import OlInteractionPinchRotate from 'ol/interaction/pinchrotate';
+import OlInteractionDragRotate from 'ol/interaction/dragrotate';
+import OlInteractionDoubleClickZoom from 'ol/interaction/doubleclickzoom';
+import OlInteractionPinchZoom from 'ol/interaction/pinchzoom';
+import OlInteractionDragPan from 'ol/interaction/dragpan';
+import OlInteractionMouseWheelZoom from 'ol/interaction/mousewheelzoom';
+import OlInteractionDragZoom from 'ol/interaction/dragzoom';
+import olExtent from 'ol/extent';
+import olProj from 'ol/proj';
 
 export function mapui(models, config, components) {
   var id = 'wv-map';
@@ -45,7 +60,7 @@ export function mapui(models, config, components) {
     }
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
-    forOwn(config.projections, function (proj) {
+    loForOwn(config.projections, function (proj) {
       var map = createMap(proj);
       self.proj[proj.id] = map;
     });
@@ -187,7 +202,7 @@ export function mapui(models, config, components) {
     var activeLayers = map.getLayers()
       .getArray()
       .slice(0);
-    each(activeLayers, function (mapLayer) {
+    loEach(activeLayers, function (mapLayer) {
       if (mapLayer.wv) {
         map.removeLayer(mapLayer);
       }
@@ -213,7 +228,7 @@ export function mapui(models, config, components) {
     var defs = models.layers.get({
       reverse: true
     });
-    each(defs, function (def) {
+    loEach(defs, function (def) {
       if (isGraticule(def)) {
         addGraticule();
       } else {
@@ -240,7 +255,7 @@ export function mapui(models, config, components) {
       }
     });
     var defs = models.layers.get();
-    each(defs, function (def) {
+    loEach(defs, function (def) {
       if (isGraticule(def)) {
         var renderable = models.layers.isRenderable(def.id);
         if (renderable) {
@@ -280,7 +295,7 @@ export function mapui(models, config, components) {
    */
 
   var addLayer = function (def) {
-    var mapIndex = findIndex(models.layers.get({
+    var mapIndex = loFindIndex(models.layers.get({
       reverse: true
     }), {
       id: def.id
@@ -338,7 +353,7 @@ export function mapui(models, config, components) {
    */
   var updateDate = function () {
     var defs = models.layers.get();
-    each(defs, function (def) {
+    loEach(defs, function (def) {
       if (def.period !== 'daily') {
         return;
       }
@@ -395,7 +410,7 @@ export function mapui(models, config, components) {
   var findLayer = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = find(layers, {
+    var layer = loFind(layers, {
       wv: {
         id: def.id
       }
@@ -417,7 +432,7 @@ export function mapui(models, config, components) {
   var findLayerIndex = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = findIndex(layers, {
+    var layer = loFindIndex(layers, {
       wv: {
         id: def.id
       }
@@ -458,9 +473,9 @@ export function mapui(models, config, components) {
   var addGraticule = function () {
     if (self.selected.graticule) { return; }
 
-    self.selected.graticule = new ol.Graticule({
+    self.selected.graticule = new OlGraticule({
       map: self.selected,
-      strokeStyle: new ol.style.Stroke({
+      strokeStyle: new OlStyleStroke({
         color: 'rgba(255, 255, 255, 0.5)',
         width: 2,
         lineDash: [0.5, 4]
@@ -484,7 +499,7 @@ export function mapui(models, config, components) {
     self.selected.graticule = null;
   };
 
-  var triggerExtent = throttle(function () {
+  var triggerExtent = loThrottle(function () {
     self.events.trigger('extent');
   }, 500, {
     trailing: true
@@ -531,26 +546,26 @@ export function mapui(models, config, components) {
       .append($map);
 
     // Create two specific controls
-    scaleMetric = new ol.control.ScaleLine({
+    scaleMetric = new OlControlScaleLine({
       className: 'wv-map-scale-metric',
       units: 'metric'
     });
-    scaleImperial = new ol.control.ScaleLine({
+    scaleImperial = new OlControlScaleLine({
       className: 'wv-map-scale-imperial',
       units: 'imperial'
     });
 
-    rotateInteraction = new ol.interaction.DragRotate({
-      condition: ol.events.condition.altKeyOnly,
+    rotateInteraction = new OlInteractionDragRotate({
+      condition: olEventsCondition.altKeyOnly,
       duration: animationDuration
     });
-    mobileRotation = new ol.interaction.PinchRotate({
+    mobileRotation = new OlInteractionPinchRotate({
       duration: animationDuration
     });
-    map = new ol.Map({
-      view: new ol.View({
+    map = new OlMap({
+      view: new OlView({
         maxResolution: proj.resolutions[0],
-        projection: ol.proj.get(proj.crs),
+        projection: olProj.get(proj.crs),
         center: proj.startCenter,
         rotation: proj.id === 'geographic' ? 0.0 : models.map.rotation,
         zoom: proj.startZoom,
@@ -566,19 +581,19 @@ export function mapui(models, config, components) {
         scaleImperial
       ],
       interactions: [
-        new ol.interaction.DoubleClickZoom({
+        new OlInteractionDoubleClickZoom({
           duration: animationDuration
         }),
-        new ol.interaction.DragPan({
-          kinetic: new ol.Kinetic(-0.005, 0.05, 100)
+        new OlInteractionDragPan({
+          kinetic: new OlKinetic(-0.005, 0.05, 100)
         }),
-        new ol.interaction.PinchZoom({
+        new OlInteractionPinchZoom({
           duration: animationDuration
         }),
-        new ol.interaction.MouseWheelZoom({
+        new OlInteractionMouseWheelZoom({
           duration: animationDuration
         }),
-        new ol.interaction.DragZoom({
+        new OlInteractionDragZoom({
           duration: animationDuration
         })
       ],
@@ -607,7 +622,7 @@ export function mapui(models, config, components) {
     map.getView()
       .on('change:resolution', updateExtent);
     map.getView()
-      .on('change:rotation', throttle(onRotate, 300));
+      .on('change:rotation', loThrottle(onRotate, 300));
     map.on('pointerdrag', function () {
       self.mapIsbeingDragged = true;
       self.events.trigger('drag');
@@ -842,7 +857,7 @@ export function mapui(models, config, components) {
       }
       pixels = map.getEventPixel(e.originalEvent);
       coords = map.getCoordinateFromPixel(pixels);
-      if (!ol.extent.containsCoordinate(extent, coords)) {
+      if (!olExtent.containsCoordinate(extent, coords)) {
         outside = true;
       }
 
@@ -903,7 +918,7 @@ export function mapui(models, config, components) {
         hoverThrottle.cancel();
         dataRunner.clearAll();
       })
-      .mousemove(hoverThrottle = throttle(onMouseMove, 300));
+      .mousemove(hoverThrottle = loThrottle(onMouseMove, 300));
   };
 
   /*

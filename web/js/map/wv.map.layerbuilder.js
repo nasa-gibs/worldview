@@ -1,8 +1,13 @@
 import util from '../util/util';
-import ol from 'openlayers';
-import cloneDeep from 'lodash/cloneDeep';
-import merge from 'lodash/merge';
-import each from 'lodash/each';
+import OlTileGridWMTS from 'ol/tilegrid/wmts';
+import OlSourceWMTS from 'ol/source/wmts';
+import OlSourceTileWMS from 'ol/source/tilewms';
+import OlLayerGroup from 'ol/layer/group';
+import OlLayerTile from 'ol/layer/tile';
+import OlTileGridTileGrid from 'ol/tilegrid/tilegrid';
+import loCloneDeep from 'lodash/cloneDeep';
+import loMerge from 'lodash/merge';
+import loEach from 'lodash/each';
 import {lookupFactory} from '../ol/lookupimagetile';
 
 export function mapLayerBuilder(models, config, cache, Parent) {
@@ -41,8 +46,8 @@ export function mapLayerBuilder(models, config, cache, Parent) {
         proj: proj.id,
         def: def
       };
-      def = cloneDeep(def);
-      merge(def, def.projections[proj.id]);
+      def = loCloneDeep(def);
+      loMerge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
         layer = createLayerWMTS(def, options);
         if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
@@ -53,7 +58,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
           layerPrior.wv = attributes;
           layerNext.wv = attributes;
 
-          layer = new ol.layer.Group({
+          layer = new OlLayerGroup({
             layers: [layer, layerNext, layerPrior]
           });
         }
@@ -67,7 +72,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
           layerPrior.wv = attributes;
           layerNext.wv = attributes;
 
-          layer = new ol.layer.Group({
+          layer = new OlLayerGroup({
             layers: [layer, layerNext, layerPrior]
           });
         }
@@ -138,7 +143,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     }
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
-      each(matrixSet.resolutions, function (resolution, index) {
+      loEach(matrixSet.resolutions, function (resolution, index) {
         matrixIds.push(index);
       });
     } else {
@@ -170,7 +175,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       crossOrigin: 'anonymous',
       format: def.format,
       matrixSet: matrixSet.id,
-      tileGrid: new ol.tilegrid.WMTS({
+      tileGrid: new OlTileGridWMTS({
         origin: start,
         resolutions: matrixSet.resolutions,
         matrixIds: matrixIds,
@@ -183,9 +188,9 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       var lookup = models.palettes.getLookup(def.id);
       sourceOptions.tileClass = lookupFactory(lookup);
     }
-    var layer = new ol.layer.Tile({
+    var layer = new OlLayerTile({
       extent: extent,
-      source: new ol.source.WMTS(sourceOptions)
+      source: new OlSourceWMTS(sourceOptions)
     });
     return layer;
   };
@@ -250,7 +255,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       style: 'default',
       crossOrigin: 'anonymous',
       params: parameters,
-      tileGrid: new ol.tilegrid.TileGrid({
+      tileGrid: new OlTileGridTileGrid({
         origin: start,
         resolutions: res
       })
@@ -260,9 +265,9 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       var lookup = models.palettes.getLookup(def.id);
       sourceOptions.tileClass = lookupFactory(lookup);
     }
-    var layer = new ol.layer.Tile({
+    var layer = new OlLayerTile({
       extent: extent,
-      source: new ol.source.TileWMS(sourceOptions)
+      source: new OlSourceTileWMS(sourceOptions)
     });
     return layer;
   };

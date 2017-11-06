@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'React-dom';
 import WVC from 'worldview-components';
-import ol from 'openlayers';
+import OlOverlay from 'ol/overlay';
 
 import util from '../util/util';
 
@@ -311,7 +311,7 @@ export function mapDateLineBuilder(models, config) {
    * @returns {void}
    */
   var drawOverlay = function(coordinate, el) {
-    var overlay = new ol.Overlay({
+    var overlay = new OlOverlay({
       element: el,
       stopEvent: false
     });
