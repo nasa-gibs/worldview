@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import uiMouse from '../ui/wv.ui.mouse';
+import uiMouse from '../ui/mouse';
 /**
  * Perform timeline zooming functions
 
