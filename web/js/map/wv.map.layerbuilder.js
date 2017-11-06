@@ -3,6 +3,7 @@ import ol from 'openlayers';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 import each from 'lodash/each';
+import {lookupFactory} from '../ol/lookupimagetile';
 
 export function mapLayerBuilder(models, config, cache, Parent) {
   var self = {};
@@ -180,7 +181,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     };
     if (models.palettes.isActive(def.id)) {
       var lookup = models.palettes.getLookup(def.id);
-      sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
+      sourceOptions.tileClass = lookupFactory(lookup);
     }
     var layer = new ol.layer.Tile({
       extent: extent,
@@ -257,7 +258,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
 
     if (models.palettes.isActive(def.id)) {
       var lookup = models.palettes.getLookup(def.id);
-      sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
+      sourceOptions.tileClass = lookupFactory(lookup);
     }
     var layer = new ol.layer.Tile({
       extent: extent,
