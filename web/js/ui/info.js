@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import wvui from './ui.js';
-import util from '../util/util.js';
-import feedbackModal from '../feedback.js';
+import wvui from './ui';
+import util from '../util/util';
+import feedbackModal from '../feedback';
 
 export function info (ui, config) {
   var selector = '#wv-info-button';

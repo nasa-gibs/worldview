@@ -8,10 +8,10 @@
 import $ from 'jquery';
 import each from 'lodash/each';
 import isNull from 'lodash/isNull';
-import wvui from '../ui/ui.js';
-import browser from './browser.js';
-import events from './events.js';
-import load from './load.js';
+import wvui from '../ui/ui';
+import browser from './browser';
+import events from './events';
+import load from './load';
 
 export const util = (function () {
   var self = {};

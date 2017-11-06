@@ -1,4 +1,4 @@
-import util from '../util/util.js';
+import util from '../util/util';
 
 export const mouse = {
   click: function ($element, callback) {

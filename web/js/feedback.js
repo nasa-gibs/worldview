@@ -5,7 +5,7 @@
  * which is included via config.scripts in web/config/wv.json
 */
 
-import util from './util/util.js';
+import util from './util/util';
 
 export const feedbackModal = (function () {
   var self = {};

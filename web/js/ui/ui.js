@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import loadingIndicator from './indicator.js';
-import info from './info.js';
-import mouse from './mouse.js';
+import loadingIndicator from './indicator';
+import info from './info';
+import mouse from './mouse';
 
 export const wvui = (function (self) {
   // Export other ui methods

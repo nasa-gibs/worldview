@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import size from 'lodash/size';
-import wvui from '../ui/ui.js';
-import brand from '../brand.js';
+import wvui from '../ui/ui';
+import brand from '../brand';
 
 export const load = (function () {
   var self = {};
