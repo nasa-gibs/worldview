@@ -1,6 +1,6 @@
 // External Dependencies
 import $ from 'jquery';
-import each from 'lodash/each';
+import loEach from 'lodash/each';
 import {GA as googleAnalytics} from 'worldview-components';
 
 // Utils
@@ -120,7 +120,7 @@ window.onload = () => {
 
     // Load any additional scripts as needed
     if (config.scripts) {
-      each(config.scripts, function(script) {
+      loEach(config.scripts, function(script) {
         $.getScript(script);
       });
     }
@@ -140,7 +140,7 @@ window.onload = () => {
     if (config.features.animation) {
       parsers.push(animationParser);
     }
-    each(parsers, function(parser) {
+    loEach(parsers, function(parser) {
       parser(state, errors, config);
     });
     requirements = [
@@ -347,7 +347,7 @@ window.onload = () => {
   var errorReport = function() {
     var layersRemoved = 0;
 
-    each(errors, function(error) {
+    loEach(errors, function(error) {
       var cause = (error.cause) ? ': ' + error.cause : '';
       util.warn(error.message + cause);
       if (error.layerRemoved) {

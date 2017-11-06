@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import each from 'lodash/each';
-import isUndefined from 'lodash/isUndefined';
-import ol from 'openlayers';
+import loEach from 'lodash/each';
+import loIsUndefined from 'lodash/isUndefined';
+import olProj from 'ol/proj';
 import {GA as googleAnalytics} from 'worldview-components';
 import util from '../util/util';
 import wvui from '../ui/ui';
@@ -264,8 +264,8 @@ export function imagePanel(models, ui, config) {
 
       // get layer transparencies (opacities)
       var opacities = [];
-      each(products, function (product) {
-        opacities.push((isUndefined(product.opacity)) ? 1 : product.opacity);
+      loEach(products, function (product) {
+        opacities.push((loIsUndefined(product.opacity)) ? 1 : product.opacity);
       });
 
       // console.log("EPSG: " + epsg);
@@ -280,8 +280,8 @@ export function imagePanel(models, ui, config) {
       var lonlat1 = map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]);
       var lonlat2 = map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]);
 
-      var geolonlat1 = ol.proj.transform(lonlat1, crs, 'EPSG:4326');
-      var geolonlat2 = ol.proj.transform(lonlat2, crs, 'EPSG:4326');
+      var geolonlat1 = olProj.transform(lonlat1, crs, 'EPSG:4326');
+      var geolonlat2 = olProj.transform(lonlat2, crs, 'EPSG:4326');
 
       var minLon = geolonlat1[0];
       var maxLon = geolonlat2[0];
@@ -329,7 +329,7 @@ export function imagePanel(models, ui, config) {
       // dlURL += "&switch="+s;
       dlURL += '&epsg=' + epsg;
       var layers = [];
-      each(products, function (layer) {
+      loEach(products, function (layer) {
         if (layer.projections[s].layer) {
           layers.push(layer.projections[s].layer);
         } else {

@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import each from 'lodash/each';
-import find from 'lodash/find';
+import loEach from 'lodash/each';
+import loFind from 'lodash/find';
 import util from '../util/util';
 import wvui from '../ui/ui';
 
@@ -37,7 +37,7 @@ export const palettes = (function (self) {
       var bins = colors.length;
       var binWidth = canvas.width / bins;
       var drawWidth = Math.ceil(binWidth);
-      each(colors, function (color, i) {
+      loEach(colors, function (color, i) {
         g.fillStyle = util.hexToRGBA(color);
         g.fillRect(Math.floor(binWidth * i), 0, drawWidth,
           canvas.height);
@@ -69,7 +69,7 @@ export const palettes = (function (self) {
 
   self.translate = function (source, target) {
     var translation = [];
-    each(source, function (color, index) {
+    loEach(source, function (color, index) {
       var sourcePercent = index / source.length;
       var targetIndex = Math.floor(sourcePercent * target.length);
       translation.push(target[targetIndex]);
@@ -79,7 +79,7 @@ export const palettes = (function (self) {
 
   self.lookup = function (sourcePalette, targetPalette) {
     var lookup = {};
-    each(sourcePalette.colors, function (sourceColor, index) {
+    loEach(sourcePalette.colors, function (sourceColor, index) {
       var source =
         parseInt(sourceColor.substring(0, 2), 16) + ',' +
         parseInt(sourceColor.substring(2, 4), 16) + ',' +
@@ -114,12 +114,12 @@ export const palettes = (function (self) {
       rendered: {},
       custom: {}
     };
-    each(state.l, function (qsLayer) {
+    loEach(state.l, function (qsLayer) {
       var layerId = qsLayer.id;
       if (config.layers[layerId] && config.layers[layerId].palette) {
         promises.push(self.loadRendered(config, layerId));
       }
-      var custom = find(qsLayer.attributes, {
+      var custom = loFind(qsLayer.attributes, {
         id: 'palette'
       });
       if (custom) {
@@ -147,7 +147,7 @@ export const palettes = (function (self) {
         return;
       }
       var parts = state.palettes.split('~');
-      each(parts, function (part) {
+      loEach(parts, function (part) {
         var items = part.split(',');
         var layerId = items[0];
         var paletteId = items[1];
@@ -162,7 +162,7 @@ export const palettes = (function (self) {
               'support palettes'
           });
         } else {
-          var layer = find(state.l, {
+          var layer = loFind(state.l, {
             id: layerId
           });
           if (layer) {

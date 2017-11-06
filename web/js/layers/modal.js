@@ -1,8 +1,8 @@
 import $ from 'jquery';
-import find from 'lodash/find';
-import indexOf from 'lodash/indexOf';
-import sortBy from 'lodash/sortBy';
-import startCase from 'lodash/startCase';
+import loFind from 'lodash/find';
+import loIndexOf from 'lodash/indexOf';
+import loSortBy from 'lodash/sortBy';
+import loStartCase from 'lodash/startCase';
 import util from '../util/util';
 
 export function layersModal(models, ui, config) {
@@ -36,8 +36,8 @@ export function layersModal(models, ui, config) {
       if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
       return layer;
     });
-    return sortBy(filteredLayers, function (layer) {
-      return indexOf(config.layerOrder, layer.id);
+    return loSortBy(filteredLayers, function (layer) {
+      return loIndexOf(config.layerOrder, layer.id);
     });
   };
 
@@ -541,7 +541,7 @@ export function layersModal(models, ui, config) {
                 }).on('ifChecked', addLayer)
                   .on('ifUnchecked', removeLayer);
 
-                if (find(model.active, {id: layer.id})) {
+                if (loFind(model.active, {id: layer.id})) {
                   $setting.attr('checked', 'checked');
                 }
 
@@ -556,7 +556,7 @@ export function layersModal(models, ui, config) {
                 if (layer.layergroup && layer.layergroup.indexOf('reference_orbits') !== -1) {
                   var orbitTitle;
                   if (layer.daynight && layer.track) {
-                    orbitTitle = startCase(layer.track) + '/' + startCase(layer.daynight);
+                    orbitTitle = loStartCase(layer.track) + '/' + loStartCase(layer.daynight);
                   }
 
                   $label.empty()

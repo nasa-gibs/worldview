@@ -1,5 +1,5 @@
-import each from 'lodash/each';
-import ol from 'openlayers';
+import loEach from 'lodash/each';
+import olProj from 'ol/proj';
 import proj4 from 'proj4';
 import util from '../util/util';
 
@@ -10,10 +10,10 @@ export function projectionModel(config) {
 
   var init = function () {
     self.selectDefault();
-    each(config.projections, function (proj) {
+    loEach(config.projections, function (proj) {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
-        ol.proj.get(proj.crs)
+        olProj.get(proj.crs)
           .setExtent(proj.maxExtent);
       }
     });

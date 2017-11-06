@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import each from 'lodash/each';
-import eachRight from 'lodash/eachRight';
+import loEach from 'lodash/each';
+import loEachRight from 'lodash/eachRight';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import layersInfo from './info';
@@ -49,7 +49,7 @@ export function layersActive(models, ui, config) {
     var $container = $('<div />', {class: 'layer-container bank'});
     $(self.selector).empty().append($container);
 
-    eachRight(groups, function (group) {
+    loEachRight(groups, function (group) {
       renderGroup($container, group);
     });
 
@@ -90,7 +90,7 @@ export function layersActive(models, ui, config) {
     $('.layer-container ul.category')
       .bind('sortstop', moveLayer);
 
-    each(model.get({
+    loEach(model.get({
       group: 'overlays'
     }), function (layer) {
       if (layer.palette) {
@@ -113,7 +113,7 @@ export function layersActive(models, ui, config) {
 
     $parent.append($header);
 
-    each(model.get({
+    loEach(model.get({
       group: group.id
     }), function (layer) {
       renderLayer($container, group, layer);
@@ -450,7 +450,7 @@ export function layersActive(models, ui, config) {
   };
 
   var onPaletteUpdateAll = function () {
-    each(legends, function (legend) {
+    loEach(legends, function (legend) {
       legend.update();
     });
   };
@@ -462,8 +462,8 @@ export function layersActive(models, ui, config) {
     setTimeout(render, 1);
   };
   var onZoomChange = function () {
-    each(groups, function (group) {
-      each(model.get({
+    loEach(groups, function (group) {
+      loEach(model.get({
         group: group.id
       }), function (layer) {
         var $layer = $('#products li.productsitem[data-layer="' +
@@ -473,8 +473,8 @@ export function layersActive(models, ui, config) {
     });
   };
   var onDateChange = function () {
-    each(groups, function (group) {
-      each(model.get({
+    loEach(groups, function (group) {
+      loEach(model.get({
         group: group.id
       }), function (layer) {
         var $layer = $('#' + group.id + '-' + encodeURIComponent(layer.id));

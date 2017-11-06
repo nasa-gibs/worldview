@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import each from 'lodash/each';
+import loEach from 'lodash/each';
 import wvui from '../ui/ui';
 
 export function projectionUi(models, config) {
@@ -55,7 +55,7 @@ export function projectionUi(models, config) {
       .attr('id', 'wv-proj-menu');
     $menuItems = $('<ul></ul>');
 
-    each(config.ui.projections, function (ui) {
+    loEach(config.ui.projections, function (ui) {
       var $item = $(
         '<li data-proj=\'' + ui.id + '\'>' +
         '<a data-proj=\'' + ui.id + '\'>' +

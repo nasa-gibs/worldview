@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import each from 'lodash/each';
-import first from 'lodash/first';
-import last from 'lodash/last';
+import loEach from 'lodash/each';
+import loFirst from 'lodash/first';
+import loLast from 'lodash/last';
 import util from '../util/util';
 import palettes from './palettes';
 
@@ -46,7 +46,7 @@ export function palettesLegend(spec) {
       .attr('data-layer', layer.id);
     $parent.append($legendPanel);
     var legends = model.getLegends(layer.id);
-    each(legends, function (legend, index) {
+    loEach(legends, function (legend, index) {
       if ((legend.type === 'continuous') ||
         (legend.type === 'discrete')) {
         renderScale($legendPanel, legend, index, layer.id);
@@ -118,7 +118,7 @@ export function palettesLegend(spec) {
   var updateClasses = function (legend, index) {
     var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
-    each(legend.colors, function (color, classIndex) {
+    loEach(legend.colors, function (color, classIndex) {
       var $colorBox;
       var $runningDataPointLabel = $('<span></span>')
         .addClass('wv-running-category-label');
@@ -137,7 +137,7 @@ export function palettesLegend(spec) {
       $colorBox.on('mouseout', hideUnitsOnMouseOut);
     });
     var $detailPanel = $('<div></div>');
-    each(legend.colors, function (color, classIndex) {
+    loEach(legend.colors, function (color, classIndex) {
       var label = legend.tooltips[classIndex];
       label = (legend.units) ? label + ' ' + legend.units : label;
       var $row = $('<div></div>')
@@ -166,7 +166,7 @@ export function palettesLegend(spec) {
       return;
     }
     var legends = model.getLegends(layer.id);
-    each(legends, function (legend, index) {
+    loEach(legends, function (legend, index) {
       if ((legend.type === 'continuous') ||
         (legend.type === 'discrete')) {
         palettes.colorbar(selector + ' ' +
@@ -185,9 +185,9 @@ export function palettesLegend(spec) {
     var legends = model.getLegends(layer.id, index);
     var entries = model.get(layer.id, index)
       .entries;
-    each(legends, function (legend, index) {
-      var min = legend.minLabel || first(legend.tooltips);
-      var max = legend.maxLabel || last(legend.tooltips);
+    loEach(legends, function (legend, index) {
+      var min = legend.minLabel || loFirst(legend.tooltips);
+      var max = legend.maxLabel || loLast(legend.tooltips);
       min = (legend.units) ? min + ' ' + legend.units : min;
       max = (legend.units) ? max + ' ' + legend.units : max;
       $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-min')

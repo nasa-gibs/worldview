@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import throttle from 'lodash/throttle';
+import loThrottle from 'lodash/throttle';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
@@ -46,7 +46,7 @@ export function linkUi(models, config) {
   };
 
   // Calls toQueryString to fetch updated state and returns URL
-  var replaceHistoryState = throttle(function () {
+  var replaceHistoryState = loThrottle(function () {
     if (util.browser.history) {
       window.history.replaceState('', '@OFFICIAL_NAME@', '?' + models.link.toQueryString());
     }

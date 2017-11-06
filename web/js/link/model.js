@@ -1,8 +1,8 @@
 import $ from 'jquery';
-import each from 'lodash/each';
-import map from 'lodash/map';
-import isArray from 'lodash/isArray';
-import isObject from 'lodash/isObject';
+import loEach from 'lodash/each';
+import loMap from 'lodash/map';
+import loIsArray from 'lodash/isArray';
+import loIsObject from 'lodash/isObject';
 import util from '../util/util';
 
 export function linkModel(config) {
@@ -46,19 +46,19 @@ export function linkModel(config) {
   // Returns a serialized string containing information of the current session
   self.toQueryString = function () {
     var state = {};
-    each(components, function (component) {
+    loEach(components, function (component) {
       component.save(state);
     });
-    var strings = map(state, function (value, key) {
-      if (isArray(value)) {
+    var strings = loMap(state, function (value, key) {
+      if (loIsArray(value)) {
         var parts = [];
-        each(value, function (item) {
+        loEach(value, function (item) {
           var part = '';
-          if (isObject(item)) {
+          if (loIsObject(item)) {
             part = item.id;
             if (item.attributes && item.attributes.length > 0) {
               var attributes = [];
-              each(item.attributes, function (attribute) {
+              loEach(item.attributes, function (attribute) {
                 if (attribute.value) {
                   attributes.push(attribute.id + '=' + attribute.value);
                 } else {
@@ -111,14 +111,14 @@ export function linkModel(config) {
 
   self.load = function (state, errors) {
     errors = errors || [];
-    each(components, function (component) {
+    loEach(components, function (component) {
       component.load(state, errors);
     });
   };
 
   var encode = function (value) {
     var encoded = encodeURIComponent(value);
-    each(ENCODING_EXCEPTIONS, function (exception) {
+    loEach(ENCODING_EXCEPTIONS, function (exception) {
       encoded = encoded.replace(exception.match, exception.replace);
     });
     return encoded;

@@ -1,13 +1,13 @@
-import cloneDeep from 'lodash/cloneDeep';
-import each from 'lodash/each';
-import remove from 'lodash/remove';
+import loCloneDeep from 'lodash/cloneDeep';
+import loEach from 'lodash/each';
+import loRemove from 'lodash/remove';
 
 // Permalink versions 1.0 and 1.1
 var parse11 = function (state, errors, config) {
   var str = state.products;
   var layers = [];
   var ids = str.split(/[~,\.]/);
-  each(ids, function (id) {
+  loEach(ids, function (id) {
     if (id === 'baselayers' || id === 'overlays') {
       return;
     }
@@ -47,7 +47,7 @@ var parse12 = function (state, errors, config) {
   // Split by layer definitions (commas not in parens)
   var layerDefs = str.match(/[^\(,]+(\([^\)]*\))?,?/g);
   var lstates = [];
-  each(layerDefs, function (layerDef) {
+  loEach(layerDefs, function (layerDef) {
     // Get the text before any paren or comma
     var layerId = layerDef.match(/[^\(,]+/)[0];
     if (config.redirects && config.redirects.layers) {
@@ -64,7 +64,7 @@ var parse12 = function (state, errors, config) {
       var strAttr = arrayAttr[0].replace(/[\(\)]/g, '');
       // Key value pairs
       var kvps = strAttr.split(',');
-      each(kvps, function (kvp) {
+      loEach(kvps, function (kvp) {
         parts = kvp.split('=');
         if (parts.length === 1) {
           lstate.attributes.push({
@@ -101,16 +101,16 @@ export function validate(errors, config) {
       layerRemoved: true
     });
     delete config.layers[layerId];
-    remove(config.layerOrder.baselayers, function (e) {
+    loRemove(config.layerOrder.baselayers, function (e) {
       return e === layerId;
     });
-    remove(config.layerOrder.overlays, function (e) {
+    loRemove(config.layerOrder.overlays, function (e) {
       return e === layerId;
     });
   };
 
-  var layers = cloneDeep(config.layers);
-  each(layers, function (layer) {
+  var layers = loCloneDeep(config.layers);
+  loEach(layers, function (layer) {
     if (!layer.group) {
       error(layer.id, 'No group defined');
       return;
@@ -120,8 +120,8 @@ export function validate(errors, config) {
     }
   });
 
-  var orders = cloneDeep(config.layerOrder);
-  each(orders, function (layerId) {
+  var orders = loCloneDeep(config.layerOrder);
+  loEach(orders, function (layerId) {
     if (!config.layers[layerId]) {
       error(layerId, 'No configuration');
     }
