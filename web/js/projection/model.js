@@ -1,7 +1,7 @@
 import each from 'lodash/each';
-import util from '../util/util';
 import ol from 'openlayers';
 import proj4 from 'proj4';
+import util from '../util/util';
 
 export function projectionModel(config) {
   var self = {};

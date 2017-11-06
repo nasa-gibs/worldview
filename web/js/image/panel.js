@@ -3,8 +3,8 @@ import each from 'lodash/each';
 import isUndefined from 'lodash/isUndefined';
 import ol from 'openlayers';
 import {GA as googleAnalytics} from 'worldview-components';
-import util from '../util/util.js';
-import wvui from '../ui/ui.js';
+import util from '../util/util';
+import wvui from '../ui/ui';
 
 export function imagePanel(models, ui, config) {
   var self = {};

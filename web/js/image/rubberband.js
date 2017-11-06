@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import find from 'lodash/find';
-import util from '../util/util.js';
-import wvui from '../ui/ui.js';
+import util from '../util/util';
+import wvui from '../ui/ui';
 
 export function imageRubberband(models, ui, config) {
   var self = {};
