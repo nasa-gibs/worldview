@@ -96,6 +96,7 @@ To display a color palette legend, a *palette* object should exist with the foll
 
 - **id**: Identifier of the palette. This should match the name of the colormap file without the extension.
 - **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see ``config/palettes-custom.json``). Example, *["orange_1", "red_1"]*
+- **immutable**(optional): When this flag is set to true, the options to adjust thresholds and colormaps are removed.
 
 ### Full Example
 
