@@ -29,7 +29,7 @@ import layersActive from './layers/active';
 import {parse as mapParser} from './map/map';
 import MapModel from './map/model';
 import MapUI from './map/ui';
-import MapRotate from './map/rotate';
+import MapRotate from './map/rotation';
 import MapRunningData from './map/runningdata';
 import MapLayerBuilder from './map/layerbuilder';
 import MapDatelineBuilder from './map/datelinebuilder';
