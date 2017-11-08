@@ -4,8 +4,12 @@ import loIndexOf from 'lodash/indexOf';
 import loSortBy from 'lodash/sortBy';
 import loStartCase from 'lodash/startCase';
 import util from '../util/util';
+import React from 'react';
+import {LayerList} from 'worldview-components';
+import ReactDOM from 'react-dom';
 
 export function layersModal(models, ui, config) {
+  var crumbText;
   var model = models.layers;
   var self = {};
   self.selector = '#layer-modal';
@@ -313,7 +317,6 @@ export function layersModal(models, ui, config) {
           var $measurements = $('<ul />');
 
           Object.values(category.measurements).forEach(function (measurement, index) {
-            var projection = models.proj.selected.id;
             var current = config.measurements[measurement];
             // Check if measurements have settings with the same projection.
             if (hasMeasurementSource(current)) {
@@ -695,7 +698,7 @@ export function layersModal(models, ui, config) {
       filteredLayers: getLayersForProjection(projection)
     };
     self.reactList = ReactDOM.render(
-      React.createElement(WVC.LayerList, props),
+      React.createElement(LayerList, props),
       $allLayers[0]
     );
 
@@ -814,7 +817,6 @@ export function layersModal(models, ui, config) {
     var $searchBtn = $('<label />', {
       'class': 'search-icon'
     }).click(function (e) {
-      var that = this;
       // TODO: Click for search icon
     }).append('<i />');
 
@@ -878,18 +880,6 @@ export function layersModal(models, ui, config) {
     var search = $('#layers-search-input').val().toLowerCase();
     var terms = search.split(/ +/);
     return terms;
-  };
-
-  var filterAreaOfInterest = function (layerId) {
-    if (!config.aoi) {
-      return false;
-    }
-    var aoi = $(self.selector + 'select').val();
-    if (aoi === 'All') {
-      return false;
-    }
-    return $.inArray(layerId, config.aoi[aoi].baselayers) < 0 &&
-      $.inArray(layerId, config.aoi[aoi].overlays) < 0;
   };
 
   var filterProjections = function (layer) {
