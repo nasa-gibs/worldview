@@ -1,13 +1,8 @@
-/**
- * @module wv.proj
- */
-var wv = wv || {};
-wv.proj = wv.proj || {};
+import $ from 'jquery';
+import util from '../util/util';
+import wvui from '../ui/ui';
 
-/**
- * @class wv.proj.change
- */
-wv.proj.change = wv.proj.change || function (models) {
+export function projectionChange(models) {
   var PROJECTION_CHANGE_DATE = new Date(Date.UTC(2013, 5, 6));
   var EARLIEST_CHANGE_DATE = new Date(Date.UTC(2012, 11, 31));
   var DO_NOT_SHOW_AGAIN = 'arcticProjectionChangeNotification';
@@ -15,7 +10,7 @@ wv.proj.change = wv.proj.change || function (models) {
   var polarVisited = 0;
   var self = {};
 
-  self.events = wv.util.events();
+  self.events = util.events();
   self.old = false;
   self.crs = null;
   self.epsg = null;
@@ -63,7 +58,7 @@ wv.proj.change = wv.proj.change || function (models) {
   var checkNotify = function () {
     // If the flag cannot be stored in local storage, do not notify
     // the user which will constantly annoy them.
-    if (!wv.util.browser.localStorage) {
+    if (!util.browser.localStorage) {
       return;
     }
     if (localStorage.getItem(DO_NOT_SHOW_AGAIN) === 'true') {
@@ -113,10 +108,10 @@ wv.proj.change = wv.proj.change || function (models) {
       '<input id=\'arcticChangeNoticeDontShowAgain\' value=\'false\' ',
       'type=\'checkbox\'>Do not show again'
     ].join('');
-    wv.ui.notify(message, 'Notice', 400);
+    wvui.notify(message, 'Notice', 400);
     var $check = $('#arcticChangeNoticeDontShowAgain');
     $check.on('click', function () {
-      if ($check.is(':checked') && wv.util.browser.localStorage) {
+      if ($check.is(':checked') && util.browser.localStorage) {
         localStorage.setItem(DO_NOT_SHOW_AGAIN, 'true');
       }
     });

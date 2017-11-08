@@ -1,12 +1,17 @@
 /* global ntptEventTag */
 
+/* The ntptEventTag global variable is defined by
+ * https://earthdata.nasa.gov/lib/ntpagetag.js
+ * which is included via config.scripts in web/config/wv.json
+*/
+
 import $ from 'jquery';
-import each from 'lodash/each';
-import isNull from 'lodash/isNull';
-import wvui from '../ui/ui.js';
-import browser from './browser.js';
-import events from './events.js';
-import load from './load.js';
+import loEach from 'lodash/each';
+import loIsNull from 'lodash/isNull';
+import wvui from '../ui/ui';
+import browser from './browser';
+import events from './events';
+import load from './load';
 
 export const util = (function () {
   var self = {};
@@ -110,9 +115,9 @@ export const util = (function () {
   self.toQueryString = function (kvps, exceptions) {
     exceptions = exceptions || {};
     var parts = [];
-    each(kvps, function (value, key) {
+    loEach(kvps, function (value, key) {
       var part = key + '=' + encodeURIComponent(value);
-      each(exceptions, function (exception) {
+      loEach(exceptions, function (exception) {
         var regexp = new RegExp(exception, 'ig');
         var decoded = decodeURIComponent(exception);
         part = part.replace(regexp, decoded);
@@ -481,7 +486,7 @@ export const util = (function () {
    */
   self.fromCompactTimestamp = function (str) {
     var v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
-    if (isNull(v)) {
+    if (loIsNull(v)) {
       throw new Error('Invalid timestamp:' + str);
     }
     return new Date(Date.UTC(

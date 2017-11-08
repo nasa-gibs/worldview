@@ -85,6 +85,7 @@
     "lodash": "4.15.0",
     "openlayers": "4.3.1",
     "perfect-scrollbar": "0.7.x",
+    "proj4": "2.3.3",
     "promise-queue": "2.2.3",
     "react": "15.3.1",
     "react-dom": "15.3.1",

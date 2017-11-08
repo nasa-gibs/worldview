@@ -1,13 +1,10 @@
-/**
- * @module wv.layers
- */
-var wv = wv || {};
-wv.layers = wv.layers || {};
+import $ from 'jquery';
+import loEach from 'lodash/each';
+import loFind from 'lodash/find';
+import loThrottle from 'lodash/throttle';
+import util from '../util/util';
 
-/**
- * @class wv.layers.add
- */
-wv.layers.add = wv.layers.add || function (models, ui, config) {
+export function layersAdd(models, ui, config) {
   var jsp = null;
 
   var model = models.layers;
@@ -19,7 +16,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
   var visible = {};
 
   var init = function () {
-    _.each(config.layers, function (layer) {
+    loEach(config.layers, function (layer) {
       visible[layer.id] = true;
     });
 
@@ -50,7 +47,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
     $(self.selector)
       .empty();
 
-    var tabs_height = $('.ui-tabs-nav')
+    var tabsHeight = $('.ui-tabs-nav')
       .outerHeight(true);
     $(self.selector)
       .addClass('selector');
@@ -59,7 +56,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
       .height(
         $(self.selector)
           .parent()
-          .outerHeight() - tabs_height
+          .outerHeight() - tabsHeight
       );
 
     var $form = $('<div></div>')
@@ -130,7 +127,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
       .addClass('category')
       .addClass('scroll-pane');
 
-    _.each(config.layerOrder, function (layerId) {
+    loEach(config.layerOrder, function (layerId) {
       var layer = config.layers[layerId];
       if (!layer) {
         console.warn('In layer order but not defined', layerId);
@@ -183,7 +180,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
     if (group === 'baselayers') {
       $checkbox.attr('name', group);
     }
-    if (_.find(model.active, {
+    if (loFind(model.active, {
       id: layer.id
     })) {
       $checkbox.attr('checked', 'checked');
@@ -199,31 +196,31 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
 
   var adjustCategoryHeights = function () {
     var heights = [];
-    var facets_height =
+    var facetsHeight =
       $(self.selector + 'facetedSearch')
         .outerHeight(true);
-    var container_height =
+    var containerHeight =
       $(self.selector)
-        .outerHeight(true) - facets_height;
+        .outerHeight(true) - facetsHeight;
     $(self.selector + 'content')
-      .height(container_height);
+      .height(containerHeight);
     var labelHeight = 0;
     $(self.selector + 'content .head')
       .each(function () {
         labelHeight += $(this)
           .outerHeight(true);
       });
-    container_height -= labelHeight;
+    containerHeight -= labelHeight;
 
     $.each(['baselayers', 'overlays'], function (i, group) {
-      var actual_height = 0;
+      var actualHeight = 0;
       var count = 0;
       $(self.selector + group + ' li')
         .each(function () {
           var layerId = decodeURIComponent($(this)
             .attr('data-layer'));
           if (visible[layerId]) {
-            actual_height += $(this)
+            actualHeight += $(this)
               .outerHeight(true);
             count++;
           }
@@ -231,16 +228,16 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
 
       heights.push({
         name: self.id + group,
-        height: actual_height,
+        height: actualHeight,
         count: count
       });
     });
 
-    if (heights[0].height + heights[1].height > container_height) {
-      if (heights[0].height > container_height / 2) {
-        heights[0].height = container_height / 2;
+    if (heights[0].height + heights[1].height > containerHeight) {
+      if (heights[0].height > containerHeight / 2) {
+        heights[0].height = containerHeight / 2;
       }
-      heights[1].height = container_height - heights[0].height;
+      heights[1].height = containerHeight - heights[0].height;
     }
     $('#' + heights[0].name)
       .css('height', heights[0].height + 'px');
@@ -261,12 +258,12 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
   };
 
   var resize = function () {
-    var tabs_height = $('.ui-tabs-nav')
+    var tabsHeight = $('.ui-tabs-nav')
       .outerHeight(true);
     $(self.selector)
       .height($(self.selector)
         .parent()
-        .outerHeight() - tabs_height);
+        .outerHeight() - tabsHeight);
 
     if (jsp) {
       var api = jsp.data('jsp');
@@ -274,7 +271,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
         api.destroy();
       }
     }
-    if (wv.util.browser.ie) {
+    if (util.browser.ie) {
       jsp = $('.' + self.id + 'category')
         .jScrollPane({
           verticalDragMinHeight: 20,
@@ -305,13 +302,13 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
 
   var onLayerAdded = function (layer) {
     var $element = $('#selectorbox [data-layer=\'' +
-      wv.util.jqueryEscape(layer.id) + '\']');
+      util.jqueryEscape(layer.id) + '\']');
     $element.iCheck('check');
   };
 
   var onLayerRemoved = function (layer) {
     var $element = $('#selectorbox [data-layer=\'' +
-      wv.util.jqueryEscape(layer.id) + '\']');
+      util.jqueryEscape(layer.id) + '\']');
     $element.iCheck('uncheck');
   };
 
@@ -322,7 +319,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
   };
 
   var adjustTitles = function () {
-    _.each(config.layers, function (def) {
+    loEach(config.layers, function (def) {
       var names = models.layers.getTitles(def.id);
       $('#selectorbox [data-layer=\'' + encodeURIComponent(def.id) +
           '\'] .title')
@@ -405,7 +402,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
     return filtered;
   };
 
-  var filter = _.throttle(function () {
+  var filter = loThrottle(function () {
     var search = searchTerms();
     $.each(config.layers, function (layerId, layer) {
       var fproj = filterProjection(layer);
@@ -413,7 +410,7 @@ wv.layers.add = wv.layers.add || function (models, ui, config) {
       var filtered = fproj || fterms;
       var display = filtered ? 'none' : 'block';
       var selector = '#selectorbox li[data-layer=\'' +
-        wv.util.jqueryEscape(layerId) + '\']';
+        util.jqueryEscape(layerId) + '\']';
       $(selector)
         .css('display', display);
       visible[layer.id] = !filtered;

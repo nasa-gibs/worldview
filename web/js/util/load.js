@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import size from 'lodash/size';
-import wvui from '../ui/ui.js';
-import brand from '../brand.js';
+import loSize from 'lodash/size';
+import wvui from '../ui/ui';
+import brand from '../brand';
 
 export const load = (function () {
   var self = {};
@@ -18,7 +18,7 @@ export const load = (function () {
         .fail(promise.reject);
       return promise;
     }
-    if (root[attr] && size(root[attr]) > 0) {
+    if (root[attr] && loSize(root[attr]) > 0) {
       promise.resolve(root[attr]);
     } else {
       loading += 1;

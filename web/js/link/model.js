@@ -1,7 +1,11 @@
-var wv = wv || {};
-wv.link = wv.link || {};
+import $ from 'jquery';
+import loEach from 'lodash/each';
+import loMap from 'lodash/map';
+import loIsArray from 'lodash/isArray';
+import loIsObject from 'lodash/isObject';
+import util from '../util/util';
 
-wv.link.model = wv.link.model || function (config) {
+export function linkModel(config) {
   var self = {};
   var DEBUG_SHORTEN_LINK = 'http://go.nasa.gov/1iKIZ4j';
   var ENCODING_EXCEPTIONS = [
@@ -21,7 +25,7 @@ wv.link.model = wv.link.model || function (config) {
   var mock = '';
   var components = [];
 
-  self.events = wv.util.events();
+  self.events = util.events();
 
   var init = function () {
     if (config && config.parameters && config.parameters.shorten) {
@@ -42,19 +46,19 @@ wv.link.model = wv.link.model || function (config) {
   // Returns a serialized string containing information of the current session
   self.toQueryString = function () {
     var state = {};
-    _.each(components, function (component) {
+    loEach(components, function (component) {
       component.save(state);
     });
-    var strings = _.map(state, function (value, key) {
-      if (_.isArray(value)) {
+    var strings = loMap(state, function (value, key) {
+      if (loIsArray(value)) {
         var parts = [];
-        _.each(value, function (item) {
+        loEach(value, function (item) {
           var part = '';
-          if (_.isObject(item)) {
+          if (loIsObject(item)) {
             part = item.id;
             if (item.attributes && item.attributes.length > 0) {
               var attributes = [];
-              _.each(item.attributes, function (attribute) {
+              loEach(item.attributes, function (attribute) {
                 if (attribute.value) {
                   attributes.push(attribute.id + '=' + attribute.value);
                 } else {
@@ -107,14 +111,14 @@ wv.link.model = wv.link.model || function (config) {
 
   self.load = function (state, errors) {
     errors = errors || [];
-    _.each(components, function (component) {
+    loEach(components, function (component) {
       component.load(state, errors);
     });
   };
 
   var encode = function (value) {
     var encoded = encodeURIComponent(value);
-    _.each(ENCODING_EXCEPTIONS, function (exception) {
+    loEach(ENCODING_EXCEPTIONS, function (exception) {
       encoded = encoded.replace(exception.match, exception.replace);
     });
     return encoded;

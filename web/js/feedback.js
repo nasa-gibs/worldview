@@ -1,5 +1,13 @@
-var wv = wv || {};
-wv.feedback = wv.feedback || (function () {
+/* global feedback */
+
+/* The feedback global variable is defined by
+ * https://fbm.earthdata.nasa.gov/for/worldview/feedback.js
+ * which is included via config.scripts in web/config/wv.json
+*/
+
+import util from './util/util';
+
+export const feedbackModal = (function () {
   var self = {};
   var feedbackInit = false;
 
@@ -8,7 +16,7 @@ wv.feedback = wv.feedback || (function () {
       'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool');
 
     $element.click(function (event) {
-      if (!wv.util.browser.small && window.feedback) {
+      if (!util.browser.small && window.feedback) {
         event.preventDefault();
         if (!feedbackInit) {
           feedback.init({

@@ -1,7 +1,12 @@
-var wv = wv || {};
-wv.image = wv.image || {};
+import $ from 'jquery';
+import loEach from 'lodash/each';
+import loIsUndefined from 'lodash/isUndefined';
+import olProj from 'ol/proj';
+import {GA as googleAnalytics} from 'worldview-components';
+import util from '../util/util';
+import wvui from '../ui/ui';
 
-wv.image.panel = wv.image.panel || function (models, ui, config) {
+export function imagePanel(models, ui, config) {
   var self = {};
 
   var container;
@@ -26,7 +31,7 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
   url = host + '/' + path + '?';
 
   if (config.parameters.imagegen) {
-    wv.util.warn('Redirecting image download to: ' + url);
+    util.warn('Redirecting image download to: ' + url);
   }
 
   var init = function () {
@@ -95,7 +100,7 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
       '</table>' +
       '</div>';
 
-    var $dialog = wv.ui.getDialog()
+    var $dialog = wvui.getDialog()
       .html(htmlElements);
     $dialog.dialog({
       dialogClass: 'wv-panel wv-image',
@@ -137,7 +142,7 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
 
     // Auto-set default resolution to map's current zoom level; round it
     // for incremental zoom steps
-    var curZoom = Math.round(wvx.ui.map.selected.getView()
+    var curZoom = Math.round(ui.map.selected.getView()
       .getZoom());
 
     // Don't do anything if the user hasn't changed zoom levels; we want to
@@ -218,7 +223,7 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
     $('#wv-image-worldfile option[value=\'' + worldfile + '\']')
       .attr('selected', 'selected');
 
-    wv.ui.positionDialog($dialog, {
+    wvui.positionDialog($dialog, {
       my: 'left top',
       at: 'left bottom+5',
       of: ('#wv-image-button')
@@ -259,10 +264,9 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
 
       // get layer transparencies (opacities)
       var opacities = [];
-      _(products)
-        .each(function (product) {
-          opacities.push((_.isUndefined(product.opacity)) ? 1 : product.opacity);
-        });
+      loEach(products, function (product) {
+        opacities.push((loIsUndefined(product.opacity)) ? 1 : product.opacity);
+      });
 
       // console.log("EPSG: " + epsg);
 
@@ -276,16 +280,16 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
       var lonlat1 = map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]);
       var lonlat2 = map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)]);
 
-      var geolonlat1 = ol.proj.transform(lonlat1, crs, 'EPSG:4326');
-      var geolonlat2 = ol.proj.transform(lonlat2, crs, 'EPSG:4326');
+      var geolonlat1 = olProj.transform(lonlat1, crs, 'EPSG:4326');
+      var geolonlat2 = olProj.transform(lonlat2, crs, 'EPSG:4326');
 
       var minLon = geolonlat1[0];
       var maxLon = geolonlat2[0];
       var minLat = geolonlat2[1];
       var maxLat = geolonlat1[1];
 
-      var ll = wv.util.formatCoordinate([minLon, maxLat]);
-      var ur = wv.util.formatCoordinate([maxLon, minLat]);
+      var ll = util.formatCoordinate([minLon, maxLat]);
+      var ur = util.formatCoordinate([maxLon, minLat]);
 
       if (x2 - x1 < 150) {
         ll = '';
@@ -315,7 +319,7 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
 
       var dTime = time;
       // Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-      var jStart = wv.util.parseDateUTC(dTime.getUTCFullYear() + '-01-01');
+      var jStart = util.parseDateUTC(dTime.getUTCFullYear() + '-01-01');
       var jDate = '00' + (1 + Math.ceil((dTime.getTime() - jStart) / 86400000));
       dlURL += 'TIME=' + dTime.getUTCFullYear() + (jDate)
         .substr((jDate.length) - 3);
@@ -325,7 +329,7 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
       // dlURL += "&switch="+s;
       dlURL += '&epsg=' + epsg;
       var layers = [];
-      _.each(products, function (layer) {
+      loEach(products, function (layer) {
         if (layer.projections[s].layer) {
           layers.push(layer.projections[s].layer);
         } else {
@@ -380,12 +384,12 @@ wv.image.panel = wv.image.panel || function (models, ui, config) {
       $('#wv-image-download-button')
         .unbind('click')
         .click(function () {
-          WVC.GA.event('Image Download', 'Click', 'Download');
-          wv.util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
+          googleAnalytics.event('Image Download', 'Click', 'Download');
+          util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
           window.open(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight, '_blank');
         });
     } catch (cause) {
-      wv.util.error(cause);
+      util.error(cause);
     }
   };
 

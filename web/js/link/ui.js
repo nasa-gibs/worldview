@@ -1,12 +1,18 @@
-var wv = wv || {};
-wv.link = wv.link || {};
+import $ from 'jquery';
+import loThrottle from 'lodash/throttle';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Clipboard from 'clipboard';
+import Share, {GA as googleAnalytics} from 'worldview-components';
+import util from '../util/util';
+import wvui from '../ui/ui';
 
-wv.link.ui = wv.link.ui || function (models, config) {
+export function linkUi(models, config) {
   var self = {};
   var id = 'wv-link-button';
   var selector = '#' + id;
   var $button, $label;
-  var widgetFactory = React.createFactory(WVC.Share);
+  var widgetFactory = React.createFactory(Share);
   var clipboard = new Clipboard('.copy-btn');
 
   var init = function () {
@@ -29,19 +35,19 @@ wv.link.ui = wv.link.ui || function (models, config) {
       .click(function () {
         var checked = $('#wv-link-button-check')
           .prop('checked');
-        WVC.GA.event('Link', 'Click', 'Share link Button');
+        googleAnalytics.event('Link', 'Click', 'Share link Button');
         if (checked) {
           self.show();
         } else {
-          wv.ui.closeDialog();
+          wvui.closeDialog();
         }
       });
     models.link.events.on('update', replaceHistoryState);
   };
 
   // Calls toQueryString to fetch updated state and returns URL
-  var replaceHistoryState = _.throttle(function () {
-    if (wv.util.browser.history) {
+  var replaceHistoryState = loThrottle(function () {
+    if (util.browser.history) {
       window.history.replaceState('', '@OFFICIAL_NAME@', '?' + models.link.toQueryString());
     }
   }, 2000, {
@@ -118,7 +124,7 @@ wv.link.ui = wv.link.ui || function (models, config) {
   };
 
   self.show = function () {
-    var $dialog = wv.ui.getDialog();
+    var $dialog = wvui.getDialog();
     var item = '<div id=\'wv-link\' class=\'wv-link\'>' +
       '<div class=\'input-group\'>' +
       '<input type=\'text\' value=\'\' name=\'permalink_content\' id=\'permalink_content\' readonly/>' +
@@ -135,11 +141,11 @@ wv.link.ui = wv.link.ui || function (models, config) {
     item += '</div>';
 
     var dialogWidth = '300';
-    if (wv.util.browser.small) {
+    if (util.browser.small) {
       dialogWidth = '242';
     }
 
-    Widget = self.initWidget();
+    var Widget = self.initWidget();
 
     // Render Dialog Box Content
     self.reactComponent = ReactDOM.render(Widget, $dialog[0]);
@@ -182,14 +188,14 @@ wv.link.ui = wv.link.ui || function (models, config) {
         $button.button('refresh');
         models.link.events.off('update', updateLink);
       });
-    if (wv.util.browser.small) {
-      wv.ui.positionDialog($dialog, {
+    if (util.browser.small) {
+      wvui.positionDialog($dialog, {
         my: 'left top',
         at: 'left+58 bottom+5',
         of: '#wv-toolbar'
       });
     } else {
-      wv.ui.positionDialog($dialog, {
+      wvui.positionDialog($dialog, {
         my: 'left top',
         at: 'left bottom+5',
         of: $label
@@ -209,7 +215,7 @@ wv.link.ui = wv.link.ui || function (models, config) {
           .prop('checked');
         if (checked) {
           var promise = models.link.shorten();
-          WVC.GA.event('Link', 'Check', 'Shorten');
+          googleAnalytics.event('Link', 'Check', 'Shorten');
           $('#permalink_content')
             .val('Please wait...');
           promise.done(function (result) {
@@ -226,7 +232,7 @@ wv.link.ui = wv.link.ui || function (models, config) {
         } else {
           $('#permalink_content')
             .val(models.link.get());
-          WVC.GA.event('Link', 'Check', 'Lengthen');
+          googleAnalytics.event('Link', 'Check', 'Lengthen');
         }
         $('#permalink_content')
           .focus();
@@ -237,7 +243,7 @@ wv.link.ui = wv.link.ui || function (models, config) {
     var error = function () {
       console.warn('Unable to shorten URL');
       console.warn.apply(console, arguments);
-      wv.ui.notify('Unable to shorten the permalink at this time. ' +
+      wvui.notify('Unable to shorten the permalink at this time. ' +
         'Please try again later.');
     };
 

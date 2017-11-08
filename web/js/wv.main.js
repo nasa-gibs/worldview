@@ -1,6 +1,6 @@
 // External Dependencies
 import $ from 'jquery';
-import each from 'lodash/each';
+import loEach from 'lodash/each';
 import {GA as googleAnalytics} from 'worldview-components';
 
 // Utils
@@ -20,11 +20,11 @@ import TimelinePick from './date/date.timeline.pick';
 import TimelinePan from './date/date.timeline.pan';
 import TimelineInput from './date/date.timeline.input';
 // Layers
-import {layerParser, layerValidate} from './layers/layers'; // export parse as layerParser. etc...
-import LayersModel from './layers/layers.model';
-import LayersModal from './layers/layers.modal';
-import LayersSidebar from './layers/layers.sidebar';
-import LayersActive from './layers/layers.active';
+import {parse as layerParser, validate as layerValidate} from './layers/layers'; // export parse as layerParser. etc...
+import layersModel from './layers/model';
+import layersModal from './layers/modal';
+import layersSidebar from './layers/sidebar';
+import layersActive from './layers/active';
 // Map
 import {parse as mapParser} from './map/map';
 import MapModel from './map/map.model';
@@ -44,7 +44,7 @@ import AnimationRangeselect from './animation/anim.rangeselect';
 import AnimationGIF from './animation/anim.gif';
 // Palettes
 import {palettesParser, paletteRequirements} from './palettes/palettes';
-import PalettesModel from './palettes/palettes.model';
+import palettesModel from './palettes/model';
 // Data
 import dataParser from './data/data';
 import DataModel from './data/data.model';
@@ -54,21 +54,20 @@ import NaturalEventsModel from './naturalEvents/naturalEvents.model';
 import NaturalEventsUI from './naturalEvents/naturalEvents.ui';
 import NaturalEventsRequest from './naturalEvents/naturalEvents.request';
 // Image
-import ImageRubberband from './image/image.rubberband';
-import ImagePanel from './image/image.panel';
+import imageRubberband from './image/rubberband';
+import imagePanel from './image/panel';
 // Notifications
 import NotificationsUI from './notifications/notifications.ui';
 // UI
-import {loadingIndicator} from './ui/ui.indicator'; // not a class, export object
+import {loadingIndicator} from './ui/indicator'; // not a class, export object
 // Link
-import LinkModel from './link/link.model';
-import LinkUI from './link/link.ui';
-import LinkInfo from './link/link.info';
+import linkModel from './link/model';
+import linkUi from './link/ui';
 // Projections
-import projectionParser from './proj/proj';
-import ProjectionModel from './proj/proj.model';
-import ProjectionUI from './proj/proj.ui';
-import ProjectionChange from './proj/proj.change';
+import projectionParser from './projection/projection';
+import projectionModel from './projection/model';
+import projectionUi from './projection/ui';
+import projectionChange from './projection/change';
 // Other
 import {debugConfig, debug} from './debug';
 import Brand from './brand';
@@ -121,7 +120,7 @@ window.onload = () => {
 
     // Load any additional scripts as needed
     if (config.scripts) {
-      each(config.scripts, function(script) {
+      loEach(config.scripts, function(script) {
         $.getScript(script);
       });
     }
@@ -141,7 +140,7 @@ window.onload = () => {
     if (config.features.animation) {
       parsers.push(animationParser);
     }
-    each(parsers, function(parser) {
+    loEach(parsers, function(parser) {
       parser(state, errors, config);
     });
     requirements = [
@@ -178,14 +177,14 @@ window.onload = () => {
     wvx.models = models;
     wvx.ui = ui;
 
-    models.proj = ProjectionModel(config);
-    models.palettes = PalettesModel(models, config);
-    models.layers = LayersModel(models, config);
+    models.proj = projectionModel(config);
+    models.palettes = palettesModel(models, config);
+    models.layers = layersModel(models, config);
     models.date = DateModel(config, {
       initial: initialDate
     });
     models.map = MapModel(models, config);
-    models.link = LinkModel(config);
+    models.link = linkModel(config);
 
     models.link
       .register(models.proj)
@@ -224,15 +223,15 @@ window.onload = () => {
     models.link.load(state); // needs to be loaded twice
 
     if (config.features.arcticProjectionChange) {
-      models.proj.change = ProjectionChange(models, config);
+      models.proj.change = projectionChange(models, config);
     }
 
     elapsed('ui');
     // Create widgets
-    ui.proj = ProjectionUI(models, config);
-    ui.sidebar = LayersSidebar(models, config);
-    ui.activeLayers = LayersActive(models, ui, config);
-    ui.addModal = LayersModal(models, ui, config);
+    ui.proj = projectionUi(models, config);
+    ui.sidebar = layersSidebar(models, config);
+    ui.activeLayers = layersActive(models, ui, config);
+    ui.addModal = layersModal(models, ui, config);
 
     function timelineInit() {
       ui.timeline = Timeline(models, config, ui);
@@ -260,8 +259,8 @@ window.onload = () => {
       ui.dateWheels = DateWheels(models, config);
     }
 
-    ui.rubberband = ImageRubberband(models, ui, config);
-    ui.image = ImagePanel(models, ui, config);
+    ui.rubberband = imageRubberband(models, ui, config);
+    ui.image = imagePanel(models, ui, config);
     if (config.features.dataDownload) {
       ui.data = DataUI(models, ui, config);
       // FIXME: Why is this here?
@@ -270,7 +269,7 @@ window.onload = () => {
     if (config.features.naturalEvents) {
       ui.naturalEvents = NaturalEventsUI(models, ui, config, NaturalEventsRequest(models, ui, config));
     }
-    ui.link = LinkUI(models, config);
+    ui.link = linkUi(models, config);
     ui.tour = Tour(models, ui, config);
     ui.info = LinkInfo(ui, config);
     if (config.features.alert) {
@@ -348,7 +347,7 @@ window.onload = () => {
   var errorReport = function() {
     var layersRemoved = 0;
 
-    each(errors, function(error) {
+    loEach(errors, function(error) {
       var cause = (error.cause) ? ': ' + error.cause : '';
       util.warn(error.message + cause);
       if (error.layerRemoved) {

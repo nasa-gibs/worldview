@@ -1,23 +1,19 @@
-/**
- * @module wv.proj
- */
-var wv = wv || {};
-wv.proj = wv.proj || {};
+import loEach from 'lodash/each';
+import olProj from 'ol/proj';
+import proj4 from 'proj4';
+import util from '../util/util';
 
-/**
- * @class wv.proj.model
- */
-wv.proj.model = wv.proj.model || function (config) {
+export function projectionModel(config) {
   var self = {};
   self.selected = null;
-  self.events = wv.util.events();
+  self.events = util.events();
 
   var init = function () {
     self.selectDefault();
-    _.each(config.projections, function (proj) {
+    loEach(config.projections, function (proj) {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
-        ol.proj.get(proj.crs)
+        olProj.get(proj.crs)
           .setExtent(proj.maxExtent);
       }
     });
