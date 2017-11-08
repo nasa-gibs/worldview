@@ -1,3 +1,4 @@
+import $ from 'jquery';
 /**
  * Modify zoom levels here. Maybe this isnt the best way to do this.
  * It could be called just level without the zoom part instead.
@@ -6,12 +7,7 @@
  *
  * @class wv.date.timeline.config
  */
-
-var wv = wv || {};
-wv.date = wv.date || {};
-wv.date.timeline = wv.date.timeline || {};
-
-wv.date.timeline.config = wv.date.timeline.config || function (models, config, ui) {
+export function timelineConfig(models, config, ui) {
   var self = {};
   var tl = ui.timeline;
   var model = models.date;

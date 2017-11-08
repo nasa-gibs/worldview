@@ -1,10 +1,28 @@
-var wv = wv || {};
-wv.map = wv.map || {};
+import $ from 'jquery';
+import loFindIndex from 'lodash/findIndex';
+import loEach from 'lodash/each';
+import loForOwn from 'lodash/forOwn';
+import loThrottle from 'lodash/throttle';
+import loFind from 'lodash/find';
+import util from '../util/util';
+import OlMap from 'ol/map';
+import OlView from 'ol/view';
+import OlKinetic from 'ol/kinetic';
+import OlGraticule from 'ol/graticule';
+import OlStyleStroke from 'ol/style/stroke';
+import OlControlScaleLine from 'ol/control/scaleline';
+import olEventsCondition from 'ol/events/condition';
+import OlInteractionPinchRotate from 'ol/interaction/pinchrotate';
+import OlInteractionDragRotate from 'ol/interaction/dragrotate';
+import OlInteractionDoubleClickZoom from 'ol/interaction/doubleclickzoom';
+import OlInteractionPinchZoom from 'ol/interaction/pinchzoom';
+import OlInteractionDragPan from 'ol/interaction/dragpan';
+import OlInteractionMouseWheelZoom from 'ol/interaction/mousewheelzoom';
+import OlInteractionDragZoom from 'ol/interaction/dragzoom';
+import olExtent from 'ol/extent';
+import olProj from 'ol/proj';
 
-/*
- * @Class
- */
-wv.map.ui = wv.map.ui || function (models, config, components) {
+export function mapui(models, config, components) {
   var id = 'wv-map';
   var selector = '#' + id;
   var cache = new Cache(400); // Save layers from days visited
@@ -13,21 +31,18 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var rotation = new components.Rotation(self, models);
   var layerBuilder;
   var dateline = components.Dateline(models, config);
-  var layerKey;
   var createLayer;
   var precache = components.Precache(models, config, cache, self);
 
   var dataRunner = self.runningdata = new components.Runningdata(models);
-  var hiDPI = ol.has.DEVICE_PIXEL_RATIO > 1;
-  var pixelRatio = hiDPI ? 2 : 1;
 
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
-  self.events = wv.util.events();
+  self.events = util.events();
   layerBuilder = self.layerBuilder = components.Layerbuilder(models, config, cache, self);
-  layerKey = self.layerKey = layerBuilder.layerKey;
+  self.layerKey = layerBuilder.layerKey;
   createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
 
@@ -45,7 +60,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     }
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
-    _.forOwn(config.projections, function (proj) {
+    loForOwn(config.projections, function (proj) {
       var map = createMap(proj);
       self.proj[proj.id] = map;
     });
@@ -131,8 +146,8 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
    */
   var onResize = function () {
     var map = self.selected;
-    if (map.small !== wv.util.browser.small) {
-      if (wv.util.browser.small) {
+    if (map.small !== util.browser.small) {
+      if (util.browser.small) {
         map.removeControl(map.wv.scaleImperial);
         map.removeControl(map.wv.scaleMetric);
         $('#' + map.getTarget() + ' .select-wrapper')
@@ -187,7 +202,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     var activeLayers = map.getLayers()
       .getArray()
       .slice(0);
-    _.each(activeLayers, function (mapLayer) {
+    loEach(activeLayers, function (mapLayer) {
       if (mapLayer.wv) {
         map.removeLayer(mapLayer);
       }
@@ -213,7 +228,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     var defs = models.layers.get({
       reverse: true
     });
-    _.each(defs, function (def) {
+    loEach(defs, function (def) {
       if (isGraticule(def)) {
         addGraticule();
       } else {
@@ -240,7 +255,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       }
     });
     var defs = models.layers.get();
-    _.each(defs, function (def) {
+    loEach(defs, function (def) {
       if (isGraticule(def)) {
         var renderable = models.layers.isRenderable(def.id);
         if (renderable) {
@@ -280,7 +295,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
    */
 
   var addLayer = function (def) {
-    var mapIndex = _.findIndex(models.layers.get({
+    var mapIndex = loFindIndex(models.layers.get({
       reverse: true
     }), {
       id: def.id
@@ -338,7 +353,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
    */
   var updateDate = function () {
     var defs = models.layers.get();
-    _.each(defs, function (def) {
+    loEach(defs, function (def) {
       if (def.period !== 'daily') {
         return;
       }
@@ -362,7 +377,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var updateLookup = function (layerId) {
     // If the lookup changes, all layers in the cache are now stale
     // since the tiles need to be rerendered. Remove from cache.
-    var selectedDate = wv.util.toISOStringDate(models.date.selected);
+    var selectedDate = util.toISOStringDate(models.date.selected);
     var selectedProj = models.proj.selected.id;
     cache.removeWhere(function (key, mapLayer) {
       if (mapLayer.wvid === layerId &&
@@ -395,7 +410,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var findLayer = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = _.find(layers, {
+    var layer = loFind(layers, {
       wv: {
         id: def.id
       }
@@ -417,7 +432,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var findLayerIndex = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = _.findIndex(layers, {
+    var layer = loFindIndex(layers, {
       wv: {
         id: def.id
       }
@@ -458,9 +473,9 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
   var addGraticule = function () {
     if (self.selected.graticule) { return; }
 
-    self.selected.graticule = new ol.Graticule({
+    self.selected.graticule = new OlGraticule({
       map: self.selected,
-      strokeStyle: new ol.style.Stroke({
+      strokeStyle: new OlStyleStroke({
         color: 'rgba(255, 255, 255, 0.5)',
         width: 2,
         lineDash: [0.5, 4]
@@ -484,7 +499,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     self.selected.graticule = null;
   };
 
-  var triggerExtent = _.throttle(function () {
+  var triggerExtent = loThrottle(function () {
     self.events.trigger('extent');
   }, 500, {
     trailing: true
@@ -519,7 +534,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
    */
   var createMap = function (proj) {
     var id, $map, scaleMetric, scaleImperial, rotateInteraction,
-      map, mobileRotation, lineSvgs, resolution;
+      map, mobileRotation;
 
     id = 'wv-map-' + proj.id;
     $map = $('<div></div>')
@@ -531,26 +546,26 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       .append($map);
 
     // Create two specific controls
-    scaleMetric = new ol.control.ScaleLine({
+    scaleMetric = new OlControlScaleLine({
       className: 'wv-map-scale-metric',
       units: 'metric'
     });
-    scaleImperial = new ol.control.ScaleLine({
+    scaleImperial = new OlControlScaleLine({
       className: 'wv-map-scale-imperial',
       units: 'imperial'
     });
 
-    rotateInteraction = new ol.interaction.DragRotate({
-      condition: ol.events.condition.altKeyOnly,
+    rotateInteraction = new OlInteractionDragRotate({
+      condition: olEventsCondition.altKeyOnly,
       duration: animationDuration
     });
-    mobileRotation = new ol.interaction.PinchRotate({
+    mobileRotation = new OlInteractionPinchRotate({
       duration: animationDuration
     });
-    map = new ol.Map({
-      view: new ol.View({
+    map = new OlMap({
+      view: new OlView({
         maxResolution: proj.resolutions[0],
-        projection: ol.proj.get(proj.crs),
+        projection: olProj.get(proj.crs),
         center: proj.startCenter,
         rotation: proj.id === 'geographic' ? 0.0 : models.map.rotation,
         zoom: proj.startZoom,
@@ -566,19 +581,19 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
         scaleImperial
       ],
       interactions: [
-        new ol.interaction.DoubleClickZoom({
+        new OlInteractionDoubleClickZoom({
           duration: animationDuration
         }),
-        new ol.interaction.DragPan({
-          kinetic: new ol.Kinetic(-0.005, 0.05, 100)
+        new OlInteractionDragPan({
+          kinetic: new OlKinetic(-0.005, 0.05, 100)
         }),
-        new ol.interaction.PinchZoom({
+        new OlInteractionPinchZoom({
           duration: animationDuration
         }),
-        new ol.interaction.MouseWheelZoom({
+        new OlInteractionMouseWheelZoom({
           duration: animationDuration
         }),
-        new ol.interaction.DragZoom({
+        new OlInteractionDragZoom({
           duration: animationDuration
         })
       ],
@@ -598,7 +613,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       map.addInteraction(rotateInteraction);
       map.addInteraction(mobileRotation);
     } else {
-      lineSvgs = dateline.init(self, map, models.date.selected);
+      dateline.init(self, map, models.date.selected);
     }
 
     // Set event listeners for changes on the map view (when rotated, zoomed, panned)
@@ -607,7 +622,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
     map.getView()
       .on('change:resolution', updateExtent);
     map.getView()
-      .on('change:rotation', _.throttle(onRotate, 300));
+      .on('change:rotation', loThrottle(onRotate, 300));
     map.on('pointerdrag', function () {
       self.mapIsbeingDragged = true;
       self.events.trigger('drag');
@@ -769,8 +784,8 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       if (outsideExtent) {
         return crs;
       }
-      target = ol.proj.transform(source, proj.crs, 'EPSG:4326');
-      return wv.util.formatCoordinate(target, format) + ' ' + crs;
+      target = olProj.transform(source, proj.crs, 'EPSG:4326');
+      return util.formatCoordinate(target, format) + ' ' + crs;
     };
 
     $map.append($mousePosition);
@@ -784,7 +799,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       .attr('data-format', 'latlon-dms')
       .addClass('map-coord');
 
-    if (wv.util.getCoordinateFormat() === 'latlon-dd') {
+    if (util.getCoordinateFormat() === 'latlon-dd') {
       $('div.map-coord')
         .removeClass('latlon-selected');
       $latlonDD.addClass('latlon-selected');
@@ -814,13 +829,13 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
             .removeClass('latlon-selected');
           $('span.map-coord[data-format="latlon-dms"]')
             .addClass('latlon-selected');
-          wv.util.setCoordinateFormat('latlon-dms');
+          util.setCoordinateFormat('latlon-dms');
         } else {
           $('span.map-coord')
             .removeClass('latlon-selected');
           $('span.map-coord[data-format="latlon-dd"]')
             .addClass('latlon-selected');
-          wv.util.setCoordinateFormat('latlon-dd');
+          util.setCoordinateFormat('latlon-dd');
         }
       });
 
@@ -830,7 +845,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       var outside;
 
       // if mobile return
-      if (wv.util.browser.small) {
+      if (util.browser.small) {
         return;
       }
       // if over coords return
@@ -842,7 +857,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
       }
       pixels = map.getEventPixel(e.originalEvent);
       coords = map.getCoordinateFromPixel(pixels);
-      if (!ol.extent.containsCoordinate(extent, coords)) {
+      if (!olExtent.containsCoordinate(extent, coords)) {
         outside = true;
       }
 
@@ -865,7 +880,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
         });
 
       // setting a limit on running-data retrievel
-      if (self.mapIsbeingDragged || wv.util.browser.small) {
+      if (self.mapIsbeingDragged || util.browser.small) {
         return;
       }
       if (typeof models.naturalEvents === 'undefined' ||
@@ -903,7 +918,7 @@ wv.map.ui = wv.map.ui || function (models, config, components) {
         hoverThrottle.cancel();
         dataRunner.clearAll();
       })
-      .mousemove(hoverThrottle = _.throttle(onMouseMove, 300));
+      .mousemove(hoverThrottle = loThrottle(onMouseMove, 300));
   };
 
   /*

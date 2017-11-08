@@ -1,35 +1,21 @@
-ol.wv = {};
-/**
- * @constructor
- * @extends {ol.ImageTile}
- */
-ol.wv.LookupImageTile = function (lookup, tileCoord, state, src, crossOrigin, tileLoadFunction) {
-  goog.base(this, tileCoord, state, src, 'anonymous', tileLoadFunction);
+import ImageTile from 'ol/imagetile';
+import TileState from 'ol/tilestate';
 
-  /**
-   * @private
-   */
-  this.lookup_ = lookup;
-
-  /**
-   * @private
-   */
-  this.canvas_ = null;
-};
-goog.inherits(ol.wv.LookupImageTile, ol.ImageTile);
-
-/**
- * @return (HTMLCanvasElement|HTMLImageElement|HTMLVideoElement|null)
- */
-ol.wv.LookupImageTile.prototype.getImage = function (opt_context) {
+class LookupImageTile extends ImageTile {
+  constructor(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction) {
+    super(tileCoord, state, src, crossOrigin, tileLoadFunction);
+    this.lookup_ = lookup;
+    this.canvas_ = null;
+  }
+}
+LookupImageTile.prototype.getImage = function() {
   return this.canvas_;
 };
-
-ol.wv.LookupImageTile.prototype.load = function () {
-  if (this.state === ol.TileState.IDLE) {
-    this.state = ol.TileState.LOADING;
+LookupImageTile.prototype.load = function() {
+  if (this.state === TileState.IDLE) {
+    this.state = TileState.LOADING;
     var that = this;
-    var onImageLoad = function (e) {
+    var onImageLoad = function() {
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
@@ -55,7 +41,7 @@ ol.wv.LookupImageTile.prototype.load = function () {
         }
       }
       g.putImageData(imageData, 0, 0);
-      that.state = ol.TileState.LOADED;
+      that.state = TileState.LOADED;
       that.changed();
       that.image_.removeEventListener('load', onImageLoad);
     };
@@ -64,12 +50,9 @@ ol.wv.LookupImageTile.prototype.load = function () {
   }
 };
 
-/**
- * @api
- */
-ol.wv.LookupImageTile.factory = function (lookup) {
+export function lookupFactory(lookup) {
   return function (tileCoord, state, src, crossOrigin, tileLoadFunction) {
-    return new ol.wv.LookupImageTile(lookup, tileCoord, state, src,
+    return new LookupImageTile(lookup, tileCoord, state, src,
       crossOrigin, tileLoadFunction);
   };
 };

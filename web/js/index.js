@@ -1,6 +1,7 @@
 export { stub, stub2 } from './stub';
 export { polyfill } from './polyfill';
 export { util } from './util/util';
+export { parse as mapParser } from './map/wv.map';
 export { imagePanel } from './image/panel';
 export { imageRubberband } from './image/rubberband';
 export { linkModel } from './link/model';

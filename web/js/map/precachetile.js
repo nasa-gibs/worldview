@@ -1,10 +1,8 @@
-var wv = wv || {};
-wv.map = wv.map || {};
+import loEach from 'lodash/each';
+import olExtent from 'ol/extent';
+import OlRendererCanvasTileLayer from 'ol/renderer/canvas/tilelayer';
 
-/*
- * @Class
- */
-wv.map.precachetile = wv.map.precachetile || function (models, config, cache, parent) {
+export function mapPrecacheTile(models, config, cache, parent) {
   /*
    * Loaded the layers that are needed for any one date.
    * Checks the cache to see if a layer has already
@@ -20,14 +18,12 @@ wv.map.precachetile = wv.map.precachetile || function (models, config, cache, pa
    */
   self.promiseDay = function (date) {
     var viewState;
-    var currentZ;
     var frameState;
     var extent;
     var pixelRatio;
     var layers;
     var map;
     var promiseArray;
-    var projExtent;
 
     layers = getActiveLayersWithData(date);
     map = parent.selected;
@@ -37,10 +33,7 @@ wv.map.precachetile = wv.map.precachetile || function (models, config, cache, pa
     promiseArray = layers.map(function (def) {
       var key;
       var layer;
-      var renderer;
-      var i = 0;
 
-      i = 0;
       key = parent.layerKey(def, {
         date: date
       });
@@ -64,7 +57,7 @@ wv.map.precachetile = wv.map.precachetile || function (models, config, cache, pa
     var layers;
     var arra = [];
     layers = models.layers.get();
-    _.each(layers, function (layer) {
+    loEach(layers, function (layer) {
       if (layer.visible && new Date(layer.startDate > date)) {
         arra.push(layer);
       }
@@ -90,7 +83,7 @@ wv.map.precachetile = wv.map.precachetile || function (models, config, cache, pa
     return extent;
   };
   var getExtent = function (extent1, extent2) {
-    return ol.extent.getIntersection(extent1, extent2);
+    return olExtent.getIntersection(extent1, extent2);
   };
   var promiseLayerGroup = function (layer, extent, viewState, pixelRatio, map) {
     return new Promise(function (resolve, reject) {
@@ -122,7 +115,7 @@ wv.map.precachetile = wv.map.precachetile || function (models, config, cache, pa
       }
       projection = viewState.projection;
       i = 0;
-      renderer = new ol.renderer.canvas.TileLayer(layer);
+      renderer = new OlRendererCanvasTileLayer(layer);
       tileSource = layer.getSource();
       tileGrid = tileSource.getTileGridForProjection(projection);
       currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);

@@ -1,16 +1,8 @@
-/**
- * @module wv.date.timeline
- */
-var wv = wv || {};
-wv.date = wv.date || {};
-wv.date.timeline = wv.date.timeline || {};
 
 /**
  * Perform timeline panning functions
- *
- * @class wv.date.timeline.pan
  */
-wv.date.timeline.pan = wv.date.timeline.pan || function (models, config, ui) {
+export function timelinePan(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
   var self = {};

@@ -1,12 +1,17 @@
-var wv = wv || {};
-wv.map = wv.map || {};
+import util from '../util/util';
+import OlTileGridWMTS from 'ol/tilegrid/wmts';
+import OlSourceWMTS from 'ol/source/wmts';
+import OlSourceTileWMS from 'ol/source/tilewms';
+import OlLayerGroup from 'ol/layer/group';
+import OlLayerTile from 'ol/layer/tile';
+import OlTileGridTileGrid from 'ol/tilegrid/tilegrid';
+import loCloneDeep from 'lodash/cloneDeep';
+import loMerge from 'lodash/merge';
+import loEach from 'lodash/each';
+import {lookupFactory} from '../ol/lookupimagetile';
 
-/*
- * @Class
- */
-wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Parent) {
+export function mapLayerBuilder(models, config, cache, Parent) {
   var self = {};
-  var map;
   self.init = function (Parent) {
     self.extentLayers = [];
     Parent.events.on('selecting', hideWrap);
@@ -26,9 +31,8 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
    * @returns {object} OpenLayers layer
    */
   self.createLayer = function (def, options) {
-    var date, key, proj, layer, layerNext, layerPrior, group, attributes;
+    var date, key, proj, layer, layerNext, layerPrior, attributes;
 
-    group = null;
     options = options || {};
     key = self.layerKey(def, options);
     proj = models.proj.selected;
@@ -38,12 +42,12 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
       attributes = {
         id: def.id,
         key: key,
-        date: wv.util.toISOStringDate(date),
+        date: util.toISOStringDate(date),
         proj: proj.id,
         def: def
       };
-      def = _.cloneDeep(def);
-      _.merge(def, def.projections[proj.id]);
+      def = loCloneDeep(def);
+      loMerge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
         layer = createLayerWMTS(def, options);
         if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
@@ -54,7 +58,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
           layerPrior.wv = attributes;
           layerNext.wv = attributes;
 
-          layer = new ol.layer.Group({
+          layer = new OlLayerGroup({
             layers: [layer, layerNext, layerPrior]
           });
         }
@@ -68,7 +72,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
           layerPrior.wv = attributes;
           layerNext.wv = attributes;
 
-          layer = new ol.layer.Group({
+          layer = new OlLayerGroup({
             layers: [layer, layerNext, layerPrior]
           });
         }
@@ -99,9 +103,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     var projId = models.proj.selected.id;
     var date;
     if (options.date) {
-      date = wv.util.toISOStringDate(options.date);
+      date = util.toISOStringDate(options.date);
     } else {
-      date = wv.util.toISOStringDate(models.date.selected);
+      date = util.toISOStringDate(models.date.selected);
     }
     var dateId = (def.period === 'daily') ? date : '';
     var palette = '';
@@ -139,7 +143,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     }
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
-      _.each(matrixSet.resolutions, function (resolution, index) {
+      loEach(matrixSet.resolutions, function (resolution, index) {
         matrixIds.push(index);
       });
     } else {
@@ -161,9 +165,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     if (def.period === 'daily') {
       date = options.date || models.date.selected;
       if (day) {
-        date = wv.util.dateAdd(date, 'day', day);
+        date = util.dateAdd(date, 'day', day);
       }
-      extra = '?TIME=' + wv.util.toISOStringDate(date);
+      extra = '?TIME=' + util.toISOStringDate(date);
     }
     var sourceOptions = {
       url: source.url + extra,
@@ -171,7 +175,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
       crossOrigin: 'anonymous',
       format: def.format,
       matrixSet: matrixSet.id,
-      tileGrid: new ol.tilegrid.WMTS({
+      tileGrid: new OlTileGridWMTS({
         origin: start,
         resolutions: matrixSet.resolutions,
         matrixIds: matrixIds,
@@ -182,11 +186,11 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     };
     if (models.palettes.isActive(def.id)) {
       var lookup = models.palettes.getLookup(def.id);
-      sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
+      sourceOptions.tileClass = lookupFactory(lookup);
     }
-    var layer = new ol.layer.Tile({
+    var layer = new OlLayerTile({
       extent: extent,
-      source: new ol.source.WMTS(sourceOptions)
+      source: new OlSourceWMTS(sourceOptions)
     });
     return layer;
   };
@@ -205,8 +209,8 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
    * @returns {object} OpenLayers WMS layer
    */
   var createLayerWMS = function (def, options, day) {
-    var proj, source, matrixSet, matrixIds, extra, transparent,
-      date, extent, start, bbox, res;
+    var proj, source, extra, transparent,
+      date, extent, start, res, parameters;
     proj = models.proj.selected;
     source = config.sources[def.source];
     extent = proj.maxExtent;
@@ -241,9 +245,9 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
     if (def.period === 'daily') {
       date = options.date || models.date.selected;
       if (day) {
-        date = wv.util.dateAdd(date, 'day', day);
+        date = util.dateAdd(date, 'day', day);
       }
-      extra = '?TIME=' + wv.util.toISOStringDate(date);
+      extra = '?TIME=' + util.toISOStringDate(date);
     }
     var sourceOptions = {
       url: source.url + extra,
@@ -251,7 +255,7 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
       style: 'default',
       crossOrigin: 'anonymous',
       params: parameters,
-      tileGrid: new ol.tilegrid.TileGrid({
+      tileGrid: new OlTileGridTileGrid({
         origin: start,
         resolutions: res
       })
@@ -259,11 +263,11 @@ wv.map.layerbuilder = wv.map.layerbuilder || function (models, config, cache, Pa
 
     if (models.palettes.isActive(def.id)) {
       var lookup = models.palettes.getLookup(def.id);
-      sourceOptions.tileClass = ol.wv.LookupImageTile.factory(lookup);
+      sourceOptions.tileClass = lookupFactory(lookup);
     }
-    var layer = new ol.layer.Tile({
+    var layer = new OlLayerTile({
       extent: extent,
-      source: new ol.source.TileWMS(sourceOptions)
+      source: new OlSourceTileWMS(sourceOptions)
     });
     return layer;
   };

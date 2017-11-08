@@ -1,18 +1,11 @@
-/**
- * @module wv.date.timeline
- */
-var wv = wv || {};
-wv.date = wv.date || {};
-wv.date.timeline = wv.date.timeline || {};
+import $ from 'jquery';
+import uiMouse from '../ui/mouse';
 /**
  * Perform timeline zooming functions
- *
- * @class wv.date.timeline.zoom
- */
-wv.date.timeline.zoom = wv.date.timeline.zoom || function (models, config, ui) {
-  var tl = ui.timeline;
-  var model = models.date;
 
+ */
+export function timelineZoom(models, config, ui) {
+  var tl = ui.timeline;
   var self = {};
 
   self.current = {
@@ -55,10 +48,10 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function (models, config, ui) {
       mouseOffset = (tl.width - tl.margin.left - tl.margin.right) / 2 - relX;
     }
 
-    var d1 = tl.data.start(),
-      d2,
-      r1 = (tl.width / 2) - ((count * w) / 2),
-      r2 = (tl.width / 2) + ((count * w) / 2);
+    var d1 = tl.data.start();
+    var d2;
+    var r1 = (tl.width / 2) - ((count * w) / 2);
+    var r2 = (tl.width / 2) + ((count * w) / 2);
 
     if (max > count) {
       tl.isCropped = false;
@@ -90,7 +83,7 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function (models, config, ui) {
       tl.axisZoom.xExtent([tl.data.start(), tl.data.end()]);
     }
 
-    wv.ui.mouse.wheel(tl.axisZoom, ui)
+    uiMouse.wheel(tl.axisZoom, ui)
       .change(self.change);
 
     tl.svg.call(tl.axisZoom);

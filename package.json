@@ -81,7 +81,7 @@
     "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
     "isotope-layout": "3.0.x",
     "isotope-packery": "2.x.x",
-    "jquery": "^2.1.4",
+    "jquery": "^2.2.4",
     "lodash": "4.15.0",
     "openlayers": "4.3.1",
     "perfect-scrollbar": "0.7.x",
@@ -89,7 +89,6 @@
     "promise-queue": "2.2.3",
     "react": "15.3.1",
     "react-dom": "15.3.1",
-    "worldview-components": "^1.5.1",
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.1.2"
   }
 }

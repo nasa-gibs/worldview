@@ -1,27 +1,26 @@
-var wv = wv || {};
-wv.date = wv.date || {};
+import util from '../util/util';
 
-wv.date.model = wv.date.model || function (config, spec) {
+export function dateModel(config, spec) {
   spec = spec || {};
 
   var self = {};
-  self.events = wv.util.events();
+  self.events = util.events();
   self.selected = null;
 
   self.monthAbbr = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
   var init = function () {
-    var initial = spec.initial || wv.util.today();
+    var initial = spec.initial || util.today();
     self.select(initial);
   };
 
   self.string = function () {
-    return wv.util.toISOStringDate(self.selected);
+    return util.toISOStringDate(self.selected);
   };
 
   self.select = function (date) {
-    date = self.clamp(wv.util.clearTimeUTC(date));
+    date = self.clamp(util.clearTimeUTC(date));
     var updated = false;
     if (!self.selected || date.getTime() !== self.selected.getTime()) {
       self.selected = date;
@@ -32,15 +31,15 @@ wv.date.model = wv.date.model || function (config, spec) {
   };
 
   self.add = function (interval, amount) {
-    self.select(wv.util.dateAdd(self.selected, interval, amount));
+    self.select(util.dateAdd(self.selected, interval, amount));
   };
 
   self.clamp = function (date) {
-    if (date > wv.util.today()) {
-      date = wv.util.today();
+    if (date > util.today()) {
+      date = util.today();
     }
     if (config.startDate) {
-      startDate = wv.util.parseDateUTC(config.startDate);
+      let startDate = util.parseDateUTC(config.startDate);
       if (date < startDate) {
         date = startDate;
       }
@@ -49,11 +48,11 @@ wv.date.model = wv.date.model || function (config, spec) {
   };
 
   self.isValid = function (date) {
-    if (date > wv.util.today()) {
+    if (date > util.today()) {
       return false;
     }
     if (config.startDate) {
-      startDate = wv.util.parseDateUTC(config.startDate);
+      let startDate = util.parseDateUTC(config.startDate);
       if (date < startDate) {
         return false;
       }
@@ -63,13 +62,13 @@ wv.date.model = wv.date.model || function (config, spec) {
 
   self.minDate = function () {
     if (config.startDate) {
-      return wv.util.parseDateUTC(config.startDate);
+      return util.parseDateUTC(config.startDate);
     }
-    return wv.util.minDate();
+    return util.minDate();
   };
 
   self.maxDate = function () {
-    return wv.util.today();
+    return util.today();
   };
 
   self.save = function (state) {

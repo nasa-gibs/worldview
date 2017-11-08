@@ -1,7 +1,9 @@
-var wv = wv || {};
+import $ from 'jquery';
+import util from '../util/util';
+import loDifference from 'lodash/difference';
+import loEach from 'lodash/each';
 
-wv.map = wv.map || {};
-wv.map.runningdata = wv.map.runningdata || function (models) {
+export function mapRunningData(models) {
   var self;
   var $productsBox;
   var productsBoxHeight;
@@ -67,7 +69,7 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
     // }
 
     for (var i = 0, len = legend.colors.length; i < len; i++) {
-      if (wv.util.hexColorDelta(legend.colors[i], hex) < 5) { // If the two colors are close
+      if (util.hexColorDelta(legend.colors[i], hex) < 5) { // If the two colors are close
         return {
           label: legend.tooltips[i] + ' ' + units,
           len: len,
@@ -184,7 +186,7 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
    *
    */
   self.LayersToRemove = function (oldArray, newArray) {
-    return _.difference(oldArray, newArray);
+    return loDifference(oldArray, newArray);
   };
 
   /*
@@ -204,8 +206,7 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
     self.activeLayers = [];
     map.forEachLayerAtPixel(coords, function (layer, data) {
       var hex;
-      var palette;
-      var legend;
+      var legends;
       var layerId;
 
       if (!layer.wv) {
@@ -217,9 +218,9 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
           return;
         }
         legends = models.palettes.getLegends(layerId);
-        hex = wv.util.rgbaToHex(data[0], data[1], data[2], data[3]);
+        hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
 
-        _.each(legends, function (legend) {
+        loEach(legends, function (legend) {
           if (legend) {
             self.createRunnerFromLegend(legend, hex);
           }
@@ -332,8 +333,6 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
    */
   self.setCategoryValue = function (id, data) {
     var $categoryPaletteCase;
-    var $caseWidth;
-    var $labelWidth;
     var $colorSquare;
     var $paletteLabel;
     var location;
@@ -347,10 +346,7 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
     $colorSquare = $categoryPaletteCase.find('[data-class-index=\'' + data.index + '\']');
     $paletteLabel = $categoryPaletteCase.find('.wv-running-category-label');
 
-    $caseWidth = $categoryPaletteCase.width();
-
     $paletteLabel.text(data.label);
-    $labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
 
     location = ((marginLeft + squareWidth) * data.index);
     if (location < 5) {
@@ -382,6 +378,9 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
     var $palette;
     var $paletteCase;
     var $paletteWidth;
+    var $paletteCaseWidth;
+    var $paletteLabel;
+    var $paletteBar;
     var labelWidth;
     var percent;
     var labelMargin;
@@ -400,7 +399,7 @@ wv.map.runningdata = wv.map.runningdata || function (models) {
     location = ($paletteWidth * percent + margin);
 
     $paletteLabel.text(data.label);
-    labelWidth = wv.util.getTextWidth(data.label, 'Lucida Sans');
+    labelWidth = util.getTextWidth(data.label, 'Lucida Sans');
     labelMargin = self.getLabelMarginLeft(labelWidth, $paletteWidth, location);
 
     $paletteLabel.attr('style', 'left:' + Math.round(labelMargin) + 'px;');

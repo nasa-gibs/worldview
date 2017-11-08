@@ -1,14 +1,7 @@
-/**
- * @module wv.date
- */
-var wv = wv || {};
-wv.date = wv.date || {};
-/**
- * Setup the timeline
- *
- * @class wv.date.timeline
- */
-wv.date.timeline = wv.date.timeline || function (models, config, ui) {
+import $ from 'jquery';
+import util from '../util/util';
+
+export function timeline(models, config, ui) {
   var self = {};
   var model = models.date;
 
@@ -97,7 +90,7 @@ wv.date.timeline = wv.date.timeline || function (models, config, ui) {
   };
 
   self.resize = function () {
-    var small = wv.util.browser.small || wv.util.browser.constrained;
+    var small = util.browser.small || util.browser.constrained;
     if (self.enabled && small) {
       self.enabled = false;
       $('#timeline')
@@ -221,7 +214,7 @@ wv.date.timeline = wv.date.timeline || function (models, config, ui) {
 
     self.resize();
 
-    if (wv.util.browser.localStorage) {
+    if (util.browser.localStorage) {
       if (localStorage.getItem('timesliderState') === 'collapsed') {
         self.collapseNow();
       }
