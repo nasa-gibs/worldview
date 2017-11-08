@@ -613,7 +613,11 @@ module.exports = function(grunt) {
       }
     },
 
-    uglify: {
+    'build-js': {
+      command: 'npm run build-js'
+    },
+
+    'build-ol': {
       // Minifiy the concatenated Worldview JavaScript file.
       options: {
         compress: {
@@ -683,7 +687,8 @@ module.exports = function(grunt) {
     'remove:source',
     'exec:empty',
     'copy:release',
-    'uglify',
+    'build-js',
+    'build-ol',
     'cssmin',
     'replace:links',
     'lineremover',
