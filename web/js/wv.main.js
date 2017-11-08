@@ -7,18 +7,18 @@ import {GA as googleAnalytics} from 'worldview-components';
 import util from './util/util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
 // Date
 import {dateParser} from './date/date'; // export default function parse!!!
-import DateModel from './date/date.model';
-import DateLabel from './date/date.label';
-import DateWheels from './date/date.wheels';
+import DateModel from './date/model';
+import DateLabel from './date/label';
+import DateWheels from './date/wheels';
 // Timeline
-import Timeline from './date/date.timeline';
-import TimelineData from './date/date.timeline.data';
-import TimelineConfig from './date/date.timeline.config';
-import TimelineZoom from './date/date.timeline.zoom';
-import TimelineTicks from './date/date.timeline.ticks';
-import TimelinePick from './date/date.timeline.pick';
-import TimelinePan from './date/date.timeline.pan';
-import TimelineInput from './date/date.timeline.input';
+import Timeline from './date/timeline';
+import TimelineData from './date/timeline-data';
+import TimelineConfig from './date/config';
+import TimelineZoom from './date/timeline-zoom';
+import TimelineTicks from './date/timeline-ticks';
+import TimelinePick from './date/timeline-pick';
+import TimelinePan from './date/timeline-pan';
+import TimelineInput from './date/timeline-input';
 // Layers
 import {parse as layerParser, validate as layerValidate} from './layers/layers'; // export parse as layerParser. etc...
 import layersModel from './layers/model';
@@ -27,20 +27,20 @@ import layersSidebar from './layers/sidebar';
 import layersActive from './layers/active';
 // Map
 import {parse as mapParser} from './map/map';
-import MapModel from './map/map.model';
-import MapUI from './map/map.ui';
-import MapRotate from './map/map.rotate';
-import MapRunningData from './map/map.runningdata';
-import MapLayerBuilder from './map/map.layerbuilder';
-import MapDatelineBuilder from './map/map.datelinebuilder';
-import MapPrecacheTile from './map/map.precachetile';
-import MapAnimate from './map/map.animate';
+import MapModel from './map/model';
+import MapUI from './map/ui';
+import MapRotate from './map/rotate';
+import MapRunningData from './map/runningdata';
+import MapLayerBuilder from './map/layerbuilder';
+import MapDatelineBuilder from './map/datelinebuilder';
+import MapPrecacheTile from './map/precachetile';
+import MapAnimate from './map/animate';
 // Animation
 import {animationParser} from './animation/anim';
-import AnimationModel from './animation/anim.model';
-import AnimationUI from './animation/anim.ui';
+import AnimationModel from './animation/model';
+import AnimationUI from './animation/ui';
 import AnimationWidget from './animation/animation-widget';
-import AnimationRangeselect from './animation/anim.rangeselect';
+import AnimationRangeselect from './animation/rangeselect';
 import AnimationGIF from './animation/anim.gif';
 // Palettes
 import {palettesParser, paletteRequirements} from './palettes/palettes';
@@ -50,9 +50,9 @@ import dataParser from './data/data';
 import DataModel from './data/data.model';
 import DataUI from './data/data.ui';
 // NaturalEvents
-import NaturalEventsModel from './naturalEvents/naturalEvents.model';
-import NaturalEventsUI from './naturalEvents/naturalEvents.ui';
-import NaturalEventsRequest from './naturalEvents/naturalEvents.request';
+import NaturalEventsModel from './naturalEvents/model';
+import NaturalEventsUI from './naturalEvents/ui';
+import NaturalEventsRequest from './naturalEvents/request';
 // Image
 import imageRubberband from './image/rubberband';
 import imagePanel from './image/panel';
