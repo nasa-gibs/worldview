@@ -1,10 +1,9 @@
-/**
- * @module wv.ui
- */
-var wv = wv || {};
-wv.ui = wv.ui || {};
+import $ from 'jquery';
+import wvui from './ui';
+import util from '../util/util';
+import feedbackModal from '../feedback';
 
-wv.ui.info = wv.ui.info || function (ui, config) {
+export function info (ui, config) {
   var selector = '#wv-info-button';
   var $button = $('<input />')
     .attr('type', 'checkbox')
@@ -28,7 +27,7 @@ wv.ui.info = wv.ui.info || function (ui, config) {
 
   $button.click(function (event) {
     event.stopPropagation();
-    wv.ui.close();
+    wvui.close();
     var checked = $('#wv-info-button-check')
       .prop('checked');
     if (checked) {
@@ -37,7 +36,7 @@ wv.ui.info = wv.ui.info || function (ui, config) {
   });
 
   var show = function () {
-    var $menu = wv.ui.getMenu()
+    var $menu = wvui.getMenu()
       .attr('id', 'wv-info-menu');
     var $alerts, $new;
     var whatsNewUrl = 'https://github.com/nasa-gibs/worldview/releases';
@@ -75,7 +74,7 @@ wv.ui.info = wv.ui.info || function (ui, config) {
     $menu.append($menuItems);
 
     $menuItems.menu();
-    wv.ui.positionMenu($menuItems, {
+    wvui.positionMenu($menuItems, {
       my: 'left top',
       at: 'left bottom + 5',
       of: $label
@@ -83,10 +82,10 @@ wv.ui.info = wv.ui.info || function (ui, config) {
     $menuItems.hide();
 
     $about.click(function () {
-      if (wv.util.browser.small || wv.util.browser.touchDevice) {
+      if (util.browser.small || util.browser.touchDevice) {
         window.open('brand/pages/about.html?v=@BUILD_NONCE@', '_blank');
       } else {
-        wv.ui.getDialog()
+        wvui.getDialog()
           .dialog({
             title: 'About',
             width: 625,
@@ -106,7 +105,7 @@ wv.ui.info = wv.ui.info || function (ui, config) {
       window.open('https://github.com/nasa-gibs/worldview', '_blank');
     });
 
-    wv.feedback.decorate($feedback.find('a'));
+    feedbackModal.decorate($feedback.find('a'));
 
     $tour.click(function () {
       ui.tour.start();

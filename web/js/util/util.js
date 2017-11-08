@@ -1,12 +1,17 @@
 /* global ntptEventTag */
 
+/* The ntptEventTag global variable is defined by
+ * https://earthdata.nasa.gov/lib/ntpagetag.js
+ * which is included via config.scripts in web/config/wv.json
+*/
+
 import $ from 'jquery';
 import loEach from 'lodash/each';
 import loIsNull from 'lodash/isNull';
-import wvui from '../ui/ui.js';
-import browser from './browser.js';
-import events from './events.js';
-import load from './load.js';
+import wvui from '../ui/ui';
+import browser from './browser';
+import events from './events';
+import load from './load';
 
 export const util = (function () {
   var self = {};

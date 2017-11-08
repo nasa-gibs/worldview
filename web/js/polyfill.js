@@ -6,7 +6,7 @@
 // ===========================================================================
 
 import $ from 'jquery';
-import util from './util/util.js';
+import util from './util/util';
 
 export function polyfill () {
   /*

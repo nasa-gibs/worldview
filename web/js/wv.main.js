@@ -59,7 +59,7 @@ import imagePanel from './image/panel';
 // Notifications
 import NotificationsUI from './notifications/notifications.ui';
 // UI
-import {loadingIndicator} from './ui/ui.indicator'; // not a class, export object
+import {loadingIndicator} from './ui/indicator'; // not a class, export object
 // Link
 import linkModel from './link/model';
 import linkUi from './link/ui';
