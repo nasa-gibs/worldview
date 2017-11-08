@@ -110,7 +110,7 @@ To display a color palette legend, a *palette* object should exist with the foll
             "id":       "AIRS_RelativeHumidity_400hPa_Day",
             "title":    "Relative Humidity (400 hPa, Day)",
             "subtitle": "Aqua / AIRS",
-            "description": "reference/orbits/AIRS_RelativeHumidity_400hPa_Day",
+            "description": "airs/AIRS_RelativeHumidity_400hPa_Day",
             "tags":     "rh",
             "group":    "overlays",
             "product":  "AIRX2RET_DAY",
