@@ -49,7 +49,6 @@ module.exports = function(grunt) {
 
   // Lists of JavaScript and CSS files to include and in the correct
   // order
-  var js = grunt.file.readJSON('deploy/wv.js.json');
   var css = grunt.file.readJSON('deploy/wv.css.json');
 
   // Platform specific command for find
@@ -110,17 +109,6 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      // Combine all the Worldview JavaScript files into one file.
-      js: {
-        src: js['wv.js'],
-        dest: 'build/worldview-debug/web/js/wv.js'
-      },
-      // Combine all the Openlayers JavaScript files into one file.
-      oljs: {
-        src: js['ol.js'],
-        dest: 'build/worldview-debug/web/js/ol.js'
-      },
-      // Combine all the Worldview CSS files into one file.
       css: {
         src: css,
         dest: 'build/worldview-debug/web/css/wv.css'
