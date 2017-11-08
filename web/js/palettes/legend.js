@@ -1,10 +1,11 @@
-/**
- * @module wv.palettes
- */
-var wv = wv || {};
-wv.palettes = wv.palettes || {};
+import $ from 'jquery';
+import loEach from 'lodash/each';
+import loFirst from 'lodash/first';
+import loLast from 'lodash/last';
+import util from '../util/util';
+import palettes from './palettes';
 
-wv.palettes.legend = wv.palettes.legend || function (spec) {
+export function palettesLegend(spec) {
   var selector = spec.selector;
   var config = spec.config;
   var models = spec.models;
@@ -22,7 +23,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       loaded = true;
       render();
     } else {
-      wv.palettes.loadRendered(config, layer.id)
+      palettes.loadRendered(config, layer.id)
         .done(function () {
           if (!loaded) {
             loaded = true;
@@ -45,7 +46,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       .attr('data-layer', layer.id);
     $parent.append($legendPanel);
     var legends = model.getLegends(layer.id);
-    _.each(legends, function (legend, index) {
+    loEach(legends, function (legend, index) {
       if ((legend.type === 'continuous') ||
         (legend.type === 'discrete')) {
         renderScale($legendPanel, legend, index, layer.id);
@@ -98,7 +99,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
     });
     $colorbar.on('mouseout', hideUnitsOnMouseOut);
     $legendPanel.append($container);
-    wv.palettes.colorbar(selector + ' ' +
+    palettes.colorbar(selector + ' ' +
       '[data-index=\'' + index + '\'] canvas', legend.colors);
   };
   var renderClasses = function ($legendPanel, legend, index) {
@@ -117,7 +118,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
   var updateClasses = function (legend, index) {
     var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
-    _.each(legend.colors, function (color, classIndex) {
+    loEach(legend.colors, function (color, classIndex) {
       var $colorBox;
       var $runningDataPointLabel = $('<span></span>')
         .addClass('wv-running-category-label');
@@ -127,7 +128,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
         .attr('data-hex', color)
         .addClass('wv-palettes-class')
         .html('&nbsp;')
-        .css('background-color', wv.util.hexToRGB(color))
+        .css('background-color', util.hexToRGB(color))
         .hover(highlightClass, unhighlightClass);
       $panel.append($colorBox);
       $panel.append($runningDataPointLabel);
@@ -136,7 +137,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       $colorBox.on('mouseout', hideUnitsOnMouseOut);
     });
     var $detailPanel = $('<div></div>');
-    _.each(legend.colors, function (color, classIndex) {
+    loEach(legend.colors, function (color, classIndex) {
       var label = legend.tooltips[classIndex];
       label = (legend.units) ? label + ' ' + legend.units : label;
       var $row = $('<div></div>')
@@ -147,7 +148,7 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
           $('<span></span>')
             .addClass('wv-palettes-class')
             .html('&nbsp;')
-            .css('background-color', wv.util.hexToRGB(color)))
+            .css('background-color', util.hexToRGB(color)))
           .append($('<span></span>')
             .addClass('wv-palettes-class-label')
             .attr('data-index', index)
@@ -165,10 +166,10 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       return;
     }
     var legends = model.getLegends(layer.id);
-    _.each(legends, function (legend, index) {
+    loEach(legends, function (legend, index) {
       if ((legend.type === 'continuous') ||
         (legend.type === 'discrete')) {
-        wv.palettes.colorbar(selector + ' ' +
+        palettes.colorbar(selector + ' ' +
           '[data-index=\'' + index + '\'] canvas', legend.colors);
         showUnitRange(index);
       } else if (legend.type === 'classification') {
@@ -184,9 +185,9 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
     var legends = model.getLegends(layer.id, index);
     var entries = model.get(layer.id, index)
       .entries;
-    _.each(legends, function (legend, index) {
-      var min = legend.minLabel || _.first(legend.tooltips);
-      var max = legend.maxLabel || _.last(legend.tooltips);
+    loEach(legends, function (legend, index) {
+      var min = legend.minLabel || loFirst(legend.tooltips);
+      var max = legend.maxLabel || loLast(legend.tooltips);
       min = (legend.units) ? min + ' ' + legend.units : min;
       max = (legend.units) ? max + ' ' + legend.units : max;
       $(selector + ' [data-index=\'' + index + '\'] .wv-palettes-min')
@@ -227,8 +228,8 @@ wv.palettes.legend = wv.palettes.legend || function (spec) {
       .offset();
     x = e.pageX - offset.left;
     y = e.pageY - offset.top;
-    rgba = wv.util.getCanvasPixelData(e.currentTarget, x, y);
-    hex = wv.util.rgbaToHex(rgba[0], rgba[1], rgba[2]);
+    rgba = util.getCanvasPixelData(e.currentTarget, x, y);
+    hex = util.rgbaToHex(rgba[0], rgba[1], rgba[2]);
     ui.map.runningdata.newLegend(legends, hex);
   };
 

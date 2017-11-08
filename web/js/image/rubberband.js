@@ -1,7 +1,9 @@
-var wv = wv || {};
-wv.image = wv.image || {};
+import $ from 'jquery';
+import loFind from 'lodash/find';
+import util from '../util/util';
+import wvui from '../ui/ui';
 
-wv.image.rubberband = wv.image.rubberband || function (models, ui, config) {
+export function imageRubberband(models, ui, config) {
   var self = {};
 
   var PALETTE_WARNING =
@@ -29,7 +31,7 @@ wv.image.rubberband = wv.image.rubberband || function (models, ui, config) {
   var jcropAPI = null;
   var previousPalettes = null;
   var $button;
-  self.events = wv.util.events();
+  self.events = util.events();
 
   /**
    * Initializes the RubberBand component.
@@ -115,10 +117,10 @@ wv.image.rubberband = wv.image.rubberband || function (models, ui, config) {
         renderable: true
       });
       var on = true;
-      if (_.find(layers, {
+      if (loFind(layers, {
         id: 'Graticule'
       }) && geographic) {
-        wv.ui.ask({
+        wvui.ask({
           header: 'Notice',
           message: GRATICLE_WARNING,
           onOk: disableGraticle,
@@ -133,7 +135,7 @@ wv.image.rubberband = wv.image.rubberband || function (models, ui, config) {
       // Confirm with the user they want to continue, and if so, disable
       // the palettes before bringing up the crop box.
       if (models.palettes.inUse()) {
-        wv.ui.ask({
+        wvui.ask({
           header: 'Notice',
           message: PALETTE_WARNING,
           onOk: disablePalettes,
@@ -147,7 +149,7 @@ wv.image.rubberband = wv.image.rubberband || function (models, ui, config) {
       // Don't toggle area select UI for downloading image if image rotated
       if (ui.map.selected.getView()
         .getRotation() === 0.0) { toggleOn(); } else {
-        wv.ui.ask({
+        wvui.ask({
           header: 'Reset rotation?',
           message: ROTATE_WARNING,
           onOk: function () {
@@ -169,7 +171,7 @@ wv.image.rubberband = wv.image.rubberband || function (models, ui, config) {
         previousPalettes = null;
       }
       toolbarButtons('enable');
-      wv.ui.closeDialog();
+      wvui.closeDialog();
       $('.wv-image-coords')
         .hide();
     }

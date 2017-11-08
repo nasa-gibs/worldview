@@ -1,7 +1,14 @@
-var wv = wv || {};
-wv.layers = wv.layers || {};
+import $ from 'jquery';
+import loEach from 'lodash/each';
+import loIndexOf from 'lodash/indexOf';
+import loIsEqual from 'lodash/isEqual';
+import loIsUndefined from 'lodash/isUndefined';
+import loParseInt from 'lodash/parseInt';
+import util from '../util/util';
+import wvui from '../ui/ui';
+import palettes from '../palettes/palettes';
 
-wv.layers.options = wv.layers.options || function (config, models, layer) {
+export function layersOptions(config, models, layer) {
   var alignTo = '#products';
   var $dialog;
   var $opacity;
@@ -9,7 +16,6 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
   var $dropDown;
   var self = {};
   var canvas;
-  var palettes;
   var index = 0;
 
   var init = function () {
@@ -17,7 +23,7 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
     canvas.width = 120;
     canvas.height = 10;
     if (config.features.customPalettes) {
-      wv.palettes.loadCustom(config)
+      palettes.loadCustom(config)
         .done(loaded);
     } else {
       loaded();
@@ -25,7 +31,7 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
   };
 
   var loaded = function (custom) {
-    $dialog = wv.ui.getDialog();
+    $dialog = wvui.getDialog();
     $dialog
       .attr('id', 'wv-layers-options-dialog')
       .attr('data-layer', layer.id);
@@ -119,7 +125,7 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
       .off('range', onRangeUpdate)
       .off('update', onPaletteUpdateAll);
     $dialog = null;
-    wv.ui.closeDialog();
+    wvui.closeDialog();
   };
 
   var renderOpacity = function ($dialog) {
@@ -167,7 +173,7 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
       .addClass('wv-legend-buttons');
     var legends = models.palettes.getLegends(layer.id);
 
-    _.each(legends, function (legend, index) {
+    loEach(legends, function (legend, index) {
       id = 'wv-legend-' + index;
       $panel.append('<input type=\'radio\' id=\'' + id + '\' ' +
         'name=\'legend\' value=\'' + index + '\'>' +
@@ -178,7 +184,7 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
 
     $('.wv-legend-buttons input[type=\'radio\']')
       .change(function () {
-        index = _.parseInt($(this)
+        index = loParseInt($(this)
           .val());
         rerenderRange();
         rerenderPaletteSelector();
@@ -265,11 +271,11 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
     updateRangeLabels();
 
     var palette = models.palettes.get(layer.id, index);
-    var imin = (_.isUndefined(palette.min)) ? 0 : palette.min;
-    var imax = (_.isUndefined(palette.max))
+    var imin = (loIsUndefined(palette.min)) ? 0 : palette.min;
+    var imax = (loIsUndefined(palette.max))
       ? palette.legend.tooltips.length - 1 : palette.max;
     current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
-    if (!_.isEqual(current, [imin, imax])) {
+    if (!loIsEqual(current, [imin, imax])) {
       $range.val([imin, imax]);
     }
 
@@ -317,14 +323,14 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
       .empty();
     $pane.append(defaultLegend());
     var recommended = layer.palette.recommended || [];
-    _.each(recommended, function (id) {
+    loEach(recommended, function (id) {
       var item = customLegend(id);
       if (item) {
         $pane.append(item);
       }
     });
-    _.each(config.paletteOrder, function (id) {
-      if (_.indexOf(recommended, id) < 0) {
+    loEach(config.paletteOrder, function (id) {
+      if (loIndexOf(recommended, id) < 0) {
         var item = customLegend(id);
         if (item) {
           $pane.append(item);
@@ -378,7 +384,7 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
   };
 
   var selectorItemScale = function (palette, id, description) {
-    wv.palettes.colorbar(canvas, palette);
+    palettes.colorbar(canvas, palette);
 
     var $row = $('<div></div>')
       .addClass('wv-palette-selector-row');
@@ -418,7 +424,7 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
       .attr('for', 'wv-palette-radio-' + id);
     var $image = $('<span></span>')
       .addClass('wv-palettes-class')
-      .css('background-color', wv.util.hexToRGB(color))
+      .css('background-color', util.hexToRGB(color))
       .html('&nbsp;');
     var $description = $('<span></span>')
       .html(description)
@@ -448,7 +454,7 @@ wv.layers.options = wv.layers.options || function (config, models, layer) {
 
     if ((source.type === 'continuous' && targetType === 'continuous') ||
       (source.type === 'discrete' && targetType === 'continuous')) {
-      var translated = wv.palettes.translate(source.colors,
+      var translated = palettes.translate(source.colors,
         target.colors);
       return selectorItemScale(translated, id, target.name);
     }

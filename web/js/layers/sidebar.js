@@ -1,13 +1,7 @@
-/**
- * @module wv.layers
- */
-var wv = wv || {};
-wv.layers = wv.layers || {};
+import $ from 'jquery';
+import util from '../util/util';
 
-/**
- * @class wv.layers.sidebar
- */
-wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
+export function layersSidebar(models, config) {
   var collapsed = false;
   var collapseRequested = false;
   var productsIsOverflow = false;
@@ -16,7 +10,7 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
 
   self.id = 'productsHolder';
   self.selector = '#productsHolder';
-  self.events = wv.util.events();
+  self.events = util.events();
 
   var init = function () {
     render();
@@ -25,7 +19,7 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
     models.proj.events.on('select', onProjectionChange);
     resize();
 
-    if (wv.util.browser.localStorage) {
+    if (util.browser.localStorage) {
       if (localStorage.getItem('sidebarState') === 'collapsed') {
         self.collapseNow();
         collapseRequested = true;
@@ -70,7 +64,7 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
     $('#' + self.id)
       .after($('.accordionToggler'));
 
-    if (wv.util.browser.localStorage) {
+    if (util.browser.localStorage) {
       localStorage.setItem('sidebarState', 'collapsed');
     }
   };
@@ -101,7 +95,7 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
     $('.accordionToggler')
       .appendTo('#' + self.id + 'toggleButtonHolder');
 
-    if (wv.util.browser.localStorage) {
+    if (util.browser.localStorage) {
       localStorage.setItem('sidebarState', 'expanded');
     }
     // Resize after browser repaints
@@ -139,7 +133,7 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
     // FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
     var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding;
-    if (!wv.util.browser.small) {
+    if (!util.browser.small) {
       maxHeight = maxHeight - timelineHeight - 10 - 5;
     }
     $tabPanel.css('max-height', maxHeight);
@@ -259,10 +253,10 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
   };
 
   var resize = function () {
-    if (!mobile && wv.util.browser.small) {
+    if (!mobile && util.browser.small) {
       self.collapseNow();
       mobile = true;
-    } else if (mobile && !wv.util.browser.small && !collapseRequested) {
+    } else if (mobile && !util.browser.small && !collapseRequested) {
       self.expandNow();
       mobile = false;
     }

@@ -1,15 +1,16 @@
-/**
- * @module wv.palettes
- */
-var wv = wv || {};
+import $ from 'jquery';
+import loEach from 'lodash/each';
+import loFind from 'lodash/find';
+import util from '../util/util';
+import wvui from '../ui/ui';
 
-wv.palettes = (function (self) {
+export const palettes = (function (self) {
   var checkerboard;
 
   self.supported = true;
 
   var init = function () {
-    var browser = wv.util.browser;
+    var browser = util.browser;
     if (browser.ie || !browser.webWorkers || !browser.cors) {
       self.supported = false;
     } else {
@@ -36,8 +37,8 @@ wv.palettes = (function (self) {
       var bins = colors.length;
       var binWidth = canvas.width / bins;
       var drawWidth = Math.ceil(binWidth);
-      _.each(colors, function (color, i) {
-        g.fillStyle = wv.util.hexToRGBA(color);
+      loEach(colors, function (color, i) {
+        g.fillStyle = util.hexToRGBA(color);
         g.fillRect(Math.floor(binWidth * i), 0, drawWidth,
           canvas.height);
       });
@@ -68,7 +69,7 @@ wv.palettes = (function (self) {
 
   self.translate = function (source, target) {
     var translation = [];
-    _.each(source, function (color, index) {
+    loEach(source, function (color, index) {
       var sourcePercent = index / source.length;
       var targetIndex = Math.floor(sourcePercent * target.length);
       translation.push(target[targetIndex]);
@@ -78,7 +79,7 @@ wv.palettes = (function (self) {
 
   self.lookup = function (sourcePalette, targetPalette) {
     var lookup = {};
-    _.each(sourcePalette.colors, function (sourceColor, index) {
+    loEach(sourcePalette.colors, function (sourceColor, index) {
       var source =
         parseInt(sourceColor.substring(0, 2), 16) + ',' +
         parseInt(sourceColor.substring(2, 4), 16) + ',' +
@@ -97,13 +98,13 @@ wv.palettes = (function (self) {
   };
 
   self.loadCustom = function (config) {
-    return wv.util.load.config(config.palettes,
+    return util.load.config(config.palettes,
       'custom', 'config/palettes-custom.json');
   };
 
   self.loadRendered = function (config, layerId) {
     var layer = config.layers[layerId];
-    return wv.util.load.config(config.palettes.rendered,
+    return util.load.config(config.palettes.rendered,
       layer.palette.id, 'config/palettes/' + layer.palette.id + '.json');
   };
 
@@ -113,12 +114,12 @@ wv.palettes = (function (self) {
       rendered: {},
       custom: {}
     };
-    _.each(state.l, function (qsLayer) {
+    loEach(state.l, function (qsLayer) {
       var layerId = qsLayer.id;
       if (config.layers[layerId] && config.layers[layerId].palette) {
         promises.push(self.loadRendered(config, layerId));
       }
-      var custom = _.find(qsLayer.attributes, {
+      var custom = loFind(qsLayer.attributes, {
         id: 'palette'
       });
       if (custom) {
@@ -137,16 +138,16 @@ wv.palettes = (function (self) {
   // Only for permalink 1.1 support
   self.parse = function (state, errors, config) {
     if (state.palettes) {
-      if (!wv.palettes.supported) {
+      if (!palettes.supported) {
         // FIXME: This should go in errors
         delete state.palettes;
-        wv.ui.notify('The custom palette feature is not supported ' +
+        wvui.notify('The custom palette feature is not supported ' +
           'with your web browser. Upgrade or try again in a ' +
           'different browser');
         return;
       }
       var parts = state.palettes.split('~');
-      _.each(parts, function (part) {
+      loEach(parts, function (part) {
         var items = part.split(',');
         var layerId = items[0];
         var paletteId = items[1];
@@ -161,7 +162,7 @@ wv.palettes = (function (self) {
               'support palettes'
           });
         } else {
-          var layer = _.find(state.l, {
+          var layer = loFind(state.l, {
             id: layerId
           });
           if (layer) {
@@ -183,4 +184,4 @@ wv.palettes = (function (self) {
 
   init();
   return self;
-})(wv.palettes || {});
+})();

@@ -1,15 +1,15 @@
-/**
- * @module wv.layers
- */
-var wv = wv || {};
-wv.layers = wv.layers || {};
+import $ from 'jquery';
+import loEach from 'lodash/each';
+import loEachRight from 'lodash/eachRight';
+import util from '../util/util';
+import wvui from '../ui/ui';
+import layersInfo from './info';
+import layersOptions from './options';
+import palettesLegend from '../palettes/legend';
 
-/**
- * @class wv.layers.active
- */
-wv.layers.active = wv.layers.active || function (models, ui, config) {
+export function layersActive(models, ui, config) {
   var model = models.layers;
-  var groups = wv.util.LAYER_GROUPS;
+  var groups = util.LAYER_GROUPS;
   var legends = {};
   var self = {};
   self.id = 'products';
@@ -49,7 +49,7 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
     var $container = $('<div />', {class: 'layer-container bank'});
     $(self.selector).empty().append($container);
 
-    _.eachRight(groups, function (group) {
+    loEachRight(groups, function (group) {
       renderGroup($container, group);
     });
 
@@ -90,7 +90,7 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
     $('.layer-container ul.category')
       .bind('sortstop', moveLayer);
 
-    _.each(model.get({
+    loEach(model.get({
       group: 'overlays'
     }), function (layer) {
       if (layer.palette) {
@@ -113,7 +113,7 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
 
     $parent.append($header);
 
-    _.each(model.get({
+    loEach(model.get({
       group: group.id
     }), function (layer) {
       renderLayer($container, group, layer);
@@ -211,7 +211,7 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
     } else {
       $infoButton.on('click', toggleInfoPanel);
     }
-    if (wv.util.browser.small) {
+    if (util.browser.small) {
       $infoButton.hide();
     }
 
@@ -225,7 +225,7 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
       .attr('title', 'Layer options for ' + names.title)
       .addClass('wv-layers-options');
     $editButton.on('click', toggleOptionsPanel);
-    if (wv.util.browser.small) {
+    if (util.browser.small) {
       $editButton.hide();
     }
 
@@ -274,12 +274,12 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
     var thisLayer = config.layers[thisLayerId];
 
     if ($i.length === 0) {
-      wv.layers.info(config, models, thisLayer);
+      layersInfo(config, models, thisLayer);
     } else if ($i.attr('data-layer') !== thisLayerId) {
-      wv.ui.closeDialog();
-      wv.layers.info(config, models, thisLayer);
+      wvui.closeDialog();
+      layersInfo(config, models, thisLayer);
     } else {
-      wv.ui.closeDialog();
+      wvui.closeDialog();
     }
   };
 
@@ -290,12 +290,12 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
       .attr('data-layer');
     var thisLayer = config.layers[thisLayerId];
     if ($d.length === 0) {
-      wv.layers.options(config, models, thisLayer);
+      layersOptions(config, models, thisLayer);
     } else if ($d.attr('data-layer') !== thisLayerId) {
-      wv.ui.closeDialog();
-      wv.layers.options(config, models, thisLayer);
+      wvui.closeDialog();
+      layersOptions(config, models, thisLayer);
     } else {
-      wv.ui.closeDialog();
+      wvui.closeDialog();
     }
   };
 
@@ -308,8 +308,8 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
 
   var renderLegendCanvas = function (layer) {
     var selector = '.wv-palette[data-layer=\'' +
-      wv.util.jqueryEscape(layer.id) + '\']';
-    legends[layer.id] = wv.palettes.legend({
+      util.jqueryEscape(layer.id) + '\']';
+    legends[layer.id] = palettesLegend({
       selector: selector,
       config: config,
       models: models,
@@ -332,18 +332,18 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
     var maxHeight;
 
     // If on a mobile device, use the native scroll bars
-    if (!wv.util.browser.small) {
+    if (!util.browser.small) {
       $('.wv-layers-options').show();
       $('.wv-layers-info').show();
     } else {
       $('.wv-layers-options').hide();
       $('.wv-layers-info').hide();
-      wv.ui.closeDialog();
+      wvui.closeDialog();
     }
 
     // FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
-    if (wv.util.browser.small) {
+    if (util.browser.small) {
       maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - 10 - 5;
     } else {
       // FIXME: Hack, the timeline sometimes renders twice as large of a height and
@@ -376,7 +376,7 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
 
   var onLayerRemoved = function (layer) {
     var layerSelector = '#' + layer.group + '-' +
-      wv.util.jqueryEscape(layer.id);
+      util.jqueryEscape(layer.id);
     $(layerSelector)
       .remove();
     if (legends[layer.id]) {
@@ -450,7 +450,7 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
   };
 
   var onPaletteUpdateAll = function () {
-    _.each(legends, function (legend) {
+    loEach(legends, function (legend) {
       legend.update();
     });
   };
@@ -462,8 +462,8 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
     setTimeout(render, 1);
   };
   var onZoomChange = function () {
-    _.each(groups, function (group) {
-      _.each(model.get({
+    loEach(groups, function (group) {
+      loEach(model.get({
         group: group.id
       }), function (layer) {
         var $layer = $('#products li.productsitem[data-layer="' +
@@ -473,8 +473,8 @@ wv.layers.active = wv.layers.active || function (models, ui, config) {
     });
   };
   var onDateChange = function () {
-    _.each(groups, function (group) {
-      _.each(model.get({
+    loEach(groups, function (group) {
+      loEach(model.get({
         group: group.id
       }), function (layer) {
         var $layer = $('#' + group.id + '-' + encodeURIComponent(layer.id));
