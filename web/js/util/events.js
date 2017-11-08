@@ -1,5 +1,5 @@
-import each from 'lodash/each';
-import pull from 'lodash/pull';
+import loEach from 'lodash/each';
+import loPull from 'lodash/pull';
 
 export function events () {
   var self = {};
@@ -24,7 +24,7 @@ export function events () {
   self.off = function (event, callback) {
     var listeners = events[event];
     if (listeners) {
-      pull(listeners, callback);
+      loPull(listeners, callback);
     }
     return self;
   };
@@ -42,10 +42,10 @@ export function events () {
       return;
     }
     var eventArguments = Array.prototype.slice.call(arguments, 1);
-    each(events[event], function (listener) {
+    loEach(events[event], function (listener) {
       listener.apply(self, eventArguments);
     });
-    each(allListeners, function (listener) {
+    loEach(allListeners, function (listener) {
       listener.apply(self, eventArguments);
     });
     return self;
