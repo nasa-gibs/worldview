@@ -21,27 +21,32 @@ import OlInteractionMouseWheelZoom from 'ol/interaction/mousewheelzoom';
 import OlInteractionDragZoom from 'ol/interaction/dragzoom';
 import olExtent from 'ol/extent';
 import olProj from 'ol/proj';
+import {MapRotate} from './rotation';
+import {mapDateLineBuilder} from './datelinebuilder';
+import {mapLayerBuilder} from './layerbuilder';
+import {MapRunningData} from './runningdata';
+import {mapPrecacheTile} from './precachetile';
 
-export function mapui(models, config, components) {
+export function mapui(models, config) {
   var id = 'wv-map';
   var selector = '#' + id;
   var cache = new Cache(400); // Save layers from days visited
   var animationDuration = 250;
   var self = {};
-  var rotation = new components.Rotation(self, models);
+  var rotation = new MapRotate(self, models);
   var layerBuilder;
-  var dateline = components.Dateline(models, config);
+  var dateline = mapDateLineBuilder(models, config);
   var createLayer;
-  var precache = components.Precache(models, config, cache, self);
+  var precache = mapPrecacheTile(models, config, cache, self);
 
-  var dataRunner = self.runningdata = new components.Runningdata(models);
+  var dataRunner = self.runningdata = new MapRunningData(models);
 
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
   self.selected = null; // The map for the selected projection
   self.events = util.events();
-  layerBuilder = self.layerBuilder = components.Layerbuilder(models, config, cache, self);
+  layerBuilder = self.layerBuilder = mapLayerBuilder(models, config, cache, self);
   self.layerKey = layerBuilder.layerKey;
   createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
