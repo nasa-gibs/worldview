@@ -10,11 +10,10 @@ import loEach from 'lodash/each';
 import loIsNull from 'lodash/isNull';
 import wvui from '../ui/ui';
 import browser from './browser';
-import events from './events';
+import {events} from './events';
 import load from './load';
 
-export const util = (function () {
-  var self = {};
+export default (function (self) {
   var canvas = null;
 
   // Export other util methods
@@ -649,6 +648,7 @@ export const util = (function () {
       try {
         return func.apply(func, arguments);
       } catch (error) {
+        debugger
         self.error(error);
       }
     };
@@ -797,4 +797,4 @@ export const util = (function () {
   };
 
   return self;
-})();
+})({});

@@ -256,4 +256,4 @@ export const wvui = (function (self) {
   };
 
   return self;
-})();
+})({});

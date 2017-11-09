@@ -7,8 +7,8 @@ const browserify = require('browserify');
 const watchify = require('watchify');
 
 const entry = 'main.js';
-const output = './build/wv.js';
-const outputMin = './build/wv.min.js';
+const output = './web/build/wv.js';
+const outputMin = './web/build/wv.min.js';
 
 // override, should set this from an argument: --dev or --prod
 // and default to dev

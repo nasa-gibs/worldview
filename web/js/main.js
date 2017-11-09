@@ -6,7 +6,7 @@ import loEach from 'lodash/each';
 // Utils
 import util from './util/util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
 // Date
-import {dateParser} from './date/date'; // export default function parse!!!
+import {parse as dateParser} from './date/date'; // export default function parse!!!
 import DateModel from './date/model';
 import DateLabel from './date/label';
 import DateWheels from './date/wheels';
@@ -43,7 +43,7 @@ import MapAnimate from './map/animate';
 // import AnimationRangeselect from './animation/rangeselect';
 // import AnimationGIF from './animation/anim.gif';
 // Palettes
-import {palettesParser, paletteRequirements} from './palettes/palettes';
+import palettes from './palettes/palettes';
 import palettesModel from './palettes/model';
 // Data
 // import dataParser from './data/data';
@@ -59,21 +59,21 @@ import imagePanel from './image/panel';
 // Notifications
 // import NotificationsUI from './notifications/notifications.ui';
 // UI
-import {loadingIndicator} from './ui/indicator'; // not a class, export object
+import loadingIndicator from './ui/indicator'; // not a class, export object
 // Link
 import linkModel from './link/model';
 import linkUi from './link/ui';
 // Projections
-import projectionParser from './projection/projection';
-import projectionModel from './projection/model';
-import projectionUi from './projection/ui';
-import projectionChange from './projection/change';
+import {parse as projectionParser} from './projection/projection';
+import {projectionModel} from './projection/model';
+import {projectionUi} from './projection/ui';
+import {projectionChange} from './projection/change';
 // Other
-import {debugConfig, debug} from './debug';
+//  import {debugConfig, debug} from './debug';
 import Brand from './brand';
 // import Tour from './tour';
 
-import polyfill from './polyfill';
+import {polyfill} from './polyfill';
 polyfill(); // Polyfills some browser features
 
 // Document ready function
@@ -105,7 +105,7 @@ window.onload = () => {
     promise
       .done(util.wrap(onConfigLoaded))
       .fail(util.error);
-    loadingIndicator(promise, 1000);
+    loadingIndicator.delayed(promise, 1000);
   };
 
   var onConfigLoaded = function(data) {
@@ -116,7 +116,7 @@ window.onload = () => {
     // Export for debugging
     wvx.config = config;
 
-    debugConfig(config);
+    // debugConfig(config);
 
     // Load any additional scripts as needed
     if (config.scripts) {
@@ -132,19 +132,19 @@ window.onload = () => {
       layerParser,
       dateParser,
       mapParser,
-      palettesParser
+      palettes.parse
     ];
     if (config.features.dataDownload) {
-      parsers.push(dataParser);
+      //parsers.push(dataParser);
     }
     if (config.features.animation) {
-      parsers.push(animationParser);
+      //parsers.push(animationParser);
     }
     loEach(parsers, function(parser) {
       parser(state, errors, config);
     });
     requirements = [
-      paletteRequirements(state, config)
+      palettes.requirements(state, config)
     ];
 
     $.when.apply(null, requirements)
@@ -324,7 +324,7 @@ window.onload = () => {
     } else {
       console.warn('Development version');
     }
-    debug.layers(ui, models, config);
+    // debug.layers(ui, models, config);
 
     errorReport();
 
@@ -362,6 +362,5 @@ window.onload = () => {
       .getTime() - startTime;
     console.log(t, message);
   };
-
   util.wrap(main)();
 };

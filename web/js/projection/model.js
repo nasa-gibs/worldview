@@ -1,5 +1,6 @@
 import loEach from 'lodash/each';
-import olProj from 'ol/proj';
+import olProjProjection from 'ol/proj/projection';
+// import olPro from 'ol/proj';
 import proj4 from 'proj4';
 import util from '../util/util';
 
@@ -13,7 +14,8 @@ export function projectionModel(config) {
     loEach(config.projections, function (proj) {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
-        olProj.get(proj.crs)
+        debugger
+        olProjProjection.getCode(proj.crs)
           .setExtent(proj.maxExtent);
       }
     });

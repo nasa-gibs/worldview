@@ -6,7 +6,7 @@ import loRemove from 'lodash/remove';
 import loIsEmpty from 'lodash/isEmpty';
 import loLast from 'lodash/last';
 
-export const loadingIndicator = (function () {
+export default (function () {
   var self = {};
 
   var $indicator;
