@@ -7,9 +7,10 @@ import util from '../util/util';
 import React from 'react';
 import {LayerList} from 'worldview-components';
 import ReactDOM from 'react-dom';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 export function layersModal(models, ui, config) {
-  var crumbText;
+  var crumbText, ps;
   var model = models.layers;
   var self = {};
   self.selector = '#layer-modal';
@@ -174,11 +175,12 @@ export function layersModal(models, ui, config) {
       width: modalWidth
     });
     $('#layers-all').css('height', modalHeight - 70); // 40 search box height + 30 breadcrub height
-    $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
+    $('#layer-modal-main').css('height', modalHeight - 40);
+    ps.update();
   };
 
   var redoScrollbar = function () {
-    $('#layer-modal-main').perfectScrollbar('update');
+    ps.update();
   };
 
   // This draws the default page, depending on projection
@@ -189,7 +191,7 @@ export function layersModal(models, ui, config) {
     $breadcrumb.hide();
     searchBool = false;
     if (self.reactList) {
-      $('#layer-modal-main').perfectScrollbar();
+      ps = new PerfectScrollbar('#layer-modal-main');
     }
     $('#layers-search-input').val('');
     $('#layer-search label.search-icon').removeClass('search-on').off('click');
@@ -688,8 +690,8 @@ export function layersModal(models, ui, config) {
   var drawAllLayers = function () {
     var projection = models.proj.selected.id;
     // Remove perfectScrollbar for the search list window
-    $('#layer-modal-main').perfectScrollbar('destroy');
-
+    ps.destroy();
+    ps = null;
     var props = {
       addLayer: model.add,
       removeLayer: model.remove,
@@ -803,7 +805,8 @@ export function layersModal(models, ui, config) {
     checkModalView();
     setModalSize();
 
-    $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar();
+    $('#layer-modal-main').css('height', modalHeight - 40);
+    ps = new PerfectScrollbar('#layer-modal-main');
 
     var $search = $('<div />', {
       id: 'layer-search'
