@@ -1,6 +1,7 @@
 // External Dependencies
 import $ from 'jquery';
 import 'jquery-ui';
+import 'perfect-scrollbar';
 import loEach from 'lodash/each';
 // import {GA as googleAnalytics} from 'worldview-components';
 
@@ -196,7 +197,7 @@ window.onload = () => {
       .register(models.map);
     models.link.load(state);
     if (config.features.googleAnalytics) {
-      //googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
+      // googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
     }
     // HACK: Map needs to be created before the data download model
     var mapComponents = {
@@ -209,23 +210,23 @@ window.onload = () => {
     ui.map = mapui(models, config, mapComponents);
     ui.map.animate = mapAnimate(models, config, ui);
     if (config.features.animation) {
-      models.anim = animationModel(models, config);
-      models.link.register(models.anim);
+      // models.anim = animationModel(models, config);
+      // models.link.register(models.anim);
     }
     if (config.features.dataDownload) {
-      models.data = dataModel(models, config);
-      models.link.register(models.data);
+      // models.data = dataModel(models, config);
+      // models.link.register(models.data);
     }
     if (config.features.naturalEvents) {
-      models.naturalEvents = naturalEventsModel(models, config, ui);
-      models.link.register(models.naturalEvents);
+      // models.naturalEvents = naturalEventsModel(models, config, ui);
+      // models.link.register(models.naturalEvents);
     }
     // HACK: Map needs permalink state loaded before starting. But
     // data download now needs it too.
     models.link.load(state); // needs to be loaded twice
 
     if (config.features.arcticProjectionChange) {
-      models.proj.change = projectionChange(models, config);
+      // models.proj.change = projectionChange(models, config);
     }
 
     elapsed('ui');
