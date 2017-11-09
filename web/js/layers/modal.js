@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import loFind from 'lodash/find';
+import Isotope from 'isotope-layout';
 import loIndexOf from 'lodash/indexOf';
 import loSortBy from 'lodash/sortBy';
 import loStartCase from 'lodash/startCase';
@@ -27,6 +28,7 @@ export function layersModal(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
+  var isotope;
 
   var getLayersForProjection = function (projection) {
     var filteredLayers = Object.values(config.layers).filter(function (layer) {
@@ -263,8 +265,8 @@ export function layersModal(models, ui, config) {
    */
   var drawCategories = function () {
     $categories.empty();
-    if ($categories.data('isotope')) {
-      $categories.isotope('destroy');
+    if (isotope) {
+      isotope.destroy();
     }
     $allLayers.hide();
     $nav.empty();
@@ -370,7 +372,7 @@ export function layersModal(models, ui, config) {
         'data-filter': interestCssName(metaCategoryName),
         'type': 'radio'
       }).click(function (e) {
-        $categories.isotope({
+        isotope.arrange({
           filter: '.layer-category-' + interestCssName(metaCategoryName)
         });
         $nav.find('.ui-button').removeClass('nav-selected');
@@ -389,7 +391,7 @@ export function layersModal(models, ui, config) {
       $nav.show();
     });
 
-    $categories.isotope({
+    isotope = new Isotope($categories[0], {
       itemSelector: '.layer-category',
       // stamp: '.stamp',
       getSortData: {
@@ -855,8 +857,9 @@ export function layersModal(models, ui, config) {
       },
       open: function (event, ui) {
         redo();
+        debugger;
         if ($categories.data('isotope')) {
-          $categories.isotope();
+          isotope = new Isotope($categories[0]);
         }
 
         redoScrollbar();

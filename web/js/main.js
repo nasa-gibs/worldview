@@ -1,7 +1,8 @@
 // External Dependencies
 import $ from 'jquery';
 import 'jquery-ui';
-import 'perfect-scrollbar';
+import 'icheck';
+import 'mobiscroll-jquery';
 import loEach from 'lodash/each';
 // import {GA as googleAnalytics} from 'worldview-components';
 
@@ -73,7 +74,7 @@ import {projectionChange} from './projection/change';
 // Other
 //  import {debugConfig, debug} from './debug';
 import Brand from './brand';
-import Tour from './tour';
+//import tour from './tour';
 import {uiInfo} from './ui/info';
 
 import {polyfill} from './polyfill';
@@ -246,11 +247,11 @@ window.onload = () => {
       ui.timeline.config = timelineConfig(models, config, ui);
       ui.timeline.input = timelineInput(models, config, ui);
       if (config.features.animation) {
-        ui.anim = {};
-        ui.anim.rangeselect = animationRangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-        ui.anim.widget = animationWidget(models, config, ui);
-        ui.anim.gif = animationGIF(models, config, ui);
-        ui.anim.ui = animationUI(models, ui);
+        // ui.anim = {};
+        // ui.anim.rangeselect = animationRangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+        // ui.anim.widget = animationWidget(models, config, ui);
+        // ui.anim.gif = animationGIF(models, config, ui);
+        // ui.anim.ui = animationUI(models, ui);
       }
 
       ui.dateLabel = dateLabel(models);
@@ -259,24 +260,24 @@ window.onload = () => {
       if (!util.browser.small) { // If mobile device, do not build timeline
         timelineInit();
       }
-      ui.dateWheels = dateWheels(models, config);
+      //ui.dateWheels = dateWheels(models, config);
     }
 
-    ui.rubberband = imageRubberband(models, ui, config);
-    ui.image = imagePanel(models, ui, config);
+    // ui.rubberband = imageRubberband(models, ui, config);
+    // ui.image = imagePanel(models, ui, config);
     if (config.features.dataDownload) {
-      ui.data = dataui(models, ui, config);
+      //ui.data = dataui(models, ui, config);
       // FIXME: Why is this here?
-      ui.data.render();
+      //ui.data.render();
     }
     if (config.features.naturalEvents) {
-      ui.naturalEvents = naturalEventsUI(models, ui, config, naturalEventsRequest(models, ui, config));
+    //  ui.naturalEvents = naturalEventsUI(models, ui, config, naturalEventsRequest(models, ui, config));
     }
-    ui.link = linkUi(models, config);
-    ui.tour = Tour(models, ui, config);
-    ui.info = uiInfo(ui, config);
+    // ui.link = linkUi(models, config);
+    // ui.tour = Tour(models, ui, config);
+    // ui.info = uiInfo(ui, config);
     if (config.features.alert) {
-      ui.alert = notificationsUi(ui, config);
+    //  ui.alert = notificationsUi(ui, config);
     }
 
     // FIXME: Old hack
@@ -298,18 +299,18 @@ window.onload = () => {
       .hide();
 
     if (config.features.dataDownload) {
-      models.data.events
-        .on('activate', function() {
-          ui.sidebar.selectTab('download');
-        })
-        .on('queryResults', function() {
-          ui.data.onViewChange();
-        });
-      ui.map.events.on('extent', function() {
-        ui.data.onViewChange();
-      });
-      // FIXME: This is a hack
-      models.map.events.on('projection', models.data.updateProjection);
+      // models.data.events
+      //   .on('activate', function() {
+      //     ui.sidebar.selectTab('download');
+      //   })
+      //   .on('queryResults', function() {
+      //     ui.data.onViewChange();
+      //   });
+      // ui.map.events.on('extent', function() {
+      //   ui.data.onViewChange();
+      // });
+      // // FIXME: This is a hack
+      // models.map.events.on('projection', models.data.updateProjection);
     }
     // Sink all focus on inputs if click unhandled
     $(document)
