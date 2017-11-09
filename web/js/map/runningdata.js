@@ -3,7 +3,7 @@ import util from '../util/util';
 import loDifference from 'lodash/difference';
 import loEach from 'lodash/each';
 
-export function mapRunningData(models) {
+export function MapRunningData(models) {
   var self;
   var $productsBox;
   var productsBoxHeight;
