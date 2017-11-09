@@ -29,35 +29,35 @@ import layersActive from './layers/active';
 import {parse as mapParser} from './map/map';
 import MapModel from './map/model';
 import MapUI from './map/ui';
-import MapRotate from './map/rotate';
+import MapRotate from './map/rotation';
 import MapRunningData from './map/runningdata';
 import MapLayerBuilder from './map/layerbuilder';
 import MapDatelineBuilder from './map/datelinebuilder';
 import MapPrecacheTile from './map/precachetile';
 import MapAnimate from './map/animate';
 // Animation
-import {animationParser} from './animation/anim';
-import AnimationModel from './animation/model';
-import AnimationUI from './animation/ui';
-import AnimationWidget from './animation/animation-widget';
-import AnimationRangeselect from './animation/rangeselect';
-import AnimationGIF from './animation/anim.gif';
+// import {animationParser} from './animation/anim';
+// import AnimationModel from './animation/model';
+// import AnimationUI from './animation/ui';
+// import AnimationWidget from './animation/animation-widget';
+// import AnimationRangeselect from './animation/rangeselect';
+// import AnimationGIF from './animation/anim.gif';
 // Palettes
 import {palettesParser, paletteRequirements} from './palettes/palettes';
 import palettesModel from './palettes/model';
 // Data
-import dataParser from './data/data';
-import DataModel from './data/data.model';
-import DataUI from './data/data.ui';
+// import dataParser from './data/data';
+// import DataModel from './data/data.model';
+// import DataUI from './data/data.ui';
 // NaturalEvents
-import NaturalEventsModel from './naturalEvents/model';
-import NaturalEventsUI from './naturalEvents/ui';
-import NaturalEventsRequest from './naturalEvents/request';
+// import NaturalEventsModel from './naturalEvents/model';
+// import NaturalEventsUI from './naturalEvents/ui';
+// import NaturalEventsRequest from './naturalEvents/request';
 // Image
 import imageRubberband from './image/rubberband';
 import imagePanel from './image/panel';
 // Notifications
-import NotificationsUI from './notifications/notifications.ui';
+// import NotificationsUI from './notifications/notifications.ui';
 // UI
 import {loadingIndicator} from './ui/indicator'; // not a class, export object
 // Link
@@ -69,11 +69,11 @@ import projectionModel from './projection/model';
 import projectionUi from './projection/ui';
 import projectionChange from './projection/change';
 // Other
-import {debugConfig, debug} from './debug';
+// import {debugConfig, debug} from './debug';
 import Brand from './brand';
-import Tour from './tour';
+// import Tour from './tour';
 
-import polyfill from './polyfill';
+import {polyfill} from './polyfill';
 polyfill(); // Polyfills some browser features
 
 // Document ready function

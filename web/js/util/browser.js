@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-export const browser = (function () {
+export function utilBrowser() {
   var self = {};
 
   /**
@@ -209,4 +209,4 @@ export const browser = (function () {
 
   init();
   return self;
-})();
+};

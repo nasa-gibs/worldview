@@ -49,7 +49,6 @@ module.exports = function(grunt) {
 
   // Lists of JavaScript and CSS files to include and in the correct
   // order
-  var js = grunt.file.readJSON('deploy/wv.js.json');
   var css = grunt.file.readJSON('deploy/wv.css.json');
 
   // Platform specific command for find
@@ -110,17 +109,6 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      // Combine all the Worldview JavaScript files into one file.
-      js: {
-        src: js['wv.js'],
-        dest: 'build/worldview-debug/web/js/wv.js'
-      },
-      // Combine all the Openlayers JavaScript files into one file.
-      oljs: {
-        src: js['ol.js'],
-        dest: 'build/worldview-debug/web/js/ol.js'
-      },
-      // Combine all the Worldview CSS files into one file.
       css: {
         src: css,
         dest: 'build/worldview-debug/web/css/wv.css'
@@ -357,6 +345,10 @@ module.exports = function(grunt) {
     exec: {
       config: {
         command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" bin/wv-options-build "' + env
+      },
+
+      'build-js': {
+        command: 'npm run build-js'
       },
 
       // After removing JavaScript and CSS files that are no longer
@@ -611,27 +603,6 @@ module.exports = function(grunt) {
         files: nodeModuleFiles,
         tasks: ['update']
       }
-    },
-
-    uglify: {
-      // Minifiy the concatenated Worldview JavaScript file.
-      options: {
-        compress: {
-          // drop_console: true,
-          // drop_debugger: true,
-          unused: true
-        }
-      },
-      wv_js: {
-        files: {
-          'build/worldview/web/js/wv.js': ['build/worldview/web/js/wv.js']
-        }
-      },
-      ol_js: {
-        files: {
-          'build/worldview/web/js/ol.js': ['build/worldview/web/js/ol.js']
-        }
-      }
     }
   });
 
@@ -683,7 +654,7 @@ module.exports = function(grunt) {
     'remove:source',
     'exec:empty',
     'copy:release',
-    'uglify',
+    'exec:build-js',
     'cssmin',
     'replace:links',
     'lineremover',

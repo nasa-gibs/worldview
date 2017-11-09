@@ -6,7 +6,7 @@
 // ===========================================================================
 
 import $ from 'jquery';
-import util from './util/util';
+import utilBrowser from './util/browser';
 
 export function polyfill () {
   /*
@@ -84,7 +84,7 @@ export function polyfill () {
    *
    * https://developer.mozilla.org/en-US/docs/Web/API/Window.setTimeout
    */
-  if (util.browser.ie && util.browser.version <= 9) {
+  if (utilBrowser.ie && utilBrowser.version <= 9) {
     (function () {
       var __nativeST__ = window.setTimeout,
         __nativeSI__ = window.setInterval;

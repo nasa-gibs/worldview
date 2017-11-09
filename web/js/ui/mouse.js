@@ -1,7 +1,7 @@
 import util from '../util/util';
 
-export const mouse = {
-  click: function ($element, callback) {
+export function mouse() {
+  var click = function ($element, callback) {
     var self = {};
     self.sensitivity = 5; // pixels
 
@@ -33,8 +33,8 @@ export const mouse = {
 
     init();
     return self;
-  },
-  wheel: function (element, ui, options) {
+  };
+  var wheel = function (element, ui, options) {
     options = options || {};
 
     var self = {};
@@ -107,5 +107,5 @@ export const mouse = {
 
     init();
     return self;
-  }
+  };
 };

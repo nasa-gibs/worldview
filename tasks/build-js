@@ -6,9 +6,9 @@ const fs = require('fs');
 const browserify = require('browserify');
 const watchify = require('watchify');
 
-const entry = 'index.js';
-const output = './build/js.js';
-const outputMin = './build/js.mins.js';
+const entry = 'main.js';
+const output = './web/js/wv.js';
+const outputMin = './build/worldview/web/js/wv.min.js';
 
 // override, should set this from an argument: --dev or --prod
 // and default to dev
