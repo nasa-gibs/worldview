@@ -82,6 +82,7 @@
     "isotope-layout": "3.0.x",
     "isotope-packery": "2.x.x",
     "jquery": "^2.2.4",
+    "jquery-ui": "^1.10.5",
     "lodash": "4.15.0",
     "ol": "^4.4.2",
     "perfect-scrollbar": "0.7.x",
