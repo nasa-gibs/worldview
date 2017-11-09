@@ -1,5 +1,6 @@
 // External Dependencies
 import $ from 'jquery';
+import 'jquery-ui';
 import loEach from 'lodash/each';
 // import {GA as googleAnalytics} from 'worldview-components';
 
@@ -7,34 +8,34 @@ import loEach from 'lodash/each';
 import util from './util/util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
 // Date
 import {parse as dateParser} from './date/date'; // export default function parse!!!
-import DateModel from './date/model';
-import DateLabel from './date/label';
-import DateWheels from './date/wheels';
+import {dateModel} from './date/model';
+import {dateLabel} from './date/label';
+import {dateWheels} from './date/wheels';
 // Timeline
-import Timeline from './date/timeline';
-import TimelineData from './date/timeline-data';
-import TimelineConfig from './date/config';
-import TimelineZoom from './date/timeline-zoom';
-import TimelineTicks from './date/timeline-ticks';
-import TimelinePick from './date/timeline-pick';
-import TimelinePan from './date/timeline-pan';
-import TimelineInput from './date/timeline-input';
+import {timeline} from './date/timeline';
+import {timelineData} from './date/timeline-data';
+import {timelineConfig} from './date/config';
+import {timelineZoom} from './date/timeline-zoom';
+import {timelineTicks} from './date/timeline-ticks';
+import {timelinePick} from './date/timeline-pick';
+import {timelinePan} from './date/timeline-pan';
+import {timelineInput} from './date/timeline-input';
 // Layers
 import {parse as layerParser, validate as layerValidate} from './layers/layers'; // export parse as layerParser. etc...
-import layersModel from './layers/model';
-import layersModal from './layers/modal';
-import layersSidebar from './layers/sidebar';
-import layersActive from './layers/active';
+import {layersModel} from './layers/model';
+import {layersModal} from './layers/modal';
+import {layersSidebar} from './layers/sidebar';
+import {layersActive} from './layers/active';
 // Map
 import {parse as mapParser} from './map/map';
-import MapModel from './map/model';
-import MapUI from './map/ui';
-import MapRotate from './map/rotation';
-import MapRunningData from './map/runningdata';
-import MapLayerBuilder from './map/layerbuilder';
-import MapDatelineBuilder from './map/datelinebuilder';
-import MapPrecacheTile from './map/precachetile';
-import MapAnimate from './map/animate';
+import {mapModel} from './map/model';
+import {mapui} from './map/ui';
+import {mapRotate} from './map/rotation';
+import {mapRunningData} from './map/runningdata';
+import {mapLayerBuilder} from './map/layerbuilder';
+import {mapDatelineBuilder} from './map/datelinebuilder';
+import {mapPrecacheTile} from './map/precachetile';
+import {mapAnimate} from './map/animate';
 // Animation
 // import {animationParser} from './animation/anim';
 // import AnimationModel from './animation/model';
@@ -44,7 +45,7 @@ import MapAnimate from './map/animate';
 // import AnimationGIF from './animation/anim.gif';
 // Palettes
 import palettes from './palettes/palettes';
-import palettesModel from './palettes/model';
+import {palettesModel} from './palettes/model';
 // Data
 // import dataParser from './data/data';
 // import DataModel from './data/model';
@@ -61,8 +62,8 @@ import imagePanel from './image/panel';
 // UI
 import loadingIndicator from './ui/indicator'; // not a class, export object
 // Link
-import linkModel from './link/model';
-import linkUi from './link/ui';
+import {linkModel} from './link/model';
+import {linkUi} from './link/ui';
 // Projections
 import {parse as projectionParser} from './projection/projection';
 import {projectionModel} from './projection/model';
@@ -71,7 +72,8 @@ import {projectionChange} from './projection/change';
 // Other
 //  import {debugConfig, debug} from './debug';
 import Brand from './brand';
-// import Tour from './tour';
+import Tour from './tour';
+import {uiInfo} from './ui/info';
 
 import {polyfill} from './polyfill';
 polyfill(); // Polyfills some browser features
@@ -135,10 +137,10 @@ window.onload = () => {
       palettes.parse
     ];
     if (config.features.dataDownload) {
-      //parsers.push(dataParser);
+      // parsers.push(dataParser);
     }
     if (config.features.animation) {
-      //parsers.push(animationParser);
+      // parsers.push(animationParser);
     }
     loEach(parsers, function(parser) {
       parser(state, errors, config);
@@ -180,10 +182,10 @@ window.onload = () => {
     models.proj = projectionModel(config);
     models.palettes = palettesModel(models, config);
     models.layers = layersModel(models, config);
-    models.date = DateModel(config, {
+    models.date = dateModel(config, {
       initial: initialDate
     });
-    models.map = MapModel(models, config);
+    models.map = mapModel(models, config);
     models.link = linkModel(config);
 
     models.link
@@ -194,28 +196,28 @@ window.onload = () => {
       .register(models.map);
     models.link.load(state);
     if (config.features.googleAnalytics) {
-      googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
+      //googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
     }
     // HACK: Map needs to be created before the data download model
     var mapComponents = {
-      Rotation: MapRotate,
-      Runningdata: MapRunningData,
-      Layerbuilder: MapLayerBuilder,
-      Dateline: MapDatelineBuilder,
-      Precache: MapPrecacheTile
+      Rotation: mapRotate,
+      Runningdata: mapRunningData,
+      Layerbuilder: mapLayerBuilder,
+      Dateline: mapDatelineBuilder,
+      Precache: mapPrecacheTile
     };
-    ui.map = MapUI(models, config, mapComponents);
-    ui.map.animate = MapAnimate(models, config, ui);
+    ui.map = mapui(models, config, mapComponents);
+    ui.map.animate = mapAnimate(models, config, ui);
     if (config.features.animation) {
-      models.anim = AnimationModel(models, config);
+      models.anim = animationModel(models, config);
       models.link.register(models.anim);
     }
     if (config.features.dataDownload) {
-      models.data = DataModel(models, config);
+      models.data = dataModel(models, config);
       models.link.register(models.data);
     }
     if (config.features.naturalEvents) {
-      models.naturalEvents = NaturalEventsModel(models, config, ui);
+      models.naturalEvents = naturalEventsModel(models, config, ui);
       models.link.register(models.naturalEvents);
     }
     // HACK: Map needs permalink state loaded before starting. But
@@ -234,46 +236,46 @@ window.onload = () => {
     ui.addModal = layersModal(models, ui, config);
 
     function timelineInit() {
-      ui.timeline = Timeline(models, config, ui);
-      ui.timeline.data = TimelineData(models, config, ui);
-      ui.timeline.zoom = TimelineZoom(models, config, ui);
-      ui.timeline.ticks = TimelineTicks(models, config, ui);
-      ui.timeline.pick = TimelinePick(models, config, ui);
-      ui.timeline.pan = TimelinePan(models, config, ui);
-      ui.timeline.config = TimelineConfig(models, config, ui);
-      ui.timeline.input = TimelineInput(models, config, ui);
+      ui.timeline = timeline(models, config, ui);
+      ui.timeline.data = timelineData(models, config, ui);
+      ui.timeline.zoom = timelineZoom(models, config, ui);
+      ui.timeline.ticks = timelineTicks(models, config, ui);
+      ui.timeline.pick = timelinePick(models, config, ui);
+      ui.timeline.pan = timelinePan(models, config, ui);
+      ui.timeline.config = timelineConfig(models, config, ui);
+      ui.timeline.input = timelineInput(models, config, ui);
       if (config.features.animation) {
         ui.anim = {};
-        ui.anim.rangeselect = AnimationRangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-        ui.anim.widget = AnimationWidget(models, config, ui);
-        ui.anim.gif = AnimationGIF(models, config, ui);
-        ui.anim.ui = AnimationUI(models, ui);
+        ui.anim.rangeselect = animationRangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+        ui.anim.widget = animationWidget(models, config, ui);
+        ui.anim.gif = animationGIF(models, config, ui);
+        ui.anim.ui = animationUI(models, ui);
       }
 
-      ui.dateLabel = DateLabel(models);
+      ui.dateLabel = dateLabel(models);
     }
     if (config.startDate) {
       if (!util.browser.small) { // If mobile device, do not build timeline
         timelineInit();
       }
-      ui.dateWheels = DateWheels(models, config);
+      ui.dateWheels = dateWheels(models, config);
     }
 
     ui.rubberband = imageRubberband(models, ui, config);
     ui.image = imagePanel(models, ui, config);
     if (config.features.dataDownload) {
-      ui.data = DataUI(models, ui, config);
+      ui.data = dataui(models, ui, config);
       // FIXME: Why is this here?
       ui.data.render();
     }
     if (config.features.naturalEvents) {
-      ui.naturalEvents = NaturalEventsUI(models, ui, config, NaturalEventsRequest(models, ui, config));
+      ui.naturalEvents = naturalEventsUI(models, ui, config, naturalEventsRequest(models, ui, config));
     }
     ui.link = linkUi(models, config);
     ui.tour = Tour(models, ui, config);
-    ui.info = LinkInfo(ui, config);
+    ui.info = uiInfo(ui, config);
     if (config.features.alert) {
-      ui.alert = NotificationsUI(ui, config);
+      ui.alert = notificationsUi(ui, config);
     }
 
     // FIXME: Old hack
