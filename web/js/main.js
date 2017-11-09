@@ -73,7 +73,7 @@ import projectionChange from './projection/change';
 import Brand from './brand';
 // import Tour from './tour';
 
-import polyfill from './polyfill';
+import {polyfill} from './polyfill';
 polyfill(); // Polyfills some browser features
 
 // Document ready function

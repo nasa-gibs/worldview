@@ -7,7 +7,7 @@ const browserify = require('browserify');
 const watchify = require('watchify');
 
 const entry = 'main.js';
-const output = './build/worldview/web/js/wv.js';
+const output = './web/js/wv.js';
 const outputMin = './build/worldview/web/js/wv.min.js';
 
 // override, should set this from an argument: --dev or --prod

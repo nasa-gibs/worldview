@@ -10,17 +10,10 @@ import loEach from 'lodash/each';
 import loIsNull from 'lodash/isNull';
 import wvui from '../ui/ui';
 import browser from './browser';
-import events from './events';
-import load from './load';
 
-export const util = (function () {
+export function util() {
   var self = {};
   var canvas = null;
-
-  // Export other util methods
-  self.browser = browser;
-  self.events = events;
-  self.load = load;
 
   // Needed anymore?
   self.LAYER_GROUPS = {
@@ -797,4 +790,4 @@ export const util = (function () {
   };
 
   return self;
-})();
+};

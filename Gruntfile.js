@@ -347,6 +347,10 @@ module.exports = function(grunt) {
         command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" bin/wv-options-build "' + env
       },
 
+      'build-js': {
+        command: 'npm run build-js'
+      },
+
       // After removing JavaScript and CSS files that are no longer
       // need in a release build, there are a lot of empty directories.
       // Remove all of them.
@@ -599,31 +603,6 @@ module.exports = function(grunt) {
         files: nodeModuleFiles,
         tasks: ['update']
       }
-    },
-
-    'build-js': {
-      command: 'npm run build-js'
-    },
-
-    'build-ol': {
-      // Minifiy the concatenated Worldview JavaScript file.
-      options: {
-        compress: {
-          // drop_console: true,
-          // drop_debugger: true,
-          unused: true
-        }
-      },
-      wv_js: {
-        files: {
-          'build/worldview/web/js/wv.js': ['build/worldview/web/js/wv.js']
-        }
-      },
-      ol_js: {
-        files: {
-          'build/worldview/web/js/ol.js': ['build/worldview/web/js/ol.js']
-        }
-      }
     }
   });
 
@@ -675,8 +654,7 @@ module.exports = function(grunt) {
     'remove:source',
     'exec:empty',
     'copy:release',
-    'build-js',
-    'build-ol',
+    'exec:build-js',
     'cssmin',
     'replace:links',
     'lineremover',
