@@ -1,5 +1,5 @@
 /build
-/web/buil/
+/web/build/
 /dist
 /node_modules
 /web/ext/node_modules/*
