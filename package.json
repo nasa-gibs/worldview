@@ -21,7 +21,7 @@
     "e2e:firefox": "nightwatch -e firefox --skiptags wip",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
     "report": "node e2e/create-report.js",
-    "build-js": "node ./tasks/build-js && grunt"
+    "build-js": "grunt && node ./tasks/build-js"
   },
   "browser": {
     "jquery": "./node_modules/jquery/dist/jquery.js",
@@ -29,7 +29,12 @@
   },
   "browserify-shim": {
     "jquery": "$",
-    "jquery-ui": { "exports": null, "depends": [ "jquery:$" ] }
+    "jquery-ui": {
+      "exports": null,
+      "depends": [
+        "jquery:$"
+      ]
+    }
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
