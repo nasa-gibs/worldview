@@ -1,8 +1,7 @@
 // External Dependencies
 import $ from 'jquery';
 import 'jquery-ui';
-import 'icheck';
-import 'mobiscroll-jquery';
+//import 'mobiscroll-jquery';
 import loEach from 'lodash/each';
 // import {GA as googleAnalytics} from 'worldview-components';
 
@@ -74,7 +73,7 @@ import {projectionChange} from './projection/change';
 // Other
 //  import {debugConfig, debug} from './debug';
 import Brand from './brand';
-//import tour from './tour';
+// import tour from './tour';
 import {uiInfo} from './ui/info';
 
 import {polyfill} from './polyfill';

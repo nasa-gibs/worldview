@@ -23,6 +23,14 @@
     "report": "node e2e/create-report.js",
     "build-js": "node ./tasks/build-js && grunt"
   },
+  "browser": {
+    "jquery": "./node_modules/jquery/dist/jquery.js",
+    "jquery-ui": "./web/ext/ui/jquery-ui-1.11.4/jquery-ui.js"
+  },
+  "browserify-shim": {
+    "jquery": "$",
+    "jquery-ui": { "exports": null, "depends": [ "jquery:$" ] }
+  },
   "devDependencies": {
     "autoprefixer": "7.1.1",
     "babel-core": "^6.26.0",
@@ -30,6 +38,7 @@
     "babel-preset-env": "^1.6.1",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
+    "browserify-shim": "^3.8.14",
     "browserstack-capabilities": "^0.4.0",
     "browserstack-local": "^1.3.0",
     "buster": "0.7.12",

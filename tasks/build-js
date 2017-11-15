@@ -24,7 +24,9 @@ const b = browserify(entry, {
   packageCache: {},
   plugin: [process.env.NODE_ENV !== 'production' ? watchify : null],
   basedir: './web/js'
-}).transform('babelify', { presets: ['env'] });
+})
+  .transform('babelify', { presets: ['env'] })
+  .transform('browserify-shim', {global: true});
 
 function bundle() {
   const stream = fs.createWriteStream(output);
