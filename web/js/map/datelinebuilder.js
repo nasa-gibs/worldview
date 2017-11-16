@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'React-dom';
-import WVC from 'worldview-components';
 import OlOverlay from 'ol/overlay';
 
 import util from '../util/util';
+import {DateLine, LineText} from 'worldview-components';
 
 var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
   lineLeft, lineRight, textLeft, textRight, proj;
@@ -26,8 +26,8 @@ export function mapDateLineBuilder(models, config) {
   self.init = function(Parent, olMap, date) {
     var dimensions;
     map = olMap;
-    lineFactory = React.createFactory(WVC.DateLine);
-    textFactory = React.createFactory(WVC.LineText);
+    lineFactory = React.createFactory(DateLine);
+    textFactory = React.createFactory(LineText);
     drawDatelines(map, date);
     proj = models.proj.selected.id;
 

@@ -611,27 +611,6 @@ module.exports = function(grunt) {
         files: nodeModuleFiles,
         tasks: ['update']
       }
-    },
-
-    uglify: {
-      // Minifiy the concatenated Worldview JavaScript file.
-      options: {
-        compress: {
-          // drop_console: true,
-          // drop_debugger: true,
-          unused: true
-        }
-      },
-      wv_js: {
-        files: {
-          'build/worldview/web/js/wv.js': ['build/worldview/web/js/wv.js']
-        }
-      },
-      ol_js: {
-        files: {
-          'build/worldview/web/js/ol.js': ['build/worldview/web/js/ol.js']
-        }
-      }
     }
   });
 
@@ -683,7 +662,6 @@ module.exports = function(grunt) {
     'remove:source',
     'exec:empty',
     'copy:release',
-    'uglify',
     'cssmin',
     'replace:links',
     'lineremover',

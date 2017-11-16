@@ -1,6 +1,7 @@
 import util from '../util/util';
+import d3 from 'd3';
 
-export const mouse = {
+export default {
   click: function ($element, callback) {
     var self = {};
     self.sensitivity = 5; // pixels

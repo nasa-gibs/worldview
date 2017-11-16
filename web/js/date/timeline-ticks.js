@@ -1,8 +1,9 @@
 import $ from 'jquery';
+import d3 from 'd3';
 /**
  * Perform timeline tick functions
  */
-export function timelineTick(models, config, ui) {
+export function timelineTicks(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
 
