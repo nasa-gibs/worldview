@@ -5,7 +5,7 @@ import util from '../util/util';
 import wvui from '../ui/ui';
 import layersInfo from './info';
 import layersOptions from './options';
-import palettesLegend from '../palettes/legend';
+import {palettesLegend} from '../palettes/legend';
 
 export function layersActive(models, ui, config) {
   var model = models.layers;
