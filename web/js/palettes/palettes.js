@@ -4,7 +4,7 @@ import loFind from 'lodash/find';
 import util from '../util/util';
 import wvui from '../ui/ui';
 
-export const palettes = (function (self) {
+export default (function (self) {
   var checkerboard;
 
   self.supported = true;
@@ -184,4 +184,4 @@ export const palettes = (function (self) {
 
   init();
   return self;
-})();
+})({});

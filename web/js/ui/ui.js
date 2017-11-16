@@ -3,7 +3,7 @@ import loadingIndicator from './indicator';
 import info from './info';
 import mouse from './mouse';
 
-export const wvui = (function (self) {
+export default (function (self) {
   // Export other ui methods
   self.loadingIndicator = loadingIndicator;
   self.info = info;
@@ -256,4 +256,4 @@ export const wvui = (function (self) {
   };
 
   return self;
-})();
+})({});

@@ -1,9 +1,11 @@
 /**
  * @module wv.debug
  */
-var wv = wv || {};
-wv.debug = wv.debug || (function () {
-  var parameters = wv.util.fromQueryString(location.search);
+import $ from 'jquery';
+import util from './util/util';
+import palettes from './palettes/palettes';
+export var debug = (function () {
+  var parameters = util.fromQueryString(location.search);
   var self = {};
 
   var init = function () {
@@ -19,7 +21,7 @@ wv.debug = wv.debug || (function () {
     }
     if (parameters.showError) {
       $(function () {
-        wv.util.error();
+        util.error();
       });
     }
   };
@@ -68,7 +70,7 @@ wv.debug = wv.debug || (function () {
   return self;
 })();
 
-wv.debug.config = wv.debug.config || function (config) {
+export function debugConfig(config) {
   if (config.parameters.debug === 'tiles') {
     var tileSize = _.parseInt(config.parameters.tileSize);
     if (_.isNaN(tileSize)) {
@@ -107,7 +109,7 @@ wv.debug.config = wv.debug.config || function (config) {
   }
 };
 
-wv.debug.layers = wv.debug.layers || function (ui, models, config) {
+export function debugLayers(ui, models, config) {
   var type;
   var selectedLayer;
 
@@ -129,7 +131,7 @@ wv.debug.layers = wv.debug.layers || function (ui, models, config) {
     }
     if (useDebugPanel[type]) {
       if (type === 'palettes') {
-        wv.palettes.loadCustom(config)
+        palettes.loadCustom(config)
           .done(render);
       } else {
         render();

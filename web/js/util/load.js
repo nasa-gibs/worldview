@@ -3,7 +3,7 @@ import loSize from 'lodash/size';
 import wvui from '../ui/ui';
 import brand from '../brand';
 
-export const load = (function () {
+export default (function () {
   var self = {};
   var configPromises = {};
   var loading = 0;
