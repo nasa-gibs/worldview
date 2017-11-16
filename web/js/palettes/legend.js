@@ -59,6 +59,7 @@ export function palettesLegend(spec) {
   };
 
   var renderScale = function ($legendPanel, legend, index, layerId) {
+    var $container, $colorbar;
     $container = $('<div></div>')
       .addClass('wv-palettes-legend')
       .attr('data-index', index);
@@ -214,12 +215,7 @@ export function palettesLegend(spec) {
    * @return {void}
    */
   var showUnitHover = function (e, index) {
-    var rgba;
-    var pos;
-    var x;
-    var y;
-    var id;
-    var legends;
+    var rgba, pos, x, y, id, legends, offset, hex;
     if (!loaded) {
       return;
     }

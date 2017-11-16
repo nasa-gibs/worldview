@@ -3,6 +3,7 @@ import 'jquery-ui/tabs';
 import 'jquery-ui/dialog';
 import 'perfect-scrollbar/jquery';
 import util from '../util/util';
+import {GA as googleAnalytics} from 'worldview-components';
 
 export function layersSidebar(models, config) {
   var collapsed = false;
@@ -244,7 +245,7 @@ export function layersSidebar(models, config) {
     if (tab === 'active') {
       $('.ui-tabs-nav li.first').addClass('ui-state-active');
     } else if (tab === 'events') {
-      WVC.GA.event('Natural Events', 'Click', 'Events Tab');
+      googleAnalytics.event('Natural Events', 'Click', 'Events Tab');
       $('.ui-tabs-nav li.second').addClass('ui-state-active');
     } else if (tab === 'download') {
       $('.ui-tabs-nav li.third').addClass('ui-state-active');
