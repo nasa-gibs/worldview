@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import util from '../util/util';
-import mobiscroll from 'mobiscroll-jquery';
 
 export function dateWheels(models, config) {
   var id = 'timewheels';
@@ -25,7 +24,6 @@ export function dateWheels(models, config) {
     $container
       .addClass('datespan')
       .html('<div id=\'wv-date-mobile-label\'></div><input type=\'hidden\' id=\'linkmode\' readonly>');
-    console.log(mobiscroll);
     $('#linkmode')
       .mobiscroll()
       .date({

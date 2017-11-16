@@ -1,7 +1,13 @@
 // External Dependencies
 import $ from 'jquery';
 import 'jquery-ui';
-//import 'mobiscroll-jquery';
+import 'jquery-migrate';
+import 'icheck';
+import 'jscrollpane';
+import 'mobiscroll';
+import 'jcrop';
+import 'nouislider';
+import 'jcarousel';
 import loEach from 'lodash/each';
 // import {GA as googleAnalytics} from 'worldview-components';
 
