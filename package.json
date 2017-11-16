@@ -93,6 +93,7 @@
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.1.2"
   },
   "browser": {
+    "d3": "./web/ext/ui/d3/d3.js",
     "jquery": "./web/ext/main/jquery-2.1.4/jquery.js",
     "jquery-ui": "./web/ext/ui/jquery-ui-1.11.4/jquery-ui.js",
     "jquery-migrate": "./web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js",
@@ -107,6 +108,7 @@
   },
   "browserify-shim": {
     "jquery": "global:$",
+    "d3": "global:d3",
     "jquery-ui": {
       "exports": null,
       "depends": [
