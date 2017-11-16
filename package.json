@@ -101,7 +101,9 @@
     "mobiscroll": "./web/ext/date/mobiscroll-2.6.0/mobiscroll.js",
     "jcrop": "./web/ext/image/jcrop-0.9.12/jquery.Jcrop.js",
     "nouislider": "./web/ext/ui/noUiSlider-6.1.10/jquery.nouislider.min.js",
-    "jcarousel": "./web/ext/layers/jcarousel/jcarousel.js"
+    "jcarousel": "./web/ext/layers/jcarousel/jcarousel.js",
+    "perfect-scrollbar-jquery": "./web/ext/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js",
+    "isotope-jquery": "./web/ext/node_modules/isotope-layout/dist/isotope.pkgd.js"
   },
   "browserify-shim": {
     "jquery": "global:$",
@@ -145,6 +147,18 @@
       "exports": null,
       "depends": [
         "jquery:$"
+      ]
+    },
+    "perfect-scrollbar-jquery": {
+      "exports": "null",
+      "depends": [
+        "jquery:jQuery"
+      ]
+    },
+    "isotope-jquery": {
+      "exports": "null",
+      "depends": [
+        "jquery:jQuery"
       ]
     }
   }

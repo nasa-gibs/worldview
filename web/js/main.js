@@ -8,6 +8,8 @@ import 'mobiscroll';
 import 'jcrop';
 import 'nouislider';
 import 'jcarousel';
+import 'perfect-scrollbar-jquery';
+import 'isotope-jquery';
 import loEach from 'lodash/each';
 // import {GA as googleAnalytics} from 'worldview-components';
 
