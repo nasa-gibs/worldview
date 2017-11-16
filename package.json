@@ -66,7 +66,7 @@
     "gruntify-eslint": "^4.0.0",
     "moment": "2.13.x",
     "nightwatch": "^0.9.16",
-    "nightwatch-cucumber": "^8.1.0",
+    "nightwatch-cucumber": "^8.2.10",
     "npm-run-all": "^4.1.1",
     "phantomjs": "2.1.x",
     "selenium-server-standalone-jar": "3.0.1",
