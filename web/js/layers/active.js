@@ -6,7 +6,6 @@ import wvui from '../ui/ui';
 import layersInfo from './info';
 import layersOptions from './options';
 import palettesLegend from '../palettes/legend';
-import PerfectScrollbar from 'perfect-scrollbar';
 
 export function layersActive(models, ui, config) {
   var model = models.layers;
@@ -331,7 +330,6 @@ export function layersActive(models, ui, config) {
     var layerGroupHeight = 26; // Height of layer group titles
     var contentHeight = overlaysHeight + baseLayersHeight + layerGroupHeight;
     var maxHeight;
-    var ps;
 
     // If on a mobile device, use the native scroll bars
     if (!util.browser.small) {
@@ -357,12 +355,12 @@ export function layersActive(models, ui, config) {
 
     if ((maxHeight <= contentHeight)) {
       $('.layer-container').css('height', maxHeight).css('padding-right', '10px');
-      ps = new PerfectScrollbar('.layer-container');
+      $('.layer-container').perfectScrollbar();
       if (productsIsOverflow === false) productsIsOverflow = true;
     } else {
       $('.layer-container').css('height', '').css('padding-right', '');
       if (productsIsOverflow) {
-        ps.destroy();
+        $('.layer-container').perfectScrollbar('destroy');
         productsIsOverflow = false;
       }
     }

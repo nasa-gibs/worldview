@@ -1,17 +1,15 @@
 import $ from 'jquery';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {LayerList} from 'worldview-components';
 import loFind from 'lodash/find';
-import Isotope from 'isotope-layout';
 import loIndexOf from 'lodash/indexOf';
 import loSortBy from 'lodash/sortBy';
 import loStartCase from 'lodash/startCase';
 import util from '../util/util';
-import React from 'react';
-import {LayerList} from 'worldview-components';
-import ReactDOM from 'react-dom';
-import PerfectScrollbar from 'perfect-scrollbar';
 
 export function layersModal(models, ui, config) {
-  var crumbText, ps;
+  var crumbText;
   var model = models.layers;
   var self = {};
   self.selector = '#layer-modal';
@@ -28,7 +26,6 @@ export function layersModal(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-  var isotope;
 
   var getLayersForProjection = function (projection) {
     var filteredLayers = Object.values(config.layers).filter(function (layer) {
@@ -177,12 +174,11 @@ export function layersModal(models, ui, config) {
       width: modalWidth
     });
     $('#layers-all').css('height', modalHeight - 70); // 40 search box height + 30 breadcrub height
-    $('#layer-modal-main').css('height', modalHeight - 40);
-    ps.update();
+    $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
   };
 
   var redoScrollbar = function () {
-    ps.update();
+    $('#layer-modal-main').perfectScrollbar('update');
   };
 
   // This draws the default page, depending on projection
@@ -193,7 +189,7 @@ export function layersModal(models, ui, config) {
     $breadcrumb.hide();
     searchBool = false;
     if (self.reactList) {
-      ps = new PerfectScrollbar('#layer-modal-main');
+      $('#layer-modal-main').perfectScrollbar();
     }
     $('#layers-search-input').val('');
     $('#layer-search label.search-icon').removeClass('search-on').off('click');
@@ -265,8 +261,8 @@ export function layersModal(models, ui, config) {
    */
   var drawCategories = function () {
     $categories.empty();
-    if (isotope) {
-      isotope.destroy();
+    if ($categories.data('isotope')) {
+      $categories.isotope('destroy');
     }
     $allLayers.hide();
     $nav.empty();
@@ -372,7 +368,7 @@ export function layersModal(models, ui, config) {
         'data-filter': interestCssName(metaCategoryName),
         'type': 'radio'
       }).click(function (e) {
-        isotope.arrange({
+        $categories.isotope({
           filter: '.layer-category-' + interestCssName(metaCategoryName)
         });
         $nav.find('.ui-button').removeClass('nav-selected');
@@ -391,7 +387,7 @@ export function layersModal(models, ui, config) {
       $nav.show();
     });
 
-    isotope = new Isotope($categories[0], {
+    $categories.isotope({
       itemSelector: '.layer-category',
       // stamp: '.stamp',
       getSortData: {
@@ -692,8 +688,8 @@ export function layersModal(models, ui, config) {
   var drawAllLayers = function () {
     var projection = models.proj.selected.id;
     // Remove perfectScrollbar for the search list window
-    ps.destroy();
-    ps = null;
+    $('#layer-modal-main').perfectScrollbar('destroy');
+
     var props = {
       addLayer: model.add,
       removeLayer: model.remove,
@@ -807,8 +803,7 @@ export function layersModal(models, ui, config) {
     checkModalView();
     setModalSize();
 
-    $('#layer-modal-main').css('height', modalHeight - 40);
-    ps = new PerfectScrollbar('#layer-modal-main');
+    $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar();
 
     var $search = $('<div />', {
       id: 'layer-search'
@@ -857,9 +852,8 @@ export function layersModal(models, ui, config) {
       },
       open: function (event, ui) {
         redo();
-        debugger;
         if ($categories.data('isotope')) {
-          isotope = new Isotope($categories[0]);
+          $categories.isotope();
         }
 
         redoScrollbar();
