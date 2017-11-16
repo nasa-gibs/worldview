@@ -10,6 +10,7 @@ export function projectionModel(config) {
 
   var init = function () {
     self.selectDefault();
+    olProj.setProj4(proj4);
     loEach(config.projections, function (proj) {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
@@ -50,7 +51,7 @@ export function projectionModel(config) {
   };
 
   self.register = function (crs, def) {
-    if (def && window.proj4) {
+    if (def && proj4) {
       proj4.defs(crs, def);
     }
   };

@@ -5,10 +5,14 @@
 const fs = require('fs');
 const browserify = require('browserify');
 const watchify = require('watchify');
-
+const outputDir = './web/build/';
 const entry = 'main.js';
-const output = './js/wv.js';
-const outputMin = './js/wv.min.js';
+const output = outputDir + 'wv.js';
+const outputMin = outputDir + 'wv.min.js';
+
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir);
+}
 
 // override, should set this from an argument: --dev or --prod
 // and default to dev
@@ -20,7 +24,9 @@ const b = browserify(entry, {
   packageCache: {},
   plugin: [process.env.NODE_ENV !== 'production' ? watchify : null],
   basedir: './web/js'
-}).transform('babelify', { presets: ['env'] });
+})
+  .transform('babelify', { presets: ['env'] })
+  .transform('browserify-shim', {global: true});
 
 function bundle() {
   const stream = fs.createWriteStream(output);

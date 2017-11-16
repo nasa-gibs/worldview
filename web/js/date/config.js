@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import d3 from 'd3';
 /**
  * Modify zoom levels here. Maybe this isnt the best way to do this.
  * It could be called just level without the zoom part instead.

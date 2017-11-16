@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import util from '../util/util';
+import d3 from 'd3';
 
 export function timeline(models, config, ui) {
   var self = {};

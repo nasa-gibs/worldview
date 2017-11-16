@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import uiMouse from '../ui/mouse';
+import d3 from 'd3';
 /**
  * Perform timeline zooming functions
 
