@@ -27,6 +27,7 @@ export function palettesModel(models, config) {
   };
 
   self.getCustom = function (paletteId) {
+    var palette;
     palette = config.palettes.custom[paletteId];
     if (!palette) {
       throw new Error('Invalid palette: ' + paletteId);
@@ -346,7 +347,7 @@ export function palettesModel(models, config) {
 
     loEach(state.l, function (layerDef) {
       var layerId = layerDef.id;
-      var minValue, maxValue;
+      var values, minValue, maxValue;
       var min = [],
         max = [];
       var squash = [];
@@ -479,12 +480,13 @@ export function palettesModel(models, config) {
   };
 
   var updateLookup = function (layerId) {
+    var legend, oldLegend, entries;
+    var lookup = {};
     if (!useLookup(layerId)) {
       delete self.active[layerId];
       return;
     }
     var active = self.active[layerId].maps;
-    var lookup = {};
     loEach(active, function (palette, index) {
       oldLegend = palette.legend;
       entries = palette.entries;
@@ -499,7 +501,6 @@ export function palettesModel(models, config) {
         id: oldLegend.id
       };
       var source = entries.colors;
-      var values = entries.values;
       var target = (palette.custom)
         ? self.getCustom(palette.custom)
           .colors : source;
@@ -509,17 +510,16 @@ export function palettesModel(models, config) {
 
       var sourceCount = source.length;
       var targetCount = target.length;
-      var indexCount = max - min;
 
       loEach(source, function (color, index) {
-        var newColor;
+        var targetColor;
         if (index < min || index > max) {
           targetColor = '00000000';
         } else {
           var sourcePercent, targetIndex;
           if (palette.squash) {
             sourcePercent = (index - min) / (max - min);
-            if (index == max) {
+            if (index === max) {
               sourcePercent = 1.0;
             }
             targetIndex = Math.floor(sourcePercent * targetCount);

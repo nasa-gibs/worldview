@@ -273,6 +273,7 @@ export function layersOptions(config, models, layer) {
   };
 
   var onRangeUpdate = function () {
+    var current;
     updateRangeLabels();
 
     var palette = models.palettes.get(layer.id, index);
