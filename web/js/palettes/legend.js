@@ -117,10 +117,10 @@ export function palettesLegend(spec) {
   };
 
   var updateClasses = function (legend, index) {
+    var $colorBox;
     var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
     loEach(legend.colors, function (color, classIndex) {
-      var $colorBox;
       var $runningDataPointLabel = $('<span></span>')
         .addClass('wv-running-category-label');
       $colorBox = $('<span></span>')
