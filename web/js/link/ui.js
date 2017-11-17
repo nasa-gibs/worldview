@@ -1,4 +1,7 @@
 import $ from 'jquery';
+import 'jquery-ui/button';
+import 'jquery-ui/dialog';
+import 'icheck';
 import loThrottle from 'lodash/throttle';
 import React from 'react';
 import ReactDOM from 'react-dom';

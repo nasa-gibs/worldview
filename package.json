@@ -80,9 +80,17 @@
     "clipboard": "^1.7.1",
     "font-awesome": "4.7.0",
     "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
+    "icheck": "^1.0.2",
     "isotope-layout": "3.0.x",
     "isotope-packery": "2.x.x",
+    "jquery": "^2.1.4",
+    "jquery-jcrop": "^0.9.13",
+    "jquery-ui": "1.10.4",
+    "jquery.joyride": "^2.2.0",
+    "jscrollpane": "^2.0.22",
     "lodash": "4.15.0",
+    "mobiscroll-jquery": "^3.2.6",
+    "nouislider-browser": "^5.0.0-1",
     "ol": "^4.4.2",
     "perfect-scrollbar": "^0.8.1",
     "proj4": "2.3.3",
@@ -94,74 +102,11 @@
   },
   "browser": {
     "d3": "./web/ext/ui/d3/d3.js",
-    "jquery": "./web/ext/main/jquery-2.1.4/jquery.js",
-    "jquery-ui": "./web/ext/ui/jquery-ui-1.11.4/jquery-ui.js",
-    "jquery-migrate": "./web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js",
-    "icheck": "./web/ext/ui/iCheck-1.0.2-patch/icheck.js",
-    "jscrollpane": "./web/ext/ui/jquery.jscrollpane-2.0.22/jquery.jscrollpane.js",
-    "mobiscroll": "./web/ext/date/mobiscroll-2.6.0/mobiscroll.js",
-    "jcrop": "./web/ext/image/jcrop-0.9.12/jquery.Jcrop.js",
-    "nouislider": "./web/ext/ui/noUiSlider-6.1.10/jquery.nouislider.min.js",
-    "jcarousel": "./web/ext/layers/jcarousel/jcarousel.js",
-    "perfect-scrollbar-jquery": "./web/ext/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js",
-    "isotope-jquery": "./web/ext/node_modules/isotope-layout/dist/isotope.pkgd.js"
+    "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
+    "jquery": "./node_modules/jquery/dist/jquery.js"
   },
   "browserify-shim": {
-    "jquery": "global:$",
-    "d3": "global:d3",
-    "jquery-ui": {
-      "exports": null,
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "jquery-migrate": {
-      "exports": null,
-      "depends": [
-        "jquery:$"
-      ]
-    },
-    "icheck": {
-      "exports": null,
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "mobiscroll": {
-      "exports": null,
-      "depends": [
-        "jquery:$"
-      ]
-    },
-    "jscrollpane": {
-      "exports": null,
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "nouislider": {
-      "exports": null,
-      "depends": [
-        "jquery:$"
-      ]
-    },
-    "jcarousel": {
-      "exports": null,
-      "depends": [
-        "jquery:$"
-      ]
-    },
-    "perfect-scrollbar-jquery": {
-      "exports": "null",
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "isotope-jquery": {
-      "exports": "null",
-      "depends": [
-        "jquery:jQuery"
-      ]
-    }
+    "isotope-layout": "isotope",
+    "jquery": "$"
   }
 }

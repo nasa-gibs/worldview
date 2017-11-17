@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'jquery-ui/dialog';
+import 'perfect-scrollbar/jquery';
 import wvui from '../ui/ui';
 
 export function layersInfo(config, models, layer) {

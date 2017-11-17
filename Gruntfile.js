@@ -721,7 +721,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['buster:console']);
 
   grunt.registerTask('default', [
-    'update-packages',
+    // 'update-packages',
     'fetch',
     'update',
     'build',

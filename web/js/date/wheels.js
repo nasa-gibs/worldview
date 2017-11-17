@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'mobiscroll-jquery';
 import util from '../util/util';
 
 export function dateWheels(models, config) {

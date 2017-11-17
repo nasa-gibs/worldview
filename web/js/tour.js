@@ -1,10 +1,12 @@
-var wv = wv || {};
+import $ from 'jquery';
+import 'jquery.joyride';
+import util from './util/util';
+import wvui from './ui/ui';
+import {GA} from 'worldview-components';
+import feedbackModal from './feedback';
 
-wv.tour = wv.tour || function (models, ui, config) {
+export default function (models, ui, config) {
   var self = {};
-
-  var conclusionPanel = null;
-  var splashOverlay = null;
 
   var init = function () {
     $('#wv-tour')
@@ -25,12 +27,12 @@ wv.tour = wv.tour || function (models, ui, config) {
     }
 
     // Tour does not work on IE 9 or below
-    if (wv.util.browser.ie && wv.util.browser.version <= 9) {
+    if (util.browser.ie && util.browser.version <= 9) {
       return;
     }
 
     // Don't annoy with the tour if they cannot opt out in the future
-    if (!wv.util.browser.localStorage) {
+    if (!util.browser.localStorage) {
       return;
     }
 
@@ -51,17 +53,17 @@ wv.tour = wv.tour || function (models, ui, config) {
    * Create the splash screen and tour panels and control iteration over them.
    */
   self.start = function (introduction) {
-    if (wv.util.browser.ie && wv.util.browser.version <= 9) {
-      wv.ui.unsupported('tour');
+    if (util.browser.ie && util.browser.version <= 9) {
+      wvui.unsupported('tour');
       return;
     }
 
     if (!validScreenSize()) {
-      wv.ui.notify('Unfortunately the @NAME@ tour can only be viewed in larger web browser windows.');
+      wvui.notify('Unfortunately the @NAME@ tour can only be viewed in larger web browser windows.');
       return;
     }
 
-    $content = $('#wv-tour-content');
+    var $content = $('#wv-tour-content');
     if ($content.children()
       .length === 0) {
       $content.load('pages/tour.html', function () {
@@ -73,10 +75,7 @@ wv.tour = wv.tour || function (models, ui, config) {
   };
 
   var onLoad = function (introduction) {
-    var padding = 15; // padding - used for all of the tour windows
-    var pos, width, height, xval, yval; // helpful calculation vars
-
-    wv.ui.close();
+    wvui.close();
     var $startDialog = $('#wv-tour-intro');
     $startDialog
       .dialog({
@@ -108,8 +107,8 @@ wv.tour = wv.tour || function (models, ui, config) {
     }
 
     var endTour = function () {
-      wv.ui.close();
-      $dialog = $('#wv-tour-end');
+      wvui.close();
+      var $dialog = $('#wv-tour-end');
       $dialog
         .dialog({
           title: 'Finished!',
@@ -120,7 +119,7 @@ wv.tour = wv.tour || function (models, ui, config) {
           draggable: false,
           resizable: false
         });
-      wv.feedback.decorate($dialog.find('.feedback'));
+      feedbackModal.decorate($dialog.find('.feedback'));
       $('#repeat')
         .click(repeatTour);
       $('#done')
@@ -143,7 +142,7 @@ wv.tour = wv.tour || function (models, ui, config) {
             'link': '<a href="#" class="joyride-close-tip">X</a>'
           },
           postStepCallback: function (index, tip) {
-            if (index == 5) {
+            if (index === 5) {
               endTour();
             }
           }
@@ -170,8 +169,8 @@ wv.tour = wv.tour || function (models, ui, config) {
     var onStop = function (index, tip, button) {
       // console.log(index, tip, button);
       setTourState();
-      WVC.GA.event('Tour', 'Click', 'Post Tour View', index + 1);
-      if (index == 5 && button !== 'previous') {
+      GA.event('Tour', 'Click', 'Post Tour View', index + 1);
+      if (index === 5 && button !== 'previous') {
         endTour();
       }
     };
@@ -184,7 +183,7 @@ wv.tour = wv.tour || function (models, ui, config) {
       $('.ui-dialog-content')
         .dialog('close');
       initTourState();
-      WVC.GA.event('Tour', 'Click', 'Take Tour');
+      GA.event('Tour', 'Click', 'Take Tour');
       $('#joyRideTipContent')
         .joyride({
           adjustForPhone: false,
@@ -201,7 +200,7 @@ wv.tour = wv.tour || function (models, ui, config) {
      * Toggle the value of the "hideSplash" flag.
      */
     var setDoNotShow = function () {
-      if (!wv.util.browser.localStorage) return;
+      if (!util.browser.localStorage) return;
       var hideSplash = localStorage.getItem('hideSplash');
       localStorage.setItem('hideSplash', !hideSplash);
     };
@@ -218,7 +217,7 @@ wv.tour = wv.tour || function (models, ui, config) {
   var initTourState = function () {
     var map = ui.map.selected;
     models.proj.selectDefault();
-    models.date.select(wv.util.today());
+    models.date.select(util.today());
     models.layers.reset();
     var leading = models.map.getLeadingExtent();
     map.getView()

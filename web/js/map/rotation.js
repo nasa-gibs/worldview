@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'jquery-ui/button';
 import util from '../util/util';
 
 export function MapRotate(ui, models, map) {

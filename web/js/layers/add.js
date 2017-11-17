@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'icheck';
+import 'jscrollpane';
 import loEach from 'lodash/each';
 import loFind from 'lodash/find';
 import loThrottle from 'lodash/throttle';

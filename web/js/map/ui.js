@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'jquery-ui/button';
 import loFindIndex from 'lodash/findIndex';
 import loEach from 'lodash/each';
 import loForOwn from 'lodash/forOwn';
