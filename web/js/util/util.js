@@ -12,6 +12,7 @@ import wvui from '../ui/ui';
 import browser from './browser';
 import {events} from './events';
 import load from './load';
+import Cache from 'cachai';
 
 export default (function (self) {
   var canvas = null;

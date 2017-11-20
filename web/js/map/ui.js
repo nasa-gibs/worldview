@@ -27,6 +27,7 @@ import {mapDateLineBuilder} from './datelinebuilder';
 import {mapLayerBuilder} from './layerbuilder';
 import {MapRunningData} from './runningdata';
 import {mapPrecacheTile} from './precachetile';
+import Cache from 'cachai';
 
 export function mapui(models, config) {
   var id = 'wv-map';
