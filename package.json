@@ -106,7 +106,7 @@
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.1.2"
   },
   "browser": {
-    "d3": "./web/ext/ui/d3/d3.js",
+    "d3": "./web/ext/d3/d3.js",
     "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   },
