@@ -18,8 +18,8 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: url('../font/OpenSans/Light/OpenSans-Regular.eot');
-  src: local('Open Sans Regular'), local('OpenSans-Regular'), url('../font/OpenSans/Light/OpenSans-Regular.eot?#iefix') format('embedded-opentype'), url('../font/OpenSans/Regular/OpenSans-Regular.woff2') format('woff2'), url('../font/OpenSans/Regular/OpenSans-Regular.woff') format('woff'), url('../font/OpenSans/Regular/OpenSans-Regular.ttf') format('truetype');
+  src: url('../font/OpenSans/Regular/OpenSans-Regular.eot');
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url('../font/OpenSans/Regular/OpenSans-Regular.eot?#iefix') format('embedded-opentype'), url('../font/OpenSans/Regular/OpenSans-Regular.woff2') format('woff2'), url('../font/OpenSans/Regular/OpenSans-Regular.woff') format('woff'), url('../font/OpenSans/Regular/OpenSans-Regular.ttf') format('truetype');
 }
 
 @font-face { /* Open Sans Italic */
