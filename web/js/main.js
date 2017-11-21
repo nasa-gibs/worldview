@@ -280,7 +280,7 @@ window.onload = () => {
     if (config.features.naturalEvents) {
     //  ui.naturalEvents = naturalEventsUI(models, ui, config, naturalEventsRequest(models, ui, config));
     }
-    // ui.link = linkUi(models, config);
+    ui.link = linkUi(models, config);
     // ui.tour = Tour(models, ui, config);
     // ui.info = uiInfo(ui, config);
     if (config.features.alert) {
