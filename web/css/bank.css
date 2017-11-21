@@ -125,7 +125,6 @@ h4 {
 
 .bank li.item {
   padding: 0;
-  overflow: hidden;
   cursor: move;
   margin: 0 auto;
 }

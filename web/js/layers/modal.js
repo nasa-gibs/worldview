@@ -787,14 +787,24 @@ export function layersModal(models, ui, config) {
     model.remove(decodeURIComponent($(this).val()));
   };
 
-  var onLayerAdded = function (layer) {
-    var $element = $(self.selector + ' [data-layer=\'' + util.jqueryEscape(layer.id) + '\']');
+  var onLayerAdded = function(layer) {
+    var $element = $(self.selector + " [data-layer='" + util.jqueryEscape(layer.id) + "']");
     $element.iCheck('check');
+    if (self.reactList) {
+      self.reactList.setState({
+        activeLayers: model.active
+      });
+    }
   };
 
-  var onLayerRemoved = function (layer) {
-    var $element = $(self.selector + ' [data-layer=\'' + util.jqueryEscape(layer.id) + '\']');
+  var onLayerRemoved = function(layer) {
+    var $element = $(self.selector + " [data-layer='" + util.jqueryEscape(layer.id) + "']");
     $element.iCheck('uncheck');
+    if (self.reactList) {
+      self.reactList.setState({
+        activeLayers: model.active
+      });
+    }
   };
 
   var unfocusInput = function () {
