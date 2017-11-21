@@ -21,8 +21,9 @@
     "e2e:firefox": "nightwatch -e firefox --skiptags wip",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
     "report": "node e2e/create-report.js",
-    "build:js": "node ./tasks/buildJS",
-    "build:css": "node ./tasks/buildCSS"
+    "build": "run-s --print-name build:* && grunt",
+    "build:css": "node ./tasks/buildCSS",
+    "build:js": "node ./tasks/buildJS"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
@@ -53,8 +54,6 @@
     "grunt-contrib-compress": "0.5.x",
     "grunt-contrib-concat": "1.0.x",
     "grunt-contrib-copy": "1.0.x",
-    "grunt-contrib-cssmin": "1.0.x",
-    "grunt-contrib-uglify": "2.0.x",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-exec": "0.4.x",
     "grunt-git-rev-parse": "0.1.x",
@@ -62,9 +61,7 @@
     "grunt-markdown": "0.7.x",
     "grunt-minjson": "0.4.x",
     "grunt-mkdir": "0.1.x",
-    "grunt-postcss": "^0.8.0",
     "grunt-rename": "0.1.x",
-    "grunt-stylefmt": "^3.0.0",
     "grunt-text-replace": "0.4.x",
     "gruntify-eslint": "^4.0.0",
     "moment": "2.13.x",

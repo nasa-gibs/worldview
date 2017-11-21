@@ -10,8 +10,8 @@ const outputPath = outputDir + 'wv.js';
 
 var bundler = browserify(entryPoint, {
   debug: isDebug, // Include source maps (makes bundle size larger)
-  fullPaths: isDebug, // For use with https://www.npmjs.com/package/disc
-  plugin: [isDebug ? watchify : null]
+  fullPaths: isDebug // For use with https://www.npmjs.com/package/disc
+  // plugin: [isDebug ? watchify : null]
 }).transform('babelify', {
   presets: ['env']
 }).transform('browserify-shim', {
