@@ -21,7 +21,8 @@
     "e2e:firefox": "nightwatch -e firefox --skiptags wip",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
     "report": "node e2e/create-report.js",
-    "build": "grunt && node ./tasks/build"
+    "build:js": "node ./tasks/buildJS",
+    "build:css": "node ./tasks/buildCSS"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
@@ -36,6 +37,7 @@
     "browserstack-local": "^1.3.0",
     "buster": "0.7.12",
     "chromedriver": "2.25.1",
+    "cssnano": "^3.10.0",
     "cucumber": "^3.0.2",
     "cucumber-html-reporter": "^3.0.4",
     "eslint-config-standard": "^10.2.1",
@@ -44,7 +46,6 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "express": "4.15.2",
-    "fs-extra": "^4.0.2",
     "geckodriver": "1.2.0",
     "grunt": "0.4.x",
     "grunt-buster": "0.4.x",
@@ -71,6 +72,9 @@
     "nightwatch-cucumber": "^8.2.10",
     "npm-run-all": "^4.1.1",
     "phantomjs": "2.1.x",
+    "postcss-cli": "^4.1.1",
+    "postcss-import": "^11.0.0",
+    "postcss-url": "^7.2.1",
     "selenium-server-standalone-jar": "3.0.1",
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",

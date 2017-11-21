@@ -3,9 +3,6 @@ import $ from 'jquery';
 import loEach from 'lodash/each';
 // import {GA as googleAnalytics} from 'worldview-components';
 
-// Styles
-import '../css/main.css';
-
 // Utils
 import util from './util/util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
 // Date
