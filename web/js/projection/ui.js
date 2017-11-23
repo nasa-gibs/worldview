@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'jquery-ui/button';
+import 'jquery-ui/menu';
 import loEach from 'lodash/each';
 import wvui from '../ui/ui';
 

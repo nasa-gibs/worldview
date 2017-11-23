@@ -1,4 +1,7 @@
 import $ from 'jquery';
+import 'jquery-ui/button';
+import 'jquery-ui/dialog';
+import 'jquery-ui/menu';
 import wvui from './ui';
 import util from '../util/util';
 import feedbackModal from '../feedback';

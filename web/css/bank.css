@@ -112,15 +112,6 @@ h4 {
   text-transform: uppercase;
 }
 
-#callSelectorLink {
-  display: inline-block;
-  width: 32px;
-  height: 32px;
-  background: transparent url("../images/addLayers.png");
-  margin-left: 50px;
-  float: right;
-}
-
 .bank div,
 .bank ul {
   display: block;
@@ -134,7 +125,6 @@ h4 {
 
 .bank li.item {
   padding: 0;
-  overflow: hidden;
   cursor: move;
   margin: 0 auto;
 }

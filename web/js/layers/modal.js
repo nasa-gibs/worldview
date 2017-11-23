@@ -1,4 +1,11 @@
 import $ from 'jquery';
+import 'jquery-ui/dialog';
+import 'jquery-ui/accordion';
+import 'jquery-ui/button';
+import 'jquery-ui/tabs';
+import 'icheck';
+import 'isotope-layout';
+import 'perfect-scrollbar/jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {LayerList} from 'worldview-components';
@@ -780,14 +787,24 @@ export function layersModal(models, ui, config) {
     model.remove(decodeURIComponent($(this).val()));
   };
 
-  var onLayerAdded = function (layer) {
-    var $element = $(self.selector + ' [data-layer=\'' + util.jqueryEscape(layer.id) + '\']');
+  var onLayerAdded = function(layer) {
+    var $element = $(self.selector + " [data-layer='" + util.jqueryEscape(layer.id) + "']");
     $element.iCheck('check');
+    if (self.reactList) {
+      self.reactList.setState({
+        activeLayers: model.active
+      });
+    }
   };
 
-  var onLayerRemoved = function (layer) {
-    var $element = $(self.selector + ' [data-layer=\'' + util.jqueryEscape(layer.id) + '\']');
+  var onLayerRemoved = function(layer) {
+    var $element = $(self.selector + " [data-layer='" + util.jqueryEscape(layer.id) + "']");
     $element.iCheck('uncheck');
+    if (self.reactList) {
+      self.reactList.setState({
+        activeLayers: model.active
+      });
+    }
   };
 
   var unfocusInput = function () {

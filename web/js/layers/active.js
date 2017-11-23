@@ -1,11 +1,16 @@
 import $ from 'jquery';
+import 'jquery-ui/sortable';
+import 'jquery-ui/button';
+import 'jquery-ui/dialog';
+import 'perfect-scrollbar/jquery';
+import d3 from 'd3';
 import loEach from 'lodash/each';
 import loEachRight from 'lodash/eachRight';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import layersInfo from './info';
 import layersOptions from './options';
-import palettesLegend from '../palettes/legend';
+import {palettesLegend} from '../palettes/legend';
 
 export function layersActive(models, ui, config) {
   var model = models.layers;
