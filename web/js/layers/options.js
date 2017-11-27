@@ -273,14 +273,12 @@ export function layersOptions(config, models, layer) {
   };
 
   var onRangeUpdate = function () {
-    var current;
-    updateRangeLabels();
-
     var palette = models.palettes.get(layer.id, index);
     var imin = (loIsUndefined(palette.min)) ? 0 : palette.min;
     var imax = (loIsUndefined(palette.max))
       ? palette.legend.tooltips.length - 1 : palette.max;
-    current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
+    var current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
+    updateRangeLabels();
     if (!loIsEqual(current, [imin, imax])) {
       $range.val([imin, imax]);
     }
