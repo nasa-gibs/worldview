@@ -27,8 +27,7 @@ export function palettesModel(models, config) {
   };
 
   self.getCustom = function (paletteId) {
-    var palette;
-    palette = config.palettes.custom[paletteId];
+    var palette = config.palettes.custom[paletteId];
     if (!palette) {
       throw new Error('Invalid palette: ' + paletteId);
     }
@@ -347,12 +346,13 @@ export function palettesModel(models, config) {
 
     loEach(state.l, function (layerDef) {
       var layerId = layerDef.id;
-      var values, minValue, maxValue;
+      var minValue, maxValue;
       var min = [],
         max = [];
       var squash = [];
       var count = 0;
       loEach(layerDef.attributes, function (attr) {
+        var values;
         if (attr.id === 'palette') {
           count = self.getCount(layerId);
           values = util.toArray(attr.value.split(';'));
@@ -480,17 +480,16 @@ export function palettesModel(models, config) {
   };
 
   var updateLookup = function (layerId) {
-    var legend, oldLegend, entries;
-    var lookup = {};
     if (!useLookup(layerId)) {
       delete self.active[layerId];
       return;
     }
+    var lookup = {};
     var active = self.active[layerId].maps;
     loEach(active, function (palette, index) {
-      oldLegend = palette.legend;
-      entries = palette.entries;
-      legend = {
+      var oldLegend = palette.legend;
+      var entries = palette.entries;
+      var legend = {
         colors: [],
         minLabel: oldLegend.minLabel,
         maxLabel: oldLegend.maxLabel,

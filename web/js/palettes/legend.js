@@ -59,11 +59,10 @@ export function palettesLegend(spec) {
   };
 
   var renderScale = function ($legendPanel, legend, index, layerId) {
-    var $container, $colorbar;
-    $container = $('<div></div>')
+    var $container = $('<div></div>')
       .addClass('wv-palettes-legend')
       .attr('data-index', index);
-    $colorbar = $('<canvas></canvas>')
+    var $colorbar = $('<canvas></canvas>')
       .addClass('wv-palettes-colorbar')
       .attr('id', legend.id)
       .attr('data-index', index);
@@ -117,13 +116,15 @@ export function palettesLegend(spec) {
   };
 
   var updateClasses = function (legend, index) {
-    var $colorBox;
     var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
+    var $detailPanel = $('<div></div>');
     loEach(legend.colors, function (color, classIndex) {
+      var label = legend.tooltips[classIndex];
+      label = (legend.units) ? label + ' ' + legend.units : label;
       var $runningDataPointLabel = $('<span></span>')
         .addClass('wv-running-category-label');
-      $colorBox = $('<span></span>')
+      var $colorBox = $('<span></span>')
         .attr('data-index', index)
         .attr('data-class-index', classIndex)
         .attr('data-hex', color)
@@ -136,11 +137,6 @@ export function palettesLegend(spec) {
       // Calls running data
       $colorBox.on('mouseenter', showClassUnitHover);
       $colorBox.on('mouseout', hideUnitsOnMouseOut);
-    });
-    var $detailPanel = $('<div></div>');
-    loEach(legend.colors, function (color, classIndex) {
-      var label = legend.tooltips[classIndex];
-      label = (legend.units) ? label + ' ' + legend.units : label;
       var $row = $('<div></div>')
         .addClass('wv-palettes-class-detail')
         .attr('data-class-index', classIndex);
@@ -261,9 +257,9 @@ export function palettesLegend(spec) {
   };
 
   var highlightClass = function () {
-    legendIndex = $(this)
+    var legendIndex = $(this)
       .attr('data-index');
-    classIndex = $(this)
+    var classIndex = $(this)
       .attr('data-class-index');
     $('.wv-palettes-class-label[data-index=\'' + legendIndex + '\']' +
         '[data-class-index=\'' + classIndex + '\']')
@@ -271,9 +267,9 @@ export function palettesLegend(spec) {
   };
 
   var unhighlightClass = function () {
-    legendIndex = $(this)
+    var legendIndex = $(this)
       .attr('data-index');
-    classIndex = $(this)
+    var classIndex = $(this)
       .attr('data-class-index');
     $('.wv-palettes-class-label[data-index=\'' + legendIndex + '\']' +
         '[data-class-index=\'' + classIndex + '\']')
