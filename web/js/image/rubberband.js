@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'jquery-ui/button';
 import loFind from 'lodash/find';
 import util from '../util/util';
 import wvui from '../ui/ui';

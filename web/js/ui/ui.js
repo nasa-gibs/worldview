@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'jquery-ui/dialog';
+import 'jquery-ui/menu';
 import loadingIndicator from './indicator';
 import info from './info';
 import mouse from './mouse';

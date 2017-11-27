@@ -4,6 +4,7 @@ import loMap from 'lodash/map';
 import loIsArray from 'lodash/isArray';
 import loIsObject from 'lodash/isObject';
 import util from '../util/util';
+import Cache from 'cachai';
 
 export function linkModel(config) {
   var self = {};
