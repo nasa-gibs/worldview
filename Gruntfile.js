@@ -2,35 +2,6 @@
 
 var fs = require('fs');
 var moment = require('moment');
-var nodeModuleFiles = [
-  'node_modules/babel-polyfill/dist/polyfill.js',
-  'node_modules/babel-polyfill/dist/polyfill.min.js',
-  'node_modules/react/dist/react.js',
-  'node_modules/react/dist/react.min.js',
-  'node_modules/react-dom/dist/react-dom.js',
-  'node_modules/react-dom/dist/react-dom.min.js',
-  'node_modules/worldview-components/browser/wvc.js',
-  'node_modules/worldview-components/browser/wvc.min.js',
-  'node_modules/lodash/lodash.js',
-  'node_modules/lodash/lodash.min.js',
-  'node_modules/bluebird/js/browser/bluebird.js',
-  'node_modules/bluebird/js/browser/bluebird.min.js',
-  'node_modules/gifshot/build/custom/gifshot.custom.js',
-  'node_modules/gifshot/build/custom/gifshot.custom.min.js',
-  'node_modules/promise-queue/lib/index.js',
-  'node_modules/openlayers/dist/ol-debug.js',
-  'node_modules/openlayers/dist/ol.css',
-  'node_modules/openlayers/dist/ol-debug.css',
-  'node_modules/font-awesome/css/font-awesome.min.css',
-  'node_modules/font-awesome/fonts/*',
-  'node_modules/isotope-layout/dist/*',
-  'node_modules/isotope-packery/packery-mode.pkgd.js',
-  'node_modules/isotope-packery/packery-mode.pkgd.min.js',
-  'node_modules/perfect-scrollbar/dist/js/*',
-  'node_modules/perfect-scrollbar/dist/css/*',
-  'node_modules/clipboard/dist/clipboard.js',
-  'node_modules/clipboard/dist/clipboard.min.js'
-];
 
 // Build date shown in the About box
 var buildTimestamp = moment.utc().format('MMMM DD, YYYY [-] HH:mm [UTC]');
@@ -46,11 +17,6 @@ module.exports = function(grunt) {
   var hasOptionsDirectory = fs.existsSync('options');
   var optionsPath = hasOptionsDirectory ? 'options' : 'node_modules/worldview-options-eosdis';
   var options = hasOptionsDirectory ? grunt.file.readJSON('options/package.json') : grunt.file.readJSON('node_modules/worldview-options-eosdis/package.json');
-
-  // Lists of JavaScript and CSS files to include and in the correct
-  // order
-  var js = grunt.file.readJSON('deploy/wv.js.json');
-  var css = grunt.file.readJSON('deploy/wv.css.json');
 
   // Platform specific command for find
   var findCmd;
@@ -75,55 +41,12 @@ module.exports = function(grunt) {
     optionsPath: optionsPath,
     apache_version: grunt.option('apache-version') || '22',
 
-    postcss: {
-      stylelint: {
-        options: {
-          map: false,
-          processors: [require('stylelint')({
-            configFile: '.stylelintrc',
-            formatter: 'string',
-            ignoreDisables: false,
-            failOnError: true,
-            outputFile: '',
-            reportNeedlessDisables: false,
-            syntax: ''
-          })]
-        },
-        src: 'web/css/*.css'
-      },
-      autoprefix: {
-        options: {
-          map: false,
-          processors: [require('autoprefixer')]
-        },
-        src: 'web/css/*.css'
-      }
-    },
-
     buster: {
       console: {},
       report: {
         test: {
           reporter: 'xml'
         }
-      }
-    },
-
-    concat: {
-      // Combine all the Worldview JavaScript files into one file.
-      js: {
-        src: js['wv.js'],
-        dest: 'build/worldview-debug/web/js/wv.js'
-      },
-      // Combine all the Openlayers JavaScript files into one file.
-      oljs: {
-        src: js['ol.js'],
-        dest: 'build/worldview-debug/web/js/ol.js'
-      },
-      // Combine all the Worldview CSS files into one file.
-      css: {
-        src: css,
-        dest: 'build/worldview-debug/web/css/wv.css'
       }
     },
 
@@ -199,21 +122,6 @@ module.exports = function(grunt) {
               '!web/var/**'
             ],
             dest: 'build/worldview-debug'
-          }
-        ],
-        options: {
-          mode: true
-        }
-      },
-
-      ext: {
-        files: [
-          {
-            expand: true,
-            cwd: '.',
-            overwrite: true,
-            src: nodeModuleFiles,
-            dest: 'web/ext'
           }
         ],
         options: {
@@ -334,18 +242,6 @@ module.exports = function(grunt) {
       }
     },
 
-    cssmin: {
-      // Minifiy the concatenated Worldview CSS file.
-      wv_css: {
-        options: {
-          keepSpecialComments: false
-        },
-        files: {
-          'build/worldview/web/css/wv.css': ['build/worldview/web/css/wv.css']
-        }
-      }
-    },
-
     eslint: {
       options: {
         configFile: '.eslintrc',
@@ -368,9 +264,6 @@ module.exports = function(grunt) {
 
       fetch: {
         command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" FETCH_GC=1 bin/wv-options-build "' + env
-      },
-      node_packages: {
-        command: 'npm update'
       },
 
       python_packages: {
@@ -492,7 +385,6 @@ module.exports = function(grunt) {
         '!build/worldview-debug/web/css/bulkDownload.css',
         '!build/worldview-debug/web/ext/**/*'
       ],
-      modules: ['web/ext/node_modules/**'],
       config_src: ['web/config/**/*'],
       build_source: [
         'build/worldview', 'build/worldview-debug'
@@ -592,36 +484,15 @@ module.exports = function(grunt) {
           }
         ]
       }
-    },
-
-    stylefmt: {
-      format: {
-        files: [
-          {
-            expand: true,
-            src: 'web/css/*.css',
-            dest: './'
-          }
-        ]
-      }
-    },
-
-    watch: {
-      scripts: {
-        files: nodeModuleFiles,
-        tasks: ['update']
-      }
     }
+
   });
 
   grunt.loadNpmTasks('grunt-buster');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('gruntify-eslint');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-line-remover');
   grunt.loadNpmTasks('grunt-exec');
@@ -629,8 +500,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-markdown');
   grunt.loadNpmTasks('grunt-minjson');
   grunt.loadNpmTasks('grunt-mkdir');
-  grunt.loadNpmTasks('grunt-postcss');
-  grunt.loadNpmTasks('grunt-stylefmt');
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-rename');
 
@@ -652,17 +521,13 @@ module.exports = function(grunt) {
     grunt.option('email', brand.email);
   });
 
-  grunt.registerTask('autoprefix', ['postcss:autoprefix']);
-
   grunt.registerTask('build', [
     'remove:build_source',
     'git-rev-parse:source',
     'copy:source',
-    'concat',
     'remove:source',
     'exec:empty',
     'copy:release',
-    'cssmin',
     'replace:links',
     'lineremover',
     'mkdir:dist',
@@ -698,8 +563,6 @@ module.exports = function(grunt) {
     'copy:dist_site_release_versioned'
   ]);
 
-  grunt.registerTask('stylelint', ['postcss:stylelint']);
-
   grunt.registerTask('rpm-only', [
     'load_branding',
     'git-rev-parse:source',
@@ -714,18 +577,16 @@ module.exports = function(grunt) {
 
   grunt.registerTask('apache-config', ['load_branding', 'copy:apache', 'replace:apache']);
 
-  grunt.registerTask('update', ['remove:modules', 'copy:ext']);
-  grunt.registerTask('update-packages', ['exec:python_packages', 'exec:node_packages', 'update']);
+  grunt.registerTask('update-packages', ['exec:python_packages']);
   grunt.registerTask('check', ['lint', 'test']);
   grunt.registerTask('clean', ['remove:build']);
   grunt.registerTask('distclean', ['remove:build', 'remove:dist']);
-  grunt.registerTask('lint', ['eslint', 'stylelint']);
+  grunt.registerTask('lint', ['eslint']);
   grunt.registerTask('test', ['buster:console']);
 
   grunt.registerTask('default', [
     'update-packages',
     'fetch',
-    'update',
     'build',
     'config',
     'site'

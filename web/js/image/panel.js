@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import 'jquery-ui/button';
+import 'jquery-ui/dialog';
 import loEach from 'lodash/each';
 import loIsUndefined from 'lodash/isUndefined';
 import olProj from 'ol/proj';

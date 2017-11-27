@@ -21,7 +21,9 @@
     "e2e:firefox": "nightwatch -e firefox --skiptags wip",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
     "report": "node e2e/create-report.js",
-    "build": "grunt && node ./tasks/build-js"
+    "build": "run-s --print-name build:* && grunt",
+    "build:css": "node ./tasks/buildCSS",
+    "build:js": "node ./tasks/buildJS"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
@@ -30,11 +32,13 @@
     "babel-preset-env": "^1.6.1",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
+    "browserify-css": "^0.13.1",
     "browserify-shim": "^3.8.14",
     "browserstack-capabilities": "^0.4.0",
     "browserstack-local": "^1.3.0",
     "buster": "0.7.12",
     "chromedriver": "2.25.1",
+    "cssnano": "^3.10.0",
     "cucumber": "^3.0.2",
     "cucumber-html-reporter": "^3.0.4",
     "eslint-config-standard": "^10.2.1",
@@ -50,8 +54,6 @@
     "grunt-contrib-compress": "0.5.x",
     "grunt-contrib-concat": "1.0.x",
     "grunt-contrib-copy": "1.0.x",
-    "grunt-contrib-cssmin": "1.0.x",
-    "grunt-contrib-uglify": "2.0.x",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-exec": "0.4.x",
     "grunt-git-rev-parse": "0.1.x",
@@ -59,30 +61,41 @@
     "grunt-markdown": "0.7.x",
     "grunt-minjson": "0.4.x",
     "grunt-mkdir": "0.1.x",
-    "grunt-postcss": "^0.8.0",
     "grunt-rename": "0.1.x",
-    "grunt-stylefmt": "^3.0.0",
     "grunt-text-replace": "0.4.x",
     "gruntify-eslint": "^4.0.0",
     "moment": "2.13.x",
     "nightwatch": "^0.9.16",
-    "nightwatch-cucumber": "^8.1.0",
+    "nightwatch-cucumber": "^8.2.10",
     "npm-run-all": "^4.1.1",
     "phantomjs": "2.1.x",
+    "postcss-cli": "^4.1.1",
+    "postcss-import": "^11.0.0",
+    "postcss-url": "^7.2.1",
     "selenium-server-standalone-jar": "3.0.1",
     "stylefmt": "^6.0.0",
     "stylelint": "^8.0.0",
+    "uglifyify": "^4.0.5",
     "watchify": "^3.9.0"
   },
   "dependencies": {
     "babel-polyfill": "6.16.0",
     "bluebird": "3.4.6",
+    "cachai": "^1.0.2",
     "clipboard": "^1.7.1",
     "font-awesome": "4.7.0",
     "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
+    "icheck": "^1.0.2",
     "isotope-layout": "3.0.x",
     "isotope-packery": "2.x.x",
+    "jquery": "^2.1.4",
+    "jquery-jcrop": "^0.9.13",
+    "jquery-ui": "1.10.4",
+    "jquery.joyride": "^2.2.0",
+    "jscrollpane": "^2.0.22",
     "lodash": "4.15.0",
+    "mobiscroll-jquery": "^3.2.6",
+    "nouislider-browser": "^5.0.0-1",
     "ol": "^4.4.2",
     "perfect-scrollbar": "^0.8.1",
     "proj4": "2.3.3",
@@ -93,75 +106,12 @@
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.1.2"
   },
   "browser": {
-    "d3": "./web/ext/ui/d3/d3.js",
-    "jquery": "./web/ext/main/jquery-2.1.4/jquery.js",
-    "jquery-ui": "./web/ext/ui/jquery-ui-1.11.4/jquery-ui.js",
-    "jquery-migrate": "./web/ext/main/jquery.migrate-1.2.1/jquery-migrate.min.js",
-    "icheck": "./web/ext/ui/iCheck-1.0.2-patch/icheck.js",
-    "jscrollpane": "./web/ext/ui/jquery.jscrollpane-2.0.22/jquery.jscrollpane.js",
-    "mobiscroll": "./web/ext/date/mobiscroll-2.6.0/mobiscroll.js",
-    "jcrop": "./web/ext/image/jcrop-0.9.12/jquery.Jcrop.js",
-    "nouislider": "./web/ext/ui/noUiSlider-6.1.10/jquery.nouislider.min.js",
-    "jcarousel": "./web/ext/layers/jcarousel/jcarousel.js",
-    "perfect-scrollbar-jquery": "./web/ext/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js",
-    "isotope-jquery": "./web/ext/node_modules/isotope-layout/dist/isotope.pkgd.js"
+    "d3": "./web/ext/d3/d3.js",
+    "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
+    "jquery": "./node_modules/jquery/dist/jquery.js"
   },
   "browserify-shim": {
-    "jquery": "global:$",
-    "d3": "global:d3",
-    "jquery-ui": {
-      "exports": null,
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "jquery-migrate": {
-      "exports": null,
-      "depends": [
-        "jquery:$"
-      ]
-    },
-    "icheck": {
-      "exports": null,
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "mobiscroll": {
-      "exports": null,
-      "depends": [
-        "jquery:$"
-      ]
-    },
-    "jscrollpane": {
-      "exports": null,
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "nouislider": {
-      "exports": null,
-      "depends": [
-        "jquery:$"
-      ]
-    },
-    "jcarousel": {
-      "exports": null,
-      "depends": [
-        "jquery:$"
-      ]
-    },
-    "perfect-scrollbar-jquery": {
-      "exports": "null",
-      "depends": [
-        "jquery:jQuery"
-      ]
-    },
-    "isotope-jquery": {
-      "exports": "null",
-      "depends": [
-        "jquery:jQuery"
-      ]
-    }
+    "isotope-layout": "isotope",
+    "jquery": "$"
   }
 }

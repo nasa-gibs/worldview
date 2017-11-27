@@ -1,4 +1,9 @@
 import $ from 'jquery';
+import 'jquery-ui/sortable';
+import 'jquery-ui/button';
+import 'jquery-ui/dialog';
+import 'perfect-scrollbar/jquery';
+import d3 from 'd3';
 import loEach from 'lodash/each';
 import loEachRight from 'lodash/eachRight';
 import util from '../util/util';

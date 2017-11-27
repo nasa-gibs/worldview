@@ -1,15 +1,5 @@
 // External Dependencies
 import $ from 'jquery';
-import 'jquery-ui';
-import 'jquery-migrate';
-import 'icheck';
-import 'jscrollpane';
-import 'mobiscroll';
-import 'jcrop';
-import 'nouislider';
-import 'jcarousel';
-import 'perfect-scrollbar-jquery';
-import 'isotope-jquery';
 import loEach from 'lodash/each';
 // import {GA as googleAnalytics} from 'worldview-components';
 
@@ -81,7 +71,7 @@ import {projectionChange} from './projection/change';
 // Other
 //  import {debugConfig, debug} from './debug';
 import Brand from './brand';
-// import tour from './tour';
+import tour from './tour';
 import {uiInfo} from './ui/info';
 
 import {polyfill} from './polyfill';
@@ -280,7 +270,7 @@ window.onload = () => {
     if (config.features.naturalEvents) {
     //  ui.naturalEvents = naturalEventsUI(models, ui, config, naturalEventsRequest(models, ui, config));
     }
-    // ui.link = linkUi(models, config);
+    ui.link = linkUi(models, config);
     // ui.tour = Tour(models, ui, config);
     // ui.info = uiInfo(ui, config);
     if (config.features.alert) {
