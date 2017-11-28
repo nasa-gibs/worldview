@@ -880,7 +880,7 @@ wv.map.ui = wv.map.ui || function(models, config, components) {
       var isEventsTabActive = (typeof models.naturalEvents !== 'undefined' && models.naturalEvents.active);
       var isDataTabActive = (typeof models.data !== 'undefined' && models.data.active);
       // Don't add data runners if map is animating
-      var isMapAnimating = (typeof models.anim !== 'undefined' && models.anim.rangeState.playing)
+      var isMapAnimating = (typeof models.anim !== 'undefined' && models.anim.rangeState.playing);
 
       if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
 
