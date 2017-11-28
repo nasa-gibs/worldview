@@ -53,9 +53,9 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
 
   var init = function () {
     model.events
-    // FIXME: on "add" needs to be present without trying to add a product
+    // FIXME: on 'add' needs to be present without trying to add a product
       // multiple times
-      // .on("add", onLayerAdded)
+      // .on('add', onLayerAdded)
       .on('remove', onLayerRemoved);
     models.proj.events.on('select', drawDefaultPage);
 
@@ -779,14 +779,24 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
     model.remove(decodeURIComponent($(this).val()));
   };
 
-  var onLayerAdded = function (layer) {
-    var $element = $(self.selector + ' [data-layer=\'' + wv.util.jqueryEscape(layer.id) + '\']');
+  var onLayerAdded = function(layer) {
+    var $element = $(self.selector + ' [data-layer="' + wv.util.jqueryEscape(layer.id) + '"]');
     $element.iCheck('check');
+    if(self.reactList) {
+      self.reactList.setState({
+        activeLayers: model.active
+      });
+    }
   };
 
-  var onLayerRemoved = function (layer) {
-    var $element = $(self.selector + ' [data-layer=\'' + wv.util.jqueryEscape(layer.id) + '\']');
+  var onLayerRemoved = function(layer) {
+    var $element = $(self.selector + ' [data-layer="' + wv.util.jqueryEscape(layer.id) + '"]');
     $element.iCheck('uncheck');
+    if(self.reactList) {
+      self.reactList.setState({
+        activeLayers: model.active
+      });
+    }
   };
 
   var unfocusInput = function () {
@@ -870,7 +880,7 @@ wv.layers.modal = wv.layers.modal || function (models, ui, config) {
       }
     });
 
-    // $(self.selector + "select").on('change', filter);
+    // $(self.selector + 'select').on('change', filter);
     $searchInput.keyup(filter);
     drawDefaultPage();
   };
