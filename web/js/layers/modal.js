@@ -788,7 +788,7 @@ export function layersModal(models, ui, config) {
   };
 
   var onLayerAdded = function(layer) {
-    var $element = $(self.selector + " [data-layer='" + util.jqueryEscape(layer.id) + "']");
+    var $element = $(self.selector + ' [data-layer="' + util.jqueryEscape(layer.id) + '"]');
     $element.iCheck('check');
     if (self.reactList) {
       self.reactList.setState({
@@ -798,7 +798,7 @@ export function layersModal(models, ui, config) {
   };
 
   var onLayerRemoved = function(layer) {
-    var $element = $(self.selector + " [data-layer='" + util.jqueryEscape(layer.id) + "']");
+    var $element = $(self.selector + ' [data-layer="' + util.jqueryEscape(layer.id) + '"]');
     $element.iCheck('uncheck');
     if (self.reactList) {
       self.reactList.setState({
