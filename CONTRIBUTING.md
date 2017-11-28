@@ -26,7 +26,7 @@ We ask that you follow these guidelines with your contributions;
 
 ### Style Guidelines
 
-Please lint your code with `npm run lint`. Our style rules are defined in `.stylelintrc` and `.eslintrc`. We follow a modified version of [Standard JS](https://github.com/standard), with semi-colons. You can install linting plugins in your editor to check against our style guides automatically:
+Please lint your code with `npm run lint`. Our style rules are defined in `.stylelintrc` and `.eslintrc`. We follow a modified version of [Standard JS Rules](https://github.com/standard/standard#the-rules), with semi-colons. You can install linting plugins in your editor to check against our style guides automatically:
 
 #### Atom
 
