@@ -122,10 +122,8 @@ git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 * [Optional Features](doc/features.md)
 * [Configuration](doc/config.md)
 * [Development Notes](doc/developing.md)
-* [Coding Style Guide](doc/style_guide.md)
 * [Testing](doc/testing.md)
 * [Project Roadmap](https://github.com/nasa-gibs/worldview/projects/7)
-* [Third-Party Library Use](THIRD_PARTY.md)
 
 ## Contributing
 

@@ -24,6 +24,22 @@ If you want to submit your own contributions, follow these steps;
 
 We ask that you follow these guidelines with your contributions;
 
+### Style Guidelines
+
+Please lint your code with `npm run lint`. Our style rules are defined in `.stylelintrc` and `.eslintrc`. We follow a modified version of [Standard JS](https://github.com/standard), with semi-colons. You can install linting plugins in your editor to check against our style guides automatically:
+
+#### Atom
+
+* [AtomLinter](https://atomlinter.github.io/)
+* [`linter-eslint`](https://atom.io/packages/linter-eslint)
+* [`linter-stylelint`](https://atom.io/packages/linter-stylelint)
+
+#### Sublime
+
+* [SublimeLinter](http://www.sublimelinter.com/en/latest/)
+* [`SublimeLinter-eslint`](https://github.com/roadhump/SublimeLinter-eslint)
+* [`SublimeLinter-contrib-stylelint`](https://github.com/kungfusheep/SublimeLinter-contrib-stylelint)
+
 ### Unit Tests
 
 All of the unit tests for this project need to pass before your submission will be accepted. You can run `npm test` in the command line after making changes to verify that the tests pass. If you add new functionality, please consider adding tests for that functionality as well.
