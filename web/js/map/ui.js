@@ -890,16 +890,12 @@ export function mapui(models, config) {
       if (self.mapIsbeingDragged || util.browser.small) {
         return;
       }
-      if (typeof models.naturalEvents === 'undefined' ||
-        typeof models.data === 'undefined' ||
-        models.naturalEvents.active || models.data.active) {
-        return;
-      }
-      if (models.anim) {
-        if (models.anim.rangeState.playing) {
-          return; // don't get running data if map is animating
-        }
-      }
+      // Don't add data runners if we're on the events or data tabs, or if map is animating
+      var isEventsTabActive = (typeof models.naturalEvents !== 'undefined' && models.naturalEvents.active);
+      var isDataTabActive = (typeof models.data !== 'undefined' && models.data.active);
+      var isMapAnimating = (typeof models.anim !== 'undefined' && models.anim.rangeState.playing);
+      if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
+      
       dataRunner.newPoint(pixels, map);
     }
     $(map.getViewport())
