@@ -1,15 +1,14 @@
 var wv = wv || {};
 wv.util = wv.util || {};
 
-wv.util.load = wv.util.load || (function() {
-
+wv.util.load = wv.util.load || (function () {
   var self = {};
   var configPromises = {};
   var loading = 0;
   var indicatorTimeout = null;
   var indicatorId = null;
 
-  self.config = function(root, attr, url) {
+  self.config = function (root, attr, url) {
     var promise = $.Deferred();
     // If a request is already outstanding, chain to that one
     if (configPromises[url]) {
@@ -23,14 +22,14 @@ wv.util.load = wv.util.load || (function() {
       loading += 1;
       promise = $.getJSON(wv.brand.url(url));
       if (loading === 1) {
-        indicatorTimeout = setTimeout(function() {
+        indicatorTimeout = setTimeout(function () {
           indicatorId = wv.ui.indicator.loading();
         }, 2000);
       }
-      promise.done(function(result) {
+      promise.done(function (result) {
         root[attr] = result;
       })
-        .always(function() {
+        .always(function () {
           delete configPromises[url];
           loading -= 1;
           if (loading === 0) {
@@ -47,5 +46,4 @@ wv.util.load = wv.util.load || (function() {
   };
 
   return self;
-
 })();

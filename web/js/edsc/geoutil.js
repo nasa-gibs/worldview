@@ -1,11 +1,11 @@
-(function() {
+(function () {
   var ns;
 
   ns = window.edsc.map;
 
-  ns.geoutil = (function(L, Coordinate, Arc, config) {
+  ns.geoutil = (function (L, Coordinate, Arc, config) {
     var DEG_TO_RAD, EPSILON, NORTH_POLE, RAD_TO_DEG, SOUTH_POLE, _angleDelta, _course, _rotationDirection, area, containsPole, exports, gcInterpolate;
-    
+
     // A small number for dealing with near-0
     EPSILON = 0.00000001;
     NORTH_POLE = 1;
@@ -15,8 +15,8 @@
 
     // Given two points, returns their midpoint along the shortest great circle between them.  The
     // two points may not be antipodal, since such a midpoint would be undefined
-    gcInterpolate = function(p1, p2) {
-      return (function(abs, asin, sqrt, pow, sin, cos, atan2) {
+    gcInterpolate = function (p1, p2) {
+      return (function (abs, asin, sqrt, pow, sin, cos, atan2) {
         var AB, d, lat, lat1, lat2, lon, lon1, lon2, ref, ref1, x, y, z;
         if ((abs(p1.lat) === (ref = abs(p2.lat)) && ref === 90)) {
           return p1;
@@ -58,7 +58,7 @@
     };
 
     // Determines the initial course direction from latlng1 setting off toward latlng2
-    _course = function(latlng1, latlng2) {
+    _course = function (latlng1, latlng2) {
       var PI, atan2, c1, c2, cos, denom, lat1, lat2, lng1, lng2, numer, result, sin;
       // http://williams.best.vwh.net/avform.htm#Crs
       sin = Math.sin, cos = Math.cos, atan2 = Math.atan2, PI = Math.PI;
@@ -85,7 +85,7 @@
 
     // Determines the difference between the given angles in the interval (-180, 180)
     // See: http://www.element84.com/determining-if-a-spherical-polygon-contains-a-pole.html
-    _angleDelta = function(a1, a2) {
+    _angleDelta = function (a1, a2) {
       var left_turn_amount;
       if (a2 < a1) {
         a2 += 360;
@@ -102,12 +102,12 @@
 
     // Returns a positive number if the angles rotate counterclockwise, a negative number
     // if the angles rotate clockwise, or 0 if they do not rotate
-    _rotationDirection = function(angles) {
+    _rotationDirection = function (angles) {
       var a1, a2, delta, i, j, len, ref;
       // Sum all adjacent angle deltas.  The sum gives us the number we need to return
       delta = 0;
       len = angles.length;
-      for (i = j = 0, ref = len; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+      for (i = j = 0, ref = len; ref >= 0 ? j < ref : j > ref; i = ref >= 0 ? ++j : --j) {
         a1 = angles[i];
         a2 = angles[(i + 1) % len];
         delta += _angleDelta(a1, a2);
@@ -125,12 +125,12 @@
      * Any Pole: containsPole(...) != 0
      * Neither Pole: containsPole(...) == 0
      */
-    containsPole = function(latlngs) {
+    containsPole = function (latlngs) {
       var angles, delta, delta0, delta1, dir, final, i, initial, j, latlng, latlng0, latlng1, latlng2, len, prev, ref;
       if (latlngs.length < 3) {
         return false;
       }
-      latlngs = (function() {
+      latlngs = (function () {
         var j, len1, results;
         results = [];
         for (j = 0, len1 = latlngs.length; j < len1; j++) {
@@ -142,7 +142,7 @@
       // http://www.element84.com/determining-if-a-spherical-polygon-contains-a-pole.html
       delta = 0;
       len = latlngs.length;
-      for (i = j = 0, ref = len; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+      for (i = j = 0, ref = len; ref >= 0 ? j < ref : j > ref; i = ref >= 0 ? ++j : --j) {
         latlng0 = latlngs[(i - 1 + len) % len];
         latlng1 = latlngs[i];
         latlng2 = latlngs[(i + 1) % len];
@@ -175,7 +175,7 @@
       if (delta < -360 + EPSILON) {
         return NORTH_POLE | SOUTH_POLE;
       } else if (delta < EPSILON) {
-        angles = (function() {
+        angles = (function () {
           var k, len1, results;
           results = [];
           for (k = 0, len1 = latlngs.length; k < len1; k++) {
@@ -191,7 +191,7 @@
           return SOUTH_POLE;
         } else {
           if (config.debug) {
-            console.warn("Rotation direction is NONE despite containing a pole");
+            console.warn('Rotation direction is NONE despite containing a pole');
           }
           return 0;
         }
@@ -201,7 +201,7 @@
     };
 
     // Calculates the area within the given latlngs
-    area = function(origLatlngs) {
+    area = function (origLatlngs) {
       var PI, crossesMeridian, i, j, k, latlngA, latlngB, latlngC, latlngs, len, phiB, ref, ref1, sum, thetaA, thetaB, thetaC;
       if (origLatlngs.length < 3) {
         return 0;
@@ -222,7 +222,7 @@
        */
       latlngs = [];
       len = origLatlngs.length;
-      for (i = j = 0, ref = len; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+      for (i = j = 0, ref = len; ref >= 0 ? j < ref : j > ref; i = ref >= 0 ? ++j : --j) {
         latlngA = origLatlngs[i];
         latlngB = origLatlngs[(i + 1) % len];
         latlngs.push(latlngA);
@@ -236,7 +236,7 @@
       crossesMeridian = false;
       sum = 0;
       len = latlngs.length;
-      for (i = k = 0, ref1 = len; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
+      for (i = k = 0, ref1 = len; ref1 >= 0 ? k < ref1 : k > ref1; i = ref1 >= 0 ? ++k : --k) {
         latlngA = latlngs[i];
         latlngB = latlngs[(i + 1) % len];
         latlngC = latlngs[(i + 2) % len];
@@ -280,5 +280,4 @@
       SOUTH_POLE: SOUTH_POLE
     };
   })(L, ns.Coordinate, ns.Arc, this.edsc.config);
-
 }).call(this);

@@ -6,8 +6,7 @@ wv.map = wv.map || {};
 /*
  * @Class
  */
-wv.map.model = wv.map.model || function(models, config) {
-
+wv.map.model = wv.map.model || function (models, config) {
   var self = {};
 
   self.extent = null;
@@ -23,9 +22,9 @@ wv.map.model = wv.map.model || function(models, config) {
    *
    * @returns {void}
    */
-  self.update = function(extent) {
+  self.update = function (extent) {
     self.extent = extent;
-    self.events.trigger("update", extent);
+    self.events.trigger('update', extent);
   };
 
   /*
@@ -40,13 +39,13 @@ wv.map.model = wv.map.model || function(models, config) {
    *
    * @returns {void}
    */
-  self.load = function(state, errors) {
+  self.load = function (state, errors) {
     if (state.v) {
       var proj = models.proj.selected;
       var extent = state.v;
       var maxExtent = proj.maxExtent;
 
-      if (proj.id === "geographic") {
+      if (proj.id === 'geographic') {
         proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
       }
       if (ol.extent.intersects(extent, maxExtent)) {
@@ -54,14 +53,14 @@ wv.map.model = wv.map.model || function(models, config) {
       } else {
         self.extent = _.clone(proj.maxExtent);
         errors.push({
-          message: "Extent outside of range"
+          message: 'Extent outside of range'
         });
       }
     }
-    //get rotation if it exists
-    if (state.p === 'arctic' || state.p === 'antarctic')
-      if (!isNaN(state.r)) //convert to radians here
-        self.rotation = state.r * (Math.PI / 180.0);
+    // get rotation if it exists
+    if (state.p === 'arctic' || state.p === 'antarctic') {
+      if (!isNaN(state.r)) { self.rotation = state.r * (Math.PI / 180.0); } // convert to radians
+    }
   };
 
   /*
@@ -76,11 +75,12 @@ wv.map.model = wv.map.model || function(models, config) {
    *
    * @returns {void}
    */
-  self.save = function(state) {
+  self.save = function (state) {
     state.v = _.clone(self.extent);
-    if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic')
+    if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic') {
       state.r = (self.rotation * (180.0 / Math.PI))
-        .toPrecision(6); //convert from radians to degrees
+        .toPrecision(6);
+    } // convert from radians to degrees
   };
 
   /*
@@ -98,7 +98,7 @@ wv.map.model = wv.map.model || function(models, config) {
    *
    * @returns {object} Extent Array
    */
-  self.getLeadingExtent = function() {
+  self.getLeadingExtent = function () {
     var curHour = wv.util.now()
       .getUTCHours();
 

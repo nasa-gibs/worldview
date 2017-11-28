@@ -1,16 +1,16 @@
-(function() {
+(function () {
   var ns;
 
   ns = window.edsc.map;
 
-  ns.Arc = (function(L, Coordinate) {
+  ns.Arc = (function (L, Coordinate) {
     var Arc, EPSILON, exports;
     // A small number for dealing with near-0
     EPSILON = 0.00000001;
 
     // Method for dealing with operations on great circle arcs
-    Arc = (function() {
-      function Arc(coordA, coordB) {
+    Arc = (function () {
+      function Arc (coordA, coordB) {
         var ref;
         if (coordB.theta < coordA.theta) {
           ref = [coordA, coordB], coordB = ref[0], coordA = ref[1];
@@ -25,7 +25,7 @@
         this.normal = this.coordA.cross(this.coordB);
       }
 
-      Arc.prototype.antimeridianCrossing = function() {
+      Arc.prototype.antimeridianCrossing = function () {
         var abs, x, xN, y, yA, yN, z, zN;
         abs = Math.abs;
 
@@ -90,9 +90,7 @@
       };
 
       return Arc;
-
     })();
     return exports = Arc;
   })(L, ns.Coordinate);
-
 }).call(this);

@@ -1,14 +1,14 @@
-(function() {
+(function () {
   var ns;
 
   ns = edsc.map;
 
-  ns.L.sphericalPolygon = (function(L, geoutil, Arc, Coordinate) {
+  ns.L.sphericalPolygon = (function (L, geoutil, Arc, Coordinate) {
     var antimeridianCrossing, convertLatLngs, dividePolygon, exports, ll2j, ll2s, makeCounterclockwise, originalRemove;
 
     // Converts the given latlngs to L.latLng objects and ensures they're
     // normalized on the expected interval, [-180, 180]
-    convertLatLngs = function(latlngs) {
+    convertLatLngs = function (latlngs) {
       var j, latlng, len1, original, result;
       result = [];
       for (j = 0, len1 = latlngs.length; j < len1; j++) {
@@ -30,7 +30,7 @@
      * arc between latlng0 and latlng1 crosses the antimeridian.  Will either
      * return the point of the crossing or null if the arc does not cross.
      */
-    antimeridianCrossing = function(latlng0, latlng1) {
+    antimeridianCrossing = function (latlng0, latlng1) {
       var arc, ref;
       arc = new Arc(Coordinate.fromLatLng(L.latLng(latlng0)), Coordinate.fromLatLng(L.latLng(latlng1)));
       return (ref = arc.antimeridianCrossing()) != null ? ref.toLatLng() : void 0;
@@ -38,7 +38,7 @@
 
     // Ensures that latlngs is counterclockwise around its smallest area
     // This is an in-place operation modifying the original list.
-    makeCounterclockwise = function(latlngs) {
+    makeCounterclockwise = function (latlngs) {
       var area;
       area = geoutil.area(latlngs);
       if (area > 2 * Math.PI) {
@@ -49,14 +49,14 @@
 
     // For debugging
     // Prints a string of latLng objects
-    ll2s = function(latlngs) {
+    ll2s = function (latlngs) {
       var ll;
-      return ((function() {
+      return ((function () {
         var j, len1, results;
         results = [];
         for (j = 0, len1 = latlngs.length; j < len1; j++) {
           ll = latlngs[j];
-          results.push("(" + ll.lat + ", " + ll.lng + ")");
+          results.push('(' + ll.lat + ', ' + ll.lng + ')');
         }
         return results;
       })()).join(', ');
@@ -64,15 +64,15 @@
 
     // Prints a string of latLng objects to a format useful in Jason's visualization
     // tools: http://testbed.echo.nasa.gov/spatial-viz/interactive_spherical_polygon_coverage
-    ll2j = function(latlngs) {
+    ll2j = function (latlngs) {
       var ll;
-      return ((function() {
+      return ((function () {
         var j, len1, ref, results;
         ref = latlngs.concat(latlngs[0]);
         results = [];
         for (j = 0, len1 = ref.length; j < len1; j++) {
           ll = ref[j];
-          results.push(ll.lng + "," + ll.lat);
+          results.push(ll.lng + ',' + ll.lat);
         }
         return results;
       })()).join(', ');
@@ -102,7 +102,7 @@
      *
      * It is, necessarily, a hack.
      */
-    dividePolygon = function(latlngs) {
+    dividePolygon = function (latlngs) {
       var boundaries, boundary, containedPoles, containsNorthPole, containsSouthPole, crossing, extra, extras, hasInsertions, hasPole, hole, holes, i, inc, interior, interiors, j, k, l, lat, latlng, latlng1, latlng2, len, len1, len2, len3, lng, m, maxCrossingLat, minCrossingLat, n, next, o, p, q, ref, ref1, split;
       interiors = [];
       boundaries = [];
@@ -142,7 +142,7 @@
        */
       split = [];
       len = latlngs.length;
-      for (i = k = 0, ref1 = len; 0 <= ref1 ? k < ref1 : k > ref1; i = 0 <= ref1 ? ++k : --k) {
+      for (i = k = 0, ref1 = len; ref1 >= 0 ? k < ref1 : k > ref1; i = ref1 >= 0 ? ++k : --k) {
         latlng1 = latlngs[i];
         latlng2 = latlngs[(i + 1) % len];
         crossing = antimeridianCrossing(latlng1, latlng2);
@@ -265,21 +265,21 @@
       options: {
         fill: true
       },
-      initialize: function(latlngs, options) {
+      initialize: function (latlngs, options) {
         this._layers = {};
         this._options = L.extend({}, this.options, options);
         return this.setLatLngs(latlngs);
       },
-      setLatLngs: function(latlngs) {
+      setLatLngs: function (latlngs) {
         var divided, latlng;
         if (latlngs[0] && Array.isArray(latlngs[0]) && latlngs[0].length > 2) {
           // Don't deal with holes
           if (console.warn) {
-            console.warn("Polygon with hole detected.  Ignoring.");
+            console.warn('Polygon with hole detected.  Ignoring.');
           }
           latlngs = latlngs[0];
         }
-        latlngs = (function() {
+        latlngs = (function () {
           var j, len1, results;
           results = [];
           for (j = 0, len1 = latlngs.length; j < len1; j++) {
@@ -304,13 +304,13 @@
           return this.addLayer(this._boundaries);
         }
       },
-      getLatLngs: function() {
+      getLatLngs: function () {
         return makeCounterclockwise(this._latlngs.concat());
       },
-      newLatLngIntersects: function(latlng, skipFirst) {
+      newLatLngIntersects: function (latlng, skipFirst) {
         return false;
       },
-      setOptions: function(options) {
+      setOptions: function (options) {
         this._options = this.options = L.extend({}, this._options, options);
         L.setOptions(this._interiors, L.extend({}, this._options, {
           stroke: false
@@ -320,7 +320,7 @@
         }));
         return this.redraw();
       },
-      setStyle: function(style) {
+      setStyle: function (style) {
         if (this.options.previousOptions) {
           this.options.previousOptions = this._options;
         }
@@ -331,19 +331,19 @@
           fill: false
         }));
       },
-      redraw: function() {
+      redraw: function () {
         return this.setLatLngs(this._latlngs);
       }
     });
 
-    L.sphericalPolygon = function(latlngs, options) {
+    L.sphericalPolygon = function (latlngs, options) {
       return new L.SphericalPolygon(latlngs, options);
     };
 
     // Monkey-patch _removeLayer.  The original doesn't handle event propagation
     // from FeatureGroups, and SphericalPolygons are FeatureGroups
     originalRemove = L.EditToolbar.Delete.prototype._removeLayer;
-    L.EditToolbar.Delete.prototype._removeLayer = function(e) {
+    L.EditToolbar.Delete.prototype._removeLayer = function (e) {
       var ref;
       if ((ref = e.target) != null ? ref._boundaries : void 0) {
         e.layer = e.target;
@@ -353,7 +353,7 @@
 
     L.Draw.Polygon = L.Draw.Polygon.extend({
       Poly: L.SphericalPolygon,
-      addHooks: function() {
+      addHooks: function () {
         L.Draw.Polyline.prototype.addHooks.call(this);
         if (this._map) {
           return this._poly = new L.SphericalPolygon([], this.options.shapeOptions);
@@ -362,7 +362,7 @@
     });
 
     L.Edit.Poly = L.Edit.Poly.extend({
-      _getMiddleLatLng: function(marker1, marker2) {
+      _getMiddleLatLng: function (marker1, marker2) {
         var latlng;
         return latlng = geoutil.gcInterpolate(marker1.getLatLng(), marker2.getLatLng());
       }
@@ -372,5 +372,4 @@
       dividePolygon: dividePolygon
     };
   })(L, ns.geoutil, ns.Arc, ns.Coordinate);
-
 }).call(this);

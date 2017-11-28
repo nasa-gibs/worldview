@@ -2,6 +2,6 @@
 var app = require('../app');
 var port = process.env.PORT || 3000;
 app.set('port', port);
-app.listen(port, function() {
+app.listen(port, function () {
   console.log('Worldview is available at http://localhost:' + port);
 });

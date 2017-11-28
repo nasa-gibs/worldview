@@ -2,30 +2,29 @@ var wv = wv || {};
 wv.ui = wv.ui || {};
 wv.ui.mouse = wv.ui.mouse || {};
 
-wv.ui.mouse.click = wv.ui.mouse.click || function($element, callback) {
-
+wv.ui.mouse.click = wv.ui.mouse.click || function ($element, callback) {
   var self = {};
   self.sensitivity = 5; // pixels
 
   var startX, startY;
 
-  var init = function() {
+  var init = function () {
     $element.mousedown(mousedown);
     $element.mouseup(mouseup);
   };
 
-  var mousedown = function(event) {
+  var mousedown = function (event) {
     startX = event.clientX;
     startY = event.clientY;
   };
 
-  var mouseup = function(event) {
+  var mouseup = function (event) {
     if (withinClickDistance(event)) {
       callback.call(this);
     }
   };
 
-  var withinClickDistance = function(event) {
+  var withinClickDistance = function (event) {
     var targetX = event.clientX;
     var targetY = event.clientY;
     var distance = Math.sqrt(Math.pow(startX - targetX, 2) +
@@ -35,10 +34,9 @@ wv.ui.mouse.click = wv.ui.mouse.click || function($element, callback) {
 
   init();
   return self;
-
 };
 
-wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
+wv.ui.mouse.wheel = wv.ui.mouse.wheel || function (element, ui, options) {
   options = options || {};
 
   var self = {};
@@ -52,16 +50,16 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
   var timeout = false;
   var lastEvent = null;
 
-  var init = function() {
-    element.on("zoom", wheel);
+  var init = function () {
+    element.on('zoom', wheel);
   };
 
-  self.change = function(listener) {
-    self.events.on("change", listener);
+  self.change = function (listener) {
+    self.events.on('change', listener);
     return self;
   };
 
-  var wheel = function() {
+  var wheel = function () {
     var evt = d3.event.sourceEvent;
     if ((Math.abs(evt.deltaX) <= Math.abs(evt.deltaY)) && timeout === false) {
       lastEvent = evt;
@@ -77,7 +75,7 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
         ui.timeline.pan.axis(d3.event);
         timeout = true;
         clearTimeout(timer);
-        timer = setTimeout(function() {
+        timer = setTimeout(function () {
           timeout = false;
         }, 500);
       }
@@ -88,21 +86,21 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
     }
   };
 
-  var update = function(event) {
+  var update = function (event) {
     var change = Math.floor(Math.abs(delta) / self.threshold);
     if (change >= 1) {
       var sign = delta ? delta < 0 ? -1 : 1 : 0;
-      self.events.trigger("change", sign * change, event);
+      self.events.trigger('change', sign * change, event);
       delta = delta % self.threshold;
       zoomed = true;
     }
   };
 
-  var end = function() {
+  var end = function () {
     timer = null;
     if (!zoomed) {
       var sign = delta ? delta < 0 ? -1 : 1 : 0;
-      self.events.trigger("change", sign, lastEvent);
+      self.events.trigger('change', sign, lastEvent);
     }
     lastEvent = null;
     delta = 0;
@@ -111,5 +109,4 @@ wv.ui.mouse.wheel = wv.ui.mouse.wheel || function(element, ui, options) {
 
   init();
   return self;
-
 };

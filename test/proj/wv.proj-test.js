@@ -1,8 +1,8 @@
-buster.testCase("wv.proj", {
+buster.testCase('wv.proj', {
 
   config: null,
 
-  setUp: function() {
+  setUp: function () {
     this.config = {
       projections: {
         geographic: {}
@@ -10,29 +10,29 @@ buster.testCase("wv.proj", {
     };
   },
 
-  "1.1: Parses valid projection": function() {
+  '1.1: Parses valid projection': function () {
     var state = {
-      "switch": "geographic"
+      'switch': 'geographic'
     };
     var errors = [];
     wv.proj.parse(state, errors, this.config);
-    buster.assert.equals(state.p, "geographic");
+    buster.assert.equals(state.p, 'geographic');
     buster.assert.equals(errors.length, 0);
   },
 
-  "1.2: Parses valid projection": function() {
+  '1.2: Parses valid projection': function () {
     var state = {
-      "p": "geographic"
+      'p': 'geographic'
     };
     var errors = [];
     wv.proj.parse(state, errors, this.config);
-    buster.assert.equals(state.p, "geographic");
+    buster.assert.equals(state.p, 'geographic');
     buster.assert.equals(errors.length, 0);
   },
 
-  "Rejects unsupported projection": function() {
+  'Rejects unsupported projection': function () {
     var state = {
-      "p": "albers"
+      'p': 'albers'
     };
     var errors = [];
     wv.proj.parse(state, errors, this.config);

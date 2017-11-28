@@ -9,8 +9,7 @@ wv.date.timeline = wv.date.timeline || {};
  *
  * @class wv.date.timeline.zoom
  */
-wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
-
+wv.date.timeline.zoom = wv.date.timeline.zoom || function (models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
 
@@ -18,21 +17,20 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
 
   self.current = {
     ticks: {
-      //Placeholders
+      // Placeholders
       boundary: {
 
       },
       normal: {
 
-      },
+      }
     },
     pick: {
-      //Placeholder
+      // Placeholder
     }
   };
 
-  self.change = function(amount, event) {
-
+  self.change = function (amount, event) {
     var zoom = tl.config.currentZoom;
 
     zoom += -amount;
@@ -44,10 +42,9 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
     }
 
     tl.config.zoom.call(this, zoom, event);
-
   };
 
-  self.drawTicks = function(count, max, aEnd, w, i, s, f, e, p) {
+  self.drawTicks = function (count, max, aEnd, w, i, s, f, e, p) {
     var mouseOffset, mousePos;
 
     if (e) {
@@ -64,13 +61,11 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
       r2 = (tl.width / 2) + ((count * w) / 2);
 
     if (max > count) {
-
       tl.isCropped = false;
       d2 = tl.data.end();
       r1 = (tl.width / 2) - ((count * w) / 2);
       r2 = (tl.width / 2) + ((count * w) / 2);
     } else {
-
       tl.isCropped = true;
       d2 = aEnd;
       r1 = 0;
@@ -110,14 +105,13 @@ wv.date.timeline.zoom = wv.date.timeline.zoom || function(models, config, ui) {
       .remove();
 
     tl.axis.call(tl.xAxis);
-
   };
 
-  self.refresh = function() {
+  self.refresh = function () {
     tl.config.zoom(tl.config.currentZoom);
   };
 
-  var init = function() {
+  var init = function () {
 
   };
 

@@ -6,36 +6,35 @@ wv.data = wv.data || {};
 
 wv.data.handler = wv.data.handler || {};
 
-wv.data.handler.getByName = function(name) {
+wv.data.handler.getByName = function (name) {
   var map = {
-    "AquaSwathMultiDay": wv.data.handler.aquaSwathMultiDay,
-    "CollectionList": wv.data.handler.collectionList,
-    "CollectionMix": wv.data.handler.collectionMix,
-    "List": wv.data.handler.list,
-    "DailyGranuleList": wv.data.handler.dailyGranuleList,
-    "DailyAMSRE": wv.data.handler.dailyAMSRE,
-    "MODISGrid": wv.data.handler.modisGrid,
-    "MODISMix": wv.data.handler.modisMix,
-    "MODISSwath": wv.data.handler.modisSwath,
-    "TerraSwathMultiDay": wv.data.handler.terraSwathMultiDay,
-    "HalfOrbit": wv.data.handler.halfOrbit
+    'AquaSwathMultiDay': wv.data.handler.aquaSwathMultiDay,
+    'CollectionList': wv.data.handler.collectionList,
+    'CollectionMix': wv.data.handler.collectionMix,
+    'List': wv.data.handler.list,
+    'DailyGranuleList': wv.data.handler.dailyGranuleList,
+    'DailyAMSRE': wv.data.handler.dailyAMSRE,
+    'MODISGrid': wv.data.handler.modisGrid,
+    'MODISMix': wv.data.handler.modisMix,
+    'MODISSwath': wv.data.handler.modisSwath,
+    'TerraSwathMultiDay': wv.data.handler.terraSwathMultiDay,
+    'HalfOrbit': wv.data.handler.halfOrbit
   };
   var handler = map[name];
   if (!handler) {
-    throw new Error("No such handler: " + name);
+    throw new Error('No such handler: ' + name);
   }
   return handler;
 };
 
-
-wv.data.handler.base = function(config, model) {
+wv.data.handler.base = function (config, model) {
   var self = {};
 
   self.events = wv.util.events();
   self.cmr = null;
   self.ajax = null;
 
-  var init = function() {
+  var init = function () {
     var ns = wv.data.handler.base;
     if (!ns.cmr) {
       if (config.parameters.mockCMR) {
@@ -55,41 +54,41 @@ wv.data.handler.base = function(config, model) {
     self.ajax = ns.ajax;
 
     self.extents = {};
-    $.each(config.projections, function(key, projection) {
+    $.each(config.projections, function (key, projection) {
       self.extents[projection.crs] = projection.maxExtent;
     });
   };
 
-  self.submit = function() {
+  self.submit = function () {
     var productConfig = config.products[model.selectedProduct].query;
     var queryData = $.extend(true, {}, productConfig);
     var promise = self._submit(queryData);
 
     var queriedProduct = model.selectedProduct;
-    promise.done(function(data) {
+    promise.done(function (data) {
       try {
         if (model.selectedProduct !== queriedProduct) {
-          self.events.trigger("results", {
+          self.events.trigger('results', {
             granules: [],
             meta: {}
           });
           return;
         }
         var results = self._processResults(data);
-        self.events.trigger("results", results);
+        self.events.trigger('results', results);
       } catch (error) {
-        self.events.trigger("error", "exception", error);
+        self.events.trigger('error', 'exception', error);
       }
     })
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        if (textStatus === "timeout") {
-          self.events.trigger("timeout");
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        if (textStatus === 'timeout') {
+          self.events.trigger('timeout');
         } else {
-          self.events.trigger("error", textStatus, errorThrown);
+          self.events.trigger('error', textStatus, errorThrown);
         }
       });
-    if (promise.state() === "pending") {
-      self.events.trigger("query");
+    if (promise.state() === 'pending') {
+      self.events.trigger('query');
     }
   };
 
@@ -97,19 +96,18 @@ wv.data.handler.base = function(config, model) {
   return self;
 };
 
-
-wv.data.handler.modisSwathMultiDay = function(config, model, spec) {
+wv.data.handler.modisSwathMultiDay = function (config, model, spec) {
   var startTimeDelta = spec.startTimeDelta || 0;
   var endTimeDelta = spec.endTimeDelta || 0;
 
   var self = wv.data.handler.base(config, model);
 
-  var init = function() {
+  var init = function () {
     self.extents[wv.map.CRS_WGS_84] =
       wv.map.CRS_WGS_84_QUERY_EXTENT;
   };
 
-  self._submit = function(queryData) {
+  self._submit = function (queryData) {
     var queryOptions = {
       time: model.time,
       startTimeDelta: startTimeDelta,
@@ -120,7 +118,7 @@ wv.data.handler.modisSwathMultiDay = function(config, model, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var results = {
       meta: {},
       granules: data
@@ -160,7 +158,7 @@ wv.data.handler.modisSwathMultiDay = function(config, model, spec) {
   return self;
 };
 
-wv.data.handler.aquaSwathMultiDay = function(config, model) {
+wv.data.handler.aquaSwathMultiDay = function (config, model) {
   var spec = {
     startTimeDelta: -180,
     endTimeDelta: 180,
@@ -173,8 +171,7 @@ wv.data.handler.aquaSwathMultiDay = function(config, model) {
   return $.extend(true, self, spec);
 };
 
-
-wv.data.handler.terraSwathMultiDay = function(config, model) {
+wv.data.handler.terraSwathMultiDay = function (config, model) {
   var spec = {
     startTimeDelta: -180,
     endTimeDelta: 180,
@@ -187,11 +184,10 @@ wv.data.handler.terraSwathMultiDay = function(config, model) {
   return $.extend(true, self, spec);
 };
 
-
-wv.data.handler.collectionList = function(config, model, spec) {
+wv.data.handler.collectionList = function (config, model, spec) {
   var self = wv.data.handler.base(config, model);
 
-  self._submit = function(queryData) {
+  self._submit = function (queryData) {
     var queryOptions = {
       data: queryData,
       search: 'collections.json'
@@ -200,7 +196,7 @@ wv.data.handler.collectionList = function(config, model, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var results = {
       meta: {},
       granules: data
@@ -224,13 +220,12 @@ wv.data.handler.collectionList = function(config, model, spec) {
   return self;
 };
 
-wv.data.handler.collectionMix = function(config, model, spec) {
-
+wv.data.handler.collectionMix = function (config, model, spec) {
   var self = wv.data.handler.base(config, model);
   var nrtHandler;
   var scienceHandler;
 
-  var init = function() {
+  var init = function () {
     var productConfig = config.products[model.selectedProduct];
 
     var nrtHandlerName = productConfig.nrt.handler;
@@ -244,8 +239,7 @@ wv.data.handler.collectionMix = function(config, model, spec) {
     scienceHandler = scienceHandlerFactory(config, model, spec);
   };
 
-  self._submit = function() {
-
+  self._submit = function () {
     var nrtQueryOptions = {
       time: model.time,
       startTimeDelta: nrtHandler.startTimeDelta,
@@ -264,20 +258,20 @@ wv.data.handler.collectionMix = function(config, model, spec) {
 
     return wv.util.ajaxJoin([
       {
-        item: "nrt",
+        item: 'nrt',
         promise: nrt
       },
       {
-        item: "science",
+        item: 'science',
         promise: science
       }
     ]);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var useNRT = false;
     if (data.nrt.length > 0 && data.science.length > 0) {
-      useNRT = (model.prefer === "nrt");
+      useNRT = (model.prefer === 'nrt');
     } else {
       useNRT = (data.nrt.length > 0);
     }
@@ -293,11 +287,10 @@ wv.data.handler.collectionMix = function(config, model, spec) {
   return self;
 };
 
-
-wv.data.handler.list = function(config, model, spec) {
+wv.data.handler.list = function (config, model, spec) {
   var self = wv.data.handler.base(config, model);
 
-  self._submit = function(queryData) {
+  self._submit = function (queryData) {
     var queryOptions = {
       startTimeDelta: 1,
       endTimeDelta: -1,
@@ -308,7 +301,7 @@ wv.data.handler.list = function(config, model, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var results = {
       meta: {},
       granules: data
@@ -335,10 +328,10 @@ wv.data.handler.list = function(config, model, spec) {
   return self;
 };
 
-wv.data.handler.dailyGranuleList = function(config, model, spec) {
+wv.data.handler.dailyGranuleList = function (config, model, spec) {
   var self = wv.data.handler.list(config, model, spec);
 
-  self._submit = function(queryData) {
+  self._submit = function (queryData) {
     var queryOptions = {
       startTimeDelta: 180,
       endTimeDelta: -180,
@@ -352,11 +345,10 @@ wv.data.handler.dailyGranuleList = function(config, model, spec) {
   return self;
 };
 
-wv.data.handler.dailyAMSRE = function(config, model, spec) {
-
+wv.data.handler.dailyAMSRE = function (config, model, spec) {
   var self = wv.data.handler.base(config, model);
 
-  self._submit = function(queryData) {
+  self._submit = function (queryData) {
     var queryOptions = {
       startTimeDelta: 180,
       endTimeDelta: -180,
@@ -367,7 +359,7 @@ wv.data.handler.dailyAMSRE = function(config, model, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var results = {
       meta: {},
       granules: data
@@ -390,11 +382,11 @@ wv.data.handler.dailyAMSRE = function(config, model, spec) {
   return self;
 };
 
-wv.data.handler.modisGrid = function(config, model, spec) {
+wv.data.handler.modisGrid = function (config, model, spec) {
   var self = wv.data.handler.base(config, model);
 
-  self._submit = function() {
-    var crs = model.crs.replace(/:/, "_");
+  self._submit = function () {
+    var crs = model.crs.replace(/:/, '_');
 
     var queryOptions = {
       startTimeDelta: 1,
@@ -405,24 +397,24 @@ wv.data.handler.modisGrid = function(config, model, spec) {
 
     var granules = self.cmr.submit(queryOptions);
     var grid = self.ajax.submit({
-      url: "data/MODIS_Grid." + crs + ".json?v=" + wv.brand.BUILD_NONCE,
-      dataType: "json"
+      url: 'data/MODIS_Grid.' + crs + '.json?v=' + wv.brand.BUILD_NONCE,
+      dataType: 'json'
     });
 
     var promise = $.Deferred();
     return wv.util.ajaxJoin([
       {
-        item: "granules",
+        item: 'granules',
         promise: granules
       },
       {
-        item: "grid",
+        item: 'grid',
         promise: grid
       }
     ]);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var productConfig = config.products[model.selectedProduct];
     var results = {
       meta: {
@@ -450,14 +442,12 @@ wv.data.handler.modisGrid = function(config, model, spec) {
   return self;
 };
 
-
-wv.data.handler.modisMix = function(config, model, spec) {
-
+wv.data.handler.modisMix = function (config, model, spec) {
   var self = wv.data.handler.base(config, model);
   var nrtHandler;
   var scienceHandler;
 
-  var init = function() {
+  var init = function () {
     var productConfig = config.products[model.selectedProduct];
 
     var nrtHandlerName = productConfig.nrt.handler;
@@ -471,8 +461,8 @@ wv.data.handler.modisMix = function(config, model, spec) {
     scienceHandler = scienceHandlerFactory(config, model, spec);
   };
 
-  self._submit = function() {
-    var crs = model.crs.replace(/:/, "_");
+  self._submit = function () {
+    var crs = model.crs.replace(/:/, '_');
 
     var nrtQueryOptions = {
       time: model.time,
@@ -489,30 +479,30 @@ wv.data.handler.modisMix = function(config, model, spec) {
     var science = self.cmr.submit(scienceQueryOptions);
 
     var grid = self.ajax.submit({
-      url: "data/MODIS_Grid." + crs + ".json?v=" + wv.brand.BUILD_NONCE,
-      dataType: "json"
+      url: 'data/MODIS_Grid.' + crs + '.json?v=' + wv.brand.BUILD_NONCE,
+      dataType: 'json'
     });
 
     return wv.util.ajaxJoin([
       {
-        item: "nrt",
+        item: 'nrt',
         promise: nrt
       },
       {
-        item: "science",
+        item: 'science',
         promise: science
       },
       {
-        item: "grid",
+        item: 'grid',
         promise: grid
       }
     ]);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var useNRT = false;
     if (data.nrt.length > 0 && data.science.length > 0) {
-      useNRT = (model.prefer === "nrt");
+      useNRT = (model.prefer === 'nrt');
     } else {
       useNRT = (data.nrt.length > 0);
     }
@@ -531,18 +521,16 @@ wv.data.handler.modisMix = function(config, model, spec) {
   return self;
 };
 
-
-wv.data.handler.modisSwath = function(config, model, spec) {
-
+wv.data.handler.modisSwath = function (config, model, spec) {
   var MAX_DISTANCE = 270;
   var self = wv.data.handler.base(config, model);
 
-  var init = function() {
+  var init = function () {
     self.extents[wv.map.CRS_WGS_84] =
       wv.map.CRS_WGS_84_QUERY_EXTENT;
   };
 
-  self._submit = function(queryData) {
+  self._submit = function (queryData) {
     var queryOptions = {
       time: model.time,
       data: queryData
@@ -551,7 +539,7 @@ wv.data.handler.modisSwath = function(config, model, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var results = {
       meta: {},
       granules: data
@@ -587,16 +575,15 @@ wv.data.handler.modisSwath = function(config, model, spec) {
   return self;
 };
 
-wv.data.handler.halfOrbit = function(config, model, spec) {
-
+wv.data.handler.halfOrbit = function (config, model, spec) {
   var self = wv.data.handler.base(config, model);
 
-  var init = function() {
+  var init = function () {
     self.extents[wv.map.CRS_WGS_84] =
       wv.map.CRS_WGS_84_QUERY_EXTENT;
   };
 
-  self._submit = function(queryData) {
+  self._submit = function (queryData) {
     var queryOptions = {
       time: model.time,
       data: queryData
@@ -605,7 +592,7 @@ wv.data.handler.halfOrbit = function(config, model, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function (data) {
     var results = {
       meta: {},
       granules: data
@@ -633,7 +620,7 @@ wv.data.handler.halfOrbit = function(config, model, spec) {
       ns.transform(model.crs),
       ns.timeLabel(model.time)
     ];
-    console.log("before process", results);
+    console.log('before process', results);
     return chain.process(results);
   };
 
