@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'jquery-ui/button';
 import 'jquery-ui/dialog';
 import 'icheck';
-import 'nouislider-browser/jquery.nouislider';
+import 'nouislider/distribute/jquery.nouislider';
 import 'perfect-scrollbar/jquery';
 import loEach from 'lodash/each';
 import loIndexOf from 'lodash/indexOf';

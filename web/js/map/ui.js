@@ -80,13 +80,13 @@ export function mapui(models, config) {
       .on('remove', removeLayer)
       .on('visibility', updateLayerVisibilities)
       .on('opacity', updateOpacity)
-      .on('update', updateLayerOrder);
+      .on('update', updateLayer);
     models.date.events.on('select', updateDate);
     models.palettes.events
-      .on('set-custom', updateLookup)
-      .on('clear-custom', updateLookup)
-      .on('range', updateLookup)
-      .on('update', updateLookup);
+      .on('set-custom', updateLayer)
+      .on('clear-custom', updateLayer)
+      .on('range', updateLayer)
+      .on('update', updateLayer);
     $(window)
       .on('resize', onResize);
     updateProjection(true);
@@ -337,15 +337,15 @@ export function mapui(models, config) {
   };
 
   /*
-   * Reloads layers on a change in layer order
+   * Reloads layer on change
    *
-   * @method updateLayerOrder
+   * @method updateLayer
    * @static
    *
    *
    * @returns {void}
    */
-  var updateLayerOrder = function () {
+  var updateLayer = function () {
     reloadLayers();
   };
 
@@ -372,31 +372,6 @@ export function mapui(models, config) {
     updateLayerVisibilities();
   };
 
-  /*
-   * Update layers for the correct Date
-   *
-   * @method updateLookup
-   * @static
-   *
-   *
-   * @returns {void}
-   */
-  var updateLookup = function (layerId) {
-    // If the lookup changes, all layers in the cache are now stale
-    // since the tiles need to be rerendered. Remove from cache.
-    var selectedDate = util.toISOStringDate(models.date.selected);
-    var selectedProj = models.proj.selected.id;
-    cache.removeWhere(function (key, mapLayer) {
-      if (mapLayer.wvid === layerId &&
-        mapLayer.wvproj === selectedProj &&
-        mapLayer.wvdate !== selectedDate &&
-        mapLayer.lookupTable) {
-        return true;
-      }
-      return false;
-    });
-    reloadLayers();
-  };
   self.getCustomLayerTimeout = function (layer) {
     if (models.palettes.isActive(layer.id)) {
       return 200;

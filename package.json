@@ -98,7 +98,7 @@
     "jscrollpane": "^2.0.22",
     "lodash": "4.15.0",
     "mobiscroll-jquery": "^3.2.6",
-    "nouislider-browser": "^5.0.0-1",
+    "nouislider": "7.0.10",
     "ol": "^4.4.2",
     "perfect-scrollbar": "^0.8.1",
     "proj4": "2.3.3",
@@ -110,6 +110,7 @@
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",
+    "jscache": "./web/ext/jscache-gitba01cdc/cache.js",
     "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   },
