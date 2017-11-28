@@ -147,8 +147,7 @@ export function layersOptions(config, models, layer) {
         }
       })
       .on('slide', function () {
-        models.layers.setOpacity(layer.id, parseFloat($(this)
-          .val()));
+        models.layers.setOpacity(layer.id, $(this).val());
       });
     var $label = $('<div></div>')
       .addClass('wv-label')
