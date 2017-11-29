@@ -141,7 +141,7 @@ export function palettesLegend(spec) {
       var label = legend.tooltips[classIndex];
       label = (legend.units) ? label + ' ' + legend.units : label;
       var $row = $('<div></div>')
-        .addClass('$colorBox')
+        .addClass('wv-palettes-class-detail')
         .attr('data-class-index', classIndex);
       var $colorBox =
         $row.append(

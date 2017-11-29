@@ -110,7 +110,6 @@
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",
-    "jscache": "./web/ext/jscache-gitba01cdc/cache.js",
     "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   },
