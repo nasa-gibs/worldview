@@ -118,10 +118,7 @@ export function palettesLegend(spec) {
   var updateClasses = function (legend, index) {
     var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
-    var $detailPanel = $('<div></div>');
     loEach(legend.colors, function (color, classIndex) {
-      var label = legend.tooltips[classIndex];
-      label = (legend.units) ? label + ' ' + legend.units : label;
       var $runningDataPointLabel = $('<span></span>')
         .addClass('wv-running-category-label');
       var $colorBox = $('<span></span>')
@@ -137,10 +134,16 @@ export function palettesLegend(spec) {
       // Calls running data
       $colorBox.on('mouseenter', showClassUnitHover);
       $colorBox.on('mouseout', hideUnitsOnMouseOut);
+    });
+    // TODO: Review this each loop. It can probably be removed.
+    var $detailPanel = $('<div></div>');
+    loEach(legend.colors, function (color, classIndex) {
+      var label = legend.tooltips[classIndex];
+      label = (legend.units) ? label + ' ' + legend.units : label;
       var $row = $('<div></div>')
-        .addClass('wv-palettes-class-detail')
+        .addClass('$colorBox')
         .attr('data-class-index', classIndex);
-      $colorBox =
+      var $colorBox =
         $row.append(
           $('<span></span>')
             .addClass('wv-palettes-class')
