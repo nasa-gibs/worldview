@@ -80,13 +80,13 @@ export function mapui(models, config) {
       .on('remove', removeLayer)
       .on('visibility', updateLayerVisibilities)
       .on('opacity', updateOpacity)
-      .on('update', updateLayer);
+      .on('update', updateLayerOrder);
     models.date.events.on('select', updateDate);
     models.palettes.events
-      .on('set-custom', updateLayer)
-      .on('clear-custom', updateLayer)
-      .on('range', updateLayer)
-      .on('update', updateLayer);
+      .on('set-custom', updateLookup)
+      .on('clear-custom', updateLookup)
+      .on('range', updateLookup)
+      .on('update', updateLookup);
     $(window)
       .on('resize', onResize);
     updateProjection(true);
@@ -339,13 +339,13 @@ export function mapui(models, config) {
   /*
    * Reloads layer on change
    *
-   * @method updateLayer
+   * @method updateLayerOrder
    * @static
    *
    *
    * @returns {void}
    */
-  var updateLayer = function () {
+  var updateLayerOrder = function () {
     reloadLayers();
   };
 
@@ -370,6 +370,21 @@ export function mapui(models, config) {
         .setAt(index, createLayer(def));
     });
     updateLayerVisibilities();
+  };
+
+  /*
+   * Update layers for the correct Date
+   *
+   * @method updateLookup
+   * @static
+   *
+   *
+   * @returns {void}
+   *
+   * @todo Check if this function can be combined with updateLayerOrder
+   */
+  var updateLookup = function (layerId) {
+    reloadLayers();
   };
 
   self.getCustomLayerTimeout = function (layer) {
