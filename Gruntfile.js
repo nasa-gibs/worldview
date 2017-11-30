@@ -43,9 +43,9 @@ module.exports = function(grunt) {
   var pkg = require('./package.json');
   var env = grunt.option('env') || 'release';
 
-  var hasOptionsDirectory = fs.existsSync('options');
-  var optionsPath = hasOptionsDirectory ? 'options' : 'node_modules/worldview-options-eosdis';
-  var options = hasOptionsDirectory ? grunt.file.readJSON('options/package.json') : grunt.file.readJSON('node_modules/worldview-options-eosdis/package.json');
+  var hasCustomOptions = fs.existsSync('options') && fs.existsSync('options/package.json');
+  var optionsPath = hasCustomOptions ? 'options' : 'node_modules/worldview-options-eosdis';
+  var options = hasCustomOptions ? grunt.file.readJSON('options/package.json') : grunt.file.readJSON('node_modules/worldview-options-eosdis/package.json');
 
   // Lists of JavaScript and CSS files to include and in the correct
   // order
