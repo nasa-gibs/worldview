@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "Interactive interface for browsing full-resolution, global, near real-time satellite imagery",
   "homepage": "https://worldview.earthdata.nasa.gov/",
   "bugs": {
