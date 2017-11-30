@@ -1,20 +1,19 @@
-buster.testCase("wv.ui.mouse.click", function() {
-
+buster.testCase('wv.ui.mouse.click', (function () {
   var self = {};
   var element, down, up;
 
-  self.setUp = function() {
+  self.setUp = function () {
     element = {
-      mousedown: function(handler) {
+      mousedown: function (handler) {
         down = handler;
       },
-      mouseup: function(handler) {
+      mouseup: function (handler) {
         up = handler;
       }
     };
   };
 
-  self["Within click limit"] = function() {
+  self['Within click limit'] = function () {
     var callback = this.stub();
     wv.ui.mouse.click(element, callback);
     down({
@@ -28,7 +27,7 @@ buster.testCase("wv.ui.mouse.click", function() {
     buster.assert.called(callback);
   };
 
-  self["Outside click limit"] = function() {
+  self['Outside click limit'] = function () {
     var callback = this.stub();
     wv.ui.mouse.click(element, callback);
     down({
@@ -43,5 +42,4 @@ buster.testCase("wv.ui.mouse.click", function() {
   };
 
   return self;
-
-}());
+}()));

@@ -1,8 +1,7 @@
 var wv = wv || {};
 wv.data = wv.data || {};
 
-wv.data.map = wv.data.map || function(model, maps, config) {
-
+wv.data.map = wv.data.map || function (model, maps, config) {
   var self = {};
 
   var map = null;
@@ -15,24 +14,24 @@ wv.data.map = wv.data.map || function(model, maps, config) {
   var hovering = null;
   var selectedFeatures = null;
 
-  var init = function() {
+  var init = function () {
     model.events
-      .on("activate", updateProjection)
-      .on("query", clear)
-      .on("queryResults", updateGranules)
-      .on("projectionUpdate", updateProjection)
-      .on("granuleSelect", selectGranule)
-      .on("granuleUnselect", unselectGranule);
+      .on('activate', updateProjection)
+      .on('query', clear)
+      .on('queryResults', updateGranules)
+      .on('projectionUpdate', updateProjection)
+      .on('granuleSelect', selectGranule)
+      .on('granuleUnselect', unselectGranule);
     updateProjection();
   };
 
-  var buttonStyle = function(feature) {
+  var buttonStyle = function (feature) {
     var dim = getButtonDimensions();
     var image;
     if (model.isSelected(feature.granule)) {
-      image = "images/data.minus-button.png";
+      image = 'images/data.minus-button.png';
     } else {
-      image = "images/data.plus-button.png";
+      image = 'images/data.plus-button.png';
     }
 
     if (feature !== hovering) {
@@ -50,13 +49,13 @@ wv.data.map = wv.data.map || function(model, maps, config) {
           scale: dim.scale
         }),
         text: new ol.style.Text({
-          font: "bold 14px ‘Lucida Sans’, Arial, Sans-Serif",
+          font: 'bold 14px ‘Lucida Sans’, Arial, Sans-Serif',
           text: feature.granule.label,
           fill: new ol.style.Fill({
-            color: "#ffffff"
+            color: '#ffffff'
           }),
           stroke: new ol.style.Stroke({
-            color: "rgba(0, 0, 0, .7)",
+            color: 'rgba(0, 0, 0, .7)',
             width: 5
           }),
           offsetY: offset
@@ -65,31 +64,31 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     }
   };
 
-  var hoverStyle = function(feature) {
+  var hoverStyle = function (feature) {
     if (!model.isSelected(feature.granule)) {
       return [new ol.style.Style({
         fill: new ol.style.Fill({
-          color: "rgba(181, 158, 50, 0.25)"
+          color: 'rgba(181, 158, 50, 0.25)'
         }),
         stroke: new ol.style.Stroke({
-          color: "rgb(251, 226, 109)",
+          color: 'rgb(251, 226, 109)',
           width: 3
         })
       })];
     } else {
       return [new ol.style.Style({
         fill: new ol.style.Fill({
-          color: "rgba(242, 12, 12, 0.25)"
+          color: 'rgba(242, 12, 12, 0.25)'
         }),
         stroke: new ol.style.Stroke({
-          color: "rgb(255, 6, 0)",
+          color: 'rgb(255, 6, 0)',
           width: 3
         })
       })];
     }
   };
 
-  var createButtonLayer = function() {
+  var createButtonLayer = function () {
     buttonLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
         wrapX: false
@@ -99,7 +98,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     map.addLayer(buttonLayer);
   };
 
-  var createHoverLayer = function() {
+  var createHoverLayer = function () {
     hoverLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
         wrapX: false
@@ -109,17 +108,17 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     map.addLayer(hoverLayer);
   };
 
-  var createSelectionLayer = function() {
+  var createSelectionLayer = function () {
     selectionLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
         wrapX: false
       }),
       style: new ol.style.Style({
         fill: new ol.style.Fill({
-          color: "rgba(127, 127, 127, 0.2)"
+          color: 'rgba(127, 127, 127, 0.2)'
         }),
         stroke: new ol.style.Stroke({
-          color: "rgb(127, 127, 127)",
+          color: 'rgb(127, 127, 127)',
           width: 3
         }),
         opacity: 0.6
@@ -128,14 +127,14 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     map.addLayer(selectionLayer);
   };
 
-  var createSwathLayer = function() {
+  var createSwathLayer = function () {
     swathLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
         wrapX: false
       }),
       style: new ol.style.Style({
         stroke: new ol.style.Stroke({
-          color: "rgba(195, 189, 123, 0.75)",
+          color: 'rgba(195, 189, 123, 0.75)',
           width: 2
         })
       })
@@ -143,14 +142,14 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     map.addLayer(swathLayer);
   };
 
-  var createGridLayer = function() {
+  var createGridLayer = function () {
     gridLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
         wrapX: false
       }),
       style: new ol.style.Style({
         stroke: new ol.style.Stroke({
-          color: "rgba(186, 180, 152, 0.6)",
+          color: 'rgba(186, 180, 152, 0.6)',
           width: 1.5
         })
       })
@@ -158,20 +157,19 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     map.addLayer(gridLayer);
   };
 
-  var create = function() {
-
+  var create = function () {
     createSelectionLayer();
     createGridLayer();
     createSwathLayer();
     createHoverLayer();
     createButtonLayer();
     $(maps.selected.getViewport())
-      .on("mousemove", hoverCheck);
+      .on('mousemove', hoverCheck);
     $(maps.selected.getViewport())
-      .on("click", clickCheck);
+      .on('click', clickCheck);
   };
 
-  var dispose = function() {
+  var dispose = function () {
     if (map) {
       map.removeLayer(selectionLayer);
       map.removeLayer(gridLayer);
@@ -181,20 +179,20 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     }
     selectedFeatures = [];
     $(maps.selected.getViewport())
-      .off("mousemove", hoverCheck);
+      .off('mousemove', hoverCheck);
     $(maps.selected.getViewport())
-      .off("click", clickCheck);
+      .off('click', clickCheck);
   };
   self.dispose = dispose;
 
-  var updateGranules = function(r) {
-    //console.log("results");
+  var updateGranules = function (r) {
+    // console.log("results");
     results = r;
     granules = r.granules;
     updateButtons();
     updateSwaths();
     updateGrid();
-    _.each(model.selectedGranules, function(granule) {
+    _.each(model.selectedGranules, function (granule) {
       if (selectedFeatures[granule.id]) {
         selectionLayer.getSource()
           .removeFeature(selectedFeatures[granule.id]);
@@ -204,11 +202,11 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     });
   };
 
-  var updateButtons = function() {
+  var updateButtons = function () {
     buttonLayer.getSource()
       .clear();
     var features = [];
-    _.each(granules, function(granule) {
+    _.each(granules, function (granule) {
       if (!granule.centroid || !granule.centroid[model.crs]) {
         return;
       }
@@ -225,27 +223,27 @@ wv.data.map = wv.data.map || function(model, maps, config) {
       .addFeatures(features);
   };
 
-  var updateSwaths = function() {
+  var updateSwaths = function () {
     swathLayer.getSource()
       .clear();
     var swaths = results.meta.swaths;
     if (!swaths) {
       return;
     }
-    var maxDistance = (model.crs === wv.map.CRS_WGS_84) ?
-      270 : Number.POSITIVE_INFINITY;
+    var maxDistance = (model.crs === wv.map.CRS_WGS_84)
+      ? 270 : Number.POSITIVE_INFINITY;
     var features = [];
-    _.each(swaths, function(swath) {
+    _.each(swaths, function (swath) {
       var lastGranule = null;
-      _.each(swath, function(granule) {
+      _.each(swath, function (granule) {
         if (!lastGranule) {
           lastGranule = granule;
           return;
         }
         var polys1 = wv.map.toPolys(lastGranule.geometry[model.crs]);
         var polys2 = wv.map.toPolys(granule.geometry[model.crs]);
-        _.each(polys1, function(poly1) {
-          _.each(polys2, function(poly2) {
+        _.each(polys1, function (poly1) {
+          _.each(polys2, function (poly2) {
             var c1 = poly1.getInteriorPoint()
               .getCoordinates();
             var c2 = poly2.getInteriorPoint()
@@ -264,7 +262,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
       .addFeatures(features);
   };
 
-  var updateGrid = function() {
+  var updateGrid = function () {
     gridLayer.getSource()
       .clear();
     var grid = results.meta.grid;
@@ -273,7 +271,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     }
     var features = [];
     var parser = new ol.format.GeoJSON();
-    _.each(grid, function(cell) {
+    _.each(grid, function (cell) {
       var geom = parser.readGeometry(cell.geometry);
       var feature = new ol.Feature(geom);
       features.push(feature);
@@ -282,39 +280,39 @@ wv.data.map = wv.data.map || function(model, maps, config) {
       .addFeatures(features);
   };
 
-  var selectGranule = function(granule) {
+  var selectGranule = function (granule) {
     if (!granule.feature) {
       return;
     }
     granule.feature.changed();
     var select = new ol.Feature(granule.geometry[model.crs]);
     select.granule = granule;
-    //granule.selectedFeature = select;
+    // granule.selectedFeature = select;
     selectionLayer.getSource()
       .addFeature(select);
     selectedFeatures[granule.id] = select;
   };
 
-  var unselectGranule = function(granule) {
+  var unselectGranule = function (granule) {
     if (!granule.feature) {
       return;
     }
     granule.feature.changed();
-    //selectionLayer.getSource().removeFeature(granule.selectedFeature);
-    //delete granule.selectedFeature;
+    // selectionLayer.getSource().removeFeature(granule.selectedFeature);
+    // delete granule.selectedFeature;
     selectionLayer.getSource()
       .removeFeature(selectedFeatures[granule.id]);
     delete selectedFeatures[granule.id];
   };
 
-  var updateProjection = function() {
+  var updateProjection = function () {
     dispose();
     map = maps.selected;
     create();
   };
 
-  var clear = function() {
-    //console.log("clear");
+  var clear = function () {
+    // console.log("clear");
     if (map) {
       swathLayer.getSource()
         .clear();
@@ -327,10 +325,10 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     }
   };
 
-  var hoverCheck = function(event) {
+  var hoverCheck = function (event) {
     var pixel = map.getEventPixel(event.originalEvent);
     var newFeature = null;
-    map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+    map.forEachFeatureAtPixel(pixel, function (feature, layer) {
       if (feature.button) {
         newFeature = feature;
       }
@@ -352,9 +350,9 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     hovering = newFeature;
   };
 
-  var clickCheck = function(event) {
+  var clickCheck = function (event) {
     var pixel = map.getEventPixel(event.originalEvent);
-    map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+    map.forEachFeatureAtPixel(pixel, function (feature, layer) {
       if (feature.button) {
         model.toggleGranule(feature.granule);
         hovering = false;
@@ -363,7 +361,7 @@ wv.data.map = wv.data.map || function(model, maps, config) {
     });
   };
 
-  var hoverOver = function(feature) {
+  var hoverOver = function (feature) {
     granule = feature.granule;
     if (!granule.geometry) {
       return;
@@ -376,12 +374,12 @@ wv.data.map = wv.data.map || function(model, maps, config) {
       .addFeature(hover);
   };
 
-  var hoverOut = function() {
+  var hoverOut = function () {
     hoverLayer.getSource()
       .clear();
   };
 
-  var getButtonDimensions = function() {
+  var getButtonDimensions = function () {
     var zoom = map.getView()
       .getZoom();
     // Minimum size of the button is 15 pixels

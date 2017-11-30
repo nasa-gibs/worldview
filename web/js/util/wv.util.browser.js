@@ -13,8 +13,7 @@ wv.util = wv.util || {};
  * @class wv.util.browser
  * @static
  */
-wv.util.browser = wv.util.browser || (function() {
-
+wv.util.browser = wv.util.browser || (function () {
   var self = {};
 
   /**
@@ -87,7 +86,7 @@ wv.util.browser = wv.util.browser || (function() {
   self.mobileWidth = 740;
   self.constrainedHeight = 320;
 
-  var init = function() {
+  var init = function () {
     var tests = self.tests;
 
     if (tests.safari()) {
@@ -107,13 +106,13 @@ wv.util.browser = wv.util.browser || (function() {
     self.history = tests.history();
     self.touchDevice = tests.touchDevice();
 
-    var onResize = function() {
+    var onResize = function () {
       self.small = tests.small();
       self.constrained = tests.constrained();
     };
     $(window)
-      .on("resize", onResize);
-    $(function() {
+      .on('resize', onResize);
+    $(function () {
       onResize();
     });
   };
@@ -122,11 +121,11 @@ wv.util.browser = wv.util.browser || (function() {
   // set in the init function. These functions are useful for testing.
   self.tests = {};
 
-  self.tests.navigator = function() {
+  self.tests.navigator = function () {
     return navigator;
   };
 
-  self.tests.window = function(property) {
+  self.tests.window = function (property) {
     // Some browsers throw an error when attempting to access restricted Window objects
     try {
       return window[property];
@@ -135,7 +134,7 @@ wv.util.browser = wv.util.browser || (function() {
     }
   };
 
-  self.tests.safari = function() {
+  self.tests.safari = function () {
     var navigator = self.tests.navigator();
     if (/ Chrome\//.test(navigator.userAgent)) {
       return false;
@@ -144,55 +143,55 @@ wv.util.browser = wv.util.browser || (function() {
       .test(navigator.userAgent);
   };
 
-  self.tests.safariVersion = function() {
+  self.tests.safariVersion = function () {
     var navigator = self.tests.navigator();
     var version = navigator.userAgent.match(/ Version\/([^ ]+)/);
     if (version) {
-      return parseInt(version[1].split(".")[0]);
+      return parseInt(version[1].split('.')[0]);
     }
   };
 
-  self.tests.ie = function() {
+  self.tests.ie = function () {
     var navigator = self.tests.navigator();
     if (/MSIE /.test(navigator.userAgent)) {
       return true;
     }
     // IE 11
-    return navigator.appName === "Netscape" && /Trident/.test(navigator.userAgent);
+    return navigator.appName === 'Netscape' && /Trident/.test(navigator.userAgent);
   };
 
-  self.tests.firefox = function() {
+  self.tests.firefox = function () {
     return navigator.userAgent.toLowerCase()
-      .indexOf("firefox") > -1;
+      .indexOf('firefox') > -1;
   };
 
-  self.tests.touchDevice = function() {
+  self.tests.touchDevice = function () {
     var el = document.createElement('div');
     el.setAttribute('ontouchstart', 'return;');
-    return typeof el.ontouchstart === "function";
+    return typeof el.ontouchstart === 'function';
   };
 
-  self.tests.ieVersion = function() {
+  self.tests.ieVersion = function () {
     var navigator = self.tests.navigator();
     var version = navigator.userAgent.match(/MSIE ([\d\.]+)/);
     if (version) {
-      return parseInt(version[1].split(".")[0]);
+      return parseInt(version[1].split('.')[0]);
     }
   };
 
-  self.tests.cors = function() {
+  self.tests.cors = function () {
     if (self.tests.safari() && self.tests.safariVersion() <= 6) {
       return false;
     }
     return !self.tests.ie();
   };
 
-  self.tests.webWorkers = function() {
-    return self.tests.window("Worker");
+  self.tests.webWorkers = function () {
+    return self.tests.window('Worker');
   };
 
-  self.tests.localStorage = function() {
-    if (!self.tests.window("localStorage")) {
+  self.tests.localStorage = function () {
+    if (!self.tests.window('localStorage')) {
       return false;
     }
     try {
@@ -207,23 +206,22 @@ wv.util.browser = wv.util.browser || (function() {
     }
   };
 
-  self.tests.small = function() {
+  self.tests.small = function () {
     return $(window)
       .width() < self.mobileWidth;
   };
 
-  self.tests.constrained = function() {
+  self.tests.constrained = function () {
     return $(window)
       .height() < self.constrainedHeight;
   };
 
-  self.tests.history = function() {
+  self.tests.history = function () {
     return window.history && window.history.replaceState;
   };
 
   init();
   return self;
-
 })();
 
 // ===========================================================================
@@ -236,16 +234,15 @@ wv.util.browser = wv.util.browser || (function() {
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
  */
 if (!Date.prototype.toISOString) {
-  (function() {
-
-    function pad(number) {
+  (function () {
+    function pad (number) {
       if (number < 10) {
         return '0' + number;
       }
       return number;
     }
 
-    Date.prototype.toISOString = function() {
+    Date.prototype.toISOString = function () {
       return this.getUTCFullYear() +
         '-' + pad(this.getUTCMonth() + 1) +
         '-' + pad(this.getUTCDate()) +
@@ -264,12 +261,12 @@ if (!Date.prototype.toISOString) {
  * console
  */
 if (!window.console) {
-  (function() {
+  (function () {
     window.console = {
-      log: function() {},
-      warn: function() {},
-      info: function() {},
-      error: function() {}
+      log: function () {},
+      warn: function () {},
+      info: function () {},
+      error: function () {}
     };
   })();
 }
@@ -277,8 +274,8 @@ if (!window.console) {
 /*
  * Get rid of address bar on iphone/ipod
  */
-(function() {
-  var execute = function() {
+(function () {
+  var execute = function () {
     window.scrollTo(0, 0);
     if (document.body) {
       document.body.style.height = '100%';
@@ -296,7 +293,7 @@ if (!window.console) {
 /*
  * Hide the URL bar
  */
-(function() {
+(function () {
   window.scrollTo(0, 0);
 })();
 
@@ -307,23 +304,22 @@ if (!window.console) {
  * https://developer.mozilla.org/en-US/docs/Web/API/Window.setTimeout
  */
 if (wv.util.browser.ie && wv.util.browser.version <= 9) {
-  (function() {
-
+  (function () {
     var __nativeST__ = window.setTimeout,
       __nativeSI__ = window.setInterval;
 
-    window.setTimeout = function(vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */ ) {
+    window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
       var oThis = this,
         aArgs = Array.prototype.slice.call(arguments, 2);
-      return __nativeST__(vCallback instanceof Function ? function() {
+      return __nativeST__(vCallback instanceof Function ? function () {
         vCallback.apply(oThis, aArgs);
       } : vCallback, nDelay);
     };
 
-    window.setInterval = function(vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */ ) {
+    window.setInterval = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
       var oThis = this,
         aArgs = Array.prototype.slice.call(arguments, 2);
-      return __nativeSI__(vCallback instanceof Function ? function() {
+      return __nativeSI__(vCallback instanceof Function ? function () {
         vCallback.apply(oThis, aArgs);
       } : vCallback, nDelay);
     };
@@ -336,10 +332,10 @@ if (wv.util.browser.ie && wv.util.browser.version <= 9) {
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/contains
  */
 if (!('contains' in String.prototype)) {
-  (function() {
-    String.prototype.contains = function(str, startIndex) {
-      return -1 !== String.prototype.indexOf.call(this, str,
-        startIndex);
+  (function () {
+    String.prototype.contains = function (str, startIndex) {
+      return String.prototype.indexOf.call(this, str,
+        startIndex) !== -1;
     };
   })();
 }
@@ -350,12 +346,12 @@ if (!('contains' in String.prototype)) {
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
  */
 if (!String.prototype.startsWith) {
-  (function() {
+  (function () {
     Object.defineProperty(String.prototype, 'startsWith', {
       enumerable: false,
       configurable: false,
       writable: false,
-      value: function(searchString, position) {
+      value: function (searchString, position) {
         position = position || 0;
         return this.indexOf(searchString, position) === position;
       }
@@ -369,12 +365,12 @@ if (!String.prototype.startsWith) {
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith
  */
 if (!String.prototype.endsWith) {
-  (function() {
+  (function () {
     Object.defineProperty(String.prototype, 'endsWith', {
       enumerable: false,
       configurable: false,
       writable: false,
-      value: function(searchString, position) {
+      value: function (searchString, position) {
         position = position || this.length;
         position = position - searchString.length;
         var lastIndex = this.lastIndexOf(searchString);
@@ -387,7 +383,7 @@ if (!String.prototype.endsWith) {
 /*
  * Mobile device quirks.  This section is mostly overwriting things that jquery.mobile is adding
  */
-(function() {
+(function () {
   if (navigator.userAgent.match(/Android/i) ||
     navigator.userAgent.match(/webOS/i) ||
     navigator.userAgent.match(/iPhone/i) ||
@@ -402,31 +398,30 @@ if (!String.prototype.endsWith) {
     }
   }
 
-
   if (navigator.userAgent.indexOf('iPhone') != -1 || navigator.userAgent.indexOf('Android') != -1) {
     // In Safari, the true version is after "Safari"
     if (navigator.userAgent.indexOf('Safari') != -1) {
       // Set a variable to use later
       mobileSafari = true;
     }
-    addEventListener("load", function() {
+    addEventListener('load', function () {
       if (mobile) {
-        $(".layerPicker a[href='#DataDownload']")
+        $('.layerPicker a[href=\'#DataDownload\']')
           .hide();
       }
       setHeight();
       window.scrollTo(0, 1);
-      $("#app, .ui-mobile, .ui-mobile .ui-page")
-        .css("min-height", 0);
+      $('#app, .ui-mobile, .ui-mobile .ui-page')
+        .css('min-height', 0);
     }, false);
-    addEventListener("orientationchange", function() {
+    addEventListener('orientationchange', function () {
       window.scrollTo(0, 1);
       setHeight();
     }, false);
   }
 
   // Set the div height
-  function setHeight($body) {
+  function setHeight ($body) {
     if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 6_\d/i)) {
       var new_height = $(window)
         .height();
@@ -436,9 +431,8 @@ if (!String.prototype.endsWith) {
         .css('min-height', 0)
         .css('height', new_height);
     } else {
-      $("#app, .ui-mobile, .ui-mobile .ui-page")
-        .css("min-height", 0);
+      $('#app, .ui-mobile, .ui-mobile .ui-page')
+        .css('min-height', 0);
     }
   }
-
 })();

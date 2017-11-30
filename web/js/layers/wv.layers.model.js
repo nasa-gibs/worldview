@@ -7,8 +7,7 @@ wv.layers = wv.layers || {};
 /**
  * @class wv.layers.model
  */
-wv.layers.model = wv.layers.model || function(models, config) {
-
+wv.layers.model = wv.layers.model || function (models, config) {
   var self = {};
 
   var split = 0;
@@ -16,42 +15,42 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
   self.active = [];
 
-  var init = function() {
+  var init = function () {
     self.reset();
   };
 
-  self.reset = function() {
+  self.reset = function () {
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
-      _.each(config.defaults.startingLayers, function(start) {
+      _.each(config.defaults.startingLayers, function (start) {
         self.add(start.id, start);
       });
     }
   };
 
-  self.get = function(spec) {
+  self.get = function (spec) {
     spec = spec || {};
-    var baselayers = forGroup("baselayers", spec);
-    var overlays = forGroup("overlays", spec);
-    if (spec.group === "baselayers") {
+    var baselayers = forGroup('baselayers', spec);
+    var overlays = forGroup('overlays', spec);
+    if (spec.group === 'baselayers') {
       return baselayers;
     }
-    if (spec.group === "overlays") {
+    if (spec.group === 'overlays') {
       return overlays;
     }
-    if (spec.group === "all") {
+    if (spec.group === 'all') {
       return {
         baselayers: baselayers,
         overlays: overlays
       };
     }
     if (spec.group) {
-      throw new Error("Invalid layer group: " + spec.group);
+      throw new Error('Invalid layer group: ' + spec.group);
     }
     return baselayers.concat(overlays);
   };
 
-  self.getTitles = function(layerId, proj) {
+  self.getTitles = function (layerId, proj) {
     proj = proj || models.proj.selected.id;
     var title, subtitle;
     if (config.layers[layerId].projections[proj]) {
@@ -61,9 +60,9 @@ wv.layers.model = wv.layers.model || function(models, config) {
       tags = forProj.tags;
     }
     var forLayer = config.layers[layerId];
-    title = title || forLayer.title || "[" + layerId + "]";
-    subtitle = subtitle || forLayer.subtitle || "";
-    tags = tags || forLayer.tags || "";
+    title = title || forLayer.title || '[' + layerId + ']';
+    subtitle = subtitle || forLayer.subtitle || '';
+    tags = tags || forLayer.tags || '';
     return {
       title: title,
       subtitle: subtitle,
@@ -71,7 +70,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     };
   };
 
-  self.available = function(id) {
+  self.available = function (id) {
     var range = self.dateRange({
       layer: id
     });
@@ -86,24 +85,23 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
   // Takes a layer id and returns a true or false value
   // if the layer exists in the active layer list
-  self.exists = function(layer) {
+  self.exists = function (layer) {
     var found = false;
-    _.each(self.active, function(current) {
+    _.each(self.active, function (current) {
       if (layer === current.id) {
         found = true;
-        return;
       }
     });
     return found;
   };
 
-  self.dateRange = function(spec) {
+  self.dateRange = function (spec) {
     spec = spec || {};
     var projId = spec.projId || models.proj.selected.id;
     var layers = (spec.layer) ? [_.find(self.active, {
       id: spec.layer
-    })] :
-      self.active;
+    })]
+      : self.active;
     var ignoreRange =
       config.parameters &&
       (config.parameters.debugGIBS || config.parameters.ignoreDateRange);
@@ -116,7 +114,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     var min = Number.MAX_VALUE;
     var max = 0;
     var range = false;
-    _.each(layers, function(def) {
+    _.each(layers, function (def) {
       if (def.startDate) {
         range = true;
         var start = wv.util.parseDateUTC(def.startDate)
@@ -155,7 +153,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     }
   };
 
-  self.add = function(id, spec) {
+  self.add = function (id, spec) {
     if (_.find(self.active, {
       id: id
     })) {
@@ -164,7 +162,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
     spec = spec || {};
     var def = config.layers[id];
     if (!def) {
-      throw new Error("No such layer: " + id);
+      throw new Error('No such layer: ' + id);
     }
     def.visible = true;
     if (!_.isUndefined(spec.visible)) {
@@ -173,17 +171,17 @@ wv.layers.model = wv.layers.model || function(models, config) {
       def.visible = !spec.hidden;
     }
     def.opacity = (_.isUndefined(spec.opacity)) ? 1.0 : spec.opacity;
-    if (def.group === "overlays") {
+    if (def.group === 'overlays') {
       self.active.unshift(def);
       split += 1;
     } else {
       self.active.splice(split, 0, def);
     }
-    self.events.trigger("add", def);
-    self.events.trigger("change");
+    self.events.trigger('add', def);
+    self.events.trigger('change');
   };
 
-  self.remove = function(id) {
+  self.remove = function (id) {
     var index = _.findIndex(self.active, {
       id: id
     });
@@ -193,12 +191,12 @@ wv.layers.model = wv.layers.model || function(models, config) {
       if (index < split) {
         split -= 1;
       }
-      self.events.trigger("remove", def);
-      self.events.trigger("change");
+      self.events.trigger('remove', def);
+      self.events.trigger('change');
     }
   };
 
-  self.replace = function(idOld, idNew) {
+  self.replace = function (idOld, idNew) {
     var index = _.findIndex(self.active, {
       id: idOld
     });
@@ -210,44 +208,44 @@ wv.layers.model = wv.layers.model || function(models, config) {
     newDef.visible = true;
     newDef.opacity = 1.0;
     self.active[index] = newDef;
-    self.events.trigger("update");
-    self.events.trigger("change");
+    self.events.trigger('update');
+    self.events.trigger('change');
   };
 
-  self.clear = function(projId) {
+  self.clear = function (projId) {
     projId = projId || models.proj.selected.id;
     var defs = self.active.slice(0);
-    _.each(defs, function(def) {
+    _.each(defs, function (def) {
       if (projId && def.projections[projId]) {
         self.remove(def.id);
       }
     });
   };
 
-  self.pushToBottom = function(id) {
+  self.pushToBottom = function (id) {
     var oldIndex = _.findIndex(self.active, {
       id: id
     });
     if (oldIndex < 0) {
-      throw new Error("Layer is not active: " + id);
+      throw new Error('Layer is not active: ' + id);
     }
     var def = self.active[oldIndex];
     self.active.splice(oldIndex, 1);
-    if (def.group === "baselayers") {
+    if (def.group === 'baselayers') {
       self.active.push(def);
     } else {
       self.active.splice(split - 1, 0, def);
     }
-    self.events.trigger("update");
-    self.events.trigger("change");
+    self.events.trigger('update');
+    self.events.trigger('change');
   };
 
-  self.moveBefore = function(sourceId, targetId) {
+  self.moveBefore = function (sourceId, targetId) {
     var sourceIndex = _.findIndex(self.active, {
       id: sourceId
     });
     if (sourceIndex < 0) {
-      throw new Error("Layer is not active: " + source);
+      throw new Error('Layer is not active: ' + source);
     }
     var sourceDef = self.active[sourceIndex];
 
@@ -255,7 +253,7 @@ wv.layers.model = wv.layers.model || function(models, config) {
       id: targetId
     });
     if (targetIndex < 0) {
-      throw new Error("Layer is not active: " + target);
+      throw new Error('Layer is not active: ' + target);
     }
 
     self.active.splice(targetIndex, 0, sourceDef);
@@ -263,33 +261,33 @@ wv.layers.model = wv.layers.model || function(models, config) {
       sourceIndex++;
     }
     self.active.splice(sourceIndex, 1);
-    self.events.trigger("update", sourceDef, targetIndex);
-    self.events.trigger("change");
+    self.events.trigger('update', sourceDef, targetIndex);
+    self.events.trigger('change');
   };
 
-  self.setVisibility = function(id, visible) {
+  self.setVisibility = function (id, visible) {
     var def = _.find(self.active, {
       id: id
     });
     if (def.visible !== visible) {
       def.visible = visible;
-      self.events.trigger("visibility", def, visible);
-      self.events.trigger("change");
+      self.events.trigger('visibility', def, visible);
+      self.events.trigger('change');
     }
   };
 
-  self.setOpacity = function(id, opacity) {
+  self.setOpacity = function (id, opacity) {
     var def = _.find(self.active, {
       id: id
     });
     if (def.opacity !== opacity) {
       def.opacity = opacity;
-      self.events.trigger("opacity", def, opacity);
-      self.events.trigger("change");
+      self.events.trigger('opacity', def, opacity);
+      self.events.trigger('change');
     }
   };
 
-  self.isRenderable = function(id) {
+  self.isRenderable = function (id) {
     var def = _.find(self.active, {
       id: id
     });
@@ -302,13 +300,13 @@ wv.layers.model = wv.layers.model || function(models, config) {
     if (!def.visible || def.opacity === 0) {
       return false;
     }
-    if (def.group === "overlays") {
+    if (def.group === 'overlays') {
       return true;
     }
     var obscured = false;
     _.each(self.get({
-      group: "baselayers"
-    }), function(otherDef) {
+      group: 'baselayers'
+    }), function (otherDef) {
       if (otherDef.id === def.id) {
         return false;
       }
@@ -321,10 +319,10 @@ wv.layers.model = wv.layers.model || function(models, config) {
     return !obscured;
   };
 
-  self.save = function(state) {
+  self.save = function (state) {
     var defs = self.get();
     state.l = state.l || [];
-    _.each(self.get(), function(def) {
+    _.each(self.get(), function (def) {
       var lstate = _.find(state.l, {
         id: def.id
       });
@@ -339,37 +337,37 @@ wv.layers.model = wv.layers.model || function(models, config) {
       }
       if (!def.visible) {
         lstate.attributes.push({
-          id: "hidden"
+          id: 'hidden'
         });
       }
       if (def.opacity < 1) {
         lstate.attributes.push({
-          id: "opacity",
+          id: 'opacity',
           value: def.opacity
         });
       }
     });
   };
 
-  self.load = function(state, errors) {
+  self.load = function (state, errors) {
     if (!_.isUndefined(state.l)) {
       self.clear(models.proj.selected.id);
-      _.eachRight(state.l, function(layerDef) {
+      _.eachRight(state.l, function (layerDef) {
         if (!config.layers[layerDef.id]) {
           errors.push({
-            message: "No such layer: " + layerDef.id
+            message: 'No such layer: ' + layerDef.id
           });
           return;
         }
         var hidden = false;
         var opacity = 1.0;
-        _.each(layerDef.attributes, function(attr) {
-          if (attr.id === "hidden") {
+        _.each(layerDef.attributes, function (attr) {
+          if (attr.id === 'hidden') {
             hidden = true;
           }
-          if (attr.id === "opacity") {
+          if (attr.id === 'opacity') {
             opacity = wv.util.clamp(parseFloat(attr.value), 0, 1);
-            if (isNaN(opacity)) opacity = 0; //"opacity=0.0" is opacity in URL, resulting in NaN
+            if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
           }
         });
         self.add(layerDef.id, {
@@ -380,19 +378,19 @@ wv.layers.model = wv.layers.model || function(models, config) {
     }
   };
 
-  var forGroup = function(group, spec) {
+  var forGroup = function (group, spec) {
     spec = spec || {};
     var projId = spec.proj || models.proj.selected.id;
     var results = [];
     var defs = _.filter(self.active, {
       group: group
     });
-    _.each(defs, function(def) {
+    _.each(defs, function (def) {
       // Skip if this layer isn't available for the selected projection
       if (!def.projections[projId]) {
         return;
       }
-      if (spec.dynamic && def.period !== "daily") {
+      if (spec.dynamic && def.period !== 'daily') {
         return;
       }
       if (spec.renderable && !self.isRenderable(def.id)) {
@@ -411,5 +409,4 @@ wv.layers.model = wv.layers.model || function(models, config) {
 
   init();
   return self;
-
 };

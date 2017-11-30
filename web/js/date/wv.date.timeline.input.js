@@ -10,58 +10,57 @@ wv.date.timeline = wv.date.timeline || {};
  *
  * @class wv.date.timeline.input
  */
-wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) {
-
+wv.date.timeline.input = wv.date.timeline.input || function (models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
   var timer;
   var self = {};
   var rollingDate;
-  self.direction = "forward";
-  self.interval = "day";
+  self.direction = 'forward';
+  self.interval = 'day';
   self.delta = 1;
   self.active = false;
   self.delay = 500;
 
-  var $incrementBtn = $("#right-arrow-group");
-  var $decrementBtn = $("#left-arrow-group");
+  var $incrementBtn = $('#right-arrow-group');
+  var $decrementBtn = $('#left-arrow-group');
 
-  var forwardNextDay = function() { //FIXME: Limit animation correctly
+  var forwardNextDay = function () { // FIXME: Limit animation correctly
     var nextDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() + 1));
     if (nextDay <= wv.util.today()) {
-      animateForward("day");
+      animateForward('day');
     } else {
       self.stop();
     }
   };
-  self.forward = function() {
-    self.play("forward");
+  self.forward = function () {
+    self.play('forward');
   };
-  self.reverse = function() {
-    self.play("reverse");
+  self.reverse = function () {
+    self.play('reverse');
   };
 
-  self.stop = function() {
+  self.stop = function () {
     if (timer) {
       clearTimeout(timer);
     }
     timer = null;
     self.active = false;
   };
-  var prepareFrame = function() {
+  var prepareFrame = function () {
     if (!self.active) {
       return;
     }
-    var amount = (self.direction === "forward") ?
-      self.delta : -self.delta;
+    var amount = (self.direction === 'forward')
+      ? self.delta : -self.delta;
     var newDate = wv.util.dateAdd(model.selected, self.interval, amount);
-    timer = setTimeout(function() {
+    timer = setTimeout(function () {
       advance(newDate);
     }, self.delay);
   };
 
-  var advance = function(newDate) {
+  var advance = function (newDate) {
     var updated = model.select(newDate);
     if (!updated) {
       self.stop();
@@ -69,7 +68,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
       prepareFrame();
     }
   };
-  self.play = function(direction) {
+  self.play = function (direction) {
     if (self.active && direction !== self.direction) {
       self.stop();
     } else if (self.active) {
@@ -79,43 +78,43 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     self.active = true;
     prepareFrame();
   };
-  var reversePrevDay = function() { //FIXME: Limit animation correctly
+  var reversePrevDay = function () { // FIXME: Limit animation correctly
     var prevDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() - 1));
     if (prevDay >= tl.data.start()) {
-      animateReverse("day");
+      animateReverse('day');
     } else {
       self.stop();
     }
   };
 
-  var animateForward = function(interval) {
+  var animateForward = function (interval) {
     if (self.active) {
       return;
     }
     models.date.add(interval, 1);
     self.interval = interval;
-    self.play("forward");
+    self.play('forward');
   };
 
-  var animateReverse = function(interval) {
+  var animateReverse = function (interval) {
     if (self.active) {
       return;
     }
     models.date.add(interval, -1);
     self.interval = interval;
-    self.play("reverse");
+    self.play('reverse');
   };
 
-  var roll = function(dataInterval, amt) {
+  var roll = function (dataInterval, amt) {
     if (timer) {
       clearTimeout(timer);
       timer = null;
     }
     var interval = $(this)
-      .attr("data-interval") || dataInterval;
+      .attr('data-interval') || dataInterval;
     var amount = _.parseInt($(this)
-      .attr("data-value")) || amt;
+      .attr('data-value')) || amt;
     var date = rollingDate || models.date.selected;
     var min = models.date.minDate();
     var max = models.date.maxDate();
@@ -125,10 +124,10 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
       rollingDate = newDate;
       $(this)
         .parent()
-        .css("border-color", "");
+        .css('border-color', '');
       updateDateInputs(rollingDate);
       var that = this;
-      timer = setTimeout(function() {
+      timer = setTimeout(function () {
         model.select(rollingDate);
         $(that)
           .parent()
@@ -140,11 +139,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     }
   };
 
-  //TODO: Cleanup
-  var validateInput = function(event) {
+  // TODO: Cleanup
+  var validateInput = function (event) {
     var kc = event.keyCode || event.which;
     var entered = (kc == 13) || (kc === 9);
-    if (event.type == "focusout" || entered) {
+    if (event.type == 'focusout' || entered) {
       if (entered) {
         event.preventDefault();
       }
@@ -155,10 +154,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
       var selectedDateObj = null;
       switch (YMDInterval) {
         case 'year-input-group':
-          if ((newInput > 1000) && (newInput < 9999))
+          if ((newInput > 1000) && (newInput < 9999)) {
             selectedDateObj = new Date(
               (new Date(model.selected))
                 .setUTCFullYear(newInput));
+          }
           break;
         case 'month-input-group':
           if (($.isNumeric(newInput)) &&
@@ -222,7 +222,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
       } else {
         selected.parent()
           .css('border-color', '#ff0000');
-        if (event.type !== "focusout") {
+        if (event.type !== 'focusout') {
           selected.select();
         } else {
           if (document.selection) {
@@ -233,11 +233,11 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
           }
           selected.parent()
             .animate({
-              borderColor: "rgba(40, 40, 40, .9)"
+              borderColor: 'rgba(40, 40, 40, .9)'
             }, {
-              complete: function() {
+              complete: function () {
                 selected.parent()
-                  .css("border-color", "");
+                  .css('border-color', '');
               }
             });
           self.update();
@@ -246,38 +246,38 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     }
   };
 
-  //TODO: Combine with self.update
-  var updateDateInputs = function(date) {
+  // TODO: Combine with self.update
+  var updateDateInputs = function (date) {
     date = date || models.selected.date;
-    $("#year-input-group")
+    $('#year-input-group')
       .val(date.getUTCFullYear());
-    $("#month-input-group")
+    $('#month-input-group')
       .val(model.monthAbbr[date.getUTCMonth()]);
     var day = date.getUTCDate();
-    $("#day-input-group")
-      .val(wv.util.pad(date.getUTCDate(), 2, "0"));
+    $('#day-input-group')
+      .val(wv.util.pad(date.getUTCDate(), 2, '0'));
   };
 
-  //TODO: Cleanup
-  self.update = function(date) {
+  // TODO: Cleanup
+  self.update = function (date) {
     var ms = date || new Date(model.selected);
     var nd = new Date(ms.setUTCDate(ms.getUTCDate() + 1));
     var pd = new Date(ms.setUTCDate(ms.getUTCDate() - 1));
 
-    //Update fields
+    // Update fields
     $('#year-input-group')
       .val(model.selected.getUTCFullYear());
     $('#month-input-group')
       .val(model.monthAbbr[model.selected.getUTCMonth()]);
     if (model.selected.getUTCDate() < 10) {
       $('#day-input-group')
-        .val("0" + model.selected.getUTCDate());
+        .val('0' + model.selected.getUTCDate());
     } else {
       $('#day-input-group')
         .val(model.selected.getUTCDate());
     }
 
-    //Disable arrows if nothing before/after selection
+    // Disable arrows if nothing before/after selection
     if (nd > wv.util.today()) {
       $incrementBtn.addClass('button-disabled');
     } else {
@@ -293,18 +293,17 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     tl.pick.update();
   };
 
-  //TODO: Cleanup
-  var init = function() {
-
+  // TODO: Cleanup
+  var init = function () {
     $incrementBtn
-      .mousedown(function(e) {
+      .mousedown(function (e) {
         e.preventDefault();
         forwardNextDay();
       })
       .mouseup(self.stop);
 
     $decrementBtn
-      .mousedown(function(e) {
+      .mousedown(function (e) {
         e.preventDefault();
         reversePrevDay();
       })
@@ -312,23 +311,22 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     $(document)
       .mouseout(self.stop)
-      .keydown(function(event) {
-        if (event.target.nodeName === "INPUT") {
+      .keydown(function (event) {
+        if (event.target.nodeName === 'INPUT') {
           return;
         }
         switch (event.keyCode) {
           case wv.util.key.LEFT:
-            animateReverse("day");
+            animateReverse('day');
             event.preventDefault();
             break;
           case wv.util.key.RIGHT:
-            animateForward("day");
+            animateForward('day');
             event.preventDefault();
             break;
-
         }
       })
-      .keyup(function(event) {
+      .keyup(function (event) {
         switch (event.keyCode) {
           case wv.util.key.LEFT:
           case wv.util.key.RIGHT:
@@ -343,7 +341,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     // FIXME: Quick fix for fixing the propagation
     // of events with arrow keys and input field
-    $buttons.keydown(function(event) {
+    $buttons.keydown(function (event) {
       var interval = $(this)
         .attr('id')
         .split('-')[0];
@@ -366,10 +364,9 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
           .select()
           .focus();
       }
-
     });
 
-    $buttons.on('focus', function(e) {
+    $buttons.on('focus', function (e) {
       e.preventDefault();
       $buttons.siblings('.date-arrows')
         .css('visibility', '');
@@ -383,7 +380,7 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
         .css('visibility', 'visible');
     });
 
-    $buttons.focusout(function(e) {
+    $buttons.focusout(function (e) {
       $buttons.siblings('.date-arrows')
         .css('visibility', '');
       $buttons.parent()
@@ -392,50 +389,50 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
 
     var $incrementIntDate = $('.date-arrow-up');
     $incrementIntDate.click(roll);
-    $incrementIntDate.mousedown(function(e) {
+    $incrementIntDate.mousedown(function (e) {
       e.preventDefault();
     });
 
     var $decrementIntDate = $('.date-arrow-down');
     $decrementIntDate.click(roll);
-    $decrementIntDate.mousedown(function(e) {
+    $decrementIntDate.mousedown(function (e) {
       e.preventDefault();
     });
 
-    //select all input on focus
+    // select all input on focus
     $('input')
-      .focus(function(e) {
+      .focus(function (e) {
         $(this)
           .select();
       })
-      .mouseup(function(e) {
+      .mouseup(function (e) {
         e.preventDefault();
       });
 
     $('.button-input-group')
       .keydown(validateInput)
-      .focusout(function(event) {
+      .focusout(function (event) {
         if ($(this)
-          .hasClass("focus")) {
+          .hasClass('focus')) {
           $(this)
-            .removeClass("focus");
+            .removeClass('focus');
           validateInput.call(this, event);
         }
       })
-      .focus(function() {
+      .focus(function () {
         $(this)
-          .addClass("focus");
+          .addClass('focus');
       });
 
-    $("#focus-guard-1")
-      .on('focus', function() {
-        $("#day-input-group")
+    $('#focus-guard-1')
+      .on('focus', function () {
+        $('#day-input-group')
           .focus()
           .select();
       });
-    $("#focus-guard-2")
-      .on('focus', function() {
-        $("#year-input-group")
+    $('#focus-guard-2')
+      .on('focus', function () {
+        $('#year-input-group')
           .focus()
           .select();
       });
@@ -446,7 +443,6 @@ wv.date.timeline.input = wv.date.timeline.input || function(models, config, ui) 
     }
 
     self.update();
-
   };
 
   init();

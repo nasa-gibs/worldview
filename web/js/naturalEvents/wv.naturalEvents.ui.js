@@ -1,19 +1,17 @@
 var wv = wv || {};
 wv.naturalEvents = wv.naturalEvents || {};
 
-wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, request) {
-
+wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, request) {
   var self = {}, eventVisibilityAlert, $footer, view;
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
   var naturalEventMarkers = wv.naturalEvents.markers(models, ui, config);
 
-  var init = function() {
-
+  var init = function () {
     view = ui.map.selected.getView();
 
-    request.events.on('queryResults', function() {
+    request.events.on('queryResults', function () {
       if (!(model.data.events || model.data.sources)) return;
       createEventList();
       var isZoomed = Math.floor(view.getZoom()) >= 3;
@@ -25,9 +23,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
         self.markers = naturalEventMarkers.draw();
       }
 
-      ui.map.selected.on('moveend', function(e) {
+      ui.map.selected.on('moveend', function (e) {
         var isZoomed = Math.floor(view.getZoom()) >= 3;
-        if (isZoomed){
+        if (isZoomed) {
           self.filterEventList();
         } else {
           $('.map-item-list .item').show();
@@ -38,14 +36,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
       // Reselect previously selected event
       if (self.selected.id) {
-        self.selectEvent(self.selected.id, self.selected.date||null);
+        self.selectEvent(self.selected.id, self.selected.date || null);
       }
 
       ui.sidebar.sizeEventsTab();
       $(window).resize(ui.sidebar.sizeEventsTab);
     });
 
-    ui.sidebar.events.on('selectTab', function(tab) {
+    ui.sidebar.events.on('selectTab', function (tab) {
       if (tab === 'events') {
         model.active = true;
 
@@ -68,7 +66,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
   };
 
-  self.selectEvent = function(id, date) {
+  self.selectEvent = function (id, date) {
     var isIdChange = (!self.selected || self.selected.id !== id);
     var prevId = self.selected.id ? self.selected.id : false;
     var prevEvent = prevId ? getEventById(prevId) : false;
@@ -98,7 +96,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-    zoomToEvent(event, date).then(function(){
+    zoomToEvent(event, date).then(function () {
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
       }
@@ -111,7 +109,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       if (event.categories[0].title === 'Wildfires') {
         var now = new Date();
         var today = now.toISOString().split('T')[0];
-        var yesterday = new Date(now.setDate(now.getDate()-1)).toISOString().split('T')[0];
+        var yesterday = new Date(now.setDate(now.getDate() - 1)).toISOString().split('T')[0];
         if (date !== today || date !== yesterday) {
           models.date.select(wv.util.dateAdd(wv.util.parseDateUTC(date), 'day', 1));
         }
@@ -124,7 +122,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           'Events may not be visible at all times.',
           800,
           'warning',
-          function() {
+          function () {
             if (wv.util.browser.localStorage) localStorage.setItem('dismissedEventVisibilityAlert', true);
             eventVisibilityAlert.dialog('close');
           }
@@ -136,7 +134,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
   };
 
-  self.deselectEvent = function() {
+  self.deselectEvent = function () {
     self.selected = {};
     naturalEventMarkers.remove(self.markers);
     self.markers = naturalEventMarkers.draw();
@@ -144,7 +142,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     model.events.trigger('change');
   };
 
-  self.getDefaultEventDate = function(event) {
+  self.getDefaultEventDate = function (event) {
     date = new Date(event.geometries[0].date).toISOString().split('T')[0];
     if (event.geometries.length < 2) return date;
     var category = event.categories.title || event.categories[0].title;
@@ -156,26 +154,26 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     return date;
   };
 
-  self.filterEventList = function(){
+  self.filterEventList = function () {
     if (!model.data.events) return;
     var extent = view.calculateExtent();
-    model.data.events.forEach(function(naturalEvent){
+    model.data.events.forEach(function (naturalEvent) {
       var date = self.getDefaultEventDate(naturalEvent);
       if (self.selected && self.selected.date) {
         date = self.selected.date;
       }
-      var geometry = _.find(naturalEvent.geometries, function(geometry){
+      var geometry = _.find(naturalEvent.geometries, function (geometry) {
         return geometry.date.split('T')[0] == date;
       }) || naturalEvent.geometries[0];
 
       var coordinates = geometry.coordinates;
       if (geometry.type == 'Polygon') {
         var geomExtent = ol.extent.boundingExtent(geometry.coordinates[0]);
-        coordinates =  ol.extent.getCenter(geomExtent);
+        coordinates = ol.extent.getCenter(geomExtent);
       }
 
       var isVisible = ol.extent.containsCoordinate(extent, coordinates);
-      var $thisItem = $('.map-item-list .item[data-id='+naturalEvent.id+']');
+      var $thisItem = $('.map-item-list .item[data-id=' + naturalEvent.id + ']');
       if (isVisible) {
         $thisItem.show();
       } else {
@@ -186,13 +184,13 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     ui.sidebar.sizeEventsTab();
   };
 
-  var getEventById = function(id) {
-    return _.find(model.data.events, function(e){
+  var getEventById = function (id) {
+    return _.find(model.data.events, function (e) {
       return e.id === id;
     });
   };
 
-  var createEventList = function() {
+  var createEventList = function () {
     var $panels = $('<div />', {class: 'wv-eventslist bank'});
     $('#wv-events').empty().append($panels);
     var $list = $('<ul></ul>').attr('id', 'wv-eventscontent').addClass('content').addClass('map-item-list');
@@ -200,7 +198,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $panels.append($list);
     $panels.append($detailContainer);
     var $content = $('#wv-eventscontent').empty();
-    _.each(model.data.events, function(event) {
+    _.each(model.data.events, function (event) {
       $content.append(createEventElement($content, event));
     });
 
@@ -212,7 +210,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       class: 'action',
       id: 'show-all-events',
       text: 'List All',
-      click: function(){
+      click: function () {
         $('.map-item-list .item').show();
         $footer.hide();
         ui.sidebar.sizeEventsTab();
@@ -225,7 +223,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     $footer.hide();
   };
 
-  var createEventElement = function($content, event) {
+  var createEventElement = function ($content, event) {
     var eventCategoryID = event.categories[0].id || null;
     eventDate = wv.util.parseDateUTC(event.geometries[0].date);
     dateString = wv.util.giveWeekDay(eventDate) + ', ' +
@@ -253,7 +251,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
 
     if (event.geometries.length > 1) {
       var eventIndex = 0;
-      _.each(event.geometries, function(geometry) {
+      _.each(event.geometries, function (geometry) {
         eventIndex++;
         var date = geometry.date.split('T')[0];
         var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
@@ -263,7 +261,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
           'data-id': event.id,
           'data-date': date,
           html: date,
-          click: function(e) {
+          click: function (e) {
             e.stopPropagation();
             self.selectEvent(event.id, date);
           }
@@ -274,10 +272,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     }
 
     $item.append($eventIcon).append($title).append($subtitle).append($dates);
-    var references = Array.isArray(event.sources)?event.sources:[event.sources];
+    var references = Array.isArray(event.sources) ? event.sources : [event.sources];
     if (references.length > 0) {
       items = [];
-      _.each(references, function(reference) {
+      _.each(references, function (reference) {
         var source = _.find(model.data.sources, {
           id: reference.id
         });
@@ -291,11 +289,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
       });
       $subtitle.append(items.join(' '));
     }
-    $('.natural-event-link').click(function(e) {
+    $('.natural-event-link').click(function (e) {
       e.stopPropagation();
     });
 
-    $item.on('click', function() {
+    $item.on('click', function () {
       var isSelected = self.selected && self.selected.id && (self.selected.id === event.id);
       if (isSelected) {
         self.deselectEvent();
@@ -307,7 +305,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     return $item;
   };
 
-  var highlightEventInList = function(id, date) {
+  var highlightEventInList = function (id, date) {
     // Undo previous highlights
     $('#wv-eventscontent .subtitle').hide();
     $('#wv-eventscontent .dates').hide();
@@ -326,19 +324,18 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     ui.sidebar.sizeEventsTab();
   };
 
-  var activateLayersForCategory = function(category){
-
+  var activateLayersForCategory = function (category) {
     category = category || 'Default';
 
     // Turn on the relevant layers for the event type
     layers = model.layers[category];
     if (!layers) layers = model.layers.Default;
     // Turn off all layers in list first
-    _.each(models.layers.active, function(layer) {
+    _.each(models.layers.active, function (layer) {
       models.layers.setVisibility(layer.id, false);
     });
     // Turn on or add new layers
-    _.each(layers, function(layer) {
+    _.each(layers, function (layer) {
       var id = layer[0];
       var visible = layer[1];
       if (models.layers.exists(id)) {
@@ -351,9 +348,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function(models, ui, config, reques
     });
   };
 
-  var zoomToEvent = function(event, date) {
+  var zoomToEvent = function (event, date) {
     var category = event.categories[0].title;
-    var geometry = _.find(event.geometries, function(geom){
+    var geometry = _.find(event.geometries, function (geom) {
       return geom.date.split('T')[0] === date;
     });
     var coordinates = (geometry.type === 'Polygon') ? ol.extent.boundingExtent(geometry.coordinates[0]) : geometry.coordinates;

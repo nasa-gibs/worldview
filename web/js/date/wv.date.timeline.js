@@ -8,7 +8,7 @@ wv.date = wv.date || {};
  *
  * @class wv.date.timeline
  */
-wv.date.timeline = wv.date.timeline || function(models, config, ui) {
+wv.date.timeline = wv.date.timeline || function (models, config, ui) {
   var self = {};
   var model = models.date;
 
@@ -21,19 +21,19 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     left: 30
   };
 
-  self.getPadding = function() {
+  self.getPadding = function () {
     self.padding = self.width / 4;
     return self.padding;
   };
 
-  self.getWidth = function() {
+  self.getWidth = function () {
     self.width = $(window)
       .outerWidth(true) -
-      $("#timeline-header")
+      $('#timeline-header')
         .outerWidth(true) -
-      $("#timeline-zoom")
+      $('#timeline-zoom')
         .outerWidth(true) -
-      $("#timeline-hide")
+      $('#timeline-hide')
         .outerWidth(true) -
       self.margin.left - self.margin.right - 22;
 
@@ -44,18 +44,18 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
 
   self.isCropped = true;
 
-  self.toggle = function(now) {
+  self.toggle = function (now) {
     var tl = $('#timeline-footer');
     var tlz = $('#timeline-zoom');
     var tlg = self.boundary;
     var gp = d3.select('#guitarpick');
     if (tl.is(':hidden')) {
-      var afterShow = function() {
+      var afterShow = function () {
         tlz.show();
         $('#timeline')
           .css('right', '10px');
         tlg.attr('style', 'clip-path:url("#timeline-boundary")');
-        gp.attr("style", "display:block;clip-path:url(#guitarpick-boundary);");
+        gp.attr('style', 'display:block;clip-path:url(#guitarpick-boundary);');
       };
       if (now) {
         tl.show();
@@ -65,7 +65,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
       }
     } else {
       tlg.attr('style', 'clip-path:none');
-      gp.attr("style", "display:none;clip-path:none");
+      gp.attr('style', 'display:none;clip-path:none');
       tlz.hide();
       tl.hide('slow');
       $('#timeline')
@@ -73,38 +73,38 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     }
   };
 
-  self.expand = function(now) {
+  self.expand = function (now) {
     now = now || false;
     var tl = $('#timeline-footer, #timeline-zoom');
-    if (tl.is(":hidden")) {
+    if (tl.is(':hidden')) {
       self.toggle(now);
     }
   };
 
-  self.expandNow = function() {
+  self.expandNow = function () {
     self.expand(true);
   };
 
-  self.collapse = function(now) {
+  self.collapse = function (now) {
     var tl = $('#timeline-footer, #timeline-zoom');
-    if (!tl.is(":hidden")) {
+    if (!tl.is(':hidden')) {
       self.toggle(now);
     }
   };
 
-  self.collapseNow = function() {
+  self.collapseNow = function () {
     self.collapse(true);
   };
 
-  self.resize = function() {
+  self.resize = function () {
     var small = wv.util.browser.small || wv.util.browser.constrained;
     if (self.enabled && small) {
       self.enabled = false;
-      $("#timeline")
+      $('#timeline')
         .hide();
     } else if (!self.enabled && !small) {
       self.enabled = true;
-      $("#timeline")
+      $('#timeline')
         .show();
     }
 
@@ -121,19 +121,17 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
           self.margin.left +
           self.margin.right);
 
-      self.axis.select("line:first-child")
-        .attr("x2", self.width);
-
+      self.axis.select('line:first-child')
+        .attr('x2', self.width);
     }
-
   };
 
-  self.setClip = function() { //This is a hack until Firefox fixes their svg rendering problems
+  self.setClip = function () { // This is a hack until Firefox fixes their svg rendering problems
     d3.select('#timeline-footer svg > g:nth-child(2)')
       .attr('visibility', 'hidden');
     d3.select('#timeline-footer svg > g:nth-child(2)')
       .attr('style', '');
-    setTimeout(function() {
+    setTimeout(function () {
       d3.select('#timeline-footer svg > g:nth-child(2)')
         .attr('style', 'clip-path:url("#timeline-boundary")');
       d3.select('#timeline-footer svg > g:nth-child(2)')
@@ -141,63 +139,62 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     }, 50);
   };
 
-  var drawContainers = function() {
+  var drawContainers = function () {
     self.getWidth();
 
     self.svg = d3.select('#timeline-footer')
-      .append("svg:svg")
+      .append('svg:svg')
       .attr('width', self.width) // + margin.left + margin.right)
       .attr('height', self.height + self.margin.top + self.margin.bottom + 16);
 
     self.svg
-      .append("svg:defs")
-      .append("svg:clipPath")
-      .attr("id", "timeline-boundary")
-      .append("svg:rect")
+      .append('svg:defs')
+      .append('svg:clipPath')
+      .attr('id', 'timeline-boundary')
+      .append('svg:rect')
       .attr('width', self.width) // + margin.left + margin.right)
       .attr('height', self.height + self.margin.top + self.margin.bottom);
 
-    d3.select("#timeline-footer svg defs")
-      .append("svg:clipPath")
-      .attr("id", "guitarpick-boundary")
-      .append("svg:rect")
+    d3.select('#timeline-footer svg defs')
+      .append('svg:clipPath')
+      .attr('id', 'guitarpick-boundary')
+      .append('svg:rect')
       .attr('width', self.width + self.margin.left + self.margin.right) // + margin.left + margin.right)
       .attr('height', self.height + self.margin.top + self.margin.bottom)
-      .attr("x", -self.margin.left);
+      .attr('x', -self.margin.left);
 
     self.boundary = self.svg
-      .append("svg:g")
-      .attr("clip-path", "#timeline-boundary")
-      .attr("style", "clip-path:url(#timeline-boundary)")
-      .attr("transform", "translate(0,16)");
+      .append('svg:g')
+      .attr('clip-path', '#timeline-boundary')
+      .attr('style', 'clip-path:url(#timeline-boundary)')
+      .attr('transform', 'translate(0,16)');
 
-    self.axis = self.boundary.append("svg:g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + self.height + ")");
+    self.axis = self.boundary.append('svg:g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + self.height + ')');
 
     self.axis
-      .insert("line", ":first-child")
-      .attr("x1", 0)
-      .attr("x2", self.width); //+margin.left+margin.right);
+      .insert('line', ':first-child')
+      .attr('x1', 0)
+      .attr('x2', self.width); // +margin.left+margin.right);
 
-    self.dataBars = self.boundary.insert("svg:g", '.x.axis')
-      .attr("height", self.height)
+    self.dataBars = self.boundary.insert('svg:g', '.x.axis')
+      .attr('height', self.height)
       .classed('plot', true);
 
-    self.verticalAxis = self.boundary.append("svg:g")
-      .attr("class", "y axis")
-      .attr("transform", "translate(0,0)");
+    self.verticalAxis = self.boundary.append('svg:g')
+      .attr('class', 'y axis')
+      .attr('transform', 'translate(0,0)');
     self.animboundary = self.svg
-      .append("svg:g")
-      .attr("clip-path", "#timeline-boundary")
-      .attr("transform", "translate(0,16)");
+      .append('svg:g')
+      .attr('clip-path', '#timeline-boundary')
+      .attr('transform', 'translate(0,16)');
     self.animboundary
       .append('g')
       .attr('id', 'wv-rangeselector-case');
-
   };
 
-  var init = function() {
+  var init = function () {
     var $timelineFooter = $('#timeline-footer');
     drawContainers();
 
@@ -214,7 +211,7 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     self.x = d3.time.scale.utc();
 
     self.xAxis = d3.svg.axis()
-      .orient("bottom")
+      .orient('bottom')
       .tickSize(-self.height)
       .tickPadding(5);
 
@@ -225,32 +222,31 @@ wv.date.timeline = wv.date.timeline || function(models, config, ui) {
     self.resize();
 
     if (wv.util.browser.localStorage) {
-      if (localStorage.getItem("timesliderState") === "collapsed") {
+      if (localStorage.getItem('timesliderState') === 'collapsed') {
         self.collapseNow();
       }
     }
 
     $('#timeline-hide')
-      .click(function() {
+      .click(function () {
         self.toggle();
       });
 
     $(window)
-      .resize(function() {
+      .resize(function () {
         self.resize();
         self.zoom.refresh();
         self.setClip();
       });
 
-    model.events.on("select", function() {
+    model.events.on('select', function () {
       self.input.update();
       self.pick.shiftView();
     });
 
-    models.layers.events.on("change", function() {
+    models.layers.events.on('change', function () {
       self.data.set();
     });
-
   };
 
   init();
