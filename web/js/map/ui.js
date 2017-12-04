@@ -337,7 +337,7 @@ export function mapui(models, config) {
   };
 
   /*
-   * Reloads layers on a change in layer order
+   * Reloads layer on change
    *
    * @method updateLayerOrder
    * @static
@@ -380,23 +380,13 @@ export function mapui(models, config) {
    *
    *
    * @returns {void}
+   *
+   * @todo Check if this function can be combined with updateLayerOrder
    */
   var updateLookup = function (layerId) {
-    // If the lookup changes, all layers in the cache are now stale
-    // since the tiles need to be rerendered. Remove from cache.
-    var selectedDate = util.toISOStringDate(models.date.selected);
-    var selectedProj = models.proj.selected.id;
-    cache.removeWhere(function (key, mapLayer) {
-      if (mapLayer.wvid === layerId &&
-        mapLayer.wvproj === selectedProj &&
-        mapLayer.wvdate !== selectedDate &&
-        mapLayer.lookupTable) {
-        return true;
-      }
-      return false;
-    });
     reloadLayers();
   };
+
   self.getCustomLayerTimeout = function (layer) {
     if (models.palettes.isActive(layer.id)) {
       return 200;

@@ -27,7 +27,7 @@ export function palettesModel(models, config) {
   };
 
   self.getCustom = function (paletteId) {
-    palette = config.palettes.custom[paletteId];
+    var palette = config.palettes.custom[paletteId];
     if (!palette) {
       throw new Error('Invalid palette: ' + paletteId);
     }
@@ -352,6 +352,7 @@ export function palettesModel(models, config) {
       var squash = [];
       var count = 0;
       loEach(layerDef.attributes, function (attr) {
+        var values;
         if (attr.id === 'palette') {
           count = self.getCount(layerId);
           values = util.toArray(attr.value.split(';'));
@@ -483,12 +484,12 @@ export function palettesModel(models, config) {
       delete self.active[layerId];
       return;
     }
-    var active = self.active[layerId].maps;
     var lookup = {};
+    var active = self.active[layerId].maps;
     loEach(active, function (palette, index) {
-      oldLegend = palette.legend;
-      entries = palette.entries;
-      legend = {
+      var oldLegend = palette.legend;
+      var entries = palette.entries;
+      var legend = {
         colors: [],
         minLabel: oldLegend.minLabel,
         maxLabel: oldLegend.maxLabel,
@@ -499,7 +500,6 @@ export function palettesModel(models, config) {
         id: oldLegend.id
       };
       var source = entries.colors;
-      var values = entries.values;
       var target = (palette.custom)
         ? self.getCustom(palette.custom)
           .colors : source;
@@ -509,17 +509,16 @@ export function palettesModel(models, config) {
 
       var sourceCount = source.length;
       var targetCount = target.length;
-      var indexCount = max - min;
 
       loEach(source, function (color, index) {
-        var newColor;
+        var targetColor;
         if (index < min || index > max) {
           targetColor = '00000000';
         } else {
           var sourcePercent, targetIndex;
           if (palette.squash) {
             sourcePercent = (index - min) / (max - min);
-            if (index == max) {
+            if (index === max) {
               sourcePercent = 1.0;
             }
             targetIndex = Math.floor(sourcePercent * targetCount);

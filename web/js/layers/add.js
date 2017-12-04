@@ -107,7 +107,7 @@ export function layersAdd(models, ui, config) {
 
     $(self.selector)
       .iCheck({
-        checkboxClass: 'icheckbox_square-grey'
+        checkboxClass: 'iCheck iCheck-checkbox icheckbox_square-grey'
       });
 
     updateAreasOfInterest();

@@ -665,7 +665,9 @@ export function layersModal(models, ui, config) {
 
     $selectedCategory.show();
     redoScrollbar();
-    $selectedCategory.iCheck({checkboxClass: 'icheckbox_square-red'});
+    $selectedCategory.iCheck({
+      checkboxClass: 'iCheck iCheck-checkbox icheckbox_square-red'
+    });
   };
 
   /**

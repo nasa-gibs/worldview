@@ -10,7 +10,7 @@
 @import url("../../node_modules/jquery.joyride/jquery.joyride.css");
 @import url("../../node_modules/jquery-jcrop/css/jquery.Jcrop.css");
 @import url("../../node_modules/ol/ol.css");
-@import url("../../node_modules/nouislider-browser/jquery.nouislider.css");
+@import url("../../node_modules/nouislider/src/jquery.nouislider.css");
 
 /* App CSS */
 @import url("fonts.css");

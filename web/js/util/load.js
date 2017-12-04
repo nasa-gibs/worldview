@@ -37,7 +37,7 @@ export default (function () {
           if (loading === 0) {
             clearTimeout(indicatorTimeout);
             indicatorTimeout = null;
-            wvui.indicator.hide(indicatorId);
+            if (indicatorId) wvui.indicator.hide(indicatorId);
           }
         })
         .fail(wvui.error);

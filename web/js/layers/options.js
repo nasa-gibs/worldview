@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'jquery-ui/button';
 import 'jquery-ui/dialog';
 import 'icheck';
-import 'nouislider-browser/jquery.nouislider';
+import 'nouislider/distribute/jquery.nouislider';
 import 'perfect-scrollbar/jquery';
 import loEach from 'lodash/each';
 import loIndexOf from 'lodash/indexOf';
@@ -147,8 +147,7 @@ export function layersOptions(config, models, layer) {
         }
       })
       .on('slide', function () {
-        models.layers.setOpacity(layer.id, parseFloat($(this)
-          .val()));
+        models.layers.setOpacity(layer.id, $(this).val());
       });
     var $label = $('<div></div>')
       .addClass('wv-label')
@@ -273,13 +272,12 @@ export function layersOptions(config, models, layer) {
   };
 
   var onRangeUpdate = function () {
-    updateRangeLabels();
-
     var palette = models.palettes.get(layer.id, index);
     var imin = (loIsUndefined(palette.min)) ? 0 : palette.min;
     var imax = (loIsUndefined(palette.max))
       ? palette.legend.tooltips.length - 1 : palette.max;
-    current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
+    var current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
+    updateRangeLabels();
     if (!loIsEqual(current, [imin, imax])) {
       $range.val([imin, imax]);
     }
