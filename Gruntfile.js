@@ -14,9 +14,8 @@ module.exports = function(grunt) {
   var pkg = require('./package.json');
   var env = grunt.option('env') || 'release';
 
-  var hasOptionsDirectory = fs.existsSync('options');
-  var optionsPath = hasOptionsDirectory ? 'options' : 'node_modules/worldview-options-eosdis';
-  var options = hasOptionsDirectory ? grunt.file.readJSON('options/package.json') : grunt.file.readJSON('node_modules/worldview-options-eosdis/package.json');
+  var hasCustomOptions = fs.existsSync('options');
+  var optionsPath = hasCustomOptions ? 'options' : 'node_modules/worldview-options-eosdis';
 
   // Platform specific command for find
   var findCmd;
@@ -37,7 +36,6 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     pkg: pkg,
-    opt: options,
     optionsPath: optionsPath,
     apache_version: grunt.option('apache-version') || '22',
 
@@ -149,7 +147,7 @@ module.exports = function(grunt) {
         files: [
           {
             src: 'dist/worldview-config.tar.bz2',
-            dest: 'dist/worldview-config' + '-<%=opt.version%>' + '-<%=opt.release%>' + '.git<%= grunt.config.get("config-revision") %>' + '.tar.bz2'
+            dest: 'dist/worldview-config.git<%= grunt.config.get("config-revision") %>.tar.bz2'
           }
         ]
       },
