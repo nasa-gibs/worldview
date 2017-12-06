@@ -414,6 +414,7 @@ div.horizontalContainer {
 .ui-menu {
   position: absolute;
   width: 150px;
+  padding: 0;
   z-index: 1000;
 }
 
@@ -567,11 +568,6 @@ label {
 .wv-panel .ui-dialog-title {
   font-weight: 400;
   color: #fff;
-}
-
-.ui-menu .ui-menu-item {
-  padding-top: 5px;
-  padding-bottom: 5px;
 }
 
 /* style for UI dialog buttons that are hovered over */
