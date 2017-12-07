@@ -8,6 +8,9 @@ import { dateModel } from '../web/js/date/model';
 import { parse as layerParser } from '../web/js/layers/layers';
 import { layersModel } from '../web/js/layers/model';
 import { linkModel } from '../web/js/link/model';
+import { parse as mapParser } from '../web/js/map/map';
+import { mapModel } from '../web/js/map/model';
+import { mapRunningData } from '../web/js/map/runningdata';
 import { projectionModel } from '../web/js/projection/model';
 import util from '../web/js/util/util';
 import fixtures from './fixtures.js';
@@ -24,6 +27,11 @@ window.wv = {
   },
   link: {
     model: linkModel
+  },
+  map: {
+    parse: mapParser,
+    model: mapModel,
+    runningdata: mapRunningData
   },
   proj: {
     model: projectionModel

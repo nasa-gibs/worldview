@@ -25,7 +25,7 @@ import olProj from 'ol/proj';
 import {MapRotate} from './rotation';
 import {mapDateLineBuilder} from './datelinebuilder';
 import {mapLayerBuilder} from './layerbuilder';
-import {MapRunningData} from './runningdata';
+import {mapRunningData} from './runningdata';
 import {mapPrecacheTile} from './precachetile';
 import Cache from 'cachai';
 
@@ -41,7 +41,7 @@ export function mapui(models, config) {
   var createLayer;
   var precache = mapPrecacheTile(models, config, cache, self);
 
-  var dataRunner = self.runningdata = new MapRunningData(models);
+  var dataRunner = self.runningdata = new mapRunningData(models);
 
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
@@ -885,7 +885,7 @@ export function mapui(models, config) {
       var isDataTabActive = (typeof models.data !== 'undefined' && models.data.active);
       var isMapAnimating = (typeof models.anim !== 'undefined' && models.anim.rangeState.playing);
       if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
-      
+
       dataRunner.newPoint(pixels, map);
     }
     $(map.getViewport())
