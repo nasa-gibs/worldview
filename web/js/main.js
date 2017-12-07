@@ -271,7 +271,7 @@ window.onload = () => {
     //  ui.naturalEvents = naturalEventsUI(models, ui, config, naturalEventsRequest(models, ui, config));
     }
     ui.link = linkUi(models, config);
-    // ui.tour = Tour(models, ui, config);
+    ui.tour = tour(models, ui, config);
     // ui.info = uiInfo(ui, config);
     if (config.features.alert) {
     //  ui.alert = notificationsUi(ui, config);

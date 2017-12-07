@@ -1,8 +1,9 @@
 import $ from 'jquery';
+import 'jquery-ui/dialog';
 import 'jquery.joyride';
 import util from './util/util';
 import wvui from './ui/ui';
-import {GA} from 'worldview-components';
+import {GA as googleAnalytics} from 'worldview-components';
 import feedbackModal from './feedback';
 
 export default function (models, ui, config) {
@@ -169,7 +170,7 @@ export default function (models, ui, config) {
     var onStop = function (index, tip, button) {
       // console.log(index, tip, button);
       setTourState();
-      GA.event('Tour', 'Click', 'Post Tour View', index + 1);
+      googleAnalytics.event('Tour', 'Click', 'Post Tour View', index + 1);
       if (index === 5 && button !== 'previous') {
         endTour();
       }
@@ -183,7 +184,7 @@ export default function (models, ui, config) {
       $('.ui-dialog-content')
         .dialog('close');
       initTourState();
-      GA.event('Tour', 'Click', 'Take Tour');
+      googleAnalytics.event('Tour', 'Click', 'Take Tour');
       $('#joyRideTipContent')
         .joyride({
           adjustForPhone: false,
