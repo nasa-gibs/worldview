@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'jquery-ui/effect-slide';
 import 'jquery-ui/button';
 import 'jquery-ui/menu';
 import loEach from 'lodash/each';

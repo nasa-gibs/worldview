@@ -6,7 +6,7 @@ import loThrottle from 'lodash/throttle';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
-import Share, {GA as googleAnalytics} from 'worldview-components';
+import {Share, GA as googleAnalytics} from 'worldview-components';
 import util from '../util/util';
 import wvui from '../ui/ui';
 
