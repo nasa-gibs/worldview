@@ -26,7 +26,8 @@
     "report": "node e2e/create-report.js",
     "build": "run-s --print-name build:* && grunt",
     "build:css": "node ./tasks/buildCSS",
-    "build:js": "node ./tasks/buildJS"
+    "build:js": "node ./tasks/buildJS",
+    "build:tests": "node ./tasks/buildJS --tests"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
@@ -67,6 +68,7 @@
     "grunt-rename": "0.1.x",
     "grunt-text-replace": "0.4.x",
     "gruntify-eslint": "^4.0.0",
+    "minimist": "^1.2.0",
     "moment": "2.13.x",
     "nightwatch": "^0.9.16",
     "nightwatch-cucumber": "^8.2.10",

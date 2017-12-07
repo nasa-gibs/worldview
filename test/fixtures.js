@@ -1,6 +1,12 @@
+import { dateModel } from '../web/js/date/model';
+import { layersModel } from '../web/js/layers/model';
+import { mapModel } from '../web/js/map/model';
+import { palettesModel } from '../web/js/palettes/model';
+import { projectionModel } from '../web/js/projection/model';
+
 // FIXME: OL3
-proj4.defs('EPSG:3413', '+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
-proj4.defs('EPSG:3031', '+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
+// proj4.defs('EPSG:3413', '+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
+// proj4.defs('EPSG:3031', '+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
 
 var fixtures = {
   red: 'ff0000ff',
@@ -148,11 +154,13 @@ fixtures.config = function () {
 fixtures.models = function (config) {
   var models = {};
 
-  models.date = wv.date.model(config);
-  models.proj = wv.proj.model(config);
-  models.layers = wv.layers.model(models, config);
-  models.palettes = wv.palettes.model(models, config);
-  models.map = wv.map.model(models, config);
+  models.date = dateModel(config);
+  models.proj = projectionModel(config);
+  models.layers = layersModel(models, config);
+  models.palettes = palettesModel(models, config);
+  models.map = mapModel(models, config);
 
   return models;
 };
+
+export default fixtures;
