@@ -13,7 +13,10 @@ import { mapModel } from '../web/js/map/model';
 import { mapRunningData } from '../web/js/map/runningdata';
 import palettes from '../web/js/palettes/palettes';
 import { palettesModel } from '../web/js/palettes/model';
+import { parse as projectionParser } from '../web/js/projection/projection';
 import { projectionModel } from '../web/js/projection/model';
+import { projectionChange } from '../web/js/projection/change';
+import ui from '../web/js/ui/ui';
 import util from '../web/js/util/util';
 import fixtures from './fixtures.js';
 
@@ -39,8 +42,11 @@ window.wv = {
   },
   palettes: palettes,
   proj: {
-    model: projectionModel
+    parse: projectionParser,
+    model: projectionModel,
+    change: projectionChange
   },
+  ui: ui,
   util: util
 };
 
