@@ -17,10 +17,14 @@ import { parse as projectionParser } from '../web/js/projection/projection';
 import { projectionModel } from '../web/js/projection/model';
 import { projectionChange } from '../web/js/projection/change';
 import ui from '../web/js/ui/ui';
+import uiIndicator from '../web/js/ui/indicator';
+import uiMouse from '../web/js/ui/mouse';
 import util from '../web/js/util/util';
 import fixtures from './fixtures.js';
 
 palettes.model = palettesModel;
+ui.indicator = uiIndicator;
+ui.mouse = uiMouse;
 
 window.wv = {
   brand: brand,
