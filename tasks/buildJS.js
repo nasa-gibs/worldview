@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const browserify = require('browserify');
-const watchify = require('watchify');
+// const watchify = require('watchify');
 const minimist = require('minimist');
 
 const argv = minimist(process.argv.slice(2));
