@@ -91,8 +91,8 @@ export function layersOptions(config, models, layer) {
       .addClass('custom-check');
     $('#wv-layers-options-dialog .custom-check')
       .iCheck({
-        radioClass: 'iradio_square-grey',
-        checkboxClass: 'icheckbox_square-grey'
+        radioClass: 'iCheck iCheck-radio iradio_square-grey',
+        checkboxClass: 'iCheck iCheck-checkbox icheckbox_square-grey'
       });
 
     $('#wv-layers-options-dialog #wv-palette-selector')
@@ -370,7 +370,7 @@ export function layersOptions(config, models, layer) {
     if (!firstTime) {
       $('#wv-palette-selector')
         .iCheck({
-          radioClass: 'iradio_square-grey'
+          radioClass: 'iCheck iCheck-radio iradio_square-grey'
         });
     }
   };

@@ -429,6 +429,7 @@
 }
 
 #selected-category .ui-tabs .ui-tabs-nav li a {
+  color: #eee;
   float: none;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
