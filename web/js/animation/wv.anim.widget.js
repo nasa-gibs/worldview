@@ -339,7 +339,7 @@ wv.anim.widget = wv.anim.widget || function (models, config, ui) {
    */
   self.onDataDeactivate = function () {
     $animateButton.removeClass('wv-disabled-button');
-    $animateButton.prop('title', 'Setup animation');
+    $animateButton.prop('title', 'Set up animation');
   };
 
   /*
