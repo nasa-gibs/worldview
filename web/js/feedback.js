@@ -7,8 +7,7 @@
 
 import util from './util/util';
 
-export const feedbackModal = (function () {
-  var self = {};
+export default (function (self) {
   var feedbackInit = false;
 
   self.decorate = function ($element) {
@@ -30,4 +29,4 @@ export const feedbackModal = (function () {
   };
 
   return self;
-})();
+})({});
