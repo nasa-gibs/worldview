@@ -3,3 +3,4 @@ node_js:
 - '6.8.1'
 before_install: npm install -g grunt-cli
 install: npm install
+before_script: npm run build:tests
