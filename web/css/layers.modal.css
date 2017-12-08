@@ -518,7 +518,8 @@
   line-height: 20px;
 }
 
-.layers-all-header.has-checkbox.checked::before {color: white;
+.layers-all-header.has-checkbox.checked::before {
+  color: #fff;
   content: '\2713';
   background-color: #d54f21;
 }
