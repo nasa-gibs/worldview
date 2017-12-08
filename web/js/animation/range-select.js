@@ -1,20 +1,20 @@
-var wv = wv || {};
+import $ from 'jquery';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {RangeSelector} from 'worldview-components';
+import d3 from 'd3';
+import util from '../util/util';
 
-wv.anim = wv.anim || {};
-
-wv.anim.rangeselect = wv.anim.rangeselect || function (models, config, ui) {
+export function animationRangeSelect(models, config, ui) {
   var self = {};
   var model;
   var timeline = ui.timeline;
-  var widgetOptions = ui.anim.options;
-  var rangeSelectionFactory = React.createFactory(WVC.RangeSelector);
-  var $mountLocation = $('#wv-rangeselector-case')[0];
-  var reactGlobal = {};
+  var rangeSelectionFactory = React.createFactory(RangeSelector);
+  var $mountLocation = $('#wv-rangeselector-case');
   var $footer = $('#timeline-footer');
   var $header = $('#timeline-header');
   var $timeline = $('#timeline');
 
-  ui.anim.rangeOptions = ui.anim.rangeOptions || {};
   /*
    * set listeners and initiates
    * widget
@@ -26,9 +26,6 @@ wv.anim.rangeselect = wv.anim.rangeselect || function (models, config, ui) {
    *
    */
   self.init = function () {
-    var $animateButton = $('#animate-button');
-    var options;
-
     self.setDefaults();
     self.render();
     models.date.events.on('timeline-change', self.update);
@@ -70,13 +67,11 @@ wv.anim.rangeselect = wv.anim.rangeselect || function (models, config, ui) {
   self.render = function () {
     var options;
     var startLocation;
-    var EndLocation;
+    var endLocation;
     var pick = d3.select('#guitarpick');
     var pickWidth = pick.node()
       .getBoundingClientRect()
       .width;
-    var ticHeight = $('.end-tick')
-      .height();
     var animEndLocation = (d3.transform(pick.attr('transform'))
       .translate[0] - (pickWidth / 2)); // getting guitar pick location
 
@@ -104,7 +99,7 @@ wv.anim.rangeselect = wv.anim.rangeselect || function (models, config, ui) {
       onDrag: self.updateRange,
       onRangeClick: self.onRangeClick
     };
-    self.reactComponent = ReactDOM.render(rangeSelectionFactory(options), $mountLocation);
+    self.reactComponent = ReactDOM.render(rangeSelectionFactory(options), $mountLocation[0]);
   };
 
   /*
@@ -180,7 +175,6 @@ wv.anim.rangeselect = wv.anim.rangeselect || function (models, config, ui) {
    *
    */
   self.updateOptions = function () {
-    var max;
     var state = model.rangeState;
     var props = {};
     props.startLocation = self.getLocationFromStringDate(state.startDate);
@@ -227,8 +221,8 @@ wv.anim.rangeselect = wv.anim.rangeselect || function (models, config, ui) {
     var startDate = timeline.x.invert(startLocation);
     var endDate = timeline.x.invert(EndLocation);
     var state = model.rangeState;
-    state.startDate = wv.util.toISOStringDate(startDate) || 0;
-    state.endDate = wv.util.toISOStringDate(endDate);
+    state.startDate = util.toISOStringDate(startDate) || 0;
+    state.endDate = util.toISOStringDate(endDate);
     model.rangeState.playing = false;
     model.events.trigger('change');
     model.events.trigger('datechange');

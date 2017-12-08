@@ -1,12 +1,16 @@
-var wv = wv || {};
+import $ from 'jquery';
+import 'jquery-jcrop';
+import wvui from '../ui/ui';
+import gifshot from 'gifshot';
+import loFind from 'lodash/find';
+import loEach from 'lodash/each';
+import loIsUndefined from 'lodash/isundefined';
+import {GA as googleAnalytics} from 'worldview-components';
+import util from '../util/util';
 
-wv.anim = wv.anim || {};
-
-wv.anim.gif = wv.anim.gif || function (models, config, ui) {
+export function animationGif(models, config, ui) {
   var self = {};
-  var $cropee = $('#wv-map');
   var jcropAPI = null;
-  var coords = null;
   var animCoords = null;
   var previousCoords = null;
   var animModel = models.anim;
@@ -14,7 +18,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
   var loader;
   var showDates = true; // show date stamp
   var progressing = false; // if progress bar has started
-  var GRATICLE_WARNING =
+  var GRATICULE_WARNING =
     'The graticule layer cannot be used to take a snapshot. Would you ' +
     'like to hide this layer?';
   var PALETTE_WARNING =
@@ -54,17 +58,16 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
     var interval = stateObj.speed;
     var startDate = stateObj.startDate;
     var endDate = stateObj.endDate;
-    var shootGIFafterImageLoad;
     var imageArra;
     var stamp;
     var build;
 
-    loader = wv.ui.indicator.loading();
+    loader = wvui.indicator.loading();
     build = function (stamp) {
       var buildProgressBar = function () {
         $progress = $('<progress />') // display progress for GIF creation
           .attr('class', 'wv-gif-progress');
-        wv.ui.getDialog()
+        wvui.getDialog()
           .append($progress)
           .dialog({ // dialog for progress
             title: 'Collecting Images...',
@@ -77,7 +80,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
         if (!progressing) {
           buildProgressBar();
           progressing = true;
-          wv.ui.indicator.hide(loader);
+          wvui.indicator.hide(loader);
         }
         $progress.parent()
           .dialog('option', 'title', 'Creating GIF...'); // set dialog title
@@ -132,17 +135,16 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
    */
   var calcRes = function (mode) { // return either multiplier or string resolution
     // geographic has 10 zoom levels from 0 to 9, polar projections have 8 from 0 to 7
+    var str, res;
     var isGeographic = models.proj.selected.id === 'geographic';
 
     // Map the zoom level from 0-9 / 0-7 to an index from 0-4
-    var zoom_res = [40, 20, 4, 2, 1],
-      str, res;
+    var zoomRes = [40, 20, 4, 2, 1];
+
     if (isGeographic) {
-      res = zoom_res[Math.floor(ui.map.selected.getView()
-        .getZoom() / 2)];
+      res = zoomRes[Math.floor(ui.map.selected.getView().getZoom() / 2)];
     } else {
-      res = zoom_res[Math.floor(((ui.map.selected.getView()
-        .getZoom() + 2) / 2))];
+      res = zoomRes[Math.floor(((ui.map.selected.getView().getZoom() + 2) / 2))];
     }
 
     if (mode === 0) { return res; } else {
@@ -186,33 +188,32 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
       renderable: true
     });
     if (models.palettes.inUse()) {
-      wv.ui.ask({
+      wvui.ask({
         header: 'Notice',
         message: PALETTE_WARNING,
         onOk: function () {
-          previousPalettes = models.palettes.active;
           models.palettes.clear();
           self.getGif();
         }
       });
       return;
     }
-    if (_.find(layers, {
+    if (loFind(layers, {
       id: 'Graticule'
     }) && models.proj.selected.id === 'geographic') {
-      wv.ui.ask({
+      wvui.ask({
         header: 'Notice',
         message: GRATICULE_WARNING,
         onOk: function () {
           models.layers.setVisibility('Graticule', false);
-          self.getGif(startDate, endDate, delta, interval);
+          self.getGif();
         }
       });
       return;
     }
     if (ui.map.selected.getView()
       .getRotation() !== 0.0) {
-      wv.ui.ask({
+      wvui.ask({
         header: 'Reset rotation?',
         message: ROTATE_WARNING,
         onOk: function () {
@@ -223,7 +224,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
       });
       return;
     }
-    WVC.GA.event('Animation', 'Click', 'Create GIF');
+    googleAnalytics.event('Animation', 'Click', 'Create GIF');
     self.createGIF();
   };
 
@@ -240,7 +241,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
    */
   var getLayers = function (products, proj) {
     var layers = [];
-    _.each(products, function (layer) {
+    loEach(products, function (layer) {
       if (layer.projections[proj].layer) {
         layers.push(layer.projections[proj].layer);
       } else {
@@ -264,7 +265,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
       reverse: true,
       renderable: true
     });
-    _.each(products, function (layer) {
+    loEach(products, function (layer) {
       if (layer.endDate) {
         if (date > new Date(layer.endDate)) return;
       }
@@ -290,8 +291,8 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
    */
   var getOpacities = function (products) {
     var opacities = [];
-    _.each(products, function (product) {
-      opacities.push((_.isUndefined(product.opacity)) ? 1 : product.opacity);
+    loEach(products, function (product) {
+      opacities.push((loIsUndefined(product.opacity)) ? 1 : product.opacity);
     });
     return opacities;
   };
@@ -354,6 +355,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
     var opacities;
     var epsg = (models.proj.change) ? models.proj.change.epsg : models.proj.selected.epsg;
     var products = getProducts();
+    var layers;
 
     if (config.features.imageDownload) {
       host = config.features.imageDownload.host;
@@ -365,13 +367,13 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
 
     while (current <= toDate) {
       j++;
-      strDate = wv.util.toISOStringDate(current);
+      strDate = util.toISOStringDate(current);
       products = getProducts(current);
 
       layers = getLayers(products, proj);
       opacities = getOpacities(products);
-      url = wv.util.format(host + '/' + path + '?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}', 'TIME={1}', lonlat[0][0] + ',' + lonlat[0][1] + ',' + lonlat[1][0] + ',' + lonlat[1][1], epsg, layers.join(','), opacities.join(','), dimensions[0], dimensions[1]);
-      src = wv.util.format(url, strDate);
+      url = util.format(host + '/' + path + '?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}', 'TIME={1}', lonlat[0][0] + ',' + lonlat[0][1] + ',' + lonlat[1][0] + ',' + lonlat[1][1], epsg, layers.join(','), opacities.join(','), dimensions[0], dimensions[1]);
+      src = util.format(url, strDate);
       if (showDates) {
         a.push({
           src: src,
@@ -380,10 +382,10 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
       } else {
         a.push(src);
       }
-      current = wv.util.dateAdd(current, ui.anim.ui.getInterval(), 1);
+      current = util.dateAdd(current, ui.anim.ui.getInterval(), 1);
       if (j > 40) { // too many frames
         showUnavailableReason();
-        wv.ui.indicator.hide(loader);
+        ui.indicator.hide(loader);
 
         return false;
       }
@@ -404,11 +406,11 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
   var showUnavailableReason = function () {
     var headerMsg = '<h3 class=\'wv-data-unavailable-header\'>GIF Not Available</h3>';
     var bodyMsg = 'Too many frames were selected. Please request less than 40 frames if you would like to generate a GIF';
-    callback = function () {
+    var callback = function () {
       $('#timeline-footer')
         .toggleClass('wv-anim-active');
     };
-    wv.ui.notify(headerMsg + bodyMsg, 'Notice', 600, callback);
+    wvui.notify(headerMsg + bodyMsg, 'Notice', 600, callback);
   };
 
   /*
@@ -449,8 +451,8 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
 
       // Create a blob out of the image's base64 encoding because Chrome can't handle large data URIs, taken from:
       // http://stackoverflow.com/questions/16761927/aw-snap-when-data-uri-is-too-large
-      var byteCharacters = atob(obj.image.substring(22)),
-        byteArrays = []; // remove "data:image/gif;base64,"
+      var byteCharacters = atob(obj.image.substring(22));
+      var byteArrays = []; // remove "data:image/gif;base64,"
       for (var offset = 0; offset < byteCharacters.length; offset += 512) {
         var slice = byteCharacters.slice(offset, offset + 512);
 
@@ -466,7 +468,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
       });
       var blobURL = URL.createObjectURL(blob); // supported in Chrome and FF
       animatedImage.src = blobURL;
-      var dlURL = wv.util.format('nasa-worldview-{1}-to-{2}.gif', animModel.rangeState.startDate, animModel.rangeState.endDate);
+      var dlURL = util.format('nasa-worldview-{1}-to-{2}.gif', animModel.rangeState.startDate, animModel.rangeState.endDate);
       var downloadSize = (blob.size / 1024)
         .toFixed();
 
@@ -485,7 +487,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
             .removeClass('ui-state-hover');
         })
         .click(function () {
-          WVC.GA.event('Animation', 'Download', 'GIF', downloadSize);
+          googleAnalytics.event('Animation', 'Download', 'GIF', downloadSize);
         });
 
       var $catalog =
@@ -538,12 +540,12 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
       $dialogBodyCase.append($catalog);
       // calculate the offset of the dialog position based on image size to display it properly
       // only height needs to be adjusted to center the dialog
-      var pos_width = animCoords.w * 1 / window.innerWidth,
-        pos_height = animCoords.h * 50 / window.innerHeight;
-      var at_string = 'center-' + pos_width.toFixed() + '% center-' + pos_height.toFixed() + '%';
+      var posWidth = animCoords.w * 1 / window.innerWidth;
+      var posHeight = animCoords.h * 50 / window.innerHeight;
+      var atString = 'center-' + posWidth.toFixed() + '% center-' + posHeight.toFixed() + '%';
 
       // Create a dialog over the view and place the image there
-      var $imgDialog = wv.ui.getDialog()
+      var $imgDialog = wvui.getDialog()
         .append($dialogBodyCase)
         .append($download);
       $imgDialog.dialog({
@@ -560,19 +562,19 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
         },
         position: { // based on image size
           my: 'center center',
-          at: at_string,
+          at: atString,
           of: window
         }
       });
     } else {
       var headerMsg = '<h3 class=\'wv-data-unavailable-header\'>GIF Not Available</h3>';
       var bodyMsg = 'One or more of the frames requested was unable to be processed';
-      wv.ui.indicator.hide(loader);
-      callback = function () {
+      wvui.indicator.hide(loader);
+      var callback = function () {
         $('#timeline-footer')
           .toggleClass('wv-anim-active');
       };
-      wv.ui.notify(headerMsg + bodyMsg, 'Notice', 600, callback);
+      wvui.notify(headerMsg + bodyMsg, 'Notice', 600, callback);
     }
   };
 
@@ -589,14 +591,14 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
    *
    */
   var calcSize = function (c) {
-    var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]),
-      lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
+    var lonlat1 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x), Math.floor(c.y2)]);
+    var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
 
-    var conversionFactor = models.proj.selected.id === 'geographic' ? 0.002197 : 256,
-      res = calcRes(0);
+    var conversionFactor = models.proj.selected.id === 'geographic' ? 0.002197 : 256;
+    var res = calcRes(0);
 
-    var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res)),
-      imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
+    var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res));
+    var imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
 
     return ((imgWidth * imgHeight * 24) / 8388608)
       .toFixed(2);
@@ -673,7 +675,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
     initCheckBox($checkBox);
 
     $createButton.on('click', self.getGif);
-    $dialogBox = wv.ui.getDialog();
+    $dialogBox = wvui.getDialog();
     $dialogBox.html($dialog);
     $dialogBox.css({
       paddingBottom: '10px'
@@ -852,7 +854,6 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
             .html((c.h));
         },
         onChange: function (c) { // Update gif size and image size in MB
-          var modalLeftMargin;
           animCoords = c;
 
           if (c.h !== 0 && c.w !== 0) { previousCoords = c; } // don't save coordinates if empty selection
@@ -880,7 +881,7 @@ wv.anim.gif = wv.anim.gif || function (models, config, ui) {
           $('#timeline-footer')
             .toggleClass('wv-anim-active');
           if ($dialog) {
-            wv.ui.close();
+            wvui.close();
           }
         }
       }, function () {

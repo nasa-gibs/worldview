@@ -1,10 +1,10 @@
-var wv = wv || {};
-wv.anim = wv.anim || {};
-wv.anim.model = wv.anim.model || function (models, config) {
+import util from '../util/util';
+
+export function animationModel(models, config) {
   // state.a is now an object, check input and set values
   var self = {};
   self.delay = 500;
-  self.events = wv.util.events();
+  self.events = util.events();
 
   self.animationState = {
     active: false,
@@ -99,12 +99,7 @@ wv.anim.model = wv.anim.model || function (models, config) {
    *
    */
   self.save = function (state) {
-    var activeState;
-    var playStates;
-    var options;
-    var newState;
-
-    rangeState = self.rangeState;
+    var rangeState = self.rangeState;
     // state.a = state.a || [];
     // newState = {id: rangeState.state};
     // newState.attributes = [];
