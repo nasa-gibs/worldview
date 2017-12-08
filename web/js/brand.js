@@ -1,4 +1,4 @@
-import loIndexOf from 'lodash/indexof';
+import loIndexOf from 'lodash/indexOf';
 /**
  * @class wv.brand
  * @static
