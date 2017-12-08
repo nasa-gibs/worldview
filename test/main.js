@@ -11,9 +11,13 @@ import { linkModel } from '../web/js/link/model';
 import { parse as mapParser } from '../web/js/map/map';
 import { mapModel } from '../web/js/map/model';
 import { mapRunningData } from '../web/js/map/runningdata';
+import palettes from '../web/js/palettes/palettes';
+import { palettesModel } from '../web/js/palettes/model';
 import { projectionModel } from '../web/js/projection/model';
 import util from '../web/js/util/util';
 import fixtures from './fixtures.js';
+
+palettes.model = palettesModel;
 
 window.wv = {
   brand: brand,
@@ -33,6 +37,7 @@ window.wv = {
     model: mapModel,
     runningdata: mapRunningData
   },
+  palettes: palettes,
   proj: {
     model: projectionModel
   },
