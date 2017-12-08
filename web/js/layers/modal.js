@@ -467,6 +467,7 @@ export function layersModal(models, ui, config) {
 
         // Begin source level
         Object.values(current.sources).forEach(function (source) {
+          var isExpanded;
           // Check if sources have settings with the same projection.
           if (hasMeasurementSetting(current, source)) {
             var $sourceTab = $('<li />');
@@ -499,14 +500,17 @@ export function layersModal(models, ui, config) {
 
             $showMore.append($moreElps);
 
-            $showMore.toggle(function (e) {
-              $sourceMeta.removeClass('overflow');
-              $moreElps.text('^').addClass('up');
-              redoScrollbar();
-            }, function (e) {
-              $sourceMeta.addClass('overflow');
-              $moreElps.text('...').removeClass('up');
-              redoScrollbar();
+            $showMore.on('click', function() {
+              isExpanded = !isExpanded;
+              if (isExpanded) {
+                $sourceMeta.removeClass('overflow');
+                $moreElps.text('^').addClass('up');
+                redoScrollbar();
+              } else {
+                $sourceMeta.addClass('overflow');
+                $moreElps.text('...').removeClass('up');
+                redoScrollbar();
+              }
             });
 
             // Simple test to see if theres a link to some metadata
