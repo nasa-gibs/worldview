@@ -49,6 +49,7 @@
     "cssnano": "^3.10.0",
     "cucumber": "^3.0.2",
     "cucumber-html-reporter": "^3.0.4",
+    "eslint": "^4.13.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
