@@ -137,8 +137,6 @@ export default function (models, ui, config) {
       $('#joyRideTipContent')
         .joyride({
           autoStart: true,
-          adjustForPhone: false,
-          bordered: true,
           includepage: true,
           template: {
             'link': '<a href="#" class="joyride-close-tip">X</a>'
@@ -189,8 +187,6 @@ export default function (models, ui, config) {
       $('#joyRideTipContent')
         .joyride({
           autoStart: true,
-          adjustForPhone: false,
-          bordered: true,
           includepage: true,
           template: {
             'link': '<a href="#" class="joyride-close-tip">X</a>'
