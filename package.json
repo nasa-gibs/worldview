@@ -17,7 +17,7 @@
     "start": "node ./bin/www",
     "test": "npm run lint && run-p test:server test:run",
     "test:server": "buster-server -c",
-    "test:run": "buster-test && npm run test:end",
+    "test:run": "sleep 2 && buster-test && npm run test:end",
     "test:end": "kill $(ps aux | grep '[b]uster-server' | awk '{print $2}')",
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
