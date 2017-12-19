@@ -10,7 +10,7 @@ import { layersModel } from '../web/js/layers/model';
 import { linkModel } from '../web/js/link/model';
 import { parse as mapParser } from '../web/js/map/map';
 import { mapModel } from '../web/js/map/model';
-import { mapRunningData } from '../web/js/map/runningdata';
+import { MapRunningData } from '../web/js/map/runningdata';
 import palettes from '../web/js/palettes/palettes';
 import { palettesModel } from '../web/js/palettes/model';
 import { parse as projectionParser } from '../web/js/projection/projection';
@@ -42,7 +42,7 @@ window.wv = {
   map: {
     parse: mapParser,
     model: mapModel,
-    runningdata: mapRunningData
+    runningdata: MapRunningData
   },
   palettes: palettes,
   proj: {
