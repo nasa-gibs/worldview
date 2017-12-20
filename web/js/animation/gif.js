@@ -724,7 +724,7 @@ export function animationGif(models, config, ui) {
    */
   var initCheckBox = function ($checkBox) {
     $checkBox.iCheck({
-      checkboxClass: 'icheckbox_square-red'
+      checkboxClass: 'iCheck iCheck-checkbox icheckbox_square-red'
     });
     $checkBox.iCheck('check');
     showDates = true;
