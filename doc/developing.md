@@ -28,26 +28,18 @@ We're in the process of replacing our Grunt tasks with npm scripts, but here are
 
 `grunt`: The default Grunt task runs all of the scripts necessary to generate a build. Among other things, it updates Python dependencies, applies branding and other configuration options, compiles assets and generates build artifacts in `/build` and `/dist`. The default Grunt task does not run tests.
 
-`grunt test`: Runs Buster integration tests.
-
 `grunt config`* : Updates branding and configuration options.
 
 `grunt site`* : Generates build assets for deployment.
 
-`grunt fetch`* : Makes a request to the GIBS `GetCapabilities` API and updates layer configurations.
+`grunt exec:fetch`* : Makes a request to the GIBS `GetCapabilities` API and updates layer configurations.
 
 `grunt build`* : Generates build assets.
 
-`grunt lint`: Lints JavaScript files
-
-`grunt check`: Runs `grunt test` and `grunt lint`.
-
 `grunt distclean`: Removes build artifacts in `/build` and `/dist`.
 
-`grunt clean`: Removes build artifacts in `/build`.
-
-`grunt update-packages`: Updates Python dependencies.
+`grunt exec:python_packages`: Installs/updates Python dependencies.
 
 `grunt rpm-only`: Creates an RPM on CentOS 6 and places it in the `/dist` directory.
 
-`grunt apache-config`* : Generates `/dist/worldview.conf` for deployment to an Apache server.
+`grunt apache-config`* : Generates `/dist/worldview.conf` in the `/dist` directory for deployment to an Apache server.
