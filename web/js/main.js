@@ -30,7 +30,7 @@ import {parse as mapParser} from './map/map';
 import {mapModel} from './map/model';
 import {mapui} from './map/ui';
 import {mapRotate} from './map/rotation';
-import {mapRunningData} from './map/runningdata';
+import {MapRunningData} from './map/runningdata';
 import {mapLayerBuilder} from './map/layerbuilder';
 import {mapDatelineBuilder} from './map/datelinebuilder';
 import {mapPrecacheTile} from './map/precachetile';
@@ -200,7 +200,7 @@ window.onload = () => {
     // HACK: Map needs to be created before the data download model
     var mapComponents = {
       Rotation: mapRotate,
-      Runningdata: mapRunningData,
+      Runningdata: MapRunningData,
       Layerbuilder: mapLayerBuilder,
       Dateline: mapDatelineBuilder,
       Precache: mapPrecacheTile

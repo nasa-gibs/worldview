@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const browserify = require('browserify');
-const watchify = require('watchify');
+// const watchify = require('watchify');
+const minimist = require('minimist');
 
+const argv = minimist(process.argv.slice(2));
 const isDebug = process.env.NODE_ENV === 'development';
+const isTest = argv.tests;
 const outputDir = './web/build/';
-const entryPoint = './web/js/main.js';
-const outputPath = outputDir + 'wv.js';
+const entryPoint = isTest ? './test/main.js' : './web/js/main.js';
+const outputPath = outputDir + (isTest ? 'wv-test-bundle.js' : 'wv.js');
 
 var bundler = browserify(entryPoint, {
   debug: isDebug, // Include source maps (makes bundle size larger)

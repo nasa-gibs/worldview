@@ -138,7 +138,7 @@ export default (function (self) {
   // Only for permalink 1.1 support
   self.parse = function (state, errors, config) {
     if (state.palettes) {
-      if (!palettes.supported) {
+      if (!self.supported) {
         // FIXME: This should go in errors
         delete state.palettes;
         wvui.notify('The custom palette feature is not supported ' +

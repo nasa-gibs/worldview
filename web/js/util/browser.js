@@ -194,13 +194,15 @@ export default (function () {
   };
 
   self.tests.small = function () {
-    return $(window)
-      .width() < self.mobileWidth;
+    return self.tests.getWindowDimensions()[0] < self.mobileWidth;
+  };
+
+  self.tests.getWindowDimensions = function () {
+    return [$(window).width(), $(window).height()];
   };
 
   self.tests.constrained = function () {
-    return $(window)
-      .height() < self.constrainedHeight;
+    return self.tests.getWindowDimensions()[1] < self.constrainedHeight;
   };
 
   self.tests.history = function () {

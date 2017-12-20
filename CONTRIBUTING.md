@@ -42,7 +42,9 @@ Please lint your code with `npm run lint`. Our style rules are defined in `.styl
 
 ### Unit Tests
 
-All of the unit tests for this project need to pass before your submission will be accepted. You can run `npm test` in the command line after making changes to verify that the tests pass. If you add new functionality, please consider adding tests for that functionality as well.
+All of the unit tests for this project need to pass before your submission will be accepted. You can run `npm build && npm test` in the command line after making changes to verify that the tests pass. If you add new functionality, please consider adding tests for that functionality as well.
+
+Note for Windows users: `npm test` may fail unless you [install PhantomJS manually](http://phantomjs.org/download.html).
 
 ### End-to-end Tests
 
