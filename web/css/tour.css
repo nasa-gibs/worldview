@@ -22,6 +22,10 @@
   width: 450px;
 }
 
+.joyride-close-tip {
+  color: rgba(38, 43, 49, 0.4) !important;
+}
+
 .tour h3 {
   color: rgb(38, 43, 49);
   font: 18px 'Open Sans', sans-serif;
@@ -279,6 +283,7 @@ button.done:hover {
 .joyride-tip-guide {
   z-index: 293;
   background: rgb(175, 181, 196);
+  padding-bottom: 32px;
 }
 
 .joyride-tip-guide[data-index="0"] {
@@ -311,6 +316,19 @@ button.done:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
 }
 
+.joyride-tip-guide .joyride-next-tip:hover {
+  border: 1px solid #bfc4c4 !important;
+  background-color: #d9dddd;
+  color: #000;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d9dddd), color-stop(100%, #c6c3c3));
+  background-image: -webkit-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -moz-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -ms-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -o-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
+}
+
 table.splash td.splash-info {
   vertical-align: top;
 }
@@ -324,9 +342,13 @@ table.splash td.splash-info {
 }
 
 p.wv-tour-page-count {
-  text-align: right;
-  margin-top: 7px;
   font: 400 13px/16px 'Open Sans', sans-serif;
+  color: #262b31;
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 12px;
 }
 
 .wv-tour-visible-icon {
@@ -399,9 +421,30 @@ p.wv-tour-page-count {
   pointer-events: none;
 }
 
+.joyride-tip-guide span.joyride-nub.top {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+}
+
+.joyride-tip-guide span.joyride-nub.right {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
 .joyride-tip-guide span.joyride-nub.bottom {
   border-color: #afb5c4 !important;
   border-bottom-color: transparent !important;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
+}
+
+.joyride-tip-guide span.joyride-nub.left {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-bottom-color: transparent !important;
 }
