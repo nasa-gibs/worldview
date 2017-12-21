@@ -3,7 +3,7 @@ import Queue from 'promise-queue';
 import util from '../util/util';
 import uiIndicator from '../ui/indicator';
 
-export function animationui(models, ui) {
+export function animationUi(models, ui) {
   var self = {};
   self.events = util.events();
   var dateModel = models.date;

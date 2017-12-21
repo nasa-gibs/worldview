@@ -38,7 +38,7 @@ import {mapAnimate} from './map/animate';
 // Animation
 import {parse as animationParser} from './animation/anim';
 import {animationModel} from './animation/model';
-import {animationui} from './animation/ui';
+import {animationUi} from './animation/ui';
 import {animationWidget} from './animation/widget';
 import {animationRangeSelect} from './animation/range-select';
 import {animationGif} from './animation/gif';
@@ -248,7 +248,7 @@ window.onload = () => {
         ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
         ui.anim.widget = animationWidget(models, config, ui);
         ui.anim.gif = animationGif(models, config, ui);
-        ui.anim.ui = animationui(models, ui);
+        ui.anim.ui = animationUi(models, ui);
       }
 
       ui.dateLabel = dateLabel(models);
