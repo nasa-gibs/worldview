@@ -885,7 +885,7 @@ export function mapui(models, config) {
       var isDataTabActive = (typeof models.data !== 'undefined' && models.data.active);
       var isMapAnimating = (typeof models.anim !== 'undefined' && models.anim.rangeState.playing);
       if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
-      
+
       dataRunner.newPoint(pixels, map);
     }
     $(map.getViewport())

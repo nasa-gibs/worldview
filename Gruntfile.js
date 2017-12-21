@@ -39,15 +39,6 @@ module.exports = function(grunt) {
     optionsPath: optionsPath,
     apache_version: grunt.option('apache-version') || '22',
 
-    buster: {
-      console: {},
-      report: {
-        test: {
-          reporter: 'xml'
-        }
-      }
-    },
-
     copy: {
       apache: {
         src: 'etc/dev/worldview-dev.httpd<%=apache_version%>.conf',
@@ -240,14 +231,6 @@ module.exports = function(grunt) {
       }
     },
 
-    eslint: {
-      options: {
-        configFile: '.eslintrc',
-        format: 'stylish'
-      },
-      src: ['**/*.js', '!node_modules/**/*', '!build/**/*', '!dist/**/*', '!lib/**/*', '!options/**/*', '!web/dist/**/*', '!web/ext/**/*', '!etc/**/*']
-    },
-
     exec: {
       config: {
         command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" bin/wv-options-build "' + env
@@ -306,21 +289,6 @@ module.exports = function(grunt) {
           cwd: '<%= optionsPath %>',
           number: 6
         }
-      }
-    },
-
-    lineremover: {
-      // After removing all the <!-- link.dev --> references, there
-      // are a lot of blank lines in index.html. Remove them
-      release: {
-        files: [
-          {
-            expand: true,
-            cwd: 'build',
-            src: ['**/web/**/*.html'],
-            dest: 'build'
-          }
-        ]
       }
     },
 
@@ -412,24 +380,6 @@ module.exports = function(grunt) {
         ]
       },
 
-      // Remove all development links <!-- link.dev --> and uncomment
-      // all the release links <!-- link.prod -->
-      links: {
-        src: [
-          'build/**/web/index.html', 'build/**/web/pages/*.html'
-        ],
-        overwrite: true,
-        replacements: [
-          {
-            from: /.*link.dev.*/g,
-            to: ''
-          }, {
-            from: /.*link.prod.*(!--|\/\*)(.*)(--|\*\/).*/g,
-            to: '$2'
-          }
-        ]
-      },
-
       rpm_sources: {
         src: [
           'build/rpmbuild/SOURCES/*', 'build/rpmbuild/SPECS/*', '!**/*.tar.bz2'
@@ -486,13 +436,8 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.loadNpmTasks('grunt-buster');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('gruntify-eslint');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-line-remover');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-git-rev-parse');
   grunt.loadNpmTasks('grunt-markdown');
@@ -526,8 +471,6 @@ module.exports = function(grunt) {
     'remove:source',
     'exec:empty',
     'copy:release',
-    'replace:links',
-    'lineremover',
     'mkdir:dist',
     'exec:tar_source_debug',
     'copy:dist_source_debug_versioned',
@@ -574,13 +517,9 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('apache-config', ['load_branding', 'copy:apache', 'replace:apache']);
-
   grunt.registerTask('update-packages', ['exec:python_packages']);
-  grunt.registerTask('check', ['lint', 'test']);
   grunt.registerTask('clean', ['remove:build']);
   grunt.registerTask('distclean', ['remove:build', 'remove:dist']);
-  grunt.registerTask('lint', ['eslint']);
-  grunt.registerTask('test', ['buster:console']);
 
   grunt.registerTask('default', [
     'update-packages',

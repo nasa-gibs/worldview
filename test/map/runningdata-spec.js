@@ -3,7 +3,7 @@ buster.testCase('wv.map.runningdata', {
   errors: null,
 
   setUp: function () {
-    models = {
+    var models = {
       layers: {
         events: {
           on: this.stub()
