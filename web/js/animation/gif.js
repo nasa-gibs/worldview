@@ -7,6 +7,7 @@ import loEach from 'lodash/each';
 import loIsUndefined from 'lodash/isundefined';
 import {GA as googleAnalytics} from 'worldview-components';
 import util from '../util/util';
+import uiIndicator from '../ui/indicator';
 
 export function animationGif(models, config, ui) {
   var self = {};
@@ -62,7 +63,7 @@ export function animationGif(models, config, ui) {
     var stamp;
     var build;
 
-    loader = wvui.indicator.loading();
+    loader = uiIndicator.loading();
     build = function (stamp) {
       var buildProgressBar = function () {
         $progress = $('<progress />') // display progress for GIF creation
@@ -80,7 +81,7 @@ export function animationGif(models, config, ui) {
         if (!progressing) {
           buildProgressBar();
           progressing = true;
-          wvui.indicator.hide(loader);
+          uiIndicator.hide(loader);
         }
         $progress.parent()
           .dialog('option', 'title', 'Creating GIF...'); // set dialog title
@@ -385,7 +386,7 @@ export function animationGif(models, config, ui) {
       current = util.dateAdd(current, ui.anim.ui.getInterval(), 1);
       if (j > 40) { // too many frames
         showUnavailableReason();
-        ui.indicator.hide(loader);
+        uiIndicator.hide(loader);
 
         return false;
       }
@@ -569,7 +570,7 @@ export function animationGif(models, config, ui) {
     } else {
       var headerMsg = '<h3 class=\'wv-data-unavailable-header\'>GIF Not Available</h3>';
       var bodyMsg = 'One or more of the frames requested was unable to be processed';
-      wvui.indicator.hide(loader);
+      uiIndicator.hide(loader);
       var callback = function () {
         $('#timeline-footer')
           .toggleClass('wv-anim-active');
