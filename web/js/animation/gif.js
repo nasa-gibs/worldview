@@ -12,7 +12,7 @@ import uiIndicator from '../ui/indicator';
 export function animationGif(models, config, ui) {
   var self = {};
   var jcropAPI = null;
-  var animCoords = null;
+  var animationCoordinates = null;
   var previousCoords = null;
   var animModel = models.anim;
   var $progress; // progress bar
@@ -94,8 +94,8 @@ export function animationGif(models, config, ui) {
       }
 
       gifshot.createGIF({
-        'gifWidth': animCoords.w,
-        'gifHeight': animCoords.h,
+        'gifWidth': animationCoordinates.w,
+        'gifHeight': animationCoordinates.h,
         'images': imageArra,
         'stamp': stamp,
         'textAlign': 'right',
@@ -136,20 +136,20 @@ export function animationGif(models, config, ui) {
    */
   var calcRes = function (mode) { // return either multiplier or string resolution
     // geographic has 10 zoom levels from 0 to 9, polar projections have 8 from 0 to 7
-    var str, res;
+    var str, resolution;
     var isGeographic = models.proj.selected.id === 'geographic';
 
     // Map the zoom level from 0-9 / 0-7 to an index from 0-4
-    var zoomRes = [40, 20, 4, 2, 1];
+    var zoomResolution = [40, 20, 4, 2, 1];
 
     if (isGeographic) {
-      res = zoomRes[Math.floor(ui.map.selected.getView().getZoom() / 2)];
+      resolution = zoomResolution[Math.floor(ui.map.selected.getView().getZoom() / 2)];
     } else {
-      res = zoomRes[Math.floor(((ui.map.selected.getView().getZoom() + 2) / 2))];
+      resolution = zoomResolution[Math.floor(((ui.map.selected.getView().getZoom() + 2) / 2))];
     }
 
-    if (mode === 0) { return res; } else {
-      switch (res) {
+    if (mode === 0) { return resolution; } else {
+      switch (resolution) {
         case 1:
           str = '250m';
           break;
@@ -308,8 +308,8 @@ export function animationGif(models, config, ui) {
    *
    */
   var getCoords = function () {
-    return [ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x), Math.floor(animCoords.y2)]),
-      ui.map.selected.getCoordinateFromPixel([Math.floor(animCoords.x2), Math.floor(animCoords.y)])];
+    return [ui.map.selected.getCoordinateFromPixel([Math.floor(animationCoordinates.x), Math.floor(animationCoordinates.y2)]),
+      ui.map.selected.getCoordinateFromPixel([Math.floor(animationCoordinates.x2), Math.floor(animationCoordinates.y)])];
   };
   /*
    * Dimenions from zoom & projection
@@ -322,10 +322,10 @@ export function animationGif(models, config, ui) {
    */
   var getDimensions = function (lonlat, proj) {
     var conversionFactor = proj === 'geographic' ? 0.002197 : 256;
-    var res = calcRes(0);
+    var resolution = calcRes(0);
     return [
-      Math.round((Math.abs(lonlat[1][0] - lonlat[0][0]) / conversionFactor) / Number(res)), // width
-      Math.round((Math.abs(lonlat[1][1] - lonlat[0][1]) / conversionFactor) / Number(res)) // height
+      Math.round((Math.abs(lonlat[1][0] - lonlat[0][0]) / conversionFactor) / Number(resolution)), // width
+      Math.round((Math.abs(lonlat[1][1] - lonlat[0][1]) / conversionFactor) / Number(resolution)) // height
     ];
   };
   /*
@@ -492,7 +492,7 @@ export function animationGif(models, config, ui) {
         });
 
       var $catalog =
-        '<div class=\'gif-results-dialog\' style=\'height: ' + animCoords.h + 'px; min-height: 210px;\' >' +
+        '<div class=\'gif-results-dialog\' style=\'height: ' + animationCoordinates.h + 'px; min-height: 210px;\' >' +
         '<div>' +
         '<div><b>' +
         'Size: ' +
@@ -541,9 +541,9 @@ export function animationGif(models, config, ui) {
       $dialogBodyCase.append($catalog);
       // calculate the offset of the dialog position based on image size to display it properly
       // only height needs to be adjusted to center the dialog
-      var posWidth = animCoords.w * 1 / window.innerWidth;
-      var posHeight = animCoords.h * 50 / window.innerHeight;
-      var atString = 'center-' + posWidth.toFixed() + '% center-' + posHeight.toFixed() + '%';
+      var positionWidth = animationCoordinates.w * 1 / window.innerWidth;
+      var positionHeight = animationCoordinates.h * 50 / window.innerHeight;
+      var positionString = 'center-' + positionWidth.toFixed() + '% center-' + positionHeight.toFixed() + '%';
 
       // Create a dialog over the view and place the image there
       var $imgDialog = wvui.getDialog()
@@ -552,10 +552,10 @@ export function animationGif(models, config, ui) {
       $imgDialog.dialog({
         dialogClass: 'wv-panel wv-gif-results',
         title: 'Your GIF',
-        width: animCoords.w + 198,
+        width: animationCoordinates.w + 198,
         resizable: false,
         close: function () {
-          animCoords = null;
+          animationCoordinates = null;
           $imgDialog.find('img')
             .remove();
           $('#timeline-footer')
@@ -563,7 +563,7 @@ export function animationGif(models, config, ui) {
         },
         position: { // based on image size
           my: 'center center',
-          at: atString,
+          at: positionString,
           of: window
         }
       });
@@ -596,10 +596,10 @@ export function animationGif(models, config, ui) {
     var lonlat2 = ui.map.selected.getCoordinateFromPixel([Math.floor(c.x2), Math.floor(c.y)]);
 
     var conversionFactor = models.proj.selected.id === 'geographic' ? 0.002197 : 256;
-    var res = calcRes(0);
+    var resolution = calcRes(0);
 
-    var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(res));
-    var imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(res));
+    var imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(resolution));
+    var imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(resolution));
 
     return ((imgWidth * imgHeight * 24) / 8388608)
       .toFixed(2);
@@ -619,7 +619,7 @@ export function animationGif(models, config, ui) {
   var removeCrop = function () {
     $('#wv-map')
       .insertAfter('#productsHolder'); // retain map element before disabling jcrop
-    animCoords = undefined;
+    animationCoordinates = undefined;
     jcropAPI.destroy();
     if (models.proj.selected.id === 'geographic') { ui.map.events.trigger('selectiondone'); }
   };
@@ -848,14 +848,14 @@ export function animationGif(models, config, ui) {
         fullScreen: true,
         setSelect: previousCoords,
         onSelect: function (c) {
-          animCoords = c;
+          animationCoordinates = c;
           $('#wv-gif-width')
             .html((c.w));
           $('#wv-gif-height')
             .html((c.h));
         },
         onChange: function (c) { // Update gif size and image size in MB
-          animCoords = c;
+          animationCoordinates = c;
 
           if (c.h !== 0 && c.w !== 0) { previousCoords = c; } // don't save coordinates if empty selection
           var dataSize = calcSize(c);
