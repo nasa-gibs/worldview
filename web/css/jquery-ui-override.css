@@ -17,3 +17,6 @@ a.ui-button.ui-state-default.ui-state-hover {
   background-image: none;
   color: #404040;
 }
+.ui-widget-header, .ui-widget-content {
+  color: #fff;
+}
