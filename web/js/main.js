@@ -54,8 +54,8 @@ import {palettesModel} from './palettes/model';
 // import NaturalEventsUI from './naturalEvents/ui';
 // import NaturalEventsRequest from './naturalEvents/request';
 // Image
-import imageRubberband from './image/rubberband';
-import imagePanel from './image/panel';
+import {imageRubberband} from './image/rubberband';
+import {imagePanel} from './image/panel';
 // Notifications
 import {notificationsUi} from './notifications/ui';
 // UI
@@ -260,8 +260,8 @@ window.onload = () => {
       //ui.dateWheels = dateWheels(models, config);
     }
 
-    // ui.rubberband = imageRubberband(models, ui, config);
-    // ui.image = imagePanel(models, ui, config);
+    ui.rubberband = imageRubberband(models, ui, config);
+    ui.image = imagePanel(models, ui, config);
     if (config.features.dataDownload) {
       // ui.data = dataui(models, ui, config);
       // FIXME: Why is this here?
