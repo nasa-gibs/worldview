@@ -6,7 +6,7 @@ import wvui from './ui';
 import util from '../util/util';
 import feedbackModal from '../feedback';
 
-export function info (ui, config) {
+export function uiInfo (ui, config) {
   var selector = '#wv-info-button';
   var $button = $('<input />')
     .attr('type', 'checkbox')
