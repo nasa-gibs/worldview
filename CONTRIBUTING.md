@@ -13,7 +13,8 @@ If you have any questions or ideas, or notice any problems or bugs, first [searc
 If you want to submit your own contributions, follow these steps;
 
 * Fork the Worldview repo
-* Create a new branch from the branch you'd like to contribute to
+* Create a new branch off of the branch you'd like to contribute to
+* ** Note: ** If there is not a feature branch already created for you to branch off of, you will want to branch off of `development` to create your own feature branch. We only branch directly off of `master` to resolve urgent bugs.
 * If an issue does't already exist, submit one (see above)
 * [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the nasa-gibs/worldview repo
 * Be sure to [mention the corresponding issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes [#480](https://github.com/nasa-gibs/worldview/issues/480)"
