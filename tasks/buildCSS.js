@@ -4,12 +4,11 @@ const postcss = require('postcss');
 const postcssImport = require('postcss-import');
 const url = require('postcss-url');
 const autoprefixer = require('autoprefixer');
-const stylelint = require('stylelint');
 const cssnano = require('cssnano');
 
 fs.readFile('web/css/main.css', (err, css) => {
   if (err) console.log(err);
-  postcss([postcssImport, autoprefixer, stylelint, cssnano])
+  postcss([postcssImport, autoprefixer, cssnano])
     .use(url({
       url: 'copy',
       assetsPath: 'assets/css'
