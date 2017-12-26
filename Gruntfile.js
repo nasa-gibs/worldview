@@ -16,8 +16,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mkdir'); // Used to make build directories
   grunt.loadNpmTasks('grunt-text-replace'); // Used to replace token strings
 
-  var env = grunt.option('env') || 'release';
-
   var hasCustomOptions = fs.existsSync('options');
   var optionsPath = hasCustomOptions ? 'options' : 'node_modules/worldview-options-eosdis';
 
