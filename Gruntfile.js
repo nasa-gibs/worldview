@@ -29,14 +29,6 @@ module.exports = function(grunt) {
     findCmd = 'find build -type d -empty -delete';
   }
 
-  // Platform specific location for Python
-  var pythonPath;
-  if (process.platform === 'win32') {
-    pythonPath = 'python/Scripts';
-  } else {
-    pythonPath = 'python/bin';
-  }
-
   grunt.initConfig({
 
     pkg: pkg,
@@ -236,23 +228,12 @@ module.exports = function(grunt) {
     },
 
     exec: {
-      config: {
-        command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" bin/wv-options-build "' + env
-      },
 
       // After removing JavaScript and CSS files that are no longer
       // need in a release build, there are a lot of empty directories.
       // Remove all of them.
       empty: {
         command: findCmd
-      },
-
-      fetch: {
-        command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" FETCH_GC=1 bin/wv-options-build "' + env
-      },
-
-      python_packages: {
-        command: 'virtualenv python && bash -c "PATH=' + pythonPath + ':${PATH} pip install xmltodict isodate"'
       },
 
       rpmbuild: {
@@ -470,10 +451,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('config', [
-    'clean:build_config', // Clear some directories
     'git-rev-parse:config', // Get commit hash
-    'clean:config_src', // Clear some directories
-    'exec:config', // Run wv-options-build bash script to make /build/options
     'markdown', // Parse metadata and pages md files into html
     'copy:config_src', // Copy build results to web/config and web/brand
     'copy:brand_info', // Copy brand config file to build directory
@@ -512,8 +490,6 @@ module.exports = function(grunt) {
   grunt.registerTask('distclean', ['remove:build', 'remove:dist']);
 
   grunt.registerTask('default', [
-    'exec:python_packages', // Install/update Python packages (xmltodict and isodate)
-    'exec:fetch', // Use options to fetch GetCapabilities with a bash script
     'build', // Copy assets to build directories and generate tar files
     'config', // Build options artifacts and put them in build, dist, web
     'site' // Combine /build/worldview and /build/options to create final build

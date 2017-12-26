@@ -3,6 +3,7 @@
 /dist
 /node_modules
 /web/ext/node_modules/*
+/.node-virtualenv
 python
 *.pyc
 .project

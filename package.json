@@ -13,7 +13,7 @@
     "node": "8.8.1"
   },
   "scripts": {
-    "preinstall": "node version-check.js",
+    "postinstall": "virtualenv-postinstall",
     "start": "node ./bin/www",
     "test": "npm run lint && run-p test:server test:run",
     "test:server": "buster-server -c",
@@ -24,15 +24,17 @@
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
     "lint:js": "eslint .",
-    "e2e": "run-s --print-name --continue-on-error --silent e2e:*",
+    "e2e": "run-s --continue-on-error --silent e2e:*",
     "e2e:chrome": "nightwatch -e chrome",
     "e2e:firefox": "nightwatch -e firefox --skiptags wip",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
     "report": "node e2e/create-report.js",
-    "build": "run-s --print-name build:* && grunt",
+    "build": "npm run getcapabilities && run-p build:* && grunt",
+    "build:config": "bin/wv-options-build release",
     "build:css": "node ./tasks/buildCSS",
     "build:js": "node ./tasks/buildJS",
-    "build:tests": "node ./tasks/buildJS --tests"
+    "build:tests": "node ./tasks/buildJS --tests",
+    "getcapabilities": "FETCH_GC=1 bin/wv-options-build release"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
@@ -82,6 +84,7 @@
     "stylelint": "^8.0.0",
     "uglifyify": "^4.0.5",
     "underscore": "^1.8.3",
+    "virtualenv": "^0.3.1",
     "watchify": "^3.9.0"
   },
   "dependencies": {
