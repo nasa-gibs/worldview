@@ -44,10 +44,13 @@ def process_remote(entry):
     response = urllib.urlopen(url)
     contents = response.read()
     output_file = os.path.join(output_dir, entry["to"])
+
+    # Write GetCapabilities responses to XML files
     with open(output_file, "w") as fp:
         fp.write(contents)
     gc = xmltodict.parse(contents)
 
+    # Find all colormaps in GetCapabilities responses and store them in memory
     try:
         for layer in gc["Capabilities"]["Contents"]["Layer"]:
             ident = layer["ows:Identifier"]
@@ -70,6 +73,7 @@ def process_remote(entry):
         print(ident)
         print(str(traceback.format_exc()))
 
+# Fetch every colormap from the API and write response to file system
 def process_colormaps():
     print "%s: Fetching %d colormaps" % (prog, len(colormaps))
     sys.stdout.flush()
