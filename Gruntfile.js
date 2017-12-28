@@ -349,7 +349,8 @@ module.exports = function(grunt) {
         '!build/worldview-debug/web/js/wv.js',
         '!build/worldview-debug/web/js/ol.js',
         '!build/worldview-debug/web/css/bulkDownload.css',
-        '!build/worldview-debug/web/ext/**/*'
+        '!build/worldview-debug/web/ext/**/*',
+        '!build/worldview-debug/web/build/**/*'
       ],
       config_src: ['web/config/**/*'],
       build_source: [
