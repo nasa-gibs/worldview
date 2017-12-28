@@ -12,7 +12,6 @@ var buildNumber = moment.utc().format('YYMMDDHHmmss');
 
 module.exports = function(grunt) {
   var pkg = require('./package.json');
-  var env = grunt.option('env') || 'release';
 
   var hasCustomOptions = fs.existsSync('options');
   var optionsPath = hasCustomOptions ? 'options' : 'node_modules/worldview-options-eosdis';
@@ -23,14 +22,6 @@ module.exports = function(grunt) {
     findCmd = ';'; // cygwin find doesn't really work in Windows compared to CentOS
   } else {
     findCmd = 'find build -type d -empty -delete';
-  }
-
-  // Platform specific location for Python
-  var pythonPath;
-  if (process.platform === 'win32') {
-    pythonPath = 'python/Scripts';
-  } else {
-    pythonPath = 'python/bin';
   }
 
   grunt.initConfig({
@@ -232,23 +223,12 @@ module.exports = function(grunt) {
     },
 
     exec: {
-      config: {
-        command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" bin/wv-options-build "' + env
-      },
 
       // After removing JavaScript and CSS files that are no longer
       // need in a release build, there are a lot of empty directories.
       // Remove all of them.
       empty: {
         command: findCmd
-      },
-
-      fetch: {
-        command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" FETCH_GC=1 bin/wv-options-build "' + env
-      },
-
-      python_packages: {
-        command: 'virtualenv python && bash -c "PATH=' + pythonPath + ':${PATH} pip install xmltodict isodate"'
       },
 
       rpmbuild: {
@@ -483,7 +463,6 @@ module.exports = function(grunt) {
     'remove:build_config',
     'git-rev-parse:config',
     'remove:config_src',
-    'exec:config',
     'markdown',
     'copy:config_src',
     'copy:brand_info',
@@ -491,8 +470,6 @@ module.exports = function(grunt) {
     'exec:tar_config',
     'copy:dist_config_versioned'
   ]);
-
-  grunt.registerTask('fetch', ['exec:fetch']);
 
   grunt.registerTask('site', [
     'load_branding',
@@ -518,13 +495,10 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('apache-config', ['load_branding', 'copy:apache', 'replace:apache']);
-  grunt.registerTask('update-packages', ['exec:python_packages']);
   grunt.registerTask('clean', ['remove:build']);
   grunt.registerTask('distclean', ['remove:build', 'remove:dist']);
 
   grunt.registerTask('default', [
-    'update-packages',
-    'fetch',
     'build',
     'config',
     'site'

@@ -4,6 +4,7 @@
 /node_modules
 /web/ext/node_modules/*
 python
+.node-virtualenv/
 *.pyc
 .project
 .settings

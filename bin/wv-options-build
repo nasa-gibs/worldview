@@ -22,14 +22,15 @@ die() {
     exit 1
 }
 
-ENV=$1
-
 [ -d "$SRC_DIR" ] || die "Options directory does not exist"
 
+# Activate virtual Python environment
+PATH=.node-virtualenv/bin:.node-virtualenv/Scripts:${PATH}
+
 if [ "$FETCH_GC" ] ; then
-    rm -rf "$OPT_DIR/$ENV/gc/*"
-    rm -rf "$OPT_DIR/$ENV/colormaps/gc/*"
-    "$BIN_DIR/wv-options-fetch" "$OPT_DIR/$ENV/config.json" "$OPT_DIR/$ENV/gc"
+    rm -rf "$OPT_DIR/release/gc/*"
+    rm -rf "$OPT_DIR/release/colormaps/gc/*"
+    "$BIN_DIR/wv-options-fetch" "$OPT_DIR/release/config.json" "$OPT_DIR/release/gc"
     exit 0
 fi
 
@@ -39,9 +40,9 @@ mkdir -p "$BUILD_DIR" "$DEST_DIR"
 cp -r "$SRC_DIR"/common/* "$BUILD_DIR"
 
 if hash rsync 2>/dev/null; then
-    rsync -a "$SRC_DIR/$ENV"/* "$BUILD_DIR"
+    rsync -a "$SRC_DIR/release"/* "$BUILD_DIR"
 else
-    cp -r "$SRC_DIR/$ENV"/* "$BUILD_DIR"
+    cp -r "$SRC_DIR/release"/* "$BUILD_DIR"
 fi
 
 mkdir -p "$DEST_DIR/config"
@@ -60,7 +61,7 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
     if [ -d "$BUILD_DIR"/gc/colormaps ] ; then
         cp -r "$BUILD_DIR"/gc/colormaps "$BUILD_DIR"/colormaps/gc
     fi
-    "$BIN_DIR/wv-options-colormap" "$OPT_DIR/$ENV/config.json" \
+    "$BIN_DIR/wv-options-colormap" "$OPT_DIR/release/config.json" \
             "$BUILD_DIR/colormaps" \
             "$BUILD_DIR/config/palettes"
 fi
