@@ -27,6 +27,7 @@ die() {
 # Activate virtual Python environment
 PATH=.node-virtualenv/bin:.node-virtualenv/Scripts:${PATH}
 
+# If $FETCH_GC is set fetch GetCapabilities
 if [ "$FETCH_GC" ] ; then
     rm -rf "$OPT_DIR/release/gc/*"
     rm -rf "$OPT_DIR/release/colormaps/gc/*"
@@ -34,6 +35,7 @@ if [ "$FETCH_GC" ] ; then
     exit 0
 fi
 
+# Copy options files to build directory, and various other file operations
 rm -rf "$BUILD_DIR" "$DEST_DIR"
 mkdir -p "$BUILD_DIR" "$DEST_DIR"
 
@@ -52,10 +54,13 @@ if [ -e "$BUILD_DIR/features.json" ] ; then
     cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
 fi
 
+# Run wv-options-wmts script with config.json
 if [ -e "$BUILD_DIR/config.json" ] ; then
     "$BIN_DIR/wv-options-wmts" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
             "$BUILD_DIR/config/wv.json/_wmts" "$BUILD_DIR/colormaps"
 fi
+
+# Run wv-options-colormap and move colormaps where we want them
 if [ -e "$BUILD_DIR/colormaps" ] ; then
     mkdir -p "$BUILD_DIR"/config/palettes
     if [ -d "$BUILD_DIR"/gc/colormaps ] ; then
@@ -66,6 +71,7 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
             "$BUILD_DIR/config/palettes"
 fi
 
+# Run wv-options-merge on all directories in /config
 configs=$(ls "$BUILD_DIR/config")
 for config in $configs; do
     case $config in
@@ -79,9 +85,11 @@ for config in $configs; do
     esac
 done
 
+# Copy brand files from build to dest
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
+# Validate the options build
 "$BIN_DIR"/wv-options-validate "$BUILD_DIR/config.json" "$DEST_DIR/config"
 
 exit 0

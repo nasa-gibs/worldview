@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var moment = require('moment');
+var pkg = require('./package.json');
 
 // Build date shown in the About box
 var buildTimestamp = moment.utc().format('MMMM DD, YYYY [-] HH:mm [UTC]');
@@ -11,7 +12,13 @@ var buildNonce = moment.utc().format('YYYYMMDDHHmmssSSS');
 var buildNumber = moment.utc().format('YYMMDDHHmmss');
 
 module.exports = function(grunt) {
-  var pkg = require('./package.json');
+  grunt.loadNpmTasks('grunt-contrib-clean'); // Used to remove build artifacts
+  grunt.loadNpmTasks('grunt-contrib-copy'); // Used to move build artifacts around
+  grunt.loadNpmTasks('grunt-exec'); // Used to run bash scripts
+  grunt.loadNpmTasks('grunt-git-rev-parse'); // Used to get commit hashes
+  grunt.loadNpmTasks('grunt-markdown'); // Used to convert md files to html
+  grunt.loadNpmTasks('grunt-mkdir'); // Used to make build directories
+  grunt.loadNpmTasks('grunt-text-replace'); // Used to replace token strings
 
   var hasCustomOptions = fs.existsSync('options');
   var optionsPath = hasCustomOptions ? 'options' : 'node_modules/worldview-options-eosdis';
@@ -316,7 +323,7 @@ module.exports = function(grunt) {
       }
     },
 
-    remove: {
+    clean: {
       build: ['build'],
       dist: ['dist'],
       // Removes all JavaScript, CSS, and auxillary files not necessary
@@ -417,16 +424,6 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-exec');
-  grunt.loadNpmTasks('grunt-git-rev-parse');
-  grunt.loadNpmTasks('grunt-markdown');
-  grunt.loadNpmTasks('grunt-minjson');
-  grunt.loadNpmTasks('grunt-mkdir');
-  grunt.loadNpmTasks('grunt-text-replace');
-  grunt.loadNpmTasks('grunt-rename');
-
   grunt.registerTask('load_branding', 'Load branding', function () {
     var brand = grunt.file.readJSON('build/options/brand.json');
     brand.officialName = brand.officialName || brand.name;
@@ -443,59 +440,58 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('build', [
-    'clean:build_source',
-    'git-rev-parse:source',
-    'copy:source',
-    'clean:source',
-    'exec:empty',
-    'copy:release',
-    'mkdir:dist',
-    'exec:tar_source_debug',
-    'copy:dist_source_debug_versioned',
-    'exec:tar_source_release',
-    'copy:dist_source_release_versioned'
+    'clean:build_source', // Clear some directories
+    'git-rev-parse:source', // Get commit hash
+    'copy:source', // Copy source files into build/worldview-debug
+    'clean:source', // Removes unneccesary assets from build directory
+    'exec:empty', // Delete empty directories in the build
+    'copy:release', // Copy build/worldview-debug into build/worldview
+    'mkdir:dist', // Make dist directory
+    'exec:tar_source_debug', // Make worldview-debug tar from /build
+    'copy:dist_source_debug_versioned', // Add version number and hash to copy of tar
+    'exec:tar_source_release', // Make worldview-debug tar from /build
+    'copy:dist_source_release_versioned' // Add version number and hash to copy of tar
   ]);
 
   grunt.registerTask('config', [
-    'clean:build_config',
-    'git-rev-parse:config',
-    'clean:config_src',
-    'markdown',
-    'copy:config_src',
-    'copy:brand_info',
-    'mkdir:dist',
-    'exec:tar_config',
-    'copy:dist_config_versioned'
+    'git-rev-parse:config', // Get commit hash
+    'markdown', // Parse metadata and pages md files into html
+    'copy:config_src', // Copy build results to web/config and web/brand
+    'copy:brand_info', // Copy brand config file to build directory
+    'mkdir:dist', // Make dist directory
+    'exec:tar_config', // Create worldview-config tar from options directory
+    'copy:dist_config_versioned' // Create copy of tar with version number
   ]);
 
   grunt.registerTask('site', [
-    'load_branding',
-    'clean:build_site',
-    'copy:site',
-    'replace:tokens',
-    'exec:tar_site_debug',
-    'copy:dist_site_debug_versioned',
-    'exec:tar_site_release',
-    'copy:dist_site_release_versioned'
+    'load_branding', // Set grunt variables from built options file
+    'clean:build_site', // Remove some build directories
+    'copy:site', // Copy /worldview and /worldview-config builds to /build/site
+    'replace:tokens', // Replace string placeholders in JS and HTML (no CSS)
+    'exec:tar_site_debug', // Create debug tar
+    'copy:dist_site_debug_versioned', // Create debug tar with version number
+    'exec:tar_site_release', // Create release tar
+    'copy:dist_site_release_versioned' // Create release tar with version number
   ]);
 
   grunt.registerTask('rpm-only', [
-    'load_branding',
-    'git-rev-parse:source',
-    'clean:rpmbuild',
-    'mkdir:rpmbuild',
-    'copy:rpm_sources',
-    'replace:rpm_sources',
-    'clean:dist_rpm',
-    'exec:rpmbuild',
-    'copy:rpm'
+    'load_branding', // Set grunt variables from built options file
+    'git-rev-parse:source', // Get commit hash
+    'clean:rpmbuild', // Remove build/rpmbuild directory
+    'mkdir:rpmbuild', // Create build/rpmbuild directory
+    'copy:rpm_sources', // Copy sources needed to build/rpmbuild
+    'replace:rpm_sources', // Replace name, version, release and build numbers in rpm
+    'clean:dist_rpm', // Remove any existing .rpm files
+    'exec:rpmbuild', // Run the command to build the rpm
+    'copy:rpm' // Copy rpm files to /dist
   ]);
 
+  // Set grunt variables, move .conf file to /dist and replace @WORLDVIEW@ and @ROOT@
   grunt.registerTask('apache-config', ['load_branding', 'copy:apache', 'replace:apache']);
 
   grunt.registerTask('default', [
-    'build',
-    'config',
-    'site'
+    'build', // Copy assets to build directories and generate tar files
+    'config', // Build options artifacts and put them in build, dist, web
+    'site' // Combine /build/worldview and /build/options to create final build
   ]);
 };
