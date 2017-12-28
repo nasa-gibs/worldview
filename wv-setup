@@ -61,11 +61,6 @@ if [ ! -e "/usr/local/bin/virtualenv" ] ; then
     sudo easy_install virtualenv==1.10.1
 fi
 
-if [ ! -d "$BASE_DIR/python" ] ; then
-    echo "$PROG: ***** Installing python dependencies"
-    "$BASE_DIR"/wv-python
-fi
-
 if [ ! -d "$BASE_DIR/options" ] ; then
     echo "$PROG: ***** Fetching options"
     if [ "$WORLDVIEW" ] ; then

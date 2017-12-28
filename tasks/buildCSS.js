@@ -4,7 +4,6 @@ const postcss = require('postcss');
 const postcssImport = require('postcss-import');
 const url = require('postcss-url');
 const autoprefixer = require('autoprefixer');
-const stylelint = require('stylelint');
 const cssnano = require('cssnano');
 
 const entryPoint = 'web/css/main.css';
@@ -13,7 +12,7 @@ const outputPath = outputDir + 'wv.css';
 
 fs.readFile(entryPoint, (err, css) => {
   if (err) console.log(err);
-  postcss([postcssImport, autoprefixer, stylelint, cssnano])
+  postcss([postcssImport, autoprefixer, cssnano])
     .use(url({
       url: 'copy',
       assetsPath: 'assets/css'

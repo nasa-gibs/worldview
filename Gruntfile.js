@@ -427,9 +427,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-rename');
 
-  // Lets use 'clean' as a target instead of the name of the task
-  grunt.renameTask('clean', 'remove');
-
   grunt.registerTask('load_branding', 'Load branding', function () {
     var brand = grunt.file.readJSON('build/options/brand.json');
     brand.officialName = brand.officialName || brand.name;
@@ -446,10 +443,10 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('build', [
-    'remove:build_source',
+    'clean:build_source',
     'git-rev-parse:source',
     'copy:source',
-    'remove:source',
+    'clean:source',
     'exec:empty',
     'copy:release',
     'mkdir:dist',
@@ -460,9 +457,9 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('config', [
-    'remove:build_config',
+    'clean:build_config',
     'git-rev-parse:config',
-    'remove:config_src',
+    'clean:config_src',
     'markdown',
     'copy:config_src',
     'copy:brand_info',
@@ -473,7 +470,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('site', [
     'load_branding',
-    'remove:build_site',
+    'clean:build_site',
     'copy:site',
     'replace:tokens',
     'exec:tar_site_debug',
@@ -485,18 +482,16 @@ module.exports = function(grunt) {
   grunt.registerTask('rpm-only', [
     'load_branding',
     'git-rev-parse:source',
-    'remove:rpmbuild',
+    'clean:rpmbuild',
     'mkdir:rpmbuild',
     'copy:rpm_sources',
     'replace:rpm_sources',
-    'remove:dist_rpm',
+    'clean:dist_rpm',
     'exec:rpmbuild',
     'copy:rpm'
   ]);
 
   grunt.registerTask('apache-config', ['load_branding', 'copy:apache', 'replace:apache']);
-  grunt.registerTask('clean', ['remove:build']);
-  grunt.registerTask('distclean', ['remove:build', 'remove:dist']);
 
   grunt.registerTask('default', [
     'build',
