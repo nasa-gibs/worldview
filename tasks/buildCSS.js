@@ -7,7 +7,11 @@ const autoprefixer = require('autoprefixer');
 const stylelint = require('stylelint');
 const cssnano = require('cssnano');
 
-fs.readFile('web/css/main.css', (err, css) => {
+const entryPoint = 'web/css/main.css';
+const outputDir = './web/build/';
+const outputPath = outputDir + 'wv.css';
+
+fs.readFile(entryPoint, (err, css) => {
   if (err) console.log(err);
   postcss([postcssImport, autoprefixer, stylelint, cssnano])
     .use(url({
@@ -15,15 +19,15 @@ fs.readFile('web/css/main.css', (err, css) => {
       assetsPath: 'assets/css'
     }))
     .process(css, {
-      from: 'web/css/main.css',
-      to: 'web/build/wv.css',
+      from: entryPoint,
+      to: outputPath,
       map: { inline: false } // Source maps are saved to a file
     })
     .then(result => {
-      fs.writeFile('web/build/wv.css', result.css, function() {});
+      fs.writeFile(outputPath, result.css, function() {});
       if (result.map) {
         // This allows debugging while still minifying the output in dev
-        fs.writeFile('web/build/wv.css.map', result.map, function() {});
+        fs.writeFile(outputPath + '.map', result.map, function() {});
       }
     });
 });
