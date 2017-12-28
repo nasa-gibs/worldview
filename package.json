@@ -13,7 +13,20 @@
     "node": "8.8.1"
   },
   "scripts": {
+    "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
+    "build": "run-s build:* && grunt",
+    "build:css": "node ./tasks/buildCSS",
+    "build:js": "node ./tasks/buildJS",
+    "build:tests": "node ./tasks/buildJS --tests",
+    "e2e": "run-s --continue-on-error --silent e2e:*",
+    "e2e:chrome": "nightwatch -e chrome",
+    "e2e:firefox": "nightwatch -e firefox --skiptags wip",
+    "lint": "run-s lint:*",
+    "lint:css": "stylelint ./web/css/**/*.css",
+    "lint:js": "eslint .",
     "preinstall": "node version-check.js",
+    "postinstall": "virtualenv .python",
+    "report": "node e2e/create-report.js",
     "start": "node ./bin/www",
     "test": "npm run lint && run-p test:server test:run",
     "test:server": "buster-server -c",
@@ -21,23 +34,13 @@
     "test:end": "run-script-os",
     "test:end:darwin:linux": "pkill -f buster-server",
     "test:end:win32": "tskill node",
-    "lint": "run-s lint:*",
-    "lint:css": "stylelint ./web/css/**/*.css",
-    "lint:js": "eslint .",
-    "e2e": "run-s --print-name --continue-on-error --silent e2e:*",
-    "e2e:chrome": "nightwatch -e chrome",
-    "e2e:firefox": "nightwatch -e firefox --skiptags wip",
-    "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
-    "report": "node e2e/create-report.js",
-    "build": "run-s --print-name build:* && grunt",
-    "build:css": "node ./tasks/buildCSS",
-    "build:js": "node ./tasks/buildJS",
-    "build:tests": "node ./tasks/buildJS --tests",
     "watch": "npm-watch"
   },
   "watch": {
     "build:css": {
-      "patterns": ["web/css/**/*"],
+      "patterns": [
+        "web/css/**/*"
+      ],
       "extensions": "css"
     },
     "build:js": "This task self-watches as long as $NODE_ENV=development"
