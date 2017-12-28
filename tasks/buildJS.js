@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const browserify = require('browserify');
-// const watchify = require('watchify');
+const watchify = require('watchify');
 const minimist = require('minimist');
 
 const argv = minimist(process.argv.slice(2));
@@ -13,8 +13,10 @@ const outputPath = outputDir + (isTest ? 'wv-test-bundle.js' : 'wv.js');
 
 var bundler = browserify(entryPoint, {
   debug: isDebug, // Include source maps (makes bundle size larger)
-  fullPaths: isDebug // For use with https://www.npmjs.com/package/disc
-  // plugin: [isDebug ? watchify : null]
+  fullPaths: isDebug, // For use with https://www.npmjs.com/package/disc
+  cache: {}, // Required for watchify
+  packageCache: {}, // Required for watchify
+  plugin: [isDebug ? watchify : null]
 }).transform('babelify', {
   presets: ['env']
 }).transform('browserify-shim', {
