@@ -16,7 +16,7 @@ Information here is incomplete and can be flushed out on an as-needed basis.
 
 All paths in the document are relative to the options repository root unless specified otherwise.
 
-After making any changes to the configuration, run ``grunt config`` from the command line to rebuild the configuration for use by the application.
+After making any changes to the configuration, run ``npm run build:config`` from the command line to rebuild the configuration for use by the application.
 
 ## New Layers
 
@@ -150,6 +150,7 @@ First, layers must be added to `config/wv.json/layers` and `config/wv.json/layer
   - Create .md file in `config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
 - Add Data Download for product, if it exists
   - Refer to [Data Download](https://github.com/nasa-gibs/worldview/blob/master/doc/data_download.md) and create JSON file in `config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
+  - Rebuild the configuration with `npm run build:config` for use by the application.
 
 ## New Map Sources
 
