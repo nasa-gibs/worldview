@@ -14,9 +14,9 @@
   },
   "scripts": {
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
-    "build": "npm run getcapabilities && run-p build:* && grunt",
+    "build": "npm run getcapabilities && run-p build:* && grunt build site",
     "build:css": "node ./tasks/buildCSS",
-    "build:config": "bin/wv-options-build",
+    "build:config": "bin/wv-options-build && grunt config",
     "build:js": "node ./tasks/buildJS",
     "build:tests": "node ./tasks/buildJS --tests",
     "e2e": "run-s --continue-on-error --silent e2e:*",
