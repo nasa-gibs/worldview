@@ -9,17 +9,17 @@ echo "Unpacking Build Artifacts"
   tar xf worldview-debug.tar.bz2 && \
   tar xf worldview-config.tar.bz2
 )
-echo "installing npm dependencies"
+echo "Installing Dependencies"
 if ! npm install ; then
   echo "ERROR: \"npm install\" failed" &>2
   exit 1
 fi
-echo "Generating site via 'grunt site'"
+echo "Combining build results from options and Worldview repos"
 if ! grunt site ; then
   echo "ERROR: \"grunt site\" failed" &>2
   exit 1
 fi
-echo "Generating rpm via 'grunt rpm-only'"
+echo "Generating an RPM of Worldview"
 if ! grunt rpm-only ; then
   echo "ERROR: \"grunt rpm-only\" failed" &>2
   exit 1
