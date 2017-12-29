@@ -36,7 +36,7 @@
     "test:end": "run-script-os",
     "test:end:darwin:linux": "pkill -f buster-server",
     "test:end:win32": "tskill node",
-    "watch": "npm-watch"
+    "watch": "WORLDVIEW_WATCH='active' npm-watch"
   },
   "watch": {
     "build:css": {
@@ -45,7 +45,7 @@
       ],
       "extensions": "css"
     },
-    "build:js": "This task self-watches as long as $NODE_ENV=development"
+    "build:js": "This task self-watches as long as $WORLDVIEW_WATCH=active"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",

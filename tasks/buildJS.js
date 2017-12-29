@@ -6,6 +6,7 @@ const minimist = require('minimist');
 
 const argv = minimist(process.argv.slice(2));
 const isDebug = process.env.NODE_ENV === 'development';
+const isWatching = process.env.WORLDVIEW_WATCH === 'active';
 const isTest = argv.tests;
 
 const entryPoint = isTest ? './test/main.js' : './web/js/main.js';
@@ -17,7 +18,7 @@ var bundler = browserify(entryPoint, {
   fullPaths: isDebug, // For use with https://www.npmjs.com/package/disc
   cache: {}, // Required for watchify
   packageCache: {}, // Required for watchify
-  plugin: [isDebug ? watchify : null]
+  plugin: [isWatching ? watchify : null]
 }).transform('babelify', {
   presets: ['env']
 }).transform('browserify-shim', {
