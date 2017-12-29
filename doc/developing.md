@@ -22,6 +22,8 @@ This project uses `npm` as an interface to run build scripts and other tasks. Th
 
 `npm run getcapabilites`: Makes a request to the GIBS `GetCapabilities` API and updates layer configurations.
 
+`npm run updateconfig`: A shortcut to update the config when new layers are added. Runs `npm run getcapabilities` and `npm run build:config` behind the scenes.
+
 `npm run report`: Generates a readable HTML report with the results of the last end-to-end test.
 
 ## Grunt tasks

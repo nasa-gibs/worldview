@@ -36,6 +36,7 @@
     "test:end": "run-script-os",
     "test:end:darwin:linux": "pkill -f buster-server",
     "test:end:win32": "tskill node",
+    "updateconfig": "run-s getcapabilities build:config",
     "watch": "WORLDVIEW_WATCH='active' npm-watch"
   },
   "watch": {
