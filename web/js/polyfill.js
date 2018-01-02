@@ -86,20 +86,20 @@ export function polyfill () {
    */
   if (util.browser.ie && util.browser.version <= 9) {
     (function () {
-      var __nativeST__ = window.setTimeout,
-        __nativeSI__ = window.setInterval;
+      var __nativeST__ = window.setTimeout;
+      var __nativeSI__ = window.setInterval;
 
       window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
-        var oThis = this,
-          aArgs = Array.prototype.slice.call(arguments, 2);
+        var oThis = this;
+        var aArgs = Array.prototype.slice.call(arguments, 2);
         return __nativeST__(vCallback instanceof Function ? function () {
           vCallback.apply(oThis, aArgs);
         } : vCallback, nDelay);
       };
 
       window.setInterval = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
-        var oThis = this,
-          aArgs = Array.prototype.slice.call(arguments, 2);
+        var oThis = this;
+        var aArgs = Array.prototype.slice.call(arguments, 2);
         return __nativeSI__(vCallback instanceof Function ? function () {
           vCallback.apply(oThis, aArgs);
         } : vCallback, nDelay);
@@ -173,17 +173,17 @@ export function polyfill () {
       navigator.userAgent.match(/BlackBerry/i) ||
       navigator.userAgent.match(/Windows Phone/i)
     ) {
-      mobile = true;
-      if (!(window.orientation == 90 || window.orientation == -90)) {
-        portrait = true;
+      var mobile = true;
+      if (!(window.orientation === 90 || window.orientation === -90)) {
+        var portrait = true;
       }
     }
 
-    if (navigator.userAgent.indexOf('iPhone') != -1 || navigator.userAgent.indexOf('Android') != -1) {
+    if (navigator.userAgent.indexOf('iPhone') !== -1 || navigator.userAgent.indexOf('Android') !== -1) {
       // In Safari, the true version is after "Safari"
-      if (navigator.userAgent.indexOf('Safari') != -1) {
+      if (navigator.userAgent.indexOf('Safari') !== -1) {
         // Set a variable to use later
-        mobileSafari = true;
+        var mobileSafari = true;
       }
       addEventListener('load', function () {
         if (mobile) {
@@ -204,13 +204,13 @@ export function polyfill () {
     // Set the div height
     function setHeight ($body) {
       if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 6_\d/i)) {
-        var new_height = $(window)
+        var newHeight = $(window)
           .height();
         // if mobileSafari 6 add +60px
-        new_height += 60;
+        newHeight += 60;
         $('#app')
           .css('min-height', 0)
-          .css('height', new_height);
+          .css('height', newHeight);
       } else {
         $('#app, .ui-mobile, .ui-mobile .ui-page')
           .css('min-height', 0);
