@@ -117,7 +117,6 @@
     "jquery.joyride": "git+https://git@github.com/nasa-gibs/joyride.git",
     "jscrollpane": "^2.0.22",
     "lodash": "4.15.0",
-    "mobiscroll-jquery": "^3.2.6",
     "nouislider": "7.0.10",
     "ol": "^4.4.2",
     "perfect-scrollbar": "^0.8.1",
@@ -130,11 +129,13 @@
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",
+    "mobiscroll": "./web/ext/mobiscroll-2.6.0/mobiscroll.js",
     "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
     "jquery-jcrop": "./node_modules/jquery-jcrop/js/jquery.Jcrop.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   },
   "browserify-shim": {
+    "mobiscroll": "mobiscroll",
     "isotope-layout": "isotope",
     "jquery-jcrop": "Jcrop",
     "jquery": "$"
