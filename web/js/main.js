@@ -9,7 +9,7 @@ import util from './util/util'; // Maybe this is the time to remove the util fil
 import {parse as dateParser} from './date/date'; // export default function parse!!!
 import {dateModel} from './date/model';
 import {dateLabel} from './date/label';
-import {dateWheels} from './date/wheels';
+import dateWheels from './date/wheels';
 // Timeline
 import {timeline} from './date/timeline';
 import {timelineData} from './date/timeline-data';
@@ -257,7 +257,7 @@ window.onload = () => {
       if (!util.browser.small) { // If mobile device, do not build timeline
         timelineInit();
       }
-      //ui.dateWheels = dateWheels(models, config);
+      ui.dateWheels = dateWheels(models, config);
     }
 
     ui.rubberband = imageRubberband(models, ui, config);
