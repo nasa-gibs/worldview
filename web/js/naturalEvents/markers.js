@@ -69,7 +69,9 @@ export default function markers (models, ui) {
       // Add event listeners
       var willSelect = true;
       var moveCount = 0;
-      var pinEl = marker.pin.element_;
+      // The pin element used to be on `element_` but now it looks like it
+      // moved to `element`. Maybe this was a change to OpenLayers.
+      var pinEl = marker.pin.element_ || marker.pin.element;
 
       ['pointerdown', 'mousedown', 'touchstart'].forEach(function (type) {
         pinEl.addEventListener(type, function (e) {
