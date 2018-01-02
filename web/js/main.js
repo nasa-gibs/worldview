@@ -224,7 +224,7 @@ window.onload = () => {
     models.link.load(state); // needs to be loaded twice
 
     if (config.features.arcticProjectionChange) {
-      // models.proj.change = projectionChange(models, config);
+      models.proj.change = projectionChange(models, config);
     }
 
     elapsed('ui');
