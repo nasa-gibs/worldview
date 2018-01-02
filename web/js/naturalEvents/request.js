@@ -1,17 +1,18 @@
-var wv = wv || {};
-wv.naturalEvents = wv.naturalEvents || {};
-/**
- * @module wv.naturalEvents.request
- */
-wv.naturalEvents.request = wv.naturalEvents.request || function (models, ui, config) {
+import $ from 'jquery';
+import orderBy from 'lodash/orderby';
+import uniqBy from 'lodash/uniqby';
+
+import util from '../util/util';
+
+export default function naturalEventsRequest (models, ui, config) {
   var self = {};
-  self.events = wv.util.events();
+  self.events = util.events();
 
   self.EVENT_QUERY_RESULTS = 'queryResults';
   self.EVENT_SELECT = 'select';
 
   self.apiURL = config.features.naturalEvents.host;
-  var querySuccessFlag = false;
+  self.querySuccessFlag = false;
   var model = models.naturalEvents;
   self.ignored = config.naturalEvents.skip || [];
   model.data = {};
@@ -23,7 +24,7 @@ wv.naturalEvents.request = wv.naturalEvents.request || function (models, ui, con
 
   var onQueryResults = function () {
     if (model.data.sources && model.data.types && model.data.events) {
-      querySuccessFlag = true;
+      self.querySuccessFlag = true;
 
       // Remove types and events for ignored event categories
       var removeIgnoredItems = function (item) {
@@ -43,16 +44,16 @@ wv.naturalEvents.request = wv.naturalEvents.request || function (models, ui, con
 
       // Sort event geometries by descending date
       model.data.events = model.data.events.map(function (e) {
-        e.geometries = _.orderBy(e.geometries, 'date', 'desc');
+        e.geometries = orderBy(e.geometries, 'date', 'desc');
         // Discard duplicate geometry dates
-        e.geometries = _.uniqBy(e.geometries, function (g) {
+        e.geometries = uniqBy(e.geometries, function (g) {
           return g.date.split('T')[0];
         });
         return e;
       });
 
       // Sort events by descending date
-      model.data.events = _.orderBy(model.data.events, function (e) {
+      model.data.events = orderBy(model.data.events, function (e) {
         return e.geometries[0].date;
       }, 'desc');
 

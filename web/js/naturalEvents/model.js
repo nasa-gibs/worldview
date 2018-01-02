@@ -1,13 +1,6 @@
-/**
- * @module wv.naturalEvents
- */
-var wv = wv || {};
-wv.naturalEvents = wv.naturalEvents || {};
+import util from '../util/util';
 
-/**
- * @class wv.naturalEvents.model
- */
-wv.naturalEvents.model = wv.naturalEvents.model || function (models, config, ui) {
+export default function naturalEventsModel(models, config, ui) {
   var self = {};
   self.selected = null;
   self.active = false;
@@ -20,7 +13,7 @@ wv.naturalEvents.model = wv.naturalEvents.model || function (models, config, ui)
    * @readOnly
    * @type Events
    */
-  self.events = wv.util.events();
+  self.events = util.events();
 
   self.save = function (state) {
     if (self.active) {
