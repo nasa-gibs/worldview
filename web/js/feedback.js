@@ -7,7 +7,8 @@
 
 import util from './util/util';
 
-export default (function (self) {
+export default (function () {
+  var self = {};
   var feedbackInit = false;
 
   self.decorate = function ($element) {
@@ -29,4 +30,4 @@ export default (function (self) {
   };
 
   return self;
-})({});
+})();
