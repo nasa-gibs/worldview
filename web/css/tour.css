@@ -295,9 +295,10 @@ button.done:hover {
   border-bottom: 0;
 }
 
-.joyride-tip-guide .joyride-next-tip {
+.joyride-tip-guide .joyride-next-tip,
+.joyride-tip-guide .joyride-prev-tip {
   width: auto;
-  float: right;
+  float: left;
   padding: 6px 18px 4px;
   font-size: 13px;
   border: 1px solid #d7dada;
@@ -316,7 +317,12 @@ button.done:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
 }
 
-.joyride-tip-guide .joyride-next-tip:hover {
+.joyride-tip-guide .joyride-next-tip {
+  float: right;
+}
+
+.joyride-tip-guide .joyride-next-tip:hover,
+.joyride-tip-guide .joyride-prev-tip:hover {
   border: 1px solid #bfc4c4 !important;
   background-color: #d9dddd;
   color: #000;

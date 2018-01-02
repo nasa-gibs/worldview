@@ -99,7 +99,7 @@
     "jquery": "^2.1.4",
     "jquery-jcrop": "^0.9.13",
     "jquery-ui": "1.10.4",
-    "jquery.joyride": "^2.2.0",
+    "jquery.joyride": "git+https://git@github.com/nasa-gibs/joyride.git",
     "jscrollpane": "^2.0.22",
     "lodash": "4.15.0",
     "mobiscroll-jquery": "^3.2.6",
