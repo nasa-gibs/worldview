@@ -170,7 +170,7 @@ export default function (models, ui, config) {
       // console.log(index, tip, button);
       setTourState();
       googleAnalytics.event('Tour', 'Click', 'Post Tour View', index + 1);
-      if (index === 5 && button !== 'previous') {
+      if (index === 5 && button === false) {
         endTour();
       }
     };

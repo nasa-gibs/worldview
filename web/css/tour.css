@@ -151,9 +151,11 @@ button.skipTour:hover {
   vertical-align: top;
 }
 
-.tour p {
+.tour p,
+.tour ul {
   color: rgb(38, 43, 49);
   font: 400 13px/16px 'Open Sans', sans-serif;
+  margin: 0 0 14px;
 }
 
 .joyride-content-wrapper {
@@ -284,6 +286,7 @@ button.done:hover {
   z-index: 293;
   background: rgb(175, 181, 196);
   padding-bottom: 32px;
+  width: 350px;
 }
 
 .joyride-tip-guide[data-index="0"] {
@@ -306,6 +309,7 @@ button.done:hover {
   -moz-border-radius: 6px;
   border-radius: 6px;
   text-align: center;
+  text-shadow: none;
   color: #000;
   background-color: #f4f5f5;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4f5f5), color-stop(100%, #dfdddd));
@@ -453,4 +457,8 @@ p.wv-tour-page-count {
   border-top-color: transparent !important;
   border-left-color: transparent !important;
   border-bottom-color: transparent !important;
+}
+
+.joyride-tip-guide.toolbarTip span.joyride-nub.top {
+  left: 250px;
 }
