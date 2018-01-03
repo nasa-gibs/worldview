@@ -6,6 +6,7 @@
 python
 .python/
 .node-virtualenv/
+.ropeproject/
 *.pyc
 .project
 .settings
