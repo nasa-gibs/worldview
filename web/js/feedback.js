@@ -7,7 +7,7 @@
 
 import util from './util/util';
 
-export const feedbackModal = (function () {
+export default (function () {
   var self = {};
   var feedbackInit = false;
 

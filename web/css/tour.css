@@ -14,6 +14,18 @@
   background-color: rgb(175, 181, 196);
 }
 
+.joyride-bordered {
+  border: #808080 solid 1px;
+}
+
+.joyride-wide {
+  width: 450px;
+}
+
+.joyride-close-tip {
+  color: rgba(38, 43, 49, 0.4) !important;
+}
+
 .tour h3 {
   color: rgb(38, 43, 49);
   font: 18px 'Open Sans', sans-serif;
@@ -139,9 +151,11 @@ button.skipTour:hover {
   vertical-align: top;
 }
 
-.tour p {
+.tour p,
+.tour ul {
   color: rgb(38, 43, 49);
   font: 400 13px/16px 'Open Sans', sans-serif;
+  margin: 0 0 14px;
 }
 
 .joyride-content-wrapper {
@@ -270,10 +284,59 @@ button.done:hover {
 
 .joyride-tip-guide {
   z-index: 293;
+  background: rgb(175, 181, 196);
+  padding-bottom: 32px;
+  width: 350px;
 }
 
 .joyride-tip-guide[data-index="0"] {
   z-index: 296;
+}
+
+.joyride-tip-guide a:hover {
+  color: #000 !important;
+  border-bottom: 0;
+}
+
+.joyride-tip-guide .joyride-next-tip,
+.joyride-tip-guide .joyride-prev-tip {
+  width: auto;
+  float: left;
+  padding: 6px 18px 4px;
+  font-size: 13px;
+  border: 1px solid #d7dada;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  text-align: center;
+  text-shadow: none;
+  color: #000;
+  background-color: #f4f5f5;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4f5f5), color-stop(100%, #dfdddd));
+  background-image: -webkit-linear-gradient(top, #f4f5f5, #dfdddd);
+  background-image: -moz-linear-gradient(top, #f4f5f5, #dfdddd);
+  background-image: -ms-linear-gradient(top, #f4f5f5, #dfdddd);
+  background-image: -o-linear-gradient(top, #f4f5f5, #dfdddd);
+  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
+}
+
+.joyride-tip-guide .joyride-next-tip {
+  float: right;
+}
+
+.joyride-tip-guide .joyride-next-tip:hover,
+.joyride-tip-guide .joyride-prev-tip:hover {
+  border: 1px solid #bfc4c4 !important;
+  background-color: #d9dddd;
+  color: #000;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d9dddd), color-stop(100%, #c6c3c3));
+  background-image: -webkit-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -moz-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -ms-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -o-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
 }
 
 table.splash td.splash-info {
@@ -289,9 +352,13 @@ table.splash td.splash-info {
 }
 
 p.wv-tour-page-count {
-  text-align: right;
-  margin-top: 7px;
   font: 400 13px/16px 'Open Sans', sans-serif;
+  color: #262b31;
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 12px;
 }
 
 .wv-tour-visible-icon {
@@ -362,4 +429,36 @@ p.wv-tour-page-count {
 .joyride-nub,
 .joyride-nub-border {
   pointer-events: none;
+}
+
+.joyride-tip-guide span.joyride-nub.top {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+}
+
+.joyride-tip-guide span.joyride-nub.right {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.joyride-tip-guide span.joyride-nub.bottom {
+  border-color: #afb5c4 !important;
+  border-bottom-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+}
+
+.joyride-tip-guide span.joyride-nub.left {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.joyride-tip-guide.toolbarTip span.joyride-nub.top {
+  left: 250px;
 }
