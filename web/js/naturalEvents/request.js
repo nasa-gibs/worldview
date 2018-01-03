@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import orderBy from 'lodash/orderby';
-import uniqBy from 'lodash/uniqby';
+import lodashOrderBy from 'lodash/orderby';
+import lodashUniqBy from 'lodash/uniqby';
 
 import util from '../util/util';
 
@@ -44,16 +44,16 @@ export default function naturalEventsRequest (models, ui, config) {
 
       // Sort event geometries by descending date
       model.data.events = model.data.events.map(function (e) {
-        e.geometries = orderBy(e.geometries, 'date', 'desc');
+        e.geometries = lodashOrderBy(e.geometries, 'date', 'desc');
         // Discard duplicate geometry dates
-        e.geometries = uniqBy(e.geometries, function (g) {
+        e.geometries = lodashUniqBy(e.geometries, function (g) {
           return g.date.split('T')[0];
         });
         return e;
       });
 
       // Sort events by descending date
-      model.data.events = orderBy(model.data.events, function (e) {
+      model.data.events = lodashOrderBy(model.data.events, function (e) {
         return e.geometries[0].date;
       }, 'desc');
 

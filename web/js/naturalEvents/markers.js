@@ -1,4 +1,4 @@
-import find from 'lodash/find';
+import lodashFind from 'lodash/find';
 import olExtent from 'ol/extent';
 import OlOverlay from 'ol/overlay';
 import OlFeature from 'ol/feature';
@@ -28,7 +28,7 @@ export default function markers (models, ui) {
         date = selected.date;
       }
 
-      var geometry = find(event.geometries, function (geom) {
+      var geometry = lodashFind(event.geometries, function (geom) {
         return geom.date.split('T')[0] === date;
       }) || event.geometries[0];
 

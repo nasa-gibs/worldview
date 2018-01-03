@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import find from 'lodash/find';
-import each from 'lodash/each';
+import lodashFind from 'lodash/find';
+import lodashEach from 'lodash/each';
 import olExtent from 'ol/extent';
 
 import markers from './markers';
@@ -171,7 +171,7 @@ export default function naturalEventsUI (models, ui, config, request) {
       if (self.selected && self.selected.date) {
         date = self.selected.date;
       }
-      var geometry = find(naturalEvent.geometries, function (geometry) {
+      var geometry = lodashFind(naturalEvent.geometries, function (geometry) {
         return geometry.date.split('T')[0] === date;
       }) || naturalEvent.geometries[0];
 
@@ -194,7 +194,7 @@ export default function naturalEventsUI (models, ui, config, request) {
   };
 
   var getEventById = function (id) {
-    return find(model.data.events, function (e) {
+    return lodashFind(model.data.events, function (e) {
       return e.id === id;
     });
   };
@@ -207,7 +207,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     $panels.append($list);
     $panels.append($detailContainer);
     var $content = $('#wv-eventscontent').empty();
-    each(model.data.events, function (event) {
+    lodashEach(model.data.events, function (event) {
       $content.append(createEventElement($content, event));
     });
 
@@ -259,7 +259,7 @@ export default function naturalEventsUI (models, ui, config, request) {
 
     if (event.geometries.length > 1) {
       var eventIndex = 0;
-      each(event.geometries, function (geometry) {
+      lodashEach(event.geometries, function (geometry) {
         eventIndex = eventIndex + 1;
         var date = geometry.date.split('T')[0];
 
@@ -282,8 +282,8 @@ export default function naturalEventsUI (models, ui, config, request) {
     var references = Array.isArray(event.sources) ? event.sources : [event.sources];
     if (references.length > 0) {
       var items = [];
-      each(references, function (reference) {
-        var source = find(model.data.sources, {
+      lodashEach(references, function (reference) {
+        var source = lodashFind(model.data.sources, {
           id: reference.id
         });
         if (reference.url) {
@@ -338,11 +338,11 @@ export default function naturalEventsUI (models, ui, config, request) {
     var layers = model.layers[category];
     if (!layers) layers = model.layers.Default;
     // Turn off all layers in list first
-    each(models.layers.active, function (layer) {
+    lodashEach(models.layers.active, function (layer) {
       models.layers.setVisibility(layer.id, false);
     });
     // Turn on or add new layers
-    each(layers, function (layer) {
+    lodashEach(layers, function (layer) {
       var id = layer[0];
       var visible = layer[1];
       if (models.layers.exists(id)) {
@@ -357,7 +357,7 @@ export default function naturalEventsUI (models, ui, config, request) {
 
   var zoomToEvent = function (event, date) {
     var category = event.categories[0].title;
-    var geometry = find(event.geometries, function (geom) {
+    var geometry = lodashFind(event.geometries, function (geom) {
       return geom.date.split('T')[0] === date;
     });
     var coordinates = (geometry.type === 'Polygon') ? olExtent.boundingExtent(geometry.coordinates[0]) : geometry.coordinates;
