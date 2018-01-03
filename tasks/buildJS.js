@@ -13,8 +13,7 @@ const outputPath = outputDir + (isTest ? 'wv-test-bundle.js' : 'wv.js');
 
 var bundler = browserify(entryPoint, {
   debug: isDebug, // Include source maps (makes bundle size larger)
-  fullPaths: isDebug, // For use with https://www.npmjs.com/package/disc
-  require: ['react', 'react-dom'] // temporary fix for react being included multiple times
+  fullPaths: isDebug // For use with https://www.npmjs.com/package/disc
   // plugin: [isDebug ? watchify : null]
 }).transform('babelify', {
   presets: ['env']
