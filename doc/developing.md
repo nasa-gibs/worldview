@@ -20,7 +20,7 @@ This project uses `npm` as an interface to run build scripts and other tasks. Th
 
 `npm run browserstack`: Runs end-to-end tests on Browserstack.
 
-`npm run getcapabilites`: Makes a request to the GIBS `GetCapabilities` API and updates layer configurations.
+`npm run getcapabilites`: Makes a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers) and updates layer configurations.
 
 `npm run updateconfig`: A shortcut to update the config when new layers are added. Runs `npm run getcapabilities` and `npm run build:config` behind the scenes.
 
