@@ -1,13 +1,14 @@
-var wv = wv || {};
-wv.anim = wv.anim || {};
-wv.anim.ui = wv.anim.ui || function (models, ui) {
+import loIsEmpty from 'lodash/isempty';
+import Queue from 'promise-queue';
+import util from '../util/util';
+import uiIndicator from '../ui/indicator';
+
+export function animationUi(models, ui) {
   var self = {};
-  self.events = wv.util.events();
+  self.events = util.events();
   var dateModel = models.date;
   var animModel = models.anim;
   var queueLength;
-  var animateArray;
-  var map = ui.map.selected;
   var zooms = ['year', 'month', 'day'];
   var queue = new Queue(5, Infinity);
   var preload = {};
@@ -15,7 +16,6 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
   var inQueue;
   var pastDates;
   var loader;
-
   /*
    * sets listeners
    *
@@ -90,8 +90,8 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
     };
     animModel.rangeState.playing = false;
     animModel.events.trigger('change');
-    wv.ui.indicator.hide(loader);
-    wv.ui.indicator._hide(loader);
+    uiIndicator.hide(loader);
+    uiIndicator._hide(loader);
   };
 
   /*
@@ -111,13 +111,13 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
     var startDate;
     var currentDate;
     state = animModel.rangeState;
-    endDate = wv.util.parseDateUTC(state.endDate);
-    startDate = wv.util.parseDateUTC(state.startDate);
+    endDate = util.parseDateUTC(state.endDate);
+    startDate = util.parseDateUTC(state.startDate);
     currentDate = dateModel.selected;
     if (currentDate > startDate && self.nextDate(currentDate) < endDate) {
-      return wv.util.toISOStringDate(self.nextDate(currentDate));
+      return util.toISOStringDate(self.nextDate(currentDate));
     }
-    return wv.util.toISOStringDate(startDate);
+    return util.toISOStringDate(startDate);
   };
 
   /*
@@ -160,7 +160,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
    *
    */
   self.nextDate = function (date) {
-    return wv.util.dateAdd(date, self.getInterval(), 1);
+    return util.dateAdd(date, self.getInterval(), 1);
   };
 
   /*
@@ -201,7 +201,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
    *
    */
   self.addToInQueue = function (date) {
-    var strDate = wv.util.toISOStringDate(date);
+    var strDate = util.toISOStringDate(date);
     inQueue[strDate] = date;
     preloadArray.push(strDate);
   };
@@ -220,7 +220,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
    *
    */
   self.addDateToCache = function (date) {
-    var strDate = wv.util.toISOStringDate(date);
+    var strDate = util.toISOStringDate(date);
     preload[strDate] = date;
     delete inQueue[strDate];
   };
@@ -239,7 +239,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
   self.shiftCache = function () {
     var key;
     if (preload[preloadArray[0]] &&
-      wv.util.objectLength(preload) > queueLength + (queueLength / 2) + 1 &&
+      util.objectLength(preload) > queueLength + (queueLength / 2) + 1 &&
       pastDates[preloadArray[0]] &&
       !self.isInToPlayGroup(preloadArray[0])) {
       key = preloadArray.shift();
@@ -314,17 +314,14 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
    *
    */
   self.checkQueue = function (bufferLength, index) {
-    var date;
     var currentDate;
-    var startDate = wv.util.parseDateUTC(animModel.rangeState.startDate);
-    var endDate = wv.util.parseDateUTC(animModel.rangeState.endDate);
-    var loop = animModel.rangeState.loop;
+    var startDate = util.parseDateUTC(animModel.rangeState.startDate);
+    var endDate = util.parseDateUTC(animModel.rangeState.endDate);
     var lastToQueue;
-    var nextDate;
     if (!animModel.rangeState.playing) {
       return self.refreshState();
     }
-    currentDate = wv.util.parseDateUTC(index);
+    currentDate = util.parseDateUTC(index);
     lastToQueue = self.getLastBufferDateStr(currentDate, startDate, endDate);
 
     if (!preloadArray[0] && !inQueue[index]) {
@@ -350,9 +347,9 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
     var layer;
     var layers = models.layers.get();
 
-    for (var i = 0, len = layers; i < layers.length; i++) {
+    for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
-      if (!_.isEmpty(models.palettes.isActive(layer.id)) && layer.visible) {
+      if (!loIsEmpty(models.palettes.isActive(layer.id)) && layer.visible) {
         return true;
       }
     }
@@ -380,7 +377,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
       nextDate = self.setNewDate(nextDate, startDate);
     }
 
-    nextDateStr = wv.util.toISOStringDate(nextDate);
+    nextDateStr = util.toISOStringDate(nextDate);
 
     if (!preload[nextDateStr] && !inQueue[nextDateStr] && !self.state.playing) {
       self.clearCache();
@@ -416,17 +413,17 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
     for (var i = 0; i < queueLength; i++) {
       self.addDate(day);
       day = self.getNextBufferDate(day, startDate, endDate);
-      if (wv.util.toISOStringDate(day) === lastToQueue) {
+      if (util.toISOStringDate(day) === lastToQueue) {
         self.addDate(day);
-        loader = wv.ui.indicator.loading();
+        loader = uiIndicator.loading();
         return;
-      } else if (wv.util.toISOStringDate(day) === wv.util.toISOStringDate(currentDate)) {
+      } else if (util.toISOStringDate(day) === util.toISOStringDate(currentDate)) {
         queueLength = i;
-        loader = wv.ui.indicator.loading();
+        loader = uiIndicator.loading();
         return;
       }
     }
-    loader = wv.ui.indicator.loading();
+    loader = uiIndicator.loading();
   };
 
   /*
@@ -471,7 +468,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
    */
   self.addItemToQueue = function (currentDate, startDate, endDate) {
     var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
-    var nextDateStr = wv.util.toISOStringDate(nextDate);
+    var nextDateStr = util.toISOStringDate(nextDate);
 
     if (!inQueue[nextDateStr] &&
       !preload[nextDateStr] &&
@@ -497,7 +494,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
    *
    */
   self.getNextBufferDate = function (currentDate, startDate, endDate) {
-    var lastInBuffer = wv.util.parseDateUTC(preloadArray[preloadArray.length - 1]);
+    var lastInBuffer = util.parseDateUTC(preloadArray[preloadArray.length - 1]);
     var nextDate = self.nextDate(lastInBuffer);
     if (lastInBuffer >= endDate || self.nextDate(lastInBuffer) > endDate) {
       return self.setNewDate(nextDate, startDate);
@@ -527,7 +524,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
     while (i < queueLength) {
       if (self.nextDate(day) > endDate) {
         if (!loop) {
-          return wv.util.toISOStringDate(day);
+          return util.toISOStringDate(day);
         }
         day = self.setNewDate(day, startDate);
       } else {
@@ -535,7 +532,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
       }
       i++;
     }
-    return wv.util.toISOStringDate(day);
+    return util.toISOStringDate(day);
   };
 
   /*
@@ -554,7 +551,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
   self.checkShouldLoop = function (playIndexJSDate) {
     if (animModel.rangeState.loop) {
       self.shiftCache();
-      self.state.playIndex = wv.util.toISOStringDate(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
+      self.state.playIndex = util.toISOStringDate(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
       setTimeout(function () {
         self.checkShouldPlay();
         self.checkQueue(queueLength, self.state.playIndex);
@@ -578,10 +575,9 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
    *
    */
   self.checkShouldPlay = function () {
-    var currentDate = wv.util.parseDateUTC(self.state.playIndex);
-    var fps = 1000 / animModel.rangeState.speed;
-    var endDate = wv.util.parseDateUTC(animModel.rangeState.endDate);
-    var startDate = wv.util.parseDateUTC(animModel.rangeState.startDate);
+    var currentDate = util.parseDateUTC(self.state.playIndex);
+    var endDate = util.parseDateUTC(animModel.rangeState.endDate);
+    var startDate = util.parseDateUTC(animModel.rangeState.startDate);
     if (self.state.playing || !animModel.rangeState.playing) {
       return false;
     }
@@ -592,7 +588,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
     }
     if (self.state.supportingCustomLayers &&
       preload[self.state.playIndex] &&
-      _.isEmpty(inQueue)) {
+      loIsEmpty(inQueue)) {
       self.play(self.state.playIndex);
       return;
     }
@@ -613,8 +609,8 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
    */
   self.play = function (index) {
     self.state.playing = true;
-    wv.ui.indicator.hide(loader);
-    wv.ui.indicator._hide(loader);
+    uiIndicator.hide(loader);
+    uiIndicator._hide(loader);
     self.animate(index);
   };
 
@@ -650,15 +646,15 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
     var interval;
     var playIndex = index;
     var playIndexJSDate;
-    var endDate = wv.util.parseDateUTC(animModel.rangeState.endDate);
+    var endDate = util.parseDateUTC(animModel.rangeState.endDate);
     var player = function () {
       self.shiftCache();
       self.checkQueue(queueLength, playIndex);
 
-      dateModel.select(wv.util.parseDateUTC(playIndex));
-      pastDates[playIndex] = wv.util.parseDateUTC(playIndex); // played record
+      dateModel.select(util.parseDateUTC(playIndex));
+      pastDates[playIndex] = util.parseDateUTC(playIndex); // played record
       self.state.playIndex = playIndex;
-      playIndex = wv.util.toISOStringDate(self.nextDate(new Date(playIndex)));
+      playIndex = util.toISOStringDate(self.nextDate(new Date(playIndex)));
       playIndexJSDate = new Date(playIndex);
       if (playIndexJSDate > endDate) {
         clearInterval(interval);
@@ -670,7 +666,7 @@ wv.anim.ui = wv.anim.ui || function (models, ui) {
         clearInterval(interval);
         self.state.playing = false;
         if (!preload[playIndex] && animModel.rangeState.playing) { // Still playing, add loader
-          loader = wv.ui.indicator.loading();
+          loader = uiIndicator.loading();
           self.shiftCache();
           self.checkQueue(queueLength, self.state.playIndex);
         } else {

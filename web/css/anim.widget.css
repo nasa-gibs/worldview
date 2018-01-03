@@ -146,7 +146,9 @@
   color: #999;
   cursor: pointer;
 }
-
+.gif-dialog {
+  color: #fff;
+}
 .gif-dialog .content {
   line-height: 15px;
 }

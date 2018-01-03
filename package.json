@@ -116,10 +116,12 @@
   "browser": {
     "d3": "./web/ext/d3/d3.js",
     "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
+    "jquery-jcrop": "./node_modules/jquery-jcrop/js/jquery.Jcrop.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   },
   "browserify-shim": {
     "isotope-layout": "isotope",
+    "jquery-jcrop": "Jcrop",
     "jquery": "$"
   }
 }

@@ -1,13 +1,16 @@
-var wv = wv || {};
+import $ from 'jquery';
+import {AnimationWidget, GA as googleAnalytics} from 'worldview-components';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import loWithout from 'lodash/without';
+import loIndexOf from 'lodash/indexof';
+import util from '../util/util';
 
-wv.anim = wv.anim || {};
-
-wv.anim.widget = wv.anim.widget || function (models, config, ui) {
+export function animationWidget (models, config, ui) {
   var zooms = ['yearly', 'monthly', 'daily'];
   var self = {};
   var timeline = ui.timeline;
   var model = models.anim;
-  var widgetFactory = React.createFactory(WVC.AnimationWidget);
   var $timelineFooter;
   var $animateButton;
   var dataModel;
@@ -22,17 +25,35 @@ wv.anim.widget = wv.anim.widget || function (models, config, ui) {
    *
    */
   self.init = function () {
-    var speed;
-    var Widget;
-
-    Widget = self.initWidget();
-    // mount react component
     $animateButton = $('#animate-button');
-    self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
 
+    var props = {
+      onPushPlay: self.onPressPlay,
+      onPushLoop: self.onPressLoop,
+      onPushPause: self.onPressPause,
+      onPushGIF: self.onPressGIF,
+      looping: model.rangeState.loop,
+      increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
+      incrementArray: loWithout(zooms, self.getIncrements()), // array of zooms without current zoom
+      onDateChange: self.dateUpdate,
+      sliderLabel: 'Frames Per Second',
+      sliderSpeed: model.rangeState.speed,
+      onZoomSelect: self.onZoomSelect,
+      onSlide: self.onRateChange,
+      startDate: new Date(model.rangeState.startDate),
+      endDate: new Date(model.rangeState.endDate),
+      minDate: models.date.minDate(),
+      maxDate: models.date.maxDate(),
+      onClose: self.toggleAnimationWidget
+    };
+
+    self.reactComponent = ReactDOM.render(
+      React.createElement(AnimationWidget, props),
+      $('#wv-animation-widet-case')[0]
+    );
     $timelineFooter = $('#timeline-footer');
     $animateButton.on('click', function () {
-      WVC.GA.event('Animation', 'Click', 'Animation Icon');
+      googleAnalytics.event('Animation', 'Click', 'Animation Icon');
       self.toggleAnimationWidget();
     });
     if (model.rangeState.state === 'on') { // show animation widget if active in permalink
@@ -81,38 +102,6 @@ wv.anim.widget = wv.anim.widget || function (models, config, ui) {
   };
 
   /*
-   * Widget initializer
-   * passes initial props
-   *
-   * @method initWidget
-   * @static
-   *
-   * @returns {void}
-   *
-   */
-  self.initWidget = function () {
-    var rangeState = model.rangeState;
-    return widgetFactory({
-      onPushPlay: self.onPressPlay,
-      onPushLoop: self.onPressLoop,
-      onPushPause: self.onPressPause,
-      onPushGIF: self.onPressGIF,
-      looping: model.rangeState.loop,
-      increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: _.without(zooms, self.getIncrements()), // array of zooms without current zoom
-      onDateChange: self.dateUpdate,
-      sliderLabel: 'Frames Per Second',
-      sliderSpeed: rangeState.speed,
-      onZoomSelect: self.onZoomSelect,
-      onSlide: self.onRateChange,
-      startDate: new Date(rangeState.startDate),
-      endDate: new Date(rangeState.endDate),
-      minDate: models.date.minDate(),
-      maxDate: models.date.maxDate(),
-      onClose: self.toggleAnimationWidget
-    });
-  };
-  /*
    * Determines whether to play
    * animation or pause animation
    *
@@ -150,7 +139,7 @@ wv.anim.widget = wv.anim.widget || function (models, config, ui) {
       endDate: new Date(state.endDate),
       playing: state.playing,
       increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: _.without(zooms, self.getIncrements()) // array of zooms without current zoom
+      incrementArray: loWithout(zooms, self.getIncrements()) // array of zooms without current zoom
     });
   };
 
@@ -182,7 +171,7 @@ wv.anim.widget = wv.anim.widget || function (models, config, ui) {
    *
    */
   self.onZoomSelect = function (increment) {
-    var zoomLevel = _.indexOf(zooms, increment);
+    var zoomLevel = loIndexOf(zooms, increment);
     return timeline.config.zoom(zoomLevel + 1);
   };
 
@@ -201,8 +190,8 @@ wv.anim.widget = wv.anim.widget || function (models, config, ui) {
    *
    */
   self.dateUpdate = function (startDate, endDate) {
-    model.rangeState.startDate = wv.util.toISOStringDate(startDate) || 0;
-    model.rangeState.endDate = wv.util.toISOStringDate(endDate);
+    model.rangeState.startDate = util.toISOStringDate(startDate) || 0;
+    model.rangeState.endDate = util.toISOStringDate(endDate);
     model.rangeState.playing = false;
     model.events.trigger('change');
     model.events.trigger('datechange');
@@ -247,19 +236,17 @@ wv.anim.widget = wv.anim.widget || function (models, config, ui) {
   };
 
   self.makeDateGuess = function () {
-    var start;
-    var end;
     var currentDate = new Date(models.date.selected);
     var interval = ui.anim.ui.getInterval();
-    var day = wv.util.dateAdd(currentDate, interval, 7);
+    var day = util.dateAdd(currentDate, interval, 7);
     var today = new Date();
 
     if (day > today) {
-      model.rangeState.endDate = wv.util.toISOStringDate(currentDate);
-      model.rangeState.startDate = wv.util.toISOStringDate(wv.util.dateAdd(currentDate, interval, -7));
+      model.rangeState.endDate = util.toISOStringDate(currentDate);
+      model.rangeState.startDate = util.toISOStringDate(util.dateAdd(currentDate, interval, -7));
     } else {
-      model.rangeState.startDate = wv.util.toISOStringDate(currentDate);
-      model.rangeState.endDate = wv.util.toISOStringDate(wv.util.dateAdd(currentDate, interval, 7));
+      model.rangeState.startDate = util.toISOStringDate(currentDate);
+      model.rangeState.endDate = util.toISOStringDate(util.dateAdd(currentDate, interval, 7));
     }
   };
   /*

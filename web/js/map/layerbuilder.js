@@ -174,6 +174,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       layer: def.layer || def.id,
       crossOrigin: 'anonymous',
       format: def.format,
+      transition: 0,
       matrixSet: matrixSet.id,
       tileGrid: new OlTileGridWMTS({
         origin: start,
@@ -255,6 +256,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       style: 'default',
       crossOrigin: 'anonymous',
       params: parameters,
+      transition: 0,
       tileGrid: new OlTileGridTileGrid({
         origin: start,
         resolutions: res
