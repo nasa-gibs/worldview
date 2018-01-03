@@ -57,7 +57,7 @@ import {palettesModel} from './palettes/model';
 import imageRubberband from './image/rubberband';
 import imagePanel from './image/panel';
 // Notifications
-// import NotificationsUI from './notifications/notifications.ui';
+import {notificationsUi} from './notifications/ui';
 // UI
 import loadingIndicator from './ui/indicator'; // not a class, export object
 // Link
@@ -272,9 +272,9 @@ window.onload = () => {
     }
     ui.link = linkUi(models, config);
     ui.tour = tour(models, ui, config);
-    // ui.info = uiInfo(ui, config);
+    ui.info = uiInfo(ui, config);
     if (config.features.alert) {
-    //  ui.alert = notificationsUi(ui, config);
+      ui.alert = notificationsUi(ui, config);
     }
 
     // FIXME: Old hack
