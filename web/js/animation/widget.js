@@ -11,7 +11,6 @@ export function animationWidget (models, config, ui) {
   var self = {};
   var timeline = ui.timeline;
   var model = models.anim;
-  var widgetFactory = React.createFactory(AnimationWidget);
   var $timelineFooter;
   var $animateButton;
   var dataModel;
@@ -26,12 +25,32 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.init = function () {
-    var Widget;
-
-    Widget = self.initWidget();
-    // mount react component
     $animateButton = $('#animate-button');
-    self.reactComponent = ReactDOM.render(Widget, $('#wv-animation-widet-case')[0]);
+
+    var props = {
+      onPushPlay: self.onPressPlay,
+      onPushLoop: self.onPressLoop,
+      onPushPause: self.onPressPause,
+      onPushGIF: self.onPressGIF,
+      looping: model.rangeState.loop,
+      increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
+      incrementArray: loWithout(zooms, self.getIncrements()), // array of zooms without current zoom
+      onDateChange: self.dateUpdate,
+      sliderLabel: 'Frames Per Second',
+      sliderSpeed: model.rangeState.speed,
+      onZoomSelect: self.onZoomSelect,
+      onSlide: self.onRateChange,
+      startDate: new Date(model.rangeState.startDate),
+      endDate: new Date(model.rangeState.endDate),
+      minDate: models.date.minDate(),
+      maxDate: models.date.maxDate(),
+      onClose: self.toggleAnimationWidget
+    };
+
+    self.reactComponent = ReactDOM.render(
+      React.createElement(AnimationWidget, props),
+      $('#wv-animation-widet-case')[0]
+    );
     $timelineFooter = $('#timeline-footer');
     $animateButton.on('click', function () {
       googleAnalytics.event('Animation', 'Click', 'Animation Icon');
@@ -82,38 +101,6 @@ export function animationWidget (models, config, ui) {
       });
   };
 
-  /*
-   * Widget initializer
-   * passes initial props
-   *
-   * @method initWidget
-   * @static
-   *
-   * @returns {void}
-   *
-   */
-  self.initWidget = function () {
-    var rangeState = model.rangeState;
-    return widgetFactory({
-      onPushPlay: self.onPressPlay,
-      onPushLoop: self.onPressLoop,
-      onPushPause: self.onPressPause,
-      onPushGIF: self.onPressGIF,
-      looping: model.rangeState.loop,
-      increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: loWithout(zooms, self.getIncrements()), // array of zooms without current zoom
-      onDateChange: self.dateUpdate,
-      sliderLabel: 'Frames Per Second',
-      sliderSpeed: rangeState.speed,
-      onZoomSelect: self.onZoomSelect,
-      onSlide: self.onRateChange,
-      startDate: new Date(rangeState.startDate),
-      endDate: new Date(rangeState.endDate),
-      minDate: models.date.minDate(),
-      maxDate: models.date.maxDate(),
-      onClose: self.toggleAnimationWidget
-    });
-  };
   /*
    * Determines whether to play
    * animation or pause animation

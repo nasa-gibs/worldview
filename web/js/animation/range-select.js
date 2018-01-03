@@ -9,7 +9,6 @@ export function animationRangeSelect(models, config, ui) {
   var self = {};
   var model;
   var timeline = ui.timeline;
-  var rangeSelectionFactory = React.createFactory(RangeSelector);
   var $mountLocation = $('#wv-rangeselector-case');
   var $footer = $('#timeline-footer');
   var $header = $('#timeline-header');
@@ -99,7 +98,10 @@ export function animationRangeSelect(models, config, ui) {
       onDrag: self.updateRange,
       onRangeClick: self.onRangeClick
     };
-    self.reactComponent = ReactDOM.render(rangeSelectionFactory(options), $mountLocation[0]);
+    self.reactComponent = ReactDOM.render(
+      React.createElement(RangeSelector, options),
+      $mountLocation[0]
+    );
   };
 
   /*
