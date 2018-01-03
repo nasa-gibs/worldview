@@ -25,7 +25,7 @@ die() {
 [ -d "$SRC_DIR" ] || die "Options directory does not exist"
 
 # Activate virtual Python environment
-PATH=.node-virtualenv/bin:.node-virtualenv/Scripts:${PATH}
+PATH=.python/bin:.python/Scripts:${PATH}
 
 # If $FETCH_GC is set fetch GetCapabilities
 if [ "$FETCH_GC" ] ; then
