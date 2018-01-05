@@ -1,7 +1,16 @@
-var wv = wv || {};
-wv.data = wv.data || {};
+import $ from 'jquery';
+import loSize from 'lodash/size';
+import loEach from 'lodash/each';
+import {GA as GoogleAnalytics} from 'worldview-components';
+import olExtent from 'ol/extent';
 
-wv.data.ui = wv.data.ui || function (models, ui, config) {
+import {dataMap} from './map';
+import uiIndicator from '../ui/indicator';
+import util from '../util/util';
+import wvui from '../ui/ui';
+import {REL_DATA, REL_METADATA, REL_BROWSE, DATA_EXTS} from './cmr';
+
+export function dataUi(models, ui, config) {
   var queryActive = false;
   var model = models.data;
   var mapController = null;
@@ -207,34 +216,34 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
     var extent = map.getView()
       .calculateExtent(map.getSize());
     var crs = models.proj.selected.crs;
-    _.each(lastResults.granules, function (granule) {
+    loEach(lastResults.granules, function (granule) {
       if (granule.centroid && granule.centroid[crs]) {
         hasCentroids = true;
-        if (ol.extent.intersects(extent,
+        if (olExtent.intersects(extent,
           granule.centroid[crs].getExtent())) {
           inView = true;
           return true;
         }
       }
     });
-    wv.ui.indicator.hide(indicators.noneInView);
+    uiIndicator.hide(indicators.noneInView);
     if (hasCentroids && !inView) {
       indicators.noneInView =
-        wv.ui.indicator.show('Zoom out or move map');
+        uiIndicator.show('Zoom out or move map');
     }
   };
 
   var onActivate = function () {
     ui.sidebar.selectTab('download');
     if (!mapController) {
-      mapController = wv.data.map(model, maps, config);
+      mapController = dataMap(model, maps, config);
     }
     onLayerUpdate();
     updateSelection();
   };
 
   var onDeactivate = function () {
-    wv.ui.indicator.hide(indicators);
+    uiIndicator.hide(indicators);
     if (selectionListPanel) {
       selectionListPanel.hide();
     }
@@ -258,7 +267,7 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
 
   var onQuery = function () {
     queryActive = true;
-    indicators.query = wv.ui.indicator.searching(indicators);
+    indicators.query = uiIndicator.searching(indicators);
     if (selectionListPanel) {
       selectionListPanel.hide();
     }
@@ -274,15 +283,15 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
     }
     queryActive = false;
     lastResults = results;
-    wv.ui.indicator.hide(indicators);
+    uiIndicator.hide(indicators);
     var hasResults = true;
     if (model.selectedProduct !== null && results.granules.length === 0) {
-      indicators.noData = wv.ui.indicator.noData(indicators);
+      indicators.noData = uiIndicator.noData(indicators);
       hasResults = false;
     }
     if (results.meta.showList && hasResults) {
       selectionListPanel =
-        wv.data.ui.selectionListPanel(model, results);
+        dataUiSelectionListPanel(model, results);
       selectionListPanel.show();
     }
     updateSelection();
@@ -290,23 +299,23 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
 
   var onQueryCancel = function () {
     queryActive = false;
-    wv.ui.indicator.hide(indicators);
+    uiIndicator.hide(indicators);
   };
 
   var onQueryError = function (status, error) {
     queryActive = false;
-    wv.ui.indicator.hide(indicators);
+    uiIndicator.hide(indicators);
     if (status !== 'abort') {
       console.error('Unable to search', status, error);
-      wv.ui.notify('Unable to search at this time.<br/><br/>Please try ' +
+      wvui.notify('Unable to search at this time.<br/><br/>Please try ' +
         'again later.');
     }
   };
 
   var onQueryTimeout = function () {
     queryActive = false;
-    wv.ui.indicator.hide(indicators);
-    wv.ui.notify(
+    uiIndicator.hide(indicators);
+    wvui.notify(
       'No results received yet. This may be due to a ' +
       'connectivity issue. Please try again later.'
     );
@@ -314,7 +323,7 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
 
   var updateSelection = function () {
     var $button = $('#wv-data-download-button');
-    var selected = _.size(model.selectedGranules);
+    var selected = loSize(model.selectedGranules);
     if (selected > 0) {
       $button.button('enable');
       var totalSize = model.getSelectionSize();
@@ -343,13 +352,13 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
   };
 
   var showDownloadList = function () {
-    WVC.GA.event('Data Download', 'Click', 'Download Button');
+    GoogleAnalytics.event('Data Download', 'Click', 'Download Button');
     if (selectionListPanel) {
       selectionListPanel.setVisible(false);
     }
     if (!downloadListPanel) {
       downloadListPanel =
-        wv.data.ui.downloadListPanel(config, model);
+        dataUiDownloadListPanel(config, model);
       downloadListPanel.events.on('close', function () {
         if (selectionListPanel) {
           selectionListPanel.setVisible(true);
@@ -363,133 +372,131 @@ wv.data.ui = wv.data.ui || function (models, ui, config) {
     var headerMsg = '<h3 class=\'wv-data-unavailable-header\'>Why are these layers not available for downloading?</h3>';
     var bodyMsg = 'Some layers in Worldview do not have corresponding source data products available for download.  These include National Boundaries, Orbit Tracks, Earth at Night, and MODIS Corrected Reflectance products.<br><br>For a downloadable product similar to MODIS Corrected Reflectance, please try the MODIS Land Surface Reflectance layers available in Worldview.  If you would like to generate MODIS Corrected Reflectance imagery yourself, please see the following document: <a href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf" target="_blank">https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf</a><br><br>If you would like to download only an image, please use the "camera" icon in the upper right.<br><br> Data download will not work for "Terra and Aqua" Fires, select Terra only Fires and/or Aqua only Fires to download the associated data files.';
 
-    wv.ui.notify(headerMsg + bodyMsg, 'Notice', 600);
+    wvui.notify(headerMsg + bodyMsg, 'Notice', 600);
   };
 
   init();
   return self;
 };
 
-wv.data.ui.bulkDownloadPage = wv.data.ui.bulkDownloadPage ||
-  (function () {
-    var ns = {};
-    var pages = {
-      wget: 'pages/wget.html',
-      curl: 'pages/curl.html'
+var dataUiBulkDownloadPage = (function () {
+  var ns = {};
+  var pages = {
+    wget: 'pages/wget.html',
+    curl: 'pages/curl.html'
+  };
+
+  ns.show = function (selection, type) {
+    var nonce = Date.now();
+    var page = window.open(pages[type] + '?v=' + nonce,
+      'Worldview_' + nonce);
+
+    var loaded = false;
+    page.onload = function () {
+      if (!loaded) {
+        fillPage(page, selection, type);
+        loaded = true;
+      }
     };
+    var checkCount = 0;
+    var timer = setInterval(function () {
+      checkCount++;
+      if (loaded) {
+        clearInterval(timer);
+        return;
+      }
+      if (checkCount > 20) {
+        clearInterval(timer);
+        return;
+      }
+      if (fillPage(page, selection, type)) {
+        loaded = true;
+        clearInterval(timer);
+      }
+    }, 100);
+  };
 
-    ns.show = function (selection, type) {
-      var nonce = Date.now();
-      var page = window.open(pages[type] + '?v=' + nonce,
-        'Worldview_' + nonce);
-
-      var loaded = false;
-      page.onload = function () {
-        if (!loaded) {
-          fillPage(page, selection, type);
-          loaded = true;
+  var fillPage = function (page, selection, type) {
+    var downloadLinks = [];
+    var hosts = {};
+    var indirectLinks = [];
+    $.each(selection, function (index, product) {
+      $.each(product.list, function (index2, granule) {
+        var netrc = '';
+        if (granule.urs) {
+          netrc = '--netrc ';
         }
-      };
-      var checkCount = 0;
-      var timer = setInterval(function () {
-        checkCount++;
-        if (loaded) {
-          clearInterval(timer);
-          return;
-        }
-        if (checkCount > 20) {
-          clearInterval(timer);
-          return;
-        }
-        if (fillPage(page, selection, type)) {
-          loaded = true;
-          clearInterval(timer);
-        }
-      }, 100);
-    };
-
-    var fillPage = function (page, selection, type) {
-      var downloadLinks = [];
-      var hosts = {};
-      var indirectLinks = [];
-      $.each(selection, function (index, product) {
-        $.each(product.list, function (index2, granule) {
-          var netrc = '';
-          if (granule.urs) {
-            netrc = '--netrc ';
+        $.each(granule.links, function (index2, link) {
+          if (!link.data) {
+            return;
           }
-          $.each(granule.links, function (index2, link) {
-            if (!link.data) {
-              return;
+          if (product.noBulkDownload) {
+            indirectLinks.push('<li><a href=\'' + link.href + '\'>' +
+              link.href + '</a></li>');
+            return;
+          }
+          if (type === 'curl') {
+            downloadLinks.push('curl --remote-name ' + netrc +
+              link.href);
+          } else {
+            downloadLinks.push(link.href);
+          }
+          if (granule.urs) {
+            // Get the hostname from the URL, the text between
+            // the double slash and the first slash after that
+            var host = /\/\/([^\/]*)\//.exec(link.href);
+            if (host) {
+              hosts[host[1]] = true;
             }
-            if (product.noBulkDownload) {
-              indirectLinks.push('<li><a href=\'' + link.href + '\'>' +
-                link.href + '</a></li>');
-              return;
-            }
-            if (type === 'curl') {
-              downloadLinks.push('curl --remote-name ' + netrc +
-                link.href);
-            } else {
-              downloadLinks.push(link.href);
-            }
-            if (granule.urs) {
-              // Get the hostname from the URL, the text between
-              // the double slash and the first slash after that
-              var host = /\/\/([^\/]*)\//.exec(link.href);
-              if (host) {
-                hosts[host[1]] = true;
-              }
-            }
-          });
+          }
         });
       });
-      var links = page.document.getElementById('links');
-      if (!links) return false;
-      links.innerHTML = '<pre>' + downloadLinks.join('\n') + '</pre>';
+    });
+    var links = page.document.getElementById('links');
+    if (!links) return false;
+    links.innerHTML = '<pre>' + downloadLinks.join('\n') + '</pre>';
 
-      var netrcEntries = [];
-      var hostnames = [];
-      $.each(hosts, function (host) {
-        netrcEntries.push('machine ' + host + ' login URS_USER ' +
-          'password URS_PASSWORD');
-        hostnames.push(host);
-      });
-      if (netrcEntries.length > 0) {
-        page.document.getElementById('netrc')
-          .innerHTML =
-          '<pre>' + netrcEntries.join('\n') + '</pre>';
-        page.document.getElementById('bulk-password-notice')
-          .style.display = 'block';
-        page.document.getElementById('netrc-instructions')
-          .style.display = 'block';
-        var instructions =
-          page.document.getElementById('fdm-password-instructions');
-        if (instructions) {
-          instructions.style.display = 'block';
-        }
-        var machineNames =
-          page.document.getElementById('fdm-machine-names');
-        if (machineNames) {
-          machineNames.innerHTML = '<pre>' + hostnames.join('\n') +
-            '</pre>';
-        }
+    var netrcEntries = [];
+    var hostnames = [];
+    $.each(hosts, function (host) {
+      netrcEntries.push('machine ' + host + ' login URS_USER ' +
+        'password URS_PASSWORD');
+      hostnames.push(host);
+    });
+    if (netrcEntries.length > 0) {
+      page.document.getElementById('netrc')
+        .innerHTML =
+        '<pre>' + netrcEntries.join('\n') + '</pre>';
+      page.document.getElementById('bulk-password-notice')
+        .style.display = 'block';
+      page.document.getElementById('netrc-instructions')
+        .style.display = 'block';
+      var instructions =
+        page.document.getElementById('fdm-password-instructions');
+      if (instructions) {
+        instructions.style.display = 'block';
       }
-      if (indirectLinks.length > 0) {
-        page.document.getElementById('indirect-instructions')
-          .style.display = 'block';
-        page.document.getElementById('indirect')
-          .innerHTML =
-          '<ul>' + indirectLinks.join('\n') + '</ul>';
+      var machineNames =
+        page.document.getElementById('fdm-machine-names');
+      if (machineNames) {
+        machineNames.innerHTML = '<pre>' + hostnames.join('\n') +
+          '</pre>';
       }
-      return true;
-    };
+    }
+    if (indirectLinks.length > 0) {
+      page.document.getElementById('indirect-instructions')
+        .style.display = 'block';
+      page.document.getElementById('indirect')
+        .innerHTML =
+        '<ul>' + indirectLinks.join('\n') + '</ul>';
+    }
+    return true;
+  };
 
-    return ns;
-  })();
+  return ns;
+})();
 
-wv.data.ui.downloadListPanel = function (config, model) {
-  var cmr = wv.data.cmr;
+var dataUiDownloadListPanel = function (config, model) {
   var NOTICE =
     '<div id=\'wv-data-selection-notice\'>' +
     '<i class=\'icon fa fa-info-circle fa-3x\'></i>' +
@@ -507,10 +514,10 @@ wv.data.ui.downloadListPanel = function (config, model) {
   var urs = false;
   var $dialog;
 
-  self.events = wv.util.events();
+  self.events = util.events();
 
   self.show = function () {
-    $dialog = wv.ui.getDialog()
+    $dialog = wvui.getDialog()
       .attr('id', 'wv-data-selection');
 
     $dialog.dialog({
@@ -557,7 +564,7 @@ wv.data.ui.downloadListPanel = function (config, model) {
     $('#wv-data-selection')
       .html(bodyText(selection));
     var bulkVisible = isBulkDownloadable() &&
-      _.size(model.selectedGranules) !== 0;
+      loSize(model.selectedGranules) !== 0;
     if (bulkVisible) {
       $('wv-data-bulk-download-links')
         .show();
@@ -625,9 +632,9 @@ wv.data.ui.downloadListPanel = function (config, model) {
         if (hrefExt && hrefExt.length > 0) {
           hrefExt = hrefExt[0];
         }
-        if ((cmr.DATA_EXTS.indexOf(hrefExt) === -1 &&
-            link.rel !== cmr.REL_BROWSE) ||
-          link.rel === cmr.REL_METADATA) {
+        if ((DATA_EXTS.indexOf(hrefExt) === -1 &&
+            link.rel !== REL_BROWSE) ||
+          link.rel === REL_METADATA) {
           if (!product.counts[link.href]) {
             product.counts[link.href] = 1;
           } else {
@@ -665,7 +672,7 @@ wv.data.ui.downloadListPanel = function (config, model) {
             return;
           }
           // Skip browse images per Kevin's request
-          if (link.rel === cmr.REL_BROWSE) {
+          if (link.rel === REL_BROWSE) {
             return;
           }
           item.links.push(reformatLink(link));
@@ -712,7 +719,7 @@ wv.data.ui.downloadListPanel = function (config, model) {
     return {
       href: link.href,
       title: titleVal,
-      data: (link.rel === cmr.REL_DATA)
+      data: (link.rel === REL_DATA)
     };
   };
 
@@ -777,7 +784,7 @@ wv.data.ui.downloadListPanel = function (config, model) {
   };
 
   var bodyText = function () {
-    if (_.size(model.selectedGranules) === 0) {
+    if (loSize(model.selectedGranules) === 0) {
       return '<br/><h3>Selection Empty</h3>';
     }
     var elements = [];
@@ -810,11 +817,11 @@ wv.data.ui.downloadListPanel = function (config, model) {
   };
 
   var showWgetPage = function () {
-    wv.data.ui.bulkDownloadPage.show(selection, 'wget');
+    dataUiBulkDownloadPage.show(selection, 'wget');
   };
 
   var showCurlPage = function () {
-    wv.data.ui.bulkDownloadPage.show(selection, 'curl');
+    dataUiBulkDownloadPage.show(selection, 'curl');
   };
 
   var removeGranule = function () {
@@ -826,20 +833,18 @@ wv.data.ui.downloadListPanel = function (config, model) {
 
   var onHoverOver = function () {
     model.events.trigger('hoverOver',
-      model.selectedGranules[$(this)
-        .attr('data-granule')]);
+      model.selectedGranules[$(this).attr('data-granule')]);
   };
 
   var onHoverOut = function () {
     model.events.trigger('hoverOut',
-      model.selectedGranules[$(this)
-        .attr('data-granule')]);
+      model.selectedGranules[$(this).attr('data-granule')]);
   };
 
   return self;
 };
 
-wv.data.ui.selectionListPanel = function (model, results) {
+var dataUiSelectionListPanel = function (model, results) {
   var self = {};
   var granules = {};
   var $dialog;
@@ -849,7 +854,7 @@ wv.data.ui.selectionListPanel = function (model, results) {
   };
 
   self.show = function () {
-    $dialog = wv.ui.getDialog('wv-data-list');
+    $dialog = wvui.getDialog('wv-data-list');
     $dialog
       .attr('id', 'wv-data-list')
       .html(bodyText())
@@ -922,8 +927,7 @@ wv.data.ui.selectionListPanel = function (model, results) {
   };
 
   var toggleSelection = function () {
-    var granule = granules[$(this)
-      .attr('value')];
+    var granule = granules[$(this).attr('value')];
     var selected = $(this)
       .prop('checked');
     if (selected) {

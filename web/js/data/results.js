@@ -1,37 +1,51 @@
-/**
- * @module wv.data
- */
-var wv = wv || {};
-wv.data = wv.data || {};
+import $ from 'jquery';
 
-wv.data.results = wv.data.results || {};
+import OlGeomMultiPolygon from 'ol/geom/multipolygon';
+import OlGeomMultiPoint from 'ol/geom/multipoint';
+import OlFormatGeoJSON from 'ol/format/geojson';
+import OlGeomPolygon from 'ol/geom/polygon';
+import OlGeomPoint from 'ol/geom/point';
+import olExtent from 'ol/extent';
+import loClone from 'lodash/clone';
+import loEach from 'lodash/each';
+import {dataCmrRoundTime, dataCmrGeometry} from './cmr';
+import util from '../util/util';
+import {dataHelper} from '../edsc';
+import {
+  CRS_WGS_84,
+  mapIsPolygonValid,
+  mapAdjustAntiMeridian,
+  mapToPolys,
+  mapDistance2D,
+  mapInterpolate2D
+} from '../map/map';
 
-wv.data.results.antiMeridianMulti = function (maxDistance) {
+export function dataResultsAntiMeridianMulti(maxDistance) {
   var self = {};
   self.name = 'AntiMeridianMulti';
 
   self.process = function (meta, granule) {
-    var geom = granule.geometry[wv.map.CRS_WGS_84];
+    var geom = granule.geometry[CRS_WGS_84];
     // Semi-hack of ensuring geometry isn't a MultiPolygon since
     // isPolygonValid can't handle it; addresses WV-1574
-    if ((!(geom instanceof ol.geom.MultiPolygon)) &&
-      (!wv.map.isPolygonValid(geom, maxDistance))) {
-      var geomEast = wv.map.adjustAntiMeridian(geom, 1);
-      var geomWest = wv.map.adjustAntiMeridian(geom, -1);
+    if ((!(geom instanceof OlGeomMultiPolygon)) &&
+      (!mapIsPolygonValid(geom, maxDistance))) {
+      var geomEast = mapAdjustAntiMeridian(geom, 1);
+      var geomWest = mapAdjustAntiMeridian(geom, -1);
       var centroidEast = geomEast.getInteriorPoint();
       var centroidWest = geomWest.getInteriorPoint();
       var newGeom =
-        new ol.geom.MultiPolygon([
+        new OlGeomMultiPolygon([
           geomEast.getCoordinates(),
           geomWest.getCoordinates()
         ]);
       var newCentroid =
-        new ol.geom.MultiPoint([
+        new OlGeomMultiPoint([
           centroidEast.getCoordinates(),
           centroidWest.getCoordinates()
         ]);
-      granule.geometry[wv.map.CRS_WGS_84] = newGeom;
-      granule.centroid[wv.map.CRS_WGS_84] = newCentroid;
+      granule.geometry[CRS_WGS_84] = newGeom;
+      granule.centroid[CRS_WGS_84] = newCentroid;
     }
     return granule;
   };
@@ -39,7 +53,7 @@ wv.data.results.antiMeridianMulti = function (maxDistance) {
   return self;
 };
 
-wv.data.results.chain = function () {
+export function dataResultsChain() {
   var self = {};
 
   self.processes = [];
@@ -64,8 +78,8 @@ wv.data.results.chain = function () {
       }
     });
 
-    newGranules = [];
-    filteredGranules = {};
+    var newGranules = [];
+    var filteredGranules = {};
     $.each(results.granules, function (index, granule) {
       if (!granule.filtered) {
         newGranules.push(granule);
@@ -87,7 +101,7 @@ wv.data.results.chain = function () {
   return self;
 };
 
-wv.data.results.collectPreferred = function (prefer) {
+export function dataResultsCollectPreferred(prefer) {
   var self = {};
 
   self.name = 'CollectPreferred';
@@ -100,7 +114,7 @@ wv.data.results.collectPreferred = function (prefer) {
       (prefer === 'nrt' && granule.nrt) ||
       (prefer === 'science' && !granule.nrt);
     if (preferred) {
-      var timeStart = wv.data.cmr.roundTime(granule.time_start);
+      var timeStart = dataCmrRoundTime(granule.time_start);
       meta.preferred[timeStart] = granule;
     }
     return granule;
@@ -109,7 +123,7 @@ wv.data.results.collectPreferred = function (prefer) {
   return self;
 };
 
-wv.data.results.collectVersions = function () {
+export function dataResultsCollectVersions() {
   var self = {};
 
   self.name = 'CollectVersions';
@@ -119,7 +133,7 @@ wv.data.results.collectVersions = function () {
       meta.versions = {};
     }
     if (granule.version) {
-      var timeStart = wv.data.cmr.roundTime(granule.time_start);
+      var timeStart = dataCmrRoundTime(granule.time_start);
       var previousVersion = meta.versions[timeStart] || 0;
       meta.versions[timeStart] = Math.max(previousVersion,
         granule.version);
@@ -130,7 +144,7 @@ wv.data.results.collectVersions = function () {
   return self;
 };
 
-wv.data.results.connectSwaths = function (projection) {
+export function dataResultsConnectSwaths(projection) {
   var MAX_DISTANCE_GEO = 270;
   var startTimes = {};
   var endTimes = {};
@@ -175,7 +189,7 @@ wv.data.results.connectSwaths = function (projection) {
   var combineSwath = function (swath) {
     var combined = false;
 
-    var maxDistance = (projection === wv.map.CRS_WGS_84)
+    var maxDistance = (projection === CRS_WGS_84)
       ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY;
     var thisTimeStart = roundTime(swath[0].time_start);
     var thisTimeEnd = roundTime(swath[swath.length - 1].time_end);
@@ -219,8 +233,8 @@ wv.data.results.connectSwaths = function (projection) {
   // Connection is allowed as long as there is at least one path between
   // centroids that is less than the max distance
   var connectionAllowed = function (g1, g2, maxDistance) {
-    var polys1 = wv.map.toPolys(g1.geometry[projection]);
-    var polys2 = wv.map.toPolys(g2.geometry[projection]);
+    var polys1 = mapToPolys(g1.geometry[projection]);
+    var polys2 = mapToPolys(g2.geometry[projection]);
     var allowed = false;
     $.each(polys1, function (index, poly1) {
       $.each(polys2, function (index, poly2) {
@@ -238,29 +252,29 @@ wv.data.results.connectSwaths = function (projection) {
   };
 
   var roundTime = function (timeString) {
-    return wv.data.cmr.roundTime(timeString);
+    return dataCmrRoundTime(timeString);
   };
 
   return self;
 };
 
-wv.data.results.dateTimeLabel = function (time) {
+export function dataResultsDateTimeLabel(time) {
   var self = {};
 
   self.name = 'DateTimeLabel';
 
   self.process = function (meta, granule) {
-    var timeStart = wv.util.parseTimestampUTC(granule.time_start);
+    var timeStart = util.parseTimestampUTC(granule.time_start);
 
     // Some granules may not have an end time
     if (granule.time_end) {
-      var timeEnd = wv.util.parseTimestampUTC(granule.time_end);
-      granule.label = wv.util.toISOStringDate(timeStart) + ': ' +
-        wv.util.toISOStringTimeHM(timeStart) + '-' +
-        wv.util.toISOStringTimeHM(timeEnd) + ' UTC';
+      var timeEnd = util.parseTimestampUTC(granule.time_end);
+      granule.label = util.toISOStringDate(timeStart) + ': ' +
+        util.toISOStringTimeHM(timeStart) + '-' +
+        util.toISOStringTimeHM(timeEnd) + ' UTC';
     } else {
-      granule.label = wv.util.toISOStringDate(timeStart) + ': ' +
-        wv.util.toISOStringTimeHM(timeStart) + ' UTC';
+      granule.label = util.toISOStringDate(timeStart) + ': ' +
+        util.toISOStringTimeHM(timeStart) + ' UTC';
     }
 
     return granule;
@@ -269,7 +283,7 @@ wv.data.results.dateTimeLabel = function (time) {
   return self;
 };
 
-wv.data.results.densify = function () {
+export function dataResultsDensify() {
   var MAX_DISTANCE = 5;
   var self = {};
 
@@ -282,19 +296,19 @@ wv.data.results.densify = function () {
     return granule;
 
     /*
-    var geom = granule.geometry[wv.map.CRS_WGS_84];
+    var geom = granule.geometry[CRS_WGS_84];
     var newGeom = null;
     if ( geom.getPolygons ) {
         var polys = [];
-        _.each(geom.getPolygons(), function(poly) {
+        loEach(geom.getPolygons(), function(poly) {
             polys.push(densifyPolygon(poly));
         });
-        newGeom = new ol.geom.MultiPolygon([polys]);
+        newGeom = new OlGeomMultiPolygon([polys]);
     } else {
         var ring = densifyPolygon(geom);
         newGeom = new ol.geom.Polygon([ring]);
     }
-    granule.geometry[wv.map.CRS_WGS_84] = newGeom;
+    granule.geometry[CRS_WGS_84] = newGeom;
     return granule;
     */
   };
@@ -308,24 +322,24 @@ wv.data.results.densify = function () {
     for (var i = 0; i < ring.length - 2; i++) {
       var start = ring[i];
       end = ring[i + 1];
-      var distance = wv.map.distance2D(start, end);
+      var distance = mapDistance2D(start, end);
       var numPoints = Math.floor(distance / MAX_DISTANCE);
-      points.push(_.clone(start));
+      points.push(loClone(start));
       for (var j = 1; j < numPoints - 1; j++) {
         var d = j / numPoints;
         // This is what REVERB does, so we will do the same
-        var p = wv.map.interpolate2D(start, end, d);
+        var p = mapInterpolate2D(start, end, d);
         points.push(p);
       }
     }
-    points.push(_.clone(end));
+    points.push(loClone(end));
     return points;
   };
 
   return self;
 };
 
-wv.data.results.dividePolygon = function () {
+export function dataResultsDividePolygon() {
   var self = {};
 
   self.name = 'DividePolygon';
@@ -337,29 +351,29 @@ wv.data.results.dividePolygon = function () {
     var ring = granule.geometry['EPSG:4326'].getLinearRing(0);
     var coords = ring.getCoordinates();
     var latlons = [];
-    _.each(coords, function (coord) {
-      var latlon = new L.LatLng(coord[1], coord[0]);
+    loEach(coords, function (coord) {
+      var latlon = new dataHelper.LatLng(coord[1], coord[0]);
       latlons.push(latlon);
     });
-    var result = L.sphericalPolygon.dividePolygon(latlons);
+    var result = dataHelper.sphericalPolygon.dividePolygon(latlons);
     var newPolys = result.interiors;
     var resultMultiPoly = [];
-    _.each(newPolys, function (newPoly) {
+    loEach(newPolys, function (newPoly) {
       var resultPoly = [];
-      _.each(newPoly, function (newCoord) {
+      loEach(newPoly, function (newCoord) {
         resultPoly.push([newCoord.lng, newCoord.lat]);
       });
       resultMultiPoly.push(resultPoly);
     });
     granule.geometry['EPSG:4326'] =
-      new ol.geom.MultiPolygon([resultMultiPoly]);
+      new OlGeomMultiPolygon([resultMultiPoly]);
     return granule;
   };
 
   return self;
 };
 
-wv.data.results.extentFilter = function (projection, extent) {
+export function dataResultsExtentFilter(projection, extent) {
   var self = {};
 
   self.name = 'ExtentFilter';
@@ -370,7 +384,7 @@ wv.data.results.extentFilter = function (projection, extent) {
       return result;
     }
     var mbr = geom.getExtent();
-    if (ol.extent.intersects(extent, mbr)) {
+    if (olExtent.intersects(extent, mbr)) {
       return granule;
     }
   };
@@ -382,7 +396,7 @@ wv.data.results.extentFilter = function (projection, extent) {
   return self;
 };
 
-wv.data.results.geometryFromCMR = function (densify) {
+export function dataResultsGeometryFromCMR(densify) {
   var self = {};
 
   self.name = 'GeometryFromCMR';
@@ -395,12 +409,12 @@ wv.data.results.geometryFromCMR = function (densify) {
       granule.centroid = {};
     }
 
-    if (!granule.geometry[wv.map.CRS_WGS_84]) {
-      var cmrGeom = wv.data.cmr.geometry(granule, densify);
+    if (!granule.geometry[CRS_WGS_84]) {
+      var cmrGeom = dataCmrGeometry(granule, densify);
       var geom = cmrGeom.toOpenLayers();
       var centroid = geom.getInteriorPoint();
-      granule.geometry[wv.map.CRS_WGS_84] = geom;
-      granule.centroid[wv.map.CRS_WGS_84] = centroid;
+      granule.geometry[CRS_WGS_84] = geom;
+      granule.centroid[CRS_WGS_84] = centroid;
     }
     return granule;
   };
@@ -408,8 +422,8 @@ wv.data.results.geometryFromCMR = function (densify) {
   return self;
 };
 
-wv.data.results.geometryFromMODISGrid = function (projection) {
-  var parser = new ol.format.GeoJSON();
+export function dataResultsGeometryFromMODISGrid(projection) {
+  var parser = new OlFormatGeoJSON();
 
   var self = {};
 
@@ -428,7 +442,7 @@ wv.data.results.geometryFromMODISGrid = function (projection) {
       }
       var grid = meta.grid[granule.hv];
       var geom = parser.readGeometry(meta.grid[granule.hv].geometry);
-      var centroid = new ol.geom.Point([
+      var centroid = new OlGeomPoint([
         grid.properties.CENTER_X,
         grid.properties.CENTER_Y
       ]);
@@ -442,7 +456,7 @@ wv.data.results.geometryFromMODISGrid = function (projection) {
   return self;
 };
 
-wv.data.results.modisGridIndex = function () {
+export function dataResultsModisGridIndex() {
   var self = {};
 
   self.name = 'MODISGridIndex';
@@ -467,7 +481,7 @@ wv.data.results.modisGridIndex = function () {
   return self;
 };
 
-wv.data.results.modisGridLabel = function () {
+export function dataResultsModisGridLabel() {
   var self = {};
 
   self.name = 'MODISGridLabel';
@@ -475,8 +489,8 @@ wv.data.results.modisGridLabel = function () {
   self.process = function (meta, granule) {
     granule.label = 'h' + granule.h + ' - ' + 'v' + granule.v;
 
-    var timeStart = wv.util.parseTimestampUTC(granule.time_start);
-    var date = wv.util.toISOStringDate(timeStart);
+    var timeStart = util.parseTimestampUTC(granule.time_start);
+    var date = util.toISOStringDate(timeStart);
 
     granule.downloadLabel = date + ': h' + granule.h + '-' + granule.v;
 
@@ -486,7 +500,7 @@ wv.data.results.modisGridLabel = function () {
   return self;
 };
 
-wv.data.results.orbitFilter = function (spec) {
+export function dataResultsOrbitFilter(spec) {
   var self = {};
 
   self.name = 'OrbitFilter';
@@ -507,13 +521,13 @@ wv.data.results.orbitFilter = function (spec) {
   return self;
 };
 
-wv.data.results.preferredFilter = function (prefer) {
+export function dataResultsPreferredFilter(prefer) {
   var self = {};
 
   self.name = 'PreferredFilter';
 
   self.process = function (meta, granule) {
-    var timeStart = wv.data.cmr.roundTime(granule.time_start);
+    var timeStart = dataCmrRoundTime(granule.time_start);
     if (meta.preferred[timeStart]) {
       if (prefer === 'nrt' && !granule.nrt) {
         return;
@@ -528,7 +542,7 @@ wv.data.results.preferredFilter = function (prefer) {
   return self;
 };
 
-wv.data.results.productLabel = function (name) {
+export function dataResultsProductLabel(name) {
   var self = {};
 
   self.name = 'ProductLabel';
@@ -541,7 +555,7 @@ wv.data.results.productLabel = function (name) {
   return self;
 };
 
-wv.data.results.tagList = function (spec) {
+export function dataResultsTagList(spec) {
   var self = {};
 
   self.name = 'TagList';
@@ -557,7 +571,7 @@ wv.data.results.tagList = function (spec) {
   return self;
 };
 
-wv.data.results.tagNRT = function (spec) {
+export function dataResultsTagNRT(spec) {
   var self = {};
 
   self.name = 'TagNRT';
@@ -586,7 +600,7 @@ wv.data.results.tagNRT = function (spec) {
   return self;
 };
 
-wv.data.results.tagProduct = function (product) {
+export function dataResultsTagProduct(product) {
   var self = {};
 
   self.name = 'TagProduct';
@@ -600,7 +614,7 @@ wv.data.results.tagProduct = function (product) {
 };
 
 // FIXME: Code copy and pasted from TagNRT, maybe consoldate this?
-wv.data.results.tagURS = function (spec) {
+export function dataResultsTagURS(spec) {
   var self = {};
 
   self.name = 'TagURS';
@@ -631,7 +645,7 @@ wv.data.results.tagURS = function (spec) {
   return self;
 };
 
-wv.data.results.tagVersion = function () {
+export function dataResultsTagVersion() {
   var self = {};
 
   self.name = 'TagVersion';
@@ -657,11 +671,11 @@ wv.data.results.tagVersion = function () {
   return self;
 };
 
-wv.data.results.timeFilter = function (spec) {
+export function dataResultsTimeFilter(spec) {
   var westZone = null;
   var eastZone = null;
   var maxDistance = null;
-
+  var timeOffset;
   var self = {};
 
   self.name = 'TimeFilter';
@@ -676,22 +690,22 @@ wv.data.results.timeFilter = function (spec) {
   };
 
   self.process = function (meta, granule) {
-    var geom = granule.geometry[wv.map.CRS_WGS_84];
-    var time = wv.util.parseTimestampUTC(granule.time_start);
+    var geom = granule.geometry[CRS_WGS_84];
+    var time = util.parseTimestampUTC(granule.time_start);
     time.setUTCMinutes(time.getUTCMinutes() + timeOffset);
 
     // Semi-hack of ensuring geometry isn't a MultiPolygon since
     // isPolygonValid can't handle it; addresses WV-1574
-    if ((!(geom instanceof ol.geom.MultiPolygon)) &&
-      (!wv.map.isPolygonValid(geom, maxDistance))) {
+    if ((!(geom instanceof OlGeomMultiPolygon)) &&
+      (!mapIsPolygonValid(geom, maxDistance))) {
       var adjustSign = (time < eastZone) ? 1 : -1;
       geom =
-        wv.map.adjustAntiMeridian(geom, adjustSign);
-      granule.geometry[wv.map.CRS_WGS_84] = geom;
-      granule.centroid[wv.map.CRS_WGS_84] = geom.getInteriorPoint();
+        mapAdjustAntiMeridian(geom, adjustSign);
+      granule.geometry[CRS_WGS_84] = geom;
+      granule.centroid[CRS_WGS_84] = geom.getInteriorPoint();
     }
 
-    var x = granule.centroid[wv.map.CRS_WGS_84].getCoordinates()[0];
+    var x = granule.centroid[CRS_WGS_84].getCoordinates()[0];
     if (time < eastZone && x < 0) {
       return;
     }
@@ -705,18 +719,18 @@ wv.data.results.timeFilter = function (spec) {
   return self;
 };
 
-wv.data.results.timeLabel = function (time) {
+export function dataResultsTimeLabel(time) {
   var self = {};
 
   self.name = 'TimeLabel';
 
   self.process = function (meta, granule) {
-    var timeStart = wv.util.parseTimestampUTC(granule.time_start);
+    var timeStart = util.parseTimestampUTC(granule.time_start);
 
     // Sometimes an end time is not provided by CMR
     var timeEnd;
     if (granule.time_end) {
-      timeEnd = wv.util.parseTimestampUTC(granule.time_end);
+      timeEnd = util.parseTimestampUTC(granule.time_end);
     }
 
     var diff = Math.floor(
@@ -731,16 +745,16 @@ wv.data.results.timeLabel = function (time) {
         suffix = ' (+' + diff + ' day)';
       }
     }
-    var displayStart = wv.util.toISOStringTimeHM(timeStart);
+    var displayStart = util.toISOStringTimeHM(timeStart);
     var displayEnd = null;
     if (timeEnd) {
-      displayEnd = wv.util.toISOStringTimeHM(timeEnd);
+      displayEnd = util.toISOStringTimeHM(timeEnd);
     } else {
       displayEnd = '?';
     }
     granule.label = displayStart + ' - ' + displayEnd + ' UTC' + suffix;
 
-    granule.downloadLabel = wv.util.toISOStringDate(timeStart) + ': ' +
+    granule.downloadLabel = util.toISOStringDate(timeStart) + ': ' +
       displayStart + '-' + displayEnd + ' UTC';
 
     return granule;
@@ -749,7 +763,7 @@ wv.data.results.timeLabel = function (time) {
   return self;
 };
 
-wv.data.results.transform = function (projection) {
+export function dataResultsTransform(projection) {
   var self = {};
 
   self.name = 'Transform';
@@ -758,15 +772,15 @@ wv.data.results.transform = function (projection) {
     if (granule.geometry[projection]) {
       return granule;
     }
-    var geom = granule.geometry[wv.map.CRS_WGS_84];
+    var geom = granule.geometry[CRS_WGS_84];
     var projGeom = geom.clone()
-      .transform(wv.map.CRS_WGS_84, projection);
+      .transform(CRS_WGS_84, projection);
     granule.geometry[projection] = projGeom;
 
-    if (projGeom instanceof ol.geom.Polygon) {
+    if (projGeom instanceof OlGeomPolygon) {
       granule.centroid[projection] = projGeom.getInteriorPoint();
     } else {
-      // Assuming that projGeom is a ol.geom.MultiPolygon
+      // Assuming that projGeom is a OlGeomMultiPolygon
       granule.centroid[projection] =
         projGeom.getInteriorPoints()
           .getPoint(0);
@@ -778,14 +792,14 @@ wv.data.results.transform = function (projection) {
   return self;
 };
 
-wv.data.results.versionFilter = function () {
+export function dataResultsVersionFilter() {
   var self = {};
 
   self.name = 'VersionFilter';
 
   self.process = function (meta, granule) {
     if (granule.version) {
-      var timeStart = wv.data.cmr.roundTime(granule.time_start);
+      var timeStart = dataCmrRoundTime(granule.time_start);
       if (meta.versions[timeStart]) {
         if (meta.versions[timeStart] !== granule.version) {
           return;
@@ -798,7 +812,7 @@ wv.data.results.versionFilter = function () {
   return self;
 };
 
-wv.data.results.versionFilterExact = function (version) {
+export function dataResultsVersionFilterExact(version) {
   var self = {};
 
   self.name = 'versionFilterExact';

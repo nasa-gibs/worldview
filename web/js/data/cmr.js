@@ -1,15 +1,17 @@
-/**
- * @module wv.data
- */
-var wv = wv || {};
-wv.data = wv.data || {};
-wv.data.cmr = wv.data.cmr || {};
+import $ from 'jquery';
+import util from '../util/util';
+import OlPolygon from 'ol/geom/polygon';
 
-wv.data.cmr.client = wv.data.cmr.client || function (spec) {
+export const REL_DATA = 'http://esipfed.org/ns/fedsearch/1.1/data#';
+export const REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
+export const REL_BROWSE = 'http://esipfed.org/ns/fedsearch/1.1/browse#';
+export const DATA_EXTS = ['hdf', 'he5', 'h5', 'hdf5', 'nc', 'bz2'];
+
+export function dataCmrClient(spec) {
   // Abort query after 45 seconds
   var QUERY_TIMEOUT = spec.timeout || 45 * 1000;
-
-  var ns = wv.data.cmr.client;
+  var self = {};
+  var ns = self;
 
   var ajaxOptions = {
     url: 'https://cmr.earthdata.nasa.gov/search/',
@@ -18,10 +20,8 @@ wv.data.cmr.client = wv.data.cmr.client || function (spec) {
     timeout: QUERY_TIMEOUT
   };
 
-  var self = {};
-
   var init = function () {
-    ns.ajax = wv.util.ajaxCache();
+    ns.ajax = util.ajaxCache();
   };
 
   self.submit = function (parameters) {
@@ -52,7 +52,7 @@ wv.data.cmr.client = wv.data.cmr.client || function (spec) {
 
     var deferred = $.Deferred();
     var metrics = 'ev=data-download&' + $.param(queryParameters.data, true);
-    wv.util.metrics(metrics);
+    util.metrics(metrics);
     ns.ajax.submit(queryParameters)
       .done(function (data) {
         deferred.resolve(data.feed.entry);
@@ -67,7 +67,7 @@ wv.data.cmr.client = wv.data.cmr.client || function (spec) {
   return self;
 };
 
-wv.data.cmr.geometry = function (result) {
+export function dataCmrGeometry(result) {
   var self = {};
   self.polygons = [];
 
@@ -82,7 +82,7 @@ wv.data.cmr.geometry = function (result) {
   };
 
   self.toOpenLayers = function () {
-    olPolygons = [];
+    var olPolygons = [];
     $.each(self.polygons, function (index, polygon) {
       var olRings = [];
       $.each(polygon, function (index, ring) {
@@ -93,7 +93,7 @@ wv.data.cmr.geometry = function (result) {
         });
         olRings.push(olPoints);
       });
-      olPolygons.push(new ol.geom.Polygon(olRings));
+      olPolygons.push(new OlPolygon(olRings));
     });
     return olPolygons[0];
   };
@@ -155,7 +155,7 @@ wv.data.cmr.geometry = function (result) {
   return self;
 };
 
-wv.data.cmr.mockClient = function (suffix) {
+export function dataCmrMockClient(suffix, models) {
   var endpoint;
   var results;
 
@@ -177,7 +177,7 @@ wv.data.cmr.mockClient = function (suffix) {
           results = adjustResults(parameters, data);
           deferred.resolve(results.feed.entry);
         } catch (error) {
-          wv.util.error(error);
+          util.error(error);
         }
       })
         .fail(function (jqXHR, textStatus, errorThrown) {
@@ -190,17 +190,17 @@ wv.data.cmr.mockClient = function (suffix) {
   };
 
   var adjustResults = function (parameters, data) {
-    var day = wvx.models.date.selected;
+    var day = models.date.selected;
     // Mock data was retrieved for Aug 6, 2013
     var resultsDay = new Date(Date.UTC(2013, 7, 6));
     var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);
 
     $.each(data.feed.entry, function (index, entry) {
-      var timeStart = wv.util.parseTimestampUTC(entry.time_start);
+      var timeStart = util.parseTimestampUTC(entry.time_start);
       timeStart.setUTCDate(timeStart.getUTCDate() + diffDays);
       entry.time_start = timeStart.toISOString();
 
-      var timeEnd = wv.util.parseTimestampUTC(entry.time_end);
+      var timeEnd = util.parseTimestampUTC(entry.time_end);
       timeEnd.setUTCDate(timeEnd.getUTCDate() + diffDays);
       entry.time_end = timeEnd.toISOString();
     });
@@ -213,13 +213,8 @@ wv.data.cmr.mockClient = function (suffix) {
   return self;
 };
 
-wv.data.cmr.REL_DATA = 'http://esipfed.org/ns/fedsearch/1.1/data#';
-wv.data.cmr.REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
-wv.data.cmr.REL_BROWSE = 'http://esipfed.org/ns/fedsearch/1.1/browse#';
-wv.data.cmr.DATA_EXTS = ['hdf', 'he5', 'h5', 'hdf5', 'nc', 'bz2'];
-
-wv.data.cmr.roundTime = function (timeString) {
-  var time = wv.util.parseTimestampUTC(timeString);
+export function dataCmrRoundTime(timeString) {
+  var time = util.parseTimestampUTC(timeString);
   if (time.getUTCMilliseconds() >= 500) {
     time.setUTCSeconds(time.getUTCSeconds() + 1);
   }
