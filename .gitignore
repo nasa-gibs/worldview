@@ -4,6 +4,9 @@
 /node_modules
 /web/ext/node_modules/*
 python
+.python/
+.node-virtualenv/
+.ropeproject/
 *.pyc
 .project
 .settings

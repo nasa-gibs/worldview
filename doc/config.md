@@ -16,7 +16,7 @@ Information here is incomplete and can be flushed out on an as-needed basis.
 
 All paths in the document are relative to the options repository root unless specified otherwise.
 
-After making any changes to the configuration, run ``grunt config`` from the command line to rebuild the configuration for use by the application.
+After making any changes to the configuration, run ``npm run build:config`` from the command line to rebuild the configuration for use by the application.
 
 ## New Layers
 
@@ -135,7 +135,7 @@ New layers in the Global Imagery Browse Services (GIBS) can be added to Worldvie
 
 First, layers must be added to `config/wv.json/layers` and `config/wv.json/layerOrder.json`. Then they must be added to the `config/wv.json/measurements` and `config/wv.json/categories` folders so that they will be categorized in the Product Picker. Lastly, if the layers have descriptions these can be added in `config/metadata` and if they are available in the Common Metadata Repository (CMR), data download may be enabled for those layers.
 
-- Fetch GIBS GetCapabilities with `grunt fetch`. This gets the latest layer information and colormaps from GIBS.
+- Fetch GIBS GetCapabilities with `npm run getcapabilities`. This gets the latest layer information and colormaps from GIBS.
 - Add new layer(s)
   - Follow [New Layers](https://github.com/nasa-gibs/worldview/blob/master/doc/config.md#new-layers) above to create JSON file in `config/wv.json/layers`.
 - Add to Measurements
@@ -150,6 +150,7 @@ First, layers must be added to `config/wv.json/layers` and `config/wv.json/layer
   - Create .md file in `config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
 - Add Data Download for product, if it exists
   - Refer to [Data Download](https://github.com/nasa-gibs/worldview/blob/master/doc/data_download.md) and create JSON file in `config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
+- Rebuild the configuration with `npm run build:config` for use by the application.
 
 ## New Map Sources
 
