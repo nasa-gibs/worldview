@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'jquery-ui/button';
+import 'jquery-jcrop';
 import loFind from 'lodash/find';
 import util from '../util/util';
 import wvui from '../ui/ui';
@@ -24,10 +25,7 @@ export function imageRubberband(models, ui, config) {
   var selector = '#' + containerId;
   var coords = null;
   var previousCoords = null;
-  var icon = 'images/camera.png';
-  var onicon = 'images/cameraon.png';
   var $cropee = $('#wv-map'); // TODO: Test on non-canvas
-  var id = containerId;
   var state = 'off';
   var jcropAPI = null;
   var previousPalettes = null;
@@ -102,7 +100,6 @@ export function imageRubberband(models, ui, config) {
     };
 
     var disablePalettes = function () {
-      var map = ui.map.selected;
       // Save the previous state to be restored later
       previousPalettes = models.palettes.active;
       models.palettes.clear();
@@ -117,7 +114,6 @@ export function imageRubberband(models, ui, config) {
       var layers = models.layers.get({
         renderable: true
       });
-      var on = true;
       if (loFind(layers, {
         id: 'Graticule'
       }) && geographic) {

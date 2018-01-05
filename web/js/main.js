@@ -36,12 +36,12 @@ import {mapDatelineBuilder} from './map/datelinebuilder';
 import {mapPrecacheTile} from './map/precachetile';
 import {mapAnimate} from './map/animate';
 // Animation
-// import {animationParser} from './animation/anim';
-// import AnimationModel from './animation/model';
-// import AnimationUI from './animation/ui';
-// import AnimationWidget from './animation/animation-widget';
-// import AnimationRangeselect from './animation/rangeselect';
-// import AnimationGIF from './animation/anim.gif';
+import {parse as animationParser} from './animation/anim';
+import {animationModel} from './animation/model';
+import {animationUi} from './animation/ui';
+import {animationWidget} from './animation/widget';
+import {animationRangeSelect} from './animation/range-select';
+import {animationGif} from './animation/gif';
 // Palettes
 import palettes from './palettes/palettes';
 import {palettesModel} from './palettes/model';
@@ -54,10 +54,10 @@ import {palettesModel} from './palettes/model';
 // import NaturalEventsUI from './naturalEvents/ui';
 // import NaturalEventsRequest from './naturalEvents/request';
 // Image
-import imageRubberband from './image/rubberband';
-import imagePanel from './image/panel';
+import {imageRubberband} from './image/rubberband';
+import {imagePanel} from './image/panel';
 // Notifications
-// import NotificationsUI from './notifications/notifications.ui';
+import {notificationsUi} from './notifications/ui';
 // UI
 import loadingIndicator from './ui/indicator'; // not a class, export object
 // Link
@@ -139,7 +139,7 @@ window.onload = () => {
       // parsers.push(dataParser);
     }
     if (config.features.animation) {
-      // parsers.push(animationParser);
+      parsers.push(animationParser);
     }
     loEach(parsers, function(parser) {
       parser(state, errors, config);
@@ -208,8 +208,8 @@ window.onload = () => {
     ui.map = mapui(models, config, mapComponents);
     ui.map.animate = mapAnimate(models, config, ui);
     if (config.features.animation) {
-      // models.anim = animationModel(models, config);
-      // models.link.register(models.anim);
+      models.anim = animationModel(models, config);
+      models.link.register(models.anim);
     }
     if (config.features.dataDownload) {
       // models.data = dataModel(models, config);
@@ -244,11 +244,11 @@ window.onload = () => {
       ui.timeline.config = timelineConfig(models, config, ui);
       ui.timeline.input = timelineInput(models, config, ui);
       if (config.features.animation) {
-        // ui.anim = {};
-        // ui.anim.rangeselect = animationRangeselect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-        // ui.anim.widget = animationWidget(models, config, ui);
-        // ui.anim.gif = animationGIF(models, config, ui);
-        // ui.anim.ui = animationUI(models, ui);
+        ui.anim = {};
+        ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+        ui.anim.widget = animationWidget(models, config, ui);
+        ui.anim.gif = animationGif(models, config, ui);
+        ui.anim.ui = animationUi(models, ui);
       }
 
       ui.dateLabel = dateLabel(models);
@@ -260,21 +260,21 @@ window.onload = () => {
       //ui.dateWheels = dateWheels(models, config);
     }
 
-    // ui.rubberband = imageRubberband(models, ui, config);
-    // ui.image = imagePanel(models, ui, config);
+    ui.rubberband = imageRubberband(models, ui, config);
+    ui.image = imagePanel(models, ui, config);
     if (config.features.dataDownload) {
-      //ui.data = dataui(models, ui, config);
+      // ui.data = dataui(models, ui, config);
       // FIXME: Why is this here?
-      //ui.data.render();
+      // ui.data.render();
     }
     if (config.features.naturalEvents) {
     //  ui.naturalEvents = naturalEventsUI(models, ui, config, naturalEventsRequest(models, ui, config));
     }
     ui.link = linkUi(models, config);
     ui.tour = tour(models, ui, config);
-    // ui.info = uiInfo(ui, config);
+    ui.info = uiInfo(ui, config);
     if (config.features.alert) {
-    //  ui.alert = notificationsUi(ui, config);
+      ui.alert = notificationsUi(ui, config);
     }
 
     // FIXME: Old hack

@@ -12,6 +12,7 @@ export function imagePanel(models, ui, config) {
   var self = {};
 
   var container;
+  var url;
   var alignTo = config.alignTo;
   var containerId = 'imagedownload';
   var id = containerId;
@@ -343,7 +344,7 @@ export function imagePanel(models, ui, config) {
 
       var imgWidth = 0;
       var imgHeight = 0;
-      var imageRes, imgFileSize, imgFormat, imgWorldfile;
+      var imgRes, imgFileSize, imgFormat, imgWorldfile;
 
       $('#wv-image-resolution')
         .unbind('change')
@@ -353,13 +354,13 @@ export function imagePanel(models, ui, config) {
           resolution = imgRes;
           imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
           imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
-          imgFilesize = ((imgWidth * imgHeight * 24) / 8388608)
+          imgFileSize = ((imgWidth * imgHeight * 24) / 8388608)
             .toFixed(2);
           imgFormat = $('#wv-image-format option:checked')
             .val();
           imgWorldfile = $('#wv-image-worldfile option:checked')
             .val();
-          var invalid = (imgFilesize > 250 || imgHeight === 0 || imgWidth === 0);
+          var invalid = (imgFileSize > 250 || imgHeight === 0 || imgWidth === 0);
           var icon;
           if (invalid) {
             icon = '<i class=\'fa fa-times fa-fw\'></i>';
@@ -379,7 +380,7 @@ export function imagePanel(models, ui, config) {
           $('#wv-image-height')
             .html((imgHeight));
           $('#wv-image-size')
-            .html(icon + imgFilesize + ' MB');
+            .html(icon + imgFileSize + ' MB');
         })
         .change();
 

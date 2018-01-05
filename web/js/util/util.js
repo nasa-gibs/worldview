@@ -649,7 +649,6 @@ export default (function (self) {
       try {
         return func.apply(func, arguments);
       } catch (error) {
-        console.log(error);
         self.error(error);
       }
     };

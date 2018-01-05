@@ -1,15 +1,15 @@
-var wv = wv || {};
-wv.notifications = wv.notifications || {};
-
+import $ from 'jquery';
+import util from '../util/util';
+import loIsEmpty from 'lodash/isempty';
+import wvui from '../ui/ui';
 /*
  * @Class
  */
-wv.notifications.ui = wv.notifications.ui || function (models, config) {
+export function notificationsUi(models, config) {
   var self = {};
   var mainNotification;
   var mainIcon;
   var mainIconLabel;
-  var secondaryNotification;
   var sortedNotifications = {};
 
   var activeNotifications = {};
@@ -21,7 +21,7 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
   url = config.features.alert.url;
   messageBlockExists = false;
   alertBlockExists = false;
-  self.events = wv.util.events();
+  self.events = util.events();
   self.infoIconActive = false;
   self.notifyIconActive = false;
   self.messageIconActive = false;
@@ -42,15 +42,15 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
    * @returns {void}
    */
   var init = function () {
-    var reactComponent, options, p, alertUser;
-    if (!wv.util.browser.localStorage) {
+    var p;
+    if (!util.browser.localStorage) {
       return;
     }
     mainIcon = $('#wv-info-button')[0];
     mainIconLabel = $('#wv-info-button label')[0];
-    p = wv.util.get(url);
+    p = util.get(url);
     p.then(function (response) {
-      var obj, notifications, alert;
+      var obj, notifications;
 
       obj = JSON.parse(response);
       notifications = obj.notifications;
@@ -194,10 +194,12 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
    * @returns {void}
    */
   var separateByType = function (obj) {
-    var messages = [],
-      alerts = [],
-      outages = [],
-      type, subObj;
+    var type;
+    var subObj;
+    var messages = [];
+    var alerts = [];
+    var outages = [];
+
     for (var i = 0, len = obj.length; i < len; i++) {
       subObj = obj[i];
       type = subObj.notification_type;
@@ -295,7 +297,7 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
   self.getAlert = function () {
     var $notifyMenuItem, alertsNumber, outageNumber, count, hide;
 
-    if (!_.isEmpty(activeNotifications)) {
+    if (!loIsEmpty(activeNotifications)) {
       alertsNumber = getNumberOfTypeNotseen('alert', sortedNotifications.alerts);
       outageNumber = getNumberOfTypeNotseen('outage', sortedNotifications.outages);
       count = outageNumber + alertsNumber;
@@ -396,7 +398,7 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
 
     $notifyContent.append(create$block(sortedNotifications.outages, 'outage'));
     $notifyContent.append(create$block(sortedNotifications.alerts, 'alert'));
-    $dialog = wv.ui.getDialog()
+    $dialog = wvui.getDialog()
       .append($notifyContent);
 
     $dialog.dialog({
@@ -426,7 +428,7 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
 
     width = 625;
     height = 'auto';
-    if (wv.util.browser.small || wv.util.browser.touchDevice) {
+    if (util.browser.small || util.browser.touchDevice) {
       width = $(window)
         .width();
       height = $(window)
@@ -447,7 +449,11 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
    * @returns {Object} Jquery ul element
    */
   var create$block = function (arra, title) {
-    var $li, date, numNotSeen, activeClass, $ul = $('<ul></ul>');
+    var $li;
+    var date;
+    var numNotSeen;
+    var activeClass;
+    var $ul = $('<ul></ul>');
 
     numNotSeen = getNumberOfTypeNotseen(title, sortedNotifications[title + 's']);
 
@@ -457,7 +463,7 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
         activeClass = title;
       }
       date = new Date(arra[i].created_at);
-      date = date.getDate() + ' ' + wv.util.giveMonth(date) + ' ' + date.getFullYear();
+      date = date.getDate() + ' ' + util.giveMonth(date) + ' ' + date.getFullYear();
       $li = $('<li><div class=\'' + activeClass + '\'><h2> <i class=\'fa fa-' + classes[title] + '\'/> ' + title + '<span> Posted ' + date + '</span></h2><p>' + arra[i].message + '</p></div></li>');
       $ul.append($li);
     }
@@ -492,16 +498,16 @@ wv.notifications.ui = wv.notifications.ui || function (models, config) {
    * @returns {void}
    */
   var create$whatsNew = function (obj, title) {
-    var $dialog, width, height, $notifyContent, releasePageUrl, date, dimensions;
+    var $dialog, $notifyContent, releasePageUrl, date, dimensions, $footer;
 
     date = new Date(obj.created_at);
-    date = date.getDate() + ' ' + wv.util.giveMonth(date) + ' ' + date.getFullYear();
+    date = date.getDate() + ' ' + util.giveMonth(date) + ' ' + date.getFullYear();
     releasePageUrl = config.features.alert.releases || 'https://github.com/nasa-gibs/worldview/releases';
     dimensions = getModalDimensions();
     $notifyContent = $('<div class=\'wv-notify-modal\'><div><h2>' + title + '<span> Posted ' + date + '</span></h2><p>' + obj.message + '</p></div></div>');
     $footer = $('<div class="wv-notify-footer"><p> Check out our <a target="_blank" href="' + releasePageUrl + '">release notes</a> for a complete list of new additions.</p></div>');
     $notifyContent.append($footer);
-    $dialog = wv.ui.getDialog()
+    $dialog = wvui.getDialog()
       .append($notifyContent);
     $dialog.dialog({
       title: 'What\'s New',
