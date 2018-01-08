@@ -9,10 +9,11 @@ import 'perfect-scrollbar/jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {LayerList} from 'worldview-components';
-import loFind from 'lodash/find';
-import loIndexOf from 'lodash/indexOf';
-import loSortBy from 'lodash/sortBy';
-import loStartCase from 'lodash/startCase';
+import lodashFind from 'lodash/find';
+import lodashIndexOf from 'lodash/indexOf';
+import lodashSortBy from 'lodash/sortBy';
+import lodashStartCase from 'lodash/startCase';
+import lodashValues from 'lodash/values';
 import util from '../util/util';
 
 export function layersModal(models, ui, config) {
@@ -35,7 +36,7 @@ export function layersModal(models, ui, config) {
   var hasMeasurement;
 
   var getLayersForProjection = function (projection) {
-    var filteredLayers = Object.values(config.layers).filter(function (layer) {
+    var filteredLayers = lodashValues(config.layers).filter(function (layer) {
       // Only use the layers for the active projection
       return layer.projections[projection];
     }).map(function (layer) {
@@ -47,8 +48,8 @@ export function layersModal(models, ui, config) {
       if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
       return layer;
     });
-    return loSortBy(filteredLayers, function (layer) {
-      return loIndexOf(config.layerOrder, layer.id);
+    return lodashSortBy(filteredLayers, function (layer) {
+      return lodashIndexOf(config.layerOrder, layer.id);
     });
   };
 
@@ -97,11 +98,11 @@ export function layersModal(models, ui, config) {
   var hasMeasurementSetting = function (current, source) {
     var projection = models.proj.selected.id;
     var hasSetting;
-    Object.values(source.settings).forEach(function (setting) {
+    lodashValues(source.settings).forEach(function (setting) {
       var layer = config.layers[setting];
       if (layer) {
         var proj = layer.projections;
-        if (layer.id == setting && Object.keys(proj).indexOf(projection) > -1) {
+        if (layer.id === setting && Object.keys(proj).indexOf(projection) > -1) {
           if (layer.layergroup && layer.layergroup.indexOf('reference_orbits') !== -1) {
             if (current.id === 'orbital-track') {
               hasSetting = true;
@@ -128,7 +129,7 @@ export function layersModal(models, ui, config) {
 
   var hasMeasurementSource = function (current) {
     var hasSource;
-    Object.values(current.sources).forEach(function (source) {
+    lodashValues(current.sources).forEach(function (source) {
       if (hasMeasurementSetting(current, source)) {
         hasSource = true;
         hasMeasurement = true;
@@ -242,7 +243,7 @@ export function layersModal(models, ui, config) {
         break;
       case undefined:
         // Set the default views per projection if modalView is not defined.
-        if (projection == 'geographic') {
+        if (projection === 'geographic') {
           crumbText = 'Categories';
           drawCategories();
         } else {
@@ -275,13 +276,13 @@ export function layersModal(models, ui, config) {
     $nav.empty();
 
     Object.keys(config.categories).forEach(function (metaCategoryName) {
-      Object.values(config.categories[metaCategoryName]).forEach(function (category) {
+      lodashValues(config.categories[metaCategoryName]).forEach(function (category) {
         var sortNumber = 2;
         var $i = 0;
 
         // Check if categories have settings with the same projection.
         hasMeasurement = false;
-        Object.values(category.measurements).forEach(function (measurement) {
+        lodashValues(category.measurements).forEach(function (measurement) {
           hasMeasurementSource(config.measurements[measurement]);
         });
 
@@ -323,7 +324,7 @@ export function layersModal(models, ui, config) {
 
           var $measurements = $('<ul />');
 
-          Object.values(category.measurements).forEach(function (measurement, index) {
+          lodashValues(category.measurements).forEach(function (measurement, index) {
             var current = config.measurements[measurement];
             // Check if measurements have settings with the same projection.
             if (hasMeasurementSource(current)) {
@@ -438,12 +439,12 @@ export function layersModal(models, ui, config) {
       id: category.id + '-list'
     });
     // Begin Measurement Level
-    Object.values(category.measurements).forEach(function (measurement) {
+    lodashValues(category.measurements).forEach(function (measurement) {
       var current = config.measurements[measurement];
       // Check if measurements have settings with the same projection.
       if (hasMeasurementSource(current)) {
         currentTab++;
-        if (selectedMeasurement == current.id) {
+        if (selectedMeasurement === current.id) {
           tabIndex = currentTab;
         }
 
@@ -466,7 +467,7 @@ export function layersModal(models, ui, config) {
         $measurementContent.append($sourceTabs);
 
         // Begin source level
-        Object.values(current.sources).forEach(function (source) {
+        lodashValues(current.sources).forEach(function (source) {
           var isExpanded;
           // Check if sources have settings with the same projection.
           if (hasMeasurementSetting(current, source)) {
@@ -536,10 +537,10 @@ export function layersModal(models, ui, config) {
               'class': 'source-orbit-tracks'
             });
 
-            Object.values(source.settings).forEach(function (setting) {
+            lodashValues(source.settings).forEach(function (setting) {
               var layer = config.layers[setting];
               // If a setting matches the current projection, then output it.
-              if (layer && layer.id == setting && Object.keys(layer.projections).indexOf(projection) > -1) {
+              if (layer && layer.id === setting && Object.keys(layer.projections).indexOf(projection) > -1) {
                 var $wrapper = $('<li />', {
                   'class': 'measurement-settings-item',
                   'data-layer': encodeURIComponent(layer.id),
@@ -555,7 +556,7 @@ export function layersModal(models, ui, config) {
                 }).on('ifChecked', addLayer)
                   .on('ifUnchecked', removeLayer);
 
-                if (loFind(model.active, {id: layer.id})) {
+                if (lodashFind(model.active, {id: layer.id})) {
                   $setting.attr('checked', 'checked');
                 }
 
@@ -570,7 +571,7 @@ export function layersModal(models, ui, config) {
                 if (layer.layergroup && layer.layergroup.indexOf('reference_orbits') !== -1) {
                   var orbitTitle;
                   if (layer.daynight && layer.track) {
-                    orbitTitle = loStartCase(layer.track) + '/' + loStartCase(layer.daynight);
+                    orbitTitle = lodashStartCase(layer.track) + '/' + lodashStartCase(layer.daynight);
                   }
 
                   $label.empty()
@@ -683,8 +684,8 @@ export function layersModal(models, ui, config) {
    */
   var drawAllMeasurements = function () {
     Object.keys(config.categories).forEach(function (metaCategoryName) {
-      Object.values(config.categories[metaCategoryName]).forEach(function (category) {
-        if (category.id == 'legacy-all') {
+      lodashValues(config.categories[metaCategoryName]).forEach(function (category) {
+        if (category.id === 'legacy-all') {
           drawMeasurements(category);
         }
       });

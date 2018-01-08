@@ -7,7 +7,7 @@
 @import url("../../node_modules/icheck/skins/line/red.css");
 @import url("../../node_modules/jscrollpane/style/jquery.jscrollpane.css");
 @import url("../../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css");
-@import url("../../node_modules/mobiscroll-jquery/dist/css/mobiscroll.css");
+@import url("../ext/mobiscroll-2.6.0/mobiscroll.css");
 @import url("../../node_modules/jquery.joyride/jquery.joyride.css");
 @import url("../../node_modules/jquery-jcrop/css/jquery.Jcrop.css");
 @import url("../../node_modules/ol/ol.css");

@@ -1,8 +1,8 @@
 import $ from 'jquery';
-import 'mobiscroll-jquery';
+import 'mobiscroll';
 import util from '../util/util';
 
-export function dateWheels(models, config) {
+var dateWheels = function(models, config) {
   var id = 'timewheels';
   var $container = $('#' + id);
   var MSEC_TO_MIN = 1000 * 60;
@@ -89,3 +89,5 @@ export function dateWheels(models, config) {
   init();
   return self;
 };
+
+export default dateWheels;
