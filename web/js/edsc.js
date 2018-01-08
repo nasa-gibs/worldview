@@ -1,6 +1,6 @@
 import edscArc from './edsc/arc';
 import edscCoordinate from './edsc/coordinate';
-import edscGeoUtil from './edsc/geoUtil';
+import edscGeoUtil from './edsc/geoutil';
 import edscInterpolation from './edsc/interpolation';
 import edscSphericalPolygon from './edsc/spherical-polygon';
 var edsc = {};
