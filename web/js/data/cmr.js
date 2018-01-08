@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import util from '../util/util';
-import OlPolygon from 'ol/geom/polygon';
+import OlGeomPolygon from 'ol/geom/polygon';
 
 export const REL_DATA = 'http://esipfed.org/ns/fedsearch/1.1/data#';
 export const REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
@@ -93,7 +93,7 @@ export function dataCmrGeometry(result) {
         });
         olRings.push(olPoints);
       });
-      olPolygons.push(new OlPolygon(olRings));
+      olPolygons.push(new OlGeomPolygon(olRings));
     });
     return olPolygons[0];
   };
