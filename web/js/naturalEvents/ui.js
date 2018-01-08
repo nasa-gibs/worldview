@@ -1,12 +1,21 @@
-var wv = wv || {};
-wv.naturalEvents = wv.naturalEvents || {};
+import $ from 'jquery';
+import lodashFind from 'lodash/find';
+import lodashEach from 'lodash/each';
+import olExtent from 'ol/extent';
 
-wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, request) {
-  var self = {}, eventVisibilityAlert, $footer, view;
+import markers from './markers';
+import wvui from '../ui/ui';
+import util from '../util/util';
+
+export default function naturalEventsUI (models, ui, config, request) {
+  var self = {};
+  var eventVisibilityAlert;
+  var $footer;
+  var view;
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
-  var naturalEventMarkers = wv.naturalEvents.markers(models, ui, config);
+  var naturalEventMarkers = markers(models, ui, config);
 
   var init = function () {
     view = ui.map.selected.getView();
@@ -78,7 +87,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
 
     var event = getEventById(id);
     if (!event) {
-      wv.ui.notify('The event with an id of ' + id + ' is no longer active.');
+      wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
     }
 
@@ -100,7 +109,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
       }
-      models.date.select(wv.util.parseDateUTC(date));
+      models.date.select(util.parseDateUTC(date));
       /* For Wildfires that didn't happen today, move the timeline forward a day
        * to improve the chance that the fire is visible.
        * NOTE: If the fire happened yesterday and the imagery isn't yet available
@@ -111,24 +120,24 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
         var today = now.toISOString().split('T')[0];
         var yesterday = new Date(now.setDate(now.getDate() - 1)).toISOString().split('T')[0];
         if (date !== today || date !== yesterday) {
-          models.date.select(wv.util.dateAdd(wv.util.parseDateUTC(date), 'day', 1));
+          models.date.select(util.dateAdd(util.parseDateUTC(date), 'day', 1));
         }
       }
 
       // Show event visiblity alert
       if (!eventVisibilityAlert) {
-        eventVisibilityAlert = wv.ui.alert(
+        eventVisibilityAlert = wvui.alert(
           eventVisibilityAlertBody,
           'Events may not be visible at all times.',
           800,
           'warning',
           function () {
-            if (wv.util.browser.localStorage) localStorage.setItem('dismissedEventVisibilityAlert', true);
+            if (util.browser.localStorage) localStorage.setItem('dismissedEventVisibilityAlert', true);
             eventVisibilityAlert.dialog('close');
           }
         );
       }
-      if (wv.util.browser.localStorage && !localStorage.getItem('dismissedEventVisibilityAlert')) {
+      if (util.browser.localStorage && !localStorage.getItem('dismissedEventVisibilityAlert')) {
         eventVisibilityAlert.dialog('open');
       }
     });
@@ -143,7 +152,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
   };
 
   self.getDefaultEventDate = function (event) {
-    date = new Date(event.geometries[0].date).toISOString().split('T')[0];
+    var date = new Date(event.geometries[0].date).toISOString().split('T')[0];
     if (event.geometries.length < 2) return date;
     var category = event.categories.title || event.categories[0].title;
     var today = new Date().toISOString().split('T')[0];
@@ -162,17 +171,17 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
       if (self.selected && self.selected.date) {
         date = self.selected.date;
       }
-      var geometry = _.find(naturalEvent.geometries, function (geometry) {
-        return geometry.date.split('T')[0] == date;
+      var geometry = lodashFind(naturalEvent.geometries, function (geometry) {
+        return geometry.date.split('T')[0] === date;
       }) || naturalEvent.geometries[0];
 
       var coordinates = geometry.coordinates;
-      if (geometry.type == 'Polygon') {
-        var geomExtent = ol.extent.boundingExtent(geometry.coordinates[0]);
-        coordinates = ol.extent.getCenter(geomExtent);
+      if (geometry.type === 'Polygon') {
+        var geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
+        coordinates = olExtent.getCenter(geomExtent);
       }
 
-      var isVisible = ol.extent.containsCoordinate(extent, coordinates);
+      var isVisible = olExtent.containsCoordinate(extent, coordinates);
       var $thisItem = $('.map-item-list .item[data-id=' + naturalEvent.id + ']');
       if (isVisible) {
         $thisItem.show();
@@ -185,7 +194,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
   };
 
   var getEventById = function (id) {
-    return _.find(model.data.events, function (e) {
+    return lodashFind(model.data.events, function (e) {
       return e.id === id;
     });
   };
@@ -198,7 +207,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
     $panels.append($list);
     $panels.append($detailContainer);
     var $content = $('#wv-eventscontent').empty();
-    _.each(model.data.events, function (event) {
+    lodashEach(model.data.events, function (event) {
       $content.append(createEventElement($content, event));
     });
 
@@ -224,13 +233,12 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
   };
 
   var createEventElement = function ($content, event) {
-    var eventCategoryID = event.categories[0].id || null;
-    eventDate = wv.util.parseDateUTC(event.geometries[0].date);
-    dateString = wv.util.giveWeekDay(eventDate) + ', ' +
-      wv.util.giveMonth(eventDate) + ' ' +
+    var eventDate = util.parseDateUTC(event.geometries[0].date);
+    var dateString = util.giveWeekDay(eventDate) + ', ' +
+      util.giveMonth(eventDate) + ' ' +
       eventDate.getUTCDate();
 
-    if (eventDate.getUTCFullYear() !== wv.util.today().getUTCFullYear()) {
+    if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
       dateString += ', ' + eventDate.getUTCFullYear();
     }
 
@@ -251,12 +259,11 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
 
     if (event.geometries.length > 1) {
       var eventIndex = 0;
-      _.each(event.geometries, function (geometry) {
-        eventIndex++;
+      lodashEach(event.geometries, function (geometry) {
+        eventIndex = eventIndex + 1;
         var date = geometry.date.split('T')[0];
-        var todayDateISOString = wv.util.toISOStringDate(wv.util.today());
 
-        $date = $('<a/>', {
+        var $date = $('<a/>', {
           class: 'date',
           'data-id': event.id,
           'data-date': date,
@@ -274,9 +281,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
     $item.append($eventIcon).append($title).append($subtitle).append($dates);
     var references = Array.isArray(event.sources) ? event.sources : [event.sources];
     if (references.length > 0) {
-      items = [];
-      _.each(references, function (reference) {
-        var source = _.find(model.data.sources, {
+      var items = [];
+      lodashEach(references, function (reference) {
+        var source = lodashFind(model.data.sources, {
           id: reference.id
         });
         if (reference.url) {
@@ -320,7 +327,7 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
     $('#wv-eventscontent [data-id="' + id + '"] .dates').show();
 
     // Adjust tab layout to fit
-    if (wv.util.browser.small) ui.sidebar.collapseNow();
+    if (util.browser.small) ui.sidebar.collapseNow();
     ui.sidebar.sizeEventsTab();
   };
 
@@ -328,14 +335,14 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
     category = category || 'Default';
 
     // Turn on the relevant layers for the event type
-    layers = model.layers[category];
+    var layers = model.layers[category];
     if (!layers) layers = model.layers.Default;
     // Turn off all layers in list first
-    _.each(models.layers.active, function (layer) {
+    lodashEach(models.layers.active, function (layer) {
       models.layers.setVisibility(layer.id, false);
     });
     // Turn on or add new layers
-    _.each(layers, function (layer) {
+    lodashEach(layers, function (layer) {
       var id = layer[0];
       var visible = layer[1];
       if (models.layers.exists(id)) {
@@ -350,10 +357,10 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
 
   var zoomToEvent = function (event, date) {
     var category = event.categories[0].title;
-    var geometry = _.find(event.geometries, function (geom) {
+    var geometry = lodashFind(event.geometries, function (geom) {
       return geom.date.split('T')[0] === date;
     });
-    var coordinates = (geometry.type === 'Polygon') ? ol.extent.boundingExtent(geometry.coordinates[0]) : geometry.coordinates;
+    var coordinates = (geometry.type === 'Polygon') ? olExtent.boundingExtent(geometry.coordinates[0]) : geometry.coordinates;
 
     return ui.map.animate.fly(coordinates, ({
       'Wildfires': 8,

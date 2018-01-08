@@ -1,7 +1,16 @@
-var wv = wv || {};
-wv.naturalEvents = wv.naturalEvents || {};
-wv.naturalEvents.markers = wv.naturalEvents.markers || function (models, ui) {
-  var self = {}, map;
+import lodashFind from 'lodash/find';
+import olExtent from 'ol/extent';
+import OlOverlay from 'ol/overlay';
+import OlFeature from 'ol/feature';
+import OlStyleStyle from 'ol/style/style';
+import OlStyleStroke from 'ol/style/stroke';
+import OlLayerVector from 'ol/layer/vector';
+import OlSourceVector from 'ol/source/vector';
+import OlGeomPolygon from 'ol/geom/polygon';
+
+export default function markers (models, ui) {
+  var self = {};
+  var map;
   map = map || ui.map.selected;
   var olViewport = map.getViewport();
 
@@ -19,7 +28,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function (models, ui) {
         date = selected.date;
       }
 
-      var geometry = _.find(event.geometries, function (geom) {
+      var geometry = lodashFind(event.geometries, function (geom) {
         return geom.date.split('T')[0] === date;
       }) || event.geometries[0];
 
@@ -45,8 +54,8 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function (models, ui) {
         : {title: 'Default', slug: 'default'};
 
       if (geometry.type === 'Polygon') {
-        var extent = ol.extent.boundingExtent(geometry.coordinates[0]);
-        coordinates = ol.extent.getCenter(extent);
+        var extent = olExtent.boundingExtent(geometry.coordinates[0]);
+        coordinates = olExtent.getCenter(extent);
         if (isSelected) {
           marker.boundingBox = createBoundingBox(geometry.coordinates);
           map.addLayer(marker.boundingBox);
@@ -60,7 +69,9 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function (models, ui) {
       // Add event listeners
       var willSelect = true;
       var moveCount = 0;
-      var pinEl = marker.pin.element_;
+      // The pin element used to be on `element_` but now it looks like it
+      // moved to `element`. Maybe this was a change to OpenLayers.
+      var pinEl = marker.pin.element_ || marker.pin.element;
 
       ['pointerdown', 'mousedown', 'touchstart'].forEach(function (type) {
         pinEl.addEventListener(type, function (e) {
@@ -131,7 +142,7 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function (models, ui) {
     icon.className = 'event-icon event-icon-' + category.slug;
     icon.title = category.title;
     overlayEl.appendChild(icon);
-    return new ol.Overlay({
+    return new OlOverlay({
       element: overlayEl,
       positioning: 'bottom-center',
       id: id
@@ -139,25 +150,25 @@ wv.naturalEvents.markers = wv.naturalEvents.markers || function (models, ui) {
   };
 
   var createBoundingBox = function (coordinates) {
-    var lightStroke = new ol.style.Style({
-      stroke: new ol.style.Stroke({
+    var lightStroke = new OlStyleStyle({
+      stroke: new OlStyleStroke({
         color: [255, 255, 255, 0.6],
         width: 2,
         lineDash: [4, 8],
         lineDashOffset: 6
       })
     });
-    var darkStroke = new ol.style.Style({
-      stroke: new ol.style.Stroke({
+    var darkStroke = new OlStyleStyle({
+      stroke: new OlStyleStroke({
         color: [0, 0, 0, 0.6],
         width: 2,
         lineDash: [4, 8]
       })
     });
-    return new ol.layer.Vector({
-      source: new ol.source.Vector({
-        features: [new ol.Feature({
-          geometry: new ol.geom.Polygon(coordinates),
+    return new OlLayerVector({
+      source: new OlSourceVector({
+        features: [new OlFeature({
+          geometry: new OlGeomPolygon(coordinates),
           name: 'NaturalEvent'
         })],
         wrapX: false

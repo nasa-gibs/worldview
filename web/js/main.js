@@ -50,9 +50,9 @@ import {palettesModel} from './palettes/model';
 // import DataModel from './data/model';
 // import DataUI from './data/ui';
 // NaturalEvents
-// import NaturalEventsModel from './naturalEvents/model';
-// import NaturalEventsUI from './naturalEvents/ui';
-// import NaturalEventsRequest from './naturalEvents/request';
+import naturalEventsModel from './naturalEvents/model';
+import naturalEventsUI from './naturalEvents/ui';
+import naturalEventsRequest from './naturalEvents/request';
 // Image
 import {imageRubberband} from './image/rubberband';
 import {imagePanel} from './image/panel';
@@ -216,8 +216,8 @@ window.onload = () => {
       // models.link.register(models.data);
     }
     if (config.features.naturalEvents) {
-      // models.naturalEvents = naturalEventsModel(models, config, ui);
-      // models.link.register(models.naturalEvents);
+      models.naturalEvents = naturalEventsModel(models, config, ui);
+      models.link.register(models.naturalEvents);
     }
     // HACK: Map needs permalink state loaded before starting. But
     // data download now needs it too.
@@ -268,7 +268,8 @@ window.onload = () => {
       // ui.data.render();
     }
     if (config.features.naturalEvents) {
-    //  ui.naturalEvents = naturalEventsUI(models, ui, config, naturalEventsRequest(models, ui, config));
+      var request = naturalEventsRequest(models, ui, config);
+      ui.naturalEvents = naturalEventsUI(models, ui, config, request);
     }
     ui.link = linkUi(models, config);
     ui.tour = tour(models, ui, config);
