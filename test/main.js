@@ -8,7 +8,7 @@ import { dateModel } from '../web/js/date/model';
 import { parse as layerParser } from '../web/js/layers/layers';
 import { layersModel } from '../web/js/layers/model';
 import { linkModel } from '../web/js/link/model';
-import { parse as mapParser } from '../web/js/map/map';
+import { mapParser } from '../web/js/map/map';
 import { mapModel } from '../web/js/map/model';
 import { MapRunningData } from '../web/js/map/runningdata';
 import palettes from '../web/js/palettes/palettes';
