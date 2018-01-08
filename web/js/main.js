@@ -69,7 +69,7 @@ import {projectionModel} from './projection/model';
 import {projectionUi} from './projection/ui';
 import {projectionChange} from './projection/change';
 // Other
-//  import {debugConfig, debug} from './debug';
+import {debugConfig, debugLayers, debug} from './debug';
 import Brand from './brand';
 import tour from './tour';
 import {uiInfo} from './ui/info';
@@ -117,7 +117,7 @@ window.onload = () => {
     // Export for debugging
     wvx.config = config;
 
-    // debugConfig(config);
+    debugConfig(config);
 
     // Load any additional scripts as needed
     if (config.scripts) {
@@ -325,7 +325,7 @@ window.onload = () => {
     } else {
       console.warn('Development version');
     }
-    // debug.layers(ui, models, config);
+    debugLayers(ui, models, config);
 
     errorReport();
 
