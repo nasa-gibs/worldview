@@ -1,9 +1,11 @@
-/**
- * @module wv.debug
- */
 import $ from 'jquery';
+import lodashEach from 'lodash/each';
+import lodashIsNaN from 'lodash/isNaN';
+import lodashParseInt from 'lodash/parseInt';
+import lodashSortBy from 'lodash/sortBy';
 import util from './util/util';
 import palettes from './palettes/palettes';
+
 export var debug = (function () {
   var parameters = util.fromQueryString(location.search);
   var self = {};
@@ -72,8 +74,8 @@ export var debug = (function () {
 
 export function debugConfig(config) {
   if (config.parameters.debug === 'tiles') {
-    var tileSize = _.parseInt(config.parameters.tileSize);
-    if (_.isNaN(tileSize)) {
+    var tileSize = lodashParseInt(config.parameters.tileSize);
+    if (lodashIsNaN(tileSize)) {
       throw new Error('No tileSize specified');
     }
     console.log('Debugging tiles with size', tileSize);
@@ -88,7 +90,7 @@ export function debugConfig(config) {
       noTransition: 'true',
       projections: {}
     };
-    _.each(config.projections, function (proj) {
+    lodashEach(config.projections, function (proj) {
       config.layers.debug_tile.projections[proj.id] = {
         'source': 'debug_tile',
         'matrixSet': tileSize
@@ -198,9 +200,8 @@ export function debugLayers(ui, models, config) {
   var initLayers = function () {
     var $select = $('.wv-debug-gibs-layerlist');
     $select.empty();
-    var proj = models.proj.selected.id;
-    var sortedLayers = _.sortBy(config.layers, ['title', 'subtitle']);
-    _.each(sortedLayers, function (layer) {
+    var sortedLayers = lodashSortBy(config.layers, ['title', 'subtitle']);
+    lodashEach(sortedLayers, function (layer) {
       if (acceptLayer(layer)) {
         var names = models.layers.getTitles(layer.id);
         var text = names.title + '; ' + names.subtitle;
@@ -247,7 +248,7 @@ export function debugLayers(ui, models, config) {
     }
     selectedLayer = layerId;
     if (type === 'palettes') {
-      wv.palettes.loadRendered(config, layerId)
+      palettes.loadRendered(config, layerId)
         .done(function () {
           var layer = config.layers[layerId];
           var palette = config.palettes.rendered[layerId];
@@ -281,7 +282,7 @@ export function debugLayers(ui, models, config) {
   var updateDate = function () {
     $('.wv-debug-gibs-date-label')
       .html(
-        wv.util.toISOStringDate(models.date.selected));
+        util.toISOStringDate(models.date.selected));
   };
 
   var nextDate = function () {
