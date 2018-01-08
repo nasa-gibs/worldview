@@ -83,7 +83,7 @@ export function dataHandlerBase(config, model) {
     self.ajax = ns.ajax;
 
     self.extents = {};
-    loEach(config.projections, function (key, projection) {
+    $.each(config.projections, function (key, projection) {
       self.extents[projection.crs] = projection.maxExtent;
     });
   };
