@@ -6,8 +6,8 @@ import OlFormatGeoJSON from 'ol/format/geojson';
 import OlGeomPolygon from 'ol/geom/polygon';
 import OlGeomPoint from 'ol/geom/point';
 import olExtent from 'ol/extent';
-import loClone from 'lodash/clone';
-import loEach from 'lodash/each';
+import lodashClone from 'lodash/clone';
+import lodashEach from 'lodash/each';
 import {dataCmrRoundTime, dataCmrGeometry} from './cmr';
 import util from '../util/util';
 import {dataHelper} from '../edsc';
@@ -300,7 +300,7 @@ export function dataResultsDensify() {
     var newGeom = null;
     if ( geom.getPolygons ) {
         var polys = [];
-        loEach(geom.getPolygons(), function(poly) {
+        lodashEach(geom.getPolygons(), function(poly) {
             polys.push(densifyPolygon(poly));
         });
         newGeom = new OlGeomMultiPolygon([polys]);
@@ -324,7 +324,7 @@ export function dataResultsDensify() {
       end = ring[i + 1];
       var distance = mapDistance2D(start, end);
       var numPoints = Math.floor(distance / MAX_DISTANCE);
-      points.push(loClone(start));
+      points.push(lodashClone(start));
       for (var j = 1; j < numPoints - 1; j++) {
         var d = j / numPoints;
         // This is what REVERB does, so we will do the same
@@ -332,7 +332,7 @@ export function dataResultsDensify() {
         points.push(p);
       }
     }
-    points.push(loClone(end));
+    points.push(lodashClone(end));
     return points;
   };
 
@@ -351,16 +351,16 @@ export function dataResultsDividePolygon() {
     var ring = granule.geometry['EPSG:4326'].getLinearRing(0);
     var coords = ring.getCoordinates();
     var latlons = [];
-    loEach(coords, function (coord) {
+    lodashEach(coords, function (coord) {
       var latlon = new dataHelper.LatLng(coord[1], coord[0]);
       latlons.push(latlon);
     });
     var result = dataHelper.sphericalPolygon.dividePolygon(latlons);
     var newPolys = result.interiors;
     var resultMultiPoly = [];
-    loEach(newPolys, function (newPoly) {
+    lodashEach(newPolys, function (newPoly) {
       var resultPoly = [];
-      loEach(newPoly, function (newCoord) {
+      lodashEach(newPoly, function (newCoord) {
         resultPoly.push([newCoord.lng, newCoord.lat]);
       });
       resultMultiPoly.push(resultPoly);

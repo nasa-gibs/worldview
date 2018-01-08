@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import loEach from 'lodash/each';
-import loFind from 'lodash/find';
+import lodashEach from 'lodash/each';
+import lodashFind from 'lodash/find';
 import util from '../util/util';
 import {dataHandlerGetByName} from './handler';
 
@@ -167,7 +167,7 @@ export function dataModel(models, config) {
     // especially for IE9. This whole function needs clean up.
     var results = {};
     var none = products.__NO_PRODUCT;
-    loEach(products, function (product, key) {
+    lodashEach(products, function (product, key) {
       if (key !== NO_PRODUCT_ID) {
         results[key] = product;
       }
@@ -277,7 +277,7 @@ export function dataModel(models, config) {
   self.load = function (state, errors) {
     var productId = state.download;
     if (productId) {
-      var found = loFind(models.layers.active, {
+      var found = lodashFind(models.layers.active, {
         product: productId
       });
       if (!found) {
@@ -359,7 +359,7 @@ export function dataModel(models, config) {
   var updateLayers = function () {
     self.layers = [];
     var foundSelected = false;
-    loEach(models.layers.get(), function (layer) {
+    lodashEach(models.layers.get(), function (layer) {
       var id = layer.id;
       var names = models.layers.getTitles(layer.id);
       var layerName = names.title;
@@ -388,7 +388,7 @@ export function dataModel(models, config) {
     // FIXME: This is a hack for now and should be cleaned up when
     // everything changes to models.
     var products = self.groupByProducts();
-    loEach(self.selectedGranules, function (selected) {
+    lodashEach(self.selectedGranules, function (selected) {
       if (!products[selected.product] &&
         !productActive(selected.product)) {
         self.unselectGranule(selected);
@@ -398,7 +398,7 @@ export function dataModel(models, config) {
 
   var productActive = function (product) {
     var active = false;
-    loEach(layersModel.active, function (layer) {
+    lodashEach(layersModel.active, function (layer) {
       if (layer.product === product) {
         active = true;
         return false;

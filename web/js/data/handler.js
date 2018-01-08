@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import loEach from 'lodash/each';
 
 import {dataCmrMockClient, dataCmrClient} from './cmr';
 

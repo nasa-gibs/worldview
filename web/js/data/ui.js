@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import loSize from 'lodash/size';
-import loEach from 'lodash/each';
+import lodashSize from 'lodash/size';
+import lodashEach from 'lodash/each';
 import {GA as GoogleAnalytics} from 'worldview-components';
 import olExtent from 'ol/extent';
 
@@ -216,7 +216,7 @@ export function dataUi(models, ui, config) {
     var extent = map.getView()
       .calculateExtent(map.getSize());
     var crs = models.proj.selected.crs;
-    loEach(lastResults.granules, function (granule) {
+    lodashEach(lastResults.granules, function (granule) {
       if (granule.centroid && granule.centroid[crs]) {
         hasCentroids = true;
         if (olExtent.intersects(extent,
@@ -323,7 +323,7 @@ export function dataUi(models, ui, config) {
 
   var updateSelection = function () {
     var $button = $('#wv-data-download-button');
-    var selected = loSize(model.selectedGranules);
+    var selected = lodashSize(model.selectedGranules);
     if (selected > 0) {
       $button.button('enable');
       var totalSize = model.getSelectionSize();
@@ -564,7 +564,7 @@ var dataUiDownloadListPanel = function (config, model) {
     $('#wv-data-selection')
       .html(bodyText(selection));
     var bulkVisible = isBulkDownloadable() &&
-      loSize(model.selectedGranules) !== 0;
+      lodashSize(model.selectedGranules) !== 0;
     if (bulkVisible) {
       $('wv-data-bulk-download-links')
         .show();
@@ -784,7 +784,7 @@ var dataUiDownloadListPanel = function (config, model) {
   };
 
   var bodyText = function () {
-    if (loSize(model.selectedGranules) === 0) {
+    if (lodashSize(model.selectedGranules) === 0) {
       return '<br/><h3>Selection Empty</h3>';
     }
     var elements = [];

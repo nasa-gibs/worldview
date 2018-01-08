@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import loEach from 'lodash/each';
+import lodashEach from 'lodash/each';
 import OlStyleStyle from 'ol/style/style';
 import OlStyleIcon from 'ol/style/icon';
 import OlStyleText from 'ol/style/text';
@@ -205,7 +205,7 @@ export function dataMap(model, maps, config) {
     updateButtons();
     updateSwaths();
     updateGrid();
-    loEach(model.selectedGranules, function (granule) {
+    lodashEach(model.selectedGranules, function (granule) {
       if (selectedFeatures[granule.id]) {
         selectionLayer.getSource()
           .removeFeature(selectedFeatures[granule.id]);
@@ -219,7 +219,7 @@ export function dataMap(model, maps, config) {
     buttonLayer.getSource()
       .clear();
     var features = [];
-    loEach(granules, function (granule) {
+    lodashEach(granules, function (granule) {
       if (!granule.centroid || !granule.centroid[model.crs]) {
         return;
       }
@@ -246,17 +246,17 @@ export function dataMap(model, maps, config) {
     var maxDistance = (model.crs === CRS_WGS_84)
       ? 270 : Number.POSITIVE_INFINITY;
     var features = [];
-    loEach(swaths, function (swath) {
+    lodashEach(swaths, function (swath) {
       var lastGranule = null;
-      loEach(swath, function (granule) {
+      lodashEach(swath, function (granule) {
         if (!lastGranule) {
           lastGranule = granule;
           return;
         }
         var polys1 = mapToPolys(lastGranule.geometry[model.crs]);
         var polys2 = mapToPolys(granule.geometry[model.crs]);
-        loEach(polys1, function (poly1) {
-          loEach(polys2, function (poly2) {
+        lodashEach(polys1, function (poly1) {
+          lodashEach(polys2, function (poly2) {
             var c1 = poly1.getInteriorPoint()
               .getCoordinates();
             var c2 = poly2.getInteriorPoint()
@@ -284,7 +284,7 @@ export function dataMap(model, maps, config) {
     }
     var features = [];
     var parser = new OlFormatGeoJSON();
-    loEach(grid, function (cell) {
+    lodashEach(grid, function (cell) {
       var geom = parser.readGeometry(cell.geometry);
       var feature = new OlFeature(geom);
       features.push(feature);
