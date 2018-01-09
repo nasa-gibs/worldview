@@ -1,15 +1,16 @@
-// External Dependencies
 import $ from 'jquery';
 import loEach from 'lodash/each';
-// import {GA as googleAnalytics} from 'worldview-components';
+import {GA as googleAnalytics} from 'worldview-components';
 
 // Utils
-import util from './util/util'; // Maybe this is the time to remove the util file from core and put everything from there in the worldview-components util....
+import util from './util/util';
+
 // Date
-import {parse as dateParser} from './date/date'; // export default function parse!!!
+import {parse as dateParser} from './date/date';
 import {dateModel} from './date/model';
 import {dateLabel} from './date/label';
 import dateWheels from './date/wheels';
+
 // Timeline
 import {timeline} from './date/timeline';
 import {timelineData} from './date/timeline-data';
@@ -19,12 +20,14 @@ import {timelineTicks} from './date/timeline-ticks';
 import {timelinePick} from './date/timeline-pick';
 import {timelinePan} from './date/timeline-pan';
 import {timelineInput} from './date/timeline-input';
+
 // Layers
-import {parse as layerParser, validate as layerValidate} from './layers/layers'; // export parse as layerParser. etc...
+import {parse as layerParser, validate as layerValidate} from './layers/layers';
 import {layersModel} from './layers/model';
 import {layersModal} from './layers/modal';
 import {layersSidebar} from './layers/sidebar';
 import {layersActive} from './layers/active';
+
 // Map
 import {mapParser} from './map/map';
 import {mapModel} from './map/model';
@@ -35,6 +38,7 @@ import {mapLayerBuilder} from './map/layerbuilder';
 import {mapDatelineBuilder} from './map/datelinebuilder';
 import {mapPrecacheTile} from './map/precachetile';
 import {mapAnimate} from './map/animate';
+
 // Animation
 import {parse as animationParser} from './animation/anim';
 import {animationModel} from './animation/model';
@@ -42,32 +46,41 @@ import {animationUi} from './animation/ui';
 import {animationWidget} from './animation/widget';
 import {animationRangeSelect} from './animation/range-select';
 import {animationGif} from './animation/gif';
+
 // Palettes
 import palettes from './palettes/palettes';
 import {palettesModel} from './palettes/model';
+
 // Data
 import {dataParser} from './data/data';
 import {dataModel} from './data/model';
 import {dataUi} from './data/ui';
+
 // NaturalEvents
 import naturalEventsModel from './naturalEvents/model';
 import naturalEventsUI from './naturalEvents/ui';
 import naturalEventsRequest from './naturalEvents/request';
+
 // Image
 import {imageRubberband} from './image/rubberband';
 import {imagePanel} from './image/panel';
+
 // Notifications
 import {notificationsUi} from './notifications/ui';
+
 // UI
-import loadingIndicator from './ui/indicator'; // not a class, export object
+import loadingIndicator from './ui/indicator';
+
 // Link
 import {linkModel} from './link/model';
 import {linkUi} from './link/ui';
+
 // Projections
 import {parse as projectionParser} from './projection/projection';
 import {projectionModel} from './projection/model';
 import {projectionUi} from './projection/ui';
 import {projectionChange} from './projection/change';
+
 // Other
 import {debugConfig, debugLayers, debug} from './debug';
 import Brand from './brand';
@@ -114,7 +127,7 @@ window.onload = () => {
     config = data;
     config.parameters = parameters;
 
-    // Export for debugging
+    // Attach to wvx object for debugging
     wvx.config = config;
 
     debugConfig(config);
@@ -174,7 +187,7 @@ window.onload = () => {
       }
     };
     var ui = {};
-    // Export for debugging
+    // Attach to wvx object for debugging
     wvx.models = models;
     wvx.ui = ui;
 
@@ -195,7 +208,7 @@ window.onload = () => {
       .register(models.map);
     models.link.load(state);
     if (config.features.googleAnalytics) {
-      // googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
+      googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
     }
     // HACK: Map needs to be created before the data download model
     var mapComponents = {
