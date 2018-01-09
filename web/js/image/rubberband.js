@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'jquery-ui/button';
 import 'jquery-jcrop';
-import loFind from 'lodash/find';
+import lodashFind from 'lodash/find';
 import util from '../util/util';
 import wvui from '../ui/ui';
 
@@ -114,7 +114,7 @@ export function imageRubberband(models, ui, config) {
       var layers = models.layers.get({
         renderable: true
       });
-      if (loFind(layers, {
+      if (lodashFind(layers, {
         id: 'Graticule'
       }) && geographic) {
         wvui.ask({

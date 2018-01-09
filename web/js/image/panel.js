@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import 'jquery-ui/button';
 import 'jquery-ui/dialog';
-import loEach from 'lodash/each';
-import loIsUndefined from 'lodash/isUndefined';
+import lodashEach from 'lodash/each';
+import lodashIsUndefined from 'lodash/isUndefined';
 import olProj from 'ol/proj';
 import {GA as googleAnalytics} from 'worldview-components';
 import util from '../util/util';
@@ -267,8 +267,8 @@ export function imagePanel(models, ui, config) {
 
       // get layer transparencies (opacities)
       var opacities = [];
-      loEach(products, function (product) {
-        opacities.push((loIsUndefined(product.opacity)) ? 1 : product.opacity);
+      lodashEach(products, function (product) {
+        opacities.push((lodashIsUndefined(product.opacity)) ? 1 : product.opacity);
       });
 
       // console.log("EPSG: " + epsg);
@@ -332,7 +332,7 @@ export function imagePanel(models, ui, config) {
       // dlURL += "&switch="+s;
       dlURL += '&epsg=' + epsg;
       var layers = [];
-      loEach(products, function (layer) {
+      lodashEach(products, function (layer) {
         if (layer.projections[s].layer) {
           layers.push(layer.projections[s].layer);
         } else {

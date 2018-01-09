@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import util from '../util/util';
-import loDifference from 'lodash/difference';
-import loEach from 'lodash/each';
+import lodashDifference from 'lodash/difference';
+import lodashEach from 'lodash/each';
 
 export function MapRunningData(models) {
   var self;
@@ -186,7 +186,7 @@ export function MapRunningData(models) {
    *
    */
   self.LayersToRemove = function (oldArray, newArray) {
-    return loDifference(oldArray, newArray);
+    return lodashDifference(oldArray, newArray);
   };
 
   /*
@@ -220,7 +220,7 @@ export function MapRunningData(models) {
         legends = models.palettes.getLegends(layerId);
         hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
 
-        loEach(legends, function (legend) {
+        lodashEach(legends, function (legend) {
           if (legend) {
             self.createRunnerFromLegend(legend, hex);
           }

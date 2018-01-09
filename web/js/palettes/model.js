@@ -1,9 +1,9 @@
-import loEach from 'lodash/each';
-import loFind from 'lodash/find';
-import loCloneDeep from 'lodash/cloneDeep';
-import loIsNaN from 'lodash/isNaN';
-import loIsUndefined from 'lodash/isUndefined';
-import loParseInt from 'lodash/parseInt';
+import lodashEach from 'lodash/each';
+import lodashFind from 'lodash/find';
+import lodashCloneDeep from 'lodash/cloneDeep';
+import lodashIsNaN from 'lodash/isNaN';
+import lodashIsUndefined from 'lodash/isUndefined';
+import lodashParseInt from 'lodash/parseInt';
 import util from '../util/util';
 import palettes from './palettes';
 
@@ -20,7 +20,7 @@ export function palettesModel(models, config) {
   self.getRendered = function (layerId, index) {
     var name = config.layers[layerId].palette.id;
     var palette = config.palettes.rendered[name];
-    if (!loIsUndefined(index)) {
+    if (!lodashIsUndefined(index)) {
       palette = palette.maps[index];
     }
     return palette;
@@ -38,11 +38,11 @@ export function palettesModel(models, config) {
     self.active[layerId] = self.active[layerId] || {};
     var active = self.active[layerId];
     active.maps = active.maps || [];
-    loEach(self.getRendered(layerId)
+    lodashEach(self.getRendered(layerId)
       .maps,
     function (palette, index) {
       if (!active.maps[index]) {
-        active.maps[index] = loCloneDeep(palette);
+        active.maps[index] = lodashCloneDeep(palette);
       }
     });
   };
@@ -59,7 +59,7 @@ export function palettesModel(models, config) {
       throw new Error('Invalid layer: ' + layerId);
     }
     prepare(layerId);
-    index = (loIsUndefined(index)) ? 0 : index;
+    index = (lodashIsUndefined(index)) ? 0 : index;
     var active = self.active[layerId];
     var palette = active.maps[index];
     if (palette.custom === paletteId) {
@@ -72,7 +72,7 @@ export function palettesModel(models, config) {
   };
 
   self.clearCustom = function (layerId, index) {
-    index = (loIsUndefined(index)) ? 0 : index;
+    index = (lodashIsUndefined(index)) ? 0 : index;
     var active = self.active[layerId];
     if (!active) {
       return;
@@ -89,7 +89,7 @@ export function palettesModel(models, config) {
 
   self.setRange = function (layerId, min, max, squash, index) {
     prepare(layerId);
-    index = (loIsUndefined(index)) ? 0 : index;
+    index = (lodashIsUndefined(index)) ? 0 : index;
     var palette = self.active[layerId].maps[index];
     if (min === 0) {
       min = undefined;
@@ -122,7 +122,7 @@ export function palettesModel(models, config) {
    * @return {object} object including the entries and legend
    */
   self.get = function (layerId, index) {
-    index = (loIsUndefined(index)) ? 0 : index;
+    index = (lodashIsUndefined(index)) ? 0 : index;
     if (self.active[layerId]) {
       return self.active[layerId].maps[index];
     }
@@ -200,8 +200,8 @@ export function palettesModel(models, config) {
     if (self.inUse() && !state.l) {
       throw new Error('No layers in state');
     }
-    loEach(self.active, function (def, layerId) {
-      if (!loFind(models.layers.get(), {
+    lodashEach(self.active, function (def, layerId) {
+      if (!lodashFind(models.layers.get(), {
         id: layerId
       })) {
         return;
@@ -215,7 +215,7 @@ export function palettesModel(models, config) {
   };
 
   self.saveSingle = function (state, layerId) {
-    var attr = loFind(state.l, {
+    var attr = lodashFind(state.l, {
       id: layerId
     })
       .attributes;
@@ -288,7 +288,7 @@ export function palettesModel(models, config) {
       }
     }
 
-    var attr = loFind(state.l, {
+    var attr = lodashFind(state.l, {
       id: layerId
     })
       .attributes;
@@ -344,19 +344,19 @@ export function palettesModel(models, config) {
       return;
     }
 
-    loEach(state.l, function (layerDef) {
+    lodashEach(state.l, function (layerDef) {
       var layerId = layerDef.id;
       var minValue, maxValue;
       var min = [],
         max = [];
       var squash = [];
       var count = 0;
-      loEach(layerDef.attributes, function (attr) {
+      lodashEach(layerDef.attributes, function (attr) {
         var values;
         if (attr.id === 'palette') {
           count = self.getCount(layerId);
           values = util.toArray(attr.value.split(';'));
-          loEach(values, function (value, index) {
+          lodashEach(values, function (value, index) {
             try {
               self.setCustom(layerId, value, index);
             } catch (error) {
@@ -367,13 +367,13 @@ export function palettesModel(models, config) {
         if (attr.id === 'min') {
           count = self.getCount(layerId);
           values = util.toArray(attr.value.split(';'));
-          loEach(values, function (value, index) {
+          lodashEach(values, function (value, index) {
             if (value === '') {
               min.push(undefined);
               return;
             }
             minValue = parseFloat(value);
-            if (loIsNaN(minValue)) {
+            if (lodashIsNaN(minValue)) {
               errors.push('Invalid min value: ' + value);
             } else {
               min.push(findIndex(layerId, 'min', minValue, index));
@@ -383,13 +383,13 @@ export function palettesModel(models, config) {
         if (attr.id === 'max') {
           count = self.getCount(layerId);
           values = util.toArray(attr.value.split(';'));
-          loEach(values, function (value, index) {
+          lodashEach(values, function (value, index) {
             if (value === '') {
               max.push(undefined);
               return;
             }
             maxValue = parseFloat(value);
-            if (loIsNaN(maxValue)) {
+            if (lodashIsNaN(maxValue)) {
               errors.push('Invalid max value: ' + value);
             } else {
               max.push(findIndex(layerId, 'max', maxValue, index));
@@ -402,7 +402,7 @@ export function palettesModel(models, config) {
             squash[0] = true;
           } else {
             values = util.toArray(attr.value.split(';'));
-            loEach(values, function (value) {
+            lodashEach(values, function (value) {
               squash.push(value === 'true');
             });
           }
@@ -424,7 +424,7 @@ export function palettesModel(models, config) {
     var values = self.get(layerId, index)
       .entries.values;
     var result;
-    loEach(values, function (check, index) {
+    lodashEach(values, function (check, index) {
       var min = getMinValue(check);
       var max = getMaxValue(check);
       if (type === 'min' && value === min) {
@@ -444,7 +444,7 @@ export function palettesModel(models, config) {
   self.inUse = function () {
     var layers = models.layers.get();
     var found = false;
-    loEach(layers, function (layer) {
+    lodashEach(layers, function (layer) {
       if (self.active[layer.id]) {
         found = true;
         return false;
@@ -457,7 +457,7 @@ export function palettesModel(models, config) {
     var use = false;
     var active = self.active[layerId].maps;
 
-    loEach(active, function (palette, index) {
+    lodashEach(active, function (palette, index) {
       if (palette.custom) {
         use = true;
         return false;
@@ -470,7 +470,7 @@ export function palettesModel(models, config) {
         if (palette.max >= rendered.entries.values.length) {
           delete palette.max;
         }
-        if (!loIsUndefined(palette.min) || !loIsUndefined(palette.max)) {
+        if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max)) {
           use = true;
           return false;
         }
@@ -486,7 +486,7 @@ export function palettesModel(models, config) {
     }
     var lookup = {};
     var active = self.active[layerId].maps;
-    loEach(active, function (palette, index) {
+    lodashEach(active, function (palette, index) {
       var oldLegend = palette.legend;
       var entries = palette.entries;
       var legend = {
@@ -510,7 +510,7 @@ export function palettesModel(models, config) {
       var sourceCount = source.length;
       var targetCount = target.length;
 
-      loEach(source, function (color, index) {
+      lodashEach(source, function (color, index) {
         var targetColor;
         if (index < min || index > max) {
           targetColor = '00000000';
@@ -533,15 +533,15 @@ export function palettesModel(models, config) {
         }
         legend.colors.push(targetColor);
         var lookupSource =
-          loParseInt(color.substring(0, 2), 16) + ',' +
-          loParseInt(color.substring(2, 4), 16) + ',' +
-          loParseInt(color.substring(4, 6), 16) + ',' +
-          loParseInt(color.substring(6, 8), 16);
+          lodashParseInt(color.substring(0, 2), 16) + ',' +
+          lodashParseInt(color.substring(2, 4), 16) + ',' +
+          lodashParseInt(color.substring(4, 6), 16) + ',' +
+          lodashParseInt(color.substring(6, 8), 16);
         var lookupTarget = {
-          r: loParseInt(targetColor.substring(0, 2), 16),
-          g: loParseInt(targetColor.substring(2, 4), 16),
-          b: loParseInt(targetColor.substring(4, 6), 16),
-          a: loParseInt(targetColor.substring(6, 8), 16)
+          r: lodashParseInt(targetColor.substring(0, 2), 16),
+          g: lodashParseInt(targetColor.substring(2, 4), 16),
+          b: lodashParseInt(targetColor.substring(4, 6), 16),
+          a: lodashParseInt(targetColor.substring(6, 8), 16)
         };
         lookup[lookupSource] = lookupTarget;
       });

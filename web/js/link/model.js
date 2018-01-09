@@ -1,8 +1,8 @@
 import $ from 'jquery';
-import loEach from 'lodash/each';
-import loMap from 'lodash/map';
-import loIsArray from 'lodash/isArray';
-import loIsObject from 'lodash/isObject';
+import lodashEach from 'lodash/each';
+import lodashMap from 'lodash/map';
+import lodashIsArray from 'lodash/isArray';
+import lodashIsObject from 'lodash/isObject';
 import util from '../util/util';
 import Cache from 'cachai';
 
@@ -47,19 +47,19 @@ export function linkModel(config) {
   // Returns a serialized string containing information of the current session
   self.toQueryString = function () {
     var state = {};
-    loEach(components, function (component) {
+    lodashEach(components, function (component) {
       component.save(state);
     });
-    var strings = loMap(state, function (value, key) {
-      if (loIsArray(value)) {
+    var strings = lodashMap(state, function (value, key) {
+      if (lodashIsArray(value)) {
         var parts = [];
-        loEach(value, function (item) {
+        lodashEach(value, function (item) {
           var part = '';
-          if (loIsObject(item)) {
+          if (lodashIsObject(item)) {
             part = item.id;
             if (item.attributes && item.attributes.length > 0) {
               var attributes = [];
-              loEach(item.attributes, function (attribute) {
+              lodashEach(item.attributes, function (attribute) {
                 if (attribute.value) {
                   attributes.push(attribute.id + '=' + attribute.value);
                 } else {
@@ -112,14 +112,14 @@ export function linkModel(config) {
 
   self.load = function (state, errors) {
     errors = errors || [];
-    loEach(components, function (component) {
+    lodashEach(components, function (component) {
       component.load(state, errors);
     });
   };
 
   var encode = function (value) {
     var encoded = encodeURIComponent(value);
-    loEach(ENCODING_EXCEPTIONS, function (exception) {
+    lodashEach(ENCODING_EXCEPTIONS, function (exception) {
       encoded = encoded.replace(exception.match, exception.replace);
     });
     return encoded;

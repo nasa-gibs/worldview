@@ -1,4 +1,4 @@
-import loIsEmpty from 'lodash/isempty';
+import lodashIsEmpty from 'lodash/isempty';
 import Queue from 'promise-queue';
 import util from '../util/util';
 import uiIndicator from '../ui/indicator';
@@ -349,7 +349,7 @@ export function animationUi(models, ui) {
 
     for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
-      if (!loIsEmpty(models.palettes.isActive(layer.id)) && layer.visible) {
+      if (!lodashIsEmpty(models.palettes.isActive(layer.id)) && layer.visible) {
         return true;
       }
     }
@@ -588,7 +588,7 @@ export function animationUi(models, ui) {
     }
     if (self.state.supportingCustomLayers &&
       preload[self.state.playIndex] &&
-      loIsEmpty(inQueue)) {
+      lodashIsEmpty(inQueue)) {
       self.play(self.state.playIndex);
       return;
     }

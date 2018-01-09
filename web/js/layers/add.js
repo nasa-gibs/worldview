@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import 'icheck';
 import 'jscrollpane';
-import loEach from 'lodash/each';
-import loFind from 'lodash/find';
-import loThrottle from 'lodash/throttle';
+import lodashEach from 'lodash/each';
+import lodashFind from 'lodash/find';
+import lodashThrottle from 'lodash/throttle';
 import util from '../util/util';
 
 export function layersAdd(models, ui, config) {
@@ -18,7 +18,7 @@ export function layersAdd(models, ui, config) {
   var visible = {};
 
   var init = function () {
-    loEach(config.layers, function (layer) {
+    lodashEach(config.layers, function (layer) {
       visible[layer.id] = true;
     });
 
@@ -129,7 +129,7 @@ export function layersAdd(models, ui, config) {
       .addClass('category')
       .addClass('scroll-pane');
 
-    loEach(config.layerOrder, function (layerId) {
+    lodashEach(config.layerOrder, function (layerId) {
       var layer = config.layers[layerId];
       if (!layer) {
         console.warn('In layer order but not defined', layerId);
@@ -182,7 +182,7 @@ export function layersAdd(models, ui, config) {
     if (group === 'baselayers') {
       $checkbox.attr('name', group);
     }
-    if (loFind(model.active, {
+    if (lodashFind(model.active, {
       id: layer.id
     })) {
       $checkbox.attr('checked', 'checked');
@@ -321,7 +321,7 @@ export function layersAdd(models, ui, config) {
   };
 
   var adjustTitles = function () {
-    loEach(config.layers, function (def) {
+    lodashEach(config.layers, function (def) {
       var names = models.layers.getTitles(def.id);
       $('#selectorbox [data-layer=\'' + encodeURIComponent(def.id) +
           '\'] .title')
@@ -404,7 +404,7 @@ export function layersAdd(models, ui, config) {
     return filtered;
   };
 
-  var filter = loThrottle(function () {
+  var filter = lodashThrottle(function () {
     var search = searchTerms();
     $.each(config.layers, function (layerId, layer) {
       var fproj = filterProjection(layer);

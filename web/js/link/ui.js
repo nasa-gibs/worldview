@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'jquery-ui/button';
 import 'jquery-ui/dialog';
 import 'icheck';
-import loThrottle from 'lodash/throttle';
+import lodashThrottle from 'lodash/throttle';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
@@ -49,7 +49,7 @@ export function linkUi(models, config) {
   };
 
   // Calls toQueryString to fetch updated state and returns URL
-  var replaceHistoryState = loThrottle(function () {
+  var replaceHistoryState = lodashThrottle(function () {
     if (util.browser.history) {
       window.history.replaceState('', '@OFFICIAL_NAME@', '?' + models.link.toQueryString());
     }

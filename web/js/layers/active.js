@@ -4,8 +4,8 @@ import 'jquery-ui/button';
 import 'jquery-ui/dialog';
 import 'perfect-scrollbar/jquery';
 import d3 from 'd3';
-import loEach from 'lodash/each';
-import loEachRight from 'lodash/eachRight';
+import lodashEach from 'lodash/each';
+import lodashEachRight from 'lodash/eachRight';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import {layersInfo} from './info';
@@ -54,7 +54,7 @@ export function layersActive(models, ui, config) {
     var $container = $('<div />', {class: 'layer-container bank'});
     $(self.selector).empty().append($container);
 
-    loEachRight(groups, function (group) {
+    lodashEachRight(groups, function (group) {
       renderGroup($container, group);
     });
 
@@ -95,7 +95,7 @@ export function layersActive(models, ui, config) {
     $('.layer-container ul.category')
       .bind('sortstop', moveLayer);
 
-    loEach(model.get({
+    lodashEach(model.get({
       group: 'overlays'
     }), function (layer) {
       if (layer.palette) {
@@ -118,7 +118,7 @@ export function layersActive(models, ui, config) {
 
     $parent.append($header);
 
-    loEach(model.get({
+    lodashEach(model.get({
       group: group.id
     }), function (layer) {
       renderLayer($container, group, layer);
@@ -455,7 +455,7 @@ export function layersActive(models, ui, config) {
   };
 
   var onPaletteUpdateAll = function () {
-    loEach(legends, function (legend) {
+    lodashEach(legends, function (legend) {
       legend.update();
     });
   };
@@ -467,8 +467,8 @@ export function layersActive(models, ui, config) {
     setTimeout(render, 1);
   };
   var onZoomChange = function () {
-    loEach(groups, function (group) {
-      loEach(model.get({
+    lodashEach(groups, function (group) {
+      lodashEach(model.get({
         group: group.id
       }), function (layer) {
         var $layer = $('#products li.productsitem[data-layer="' +
@@ -478,8 +478,8 @@ export function layersActive(models, ui, config) {
     });
   };
   var onDateChange = function () {
-    loEach(groups, function (group) {
-      loEach(model.get({
+    lodashEach(groups, function (group) {
+      lodashEach(model.get({
         group: group.id
       }), function (layer) {
         var $layer = $('#' + group.id + '-' + encodeURIComponent(layer.id));

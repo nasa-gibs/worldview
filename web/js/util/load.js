@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import loSize from 'lodash/size';
+import lodashSize from 'lodash/size';
 import wvui from '../ui/ui';
 import brand from '../brand';
 
@@ -18,7 +18,7 @@ export default (function () {
         .fail(promise.reject);
       return promise;
     }
-    if (root[attr] && loSize(root[attr]) > 0) {
+    if (root[attr] && lodashSize(root[attr]) > 0) {
       promise.resolve(root[attr]);
     } else {
       loading += 1;

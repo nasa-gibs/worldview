@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import 'jquery-ui/button';
-import loFindIndex from 'lodash/findIndex';
-import loEach from 'lodash/each';
-import loForOwn from 'lodash/forOwn';
-import loThrottle from 'lodash/throttle';
-import loFind from 'lodash/find';
+import lodashFindIndex from 'lodash/findIndex';
+import lodashEach from 'lodash/each';
+import lodashForOwn from 'lodash/forOwn';
+import lodashThrottle from 'lodash/throttle';
+import lodashFind from 'lodash/find';
 import util from '../util/util';
 import OlMap from 'ol/map';
 import OlView from 'ol/view';
@@ -67,7 +67,7 @@ export function mapui(models, config) {
     }
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
-    loForOwn(config.projections, function (proj) {
+    lodashForOwn(config.projections, function (proj) {
       var map = createMap(proj);
       self.proj[proj.id] = map;
     });
@@ -209,7 +209,7 @@ export function mapui(models, config) {
     var activeLayers = map.getLayers()
       .getArray()
       .slice(0);
-    loEach(activeLayers, function (mapLayer) {
+    lodashEach(activeLayers, function (mapLayer) {
       if (mapLayer.wv) {
         map.removeLayer(mapLayer);
       }
@@ -235,7 +235,7 @@ export function mapui(models, config) {
     var defs = models.layers.get({
       reverse: true
     });
-    loEach(defs, function (def) {
+    lodashEach(defs, function (def) {
       if (isGraticule(def)) {
         addGraticule();
       } else {
@@ -262,7 +262,7 @@ export function mapui(models, config) {
       }
     });
     var defs = models.layers.get();
-    loEach(defs, function (def) {
+    lodashEach(defs, function (def) {
       if (isGraticule(def)) {
         var renderable = models.layers.isRenderable(def.id);
         if (renderable) {
@@ -302,7 +302,7 @@ export function mapui(models, config) {
    */
 
   var addLayer = function (def) {
-    var mapIndex = loFindIndex(models.layers.get({
+    var mapIndex = lodashFindIndex(models.layers.get({
       reverse: true
     }), {
       id: def.id
@@ -360,7 +360,7 @@ export function mapui(models, config) {
    */
   var updateDate = function () {
     var defs = models.layers.get();
-    loEach(defs, function (def) {
+    lodashEach(defs, function (def) {
       if (def.period !== 'daily') {
         return;
       }
@@ -407,7 +407,7 @@ export function mapui(models, config) {
   var findLayer = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = loFind(layers, {
+    var layer = lodashFind(layers, {
       wv: {
         id: def.id
       }
@@ -429,7 +429,7 @@ export function mapui(models, config) {
   var findLayerIndex = function (def) {
     var layers = self.selected.getLayers()
       .getArray();
-    var layer = loFindIndex(layers, {
+    var layer = lodashFindIndex(layers, {
       wv: {
         id: def.id
       }
@@ -496,7 +496,7 @@ export function mapui(models, config) {
     self.selected.graticule = null;
   };
 
-  var triggerExtent = loThrottle(function () {
+  var triggerExtent = lodashThrottle(function () {
     self.events.trigger('extent');
   }, 500, {
     trailing: true
@@ -619,7 +619,7 @@ export function mapui(models, config) {
     map.getView()
       .on('change:resolution', updateExtent);
     map.getView()
-      .on('change:rotation', loThrottle(onRotate, 300));
+      .on('change:rotation', lodashThrottle(onRotate, 300));
     map.on('pointerdrag', function () {
       self.mapIsbeingDragged = true;
       self.events.trigger('drag');
@@ -911,7 +911,7 @@ export function mapui(models, config) {
         hoverThrottle.cancel();
         dataRunner.clearAll();
       })
-      .mousemove(hoverThrottle = loThrottle(onMouseMove, 300));
+      .mousemove(hoverThrottle = lodashThrottle(onMouseMove, 300));
   };
 
   /*

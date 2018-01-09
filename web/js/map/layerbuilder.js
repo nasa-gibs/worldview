@@ -5,9 +5,9 @@ import OlSourceTileWMS from 'ol/source/tilewms';
 import OlLayerGroup from 'ol/layer/group';
 import OlLayerTile from 'ol/layer/tile';
 import OlTileGridTileGrid from 'ol/tilegrid/tilegrid';
-import loCloneDeep from 'lodash/cloneDeep';
-import loMerge from 'lodash/merge';
-import loEach from 'lodash/each';
+import lodashCloneDeep from 'lodash/cloneDeep';
+import lodashMerge from 'lodash/merge';
+import lodashEach from 'lodash/each';
 import {lookupFactory} from '../ol/lookupimagetile';
 
 export function mapLayerBuilder(models, config, cache, Parent) {
@@ -46,8 +46,8 @@ export function mapLayerBuilder(models, config, cache, Parent) {
         proj: proj.id,
         def: def
       };
-      def = loCloneDeep(def);
-      loMerge(def, def.projections[proj.id]);
+      def = lodashCloneDeep(def);
+      lodashMerge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
         layer = createLayerWMTS(def, options);
         if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
@@ -143,7 +143,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     }
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
-      loEach(matrixSet.resolutions, function (resolution, index) {
+      lodashEach(matrixSet.resolutions, function (resolution, index) {
         matrixIds.push(index);
       });
     } else {
