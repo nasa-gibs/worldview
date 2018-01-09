@@ -1,7 +1,7 @@
 /* This file is just a stub to test the browserify build task */
 import $ from 'jquery';
-import { DateSelector } from 'worldview-components';
-import { parse as mapParser } from './map/map';
+import {DateSelector} from 'worldview-components';
+import {parse as mapParser} from './map/map';
 import builder from './map/datelinebuilder';
 import layerBuilder from './map/layerbuilder';
 import animate from './map/animate';
