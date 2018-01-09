@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import util from '../util/util';
-import loParseInt from 'lodash/parseInt';
+import lodashParseInt from 'lodash/parseInt';
 
 /**
  * Implements the date input
@@ -110,7 +110,7 @@ export function timelineInput(models, config, ui) {
     }
     var interval = $(this)
       .attr('data-interval') || dataInterval;
-    var amount = loParseInt($(this)
+    var amount = lodashParseInt($(this)
       .attr('data-value')) || amt;
     var date = rollingDate || models.date.selected;
     var min = models.date.minDate();

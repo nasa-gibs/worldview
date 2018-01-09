@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import util from '../util/util';
-import loIsEmpty from 'lodash/isempty';
+import lodashIsEmpty from 'lodash/isempty';
 import wvui from '../ui/ui';
 /*
  * @Class
@@ -297,7 +297,7 @@ export function notificationsUi(models, config) {
   self.getAlert = function () {
     var $notifyMenuItem, alertsNumber, outageNumber, count, hide;
 
-    if (!loIsEmpty(activeNotifications)) {
+    if (!lodashIsEmpty(activeNotifications)) {
       alertsNumber = getNumberOfTypeNotseen('alert', sortedNotifications.alerts);
       outageNumber = getNumberOfTypeNotseen('outage', sortedNotifications.outages);
       count = outageNumber + alertsNumber;

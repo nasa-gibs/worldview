@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import loUniqueId from 'lodash/uniqueId';
-import loIsString from 'lodash/isString';
-import loEach from 'lodash/each';
-import loRemove from 'lodash/remove';
-import loIsEmpty from 'lodash/isEmpty';
-import loLast from 'lodash/last';
+import lodashUniqueId from 'lodash/uniqueId';
+import lodashIsString from 'lodash/isString';
+import lodashEach from 'lodash/each';
+import lodashRemove from 'lodash/remove';
+import lodashIsEmpty from 'lodash/isEmpty';
+import lodashLast from 'lodash/last';
 
 export default (function () {
   var self = {};
@@ -30,7 +30,7 @@ export default (function () {
 
   self.show = function (message, icon) {
     self._show(message, icon);
-    var id = loUniqueId();
+    var id = lodashUniqueId();
     self.active.push({
       id: id,
       message: message,
@@ -40,18 +40,18 @@ export default (function () {
   };
 
   self.hide = function (hides) {
-    if (loIsString(hides)) {
+    if (lodashIsString(hides)) {
       hides = [hides];
     }
-    loEach(hides, function (id) {
-      loRemove(self.active, {
+    lodashEach(hides, function (id) {
+      lodashRemove(self.active, {
         id: id
       });
     });
-    if (loIsEmpty(self.active)) {
+    if (lodashIsEmpty(self.active)) {
       self._hide();
     } else {
-      var def = loLast(self.active);
+      var def = lodashLast(self.active);
       self._show(def.message, def.icon);
     }
   };

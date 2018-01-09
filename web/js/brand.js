@@ -1,4 +1,4 @@
-import loIndexOf from 'lodash/indexOf';
+import lodashIndexOf from 'lodash/indexOf';
 /**
  * @class wv.brand
  * @static
@@ -59,7 +59,7 @@ export default (function () {
   };
 
   self.url = function (base) {
-    var joiner = (loIndexOf(base, '?') < 0) ? '?' : '&';
+    var joiner = (lodashIndexOf(base, '?') < 0) ? '?' : '&';
     return base + joiner + 'v=' + self.BUILD_NONCE;
   };
 

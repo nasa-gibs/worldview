@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'jquery-ui/effect-slide';
 import 'jquery-ui/button';
 import 'jquery-ui/menu';
-import loEach from 'lodash/each';
+import lodashEach from 'lodash/each';
 import wvui from '../ui/ui';
 
 export function projectionUi(models, config) {
@@ -58,7 +58,7 @@ export function projectionUi(models, config) {
       .attr('id', 'wv-proj-menu');
     $menuItems = $('<ul></ul>');
 
-    loEach(config.ui.projections, function (ui) {
+    lodashEach(config.ui.projections, function (ui) {
       var $item = $(
         '<li data-proj=\'' + ui.id + '\'>' +
         '<a data-proj=\'' + ui.id + '\'>' +

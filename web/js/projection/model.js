@@ -1,4 +1,4 @@
-import loEach from 'lodash/each';
+import lodashEach from 'lodash/each';
 import olProj from 'ol/proj';
 import proj4 from 'proj4';
 import util from '../util/util';
@@ -11,7 +11,7 @@ export function projectionModel(config) {
   var init = function () {
     self.selectDefault();
     olProj.setProj4(proj4);
-    loEach(config.projections, function (proj) {
+    lodashEach(config.projections, function (proj) {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
         olProj.get(proj.crs)

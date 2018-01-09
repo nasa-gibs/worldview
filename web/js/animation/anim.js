@@ -1,4 +1,4 @@
-import loEach from 'lodash/each';
+import lodashEach from 'lodash/each';
 
 export function parse (state, errors) {
   if (state.a) {
@@ -17,7 +17,7 @@ export function parse (state, errors) {
     // remove (, get key value pairs
     str = str.match(/\(.*\)/)[0].replace(/[\(\)]/g, '');
     var kvps = str.split(',');
-    loEach(kvps, function (kvp) {
+    lodashEach(kvps, function (kvp) {
       var parts = kvp.split('=');
       astate.attributes.push({
         id: parts[0],

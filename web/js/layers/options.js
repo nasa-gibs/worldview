@@ -4,11 +4,11 @@ import 'jquery-ui/dialog';
 import 'icheck';
 import 'nouislider/distribute/jquery.nouislider';
 import 'perfect-scrollbar/jquery';
-import loEach from 'lodash/each';
-import loIndexOf from 'lodash/indexOf';
-import loIsEqual from 'lodash/isEqual';
-import loIsUndefined from 'lodash/isUndefined';
-import loParseInt from 'lodash/parseInt';
+import lodashEach from 'lodash/each';
+import lodashIndexOf from 'lodash/indexOf';
+import lodashIsEqual from 'lodash/isEqual';
+import lodashIsUndefined from 'lodash/isUndefined';
+import lodashParseInt from 'lodash/parseInt';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import palettes from '../palettes/palettes';
@@ -177,7 +177,7 @@ export function layersOptions(config, models, layer) {
       .addClass('wv-legend-buttons');
     var legends = models.palettes.getLegends(layer.id);
 
-    loEach(legends, function (legend, index) {
+    lodashEach(legends, function (legend, index) {
       id = 'wv-legend-' + index;
       $panel.append('<input type=\'radio\' id=\'' + id + '\' ' +
         'name=\'legend\' value=\'' + index + '\'>' +
@@ -188,7 +188,7 @@ export function layersOptions(config, models, layer) {
 
     $('.wv-legend-buttons input[type=\'radio\']')
       .change(function () {
-        index = loParseInt($(this)
+        index = lodashParseInt($(this)
           .val());
         rerenderRange();
         rerenderPaletteSelector();
@@ -273,12 +273,12 @@ export function layersOptions(config, models, layer) {
 
   var onRangeUpdate = function () {
     var palette = models.palettes.get(layer.id, index);
-    var imin = (loIsUndefined(palette.min)) ? 0 : palette.min;
-    var imax = (loIsUndefined(palette.max))
+    var imin = (lodashIsUndefined(palette.min)) ? 0 : palette.min;
+    var imax = (lodashIsUndefined(palette.max))
       ? palette.legend.tooltips.length - 1 : palette.max;
     var current = [parseFloat($range.val()[0]), parseFloat($range.val()[1])];
     updateRangeLabels();
-    if (!loIsEqual(current, [imin, imax])) {
+    if (!lodashIsEqual(current, [imin, imax])) {
       $range.val([imin, imax]);
     }
 
@@ -326,14 +326,14 @@ export function layersOptions(config, models, layer) {
       .empty();
     $pane.append(defaultLegend());
     var recommended = layer.palette.recommended || [];
-    loEach(recommended, function (id) {
+    lodashEach(recommended, function (id) {
       var item = customLegend(id);
       if (item) {
         $pane.append(item);
       }
     });
-    loEach(config.paletteOrder, function (id) {
-      if (loIndexOf(recommended, id) < 0) {
+    lodashEach(config.paletteOrder, function (id) {
+      if (lodashIndexOf(recommended, id) < 0) {
         var item = customLegend(id);
         if (item) {
           $pane.append(item);

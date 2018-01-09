@@ -1,4 +1,4 @@
-import loEach from 'lodash/each';
+import lodashEach from 'lodash/each';
 import olExtent from 'ol/extent';
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/tilelayer';
 
@@ -57,7 +57,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
     var layers;
     var arra = [];
     layers = models.layers.get();
-    loEach(layers, function (layer) {
+    lodashEach(layers, function (layer) {
       if (layer.visible && new Date(layer.startDate > date)) {
         arra.push(layer);
       }

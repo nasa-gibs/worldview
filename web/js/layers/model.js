@@ -1,9 +1,9 @@
-import loEach from 'lodash/each';
-import loEachRight from 'lodash/eachRight';
-import loFilter from 'lodash/filter';
-import loFind from 'lodash/find';
-import loFindIndex from 'lodash/findIndex';
-import loIsUndefined from 'lodash/isUndefined';
+import lodashEach from 'lodash/each';
+import lodashEachRight from 'lodash/eachRight';
+import lodashFilter from 'lodash/filter';
+import lodashFind from 'lodash/find';
+import lodashFindIndex from 'lodash/findIndex';
+import lodashIsUndefined from 'lodash/isUndefined';
 import util from '../util/util';
 
 export function layersModel(models, config) {
@@ -21,7 +21,7 @@ export function layersModel(models, config) {
   self.reset = function () {
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
-      loEach(config.defaults.startingLayers, function (start) {
+      lodashEach(config.defaults.startingLayers, function (start) {
         self.add(start.id, start);
       });
     }
@@ -86,7 +86,7 @@ export function layersModel(models, config) {
   // if the layer exists in the active layer list
   self.exists = function (layer) {
     var found = false;
-    loEach(self.active, function (current) {
+    lodashEach(self.active, function (current) {
       if (layer === current.id) {
         found = true;
       }
@@ -97,7 +97,7 @@ export function layersModel(models, config) {
   self.dateRange = function (spec) {
     spec = spec || {};
     var projId = spec.projId || models.proj.selected.id;
-    var layers = (spec.layer) ? [loFind(self.active, {
+    var layers = (spec.layer) ? [lodashFind(self.active, {
       id: spec.layer
     })]
       : self.active;
@@ -113,7 +113,7 @@ export function layersModel(models, config) {
     var min = Number.MAX_VALUE;
     var max = 0;
     var range = false;
-    loEach(layers, function (def) {
+    lodashEach(layers, function (def) {
       if (def.startDate) {
         range = true;
         var start = util.parseDateUTC(def.startDate)
@@ -153,7 +153,7 @@ export function layersModel(models, config) {
   };
 
   self.add = function (id, spec) {
-    if (loFind(self.active, {
+    if (lodashFind(self.active, {
       id: id
     })) {
       return;
@@ -164,12 +164,12 @@ export function layersModel(models, config) {
       throw new Error('No such layer: ' + id);
     }
     def.visible = true;
-    if (!loIsUndefined(spec.visible)) {
+    if (!lodashIsUndefined(spec.visible)) {
       def.visible = spec.visible;
-    } else if (!loIsUndefined(spec.hidden)) {
+    } else if (!lodashIsUndefined(spec.hidden)) {
       def.visible = !spec.hidden;
     }
-    def.opacity = (loIsUndefined(spec.opacity)) ? 1.0 : spec.opacity;
+    def.opacity = (lodashIsUndefined(spec.opacity)) ? 1.0 : spec.opacity;
     if (def.group === 'overlays') {
       self.active.unshift(def);
       split += 1;
@@ -181,7 +181,7 @@ export function layersModel(models, config) {
   };
 
   self.remove = function (id) {
-    var index = loFindIndex(self.active, {
+    var index = lodashFindIndex(self.active, {
       id: id
     });
     var def = self.active[index];
@@ -196,7 +196,7 @@ export function layersModel(models, config) {
   };
 
   self.replace = function (idOld, idNew) {
-    var index = loFindIndex(self.active, {
+    var index = lodashFindIndex(self.active, {
       id: idOld
     });
     if (index < 0) {
@@ -214,7 +214,7 @@ export function layersModel(models, config) {
   self.clear = function (projId) {
     projId = projId || models.proj.selected.id;
     var defs = self.active.slice(0);
-    loEach(defs, function (def) {
+    lodashEach(defs, function (def) {
       if (projId && def.projections[projId]) {
         self.remove(def.id);
       }
@@ -222,7 +222,7 @@ export function layersModel(models, config) {
   };
 
   self.pushToBottom = function (id) {
-    var oldIndex = loFindIndex(self.active, {
+    var oldIndex = lodashFindIndex(self.active, {
       id: id
     });
     if (oldIndex < 0) {
@@ -240,7 +240,7 @@ export function layersModel(models, config) {
   };
 
   self.moveBefore = function (sourceId, targetId) {
-    var sourceIndex = loFindIndex(self.active, {
+    var sourceIndex = lodashFindIndex(self.active, {
       id: sourceId
     });
     if (sourceIndex < 0) {
@@ -248,7 +248,7 @@ export function layersModel(models, config) {
     }
     var sourceDef = self.active[sourceIndex];
 
-    var targetIndex = loFindIndex(self.active, {
+    var targetIndex = lodashFindIndex(self.active, {
       id: targetId
     });
     if (targetIndex < 0) {
@@ -265,7 +265,7 @@ export function layersModel(models, config) {
   };
 
   self.setVisibility = function (id, visible) {
-    var def = loFind(self.active, {
+    var def = lodashFind(self.active, {
       id: id
     });
     if (def.visible !== visible) {
@@ -276,7 +276,7 @@ export function layersModel(models, config) {
   };
 
   self.setOpacity = function (id, opacity) {
-    var def = loFind(self.active, {
+    var def = lodashFind(self.active, {
       id: id
     });
     if (def.opacity !== opacity) {
@@ -287,7 +287,7 @@ export function layersModel(models, config) {
   };
 
   self.isRenderable = function (id) {
-    var def = loFind(self.active, {
+    var def = lodashFind(self.active, {
       id: id
     });
     if (!def) {
@@ -303,7 +303,7 @@ export function layersModel(models, config) {
       return true;
     }
     var obscured = false;
-    loEach(self.get({
+    lodashEach(self.get({
       group: 'baselayers'
     }), function (otherDef) {
       if (otherDef.id === def.id) {
@@ -321,8 +321,8 @@ export function layersModel(models, config) {
   self.save = function (state) {
     var defs = self.get();
     state.l = state.l || [];
-    loEach(self.get(), function (def) {
-      var lstate = loFind(state.l, {
+    lodashEach(self.get(), function (def) {
+      var lstate = lodashFind(state.l, {
         id: def.id
       });
       if (!lstate) {
@@ -349,9 +349,9 @@ export function layersModel(models, config) {
   };
 
   self.load = function (state, errors) {
-    if (!loIsUndefined(state.l)) {
+    if (!lodashIsUndefined(state.l)) {
       self.clear(models.proj.selected.id);
-      loEachRight(state.l, function (layerDef) {
+      lodashEachRight(state.l, function (layerDef) {
         if (!config.layers[layerDef.id]) {
           errors.push({
             message: 'No such layer: ' + layerDef.id
@@ -360,7 +360,7 @@ export function layersModel(models, config) {
         }
         var hidden = false;
         var opacity = 1.0;
-        loEach(layerDef.attributes, function (attr) {
+        lodashEach(layerDef.attributes, function (attr) {
           if (attr.id === 'hidden') {
             hidden = true;
           }
@@ -381,10 +381,10 @@ export function layersModel(models, config) {
     spec = spec || {};
     var projId = spec.proj || models.proj.selected.id;
     var results = [];
-    var defs = loFilter(self.active, {
+    var defs = lodashFilter(self.active, {
       group: group
     });
-    loEach(defs, function (def) {
+    lodashEach(defs, function (def) {
       // Skip if this layer isn't available for the selected projection
       if (!def.projections[projId]) {
         return;

@@ -2,9 +2,9 @@ import $ from 'jquery';
 import 'jquery-jcrop';
 import wvui from '../ui/ui';
 import gifshot from 'gifshot';
-import loFind from 'lodash/find';
-import loEach from 'lodash/each';
-import loIsUndefined from 'lodash/isundefined';
+import lodashFind from 'lodash/find';
+import lodashEach from 'lodash/each';
+import lodashIsUndefined from 'lodash/isundefined';
 import {GA as googleAnalytics} from 'worldview-components';
 import util from '../util/util';
 import uiIndicator from '../ui/indicator';
@@ -199,7 +199,7 @@ export function animationGif(models, config, ui) {
       });
       return;
     }
-    if (loFind(layers, {
+    if (lodashFind(layers, {
       id: 'Graticule'
     }) && models.proj.selected.id === 'geographic') {
       wvui.ask({
@@ -242,7 +242,7 @@ export function animationGif(models, config, ui) {
    */
   var getLayers = function (products, proj) {
     var layers = [];
-    loEach(products, function (layer) {
+    lodashEach(products, function (layer) {
       if (layer.projections[proj].layer) {
         layers.push(layer.projections[proj].layer);
       } else {
@@ -266,7 +266,7 @@ export function animationGif(models, config, ui) {
       reverse: true,
       renderable: true
     });
-    loEach(products, function (layer) {
+    lodashEach(products, function (layer) {
       if (layer.endDate) {
         if (date > new Date(layer.endDate)) return;
       }
@@ -292,8 +292,8 @@ export function animationGif(models, config, ui) {
    */
   var getOpacities = function (products) {
     var opacities = [];
-    loEach(products, function (product) {
-      opacities.push((loIsUndefined(product.opacity)) ? 1 : product.opacity);
+    lodashEach(products, function (product) {
+      opacities.push((lodashIsUndefined(product.opacity)) ? 1 : product.opacity);
     });
     return opacities;
   };

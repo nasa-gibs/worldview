@@ -1,7 +1,7 @@
-import loMap from 'lodash/map';
-import loEach from 'lodash/each';
-import loIsUndefined from 'lodash/isUndefined';
-import loFind from 'lodash/find';
+import lodashMap from 'lodash/map';
+import lodashEach from 'lodash/each';
+import lodashIsUndefined from 'lodash/isUndefined';
+import lodashFind from 'lodash/find';
 import OlGeomPolygon from 'ol/geom/polygon';
 
 export const CRS_WGS_84 = 'EPSG:4326';
@@ -31,7 +31,7 @@ export function mapParser(state, errors) {
     delete state.map;
   }
   if (state.v) {
-    var extent = loMap(state.v.split(','), function (str) {
+    var extent = lodashMap(state.v.split(','), function (str) {
       return parseFloat(str);
     });
     var valid = mapIsExtentValid(extent);
@@ -58,14 +58,14 @@ export function mapParser(state, errors) {
  * true.
  */
 export function mapIsExtentValid(extent) {
-  if (loIsUndefined(extent)) {
+  if (lodashIsUndefined(extent)) {
     return false;
   }
   var valid = true;
   if (extent.toArray) {
     extent = extent.toArray();
   }
-  loEach(extent, function (value) {
+  lodashEach(extent, function (value) {
     if (isNaN(value)) {
       valid = false;
       return false;
@@ -140,7 +140,7 @@ export function setVisibility(layer, visible, opacity) {
 export function getLayerByName(map, name) {
   var layers = map.getLayers()
     .getArray();
-  return loFind(layers, {
+  return lodashFind(layers, {
     'wvname': name
   });
 };

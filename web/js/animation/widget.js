@@ -2,8 +2,8 @@ import $ from 'jquery';
 import {AnimationWidget, GA as googleAnalytics} from 'worldview-components';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import loWithout from 'lodash/without';
-import loIndexOf from 'lodash/indexof';
+import lodashWithout from 'lodash/without';
+import lodashIndexOf from 'lodash/indexof';
 import util from '../util/util';
 
 export function animationWidget (models, config, ui) {
@@ -34,7 +34,7 @@ export function animationWidget (models, config, ui) {
       onPushGIF: self.onPressGIF,
       looping: model.rangeState.loop,
       increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: loWithout(zooms, self.getIncrements()), // array of zooms without current zoom
+      incrementArray: lodashWithout(zooms, self.getIncrements()), // array of zooms without current zoom
       onDateChange: self.dateUpdate,
       sliderLabel: 'Frames Per Second',
       sliderSpeed: model.rangeState.speed,
@@ -139,7 +139,7 @@ export function animationWidget (models, config, ui) {
       endDate: new Date(state.endDate),
       playing: state.playing,
       increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: loWithout(zooms, self.getIncrements()) // array of zooms without current zoom
+      incrementArray: lodashWithout(zooms, self.getIncrements()) // array of zooms without current zoom
     });
   };
 
@@ -171,7 +171,7 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.onZoomSelect = function (increment) {
-    var zoomLevel = loIndexOf(zooms, increment);
+    var zoomLevel = lodashIndexOf(zooms, increment);
     return timeline.config.zoom(zoomLevel + 1);
   };
 

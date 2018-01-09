@@ -6,8 +6,8 @@
 */
 
 import $ from 'jquery';
-import loEach from 'lodash/each';
-import loIsNull from 'lodash/isNull';
+import lodashEach from 'lodash/each';
+import lodashIsNull from 'lodash/isNull';
 import wvui from '../ui/ui';
 import browser from './browser';
 import {events} from './events';
@@ -115,9 +115,9 @@ export default (function (self) {
   self.toQueryString = function (kvps, exceptions) {
     exceptions = exceptions || {};
     var parts = [];
-    loEach(kvps, function (value, key) {
+    lodashEach(kvps, function (value, key) {
       var part = key + '=' + encodeURIComponent(value);
-      loEach(exceptions, function (exception) {
+      lodashEach(exceptions, function (exception) {
         var regexp = new RegExp(exception, 'ig');
         var decoded = decodeURIComponent(exception);
         part = part.replace(regexp, decoded);
@@ -486,7 +486,7 @@ export default (function (self) {
    */
   self.fromCompactTimestamp = function (str) {
     var v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
-    if (loIsNull(v)) {
+    if (lodashIsNull(v)) {
       throw new Error('Invalid timestamp:' + str);
     }
     return new Date(Date.UTC(
