@@ -34,7 +34,7 @@ function bundle() {
     this.emit('end');
   }).pipe(stream);
   stream.on('finish', function() {
-    console.log('Build complete in ' + (Date.now() - begin) / 1000 + 's');
+    console.log(outputPath + ' written in ' + (Date.now() - begin) / 1000 + 's');
   });
 }
 

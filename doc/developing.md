@@ -6,7 +6,7 @@ This project uses `npm` as an interface to run build scripts and other tasks. Th
 
 `npm install`: Installs JavaScript and Python dependencies.
 
-`npm run build`: Runs all build scripts and generates built versions of the app. You can also build specific assets with `npm run build:css`, `npm run build:js`, `npm run build:tests` and `npm run build:config` (compiles configuration files).
+`npm run build`: Runs all build scripts and generates built versions of the app. You can also build specific assets with `npm run build:css`, `npm run build:js`, `npm run build:tests` and `npm run build:config` (compiles configuration files). If you're using a custom options repo, you can pass in a subdirectory name to the build command with `npm run build -- subdirectory_name` or the build config command with `npm run build:config -- subdirectory_name`.
 
 `npm start`: Starts the app for local development. More specifically, starts a web server that serves the contents of the `/web` directory.
 
@@ -20,7 +20,7 @@ This project uses `npm` as an interface to run build scripts and other tasks. Th
 
 `npm run browserstack`: Runs end-to-end tests on Browserstack.
 
-`npm run getcapabilites`: Makes a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers) and updates layer configurations.
+`npm run getcapabilites`: Makes a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers) and updates layer configurations. If you're using a custom options repo, you can pass in a subdirectory with `npm run getcapabilites -- subdirectory_name`.
 
 `npm run updateconfig`: A shortcut to update the config when new layers are added. Runs `npm run getcapabilities` and `npm run build:config` behind the scenes.
 
