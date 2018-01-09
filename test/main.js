@@ -5,10 +5,12 @@ import 'babel-polyfill'; // Polyfill fixes a bug in Phantom 2.1.x
 import brand from '../web/js/brand';
 import { parse as dateParser } from '../web/js/date/date';
 import { dateModel } from '../web/js/date/model';
+import { dataParser } from '../web/js/data/data';
+import { dataModel } from '../web/js/data/model';
 import { parse as layerParser } from '../web/js/layers/layers';
 import { layersModel } from '../web/js/layers/model';
 import { linkModel } from '../web/js/link/model';
-import { parse as mapParser } from '../web/js/map/map';
+import { mapParser } from '../web/js/map/map';
 import { mapModel } from '../web/js/map/model';
 import { MapRunningData } from '../web/js/map/runningdata';
 import palettes from '../web/js/palettes/palettes';
@@ -31,6 +33,10 @@ window.wv = {
   date: {
     parse: dateParser,
     model: dateModel
+  },
+  data: {
+    parse: dataParser,
+    model: dataModel
   },
   layers: {
     parse: layerParser,

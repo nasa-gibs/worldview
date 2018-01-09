@@ -4,6 +4,10 @@ import loIsUndefined from 'lodash/isUndefined';
 import loFind from 'lodash/find';
 import OlGeomPolygon from 'ol/geom/polygon';
 
+export const CRS_WGS_84 = 'EPSG:4326';
+
+export const CRS_WGS_84_QUERY_EXTENT = [-180, -60, 180, 60];
+
 /*
  * Checks to see if an extents string is found. If it exist
  * then it is changed from a string to an array which is then
@@ -20,7 +24,7 @@ import OlGeomPolygon from 'ol/geom/polygon';
  *
  * @todo would benefit by returning the array instead of attaching it to a global var
  */
-export function parse(state, errors) {
+export function mapParser(state, errors) {
   // 1.1 support
   if (state.map) {
     state.v = state.map;
@@ -30,7 +34,7 @@ export function parse(state, errors) {
     var extent = loMap(state.v.split(','), function (str) {
       return parseFloat(str);
     });
-    var valid = isExtentValid(extent);
+    var valid = mapIsExtentValid(extent);
     if (!valid) {
       errors.push({
         message: 'Invalid extent: ' + state.v
@@ -53,7 +57,7 @@ export function parse(state, errors) {
  * @return {boolean} False if any of the values is NaN, otherwise returns
  * true.
  */
-var isExtentValid = function(extent) {
+export function mapIsExtentValid(extent) {
   if (loIsUndefined(extent)) {
     return false;
   }
@@ -156,7 +160,7 @@ export function getLayerByName(map, name) {
  * @todo relocate this utility function
  *
  */
-export function isPolygonValid(polygon, maxDistance) {
+export function mapIsPolygonValid(polygon, maxDistance) {
   var outerRing = polygon.getLinearRing(0);
   var points = outerRing.getCoordinates();
   for (var i = 0; i < points.length - 1; i++) {
@@ -189,7 +193,7 @@ export function isPolygonValid(polygon, maxDistance) {
  *
  * @todo relocate this utility function
  */
-export function adjustAntiMeridian(polygon, adjustSign) {
+export function mapAdjustAntiMeridian(polygon, adjustSign) {
   var outerRing = polygon.getLinearRing(0);
   var points = outerRing.getCoordinates()
     .slice();
@@ -220,7 +224,7 @@ export function adjustAntiMeridian(polygon, adjustSign) {
  * @todo relocate this utility function
  *
  */
-export function distance2D(p1, p2) {
+export function mapDistance2D(p1, p2) {
   return Math.sqrt(Math.pow(p1[0] - p2[0], 2) +
     (Math.pow(p1[1] - p2[1], 2)));
 };
@@ -240,7 +244,7 @@ export function distance2D(p1, p2) {
  * @todo relocate this utility function
  *
  */
-export function distanceX(p1, p2) {
+export function mapDistanceX(p1, p2) {
   return Math.abs(p2 - p1);
 };
 
@@ -259,7 +263,7 @@ export function distanceX(p1, p2) {
  * @todo relocate this utility function
  *
  */
-export function interpolate2D(p1, p2, amount) {
+export function mapInterpolate2D(p1, p2, amount) {
   var distX = p2[0] - p1[0];
   var distY = p2[1] - p1[1];
 
@@ -283,7 +287,7 @@ export function interpolate2D(p1, p2, amount) {
  * @todo relocate this utility function
  *
  */
-export function toPolys(geom) {
+export function mapToPolys(geom) {
   if (geom.getPolygons) {
     return geom.getPolygons();
   }

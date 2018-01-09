@@ -1,6 +1,5 @@
 buster.testCase('wv.ui.indicator', (function () {
   var self = {};
-
   self.setUp = function () {
     wv.ui.indicator.active = [];
   };

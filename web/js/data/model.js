@@ -1,27 +1,16 @@
-/**
- * @module wv.data
- */
-var wv = wv || {};
-wv.data = wv.data || {};
+import $ from 'jquery';
+import lodashEach from 'lodash/each';
+import lodashFind from 'lodash/find';
+import util from '../util/util';
+import {dataHandlerGetByName} from './handler';
 
-/**
- * Undocumented.
- *
- * @class wv.data.model
- */
-wv.data.model = wv.data.model || function (models, config) {
+export function dataModel(models, config) {
   var NO_PRODUCT_ID = '__NO_PRODUCT';
   var NO_PRODUCT = {
     name: 'Not available for download &nbsp;&nbsp;<span class=\'link\'>(?)</span>',
     notSelectable: true
   };
 
-  var state = {
-    layersString: null,
-    projection: null,
-    epsg: null,
-    time: null
-  };
   var layersModel = models.layers;
   var queryExecuting = false;
   var nextQuery = null;
@@ -70,7 +59,7 @@ wv.data.model = wv.data.model || function (models, config) {
    * @readOnly
    * @type Events
    */
-  self.events = wv.util.events();
+  self.events = util.events();
 
   self.selectedProduct = null;
   self.selectedGranules = {};
@@ -178,7 +167,7 @@ wv.data.model = wv.data.model || function (models, config) {
     // especially for IE9. This whole function needs clean up.
     var results = {};
     var none = products.__NO_PRODUCT;
-    _.each(products, function (product, key) {
+    lodashEach(products, function (product, key) {
       if (key !== NO_PRODUCT_ID) {
         results[key] = product;
       }
@@ -262,7 +251,7 @@ wv.data.model = wv.data.model || function (models, config) {
   };
 
   self.getSelectionCounts = function () {
-    counts = {};
+    var counts = {};
     $.each(self.layers, function (index, layer) {
       if (layer.product) {
         counts[layer.product] = 0;
@@ -288,7 +277,7 @@ wv.data.model = wv.data.model || function (models, config) {
   self.load = function (state, errors) {
     var productId = state.download;
     if (productId) {
-      var found = _.find(models.layers.active, {
+      var found = lodashFind(models.layers.active, {
         product: productId
       });
       if (!found) {
@@ -321,7 +310,7 @@ wv.data.model = wv.data.model || function (models, config) {
       throw Error('Product not defined: ' + self.selectedProduct);
     }
 
-    var handlerFactory = wv.data.handler.getByName(productConfig.handler);
+    var handlerFactory = dataHandlerGetByName(productConfig.handler);
     var handler = handlerFactory(config, self);
     handler.events.on('query', function () {
       self.events.trigger(self.EVENT_QUERY);
@@ -370,7 +359,7 @@ wv.data.model = wv.data.model || function (models, config) {
   var updateLayers = function () {
     self.layers = [];
     var foundSelected = false;
-    _.each(models.layers.get(), function (layer) {
+    lodashEach(models.layers.get(), function (layer) {
       var id = layer.id;
       var names = models.layers.getTitles(layer.id);
       var layerName = names.title;
@@ -399,7 +388,7 @@ wv.data.model = wv.data.model || function (models, config) {
     // FIXME: This is a hack for now and should be cleaned up when
     // everything changes to models.
     var products = self.groupByProducts();
-    _.each(self.selectedGranules, function (selected) {
+    lodashEach(self.selectedGranules, function (selected) {
       if (!products[selected.product] &&
         !productActive(selected.product)) {
         self.unselectGranule(selected);
@@ -409,7 +398,7 @@ wv.data.model = wv.data.model || function (models, config) {
 
   var productActive = function (product) {
     var active = false;
-    _.each(layersModel.active, function (layer) {
+    lodashEach(layersModel.active, function (layer) {
       if (layer.product === product) {
         active = true;
         return false;

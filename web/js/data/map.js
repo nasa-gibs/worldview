@@ -1,7 +1,19 @@
-var wv = wv || {};
-wv.data = wv.data || {};
+import $ from 'jquery';
+import lodashEach from 'lodash/each';
+import OlStyleStyle from 'ol/style/style';
+import OlStyleIcon from 'ol/style/icon';
+import OlStyleText from 'ol/style/text';
+import OlStyleFill from 'ol/style/fill';
+import OlStyleStroke from 'ol/style/stroke';
+import OlLayerVector from 'ol/layer/vector';
+import OlSourceVector from 'ol/source/vector';
+import OlGeomLineString from 'ol/geom/linestring';
+import OlFormatGeoJSON from 'ol/format/geojson';
+import OlFeature from 'ol/feature';
 
-wv.data.map = wv.data.map || function (model, maps, config) {
+import {CRS_WGS_84, mapToPolys, mapDistanceX} from '../map/map';
+
+export function dataMap(model, maps, config) {
   var self = {};
 
   var map = null;
@@ -11,6 +23,7 @@ wv.data.map = wv.data.map || function (model, maps, config) {
   var buttonLayer = null;
   var selectionLayer = null;
   var gridLayer = null;
+  var swathLayer = null;
   var hovering = null;
   var selectedFeatures = null;
 
@@ -35,26 +48,26 @@ wv.data.map = wv.data.map || function (model, maps, config) {
     }
 
     if (feature !== hovering) {
-      return [new ol.style.Style({
-        image: new ol.style.Icon({
+      return [new OlStyleStyle({
+        image: new OlStyleIcon({
           src: image,
           scale: dim.scale
         })
       })];
     } else {
       var offset = -(dim.size / 2.0 + 14);
-      return [new ol.style.Style({
-        image: new ol.style.Icon({
+      return [new OlStyleStyle({
+        image: new OlStyleIcon({
           src: image,
           scale: dim.scale
         }),
-        text: new ol.style.Text({
+        text: new OlStyleText({
           font: 'bold 14px ‘Lucida Sans’, Arial, Sans-Serif',
           text: feature.granule.label,
-          fill: new ol.style.Fill({
+          fill: new OlStyleFill({
             color: '#ffffff'
           }),
-          stroke: new ol.style.Stroke({
+          stroke: new OlStyleStroke({
             color: 'rgba(0, 0, 0, .7)',
             width: 5
           }),
@@ -66,21 +79,21 @@ wv.data.map = wv.data.map || function (model, maps, config) {
 
   var hoverStyle = function (feature) {
     if (!model.isSelected(feature.granule)) {
-      return [new ol.style.Style({
-        fill: new ol.style.Fill({
+      return [new OlStyleStyle({
+        fill: new OlStyleFill({
           color: 'rgba(181, 158, 50, 0.25)'
         }),
-        stroke: new ol.style.Stroke({
+        stroke: new OlStyleStroke({
           color: 'rgb(251, 226, 109)',
           width: 3
         })
       })];
     } else {
-      return [new ol.style.Style({
-        fill: new ol.style.Fill({
+      return [new OlStyleStyle({
+        fill: new OlStyleFill({
           color: 'rgba(242, 12, 12, 0.25)'
         }),
-        stroke: new ol.style.Stroke({
+        stroke: new OlStyleStroke({
           color: 'rgb(255, 6, 0)',
           width: 3
         })
@@ -89,8 +102,8 @@ wv.data.map = wv.data.map || function (model, maps, config) {
   };
 
   var createButtonLayer = function () {
-    buttonLayer = new ol.layer.Vector({
-      source: new ol.source.Vector({
+    buttonLayer = new OlLayerVector({
+      source: new OlSourceVector({
         wrapX: false
       }),
       style: buttonStyle
@@ -99,8 +112,8 @@ wv.data.map = wv.data.map || function (model, maps, config) {
   };
 
   var createHoverLayer = function () {
-    hoverLayer = new ol.layer.Vector({
-      source: new ol.source.Vector({
+    hoverLayer = new OlLayerVector({
+      source: new OlSourceVector({
         wrapX: false
       }),
       style: hoverStyle
@@ -109,15 +122,15 @@ wv.data.map = wv.data.map || function (model, maps, config) {
   };
 
   var createSelectionLayer = function () {
-    selectionLayer = new ol.layer.Vector({
-      source: new ol.source.Vector({
+    selectionLayer = new OlLayerVector({
+      source: new OlSourceVector({
         wrapX: false
       }),
-      style: new ol.style.Style({
-        fill: new ol.style.Fill({
+      style: new OlStyleStyle({
+        fill: new OlStyleFill({
           color: 'rgba(127, 127, 127, 0.2)'
         }),
-        stroke: new ol.style.Stroke({
+        stroke: new OlStyleStroke({
           color: 'rgb(127, 127, 127)',
           width: 3
         }),
@@ -128,12 +141,12 @@ wv.data.map = wv.data.map || function (model, maps, config) {
   };
 
   var createSwathLayer = function () {
-    swathLayer = new ol.layer.Vector({
-      source: new ol.source.Vector({
+    swathLayer = new OlLayerVector({
+      source: new OlSourceVector({
         wrapX: false
       }),
-      style: new ol.style.Style({
-        stroke: new ol.style.Stroke({
+      style: new OlStyleStyle({
+        stroke: new OlStyleStroke({
           color: 'rgba(195, 189, 123, 0.75)',
           width: 2
         })
@@ -143,12 +156,12 @@ wv.data.map = wv.data.map || function (model, maps, config) {
   };
 
   var createGridLayer = function () {
-    gridLayer = new ol.layer.Vector({
-      source: new ol.source.Vector({
+    gridLayer = new OlLayerVector({
+      source: new OlSourceVector({
         wrapX: false
       }),
-      style: new ol.style.Style({
-        stroke: new ol.style.Stroke({
+      style: new OlStyleStyle({
+        stroke: new OlStyleStroke({
           color: 'rgba(186, 180, 152, 0.6)',
           width: 1.5
         })
@@ -192,7 +205,7 @@ wv.data.map = wv.data.map || function (model, maps, config) {
     updateButtons();
     updateSwaths();
     updateGrid();
-    _.each(model.selectedGranules, function (granule) {
+    lodashEach(model.selectedGranules, function (granule) {
       if (selectedFeatures[granule.id]) {
         selectionLayer.getSource()
           .removeFeature(selectedFeatures[granule.id]);
@@ -206,12 +219,12 @@ wv.data.map = wv.data.map || function (model, maps, config) {
     buttonLayer.getSource()
       .clear();
     var features = [];
-    _.each(granules, function (granule) {
+    lodashEach(granules, function (granule) {
       if (!granule.centroid || !granule.centroid[model.crs]) {
         return;
       }
       var centroid = granule.centroid[model.crs];
-      var feature = new ol.Feature({
+      var feature = new OlFeature({
         geometry: centroid
       });
       feature.button = true;
@@ -230,28 +243,28 @@ wv.data.map = wv.data.map || function (model, maps, config) {
     if (!swaths) {
       return;
     }
-    var maxDistance = (model.crs === wv.map.CRS_WGS_84)
+    var maxDistance = (model.crs === CRS_WGS_84)
       ? 270 : Number.POSITIVE_INFINITY;
     var features = [];
-    _.each(swaths, function (swath) {
+    lodashEach(swaths, function (swath) {
       var lastGranule = null;
-      _.each(swath, function (granule) {
+      lodashEach(swath, function (granule) {
         if (!lastGranule) {
           lastGranule = granule;
           return;
         }
-        var polys1 = wv.map.toPolys(lastGranule.geometry[model.crs]);
-        var polys2 = wv.map.toPolys(granule.geometry[model.crs]);
-        _.each(polys1, function (poly1) {
-          _.each(polys2, function (poly2) {
+        var polys1 = mapToPolys(lastGranule.geometry[model.crs]);
+        var polys2 = mapToPolys(granule.geometry[model.crs]);
+        lodashEach(polys1, function (poly1) {
+          lodashEach(polys2, function (poly2) {
             var c1 = poly1.getInteriorPoint()
               .getCoordinates();
             var c2 = poly2.getInteriorPoint()
               .getCoordinates();
-            var distanceX = wv.map.distanceX(c1[0], c2[0]);
+            var distanceX = mapDistanceX(c1[0], c2[0]);
             if (distanceX < maxDistance) {
-              var ls = new ol.geom.LineString([c1, c2]);
-              features.push(new ol.Feature(ls));
+              var ls = new OlGeomLineString([c1, c2]);
+              features.push(new OlFeature(ls));
             }
           });
         });
@@ -270,10 +283,10 @@ wv.data.map = wv.data.map || function (model, maps, config) {
       return;
     }
     var features = [];
-    var parser = new ol.format.GeoJSON();
-    _.each(grid, function (cell) {
+    var parser = new OlFormatGeoJSON();
+    lodashEach(grid, function (cell) {
       var geom = parser.readGeometry(cell.geometry);
-      var feature = new ol.Feature(geom);
+      var feature = new OlFeature(geom);
       features.push(feature);
     });
     gridLayer.getSource()
@@ -285,7 +298,7 @@ wv.data.map = wv.data.map || function (model, maps, config) {
       return;
     }
     granule.feature.changed();
-    var select = new ol.Feature(granule.geometry[model.crs]);
+    var select = new OlFeature(granule.geometry[model.crs]);
     select.granule = granule;
     // granule.selectedFeature = select;
     selectionLayer.getSource()
@@ -362,11 +375,11 @@ wv.data.map = wv.data.map || function (model, maps, config) {
   };
 
   var hoverOver = function (feature) {
-    granule = feature.granule;
+    var granule = feature.granule;
     if (!granule.geometry) {
       return;
     }
-    var hover = new ol.Feature(granule.geometry[model.crs]);
+    var hover = new OlFeature(granule.geometry[model.crs]);
     hover.granule = granule;
     hoverLayer.getSource()
       .clear();

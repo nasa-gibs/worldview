@@ -26,7 +26,7 @@ import {layersModal} from './layers/modal';
 import {layersSidebar} from './layers/sidebar';
 import {layersActive} from './layers/active';
 // Map
-import {parse as mapParser} from './map/map';
+import {mapParser} from './map/map';
 import {mapModel} from './map/model';
 import {mapui} from './map/ui';
 import {mapRotate} from './map/rotation';
@@ -46,9 +46,9 @@ import {animationGif} from './animation/gif';
 import palettes from './palettes/palettes';
 import {palettesModel} from './palettes/model';
 // Data
-// import dataParser from './data/data';
-// import DataModel from './data/model';
-// import DataUI from './data/ui';
+import {dataParser} from './data/data';
+import {dataModel} from './data/model';
+import {dataUi} from './data/ui';
 // NaturalEvents
 import naturalEventsModel from './naturalEvents/model';
 import naturalEventsUI from './naturalEvents/ui';
@@ -136,7 +136,7 @@ window.onload = () => {
       palettes.parse
     ];
     if (config.features.dataDownload) {
-      // parsers.push(dataParser);
+      parsers.push(dataParser);
     }
     if (config.features.animation) {
       parsers.push(animationParser);
@@ -212,8 +212,8 @@ window.onload = () => {
       models.link.register(models.anim);
     }
     if (config.features.dataDownload) {
-      // models.data = dataModel(models, config);
-      // models.link.register(models.data);
+      models.data = dataModel(models, config);
+      models.link.register(models.data);
     }
     if (config.features.naturalEvents) {
       models.naturalEvents = naturalEventsModel(models, config, ui);
@@ -263,9 +263,9 @@ window.onload = () => {
     ui.rubberband = imageRubberband(models, ui, config);
     ui.image = imagePanel(models, ui, config);
     if (config.features.dataDownload) {
-      // ui.data = dataui(models, ui, config);
+      ui.data = dataUi(models, ui, config);
       // FIXME: Why is this here?
-      // ui.data.render();
+      ui.data.render();
     }
     if (config.features.naturalEvents) {
       var request = naturalEventsRequest(models, ui, config);
@@ -297,18 +297,18 @@ window.onload = () => {
       .hide();
 
     if (config.features.dataDownload) {
-      // models.data.events
-      //   .on('activate', function() {
-      //     ui.sidebar.selectTab('download');
-      //   })
-      //   .on('queryResults', function() {
-      //     ui.data.onViewChange();
-      //   });
-      // ui.map.events.on('extent', function() {
-      //   ui.data.onViewChange();
-      // });
-      // // FIXME: This is a hack
-      // models.map.events.on('projection', models.data.updateProjection);
+      models.data.events
+        .on('activate', function() {
+          ui.sidebar.selectTab('download');
+        })
+        .on('queryResults', function() {
+          ui.data.onViewChange();
+        });
+      ui.map.events.on('extent', function() {
+        ui.data.onViewChange();
+      });
+      // FIXME: This is a hack
+      models.map.events.on('projection', models.data.updateProjection);
     }
     // Sink all focus on inputs if click unhandled
     $(document)

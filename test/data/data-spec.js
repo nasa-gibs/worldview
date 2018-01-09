@@ -3,7 +3,6 @@ buster.testCase('wv.data', (function () {
 
   var config;
   var errors;
-
   self.setUp = function () {
     config = {
       products: {
