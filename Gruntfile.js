@@ -228,7 +228,7 @@ module.exports = function(grunt) {
     replace: {
 
       rpm_placeholders: {
-        src: ['build/rpm/SPECS/worldview.spec'],
+        src: ['build/rpm/SPECS/worldview.spec', 'build/rpm/SOURCES/*.conf'],
         overwrite: true,
         replacements: [
           {
