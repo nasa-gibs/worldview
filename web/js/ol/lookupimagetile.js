@@ -1,7 +1,7 @@
 import OlImageTile from 'ol/imagetile';
 import OlTileState from 'ol/tilestate';
 
-class LookupImageTile extends ImageTile {
+class LookupImageTile extends OlImageTile {
   constructor(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction) {
     super(tileCoord, state, src, crossOrigin, tileLoadFunction);
     this.lookup_ = lookup;
