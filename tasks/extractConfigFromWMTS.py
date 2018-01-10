@@ -8,7 +8,7 @@ import sys
 import urllib2 as urllib
 import xmltodict
 import isodate
-from process_temporal_layer import process_temporal
+from processTemporalLayer import process_temporal
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")

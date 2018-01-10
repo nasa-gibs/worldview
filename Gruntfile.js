@@ -15,7 +15,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean'); // Used to remove build artifacts
   grunt.loadNpmTasks('grunt-contrib-copy'); // Used to move build artifacts around
   grunt.loadNpmTasks('grunt-exec'); // Used to run bash scripts
-  grunt.loadNpmTasks('grunt-git-rev-parse'); // Used to get commit hashes
   grunt.loadNpmTasks('grunt-markdown'); // Used to convert md files to html
   grunt.loadNpmTasks('grunt-mkdir'); // Used to make build directories
   grunt.loadNpmTasks('grunt-text-replace'); // Used to replace token strings
@@ -23,25 +22,12 @@ module.exports = function(grunt) {
   var hasCustomOptions = fs.existsSync('options');
   var optionsPath = hasCustomOptions ? 'options' : 'node_modules/worldview-options-eosdis';
 
-  // Platform specific command for find
-  var findCmd;
-  if (process.platform === 'win32') {
-    findCmd = ';'; // cygwin find doesn't really work in Windows compared to CentOS
-  } else {
-    findCmd = 'find build -type d -empty -delete';
-  }
-
   grunt.initConfig({
 
     pkg: pkg,
     optionsPath: optionsPath,
-    apache_version: grunt.option('apache-version') || '22',
 
     copy: {
-      apache: {
-        src: 'etc/dev/worldview-dev.httpd<%=apache_version%>.conf',
-        dest: 'dist/<%=grunt.option("packageName")%>.conf'
-      },
 
       brand_info: {
         files: [
@@ -64,29 +50,6 @@ module.exports = function(grunt) {
             cwd: 'build/options/brand',
             src: ['**'],
             dest: 'web/brand'
-          }
-        ]
-      },
-
-      rpm_sources: {
-        files: [
-          {
-            expand: true,
-            cwd: 'deploy/sources',
-            src: ['**'],
-            dest: 'build/rpmbuild/SOURCES'
-          }, {
-            expand: true,
-            cwd: 'deploy',
-            src: ['worldview.spec'],
-            dest: 'build/rpmbuild/SPECS'
-          }, {
-            expand: true,
-            cwd: 'dist',
-            src: [
-              'site-<%=grunt.option("packageName")%>.tar.bz2', 'site-<%=grunt.option("packageName")%>-debug.tar.bz2', 'worldview-config.tar.bz2'
-            ],
-            dest: 'build/rpmbuild/SOURCES'
           }
         ]
       },
@@ -132,63 +95,6 @@ module.exports = function(grunt) {
         }
       },
 
-      dist_config_versioned: {
-        files: [
-          {
-            src: 'dist/worldview-config.tar.bz2',
-            dest: 'dist/worldview-config.git<%= grunt.config.get("config-revision") %>.tar.bz2'
-          }
-        ]
-      },
-
-      dist_site_debug_versioned: {
-        files: [
-          {
-            src: 'dist/site-<%=grunt.option("packageName")%>-debug.tar.bz2',
-            dest: 'dist/site-<%=grunt.option("packageName")%>-debug' + '-<%=pkg.version%>' + '-<%=pkg.release%>' + '.tar.bz2'
-          }
-        ]
-      },
-
-      dist_site_release_versioned: {
-        files: [
-          {
-            src: 'dist/site-<%=grunt.option("packageName")%>.tar.bz2',
-            dest: 'dist/site-<%=grunt.option("packageName")%>' + '-<%=pkg.version%>' + '-<%=pkg.release%>' + '.tar.bz2'
-          }
-        ]
-      },
-
-      dist_source_debug_versioned: {
-        files: [
-          {
-            src: 'dist/worldview-debug.tar.bz2',
-            dest: 'dist/worldview-debug' + '-<%=pkg.version%>' + '-<%=pkg.release%>' + '.git<%= grunt.config.get("source-revision") %>' + '.tar.bz2'
-          }
-        ]
-      },
-
-      dist_source_release_versioned: {
-        files: [
-          {
-            src: 'dist/worldview.tar.bz2',
-            dest: 'dist/worldview' + '-<%=pkg.version%>' + '-<%=pkg.release%>' + '.git<%= grunt.config.get("source-revision") %>' + '.tar.bz2'
-          }
-        ]
-      },
-
-      rpm: {
-        files: [
-          {
-            expand: true,
-            flatten: true,
-            cwd: 'build/rpmbuild',
-            src: ['**/*.rpm'],
-            dest: 'dist'
-          }
-        ]
-      },
-
       site: {
         files: [
           {
@@ -231,51 +137,24 @@ module.exports = function(grunt) {
 
     exec: {
 
-      // After removing JavaScript and CSS files that are no longer
-      // need in a release build, there are a lot of empty directories.
-      // Remove all of them.
-      empty: {
-        command: findCmd
-      },
-
-      rpmbuild: {
-        command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' + '-ba build/rpmbuild/SPECS/worldview.spec'
-      },
-
       tar_config: {
-        command: 'tar -C build -cjf dist/worldview-config.tar.bz2 ' + 'options'
+        command: 'tar -C build -cjf dist/worldview-config.tar.bz2 options'
       },
 
       tar_site_debug: {
-        command: 'tar cjCf build dist/site-<%=grunt.option("packageName")%>-debug.tar.bz2 ' + 'site-<%=grunt.option("packageName")%>-debug'
+        command: 'tar cjCf build dist/site-<%=grunt.option("packageName")%>-debug.tar.bz2 site-<%=grunt.option("packageName")%>-debug'
       },
 
       tar_site_release: {
-        command: 'tar cjCf build dist/site-<%=grunt.option("packageName")%>.tar.bz2 ' + 'site-<%=grunt.option("packageName")%>'
+        command: 'tar cjCf build dist/site-<%=grunt.option("packageName")%>.tar.bz2 site-<%=grunt.option("packageName")%>'
       },
 
       tar_source_debug: {
-        command: 'tar cjCf build dist/worldview-debug.tar.bz2 ' + 'worldview-debug'
+        command: 'tar cjCf build dist/worldview-debug.tar.bz2 worldview-debug'
       },
 
       tar_source_release: {
-        command: 'tar cjCf build dist/worldview.tar.bz2 ' + 'worldview'
-      }
-    },
-
-    'git-rev-parse': {
-      source: {
-        options: {
-          prop: 'source-revision',
-          number: 6
-        }
-      },
-      config: {
-        options: {
-          prop: 'config-revision',
-          cwd: '<%= optionsPath %>',
-          number: 6
-        }
+        command: 'tar cjCf build dist/worldview.tar.bz2 worldview'
       }
     },
 
@@ -291,7 +170,7 @@ module.exports = function(grunt) {
           }
         ],
         options: {
-          template: 'deploy/metadata.template.html'
+          template: 'templates/metadata.html'
         }
       },
       new: {
@@ -305,7 +184,7 @@ module.exports = function(grunt) {
           }
         ],
         options: {
-          template: 'deploy/new.template.html'
+          template: 'templates/new.html'
         }
       }
     },
@@ -314,11 +193,6 @@ module.exports = function(grunt) {
       dist: {
         options: {
           create: ['dist']
-        }
-      },
-      rpmbuild: {
-        options: {
-          create: ['build/rpmbuild']
         }
       }
     },
@@ -348,30 +222,13 @@ module.exports = function(grunt) {
       ],
       build_site: [
         'build/site-<%=grunt.option("packageName")%>-debug', 'build/site-<%=grunt.option("packageName")%>'
-      ],
-      dist_rpm: ['dist/*.rpm'],
-      rpmbuild: ['build/rpmbuild']
+      ]
     },
 
     replace: {
-      apache: {
-        src: ['dist/<%=grunt.option("packageName")%>.conf'],
-        overwrite: true,
-        replacements: [
-          {
-            from: '@WORLDVIEW@',
-            to: '<%=grunt.option("packageName")%>'
-          }, {
-            from: '@ROOT@',
-            to: process.cwd()
-          }
-        ]
-      },
 
-      rpm_sources: {
-        src: [
-          'build/rpmbuild/SOURCES/*', 'build/rpmbuild/SPECS/*', '!**/*.tar.bz2'
-        ],
+      rpm_placeholders: {
+        src: ['build/rpm/SPECS/worldview.spec'],
         overwrite: true,
         replacements: [
           {
@@ -440,27 +297,20 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('build', [
-    'clean:build_source', // Clear some directories
-    'git-rev-parse:source', // Get commit hash
     'copy:source', // Copy source files into build/worldview-debug
     'clean:source', // Removes unneccesary assets from build directory
-    'exec:empty', // Delete empty directories in the build
     'copy:release', // Copy build/worldview-debug into build/worldview
     'mkdir:dist', // Make dist directory
     'exec:tar_source_debug', // Make worldview-debug tar from /build
-    'copy:dist_source_debug_versioned', // Add version number and hash to copy of tar
-    'exec:tar_source_release', // Make worldview-debug tar from /build
-    'copy:dist_source_release_versioned' // Add version number and hash to copy of tar
+    'exec:tar_source_release' // Make worldview-debug tar from /build
   ]);
 
   grunt.registerTask('config', [
-    'git-rev-parse:config', // Get commit hash
     'markdown', // Parse metadata and pages md files into html
     'copy:config_src', // Copy build results to web/config and web/brand
     'copy:brand_info', // Copy brand config file to build directory
     'mkdir:dist', // Make dist directory
-    'exec:tar_config', // Create worldview-config tar from options directory
-    'copy:dist_config_versioned' // Create copy of tar with version number
+    'exec:tar_config' // Create worldview-config tar from options directory
   ]);
 
   grunt.registerTask('site', [
@@ -469,25 +319,13 @@ module.exports = function(grunt) {
     'copy:site', // Copy /worldview and /worldview-config builds to /build/site
     'replace:tokens', // Replace string placeholders in JS and HTML (no CSS)
     'exec:tar_site_debug', // Create debug tar
-    'copy:dist_site_debug_versioned', // Create debug tar with version number
-    'exec:tar_site_release', // Create release tar
-    'copy:dist_site_release_versioned' // Create release tar with version number
+    'exec:tar_site_release' // Create release tar
   ]);
 
-  grunt.registerTask('rpm-only', [
+  grunt.registerTask('rpm-placeholders', [
     'load_branding', // Set grunt variables from built options file
-    'git-rev-parse:source', // Get commit hash
-    'clean:rpmbuild', // Remove build/rpmbuild directory
-    'mkdir:rpmbuild', // Create build/rpmbuild directory
-    'copy:rpm_sources', // Copy sources needed to build/rpmbuild
-    'replace:rpm_sources', // Replace name, version, release and build numbers in rpm
-    'clean:dist_rpm', // Remove any existing .rpm files
-    'exec:rpmbuild', // Run the command to build the rpm
-    'copy:rpm' // Copy rpm files to /dist
+    'replace:rpm_placeholders' // Replace strings in rpm sources
   ]);
-
-  // Set grunt variables, move .conf file to /dist and replace @WORLDVIEW@ and @ROOT@
-  grunt.registerTask('apache-config', ['load_branding', 'copy:apache', 'replace:apache']);
 
   grunt.registerTask('default', [
     'build', // Copy assets to build directories and generate tar files
