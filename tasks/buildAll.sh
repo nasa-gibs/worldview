@@ -18,4 +18,4 @@ cp *.conf build/rpm/SOURCES
 grunt rpm-placeholders
 
 # Build rpm
-rpmbuild -ba build/rpm/SPECS/worldview.spec
+rpmbuild --define "_topdir $PWD/build/rpm" -ba build/rpm/SPECS/worldview.spec
