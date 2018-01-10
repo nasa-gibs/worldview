@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'React-dom';
+import ReactDOM from 'react-dom';
 import OlOverlay from 'ol/overlay';
 
 import util from '../util/util';
