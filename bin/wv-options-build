@@ -15,7 +15,8 @@ if [ -d "$BASE/options" ]; then
     OPT_DIR="$BASE/options"
 fi
 
-[ "$FORCE" ] || set -e
+# If $IGNORE_ERRORS is true, don't fail on errors
+[ "$IGNORE_ERRORS" ] || set -e
 
 die() {
     echo "$PROG: ERROR: $@" >& 2
