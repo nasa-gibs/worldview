@@ -1,5 +1,5 @@
-import ImageTile from 'ol/imagetile';
-import TileState from 'ol/tilestate';
+import OlImageTile from 'ol/imagetile';
+import OlTileState from 'ol/tilestate';
 
 class LookupImageTile extends ImageTile {
   constructor(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction) {
@@ -12,8 +12,8 @@ LookupImageTile.prototype.getImage = function() {
   return this.canvas_;
 };
 LookupImageTile.prototype.load = function() {
-  if (this.state === TileState.IDLE) {
-    this.state = TileState.LOADING;
+  if (this.state === OlTileState.IDLE) {
+    this.state = OlTileState.LOADING;
     var that = this;
     var onImageLoad = function() {
       that.canvas_ = document.createElement('canvas');
@@ -41,7 +41,7 @@ LookupImageTile.prototype.load = function() {
         }
       }
       g.putImageData(imageData, 0, 0);
-      that.state = TileState.LOADED;
+      that.state = OlTileState.LOADED;
       that.changed();
       that.image_.removeEventListener('load', onImageLoad);
     };

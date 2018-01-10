@@ -14,8 +14,8 @@
   },
   "scripts": {
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack --skiptags wip",
-    "build": "run-p build:css build:js build:tests && run-s \"getcapabilities -- {1}\" \"build:config -- {1}\" --",
-    "postbuild": "grunt build site",
+    "build": "run-s \"getcapabilities -- {1}\" \"build:config -- {1}\" --",
+    "postbuild": "run-p build:css build:js build:tests && grunt build site",
     "build:css": "node ./tasks/buildCSS",
     "build:config": "bash -c 'bin/wv-options-build ${1}' 0",
     "postbuild:config": "grunt config",
