@@ -13,7 +13,8 @@
   "extends": "standard",
   "rules": {
     "semi": ["error", "always"],
-    "space-before-function-paren": "off"
+    "space-before-function-paren": "off",
+    "object-curly-spacing": ["warn", "always"],
   },
   "overrides": [
     {

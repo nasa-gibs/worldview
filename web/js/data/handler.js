@@ -1,10 +1,10 @@
 import $ from 'jquery';
 
-import {dataCmrMockClient, dataCmrClient} from './cmr';
+import { dataCmrMockClient, dataCmrClient } from './cmr';
 
 import util from '../util/util';
 import brand from '../brand';
-import {CRS_WGS_84_QUERY_EXTENT, CRS_WGS_84} from '../map/map';
+import { CRS_WGS_84_QUERY_EXTENT, CRS_WGS_84 } from '../map/map';
 import {
   dataResultsChain,
   dataResultsTagProduct,

@@ -10,7 +10,7 @@ import lodashEach from 'lodash/each';
 import lodashIsNull from 'lodash/isNull';
 import wvui from '../ui/ui';
 import browser from './browser';
-import {events} from './events';
+import { events } from './events';
 import load from './load';
 import Cache from 'cachai';
 

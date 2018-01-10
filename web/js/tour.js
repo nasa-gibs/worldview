@@ -3,7 +3,7 @@ import 'jquery-ui/dialog';
 import 'jquery.joyride';
 import util from './util/util';
 import wvui from './ui/ui';
-import {GA as googleAnalytics} from 'worldview-components';
+import { GA as googleAnalytics } from 'worldview-components';
 import feedbackModal from './feedback';
 
 export default function (models, ui, config) {
