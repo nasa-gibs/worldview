@@ -125,7 +125,7 @@
     "promise-queue": "2.2.3",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
-    "worldview-components": "^1.5.2",
+    "worldview-components": "nasa-gibs/worldview-components#remove-shim",
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.3.0"
   },
   "browser": {
