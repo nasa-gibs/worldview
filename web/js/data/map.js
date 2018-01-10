@@ -11,7 +11,7 @@ import OlGeomLineString from 'ol/geom/linestring';
 import OlFormatGeoJSON from 'ol/format/geojson';
 import OlFeature from 'ol/feature';
 
-import {CRS_WGS_84, mapToPolys, mapDistanceX} from '../map/map';
+import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map/map';
 
 export function dataMap(model, maps, config) {
   var self = {};

@@ -51,7 +51,7 @@ export default function markers (models, ui) {
       ];
       category = icons.includes(category.title)
         ? category
-        : {title: 'Default', slug: 'default'};
+        : { title: 'Default', slug: 'default' };
 
       if (geometry.type === 'Polygon') {
         var extent = olExtent.boundingExtent(geometry.coordinates[0]);

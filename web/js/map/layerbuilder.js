@@ -8,7 +8,7 @@ import OlTileGridTileGrid from 'ol/tilegrid/tilegrid';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
-import {lookupFactory} from '../ol/lookupimagetile';
+import { lookupFactory } from '../ol/lookupimagetile';
 
 export function mapLayerBuilder(models, config, cache, Parent) {
   var self = {};

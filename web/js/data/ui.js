@@ -1,14 +1,14 @@
 import $ from 'jquery';
 import lodashSize from 'lodash/size';
 import lodashEach from 'lodash/each';
-import {GA as GoogleAnalytics} from 'worldview-components';
+import { GA as GoogleAnalytics } from 'worldview-components';
 import olExtent from 'ol/extent';
 
-import {dataMap} from './map';
+import { dataMap } from './map';
 import uiIndicator from '../ui/indicator';
 import util from '../util/util';
 import wvui from '../ui/ui';
-import {REL_DATA, REL_METADATA, REL_BROWSE, DATA_EXTS} from './cmr';
+import { REL_DATA, REL_METADATA, REL_BROWSE, DATA_EXTS } from './cmr';
 
 export function dataUi(models, ui, config) {
   var queryActive = false;

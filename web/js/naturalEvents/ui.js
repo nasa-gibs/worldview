@@ -82,7 +82,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
 
     // Store selected id and date in model
-    self.selected = {id: id};
+    self.selected = { id: id };
     if (date) self.selected.date = date;
 
     var event = getEventById(id);
@@ -200,7 +200,7 @@ export default function naturalEventsUI (models, ui, config, request) {
   };
 
   var createEventList = function () {
-    var $panels = $('<div />', {class: 'wv-eventslist bank'});
+    var $panels = $('<div />', { class: 'wv-eventslist bank' });
     $('#wv-events').empty().append($panels);
     var $list = $('<ul></ul>').attr('id', 'wv-eventscontent').addClass('content').addClass('map-item-list');
     var $detailContainer = $('<div></div>').attr('id', 'wv-events-detail').hide();

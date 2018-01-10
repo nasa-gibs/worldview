@@ -8,7 +8,7 @@ import 'isotope-layout';
 import 'perfect-scrollbar/jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {LayerList} from 'worldview-components';
+import { LayerList } from 'worldview-components';
 import lodashFind from 'lodash/find';
 import lodashIndexOf from 'lodash/indexOf';
 import lodashSortBy from 'lodash/sortBy';
@@ -556,7 +556,7 @@ export function layersModal(models, ui, config) {
                 }).on('ifChecked', addLayer)
                   .on('ifUnchecked', removeLayer);
 
-                if (lodashFind(model.active, {id: layer.id})) {
+                if (lodashFind(model.active, { id: layer.id })) {
                   $setting.attr('checked', 'checked');
                 }
 

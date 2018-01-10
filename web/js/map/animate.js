@@ -35,16 +35,16 @@ export function mapAnimate(models, config, ui) {
     if (hasEndInView) {
       // If the event is already visible, don't zoom out
       return Promise.all([
-        animationPromise({center: endPoint, duration: duration}),
-        animationPromise({zoom: endZoom, duration: duration})
+        animationPromise({ center: endPoint, duration: duration }),
+        animationPromise({ zoom: endZoom, duration: duration })
       ]);
     }
     // Default animation zooms out to arc
     return Promise.all([
-      animationPromise({center: endPoint, duration: duration}),
+      animationPromise({ center: endPoint, duration: duration }),
       animationPromise(
-        {zoom: getBestZoom(distance, startZoom, endZoom, view), duration: duration / 2},
-        {zoom: endZoom, duration: duration / 2}
+        { zoom: getBestZoom(distance, startZoom, endZoom, view), duration: duration / 2 },
+        { zoom: endZoom, duration: duration / 2 }
       )
     ]);
   };

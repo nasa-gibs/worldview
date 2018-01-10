@@ -8,9 +8,9 @@ import OlGeomPoint from 'ol/geom/point';
 import olExtent from 'ol/extent';
 import lodashClone from 'lodash/clone';
 import lodashEach from 'lodash/each';
-import {dataCmrRoundTime, dataCmrGeometry} from './cmr';
+import { dataCmrRoundTime, dataCmrGeometry } from './cmr';
 import util from '../util/util';
-import {dataHelper} from '../edsc';
+import { dataHelper } from '../edsc';
 import {
   CRS_WGS_84,
   mapIsPolygonValid,

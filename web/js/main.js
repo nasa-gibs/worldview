@@ -1,60 +1,60 @@
 import $ from 'jquery';
 import lodashEach from 'lodash/each';
-import {GA as googleAnalytics} from 'worldview-components';
+import { GA as googleAnalytics } from 'worldview-components';
 
 // Utils
 import util from './util/util';
 
 // Date
-import {parse as dateParser} from './date/date';
-import {dateModel} from './date/model';
-import {dateLabel} from './date/label';
+import { parse as dateParser } from './date/date';
+import { dateModel } from './date/model';
+import { dateLabel } from './date/label';
 import dateWheels from './date/wheels';
 
 // Timeline
-import {timeline} from './date/timeline';
-import {timelineData} from './date/timeline-data';
-import {timelineConfig} from './date/config';
-import {timelineZoom} from './date/timeline-zoom';
-import {timelineTicks} from './date/timeline-ticks';
-import {timelinePick} from './date/timeline-pick';
-import {timelinePan} from './date/timeline-pan';
-import {timelineInput} from './date/timeline-input';
+import { timeline } from './date/timeline';
+import { timelineData } from './date/timeline-data';
+import { timelineConfig } from './date/config';
+import { timelineZoom } from './date/timeline-zoom';
+import { timelineTicks } from './date/timeline-ticks';
+import { timelinePick } from './date/timeline-pick';
+import { timelinePan } from './date/timeline-pan';
+import { timelineInput } from './date/timeline-input';
 
 // Layers
-import {parse as layerParser, validate as layerValidate} from './layers/layers';
-import {layersModel} from './layers/model';
-import {layersModal} from './layers/modal';
-import {layersSidebar} from './layers/sidebar';
-import {layersActive} from './layers/active';
+import { parse as layerParser, validate as layerValidate } from './layers/layers';
+import { layersModel } from './layers/model';
+import { layersModal } from './layers/modal';
+import { layersSidebar } from './layers/sidebar';
+import { layersActive } from './layers/active';
 
 // Map
-import {mapParser} from './map/map';
-import {mapModel} from './map/model';
-import {mapui} from './map/ui';
-import {mapRotate} from './map/rotation';
-import {MapRunningData} from './map/runningdata';
-import {mapLayerBuilder} from './map/layerbuilder';
-import {mapDatelineBuilder} from './map/datelinebuilder';
-import {mapPrecacheTile} from './map/precachetile';
-import {mapAnimate} from './map/animate';
+import { mapParser } from './map/map';
+import { mapModel } from './map/model';
+import { mapui } from './map/ui';
+import { mapRotate } from './map/rotation';
+import { MapRunningData } from './map/runningdata';
+import { mapLayerBuilder } from './map/layerbuilder';
+import { mapDatelineBuilder } from './map/datelinebuilder';
+import { mapPrecacheTile } from './map/precachetile';
+import { mapAnimate } from './map/animate';
 
 // Animation
-import {parse as animationParser} from './animation/anim';
-import {animationModel} from './animation/model';
-import {animationUi} from './animation/ui';
-import {animationWidget} from './animation/widget';
-import {animationRangeSelect} from './animation/range-select';
-import {animationGif} from './animation/gif';
+import { parse as animationParser } from './animation/anim';
+import { animationModel } from './animation/model';
+import { animationUi } from './animation/ui';
+import { animationWidget } from './animation/widget';
+import { animationRangeSelect } from './animation/range-select';
+import { animationGif } from './animation/gif';
 
 // Palettes
 import palettes from './palettes/palettes';
-import {palettesModel} from './palettes/model';
+import { palettesModel } from './palettes/model';
 
 // Data
-import {dataParser} from './data/data';
-import {dataModel} from './data/model';
-import {dataUi} from './data/ui';
+import { dataParser } from './data/data';
+import { dataModel } from './data/model';
+import { dataUi } from './data/ui';
 
 // NaturalEvents
 import naturalEventsModel from './naturalEvents/model';
@@ -62,32 +62,32 @@ import naturalEventsUI from './naturalEvents/ui';
 import naturalEventsRequest from './naturalEvents/request';
 
 // Image
-import {imageRubberband} from './image/rubberband';
-import {imagePanel} from './image/panel';
+import { imageRubberband } from './image/rubberband';
+import { imagePanel } from './image/panel';
 
 // Notifications
-import {notificationsUi} from './notifications/ui';
+import { notificationsUi } from './notifications/ui';
 
 // UI
 import loadingIndicator from './ui/indicator';
 
 // Link
-import {linkModel} from './link/model';
-import {linkUi} from './link/ui';
+import { linkModel } from './link/model';
+import { linkUi } from './link/ui';
 
 // Projections
-import {parse as projectionParser} from './projection/projection';
-import {projectionModel} from './projection/model';
-import {projectionUi} from './projection/ui';
-import {projectionChange} from './projection/change';
+import { parse as projectionParser } from './projection/projection';
+import { projectionModel } from './projection/model';
+import { projectionUi } from './projection/ui';
+import { projectionChange } from './projection/change';
 
 // Other
-import {debugConfig, debugLayers, debug} from './debug';
+import { debugConfig, debugLayers, debug } from './debug';
 import Brand from './brand';
 import tour from './tour';
-import {uiInfo} from './ui/info';
+import { uiInfo } from './ui/info';
 
-import {polyfill} from './polyfill';
+import { polyfill } from './polyfill';
 polyfill(); // Polyfills some browser features
 
 // Document ready function

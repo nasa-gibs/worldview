@@ -2,7 +2,7 @@ import $ from 'jquery';
 import lodashEach from 'lodash/each';
 import lodashFind from 'lodash/find';
 import util from '../util/util';
-import {dataHandlerGetByName} from './handler';
+import { dataHandlerGetByName } from './handler';
 
 export function dataModel(models, config) {
   var NO_PRODUCT_ID = '__NO_PRODUCT';

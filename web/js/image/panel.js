@@ -4,7 +4,7 @@ import 'jquery-ui/dialog';
 import lodashEach from 'lodash/each';
 import lodashIsUndefined from 'lodash/isUndefined';
 import olProj from 'ol/proj';
-import {GA as googleAnalytics} from 'worldview-components';
+import { GA as googleAnalytics } from 'worldview-components';
 import util from '../util/util';
 import wvui from '../ui/ui';
 

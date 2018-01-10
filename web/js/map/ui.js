@@ -22,11 +22,11 @@ import OlInteractionMouseWheelZoom from 'ol/interaction/mousewheelzoom';
 import OlInteractionDragZoom from 'ol/interaction/dragzoom';
 import olExtent from 'ol/extent';
 import olProj from 'ol/proj';
-import {MapRotate} from './rotation';
-import {mapDateLineBuilder} from './datelinebuilder';
-import {mapLayerBuilder} from './layerbuilder';
-import {MapRunningData} from './runningdata';
-import {mapPrecacheTile} from './precachetile';
+import { MapRotate } from './rotation';
+import { mapDateLineBuilder } from './datelinebuilder';
+import { mapLayerBuilder } from './layerbuilder';
+import { MapRunningData } from './runningdata';
+import { mapPrecacheTile } from './precachetile';
 import Cache from 'cachai';
 
 export function mapui(models, config) {

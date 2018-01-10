@@ -8,9 +8,9 @@ import lodashEach from 'lodash/each';
 import lodashEachRight from 'lodash/eachRight';
 import util from '../util/util';
 import wvui from '../ui/ui';
-import {layersInfo} from './info';
-import {layersOptions} from './options';
-import {palettesLegend} from '../palettes/legend';
+import { layersInfo } from './info';
+import { layersOptions } from './options';
+import { palettesLegend } from '../palettes/legend';
 
 export function layersActive(models, ui, config) {
   var model = models.layers;
@@ -51,7 +51,7 @@ export function layersActive(models, ui, config) {
 
   var render = function () {
     legends = {};
-    var $container = $('<div />', {class: 'layer-container bank'});
+    var $container = $('<div />', { class: 'layer-container bank' });
     $(self.selector).empty().append($container);
 
     lodashEachRight(groups, function (group) {

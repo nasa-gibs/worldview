@@ -76,12 +76,12 @@ export default (function (self) {
   };
 
   self.alert = function (body, title, size, glyph, closeFn) {
-    var $message = $('<span/>', {class: 'notify-message'});
+    var $message = $('<span/>', { class: 'notify-message' });
     var $icon = $('<i/>', { class: 'fa fa-' + glyph + ' fa-1x', title: title });
     var $messageWrapper = $('<div/>').click(function () {
       self.notify(body, title, size);
     }).append($icon).append($message);
-    var $close = $('<i/>', {class: 'fa fa-times fa-1x'}).click(closeFn);
+    var $close = $('<i/>', { class: 'fa fa-times fa-1x' }).click(closeFn);
     var $alert = $('<div/>').append($close).append($messageWrapper).dialog({
       autoOpen: false,
       resizable: false,
