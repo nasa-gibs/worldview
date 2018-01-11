@@ -110,7 +110,7 @@ module.exports = function(grunt) {
             src: ['**'],
             dest: 'build/site-<%=grunt.option("packageName")%>-debug/web'
           }, {
-            src: 'options/bitly.json',
+            src: 'bitly.json',
             dest: 'build/site-<%=grunt.option("packageName")%>-debug/etc/bitly.json'
           }, {
             expand: true,
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
             src: ['**'],
             dest: 'build/site-<%=grunt.option("packageName")%>/web'
           }, {
-            src: 'options/bitly.json',
+            src: 'bitly.json',
             dest: 'build/site-<%=grunt.option("packageName")%>/etc/bitly.json'
           }
         ],
