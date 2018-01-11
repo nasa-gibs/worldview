@@ -5,10 +5,6 @@
 # Reset directories that have build or install artifacts
 rm -rf build dist node_modules .python web/build
 
-echo "The NODE_ENV variable is;"
-echo $NODE_ENV
-echo "---"
-
 npm install # Install dependencies
 npm run build # Build the app
 
