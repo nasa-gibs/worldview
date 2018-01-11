@@ -13,6 +13,9 @@ const entryPoint = isTest ? './test/main.js' : './web/js/main.js';
 const outputDir = './web/build/';
 const outputPath = outputDir + (isTest ? 'wv-test-bundle.js' : 'wv.js');
 
+// Log what we're building, and in what environment
+console.log('Building ' + outputPath + ' for ' + process.env.NODE_ENV);
+
 var bundler = browserify(entryPoint, {
   debug: !isProduction, // Include source maps (makes bundle size larger)
   fullPaths: !isProduction, // For use with https://www.npmjs.com/package/disc

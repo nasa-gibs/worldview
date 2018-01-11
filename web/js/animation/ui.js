@@ -1,4 +1,4 @@
-import lodashIsEmpty from 'lodash/isempty';
+import lodashIsEmpty from 'lodash/isEmpty';
 import Queue from 'promise-queue';
 import util from '../util/util';
 import uiIndicator from '../ui/indicator';

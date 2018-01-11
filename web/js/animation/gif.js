@@ -4,7 +4,7 @@ import wvui from '../ui/ui';
 import gifshot from 'gifshot';
 import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
-import lodashIsUndefined from 'lodash/isundefined';
+import lodashIsUndefined from 'lodash/isUndefined';
 import { GA as googleAnalytics } from 'worldview-components';
 import util from '../util/util';
 import uiIndicator from '../ui/indicator';

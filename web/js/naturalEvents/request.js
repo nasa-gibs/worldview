@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import lodashOrderBy from 'lodash/orderby';
-import lodashUniqBy from 'lodash/uniqby';
+import lodashOrderBy from 'lodash/orderBy';
+import lodashUniqBy from 'lodash/uniqBy';
 
 import util from '../util/util';
 

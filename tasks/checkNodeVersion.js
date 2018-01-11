@@ -1,6 +1,6 @@
 /* eslint no-console: "off" */
-var packageJson = require('./package.json');
-var requiredVersion = 'v' + packageJson.engines.node;
+var pkg = require('../package.json');
+var requiredVersion = 'v' + pkg.engines.node;
 var nodeBeingUsed = process.version;
 
 if (requiredVersion !== nodeBeingUsed) {

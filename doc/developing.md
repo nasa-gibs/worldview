@@ -48,6 +48,6 @@ We're in the process of replacing our Grunt tasks with npm scripts, but here are
 
 `grunt site`* : Combines the results of `grunt config` and `grunt build` into final `/build` and `/dist` directories and generates `tar` files of the final build.
 
-`grunt rpm-only`: Creates an RPM on CentOS 6 and places it in the `/dist` directory.
+`grunt rpm-placeholders`: Replaces placeholder strings in rpm source files.
 
 `grunt apache-config`* : Moves `worldview.conf` to the `/dist` directory for deployment to an Apache server.

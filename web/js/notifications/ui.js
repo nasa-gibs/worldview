@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import util from '../util/util';
-import lodashIsEmpty from 'lodash/isempty';
+import lodashIsEmpty from 'lodash/isEmpty';
 import wvui from '../ui/ui';
 /*
  * @Class

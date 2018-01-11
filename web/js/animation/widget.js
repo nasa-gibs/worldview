@@ -3,7 +3,7 @@ import { AnimationWidget, GA as googleAnalytics } from 'worldview-components';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import lodashWithout from 'lodash/without';
-import lodashIndexOf from 'lodash/indexof';
+import lodashIndexOf from 'lodash/indexOf';
 import util from '../util/util';
 
 export function animationWidget (models, config, ui) {
