@@ -184,7 +184,7 @@ module.exports = function(grunt) {
           }
         ],
         options: {
-          template: 'templates/new.html'
+          template: 'templates/page.html'
         }
       }
     },
