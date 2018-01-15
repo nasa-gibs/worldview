@@ -15,6 +15,7 @@ const outputPath = outputDir + (isTest ? 'wv-test-bundle.js' : 'wv.js');
 
 // Log what we're building, and in what environment
 console.log('Building ' + outputPath + ' for ' + process.env.NODE_ENV);
+if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
 var bundler = browserify(entryPoint, {
   debug: !isProduction, // Include source maps (makes bundle size larger)
@@ -29,7 +30,6 @@ var bundler = browserify(entryPoint, {
 }).transform('uglifyify'); // With sourcemaps turned on, it's ok to uglify in dev
 
 function bundle() {
-  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
   const begin = Date.now();
   var stream = fs.createWriteStream(outputPath);
   bundler.bundle().on('error', function(err) {
