@@ -119,7 +119,7 @@
     "jscrollpane": "^2.0.22",
     "lodash": "4.15.0",
     "nouislider": "7.0.10",
-    "ol": "4.5.0",
+    "ol": "^4.3.4",
     "perfect-scrollbar": "^0.8.1",
     "proj4": "2.3.3",
     "promise-queue": "2.2.3",
