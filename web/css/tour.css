@@ -14,10 +14,17 @@
   background-color: rgb(175, 181, 196);
 }
 
+.joyride-tip-guide p,
+.joyride-tip-guide ul {
+  margin: 0 0 14px;
+}
+
+.joyride-tip-guide.bordered,
 .joyride-bordered {
   border: #808080 solid 1px;
 }
 
+.joyride-tip-guide.wide,
 .joyride-wide {
   width: 450px;
 }
@@ -155,7 +162,6 @@ button.skipTour:hover {
 .tour ul {
   color: rgb(38, 43, 49);
   font: 400 13px/16px 'Open Sans', sans-serif;
-  margin: 0 0 14px;
 }
 
 .joyride-content-wrapper {
@@ -323,6 +329,7 @@ button.done:hover {
 
 .joyride-tip-guide .joyride-next-tip {
   float: right;
+  margin-right: 0;
 }
 
 .joyride-tip-guide .joyride-next-tip:hover,
@@ -431,11 +438,33 @@ p.wv-tour-page-count {
   pointer-events: none;
 }
 
+.joyride-tip-guide.bordered span.joyride-nub::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: -1;
+}
+
 .joyride-tip-guide span.joyride-nub.top {
   border-color: #afb5c4 !important;
   border-top-color: transparent !important;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
+}
+
+.joyride-tip-guide.toolbarTip span.joyride-nub.top {
+  left: 250px;
+}
+
+.joyride-tip-guide.bordered span.joyride-nub.top::after {
+  top: -16px;
+  left: -15px;
+  border: 15px solid #808080;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
 }
 
 .joyride-tip-guide span.joyride-nub.right {
@@ -445,11 +474,29 @@ p.wv-tour-page-count {
   border-bottom-color: transparent !important;
 }
 
+.joyride-tip-guide.bordered span.joyride-nub.right::after {
+  top: -15px;
+  left: -14px;
+  border: 15px solid #808080;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+}
+
 .joyride-tip-guide span.joyride-nub.bottom {
   border-color: #afb5c4 !important;
   border-bottom-color: transparent !important;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
+}
+
+.joyride-tip-guide.bordered span.joyride-nub.bottom::after {
+  top: -14px;
+  left: -15px;
+  border: 15px solid #808080;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
 }
 
 .joyride-tip-guide span.joyride-nub.left {
@@ -459,6 +506,11 @@ p.wv-tour-page-count {
   border-bottom-color: transparent !important;
 }
 
-.joyride-tip-guide.toolbarTip span.joyride-nub.top {
-  left: 250px;
+.joyride-tip-guide.bordered span.joyride-nub.left::after {
+  top: -15px;
+  left: -16px;
+  border: 15px solid #808080;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
 }
