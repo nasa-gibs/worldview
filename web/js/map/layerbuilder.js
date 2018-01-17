@@ -187,7 +187,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     };
     if (models.palettes.isActive(def.id)) {
       var lookup = models.palettes.getLookup(def.id);
-      sourceOptions.tileClass = lookupFactory(lookup);
+      sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     var layer = new OlLayerTile({
       extent: extent,
@@ -265,7 +265,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
 
     if (models.palettes.isActive(def.id)) {
       var lookup = models.palettes.getLookup(def.id);
-      sourceOptions.tileClass = lookupFactory(lookup);
+      sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     var layer = new OlLayerTile({
       extent: extent,
