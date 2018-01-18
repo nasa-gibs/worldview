@@ -268,14 +268,14 @@ export function debugLayers(ui, models, config) {
   var nextLayer = function () {
     $('.wv-debug-gibs-layerlist option:selected')
       .next()
-      .attr('selected', 'selected');
+      .prop('selected', 'selected');
     updateLayers.apply($('.wv-debug-gibs-layerlist'));
   };
 
   var previousLayer = function () {
     $('.wv-debug-gibs-layerlist option:selected')
       .prev()
-      .attr('selected', 'selected');
+      .prop('selected', 'selected');
     updateLayers.apply($('.wv-debug-gibs-layerlist'));
   };
 
