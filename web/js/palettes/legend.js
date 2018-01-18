@@ -8,7 +8,6 @@ import palettes from './palettes';
 export function palettesLegend(spec) {
   var selector = spec.selector;
   var config = spec.config;
-  var models = spec.models;
   var model = spec.models.palettes;
   var ui = spec.ui;
   var layer = spec.layer;
@@ -38,8 +37,6 @@ export function palettesLegend(spec) {
 
   var render = function () {
     var $parent = $(selector);
-    var paletteId = layer.palette.id;
-    var palette = config.palettes.rendered[paletteId];
 
     var $legendPanel = $('<div></div>')
       .addClass('wv-palettes-panel')
@@ -143,17 +140,16 @@ export function palettesLegend(spec) {
       var $row = $('<div></div>')
         .addClass('wv-palettes-class-detail')
         .attr('data-class-index', classIndex);
-      var $colorBox =
-        $row.append(
-          $('<span></span>')
-            .addClass('wv-palettes-class')
-            .html('&nbsp;')
-            .css('background-color', util.hexToRGB(color)))
-          .append($('<span></span>')
-            .addClass('wv-palettes-class-label')
-            .attr('data-index', index)
-            .attr('data-class-index', classIndex)
-            .html(label));
+      $row.append(
+        $('<span></span>')
+          .addClass('wv-palettes-class')
+          .html('&nbsp;')
+          .css('background-color', util.hexToRGB(color)))
+        .append($('<span></span>')
+          .addClass('wv-palettes-class-label')
+          .attr('data-index', index)
+          .attr('data-class-index', classIndex)
+          .html(label));
       $detailPanel.append($row);
     });
     if (!rendered) {
@@ -183,8 +179,7 @@ export function palettesLegend(spec) {
       return;
     }
     var legends = model.getLegends(layer.id, index);
-    var entries = model.get(layer.id, index)
-      .entries;
+
     lodashEach(legends, function (legend, index) {
       var min = legend.minLabel || lodashFirst(legend.tooltips);
       var max = legend.maxLabel || lodashLast(legend.tooltips);
@@ -214,7 +209,7 @@ export function palettesLegend(spec) {
    * @return {void}
    */
   var showUnitHover = function (e, index) {
-    var rgba, pos, x, y, id, legends, offset, hex;
+    var rgba, x, y, legends, offset, hex;
     if (!loaded) {
       return;
     }
