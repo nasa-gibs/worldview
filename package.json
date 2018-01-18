@@ -127,7 +127,7 @@
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "worldview-components": "nasa-gibs/worldview-components#remove-shim",
-    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.3.0"
+    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.4.0"
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",
