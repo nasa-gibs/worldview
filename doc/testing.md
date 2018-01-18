@@ -1,11 +1,16 @@
 # Testing
-Note: Some of the parameters below may no longer be functional. Please contact us if you have any issues at support@earthdata.nasa.gov.
 
-To run unit tests using Grunt, see the [Grunt Targets](https://github.com/nasa-gibs/worldview/blob/9781bcc3c177338bf3043f59c1ebe1a9d8ae4355/doc/developing.md#unit-tests) documentation
+To run unit tests, run `npm test`.
 
-Append the following parameters to the URL to test using mock data.
+End-to-end tests are also available with the following commands:
 
-## Permalinks
+`npm run e2e:chrome`
+`npm run e2e:firefox`
+`npm run browserstack`
+
+## Mocking Data
+
+Append the following parameters to the URL to test using mock data;
 
 ### External
 
@@ -204,11 +209,6 @@ Append the following parameters to the URL to test using mock data.
       <td colspan="1">showError</td>
       <td colspan="1">true</td>
       <td colspan="1">If any value is specified, an error dialog will be shown on startup.</td>
-    </tr>
-    <tr>
-      <td colspan="1">webmerc</td>
-      <td colspan="1"></td>
-      <td colspan="1">If found in the query string, a menu item for Web Mercator becomes available.</td>
     </tr>
   </tbody>
 </table>

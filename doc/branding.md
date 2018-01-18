@@ -1,50 +1,25 @@
 # Branding
 
-By default, the build process will:
-
-* Name the application "Example Map"
-* Not provide a logo in the upper left hand corner
-* Contain an "About" page with only the version and name of the application.
-* Have a default support email address of support@example.com
+To add custom branding to Worldview you can [create a custom configuration](https://github.com/nasa-gibs/worldview#custom-configuration) and modify it;
 
 ## Customizing
 
-Customization is easy as modifying or changing some files in the ``options``
-directory.
+Update the following fields in `options/common/brand.json` with your custom branding;
 
-*Please Note*: The ``options`` directory is contained in the ``.gitignore`` file
-so that you can make a separate repository for the customizations.
+* `packageName`: Application name used to create builds, (i.e. `worldview`).
+* `name`: Application name shown to end users (i.e. `EOSDIS Worldview`).
+* `email`: Email address for support requests.
 
-Edit the ``options/brand.json`` file and make changes as necessary using the
-guidance below:
-
-* ``packageName``: Name used to create tar files, base directories and web
-roots (e.g., supermap)
-* ``name``: Name of the application presented to the end users (e.g.,
-Super Map of the World)
-* ``email``: Email address that should be presented to the end user for
-support requests.
-
-Naming can be more specific by omitting the ``name`` property and using
+Naming can be more specific by omitting the `name` field and using
 the following instead:
 
-* ``officalName``: Name of the application when used in a formal setting
-(e.g, TLA's Super Map of the World)
-* ``longName``: Full, but not official, name of the application (e.g. Super
-Map of the World)
-* ``shortName``: Abbreviated, short name of the application (e.g. Super Map)
+* `officalName`: Full name of the application (i.e. `EOSDIS Worldview`).
+* `shortName`: Short name of the application (i.e. `Worldview`).
 
-To add a logo, replace the following file with an image that is 247 pixels by
-45 pixels:
+To add a logo, replace `options/common/brand/images/wv-logo.png` with an image that is 247x45 pixels.
 
-    options/brand/images/wv-logo.png
-
-To create an "About" page, edit the following file:
-
-    options/brands/pages/about.html
+To create an "About" page, edit `options/common/brand/pages/about.md`. You can also create other pages by creating other Markdown files in this directory.
 
 ## Rebuilding
 
-Build again and the customizations should now be included:
-
-    grunt
+After making changes to a custom configuration, you'll need to run `npm run build` again to rebuild the app.

@@ -32,84 +32,54 @@ to see where we're going or follow our [blog](https://wiki.earthdata.nasa.gov/pa
 to find out the latest features and imagery available!
 
 
-## Installation
-
-These instructions install a development version of Worldview using [Node.js](https://nodejs.org/)
-to serve the app locally.  If you prefer to use Apache, follow the directions in [Setup Using Apache](doc/apache_setup.md).
-
-*Note:* This has been demonstrated to work on Windows 7 and 10 (as tested with [mingw-w64](http://mingw-w64.org/)), Mac OS X, and Ubuntu.
-
-Prerequisites:
-- [Node.js](https://nodejs.org/)  
-  - *Note to Ubuntu users:* After installing Node.js, ensure that it is available as `node` on the command line.  If not, [see here](https://github.com/nasa-gibs/worldview/issues/249#issuecomment-302172817) for more information.
-  - A later version of Node (>v6) is required and is not available on some distributions.  To make sure you have a later version, [visit the Node download page](https://nodejs.org/en/download/)
-- Windows users:
-  - Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
-  - .NET Framework 2.0 or Visual Studio 2005 or newer installed with Visual C++ compilers.  
-  It is HIGHLY recommended you install the Windows Build Tools npm package to ensure the correct compilers have been installed.  
-  To install this package:
-  ```
-  # run in administrator privileged command prompt window
-  npm install --global --production windows-build-tools
-  ```
-  - Python 2.7.x (included with Windows Build Tools)
-  - Python path added to Windows environmental variables (to use within cmd.exe and powershell)  
-  To add environmental variables:
-    - Right-click the Windows icon in bottom-left corner of the screen.
-    - Click System, click Advanced System Settings, click Environmental Variables.
-    - Highlight the Path row and click edit.
-    - Each path is seperated with a semicolon ";"
-    - Add your python directory path here.\*  
-   \*Windows Build Tools includes python, the included python path is:  
-   `%USERPROFILE%\.windows-build-tools\python27`  
-   Otherwise the path is most likely:
-   `C:\Python27`
-
-
-Clone this repository:
+## Install
 
 ```bash
 git clone https://github.com/nasa-gibs/worldview.git
 cd worldview
-```
-
-Install dependencies (NOTE for Windows users: omit the "sudo" part of the following commands as it [isn't available](https://stackoverflow.com/questions/22527668/sudo-command-not-found-on-cygwin)):
-```bash
-# install local version of grunt
-sudo npm install --global grunt-cli
-```
-
-```bash
-# install virtualenv to keep additional libraries installed in a local directory:
-sudo easy_install virtualenv==1.10.1
-```
-
-Run local node server:
-```bash
 npm install
-grunt
+```
+
+### Dependencies
+
+- [Node.js v8.8.1 or Later](https://nodejs.org/en/download/)  
+  - *Note to Ubuntu users:* After installing Node.js, ensure that it is available as `node` on the command line. If not, [see here](https://github.com/nasa-gibs/worldview/issues/249#issuecomment-302172817) for more information.
+- Windows users:
+  - Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
+  - .NET Framework 2.0 or Visual Studio 2005 or newer installed with Visual C++ compilers.
+  It is HIGHLY recommended you install the Windows Build Tools npm package to ensure the correct compilers have been installed. To install this package:
+    ```
+    # run in administrator privileged command prompt window
+    npm install --global --production windows-build-tools
+    ```
+  - Python 2.7.x (included with Windows Build Tools)
+  - Python path added to Windows path variable (to use within cmd.exe and powershell). To edit this:
+    - Right-click the Windows icon in bottom-left corner of the screen.
+    - Click System, click Advanced System Settings, click Environmental Variables.
+    - Highlight the Path row and click edit.
+    - Each path is separated with a semicolon, `;`.
+    - Add your python directory path here. (Windows Build Tools includes python, the included python path is: `%USERPROFILE%\.windows-build-tools\python27`. Otherwise the path is most likely: `C:\Python27`.
+
+## Usage
+
+```bash
+npm run build
 npm start
 ```
-Worldview should be available at
+
+Navigate to `http://localhost:3000`.
+
+To stop Worldview, press Control+C.
+
+### Custom Configuration
+
+The [Official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis) are used by default. To create a custom configuration, clone the configuration template into the `options/` directory and modify it;
 
 ```bash
-
-http://localhost:3000
-```
-A node server will continue running until you end the session.
-You can end the session by pressing `control-C`
-
-
-### Additional Configuration Options
-
-The [Official EOSDIS configurations](https://github.com/nasa-gibs/worldview-options-eosdis) are installed by default in the `node_modules` directory.   
-To use custom options, clone the template repository into a new `options` directory in the root using the following git command.   
-
-```bash
-# A blank repository with only Corrected Reflectance and no branding
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
 ```
-Optionally, you can clone the official options and make changes as needed.
+
+Optionally, you can clone the official configuration and make changes as needed.
 ```bash
 # or the Official EOSDIS configurations
 git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
@@ -117,7 +87,7 @@ git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 
 ## Other Information
 
-* [Alternate Installation using Apache](doc/apache_setup.md)
+* [Alternate Setup using Apache](doc/apache_setup.md)
 * [Branding](doc/branding.md)
 * [Optional Features](doc/features.md)
 * [Configuration](doc/config.md)

@@ -38,16 +38,14 @@ This project uses `npm` as an interface to run build scripts and other tasks. Th
 
 ## Grunt tasks
 
-We're in the process of replacing our Grunt tasks with npm scripts, but here are the Grunt build scripts that are available. Note, these are poorly documented and you should use caution when running these scripts if you don't know what you're doing. Your mileage may vary when running scripts marked with a `*` by themselves.
+Grunt tasks are deprecated, but the following are still used under the hood and available to use if you know what you're doing;
 
 `grunt`: This task is deprecated, and we don't recommend that you use it. Instead, use `npm run build` to generate a build. Under the hood, this is a shortcut for `grunt build && grunt config && grunt site`.
 
-`grunt config`* : Compiles branding and configuration options into an intermediate build directory and generates `tar` files of that directory.
+`grunt config`: Compiles branding and configuration options and puts the results in `build/`, `dist/`, and `web/`.
 
-`grunt build`* : Adds a git commit hash to source files, copies them into an intermediate build directory and generates `tar` files of that directory.
+`grunt build`: Copy assets to build directories and generate intermediate `tar` files.
 
-`grunt site`* : Combines the results of `grunt config` and `grunt build` into final `/build` and `/dist` directories and generates `tar` files of the final build.
+`grunt site`: Combines the results of `grunt config` and `grunt build` into final `/build` and `/dist` directories and generates `tar` files of the final build.
 
 `grunt rpm-placeholders`: Replaces placeholder strings in rpm source files.
-
-`grunt apache-config`* : Moves `worldview.conf` to the `/dist` directory for deployment to an Apache server.
