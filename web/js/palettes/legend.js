@@ -100,12 +100,9 @@ export function palettesLegend(spec) {
       '[data-index=\'' + index + '\'] canvas', legend.colors);
   };
   var renderClasses = function ($legendPanel, legend, index) {
-    // var $runningDataPointLabel = $("<span></span>")
-    //     .addClass("wv-running-category-label");
     var $panel = $('<div></div>')
       .addClass('wv-palettes-legend')
       .addClass('wv-palettes-classes')
-      // .append($runningDataPointLabel)
       .attr('data-index', index);
     $legendPanel
       .attr('id', legend.id)
@@ -116,8 +113,6 @@ export function palettesLegend(spec) {
     var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
     lodashEach(legend.colors, function (color, classIndex) {
-      var $runningDataPointLabel = $('<span></span>')
-        .addClass('wv-running-category-label');
       var $colorBox = $('<span></span>')
         .attr('data-index', index)
         .attr('data-class-index', classIndex)
@@ -127,11 +122,13 @@ export function palettesLegend(spec) {
         .css('background-color', util.hexToRGB(color))
         .hover(highlightClass, unhighlightClass);
       $panel.append($colorBox);
-      $panel.append($runningDataPointLabel);
       // Calls running data
       $colorBox.on('mouseenter', showClassUnitHover);
       $colorBox.on('mouseout', hideUnitsOnMouseOut);
     });
+    var $runningDataPointLabel = $('<span></span>')
+      .addClass('wv-running-category-label');
+    $panel.append($runningDataPointLabel);
     // TODO: Review this each loop. It can probably be removed.
     var $detailPanel = $('<div></div>');
     lodashEach(legend.colors, function (color, classIndex) {
