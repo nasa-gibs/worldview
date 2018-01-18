@@ -91,7 +91,8 @@ export function layersActive(models, ui, config) {
         axis: 'y',
         containment: 'parent',
         tolerance: 'pointer',
-        placeholder: 'state-saver'
+        placeholder: 'state-saver',
+        cursorAt: { bottom: 20 }
       });
     $('.layer-container ul.category li')
       .disableSelection();
