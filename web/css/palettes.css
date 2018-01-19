@@ -82,11 +82,11 @@
 }
 
 .bank div.wv-palettes-min {
-  left:0;
+  left: 0;
 }
 
 .bank div.wv-palettes-max {
-  right:0;
+  right: 0;
   width: auto;
 }
 
@@ -178,8 +178,6 @@
   cursor: crosshair;
 }
 
-.bank div.wv-palettes-classes {}
-
 .bank .wv-running div.wv-palettes-classes .wv-palettes-class.wv-active {
   opacity: 1;
 }
@@ -196,7 +194,7 @@
   width: 13px;
   display: inline-block;
   border: 1px solid #000;
-  margin: 0px 0 15px 3px;
+  margin: 0 0 15px 3px;
 }
 
 .wv-palettes-class-detail {
