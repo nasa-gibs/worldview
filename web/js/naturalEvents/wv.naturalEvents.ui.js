@@ -9,6 +9,9 @@ wv.naturalEvents.ui = wv.naturalEvents.ui || function (models, ui, config, reque
   var naturalEventMarkers = wv.naturalEvents.markers(models, ui, config);
 
   var init = function () {
+    // Display loading information for user feedback on slow network
+    $('#wv-events').text("Loading...");
+
     view = ui.map.selected.getView();
 
     request.events.on('queryResults', function () {

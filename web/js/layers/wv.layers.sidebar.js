@@ -227,9 +227,6 @@ wv.layers.sidebar = wv.layers.sidebar || function (models, config) {
 
     $('.accordionToggler')
       .bind('click', self.toggle);
-
-    // Hide loading information after rendering
-    $('#wv-loading').hide();
   };
 
   var onTabChange = function (e, ui) {
