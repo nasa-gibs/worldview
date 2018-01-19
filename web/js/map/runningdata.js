@@ -335,24 +335,35 @@ export function MapRunningData(models) {
     var $categoryPaletteCase;
     var $colorSquare;
     var $paletteLabel;
-    var location;
-    var marginLeft;
+    var offsetLeft;
+    var offsetTop;
     var squareWidth;
+    var offset;
+    var labelWidth;
+    var marginLeft;
+    var caseWidth;
 
+    squareWidth = 17;
     marginLeft = 3;
-    squareWidth = 15;
 
     $categoryPaletteCase = $('#' + id);
+    caseWidth = $categoryPaletteCase.width();
     $colorSquare = $categoryPaletteCase.find('[data-class-index=\'' + data.index + '\']');
+    offset = $colorSquare.position();
+    console.log(offset);
     $paletteLabel = $categoryPaletteCase.find('.wv-running-category-label');
 
     $paletteLabel.text(data.label);
-
-    location = ((marginLeft + squareWidth) * data.index);
-    if (location < 5) {
-      location = 5;
+    labelWidth = util.getTextWidth(data.label, 'Lucida Sans');
+    offsetLeft = offset.left + (squareWidth / 2) + marginLeft - (labelWidth / 2);
+    offsetTop = offset.top + squareWidth;
+    // Keep label inside parent element
+    if (offsetLeft < 5) {
+      offsetLeft = 5;
+    } else if ((offsetLeft + labelWidth) > caseWidth) {
+      offsetLeft = caseWidth - labelWidth;
     }
-    $paletteLabel.attr('style', 'left:' + Math.round(location) + 'px;');
+    $paletteLabel.attr('style', 'left:' + Math.round(offsetLeft) + 'px; top: ' + offsetTop + 'px');
     $categoryPaletteCase.addClass('wv-running');
     $categoryPaletteCase.find('.wv-active')
       .removeClass('wv-active');

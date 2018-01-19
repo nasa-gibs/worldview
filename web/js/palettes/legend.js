@@ -74,8 +74,6 @@ export function palettesLegend(spec) {
     var $runningDataPointLabel = $('<span></span>')
       .addClass('wv-running-label');
 
-    var $ranges = $('<div></div>')
-      .addClass('wv-palettes-ranges');
     var $min = $('<div></div>')
       .addClass('wv-palettes-min');
     var $max = $('<div></div>')
@@ -83,12 +81,11 @@ export function palettesLegend(spec) {
     var $title = $('<div></div>')
       .addClass('wv-palettes-title');
     $container.prepend($title);
-    $ranges
+
+    $container
       .append($min)
       .append($max)
-      .append($runningDataPointLabel);
-    $container
-      .append($ranges)
+      .append($runningDataPointLabel)
       .append($runningDataPointBar);
 
     $colorbar.on('mousemove', function (e) {
