@@ -97,7 +97,7 @@ git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 ## License
 

@@ -15,7 +15,7 @@ If you want to submit your own contributions, follow these steps;
 * Fork the Worldview repo
 * Create a new branch off of the branch you'd like to contribute to
 * ** Note: ** If there is not a feature branch already created for you to branch off of, you will want to branch off of `development` to create your own feature branch. We only branch directly off of `master` to resolve urgent bugs.
-* If an issue does't already exist, submit one (see above)
+* If an issue doesn't already exist, submit one (see above)
 * [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the nasa-gibs/worldview repo
 * Be sure to [mention the corresponding issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes [#480](https://github.com/nasa-gibs/worldview/issues/480)"
 * Upon submission of a pull request, the Worldview development team will review the code
@@ -92,7 +92,7 @@ Improve contributing docs and consolidate them in the standard location https://
 
 ## What We're Working On
 
-Please see our [Roadmap](https://github.com/nasa-gibs/worldview/projects/7) for an overview of what we're planning.
+Please see our [Roadmap](https://github.com/nasa-gibs/worldview/projects/7) for an overview of what we're planning. We also track the progress of [Worldview](https://github.com/nasa-gibs/worldview), [Worldview-Components](https://github.com/nasa-gibs/worldview-components), and [Worldview-Options-EOSDIS](https://github.com/nasa-gibs/worldview-options-eosdis) using a public [Waffle.io Board](https://waffle.io/nasa-gibs/worldview).
 
 We use GitHub labels to organize issues we're working on. Here are the labels we use, along with descriptions of what they mean. Click on the headings or badges below to see the GitHub issues tagged with each label.
 
@@ -130,7 +130,7 @@ These are issues that have a PR ready to resolve them, and are just waiting to b
 
 ### [`technical` ![Issues tagged with 'technical'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/technical.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3Atechnical)
 
-These issues are related to our technical implementation (refactoring, dependency changes, etc), they're developer focused, and don't directly add new features for end users.
+These issues are related to our technical implementation (refactoring, dependency changes, etc.), they're developer focused, and don't directly add new features for end users.
 
 ### [`under development` ![Issues tagged with 'under development'](https://img.shields.io/github/issues-raw/nasa-gibs/worldview/%22under%20development%22.svg)](https://github.com/nasa-gibs/worldview/issues?q=is%3Aopen+is%3Aissue+label%3A%22under%20development%22)
 
