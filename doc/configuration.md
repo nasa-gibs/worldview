@@ -57,6 +57,7 @@ The minimum set of required properties are as follows:
 - **title**: Title of the layer displayed to the end user. This is the first line displayed in the active layers list.
 - **subtitle**: Subtitle of the layer displayed to the end user. This is the second line displayed in the active layers list and usually includes platform, sensor, and/or attribution information.
 - **group**: The group this layer is found in, either *baselayers* or *overlays*
+- **layergroup**: A reference to the layer group the layer belongs to (usually the folder name it's contained in; i.e. airs, modis, reference_orbits).
 
 The following properties are required if this information is not available via the GIBS WMTS GetCapabilities document:
 
@@ -100,6 +101,9 @@ The `config/wv.json/layerOrder.json` file must be updated to include the new lay
 - **product**: Identifier of the product to use when searching the Common Metadata Repository (CMR) to download data. See the [Data Download documentation](data_download.md) for more information.
 - **style**: For WMTS layers only, this sets the WMTS `style` parameter accordingly; defaults to `default` if not set.
 - **matrixIds**: For WMTS layers only, this is an array of labels used for the `TileMatrix` parameter at each zoom level; defaults to `[0, 1, 2, ...]` if not set.
+- **daynight**: Classify a layer as day or night. This information will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
+- **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
+- **description**: Point to a markdown file within the metadata folder to provide a layer description.
 
 To display a color palette legend, a *palette* object should exist with the following properties:
 
@@ -128,6 +132,11 @@ To display a color palette legend, a *palette* object should exist with the foll
           "matrixSet": "EPSG4326_2km"
         }
       },
+      "layergroup": [
+        "airs"
+      ],
+      "daynight": "day",
+      "track": "descending",
       "palette": {
         "id": "AIRS_RH400_A"
       }
