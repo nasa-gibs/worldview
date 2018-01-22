@@ -8,7 +8,6 @@ import palettes from './palettes';
 export function palettesLegend(spec) {
   var selector = spec.selector;
   var config = spec.config;
-  var models = spec.models;
   var model = spec.models.palettes;
   var ui = spec.ui;
   var layer = spec.layer;
@@ -38,8 +37,6 @@ export function palettesLegend(spec) {
 
   var render = function () {
     var $parent = $(selector);
-    var paletteId = layer.palette.id;
-    var palette = config.palettes.rendered[paletteId];
 
     var $legendPanel = $('<div></div>')
       .addClass('wv-palettes-panel')
@@ -62,23 +59,25 @@ export function palettesLegend(spec) {
     var $container = $('<div></div>')
       .addClass('wv-palettes-legend')
       .attr('data-index', index);
+    var $colorBarCase = $('<div></div>')
+      .addClass('colorbar-case');
     var $colorbar = $('<canvas></canvas>')
       .addClass('wv-palettes-colorbar')
       .attr('id', legend.id)
       .attr('data-index', index);
+    var $runningDataPointBar = $('<div></div>')
+      .addClass('wv-running-bar');
     // set fixed canvas dimensions
     $colorbar[0].width = 235;
     $colorbar[0].height = 12;
+    $colorBarCase
+      .append($colorbar)
+      .append($runningDataPointBar);
+    $container.append($colorBarCase);
 
-    $container.append($colorbar);
-
-    var $runningDataPointBar = $('<div></div>')
-      .addClass('wv-running-bar');
     var $runningDataPointLabel = $('<span></span>')
       .addClass('wv-running-label');
 
-    var $ranges = $('<div></div>')
-      .addClass('wv-palettes-ranges');
     var $min = $('<div></div>')
       .addClass('wv-palettes-min');
     var $max = $('<div></div>')
@@ -86,13 +85,11 @@ export function palettesLegend(spec) {
     var $title = $('<div></div>')
       .addClass('wv-palettes-title');
     $container.prepend($title);
-    $ranges
+
+    $container
       .append($min)
       .append($max)
       .append($runningDataPointLabel);
-    $container
-      .append($ranges)
-      .append($runningDataPointBar);
 
     $colorbar.on('mousemove', function (e) {
       showUnitHover(e, index);
@@ -103,12 +100,9 @@ export function palettesLegend(spec) {
       '[data-index=\'' + index + '\'] canvas', legend.colors);
   };
   var renderClasses = function ($legendPanel, legend, index) {
-    // var $runningDataPointLabel = $("<span></span>")
-    //     .addClass("wv-running-category-label");
     var $panel = $('<div></div>')
       .addClass('wv-palettes-legend')
       .addClass('wv-palettes-classes')
-      // .append($runningDataPointLabel)
       .attr('data-index', index);
     $legendPanel
       .attr('id', legend.id)
@@ -119,8 +113,6 @@ export function palettesLegend(spec) {
     var $panel = $(selector + ' [data-index=\'' + index + '\']');
     $panel.empty();
     lodashEach(legend.colors, function (color, classIndex) {
-      var $runningDataPointLabel = $('<span></span>')
-        .addClass('wv-running-category-label');
       var $colorBox = $('<span></span>')
         .attr('data-index', index)
         .attr('data-class-index', classIndex)
@@ -130,11 +122,13 @@ export function palettesLegend(spec) {
         .css('background-color', util.hexToRGB(color))
         .hover(highlightClass, unhighlightClass);
       $panel.append($colorBox);
-      $panel.append($runningDataPointLabel);
       // Calls running data
       $colorBox.on('mouseenter', showClassUnitHover);
       $colorBox.on('mouseout', hideUnitsOnMouseOut);
     });
+    var $runningDataPointLabel = $('<span></span>')
+      .addClass('wv-running-category-label');
+    $panel.append($runningDataPointLabel);
     // TODO: Review this each loop. It can probably be removed.
     var $detailPanel = $('<div></div>');
     lodashEach(legend.colors, function (color, classIndex) {
@@ -143,17 +137,16 @@ export function palettesLegend(spec) {
       var $row = $('<div></div>')
         .addClass('wv-palettes-class-detail')
         .attr('data-class-index', classIndex);
-      var $colorBox =
-        $row.append(
-          $('<span></span>')
-            .addClass('wv-palettes-class')
-            .html('&nbsp;')
-            .css('background-color', util.hexToRGB(color)))
-          .append($('<span></span>')
-            .addClass('wv-palettes-class-label')
-            .attr('data-index', index)
-            .attr('data-class-index', classIndex)
-            .html(label));
+      $row.append(
+        $('<span></span>')
+          .addClass('wv-palettes-class')
+          .html('&nbsp;')
+          .css('background-color', util.hexToRGB(color)))
+        .append($('<span></span>')
+          .addClass('wv-palettes-class-label')
+          .attr('data-index', index)
+          .attr('data-class-index', classIndex)
+          .html(label));
       $detailPanel.append($row);
     });
     if (!rendered) {
@@ -183,8 +176,7 @@ export function palettesLegend(spec) {
       return;
     }
     var legends = model.getLegends(layer.id, index);
-    var entries = model.get(layer.id, index)
-      .entries;
+
     lodashEach(legends, function (legend, index) {
       var min = legend.minLabel || lodashFirst(legend.tooltips);
       var max = legend.maxLabel || lodashLast(legend.tooltips);
@@ -214,7 +206,7 @@ export function palettesLegend(spec) {
    * @return {void}
    */
   var showUnitHover = function (e, index) {
-    var rgba, pos, x, y, id, legends, offset, hex;
+    var rgba, x, y, legends, offset, hex;
     if (!loaded) {
       return;
     }

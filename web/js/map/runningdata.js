@@ -95,14 +95,14 @@ export function MapRunningData(models) {
    * @return {number} margin-left value of label
    *
    */
-  self.getLabelMarginLeft = function (labelWidth, caseWidth, location) {
-    if (location + (labelWidth / 2) > caseWidth) {
-      return (caseWidth - labelWidth) - 5;
-    } else if (location - (labelWidth / 2) < 0) {
-      return 0;
-    } else {
-      return (location - ((labelWidth / 2) + 5));
+  self.getLabelMarginLeft = function (labelWidth, caseWidth, location, marginLeft) {
+    var offsetLeft = location + marginLeft - (labelWidth / 2);
+    if (offsetLeft + labelWidth > caseWidth) {
+      offsetLeft = caseWidth - labelWidth;
+    } else if (offsetLeft < 5) {
+      offsetLeft = 5;
     }
+    return offsetLeft;
   };
 
   /*
@@ -335,24 +335,29 @@ export function MapRunningData(models) {
     var $categoryPaletteCase;
     var $colorSquare;
     var $paletteLabel;
-    var location;
-    var marginLeft;
+    var offsetLeft;
+    var offsetTop;
     var squareWidth;
+    var offset;
+    var labelWidth;
+    var marginLeft;
+    var caseWidth;
 
+    squareWidth = 17;
     marginLeft = 3;
-    squareWidth = 15;
 
     $categoryPaletteCase = $('#' + id);
+    caseWidth = $categoryPaletteCase.width();
     $colorSquare = $categoryPaletteCase.find('[data-class-index=\'' + data.index + '\']');
+    offset = $colorSquare.position();
     $paletteLabel = $categoryPaletteCase.find('.wv-running-category-label');
 
     $paletteLabel.text(data.label);
-
-    location = ((marginLeft + squareWidth) * data.index);
-    if (location < 5) {
-      location = 5;
-    }
-    $paletteLabel.attr('style', 'left:' + Math.round(location) + 'px;');
+    labelWidth = util.getTextWidth(data.label, 'Lucida Sans');
+    offsetLeft = offset.left + (squareWidth / 2);
+    offsetTop = offset.top + squareWidth;
+    offsetLeft = self.getLabelMarginLeft(labelWidth, caseWidth, offsetLeft, marginLeft);
+    $paletteLabel.attr('style', 'left:' + Math.round(offsetLeft) + 'px; top: ' + offsetTop + 'px');
     $categoryPaletteCase.addClass('wv-running');
     $categoryPaletteCase.find('.wv-active')
       .removeClass('wv-active');
@@ -384,11 +389,14 @@ export function MapRunningData(models) {
     var labelWidth;
     var percent;
     var labelMargin;
-    var location;
+    var offsetLeft;
     var margin;
+    var marginLeft;
+
+    marginLeft = 3;
 
     $palette = self.getPalette(id);
-    $paletteCase = $palette.parent();
+    $paletteCase = $palette.parent().parent();
     $paletteWidth = $palette.width();
     $paletteCaseWidth = $paletteCase.outerWidth();
     $paletteLabel = $paletteCase.find('.wv-running-label');
@@ -396,14 +404,14 @@ export function MapRunningData(models) {
 
     percent = self.getPercent(data.len, data.index, $paletteWidth);
     margin = (($paletteCaseWidth - $paletteWidth) / 2);
-    location = ($paletteWidth * percent + margin);
+    offsetLeft = ($paletteWidth * percent + margin);
 
     $paletteLabel.text(data.label);
     labelWidth = util.getTextWidth(data.label, 'Lucida Sans');
-    labelMargin = self.getLabelMarginLeft(labelWidth, $paletteWidth, location);
+    labelMargin = self.getLabelMarginLeft(labelWidth, $paletteCaseWidth, offsetLeft, marginLeft);
 
     $paletteLabel.attr('style', 'left:' + Math.round(labelMargin) + 'px;');
-    $paletteBar.attr('style', 'left:' + Math.round(location) + 'px;');
+    $paletteBar.attr('style', 'left:' + Math.round(offsetLeft) + 'px;');
     $paletteCase.addClass('wv-running');
   };
 

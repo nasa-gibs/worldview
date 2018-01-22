@@ -45,13 +45,8 @@
   margin-top: 0;
   position: relative;
 }
-
-.bank div.wv-palettes-ranges {
-  margin-top: -3px;
-  width: auto;
+.bank div .colorbar-case {
   position: relative;
-  overflow: hidden;
-  height: 12px;
 }
 
 .wv-palettes-max,
@@ -60,6 +55,14 @@
 .wv-running-category-label,
 .wv-running-label {
   font-size: 0.7em;
+  bottom: 0;
+  width: auto;
+}
+.wv-palettes-max,
+.wv-palettes-min,
+.wv-running-category-label,
+.wv-running-label {
+  position: absolute;
 }
 
 .wv-palettes-max,
@@ -87,15 +90,11 @@
 }
 
 .bank div.wv-palettes-min {
-  max-width: 112px;
-  width: auto;
-  float: left;
+  left: 0;
 }
 
 .bank div.wv-palettes-max {
-  float: right;
-  text-align: right;
-  max-width: 112px;
+  right: 0;
   width: auto;
 }
 
@@ -126,7 +125,7 @@
 }
 
 .bank div .wv-palettes-panel .wv-running-bar {
-  bottom: 11px;
+  top: 0;
   width: 1px;
   height: 12px;
   background: #000;
@@ -180,14 +179,11 @@
   width: 100%;
   height: 10px;
   border: 1px solid #404040;
+  margin-bottom: 13px;
 }
 
 .bank .wv-palettes-colorbar:hover {
   cursor: crosshair;
-}
-
-.bank div.wv-palettes-classes {
-  padding-bottom: 16px;
 }
 
 .bank .wv-running div.wv-palettes-classes .wv-palettes-class.wv-active {
@@ -203,11 +199,10 @@
 }
 
 .wv-palettes-class {
-  padding-left: 5px;
-  padding-right: 6px;
-  margin-left: 3px;
+  width: 13px;
+  display: inline-block;
   border: 1px solid #000;
-  font-size: 9.5px;
+  margin: 0 0 15px 3px;
 }
 
 .wv-palettes-class-detail {
