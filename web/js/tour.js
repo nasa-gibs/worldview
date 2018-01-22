@@ -236,7 +236,7 @@ export default function (models, ui, config) {
       .width();
     var viewHeight = $(window)
       .height();
-    return viewWidth >= 768 && viewHeight >= 680;
+    return viewWidth > 800 && viewHeight > 680;
   };
 
   init();
