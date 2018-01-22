@@ -193,14 +193,14 @@ export function linkUi(models, config) {
       });
     if (util.browser.small) {
       wvui.positionDialog($dialog, {
-        my: 'left top',
-        at: 'left+58 bottom+5',
+        my: 'right top',
+        at: 'right-58 bottom+5',
         of: '#wv-toolbar'
       });
     } else {
       wvui.positionDialog($dialog, {
-        my: 'left top',
-        at: 'left bottom+5',
+        my: 'right top',
+        at: 'right bottom+5',
         of: $label
       });
     }
