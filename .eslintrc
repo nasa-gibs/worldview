@@ -5,23 +5,20 @@
   },
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "script"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": false
+    }
   },
   "extends": "standard",
   "rules": {
     "semi": ["error", "always"],
-    "space-before-function-paren": "off"
+    "space-before-function-paren": "off",
+    "object-curly-spacing": ["warn", "always"],
   },
   "overrides": [
     {
       "files": [ "web/**/*.js", "test/**/*.js" ],
-      "parserOptions": {
-        "ecmaVersion": 5,
-        "sourceType": "script",
-        "ecmaFeatures": {
-          "jsx": false
-        }
-      },
       "rules": {
         "no-octal": "warn",
         "no-unused-vars": "warn",
@@ -56,15 +53,6 @@
         "standard/computed-property-even-spacing": "warn",
         "wrap-iife": "warn",
         "new-cap": "warn"
-      },
-      "globals": {
-        "wv": true,
-        "wvx": true,
-        "WVC": true,
-        "buster": true,
-        "jQuery": true,
-        "$": true,
-        "_": true
       }
     }
   ]

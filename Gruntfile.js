@@ -2,35 +2,7 @@
 
 var fs = require('fs');
 var moment = require('moment');
-var nodeModuleFiles = [
-  'node_modules/babel-polyfill/dist/polyfill.js',
-  'node_modules/babel-polyfill/dist/polyfill.min.js',
-  'node_modules/react/dist/react.js',
-  'node_modules/react/dist/react.min.js',
-  'node_modules/react-dom/dist/react-dom.js',
-  'node_modules/react-dom/dist/react-dom.min.js',
-  'node_modules/worldview-components/browser/wvc.js',
-  'node_modules/worldview-components/browser/wvc.min.js',
-  'node_modules/lodash/lodash.js',
-  'node_modules/lodash/lodash.min.js',
-  'node_modules/bluebird/js/browser/bluebird.js',
-  'node_modules/bluebird/js/browser/bluebird.min.js',
-  'node_modules/gifshot/build/custom/gifshot.custom.js',
-  'node_modules/gifshot/build/custom/gifshot.custom.min.js',
-  'node_modules/promise-queue/lib/index.js',
-  'node_modules/openlayers/dist/ol-debug.js',
-  'node_modules/openlayers/dist/ol.css',
-  'node_modules/openlayers/dist/ol-debug.css',
-  'node_modules/font-awesome/css/font-awesome.min.css',
-  'node_modules/font-awesome/fonts/*',
-  'node_modules/isotope-layout/dist/*',
-  'node_modules/isotope-packery/packery-mode.pkgd.js',
-  'node_modules/isotope-packery/packery-mode.pkgd.min.js',
-  'node_modules/perfect-scrollbar/dist/js/*',
-  'node_modules/perfect-scrollbar/dist/css/*',
-  'node_modules/clipboard/dist/clipboard.js',
-  'node_modules/clipboard/dist/clipboard.min.js'
-];
+var pkg = require('./package.json');
 
 // Build date shown in the About box
 var buildTimestamp = moment.utc().format('MMMM DD, YYYY [-] HH:mm [UTC]');
@@ -40,96 +12,22 @@ var buildNonce = moment.utc().format('YYYYMMDDHHmmssSSS');
 var buildNumber = moment.utc().format('YYMMDDHHmmss');
 
 module.exports = function(grunt) {
-  var pkg = require('./package.json');
-  var env = grunt.option('env') || 'release';
+  grunt.loadNpmTasks('grunt-contrib-clean'); // Used to remove build artifacts
+  grunt.loadNpmTasks('grunt-contrib-copy'); // Used to move build artifacts around
+  grunt.loadNpmTasks('grunt-exec'); // Used to run bash scripts
+  grunt.loadNpmTasks('grunt-markdown'); // Used to convert md files to html
+  grunt.loadNpmTasks('grunt-mkdir'); // Used to make build directories
+  grunt.loadNpmTasks('grunt-text-replace'); // Used to replace token strings
 
   var hasCustomOptions = fs.existsSync('options');
   var optionsPath = hasCustomOptions ? 'options' : 'node_modules/worldview-options-eosdis';
-
-  // Lists of JavaScript and CSS files to include and in the correct
-  // order
-  var js = grunt.file.readJSON('deploy/wv.js.json');
-  var css = grunt.file.readJSON('deploy/wv.css.json');
-
-  // Platform specific command for find
-  var findCmd;
-  if (process.platform === 'win32') {
-    findCmd = ';'; // cygwin find doesn't really work in Windows compared to CentOS
-  } else {
-    findCmd = 'find build -type d -empty -delete';
-  }
-
-  // Platform specific location for Python
-  var pythonPath;
-  if (process.platform === 'win32') {
-    pythonPath = 'python/Scripts';
-  } else {
-    pythonPath = 'python/bin';
-  }
 
   grunt.initConfig({
 
     pkg: pkg,
     optionsPath: optionsPath,
-    apache_version: grunt.option('apache-version') || '22',
-
-    postcss: {
-      stylelint: {
-        options: {
-          map: false,
-          processors: [require('stylelint')({
-            configFile: '.stylelintrc',
-            formatter: 'string',
-            ignoreDisables: false,
-            failOnError: true,
-            outputFile: '',
-            reportNeedlessDisables: false,
-            syntax: ''
-          })]
-        },
-        src: 'web/css/*.css'
-      },
-      autoprefix: {
-        options: {
-          map: false,
-          processors: [require('autoprefixer')]
-        },
-        src: 'web/css/*.css'
-      }
-    },
-
-    buster: {
-      console: {},
-      report: {
-        test: {
-          reporter: 'xml'
-        }
-      }
-    },
-
-    concat: {
-      // Combine all the Worldview JavaScript files into one file.
-      js: {
-        src: js['wv.js'],
-        dest: 'build/worldview-debug/web/js/wv.js'
-      },
-      // Combine all the Openlayers JavaScript files into one file.
-      oljs: {
-        src: js['ol.js'],
-        dest: 'build/worldview-debug/web/js/ol.js'
-      },
-      // Combine all the Worldview CSS files into one file.
-      css: {
-        src: css,
-        dest: 'build/worldview-debug/web/css/wv.css'
-      }
-    },
 
     copy: {
-      apache: {
-        src: 'etc/dev/worldview-dev.httpd<%=apache_version%>.conf',
-        dest: 'dist/<%=grunt.option("packageName")%>.conf'
-      },
 
       brand_info: {
         files: [
@@ -152,29 +50,6 @@ module.exports = function(grunt) {
             cwd: 'build/options/brand',
             src: ['**'],
             dest: 'web/brand'
-          }
-        ]
-      },
-
-      rpm_sources: {
-        files: [
-          {
-            expand: true,
-            cwd: 'deploy/sources',
-            src: ['**'],
-            dest: 'build/rpmbuild/SOURCES'
-          }, {
-            expand: true,
-            cwd: 'deploy',
-            src: ['worldview.spec'],
-            dest: 'build/rpmbuild/SPECS'
-          }, {
-            expand: true,
-            cwd: 'dist',
-            src: [
-              'site-<%=grunt.option("packageName")%>.tar.bz2', 'site-<%=grunt.option("packageName")%>-debug.tar.bz2', 'worldview-config.tar.bz2'
-            ],
-            dest: 'build/rpmbuild/SOURCES'
           }
         ]
       },
@@ -204,21 +79,6 @@ module.exports = function(grunt) {
         }
       },
 
-      ext: {
-        files: [
-          {
-            expand: true,
-            cwd: '.',
-            overwrite: true,
-            src: nodeModuleFiles,
-            dest: 'web/ext'
-          }
-        ],
-        options: {
-          mode: true
-        }
-      },
-
       release: {
         files: [
           {
@@ -233,63 +93,6 @@ module.exports = function(grunt) {
         options: {
           mode: true
         }
-      },
-
-      dist_config_versioned: {
-        files: [
-          {
-            src: 'dist/worldview-config.tar.bz2',
-            dest: 'dist/worldview-config.git<%= grunt.config.get("config-revision") %>.tar.bz2'
-          }
-        ]
-      },
-
-      dist_site_debug_versioned: {
-        files: [
-          {
-            src: 'dist/site-<%=grunt.option("packageName")%>-debug.tar.bz2',
-            dest: 'dist/site-<%=grunt.option("packageName")%>-debug' + '-<%=pkg.version%>' + '-<%=pkg.release%>' + '.tar.bz2'
-          }
-        ]
-      },
-
-      dist_site_release_versioned: {
-        files: [
-          {
-            src: 'dist/site-<%=grunt.option("packageName")%>.tar.bz2',
-            dest: 'dist/site-<%=grunt.option("packageName")%>' + '-<%=pkg.version%>' + '-<%=pkg.release%>' + '.tar.bz2'
-          }
-        ]
-      },
-
-      dist_source_debug_versioned: {
-        files: [
-          {
-            src: 'dist/worldview-debug.tar.bz2',
-            dest: 'dist/worldview-debug' + '-<%=pkg.version%>' + '-<%=pkg.release%>' + '.git<%= grunt.config.get("source-revision") %>' + '.tar.bz2'
-          }
-        ]
-      },
-
-      dist_source_release_versioned: {
-        files: [
-          {
-            src: 'dist/worldview.tar.bz2',
-            dest: 'dist/worldview' + '-<%=pkg.version%>' + '-<%=pkg.release%>' + '.git<%= grunt.config.get("source-revision") %>' + '.tar.bz2'
-          }
-        ]
-      },
-
-      rpm: {
-        files: [
-          {
-            expand: true,
-            flatten: true,
-            cwd: 'build/rpmbuild',
-            src: ['**/*.rpm'],
-            dest: 'dist'
-          }
-        ]
       },
 
       site: {
@@ -307,7 +110,7 @@ module.exports = function(grunt) {
             src: ['**'],
             dest: 'build/site-<%=grunt.option("packageName")%>-debug/web'
           }, {
-            src: 'options/bitly.json',
+            src: 'bitly.json',
             dest: 'build/site-<%=grunt.option("packageName")%>-debug/etc/bitly.json'
           }, {
             expand: true,
@@ -322,7 +125,7 @@ module.exports = function(grunt) {
             src: ['**'],
             dest: 'build/site-<%=grunt.option("packageName")%>/web'
           }, {
-            src: 'options/bitly.json',
+            src: 'bitly.json',
             dest: 'build/site-<%=grunt.option("packageName")%>/etc/bitly.json'
           }
         ],
@@ -332,102 +135,26 @@ module.exports = function(grunt) {
       }
     },
 
-    cssmin: {
-      // Minifiy the concatenated Worldview CSS file.
-      wv_css: {
-        options: {
-          keepSpecialComments: false
-        },
-        files: {
-          'build/worldview/web/css/wv.css': ['build/worldview/web/css/wv.css']
-        }
-      }
-    },
-
-    eslint: {
-      options: {
-        configFile: '.eslintrc',
-        format: 'stylish'
-      },
-      src: ['**/*.js', '!node_modules/**/*', '!build/**/*', '!dist/**/*', '!lib/**/*', '!options/**/*', '!web/dist/**/*', '!web/ext/**/*', '!etc/**/*']
-    },
-
     exec: {
-      config: {
-        command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" bin/wv-options-build "' + env
-      },
-
-      // After removing JavaScript and CSS files that are no longer
-      // need in a release build, there are a lot of empty directories.
-      // Remove all of them.
-      empty: {
-        command: findCmd
-      },
-
-      fetch: {
-        command: 'bash -c "PATH=' + pythonPath + ':"${PATH}" FETCH_GC=1 bin/wv-options-build "' + env
-      },
-      node_packages: {
-        command: 'npm update'
-      },
-
-      python_packages: {
-        command: 'virtualenv python && bash -c "PATH=' + pythonPath + ':${PATH} pip install xmltodict isodate"'
-      },
-
-      rpmbuild: {
-        command: 'rpmbuild --define "_topdir $PWD/build/rpmbuild" ' + '-ba build/rpmbuild/SPECS/worldview.spec'
-      },
 
       tar_config: {
-        command: 'tar -C build -cjf dist/worldview-config.tar.bz2 ' + 'options'
+        command: 'tar -C build -cjf dist/worldview-config.tar.bz2 options'
       },
 
       tar_site_debug: {
-        command: 'tar cjCf build dist/site-<%=grunt.option("packageName")%>-debug.tar.bz2 ' + 'site-<%=grunt.option("packageName")%>-debug'
+        command: 'tar cjCf build dist/site-<%=grunt.option("packageName")%>-debug.tar.bz2 site-<%=grunt.option("packageName")%>-debug'
       },
 
       tar_site_release: {
-        command: 'tar cjCf build dist/site-<%=grunt.option("packageName")%>.tar.bz2 ' + 'site-<%=grunt.option("packageName")%>'
+        command: 'tar cjCf build dist/site-<%=grunt.option("packageName")%>.tar.bz2 site-<%=grunt.option("packageName")%>'
       },
 
       tar_source_debug: {
-        command: 'tar cjCf build dist/worldview-debug.tar.bz2 ' + 'worldview-debug'
+        command: 'tar cjCf build dist/worldview-debug.tar.bz2 worldview-debug'
       },
 
       tar_source_release: {
-        command: 'tar cjCf build dist/worldview.tar.bz2 ' + 'worldview'
-      }
-    },
-
-    'git-rev-parse': {
-      source: {
-        options: {
-          prop: 'source-revision',
-          number: 6
-        }
-      },
-      config: {
-        options: {
-          prop: 'config-revision',
-          cwd: '<%= optionsPath %>',
-          number: 6
-        }
-      }
-    },
-
-    lineremover: {
-      // After removing all the <!-- link.dev --> references, there
-      // are a lot of blank lines in index.html. Remove them
-      release: {
-        files: [
-          {
-            expand: true,
-            cwd: 'build',
-            src: ['**/web/**/*.html'],
-            dest: 'build'
-          }
-        ]
+        command: 'tar cjCf build dist/worldview.tar.bz2 worldview'
       }
     },
 
@@ -443,7 +170,7 @@ module.exports = function(grunt) {
           }
         ],
         options: {
-          template: 'deploy/metadata.template.html'
+          template: 'templates/metadata.html'
         }
       },
       new: {
@@ -457,7 +184,7 @@ module.exports = function(grunt) {
           }
         ],
         options: {
-          template: 'deploy/new.template.html'
+          template: 'templates/page.html'
         }
       }
     },
@@ -467,15 +194,10 @@ module.exports = function(grunt) {
         options: {
           create: ['dist']
         }
-      },
-      rpmbuild: {
-        options: {
-          create: ['build/rpmbuild']
-        }
       }
     },
 
-    remove: {
+    clean: {
       build: ['build'],
       dist: ['dist'],
       // Removes all JavaScript, CSS, and auxillary files not necessary
@@ -488,9 +210,9 @@ module.exports = function(grunt) {
         '!build/worldview-debug/web/js/wv.js',
         '!build/worldview-debug/web/js/ol.js',
         '!build/worldview-debug/web/css/bulkDownload.css',
-        '!build/worldview-debug/web/ext/**/*'
+        '!build/worldview-debug/web/ext/**/*',
+        '!build/worldview-debug/web/build/**/*'
       ],
-      modules: ['web/ext/node_modules/**'],
       config_src: ['web/config/**/*'],
       build_source: [
         'build/worldview', 'build/worldview-debug'
@@ -500,48 +222,13 @@ module.exports = function(grunt) {
       ],
       build_site: [
         'build/site-<%=grunt.option("packageName")%>-debug', 'build/site-<%=grunt.option("packageName")%>'
-      ],
-      dist_rpm: ['dist/*.rpm'],
-      rpmbuild: ['build/rpmbuild']
+      ]
     },
 
     replace: {
-      apache: {
-        src: ['dist/<%=grunt.option("packageName")%>.conf'],
-        overwrite: true,
-        replacements: [
-          {
-            from: '@WORLDVIEW@',
-            to: '<%=grunt.option("packageName")%>'
-          }, {
-            from: '@ROOT@',
-            to: process.cwd()
-          }
-        ]
-      },
 
-      // Remove all development links <!-- link.dev --> and uncomment
-      // all the release links <!-- link.prod -->
-      links: {
-        src: [
-          'build/**/web/index.html', 'build/**/web/pages/*.html'
-        ],
-        overwrite: true,
-        replacements: [
-          {
-            from: /.*link.dev.*/g,
-            to: ''
-          }, {
-            from: /.*link.prod.*(!--|\/\*)(.*)(--|\*\/).*/g,
-            to: '$2'
-          }
-        ]
-      },
-
-      rpm_sources: {
-        src: [
-          'build/rpmbuild/SOURCES/*', 'build/rpmbuild/SPECS/*', '!**/*.tar.bz2'
-        ],
+      rpm_placeholders: {
+        src: ['build/rpm/SPECS/worldview.spec', 'build/rpm/SOURCES/*.conf'],
         overwrite: true,
         replacements: [
           {
@@ -590,71 +277,9 @@ module.exports = function(grunt) {
           }
         ]
       }
-    },
-
-    stylefmt: {
-      format: {
-        files: [
-          {
-            expand: true,
-            src: 'web/css/*.css',
-            dest: './'
-          }
-        ]
-      }
-    },
-
-    watch: {
-      scripts: {
-        files: nodeModuleFiles,
-        tasks: ['update']
-      }
-    },
-
-    uglify: {
-      // Minifiy the concatenated Worldview JavaScript file.
-      options: {
-        compress: {
-          // drop_console: true,
-          // drop_debugger: true,
-          unused: true
-        }
-      },
-      wv_js: {
-        files: {
-          'build/worldview/web/js/wv.js': ['build/worldview/web/js/wv.js']
-        }
-      },
-      ol_js: {
-        files: {
-          'build/worldview/web/js/ol.js': ['build/worldview/web/js/ol.js']
-        }
-      }
     }
+
   });
-
-  grunt.loadNpmTasks('grunt-buster');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-compress');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('gruntify-eslint');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-line-remover');
-  grunt.loadNpmTasks('grunt-exec');
-  grunt.loadNpmTasks('grunt-git-rev-parse');
-  grunt.loadNpmTasks('grunt-markdown');
-  grunt.loadNpmTasks('grunt-minjson');
-  grunt.loadNpmTasks('grunt-mkdir');
-  grunt.loadNpmTasks('grunt-postcss');
-  grunt.loadNpmTasks('grunt-stylefmt');
-  grunt.loadNpmTasks('grunt-text-replace');
-  grunt.loadNpmTasks('grunt-rename');
-
-  // Lets use 'clean' as a target instead of the name of the task
-  grunt.renameTask('clean', 'remove');
 
   grunt.registerTask('load_branding', 'Load branding', function () {
     var brand = grunt.file.readJSON('build/options/brand.json');
@@ -671,83 +296,40 @@ module.exports = function(grunt) {
     grunt.option('email', brand.email);
   });
 
-  grunt.registerTask('autoprefix', ['postcss:autoprefix']);
-
   grunt.registerTask('build', [
-    'remove:build_source',
-    'git-rev-parse:source',
-    'copy:source',
-    'concat',
-    'remove:source',
-    'exec:empty',
-    'copy:release',
-    'uglify',
-    'cssmin',
-    'replace:links',
-    'lineremover',
-    'mkdir:dist',
-    'exec:tar_source_debug',
-    'copy:dist_source_debug_versioned',
-    'exec:tar_source_release',
-    'copy:dist_source_release_versioned'
+    'copy:source', // Copy source files into build/worldview-debug
+    'clean:source', // Removes unneccesary assets from build directory
+    'copy:release', // Copy build/worldview-debug into build/worldview
+    'mkdir:dist', // Make dist directory
+    'exec:tar_source_debug', // Make worldview-debug tar from /build
+    'exec:tar_source_release' // Make worldview-debug tar from /build
   ]);
 
   grunt.registerTask('config', [
-    'remove:build_config',
-    'git-rev-parse:config',
-    'remove:config_src',
-    'exec:config',
-    'markdown',
-    'copy:config_src',
-    'copy:brand_info',
-    'mkdir:dist',
-    'exec:tar_config',
-    'copy:dist_config_versioned'
+    'markdown', // Parse metadata and pages md files into html
+    'copy:config_src', // Copy build results to web/config and web/brand
+    'copy:brand_info', // Copy brand config file to build directory
+    'mkdir:dist', // Make dist directory
+    'exec:tar_config' // Create worldview-config tar from options directory
   ]);
-
-  grunt.registerTask('fetch', ['exec:fetch']);
 
   grunt.registerTask('site', [
-    'load_branding',
-    'remove:build_site',
-    'copy:site',
-    'replace:tokens',
-    'exec:tar_site_debug',
-    'copy:dist_site_debug_versioned',
-    'exec:tar_site_release',
-    'copy:dist_site_release_versioned'
+    'load_branding', // Set grunt variables from built options file
+    'clean:build_site', // Remove some build directories
+    'copy:site', // Copy /worldview and /worldview-config builds to /build/site
+    'replace:tokens', // Replace string placeholders in JS and HTML (no CSS)
+    'exec:tar_site_debug', // Create debug tar
+    'exec:tar_site_release' // Create release tar
   ]);
 
-  grunt.registerTask('stylelint', ['postcss:stylelint']);
-
-  grunt.registerTask('rpm-only', [
-    'load_branding',
-    'git-rev-parse:source',
-    'remove:rpmbuild',
-    'mkdir:rpmbuild',
-    'copy:rpm_sources',
-    'replace:rpm_sources',
-    'remove:dist_rpm',
-    'exec:rpmbuild',
-    'copy:rpm'
+  grunt.registerTask('rpm-placeholders', [
+    'load_branding', // Set grunt variables from built options file
+    'replace:rpm_placeholders' // Replace strings in rpm sources
   ]);
-
-  grunt.registerTask('apache-config', ['load_branding', 'copy:apache', 'replace:apache']);
-
-  grunt.registerTask('update', ['remove:modules', 'copy:ext']);
-  grunt.registerTask('update-packages', ['exec:python_packages', 'exec:node_packages', 'update']);
-  grunt.registerTask('check', ['lint', 'test']);
-  grunt.registerTask('clean', ['remove:build']);
-  grunt.registerTask('distclean', ['remove:build', 'remove:dist']);
-  grunt.registerTask('lint', ['eslint', 'stylelint']);
-  grunt.registerTask('test', ['buster:console']);
 
   grunt.registerTask('default', [
-    'update-packages',
-    'fetch',
-    'update',
-    'build',
-    'config',
-    'site'
+    'build', // Copy assets to build directories and generate tar files
+    'config', // Build options artifacts and put them in build, dist, web
+    'site' // Combine /build/worldview and /build/options to create final build
   ]);
 };

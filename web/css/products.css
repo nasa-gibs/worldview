@@ -54,6 +54,10 @@
   display: block;
 }
 
+#productsHolder-tabs .ui-state-default a {
+  color: #fff;
+}
+
 #productsHolder-tabs .ui-state-default:hover a {
   background-color: #ccc;
   color: #000;
