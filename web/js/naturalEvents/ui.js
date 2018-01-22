@@ -18,6 +18,9 @@ export default function naturalEventsUI (models, ui, config, request) {
   var naturalEventMarkers = markers(models, ui, config);
 
   var init = function () {
+    // Display loading information for user feedback on slow network
+    $('#wv-events').text('Loading...');
+
     view = ui.map.selected.getView();
 
     request.events.on('queryResults', function () {
