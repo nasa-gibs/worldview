@@ -1,0 +1,21 @@
+/*
+ * Default jquery-ui button
+ */
+
+a.ui-button.ui-state-default {
+  color: #eee;
+  font-weight: 700;
+  border: 1px solid #666;
+  font-size: 1em;
+  background-image: linear-gradient(#555, #666);
+  background-image: -ms-linear-gradient(#555, #666);
+  background-image: -o-linear-gradient(#555, #666);
+  font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+a.ui-button.ui-state-default.ui-state-hover {
+  border-color: #eee;
+  background-color: #eee;
+  background-image: none;
+  color: #404040;
+}

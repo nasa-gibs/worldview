@@ -1,156 +1,53 @@
-## Development
+# Developing
 
-*Please Note*: There is little to no documentation at this time and any
-comments in the code may be out of date.
+## npm scripts
 
-### Minification of CSS and JavaScript files
+This project uses `npm` as an interface to run build scripts and other tasks. The scripts themselves are a combination of JavaScript, Bash and Python scripts. Here are the essential scripts;
 
-The build script needs to know which files to minify and the correct order used
-to concatenate. Anytime a CSS or JavaScript file is added. renamed, or removed,
-the following files must be updated:
+`npm install`: Installs JavaScript and Python dependencies.
 
-* ``etc/deploy/wv.css.json``
-* ``etc/deploy/wv.js.json``
+`npm run build`: Runs all of the `build:x` scripts below and generates all builds of the app. If you have configuration options in a subdirectory of `/options` other than `options/release`, you can pass in the name of the subdirectory you would like to use with `npm run build -- subdirectory_name`. If you would like to build the app with an incomplete configuration, you should prefix the command like this; `IGNORE_ERRORS=true npm run build`.
 
-To ensure that references to the unminified value are removed in the production
-version, prefix all CSS or JavaScript link tags with
+`npm run build:js`: Builds the JavaScript bundle for the app.
 
-    <!-- link.dev -->
+`npm run build:css`: Builds the CSS bundle for the app.
 
-If there are some CSS or JavaScript files that must be available in
-non-concatenated form, add exceptions in the ``remove:source`` task in
-``Gruntfile.js``
+`npm run build:config`: Builds the configuration (options) for the app. If you have configuration options in a subdirectory of `/options` other than `options/release`, you can pass in the name of the subdirectory you would like to use with `npm run build:config -- subdirectory_name`. If you would like to build the app with an incomplete configuration, you should prefix the command like this; `IGNORE_ERRORS=true npm run build:config`.
 
-## Syncing with remote branch
-Update packages that may have been adjusted since your last pull
+`npm run build:tests`: Builds a JavaScript bundle for running tests.
 
-     grunt update-packages
+ If you're using a custom options repo, you can pass in a subdirectory name to the build command with `npm run build -- subdirectory_name` or the build config command with `npm run build:config -- subdirectory_name`.
 
-## Naming and Versioning
+`npm start`: Starts the app for local development. More specifically, starts a web server that serves the contents of the `/web` directory.
 
-The ``options.json`` file contains the name, version, and release number
-that is used when building the deployment packages. The name can be changed
-to allow side-by-side deployments of different branches. Executing:
+`npm watch`: Runs all of the build tasks necessary for local development in watch mode so that the build is automatically when source files change. This does not generate a final build, and is only for local development. You must run `npm run build` or `npm run build:config` first to make a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers) and build the configuration files.
 
-     grunt
+`npm test`: Runs all tests and linting to verify code quality. Make sure to run `npm run build` or `npm run build:tests` first to build a testable version of Worldview.
 
-also creates distribution tarballs in the dist directory. Three "unversioned"
-files are generated:
+`npm run lint`: Lints code against the project's style guides. Use `npm run lint:css` or `npm run lint:js` to lint CSS or JS files separately.
 
-* ``dist/worldview.tar.bz2``
-* ``dist/worldview-debug.tar.bz2``
-* ``dist/worldview-doc.tar.bz2``
+`npm run e2e`: Runs end-to-end tests locally. Use `npm run e2e:chrome` or `npm run e2e:firefox` to run tests in a specific browser.
 
-Three "versioned" files are also generated in the form of:
+`npm run browserstack`: Runs end-to-end tests on Browserstack.
 
-* ``dist/<name>-<version>-<release>.git<revision>.tar.bz2``
+`npm run getcapabilites`: Makes a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers) and updates layer configurations. If you're using a custom options repo, you can pass in a subdirectory with `npm run getcapabilites -- subdirectory_name`.
 
-Where ``name``, ``version``, ``release`` are the values found in the
-``package.json`` file and ``revision`` is the value from:
+`npm run updateconfig`: A shortcut to update the config when new layers are added. Runs `npm run getcapabilities` and `npm run build:config` behind the scenes.
 
-    git rev-parse --short HEAD
+`npm run report`: Generates a readable HTML report with the results of the last end-to-end test.
 
-The ``options.json`` file in the repository root is copied from the
-active brand directory. To make changes, edit the official copy in the
-brand directory.
+## Grunt tasks
 
+We're in the process of replacing our Grunt tasks with npm scripts, but here are the Grunt build scripts that are available. Note, these are poorly documented and you should use caution when running these scripts if you don't know what you're doing. Your mileage may vary when running scripts marked with a `*` by themselves.
 
-## Grunt Targets
+`grunt`: This task is deprecated, and we don't recommend that you use it. Instead, use `npm run build` to generate a build. Under the hood, this is a shortcut for `grunt build && grunt config && grunt site`.
 
-These additional grunt targets are available.
+`grunt config`* : Compiles branding and configuration options into an intermediate build directory and generates `tar` files of that directory.
 
-### Sync runtime node modules
+`grunt build`* : Adds a git commit hash to source files, copies them into an intermediate build directory and generates `tar` files of that directory.
 
-Any new update to runtime npm modules, by such means as 'npm install', 'npm update', or a version change in package.json will need to be synced to the web directory:
+`grunt site`* : Combines the results of `grunt config` and `grunt build` into final `/build` and `/dist` directories and generates `tar` files of the final build.
 
-    grunt update
+`grunt rpm-placeholders`: Replaces placeholder strings in rpm source files.
 
-### Branding
-
-Any changes to the brading directories need to be applied to the source
-tree to take effect:
-
-    grunt brand
-
-### Edit Libraries and sync changes on save
-
-Make edits to node_modules that are [npm linked](https://docs.npmjs.com/cli/link) and have them relocate to the web directory automatically.
-
-    grunt watch
-
-### Configuration
-
-The Worldivew configuration file is generated by concatenating all files
-in ``conf/web``
-
-To regenerate the master configuration file in the source tree after making
-an edit, issue the following command:
-
-    grunt config
-
-
-### Autoprefix CSS
-
-Parse all CSS files and automatically add vendor prefixes to CSS rules using values from Can I Use.
-
-Run autoprefix with the following:
-
-    grunt autoprefix
-
-
-### Linting
-
-Check for common errors in the JavaScript and CSS files with:
-
-    grunt lint
-
-[eslint](http://eslint.org) is used for JavaScript linting.
-Run the following to check only check Javascript errors:
-
-    grunt eslint
-
-[stylelint](https://stylelint.io) is used for CSS linting.
-Run the following to checkout only CSS errors:
-
-    grunt stylelint
-
-Run the following to automatically fix stylelint errors:
-
-    grunt stylefmt
-
-### Documentation
-
-Documentation can be built separately with:
-
-    grunt doc
-
-### Unit Tests
-
-Run unit test with the following:
-
-    grunt test
-
-This uses BusterJS with PhantomJS for headless browser testing. To test in an
-actual browser which is quicker, install the Buster command line tools
-with:
-
-    sudo npm install --global buster-cli
-
-For static testing like QUnit, run the following and navigate the web browser
-to the address shown:
-
-    buster-static
-
-For browser capturing, run the following and navigate the web browser to
-the address shown:
-
-    buster-server
-
-
-### RPM
-
-To create an RPM on CentOS 6, issue the following:
-
-    grunt rpm-only
-
-Built RPMs will be found in the ``dist`` directory.
+`grunt apache-config`* : Moves `worldview.conf` to the `/dist` directory for deployment to an Apache server.

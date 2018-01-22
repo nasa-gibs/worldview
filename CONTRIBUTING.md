@@ -13,7 +13,8 @@ If you have any questions or ideas, or notice any problems or bugs, first [searc
 If you want to submit your own contributions, follow these steps;
 
 * Fork the Worldview repo
-* Create a new branch from the branch you'd like to contribute to
+* Create a new branch off of the branch you'd like to contribute to
+* ** Note: ** If there is not a feature branch already created for you to branch off of, you will want to branch off of `development` to create your own feature branch. We only branch directly off of `master` to resolve urgent bugs.
 * If an issue does't already exist, submit one (see above)
 * [Create a pull request](https://help.github.com/articles/creating-a-pull-request/) from your fork into the target branch of the nasa-gibs/worldview repo
 * Be sure to [mention the corresponding issue number](https://help.github.com/articles/closing-issues-using-keywords/) in the PR description, i.e. "Fixes [#480](https://github.com/nasa-gibs/worldview/issues/480)"
@@ -24,9 +25,27 @@ If you want to submit your own contributions, follow these steps;
 
 We ask that you follow these guidelines with your contributions;
 
+### Style Guidelines
+
+Please lint your code with `npm run lint`. Our style rules are defined in `.stylelintrc` and `.eslintrc`. We follow a modified version of [Standard JS Rules](https://github.com/standard/standard#the-rules), with semi-colons. You can install linting plugins in your editor to check against our style guides automatically:
+
+#### Atom
+
+* [AtomLinter](https://atomlinter.github.io/)
+* [`linter-eslint`](https://atom.io/packages/linter-eslint)
+* [`linter-stylelint`](https://atom.io/packages/linter-stylelint)
+
+#### Sublime
+
+* [SublimeLinter](http://www.sublimelinter.com/en/latest/)
+* [`SublimeLinter-eslint`](https://github.com/roadhump/SublimeLinter-eslint)
+* [`SublimeLinter-contrib-stylelint`](https://github.com/kungfusheep/SublimeLinter-contrib-stylelint)
+
 ### Unit Tests
 
-All of the unit tests for this project need to pass before your submission will be accepted. You can run `npm test` in the command line after making changes to verify that the tests pass. If you add new functionality, please consider adding tests for that functionality as well.
+All of the unit tests for this project need to pass before your submission will be accepted. You can run `npm build && npm test` in the command line after making changes to verify that the tests pass. If you add new functionality, please consider adding tests for that functionality as well.
+
+Note for Windows users: `npm test` may fail unless you [install PhantomJS manually](http://phantomjs.org/download.html).
 
 ### End-to-end Tests
 

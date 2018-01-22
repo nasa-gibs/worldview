@@ -1,5 +1,0 @@
-# http://stackoverflow.com/questions/7748140/font-face-eot-not-loading-over-https
-
-Header unset Cache-Control
-Header unset Pragma
-Header unset Expires
