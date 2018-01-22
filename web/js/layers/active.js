@@ -88,6 +88,7 @@ export function layersActive(models, ui, config) {
     $('.layer-container ul.category')
       .sortable({
         items: 'li:not(.head)',
+        cancel: 'a',
         axis: 'y',
         containment: 'parent',
         tolerance: 'pointer',
