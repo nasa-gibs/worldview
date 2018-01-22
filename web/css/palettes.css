@@ -45,6 +45,9 @@
   margin-top: 0;
   position: relative;
 }
+.bank div .colorbar-case {
+  position: relative;
+}
 
 .wv-palettes-max,
 .wv-palettes-min,
@@ -122,7 +125,7 @@
 }
 
 .bank div .wv-palettes-panel .wv-running-bar {
-  bottom: 15px;
+  top: 0;
   width: 1px;
   height: 12px;
   background: #000;

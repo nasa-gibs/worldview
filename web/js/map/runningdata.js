@@ -396,7 +396,7 @@ export function MapRunningData(models) {
     marginLeft = 3;
 
     $palette = self.getPalette(id);
-    $paletteCase = $palette.parent();
+    $paletteCase = $palette.parent().parent();
     $paletteWidth = $palette.width();
     $paletteCaseWidth = $paletteCase.outerWidth();
     $paletteLabel = $paletteCase.find('.wv-running-label');

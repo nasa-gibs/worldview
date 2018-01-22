@@ -59,18 +59,22 @@ export function palettesLegend(spec) {
     var $container = $('<div></div>')
       .addClass('wv-palettes-legend')
       .attr('data-index', index);
+    var $colorBarCase = $('<div></div>')
+      .addClass('colorbar-case');
     var $colorbar = $('<canvas></canvas>')
       .addClass('wv-palettes-colorbar')
       .attr('id', legend.id)
       .attr('data-index', index);
+    var $runningDataPointBar = $('<div></div>')
+      .addClass('wv-running-bar');
     // set fixed canvas dimensions
     $colorbar[0].width = 235;
     $colorbar[0].height = 12;
+    $colorBarCase
+      .append($colorbar)
+      .append($runningDataPointBar);
+    $container.append($colorBarCase);
 
-    $container.append($colorbar);
-
-    var $runningDataPointBar = $('<div></div>')
-      .addClass('wv-running-bar');
     var $runningDataPointLabel = $('<span></span>')
       .addClass('wv-running-label');
 
@@ -85,8 +89,7 @@ export function palettesLegend(spec) {
     $container
       .append($min)
       .append($max)
-      .append($runningDataPointLabel)
-      .append($runningDataPointBar);
+      .append($runningDataPointLabel);
 
     $colorbar.on('mousemove', function (e) {
       showUnitHover(e, index);
