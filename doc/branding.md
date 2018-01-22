@@ -1,6 +1,6 @@
 # Branding
 
-To add custom branding to Worldview you can [create a custom configuration](https://github.com/nasa-gibs/worldview#custom-configuration) and modify it;
+To add custom branding to Worldview you can [create a custom configuration](configuration.md) and modify it;
 
 ## Customizing
 
@@ -16,10 +16,13 @@ the following instead:
 * `officalName`: Full name of the application (i.e. `EOSDIS Worldview`).
 * `shortName`: Short name of the application (i.e. `Worldview`).
 
-To add a logo, replace `options/common/brand/images/wv-logo.png` with an image that is 247x45 pixels.
+To add a logo, replace `options/common/brand/images/wv-logo.png` with an image
+that is 247x45 pixels.
 
-To create an "About" page, edit `options/common/brand/pages/about.md`. You can also create other pages by creating other Markdown files in this directory.
+To create an "About" page, edit `options/common/brand/pages/about.md`. You can
+also create other pages by creating other Markdown files in this directory.
 
 ## Rebuilding
 
-After making changes to a custom configuration, you'll need to run `npm run build` again to rebuild the app.
+After making changes to a custom configuration, you'll need to run
+`npm run build` again to rebuild the app.

@@ -1,22 +1,23 @@
 # Configuration
 
-The configuration used by the official NASA EOSDIS Worldview application can be found here:
+By default, Worldview uses [the official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis). To create a custom configuration, you can clone the default configuration repo or [the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git) into the `options/` directory and modify it;
 
-<https://github.com/nasa-gibs/worldview-options-eosdis>
+```bash
+git clone https://github.com/nasa-gibs/worldview-options-template.git options
+```
 
-A basic configuration that only includes three starting layers can be found here:
+## Updating the Configuration
 
-<https://github.com/nasa-gibs/worldview-options-template>
+After making any changes to a custom configuration, you need to rebuild the app
+with the changes. Instead of running the entire build process you can run
+`npm run getcapabilities` to make a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers)
+and update layer configurations, and then `npm run build:config` to rebuild the
+configuration for use by the application. You can run these commands separately
+as needed or use `npm run updateconfig` as a shortcut to run them both.
 
-To customize the configuration of the application, use either repository above as a starting point.
+### Subdirectories
 
-## General Notes
-
-Information here is incomplete and can be flushed out on an as-needed basis.
-
-All paths in the document are relative to the options repository root unless specified otherwise.
-
-After making any changes to the configuration, run `npm run build:config` from the command line to rebuild the configuration for use by the application.
+If you have a custom configuration in a subdirectory of `options/` other than `options/release/`, you can pass in the name of the subdirectory you would like to use with `npm run build:config -- subdirectory_name`. If you would like to build an incomplete configuration, you should prefix the command like this; `IGNORE_ERRORS=true npm run build:config`.
 
 ## New Layers
 

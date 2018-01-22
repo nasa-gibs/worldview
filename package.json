@@ -2,6 +2,19 @@
   "name": "worldview",
   "version": "1.11.0",
   "description": "Interactive interface for browsing full-resolution, global, near real-time satellite imagery",
+  "keywords": [
+    "NASA",
+    "Earthdata",
+    "GIS",
+    "NRT",
+    "satellite imagery",
+    "wildfire management",
+    "air quality",
+    "flood monitoring",
+    "science",
+    "earth science",
+    "GDAL"
+  ],
   "homepage": "https://worldview.earthdata.nasa.gov/",
   "bugs": {
     "url": "https://github.com/nasa-gibs/worldview/issues",

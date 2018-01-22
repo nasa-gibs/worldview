@@ -18,11 +18,11 @@ This feature uses
 * Obtain a login and API key from [bit.ly](http://bit.ly).
 * Create `build/options/bitly.json` with the following contents (replacing `your_login` and `your_key` with the appropriate values);
 
-  ```json
-  {
-    "login": "your_login",
-    "key": "your_key"
-  }
-  ```
+```json
+{
+  "login": "your_login",
+  "key": "your_key"
+}
+```
 
-  > Caution: Do not commit this file to a public repo, and make sure that the `build/options` directory is not publicly accessible on your web server since your API key should remain secret.
+> Caution: Do not commit this file to a public repo, and make sure that the `build/options` directory is not publicly accessible on your web server since your API key should remain secret.
