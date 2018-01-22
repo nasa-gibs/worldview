@@ -227,8 +227,8 @@ export function imagePanel(models, ui, config) {
       .attr('selected', 'selected');
 
     wvui.positionDialog($dialog, {
-      my: 'left top',
-      at: 'left bottom+5',
+      my: 'right top',
+      at: 'right bottom+5',
       of: ('#wv-image-button')
     });
     $dialog.dialog('open');
