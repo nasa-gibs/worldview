@@ -1,10 +1,11 @@
 # Branding
 
-To add custom branding to Worldview you can [create a custom configuration](configuration.md) and modify it;
+To add custom branding to Worldview,
+[create a custom configuration](configuration.md) and modify it;
 
 ## Customizing
 
-Update the following fields in `options/common/brand.json` with your custom branding;
+Update the following fields in `options/common/brand.json` with custom branding;
 
 * `packageName`: Application name used to create builds, (i.e. `worldview`).
 * `name`: Application name shown to end users (i.e. `EOSDIS Worldview`).
@@ -19,10 +20,10 @@ the following instead:
 To add a logo, replace `options/common/brand/images/wv-logo.png` with an image
 that is 247x45 pixels.
 
-To create an "About" page, edit `options/common/brand/pages/about.md`. You can
-also create other pages by creating other Markdown files in this directory.
+To create an "About" page, edit `options/common/brand/pages/about.md`. Add other
+Markdown files in this directory to add more pages.
 
 ## Rebuilding
 
-After making changes to a custom configuration, you'll need to run
-`npm run build` again to rebuild the app.
+After making changes to a custom configuration, run `npm run build` again to
+rebuild the app.

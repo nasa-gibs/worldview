@@ -1,6 +1,9 @@
 # Configuration
 
-By default, Worldview uses [the official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis). To create a custom configuration, you can clone the default configuration repo or [the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git) into the `options/` directory and modify it;
+By default, Worldview uses [the official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis).
+To create a custom configuration, clone the default configuration repo or
+[the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git)
+into the `options/` directory and modify it;
 
 ```bash
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
@@ -8,22 +11,27 @@ git clone https://github.com/nasa-gibs/worldview-options-template.git options
 
 ## Updating the Configuration
 
-After making any changes to a custom configuration, you need to rebuild the app
-with the changes. Instead of running the entire build process you can run
-`npm run getcapabilities` to make a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers)
+After making any changes to a custom configuration, rebuild the app for the
+changes to take effect. Instead of running the entire build process, use the
+`npm run getcapabilities` command to make a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers)
 and update layer configurations, and then `npm run build:config` to rebuild the
-configuration for use by the application. You can run these commands separately
-as needed or use `npm run updateconfig` as a shortcut to run them both.
+configuration for use by the application. Run these commands separately
+as needed or use `npm run updateconfig` as a shortcut to run both.
 
 ### Subdirectories
 
-If you have a custom configuration in a subdirectory of `options/` other than `options/release/`, you can pass in the name of the subdirectory you would like to use with `npm run build:config -- subdirectory_name`. If you would like to build an incomplete configuration, you should prefix the command like this; `IGNORE_ERRORS=true npm run build:config`.
+If you have a custom configuration in a subdirectory of `options/` other than
+`options/release/`, pass in the name of the subdirectory to use with
+`npm run build:config -- subdirectory_name`. To build an incomplete configuration,
+prefix the command like this; `IGNORE_ERRORS=true npm run build:config`.
 
 ## New Layers
 
-Create a new JSON document in `config/wv.json/layers` named `X.json` where `X` is the layer identifier used in the WMTS or WMS API call. This file can be placed in any subdirectory as needed for organizational purposes.
+Create a new JSON document in `config/wv.json/layers` named `X.json` where `X`
+is the layer identifier used in the WMTS or WMS API call. This file can be
+placed in any subdirectory as needed for organizational purposes.
 
-The following is the minimum configuration needed for the Aerosol Optical Depth layer:
+Here's an example of a minimum configuration for the Aerosol Optical Depth layer:
 
 ```json
 {
@@ -38,7 +46,8 @@ The following is the minimum configuration needed for the Aerosol Optical Depth 
 }
 ```
 
-All properties should be in an object keyed by the layer identifier used in the WMTS of WMS API call.
+All properties should be in an object keyed by the layer identifier used in the
+WMTS of WMS API call.
 
 ### Required Properties
 
@@ -47,7 +56,7 @@ The minimum set of required properties are as follows:
 - **id**: The layer identifier used in the WMTS or WMS call
 - **title**: Title of the layer displayed to the end user. This is the first line displayed in the active layers list.
 - **subtitle**: Subtitle of the layer displayed to the end user. This is the second line displayed in the active layers list and usually includes platform, sensor, and/or attribution information.
-- **group**: The group this layer should be found in, either *baselayers* or *overlays*
+- **group**: The group this layer is found in, either *baselayers* or *overlays*
 
 The following properties are required if this information is not available via the GIBS WMTS GetCapabilities document:
 
@@ -152,16 +161,21 @@ First, layers must be added to `config/wv.json/layers` and `config/wv.json/layer
 
 ## New Map Sources
 
-Modify the JSON document, `config/wv.json/sources.json`. There is a *sources* object that contains an object for each map source keyed by the source identifier. For layers that can be configured via a GIBS WMTS GetCapabilities document or for WMS layers, the only property required is:
+Modify the JSON document, `config/wv.json/sources.json`. There is a *sources*
+object that contains an object for each map source keyed by the source identifier.
+For layers that can be configured via a GIBS WMTS GetCapabilities document or
+for WMS layers, the only property required is:
 
 - **url**: Either a string or array of strings where the map service is found.
 
-For WMTS layers that cannot be configured with a GetCapabilities document, a *matrixSets* object must exist that contains an object for each matrix set, keyed by the matrix set identifier.
+For WMTS layers that cannot be configured with a GetCapabilities document, a
+*matrixSets* object must exist that contains an object for each matrix set,
+keyed by the matrix set identifier.
 
 - **id**: The identifier for this matrix set.
 - **maxResolution**: The maximum resolution of this of this matrix tile set as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution). This property might be deprecated in the future as it can be obtained from the *resolutions* property.
 - **resolutions**: Array of resolutions for each zoom level as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution).
-- **tileSize**: Array of pixel dimensions for each tile. Example *[512, 512]*
+- **tileSize**: Array of pixel dimensions for each tile. Example; `[512, 512]`
 
 ### Full Example
 
@@ -189,15 +203,17 @@ For WMTS layers that cannot be configured with a GetCapabilities document, a *ma
 
 ### GetCapabilities
 
-To automatically fetch configuration information from the GetCapabilities document, modify the `config.json` file and add an object to the *wv-options-fetch* object with the following properties:
+To automatically fetch configuration information from the GetCapabilities
+document, modify the `config.json` file and add an object to the
+`wv-options-fetch` object with the following properties:
 
 - **from**: The URL to fetch the GetCapabilities document
 - **to**: Name of the temporary file used to store the GetCapabilities document.
 
-Now add an object to the *wv-options-wmts* object with the following properties:
+Now add an object to the `wv-options-wmts` object with the following properties:
 
 - **source**: The identifier of the source that corresponds to this endpoint.
-- **from**: The name of the temporary file used int he *wv-options-fetch* object.
+- **from**: The name of the temporary file used int he `wv-options-fetch` object.
 - **to**: The name of the temporary output JSON file.
 - **projection**: The identifier of the projection used in this endpoint (see `config/wv.json/projections`)
 - **maxResolution**: The resolution of first tile matrix entry.

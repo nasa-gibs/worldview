@@ -15,9 +15,8 @@ build a testable version of Worldview.
 
 ## End-to-end Tests
 
-You can run the included end-to-end tests to test the app in Chrome and Firefox.
-The tests run the Cucumber features in `./e2e/features` using Nightwatch
-and Selenium.
+Run the included end-to-end tests to test the app in Chrome and Firefox. The
+tests run the Cucumber features in `./e2e/features` using Nightwatch and Selenium.
 
 To run tests on your machine in Chrome; `npm run e2e:chrome`.
 
@@ -26,11 +25,11 @@ To run tests on your machine in Firefox;
 1) [Create a new Firefox profile](https://developer.mozilla.org/en-US/Firefox/Multiple_profiles) called 'nightwatch'.
 2) Run `npm run e2e:firefox`.
 
-You can run tests for both browsers in sequence by running `npm run e2e`.
+To run tests for both browsers in sequence; `npm run e2e`.
 
-To run tests in Browserstack;
+To run tests in BrowserStack;
 
-1) Log into [Browserstack](https://www.browserstack.com/automate) and get your username and access key from the upper left.
+1) Log into [BrowserStack](https://www.browserstack.com/automate) and get your username and access key from the upper left.
 2) Add the following to your shell configuration (`.bashrc` or `.profile`);
 
 ```bash
@@ -38,22 +37,22 @@ export BROWSERSTACK_ACCESS_KEY=yourkeyhere
 export BROWSERSTACK_USER=yourusernamehere
 ```
 
-3) Configure `./e2e/environments.json` with the browsers you want to test.
+3) Configure `./e2e/environments.json` with the browsers to test.
 4) Run `npm run browserstack`.
 
 ### Reports
 
 After running end-to-end tests, reports are generated and saved in
-`./e2e/reports`. You can convert these to HTML by running
-`npm run report <environment>` where `<environment>` is either the lowercase
-name of the browser for local tests (`chrome` or `firefox`) or the name of the
-Browserstack environment, such as `Chrome_61-0_OS_X_El_Capitan-1` (you can get
-this name from the JSON files in `./e2e/reports`).
+`./e2e/reports`. To convert these to HTML, use `npm run report <environment>`
+where `<environment>` is either the lowercase name of the browser for local
+tests (`chrome` or `firefox`) or the name of the BrowserStack environment, such
+as `Chrome_61-0_OS_X_El_Capitan-1` (get the name from the JSON files in
+`./e2e/reports`).
 
 The end-to-end tests are a little bit flaky, so they aren't required to pass
-before a submission will be accepted, but you should run them and read through
-the results to make sure that you haven't broken any functionality. Please also
-consider adding end-to-end tests to cover any functionality you add.
+before a submission will be accepted. But, please run them and check the results
+to make sure you haven't broken any functionality. And add end-to-end tests to
+cover any new functionality you add.
 
 ## Mocking Data
 

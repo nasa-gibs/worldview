@@ -1,12 +1,13 @@
 # Data Download
 
-*Note*: This feature exclusively uses the Common Metadata Repository (CMR) and is
-of no use for datasets stored elsewhere.
+**Note**: This feature uses the Common Metadata Repository (CMR) and does not
+work for data sets stored elsewhere.
 
-Each layer in Worldview can be mapped to a data product found in the CMR. In the layer configuration, use the *product* attribute and provide the identifier that will be used for the downloadable product.
+Each layer in Worldview can be mapped to a data product in the CMR. In the layer
+configuration, use the *product* attribute and provide the identifier for the
+downloadable product.
 
-Each *product* is defined in the *products* section, keyed by identifier. An
-example follows below:
+Each *product* is defined in the *products* section, keyed by identifier:
 
 ```json
 {
@@ -43,12 +44,12 @@ yesterday, and tomorrow appear together on the same map.
 list. Use this for collections that do not have granules and only have
 a collection level entry.
 * `CollectionMix`: Handles layers which only have collection-level metadata
-and have different collections based on the currently-selected date.  Uses
+and have different collections based on the selected date. Uses
 "science" and "nrt" query flags to distinguish between "old" and "new"
 collections, respectively.
 * `DailyAMSRE`: Displays a single entry for a daily AMSR-E product. Since the
-metadata is too exact, this omits granules that happen to contain on a very
-small fraction of the day.
+metadata is too exact, this omits granules that happen to contain a small
+fraction of the day.
 * `DailyGranuleList`: Similar to `List` but also obtains granules three hours
 from yesterday and tomorrow. This handler is only used for MODIS Combined
 Value Added AOD and granules appear to be in six hour chunks. It isn't apparent
@@ -103,7 +104,7 @@ using the `MODISMix` handler, the query is specified in the following manner:
 
 ## Result Processing and Filtering
 
-Each handler has a series of processors that may change or filter each result.
+Each handler has a series of processors that change or filter each result.
 The result processors and configurations are as follows:
 
 ### AntiMeridianMulti
@@ -111,7 +112,7 @@ The result processors and configurations are as follows:
 If a granule splits the anti-meridian, this processor creates two polygons,
 one on each side of the map. The constructor takes a `maxDistance` argument
 that specifies a distance, in degrees. If a line segment in the polygon is
-greater than `maxDistance`, it is assumed to be crossing the anti-meridian.
+greater than `maxDistance`, it's assumed to be crossing the anti-meridian.
 
 ### CollectPreferred
 
@@ -172,7 +173,7 @@ Filter by ascending or descending orbit. Configure with `orbit` with the
 following parameters:
 
 * `type`: Always `regex_group`
-* `field`: The field to inspect to determine the orbit
+* `field`: The field to inspect to find the orbit
 * `regex`: The regular expression to match against, should have one group.
 * `match`: Keep the granule if it matches this value.
 
@@ -209,8 +210,8 @@ parameters:
 * `field`: The field value to check against
 * `value`: Field value must equal this exactly.
 * `regex`: Field value must match this regular expression.
-* `handler`: If the handler for this product is `MODISMix` or `CollectionMix`, the
-handler that should be used for the NRT query, for example, `TerraSwathMultiDay`.
+* `handler`: If the handler for this product is `MODISMix` or `CollectionMix`,
+the handler to use for the NRT query, for example, `TerraSwathMultiDay`.
 
 Example:
 
@@ -231,8 +232,6 @@ Add a field to the granule result with the name of the product.
 
 Mark granules as requiring URS access depending on the following `urs`
 configuration parameters.
-
-*FIXME*: Code an almost copy-and-paste from TagNRT, maybe consolidate this?
 
 * `by`: Determine if this requires URS by `value`, `regex`, or `constant`
 * `field`: The field value to check against

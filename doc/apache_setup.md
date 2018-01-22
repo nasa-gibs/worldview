@@ -1,6 +1,6 @@
 # How to Setup Worldview Using Apache
 
-> Note: Using Worldview with Apache is deprecated and will not be supported in the future. Is is recommended that you use Worldview with Node/[Express](https://expressjs.com/) instead. If you choose to proceed with Apache, choose one of the setup methods below.
+> Note: Using Worldview with Apache is deprecated and will not be supported in the future. We recommended using Worldview with Node/[Express](https://expressjs.com/) instead. To use Apache, choose one of the setup methods below.
 
 ## Manual Setup
 

@@ -59,13 +59,13 @@ npm run build
 npm start
 ```
 
-Navigate to [`http://localhost:3000`](http://localhost:3000) in a browser. To stop Worldview, press Control+C in your terminal.
+Navigate to [`http://localhost:3000`](http://localhost:3000) in a browser. To stop Worldview, press Control+C in the terminal.
 
 See [Developing](doc/developing.md) for more usage details.
 
 ## Updates
 
-To update Worldview, you can pull down any branch or tag from GitHub. If you're on the `master` branch (default), and you want to update to the latest stable version of Worldview, run `git pull`.
+To update Worldview, pull down any branch or tag from GitHub. From the `master` branch (default), to update to the latest stable version of Worldview, run `git pull`.
 
 **Note:** This project uses [Semantic Versioning](https://semver.org/). Updates to the major version number in [package.json](package.json) indicate a breaking change; _update with caution_.
 
