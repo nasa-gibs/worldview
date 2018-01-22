@@ -1,43 +1,53 @@
 # Configuration
 
-The configuration used by the official NASA EOSDIS Worldview application can be found here:
+By default, Worldview uses [the official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis).
+To create a custom configuration, clone the default configuration repo or
+[the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git)
+into the `options/` directory and modify it;
 
-<https://github.com/nasa-gibs/worldview-options-eosdis>
+```bash
+git clone https://github.com/nasa-gibs/worldview-options-template.git options
+```
 
-A basic configuration that only includes three starting layers can be found here:
+## Updating the Configuration
 
-<https://github.com/nasa-gibs/worldview-options-template>
+After making any changes to a custom configuration, rebuild the app for the
+changes to take effect. Instead of running the entire build process, use the
+`npm run getcapabilities` command to make a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers)
+and update layer configurations, and then `npm run build:config` to rebuild the
+configuration for use by the application. Run these commands separately
+as needed or use `npm run updateconfig` as a shortcut to run both.
 
-To customize the configuration of the application, use either repository above as a starting point.
+### Subdirectories
 
-## General Notes
-
-Information here is incomplete and can be flushed out on an as-needed basis.
-
-All paths in the document are relative to the options repository root unless specified otherwise.
-
-After making any changes to the configuration, run ``npm run build:config`` from the command line to rebuild the configuration for use by the application.
+If you have a custom configuration in a subdirectory of `options/` other than
+`options/release/`, pass in the name of the subdirectory to use with
+`npm run build:config -- subdirectory_name`. To build an incomplete configuration,
+prefix the command like this; `IGNORE_ERRORS=true npm run build:config`.
 
 ## New Layers
 
-Create a new JSON document in ``config/wv.json/layers`` named ``X.json`` where ``X`` is the layer identifier used in the WMTS or WMS call. This file can be placed in any subdirectory as needed for organizational purposes.
+Create a new JSON document in `config/wv.json/layers` named `X.json` where `X`
+is the layer identifier used in the WMTS or WMS API call. This file can be
+placed in any subdirectory as needed for organizational purposes.
 
-The following is the minimum configuration needed for the Aerosol Optical Depth layer:
+Here's an example of a minimum configuration for the Aerosol Optical Depth layer:
 
 ```json
 {
-    "layers": {
-        "MODIS_Aqua_Aerosol": {
-            "id":       "MODIS_Aqua_Aerosol",
-            "title":    "Aerosol Optical Depth",
-            "subtitle": "Aqua / MODIS",
-            "group":    "overlays"
-        }
+  "layers": {
+    "MODIS_Aqua_Aerosol": {
+      "id": "MODIS_Aqua_Aerosol",
+      "title": "Aerosol Optical Depth",
+      "subtitle": "Aqua / MODIS",
+      "group": "overlays"
     }
+  }
 }
 ```
 
-All properties should be in an object keyed by the layer identifier used in the WMTS of WMS call.
+All properties should be in an object keyed by the layer identifier used in the
+WMTS of WMS API call.
 
 ### Required Properties
 
@@ -46,7 +56,7 @@ The minimum set of required properties are as follows:
 - **id**: The layer identifier used in the WMTS or WMS call
 - **title**: Title of the layer displayed to the end user. This is the first line displayed in the active layers list.
 - **subtitle**: Subtitle of the layer displayed to the end user. This is the second line displayed in the active layers list and usually includes platform, sensor, and/or attribution information.
-- **group**: The group this layer should be found in, either *baselayers* or *overlays*
+- **group**: The group this layer is found in, either *baselayers* or *overlays*
 
 The following properties are required if this information is not available via the GIBS WMTS GetCapabilities document:
 
@@ -54,34 +64,33 @@ The following properties are required if this information is not available via t
 - **format**: Image format type, either *image/png* or *image/jpeg*.
 - **tileSize**: For WMS layers only, an array of pixel dimensions used to tile the requests. For example, *[512, 512]*
 - **period**: Use *daily* for layers that have new content each day, otherwise use *static*.
-- **startDate**: For daily layers, the first day in ``YYYY-MM-DD`` format that data is available
+- **startDate**: For daily layers, the first day in `YYYY-MM-DD` format that data is available
 - **inactive**: If the daily layer is no longer being produced, this should be present with a *true* value. Otherwise, this property can be omitted.
-- **endDate**: If the daily layer is no longer being produced, the last day in ``YYYY-MM-DD`` format that data was available.
+- **endDate**: If the daily layer is no longer being produced, the last day in `YYYY-MM-DD` format that data was available.
 
-A *projections* object must exist which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in ``config/wv.json/projections``). Example:
+A *projections* object must exist which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in `config/wv.json/projections`). Example:
 
 ```json
 "projections": {
-	"antarctic": {
-		"source":     "GIBS:antarctic",
-		"matrixSet":  "EPSG3031_250m"
-	},
-    "arctic": {
-		"source": 	"GIBS:arctic",
-		"matrixSet":  "EPSG3413_250m"
-	}
+  "antarctic": {
+    "source":     "GIBS:antarctic",
+    "matrixSet":  "EPSG3031_250m"
+  },
+  "arctic": {
+    "source": 	"GIBS:arctic",
+    "matrixSet":  "EPSG3413_250m"
+  }
 }
 ```
 
 The projection parameters are as follows:
 
-- **source**: Identifier that indicates which endpoint contains this layer (see ``config/wv.json/sources.json``)
+- **source**: Identifier that indicates which endpoint contains this layer (see `config/wv.json/sources.json`)
 - **matrixSet**: For WMTS layers only, the name of the matrix set as defined in the endpoint's GetCapabilities document.
 
 ### Layer Order
 
-The ``config/wv.json/layerOrder.json`` file must be updated to include the new layer identifier. This file determines the order that layers are displayed in the add layers tab.
-
+The `config/wv.json/layerOrder.json` file must be updated to include the new layer identifier. This file determines the order that layers are displayed in the add layers tab.
 
 ### Optional Properties
 
@@ -95,42 +104,40 @@ The ``config/wv.json/layerOrder.json`` file must be updated to include the new l
 To display a color palette legend, a *palette* object should exist with the following properties:
 
 - **id**: Identifier of the palette. This should match the name of the colormap file without the extension.
-- **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see ``config/palettes-custom.json``). Example, *["orange_1", "red_1"]*
+- **recommended**: Array of custom palette identifiers that are recommended for use with this layer (see `config/palettes-custom.json`). Example, *["orange_1", "red_1"]*
 
 ### Full Example
 
 ```json
 {
-    "layers": {
-        "AIRS_RelativeHumidity_400hPa_Day": {
-            "id":       "AIRS_RelativeHumidity_400hPa_Day",
-            "title":    "Relative Humidity (400 hPa, Day)",
-            "subtitle": "Aqua / AIRS",
-            "tags":     "rh",
-            "group":    "overlays",
-            "product":  "AIRX2RET_DAY",
-
-            "format":   "image/png",
-            "type":     "wmts",
-
-            "period":       "daily",
-            "startDate":    "2013-07-16",
-
-            "projections": {
-                "geographic": {
-                    "source":       "GIBS:geographic",
-                    "matrixSet":    "EPSG4326_2km"
-                }
-            },
-
-            "palette": {
-                "id": "AIRS_RH400_A"
-            }
+  "layers": {
+    "AIRS_RelativeHumidity_400hPa_Day": {
+      "id": "AIRS_RelativeHumidity_400hPa_Day",
+      "title": "Relative Humidity (400 hPa, Day)",
+      "subtitle": "Aqua / AIRS",
+      "tags": "rh",
+      "group": "overlays",
+      "product": "AIRX2RET_DAY",
+      "format": "image/png",
+      "type": "wmts",
+      "period": "daily",
+      "startDate": "2013-07-16",
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic",
+          "matrixSet": "EPSG4326_2km"
         }
+      },
+      "palette": {
+        "id": "AIRS_RH400_A"
+      }
     }
+  }
 }
 ```
+
 ## Adding Layers to Worldview and the Product Picker
+
 New layers in the Global Imagery Browse Services (GIBS) can be added to Worldview via the options repository using the following instructions.
 
 First, layers must be added to `config/wv.json/layers` and `config/wv.json/layerOrder.json`. Then they must be added to the `config/wv.json/measurements` and `config/wv.json/categories` folders so that they will be categorized in the Product Picker. Lastly, if the layers have descriptions these can be added in `config/metadata` and if they are available in the Common Metadata Repository (CMR), data download may be enabled for those layers.
@@ -154,73 +161,81 @@ First, layers must be added to `config/wv.json/layers` and `config/wv.json/layer
 
 ## New Map Sources
 
-Modify the JSON document, ``config/wv.json/sources.json``. There is a *sources* object that contains an object for each map source keyed by the source identifier. For layers that can be configured via a GIBS WMTS GetCapabilities document or for WMS layers, the only property required is:
+Modify the JSON document, `config/wv.json/sources.json`. There is a *sources*
+object that contains an object for each map source keyed by the source identifier.
+For layers that can be configured via a GIBS WMTS GetCapabilities document or
+for WMS layers, the only property required is:
 
 - **url**: Either a string or array of strings where the map service is found.
 
-For WMTS layers that cannot be configured with a GetCapabilities document, a *matrixSets* object must exist that contains an object for each matrix set, keyed by the matrix set identifier.
+For WMTS layers that cannot be configured with a GetCapabilities document, a
+*matrixSets* object must exist that contains an object for each matrix set,
+keyed by the matrix set identifier.
 
 - **id**: The identifier for this matrix set.
 - **maxResolution**: The maximum resolution of this of this matrix tile set as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution). This property might be deprecated in the future as it can be obtained from the *resolutions* property.
 - **resolutions**: Array of resolutions for each zoom level as defined in the [OpenLayers 2 documentation](http://dev.openlayers.org/docs/files/OpenLayers/Layer-js.html#OpenLayers.Layer.maxResolution).
-- **tileSize**: Array of pixel dimensions for each tile. Example *[512, 512]*
+- **tileSize**: Array of pixel dimensions for each tile. Example; `[512, 512]`
 
 ### Full Example
+
 ```json
 {
-    "sources": {
-        "GIBS:arctic": {
-            "url": [
-                "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
-                "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
-            ],
-            "matrixSets": {
-                "EPSG3413_250m": {
-                    "id": "EPSG3413_250m",
-                    "maxResolution": 8192,
-                    "resolutions": [8192, 4096, 2048, 1024, 512],
-                    "tileSize": [512, 512]
-                }
-            }
+  "sources": {
+    "GIBS:arctic": {
+      "url": [
+        "//map1a.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+        "//map1b.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi",
+        "//map1c.vis.earthdata.nasa.gov/wmts-arctic/wmts.cgi"
+      ],
+      "matrixSets": {
+        "EPSG3413_250m": {
+          "id": "EPSG3413_250m",
+          "maxResolution": 8192,
+          "resolutions": [8192, 4096, 2048, 1024, 512],
+          "tileSize": [512, 512]
         }
+      }
     }
+  }
 }
 ```
 
 ### GetCapabilities
 
-To automatically fetch configuration information from the GetCapabilities document, modify the ``config.json`` file and add an object to the *wv-options-fetch* object with the following properties:
+To automatically fetch configuration information from the GetCapabilities
+document, modify the `config.json` file and add an object to the
+`wv-options-fetch` object with the following properties:
 
 - **from**: The URL to fetch the GetCapabilities document
 - **to**: Name of the temporary file used to store the GetCapabilities document.
 
-Now add an object to the *wv-options-wmts* object with the following properties:
+Now add an object to the `wv-options-wmts` object with the following properties:
 
 - **source**: The identifier of the source that corresponds to this endpoint.
-- **from**: The name of the temporary file used int he *wv-options-fetch* object.
+- **from**: The name of the temporary file used int he `wv-options-fetch` object.
 - **to**: The name of the temporary output JSON file.
-- **projection**: The identifier of the projection used in this endpoint (see ``config/wv.json/projections``)
+- **projection**: The identifier of the projection used in this endpoint (see `config/wv.json/projections`)
 - **maxResolution**: The resolution of first tile matrix entry.
 
 ### config.json Example
 
 ```json
 {
-    "wv-options-fetch": [
-        {
-            "from": "https://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?request=GetCapabilities",
-            "to": "gibs-geographic.xml"
-        },
-    ],
-    "wv-options-wmts": [
-        {
-            "source": "GIBS:geographic",
-            "from": "gibs-geographic.xml",
-            "to": "gibs-geographic.json",
-            "projection": "geographic",
-            "maxResolution": 0.5625
-        }
-    ]
+  "wv-options-fetch": [
+    {
+      "from": "https://map1.vis.earthdata.nasa.gov/wmts-geo/wmts.cgi?request=GetCapabilities",
+      "to": "gibs-geographic.xml"
+    },
+  ],
+  "wv-options-wmts": [
+    {
+      "source": "GIBS:geographic",
+      "from": "gibs-geographic.xml",
+      "to": "gibs-geographic.json",
+      "projection": "geographic",
+      "maxResolution": 0.5625
+    }
+  ]
 }
 ```
