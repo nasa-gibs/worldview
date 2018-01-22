@@ -1,0 +1,37 @@
+#wv-layers-options-dialog {
+  color: #fff;
+}
+
+#wv-layers-options-dialog .wv-header {
+  margin-top: 1em;
+  font-size: 14px;
+  margin-bottom: 1em;
+}
+
+#wv-layers-options-dialog .wv-header.wv-color-palette-label {
+  margin-bottom: 0.5em;
+}
+
+#wv-layers-options-dialog .wv-label {
+  color: #fff;
+  width: 100%;
+}
+
+#wv-layers-options-dialog .wv-label-opacity {
+  text-align: right;
+}
+
+#wv-layers-options-dialog .wv-label-range-min {
+  float: left;
+  text-align: left;
+}
+
+#wv-layers-options-dialog .wv-label-range-max {
+  float: right;
+  text-align: right;
+}
+
+#wv-layers-options-dialog .wv-palette-squash {
+  float: right;
+  margin-top: -2.4em;
+}

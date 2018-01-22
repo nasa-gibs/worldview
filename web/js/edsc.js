@@ -1,15 +1,20 @@
+import edscArc from './edsc/arc';
+import edscCoordinate from './edsc/coordinate';
+import edscGeoUtil from './edsc/geoutil';
+import edscInterpolation from './edsc/interpolation';
+import edscSphericalPolygon from './edsc/spherical-polygon';
 var edsc = {};
 edsc.map = {};
+edsc.config = null;
 
 var L = {};
-edsc.map.L = L;
-
+edsc.L = L;
 L.Polyline = {
   prototype: {}
 };
 
 L.Polygon = {
-  extend: function() {},
+  extend: function () {},
   prototype: {}
 };
 
@@ -35,38 +40,40 @@ L.EditToolbar = {
 
 L.Draw = {
   Polygon: {
-    extend: function() {}
+    extend: function () {}
   }
 };
 
 L.Edit = {
   Poly: {
-    extend: function() {}
+    extend: function () {}
   }
 };
 
 L.Util = {
-  isArray: function(value) {
+  isArray: function (value) {
     return value.constructor === Array;
   }
 };
+function LatLng (lat, lng) {
+  if (lat.lat) {
+    var latlng = lat;
+    this.lat = latlng.lat;
+    this.lng = latlng.lng;
+  } else {
+    this.lat = lat;
+    this.lng = lng;
+  }
+}
 
-(function() {
+L.LatLng = LatLng;
+L.latLng = function (lat, lng) {
+  return new L.LatLng(lat, lng);
+};
+edsc.Coordinate = edscCoordinate(L);
+edsc.Arc = edscArc(L, edsc.Coordinate);
+edsc.geoutil = edscGeoUtil(L, edsc.Coordinate, edsc.Arc, edsc.config);
+edsc.interpolation = edscInterpolation(L, edsc.geoutil.gcInterpolate);
+edsc.L.sphericalPolygon = edscSphericalPolygon(L, edsc.geoutil, edsc.Arc, edsc.Coordinate);
 
-  function LatLng(lat, lng) {
-    if (lat.lat) {
-      var latlng = lat;
-      this.lat = latlng.lat;
-      this.lng = latlng.lng;
-    } else {
-      this.lat = lat;
-      this.lng = lng;
-    }
-  };
-
-  L.LatLng = LatLng;
-  L.latLng = function(lat, lng) {
-    return new L.LatLng(lat, lng);
-  };
-
-})();
+export { L as dataHelper };

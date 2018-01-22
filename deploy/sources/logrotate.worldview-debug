@@ -1,8 +1,0 @@
-/var/log/@WORLDVIEW@-debug/*.log {
-    copytruncate
-    weekly
-    rotate 4
-    compress
-    missingok
-    create 0664 apache apache
-}
