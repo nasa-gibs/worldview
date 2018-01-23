@@ -1,141 +1,98 @@
 # [Worldview](https://worldview.earthdata.nasa.gov)
 
+![Worldview Screenshot](screenshot.png)
+
 [![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
-Visit Worldview at
-[https://worldview.earthdata.nasa.gov](https://worldview.earthdata.nasa.gov)
+> Interactive interface for browsing full-resolution, global, near real-time satellite imagery
 
+## Background
 
-## About
-
-This tool from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
+This app from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
 provides the capability to interactively browse global, full-resolution
-satellite imagery and then download the underlying data. Most of the 600+
-available products are updated within three hours of observation, essentially
-showing the entire Earth as it looks "right now". This supports time-critical
-application areas such as wildfire management, air quality measurements, and
-flood monitoring. Arctic and Antarctic views of several products are also
-available for a "full globe" perspective. Browsing on mobile devices is
-generally supported for portable access to the imagery.
+satellite imagery on desktop and mobile devices. Most of the 600+ products
+are updated within three hours of observation, showing the entire Earth as it
+is "right now". This supports time-critical applications such as wildfire
+management, air quality measurements, and flood monitoring. Underlying data is
+available for download in several formats, and Arctic and Antarctic views of
+several products are available.
 
-Worldview uses the
-[Global Imagery Browse Services (GIBS)](https://earthdata.nasa.gov/gibs) to
-rapidly retrieve its imagery for an interactive browsing experience. While
-Worldview uses [OpenLayers](http://openlayers.org/) as its mapping library,
-GIBS imagery can also be accessed from Leaflet, Cesium, and several other
-clients as well as [scripts](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage#expand-GDALBasics).
-We encourage interested developers to build their own clients or integrate
-NASA imagery into their existing ones using these services.
+Worldview uses [OpenLayers](http://openlayers.org/) to display imagery from
+[Global Imagery Browse Services (GIBS)](https://earthdata.nasa.gov/gibs).
+This imagery [can also be used with libraries such as Leaflet, Cesium, Google Maps or custom GDAL scripts](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage#expand-GDALBasics).
+We encourage interested developers to fork Worldview or build their own clients
+for GIBS imagery.
 
 Check out our [roadmap](https://github.com/nasa-gibs/worldview/projects/7)
-to see where we're going or follow our [blog](https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS)
-to find out the latest features and imagery available!
+to see what we're working on and follow our [blog](https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS)
+to find out the latest features and imagery available.
 
+## Install
 
-## Installation
-
-These instructions install a development version of Worldview using [Node.js](https://nodejs.org/)
-to serve the app locally.  If you prefer to use Apache, follow the directions in [Setup Using Apache](doc/apache_setup.md).
-
-*Note:* This has been demonstrated to work on Windows 7 and 10 (as tested with [mingw-w64](http://mingw-w64.org/)), Mac OS X, and Ubuntu.
-
-Prerequisites:
-- [Node.js](https://nodejs.org/)  
-  - *Note to Ubuntu users:* After installing Node.js, ensure that it is available as `node` on the command line.  If not, [see here](https://github.com/nasa-gibs/worldview/issues/249#issuecomment-302172817) for more information.
-  - A later version of Node (>v6) is required and is not available on some distributions.  To make sure you have a later version, [visit the Node download page](https://nodejs.org/en/download/)
-- Windows users:
-  - Git Bash, mingw-w64 bash, or a similar shell must be used in order to run bash commands.
-  - .NET Framework 2.0 or Visual Studio 2005 or newer installed with Visual C++ compilers.  
-  It is HIGHLY recommended you install the Windows Build Tools npm package to ensure the correct compilers have been installed.  
-  To install this package:
-  ```
-  # run in administrator privileged command prompt window
-  npm install --global --production windows-build-tools
-  ```
-  - Python 2.7.x (included with Windows Build Tools)
-  - Python path added to Windows environmental variables (to use within cmd.exe and powershell)  
-  To add environmental variables:
-    - Right-click the Windows icon in bottom-left corner of the screen.
-    - Click System, click Advanced System Settings, click Environmental Variables.
-    - Highlight the Path row and click edit.
-    - Each path is seperated with a semicolon ";"
-    - Add your python directory path here.\*  
-   \*Windows Build Tools includes python, the included python path is:  
-   `%USERPROFILE%\.windows-build-tools\python27`  
-   Otherwise the path is most likely:
-   `C:\Python27`
-
-
-Clone this repository:
+This project uses Node and Python. See the [dependencies](#dependencies) section for more information.
 
 ```bash
 git clone https://github.com/nasa-gibs/worldview.git
 cd worldview
-```
-
-Install dependencies (NOTE for Windows users: omit the "sudo" part of the following commands as it [isn't available](https://stackoverflow.com/questions/22527668/sudo-command-not-found-on-cygwin)):
-```bash
-# install local version of grunt
-sudo npm install --global grunt-cli
-```
-
-```bash
-# install virtualenv to keep additional libraries installed in a local directory:
-sudo easy_install virtualenv==1.10.1
-```
-
-Run local node server:
-```bash
 npm install
-grunt
+```
+
+### Dependencies
+
+The following are required to install and run Worldview;
+
+- [Node v8.8.1 or Later](https://nodejs.org/en/download/)  
+  - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
+- [Python v2.7.14 or Later](https://www.python.org/)
+  - **Note:** It is recommended that Windows users install Python with [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools).
+
+Windows users will also need the following;
+
+  - [Git Bash](https://git-scm.com/downloads), or [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/)
+  - [.NET Framework](https://www.microsoft.com/net/download/dotnet-framework-runtime) or [Visual Studio Team Services](https://www.visualstudio.com/)
+  - [Add `python` to the path](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables)
+
+## Usage
+
+```bash
+npm run build
 npm start
 ```
-Worldview should be available at
 
-```bash
+Navigate to [`http://localhost:3000`](http://localhost:3000) in a browser. To stop Worldview, press Control+C in the terminal.
 
-http://localhost:3000
-```
-A node server will continue running until you end the session.
-You can end the session by pressing `control-C`
+See [Developing](doc/developing.md) for more usage details.
 
+## Updates
 
-### Additional Configuration Options
+To update Worldview, pull down any branch or tag from GitHub. From the `master` branch (default), to update to the latest stable version of Worldview, run `git pull`.
 
-The [Official EOSDIS configurations](https://github.com/nasa-gibs/worldview-options-eosdis) are installed by default in the `node_modules` directory.   
-To use custom options, clone the template repository into a new `options` directory in the root using the following git command.   
-
-```bash
-# A blank repository with only Corrected Reflectance and no branding
-git clone https://github.com/nasa-gibs/worldview-options-template.git options
-```
-Optionally, you can clone the official options and make changes as needed.
-```bash
-# or the Official EOSDIS configurations
-git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
-```
+**Note:** This project uses [Semantic Versioning](https://semver.org/). Updates to the major version number in [package.json](package.json) indicate a breaking change; _update with caution_.
 
 ## Other Information
 
-* [Alternate Installation using Apache](doc/apache_setup.md)
-* [Branding](doc/branding.md)
-* [Optional Features](doc/features.md)
-* [Configuration](doc/config.md)
-* [Development Notes](doc/developing.md)
-* [Coding Style Guide](doc/style_guide.md)
+* [Developing](doc/developing.md)
 * [Testing](doc/testing.md)
-* [Project Roadmap](https://github.com/nasa-gibs/worldview/projects/7)
-* [Third-Party Library Use](THIRD_PARTY.md)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-
-See [LICENSE.md](LICENSE.md)
+* [Configuration](doc/configuration.md)
+* [Custom Branding](doc/branding.md)
+* [Data Download](doc/data_download.md)
+* [Optional Features](doc/features.md)
+* [Deployment](doc/deployment.md)
+* [Using Apache (deprecated)](doc/apache_setup.md)
 
 ## Contact
 
-Contact us by sending an email to
-[support@earthdata.nasa.gov](mailto:support@earthdata.nasa.gov)
+Contact us via GitHub or by sending an email to
+[support@earthdata.nasa.gov](mailto:support@earthdata.nasa.gov).
+
+## Contribute
+
+We welcome your contributions! Feel free to [open an issue](https://github.com/nasa-gibs/worldview/issues/new) or [submit a PR](https://github.com/nasa-gibs/worldview/compare).
+
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more contribution guidelines.
+
+Worldview and NASA follow the [Contributor Covenant Code of Conduct](.github/CODE_OF_CONDUCT.md).
+
+## License
+
+NASA-1.3 (See [LICENSE.md](LICENSE.md))

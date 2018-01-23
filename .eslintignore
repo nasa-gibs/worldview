@@ -8,3 +8,4 @@ options/*
 reports/*
 web/ext/*
 web/dist/*
+web/build/*
