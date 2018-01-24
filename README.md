@@ -1,27 +1,29 @@
 # [Worldview](https://worldview.earthdata.nasa.gov)
 
-![Worldview Screenshot](screenshot.png)
+[![Worldview Screenshot](screenshot.png)](https://worldview.earthdata.nasa.gov)
 
 [![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
-> Interactive interface for browsing full-resolution, global, near real-time satellite imagery
+> Interactive interface for browsing full-resolution, global satellite imagery
 
 ## Background
 
-This app from [NASA's](http://nasa.gov) [EOSDIS](https://earthdata.nasa.gov)
-provides the capability to interactively browse global, full-resolution
-satellite imagery on desktop and mobile devices. Most of the 600+ products
-are updated within three hours of observation, showing the entire Earth as it
-is "right now". This supports time-critical applications such as wildfire
-management, air quality measurements, and flood monitoring. Underlying data is
-available for download in several formats, and Arctic and Antarctic views of
-several products are available.
+This app from NASA's [EOSDIS](https://earthdata.nasa.gov/) provides the
+capability to interactively browse over 600 global, full-resolution satellite
+imagery layers on desktop and mobile devices. Many of the imagery layers are
+updated within three hours of observation, showing the entire Earth as it is
+"right now". This supports time-critical applications such as wildfire
+management, air quality measurements, and flood monitoring. Some satellite
+imagery layers span almost 30 years, providing a long term view of our dynamic
+planet. The underlying data is available for download, and Arctic and Antarctic
+views of several imagery layers are available for a “full globe” perspective.
 
-Worldview uses [OpenLayers](http://openlayers.org/) to display imagery from
-[Global Imagery Browse Services (GIBS)](https://earthdata.nasa.gov/gibs).
-This imagery [can also be used with libraries such as Leaflet, Cesium, Google Maps or custom GDAL scripts](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage#expand-GDALBasics).
+Worldview uses [OpenLayers](http://openlayers.org/) to display imagery from the
+[Global Imagery Browse Services (GIBS)](https://earthdata.nasa.gov/gibs). This
+imagery can also be used [with libraries such as Leaflet, Cesium, Google Maps](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage)
+or [custom GDAL scripts](https://wiki.earthdata.nasa.gov/display/GIBS/Map+Library+Usage#expand-GDALBasics).
 We encourage interested developers to fork Worldview or build their own clients
-for GIBS imagery.
+using GIBS services.
 
 Check out our [roadmap](https://github.com/nasa-gibs/worldview/projects/7)
 to see what we're working on and follow our [blog](https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS)

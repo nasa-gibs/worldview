@@ -1,7 +1,7 @@
 {
   "name": "worldview",
   "version": "2.0.0",
-  "description": "Interactive interface for browsing full-resolution, global, near real-time satellite imagery",
+  "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
     "Earthdata",
