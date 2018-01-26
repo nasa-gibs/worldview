@@ -4,8 +4,28 @@ import 'jquery-jcrop';
 import lodashFind from 'lodash/find';
 import util from '../util/util';
 import wvui from '../ui/ui';
+import { imagePanel } from './panel';
 
-export function imageRubberband(models, ui, config) {
+const dialogConfig = {
+  dialogClass: 'wv-panel wv-image',
+  title: 'Take a snapshot',
+  show: {
+    effect: 'slide',
+    direction: 'up'
+  },
+  hide: {
+    effect: 'slide',
+    direction: 'up'
+  },
+  width: 230,
+  height: 'auto',
+  minHeight: 10,
+  draggable: false,
+  resizable: false,
+  autoOpen: false
+};
+
+export function imageRubberband (models, ui, config) {
   var self = {};
 
   var PALETTE_WARNING =
@@ -30,6 +50,8 @@ export function imageRubberband(models, ui, config) {
   var jcropAPI = null;
   var previousPalettes = null;
   var $button;
+
+  self.panel = imagePanel(models, ui, config, dialogConfig);
   self.events = util.events();
 
   /**
@@ -74,14 +96,12 @@ export function imageRubberband(models, ui, config) {
   };
 
   var toggle = function () {
-    var checked = $('#wv-image-button-check')
-      .prop('checked');
     var geographic = models.proj.selected.id === 'geographic';
     // Enables UI to select an area on the map while darkening the view
     var toggleOn = function () {
       state = 'on';
       toolbarButtons('disable');
-      self.events.trigger('show');
+      self.panel.show();
       $('.ui-dialog')
         .on('dialogclose', function () {
           if (state === 'on') {
@@ -110,7 +130,7 @@ export function imageRubberband(models, ui, config) {
       models.layers.setVisibility('Graticule', false);
       toggle();
     };
-    if (state == 'off') {
+    if (state === 'off') {
       var layers = models.layers.get({
         renderable: true
       });
@@ -180,10 +200,10 @@ export function imageRubberband(models, ui, config) {
    * @param {String} coordinates object of JCrop
    *
    */
-  var setCoords = function (c) {
+  var setCoords = function (c, panel) {
     previousCoords = coords;
     coords = c;
-    self.events.trigger('update', coords);
+    self.panel.update(coords);
   };
 
   /**
