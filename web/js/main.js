@@ -83,7 +83,7 @@ import { projectionUi } from './projection/ui';
 import { projectionChange } from './projection/change';
 
 // Other
-import { debugConfig, debugLayers, debug } from './debug';
+import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
 import tour from './tour';
 import { uiInfo } from './ui/info';
