@@ -62,13 +62,6 @@ export function animationGif(models, config, ui) {
     'layer(s)?';
   var ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to reset rotation?';
 
-  var setProjectionGlobals = function() {
-    if (models.proj.selected.id === 'geographic') {
-      resolutions = resolutionsGeo;
-    } else {
-      resolutions = resolutionsPolar;
-    }
-  };
   var renderPanel = function(options, mountEl) {
     return ReactDOM.render(
       React.createElement(GifResSelection, options),
@@ -90,14 +83,12 @@ export function animationGif(models, config, ui) {
     models.anim.events.on('gif-click', setImageCoords);
     panelCase = document.createElement('div');
     panelCase.className = 'gif-dialog';
-    setProjectionGlobals();
-    models.proj.events.on('change', setProjectionGlobals);
     options = {
       resolution: 1,
       onSelectionChange: onSelectionChange,
       onClick: getGif,
       valid: true,
-      resolutions: resolutions,
+      resolutions: models.proj.selected.id === 'geographic' ? resolutionsGeo : resolutionsPolar,
       onCheck: onchecked,
       startDate: null,
       endDate: null,
@@ -110,13 +101,12 @@ export function animationGif(models, config, ui) {
     var state = animModel.rangeState;
     return {
       resolution: resolution,
-      proj: models.proj.selected.id,
+      resolutions: models.proj.selected.id === 'geographic' ? resolutionsGeo : resolutionsPolar,
       valid: fileSizeValid(),
       fileSizeEstimate: lodashRound(requestSize / conversionConstant, 3),
       requestSize: lodashRound(requestSize, 3),
       imgHeight: lodashRound(imgHeight, 2),
       imgWidth: lodashRound(imgWidth, 2),
-      resolutions: resolutions,
       startDate: state.startDate,
       endDate: state.endDate,
       speed: lodashRound(state.speed, 2)
@@ -172,6 +162,8 @@ export function animationGif(models, config, ui) {
     var imageArra;
     var stamp;
     var build;
+    var stampHeight;
+    var fontSize;
 
     loader = uiIndicator.loading();
     build = function(stamp) {
@@ -202,18 +194,25 @@ export function animationGif(models, config, ui) {
       if (!imageArra) { // won't be true if there are too mant frames
         return;
       }
+      stampHeight = imgHeight * 0.1 > 26 ? imgHeight * 0.1 : 26;
+      fontSize = imgHeight * 0.06 > 16 ? imgHeight * 0.06 : 16;
 
       gifshot.createGIF({
         'gifWidth': imgWidth,
         'gifHeight': imgHeight,
         'images': imageArra,
         'stamp': stamp,
-        'textAlign': 'right',
-        'textBaseline': 'top',
+        'fontSize': fontSize + 'px',
+        'stampHeight': stampHeight,
+        'stampWidth': stampHeight / 0.192,
+        'stampCoordinates': { x: imgWidth * 0.01, y: imgHeight * 0.01 }, // Margin based on GIF width
+        'textXCoordinate': imgWidth < 250 && imgHeight > 50 ? imgWidth * 0.02 : null, // date location based on Dimensions
+        'textYCoordinate': imgWidth < 250 && imgHeight > 50 ? imgHeight - 30 : null, // date location based on Dimensions
+        'textAlign': 'right', // If textXCoordinate is null this takes precedence
+        'textBaseline': 'top', // If textYCoordinate is null this takes precedence
         'fontColor': '#fff',
         'fontWeight': 'lighter',
         'fontFamily': 'Helvetica Neue',
-        'fontSize': '16px',
         'interval': 1 / interval,
         'progressCallback': onGifProgress,
         'stroke': {
@@ -553,7 +552,6 @@ export function animationGif(models, config, ui) {
    *
    */
   var onGifComplete = function(obj) { // callback function for when image is finished
-    console.log(obj);
     if (obj.error === false) {
       $progress.remove();
       progressing = false;
