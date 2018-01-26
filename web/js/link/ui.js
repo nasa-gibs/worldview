@@ -15,7 +15,6 @@ export function linkUi(models, config) {
   var id = 'wv-link-button';
   var selector = '#' + id;
   var $button, $label;
-  var widgetFactory = React.createFactory(Share);
   var clipboard = new Clipboard('.copy-btn');
 
   var init = function () {
@@ -273,7 +272,7 @@ export function linkUi(models, config) {
   };
 
   self.initWidget = function () {
-    return widgetFactory({
+    return React.createElement(Share, {
       clickFunction: clickFunction,
       fbLink: '#',
       twLink: '#',

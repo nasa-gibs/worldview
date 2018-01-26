@@ -5,7 +5,7 @@ import OlOverlay from 'ol/overlay';
 import util from '../util/util';
 import { DateLine, LineText } from 'worldview-components';
 
-var map, overlay1, overlay2, textFactory, lineFactory, textOverlay1, textOverlay2,
+var map, overlay1, overlay2, textOverlay1, textOverlay2,
   lineLeft, lineRight, textLeft, textRight, proj;
 
 export function mapDateLineBuilder(models, config) {
@@ -26,8 +26,6 @@ export function mapDateLineBuilder(models, config) {
   self.init = function(Parent, olMap, date) {
     var dimensions;
     map = olMap;
-    lineFactory = React.createFactory(DateLine);
-    textFactory = React.createFactory(LineText);
     drawDatelines(map, date);
     proj = models.proj.selected.id;
 
@@ -74,7 +72,7 @@ export function mapDateLineBuilder(models, config) {
    *
    * @returns {object} React Component
    */
-  var setLineDefaults = function(Factory, height, lineX, overlay, reactCase, tooltip) {
+  var setLineDefaults = function(ReactComponent, height, lineX, overlay, reactCase, tooltip) {
     var props = {
       height: height,
       lineOver: onHover,
@@ -83,7 +81,7 @@ export function mapDateLineBuilder(models, config) {
       overlay: overlay,
       tooltip: tooltip
     };
-    return ReactDOM.render(initWidget(Factory, props), reactCase);
+    return ReactDOM.render(React.createElement(ReactComponent, props), reactCase);
   };
 
   /*
@@ -99,27 +97,12 @@ export function mapDateLineBuilder(models, config) {
    *
    * @returns {object} React Component
    */
-  var setTextDefaults = function(Factory, reactCase, date) {
+  var setTextDefaults = function(ReactComponent, reactCase, date) {
     var props = {
       dateLeft: util.toISOStringDate(util.dateAdd(date, 'day', 1)),
       dateRight: util.toISOStringDate(date)
     };
-    return ReactDOM.render(initWidget(Factory, props), reactCase);
-  };
-
-  /*
-   * Creates new instance of react component
-   *
-   * @method initWidget
-   * @static
-   *
-   * @param {object} Factory - React component Factory
-   * @param {object} props - component props
-   *
-   * @returns {object} React Component
-   */
-  var initWidget = function(Factory, props) {
-    return Factory(props);
+    return ReactDOM.render(React.createElement(ReactComponent, props), reactCase);
   };
 
   /*
@@ -169,10 +152,10 @@ export function mapDateLineBuilder(models, config) {
     map.addOverlay(textOverlay1);
     map.addOverlay(textOverlay2);
 
-    textLeft = setTextDefaults(textFactory, leftTextCase, date);
-    textRight = setTextDefaults(textFactory, rightTextCase, util.dateAdd(date, 'day', -1));
-    lineLeft = setLineDefaults(lineFactory, height, -180, textOverlay1, leftLineCase, textLeft);
-    lineRight = setLineDefaults(lineFactory, height, 180, textOverlay2, rightLineCase, textRight);
+    textLeft = setTextDefaults(LineText, leftTextCase, date);
+    textRight = setTextDefaults(LineText, rightTextCase, util.dateAdd(date, 'day', -1));
+    lineLeft = setLineDefaults(DateLine, height, -180, textOverlay1, leftLineCase, textLeft);
+    lineRight = setLineDefaults(DateLine, height, 180, textOverlay2, rightLineCase, textRight);
   };
 
   /*
