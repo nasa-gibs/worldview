@@ -149,18 +149,35 @@
 .gif-dialog {
   color: #fff;
 }
-.gif-dialog .content {
-  line-height: 15px;
+.gif-dialog .wv-button {
+  margin: 10px 0 0 10px;
 }
-
-.gif-dialog .ui-button {
-  margin-top: 5px;
+.gif-dialog .wv-button,
+.gif-dialog .checkbox {
+  display: inline-block;
 }
-
-.gif-results-dialog-case {
+.gif-dialog .checkbox {
+  margin-left: 18px;
+}
+.gif-results-dialog-case, {
   text-transform: capitalize;
 }
-
+.gif-selector-case {
+  padding: 10px 8px 15px;
+}
+.gif-download-grid {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  font-weight: 400;
+}
+.gif-download-grid .grid-child {
+  width: 130px;
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 10px;
+  margin-bottom: 4px;
+}
 .gif-results-dialog-case .gif-results-dialog,
 .gif-results-dialog-case img {
   display: inline-block;
