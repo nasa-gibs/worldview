@@ -51,7 +51,6 @@ export function animationGif(models, config, ui) {
   var imgWidth;
   var imgHeight;
   var requestSize;
-  var resolutions = null;
   var GRATICULE_WARNING =
     'The graticule layer cannot be used to take a snapshot. Would you ' +
     'like to hide this layer?';
