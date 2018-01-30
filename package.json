@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -133,14 +133,14 @@
     "jscrollpane": "^2.0.22",
     "lodash": "4.15.0",
     "nouislider": "7.0.10",
-    "ol": "~4.3.4",
+    "ol": "~4.5.0",
     "perfect-scrollbar": "^0.8.1",
     "proj4": "2.3.3",
     "promise-queue": "2.2.3",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
-    "worldview-components": "^1.5.4",
-    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.5.0"
+    "worldview-components": "^1.5.5",
+    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.5.1"
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",

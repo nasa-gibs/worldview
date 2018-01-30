@@ -854,6 +854,7 @@ export function mapui(models, config) {
       }
       pixels = map.getEventPixel(e.originalEvent);
       coords = map.getCoordinateFromPixel(pixels);
+      if (!coords) return;
       if (!olExtent.containsCoordinate(extent, coords)) {
         outside = true;
       }
