@@ -249,7 +249,7 @@ export function debugLayers(ui, models, config) {
     }
     selectedLayer = layerId;
     if (type === 'palettes') {
-      palettes.loadRendered(config, layerId)
+      palettes.loadRenderedPalette(config, layerId)
         .done(function () {
           var layer = config.layers[layerId];
           var palette = config.palettes.rendered[layerId];

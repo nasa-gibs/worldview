@@ -22,7 +22,7 @@ export function palettesLegend(spec) {
       loaded = true;
       render();
     } else {
-      palettes.loadRendered(config, layer.id)
+      palettes.loadRenderedPalette(config, layer.id)
         .done(function () {
           if (!loaded) {
             loaded = true;

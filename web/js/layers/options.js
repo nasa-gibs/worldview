@@ -39,7 +39,6 @@ export function layersOptions(config, models, layer) {
       .attr('id', 'wv-layers-options-dialog')
       .attr('data-layer', layer.id);
     renderOpacity($dialog);
-
     if (config.features.customPalettes) {
       if (models.palettes.allowed(layer.id) &&
         (models.palettes.getLegends(layer.id)
@@ -49,16 +48,18 @@ export function layersOptions(config, models, layer) {
           renderLegendButtons($dialog);
           } */
         var legend = models.palettes.getLegend(layer.id, index);
-        if ((legend.type === 'continuous') ||
-          (legend.type === 'discrete')) {
-          renderRange($dialog);
-          if (config.layers[layer.id].type !== 'wms') {
-            renderPaletteSelector($dialog);
-          }
-        } else if (models.palettes.getDefaultLegend(layer.id, index)
-          .colors.length === 1) {
-          if (config.layers[layer.id].type !== 'wms') {
-            renderPaletteSelector($dialog);
+        if (legend) {
+          if ((legend.type === 'continuous') ||
+            (legend.type === 'discrete')) {
+            renderRange($dialog);
+            if (config.layers[layer.id].type !== 'wms') {
+              renderPaletteSelector($dialog);
+            }
+          } else if (models.palettes.getDefaultLegend(layer.id, index)
+            .colors.length === 1) {
+            if (config.layers[layer.id].type !== 'wms') {
+              renderPaletteSelector($dialog);
+            }
           }
         }
       }
@@ -293,12 +294,11 @@ export function layersOptions(config, models, layer) {
       .attr('id', 'wv-palette-selector');
     $dialog.append($header)
       .append($pane);
-    rerenderPaletteSelector(true);
+    renderColorPaletteSelector(true);
   };
 
-  var rerenderPaletteSelector = function (firstTime) {
-    var $pane = $('#wv-palette-selector')
-      .empty();
+  var renderColorPaletteSelector = function(firstTime) {
+    var $pane = $('#wv-palette-selector').empty();
     $pane.append(defaultLegend());
     var recommended = layer.palette.recommended || [];
     lodashEach(recommended, function (id) {
@@ -427,7 +427,7 @@ export function layersOptions(config, models, layer) {
 
   var customLegend = function (id) {
     var source = models.palettes.getDefaultLegend(layer.id, index);
-    var target = models.palettes.getCustom(id);
+    var target = models.palettes.getCustomPalette(id);
     var targetType = (target.colors.length === 1) ? 'classification' : 'continuous';
 
     if ((source.type === 'continuous' && targetType === 'continuous') ||

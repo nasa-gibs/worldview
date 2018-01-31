@@ -5,6 +5,9 @@ import OlSourceTileWMS from 'ol/source/tilewms';
 import OlLayerGroup from 'ol/layer/group';
 import OlLayerTile from 'ol/layer/tile';
 import OlTileGridTileGrid from 'ol/tilegrid/tilegrid';
+import MVT from 'ol/format/mvt';
+import LayerVectorTile from 'ol/layer/vectortile';
+import SourceVectorTile from 'ol/source/vectortile';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
@@ -32,7 +35,6 @@ export function mapLayerBuilder(models, config, cache, Parent) {
    */
   self.createLayer = function (def, options) {
     var date, key, proj, layer, layerNext, layerPrior, attributes;
-
     options = options || {};
     date = self.closestDate(def, options);
     key = self.layerKey(def, options, date);
@@ -54,6 +56,20 @@ export function mapLayerBuilder(models, config, cache, Parent) {
         if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
           layerNext = createLayerWMTS(def, options, 1);
           layerPrior = createLayerWMTS(def, options, -1);
+
+          layer.wv = attributes;
+          layerPrior.wv = attributes;
+          layerNext.wv = attributes;
+
+          layer = new OlLayerGroup({
+            layers: [layer, layerNext, layerPrior]
+          });
+        }
+      } else if (def.type === 'vector') {
+        layer = createLayerVector(def, options, null);
+        if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
+          layerNext = createLayerVector(def, options, 1);
+          layerPrior = createLayerVector(def, options, -1);
 
           layer.wv = attributes;
           layerPrior.wv = attributes;
@@ -166,7 +182,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
    * @returns {object} OpenLayers WMTS layer
    */
   var createLayerWMTS = function (def, options, day) {
-    var proj, source, matrixSet, matrixIds, extra,
+    var proj, source, matrixSet, matrixIds, urlParameters,
       date, extent, start;
     proj = models.proj.selected;
     source = config.sources[def.source];
@@ -188,8 +204,6 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       matrixIds = def.matrixIds;
     }
 
-    extra = '';
-
     if (day) {
       if (day === 1) {
         extent = [-250, -90, -180, 90];
@@ -200,14 +214,17 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       }
     }
 
-    date = options.date || models.date.selected;
-    if (day) {
-      date = util.dateAdd(date, 'day', day);
+    urlParameters = '?';
+    if (def.period === 'daily') {
+      date = options.date || models.date.selected;
+      if (day) {
+        date = util.dateAdd(date, 'day', day);
+      }
+      urlParameters = '&TIME=' + util.toISOStringDate(date);
     }
-    extra = '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
 
     var sourceOptions = {
-      url: source.url + extra,
+      url: source.url + urlParameters,
       layer: def.layer || def.id,
       cacheSize: 4096,
       crossOrigin: 'anonymous',
@@ -232,6 +249,98 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       extent: extent,
       source: new OlSourceWMTS(sourceOptions)
     });
+
+    return layer;
+  };
+
+  /*
+   * Create a new Vector Layer
+   *
+   * @method createLayerVector
+   * @static
+   *
+   * @param {object} def - Layer Specs
+   *
+   * @param {object} options - Layer options
+   *
+   *
+   * @returns {object} OpenLayers Vector layer
+   */
+  var createLayerVector = function(def, options, day) {
+    var date, urlParameters, proj, extent, source, matrixSet, matrixIds, start;
+    proj = models.proj.selected;
+    source = config.sources[def.source];
+    extent = proj.maxExtent;
+    start = [proj.maxExtent[0], proj.maxExtent[3]];
+
+    if (!source) { throw new Error(def.id + ': Invalid source: ' + def.source); }
+    if (!source) {
+      throw new Error(def.id + ': Invalid source: ' + def.source);
+    }
+    matrixSet = source.matrixSets[def.matrixSet];
+    if (!matrixSet) {
+      throw new Error(def.id + ': Undefined matrix set: ' + def.matrixSet);
+    }
+    if (typeof def.matrixIds === 'undefined') {
+      matrixIds = [];
+      lodashEach(matrixSet.resolutions, function(resolution, index) {
+        matrixIds.push(index);
+      });
+    } else {
+      matrixIds = def.matrixIds;
+    }
+
+    if (day) {
+      if (day === 1) {
+        extent = [-250, -90, -180, 90];
+        start = [-540, 90];
+      } else {
+        extent = [180, -90, 250, 90];
+        start = [180, 90];
+      }
+    }
+
+    var layerName = def.layer || def.id;
+    var tms = def.matrixSet;
+
+    urlParameters = '?' +
+    '&layer=' + layerName +
+    '&tilematrixset=' + tms +
+    '&Service=WMTS' +
+    '&Request=GetTile' +
+    '&Version=1.0.0' +
+    '&FORMAT=application%2Fvnd.mapbox-vector-tile' +
+    '&TileMatrix={z}&TileCol={x}&TileRow={y}';
+
+    if (def.period === 'daily') {
+      date = options.date || models.date.selected;
+      if (day) {
+        date = util.dateAdd(date, 'day', day);
+      }
+      urlParameters += '&TIME=' + util.toISOStringDate(date);
+    }
+
+    var sourceOptions = new SourceVectorTile({
+      url: source.url + urlParameters,
+      layer: layerName,
+      crossOrigin: 'anonymous',
+      format: new MVT(),
+      matrixSet: tms,
+      tileGrid: new OlTileGridTileGrid({
+        extent: extent,
+        origin: start,
+        resolutions: matrixSet.resolutions,
+        tileSize: matrixSet.tileSize
+      })
+    });
+
+    var layer = new LayerVectorTile({
+      renderMode: 'image',
+      preload: 1,
+      extent: extent,
+      source: sourceOptions
+    });
+
     return layer;
   };
 
@@ -249,7 +358,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
    * @returns {object} OpenLayers WMS layer
    */
   var createLayerWMS = function (def, options, day) {
-    var proj, source, extra, transparent,
+    var proj, source, urlParameters, transparent,
       date, extent, start, res, parameters;
     proj = models.proj.selected;
     source = config.sources[def.source];
@@ -280,16 +389,17 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     };
     if (def.styles) { parameters.STYLES = def.styles; }
 
-    extra = '';
+    urlParameters = '?';
 
-    date = options.date || models.date.selected;
-    if (day) {
-      date = util.dateAdd(date, 'day', day);
+    if (def.period === 'daily') {
+      date = options.date || models.date.selected;
+      if (day) {
+        date = util.dateAdd(date, 'day', day);
+      }
+      urlParameters += 'TIME=' + util.toISOStringDate(date);
     }
-    extra = '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-
     var sourceOptions = {
-      url: source.url + extra,
+      url: source.url + urlParameters,
       cacheSize: 4096,
       wrapX: true,
       style: 'default',

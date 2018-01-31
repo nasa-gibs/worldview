@@ -102,14 +102,23 @@ export default (function (self) {
       'custom', 'config/palettes-custom.json');
   };
 
-  self.loadRendered = function (config, layerId) {
+  self.loadRenderedPalette = function (config, layerId) {
     var layer = config.layers[layerId];
     return util.load.config(config.palettes.rendered,
       layer.palette.id, 'config/palettes/' + layer.palette.id + '.json');
   };
 
+  self.loadRenderedVectorStyle = function (config, layerId) {
+    var layer = config.layers[layerId];
+    return util.load.config(config.vectorStyles.rendered,
+      layer.vectorStyle.id, 'config/vectorstyles/' + layer.vectorStyle.id + '.json');
+  };
+
   self.requirements = function (state, config) {
     var promises = [];
+    config.vectorStyles = {
+      rendered: {}
+    };
     config.palettes = {
       rendered: {},
       custom: {}
@@ -117,7 +126,9 @@ export default (function (self) {
     lodashEach(state.l, function (qsLayer) {
       var layerId = qsLayer.id;
       if (config.layers[layerId] && config.layers[layerId].palette) {
-        promises.push(self.loadRendered(config, layerId));
+        promises.push(self.loadRenderedPalette(config, layerId));
+      } else if (config.layers[layerId] && config.layers[layerId].vectorStyle) {
+        promises.push(self.loadRenderedVectorStyle(config, layerId));
       }
       var custom = lodashFind(qsLayer.attributes, {
         id: 'palette'
