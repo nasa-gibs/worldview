@@ -63,7 +63,7 @@ The minimum set of required properties are as follows:
 
 The following properties are required if this information is not available via the GIBS WMTS GetCapabilities document:
 
-- **type**: Tile service type, either *wmts* or *wms*.
+- **type**: Tile service type, either *wmts*, *wms*, or *vector*.
 - **format**: Image format type, either *image/png* or *image/jpeg*.
 - **tileSize**: For WMS layers only, an array of pixel dimensions used to tile the requests. For example, *[512, 512]*
 - **period**: Use *subdaily*, *daily*, *monthly*, or *yearly* for layers that have new content and no startDate defined in GetCapabilities. Changing the period will affect how often the layer is requested in the timeline. Use *static* to clear the startDate and always have the layer shown on the timeline.

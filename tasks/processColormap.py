@@ -14,7 +14,7 @@ help_description = """\
 Converts colormaps to JSON files
 """
 
-parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <config_file> <colormap_input_dir> <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 
@@ -23,7 +23,7 @@ if len(args) != 3:
     parser.error("Invalid number of arguments")
 
 config_file = args[0]
-input_dir = args[1]
+colormap_input_dir = args[1]
 output_dir = args[2]
 
 with open(config_file) as fp:
@@ -231,7 +231,7 @@ def process_file(file):
 file_count = 0
 error_count = 0
 
-for root, dirs, files in os.walk(input_dir):
+for root, dirs, files in os.walk(colormap_input_dir):
     for file in files:
         try:
             file_count += 1

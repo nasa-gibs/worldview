@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
-from datetime import datetime, date, timedelta
 import json
 from optparse import OptionParser
 import os
 import sys
-import urllib2 as urllib
 import xmltodict
-import isodate
 from processTemporalLayer import process_temporal
 from collections import OrderedDict
 
@@ -18,24 +15,23 @@ help_description = """\
 Extracts configuration information from a WMTS GetCapabilities file.
 """
 
-parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir> <colormaps_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <config_file> <input_dir> <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 (options, args) = parser.parse_args()
 
-if len(args) != 4:
+if len(args) != 3:
     parser.error("Invalid number of arguments")
 
 config_file = args[0]
 input_dir = args[1]
 output_dir = args[2]
-colormaps_dir = args[3]
 
 with open(config_file) as fp:
     config = json.load(fp)
 
 tolerant = config.get("tolerant", False)
-if not "wv-options-wmts" in config:
+if "wv-options-wmts" not in config:
     sys.exit(0)
 
 if not os.path.exists(output_dir):
@@ -55,8 +51,10 @@ json_options = {}
 json_options["indent"] = 4
 json_options["separators"] = (',', ': ')
 
+
 class SkipException(Exception):
     pass
+
 
 def process_layer(gc_layer, wv_layers, colormaps):
     id = gc_layer["ows:Identifier"]
@@ -101,9 +99,18 @@ def process_layer(gc_layer, wv_layers, colormaps):
                     colormap_link = item["@xlink:href"]
                     colormap_file = os.path.basename(colormap_link)
                     colormap_id = os.path.splitext(colormap_file)[0]
-                    wv_layer["palette"] = {
+                    wv_layer["vectorStyle"] = {
                         "id": colormap_id
                     }
+
+                elif schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0":
+                    colormap_link = item["@xlink:href"]
+                    colormap_file = os.path.basename(colormap_link)
+                    colormap_id = os.path.splitext(colormap_file)[0]
+                    wv_layer["vectorStyle"] = {
+                        "id": colormap_id
+                    }
+
 
 def process_entry(entry, colormaps):
     layer_count = 0
