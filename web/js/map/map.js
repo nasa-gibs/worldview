@@ -4,10 +4,6 @@ import lodashIsUndefined from 'lodash/isUndefined';
 import lodashFind from 'lodash/find';
 import OlGeomPolygon from 'ol/geom/polygon';
 
-export const CRS_WGS_84 = 'EPSG:4326';
-
-export const CRS_WGS_84_QUERY_EXTENT = [-180, -60, 180, 60];
-
 /*
  * Checks to see if an extents string is found. If it exist
  * then it is changed from a string to an array which is then
