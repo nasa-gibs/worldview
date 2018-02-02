@@ -7,7 +7,7 @@ export const REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
 export const REL_BROWSE = 'http://esipfed.org/ns/fedsearch/1.1/browse#';
 export const DATA_EXTS = ['hdf', 'he5', 'h5', 'hdf5', 'nc', 'bz2'];
 
-export function dataCmrClient(spec) {
+export function cmrClient(spec) {
   // Abort query after 45 seconds
   var QUERY_TIMEOUT = spec.timeout || 45 * 1000;
   var self = {};
@@ -67,7 +67,7 @@ export function dataCmrClient(spec) {
   return self;
 };
 
-export function dataCmrGeometry(result) {
+export function cmrGeometry(result) {
   var self = {};
   self.polygons = [];
 
@@ -155,7 +155,7 @@ export function dataCmrGeometry(result) {
   return self;
 };
 
-export function dataCmrMockClient(suffix, models) {
+export function cmrMockClient(suffix, models) {
   var endpoint;
   var results;
 
@@ -213,7 +213,7 @@ export function dataCmrMockClient(suffix, models) {
   return self;
 };
 
-export function dataCmrRoundTime(timeString) {
+export function cmrRoundTime(timeString) {
   var time = util.parseTimestampUTC(timeString);
   if (time.getUTCMilliseconds() >= 500) {
     time.setUTCSeconds(time.getUTCSeconds() + 1);
