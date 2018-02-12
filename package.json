@@ -140,7 +140,7 @@
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "worldview-components": "^1.5.5",
-    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.6.0"
+    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.6.1"
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",
