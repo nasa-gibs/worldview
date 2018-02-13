@@ -282,6 +282,12 @@ export default (function (self) {
     var month, maxDay, year;
     var newDate = new Date(date.getTime());
     switch (interval) {
+      case 'minute':
+        newDate.setUTCDate(newDate.getUTCDate() + amount);
+        break;
+      case 'hour':
+        newDate.setUTCDate(newDate.getUTCDate() + amount);
+        break;
       case 'day':
         newDate.setUTCDate(newDate.getUTCDate() + amount);
         break;
