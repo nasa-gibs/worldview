@@ -131,7 +131,7 @@ g.plot rect.data-bar-invisible {
 #timeline-header .input-wrapper {
   background: transparent;
   border: 1px solid transparent;
-  vertical-align: middle;
+  vertical-align: top;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
@@ -149,9 +149,9 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header input {
-  height: 40px;
+  height: 20px;
   color: #fff;
-  font-size: 24px;
+  font-size: 20px;
   background: transparent;
   border: 0;
   font-family: 'Roboto Mono', monospace;
@@ -160,6 +160,8 @@ g.plot rect.data-bar-invisible {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   padding: 0;
+  text-align: center;
+  margin-left: -5px;
 }
 
 #timeline-header .input-wrapper:hover {

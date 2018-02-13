@@ -542,13 +542,19 @@ export function timelineConfig(models, config, ui) {
       case 4: // 10-Minute
         labelFormat = d3.time.format.utc('%b');
         dateInterval = d3.time.day.utc;
-        tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 60 / 24 / 60;
+        // Latest Date minus begin date (Wed Dec 31 1947 19:00:00 GMT-0500 (Eastern Standard Time))
+        // Subtracting these leaves miliseconds divide by 1000 = seconds
+        // Divide by 60 = Minutes
+        // Divide by 60 = Hours - not used
+        // Divide by 24 = Days - not used
+        // Divide by 1- = 10-minute intervals
+        tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 10;
         tickWidth = 11;
         tickCountMax = Math.ceil(tl.width / tickWidth);
 
         paddedRange = [
-          new Date(tl.data.start().setUTCDate(tl.data.start().getUTCDate() - 15)),
-          new Date(tl.data.end().setUTCDate(tl.data.end().getUTCDate() + 15))
+          new Date(tl.data.start().setUTCMinutes(tl.data.start().getUTCMinutes() - 10)),
+          new Date(tl.data.end().setUTCMinutes(tl.data.end().getUTCMinutes() + 10))
         ];
 
         altEnd = new Date(tl.data.start()
@@ -556,7 +562,11 @@ export function timelineConfig(models, config, ui) {
         tl.data.start()
           .getUTCMonth(),
         tl.data.start()
-          .getUTCDate() + tickCountMax);
+          .getUTCDate(),
+        tl.data.start()
+          .getUTCHours(),
+        tl.data.start()
+          .getUTCMinutes() + tickCountMax);
 
         tl.zoom.drawTicks(tickCount,
           tickCountMax,
@@ -586,13 +596,13 @@ export function timelineConfig(models, config, ui) {
         // Calculated next boundary tick by date
         tl.zoom.current.ticks.boundary.next = function (current) {
           var next = new Date(current);
-          return new Date(next.setUTCMonth(next.getUTCMonth() + 1));
+          return new Date(next.setUTCHours(next.getUTCHours() + 1));
         };
 
         // Calculated next normal tick by date
         tl.zoom.current.ticks.normal.next = function (current) {
           var next = new Date(current);
-          return new Date(next.setUTCDate(next.getUTCDate() + 1));
+          return new Date(next.setUTCMinutes(next.getUTCMinutes() + 60));
         };
 
         // Date of first printed boundary interval of this zoom level

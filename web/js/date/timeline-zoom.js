@@ -31,8 +31,8 @@ export function timelineZoom(models, config, ui) {
     if (zoom < 1) {
       zoom = 1;
     }
-    if (zoom > 3) {
-      zoom = 3;
+    if (zoom > 4) {
+      zoom = 4;
     }
 
     tl.config.zoom.call(this, zoom, event);
