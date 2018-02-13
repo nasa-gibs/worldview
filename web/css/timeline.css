@@ -349,7 +349,7 @@ g.plot rect.data-bar-invisible {
 #timeline-zoom {
   display: inline-block;
   vertical-align: middle;
-  overflow: hidden;
+  overflow-y: scroll;
   height: 65px;
   width: 100px;
   box-sizing: border-box;
@@ -385,7 +385,9 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-zoom a.zoom-btn.depth-4 {
-  display: none;
+  color: #666;
+  font-size: 0.8em;
+  line-height: 1em;
 }
 
 #timeline-zoom a.zoom-btn:hover {
