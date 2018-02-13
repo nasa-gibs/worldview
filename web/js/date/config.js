@@ -189,20 +189,13 @@ export function timelineConfig(models, config, ui) {
           .css('margin', '')
           .css('font-size', '');
         $('#zoom-years')
-          .addClass('depth-1')
-          .css('font-size', '1.7em');
+          .addClass('depth-1');
         $('#zoom-months')
-          .addClass('depth-2')
-          .css('font-size', '1.2em');
+          .addClass('depth-2');
         $('#zoom-days')
-          .addClass('depth-3')
-          .css('margin', '-3px 0 5px 0');
-        $('#zoom-hours')
-          .addClass('depth-4')
-          .css('margin', '-3px 0 5px 0');
+          .addClass('depth-3');
         $('#zoom-minutes')
-          .addClass('depth-4')
-          .css('margin', '-3px 0 5px 0');
+          .addClass('depth-4');
 
         self.currentZoom = 1;
         break;
@@ -363,17 +356,11 @@ export function timelineConfig(models, config, ui) {
         $('#zoom-years')
           .addClass('depth-2');
         $('#zoom-months')
-          .addClass('depth-1')
-          .css('font-size', '1.7em');
+          .addClass('depth-1');
         $('#zoom-days')
-          .addClass('depth-2')
-          .css('margin', '5px 0 0 0');
-        $('#zoom-hours')
-          .addClass('depth-3')
-          .css('margin', '5px 0 0 0');
+          .addClass('depth-2');
         $('#zoom-minutes')
-          .addClass('depth-4')
-          .css('margin', '5px 0 0 0');
+          .addClass('depth-3');
 
         self.currentZoom = 2;
         break;
@@ -541,22 +528,18 @@ export function timelineConfig(models, config, ui) {
           .css('margin', '')
           .css('font-size', '');
         $('#zoom-years')
-          .addClass('depth-3')
-          .css('margin', '6px 0 0 0');
+          .addClass('depth-3');
         $('#zoom-months')
           .addClass('depth-2');
         $('#zoom-days')
-          .addClass('depth-1')
-          .css('margin', '8px 0 0 0')
-          .css('font-size', '1.8em');
-        $('#zoom-hours')
-          .addClass('depth-2');
+          .addClass('depth-1');
         $('#zoom-minutes')
-          .addClass('depth-3');
+          .addClass('depth-2');
 
         self.currentZoom = 3;
         break;
-      case 4: // Hour
+
+      case 4: // 10-Minute
         labelFormat = d3.time.format.utc('%b');
         dateInterval = d3.time.day.utc;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 60 / 24 / 60;
@@ -720,200 +703,15 @@ export function timelineConfig(models, config, ui) {
           .css('margin', '')
           .css('font-size', '');
         $('#zoom-years')
-          .addClass('depth-4')
-          .css('margin', '6px 0 0 0');
+          .addClass('depth-4');
         $('#zoom-months')
           .addClass('depth-3');
         $('#zoom-days')
           .addClass('depth-2');
-        $('#zoom-hours')
-          .addClass('depth-1')
-          .css('margin', '8px 0 0 0')
-          .css('font-size', '1.8em');
         $('#zoom-minutes')
-          .addClass('depth-2');
+          .addClass('depth-1');
 
         self.currentZoom = 4;
-        break;
-
-      case 5: // Minute
-        labelFormat = d3.time.format.utc('%b');
-        dateInterval = d3.time.day.utc;
-        tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 60 / 24 / 60;
-        tickWidth = 11;
-        tickCountMax = Math.ceil(tl.width / tickWidth);
-
-        paddedRange = [
-          new Date(tl.data.start().setUTCDate(tl.data.start().getUTCDate() - 15)),
-          new Date(tl.data.end().setUTCDate(tl.data.end().getUTCDate() + 15))
-        ];
-
-        altEnd = new Date(tl.data.start()
-          .getUTCFullYear(),
-        tl.data.start()
-          .getUTCMonth(),
-        tl.data.start()
-          .getUTCDate() + tickCountMax);
-
-        tl.zoom.drawTicks(tickCount,
-          tickCountMax,
-          altEnd,
-          tickWidth,
-          dateInterval,
-          dateStep,
-          labelFormat,
-          event,
-          paddedRange);
-
-        // Filters ticks for nonboundaries that have the following attribute
-        tl.zoom.current.ticks.normal.all = function () {
-          tl.ticks.normal.all = tl.ticks.all.filter(function (d) {
-            return d.getUTCDate() !== 1;
-          });
-          tl.ticks.normal.setEnds();
-        };
-
-        // Filters ticks for boundaries that have the following attribute
-        tl.zoom.current.ticks.boundary.all = function () {
-          tl.ticks.boundary.all = tl.ticks.all.filter(function (d) {
-            return d.getUTCDate() === 1;
-          });
-        };
-
-        // Calculated next boundary tick by date
-        tl.zoom.current.ticks.boundary.next = function (current) {
-          var next = new Date(current);
-          return new Date(next.setUTCMonth(next.getUTCMonth() + 1));
-        };
-
-        // Calculated next normal tick by date
-        tl.zoom.current.ticks.normal.next = function (current) {
-          var next = new Date(current);
-          return new Date(next.setUTCDate(next.getUTCDate() + 1));
-        };
-
-        // Date of first printed boundary interval of this zoom level
-        tl.zoom.current.ticks.boundary.first = function () {
-          var first = tl.ticks.normal.firstDate;
-          return new Date(Date.UTC(first.getUTCFullYear(),
-            first.getUTCMonth(),
-            1));
-        };
-
-        // Date of first printed normal tick
-        tl.zoom.current.ticks.normal.first = function () {
-          var first = tl.ticks.normal.firstDate;
-          return new Date(Date.UTC(first.getUTCFullYear(),
-            first.getUTCMonth(),
-            first.getUTCDate() - 1));
-        };
-
-        // Date of last printed boundary interval of this zoom level
-        tl.zoom.current.ticks.boundary.last = function () {
-          var last = tl.ticks.normal.lastDate;
-          return new Date(Date.UTC(last.getUTCFullYear(),
-            last.getUTCMonth() + 1,
-            1));
-        };
-
-        // Value for hovered normal label
-        tl.zoom.current.ticks.normal.hover = function (d) {
-          // No modifications to date obj at this zoom level
-          return d;
-        };
-
-        // Value for clicked normal tick
-        tl.zoom.current.ticks.normal.clickDate = function (d) {
-          return new Date(d.getUTCFullYear(),
-            d.getUTCMonth(),
-            d.getUTCDate());
-        };
-
-        // Value for hovered boundary tick
-        tl.zoom.current.ticks.boundary.hover = function (d) {
-          return new Date(d.getUTCFullYear(),
-            d.getUTCMonth(),
-            model.selected.getUTCDate());
-        };
-
-        // Displayed default label
-        tl.zoom.current.ticks.boundary.label = function (d) {
-          return model.monthAbbr[d.getUTCMonth()];
-        };
-
-        // Displayed default sub-label (if any)
-        tl.zoom.current.ticks.boundary.subLabel = function (d) {
-          return d.getUTCFullYear();
-        };
-
-        // Value for clicked boundary tick
-        tl.zoom.current.ticks.boundary.clickDate = function (d) {
-          return new Date(d.getUTCFullYear(),
-            d.getUTCMonth(),
-            model.selected.getUTCDate());
-        };
-
-        // When the date updates while dragging the pick forward
-        tl.zoom.current.pick.nextChange = function (d) {
-          return new Date(Date.UTC(d.getUTCFullYear(),
-            d.getUTCMonth(),
-            d.getUTCDate() + 1));
-        };
-
-        // When the date updates while dragging the pick backward
-        tl.zoom.current.pick.prevChange = function (d) {
-          return new Date(Date.UTC(d.getUTCFullYear(),
-            d.getUTCMonth(),
-            d.getUTCDate()));
-        };
-
-        tl.zoom.current.pick.hoverTick = function (newDate) {
-          tl.zoom.current.pick.hoveredTick = d3.selectAll('.x.axis>g.tick')
-            .filter(function (d) {
-              return (d.getUTCFullYear() === newDate.getUTCFullYear()) &&
-                (d.getUTCMonth() === newDate.getUTCMonth() &&
-                  (d.getUTCDate() === newDate.getUTCDate()));
-            });
-        };
-
-        d3.selectAll('.x.axis > g.tick')
-          .each(function () {
-            var currentTick = d3.select(this);
-            var currentTickData = currentTick.data()[0];
-            if ((currentTickData.getUTCDay() === 0) &&
-              (currentTickData.getUTCDate() !== 1)) {
-              currentTick
-                .insert('line', 'rect')
-                .attr('y1', 0)
-                .attr('y2', -10)
-                .attr('x2', 0)
-                .classed('tick-week', true);
-            }
-          });
-
-        // Update placement of zoom buttons
-        $('.zoom-btn')
-          .removeClass(function (index, css) {
-            return (css.match(/(^|\s)depth-\S+/g) || [])
-              .join(' ');
-          })
-          .css('margin', '')
-          .css('font-size', '');
-        $('#zoom-years')
-          .addClass('depth-4')
-          .css('margin', '6px 0 0 0');
-        $('#zoom-months')
-          .addClass('depth-4');
-        $('#zoom-days')
-          .addClass('depth-3');
-        $('#zoom-hours')
-          .addClass('depth-2');
-        $('#zoom-minutes')
-          .addClass('depth-1')
-          .css('margin', '8px 0 0 0')
-          .css('font-size', '1.8em');
-
-        self.currentZoom = 5;
         break;
 
       default:
@@ -966,21 +764,13 @@ export function timelineConfig(models, config, ui) {
           .addClass('zoom-btn-selected');
         self.zoom(3);
       });
-    d3.select('#zoom-hours')
-      .on('click', function (d) {
-        $('.zoom-btn')
-          .removeClass('zoom-btn-selected');
-        $(this)
-          .addClass('zoom-btn-selected');
-        self.zoom(4);
-      });
     d3.select('#zoom-minutes')
       .on('click', function (d) {
         $('.zoom-btn')
           .removeClass('zoom-btn-selected');
         $(this)
           .addClass('zoom-btn-selected');
-        self.zoom(5);
+        self.zoom(4);
       });
     // Default zoom
     self.zoom(zoomLevel);
