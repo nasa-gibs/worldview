@@ -538,7 +538,6 @@ export function timelineConfig(models, config, ui) {
 
         self.currentZoom = 3;
         break;
-
       case 4: // 10-Minute
         labelFormat = d3.time.format.utc('%b');
         dateInterval = d3.time.day.utc;
