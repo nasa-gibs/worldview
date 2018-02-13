@@ -349,9 +349,9 @@ g.plot rect.data-bar-invisible {
 #timeline-zoom {
   display: inline-block;
   vertical-align: middle;
-  overflow-y: scroll;
+  overflow-y: hidden;
   height: 65px;
-  width: 100px;
+  width: 136px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -368,26 +368,26 @@ g.plot rect.data-bar-invisible {
 
 #timeline-zoom a.zoom-btn.depth-1 {
   color: #fff;
-  font-size: 1.5em;
-  line-height: 1.4em;
+  font-size: 18px;
+  line-height: 20px;
 }
 
 #timeline-zoom a.zoom-btn.depth-2 {
   color: #999;
-  font-size: 1em;
-  line-height: 1em;
+  font-size: 14px;
+  line-height: 16px;
 }
 
 #timeline-zoom a.zoom-btn.depth-3 {
   color: #666;
-  font-size: 0.8em;
-  line-height: 1em;
+  font-size: 12px;
+  line-height: 14px;
 }
 
 #timeline-zoom a.zoom-btn.depth-4 {
   color: #666;
-  font-size: 0.8em;
-  line-height: 1em;
+  font-size: 10px;
+  line-height: 14px;
 }
 
 #timeline-zoom a.zoom-btn:hover {
