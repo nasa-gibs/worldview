@@ -149,9 +149,9 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header input {
-  height: 20px;
+  height: 40px;
   color: #fff;
-  font-size: 20px;
+  font-size: 24px;
   background: transparent;
   border: 0;
   font-family: 'Roboto Mono', monospace;
@@ -160,8 +160,6 @@ g.plot rect.data-bar-invisible {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   padding: 0;
-  text-align: center;
-  margin-left: -5px;
 }
 
 #timeline-header .input-wrapper:hover {
@@ -186,6 +184,11 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header div {
   display: inline-block;
+}
+
+#time-buttons-group {
+  position: relative;
+  width: 86px;
 }
 
 .button-action-group,
@@ -349,14 +352,19 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-zoom {
-  display: inline-block;
-  vertical-align: middle;
-  overflow-y: hidden;
-  height: 65px;
-  width: 136px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  display: inline-block;
+  position: absolute;
+  bottom: 65px;
+  z-index: 9999;
+  vertical-align: middle;
+  overflow-y: hidden;
+  height: 54px;
+  width: 100%;
+  border-radius: 5px;
+  background-color: rgba(40, 40, 40, 0.9);
 }
 
 #timeline-zoom a.zoom-btn {
