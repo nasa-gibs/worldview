@@ -31,6 +31,49 @@ export function timelineConfig(models, config, ui) {
     var altEnd;
     var paddedRange;
 
+    var activeLayers = models.layers.active;
+    var yearlyFound = false;
+    var monthlyFound = false;
+    var dailyFound = false;
+    var subdailyFound = false;
+
+    for (var i = 0; i < activeLayers.length; i++) {
+      switch (activeLayers[i].period) {
+        case 'yearly':
+          yearlyFound = true;
+          break;
+        case 'monthly':
+          monthlyFound = true;
+          break;
+        case 'daily':
+          dailyFound = true;
+          break;
+        case 'subdaily':
+          subdailyFound = true;
+          break;
+      }
+    }
+
+    // if (!yearlyFound) {
+    //   document.getElementById('zoom-years').style.display = 'none';
+    //   self.currentZoom = 3;
+    // }
+    //
+    // if (!monthlyFound) {
+    //   document.getElementById('zoom-months').style.display = 'none';
+    //   self.currentZoom = 3;
+    // }
+    //
+    // if (!dailyFound) {
+    //   document.getElementById('zoom-days').style.display = 'none';
+    //   self.currentZoom = 3;
+    // }
+
+    if (!subdailyFound) {
+      document.getElementById('zoom-minutes').style.display = 'none';
+      self.currentZoom = 3;
+    }
+
     switch (level) {
       case 1: // Year
         labelFormat = d3.time.format.utc('%Y');
@@ -200,6 +243,7 @@ export function timelineConfig(models, config, ui) {
         self.currentZoom = 1;
         break;
       case 2: // Month
+
         labelFormat = d3.time.format.utc('%Y');
         dateInterval = d3.time.month.utc;
 
@@ -539,6 +583,7 @@ export function timelineConfig(models, config, ui) {
         self.currentZoom = 3;
         break;
       case 4: // 10-Minute
+
         labelFormat = d3.time.format.utc('%b');
         dateInterval = d3.time.day.utc;
         // Latest Date minus begin date (Wed Dec 31 1947 19:00:00 GMT-0500 (Eastern Standard Time))
