@@ -25,8 +25,6 @@ export function timeline(models, config, ui) {
       .outerWidth(true) -
       $('#timeline-header')
         .outerWidth(true) -
-      $('#timeline-zoom')
-        .outerWidth(true) -
       $('#timeline-hide')
         .outerWidth(true) -
       self.margin.left - self.margin.right - 2;
@@ -39,12 +37,10 @@ export function timeline(models, config, ui) {
 
   self.toggle = function (now) {
     var tl = $('#timeline-footer');
-    var tlz = $('#timeline-zoom');
     var tlg = self.boundary;
     var gp = d3.select('#guitarpick');
     if (tl.is(':hidden')) {
       var afterShow = function () {
-        tlz.show();
         $('#timeline')
           .css('right', '10px');
         tlg.attr('style', 'clip-path:url("#timeline-boundary")');
@@ -59,7 +55,6 @@ export function timeline(models, config, ui) {
     } else {
       tlg.attr('style', 'clip-path:none');
       gp.attr('style', 'display:none;clip-path:none');
-      tlz.hide();
       tl.hide('slow');
       $('#timeline')
         .css('right', 'auto');
@@ -68,7 +63,7 @@ export function timeline(models, config, ui) {
 
   self.expand = function (now) {
     now = now || false;
-    var tl = $('#timeline-footer, #timeline-zoom');
+    var tl = $('#timeline-footer');
     if (tl.is(':hidden')) {
       self.toggle(now);
     }
@@ -79,7 +74,7 @@ export function timeline(models, config, ui) {
   };
 
   self.collapse = function (now) {
-    var tl = $('#timeline-footer, #timeline-zoom');
+    var tl = $('#timeline-footer');
     if (!tl.is(':hidden')) {
       self.toggle(now);
     }
