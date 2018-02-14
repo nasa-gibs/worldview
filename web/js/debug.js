@@ -185,7 +185,7 @@ export function debugLayers(ui, models, config) {
     if (layer.id === 'Land_Water_Map' || layer.id === 'Land_Mask') {
       return false;
     }
-    if (type === 'gibs' && layer.period === 'daily' && layer.type === 'wmts') {
+    if (type === 'gibs' && ['daily', 'monthly', 'yearly'].includes(layer.period) && layer.type === 'wmts') {
       return true;
     }
     if (type === 'palettes' && layer.palette && !layer.palette.immutable) {
