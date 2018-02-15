@@ -85,6 +85,10 @@ export function dateModel(config, spec) {
     if (state.t) {
       self.select(state.t);
     }
+    // If there is a time, load using the corresponding date state
+    if (state.t && state.t2) {
+      self.select(state.t);
+    }
     if (state.z) {
       self.selectedZoom = Number(state.z);
     }
