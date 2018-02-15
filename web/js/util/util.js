@@ -178,7 +178,7 @@ export default (function (self) {
   self.parseDateUTC = function (dateAsString) {
     var dateTimeArr = dateAsString.split(/T/);
 
-    var yyyymmdd = dateTimeArr[0].split('-');
+    var yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
 
     // Parse elements of date and time
     var year = yyyymmdd[0];
