@@ -423,6 +423,22 @@ export default (function (self) {
     var m = date.getUTCMonth();
     var first, last;
     switch (interval) {
+      case 'minute':
+        var firstMinute = new Date(Date.UTC(y, m, 1, 0, 0));
+        var lastMinute = new Date(Date.UTC(y, m, self.daysInMonth(date), 23, 59));
+        first = new Date(Math.max(firstMinute, minDate))
+          .getUTCDate();
+        last = new Date(Math.min(lastMinute, maxDate))
+          .getUTCDate();
+        break;
+      case 'hour':
+        var firstHour = new Date(Date.UTC(y, m, 1, 0));
+        var lastHour = new Date(Date.UTC(y, m, self.daysInMonth(date), 23));
+        first = new Date(Math.max(firstHour, minDate))
+          .getUTCDate();
+        last = new Date(Math.min(lastHour, maxDate))
+          .getUTCDate();
+        break;
       case 'day':
         var firstDay = new Date(Date.UTC(y, m, 1));
         var lastDay = new Date(Date.UTC(y, m, self.daysInMonth(date)));
@@ -460,10 +476,18 @@ export default (function (self) {
     var range = self.rollRange(date, interval, minDate, maxDate);
     var min = range.first;
     var max = range.last;
+    var minute = date.getUTCMinutes();
+    var hour = date.getUTCHours();
     var day = date.getUTCDate();
     var month = date.getUTCMonth();
     var year = date.getUTCFullYear();
     switch (interval) {
+      case 'minute':
+        minute = self.roll(minute + amount, min, max);
+        break;
+      case 'hour':
+        hour = self.roll(hour + amount, min, max);
+        break;
       case 'day':
         day = self.roll(day + amount, min, max);
         break;
@@ -483,7 +507,7 @@ export default (function (self) {
     if (day > daysInMonth) {
       day = daysInMonth;
     }
-    var newDate = new Date(Date.UTC(year, month, day));
+    var newDate = new Date(Date.UTC(year, month, day, hour, minute));
     newDate = new Date(self.clamp(newDate, minDate, maxDate));
     return newDate;
   };
