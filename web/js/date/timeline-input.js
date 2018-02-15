@@ -184,8 +184,8 @@ export function timelineInput(models, config, ui) {
   // TODO: Cleanup
   var validateInput = function (event) {
     var kc = event.keyCode || event.which;
-    var entered = (kc == 13) || (kc === 9);
-    if (event.type == 'focusout' || entered) {
+    var entered = (kc === 13) || (kc === 9);
+    if (event.type === 'focusout' || entered) {
       if (entered) {
         event.preventDefault();
       }
@@ -236,6 +236,19 @@ export function timelineInput(models, config, ui) {
                 .setUTCDate(newInput));
           }
           break;
+        case 'hour-input-group':
+          if ((newInput > 23) && (newInput < 0)) {
+            selectedDateObj = new Date(
+              (new Date(model.selected))
+                .setUTCHours(newInput));
+          }
+          break;
+        case 'minute-input-group':
+          if ((newInput > 59) && (newInput < 0)) {
+            selectedDateObj = new Date(
+              (new Date(model.selected))
+                .setUTCMinutes(newInput));
+          }
       }
       if ((selectedDateObj > tl.data.start()) &&
         (selectedDateObj <= util.today())) {
@@ -297,6 +310,10 @@ export function timelineInput(models, config, ui) {
       .val(model.monthAbbr[date.getUTCMonth()]);
     $('#day-input-group')
       .val(util.pad(date.getUTCDate(), 2, '0'));
+    $('#hour-input-group')
+      .val(util.pad(date.getUTCHours(), 2, '0'));
+    $('#minute-input-group')
+      .val(util.pad(date.getUTCMinutes(), 2, '0'));
   };
 
   // TODO: Cleanup
@@ -316,6 +333,20 @@ export function timelineInput(models, config, ui) {
     } else {
       $('#day-input-group')
         .val(model.selected.getUTCDate());
+    }
+    if (model.selected.getUTCHours() < 10) {
+      $('#hour-input-group')
+        .val('0' + model.selected.getUTCHours());
+    } else {
+      $('#hour-input-group')
+        .val(model.selected.getUTCHours());
+    }
+    if (model.selected.getUTCMinutes() < 10) {
+      $('#minute-input-group')
+        .val('0' + model.selected.getUTCMinutes());
+    } else {
+      $('#minute-input-group')
+        .val(model.selected.getUTCMinutes());
     }
 
     // Disable arrows if nothing before/after selection
