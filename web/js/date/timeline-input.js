@@ -22,6 +22,16 @@ export function timelineInput(models, config, ui) {
   var $incrementBtn = $('#right-arrow-group');
   var $decrementBtn = $('#left-arrow-group');
 
+  var forwardNextMinute = function () { // FIXME: Limit animation correctly
+    var nextMinute = new Date(new Date(model.selected)
+      .setUTCDate(model.selected.getUTCMinutes() + 10));
+    if (nextMinute <= util.today()) {
+      animateForward('minute');
+    } else {
+      self.stop();
+    }
+  };
+
   var forwardNextDay = function () { // FIXME: Limit animation correctly
     var nextDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() + 1));
@@ -98,6 +108,16 @@ export function timelineInput(models, config, ui) {
     self.direction = direction || self.direction;
     self.active = true;
     prepareFrame();
+  };
+
+  var reversePrevMinute = function () {
+    var prevMinute = new Date(new Date(model.selected)
+      .setUTCDate(model.selected.getUTCMinutes() - 10));
+    if (prevMinute >= tl.data.start()) {
+      animateReverse('minute');
+    } else {
+      self.stop();
+    }
   };
 
   var reversePrevDay = function () { // FIXME: Limit animation correctly
@@ -380,6 +400,9 @@ export function timelineInput(models, config, ui) {
           case 3:
             forwardNextDay();
             break;
+          case 4:
+            forwardNextMinute();
+            break;
           default:
             forwardNextDay();
         }
@@ -398,6 +421,9 @@ export function timelineInput(models, config, ui) {
             break;
           case 3:
             reversePrevDay();
+            break;
+          case 4:
+            reversePrevMinute();
             break;
           default:
             reversePrevDay();

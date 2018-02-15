@@ -20,7 +20,7 @@ export function dateModel(config, spec) {
   };
 
   self.select = function (date) {
-    date = self.clamp(util.clearTimeUTC(date));
+    date = self.clamp(date);
     var updated = false;
     if (!self.selected || date.getTime() !== self.selected.getTime()) {
       self.selected = date;
@@ -74,6 +74,8 @@ export function dateModel(config, spec) {
   self.save = function (state) {
     state.t = self.selected.toISOString()
       .split('T')[0];
+    state.t2 = self.selected.toISOString()
+      .split('T')[1].slice(0, -5).replace(/:/g, '-');
     if (self.selectedZoom) {
       state.z = self.selectedZoom.toString();
     }

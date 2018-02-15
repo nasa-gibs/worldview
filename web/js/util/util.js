@@ -170,7 +170,7 @@ export default (function (self) {
    *
    * @method parseDateUTC
    * @static
-   * @param str {string} Date to parse in the form of ``YYYY-MM-DD``.
+   * @param str {string} Date to parse in the form of YYYY-MM-DD HH:MM:SS`.
    * @return {Date} converted string as a date object, throws an exception if
    * the string is invalid
    */
@@ -198,6 +198,7 @@ export default (function (self) {
       second = hhmmss[2] || 0;
       millisecond = hhmmss[3] || 0;
     }
+
     var date = new Date(Date.UTC(year, month, day, hour, minute, second,
       millisecond));
     if (isNaN(date.getTime())) {
@@ -271,9 +272,9 @@ export default (function (self) {
    * @return {Date} the date object
    */
   self.clearTimeUTC = function (date) {
-    date.setUTCHours(0);
-    date.setUTCMinutes(0);
-    date.setUTCSeconds(0);
+    // date.setUTCHours(0);
+    // date.setUTCMinutes(0);
+    // date.setUTCSeconds(0);
     date.setUTCMilliseconds(0);
     return date;
   };
