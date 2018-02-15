@@ -71,6 +71,9 @@ export function timelineConfig(models, config, ui) {
 
     if (!subdailyFound) {
       document.getElementById('zoom-minutes').style.display = 'none';
+      document.getElementById('input-wrapper-hour').style.display = 'none';
+      document.getElementById('input-wrapper-minute').style.display = 'none';
+      document.getElementById('timeline-header').style.width = '296px';
       self.currentZoom = 3;
     }
 

@@ -125,7 +125,7 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header {
   margin-top: 2px;
-  width: 296px;
+  width: 402px;
 }
 
 #timeline-header .input-wrapper {
@@ -244,12 +244,14 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .date-arrows:hover,
-#timeline-header > .button-action-group:hover {
+#timeline-header > .button-action-group:hover,
+#timeline-header #time-buttons-group .button-action-group:hover {
   background-color: #fff;
   cursor: pointer;
 }
 
-#timeline-header > .button-action-group.button-disabled:hover {
+#timeline-header > .button-action-group .button-disabled:hover,
+#timeline-header #time-buttons-group .button-action-group .button-disabled:hover {
   background-color: transparent;
   cursor: default;
 }
@@ -273,17 +275,20 @@ g.plot rect.data-bar-invisible {
   -ms-filter: "FlipH";
 }
 
-#timeline-header > .button-action-group:hover .arrow {
+#timeline-header > .button-action-group:hover .arrow,
+#timeline-header #time-buttons-group .button-action-group:hover .arrow {
   fill: #1a1a1a;
   fill-opacity: 1;
   stroke: none;
 }
 
-#timeline-header > .button-action-group.button-disabled .arrow {
+#timeline-header > .button-action-group.button-disabled .arrow,
+#timeline-header #time-buttons-group .button-action-group.button-disabled .arrow {
   fill: #333;
 }
 
-#timeline-header > .button-action-group.button-disabled:hover .arrow {
+#timeline-header > .button-action-group.button-disabled:hover .arrow,
+#timeline-header #time-buttons-group .button-action-group.button-disabled:hover .arrow {
   fill: #333;
 }
 
