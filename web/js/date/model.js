@@ -73,9 +73,8 @@ export function dateModel(config, spec) {
 
   self.save = function (state) {
     state.t = self.selected.toISOString()
-      .split('T')[0];
-    state.t2 = self.selected.toISOString()
-      .split('T')[1].slice(0, -5).replace(/:/g, '-');
+      .split('T')[0] + '-' + self.selected.toISOString()
+        .split('T')[1].slice(0, -5).replace(/:/g, '-');
     if (self.selectedZoom) {
       state.z = self.selectedZoom.toString();
     }
@@ -83,10 +82,6 @@ export function dateModel(config, spec) {
 
   self.load = function (state) {
     if (state.t) {
-      self.select(state.t);
-    }
-    // If there is a time, load using the corresponding date state
-    if (state.t && state.t2) {
       self.select(state.t);
     }
     if (state.z) {

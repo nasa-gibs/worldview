@@ -192,3 +192,10 @@ button[data-tooltip] {
 [data-tooltip-length="fit"]::after {
   width: 100%;
 }
+
+/* Clearfix classes */
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}

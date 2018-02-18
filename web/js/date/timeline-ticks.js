@@ -86,10 +86,26 @@ export function timelineTicks(models, config, ui) {
           if (!$(this)
             .find('line.tick-week')
             .length) {
-            var currentTick = d3.select(this);
-            var currentTickData = currentTick.data()[0];
+            let currentTick = d3.select(this);
+            let currentTickData = currentTick.data()[0];
             if ((currentTickData.getUTCDay() === 0) &&
               (currentTickData.getUTCDate() !== 1)) {
+              currentTick
+                .insert('line', 'rect')
+                .attr('y1', 0)
+                .attr('y2', -10)
+                .attr('x2', 0)
+                .classed('tick-week', true);
+            }
+          }
+        } else if (tl.config.currentZoom === 4) {
+          if (!$(this)
+            .find('line.tick-week')
+            .length) {
+            let currentTick = d3.select(this);
+            let currentTickData = currentTick.data()[0];
+            if ((currentTickData.getUTCMinutes() === 0) &&
+              (currentTickData.getUTCMinutes() !== 1)) {
               currentTick
                 .insert('line', 'rect')
                 .attr('y1', 0)
