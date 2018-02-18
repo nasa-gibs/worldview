@@ -284,7 +284,7 @@ export default (function (self) {
     var newDate = new Date(date.getTime());
     switch (interval) {
       case 'minute':
-        newDate.setUTCDate(newDate.getUTCDate() + amount);
+        newDate.setUTCMinutes(newDate.getUTCMinutes() + amount);
         break;
       case 'day':
         newDate.setUTCDate(newDate.getUTCDate() + amount);
