@@ -73,8 +73,8 @@ export function dateModel(config, spec) {
 
   self.save = function (state) {
     state.t = self.selected.toISOString()
-      .split('T')[0] + '-' + self.selected.toISOString()
-        .split('T')[1].slice(0, -5).replace(/:/g, '-');
+      .split('T')[0] + '-' + 'T' + self.selected.toISOString()
+        .split('T')[1].slice(0, -5) + 'Z';
     if (self.selectedZoom) {
       state.z = self.selectedZoom.toString();
     }
