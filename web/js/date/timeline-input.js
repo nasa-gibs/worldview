@@ -24,8 +24,8 @@ export function timelineInput(models, config, ui) {
 
   var forwardNextMinute = function () { // FIXME: Limit animation correctly
     var nextMinute = new Date(new Date(model.selected)
-      .setUTCDate(model.selected.getUTCMinutes() + 10));
-    if (nextMinute <= util.today()) {
+      .setUTCMinutes(model.selected.getUTCMinutes() + 10));
+    if (nextMinute <= util.thisTime()) {
       animateForward('minute');
     } else {
       self.stop();
@@ -112,8 +112,8 @@ export function timelineInput(models, config, ui) {
 
   var reversePrevMinute = function () {
     var prevMinute = new Date(new Date(model.selected)
-      .setUTCDate(model.selected.getUTCMinutes() - 10));
-    if (prevMinute >= tl.data.start()) {
+      .setUTCMinutes(model.selected.getUTCMinutes() - 10));
+    if (prevMinute >= tl.data.thisTime()) {
       animateReverse('minute');
     } else {
       self.stop();
@@ -390,6 +390,7 @@ export function timelineInput(models, config, ui) {
     $incrementBtn
       .mousedown(function (e) {
         e.preventDefault();
+        console.log(ui.timeline.config.currentZoom);
         switch (ui.timeline.config.currentZoom) {
           case 1:
             forwardNextYear();

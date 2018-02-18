@@ -27,7 +27,7 @@ export function timeline(models, config, ui) {
         .outerWidth(true) -
       $('#timeline-hide')
         .outerWidth(true) -
-      self.margin.left - self.margin.right - 2;
+      self.margin.left - self.margin.right - 22;
     return self.width;
   };
 
@@ -41,8 +41,6 @@ export function timeline(models, config, ui) {
     var gp = d3.select('#guitarpick');
     if (tl.is(':hidden')) {
       var afterShow = function () {
-        $('#timeline')
-          .css('right', '10px');
         tlg.attr('style', 'clip-path:url("#timeline-boundary")');
         gp.attr('style', 'display:block;clip-path:url(#guitarpick-boundary);');
       };
@@ -52,12 +50,14 @@ export function timeline(models, config, ui) {
       } else {
         tl.show('slow', afterShow);
       }
+      $('#timeline')
+        .css('right', '10px').css('width', '100%');
     } else {
       tlg.attr('style', 'clip-path:none');
       gp.attr('style', 'display:none;clip-path:none');
       tl.hide('slow');
       $('#timeline')
-        .css('right', 'auto');
+        .css('right', 'auto').css('width', 'auto');
     }
   };
 
@@ -128,6 +128,21 @@ export function timeline(models, config, ui) {
   };
 
   var drawContainers = function () {
+    var activeLayers = models.layers.active;
+    var subdailyFound = false;
+
+    for (var i = 0; i < activeLayers.length; i++) {
+      switch (activeLayers[i].period) {
+        case 'subdaily':
+          subdailyFound = true;
+          break;
+      }
+    }
+    if (!subdailyFound) {
+      document.getElementById('timeline-header').classList.remove('subdaily');
+    } else {
+      document.getElementById('timeline-header').classList.add('subdaily');
+    }
     self.getWidth();
 
     self.svg = d3.select('#timeline-footer')

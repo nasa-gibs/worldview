@@ -32,49 +32,24 @@ export function timelineConfig(models, config, ui) {
     var paddedRange;
 
     var activeLayers = models.layers.active;
-    var yearlyFound = false;
-    var monthlyFound = false;
-    var dailyFound = false;
     var subdailyFound = false;
 
     for (var i = 0; i < activeLayers.length; i++) {
       switch (activeLayers[i].period) {
-        case 'yearly':
-          yearlyFound = true;
-          break;
-        case 'monthly':
-          monthlyFound = true;
-          break;
-        case 'daily':
-          dailyFound = true;
-          break;
         case 'subdaily':
           subdailyFound = true;
           break;
       }
     }
 
-    // if (!yearlyFound) {
-    //   document.getElementById('zoom-years').style.display = 'none';
-    //   self.currentZoom = 3;
-    // }
-    //
-    // if (!monthlyFound) {
-    //   document.getElementById('zoom-months').style.display = 'none';
-    //   self.currentZoom = 3;
-    // }
-    //
-    // if (!dailyFound) {
-    //   document.getElementById('zoom-days').style.display = 'none';
-    //   self.currentZoom = 3;
-    // }
-
     if (!subdailyFound) {
       document.getElementById('zoom-minutes').style.display = 'none';
       document.getElementById('input-wrapper-hour').style.display = 'none';
       document.getElementById('input-wrapper-minute').style.display = 'none';
-      document.getElementById('timeline-header').style.width = '296px';
+      document.getElementById('timeline-header').classList.remove('subdaily');
       self.currentZoom = 3;
+    } else {
+      document.getElementById('timeline-header').classList.add('subdaily');
     }
 
     switch (level) {
