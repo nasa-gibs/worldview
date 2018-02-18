@@ -41,7 +41,7 @@ buster.testCase('wv.date.model', (function () {
     models.date.select(d);
     var state = {};
     models.date.save(state);
-    buster.assert.equals(state.t, '2013-01-05');
+    buster.assert.equals(state.t, '2013-01-05-00-00-00');
   };
 
   self['Loads state'] = function () {
