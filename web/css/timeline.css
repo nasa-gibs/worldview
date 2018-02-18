@@ -5,12 +5,20 @@
 #timeline {
   position: absolute;
   bottom: 10px;
-  left: 10px;
-  right: 10px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: transparent;
+  min-width: 286px;
+}
+
+.timeline-inner {
+  position: relative;
   border: 1px solid #333;
   background: rgba(40, 40, 40, 0.9);
-  min-width: 286px;
   border-radius: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 #timeline-footer text {
@@ -125,6 +133,10 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header {
   margin-top: 2px;
+  width: 296px;
+}
+
+#timeline-header.subdaily {
   width: 402px;
 }
 
@@ -294,7 +306,6 @@ g.plot rect.data-bar-invisible {
 
 #timeline-footer,
 #timeline-header,
-#timeline-hide,
 #timeline-zoom {
   float: left;
 }
@@ -411,11 +422,15 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-hide {
+  position: absolute;
+  top: 0;
+  right: 0;
   height: 65px;
   width: 20px;
   cursor: pointer;
-  float: right;
   border-left: 1px solid #1a1a1a;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 #timeline-hide:hover {

@@ -11,6 +11,7 @@ import lodashEach from 'lodash/each';
 import lodashEachRight from 'lodash/eachRight';
 import util from '../util/util';
 import wvui from '../ui/ui';
+import { timeline } from '../date/timeline';
 import { layersInfo } from './info';
 import { layersOptions } from './options';
 import { palettesLegend } from '../palettes/legend';
@@ -392,6 +393,7 @@ export function layersActive(models, ui, config) {
     if (legends[layer.id]) {
       delete legends[layer.id];
     }
+    toggleSubdailyZoom();
     sizeProductsTab();
   };
 
@@ -402,7 +404,37 @@ export function layersActive(models, ui, config) {
     if (layer.palette) {
       renderLegendCanvas(layer);
     }
+    toggleSubdailyZoom();
+    model.events.trigger('timeline-change');
     sizeProductsTab();
+  };
+
+  var toggleSubdailyZoom = function () {
+    var activeLayers = models.layers.active;
+    var subdailyFound = false;
+
+    for (var i = 0; i < activeLayers.length; i++) {
+      switch (activeLayers[i].period) {
+        case 'subdaily':
+          subdailyFound = true;
+          break;
+      }
+    }
+
+    if (!subdailyFound) {
+      document.getElementById('zoom-minutes').style.display = 'none';
+      document.getElementById('input-wrapper-hour').style.display = 'none';
+      document.getElementById('input-wrapper-minute').style.display = 'none';
+      document.getElementById('timeline-header').classList.remove('subdaily');
+      document.getElementById('zoom-days').click(); // Switch back to 'Days' view
+      models.date.events.trigger('resize');
+    } else {
+      document.getElementById('zoom-minutes').style.display = null;
+      document.getElementById('input-wrapper-hour').style.display = null;
+      document.getElementById('input-wrapper-minute').style.display = null;
+      document.getElementById('timeline-header').classList.add('subdaily');
+      models.date.events.trigger('resize');
+    }
   };
 
   var toggleVisibility = function () {
@@ -533,7 +565,7 @@ export function layersActive(models, ui, config) {
 
     // Account for offset between the map's top zoom level and the
     // lowest-resolution TileMatrix in polar layers
-    var zoomOffset = ((proj == 'arctic') || (proj == 'antarctic')) ? 1 : 0;
+    var zoomOffset = ((proj === 'arctic') || (proj === 'antarctic')) ? 1 : 0;
 
     var matrixSet = layer.projections[proj].matrixSet;
 
