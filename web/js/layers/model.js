@@ -389,7 +389,7 @@ export function layersModel(models, config) {
       if (!def.projections[projId]) {
         return;
       }
-      if (spec.dynamic && !['daily', 'monthly', 'yearly'].includes(def.period)) {
+      if (spec.dynamic && !['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
         return;
       }
       if (spec.renderable && !self.isRenderable(def.id)) {
