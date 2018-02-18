@@ -269,6 +269,7 @@ export function timelineInput(models, config, ui) {
               (new Date(model.selected))
                 .setUTCMinutes(newInput));
           }
+          break;
       }
       if ((selectedDateObj > tl.data.start()) &&
         (selectedDateObj <= util.today())) {
@@ -281,7 +282,7 @@ export function timelineInput(models, config, ui) {
             .focus();
         }
 
-        model.select(selectedDateObj);
+        if (selectedDateObj) model.select(selectedDateObj);
 
         $('.button-input-group')
           .parent()
