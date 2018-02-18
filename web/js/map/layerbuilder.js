@@ -205,7 +205,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       if (day) {
         date = util.dateAdd(date, 'day', day);
       }
-      extra = '?TIME=' + util.toISOStringDate(date);
+      extra = '?TIME=' + date.toISOString().split('.')[0] + 'Z';
     }
     var sourceOptions = {
       url: source.url + extra,
