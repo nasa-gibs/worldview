@@ -14,6 +14,9 @@ buster.testCase('wv.date.model', (function () {
     buster.assert.equals(models.date.selected.getUTCFullYear(), 2013);
     buster.assert.equals(models.date.selected.getUTCMonth(), 0);
     buster.assert.equals(models.date.selected.getUTCDate(), 15);
+    buster.assert.equals(models.date.selected.getUTCHours(), 0);
+    buster.assert.equals(models.date.selected.getUTCMinutes(), 0);
+    buster.assert.equals(models.date.selected.getUTCSeconds(), 0);
   };
 
   self['Initializes with a specified date'] = function () {
@@ -55,16 +58,16 @@ buster.testCase('wv.date.model', (function () {
     buster.assert.equals(models.date.selected, now);
   };
 
-  self['Clears time to UTC midnight when selecting'] = function () {
+  self['Date and time is unchanged when selecting'] = function () {
     var date = new Date(Date.UTC(2012, 1, 2, 3, 4, 5));
     models.date.select(date);
     var selected = models.date.selected;
     buster.assert.equals(selected.getUTCFullYear(), 2012);
     buster.assert.equals(selected.getUTCMonth(), 1);
     buster.assert.equals(selected.getUTCDate(), 2);
-    buster.assert.equals(selected.getUTCHours(), 0);
-    buster.assert.equals(selected.getUTCMinutes(), 0);
-    buster.assert.equals(selected.getUTCSeconds(), 0);
+    buster.assert.equals(selected.getUTCHours(), 3);
+    buster.assert.equals(selected.getUTCMinutes(), 4);
+    buster.assert.equals(selected.getUTCSeconds(), 5);
   };
 
   return self;
