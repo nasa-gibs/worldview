@@ -3,13 +3,12 @@
 }
 
 #timeline {
+  background: transparent;
   position: absolute;
   bottom: 10px;
   left: 0;
   right: 0;
   width: 100%;
-  background: transparent;
-  min-width: 286px;
 }
 
 .timeline-inner {
@@ -17,6 +16,7 @@
   border: 1px solid #333;
   background: rgba(40, 40, 40, 0.9);
   border-radius: 5px;
+  display: inline-block;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -374,7 +374,6 @@ g.plot rect.data-bar-invisible {
   display: inline-block;
   position: absolute;
   bottom: 65px;
-  z-index: 9999;
   vertical-align: middle;
   overflow-y: hidden;
   height: 54px;
