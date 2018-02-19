@@ -10,7 +10,7 @@ export function timeline(models, config, ui) {
 
   self.margin = {
     top: 0,
-    right: 30,
+    right: 50,
     bottom: 20,
     left: 30
   };
@@ -27,7 +27,7 @@ export function timeline(models, config, ui) {
         .outerWidth(true) -
       $('#timeline-hide')
         .outerWidth(true) -
-      self.margin.left - self.margin.right - 22;
+      self.margin.left - self.margin.right - 2;
     return self.width;
   };
 
@@ -51,13 +51,13 @@ export function timeline(models, config, ui) {
         tl.show('slow', afterShow);
       }
       $('#timeline')
-        .css('right', '10px').css('width', '100%');
+        .removeClass('closed');
     } else {
       tlg.attr('style', 'clip-path:none');
       gp.attr('style', 'display:none;clip-path:none');
       tl.hide('slow');
       $('#timeline')
-        .css('right', 'auto').css('width', 'auto');
+        .addClass('closed');
     }
   };
 
@@ -128,21 +128,6 @@ export function timeline(models, config, ui) {
   };
 
   var drawContainers = function () {
-    var activeLayers = models.layers.active;
-    var subdailyFound = false;
-
-    for (var i = 0; i < activeLayers.length; i++) {
-      switch (activeLayers[i].period) {
-        case 'subdaily':
-          subdailyFound = true;
-          break;
-      }
-    }
-    if (!subdailyFound) {
-      document.getElementById('timeline-header').classList.remove('subdaily');
-    } else {
-      document.getElementById('timeline-header').classList.add('subdaily');
-    }
     self.getWidth();
 
     self.svg = d3.select('#timeline-footer')
@@ -199,6 +184,7 @@ export function timeline(models, config, ui) {
 
   var init = function () {
     var $timelineFooter = $('#timeline-footer');
+    models.layers.events.trigger('toggle-subdaily');
     drawContainers();
 
     if (!models.anim) { // Hack: margin if anim is present
@@ -249,6 +235,9 @@ export function timeline(models, config, ui) {
 
     models.layers.events.on('change', function () {
       self.data.set();
+      self.resize();
+      self.zoom.refresh();
+      self.setClip();
     });
   };
 

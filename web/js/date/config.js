@@ -31,9 +31,9 @@ export function timelineConfig(models, config, ui) {
     var altEnd;
     var paddedRange;
 
+    // Needs reworked. Repeated from layers/active/toggleSubdaily
     var activeLayers = models.layers.active;
     var subdailyFound = false;
-
     for (var i = 0; i < activeLayers.length; i++) {
       switch (activeLayers[i].period) {
         case 'subdaily':
@@ -42,15 +42,9 @@ export function timelineConfig(models, config, ui) {
       }
     }
 
-    if (!subdailyFound) {
-      document.getElementById('zoom-minutes').style.display = 'none';
-      document.getElementById('input-wrapper-hour').style.display = 'none';
-      document.getElementById('input-wrapper-minute').style.display = 'none';
-      document.getElementById('timeline-header').classList.remove('subdaily');
-      self.currentZoom = 3;
-    } else {
-      document.getElementById('timeline-header').classList.add('subdaily');
-    }
+    // If zoom is not within range, set it to level 3 (daily)
+    if (level > 4 || level < 0) level = 3;
+    if (!subdailyFound && (level > 3 || level < 0)) level = 3;
 
     switch (level) {
       case 1: // Year
