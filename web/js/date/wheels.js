@@ -27,7 +27,7 @@ var dateWheels = function(models, config) {
       .html('<div id=\'wv-date-mobile-label\'></div><input type=\'hidden\' id=\'linkmode\' readonly>');
     $('#linkmode')
       .mobiscroll()
-      .date({
+      .datetime({
         display: 'bottom',
         onChange: function (valueText) {
           var d = util.parseDateUTC(valueText);
@@ -42,7 +42,9 @@ var dateWheels = function(models, config) {
             .css('display', 'block');
         },
         dateFormat: 'yyyy-mm-dd',
-        setText: 'OK'
+        setText: 'OK',
+        timeFormat: 'T' + 'HH:ii:ss' + 'Z',
+        'timeWheels': '|HH:ii|'
       });
     $('#linkmode')
       .mobiscroll('setDate', UTCToLocal(model.selected), true);
