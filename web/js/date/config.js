@@ -556,8 +556,8 @@ export function timelineConfig(models, config, ui) {
         break;
       case 4: // 10-Minute
 
-        labelFormat = d3.time.format.utc('%b');
-        dateInterval = d3.time.day.utc;
+        labelFormat = d3.time.format.utc('%M');
+        dateInterval = d3.time.utc;
         // Latest Date minus begin date (Wed Dec 31 1947 19:00:00 GMT-0500 (Eastern Standard Time))
         // Subtracting these leaves miliseconds divide by 1000 = seconds
         // Divide by 60 = Minutes
@@ -569,8 +569,8 @@ export function timelineConfig(models, config, ui) {
         tickCountMax = Math.ceil(tl.width / tickWidth);
 
         paddedRange = [
-          new Date(tl.data.start().setUTCMinutes(tl.data.start().getUTCMinutes() - 10)),
-          new Date(tl.data.end().setUTCMinutes(tl.data.end().getUTCMinutes() + 10))
+          new Date(tl.data.start().setUTCHours(tl.data.start().getUTCHours() - 3)),
+          new Date(tl.data.end().setUTCHours(tl.data.end().getUTCHours() + 3))
         ];
 
         altEnd = new Date(tl.data.start()
@@ -583,7 +583,6 @@ export function timelineConfig(models, config, ui) {
           .getUTCHours(),
         tl.data.start()
           .getUTCMinutes() + tickCountMax);
-
         tl.zoom.drawTicks(tickCount,
           tickCountMax,
           altEnd,
@@ -686,14 +685,18 @@ export function timelineConfig(models, config, ui) {
         tl.zoom.current.pick.nextChange = function (d) {
           return new Date(Date.UTC(d.getUTCFullYear(),
             d.getUTCMonth(),
-            d.getUTCDate() + 1));
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes() + 10));
         };
 
         // When the date updates while dragging the pick backward
         tl.zoom.current.pick.prevChange = function (d) {
           return new Date(Date.UTC(d.getUTCFullYear(),
             d.getUTCMonth(),
-            d.getUTCDate()));
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()));
         };
 
         tl.zoom.current.pick.hoverTick = function (newDate) {
@@ -705,20 +708,21 @@ export function timelineConfig(models, config, ui) {
             });
         };
 
-        d3.selectAll('.x.axis > g.tick')
-          .each(function () {
-            var currentTick = d3.select(this);
-            var currentTickData = currentTick.data()[0];
-            if ((currentTickData.getUTCDay() === 0) &&
-              (currentTickData.getUTCDate() !== 1)) {
-              currentTick
-                .insert('line', 'rect')
-                .attr('y1', 0)
-                .attr('y2', -10)
-                .attr('x2', 0)
-                .classed('tick-week', true);
-            }
-          });
+        // Setting the week ticks
+        // d3.selectAll('.x.axis > g.tick')
+        //   .each(function () {
+        //     var currentTick = d3.select(this);
+        //     var currentTickData = currentTick.data()[0];
+        //     if ((currentTickData.getUTCDay() === 0) &&
+        //       (currentTickData.getUTCDate() !== 1)) {
+        //       currentTick
+        //         .insert('line', 'rect')
+        //         .attr('y1', 0)
+        //         .attr('y2', -10)
+        //         .attr('x2', 0)
+        //         .classed('tick-week', true);
+        //     }
+        //   });
 
         // Update placement of zoom buttons
         $('.zoom-btn')
