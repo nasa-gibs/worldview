@@ -41,10 +41,11 @@ var dateWheels = function(models, config) {
           $('#wv-date-mobile-label')
             .css('display', 'block');
         },
+        stepMinute: 10,
         dateFormat: 'yyyy-mm-dd',
         setText: 'OK',
         timeFormat: 'T' + 'HH:ii:ss' + 'Z',
-        'timeWheels': '|HH:ii|'
+        timeWheels: '|HH:ii|'
       });
     $('#linkmode')
       .mobiscroll('setDate', UTCToLocal(model.selected), true);
