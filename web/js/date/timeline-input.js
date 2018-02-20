@@ -26,7 +26,7 @@ export function timelineInput(models, config, ui) {
     var nextMinute = new Date(new Date(model.selected)
       .setUTCMinutes(model.selected.getUTCMinutes() + 10));
     if (nextMinute <= util.now()) {
-      animateForward('minute');
+      animateForward('minute', 10);
     } else {
       self.stop();
     }
@@ -36,7 +36,7 @@ export function timelineInput(models, config, ui) {
     var nextDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() + 1));
     if (nextDay <= util.today()) {
-      animateForward('day');
+      animateForward('day', 1);
     } else {
       self.stop();
     }
@@ -46,7 +46,7 @@ export function timelineInput(models, config, ui) {
     var nextMonth = new Date(new Date(model.selected)
       .setUTCMonth(model.selected.getUTCMonth() + 1));
     if (nextMonth <= util.today()) {
-      animateForward('month');
+      animateForward('month', 1);
     } else {
       self.stop();
     }
@@ -56,7 +56,7 @@ export function timelineInput(models, config, ui) {
     var nextYear = new Date(new Date(model.selected)
       .setUTCFullYear(model.selected.getUTCFullYear() + 1));
     if (nextYear <= util.today()) {
-      animateForward('year');
+      animateForward('year', 1);
     } else {
       self.stop();
     }
@@ -114,7 +114,7 @@ export function timelineInput(models, config, ui) {
     var prevMinute = new Date(new Date(model.selected)
       .setUTCMinutes(model.selected.getUTCMinutes() - 10));
     if (prevMinute >= tl.data.start()) {
-      animateReverse('minute');
+      animateReverse('minute', -10);
     } else {
       self.stop();
     }
@@ -124,7 +124,7 @@ export function timelineInput(models, config, ui) {
     var prevDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() - 1));
     if (prevDay >= tl.data.start()) {
-      animateReverse('day');
+      animateReverse('day', -1);
     } else {
       self.stop();
     }
@@ -134,7 +134,7 @@ export function timelineInput(models, config, ui) {
     var prevMonth = new Date(new Date(model.selected)
       .setUTCMonth(model.selected.getUTCMonth() - 1));
     if (prevMonth >= tl.data.start()) {
-      animateReverse('month');
+      animateReverse('month', -1);
     } else {
       self.stop();
     }
@@ -144,26 +144,26 @@ export function timelineInput(models, config, ui) {
     var prevYear = new Date(new Date(model.selected)
       .setUTCFullYear(model.selected.getUTCFullYear() - 1));
     if (prevYear >= tl.data.start()) {
-      animateReverse('year');
+      animateReverse('year', -1);
     } else {
       self.stop();
     }
   };
 
-  var animateForward = function (interval) {
+  var animateForward = function (interval, amount) {
     if (self.active) {
       return;
     }
-    models.date.add(interval, 1);
+    models.date.add(interval, amount);
     self.interval = interval;
     self.play('forward');
   };
 
-  var animateReverse = function (interval) {
+  var animateReverse = function (interval, amount) {
     if (self.active) {
       return;
     }
-    models.date.add(interval, -1);
+    models.date.add(interval, amount);
     self.interval = interval;
     self.play('reverse');
   };
@@ -439,11 +439,11 @@ export function timelineInput(models, config, ui) {
         }
         switch (event.keyCode) {
           case util.key.LEFT:
-            animateReverse('day');
+            animateReverse('day', -1);
             event.preventDefault();
             break;
           case util.key.RIGHT:
-            animateForward('day');
+            animateForward('day', 1);
             event.preventDefault();
             break;
         }
