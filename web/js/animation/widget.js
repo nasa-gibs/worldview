@@ -7,7 +7,7 @@ import lodashIndexOf from 'lodash/indexOf';
 import util from '../util/util';
 
 export function animationWidget (models, config, ui) {
-  var zooms = ['yearly', 'monthly', 'daily'];
+  var zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
   var self = {};
   var timeline = ui.timeline;
   var model = models.anim;
@@ -153,6 +153,11 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.getIncrements = function () {
+    if (models.date.maxZoom > 3) {
+      zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
+    } else {
+      zooms = ['yearly', 'monthly', 'daily'];
+    }
     return zooms[timeline.config.currentZoom - 1];
   };
 
