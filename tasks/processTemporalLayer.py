@@ -44,12 +44,12 @@ def process_temporal(wv_layer, value):
                 if times[2] != "P1D":
                     end_date = determine_end_date(times[2], end_date)
             else:
-                startDate = times[0].replace('T', ' ').replace('Z', '')
-                endDate = times[1].replace('T', ' ').replace('Z', '')
+                startTime = times[0].replace('T', ' ').replace('Z', '')
+                endTime = times[1].replace('T', ' ').replace('Z', '')
                 start_date = min(start_date,
-                    datetime.strptime(startDate, "%Y-%m-%d %H:%M:%S"))
+                    datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S"))
                 end_date = max(end_date,
-                    datetime.strptime(endDate, "%Y-%m-%d %H:%M:%S"))
+                    datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S"))
                 if start_date:
                     startTimeParse = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
                     date_range_start.append(startTimeParse.strftime("%Y-%m-%d %H:%M:%S"))
