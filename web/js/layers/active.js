@@ -30,7 +30,8 @@ export function layersActive(models, ui, config) {
       .on('remove', onLayerRemoved)
       .on('update', onLayerUpdate)
       .on('visibility', onLayerVisibility)
-      .on('toggle-subdaily', toggleSubdaily);
+      .on('toggle-subdaily', toggleSubdaily)
+      .on('set-zoom', setMaxZoomlevel);
     models.proj.events
       .on('select', onProjectionChanged);
     models.palettes.events
@@ -422,18 +423,26 @@ export function layersActive(models, ui, config) {
     }
   };
 
+  var setMaxZoomlevel = function (zoomLevel) {
+    models.date.maxZoom = zoomLevel;
+  };
+
   var toggleSubdaily = function () {
     if (subdailyCheck()) {
       document.getElementById('zoom-minutes').style.display = null;
       document.getElementById('input-wrapper-hour').style.display = null;
       document.getElementById('input-wrapper-minute').style.display = null;
       document.getElementById('timeline-header').classList.add('subdaily');
+      setMaxZoomlevel(4);
+      models.anim.events.trigger('change');
     } else {
       document.getElementById('zoom-minutes').style.display = 'none';
       document.getElementById('input-wrapper-hour').style.display = 'none';
       document.getElementById('input-wrapper-minute').style.display = 'none';
       document.getElementById('timeline-header').classList.remove('subdaily');
       document.getElementById('zoom-days').click(); // Switch back to 'Days' view
+      setMaxZoomlevel(3);
+      models.anim.events.trigger('change');
     }
   };
 
