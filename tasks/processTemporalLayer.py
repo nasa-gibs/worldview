@@ -1,6 +1,5 @@
 from datetime import datetime, date, timedelta
 import isodate
-import json
 
 def to_list(val):
     return [val] if not hasattr(val, 'reverse') else val
@@ -37,9 +36,11 @@ def process_temporal(wv_layer, value):
                 end_date = max(end_date,
                     datetime.strptime(times[1], "%Y-%m-%d"))
                 if start_date:
-                    date_range_start.append(start_date.strftime("%Y-%m-%d"))
+                    startDateParse = datetime.strptime(times[0], "%Y-%m-%d")
+                    date_range_start.append(startDateParse.strftime("%Y-%m-%d %H:%M:%S"))
                 if end_date:
-                    date_range_end.append(end_date.strftime("%Y-%m-%d"))
+                    endDateParse = datetime.strptime(times[1], "%Y-%m-%d")
+                    date_range_end.append(endDateParse.strftime("%Y-%m-%d %H:%M:%S"))
                 if times[2] != "P1D":
                     end_date = determine_end_date(times[2], end_date)
             else:
@@ -50,9 +51,11 @@ def process_temporal(wv_layer, value):
                 end_date = max(end_date,
                     datetime.strptime(endDate, "%Y-%m-%d %H:%M:%S"))
                 if start_date:
-                    date_range_start.append(start_date.strftime("%Y-%m-%d %H:%M:%S"))
+                    startTimeParse = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
+                    date_range_start.append(startTimeParse.strftime("%Y-%m-%d %H:%M:%S"))
                 if end_date:
-                    date_range_end.append(end_date.strftime("%Y-%m-%d %H:%M:%S"))
+                    endTimeParse = datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S")
+                    date_range_end.append(endTimeParse.strftime("%Y-%m-%d %H:%M:%S"))
 
             # This will need to be updates to include subdaily values
             # when granule support is in
