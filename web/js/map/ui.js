@@ -112,7 +112,9 @@ export function mapui(models, config) {
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
-    if (models.proj.selected.id !== 'geographic') { rotation.setResetButton(models.map.rotation); }
+    if (models.proj.selected.id !== 'geographic' && models.proj.selected.id !== 'webmerc') {
+      rotation.setResetButton(models.map.rotation);
+    }
 
     // If the browser was resized, the inactive map was not notified of
     // the event. Force the update no matter what and reposition the center
@@ -564,7 +566,7 @@ export function mapui(models, config) {
         maxResolution: proj.resolutions[0],
         projection: olProj.get(proj.crs),
         center: proj.startCenter,
-        rotation: proj.id === 'geographic' ? 0.0 : models.map.rotation,
+        rotation: proj.id === 'geographic' || 'webmerc' ? 0.0 : models.map.rotation,
         zoom: proj.startZoom,
         maxZoom: proj.numZoomLevels,
         enableRotation: true,
@@ -605,11 +607,11 @@ export function mapui(models, config) {
     createMousePosSel(map, proj);
 
     // allow rotation by dragging for polar projections
-    if (proj.id !== 'geographic') {
+    if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
       rotation.init(map, proj.id);
       map.addInteraction(rotateInteraction);
       map.addInteraction(mobileRotation);
-    } else {
+    } else if (proj.id === 'geographic') {
       dateline.init(self, map, models.date.selected);
     }
 
