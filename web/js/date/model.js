@@ -71,6 +71,8 @@ export function dateModel(config, spec) {
     return util.today();
   };
 
+  self.maxZoom = null;
+
   self.save = function (state) {
     state.t = self.selected.toISOString()
       .split('T')[0] + '-' + 'T' + self.selected.toISOString()
