@@ -363,7 +363,7 @@ export function mapui(models, config) {
   var updateDate = function () {
     var defs = models.layers.get();
     lodashEach(defs, function (def) {
-      if (def.period !== 'daily') {
+      if (!['daily', 'monthly', 'yearly'].includes(def.period)) {
         return;
       }
       var index = findLayerIndex(def);

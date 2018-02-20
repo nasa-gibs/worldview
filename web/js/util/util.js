@@ -297,6 +297,7 @@ export default (function (self) {
     }
     return newDate;
   };
+
   self.daysInMonth = function (d) {
     var y;
     var m;
@@ -310,6 +311,15 @@ export default (function (self) {
     var lastDay = new Date(Date.UTC(y, m + 1, 0));
     return lastDay.getUTCDate();
   };
+
+  self.daysInYear = function (time) {
+    var start = new Date(time.getUTCFullYear(), 0, 0);
+    var diff = (time - start) + ((start.getTimezoneOffset() - time.getTimezoneOffset()) * 60 * 1000);
+    var oneDay = 1000 * 60 * 60 * 24;
+    var day = Math.floor(diff / oneDay);
+    return day;
+  };
+
   self.objectLength = function (obj) {
     return Object.keys(obj)
       .length;

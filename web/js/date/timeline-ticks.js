@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import d3 from 'd3';
+import util from '../util/util';
 /**
  * Perform timeline tick functions
  */
@@ -368,6 +369,7 @@ export function timelineTicks(models, config, ui) {
       var $boundaryTick;
       var tick = this.parentNode;
       var boundaryTick, boundaryTickWidth;
+      var hoverDay = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
 
       // Using jquery to precise select as it's easier than d3
       if (d3.select(tick)
@@ -396,7 +398,6 @@ export function timelineTicks(models, config, ui) {
       // trigger hover state
       boundaryTick.select('rect.boundarytick-background')
         .classed('bg-hover', true);
-
       boundaryTick.append('svg:text')
         .attr('class', 'hover-tick-label')
         .attr('y', '15')
@@ -405,7 +406,8 @@ export function timelineTicks(models, config, ui) {
         .attr('width', boundaryTickWidth)
         .text(d.getUTCFullYear() +
           ' ' + model.monthAbbr[d.getUTCMonth()] +
-          ' ' + d.getUTCDate()); // Add hover Label
+          ' ' + d.getUTCDate() +
+          ' (' + util.daysInYear(hoverDay) + ')'); // Add hover Label
     },
     remove: function () { // TODO: update
       tl.boundary.selectAll('.tick-label, .sub-label')

@@ -56,6 +56,13 @@ def remove_layer(wv, layer_id):
     del wv["layers"][layer_id]
     if layer_id in wv["layerOrder"]: wv["layerOrder"].remove(layer_id)
 
+def isDateTimeFormat(input):
+    try:
+        datetime.strptime(input, '%Y-%m-%d %H:%M:%S')
+        return True
+    except ValueError:
+        return False
+
 if tolerant:
     warn("Validation enforcement disabled")
 
@@ -130,7 +137,10 @@ for layer_id in wv["layers"].keys():
         if "endDate" in layer:
             del layer["endDate"]
     if "startDate" in layer:
-        d = datetime.strptime(layer["startDate"], "%Y-%m-%d")
+        if isDateTimeFormat(layer["startDate"]):
+            d = datetime.strptime(layer["startDate"], "%Y-%m-%d %H:%M:%S")
+        else:
+            d = datetime.strptime(layer["startDate"], "%Y-%m-%d")
         start_date = min(start_date, d)
 
 if start_date != datetime.max:

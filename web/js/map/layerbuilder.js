@@ -107,7 +107,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     } else {
       date = util.toISOStringDate(models.date.selected);
     }
-    var dateId = (def.period === 'daily') ? date : '';
+    var dateId = (def.period === 'daily' || def.period === 'monthly' || def.period === 'yearly') ? date : '';
     var palette = '';
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
@@ -162,7 +162,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       }
     }
 
-    if (def.period === 'daily') {
+    if (['daily', 'monthly', 'yearly'].includes(def.period)) {
       date = options.date || models.date.selected;
       if (day) {
         date = util.dateAdd(date, 'day', day);
@@ -243,7 +243,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
 
     extra = '';
 
-    if (def.period === 'daily') {
+    if (def.period === 'daily' || def.period === 'monthly' || def.period === 'yearly') {
       date = options.date || models.date.selected;
       if (day) {
         date = util.dateAdd(date, 'day', day);
