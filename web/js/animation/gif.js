@@ -540,7 +540,7 @@ export function animationGif(models, config, ui) {
 
     while (current <= toDate) {
       j++;
-      strDate = util.toISOStringDate(current);
+      strDate = current.toISOString().split('.')[0] + 'Z';
       products = getProducts(current);
 
       layers = getLayers(products, proj);
