@@ -195,8 +195,8 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.dateUpdate = function (startDate, endDate) {
-    model.rangeState.startDate = util.toISOStringDate(startDate) || 0;
-    model.rangeState.endDate = util.toISOStringDate(endDate);
+    model.rangeState.startDate = (startDate).toISOString().split('.')[0] + 'Z' || 0;
+    model.rangeState.endDate = (endDate).toISOString().split('.')[0] + 'Z';
     model.rangeState.playing = false;
     model.events.trigger('change');
     model.events.trigger('datechange');
