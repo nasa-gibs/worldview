@@ -73,7 +73,6 @@ export function animationRangeSelect(models, config, ui) {
       .width;
     var animEndLocation = (d3.transform(pick.attr('transform'))
       .translate[0] - (pickWidth / 2)); // getting guitar pick location
-
     if (model.rangeState.startDate) {
       startLocation = self.getLocationFromStringDate(model.rangeState.startDate);
       endLocation = self.getLocationFromStringDate(model.rangeState.endDate);
@@ -223,8 +222,8 @@ export function animationRangeSelect(models, config, ui) {
     var startDate = timeline.x.invert(startLocation);
     var endDate = timeline.x.invert(EndLocation);
     var state = model.rangeState;
-    state.startDate = util.toISOStringDate(startDate) || 0;
-    state.endDate = util.toISOStringDate(endDate);
+    state.startDate = startDate.toISOString().split('.')[0] + 'Z' || 0;
+    state.endDate = endDate.toISOString().split('.')[0] + 'Z';
     model.rangeState.playing = false;
     model.events.trigger('change');
     model.events.trigger('datechange');
