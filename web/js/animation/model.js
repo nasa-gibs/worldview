@@ -40,7 +40,7 @@ export function animationModel(models, config) {
       self.rangeState.state = state.ab;
     }
     if (state.as && state.ae) {
-      if (state.ae.length == 10 && state.as.length == 10) {
+      if (state.ae.length >= 10 && state.as.length >= 10) {
         self.rangeState.startDate = state.as;
         self.rangeState.endDate = state.ae;
       }
