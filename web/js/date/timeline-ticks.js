@@ -99,6 +99,22 @@ export function timelineTicks(models, config, ui) {
             }
           }
         }
+        if (tl.config.currentZoom === 4) {
+          if (!$(this)
+            .find('line.tick-hour')
+            .length) {
+            let currentTick = d3.select(this);
+            let currentTickData = currentTick.data()[0];
+            if (currentTickData.getUTCMinutes() === 0) {
+              currentTick
+                .insert('line', 'rect')
+                .attr('y1', 0)
+                .attr('y2', -10)
+                .attr('x2', 0)
+                .classed('tick-hour', true);
+            }
+          }
+        }
       });
 
       self.normal.set();
