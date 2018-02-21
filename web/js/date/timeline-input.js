@@ -265,9 +265,10 @@ export function timelineInput(models, config, ui) {
           break;
         case 'minute-input-group':
           if ((newInput >= 0) && (newInput <= 59)) {
-            selectedDateObj = new Date(
+            var coeff = 1000 * 60 * 10;
+            selectedDateObj = new Date(Math.round(
               (new Date(model.selected))
-                .setUTCMinutes(newInput));
+                .setUTCMinutes(newInput) / coeff) * coeff);
           }
           break;
       }
