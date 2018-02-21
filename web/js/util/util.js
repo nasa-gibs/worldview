@@ -483,6 +483,7 @@ export default (function (self) {
     var month = date.getUTCMonth();
     var year = date.getUTCFullYear();
     switch (interval) {
+      // TODO: change minute and hour hard-coded min & max to be dynamic
       case 'minute':
         minute = self.roll(minute + amount, 0, 59);
         break;
