@@ -204,7 +204,7 @@ export function timelineInput(models, config, ui) {
   // TODO: Cleanup
   var validateInput = function (event) {
     var kc = event.keyCode || event.which;
-    var entered = (kc === 13) || (kc === 9);
+    var entered = (kc === 13) || (kc === 9); // carriage return or horizontal tab
     if (event.type === 'focusout' || entered) {
       if (entered) {
         event.preventDefault();
@@ -257,14 +257,14 @@ export function timelineInput(models, config, ui) {
           }
           break;
         case 'hour-input-group':
-          if ((newInput > 23) && (newInput < 0)) {
+          if ((newInput >= 0) && (newInput <= 23)) {
             selectedDateObj = new Date(
               (new Date(model.selected))
                 .setUTCHours(newInput));
           }
           break;
         case 'minute-input-group':
-          if ((newInput > 59) && (newInput < 0)) {
+          if ((newInput >= 0) && (newInput <= 59)) {
             selectedDateObj = new Date(
               (new Date(model.selected))
                 .setUTCMinutes(newInput));
@@ -371,7 +371,9 @@ export function timelineInput(models, config, ui) {
     }
 
     // Disable arrows if nothing before/after selection
-    if (nd > util.today()) {
+    if (model.selectedZoom === 4 && nd > util.now()) {
+      $incrementBtn.addClass('button-disabled');
+    } else if (nd > util.today()) {
       $incrementBtn.addClass('button-disabled');
     } else {
       $incrementBtn.removeClass('button-disabled');
@@ -548,7 +550,7 @@ export function timelineInput(models, config, ui) {
 
     $('#focus-guard-1')
       .on('focus', function () {
-        $('#day-input-group')
+        $('#minute-input-group')
           .focus()
           .select();
       });

@@ -412,11 +412,11 @@ export default (function (self) {
   };
 
   self.minDate = function () {
-    return new Date(Date.UTC(1000, 0, 1));
+    return new Date(Date.UTC(1000, 0, 1, 0, 0));
   };
 
   self.maxDate = function () {
-    return new Date(Date.UTC(3000, 11, 31));
+    return new Date(Date.UTC(3000, 11, 30, 23, 59));
   };
 
   self.rollRange = function (date, interval, minDate, maxDate) {
@@ -428,17 +428,17 @@ export default (function (self) {
         var firstMinute = new Date(Date.UTC(y, m, 1, 0, 0));
         var lastMinute = new Date(Date.UTC(y, m, self.daysInMonth(date), 23, 59));
         first = new Date(Math.max(firstMinute, minDate))
-          .getUTCDate();
+          .getUTCMinutes();
         last = new Date(Math.min(lastMinute, maxDate))
-          .getUTCDate();
+          .getUTCMinutes();
         break;
       case 'hour':
         var firstHour = new Date(Date.UTC(y, m, 1, 0));
         var lastHour = new Date(Date.UTC(y, m, self.daysInMonth(date), 23));
         first = new Date(Math.max(firstHour, minDate))
-          .getUTCDate();
+          .getUTCHours();
         last = new Date(Math.min(lastHour, maxDate))
-          .getUTCDate();
+          .getUTCHours();
         break;
       case 'day':
         var firstDay = new Date(Date.UTC(y, m, 1));
@@ -484,10 +484,10 @@ export default (function (self) {
     var year = date.getUTCFullYear();
     switch (interval) {
       case 'minute':
-        minute = self.roll(minute + amount, min, max);
+        minute = self.roll(minute + amount, 0, 59);
         break;
       case 'hour':
-        hour = self.roll(hour + amount, min, max);
+        hour = self.roll(hour + amount, 0, 23);
         break;
       case 'day':
         day = self.roll(day + amount, min, max);
