@@ -195,8 +195,8 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.dateUpdate = function (startDate, endDate) {
-    model.rangeState.startDate = (startDate).toISOString().split('.')[0] + 'Z' || 0;
-    model.rangeState.endDate = (endDate).toISOString().split('.')[0] + 'Z';
+    model.rangeState.startDate = startDate.toISOString().split('.')[0] + 'Z' || 0;
+    model.rangeState.endDate = endDate.toISOString().split('.')[0] + 'Z';
     model.rangeState.playing = false;
     model.events.trigger('change');
     model.events.trigger('datechange');
@@ -247,11 +247,11 @@ export function animationWidget (models, config, ui) {
     var today = new Date();
 
     if (day > today) {
-      model.rangeState.endDate = util.toISOStringDate(currentDate);
-      model.rangeState.startDate = util.toISOStringDate(util.dateAdd(currentDate, interval, -7));
+      model.rangeState.endDate = currentDate.toISOString().split('.')[0] + 'Z';
+      model.rangeState.startDate = (util.dateAdd(currentDate, interval, -7).toISOString().split('.')[0] + 'Z');
     } else {
-      model.rangeState.startDate = util.toISOStringDate(currentDate);
-      model.rangeState.endDate = util.toISOStringDate(util.dateAdd(currentDate, interval, 7));
+      model.rangeState.startDate = currentDate.toISOString().split('.')[0] + 'Z';
+      model.rangeState.endDate = (util.dateAdd(currentDate, interval, 7).toISOString().split('.')[0] + 'Z');
     }
   };
   /*
