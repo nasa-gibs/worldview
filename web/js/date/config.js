@@ -557,7 +557,7 @@ export function timelineConfig(models, config, ui) {
       case 4: // 10-Minute
 
         labelFormat = d3.time.format.utc('%M');
-        dateInterval = d3.time.utc;
+        dateInterval = d3.time.minutes.utc;
         // Latest Date minus begin date (Wed Dec 31 1947 19:00:00 GMT-0500 (Eastern Standard Time))
         // Subtracting these leaves miliseconds divide by 1000 = seconds
         // Divide by 60 = Minutes
@@ -611,13 +611,13 @@ export function timelineConfig(models, config, ui) {
         // Calculated next boundary tick by date
         tl.zoom.current.ticks.boundary.next = function (current) {
           var next = new Date(current);
-          return new Date(next.setUTCHours(next.getUTCHours() + 1));
+          return new Date(next.setUTCMinutes(next.getUTCMinutes() + 10));
         };
 
         // Calculated next normal tick by date
         tl.zoom.current.ticks.normal.next = function (current) {
           var next = new Date(current);
-          return new Date(next.setUTCMinutes(next.getUTCMinutes() + 60));
+          return new Date(next.setUTCMinutes(next.getUTCMinutes() + 10));
         };
 
         // Date of first printed boundary interval of this zoom level
@@ -633,7 +633,7 @@ export function timelineConfig(models, config, ui) {
           var first = tl.ticks.normal.firstDate;
           return new Date(Date.UTC(first.getUTCFullYear(),
             first.getUTCMonth(),
-            first.getUTCDate() - 1));
+            first.getUTCDate(), first.getUTCHours(), first.getUTCMinutes() - 1));
         };
 
         // Date of last printed boundary interval of this zoom level
@@ -654,7 +654,9 @@ export function timelineConfig(models, config, ui) {
         tl.zoom.current.ticks.normal.clickDate = function (d) {
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            d.getUTCDate());
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes());
         };
 
         // Value for hovered boundary tick
@@ -678,7 +680,9 @@ export function timelineConfig(models, config, ui) {
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            model.selected.getUTCDate());
+            d.getUTCDate(),
+            d.getUTCHours(),
+            model.selected.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
@@ -687,7 +691,7 @@ export function timelineConfig(models, config, ui) {
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
-            d.getUTCMinutes() + 10));
+            d.getUTCMinutes() + 1));
         };
 
         // When the date updates while dragging the pick backward
@@ -708,21 +712,20 @@ export function timelineConfig(models, config, ui) {
             });
         };
 
-        // Setting the week ticks
-        // d3.selectAll('.x.axis > g.tick')
-        //   .each(function () {
-        //     var currentTick = d3.select(this);
-        //     var currentTickData = currentTick.data()[0];
-        //     if ((currentTickData.getUTCDay() === 0) &&
-        //       (currentTickData.getUTCDate() !== 1)) {
-        //       currentTick
-        //         .insert('line', 'rect')
-        //         .attr('y1', 0)
-        //         .attr('y2', -10)
-        //         .attr('x2', 0)
-        //         .classed('tick-week', true);
-        //     }
-        //   });
+        // Setting the hour ticks
+        d3.selectAll('.x.axis > g.tick')
+          .each(function () {
+            var currentTick = d3.select(this);
+            var currentTickData = currentTick.data()[0];
+            if (currentTickData.getUTCMinutes() === 0) {
+              currentTick
+                .insert('line', 'rect')
+                .attr('y1', 0)
+                .attr('y2', -10)
+                .attr('x2', 0)
+                .classed('tick-hour', true);
+            }
+          });
 
         // Update placement of zoom buttons
         $('.zoom-btn')
