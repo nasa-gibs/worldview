@@ -194,7 +194,7 @@ export function timeline(models, config, ui) {
       $timelineFooter.css('margin-right', self.margin.right - 1 + 'px');
     } else {
       $timelineFooter.css('margin-left', '10px');
-      $timelineFooter.css('margin-right', (self.margin.right + self.margin.left) - 34 + 'px');
+      $timelineFooter.css('margin-right', (self.margin.right + self.margin.left) - 12 + 'px');
     }
 
     self.x = d3.time.scale.utc();
