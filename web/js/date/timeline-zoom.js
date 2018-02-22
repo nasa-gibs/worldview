@@ -38,40 +38,40 @@ export function timelineZoom(models, config, ui) {
     tl.config.zoom.call(this, zoom, event);
   };
 
-  self.drawTicks = function (count, max, aEnd, w, i, s, f, e, p) {
+  self.drawTicks = function (tickCount, tickCountMax, altEnd, tickWidth, dateInterval, dateStep, labelFormat, event, paddedRange) {
     var mouseOffset, mousePos;
 
-    if (e) {
-      var relX = e.clientX - $('#timeline-footer')
+    if (event) {
+      var relX = event.clientX - $('#timeline-footer')
         .offset()
         .left;
       mousePos = tl.x.invert(relX);
       mouseOffset = (tl.width - tl.margin.left - tl.margin.right) / 2 - relX;
     }
 
-    var d1 = tl.data.start();
-    var d2;
-    var r1 = (tl.width / 2) - ((count * w) / 2);
-    var r2 = (tl.width / 2) + ((count * w) / 2);
+    var dataStart = tl.data.start();
+    var dataEnd;
+    var rangeStart = (tl.width / 2) - ((tickCount * tickWidth) / 2);
+    var rangeEnd = (tl.width / 2) + ((tickCount * tickWidth) / 2);
 
-    if (max > count) {
+    if (tickCountMax > tickCount) {
       tl.isCropped = false;
-      d2 = tl.data.end();
-      r1 = (tl.width / 2) - ((count * w) / 2);
-      r2 = (tl.width / 2) + ((count * w) / 2);
+      dataEnd = tl.data.end();
+      rangeStart = (tl.width / 2) - ((tickCount * tickWidth) / 2);
+      rangeEnd = (tl.width / 2) + ((tickCount * tickWidth) / 2);
     } else {
       tl.isCropped = true;
-      d2 = aEnd;
-      r1 = 0;
-      r2 = tl.width;
+      dataEnd = altEnd;
+      rangeStart = 0;
+      rangeEnd = tl.width;
     }
 
-    tl.x.domain([d1, d2])
-      .range([r1, r2]);
+    tl.x.domain([dataStart, dataEnd])
+      .range([rangeStart, rangeEnd]);
 
     tl.xAxis.scale(tl.x)
-      .ticks(i, s)
-      .tickFormat(f);
+      .ticks(dateInterval, dateStep)
+      .tickFormat(labelFormat);
 
     tl.axisZoom = d3.behavior.zoom()
       .scale(1)
@@ -79,7 +79,7 @@ export function timelineZoom(models, config, ui) {
       .x(tl.x);
 
     if (tl.isCropped) {
-      tl.axisZoom.xExtent(p);
+      tl.axisZoom.xExtent(paddedRange);
     } else {
       tl.axisZoom.xExtent([tl.data.start(), tl.data.end()]);
     }
@@ -89,7 +89,7 @@ export function timelineZoom(models, config, ui) {
 
     tl.svg.call(tl.axisZoom);
 
-    if (e) {
+    if (event) {
       tl.pan.toCursor(mousePos, mouseOffset);
     } else {
       tl.pan.toSelection();
