@@ -412,15 +412,11 @@ export function layersActive(models, ui, config) {
 
   var subdailyCheck = function () {
     var activeLayers = models.layers.active;
-
-    for (var i = 0; i < activeLayers.length; i++) {
-      switch (activeLayers[i].period) {
-        case 'subdaily':
-          return true;
-        default:
-          return false;
-      }
-    }
+    var check;
+    lodashEach(activeLayers, function(activeLayer) {
+      if (activeLayer.period === 'subdaily') check = true;
+    });
+    return check;
   };
 
   var setMaxZoomlevel = function (zoomLevel) {
