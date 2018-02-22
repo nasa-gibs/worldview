@@ -8,14 +8,14 @@ export function parse (state, errors) {
     };
 
     // Get text before (
-    var on = str.match(/[^\(,]+/)[0];
+    var on = str.match(/[^(,]+/)[0];
     if (on !== 'on') { // don't do anything if wrong format
       state.a = undefined;
       return;
     }
 
     // remove (, get key value pairs
-    str = str.match(/\(.*\)/)[0].replace(/[\(\)]/g, '');
+    str = str.match(/\(.*\)/)[0].replace(/[()]/g, '');
     var kvps = str.split(',');
     lodashEach(kvps, function (kvp) {
       var parts = kvp.split('=');

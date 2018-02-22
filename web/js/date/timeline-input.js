@@ -442,11 +442,19 @@ export function timelineInput(models, config, ui) {
         }
         switch (event.keyCode) {
           case util.key.LEFT:
-            animateReverse('day', -1);
+            if (models.date.selectedZoom === 4) {
+              animateReverse('hour', -1);
+            } else {
+              animateReverse('day', -1);
+            }
             event.preventDefault();
             break;
           case util.key.RIGHT:
-            animateForward('day', 1);
+            if (models.date.selectedZoom === 4) {
+              animateReverse('hour', 1);
+            } else {
+              animateReverse('day', 1);
+            }
             event.preventDefault();
             break;
         }
@@ -462,11 +470,15 @@ export function timelineInput(models, config, ui) {
       });
     // bind click action to interval radio buttons
     var $buttons = $('.button-input-group');
+    var $oneIntervalButtons = $('.1-interval-group');
+    var $tenIntervalButtons = $('.10-interval-group');
     $buttons.unbind();
+    $oneIntervalButtons.unbind();
+    $tenIntervalButtons.unbind();
 
     // FIXME: Quick fix for fixing the propagation
     // of events with arrow keys and input field
-    $buttons.keydown(function (event) {
+    $oneIntervalButtons.keydown(function (event) {
       var interval = $(this)
         .attr('id')
         .split('-')[0];
@@ -485,6 +497,33 @@ export function timelineInput(models, config, ui) {
       } else if (event.keyCode === (util.key.DOWN)) {
         event.preventDefault();
         roll(interval, -1);
+        $(this)
+          .select()
+          .focus();
+      }
+    });
+
+    // FIXME: Quick fix for fixing the propagation
+    // of events with arrow keys and input field
+    $tenIntervalButtons.keydown(function (event) {
+      var interval = $(this)
+        .attr('id')
+        .split('-')[0];
+      event.stopPropagation();
+      if (event.keyCode === (util.key.LEFT || util.key.RIGHT)) {
+        event.preventDefault();
+        $(this)
+          .select()
+          .focus();
+      } else if (event.keyCode === (util.key.UP)) {
+        event.preventDefault();
+        roll(interval, 10);
+        $(this)
+          .select()
+          .focus();
+      } else if (event.keyCode === (util.key.DOWN)) {
+        event.preventDefault();
+        roll(interval, -10);
         $(this)
           .select()
           .focus();
