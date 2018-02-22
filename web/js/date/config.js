@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import d3 from 'd3';
+import util from '../util/util';
 /**
  * Modify zoom levels here. Maybe this isnt the best way to do this.
  * It could be called just level without the zoom part instead.
@@ -687,15 +688,17 @@ export function timelineConfig(models, config, ui) {
 
         // When the date updates while dragging the pick forward
         tl.zoom.current.pick.nextChange = function (d) {
+          d = util.roundTimeTenMinute(d);
           return new Date(Date.UTC(d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
-            d.getUTCMinutes() + 1));
+            d.getUTCMinutes() + 10));
         };
 
         // When the date updates while dragging the pick backward
         tl.zoom.current.pick.prevChange = function (d) {
+          d = util.roundTimeTenMinute(d);
           return new Date(Date.UTC(d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
