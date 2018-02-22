@@ -270,11 +270,11 @@ export function dataResultsDateTimeLabel(time) {
     if (granule.time_end) {
       var timeEnd = util.parseTimestampUTC(granule.time_end);
       granule.label = util.toISOStringDate(timeStart) + ': ' +
-        util.toISOStringTimeHM(timeStart) + '-' +
-        util.toISOStringTimeHM(timeEnd) + ' UTC';
+        util.toISOStringMinutes(timeStart) + '-' +
+        util.toISOStringMinutes(timeEnd) + ' UTC';
     } else {
       granule.label = util.toISOStringDate(timeStart) + ': ' +
-        util.toISOStringTimeHM(timeStart) + ' UTC';
+        util.toISOStringMinutes(timeStart) + ' UTC';
     }
 
     return granule;
@@ -745,10 +745,10 @@ export function dataResultsTimeLabel(time) {
         suffix = ' (+' + diff + ' day)';
       }
     }
-    var displayStart = util.toISOStringTimeHM(timeStart);
+    var displayStart = util.toISOStringMinutes(timeStart);
     var displayEnd = null;
     if (timeEnd) {
-      displayEnd = util.toISOStringTimeHM(timeEnd);
+      displayEnd = util.toISOStringMinutes(timeEnd);
     } else {
       displayEnd = '?';
     }

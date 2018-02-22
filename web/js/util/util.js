@@ -236,14 +236,26 @@ export default (function (self) {
   };
 
   /**
-   * Converts a time into an ISO string without seconds.
+   * Converts a time into an ISO string without miliseconds.
    *
-   * @method toISOStringTimeHM
+   * @method toISOStringSeconds
+   * @static
+   * @param date {Date} the date to convert
+   * @return {string} ISO string in the form of ``HH:MM:SS``.
+   */
+  self.toISOStringSeconds = function (date) {
+    return date.toISOString().split('.')[0] + 'Z';
+  };
+
+  /**
+   * Converts a time into an ISO string without seconds & milseconds.
+   *
+   * @method toISOStringMinutes
    * @static
    * @param date {Date} the date to convert
    * @return {string} ISO string in the form of ``HH:MM``.
    */
-  self.toISOStringTimeHM = function (date) {
+  self.toISOStringMinutes = function (date) {
     var time = date.toISOString()
       .split('T')[1];
     var parts = time.split('.')[0].split(':');
@@ -253,7 +265,7 @@ export default (function (self) {
   /**
    * Calculates percent of date between two other dates
    *
-   * @method toISOStringTimeHM
+   * @method getDatePercent
    * @static
    * @param current {Date} current date
    * @param start {Date} start date
@@ -262,6 +274,15 @@ export default (function (self) {
    */
   self.getDatePercent = function (current, start, end) {
     return Math.round((current - start) / (end - start));
+  };
+
+  self.roundTimeOneMinute = function (time) {
+    var timeToReturn = new Date(time);
+
+    timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
+    timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
+    timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes()));
+    return timeToReturn;
   };
 
   self.roundTimeTenMinute = function (time) {
