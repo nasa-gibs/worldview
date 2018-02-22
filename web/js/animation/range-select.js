@@ -222,8 +222,8 @@ export function animationRangeSelect(models, config, ui) {
     var startDate = timeline.x.invert(startLocation);
     var endDate = timeline.x.invert(EndLocation);
     var state = model.rangeState;
-    state.startDate = startDate.toISOString().split('.')[0] + 'Z' || 0;
-    state.endDate = endDate.toISOString().split('.')[0] + 'Z';
+    state.startDate = util.toISOStringSeconds(startDate) || 0;
+    state.endDate = util.toISOStringSeconds(endDate);
     model.rangeState.playing = false;
     model.events.trigger('change');
     model.events.trigger('datechange');
