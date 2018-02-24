@@ -23,6 +23,7 @@ export function timelineInput(models, config, ui) {
   var $decrementBtn = $('#left-arrow-group');
 
   var forwardNextMinute = function () { // FIXME: Limit animation correctly
+    self.delta = 10;
     var nextMinute = new Date(new Date(model.selected)
       .setUTCMinutes(model.selected.getUTCMinutes() + 10));
     if (nextMinute <= util.now()) {
@@ -33,6 +34,7 @@ export function timelineInput(models, config, ui) {
   };
 
   var forwardNextDay = function () { // FIXME: Limit animation correctly
+    self.delta = 1;
     var nextDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() + 1));
     if (nextDay <= util.today()) {
@@ -43,6 +45,7 @@ export function timelineInput(models, config, ui) {
   };
 
   var forwardNextMonth = function () {
+    self.delta = 1;
     var nextMonth = new Date(new Date(model.selected)
       .setUTCMonth(model.selected.getUTCMonth() + 1));
     if (nextMonth <= util.today()) {
@@ -53,6 +56,7 @@ export function timelineInput(models, config, ui) {
   };
 
   var forwardNextYear = function () {
+    self.delta = 1;
     var nextYear = new Date(new Date(model.selected)
       .setUTCFullYear(model.selected.getUTCFullYear() + 1));
     if (nextYear <= util.today()) {
@@ -111,6 +115,7 @@ export function timelineInput(models, config, ui) {
   };
 
   var reversePrevMinute = function () {
+    self.delta = 10;
     var prevMinute = new Date(new Date(model.selected)
       .setUTCMinutes(model.selected.getUTCMinutes() - 10));
     if (prevMinute >= tl.data.start()) {
@@ -121,6 +126,7 @@ export function timelineInput(models, config, ui) {
   };
 
   var reversePrevDay = function () { // FIXME: Limit animation correctly
+    self.delta = 1;
     var prevDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() - 1));
     if (prevDay >= tl.data.start()) {
@@ -131,6 +137,7 @@ export function timelineInput(models, config, ui) {
   };
 
   var reversePrevMonth = function () {
+    self.delta = 1;
     var prevMonth = new Date(new Date(model.selected)
       .setUTCMonth(model.selected.getUTCMonth() - 1));
     if (prevMonth >= tl.data.start()) {
@@ -141,6 +148,7 @@ export function timelineInput(models, config, ui) {
   };
 
   var reversePrevYear = function () {
+    self.delta = 1;
     var prevYear = new Date(new Date(model.selected)
       .setUTCFullYear(model.selected.getUTCFullYear() - 1));
     if (prevYear >= tl.data.start()) {
