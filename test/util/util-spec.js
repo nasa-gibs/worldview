@@ -84,15 +84,16 @@ buster.testCase('wv.util', (function () {
     buster.assert.equals(wv.util.toISOStringDate(d), '2013-01-15');
   };
 
-  self['toISOStringMinutes: Converts time'] = function () {
-    var d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
-    buster.assert.equals(wv.util.toISOStringMinutes(d), '11:22');
-  };
-
   self['toISOStringSeconds: Converts time'] = function () {
     var d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
-    buster.assert.equals(wv.util.toISOStringSeconds(d), '11:22:33');
+    buster.assert.equals(wv.util.toISOStringSeconds(d), '2013-01-15T11:22:33Z');
   };
+
+  self['toHourMinutes: Converts time'] = function () {
+    var d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
+    buster.assert.equals(wv.util.toHourMinutes(d), '11:22');
+  };
+
 
   self['toCompactTimestamp: Converts timestamp'] = function () {
     var d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));

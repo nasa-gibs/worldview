@@ -241,21 +241,21 @@ export default (function (self) {
    * @method toISOStringSeconds
    * @static
    * @param date {Date} the date to convert
-   * @return {string} ISO string in the form of ``HH:MM:SS``.
+   * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
   self.toISOStringSeconds = function (date) {
     return date.toISOString().split('.')[0] + 'Z';
   };
 
   /**
-   * Converts a time into an ISO string without seconds & milseconds.
+   * Converts a time into a HH:MM string
    *
-   * @method toISOStringMinutes
+   * @method toHourMinutes
    * @static
    * @param date {Date} the date to convert
-   * @return {string} ISO string in the form of ``HH:MM``.
+   * @return {string} ISO string in the form of HH:MM`.
    */
-  self.toISOStringMinutes = function (date) {
+  self.toHourMinutes = function (date) {
     var time = date.toISOString()
       .split('T')[1];
     var parts = time.split('.')[0].split(':');
