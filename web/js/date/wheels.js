@@ -21,10 +21,29 @@ var dateWheels = function(models, config) {
     resize();
   };
 
-  var render = function () {
-    $container
-      .addClass('datespan')
-      .html('<div id=\'wv-date-mobile-label\'></div><input type=\'hidden\' id=\'linkmode\' readonly>');
+  var dateWheel = function () {
+    $('#linkmode')
+      .mobiscroll()
+      .date({
+        display: 'bottom',
+        onChange: function (valueText) {
+          var d = util.parseDateUTC(valueText);
+          model.select(d);
+        },
+        onShow: function () {
+          $('#wv-date-mobile-label')
+            .css('display', 'none');
+        },
+        onClose: function () {
+          $('#wv-date-mobile-label')
+            .css('display', 'block');
+        },
+        dateFormat: 'yyyy-mm-dd',
+        setText: 'OK'
+      });
+  };
+
+  var dateTimeWheel = function () {
     $('#linkmode')
       .mobiscroll()
       .datetime({
@@ -47,6 +66,22 @@ var dateWheels = function(models, config) {
         timeFormat: 'T' + 'HH:ii:ss' + 'Z',
         timeWheels: '|HH:ii|'
       });
+  };
+
+  var setTimeWheel = function () {
+    if (models.date.maxZoom === 4) {
+      dateTimeWheel();
+    } else {
+      dateWheel();
+    }
+  };
+
+  var render = function () {
+    models.layers.events.trigger('toggle-subdaily');
+    $container
+      .addClass('datespan')
+      .html('<div id=\'wv-date-mobile-label\'></div><input type=\'hidden\' id=\'linkmode\' readonly>');
+    setTimeWheel();
     $('#linkmode')
       .mobiscroll('setDate', UTCToLocal(model.selected), true);
     $('#wv-date-mobile-label')
@@ -83,6 +118,7 @@ var dateWheels = function(models, config) {
   };
 
   var update = function () {
+    setTimeWheel();
     $('#wv-date-mobile-label')
       .html(util.toISOStringDate(model.selected));
     $('#linkmode')

@@ -430,6 +430,7 @@ export function layersActive(models, ui, config) {
       document.getElementById('input-wrapper-minute').style.display = null;
       document.getElementById('timeline-header').classList.add('subdaily');
       setMaxZoomlevel(4);
+      models.date.events.trigger('select');
       models.anim.events.trigger('change');
     } else {
       document.getElementById('zoom-minutes').style.display = 'none';
@@ -438,6 +439,7 @@ export function layersActive(models, ui, config) {
       document.getElementById('timeline-header').classList.remove('subdaily');
       document.getElementById('zoom-days').click(); // Switch back to 'Days' view
       setMaxZoomlevel(3);
+      models.date.events.trigger('select');
       models.anim.events.trigger('change');
     }
   };
