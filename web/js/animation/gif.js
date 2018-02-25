@@ -11,6 +11,7 @@ import lodashIsUndefined from 'lodash/isUndefined';
 import { GA as googleAnalytics, GifResSelection } from 'worldview-components';
 import util from '../util/util';
 import uiIndicator from '../ui/indicator';
+import canvg from 'canvg-browser';
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
 const maxGifSize = 40;
@@ -92,7 +93,8 @@ export function animationGif(models, config, ui) {
       startDate: null,
       endDate: null,
       speed: null,
-      maxGifSize: maxGifSize
+      maxGifSize: maxGifSize,
+      checked: true
     };
     self.reactComponent = renderPanel(options, panelCase);
   };
@@ -159,10 +161,10 @@ export function animationGif(models, config, ui) {
     var startDate = stateObj.startDate;
     var endDate = stateObj.endDate;
     var imageArra;
-    var stamp;
     var build;
     var stampHeight;
     var fontSize;
+    var svg;
 
     loader = uiIndicator.loading();
     build = function(stamp) {
@@ -193,44 +195,50 @@ export function animationGif(models, config, ui) {
       if (!imageArra) { // won't be true if there are too mant frames
         return;
       }
-      stampHeight = imgHeight * 0.1 > 26 ? imgHeight * 0.1 : 26;
-      fontSize = imgHeight * 0.06 > 16 ? imgHeight * 0.06 : 16;
+      // stampHeight = imgHeight * 0.1 > 26 ? imgHeight * 0.1 : 26;
+      fontSize = imgHeight * 0.07 > 16 ? imgHeight * 0.065 : 16;
 
       gifshot.createGIF({
         'gifWidth': imgWidth,
         'gifHeight': imgHeight,
         'images': imageArra,
-        'stamp': stamp,
+        'stamp': animationCoordinates.w > 100 ? stamp : null,
         'fontSize': fontSize + 'px',
-        'stampHeight': stampHeight,
-        'stampWidth': stampHeight / 0.192,
+        'stampHeight': stamp.height,
+        'stampWidth': stamp.width,
         'stampCoordinates': { x: imgWidth * 0.01, y: imgHeight * 0.01 }, // Margin based on GIF width
-        'textXCoordinate': imgWidth < 250 && imgHeight > 50 ? imgWidth * 0.02 : null, // date location based on Dimensions
-        'textYCoordinate': imgWidth < 250 && imgHeight > 50 ? imgHeight - 30 : null, // date location based on Dimensions
-        'textAlign': 'right', // If textXCoordinate is null this takes precedence
+        'textXCoordinate': null, // date location based on Dimensions
+        'textYCoordinate': animationCoordinates.w < 250 && animationCoordinates.h > 50 ? imgHeight - (fontSize + imgHeight * 0.02) : imgHeight * 0.02, // date location based on Dimensions
+        'textAlign': animationCoordinates.w < 250 ? 'left' : 'right', // If textXCoordinate is null this takes precedence
         'textBaseline': 'top', // If textYCoordinate is null this takes precedence
         'fontColor': '#fff',
-        'fontWeight': 'lighter',
+        'fontWeight': '300',
         'fontFamily': 'Helvetica Neue',
         'interval': 1 / interval,
         'progressCallback': onGifProgress,
+        'showFrameText': animationCoordinates.w > 100 && animationCoordinates.h > 100,
         'stroke': {
           'color': '#000',
-          'pixels': 1.7
+          'pixels': fontSize * 0.05
         },
         'pause': 1
       }, onGifComplete);
     };
-    stamp = new Image();
-    stamp.onload = function() {
-      build(stamp);
+    stampHeight = imgHeight * 0.10 > 20 ? imgHeight * 0.10 : 20;
+    svg = 'brand/images/wv-logo-w-shadow.svg';
+    var c = document.createElement('canvas');
+    var options = {
+      log: false,
+      ignoreMouse: true,
+      scaleHeight: stampHeight
     };
-    stamp.onerror = function() {
-      build(null);
-    };
-    stamp.src = 'brand/images/wv-icon-w-shadow.png';
+    canvg(c, svg, options);
+    var newImage = new Image();
+    newImage.src = c.toDataURL('image/png');
+    newImage.width = c.width;
+    newImage.height = c.height;
+    build(newImage);
   };
-
   /*
    * Calculates resolution of frame based
    * on zoom and projection
@@ -663,7 +671,6 @@ export function animationGif(models, config, ui) {
         width: animationCoordinates.w + 198,
         resizable: false,
         close: function() {
-          animationCoordinates = null;
           $imgDialog.find('img')
             .remove();
           $('#timeline-footer')
@@ -834,12 +841,8 @@ export function animationGif(models, config, ui) {
    * @returns {void}
    *
    */
-  var onchecked = function(e) {
-    if (e.type === 'ifUnchecked') {
-      showDates = false;
-    } else {
-      showDates = true;
-    }
+  var onchecked = function(showDatesBoolean) {
+    showDates = showDatesBoolean;
   };
 
   /*
