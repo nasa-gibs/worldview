@@ -22,6 +22,9 @@ var dateWheels = function(models, config) {
   };
 
   var dateWheel = function () {
+    $('#wv-date-mobile-label').css('width', 100);
+    $('#wv-date-mobile-label')
+      .html(util.toISOStringDate(model.selected));
     $('#linkmode')
       .mobiscroll()
       .date({
@@ -44,6 +47,9 @@ var dateWheels = function(models, config) {
   };
 
   var dateTimeWheel = function () {
+    $('#wv-date-mobile-label').css('width', 140);
+    $('#wv-date-mobile-label')
+      .html(util.toISOStringSeconds(model.selected).split('T').join(' T'));
     $('#linkmode')
       .mobiscroll()
       .datetime({
@@ -119,8 +125,6 @@ var dateWheels = function(models, config) {
 
   var update = function () {
     setTimeWheel();
-    $('#wv-date-mobile-label')
-      .html(util.toISOStringDate(model.selected));
     $('#linkmode')
       .mobiscroll('setDate', UTCToLocal(model.selected), true);
   };

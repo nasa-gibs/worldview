@@ -176,6 +176,10 @@ div.ui-slider {
   width: 100px;
 }
 
+#wv-date-mobile-label:hover {
+  cursor: pointer;
+}
+
 a.ui-btn {
   margin: 0;
 }
