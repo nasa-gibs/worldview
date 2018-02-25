@@ -442,9 +442,9 @@ export function animationGif(models, config, ui) {
     });
     lodashEach(products, function(layer) {
       if (layer.endDate) {
-        if (date > new Date(layer.endDate)) return;
+        if (layerDate > new Date(layer.endDate)) return;
       }
-      if (layer.visible && new Date(layer.startDate) < date) {
+      if (layer.visible && new Date(layer.startDate) <= layerDate) {
         layers.push(layer);
       } else if (!layer.startDate) {
         layers.push(layer);
