@@ -529,6 +529,8 @@ export function animationGif(models, config, ui) {
     var opacities;
     var epsg = (models.proj.change) ? models.proj.change.epsg : models.proj.selected.epsg;
     var products = getProducts();
+    var layers;
+    var intervalAmount = 1;
 
     if (config.features.imageDownload) {
       host = config.features.imageDownload.host;
@@ -555,7 +557,12 @@ export function animationGif(models, config, ui) {
       } else {
         a.push(src);
       }
-      current = util.dateAdd(current, ui.anim.ui.getInterval(), 1);
+      if(ui.anim.ui.getInterval() === 'minute') {
+        intervalAmount = 10;
+      } else {
+        intervalAmount = 1;
+      }
+      current = util.dateAdd(current, ui.anim.ui.getInterval(), intervalAmount);
       if (j > 40) { // too many frames
         showUnavailableReason();
         uiIndicator.hide(loader);
