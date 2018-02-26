@@ -197,22 +197,14 @@ export function timelineConfig(models, config, ui) {
             });
         };
 
-        // Update placement of zoom buttons
+        util.swapNodes('.zoom-btn-active', '#zoom-years');
         $('.zoom-btn')
-          .removeClass(function (index, css) {
-            return (css.match(/(^|\s)depth-\S+/g) || [])
-              .join(' ');
-          })
-          .css('margin', '')
-          .css('font-size', '');
+          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
         $('#zoom-years')
-          .addClass('depth-1');
-        $('#zoom-months')
-          .addClass('depth-2');
-        $('#zoom-days')
-          .addClass('depth-3');
-        $('#zoom-minutes')
-          .addClass('depth-4');
+          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
+          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
+        }).appendTo('#timeline-zoom');
 
         self.currentZoom = 1;
         break;
@@ -363,22 +355,14 @@ export function timelineConfig(models, config, ui) {
             });
         };
 
-        // Update placement of zoom buttons
+        util.swapNodes('.zoom-btn-active', '#zoom-months');
         $('.zoom-btn')
-          .removeClass(function (index, css) {
-            return (css.match(/(^|\s)depth-\S+/g) || [])
-              .join(' ');
-          })
-          .css('margin', '')
-          .css('font-size', '');
-        $('#zoom-years')
-          .addClass('depth-2');
+          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
         $('#zoom-months')
-          .addClass('depth-1');
-        $('#zoom-days')
-          .addClass('depth-2');
-        $('#zoom-minutes')
-          .addClass('depth-3');
+          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
+          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
+        }).appendTo('#timeline-zoom');
 
         self.currentZoom = 2;
         break;
@@ -538,22 +522,14 @@ export function timelineConfig(models, config, ui) {
             }
           });
 
-        // Update placement of zoom buttons
+        util.swapNodes('.zoom-btn-active', '#zoom-days');
         $('.zoom-btn')
-          .removeClass(function (index, css) {
-            return (css.match(/(^|\s)depth-\S+/g) || [])
-              .join(' ');
-          })
-          .css('margin', '')
-          .css('font-size', '');
-        $('#zoom-years')
-          .addClass('depth-3');
-        $('#zoom-months')
-          .addClass('depth-2');
+          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
         $('#zoom-days')
-          .addClass('depth-1');
-        $('#zoom-minutes')
-          .addClass('depth-2');
+          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
+          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
+        }).appendTo('#timeline-zoom');
 
         self.currentZoom = 3;
         break;
@@ -733,22 +709,14 @@ export function timelineConfig(models, config, ui) {
             }
           });
 
-        // Update placement of zoom buttons
+        util.swapNodes('.zoom-btn-active', '#zoom-minutes');
         $('.zoom-btn')
-          .removeClass(function (index, css) {
-            return (css.match(/(^|\s)depth-\S+/g) || [])
-              .join(' ');
-          })
-          .css('margin', '')
-          .css('font-size', '');
-        $('#zoom-years')
-          .addClass('depth-4');
-        $('#zoom-months')
-          .addClass('depth-3');
-        $('#zoom-days')
-          .addClass('depth-2');
+          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
         $('#zoom-minutes')
-          .addClass('depth-1');
+          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
+          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
+        }).appendTo('#timeline-zoom');
 
         self.currentZoom = 4;
         break;
@@ -779,36 +747,55 @@ export function timelineConfig(models, config, ui) {
   };
 
   var init = function () {
+    $('#zoom-btn-container').hover(function () {
+      $('.wv-tooltip').toggle();
+    });
     d3.select('#zoom-years')
       .on('click', function (d) {
+        util.swapNodes('.zoom-btn-active', this);
         $('.zoom-btn')
-          .removeClass('zoom-btn-selected');
+          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
         $(this)
-          .addClass('zoom-btn-selected');
+          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
+          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
+        }).appendTo('#timeline-zoom');
         self.zoom(1);
       });
     d3.select('#zoom-months')
       .on('click', function (d) {
+        util.swapNodes('.zoom-btn-active', this);
         $('.zoom-btn')
-          .removeClass('zoom-btn-selected');
+          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
         $(this)
-          .addClass('zoom-btn-selected');
+          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
+          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
+        }).appendTo('#timeline-zoom');
         self.zoom(2);
       });
     d3.select('#zoom-days')
       .on('click', function (d) {
+        util.swapNodes('.zoom-btn-active', this);
         $('.zoom-btn')
-          .removeClass('zoom-btn-selected');
+          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
         $(this)
-          .addClass('zoom-btn-selected');
+          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
+          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
+        }).appendTo('#timeline-zoom');
         self.zoom(3);
       });
     d3.select('#zoom-minutes')
       .on('click', function (d) {
+        util.swapNodes('.zoom-btn-active', this);
         $('.zoom-btn')
-          .removeClass('zoom-btn-selected');
+          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
         $(this)
-          .addClass('zoom-btn-selected');
+          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
+          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
+        }).appendTo('#timeline-zoom');
         self.zoom(4);
       });
     // Default zoom

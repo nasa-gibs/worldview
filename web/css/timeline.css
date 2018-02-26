@@ -310,8 +310,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-footer,
-#timeline-header,
-#timeline-zoom {
+#timeline-header {
   float: left;
 }
 
@@ -372,19 +371,37 @@ g.plot rect.data-bar-invisible {
   stroke: #4682b4;
 }
 
-#timeline-zoom {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  display: inline-block;
-  position: absolute;
-  bottom: 60px;
-  vertical-align: middle;
-  overflow-y: hidden;
-  height: 54px;
-  width: 100%;
-  border-radius: 5px;
+#timeline-header #timeline-zoom {
+  display: block;
+  width: 66px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 4px;
   background-color: rgba(40, 40, 40, 0.9);
+  border-radius: 3px;
+}
+
+#timeline-header #zoom-btn-container {
+  display: block;
+}
+
+#zoom-btn-container .wv-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  border-bottom: 8px solid transparent;
+  width: 100%;
+}
+
+#zoom-btn-container .wv-tooltip::after {
+  position: absolute;
+  top: 100%;
+  left: 15%;
+  content: "";
+  border-top: 5px solid #000;
+  border-top: 5px solid rgba(51, 51, 51, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
 }
 
 .zoom-btn-active {
@@ -413,30 +430,9 @@ g.plot rect.data-bar-invisible {
   text-transform: uppercase;
   text-align: center;
   font-family: 'Roboto Mono', monospace;
-}
-
-#timeline-zoom .zoom-btn.depth-1 {
-  color: #fff;
-  font-size: 18px;
-  line-height: 20px;
-}
-
-#timeline-zoom .zoom-btn.depth-2 {
-  color: #999;
-  font-size: 14px;
-  line-height: 16px;
-}
-
-#timeline-zoom .zoom-btn.depth-3 {
-  color: #666;
-  font-size: 12px;
-  line-height: 14px;
-}
-
-#timeline-zoom .zoom-btn.depth-4 {
-  color: #666;
-  font-size: 10px;
-  line-height: 14px;
+  font-size: 13px;
+  line-height: 15px;
+  color: #ccc;
 }
 
 #timeline-zoom .zoom-btn:hover {
