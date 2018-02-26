@@ -19,6 +19,7 @@
   display: inline-block;
   margin-left: 10px;
   margin-right: 10px;
+  min-height: 65px;
 }
 
 #timeline-footer text {
