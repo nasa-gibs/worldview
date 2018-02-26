@@ -1,5 +1,5 @@
 #wv-animation-widget {
-  width: 402px;
+  width: 330px;
   border-radius: 8px;
   height: 125px;
   background: #212121;
@@ -10,6 +10,10 @@
   left: 50%;
   display: none;
   color: #fff;
+}
+
+#wv-animation-widget.subdaily {
+  width: 402px;
 }
 
 #wv-animation-widget > a,
