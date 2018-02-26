@@ -412,9 +412,12 @@ export function layersActive(models, ui, config) {
 
   var subdailyCheck = function () {
     var activeLayers = models.layers.active;
+    var currentProjection = models.proj.selected.id;
     var check;
     lodashEach(activeLayers, function(activeLayer) {
-      if (activeLayer.period === 'subdaily') check = true;
+      if (Object.keys(activeLayer.projections).some(function(k) { return ~k.indexOf(currentProjection); })) {
+        if (activeLayer.period === 'subdaily' && activeLayer.projections[currentProjection]) check = true;
+      }
     });
     return check;
   };
@@ -505,6 +508,7 @@ export function layersActive(models, ui, config) {
   };
 
   var onProjectionChanged = function () {
+    toggleSubdaily();
     // Timeout prevents redraw artifacts
     ui.map.selected.getView()
       .on('change:resolution', onZoomChange);
