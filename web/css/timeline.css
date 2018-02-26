@@ -318,7 +318,7 @@ g.plot rect.data-bar-invisible {
 #timeline-header .animate-button .wv-animate {
   color: #fff;
   font-size: 2.5em;
-  margin: 12px 0 0 2px;
+  margin: 4px 0 0 2px;
 }
 
 #timeline-header .animate-button:hover .wv-animate {
@@ -378,7 +378,7 @@ g.plot rect.data-bar-invisible {
   -webkit-box-sizing: border-box;
   display: inline-block;
   position: absolute;
-  bottom: 65px;
+  bottom: 60px;
   vertical-align: middle;
   overflow-y: hidden;
   height: 54px;
@@ -387,7 +387,26 @@ g.plot rect.data-bar-invisible {
   background-color: rgba(40, 40, 40, 0.9);
 }
 
-#timeline-zoom a.zoom-btn {
+.zoom-btn-active {
+  width: 100%;
+  color: #ccc;
+  font-size: 12px;
+  line-height: 14px;
+  display: block;
+  clear: both;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: 'Roboto Mono', monospace;
+  margin-top: -2px;
+}
+
+.zoom-btn-active:hover {
+  background-color: #fff;
+  color: #1a1a1a;
+}
+
+#timeline-zoom .zoom-btn {
   display: block;
   clear: both;
   cursor: pointer;
@@ -396,31 +415,31 @@ g.plot rect.data-bar-invisible {
   font-family: 'Roboto Mono', monospace;
 }
 
-#timeline-zoom a.zoom-btn.depth-1 {
+#timeline-zoom .zoom-btn.depth-1 {
   color: #fff;
   font-size: 18px;
   line-height: 20px;
 }
 
-#timeline-zoom a.zoom-btn.depth-2 {
+#timeline-zoom .zoom-btn.depth-2 {
   color: #999;
   font-size: 14px;
   line-height: 16px;
 }
 
-#timeline-zoom a.zoom-btn.depth-3 {
+#timeline-zoom .zoom-btn.depth-3 {
   color: #666;
   font-size: 12px;
   line-height: 14px;
 }
 
-#timeline-zoom a.zoom-btn.depth-4 {
+#timeline-zoom .zoom-btn.depth-4 {
   color: #666;
   font-size: 10px;
   line-height: 14px;
 }
 
-#timeline-zoom a.zoom-btn:hover {
+#timeline-zoom .zoom-btn:hover {
   background-color: #fff;
   color: #1a1a1a;
 }
