@@ -153,16 +153,20 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .input-wrapper:nth-child(3) {
-  max-width: 50px;
+  max-width: 45px;
 }
 
 #timeline-header .input-wrapper:nth-child(4) {
-  max-width: 35px;
+  max-width: 31px;
 }
 
 #timeline-header #input-wrapper-hour,
 #timeline-header #input-wrapper-minute {
   width: 31px;
+}
+
+#timeline-header #input-wrapper-hour {
+  margin-left: 6px;
 }
 
 #timeline-header input {
@@ -202,6 +206,15 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header div {
   display: inline-block;
+}
+
+#timeline-header .time-divider {
+  color: #fff;
+  font-size: 28px;
+  vertical-align: middle;
+  width: 4px;
+  margin-top: -5px;
+  margin-left: -4px;
 }
 
 #time-buttons-group {
