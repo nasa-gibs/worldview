@@ -49,6 +49,7 @@ export function timelineConfig(models, config, ui) {
 
     switch (level) {
       case 1: // Year
+        dateStep = 1;
         labelFormat = d3.time.format.utc('%Y');
         dateInterval = d3.time.year.utc;
         tickCount = tl.data.end()
@@ -216,7 +217,7 @@ export function timelineConfig(models, config, ui) {
         self.currentZoom = 1;
         break;
       case 2: // Month
-
+        dateStep = 1;
         labelFormat = d3.time.format.utc('%Y');
         dateInterval = d3.time.month.utc;
 
@@ -382,6 +383,7 @@ export function timelineConfig(models, config, ui) {
         self.currentZoom = 2;
         break;
       case 3: // Day
+        dateStep = 1;
         labelFormat = d3.time.format.utc('%b');
         dateInterval = d3.time.day.utc;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 60 / 24;
@@ -556,7 +558,7 @@ export function timelineConfig(models, config, ui) {
         self.currentZoom = 3;
         break;
       case 4: // 10-Minute
-
+        dateStep = 10;
         labelFormat = d3.time.format.utc('%M');
         dateInterval = d3.time.minutes.utc;
         // Latest Date minus begin date (Wed Dec 31 1947 19:00:00 GMT-0500 (Eastern Standard Time))
@@ -584,6 +586,7 @@ export function timelineConfig(models, config, ui) {
           .getUTCHours(),
         tl.data.start()
           .getUTCMinutes() + tickCountMax);
+
         tl.zoom.drawTicks(tickCount,
           tickCountMax,
           altEnd,
