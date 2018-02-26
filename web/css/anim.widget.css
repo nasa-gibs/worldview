@@ -127,7 +127,9 @@
   max-width: 35px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(3) {
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(3),
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(4),
+#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(5) {
   max-width: 25px;
 }
 

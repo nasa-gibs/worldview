@@ -162,10 +162,11 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header #input-wrapper-hour,
 #timeline-header #input-wrapper-minute {
-  width: 36px;
+  width: 31px;
 }
 
 #timeline-header input {
+  width: 100%;
   height: 40px;
   color: #fff;
   font-size: 24px;
