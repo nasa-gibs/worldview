@@ -31,6 +31,7 @@
 .wv-tooltip-case .wv-tooltip ul {
   background-color: #000;
   background-color: hsla(0, 0%, 20%, 0.9);
+  border-radius: 3px;
   color: #fff;
   padding: 5px 10px;
   list-style: none;

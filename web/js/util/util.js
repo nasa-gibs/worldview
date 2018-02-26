@@ -1027,5 +1027,14 @@ export default (function (self) {
     }
   };
 
+  // Switch two elements' locations in the dom
+  self.swapNodes = function (a, b) {
+    a = $(a); b = $(b);
+    var tmp = $('<span>').hide();
+    a.before(tmp);
+    b.before(a);
+    tmp.replaceWith(b);
+  };
+
   return self;
 })({});
