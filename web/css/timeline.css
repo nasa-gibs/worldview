@@ -208,16 +208,25 @@ g.plot rect.data-bar-invisible {
   display: inline-block;
 }
 
-#timeline-header .time-divider {
+#timeline-header #input-time-divider {
+  font-family: 'Roboto Mono', monospace;
   color: #fff;
-  font-size: 28px;
+  font-size: 24px;
   vertical-align: middle;
-  width: 4px;
+  width: 8px;
   margin-top: -5px;
+  margin-left: -9px;
+}
+
+#timeline-header #input-time-zmark {
+  font-family: 'Roboto Mono', monospace;
+  color: #fff;
+  font-size: 24px;
+  vertical-align: middle;
   margin-left: -4px;
 }
 
-#time-buttons-group {
+#zoom-buttons-group {
   position: relative;
   width: 86px;
 }
@@ -276,13 +285,13 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header .date-arrows:hover,
 #timeline-header > .button-action-group:hover,
-#timeline-header #time-buttons-group .button-action-group:hover {
+#timeline-header #zoom-buttons-group .button-action-group:hover {
   background-color: #fff;
   cursor: pointer;
 }
 
 #timeline-header > .button-action-group .button-disabled:hover,
-#timeline-header #time-buttons-group .button-action-group .button-disabled:hover {
+#timeline-header #zoom-buttons-group .button-action-group .button-disabled:hover {
   background-color: transparent;
   cursor: default;
 }
@@ -307,19 +316,19 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header > .button-action-group:hover .arrow,
-#timeline-header #time-buttons-group .button-action-group:hover .arrow {
+#timeline-header #zoom-buttons-group .button-action-group:hover .arrow {
   fill: #1a1a1a;
   fill-opacity: 1;
   stroke: none;
 }
 
 #timeline-header > .button-action-group.button-disabled .arrow,
-#timeline-header #time-buttons-group .button-action-group.button-disabled .arrow {
+#timeline-header #zoom-buttons-group .button-action-group.button-disabled .arrow {
   fill: #333;
 }
 
 #timeline-header > .button-action-group.button-disabled:hover .arrow,
-#timeline-header #time-buttons-group .button-action-group.button-disabled:hover .arrow {
+#timeline-header #zoom-buttons-group .button-action-group.button-disabled:hover .arrow {
   fill: #333;
 }
 
