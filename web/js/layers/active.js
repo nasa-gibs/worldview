@@ -430,7 +430,9 @@ export function layersActive(models, ui, config) {
     if (subdailyCheck()) {
       document.getElementById('zoom-minutes').style.display = null;
       document.getElementById('input-wrapper-hour').style.display = null;
+      document.getElementById('input-time-divider').style.display = null;
       document.getElementById('input-wrapper-minute').style.display = null;
+      document.getElementById('input-time-zmark').style.display = null;
       document.getElementById('timeline-header').classList.add('subdaily');
       setMaxZoomlevel(4);
       models.date.events.trigger('select');
@@ -438,7 +440,9 @@ export function layersActive(models, ui, config) {
     } else {
       document.getElementById('zoom-minutes').style.display = 'none';
       document.getElementById('input-wrapper-hour').style.display = 'none';
+      document.getElementById('input-time-divider').style.display = 'none';
       document.getElementById('input-wrapper-minute').style.display = 'none';
+      document.getElementById('input-time-zmark').style.display = 'none';
       document.getElementById('timeline-header').classList.remove('subdaily');
       document.getElementById('zoom-days').click(); // Switch back to 'Days' view
       setMaxZoomlevel(3);
