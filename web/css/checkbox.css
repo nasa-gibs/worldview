@@ -1,0 +1,28 @@
+.checkbox {
+  position: relative;
+
+}
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  left: 0;
+}
+.checkbox:before {
+  content: '\00a0';
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  border: 2px solid #d54f21;
+  text-align: center;
+  font-size: 15px;
+  line-height: 20px;
+  margin-right: 5px;
+}
+.checkbox.checked:before {
+  color: #fff;
+  content: '\2713';
+  background-color: #d54f21;
+}
