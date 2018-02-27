@@ -44,7 +44,7 @@ export function animationWidget (models, config, ui) {
       endDate: new Date(model.rangeState.endDate),
       minDate: models.date.minDate(),
       maxDate: models.date.maxDate(),
-      currentZoom: models.date.selectedZoom,
+      maxZoom: models.date.maxZoom,
       onClose: self.toggleAnimationWidget
     };
 
@@ -138,7 +138,7 @@ export function animationWidget (models, config, ui) {
     self.reactComponent.setState({
       startDate: new Date(state.startDate),
       endDate: new Date(state.endDate),
-      currentZoom: models.date.selectedZoom,
+      maxZoom: models.date.maxZoom,
       playing: state.playing,
       increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
       incrementArray: lodashWithout(zooms, self.getIncrements()) // array of zooms without current zoom
