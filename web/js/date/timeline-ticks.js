@@ -387,7 +387,6 @@ export function timelineTicks(models, config, ui) {
       var $boundaryTick;
       var tick = this.parentNode;
       var boundaryTick, boundaryTickWidth;
-      var hoverDay = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes());
 
       // Using jquery to precise select as it's easier than d3
       if (d3.select(tick)
@@ -428,7 +427,7 @@ export function timelineTicks(models, config, ui) {
           ' ' + d.getUTCDate() +
           ' ' + util.pad(d.getUTCHours(), 2, '0') +
           ':' + util.pad(d.getUTCMinutes(), 2, '0') +
-          ' (' + util.daysInYear(hoverDay) + ')');
+          ' (' + util.daysInYear(d) + ')');
       } else {
         boundaryTick.append('svg:text')
           .attr('class', 'hover-tick-label')
@@ -439,7 +438,7 @@ export function timelineTicks(models, config, ui) {
           .text(d.getUTCFullYear() +
             ' ' + model.monthAbbr[d.getUTCMonth()] +
             ' ' + d.getUTCDate() +
-            ' (' + util.daysInYear(hoverDay) + ')'); // Add hover Label
+            ' (' + util.daysInYear(d) + ')'); // Add hover Label
       }
     },
     remove: function () { // TODO: update
