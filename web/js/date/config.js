@@ -576,7 +576,7 @@ export function timelineConfig(models, config, ui) {
         // Filters ticks for nonboundaries that have the following attribute
         tl.zoom.current.ticks.normal.all = function () {
           tl.ticks.normal.all = tl.ticks.all.filter(function (d) {
-            return d.getUTCDate() !== 1;
+            return d.getUTCMinutes() !== 1;
           });
           tl.ticks.normal.setEnds();
         };
@@ -584,7 +584,7 @@ export function timelineConfig(models, config, ui) {
         // Filters ticks for boundaries that have the following attribute
         tl.zoom.current.ticks.boundary.all = function () {
           tl.ticks.boundary.all = tl.ticks.all.filter(function (d) {
-            return d.getUTCDate() === 1;
+            return d.getUTCMinutes() === 1;
           });
         };
 
@@ -605,7 +605,9 @@ export function timelineConfig(models, config, ui) {
           var first = tl.ticks.normal.firstDate;
           return new Date(Date.UTC(first.getUTCFullYear(),
             first.getUTCMonth(),
-            1));
+            first.getUTCDate(),
+            first.getUTCHours(),
+            first.getUTCMinutes()));
         };
 
         // Date of first printed normal tick
@@ -613,15 +615,19 @@ export function timelineConfig(models, config, ui) {
           var first = tl.ticks.normal.firstDate;
           return new Date(Date.UTC(first.getUTCFullYear(),
             first.getUTCMonth(),
-            first.getUTCDate(), first.getUTCHours(), first.getUTCMinutes() - 1));
+            first.getUTCDate(),
+            first.getUTCHours(),
+            first.getUTCMinutes() - 1));
         };
 
         // Date of last printed boundary interval of this zoom level
         tl.zoom.current.ticks.boundary.last = function () {
           var last = tl.ticks.normal.lastDate;
           return new Date(Date.UTC(last.getUTCFullYear(),
-            last.getUTCMonth() + 1,
-            1));
+            last.getUTCMonth(),
+            last.getUTCDate(),
+            last.getUTCHours(),
+            last.getUTCMinutes() + 1));
         };
 
         // Value for hovered normal label
@@ -632,6 +638,7 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function (d) {
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
@@ -641,28 +648,32 @@ export function timelineConfig(models, config, ui) {
 
         // Value for hovered boundary tick
         tl.zoom.current.ticks.boundary.hover = function (d) {
-          return new Date(d.getUTCFullYear(),
-            d.getUTCMonth(),
-            model.selected.getUTCDate());
-        };
-
-        // Displayed default label
-        tl.zoom.current.ticks.boundary.label = function (d) {
-          return model.monthAbbr[d.getUTCMonth()];
-        };
-
-        // Displayed default sub-label (if any)
-        tl.zoom.current.ticks.boundary.subLabel = function (d) {
-          return d.getUTCFullYear();
-        };
-
-        // Value for clicked boundary tick
-        tl.zoom.current.ticks.boundary.clickDate = function (d) {
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
-            model.selected.getUTCMinutes());
+            d.getUTCMinutes());
+        };
+
+        // Displayed default label
+        tl.zoom.current.ticks.boundary.label = function (d) {
+          return d.getUTCHours();
+        };
+
+        // Displayed default sub-label (if any)
+        tl.zoom.current.ticks.boundary.subLabel = function (d) {
+          return d.getUTCDate();
+        };
+
+        // Value for clicked boundary tick
+        tl.zoom.current.ticks.boundary.clickDate = function (d) {
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          return new Date(d.getUTCFullYear(),
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
@@ -686,14 +697,16 @@ export function timelineConfig(models, config, ui) {
         };
 
         tl.zoom.current.pick.hoverTick = function (newDate) {
+          newDate = new Date(newDate.getTime() + (newDate.getTimezoneOffset() * 60000));
           tl.zoom.current.pick.hoveredTick = d3.selectAll('.x.axis>g.tick')
             .filter(function (d) {
               return (d.getUTCFullYear() === newDate.getUTCFullYear()) &&
                 (d.getUTCMonth() === newDate.getUTCMonth() &&
-                  (d.getUTCDate() === newDate.getUTCDate()));
+                  (d.getUTCDate() === newDate.getUTCDate()) &&
+                    (d.getUTCHours() === newDate.getUTCHours()) &&
+                      (d.getUTCMinutes() === newDate.getUTCMinutes()));
             });
         };
-
         // Setting the hour ticks
         d3.selectAll('.x.axis > g.tick')
           .each(function () {
