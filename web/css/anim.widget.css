@@ -348,9 +348,13 @@
   top: 50%;
 }
 
-.input-range {
+.wv-animation-widget .input-range {
   cursor: pointer;
   height: 13px;
   position: relative;
   width: 152px;
+}
+
+.wv-animation-widget.subdaily .input-range {
+  width: 224px;
 }
