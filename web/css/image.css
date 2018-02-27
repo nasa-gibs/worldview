@@ -6,6 +6,29 @@
   width: 6em;
   margin-right: 1em;
 }
+.wv-image-download-grid {
+  display: flex;
+  margin-top: .5em;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.wv-image-download-grid .grid-child {
+  border: 1px solid rgba(0, 0, 0, 0);
+  font-weight: 400;
+  font-size: 10px;
+  text-align: center;
+  padding: 0.1em 0;
+  border: 0;
+  flex: 0 50%;
+}
+.wv-image-download-grid .grid-head {
+  font-size: 12px;
+}
+.wv-image-download-grid .grid-child.wv-image-dimensions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .wv-image-header {
   padding: 0.5em 0 0;
@@ -13,36 +36,14 @@
   font-weight: 400;
 }
 
-.wv-image-download {
-  margin-top: 0.5em;
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.wv-image-download th {
-  font-weight: 400;
-  font-size: 12px;
-  text-align: center;
-  padding: 0.1em;
-}
-
-.wv-image-download td {
-  border: 1px solid rgba(0, 0, 0, 0);
-  font-weight: 400;
-  font-size: 10px;
-  text-align: center;
-  padding: 0.1em;
-  width: 50%;
-}
-
-.wv-image-download td.wv-image-size-invalid {
+.wv-image-download-grid .wv-image-size-invalid {
   border: 1px solid #faa;
 }
 
-#wv-image-download-button .ui-button-text {
+.wv-image-download-grid button span {
+  padding: .2em 1em;
   font-weight: 700;
   font-size: 12px;
-  padding: 0.2em 1em;
 }
 
 .wv-image-coords {
