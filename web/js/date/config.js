@@ -607,8 +607,7 @@ export function timelineConfig(models, config, ui) {
           return new Date(Date.UTC(first.getUTCFullYear(),
             first.getUTCMonth(),
             first.getUTCDate(),
-            first.getUTCHours(),
-            first.getUTCMinutes()));
+            first.getUTCHours()));
         };
 
         // Date of first printed normal tick
@@ -627,8 +626,7 @@ export function timelineConfig(models, config, ui) {
           return new Date(Date.UTC(last.getUTCFullYear(),
             last.getUTCMonth(),
             last.getUTCDate(),
-            last.getUTCHours(),
-            last.getUTCMinutes() + 1));
+            last.getUTCHours() + 1));
         };
 
         // Value for hovered normal label
@@ -659,7 +657,6 @@ export function timelineConfig(models, config, ui) {
 
         // Displayed default label
         tl.zoom.current.ticks.boundary.label = function (d) {
-          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
           return util.pad(d.getUTCHours(), 2, '0') + ':' + util.pad(d.getUTCMinutes(), 2, '0');
         };
 
