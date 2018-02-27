@@ -569,9 +569,13 @@ export function layersModal(models, ui, config) {
 
                 // If this is an orbit track.... put it in the orbit track list
                 if (layer.layergroup && layer.layergroup.indexOf('reference_orbits') !== -1) {
-                  var orbitTitle;
+                  var orbitTitle = '';
                   if (layer.daynight && layer.track) {
                     orbitTitle = lodashStartCase(layer.track) + '/' + lodashStartCase(layer.daynight);
+                  } else if (layer.track) {
+                    orbitTitle = lodashStartCase(layer.track);
+                  } else if (layer.day) {
+                    orbitTitle = lodashStartCase(layer.daynight);
                   }
 
                   $label.empty()
