@@ -21,11 +21,25 @@
 .wv-button.red {
   background: #d54e21;
 }
+.wv-button.black {
+  background: #212121;
+  border-color: #666;
+}
 .wv-button:hover {
   border-color: #eee;
   background-color: #eee;
   background-image: none;
   color: #404040;
   cursor: pointer;
+}
+
+.wv-button:disabled {
+  opacity: .35;
+  background-image: none;
+  border: 1px solid #666;
+  background-color: #555;
+  border-radius: 0;
+  color: #eee;
+  cursor: not-allowed;
 }
 
