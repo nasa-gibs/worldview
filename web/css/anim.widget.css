@@ -100,7 +100,7 @@
 }
 
 #wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(3) {
-  right: 8px;
+  right: 10px;
 }
 
 #wv-animation-widget .wv-date-selector-widget svg {
@@ -119,18 +119,38 @@
   margin: 0 1px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(1) {
-  max-width: 40px;
+#wv-animation-widget .wv-date-selector-widget .input-wrapper-year {
+  max-width: 38px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(2) {
-  max-width: 35px;
+#wv-animation-widget .wv-date-selector-widget .input-wrapper-month {
+  max-width: 30px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(3),
-#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(4),
-#wv-animation-widget .wv-date-selector-widget .input-wrapper:nth-child(5) {
+#wv-animation-widget .wv-date-selector-widget .input-wrapper-day,
+#wv-animation-widget .wv-date-selector-widget .input-wrapper-hour,
+#wv-animation-widget .wv-date-selector-widget .input-wrapper-minute {
   max-width: 25px;
+}
+
+#wv-animation-widget .wv-date-selector-widget .input-wrapper-hour {
+  margin-left: 8px;
+}
+
+#wv-animation-widget .wv-date-selector-widget .input-time-divider {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 15px;
+  vertical-align: middle;
+  width: 5px;
+  margin-left: -5px;
+}
+
+#wv-animation-widget .wv-date-selector-widget .input-time-zmark {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 15px;
+  vertical-align: middle;
+  margin-top: 2px;
+  margin-left: -2px;
 }
 
 #wv-rangeselector-case {
