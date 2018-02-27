@@ -576,7 +576,8 @@ export function timelineConfig(models, config, ui) {
         // Filters ticks for nonboundaries that have the following attribute
         tl.zoom.current.ticks.normal.all = function () {
           tl.ticks.normal.all = tl.ticks.all.filter(function (d) {
-            return d.getUTCMinutes() !== 1;
+            // This should be rewritten to be cleaner
+            return d.getUTCHours() % 3 !== 0 || d.getUTCMinutes() !== 0 || d.getUTCMinutes() === 0;
           });
           tl.ticks.normal.setEnds();
         };
@@ -584,14 +585,14 @@ export function timelineConfig(models, config, ui) {
         // Filters ticks for boundaries that have the following attribute
         tl.zoom.current.ticks.boundary.all = function () {
           tl.ticks.boundary.all = tl.ticks.all.filter(function (d) {
-            return d.getUTCMinutes() === 1;
+            return d.getUTCHours() % 3 === 0 && d.getUTCMinutes() === 0;
           });
         };
 
         // Calculated next boundary tick by date
         tl.zoom.current.ticks.boundary.next = function (current) {
           var next = new Date(current);
-          return new Date(next.setUTCMinutes(next.getUTCMinutes() + 10));
+          return new Date(next.setUTCHours(next.getUTCHours() + 3));
         };
 
         // Calculated next normal tick by date
@@ -658,12 +659,12 @@ export function timelineConfig(models, config, ui) {
 
         // Displayed default label
         tl.zoom.current.ticks.boundary.label = function (d) {
-          return d.getUTCHours();
+          return null;
         };
 
         // Displayed default sub-label (if any)
         tl.zoom.current.ticks.boundary.subLabel = function (d) {
-          return d.getUTCDate();
+          return null;
         };
 
         // Value for clicked boundary tick
