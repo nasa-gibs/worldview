@@ -659,7 +659,8 @@ export function timelineConfig(models, config, ui) {
 
         // Displayed default label
         tl.zoom.current.ticks.boundary.label = function (d) {
-          return null;
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          return util.pad(d.getUTCHours(), 2, '0') + ':' + util.pad(d.getUTCMinutes(), 2, '0');
         };
 
         // Displayed default sub-label (if any)
@@ -698,7 +699,6 @@ export function timelineConfig(models, config, ui) {
         };
 
         tl.zoom.current.pick.hoverTick = function (newDate) {
-          newDate = new Date(newDate.getTime() + (newDate.getTimezoneOffset() * 60000));
           tl.zoom.current.pick.hoveredTick = d3.selectAll('.x.axis>g.tick')
             .filter(function (d) {
               return (d.getUTCFullYear() === newDate.getUTCFullYear()) &&
