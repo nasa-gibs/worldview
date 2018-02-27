@@ -109,7 +109,7 @@ export function timelineTicks(models, config, ui) {
               currentTick
                 .insert('line', 'rect')
                 .attr('y1', 0)
-                .attr('y2', -46)
+                .attr('y2', -10)
                 .attr('x2', 0)
                 .classed('tick-hour', true);
             }
@@ -129,8 +129,7 @@ export function timelineTicks(models, config, ui) {
       ticks.selectAll('line.tick-week')
         .attr('y1', '0');
       ticks.selectAll('line.tick-hour')
-        .attr('y1', '0')
-        .attr('y2', -46);
+        .attr('y1', '0');
 
       ticks.selectAll('text')
         .remove();

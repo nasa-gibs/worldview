@@ -110,10 +110,15 @@
   stroke-miterlimit: 4;
 }
 
+.x.axis > .tick > line.tick-hour,
 .x.axis > .tick > line.tick-week {
   stroke: #cfcfcf;
   stroke-width: 1;
   stroke-dasharray: 0;
+}
+
+.x.axis > .tick > line.tick-hour {
+  stroke-width: 2;
 }
 
 g.plot rect.data-bar {
