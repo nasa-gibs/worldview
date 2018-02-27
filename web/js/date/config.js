@@ -604,10 +604,13 @@ export function timelineConfig(models, config, ui) {
         // Date of first printed boundary interval of this zoom level
         tl.zoom.current.ticks.boundary.first = function () {
           var first = tl.ticks.normal.firstDate;
+          var threeHour = null;
+          if (first.getUTCHours() % 3 === 0) { threeHour = first.getUTCHours(); }
           return new Date(Date.UTC(first.getUTCFullYear(),
             first.getUTCMonth(),
             first.getUTCDate(),
-            first.getUTCHours()));
+            threeHour,
+            0));
         };
 
         // Date of first printed normal tick
@@ -617,19 +620,22 @@ export function timelineConfig(models, config, ui) {
             first.getUTCMonth(),
             first.getUTCDate(),
             first.getUTCHours(),
-            first.getUTCMinutes() - 1));
+            first.getUTCMinutes() - 10));
         };
 
         // Date of last printed boundary interval of this zoom level
         tl.zoom.current.ticks.boundary.last = function () {
           var last = tl.ticks.normal.lastDate;
+          var threeHour = null;
+          if (last.getUTCHours() % 3 === 0) { threeHour = last.getUTCHours(); }
           return new Date(Date.UTC(last.getUTCFullYear(),
             last.getUTCMonth(),
             last.getUTCDate(),
-            last.getUTCHours() + 1));
+            threeHour,
+            0));
         };
 
-        // Value for hovered normal label
+        // Value for normal tick hover label
         tl.zoom.current.ticks.normal.hover = function (d) {
           // No modifications to date obj at this zoom level
           return d;
@@ -645,7 +651,7 @@ export function timelineConfig(models, config, ui) {
             d.getUTCMinutes());
         };
 
-        // Value for hovered boundary tick
+        // Value for boundary ribbon hover label
         tl.zoom.current.ticks.boundary.hover = function (d) {
           d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
