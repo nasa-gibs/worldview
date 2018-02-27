@@ -2,14 +2,17 @@ import $ from 'jquery';
 import 'jquery-jcrop';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import wvui from '../ui/ui';
+
 import gifshot from 'gifshot';
 import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import lodashIsUndefined from 'lodash/isUndefined';
+import lodashThrottle from 'lodash/throttle';
+
 import { GA as googleAnalytics, GifResSelection } from 'worldview-components';
 import util from '../util/util';
+import wvui from '../ui/ui';
 import uiIndicator from '../ui/indicator';
 import canvg from 'canvg-browser';
 
@@ -52,6 +55,7 @@ export function animationGif(models, config, ui) {
   var imgWidth;
   var imgHeight;
   var requestSize;
+  var throttleSetDownloadButton;
   var GRATICULE_WARNING =
     'The graticule layer cannot be used to take a snapshot. Would you ' +
     'like to hide this layer?';
@@ -83,6 +87,8 @@ export function animationGif(models, config, ui) {
     models.anim.events.on('gif-click', setImageCoords);
     panelCase = document.createElement('div');
     panelCase.className = 'gif-dialog';
+    throttleSetDownloadButton = lodashThrottle(setDownloadButtonClass, 300, { trailing: true });
+
     options = {
       resolution: 1,
       onSelectionChange: onSelectionChange,
@@ -132,8 +138,8 @@ export function animationGif(models, config, ui) {
     }
 
     requestSize = calulateFileSize(resolution, lonlats[0], lonlats[1], numDays, imgWidth, imgHeight);
-
     updatePanel(getUpdatedProps());
+    throttleSetDownloadButton();
   };
   var updatePanel = function(options) {
     self.reactComponent.setState(options);
@@ -143,6 +149,19 @@ export function animationGif(models, config, ui) {
   };
   var fileSizeValid = function() {
     return (requestSize < maxGifSize && imgHeight !== 0 && imgWidth !== 0);
+  };
+  var setDownloadButtonClass = function() {
+    var $iconCase;
+    var boo;
+    $iconCase = $('.wv-dl-gif-bt-case');
+    if (!$iconCase.length) return;
+    boo = fileSizeValid();
+
+    if (!boo && !$iconCase.hasClass('disabled')) {
+      $iconCase.addClass('disabled');
+    } else if (boo && $iconCase.hasClass('disabled')) {
+      $iconCase.removeClass('disabled');
+    }
   };
   /*
    * Uses, frameUrl array and gifShot
