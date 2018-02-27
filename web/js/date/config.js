@@ -548,8 +548,8 @@ export function timelineConfig(models, config, ui) {
         tickCountMax = Math.ceil(tl.width / tickWidth);
 
         paddedRange = [
-          new Date(tl.data.start().setUTCHours(tl.data.start().getUTCHours() - 3)),
-          new Date(tl.data.end().setUTCHours(tl.data.end().getUTCHours() + 3))
+          new Date(tl.data.start().setUTCMinutes(tl.data.start().getUTCMinutes() - 50)),
+          new Date(tl.data.end().setUTCMinutes(tl.data.end().getUTCMinutes() + 50))
         ];
 
         altEnd = new Date(tl.data.start()
@@ -678,7 +678,7 @@ export function timelineConfig(models, config, ui) {
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
-            d.getUTCMinutes());
+            model.selected.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
