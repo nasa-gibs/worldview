@@ -153,10 +153,10 @@
   margin: 10px 0 0 10px;
 }
 .gif-dialog .wv-button,
-.gif-dialog .checkbox {
+.gif-dialog .wv-checkbox {
   display: inline-block;
 }
-.gif-dialog .checkbox {
+.gif-dialog .wv-checkbox {
   margin-left: 18px;
 }
 .gif-results-dialog-case, {

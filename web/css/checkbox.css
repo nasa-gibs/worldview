@@ -1,8 +1,7 @@
-.checkbox {
+.wv-checkbox {
   position: relative;
-
 }
-.checkbox input {
+.wv-checkbox input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -10,7 +9,7 @@
   width: 20px;
   left: 0;
 }
-.checkbox:before {
+.wv-checkbox:before {
   content: '\00a0';
   display: inline-block;
   height: 20px;
@@ -21,7 +20,7 @@
   line-height: 20px;
   margin-right: 5px;
 }
-.checkbox.checked:before {
+.wv-checkbox.checked:before {
   color: #fff;
   content: '\2713';
   background-color: #d54f21;
