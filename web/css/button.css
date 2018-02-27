@@ -13,6 +13,7 @@
   background-image: -o-linear-gradient(#555, #666);
   font-family: "Segoe UI", "Arial", sans-serif;
   padding: 0;
+  transition: background 0.5s ease;
 }
 .wv-button span {
   padding: 0.4em 1em;
