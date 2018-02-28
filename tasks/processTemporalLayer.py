@@ -1,5 +1,6 @@
 from datetime import datetime, date, timedelta
 import isodate
+import re
 
 def to_list(val):
     return [val] if not hasattr(val, 'reverse') else val
@@ -25,7 +26,7 @@ def process_temporal(wv_layer, value):
                 wv_layer["period"] = "daily"
         start_date = datetime.max
         end_date = datetime.min
-        date_range_start, date_range_end = [], []
+        date_range_start, date_range_end, range_interval = [], [], []
         for range in ranges:
             times = range.split('/')
             if wv_layer["period"] == "daily" \
@@ -43,6 +44,7 @@ def process_temporal(wv_layer, value):
                     date_range_end.append(endDateParse.strftime("%Y-%m-%d") + "T" + endDateParse.strftime("%H:%M:%S") + "Z")
                 if times[2] != "P1D":
                     end_date = determine_end_date(times[2], end_date)
+                range_interval.append(re.search(r'\d+', times[2]).group())
             else:
                 startTime = times[0].replace('T', ' ').replace('Z', '')
                 endTime = times[1].replace('T', ' ').replace('Z', '')
@@ -56,12 +58,12 @@ def process_temporal(wv_layer, value):
                 if end_date:
                     endTimeParse = datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S")
                     date_range_end.append(endTimeParse.strftime("%Y-%m-%d") + "T" + endTimeParse.strftime("%H:%M:%S") + "Z")
-
+                range_interval.append(re.search(r'\d+', times[2]).group())
             wv_layer["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z"
             if end_date != datetime.min:
                 wv_layer["endDate"] = end_date.strftime("%Y-%m-%d") + "T" + end_date.strftime("%H:%M:%S") + "Z"
             if date_range_start and date_range_end:
-                wv_layer["allDateRanges"] = [{"startDate": s, "endDate": e} for s, e in zip(date_range_start, date_range_end)]
+                wv_layer["dateRanges"] = [{"startDate": s, "endDate": e, "dateInterval": i} for s, e, i in zip(date_range_start, date_range_end, range_interval)]
     except ValueError:
         raise
         raise Exception("Invalid time: {0}".format(range))
