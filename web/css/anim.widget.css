@@ -172,11 +172,15 @@
   font-weight: 400;
 }
 .gif-download-grid .grid-child {
-  width: 130px;
+  width: 120px;
   font-size: 12px;
   font-weight: 400;
-  margin-left: 10px;
+  padding-left: 10px;
   margin-bottom: 4px;
+  transition: border 0.5s ease;
+}
+.gif-download-grid .grid-child.gif-size-invalid {
+  border: 1px solid #faa;
 }
 .gif-results-dialog-case .gif-results-dialog,
 .gif-results-dialog-case img {
