@@ -37,7 +37,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     key = self.layerKey(def, options);
     proj = models.proj.selected;
     layer = cache.getItem(key);
-    if (!layer) {
+    if (!layer) { // layer is not in the cache
       date = options.date || models.date.selected;
       attributes = {
         id: def.id,
@@ -101,13 +101,25 @@ export function mapLayerBuilder(models, config, cache, Parent) {
   self.layerKey = function (def, options) {
     var layerId = def.id;
     var projId = models.proj.selected.id;
+    var dateId = '';
     var date;
     if (options.date) {
-      date = util.toISOStringDate(options.date);
+      date = options.date;
     } else {
-      date = util.toISOStringDate(models.date.selected);
+      date = models.date.selected;
     }
-    var dateId = (def.period === 'daily' || def.period === 'monthly' || def.period === 'yearly') ? date : '';
+    if (def.period === 'daily') {
+      date = util.toISOStringDate(date);
+      dateId = date;
+    } else if (def.period === 'monthly') {
+      date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
+      date = util.toISOStringDate(date);
+      dateId = date;
+    } else if (def.period === 'yearly') {
+      date = new Date(Date.UTC(date.getUTCFullYear(), 1, 1));
+      date = util.toISOStringDate(date);
+      dateId = date;
+    }
     var palette = '';
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
