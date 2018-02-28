@@ -37,10 +37,10 @@ def process_temporal(wv_layer, value):
                     datetime.strptime(times[1], "%Y-%m-%d"))
                 if start_date:
                     startDateParse = datetime.strptime(times[0], "%Y-%m-%d")
-                    date_range_start.append(startDateParse.strftime("%Y-%m-%d %H:%M:%S"))
+                    date_range_start.append(startDateParse.strftime("%Y-%m-%d") + "T" + startDateParse.strftime("%H:%M:%S") + "Z")
                 if end_date:
                     endDateParse = datetime.strptime(times[1], "%Y-%m-%d")
-                    date_range_end.append(endDateParse.strftime("%Y-%m-%d %H:%M:%S"))
+                    date_range_end.append(endDateParse.strftime("%Y-%m-%d") + "T" + endDateParse.strftime("%H:%M:%S") + "Z")
                 if times[2] != "P1D":
                     end_date = determine_end_date(times[2], end_date)
             else:
@@ -52,16 +52,14 @@ def process_temporal(wv_layer, value):
                     datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S"))
                 if start_date:
                     startTimeParse = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
-                    date_range_start.append(startTimeParse.strftime("%Y-%m-%d %H:%M:%S"))
+                    date_range_start.append(startTimeParse.strftime("%Y-%m-%d") + "T" + startTimeParse.strftime("%H:%M:%S") + "Z")
                 if end_date:
                     endTimeParse = datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S")
-                    date_range_end.append(endTimeParse.strftime("%Y-%m-%d %H:%M:%S"))
+                    date_range_end.append(endTimeParse.strftime("%Y-%m-%d") + "T" + endTimeParse.strftime("%H:%M:%S") + "Z")
 
-            # This will need to be updates to include subdaily values
-            # when granule support is in
-            wv_layer["startDate"] = start_date.strftime("%Y-%m-%d")
+            wv_layer["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z"
             if end_date != datetime.min:
-                wv_layer["endDate"] = end_date.strftime("%Y-%m-%d")
+                wv_layer["endDate"] = end_date.strftime("%Y-%m-%d") + "T" + end_date.strftime("%H:%M:%S") + "Z"
             if date_range_start and date_range_end:
                 wv_layer["allDateRanges"] = [{"startDate": s, "endDate": e} for s, e in zip(date_range_start, date_range_end)]
     except ValueError:

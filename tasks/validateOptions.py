@@ -137,14 +137,15 @@ for layer_id in wv["layers"].keys():
         if "endDate" in layer:
             del layer["endDate"]
     if "startDate" in layer:
-        if isDateTimeFormat(layer["startDate"]):
-            d = datetime.strptime(layer["startDate"], "%Y-%m-%d %H:%M:%S")
+        startTime = layer["startDate"].replace('T', ' ').replace('Z', '')
+        if isDateTimeFormat(startTime):
+            d = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
         else:
             d = datetime.strptime(layer["startDate"], "%Y-%m-%d")
         start_date = min(start_date, d)
 
 if start_date != datetime.max:
-    wv["startDate"] = start_date.strftime("%Y-%m-%d")
+    wv["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z";
 
 
 for layer_id in wv["layerOrder"]:
