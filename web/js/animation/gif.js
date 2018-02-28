@@ -90,7 +90,7 @@ export function animationGif(models, config, ui) {
     throttleSetDownloadButton = lodashThrottle(setDownloadButtonClass, 300, { trailing: true });
 
     options = {
-      resolution: 1,
+      resolution: '1',
       onSelectionChange: onSelectionChange,
       onClick: getGif,
       valid: true,
@@ -283,7 +283,7 @@ export function animationGif(models, config, ui) {
       res = zoomRes[Math.floor(((ui.map.selected.getView().getZoom() + 2) / 2))];
     }
 
-    if (mode === 0) { return res; } else {
+    if (mode === 0) { return res.toString(); } else {
       switch (res) {
         case 1:
           str = '250m';
