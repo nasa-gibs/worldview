@@ -216,12 +216,11 @@ export function animationGif(models, config, ui) {
       }
       // stampHeight = imgHeight * 0.1 > 26 ? imgHeight * 0.1 : 26;
       fontSize = imgHeight * 0.07 > 16 ? imgHeight * 0.065 : 16;
-
       gifshot.createGIF({
         'gifWidth': imgWidth,
         'gifHeight': imgHeight,
         'images': imageArra,
-        'stamp': animationCoordinates.w > 100 ? stamp : null,
+        'stamp': animationCoordinates.w > 100 && imgWidth > 100 ? stamp : null,
         'fontSize': fontSize + 'px',
         'stampHeight': stamp.height,
         'stampWidth': stamp.width,
@@ -235,7 +234,7 @@ export function animationGif(models, config, ui) {
         'fontFamily': 'Helvetica Neue',
         'interval': 1 / interval,
         'progressCallback': onGifProgress,
-        'showFrameText': animationCoordinates.w > 100 && animationCoordinates.h > 100,
+        'showFrameText': animationCoordinates.w > 100 && animationCoordinates.h > 50 && imgWidth > 100 && imgHeight > 50,
         'stroke': {
           'color': '#000',
           'pixels': fontSize * 0.05
