@@ -35,7 +35,7 @@
 }
 
 .wv-button:disabled {
-  opacity: .35;
+  opacity: 0.35;
   background-image: none;
   border: 1px solid #666;
   background-color: #555;
