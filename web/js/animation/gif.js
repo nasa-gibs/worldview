@@ -184,6 +184,9 @@ export function animationGif(models, config, ui) {
     var stampHeight;
     var fontSize;
     var svg;
+    var breakPointOne = 300;
+    var breakPointTwo = 100;
+    var marginLeft;
 
     loader = uiIndicator.loading();
     build = function(stamp) {
@@ -216,25 +219,27 @@ export function animationGif(models, config, ui) {
       }
       // stampHeight = imgHeight * 0.1 > 26 ? imgHeight * 0.1 : 26;
       fontSize = imgHeight * 0.07 > 16 ? imgHeight * 0.065 : 16;
+      marginLeft = imgWidth * 0.01;
+
       gifshot.createGIF({
         'gifWidth': imgWidth,
         'gifHeight': imgHeight,
         'images': imageArra,
-        'stamp': animationCoordinates.w > 100 && imgWidth > 100 ? stamp : null,
+        'stamp': animationCoordinates.w > breakPointTwo && imgWidth > breakPointTwo ? stamp : null,
         'fontSize': fontSize + 'px',
         'stampHeight': stamp.height,
         'stampWidth': stamp.width,
         'stampCoordinates': { x: imgWidth * 0.01, y: imgHeight * 0.01 }, // Margin based on GIF width
-        'textXCoordinate': null, // date location based on Dimensions
-        'textYCoordinate': animationCoordinates.w < 250 && animationCoordinates.h > 50 ? imgHeight - (fontSize + imgHeight * 0.02) : imgHeight * 0.02, // date location based on Dimensions
-        'textAlign': animationCoordinates.w < 250 ? 'left' : 'right', // If textXCoordinate is null this takes precedence
+        'textXCoordinate': animationCoordinates.w < breakPointOne ? marginLeft : null, // date location based on Dimensions
+        'textYCoordinate': animationCoordinates.w < breakPointOne ? imgHeight - (fontSize + imgHeight * 0.02) : imgHeight * 0.025, // date location based on Dimensions
+        'textAlign': animationCoordinates.w < breakPointOne ? 'left' : 'right', // If textXCoordinate is null this takes precedence
         'textBaseline': 'top', // If textYCoordinate is null this takes precedence
         'fontColor': '#fff',
         'fontWeight': '300',
         'fontFamily': 'Helvetica Neue',
         'interval': 1 / interval,
         'progressCallback': onGifProgress,
-        'showFrameText': animationCoordinates.w > 100 && animationCoordinates.h > 50 && imgWidth > 100 && imgHeight > 50,
+        'showFrameText': animationCoordinates.w > breakPointTwo && animationCoordinates.h > 50 && imgWidth > breakPointTwo && imgHeight > 50,
         'stroke': {
           'color': '#000',
           'pixels': fontSize * 0.05
