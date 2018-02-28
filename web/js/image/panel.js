@@ -138,7 +138,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
   };
   var getUpdatedProps = function() {
     return {
-      resolution: imgRes,
+      resolution: imgRes.toString(),
       proj: models.proj.selected.id,
       worldfile: worldfile,
       valid: fileSizeValid(),
