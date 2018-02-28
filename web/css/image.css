@@ -19,7 +19,7 @@
   text-align: center;
   padding: 0.1em 0;
   border: 0;
-  flex: 0 50%;
+  flex: 0 45%;
 }
 .wv-image-download-grid .grid-head {
   font-size: 12px;
@@ -40,6 +40,9 @@
   border: 1px solid #faa;
 }
 
+.wv-image-download-grid .wv-image-max-size.wv-image-size-invalid {
+  border-left: none;
+}
 .wv-image-download-grid button span {
   padding: .2em 1em;
   font-weight: 700;
