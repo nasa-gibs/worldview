@@ -159,6 +159,9 @@
 .gif-dialog .wv-checkbox {
   margin-left: 18px;
 }
+.gif-dialog select {
+  margin-left: 1em;
+}
 .gif-results-dialog-case, {
   text-transform: capitalize;
 }
