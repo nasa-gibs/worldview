@@ -814,5 +814,19 @@ export default (function (self) {
     return value;
   };
 
+  // Returns the number of months between two dates
+  self.monthDiff = function(date1, date2) {
+    var year1 = date1.getFullYear();
+    var year2 = date2.getFullYear();
+    var month1 = date1.getMonth();
+    var month2 = date2.getMonth();
+    if (month1 === 0) {
+      month1++;
+      month2++;
+    }
+    var numberOfMonths = (year2 - year1) * 12 + (month2 - month1);
+    return numberOfMonths;
+  };
+
   return self;
 })({});
