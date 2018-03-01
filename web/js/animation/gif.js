@@ -16,7 +16,6 @@ import util from '../util/util';
 import wvui from '../ui/ui';
 import uiIndicator from '../ui/indicator';
 
-
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
 const maxGifSize = 40;
 const resolutionsGeo = {
