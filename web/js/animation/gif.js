@@ -2,19 +2,20 @@ import $ from 'jquery';
 import 'jquery-jcrop';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import gifshot from 'gifshot';
 import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashThrottle from 'lodash/throttle';
+import lodashCapitalize from 'lodash/capitalize';
+import canvg from 'canvg-browser';
 
 import { GA as googleAnalytics, GifResSelection } from 'worldview-components';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import uiIndicator from '../ui/indicator';
-import canvg from 'canvg-browser';
+
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
 const maxGifSize = 40;
@@ -668,7 +669,7 @@ export function animationGif(models, config, ui) {
         'Increments: ' +
         '</b></div>' +
         '<div>' +
-        ui.anim.widget.getIncrements() +
+        lodashCapitalize(ui.anim.widget.getIncrements()) +
         '</div>' +
 
         '</div>' +
