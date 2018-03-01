@@ -65,14 +65,6 @@ export function layersAdd(models, ui, config) {
       .attr('id', self.id + 'facetedSearch')
       .addClass('facetedSearch');
 
-    if (config.aoi) {
-      var $select = $('<select></select>')
-        .attr('id', self.id + 'select')
-        .addClass('select');
-
-      $form.append($select);
-    }
-
     var $search = $('<input>')
       .attr('id', self.id + 'search')
       .addClass('search')
@@ -110,7 +102,6 @@ export function layersAdd(models, ui, config) {
         checkboxClass: 'iCheck iCheck-checkbox icheckbox_square-grey'
       });
 
-    updateAreasOfInterest();
     setTimeout(resize, 1);
   };
 
@@ -316,7 +307,6 @@ export function layersAdd(models, ui, config) {
 
   var onProjectionChange = function () {
     adjustTitles();
-    updateAreasOfInterest();
     filter();
   };
 
@@ -330,44 +320,6 @@ export function layersAdd(models, ui, config) {
           '\'] .subtitle')
         .html(names.subtitle);
     });
-  };
-
-  var updateAreasOfInterest = function () {
-    if (!config.aoi) {
-      return;
-    }
-    var $select = $('#' + self.id + 'select');
-    var previous = $(self.selector + 'select')
-      .val();
-
-    $select.empty();
-    var $option = $('<option></option>')
-      .attr('value', 'All')
-      .html('All');
-    $select.append($option);
-
-    var aois = [];
-    $.each(config.aoi, function (name, info) {
-      if ($.inArray(models.proj.selected.id,
-        info.projections) >= 0) {
-        if (info.index === 0 || info.index) {
-          aois.splice(info.index, 0, name);
-        } else {
-          aois.push(name);
-        }
-      }
-    });
-
-    $.each(aois, function (index, name) {
-      var $option = $('<option></option>')
-        .attr('value', name)
-        .html(name);
-      if (previous === name) {
-        $option.attr('selected', 'selected');
-      }
-      $select.append($option);
-    });
-    filter();
   };
 
   var searchTerms = function () {
