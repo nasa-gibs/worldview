@@ -828,5 +828,51 @@ export default (function (self) {
     return numberOfMonths;
   };
 
+  self.prevMonthInDateRange = function (def, date) {
+    var dateArray = [];
+    // Offset timezone
+    var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+    lodashEach(def.dateRanges, function (dateRange) {
+      var monthDifference;
+      let dateInterval = dateRange.dateInterval;
+      let minDate = new Date(dateRange.startDate);
+      let maxDate = new Date(dateRange.endDate);
+
+      // Offset timezone
+      minDate = new Date(minDate.getTime() + (minDate.getTimezoneOffset() * 60000));
+      maxDate = new Date(maxDate.getTime() + (maxDate.getTimezoneOffset() * 60000));
+
+      // Check if date is between dateRange.startDate && dateRange.endDate
+      if (currentDate >= minDate && currentDate <= maxDate) {
+        // Find the monthDifference of the endDate vs startDate (i.e. 10)
+        monthDifference = self.monthDiff(minDate, maxDate);
+      }
+
+      // Create array of all possible request dates by saying for interval++ <= monthDifference
+      for (dateInterval = 0; dateInterval <= monthDifference; dateInterval++) {
+        dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth() + dateInterval, minDate.getUTCDate(), 0, 0, 0));
+      }
+    });
+
+    // Find the closest dates within the current aray
+    dateArray.sort(function(a, b) {
+      var distancea = Math.abs(currentDate - a);
+      var distanceb = Math.abs(currentDate - b);
+      return distancea - distanceb; // sort a before b when the distance is smaller
+    });
+
+    // Filter the closest dates to only show dates before the currently selected date
+    var closestBeforeMonths = dateArray.filter(function(d) {
+      return d - currentDate < 0;
+    });
+
+    // Closest month, in date range, before current date = closestBeforeMonths[0]
+    if (closestBeforeMonths[0]) {
+      return closestBeforeMonths[0];
+    } else {
+      return date;
+    }
+  };
+
   return self;
 })({});
