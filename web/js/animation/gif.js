@@ -611,8 +611,7 @@ export function animationGif(models, config, ui) {
       animatedImage.width = animationCoordinates.w;
       animatedImage.height = animationCoordinates.h;
       var dlURL = util.format('nasa-worldview-{1}-to-{2}.gif', animModel.rangeState.startDate, animModel.rangeState.endDate);
-      var downloadSize = (blob.size / 1024)
-        .toFixed();
+      var downloadSize = lodashRound((blob.size / 1024 * 0.001), 2);
 
       // Create download link and apply button CSS
       var $download = $('<a><span class=ui-button-text>Download</span></a>')
@@ -639,7 +638,7 @@ export function animationGif(models, config, ui) {
         'Size: ' +
         '</b></div>' +
         '<div>' +
-        downloadSize + ' KB' +
+        downloadSize + ' MB' +
         '</div>' +
         '</div>' +
         '<div>' +
