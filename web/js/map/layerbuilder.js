@@ -103,6 +103,8 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     var projId = models.proj.selected.id;
     var dateId = '';
     var date;
+    var prevDate;
+    var dateArray = [];
     if (options.date) {
       date = options.date;
     } else {
@@ -113,8 +115,9 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       date = util.toISOStringDate(date);
       dateId = date;
     } else if (def.period === 'monthly') {
-      date = util.prevDateInDateRange(def, date);
-      date = util.toISOStringDate(date);
+      dateArray = util.datesinDateRanges(def, date, false);
+      prevDate = util.prevDateInDateRange(def, date, dateArray);
+      date = util.toISOStringDate(prevDate);
       dateId = date;
     } else if (def.period === 'yearly') {
       date = util.prevDateInDateRange(def, date);
