@@ -843,10 +843,21 @@ export default (function (self) {
     return dayDiff;
   };
 
-  self.prevDateInDateRange = function (def, date) {
+  // Return an array of dates based on the dateRange the current date falls in.
+
+  /**
+   * Return an array of dates based on the dateRange the current date falls in.
+   *
+   * @method datesinDateRanges
+   * @param  {object} def           The layer object
+   * @param  {object} date          The current date to find in the layer's range
+   * @param  {boolean} containRange If true, return all ranges. If false, only return the range of dates the layer falls in.
+   * @return {array}                Return an array of dates based on the dateRange the current date falls in.
+   */
+  self.datesinDateRanges = function (def, date, containRange) {
     var dateArray = [];
-    // Offset timezone
     var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+
     lodashEach(def.dateRanges, function (dateRange) {
       var yearDifference;
       var monthDifference;
@@ -866,8 +877,10 @@ export default (function (self) {
       maxDayDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth(), maxDate.getUTCDate() + 1);
 
       if (def.period === 'yearly') {
-        // Check if date is between dateRange.startDate && dateRange.endDate
-        if (currentDate >= minDate && currentDate <= maxYearDate) {
+        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
+        if (!containRange) {
+          yearDifference = self.yearDiff(minDate, maxYearDate);
+        } else if (currentDate >= minDate && currentDate <= maxYearDate) {
           // Find the yearDifference of the endDate vs startDate
           yearDifference = self.yearDiff(minDate, maxYearDate);
         }
@@ -877,8 +890,10 @@ export default (function (self) {
           dateArray.push(new Date(minDate.getUTCFullYear() + dateInterval, minDate.getUTCMonth(), minDate.getUTCDate(), 0, 0, 0));
         }
       } else if (def.period === 'monthly') {
-        // Check if date is between dateRange.startDate && dateRange.endDate
-        if (currentDate >= minDate && currentDate <= maxMonthDate) {
+        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
+        if (!containRange) {
+          monthDifference = self.monthDiff(minDate, maxMonthDate);
+        } else if (currentDate >= minDate && currentDate <= maxMonthDate) {
           // Find the monthDifference of the endDate vs startDate
           monthDifference = self.monthDiff(minDate, maxMonthDate);
         }
@@ -888,8 +903,10 @@ export default (function (self) {
           dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth() + dateInterval, minDate.getUTCDate(), 0, 0, 0));
         }
       } else if (def.period === 'daily') {
-        // Check if date is between dateRange.startDate && dateRange.endDate
-        if (currentDate >= minDate && currentDate <= maxDayDate) {
+        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
+        if (!containRange) {
+          dayDifference = self.dayDiff(minDate, maxDayDate);
+        } else if (currentDate >= minDate && currentDate <= maxDayDate) {
           // Find the dayDifference of the endDate vs startDate
           dayDifference = self.dayDiff(minDate, maxDayDate);
         }
@@ -900,6 +917,12 @@ export default (function (self) {
         }
       }
     });
+    return dateArray;
+  };
+
+  self.prevDateInDateRange = function (def, date, dateArray) {
+    // Offset timezone
+    var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
 
     // Find the closest dates within the current aray
     dateArray.sort(function(a, b) {
