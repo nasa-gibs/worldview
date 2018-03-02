@@ -108,15 +108,16 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     } else {
       date = models.date.selected;
     }
+
     if (def.period === 'daily') {
       date = util.toISOStringDate(date);
       dateId = date;
     } else if (def.period === 'monthly') {
-      date = util.prevMonthInDateRange(def, date);
+      date = util.prevDateInDateRange(def, date);
       date = util.toISOStringDate(date);
       dateId = date;
     } else if (def.period === 'yearly') {
-      date = new Date(Date.UTC(date.getUTCFullYear(), 1, 1));
+      date = util.prevDateInDateRange(def, date);
       date = util.toISOStringDate(date);
       dateId = date;
     }
