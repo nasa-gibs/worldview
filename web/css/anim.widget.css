@@ -175,12 +175,15 @@
   font-weight: 400;
 }
 .gif-download-grid .grid-child {
-  width: 120px;
+  width: 190px;
   font-size: 12px;
   font-weight: 400;
   padding-left: 10px;
   margin-bottom: 4px;
   transition: border 0.5s ease;
+}
+.gif-download-grid .grid-child.label {
+  width: 110px;
 }
 .gif-download-grid .grid-child.gif-size-invalid {
   border: 1px solid #faa;
