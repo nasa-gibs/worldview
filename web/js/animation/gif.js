@@ -100,7 +100,8 @@ export function animationGif(models, config, ui) {
       endDate: null,
       speed: null,
       maxGifSize: maxGifSize,
-      checked: true
+      checked: true,
+      increment: lodashCapitalize(ui.anim.widget.getIncrements())
     };
     self.reactComponent = renderPanel(options, panelCase);
   };
@@ -116,7 +117,8 @@ export function animationGif(models, config, ui) {
       imgWidth: lodashRound(imgWidth, 2),
       startDate: state.startDate,
       endDate: state.endDate,
-      speed: lodashRound(state.speed, 2)
+      speed: lodashRound(state.speed, 2),
+      increment: lodashCapitalize(ui.anim.widget.getIncrements())
     };
   };
   var update = function(selectedRes, lonlats) {
