@@ -13,6 +13,8 @@ import browser from './browser';
 import { events } from './events';
 import load from './load';
 import Cache from 'cachai';
+import closestTo from 'date-fns/closest_to';
+import isBefore from 'date-fns/is_before';
 
 export default (function (self) {
   var canvas = null;
@@ -925,26 +927,24 @@ export default (function (self) {
   self.prevDateInDateRange = function (def, date, dateArray) {
     // Offset timezone
     var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+    if (!dateArray) return date;
 
-    // Find the closest dates within the current aray
-    dateArray.sort(function(a, b) {
-      var distancea = Math.abs(currentDate - a);
-      var distanceb = Math.abs(currentDate - b);
-
-      return distancea - distanceb; // sort a before b when the distance is smaller
+    // Return an array of the closest available dates within the range
+    var closestAvailableDates = [];
+    lodashEach(dateArray, function(rangeDate) {
+      if (isBefore(rangeDate, currentDate)) {
+        closestAvailableDates.push(rangeDate);
+      }
     });
 
-    // Filter the closest dates to only show dates before the currently selected date
-    var closestAvailableDate = dateArray.filter(function(d) {
-      return d - currentDate <= 0;
-    });
+    // Find the closest dates within the current array
+    var closestDate = closestTo(currentDate, closestAvailableDates);
 
-    // Closest month, in date range, before current date = closestAvailableDate[0]
-    if (closestAvailableDate[0] &&
-      ((def.period === 'yearly' && self.yearDiff(closestAvailableDate[0], currentDate) <= 1) ||
-      (def.period === 'monthly' && self.monthDiff(closestAvailableDate[0], currentDate) <= 1) ||
-      (def.period === 'daily' && self.dayDiff(closestAvailableDate[0], currentDate) <= 1))) {
-      return closestAvailableDate[0];
+    if (closestDate &&
+      ((def.period === 'yearly' && self.yearDiff(closestDate, currentDate) <= 1) ||
+      (def.period === 'monthly' && self.monthDiff(closestDate, currentDate) <= 1) ||
+      (def.period === 'daily' && self.dayDiff(closestDate, currentDate) <= 1))) {
+      return closestDate;
     } else {
       return date;
     }

@@ -99,7 +99,6 @@ export default function (models, ui, config) {
 
     var mapAnchor = document.getElementById('mapPanelTourAnchor');
     if (!mapAnchor) {
-      // console.log("creating mapanchor");
       var owner = document.getElementById('wv-map');
       mapAnchor = document.createElement('div');
       mapAnchor.setAttribute('id', 'mapPanelTourAnchor');
@@ -167,7 +166,6 @@ export default function (models, ui, config) {
     };
 
     var onStop = function (index, tip, button) {
-      // console.log(index, tip, button);
       setTourState();
       googleAnalytics.event('Tour', 'Click', 'Post Tour View', index + 1);
       if (index === 5 && button === false) {

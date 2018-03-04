@@ -304,6 +304,7 @@ export function mapui(models, config) {
    */
 
   var addLayer = function (def) {
+    var date = models.date.selected;
     var mapIndex = lodashFindIndex(models.layers.get({
       reverse: true
     }), {
@@ -312,6 +313,7 @@ export function mapui(models, config) {
     if (isGraticule(def)) {
       addGraticule();
     } else {
+      def.availableDates = util.datesinDateRanges(def, date, false);
       self.selected.getLayers()
         .insertAt(mapIndex, createLayer(def));
     }
