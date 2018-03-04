@@ -103,27 +103,22 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     var projId = models.proj.selected.id;
     var dateId = '';
     var date;
-    var prevDate;
-    var dateArray = [];
+    var dateArray = def.availableDates || [];
     if (options.date) {
       date = options.date;
     } else {
       date = models.date.selected;
     }
 
-    if (def.period === 'daily') {
-      date = util.toISOStringDate(date);
-      dateId = date;
-    } else if (def.period === 'monthly') {
-      dateArray = util.datesinDateRanges(def, date, false);
-      prevDate = util.prevDateInDateRange(def, date, dateArray);
-      date = util.toISOStringDate(prevDate);
-      dateId = date;
-    } else if (def.period === 'yearly') {
-      date = util.prevDateInDateRange(def, date);
-      date = util.toISOStringDate(date);
-      dateId = date;
+    date = util.prevDateInDateRange(def, date, dateArray);
+
+    // Is current "rounded" previous date not in array of availableDates
+    if (date && !dateArray.includes(date)) {
+      // Then, update layer object with new array of dates
+      def.availableDates = util.datesinDateRanges(def, date, true);
+      date = util.prevDateInDateRange(def, date, dateArray);
     }
+    dateId = date;
     var palette = '';
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
