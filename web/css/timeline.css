@@ -420,6 +420,7 @@ g.plot rect.data-bar-invisible {
   bottom: 100%;
   border-bottom: 8px solid transparent;
   width: 100%;
+  z-index: 10;
 }
 
 #zoom-btn-container .wv-tooltip::after {
