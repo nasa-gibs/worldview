@@ -110,13 +110,13 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       date = models.date.selected;
     }
 
-    date = util.prevDateInDateRange(def, date, dateArray);
+    date = util.prevDateInDateRange(date, dateArray);
 
     // Is current "rounded" previous date not in array of availableDates
     if (date && !dateArray.includes(date)) {
       // Then, update layer object with new array of dates
       def.availableDates = util.datesinDateRanges(def, date, true);
-      date = util.prevDateInDateRange(def, date, dateArray);
+      date = util.prevDateInDateRange(date, dateArray);
     }
     dateId = date;
     var palette = '';
