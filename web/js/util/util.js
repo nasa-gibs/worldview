@@ -848,16 +848,15 @@ export default (function (self) {
     return dayDiff;
   };
 
-  // Return an array of dates based on the dateRange the current date falls in.
-
   /**
    * Return an array of dates based on the dateRange the current date falls in.
    *
    * @method datesinDateRanges
-   * @param  {object} def           The layer object
-   * @param  {object} date          The current date to find in the layer's range
-   * @param  {boolean} containRange If true, return all ranges. If false, only return the range of dates the layer falls in.
-   * @return {array}                Return an array of dates based on the dateRange the current date falls in.
+   * @param  {object} def           A layer object
+   * @param  {object} date          A date object
+   * @param  {boolean} containRange If true, return dates from all ranges.
+   *                                If false, only return the dates from the range the current date falls in.
+   * @return {array}                An array of dates with normalized timezones
    */
   self.datesinDateRanges = function (def, date, containRange) {
     var dateArray = [];
@@ -925,8 +924,15 @@ export default (function (self) {
     return dateArray;
   };
 
+  /**
+   * Find the closest previous date from an array of dates
+   *
+   * @param  {object} def       The layer object
+   * @param  {object} date      A date to compare against the array of dates
+   * @param  {array} dateArray  An array of dates
+   * @return {object}           The date object with normalized timeszone.
+   */
   self.prevDateInDateRange = function (def, date, dateArray) {
-    // Offset timezone
     var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     if (!dateArray) return date;
 
