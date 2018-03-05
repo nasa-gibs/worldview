@@ -16,6 +16,8 @@ export function timelineConfig(models, config, ui) {
   var zoomLevel = model.selectedZoom || 3;
 
   self.zoom = function (level, event) {
+    // clone zoom element when switching zoom level.
+    var clone;
     // format of the label
     var labelFormat;
     // printed type of tick
@@ -197,14 +199,7 @@ export function timelineConfig(models, config, ui) {
             });
         };
 
-        util.swapNodes('.zoom-btn-active', '#zoom-years');
-        $('.zoom-btn')
-          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
-        $('#zoom-years')
-          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
-        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
-          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
-        }).appendTo('#timeline-zoom');
+        switchZoom(1);
 
         self.currentZoom = 1;
         break;
@@ -355,14 +350,7 @@ export function timelineConfig(models, config, ui) {
             });
         };
 
-        util.swapNodes('.zoom-btn-active', '#zoom-months');
-        $('.zoom-btn')
-          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
-        $('#zoom-months')
-          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
-        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
-          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
-        }).appendTo('#timeline-zoom');
+        switchZoom(2);
 
         self.currentZoom = 2;
         break;
@@ -522,14 +510,7 @@ export function timelineConfig(models, config, ui) {
             }
           });
 
-        util.swapNodes('.zoom-btn-active', '#zoom-days');
-        $('.zoom-btn')
-          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
-        $('#zoom-days')
-          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
-        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
-          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
-        }).appendTo('#timeline-zoom');
+        switchZoom(3);
 
         self.currentZoom = 3;
         break;
@@ -726,14 +707,7 @@ export function timelineConfig(models, config, ui) {
             }
           });
 
-        util.swapNodes('.zoom-btn-active', '#zoom-minutes');
-        $('.zoom-btn')
-          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
-        $('#zoom-minutes')
-          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
-        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
-          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
-        }).appendTo('#timeline-zoom');
+        switchZoom(4);
 
         self.currentZoom = 4;
         break;
@@ -753,6 +727,29 @@ export function timelineConfig(models, config, ui) {
     model.events.trigger('timeline-change');
   };
 
+  var switchZoom = function (zoomLevel) {
+    var clone;
+    var zoomElement;
+    switch (zoomLevel) {
+      case 1:
+        zoomElement = '#zoom-years';
+        break;
+      case 2:
+        zoomElement = '#zoom-months';
+        break;
+      case 3:
+        zoomElement = '#zoom-days';
+        break;
+      case 4:
+        zoomElement = '#zoom-minutes';
+        break;
+    }
+    $('#current-zoom').remove();
+    clone = $(zoomElement).clone().prop('id', 'current-zoom')
+      .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
+    $('#zoom-btn-container').prepend(clone);
+  };
+
   // Draw ticks based on zoom level
   var initTicks = function () {
     tl.ticks.boundary.init();
@@ -767,53 +764,23 @@ export function timelineConfig(models, config, ui) {
     $('#zoom-btn-container').hover(function () {
       $('.wv-tooltip').toggle();
     });
-    d3.select('#zoom-years')
+    $('.zoom-btn-inactive')
       .on('click', function (d) {
-        util.swapNodes('.zoom-btn-active', this);
-        $('.zoom-btn')
-          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
-        $(this)
-          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
-        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
-          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
-        }).appendTo('#timeline-zoom');
-        self.zoom(1);
-      });
-    d3.select('#zoom-months')
-      .on('click', function (d) {
-        util.swapNodes('.zoom-btn-active', this);
-        $('.zoom-btn')
-          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
-        $(this)
-          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
-        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
-          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
-        }).appendTo('#timeline-zoom');
-        self.zoom(2);
-      });
-    d3.select('#zoom-days')
-      .on('click', function (d) {
-        util.swapNodes('.zoom-btn-active', this);
-        $('.zoom-btn')
-          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
-        $(this)
-          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
-        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
-          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
-        }).appendTo('#timeline-zoom');
-        self.zoom(3);
-      });
-    d3.select('#zoom-minutes')
-      .on('click', function (d) {
-        util.swapNodes('.zoom-btn-active', this);
-        $('.zoom-btn')
-          .removeClass('zoom-btn-active').addClass('zoom-btn-inactive');
-        $(this)
-          .removeClass('zoom-btn-inactive').addClass('zoom-btn-active');
-        $('#zoom-btn-container').find('.zoom-btn-inactive').sort(function (a, b) {
-          return +a.getAttribute('data-zoom') - +b.getAttribute('data-zoom');
-        }).appendTo('#timeline-zoom');
-        self.zoom(4);
+        var dataZoom = $(this).attr('data-zoom');
+        switch (dataZoom) {
+          case '1':
+            self.zoom(1);
+            break;
+          case '2':
+            self.zoom(2);
+            break;
+          case '4':
+            self.zoom(4);
+            break;
+          default:
+            self.zoom(3);
+            break;
+        }
       });
     // Default zoom
     self.zoom(zoomLevel);
