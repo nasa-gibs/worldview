@@ -282,9 +282,13 @@ export function timelineInput(models, config, ui) {
       }
       if ((selectedDateObj > tl.data.start()) &&
         (selectedDateObj <= util.today())) {
-        var sib = selected.parent()
-          .next('div.input-wrapper')
+        var parent = selected.parent();
+        var sib = parent.next('div.input-wrapper')
           .find('input.button-input-group');
+        if (parent.next('#input-time-divider').length) {
+          sib = parent.next().next('div.input-wrapper')
+            .find('input.button-input-group');
+        }
 
         if (entered && sib.length < 1) {
           $('#focus-guard-2')
