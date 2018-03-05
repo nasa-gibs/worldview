@@ -36,7 +36,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
 
       key = parent.layerKey(def, {
         date: date
-      });
+      }, true);
       layer = cache.getItem(key);
       if (layer) {
         cache.removeItem(key);
@@ -53,6 +53,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
         });
     });
   };
+
   var getActiveLayersWithData = function (date) {
     var layers;
     var arra = [];
@@ -82,9 +83,11 @@ export function mapPrecacheTile(models, config, cache, parent) {
     }
     return extent;
   };
+
   var getExtent = function (extent1, extent2) {
     return olExtent.getIntersection(extent1, extent2);
   };
+
   var promiseLayerGroup = function (layer, extent, viewState, pixelRatio, map) {
     return new Promise(function (resolve, reject) {
       var layers, layerPromiseArray;
@@ -102,16 +105,16 @@ export function mapPrecacheTile(models, config, cache, parent) {
       });
       Promise.all(layerPromiseArray)
         .then(function (yo) {
-          resolve('reslove layer group');
+          resolve('resolve layer group');
         });
     });
   };
+
   var promiseTileLayer = function (layer, extent, viewState, pixelRatio) {
     var renderer, tileSource, currentZ, i, tileGrid, projection;
-
     return new Promise(function (resolve, reject) {
       if (!extent) {
-        resolve('reslove tile layer');
+        resolve('resolve tile layer');
       }
       projection = viewState.projection;
       i = 0;

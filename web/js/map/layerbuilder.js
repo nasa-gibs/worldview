@@ -93,33 +93,34 @@ export function mapLayerBuilder(models, config, cache, Parent) {
    * @static
    *
    * @param {Object} def - Layer properties
-   *
    * @param {number} options - Layer options
+   * @param {boolean} precache
    *
    * @returns {object} layer key Object
    */
   self.layerKey = function (def, options) {
     var layerId = def.id;
     var projId = models.proj.selected.id;
-    var dateId = '';
     var date;
+    var dateId = '';
     var dateArray = def.availableDates || [];
+    var palette = '';
+
     if (options.date) {
       date = options.date;
     } else {
       date = models.date.selected;
-    }
-
-    date = util.prevDateInDateRange(date, dateArray);
-
-    // Is current "rounded" previous date not in array of availableDates
-    if (date && !dateArray.includes(date)) {
-      // Then, update layer object with new array of dates
-      def.availableDates = util.datesinDateRanges(def, date, true);
       date = util.prevDateInDateRange(date, dateArray);
+
+      // Is current "rounded" previous date not in array of availableDates
+      if (date && !dateArray.includes(date)) {
+        // Then, update layer object with new array of dates
+        def.availableDates = util.datesinDateRanges(def, date, true);
+        date = util.prevDateInDateRange(date, dateArray);
+      }
     }
+
     dateId = date;
-    var palette = '';
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
     }
