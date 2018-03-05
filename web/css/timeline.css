@@ -402,7 +402,7 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header #timeline-zoom {
   display: block;
-  width: 66px;
+  width: 80px;
   margin-left: auto;
   margin-right: auto;
   padding: 4px;
@@ -459,9 +459,10 @@ g.plot rect.data-bar-invisible {
   text-transform: uppercase;
   text-align: center;
   font-family: 'Roboto Mono', monospace;
-  font-size: 13px;
-  line-height: 15px;
+  font-size: 14px;
+  line-height: 16px;
   color: #ccc;
+  padding: 2px 0;
 }
 
 #timeline-zoom .zoom-btn:hover {
