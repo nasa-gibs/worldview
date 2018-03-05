@@ -313,7 +313,7 @@ export function mapui(models, config) {
     if (isGraticule(def)) {
       addGraticule();
     } else {
-      def.availableDates = util.datesinDateRanges(def, date, false);
+      def.availableDates = util.datesinDateRanges(def, date, true);
       self.selected.getLayers()
         .insertAt(mapIndex, createLayer(def));
     }
