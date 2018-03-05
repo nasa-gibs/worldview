@@ -180,7 +180,6 @@ export function animationGif(models, config, ui) {
     var imageArra;
     var stampWidth;
     var build;
-    var fontSize;
     var stampProps;
     var newImage;
     var breakPointOne = 300;
@@ -240,7 +239,7 @@ export function animationGif(models, config, ui) {
         'showFrameText': stampHeight > 20,
         'stroke': {
           'color': '#000',
-          'pixels': fontSize * 0.05
+          'pixels': dateStamp.fontSize * 0.05
         },
         'pause': 1
       }, onGifComplete);
