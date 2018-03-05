@@ -36,7 +36,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
 
       key = parent.layerKey(def, {
         date: date
-      }, true);
+      });
       layer = cache.getItem(key);
       if (layer) {
         cache.removeItem(key);
