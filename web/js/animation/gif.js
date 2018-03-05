@@ -177,21 +177,21 @@ export function animationGif(models, config, ui) {
    *
    */
   self.createGIF = function() {
+    var imageArra;
+    var stampWidth;
+    var build;
+    var fontSize;
+    var stampProps;
+    var newImage;
+    var breakPointOne = 300;
+    var stampWidthRatio = 4.889;
     var stateObj = animModel.rangeState;
     var interval = stateObj.speed;
     var startDate = stateObj.startDate;
     var endDate = stateObj.endDate;
-    var imageArra;
-    var build;
-    var stampHeight;
-    var fontSize;
-    var svg;
-    var breakPointOne = 300;
-    var breakPointTwo = 100;
-    var marginLeft;
 
     loader = uiIndicator.loading();
-    build = function(stamp) {
+    build = function(stamp, dateStamp, stampHeight) {
       var buildProgressBar = function() {
         $progress = $('<progress />') // display progress for GIF creation
           .attr('class', 'wv-gif-progress');
@@ -219,29 +219,25 @@ export function animationGif(models, config, ui) {
       if (!imageArra) { // won't be true if there are too mant frames
         return;
       }
-      // stampHeight = imgHeight * 0.1 > 26 ? imgHeight * 0.1 : 26;
-      fontSize = imgHeight * 0.07 > 16 ? imgHeight * 0.065 : 16;
-      marginLeft = imgWidth * 0.01;
-
       gifshot.createGIF({
         'gifWidth': imgWidth,
         'gifHeight': imgHeight,
         'images': imageArra,
-        'stamp': animationCoordinates.w > breakPointTwo && imgWidth > breakPointTwo ? stamp : null,
-        'fontSize': fontSize + 'px',
+        'stamp': stampHeight > 20 ? stamp : null,
+        'fontSize': dateStamp.fontSize + 'px',
         'stampHeight': stamp.height,
         'stampWidth': stamp.width,
         'stampCoordinates': { x: imgWidth * 0.01, y: imgHeight * 0.01 }, // Margin based on GIF width
-        'textXCoordinate': animationCoordinates.w < breakPointOne ? marginLeft : null, // date location based on Dimensions
-        'textYCoordinate': animationCoordinates.w < breakPointOne ? imgHeight - (fontSize + imgHeight * 0.02) : imgHeight * 0.025, // date location based on Dimensions
-        'textAlign': animationCoordinates.w < breakPointOne ? 'left' : 'right', // If textXCoordinate is null this takes precedence
+        'textXCoordinate': dateStamp.x,
+        'textYCoordinate': dateStamp.y, // date location based on Dimensions
+        'textAlign': dateStamp.align, // If textXCoordinate is null this takes precedence
         'textBaseline': 'top', // If textYCoordinate is null this takes precedence
         'fontColor': '#fff',
         'fontWeight': '300',
         'fontFamily': 'Helvetica Neue',
         'interval': 1 / interval,
         'progressCallback': onGifProgress,
-        'showFrameText': animationCoordinates.w > breakPointTwo && animationCoordinates.h > 50 && imgWidth > breakPointTwo && imgHeight > 50,
+        'showFrameText': stampHeight > 20,
         'stroke': {
           'color': '#000',
           'pixels': fontSize * 0.05
@@ -249,20 +245,55 @@ export function animationGif(models, config, ui) {
         'pause': 1
       }, onGifComplete);
     };
-    stampHeight = imgHeight * 0.10 > 20 ? imgHeight * 0.10 : 20;
-    svg = 'brand/images/wv-logo-w-shadow.svg';
-    var c = document.createElement('canvas');
-    var options = {
+    stampProps = getStampProps(stampWidthRatio, breakPointOne, stampWidth);
+    newImage = svgToPng('brand/images/wv-logo-w-shadow.svg', stampProps.stampHeight);
+
+    build(newImage, stampProps.dateStamp, stampProps.stampHeight);
+  };
+  var svgToPng = function(svgURL, stampHeight) {
+    var newImage;
+    var canvasEl = document.createElement('canvas');
+    var canvgOptions = {
       log: false,
       ignoreMouse: true,
       scaleHeight: stampHeight
     };
-    canvg(c, svg, options);
-    var newImage = new Image();
-    newImage.src = c.toDataURL('image/png');
-    newImage.width = c.width;
-    newImage.height = c.height;
-    build(newImage);
+    canvg(canvasEl, svgURL, canvgOptions);
+    newImage = new Image();
+    newImage.src = canvasEl.toDataURL('image/png');
+    newImage.width = canvasEl.width;
+    newImage.height = canvasEl.height;
+
+    return newImage;
+  };
+  var getStampProps = function(stampWidthRatio, breakPoint, stampWidth) {
+    var dateStamp = {};
+    var fontSize;
+    var stampHeight;
+    var stampHeightByImageWidth;
+    // Set Logo-stamp dimensions based upon smallest total image dimension
+    if (animationCoordinates.w < breakPoint) {
+      stampHeight = (imgWidth * 0.70) / stampWidthRatio;
+      dateStamp.fontSize = lodashRound(stampHeight * 0.65);
+      dateStamp.align = 'left';
+      dateStamp.x = imgWidth * 0.01;
+      dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.03);
+    } else if (imgHeight > imgWidth) {
+      stampWidth = imgWidth * 0.4;
+      stampHeightByImageWidth = stampWidth / stampWidthRatio;
+      stampHeight = stampHeightByImageWidth > 20 ? stampHeightByImageWidth : 20;
+      dateStamp.fontSize = lodashRound(stampHeight * 0.65);
+      dateStamp.y = imgHeight - (fontSize + imgHeight * 0.03);
+      dateStamp.x = imgWidth * 0.01;
+      dateStamp.align = 'left';
+    } else {
+      stampHeight = imgHeight * 0.10;
+      dateStamp.fontSize = lodashRound(stampHeight * 0.65);
+      dateStamp.y = imgHeight * 0.025;
+      dateStamp.align = 'right';
+      dateStamp.x = null;
+    }
+    return { stampHeight: stampHeight, dateStamp: dateStamp };
   };
   /*
    * Calculates resolution of frame based
