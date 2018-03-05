@@ -15,6 +15,7 @@ import load from './load';
 import Cache from 'cachai';
 import closestTo from 'date-fns/closest_to';
 import isBefore from 'date-fns/is_before';
+import isEqual from 'date-fns/is_equal';
 
 export default (function (self) {
   var canvas = null;
@@ -930,7 +931,7 @@ export default (function (self) {
     // Return an array of the closest available dates within the range
     var closestAvailableDates = [];
     lodashEach(dateArray, function(rangeDate) {
-      if (isBefore(rangeDate, currentDate)) {
+      if (isBefore(rangeDate, currentDate) || isEqual(rangeDate, currentDate)) {
         closestAvailableDates.push(rangeDate);
       }
     });
