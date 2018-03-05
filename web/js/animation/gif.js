@@ -877,6 +877,7 @@ export function animationGif(models, config, ui) {
       position: {
         my: 'left top',
         at: 'left bottom+10',
+        collision: 'flipfit',
         of: $('.jcrop-tracker')
       },
 
@@ -922,6 +923,7 @@ export function animationGif(models, config, ui) {
       $parent.position({
         my: 'left top',
         at: 'right+10 top',
+        collision: 'flipfit',
         of: $('.jcrop-tracker')
       });
     }
