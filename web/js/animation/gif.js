@@ -1018,7 +1018,7 @@ export function animationGif(models, config, ui) {
         jcropAPI = this;
         $('#timeline-footer')
           .toggleClass('wv-anim-active');
-        $dialog = getSelectorDialog(340);
+        $dialog = getSelectorDialog(342);
         $tracker = this.ui.selection.find('.jcrop-tracker');
         $tracker.append($dlButton);
         $dlButton = $('.wv-dl-gif-bt-case i');
