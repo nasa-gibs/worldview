@@ -925,12 +925,11 @@ export default (function (self) {
   /**
    * Find the closest previous date from an array of dates
    *
-   * @param  {object} def       The layer object
    * @param  {object} date      A date to compare against the array of dates
    * @param  {array} dateArray  An array of dates
    * @return {object}           The date object with normalized timeszone.
    */
-  self.prevDateInDateRange = function (def, date, dateArray) {
+  self.prevDateInDateRange = function (date, dateArray) {
     var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     if (!dateArray) return date;
 
@@ -945,10 +944,7 @@ export default (function (self) {
     // Find the closest dates within the current array
     var closestDate = closestTo(currentDate, closestAvailableDates);
 
-    if (closestDate &&
-      ((def.period === 'yearly' && self.yearDiff(closestDate, currentDate) <= 1) ||
-      (def.period === 'monthly' && self.monthDiff(closestDate, currentDate) <= 1) ||
-      (def.period === 'daily' && self.dayDiff(closestDate, currentDate) <= 1))) {
+    if (closestDate) {
       return closestDate;
     } else {
       return date;
