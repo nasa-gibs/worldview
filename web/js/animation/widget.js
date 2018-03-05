@@ -243,17 +243,22 @@ export function animationWidget (models, config, ui) {
   };
 
   self.makeDateGuess = function () {
+    var day, intervalStep;
+    var today = new Date();
     var currentDate = new Date(models.date.selected);
     var interval = ui.anim.ui.getInterval();
-    var day = util.dateAdd(currentDate, interval, 7);
-    var today = new Date();
-
+    if (models.date.selectedZoom === 4) {
+      intervalStep = 70;
+    } else {
+      intervalStep = 7;
+    }
+    day = util.dateAdd(currentDate, interval, intervalStep);
     if (day > today) {
       model.rangeState.endDate = util.toISOStringSeconds(currentDate);
-      model.rangeState.startDate = util.toISOStringSeconds(util.dateAdd(currentDate, interval, -7));
+      model.rangeState.startDate = util.toISOStringSeconds(util.dateAdd(currentDate, interval, -(intervalStep)));
     } else {
       model.rangeState.startDate = util.toISOStringSeconds(currentDate);
-      model.rangeState.endDate = util.toISOStringSeconds(util.dateAdd(currentDate, interval, 7));
+      model.rangeState.endDate = util.toISOStringSeconds(util.dateAdd(currentDate, interval, intervalStep));
     }
   };
   /*
