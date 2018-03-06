@@ -56,6 +56,8 @@ export function animationGif(models, config, ui) {
   var imgHeight;
   var requestSize;
   var throttleSetDownloadButton;
+  var lastRequestedDimensions = {};
+
   var GRATICULE_WARNING =
     'The graticule layer cannot be used to take a snapshot. Would you ' +
     'like to hide this layer?';
@@ -189,6 +191,8 @@ export function animationGif(models, config, ui) {
     var startDate = stateObj.startDate;
     var endDate = stateObj.endDate;
 
+    lastRequestedDimensions.w = animationCoordinates.w;
+    lastRequestedDimensions.h = animationCoordinates.h;
     loader = uiIndicator.loading();
     build = function(stamp, dateStamp, stampHeight) {
       var buildProgressBar = function() {
@@ -270,7 +274,7 @@ export function animationGif(models, config, ui) {
     var stampHeight;
     var stampHeightByImageWidth;
     // Set Logo-stamp dimensions based upon smallest total image dimension
-    if (animationCoordinates.w < breakPoint) {
+    if (lastRequestedDimensions.w < breakPoint) {
       stampHeight = (imgWidth * 0.70) / stampWidthRatio < 60 ? ((imgWidth * 0.70) / stampWidthRatio) : 60;
       dateStamp.fontSize = lodashRound(stampHeight * 0.65);
       dateStamp.align = 'left';
@@ -637,8 +641,8 @@ export function animationGif(models, config, ui) {
       });
       var blobURL = URL.createObjectURL(blob); // supported in Chrome and FF
       animatedImage.src = blobURL;
-      animatedImage.width = animationCoordinates.w > window.innerWidth - 198 ? window.innerWidth - 198 : animationCoordinates.w;
-      animatedImage.height = animationCoordinates.h > window.innerHeight - 80 ? window.innerHeight - 80 : animationCoordinates.h;
+      animatedImage.width = lastRequestedDimensions.w > window.innerWidth - 198 ? window.innerWidth - 198 : lastRequestedDimensions.w;
+      animatedImage.height = lastRequestedDimensions.h > window.innerHeight - 80 ? window.innerHeight - 80 : lastRequestedDimensions.h;
       var dlURL = util.format('nasa-worldview-{1}-to-{2}.gif', animModel.rangeState.startDate, animModel.rangeState.endDate);
       var downloadSize = lodashRound((blob.size / 1024 * 0.001), 2);
 
@@ -710,8 +714,8 @@ export function animationGif(models, config, ui) {
       $dialogBodyCase.append($catalog);
       // calculate the offset of the dialog position based on image size to display it properly
       // only height needs to be adjusted to center the dialog
-      var posWidth = animationCoordinates.w * 1 / window.innerWidth;
-      var posHeight = animationCoordinates.h * 50 / window.innerHeight;
+      var posWidth = lastRequestedDimensions.w * 1 / window.innerWidth;
+      var posHeight = lastRequestedDimensions.h * 50 / window.innerHeight;
       var atString = 'center-' + posWidth.toFixed() + '% center-' + posHeight.toFixed() + '%';
 
       // Create a dialog over the view and place the image there
