@@ -768,7 +768,7 @@ export function animationGif(models, config, ui) {
     });
     $dialogBox.dialog({
       dialogClass: 'wv-panel wv-image',
-      title: 'Create An Animating GIF',
+      title: 'Create An Animated GIF',
       height: 'auto',
       width: width,
       minHeight: 40,
