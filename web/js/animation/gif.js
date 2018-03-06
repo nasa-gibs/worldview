@@ -942,12 +942,11 @@ export function animationGif(models, config, ui) {
    *
    */
   var setIconFontSize = function($el, width) {
-    var fs = Math.abs(width / 4);
     if (!$el) { return; }
-    if (fs <= 30) {
-      fs = 30;
-    }
-    $el.css('font-size', fs);
+    var fontSize = Math.abs(width / 4); // Font size is 25% width
+    fontSize = fontSize < 30 ? 30 : fontSize > 100 ? 100 : fontSize; // Set max and min font-size
+
+    $el.css('font-size', fontSize);
   };
 
   var onBoundingBoxChange = function(c, $dialog, $dlButton) {
