@@ -267,7 +267,6 @@ export function animationGif(models, config, ui) {
   };
   var getStampProps = function(stampWidthRatio, breakPoint, stampWidth) {
     var dateStamp = {};
-    var fontSize;
     var stampHeight;
     var stampHeightByImageWidth;
     // Set Logo-stamp dimensions based upon smallest total image dimension
@@ -276,13 +275,13 @@ export function animationGif(models, config, ui) {
       dateStamp.fontSize = lodashRound(stampHeight * 0.65);
       dateStamp.align = 'left';
       dateStamp.x = imgWidth * 0.01;
-      dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.01);
+      dateStamp.y = imgHeight - (dateStamp.fontSize + (imgHeight * 0.01));
     } else if (imgHeight > imgWidth) {
       stampWidth = imgWidth * 0.4;
       stampHeightByImageWidth = stampWidth / stampWidthRatio;
       stampHeight = stampHeightByImageWidth < 20 ? 20 : stampHeightByImageWidth > 60 ? 60 : stampHeightByImageWidth;
       dateStamp.fontSize = lodashRound(stampHeight * 0.65);
-      dateStamp.y = imgHeight - (fontSize + imgHeight * 0.01);
+      dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.01);
       dateStamp.x = imgWidth * 0.01;
       dateStamp.align = 'left';
     } else {
@@ -638,8 +637,8 @@ export function animationGif(models, config, ui) {
       });
       var blobURL = URL.createObjectURL(blob); // supported in Chrome and FF
       animatedImage.src = blobURL;
-      animatedImage.width = animationCoordinates.w;
-      animatedImage.height = animationCoordinates.h;
+      animatedImage.width = animationCoordinates.w > window.innerWidth - 198 ? window.innerWidth - 198 : animationCoordinates.w;
+      animatedImage.height = animationCoordinates.h > window.innerHeight - 80 ? window.innerHeight - 80 : animationCoordinates.h;
       var dlURL = util.format('nasa-worldview-{1}-to-{2}.gif', animModel.rangeState.startDate, animModel.rangeState.endDate);
       var downloadSize = lodashRound((blob.size / 1024 * 0.001), 2);
 
@@ -662,7 +661,7 @@ export function animationGif(models, config, ui) {
         });
 
       var $catalog =
-        "<div class='gif-results-dialog' style='height: " + animationCoordinates.h + "px; min-height: 210px;' >" +
+        "<div class='gif-results-dialog' style='height: " + animatedImage.height + "px; min-height: 210px;' >" +
         '<div>' +
         '<div><b>' +
         'Size: ' +
@@ -722,8 +721,10 @@ export function animationGif(models, config, ui) {
       $imgDialog.dialog({
         dialogClass: 'wv-panel wv-gif-results',
         title: 'Your GIF',
-        width: animationCoordinates.w + 198,
+        width: animatedImage.width + 198,
         resizable: false,
+        maxWidth: window.innerWidth,
+        maxHeight: window.innerHeight,
         close: function() {
           $imgDialog.find('img')
             .remove();
