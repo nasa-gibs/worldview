@@ -108,6 +108,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
 
     if (options.date) {
       date = options.date;
+      date = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     } else {
       date = models.date.selected;
       date = util.prevDateInDateRange(date, dateArray);
