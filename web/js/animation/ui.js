@@ -612,6 +612,9 @@ export function animationUi(models, ui) {
     uiIndicator.hide(loader);
     uiIndicator._hide(loader);
     self.animate(index);
+    if (document.hidden) {
+      self.state.playing = false;
+    }
   };
 
   /*
