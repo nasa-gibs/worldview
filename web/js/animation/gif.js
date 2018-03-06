@@ -226,7 +226,7 @@ export function animationGif(models, config, ui) {
         'fontSize': dateStamp.fontSize + 'px',
         'stampHeight': stamp.height,
         'stampWidth': stamp.width,
-        'stampCoordinates': { x: imgWidth * 0.01, y: imgHeight * 0.01 }, // Margin based on GIF width
+        'stampCoordinates': { x: stampHeight * 0.01, y: stampHeight * 0.01 }, // Margin based on GIF width
         'textXCoordinate': dateStamp.x,
         'textYCoordinate': dateStamp.y, // date location based on Dimensions
         'textAlign': dateStamp.align, // If textXCoordinate is null this takes precedence
@@ -272,23 +272,23 @@ export function animationGif(models, config, ui) {
     var stampHeightByImageWidth;
     // Set Logo-stamp dimensions based upon smallest total image dimension
     if (animationCoordinates.w < breakPoint) {
-      stampHeight = (imgWidth * 0.70) / stampWidthRatio;
+      stampHeight = (imgWidth * 0.70) / stampWidthRatio < 60 ? ((imgWidth * 0.70) / stampWidthRatio) : 60;
       dateStamp.fontSize = lodashRound(stampHeight * 0.65);
       dateStamp.align = 'left';
       dateStamp.x = imgWidth * 0.01;
-      dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.03);
+      dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.01);
     } else if (imgHeight > imgWidth) {
       stampWidth = imgWidth * 0.4;
       stampHeightByImageWidth = stampWidth / stampWidthRatio;
-      stampHeight = stampHeightByImageWidth > 20 ? stampHeightByImageWidth : 20;
+      stampHeight = stampHeightByImageWidth < 20 ? 20 : stampHeightByImageWidth > 60 ? 60 : stampHeightByImageWidth;
       dateStamp.fontSize = lodashRound(stampHeight * 0.65);
-      dateStamp.y = imgHeight - (fontSize + imgHeight * 0.03);
+      dateStamp.y = imgHeight - (fontSize + imgHeight * 0.01);
       dateStamp.x = imgWidth * 0.01;
       dateStamp.align = 'left';
     } else {
-      stampHeight = imgHeight * 0.10;
+      stampHeight = (imgHeight * 0.10 > 60) ? 60 : imgHeight * 0.10;
       dateStamp.fontSize = lodashRound(stampHeight * 0.65);
-      dateStamp.y = imgHeight * 0.025;
+      dateStamp.y = imgHeight * 0.01;
       dateStamp.align = 'right';
       dateStamp.x = null;
     }
