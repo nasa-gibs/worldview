@@ -122,7 +122,7 @@
     "canvg-browser": "^1.0.0",
     "clipboard": "^1.7.1",
     "font-awesome": "4.7.0",
-    "gifshot": "https://github.com/nasa-gibs/gifshot/archive/4.2.0.tar.gz",
+    "gifshot": "github:nasa-gibs/gifshot#v4.3.0",
     "icheck": "^1.0.2",
     "isotope-layout": "3.0.x",
     "isotope-packery": "2.x.x",
