@@ -526,7 +526,7 @@ export function timelineConfig(models, config, ui) {
         // Divide by 1- = 10-minute intervals
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 10;
         tickWidth = 1;
-        tickCountMax = Math.ceil(tl.width / tickWidth);
+        tickCountMax = tl.width;
 
         paddedRange = [
           new Date(tl.data.start().setUTCMinutes(tl.data.start().getUTCMinutes() - 50)),
