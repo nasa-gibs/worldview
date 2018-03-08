@@ -82,7 +82,7 @@ export function animationUi(models, ui) {
     preload = {};
     pastDates = {};
     inQueue = {};
-    queueLength = 500;
+    queueLength = 5000; // Set to large number to requests all layers up front
     self.state = {
       playing: false,
       playIndex: self.getStartDate(),
