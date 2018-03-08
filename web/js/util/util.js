@@ -16,6 +16,9 @@ import Cache from 'cachai';
 import closestTo from 'date-fns/closest_to';
 import isBefore from 'date-fns/is_before';
 import isEqual from 'date-fns/is_equal';
+import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
+import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
+import lastDayOfYear from 'date-fns/last_day_of_year';
 
 export default (function (self) {
   var canvas = null;
@@ -927,14 +930,17 @@ export default (function (self) {
   /**
    * Find the closest previous date from an array of dates
    *
+   * @param  {object} def       A layer definition
    * @param  {object} date      A date to compare against the array of dates
    * @param  {array} dateArray  An array of dates
    * @return {object}           The date object with normalized timeszone.
    */
-  self.prevDateInDateRange = function (date, dateArray) {
+  self.prevDateInDateRange = function (def, date, dateArray) {
     var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     if (!dateArray) return date;
-
+    if ((def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
+        (def.period === 'yearly' && ((currentDate.getDate() === 1 &&
+          currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) return date;
     // Return an array of the closest available dates within the range
     var closestAvailableDates = [];
     lodashEach(dateArray, function(rangeDate) {
