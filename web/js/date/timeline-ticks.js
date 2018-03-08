@@ -385,7 +385,8 @@ export function timelineTicks(models, config, ui) {
   self.label = { // TODO: Update, this is just copied over
     show: function (d) {
       var $boundaryTick;
-      var tick = this.parentNode;
+      var tick;
+      if (this) tick = this.parentNode;
       var boundaryTick, boundaryTickWidth;
 
       // Using jquery to precise select as it's easier than d3
