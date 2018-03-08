@@ -16,8 +16,6 @@ export function timelineConfig(models, config, ui) {
   var zoomLevel = model.selectedZoom || 3;
 
   self.zoom = function (level, event) {
-    // clone zoom element when switching zoom level.
-    var clone;
     // format of the label
     var labelFormat;
     // printed type of tick
@@ -516,10 +514,9 @@ export function timelineConfig(models, config, ui) {
         break;
       case 4: // 10-Minute
         dateStep = 10;
-        labelFormat = d3.time.format.utc('%M');
+        labelFormat = d3.time.format.utc('%H:%M');
         dateInterval = d3.time.minutes.utc;
-        // Latest Date minus begin date (Wed Dec 31 1947 19:00:00 GMT-0500 (Eastern Standard Time))
-        // Subtracting these leaves miliseconds divide by 1000 = seconds
+        // Divide by 1000 = Seconds
         // Divide by 60 = Minutes
         // Divide by 60 = Hours - not used
         // Divide by 24 = Days - not used
@@ -559,7 +556,11 @@ export function timelineConfig(models, config, ui) {
         tl.zoom.current.ticks.normal.all = function () {
           tl.ticks.normal.all = tl.ticks.all.filter(function (d) {
             // This should be rewritten to be cleaner
-            return d.getUTCHours() % 3 !== 0 || d.getUTCMinutes() !== 0 || d.getUTCMinutes() === 0;
+            if (d.getUTCHours() % 6 !== 0) {
+              return d;
+            } else {
+              return d.getUTCMinutes();
+            }
           });
           tl.ticks.normal.setEnds();
         };
@@ -568,7 +569,7 @@ export function timelineConfig(models, config, ui) {
         // Creates wider ticks; use this to space those ticks
         tl.zoom.current.ticks.boundary.all = function () {
           tl.ticks.boundary.all = tl.ticks.all.filter(function (d) {
-            return d.getUTCHours() % 3 === 0 && d.getUTCMinutes() === 0;
+            return d.getUTCHours() % 6 === 0 && d.getUTCMinutes() === 0;
           });
         };
 
@@ -576,7 +577,7 @@ export function timelineConfig(models, config, ui) {
         // The interval in which the white hover label shows
         tl.zoom.current.ticks.boundary.next = function (current) {
           var next = new Date(current);
-          return new Date(next.setUTCHours(next.getUTCHours() + 3));
+          return new Date(next.setUTCHours(next.getUTCHours() + 6));
         };
 
         // Calculated next normal tick by date
@@ -593,7 +594,7 @@ export function timelineConfig(models, config, ui) {
             first.getUTCFullYear(),
             first.getUTCMonth(),
             first.getUTCDate(),
-            Math.ceil(first.getUTCHours() / 3) * 3,
+            first.getUTCHours() - 6,
             0));
         };
 
@@ -614,14 +615,14 @@ export function timelineConfig(models, config, ui) {
             last.getUTCFullYear(),
             last.getUTCMonth(),
             last.getUTCDate(),
-            Math.floor(last.getUTCHours() / 3) * 3,
+            last.getUTCHours() + 6,
             0));
         };
 
         // Value for normal tick hover label
         tl.zoom.current.ticks.normal.hover = function (d) {
           // No modifications to date obj at this zoom level
-          return null;
+          return d;
         };
 
         // Value for clicked normal tick
