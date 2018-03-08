@@ -525,7 +525,7 @@ export function timelineConfig(models, config, ui) {
         // Divide by 24 = Days - not used
         // Divide by 1- = 10-minute intervals
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 10;
-        tickWidth = 11;
+        tickWidth = 1;
         tickCountMax = Math.ceil(tl.width / tickWidth);
 
         paddedRange = [
@@ -593,7 +593,7 @@ export function timelineConfig(models, config, ui) {
             first.getUTCFullYear(),
             first.getUTCMonth(),
             first.getUTCDate(),
-            (Math.ceil(first.getUTCHours() / 3) * 3),
+            Math.ceil(first.getUTCHours() / 3) * 3,
             0));
         };
 
@@ -621,7 +621,7 @@ export function timelineConfig(models, config, ui) {
         // Value for normal tick hover label
         tl.zoom.current.ticks.normal.hover = function (d) {
           // No modifications to date obj at this zoom level
-          return d;
+          return null;
         };
 
         // Value for clicked normal tick
