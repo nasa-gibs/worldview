@@ -555,6 +555,7 @@ export function timelineConfig(models, config, ui) {
           paddedRange);
 
         // Filters ticks for nonboundaries that have the following attribute
+        // Creates normal ticks, use this to space those tick
         tl.zoom.current.ticks.normal.all = function () {
           tl.ticks.normal.all = tl.ticks.all.filter(function (d) {
             // This should be rewritten to be cleaner
@@ -564,6 +565,7 @@ export function timelineConfig(models, config, ui) {
         };
 
         // Filters ticks for boundaries that have the following attribute
+        // Creates wider ticks; use this to space those ticks
         tl.zoom.current.ticks.boundary.all = function () {
           tl.ticks.boundary.all = tl.ticks.all.filter(function (d) {
             return d.getUTCHours() % 3 === 0 && d.getUTCMinutes() === 0;
@@ -571,12 +573,14 @@ export function timelineConfig(models, config, ui) {
         };
 
         // Calculated next boundary tick by date
+        // The interval in which the white hover label shows
         tl.zoom.current.ticks.boundary.next = function (current) {
           var next = new Date(current);
           return new Date(next.setUTCHours(next.getUTCHours() + 3));
         };
 
         // Calculated next normal tick by date
+        // The interval in which the hover semi-transparent bg appears over ticks
         tl.zoom.current.ticks.normal.next = function (current) {
           var next = new Date(current);
           return new Date(next.setUTCMinutes(next.getUTCMinutes() + 10));
@@ -585,12 +589,11 @@ export function timelineConfig(models, config, ui) {
         // Date of first printed boundary interval of this zoom level
         tl.zoom.current.ticks.boundary.first = function () {
           var first = tl.ticks.normal.firstDate;
-          var threeHour = null;
-          if (first.getUTCHours() % 3 === 0) { threeHour = first.getUTCHours(); }
-          return new Date(Date.UTC(first.getUTCFullYear(),
+          return new Date(Date.UTC(
+            first.getUTCFullYear(),
             first.getUTCMonth(),
             first.getUTCDate(),
-            threeHour,
+            (Math.ceil(first.getUTCHours() / 3) * 3),
             0));
         };
 
@@ -607,12 +610,11 @@ export function timelineConfig(models, config, ui) {
         // Date of last printed boundary interval of this zoom level
         tl.zoom.current.ticks.boundary.last = function () {
           var last = tl.ticks.normal.lastDate;
-          var threeHour = null;
-          if (last.getUTCHours() % 3 === 0) { threeHour = last.getUTCHours(); }
-          return new Date(Date.UTC(last.getUTCFullYear(),
+          return new Date(Date.UTC(
+            last.getUTCFullYear(),
             last.getUTCMonth(),
             last.getUTCDate(),
-            threeHour,
+            Math.floor(last.getUTCHours() / 3) * 3,
             0));
         };
 
@@ -644,6 +646,7 @@ export function timelineConfig(models, config, ui) {
 
         // Displayed default label
         tl.zoom.current.ticks.boundary.label = function (d) {
+          // reutn null;
           return util.pad(d.getUTCHours(), 2, '0') + ':' + util.pad(d.getUTCMinutes(), 2, '0');
         };
 
@@ -653,6 +656,8 @@ export function timelineConfig(models, config, ui) {
         };
 
         // Value for clicked boundary tick
+        // TODO: Return to 3 hr with 0 minute if pick is within 3 hour range, otherwise
+        // maintain the minute interval
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
           d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
@@ -692,7 +697,7 @@ export function timelineConfig(models, config, ui) {
                       (d.getUTCMinutes() === newDate.getUTCMinutes()));
             });
         };
-        // Setting the hour ticks
+        // Creates small hour notches in the timeline
         d3.selectAll('.x.axis > g.tick')
           .each(function () {
             var currentTick = d3.select(this);
