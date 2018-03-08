@@ -97,23 +97,26 @@ export function mapLayerBuilder(models, config, cache, Parent) {
    */
   self.closestDate = function (def, options) {
     var date;
+    var animRange;
+    if (models.anim) { animRange = models.anim.rangeState; }
     var dateArray = def.availableDates || [];
     if (options.date) {
       date = options.date;
     } else {
       date = models.date.selected;
     }
-    if (!options.precache &&
+    // Perform extensive checks before finding closest date
+    if (!options.precache && (animRange && animRange.playing === false) &&
         ((def.period === 'daily' && (models.date.selectedZoom > 3)) ||
         (def.period === 'monthly' && (models.date.selectedZoom >= 2)) ||
         (def.period === 'yearly' && (models.date.selectedZoom >= 1)))) {
-      date = util.prevDateInDateRange(date, dateArray);
+      date = util.prevDateInDateRange(def, date, dateArray);
 
       // Is current "rounded" previous date not in array of availableDates
       if (date && !dateArray.includes(date)) {
         // Then, update layer object with new array of dates
         def.availableDates = util.datesinDateRanges(def, date, true);
-        date = util.prevDateInDateRange(date, dateArray);
+        date = util.prevDateInDateRange(def, date, dateArray);
       }
     }
     return date;
@@ -142,7 +145,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     } else {
       date = models.date.selected;
     }
-    self.closestDate(def, options);
+    date = self.closestDate(def, options);
 
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
