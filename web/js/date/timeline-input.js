@@ -384,15 +384,14 @@ export function timelineInput(models, config, ui) {
     }
 
     // Disable arrows if nothing before/after selection
-    if (model.selectedZoom === 4 && nd > util.now()) {
+    if ((model.selectedZoom === 4) && ms >= util.today()) {
       $incrementBtn.addClass('button-disabled');
-    } else if (nd > util.today()) {
+    } else if ((model.selectedZoom !== 4) && nd > util.today()) {
       $incrementBtn.addClass('button-disabled');
     } else {
       $incrementBtn.removeClass('button-disabled');
     }
-    if (pd.toUTCString() === tl.data.start()
-      .toUTCString()) {
+    if (pd.toUTCString() === tl.data.start().toUTCString()) {
       $decrementBtn.addClass('button-disabled');
     } else {
       $decrementBtn.removeClass('button-disabled');
