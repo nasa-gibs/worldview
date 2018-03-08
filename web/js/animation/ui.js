@@ -82,7 +82,7 @@ export function animationUi(models, ui) {
     preload = {};
     pastDates = {};
     inQueue = {};
-    queueLength = 10;
+    queueLength = 500;
     self.state = {
       playing: false,
       playIndex: self.getStartDate(),
