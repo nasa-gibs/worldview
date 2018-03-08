@@ -103,13 +103,18 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     } else {
       date = models.date.selected;
     }
-    date = util.prevDateInDateRange(date, dateArray);
-
-    // Is current "rounded" previous date not in array of availableDates
-    if (date && !dateArray.includes(date)) {
-      // Then, update layer object with new array of dates
-      def.availableDates = util.datesinDateRanges(def, date, true);
+    if (!options.precache &&
+        ((def.period === 'daily' && (models.date.selectedZoom > 3)) ||
+        (def.period === 'monthly' && (models.date.selectedZoom >= 2)) ||
+        (def.period === 'yearly' && (models.date.selectedZoom >= 1)))) {
       date = util.prevDateInDateRange(date, dateArray);
+
+      // Is current "rounded" previous date not in array of availableDates
+      if (date && !dateArray.includes(date)) {
+        // Then, update layer object with new array of dates
+        def.availableDates = util.datesinDateRanges(def, date, true);
+        date = util.prevDateInDateRange(date, dateArray);
+      }
     }
     return date;
   };
@@ -134,15 +139,10 @@ export function mapLayerBuilder(models, config, cache, Parent) {
 
     if (options.date) {
       date = options.date;
-      if (def.period === 'monthly' && models.date.selectedZoom <= 2) {
-        date = self.closestDate(def, options);
-      } else if (def.period === 'yearly' && models.date.selectedZoom <= 1) {
-        date = self.closestDate(def, options);
-      }
     } else {
       date = models.date.selected;
-      if (!options.precache) date = self.closestDate(def, options);
     }
+    self.closestDate(def, options);
 
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
