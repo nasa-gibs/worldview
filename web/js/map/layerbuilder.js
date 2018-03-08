@@ -210,6 +210,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     var sourceOptions = {
       url: source.url + extra,
       layer: def.layer || def.id,
+      cacheSize: 4096,
       crossOrigin: 'anonymous',
       format: def.format,
       transition: 0,
@@ -290,6 +291,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     }
     var sourceOptions = {
       url: source.url + extra,
+      cacheSize: 4096,
       wrapX: true,
       style: 'default',
       crossOrigin: 'anonymous',
