@@ -141,9 +141,14 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function (d) {
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          var selected = model.selected;
+          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
-            model.selected.getUTCMonth(),
-            model.selected.getUTCDate());
+            selected.getUTCMonth(),
+            selected.getUTCDate(),
+            selected.getUTCHours(),
+            selected.getUTCMinutes());
         };
 
         // Value for hovered boundary tick
@@ -168,12 +173,16 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked boundary tick, FIXME: This is exactly the same as hover value
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
+          var selected = model.selected;
           var yearOffset = model.selected.getUTCFullYear() -
             Math.ceil(new Date(model.selected.getUTCFullYear() / 10) * 10);
+          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
 
           return new Date(d.getUTCFullYear() + yearOffset,
-            model.selected.getUTCMonth(),
-            model.selected.getUTCDate());
+            selected.getUTCMonth(),
+            selected.getUTCDate(),
+            selected.getUTCHours(),
+            selected.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
@@ -299,7 +308,14 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function (d) {
-          return new Date(d.getUTCFullYear(), d.getUTCMonth(), model.selected.getUTCDate());
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          var selected = model.selected;
+          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
+          return new Date(d.getUTCFullYear(),
+            d.getUTCMonth(),
+            selected.getUTCDate(),
+            selected.getUTCHours(),
+            selected.getUTCMinutes());
         };
 
         // Value for hovered boundary tick
@@ -321,9 +337,13 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
+          var selected = model.selected;
+          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
-            model.selected.getUTCMonth(),
-            model.selected.getUTCDate());
+            selected.getUTCMonth(),
+            selected.getUTCDate(),
+            selected.getUTCHours(),
+            selected.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
@@ -441,9 +461,14 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function (d) {
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          var selected = model.selected;
+          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            d.getUTCDate());
+            d.getUTCDate(),
+            selected.getUTCHours(),
+            selected.getUTCMinutes());
         };
 
         // Value for hovered boundary tick
@@ -465,9 +490,13 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
+          var selected = model.selected;
+          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            model.selected.getUTCDate());
+            selected.getUTCDate(),
+            selected.getUTCHours(),
+            selected.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
@@ -657,15 +686,17 @@ export function timelineConfig(models, config, ui) {
         };
 
         // Value for clicked boundary tick
-        // TODO: Return to 3 hr with 0 minute if pick is within 3 hour range, otherwise
+        // TODO: Return to 6 hr with 0 minute if pick is within 6 hour range, otherwise
         // maintain the minute interval
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
           d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          var selected = model.selected;
+          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
-            model.selected.getUTCMinutes());
+            selected.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
