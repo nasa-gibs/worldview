@@ -13,6 +13,12 @@ import browser from './browser';
 import { events } from './events';
 import load from './load';
 import Cache from 'cachai';
+import closestTo from 'date-fns/closest_to';
+import isBefore from 'date-fns/is_before';
+import isEqual from 'date-fns/is_equal';
+import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
+import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
+import lastDayOfYear from 'date-fns/last_day_of_year';
 
 export default (function (self) {
   var canvas = null;
@@ -186,7 +192,7 @@ export default (function (self) {
 
     // Use default of midnight if time is not specified
     if (dateTimeArr.length > 1) {
-      var hhmmss = dateTimeArr[1].split(/[:\.Z]/);
+      var hhmmss = dateTimeArr[1].split(/[:.Z]/);
       hour = hhmmss[0] || 0;
       minute = hhmmss[1] || 0;
       second = hhmmss[2] || 0;
@@ -492,7 +498,7 @@ export default (function (self) {
    */
   self.toCompactTimestamp = function (date) {
     return date.toISOString()
-      .replace(/[-:TZ\.]/g, '');
+      .replace(/[-:TZ.]/g, '');
   };
 
   /**
@@ -593,7 +599,7 @@ export default (function (self) {
   self.rgbaToHex = function (r, g, b) {
     function hex (c) {
       var strHex = c.toString(16);
-      return strHex.length == 1 ? '0' + strHex : strHex;
+      return strHex.length === 1 ? '0' + strHex : strHex;
     }
     return hex(r) + hex(g) + hex(b) + 'ff';
   };
@@ -691,7 +697,7 @@ export default (function (self) {
       req.onload = function () {
         // This is called even on 404 etc
         // so check the status
-        if (req.status == 200) {
+        if (req.status === 200) {
           // Resolve the promise with the response text
           resolve(req.response);
         } else {
@@ -718,7 +724,7 @@ export default (function (self) {
       call.promise.done(function (data) {
         result[call.item] = data;
         completed += 1;
-        if (completed == calls.length) {
+        if (completed === calls.length) {
           deferred.resolve(result);
         }
       })
@@ -733,7 +739,7 @@ export default (function (self) {
   // http://totaldev.com/content/escaping-characters-get-valid-jquery-id
   self.jqueryEscape = function (str) {
     return encodeURIComponent(str)
-      .replace(/([;&,\.\+\*\~':"\!\^#$%@\[\]\(\)=>\|])/g, '\\$1');
+      .replace(/([;&,.+*~':"!^#$%@[]()=>|])/g, '\\$1');
   };
 
   self.metrics = function () {
@@ -814,6 +820,143 @@ export default (function (self) {
       value = [value];
     }
     return value;
+  };
+
+  // Returns the number of months between two dates
+  self.yearDiff = function(startDate, endDate) {
+    var year1 = startDate.getFullYear();
+    var year2 = endDate.getFullYear();
+    return year2 - year1;
+  };
+
+  // Returns the number of months between two dates
+  self.monthDiff = function(startDate, endDate) {
+    var year1 = startDate.getFullYear();
+    var year2 = endDate.getFullYear();
+    var month1 = startDate.getMonth();
+    var month2 = endDate.getMonth();
+    if (month1 === 0) {
+      month1++;
+      month2++;
+    }
+    var numberOfMonths = (year2 - year1) * 12 + (month2 - month1);
+    return numberOfMonths;
+  };
+
+  self.dayDiff = function (startDate, endDate) {
+    var date1 = new Date(startDate);
+    var date2 = new Date(endDate);
+    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    var dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return dayDiff;
+  };
+
+  /**
+   * Return an array of dates based on the dateRange the current date falls in.
+   *
+   * @method datesinDateRanges
+   * @param  {object} def           A layer object
+   * @param  {object} date          A date object
+   * @param  {boolean} containRange If true, return dates from all ranges.
+   *                                If false, only return the dates from the range the current date falls in.
+   * @return {array}                An array of dates with normalized timezones
+   */
+  self.datesinDateRanges = function (def, date, containRange) {
+    var dateArray = [];
+    var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+
+    lodashEach(def.dateRanges, function (dateRange) {
+      var yearDifference;
+      var monthDifference;
+      var dayDifference;
+      var maxYearDate;
+      var maxMonthDate;
+      var maxDayDate;
+      let dateInterval = dateRange.dateInterval;
+      let minDate = new Date(dateRange.startDate);
+      let maxDate = new Date(dateRange.endDate);
+
+      // Offset timezone
+      minDate = new Date(minDate.getTime() + (minDate.getTimezoneOffset() * 60000));
+      maxDate = new Date(maxDate.getTime() + (maxDate.getTimezoneOffset() * 60000));
+      maxYearDate = new Date(maxDate.getUTCFullYear() + 1, maxDate.getUTCMonth(), maxDate.getUTCDate());
+      maxMonthDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth() + 1, maxDate.getUTCDate());
+      maxDayDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth(), maxDate.getUTCDate() + 1);
+
+      if (def.period === 'yearly') {
+        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
+        if (!containRange) {
+          yearDifference = self.yearDiff(minDate, maxYearDate);
+        } else if (currentDate >= minDate && currentDate <= maxYearDate) {
+          // Find the yearDifference of the endDate vs startDate
+          yearDifference = self.yearDiff(minDate, maxYearDate);
+        }
+
+        // Create array of all possible request dates by saying for interval++ <= yearDifference
+        for (dateInterval = 0; dateInterval <= (yearDifference + 1); dateInterval++) {
+          dateArray.push(new Date(minDate.getUTCFullYear() + dateInterval, minDate.getUTCMonth(), minDate.getUTCDate(), 0, 0, 0));
+        }
+      } else if (def.period === 'monthly') {
+        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
+        if (!containRange) {
+          monthDifference = self.monthDiff(minDate, maxMonthDate);
+        } else if (currentDate >= minDate && currentDate <= maxMonthDate) {
+          // Find the monthDifference of the endDate vs startDate
+          monthDifference = self.monthDiff(minDate, maxMonthDate);
+        }
+
+        // Create array of all possible request dates by saying for interval++ <= monthDifference
+        for (dateInterval = 0; dateInterval <= (monthDifference + 1); dateInterval++) {
+          dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth() + dateInterval, minDate.getUTCDate(), 0, 0, 0));
+        }
+      } else if (def.period === 'daily') {
+        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
+        if (!containRange) {
+          dayDifference = self.dayDiff(minDate, maxDayDate);
+        } else if (currentDate >= minDate && currentDate <= maxDayDate) {
+          // Find the dayDifference of the endDate vs startDate
+          dayDifference = self.dayDiff(minDate, maxDayDate);
+        }
+
+        // Create array of all possible request dates by saying for interval++ <= dayDifference
+        for (dateInterval = 0; dateInterval <= (dayDifference + 1); dateInterval++) {
+          dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate() + dateInterval, 0, 0, 0));
+        }
+      }
+    });
+    return dateArray;
+  };
+
+  /**
+   * Find the closest previous date from an array of dates
+   *
+   * @param  {object} def       A layer definition
+   * @param  {object} date      A date to compare against the array of dates
+   * @param  {array} dateArray  An array of dates
+   * @return {object}           The date object with normalized timeszone.
+   */
+  self.prevDateInDateRange = function (def, date, dateArray) {
+    var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+    if (!dateArray) return date;
+    if ((def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
+        (def.period === 'yearly' && ((currentDate.getDate() === 1 &&
+          currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) return date;
+    // Return an array of the closest available dates within the range
+    var closestAvailableDates = [];
+    lodashEach(dateArray, function(rangeDate) {
+      if (isBefore(rangeDate, currentDate) || isEqual(rangeDate, currentDate)) {
+        closestAvailableDates.push(rangeDate);
+      }
+    });
+
+    // Find the closest dates within the current array
+    var closestDate = closestTo(currentDate, closestAvailableDates);
+
+    if (closestDate) {
+      return closestDate;
+    } else {
+      return date;
+    }
   };
 
   return self;

@@ -30,15 +30,14 @@ import { mapPrecacheTile } from './precachetile';
 import Cache from 'cachai';
 
 export function mapui(models, config) {
+  var layerBuilder, createLayer;
   var id = 'wv-map';
   var selector = '#' + id;
   var cache = new Cache(400); // Save layers from days visited
   var animationDuration = 250;
   var self = {};
   var rotation = new MapRotate(self, models);
-  var layerBuilder;
   var dateline = mapDateLineBuilder(models, config);
-  var createLayer;
   var precache = mapPrecacheTile(models, config, cache, self);
 
   var dataRunner = self.runningdata = new MapRunningData(models);
@@ -304,6 +303,7 @@ export function mapui(models, config) {
    */
 
   var addLayer = function (def) {
+    var date = models.date.selected;
     var mapIndex = lodashFindIndex(models.layers.get({
       reverse: true
     }), {
@@ -312,6 +312,7 @@ export function mapui(models, config) {
     if (isGraticule(def)) {
       addGraticule();
     } else {
+      def.availableDates = util.datesinDateRanges(def, date, true);
       self.selected.getLayers()
         .insertAt(mapIndex, createLayer(def));
     }

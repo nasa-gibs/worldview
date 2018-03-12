@@ -9,8 +9,8 @@ export function animationUi(models, ui) {
   var dateModel = models.date;
   var animModel = models.anim;
   var queueLength;
-  var zooms = ['year', 'month', 'day'];
   var queue = new Queue(5, Infinity);
+  var zooms = ['year', 'month', 'day', 'minute'];
   var preload = {};
   var preloadArray;
   var inQueue;
@@ -82,7 +82,7 @@ export function animationUi(models, ui) {
     preload = {};
     pastDates = {};
     inQueue = {};
-    queueLength = 10;
+    queueLength = 10; // Default length
     self.state = {
       playing: false,
       playIndex: self.getStartDate(),
@@ -115,9 +115,9 @@ export function animationUi(models, ui) {
     startDate = util.parseDateUTC(state.startDate);
     currentDate = dateModel.selected;
     if (currentDate > startDate && self.nextDate(currentDate) < endDate) {
-      return util.toISOStringDate(self.nextDate(currentDate));
+      return util.toISOStringSeconds(self.nextDate(currentDate));
     }
-    return util.toISOStringDate(startDate);
+    return util.toISOStringSeconds(startDate);
   };
 
   /*
@@ -130,6 +130,24 @@ export function animationUi(models, ui) {
    *
    */
   self.onPushedPlay = function () {
+    var speed = animModel.rangeState.speed;
+    switch (true) {
+      case (speed > 8 && speed <= 10):
+        queueLength = 500;
+        break;
+      case (speed > 7 && speed <= 8):
+        queueLength = 250;
+        break;
+      case (speed > 5 && speed <= 7):
+        queueLength = 100;
+        break;
+      case (speed > 3 && speed <= 5):
+        queueLength = 20;
+        break;
+      case (speed > 0 && speed <= 3):
+        queueLength = 10;
+        break;
+    }
     self.checkQueue(queueLength, self.state.playIndex);
     self.checkShouldPlay();
   };
@@ -160,7 +178,11 @@ export function animationUi(models, ui) {
    *
    */
   self.nextDate = function (date) {
-    return util.dateAdd(date, self.getInterval(), 1);
+    if (models.date.selectedZoom === 4) {
+      return util.dateAdd(date, self.getInterval(), 10);
+    } else {
+      return util.dateAdd(date, self.getInterval(), 1);
+    }
   };
 
   /*
@@ -178,13 +200,20 @@ export function animationUi(models, ui) {
   self.addDate = function (date) {
     self.addToInQueue(date);
     queue.add(function () {
-      return ui.map.promiseDay(date);
+      if (animModel.rangeState.state === 'on' && animModel.rangeState.playing) {
+        return ui.map.promiseDay(date);
+      } else {
+        self.clearCache();
+        uiIndicator.hide(loader);
+      }
     })
       .then(function (date) {
-        self.addDateToCache(date);
-        self.shiftCache();
-        self.checkQueue(queueLength, self.state.playIndex);
-        self.checkShouldPlay();
+        if (animModel.rangeState.state === 'on' && animModel.rangeState.playing) {
+          self.addDateToCache(date);
+          self.shiftCache();
+          self.checkQueue(queueLength, self.state.playIndex);
+          self.checkShouldPlay();
+        }
       });
   };
 
@@ -201,7 +230,7 @@ export function animationUi(models, ui) {
    *
    */
   self.addToInQueue = function (date) {
-    var strDate = util.toISOStringDate(date);
+    var strDate = util.toISOStringSeconds(date);
     inQueue[strDate] = date;
     preloadArray.push(strDate);
   };
@@ -220,7 +249,7 @@ export function animationUi(models, ui) {
    *
    */
   self.addDateToCache = function (date) {
-    var strDate = util.toISOStringDate(date);
+    var strDate = util.toISOStringSeconds(date);
     preload[strDate] = date;
     delete inQueue[strDate];
   };
@@ -278,7 +307,7 @@ export function animationUi(models, ui) {
       } else {
         day = self.nextDate(day);
       }
-      if (day.valueOf() == jsTestDate.valueOf()) {
+      if (day.valueOf() === jsTestDate.valueOf()) {
         return true;
       }
       i++;
@@ -377,7 +406,7 @@ export function animationUi(models, ui) {
       nextDate = self.setNewDate(nextDate, startDate);
     }
 
-    nextDateStr = util.toISOStringDate(nextDate);
+    nextDateStr = util.toISOStringSeconds(nextDate);
 
     if (!preload[nextDateStr] && !inQueue[nextDateStr] && !self.state.playing) {
       self.clearCache();
@@ -413,11 +442,11 @@ export function animationUi(models, ui) {
     for (var i = 0; i < queueLength; i++) {
       self.addDate(day);
       day = self.getNextBufferDate(day, startDate, endDate);
-      if (util.toISOStringDate(day) === lastToQueue) {
+      if (util.toISOStringSeconds(day) === lastToQueue) {
         self.addDate(day);
         loader = uiIndicator.loading();
         return;
-      } else if (util.toISOStringDate(day) === util.toISOStringDate(currentDate)) {
+      } else if (util.toISOStringSeconds(day) === util.toISOStringSeconds(currentDate)) {
         queueLength = i;
         loader = uiIndicator.loading();
         return;
@@ -468,7 +497,7 @@ export function animationUi(models, ui) {
    */
   self.addItemToQueue = function (currentDate, startDate, endDate) {
     var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
-    var nextDateStr = util.toISOStringDate(nextDate);
+    var nextDateStr = util.toISOStringSeconds(nextDate);
 
     if (!inQueue[nextDateStr] &&
       !preload[nextDateStr] &&
@@ -524,7 +553,7 @@ export function animationUi(models, ui) {
     while (i < queueLength) {
       if (self.nextDate(day) > endDate) {
         if (!loop) {
-          return util.toISOStringDate(day);
+          return util.toISOStringSeconds(day);
         }
         day = self.setNewDate(day, startDate);
       } else {
@@ -532,7 +561,7 @@ export function animationUi(models, ui) {
       }
       i++;
     }
-    return util.toISOStringDate(day);
+    return util.toISOStringSeconds(day);
   };
 
   /*
@@ -551,7 +580,7 @@ export function animationUi(models, ui) {
   self.checkShouldLoop = function (playIndexJSDate) {
     if (animModel.rangeState.loop) {
       self.shiftCache();
-      self.state.playIndex = util.toISOStringDate(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
+      self.state.playIndex = util.toISOStringSeconds(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
       setTimeout(function () {
         self.checkShouldPlay();
         self.checkQueue(queueLength, self.state.playIndex);
@@ -612,6 +641,9 @@ export function animationUi(models, ui) {
     uiIndicator.hide(loader);
     uiIndicator._hide(loader);
     self.animate(index);
+    if (document.hidden) {
+      self.state.playing = false;
+    }
   };
 
   /*
@@ -654,7 +686,7 @@ export function animationUi(models, ui) {
       dateModel.select(util.parseDateUTC(playIndex));
       pastDates[playIndex] = util.parseDateUTC(playIndex); // played record
       self.state.playIndex = playIndex;
-      playIndex = util.toISOStringDate(self.nextDate(new Date(playIndex)));
+      playIndex = util.toISOStringSeconds(self.nextDate(new Date(playIndex)));
       playIndexJSDate = new Date(playIndex);
       if (playIndexJSDate > endDate) {
         clearInterval(interval);

@@ -194,7 +194,6 @@ export function dataMap(model, maps, config) {
   self.dispose = dispose;
 
   var updateGranules = function (r) {
-    // console.log("results");
     results = r;
     granules = r.granules;
     updateButtons();
@@ -320,7 +319,6 @@ export function dataMap(model, maps, config) {
   };
 
   var clear = function () {
-    // console.log("clear");
     if (map) {
       swathLayer.getSource()
         .clear();
