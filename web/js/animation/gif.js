@@ -434,13 +434,15 @@ export function animationGif(models, config, ui) {
    * @returns {array} array of layer objects
    *
    */
-  var getProducts = function(date) {
+  var getProducts = function (date) {
     var layers = [];
     var products = models.layers.get({
       reverse: true,
       renderable: true
     });
-    lodashEach(products, function(layer) {
+    lodashEach(products, function (layer) {
+      let layerDate = new Date(date);
+      layerDate = new Date(layerDate.getTime() + (layerDate.getTimezoneOffset() * 60000));
       if (layer.endDate) {
         if (layerDate > new Date(layer.endDate)) return;
       }
