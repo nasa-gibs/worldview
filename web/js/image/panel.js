@@ -55,8 +55,6 @@ export function imagePanel (models, ui, config, dialogConfig) {
   var alignTo = config.alignTo;
   var coords;
   var resolution = '1';
-  var format = 'image/jpeg';
-  var worldfile = 'false';
   var lastZoom = -1;
   var htmlElements;
   var host;
@@ -65,8 +63,8 @@ export function imagePanel (models, ui, config, dialogConfig) {
   var id = containerId;
   // state items as global vars
   var lonlats;
-  var imgWorldfile;
-  var imgFormat;
+  var imgWorldfile = 'false';
+  var imgFormat = 'image/jpeg';
   var imgWidth;
   var imgHeight;
   var imgRes;
@@ -95,10 +93,10 @@ export function imagePanel (models, ui, config, dialogConfig) {
     setProjectionGlobals();
     options = {
       resolution: resolution,
-      worldfile: worldfile,
+      worldfile: imgWorldfile,
       onSelectionChange: onSelectionChange,
       onDownloadClick: onDownload,
-      fileType: format,
+      fileType: imgFormat,
       valid: true,
       resolutions: resolutions,
       fileTypes: fileTypes
@@ -140,7 +138,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
     return {
       resolution: imgRes.toString(),
       proj: models.proj.selected.id,
-      worldfile: worldfile,
+      worldfile: imgWorldfile,
       valid: fileSizeValid(),
       fileSize: imgFilesize,
       imgHeight: imgHeight,
@@ -361,7 +359,6 @@ export function imagePanel (models, ui, config, dialogConfig) {
       reverse: true,
       renderable: true
     });
-
     dlURL = createDownloadURL(models.date.selected, lonlats, getEPSG(), products, getLayerOpacities(products), url);
     googleAnalytics.event('Image Download', 'Click', 'Download');
     util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
