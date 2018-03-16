@@ -140,7 +140,7 @@
     "promise-queue": "2.2.3",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
-    "worldview-components": "^1.6.1",
+    "worldview-components": "^1.6.2",
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.8.0"
   },
   "browser": {
