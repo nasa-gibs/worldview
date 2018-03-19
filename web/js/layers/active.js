@@ -444,7 +444,6 @@ export function layersActive(models, ui, config) {
       document.getElementById('input-wrapper-minute').style.display = 'none';
       document.getElementById('input-time-zmark').style.display = 'none';
       document.getElementById('timeline-header').classList.remove('subdaily');
-      document.getElementById('zoom-days').click(); // Switch back to 'Days' view
       setMaxZoomlevel(3);
       models.date.events.trigger('select');
       models.anim.events.trigger('change');
