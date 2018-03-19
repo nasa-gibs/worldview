@@ -139,11 +139,11 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header {
   margin-top: 2px;
-  width: 322px;
+  width: 290px;
 }
 
 #timeline-header.subdaily {
-  width: 402px;
+  width: 384px;
 }
 
 #timeline-header .input-wrapper {
