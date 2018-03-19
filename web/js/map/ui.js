@@ -566,7 +566,7 @@ export function mapui(models, config) {
         maxResolution: proj.resolutions[0],
         projection: olProj.get(proj.crs),
         center: proj.startCenter,
-        rotation: proj.id === 'geographic' || 'webmerc' ? 0.0 : models.map.rotation,
+        rotation: (proj.id === 'geographic' || proj.id === 'webmerc') ? 0.0 : models.map.rotation,
         zoom: proj.startZoom,
         maxZoom: proj.numZoomLevels,
         enableRotation: true,
