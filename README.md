@@ -38,17 +38,18 @@ git clone https://github.com/nasa-gibs/worldview.git
 cd worldview
 npm install
 ```
+View the [Configuration](doc/configuration.md) section for information on how to install the offical EOSDIS Worldview configuration, or to add your own custom configuration.
 
 ### Dependencies
 
-The following are required to install and run Worldview;
+The following are required to install and run Worldview:
 
 - [Node v8.8.1 or Later](https://nodejs.org/en/download/)  
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
 - [Python v2.7.14 or Later](https://www.python.org/)
   - **Note:** It is recommended that Windows users install Python with [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools).
 
-Windows users will also need the following;
+Windows users will also need the following:
 
   - [Git Bash](https://git-scm.com/downloads), or [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/)
   - [.NET Framework](https://www.microsoft.com/net/download/dotnet-framework-runtime) or [Visual Studio Team Services](https://www.visualstudio.com/)

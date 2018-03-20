@@ -12,7 +12,7 @@ edit `options/common/features.json` and set `"dataDownload": true`.
 ## URL Shortening
 
 This feature uses
-[bit.ly](http://bit.ly) to shorten links. Follow these steps to enable it;
+[bit.ly](http://bit.ly) to shorten links. Follow these steps to enable it:
 
 * Edit `options/common/features.json` and set `"urlShortening": true`.
 * Get a login and API key from [bit.ly](http://bit.ly).

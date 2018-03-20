@@ -8,7 +8,7 @@ combination of JavaScript, Bash and Python scripts.
 **`npm run build`**: Runs all the `build:x` scripts below and generates a build
 in `build/` and `dist/site-worldview.tar.bz2`. If you have a custom configuration
 subdirectory, pass it to the command with `npm run build -- subdirectory_name`.
-To build the app with an incomplete configuration, prefix the command like this;
+To build the app with an incomplete configuration, prefix the command like this:
 `IGNORE_ERRORS=true npm run build`.
 
 **`npm run build:js`**: Builds the JavaScript bundle for the app and writes it
@@ -33,7 +33,7 @@ build the configuration files.
 ### Grunt tasks
 
 Grunt tasks are deprecated, but the following are used by the build scripts
-under the hood and available to use if you know what you're doing;
+under the hood and available to use if you know what you're doing:
 
 **`grunt`**: This is a shortcut for `grunt build config site`.
 
