@@ -27,7 +27,7 @@ export function timeline(models, config, ui) {
         .outerWidth(true) -
       $('#timeline-hide')
         .outerWidth(true) -
-      self.margin.left - self.margin.right - 2;
+      self.margin.left - self.margin.right + 28;
     return self.width;
   };
 
@@ -193,8 +193,8 @@ export function timeline(models, config, ui) {
       $timelineFooter.css('margin-left', self.margin.left - 1 + 'px');
       $timelineFooter.css('margin-right', self.margin.right - 1 + 'px');
     } else {
-      $timelineFooter.css('margin-left', '10px');
-      $timelineFooter.css('margin-right', (self.margin.right + self.margin.left) - 12 + 'px');
+      $timelineFooter.css('margin-left', '0');
+      $timelineFooter.css('margin-right', (self.margin.right + self.margin.left) - 32 + 'px');
     }
 
     self.x = d3.time.scale.utc();
