@@ -1,9 +1,9 @@
 # Configuration
 
-By default, Worldview uses [the official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis).
+The Worldview app uses [the official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis).
 To create a custom configuration, clone the default configuration repo or
 [the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git)
-into the `options/` directory and modify it;
+into the `options/` directory and modify it:
 
 ```bash
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
@@ -23,7 +23,7 @@ as needed or use `npm run updateconfig` as a shortcut to run both.
 If you have a custom configuration in a subdirectory of `options/` other than
 `options/release/`, pass in the name of the subdirectory to use with
 `npm run build:config -- subdirectory_name`. To build an incomplete configuration,
-prefix the command like this; `IGNORE_ERRORS=true npm run build:config`.
+prefix the command like this: `IGNORE_ERRORS=true npm run build:config`.
 
 ## New Layers
 
@@ -154,7 +154,7 @@ First, layers must be added to `config/wv.json/layers` and `config/wv.json/layer
 
 - Fetch GIBS GetCapabilities with `npm run getcapabilities`. This gets the latest layer information and colormaps from GIBS.
 - Add new layer(s)
-  - Follow [New Layers](https://github.com/nasa-gibs/worldview/blob/master/doc/config.md#new-layers) above to create JSON file in `config/wv.json/layers`.
+  - Follow [New Layers](configuration.md#new-layers) above to create JSON file in `config/wv.json/layers`.
 - Add to Measurements
   - Add to relevant measurement or create a new JSON file in `config/wv.json/measurements`.
 - Add to Categories
@@ -166,7 +166,7 @@ First, layers must be added to `config/wv.json/layers` and `config/wv.json/layer
 - Add Layer descriptions/metadata, if it exists
   - Create .md file in `config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
 - Add Data Download for product, if it exists
-  - Refer to [Data Download](https://github.com/nasa-gibs/worldview/blob/master/doc/data_download.md) and create JSON file in `config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
+  - Refer to [Data Download](data_download.md) and create JSON file in `config/wv.json/products`. The *product* identifier has to be added to the corresponding layer JSON file.
 - Rebuild the configuration with `npm run build:config` for use by the application.
 
 ## New Map Sources

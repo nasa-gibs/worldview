@@ -1,11 +1,11 @@
 # Branding
 
 To add custom branding to Worldview,
-[create a custom configuration](configuration.md) and modify it;
+[create a custom configuration](configuration.md) and modify it:
 
 ## Customizing
 
-Update the following fields in `options/common/brand.json` with custom branding;
+Update the following fields in `options/common/brand.json` with custom branding:
 
 * `packageName`: Application name used to create builds, (i.e. `worldview`).
 * `name`: Application name shown to end users (i.e. `EOSDIS Worldview`).

@@ -18,16 +18,16 @@ build a testable version of Worldview.
 Run the included end-to-end tests to test the app in Chrome and Firefox. The
 tests run the Cucumber features in `./e2e/features` using Nightwatch and Selenium.
 
-To run tests on your machine in Chrome; `npm run e2e:chrome`.
+To run tests on your machine in Chrome: `npm run e2e:chrome`.
 
-To run tests on your machine in Firefox;
+To run tests on your machine in Firefox:
 
 1) [Create a new Firefox profile](https://developer.mozilla.org/en-US/Firefox/Multiple_profiles) called 'nightwatch'.
 2) Run `npm run e2e:firefox`.
 
-To run tests for both browsers in sequence; `npm run e2e`.
+To run tests for both browsers in sequence: `npm run e2e`.
 
-To run tests in BrowserStack;
+To run tests in BrowserStack:
 
 1) Log into [BrowserStack](https://www.browserstack.com/automate) and get your username and access key from the upper left.
 2) Add the following to your shell configuration (`.bashrc` or `.profile`);
