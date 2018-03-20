@@ -1,8 +1,11 @@
 # Configuration
 
 The Worldview app uses [the official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis).
-To create a custom configuration, clone the default configuration repo or
-[the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git)
+To create a custom configuration, clone the default configuration repo into the `options/` directory and modify it:
+```bash
+git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
+```
+or [the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git)
 into the `options/` directory and modify it:
 
 ```bash
