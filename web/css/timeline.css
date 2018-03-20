@@ -172,6 +172,7 @@ g.plot rect.data-bar-invisible {
   width: 100%;
   height: 40px;
   color: #fff;
+  opacity: 1;
   font-size: 24px;
   background: transparent;
   border: 0;
