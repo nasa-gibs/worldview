@@ -79,6 +79,11 @@ buster.testCase('wv.util', (function () {
     });
   };
 
+  self['toJulianDate: Converts date'] = function () {
+    var d = new Date(Date.UTC(2013, 0, 15));
+    buster.assert.equals(wv.util.toJulianDate(d), '2013015');
+  };
+
   self['toISOStringDate: Converts date'] = function () {
     var d = new Date(Date.UTC(2013, 0, 15));
     buster.assert.equals(wv.util.toISOStringDate(d), '2013-01-15');

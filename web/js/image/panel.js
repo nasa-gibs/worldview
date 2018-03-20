@@ -376,18 +376,12 @@ export function imagePanel (models, ui, config, dialogConfig) {
   };
 
   var createDownloadURL = function(time, lonlats, epsg, products, opacities, dlURL) {
-    var layers, jStart, jDate;
-    var dTime = time;
-
+    var layers;
     layers = getLayers(products, models.proj.selected.id);
-    // Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-    jStart = util.parseDateUTC(dTime.getUTCFullYear() + '-01-01');
-    jDate = '00' + (1 + Math.ceil((dTime.getTime() - jStart) / 86400000));
-    dlURL += 'TIME=' + dTime.getUTCFullYear() + (jDate)
-      .substr((jDate.length) - 3);
+
+    dlURL += 'TIME=' + util.toISOStringSeconds(time);
 
     dlURL += '&extent=' + lonlats[0][0] + ',' + lonlats[0][1] + ',' + lonlats[1][0] + ',' + lonlats[1][1];
-    // dlURL += "&switch="+s;
     dlURL += '&epsg=' + epsg;
     dlURL += '&layers=' + layers.join(',');
     dlURL += '&opacities=' + opacities.join(',');
