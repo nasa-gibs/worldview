@@ -222,6 +222,21 @@ export default (function (self) {
     var metrics = context.measureText(text);
     return metrics.width;
   };
+
+  /**
+   * Julian date, padded with two zeros
+   * (to ensure the julian date is always in DDD format).
+   *
+   * @param  {Date} date {Date} the date to convert
+   * @return {string} Julian date string in the form of `YYYYDDD`
+   */
+  self.toJulianDate = function (date) {
+    var jStart, jDate;
+    jStart = self.parseDateUTC(date.getUTCFullYear() + '-01-01');
+    jDate = '00' + (1 + Math.ceil((date.getTime() - jStart) / 86400000));
+    return date.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
+  };
+
   /**
    * Converts a date into an ISO string with only the date portion.
    *
@@ -240,7 +255,7 @@ export default (function (self) {
    *
    * @method toISOStringSeconds
    * @static
-   * @param date {Date} the date to convert
+   * @param  {Date} date the date to convert
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
   self.toISOStringSeconds = function (date) {
