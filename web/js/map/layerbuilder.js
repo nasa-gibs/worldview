@@ -228,6 +228,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     var layer = new OlLayerTile({
+      preload: Infinity,
       extent: extent,
       source: new OlSourceWMTS(sourceOptions)
     });
@@ -306,6 +307,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     var layer = new OlLayerTile({
+      preload: Infinity,
       extent: extent,
       source: new OlSourceTileWMS(sourceOptions)
     });
