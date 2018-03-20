@@ -5,7 +5,7 @@ To create a custom configuration, clone the default configuration repo into the 
 ```bash
 git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
 ```
-or [the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git)
+Or [the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git)
 into the `options/` directory and modify it:
 
 ```bash
@@ -15,9 +15,8 @@ git clone https://github.com/nasa-gibs/worldview-options-template.git options
 ## Updating the Configuration
 
 After making any changes to a custom configuration, rebuild the app for the
-changes to take effect. Instead of running the entire build process, use the
-`npm run getcapabilities` command to make a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers)
-and update layer configurations, and then `npm run build:config` to rebuild the
+changes to take effect. To make a request to [the GIBS `GetCapabilities` API](https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers)
+and update layer configurations, use the `npm run getcapabilities` command; then use `npm run build:config` to rebuild the
 configuration for use by the application. Run these commands separately
 as needed or use `npm run updateconfig` as a shortcut to run both.
 
