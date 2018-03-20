@@ -530,7 +530,6 @@ export function animationGif(models, config, ui) {
     var opacities;
     var epsg = (models.proj.change) ? models.proj.change.epsg : models.proj.selected.epsg;
     var products = getProducts();
-    var layers;
     var intervalAmount = 1;
 
     if (config.features.imageDownload) {
