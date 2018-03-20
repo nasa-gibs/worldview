@@ -2,24 +2,17 @@
   outline: 0;
 }
 
-#timeline {
-  background: transparent;
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
-  width: 100%;
-}
-
 .timeline-inner {
-  position: relative;
+  position: absolute;
   border: 1px solid #333;
+  background: rgb(40, 40, 40);
   background: rgba(40, 40, 40, 0.9);
   border-radius: 5px;
   display: inline-block;
   margin-left: 10px;
   margin-right: 10px;
   min-height: 65px;
+  bottom: 10px;
 }
 
 #timeline-footer text {
@@ -139,11 +132,11 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header {
   margin-top: 2px;
-  width: 290px;
+  width: 304px;
 }
 
 #timeline-header.subdaily {
-  width: 384px;
+  width: 396px;
 }
 
 #timeline-header .input-wrapper {
