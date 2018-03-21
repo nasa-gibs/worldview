@@ -4,6 +4,7 @@ import lodashEach from 'lodash/each';
 import olExtent from 'ol/extent';
 
 import markers from './markers';
+import { naturalEventsTrackCreate } from './track';
 import wvui from '../ui/ui';
 import util from '../util/util';
 
@@ -89,6 +90,10 @@ export default function naturalEventsUI (models, ui, config, request) {
     if (date) self.selected.date = date;
 
     var event = getEventById(id);
+    if (event.geometries.length > 1) {
+      let vectorLayer = naturalEventsTrackCreate(event);
+      ui.map.selected.addLayer(vectorLayer);
+    }
     if (!event) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
@@ -261,7 +266,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     var $dates = $('<ul/>', { class: 'dates' }).hide();
 
     if (event.geometries.length > 1) {
-      var eventIndex = 0;
+      let eventIndex = 0;
       lodashEach(event.geometries, function (geometry) {
         eventIndex = eventIndex + 1;
         var date = geometry.date.split('T')[0];
@@ -276,7 +281,6 @@ export default function naturalEventsUI (models, ui, config, request) {
             self.selectEvent(event.id, date);
           }
         });
-
         $dates.append($('<li class="dates"></li>').append($date));
       });
     }
