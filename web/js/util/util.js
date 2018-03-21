@@ -301,9 +301,7 @@ export default (function (self) {
     var i = 1;
     var currentDate = start;
     while (currentDate < end) {
-      if (i > 1000) throw new Error('Too many days selected');
       i++;
-
       currentDate = self.dateAdd(currentDate, interval, 1);
     }
     return i;
