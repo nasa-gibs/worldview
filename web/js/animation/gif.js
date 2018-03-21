@@ -108,7 +108,17 @@ export function animationGif(models, config, ui) {
     self.reactComponent = renderPanel(options, panelCase);
   };
   var getUpdatedProps = function() {
+    var startDate, endDate;
     var state = animModel.rangeState;
+
+    if (models.date.maxZoom < 4) {
+      startDate = state.startDate.split('T')[0];
+      endDate = state.endDate.split('T')[0];
+    } else {
+      startDate = state.startDate;
+      endDate = state.endDate;
+    }
+
     return {
       resolution: resolution,
       resolutions: models.proj.selected.id === 'geographic' ? resolutionsGeo : resolutionsPolar,
@@ -117,8 +127,8 @@ export function animationGif(models, config, ui) {
       requestSize: lodashRound(requestSize, 3),
       imgHeight: lodashRound(imgHeight, 2),
       imgWidth: lodashRound(imgWidth, 2),
-      startDate: state.startDate,
-      endDate: state.endDate,
+      startDate: startDate,
+      endDate: endDate,
       speed: lodashRound(state.speed, 2),
       increment: lodashCapitalize(ui.anim.widget.getIncrements())
     };
@@ -542,7 +552,11 @@ export function animationGif(models, config, ui) {
 
     while (current <= toDate) {
       j++;
-      strDate = util.toISOStringSeconds(current);
+      if (models.date.maxZoom > 3) {
+        strDate = util.toISOStringSeconds(current);
+      } else {
+        strDate = util.toISOStringDate(current);
+      }
       products = getProducts(current);
 
       layers = getLayers(products, proj);
@@ -557,7 +571,7 @@ export function animationGif(models, config, ui) {
       } else {
         a.push(src);
       }
-      if(ui.anim.ui.getInterval() === 'minute') {
+      if (ui.anim.ui.getInterval() === 'minute') {
         intervalAmount = 10;
       } else {
         intervalAmount = 1;
