@@ -310,17 +310,17 @@ export function animationGif(models, config, ui) {
    */
   var calcRes = function(mode) { // return either multiplier or string resolution
     // geographic has 10 zoom levels from 0 to 9, polar projections have 8 from 0 to 7
-    var isGeographic = models.proj.selected.id === 'geographic';
-
-    // Map the zoom level from 0-9 / 0-7 to an index from 0-4
-    var zoomRes = [40, 20, 4, 2, 1];
     var str;
     var res;
-
+    var isGeographic = models.proj.selected.id === 'geographic';
+    // Map the zoom level from 0-9 / 0-7 to an index from 0-4
+    var zoomRes = [40, 20, 4, 2, 1];
+    var zoom = ui.map.selected.getView().getZoom();
+    zoom = zoom < 0 ? 0 : zoom;
     if (isGeographic) {
-      res = zoomRes[Math.floor(ui.map.selected.getView().getZoom() / 2)];
+      res = zoomRes[Math.floor(zoom / 2)];
     } else {
-      res = zoomRes[Math.floor(((ui.map.selected.getView().getZoom() + 2) / 2))];
+      res = zoomRes[Math.floor(((zoom + 2) / 2))];
     }
 
     if (mode === 0) { return res.toString(); } else {
