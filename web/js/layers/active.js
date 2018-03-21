@@ -435,8 +435,6 @@ export function layersActive(models, ui, config) {
       document.getElementById('input-time-zmark').style.display = null;
       document.getElementById('timeline-header').classList.add('subdaily');
       setMaxZoomlevel(4);
-      models.date.events.trigger('select');
-      models.anim.events.trigger('change');
     } else {
       document.getElementById('zoom-minutes').style.display = 'none';
       document.getElementById('input-wrapper-hour').style.display = 'none';
@@ -445,9 +443,8 @@ export function layersActive(models, ui, config) {
       document.getElementById('input-time-zmark').style.display = 'none';
       document.getElementById('timeline-header').classList.remove('subdaily');
       setMaxZoomlevel(3);
-      models.date.events.trigger('select');
-      models.anim.events.trigger('change');
     }
+    models.anim.events.trigger('change');
   };
 
   var toggleVisibility = function () {
