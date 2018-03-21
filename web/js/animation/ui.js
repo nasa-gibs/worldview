@@ -133,16 +133,16 @@ export function animationUi(models, ui) {
     var speed = animModel.rangeState.speed;
     switch (true) {
       case (speed > 8 && speed <= 10):
-        queueLength = 500;
+        queueLength = 40;
         break;
       case (speed > 7 && speed <= 8):
-        queueLength = 250;
+        queueLength = 32;
         break;
       case (speed > 5 && speed <= 7):
-        queueLength = 100;
+        queueLength = 24;
         break;
       case (speed > 3 && speed <= 5):
-        queueLength = 20;
+        queueLength = 16;
         break;
       case (speed > 0 && speed <= 3):
         queueLength = 10;
