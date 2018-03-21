@@ -9,6 +9,7 @@ import urllib2 as urllib
 import xmltodict
 import isodate
 from processTemporalLayer import process_temporal
+from collections import OrderedDict
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
@@ -137,7 +138,8 @@ def process_entry(entry, colormaps):
     gc_contents = gc["Capabilities"]["Contents"]
     wv_layers = wv["layers"]
 
-    for gc_layer in gc_contents["Layer"]:
+    if(type(gc["Capabilities"]["Contents"]["Layer"]) is OrderedDict):
+        gc_layer = gc["Capabilities"]["Contents"]["Layer"]
         id = gc_layer["ows:Identifier"]
         try:
             layer_count += 1
@@ -149,8 +151,21 @@ def process_entry(entry, colormaps):
             error_count += 1
             sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
                     id, str(e)))
+    else:
+        for gc_layer in gc_contents["Layer"]:
+            id = gc_layer["ows:Identifier"]
+            try:
+                layer_count += 1
+                process_layer(gc_layer, wv_layers, colormaps)
+            except SkipException as se:
+                warning_count += 1
+                sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))
+            except Exception as e:
+                error_count += 1
+                sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
+                        id, str(e)))
 
-    for gc_matrix_set in gc_contents["TileMatrixSet"]:
+    def process_matrix_set(gc_matrix_set):
         id = gc_matrix_set["ows:Identifier"]
         zoom_levels = len(gc_matrix_set["TileMatrix"])
         resolutions = []
@@ -166,6 +181,12 @@ def process_entry(entry, colormaps):
                 int(gc_matrix_set["TileMatrix"][0]["TileHeight"])
             ]
         }
+
+    if(type(gc_contents["TileMatrixSet"]) is OrderedDict):
+        process_matrix_set(gc_contents["TileMatrixSet"])
+    else:
+        for gc_matrix_set in gc_contents["TileMatrixSet"]:
+            process_matrix_set(gc_matrix_set)
 
     output_file = os.path.join(output_dir, entry["to"])
     with open(output_file, "w") as fp:

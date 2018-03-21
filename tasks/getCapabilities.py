@@ -2,6 +2,7 @@
 
 from optparse import OptionParser
 from datetime import datetime
+from collections import OrderedDict
 import os
 import sys
 import json
@@ -38,6 +39,24 @@ if not os.path.exists(output_dir):
 with open(config_file) as fp:
     config = json.load(fp)
 
+def process_layer(layer):
+    ident = layer["ows:Identifier"]
+    if "ows:Metadata" in layer:
+        if ident in config.get("skipPalettes", []):
+            sys.stderr.write("%s:    WARN: Skipping palette for %s\n" %
+                             prog, ident)
+            global warning_count
+            warning_count += 1
+        else:
+            for item in layer["ows:Metadata"]:
+                schema_version = item["@xlink:role"]
+                if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3":
+                    colormap_link = item["@xlink:href"]
+                    #colormap_link = layer["ows:Metadata"]["@xlink:href"]
+                    colormap_file = os.path.basename(colormap_link)
+                    colormap_id = os.path.splitext(colormap_file)[0]
+                    colormaps[colormap_id] = colormap_link
+
 def process_remote(entry):
     url = entry["from"]
     print "%s: %s" % (prog, url)
@@ -52,23 +71,12 @@ def process_remote(entry):
 
     # Find all colormaps in GetCapabilities responses and store them in memory
     try:
-        for layer in gc["Capabilities"]["Contents"]["Layer"]:
-            ident = layer["ows:Identifier"]
-            if "ows:Metadata" in layer:
-                if ident in config.get("skipPalettes", []):
-                    sys.stderr.write("%s:    WARN: Skipping palette for %s\n" %
-                                     prog, ident)
-                    global warning_count
-                    warning_count += 1
-                else:
-                    for item in layer["ows:Metadata"]:
-                        schema_version = item["@xlink:role"]
-                        if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3":
-                            colormap_link = item["@xlink:href"]
-                            #colormap_link = layer["ows:Metadata"]["@xlink:href"]
-                            colormap_file = os.path.basename(colormap_link)
-                            colormap_id = os.path.splitext(colormap_file)[0]
-                            colormaps[colormap_id] = colormap_link
+        if(type(gc["Capabilities"]["Contents"]["Layer"]) is OrderedDict):
+            process_layer(gc["Capabilities"]["Contents"]["Layer"])
+        else:
+            for layer in gc["Capabilities"]["Contents"]["Layer"]:
+                process_layer(layer)
+
     except:
         print(ident)
         print(str(traceback.format_exc()))
