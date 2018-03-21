@@ -186,7 +186,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
     // for incremental zoom steps
     var curZoom = Math.round(ui.map.selected.getView()
       .getZoom());
-
+    curZoom = curZoom < 0 ? 0 : curZoom;
     // Don't do anything if the user hasn't changed zoom levels; we want to
     // preserve their existing settings
     if (curZoom !== lastZoom) {
