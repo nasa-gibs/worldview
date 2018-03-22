@@ -436,7 +436,7 @@ export function layersActive(models, ui, config) {
       document.getElementById('timeline-header').classList.add('subdaily');
     } else {
       setMaxZoomlevel(3);
-      if (ui.timeline.config.currentZoom > 3) {
+      if (ui.timeline && ui.timeline.config.currentZoom > 3) {
         document.getElementById('zoom-days').click();
       }
       document.getElementById('zoom-minutes').style.display = 'none';
