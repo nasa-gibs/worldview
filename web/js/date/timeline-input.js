@@ -283,10 +283,10 @@ export function timelineInput(models, config, ui) {
       if ((selectedDateObj > tl.data.start()) &&
         (selectedDateObj <= util.today())) {
         var parent = selected.parent();
-        var sib = parent.next('div.input-wrapper')
+        var sib = parent.next('div.input-wrapper.selectable')
           .find('input.button-input-group');
         if (parent.next('#input-time-divider').length) {
-          sib = parent.next().next('div.input-wrapper')
+          sib = parent.next().next('div.input-wrapper.selectable')
             .find('input.button-input-group');
         }
 
