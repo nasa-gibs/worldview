@@ -642,7 +642,7 @@ export function animationGif(models, config, ui) {
       var blobURL = URL.createObjectURL(blob); // supported in Chrome and FF
       animatedImage.src = blobURL;
       animatedImage.width = lastRequestedDimensions.w > window.innerWidth - 198 ? window.innerWidth - 198 : lastRequestedDimensions.w;
-      animatedImage.height = lastRequestedDimensions.h > window.innerHeight - 80 ? window.innerHeight - 80 : lastRequestedDimensions.h;
+      animatedImage.height = lastRequestedDimensions.h > window.innerHeight - 120 ? window.innerHeight - 120 : lastRequestedDimensions.h;
       var dlURL = util.format('nasa-worldview-{1}-to-{2}.gif', animModel.rangeState.startDate, animModel.rangeState.endDate);
       var downloadSize = lodashRound((blob.size / 1024 * 0.001), 2);
 
