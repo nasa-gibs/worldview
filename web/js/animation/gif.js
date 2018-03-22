@@ -237,7 +237,7 @@ export function animationGif(models, config, ui) {
         'textBaseline': 'top', // If textYCoordinate is null this takes precedence
         'fontColor': '#fff',
         'fontWeight': '300',
-        'fontFamily': 'Helvetica Neue',
+        'fontFamily': 'Open Sans, sans-serif',
         'interval': 1 / interval,
         'progressCallback': onGifProgress,
         'showFrameText': stampHeight > 20,
