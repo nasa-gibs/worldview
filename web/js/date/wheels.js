@@ -14,6 +14,7 @@ var dateWheels = function(models, config) {
   var init = function () {
     render();
     model.events.on('select', update);
+    model.events.on('update-timewheel', update);
     $(window)
       .on('resize', resize);
     updateRange();
