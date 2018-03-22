@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import d3 from 'd3';
 import util from '../util/util';
+import moment from 'moment';
+
 /**
  * Modify zoom levels here. Maybe this isnt the best way to do this.
  * It could be called just level without the zoom part instead.
@@ -51,7 +53,7 @@ export function timelineConfig(models, config, ui) {
       case 1: // Year
         dateStep = 1;
         labelFormat = d3.time.format.utc('%Y');
-        dateInterval = d3.time.year.utc;
+        dateInterval = d3.time.year;
         tickCount = tl.data.end()
           .getUTCFullYear() - tl.data.start()
           .getUTCFullYear();
@@ -141,14 +143,24 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function (d) {
+          var prevDate = model.selected;
+          d = new Date(d.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
           d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
-          var selected = model.selected;
-          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
+          if (!moment(prevDate).isDST() && moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() + (1 * 60 * 60 * 1000));
+          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() - (1 * 60 * 60 * 1000));
+          }
+          prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
-            selected.getUTCMonth(),
-            selected.getUTCDate(),
-            selected.getUTCHours(),
-            selected.getUTCMinutes());
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
         };
 
         // Value for hovered boundary tick
@@ -171,18 +183,28 @@ export function timelineConfig(models, config, ui) {
           return null;
         };
 
-        // Value for clicked boundary tick, FIXME: This is exactly the same as hover value
+        // Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
-          var selected = model.selected;
-          var yearOffset = model.selected.getUTCFullYear() -
-            Math.ceil(new Date(model.selected.getUTCFullYear() / 10) * 10);
-          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
-
-          return new Date(d.getUTCFullYear() + yearOffset,
-            selected.getUTCMonth(),
-            selected.getUTCDate(),
-            selected.getUTCHours(),
-            selected.getUTCMinutes());
+          var prevDate = model.selected;
+          var yearOffset = prevDate.getUTCFullYear() -
+            Math.ceil(new Date(prevDate.getUTCFullYear() / 10) * 10);
+          d = new Date(d.getUTCFullYear() + yearOffset,
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          if (!moment(prevDate).isDST() && moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() + (1 * 60 * 60 * 1000));
+          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() - (1 * 60 * 60 * 1000));
+          }
+          prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
+          return new Date(d.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
@@ -213,7 +235,7 @@ export function timelineConfig(models, config, ui) {
       case 2: // Month
         dateStep = 1;
         labelFormat = d3.time.format.utc('%Y');
-        dateInterval = d3.time.month.utc;
+        dateInterval = d3.time.month;
 
         tickCount = (tl.data.end()
           .getUTCFullYear() -
@@ -308,14 +330,24 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function (d) {
+          var prevDate = model.selected;
+          d = new Date(d.getUTCFullYear(),
+            d.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
           d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
-          var selected = model.selected;
-          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
+          if (!moment(prevDate).isDST() && moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() + (1 * 60 * 60 * 1000));
+          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() - (1 * 60 * 60 * 1000));
+          }
+          prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            selected.getUTCDate(),
-            selected.getUTCHours(),
-            selected.getUTCMinutes());
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
         };
 
         // Value for hovered boundary tick
@@ -337,13 +369,24 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
-          var selected = model.selected;
-          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
+          var prevDate = model.selected;
+          d = new Date(d.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          if (!moment(prevDate).isDST() && moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() + (1 * 60 * 60 * 1000));
+          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() - (1 * 60 * 60 * 1000));
+          }
+          prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
-            selected.getUTCMonth(),
-            selected.getUTCDate(),
-            selected.getUTCHours(),
-            selected.getUTCMinutes());
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
@@ -375,7 +418,7 @@ export function timelineConfig(models, config, ui) {
       case 3: // Day
         dateStep = 1;
         labelFormat = d3.time.format.utc('%b');
-        dateInterval = d3.time.day.utc;
+        dateInterval = d3.time.day;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 60 / 24;
         tickWidth = 11;
         tickCountMax = Math.ceil(tl.width / tickWidth);
@@ -461,14 +504,24 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function (d) {
+          var prevDate = model.selected;
+          d = new Date(d.getUTCFullYear(),
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
           d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
-          var selected = model.selected;
-          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
+          if (!moment(prevDate).isDST() && moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() + (1 * 60 * 60 * 1000));
+          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() - (1 * 60 * 60 * 1000));
+          }
+          prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            selected.getUTCHours(),
-            selected.getUTCMinutes());
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
         };
 
         // Value for hovered boundary tick
@@ -490,13 +543,24 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function (d) {
-          var selected = model.selected;
-          selected = new Date(selected.getTime() - (selected.getTimezoneOffset() * 60000));
+          var prevDate = model.selected;
+          d = new Date(d.getUTCFullYear(),
+            d.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
+          d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
+          if (!moment(prevDate).isDST() && moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() + (1 * 60 * 60 * 1000));
+          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
+            prevDate = new Date(prevDate.getTime() - (1 * 60 * 60 * 1000));
+          }
+          prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            selected.getUTCDate(),
-            selected.getUTCHours(),
-            selected.getUTCMinutes());
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes());
         };
 
         // When the date updates while dragging the pick forward
@@ -544,12 +608,7 @@ export function timelineConfig(models, config, ui) {
       case 4: // 10-Minute
         dateStep = 10;
         labelFormat = d3.time.format.utc('%H:%M');
-        dateInterval = d3.time.minutes.utc;
-        // Divide by 1000 = Seconds
-        // Divide by 60 = Minutes
-        // Divide by 60 = Hours - not used
-        // Divide by 24 = Days - not used
-        // Divide by 1- = 10-minute intervals
+        dateInterval = d3.time.minutes;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 10;
         tickWidth = 1;
         tickCountMax = tl.width;
