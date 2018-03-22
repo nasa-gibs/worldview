@@ -450,6 +450,7 @@ export function layersActive(models, ui, config) {
       document.getElementById('input-time-zmark').style.display = 'none';
       document.getElementById('timeline-header').classList.remove('subdaily');
     }
+    models.date.events.trigger('update-timewheel');
   };
 
   var toggleVisibility = function () {
