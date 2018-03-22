@@ -406,7 +406,6 @@ export function layersActive(models, ui, config) {
       renderLegendCanvas(layer);
     }
     toggleSubdaily();
-    model.events.trigger('timeline-change');
     sizeProductsTab();
   };
 
@@ -428,23 +427,25 @@ export function layersActive(models, ui, config) {
 
   var toggleSubdaily = function () {
     if (subdailyCheck()) {
+      setMaxZoomlevel(4);
       document.getElementById('zoom-minutes').style.display = null;
       document.getElementById('input-wrapper-hour').style.display = null;
       document.getElementById('input-time-divider').style.display = null;
       document.getElementById('input-wrapper-minute').style.display = null;
       document.getElementById('input-time-zmark').style.display = null;
       document.getElementById('timeline-header').classList.add('subdaily');
-      setMaxZoomlevel(4);
     } else {
+      setMaxZoomlevel(3);
+      if (ui.timeline.config.currentZoom > 3) {
+        document.getElementById('zoom-days').click();
+      }
       document.getElementById('zoom-minutes').style.display = 'none';
       document.getElementById('input-wrapper-hour').style.display = 'none';
       document.getElementById('input-time-divider').style.display = 'none';
       document.getElementById('input-wrapper-minute').style.display = 'none';
       document.getElementById('input-time-zmark').style.display = 'none';
       document.getElementById('timeline-header').classList.remove('subdaily');
-      setMaxZoomlevel(3);
     }
-    models.anim.events.trigger('change');
   };
 
   var toggleVisibility = function () {
@@ -514,6 +515,7 @@ export function layersActive(models, ui, config) {
       .on('change:resolution', onZoomChange);
     setTimeout(render, 1);
   };
+
   var onZoomChange = function () {
     lodashEach(groups, function (group) {
       lodashEach(model.get({
@@ -525,6 +527,7 @@ export function layersActive(models, ui, config) {
       });
     });
   };
+
   var onDateChange = function () {
     lodashEach(groups, function (group) {
       lodashEach(model.get({

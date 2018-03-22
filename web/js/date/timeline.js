@@ -239,6 +239,12 @@ export function timeline(models, config, ui) {
       self.zoom.refresh();
       self.setClip();
     });
+
+    models.proj.events.on('select', function () {
+      self.resize();
+      self.zoom.refresh();
+      self.setClip();
+    });
   };
 
   init();
