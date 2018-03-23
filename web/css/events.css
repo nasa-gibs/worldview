@@ -140,6 +140,55 @@
   z-index: 100;
   cursor: pointer;
 }
+.track-marker-case {
+  position:relative;
+
+}
+.track-marker-case-selected .track-marker {
+  opacity: 0.7;
+}
+.track-marker {
+  width: 6px;
+  height: 6px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  background-color: #fff;
+  opacity: 1;
+}
+.track-marker-date {
+  display: none;
+  position: absolute;
+  width: 74px;
+  top: 15px;
+  left: -37px;
+  padding: 4px;
+  background-color: rgba(40,40,40,.9);
+  border-radius: 3px;
+  text-align: center;
+  font-family: Roboto Mono,monospace;
+  font-size: 12px;
+  color: #ccc;
+  z-index: 900;
+}
+.track-marker-date::before {
+  position: absolute;
+  top: -4px;
+  left: 36px;
+  content: "";
+  border-bottom: 5px solid #000;
+  border-bottom: 5px solid rgba(51, 51, 51, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}
+
+.track-marker-case:not(.track-marker-case-selected) .track-marker:hover {
+  transform: scale(1.5);
+  border: 1px solid #22a;
+  cursor: pointer;
+}
+.track-marker-case .track-marker:hover ~ .track-marker-date {
+  display: block;
+}
 
 .event-icon {
   display: block;
