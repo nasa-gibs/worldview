@@ -45,9 +45,9 @@ var naturalEventsTrackPoint = function(coords, date, eventID, isSelected, callba
   });
 };
 
-var naturalEventsTrackLine = function(coordinateArray) {
+var naturalEventsTrackLine = function(coordinateArray, type) {
   return new OlFeature({
-    type: 'line',
+    type: type,
     geometry: new OlGeomMultiLineString(coordinateArray)
   });
 };
@@ -64,10 +64,16 @@ var naturalEventsTrackStyle = function() {
         })
       })
     }),
-    'line': new OlStyleStyle({
+    'white-line': new OlStyleStyle({
       stroke: new OlStyleStroke({
         color: 'white',
         width: 1
+      })
+    }),
+    'black-line': new OlStyleStyle({
+      stroke: new OlStyleStroke({
+        color: 'black',
+        width: 2
       })
     })
   };
@@ -77,7 +83,7 @@ export function naturalEventsTrackCreate(eventObj, map, selectedDate, callback) 
   var olPointCoordinates = [];
   var coordinateArray = [];
   var eventTrackStyles;
-  var olTrackLineFeature;
+  var olTrackLineFeatures = [];
 
   lodashEach(eventObj.geometries, function (geometry, index) {
     var date = geometry.date.split('T')[0];
@@ -92,7 +98,9 @@ export function naturalEventsTrackCreate(eventObj, map, selectedDate, callback) 
   });
 
   eventTrackStyles = naturalEventsTrackStyle();
-  olTrackLineFeature = naturalEventsTrackLine(coordinateArray);
 
-  return naturalEventsTrackLayer([olTrackLineFeature], eventTrackStyles);
+  olTrackLineFeatures.push(naturalEventsTrackLine(coordinateArray, 'black-line'));
+  olTrackLineFeatures.push(naturalEventsTrackLine(coordinateArray, 'white-line'));
+
+  return naturalEventsTrackLayer(olTrackLineFeatures, eventTrackStyles);
 };
