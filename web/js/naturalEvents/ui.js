@@ -90,10 +90,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     if (date) self.selected.date = date;
 
     var event = getEventById(id);
-    if (event.geometries.length > 1) {
-      let vectorLayer = naturalEventsTrackCreate(event);
-      ui.map.selected.addLayer(vectorLayer);
-    }
+
     if (!event) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
@@ -113,6 +110,11 @@ export default function naturalEventsUI (models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
+
+    if (event.geometries.length > 1) {
+      let trackVectory = naturalEventsTrackCreate(event, ui.map.selected, date, self.selectEvent);
+      ui.map.selected.addLayer(trackVectory);
+    }
     zoomToEvent(event, date).then(function () {
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);

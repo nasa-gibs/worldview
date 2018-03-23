@@ -1,5 +1,5 @@
 import OlFeature from 'ol/feature';
-import OlGeomPoint from 'ol/geom/point';
+import OlOverlay from 'ol/overlay';
 import OlLayerVector from 'ol/layer/vector';
 import OlSourceVector from 'ol/source/vector';
 import OlStyleFill from 'ol/style/fill';
@@ -9,7 +9,7 @@ import OlStyleStyle from 'ol/style/style';
 import OlGeomMultiLineString from 'ol/geom/multilinestring';
 import lodashEach from 'lodash/each';
 
-export function naturalEventsTrackLayer(featuresArray, styles) {
+var naturalEventsTrackLayer = function(featuresArray, styles) {
   return new OlLayerVector({
     source: new OlSourceVector({
       features: featuresArray
@@ -20,21 +20,38 @@ export function naturalEventsTrackLayer(featuresArray, styles) {
 
   });
 };
-export function naturalEventsTrackPoint(coords, date, eventID) {
-  return new OlFeature({
-    type: 'geoMarker',
-    geometry: new OlGeomPoint(coords),
-    date: date,
-    eventType: eventID
+var naturalEventsTrackPoint = function(coords, date, eventID, isSelected, callback) {
+  var overlayEl = document.createElement('div');
+  var circleEl = document.createElement('div');
+  var textEl = document.createElement('span');
+  var content = document.createTextNode(date);
+
+  overlayEl.className = isSelected ? 'track-marker-case track-marker-case-selected' : 'track-marker-case';
+  overlayEl.dataset.id = eventID;
+  overlayEl.onclick = function() {
+    callback(eventID, date);
+  };
+  textEl.appendChild(content);
+  textEl.className = 'track-marker-date';
+  circleEl.className = 'track-marker track-marker-' + date;
+  overlayEl.appendChild(circleEl);
+  overlayEl.appendChild(textEl);
+
+  return new OlOverlay({
+    position: coords,
+    positioning: 'center-center',
+    element: overlayEl,
+    stopEvent: false
   });
 };
-export function naturalEventsTrackLine(coordinateArray) {
+
+var naturalEventsTrackLine = function(coordinateArray) {
   return new OlFeature({
     type: 'line',
     geometry: new OlGeomMultiLineString(coordinateArray)
   });
 };
-export function naturalEventsTrackStyle() {
+var naturalEventsTrackStyle = function() {
   return {
     'geoMarker': new OlStyleStyle({
       image: new OlStyleCircle({
@@ -56,8 +73,8 @@ export function naturalEventsTrackStyle() {
   };
 };
 
-export function naturalEventsTrackCreate(eventObj) {
-  var olTrackFeatures = [];
+export function naturalEventsTrackCreate(eventObj, map, selectedDate, callback) {
+  var olPointCoordinates = [];
   var coordinateArray = [];
   var eventTrackStyles;
   var olTrackLineFeature;
@@ -65,16 +82,17 @@ export function naturalEventsTrackCreate(eventObj) {
   lodashEach(eventObj.geometries, function (geometry, index) {
     var date = geometry.date.split('T')[0];
     var coordinates = geometry.coordinates;
-    olTrackFeatures.push(naturalEventsTrackPoint(coordinates, date, eventObj.id));
+    var isSelected = (selectedDate === date);
+
+    olPointCoordinates.push(coordinates);
     if (index !== 0) {
-      coordinateArray.push([olTrackFeatures[index - 1].getGeometry().getCoordinates(), coordinates]);
+      coordinateArray.push([olPointCoordinates[index - 1], coordinates]);
     }
+    map.addOverlay(naturalEventsTrackPoint(coordinates, date, eventObj.id, isSelected, callback));
   });
 
   eventTrackStyles = naturalEventsTrackStyle();
   olTrackLineFeature = naturalEventsTrackLine(coordinateArray);
-  console.log(olTrackLineFeature, olTrackFeatures[0]);
-  olTrackFeatures.push(olTrackLineFeature);
 
-  return naturalEventsTrackLayer(olTrackFeatures, eventTrackStyles);
+  return naturalEventsTrackLayer([olTrackLineFeature], eventTrackStyles);
 };
