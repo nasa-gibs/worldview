@@ -142,10 +142,14 @@
 }
 .track-marker-case {
   position:relative;
-
+  z-index: 99;
+}
+.track-marker-case-selected {
+  z-index: 100;
 }
 .track-marker-case-selected .track-marker {
   opacity: 0.7;
+  z-index: 100;
 }
 .track-marker {
   width: 6px;
@@ -154,6 +158,7 @@
   border-radius: 3px;
   background-color: #fff;
   opacity: 1;
+  z-index: 99;
 }
 .track-marker-date {
   display: none;
