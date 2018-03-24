@@ -28,6 +28,7 @@ var naturalEventsTrackPoint = function(coords, date, eventID, isSelected, callba
 
   overlayEl.className = isSelected ? 'track-marker-case track-marker-case-selected' : 'track-marker-case';
   overlayEl.dataset.id = eventID;
+  overlayEl.id = 'track-marker-case' + date;
   overlayEl.onclick = function() {
     callback(eventID, date);
   };
@@ -78,23 +79,73 @@ var naturalEventsTrackStyle = function() {
     })
   };
 };
-
+var removeTrack = function(map, trackObj) {
+  map.removeLayer(trackObj.track);
+  naturalEventsRemoveOldPoints(map, trackObj.pointArray);
+  return {};
+};
+export function naturalEventsUpdateEventTrack(event, map, trackObj, selectedDate, callback) {
+  var newTrackObj;
+  if (event.geometries.length <= 2) {
+    // If track exists remove it.
+    // Else return empty Object
+    return (trackObj.id) ? removeTrack(map, trackObj) : {};
+  }
+  newTrackObj = {};
+  if (trackObj.id) {
+    if (trackObj.id === event.id) {
+      newTrackObj = trackObj;
+      // If same Track but different selection
+      // Just update classNames
+      if (trackObj.selectedDate !== selectedDate) {
+        naturalUpdateActiveTrack(selectedDate);
+        newTrackObj.selectedDate = selectedDate;
+      }
+      return newTrackObj;
+    } else {
+      // Remove old DOM Elements
+      newTrackObj = removeTrack(map, trackObj);
+      newTrackObj = naturalEventsTrackCreate(event, map, selectedDate, callback);
+      map.addLayer(newTrackObj.track);
+    }
+    return newTrackObj;
+  } else {
+    newTrackObj = naturalEventsTrackCreate(event, map, selectedDate, callback);
+    map.addLayer(newTrackObj.track);
+    return newTrackObj;
+  }
+};
+export function naturalEventsRemoveOldPoints(map, pointOverlayArray) {
+  lodashEach(pointOverlayArray, function(pointOverlay) {
+    map.removeOverlay(pointOverlay);
+  });
+}
+export function naturalUpdateActiveTrack(newDate) {
+  var oldSelectedPoint = document.getElementsByClassName('track-marker-case-selected')[0];
+  var newSelectedPoint = document.getElementById('track-marker-case' + newDate);
+  oldSelectedPoint.className = 'track-marker-case';
+  newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
+}
 export function naturalEventsTrackCreate(eventObj, map, selectedDate, callback) {
   var olPointCoordinates = [];
   var coordinateArray = [];
   var eventTrackStyles;
   var olTrackLineFeatures = [];
+  var overlayArray = [];
 
   lodashEach(eventObj.geometries, function (geometry, index) {
     var date = geometry.date.split('T')[0];
     var coordinates = geometry.coordinates;
     var isSelected = (selectedDate === date);
+    var trackPoint;
 
     olPointCoordinates.push(coordinates);
     if (index !== 0) {
       coordinateArray.push([olPointCoordinates[index - 1], coordinates]);
     }
-    map.addOverlay(naturalEventsTrackPoint(coordinates, date, eventObj.id, isSelected, callback));
+    trackPoint = naturalEventsTrackPoint(coordinates, date, eventObj.id, isSelected, callback);
+    overlayArray.push(trackPoint);
+    map.addOverlay(trackPoint);
   });
 
   eventTrackStyles = naturalEventsTrackStyle();
@@ -102,5 +153,10 @@ export function naturalEventsTrackCreate(eventObj, map, selectedDate, callback) 
   olTrackLineFeatures.push(naturalEventsTrackLine(coordinateArray, 'black-line'));
   olTrackLineFeatures.push(naturalEventsTrackLine(coordinateArray, 'white-line'));
 
-  return naturalEventsTrackLayer(olTrackLineFeatures, eventTrackStyles);
+  return {
+    'id': eventObj.id,
+    'track': naturalEventsTrackLayer(olTrackLineFeatures, eventTrackStyles),
+    'pointArray': overlayArray,
+    'selectedDate': selectedDate
+  };
 };

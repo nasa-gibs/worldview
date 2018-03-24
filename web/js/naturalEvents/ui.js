@@ -4,7 +4,7 @@ import lodashEach from 'lodash/each';
 import olExtent from 'ol/extent';
 
 import markers from './markers';
-import { naturalEventsTrackCreate } from './track';
+import { naturalEventsUpdateEventTrack } from './track';
 import wvui from '../ui/ui';
 import util from '../util/util';
 
@@ -16,6 +16,7 @@ export default function naturalEventsUI (models, ui, config, request) {
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
+  self.trackObj = {};
   var naturalEventMarkers = markers(models, ui, config);
 
   var init = function () {
@@ -110,11 +111,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-
-    if (event.geometries.length > 1) {
-      let trackVectory = naturalEventsTrackCreate(event, ui.map.selected, date, self.selectEvent);
-      ui.map.selected.addLayer(trackVectory);
-    }
+    self.trackObj = naturalEventsUpdateEventTrack(event, ui.map.selected, self.trackObj, date, self.selectEvent);
     zoomToEvent(event, date).then(function () {
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
