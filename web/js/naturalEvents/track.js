@@ -84,49 +84,18 @@ var removeTrack = function(map, trackObj) {
   naturalEventsRemoveOldPoints(map, trackObj.pointArray);
   return {};
 };
-export function naturalEventsUpdateEventTrack(event, map, trackObj, selectedDate, callback) {
-  var newTrackObj;
-  if (event.geometries.length <= 2) {
-    // If track exists remove it.
-    // Else return empty Object
-    return (trackObj.id) ? removeTrack(map, trackObj) : {};
-  }
-  newTrackObj = {};
-  if (trackObj.id) {
-    if (trackObj.id === event.id) {
-      newTrackObj = trackObj;
-      // If same Track but different selection
-      // Just update classNames
-      if (trackObj.selectedDate !== selectedDate) {
-        naturalUpdateActiveTrack(selectedDate);
-        newTrackObj.selectedDate = selectedDate;
-      }
-      return newTrackObj;
-    } else {
-      // Remove old DOM Elements
-      newTrackObj = removeTrack(map, trackObj);
-      newTrackObj = naturalEventsTrackCreate(event, map, selectedDate, callback);
-      map.addLayer(newTrackObj.track);
-    }
-    return newTrackObj;
-  } else {
-    newTrackObj = naturalEventsTrackCreate(event, map, selectedDate, callback);
-    map.addLayer(newTrackObj.track);
-    return newTrackObj;
-  }
-};
-export function naturalEventsRemoveOldPoints(map, pointOverlayArray) {
-  lodashEach(pointOverlayArray, function(pointOverlay) {
+var naturalEventsRemoveOldPoints = function (map, pointOverlayArray) {
+  lodashEach(pointOverlayArray, function (pointOverlay) {
     map.removeOverlay(pointOverlay);
   });
-}
-export function naturalUpdateActiveTrack(newDate) {
+};
+var naturalUpdateActiveTrack = function (newDate) {
   var oldSelectedPoint = document.getElementsByClassName('track-marker-case-selected')[0];
   var newSelectedPoint = document.getElementById('track-marker-case' + newDate);
   oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
-}
-export function naturalEventsTrackCreate(eventObj, map, selectedDate, callback) {
+};
+var naturalEventsTrackCreate = function (eventObj, map, selectedDate, callback) {
   var olPointCoordinates = [];
   var coordinateArray = [];
   var eventTrackStyles;
@@ -157,6 +126,56 @@ export function naturalEventsTrackCreate(eventObj, map, selectedDate, callback) 
     'id': eventObj.id,
     'track': naturalEventsTrackLayer(olTrackLineFeatures, eventTrackStyles),
     'pointArray': overlayArray,
-    'selectedDate': selectedDate
+    'selectedDate': selectedDate,
+    'hidden': false
   };
+};
+export function naturalEventsTrackToggleVisibilty(shouldBeVisible, trackObj) {
+  var selectedPoints = document.getElementsByClassName('track-marker-case');
+  var newTrackObj = trackObj;
+  if (shouldBeVisible) {
+    lodashEach(selectedPoints, function (el) {
+      el.classList.remove('track-marker-case-hidden');
+    });
+    newTrackObj.track.setOpacity(1);
+    newTrackObj.hidden = false;
+  } else {
+    lodashEach(selectedPoints, function (el) {
+      el.classList.add('track-marker-case-hidden');
+    });
+    newTrackObj.hidden = true;
+    newTrackObj.track.setOpacity(0);
+  }
+  return newTrackObj;
+};
+export function naturalEventsTrackUpdateEvent(event, map, trackObj, selectedDate, callback) {
+  var newTrackObj;
+  if (!event || event.geometries.length < 2) {
+    // If track exists remove it.
+    // Else return empty Object
+    return (trackObj.id) ? removeTrack(map, trackObj) : {};
+  }
+  newTrackObj = {};
+  if (trackObj.id) {
+    if (trackObj.id === event.id) {
+      newTrackObj = trackObj;
+      // If same Track but different selection
+      // Just update classNames
+      if (trackObj.selectedDate !== selectedDate) {
+        naturalUpdateActiveTrack(selectedDate);
+        newTrackObj.selectedDate = selectedDate;
+      }
+      return newTrackObj;
+    } else {
+      // Remove old DOM Elements
+      newTrackObj = removeTrack(map, trackObj);
+      newTrackObj = naturalEventsTrackCreate(event, map, selectedDate, callback);
+      map.addLayer(newTrackObj.track);
+    }
+    return newTrackObj;
+  } else {
+    newTrackObj = naturalEventsTrackCreate(event, map, selectedDate, callback);
+    map.addLayer(newTrackObj.track);
+    return newTrackObj;
+  }
 };

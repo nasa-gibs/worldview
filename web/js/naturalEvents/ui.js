@@ -4,7 +4,10 @@ import lodashEach from 'lodash/each';
 import olExtent from 'ol/extent';
 
 import markers from './markers';
-import { naturalEventsUpdateEventTrack } from './track';
+import {
+  naturalEventsTrackUpdateEvent,
+  naturalEventsTrackToggleVisibilty
+} from './track';
 import wvui from '../ui/ui';
 import util from '../util/util';
 
@@ -70,10 +73,11 @@ export default function naturalEventsUI (models, ui, config, request) {
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
         self.markers = naturalEventMarkers.draw();
-
+        self.trackObj = (self.trackObj.id) ? naturalEventsTrackToggleVisibilty(true, self.trackObj) : {};
         ui.sidebar.sizeEventsTab();
       } else {
         model.active = false;
+        self.trackObj = (self.trackObj.id) ? naturalEventsTrackToggleVisibilty(false, self.trackObj) : {};
         if (naturalEventMarkers) naturalEventMarkers.remove(self.markers);
       }
       model.events.trigger('change');
@@ -111,7 +115,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-    self.trackObj = naturalEventsUpdateEventTrack(event, ui.map.selected, self.trackObj, date, self.selectEvent);
+    self.trackObj = naturalEventsTrackUpdateEvent(event, ui.map.selected, self.trackObj, date, self.selectEvent);
     zoomToEvent(event, date).then(function () {
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
@@ -155,6 +159,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     self.markers = naturalEventMarkers.draw();
     highlightEventInList();
+    self.trackObj = (self.trackObj.id) ? naturalEventsTrackUpdateEvent(null, ui.map.selected, self.trackObj) : {};
     model.events.trigger('change');
   };
 

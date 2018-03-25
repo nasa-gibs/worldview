@@ -147,6 +147,9 @@
 .track-marker-case-selected {
   z-index: 100;
 }
+.track-marker-case-hidden {
+  display: none;
+}
 .track-marker-case-selected .track-marker {
   opacity: 0.7;
   z-index: 100;
