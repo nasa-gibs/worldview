@@ -54,9 +54,7 @@ before a submission will be accepted. But, please run them and check the results
 to make sure you haven't broken any functionality. And add end-to-end tests to
 cover any new functionality you add.
 
-## Mocking Data
-
-Append the following parameters to the URL to test using mock data;
+## URL Parameters
 
 ### External
 
