@@ -18,6 +18,15 @@ import uiIndicator from '../ui/indicator';
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
 const maxGifSize = 40;
+const GRATICULE_WARNING =
+  'The graticule layer cannot be used to take a snapshot. Would you ' +
+  'like to hide this layer?';
+const PALETTE_WARNING =
+  'One or more layers on the map have been modified (changed palette, ' +
+  'thresholds, etc.). These modifications cannot be used to take a ' +
+  'snapshot. Would you like to temporarily revert to the original ' +
+  'layer(s)?';
+const ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to reset rotation?';
 const resolutionsGeo = {
   values: [
     { value: '0.125', text: '30m' },
@@ -57,16 +66,6 @@ export function animationGif(models, config, ui) {
   var requestSize;
   var throttleSetDownloadButton;
   var lastRequestedDimensions = {};
-
-  var GRATICULE_WARNING =
-    'The graticule layer cannot be used to take a snapshot. Would you ' +
-    'like to hide this layer?';
-  var PALETTE_WARNING =
-    'One or more layers on the map have been modified (changed palette, ' +
-    'thresholds, etc.). These modifications cannot be used to take a ' +
-    'snapshot. Would you like to temporarily revert to the original ' +
-    'layer(s)?';
-  var ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to reset rotation?';
 
   var renderPanel = function(options, mountEl) {
     return ReactDOM.render(
@@ -143,15 +142,10 @@ export function animationGif(models, config, ui) {
     stateObj = animModel.rangeState;
     numDays = util.getNumberOfDays(new Date(stateObj.startDate), new Date(stateObj.endDate), ui.anim.ui.getInterval());
 
-    if (!resolution) {
-      resolution = calcRes(0);
-      imgWidth = animationCoordinates.w;
-      imgHeight = animationCoordinates.h;
-    } else {
-      dimensions = getDimensions(lonlats, models.proj.selected.id, resolution);
-      imgWidth = dimensions[0];
-      imgHeight = dimensions[1];
-    }
+    if (!resolution) resolution = calcRes(0);
+    dimensions = getDimensions(lonlats, models.proj.selected.id, resolution);
+    imgWidth = dimensions[0];
+    imgHeight = dimensions[1];
 
     requestSize = calulateFileSize(resolution, lonlats[0], lonlats[1], numDays, imgWidth, imgHeight);
     updatePanel(getUpdatedProps());
