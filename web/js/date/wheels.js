@@ -17,8 +17,8 @@ var dateWheels = function(models, config) {
     model.events.on('update-timewheel', update);
     $(window)
       .on('resize', resize);
-    updateRange();
     update();
+    updateRange();
     resize();
   };
 
@@ -81,6 +81,7 @@ var dateWheels = function(models, config) {
     } else {
       dateWheel();
     }
+    updateRange();
   };
 
   var render = function () {
