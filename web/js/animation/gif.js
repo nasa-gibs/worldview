@@ -286,24 +286,18 @@ export function animationGif(models, config, ui) {
     // Set Logo-stamp dimensions based upon smallest total image dimension
     if (lastRequestedDimensions.w < breakPoint) {
       stampHeight = (imgWidth * 0.70) / stampWidthRatio < 60 ? ((imgWidth * 0.70) / stampWidthRatio) : 60;
-      dateStamp.fontSize = lodashRound(stampHeight * 0.65);
+      dateStamp.fontSize = lastRequestedDimensions.h > (stampHeight * 1.5) ? lodashRound(stampHeight * 0.65) : 0;
       dateStamp.align = 'left';
       dateStamp.x = imgWidth * 0.01;
       dateStamp.y = imgHeight - (dateStamp.fontSize + (imgHeight * 0.01));
-    } else if (imgHeight > imgWidth) {
+    } else {
       stampWidth = imgWidth * 0.4;
       stampHeightByImageWidth = stampWidth / stampWidthRatio;
       stampHeight = stampHeightByImageWidth < 20 ? 20 : stampHeightByImageWidth > 60 ? 60 : stampHeightByImageWidth;
-      dateStamp.fontSize = lodashRound(stampHeight * 0.65);
+      dateStamp.fontSize = lastRequestedDimensions.h > (stampHeight * 1.5) ? lodashRound(stampHeight * 0.65) : 0;
       dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.01);
       dateStamp.x = imgWidth * 0.01;
       dateStamp.align = 'left';
-    } else {
-      stampHeight = (imgHeight * 0.10 > 60) ? 60 : imgHeight * 0.10;
-      dateStamp.fontSize = lodashRound(stampHeight * 0.65);
-      dateStamp.y = imgHeight * 0.01;
-      dateStamp.align = 'right';
-      dateStamp.x = null;
     }
     return { stampHeight: stampHeight, dateStamp: dateStamp };
   };
