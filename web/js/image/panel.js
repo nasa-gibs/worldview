@@ -1,14 +1,20 @@
 import $ from 'jquery';
 import 'jquery-ui/button';
 import 'jquery-ui/dialog';
-import lodashEach from 'lodash/each';
-import lodashIsUndefined from 'lodash/isUndefined';
 import olProj from 'ol/proj';
 import { GA as googleAnalytics, ImageResSelection } from 'worldview-components';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import {
+  imageUtilCalculateResolution,
+  imageUtilGetLayerOpacities,
+  imageUtilGetCoordsFromPixelValues,
+  imageUtilGetLayers,
+  imageUtilGetConversionFactor
+} from './util';
 
 const resolutionsGeo = {
   values: [
@@ -187,57 +193,12 @@ export function imagePanel (models, ui, config, dialogConfig) {
     // for incremental zoom steps
     var curZoom = Math.round(ui.map.selected.getView()
       .getZoom());
-    curZoom = curZoom < 0 ? 0 : curZoom;
     // Don't do anything if the user hasn't changed zoom levels; we want to
     // preserve their existing settings
     if (curZoom !== lastZoom) {
       lastZoom = curZoom;
-      var nZoomLevels = models.proj.selected.resolutions.length;
-      var curResolution = (curZoom >= nZoomLevels)
-        ? models.proj.selected.resolutions[nZoomLevels - 1]
-        : models.proj.selected.resolutions[curZoom];
-
-      // Estimate the option value used by "wv-image-resolution"
-      var resolutionEstimate = (models.proj.selected.id === 'geographic')
-        ? curResolution / 0.002197265625 : curResolution / 256.0;
-
-      // Find the closest match of resolution within the available values
-      var possibleResolutions = (models.proj.selected.id === 'geographic')
-        ? [0.125, 0.25, 0.5, 1, 2, 4, 20, 40]
-        : [1, 2, 4, 20, 40];
-      var bestDiff = Infinity;
-      var bestIdx = -1;
-      var currDiff = 0;
-      for (var i = 0; i < possibleResolutions.length; i++) {
-        currDiff = Math.abs(possibleResolutions[i] - resolutionEstimate);
-        if (currDiff < bestDiff) {
-          resolution = possibleResolutions[i];
-          bestDiff = currDiff;
-          bestIdx = i;
-        }
-      }
-
-      // Bump up resolution in certain cases where default is too low
-      if (bestIdx > 0) {
-        if (models.proj.selected.id === 'geographic') {
-          switch (curZoom) {
-            case 3:
-            case 4:
-            case 6:
-            case 7:
-              resolution = possibleResolutions[bestIdx - 1];
-          }
-        } else {
-          switch (curZoom) {
-            case 1:
-            case 2:
-            case 4:
-            case 5:
-              resolution = possibleResolutions[bestIdx - 1];
-          }
-        }
-      }
-      imgRes = resolution;
+      let isGeoProjection = (models.proj.selected.id === 'geographic');
+      imgRes = imageUtilCalculateResolution(curZoom, isGeoProjection, models.proj.selected.resolutions);
       updatePanel(getUpdatedProps());
     }
 
@@ -267,7 +228,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
       y2 = px.y2;
       crs = models.proj.selected.crs;
 
-      lonlats = getCoordsFromPixelValues(x1, x2, y1, y2, map);
+      lonlats = imageUtilGetCoordsFromPixelValues(pixels, map);
 
       geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
       geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
@@ -319,27 +280,11 @@ export function imagePanel (models, ui, config, dialogConfig) {
         width: x2 - x1
       }).html(bottomLeftCoordinates);
   };
-  var getCoordsFromPixelValues = function(x1, x2, y1, y2, map) {
-    return [
-      map.getCoordinateFromPixel([Math.floor(x1), Math.floor(y2)]),
-      map.getCoordinateFromPixel([Math.floor(x2), Math.floor(y1)])
-    ];
-  };
-  var getLayerOpacities = function(products) {
-    var opacities = [];
-    lodashEach(products, function (product) {
-      opacities.push((lodashIsUndefined(product.opacity)) ? 1 : product.opacity);
-    });
-    return opacities;
-  };
-  var getConversionFactor = function(proj) {
-    if (proj === 'geographic') return 0.002197;
-    return 256;
-  };
+
   var calulateFileSize = function(imgRes, lonlat1, lonlat2) {
     var conversionFactor;
 
-    conversionFactor = getConversionFactor(models.proj.selected.id);
+    conversionFactor = imageUtilGetConversionFactor(models.proj.selected.id);
     resolution = imgRes;
     imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
     imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
@@ -356,7 +301,8 @@ export function imagePanel (models, ui, config, dialogConfig) {
       reverse: true,
       renderable: true
     });
-    dlURL = createDownloadURL(models.date.selected, lonlats, models.proj.selected.epsg, products, getLayerOpacities(products), url);
+
+    dlURL = createDownloadURL(models.date.selected, lonlats, models.proj.selected.epsg, products, imageUtilGetLayerOpacities(products), url);
     googleAnalytics.event('Image Download', 'Click', 'Download');
     util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
     window.open(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight, '_blank');
@@ -373,10 +319,15 @@ export function imagePanel (models, ui, config, dialogConfig) {
   };
 
   var createDownloadURL = function(time, lonlats, epsg, products, opacities, dlURL) {
-    var layers;
-    layers = getLayers(products, models.proj.selected.id);
+    var layers, jStart, jDate;
+    var dTime = time;
 
-    dlURL += 'TIME=' + util.toISOStringSeconds(time);
+    layers = imageUtilGetLayers(products, models.proj.selected.id);
+    // Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
+    jStart = util.parseDateUTC(dTime.getUTCFullYear() + '-01-01');
+    jDate = '00' + (1 + Math.ceil((dTime.getTime() - jStart) / 86400000));
+    dlURL += 'TIME=' + dTime.getUTCFullYear() + (jDate)
+      .substr((jDate.length) - 3);
 
     dlURL += '&extent=' + lonlats[0][0] + ',' + lonlats[0][1] + ',' + lonlats[1][0] + ',' + lonlats[1][1];
     dlURL += '&epsg=' + epsg;
@@ -385,17 +336,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     return dlURL;
   };
-  var getLayers = function(products, s) {
-    var layers = [];
-    lodashEach(products, function(layer) {
-      if (layer.projections[s].layer) {
-        layers.push(layer.projections[s].layer);
-      } else {
-        layers.push(layer.id);
-      }
-    });
-    return layers;
-  };
+
   init();
   return self;
 };
