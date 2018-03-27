@@ -8,6 +8,7 @@ import OlStyleCircle from 'ol/style/circle';
 import OlStyleStyle from 'ol/style/style';
 import OlGeomMultiLineString from 'ol/geom/multilinestring';
 import lodashEach from 'lodash/each';
+import { naturalEventsPointToGeoJSON, naturalEventsGetClusterPoints } from './cluster';
 
 var naturalEventsTrackLayer = function(featuresArray, styles) {
   return new OlLayerVector({
@@ -20,11 +21,15 @@ var naturalEventsTrackLayer = function(featuresArray, styles) {
 
   });
 };
-var naturalEventsTrackPoint = function(coords, date, eventID, isSelected, callback) {
+var naturalEventsTrackPoint = function(clusterPoint, callback) {
   var overlayEl = document.createElement('div');
   var circleEl = document.createElement('div');
   var textEl = document.createElement('span');
-  var content = document.createTextNode(date);
+  var properties = clusterPoint.properties;
+  var content = document.createTextNode(properties.date);
+  var date = properties.date;
+  var eventID = properties.id;
+  var isSelected = false;
 
   overlayEl.className = isSelected ? 'track-marker-case track-marker-case-selected' : 'track-marker-case';
   overlayEl.dataset.id = eventID;
@@ -39,7 +44,7 @@ var naturalEventsTrackPoint = function(coords, date, eventID, isSelected, callba
   overlayEl.appendChild(textEl);
 
   return new OlOverlay({
-    position: coords,
+    position: clusterPoint.geometry.coordinates,
     positioning: 'center-center',
     element: overlayEl,
     stopEvent: false
@@ -95,12 +100,63 @@ var naturalUpdateActiveTrack = function (newDate) {
   oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
 };
+var addClusterPoints = function(clusters, map, callback) {
+  var points = [];
+  var trackArray = [];
+  lodashEach(clusters, function(clusterPoint, index) {
+    let point;
+    if (index !== 0) {
+      trackArray.push([clusters[index - 1].geometry.coordinates, clusterPoint.geometry.coordinates]);
+    }
+    if (clusterPoint.properties.cluster) {
+      point = getClusterPointEl(clusterPoint, '12-13-18 - 12-16-18', callback);
+      points.push(point);
+    } else {
+      point = naturalEventsTrackPoint(clusterPoint, callback);
+      points.push(point);
+    }
+    map.addOverlay(point);
+  });
+  return trackArray;
+};
+
+function getClusterPointEl(cluster, date, callback) {
+  var overlayEl = document.createElement('div');
+  var circleEl = document.createElement('div');
+  var textEl = document.createElement('span');
+  var content = document.createTextNode(date);
+  var properties = cluster.properties;
+  var eventID = properties.cluster_id;
+  var numberEl = document.createTextNode(properties.point_count_abbreviated);
+  var isSelected = false;
+
+  overlayEl.className = isSelected ? 'track-marker-case track-marker-case-selected' : 'track-marker-case';
+  overlayEl.dataset.id = eventID;
+  overlayEl.id = 'cluster-track-marker-case track-marker-case';
+
+  textEl.appendChild(content);
+  textEl.className = 'cluster-track-marker-date track-marker-date';
+  circleEl.className = 'track-marker track-marker';
+  circleEl.appendChild(numberEl);
+  overlayEl.appendChild(circleEl);
+  overlayEl.appendChild(textEl);
+
+  return new OlOverlay({
+    position: cluster.geometry.coordinates,
+    positioning: 'center-center',
+    element: overlayEl,
+    stopEvent: false
+  });
+};
+
 var naturalEventsTrackCreate = function (eventObj, map, selectedDate, callback) {
   var olPointCoordinates = [];
   var coordinateArray = [];
   var eventTrackStyles;
   var olTrackLineFeatures = [];
   var overlayArray = [];
+  var geoJSONPoints = [];
+  var clusters;
 
   lodashEach(eventObj.geometries, function (geometry, index) {
     var date = geometry.date.split('T')[0];
@@ -112,13 +168,15 @@ var naturalEventsTrackCreate = function (eventObj, map, selectedDate, callback) 
     if (index !== 0) {
       coordinateArray.push([olPointCoordinates[index - 1], coordinates]);
     }
-    trackPoint = naturalEventsTrackPoint(coordinates, date, eventObj.id, isSelected, callback);
+    geoJSONPoints.push(naturalEventsPointToGeoJSON(eventObj.id, coordinates, date));
+    //trackPoint = naturalEventsTrackPoint(coordinates, date, eventObj.id, isSelected, callback);
     overlayArray.push(trackPoint);
-    map.addOverlay(trackPoint);
   });
-
+  console.log(geoJSONPoints, map.getView().getZoom())
+  clusters = naturalEventsGetClusterPoints(geoJSONPoints, map.getView().getZoom());
   eventTrackStyles = naturalEventsTrackStyle();
-
+  coordinateArray = addClusterPoints(clusters, map, callback);
+  console.log(coordinateArray);
   olTrackLineFeatures.push(naturalEventsTrackLine(coordinateArray, 'black-line'));
   olTrackLineFeatures.push(naturalEventsTrackLine(coordinateArray, 'white-line'));
 
