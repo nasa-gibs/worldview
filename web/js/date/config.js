@@ -37,7 +37,7 @@ export function timelineConfig(models, config, ui) {
         dateInterval = d3.time.year.utc;
         tickCount = tl.data.end()
           .getUTCFullYear() - tl.data.start()
-            .getUTCFullYear();
+          .getUTCFullYear();
         tickWidth = 15;
         tickCountMax = Math.ceil(tl.width / tickWidth);
 

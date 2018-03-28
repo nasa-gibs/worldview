@@ -104,7 +104,7 @@
     "nightwatch-cucumber": "^8.2.10",
     "npm-run-all": "^4.1.1",
     "npm-watch": "^0.3.0",
-    "phantomjs": "2.1.x",
+    "phantomjs-prebuilt": "2.1.x",
     "postcss-cli": "^4.1.1",
     "postcss-import": "^11.0.0",
     "postcss-url": "^7.2.1",
