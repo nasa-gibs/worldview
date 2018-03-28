@@ -139,8 +139,8 @@
     "perfect-scrollbar": "^0.8.1",
     "proj4": "2.3.3",
     "promise-queue": "2.2.3",
-    "react": "^15.6.2",
-    "react-dom": "^15.6.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "worldview-components": "^1.6.2",
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.8.0"
   },
