@@ -370,7 +370,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
       .offset();
     var left = offset.left + parseInt($('#' + alignTo.id)
       .css('width')) - parseInt($('#' + id)
-        .css('width'));
+      .css('width'));
     $('#' + id)
       .css('left', left + 'px');
   };
