@@ -1,6 +1,6 @@
 import util from '../util/util';
 
-export function dateModel(config, spec) {
+export function dateModel(config, spec, models) {
   spec = spec || {};
 
   var self = {};
@@ -35,8 +35,9 @@ export function dateModel(config, spec) {
   };
 
   self.clamp = function (date) {
-    if (date > util.today()) {
-      date = util.today();
+    var endDate = models.layers.lastDate();
+    if (date > endDate) {
+      date = endDate;
     }
     if (config.startDate) {
       let startDate = util.parseDateUTC(config.startDate);
@@ -48,7 +49,8 @@ export function dateModel(config, spec) {
   };
 
   self.isValid = function (date) {
-    if (date > util.today()) {
+    var endDate = models.layers.lastDate();
+    if (date > endDate) {
       return false;
     }
     if (config.startDate) {
@@ -68,7 +70,8 @@ export function dateModel(config, spec) {
   };
 
   self.maxDate = function () {
-    return util.today();
+    var endDate = models.layers.lastDate();
+    return endDate;
   };
 
   self.maxZoom = null;
