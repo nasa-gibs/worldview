@@ -8,7 +8,10 @@ import OlStyleCircle from 'ol/style/circle';
 import OlStyleStyle from 'ol/style/style';
 import OlGeomMultiLineString from 'ol/geom/multilinestring';
 import lodashEach from 'lodash/each';
-import { naturalEventsPointToGeoJSON, naturalEventsGetClusterPoints } from './cluster';
+import {
+  naturalEventsPointToGeoJSON,
+  naturalEventsGetClusterPoints,
+  naturalEventsCalculateRange} from './cluster';
 
 var naturalEventsTrackLayer = function(featuresArray, styles) {
   return new OlLayerVector({
@@ -138,6 +141,10 @@ function getClusterPointEl(cluster, date, callback) {
   textEl.className = 'cluster-track-marker-date track-marker-date';
   circleEl.className = 'track-marker track-marker';
   circleEl.appendChild(numberEl);
+  circleEl.onmouseover = () => {
+    naturalEventsCalculateRange(eventID);
+    console.log('yolo')
+  };
   overlayEl.appendChild(circleEl);
   overlayEl.appendChild(textEl);
 
