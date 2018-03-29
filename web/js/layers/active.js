@@ -428,27 +428,17 @@ export function layersActive(models, ui, config) {
   var toggleSubdaily = function () {
     if (subdailyCheck()) {
       setMaxZoomlevel(4);
-      document.getElementById('zoom-minutes').style.display = null;
-      document.getElementById('input-wrapper-hour').style.display = null;
-      document.getElementById('input-wrapper-hour').classList.add('selectable');
-      document.getElementById('input-time-divider').style.display = null;
-      document.getElementById('input-wrapper-minute').style.display = null;
-      document.getElementById('input-wrapper-minute').classList.add('selectable');
-      document.getElementById('input-time-zmark').style.display = null;
       document.getElementById('timeline-header').classList.add('subdaily');
+      document.getElementById('input-wrapper-hour').classList.add('selectable');
+      document.getElementById('input-wrapper-minute').classList.add('selectable');
     } else {
       setMaxZoomlevel(3);
       if (ui.timeline && ui.timeline.config.currentZoom > 3) {
         document.getElementById('zoom-days').click();
       }
-      document.getElementById('zoom-minutes').style.display = 'none';
-      document.getElementById('input-wrapper-hour').style.display = 'none';
-      document.getElementById('input-wrapper-hour').classList.remove('selectable');
-      document.getElementById('input-time-divider').style.display = 'none';
-      document.getElementById('input-wrapper-minute').style.display = 'none';
-      document.getElementById('input-wrapper-minute').classList.remove('selectable');
-      document.getElementById('input-time-zmark').style.display = 'none';
       document.getElementById('timeline-header').classList.remove('subdaily');
+      document.getElementById('input-wrapper-hour').classList.remove('selectable');
+      document.getElementById('input-wrapper-minute').classList.remove('selectable');
     }
     models.date.events.trigger('update-timewheel');
   };

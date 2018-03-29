@@ -139,6 +139,22 @@ g.plot rect.data-bar-invisible {
   width: 396px;
 }
 
+#timeline-header .timeline-zoom,
+#timeline-header .input-wrapper-hour,
+#timeline-header .input-time-divider,
+#timeline-header .input-wrapper-minute,
+#timeline-header .input-time-zmark {
+  display: none;
+}
+
+#timeline-header.subdaily .timeline-zoom,
+#timeline-header.subdaily .input-wrapper-hour,
+#timeline-header.subdaily .input-time-divider,
+#timeline-header.subdaily .input-wrapper-minute,
+#timeline-header.subdaily .input-time-zmark {
+  display: inline-block;
+}
+
 #timeline-header .input-wrapper {
   background: transparent;
   border: 1px solid transparent;
@@ -159,12 +175,12 @@ g.plot rect.data-bar-invisible {
   max-width: 31px;
 }
 
-#timeline-header #input-wrapper-hour,
-#timeline-header #input-wrapper-minute {
+#timeline-header .input-wrapper-hour,
+#timeline-header .input-wrapper-minute {
   width: 31px;
 }
 
-#timeline-header #input-wrapper-hour {
+#timeline-header .input-wrapper-hour {
   margin-left: 8px;
 }
 
@@ -208,7 +224,7 @@ g.plot rect.data-bar-invisible {
   display: inline-block;
 }
 
-#timeline-header #input-time-divider {
+#timeline-header .input-time-divider {
   font-family: 'Roboto Mono', monospace;
   color: #fff;
   font-size: 24px;
@@ -218,7 +234,7 @@ g.plot rect.data-bar-invisible {
   margin-left: -9px;
 }
 
-#timeline-header #input-time-zmark {
+#timeline-header .input-time-zmark {
   font-family: 'Roboto Mono', monospace;
   color: #fff;
   font-size: 24px;
@@ -394,7 +410,7 @@ g.plot rect.data-bar-invisible {
   stroke: #4682b4;
 }
 
-#timeline-header #timeline-zoom {
+#timeline-header .timeline-zoom {
   display: block;
   width: 80px;
   margin-left: auto;
@@ -447,7 +463,7 @@ g.plot rect.data-bar-invisible {
   color: #1a1a1a;
 }
 
-#timeline-zoom .zoom-btn {
+.timeline-zoom .zoom-btn {
   display: block;
   clear: both;
   cursor: pointer;
@@ -460,7 +476,7 @@ g.plot rect.data-bar-invisible {
   padding: 2px 0;
 }
 
-#timeline-zoom .zoom-btn:hover {
+.timeline-zoom .zoom-btn:hover {
   background-color: #fff;
   color: #1a1a1a;
 }
