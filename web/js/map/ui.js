@@ -27,6 +27,7 @@ import { mapDateLineBuilder } from './datelinebuilder';
 import { mapLayerBuilder } from './layerbuilder';
 import { MapRunningData } from './runningdata';
 import { mapPrecacheTile } from './precachetile';
+import { mapUtilZoomAction } from './util';
 import Cache from 'cachai';
 
 export function mapui(models, config) {
@@ -673,7 +674,7 @@ export function mapui(models, config) {
     $zoomOut.button({
       text: false
     });
-    $zoomOut.click(zoomAction(map, -1));
+    $zoomOut.click(mapUtilZoomAction(map, -1));
 
     var $zoomIn = $('<button></button>')
       .addClass('wv-map-zoom-in')
@@ -687,7 +688,7 @@ export function mapui(models, config) {
     $zoomIn.button({
       text: false
     });
-    $zoomIn.click(zoomAction(map, 1));
+    $zoomIn.click(mapUtilZoomAction(map, 1));
 
     /*
      * Sets zoom buttons as active or inactive based
@@ -917,28 +918,6 @@ export function mapui(models, config) {
       .mousemove(hoverThrottle = lodashThrottle(onMouseMove, 300));
   };
 
-  /*
-   * Setting a zoom action
-   *
-   * @function zoomAction
-   * @static
-   *
-   * @param {Object} map - OpenLayers Map Object
-   * @param {number} amount - Direction and
-   *  amount to zoom
-   *
-   * @returns {void}
-   */
-  var zoomAction = function (map, amount) {
-    return function () {
-      var view = map.getView();
-      var zoom = view.getZoom();
-      view.animate({
-        zoom: zoom + amount,
-        duration: animationDuration
-      });
-    };
-  };
 
   init();
   return self;
