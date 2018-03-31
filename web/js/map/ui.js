@@ -674,7 +674,9 @@ export function mapui(models, config) {
     $zoomOut.button({
       text: false
     });
-    $zoomOut.click(mapUtilZoomAction(map, -1));
+    $zoomOut.click(() => {
+      mapUtilZoomAction(map, -1);
+    });
 
     var $zoomIn = $('<button></button>')
       .addClass('wv-map-zoom-in')
@@ -688,7 +690,9 @@ export function mapui(models, config) {
     $zoomIn.button({
       text: false
     });
-    $zoomIn.click(mapUtilZoomAction(map, 1));
+    $zoomIn.click(() => {
+      mapUtilZoomAction(map, 1);
+    });
 
     /*
      * Sets zoom buttons as active or inactive based
