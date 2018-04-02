@@ -289,13 +289,13 @@ export function animationGif(models, config, ui) {
       dateStamp.fontSize = lastRequestedDimensions.h > (stampHeight * 1.5) ? lodashRound(stampHeight * 0.65) : 0;
       dateStamp.align = 'left';
       dateStamp.x = imgWidth * 0.01;
-      dateStamp.y = imgHeight - (dateStamp.fontSize + (imgHeight * 0.01));
+      dateStamp.y = (imgHeight - (dateStamp.fontSize + (imgHeight * 0.01)) - 4);
     } else {
       stampWidth = imgWidth * 0.4;
       stampHeightByImageWidth = stampWidth / stampWidthRatio;
       stampHeight = stampHeightByImageWidth < 20 ? 20 : stampHeightByImageWidth > 60 ? 60 : stampHeightByImageWidth;
       dateStamp.fontSize = lastRequestedDimensions.h > (stampHeight * 1.5) ? lodashRound(stampHeight * 0.65) : 0;
-      dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.01);
+      dateStamp.y = (imgHeight - (dateStamp.fontSize + (imgHeight * 0.01)) - 4);
       dateStamp.x = imgWidth * 0.01;
       dateStamp.align = 'left';
     }
