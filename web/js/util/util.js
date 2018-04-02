@@ -150,6 +150,7 @@ export default (function (self) {
   self.parseTimestampUTC = function (str) {
     return self.parseDateUTC(str);
   };
+
   /**
    * Gets a pixel RGBA value from Canvas
    *
@@ -165,6 +166,7 @@ export default (function (self) {
     return context.getImageData(x, y, 1, 1)
       .data;
   };
+
   /**
    * Parses a UTC ISO 8601 date.
    *
@@ -206,6 +208,7 @@ export default (function (self) {
     }
     return date;
   };
+
   /**
    * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
    *
@@ -357,6 +360,7 @@ export default (function (self) {
     }
     return newDate;
   };
+
   self.getNumberOfDays = function(start, end, interval) {
     var i = 1;
     var currentDate = start;
@@ -366,6 +370,7 @@ export default (function (self) {
     }
     return i;
   };
+
   self.daysInMonth = function (d) {
     var year;
     var month;
@@ -414,6 +419,7 @@ export default (function (self) {
 
     return day[d.getUTCDay()];
   };
+
   /**
    * Returns the month of the year for the given date object
    *
@@ -611,9 +617,13 @@ export default (function (self) {
    * @return {Date} The current time or an overriden value.
    */
   var now = function () {
-    return new Date();
+    var now = new Date();
+    var nowOffset = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+    return nowOffset;
   };
+
   self.now = now;
+
   self.resetNow = function () {
     self.now = now;
   };
@@ -883,8 +893,10 @@ export default (function (self) {
         coord[0].toFixed(4) + '&deg;';
     }
   };
-  // allows simple printf functionality with strings
-  // arguments array contains all args passed. String must be formatted so that first replacement starts with "{1}"
+
+  // Allows simple printf functionality with strings
+  // arguments array contains all args passed. String must be formatted
+  // so that first replacement starts with "{1}"
   // usage example: wv.util.format("{1}{2}",'World','view')
   self.format = function () {
     var formatted = arguments[0];

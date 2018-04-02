@@ -96,7 +96,6 @@ export function layersModel(models, config) {
 
   self.dateRange = function (spec) {
     spec = spec || {};
-    var projId = spec.projId || models.proj.selected.id;
     var layers = (spec.layer) ? [lodashFind(self.active, {
       id: spec.layer
     })]
@@ -124,13 +123,20 @@ export function layersModel(models, config) {
       // an ongoing product unless it is marked as inactive.
       if (def.inactive && def.endDate) {
         range = true;
-        var end = util.parseDateUTC(def.endDate)
+        let end = util.parseDateUTC(def.endDate)
           .getTime();
         max = Math.max(max, end);
       } else if (def.endDate) {
         range = true;
-        max = util.today()
+        let end = util.parseDateUTC(def.endDate)
           .getTime();
+        let today = util.today()
+          .getTime();
+        if (end > today) {
+          max = end;
+        } else {
+          max = today;
+        }
       }
       // If there is a start date but no end date, this is a
       // product that is currently being created each day, set
@@ -150,6 +156,18 @@ export function layersModel(models, config) {
         end: new Date(max)
       };
     }
+  };
+
+  self.lastDate = function () {
+    var endDate;
+    var layersDateRange = self.dateRange();
+    var now = util.today();
+    if (layersDateRange && layersDateRange.end > now) {
+      endDate = layersDateRange.end;
+    } else {
+      endDate = util.today();
+    }
+    return endDate;
   };
 
   self.add = function (id, spec) {

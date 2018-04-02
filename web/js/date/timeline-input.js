@@ -35,9 +35,10 @@ export function timelineInput(models, config, ui) {
 
   var forwardNextDay = function () { // FIXME: Limit animation correctly
     self.delta = 1;
+    var endDate = models.layers.lastDate();
     var nextDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() + 1));
-    if (nextDay <= util.today()) {
+    if (nextDay <= endDate) {
       animateForward('day', 1);
     } else {
       self.stop();
@@ -46,9 +47,10 @@ export function timelineInput(models, config, ui) {
 
   var forwardNextMonth = function () {
     self.delta = 1;
+    var endDate = models.layers.lastDate();
     var nextMonth = new Date(new Date(model.selected)
       .setUTCMonth(model.selected.getUTCMonth() + 1));
-    if (nextMonth <= util.today()) {
+    if (nextMonth <= endDate) {
       animateForward('month', 1);
     } else {
       self.stop();
@@ -57,9 +59,10 @@ export function timelineInput(models, config, ui) {
 
   var forwardNextYear = function () {
     self.delta = 1;
+    var endDate = models.layers.lastDate();
     var nextYear = new Date(new Date(model.selected)
       .setUTCFullYear(model.selected.getUTCFullYear() + 1));
-    if (nextYear <= util.today()) {
+    if (nextYear <= endDate) {
       animateForward('year', 1);
     } else {
       self.stop();
@@ -211,6 +214,7 @@ export function timelineInput(models, config, ui) {
 
   // TODO: Cleanup
   var validateInput = function (event) {
+    var endDate = models.layers.lastDate();
     var kc = event.keyCode || event.which;
     var entered = (kc === 13) || (kc === 9); // carriage return or horizontal tab
     if (event.type === 'focusout' || entered) {
@@ -281,7 +285,7 @@ export function timelineInput(models, config, ui) {
           break;
       }
       if ((selectedDateObj > tl.data.start()) &&
-        (selectedDateObj <= util.today())) {
+        (selectedDateObj <= endDate)) {
         var parent = selected.parent();
         var sib = parent.next('div.input-wrapper.selectable')
           .find('input.button-input-group');
@@ -355,6 +359,7 @@ export function timelineInput(models, config, ui) {
     var ms = date || new Date(model.selected);
     var nd = new Date(ms.setUTCDate(ms.getUTCDate() + 1));
     var pd = new Date(ms.setUTCDate(ms.getUTCDate() - 1));
+    var endDate = models.layers.lastDate();
 
     // Update fields
     $('#year-input-group')
@@ -384,9 +389,9 @@ export function timelineInput(models, config, ui) {
     }
 
     // Disable arrows if nothing before/after selection
-    if ((model.selectedZoom === 4) && ms >= util.today()) {
+    if ((model.selectedZoom === 4) && ms >= endDate) {
       $incrementBtn.addClass('button-disabled');
-    } else if ((model.selectedZoom !== 4) && nd > util.today()) {
+    } else if ((model.selectedZoom !== 4) && nd > endDate) {
       $incrementBtn.addClass('button-disabled');
     } else {
       $incrementBtn.removeClass('button-disabled');

@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import util from '../util/util';
 import d3 from 'd3';
 
 export function timelineData(models, config, ui) {
@@ -12,9 +11,10 @@ export function timelineData(models, config, ui) {
   };
 
   self.end = function () {
+    var endDate = models.layers.lastDate();
     return new Date(
-      new Date(util.today())
-        .setUTCDate(util.today()
+      new Date(endDate)
+        .setUTCDate(endDate
           .getUTCDate()));
   };
 

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'mobiscroll';
+import lodashEach from 'lodash/each';
 import util from '../util/util';
 
 var dateWheels = function(models, config) {
@@ -116,7 +117,7 @@ var dateWheels = function(models, config) {
 
   var updateRange = function () {
     var startDate = util.parseDateUTC(config.startDate);
-    var endDate = util.today();
+    var endDate = models.layers.lastDate();
     $('#linkmode')
       .mobiscroll('option', 'disabled', false);
     $('#linkmode')
