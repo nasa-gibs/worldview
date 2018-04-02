@@ -80,7 +80,6 @@ import { linkUi } from './link/ui';
 import { parse as projectionParser } from './projection/projection';
 import { projectionModel } from './projection/model';
 import { projectionUi } from './projection/ui';
-import { projectionChange } from './projection/change';
 
 // Other
 import { debugConfig, debugLayers } from './debug';
@@ -236,10 +235,6 @@ window.onload = () => {
     // HACK: Map needs permalink state loaded before starting. But
     // data download now needs it too.
     models.link.load(state); // needs to be loaded twice
-
-    if (config.features.arcticProjectionChange) {
-      models.proj.change = projectionChange(models, config);
-    }
 
     elapsed('ui');
     // Create widgets
