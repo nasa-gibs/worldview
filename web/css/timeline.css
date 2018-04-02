@@ -143,8 +143,13 @@ g.plot rect.data-bar-invisible {
 #timeline-header .input-wrapper-hour,
 #timeline-header .input-time-divider,
 #timeline-header .input-wrapper-minute,
-#timeline-header .input-time-zmark {
+#timeline-header .input-time-zmark,
+#timeline-header .zoom-minutes {
   display: none;
+}
+
+#timeline-header.subdaily .zoom-minutes {
+  display: block;
 }
 
 #timeline-header.subdaily .timeline-zoom,
