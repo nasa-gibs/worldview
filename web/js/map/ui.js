@@ -779,8 +779,7 @@ export function mapui(models, config) {
      */
     coordinateFormat = function (source, format, outsideExtent) {
       var target, crs;
-      crs = (models.proj.change) ? models.proj.change.crs
-        : models.proj.selected.crs;
+      crs = models.proj.selected.crs;
       if (outsideExtent) {
         return crs;
       }

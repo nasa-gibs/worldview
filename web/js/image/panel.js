@@ -284,12 +284,6 @@ export function imagePanel (models, ui, config, dialogConfig) {
       util.error(cause);
     }
   };
-  var getEPSG = function() {
-    // NOTE: This needs to be changed back to the projection model
-    // when the backfill removes the old projection.
-
-    return (models.proj.change) ? models.proj.change.epsg : models.proj.selected.epsg;
-  };
   /*
    * Sets labels of bounding box of Jcrop
    * selector
@@ -359,7 +353,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
       reverse: true,
       renderable: true
     });
-    dlURL = createDownloadURL(models.date.selected, lonlats, getEPSG(), products, getLayerOpacities(products), url);
+    dlURL = createDownloadURL(models.date.selected, lonlats, models.proj.selected.epsg, products, getLayerOpacities(products), url);
     googleAnalytics.event('Image Download', 'Click', 'Download');
     util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
     window.open(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight, '_blank');
