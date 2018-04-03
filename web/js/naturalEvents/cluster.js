@@ -61,7 +61,7 @@ export function sortCluster(clusterArray) {
 
 export function naturalEventsGetClusterPoints(superClusterObj, pointArray, zoomLevel) {
   superClusterObj.load(pointArray);
-  return superClusterObj.getClusters([-180, -85, 180, 85], lodashRound(zoomLevel));
+  return superClusterObj.getClusters([-180, -90, 180, 90], lodashRound(zoomLevel));
 };
 
 export function naturalEventsClusterAppend(tooltipEl, dateString) {

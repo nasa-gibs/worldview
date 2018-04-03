@@ -112,6 +112,7 @@ var naturalEventsTrackLayer = function(featuresArray, styles) {
     source: new OlSourceVector({
       features: featuresArray
     }),
+    extent: [-180, -90, 180, 90],
     style: function(feature) {
       return styles[feature.get('type')];
     }
