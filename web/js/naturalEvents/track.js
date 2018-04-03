@@ -77,10 +77,21 @@ export default function naturalEventsTrack (models, ui, config) {
         // If same Track but different selection
         // Just update classNames
         if (trackDetails.selectedDate !== selectedDate) {
-          newTrackDetails = trackDetails;
-          updateActiveTrack(selectedDate);
-          newTrackDetails.selectedDate = selectedDate;
+          let isClusteredSelection = !(document.getElementById('track-marker-' + selectedDate));
+          // If New Date is in cluster
+          // build new track
+          if (isClusteredSelection) {
+            newTrackDetails = self.removeTrack(map, trackDetails);
+            newTrackDetails = createTrack(event, map, selectedDate, callback);
+            map.addLayer(newTrackDetails.track);
+          } else {
+            newTrackDetails = trackDetails;
+            updateSelection(selectedDate);
+            newTrackDetails.selectedDate = selectedDate;
+          }
         } else {
+          // If the date and event are the same
+          // Return the same Object and do nothing
           return self.trackDetails;
         }
       } else {
@@ -90,6 +101,8 @@ export default function naturalEventsTrack (models, ui, config) {
         map.addLayer(newTrackDetails.track);
       }
     } else {
+      // If no track element currenlty exists,
+      // but there is a multiday event, build a new track
       newTrackDetails = createTrack(event, map, selectedDate, callback);
       map.addLayer(newTrackDetails.track);
       self.active = true;
@@ -137,6 +150,7 @@ var naturalEventsTrackPoint = function(clusterPoint, isSelected, callback) {
   textEl.appendChild(content);
   textEl.className = 'track-marker-date';
   circleEl.className = 'track-marker track-marker-' + date;
+  circleEl.id = 'track-marker-' + date;
   overlayEl.appendChild(circleEl);
   overlayEl.appendChild(textEl);
 
@@ -234,7 +248,7 @@ var naturalEventsRemoveOldPoints = function (map, pointOverlayArray) {
     map.removeOverlay(pointOverlay);
   });
 };
-var updateActiveTrack = function (newDate) {
+var updateSelection = function (newDate) {
   var oldSelectedPoint = document.getElementsByClassName('track-marker-case-selected')[0];
   var newSelectedPoint = document.getElementById('track-marker-case-' + newDate);
 
