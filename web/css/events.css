@@ -141,7 +141,7 @@
   cursor: pointer;
 }
 .track-marker-case {
-  position:relative;
+  position: relative;
   z-index: 99;
 }
 .track-marker-case-selected {
@@ -171,10 +171,10 @@
   top: 20px;
   left: -34px;
   padding: 4px;
-  background-color: rgba(40,40,40,.9);
+  background-color: rgba(40, 40, 40, 0.9);
   border-radius: 3px;
   text-align: center;
-  font-family: Roboto Mono,monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 12px;
   color: #ccc;
   z-index: 900;
