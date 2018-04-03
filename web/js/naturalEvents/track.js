@@ -286,12 +286,11 @@ function getClusterPointEl(cluster, map, pointClusterObj, callback) {
   var coordinates = cluster.geometry.coordinates;
   var sizeClass = (number < 3) ? 'small' : (number < 8) ? 'medium' : 'large';
 
-  overlayEl.id = 'cluster-track-marker-case';
-
+  overlayEl.className = 'cluster-track-marker-case track-marker-case';
   textEl.className = 'cluster-track-marker-date track-marker-date';
   textEl.appendChild(dateRangeTextEl);
   circleEl.className = 'cluster-marker cluster-marker-' + sizeClass;
-  innerCircleEl.className = 'cluster-marker-innner';
+  innerCircleEl.className = 'cluster-marker-inner';
   innerCircleEl.appendChild(numberEl);
   circleEl.appendChild(innerCircleEl);
   circleEl.onclick = () => {
