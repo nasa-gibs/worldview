@@ -155,20 +155,21 @@
   z-index: 100;
 }
 .track-marker {
-  width: 6px;
-  height: 6px;
+  width: 12px;
+  height: 12px;
   border: 1px solid #000;
-  border-radius: 3px;
+  border-radius: 6px;
   background-color: #fff;
   opacity: 1;
   z-index: 99;
 }
+
 .track-marker-date {
   display: none;
   position: absolute;
   width: 74px;
-  top: 15px;
-  left: -37px;
+  top: 20px;
+  left: -34px;
   padding: 4px;
   background-color: rgba(40,40,40,.9);
   border-radius: 3px;
@@ -177,6 +178,11 @@
   font-size: 12px;
   color: #ccc;
   z-index: 900;
+}
+.cluster-track-marker-date {
+  top: 28px;
+  left: -29px;
+  width: 96px;
 }
 .track-marker-date::before {
   position: absolute;
@@ -194,17 +200,55 @@
   border: 1px solid #22a;
   cursor: pointer;
 }
+
 .track-marker-case .track-marker:hover ~ .track-marker-date {
   display: block;
 }
+.cluster-marker:hover ~ .cluster-track-marker-date {
+  display: block;
+}
+.cluster-marker-small {
+  background-color: rgb(181, 226, 140, 0.6);
+}
+.cluster-marker-small div {
+  background-color: rgba(110, 204, 57, 0.6);
+}
 
+.cluster-marker-medium {
+  background-color: rgba(241, 211, 87, 0.6);
+}
+.cluster-marker-medium div {
+  background-color: rgba(240, 194, 12, 0.6);
+}
+
+.cluster-marker-large {
+  background-color: rgba(253, 156, 115, 0.6);
+}
+.cluster-marker-large div {
+  background-color: rgba(241, 128, 23, 0.6);
+}
+.cluster-marker {
+  border-radius: 12px;
+  width: 24px;
+  height: 24px;
+}
+.cluster-marker:hover {
+  cursor: pointer;
+}
+.cluster-marker div {
+  width: 16px;
+  height: 16px;
+  padding-left: 4px;
+  padding-top: 4px;
+  text-align: center;
+  border-radius: 12px
+}
 .event-icon {
   display: block;
   height: 30px;
   width: 30px;
   background: url('../images/natural-events/icon-default.svg');
 }
-
 .wv-map .event-icon {
   height: 26px;
   width: 26px;
