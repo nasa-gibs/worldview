@@ -73,11 +73,9 @@ export default function naturalEventsUI (models, ui, config, request) {
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
         self.markers = naturalEventMarkers.draw();
-        if (naturalEventsTrack.trackDetails.id) naturalEventsTrack.toggleVisibilty(true);
         ui.sidebar.sizeEventsTab();
       } else {
         model.active = false;
-        if (naturalEventsTrack.trackDetails.id) naturalEventsTrack.toggleVisibilty(false);
         if (naturalEventMarkers) naturalEventMarkers.remove(self.markers);
       }
       model.events.trigger('change');

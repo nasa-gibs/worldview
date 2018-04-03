@@ -45,24 +45,17 @@ export default function naturalEventsTrack (models, ui, config) {
         self.trackDetails = (self.trackDetails.id) ? self.removeTrack(map, self.trackDetails) : {};
       }
     });
-  };
-  self.toggleVisibilty = function(shouldBeVisible) {
-    var selectedPoints = document.getElementsByClassName('track-marker-case');
-    var newTrackDetails = self.trackDetails;
-    if (shouldBeVisible) {
-      lodashEach(selectedPoints, function (el) {
-        el.classList.remove('track-marker-case-hidden');
-      });
-      newTrackDetails.track.setOpacity(1);
-      newTrackDetails.hidden = false;
-    } else {
-      lodashEach(selectedPoints, function (el) {
-        el.classList.add('track-marker-case-hidden');
-      });
-      newTrackDetails.hidden = true;
-      newTrackDetails.track.setOpacity(0);
-    }
-    self.trackDetails = newTrackDetails;
+    ui.sidebar.events.on('selectTab', function (tab) {
+      if (tab === 'events') {
+        let selectedEvent = ui.naturalEvents.selected;
+        if (selectedEvent.date) {
+          let event = getEventById(model.data.events, selectedEvent.id);
+          self.update(event, map, selectedEvent.date, ui.naturalEvents.selectEvent);
+        }
+      } else {
+        if (self.trackDetails.id) self.update(null, map);
+      }
+    });
   };
   self.update = function(event, map, selectedDate, callback) {
     var newTrackDetails;
