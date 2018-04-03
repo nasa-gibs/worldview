@@ -92,7 +92,6 @@ export default function naturalEventsUI (models, ui, config, request) {
 
     // Store selected id and date in model
     self.selected = { id: id };
-    if (date) self.selected.date = date;
 
     var event = getEventById(model.data.events, id);
 
@@ -109,6 +108,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     }
 
     date = date || self.getDefaultEventDate(event);
+    self.selected.date = date;
 
     highlightEventInList(id, date);
     // Remove previously stored markers
