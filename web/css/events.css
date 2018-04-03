@@ -210,21 +210,21 @@
 .cluster-marker-small {
   background-color: rgb(181, 226, 140, 0.6);
 }
-.cluster-marker-small div {
+.cluster-marker-small .cluster-marker-inner {
   background-color: rgba(110, 204, 57, 0.6);
 }
 
 .cluster-marker-medium {
   background-color: rgba(241, 211, 87, 0.6);
 }
-.cluster-marker-medium div {
+.cluster-marker-medium .cluster-marker-inner {
   background-color: rgba(240, 194, 12, 0.6);
 }
 
 .cluster-marker-large {
   background-color: rgba(253, 156, 115, 0.6);
 }
-.cluster-marker-large div {
+.cluster-marker-large .cluster-marker-inner {
   background-color: rgba(241, 128, 23, 0.6);
 }
 .cluster-marker {
@@ -232,11 +232,12 @@
   font-family: 'Open Sans', sans-serif;
   width: 24px;
   height: 24px;
+  z-index: 99;
 }
 .cluster-marker:hover {
   cursor: pointer;
 }
-.cluster-marker div {
+.cluster-marker .cluster-marker-inner {
   position: absolute;
   height: 16px;
   width: 16px;
