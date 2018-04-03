@@ -236,12 +236,15 @@
   cursor: pointer;
 }
 .cluster-marker div {
-  width: 16px;
+  position: absolute;
   height: 16px;
-  padding-left: 4px;
-  padding-top: 4px;
+  width: 16px;
   text-align: center;
-  border-radius: 12px
+  right: 4px;
+  bottom: 4px;
+  border-radius: 8px;
+  margin-top: 4px;
+  font-size: 11px;
 }
 .event-icon {
   display: block;
