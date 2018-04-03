@@ -4,12 +4,11 @@ import lodashEach from 'lodash/each';
 import olExtent from 'ol/extent';
 
 import markers from './markers';
-import {
-  naturalEventsTrackUpdateEvent,
-  naturalEventsTrackToggleVisibilty
-} from './track';
+import track from './track';
+
 import wvui from '../ui/ui';
 import util from '../util/util';
+import { getEventById } from './util';
 
 export default function naturalEventsUI (models, ui, config, request) {
   var self = {};
@@ -20,9 +19,11 @@ export default function naturalEventsUI (models, ui, config, request) {
   self.markers = [];
   self.selected = {};
   self.trackObj = {};
-  var naturalEventMarkers = markers(models, ui, config);
+  const naturalEventMarkers = markers(models, ui, config);
+  const naturalEventsTrack = track(models, ui, config);
 
   var init = function () {
+    var map = ui.map.selected;
     // Display loading information for user feedback on slow network
     $('#wv-events').text('Loading...');
 
@@ -40,7 +41,7 @@ export default function naturalEventsUI (models, ui, config, request) {
         self.markers = naturalEventMarkers.draw();
       }
 
-      ui.map.selected.on('moveend', function (e) {
+      map.on('moveend', function (e) {
         var isZoomed = Math.floor(view.getZoom()) >= 3;
         if (isZoomed) {
           self.filterEventList();
@@ -73,11 +74,11 @@ export default function naturalEventsUI (models, ui, config, request) {
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
         self.markers = naturalEventMarkers.draw();
-        self.trackObj = (self.trackObj.id) ? naturalEventsTrackToggleVisibilty(true, self.trackObj) : {};
+        if (naturalEventsTrack.trackDetails.id) naturalEventsTrack.toggleVisibilty(true);
         ui.sidebar.sizeEventsTab();
       } else {
         model.active = false;
-        self.trackObj = (self.trackObj.id) ? naturalEventsTrackToggleVisibilty(false, self.trackObj) : {};
+        if (naturalEventsTrack.trackDetails.id) naturalEventsTrack.toggleVisibilty(false);
         if (naturalEventMarkers) naturalEventMarkers.remove(self.markers);
       }
       model.events.trigger('change');
@@ -87,14 +88,14 @@ export default function naturalEventsUI (models, ui, config, request) {
   self.selectEvent = function (id, date) {
     var isIdChange = (!self.selected || self.selected.id !== id);
     var prevId = self.selected.id ? self.selected.id : false;
-    var prevEvent = prevId ? getEventById(prevId) : false;
+    var prevEvent = prevId ? getEventById(model.data.events, prevId) : false;
     var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
 
     // Store selected id and date in model
     self.selected = { id: id };
     if (date) self.selected.date = date;
 
-    var event = getEventById(id);
+    var event = getEventById(model.data.events, id);
 
     if (!event) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
@@ -115,7 +116,6 @@ export default function naturalEventsUI (models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-    self.trackObj = naturalEventsTrackUpdateEvent(event, ui.map.selected, self.trackObj, date, self.selectEvent);
     zoomToEvent(event, date).then(function () {
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
@@ -151,6 +151,7 @@ export default function naturalEventsUI (models, ui, config, request) {
       if (util.browser.localStorage && !localStorage.getItem('dismissedEventVisibilityAlert')) {
         eventVisibilityAlert.dialog('open');
       }
+      naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
     });
   };
 
@@ -159,7 +160,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     self.markers = naturalEventMarkers.draw();
     highlightEventInList();
-    self.trackObj = (self.trackObj.id) ? naturalEventsTrackUpdateEvent(null, ui.map.selected, self.trackObj) : {};
+    naturalEventsTrack.update(null, ui.map.selected);
     model.events.trigger('change');
   };
 
@@ -203,12 +204,6 @@ export default function naturalEventsUI (models, ui, config, request) {
     });
     $footer.show();
     ui.sidebar.sizeEventsTab();
-  };
-
-  var getEventById = function (id) {
-    return lodashFind(model.data.events, function (e) {
-      return e.id === id;
-    });
   };
 
   var createEventList = function () {
