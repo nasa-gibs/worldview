@@ -28,13 +28,16 @@ export default function naturalEventsTrack (models, ui, config) {
   var self = {};
   var model = models.naturalEvents;
   self.trackDetails = {};
+  self.active = false;
   var init = function() {
     const map = ui.map.selected;
     map.on('moveend', function (e) {
-      var selectedEventId = ui.naturalEvents.selected.id;
-      if (selectedEventId) {
-        var event = getEventById(model.data.events, selectedEventId);
-        debounceTrackUpdate(event, ui.naturalEvents.selected.date, map, ui.naturalEvents.selectEvent);
+      if (self.active) {
+        let selectedEvent = ui.naturalEvents.selected;
+        if (selectedEvent.date) {
+          let event = getEventById(model.data.events, selectedEvent.id);
+          debounceTrackUpdate(event, selectedEvent.date, map, ui.naturalEvents.selectEvent);
+        }
       }
     });
     map.getView().on('propertychange', function(e) {
@@ -64,19 +67,21 @@ export default function naturalEventsTrack (models, ui, config) {
   self.update = function(event, map, selectedDate, callback) {
     var newTrackDetails;
     var trackDetails = self.trackDetails;
-    console.log(trackDetails);
     if (!event || event.geometries.length < 2) {
       // If track exists remove it.
       // Else return empty Object
       newTrackDetails = (trackDetails.id) ? self.removeTrack(map, trackDetails) : {};
+      self.active = false;
     } else if (trackDetails.id) {
       if (trackDetails.id === event.id) {
-        newTrackDetails = trackDetails;
         // If same Track but different selection
         // Just update classNames
         if (trackDetails.selectedDate !== selectedDate) {
+          newTrackDetails = trackDetails;
           updateActiveTrack(selectedDate);
           newTrackDetails.selectedDate = selectedDate;
+        } else {
+          return self.trackDetails;
         }
       } else {
         // Remove old DOM Elements
@@ -87,6 +92,7 @@ export default function naturalEventsTrack (models, ui, config) {
     } else {
       newTrackDetails = createTrack(event, map, selectedDate, callback);
       map.addLayer(newTrackDetails.track);
+      self.active = true;
     }
     self.trackDetails = newTrackDetails;
   };
@@ -123,7 +129,7 @@ var naturalEventsTrackPoint = function(clusterPoint, isSelected, callback) {
 
   overlayEl.className = isSelected ? 'track-marker-case track-marker-case-selected' : 'track-marker-case';
   overlayEl.dataset.id = eventID;
-  overlayEl.id = 'track-marker-case' + date;
+  overlayEl.id = 'track-marker-case-' + date;
   overlayEl.onclick = function() {
     callback(eventID, date);
   };
@@ -229,7 +235,7 @@ var naturalEventsRemoveOldPoints = function (map, pointOverlayArray) {
 };
 var updateActiveTrack = function (newDate) {
   var oldSelectedPoint = document.getElementsByClassName('track-marker-case-selected')[0];
-  var newSelectedPoint = document.getElementById('track-marker-case' + newDate);
+  var newSelectedPoint = document.getElementById('track-marker-case-' + newDate);
 
   oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';

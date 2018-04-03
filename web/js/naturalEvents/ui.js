@@ -18,7 +18,6 @@ export default function naturalEventsUI (models, ui, config, request) {
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
-  self.trackObj = {};
   const naturalEventMarkers = markers(models, ui, config);
   const naturalEventsTrack = track(models, ui, config);
 
