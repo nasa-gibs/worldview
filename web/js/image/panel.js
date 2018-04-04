@@ -251,9 +251,11 @@ export function imagePanel (models, ui, config, dialogConfig) {
       .show();
   };
   self.update = function(c) {
-    var pixels, map, px, x1, y1, x2, y2, crs;
-
     try {
+      let pixels, map, px, x1, y1, x2, y2, crs;
+      let geolonlat1, geolonlat2, minLon, maxLon;
+      let minLat, maxLat, topRightCoordinates, bottomLeftCoordinates;
+
       coords = c;
       map = ui.map.selected;
       pixels = coords;
@@ -266,18 +268,18 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
       lonlats = getCoordsFromPixelValues(x1, x2, y1, y2, map);
 
-      var geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-      var geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+      geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+      geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
-      var minLon = geolonlat1[0];
-      var maxLon = geolonlat2[0];
-      var minLat = geolonlat2[1];
-      var maxLat = geolonlat1[1];
+      minLon = geolonlat1[0];
+      maxLon = geolonlat2[0];
+      minLat = geolonlat2[1];
+      maxLat = geolonlat1[1];
 
-      var ll = util.formatCoordinate([minLon, maxLat]);
-      var ur = util.formatCoordinate([maxLon, minLat]);
+      bottomLeftCoordinates = util.formatCoordinate([minLon, maxLat]);
+      topRightCoordinates = util.formatCoordinate([maxLon, minLat]);
 
-      setBoundingBoxLabels(x1, x2, y1, y2, ll, ur);
+      setBoundingBoxLabels(x1, x2, y1, y2, bottomLeftCoordinates, topRightCoordinates);
       imgFilesize = calulateFileSize(imgRes, lonlats[0], lonlats[1]);
       updatePanel(getUpdatedProps());
     } catch (cause) {
@@ -297,24 +299,24 @@ export function imagePanel (models, ui, config, dialogConfig) {
    *
    * @returns {void}
    */
-  var setBoundingBoxLabels = function(x1, x2, y1, y2, ur, ll) {
+  var setBoundingBoxLabels = function(x1, x2, y1, y2, bottomLeftCoordinates, topRightCoordinates) {
     if (x2 - x1 < 150) {
-      ll = '';
-      ur = '';
+      bottomLeftCoordinates = '';
+      topRightCoordinates = '';
     }
     $('#wv-image-top')
       .css({
         left: x1 - 10,
         top: y1 - 20,
         width: x2 - x1
-      }).html(ur);
+      }).html(topRightCoordinates);
 
     $('#wv-image-bottom')
       .css({
         left: x1,
         top: y2,
         width: x2 - x1
-      }).html(ll);
+      }).html(bottomLeftCoordinates);
   };
   var getCoordsFromPixelValues = function(x1, x2, y1, y2, map) {
     return [
