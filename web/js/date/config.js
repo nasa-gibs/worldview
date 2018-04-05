@@ -345,7 +345,7 @@ export function timelineConfig(models, config, ui) {
           prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            prevDate.getUTCDate(),
+            d.getUTCDate(),
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes());
         };
@@ -519,7 +519,7 @@ export function timelineConfig(models, config, ui) {
           prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            d.getUTCDate(),
+            d.getUTCDate() - 1,
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes());
         };
