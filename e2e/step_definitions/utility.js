@@ -116,6 +116,10 @@ defineSupportCode(({ Given, Then, When }) => {
     return client.useCss().expect.element(selectors[key] || key).to.be.visible;
   });
 
+  // Check that Checkbox is checked
+  Then('I see {string} is checked', (key) => {
+    return client.assert.ok(selectors[key] || key);
+  });
   // Wait for an element to be visible
   Then('I see the {string} within {int} seconds', (key, seconds) => {
     return client.useCss().expect.element(selectors[key] || key).to.be.visible.before(seconds * 1000);
