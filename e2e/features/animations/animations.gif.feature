@@ -8,7 +8,7 @@ Scenario: Downloading GIF when custom colormap is activated
   And I click the "GIF download icon"
   Then I see "Would you like to temporarily revert"
   When I click "OK"
-  Then I see the "GIF results" within 6 seconds
+  Then I see the "GIF results" within 10 seconds
   When I click the "GIF results close button"
   Then the page doesn't have the "GIF results"
   And I see the "animation widget"
@@ -21,7 +21,7 @@ Scenario: Downloading GIF when polar projection is rotated
   Then I see "Would you like to reset rotation"
   When I click "OK"
   And I click the "GIF download icon"
-  Then I see the "GIF results" within 6 seconds
+  Then I see the "GIF results" within 10 seconds
   When I click the "GIF results close button"
   Then the page doesn't have the "GIF results"
 
