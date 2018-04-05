@@ -2,6 +2,7 @@ module.exports = {
   url: 'http://localhost:3000/',
   production: 'https://worldview.earthdata.nasa.gov/',
   querystrings: {
+    'animation widget active': '?p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-04-04&z=3&v=-177.94712426144758,-46.546875,-5.14662573855243,53.015625&ab=on&as=2018-03-28&ae=2018-04-04&av=3&al=false',
     'animation with custom colormap active': '?p=geographic&l=AIRS_CO_Total_Column_Day(palette=red_1)&t=2016-04-08&z=3&v=-223.875,-91.828125,162.84375,98.296875&ab=on&as=2016-03-25&ae=2016-04-08&av=3&al=false',
     'animation with polar projection rotated': '?p=arctic&l=MODIS_Terra_CorrectedReflectance_TrueColor,Coastlines&t=2016-12-09&z=3&v=-2764195.2298414493,-88762.12734933128,2589496.903095221,3893331.478195751&r=-18.0000&ab=on&as=2016-12-02&ae=2016-12-09&av=3&al=true',
     'continuous data layers': '?p=geographic&l=MODIS_Terra_Brightness_Temp_Band31_Day&t=2015-05-25&z=2&v=-42.148380855752734,42.13121723408824,22.122734950093943,85.16225953076464',
@@ -22,6 +23,9 @@ module.exports = {
     'yearly resolution tooltip': '.wv-tooltip #yearly',
     'timeline set to years': '#zoom-years.depth-1',
     'create GIF button': '.fa-file-video-o.wv-animation-widget-icon',
+    'GIF preview start date value': '.gif-download-grid .grid-child:nth-child(2) span',
+    'GIF preview end date value': '.gif-download-grid .grid-child:nth-child(4) span',
+    'GIF preview frame rate value': '.gif-download-grid .grid-child:nth-child(6) span',
     'GIF download icon': '.jcrop-holder .fa-download',
     'GIF results': '.gif-results-dialog-case img',
     'GIF results close button': '.wv-gif-results button.ui-dialog-titlebar-close',

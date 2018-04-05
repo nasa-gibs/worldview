@@ -87,6 +87,10 @@ defineSupportCode(({ Given, Then, When }) => {
   Then('I don\'t see {string}', (text) => {
     return client.useCss().expect.element('body').text.not.contains(text);
   });
+  // check for string within element
+  Then('I see {string} in the {string}', (text, key) => {
+    return client.useCss().assert.containsText(selectors[key] || key, text);
+  });
 
   // Check that an element is visible by predefined selector
   Then('I see the {string}', (key) => {
