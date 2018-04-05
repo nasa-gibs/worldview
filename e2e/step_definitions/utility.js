@@ -83,7 +83,7 @@ defineSupportCode(({ Given, Then, When }) => {
     return client.useCss().assert.containsText('body', text);
   });
 
-  // Wait for an element to be visible
+  // Wait for an string to be visible
   Then('I see {string} within {int} seconds', (text, seconds) => {
     return client.useCss().expect.element('body').text.to.contain(text).before(seconds * 1000);
   });
