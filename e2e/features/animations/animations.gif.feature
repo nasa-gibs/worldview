@@ -34,6 +34,7 @@ Scenario: GIF selection preview is Accurate and selections that are too high dis
   Then I see '2018-04-04' in the 'GIF preview end date value'
   Then I see '3 Frames Per Second' in the 'GIF preview frame rate value'
   Then I see a value of '40' in the 'GIF preview resolution selector'
+  Then I see 'GIF preview checkbox' is checked
   Then I click the 'GIF preview resolution option 250m'
   And I wait 1 seconds
   Then I see a value of '1' in the 'GIF preview resolution selector'
