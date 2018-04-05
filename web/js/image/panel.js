@@ -144,7 +144,8 @@ export function imagePanel (models, ui, config, dialogConfig) {
       imgHeight: imgHeight,
       imgWidth: imgWidth,
       resolutions: resolutions,
-      fileTypes: fileTypes
+      fileTypes: fileTypes,
+      fileType: imgFormat
     };
   };
   var renderPanel = function(options, mountEl) {
