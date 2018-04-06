@@ -10,6 +10,7 @@ import lodashIsUndefined from 'lodash/isUndefined';
 import lodashThrottle from 'lodash/throttle';
 import lodashCapitalize from 'lodash/capitalize';
 import canvg from 'canvg-browser';
+import FileSaver from 'file-saver';
 
 import { GA as googleAnalytics, GifResSelection } from 'worldview-components';
 import util from '../util/util';
@@ -665,7 +666,6 @@ export function animationGif(models, config, ui) {
       var $download = $('<a><span class=ui-button-text>Download</span></a>')
         .attr('type', 'button')
         .attr('role', 'button')
-        .attr('download', dlURL)
         .attr('href', blobURL)
         .attr('class', 'ui-button ui-widget ui-state-default ui-button-text-only')
         .hover(function() {
@@ -676,6 +676,7 @@ export function animationGif(models, config, ui) {
             .removeClass('ui-state-hover');
         })
         .click(function() {
+          FileSaver.saveAs(blob, dlURL);
           googleAnalytics.event('Animation', 'Download', 'GIF', downloadSize);
         });
 
