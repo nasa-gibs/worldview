@@ -371,6 +371,7 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.onPressGIF = function () {
+    model.rangeState.state = 'off';
     model.events.trigger('gif-click');
   };
   self.init();
