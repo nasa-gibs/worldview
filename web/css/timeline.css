@@ -384,8 +384,17 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-footer svg {
-  overflow: hidden;
   margin-top: -16px;
+}
+
+#timeline-footer > svg {
+  overflow-y: hidden;
+  margin-top: -32px;
+  padding-top: 16px;
+}
+
+#wv-rangeselector-case > .wv-timeline-range-selector {
+  overflow: visible;
 }
 
 #timeline-footer svg > g {
