@@ -78,6 +78,7 @@ export function animationUi(models, ui) {
    */
 
   self.refreshState = function () {
+    self.clearCache();
     preloadArray = [];
     preload = {};
     pastDates = {};
@@ -365,7 +366,6 @@ export function animationUi(models, ui) {
     }
     currentDate = util.parseDateUTC(index);
     lastToQueue = self.getLastBufferDateStr(currentDate, startDate, endDate);
-
     if (!preloadArray[0] && !inQueue[index]) {
       self.initialPreload(currentDate, startDate, endDate, lastToQueue);
     } else if (!preload[lastToQueue] && !inQueue[lastToQueue] && !self.state.supportingCustomLayers) { // if last preload date doesn't exist

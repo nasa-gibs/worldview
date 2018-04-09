@@ -133,7 +133,7 @@ export function timeline(models, config, ui) {
     self.svg = d3.select('#timeline-footer')
       .append('svg:svg')
       .attr('width', self.width) // + margin.left + margin.right)
-      .attr('height', self.height + self.margin.top + self.margin.bottom + 16);
+      .attr('height', self.height + self.margin.top + self.margin.bottom + 32);
 
     self.svg
       .append('svg:defs')
