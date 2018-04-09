@@ -455,16 +455,24 @@ export function timelineInput(models, config, ui) {
           case util.key.LEFT:
             if (models.date.selectedZoom === 4) {
               animateReverse('hour', -1);
-            } else {
+            } else if (models.date.selectedZoom === 3) {
               animateReverse('day', -1);
+            } else if (models.date.selectedZoom === 2) {
+              animateReverse('month', -1);
+            } else {
+              animateReverse('year', -1);
             }
             event.preventDefault();
             break;
           case util.key.RIGHT:
             if (models.date.selectedZoom === 4) {
               animateReverse('hour', 1);
+            } else if (models.date.selectedZoom === 3) {
+              animateReverse('day', -1);
+            } else if (models.date.selectedZoom === 2) {
+              animateReverse('month', -1);
             } else {
-              animateReverse('day', 1);
+              animateReverse('year', -1);
             }
             event.preventDefault();
             break;
