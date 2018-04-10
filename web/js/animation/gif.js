@@ -11,7 +11,6 @@ import lodashThrottle from 'lodash/throttle';
 import lodashCapitalize from 'lodash/capitalize';
 import canvg from 'canvg-browser';
 import FileSaver from 'file-saver';
-
 import { GA as googleAnalytics, GifResSelection } from 'worldview-components';
 import util from '../util/util';
 import wvui from '../ui/ui';
@@ -108,6 +107,7 @@ export function animationGif(models, config, ui) {
     };
     self.reactComponent = renderPanel(options, panelCase);
   };
+
   var getUpdatedProps = function() {
     var startDate, endDate;
     var state = animModel.rangeState;
@@ -134,6 +134,7 @@ export function animationGif(models, config, ui) {
       increment: lodashCapitalize(ui.anim.widget.getIncrements())
     };
   };
+
   var update = function(selectedRes, lonlats) {
     if (!animationCoordinates) return;
     var numDays, stateObj, dimensions;
@@ -156,15 +157,19 @@ export function animationGif(models, config, ui) {
     updatePanel(getUpdatedProps());
     throttleSetDownloadButton();
   };
+
   var updatePanel = function(options) {
     self.reactComponent.setState(options);
   };
+
   var onSelectionChange = function(selectedRes) {
     update(selectedRes, getCoords());
   };
+
   var fileSizeValid = function() {
     return (requestSize < maxGifSize && imgHeight !== 0 && imgWidth !== 0);
   };
+
   var setDownloadButtonClass = function() {
     var $iconCase;
     var boo;
@@ -178,6 +183,7 @@ export function animationGif(models, config, ui) {
       $iconCase.removeClass('disabled');
     }
   };
+
   /*
    * Uses, frameUrl array and gifShot
    * Library to create GIF
@@ -264,6 +270,7 @@ export function animationGif(models, config, ui) {
 
     build(newImage, stampProps.dateStamp, stampProps.stampHeight);
   };
+
   var svgToPng = function(svgURL, stampHeight) {
     var newImage;
     var canvasEl = document.createElement('canvas');
@@ -280,6 +287,7 @@ export function animationGif(models, config, ui) {
 
     return newImage;
   };
+
   var getStampProps = function(stampWidthRatio, breakPoint, stampWidth) {
     var dateStamp = {};
     var stampHeight;
@@ -302,6 +310,7 @@ export function animationGif(models, config, ui) {
     }
     return { stampHeight: stampHeight, dateStamp: dateStamp };
   };
+
   /*
    * Calculates resolution of frame based
    * on zoom and projection
@@ -349,6 +358,7 @@ export function animationGif(models, config, ui) {
       return str;
     }
   };
+
   /*
    * checks if rotation, changed palettes, or graticules
    * are active and ask to reset if any are active
@@ -430,6 +440,7 @@ export function animationGif(models, config, ui) {
     });
     return layers;
   };
+
   /*
    * retrieves renderable layers
    *
@@ -491,6 +502,7 @@ export function animationGif(models, config, ui) {
     return [ui.map.selected.getCoordinateFromPixel([Math.floor(animationCoordinates.x), Math.floor(animationCoordinates.y2)]),
       ui.map.selected.getCoordinateFromPixel([Math.floor(animationCoordinates.x2), Math.floor(animationCoordinates.y)])];
   };
+
   /*
    * Dimenions from zoom & projection
    *
@@ -507,6 +519,7 @@ export function animationGif(models, config, ui) {
       Math.round((Math.abs(lonlat[1][1] - lonlat[0][1]) / conversionFactor) / Number(res)) // height
     ];
   };
+
   /*
    * loops through dates and created image
    * download urls and pushs them to an
@@ -633,6 +646,8 @@ export function animationGif(models, config, ui) {
    *
    */
   var onGifComplete = function(obj) { // callback function for when image is finished
+    $('#timeline-footer').removeClass('wv-anim-active');
+    models.anim.rangeState.state = 'off';
     if (obj.error === false) {
       $progress.remove();
       progressing = false;
@@ -748,6 +763,7 @@ export function animationGif(models, config, ui) {
         close: function() {
           $imgDialog.find('img')
             .remove();
+          models.anim.rangeState.state = 'on';
           $('#timeline-footer')
             .toggleClass('wv-anim-active');
         },
@@ -768,7 +784,8 @@ export function animationGif(models, config, ui) {
       wvui.notify(headerMsg + bodyMsg, 'Notice', 600, callback);
     }
   };
-    /*
+
+  /*
    * Builds selector dialog
    *
    * @method getSelectorDialog
@@ -808,10 +825,13 @@ export function animationGif(models, config, ui) {
     });
     return $dialogBox;
   };
+
   var onCloseSelector = function() {
     $('#wv-map')
       .insertAfter('#productsHolder'); // retain map element before disabling jcrop
     jcropAPI.destroy();
+    $('#timeline-footer')
+      .toggleClass('wv-anim-active');
     if (models.proj.selected.id === 'geographic') {
       ui.map.events.trigger('selectiondone');
     }
@@ -821,6 +841,7 @@ export function animationGif(models, config, ui) {
     if (proj === 'geographic') return 0.002197;
     return 256;
   };
+
   /*
    * uses resolution and dimension to
    * calculates size of selected area
@@ -843,6 +864,7 @@ export function animationGif(models, config, ui) {
 
     return (((imgWidth * imgHeight * 24) / 8388608).toFixed(2) * numDays);
   };
+
   /*
    * removes jquery JCrop
    *
@@ -862,48 +884,6 @@ export function animationGif(models, config, ui) {
     if (models.proj.selected.id === 'geographic') {
       ui.map.events.trigger('selectiondone');
     }
-  };
-
-  /*
-   * Builds selector dialog
-   *
-   * @method getSelectorDialog
-   * @private
-   *
-   * @param width {number}
-   *
-   * @returns {JQuery} Selector diaglog element
-   *
-   */
-  self.getSelectorDialog = function(width) {
-    var $dialogBox;
-    $dialogBox = ui.getDialog();
-    $dialogBox.html(panelCase);
-    $dialogBox.css({
-      paddingBottom: '10px'
-    });
-    $dialogBox.dialog({
-      dialogClass: 'wv-panel wv-image',
-      title: 'Generate GIF',
-      height: 'auto',
-      width: width,
-      minHeight: 40,
-      minWidth: 287,
-      resizable: false,
-      show: {
-        effect: 'slide',
-        direction: 'down'
-      },
-      position: {
-        my: 'left top',
-        at: 'left bottom+10',
-        collision: 'flipfit',
-        of: $('.jcrop-tracker')
-      },
-
-      close: onCloseSelector
-    });
-    return $dialogBox;
   };
 
   /*
@@ -981,6 +961,7 @@ export function animationGif(models, config, ui) {
     setDialogWidth($dialog, c.w);
     setIconFontSize($dlButton, c.w);
   };
+
   /*
    * Initializes and sets callbacks for
    *  Jcrop selector
@@ -1022,8 +1003,6 @@ export function animationGif(models, config, ui) {
         },
         onRelease: function() {
           removeCrop();
-          $('#timeline-footer')
-            .toggleClass('wv-anim-active');
           if ($dialog) {
             wvui.close();
           }

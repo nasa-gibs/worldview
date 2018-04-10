@@ -14,6 +14,7 @@ export function animationWidget (models, config, ui) {
   var $timelineFooter;
   var $animateButton;
   var dataModel;
+
   /*
    * set listeners and initiate
    * widget
@@ -261,6 +262,7 @@ export function animationWidget (models, config, ui) {
       model.rangeState.endDate = util.toISOStringSeconds(util.dateAdd(currentDate, interval, intervalStep));
     }
   };
+
   /*
    * Press play button event handler
    *
@@ -371,9 +373,9 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.onPressGIF = function () {
-    model.rangeState.state = 'off';
     model.events.trigger('gif-click');
   };
+
   self.init();
   return self;
 };
