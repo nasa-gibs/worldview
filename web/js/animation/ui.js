@@ -78,7 +78,6 @@ export function animationUi(models, ui) {
    */
 
   self.refreshState = function () {
-    self.clearCache();
     preloadArray = [];
     preload = {};
     pastDates = {};
