@@ -132,11 +132,11 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header {
   margin-top: 2px;
-  width: 304px;
+  width: 310px;
 }
 
 #timeline-header.subdaily {
-  width: 396px;
+  width: 404px;
 }
 
 #timeline-header .timeline-zoom,
@@ -169,20 +169,20 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .input-wrapper:nth-child(2) {
-  max-width: 60px;
+  max-width: 62px;
 }
 
 #timeline-header .input-wrapper:nth-child(3) {
-  max-width: 45px;
+  max-width: 46px;
 }
 
 #timeline-header .input-wrapper:nth-child(4) {
-  max-width: 31px;
+  max-width: 32px;
 }
 
 #timeline-header .input-wrapper-hour,
 #timeline-header .input-wrapper-minute {
-  width: 31px;
+  width: 32px;
 }
 
 #timeline-header .input-wrapper-hour {
