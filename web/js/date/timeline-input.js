@@ -453,26 +453,36 @@ export function timelineInput(models, config, ui) {
         }
         switch (event.keyCode) {
           case util.key.LEFT:
-            if (models.date.selectedZoom === 4) {
-              animateReverse('hour', -1);
-            } else if (models.date.selectedZoom === 3) {
-              animateReverse('day', -1);
-            } else if (models.date.selectedZoom === 2) {
-              animateReverse('month', -1);
-            } else {
-              animateReverse('year', -1);
+            switch (models.date.selectedZoom) {
+              case 1:
+                animateReverse('year', -1);
+                break;
+              case 2:
+                animateReverse('month', -1);
+                break;
+              case 3:
+                animateReverse('day', -1);
+                break;
+              case 4:
+                animateReverse('minute', -10);
+                break;
             }
             event.preventDefault();
             break;
           case util.key.RIGHT:
-            if (models.date.selectedZoom === 4) {
-              animateReverse('hour', 1);
-            } else if (models.date.selectedZoom === 3) {
-              animateReverse('day', -1);
-            } else if (models.date.selectedZoom === 2) {
-              animateReverse('month', -1);
-            } else {
-              animateReverse('year', -1);
+            switch (models.date.selectedZoom) {
+              case 1:
+                animateForward('year', 1);
+                break;
+              case 2:
+                animateForward('month', 1);
+                break;
+              case 3:
+                animateForward('day', 1);
+                break;
+              case 4:
+                animateForward('minute', 10);
+                break;
             }
             event.preventDefault();
             break;
