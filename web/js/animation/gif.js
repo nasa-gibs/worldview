@@ -225,6 +225,8 @@ export function animationGif(models, config, ui) {
         $progress.attr('value', 0);
       };
       var onGifProgress = function(captureProgress) {
+        $('#timeline-footer').removeClass('wv-anim-active');
+        models.anim.rangeState.state = 'off';
         if (!progressing) {
           buildProgressBar();
           progressing = true;
