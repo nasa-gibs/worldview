@@ -222,7 +222,7 @@ export function timelineTicks(models, config, ui) {
           .attr('y1') !== '20')) {
           current.select('line')
             .attr('y1', '20')
-            .attr('y2', '-50');
+            .attr('y2', '-45');
         }
         if (!$(this)
           .find('text')
@@ -266,7 +266,7 @@ export function timelineTicks(models, config, ui) {
       var ticks = self.boundary.all;
       ticks.selectAll('line')
         .attr('y1', '20')
-        .attr('y2', '-50');
+        .attr('y2', '-45');
 
       ticks.insert('svg:circle', 'text')
         .attr('r', '6');

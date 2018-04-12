@@ -236,13 +236,11 @@ export function timeline(models, config, ui) {
     models.layers.events.on('change', function () {
       self.data.set();
       self.resize();
-      self.zoom.refresh();
       self.setClip();
     });
 
     models.proj.events.on('select', function () {
       self.resize();
-      self.zoom.refresh();
       self.setClip();
     });
   };
