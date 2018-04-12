@@ -271,6 +271,7 @@ export function layersModel(models, config) {
     if (def.visible !== visible) {
       def.visible = visible;
       self.events.trigger('visibility', def, visible);
+      self.events.trigger('change');
     }
   };
 
@@ -281,6 +282,7 @@ export function layersModel(models, config) {
     if (def.opacity !== opacity) {
       def.opacity = opacity;
       self.events.trigger('opacity', def, opacity);
+      self.events.trigger('change');
     }
   };
 
