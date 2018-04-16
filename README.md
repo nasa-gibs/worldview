@@ -48,6 +48,7 @@ The following are required to install and run Worldview:
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
 - [Python v2.7.14 or Later](https://www.python.org/)
   - **Note:** It is recommended that Windows users install Python with [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools).
+  - macOS users should use the `--with-brewed-openssl` option when using Homebrew.
 
 Windows users will also need the following:
 
