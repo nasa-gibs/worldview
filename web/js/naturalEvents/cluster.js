@@ -1,10 +1,16 @@
 import superCluster from 'supercluster';
 import lodashRound from 'lodash/round';
 import lodashEach from 'lodash/each';
-
-export function naturalEventsCreateClusterObject () {
+/**
+ * Create superCLuster Object - Uses map and reduce
+ * operations to create a timespan on each clustered
+ * object
+ *
+ * @return {void}
+ */
+export function naturalEventsClusterCreateObject () {
   return superCluster({
-    radius: 60,
+    radius: 60, // pixel radius where points are clustered
     maxZoom: 16,
     initial: function() {
       return {
@@ -33,8 +39,15 @@ export function naturalEventsCreateClusterObject () {
 
   });
 };
-
-export function naturalEventsPointToGeoJSON(id, coordinates, date) {
+/**
+ * Create a geoJSON point out of a point
+ *
+ * @param  {String} id
+ * @param  {Array} coordinates
+ * @param  {String} date
+ * @return {Object} geoJSON point
+ */
+export function naturalEventsClusterPointToGeoJSON(id, coordinates, date) {
   return {
     type: 'Feature',
     properties: {
@@ -48,27 +61,21 @@ export function naturalEventsPointToGeoJSON(id, coordinates, date) {
     }
   };
 };
-export function sortCluster(clusterArray) {
-  lodashEach(clusterArray, (point) => {
-    clusterArray.sort(function(a, b) {
-      var firstDate = a.properties.date || a.properties.startDate;
-      var secondDate = b.properties.date || b.properties.startDate;
+/**
+ * @param  {Array}
+ * @return {[type]}
+ */
+export function naturalEventsClusterSort(clusterArray) {
+  let newArray = clusterArray.sort(function(a, b) {
+    var firstDate = a.properties.date || a.properties.startDate;
+    var secondDate = b.properties.date || b.properties.startDate;
 
-      return new Date(secondDate) - new Date(firstDate);
-    });
+    return new Date(secondDate) - new Date(firstDate);
   });
+  return newArray;
 };
 
-export function naturalEventsGetClusterPoints(superClusterObj, pointArray, zoomLevel) {
+export function naturalEventsClusterGetPoints(superClusterObj, pointArray, zoomLevel) {
   superClusterObj.load(pointArray);
   return superClusterObj.getClusters([-180, -90, 180, 90], lodashRound(zoomLevel));
 };
-
-export function naturalEventsClusterAppend(tooltipEl, dateString) {
-  var textNode = document.createTextNode(dateString);
-
-  tooltipEl.appendChild(textNode);
-  tooltipEl.classList.add('track-marker-date-range');
-
-  return tooltipEl;
-}

@@ -9,15 +9,15 @@ import lodashEach from 'lodash/each';
 import lodashDebounce from 'lodash/debounce';
 import { getEventById } from './util';
 import {
-  naturalEventsPointToGeoJSON,
-  naturalEventsGetClusterPoints,
-  naturalEventsCreateClusterObject,
-  sortCluster
+  naturalEventsClusterPointToGeoJSON,
+  naturalEventsClusterGetPoints,
+  naturalEventsClusterCreateObject,
+  naturalEventsClusterSort
 } from './cluster';
 
 import { mapUtilZoomAction } from '../map/util';
-const firstClusterObj = naturalEventsCreateClusterObject(); // Cluster before selected event
-const secondClusterObj = naturalEventsCreateClusterObject();// Cluster after selected event
+const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
+const secondClusterObj = naturalEventsClusterCreateObject();// Cluster after selected event
 
 export default function naturalEventsTrack (models, ui, config) {
   var self = {};
@@ -56,6 +56,8 @@ export default function naturalEventsTrack (models, ui, config) {
     });
   };
   /**
+   * Remove track
+   *
    * @param  {Object} map Openlayers map object
    * @param  {Object} trackObj Object containig info related
    *                            to track
@@ -63,10 +65,19 @@ export default function naturalEventsTrack (models, ui, config) {
    */
   self.removeTrack = function(map, trackObj) {
     map.removeLayer(trackObj.track);
-    naturalEventsRemoveOldPoints(map, trackObj.pointArray);
+    removeOldPoints(map, trackObj.pointArray);
     return {};
   };
 
+  /**
+   * Update track
+   *
+   * @param  {Object} event EONET event object
+   * @param  {Object} map Ol map object
+   * @param  {String} selectedDate
+   * @param  {Function} callback event change callback
+   * @return {[type]}
+   */
   self.update = function(event, map, selectedDate, callback) {
     var newTrackDetails;
     var trackDetails = self.trackDetails;
@@ -119,7 +130,13 @@ export default function naturalEventsTrack (models, ui, config) {
   init();
   return self;
 }
-
+/**
+ * Create vector layer
+ *
+ * @param  {Array} featuresArray Array of linstring
+ *                               points
+ * @return {Object} OpenLayers Vector Layer
+ */
 var naturalEventsTrackLayer = function(featuresArray) {
   return new OlLayerVector({
     source: new OlSourceVector({
@@ -129,6 +146,14 @@ var naturalEventsTrackLayer = function(featuresArray) {
     style: [getLineStyle('black', 2), getLineStyle('white', 1)]
   });
 };
+/**
+ * Create event point
+ *
+ * @param  {Object} clusterPoint
+ * @param  {Boolean} isSelected
+ * @param  {Function} callback
+ * @return {Object} Openlayers overlay object
+ */
 var naturalEventsTrackPoint = function(clusterPoint, isSelected, callback) {
   var overlayEl = document.createElement('div');
   var circleEl = document.createElement('div');
@@ -158,13 +183,20 @@ var naturalEventsTrackPoint = function(clusterPoint, isSelected, callback) {
     stopEvent: false
   });
 };
-
+/**
+ * @param  {Array} coordinateArray
+ * @return {Object} Openlayers Feature
+ */
 var naturalEventsTrackLine = function(coordinateArray) {
   return new OlFeature({
     geometry: new OlGeomMultiLineString(coordinateArray)
   });
 };
-
+/**
+ * @param  {String} color
+ * @param  {Number} Width
+ * @return {Object} OpenLayers Style Object
+ */
 var getLineStyle = function(color, width) {
   return new OlStyleStyle({
     stroke: new OlStyleStroke({
@@ -173,7 +205,16 @@ var getLineStyle = function(color, width) {
     })
   });
 };
-
+/**
+ * Loop through event geometries and create
+ * track points and line
+ *
+ * @param  {Object} eventObj EONET event Object
+ * @param  {Object} map Openlayers map Object
+ * @param  {String} selectedDate
+ * @param  {Function} callback date-change callback
+ * @return {Object} Object with Track elements and info
+ */
 var createTrack = function (eventObj, map, selectedDate, callback) {
   var olPointCoordinates = [];
   var olTrackLineFeatures = [];
@@ -195,18 +236,18 @@ var createTrack = function (eventObj, map, selectedDate, callback) {
     olPointCoordinates.push(coordinates);
     // Cluster in three groups
     if (isSelected) {
-      selectedPoint = naturalEventsPointToGeoJSON(eventObj.id, coordinates, date);
+      selectedPoint = naturalEventsClusterPointToGeoJSON(eventObj.id, coordinates, date);
       afterSelected = true;
     } else if (!afterSelected) {
-      geoJSONPointsBeforeSelected.push(naturalEventsPointToGeoJSON(eventObj.id, coordinates, date));
+      geoJSONPointsBeforeSelected.push(naturalEventsClusterPointToGeoJSON(eventObj.id, coordinates, date));
     } else {
-      geoJSONPointsAfterSelected.push(naturalEventsPointToGeoJSON(eventObj.id, coordinates, date));
+      geoJSONPointsAfterSelected.push(naturalEventsClusterPointToGeoJSON(eventObj.id, coordinates, date));
     }
   });
-  clustersBeforeSelected = naturalEventsGetClusterPoints(firstClusterObj, geoJSONPointsBeforeSelected, zoom);
-  clustersAfterSelected = naturalEventsGetClusterPoints(secondClusterObj, geoJSONPointsAfterSelected, zoom);
+  clustersBeforeSelected = naturalEventsClusterGetPoints(firstClusterObj, geoJSONPointsBeforeSelected, zoom);
+  clustersAfterSelected = naturalEventsClusterGetPoints(secondClusterObj, geoJSONPointsAfterSelected, zoom);
   clusters = clustersBeforeSelected.concat([selectedPoint], clustersAfterSelected);
-  sortCluster(clusters);
+  clusters = naturalEventsClusterSort(clusters);
   pointObject = addPoints(clusters, map, selectedDate, callback);
 
   olTrackLineFeatures.push(naturalEventsTrackLine(pointObject.trackArray));
@@ -219,11 +260,22 @@ var createTrack = function (eventObj, map, selectedDate, callback) {
     'hidden': false
   };
 };
-var naturalEventsRemoveOldPoints = function (map, pointOverlayArray) {
+/**
+ * @param  {Object} map OpenLayers Map Object
+ * @param  {Array} pointOverlayArray
+ * @return {void}
+ */
+var removeOldPoints = function (map, pointOverlayArray) {
   lodashEach(pointOverlayArray, function (pointOverlay) {
     map.removeOverlay(pointOverlay);
   });
 };
+/**
+ * Change selected point
+ *
+ * @param  {String} newDate
+ * @return {void}
+ */
 var updateSelection = function (newDate) {
   var oldSelectedPoint = document.getElementsByClassName('track-marker-case-selected')[0];
   var newSelectedPoint = document.getElementById('track-marker-case-' + newDate);
@@ -231,6 +283,15 @@ var updateSelection = function (newDate) {
   oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
 };
+/**
+ * Create rotated element that displays arrows between points
+ * as repeated css background image
+ *
+ * @param  {Array} lineSegmentCoords Start and end points of
+ *                  line in Lat/long
+ * @param  {Object} map OpenLayers map Object
+ * @return {Object} Openlayers overlay Object
+ */
 var createArrows = function (lineSegmentCoords, map) {
   var overlayEl = document.createElement('div');
   var innerEl = document.createElement('div');
@@ -263,6 +324,15 @@ var createArrows = function (lineSegmentCoords, map) {
     element: overlayEl
   });
 };
+/**
+ * Loop through clustered point array and create elements
+ *
+ * @param {Array} clusters Array of cluster objects
+ * @param {Object} map OpenLayers map Object
+ * @param {String} selectedDate
+ * @param {Function} callback
+ * @return {Object} Object Containing track info and elements
+ */
 var addPoints = function(clusters, map, selectedDate, callback) {
   var overlays = [];
   var trackArray = [];
@@ -289,7 +359,15 @@ var addPoints = function(clusters, map, selectedDate, callback) {
   });
   return { trackArray: trackArray, overlayArray: overlays };
 };
-
+/**
+ * Create cluster point
+ *
+ * @param  {Object} clusterPoint
+ * @param  {Object} map Openlayers map object
+ * @param  {Object} pointClusterObj supercluster object
+ * @param  {Function} callback
+ * @return {Object} Openlayers overlay object
+ */
 function getClusterPointEl(cluster, map, pointClusterObj, callback) {
   var overlayEl = document.createElement('div');
   var circleEl = document.createElement('div');
