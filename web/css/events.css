@@ -212,6 +212,9 @@
 .track-marker-case .track-marker:hover ~ .track-marker-date {
   display: block;
 }
+.cluster-track-marker-case {
+  z-index: 100;
+}
 .cluster-marker:hover ~ .cluster-track-marker-date {
   display: block;
 }
