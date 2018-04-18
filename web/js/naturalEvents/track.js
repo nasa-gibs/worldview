@@ -2,14 +2,11 @@ import OlFeature from 'ol/feature';
 import OlOverlay from 'ol/overlay';
 import OlLayerVector from 'ol/layer/vector';
 import OlSourceVector from 'ol/source/vector';
-import OlStyleFill from 'ol/style/fill';
 import OlStyleStroke from 'ol/style/stroke';
-import OlStyleCircle from 'ol/style/circle';
 import OlStyleStyle from 'ol/style/style';
 import OlGeomMultiLineString from 'ol/geom/multilinestring';
 import lodashEach from 'lodash/each';
 import lodashDebounce from 'lodash/debounce';
-
 import { getEventById } from './util';
 import {
   naturalEventsPointToGeoJSON,
@@ -17,18 +14,19 @@ import {
   naturalEventsCreateClusterObject,
   sortCluster
 } from './cluster';
-import {
-  mapUtilZoomAction
-} from '../map/util';
 
-const firstClusterObj = naturalEventsCreateClusterObject();
-const secondClusterObj = naturalEventsCreateClusterObject();
+import { mapUtilZoomAction } from '../map/util';
+const firstClusterObj = naturalEventsCreateClusterObject(); // Cluster before selected event
+const secondClusterObj = naturalEventsCreateClusterObject();// Cluster after selected event
 
 export default function naturalEventsTrack (models, ui, config) {
   var self = {};
   var model = models.naturalEvents;
   self.trackDetails = {};
   self.active = false;
+  /**
+   * @return {void}
+   */
   var init = function() {
     const map = ui.map.selected;
     map.on('moveend', function (e) {
@@ -57,6 +55,18 @@ export default function naturalEventsTrack (models, ui, config) {
       }
     });
   };
+  /**
+   * @param  {Object} map Openlayers map object
+   * @param  {Object} trackObj Object containig info related
+   *                            to track
+   * @return {Object} Empty object
+   */
+  self.removeTrack = function(map, trackObj) {
+    map.removeLayer(trackObj.track);
+    naturalEventsRemoveOldPoints(map, trackObj.pointArray);
+    return {};
+  };
+
   self.update = function(event, map, selectedDate, callback) {
     var newTrackDetails;
     var trackDetails = self.trackDetails;
@@ -105,24 +115,18 @@ export default function naturalEventsTrack (models, ui, config) {
   var debounceTrackUpdate = lodashDebounce((event, selectedDate, map, selectEventCallback) => {
     self.update(event, map, selectedDate, selectEventCallback);
   }, 1000);
-  self.removeTrack = function(map, trackObj) {
-    map.removeLayer(trackObj.track);
-    naturalEventsRemoveOldPoints(map, trackObj.pointArray);
-    return {};
-  };
+
   init();
   return self;
 }
-var naturalEventsTrackLayer = function(featuresArray, styles) {
+
+var naturalEventsTrackLayer = function(featuresArray) {
   return new OlLayerVector({
     source: new OlSourceVector({
       features: featuresArray
     }),
     extent: [-180, -90, 180, 90],
-    style: function(feature) {
-      return styles[feature.get('type')];
-    }
-
+    style: [getLineStyle('black', 2), getLineStyle('white', 1)]
   });
 };
 var naturalEventsTrackPoint = function(clusterPoint, isSelected, callback) {
@@ -155,42 +159,23 @@ var naturalEventsTrackPoint = function(clusterPoint, isSelected, callback) {
   });
 };
 
-var naturalEventsTrackLine = function(coordinateArray, type) {
+var naturalEventsTrackLine = function(coordinateArray) {
   return new OlFeature({
-    type: type,
     geometry: new OlGeomMultiLineString(coordinateArray)
   });
 };
-var naturalEventsTrackStyle = function() {
-  return {
-    'geoMarker': new OlStyleStyle({
-      image: new OlStyleCircle({
-        radius: 4,
-        snapToPixel: false,
-        fill: new OlStyleFill({ color: 'white' }),
-        stroke: new OlStyleStroke({
-          color: 'white',
-          width: 2
-        })
-      })
-    }),
-    'white-line': new OlStyleStyle({
-      stroke: new OlStyleStroke({
-        color: 'white',
-        width: 1
-      })
-    }),
-    'black-line': new OlStyleStyle({
-      stroke: new OlStyleStroke({
-        color: 'black',
-        width: 2
-      })
+
+var getLineStyle = function(color, width) {
+  return new OlStyleStyle({
+    stroke: new OlStyleStroke({
+      color: color,
+      width: width
     })
-  };
+  });
 };
+
 var createTrack = function (eventObj, map, selectedDate, callback) {
   var olPointCoordinates = [];
-  var eventTrackStyles;
   var olTrackLineFeatures = [];
   var pointObject = {};
   var geoJSONPointsBeforeSelected = [];
@@ -222,15 +207,13 @@ var createTrack = function (eventObj, map, selectedDate, callback) {
   clustersAfterSelected = naturalEventsGetClusterPoints(secondClusterObj, geoJSONPointsAfterSelected, zoom);
   clusters = clustersBeforeSelected.concat([selectedPoint], clustersAfterSelected);
   sortCluster(clusters);
-  eventTrackStyles = naturalEventsTrackStyle();
   pointObject = addPoints(clusters, map, selectedDate, callback);
 
-  olTrackLineFeatures.push(naturalEventsTrackLine(pointObject.trackArray, 'black-line'));
-  olTrackLineFeatures.push(naturalEventsTrackLine(pointObject.trackArray, 'white-line'));
+  olTrackLineFeatures.push(naturalEventsTrackLine(pointObject.trackArray));
 
   return {
     'id': eventObj.id,
-    'track': naturalEventsTrackLayer(olTrackLineFeatures, eventTrackStyles),
+    'track': naturalEventsTrackLayer(olTrackLineFeatures, map),
     'pointArray': pointObject.overlayArray,
     'selectedDate': selectedDate,
     'hidden': false
@@ -248,17 +231,52 @@ var updateSelection = function (newDate) {
   oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
 };
+var createArrows = function (lineSegmentCoords, map) {
+  var overlayEl = document.createElement('div');
+  var innerEl = document.createElement('div');
+
+  const end = lineSegmentCoords[0];
+  const start = lineSegmentCoords[1];
+  const dxCoord = end[0] - start[0];
+  const dyCoord = end[1] - start[1];
+  const pixel1 = map.getPixelFromCoordinate(start);
+  const pixel2 = map.getPixelFromCoordinate(end);
+  const dx = pixel2[0] - pixel1[0];
+  const dy = pixel2[1] - pixel1[1];
+  const pixelMidPoint = [(0.5 * (dx)) + pixel1[0], (0.5 * (dy)) + pixel1[1]];
+  const distanceInPixels = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+  const angleRadians = Math.atan2(dyCoord, dxCoord);
+  const angleDegrees = -angleRadians * (180 / Math.PI);
+
+  innerEl.className = 'event-track-arrows';
+  overlayEl.appendChild(innerEl);
+  overlayEl.style.width = '1px';
+  overlayEl.style.height = '1px';
+  innerEl.style.width = distanceInPixels + 'px';
+  innerEl.style.height = '16px';
+  innerEl.style.transform = 'translate(' + -(distanceInPixels / 2) + 'px' + ', -8px)';
+  overlayEl.style.transform = 'rotate(' + angleDegrees + 'deg)';
+  return new OlOverlay({
+    position: map.getCoordinateFromPixel(pixelMidPoint),
+    positioning: 'center-center',
+    stopEvent: true,
+    element: overlayEl
+  });
+};
 var addPoints = function(clusters, map, selectedDate, callback) {
   var overlays = [];
   var trackArray = [];
-
   lodashEach(clusters, function(clusterPoint, index) {
     let point;
     let date = clusterPoint.properties.date || clusterPoint.properties.startDate;
     let isSelected = (selectedDate === date);
     let pointClusterObj = (new Date(date) > new Date(selectedDate)) ? firstClusterObj : secondClusterObj;
     if (index !== 0) {
-      trackArray.push([clusters[index - 1].geometry.coordinates, clusterPoint.geometry.coordinates]);
+      let lineSegmentArray = [clusters[index - 1].geometry.coordinates, clusterPoint.geometry.coordinates];
+      let arrowOverlay = createArrows(lineSegmentArray, map);
+      overlays.push(arrowOverlay);
+      trackArray.push(lineSegmentArray);
+      map.addOverlay(arrowOverlay);
     }
     if (clusterPoint.properties.cluster) {
       point = getClusterPointEl(clusterPoint, map, pointClusterObj, callback);
