@@ -333,7 +333,7 @@ export function timelineConfig(models, config, ui) {
           var prevDate = model.selected;
           d = new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            d.getUTCDate(),
+            prevDate.getUTCDate(),
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes());
           d = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
@@ -345,7 +345,7 @@ export function timelineConfig(models, config, ui) {
           prevDate = new Date(prevDate.getTime() - (prevDate.getTimezoneOffset() * 60000));
           return new Date(d.getUTCFullYear(),
             d.getUTCMonth(),
-            d.getUTCDate(),
+            d.getUTCDate() - 1,
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes());
         };
