@@ -17,7 +17,7 @@ export function timelineInput(models, config, ui) {
   self.interval = 'day';
   self.delta = 1;
   self.active = false;
-  self.delay = 1000;
+  self.delay = 500;
   var animator = null;
   var keyDown;
 
