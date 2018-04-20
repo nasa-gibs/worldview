@@ -456,6 +456,21 @@ export function dataResultsGeometryFromMODISGrid(projection) {
   return self;
 };
 
+export function dataResultsOfflineFilter() {
+  var self = {};
+
+  self.name = 'OfflineFilter';
+
+  self.process = function (meta, granule) {
+    if (granule.online_access_flag === false) {
+      return null;
+    }
+    return granule;
+  };
+
+  return self;
+};
+
 export function dataResultsModisGridIndex() {
   var self = {};
 
