@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import util from '../util/util';
 import lodashParseInt from 'lodash/parseInt';
+import lodashDebounce from 'lodash/debounce';
 
 /**
  * Implements the date input
@@ -10,177 +11,48 @@ import lodashParseInt from 'lodash/parseInt';
 export function timelineInput(models, config, ui) {
   var tl = ui.timeline;
   var model = models.date;
-  var timer;
   var self = {};
   var rollingDate;
   self.direction = 'forward';
   self.interval = 'day';
   self.delta = 1;
   self.active = false;
-  self.delay = 500;
+  self.delay = 1000;
+  var animator = null;
+  var keyDown;
 
   var $incrementBtn = $('#right-arrow-group');
   var $decrementBtn = $('#left-arrow-group');
 
-  var forwardNextMinute = function () { // FIXME: Limit animation correctly
-    self.delta = 10;
-    var nextMinute = new Date(new Date(model.selected)
-      .setUTCMinutes(model.selected.getUTCMinutes() + 10));
-    if (nextMinute <= util.now()) {
-      animateForward('minute', 10);
-    } else {
-      self.stop();
+  var animateByIncrement = function(delta, increment) {
+    self.delta = Math.abs(delta);
+    function animate() {
+      var nextTime = getNextTimeSelection(delta, increment);
+      if (tl.data.start() <= nextTime <= util.now()) {
+        models.date.add(increment, delta);
+      };
+      animator = setTimeout(animate, self.delay);
     }
+    animate();
   };
-
-  var forwardNextDay = function () { // FIXME: Limit animation correctly
-    self.delta = 1;
-    var nextDay = new Date(new Date(model.selected)
-      .setUTCDate(model.selected.getUTCDate() + 1));
-    if (nextDay <= util.now()) {
-      animateForward('day', 1);
-    } else {
-      self.stop();
+  var stopper = function() {
+    clearInterval(animator);
+    animator = 0;
+  };
+  var getNextTimeSelection = function(delta, increment) {
+    switch (increment) {
+      case 'year':
+        return new Date(new Date(model.selected).setUTCFullYear(model.selected.getUTCFullYear() + increment));
+      case 'month':
+        return new Date(new Date(model.selected).setUTCMonth(model.selected.getUTCMonth() + increment));
+      case 'day':
+        return new Date(new Date(model.selected).setUTCDate(model.selected.getUTCDate() + increment));
+      case 'minute':
+        return new Date(new Date(model.selected).setUTCMinutes(model.selected.getUTCMinutes() + increment));
     }
-  };
-
-  var forwardNextMonth = function () {
-    self.delta = 1;
-    var nextMonth = new Date(new Date(model.selected)
-      .setUTCMonth(model.selected.getUTCMonth() + 1));
-    if (nextMonth <= util.now()) {
-      animateForward('month', 1);
-    } else {
-      self.stop();
-    }
-  };
-
-  var forwardNextYear = function () {
-    self.delta = 1;
-    var nextYear = new Date(new Date(model.selected)
-      .setUTCFullYear(model.selected.getUTCFullYear() + 1));
-    if (nextYear <= util.now()) {
-      animateForward('year', 1);
-    } else {
-      self.stop();
-    }
-  };
-
-  self.forward = function () {
-    self.play('forward');
-  };
-
-  self.reverse = function () {
-    self.play('reverse');
-  };
-
-  self.stop = function () {
-    if (timer) {
-      clearTimeout(timer);
-    }
-    timer = null;
-    self.active = false;
-  };
-
-  var prepareFrame = function () {
-    if (!self.active) {
-      return;
-    }
-    var amount = (self.direction === 'forward')
-      ? self.delta : -self.delta;
-    var newDate = util.dateAdd(model.selected, self.interval, amount);
-    timer = setTimeout(function () {
-      advance(newDate);
-    }, self.delay);
-  };
-
-  var advance = function (newDate) {
-    var updated = model.select(newDate);
-    if (!updated) {
-      self.stop();
-    } else {
-      prepareFrame();
-    }
-  };
-
-  self.play = function (direction) {
-    if (self.active && direction !== self.direction) {
-      self.stop();
-    } else if (self.active) {
-      return;
-    }
-    self.direction = direction || self.direction;
-    self.active = true;
-    prepareFrame();
-  };
-
-  var reversePrevMinute = function () {
-    self.delta = 10;
-    var prevMinute = new Date(new Date(model.selected)
-      .setUTCMinutes(model.selected.getUTCMinutes() - 10));
-    if (prevMinute >= tl.data.start()) {
-      animateReverse('minute', -10);
-    } else {
-      self.stop();
-    }
-  };
-
-  var reversePrevDay = function () { // FIXME: Limit animation correctly
-    self.delta = 1;
-    var prevDay = new Date(new Date(model.selected)
-      .setUTCDate(model.selected.getUTCDate() - 1));
-    if (prevDay >= tl.data.start()) {
-      animateReverse('day', -1);
-    } else {
-      self.stop();
-    }
-  };
-
-  var reversePrevMonth = function () {
-    self.delta = 1;
-    var prevMonth = new Date(new Date(model.selected)
-      .setUTCMonth(model.selected.getUTCMonth() - 1));
-    if (prevMonth >= tl.data.start()) {
-      animateReverse('month', -1);
-    } else {
-      self.stop();
-    }
-  };
-
-  var reversePrevYear = function () {
-    self.delta = 1;
-    var prevYear = new Date(new Date(model.selected)
-      .setUTCFullYear(model.selected.getUTCFullYear() - 1));
-    if (prevYear >= tl.data.start()) {
-      animateReverse('year', -1);
-    } else {
-      self.stop();
-    }
-  };
-
-  var animateForward = function (interval, amount) {
-    if (self.active) {
-      return;
-    }
-    models.date.add(interval, amount);
-    self.interval = interval;
-    self.play('forward');
-  };
-
-  var animateReverse = function (interval, amount) {
-    if (self.active) {
-      return;
-    }
-    models.date.add(interval, amount);
-    self.interval = interval;
-    self.play('reverse');
   };
 
   var roll = function (dataInterval, amt) {
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-    }
     var interval = $(this)
       .attr('data-interval') || dataInterval;
     var amount = lodashParseInt($(this)
@@ -189,25 +61,23 @@ export function timelineInput(models, config, ui) {
     var min = models.date.minDate();
     var max = models.date.maxDate();
     var newDate = util.rollDate(date, interval, amount, min, max);
-
     if (newDate !== date) {
       rollingDate = newDate;
       $(this)
         .parent()
         .css('border-color', '');
       updateDateInputs(rollingDate);
-      var that = this;
-      timer = setTimeout(function () {
-        model.select(rollingDate);
-        $(that)
-          .parent()
-          .find('input')
-          .select();
-        rollingDate = null;
-        timer = null;
-      }, 400);
+      debounceDateChange(rollingDate, this);
     }
   };
+  var selectNewDate = function(newDate, el) {
+    model.select(newDate);
+    $(el)
+      .parent()
+      .find('input')
+      .select();
+  };
+  var debounceDateChange = lodashDebounce(selectNewDate, self.delay);
 
   // TODO: Cleanup
   var validateInput = function (event) {
@@ -283,10 +153,10 @@ export function timelineInput(models, config, ui) {
       if ((selectedDateObj > tl.data.start()) &&
         (selectedDateObj <= util.now())) {
         var parent = selected.parent();
-        var sib = parent.next('div.input-wrapper.selectable')
+        var sib = parent.next('div.input-wrapper')
           .find('input.button-input-group');
         if (parent.next('#input-time-divider').length) {
-          sib = parent.next().next('div.input-wrapper.selectable')
+          sib = parent.next().next('div.input-wrapper')
             .find('input.button-input-group');
         }
 
@@ -406,96 +276,78 @@ export function timelineInput(models, config, ui) {
         e.preventDefault();
         switch (ui.timeline.config.currentZoom) {
           case 1:
-            forwardNextYear();
+            animateByIncrement(1, 'year');
             break;
           case 2:
-            forwardNextMonth();
+            animateByIncrement(1, 'month');
             break;
           case 3:
-            forwardNextDay();
+            animateByIncrement(1, 'day');
             break;
           case 4:
-            forwardNextMinute();
+            animateByIncrement(10, 'minute');
             break;
           default:
-            forwardNextDay();
+            animateByIncrement(1, 'day');
         }
       })
-      .mouseup(self.stop);
+      .mouseup(stopper);
 
     $decrementBtn
       .mousedown(function (e) {
         e.preventDefault();
         switch (ui.timeline.config.currentZoom) {
           case 1:
-            reversePrevYear();
+            animateByIncrement(-1, 'year');
             break;
           case 2:
-            reversePrevMonth();
+            animateByIncrement(-1, 'month');
             break;
           case 3:
-            reversePrevDay();
+            animateByIncrement(-1, 'day');
             break;
           case 4:
-            reversePrevMinute();
+            animateByIncrement(-10, 'minute');
             break;
           default:
-            reversePrevDay();
+            animateByIncrement(-1, 'day');
         }
       })
-      .mouseup(self.stop);
+      .mouseup(stopper);
 
     $(document)
-      .mouseout(self.stop)
+      .mouseout(stopper)
       .keydown(function (event) {
-        if (event.target.nodeName === 'INPUT') {
-          return;
-        }
+        if (event.target.nodeName === 'INPUT' || keyDown === event.keyCode) return;
         switch (event.keyCode) {
           case util.key.LEFT:
-            switch (models.date.selectedZoom) {
-              case 1:
-                animateReverse('year', -1);
-                break;
-              case 2:
-                animateReverse('month', -1);
-                break;
-              case 3:
-                animateReverse('day', -1);
-                break;
-              case 4:
-                animateReverse('minute', -10);
-                break;
+            if (models.date.selectedZoom === 4) {
+              animateByIncrement(-1, 'hour');
+            } else {
+              animateByIncrement(-1, 'day');
             }
             event.preventDefault();
             break;
           case util.key.RIGHT:
-            switch (models.date.selectedZoom) {
-              case 1:
-                animateForward('year', 1);
-                break;
-              case 2:
-                animateForward('month', 1);
-                break;
-              case 3:
-                animateForward('day', 1);
-                break;
-              case 4:
-                animateForward('minute', 10);
-                break;
+            if (models.date.selectedZoom === 4) {
+              animateByIncrement(1, 'hour');
+            } else {
+              animateByIncrement(1, 'day');
             }
             event.preventDefault();
             break;
         }
+        keyDown = event.keyCode;
       })
       .keyup(function (event) {
         switch (event.keyCode) {
           case util.key.LEFT:
           case util.key.RIGHT:
-            self.stop();
+            stopper();
             event.preventDefault();
             break;
         }
+        keyDown = null;
       });
     // bind click action to interval radio buttons
     var $buttons = $('.button-input-group');
