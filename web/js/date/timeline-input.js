@@ -23,7 +23,17 @@ export function timelineInput(models, config, ui) {
 
   var $incrementBtn = $('#right-arrow-group');
   var $decrementBtn = $('#left-arrow-group');
-
+  /**
+   * Add timeout to date change when buttons are being held so that
+   * date changes don't happen too quickly
+   *
+   * @todo Create smart precaching so animation is smooth
+   *
+   * @param  {number} delta Amount of time to change
+   * @param  {String} increment Zoom level of timeline
+   *                  e.g. months,minutes, years, days
+   * @return {void}
+   */
   var animateByIncrement = function(delta, increment) {
     self.delta = Math.abs(delta);
     function animate() {
@@ -35,10 +45,21 @@ export function timelineInput(models, config, ui) {
     }
     animate();
   };
+  /**
+   *  Clear animateByIncrement's Timeout
+   *
+   * @return {void}
+   */
   var stopper = function() {
     clearInterval(animator);
     animator = 0;
   };
+  /**
+   * @param  {Number} delta Date and direction to change
+   * @param  {Number} increment Zoom level of change
+   *                  e.g. months,minutes, years, days
+   * @return {Object} JS Date Object
+   */
   var getNextTimeSelection = function(delta, increment) {
     switch (increment) {
       case 'year':
@@ -51,7 +72,15 @@ export function timelineInput(models, config, ui) {
         return new Date(new Date(model.selected).setUTCMinutes(model.selected.getUTCMinutes() + increment));
     }
   };
-
+  /**
+   * Change date input with up or down button and roll date if
+   * max or min date is reached when changed
+   *
+   * @param  {String} dataInterval Interval of change
+   *                  e.g. months,minutes, years, days
+   * @param  {Number} amt Amount to change
+   * @return {void}
+   */
   var roll = function (dataInterval, amt) {
     var interval = $(this)
       .attr('data-interval') || dataInterval;
@@ -70,6 +99,11 @@ export function timelineInput(models, config, ui) {
       debounceDateChange(rollingDate, this);
     }
   };
+  /**
+   * @param  {Object} newDate JS date Object
+   * @param  {el} el JS element
+   * @return {void}
+   */
   var selectNewDate = function(newDate, el) {
     model.select(newDate);
     $(el)
@@ -79,7 +113,7 @@ export function timelineInput(models, config, ui) {
   };
   var debounceDateChange = lodashDebounce(selectNewDate, self.delay);
 
-  // TODO: Cleanup
+  // TODO: Replace with WVC
   var validateInput = function (event) {
     var kc = event.keyCode || event.which;
     var entered = (kc === 13) || (kc === 9); // carriage return or horizontal tab
