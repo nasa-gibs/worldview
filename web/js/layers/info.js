@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'jquery-ui/dialog';
 import 'perfect-scrollbar/jquery';
 import wvui from '../ui/ui';
+import util from '../util/util';
 
 export function layersInfo(config, models, layer) {
   var $dialog;
@@ -77,18 +78,26 @@ export function layersInfo(config, models, layer) {
       .addClass('layer-metadata');
 
     if (layer.startDate) {
-      $layerDateStart.html(layer.startDate + ' - ');
+      if (layer.period !== 'subdaily') {
+        layer.startDate = util.toISOStringDate(util.parseDateUTC(layer.startDate));
+      }
+      $layerDateStart.html('Temporal coverage: ' + layer.startDate + ' - ');
       if (layer.id) $layerDateStart.attr('id', layer.id + '-startDate');
       $layerDateRange.append($layerDateStart);
+
+      if (layer.endDate) {
+        if (layer.period !== 'subdaily') {
+          layer.endDate = util.toISOStringDate(util.parseDateUTC(layer.endDate));
+        }
+        $layerDateEnd.html(layer.endDate);
+      } else {
+        $layerDateEnd.append('Present');
+      }
+      if (layer.id) $layerDateEnd.attr('id', layer.id + '-endDate');
+      $layerDateRange.append($layerDateEnd);
+      $layerDescription.append($layerDateRange);
     }
-    if (layer.startDate && layer.endDate) {
-      $layerDateEnd.html(layer.endDate);
-    } else if (layer.startDate) {
-      $layerDateEnd.append('Present');
-    }
-    if (layer.id) $layerDateEnd.attr('id', layer.id + '-endDate');
-    $layerDateRange.append($layerDateEnd);
-    $layerDescription.append($layerDateRange);
+
     if (layer.description) {
       $.get('config/metadata/' + layer.description + '.html')
         .success(function (data) {
