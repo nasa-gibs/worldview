@@ -47,7 +47,8 @@ export function dataHandlerGetByName(name) {
     'MODISMix': dataHandlerModisMix,
     'MODISSwath': dataHandlerModisSwath,
     'TerraSwathMultiDay': dataHandlerTerraSwathMultiDay,
-    'HalfOrbit': dataHandlerHalfOrbit
+    'HalfOrbit': dataHandlerHalfOrbit,
+    'VIIRSSwath': dataHandlerVIIRSSwath
   };
   var handler = map[name];
   if (!handler) {
@@ -640,7 +641,62 @@ export function dataHandlerHalfOrbit(config, model, spec) {
       dataResultsTransform(model.crs),
       dataResultsTimeLabel(model.time)
     ];
-    console.log('before process', results);
+    return chain.process(results);
+  };
+
+  init();
+  return self;
+};
+
+export function dataHandlerVIIRSSwath(config, model) {
+  var self = dataHandlerBase(config, model);
+
+  var spec = {
+    startTimeDelta: -180,
+    endTimeDelta: 180,
+    maxDistance: 270,
+    eastZone: 300,
+    westZone: 1380
+  };
+
+  var init = function () {
+    // Normal north-south extent minus a degree on each side. This removes
+    // granules that misbehave at the poles
+    self.extents[CRS_WGS_84] = [-180, -59, 180, 59];
+  };
+
+  self._submit = function (queryData) {
+    var queryOptions = {
+      time: model.time,
+      data: queryData
+    };
+
+    return self.cmr.submit(queryOptions);
+  };
+
+  self._processResults = function (data) {
+    var results = {
+      meta: {},
+      granules: data
+    };
+
+    // var productConfig = config.products[model.selectedProduct];
+    var chain = dataResultsChain();
+    chain.processes = [
+      dataResultsGeometryFromCMR(),
+      dataResultsTransform(model.crs),
+      dataResultsExtentFilter(model.crs, self.extents[model.crs]),
+      dataResultsTimeFilter({
+        time: model.time,
+        eastZone: spec.eastZone,
+        westZone: spec.westZone,
+        maxDistance: spec.maxDistance
+      }),
+      dataResultsTimeLabel(model.time),
+      // End of one granule is 60 seconds behind the start of the next granule.
+      // Use delta of -60.
+      dataResultsConnectSwaths(model.crs, -60)
+    ];
     return chain.process(results);
   };
 

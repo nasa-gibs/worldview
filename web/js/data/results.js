@@ -144,7 +144,7 @@ export function dataResultsCollectVersions() {
   return self;
 };
 
-export function dataResultsConnectSwaths(projection) {
+export function dataResultsConnectSwaths(projection, delta) {
   var MAX_DISTANCE_GEO = 270;
   var startTimes = {};
   var endTimes = {};
@@ -173,7 +173,7 @@ export function dataResultsConnectSwaths(projection) {
     startTimes[timeStart] = swath;
     endTimes[timeEnd] = swath;
 
-    combineSwath(swath);
+    combineSwath(swath, delta);
     return granule;
   };
 
@@ -186,14 +186,23 @@ export function dataResultsConnectSwaths(projection) {
     });
   };
 
-  var combineSwath = function (swath) {
+  var combineSwath = function (swath, delta) {
     var combined = false;
 
     var maxDistance = (projection === CRS_WGS_84)
       ? MAX_DISTANCE_GEO : Number.POSITIVE_INFINITY;
     var thisTimeStart = roundTime(swath[0].time_start);
     var thisTimeEnd = roundTime(swath[swath.length - 1].time_end);
-    var otherSwath = endTimes[thisTimeStart];
+
+    // MODIS data is easily combined by matching up the end time of
+    // one granule to the start time of another granule because they
+    // are the same value. VIIRS start and end times differ by a
+    // minute. Use the delta value to adjust as needed.
+    delta = delta || 0;
+    var thisTimeStartDate = util.parseTimestampUTC(thisTimeStart);
+    thisTimeStartDate.setUTCSeconds(thisTimeStartDate.getUTCSeconds() + delta);
+    var thisTimeStartDelta = thisTimeStartDate.toISOString(thisTimeStartDate);
+    var otherSwath = endTimes[thisTimeStartDelta];
 
     // Can this swath be added to the end of other swath?
     if (otherSwath) {
