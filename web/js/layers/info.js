@@ -65,14 +65,14 @@ export function layersInfo(config, models, layer) {
   };
 
   var renderDescription = function ($dialog) {
+    var $layerDescription = $('<div></div>')
+      .addClass('layer-description');
     var $layerDateRange = $('<p></p>')
       .addClass('layer-date-range');
     var $layerDateStart = $('<span></span>')
       .addClass('layer-date-start');
     var $layerDateEnd = $('<span></span>')
       .addClass('layer-date-end');
-    var $layerDescription = $('<div></div>')
-      .addClass('layer-description');
     var $layerMeta = $('<div></div>')
       .addClass('layer-metadata');
 
