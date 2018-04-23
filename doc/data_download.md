@@ -131,7 +131,11 @@ only one of these.
 ### ConnectSwaths
 
 Uses the acquisition times to create connector lines to show the swath
-ground track.
+ground track. Swaths are normally connected when the start time of one
+granule matches the end time of another granule. If this is not the
+case, use the `delta` parameter to specify, in seconds, how much time should
+be added to the start time to match the end time of another granule. For
+VIIRS, this is -60.
 
 ### DateTimeLabel
 
