@@ -35,6 +35,7 @@ export function layersOptions(config, models, layer) {
   var loaded = function (custom) {
     $dialog = wvui.getDialog();
     $dialog
+      .addClass('wv-layers-options-dialog')
       .attr('id', 'wv-layers-options-dialog')
       .attr('data-layer', layer.id);
     renderOpacity($dialog);
