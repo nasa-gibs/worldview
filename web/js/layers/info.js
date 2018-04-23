@@ -50,8 +50,12 @@ export function layersInfo(config, models, layer) {
       },
       close: dispose
     });
+
     $('#wv-layers-info-dialog')
       .perfectScrollbar();
+
+    models.layers.events
+      .on('remove', onLayerRemoved);
   };
 
   var dispose = function () {
