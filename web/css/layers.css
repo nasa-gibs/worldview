@@ -553,6 +553,7 @@
 .layers-all .source-metadata p,
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata a,
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata p,
+.layer-date-range,
 .layer-metadata a,
 .layer-metadata p {
   font-family: 'Open Sans', sans-serif;
@@ -566,6 +567,7 @@
   color: #bbb;
 }
 
+.layer-date-range,
 .layer-metadata p {
   color: #ccc;
 }
