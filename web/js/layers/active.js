@@ -153,50 +153,11 @@ export function layersActive(models, ui, config) {
 
     $visibleButton.append($visibleImage);
     $layer.append($visibleButton);
-    if (!model.available(layer.id)) {
-      $layer
-        .removeClass('layer-visible')
-        .addClass('disabled')
-        .addClass('layer-hidden');
-      $visibleButton
-        .attr('title', 'No data on selected date for this layer');
-    } else {
-      $layer
-        .removeClass('disabled')
-        .addClass('layer-enabled')
-        .removeClass('layer-hidden');
-      if (!layer.visible) {
-        $visibleButton
-          .attr('title', 'Show Layer')
-          .attr('data-action', 'show')
-          .parent()
-          .addClass('layer-hidden');
-      } else {
-        $visibleButton
-          .attr('title', 'Hide Layer')
-          .attr('data-action', 'hide')
-          .parent()
-          .addClass('layer-visible');
-      }
-    }
     $layer.append($('<div></div>')
       .addClass('zot')
       .append('<b>!</b>'));
-    if (model.available(layer.id)) {
-      if (!layer.visible) {
-        $visibleButton
-          .attr('title', 'Show Layer')
-          .attr('data-action', 'show')
-          .parent()
-          .addClass('layer-hidden');
-      } else {
-        $visibleButton
-          .attr('title', 'Hide Layer')
-          .attr('data-action', 'hide')
-          .parent()
-          .addClass('layer-visible');
-      }
-    }
+
+    setLayerVisibility(group, layer, $layer, $visibleButton);
 
     checkZots($layer, layer);
 
@@ -529,40 +490,59 @@ export function layersActive(models, ui, config) {
         group: group.id
       }), function (layer) {
         var $layer = $('#' + group.id + '-' + encodeURIComponent(layer.id));
-
         var $visibleButton = $('#' + 'hide' + encodeURIComponent(layer.id));
-
-        if (!model.available(layer.id)) {
-          $layer
-            .removeClass('layer-visible')
-            .removeClass('layer-enabled')
-            .addClass('disabled')
-            .addClass('layer-hidden');
-          $visibleButton
-            .attr('title', 'No data on selected date for this layer');
-        } else {
-          $layer
-            .removeClass('layer-visible')
-            .removeClass('disabled')
-            .addClass('layer-enabled')
-            .removeClass('layer-hidden');
-          if (!layer.visible) {
-            $visibleButton
-              .attr('title', 'Show Layer')
-              .attr('data-action', 'show')
-              .parent()
-              .addClass('layer-hidden');
-          } else {
-            $visibleButton
-              .attr('title', 'Hide Layer')
-              .attr('data-action', 'hide')
-              .parent()
-              .addClass('layer-visible');
-          }
-        }
+        setLayerVisibility(group, layer, $layer, $visibleButton);
         checkZots($layer, layer);
       });
     });
+  };
+
+  var setLayerVisibility = function (group, layer, $layer, $visibleButton) {
+    if (!model.available(layer.id)) {
+      $layer
+        .removeClass('layer-visible')
+        .removeClass('layer-enabled')
+        .addClass('disabled')
+        .addClass('layer-hidden');
+      if (layer.startDate && layer.endDate) {
+        if (layer.period !== 'subdaily') {
+          layer.startDate = util.toISOStringDate(util.parseDateUTC(layer.startDate));
+          layer.endDate = util.toISOStringDate(util.parseDateUTC(layer.endDate));
+        }
+        $visibleButton
+          .attr('title', 'Data available between ' + layer.startDate +
+          ' - ' + util.toISOStringDate(util.parseDateUTC(layer.endDate)));
+      } else if (layer.startDate) {
+        if (layer.period !== 'subdaily') {
+          layer.startDate = util.toISOStringDate(util.parseDateUTC(layer.startDate));
+        }
+        $visibleButton
+          .attr('title', 'Data available between ' + layer.startDate +
+          ' - Present');
+      } else {
+        $visibleButton
+          .attr('title', 'No data on selected date for this layer');
+      }
+    } else {
+      $layer
+        .removeClass('layer-visible')
+        .removeClass('disabled')
+        .addClass('layer-enabled')
+        .removeClass('layer-hidden');
+      if (!layer.visible) {
+        $visibleButton
+          .attr('title', 'Show Layer')
+          .attr('data-action', 'show')
+          .parent()
+          .addClass('layer-hidden');
+      } else {
+        $visibleButton
+          .attr('title', 'Hide Layer')
+          .attr('data-action', 'hide')
+          .parent()
+          .addClass('layer-visible');
+      }
+    }
   };
 
   var checkZots = function ($layer, layer) {
