@@ -383,4 +383,4 @@ var eventVisibilityAlertBody = '<h3 class="wv-data-unavailable-header">Why canâ€
 '<li>The resolution of the imagery may be too coarse to see an event.</li>' +
 '<li>There are normal swath data gaps in some of the imagery layers due to way the satellite orbits the Earth, and an event may have occurred in the data gap.</li>' +
 '</ul>' +
-'<p>This is currently an experimental feature and we are working closely with the provider of these events, the <a href="http://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.</p>';
+'<p>This is currently an experimental feature and we are working closely with the provider of these events, the <a href="https://eonet.sci.gsfc.nasa.gov/" target="_blank">Earth Observatory Natural Event Tracker</a>, to refine this listing to only show events that are visible with our satellite imagery.</p>';
