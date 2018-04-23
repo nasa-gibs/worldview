@@ -63,7 +63,7 @@ export function naturalEventsClusterPointToGeoJSON(id, coordinates, date) {
 };
 /**
  * @param  {Array}
- * @return {[type]}
+ * @return {void}
  */
 export function naturalEventsClusterSort(clusterArray) {
   let newArray = clusterArray.sort(function(a, b) {
@@ -74,7 +74,14 @@ export function naturalEventsClusterSort(clusterArray) {
   });
   return newArray;
 };
-
+/**
+ * Load points given superCluster Object
+ *
+ * @param  {Object} superClusterObj
+ * @param  {Array} pointArray
+ * @param  {number} zoomLevel
+ * @return {Object}
+ */
 export function naturalEventsClusterGetPoints(superClusterObj, pointArray, zoomLevel) {
   superClusterObj.load(pointArray);
   return superClusterObj.getClusters([-180, -90, 180, 90], lodashRound(zoomLevel));
