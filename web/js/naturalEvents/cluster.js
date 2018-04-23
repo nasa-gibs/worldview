@@ -1,6 +1,6 @@
 import superCluster from 'supercluster';
 import lodashRound from 'lodash/round';
-import lodashEach from 'lodash/each';
+
 /**
  * Create superCLuster Object - Uses map and reduce
  * operations to create a timespan on each clustered
