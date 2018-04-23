@@ -380,7 +380,7 @@ function getClusterPointEl(cluster, map, pointClusterObj, callback) {
   var numberEl = document.createTextNode(number);
   var dateRangeTextEl = document.createTextNode(properties.startDate + ' to ' + properties.endDate);
   var coordinates = cluster.geometry.coordinates;
-  var sizeClass = (number < 3) ? 'small' : (number < 8) ? 'medium' : 'large';
+  var sizeClass = (number < 10) ? 'small' : (number < 20) ? 'medium' : 'large';
 
   overlayEl.className = 'cluster-track-marker-case track-marker-case';
   textEl.className = 'cluster-track-marker-date track-marker-date';

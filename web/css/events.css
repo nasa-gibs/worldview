@@ -219,24 +219,18 @@
   display: block;
 }
 .cluster-marker-small {
-  background-color: rgb(181, 226, 140, 0.6);
-}
-.cluster-marker-small .cluster-marker-inner {
-  background-color: rgba(110, 204, 57, 0.6);
+  background-color: rgb(253, 156, 115, 0.8);
+  transform: scale(0.8);
+
 }
 
 .cluster-marker-medium {
-  background-color: rgba(241, 211, 87, 0.6);
-}
-.cluster-marker-medium .cluster-marker-inner {
-  background-color: rgba(240, 194, 12, 0.6);
+  background-color: rgba(253, 156, 115, 0.9);
+  transform: scale(0.9);
 }
 
 .cluster-marker-large {
-  background-color: rgba(253, 156, 115, 0.6);
-}
-.cluster-marker-large .cluster-marker-inner {
-  background-color: rgba(241, 128, 23, 0.6);
+  background-color: rgba(253, 156, 115, 1);
 }
 .cluster-marker {
   border-radius: 12px;
