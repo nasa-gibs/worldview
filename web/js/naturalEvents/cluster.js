@@ -8,7 +8,7 @@ import lodashRound from 'lodash/round';
  *
  * @return {void}
  */
-export function naturalEventsClusterCreateObject () {
+export function naturalEventsClusterCreateObject() {
   return superCluster({
     radius: 60, // pixel radius where points are clustered
     maxZoom: 16,

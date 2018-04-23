@@ -212,25 +212,30 @@
 .track-marker-case .track-marker:hover ~ .track-marker-date {
   display: block;
 }
-.cluster-track-marker-case {
-  z-index: 100;
-}
 .cluster-marker:hover ~ .cluster-track-marker-date {
   display: block;
 }
 .cluster-marker-small {
-  background-color: rgb(253, 156, 115, 0.8);
+  background-color: rgb(214, 139, 108, 0.6);
   transform: scale(0.8);
-
+}
+.cluster-marker-small .cluster-marker-inner {
+  background-color: rgba(209, 114, 74, 0.6);
 }
 
 .cluster-marker-medium {
-  background-color: rgba(253, 156, 115, 0.9);
+  background-color: rgba(220, 125, 86, 0.6);
   transform: scale(0.9);
+}
+.cluster-marker-medium .cluster-marker-inner {
+  background-color: rgba(217, 97, 48, 0.6);
 }
 
 .cluster-marker-large {
-  background-color: rgba(253, 156, 115, 1);
+  background-color: rgba(243, 127, 72, 0.6);
+}
+.cluster-marker-large .cluster-marker-inner {
+  background-color: rgba(241, 93, 23, 0.6);
 }
 .cluster-marker {
   border-radius: 12px;
