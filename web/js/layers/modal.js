@@ -24,7 +24,7 @@ export function layersModal(models, ui, config) {
   self.id = 'layer-modal';
   self.metadata = {};
 
-  var $header = $(self.selector + ' header');
+  var $header = $(self.selector + ' #layer-modal-header');
   var $categories = $(' #layer-categories ');
   var $selectedCategory = $(self.selector + ' #selected-category');
   var $allLayers = $(self.selector + ' #layers-all');
@@ -78,12 +78,14 @@ export function layersModal(models, ui, config) {
 
   // Create container for 'by interest' filters buttons
   var $nav = $('<nav />', {
-    id: 'categories-nav'
+    id: 'categories-nav',
+    'class': 'categories-nav'
   });
 
   // Create container for breadcrumb
   var $breadcrumb = $('<nav />', {
-    id: 'category-breadcrumb'
+    id: 'category-breadcrumb',
+    'class': 'category-breadcrumb'
   });
 
   /**
@@ -182,11 +184,11 @@ export function layersModal(models, ui, config) {
       width: modalWidth
     });
     $('#layers-all').css('height', modalHeight - 70); // 40 search box height + 30 breadcrub height
-    $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar('update');
+    $('#layer-modal-content').css('height', modalHeight - 40).perfectScrollbar('update');
   };
 
   var redoScrollbar = function () {
-    $('#layer-modal-main').perfectScrollbar('update');
+    $('#layer-modal-content').perfectScrollbar('update');
   };
 
   // This draws the default page, depending on projection
@@ -197,7 +199,7 @@ export function layersModal(models, ui, config) {
     $breadcrumb.hide();
     searchBool = false;
     if (self.reactList) {
-      $('#layer-modal-main').perfectScrollbar();
+      $('#layer-modal-content').perfectScrollbar();
     }
     $('#layers-search-input').val('');
     $('#layer-search label.search-icon').removeClass('search-on').off('click');
@@ -373,6 +375,7 @@ export function layersModal(models, ui, config) {
       var $filterButton = $('<input />', {
         text: interestLabelName(metaCategoryName),
         id: 'button-filter-' + interestCssName(metaCategoryName),
+        'class': 'button-input-' + interestCssName(metaCategoryName),
         'data-filter': interestCssName(metaCategoryName),
         'type': 'radio'
       }).click(function (e) {
@@ -385,6 +388,7 @@ export function layersModal(models, ui, config) {
 
       var $label = $('<label />', {
         text: interestLabelName(metaCategoryName),
+        'class': 'layer-category-button button-label-' + interestCssName(metaCategoryName),
         'for': 'button-filter-' + interestCssName(metaCategoryName)
       });
 
@@ -412,9 +416,9 @@ export function layersModal(models, ui, config) {
 
     });
 
-    $('#layer-modal-main').prepend($nav);
+    $('#layer-modal-content').prepend($nav);
 
-    $('label[for=button-filter-legacy]').addClass('nav-selected');
+    $('label[for=button-filter-legacy]').addClass('layer-category-button button-label-legacy nav-selected');
   };
 
   /**
@@ -706,7 +710,7 @@ export function layersModal(models, ui, config) {
   var drawAllLayers = function () {
     var projection = models.proj.selected.id;
     // Remove perfectScrollbar for the search list window
-    $('#layer-modal-main').perfectScrollbar('destroy');
+    $('#layer-modal-content').perfectScrollbar('destroy');
 
     var props = {
       addLayer: model.add,
@@ -813,7 +817,7 @@ export function layersModal(models, ui, config) {
       $('#layers-search-input').focus();
     } else {
       $('#layers-search-input').blur();
-      $('#layer-modal-main').focus();
+      $('#layer-modal-content').focus();
     }
   };
 
@@ -821,10 +825,11 @@ export function layersModal(models, ui, config) {
     checkModalView();
     setModalSize();
 
-    $('#layer-modal-main').css('height', modalHeight - 40).perfectScrollbar();
+    $('#layer-modal-content').css('height', modalHeight - 40).perfectScrollbar();
 
     var $search = $('<div />', {
-      id: 'layer-search'
+      id: 'layer-search',
+      'class': 'layer-search'
     });
 
     var $searchInput = $('<input />', {
@@ -844,7 +849,8 @@ export function layersModal(models, ui, config) {
     $header.append($search);
 
     var $closeButton = $('<div />', {
-      'id': 'layers-modal-close'
+      'id': 'layers-modal-close',
+      'class': 'layers-modal-close'
     }).click(function () {
       $(self.selector).dialog('close');
     }).append('<i></i>');
@@ -857,7 +863,7 @@ export function layersModal(models, ui, config) {
       height: modalHeight,
       width: modalWidth,
       modal: true,
-      dialogClass: 'layer-modal no-titlebar',
+      dialogClass: 'layer-modal-dialog no-titlebar',
       draggable: false,
       title: 'Layer Picker',
       show: {

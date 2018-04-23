@@ -35,10 +35,8 @@
 @import url("events.css");
 @import url("dataDownload.css");
 @import url("sidebar.css");
-@import url("layers.modal.css");
+@import url("layers.css");
 @import url("scrollbar.css");
-@import url("layers.options.css");
-@import url("layers.info.css");
 @import url("timeline.css");
 @import url("anim.widget.css");
 @import url("dateselector.css");
