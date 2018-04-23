@@ -16,6 +16,7 @@ export function layersInfo(config, models, layer) {
 
     $dialog = wvui.getDialog();
     $dialog
+      .addClass('wv-layers-info-dialog')
       .attr('id', 'wv-layers-info-dialog')
       .attr('data-layer', layer.id);
     renderDescription($dialog);
@@ -64,18 +65,40 @@ export function layersInfo(config, models, layer) {
   };
 
   var renderDescription = function ($dialog) {
+    var $layerDateRange = $('<p></p>')
+      .addClass('layer-date-range');
+    var $layerDateStart = $('<span></span>')
+      .addClass('layer-date-start');
+    var $layerDateEnd = $('<span></span>')
+      .addClass('layer-date-end');
+    var $layerDescription = $('<div></div>')
+      .addClass('layer-description');
     var $layerMeta = $('<div></div>')
-      .addClass('layer-metadata source-metadata');
+      .addClass('layer-metadata');
 
+    if (layer.startDate) {
+      $layerDateStart.html(layer.startDate + ' - ');
+      if (layer.id) $layerDateStart.attr('id', layer.id + '-startDate');
+      $layerDateRange.append($layerDateStart);
+    }
+    if (layer.startDate && layer.endDate) {
+      $layerDateEnd.html(layer.endDate);
+    } else if (layer.startDate) {
+      $layerDateEnd.append('Present');
+    }
+    if (layer.id) $layerDateEnd.attr('id', layer.id + '-endDate');
+    $layerDateRange.append($layerDateEnd);
+    $layerDescription.append($layerDateRange);
     if (layer.description) {
       $.get('config/metadata/' + layer.description + '.html')
         .success(function (data) {
           $layerMeta.html(data);
-          $dialog.append($layerMeta);
+          $layerDescription.append($layerMeta);
           $layerMeta.find('a')
             .attr('target', '_blank');
         });
     }
+    $dialog.append($layerDescription);
   };
 
   init();
