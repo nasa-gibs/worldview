@@ -48,7 +48,8 @@ export function dataHandlerGetByName(name) {
     'MODISSwath': dataHandlerModisSwath,
     'TerraSwathMultiDay': dataHandlerTerraSwathMultiDay,
     'HalfOrbit': dataHandlerHalfOrbit,
-    'VIIRSSwath': dataHandlerVIIRSSwath
+    'VIIRSSwathDay': dataHandlerVIIRSSwathDay,
+    'VIIRSSwathNight': dataHandlerVIIRSSwathNight
   };
   var handler = map[name];
   if (!handler) {
@@ -648,16 +649,28 @@ export function dataHandlerHalfOrbit(config, model, spec) {
   return self;
 };
 
-export function dataHandlerVIIRSSwath(config, model) {
-  var self = dataHandlerBase(config, model);
-
-  var spec = {
+export function dataHandlerVIIRSSwathDay(config, model, spec) {
+  return dataHandlerVIIRSSwath(config, model, {
     startTimeDelta: -180,
     endTimeDelta: 180,
     maxDistance: 270,
     eastZone: 300,
     westZone: 1380
-  };
+  });
+};
+
+export function dataHandlerVIIRSSwathNight(config, model, spec) {
+  return dataHandlerVIIRSSwath(config, model, {
+    startTimeDelta: 0,
+    endTimeDelta: 0,
+    maxDistance: 270,
+    eastZone: 0,
+    westZone: 1440
+  });
+};
+
+export function dataHandlerVIIRSSwath(config, model, spec) {
+  var self = dataHandlerBase(config, model);
 
   var init = function () {
     // Normal north-south extent minus a degree on each side. This removes
@@ -668,6 +681,8 @@ export function dataHandlerVIIRSSwath(config, model) {
   self._submit = function (queryData) {
     var queryOptions = {
       time: model.time,
+      startTimeDelta: spec.startTimeDelta,
+      endTimeDelta: spec.endTimeDelta,
       data: queryData
     };
 
@@ -684,6 +699,7 @@ export function dataHandlerVIIRSSwath(config, model) {
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsGeometryFromCMR(),
+      dataResultsAntiMeridianMulti(spec.maxDistance),
       dataResultsTransform(model.crs),
       dataResultsExtentFilter(model.crs, self.extents[model.crs]),
       dataResultsTimeFilter({
