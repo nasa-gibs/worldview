@@ -683,10 +683,12 @@ export function dataHandlerVIIRSSwathDay(config, model) {
       granules: data
     };
 
-    // var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagURS(productConfig.urs),
       dataResultsGeometryFromCMR(),
       dataResultsTransform(model.crs),
       dataResultsExtentFilter(model.crs, self.extents[model.crs]),
@@ -742,10 +744,12 @@ export function dataHandlerVIIRSSwathNight(config, model) {
       granules: data
     };
 
-    // var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagURS(productConfig.urs),
       dataResultsGeometryFromCMR(),
       dataResultsAntiMeridianMulti(spec.maxDistance),
       dataResultsTransform(model.crs),
