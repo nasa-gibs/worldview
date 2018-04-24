@@ -498,6 +498,7 @@ export function layersActive(models, ui, config) {
   };
 
   var setLayerVisibility = function (group, layer, $layer, $visibleButton) {
+    var startDate, endDate;
     if (!model.available(layer.id)) {
       $layer
         .removeClass('layer-visible')
@@ -505,19 +506,25 @@ export function layersActive(models, ui, config) {
         .addClass('disabled')
         .addClass('layer-hidden');
       if (layer.startDate && layer.endDate) {
+        startDate = util.parseDate(layer.startDate);
+        endDate = util.parseDate(layer.endDate);
         if (layer.period !== 'subdaily') {
-          layer.startDate = util.toISOStringDate(util.parseDateUTC(layer.startDate));
-          layer.endDate = util.toISOStringDate(util.parseDateUTC(layer.endDate));
+          startDate = startDate.getDate() + ' ' + util.giveMonth(startDate) + ' ' +
+          startDate.getFullYear();
+          endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
+          endDate.getFullYear();
         }
         $visibleButton
-          .attr('title', 'Data available between ' + layer.startDate +
-          ' - ' + util.toISOStringDate(util.parseDateUTC(layer.endDate)));
+          .attr('title', 'Data available between ' + startDate +
+          ' - ' + endDate);
       } else if (layer.startDate) {
+        startDate = util.parseDate(layer.startDate);
         if (layer.period !== 'subdaily') {
-          layer.startDate = util.toISOStringDate(util.parseDateUTC(layer.startDate));
+          startDate = startDate.getDate() + ' ' + util.giveMonth(startDate) + ' ' +
+          startDate.getFullYear();
         }
         $visibleButton
-          .attr('title', 'Data available between ' + layer.startDate +
+          .attr('title', 'Data available between ' + startDate +
           ' - Present');
       } else {
         $visibleButton
