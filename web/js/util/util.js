@@ -165,6 +165,7 @@ export default (function (self) {
     return context.getImageData(x, y, 1, 1)
       .data;
   };
+
   /**
    * Parses a UTC ISO 8601 date.
    *
@@ -206,6 +207,47 @@ export default (function (self) {
     }
     return date;
   };
+
+  /**
+   * Parses a UTC ISO 8601 date to a non UTC date
+   *
+   * @method parseDate
+   * @static
+   * @param str {string} Date to parse in the form of YYYY-MM-DDTHH:MM:SSZ`.
+   * @return {Date} converted string as a non UTC date object, throws an exception if
+   * the string is invalid
+   */
+  self.parseDate = function (dateAsString) {
+    var dateTimeArr = dateAsString.split(/T/);
+
+    var yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
+
+    // Parse elements of date and time
+    var year = yyyymmdd[0];
+    var month = yyyymmdd[1] - 1;
+    var day = yyyymmdd[2];
+
+    var hour = 0;
+    var minute = 0;
+    var second = 0;
+    var millisecond = 0;
+
+    // Use default of midnight if time is not specified
+    if (dateTimeArr.length > 1) {
+      var hhmmss = dateTimeArr[1].split(/[:.Z]/);
+      hour = hhmmss[0] || 0;
+      minute = hhmmss[1] || 0;
+      second = hhmmss[2] || 0;
+      millisecond = hhmmss[3] || 0;
+    }
+    var date = new Date(year, month, day, hour, minute, second,
+      millisecond);
+    if (isNaN(date.getTime())) {
+      throw new Error('Invalid date: ' + dateAsString);
+    }
+    return date;
+  };
+
   /**
    * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
    *
@@ -357,6 +399,7 @@ export default (function (self) {
     }
     return newDate;
   };
+
   self.getNumberOfDays = function(start, end, interval) {
     var i = 1;
     var currentDate = start;
@@ -366,6 +409,7 @@ export default (function (self) {
     }
     return i;
   };
+
   self.daysInMonth = function (d) {
     var year;
     var month;
@@ -414,6 +458,7 @@ export default (function (self) {
 
     return day[d.getUTCDay()];
   };
+
   /**
    * Returns the month of the year for the given date object
    *

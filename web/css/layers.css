@@ -471,15 +471,24 @@
 
 .layer-description,
 .source-metadata {
-  padding-top: 7px;
+  padding-top: 11px;
   border-top: 2px solid #d54e21;
 }
-.source-metadata {
+
+.layers-all .layers-all-layer .source-metadata,
+.selected-category .source-metadata {
   margin-top: 7px;
+  padding-top: 7px;
+}
+
+.layers-all .layers-all-layer .source-metadata {
+  border-top-width: 1px;
+  color: #ddd;
+  padding-right: 1.2em;
 }
 
 .layer-description .layer-title,
-.layer-modal .layers-all-layer .source-metadata h3 {
+.layer-modal .source-metadata h3 {
   display: block;
   color: #ddd;
   font-weight: 700;
@@ -551,6 +560,7 @@
 
 .layers-all .source-metadata a,
 .layers-all .source-metadata p,
+.layers-all .source-metadata span,
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata a,
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata p,
 .layer-date-range,
@@ -563,7 +573,8 @@
   margin-bottom: 15px;
 }
 
-.layers-all .source-metadata p {
+.layers-all .source-metadata p,
+.layers-all .source-metadata span {
   color: #bbb;
 }
 
