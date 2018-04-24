@@ -686,6 +686,7 @@ export function dataHandlerVIIRSSwathDay(config, model) {
     // var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsTagProduct(model.selectedProduct),
       dataResultsGeometryFromCMR(),
       dataResultsTransform(model.crs),
       dataResultsExtentFilter(model.crs, self.extents[model.crs]),
@@ -744,6 +745,7 @@ export function dataHandlerVIIRSSwathNight(config, model) {
     // var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsTagProduct(model.selectedProduct),
       dataResultsGeometryFromCMR(),
       dataResultsAntiMeridianMulti(spec.maxDistance),
       dataResultsTransform(model.crs),
