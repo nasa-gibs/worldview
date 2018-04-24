@@ -177,6 +177,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     if (!model.data.events) return;
     var extent = view.calculateExtent();
     model.data.events.forEach(function (naturalEvent) {
+      var isSelectedEvent = (self.selected.id === naturalEvent.id);
       var date = self.getDefaultEventDate(naturalEvent);
       if (self.selected && self.selected.date) {
         date = self.selected.date;
@@ -193,7 +194,7 @@ export default function naturalEventsUI (models, ui, config, request) {
 
       var isVisible = olExtent.containsCoordinate(extent, coordinates);
       var $thisItem = $('.map-item-list .item[data-id=' + naturalEvent.id + ']');
-      if (isVisible) {
+      if (isVisible || isSelectedEvent) {
         $thisItem.show();
       } else {
         $thisItem.hide();
@@ -217,7 +218,7 @@ export default function naturalEventsUI (models, ui, config, request) {
 
     $footer = $('<footer />');
     var $footerNote = $('<p />', {
-      text: 'Only events in current map view are listed'
+      text: 'Only selected events and events in current map view are listed'
     });
     var $showAllBtn = $('<button />', {
       class: 'action',
