@@ -66,10 +66,10 @@ The following properties are required if this information is not available via t
 - **type**: Tile service type, either *wmts* or *wms*.
 - **format**: Image format type, either *image/png* or *image/jpeg*.
 - **tileSize**: For WMS layers only, an array of pixel dimensions used to tile the requests. For example, *[512, 512]*
-- **period**: Use *daily* for layers that have new content each day, otherwise use *static*.
-- **startDate**: For daily layers, the first day in `YYYY-MM-DD` format that data is available
-- **inactive**: If the daily layer is no longer being produced, this should be present with a *true* value. Otherwise, this property can be omitted.
-- **endDate**: If the daily layer is no longer being produced, the last day in `YYYY-MM-DD` format that data was available.
+- **period**: Use *subdaily*, *daily*, *monthly*, or *yearly* for layers that have new content and no startDate defined in GetCapabilities. Changing the period will affect how often the layer is requested in the timeline. Use *static* to clear the startDate and always have the layer shown on the timeline.
+- **startDate**: The first day that data is available, represented in YYYY-MM-DD or YYYY-MM-DDThh:mm:ssZ format.
+- **endDate**: The last day that data is available, represented in YYYY-MM-DD or YYYY-MM-DDThh:mm:ssZ format.
+- **inactive**: Use *true* if the layer is no longer being produced.
 
 A *projections* object must exist which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in `config/wv.json/projections`). Example:
 

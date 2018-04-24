@@ -31,7 +31,8 @@ import {
   dataResultsGeometryFromMODISGrid,
   dataResultsModisGridLabel,
   dataResultsOrbitFilter,
-  dataResultsDividePolygon
+  dataResultsDividePolygon,
+  dataResultsOfflineFilter
 } from './results';
 
 export function dataHandlerGetByName(name) {
@@ -156,6 +157,7 @@ export function dataHandlerModisSwathMultiDay(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
@@ -230,6 +232,7 @@ export function dataHandlerCollectionList(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsTagList(),
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagURS(productConfig.urs),
@@ -334,6 +337,7 @@ export function dataHandlerList(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsTagList(),
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
@@ -391,6 +395,7 @@ export function dataHandlerDailyAMSRE(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsTagList(),
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagURS(productConfig.urs),
@@ -446,6 +451,7 @@ export function dataHandlerModisGrid(config, model, spec) {
 
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagVersion(),
       dataResultsTagURS(productConfig.urs),
@@ -568,6 +574,7 @@ export function dataHandlerModisSwath(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
@@ -617,6 +624,7 @@ export function dataHandlerHalfOrbit(config, model, spec) {
     var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
+      dataResultsOfflineFilter(),
       dataResultsOrbitFilter(productConfig.orbit),
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),

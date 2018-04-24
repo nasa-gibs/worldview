@@ -167,6 +167,10 @@ Creates a index value by combining the MODIS H and V tile numbers.
 
 Creates a label for this granule based on the MODIS H and V tile numbers.
 
+### OfflineFilter
+
+Filters out granules that are not available for download.
+
 ### OrbitFilter
 
 Filter by ascending or descending orbit. Configure with `orbit` with the

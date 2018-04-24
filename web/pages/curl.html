@@ -11,7 +11,7 @@
             <div id="links"></div>
             <div id="bulk-password-notice">
             <b>Note</b>: some of your download links are password-protected and require a free
-            <a href='https://urs.earthdata.nasa.gov/users/new' target='_blank'>EOSDIS User Registration System (URS) profile</a>.<br/><br/>
+            <a href='https://urs.earthdata.nasa.gov/users/new' target='_blank'>Earthdata Login profile</a>.<br/><br/>
             </div>
 			<h3>Using <code><a href='http://en.wikipedia.org/wiki/CURL' target='_blank'>cURL</a></code> to Bulk Download Your Data</h3>
             <div id="netrc-instructions">
@@ -30,10 +30,13 @@
                 </li>
             </ul>
             <p>
-            Replace <code>URS_USER</code> with your URS username and
-            <code>URS_PASSWORD</code> with your URS password. If this file does
+            Replace <code>URS_USER</code> with your Earthdata Login username and
+            <code>URS_PASSWORD</code> with your Earthdata Login password. If this file does
             not exist, create a new one. Ensure that you are the only
             one that can read this file, then follow the steps below.
+            </p>
+            <p>
+              NOTE: If these files require authentication from Earthdata Login for downloading over HTTPS, you may need to update the command above to what is described on this page - <a href='https://wiki.earthdata.nasa.gov/display/EL/How+To+Access+Data+With+cURL+And+Wget' target='_blank'>How to Access Data with cURL and Wget</a>.
             </p>
             <br/>
             </div>
@@ -66,5 +69,6 @@ download.bat</pre>
             <div id="fdm"></div>
             <div id="fdm-password-instructions"></div>
         </div>
+
     </body>
 </html>
