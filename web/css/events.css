@@ -232,10 +232,10 @@
 }
 
 .cluster-marker-large {
-  background-color: rgba(226, 95, 65, 0.6);
+  background-color: rgba(253, 107, 73, 0.6);
 }
 .cluster-marker-large .cluster-marker-inner {
-  background-color: rgba(222, 63, 27, 0.6);
+  background-color: rgba(247, 53, 10, 0.6);
 }
 .cluster-marker {
   border-radius: 12px;
