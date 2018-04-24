@@ -31,16 +31,25 @@ export default function naturalEventsTrack (models, ui, config) {
     const map = ui.map.selected;
     map.on('moveend', function (e) {
       if (self.active) {
-        let selectedEvent = ui.naturalEvents.selected;
-        if (selectedEvent.date) {
-          let event = getEventById(model.data.events, selectedEvent.id);
-          debounceTrackUpdate(event, selectedEvent.date, map, ui.naturalEvents.selectEvent);
+        if (self.trackDetails.id) {
+          addPointOverlays(map, self.trackDetails.pointArray);
+        } else {
+          let selectedEvent = ui.naturalEvents.selected;
+          if (selectedEvent.date) {
+            let event = getEventById(model.data.events, selectedEvent.id);
+            debounceTrackUpdate(event, selectedEvent.date, map, ui.naturalEvents.selectEvent);
+          }
         }
       }
     });
     map.getView().on('propertychange', function(e) {
       if (e.key === 'resolution') {
         self.trackDetails = (self.trackDetails.id) ? self.removeTrack(map, self.trackDetails) : {};
+      }
+    });
+    map.on('pointerdrag', (e) => {
+      if (self.active) {
+        removeOldPoints(map, self.trackDetails.pointArray);
       }
     });
     ui.sidebar.events.on('selectTab', function (tab) {
@@ -261,6 +270,8 @@ var createTrack = function (eventObj, map, selectedDate, callback) {
   };
 };
 /**
+ * Remove Point overlays to DOM
+ *
  * @param  {Object} map OpenLayers Map Object
  * @param  {Array} pointOverlayArray
  * @return {void}
@@ -268,6 +279,19 @@ var createTrack = function (eventObj, map, selectedDate, callback) {
 var removeOldPoints = function (map, pointOverlayArray) {
   lodashEach(pointOverlayArray, function (pointOverlay) {
     map.removeOverlay(pointOverlay);
+  });
+};
+
+/**
+ * Add Point overlays to DOM
+ *
+ * @param  {Object} map OpenLayers Map Object
+ * @param  {Array} pointOverlayArray
+ * @return {void}
+ */
+var addPointOverlays = function (map, pointOverlayArray) {
+  lodashEach(pointOverlayArray, function (pointOverlay) {
+    map.addOverlay(pointOverlay);
   });
 };
 /**
