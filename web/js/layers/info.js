@@ -66,6 +66,7 @@ export function layersInfo(config, models, layer) {
   };
 
   var renderDescription = function ($dialog) {
+    var startDate, endDate;
     var $layerDescription = $('<div></div>')
       .addClass('layer-description');
     var $layerDateRange = $('<p></p>')
@@ -78,18 +79,30 @@ export function layersInfo(config, models, layer) {
       .addClass('layer-metadata');
 
     if (layer.startDate) {
+      startDate = util.parseDate(layer.startDate);
       if (layer.period !== 'subdaily') {
-        layer.startDate = util.toISOStringDate(util.parseDateUTC(layer.startDate));
+        startDate = startDate.getDate() + ' ' + util.giveMonth(startDate) + ' ' +
+         startDate.getFullYear();
+      } else {
+        startDate = startDate.getDate() + ' ' + util.giveMonth(startDate) + ' ' +
+        startDate.getFullYear() + ' ' + util.pad(startDate.getHours(), 2, '0') + ':' +
+        util.pad(startDate.getMinutes(), 2, '0');
       }
-      $layerDateStart.html('Temporal coverage: ' + layer.startDate + ' - ');
+      $layerDateStart.html('Temporal coverage: ' + startDate + ' - ');
       if (layer.id) $layerDateStart.attr('id', layer.id + '-startDate');
       $layerDateRange.append($layerDateStart);
 
       if (layer.endDate) {
+        endDate = util.parseDate(layer.endDate);
         if (layer.period !== 'subdaily') {
-          layer.endDate = util.toISOStringDate(util.parseDateUTC(layer.endDate));
+          endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
+          endDate.getFullYear();
+        } else {
+          endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
+          endDate.getFullYear() + ' ' + util.pad(endDate.getHours(), 2, '0') + ':' +
+          util.pad(endDate.getMinutes(), 2, '0');
         }
-        $layerDateEnd.html(layer.endDate);
+        $layerDateEnd.html(endDate);
       } else {
         $layerDateEnd.append('Present');
       }
