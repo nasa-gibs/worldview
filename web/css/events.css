@@ -202,11 +202,11 @@
 }
 
 .event-track-arrows {
-  background-size: contain;
+  background-size: initial;
+  background-position: center;
   background-repeat: repeat-x;
   background-image: url('../images/natural-events/track-arrow.svg');
   position:absolute;
-  text-align: center;
   pointer-events: none;
 }
 .track-marker-case .track-marker:hover ~ .track-marker-date {

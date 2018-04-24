@@ -320,6 +320,7 @@ var createArrows = function (lineSegmentCoords, map) {
   var overlayEl = document.createElement('div');
   var innerEl = document.createElement('div');
 
+  const clusterPadding = 20; // 10px on each side
   const end = lineSegmentCoords[0];
   const start = lineSegmentCoords[1];
   const dxCoord = end[0] - start[0];
@@ -332,14 +333,15 @@ var createArrows = function (lineSegmentCoords, map) {
   const distanceInPixels = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
   const angleRadians = Math.atan2(dyCoord, dxCoord);
   const angleDegrees = -angleRadians * (180 / Math.PI);
+  const lengthOfArrowDiv = distanceInPixels - clusterPadding;
 
   innerEl.className = 'event-track-arrows';
   overlayEl.appendChild(innerEl);
   overlayEl.style.width = '1px';
   overlayEl.style.height = '1px';
-  innerEl.style.width = distanceInPixels + 'px';
+  innerEl.style.width = lengthOfArrowDiv + 'px';
   innerEl.style.height = '16px';
-  innerEl.style.transform = 'translate(' + -(distanceInPixels / 2) + 'px' + ', -8px)';
+  innerEl.style.transform = 'translate(' + -(lengthOfArrowDiv / 2) + 'px' + ', -8px)';
   overlayEl.style.transform = 'rotate(' + angleDegrees + 'deg)';
   return new OlOverlay({
     position: map.getCoordinateFromPixel(pixelMidPoint),
