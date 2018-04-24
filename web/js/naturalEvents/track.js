@@ -134,7 +134,7 @@ export default function naturalEventsTrack (models, ui, config) {
   };
   var debounceTrackUpdate = lodashDebounce((event, selectedDate, map, selectEventCallback) => {
     self.update(event, map, selectedDate, selectEventCallback);
-  }, 1000);
+  }, 250);
 
   init();
   return self;
