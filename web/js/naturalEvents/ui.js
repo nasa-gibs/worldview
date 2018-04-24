@@ -10,6 +10,11 @@ import wvui from '../ui/ui';
 import util from '../util/util';
 import { getEventById } from './util';
 
+const zoomLevelReference = {
+  'Wildfires': 8,
+  'Volcanoes': 6
+};
+
 export default function naturalEventsUI (models, ui, config, request) {
   var self = {};
   var eventVisibilityAlert;
@@ -26,7 +31,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     // Display loading information for user feedback on slow network
     $('#wv-events').text('Loading...');
 
-    view = ui.map.selected.getView();
+    view = map.getView();
 
     request.events.on('queryResults', function () {
       if (!(model.data.events || model.data.sources)) return;
@@ -113,7 +118,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-    zoomToEvent(event, date).then(function () {
+    zoomToEvent(event, date, !isIdChange).then(function () {
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
       }
@@ -359,17 +364,16 @@ export default function naturalEventsUI (models, ui, config, request) {
     });
   };
 
-  var zoomToEvent = function (event, date) {
+  var zoomToEvent = function (event, date, isSameEventID) {
     var category = event.categories[0].title;
+    var zoom = (isSameEventID) ? ui.map.selected.getView().getZoom() : (zoomLevelReference[category]);
+
     var geometry = lodashFind(event.geometries, function (geom) {
       return geom.date.split('T')[0] === date;
     });
     var coordinates = (geometry.type === 'Polygon') ? olExtent.boundingExtent(geometry.coordinates[0]) : geometry.coordinates;
 
-    return ui.map.animate.fly(coordinates, ({
-      'Wildfires': 8,
-      'Volcanoes': 6
-    })[category]);
+    return ui.map.animate.fly(coordinates, zoom);
   };
 
   init();
