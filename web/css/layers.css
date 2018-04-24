@@ -487,6 +487,16 @@
   padding-right: 1.2em;
 }
 
+.layer-description .layer-date-ranges {
+  background-color: #333;
+  margin-right: 10px;
+  padding: 12px 8px;
+}
+
+.layer-description .layer-date-ranges li {
+  margin-bottom: 6px;
+}
+
 .layer-description .layer-title,
 .layer-modal .source-metadata h3 {
   display: block;
@@ -564,6 +574,7 @@
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata a,
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata p,
 .layer-date-range,
+.layer-date-wrap,
 .layer-metadata a,
 .layer-metadata p {
   font-family: 'Open Sans', sans-serif;
@@ -579,7 +590,8 @@
 }
 
 .layer-date-range,
-.layer-metadata p {
+.layer-metadata p,
+.layer-date-wrap {
   color: #ccc;
 }
 
