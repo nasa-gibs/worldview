@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'jquery-ui/dialog';
 import 'perfect-scrollbar/jquery';
+import lodashEach from 'lodash/each';
 import wvui from '../ui/ui';
 import util from '../util/util';
 
@@ -67,16 +68,40 @@ export function layersInfo(config, models, layer) {
 
   var renderDescription = function ($dialog) {
     var startDate, endDate;
-    var $layerDescription = $('<div></div>')
-      .addClass('layer-description');
-    var $layerDateRange = $('<p></p>')
-      .addClass('layer-date-range');
-    var $layerDateStart = $('<span></span>')
-      .addClass('layer-date-start');
-    var $layerDateEnd = $('<span></span>')
-      .addClass('layer-date-end');
-    var $layerMeta = $('<div></div>')
-      .addClass('layer-metadata');
+    var $layerDescription = $('<div>', {
+      id: 'layer-description',
+      'class': 'layer-description'
+    });
+    var $layerDateRange = $('<p>', {
+      id: 'layer-date-range',
+      'class': 'layer-date-range'
+    });
+    var $layerDateStart = $('<span>', {
+      id: 'layer-date-start',
+      'class': 'layer-date-start'
+    });
+    var $layerDateEnd = $('<span>', {
+      id: 'layer-date-end',
+      'class': 'layer-date-end'
+    });
+    var $layerDateWrap = $('<p>', {
+      id: 'layer-date-wrap',
+      'class': 'layer-date-wrap'
+    });
+    var $layerDateRangesButton = $('<a>', {
+      id: 'layer-date-ranges-button',
+      'class': 'layer-date-ranges-button',
+      'text': '*Show All Date Ranges'
+    });
+    var $layerDateRanges = $('<ul>', {
+      id: 'layer-date-ranges',
+      'class': 'layer-date-ranges',
+      'style': 'display: none'
+    });
+    var $layerMeta = $('<div>', {
+      id: 'layer-metadata',
+      'class': 'layer-metadata'
+    });
 
     if (layer.startDate) {
       startDate = util.parseDate(layer.startDate);
@@ -106,9 +131,48 @@ export function layersInfo(config, models, layer) {
       } else {
         $layerDateEnd.append('Present');
       }
+      if (layer.dateRanges) if ((layer.dateRanges).length > 1) $layerDateEnd.append('*');
       if (layer.id) $layerDateEnd.attr('id', layer.id + '-endDate');
       $layerDateRange.append($layerDateEnd);
       $layerDescription.append($layerDateRange);
+    }
+
+    if ((layer.dateRanges).length > 1) {
+      $layerDateWrap.append($layerDateRangesButton);
+      $layerDateWrap.append($layerDateRanges);
+      $layerDescription.append($layerDateWrap);
+      lodashEach(layer.dateRanges, function(dateRange) {
+        let rangeStartDate = util.parseDate(dateRange.startDate);
+        let rangeEndDate = util.parseDate(dateRange.endDate);
+        if (layer.period !== 'subdaily') {
+          rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
+           rangeStartDate.getFullYear();
+          rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
+           rangeEndDate.getFullYear();
+        } else {
+          rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
+          rangeStartDate.getFullYear() + ' ' + util.pad(rangeStartDate.getHours(), 2, '0') + ':' +
+          util.pad(rangeStartDate.getMinutes(), 2, '0');
+          rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
+          rangeEndDate.getFullYear() + ' ' + util.pad(rangeEndDate.getHours(), 2, '0') + ':' +
+          util.pad(rangeEndDate.getMinutes(), 2, '0');
+        }
+        $layerDateRanges.append('<li>' + rangeStartDate + ' - ' +
+        rangeEndDate + '</li>');
+      });
+      $layerDateRangesButton.click(function(e) {
+        var text = $(this).text();
+        e.preventDefault();
+        $('#wv-layers-info-dialog')
+          .perfectScrollbar('update');
+        if (text === '*Show All Date Ranges') {
+          $layerDateRangesButton.text('*Hide All Date Ranges');
+          $layerDateRanges.css('display', 'block');
+        } else {
+          $layerDateRangesButton.text('*Show All Date Ranges');
+          $layerDateRanges.css('display', 'none');
+        }
+      });
     }
 
     if (layer.description) {
@@ -120,6 +184,7 @@ export function layersInfo(config, models, layer) {
             .attr('target', '_blank');
         });
     }
+
     $dialog.append($layerDescription);
   };
 
