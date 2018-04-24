@@ -137,42 +137,44 @@ export function layersInfo(config, models, layer) {
       $layerDescription.append($layerDateRange);
     }
 
-    if ((layer.dateRanges).length > 1) {
-      $layerDateWrap.append($layerDateRangesButton);
-      $layerDateWrap.append($layerDateRanges);
-      $layerDescription.append($layerDateWrap);
-      lodashEach(layer.dateRanges, function(dateRange) {
-        let rangeStartDate = util.parseDate(dateRange.startDate);
-        let rangeEndDate = util.parseDate(dateRange.endDate);
-        if (layer.period !== 'subdaily') {
-          rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
-           rangeStartDate.getFullYear();
-          rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
-           rangeEndDate.getFullYear();
-        } else {
-          rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
-          rangeStartDate.getFullYear() + ' ' + util.pad(rangeStartDate.getHours(), 2, '0') + ':' +
-          util.pad(rangeStartDate.getMinutes(), 2, '0');
-          rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
-          rangeEndDate.getFullYear() + ' ' + util.pad(rangeEndDate.getHours(), 2, '0') + ':' +
-          util.pad(rangeEndDate.getMinutes(), 2, '0');
-        }
-        $layerDateRanges.append('<li>' + rangeStartDate + ' - ' +
-        rangeEndDate + '</li>');
-      });
-      $layerDateRangesButton.click(function(e) {
-        var text = $(this).text();
-        e.preventDefault();
-        $('#wv-layers-info-dialog')
-          .perfectScrollbar('update');
-        if (text === '*Show All Date Ranges') {
-          $layerDateRangesButton.text('*Hide All Date Ranges');
-          $layerDateRanges.css('display', 'block');
-        } else {
-          $layerDateRangesButton.text('*Show All Date Ranges');
-          $layerDateRanges.css('display', 'none');
-        }
-      });
+    if (layer.dateRanges) {
+      if ((layer.dateRanges).length > 1) {
+        $layerDateWrap.append($layerDateRangesButton);
+        $layerDateWrap.append($layerDateRanges);
+        $layerDescription.append($layerDateWrap);
+        lodashEach(layer.dateRanges, function(dateRange) {
+          let rangeStartDate = util.parseDate(dateRange.startDate);
+          let rangeEndDate = util.parseDate(dateRange.endDate);
+          if (layer.period !== 'subdaily') {
+            rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
+             rangeStartDate.getFullYear();
+            rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
+             rangeEndDate.getFullYear();
+          } else {
+            rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
+            rangeStartDate.getFullYear() + ' ' + util.pad(rangeStartDate.getHours(), 2, '0') + ':' +
+            util.pad(rangeStartDate.getMinutes(), 2, '0');
+            rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
+            rangeEndDate.getFullYear() + ' ' + util.pad(rangeEndDate.getHours(), 2, '0') + ':' +
+            util.pad(rangeEndDate.getMinutes(), 2, '0');
+          }
+          $layerDateRanges.append('<li>' + rangeStartDate + ' - ' +
+          rangeEndDate + '</li>');
+        });
+        $layerDateRangesButton.click(function(e) {
+          var text = $(this).text();
+          e.preventDefault();
+          $('#wv-layers-info-dialog')
+            .perfectScrollbar('update');
+          if (text === '*Show All Date Ranges') {
+            $layerDateRangesButton.text('*Hide All Date Ranges');
+            $layerDateRanges.css('display', 'block');
+          } else {
+            $layerDateRangesButton.text('*Show All Date Ranges');
+            $layerDateRanges.css('display', 'none');
+          }
+        });
+      }
     }
 
     if (layer.description) {
