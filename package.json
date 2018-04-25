@@ -118,6 +118,7 @@
   },
   "dependencies": {
     "bluebird": "3.4.6",
+    "bootstrap": "^4.1.0",
     "cachai": "^1.0.2",
     "canvg-browser": "^1.0.0",
     "clipboard": "^1.7.1",
