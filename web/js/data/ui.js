@@ -67,7 +67,7 @@ export function dataUi(models, ui, config) {
       text: 'No Data Selected'
     });
     var $wrapper = $('<div />', {
-      class: 'wv-datalist bank content'
+      class: 'wv-datalist sidebar-panel content'
     });
     var $list = $('<div />', {
       id: 'wv-datacontent'

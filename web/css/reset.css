@@ -181,6 +181,11 @@ sup {
   top: -0.5em;
 }
 
+*:focus,
+button:focus {
+  outline: 0;
+}
+
 #info_drop {
   border: none;
   margin: 0;

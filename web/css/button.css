@@ -16,7 +16,7 @@
   transition: background 0.5s ease;
 }
 .wv-button span {
-  padding: 0.4em 1em;
+  padding: 6px 13px 7px;
   display: block;
 }
 .wv-button.red {
@@ -43,4 +43,3 @@
   color: #eee;
   cursor: not-allowed;
 }
-

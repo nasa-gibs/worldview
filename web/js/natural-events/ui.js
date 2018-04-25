@@ -210,7 +210,7 @@ export default function naturalEventsUI (models, ui, config, request) {
   };
 
   var createEventList = function () {
-    var $panels = $('<div />', { class: 'wv-eventslist bank' });
+    var $panels = $('<div />', { class: 'wv-eventslist sidebar-panel' });
     $('#wv-events').empty().append($panels);
     var $list = $('<ul></ul>').attr('id', 'wv-eventscontent').addClass('content').addClass('map-item-list');
     var $detailContainer = $('<div></div>').attr('id', 'wv-events-detail').hide();

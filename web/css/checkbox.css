@@ -12,8 +12,8 @@
 .wv-checkbox::before {
   content: '\00a0';
   display: inline-block;
-  height: 20px;
-  width: 20px;
+  height: 24px;
+  width: 24px;
   border: 2px solid #d54f21;
   text-align: center;
   font-size: 15px;

@@ -31,8 +31,7 @@
 
 #productsHolder footer {
   bottom: 0;
-  position: absolute;
-  padding: 5px;
+  padding: 2px 5px 5px;
 }
 
 #productsHolder footer p {

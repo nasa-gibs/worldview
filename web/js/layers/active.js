@@ -56,7 +56,7 @@ export function layersActive(models, ui, config) {
 
   var render = function () {
     legends = {};
-    var $container = $('<div />', { class: 'layer-container bank' });
+    var $container = $('<div />', { class: 'layer-container sidebar-panel' });
     $(self.selector).empty().append($container);
 
     lodashEachRight(groups, function (group) {
@@ -141,7 +141,7 @@ export function layersActive(models, ui, config) {
       .attr('data-layer', layer.id);
 
     var $visibleButton = $('<a></a>')
-      .addClass('hdanchor hide hideReg bank-item-img')
+      .addClass('hdanchor hide hideReg sidebar-panel-item-img')
       .attr('id', 'hide' + encodeURIComponent(layer.id))
       .attr('data-layer', layer.id)
       .on('click', toggleVisibility);
@@ -165,7 +165,7 @@ export function layersActive(models, ui, config) {
 
     var $removeButton = $('<a></a>')
       .attr('id', 'close' + group.id + encodeURIComponent(layer.id))
-      .addClass('button close bank-item-img')
+      .addClass('button close sidebar-panel-item-img')
       .attr('data-layer', layer.id)
       .attr('title', 'Remove Layer')
       .on('click', removeLayer);

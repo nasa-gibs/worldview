@@ -13,7 +13,7 @@ a.accordionToggler {
   background: none no-repeat scroll left;
 }
 
-a.staticLayers {
+a.staticLayers:not([href]):not([tabindex]) {
   float: left;
   left: 10px;
   position: absolute;
@@ -34,7 +34,7 @@ a.staticLayers {
   color: #fff;
 }
 
-a.staticLayers:hover {
+a.staticLayers:not([href]):not([tabindex]):hover {
   background-color: #ccc;
   color: rgb(40, 40, 40);
 }
@@ -72,11 +72,11 @@ a.atexpand {
   background: url("../images/icon-sprite.svg") -175px 0;
 }
 
-.bank {
+.sidebar-panel {
   color: #222;
 }
 
-.bank h1,
+.sidebar-panel h1,
 h2,
 h3,
 h4 {
@@ -86,7 +86,7 @@ h4 {
   font-weight: 400;
 }
 
-.bank h2 {
+.sidebar-panel h2 {
   font-size: 1.4em;
   display: inline-block;
   float: left;
@@ -95,11 +95,11 @@ h4 {
   padding: 9px 30px;
 }
 
-.bank .tabContainer {
+.sidebar-panel .tabContainer {
   border-bottom: 2px #005190 solid;
 }
 
-.bank h3 {
+.sidebar-panel h3 {
   display: block;
   color: #fff;
   border: none;
@@ -112,28 +112,28 @@ h4 {
   text-transform: uppercase;
 }
 
-.bank div,
-.bank ul {
+.sidebar-panel div,
+.sidebar-panel ul {
   display: block;
   width: 100%;
   margin: 0 auto;
 }
 
-.bank .category {
+.sidebar-panel .category {
   overflow: hidden;
 }
 
-.bank li.item {
+.sidebar-panel li.item {
   padding: 0;
   cursor: move;
   margin: 0 auto;
 }
 
-.bank li.item-static {
+.sidebar-panel li.item-static {
   cursor: default;
 }
 
-.bank li.item-static:hover {
+.sidebar-panel li.item-static:hover {
   background: rgba(220, 220, 220, 1);
 }
 
@@ -147,11 +147,11 @@ h4 {
   right: -6px;
 }
 
-.bank li.item a {
+.sidebar-panel li.item a {
   color: #22a;
 }
 
-.bank li.item a:hover {
+.sidebar-panel li.item a:hover {
   color: #88f;
 }
 
@@ -163,46 +163,46 @@ h4 {
   color: #88f;
 }
 
-.bank li.item h4 {
+.sidebar-panel li.item h4 {
   font-size: 0.9em;
   line-height: 14px;
   padding: 3px 3px 0;
 }
 
-.bank li.item p {
+.sidebar-panel li.item p {
   padding: 0 3px 6px;
   color: #222;
   font-size: 0.8em;
   font-style: italic;
 }
 
-.bank li.item span.palette {
+.sidebar-panel li.item span.palette {
   display: block;
   overflow: hidden;
   margin-top: 5px;
   margin-left: 5px;
 }
 
-.bank li.item ul.palette li {
+.sidebar-panel li.item ul.palette li {
   float: left;
 }
 
-.bank ul.category {
+.sidebar-panel ul.category {
   overflow: auto;
 }
 
-.bank ul.category li h3 {
+.sidebar-panel ul.category li h3 {
   display: block;
   clear: both;
   float: none;
 }
 
-.bank .layer-metadata.overflow {
+.sidebar-panel .layer-metadata.overflow {
   height: 40px;
   overflow: hidden;
 }
 
-img.bank-item-img {
+img.sidebar-panel-item-img {
   display: block;
 }
 
@@ -211,7 +211,7 @@ img.hideReg {
   width: 20px;
 }
 
-.bank img.close {
+.sidebar-panel img.close {
   height: 14px;
   width: 14px;
 }
@@ -225,8 +225,8 @@ img.hideReg {
   margin-left: 0 !important;
 }
 
-.bank li.item.productsitem,
-.bank li.itemstatic {
+.sidebar-panel li.item.productsitem,
+.sidebar-panel li.itemstatic {
   padding: 0;
   min-height: 40px;
   box-sizing: border-box;
@@ -237,7 +237,7 @@ img.hideReg {
   border: 1px solid transparent;
 }
 
-.bank li.item.productsitem:hover {
+.sidebar-panel li.item.productsitem:hover {
   border-color: #fff;
 }
 
@@ -294,8 +294,8 @@ img.hideReg {
 .wv-layers-info-icon {
   font-size: 11px;
   border: 1px solid #333;
-  width: 12px;
-  height: 11px;
+  width: 14px;
+  height: 14px;
   text-align: center;
   border-radius: 50%;
   padding-top: 1px;
@@ -361,7 +361,7 @@ i.wv-layers-options-icon {
   cursor: pointer;
 }
 
-.bank li.item.productsitem:hover a.button.close {
+.sidebar-panel li.item.productsitem:hover a.button.close {
   display: block;
 }
 
@@ -419,12 +419,12 @@ i.wv-layers-options-icon {
   color: #999;
 }
 
-.bank .layer-main h4,
-.bank .layer-main p {
+.sidebar-panel .layer-main h4,
+.sidebar-panel .layer-main p {
   padding: 0;
 }
 
-.bank li.layer-hidden a {
+.sidebar-panel li.layer-hidden a {
   color: #999;
 }
 
@@ -433,11 +433,11 @@ i.wv-layers-options-icon {
   height: 42px;
 }
 
-.bank li.item.productsitem.disabled.layer-hidden:hover {
+.sidebar-panel li.item.productsitem.disabled.layer-hidden:hover {
   border-color: transparent;
 }
 
-.bank li.item.productsitem .layer-main:hover a.hdanchor i {
+.sidebar-panel li.item.productsitem .layer-main:hover a.hdanchor i {
   background-position: 5px -36px;
 }
 
