@@ -1,4 +1,5 @@
 /* Dependency CSS */
+@import url("../../node_modules/bootstrap/dist/css/bootstrap.css");
 @import url("../../node_modules/font-awesome/css/font-awesome.css");
 @import url("../../node_modules/jquery-ui/themes/base/jquery-ui.css");
 @import url("../../node_modules/jquery-ui/themes/ui-darkness/jquery-ui.css");
