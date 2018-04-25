@@ -45,11 +45,8 @@ export default function naturalEventsTrack (models, ui, config) {
     map.getView().on('propertychange', function(e) {
       if (e.key === 'resolution') {
         self.trackDetails = (self.trackDetails.id) ? self.removeTrack(map, self.trackDetails) : {};
-      }
-    });
-    map.on('pointerdrag', (e) => {
-      if (self.active) {
-        removeOldPoints(map, self.trackDetails.pointArray);
+      } else if (e.key === 'center') {
+        if (self.active) removeOldPoints(map, self.trackDetails.pointArray);
       }
     });
     ui.sidebar.events.on('selectTab', function (tab) {
