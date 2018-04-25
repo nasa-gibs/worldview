@@ -258,3 +258,7 @@
 #wv-datacontent div[data-product='__NO_PRODUCT'] a {
   color: #000;
 }
+
+.wv-datacategory {
+  list-style: none;
+}
