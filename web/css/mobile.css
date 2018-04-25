@@ -14,7 +14,7 @@
     z-index: 10100;
   }
 
-  .bank {
+  .sidebar-panel {
     height: 96%;
   }
 
@@ -22,7 +22,7 @@
     max-height: 97%;
   }
 
-  img.bank-item-img {
+  img.sidebar-panel-item-img {
     display: block;
     height: 1.6em;
     width: auto;
@@ -42,19 +42,19 @@
     border: 1px solid #333;
   }
 
-  a.staticLayers {
+  a.staticLayers:not([href]):not([tabindex]) {
     width: 100px;
     background-image: none;
     border-radius: 5px;
     top: 55px;
   }
 
-  a.staticLayers::after {
-    display: none;
+  a.staticLayers:not([href]):not([tabindex]):hover {
+    background-image: none;
   }
 
-  a.staticLayers:hover {
-    background-image: none;
+  a.staticLayers::after {
+    display: none;
   }
 
   #wv-toolbar li {

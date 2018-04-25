@@ -781,6 +781,7 @@ export function layersModal(models, ui, config) {
 
     var $dotContinueLink = $('<a />', {
       text: '...',
+      'class': 'layer-category-name',
       'data-category': category.id
     });
 

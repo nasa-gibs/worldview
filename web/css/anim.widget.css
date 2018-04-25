@@ -209,7 +209,7 @@
   transition: border 0.5s ease;
 }
 .gif-download-grid .grid-child.label {
-  width: 110px;
+  width: 120px;
 }
 .gif-download-grid .grid-child.gif-size-invalid {
   border: 1px solid #faa;
@@ -286,14 +286,14 @@
   border-radius: 100%;
   cursor: pointer;
   display: block;
-  height: 13px;
+  height: 15px;
   margin-left: -6.5px;
   margin-top: -8.45px;
   outline: none;
   position: absolute;
   top: 50%;
   transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, -webkit-transform 0.3s ease-out, -webkit-box-shadow 0.3s ease-out;
-  width: 13px;
+  width: 15px;
 }
 
 .input-range__slider:active {

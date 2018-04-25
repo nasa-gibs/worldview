@@ -240,7 +240,7 @@
   line-height: 20px;
 }
 
-.layer-category h3 a {
+.layer-category h3 .layer-category-name {
   display: block;
   width: 100%;
   line-height: 20px;
@@ -249,15 +249,15 @@
   background: rgba(51, 51, 51, 0.6);
 }
 
-.layer-category h3 a:hover {
+.layer-category h3 .layer-category-name:hover {
   background: rgba(255, 255, 255, 0.6);
 }
 
-.layer-category li {
+.layer-category .layer-category-item {
   list-style: none;
 }
 
-.layer-category li a {
+.layer-category .layer-category-item .layer-category-name {
   display: block;
   padding: 7px 10px;
   width: 100%;
@@ -271,7 +271,7 @@
   -o-box-sizing: border-box;
 }
 
-.layer-category li a:hover {
+.layer-category .layer-category-item .layer-category-name:hover {
   background: rgba(255, 255, 255, 0.6);
 }
 
@@ -519,14 +519,13 @@
 .layers-all-header.has-checkbox::before {
   content: '';
   display: block;
-  height: 20px;
-  width: 20px;
+  height: 24px;
+  width: 24px;
   border: 2px solid #d54f21;
   position: absolute;
   top: 7px;
   right: 10px;
   text-align: center;
-  vertical-align: middle;
   font-size: 15px;
   line-height: 20px;
 }
@@ -676,6 +675,10 @@
   padding-right: 10px;
 }
 
+.layer-modal-content .selected-category .source-settings label {
+  display: inline;
+}
+
 /* Layer Options */
 .wv-layers-options-dialog {
   color: #fff;
@@ -716,40 +719,40 @@
 }
 
 /* Layers Info */
-.bank li.item a.wv-layers-info {
+.sidebar-panel li.item a.wv-layers-info {
   color: #333;
   text-align: center;
 }
 
-.bank li.item a.wv-layers-info .wv-layers-info-icon {
+.sidebar-panel li.item a.wv-layers-info .wv-layers-info-icon {
   border-color: #333;
 }
 
-.bank li.item a.wv-layers-info.disabled {
+.sidebar-panel li.item a.wv-layers-info.disabled {
   color: #aaa;
 }
 
-.bank li.item a.wv-layers-info.disabled .wv-layers-info-icon {
+.sidebar-panel li.item a.wv-layers-info.disabled .wv-layers-info-icon {
   border-color: #aaa;
 }
 
-.bank li.item a.wv-layers-info.disabled:hover {
+.sidebar-panel li.item a.wv-layers-info.disabled:hover {
   cursor: no-drop;
   background-color: transparent;
 }
 
-.bank li.layer-hidden a.wv-layers-info {
+.sidebar-panel li.layer-hidden a.wv-layers-info {
   color: #999;
 }
 
-.bank li.layer-hidden a.wv-layers-info .wv-layers-info-icon {
+.sidebar-panel li.layer-hidden a.wv-layers-info .wv-layers-info-icon {
   border-color: #999;
 }
 
-.bank li.layer-hidden a.wv-layers-info.disabled {
+.sidebar-panel li.layer-hidden a.wv-layers-info.disabled {
   color: #666;
 }
 
-.bank li.layer-hidden a.wv-layers-info.disabled .wv-layers-info-icon {
+.sidebar-panel li.layer-hidden a.wv-layers-info.disabled .wv-layers-info-icon {
   border-color: #666;
 }
