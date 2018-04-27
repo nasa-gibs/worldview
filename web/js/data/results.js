@@ -578,6 +578,19 @@ export function dataResultsProductLabel(name) {
   return self;
 };
 
+export function dataResultsTagButtonScale(scale) {
+  var self = {};
+
+  self.name = 'TagButtonScale';
+
+  self.process = function (meta, granule) {
+    granule.buttonScale = scale;
+    return granule;
+  };
+
+  return self;
+};
+
 export function dataResultsTagList(spec) {
   var self = {};
 

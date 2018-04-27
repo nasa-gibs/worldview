@@ -39,7 +39,7 @@ export function dataMap(model, maps, config) {
   };
 
   var buttonStyle = function (feature) {
-    var dimensions = getButtonDimensions();
+    var dimensions = getButtonDimensions(feature);
     var image;
     if (model.isSelected(feature.granule)) {
       image = 'images/data.minus-button.png';
@@ -56,7 +56,7 @@ export function dataMap(model, maps, config) {
   };
 
   var hoverStyle = function (feature) {
-    var dimensions = getButtonDimensions();
+    var dimensions = getButtonDimensions(feature);
     var offset = -(dimensions.size / 2.0 + 14);
     var textStyle = new OlStyleText({
       exceedLength: true,
@@ -385,7 +385,7 @@ export function dataMap(model, maps, config) {
       .clear();
   };
 
-  var getButtonDimensions = function () {
+  var getButtonDimensions = function (feature) {
     var zoom = map.getView()
       .getZoom();
     // Minimum size of the button is 15 pixels
@@ -393,7 +393,9 @@ export function dataMap(model, maps, config) {
     // Double the size for each zoom level
     var add = Math.pow(2, zoom);
     // But 47 pixels is the maximum size
-    var size = Math.min(base + add, base + 32);
+    var buttonScale = feature.granule.buttonScale || 1;
+    var size = (base + add) * buttonScale;
+    size = Math.min(size, base + 32);
     return {
       scale: size / 48,
       size: size
