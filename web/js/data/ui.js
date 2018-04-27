@@ -522,7 +522,7 @@ var dataUiDownloadListPanel = function (config, model) {
 
     $dialog.dialog({
       title: 'Download Links',
-      width: 600,
+      width: 650,
       height: 500,
       autoOpen: false
     });
