@@ -793,10 +793,9 @@ export function dataHandlerWeldGranuleFootprints(config, model, spec) {
       granules: data
     };
 
-    // var productConfig = config.products[model.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
-      dataResultsTagButtonScale(0.35),
+      dataResultsTagButtonScale(0.35), // standard button size is too big
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagVersion(),
       dataResultsGeometryFromCMR(),
