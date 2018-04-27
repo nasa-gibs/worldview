@@ -6,7 +6,6 @@ import OlFormatGeoJSON from 'ol/format/geojson';
 import OlGeomPolygon from 'ol/geom/polygon';
 import OlGeomPoint from 'ol/geom/point';
 import olExtent from 'ol/extent';
-import lodashClone from 'lodash/clone';
 import lodashEach from 'lodash/each';
 import { dataCmrRoundTime, dataCmrGeometry } from './cmr';
 import util from '../util/util';
@@ -15,9 +14,7 @@ import {
   CRS_WGS_84,
   mapIsPolygonValid,
   mapAdjustAntiMeridian,
-  mapToPolys,
-  mapDistance2D,
-  mapInterpolate2D
+  mapToPolys
 } from '../map/map';
 
 export function dataResultsAntiMeridianMulti(maxDistance) {
@@ -284,7 +281,7 @@ export function dataResultsDateTimeLabel(time) {
 };
 
 export function dataResultsDensify() {
-  var MAX_DISTANCE = 5;
+  // var MAX_DISTANCE = 5;
   var self = {};
 
   self.name = 'Densify';
@@ -313,6 +310,7 @@ export function dataResultsDensify() {
     */
   };
 
+  /*
   var densifyPolygon = function (poly) {
     // Get the outer ring and then get an array of all the points
     var ring = poly.getLinearRing(0)
@@ -335,6 +333,7 @@ export function dataResultsDensify() {
     points.push(lodashClone(end));
     return points;
   };
+  */
 
   return self;
 };
@@ -381,7 +380,7 @@ export function dataResultsExtentFilter(projection, extent) {
   self.process = function (meta, granule) {
     var geom = granule.geometry[projection];
     if (!geom) {
-      return result;
+      return granule;
     }
     var mbr = geom.getExtent();
     if (olExtent.intersects(extent, mbr)) {

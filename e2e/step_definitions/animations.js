@@ -1,7 +1,7 @@
-const {client} = require('nightwatch-cucumber');
-const {defineSupportCode} = require('cucumber');
+const { client } = require('nightwatch-cucumber');
+const { defineSupportCode } = require('cucumber');
 
-defineSupportCode(({Then}) => {
+defineSupportCode(({ Then }) => {
   Then('the animation range selector works', () => {
     return client
       .getValue('.wv-anim-dates-case .wv-date-selector-widget:first-child #day-input-group', function (result) {

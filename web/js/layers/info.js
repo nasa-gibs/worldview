@@ -74,12 +74,6 @@ export function layersInfo(config, models, layer) {
     }
   };
 
-  var onLayerRemoved = function (removedLayer) {
-    if (layer.id === removedLayer.id && $dialog) {
-      $dialog.dialog('close');
-    }
-  };
-
   init();
   return self;
 };

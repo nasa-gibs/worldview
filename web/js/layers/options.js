@@ -8,17 +8,14 @@ import lodashEach from 'lodash/each';
 import lodashIndexOf from 'lodash/indexOf';
 import lodashIsEqual from 'lodash/isEqual';
 import lodashIsUndefined from 'lodash/isUndefined';
-import lodashParseInt from 'lodash/parseInt';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import palettes from '../palettes/palettes';
 
 export function layersOptions(config, models, layer) {
-  var alignTo = '#products';
   var $dialog;
   var $opacity;
   var $range;
-  var $dropDown;
   var self = {};
   var canvas;
   var index = 0;
@@ -170,29 +167,6 @@ export function layersOptions(config, models, layer) {
     if ($opacity.val() !== opacity) {
       $opacity.val(opacity);
     }
-  };
-
-  var renderLegendButtons = function ($dialog) {
-    var $panel = $('<div></div>')
-      .addClass('wv-legend-buttons');
-    var legends = models.palettes.getLegends(layer.id);
-
-    lodashEach(legends, function (legend, index) {
-      id = 'wv-legend-' + index;
-      $panel.append('<input type=\'radio\' id=\'' + id + '\' ' +
-        'name=\'legend\' value=\'' + index + '\'>' +
-        '<label for=\'' + id + '\'>' + legend.title + '</label>');
-    });
-    $panel.buttonset();
-    $dialog.append($panel);
-
-    $('.wv-legend-buttons input[type=\'radio\']')
-      .change(function () {
-        index = lodashParseInt($(this)
-          .val());
-        rerenderRange();
-        rerenderPaletteSelector();
-      });
   };
 
   var renderRange = function () {

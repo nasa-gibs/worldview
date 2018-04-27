@@ -6,7 +6,7 @@ import lodashRemove from 'lodash/remove';
 var parse11 = function (state, errors, config) {
   var str = state.products;
   var layers = [];
-  var ids = str.split(/[~,\.]/);
+  var ids = str.split(/[~,.]/);
   lodashEach(ids, function (id) {
     if (id === 'baselayers' || id === 'overlays') {
       return;
@@ -45,11 +45,11 @@ var parse12 = function (state, errors, config) {
   var parts;
   var str = state.l;
   // Split by layer definitions (commas not in parens)
-  var layerDefs = str.match(/[^\(,]+(\([^\)]*\))?,?/g);
+  var layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
   var lstates = [];
   lodashEach(layerDefs, function (layerDef) {
     // Get the text before any paren or comma
-    var layerId = layerDef.match(/[^\(,]+/)[0];
+    var layerId = layerDef.match(/[^(,]+/)[0];
     if (config.redirects && config.redirects.layers) {
       layerId = config.redirects.layers[layerId] || layerId;
     }
@@ -61,7 +61,7 @@ var parse12 = function (state, errors, config) {
     var arrayAttr = layerDef.match(/\(.*\)/);
     if (arrayAttr) {
       // Get single match and remove parens
-      var strAttr = arrayAttr[0].replace(/[\(\)]/g, '');
+      var strAttr = arrayAttr[0].replace(/[()]/g, '');
       // Key value pairs
       var kvps = strAttr.split(',');
       lodashEach(kvps, function (kvp) {

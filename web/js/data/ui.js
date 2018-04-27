@@ -444,7 +444,7 @@ var dataUiBulkDownloadPage = (function () {
           if (granule.urs) {
             // Get the hostname from the URL, the text between
             // the double slash and the first slash after that
-            var host = /\/\/([^\/]*)\//.exec(link.href);
+            var host = /\/\/([^/]*)\//.exec(link.href);
             if (host) {
               hosts[host[1]] = true;
             }

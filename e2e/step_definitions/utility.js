@@ -1,10 +1,10 @@
-const {client} = require('nightwatch-cucumber');
-const {defineSupportCode} = require('cucumber');
+const { client } = require('nightwatch-cucumber');
+const { defineSupportCode } = require('cucumber');
 const delay = client.globals.delay;
 const selectors = client.globals.selectors;
 const querystrings = client.globals.querystrings;
 
-defineSupportCode(({Given, Then, When}) => {
+defineSupportCode(({ Given, Then, When }) => {
   Given('Worldview is in {string} state', (state) => {
     var stateUrl = client.globals.url + (querystrings[state] || '');
     client.url(stateUrl).execute('if (window.localStorage) window.localStorage.clear()');

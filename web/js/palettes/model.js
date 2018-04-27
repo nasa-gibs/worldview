@@ -248,14 +248,14 @@ export function palettesModel(models, config) {
   };
 
   self.saveMulti = function (state, layerId) {
-    var palettes = [],
-      hasPalettes = false;
-    var min = [],
-      hasMin = false;
-    var max = [],
-      hasMax = false;
-    var squash = [],
-      hasSquash = false;
+    var palettes = [];
+    var hasPalettes = false;
+    var min = [];
+    var hasMin = false;
+    var max = [];
+    var hasMax = false;
+    var squash = [];
+    var hasSquash = false;
 
     for (var i = 0; i < self.getCount(layerId); i++) {
       var def = self.get(layerId, i);
@@ -347,8 +347,8 @@ export function palettesModel(models, config) {
     lodashEach(state.l, function (layerDef) {
       var layerId = layerDef.id;
       var minValue, maxValue;
-      var min = [],
-        max = [];
+      var min = [];
+      var max = [];
       var squash = [];
       var count = 0;
       lodashEach(layerDef.attributes, function (attr) {

@@ -57,7 +57,7 @@ environments.forEach(e => {
     e.os,
     e.os_version
   ].join('_').replace(/\./g, '-').replace(/ /g, '_');
-  nightwatchConfig.test_settings[env] = {desiredCapabilities: e};
+  nightwatchConfig.test_settings[env] = { desiredCapabilities: e };
 });
 
 // Merge common_capabilities with each test_settings key

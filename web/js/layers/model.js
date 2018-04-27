@@ -96,7 +96,6 @@ export function layersModel(models, config) {
 
   self.dateRange = function (spec) {
     spec = spec || {};
-    var projId = spec.projId || models.proj.selected.id;
     var layers = (spec.layer) ? [lodashFind(self.active, {
       id: spec.layer
     })]
@@ -202,7 +201,6 @@ export function layersModel(models, config) {
     if (index < 0) {
       return;
     }
-    var oldDef = self.active[index];
     var newDef = config.layers[idNew];
     newDef.visible = true;
     newDef.opacity = 1.0;
@@ -244,7 +242,7 @@ export function layersModel(models, config) {
       id: sourceId
     });
     if (sourceIndex < 0) {
-      throw new Error('Layer is not active: ' + source);
+      throw new Error('Layer is not active: ' + sourceId);
     }
     var sourceDef = self.active[sourceIndex];
 
@@ -252,7 +250,7 @@ export function layersModel(models, config) {
       id: targetId
     });
     if (targetIndex < 0) {
-      throw new Error('Layer is not active: ' + target);
+      throw new Error('Layer is not active: ' + targetId);
     }
 
     self.active.splice(targetIndex, 0, sourceDef);
@@ -319,7 +317,6 @@ export function layersModel(models, config) {
   };
 
   self.save = function (state) {
-    var defs = self.get();
     state.l = state.l || [];
     lodashEach(self.get(), function (def) {
       var lstate = lodashFind(state.l, {
