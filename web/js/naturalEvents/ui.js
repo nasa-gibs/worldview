@@ -8,7 +8,7 @@ import track from './track';
 
 import wvui from '../ui/ui';
 import util from '../util/util';
-import { getEventById } from './util';
+import { naturalEventsUtilGetEventById } from './util';
 
 const zoomLevelReference = {
   'Wildfires': 8,
@@ -90,13 +90,13 @@ export default function naturalEventsUI (models, ui, config, request) {
   self.selectEvent = function (id, date) {
     var isIdChange = (!self.selected || self.selected.id !== id);
     var prevId = self.selected.id ? self.selected.id : false;
-    var prevEvent = prevId ? getEventById(model.data.events, prevId) : false;
+    var prevEvent = prevId ? naturalEventsUtilGetEventById(model.data.events, prevId) : false;
     var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
 
     // Store selected id and date in model
     self.selected = { id: id };
 
-    var event = getEventById(model.data.events, id);
+    var event = naturalEventsUtilGetEventById(model.data.events, id);
 
     if (!event) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');

@@ -7,7 +7,7 @@ import OlStyleStyle from 'ol/style/style';
 import OlGeomMultiLineString from 'ol/geom/multilinestring';
 import lodashEach from 'lodash/each';
 import lodashDebounce from 'lodash/debounce';
-import { getEventById } from './util';
+import { naturalEventsUtilGetEventById } from './util';
 import {
   naturalEventsClusterPointToGeoJSON,
   naturalEventsClusterGetPoints,
@@ -36,7 +36,7 @@ export default function naturalEventsTrack (models, ui, config) {
         } else {
           let selectedEvent = ui.naturalEvents.selected;
           if (selectedEvent.date) {
-            let event = getEventById(model.data.events, selectedEvent.id);
+            let event = naturalEventsUtilGetEventById(model.data.events, selectedEvent.id);
             debounceTrackUpdate(event, selectedEvent.date, map, ui.naturalEvents.selectEvent);
           }
         }
