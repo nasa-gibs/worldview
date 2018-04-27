@@ -160,7 +160,9 @@ export default (function () {
 
   self.tests.ieVersion = function () {
     var navigator = self.tests.navigator();
-    var version = navigator.userAgent.match(/MSIE ([\d\.]+)/);
+    // FIXME: linter says that the backslash in \d is unnessary which means
+    // that this regex is probably wrong.
+    var version = navigator.userAgent.match(/MSIE ([\d\.]+)/); //eslint-disable-line
     if (version) {
       return parseInt(version[1].split('.')[0]);
     }
@@ -185,7 +187,7 @@ export default (function () {
       var uid = new Date();
       var result;
       localStorage.setItem(uid, uid);
-      result = localStorage.getItem(uid) == uid;
+      result = localStorage.getItem(uid) === uid;
       localStorage.removeItem(uid);
       return result && true;
     } catch (error) {

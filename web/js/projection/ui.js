@@ -6,15 +6,12 @@ import lodashEach from 'lodash/each';
 import wvui from '../ui/ui';
 
 export function projectionUi(models, config) {
-  var model = models.proj;
-
   var self = {};
   var $button;
   var $label;
   var $menuItems;
 
   var selector = '#wv-proj-button';
-  var id = 'wv-proj-button';
 
   var init = function () {
     if (config.ui && config.ui.projections) {

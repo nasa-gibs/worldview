@@ -5,6 +5,8 @@
 // Now that we're transpiling code, YOU SHOULD NOT ADD TO THIS FILE
 // ===========================================================================
 
+/* eslint-disable no-extend-native */
+
 import $ from 'jquery';
 import util from './util/util';
 
@@ -174,17 +176,9 @@ export function polyfill () {
       navigator.userAgent.match(/Windows Phone/i)
     ) {
       var mobile = true;
-      if (!(window.orientation === 90 || window.orientation === -90)) {
-        var portrait = true;
-      }
     }
 
     if (navigator.userAgent.indexOf('iPhone') !== -1 || navigator.userAgent.indexOf('Android') !== -1) {
-      // In Safari, the true version is after "Safari"
-      if (navigator.userAgent.indexOf('Safari') !== -1) {
-        // Set a variable to use later
-        var mobileSafari = true;
-      }
       addEventListener('load', function () {
         if (mobile) {
           $('.layerPicker a[href=\'#DataDownload\']')

@@ -1,7 +1,7 @@
-const {client} = require('nightwatch-cucumber');
-const {defineSupportCode} = require('cucumber');
+const { client } = require('nightwatch-cucumber');
+const { defineSupportCode } = require('cucumber');
 
-defineSupportCode(({Then}) => {
+defineSupportCode(({ Then }) => {
   Then('label says {string} when mouse is in the center', (label) => {
     return client.getElementSize('#wv-map-geographic .ol-viewport', (size) => {
       var x = size.value.width / 2;

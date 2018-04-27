@@ -86,15 +86,15 @@ export function animationWidget (models, config, ui) {
     // hack for react bug https://github.com/facebook/react/issues/1920
     $('.wv-date-selector-widget input')
       .keydown(function (e) {
-        if (e.keyCode == 13 || e.keyCode == 9) {
+        if (e.keyCode === 13 || e.keyCode === 9) {
           e.preventDefault();
         }
       });
     // Space bar event listener
     $(window)
       .keypress(function (e) {
-        if ((e.keyCode == 32 ||
-            e.charCode == 32) && // space click
+        if ((e.keyCode === 32 ||
+            e.charCode === 32) && // space click
           !$('#layer-modal')
             .dialog('isOpen')) { // layer selector is not open
           e.preventDefault();
