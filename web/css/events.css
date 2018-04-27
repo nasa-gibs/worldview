@@ -206,7 +206,7 @@
   background-position: center;
   background-repeat: repeat-x;
   background-image: url('../images/natural-events/track-arrow.svg');
-  position:absolute;
+  position: absolute;
   pointer-events: none;
 }
 .track-marker-case .track-marker:hover ~ .track-marker-date {
