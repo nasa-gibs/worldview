@@ -359,10 +359,10 @@ export function timelineInput(models, config, ui) {
         event.preventDefault();
       }
 
-      var selected = $(this);
-      var YMDInterval = selected.attr('id');
-      var newInput = selected.val();
-      var selectedDateObj = null;
+      let selected = $(this);
+      let YMDInterval = selected.attr('id');
+      let newInput = selected.val();
+      let selectedDateObj = null;
       switch (YMDInterval) {
         case 'year-input-group':
           if ((newInput > 1000) && (newInput < 9999)) {
@@ -378,8 +378,8 @@ export function timelineInput(models, config, ui) {
               (new Date(model.selected))
                 .setUTCMonth(newInput - 1));
           } else {
-            var validStr = false;
-            var newIntInput;
+            let validStr = false;
+            let newIntInput;
             newInput = newInput.toUpperCase();
 
             for (var i = 0; i < model.monthAbbr.length; i++) {
