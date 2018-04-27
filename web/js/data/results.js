@@ -799,6 +799,19 @@ export function dataResultsTimeLabel(time) {
   return self;
 };
 
+export function dataResultsTitleLabel() {
+  var self = {};
+
+  self.name = 'TitleLabel';
+
+  self.process = function (meta, granule) {
+    granule.label = granule.title || '';
+    return granule;
+  };
+
+  return self;
+};
+
 export function dataResultsTransform(projection) {
   var self = {};
 
@@ -861,3 +874,4 @@ export function dataResultsVersionFilterExact(version) {
 
   return self;
 };
+
