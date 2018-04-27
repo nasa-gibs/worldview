@@ -7,6 +7,7 @@ import brand from '../brand';
 import { CRS_WGS_84_QUERY_EXTENT, CRS_WGS_84 } from '../map/map';
 import {
   dataResultsChain,
+  dataResultsTagButtonScale,
   dataResultsTagProduct,
   dataResultsTagNRT,
   dataResultsTagURS,
@@ -49,7 +50,8 @@ export function dataHandlerGetByName(name) {
     'TerraSwathMultiDay': dataHandlerTerraSwathMultiDay,
     'HalfOrbit': dataHandlerHalfOrbit,
     'VIIRSSwathDay': dataHandlerVIIRSSwathDay,
-    'VIIRSSwathNight': dataHandlerVIIRSSwathNight
+    'VIIRSSwathNight': dataHandlerVIIRSSwathNight,
+    'WELDGranuleFootprints': dataHandlerWELDGranuleFootprints
   };
   var handler = map[name];
   if (!handler) {
@@ -769,5 +771,40 @@ export function dataHandlerVIIRSSwathNight(config, model) {
   };
 
   init();
+  return self;
+};
+
+export function dataHandlerWELDGranuleFootprints(config, model, spec) {
+  var self = dataHandlerBase(config, model);
+
+  self._submit = function (queryData) {
+    var queryOptions = {
+      time: model.time,
+      data: queryData
+    };
+
+    return self.cmr.submit(queryOptions);
+  };
+
+  self._processResults = function (data) {
+    var results = {
+      meta: {},
+      granules: data
+    };
+
+    // var productConfig = config.products[model.selectedProduct];
+    var chain = dataResultsChain();
+    chain.processes = [
+      dataResultsTagButtonScale(0.35),
+      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagVersion(),
+      dataResultsGeometryFromCMR(),
+      dataResultsDensify(),
+      dataResultsTransform(model.crs),
+      dataResultsExtentFilter(model.crs, self.extents[model.crs])
+    ];
+    return chain.process(results);
+  };
+
   return self;
 };
