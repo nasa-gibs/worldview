@@ -66,6 +66,7 @@ grid tiles.
 on the map.
 * `TerraSwathMultiDay`: Use for Terra 5-minute data granules where today,
 yesterday, and tomorrow appear together on the same map.
+* `WELDGranuleFootprints`: Use for the WELD product.
 
 ## Query Parameters
 
@@ -205,6 +206,12 @@ otherwise keeps science-quality granules if `science`.
 
 Sets the label of the granule to the `name` provided in the constructor.
 
+### TagButtonScale
+
+Sets a scale value for the granule selection buttons. Useful for making the
+buttons smaller for dense datasets. For example, WELD uses a value of
+0.35.
+
 ### TagList
 
 Forces the results to display in a dialog box list instead of on the map.
@@ -267,6 +274,10 @@ in degrees, is considered to have crossed the anti-meridian.
 
 Creates a label for this granule based on its acquisition time only. Times
 that are not from the selected day are indicated with + or - day indicators.
+
+### TitleLabel
+
+Use the provided title in the metadata as the granule label.
 
 ### Transform
 

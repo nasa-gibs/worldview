@@ -392,9 +392,10 @@ export function dataMap(model, maps, config) {
     var base = 12;
     // Double the size for each zoom level
     var add = Math.pow(2, zoom);
-    // But 47 pixels is the maximum size
+    // Apply size adjustment to the button if specified by TagButtonScale
     var buttonScale = feature.granule.buttonScale || 1;
     var size = (base + add) * buttonScale;
+    // But 44 pixels is the maximum size
     size = Math.min(size, base + 32);
     return {
       scale: size / 48,
