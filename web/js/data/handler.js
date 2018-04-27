@@ -52,7 +52,7 @@ export function dataHandlerGetByName(name) {
     'HalfOrbit': dataHandlerHalfOrbit,
     'VIIRSSwathDay': dataHandlerVIIRSSwathDay,
     'VIIRSSwathNight': dataHandlerVIIRSSwathNight,
-    'WELDGranuleFootprints': dataHandlerWELDGranuleFootprints
+    'WELDGranuleFootprints': dataHandlerWeldGranuleFootprints
   };
   var handler = map[name];
   if (!handler) {
@@ -775,7 +775,7 @@ export function dataHandlerVIIRSSwathNight(config, model) {
   return self;
 };
 
-export function dataHandlerWELDGranuleFootprints(config, model, spec) {
+export function dataHandlerWeldGranuleFootprints(config, model, spec) {
   var self = dataHandlerBase(config, model);
 
   self._submit = function (queryData) {
