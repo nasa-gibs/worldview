@@ -653,10 +653,10 @@ export function dataHandlerVIIRSSwathDay(config, model) {
   var self = dataHandlerBase(config, model);
 
   var spec = {
-    startTimeDelta: -180,
-    endTimeDelta: 180,
+    startTimeDelta: -180, // process granules 3 hours before and
+    endTimeDelta: 180, // 3 hours after the current day
     maxDistance: 270,
-    eastZone: 300,
+    eastZone: 300, // afternoon orbit
     westZone: 1380
   };
 
@@ -718,7 +718,7 @@ export function dataHandlerVIIRSSwathNight(config, model) {
     endTimeDelta: 0,
     maxDistance: 270,
     eastZone: 0,
-    westZone: 1440
+    westZone: 1440 // Move everything west of the anti-merdian to the east
   };
 
   var init = function () {
