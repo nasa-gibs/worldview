@@ -6,18 +6,33 @@ import gifshot from 'gifshot';
 import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
-import lodashIsUndefined from 'lodash/isUndefined';
 import lodashThrottle from 'lodash/throttle';
 import lodashCapitalize from 'lodash/capitalize';
 import canvg from 'canvg-browser';
 import FileSaver from 'file-saver';
 import { GA as googleAnalytics, GifResSelection } from 'worldview-components';
+import {
+  imageUtilGetLayerOpacities,
+  imageUtilCalculateResolution,
+  imageUtilGetLayers,
+  imageUtilGetCoordsFromPixelValues,
+  imageUtilGetConversionFactor
+} from '../image/util';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import uiIndicator from '../ui/indicator';
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
 const maxGifSize = 40;
+const GRATICULE_WARNING =
+  'The graticule layer cannot be used to take a snapshot. Would you ' +
+  'like to hide this layer?';
+const PALETTE_WARNING =
+  'One or more layers on the map have been modified (changed palette, ' +
+  'thresholds, etc.). These modifications cannot be used to take a ' +
+  'snapshot. Would you like to temporarily revert to the original ' +
+  'layer(s)?';
+const ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to reset rotation?';
 const resolutionsGeo = {
   values: [
     { value: '0.125', text: '30m' },
@@ -57,16 +72,6 @@ export function animationGif(models, config, ui) {
   var requestSize;
   var throttleSetDownloadButton;
   var lastRequestedDimensions = {};
-
-  var GRATICULE_WARNING =
-    'The graticule layer cannot be used to take a snapshot. Would you ' +
-    'like to hide this layer?';
-  var PALETTE_WARNING =
-    'One or more layers on the map have been modified (changed palette, ' +
-    'thresholds, etc.). These modifications cannot be used to take a ' +
-    'snapshot. Would you like to temporarily revert to the original ' +
-    'layer(s)?';
-  var ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to reset rotation?';
 
   var renderPanel = function(options, mountEl) {
     return ReactDOM.render(
@@ -137,21 +142,20 @@ export function animationGif(models, config, ui) {
 
   var update = function(selectedRes, lonlats) {
     if (!animationCoordinates) return;
-    var numDays, stateObj, dimensions;
+    var numDays, stateObj, dimensions, isGeoProjection;
 
+    isGeoProjection = (models.proj.selected.id === 'geographic');
     resolution = selectedRes;
     stateObj = animModel.rangeState;
     numDays = util.getNumberOfDays(new Date(stateObj.startDate), new Date(stateObj.endDate), ui.anim.ui.getInterval());
 
     if (!resolution) {
-      resolution = calcRes(0);
-      imgWidth = animationCoordinates.w;
-      imgHeight = animationCoordinates.h;
-    } else {
-      dimensions = getDimensions(lonlats, models.proj.selected.id, resolution);
-      imgWidth = dimensions[0];
-      imgHeight = dimensions[1];
+      let currentZoom = Math.round(ui.map.selected.getView().getZoom());
+      resolution = imageUtilCalculateResolution(currentZoom, isGeoProjection, models.proj.selected.resolutions);
     }
+    dimensions = getDimensions(lonlats, models.proj.selected.id, resolution);
+    imgWidth = dimensions[0];
+    imgHeight = dimensions[1];
 
     requestSize = calulateFileSize(resolution, lonlats[0], lonlats[1], numDays, imgWidth, imgHeight);
     updatePanel(getUpdatedProps());
@@ -163,7 +167,7 @@ export function animationGif(models, config, ui) {
   };
 
   var onSelectionChange = function(selectedRes) {
-    update(selectedRes, getCoords());
+    update(selectedRes, imageUtilGetCoordsFromPixelValues(animationCoordinates, ui.map.selected));
   };
 
   var fileSizeValid = function() {
@@ -314,54 +318,6 @@ export function animationGif(models, config, ui) {
   };
 
   /*
-   * Calculates resolution of frame based
-   * on zoom and projection
-   *
-   *
-   * @func calcRes
-   * @private
-   *
-   * @returns {void}
-   *
-   */
-  var calcRes = function(mode) { // return either multiplier or string resolution
-    // geographic has 10 zoom levels from 0 to 9, polar projections have 8 from 0 to 7
-    var str;
-    var res;
-    var isGeographic = models.proj.selected.id === 'geographic';
-    // Map the zoom level from 0-9 / 0-7 to an index from 0-4
-    var zoomRes = [40, 20, 4, 2, 1];
-    var zoom = ui.map.selected.getView().getZoom();
-    zoom = zoom < 0 ? 0 : zoom;
-    if (isGeographic) {
-      res = zoomRes[Math.floor(zoom / 2)];
-    } else {
-      res = zoomRes[Math.floor(((zoom + 2) / 2))];
-    }
-
-    if (mode === 0) { return res.toString(); } else {
-      switch (res) {
-        case 1:
-          str = '250m';
-          break;
-        case 2:
-          str = '500m';
-          break;
-        case 4:
-          str = '1km';
-          break;
-        case 20:
-          str = '5km';
-          break;
-        default:
-          str = '10km';
-      }
-
-      return str;
-    }
-  };
-
-  /*
    * checks if rotation, changed palettes, or graticules
    * are active and ask to reset if any are active
    *
@@ -421,29 +377,6 @@ export function animationGif(models, config, ui) {
   };
 
   /*
-   * Retieves avtive layers by day
-   *
-   * @method getLayersForDay
-   * @private
-   *
-   * @param {array} array of layers
-   *
-   * @returns {array} array of layer ids
-   *
-   */
-  var getLayers = function(products, proj) {
-    var layers = [];
-    lodashEach(products, function(layer) {
-      if (layer.projections[proj].layer) {
-        layers.push(layer.projections[proj].layer);
-      } else {
-        layers.push(layer.id);
-      }
-    });
-    return layers;
-  };
-
-  /*
    * retrieves renderable layers
    *
    * @method getProducts
@@ -470,39 +403,6 @@ export function animationGif(models, config, ui) {
       }
     });
     return layers;
-  };
-
-  /*
-   * Retieves opacities from palettes
-   *
-   * @method getOpacities
-   * @private
-   *
-   * @param {array} array of layers
-   *
-   * @returns {array} array of opacities
-   *
-   */
-  var getOpacities = function(products) {
-    var opacities = [];
-    lodashEach(products, function(product) {
-      opacities.push((lodashIsUndefined(product.opacity)) ? 1 : product.opacity);
-    });
-    return opacities;
-  };
-
-  /*
-   * Retieves coordinates from pixel
-   *
-   * @method getCoords
-   * @private
-   *
-   * @returns {array} array of coords
-   *
-   */
-  var getCoords = function() {
-    return [ui.map.selected.getCoordinateFromPixel([Math.floor(animationCoordinates.x), Math.floor(animationCoordinates.y2)]),
-      ui.map.selected.getCoordinateFromPixel([Math.floor(animationCoordinates.x2), Math.floor(animationCoordinates.y)])];
   };
 
   /*
@@ -544,7 +444,7 @@ export function animationGif(models, config, ui) {
     var j = 0;
     var src;
     var strDate;
-    var lonlat = getCoords();
+    var lonlat = imageUtilGetCoordsFromPixelValues(animationCoordinates, ui.map.selected);
     var layers;
     var proj = models.proj.selected.id;
     var opacities;
@@ -569,8 +469,8 @@ export function animationGif(models, config, ui) {
       }
       products = getProducts(current);
 
-      layers = getLayers(products, proj);
-      opacities = getOpacities(products);
+      layers = imageUtilGetLayers(products, proj);
+      opacities = imageUtilGetLayerOpacities(products);
       url = util.format(host + '/' + path + '?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}', 'TIME={1}', lonlat[0][0] + ',' + lonlat[0][1] + ',' + lonlat[1][0] + ',' + lonlat[1][1], epsg, layers.join(','), opacities.join(','), imgWidth, imgHeight);
       src = util.format(url, strDate);
       if (showDates) {
@@ -839,11 +739,6 @@ export function animationGif(models, config, ui) {
     }
   };
 
-  var getConversionFactor = function(proj) {
-    if (proj === 'geographic') return 0.002197;
-    return 256;
-  };
-
   /*
    * uses resolution and dimension to
    * calculates size of selected area
@@ -859,7 +754,7 @@ export function animationGif(models, config, ui) {
   var calulateFileSize = function(imgRes, lonlat1, lonlat2, numDays, imgWidth, imgHeight) {
     var conversionFactor;
 
-    conversionFactor = getConversionFactor(models.proj.selected.id);
+    conversionFactor = imageUtilGetConversionFactor(models.proj.selected.id);
     resolution = imgRes;
     imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
     imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
@@ -1001,7 +896,7 @@ export function animationGif(models, config, ui) {
         },
         onChange: function(e) {
           onBoundingBoxChange(e, $dialog, $dlButton);
-          update(resolution, getCoords());
+          update(resolution, imageUtilGetCoordsFromPixelValues(animationCoordinates, ui.map.selected));
         },
         onRelease: function() {
           removeCrop();
@@ -1025,7 +920,8 @@ export function animationGif(models, config, ui) {
         setIconFontSize($dlButton, starterWidth);
         $dlButton.on('click', getGif);
       });
-    update(null, getCoords());
+
+    update(null, imageUtilGetCoordsFromPixelValues(animationCoordinates, ui.map.selected));
   };
   self.init();
   return self;
