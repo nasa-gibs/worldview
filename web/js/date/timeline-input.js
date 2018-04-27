@@ -75,18 +75,35 @@ export function timelineInput(models, config, ui) {
         if (event.target.nodeName === 'INPUT' || keyDown === event.keyCode) return;
         switch (event.keyCode) {
           case util.key.LEFT:
-            if (models.date.selectedZoom === 4) {
-              animateByIncrement(-1, 'hour');
-            } else {
-              animateByIncrement(-1, 'day');
+            switch (models.date.selectedZoom) {
+              case 1:
+                animateByIncrement(-1, 'year');
+                break;
+              case 2:
+                animateByIncrement(-1, 'month');
+                break;
+              case 3:
+                animateByIncrement(-1, 'day');
+                break;
+              case 4:
+                animateByIncrement(-10, 'minute');
+                break;
             }
-            event.preventDefault();
             break;
           case util.key.RIGHT:
-            if (models.date.selectedZoom === 4) {
-              animateByIncrement(1, 'hour');
-            } else {
-              animateByIncrement(1, 'day');
+            switch (models.date.selectedZoom) {
+              case 1:
+                animateByIncrement(1, 'year');
+                break;
+              case 2:
+                animateByIncrement(1, 'month');
+                break;
+              case 3:
+                animateByIncrement(1, 'day');
+                break;
+              case 4:
+                animateByIncrement(10, 'minute');
+                break;
             }
             event.preventDefault();
             break;
@@ -397,7 +414,7 @@ export function timelineInput(models, config, ui) {
           break;
         case 'minute-input-group':
           if ((newInput >= 0) && (newInput <= 59)) {
-            var coeff = 1000 * 60 * 10;
+            let coeff = 1000 * 60 * 10;
             selectedDateObj = new Date(Math.round(
               (new Date(model.selected))
                 .setUTCMinutes(newInput) / coeff) * coeff);
@@ -410,7 +427,7 @@ export function timelineInput(models, config, ui) {
         var sib = parent.next('div.input-wrapper')
           .find('input.button-input-group');
         if (parent.next('#input-time-divider').length) {
-          sib = parent.next().next('div.input-wrapper')
+          sib = parent.next().next('div.input-wrapper.selectable')
             .find('input.button-input-group');
         }
 
