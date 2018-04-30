@@ -164,8 +164,6 @@ export function layersInfo(config, models, layer) {
         $layerDateRangesButton.click(function(e) {
           var text = $(this).text();
           e.preventDefault();
-          $('#wv-layers-info-dialog')
-            .perfectScrollbar('update');
           if (text === '*Show All Date Ranges') {
             $layerDateRangesButton.text('*Hide All Date Ranges');
             $layerDateRanges.css('display', 'block');
@@ -173,6 +171,7 @@ export function layersInfo(config, models, layer) {
             $layerDateRangesButton.text('*Show All Date Ranges');
             $layerDateRanges.css('display', 'none');
           }
+          $('#wv-layers-info-dialog').perfectScrollbar('update');
         });
       }
     }
