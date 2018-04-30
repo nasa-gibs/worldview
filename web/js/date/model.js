@@ -11,7 +11,7 @@ export function dateModel(config, spec) {
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
   var init = function () {
-    var initial = spec.initial || util.today();
+    var initial = spec.initial || util.now();
     self.select(initial);
   };
 
@@ -35,8 +35,14 @@ export function dateModel(config, spec) {
   };
 
   self.clamp = function (date) {
-    if (date > util.today()) {
-      date = util.today();
+    if (self.maxZoom > 3) {
+      if (date > util.now()) {
+        date = util.now();
+      }
+    } else {
+      if (date > util.today()) {
+        date = util.today();
+      }
     }
     if (config.startDate) {
       let startDate = util.parseDateUTC(config.startDate);
@@ -48,8 +54,14 @@ export function dateModel(config, spec) {
   };
 
   self.isValid = function (date) {
-    if (date > util.today()) {
-      return false;
+    if (self.maxZoom > 3) {
+      if (date > util.now()) {
+        return false;
+      }
+    } else {
+      if (date > util.today()) {
+        return false;
+      }
     }
     if (config.startDate) {
       let startDate = util.parseDateUTC(config.startDate);
@@ -68,7 +80,7 @@ export function dateModel(config, spec) {
   };
 
   self.maxDate = function () {
-    return util.today();
+    return util.now();
   };
 
   self.maxZoom = null;

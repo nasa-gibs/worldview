@@ -13,8 +13,8 @@ export function timelineData(models, config, ui) {
 
   self.end = function () {
     return new Date(
-      new Date(util.today())
-        .setUTCDate(util.today()
+      new Date(util.now())
+        .setUTCDate(util.now()
           .getUTCDate()));
   };
 

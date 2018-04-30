@@ -37,7 +37,7 @@ export function timelineInput(models, config, ui) {
     self.delta = 1;
     var nextDay = new Date(new Date(model.selected)
       .setUTCDate(model.selected.getUTCDate() + 1));
-    if (nextDay <= util.today()) {
+    if (nextDay <= util.now()) {
       animateForward('day', 1);
     } else {
       self.stop();
@@ -48,7 +48,7 @@ export function timelineInput(models, config, ui) {
     self.delta = 1;
     var nextMonth = new Date(new Date(model.selected)
       .setUTCMonth(model.selected.getUTCMonth() + 1));
-    if (nextMonth <= util.today()) {
+    if (nextMonth <= util.now()) {
       animateForward('month', 1);
     } else {
       self.stop();
@@ -59,7 +59,7 @@ export function timelineInput(models, config, ui) {
     self.delta = 1;
     var nextYear = new Date(new Date(model.selected)
       .setUTCFullYear(model.selected.getUTCFullYear() + 1));
-    if (nextYear <= util.today()) {
+    if (nextYear <= util.now()) {
       animateForward('year', 1);
     } else {
       self.stop();
@@ -281,7 +281,7 @@ export function timelineInput(models, config, ui) {
           break;
       }
       if ((selectedDateObj > tl.data.start()) &&
-        (selectedDateObj <= util.today())) {
+        (selectedDateObj <= util.now())) {
         var parent = selected.parent();
         var sib = parent.next('div.input-wrapper.selectable')
           .find('input.button-input-group');
@@ -384,9 +384,9 @@ export function timelineInput(models, config, ui) {
     }
 
     // Disable arrows if nothing before/after selection
-    if ((model.selectedZoom === 4) && ms >= util.today()) {
+    if ((model.selectedZoom === 4) && ms >= util.now()) {
       $incrementBtn.addClass('button-disabled');
-    } else if ((model.selectedZoom !== 4) && nd > util.today()) {
+    } else if ((model.selectedZoom !== 4) && nd > util.now()) {
       $incrementBtn.addClass('button-disabled');
     } else {
       $incrementBtn.removeClass('button-disabled');
