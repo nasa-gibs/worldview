@@ -116,7 +116,7 @@ var dateWheels = function(models, config) {
 
   var updateRange = function () {
     var startDate = util.parseDateUTC(config.startDate);
-    var endDate = util.today();
+    var endDate = util.now();
     $('#linkmode')
       .mobiscroll('option', 'disabled', false);
     $('#linkmode')
