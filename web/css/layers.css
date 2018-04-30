@@ -497,6 +497,16 @@
   margin-bottom: 6px;
 }
 
+.layer-description .layer-date-ranges-button,
+.layer-description .layer-date-ranges-button:not([href]):not([tabindex]) {
+  color: #7bf;
+}
+
+.layer-description .layer-date-ranges-button:hover,
+.layer-description .layer-date-ranges-button:not([href]):not([tabindex]):hover {
+  color: #9df;
+}
+
 .layer-description .layer-title,
 .layer-modal .source-metadata h3 {
   display: block;
