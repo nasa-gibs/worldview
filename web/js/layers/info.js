@@ -72,7 +72,7 @@ export function layersInfo(config, models, layer) {
       id: 'layer-description',
       'class': 'layer-description'
     });
-    var $layerDateRange = $('<p>', {
+    var $layerDateRange = $('<div>', {
       id: 'layer-date-range',
       'class': 'layer-date-range'
     });
@@ -95,7 +95,7 @@ export function layersInfo(config, models, layer) {
     });
     var $layerDateRanges = $('<ul>', {
       id: 'layer-date-ranges',
-      'class': 'layer-date-ranges',
+      'class': 'list-group layer-date-ranges',
       'style': 'display: none'
     });
     var $layerMeta = $('<div>', {
@@ -158,7 +158,7 @@ export function layersInfo(config, models, layer) {
             rangeEndDate.getFullYear() + ' ' + util.pad(rangeEndDate.getHours(), 2, '0') + ':' +
             util.pad(rangeEndDate.getMinutes(), 2, '0');
           }
-          $layerDateRanges.append('<li>' + rangeStartDate + ' - ' +
+          $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
           rangeEndDate + '</li>');
         });
         $layerDateRangesButton.click(function(e) {

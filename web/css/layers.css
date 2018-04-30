@@ -487,23 +487,28 @@
   padding-right: 1.2em;
 }
 
-.layer-description .layer-date-ranges {
+.layer-date-wrap .layer-date-ranges {
   background-color: #333;
-  margin-right: 10px;
+  margin: 10px 10px 10px 0;
   padding: 12px 8px;
 }
 
-.layer-description .layer-date-ranges li {
-  margin-bottom: 6px;
+.layer-date-wrap .layer-date-ranges .list-group-item {
+  border: 0;
+  padding: 0;
+  background: none;
+  list-style-type: disc;
+  display: list-item;
+  margin: 2px 0 6px 20px;
 }
 
-.layer-description .layer-date-ranges-button,
-.layer-description .layer-date-ranges-button:not([href]):not([tabindex]) {
+.layer-date-wrap .layer-date-ranges-button,
+.layer-date-wrap .layer-date-ranges-button:not([href]):not([tabindex]) {
   color: #7bf;
 }
 
-.layer-description .layer-date-ranges-button:hover,
-.layer-description .layer-date-ranges-button:not([href]):not([tabindex]):hover {
+.layer-date-wrap .layer-date-ranges-button:hover,
+.layer-date-wrap .layer-date-ranges-button:not([href]):not([tabindex]):hover {
   color: #9df;
 }
 
@@ -578,6 +583,7 @@
 }
 
 .layers-all .source-metadata a,
+.layers-all .source-metadata div,
 .layers-all .source-metadata p,
 .layers-all .source-metadata span,
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata a,
@@ -593,6 +599,7 @@
   margin-bottom: 15px;
 }
 
+.layers-all .source-metadata div,
 .layers-all .source-metadata p,
 .layers-all .source-metadata span {
   color: #bbb;
