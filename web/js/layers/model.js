@@ -106,7 +106,7 @@ export function layersModel(models, config) {
     if (ignoreRange) {
       return {
         start: new Date(Date.UTC(1970, 0, 1)),
-        end: util.today()
+        end: util.now()
       };
     }
     var min = Number.MAX_VALUE;
@@ -128,20 +128,20 @@ export function layersModel(models, config) {
         max = Math.max(max, end);
       } else if (def.endDate) {
         range = true;
-        max = util.today()
+        max = util.now()
           .getTime();
       }
       // If there is a start date but no end date, this is a
       // product that is currently being created each day, set
       // the max day to today.
       if (def.startDate && !def.endDate) {
-        max = util.today()
+        max = util.now()
           .getTime();
       }
     });
     if (range) {
       if (max === 0) {
-        max = util.today()
+        max = util.now()
           .getTime();
       }
       return {
