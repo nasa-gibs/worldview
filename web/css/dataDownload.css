@@ -1,3 +1,7 @@
+#wv-data ul {
+  list-style-type: none;
+}
+
 #wv-datacontent {
   position: relative;
 }
