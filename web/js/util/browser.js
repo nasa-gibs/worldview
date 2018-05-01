@@ -184,7 +184,7 @@ export default (function () {
       return false;
     }
     try {
-      var uid = new Date();
+      var uid = new Date().toString();
       var result;
       localStorage.setItem(uid, uid);
       result = localStorage.getItem(uid) === uid;
