@@ -373,10 +373,12 @@ export function imagePanel (models, ui, config, dialogConfig) {
   };
 
   var createDownloadURL = function(time, lonlats, epsg, products, opacities, dlURL) {
-    var layers;
+    var layers, jStart, jDate;
+    var dTime = time;
     layers = getLayers(products, models.proj.selected.id);
-
-    dlURL += 'TIME=' + util.toISOStringSeconds(time);
+    jStart = util.parseDateUTC(dTime.getUTCFullYear() + '-01-01');
+    jDate = '00' + (1 + Math.ceil((dTime.getTime() - jStart) / 86400000));
+    dlURL += 'TIME=' + dTime.getUTCFullYear() + (jDate).substr((jDate.length) - 3);
 
     dlURL += '&extent=' + lonlats[0][0] + ',' + lonlats[0][1] + ',' + lonlats[1][0] + ',' + lonlats[1][1];
     dlURL += '&epsg=' + epsg;
