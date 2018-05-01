@@ -4,8 +4,16 @@ import lodashEach from 'lodash/each';
 import olExtent from 'ol/extent';
 
 import markers from './markers';
+import track from './track';
+
 import wvui from '../ui/ui';
 import util from '../util/util';
+import { naturalEventsUtilGetEventById } from './util';
+
+const zoomLevelReference = {
+  'Wildfires': 8,
+  'Volcanoes': 6
+};
 
 export default function naturalEventsUI (models, ui, config, request) {
   var self = {};
@@ -15,13 +23,15 @@ export default function naturalEventsUI (models, ui, config, request) {
   var model = models.naturalEvents;
   self.markers = [];
   self.selected = {};
-  var naturalEventMarkers = markers(models, ui, config);
+  const naturalEventMarkers = markers(models, ui, config);
+  const naturalEventsTrack = track(models, ui, config);
 
   var init = function () {
+    var map = ui.map.selected;
     // Display loading information for user feedback on slow network
     $('#wv-events').text('Loading...');
 
-    view = ui.map.selected.getView();
+    view = map.getView();
 
     request.events.on('queryResults', function () {
       if (!(model.data.events || model.data.sources)) return;
@@ -35,7 +45,7 @@ export default function naturalEventsUI (models, ui, config, request) {
         self.markers = naturalEventMarkers.draw();
       }
 
-      ui.map.selected.on('moveend', function (e) {
+      map.on('moveend', function (e) {
         var isZoomed = Math.floor(view.getZoom()) >= 3;
         if (isZoomed) {
           self.filterEventList();
@@ -68,7 +78,6 @@ export default function naturalEventsUI (models, ui, config, request) {
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
         self.markers = naturalEventMarkers.draw();
-
         ui.sidebar.sizeEventsTab();
       } else {
         model.active = false;
@@ -81,14 +90,14 @@ export default function naturalEventsUI (models, ui, config, request) {
   self.selectEvent = function (id, date) {
     var isIdChange = (!self.selected || self.selected.id !== id);
     var prevId = self.selected.id ? self.selected.id : false;
-    var prevEvent = prevId ? getEventById(prevId) : false;
+    var prevEvent = prevId ? naturalEventsUtilGetEventById(model.data.events, prevId) : false;
     var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
 
     // Store selected id and date in model
     self.selected = { id: id };
-    if (date) self.selected.date = date;
 
-    var event = getEventById(id);
+    var event = naturalEventsUtilGetEventById(model.data.events, id);
+
     if (!event) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
@@ -102,13 +111,14 @@ export default function naturalEventsUI (models, ui, config, request) {
     }
 
     date = date || self.getDefaultEventDate(event);
+    self.selected.date = date;
 
     highlightEventInList(id, date);
     // Remove previously stored markers
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-    zoomToEvent(event, date).then(function () {
+    zoomToEvent(event, date, !isIdChange).then(function () {
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
       }
@@ -143,6 +153,7 @@ export default function naturalEventsUI (models, ui, config, request) {
       if (util.browser.localStorage && !localStorage.getItem('dismissedEventVisibilityAlert')) {
         eventVisibilityAlert.dialog('open');
       }
+      naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
     });
   };
 
@@ -151,6 +162,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     self.markers = naturalEventMarkers.draw();
     highlightEventInList();
+    naturalEventsTrack.update(null, ui.map.selected);
     model.events.trigger('change');
   };
 
@@ -170,6 +182,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     if (!model.data.events) return;
     var extent = view.calculateExtent();
     model.data.events.forEach(function (naturalEvent) {
+      var isSelectedEvent = (self.selected.id === naturalEvent.id);
       var date = self.getDefaultEventDate(naturalEvent);
       if (self.selected && self.selected.date) {
         date = self.selected.date;
@@ -186,7 +199,7 @@ export default function naturalEventsUI (models, ui, config, request) {
 
       var isVisible = olExtent.containsCoordinate(extent, coordinates);
       var $thisItem = $('.map-item-list .item[data-id=' + naturalEvent.id + ']');
-      if (isVisible) {
+      if (isVisible || isSelectedEvent) {
         $thisItem.show();
       } else {
         $thisItem.hide();
@@ -194,12 +207,6 @@ export default function naturalEventsUI (models, ui, config, request) {
     });
     $footer.show();
     ui.sidebar.sizeEventsTab();
-  };
-
-  var getEventById = function (id) {
-    return lodashFind(model.data.events, function (e) {
-      return e.id === id;
-    });
   };
 
   var createEventList = function () {
@@ -216,7 +223,7 @@ export default function naturalEventsUI (models, ui, config, request) {
 
     $footer = $('<footer />');
     var $footerNote = $('<p />', {
-      text: 'Only events in current map view are listed'
+      text: 'Only selected events and events in current map view are listed'
     });
     var $showAllBtn = $('<button />', {
       class: 'action',
@@ -261,7 +268,7 @@ export default function naturalEventsUI (models, ui, config, request) {
     var $dates = $('<ul/>', { class: 'dates' }).hide();
 
     if (event.geometries.length > 1) {
-      var eventIndex = 0;
+      let eventIndex = 0;
       lodashEach(event.geometries, function (geometry) {
         eventIndex = eventIndex + 1;
         var date = geometry.date.split('T')[0];
@@ -276,7 +283,6 @@ export default function naturalEventsUI (models, ui, config, request) {
             self.selectEvent(event.id, date);
           }
         });
-
         $dates.append($('<li class="dates"></li>').append($date));
       });
     }
@@ -358,17 +364,16 @@ export default function naturalEventsUI (models, ui, config, request) {
     });
   };
 
-  var zoomToEvent = function (event, date) {
+  var zoomToEvent = function (event, date, isSameEventID) {
     var category = event.categories[0].title;
+    var zoom = (isSameEventID) ? ui.map.selected.getView().getZoom() : (zoomLevelReference[category]);
+
     var geometry = lodashFind(event.geometries, function (geom) {
       return geom.date.split('T')[0] === date;
     });
     var coordinates = (geometry.type === 'Polygon') ? olExtent.boundingExtent(geometry.coordinates[0]) : geometry.coordinates;
 
-    return ui.map.animate.fly(coordinates, ({
-      'Wildfires': 8,
-      'Volcanoes': 6
-    })[category]);
+    return ui.map.animate.fly(coordinates, zoom);
   };
 
   init();

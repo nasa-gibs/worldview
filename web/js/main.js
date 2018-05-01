@@ -58,9 +58,9 @@ import { dataModel } from './data/model';
 import { dataUi } from './data/ui';
 
 // NaturalEvents
-import naturalEventsModel from './naturalEvents/model';
-import naturalEventsUI from './naturalEvents/ui';
-import naturalEventsRequest from './naturalEvents/request';
+import naturalEventsModel from './natural-events/model';
+import naturalEventsUI from './natural-events/ui';
+import naturalEventsRequest from './natural-events/request';
 
 // Image
 import { imageRubberband } from './image/rubberband';

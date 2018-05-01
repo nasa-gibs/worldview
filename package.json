@@ -142,6 +142,7 @@
     "promise-queue": "2.2.3",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
+    "supercluster": "github:mapbox/supercluster#v3.0.2",
     "worldview-components": "1.7.0",
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.9.0"
   },
