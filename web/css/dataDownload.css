@@ -62,6 +62,7 @@
 
 #wv-data-selection td {
   border-bottom: 1px solid #404040;
+  vertical-align: middle;
   padding: 5px;
 }
 
