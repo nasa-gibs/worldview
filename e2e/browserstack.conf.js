@@ -1,19 +1,11 @@
 const environments = require('./environments.js');
-
-require('nightwatch-cucumber')({
-  nightwatchOutput: false,
-  cucumberArgs: [
-    '--compiler', 'js:babel-core/register',
-    '--require', 'e2e/step_definitions',
-    '--format', `json:e2e/reports/cucumber-${process.argv[5]}.json`,
-    'e2e/features'
-  ]
-});
-
-var nightwatchConfig = {
+const glob = require('glob');
+const files = glob.sync('./e2e/features/**/*-test.js');
+const nightwatchConfig = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
   custom_assertions_path: ['e2e/custom-assertions'],
+  src_folders: files,
   selenium: {
     start_process: false,
     host: 'hub-cloud.browserstack.com',
@@ -23,7 +15,6 @@ var nightwatchConfig = {
     'browserstack.user': process.env.BROWSERSTACK_USER,
     'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
     'browserstack.local': true,
-    'browserstack.selenium_version': '3.5.2',
     applicationCacheEnabled: false,
     webStorageEnabled: false,
     marionette: true
@@ -38,13 +29,29 @@ var nightwatchConfig = {
     chrome: {
       desiredCapabilities: {
         browser: 'chrome',
-        marionette: true
+        marionette: true,
+        'browserstack.selenium_version': '2.53.0'
       }
     },
     firefox: {
       desiredCapabilities: {
         browser: 'firefox',
-        marionette: true
+        marionette: true,
+        javascriptEnabled: true,
+        'browserstack.selenium_version': '3.5.2'
+      }
+    },
+    ie: {
+      desiredCapabilities: {
+        'browser' : 'internet explorer',
+        'browserstack.selenium_version': '2.53.0'
+      }
+    },
+    safari: {
+      desiredCapabilities: {
+        'browser' : 'safari',
+        'browserstack.selenium_version': '3.5.2',
+        'browserstack.safari.driver': '2.45'
       }
     }
   }
