@@ -17,7 +17,7 @@ module.exports = {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   'Use Mock to make sure appropriate number of event markers are appended to map': function(client) {
-    client.url(client.globals.url + localQuerystrings.mockEvents);
+    client.url(client.globals.url + localQuerystrings.mockEvents)
     client.waitForElementVisible(listOfEvents, TIME_LIMIT, function() {
       client.assert.elementCountEquals(eventIcons, 6);
     });
@@ -72,17 +72,19 @@ module.exports = {
         client.click(firstEvent)
           .pause(500);
         client.windowHandles(function (tabs) {
-          client.assert.equal(tabs.value.length, 1);
+          client.assert.equal(tabs.value.length, 1); 
         });
         client.click(firstExternalEventLink)
-          .pause(2000);
+          .pause(2000)
+        
         client.windowHandles(function (tabs) {
-          client.assert.equal(tabs.value.length, 2);
+          client.assert.equal(tabs.value.length, 2); 
         });
       });
     });
-  },
+  }, 
   after: function(client) {
     client.end();
   }
 };
+
