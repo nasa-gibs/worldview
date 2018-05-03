@@ -15,6 +15,8 @@ const nightwatchConfig = {
     'browserstack.user': process.env.BROWSERSTACK_USER,
     'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
     'browserstack.local': true,
+    'browserstack.debug': true,
+    'build': 'nightwatch-browserstack',
     applicationCacheEnabled: false,
     webStorageEnabled: false,
     marionette: true
@@ -23,7 +25,7 @@ const nightwatchConfig = {
     default: {},
     browserstack: {
       desiredCapabilities: {
-        browser: 'chrome'
+        'browser': 'chrome'
       }
     },
     chrome: {
@@ -37,19 +39,20 @@ const nightwatchConfig = {
       desiredCapabilities: {
         browser: 'firefox',
         marionette: true,
+        browserName: 'firefox',
         javascriptEnabled: true,
         'browserstack.selenium_version': '3.5.2'
       }
     },
     ie: {
       desiredCapabilities: {
-        'browser' : 'internet explorer',
+        browser: 'internet explorer',
         'browserstack.selenium_version': '2.53.0'
       }
     },
     safari: {
       desiredCapabilities: {
-        'browser' : 'safari',
+        browser: 'safari',
         'browserstack.selenium_version': '3.5.2',
         'browserstack.safari.driver': '2.45'
       }
@@ -77,5 +80,4 @@ for (var i in nightwatchConfig.test_settings) {
     config['desiredCapabilities'][j] = config['desiredCapabilities'][j] || nightwatchConfig.common_capabilities[j];
   }
 }
-
 module.exports = nightwatchConfig;
