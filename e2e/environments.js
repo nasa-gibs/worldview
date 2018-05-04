@@ -5,8 +5,7 @@ const createCapabilities = bsCapabilities(
   process.env.BROWSERSTACK_ACCESS_KEY
 ).create;
 
-const capabilities = createCapabilities([
-{
+const capabilities = createCapabilities([{
   browser: 'firefox',
   browser_version: ['59.0'],
   os: ['Windows'],
