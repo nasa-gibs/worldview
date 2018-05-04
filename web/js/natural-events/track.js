@@ -53,7 +53,7 @@ export default function naturalEventsTrack (models, ui, config) {
       if (tab === 'events') {
         let selectedEvent = ui.naturalEvents.selected;
         if (selectedEvent.date) {
-          let event = getEventById(model.data.events, selectedEvent.id);
+          let event = naturalEventsUtilGetEventById(model.data.events, selectedEvent.id);
           self.update(event, map, selectedEvent.date, ui.naturalEvents.selectEvent);
         }
       } else {
