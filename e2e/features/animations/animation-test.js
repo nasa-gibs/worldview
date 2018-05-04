@@ -24,7 +24,7 @@ module.exports = {
     // Test Permalink opens widget
     client.waitForElementVisible('#day-animation-widget-start', TIME_LIMIT, function(el) {
       client.getValue('#day-animation-widget-start', function(result) {
-        startDay = result.value;
+        const startDay = result.value;
         client.useCss()
           .moveToElement('#wv-timeline-range-selector > g:nth-child(2) > rect', 1, 1)
           .mouseButtonDown(0)
@@ -32,7 +32,7 @@ module.exports = {
           .mouseButtonUp(0)
           .pause(2000);
         client.getValue('#day-animation-widget-start', function(result) {
-          newDay = result.value;
+          const newDay = result.value;
           this.assert.notEqual(startDay, newDay);
         });
       });
@@ -50,7 +50,7 @@ module.exports = {
         .moveToElement(globalSelectors.resolutionTooltip, 1, 1)
         .click(globalSelectors.yearlyResolutionTooltip);
       client.pause(1000);
-      client.expect.element(globalSelectors.timelineSetToYears).to.be.present; 
+      client.expect.element(globalSelectors.timelineSetToYears).to.be.present;
     });
   },
   after: function(client) {
