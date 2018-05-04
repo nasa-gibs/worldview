@@ -109,6 +109,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
     };
 
     self.reactComponent = renderPanel(options, htmlElements);
+    models.proj.events.on('select', setProjectionGlobals);
   };
   var setProjectionGlobals = function() {
     if (models.proj.selected.id === 'geographic') {
