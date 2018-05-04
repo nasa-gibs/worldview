@@ -1,0 +1,59 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 5,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": false
+    }
+  },
+  "extends": "standard",
+  "rules": {
+    "semi": ["error", "always"],
+    "space-before-function-paren": "off",
+    "object-curly-spacing": ["warn", "always"],
+  },
+  "overrides": [
+    {
+      "files": [ "*.js"],
+      "rules": {
+        "no-octal": "warn",
+        "no-unused-vars": "warn",
+        "no-undef": "warn",
+        "no-useless-escape": "warn",
+        "eqeqeq": "warn",
+        "padded-blocks": "warn",
+        "space-before-blocks": "warn",
+        "spaced-comment": "warn",
+        "no-multiple-empty-lines": "warn",
+        "operator-linebreak": "warn",
+        "comma-dangle": "warn",
+        "no-use-before-define": "warn",
+        "camelcase": "warn",
+        "no-extend-native": "warn",
+        "one-var": "warn",
+        "no-extra-parens": "warn",
+        "space-in-parens": "warn",
+        "space-infix-ops": "warn",
+        "no-multi-spaces": "warn",
+        "comma-spacing": "warn",
+        "yoda": "warn",
+        "no-useless-return": "warn",
+        "keyword-spacing": "warn",
+        "brace-style": "warn",
+        "func-call-spacing": "warn",
+        "no-return-assign": "warn",
+        "no-sequences": "warn",
+        "no-unused-expressions": "false",
+        "no-useless-call": "warn",
+        "no-trailing-spaces": "warn",
+        "standard/computed-property-even-spacing": "warn",
+        "wrap-iife": "warn",
+        "new-cap": "warn"
+      }
+    }
+  ]
+}
