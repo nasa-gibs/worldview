@@ -50,7 +50,7 @@ export function palettesLegend(spec) {
         renderScale($legendPanel, legend, index, layer.id);
       }
       if (legend.type === 'classification') {
-        renderClasses($legendPanel, legend, index);
+        renderClasses($legendPanel, index);
       }
     });
     self.update();
@@ -64,7 +64,6 @@ export function palettesLegend(spec) {
       .addClass('colorbar-case');
     var $colorbar = $('<canvas></canvas>')
       .addClass('wv-palettes-colorbar')
-      .attr('id', legend.id)
       .attr('data-index', index);
     var $runningDataPointBar = $('<div></div>')
       .addClass('wv-running-bar');
@@ -100,7 +99,7 @@ export function palettesLegend(spec) {
     palettes.colorbar(selector + ' ' +
       '[data-index=\'' + index + '\'] canvas', legend.colors);
   };
-  var renderClasses = function ($legendPanel, legend, index) {
+  var renderClasses = function ($legendPanel, index) {
     var $panel = $('<div></div>')
       .addClass('wv-palettes-legend')
       .addClass('wv-palettes-classes')
