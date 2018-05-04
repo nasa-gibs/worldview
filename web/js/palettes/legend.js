@@ -40,7 +40,8 @@ export function palettesLegend(spec) {
 
     var $legendPanel = $('<div></div>')
       .addClass('wv-palettes-panel')
-      .attr('data-layer', layer.id);
+      .attr('data-layer', layer.id)
+      .attr('id', layer.id + '_panel');
     $parent.append($legendPanel);
     var legends = model.getLegends(layer.id);
     lodashEach(legends, function (legend, index) {
@@ -105,7 +106,6 @@ export function palettesLegend(spec) {
       .addClass('wv-palettes-classes')
       .attr('data-index', index);
     $legendPanel
-      .attr('id', legend.id)
       .append($panel);
   };
 
@@ -217,7 +217,7 @@ export function palettesLegend(spec) {
     y = e.pageY - offset.top;
     rgba = util.getCanvasPixelData(e.currentTarget, x, y);
     hex = util.rgbaToHex(rgba[0], rgba[1], rgba[2]);
-    ui.map.runningdata.newLegend(legends, hex);
+    ui.map.runningdata.newLegend(legends, hex, layer.id);
   };
 
   /**
@@ -234,7 +234,7 @@ export function palettesLegend(spec) {
     var hex = $(this)
       .data('hex');
     var legends = model.getLegends(layer.id)[0];
-    ui.map.runningdata.newLegend(legends, hex);
+    ui.map.runningdata.newLegend(legends, hex, layer.id);
   };
 
   /**

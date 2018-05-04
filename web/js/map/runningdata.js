@@ -131,21 +131,6 @@ export function MapRunningData(models) {
   };
 
   /*
-   * Gets the point in which to place the running
-   * data value label
-   *
-   * @method getPalette
-   *
-   * @param {String} id - Palette id
-   *
-   * @return {Object} Jquery palette dom object
-   *
-   */
-  self.getPalette = function (id) {
-    return $(document.getElementById(id));
-  };
-
-  /*
    * Get location in which to put pin on palette
    *
    * @method getPercent
@@ -222,7 +207,7 @@ export function MapRunningData(models) {
 
         lodashEach(legends, function (legend) {
           if (legend) {
-            self.createRunnerFromLegend(legend, hex);
+            self.createRunnerFromLegend(legend, hex, layerId);
           }
         });
       }
@@ -256,10 +241,10 @@ export function MapRunningData(models) {
    * @return {Void}
    *
    */
-  self.newLegend = function (legends, hex) {
-    self.activeLayers = [legends.id];
+  self.newLegend = function (legends, hex, layerId) {
+    self.activeLayers = [layerId];
     $productsBox.addClass('active-lengend');
-    self.createRunnerFromLegend(legends, hex);
+    self.createRunnerFromLegend(legends, hex, layerId);
     self.update();
   };
 
@@ -276,20 +261,19 @@ export function MapRunningData(models) {
    * @return {Void}
    *
    */
-  self.createRunnerFromLegend = function (legend, hex) {
+  self.createRunnerFromLegend = function (legend, hex, layerId) {
     var paletteInfo;
-
     if (legend.type === 'continuous' || legend.type === 'discrete') {
       paletteInfo = self.getDataLabel(legend, hex);
       if (paletteInfo) {
-        self.setLayerValue(legend.id, paletteInfo);
-        self.activeLayers.push(legend.id);
+        self.setLayerValue(layerId, paletteInfo);
+        self.activeLayers.push(layerId);
       }
     } else if (legend.type === 'classification') {
       paletteInfo = self.getDataLabel(legend, hex);
       if (paletteInfo) {
-        self.setCategoryValue(legend.id, paletteInfo);
-        self.activeLayers.push(legend.id);
+        self.setCategoryValue(layerId, paletteInfo);
+        self.activeLayers.push(layerId);
       }
     }
   };
@@ -346,7 +330,7 @@ export function MapRunningData(models) {
     squareWidth = 17;
     marginLeft = 3;
 
-    $categoryPaletteCase = $('#' + id);
+    $categoryPaletteCase = $('#' + id + '_panel.wv-palettes-panel');
     caseWidth = $categoryPaletteCase.width();
     $colorSquare = $categoryPaletteCase.find('[data-class-index=\'' + data.index + '\']');
     offset = $colorSquare.position();
@@ -370,7 +354,7 @@ export function MapRunningData(models) {
    *
    * @method setLayerValue
    *
-   * @param {String} id - Pallete id
+   * @param {String} id - Layer id
    *
    * @param {Object} data - Object that contains
    *  the index, length and label of running data
@@ -395,7 +379,7 @@ export function MapRunningData(models) {
 
     marginLeft = 3;
 
-    $palette = self.getPalette(id);
+    $palette = $('#' + id + '_panel .wv-palettes-colorbar');
     $paletteCase = $palette.parent().parent();
     $paletteWidth = $palette.width();
     $paletteCaseWidth = $paletteCase.outerWidth();
