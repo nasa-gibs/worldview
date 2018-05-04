@@ -874,4 +874,3 @@ export function dataResultsVersionFilterExact(version) {
 
   return self;
 };
-
