@@ -1,22 +1,13 @@
 const seleniumServer = require('selenium-server-standalone-jar');
 const chromedriver = require('chromedriver');
 const geckodriver = require('geckodriver');
-
-require('nightwatch-cucumber')({
-  nightwatchOutput: false,
-  cucumberArgs: [
-    '--compiler', 'js:babel-core/register',
-    '--require', 'e2e/step_definitions',
-    '--format', `json:e2e/reports/cucumber-${process.argv[3]}.json`,
-    '--format', 'progress-bar',
-    'e2e/features'
-  ]
-});
-
+const glob = require('glob');
+const files = glob.sync('./e2e/features/**/*-test.js');
 module.exports = {
   output_folder: 'e2e/reports',
   globals_path: 'e2e/globals.js',
   custom_assertions_path: ['e2e/custom-assertions'],
+  src_folders: files,
   selenium: {
     start_process: true,
     server_path: seleniumServer.path,
@@ -33,10 +24,7 @@ module.exports = {
       launch_url: 'http://localhost',
       selenium_port: 4444,
       selenium_host: 'localhost',
-      desiredCapabilities: {
-        browserName: 'chrome',
-        marionette: true
-      }
+      marionette: true
     },
     chrome: {
       desiredCapabilities: {
@@ -45,7 +33,8 @@ module.exports = {
     },
     firefox: {
       desiredCapabilities: {
-        browserName: 'firefox'
+        browserName: 'firefox',
+        javascriptEnabled: true
       }
     }
   }
