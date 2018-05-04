@@ -922,7 +922,6 @@ export function mapui(models, config) {
       .mousemove(hoverThrottle = lodashThrottle(onMouseMove, 300));
   };
 
-
   init();
   return self;
 };
