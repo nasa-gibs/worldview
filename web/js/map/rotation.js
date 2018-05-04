@@ -88,6 +88,9 @@ export function MapRotate(ui, models, map) {
       })
       .mouseup(function () {
         clearInterval(self.intervalId);
+      })
+      .mouseout(function() {
+        clearInterval(self.intervalId);
       });
 
     $rightButton.button({
@@ -100,6 +103,9 @@ export function MapRotate(ui, models, map) {
         self.rotate(-10, dur, map);
       })
       .mouseup(function () {
+        clearInterval(self.intervalId);
+      })
+      .mouseout(function() {
         clearInterval(self.intervalId);
       });
 
