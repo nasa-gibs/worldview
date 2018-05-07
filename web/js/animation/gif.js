@@ -24,7 +24,7 @@ import uiIndicator from '../ui/indicator';
 const gifCreater = new GifCreater();
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
-const maxGifSize = 40;
+const maxGifSize = 250;
 const GRATICULE_WARNING =
   'The graticule layer cannot be used to take a snapshot. Would you ' +
   'like to hide this layer?';
@@ -548,14 +548,14 @@ export function animationGif(models, config, ui) {
    * @returns {void}
    *
    */
-  var onGifComplete = function(blob) { // callback function for when image is finished
+  var onGifComplete = function(obj) { // callback function for when image is finished
     $('#timeline-footer').removeClass('wv-anim-active');
     models.anim.rangeState.state = 'off';
-    if (blob) {
+    if (!obj.error) {
+      const blob = obj.blob;
       progressing = false;
       var animatedImage = document.createElement('img');
-
-      var blobURL = URL.createObjectURL(blob); // supported in Chrome and FF
+      const blobURL = URL.createObjectURL(blob);
       animatedImage.src = blobURL;
       animatedImage.width = lastRequestedDimensions.w > window.innerWidth - 198 ? window.innerWidth - 198 : lastRequestedDimensions.w;
       animatedImage.height = lastRequestedDimensions.h > window.innerHeight - 120 ? window.innerHeight - 120 : lastRequestedDimensions.h;

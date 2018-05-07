@@ -78,26 +78,35 @@ export default class gifCreater {
     var chunks = [];
     var imagePromiseArray = [];
     lodashEach(options.images, (imageObj) => {
-      imagePromiseArray.push(this.getImagePromise(imageObj));
+      imagePromiseArray.push(this.getImagePromise(imageObj).catch(returnError));
     });
+    function returnError(e) {
+      const callbackObj = {
+        blob: null,
+        error: e
+      };
+      callback(callbackObj);
+    }
     Promise.all(imagePromiseArray).then((images) => {
       var gifStream = this.getStream(images, ctx);
       var reader = gifStream.getReader();
-
-      var pull = function() {
+      function pull() {
         return reader.read().then(function (result) {
           chunks.push(result.value);
           return result.done ? chunks : pull();
         });
       };
-
       pull().then(function (chunks) {
-        callback(new Blob(chunks, { type: 'image/gif' }));
+        const callbackObj = {
+          blob: new Blob(chunks, { type: 'image/gif' }),
+          error: ''
+        };
+        callback(callbackObj);
       });
     });
   }
   getImagePromise(frame) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       var img = new Image();
       img.width = this.options.gifWidth;
       img.height = this.options.gifHeight;
@@ -106,6 +115,13 @@ export default class gifCreater {
       img.crossOrigin = 'Anonymous';
       img.onload = () => {
         resolve(img);
+        delete img.onload;
+        delete img.onerror;
+      };
+      img.onerror = (e) => {
+        reject(e);
+        delete img.onload;
+        delete img.onerror;
       };
       img.src = frame.src;
     });
