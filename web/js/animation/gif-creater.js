@@ -1,6 +1,7 @@
 import GifWriter from 'gifwriter';
 import NeuQuant from 'neuquant';
 import { ReadableStream } from 'web-streams-polyfill';
+import lodashEach from 'lodash/each';
 
 export default class gifCreater {
 /**
@@ -75,17 +76,38 @@ export default class gifCreater {
     cv.width = options.gifWidth;
     cv.height = options.gifHeight;
     var chunks = [];
-    var gifStream = this.getStream(options.images, ctx);
-    var reader = gifStream.getReader();
+    var imagePromiseArray = [];
+    lodashEach(options.images, (imageObj) => {
+      imagePromiseArray.push(this.getImagePromise(imageObj));
+    });
+    Promise.all(imagePromiseArray).then((images) => {
+      var gifStream = this.getStream(images, ctx);
+      var reader = gifStream.getReader();
 
-    var pull = function() {
-      return reader.read().then(function (result) {
-        chunks.push(result.value);
-        return result.done ? chunks : pull();
+      var pull = function() {
+        return reader.read().then(function (result) {
+          chunks.push(result.value);
+          return result.done ? chunks : pull();
+        });
+      };
+
+      pull().then(function (chunks) {
+        callback(new Blob(chunks, { type: 'image/gif' }));
       });
-    };
-    pull().then(function (chunks) {
-      callback(new Blob(chunks, { type: 'image/gif' }));
+    });
+  }
+  getImagePromise(frame) {
+    return new Promise((resolve) => {
+      var img = new Image();
+      img.width = this.options.gifWidth;
+      img.height = this.options.gifHeight;
+      img.text = frame.text;
+      img.delay = frame.delay;
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => {
+        resolve(img);
+      };
+      img.src = frame.src;
     });
   }
   /**
@@ -103,48 +125,33 @@ export default class gifCreater {
     var processedImages = 0;
     var self = this;
     var rs = new ReadableStream({
-      // Each time pull gets called you should get the pixel data and
-      // enqueue it as if it would be good old gif.addFrame()
       pull: function pull(controller) {
         var frame = frames.shift();
         if (!frame) controller.close();
-        return new Promise((resolve, reject) => {
-          var img = new Image();
-          img.width = width;
-          img.height = height;
-          img.text = frame.text;
-          img.delay = frame.delay;
-          img.crossOrigin = 'Anonymous';
-          img.onload = () => {
-            resolve(img);
-          };
-          img.src = frame.src;
-        }).then((img) => {
-          var data, rgbComponents, paletteRGB, nq, paletteArray, numberPixels;
-          var r, g, b;
-          var k = 0;
-          var delay = (img.delay) ? img.delay / 10 : 100;
-          processedImages++;
-          delay = (processedImages === totalImages && options.extraLastFrameDelay) ? delay + (options.extraLastFrameDelay / 10) : delay;// Add an extra
-          options.progressCallback(Math.round((processedImages / totalImages) * 100));
-          ctx = self.addFrameDetails(ctx, img);
-          data = ctx.getImageData(0, 0, width, height).data;
-          rgbComponents = dataToRGB(data, width, height);
-          nq = new NeuQuant(rgbComponents, rgbComponents.length, 15);
-          paletteRGB = nq.process();
-          paletteArray = new Uint32Array(componentizedPaletteToArray(paletteRGB));
-          numberPixels = width * height;
-          for (var i = 0; i < numberPixels; i++) {
-            r = rgbComponents[k++];
-            g = rgbComponents[k++];
-            b = rgbComponents[k++];
-            pixels[i] = nq.map(r, g, b);
-          }
-          controller.enqueue([0, 0, width, height, pixels, {
-            palette: new Uint32Array(paletteArray),
-            delay: delay
-          }]);
-        });
+        var data, rgbComponents, paletteRGB, nq, paletteArray, numberPixels;
+        var r, g, b;
+        var k = 0;
+        var delay = (frame.delay) ? frame.delay / 10 : 100;
+        processedImages++;
+        delay = (processedImages === totalImages && options.extraLastFrameDelay) ? delay + (options.extraLastFrameDelay / 10) : delay;// Add an extra
+        options.progressCallback(Math.round((processedImages / totalImages) * 100));
+        ctx = self.addFrameDetails(ctx, frame);
+        data = ctx.getImageData(0, 0, width, height).data;
+        rgbComponents = dataToRGB(data, width, height);
+        nq = new NeuQuant(rgbComponents, rgbComponents.length, 15);
+        paletteRGB = nq.process();
+        paletteArray = new Uint32Array(componentizedPaletteToArray(paletteRGB));
+        numberPixels = width * height;
+        for (var i = 0; i < numberPixels; i++) {
+          r = rgbComponents[k++];
+          g = rgbComponents[k++];
+          b = rgbComponents[k++];
+          pixels[i] = nq.map(r, g, b);
+        }
+        controller.enqueue([0, 0, width, height, pixels, {
+          palette: new Uint32Array(paletteArray),
+          delay: delay
+        }]);
       }
     });
     return new GifWriter(rs, width, height, {
@@ -152,6 +159,7 @@ export default class gifCreater {
     });
   }
 }
+
 // part of neuquant conversion
 function componentizedPaletteToArray(paletteRGB) {
   var paletteArray = [];
