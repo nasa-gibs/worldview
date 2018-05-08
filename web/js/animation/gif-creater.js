@@ -1,5 +1,6 @@
 import GifWriter from 'gifwriter';
 import NeuQuant from 'neuquant';
+import Promise from 'bluebird';
 import { ReadableStream } from 'web-streams-polyfill';
 import lodashEach from 'lodash/each';
 
@@ -90,9 +91,10 @@ export default class gifCreater {
     Promise.all(imagePromiseArray).then((images) => {
       var gifStream = this.getStream(images, ctx);
       var reader = gifStream.getReader();
+
       function pull() {
         return reader.read().then(function (result) {
-          chunks.push(result.value);
+          if (result.value) chunks.push(result.value);
           return result.done ? chunks : pull();
         });
       };
