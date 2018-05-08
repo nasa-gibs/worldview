@@ -191,8 +191,7 @@ export function animationGif(models, config, ui) {
   };
 
   /*
-   * Uses, frameUrl array and gifShot
-   * Library to create GIF
+   * Use class to create GIF
    *
    *
    * @method createGIF
