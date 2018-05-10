@@ -12,7 +12,7 @@ const capabilities = createCapabilities([{
   os_version: ['10']
 }, {
   browser: 'safari',
-  browser_version: ['11.0'],
+  browser_version: ['11.1'],
   os: ['OS X'],
   os_version: ['High Sierra']
 }, {

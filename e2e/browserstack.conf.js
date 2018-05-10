@@ -35,13 +35,21 @@ const nightwatchConfig = {
         'browserstack.selenium_version': '2.53.0'
       }
     },
+    safari: {
+      desiredCapabilities: {
+        browser: 'safari',
+        'browserstack.selenium_version': '3.5.2',
+        'browserstack.safari.driver': '2.45'
+      }
+    },
     firefox: {
       desiredCapabilities: {
         browser: 'firefox',
         marionette: true,
         browserName: 'firefox',
         javascriptEnabled: true,
-        'browserstack.selenium_version': '3.5.2'
+        'browserstack.selenium_version': '3.10.0',
+        'browserstack.geckodriver': '0.19.0'
       }
     },
     ie: {
@@ -49,14 +57,8 @@ const nightwatchConfig = {
         browser: 'internet explorer',
         'browserstack.selenium_version': '2.53.0'
       }
-    },
-    safari: {
-      desiredCapabilities: {
-        browser: 'safari',
-        'browserstack.selenium_version': '3.5.2',
-        'browserstack.safari.driver': '2.45'
-      }
     }
+
   }
 };
 
