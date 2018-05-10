@@ -35,7 +35,9 @@ try {
       Nightwatch.CliRunner(argv)
         .setup(null, function () {
           // Code to stop browserstack local after end of parallel test
-          bs_local.stop(function () {});
+          bs_local.stop(function () {
+            process.exit();
+          });
         })
         .runTests(function () {
           // Code to stop browserstack local after end of single test
