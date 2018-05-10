@@ -18,5 +18,4 @@ install:
 before_script:
   - npm run build
 
-script: npm run browerstack
-
+script: npm run browserstack
