@@ -10,7 +10,7 @@ module.exports = {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   'Downloading GIF when custom colormap is activated': function(client) {
-    if (client.options.desiredCapabilities.browser!== 'ie') { // Custom colormaps down exist in IE
+    if (client.options.desiredCapabilities.browser !== 'ie') { // Custom colormaps down exist in IE
       client.url(client.globals.url + localQuerystrings.activeCustomColormap);
       client.waitForElementVisible(localSelectors.animationWidget, TIME_LIMIT, function() {
         client.click(localSelectors.createGifIcon)
