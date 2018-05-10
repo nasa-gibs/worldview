@@ -1,10 +1,22 @@
 language: node_js
 node_js:
 - '8.8.1'
+env:
+  global:
+    - BROWSERSTACK_USER=${BROWSERSTACK_USER}
+    - BROWSERSTACK_ACCESS_KEY=${BROWSERSTACK_ACCESS_KEY}
 before_install: npm install -g grunt-cli
-install: npm install
-before_script: npm run build:tests
 cache:
   directories:
     - node_modules
     - .python
+install:
+  - npm install
+  - npm start
+  - sleep 3
+
+before_script:
+  - npm run build
+
+script: npm run browerstack
+
