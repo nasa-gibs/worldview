@@ -12,7 +12,7 @@ cache:
     - .python
 install:
   - npm install
-  - npm start
+  - npm start &
   - sleep 3
 
 before_script:
