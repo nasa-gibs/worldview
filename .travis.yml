@@ -12,10 +12,23 @@ cache:
     - .python
 install:
   - npm install
-  - npm start &
-  - sleep 3
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      then npm start &
+    fi
+
 
 before_script:
-  - npm run build
+  - |
+    if [ "${TRAVIS_PULL_REQUEST}"" != "false" ]; then
+      npm run build
+    else
+      npm run build:test
+    fi
 
-script: npm run browserstack
+script:
+  - npm run test
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      npm run browserstack
+    fi
