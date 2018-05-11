@@ -9,8 +9,8 @@ module.exports = {
   before: function (client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
-  'Downloading GIF when custom colormap is activated': function(client) {
-    if (client.options.desiredCapabilities.browser !== 'ie') { // Custom colormaps down exist in IE
+  'Downloading GIF opens Ask Dialog before resetting colormap when custom colormap is activated': function(client) {
+    if (client.options.desiredCapabilities.browser !== 'ie') { // Custom colormaps don't exist in IE
       client.url(client.globals.url + localQuerystrings.activeCustomColormap);
       client.waitForElementVisible(localSelectors.animationWidget, TIME_LIMIT, function() {
         client.click(localSelectors.createGifIcon)
@@ -27,7 +27,7 @@ module.exports = {
       });
     }
   },
-  'Downloading GIF when polar projection is rotated': function(client) {
+  'Downloading GIF opens Ask Dialog before reseting rotation when polar projection is rotated': function(client) {
     const globalSelectors = client.globals.selectors;
     client.url(client.globals.url + localQuerystrings.animationProjectionRotated);
     client.waitForElementVisible(localSelectors.animationWidget, TIME_LIMIT, function() {
@@ -42,7 +42,7 @@ module.exports = {
       client.useCss().assert.containsText(globalSelectors.clearRotationButton, '0');
     });
   },
-  'GIF selection preview is Accurate and selections that are too high disable GIF download': function(client) {
+  'GIF selection preview is Accurate when first loaded': function(client) {
     client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
     client.waitForElementVisible(localSelectors.animationWidget, TIME_LIMIT, function() {
       client.click(localSelectors.createGifIcon)
@@ -52,12 +52,14 @@ module.exports = {
         client.useCss().assert.containsText(localSelectors.gifPreviewEndDate, '2018-04-04');
         client.useCss().assert.containsText(localSelectors.gifPreviewFrameRateValue, '3 Frames Per Second');
         client.assert.ok('#wv-checkbox-gif'); // checkbox is checked
-        client.click(localSelectors.gifPreviewEndResolutionOption250)
-          .pause(1000);
-        client.assert.value(localSelectors.gifPreviewEndResolutionSelector, '1');
-        client.expect.element(localSelectors.gifDownloadButton).to.not.be.enabled;
       });
     });
+  },
+  'GIF selections that are too high disable GIF download': function(client) {
+    client.click(localSelectors.gifPreviewEndResolutionOption250)
+      .pause(1000);
+    client.assert.value(localSelectors.gifPreviewEndResolutionSelector, '1');
+    client.expect.element(localSelectors.gifDownloadButton).to.not.be.enabled;
   },
   after: function(client) {
     client.end();
