@@ -50,36 +50,47 @@ module.exports = {
           .pause(3000);
         client.expect.element(selectedMarker).to.be.visible;
         client.expect.element(selectedFirstEvent).to.be.visible;
-        // test url is updated
-        client
-          .assert.urlParameterEquals('l', true)
-          .assert.urlParameterEquals('t', true)
-          .assert.urlParameterEquals('z', true)
-          .assert.urlParameterEquals('v', true)
-          .assert.urlParameterEquals('e', true);
-        client.assert.containsText(globalSelectors.notifyMessage, 'Events may not be visible at all times');
-        client.click(globalSelectors.notifyMessage)
-          .pause(2000);
-        client.assert.containsText('.wv-data-unavailable-header', 'Why can’t I see an event?');
-        client
-          .click(globalSelectors.notificationDismissButton)
-          .pause(2000);
-        client.expect.element(globalSelectors.notificationDismissButton).to.not.be.visible;
-        client.assert.elementCountGreater(globalSelectors.overlayLayerItems, 4); // At least 4 overlay layers present
-        client.click(selectedFirstEvent)
-          .pause(500);
-        client.expect.element(selectedFirstEvent).to.not.be.present;
-        client.click(firstEvent)
-          .pause(500);
-        client.windowHandles(function (tabs) {
-          client.assert.equal(tabs.value.length, 1);
-        });
-        client.click(firstExternalEventLink)
-          .pause(2000);
-        client.windowHandles(function (tabs) {
-          client.assert.equal(tabs.value.length, 2);
-        });
       });
+    });
+  },
+  'Verify that url contains correct attributes': function(client) {
+    client
+      .assert.urlParameterEquals('l', true)
+      .assert.urlParameterEquals('t', true)
+      .assert.urlParameterEquals('z', true)
+      .assert.urlParameterEquals('v', true)
+      .assert.urlParameterEquals('e', true);
+  },
+  'Verify event Nofication is present and click Nofication to get more info': function(client) {
+    const globalSelectors = client.globals.selectors;
+    client.assert.containsText(globalSelectors.notifyMessage, 'Events may not be visible at all times');
+    client.click(globalSelectors.notifyMessage)
+      .pause(2000);
+  },
+  'Verify Nofication info if present and click Dismiss': function(client) {
+    const globalSelectors = client.globals.selectors;
+    client.assert.containsText('.wv-data-unavailable-header', 'Why can’t I see an event?');
+    client
+      .click(globalSelectors.notificationDismissButton)
+      .pause(2000);
+    client.expect.element(globalSelectors.notificationDismissButton).to.not.be.visible;
+  },
+  'Verify that more overlay layers have been included': function(client) {
+    client.assert.elementCountGreater(client.globals.selectors.overlayLayerItems, 4); // At least 4 overlay layers present
+  },
+  'Event external link opens new window': function(client) {
+    client.click(selectedFirstEvent)
+      .pause(500);
+    client.expect.element(selectedFirstEvent).to.not.be.present;
+    client.click(firstEvent)
+      .pause(500);
+    client.windowHandles(function (tabs) {
+      client.assert.equal(tabs.value.length, 1);
+    });
+    client.click(firstExternalEventLink)
+      .pause(2000);
+    client.windowHandles(function (tabs) {
+      client.assert.equal(tabs.value.length, 2);
     });
   },
   after: function(client) {
