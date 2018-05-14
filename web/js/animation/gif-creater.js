@@ -5,17 +5,21 @@ import { ReadableStream } from 'web-streams-polyfill';
 import lodashEach from 'lodash/each';
 
 export default class gifCreater {
-/**
- * Add frame contents to canvas
- *
- * https://github.com/yahoo/gifshot/blob/master/src/modules/core/AnimatedGIF.js
- *
- * @param {Object} ctx       2d Canvas Context
- * @param {Object} img       Image Element
- * @param {String} frameText Text to be applied to this string
- *
- * @return {Object}            2d Canvas Context
- */
+  constructor() {
+    this.canvas = null;
+    this.ctx = null;
+  }
+  /**
+   * Add frame contents to canvas
+   *
+   * https://github.com/yahoo/gifshot/blob/master/src/modules/core/AnimatedGIF.js
+   *
+   * @param {Object} ctx       2d Canvas Context
+   * @param {Object} img       Image Element
+   * @param {String} frameText Text to be applied to this string
+   *
+   * @return {Object}            2d Canvas Context
+   */
   addFrameDetails(ctx, img) {
     const options = this.options;
     const frameText = img.text;
@@ -71,12 +75,12 @@ export default class gifCreater {
    * @return {void}
    */
   createGIF(options, callback) {
-    var cv = document.createElement('canvas');
-    var ctx = cv.getContext('2d');
+    if (this.canvas) this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.canvas = document.createElement('canvas');
+    this.ctx = this.canvas.getContext('2d');
     this.options = options;
-    cv.width = options.gifWidth;
-    cv.height = options.gifHeight;
-    var chunks = [];
+    this.canvas.width = options.gifWidth;
+    this.canvas.height = options.gifHeight;
     var imagePromiseArray = [];
     lodashEach(options.images, (imageObj) => {
       imagePromiseArray.push(this.getImagePromise(imageObj).catch(returnError));
@@ -89,12 +93,21 @@ export default class gifCreater {
       callback(callbackObj);
     }
     Promise.all(imagePromiseArray).then((images) => {
-      var gifStream = this.getStream(images, ctx);
+      var gifStream = this.getStream(images, this.ctx);
       var reader = gifStream.getReader();
+      var chunks = [];
 
       function pull() {
         return reader.read().then(function (result) {
-          if (result.value) chunks.push(result.value);
+          const chunk = result.value;
+          if (chunk) {
+            chunks.push(new Uint8Array(chunk));
+            // for (var offset = 0; offset < chunk.length; offset += 512) {
+            //   let sliceOfChunk = chunk.slice(offset, offset + 512);
+            //   let byteArray = new Uint8Array(sliceOfChunk);
+            //   chunks.push(byteArray);
+            // }
+          }
           return result.done ? chunks : pull();
         });
       };
@@ -138,7 +151,6 @@ export default class gifCreater {
     var options = this.options;
     var width = options.gifWidth;
     var height = options.gifHeight;
-    var pixels = new Uint8Array(width * height);
     var totalImages = frames.length;
     var processedImages = 0;
     var self = this;
@@ -146,7 +158,7 @@ export default class gifCreater {
       pull: function pull(controller) {
         var frame = frames.shift();
         if (!frame) controller.close();
-        var data, rgbComponents, paletteRGB, nq, paletteArray, numberPixels;
+        var imgData, rgbComponents, paletteRGB, nq, paletteArray, numberPixels, pixels;
         var r, g, b;
         var k = 0;
         var delay = (frame.delay) ? frame.delay / 10 : 100;
@@ -154,12 +166,13 @@ export default class gifCreater {
         delay = (processedImages === totalImages && options.extraLastFrameDelay) ? delay + (options.extraLastFrameDelay / 10) : delay;// Add an extra
         options.progressCallback(Math.round((processedImages / totalImages) * 100));
         ctx = self.addFrameDetails(ctx, frame);
-        data = ctx.getImageData(0, 0, width, height).data;
-        rgbComponents = dataToRGB(data, width, height);
+        imgData = ctx.getImageData(0, 0, width, height);
+        rgbComponents = dataToRGB(imgData.data, imgData.height, imgData.height);
         nq = new NeuQuant(rgbComponents, rgbComponents.length, 15);
         paletteRGB = nq.process();
         paletteArray = new Uint32Array(componentizedPaletteToArray(paletteRGB));
-        numberPixels = width * height;
+        numberPixels = imgData.height * imgData.width;
+        pixels = new Uint8Array(imgData.height * imgData.width);
         for (var i = 0; i < numberPixels; i++) {
           r = rgbComponents[k++];
           g = rgbComponents[k++];
@@ -167,7 +180,7 @@ export default class gifCreater {
           pixels[i] = nq.map(r, g, b);
         }
         controller.enqueue([0, 0, width, height, pixels, {
-          palette: new Uint32Array(paletteArray),
+          palette: paletteArray,
           delay: delay
         }]);
       }
