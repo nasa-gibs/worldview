@@ -1,4 +1,5 @@
 import lodashFind from 'lodash/find';
+import lodashIsEmpty from 'lodash/isEmpty';
 import olExtent from 'ol/extent';
 import OlOverlay from 'ol/overlay';
 import OlFeature from 'ol/feature';
@@ -7,11 +8,11 @@ import OlStyleStroke from 'ol/style/stroke';
 import OlLayerVector from 'ol/layer/vector';
 import OlSourceVector from 'ol/source/vector';
 import OlGeomPolygon from 'ol/geom/polygon';
+import olProj from 'ol/proj';
 
 export default function markers (models, ui) {
   var self = {};
-  var map;
-  map = map || ui.map.selected;
+  var map = ui.map.selected;
   var olViewport = map.getViewport();
 
   self.draw = function () {
@@ -31,10 +32,38 @@ export default function markers (models, ui) {
       var geometry = lodashFind(event.geometries, function (geom) {
         return geom.date.split('T')[0] === date;
       }) || event.geometries[0];
-
       if (!geometry) return marker;
 
       var coordinates = geometry.coordinates;
+
+      // polar projections require transform of coordinates to crs
+      if (models.proj.selected.id !== 'geographic') {
+        // check for polygon geometries
+        if (geometry.type === 'Polygon') {
+          let coordinatesTransform = coordinates[0].map((coordinate) => {
+            return olProj.transform(coordinate, 'EPSG:4326', models.proj.selected.crs);
+          });
+          let extent = olExtent.boundingExtent(coordinatesTransform);
+          coordinates = olExtent.getCenter(extent);
+          if (isSelected) {
+            marker.boundingBox = createBoundingBox(coordinatesTransform);
+            map.addLayer(marker.boundingBox);
+          }
+        } else {
+          // if normal geometries, transform given lon/lat array
+          coordinates = olProj.transform(coordinates, 'EPSG:4326', models.proj.selected.crs);
+        }
+      } else {
+        if (geometry.type === 'Polygon') {
+          let extent = olExtent.boundingExtent(geometry.coordinates[0]);
+          coordinates = olExtent.getCenter(extent);
+          if (isSelected) {
+            marker.boundingBox = createBoundingBox(geometry.coordinates);
+            map.addLayer(marker.boundingBox);
+          }
+        }
+      }
+
       var category = event.categories[0];
       // Assign a default category if we don't have an icon
       var icons = [
@@ -53,19 +82,19 @@ export default function markers (models, ui) {
         ? category
         : { title: 'Default', slug: 'default' };
 
-      if (geometry.type === 'Polygon') {
-        var extent = olExtent.boundingExtent(geometry.coordinates[0]);
-        coordinates = olExtent.getCenter(extent);
-        if (isSelected) {
-          marker.boundingBox = createBoundingBox(geometry.coordinates);
-          map.addLayer(marker.boundingBox);
-        }
-      }
+      // get maxExtent of current projection and check if marker is within range 
+      let maxExtent = models.proj.selected.maxExtent;
+      let maxExtentCheck = coordinates[0] >= maxExtent[0] 
+                        && coordinates[0] <= maxExtent[2] 
+                        && coordinates[1] >= maxExtent[1] 
+                        && coordinates[1] <= maxExtent[3];
 
-      marker.pin = createPin(event.id, category, isSelected);
-      marker.pin.setPosition(coordinates);
-      map.addOverlay(marker.pin);
-
+      // only create marker if within projection extent range
+      if (maxExtentCheck) {
+        marker.pin = createPin(event.id, category, isSelected);
+        marker.pin.setPosition(coordinates);
+        map.addOverlay(marker.pin);
+      
       // Add event listeners
       var willSelect = true;
       var moveCount = 0;
@@ -110,8 +139,11 @@ export default function markers (models, ui) {
           passEventToTarget(e, olViewport);
         }
       });
-      return marker;
-    });
+    } 
+
+    return marker; 
+    // empty objects (i.e., markers not within projection range) are filtered out
+    }).filter((marker) => !lodashIsEmpty(marker));
     map.renderSync(); // Marker position will be off until this is called
     return markers;
   };
@@ -119,9 +151,17 @@ export default function markers (models, ui) {
   self.remove = function (markers) {
     markers = markers || [];
     if (markers.length < 1) return;
-    markers.forEach(function (marker) {
-      if (marker.boundingBox) map.removeLayer(marker.boundingBox);
-      if (marker.pin) map.removeOverlay(marker.pin);
+    markers.forEach(function(marker) {
+      if (marker.boundingBox) {
+        // added setMap to null for marker to remove - may be scope related issue
+        marker.boundingBox.setMap(null);
+        map.removeLayer(marker.boundingBox);
+      }
+      if (marker.pin) {
+        // added setMap to null for marker to remove - may be scope related issue
+        marker.pin.setMap(null);
+        map.removeOverlay(marker.pin);
+      }
     });
   };
 
