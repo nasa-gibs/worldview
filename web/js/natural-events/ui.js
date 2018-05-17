@@ -2,6 +2,7 @@ import $ from 'jquery';
 import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import olExtent from 'ol/extent';
+import olProj from 'ol/proj';
 
 import markers from './markers';
 import track from './track';
@@ -19,15 +20,17 @@ export default function naturalEventsUI (models, ui, config, request) {
   var self = {};
   var eventVisibilityAlert;
   var $footer;
+  var map;
   var view;
   var model = models.naturalEvents;
+  model.active = false;
   self.markers = [];
   self.selected = {};
-  const naturalEventMarkers = markers(models, ui, config);
-  const naturalEventsTrack = track(models, ui, config);
+  var naturalEventMarkers = markers(models, ui, config);
+  var naturalEventsTrack = track(models, ui, config);
 
   var init = function () {
-    var map = ui.map.selected;
+    map = ui.map.selected;
     // Display loading information for user feedback on slow network
     $('#wv-events').text('Loading...');
 
@@ -37,7 +40,9 @@ export default function naturalEventsUI (models, ui, config, request) {
       if (!(model.data.events || model.data.sources)) return;
       createEventList();
       var isZoomed = Math.floor(view.getZoom()) >= 3;
-      if (isZoomed) self.filterEventList();
+      if (isZoomed || models.proj.selected.id !== 'geographic') {
+        self.filterEventList();
+      }
       if (model.active) {
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
@@ -47,7 +52,7 @@ export default function naturalEventsUI (models, ui, config, request) {
 
       map.on('moveend', function (e) {
         var isZoomed = Math.floor(view.getZoom()) >= 3;
-        if (isZoomed) {
+        if (isZoomed || models.proj.selected.id !== 'geographic') {
           self.filterEventList();
         } else {
           $('.map-item-list .item').show();
@@ -69,11 +74,6 @@ export default function naturalEventsUI (models, ui, config, request) {
       if (tab === 'events') {
         model.active = true;
 
-        // Set the correct map projection
-        if (models.proj.selected.id !== 'geographic') {
-          models.proj.select('geographic');
-        }
-
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
@@ -81,10 +81,55 @@ export default function naturalEventsUI (models, ui, config, request) {
         ui.sidebar.sizeEventsTab();
       } else {
         model.active = false;
-        if (naturalEventMarkers) naturalEventMarkers.remove(self.markers);
+        naturalEventMarkers.remove(self.markers);
       }
       model.events.trigger('change');
     });
+
+    // get events for projection change
+    models.proj.events.on('select', function(e) {
+      map = ui.map.selected;
+      view = map.getView();
+      naturalEventMarkers = markers(models, ui, config);
+      naturalEventsTrack = track(models, ui, config);
+
+      if (!(model.data.events || model.data.sources)) return;
+      createEventList();
+
+      var isZoomed = Math.floor(view.getZoom()) >= 3;
+      if (isZoomed || models.proj.selected.id !== 'geographic') {
+        self.filterEventList();
+      }
+
+      // handle list filter on map move
+      ui.map.selected.on('moveend', function (e) {
+        self.filterEventList();
+      });
+
+      if(model.active) {
+        // Remove previously stored markers
+        naturalEventMarkers.remove(self.markers);
+        // Store markers so the can be referenced later
+        self.markers = naturalEventMarkers.draw();
+        self.filterEventList();
+        // check if selected event is in changed projection
+        if (self.selected.id) {
+          let findSelectedInProjection = lodashFind(self.markers, function(marker) {
+            if(marker.pin) {
+              return marker.pin.id === self.selected.id;
+            } else {
+              return false;
+            }
+          })
+          // remove selected event if not in changed projection
+          if(!findSelectedInProjection) {
+            self.deselectEvent();
+            self.filterEventList();
+          }
+        }
+      } 
+      models.proj.events.trigger('change');
+    })
   };
 
   self.selectEvent = function (id, date) {
@@ -105,10 +150,6 @@ export default function naturalEventsUI (models, ui, config, request) {
 
     var category = event.categories[0].title;
     var isSameCategory = category === prevCategory;
-
-    if (models.proj.selected.id !== 'geographic') {
-      models.proj.select('geographic');
-    }
 
     date = date || self.getDefaultEventDate(event);
     self.selected.date = date;
@@ -192,11 +233,30 @@ export default function naturalEventsUI (models, ui, config, request) {
       }) || naturalEvent.geometries[0];
 
       var coordinates = geometry.coordinates;
-      if (geometry.type === 'Polygon') {
-        var geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
-        coordinates = olExtent.getCenter(geomExtent);
-      }
 
+      if (models.proj.selected.id !== 'geographic') {
+        // limit to maxExtent while allowing zoom and filter for polar projections
+        let currentExtent = view.calculateExtent();
+        let maxExtent = models.proj.selected.maxExtent;
+        extent = olExtent.containsExtent(maxExtent, currentExtent) ? currentExtent : maxExtent;
+
+        // check for polygon geometries for targeted projection coordinate transform
+        if (geometry.type === 'Polygon') {
+          let coordinatesTransform = coordinates[0].map((coordinate) => {
+            return olProj.transform(coordinate, 'EPSG:4326', models.proj.selected.crs);
+          });
+          let geomExtent = olExtent.boundingExtent(coordinatesTransform);
+          coordinates = olExtent.getCenter(geomExtent);
+        } else {
+          // if normal geometries, transform given lon/lat array
+          coordinates = olProj.transform(coordinates, 'EPSG:4326', models.proj.selected.crs);
+        }
+      } else {
+        if (geometry.type === 'Polygon') {
+          let geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
+          coordinates = olExtent.getCenter(geomExtent);
+        }
+      }
       var isVisible = olExtent.containsCoordinate(extent, coordinates);
       var $thisItem = $('.map-item-list .item[data-id=' + naturalEvent.id + ']');
       if (isVisible || isSelectedEvent) {
@@ -371,7 +431,11 @@ export default function naturalEventsUI (models, ui, config, request) {
     var geometry = lodashFind(event.geometries, function (geom) {
       return geom.date.split('T')[0] === date;
     });
-    var coordinates = (geometry.type === 'Polygon') ? olExtent.boundingExtent(geometry.coordinates[0]) : geometry.coordinates;
+
+    // check for polygon geometries and/or perform projection coordinate transform
+    var coordinates = (geometry.type === 'Polygon') 
+        ? olExtent.boundingExtent(olProj.transform(geometry.coordinates[0], 'EPSG:4326', models.proj.selected.crs)) 
+        : olProj.transform(geometry.coordinates, 'EPSG:4326', models.proj.selected.crs);
 
     return ui.map.animate.fly(coordinates, zoom);
   };
