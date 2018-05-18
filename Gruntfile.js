@@ -238,9 +238,6 @@ module.exports = function(grunt) {
             from: '@BUILD_VERSION@',
             to: '<%=pkg.version%>'
           }, {
-            from: '@BUILD_RELEASE@',
-            to: '<%=pkg.release%>'
-          }, {
             from: '@BUILD_NUMBER@',
             to: buildNumber
           }
