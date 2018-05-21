@@ -30,6 +30,9 @@ export default function naturalEventsUI (models, ui, config, request) {
   var naturalEventsTrack = track(models, ui, config);
 
   var init = function () {
+    console.log('MODELS', models);
+    console.log('UI', ui);
+    console.log('CONFIG', config);
     map = ui.map.selected;
     // Display loading information for user feedback on slow network
     $('#wv-events').text('Loading...');
@@ -106,7 +109,7 @@ export default function naturalEventsUI (models, ui, config, request) {
         self.filterEventList();
       });
 
-      if(model.active) {
+      if (model.active) {
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
@@ -115,21 +118,21 @@ export default function naturalEventsUI (models, ui, config, request) {
         // check if selected event is in changed projection
         if (self.selected.id) {
           let findSelectedInProjection = lodashFind(self.markers, function(marker) {
-            if(marker.pin) {
+            if (marker.pin) {
               return marker.pin.id === self.selected.id;
             } else {
               return false;
             }
-          })
+          });
           // remove selected event if not in changed projection
-          if(!findSelectedInProjection) {
+          if (!findSelectedInProjection) {
             self.deselectEvent();
             self.filterEventList();
           }
         }
-      } 
+      }
       models.proj.events.trigger('change');
-    })
+    });
   };
 
   self.selectEvent = function (id, date) {
@@ -433,9 +436,9 @@ export default function naturalEventsUI (models, ui, config, request) {
     });
 
     // check for polygon geometries and/or perform projection coordinate transform
-    var coordinates = (geometry.type === 'Polygon') 
-        ? olExtent.boundingExtent(olProj.transform(geometry.coordinates[0], 'EPSG:4326', models.proj.selected.crs)) 
-        : olProj.transform(geometry.coordinates, 'EPSG:4326', models.proj.selected.crs);
+    var coordinates = (geometry.type === 'Polygon')
+      ? olExtent.boundingExtent(olProj.transform(geometry.coordinates[0], 'EPSG:4326', models.proj.selected.crs))
+      : olProj.transform(geometry.coordinates, 'EPSG:4326', models.proj.selected.crs);
 
     return ui.map.animate.fly(coordinates, zoom);
   };
