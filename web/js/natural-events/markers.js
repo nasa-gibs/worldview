@@ -82,66 +82,66 @@ export default function markers (models, ui) {
         ? category
         : { title: 'Default', slug: 'default' };
 
-      // get maxExtent of current projection and check if marker is within range 
+      // get maxExtent of current projection and check if marker is within range
       let maxExtent = models.proj.selected.maxExtent;
-      let maxExtentCheck = coordinates[0] >= maxExtent[0] 
-                        && coordinates[0] <= maxExtent[2] 
-                        && coordinates[1] >= maxExtent[1] 
-                        && coordinates[1] <= maxExtent[3];
+      let maxExtentCheck = coordinates[0] >= maxExtent[0] &&
+                           coordinates[0] <= maxExtent[2] &&
+                           coordinates[1] >= maxExtent[1] &&
+                           coordinates[1] <= maxExtent[3];
 
       // only create marker if within projection extent range
       if (maxExtentCheck) {
         marker.pin = createPin(event.id, category, isSelected);
         marker.pin.setPosition(coordinates);
         map.addOverlay(marker.pin);
-      
-      // Add event listeners
-      var willSelect = true;
-      var moveCount = 0;
-      // The pin element used to be on `element_` but now it looks like it
-      // moved to `element`. Maybe this was a change to OpenLayers.
-      var pinEl = marker.pin.element_ || marker.pin.element;
 
-      ['pointerdown', 'mousedown', 'touchstart'].forEach(function (type) {
-        pinEl.addEventListener(type, function (e) {
-          willSelect = true;
-          moveCount = 0;
-          passEventToTarget(e, olViewport);
+        // Add event listeners
+        var willSelect = true;
+        var moveCount = 0;
+        // The pin element used to be on `element_` but now it looks like it
+        // moved to `element`. Maybe this was a change to OpenLayers.
+        var pinEl = marker.pin.element_ || marker.pin.element;
+
+        ['pointerdown', 'mousedown', 'touchstart'].forEach(function (type) {
+          pinEl.addEventListener(type, function (e) {
+            willSelect = true;
+            moveCount = 0;
+            passEventToTarget(e, olViewport);
+          });
         });
-      });
 
-      [
-        'pointermove',
-        'wheel',
-        'pointerdrag',
-        'pointerup',
-        'mousemove',
-        'touchmove'
-      ].forEach(function (type) {
-        pinEl.addEventListener(type, function (e) {
-          passEventToTarget(e, olViewport);
+        [
+          'pointermove',
+          'wheel',
+          'pointerdrag',
+          'pointerup',
+          'mousemove',
+          'touchmove'
+        ].forEach(function (type) {
+          pinEl.addEventListener(type, function (e) {
+            passEventToTarget(e, olViewport);
+          });
         });
-      });
 
-      ['pointermove', 'mousemove'].forEach(function (type) {
-        pinEl.addEventListener(type, function (e) {
-          moveCount++;
-          if (moveCount > 2) {
-            willSelect = false;
+        ['pointermove', 'mousemove'].forEach(function (type) {
+          pinEl.addEventListener(type, function (e) {
+            moveCount++;
+            if (moveCount > 2) {
+              willSelect = false;
+            }
+          });
+        });
+
+        pinEl.addEventListener('click', function (e) {
+          if (willSelect && !isSelected) {
+            ui.naturalEvents.selectEvent(event.id, date);
+          } else {
+            passEventToTarget(e, olViewport);
           }
         });
-      });
+      }
 
-      pinEl.addEventListener('click', function (e) {
-        if (willSelect && !isSelected) {
-          ui.naturalEvents.selectEvent(event.id, date);
-        } else {
-          passEventToTarget(e, olViewport);
-        }
-      });
-    } 
-
-    return marker; 
+      return marker;
     // empty objects (i.e., markers not within projection range) are filtered out
     }).filter((marker) => !lodashIsEmpty(marker));
     map.renderSync(); // Marker position will be off until this is called

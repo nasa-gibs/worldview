@@ -21,7 +21,8 @@ export function mapAnimate(models, config, ui) {
     var hasEndInView = olExtent.containsCoordinate(extent, endPoint);
     var line = new OlGeomLineString([startPoint, endPoint]);
     var distance = line.getLength(); // In map units, which is usually degrees
-    var duration = (distance * 20) + 1000; // 4.6 seconds to go 360 degrees
+    distance = distance > 1000 ? distance / 100000 : distance; // limit large polar projection distances from coordinate transforms
+    var duration = Math.floor((distance * 20) + 1000); // 4.6 seconds to go 360 degrees
     var animationPromise = function () {
       var args = Array.prototype.slice.call(arguments);
       return new Promise(function (resolve, reject) {
