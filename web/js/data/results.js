@@ -707,6 +707,51 @@ export function dataResultsTagVersion() {
   return self;
 };
 
+const versionParsers = {
+  'ParseMODISVersion': (strVersion) => {
+    let version = Number.parseFloat(strVersion);
+    if (version < 10) {
+      version *= 10;
+    }
+    return version;
+  }
+};
+
+export function dataResultsTagVersionRegex(spec) {
+  var self = {};
+
+  self.name = 'TagVersionRegex';
+
+  self.process = function (meta, granule) {
+    if (!spec) {
+      return granule;
+    }
+    const match = granule[spec.field].match(spec.regex);
+    let version;
+    if (match) {
+      let strVersion = match[1];
+      if (spec.parseVersion) {
+        const parser = versionParsers[spec.parseVersion];
+        if (!parser) {
+          console.warn('no such parser', spec.parseVersion);
+          return granule;
+        }
+        version = parser(strVersion);
+      } else {
+        version = Number.parseFloat(strVersion);
+      }
+      if (Number.isNaN(version)) {
+        console.warn('version is not a number', strVersion, granule);
+      } else {
+        granule.version = version;
+      }
+    }
+    return granule;
+  };
+
+  return self;
+}
+
 export function dataResultsTimeFilter(spec) {
   var westZone = null;
   var eastZone = null;
