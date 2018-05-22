@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'jquery-jcrop';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import GifCreater from './gif-creater';
+import GifStream from './gif-stream';
 import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
@@ -21,7 +21,7 @@ import {
 import util from '../util/util';
 import wvui from '../ui/ui';
 import uiIndicator from '../ui/indicator';
-const gifCreater = new GifCreater();
+const gifStream = new GifStream();
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
 const maxGifSize = 250;
@@ -247,7 +247,7 @@ export function animationGif(models, config, ui) {
       if (!imageArra) { // won't be true if there are too mant frames
         return;
       }
-      gifCreater.createGIF({
+      gifStream.createGIF({
         'gifWidth': imgWidth,
         'gifHeight': imgHeight,
         'images': imageArra,

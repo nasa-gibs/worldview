@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import { ReadableStream } from 'web-streams-polyfill';
 import lodashEach from 'lodash/each';
 
-export default class gifCreater {
+export default class GifStream {
   constructor() {
     this.canvas = null;
     this.ctx = null;
