@@ -714,6 +714,10 @@ var versionRegex = {
 };
 
 var versionParsers = {
+  // MODIS uses version numbers like 4, 5, 6 as major versions but
+  // 41, 51, 61 for minor versions. This function multiplies values
+  // less than 10 for easy comparision (40, 41, 50, 51, 60, 61).
+  // Will there ever be a collection 10?
   'MODIS': (strVersion) => {
     var version = Number.parseFloat(strVersion);
     if (version < 10) {
