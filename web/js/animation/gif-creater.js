@@ -81,6 +81,7 @@ export default class gifCreater {
     this.options = options;
     this.canvas.width = options.gifWidth;
     this.canvas.height = options.gifHeight;
+
     var imagePromiseArray = [];
     lodashEach(options.images, (imageObj) => {
       imagePromiseArray.push(this.getImagePromise(imageObj).catch(returnError));
@@ -96,28 +97,33 @@ export default class gifCreater {
       var gifStream = this.getStream(images, this.ctx);
       var reader = gifStream.getReader();
       var chunks = [];
-
-      function pull() {
-        return reader.read().then(function (result) {
-          const chunk = result.value;
-          if (chunk) {
-            chunks.push(new Uint8Array(chunk));
-            // for (var offset = 0; offset < chunk.length; offset += 512) {
-            //   let sliceOfChunk = chunk.slice(offset, offset + 512);
-            //   let byteArray = new Uint8Array(sliceOfChunk);
-            //   chunks.push(byteArray);
-            // }
-          }
-          return result.done ? chunks : pull();
-        });
-      };
-      pull().then(function (chunks) {
+      var processedImages = 1;
+      function finished(chunks) {
         const callbackObj = {
           blob: new Blob(chunks, { type: 'image/gif' }),
           error: ''
         };
         callback(callbackObj);
-      });
+      };
+
+      function pull() {
+        const imageLength = options.images.length;
+        return reader.read().then(function (result) {
+          const chunk = result.value;
+          if (result.done) {
+            finished(chunks);
+          } else {
+            chunks.push(new Uint8Array(chunk));
+            options.progressCallback(Math.round((processedImages / imageLength) * 100));
+            processedImages++;
+            setTimeout(function() { // This was needed in order for callback to be applied
+              return pull();
+            }, 10);
+          }
+        });
+      };
+      options.progressCallback(0);
+      pull();
     });
   }
   getImagePromise(frame) {
@@ -164,7 +170,6 @@ export default class gifCreater {
         var delay = (frame.delay) ? frame.delay / 10 : 100;
         processedImages++;
         delay = (processedImages === totalImages && options.extraLastFrameDelay) ? delay + (options.extraLastFrameDelay / 10) : delay;// Add an extra
-        options.progressCallback(Math.round((processedImages / totalImages) * 100));
         ctx = self.addFrameDetails(ctx, frame);
         imgData = ctx.getImageData(0, 0, width, height);
         rgbComponents = dataToRGB(imgData.data, imgData.height, imgData.height);

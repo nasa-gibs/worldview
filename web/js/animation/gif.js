@@ -232,14 +232,15 @@ export function animationGif(models, config, ui) {
       var onGifProgress = function(captureProgress) {
         $('#timeline-footer').removeClass('wv-anim-active');
         models.anim.rangeState.state = 'off';
+
         if (!progressing) {
           buildProgressBar();
           progressing = true;
           uiIndicator.hide(loader);
+          $progress.parent()
+            .dialog('option', 'title', 'Creating GIF...'); // set dialog title
         }
-        $progress.parent()
-          .dialog('option', 'title', 'Creating GIF...'); // set dialog title
-        $progress.attr('value', captureProgress); // before value set, it is in indeterminate state
+        $progress.attr('value', captureProgress / 100); // before value set, it is in indeterminate state
       };
 
       imageArra = getImageArray(startDate, endDate, interval);
@@ -552,6 +553,7 @@ export function animationGif(models, config, ui) {
     models.anim.rangeState.state = 'off';
     if (!obj.error) {
       const blob = obj.blob;
+      $progress.remove();
       progressing = false;
       var animatedImage = document.createElement('img');
       const blobURL = URL.createObjectURL(blob);
