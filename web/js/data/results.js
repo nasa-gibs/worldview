@@ -707,13 +707,13 @@ export function dataResultsTagVersion() {
   return self;
 };
 
-const versionRegex = {
+var versionRegex = {
   'MODISProducerGranuleID': '[^\\.]+\\.[^\\.]+\\.[^\\.]+\\.([^\\.]+)\\.'
 };
 
-const versionParsers = {
+var versionParsers = {
   'MODIS': (strVersion) => {
-    let version = Number.parseFloat(strVersion);
+    var version = Number.parseFloat(strVersion);
     if (version < 10) {
       version *= 10;
     }
@@ -731,7 +731,7 @@ export function dataResultsTagVersionRegex(spec) {
     if (!spec) {
       return granule;
     }
-    let regex = versionRegex[spec.namedRegex];
+    var regex = versionRegex[spec.namedRegex];
     if (!regex) {
       regex = spec.regex;
     }
@@ -739,18 +739,18 @@ export function dataResultsTagVersionRegex(spec) {
       console.warn('no regex', granule);
       return granule;
     }
-    const value = granule[spec.field];
+    var value = granule[spec.field];
     if (!value) {
       console.warn(`no value for ${spec.field}`, granule);
       return granule;
     }
-    const match = value.match(regex);
+    var match = value.match(regex);
     if (match) {
-      let version = null;
-      let strVersion = match[1];
+      var version = null;
+      var strVersion = match[1];
       // If a parsing function is not named, just convert from float
       if (spec.parseVersion) {
-        const parser = versionParsers[spec.parseVersion];
+        var parser = versionParsers[spec.parseVersion];
         if (!parser) {
           console.warn('no such parser', spec.parseVersion);
           return granule;
