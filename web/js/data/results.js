@@ -707,8 +707,12 @@ export function dataResultsTagVersion() {
   return self;
 };
 
+const versionRegex = {
+  'MODISProducerGranuleID': '[^\\.]+\\.[^\\.]+\\.[^\\.]+\\.([^\\.]+)\\.'
+};
+
 const versionParsers = {
-  'ParseMODISVersion': (strVersion) => {
+  'MODIS': (strVersion) => {
     let version = Number.parseFloat(strVersion);
     if (version < 10) {
       version *= 10;
@@ -723,13 +727,28 @@ export function dataResultsTagVersionRegex(spec) {
   self.name = 'TagVersionRegex';
 
   self.process = function (meta, granule) {
+    // Continue if not used
     if (!spec) {
       return granule;
     }
-    const match = granule[spec.field].match(spec.regex);
-    let version;
+    let regex = versionRegex[spec.namedRegex];
+    if (!regex) {
+      regex = spec.regex;
+    }
+    if (!regex) {
+      console.warn('no regex', granule);
+      return granule;
+    }
+    const value = granule[spec.field];
+    if (!value) {
+      console.warn(`no value for ${spec.field}`, granule);
+      return granule;
+    }
+    const match = value.match(regex);
     if (match) {
+      let version = null;
       let strVersion = match[1];
+      // If a parsing function is not named, just convert from float
       if (spec.parseVersion) {
         const parser = versionParsers[spec.parseVersion];
         if (!parser) {
@@ -740,7 +759,10 @@ export function dataResultsTagVersionRegex(spec) {
       } else {
         version = Number.parseFloat(strVersion);
       }
-      if (Number.isNaN(version)) {
+
+      if (version === null) {
+        console.warn('version not assigned', strVersion, granule);
+      } else if (Number.isNaN(version)) {
         console.warn('version is not a number', strVersion, granule);
       } else {
         granule.version = version;
