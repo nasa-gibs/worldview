@@ -565,7 +565,6 @@ export function animationGif(models, config, ui) {
       var $download = $('<a><span class=ui-button-text>Download</span></a>')
         .attr('type', 'button')
         .attr('role', 'button')
-        .attr('href', blobURL)
         .attr('class', 'ui-button ui-widget ui-state-default ui-button-text-only')
         .hover(function() {
           $(this)
@@ -574,7 +573,8 @@ export function animationGif(models, config, ui) {
           $(this)
             .removeClass('ui-state-hover');
         })
-        .click(function() {
+        .click(function(e) {
+          e.preventDefault();
           FileSaver.saveAs(blob, dlURL);
           googleAnalytics.event('Animation', 'Download', 'GIF', downloadSize);
         });
