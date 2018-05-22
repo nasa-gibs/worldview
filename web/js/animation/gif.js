@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'jquery-jcrop';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import gifshot from 'gifshot';
+import GifStream from './gif-stream';
 import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
@@ -21,9 +21,10 @@ import {
 import util from '../util/util';
 import wvui from '../ui/ui';
 import uiIndicator from '../ui/indicator';
+const gifStream = new GifStream();
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
-const maxGifSize = 40;
+const maxGifSize = 250;
 const GRATICULE_WARNING =
   'The graticule layer cannot be used to take a snapshot. Would you ' +
   'like to hide this layer?';
@@ -33,6 +34,7 @@ const PALETTE_WARNING =
   'snapshot. Would you like to temporarily revert to the original ' +
   'layer(s)?';
 const ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to reset rotation?';
+
 const resolutionsGeo = {
   values: [
     { value: '0.125', text: '30m' },
@@ -189,8 +191,7 @@ export function animationGif(models, config, ui) {
   };
 
   /*
-   * Uses, frameUrl array and gifShot
-   * Library to create GIF
+   * Use class to create GIF
    *
    *
    * @method createGIF
@@ -231,29 +232,31 @@ export function animationGif(models, config, ui) {
       var onGifProgress = function(captureProgress) {
         $('#timeline-footer').removeClass('wv-anim-active');
         models.anim.rangeState.state = 'off';
+
         if (!progressing) {
           buildProgressBar();
           progressing = true;
           uiIndicator.hide(loader);
+          $progress.parent()
+            .dialog('option', 'title', 'Creating GIF...'); // set dialog title
         }
-        $progress.parent()
-          .dialog('option', 'title', 'Creating GIF...'); // set dialog title
-        $progress.attr('value', captureProgress); // before value set, it is in indeterminate state
+        $progress.attr('value', captureProgress / 100); // before value set, it is in indeterminate state
       };
 
-      imageArra = getImageArray(startDate, endDate, $progress);
+      imageArra = getImageArray(startDate, endDate, interval);
       if (!imageArra) { // won't be true if there are too mant frames
         return;
       }
-      gifshot.createGIF({
+      gifStream.createGIF({
         'gifWidth': imgWidth,
         'gifHeight': imgHeight,
         'images': imageArra,
-        'stamp': stampHeight > 20 ? stamp : null,
+        'waterMarkXCoordinate': stampHeight * 0.01, // Margin based on GIF Height
+        'waterMarkYCoordinate': stampHeight * 0.01, // Margin based on GIF Height
+        'waterMarkHeight': stamp.height,
+        'waterMark': stampHeight > 20 ? stamp : null,
+        'waterMarkWidth': stamp.width,
         'fontSize': dateStamp.fontSize + 'px',
-        'stampHeight': stamp.height,
-        'stampWidth': stamp.width,
-        'stampCoordinates': { x: stampHeight * 0.01, y: stampHeight * 0.01 }, // Margin based on GIF width
         'textXCoordinate': dateStamp.x,
         'textYCoordinate': dateStamp.y, // date location based on Dimensions
         'textAlign': dateStamp.align, // If textXCoordinate is null this takes precedence
@@ -261,9 +264,10 @@ export function animationGif(models, config, ui) {
         'fontColor': '#fff',
         'fontWeight': '300',
         'fontFamily': 'Open Sans, sans-serif',
-        'interval': 1 / interval,
         'progressCallback': onGifProgress,
         'showFrameText': stampHeight > 20,
+        'extraLastFrameDelay': 1000,
+        'text': '',
         'stroke': {
           'color': '#000',
           'pixels': dateStamp.fontSize * 0.05
@@ -433,7 +437,7 @@ export function animationGif(models, config, ui) {
    * @returns {array} array of jpg urls
    *
    */
-  var getImageArray = function(startDate, endDate) {
+  var getImageArray = function(startDate, endDate, interval) {
     var url;
     var a = [];
     var fromDate = new Date(startDate);
@@ -473,14 +477,11 @@ export function animationGif(models, config, ui) {
       opacities = imageUtilGetLayerOpacities(products);
       url = util.format(host + '/' + path + '?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}', 'TIME={1}', lonlat[0][0] + ',' + lonlat[0][1] + ',' + lonlat[1][0] + ',' + lonlat[1][1], epsg, layers.join(','), opacities.join(','), imgWidth, imgHeight);
       src = util.format(url, strDate);
-      if (showDates) {
-        a.push({
-          src: src,
-          text: strDate
-        });
-      } else {
-        a.push(src);
-      }
+      a.push({
+        src: src,
+        text: showDates ? strDate : '',
+        delay: 1000 / interval
+      });
       if (ui.anim.ui.getInterval() === 'minute') {
         intervalAmount = 10;
       } else {
@@ -550,29 +551,12 @@ export function animationGif(models, config, ui) {
   var onGifComplete = function(obj) { // callback function for when image is finished
     $('#timeline-footer').removeClass('wv-anim-active');
     models.anim.rangeState.state = 'off';
-    if (obj.error === false) {
+    if (!obj.error) {
+      const blob = obj.blob;
       $progress.remove();
       progressing = false;
       var animatedImage = document.createElement('img');
-
-      // Create a blob out of the image's base64 encoding because Chrome can't handle large data URIs, taken from:
-      // http://stackoverflow.com/questions/16761927/aw-snap-when-data-uri-is-too-large
-      var byteCharacters = atob(obj.image.substring(22));
-      var byteArrays = []; // remove "data:image/gif;base64,"
-      for (var offset = 0; offset < byteCharacters.length; offset += 512) {
-        var slice = byteCharacters.slice(offset, offset + 512);
-
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) { byteNumbers[i] = slice.charCodeAt(i); }
-
-        var byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
-
-      var blob = new Blob(byteArrays, {
-        type: 'image/gif'
-      });
-      var blobURL = URL.createObjectURL(blob); // supported in Chrome and FF
+      const blobURL = URL.createObjectURL(blob);
       animatedImage.src = blobURL;
       animatedImage.width = lastRequestedDimensions.w > window.innerWidth - 198 ? window.innerWidth - 198 : lastRequestedDimensions.w;
       animatedImage.height = lastRequestedDimensions.h > window.innerHeight - 120 ? window.innerHeight - 120 : lastRequestedDimensions.h;
@@ -583,7 +567,6 @@ export function animationGif(models, config, ui) {
       var $download = $('<a><span class=ui-button-text>Download</span></a>')
         .attr('type', 'button')
         .attr('role', 'button')
-        .attr('href', blobURL)
         .attr('class', 'ui-button ui-widget ui-state-default ui-button-text-only')
         .hover(function() {
           $(this)
@@ -592,7 +575,8 @@ export function animationGif(models, config, ui) {
           $(this)
             .removeClass('ui-state-hover');
         })
-        .click(function() {
+        .click(function(e) {
+          e.preventDefault();
           FileSaver.saveAs(blob, dlURL);
           googleAnalytics.event('Animation', 'Download', 'GIF', downloadSize);
         });

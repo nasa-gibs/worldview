@@ -124,7 +124,6 @@
     "date-fns": "^1.29.0",
     "file-saver": "^1.3.8",
     "font-awesome": "4.7.0",
-    "gifshot": "github:nasa-gibs/gifshot#v4.3.1",
     "icheck": "^1.0.2",
     "isotope-layout": "3.0.x",
     "isotope-packery": "2.x.x",
@@ -144,10 +143,13 @@
     "react-dom": "^16.3.0",
     "supercluster": "github:mapbox/supercluster#v3.0.2",
     "worldview-components": "1.7.1",
-    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.10.0"
+    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.10.0",
+    "web-streams-polyfill": "^1.3.2"
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",
+    "gifwriter": "./web/ext/gifwriter/gifwriter.js",
+    "neuquant": "./web/ext/neuquant/neuquant.js",
     "mobiscroll": "./web/ext/mobiscroll-2.6.0/mobiscroll.js",
     "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
     "jquery-jcrop": "./node_modules/jquery-jcrop/js/jquery.Jcrop.js",
