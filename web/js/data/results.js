@@ -708,6 +708,8 @@ export function dataResultsTagVersion() {
 };
 
 var versionRegex = {
+  // Form of MOD04_L2.A2016137.2105.061.2017326151115.hdf
+  // Using periods as delimiters, version is the 4th field
   'MODISProducerGranuleID': '[^\\.]+\\.[^\\.]+\\.[^\\.]+\\.([^\\.]+)\\.'
 };
 
