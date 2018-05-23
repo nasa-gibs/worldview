@@ -102,12 +102,14 @@ export default function markers (models, ui) {
         // moved to `element`. Maybe this was a change to OpenLayers.
         var pinEl = marker.pin.element_ || marker.pin.element;
 
+
+        // Use passiveSupport detect in ui. passive applied if supported, capture will be false either way.
         ['pointerdown', 'mousedown', 'touchstart'].forEach(function (type) {
           pinEl.addEventListener(type, function (e) {
             willSelect = true;
             moveCount = 0;
             passEventToTarget(e, olViewport);
-          });
+          }, ui.supportsPassive ? { passive: true } : false);
         });
 
         [
@@ -120,7 +122,7 @@ export default function markers (models, ui) {
         ].forEach(function (type) {
           pinEl.addEventListener(type, function (e) {
             passEventToTarget(e, olViewport);
-          });
+          }, ui.supportsPassive ? { passive: true } : false);
         });
 
         ['pointermove', 'mousemove'].forEach(function (type) {
@@ -129,7 +131,7 @@ export default function markers (models, ui) {
             if (moveCount > 2) {
               willSelect = false;
             }
-          });
+          }, ui.supportsPassive ? { passive: true } : false);
         });
 
         pinEl.addEventListener('click', function (e) {
@@ -138,7 +140,7 @@ export default function markers (models, ui) {
           } else {
             passEventToTarget(e, olViewport);
           }
-        });
+        }, ui.supportsPassive ? { passive: true } : false);
       }
 
       return marker;
