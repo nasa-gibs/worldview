@@ -243,6 +243,18 @@ window.onload = () => {
     ui.activeLayers = layersActive(models, ui, config);
     ui.addModal = layersModal(models, ui, config);
 
+    // Test via a getter in the options object to see if the passive property is accessed
+    ui.supportsPassive = false;
+    try {
+      var opts = Object.defineProperty({}, 'passive', {
+        get: function() {
+          ui.supportsPassive = true;
+        }
+      });
+      window.addEventListener("testPassive", null, opts);
+      window.removeEventListener("testPassive", null, opts);
+    } catch (e) {}
+
     function timelineInit() {
       ui.timeline = timeline(models, config, ui);
       ui.timeline.data = timelineData(models, config, ui);
