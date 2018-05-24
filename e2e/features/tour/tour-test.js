@@ -1,5 +1,5 @@
 const normalizeViewport = require('../../reuseables/normalize-viewport.js').normalizeViewport;
-const TIME_LIMIT = 10000;
+const TIME_LIMIT = 30000;
 
 module.exports = {
   before: function(client) {

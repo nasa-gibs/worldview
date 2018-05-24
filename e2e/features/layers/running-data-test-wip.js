@@ -1,6 +1,6 @@
 const loadAndSkipTour = require('../../reuseables/skip-tour.js').loadAndSkipTour;
 const localQuerystrings = require('./querystrings.js');
-const TIME_LIMIT = 10000;
+const TIME_LIMIT = 30000;
 /**
  * selectors
  */
