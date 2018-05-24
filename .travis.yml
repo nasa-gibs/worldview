@@ -12,6 +12,19 @@ cache:
     - .python
 install: npm install
 
-before_script: ./tasks/travisSetup.sh
+before_script: 
+  - |
+    if [ $TRAVIS_PULL_REQUEST != "false" ]; then
+      npm start &
+      npm run build
+    else
+      npm run build:tests
+    fi
 
-script: ./tasks/travisScripts.sh
+
+script:
+  - |
+    if [ $TRAVIS_PULL_REQUEST != "false" ]; then
+      npm run browserstack
+    fi
+  - npm run test
