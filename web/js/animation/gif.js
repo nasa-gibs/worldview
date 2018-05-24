@@ -371,7 +371,7 @@ export function animationGif(models, config, ui) {
         onOk: function() {
           resetRotation();
           // Let rotation finish before reselecting can occur
-          setImageCoords();
+          setTimeout(setImageCoords, 500);
         }
       });
       return;
