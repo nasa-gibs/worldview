@@ -16,8 +16,8 @@ module.exports = {
   },
   'Veryify running data label is correct when mouse hovers data': function(client) {
     client.getElementSize('#wv-map-geographic', (size) => {
-      var x = size.value.width / 2;
-      var y = size.value.height / 2;
+      // var x = size.value.width / 2;
+      // var y = size.value.height / 2;
       console.log(size.value);
       client.pause(4000);
       client.click('body');
