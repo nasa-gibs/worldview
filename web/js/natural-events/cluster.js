@@ -10,7 +10,7 @@ import lodashRound from 'lodash/round';
  */
 export function naturalEventsClusterCreateObject() {
   return superCluster({
-    radius: 60, // pixel radius where points are clustered
+    radius: 40, // pixel radius where points are clustered
     maxZoom: 16,
     initial: function() {
       return {
