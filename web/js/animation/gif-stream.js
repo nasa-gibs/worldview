@@ -172,7 +172,7 @@ export default class GifStream {
         delay = (processedImages === totalImages && options.extraLastFrameDelay) ? delay + (options.extraLastFrameDelay / 10) : delay;// Add an extra
         ctx = self.addFrameDetails(ctx, frame);
         imgData = ctx.getImageData(0, 0, width, height);
-        rgbComponents = dataToRGB(imgData.data, imgData.height, imgData.height);
+        rgbComponents = dataToRGB(imgData.data, imgData.width, imgData.height);
         nq = new NeuQuant(rgbComponents, rgbComponents.length, 15);
         paletteRGB = nq.process();
         paletteArray = new Uint32Array(componentizedPaletteToArray(paletteRGB));
