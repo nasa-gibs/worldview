@@ -19,7 +19,7 @@ export default function markers (models, ui) {
     if (!(models.naturalEvents && models.naturalEvents.data)) return null;
     var events = models.naturalEvents.data.events;
     if (!events) return null;
-    var markers = events.map(function (event) {
+    var markers = events.reduce(function (collection, event) {
       var marker = {};
       var selected = ui.naturalEvents.selected;
       var isSelected = event.id === selected.id;
@@ -84,11 +84,7 @@ export default function markers (models, ui) {
 
       // get maxExtent of current projection and check if marker is within range
       let maxExtent = models.proj.selected.maxExtent;
-      let maxExtentCheck = coordinates[0] >= maxExtent[0] &&
-                           coordinates[0] <= maxExtent[2] &&
-                           coordinates[1] >= maxExtent[1] &&
-                           coordinates[1] <= maxExtent[3];
-
+      let maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
       // only create marker if within projection extent range
       if (maxExtentCheck) {
         marker.pin = createPin(event.id, category, isSelected);
@@ -101,7 +97,6 @@ export default function markers (models, ui) {
         // The pin element used to be on `element_` but now it looks like it
         // moved to `element`. Maybe this was a change to OpenLayers.
         var pinEl = marker.pin.element_ || marker.pin.element;
-
 
         // Use passiveSupport detect in ui. passive applied if supported, capture will be false either way.
         ['pointerdown', 'mousedown', 'touchstart'].forEach(function (type) {
@@ -142,10 +137,13 @@ export default function markers (models, ui) {
           }
         }, ui.supportsPassive ? { passive: true } : false);
       }
+      // empty objects (i.e., markers not within projection range) are not pushed to collection
+      if (lodashIsEmpty(marker) !== true) {
+        collection.push(marker);
+      }
+      return collection;
+    }, []);
 
-      return marker;
-    // empty objects (i.e., markers not within projection range) are filtered out
-    }).filter((marker) => !lodashIsEmpty(marker));
     map.renderSync(); // Marker position will be off until this is called
     return markers;
   };

@@ -30,9 +30,6 @@ export default function naturalEventsUI (models, ui, config, request) {
   var naturalEventsTrack = track(models, ui, config);
 
   var init = function () {
-    console.log('MODELS', models);
-    console.log('UI', ui);
-    console.log('CONFIG', config);
     map = ui.map.selected;
     // Display loading information for user feedback on slow network
     $('#wv-events').text('Loading...');
@@ -97,7 +94,6 @@ export default function naturalEventsUI (models, ui, config, request) {
       naturalEventsTrack = track(models, ui, config);
 
       if (!(model.data.events || model.data.sources)) return;
-      createEventList();
 
       var isZoomed = Math.floor(view.getZoom()) >= 3;
       if (isZoomed || models.proj.selected.id !== 'geographic') {
@@ -119,8 +115,16 @@ export default function naturalEventsUI (models, ui, config, request) {
         if (self.selected.id) {
           let findSelectedInProjection = lodashFind(self.markers, function(marker) {
             if (marker.pin) {
-              return marker.pin.id === self.selected.id;
+              if (marker.pin.id === self.selected.id) {
+                // keep event highlighted when available in changed projection
+                highlightEventInList(self.selected.id, self.selected.date);
+                return true;
+              } else {
+                return false;
+              }
+              // return marker.pin.id === self.selected.id;
             } else {
+              highlightEventInList();
               return false;
             }
           });
@@ -143,7 +147,6 @@ export default function naturalEventsUI (models, ui, config, request) {
 
     // Store selected id and date in model
     self.selected = { id: id };
-
     var event = naturalEventsUtilGetEventById(model.data.events, id);
 
     if (!event) {
@@ -222,9 +225,11 @@ export default function naturalEventsUI (models, ui, config, request) {
     return date;
   };
 
-  self.filterEventList = function () {
+  self.filterEventList = function (showAll) {
     if (!model.data.events) return;
+    var hiddenEventsCounter = self.markers.length;
     var extent = view.calculateExtent();
+    var maxExtent = models.proj.selected.maxExtent;
     model.data.events.forEach(function (naturalEvent) {
       var isSelectedEvent = (self.selected.id === naturalEvent.id);
       var date = self.getDefaultEventDate(naturalEvent);
@@ -238,11 +243,6 @@ export default function naturalEventsUI (models, ui, config, request) {
       var coordinates = geometry.coordinates;
 
       if (models.proj.selected.id !== 'geographic') {
-        // limit to maxExtent while allowing zoom and filter for polar projections
-        let currentExtent = view.calculateExtent();
-        let maxExtent = models.proj.selected.maxExtent;
-        extent = olExtent.containsExtent(maxExtent, currentExtent) ? currentExtent : maxExtent;
-
         // check for polygon geometries for targeted projection coordinate transform
         if (geometry.type === 'Polygon') {
           let coordinatesTransform = coordinates[0].map((coordinate) => {
@@ -260,15 +260,29 @@ export default function naturalEventsUI (models, ui, config, request) {
           coordinates = olExtent.getCenter(geomExtent);
         }
       }
-      var isVisible = olExtent.containsCoordinate(extent, coordinates);
+
+      // limit to maxExtent while allowing zoom and filter 'out of extent' events
+      var isVisible = olExtent.containsCoordinate(extent, coordinates) &&
+                      olExtent.containsCoordinate(maxExtent, coordinates);
+      // boolean argument to showAll limited to maxExtent of current projection - for polar
+      if (showAll) {
+        isVisible = olExtent.containsCoordinate(maxExtent, coordinates);
+      }
       var $thisItem = $('.map-item-list .item[data-id=' + naturalEvent.id + ']');
       if (isVisible || isSelectedEvent) {
         $thisItem.show();
       } else {
+        hiddenEventsCounter++;
         $thisItem.hide();
       }
     });
-    $footer.show();
+
+    // hide footer 'List All' button/message if all events are visible
+    if (hiddenEventsCounter > model.data.events.length) {
+      $footer.show();
+    } else {
+      $footer.hide();
+    }
     ui.sidebar.sizeEventsTab();
   };
 
@@ -293,7 +307,8 @@ export default function naturalEventsUI (models, ui, config, request) {
       id: 'show-all-events',
       text: 'List All',
       click: function () {
-        $('.map-item-list .item').show();
+        $('.map-item-list .item ').show();
+        self.filterEventList(true);
         $footer.hide();
         ui.sidebar.sizeEventsTab();
       }
@@ -430,7 +445,6 @@ export default function naturalEventsUI (models, ui, config, request) {
   var zoomToEvent = function (event, date, isSameEventID) {
     var category = event.categories[0].title;
     var zoom = (isSameEventID) ? ui.map.selected.getView().getZoom() : (zoomLevelReference[category]);
-
     var geometry = lodashFind(event.geometries, function (geom) {
       return geom.date.split('T')[0] === date;
     });
