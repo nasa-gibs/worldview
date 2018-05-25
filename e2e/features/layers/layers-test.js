@@ -46,7 +46,7 @@ module.exports = {
     client.useCss().expect.element(localSelectors.layersAll).text.not.contains('VIIRS Corrected Reflectance');
     client
       .click(localSelectors.sourceInfoIcon)
-      .pause(100);
+      .pause(2000);
     client.useCss().assert.containsText(localSelectors.layersAll, 'VIIRS Corrected Reflectance');
     client.useCss().moveToElement(localSelectors.sourceMetadataCloseButton, 10, 10);
     client.click(localSelectors.sourceMetadataCloseButton);
