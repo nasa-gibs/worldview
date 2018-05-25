@@ -251,8 +251,8 @@ window.onload = () => {
           ui.supportsPassive = true;
         }
       });
-      window.addEventListener("testPassive", null, opts);
-      window.removeEventListener("testPassive", null, opts);
+      window.addEventListener('testPassive', null, opts);
+      window.removeEventListener('testPassive', null, opts);
     } catch (e) {}
 
     function timelineInit() {
