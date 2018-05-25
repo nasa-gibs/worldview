@@ -135,6 +135,7 @@ export default class GifStream {
       img.delay = frame.delay;
       img.crossOrigin = 'Anonymous';
       img.onload = () => {
+        URL.revokeObjectURL(img.src); // Free up some memory
         resolve(img);
         delete img.onload;
         delete img.onerror;
