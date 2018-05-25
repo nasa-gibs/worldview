@@ -102,6 +102,7 @@
     "moment": "2.13.x",
     "nightwatch": "^0.9.16",
     "nightwatch-cucumber": "^8.2.10",
+    "node-ssh": "^5.1.1",
     "npm-run-all": "^4.1.1",
     "npm-watch": "^0.3.0",
     "phantomjs-prebuilt": "2.1.x",
@@ -114,7 +115,8 @@
     "stylelint": "^8.0.0",
     "uglifyify": "^4.0.5",
     "underscore": "^1.8.3",
-    "watchify": "^3.9.0"
+    "watchify": "^3.9.0",
+    "yargs": "^11.0.0"
   },
   "dependencies": {
     "bluebird": "3.4.6",
