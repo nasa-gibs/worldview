@@ -34,7 +34,7 @@ separate instances of Worldview can be easily upload by just using the `name` ar
 Prefix the command with `IGNORE_ERRORS=true` to build the application even
 if there are errors in the Worldview configuration.
 
-Examples:
+## Examples
 
 Upload to a directory named `my-feature-branch` under the `root` directory.
 
