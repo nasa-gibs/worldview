@@ -91,7 +91,6 @@ export default function naturalEventsUI (models, ui, config, request) {
               } else {
                 return false;
               }
-              // return marker.pin.id === self.selected.id;
             } else {
               highlightEventInList();
               return false;
@@ -103,7 +102,6 @@ export default function naturalEventsUI (models, ui, config, request) {
             self.filterEventList();
           }
         }
-        
       } else {
         model.active = false;
         naturalEventMarkers.remove(self.markers);
@@ -147,7 +145,6 @@ export default function naturalEventsUI (models, ui, config, request) {
               } else {
                 return false;
               }
-              // return marker.pin.id === self.selected.id;
             } else {
               highlightEventInList();
               return false;
@@ -444,7 +441,7 @@ export default function naturalEventsUI (models, ui, config, request) {
   };
 
   var activateLayersForCategory = function (category) {
-    category = category || 'Default';  
+    category = category || 'Default';
     // remove current layers
     models.layers.reset();
     let currentProjection = models.proj.selected.id;
