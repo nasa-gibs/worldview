@@ -33,11 +33,6 @@ var argv = yargs
     requiresArg: true,
     type: 'string'
   })
-  .option('i', {
-    alias: 'ignore-errors',
-    description: 'ignore errors when building config',
-    type: 'boolean'
-  })
   .option('k', {
     alias: 'key',
     description: 'path to private ssh key',
@@ -87,7 +82,6 @@ const host = argv.host || config.host;
 const root = argv.root || config.root;
 const username = argv.user || config.user || os.userInfo().username;
 const key = argv.key || config.key || path.join(os.homedir(), '.ssh', 'id_rsa');
-const ignoreErrors = argv.ignoreErrors || config.ignoreErrors || false;
 
 if (!host) {
   error('host not found in config file or command line');
@@ -132,20 +126,12 @@ async function upload() {
 if (!argv.dist) {
   let cmd = 'npm';
   let args = ['run', 'build'];
-  let env = {};
-  if (ignoreErrors) {
-    env.IGNORE_ERRORS = 1;
-  }
+
   if (argv.config) {
     args = args.concat(['--', argv.config]);
   }
-  console.log(`===>`, env, `${cmd} ${args.join(' ')}`);
-  const proc = spawn(cmd, args, {
-    env: {
-      ...process.env,
-      env
-    }
-  });
+  console.log(`===>`, `${cmd} ${args.join(' ')}`);
+  const proc = spawn(cmd, args);
   proc.stdout.on('data', (data) => {
     process.stdout.write(data);
   });
