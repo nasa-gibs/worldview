@@ -55,7 +55,8 @@
     "test:end:darwin:linux": "pkill -f run-p",
     "test:end:win32": "tskill node",
     "updateconfig": "run-s getcapabilities build:config",
-    "watch": "bash -c 'WORLDVIEW_WATCH='active' npm-watch'"
+    "watch": "bash -c 'WORLDVIEW_WATCH='active' npm-watch'",
+    "upload": "node tasks/upload.js"
   },
   "watch": {
     "build:css": {

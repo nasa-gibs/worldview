@@ -51,6 +51,14 @@ var argv = yargs
     requiresArg: true,
     type: 'string'
   })
+  .epilog(`
+Defaults for "host", "key", "root", and "user" should be placed in a JSON
+file found at "${os.homedir()}/.worldview/upload.config".
+
+Values on the command line override those found in the configuration file.
+
+If "host" or "root" is not found in the configuration file, it must
+appear on the command line.`)
   .argv;
 
 if (argv.help) {

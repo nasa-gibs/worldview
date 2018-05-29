@@ -44,7 +44,7 @@ View the [Configuration](doc/configuration.md) section for information on how to
 
 The following are required to install and run Worldview:
 
-- [Node v8.8.1 or Later](https://nodejs.org/en/download/)  
+- [Node v8.8.1 or Later](https://nodejs.org/en/download/)
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
 - [Python v2.7.14 or Later](https://www.python.org/)
   - **Note:** It is recommended that Windows users install Python with [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools).
@@ -83,6 +83,7 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 * [Optional Features](doc/features.md)
 * [Deployment](doc/deployment.md)
 * [Using Apache (deprecated)](doc/apache_setup.md)
+* [Uploading](doc/upload.md)
 
 ## Contact
 
