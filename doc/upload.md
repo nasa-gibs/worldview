@@ -16,8 +16,18 @@ Options:
   -u, --user    login to remote host using this user name               [string]
 ```
 
-Defaults for `host`, `key`, `root`, and `user` can be placed in a JSON
-file found at `~/.worldview/upload.config`. Example configuration:
+Files are uploaded using ssh and expect `key` to be listed in the remote's
+`authorized_keys` file.
+
+Defaults for `host`, `key`, `root`, and `user` should be placed in a JSON
+file found at `~/.worldview/upload.config`.
+
+Values on the command line override those found in the configuration file.
+
+If `host` or `root` is not found in the configuration file, it must
+appear on the command line.
+
+Example configuration:
 
 ```json
 {
