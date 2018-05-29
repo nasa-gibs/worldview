@@ -28,8 +28,9 @@ file found at `~/.worldview/upload.config`. Example configuration:
 ```
 
 The script will create a directory named `name` in the `root` directory and
-upload the applicaiton there. If the `root` path is in the configuraiton file,
-separate instances of Worldview can be easily upload by just using the `name` argument.
+upload the application there. If the `root` path is in the configuration file,
+separate instances of Worldview can be easily uploaded by just using the
+`name` argument.
 
 Prefix the command with `IGNORE_ERRORS=true` to build the application even
 if there are errors in the Worldview configuration.
