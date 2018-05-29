@@ -2,54 +2,54 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 300;
-  src: url('../font/OpenSans/Light/OpenSans-Light.eot');
-  src: local('Open Sans Light'), local('OpenSans-Light'), url('../font/OpenSans/Light/OpenSans-Light.eot?#iefix') format('embedded-opentype'), url('../font/OpenSans/Light/OpenSans-Light.woff2') format('woff2'), url('../font/OpenSans/Light/OpenSans-Light.woff') format('woff'), url('../font/OpenSans/Light/OpenSans-Light.ttf') format('truetype');
+  src: url('../fonts/OpenSans/Light/OpenSans-Light.eot');
+  src: local('Open Sans Light'), local('OpenSans-Light'), url('../fonts/OpenSans/Light/OpenSans-Light.eot?#iefix') format('embedded-opentype'), url('../fonts/OpenSans/Light/OpenSans-Light.woff') format('woff'), url('../fonts/OpenSans/Light/OpenSans-Light.ttf') format('truetype');
 }
 
 @font-face { /* Open Sans Light Italic */
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 300;
-  src: url("../font/OpenSans/LightItalic/OpenSans-LightItalic.eot");
-  src: local('Open Sans Light Italic'), local('OpenSansLight-Italic'), url("../font/OpenSans/LightItalic/OpenSans-LightItalic.eot?#iefix") format("embedded-opentype"), url("../font/OpenSans/LightItalic/OpenSans-LightItalic.woff2") format("woff2"), url("../font/OpenSans/LightItalic/OpenSans-LightItalic.woff") format("woff"), url("../font/OpenSans/LightItalic/OpenSans-LightItalic.ttf") format("truetype");
+  src: url("../fonts/OpenSans/LightItalic/OpenSans-LightItalic.eot");
+  src: local('Open Sans Light Italic'), local('OpenSansLight-Italic'), url("../fonts/OpenSans/LightItalic/OpenSans-LightItalic.eot?#iefix") format("embedded-opentype"), url("../fonts/OpenSans/LightItalic/OpenSans-LightItalic.woff") format("woff"), url("../fonts/OpenSans/LightItalic/OpenSans-LightItalic.ttf") format("truetype");
 }
 
 @font-face { /* Open Sans Regular */
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: url('../font/OpenSans/Regular/OpenSans-Regular.eot');
-  src: local('Open Sans Regular'), local('OpenSans-Regular'), url('../font/OpenSans/Regular/OpenSans-Regular.eot?#iefix') format('embedded-opentype'), url('../font/OpenSans/Regular/OpenSans-Regular.woff2') format('woff2'), url('../font/OpenSans/Regular/OpenSans-Regular.woff') format('woff'), url('../font/OpenSans/Regular/OpenSans-Regular.ttf') format('truetype');
+  src: url('../fonts/OpenSans/Regular/OpenSans-Regular.eot');
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url('../fonts/OpenSans/Regular/OpenSans-Regular.eot?#iefix') format('embedded-opentype'), url('../fonts/OpenSans/Regular/OpenSans-Regular.woff') format('woff'), url('../fonts/OpenSans/Regular/OpenSans-Regular.ttf') format('truetype');
 }
 
 @font-face { /* Open Sans Italic */
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 400;
-  src: url("../font/OpenSans/Italic/OpenSans-Italic.eot");
-  src: local('Open Sans Italic'), local('OpenSans-Italic'), url("../font/OpenSans/Italic/OpenSans-Italic.eot?#iefix") format("embedded-opentype"), url("../font/OpenSans/Italic/OpenSans-Italic.woff2") format("woff2"), url("../font/OpenSans/Italic/OpenSans-Italic.woff") format("woff"), url("../font/OpenSans/Italic/OpenSans-Italic.ttf") format("truetype");
+  src: url("../fonts/OpenSans/Italic/OpenSans-Italic.eot");
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url("../fonts/OpenSans/Italic/OpenSans-Italic.eot?#iefix") format("embedded-opentype"), url("../fonts/OpenSans/Italic/OpenSans-Italic.woff") format("woff"), url("../fonts/OpenSans/Italic/OpenSans-Italic.ttf") format("truetype");
 }
 
 @font-face { /* Open Sans Bold */
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: url("../font/OpenSans/Bold/OpenSans-Bold.eot");
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url("../font/OpenSans/Bold/OpenSans-Bold.eot?#iefix") format("embedded-opentype"), url("../font/OpenSans/Bold/OpenSans-Bold.woff2") format("woff2"), url("../font/OpenSans/Bold/OpenSans-Bold.woff") format("woff"), url("../font/OpenSans/Bold/OpenSans-Bold.ttf") format("truetype");
+  src: url("../fonts/OpenSans/Bold/OpenSans-Bold.eot");
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url("../fonts/OpenSans/Bold/OpenSans-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/OpenSans/Bold/OpenSans-Bold.woff") format("woff"), url("../fonts/OpenSans/Bold/OpenSans-Bold.ttf") format("truetype");
 }
 
 @font-face { /* Open Sans Bold Italic */
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 700;
-  src: url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.eot");
-  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.eot?#iefix") format("embedded-opentype"), url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.woff2") format("woff2"), url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.woff") format("woff"), url("../font/OpenSans/BoldItalic/OpenSans-BoldItalic.ttf") format("truetype");
+  src: url("../fonts/OpenSans/BoldItalic/OpenSans-BoldItalic.eot");
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url("../fonts/OpenSans/BoldItalic/OpenSans-BoldItalic.eot?#iefix") format("embedded-opentype"), url("../fonts/OpenSans/BoldItalic/OpenSans-BoldItalic.woff") format("woff"), url("../fonts/OpenSans/BoldItalic/OpenSans-BoldItalic.ttf") format("truetype");
 }
 
 @font-face { /* Roboto Mono Regular */
   font-family: 'Roboto Mono';
   font-style: normal;
   font-weight: 400;
-  src: url("../font/RobotoMono/Regular/RobotoMono-Regular.eot");
-  src: local('Roboto Mono'), local('RobotoMono-Regular'), url("../font/RobotoMono/Regular/RobotoMono-Regular.eot?#iefix") format("embedded-opentype"), url("../font/RobotoMono/Regular/RobotoMono-Regular.woff2") format("woff2"), url("../font/RobotoMono/Regular/RobotoMono-Regular.woff") format("woff"), url('../font/RobotoMono/Regular/RobotoMono-Regular.ttf') format('truetype');
+  src: url("../fonts/RobotoMono/Regular/RobotoMono-Regular.eot");
+  src: local('Roboto Mono'), local('RobotoMono-Regular'), url("../fonts/RobotoMono/Regular/RobotoMono-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/RobotoMono/Regular/RobotoMono-Regular.woff2") format("woff2"), url("../fonts/RobotoMono/Regular/RobotoMono-Regular.woff") format("woff"), url('../fonts/RobotoMono/Regular/RobotoMono-Regular.ttf') format('truetype');
 }
