@@ -79,6 +79,31 @@ export default function naturalEventsUI (models, ui, config, request) {
         // Store markers so the can be referenced later
         self.markers = naturalEventMarkers.draw();
         ui.sidebar.sizeEventsTab();
+
+        // check if selected event is in changed projection
+        if (self.selected.id) {
+          let findSelectedInProjection = lodashFind(self.markers, function(marker) {
+            if (marker.pin) {
+              if (marker.pin.id === self.selected.id) {
+                // keep event highlighted when available in changed projection
+                highlightEventInList(self.selected.id, self.selected.date);
+                return true;
+              } else {
+                return false;
+              }
+              // return marker.pin.id === self.selected.id;
+            } else {
+              highlightEventInList();
+              return false;
+            }
+          });
+          // remove selected event if not in changed projection
+          if (!findSelectedInProjection) {
+            self.deselectEvent();
+            self.filterEventList();
+          }
+        }
+        
       } else {
         model.active = false;
         naturalEventMarkers.remove(self.markers);
@@ -419,11 +444,13 @@ export default function naturalEventsUI (models, ui, config, request) {
   };
 
   var activateLayersForCategory = function (category) {
-    category = category || 'Default';
-
-    // Turn on the relevant layers for the event type
-    var layers = model.layers[category];
-    if (!layers) layers = model.layers.Default;
+    category = category || 'Default';  
+    // remove current layers
+    models.layers.reset();
+    let currentProjection = models.proj.selected.id;
+    // Turn on the relevant layers for the event type based on projection and category
+    var layers = model.layers[currentProjection][category];
+    if (!layers) layers = model.layers[currentProjection]['Default'];
     // Turn off all layers in list first
     lodashEach(models.layers.active, function (layer) {
       models.layers.setVisibility(layer.id, false);
