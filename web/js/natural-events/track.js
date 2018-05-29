@@ -5,6 +5,7 @@ import OlSourceVector from 'ol/source/vector';
 import OlStyleStroke from 'ol/style/stroke';
 import OlStyleStyle from 'ol/style/style';
 import OlGeomMultiLineString from 'ol/geom/multilinestring';
+import olProj from 'ol/proj';
 import lodashEach from 'lodash/each';
 import lodashDebounce from 'lodash/debounce';
 import { naturalEventsUtilGetEventById } from './util';
@@ -14,8 +15,6 @@ import {
   naturalEventsClusterCreateObject,
   naturalEventsClusterSort
 } from './cluster';
-
-import olProj from 'ol/proj';
 
 import { mapUtilZoomAction } from '../map/util';
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
