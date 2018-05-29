@@ -112,7 +112,11 @@ export function imagePanel (models, ui, config, dialogConfig) {
     models.proj.events.on('select', setProjectionGlobals);
   };
   var setProjectionGlobals = function() {
-    if (models.proj.selected.id === 'geographic') {
+    var isGeoProjection = (models.proj.selected.id === 'geographic');
+    var curZoom = Math.round(ui.map.selected.getView()
+      .getZoom());
+    imgRes = imageUtilCalculateResolution(curZoom, isGeoProjection, models.proj.selected.resolutions);
+    if (isGeoProjection) {
       resolutions = resolutionsGeo;
       fileTypes = fileTypesGeo;
     } else {
@@ -213,6 +217,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
     $('.wv-image-coords')
       .show();
   };
+
   self.update = function(c) {
     try {
       let pixels, map, px, x1, y1, x2, y2, crs;
