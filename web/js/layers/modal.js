@@ -472,7 +472,7 @@ export function layersModal(models, ui, config) {
 
         // Begin source level
         lodashValues(current.sources).forEach(function (source) {
-          var isExpanded;
+          var isMetadataExpanded;
           // Check if sources have settings with the same projection.
           if (hasMeasurementSetting(current, source)) {
             var $sourceTab = $('<li />');
@@ -506,8 +506,8 @@ export function layersModal(models, ui, config) {
             $showMore.append($moreElps);
 
             $showMore.on('click', function() {
-              isExpanded = !isExpanded;
-              if (isExpanded) {
+              isMetadataExpanded = !isMetadataExpanded;
+              if (isMetadataExpanded) {
                 $sourceMeta.removeClass('overflow');
                 $moreElps.text('^').addClass('up');
                 redoScrollbar();
