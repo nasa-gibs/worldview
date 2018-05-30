@@ -258,6 +258,16 @@ var createTrack = function (models, eventObj, map, selectedDate, callback) {
       geoJSONPointsAfterSelected.push(naturalEventsClusterPointToGeoJSON(eventObj.id, coordinates, date));
     }
   });
+
+  // set radius and maxZoom of superCluster object for polar vs geographic projections
+  if (models.proj.selected.id !== 'geographic') {
+    firstClusterObj.options.setPolar();
+    secondClusterObj.options.setPolar();
+  } else {
+    firstClusterObj.options.setGeo();
+    secondClusterObj.options.setGeo();
+  }
+
   clustersBeforeSelected = naturalEventsClusterGetPoints(firstClusterObj, geoJSONPointsBeforeSelected, zoom);
   clustersAfterSelected = naturalEventsClusterGetPoints(secondClusterObj, geoJSONPointsAfterSelected, zoom);
   clusters = clustersBeforeSelected.concat([selectedPoint], clustersAfterSelected);
@@ -376,6 +386,7 @@ var addPoints = function(models, clusters, map, selectedDate, callback) {
       let prevCoordinates = clusters[index - 1].geometry.coordinates;
       let nextCoordinates = clusterPoint.geometry.coordinates;
 
+      // polar projections require transform of coordinates to crs
       if (models.proj.selected.id !== 'geographic') {
         prevCoordinates = olProj.transform(prevCoordinates, 'EPSG:4326', models.proj.selected.crs);
         nextCoordinates = olProj.transform(nextCoordinates, 'EPSG:4326', models.proj.selected.crs);

@@ -249,6 +249,11 @@ export default function naturalEventsUI (models, ui, config, request) {
     return date;
   };
 
+  /**
+   * Filter event list in sidebar based on projection/view extents
+   *
+   * @param  {Boolean} showAll - show all available points in projection
+   */
   self.filterEventList = function (showAll) {
     if (!model.data.events) return;
     var hiddenEventsCounter = self.markers.length;
@@ -288,7 +293,7 @@ export default function naturalEventsUI (models, ui, config, request) {
       // limit to maxExtent while allowing zoom and filter 'out of extent' events
       var isVisible = olExtent.containsCoordinate(extent, coordinates) &&
                       olExtent.containsCoordinate(maxExtent, coordinates);
-      // boolean argument to showAll limited to maxExtent of current projection - for polar
+      // boolean showAll events limited to maxExtent of current projection
       if (showAll) {
         isVisible = olExtent.containsCoordinate(maxExtent, coordinates);
       }
