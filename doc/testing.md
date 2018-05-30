@@ -1,3 +1,4 @@
+
 # Testing
 
 ## Linting
@@ -14,20 +15,14 @@ build a testable version of Worldview.
 *Note for Windows users:* `npm test` may fail unless you [install PhantomJS manually](http://phantomjs.org/download.html).
 
 ## End-to-end Tests
+End to end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by End to End tests to cover any new functionality you add.
 
-Run the included end-to-end tests to test the app in Chrome and Firefox. The
-tests run the Cucumber features in `./e2e/features` using Nightwatch and Selenium.
+### Browserstack
 
-To run tests on your machine in Chrome: `npm run e2e:chrome`.
 
-To run tests on your machine in Firefox:
+Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, `Internet Exporer(windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features in found in `./e2e/features` using Selenium.
 
-1) [Create a new Firefox profile](https://developer.mozilla.org/en-US/Firefox/Multiple_profiles) called 'nightwatch'.
-2) Run `npm run e2e:firefox`.
-
-To run tests for both browsers in sequence: `npm run e2e`.
-
-To run tests in BrowserStack:
+To run tests in BrowserStack from your local machine:
 
 1) Log into [BrowserStack](https://www.browserstack.com/automate) and get your username and access key from the upper left.
 2) Add the following to your shell configuration (`.bashrc` or `.profile`);
@@ -36,23 +31,23 @@ To run tests in BrowserStack:
 export BROWSERSTACK_ACCESS_KEY=yourkeyhere
 export BROWSERSTACK_USER=yourusernamehere
 ```
+### Selenium Drivers
+ **(Note)** Driver reliability varies between Operating systems. Using local selenium drivers to run tests is more useful as a development tool for creating new tests than it is for verifying if all tests are passing.
 
-3) Configure `./e2e/environments.json` with the browsers to test.
-4) Run `npm run browserstack`.
+To run tests on your machine using a Chrome driver: Run `npm run e2e:chrome`.
 
-### Reports
+To run tests on your machine using a Firefox driver:
 
-After running end-to-end tests, reports are generated and saved in
-`./e2e/reports`. To convert these to HTML, use `npm run report <environment>`
-where `<environment>` is either the lowercase name of the browser for local
-tests (`chrome` or `firefox`) or the name of the BrowserStack environment, such
-as `Chrome_61-0_OS_X_El_Capitan-1` (get the name from the JSON files in
-`./e2e/reports`).
+1) [Create a new Firefox profile](https://developer.mozilla.org/en-US/Firefox/Multiple_profiles) called 'nightwatch'.
+2) Run `npm run e2e:firefox`.
 
-The end-to-end tests are a little bit flaky, so they aren't required to pass
-before a submission will be accepted. But, please run them and check the results
-to make sure you haven't broken any functionality. And add end-to-end tests to
-cover any new functionality you add.
+To run tests for both browsers in sequence: `npm run e2e`.
+
+### Developing new End to End Tests
+* When creating new tests you will likely want to work locally with a `chrome` or `Firefox` driver to expedite the development process.
+
+* If there is a specific test that you would like to run, you can change the `files` variable found in `./e2e/browserstack.conf.js` to point directly to your test.
+* If there is a specific browser that you would like to test, you can specify which in `./e2e/environments.json`
 
 ## URL Parameters
 
