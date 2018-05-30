@@ -1,11 +1,6 @@
 import superCluster from 'supercluster';
 import lodashRound from 'lodash/round';
 
-export function setMaxZoomCluster(maxZoom) {
-
-}
-
-
 /**
  * Create superCLuster Object - Uses map and reduce
  * operations to create a timespan on each clustered
@@ -47,7 +42,7 @@ export function naturalEventsClusterCreateObject() {
     },
     setGeo: function() {
       this.radius = 60;
-      this.maxZoom = 12
+      this.maxZoom = 12;
     }
   });
 };
