@@ -84,19 +84,18 @@ export function layersInfo(config, models, layer) {
       id: 'layer-date-end',
       'class': 'layer-date-end'
     });
-    var $layerDateWrap = $('<p>', {
+    var $layerDateWrap = $('<div>', {
       id: 'layer-date-wrap',
-      'class': 'layer-date-wrap'
+      'class': 'layer-date-wrap d-none'
     });
     var $layerDateRangesButton = $('<a>', {
       id: 'layer-date-ranges-button',
       'class': 'layer-date-ranges-button',
-      'text': '*Show All Date Ranges'
+      'title': 'View all date ranges'
     });
     var $layerDateRanges = $('<ul>', {
       id: 'layer-date-ranges',
-      'class': 'list-group layer-date-ranges',
-      'style': 'display: none'
+      'class': 'list-group layer-date-ranges'
     });
     var $layerMeta = $('<div>', {
       id: 'layer-metadata',
@@ -131,7 +130,9 @@ export function layersInfo(config, models, layer) {
       } else {
         $layerDateEnd.append('Present');
       }
-      if (layer.dateRanges) if ((layer.dateRanges).length > 1) $layerDateEnd.append('*');
+      if (layer.dateRanges && (layer.dateRanges).length > 1) {
+        $layerDateEnd.append($layerDateRangesButton.append(' *'));
+      }
       if (layer.id) $layerDateEnd.attr('id', layer.id + '-endDate');
       $layerDateRange.append($layerDateEnd);
       $layerDescription.append($layerDateRange);
@@ -139,8 +140,7 @@ export function layersInfo(config, models, layer) {
 
     if (layer.dateRanges) {
       if ((layer.dateRanges).length > 1) {
-        $layerDateWrap.append($layerDateRangesButton);
-        $layerDateWrap.append($layerDateRanges);
+        $layerDateWrap.append('<p>Date Ranges:</p>', $layerDateRanges);
         $layerDescription.append($layerDateWrap);
         lodashEach(layer.dateRanges, function(dateRange) {
           let rangeStartDate = util.parseDate(dateRange.startDate);
@@ -162,15 +162,8 @@ export function layersInfo(config, models, layer) {
           rangeEndDate + '</li>');
         });
         $layerDateRangesButton.click(function(e) {
-          var text = $(this).text();
           e.preventDefault();
-          if (text === '*Show All Date Ranges') {
-            $layerDateRangesButton.text('*Hide All Date Ranges');
-            $layerDateRanges.css('display', 'block');
-          } else {
-            $layerDateRangesButton.text('*Show All Date Ranges');
-            $layerDateRanges.css('display', 'none');
-          }
+          $layerDateWrap.toggleClass('d-none');
           $('#wv-layers-info-dialog').perfectScrollbar('update');
         });
       }

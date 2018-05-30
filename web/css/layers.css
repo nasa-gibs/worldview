@@ -487,10 +487,14 @@
   padding-right: 1.2em;
 }
 
-.layer-date-wrap .layer-date-ranges {
+.layer-date-wrap {
   background-color: #333;
-  margin: 10px 10px 10px 0;
-  padding: 12px 8px;
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.layer-date-wrap .layer-date-ranges {
+  padding-left: 0;
 }
 
 .layer-date-wrap .layer-date-ranges .list-group-item {
@@ -502,13 +506,13 @@
   margin: 2px 0 6px 20px;
 }
 
-.layer-date-wrap .layer-date-ranges-button,
-.layer-date-wrap .layer-date-ranges-button:not([href]):not([tabindex]) {
+.layer-date-range .layer-date-ranges-button,
+.layer-date-range .layer-date-ranges-button:not([href]):not([tabindex]) {
   color: #7bf;
 }
 
-.layer-date-wrap .layer-date-ranges-button:hover,
-.layer-date-wrap .layer-date-ranges-button:not([href]):not([tabindex]):hover {
+.layer-date-range .layer-date-ranges-button:hover,
+.layer-date-range .layer-date-ranges-button:not([href]):not([tabindex]):hover {
   color: #9df;
 }
 
