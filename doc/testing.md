@@ -20,7 +20,7 @@ End to end tests are integrated into our CI and are required to pass before a su
 ### Browserstack
 
 
-Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, `Internet Exporer(windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features in found in `./e2e/features` using Selenium.
+Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, `Internet Exporer(windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features found in `./e2e/features` using Selenium.
 
 To run tests in BrowserStack from your local machine:
 
