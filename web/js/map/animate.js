@@ -23,7 +23,7 @@ export function mapAnimate(models, config, ui) {
     var line = new OlGeomLineString([startPoint, endPoint]);
     var distance = line.getLength(); // In map units, which is usually degrees
     var distanceDuration = polarProjectionCheck ? distance / 50000 : distance; // limit large polar projection distances from coordinate transforms
-    var duration = Math.floor((distanceDuration * 15) + 800); // 4.6 seconds to go 360 degrees
+    var duration = Math.floor((distanceDuration * 20) + 1000); // approx 6 seconds to go 360 degrees
     var animationPromise = function () {
       var args = Array.prototype.slice.call(arguments);
       return new Promise(function (resolve, reject) {
@@ -35,6 +35,8 @@ export function mapAnimate(models, config, ui) {
       }).catch(function () {});
     };
     if (hasEndInView) {
+      // allow faster fly with nearby events
+      duration = duration < 1200 ? duration / 2 : duration;
       // If the event is already visible, don't zoom out
       return Promise.all([
         animationPromise({ center: endPoint, duration: duration }),
