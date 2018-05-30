@@ -1,6 +1,11 @@
 import superCluster from 'supercluster';
 import lodashRound from 'lodash/round';
 
+export function setMaxZoomCluster(maxZoom) {
+
+}
+
+
 /**
  * Create superCLuster Object - Uses map and reduce
  * operations to create a timespan on each clustered
@@ -10,8 +15,8 @@ import lodashRound from 'lodash/round';
  */
 export function naturalEventsClusterCreateObject() {
   return superCluster({
-    radius: 40, // pixel radius where points are clustered
-    maxZoom: 16,
+    radius: 60, // pixel radius where points are clustered
+    maxZoom: 12,
     initial: function() {
       return {
         startDate: null,
@@ -35,8 +40,15 @@ export function naturalEventsClusterCreateObject() {
         accumulated.startDate = Date.parse(new Date(pastStartDate)) > Date.parse(new Date(newDate)) ? newDate : pastStartDate;
         accumulated.endDate = Date.parse(new Date(pastEndDate)) < Date.parse(new Date(newDate)) ? newDate : pastEndDate;
       }
+    },
+    setPolar: function() {
+      this.radius = 30;
+      this.maxZoom = 7;
+    },
+    setGeo: function() {
+      this.radius = 60;
+      this.maxZoom = 12
     }
-
   });
 };
 /**
