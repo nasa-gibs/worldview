@@ -77,9 +77,9 @@ a.atexpand {
 }
 
 .sidebar-panel h1,
-h2,
-h3,
-h4 {
+.sidebar-panel h2,
+.sidebar-panel h3,
+.sidebar-panel h4 {
   margin: 0;
   padding: 0;
   color: #000;
