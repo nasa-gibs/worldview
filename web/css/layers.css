@@ -606,7 +606,7 @@
 }
 
 .layer-date-range,
-.layer-metadata p,
+.layer-metadata,
 .layer-date-wrap {
   color: #ccc;
 }
