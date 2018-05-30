@@ -38,16 +38,18 @@ export default function naturalEventsUI (models, ui, config, request) {
 
     request.events.on('queryResults', function () {
       if (!(model.data.events || model.data.sources)) return;
-      createEventList();
-      var isZoomed = Math.floor(view.getZoom()) >= 3;
-      if (isZoomed || models.proj.selected.id !== 'geographic') {
-        self.filterEventList();
-      }
+
       if (model.active) {
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
         self.markers = naturalEventMarkers.draw();
+      }
+
+      createEventList();
+      var isZoomed = Math.floor(view.getZoom()) >= 3;
+      if (isZoomed || models.proj.selected.id !== 'geographic') {
+        self.filterEventList();
       }
 
       map.on('moveend', function (e) {
