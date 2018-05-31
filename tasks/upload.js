@@ -66,11 +66,11 @@ if (argv.help) {
   process.exit(0);
 }
 
-const baseDir = `${__dirname}/..`;
-const distDir = `${baseDir}/dist`;
+const baseDir = path.join(__dirname, '..');
+const distDir = path.join(baseDir, 'dist');
 const worldview = 'site-worldview-debug.tar.bz2';
-const distWorldview = `${distDir}/${worldview}`;
-const configFile = `${os.homedir()}/.worldview/upload.config`;
+const distWorldview = path.join(distDir, worldview);
+const configFile = path.join(os.homedir(), '.worldview', 'upload.config');
 
 let configData = '{}';
 try {
@@ -152,6 +152,9 @@ if (!argv.dist) {
     } else {
       error('build failed');
     }
+  });
+  proc.on('error', (err) => {
+    error(`build failed: ${err}`);
   });
 } else {
   upload();
