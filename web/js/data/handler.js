@@ -34,7 +34,8 @@ import {
   dataResultsOrbitFilter,
   dataResultsDividePolygon,
   dataResultsOfflineFilter,
-  dataResultsTitleLabel
+  dataResultsTitleLabel,
+  dataResultsTagVersionRegex
 } from './results';
 
 export function dataHandlerGetByName(name) {
@@ -169,6 +170,7 @@ export function dataHandlerModisSwathMultiDay(config, model, spec) {
       dataResultsCollectPreferred(model.prefer),
       dataResultsPreferredFilter(model.prefer),
       dataResultsTagVersion(),
+      dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
       dataResultsGeometryFromCMR(),
@@ -242,6 +244,7 @@ export function dataHandlerCollectionList(config, model, spec) {
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsTagVersion(),
+      dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
       dataResultsProductLabel(config.products[model.selectedProduct].name)
@@ -350,6 +353,7 @@ export function dataHandlerList(config, model, spec) {
       dataResultsCollectPreferred(model.prefer),
       dataResultsPreferredFilter(model.prefer),
       dataResultsTagVersion(),
+      dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
       dataResultsDateTimeLabel(model.time)
@@ -405,6 +409,7 @@ export function dataHandlerDailyAMSRE(config, model, spec) {
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsTagVersion(),
+      dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsVersionFilterExact(productConfig.version),
       dataResultsDateTimeLabel(model.time)
     ];
@@ -459,6 +464,7 @@ export function dataHandlerModisGrid(config, model, spec) {
       dataResultsOfflineFilter(),
       dataResultsTagProduct(model.selectedProduct),
       dataResultsTagVersion(),
+      dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsTagURS(productConfig.urs),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
@@ -586,6 +592,7 @@ export function dataHandlerModisSwath(config, model, spec) {
       dataResultsCollectPreferred(model.prefer),
       dataResultsPreferredFilter(model.prefer),
       dataResultsTagVersion(),
+      dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
       dataResultsGeometryFromCMR(),
@@ -637,6 +644,7 @@ export function dataHandlerHalfOrbit(config, model, spec) {
       dataResultsCollectPreferred(model.prefer),
       dataResultsPreferredFilter(model.prefer),
       dataResultsTagVersion(),
+      dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
       dataResultsGeometryFromCMR(),

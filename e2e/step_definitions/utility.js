@@ -32,14 +32,19 @@ defineSupportCode(({ Given, Then, When }) => {
     return client.useCss().click(selectors[key] || key);
   });
 
+  // Input a value into a keyed element
+  When('I input {string} in the {string}', (value, key) => {
+    return client.useCss().setValue(selectors[key] || key, value);
+  });
+
   // Click a Worldview tab
   When('I click the {string} tab', (name) => {
     return client.useCss().click('[data-tab="' + name + '"]');
   });
 
-  // Input a value into a keyed element
-  When('I input {string} in the {string}', (value, key) => {
-    return client.useCss().setValue(selectors[key] || key, value);
+  // Check value of input
+  When('I see a value of {string} in the {string}', (value, key) => {
+    return client.assert.value(selectors[key] || key, value);
   });
 
   // Pause for n seconds
@@ -78,7 +83,7 @@ defineSupportCode(({ Given, Then, When }) => {
     return client.useCss().assert.containsText('body', text);
   });
 
-  // Wait for an element to be visible
+  // Wait for an string to be visible
   Then('I see {string} within {int} seconds', (text, seconds) => {
     return client.useCss().expect.element('body').text.to.contain(text).before(seconds * 1000);
   });
@@ -87,12 +92,34 @@ defineSupportCode(({ Given, Then, When }) => {
   Then('I don\'t see {string}', (text) => {
     return client.useCss().expect.element('body').text.not.contains(text);
   });
+  // check for string within element
+  Then('I see {string} in the {string}', (text, key) => {
+    return client.useCss().assert.containsText(selectors[key] || key, text);
+  });
 
+  // check for a class in an element
+  Then('I see the class {string} in the {string}', (text, key) => {
+    return client.assert.cssClassPresent(selectors[key] || key, text);
+  });
+
+  // check if a class is disabled
+  Then('I see {string} is disabled', (key) => {
+    return client.expect.element(selectors[key] || key).to.not.be.enabled;
+  });
+
+  // check if an element has a css property
+  Then('I see {string} has style property {string} equal to {string}', (key, prop, value) => {
+    return client.assert.cssProperty(selectors[key] || key, prop, value);
+  });
   // Check that an element is visible by predefined selector
   Then('I see the {string}', (key) => {
     return client.useCss().expect.element(selectors[key] || key).to.be.visible;
   });
 
+  // Check that Checkbox is checked
+  Then('I see {string} is checked', (key) => {
+    return client.assert.ok(selectors[key] || key);
+  });
   // Wait for an element to be visible
   Then('I see the {string} within {int} seconds', (key, seconds) => {
     return client.useCss().expect.element(selectors[key] || key).to.be.visible.before(seconds * 1000);

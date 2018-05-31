@@ -23,7 +23,10 @@ try {
   // Code to start browserstack local before start of test
   console.log('Connecting localhost to Browserstack...');
   Nightwatch.bs_local = bs_local = new browserstack.Local();
-  bs_local.start({ 'key': process.env.BROWSERSTACK_ACCESS_KEY }, function (error) {
+  bs_local.start({
+    'key': process.env.BROWSERSTACK_ACCESS_KEY,
+    'force': 'true' // if you want to kill existing ports
+  }, function (error) {
     if (error) throw new Error(error);
 
     console.log('Connected. Running tests...');
@@ -35,7 +38,9 @@ try {
       Nightwatch.CliRunner(argv)
         .setup(null, function () {
           // Code to stop browserstack local after end of parallel test
-          bs_local.stop(function () {});
+          bs_local.stop(function () {
+            process.exit();
+          });
         })
         .runTests(function () {
           // Code to stop browserstack local after end of single test

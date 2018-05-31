@@ -258,6 +258,20 @@ configuration parameters.
 Parse out the version field into a numeric value that can used for comparison
 operations.
 
+### TagVersionRegex
+
+Use a regular expression to parse out a version into a numeric value that can
+used for comparison operations. Parameters:
+
+* `field`: The name of the field that contains the version
+* `namedRegex`: Use `MODISProducerGranuleID` to parse out the version from a
+MODIS producer granule ID in the form of
+`MOD04_L2.A2016137.2105.061.2017326151115.hdf`
+* `regex`: If `namedRegex` is not used, a regular expression used to extract
+the version
+* `parseVersion`: Use `MODIS` to multiply version numbers below 10 by 10. This
+changes MODIS version numbers from 5, 51, 6, 61 to 50, 51, 60, 61.
+
 ### TimeFilter
 
 Keep granules that meet the following values passed into the `spec`

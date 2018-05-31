@@ -707,6 +707,79 @@ export function dataResultsTagVersion() {
   return self;
 };
 
+var versionRegex = {
+  // Form of MOD04_L2.A2016137.2105.061.2017326151115.hdf
+  // Using periods as delimiters, version is the 4th field
+  'MODISProducerGranuleID': '[^\\.]+\\.[^\\.]+\\.[^\\.]+\\.([^\\.]+)\\.'
+};
+
+var versionParsers = {
+  // MODIS uses version numbers like 4, 5, 6 as major versions but
+  // 41, 51, 61 for minor versions. This function multiplies values
+  // less than 10 for easy comparision (40, 41, 50, 51, 60, 61).
+  // Will there ever be a collection 10?
+  'MODIS': (strVersion) => {
+    var version = Number.parseFloat(strVersion);
+    if (version < 10) {
+      version *= 10;
+    }
+    return version;
+  }
+};
+
+export function dataResultsTagVersionRegex(spec) {
+  var self = {};
+
+  self.name = 'TagVersionRegex';
+
+  self.process = function (meta, granule) {
+    // Continue if not used
+    if (!spec) {
+      return granule;
+    }
+    var regex = versionRegex[spec.namedRegex];
+    if (!regex) {
+      regex = spec.regex;
+    }
+    if (!regex) {
+      console.warn('no regex', granule);
+      return granule;
+    }
+    var value = granule[spec.field];
+    if (!value) {
+      console.warn(`no value for ${spec.field}`, granule);
+      return granule;
+    }
+    var match = value.match(regex);
+    if (match) {
+      var version = null;
+      var strVersion = match[1];
+      // If a parsing function is not named, just convert from float
+      if (spec.parseVersion) {
+        var parser = versionParsers[spec.parseVersion];
+        if (!parser) {
+          console.warn('no such parser', spec.parseVersion);
+          return granule;
+        }
+        version = parser(strVersion);
+      } else {
+        version = Number.parseFloat(strVersion);
+      }
+
+      if (version === null) {
+        console.warn('version not assigned', strVersion, granule);
+      } else if (Number.isNaN(version)) {
+        console.warn('version is not a number', strVersion, granule);
+      } else {
+        granule.version = version;
+      }
+    }
+    return granule;
+  };
+
+  return self;
+}
+
 export function dataResultsTimeFilter(spec) {
   var westZone = null;
   var eastZone = null;
