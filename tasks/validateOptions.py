@@ -67,6 +67,7 @@ if tolerant:
     warn("Validation enforcement disabled")
 
 start_date = datetime.max
+end_date = datetime.min
 
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]
@@ -136,6 +137,7 @@ for layer_id in wv["layers"].keys():
     else:
         if "endDate" in layer:
             del layer["endDate"]
+
     if "startDate" in layer:
         startTime = layer["startDate"].replace('T', ' ').replace('Z', '')
         if isDateTimeFormat(startTime):
@@ -144,8 +146,19 @@ for layer_id in wv["layers"].keys():
             d = datetime.strptime(layer["startDate"], "%Y-%m-%d")
         start_date = min(start_date, d)
 
+    if "endDate" in layer:
+        endTime = layer["endDate"].replace('T', ' ').replace('Z', '')
+        if isDateTimeFormat(endTime):
+            d = datetime.strptime(endTime, "%Y-%m-%d %H:%M:%S")
+        else:
+            d = datetime.strptime(layer["endDate"], "%Y-%m-%d")
+        end_date = max(end_date, d)
+
 if start_date != datetime.max:
     wv["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z";
+
+if end_date != datetime.min:
+    wv["endDate"] = end_date.strftime("%Y-%m-%d") + "T" + end_date.strftime("%H:%M:%S") + "Z";
 
 
 for layer_id in wv["layerOrder"]:

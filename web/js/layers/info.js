@@ -104,13 +104,17 @@ export function layersInfo(config, models, layer) {
 
     if (layer.startDate) {
       startDate = util.parseDate(layer.startDate);
-      if (layer.period !== 'subdaily') {
+      if (layer.period === 'subdaily') {
         startDate = startDate.getDate() + ' ' + util.giveMonth(startDate) + ' ' +
-         startDate.getFullYear();
+         startDate.getFullYear() + ' ' + util.pad(startDate.getHours(), 2, '0') + ':' +
+        util.pad(startDate.getMinutes(), 2, '0');
+      } else if (layer.period === 'yearly') {
+        startDate = startDate.getFullYear();
+      } else if (layer.period === 'monthly') {
+        startDate = util.giveMonth(startDate) + ' ' + startDate.getFullYear();
       } else {
         startDate = startDate.getDate() + ' ' + util.giveMonth(startDate) + ' ' +
-        startDate.getFullYear() + ' ' + util.pad(startDate.getHours(), 2, '0') + ':' +
-        util.pad(startDate.getMinutes(), 2, '0');
+         startDate.getFullYear();
       }
       $layerDateStart.html('Temporal coverage: ' + startDate + ' - ');
       if (layer.id) $layerDateStart.attr('id', layer.id + '-startDate');
@@ -118,20 +122,24 @@ export function layersInfo(config, models, layer) {
 
       if (layer.endDate) {
         endDate = util.parseDate(layer.endDate);
-        if (layer.period !== 'subdaily') {
-          endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
-          endDate.getFullYear();
-        } else {
+        if (layer.period === 'subdaily') {
           endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
           endDate.getFullYear() + ' ' + util.pad(endDate.getHours(), 2, '0') + ':' +
           util.pad(endDate.getMinutes(), 2, '0');
+        } else if (layer.period === 'yearly') {
+          endDate = endDate.getFullYear();
+        } else if (layer.period === 'monthly') {
+          endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
+        } else {
+          endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
+          endDate.getFullYear();
         }
         $layerDateEnd.html(endDate);
       } else {
         $layerDateEnd.append('Present');
       }
       if (layer.dateRanges && (layer.dateRanges).length > 1) {
-        $layerDateEnd.append($layerDateRangesButton.append(' *'));
+        $layerDateEnd.append($layerDateRangesButton.append(' <sup>*View Dates</sup>'));
       }
       if (layer.id) $layerDateEnd.attr('id', layer.id + '-endDate');
       $layerDateRange.append($layerDateEnd);
@@ -145,21 +153,31 @@ export function layersInfo(config, models, layer) {
         lodashEach(layer.dateRanges, function(dateRange) {
           let rangeStartDate = util.parseDate(dateRange.startDate);
           let rangeEndDate = util.parseDate(dateRange.endDate);
-          if (layer.period !== 'subdaily') {
-            rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
-             rangeStartDate.getFullYear();
-            rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
-             rangeEndDate.getFullYear();
-          } else {
+          if (layer.period === 'subdaily') {
             rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
             rangeStartDate.getFullYear() + ' ' + util.pad(rangeStartDate.getHours(), 2, '0') + ':' +
             util.pad(rangeStartDate.getMinutes(), 2, '0');
             rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
             rangeEndDate.getFullYear() + ' ' + util.pad(rangeEndDate.getHours(), 2, '0') + ':' +
             util.pad(rangeEndDate.getMinutes(), 2, '0');
+            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
+             rangeEndDate + '</li>');
+          } else if (layer.period === 'yearly' && dateRange.startDate === dateRange.endDate) {
+            rangeStartDate = rangeStartDate.getFullYear();
+            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
+          } else if (layer.period === 'monthly' && dateRange.startDate === dateRange.endDate) {
+            rangeStartDate = util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
+            rangeEndDate = util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
+            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
+             rangeEndDate + '</li>');
+          } else {
+            rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
+             rangeStartDate.getFullYear();
+            rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
+             rangeEndDate.getFullYear();
+            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
+             rangeEndDate + '</li>');
           }
-          $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
-          rangeEndDate + '</li>');
         });
         $layerDateRangesButton.click(function(e) {
           e.preventDefault();
