@@ -165,7 +165,15 @@ export function layersInfo(config, models, layer) {
           } else if (layer.period === 'yearly' && dateRange.startDate === dateRange.endDate) {
             rangeStartDate = rangeStartDate.getFullYear();
             $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
+          } else if (layer.period === 'yearly') {
+            rangeStartDate = rangeStartDate.getFullYear();
+            rangeEndDate = rangeEndDate.getFullYear();
+            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
+             rangeEndDate + '</li>');
           } else if (layer.period === 'monthly' && dateRange.startDate === dateRange.endDate) {
+            rangeStartDate = util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
+            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
+          } else if (layer.period === 'monthly') {
             rangeStartDate = util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
             rangeEndDate = util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
             $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
