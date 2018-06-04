@@ -43,14 +43,14 @@ module.exports = {
     client.assert.cssClassPresent(localSelectors.layerHeader, 'checked');
   },
   'Open And Close info about Layer found in search': function(client) {
-    client.useCss().expect.element(localSelectors.layersAll).text.not.contains('VIIRS Corrected Reflectance');
+    client.useCss().expect.element(localSelectors.layersAll).text.not.contains('(VIIRS) Corrected Reflectance');
     client
       .click(localSelectors.sourceInfoIcon)
       .pause(2000);
-    client.useCss().assert.containsText(localSelectors.layersAll, 'VIIRS Corrected Reflectance');
+    client.useCss().assert.containsText(localSelectors.layersAll, '(VIIRS) Corrected Reflectance');
     client.useCss().moveToElement(localSelectors.sourceMetadataCloseButton, 10, 10);
     client.click(localSelectors.sourceMetadataCloseButton);
-    client.useCss().expect.element(localSelectors.layersAll).text.not.contains('VIIRS Corrected Reflectance');
+    client.useCss().expect.element(localSelectors.layersAll).text.not.contains('(VIIRS) Corrected Reflectance');
   },
   'Close Layer modal': function(client) {
     client.click(localSelectors.layersModalCloseButton)
