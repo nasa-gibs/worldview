@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'jquery-ui/dialog';
 import 'perfect-scrollbar/jquery';
-import lodashEach from 'lodash/each';
+import lodashForEachRight from 'lodash/forEachRight';
 import wvui from '../ui/ui';
 import util from '../util/util';
 
@@ -150,7 +150,7 @@ export function layersInfo(config, models, layer) {
       if ((layer.dateRanges).length > 1) {
         $layerDateWrap.append('<p>Date Ranges:</p>', $layerDateRanges);
         $layerDescription.append($layerDateWrap);
-        lodashEach(layer.dateRanges, function(dateRange) {
+        lodashForEachRight(layer.dateRanges, function(dateRange) {
           let rangeStartDate = util.parseDate(dateRange.startDate);
           let rangeEndDate = util.parseDate(dateRange.endDate);
           if (layer.period === 'subdaily') {
@@ -178,6 +178,10 @@ export function layersInfo(config, models, layer) {
             rangeEndDate = util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
             $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
              rangeEndDate + '</li>');
+          } else if (layer.period === 'daily' && dateRange.startDate === dateRange.endDate) {
+            rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
+             rangeStartDate.getFullYear();
+            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
           } else {
             rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
              rangeStartDate.getFullYear();
