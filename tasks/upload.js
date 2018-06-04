@@ -132,7 +132,7 @@ async function upload() {
 };
 
 if (!argv.dist) {
-  let cmd = 'npm';
+  let cmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   let args = ['run', 'build'];
 
   if (argv.config) {
