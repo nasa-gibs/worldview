@@ -302,7 +302,9 @@ export function layersActive(models, ui, config) {
     var baseLayersHeight = $('#baselayers').outerHeight(true);
     var layerGroupHeight = 26; // Height of layer group titles
     var contentHeight = overlaysHeight + baseLayersHeight + layerGroupHeight;
-    var maxHeight;
+    var tabPadding = $tabPanel.outerHeight(true) - $tabPanel.height();
+    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding + footerHeight;
+    var innerMaxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding - footerHeight;
 
     // If on a mobile device, use the native scroll bars
     if (!util.browser.small) {
@@ -318,16 +320,12 @@ export function layersActive(models, ui, config) {
     // after timeline markup is corrected to be loaded first
     if (util.browser.small) {
       maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - 10 - 5;
-    } else {
-      // FIXME: Hack, the timeline sometimes renders twice as large of a height and
-      // creates a miscalculation here for timelineHeight
-      maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - /* timelineHeight */ 67 - 10 - 5;
     }
 
     $tabPanel.css('max-height', maxHeight);
 
-    if ((maxHeight <= contentHeight)) {
-      $('.layer-container').css('height', maxHeight).css('padding-right', '10px');
+    if ((innerMaxHeight <= contentHeight)) {
+      $('.layer-container').css('height', innerMaxHeight).css('padding-right', '10px');
       $('.layer-container').perfectScrollbar();
       if (productsIsOverflow === false) productsIsOverflow = true;
     } else {

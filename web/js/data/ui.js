@@ -178,18 +178,25 @@ export function dataUi(models, ui, config) {
     var footerHeight = $tabFooter.outerHeight(true);
     var distanceFromTop = $('#productsHolder').offset().top;
     var timelineHeight = $('#timeline').outerHeight(true);
+    var tabPadding = $tabPanel.outerHeight(true) - $tabPanel.height();
 
     // FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
-    var maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - timelineHeight - 10 - 5;
+    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding + footerHeight;
+    var innerMaxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding - footerHeight;
+
+    if (!util.browser.small) {
+      maxHeight = maxHeight - timelineHeight - 10 - 5;
+    }
+
     $tabPanel.css('max-height', maxHeight);
 
     var childrenHeight = $('#wv-datacontent').outerHeight(true);
 
-    var isTallerThanContainer = childrenHeight > maxHeight;
+    var isTallerThanContainer = childrenHeight > innerMaxHeight;
 
     if (isTallerThanContainer) {
-      $('.wv-datalist').css('height', maxHeight).css('padding-right', '10px');
+      $('.wv-datalist').css('height', innerMaxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
         $('.wv-datalist').perfectScrollbar('update');
       } else {

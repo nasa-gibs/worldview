@@ -131,12 +131,13 @@ export function layersSidebar(models, config) {
     var distanceFromTop = $('#productsHolder').offset().top;
     var timelineHeight = $('#timeline').outerHeight(true);
     var footerHeight = footerIsVisible ? $tabFooter.outerHeight(true) : 0;
-    $tabPanel.css('padding-bottom', footerHeight);
     var tabPadding = $tabPanel.outerHeight(true) - $tabPanel.height();
 
     // FIXME: -10 here is the timeline's bottom position from page, fix
     // after timeline markup is corrected to be loaded first
-    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding;
+    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding + footerHeight;
+    var innerMaxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding - footerHeight;
+
     if (!util.browser.small) {
       maxHeight = maxHeight - timelineHeight - 10 - 5;
     }
@@ -145,8 +146,8 @@ export function layersSidebar(models, config) {
 
     var childrenHeight = $('#wv-eventscontent').outerHeight(true);
 
-    if ((maxHeight <= childrenHeight)) {
-      $('.wv-eventslist').css('height', maxHeight).css('padding-right', '10px');
+    if ((innerMaxHeight <= childrenHeight)) {
+      $('.wv-eventslist').css('height', innerMaxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
         $('.wv-eventslist').perfectScrollbar('update');
       } else {
