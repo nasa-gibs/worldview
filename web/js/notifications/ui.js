@@ -17,7 +17,6 @@ export function notificationsUi(models, config) {
   var url;
   var alertBlockExists;
   var messageBlockExists;
-
   url = config.features.alert.url;
   messageBlockExists = false;
   alertBlockExists = false;
@@ -46,6 +45,10 @@ export function notificationsUi(models, config) {
     if (!util.browser.localStorage) {
       return;
     }
+    if (config.parameters.mockAlerts) {
+      url = 'mock/notify_' + config.parameters.mockAlerts + '.json';
+    }
+
     mainIcon = $('#wv-info-button')[0];
     mainIconLabel = $('#wv-info-button label')[0];
     p = util.get(url);
