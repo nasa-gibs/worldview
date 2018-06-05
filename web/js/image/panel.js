@@ -58,7 +58,6 @@ export function imagePanel (models, ui, config, dialogConfig) {
   let self = {};
 
   let container;
-  let url;
   let alignTo = config.alignTo;
   let coords;
   let resolution = '1';
@@ -77,9 +76,10 @@ export function imagePanel (models, ui, config, dialogConfig) {
   let resolutions;
   let fileTypes;
 
-  /* FIXME: Put in configuration */
-  url = 'http://localhost:8080/wvs/v1';
-
+  const url = config.features.imageDownload.url;
+  if (!url) {
+    throw new Error('no image download url in configuration');
+  }
   if (config.parameters.imagegen) {
     util.warn('Redirecting image download to: ' + url);
   }
