@@ -1,6 +1,3 @@
-import lodashIsUndefined from 'lodash/isUndefined';
-import lodashEach from 'lodash/each';
-
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
 
@@ -61,7 +58,7 @@ export function imageUtilCalculateResolution(zoom, isGeoProjection, resolutions)
 };
 
 /*
- * Retieves avtive layers by day
+ * Gets active layers by day
  *
  * @method getLayersForDay
  * @private
@@ -71,19 +68,20 @@ export function imageUtilCalculateResolution(zoom, isGeoProjection, resolutions)
  * @returns {array} array of layer ids
  *
  */
-export function imageUtilGetLayers (products, proj) {
-  var layers = [];
-  lodashEach(products, function(layer) {
+export function imageUtilGetLayers(layers, proj) {
+  var result = [];
+  layers.forEach((layer) => {
     if (layer.projections[proj].layer) {
-      layers.push(layer.projections[proj].layer);
+      result.push(layer.projections[proj].layer);
     } else {
-      layers.push(layer.id);
+      result.push(layer.id);
     }
   });
-  return layers;
+  return result;
 };
+
 /*
- * Retieves opacities from palettes
+ * Gets opacities from palettes
  *
  * @method getOpacities
  * @private
@@ -93,12 +91,23 @@ export function imageUtilGetLayers (products, proj) {
  * @returns {array} array of opacities
  *
  */
-export function imageUtilGetLayerOpacities (products) {
-  var opacities = [];
-  lodashEach(products, function(product) {
-    opacities.push((lodashIsUndefined(product.opacity)) ? 1 : product.opacity);
+export function imageUtilGetLayerOpacities(layers) {
+  const result = [];
+  let hasOpacity = false;
+  layers.forEach((layer) => {
+    if ('opacity' in layer && layer.opacity !== 1) {
+      hasOpacity = true;
+      result.push(layer.opacity);
+    } else {
+      result.push('');
+    }
   });
-  return opacities;
+  // If no layers have an opacity set, return null and the caller can
+  // omit this parameter in the request
+  if (!hasOpacity) {
+    return null;
+  }
+  return result;
 };
 
 export function imageUtilEstimateResolution(resolution, isGeoProjection) {

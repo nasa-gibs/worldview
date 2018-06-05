@@ -7,6 +7,7 @@ import util from '../util/util';
 import wvui from '../ui/ui';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
 
 import {
   imageUtilCalculateResolution,
@@ -41,60 +42,51 @@ const fileTypesGeo = {
   values: [
     { value: 'image/jpeg', text: 'JPEG' },
     { value: 'image/png', text: 'PNG' },
-    { value: 'image/geotiff', text: 'GeoTIFF' },
-    { value: 'image/kmz', text: 'KMZ' }
+    { value: 'image/tiff', text: 'GeoTIFF' },
+    { value: 'application/vnd.google-earth.kmz', text: 'KMZ' }
   ]
 };
 const fileTypesPolar = {
   values: [
     { value: 'image/jpeg', text: 'JPEG' },
     { value: 'image/png', text: 'PNG' },
-    { value: 'image/geotiff', text: 'GeoTIFF' }
+    { value: 'image/tiff', text: 'GeoTIFF' }
   ]
 };
 
 export function imagePanel (models, ui, config, dialogConfig) {
-  var self = {};
+  let self = {};
 
-  var container;
-  var url;
-  var alignTo = config.alignTo;
-  var coords;
-  var resolution = '1';
-  var lastZoom = -1;
-  var htmlElements;
-  var host;
-  var path;
-  var containerId = 'wv-image-button';
-  var id = containerId;
-  // state items as global vars
-  var lonlats;
-  var imgWorldfile = 'false';
-  var imgFormat = 'image/jpeg';
-  var imgWidth;
-  var imgHeight;
-  var imgRes;
-  var imgFilesize;
-  var resolutions;
-  var fileTypes;
+  let container;
+  let url;
+  let alignTo = config.alignTo;
+  let coords;
+  let resolution = '1';
+  let lastZoom = -1;
+  let htmlElements;
+  let containerId = 'wv-image-button';
+  let id = containerId;
+  // state items as global lets
+  let lonlats;
+  let imgWorldfile = 'false';
+  let imgFormat = 'image/jpeg';
+  let imgWidth;
+  let imgHeight;
+  let imgRes;
+  let imgFilesize;
+  let resolutions;
+  let fileTypes;
 
-  if (config.features.imageDownload) {
-    host = config.features.imageDownload.host;
-    path = config.parameters.imagegen || config.features.imageDownload.path;
-  } else {
-    host = 'http://map2.vis.earthdata.nasa.gov';
-    path = 'imagegen/index.php';
-  }
-  url = host + '/' + path + '?';
+  /* FIXME: Put in configuration */
+  url = 'http://localhost:8080/wvs/v1';
 
   if (config.parameters.imagegen) {
     util.warn('Redirecting image download to: ' + url);
   }
 
-  var init = function() {
-    var options;
+  let init = function() {
+    let options;
 
-    checkConfig();
     htmlElements = document.createElement('div');
     setProjectionGlobals();
     options = {
@@ -111,9 +103,9 @@ export function imagePanel (models, ui, config, dialogConfig) {
     self.reactComponent = renderPanel(options, htmlElements);
     models.proj.events.on('select', setProjectionGlobals);
   };
-  var setProjectionGlobals = function() {
-    var isGeoProjection = (models.proj.selected.id === 'geographic');
-    var curZoom = Math.round(ui.map.selected.getView()
+  let setProjectionGlobals = function() {
+    let isGeoProjection = (models.proj.selected.id === 'geographic');
+    let curZoom = Math.round(ui.map.selected.getView()
       .getZoom());
     imgRes = imageUtilCalculateResolution(curZoom, isGeoProjection, models.proj.selected.resolutions);
     if (isGeoProjection) {
@@ -124,28 +116,14 @@ export function imagePanel (models, ui, config, dialogConfig) {
       fileTypes = fileTypesPolar;
     }
   };
-  var onSelectionChange = function(res, worldfile, format) {
+  let onSelectionChange = function(res, worldfile, format) {
     imgWorldfile = worldfile;
     imgFormat = format;
     imgRes = res;
     self.update(coords);
   };
 
-  var checkConfig = function() {
-    if (config.features.imageDownload) {
-      host = config.features.imageDownload.host;
-      path = config.parameters.imagegen || config.features.imageDownload.path;
-    } else {
-      host = 'http://map2.vis.earthdata.nasa.gov';
-      path = 'imagegen/index.php';
-    }
-    url = host + '/' + path + '?';
-
-    if (config.parameters.imagegen) {
-      util.warn('Redirecting image download to: ' + url);
-    }
-  };
-  var getUpdatedProps = function() {
+  let getUpdatedProps = function() {
     return {
       resolution: imgRes.toString(),
       proj: models.proj.selected.id,
@@ -159,10 +137,10 @@ export function imagePanel (models, ui, config, dialogConfig) {
       fileType: imgFormat
     };
   };
-  var renderPanel = function(options, mountEl) {
+  let renderPanel = function(options, mountEl) {
     return ReactDOM.render(React.createElement(ImageResSelection, options), mountEl);
   };
-  var updatePanel = function(options) {
+  let updatePanel = function(options) {
     self.reactComponent.setState(options);
   };
   /**
@@ -182,7 +160,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     container.setAttribute('class', 'imagedownload');
 
-    var $dialog = wvui.getDialog()
+    let $dialog = wvui.getDialog()
       .html(htmlElements);
     $dialog.dialog(dialogConfig);
     // $("#wv-image-resolution").buttonset();
@@ -196,7 +174,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     // Auto-set default resolution to map's current zoom level; round it
     // for incremental zoom steps
-    var curZoom = Math.round(ui.map.selected.getView()
+    let curZoom = Math.round(ui.map.selected.getView()
       .getZoom());
     // Don't do anything if the user hasn't changed zoom levels; we want to
     // preserve their existing settings
@@ -267,7 +245,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
    *
    * @returns {void}
    */
-  var setBoundingBoxLabels = function(x1, x2, y1, y2, bottomLeftCoordinates, topRightCoordinates) {
+  let setBoundingBoxLabels = function(x1, x2, y1, y2, bottomLeftCoordinates, topRightCoordinates) {
     if (x2 - x1 < 150) {
       bottomLeftCoordinates = '';
       topRightCoordinates = '';
@@ -287,8 +265,8 @@ export function imagePanel (models, ui, config, dialogConfig) {
       }).html(bottomLeftCoordinates);
   };
 
-  var calulateFileSize = function(imgRes, lonlat1, lonlat2) {
-    var conversionFactor;
+  let calulateFileSize = function(imgRes, lonlat1, lonlat2) {
+    let conversionFactor;
 
     conversionFactor = imageUtilGetConversionFactor(models.proj.selected.id);
     resolution = imgRes;
@@ -297,50 +275,60 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
   };
-  var fileSizeValid = function() {
+  let fileSizeValid = function() {
     return (imgFilesize < 250 && imgHeight !== 0 && imgWidth !== 0);
   };
-  var onDownload = function() {
-    var dlURL, products;
-
-    products = models.layers.get({
+  let onDownload = function() {
+    const layers = models.layers.get({
       reverse: true,
       renderable: true
     });
 
-    dlURL = createDownloadURL(models.date.selected, lonlats, models.proj.selected.epsg, products, imageUtilGetLayerOpacities(products), url);
+    let imageLayers = imageUtilGetLayers(layers, models.proj.selected.id);
+    let opacities = imageUtilGetLayerOpacities(layers);
+
+    let bbox;
+    if (models.proj.selected.units === 'm') {
+      // When meters are specified, bbox is minx,miny,maxx,maxy
+      bbox =
+        lonlats[0][0] + ',' + lonlats[0][1] + ',' +
+        lonlats[1][0] + ',' + lonlats[1][1];
+    } else {
+      // When degrees are specified, bbox is minlat,minlon,maxlat,maxlon
+      bbox =
+        lonlats[0][1] + ',' + lonlats[0][0] + ',' +
+        lonlats[1][1] + ',' + lonlats[1][0];
+    }
+
+    let params = [
+      'REQUEST=GetSnapshot',
+      'LAYERS=' + imageLayers.join(','),
+      'BBOX=' + bbox,
+      'CRS=' + models.proj.selected.crs,
+      'FORMAT=' + imgFormat,
+      'WIDTH=' + imgWidth,
+      'HEIGHT=' + imgHeight,
+      'TIME=' + moment(models.date.selected).utc().format('YYYY-MM-DD')
+    ];
+    if (opacities) {
+      params.push('OPACITIES=' + opacities.join(','));
+    }
+    if (imgWorldfile && imgWorldfile !== 'false') {
+      params.push('WORLDFILE=' + imgWorldfile);
+    }
+    const snapshotUrl = url + '?' + params.join('&');
     googleAnalytics.event('Image Download', 'Click', 'Download');
-    util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
-    window.open(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight, '_blank');
+    window.open(snapshotUrl, '_blank');
   };
 
-  var setPosition = function() {
-    var offset = $('#' + alignTo.id)
+  let setPosition = function() {
+    let offset = $('#' + alignTo.id)
       .offset();
-    var left = offset.left + parseInt($('#' + alignTo.id)
+    let left = offset.left + parseInt($('#' + alignTo.id)
       .css('width')) - parseInt($('#' + id)
       .css('width'));
     $('#' + id)
       .css('left', left + 'px');
-  };
-
-  var createDownloadURL = function(time, lonlats, epsg, products, opacities, dlURL) {
-    var layers, jStart, jDate;
-    var dTime = time;
-
-    layers = imageUtilGetLayers(products, models.proj.selected.id);
-    // Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-    jStart = util.parseDateUTC(dTime.getUTCFullYear() + '-01-01');
-    jDate = '00' + (1 + Math.ceil((dTime.getTime() - jStart) / 86400000));
-    dlURL += 'TIME=' + dTime.getUTCFullYear() + (jDate)
-      .substr((jDate.length) - 3);
-
-    dlURL += '&extent=' + lonlats[0][0] + ',' + lonlats[0][1] + ',' + lonlats[1][0] + ',' + lonlats[1][1];
-    dlURL += '&epsg=' + epsg;
-    dlURL += '&layers=' + layers.join(',');
-    dlURL += '&opacities=' + opacities.join(',');
-
-    return dlURL;
   };
 
   init();
