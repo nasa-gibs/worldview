@@ -147,6 +147,7 @@ export function layersInfo(config, models, layer) {
     }
 
     if (layer.dateRanges) {
+      var firstDateRange = true;
       if ((layer.dateRanges).length > 1) {
         $layerDateWrap.append('<p>Date Ranges:</p>', $layerDateRanges);
         $layerDescription.append($layerDateWrap);
@@ -160,6 +161,12 @@ export function layersInfo(config, models, layer) {
             rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
             rangeEndDate.getFullYear() + ' ' + util.pad(rangeEndDate.getHours(), 2, '0') + ':' +
             util.pad(rangeEndDate.getMinutes(), 2, '0');
+            if (firstDateRange) {
+              if (layer.endDate === undefined) {
+                rangeEndDate = 'Present';
+              }
+              firstDateRange = false;
+            }
             $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
              rangeEndDate + '</li>');
           } else if (layer.period === 'yearly' && dateRange.startDate === dateRange.endDate) {
@@ -168,6 +175,12 @@ export function layersInfo(config, models, layer) {
           } else if (layer.period === 'yearly') {
             rangeStartDate = rangeStartDate.getFullYear();
             rangeEndDate = rangeEndDate.getFullYear();
+            if (firstDateRange) {
+              if (layer.endDate === undefined) {
+                rangeEndDate = 'Present';
+              }
+              firstDateRange = false;
+            }
             $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
              rangeEndDate + '</li>');
           } else if (layer.period === 'monthly' && dateRange.startDate === dateRange.endDate) {
@@ -176,6 +189,12 @@ export function layersInfo(config, models, layer) {
           } else if (layer.period === 'monthly') {
             rangeStartDate = util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
             rangeEndDate = util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
+            if (firstDateRange) {
+              if (layer.endDate === undefined) {
+                rangeEndDate = 'Present';
+              }
+              firstDateRange = false;
+            }
             $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
              rangeEndDate + '</li>');
           } else if (layer.period === 'daily' && dateRange.startDate === dateRange.endDate) {
@@ -187,6 +206,12 @@ export function layersInfo(config, models, layer) {
              rangeStartDate.getFullYear();
             rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
              rangeEndDate.getFullYear();
+            if (firstDateRange) {
+              if (layer.endDate === undefined) {
+                rangeEndDate = 'Present';
+              }
+              firstDateRange = false;
+            }
             $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
              rangeEndDate + '</li>');
           }
