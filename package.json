@@ -55,7 +55,8 @@
     "test:end:darwin:linux": "pkill -f run-p",
     "test:end:win32": "tskill node",
     "updateconfig": "run-s getcapabilities build:config",
-    "watch": "bash -c 'WORLDVIEW_WATCH='active' npm-watch'"
+    "watch": "bash -c 'WORLDVIEW_WATCH='active' npm-watch'",
+    "upload": "node tasks/upload.js"
   },
   "watch": {
     "build:css": {
@@ -100,6 +101,7 @@
     "minimist": "^1.2.0",
     "moment": "2.13.x",
     "nightwatch": "^0.9.16",
+    "node-ssh": "^5.1.1",
     "npm-run-all": "^4.1.1",
     "npm-watch": "^0.3.0",
     "phantomjs-prebuilt": "2.1.x",
@@ -112,7 +114,8 @@
     "stylelint": "^8.0.0",
     "uglifyify": "^4.0.5",
     "underscore": "^1.8.3",
-    "watchify": "^3.9.0"
+    "watchify": "^3.9.0",
+    "yargs": "^11.0.0"
   },
   "dependencies": {
     "bluebird": "3.4.6",
@@ -140,7 +143,7 @@
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
     "supercluster": "^3.0.2",
-    "worldview-components": "1.7.1",
+    "worldview-components": "github:nasa-gibs/worldview-components#develop",
     "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.11.1",
     "web-streams-polyfill": "^1.3.2"
   },
