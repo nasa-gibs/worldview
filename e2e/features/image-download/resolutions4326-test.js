@@ -9,14 +9,13 @@ const {
   clickDownload
 } = require('./reuseables');
 
-const TIME_LIMIT = 10000;
 const startParams = [
   'p=geographic',
   'v=-180,-90,180,90',
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   't=2018-06-01',
   'snapshots='
-]
+];
 
 module.exports = {
   after: function(client) {
@@ -132,4 +131,4 @@ module.exports = {
     });
   }
 
-}
+};
