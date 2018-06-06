@@ -1,5 +1,6 @@
 const { loadAndSkipTour } = require('../../reuseables/skip-tour');
 const { switchProjection } = require('../../reuseables/switch-projection');
+const { bookmark } = require('../../reuseables/bookmark');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
@@ -24,7 +25,7 @@ module.exports = {
   },
 
   'JPEG is the default': function(c) {
-    c.url(c.globals.url + '?' + startParams.join('&'));
+    bookmark(c, startParams);
     openImageDownloadPanel(c);
     clickDownload(c);
     c.expect.element('#wv-image-download-url').to.have.attribute('url')
@@ -33,7 +34,6 @@ module.exports = {
   },
 
   'Select PNG': function(c) {
-    // does the format change?
     openImageDownloadPanel(c);
     c.click('#wv-image-format option[value="image/png"]')
     clickDownload(c);
@@ -43,7 +43,6 @@ module.exports = {
   },
 
   'Swtich to arctic, is PNG': function(c) {
-    // does the format stay the same when switching projections?
     switchProjection(c, 'arctic');
     openImageDownloadPanel(c);
     clickDownload(c);
@@ -53,7 +52,6 @@ module.exports = {
   },
 
   'Switch to geographic, select KMZ, switch to arctic, is PNG': function(c) {
-    // when selecting KMZ in geographic, does it stay as PNG in the arctic?
     switchProjection(c, 'geographic')
     openImageDownloadPanel(c);
     c.click('#wv-image-format option[value="application/vnd.google-earth.kmz"]')
