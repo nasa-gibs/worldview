@@ -97,7 +97,8 @@ export function imagePanel (models, ui, config, dialogConfig) {
       fileType: imgFormat,
       valid: true,
       resolutions: resolutions,
-      fileTypes: fileTypes
+      fileTypes: fileTypes,
+      maxImageSize: '5000px x 5000px'
     };
 
     self.reactComponent = renderPanel(options, htmlElements);
@@ -128,7 +129,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
       resolution: imgRes.toString(),
       proj: models.proj.selected.id,
       worldfile: imgWorldfile,
-      valid: fileSizeValid(),
+      valid: imageSizeValid(),
       fileSize: imgFilesize,
       imgHeight: imgHeight,
       imgWidth: imgWidth,
@@ -275,9 +276,17 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
   };
-  let fileSizeValid = function() {
-    return (imgFilesize < 250 && imgHeight !== 0 && imgWidth !== 0);
+
+  const imageSizeValid = function() {
+    if (imgHeight === 0 && imgWidth === 0) {
+      return false;
+    }
+    if (imgHeight > 5000 || imgWidth > 5000) {
+      return false;
+    }
+    return true;
   };
+
   let onDownload = function() {
     const layers = models.layers.get({
       reverse: true,
