@@ -23,7 +23,19 @@ module.exports = {
     openImageDownloadPanel(c);
     clickDownload(c);
     c.expect.element('#wv-image-download-url').to.have.attribute('url')
-      .contain('FORMAT=image/jpeg');
+      .and.to.contain('FORMAT=image/jpeg');
+    c.expect.element('#wv-image-download-url').to.have.attribute('url')
+      .and.not.to.contain('WORLDFILE');
+    closeImageDownloadPanel(c);
+  },
+
+  'Add a worldfile': function(c) {
+    openImageDownloadPanel(c);
+    c.click('#wv-image-worldfile option[value="true"]');
+    clickDownload(c);
+    c.expect.element('#wv-image-download-url').to.have.attribute('url')
+      .and.to.contain('WORLDFILE=true');
+    c.click('#wv-image-worldfile option[value="false"]');
     closeImageDownloadPanel(c);
   },
 
