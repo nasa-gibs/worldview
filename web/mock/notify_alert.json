@@ -1,0 +1,18 @@
+{
+  "success":true,
+  "notifications":[
+    {
+      "id":535,
+      "notification_type":"alert",
+      "message":"Watch our new \u003ca href=\"https://www.nasa.gov/feature/goddard/2018/explore-earth-your-way-with-worldview\" target=\"_blank\"\u003etutorial\u003c/a\u003e to learn how to visualize global satellite imagery for severe storms, volcanic eruptions, wildfires and more in Worldview!",
+      "updated_at":"2018-02-20T16:26:43.013-04:00",
+      "created_at":"2018-02-20T16:23:37.049-04:00",
+      "starttime":null,
+      "endtime":null,
+      "applications":["Worldview (OPS)"],
+      "domains":["https://worldview.earthdata.nasa.gov"],
+      "dismissible":true,
+      "path":""
+    }
+  ]
+}
