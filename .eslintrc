@@ -11,9 +11,6 @@
     }
   },
   "extends": "standard",
-  "plugins": [
-    "transform-class-properties"
-  ],
   "rules": {
     "semi": ["error", "always"],
     "space-before-function-paren": "off",
