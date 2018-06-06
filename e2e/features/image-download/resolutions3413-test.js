@@ -1,4 +1,3 @@
-const { loadAndSkipTour } = require('../../reuseables/skip-tour');
 const { zoomIn } = require('../../reuseables/zoom');
 const { bookmark } = require('../../reuseables/bookmark');
 

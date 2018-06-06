@@ -1,4 +1,3 @@
-const { loadAndSkipTour } = require('../../reuseables/skip-tour');
 const { switchProjection } = require('../../reuseables/switch-projection');
 const { bookmark } = require('../../reuseables/bookmark');
 const {
