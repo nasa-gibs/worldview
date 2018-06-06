@@ -76,12 +76,17 @@ export function imagePanel (models, ui, config, dialogConfig) {
   let resolutions;
   let fileTypes;
 
-  const url = config.features.imageDownload.url;
+  // hidden element that contains the url of the last image download request
+  // used for end-to-end testing
+  let debugUrl;
+
+  let url = config.features.imageDownload.url;
   if (!url) {
     throw new Error('no image download url in configuration');
   }
-  if (config.parameters.imagegen) {
-    util.warn('Redirecting image download to: ' + url);
+  if ('snapshots' in config.parameters) {
+    url = config.parameters.snapshots;
+    util.warn('image download: ' + url);
   }
 
   let init = function() {
@@ -103,6 +108,11 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     self.reactComponent = renderPanel(options, htmlElements);
     models.proj.events.on('select', setProjectionGlobals);
+
+    debugUrl = document.createElement('div');
+    debugUrl.setAttribute('id', 'wv-image-download-url');
+    debugUrl.setAttribute('style', 'visbility: hidden');
+    document.querySelector('body').appendChild(debugUrl);
   };
   let setProjectionGlobals = function() {
     let isGeoProjection = (models.proj.selected.id === 'geographic');
@@ -326,8 +336,11 @@ export function imagePanel (models, ui, config, dialogConfig) {
       params.push('WORLDFILE=' + imgWorldfile);
     }
     const snapshotUrl = url + '?' + params.join('&');
-    googleAnalytics.event('Image Download', 'Click', 'Download');
-    window.open(snapshotUrl, '_blank');
+    if (url) {
+      googleAnalytics.event('Image Download', 'Click', 'Download');
+      window.open(snapshotUrl, '_blank');
+    }
+    debugUrl.setAttribute('url', snapshotUrl);
   };
 
   let setPosition = function() {
