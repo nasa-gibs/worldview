@@ -120,10 +120,8 @@ export default function naturalEventsUI (models, ui, config, request) {
 
       if (!(model.data.events || model.data.sources)) return;
 
-      var isZoomed = Math.floor(view.getZoom()) >= 3;
-      if (isZoomed || models.proj.selected.id !== 'geographic') {
-        self.filterEventList();
-      }
+      // filter events within projection view extent
+      self.filterEventList();
 
       // handle list filter on map move
       ui.map.selected.on('moveend', function (e) {
