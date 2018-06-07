@@ -327,7 +327,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
       'FORMAT=' + imgFormat,
       'WIDTH=' + imgWidth,
       'HEIGHT=' + imgHeight,
-      'TIME=' + moment(models.date.selected).utc().format('YYYY-MM-DD')
+      'TIME=' + moment(models.date.selected).format('YYYY-MM-DD')
     ];
     if (opacities) {
       params.push('OPACITIES=' + opacities.join(','));
