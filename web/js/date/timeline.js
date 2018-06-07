@@ -99,7 +99,8 @@ export function timeline(models, config, ui) {
     if (self.enabled) {
       self.getWidth();
 
-      self.svg.attr('width', self.width);
+      self.svg.attr('width', self.width)
+        .attr('viewBox', '0 -7 ' + self.width + ' ' + (self.height + self.margin.top + self.margin.bottom + 26));
 
       d3.select('#timeline-boundary rect')
         .attr('width', self.width);
@@ -133,7 +134,8 @@ export function timeline(models, config, ui) {
     self.svg = d3.select('#timeline-footer')
       .append('svg:svg')
       .attr('width', self.width) // + margin.left + margin.right)
-      .attr('height', self.height + self.margin.top + self.margin.bottom + 32);
+      .attr('height', self.height + self.margin.top + self.margin.bottom + 26)
+      .attr('viewBox', '0 -7 ' + self.width + ' ' + (self.height + self.margin.top + self.margin.bottom + 26));
 
     self.svg
       .append('svg:defs')
