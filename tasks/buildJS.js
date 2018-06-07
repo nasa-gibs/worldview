@@ -15,7 +15,13 @@ const outputPath = outputDir + (isTest ? 'wv-test-bundle.js' : 'wv.js');
 
 // Log what we're building, and in what environment
 console.log('Building ' + outputPath + ' for ' + process.env.NODE_ENV);
-if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+if (!fs.existsSync(outputDir)) {
+  try {
+    fs.mkdirSync(outputDir);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 var bundler = browserify(entryPoint, {
   debug: !isProduction, // Include source maps (makes bundle size larger)
