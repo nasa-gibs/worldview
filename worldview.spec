@@ -1,6 +1,6 @@
 Name: @WORLDVIEW@
 Version: @BUILD_VERSION@
-Release: 1.@BUILD_NUMBER@%{?dist}
+Release: @BUILD_RELEASE@.@BUILD_NUMBER@%{?dist}
 Summary: Browse full-resolution, near real-time satellite imagery.
 License: NASA-1.3
 URL: http://earthdata.nasa.gov
@@ -68,29 +68,28 @@ rm -rf %{buildroot}
 
 %post
 if [ $1 -gt 0 ] ; then
-   if /bin/systemctl show httpd.service | grep ActiveState=active >/dev/null ; then
-      /bin/systemctl reload httpd.service
+   if /sbin/service httpd status >/dev/null ; then
+      /sbin/service httpd reload
    fi
 fi
 
 %post debug
 if [ $1 -gt 0 ] ; then
-   if /bin/systemctl show httpd.service | grep ActiveState=active >/dev/null ; then
-      /bin/systemctl reload httpd.service
+   if /sbin/service httpd status >/dev/null ; then
+       /sbin/service httpd reload
    fi
 fi
 
 %postun
-if [ $1 -gt 0 ] ; then
-   if /bin/systemctl show httpd.service | grep ActiveState=active >/dev/null ; then
-      /bin/systemctl reload httpd.service
+if [ $1 -eq 0 ] ; then
+   if /sbin/service httpd status >/dev/null ; then
+       /sbin/service httpd reload
    fi
 fi
 
 %postun debug
-if [ $1 -gt 0 ] ; then
-   if /bin/systemctl show httpd.service | grep ActiveState=active >/dev/null ; then
-      /bin/systemctl reload httpd.service
+if [ $1 -eq 0 ] ; then
+   if /sbin/service httpd status >/dev/null ; then
+       /sbin/service httpd reload
    fi
 fi
-
