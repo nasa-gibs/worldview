@@ -390,6 +390,7 @@ g.plot rect.data-bar-invisible {
 
 #timeline-footer > svg {
   overflow-y: hidden;
+  margin-top: -23px;
 }
 
 #wv-rangeselector-case > .wv-timeline-range-selector {
