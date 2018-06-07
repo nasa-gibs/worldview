@@ -1,6 +1,6 @@
 Name: @WORLDVIEW@
 Version: @BUILD_VERSION@
-Release: @BUILD_RELEASE@.@BUILD_NUMBER@%{?dist}
+Release: 1.@BUILD_NUMBER@%{?dist}
 Summary: Browse full-resolution, near real-time satellite imagery.
 License: NASA-1.3
 URL: http://earthdata.nasa.gov
