@@ -18,7 +18,7 @@ module.exports = {
 
   'Check resolutions': function(c) {
     openImageDownloadPanel(c);
-    let expected = [
+    const expected = [
       '30m',
       '60m',
       '125m',
@@ -32,7 +32,7 @@ module.exports = {
   },
 
   'Check formats': function(c) {
-    expected = [
+    const expected = [
       'JPEG',
       'PNG',
       'GeoTIFF',
@@ -42,7 +42,7 @@ module.exports = {
   },
 
   'Check worldfile option': function(c) {
-    expected = [
+    const expected = [
       'No',
       'Yes'
     ].join('\n');
@@ -53,7 +53,7 @@ module.exports = {
     closeImageDownloadPanel(c);
     switchProjection(c, 'arctic');
     openImageDownloadPanel(c);
-    expected = [
+    const expected = [
       'JPEG',
       'PNG',
       'GeoTIFF']
@@ -65,7 +65,7 @@ module.exports = {
     closeImageDownloadPanel(c);
     switchProjection(c, 'antarctic');
     openImageDownloadPanel(c);
-    expected = [
+    const expected = [
       'JPEG',
       'PNG',
       'GeoTIFF']
