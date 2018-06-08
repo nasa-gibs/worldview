@@ -205,7 +205,8 @@ export function layersInfo(config, models, layer) {
             }
           } else if (layer.period === 'daily') {
             if (dateRange.dateInterval === '1' && dateRange.startDate === dateRange.endDate) {
-              rangeStartDate = rangeStartDate.getDate();
+              rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
+               rangeStartDate.getFullYear();
               $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
             } else {
               rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
