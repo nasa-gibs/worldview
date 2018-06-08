@@ -188,7 +188,7 @@ export function layersInfo(config, models, layer) {
             }
           } else if (layer.period === 'monthly') {
             if (dateRange.dateInterval === '1' && dateRange.startDate === dateRange.endDate) {
-              rangeStartDate = util.giveMonth(rangeStartDate);
+              rangeStartDate = util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
               $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
             } else {
               rangeStartDate = util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
