@@ -66,6 +66,76 @@ export function layersInfo(config, models, layer) {
     wvui.closeDialog();
   };
 
+  // this function takes an array of date ranges in this format:
+  // [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
+  // the array is first sorted, and then checked for any overlap
+  var dateOverlap = function (period, dateRanges) {
+    var sortedRanges = dateRanges.sort((previous, current) => {
+      // get the start date from previous and current
+      var previousTime = util.parseDate(previous.startDate);
+      previousTime = previousTime.getTime();
+      var currentTime = util.parseDate(current.startDate);
+      currentTime = currentTime.getTime();
+
+      // if the previous is earlier than the current
+      if (previousTime < currentTime) {
+        return -1;
+      }
+
+      // if the previous time is the same as the current time
+      if (previousTime === currentTime) {
+        return 0;
+      }
+
+      // if the previous time is later than the current time
+      return 1;
+    });
+
+    var result = sortedRanges.reduce((result, current, idx, arr) => {
+      // get the previous range
+      if (idx === 0) { return result; }
+      var previous = arr[idx - 1];
+
+      // check for any overlap
+      var previousEnd = util.parseDate(previous.endDate);
+      // Add dateInterval
+      if (previous.dateInterval > 1) {
+        if (period === 'daily') {
+          previousEnd = new Date(previousEnd.setTime(previousEnd.getTime() + previous.dateInterval * 86400000));
+        } else if (period === 'monthly') {
+          previousEnd = new Date(previousEnd.setMonth(previousEnd.getMonth() + previous.dateInterval));
+        } else if (period === 'yearly') {
+          previousEnd = new Date(previousEnd.setFullYear(previousEnd.getFullYear() + previous.dateInterval));
+        }
+      }
+      previousEnd = previousEnd.getTime();
+
+      var currentStart = util.parseDate(current.startDate);
+      currentStart = currentStart.getTime();
+
+      var overlap = (previousEnd >= currentStart);
+      // store the result
+      if (overlap) {
+        // yes, there is overlap
+        result.overlap = true;
+        // store the specific ranges that overlap
+        result.ranges.push({
+          previous: previous,
+          current: current
+        });
+      }
+
+      return result;
+    },
+    {
+      overlap: false,
+      ranges: []
+    });
+
+    // return the final results
+    return result;
+  };
+
   var renderDescription = function ($dialog) {
     var startDate, endDate;
     var $layerDescription = $('<div>', {
@@ -138,44 +208,38 @@ export function layersInfo(config, models, layer) {
       } else {
         $layerDateEnd.append('Present');
       }
-      if (layer.dateRanges && (layer.dateRanges).length > 1) {
-        $layerDateEnd.append($layerDateRangesButton.append(' <sup>*View Dates</sup>'));
-      }
       if (layer.id) $layerDateEnd.attr('id', layer.id + '-endDate');
       $layerDateRange.append($layerDateEnd);
       $layerDescription.append($layerDateRange);
     }
-
-    if (layer.dateRanges) {
+    // If the layer has date ranges...
+    if (layer.dateRanges && (layer.dateRanges).length > 1) {
       var firstDateRange = true;
-      if ((layer.dateRanges).length > 1) {
-        $layerDateWrap.append('<p>Date Ranges:</p>', $layerDateRanges);
-        $layerDescription.append($layerDateWrap);
-        lodashForEachRight(layer.dateRanges, function(dateRange) {
-          let rangeStartDate = util.parseDate(dateRange.startDate);
-          let rangeEndDate = util.parseDate(dateRange.endDate);
-          if (layer.period === 'subdaily') {
-            rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
-            rangeStartDate.getFullYear() + ' ' + util.pad(rangeStartDate.getHours(), 2, '0') + ':' +
-            util.pad(rangeStartDate.getMinutes(), 2, '0');
-            rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
-            rangeEndDate.getFullYear() + ' ' + util.pad(rangeEndDate.getHours(), 2, '0') + ':' +
-            util.pad(rangeEndDate.getMinutes(), 2, '0');
-            if (firstDateRange) {
-              if (layer.endDate === undefined) {
-                rangeEndDate = 'Present';
-              }
-              firstDateRange = false;
-            }
-            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
-             rangeEndDate + '</li>');
-          } else if (layer.period === 'yearly') {
+      $layerDateWrap.append('<p>Date Ranges:</p>', $layerDateRanges);
+      $layerDescription.append($layerDateWrap);
+
+      // Start creating an array of date ranges without overlapping dates //
+
+      var dateRanges = dateOverlap(layer.period, layer.dateRanges);
+
+      if (dateRanges.overlap === false) {
+        if (layer.dateRanges && (layer.dateRanges).length > 1) {
+          $layerDateEnd.append($layerDateRangesButton.append(' <sup>*View Dates</sup>'));
+        }
+        lodashForEachRight(layer.dateRanges, function(dateRange, index) {
+          let rangeStartDate = dateRange.startDate;
+          let rangeEndDate = dateRange.endDate;
+          rangeStartDate = util.parseDate(rangeStartDate);
+          rangeEndDate = util.parseDate(rangeEndDate);
+          if (layer.period === 'yearly') {
             if (dateRange.dateInterval === '1' && dateRange.startDate === dateRange.endDate) {
               rangeStartDate = rangeStartDate.getFullYear();
               $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
             } else {
               rangeStartDate = rangeStartDate.getFullYear();
-              rangeEndDate = new Date(rangeEndDate.setFullYear(rangeEndDate.getFullYear() + dateRange.dateInterval));
+              if (dateRange.dateInterval !== '1') {
+                rangeEndDate = new Date(rangeEndDate.setFullYear(rangeEndDate.getFullYear() + dateRange.dateInterval));
+              }
               rangeEndDate = rangeEndDate.getFullYear();
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
@@ -192,7 +256,9 @@ export function layersInfo(config, models, layer) {
               $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
             } else {
               rangeStartDate = util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
-              rangeEndDate = new Date(rangeEndDate.setMonth(rangeEndDate.getMonth() + dateRange.dateInterval));
+              if (dateRange.dateInterval !== '1') {
+                rangeEndDate = new Date(rangeEndDate.setMonth(rangeEndDate.getMonth() + dateRange.dateInterval));
+              }
               rangeEndDate = util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
@@ -209,11 +275,11 @@ export function layersInfo(config, models, layer) {
                rangeStartDate.getFullYear();
               $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + '</li>');
             } else {
-              rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
-               rangeStartDate.getFullYear();
-              rangeEndDate = new Date(rangeEndDate.setTime(rangeEndDate.getTime() + dateRange.dateInterval * 86400000));
-              rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
-               rangeEndDate.getFullYear();
+              rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
+              if (dateRange.dateInterval !== '1') {
+                rangeEndDate = new Date(rangeEndDate.setTime(rangeEndDate.getTime() + dateRange.dateInterval * 86400000));
+              }
+              rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
                   rangeEndDate = 'Present';
@@ -223,14 +289,30 @@ export function layersInfo(config, models, layer) {
               $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
                rangeEndDate + '</li>');
             }
+          } else if (layer.period === 'subdaily') {
+            rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' +
+            rangeStartDate.getFullYear() + ' ' + util.pad(rangeStartDate.getHours(), 2, '0') + ':' +
+            util.pad(rangeStartDate.getMinutes(), 2, '0');
+            rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' +
+            rangeEndDate.getFullYear() + ' ' + util.pad(rangeEndDate.getHours(), 2, '0') + ':' +
+            util.pad(rangeEndDate.getMinutes(), 2, '0');
+            if (firstDateRange) {
+              if (layer.endDate === undefined) {
+                rangeEndDate = 'Present';
+              }
+              firstDateRange = false;
+            }
+            $layerDateRanges.append('<li class="list-group-item">' + rangeStartDate + ' - ' +
+             rangeEndDate + '</li>');
           }
         });
-        $layerDateRangesButton.click(function(e) {
-          e.preventDefault();
-          $layerDateWrap.toggleClass('d-none');
-          $('#wv-layers-info-dialog').perfectScrollbar('update');
-        });
       }
+
+      $layerDateRangesButton.click(function(e) {
+        e.preventDefault();
+        $layerDateWrap.toggleClass('d-none');
+        $('#wv-layers-info-dialog').perfectScrollbar('update');
+      });
     }
 
     if (layer.description) {
