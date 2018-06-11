@@ -294,17 +294,20 @@ export function layersActive(models, ui, config) {
   var sizeProductsTab = function () {
     var $tabPanel = $('#products');
     var $tabFooter = $tabPanel.find('footer');
+    var footerIsVisible = $tabFooter.css('display') === 'block';
     var windowHeight = $(window).outerHeight(true);
     var tabBarHeight = $('#productsHolder-tabs').outerHeight(true);
-    var footerHeight = $tabFooter.outerHeight(true);
     var distanceFromTop = $('#productsHolder').offset().top;
     var overlaysHeight = $('#overlays').outerHeight(true);
     var baseLayersHeight = $('#baselayers').outerHeight(true);
     var layerGroupHeight = 26; // Height of layer group titles
     var contentHeight = overlaysHeight + baseLayersHeight + layerGroupHeight;
-    var tabPadding = $tabPanel.outerHeight(true) - $tabPanel.height();
-    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding + footerHeight;
-    var innerMaxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding - footerHeight;
+    var footerHeight = $tabFooter.outerHeight(true);
+    var tabPadding = 36;
+
+    if (footerIsVisible) { $tabPanel.css('padding-bottom', footerHeight); } else { $tabPanel.css('padding-bottom', 0); }
+    var maxHeight = windowHeight - tabBarHeight - distanceFromTop;
+    var innerMaxHeight = windowHeight - tabBarHeight - distanceFromTop - footerHeight;
 
     // If on a mobile device, use the native scroll bars
     if (!util.browser.small) {
@@ -316,12 +319,10 @@ export function layersActive(models, ui, config) {
       wvui.closeDialog();
     }
 
-    // FIXME: -10 here is the timeline's bottom position from page, fix
-    // after timeline markup is corrected to be loaded first
-    if (util.browser.small) {
-      maxHeight = windowHeight - tabBarHeight - footerHeight - distanceFromTop - 10 - 5;
+    if (!util.browser.small) {
+      maxHeight = maxHeight - 10 - 5;
+      innerMaxHeight = innerMaxHeight - tabPadding - footerHeight - 10 - 5;
     }
-
     $tabPanel.css('max-height', maxHeight);
 
     if ((innerMaxHeight <= contentHeight)) {

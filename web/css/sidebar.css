@@ -82,15 +82,3 @@
 #productsHolder .ps__scrollbar-y {
   background: #ccc;
 }
-
-#productsHolder #products {
-  padding-bottom: 36px;
-}
-
-#productsHolder #wv-events {
-  padding-bottom: 83px;
-}
-
-#productsHolder #wv-data {
-  padding-bottom: 36px;
-}

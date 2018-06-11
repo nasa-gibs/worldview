@@ -173,29 +173,31 @@ export function dataUi(models, ui, config) {
   var sizeDownloadTab = function () {
     var $tabPanel = $('#wv-data');
     var $tabFooter = $tabPanel.find('footer');
+    var footerIsVisible = $tabFooter.css('display') === 'block';
     var windowHeight = $(window).outerHeight(true);
     var tabBarHeight = $('ul#productsHolder-tabs').outerHeight(true);
     var footerHeight = $tabFooter.outerHeight(true);
     var distanceFromTop = $('#productsHolder').offset().top;
-    var timelineHeight = $('#timeline').outerHeight(true);
-    var tabPadding = $tabPanel.outerHeight(true) - $tabPanel.height();
 
-    // FIXME: -10 here is the timeline's bottom position from page, fix
-    // after timeline markup is corrected to be loaded first
-    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding + footerHeight;
-    var innerMaxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding - footerHeight;
+    var maxHeight = windowHeight - tabBarHeight - distanceFromTop;
+    var innerMaxHeight = windowHeight - tabBarHeight - distanceFromTop - footerHeight;
 
-    if (!util.browser.small) {
-      maxHeight = maxHeight - timelineHeight - 10 - 5;
+    if (footerIsVisible) {
+      $tabPanel.css('padding-bottom', footerHeight);
+      innerMaxHeight = innerMaxHeight - footerHeight;
+    } else {
+      $tabPanel.css('padding-bottom', 0);
     }
 
+    if (!util.browser.small) {
+      maxHeight = maxHeight - 10 - 5;
+      innerMaxHeight = innerMaxHeight - footerHeight - 10 - 5;
+    }
     $tabPanel.css('max-height', maxHeight);
 
     var childrenHeight = $('#wv-datacontent').outerHeight(true);
 
-    var isTallerThanContainer = childrenHeight > innerMaxHeight;
-
-    if (isTallerThanContainer) {
+    if ((innerMaxHeight <= childrenHeight)) {
       $('.wv-datalist').css('height', innerMaxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
         $('.wv-datalist').perfectScrollbar('update');
@@ -203,10 +205,12 @@ export function dataUi(models, ui, config) {
         $('.wv-datalist').perfectScrollbar();
         productsIsOverflow = true;
       }
-    } else if (productsIsOverflow) {
+    } else {
       $('.wv-datalist').css('height', '').css('padding-right', '');
-      $('.wv-datalist').perfectScrollbar('destroy');
-      productsIsOverflow = false;
+      if (productsIsOverflow) {
+        $('.wv-datalist').perfectScrollbar('destroy');
+        productsIsOverflow = false;
+      }
     }
   };
   self.onViewChange = function () {
