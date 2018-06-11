@@ -9,20 +9,18 @@ const walk = (dir) => {
   list.forEach(function(file) {
     file = dir + '/' + file;
     let stat = fs.statSync(file);
-    if (stat && stat.isDirectory()) { 
+    if (stat && stat.isDirectory()) {
       /* Recurse into a subdirectory */
       results = results.concat(walk(file));
-    } else { 
-      // results.push(file);
-      file_type = file.split(".").pop();
-      file_name = file.split(/(\\|\/)/g).pop();
-      if (file_type == "html") {
+    } else {
+      let fileType = file.split('.').pop();
+      if (fileType === 'html') {
         results.push(file);
       }
     }
   });
   return results;
-}
+};
 
 // get URLS from HTML in ./build/options using cheerio
 const getUrls = (htmlArray) => {
@@ -41,13 +39,13 @@ const getUrls = (htmlArray) => {
       let linkHref = $(link).attr('href');
 
       if (trackDoubles[linkRel] !== linkHref) {
-        scrapedHTML.push({[linkRel]: linkHref});
+        scrapedHTML.push({ [linkRel]: linkHref });
         trackDoubles[linkRel] = linkHref;
-      } 
-    })
+      }
+    });
   }
   return scrapedHTML;
-}
+};
 
 // get URLS from HTML files
 // scraped URLs are saved in an array of objects with a key value pair of link text and href:
