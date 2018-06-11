@@ -99,14 +99,13 @@ export function layersInfo(config, models, layer) {
       // check for any overlap
       var previousEnd = util.parseDate(previous.endDate);
       // Add dateInterval
-      if (previous.dateInterval > 1) {
-        if (period === 'daily') {
-          previousEnd = new Date(previousEnd.setTime(previousEnd.getTime() + previous.dateInterval * 86400000));
-        } else if (period === 'monthly') {
-          previousEnd = new Date(previousEnd.setMonth(previousEnd.getMonth() + previous.dateInterval));
-        } else if (period === 'yearly') {
-          previousEnd = new Date(previousEnd.setFullYear(previousEnd.getFullYear() + previous.dateInterval));
-        }
+      if (previous.dateInterval > 1 && period === 'daily') {
+        previousEnd = new Date(previousEnd.setTime(previousEnd.getTime() + ((previous.dateInterval * 86400000) - 86400000)));
+      }
+      if (period === 'monthly') {
+        previousEnd = new Date(previousEnd.setMonth(previousEnd.getMonth() + (previous.dateInterval - 1)));
+      } else if (period === 'yearly') {
+        previousEnd = new Date(previousEnd.setFullYear(previousEnd.getFullYear() + (previous.dateInterval - 1)));
       }
       previousEnd = previousEnd.getTime();
 
@@ -197,10 +196,19 @@ export function layersInfo(config, models, layer) {
           endDate.getFullYear() + ' ' + util.pad(endDate.getHours(), 2, '0') + ':' +
           util.pad(endDate.getMinutes(), 2, '0');
         } else if (layer.period === 'yearly') {
+          if (layer.dateRanges && layer.dateRanges.slice(-1)[0].dateInterval !== '1') {
+            endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
+          }
           endDate = endDate.getFullYear();
         } else if (layer.period === 'monthly') {
+          if (layer.dateRanges && layer.dateRanges.slice(-1)[0].dateInterval !== '1') {
+            endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
+          }
           endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
         } else {
+          if (layer.dateRanges && layer.dateRanges.slice(-1)[0].dateInterval !== '1') {
+            endDate = new Date(endDate.setTime(endDate.getTime() - 86400000));
+          }
           endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
           endDate.getFullYear();
         }
@@ -238,7 +246,7 @@ export function layersInfo(config, models, layer) {
             } else {
               rangeStartDate = rangeStartDate.getFullYear();
               if (dateRange.dateInterval !== '1') {
-                rangeEndDate = new Date(rangeEndDate.setFullYear(rangeEndDate.getFullYear() + dateRange.dateInterval));
+                rangeEndDate = new Date(rangeEndDate.setFullYear(rangeEndDate.getFullYear() + (dateRange.dateInterval - 1)));
               }
               rangeEndDate = rangeEndDate.getFullYear();
               if (firstDateRange) {
@@ -257,7 +265,7 @@ export function layersInfo(config, models, layer) {
             } else {
               rangeStartDate = util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
               if (dateRange.dateInterval !== '1') {
-                rangeEndDate = new Date(rangeEndDate.setMonth(rangeEndDate.getMonth() + dateRange.dateInterval));
+                rangeEndDate = new Date(rangeEndDate.setMonth(rangeEndDate.getMonth() + (dateRange.dateInterval - 1)));
               }
               rangeEndDate = util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
               if (firstDateRange) {
@@ -277,7 +285,7 @@ export function layersInfo(config, models, layer) {
             } else {
               rangeStartDate = rangeStartDate.getDate() + ' ' + util.giveMonth(rangeStartDate) + ' ' + rangeStartDate.getFullYear();
               if (dateRange.dateInterval !== '1') {
-                rangeEndDate = new Date(rangeEndDate.setTime(rangeEndDate.getTime() + dateRange.dateInterval * 86400000));
+                rangeEndDate = new Date(rangeEndDate.setTime(rangeEndDate.getTime() + ((dateRange.dateInterval * 86400000) - 86400000)));
               }
               rangeEndDate = rangeEndDate.getDate() + ' ' + util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
               if (firstDateRange) {
