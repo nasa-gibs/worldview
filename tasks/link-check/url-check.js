@@ -18,7 +18,7 @@ const requestCheck = async (urls) => {
     if (url[0] !== 'h') {
       continue;
     }
-    fetch(url, { timeout: 10000 })
+    await fetch(url, { timeout: 10000 })
       .then(async (res) => {
         let statusCode = await res.status;
         if (!parsedUrls['STATUSCODE'][statusCode]) {
@@ -27,8 +27,7 @@ const requestCheck = async (urls) => {
         parsedUrls['STATUSCODE'][statusCode].push({ [linkName]: url });
       })
       .then(sleeper(500))
-      .catch((err) => {
-        console.log(err);
+      .catch((err) => { // eslint-disable-line handle-callback-err
         parsedUrls['ERROR'].push({ [linkName]: url });
       });
   }

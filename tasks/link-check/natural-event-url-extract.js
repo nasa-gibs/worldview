@@ -36,7 +36,7 @@ const scrapeLinks = async (htmlLinks) => {
 
   for (let i = 0; i < htmlLinks.length; i++) {
     let htmlLink = htmlLinks[i];
-    fetch(htmlLink)
+    await fetch(htmlLink)
       .then(async (res) => {
         let status = await res.json();
         let urls = await findProp(status, ['url', 'link', 'source']);
@@ -52,7 +52,6 @@ const scrapeLinks = async (htmlLinks) => {
         }
       }).then(sleeper(500))
       .catch((err) => {
-        // will get inital errors if on - TURN ON FOR LOGGING/FURTHER DEBUGGING
         console.log(htmlLink, err);
       });
   }
