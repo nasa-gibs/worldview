@@ -1,21 +1,21 @@
 // *************************************************************************
 // Scrape Worldview then process URLs to organize by errors and status codes
-// 
+//
 // Current version 1.0 targets urls collected from:
 // ./build/options metadata and EONET natural events
 // *************************************************************************
 const getUrlStatusCodeCollection = require('./link-check/url-check');
-const getHtmlUrls = require('./link-check/html-url-extract.js')
+const getHtmlUrls = require('./link-check/html-url-extract.js');
 const getNaturalEventsUrls = require('./link-check/natural-event-url-extract.js');
 
 const fs = require('fs');
 const makeLine = (msg) => {
   return console.log(`${'-'.repeat(66)}
 \x1b[36m${msg}\x1b[0m`);
-}
+};
 
 // Prevent majority of TLS SSL related errors
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // Make get requests with URLs with node-fetch to check status codes and organize by errors and codes
 const organizeURLStatus = async (scrapedUrls) => {
@@ -35,7 +35,7 @@ const organizeURLStatus = async (scrapedUrls) => {
     makeLine(`Results file created: ${fileName}`);
     process.exit();
   });
-}
+};
 
 const main = async () => {
   makeLine('Starting by collecting urls to check...');
@@ -44,6 +44,6 @@ const main = async () => {
   // get metadata layers and about page urls
   let htmlUrls = await getHtmlUrls();
   organizeURLStatus(htmlUrls.concat(naturalEventsUrls));
-}
+};
 
 main();
