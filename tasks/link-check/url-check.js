@@ -15,28 +15,28 @@ const requestCheck = async (urls) => {
     let url = Object.values(urls[i])[0];
 
     // Skip for mailto email links
-    if(url[0] !== 'h') {
+    if (url[0] !== 'h') {
       continue;
     }
-    const status = await fetch(url, { timeout: 10000})
+    fetch(url, { timeout: 10000 })
       .then(async (res) => {
         let statusCode = await res.status;
-        if(!parsedUrls['STATUSCODE'][statusCode]) {
+        if (!parsedUrls['STATUSCODE'][statusCode]) {
           parsedUrls['STATUSCODE'][statusCode] = [];
         }
-        parsedUrls['STATUSCODE'][statusCode].push({[linkName]: url});
+        parsedUrls['STATUSCODE'][statusCode].push({ [linkName]: url });
       })
       .then(sleeper(500))
       .catch((err) => {
-        parsedUrls['ERROR'].push({[linkName]: url});
-      })
+        console.log(err);
+        parsedUrls['ERROR'].push({ [linkName]: url });
+      });
   }
-  return await parsedUrls;
-}
+  return parsedUrls;
+};
 
 // Get urls with errors/status codes organized into an object
-const	getURLStatusCodeCollection = async function(urls) {
-	// const parsedUrls = await getUrlLinks(urls);
+const getURLStatusCodeCollection = async function(urls) {
   const checkStatus = await requestCheck(urls);
   // Log out number of links with errors/status codes
   console.log(`
@@ -44,9 +44,9 @@ URL STATUSCODE RESULTS:
 ${'-'.repeat(66)}
   ERRORS: \x1b[31m${checkStatus['ERROR'].length}\x1b[0m
   STATUSCODE:`);
-  for(let code in checkStatus['STATUSCODE']) {
+  for (let code in checkStatus['STATUSCODE']) {
     let preColor = '\x1b[33m';
-    if (code == '200') {
+    if (code === '200') {
       preColor = '\x1b[32m';
     } else if (Number(code) >= 400) {
       preColor = '\x1b[31m';
