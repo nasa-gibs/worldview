@@ -105,7 +105,7 @@ export function layersSidebar(models, config) {
     // Resize after browser repaints
     setTimeout(function () {
       self.sizeEventsTab();
-    }, 100);
+    }, 400);
   };
 
   self.expandNow = function () {
@@ -129,17 +129,22 @@ export function layersSidebar(models, config) {
     var windowHeight = $(window).outerHeight(true);
     var tabBarHeight = $('ul#productsHolder-tabs').outerHeight(true);
     var distanceFromTop = $('#productsHolder').offset().top;
-    var timelineHeight = $('#timeline').outerHeight(true);
-    var footerHeight = footerIsVisible ? $tabFooter.outerHeight(true) : 0;
-    var tabPadding = $tabPanel.outerHeight(true) - $tabPanel.height();
+    var footerHeight = $tabFooter.outerHeight(true);
+    var tabPadding = 54;
 
-    // FIXME: -10 here is the timeline's bottom position from page, fix
-    // after timeline markup is corrected to be loaded first
-    var maxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding + footerHeight;
-    var innerMaxHeight = windowHeight - tabBarHeight - distanceFromTop - tabPadding - footerHeight;
+    var maxHeight = windowHeight - tabBarHeight - distanceFromTop;
+    var innerMaxHeight = windowHeight - tabBarHeight;
+
+    if (footerIsVisible) {
+      $tabPanel.css('padding-bottom', footerHeight);
+      innerMaxHeight = innerMaxHeight - footerHeight;
+    } else {
+      $tabPanel.css('padding-bottom', 0);
+    }
 
     if (!util.browser.small) {
-      maxHeight = maxHeight - timelineHeight - 10 - 5;
+      maxHeight = maxHeight - 10 - 5;
+      innerMaxHeight = innerMaxHeight - tabPadding - footerHeight - 10 - 5;
     }
     $tabPanel.css('max-height', maxHeight);
     $('.wv-eventslist').css('min-height', 1);
