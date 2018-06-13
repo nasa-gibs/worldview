@@ -42,6 +42,7 @@
 }
 
 .sidebar-panel div.wv-palettes-legend {
+  position: relative;
   margin-top: 0;
 }
 .sidebar-panel div .colorbar-case {
