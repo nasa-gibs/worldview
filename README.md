@@ -38,7 +38,7 @@ git clone https://github.com/nasa-gibs/worldview.git
 cd worldview
 npm install
 ```
-View the [Configuration](doc/configuration.md) section for information on how to install the offical EOSDIS Worldview configuration, or to add your own custom configuration.
+View the [Configuration](doc/configuration.md) section for information on how to install the official EOSDIS Worldview configuration, or to add your own custom configuration.
 
 ### Dependencies
 
