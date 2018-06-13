@@ -3,6 +3,7 @@
 /dist
 /node_modules
 /web/ext/node_modules/*
+/tasks/link-check/results
 python
 .python/
 .node-virtualenv/
