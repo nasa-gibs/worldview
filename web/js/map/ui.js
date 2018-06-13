@@ -113,7 +113,8 @@ export function mapui(models, config) {
 
     // Update the rotation buttons if polar projection to display correct value
     if (models.proj.selected.id !== 'geographic' && models.proj.selected.id !== 'webmerc') {
-      rotation.setResetButton(models.map.rotation);
+      let currentRotation = map.getView().getRotation();
+      rotation.setResetButton(currentRotation);
     }
 
     // If the browser was resized, the inactive map was not notified of
