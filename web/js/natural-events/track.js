@@ -43,8 +43,9 @@ export default function naturalEventsTrack (models, ui, config) {
         }
       }
     });
+    // reset track on change to resolution or rotation
     map.getView().on('propertychange', function(e) {
-      if (e.key === 'resolution') {
+      if (e.key === 'resolution' || e.key === 'rotation') {
         self.trackDetails = (self.trackDetails.id) ? self.removeTrack(map, self.trackDetails) : {};
       } else if (e.key === 'center') {
         if (self.active) removeOldPoints(map, self.trackDetails.pointArray);
@@ -332,6 +333,7 @@ var updateSelection = function (newDate) {
  * @return {Object} Openlayers overlay Object
  */
 var createArrows = function (lineSegmentCoords, map) {
+  const currentRotation = map.getView().getRotation();
   var overlayEl = document.createElement('div');
   var innerEl = document.createElement('div');
 
@@ -346,7 +348,7 @@ var createArrows = function (lineSegmentCoords, map) {
   const dy = pixel2[1] - pixel1[1];
   const pixelMidPoint = [(0.5 * (dx)) + pixel1[0], (0.5 * (dy)) + pixel1[1]];
   const distanceInPixels = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-  const angleRadians = Math.atan2(dyCoord, dxCoord);
+  const angleRadians = Math.atan2(dyCoord, dxCoord) - currentRotation;
   const angleDegrees = -angleRadians * (180 / Math.PI);
   const lengthOfArrowDiv = distanceInPixels - clusterPadding;
 
