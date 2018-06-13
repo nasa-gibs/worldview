@@ -3,6 +3,7 @@ const fs = require('fs');
 const browserify = require('browserify');
 const watchify = require('watchify');
 const minimist = require('minimist');
+const uglifyjs = require('uglify-js');
 
 const argv = minimist(process.argv.slice(2));
 const isProduction = process.env.NODE_ENV === 'production';
@@ -31,11 +32,16 @@ var bundler = browserify(entryPoint, {
   cache: {}, // Required for watchify
   packageCache: {}, // Required for watchify
   plugin: [isWatching ? watchify : null]
+}).transform('envify', { // Replace env variables with strings - allows deadcode removal with uglifyify (below) and unglifyjs (see npm script "build:js")
+  NODE_ENV: process.env.NODE_ENV,
+  global: true
 }).transform('babelify', {
   presets: ['env']
 }).transform('browserify-shim', {
   global: true
-}).transform('uglifyify'); // With sourcemaps turned on, it's ok to uglify in dev
+}).transform('uglifyify', { // With sourcemaps turned on, it's ok to uglify in dev
+  global: true
+});
 
 function bundle() {
   const begin = Date.now();
@@ -45,7 +51,37 @@ function bundle() {
     this.emit('end');
   }).pipe(stream);
   stream.on('finish', function() {
-    console.log(outputPath + ' written in ' + (Date.now() - begin) / 1000 + 's');
+    // if production - read bundle file, uglify-js bundle, and rewrite file
+    if (isProduction) {
+      const uglifyOptions = {
+        toplevel: true,
+        compress: {
+          dead_code: true,
+          conditionals: true,
+          booleans: true,
+          unused: true,
+          if_return: true,
+          join_vars: true
+        },
+        mangle: true
+      };
+
+      fs.readFile(outputPath, 'utf8', function(err, data) {
+        if (err) {
+          console.log(err);
+        }
+        var code = uglifyjs.minify(data, uglifyOptions);
+        fs.writeFile(outputPath, code.code, function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(outputPath + ' written in ' + (Date.now() - begin) / 1000 + 's');
+          }
+        });
+      });
+    } else {
+      console.log(outputPath + ' written in ' + (Date.now() - begin) / 1000 + 's');
+    }
   });
 }
 
