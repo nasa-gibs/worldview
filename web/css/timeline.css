@@ -9,10 +9,11 @@ button:focus {
   background: rgb(40, 40, 40);
   background: rgba(40, 40, 40, 0.9);
   border-radius: 5px;
-  display: inline-block;
+  display: flex;
+  flex-flow: row nowrap;
   margin-left: 10px;
   margin-right: 10px;
-  min-height: 65px;
+  height: 65px;
   bottom: 10px;
 }
 
@@ -133,7 +134,8 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header {
   margin-top: 2px;
-  width: 310px;
+  min-width: 310px;
+  display: inline-block;
 }
 
 #timeline-header.subdaily {
@@ -354,11 +356,6 @@ g.plot rect.data-bar-invisible {
   fill: #333;
 }
 
-#timeline-footer,
-#timeline-header {
-  float: left;
-}
-
 #timeline-header .animate-button .wv-animate {
   color: #fff;
   font-size: 2.5em;
@@ -379,7 +376,6 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-footer {
-  height: 65px;
   border-left: 1px solid #666;
   border-right: 1px solid #666;
 }
@@ -500,7 +496,7 @@ g.plot rect.data-bar-invisible {
   position: absolute;
   top: 0;
   right: 0;
-  height: 65px;
+  height: 64px;
   width: 20px;
   cursor: pointer;
   border-left: 1px solid #1a1a1a;
