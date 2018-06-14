@@ -216,7 +216,8 @@
 }
 .gif-results-dialog-case .gif-results-dialog,
 .gif-results-dialog-case img {
-  display: inline-block;
+  display: block;
+  float: left;
 }
 
 .gif-results-dialog-case .gif-results-dialog {
@@ -224,10 +225,10 @@
   text-align: center;
   color: #444;
   vertical-align: top;
-  margin-left: 10px;
   border-radius: 6px;
   font-size: 12px;
   width: 162px;
+  margin-left: 10px;
 }
 
 .gif-results-dialog-case .gif-results-dialog b {
