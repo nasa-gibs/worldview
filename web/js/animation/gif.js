@@ -625,7 +625,7 @@ export function animationGif(models, config, ui) {
         '</div>' +
         '</div>';
       var $dialogBodyCase = $('<div></div>');
-      $dialogBodyCase.addClass('gif-results-dialog-case');
+      $dialogBodyCase.addClass('gif-results-dialog-case clearfix');
       $dialogBodyCase.css('padding', '10px 0');
       $dialogBodyCase.append(animatedImage);
       $dialogBodyCase.append($catalog);
@@ -642,7 +642,7 @@ export function animationGif(models, config, ui) {
       $imgDialog.dialog({
         dialogClass: 'wv-panel wv-gif-results',
         title: 'Your GIF',
-        width: animatedImage.width + 198,
+        width: animatedImage.width + 204,
         resizable: false,
         maxWidth: window.innerWidth,
         maxHeight: window.innerHeight,
