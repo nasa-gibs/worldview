@@ -375,6 +375,10 @@ g.plot rect.data-bar-invisible {
   color: #ccc;
 }
 
+#timeline-header, #timeline-footer {
+  float: left;
+}
+
 #timeline-footer {
   border-left: 1px solid #666;
   border-right: 1px solid #666;
