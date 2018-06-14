@@ -555,7 +555,7 @@ var dataUiDownloadListPanel = function (config, model) {
     $('a.curl')
       .click(showCurlPage);
 
-    $dialog.find('.collapse')
+    $dialog.find('.dd-collapse')
       .accordion({
         collapsible: true,
         active: false,
@@ -813,7 +813,7 @@ var dataUiDownloadListPanel = function (config, model) {
 
   var bulkDownloadText = function () {
     var bulk =
-      '<div class=\'bulk collapse\'>' +
+      '<div class=\'bulk dd-collapse\'>' +
       '<h5>Bulk Download</h5>' +
       '<ul class=\'BulkDownload\'>' +
       '<li><a class=\'wget\' href=\'#\'>List of Links</a>: ' +
