@@ -58,6 +58,7 @@ export function palettesLegend(spec) {
 
   var renderScale = function ($legendPanel, legend, index, layerId) {
     var $container = $('<div></div>')
+      .attr('id', legend.id)
       .addClass('wv-palettes-legend')
       .attr('data-index', index);
     var $colorBarCase = $('<div></div>')
