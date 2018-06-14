@@ -564,10 +564,8 @@ export function animationGif(models, config, ui) {
       var downloadSize = lodashRound((blob.size / 1024 * 0.001), 2);
 
       // Create download link and apply button CSS
-      var $download = $('<a><span class=ui-button-text>Download</span></a>')
-        .attr('type', 'button')
-        .attr('role', 'button')
-        .attr('class', 'ui-button ui-widget ui-state-default ui-button-text-only')
+      var $download = $('<button><span class=ui-button-text>Download</span></button>')
+        .attr('class', 'wv-button')
         .hover(function() {
           $(this)
             .addClass('ui-state-hover');
