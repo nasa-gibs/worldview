@@ -266,7 +266,7 @@ export function MapRunningData(models) {
     if (legend.type === 'continuous' || legend.type === 'discrete') {
       paletteInfo = self.getDataLabel(legend, hex);
       if (paletteInfo) {
-        self.setLayerValue(layerId, paletteInfo);
+        self.setLayerValue(layerId, legend.id, paletteInfo);
         self.activeLayers.push(layerId);
       }
     } else if (legend.type === 'classification') {
@@ -290,8 +290,8 @@ export function MapRunningData(models) {
    *
    */
   self.remove = function (id) {
-    var $palette = $('#' + id);
-    var $paletteCase = $palette.parent();
+    var $palette = $('#' + id + '_panel');
+    var $paletteCase = $palette.children('.wv-palettes-legend');
     $paletteCase.removeClass('wv-running');
     $palette.removeClass('wv-running');
   };
@@ -363,7 +363,7 @@ export function MapRunningData(models) {
    * @return {Void}
    *
    */
-  self.setLayerValue = function (id, data) {
+  self.setLayerValue = function (id, legendId, data) {
     var $palette;
     var $paletteCase;
     var $paletteWidth;
@@ -380,7 +380,7 @@ export function MapRunningData(models) {
     marginLeft = 3;
 
     $palette = $('#' + id + '_panel .wv-palettes-colorbar');
-    $paletteCase = $palette.parent().parent();
+    $paletteCase = $('#' + legendId);
     $paletteWidth = $palette.width();
     $paletteCaseWidth = $paletteCase.outerWidth();
     $paletteLabel = $paletteCase.find('.wv-running-label');
