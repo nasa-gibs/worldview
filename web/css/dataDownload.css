@@ -259,6 +259,14 @@
   color: #000;
 }
 
+#wv-datacontent .dl-group .head {
+  line-height: 14px;
+}
+
+#wv-datacontent .dl-group .head input {
+  margin: 4px 4px 2px 0;
+}
+
 .wv-datacategory {
   list-style: none;
 }
