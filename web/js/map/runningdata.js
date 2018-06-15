@@ -266,7 +266,8 @@ export function MapRunningData(models) {
     if (legend.type === 'continuous' || legend.type === 'discrete') {
       paletteInfo = self.getDataLabel(legend, hex);
       if (paletteInfo) {
-        self.setLayerValue(layerId, legend.id, paletteInfo);
+        let legendIdentifier = layerId + '-' + legend.id;
+        self.setLayerValue(layerId, legendIdentifier, paletteInfo);
         self.activeLayers.push(layerId);
       }
     } else if (legend.type === 'classification') {
