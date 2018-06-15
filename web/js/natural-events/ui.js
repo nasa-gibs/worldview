@@ -76,10 +76,18 @@ export default function naturalEventsUI (models, ui, config, request) {
       if (tab === 'events') {
         model.active = true;
 
+        if (self.markers.length === 0) {
+          createEventList();
+        }
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
         self.markers = naturalEventMarkers.draw();
+
+        var isZoomed = Math.floor(view.getZoom()) >= 3;
+        if (isZoomed || models.proj.selected.id !== 'geographic') {
+          self.filterEventList();
+        }
         ui.sidebar.sizeEventsTab();
 
         // check if selected event is in changed projection
