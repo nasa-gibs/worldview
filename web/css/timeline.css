@@ -13,7 +13,7 @@ button:focus {
   flex-flow: row nowrap;
   margin-left: 10px;
   margin-right: 10px;
-  height: 65px;
+  height: 67px;
   bottom: 10px;
 }
 
@@ -202,7 +202,7 @@ g.plot rect.data-bar-invisible {
   border: 0;
   font-family: 'Roboto Mono', monospace;
   line-height: 1.2em;
-  vertical-align: middle;
+  vertical-align: baseline;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -399,7 +399,6 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-footer svg > g {
-  overflow: hidden;
   visibility: visible;
 }
 
