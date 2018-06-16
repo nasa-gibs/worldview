@@ -25,7 +25,7 @@ export function animationModel(models, config) {
    * @returns {void}
    *
    */
-  self.load = function (state, errors) {
+  self.load = function(state, errors) {
     self.rangeState = self.rangeState || {};
     // self.rangeState.playing = false;
     // if(state.a) {
@@ -63,7 +63,7 @@ export function animationModel(models, config) {
    * @returns {void}
    *
    */
-  self.toggleActive = function () {
+  self.toggleActive = function() {
     if (self.rangeState.state === 'off') {
       self.rangeState.state = 'on';
     } else {
@@ -81,7 +81,7 @@ export function animationModel(models, config) {
    *
    */
 
-  self.add = function (arra) {
+  self.add = function(arra) {
     // var updatedState = _.clone(self.state);
     // arra.forEach(function(prop) {
     //     updatedState[prop.id] = prop.value;
@@ -98,7 +98,7 @@ export function animationModel(models, config) {
    * @returns {void}
    *
    */
-  self.save = function (state) {
+  self.save = function(state) {
     var rangeState = self.rangeState;
     // state.a = state.a || [];
     // newState = {id: rangeState.state};
@@ -131,4 +131,4 @@ export function animationModel(models, config) {
     // state.a.push(newState);
   };
   return self;
-};
+}

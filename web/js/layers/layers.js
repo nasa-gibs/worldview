@@ -41,9 +41,9 @@ var parse11 = function (state, errors, config) {
 };
 
 // Permalink version 1.2
-var parse12 = function (state, errors, config) {
+var parse12 = function (stateObj, errors, config) {
   var parts;
-  var str = state.l;
+  var str = stateObj;
   // Split by layer definitions (commas not in parens)
   var layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
   var lstates = [];
@@ -81,12 +81,18 @@ var parse12 = function (state, errors, config) {
     }
     lstates.push(lstate);
   });
-  state.l = lstates;
+  return lstates;
 };
 
 export function parse(state, errors, config) {
   if (state.l) {
-    parse12(state, errors, config);
+    state.l = parse12(state.l, errors, config);
+  }
+  if (state.l1) {
+    state.l1 = parse12(state.l1, errors, config);
+  }
+  if (state.l2) {
+    state.l2 = parse12(state.l2, errors, config);
   }
   if (state.products) {
     parse11(state, errors, config);

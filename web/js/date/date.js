@@ -5,16 +5,24 @@ export function parse(state, errors) {
     state.t = state.time;
     delete state.time;
   }
-  if (state.t) {
+  var tryCatchDate = function(stateDate) {
     try {
-      state.t = util.parseDateUTC(state.t);
+      state.t = util.parseDateUTC(stateDate);
     } catch (error) {
-      delete state.t;
       errors.push({
-        message: 'Invalid date: ' + state.t,
+        message: 'Invalid date: ' + stateDate,
         cause: error
       });
     }
+  };
+  if (state.t) {
+    state.t = tryCatchDate(state.t);
+  }
+  if (state.t1) {
+    state.t1 = tryCatchDate(state.t1);
+  }
+  if (state.t2) {
+    state.t2 = tryCatchDate(state.t2);
   }
 
   if (state.now) {

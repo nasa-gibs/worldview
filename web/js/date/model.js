@@ -6,6 +6,9 @@ export function dateModel(config, spec) {
   var self = {};
   self.events = util.events();
   self.selected = null;
+  self.selectedA = null;
+  self.selectedB = null;
+  self.activeDate = 'selected';
 
   self.monthAbbr = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
     'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -13,25 +16,33 @@ export function dateModel(config, spec) {
   var init = function () {
     var initial = spec.initial || util.now();
     self.select(initial);
+    if (config.features.compare) {
+      self.select(initial, 'selectedA');
+      self.select(util.dateAdd(initial, 'day', -5), 'selectedB');
+    }
   };
 
   self.string = function () {
     return util.toISOStringDate(self.selected);
   };
 
-  self.select = function (date) {
+  self.select = function (date, selection) {
+    selection = selection || 'selected';
     date = self.clamp(date);
     var updated = false;
-    if (!self.selected || date.getTime() !== self.selected.getTime()) {
-      self.selected = date;
-      self.events.trigger('select', date);
+    if (!self[selection] || date.getTime() !== self[selection].getTime()) {
+      self[selection] = date;
+      if (selection === self.activeDate) {
+        self.events.trigger('select', date);
+      }
       updated = true;
     }
     return updated;
   };
 
-  self.add = function (interval, amount) {
-    self.select(util.dateAdd(self.selected, interval, amount));
+  self.add = function (interval, amount, selection) {
+    selection = selection || self.selected;
+    self.select(util.dateAdd(selection, interval, amount), selection);
   };
 
   self.clamp = function (date) {
@@ -85,12 +96,19 @@ export function dateModel(config, spec) {
 
   self.maxZoom = null;
 
-  self.save = function (state) {
-    state.t = self.selected.toISOString()
+  var dateToStringForUrl = function(date) {
+    return date.toISOString()
       .split('T')[0] + '-' + 'T' + self.selected.toISOString()
       .split('T')[1].slice(0, -5) + 'Z';
+  };
+  self.save = function (state) {
+    state.t = dateToStringForUrl(self.selected);
     if (self.selectedZoom) {
       state.z = self.selectedZoom.toString();
+    }
+    if (config.features.compare) {
+      state.t1 = dateToStringForUrl(self.selectedA);
+      state.t2 = dateToStringForUrl(self.selectedB);
     }
   };
 
@@ -100,6 +118,12 @@ export function dateModel(config, spec) {
     }
     if (state.z) {
       self.selectedZoom = Number(state.z);
+    }
+    if (state.t1) {
+      self.select(state.t1, 'selectedA');
+    }
+    if (state.t2) {
+      self.select(state.t2, 'selectedB');
     }
   };
   init();
