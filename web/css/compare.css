@@ -1,0 +1,38 @@
+.ab-swipe-line {
+  height: 100%;
+  padding: 0 2px 0 2px;
+  position: absolute;
+  top: 0;
+  width: 1px;
+  background: white;
+}
+.ab-swipe-dragger {
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  left: -12px;
+  border-radius: 50%;
+  color: black;
+  background: white;
+  text-align: center;
+}
+.ab-swipe-dragger:hover {
+  transform: scale(1.2);
+  cursor: grabbing;
+}
+.ab-swipe-dragger i {
+  font-size: 18px;
+  margin-top: 7px;
+}
+.ab-slider-case {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  bottom: 25%;
+  width: 150px;
+  text-align: center;
+  background: rgba(40, 40, 40, 0.85);
+}
