@@ -103,7 +103,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
       valid: true,
       resolutions: resolutions,
       fileTypes: fileTypes,
-      maxImageSize: '5000px x 5000px'
+      maxImageSize: '8500px x 8500px'
     };
 
     self.reactComponent = renderPanel(options, htmlElements);
@@ -291,7 +291,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
     if (imgHeight === 0 && imgWidth === 0) {
       return false;
     }
-    if (imgHeight > 5000 || imgWidth > 5000) {
+    if (imgHeight > 8500 || imgWidth > 8500) {
       return false;
     }
     return true;
