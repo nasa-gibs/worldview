@@ -60,7 +60,7 @@
 }
 
 .wv-link [data-tooltip-length="xsmall"]::after {
-  width: 40px;
+  width: 75px;
 }
 
 .wv-link .copy-btn {
