@@ -68,7 +68,6 @@ export function timelineInput(models, config, ui) {
         }
       })
       .mouseup(stopper);
-
     $(document)
       .mouseout(stopper)
       .keydown(function (event) {
@@ -127,7 +126,6 @@ export function timelineInput(models, config, ui) {
     $buttons.unbind();
     $oneIntervalButtons.unbind();
     $tenIntervalButtons.unbind();
-
     // FIXME: Quick fix for fixing the propagation
     // of events with arrow keys and input field
     $oneIntervalButtons.keydown(function (event) {
@@ -272,10 +270,11 @@ export function timelineInput(models, config, ui) {
    * @return {void}
    */
   var animateByIncrement = function(delta, increment) {
+    var endDate = models.layers.lastDate();
     self.delta = Math.abs(delta);
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
-      if (tl.data.start() <= nextTime <= util.now()) {
+      if (tl.data.start() <= nextTime <= endDate) {
         models.date.add(increment, delta);
       };
       animator = setTimeout(animate, self.delay);
@@ -352,6 +351,7 @@ export function timelineInput(models, config, ui) {
 
   // TODO: Replace with WVC
   var validateInput = function (event) {
+    var endDate = models.layers.lastDate();
     var kc = event.keyCode || event.which;
     var entered = (kc === 13) || (kc === 9); // carriage return or horizontal tab
     if (event.type === 'focusout' || entered) {
@@ -422,7 +422,7 @@ export function timelineInput(models, config, ui) {
           break;
       }
       if ((selectedDateObj > tl.data.start()) &&
-        (selectedDateObj <= util.now())) {
+        (selectedDateObj <= endDate)) {
         var parent = selected.parent();
         var sib = parent.next('div.input-wrapper.selectable')
           .find('input.button-input-group');
@@ -496,6 +496,7 @@ export function timelineInput(models, config, ui) {
     var ms = date || new Date(model.selected);
     var nd = new Date(ms.setUTCDate(ms.getUTCDate() + 1));
     var pd = new Date(ms.setUTCDate(ms.getUTCDate() - 1));
+    var endDate = models.layers.lastDate();
 
     // Update fields
     $('#year-input-group')
@@ -525,9 +526,9 @@ export function timelineInput(models, config, ui) {
     }
 
     // Disable arrows if nothing before/after selection
-    if ((model.selectedZoom === 4) && ms >= util.now()) {
+    if ((model.selectedZoom === 4) && ms >= endDate) {
       $incrementBtn.addClass('button-disabled');
-    } else if ((model.selectedZoom !== 4) && nd > util.now()) {
+    } else if ((model.selectedZoom !== 4) && nd > endDate) {
       $incrementBtn.addClass('button-disabled');
     } else {
       $incrementBtn.removeClass('button-disabled');
