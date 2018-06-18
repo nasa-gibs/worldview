@@ -199,3 +199,7 @@ button[data-tooltip] {
   display: table;
   clear: both;
 }
+
+input[type="checkbox"] {
+  margin: 3px 0.5ex;
+}
