@@ -167,7 +167,7 @@
 .track-marker-date {
   display: none;
   position: absolute;
-  width: 74px;
+  width: 95px;
   top: 20px;
   left: -34px;
   padding: 4px;
@@ -182,7 +182,7 @@
 .cluster-track-marker-date {
   top: 28px;
   left: -29px;
-  width: 96px;
+  width: 110px;
 }
 .track-marker-date::before {
   position: absolute;
