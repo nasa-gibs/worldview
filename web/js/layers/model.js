@@ -137,9 +137,9 @@ export function layersModel(models, config) {
         let today = util.today()
           .getTime();
         if (end > today) {
-          max = end;
+          max = Math.max(max, end);
         } else {
-          max = today;
+          max = Math.max(max, today);
         }
       }
       // If there is a start date but no end date, this is a

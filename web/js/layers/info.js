@@ -22,7 +22,6 @@ export function layersInfo(config, models, layer) {
       .attr('id', 'wv-layers-info-dialog')
       .attr('data-layer', layer.id);
     renderDescription($dialog);
-
     names = models.layers.getTitles(layer.id);
     $dialog.dialog({
       dialogClass: 'wv-panel',
@@ -192,22 +191,26 @@ export function layersInfo(config, models, layer) {
 
       if (layer.endDate) {
         endDate = util.parseDate(layer.endDate);
-        if (layer.period === 'subdaily') {
-          endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
-          endDate.getFullYear() + ' ' + util.pad(endDate.getHours(), 2, '0') + ':' +
-          util.pad(endDate.getMinutes(), 2, '0');
-        } else if (layer.period === 'yearly') {
-          endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
-          endDate = endDate.getFullYear();
-        } else if (layer.period === 'monthly') {
-          endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
-          endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
+        if (endDate <= util.today() && !layer.inactive) {
+          endDate = 'Present';
         } else {
-          if (layer.dateRanges && layer.dateRanges.slice(-1)[0].dateInterval !== '1') {
-            endDate = new Date(endDate.setTime(endDate.getTime() - 86400000));
+          if (layer.period === 'subdaily') {
+            endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
+            endDate.getFullYear() + ' ' + util.pad(endDate.getHours(), 2, '0') + ':' +
+            util.pad(endDate.getMinutes(), 2, '0');
+          } else if (layer.period === 'yearly') {
+            endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
+            endDate = endDate.getFullYear();
+          } else if (layer.period === 'monthly') {
+            endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
+            endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
+          } else {
+            if (layer.dateRanges && layer.dateRanges.slice(-1)[0].dateInterval !== '1') {
+              endDate = new Date(endDate.setTime(endDate.getTime() - 86400000));
+            }
+            endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
+            endDate.getFullYear();
           }
-          endDate = endDate.getDate() + ' ' + util.giveMonth(endDate) + ' ' +
-          endDate.getFullYear();
         }
         $layerDateEnd.html(endDate);
       } else {
@@ -249,6 +252,8 @@ export function layersInfo(config, models, layer) {
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
                   rangeEndDate = 'Present';
+                } else if (util.parseDate(layer.endDate) <= util.today() && !layer.inactive) {
+                  rangeEndDate = 'Present';
                 }
                 firstDateRange = false;
               }
@@ -267,6 +272,8 @@ export function layersInfo(config, models, layer) {
               rangeEndDate = util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
+                  rangeEndDate = 'Present';
+                } else if (util.parseDate(layer.endDate) <= util.today() && !layer.inactive) {
                   rangeEndDate = 'Present';
                 }
                 firstDateRange = false;
@@ -288,6 +295,8 @@ export function layersInfo(config, models, layer) {
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
                   rangeEndDate = 'Present';
+                } else if (util.parseDate(layer.endDate) <= util.today() && !layer.inactive) {
+                  rangeEndDate = 'Present';
                 }
                 firstDateRange = false;
               }
@@ -303,6 +312,8 @@ export function layersInfo(config, models, layer) {
             util.pad(rangeEndDate.getMinutes(), 2, '0');
             if (firstDateRange) {
               if (layer.endDate === undefined) {
+                rangeEndDate = 'Present';
+              } else if (util.parseDate(layer.endDate) <= util.today() && !layer.inactive) {
                 rangeEndDate = 'Present';
               }
               firstDateRange = false;

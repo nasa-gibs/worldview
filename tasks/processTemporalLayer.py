@@ -60,7 +60,8 @@ def process_temporal(wv_layer, value):
                     date_range_end.append(endTimeParse.strftime("%Y-%m-%d") + "T" + endTimeParse.strftime("%H:%M:%S") + "Z")
                 range_interval.append(re.search(r'\d+', times[2]).group())
             wv_layer["startDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z"
-            wv_layer["endDate"] = start_date.strftime("%Y-%m-%d") + "T" + start_date.strftime("%H:%M:%S") + "Z"
+            if end_date != datetime.min:
+                wv_layer["endDate"] = end_date.strftime("%Y-%m-%d") + "T" + end_date.strftime("%H:%M:%S") + "Z"
             if date_range_start and date_range_end:
                 wv_layer["dateRanges"] = [{"startDate": s, "endDate": e, "dateInterval": i} for s, e, i in zip(date_range_start, date_range_end, range_interval)]
     except ValueError:
