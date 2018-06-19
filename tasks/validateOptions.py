@@ -129,9 +129,6 @@ for layer_id in wv["layers"].keys():
         layer = process_temporal(layer, layer["temporal"])
     if layer.get("inactive", False):
         pass
-    else:
-        if "endDate" in layer:
-            del layer["endDate"]
 
     if "startDate" in layer:
         startTime = layer["startDate"].replace('T', ' ').replace('Z', '')
