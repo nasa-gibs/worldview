@@ -150,11 +150,11 @@ fixtures.config = function () {
 fixtures.models = function (config) {
   var models = {};
 
-  models.date = dateModel(config);
   models.proj = projectionModel(config);
   models.layers = layersModel(models, config);
   models.palettes = palettesModel(models, config);
   models.map = mapModel(models, config);
+  models.date = dateModel(models, config);
 
   return models;
 };
