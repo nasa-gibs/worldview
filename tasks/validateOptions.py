@@ -67,7 +67,6 @@ if tolerant:
     warn("Validation enforcement disabled")
 
 start_date = datetime.max
-end_date = datetime.min
 
 for layer_id in wv["layers"].keys():
     layer = wv["layers"][layer_id]

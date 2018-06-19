@@ -26,9 +26,9 @@ buster.testCase('wv.data.model', {
     this.models.proj.selected = {
       id: 'geographic'
     };
-    this.models.date = wv.date.model(this.config);
     this.models.layers = wv.layers.model(this.models, this.config);
     this.models.layers.add('layer1');
+    this.models.date = wv.date.model(this.models, this.config);
     this.model = wv.data.model(this.models, this.config);
     this.errors = [];
   },

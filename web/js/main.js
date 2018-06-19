@@ -194,9 +194,9 @@ window.onload = () => {
     models.proj = projectionModel(config);
     models.palettes = palettesModel(models, config);
     models.layers = layersModel(models, config);
-    models.date = dateModel(config, {
+    models.date = dateModel(models, config, {
       initial: initialDate
-    }, models);
+    });
     models.map = mapModel(models, config);
     models.link = linkModel(config);
 
