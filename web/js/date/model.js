@@ -1,5 +1,3 @@
-import lodashEach from 'lodash/each';
-import lodashFind from 'lodash/find';
 import util from '../util/util';
 
 export function dateModel(models, config, spec) {
@@ -37,7 +35,7 @@ export function dateModel(models, config, spec) {
   };
 
   self.clamp = function (date) {
-    var endDate = self.lastDate(spec);
+    var endDate = models.layers.lastDate(spec);
     if (self.maxZoom > 3) {
       if (date > util.now()) {
         date = util.now();
@@ -56,84 +54,8 @@ export function dateModel(models, config, spec) {
     return date;
   };
 
-  self.dateRange = function (spec) {
-    spec = spec || {};
-    var layers = (spec.layer) ? [lodashFind(models.layers.active, {
-      id: spec.layer
-    })]
-      : models.layers.active;
-    var ignoreRange =
-      config.parameters &&
-      (config.parameters.debugGIBS || config.parameters.ignoreDateRange);
-    if (ignoreRange) {
-      return {
-        start: new Date(Date.UTC(1970, 0, 1)),
-        end: util.now()
-      };
-    }
-    var min = Number.MAX_VALUE;
-    var max = 0;
-    var range = false;
-    lodashEach(layers, function (def) {
-      if (def.startDate) {
-        range = true;
-        var start = util.parseDateUTC(def.startDate)
-          .getTime();
-        min = Math.min(min, start);
-      }
-      // For now, we assume that any layer with an end date is
-      // an ongoing product unless it is marked as inactive.
-      if (def.inactive && def.endDate) {
-        range = true;
-        let end = util.parseDateUTC(def.endDate)
-          .getTime();
-        max = Math.max(max, end);
-      } else if (def.endDate) {
-        range = true;
-        let end = util.parseDateUTC(def.endDate)
-          .getTime();
-        let today = util.today()
-          .getTime();
-        if (end > today) {
-          max = Math.max(max, end);
-        } else {
-          max = Math.max(max, today);
-        }
-      }
-      // If there is a start date but no end date, this is a
-      // product that is currently being created each day, set
-      // the max day to today.
-      if (def.startDate && !def.endDate) {
-        max = util.now()
-          .getTime();
-      }
-    });
-    if (range) {
-      if (max === 0) {
-        max = util.now()
-          .getTime();
-      }
-      return {
-        start: new Date(min),
-        end: new Date(max)
-      };
-    }
-  };
-
-  self.lastDate = function (spec) {
-    var endDate;
-    var layersDateRange = self.dateRange(spec);
-    var now = util.today();
-    if (layersDateRange && layersDateRange.end > now) {
-      endDate = layersDateRange.end;
-    } else {
-      endDate = util.today();
-    }
-    return endDate;
-  };
-
   self.isValid = function (date) {
-    var endDate = self.lastDate(spec);
+    var endDate = models.layers.lastDate(spec);
     if (self.maxZoom > 3) {
       if (date > util.now()) {
         return false;
@@ -160,7 +82,7 @@ export function dateModel(models, config, spec) {
   };
 
   self.maxDate = function () {
-    var endDate = self.lastDate(spec);
+    var endDate = models.layers.lastDate(spec);
     return endDate;
   };
 
