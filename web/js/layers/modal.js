@@ -285,6 +285,9 @@ export function layersModal(models, ui, config) {
         // Check if categories have settings with the same projection.
         hasMeasurement = false;
         lodashValues(category.measurements).forEach(function (measurement) {
+          if (measurement in config.measurements === false) {
+            console.error('in category', category.title, 'unknown measurement', measurement);
+          }
           hasMeasurementSource(config.measurements[measurement]);
         });
 
