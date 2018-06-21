@@ -297,21 +297,9 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
   };
+
   var fileSizeValid = function() {
     return (imgFilesize < 250 && imgHeight !== 0 && imgWidth !== 0);
-  };
-  var onDownload = function() {
-    var dlURL, products;
-
-    products = models.layers.get({
-      reverse: true,
-      renderable: true
-    });
-
-    dlURL = createDownloadURL(models.date.selected, lonlats, models.proj.selected.epsg, products, imageUtilGetLayerOpacities(products), url);
-    googleAnalytics.event('Image Download', 'Click', 'Download');
-    util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
-    window.open(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight, '_blank');
   };
 
   var setPosition = function() {
@@ -326,21 +314,34 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
   var createDownloadURL = function(time, lonlats, epsg, products, opacities, dlURL) {
     var layers, jStart, jDate;
-    var dTime = time;
 
+    time.setUTCHours(0, 0, 0, 0);
     layers = imageUtilGetLayers(products, models.proj.selected.id);
     // Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-    jStart = util.parseDateUTC(dTime.getUTCFullYear() + '-01-01');
-    jDate = '00' + (1 + Math.ceil((dTime.getTime() - jStart) / 86400000));
-    dlURL += 'TIME=' + dTime.getUTCFullYear() + (jDate)
+    jStart = util.parseDateUTC(time.getUTCFullYear() + '-01-01');
+    jDate = '00' + (1 + Math.ceil((time.getTime() - jStart) / 86400000));
+    dlURL += 'TIME=' + time.getUTCFullYear() + (jDate)
       .substr((jDate.length) - 3);
-
     dlURL += '&extent=' + lonlats[0][0] + ',' + lonlats[0][1] + ',' + lonlats[1][0] + ',' + lonlats[1][1];
     dlURL += '&epsg=' + epsg;
     dlURL += '&layers=' + layers.join(',');
     dlURL += '&opacities=' + opacities.join(',');
 
     return dlURL;
+  };
+
+  var onDownload = function() {
+    var dlURL, products;
+
+    products = models.layers.get({
+      reverse: true,
+      renderable: true
+    });
+
+    dlURL = createDownloadURL(models.date.selected, lonlats, models.proj.selected.epsg, products, imageUtilGetLayerOpacities(products), url);
+    googleAnalytics.event('Image Download', 'Click', 'Download');
+    util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
+    window.open(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight, '_blank');
   };
 
   init();
