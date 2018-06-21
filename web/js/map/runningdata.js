@@ -96,11 +96,12 @@ export function MapRunningData(models) {
    *
    */
   self.getLabelMarginLeft = function (labelWidth, caseWidth, location, marginLeft) {
+    const padding = 5;
     var offsetLeft = location + marginLeft - (labelWidth / 2);
-    if (offsetLeft + labelWidth > caseWidth) {
-      offsetLeft = caseWidth - labelWidth;
-    } else if (offsetLeft < 5) {
-      offsetLeft = 5;
+    if (offsetLeft + labelWidth + padding > caseWidth) {
+      offsetLeft = caseWidth - labelWidth - padding;
+    } else if (offsetLeft < padding) {
+      offsetLeft = padding;
     }
     return offsetLeft;
   };
