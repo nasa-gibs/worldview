@@ -539,6 +539,7 @@ label {
 
 .wv-panel {
   border: 1px solid #333;
+  box-sizing: content-box;
 }
 
 .wv-panel .ui-dialog-titlebar {
