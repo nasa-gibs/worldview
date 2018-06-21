@@ -315,6 +315,7 @@ export function imagePanel (models, ui, config, dialogConfig) {
   var createDownloadURL = function(time, lonlats, epsg, products, opacities, dlURL) {
     var layers, jStart, jDate;
 
+    time = new Date(time.getTime());
     time.setUTCHours(0, 0, 0, 0);
     layers = imageUtilGetLayers(products, models.proj.selected.id);
     // Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
