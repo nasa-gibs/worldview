@@ -67,7 +67,8 @@
 
 .wv-palettes-max,
 .wv-palettes-min,
-.wv-palettes-title {
+.wv-palettes-title,
+.wv-running-label {
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
