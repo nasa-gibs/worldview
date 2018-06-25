@@ -2,6 +2,7 @@
 .layer-modal .ui-dialog-titlebar,
 .layer-modal .ui-widget-content,
 .layer-modal .ui-widget-header {
+
   background: none;
   border: 0;
 }
@@ -517,15 +518,37 @@
 }
 
 .layer-description .layer-title,
-.layer-modal .source-metadata h3 {
-  display: block;
+.layer-modal .source-metadata h1,
+.layer-modal .source-metadata h2,
+.layer-modal .source-metadata h3,
+.layer-modal .source-metadata h4,
+.layer-modal .source-metadata h5,
+.layer-modal .source-metadata h6,
+.layer-description .layer-metadata h1,
+.layer-description .layer-metadata h2,
+.layer-description .layer-metadata h3,
+.layer-description .layer-metadata h4,
+.layer-description .layer-metadata h5,
+.layer-description .layer-metadata h6 {
   color: #ddd;
   font-weight: 700;
+}
+
+.layer-description .layer-title,
+.layer-modal .source-metadata h3 {
+  display: block;
   font-size: 14px;
   line-height: 18px;
   margin: 16px 0 6px;
   font-family: 'Open Sans', sans-serif;
   margin-top: 4px;
+}
+
+.layer-description .layer-metadata h3,
+.layer-modal .source-metadata h3,
+.layer-modal .source-metadata h4,
+.layer-description .layer-metadata h4 {
+  margin-bottom: 5px;
 }
 
 /* Layer search rows */
