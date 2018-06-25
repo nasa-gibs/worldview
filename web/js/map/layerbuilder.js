@@ -214,14 +214,11 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       }
     }
 
-    urlParameters = '?';
-    if (def.period === 'daily') {
-      date = options.date || models.date.selected;
-      if (day) {
-        date = util.dateAdd(date, 'day', day);
-      }
-      urlParameters = '&TIME=' + util.toISOStringDate(date);
+    date = options.date || models.date.selected;
+    if (day) {
+      date = util.dateAdd(date, 'day', day);
     }
+    urlParameters = '?TIME=' + util.toISOStringDate(date);
 
     var sourceOptions = {
       url: source.url + urlParameters,
@@ -303,7 +300,13 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     var layerName = def.layer || def.id;
     var tms = def.matrixSet;
 
+    date = options.date || models.date.selected;
+    if (day) {
+      date = util.dateAdd(date, 'day', day);
+    }
+
     urlParameters = '?' +
+    'TIME=' + util.toISOStringDate(date) +
     '&layer=' + layerName +
     '&tilematrixset=' + tms +
     '&Service=WMTS' +
@@ -311,14 +314,6 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     '&Version=1.0.0' +
     '&FORMAT=application%2Fvnd.mapbox-vector-tile' +
     '&TileMatrix={z}&TileCol={x}&TileRow={y}';
-
-    if (def.period === 'daily') {
-      date = options.date || models.date.selected;
-      if (day) {
-        date = util.dateAdd(date, 'day', day);
-      }
-      urlParameters += '&TIME=' + util.toISOStringDate(date);
-    }
 
     var sourceOptions = new SourceVectorTile({
       url: source.url + urlParameters,
@@ -389,15 +384,12 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     };
     if (def.styles) { parameters.STYLES = def.styles; }
 
-    urlParameters = '?';
-
-    if (def.period === 'daily') {
-      date = options.date || models.date.selected;
-      if (day) {
-        date = util.dateAdd(date, 'day', day);
-      }
-      urlParameters += 'TIME=' + util.toISOStringDate(date);
+    date = options.date || models.date.selected;
+    if (day) {
+      date = util.dateAdd(date, 'day', day);
     }
+    urlParameters += '?TIME=' + util.toISOStringDate(date);
+
     var sourceOptions = {
       url: source.url + urlParameters,
       cacheSize: 4096,
