@@ -455,8 +455,6 @@ export default function naturalEventsUI (models, ui, config, request) {
 
   var activateLayersForCategory = function (category) {
     category = category || 'Default';
-    // remove current layers
-    models.layers.reset();
     let currentProjection = models.proj.selected.id;
     // Turn on the relevant layers for the event type based on projection and category
     var layers = model.layers[currentProjection][category];
@@ -490,6 +488,11 @@ export default function naturalEventsUI (models, ui, config, request) {
     var coordinates = (geometry.type === 'Polygon')
       ? olExtent.boundingExtent(olProj.transform(geometry.coordinates[0], 'EPSG:4326', models.proj.selected.crs))
       : olProj.transform(geometry.coordinates, 'EPSG:4326', models.proj.selected.crs);
+
+    // handle extent transform for polar
+    if (geometry.type === 'Polygon' && models.proj.selected.id !== 'geographic') {
+      coordinates = olProj.transformExtent(coordinates, 'EPSG:4326', models.proj.selected.crs);
+    };
 
     return ui.map.animate.fly(coordinates, zoom);
   };
