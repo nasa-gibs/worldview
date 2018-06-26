@@ -105,7 +105,7 @@ export function layersSidebar(models, config) {
     // Resize after browser repaints
     setTimeout(function () {
       self.sizeEventsTab();
-    }, 400);
+    }, 100);
   };
 
   self.expandNow = function () {
