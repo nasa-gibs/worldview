@@ -216,6 +216,10 @@ img.hideReg {
   width: 14px;
 }
 
+.sidebar-panel-item-img.close {
+  opacity: 1;
+}
+
 .ui-tabs-hide {
   position: absolute !important;
   left: -999em !important;
