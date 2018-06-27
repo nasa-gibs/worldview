@@ -7,18 +7,17 @@ import lodashIsUndefined from 'lodash/isUndefined';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import { getActiveDateString } from '../compare/util';
 import util from '../util/util';
-const activeGroups = ['active', 'activeA', 'activeB'];
 var loaded = false;
+self.activeLayers = 'active';
 
 export function layersModel(models, config) {
   var self = {};
 
-  var split = 0;
+  var split = { active: 0, activeB: 0 };
   self.events = util.events();
 
   self.active = [];
-  self.activeA = [];
-  self.activeB = [];
+  self.activeB = null;
 
   var init = function() {
     self.reset();
@@ -28,17 +27,16 @@ export function layersModel(models, config) {
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
       lodashEach(config.defaults.startingLayers, function(start) {
-        lodashEach(activeGroups, activeLayerString => {
-          self[activeLayerString] = self.add(
-            start.id,
-            start,
-            activeLayerString
-          );
-        });
+        self['active'] = self.add(start.id, start, 'active');
       });
     }
   };
 
+  self.initCompare = function() {
+    if (!self.activeB) {
+      self.activeB = lodashCloneDeep(self.active);
+    }
+  };
   self.get = function(spec, activeLayers) {
     spec = spec || {};
     activeLayers = activeLayers || self.active;
@@ -103,7 +101,7 @@ export function layersModel(models, config) {
       models.compare.abIsActive,
       models.compareisCompareA
     );
-    date = date || models.date[activeDateString];
+    date = date || models.date[activeDateString] || models.date.selected;
     var range = self.dateRange(
       {
         layer: id
@@ -209,11 +207,11 @@ export function layersModel(models, config) {
     def.opacity = lodashIsUndefined(spec.opacity) ? 1.0 : spec.opacity;
     if (def.group === 'overlays') {
       self[activeLayerString].unshift(def);
-      split += 1;
+      split[activeLayerString] += 1;
     } else {
-      self[activeLayerString].splice(split, 0, def);
+      self[activeLayerString].splice(split[activeLayerString], 0, def);
     }
-    self.events.trigger('add', def);
+    self.events.trigger('add', def, null, self[activeLayerString]);
     self.events.trigger('change');
     return self[activeLayerString];
   };
@@ -226,10 +224,10 @@ export function layersModel(models, config) {
     var def = self[activeLayerString][index];
     if (index >= 0) {
       self[activeLayerString].splice(index, 1);
-      if (index < split) {
-        split -= 1;
+      if (index < split[activeLayerString]) {
+        split[activeLayerString] -= 1;
       }
-      self.events.trigger('remove', def);
+      self.events.trigger('remove', def, self[activeLayerString]);
       self.events.trigger('change');
     }
   };
@@ -252,6 +250,7 @@ export function layersModel(models, config) {
 
   self.clear = function(projId, activeLayerString) {
     activeLayerString = activeLayerString || 'active';
+    if (!self[activeLayerString]) self[activeLayerString] = [];
     projId = projId || models.proj.selected.id;
     var defs = self[activeLayerString].slice(0);
     lodashEach(defs, function(def) {
@@ -274,7 +273,7 @@ export function layersModel(models, config) {
     if (def.group === 'baselayers') {
       self[activeLayersString].push(def);
     } else {
-      self[activeLayersString].splice(split - 1, 0, def);
+      self[activeLayersString].splice(split[activeLayersString] - 1, 0, def);
     }
     self.events.trigger('update');
     self.events.trigger('change');
@@ -398,10 +397,6 @@ export function layersModel(models, config) {
         },
         {
           state: 'l1',
-          str: 'activeA'
-        },
-        {
-          state: 'l2',
           str: 'activeB'
         }
       ];
@@ -448,10 +443,6 @@ export function layersModel(models, config) {
         },
         {
           state: 'l1',
-          active: 'activeA'
-        },
-        {
-          state: 'l2',
           active: 'activeB'
         }
       ];

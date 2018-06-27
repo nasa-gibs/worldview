@@ -1,9 +1,11 @@
 import util from '../util/util';
+const DEFAULT_COMPARE_OBJ = {};
 export function getCompareObjects(models) {
-  let obj = {};
+  if (!models.layers.activeB) return DEFAULT_COMPARE_OBJ;
+  var obj = {};
   obj.a = {
-    dateString: util.toISOStringDate(models.date.selectedA),
-    layers: models.layers.get({ group: 'all' }, models.layers['activeA'])
+    dateString: util.toISOStringDate(models.date.selected),
+    layers: models.layers.get({ group: 'all' }, models.layers['active'])
   };
   obj.b = {
     dateString: util.toISOStringDate(models.date.selectedB),
@@ -12,9 +14,8 @@ export function getCompareObjects(models) {
   return obj;
 }
 export function getActiveLayerGroupString(abIsActive, isCompareA) {
-  console.log(abIsActive, isCompareA);
-  return !abIsActive ? 'active' : isCompareA ? 'activeA' : 'activeB';
+  return isCompareA ? 'active' : 'activeB';
 }
 export function getActiveDateString(abIsActive, isCompareA) {
-  return !abIsActive ? 'selected' : isCompareA ? 'selectedA' : 'selectedB';
+  return isCompareA ? 'selected' : 'selectedB';
 }
