@@ -14,7 +14,7 @@ export function compareModel(models, config) {
   };
   self.toggleState = function() {
     self.isCompareA = !self.isCompareA;
-    self.events.trigger('toggle');
+    self.events.trigger('toggle-state');
     self.events.trigger('change');
   };
   self.setMode = function(mode) {
