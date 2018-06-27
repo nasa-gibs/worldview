@@ -2,7 +2,8 @@ import lodashEach from 'lodash/each';
 
 var swipeOffset = null;
 var line = null;
-var layers = [];
+var bottomLayers = [];
+var topLayers = [];
 var map;
 export class Swipe {
   constructor(olMap) {
@@ -16,10 +17,12 @@ export class Swipe {
   update() {
     var mapLayers = map.getLayers().getArray();
     applyEventsToBaseLayers(mapLayers[1], map, applyLayerListeners);
+    applyEventsToBaseLayers(mapLayers[0], map, applyReverseLayerListeners);
   }
   destroy() {
     line.remove();
-    removeListenersFromLayers(layers);
+    removeListenersFromLayers(topLayers);
+    removeListenersFromBottomLayers(bottomLayers);
   }
 }
 
@@ -28,10 +31,18 @@ var addLineOverlay = function(map) {
   var draggerEl = document.createElement('div');
   var iconEl = document.createElement('i');
   var mapCase = document.getElementById('wv-map');
+  var firstLabel = document.createElement('span');
+  var secondLabel = document.createElement('span');
+  firstLabel.className = 'ab-swipe-span left-label';
+  secondLabel.className = 'ab-swipe-span right-label';
+  firstLabel.appendChild(document.createTextNode('A'));
+  secondLabel.appendChild(document.createTextNode('B'));
+
   iconEl.className = 'fa fa-arrows-h';
   draggerEl.className = 'ab-swipe-dragger';
   lineCaseEl.className = 'ab-swipe-line';
-
+  lineCaseEl.appendChild(firstLabel);
+  lineCaseEl.appendChild(secondLabel);
   draggerEl.appendChild(iconEl);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
@@ -60,8 +71,14 @@ var addLineOverlay = function(map) {
 var applyLayerListeners = function(layer) {
   layer.on('precompose', clip);
   layer.on('postcompose', restore);
-  layers.push(layer);
+  bottomLayers.push(layer);
 };
+var applyReverseLayerListeners = function(layer) {
+  layer.on('precompose', reverseClip);
+  layer.on('postcompose', restore);
+  topLayers.push(layer);
+};
+
 var clip = function(event) {
   var ctx = event.context;
   var viewportWidth = map.getSize()[0];
@@ -71,9 +88,24 @@ var clip = function(event) {
   ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
   ctx.clip();
 };
+var reverseClip = function(event) {
+  var ctx = event.context;
+  var viewportWidth = map.getSize()[0];
+  var width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, 0, ctx.canvas.width - width, ctx.canvas.height);
+  ctx.clip();
+};
 var restore = function(event) {
   var ctx = event.context;
   ctx.restore();
+};
+var removeListenersFromBottomLayers = function(layers) {
+  lodashEach(layers, layer => {
+    layer.un('precompose', reverseClip);
+    layer.un('postcompose', restore);
+  });
 };
 var removeListenersFromLayers = function(layers) {
   lodashEach(layers, layer => {
