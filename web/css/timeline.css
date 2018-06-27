@@ -22,7 +22,7 @@ button:focus {
 }
 
 #timeline-footer text {
-  font: 400 12px/125% 'Roboto Mono', monospace;
+  font: 400 12px/125% "Roboto Mono", monospace;
   text-align: start;
   letter-spacing: 0;
   word-spacing: 0;
@@ -204,7 +204,7 @@ g.plot rect.data-bar-invisible {
   font-size: 24px;
   background: transparent;
   border: 0;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
@@ -235,10 +235,11 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header div {
   display: inline-block;
+  vertical-align: top;
 }
 
 #timeline-header .input-time-divider {
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   color: #fff;
   font-size: 24px;
   vertical-align: middle;
@@ -248,7 +249,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .input-time-zmark {
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   color: #fff;
   font-size: 24px;
   vertical-align: middle;
@@ -320,7 +321,10 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header > .button-action-group .button-disabled:hover,
-#timeline-header #zoom-buttons-group .button-action-group .button-disabled:hover {
+#timeline-header
+  #zoom-buttons-group
+  .button-action-group
+  .button-disabled:hover {
   background-color: transparent;
   cursor: default;
 }
@@ -352,15 +356,26 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header > .button-action-group.button-disabled .arrow,
-#timeline-header #zoom-buttons-group .button-action-group.button-disabled .arrow {
+#timeline-header
+  #zoom-buttons-group
+  .button-action-group.button-disabled
+  .arrow {
   fill: #333;
 }
 
 #timeline-header > .button-action-group.button-disabled:hover .arrow,
-#timeline-header #zoom-buttons-group .button-action-group.button-disabled:hover .arrow {
+#timeline-header
+  #zoom-buttons-group
+  .button-action-group.button-disabled:hover
+  .arrow {
   fill: #333;
 }
 
+#timeline-header .animate-button {
+  margin-top: 10px;
+  height: 40px;
+  width: 40px;
+}
 #timeline-header .animate-button .wv-animate {
   color: #fff;
   font-size: 2.5em;
@@ -380,7 +395,8 @@ g.plot rect.data-bar-invisible {
   color: #ccc;
 }
 
-#timeline-header, #timeline-footer {
+#timeline-header,
+#timeline-footer {
   float: left;
 }
 
@@ -473,7 +489,7 @@ g.plot rect.data-bar-invisible {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   margin-top: -2px;
 }
 
@@ -488,7 +504,7 @@ g.plot rect.data-bar-invisible {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   font-size: 14px;
   line-height: 16px;
   color: #ccc;
@@ -559,4 +575,31 @@ g.plot rect.data-bar-invisible {
 
 #timeline-hide:hover .hamburger path {
   fill: #1a1a1a;
+}
+.ab-group-case {
+  display: none;
+}
+.ab-group-case-active {
+  fill: white;
+}
+.ab-group-case polygon,
+.ab-group-case rect {
+  fill: gray;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.ab-group-case-active polygon,
+.ab-group-case-active rect {
+  fill: white;
+  opacity: 1;
+  pointer-events: initial;
+}
+.ab-active .ab-group-case {
+  display: block;
+}
+.ab-active #guitarpick {
+  display: none !important;
+}
+.ab-group-case text {
+  pointer-events: none;
 }

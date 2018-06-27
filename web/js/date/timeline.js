@@ -15,19 +15,19 @@ export function timeline(models, config, ui) {
     left: 30
   };
 
-  self.getPadding = function () {
+  self.getPadding = function() {
     self.padding = self.width / 4;
     return self.padding;
   };
 
-  self.getWidth = function () {
-    self.width = $(window)
-      .outerWidth(true) -
-      $('#timeline-header')
-        .outerWidth(true) -
-      $('#timeline-hide')
-        .outerWidth(true) -
-      self.margin.left - self.margin.right + 28;
+  self.getWidth = function() {
+    self.width =
+      $(window).outerWidth(true) -
+      $('#timeline-header').outerWidth(true) -
+      $('#timeline-hide').outerWidth(true) -
+      self.margin.left -
+      self.margin.right +
+      28;
     return self.width;
   };
 
@@ -35,12 +35,12 @@ export function timeline(models, config, ui) {
 
   self.isCropped = true;
 
-  self.toggle = function (now) {
+  self.toggle = function(now) {
     var tl = $('#timeline-footer');
     var tlg = self.boundary;
     var gp = d3.select('#guitarpick');
     if (tl.is(':hidden')) {
-      var afterShow = function () {
+      var afterShow = function() {
         tlg.attr('style', 'clip-path:url("#timeline-boundary")');
         gp.attr('style', 'display:block;clip-path:url(#guitarpick-boundary);');
       };
@@ -50,18 +50,16 @@ export function timeline(models, config, ui) {
       } else {
         tl.show('slow', afterShow);
       }
-      $('#timeline')
-        .removeClass('closed');
+      $('#timeline').removeClass('closed');
     } else {
       tlg.attr('style', 'clip-path:none');
       gp.attr('style', 'display:none;clip-path:none');
       tl.hide('slow');
-      $('#timeline')
-        .addClass('closed');
+      $('#timeline').addClass('closed');
     }
   };
 
-  self.expand = function (now) {
+  self.expand = function(now) {
     now = now || false;
     var tl = $('#timeline-footer');
     if (tl.is(':hidden')) {
@@ -69,73 +67,87 @@ export function timeline(models, config, ui) {
     }
   };
 
-  self.expandNow = function () {
+  self.expandNow = function() {
     self.expand(true);
   };
 
-  self.collapse = function (now) {
+  self.collapse = function(now) {
     var tl = $('#timeline-footer');
     if (!tl.is(':hidden')) {
       self.toggle(now);
     }
   };
 
-  self.collapseNow = function () {
+  self.collapseNow = function() {
     self.collapse(true);
   };
 
-  self.resize = function () {
+  self.resize = function() {
     var small = util.browser.small || util.browser.constrained;
     if (self.enabled && small) {
       self.enabled = false;
-      $('#timeline')
-        .hide();
+      $('#timeline').hide();
     } else if (!self.enabled && !small) {
       self.enabled = true;
-      $('#timeline')
-        .show();
+      $('#timeline').show();
     }
 
     if (self.enabled) {
       self.getWidth();
 
-      self.svg.attr('width', self.width)
-        .attr('viewBox', '0 1 ' + self.width + ' ' + (self.height + self.margin.top + self.margin.bottom + 26));
+      self.svg
+        .attr('width', self.width)
+        .attr(
+          'viewBox',
+          '0 1 ' +
+            self.width +
+            ' ' +
+            (self.height + self.margin.top + self.margin.bottom + 26)
+        );
 
-      d3.select('#timeline-boundary rect')
-        .attr('width', self.width);
+      d3.select('#timeline-boundary rect').attr('width', self.width);
 
-      d3.select('#guitarpick-boundary rect')
-        .attr('width', self.width +
-          self.margin.left +
-          self.margin.right);
+      d3.select('#guitarpick-boundary rect').attr(
+        'width',
+        self.width + self.margin.left + self.margin.right
+      );
 
-      self.axis.select('line:first-child')
-        .attr('x2', self.width);
+      self.axis.select('line:first-child').attr('x2', self.width);
     }
   };
 
-  self.setClip = function () { // This is a hack until Firefox fixes their svg rendering problems
-    d3.select('#timeline-footer svg > g:nth-child(2)')
-      .attr('visibility', 'hidden');
-    d3.select('#timeline-footer svg > g:nth-child(2)')
-      .attr('style', '');
-    setTimeout(function () {
-      d3.select('#timeline-footer svg > g:nth-child(2)')
-        .attr('style', 'clip-path:url("#timeline-boundary")');
-      d3.select('#timeline-footer svg > g:nth-child(2)')
-        .attr('visibility', '');
+  self.setClip = function() {
+    // This is a hack until Firefox fixes their svg rendering problems
+    d3.select('#timeline-footer svg > g:nth-child(2)').attr(
+      'visibility',
+      'hidden'
+    );
+    d3.select('#timeline-footer svg > g:nth-child(2)').attr('style', '');
+    setTimeout(function() {
+      d3.select('#timeline-footer svg > g:nth-child(2)').attr(
+        'style',
+        'clip-path:url("#timeline-boundary")'
+      );
+      d3.select('#timeline-footer svg > g:nth-child(2)').attr('visibility', '');
     }, 50);
   };
 
-  var drawContainers = function () {
+  var drawContainers = function() {
     self.getWidth();
 
-    self.svg = d3.select('#timeline-footer')
+    self.svg = d3
+      .select('#timeline-footer')
       .append('svg:svg')
       .attr('width', self.width) // + margin.left + margin.right)
       .attr('height', self.height + self.margin.top + self.margin.bottom + 42)
-      .attr('viewBox', '0 1 ' + self.width + ' ' + (self.height + self.margin.top + self.margin.bottom + 26));
+      .attr('id', 'timeline-footer-svg')
+      .attr(
+        'viewBox',
+        '0 1 ' +
+          self.width +
+          ' ' +
+          (self.height + self.margin.top + self.margin.bottom + 26)
+      );
 
     self.svg
       .append('svg:defs')
@@ -159,7 +171,8 @@ export function timeline(models, config, ui) {
       .attr('style', 'clip-path:url(#timeline-boundary)')
       .attr('transform', 'translate(0,16)');
 
-    self.axis = self.boundary.append('svg:g')
+    self.axis = self.boundary
+      .append('svg:g')
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + self.height + ')');
 
@@ -168,45 +181,50 @@ export function timeline(models, config, ui) {
       .attr('x1', 0)
       .attr('x2', self.width); // +margin.left+margin.right);
 
-    self.dataBars = self.boundary.insert('svg:g', '.x.axis')
+    self.dataBars = self.boundary
+      .insert('svg:g', '.x.axis')
       .attr('height', self.height)
       .classed('plot', true);
 
-    self.verticalAxis = self.boundary.append('svg:g')
+    self.verticalAxis = self.boundary
+      .append('svg:g')
       .attr('class', 'y axis')
       .attr('transform', 'translate(0,0)');
     self.animboundary = self.svg
       .append('svg:g')
       .attr('clip-path', '#timeline-boundary')
       .attr('transform', 'translate(0,16)');
-    self.animboundary
-      .append('g')
-      .attr('id', 'wv-rangeselector-case');
+    self.animboundary.append('g').attr('id', 'wv-rangeselector-case');
   };
 
-  var init = function () {
+  var init = function() {
     var $timelineFooter = $('#timeline-footer');
     models.layers.events.trigger('toggle-subdaily');
     drawContainers();
 
-    if (!models.anim) { // Hack: margin if anim is present
-      $('#animate-button')
-        .hide();
+    if (!models.anim) {
+      // Hack: margin if anim is present
+      $('#animate-button').hide();
       $timelineFooter.css('margin-left', self.margin.left - 1 + 'px');
       $timelineFooter.css('margin-right', self.margin.right - 1 + 'px');
     } else {
       $timelineFooter.css('margin-left', '0');
-      $timelineFooter.css('margin-right', (self.margin.right + self.margin.left) - 32 + 'px');
+      $timelineFooter.css(
+        'margin-right',
+        self.margin.right + self.margin.left - 32 + 'px'
+      );
     }
 
     self.x = d3.time.scale.utc();
 
-    self.xAxis = d3.svg.axis()
+    self.xAxis = d3.svg
+      .axis()
       .orient('bottom')
       .tickSize(-self.height)
       .tickPadding(5);
 
-    self.axisZoom = d3.behavior.zoom()
+    self.axisZoom = d3.behavior
+      .zoom()
       .scale(1)
       .scaleExtent([1, 1]);
 
@@ -218,30 +236,28 @@ export function timeline(models, config, ui) {
       }
     }
 
-    $('#timeline-hide')
-      .click(function () {
-        self.toggle();
-      });
+    $('#timeline-hide').click(function() {
+      self.toggle();
+    });
 
-    $(window)
-      .resize(function () {
-        self.resize();
-        self.zoom.refresh();
-        self.setClip();
-      });
+    $(window).resize(function() {
+      self.resize();
+      self.zoom.refresh();
+      self.setClip();
+    });
 
-    model.events.on('select', function () {
+    model.events.on('select', function() {
       self.input.update();
       self.pick.shiftView();
     });
 
-    models.layers.events.on('change', function () {
+    models.layers.events.on('change', function() {
       self.data.set();
       self.resize();
       self.setClip();
     });
 
-    models.proj.events.on('select', function () {
+    models.proj.events.on('select', function() {
       self.resize();
       self.setClip();
     });
@@ -249,4 +265,4 @@ export function timeline(models, config, ui) {
 
   init();
   return self;
-};
+}
