@@ -1,41 +1,101 @@
 #productsHolder {
-  border: 1px solid #333;
+  border-bottom: 1px solid #333;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   position: absolute;
   z-index: 2;
   min-width: 286px;
   width: 286px;
-  background: rgba(40, 40, 40, 0.85);
+  background: transparent;
   left: 10px;
-  top: 68px;
+  top: 65px;
   -webkit-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0;
+  border-top: none;
 }
-
 #productsHolder .layer-container {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -o-box-sizing: border-box;
-  padding: 5px 0 0;
   position: relative;
   border: 1px solid transparent;
 }
-
+#productsHolder .main-nav {
+  background: rgba(40, 40, 40, 0.85);
+}
+#productsHolder > .tab-content {
+  background: rgba(40, 40, 40, 0.85);
+  margin-top: 10px;
+}
+#wv-logo {
+  border-bottom: none;
+}
 #productsHolder ul#overlays {
   margin-bottom: 10px;
 }
-
-#productsHolder footer {
-  bottom: 0;
-  padding: 2px 5px 5px;
-  position: absolute;
-  background-color: transparent;
+.nav-tabs {
+  border-bottom: 3px solid #00457b;
+}
+#productsHolder .nav-tabs .disabled {
+  cursor: not-allowed;
+  color: white;
+  opacity: 0.5;
 }
 
+.tab-content .nav-tabs {
+  border-bottom: 3px solid #dee2e6;
+}
+
+.nav-item {
+  color: white;
+}
+.nav-item .active {
+  cursor: pointer;
+}
+/* override bootstrap styles */
+.tab-content .ab-tabs-case .nav-item .active {
+  color: #495057;
+}
+.nav-item .sidebar-tab.active {
+  background: #00457b;
+  border-color: #00457b;
+  color: white;
+}
+#productsHolder footer {
+  padding: 5px;
+  background-color: transparent;
+  position: relative;
+}
+footer .product-buttons {
+  padding: 5px;
+  height: 37px;
+  width: initial;
+}
+footer .layers-add {
+  position: absolute;
+  left: 5px;
+}
+footer .compare-toggle-button {
+  position: absolute;
+  right: 5px;
+}
+
+.wv-ab-mode-selection-case {
+  margin: 5px;
+}
+.wv-ab-mode-selection-case > div {
+  margin-left: 10px;
+}
+.wv-ab-mode-selection-case > div,
+.wv-ab-mode-selection-case h3 {
+  display: inline-block;
+}
+.wv-ab-mode-selection-case {
+  color: white;
+}
 #productsHolder footer p {
   color: #ccc;
   margin: 3px 0 8px;
