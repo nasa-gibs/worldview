@@ -9,198 +9,118 @@ Copyright (C) 2013 - 2016 United States Government as represented by the Adminis
 Licensed under the NASA Open Source Agreement, Version 1.3 (http://opensource.gsfc.nasa.gov/nosa.php)
 -->
 <html>
+
 <head>
-    <title>@OFFICIAL_NAME@</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>@OFFICIAL_NAME@</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <script type="text/javascript">
-        if ( /MSIE (\d+\.\d+);/.test(navigator.userAgent) && ! /unsupported/.test(location.search) ) {
-            var version = parseFloat(navigator.appVersion.split("MSIE")[1]);
-            if ( version < 9 ) {
-                document.location.replace("pages/unsupported_browser.html" + location.search);
-            }
-        }
-    </script>
+  <script type="text/javascript">
+    if (/MSIE (\d+\.\d+);/.test(navigator.userAgent) && ! /unsupported/.test(location.search)) {
+      var version = parseFloat(navigator.appVersion.split("MSIE")[1]);
+      if (version < 9) {
+        document.location.replace("pages/unsupported_browser.html" + location.search);
+      }
+    }
+  </script>
 
-    <link rel="shortcut icon" href="brand/images/wv-icon.ico" type="image/vnd.microsoft.icon" />
+  <link rel="shortcut icon" href="brand/images/wv-icon.ico" type="image/vnd.microsoft.icon" />
 
-    <!-- meta defines -->
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="keywords" content="nasa, worldview, nasa worldview, eosdis worldview, satellite imagery, remote sensing, natural hazards, natural disasters, near real-time, nrt, lance, wildfire management, air quality, weather forecasting, agriculture, dust storms, smoke plumes, vegetation, severe storms, shipping, fisheries, floods, drought, oil spills">
-    <meta name="description" content="Interactive interface for browsing full-resolution, global satellite imagery. Supports time-critical application areas such as wildfire management, air quality measurements, and weather forecasting. Data is generally available within three hours of observation.">
-    <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="Cache-control" content="no-store">
-    <meta http-equiv="Pragma" content="no-cache">
+  <!-- meta defines -->
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="keywords" content="nasa, worldview, nasa worldview, eosdis worldview, satellite imagery, remote sensing, natural hazards, natural disasters, near real-time, nrt, lance, wildfire management, air quality, weather forecasting, agriculture, dust storms, smoke plumes, vegetation, severe storms, shipping, fisheries, floods, drought, oil spills">
+  <meta name="description" content="Interactive interface for browsing full-resolution, global satellite imagery. Supports time-critical application areas such as wildfire management, air quality measurements, and weather forecasting. Data is generally available within three hours of observation.">
+  <meta http-equiv="Cache-control" content="no-cache">
+  <meta http-equiv="Cache-control" content="no-store">
+  <meta http-equiv="Pragma" content="no-cache">
 
-    <!-- open graph for social sharing -->
-    <meta property="og:title" content="Worldview: Explore Your Dynamic Planet">
-    <meta property="og:image" content="images/preview.png" />
-    <meta property="og:description" content="The NASA Worldview app provides a satellite's perspective of the planet as it looks today and as it has in the past. Worldview is part of NASA’s Earth Observing System Data and Information System. EOSDIS makes the agency's large repository of data accessible and freely available to the public.">
+  <!-- open graph for social sharing -->
+  <meta property="og:title" content="Worldview: Explore Your Dynamic Planet">
+  <meta property="og:image" content="images/preview.png" />
+  <meta property="og:description" content="The NASA Worldview app provides a satellite's perspective of the planet as it looks today and as it has in the past. Worldview is part of NASA’s Earth Observing System Data and Information System. EOSDIS makes the agency's large repository of data accessible and freely available to the public.">
 
-    <link type="text/css" rel="Stylesheet" href="build/wv.css?v=@BUILD_NONCE@">
-    <script type="text/javascript" src="build/wv.js?v=@BUILD_NONCE@"></script>
+  <link type="text/css" rel="Stylesheet" href="build/wv.css?v=@BUILD_NONCE@">
+  <script type="text/javascript" src="build/wv.js?v=@BUILD_NONCE@"></script>
 
 </head>
 
 <body>
-    <div data-role="page" id="app">
-        <div data-role="content">
-            <ul id="wv-toolbar">
-                <li id="wv-link-button" class="wv-toolbar-button"></li>
-                <li id="wv-proj-button" class="wv-toolbar-button"></li>
-                <li id="wv-image-button" class="wv-toolbar-button"></li>
-                <li id="wv-info-button" class="wv-toolbar-button wv-status-hide"></li>
-            </ul>
-            <a href="/" title="Click to Reset Worldview to Defaults" id="wv-logo"></a>
-            <section id="productsHolder">
-              <ul id="productsHolder-tabs"></ul>
-              <div id="productsHoldertoggleButtonHolder"></div>
-              <div id="products"></div>
-              <div id="wv-events"></div>
-              <div id="wv-data"></div>
-            </section>
-            <div id="wv-map" class="wv-map"></div>
-            <div id="eventsHolder"></div>
-            <div id="imagedownload"></div>
-            <div id="dlMap"></div>
+  <div data-role="page" id="app">
+    <div data-role="content">
+      <ul id="wv-toolbar">
+        <li id="wv-link-button" class="wv-toolbar-button"></li>
+        <li id="wv-proj-button" class="wv-toolbar-button"></li>
+        <li id="wv-image-button" class="wv-toolbar-button"></li>
+        <li id="wv-info-button" class="wv-toolbar-button wv-status-hide"></li>
+      </ul>
+      <section id="wv-sidebar">
+      </section>
+      <div id="wv-map" class="wv-map"></div>
+      <div id="eventsHolder"></div>
+      <div id="imagedownload"></div>
+      <div id="dlMap"></div>
 
-            <div id="timewheels" style="display:none"></div>
+      <div id="timewheels" style="display:none"></div>
 
-            <section id="timeline" class="timeline-inner clearfix" style="display: none">
-                <div id="timeline-header">
-                    <div id="focus-guard-1" class="focus-guard" tabindex="1"></div>
-                    <div id="input-wrapper-year" class="input-wrapper input-wrapper-year selectable">
-                      <div class="date-arrows date-arrow-up" data-interval="year" data-value="1">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
-                        </svg>
-                      </div>
-                      <input type="text" size="4" maxlength="4" class="button-input-group 1-interval-group" id="year-input-group" tabindex="2" />
-                      <div class="date-arrows date-arrow-down" data-interval="year" data-value="-1">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
-                        </svg>
-                      </div>
-                    </div>
-                    <div id="input-wrapper-month" class="input-wrapper input-wrapper-month selectable">
-                      <div class="date-arrows date-arrow-up" data-interval="month" data-value="1">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
-                        </svg>
-                      </div>
-                      <input type="text" size="3" maxlength="3" class="button-input-group 1-interval-group" id="month-input-group" tabindex="3" />
-                      <div class="date-arrows date-arrow-down" data-interval="month" data-value="-1">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
-                        </svg>
-                      </div>
-                    </div>
-
-                    <div id="input-wrapper-day" class="input-wrapper input-wrapper-day selectable">
-                      <div class="date-arrows date-arrow-up" data-interval="day" data-value="1">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
-                        </svg>
-                      </div>
-                      <input type="text" size="2" maxlength="2" class="button-input-group 1-interval-group" id="day-input-group" tabindex="4" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.keyCode == 13 || event.keyCode == 9 || even.keyCode == 8" />
-                      <div class="date-arrows date-arrow-down" data-interval="day" data-value="-1">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
-                        </svg>
-                      </div>
-                    </div>
-
-                    <div id="input-wrapper-hour" class="input-wrapper input-wrapper-hour">
-                      <div class="date-arrows date-arrow-up" data-interval="hour" data-value="1">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
-                        </svg>
-                      </div>
-                      <input type="text" size="2" maxlength="2" class="button-input-group 1-interval-group" id="hour-input-group" tabindex="5" />
-                      <div class="date-arrows date-arrow-down" data-interval="hour" data-value="-1">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
-                        </svg>
-                      </div>
-                    </div>
-
-                    <div id="input-time-divider" class="input-time-divider">:</div>
-
-                    <div id="input-wrapper-minute" class="input-wrapper input-wrapper-minute">
-                      <div class="date-arrows date-arrow-up" data-interval="minute" data-value="10">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="uparrow"></path>
-                        </svg>
-                      </div>
-                      <input type="text" size="2" maxlength="2" step="10" class="button-input-group 10-interval-group" id="minute-input-group" tabindex="6" />
-                      <div class="date-arrows date-arrow-down" data-interval="minute" data-value="-10">
-                        <svg width="25" height="8">
-                          <path d="M 12.5,0 25,8 0,8 z" class="downarrow"></path>
-                        </svg>
-                      </div>
-                    </div>
-                    <div id="input-time-zmark" class="input-time-zmark">Z</div>
-                    <div id="focus-guard-2" class="focus-guard" tabindex="7"></div>
-                    <div id="zoom-buttons-group">
-                      <div id="zoom-btn-container">
-                        <span id="current-zoom" class="zoom-btn zoom-btn-active" data-zoom="3">Days</span>
-                        <div class="wv-tooltip">
-                          <div id="timeline-zoom" class="timeline-zoom">
-                            <span id="zoom-years" class="zoom-btn zoom-btn-inactive zoom-years" data-zoom="1">Years</span>
-                            <span id="zoom-months" class="zoom-btn zoom-btn-inactive zoom-months" data-zoom="2">Months</span>
-                            <span id="zoom-days" class="zoom-btn zoom-btn-inactive zoom-days" data-zoom="3">Days</span>
-                            <span id="zoom-minutes" class="zoom-btn zoom-btn-inactive zoom-minutes" data-zoom="4">Minutes</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="button-action-group" id="left-arrow-group" title="Click and hold to animate backwards">
-                          <svg width="24" height="30">
-                              <path
-                               d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                               class="arrow"></path>
-                          </svg>
-                      </div>
-                      <div class="button-action-group" id="right-arrow-group" title="Click and hold to animate forwards">
-                          <svg width="24" height="30" >
-                              <path
-                              d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                              class="arrow"></path>
-                          </svg>
-                      </div>
-                    </div>
-                    <div class="button-action-group animate-button" id="animate-button" title="Set up animation">
-                        <i id="wv-animate" class="fa fa-video-camera wv-animate"></i>
-                    </div>
-
+      <section id="timeline" class="timeline-inner clearfix" style="display: none">
+        <div id="timeline-header">
+          <div id="date-selector-main"></div>
+          <div id="zoom-buttons-group">
+            <div id="zoom-btn-container">
+              <span id="current-zoom" class="zoom-btn zoom-btn-active" data-zoom="3">Days</span>
+              <div class="wv-tooltip">
+                <div id="timeline-zoom" class="timeline-zoom">
+                  <span id="zoom-years" class="zoom-btn zoom-btn-inactive zoom-years" data-zoom="1">Years</span>
+                  <span id="zoom-months" class="zoom-btn zoom-btn-inactive zoom-months" data-zoom="2">Months</span>
+                  <span id="zoom-days" class="zoom-btn zoom-btn-inactive zoom-days" data-zoom="3">Days</span>
+                  <span id="zoom-minutes" class="zoom-btn zoom-btn-inactive zoom-minutes" data-zoom="4">Minutes</span>
                 </div>
-                <div id="timeline-footer">
-                    <div id="wv-animation-widet-case"> </div>
-                </div>
-                <div id="timeline-hide">
-                  <svg class="hamburger" width="10" height="9">
-                    <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z"></path>
-                  </svg>
-                </div>
-            </section>
+              </div>
+            </div>
+            <div class="button-action-group" id="left-arrow-group" title="Click and hold to animate backwards">
+              <svg id="timeline-svg" width="24" height="30">
+                <path d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z" class="arrow"></path>
+              </svg>
+            </div>
+            <div class="button-action-group" id="right-arrow-group" title="Click and hold to animate forwards">
+              <svg width="24" height="30">
+                <path d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z" class="arrow"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="button-action-group animate-button" id="animate-button" title="Set up animation">
+            <i id="wv-animate" class="fa fa-video-camera wv-animate"></i>
+          </div>
 
         </div>
+        <div id="timeline-footer">
+          <div id="wv-animation-widet-case"> </div>
+        </div>
+        <div id="timeline-hide">
+          <svg class="hamburger" width="10" height="9">
+            <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z"></path>
+          </svg>
+        </div>
+      </section>
+
     </div>
-    <section id="layer-modal" class="layer-modal">
-      <header id="layer-modal-header" class="layer-modal-header"></header>
-      <div id="layer-modal-content" class="layer-modal-content">
-        <div id="layer-categories" class="layer-categories"></div>
-        <div id="selected-category" class="selected-category"></div>
-        <div id="layers-all" class="layers-all"></div>
-      </div>
-      <footer></footer>
-    </section>
-    <div id="wv-tour-content" class="tour-content"></div>
-    <div id="wv-image-top" class="wv-image-coords"></div>
-    <div id="wv-image-right" class="wv-image-coords"></div>
-    <div id="wv-image-bottom" class="wv-image-coords"></div>
-    <div id="wv-image-left" class="wv-image-coords"></div>
-    <div class="backdrop"></div>
+  </div>
+  <section id="layer-modal" class="layer-modal">
+    <header id="layer-modal-header" class="layer-modal-header"></header>
+    <div id="layer-modal-content" class="layer-modal-content">
+      <div id="layer-categories" class="layer-categories"></div>
+      <div id="selected-category" class="selected-category"></div>
+      <div id="layers-all" class="layers-all"></div>
+    </div>
+    <footer></footer>
+  </section>
+  <div id="wv-tour-content" class="tour-content"></div>
+  <div id="wv-image-top" class="wv-image-coords"></div>
+  <div id="wv-image-right" class="wv-image-coords"></div>
+  <div id="wv-image-bottom" class="wv-image-coords"></div>
+  <div id="wv-image-left" class="wv-image-coords"></div>
+  <div class="backdrop"></div>
 </body>
+
 </html>
