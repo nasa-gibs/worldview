@@ -2,284 +2,211 @@ import $ from 'jquery';
 import 'jquery-ui/tabs';
 import 'jquery-ui/dialog';
 import 'perfect-scrollbar/jquery';
+import lodashFind from 'lodash/find';
 import util from '../util/util';
-import { GA as googleAnalytics } from 'worldview-components';
+import { GA as googleAnalytics, Sidebar } from 'worldview-components';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { getCompareObjects, getActiveLayerGroupString } from '../compare/util';
+import { layersOptions } from './options';
+import { layersInfo } from './info';
 
 export function layersSidebar(models, config) {
-  var collapsed = false;
-  var collapseRequested = false;
-  var productsIsOverflow = false;
-  var mobile = false;
+  var isCollapsed = false;
+  var activeTab = 'layers';
+  var isCompareMode = false;
+  // var mobile = false;
   var self = {};
+  var model = models.layers;
+  var compareObj = {};
+  var isCompareA = true;
+  var compareModeType = 'swipe';
 
-  self.id = 'productsHolder';
-  self.selector = '#productsHolder';
   self.events = util.events();
 
-  var init = function () {
-    render();
-    $(window)
-      .resize(resize);
-    models.proj.events.on('select', onProjectionChange);
-    resize();
-
-    if (util.browser.localStorage) {
-      if (localStorage.getItem('sidebarState') === 'collapsed') {
-        self.collapseNow();
-        collapseRequested = true;
-      }
-    }
-  };
-
-  self.selectTab = function (tabName) {
-    if (tabName === 'active') {
-      $(self.selector)
-        .tabs('option', 'active', 0);
-    } else if (tabName === 'events') {
-      $(self.selector)
-        .tabs('option', 'active', 1);
-    } else if (tabName === 'download') {
-      $(self.selector)
-        .tabs('option', 'active', 2);
-    } else {
-      throw new Error('Invalid tab: ' + tabName);
-    }
-  };
-
-  self.collapse = function (now) {
-    if (collapsed) {
-      return;
-    }
-    collapsed = true;
-    $('.accordionToggler')
-      .removeClass('atcollapse')
-      .addClass('dateHolder')
-      .removeClass('arrow')
-      .addClass('staticLayers');
-    $('.accordionToggler')
-      .attr('title', 'Show Layer Selector');
-    $('.accordionToggler')
-      .html('Layers (' + models.layers.get()
-        .length + ')');
-
-    var speed = (now) ? undefined : 'fast';
-    $('.products')
-      .hide(speed);
-    $('#' + self.id)
-      .after($('.accordionToggler'));
-
-    if (util.browser.localStorage) {
-      localStorage.setItem('sidebarState', 'collapsed');
-    }
-  };
-
-  self.collapseNow = function () {
-    self.collapse(true);
-  };
-
-  self.expand = function (now) {
-    if (!collapsed) {
-      return;
-    }
-    collapsed = false;
-    $('.accordionToggler')
-      .removeClass('atexpand')
-      .addClass('atcollapse')
-      .removeClass('staticLayers dateHolder')
-      .addClass('arrow');
-    $('.accordionToggler')
-      .attr('title', 'Hide Layer Selector');
-    $('.accordionToggler')
-      .empty();
-    var speed = (now) ? undefined : 'fast';
-    $('.products')
-      .show(speed, function () {
-        models.wv.events.trigger('sidebar-expand');
-      });
-    $('.accordionToggler')
-      .appendTo('#' + self.id + 'toggleButtonHolder');
-
-    if (util.browser.localStorage) {
-      localStorage.setItem('sidebarState', 'expanded');
-    }
-    // Resize after browser repaints
-    setTimeout(function () {
-      self.sizeEventsTab();
-    }, 100);
-  };
-
-  self.expandNow = function () {
-    self.expand(true);
-  };
-
-  self.toggle = function () {
-    if (collapsed) {
-      self.expand();
-      collapseRequested = false;
-    } else {
-      self.collapse();
-      collapseRequested = true;
-    }
-  };
-
-  self.sizeEventsTab = function () {
-    var $tabPanel = $('#wv-events');
-    var $tabFooter = $tabPanel.find('footer');
-    var footerIsVisible = $tabFooter.css('display') === 'block';
-    var windowHeight = $(window).outerHeight(true);
-    var tabBarHeight = $('ul#productsHolder-tabs').outerHeight(true);
-    var distanceFromTop = $('#productsHolder').offset().top;
-    var footerHeight = $tabFooter.outerHeight(true);
-    var tabPadding = 54;
-
-    var maxHeight = windowHeight - tabBarHeight - distanceFromTop;
-    var innerMaxHeight = windowHeight - tabBarHeight;
-
-    if (footerIsVisible) {
-      $tabPanel.css('padding-bottom', footerHeight);
-      innerMaxHeight = innerMaxHeight - footerHeight;
-    } else {
-      $tabPanel.css('padding-bottom', 0);
-    }
-
-    if (!util.browser.small) {
-      maxHeight = maxHeight - 10 - 5;
-      innerMaxHeight = innerMaxHeight - tabPadding - footerHeight - 10 - 5;
-    }
-    $tabPanel.css('max-height', maxHeight);
-    $('.wv-eventslist').css('min-height', 1);
-
-    var childrenHeight = $('#wv-eventscontent').outerHeight(true);
-
-    if ((innerMaxHeight <= childrenHeight)) {
-      $('.wv-eventslist').css('height', innerMaxHeight).css('padding-right', '10px');
-      if (productsIsOverflow) {
-        $('.wv-eventslist').perfectScrollbar('update');
+  var init = function() {
+    self.reactComponent = ReactDOM.render(
+      React.createElement(Sidebar, getInitialProps()),
+      document.getElementById('wv-sidebar')
+    );
+    var updateLayers = function() {
+      if (models.compare.active) {
+        updateState('layerObjects');
       } else {
-        $('.wv-eventslist').perfectScrollbar();
-        productsIsOverflow = true;
+        updateState('layers');
       }
-    } else {
-      $('.wv-eventslist').css('height', '').css('padding-right', '');
-      if (productsIsOverflow) {
-        $('.wv-eventslist').perfectScrollbar('destroy');
-        productsIsOverflow = false;
+    };
+    model.events.on('add', updateLayers).on('remove', updateLayers);
+    models.data.events.on('activate', () => onTabClick('download'));
+    models.naturalEvents.events.on('activate', () => onTabClick('events'));
+    models.date.events.on('select', date => {
+      if (!models.compare.active) {
+        updateState('layers');
+      } else {
+        updateState('layerObjects');
       }
-    }
-  };
-
-  var render = function () {
-    var $container = $(self.selector);
-    $container.addClass('products');
-
-    var $tabs = $('ul#productsHolder-tabs');
-
-    var $activeTab = $('<li></li>')
-      .addClass('layerPicker')
-      .addClass('first')
-      .attr('data-tab', 'active');
-
-    var $activeLink = $('<a></a>')
-      .attr('href', '#products')
-      .addClass('activetab')
-      .addClass('tab')
-      .html('<i class=\'productsIcon selected icon-layers\' title=\'Layers\'></i> Layers');
-
-    $activeTab.append($activeLink);
-    $tabs.append($activeTab);
-
-    if (config.features.naturalEvents) {
-      var $eventsTab = $('<li></li>')
-        .addClass('layerPicker')
-        .addClass('second')
-        .attr('data-tab', 'events');
-      var $eventsLink = $('<a></a>')
-        .attr('href', '#wv-events')
-        .addClass('tab')
-        .html('<i class=\'productsIcon selected icon-events\' title=\'Events\'></i> Events');
-      $eventsTab.append($eventsLink);
-      $tabs.append($eventsTab);
-    }
-    if (config.features.dataDownload) {
-      var $downloadTab = $('<li></li>')
-        .addClass('layerPicker')
-        .addClass('third')
-        .attr('data-tab', 'download');
-      var $downloadLink = $('<a></a>')
-        .attr('href', '#wv-data')
-        .addClass('tab')
-        .html('<i class=\'productsIcon selected icon-download\' title=\'Data\'></i> Data');
-      $downloadTab.append($downloadLink);
-      $tabs.append($downloadTab);
-    }
-
-    var $collapseContainer = $('div#productsHoldertoggleButtonHolder')
-      .addClass('toggleButtonHolder');
-
-    var $collapseButton = $('<a></a>')
-      .addClass('accordionToggler')
-      .addClass('atcollapse')
-      .addClass('arrow')
-      .attr('title', 'Hide');
-
-    $collapseContainer.append($collapseButton);
-
-    $container.tabs({
-      beforeActivate: onBeforeTabChange,
-      activate: onTabChange
     });
-
-    $('.accordionToggler')
-      .bind('click', self.toggle);
+  };
+  self.sizeEventsTab = function() {};
+  var getInitialProps = function() {
+    var compareModel;
+    activeTab = models.naturalEvents.active
+      ? 'events'
+      : models.data.active
+        ? 'download'
+        : 'layers';
+    if (config.features.compare) {
+      compareModel = models.compare;
+      if (models.compare.active) {
+        isCompareA = compareModel.isCompareA;
+        isCompareMode = compareModel.active;
+        compareObj = getCompareObjects(models);
+        compareModeType = compareModel.mode;
+      }
+    }
+    return {
+      activeTab: activeTab,
+      isCompareMode: isCompareMode,
+      isCollapsed: isCollapsed,
+      layers: model.get({ group: 'all' }),
+      onTabClick: onTabClick,
+      toggleSidebar: toggleSidebar,
+      toggleLayerVisibility: toggleLayerVisibility,
+      tabTypes: getActiveTabs(),
+      getNames: model.getTitles,
+      firstDateObject: compareObj.a,
+      secondDateObject: compareObj.b,
+      getAvailability: getAvailability,
+      toggleComparisonObject: toggleComparisonObject,
+      toggleMode: toggleComparisonMode,
+      isCompareA: isCompareA,
+      updateLayer: updateLayer,
+      addLayers: onAddLayerCLick,
+      comparisonType: compareModeType,
+      changeCompareMode: compareModel.setMode
+    };
   };
 
-  var onTabChange = function (e, ui) {
-    var tab = ui.newTab.attr('data-tab');
-    if (tab === 'events' || tab === 'download') {
-      $('#wv-layers-options-dialog')
-        .dialog('close');
-    }
-    self.events.trigger('selectTab', ui.newTab.attr('data-tab'));
-    if (e.currentTarget) {
-      e.currentTarget.blur();
-    }
+  var getAvailability = function(id, isVisible, groupStr) {
+    return model.available(id, isVisible, model[groupStr]);
   };
 
-  var onBeforeTabChange = function (e, ui) {
-    var tab = ui.newTab.attr('data-tab');
-    $('.ui-tabs-nav li.second').removeClass('ui-state-active');
-    if (tab === 'active') {
-      $('.ui-tabs-nav li.first').addClass('ui-state-active');
-    } else if (tab === 'events') {
-      googleAnalytics.event('Natural Events', 'Click', 'Events Tab');
-      $('.ui-tabs-nav li.second').addClass('ui-state-active');
-    } else if (tab === 'download') {
-      $('.ui-tabs-nav li.third').addClass('ui-state-active');
+  // var changeDate = function() {
+  //   var strGroup = getActiveDateString(isCompareMode, isCompareA);
+  //   models.date.activeDate = strGroup;
+  //   models.date.select(models.date[strGroup], strGroup);
+  // };
+  var toggleComparisonObject = function() {
+    isCompareA = !isCompareA;
+    models.compare.toggleState();
+    updateState('isCompareA');
+  };
+  var onAddLayerCLick = function() {
+    $('#layer-modal').dialog('open');
+  };
+  var toggleComparisonMode = function() {
+    isCompareMode = !isCompareMode;
+    if (!models.layers.activeB || !models.date.selectedB) {
+      if (!models.date.selectedB) {
+        models.date.initCompare();
+      }
+      if (!models.layers.activeB) {
+        models.layers.initCompare();
+      }
+      updateState('layerObjects');
+    }
+
+    models.compare.toggle();
+    updateState('isCompareMode');
+    updateState('layerObjects');
+    updateState('layers');
+  };
+  var getActiveTabs = function() {
+    const features = config.features;
+    return {
+      download: features.dataDownload,
+      layers: true,
+      events: features.naturalEvents != null
+    };
+  };
+  var updateState = function(type) {
+    switch (type) {
+      case 'isCollapsed':
+        return self.reactComponent.setState({ isCollapsed: isCollapsed });
+      case 'activeTab':
+        return self.reactComponent.setState({ activeTab: activeTab });
+      case 'layers':
+        let layerString = getActiveLayerGroupString(isCompareMode, isCompareA);
+        return self.reactComponent.setState({
+          layers: models.layers.get(
+            { group: 'all' },
+            models.layers[layerString]
+          )
+        });
+      case 'isCompareMode':
+        return self.reactComponent.setState({ isCompareMode: isCompareMode });
+      case 'isCompareA': {
+        return self.reactComponent.setState({ isCompareA: isCompareA });
+      }
+      case 'layerObjects':
+        compareObj = getCompareObjects(models);
+        return self.reactComponent.setState({
+          firstDateObject: compareObj.a,
+          secondDateObject: compareObj.b
+        });
+    }
+  };
+  var toggleSidebar = function() {
+    isCollapsed = !isCollapsed;
+    updateState('isCollapsed');
+  };
+  var onTabClick = function(tab) {
+    if (activeTab === tab) return;
+    activeTab = tab;
+    self.events.trigger('selectTab', tab);
+    updateState('activeTab');
+  };
+  var updateLayer = function(layerId, typeOfUpdate) {
+    var layer;
+    var layerGroupString = getActiveLayerGroupString(isCompareMode, isCompareA);
+
+    switch (typeOfUpdate) {
+      case 'remove':
+        models.layers.remove(layerId, layerGroupString);
+        updateState(removeLayerState(layerGroupString));
+        break;
+      case 'add':
+        models.layers.add(layerId, layerGroupString);
+        break;
+      case 'visibility':
+        models.layers.toggleVisibility(layerId, layerGroupString);
+        updateState(removeLayerState(layerGroupString));
+        break;
+      case 'info':
+        layer = lodashFind(models.layers[layerGroupString], { id: layerId });
+        layersInfo(config, models, layer);
+        break;
+      case 'options':
+        layer = lodashFind(models.layers[layerGroupString], { id: layerId });
+        layersOptions(config, models, layer);
+        break;
+      default:
+        updateState(removeLayerState(layerGroupString));
+    }
+  };
+  var removeLayerState = function(groupString) {
+    return groupString === 'active' ? 'layers' : 'layerObjects';
+  };
+  var toggleLayerVisibility = function(layerId, isVisible) {
+    var groupString = getActiveLayerGroupString(isCompareMode, isCompareA);
+    models.layers.setVisibility(layerId, isVisible, groupString);
+    if (groupString === 'active') {
+      updateState('layers');
     } else {
-      throw new Error('Invalid tab index: ' + ui.index);
-    }
-    self.events.trigger('before-select', tab);
-    return true;
-  };
-
-  var resize = function () {
-    if (!mobile && util.browser.small) {
-      self.collapseNow();
-      mobile = true;
-    } else if (mobile && !util.browser.small && !collapseRequested) {
-      self.expandNow();
-      mobile = false;
-    }
-  };
-
-  var onProjectionChange = function () {
-    if (collapsed) {
-      $('.accordionToggler')
-        .html('Layers (' + models.layers.get()
-          .length + ')');
+      updateState('layerObjects');
     }
   };
 
   init();
   return self;
-};
+}
