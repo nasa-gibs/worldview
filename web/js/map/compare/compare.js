@@ -13,14 +13,14 @@ export function mapCompare(models, config) {
 
   self.create = function(map, compareMode) {
     if (compareMode === mode && comparison && proj === models.proj.selected) {
-      comparison.update();
+      comparison.update(models.compare.isCompareA);
     } else if (comparison) {
       mode = compareMode;
       self.destroy();
-      comparison = new self[compareMode](map); // e.g. new self.swipe()
+      comparison = new self[compareMode](map, models.compare.isCompareA); // e.g. new self.swipe()
     } else {
       mode = compareMode;
-      comparison = new self[compareMode](map); // e.g. new self.swipe()
+      comparison = new self[compareMode](map, models.compare.isCompareA); // e.g. new self.swipe()
     }
     self.active = true;
     proj = models.proj.selected;

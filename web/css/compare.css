@@ -11,7 +11,8 @@
   top: 50%;
   width: 30px;
   height: 30px;
-  left: -12px;
+  margin-top: -15px;
+  left: -13px;
   border-radius: 50%;
   color: black;
   background: white;
@@ -32,7 +33,48 @@
   left: 0;
   right: 0;
   bottom: 25%;
-  width: 150px;
+  width: 160px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
+  color: white;
+}
+.ab-slider-case span {
+  position: absolute;
+  top: 5px;
+  font-size: 14px;
+}
+.ab-swipe-line .ab-swipe-span {
+  position: absolute;
+  top: 50%;
+  padding: 2px;
+  background: white;
+  color: black;
+  display: block;
+  font-size: 14px;
+  margin-top: -7px;
+  border-radius: 3px;
+  border: 1px solid black;
+}
+.ab-swipe-line .left-label {
+  left: -35px;
+}
+.ab-swipe-line .right-label {
+  left: 24px;
+}
+.ab-spy-span {
+  position: absolute;
+  background: white;
+  color: black;
+  display: block;
+  font-size: 14px;
+  border-radius: 3px;
+  border: 1px solid black;
+  padding: 2px;
+  margin-left: -4px;
+}
+.ab-slider-case .left-label {
+  left: 3px;
+}
+.ab-slider-case .right-label {
+  right: 3px;
 }
