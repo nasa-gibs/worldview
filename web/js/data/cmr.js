@@ -15,6 +15,9 @@ export function dataCmrClient(spec) {
 
   var ajaxOptions = {
     url: 'https://cmr.earthdata.nasa.gov/search/',
+    headers: {
+      'Client-Id': 'Worldview'
+    },
     traditional: true,
     dataType: 'json',
     timeout: QUERY_TIMEOUT
