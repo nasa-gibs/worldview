@@ -197,6 +197,9 @@ export function dataUi(models, ui, config) {
 
     var childrenHeight = $('#wv-datacontent').outerHeight(true);
 
+    // https://github.com/utatti/perfect-scrollbar/tree/0.8.1#before-using-perfect-scrollbar
+    $('.wv-datalist').css('position', 'relative');
+
     if ((innerMaxHeight <= childrenHeight)) {
       $('.wv-datalist').css('height', innerMaxHeight).css('padding-right', '10px');
       if (productsIsOverflow) {
