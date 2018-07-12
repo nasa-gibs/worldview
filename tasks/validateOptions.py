@@ -78,12 +78,7 @@ for layer_id in wv["layers"].keys():
             continue
         elif tolerant or opt.get("ignoreLayerOrder", False):
             wv["layerOrder"] += [layer_id]
-        elif opt.get("warnOnUnexpectedLayer"):
-            warn("[%s] Unexpected layer, not in layer order" % layer_id)
-            remove_layer(wv, layer_id)
-            continue
         else:
-            error("[%s] Unexpected layer, not in layer order" % layer_id)
             remove_layer(wv, layer_id)
             continue
     if "projections" not in layer or len(layer["projections"]) == 0:
