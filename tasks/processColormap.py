@@ -114,6 +114,14 @@ def replace_duplicates(duplicates, tooltip_list, entries):
 
 def process_entries(colormap):
     entries = to_list(colormap["Entries"]["ColorMapEntry"])
+
+    transparent_map = "true"
+    for entry in entries:
+        if entry["@transparent"] == "false":
+            transparent_map = "false"
+    if (transparent_map == "true"):
+        return "transparent"
+
     if "Legend" not in colormap:
         raise KeyError("No Legend")
     else:
@@ -123,13 +131,7 @@ def process_entries(colormap):
     values = []
     tooltips = []
     matches = []
-    transparent_map = "true"
 
-    for entry in entries:
-        if entry["@transparent"] == "false":
-            transparent_map = "false"
-    if (transparent_map == "true"):
-        return "transparent"
     color_format = "{0:02x}{1:02x}{2:02x}{3:02x}"
     for index, entry in enumerate(entries):
         legend = match_legend(entry, legends)
