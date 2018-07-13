@@ -51,7 +51,11 @@ export function palettesModel(models, config) {
     if (!palettes.supported) {
       return false;
     }
-    return config.layers[layerId].palette;
+    let palette = config.layers[layerId].palette;
+    if (palette.immutable) {
+      return false;
+    }
+    return palette;
   };
 
   self.setCustom = function (layerId, paletteId, index) {
