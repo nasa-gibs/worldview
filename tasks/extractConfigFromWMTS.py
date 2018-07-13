@@ -138,6 +138,11 @@ def process_entry(entry, colormaps):
     gc_contents = gc["Capabilities"]["Contents"]
     wv_layers = wv["layers"]
 
+    if gc_contents is None or "Layer" not in gc_contents:
+        error_count += 1
+        sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, gc_id, "No layers"))
+        return [error_count, warning_count, layer_count]
+
     if(type(gc["Capabilities"]["Contents"]["Layer"]) is OrderedDict):
         gc_layer = gc["Capabilities"]["Contents"]["Layer"]
         id = gc_layer["ows:Identifier"]

@@ -50,23 +50,27 @@ export function layersModel(models, config) {
   };
 
   self.getTitles = function (layerId, proj) {
-    proj = proj || models.proj.selected.id;
-    var title, subtitle, tags;
-    if (config.layers[layerId].projections[proj]) {
-      var forProj = config.layers[layerId].projections[proj];
-      title = forProj.title;
-      subtitle = forProj.subtitle;
-      tags = forProj.tags;
+    try {
+      proj = proj || models.proj.selected.id;
+      var title, subtitle, tags;
+      if (config.layers[layerId].projections[proj]) {
+        var forProj = config.layers[layerId].projections[proj];
+        title = forProj.title;
+        subtitle = forProj.subtitle;
+        tags = forProj.tags;
+      }
+      var forLayer = config.layers[layerId];
+      title = title || forLayer.title || '[' + layerId + ']';
+      subtitle = subtitle || forLayer.subtitle || '';
+      tags = tags || forLayer.tags || '';
+      return {
+        title: title,
+        subtitle: subtitle,
+        tags: tags
+      };
+    } catch (err) {
+      throw new Error(`error in layer ${layerId}: ${err}`);
     }
-    var forLayer = config.layers[layerId];
-    title = title || forLayer.title || '[' + layerId + ']';
-    subtitle = subtitle || forLayer.subtitle || '';
-    tags = tags || forLayer.tags || '';
-    return {
-      title: title,
-      subtitle: subtitle,
-      tags: tags
-    };
   };
 
   self.available = function (id) {
