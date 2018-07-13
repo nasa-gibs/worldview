@@ -3,6 +3,10 @@ button:focus {
   outline: 0;
 }
 
+#timeline {
+  left: 0;
+}
+
 .timeline-inner {
   position: absolute;
   border: 1px solid #333;
