@@ -70,6 +70,10 @@ def process_remote(entry):
     gc = xmltodict.parse(contents)
 
     # Find all colormaps in GetCapabilities responses and store them in memory
+    if gc["Capabilities"]["Contents"] is None:
+        print('error: %s: no layers' % url)
+        return
+
     try:
         if(type(gc["Capabilities"]["Contents"]["Layer"]) is OrderedDict):
             process_layer(gc["Capabilities"]["Contents"]["Layer"])
@@ -77,8 +81,8 @@ def process_remote(entry):
             for layer in gc["Capabilities"]["Contents"]["Layer"]:
                 process_layer(layer)
 
-    except:
-        print(ident)
+    except Exception as e:
+        print('error: %s: %s' % (url, str(e)))
         print(str(traceback.format_exc()))
 
 # Fetch every colormap from the API and write response to file system
