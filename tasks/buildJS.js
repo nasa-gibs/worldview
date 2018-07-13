@@ -26,22 +26,33 @@ if (!fs.existsSync(outputDir)) {
   }
 }
 
+// bundler is broken up conditionally to allow watch for dev, and uglification for prod
 var bundler = browserify(entryPoint, {
   debug: !isProduction, // Include source maps (makes bundle size larger)
   fullPaths: !isProduction, // For use with https://www.npmjs.com/package/disc
   cache: {}, // Required for watchify
   packageCache: {}, // Required for watchify
   plugin: [isWatching ? watchify : null]
-}).transform('envify', { // Replace env variables with strings - allows deadcode removal with uglifyify (below) and unglifyjs (see npm script "build:js")
-  NODE_ENV: process.env.NODE_ENV,
-  global: true
-}).transform('babelify', {
+});
+
+if (isProduction) {
+  bundler = bundler.transform('envify', { // Replace env variables with strings - allows deadcode removal with uglifyify (below) and unglifyjs (see npm script "build:js")
+    NODE_ENV: process.env.NODE_ENV,
+    global: true
+  });
+}
+
+bundler = bundler.transform('babelify', { // necessary regardless of dev or prod build
   presets: ['env']
 }).transform('browserify-shim', {
   global: true
-}).transform('uglifyify', { // With sourcemaps turned on, it's ok to uglify in dev
-  global: true
 });
+
+if (isProduction) {
+  bundler = bundler.transform('uglifyify', { // With sourcemaps turned on, it's ok to uglify in dev
+    global: true
+  });
+}
 
 function bundle() {
   const begin = Date.now();
