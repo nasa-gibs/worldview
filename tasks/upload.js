@@ -16,16 +16,16 @@ const error = (msg) => {
 
 var argv = yargs
   .usage('$0 [options] <name>')
-  .option('c', {
-    alias: 'config',
-    description: 'configuration target if not "release"',
-    requiresArg: true,
-    type: 'string'
-  })
   .option('d', {
     alias: 'dist',
     description: 'do not build, use artifacts found in dist directory',
     type: 'boolean'
+  })
+  .option('e', {
+    alias: 'env',
+    description: 'configuration environment if not "release"',
+    requiresArg: true,
+    type: 'string'
   })
   .option('h', {
     alias: 'host',
@@ -135,8 +135,8 @@ if (!argv.dist) {
   let cmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   let args = ['run', 'build'];
 
-  if (argv.config) {
-    args = args.concat(['--', argv.config]);
+  if (argv.env) {
+    args = args.concat(['--', argv.env]);
   }
   console.log(`===>`, `${cmd} ${args.join(' ')}`);
   const proc = spawn(cmd, args);
