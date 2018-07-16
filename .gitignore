@@ -1,5 +1,7 @@
 /build
 /web/build
+/web/brand
+/web/config
 /dist
 /node_modules
 /web/ext/node_modules/*
