@@ -283,7 +283,7 @@ module.exports = function(grunt) {
     brand.officialName = brand.officialName || brand.name;
     brand.longName = brand.longName || brand.name;
     brand.shortName = brand.shortName || brand.name;
-    brand.packageName = grunt.option('package-name') || brand.packageName;
+    brand.packageName = grunt.option('package-name') || brand.packageName || 'worldview';
     brand.email = brand.email || 'support@example.com';
 
     grunt.option('officialName', brand.officialName);
