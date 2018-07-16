@@ -15,7 +15,11 @@ const outputDir = './web/build/';
 const outputPath = outputDir + (isTest ? 'wv-test-bundle.js' : 'wv.js');
 
 // Log what we're building, and in what environment
-console.log('Building ' + outputPath + ' for ' + process.env.NODE_ENV);
+let buildEnv = 'development';
+if (isProduction) {
+  buildEnv = 'production';
+}
+console.log('Building ' + outputPath + ' for ' + buildEnv);
 if (!fs.existsSync(outputDir)) {
   // Bamboo was getting caught up here saying the directory already exists.
   // Just log an error if that happens and continue.

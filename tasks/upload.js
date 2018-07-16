@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const { spawn } = require('child_process');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -16,17 +15,6 @@ const error = (msg) => {
 
 var argv = yargs
   .usage('$0 [options] <name>')
-  .option('d', {
-    alias: 'dist',
-    description: 'do not build, use artifacts found in dist directory',
-    type: 'boolean'
-  })
-  .option('e', {
-    alias: 'env',
-    description: 'configuration environment if not "release"',
-    requiresArg: true,
-    type: 'string'
-  })
   .option('h', {
     alias: 'host',
     description: 'upload to this host',
@@ -68,7 +56,7 @@ if (argv.help) {
 
 const baseDir = path.join(__dirname, '..');
 const distDir = path.join(baseDir, 'dist');
-const worldview = 'site-worldview-debug.tar.bz2';
+const worldview = 'worldview.tar.gz';
 const distWorldview = path.join(distDir, worldview);
 const configFile = path.join(os.homedir(), '.worldview', 'upload.config');
 
@@ -119,9 +107,7 @@ async function upload() {
     await ssh.putFile(distWorldview, `${root}/${name}/${worldview}`);
     cmd = `
       cd ${root}/${name} &&
-      tar xf ${worldview} --warning=no-unknown-keyword &&
-      mv site-worldview-debug/web/{*,.htaccess} . &&
-      rm -rf site-worldview-debug`;
+      tar xf ${worldview} --warning=no-unknown-keyword --strip-components=1 --touch`;
     result = await ssh.execCommand(cmd);
     process.stdout.write(result.stdout);
     process.stderr.write(result.stderr);
@@ -131,31 +117,4 @@ async function upload() {
   }
 };
 
-if (!argv.dist) {
-  let cmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  let args = ['run', 'build'];
-
-  if (argv.env) {
-    args = args.concat(['--', argv.env]);
-  }
-  console.log(`===>`, `${cmd} ${args.join(' ')}`);
-  const proc = spawn(cmd, args);
-  proc.stdout.on('data', (data) => {
-    process.stdout.write(data);
-  });
-  proc.stderr.on('data', (data) => {
-    process.stderr.write(data);
-  });
-  proc.on('close', (code) => {
-    if (code === 0) {
-      upload();
-    } else {
-      error('build failed');
-    }
-  });
-  proc.on('error', (err) => {
-    error(`build failed: ${err}`);
-  });
-} else {
-  upload();
-}
+upload();
