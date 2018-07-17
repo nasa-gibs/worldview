@@ -21,3 +21,13 @@ console.log('Copying options to web directory');
 shell.cp('-r', 'build/options/config', 'web/config');
 shell.cp('-r', 'build/options/brand', 'web/brand');
 shell.cp('-r', 'build/options/brand.json', 'web/brand');
+
+console.log('Adding .htaccess files to options');
+let htaccess = `
+ExpiresActive On
+ExpiresDefault A0
+Header set Cache-Control "no-cache, must-revalidate, public"
+Header set Pragma "no-cache"
+`;
+fs.writeFileSync('web/brand/.htaccess', htaccess);
+fs.writeFileSync('web/config/.htaccess', htaccess);
