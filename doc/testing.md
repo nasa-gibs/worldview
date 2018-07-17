@@ -88,3 +88,4 @@ To run tests for both browsers in sequence: `npm run e2e`.
 | markDownloads | boolean | If any value is specified, layers that can be downloaded will be marked in red in the Add Layers tab. |
 | debugPalette | boolean | If any value is specified, a black debugging custom palette will be added to assist in finding invalid lookup table mappings. |
 | showError | boolean | If any value is specified, an error dialog will be shown on startup. |
+| showSubdaily | boolean | If any value is specified, the hour input, minute input and "minutes" timeline zoom option will be shown. |

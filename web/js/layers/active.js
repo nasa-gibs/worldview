@@ -372,10 +372,9 @@ export function layersActive(models, ui, config) {
   var subdailyCheck = function () {
     var activeLayers = models.layers.active;
     var currentProjection = models.proj.selected.id;
-    var showSubdaily = config.parameters.showSubdaily;
     var check;
 
-    if (showSubdaily === 'true') {
+    if (config.parameters.showSubdaily) {
       check = true;
     } else {
       lodashEach(activeLayers, function(activeLayer) {
