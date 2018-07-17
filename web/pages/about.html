@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>@OFFICIAL_NAME@ - About</title>
+    <link type="text/css" href="../pages/css/document.css?v=@BUILD_NONCE@" rel="Stylesheet" />
+    <link type="text/css" href="../pages/css/standalone.css?v=@BUILD_NONCE@" rel="Stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <div id="page" class="wv-document">
+        <div class="right">
+            <div class="caption">Version @BUILD_VERSION@</div>
+        </div>
+
+        <h1>Welcome to @NAME@</h1>
+
+        <p>
+            This app from NASA's
+            <a href='https://earthdata.nasa.gov/about'>EOSDIS</a> provides the capability to interactively browse over 600 global, full-resolution satellite imagery
+            layers and then download the underlying data. Many of the available imagery layers are updated within three hours
+            of observation, essentially showing the entire Earth as it looks "right now". This supports time-critical application
+            areas such as wildfire management, air quality measurements, and flood monitoring. Arctic and Antarctic views
+            of several products are also available for a "full globe" perspective. Browsing on tablet and smartphone devices
+            is generally supported for mobile access to the imagery.
+        </p>
+
+        <div class="right">
+            <a href="https://earthdata.nasa.gov/gibs" class="gibs-logo"></a>
+            <div class="caption gibs-caption">Powered by GIBS</div>
+        </div>
+
+        <p>
+            @NAME@ uses the
+            <a href='https://earthdata.nasa.gov/gibs'>Global Imagery Browse Services</a> to rapidly retrieve its imagery for an interactive browsing experience. While
+            @NAME@ uses
+            <a href='https://openlayers.org'>OpenLayers</a> as its mapping library, GIBS imagery can also be accessed from Google Earth, NASA World Wind,
+            and several other clients. We encourage interested developers to build their own clients or integrate NASA imagery
+            into their existing ones using these services.
+        </p>
+        <p>
+            <a href='https://earthdata.nasa.gov/faq/worldview-gibs-faq'>Frequently Asked Questions</a>
+        </p>
+        <hr/>
+        <h2>Imagery Use</h2>
+        <p>
+            NASA supports an
+            <a href='https://earthdata.nasa.gov/earth-science-data-systems-program/policies/data-information-policy'>open data policy</a>
+            and we encourage publication of imagery from @NAME@; when doing so for image captions, please cite it as "NASA @NAME@" and
+            also consider including a direct link to the imagery in Worldview to allow others to explore the imagery.
+        </p>
+        <p>
+            For acknowledgment in scientific journals, please use: "We acknowledge the use of imagery from the NASA @NAME@ application
+            (<a href='https://worldview.earthdata.nasa.gov/'>https://worldview.earthdata.nasa.gov/</a>) operated by the NASA/Goddard Space Flight Center Earth Science Data
+            and Information System (ESDIS) project."
+        </p>
+        <hr/>
+        <h2>Acknowledgements</h2>
+        <p>
+            <ul>
+                <li>Near real-time data is courtesy of the [Land, Atmosphere Near Real-Time Capability for EOS (LANCE)](https://earthdata.nasa.gov/earth-observation-data/near-real-time)
+                    data providers:
+                    <ul>
+                        <li>
+                            <a href='https://earthdata.nasa.gov/about/science-system-description/eosdis-components/lance/about-amsr2-sips'>AMSR SIPS</a>
+                        </li>
+                        <li>
+                            <a href='https://earthdata.nasa.gov/about/daacs/daac-asdc'>ASDC</a>
+                        </li>
+                        <li>
+                            <a href='https://earthdata.nasa.gov/about/science-system-description/eosdis-components/lance/about-ges-disc'>GES DISC</a>
+                        </li>
+                        <li>
+                            <a href='https://earthdata.nasa.gov/about/science-system-description/eosdis-components/lance/about-modaps'>MODAPS</a>
+                        </li>
+                        <li>
+                            <a href='https://earthdata.nasa.gov/about/sips/sips-mopitt'>MOPITT SIPS</a>
+                        </li>
+                        <li>
+                            <a href='https://earthdata.nasa.gov/about/science-system-description/eosdis-components/lance/about-omi-sips'>OMI SIPS</a>
+                            and
+                            <a href='https://earthdata.nasa.gov/about/science-system-description/eosdis-components/lance/about-ozone-sips'>Ozone SIPS</a>
+                        </li>
+                        <li>
+                            <a href='https://earthdata.nasa.gov/earth-observation-data/near-real-time/firms'>FIRMS</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>Ocean color and sea surface temperature products provided by <a href='https://oceancolor.gsfc.nasa.gov/'>OB.DAAC</a>
+                    and <a href='https://podaac.jpl.nasa.gov/'>PO.DAAC</a>.</li>
+                <li>Precipitation products provided by <a href='https://pps.gsfc.nasa.gov/'>Precipitation Processing System (PPS)</a> and
+                    <a href='https://earthdata.nasa.gov/about/science-system-description/eosdis-components/lance/about-amsr2-sips'>AMSR SIPS</a>.</li>
+                <li>Freeze/Thaw products, soil moisture and related products supplied by <a href='https://nsidc.org/daac'>NSIDC DAAC</a>.</li>
+                <li>Socioeconomic layers supplied by <a href='http://sedac.ciesin.org/'>SEDAC</a>.</li>
+                <li>Digital Elevation Model layers supplied by <a href='https://lpdaac.usgs.gov/'>LP DAAC</a>.</li>
+                <li>Orbit tracks provided by <a href='https://www.space-track.org'>space-track.org</a>.</li>
+                <li>Polar coastlines and graticules courtesy of <a href='https://www.add.scar.org/'>SCAR Antarctic Digital Database</a>,
+                    <a href='https://www.openstreetmap.org/'>OpenStreetMap</a>, and <a href='https://www.polarview.aq/'>PolarView</a>.</li>
+                <li>Coastlines, borders, roads, and place labels courtesy of <a href='https://www.openstreetmap.org/'>OpenStreetMap</a>
+                    and <a href='http://www.naturalearthdata.com/'>Natural Earth</a>. This data is available under the <a href='https://www.openstreetmap.org/copyright'>Open Database
+                        License</a>. &copy; OpenStreetMap contributors.</li>
+                <li>Natural events database is provided by the <a href='https://eonet.sci.gsfc.nasa.gov/'>Earth Observatory Natural Event Tracker (EONET)</a>.</li>
+                <li>User-selectable color palettes are primarily derived from <a href='https://neo.sci.gsfc.nasa.gov/'>NEO</a>.</li>
+                <li>The imagery ingest and serving system (GIBS) is built by NASA/JPL and operated by NASA/GSFC.</li>
+                <li>@NAME@ is built by the NASA/GSFC <a href='https://earthdata.nasa.gov/about/esdis-project'>Earth Science Data and Information System (ESDIS) Project</a>.
+                    We are grateful for the many third-party projects we depend on which are listed in
+                    <a href='https://github.com/nasa-gibs/worldview/blob/master/package.json'>our package.json file</a> under "dependencies".</li>
+            </ul>
+        </p>
+
+        <hr/>
+        <h2>Disclaimer</h2>
+        <p>
+            The information presented through this interface is provided "as is" and users bear all responsibility and liability for
+            their use of the data. Please read the
+            <a href='https://earthdata.nasa.gov/earth-observation-data/near-real-time/citation#ed-lance-disclaimer'>full disclaimer</a>.
+        </p>
+
+        <hr/>
+        <h2>License</h2>
+        <p>
+            Copyright &copy; 2013 - 2018 United States Government as represented by the Administrator of the National Aeronautics and
+            Space Administration. All Rights Reserved. This software is licensed under the
+            <a href='https://ti.arc.nasa.gov/opensource/nosa/'>NASA Open Source Software Agreement, Version 1.3</a>. Source code is available on the
+            <a href='https://github.com/nasa-gibs/worldview'>NASA GIBS GitHub</a>.
+        </p>
+
+        <hr/>
+        <p>
+            @BUILD_TIMESTAMP@
+            <br/> Responsible NASA Official:
+            <a href='mailto:ryan.a.boller@nasa.gov'>Ryan Boller</a>
+        </p>
+    </div>
+</body>
+
+</html>
