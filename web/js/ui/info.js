@@ -86,7 +86,7 @@ export function uiInfo (ui, config) {
 
     $about.click(function () {
       if (util.browser.small || util.browser.touchDevice) {
-        window.open('brand/pages/about.html?v=@BUILD_NONCE@', '_blank');
+        window.open('pages/about.html?v=@BUILD_NONCE@', '_blank');
       } else {
         wvui.getDialog()
           .dialog({
@@ -100,7 +100,7 @@ export function uiInfo (ui, config) {
               effect: 'fade'
             }
           })
-          .load('brand/pages/about.html?v=@BUILD_NONCE@ #page')
+          .load('pages/about.html?v=@BUILD_NONCE@ #page')
           .addClass('wv-opaque');
       }
     });
