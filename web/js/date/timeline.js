@@ -155,7 +155,7 @@ export function timeline(models, config, ui) {
 
     self.boundary = self.svg
       .append('svg:g')
-      .attr('clip-path', '#timeline-boundary')
+      .attr('clip-path', 'url(#timeline-boundary)')
       .attr('style', 'clip-path:url(#timeline-boundary)')
       .attr('transform', 'translate(0,16)');
 
