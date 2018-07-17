@@ -372,12 +372,18 @@ export function layersActive(models, ui, config) {
   var subdailyCheck = function () {
     var activeLayers = models.layers.active;
     var currentProjection = models.proj.selected.id;
+    var showSubdaily = config.parameters.showSubdaily;
     var check;
-    lodashEach(activeLayers, function(activeLayer) {
-      if (Object.keys(activeLayer.projections).some(function(k) { return ~k.indexOf(currentProjection); })) {
-        if (activeLayer.period === 'subdaily' && activeLayer.projections[currentProjection]) check = true;
-      }
-    });
+
+    if (showSubdaily === 'true') {
+      check = true;
+    } else {
+      lodashEach(activeLayers, function(activeLayer) {
+        if (Object.keys(activeLayer.projections).some(function(k) { return ~k.indexOf(currentProjection); })) {
+          if (activeLayer.period === 'subdaily' && activeLayer.projections[currentProjection]) check = true;
+        }
+      });
+    }
     return check;
   };
 
