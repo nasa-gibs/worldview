@@ -74,6 +74,7 @@ export function layersActive(models, ui, config) {
     var $addBtn = $('#layers-add');
     $addBtn.button();
     $addBtn.click(function (e) {
+      wvui.closeDialog();
       $('#layer-modal').dialog('open');
     });
 
