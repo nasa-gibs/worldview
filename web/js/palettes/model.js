@@ -52,7 +52,7 @@ export function palettesModel(models, config) {
       return false;
     }
     let palette = config.layers[layerId].palette;
-    if (palette.immutable) {
+    if (!palette || palette.immutable) {
       return false;
     }
     return palette;
