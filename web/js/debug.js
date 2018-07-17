@@ -21,6 +21,7 @@ export var debug = (function () {
         return;
       }
     }
+
     if (parameters.showError) {
       $(function () {
         util.error();
