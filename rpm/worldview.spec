@@ -4,10 +4,8 @@ Release: 1.@BUILD_NUMBER@%{?dist}
 Summary: Browse full-resolution, near real-time satellite imagery.
 License: NASA-1.3
 URL: http://earthdata.nasa.gov
-Source0: site-@WORLDVIEW@.tar.bz2
-Source1: site-@WORLDVIEW@-debug.tar.bz2
-Source3: httpd.conf
-Source4: httpd-debug.conf
+Source0: @WORLDVIEW@.tar.gz
+Source1: httpd.conf
 BuildArch: noarch
 Requires: httpd
 
@@ -28,10 +26,8 @@ Summary:	Non-minified version of Worldview for debugging
 
 %prep
 %setup -c -T
-tar xf %{SOURCE0}
-tar xf %{SOURCE1}
-cp %{SOURCE3} .
-cp %{SOURCE4} .
+tar xf %{SOURCE0} --touch
+cp %{SOURCE1} .
 
 %install
 rm -rf %{buildroot}
@@ -41,17 +37,9 @@ install -m 755 -d %{buildroot}/%{httpdconfdir}
 install -m 644 httpd.conf %{buildroot}/%{httpdconfdir}/@WORLDVIEW@.conf
 rm httpd.conf
 
-# Install Apache configuration for debug
-install -m 644 httpd-debug.conf %{buildroot}/%{httpdconfdir}/@WORLDVIEW@-debug.conf
-rm httpd-debug.conf
-
 # Install release application
 install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@
-cp -r site-@WORLDVIEW@/* %{buildroot}/%{_datadir}/@WORLDVIEW@
-
-# Install debug application
-install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
-cp -r site-@WORLDVIEW@-debug/* %{buildroot}/%{_datadir}/@WORLDVIEW@-debug
+cp -r @WORLDVIEW@/* %{buildroot}/%{_datadir}/@WORLDVIEW@
 
 %clean
 rm -rf %{buildroot}
