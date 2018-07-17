@@ -386,11 +386,11 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-footer svg {
+  overflow: visible;
   margin-top: -16px;
 }
 
 #timeline-footer > svg {
-  overflow-y: hidden;
   margin-top: -23px;
 }
 
