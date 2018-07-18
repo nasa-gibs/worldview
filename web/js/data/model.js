@@ -142,26 +142,36 @@ export function dataModel(models, config) {
   };
 
   self.groupByProducts = function () {
-    var products = {};
-    $.each(self.layers, function (index, layer) {
-      var productId = layer.product || NO_PRODUCT_ID;
-      var product = config.products[productId] || NO_PRODUCT;
-      if (!products[productId]) {
-        products[productId] = {
-          title: product.name,
-          items: [],
-          notSelectable: product.notSelectable
-        };
+    let products = {};
+    for (let layer of self.layers) {
+      let productIds = [];
+      if (!layer.product) {
+        productIds = [NO_PRODUCT_ID];
+      } else if (Array.isArray(layer.product)) {
+        productIds = layer.product;
+      } else {
+        productIds = [layer.product];
       }
-      products[productId].items.push({
-        label: layer.name,
-        sublabel: layer.description,
-        value: layer.id,
-        categories: {
-          All: 1
+      for (let productId of productIds) {
+        var product = config.products[productId] || NO_PRODUCT;
+        console.log('product', product);
+        if (!products[productId]) {
+          products[productId] = {
+            title: product.name,
+            items: [],
+            notSelectable: product.notSelectable
+          };
         }
-      });
-    });
+        products[productId].items.push({
+          label: layer.name,
+          sublabel: layer.description,
+          value: layer.id,
+          categories: {
+            All: 1
+          }
+        });
+      }
+    };
 
     // FIXME: This is a hack to force the not availables to the bottom
     // especially for IE9. This whole function needs clean up.
@@ -436,6 +446,9 @@ export function dataModel(models, config) {
     for (var i = list.length - 1; i >= 0; i--) {
       if (list[i].product) {
         foundProduct = list[i].product;
+        if (Array.isArray(foundProduct)) {
+          foundProduct = foundProduct[0];
+        }
       }
     }
     return foundProduct;
