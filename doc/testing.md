@@ -54,17 +54,12 @@ To run tests for both browsers in sequence: `npm run e2e`.
 | --------- | ----- | ----------- |
 | `mockCMR` | boolean | Do not query CMR and fetch the static JSON file found at mock/cmr.cgi-X |
 | `timeoutCMR` | ms | Override the CMR timeout value in milliseconds |
-| `mockMap` | boolean | If any value is specified, do not fetch tiles from remote sources and display a blank map |
 | `mockEvents` | boolean | Use the static JSON file with event feeds found at mock/events\_data.json-X |
 | `mockCategories` | boolean | Use the static JSON file with categories feeds found at mock/categories\_data.json-X |
 | `mockSources` | boolean | Use the static JSON file with sources feeds found at mock/sources\_data.json-X |
 | `mockAlerts` | string | Use a static JSON file by passing the notification type: `alert`, `message`, `outage`, `no_types`, or `all_types`. Local sources can be found at mock/notify_{string}.json |
 | `modalView` | `categories`, `measurements`, `layers` | Forces the 'Add Layers' modal to display categories, measurements or layers. By default Artic/Antarctic shows measurements and Geographic shows categories. |
-| `imagegen` | boolean | Use the endpoint http://map2.vis.earthdata.nasa.gov/imagegen/index-X.php for image download  |
 | `loadDelay` | ms | After loading all resources, wait X milliseconds before starting. |
 | `now` | `YYYY-MM-DDTHH:MM` | Override the value the Worldview uses for the current date and time. This only works when using the `now()` function from `js/util/util.js`. |
-| `markPalettes` | boolean | If any value is specified, layers with an assigned palette will be marked in red in the Add Layers . |
-| `markDownloads` | boolean | If any value is specified, layers that can be downloaded will be marked in red in the Add Layers tab. |
-| `debugPalette` | boolean | If any value is specified, a black debugging custom palette will be added to assist in finding invalid lookup table mappings. |
 | `showError` | boolean | If any value is specified, an error dialog will be shown on startup. |
 | `showSubdaily` | boolean | If any value is specified, the hour input, minute input and "minutes" timeline zoom option will be shown. |
