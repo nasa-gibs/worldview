@@ -75,14 +75,15 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 
 ## Other Information
 
-* [Developing](doc/developing.md)
-* [Testing](doc/testing.md)
 * [Configuration](doc/configuration.md)
 * [Custom Branding](doc/branding.md)
-* [Data Download](doc/data_download.md)
 * [Optional Features](doc/features.md)
+* [Data Download](doc/data_download.md)
+* [URL Parameters](doc/url_parameters.md)
+* [Developing](doc/developing.md)
 * [Deployment](doc/deployment.md)
 * [Using Apache (deprecated)](doc/apache_setup.md)
+* [Testing](doc/testing.md)
 * [Uploading](doc/upload.md)
 
 ## Contact

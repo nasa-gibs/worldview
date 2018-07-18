@@ -18,4 +18,4 @@
 | --------- | ----- | ----------- |
 | epsg | `4326` (geographic), `3413` (arctic), `3031` (antarctic) | EPSG code for the selected projection |
 
-For additional debugging parameters, see: [Testing/Debug Parameters](testing.md)
+For debugging with URL parameters, see: [Testing / Debug Parameters](testing.md#debug-parameters)
