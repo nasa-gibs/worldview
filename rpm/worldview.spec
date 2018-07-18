@@ -49,11 +49,6 @@ rm -rf %{buildroot}
 %{_datadir}/@WORLDVIEW@
 %config(noreplace) %{httpdconfdir}/@WORLDVIEW@.conf
 
-
-%files debug
-%{_datadir}/@WORLDVIEW@-debug
-%config(noreplace) %{httpdconfdir}/@WORLDVIEW@-debug.conf
-
 %post
 if [ $1 -gt 0 ] ; then
    if /sbin/service httpd status >/dev/null ; then
@@ -61,21 +56,7 @@ if [ $1 -gt 0 ] ; then
    fi
 fi
 
-%post debug
-if [ $1 -gt 0 ] ; then
-   if /sbin/service httpd status >/dev/null ; then
-       /sbin/service httpd reload
-   fi
-fi
-
 %postun
-if [ $1 -eq 0 ] ; then
-   if /sbin/service httpd status >/dev/null ; then
-       /sbin/service httpd reload
-   fi
-fi
-
-%postun debug
 if [ $1 -eq 0 ] ; then
    if /sbin/service httpd status >/dev/null ; then
        /sbin/service httpd reload

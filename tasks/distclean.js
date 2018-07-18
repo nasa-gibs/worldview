@@ -2,5 +2,12 @@
 
 const shell = require('shelljs');
 
-shell.rm('-rf', 'node_modules');
-shell.rm('-rf', '.python');
+let dirs = [
+  'node_modules',
+  '.python',
+];
+
+dirs.forEach((dir) => {
+  console.log('Removing', dir);
+  shell.rm('-rf', dir);
+});

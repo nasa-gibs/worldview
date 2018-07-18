@@ -2,8 +2,15 @@
 
 const shell = require('shelljs');
 
-shell.rm('-rf', 'build');
-shell.rm('-rf', 'dist');
-shell.rm('-rf', 'web/brand');
-shell.rm('-rf', 'web/build');
-shell.rm('-rf', 'web/config');
+let dirs = [
+  'build',
+  'dist',
+  'web/brand',
+  'web/build',
+  'web/config'
+];
+
+dirs.forEach((dir) => {
+  console.log('Removing', dir);
+  shell.rm('-rf', dir);
+});
