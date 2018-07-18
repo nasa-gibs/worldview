@@ -151,16 +151,6 @@ export function layersAdd(models, ui, config) {
     var $name = $('<h4></h4>')
       .addClass('title')
       .html(names.title);
-    if (config.parameters.markPalettes) {
-      if (layer.palette) {
-        $name.addClass('mark');
-      }
-    }
-    if (config.parameters.markDownloads) {
-      if (layer.product) {
-        $name.addClass('mark');
-      }
-    }
     var $description = $('<p></p>')
       .addClass('subtitle')
       .html(names.subtitle);

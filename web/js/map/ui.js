@@ -62,9 +62,6 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var init = function () {
-    if (config.parameters.mockMap) {
-      return;
-    }
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
     lodashForOwn(config.projections, function (proj) {
