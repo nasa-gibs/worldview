@@ -4,6 +4,7 @@ RUN yum install -y epel-release && \
     yum install -y https://centos6.iuscommunity.org/ius-release.rpm && \
     yum install -y \
         "@Development Tools" \
+        httpd \
         python27 \
         python27-virtualenv \
         git \
@@ -21,3 +22,5 @@ RUN cd /usr/local/stow && \
 RUN npm install run-script-os -g
 
 RUN ln -s /usr/bin/virtualenv-2.7 /usr/bin/virtualenv
+
+EXPOSE 80
