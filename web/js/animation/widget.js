@@ -273,6 +273,11 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.onPressPlay = function () {
+    let zoomLevel = ui.anim.ui.getInterval();
+    if (zoomLevel !== 'minute') {
+      // zero out start/end date times
+      self.setZeroDateTimes();
+    }
     model.rangeState.playing = true;
     model.events.trigger('play');
   };
@@ -373,7 +378,40 @@ export function animationWidget (models, config, ui) {
    *
    */
   self.onPressGIF = function () {
+    let zoomLevel = ui.anim.ui.getInterval();
+    if (zoomLevel !== 'minute') {
+      // zero out start/end date times
+      self.setZeroDateTimes();
+    }
     model.events.trigger('gif-click');
+  };
+
+  /*
+   * Zero out hours/min/sec for start/end dates
+   * will snap draggers into place on timeline
+   * and zero out GIF Animation preview modal and url time data
+   *
+   * used with onPressPlay and onPressGIF
+   *
+   * @method setZeroDateTimes
+   *
+   * @static
+   *
+   * @returns {void}
+   *
+   */
+  self.setZeroDateTimes = function () {
+    let state = model.rangeState;
+    let startDate = util.parseDateUTC(state.startDate);
+    let endDate = util.parseDateUTC(state.endDate);
+
+    util.clearTimeUTC(startDate);
+    util.clearTimeUTC(endDate);
+
+    // save changes to model
+    model.rangeState.startDate = util.toISOStringSeconds(startDate);
+    model.rangeState.endDate = util.toISOStringSeconds(endDate);
+    model.events.trigger('change');
   };
 
   self.init();

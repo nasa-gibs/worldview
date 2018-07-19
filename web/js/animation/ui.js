@@ -106,6 +106,8 @@ export function animationUi(models, ui) {
    *
    */
   self.getStartDate = function () {
+    // get index+1 of date zoom 'yearly', 'monthly', 'daily', '10-Minute'
+    let dateSelectedZoom = models.date.selectedZoom || 0;
     var state;
     var endDate;
     var startDate;
@@ -113,6 +115,13 @@ export function animationUi(models, ui) {
     state = animModel.rangeState;
     endDate = util.parseDateUTC(state.endDate);
     startDate = util.parseDateUTC(state.startDate);
+    // if not index+1 of 4 ('10-Minute'), zero out start/end times and resave
+    if (dateSelectedZoom < 4) {
+      let zeroDate = dateModel.selected;
+      util.clearTimeUTC(zeroDate);
+      util.clearTimeUTC(startDate);
+      dateModel.selected = zeroDate;
+    }
     currentDate = dateModel.selected;
     if (currentDate > startDate && self.nextDate(currentDate) < endDate) {
       return util.toISOStringSeconds(self.nextDate(currentDate));
