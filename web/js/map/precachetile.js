@@ -163,31 +163,36 @@ export function mapPrecacheTile(models, config, cache, parent) {
       }
       projection = viewState.projection;
       i = 0;
-      renderer = new OlRendererCanvasTileLayer(layer);
-      tileSource = layer.getSource();
-      tileGrid = tileSource.getTileGridForProjection(projection);
-      currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-      tileGrid.forEachTileCoord(extent, currentZ, function (tileCoord) {
-        var tile;
-        tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
-        tile.load();
-        var loader = function (e) {
-          if (e.type === 'tileloadend') {
-            --i;
-            if (i === 0) {
-              resolve();
+      if (layer.type === 'VECTOR_TILE') {
+        // No need to look up tiles, vectors can resolve ASAP
+        resolve();
+      } else {
+        renderer = new OlRendererCanvasTileLayer(layer);
+        tileSource = layer.getSource();
+        tileGrid = tileSource.getTileGridForProjection(projection);
+        currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
+        tileGrid.forEachTileCoord(extent, currentZ, function (tileCoord) {
+          var tile;
+          tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
+          tile.load();
+          var loader = function (e) {
+            if (e.type === 'tileloadend') {
+              --i;
+              if (i === 0) {
+                resolve();
+              }
+            } else {
+              reject(new Error('No response at this URL'));
+              // resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
             }
-          } else {
-            reject(new Error('No response at this URL'));
-            // resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
-          }
-          this.un('tileloadend', loader); // remove event listeners from memory
-          this.un('tileloaderror', loader);
-        };
-        tileSource.on('tileloadend', loader);
-        tileSource.on('tileloaderror', loader);
-        ++i;
-      });
+            this.un('tileloadend', loader); // remove event listeners from memory
+            this.un('tileloaderror', loader);
+          };
+          tileSource.on('tileloadend', loader);
+          tileSource.on('tileloaderror', loader);
+          ++i;
+        });
+      }
     });
   };
   return self;

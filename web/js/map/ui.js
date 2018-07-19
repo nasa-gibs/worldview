@@ -642,7 +642,7 @@ export function mapui(models, config) {
       }, 200);
     });
 
-    // TEST: Clicking on a vector shows it's attributes in console.
+    // Clicking on a vector shows it's attributes in console.
     map.on('click', function (e) {
       map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
         console.log(feature.getProperties());

@@ -218,7 +218,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     if (day) {
       date = util.dateAdd(date, 'day', day);
     }
-    urlParameters = '?TIME=' + util.toISOStringDate(date);
+    urlParameters = '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
 
     var sourceOptions = {
       url: source.url + urlParameters,
@@ -306,7 +306,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     }
 
     urlParameters = '?' +
-    'TIME=' + util.toISOStringDate(date) +
+    'TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date)) +
     '&layer=' + layerName +
     '&tilematrixset=' + tms +
     '&Service=WMTS' +
@@ -388,7 +388,7 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     if (day) {
       date = util.dateAdd(date, 'day', day);
     }
-    urlParameters += '?TIME=' + util.toISOStringDate(date);
+    urlParameters += '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
 
     var sourceOptions = {
       url: source.url + urlParameters,
