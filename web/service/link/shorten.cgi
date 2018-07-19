@@ -31,6 +31,7 @@ def handle_error(error_code, message, options, info=None):
   - info: Additional information to display to the user if options.error
       is True
   """
+  options.error = True
   info = True
   print "Content-type: text/html"
   print "Status: %s" % error_code
@@ -86,7 +87,6 @@ def service_unavailable(options, info=None):
   - info: Additional information to display to the user if options.error
       is True
   """
-  print options
   handle_error(503, "Service Unavailable", options, info)
 
 def process_request(options):
