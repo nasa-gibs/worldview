@@ -9,8 +9,6 @@ const homedir = require('os').homedir();
 
 // https://github.com/docker/for-mac/issues/2296
 
-shell.exec('npm run dist');
-
 console.log('Preparing RPM build');
 shell.rm('-rf', `${homedir}/rpmbuild`);
 shell.mkdir('-p', `${homedir}/rpmbuild/SOURCES`);
