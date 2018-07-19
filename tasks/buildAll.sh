@@ -9,3 +9,6 @@ npm install --production=false # Install dependencies, set production false so d
 npm run dist
 node rpm/buildRPM.js
 
+# This is where bamboo expects to find artifacts
+mv ~/rpmbuild build/rpm 
+
