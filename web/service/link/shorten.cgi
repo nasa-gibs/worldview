@@ -31,6 +31,7 @@ def handle_error(error_code, message, options, info=None):
   - info: Additional information to display to the user if options.error
       is True
   """
+  info = True
   print "Content-type: text/html"
   print "Status: %s" % error_code
   print ""
