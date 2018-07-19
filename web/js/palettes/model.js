@@ -13,10 +13,6 @@ export function palettesModel(models, config) {
     custom: {}
   };
 
-  config.vectorStyles = config.vectorStyles || {
-    rendered: {}
-  };
-
   var self = {};
   self.events = util.events();
   self.active = {};
@@ -30,17 +26,6 @@ export function palettesModel(models, config) {
       }
     }
     return palette;
-  };
-
-  self.getRenderedVectorStyle = function (layerId, index) {
-    var name = config.layers[layerId].vectorStyle.id;
-    var vectorStyle = config.vectorStyles.rendered[name];
-    if (!lodashIsUndefined(index)) {
-      if (vectorStyle.styles) {
-        vectorStyle = vectorStyle.styles[index];
-      }
-    }
-    return vectorStyle;
   };
 
   self.getCustomPalette = function (paletteId) {
