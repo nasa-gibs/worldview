@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # Bash commands to run in Bamboo to prepare an rpm for deployment
+
+# Overwrite the placeholder config in the RPM directory with the actual
+# bit.ly configuration
 cp bitly.json rpm/bitly.json
 
-npm install --production=false # Install dependencies, set production false so devDependencies are installed even though NODE_ENV is set to production
-npm run dist
+npm install
+npm dist
 node rpm/buildRPM.js
 
 # This is where bamboo expects to find artifacts

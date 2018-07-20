@@ -14,7 +14,7 @@ shell.cp('-rf', 'web/*', 'build/worldview');
 console.log('Branding');
 let brand = require('../build/worldview/brand/brand.json');
 let applyTo = [
-  'build/worldview/index.html', 
+  'build/worldview/index.html',
   'build/worldview/build/wv.js',
   'build/worldview/pages/about.html'
 ];
