@@ -8,7 +8,6 @@ const shell = require('shelljs');
 console.log('Converting markdown to html');
 let converter = new showdown.Converter();
 
-// Convert markdown files to HTML
 let files = glob.sync('build/options/config/metadata/**/*.md');
 for (let file of files) {
   let dest = file.replace(/\.md$/, '.html');
