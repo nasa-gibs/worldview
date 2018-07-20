@@ -383,11 +383,13 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     };
     if (def.styles) { parameters.STYLES = def.styles; }
 
+    urlParameters = '';
+
     date = options.date || models.date.selected;
     if (day) {
       date = util.dateAdd(date, 'day', day);
     }
-    urlParameters += '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
+    urlParameters = '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
 
     var sourceOptions = {
       url: source.url + urlParameters,

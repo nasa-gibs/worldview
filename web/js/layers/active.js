@@ -570,7 +570,7 @@ export function layersActive(models, ui, config) {
 
     var matrixSet = layer.projections[proj].matrixSet;
 
-    if (matrixSet !== undefined) {
+    if (matrixSet !== undefined && layer.type !== 'vector') {
       var source = layer.projections[proj].source;
       var zoomLimit = sources[source]
         .matrixSets[matrixSet]
