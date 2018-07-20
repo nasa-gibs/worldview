@@ -144,17 +144,12 @@ export function dataModel(models, config) {
   self.groupByProducts = function () {
     let products = {};
     for (let layer of self.layers) {
-      let productIds = [];
-      if (!layer.product) {
+      let productIds = util.toArray(layer.product);
+      if (productIds.length === 0) {
         productIds = [NO_PRODUCT_ID];
-      } else if (Array.isArray(layer.product)) {
-        productIds = layer.product;
-      } else {
-        productIds = [layer.product];
       }
       for (let productId of productIds) {
         var product = config.products[productId] || NO_PRODUCT;
-        console.log('product', product);
         if (!products[productId]) {
           products[productId] = {
             title: product.name,
@@ -262,14 +257,17 @@ export function dataModel(models, config) {
 
   self.getSelectionCounts = function () {
     var counts = {};
-    $.each(self.layers, function (index, layer) {
+    for (let layer of self.layers) {
       if (layer.product) {
-        counts[layer.product] = 0;
+        let products = util.toArray(layer.product);
+        for (let product of products) {
+          counts[product] = 0;
+        }
       }
-    });
-    $.each(self.selectedGranules, function (index, granule) {
+    }
+    for (let granule of Object.values(self.selectedGranules)) {
       counts[granule.product]++;
-    });
+    }
     return counts;
   };
 
