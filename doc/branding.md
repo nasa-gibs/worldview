@@ -20,9 +20,6 @@ the following instead:
 To add a logo, replace `options/common/brand/images/wv-logo.png` with an image
 that is 247x45 pixels.
 
-To create an "About" page, edit `options/common/brand/pages/about.md`. Add other
-Markdown files in this directory to add more pages.
-
 ## Rebuilding
 
 After making changes to a custom configuration, run `npm run build` again to
