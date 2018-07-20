@@ -6,7 +6,10 @@
 # bit.ly configuration
 cp bitly.json rpm/bitly.json
 
-npm install
+# Bamboo automatically sets NODE_ENV to production. Override this so that
+# devDependencies are installed.
+npm install --production=false
+
 npm dist
 node rpm/buildRPM.js
 
