@@ -107,7 +107,7 @@ export function animationUi(models, ui) {
    */
   self.getStartDate = function () {
     // get index+1 of date zoom 'yearly', 'monthly', 'daily', '10-Minute'
-    let dateSelectedZoom = models.date.selectedZoom || 0;
+    let dateSelectedZoom = models.date.selectedZoom || 1;
     var state;
     var endDate;
     var startDate;
