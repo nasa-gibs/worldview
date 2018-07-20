@@ -48,7 +48,12 @@ export default function naturalEventsTrack (models, ui, config) {
       if (e.key === 'resolution' || e.key === 'rotation') {
         self.trackDetails = (self.trackDetails.id) ? self.removeTrack(map, self.trackDetails) : {};
       } else if (e.key === 'center') {
-        if (self.active) removeOldPoints(map, self.trackDetails.pointArray);
+        // zoom restrictions prevent track/cluster points disappearing on min/max zoom
+        let zoomMax = models.proj.selected.numZoomLevels;
+        let zoom = map.getView().getZoom();
+        if (self.active && zoom < zoomMax && zoom > 0) {
+          removeOldPoints(map, self.trackDetails.pointArray);
+        }
       }
     });
     ui.sidebar.events.on('selectTab', function (tab) {
