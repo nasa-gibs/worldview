@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Bash commands to run in Bamboo to prepare an rpm for deployment
+cp bitly.json rpm/bitly.json
+
 npm install --production=false # Install dependencies, set production false so devDependencies are installed even though NODE_ENV is set to production
 npm run dist
 node rpm/buildRPM.js
