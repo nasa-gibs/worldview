@@ -6,6 +6,7 @@ License: NASA-1.3
 URL: http://earthdata.nasa.gov
 Source0: @WORLDVIEW@.tar.gz
 Source1: httpd.conf
+Source2: bitly.json
 BuildArch: noarch
 Requires: httpd
 
@@ -28,6 +29,7 @@ Summary:	Non-minified version of Worldview for debugging
 %setup -c -T
 tar xf %{SOURCE0} --touch
 cp %{SOURCE1} .
+cp %{SOURCE2} .
 
 %install
 rm -rf %{buildroot}
@@ -38,8 +40,11 @@ install -m 644 httpd.conf %{buildroot}/%{httpdconfdir}/@WORLDVIEW@.conf
 rm httpd.conf
 
 # Install release application
-install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@
-cp -r @WORLDVIEW@/* %{buildroot}/%{_datadir}/@WORLDVIEW@
+install -m 755 -d %{buildroot}/%{_datadir}/@WORLDVIEW@/web
+cp -r @WORLDVIEW@/* %{buildroot}/%{_datadir}/@WORLDVIEW@/web
+
+# Keep the bitly API key outside the web root
+cp bitly.json %{buildroot}/%{_datadir}/@WORLDVIEW@
 
 %clean
 rm -rf %{buildroot}

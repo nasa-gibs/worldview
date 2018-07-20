@@ -149,7 +149,7 @@ if __name__ == '__main__':
   """
   options = parse_options()
   try:
-    key_path = os.path.join("..", "..", "etc", "bitly.json")
+    key_path = os.path.join("..", "..", "..", "bitly.json")
     with open(key_path) as fp:
         config = json.load(fp)
     login = config["login"]
