@@ -10,7 +10,7 @@ cp bitly.json rpm/bitly.json
 # devDependencies are installed.
 npm install --production=false
 
-npm dist
+npm run dist
 node rpm/buildRPM.js
 
 # This is where bamboo expects to find artifacts
