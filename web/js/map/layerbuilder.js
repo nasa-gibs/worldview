@@ -270,7 +270,6 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     extent = proj.maxExtent;
     start = [proj.maxExtent[0], proj.maxExtent[3]];
 
-    if (!source) { throw new Error(def.id + ': Invalid source: ' + def.source); }
     if (!source) {
       throw new Error(def.id + ': Invalid source: ' + def.source);
     }
