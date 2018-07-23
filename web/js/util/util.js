@@ -866,7 +866,19 @@ export default (function (self) {
   // http://totaldev.com/content/escaping-characters-get-valid-jquery-id
   self.jqueryEscape = function (str) {
     return encodeURIComponent(str)
+      // TODO: this replace appears to do nothing?
       .replace(/([;&,.+*~':"!^#$%@[]()=>|])/g, '\\$1');
+  };
+
+  self.encodeId = function(str) {
+    let id = encodeURIComponent(str);
+    return id.replace(/\./g, (match) => {
+      return '%' + match.charCodeAt(0).toString(16).toUpperCase();
+    });
+  };
+
+  self.decodeId = function(id) {
+    return decodeURIComponent(id);
   };
 
   self.metrics = function () {

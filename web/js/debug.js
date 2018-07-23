@@ -211,7 +211,7 @@ export function debugLayers(ui, models, config) {
         }
         console.log(layer.id);
         var $option = $('<option></option>')
-          .val(encodeURIComponent(layer.id))
+          .val(util.encodeId(layer.id))
           .html(text);
         $select.append($option);
       }
@@ -231,7 +231,7 @@ export function debugLayers(ui, models, config) {
       .val()) {
       return;
     }
-    var layerId = decodeURIComponent($(this)
+    var layerId = util.decodeId($(this)
       .val());
     var names = models.layers.getTitles(layerId);
     console.log(names.title + '; ' + names.subtitle);

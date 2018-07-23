@@ -141,10 +141,10 @@ export function layersAdd(models, ui, config) {
       return;
     }
     var $label = $('<label></label>')
-      .attr('data-layer', encodeURIComponent(layer.id));
+      .attr('data-layer', util.encodeId(layer.id));
     var $element = $('<li></li>')
       .addClass('selectorItem')
-      .attr('data-layer', encodeURIComponent(layer.id))
+      .attr('data-layer', util.encodeId(layer.id))
       .addClass('item');
 
     var names = models.layers.getTitles(layer.id);
@@ -156,7 +156,7 @@ export function layersAdd(models, ui, config) {
       .html(names.subtitle);
 
     var $checkbox = $('<input></input>')
-      .attr('id', encodeURIComponent(layer.id))
+      .attr('id', util.encodeId(layer.id))
       .attr('value', layer.id)
       .attr('type', 'checkbox')
       .attr('data-layer', layer.id);
@@ -200,7 +200,7 @@ export function layersAdd(models, ui, config) {
       var count = 0;
       $(self.selector + group + ' li')
         .each(function () {
-          var layerId = decodeURIComponent($(this)
+          var layerId = util.decodeId($(this)
             .attr('data-layer'));
           if (visible[layerId]) {
             actualHeight += $(this)
@@ -274,12 +274,12 @@ export function layersAdd(models, ui, config) {
   };
 
   var addLayer = function () {
-    model.add(decodeURIComponent($(this)
+    model.add(util.decodeId($(this)
       .attr('data-layer')));
   };
 
   var removeLayer = function () {
-    model.remove(decodeURIComponent($(this)
+    model.remove(util.decodeId($(this)
       .attr('data-layer')));
   };
 
@@ -303,10 +303,10 @@ export function layersAdd(models, ui, config) {
   var adjustTitles = function () {
     lodashEach(config.layers, function (def) {
       var names = models.layers.getTitles(def.id);
-      $('#selectorbox [data-layer=\'' + encodeURIComponent(def.id) +
+      $('#selectorbox [data-layer=\'' + util.encodeId(def.id) +
           '\'] .title')
         .html(names.title);
-      $('#selectorbox [data-layer=\'' + encodeURIComponent(def.id) +
+      $('#selectorbox [data-layer=\'' + util.encodeId(def.id) +
           '\'] .subtitle')
         .html(names.subtitle);
     });

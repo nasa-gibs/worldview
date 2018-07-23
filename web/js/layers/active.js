@@ -136,15 +136,15 @@ export function layersActive(models, ui, config) {
 
   var renderLayer = function ($parent, group, layer, top) {
     var $layer = $('<li></li>')
-      .attr('id', group.id + '-' + encodeURIComponent(layer.id))
+      .attr('id', group.id + '-' + util.encodeId(layer.id))
       .addClass(self.id + 'item')
       .addClass('item')
-      .attr('data-layer', layer.id);
+      .attr('data-layer', util.encodeId(layer.id));
 
     var $visibleButton = $('<a></a>')
       .addClass('hdanchor hide hideReg sidebar-panel-item-img')
-      .attr('id', 'hide' + encodeURIComponent(layer.id))
-      .attr('data-layer', layer.id)
+      .attr('id', 'hide' + util.encodeId(layer.id))
+      .attr('data-layer', util.encodeId(layer.id))
       .on('click', toggleVisibility);
 
     var $visibleImage = $('<i></i>')
@@ -165,9 +165,9 @@ export function layersActive(models, ui, config) {
     var names = models.layers.getTitles(layer.id);
 
     var $removeButton = $('<a></a>')
-      .attr('id', 'close' + group.id + encodeURIComponent(layer.id))
+      .attr('id', 'close' + group.id + util.encodeId(layer.id))
       .addClass('button close sidebar-panel-item-img')
-      .attr('data-layer', layer.id)
+      .attr('data-layer', util.encodeId(layer.id))
       .attr('title', 'Remove Layer')
       .on('click', removeLayer);
     var $removeImage = $('<i></i>');
@@ -175,7 +175,7 @@ export function layersActive(models, ui, config) {
     $removeButton.append($removeImage);
 
     var $infoButton = $('<a></a>')
-      .attr('data-layer', layer.id)
+      .attr('data-layer', util.encodeId(layer.id))
       .attr('title', 'Layer description for ' + names.title)
       .addClass('wv-layers-info');
     if (!layer.description) {
@@ -195,7 +195,7 @@ export function layersActive(models, ui, config) {
     $infoButton.append($infoIcon);
 
     var $editButton = $('<a></a>')
-      .attr('data-layer', layer.id)
+      .attr('data-layer', util.encodeId(layer.id))
       .attr('title', 'Layer options for ' + names.title)
       .addClass('wv-layers-options');
     $editButton.on('click', toggleOptionsPanel);
@@ -210,7 +210,7 @@ export function layersActive(models, ui, config) {
 
     var $mainLayerDiv = $('<div></div>')
       .addClass('layer-main')
-      .attr('data-layer', layer.id)
+      .attr('data-layer', util.encodeId(layer.id))
       .append($('<h4></h4>')
         .html(names.title)
         .attr('title', names.title))
@@ -218,10 +218,10 @@ export function layersActive(models, ui, config) {
         .html(names.subtitle));
 
     $layer.hover(function () {
-      d3.select('#timeline-footer svg g.plot rect[data-layer="' + layer.id + '"]')
+      d3.select('#timeline-footer svg g.plot rect[data-layer="' + util.encodeId(layer.id) + '"]')
         .classed('data-bar-hovered', true);
     }, function () {
-      d3.select('#timeline-footer svg g.plot rect[data-layer="' + layer.id + '"]')
+      d3.select('#timeline-footer svg g.plot rect[data-layer="' + util.encodeId(layer.id) + '"]')
         .classed('data-bar-hovered', false);
     });
 
@@ -276,13 +276,13 @@ export function layersActive(models, ui, config) {
   var renderLegend = function ($parent, group, layer) {
     var $container = $('<div></div>')
       .addClass('wv-palette')
-      .attr('data-layer', encodeURIComponent(layer.id));
+      .attr('data-layer', util.encodeId(layer.id));
     $parent.append($container);
   };
 
   var renderLegendCanvas = function (layer) {
     var selector = '.wv-palette[data-layer=\'' +
-      util.jqueryEscape(layer.id) + '\']';
+      util.encodeId(layer.id) + '\']';
     legends[layer.id] = palettesLegend({
       selector: selector,
       config: config,
@@ -349,7 +349,7 @@ export function layersActive(models, ui, config) {
 
   var onLayerRemoved = function (layer) {
     var layerSelector = '#' + layer.group + '-' +
-      util.jqueryEscape(layer.id);
+      util.encodeId(layer.id);
     $(layerSelector)
       .remove();
     if (legends[layer.id]) {
@@ -440,7 +440,7 @@ export function layersActive(models, ui, config) {
   };
 
   var onLayerVisibility = function (layer, visible) {
-    var $element = $('.hideReg[data-layer=\'' + layer.id + '\']');
+    var $element = $('.hideReg[data-layer=\'' + util.encodeId(layer.id) + '\']');
     if (visible) {
       $element.attr('data-action', 'hide')
         .attr('title', 'Hide Layer')
@@ -483,7 +483,7 @@ export function layersActive(models, ui, config) {
         group: group.id
       }), function (layer) {
         var $layer = $('#products li.productsitem[data-layer="' +
-          layer.id + '"]');
+          util.encodeId(layer.id) + '"]');
         checkZots($layer, layer);
       });
     });
@@ -494,8 +494,8 @@ export function layersActive(models, ui, config) {
       lodashEach(model.get({
         group: group.id
       }), function (layer) {
-        var $layer = $('#' + group.id + '-' + encodeURIComponent(layer.id));
-        var $visibleButton = $('#' + 'hide' + encodeURIComponent(layer.id));
+        var $layer = $('#' + group.id + '-' + util.encodeId(layer.id));
+        var $visibleButton = $('#' + 'hide' + util.encodeId(layer.id));
         setLayerVisibility(group, layer, $layer, $visibleButton);
         checkZots($layer, layer);
       });
