@@ -53,8 +53,9 @@ export default function naturalEventsTrack (models, ui, config) {
           // restricts track/cluster points from disappearing on min/max zoom
           let isNewTarget = true;
           if (e.target) {
-            let oldValues = e.oldValue.map(val => typeof val === 'number' ? val.toFixed(6) : 0);
-            let targetValues = e.target.values_.center.map(val => typeof val === 'number' ? val.toFixed(6) : 0);
+            const valueCheck = (val) => typeof val === 'number' ? val.toFixed(6) : 0;
+            let oldValues = e.oldValue.map(val => valueCheck(val));
+            let targetValues = e.target.values_.center.map(val => valueCheck(val));
 
             let oldLon = oldValues[0];
             let oldLat = oldValues[1];
