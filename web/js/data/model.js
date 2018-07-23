@@ -144,6 +144,8 @@ export function dataModel(models, config) {
   self.groupByProducts = function () {
     let products = {};
     for (let layer of self.layers) {
+      // If products is a list, use it. If a single item, convert to a list.
+      // If no products are defined, add it to the no product group.
       let productIds = util.toArray(layer.product);
       if (productIds.length === 0) {
         productIds = [NO_PRODUCT_ID];
@@ -255,6 +257,9 @@ export function dataModel(models, config) {
     }
   };
 
+  // For each product displayed in the sidebar, gets the count of
+  // granules that have been selected by the user. Returns an object
+  // in the form of product_id = count.
   self.getSelectionCounts = function () {
     var counts = {};
     for (let layer of self.layers) {
@@ -444,6 +449,7 @@ export function dataModel(models, config) {
     for (var i = list.length - 1; i >= 0; i--) {
       if (list[i].product) {
         foundProduct = list[i].product;
+        // If the layer has more than one product, select the first.
         if (Array.isArray(foundProduct)) {
           foundProduct = foundProduct[0];
         }
