@@ -48,19 +48,25 @@ export default function naturalEventsTrack (models, ui, config) {
       if (e.key === 'resolution' || e.key === 'rotation') {
         self.trackDetails = (self.trackDetails.id) ? self.removeTrack(map, self.trackDetails) : {};
       } else if (e.key === 'center') {
-        // if old values equal target, map is not moving
-        // restricts track/cluster points from disappearing on min/max zoom
-        let isNewTarget;
-        if (e.target) {
-          let oldLon = e.oldValue[0];
-          let oldLat = e.oldValue[1];
-          let targetLon = e.target.values_.center[0];
-          let targetLat = e.target.values_.center[1];
-          // compare oldValues and target values
-          isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
-        }
-        if (self.active && isNewTarget) {
-          removeOldPoints(map, self.trackDetails.pointArray);
+        if (self.active) {
+          // if old values equal target, map is not moving
+          // restricts track/cluster points from disappearing on min/max zoom
+          let isNewTarget = true;
+          if (e.target) {
+            let oldValues = e.oldValue.map(val => typeof val === 'number' ? val.toFixed(6) : 0);
+            let targetValues = e.target.values_.center.map(val => typeof val === 'number' ? val.toFixed(6) : 0);
+
+            let oldLon = oldValues[0];
+            let oldLat = oldValues[1];
+            let targetLon = targetValues[0];
+            let targetLat = targetValues[1];
+
+            // compare oldValues and target values
+            isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
+          }
+          if (isNewTarget) {
+            removeOldPoints(map, self.trackDetails.pointArray);
+          }
         }
       }
     });
