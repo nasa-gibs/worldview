@@ -100,7 +100,7 @@ The `config/wv.json/layerOrder.json` file must be updated to include the new lay
 - **tags**: Additional text used for matching this layer when searching in the add layers tab. This allows Aerosol Optical Depth layers to match when "aod" is typed in
 - **noTransition**: For WMTS layers only, if set to *true*, the map will not display lower-resolution tiles while loading.
 - **transition**: For WMS layers only, if set to *true*, the map will display lower-resolution tiles while loading.
-- **product**: Identifier of the product to use when searching the Common Metadata Repository (CMR) to download data. See the [Data Download documentation](data_download.md) for more information.
+- **product**: Identifier of the product to use when searching the Common Metadata Repository (CMR) to download data. Can also be a list of identifiers to map the layer to multiple CMR products. See the [Data Download documentation](data_download.md) for more information.
 - **style**: For WMTS layers only, this sets the WMTS `style` parameter accordingly; defaults to `default` if not set.
 - **matrixIds**: For WMTS layers only, this is an array of labels used for the `TileMatrix` parameter at each zoom level; defaults to `[0, 1, 2, ...]` if not set.
 - **daynight**: Classify a layer as day or night. This information will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
