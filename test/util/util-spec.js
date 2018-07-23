@@ -402,5 +402,25 @@ buster.testCase('wv.util', (function () {
     buster.assert.equals('179&deg;59\'59"E', lon);
   };
 
+  var encodeIdTests = [
+    { decoded: '', encoded: '' },
+    { decoded: 'foo', encoded: 'foo' },
+    { decoded: 'really?', encoded: 'really%3F'},
+    { decoded: 'foo.bar', encoded: 'foo%2Ebar'},
+    { decoded: 'foos.bars?', encoded: 'foos%2Ebars%3F'}
+  ];
+
+  self['encodeId'] = function() {
+    encodeIdTests.forEach(function(test) {
+      buster.assert.equals(test.encoded, wv.util.encodeId(test.decoded));
+    });
+  };
+
+  self['decodeId'] = function() {
+    encodeIdTests.forEach(function(test) {
+      buster.assert.equals(test.decoded, wv.util.decodeId(test.encoded));
+    });
+  };
+
   return self;
 }()));

@@ -161,7 +161,7 @@ export function dataUi(models, ui, config) {
 
   var refreshLayers = function ($container, key, value, layer) {
     var $item = $('<li></li>')
-      .attr('id', self.id + key + encodeURIComponent(layer.value))
+      .attr('id', self.id + key + util.encodeId(layer.value))
       .addClass('item')
       .addClass('item-static');
     $item.append('<h4>' + layer.label + '</h4>');

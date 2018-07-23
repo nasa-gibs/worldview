@@ -550,16 +550,16 @@ export function layersModal(models, ui, config) {
               if (layer && layer.id === setting && Object.keys(layer.projections).indexOf(projection) > -1) {
                 var $wrapper = $('<li />', {
                   'class': 'measurement-settings-item',
-                  'data-layer': encodeURIComponent(layer.id),
-                  'value': encodeURIComponent(layer.id)
+                  'data-layer': util.encodeId(layer.id),
+                  'value': util.encodeId(layer.id)
                 });
 
                 var $setting = $('<input />', {
                   id: 'setting-' + layer.id,
                   'class': 'settings-check',
                   'type': 'checkbox',
-                  'data-layer': encodeURIComponent(layer.id),
-                  'value': encodeURIComponent(layer.id)
+                  'data-layer': util.encodeId(layer.id),
+                  'value': util.encodeId(layer.id)
                 }).on('ifChecked', addLayer)
                   .on('ifUnchecked', removeLayer);
 
@@ -569,7 +569,7 @@ export function layersModal(models, ui, config) {
 
                 var $label = $('<label />', {
                   text: layer.title,
-                  'for': 'setting-' + encodeURIComponent(layer.id)
+                  'for': 'setting-' + util.encodeId(layer.id)
                 });
 
                 $wrapper.append($setting).append($label);
@@ -798,12 +798,12 @@ export function layersModal(models, ui, config) {
 
   var addLayer = function (event) {
     event.stopPropagation();
-    model.add(decodeURIComponent($(this).val()));
+    model.add(util.decodeId($(this).val()));
   };
 
   var removeLayer = function (event) {
     event.stopPropagation();
-    model.remove(decodeURIComponent($(this).val()));
+    model.remove(util.decodeId($(this).val()));
   };
 
   var onLayerRemoved = function(layer) {
