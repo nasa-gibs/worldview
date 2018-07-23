@@ -48,10 +48,18 @@ export default function naturalEventsTrack (models, ui, config) {
       if (e.key === 'resolution' || e.key === 'rotation') {
         self.trackDetails = (self.trackDetails.id) ? self.removeTrack(map, self.trackDetails) : {};
       } else if (e.key === 'center') {
-        // zoom restrictions prevent track/cluster points disappearing on min/max zoom
-        let zoomMax = models.proj.selected.numZoomLevels;
-        let zoom = map.getView().getZoom();
-        if (self.active && zoom < zoomMax && zoom > 0) {
+        // if old values equal target, map is not moving
+        // restricts track/cluster points from disappearing on min/max zoom
+        let isNewTarget;
+        if (e.target) {
+          let oldLon = e.oldValue[0];
+          let oldLat = e.oldValue[1];
+          let targetLon = e.target.values_.center[0];
+          let targetLat = e.target.values_.center[1];
+          // compare oldValues and target values
+          isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
+        }
+        if (self.active && isNewTarget) {
           removeOldPoints(map, self.trackDetails.pointArray);
         }
       }
