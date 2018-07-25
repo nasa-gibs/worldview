@@ -99,7 +99,7 @@ def process_colormaps():
             with open(output_file, "w") as fp:
                 fp.write(contents)
         except Exception as e:
-            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
+            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s\n" %
                 (prog, link, str(e)))
             global warning_count
             warning_count += 1
