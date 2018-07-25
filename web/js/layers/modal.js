@@ -807,7 +807,7 @@ export function layersModal(models, ui, config) {
   };
 
   var onLayerRemoved = function(layer) {
-    var $element = $(self.selector + ' [data-layer="' + util.jqueryEscape(layer.id) + '"]');
+    var $element = $(self.selector + ' [data-layer="' + util.encodeId(layer.id) + '"]');
     $element.iCheck('uncheck');
     if (self.reactList) {
       self.reactList.setState({

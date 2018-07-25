@@ -40,8 +40,8 @@ export function palettesLegend(spec) {
 
     var $legendPanel = $('<div></div>')
       .addClass('wv-palettes-panel')
-      .attr('data-layer', layer.id)
-      .attr('id', layer.id + '_panel');
+      .attr('data-layer', util.encodeId(layer.id))
+      .attr('id', util.encodeId(layer.id) + '_panel');
     $parent.append($legendPanel);
     var legends = model.getLegends(layer.id);
     lodashEach(legends, function (legend, index) {
@@ -58,7 +58,7 @@ export function palettesLegend(spec) {
 
   var renderScale = function ($legendPanel, legend, index, layerId) {
     var $container = $('<div></div>')
-      .attr('id', layerId + '-' + legend.id)
+      .attr('id', util.encodeId(layerId) + '-' + util.encodeId(legend.id))
       .addClass('wv-palettes-legend')
       .attr('data-index', index);
     var $colorBarCase = $('<div></div>')

@@ -119,7 +119,7 @@ export function MapRunningData(models) {
   var layerIsInView = function (layerID) {
     var elTop;
     var elBottom;
-    var $case = $('.productsitem[data-layer=\'' + layerID + '\']');
+    var $case = $('.productsitem[data-layer=\'' + util.encodeId(layerID) + '\']');
     if ($case[0]) {
       elTop = $case[0].offsetTop;
       elBottom = elTop + $case.height();
@@ -292,7 +292,7 @@ export function MapRunningData(models) {
    *
    */
   self.remove = function (id) {
-    var $palette = $('#' + id + '_panel');
+    var $palette = $('#' + util.encodeId(id) + '_panel');
     var $paletteCase = $palette.children('.wv-palettes-legend');
     $paletteCase.removeClass('wv-running');
     $palette.removeClass('wv-running');
@@ -381,8 +381,8 @@ export function MapRunningData(models) {
 
     marginLeft = 3;
 
-    $palette = $('#' + id + '_panel .wv-palettes-colorbar');
-    $paletteCase = $('#' + legendId);
+    $palette = $('#' + util.encodeId(id) + '_panel .wv-palettes-colorbar');
+    $paletteCase = $('#' + util.encodeId(legendId));
     $paletteWidth = $palette.width();
     $paletteCaseWidth = $paletteCase.outerWidth();
     $paletteLabel = $paletteCase.find('.wv-running-label');

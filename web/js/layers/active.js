@@ -243,8 +243,7 @@ export function layersActive(models, ui, config) {
   var toggleInfoPanel = function (e) {
     e.stopPropagation();
     var $i = $('#wv-layers-info-dialog');
-    var thisLayerId = $(this)
-      .attr('data-layer');
+    var thisLayerId = util.decodeId($(this).attr('data-layer'));
     var thisLayer = config.layers[thisLayerId];
 
     if ($i.length === 0) {
@@ -260,8 +259,7 @@ export function layersActive(models, ui, config) {
   var toggleOptionsPanel = function (e) {
     e.stopPropagation();
     var $d = $('#wv-layers-options-dialog');
-    var thisLayerId = $(this)
-      .attr('data-layer');
+    var thisLayerId = util.decodeId($(this).attr('data-layer'));
     var thisLayer = config.layers[thisLayerId];
     if ($d.length === 0) {
       layersOptions(config, models, thisLayer);
@@ -340,8 +338,7 @@ export function layersActive(models, ui, config) {
   };
 
   var removeLayer = function (event) {
-    var layerId = $(event.target)
-      .attr('data-layer');
+    var layerId = util.decodeId($(event.target).attr('data-layer'));
     setTimeout(function () {
       model.remove(layerId);
     }, 50);
@@ -413,13 +410,12 @@ export function layersActive(models, ui, config) {
     if ($(this)
       .parent()
       .hasClass('disabled')) { return; }
+    let layerId = util.decodeId($(this).attr('data-layer'));
     if ($(this)
       .attr('data-action') === 'show') {
-      model.setVisibility($(this)
-        .attr('data-layer'), true);
+      model.setVisibility(layerId, true);
     } else {
-      model.setVisibility($(this)
-        .attr('data-layer'), false);
+      model.setVisibility(layerId, false);
     }
   };
 
@@ -427,10 +423,10 @@ export function layersActive(models, ui, config) {
     var $target = ui.item;
     var $next = $target.next();
     if ($next.length) {
-      model.moveBefore($target.attr('data-layer'),
-        $next.attr('data-layer'));
+      model.moveBefore(util.decodeId($target.attr('data-layer')),
+        util.decodeId($next.attr('data-layer')));
     } else {
-      model.pushToBottom($target.attr('data-layer'));
+      model.pushToBottom(util.decodeId($target.attr('data-layer')));
     }
   };
 
