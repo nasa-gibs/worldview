@@ -863,21 +863,28 @@ export default (function (self) {
     return deferred.promise();
   };
 
-  // http://totaldev.com/content/escaping-characters-get-valid-jquery-id
-  /*
-  self.jqueryEscape = function (str) {
-    return encodeURIComponent(str)
-      // TODO: this replace appears to do nothing?
-      .replace(/([;&,.+*~':"!^#$%@[]()=>|])/g, '\\$1');
-  };
-  */
-
+  // Converts a string to a form that can be safely used as an identifier.
+  //
+  // Currently only converts '.' and ':' to __xx__ where xx is the hex
+  // value of that character. Add more here as needed.
+  //
+  // When GIBS added the 'Particulate_Matter_Below_2.5micrometers_2001-2010'
+  // layer, the period in the identifier caused problems when using a selector
+  // as that is a special character used to select a CSS class.
+  //
+  // encodeURIComponent does not work. An identifier with a '%' character
+  // is considered invalid by the Sizzle library.
+  //
+  // The original plan was to escape the special characters but that
+  // became confusing as element attributes would need one escape character
+  // but the selector would need two (\. vs \\.)
   self.encodeId = function(str) {
     return str.replace(/[.:]/g, (match) => {
       return '__' + match.charCodeAt(0).toString(16).toUpperCase() + '__';
     });
   };
 
+  // Converts an encoded identifier back to its original value.
   self.decodeId = function(str) {
     return str.replace(/__[0-9A-Fa-f]{2}__/g, (match) => {
       let charCode = Number.parseInt(match.substring(2, 4), 16);
