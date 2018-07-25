@@ -405,9 +405,9 @@ buster.testCase('wv.util', (function () {
   var encodeIdTests = [
     { decoded: '', encoded: '' },
     { decoded: 'foo', encoded: 'foo' },
-    { decoded: 'really?', encoded: 'really%3F'},
-    { decoded: 'foo.bar', encoded: 'foo%2Ebar'},
-    { decoded: 'foos.bars?', encoded: 'foos%2Ebars%3F'}
+    { decoded: 'really.', encoded: 'really__2E__'},
+    { decoded: 'foo:bar', encoded: 'foo__3A__bar'},
+    { decoded: 'foos.bars:', encoded: 'foos__2E__bars__3A__'}
   ];
 
   self['encodeId'] = function() {
