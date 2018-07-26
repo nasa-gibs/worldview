@@ -42,7 +42,7 @@ def process_temporal(wv_layer, value):
                 if end_date:
                     endDateParse = datetime.strptime(times[1], "%Y-%m-%d")
                     date_range_end.append(endDateParse.strftime("%Y-%m-%d") + "T" + endDateParse.strftime("%H:%M:%S") + "Z")
-                if times[2] not in ["P1D", "P1M", "P1Y"]:
+                if times[2] != "P1D":
                     end_date = determine_end_date(times[2], end_date)
                 range_interval.append(re.search(r'\d+', times[2]).group())
             else:

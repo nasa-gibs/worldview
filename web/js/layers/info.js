@@ -196,14 +196,10 @@ export function layersInfo(config, models, layer) {
           endDate.getFullYear() + ' ' + util.pad(endDate.getHours(), 2, '0') + ':' +
           util.pad(endDate.getMinutes(), 2, '0');
         } else if (layer.period === 'yearly') {
-          if (layer.dateRanges && layer.dateRanges.slice(-1)[0].dateInterval !== '1') {
-            endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
-          }
+          endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
           endDate = endDate.getFullYear();
         } else if (layer.period === 'monthly') {
-          if (layer.dateRanges && layer.dateRanges.slice(-1)[0].dateInterval !== '1') {
-            endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
-          }
+          endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
           endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
         } else {
           if (layer.dateRanges && layer.dateRanges.slice(-1)[0].dateInterval !== '1') {
