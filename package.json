@@ -27,7 +27,7 @@
   },
   "scripts": {
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack ",
-    "build": "run-s clean getcapabilities build:config build:js build:css",
+    "build": "run-s clean \"getcapabilities -- {1}\" \"build:config -- {1}\" build:js build:css --",
     "build:css": "node ./tasks/buildCSS",
     "build:config": "bash -c 'tasks/buildOptions.sh ${1}' 0 && node ./tasks/config.js",
     "build:js": "node ./tasks/buildJS",
