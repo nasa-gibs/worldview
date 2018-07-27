@@ -4,17 +4,29 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const yargs = require('yargs');
+const shell = require('shelljs');
 const NodeSSH = require('node-ssh');
 const ssh = new NodeSSH();
 
-const error = (msg) => {
+function error(msg) {
   const prog = path.basename(__filename);
   console.error(`${prog}: error: ${msg}`);
   process.exit(1);
 };
 
-var argv = yargs
+let argv = yargs
   .usage('$0 [options] <name>')
+  .option('d', {
+    alias: 'dist',
+    description: 'do not build, use artifacts found in dist directory',
+    type: 'boolean'
+  })
+  .option('e', {
+    alias: 'env',
+    description: 'configuration environment if not "release"',
+    requiresArg: true,
+    type: 'string'
+  })
   .option('h', {
     alias: 'host',
     description: 'upload to this host',
@@ -54,11 +66,11 @@ if (argv.help) {
   process.exit(0);
 }
 
-const baseDir = path.join(__dirname, '..');
-const distDir = path.join(baseDir, 'dist');
-const worldview = 'worldview.tar.gz';
-const distWorldview = path.join(distDir, worldview);
-const configFile = path.join(os.homedir(), '.worldview', 'upload.config');
+let baseDir = path.join(__dirname, '..');
+let distDir = path.join(baseDir, 'dist');
+let worldview = 'worldview.tar.gz';
+let distWorldview = path.join(distDir, worldview);
+let configFile = path.join(os.homedir(), '.worldview', 'upload.config');
 
 let configData = '{}';
 try {
@@ -74,10 +86,10 @@ try {
   error(`${configFile}:\n${err}`);
 }
 
-const host = argv.host || config.host;
-const root = argv.root || config.root;
-const username = argv.user || config.user || os.userInfo().username;
-const key = argv.key || config.key || path.join(os.homedir(), '.ssh', 'id_rsa');
+let host = argv.host || config.host;
+let root = argv.root || config.root;
+let username = argv.user || config.user || os.userInfo().username;
+let key = argv.key || config.key || path.join(os.homedir(), '.ssh', 'id_rsa');
 
 if (!host) {
   error('host not found in config file or command line');
@@ -89,12 +101,13 @@ if (!username) {
   error('user not found in config file or command line');
 }
 
-const name = argv._[0];
+let name = argv._[0];
 if (!name) {
   error('name is required');
 }
 
 async function upload() {
+  console.log(`Uploading to ${host}`);
   try {
     await ssh.connect({ host, username, privateKey: key });
     let cmd = `
@@ -112,9 +125,20 @@ async function upload() {
     process.stdout.write(result.stdout);
     process.stderr.write(result.stderr);
     ssh.dispose();
+    console.log('Done');
   } catch (err) {
     error(err.toString());
   }
 };
+
+if (!argv.dist) {
+  shell.exec('npm install');
+  let cmd = 'npm run build';
+  if (argv.env) {
+    cmd = cmd + ' -- ' + argv.env;
+  }
+  shell.exec(cmd);
+  shell.exec('node ./tasks/dist.js');
+}
 
 upload();
