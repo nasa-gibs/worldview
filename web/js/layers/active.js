@@ -1,10 +1,6 @@
 import $ from 'jquery';
-import 'jquery-ui/sortable';
-import 'jquery-ui/button';
-import 'jquery-ui/dialog';
-import 'jquery-ui/widget';
-import 'jquery-ui/mouse';
-import 'jquery-ui-touch-punch';
+import 'jquery-ui-bundle/jquery-ui';
+import 'jquery-ui-touch-punch/jquery.ui.touch-punch';
 import 'perfect-scrollbar/jquery';
 import d3 from 'd3';
 import lodashEach from 'lodash/each';

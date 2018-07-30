@@ -1,7 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/effect-slide';
-import 'jquery-ui/button';
-import 'jquery-ui/menu';
+import 'jquery-ui-bundle/jquery-ui';
 import lodashEach from 'lodash/each';
 import wvui from '../ui/ui';
 

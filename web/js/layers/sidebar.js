@@ -1,6 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/tabs';
-import 'jquery-ui/dialog';
+import 'jquery-ui-bundle/jquery-ui';
 import 'perfect-scrollbar/jquery';
 import util from '../util/util';
 import { GA as googleAnalytics } from 'worldview-components';

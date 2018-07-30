@@ -1,8 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/dialog';
-import 'jquery-ui/accordion';
-import 'jquery-ui/button';
-import 'jquery-ui/tabs';
+import 'jquery-ui-bundle/jquery-ui';
 import 'icheck';
 import 'isotope-layout';
 import 'perfect-scrollbar/jquery';
