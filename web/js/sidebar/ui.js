@@ -231,7 +231,7 @@ export function sidebarUi(models, config, ui) {
       if (config.palettes.rendered[paletteId]) {
         resolve();
       } else {
-        palettes.loadRendered(config, layerId).done(function(result) {
+        palettes.loadRenderedPalette(config, layerId).done(function(result) {
           resolve(result);
         });
       }
