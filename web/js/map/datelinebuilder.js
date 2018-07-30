@@ -5,8 +5,16 @@ import OlOverlay from 'ol/overlay';
 import util from '../util/util';
 import { DateLine, LineText } from 'worldview-components';
 
-var map, overlay1, overlay2, textOverlay1, textOverlay2,
-  lineLeft, lineRight, textLeft, textRight, proj;
+var map,
+  overlay1,
+  overlay2,
+  textOverlay1,
+  textOverlay2,
+  lineLeft,
+  lineRight,
+  textLeft,
+  textRight,
+  proj;
 
 export function mapDateLineBuilder(models, config) {
   var self = {};
@@ -30,21 +38,27 @@ export function mapDateLineBuilder(models, config) {
     proj = models.proj.selected.id;
 
     Parent.events.on('moveend', function() {
-      if (!isGeoProjection()) { return; }
+      if (!isGeoProjection()) {
+        return;
+      }
       updateLineVisibility(true);
       dimensions = position(map);
       update(dimensions);
     });
     Parent.events.on('drag', function() {
-      if (!isGeoProjection()) { return; }
+      if (!isGeoProjection()) {
+        return;
+      }
       updateLineVisibility(false);
     });
     Parent.events.on('movestart', function() {
-      if (!isGeoProjection()) { return; }
+      if (!isGeoProjection()) {
+        return;
+      }
       updateLineVisibility(false);
     });
     models.date.events.on('select', function() {
-      updateDate(models.date.selected);
+      updateDate(models.date[models.date.activeDate]);
     });
     models.proj.events.on('select', function() {
       proj = models.proj.selected.id;
@@ -72,7 +86,14 @@ export function mapDateLineBuilder(models, config) {
    *
    * @returns {object} React Component
    */
-  var setLineDefaults = function(ReactComponent, height, lineX, overlay, reactCase, tooltip) {
+  var setLineDefaults = function(
+    ReactComponent,
+    height,
+    lineX,
+    overlay,
+    reactCase,
+    tooltip
+  ) {
     var props = {
       height: height,
       lineOver: onHover,
@@ -81,7 +102,10 @@ export function mapDateLineBuilder(models, config) {
       overlay: overlay,
       tooltip: tooltip
     };
-    return ReactDOM.render(React.createElement(ReactComponent, props), reactCase);
+    return ReactDOM.render(
+      React.createElement(ReactComponent, props),
+      reactCase
+    );
   };
 
   /*
@@ -102,7 +126,10 @@ export function mapDateLineBuilder(models, config) {
       dateLeft: util.toISOStringDate(util.dateAdd(date, 'day', 1)),
       dateRight: util.toISOStringDate(date)
     };
-    return ReactDOM.render(React.createElement(ReactComponent, props), reactCase);
+    return ReactDOM.render(
+      React.createElement(ReactComponent, props),
+      reactCase
+    );
   };
 
   /*
@@ -153,9 +180,27 @@ export function mapDateLineBuilder(models, config) {
     map.addOverlay(textOverlay2);
 
     textLeft = setTextDefaults(LineText, leftTextCase, date);
-    textRight = setTextDefaults(LineText, rightTextCase, util.dateAdd(date, 'day', -1));
-    lineLeft = setLineDefaults(DateLine, height, -180, textOverlay1, leftLineCase, textLeft);
-    lineRight = setLineDefaults(DateLine, height, 180, textOverlay2, rightLineCase, textRight);
+    textRight = setTextDefaults(
+      LineText,
+      rightTextCase,
+      util.dateAdd(date, 'day', -1)
+    );
+    lineLeft = setLineDefaults(
+      DateLine,
+      height,
+      -180,
+      textOverlay1,
+      leftLineCase,
+      textLeft
+    );
+    lineRight = setLineDefaults(
+      DateLine,
+      height,
+      180,
+      textOverlay2,
+      rightLineCase,
+      textRight
+    );
   };
 
   /*
@@ -232,13 +277,20 @@ export function mapDateLineBuilder(models, config) {
    * @returns {void}
    */
   var position = function(map) {
-    var extent, top, topY, bottomY, bottom, height, startY, topExtent, bottomExtent;
+    var extent,
+      top,
+      topY,
+      bottomY,
+      bottom,
+      height,
+      startY,
+      topExtent,
+      bottomExtent;
 
     if (map.getSize()[0] === 0) {
       return;
     }
-    extent = map.getView()
-      .calculateExtent(map.getSize());
+    extent = map.getView().calculateExtent(map.getSize());
     top = [extent[2] - 1, extent[3] + 5];
     bottom = [extent[2] - 1, extent[1] - 5];
     topExtent = map.getPixelFromCoordinate([extent[2] - 1, extent[3] - 1]);
@@ -303,4 +355,4 @@ export function mapDateLineBuilder(models, config) {
   };
 
   return self;
-};
+}
