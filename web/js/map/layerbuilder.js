@@ -38,7 +38,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     options = options || {};
     group = options.group || null;
     date = self.closestDate(def, options);
-    key = self.layerKey(def, options, date);
+    key = self.layerKey(def, options, group);
     proj = models.proj.selected;
     layer = cache.getItem(key);
     if (!layer) {
@@ -159,22 +159,22 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @returns {object} layer key Object
    */
   self.layerKey = function(def, options) {
+    layerGroupStr = layerGroupStr || models.layers.activeLayers;
     var date;
+    var layerGroupStr;
     var layerId = def.id;
     var projId = models.proj.selected.id;
     var palette = '';
-
-    if (options.date) {
-      date = options.date;
-    } else {
-      date = models.date[models.date.activeDate];
-    }
+    date = options.date ? options.date : models.date[models.date.activeDate];
+    layerGroupStr = options.group
+      ? options.group
+      : models.layers[models.layers.activeLayers];
     date = self.closestDate(def, options);
 
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
     }
-    return [layerId, projId, date, palette].join(':');
+    return [layerId, projId, date, palette, layerGroupStr].join(':');
   };
   /*
    * Create a new WMTS Layer
