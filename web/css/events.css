@@ -16,6 +16,9 @@
   cursor: pointer;
   background: transparent;
 }
+.map-item-list li.item.hidden {
+  display: none;
+}
 
 .map-item-list li.item h4 {
   font-size: 0.85em;
@@ -121,7 +124,7 @@
   display: block;
   height: 26px;
   width: 26px;
-  background: url('../images/natural-events/dot.svg');
+  background: url("../images/natural-events/dot.svg");
 }
 
 .marker-selected {
@@ -130,7 +133,7 @@
   position: relative;
   z-index: 100;
   height: 31px;
-  background: url('../images/natural-events/pin.svg');
+  background: url("../images/natural-events/pin.svg");
 }
 
 .marker:not(.marker-selected):hover {
@@ -174,7 +177,7 @@
   background-color: rgba(40, 40, 40, 0.9);
   border-radius: 3px;
   text-align: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   font-size: 12px;
   color: #ccc;
   z-index: 900;
@@ -205,7 +208,7 @@
   background-size: initial;
   background-position: center;
   background-repeat: repeat-x;
-  background-image: url('../images/natural-events/track-arrow.svg');
+  background-image: url("../images/natural-events/track-arrow.svg");
   position: absolute;
   pointer-events: none;
 }
@@ -239,7 +242,7 @@
 }
 .cluster-marker {
   border-radius: 12px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   width: 24px;
   height: 24px;
   z-index: 99;
@@ -262,7 +265,7 @@
   display: block;
   height: 30px;
   width: 30px;
-  background: url('../images/natural-events/icon-default.svg');
+  background: url("../images/natural-events/icon-default.svg");
 }
 .wv-map .event-icon {
   height: 26px;
@@ -270,41 +273,44 @@
 }
 
 .event-icon-dust-and-haze {
-  background: url('../images/natural-events/icon-dust-and-haze.svg');
+  background: url("../images/natural-events/icon-dust-and-haze.svg");
 }
 
 .event-icon-icebergs {
-  background: url('../images/natural-events/icon-icebergs.svg');
+  background: url("../images/natural-events/icon-icebergs.svg");
 }
 
 .event-icon-manmade {
-  background: url('../images/natural-events/icon-manmade.svg');
+  background: url("../images/natural-events/icon-manmade.svg");
 }
 
 .event-icon-sea-and-lake-ice {
-  background: url('../images/natural-events/icon-sea-and-lake-ice.svg');
+  background: url("../images/natural-events/icon-sea-and-lake-ice.svg");
 }
 
 .event-icon-severe-storms {
-  background: url('../images/natural-events/icon-severe-storms.svg');
+  background: url("../images/natural-events/icon-severe-storms.svg");
 }
 
 .event-icon-snow {
-  background: url('../images/natural-events/icon-snow.svg');
+  background: url("../images/natural-events/icon-snow.svg");
 }
 
 .event-icon-volcanoes {
-  background: url('../images/natural-events/icon-volcanoes.svg');
+  background: url("../images/natural-events/icon-volcanoes.svg");
 }
 
 .event-icon-water-color {
-  background: url('../images/natural-events/icon-water-color.svg');
+  background: url("../images/natural-events/icon-water-color.svg");
 }
 
 .event-icon-wildfires {
-  background: url('../images/natural-events/icon-wildfires.svg');
+  background: url("../images/natural-events/icon-wildfires.svg");
 }
-
+.events-loading-text {
+  color: #fff;
+  padding: 10px;
+}
 .notify-alert {
   position: absolute;
   top: 60px !important;
@@ -317,7 +323,7 @@
   transform: translateY(50%);
   bottom: 50%;
   height: 10px;
-  content: 'Read more \002026 ';
+  content: "Read more \002026 ";
   float: right;
   position: absolute;
   display: block;
