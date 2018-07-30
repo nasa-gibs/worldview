@@ -31,11 +31,13 @@ export function sidebarUi(models, config, ui) {
       document.getElementById('wv-sidebar')
     );
     var debounceLayerUpdates = lodashDebounce(updateLayers, 300, {
-      leading: true
+      leading: true,
+      trailing: true
     });
     var debounceUpdateData = lodashDebounce(updateData, 300, { leading: true });
     var debounceUpdateEventsList = lodashDebounce(updateEventsList, 300, {
-      leading: true
+      leading: true,
+      trailing: true
     });
     var debounceLayerAdd = lodashDebounce(
       layer => {
@@ -43,7 +45,7 @@ export function sidebarUi(models, config, ui) {
         updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
       },
       300,
-      { leading: true }
+      { leading: true, trailing: true }
     );
 
     // Set Event Listeners
