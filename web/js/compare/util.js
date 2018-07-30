@@ -13,9 +13,3 @@ export function getCompareObjects(models) {
   };
   return obj;
 }
-export function getActiveLayerGroupString(abIsActive, isCompareA) {
-  return isCompareA ? 'active' : 'activeB';
-}
-export function getActiveDateString(abIsActive, isCompareA) {
-  return isCompareA ? 'selected' : 'selectedB';
-}
