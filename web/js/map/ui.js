@@ -30,7 +30,6 @@ import { mapLayerBuilder } from './layerbuilder';
 import { MapRunningData } from './runningdata';
 import { mapPrecacheTile } from './precachetile';
 import { mapUtilZoomAction } from './util';
-import { getActiveLayerGroupString } from '../compare/util';
 import { mapCompare } from './compare/compare';
 import Cache from 'cachai';
 
@@ -46,7 +45,7 @@ export function mapui(models, config) {
   var precache = mapPrecacheTile(models, config, cache, self);
   var compare = mapCompare(models, config);
 
-  var dataRunner = (self.runningdata = new MapRunningData(models));
+  var dataRunner = (self.runningdata = new MapRunningData(models, compare));
 
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
@@ -86,9 +85,11 @@ export function mapui(models, config) {
       .on('add', addLayer)
       .on('remove', removeLayer)
       .on('visibility', updateLayerVisibilities)
-      .on('opacity', updateOpacity)
-      .on('update', updateLayerOrder);
-    models.compare.events.on('change', reloadLayers);
+      .on('update', updateLayerOrder)
+      .on('opacity', updateOpacity);
+    models.compare.events.on('toggle', reloadLayers);
+    models.compare.events.on('toggle-state', reloadLayers);
+    models.compare.events.on('mode', reloadLayers);
     models.date.events.on('select', updateDate);
     models.palettes.events
       .on('set-custom', updateLookup)
@@ -213,58 +214,18 @@ export function mapui(models, config) {
    *
    * @returns {void}
    */
-  var clearLayers = function(map, isOnlyFirstGroup) {
+  var clearLayers = function(map) {
     var activeLayers = map
       .getLayers()
       .getArray()
       .slice(0);
-    if (isOnlyFirstGroup) activeLayers = activeLayers[0];
     lodashEach(activeLayers, function(mapLayer) {
       map.removeLayer(mapLayer);
     });
-    removeGraticule();
+    removeGraticule('active');
+    removeGraticule('activeB');
     cache.clear();
   };
-  // var clearFirstLayerGroup = function(map) {
-  //   var layerGroup = map
-  //     .getLayers()
-  //     .getArray()
-  //     .slice(0)[0];
-  //   map.removeLayer(layerGroup);
-  // }
-  // var reloadCompareLayer = function(map) {
-  //   map = map || self.selected;
-  //   var activeLayerString = getActiveLayerGroupString(true, models.compare.isCompareA);
-  //   var layerGroup = map.getLayers()[0];
-  //   var activeLayers = models.layers.get({}, activeLayerString);
-  //   clearFirstLayerGroup();
-  //   if (layerGroupStr === 'active') {
-  //     if (compare.active) {
-  //       compare.destroy();
-  //     }
-  //     let defs = models.layers.get(
-  //       {
-  //         reverse: true
-  //       },
-  //       activeLayers
-  //     );
-  //     lodashEach(defs, function(def) {
-  //       if (isGraticule(def)) {
-  //         addGraticule();
-  //       } else {
-  //         self.selected.addLayer(createLayer(def));
-  //       }
-  //     });
-  //   } else {
-  //     let stateArray = [['activeA', 'selectedA'], ['activeB', 'selectedB']];
-  //     if (!compareModel.isCompareA) stateArray.reverse();
-  //     lodashEach(stateArray, arr => {
-  //       self.selected.addLayer(getCompareLayerGroup(arr));
-  //     });
-  //     compare.create(map, compareModel.mode);
-  //   }
-  //   updateLayerVisibilities();
-  // }
   /*
    * get layers from models obj
    * and add each layer to the map
@@ -276,20 +237,17 @@ export function mapui(models, config) {
    *
    * @returns {void}
    */
-  var reloadLayers = function(map, isLayerGroup) {
+  var reloadLayers = function(map) {
     map = map || self.selected;
     var compareModel = models.compare;
-    var layerGroupStr = getActiveLayerGroupString(
-      compareModel.active,
-      compareModel.isCompareA
-    );
+    var layerGroupStr = models.layers.activeLayers;
     var activeLayers = models.layers[layerGroupStr];
 
-    clearLayers(map);
     if (!models.compare.active) {
       if (compare.active) {
         compare.destroy();
       }
+      clearLayers(map);
       let defs = models.layers.get(
         {
           reverse: true
@@ -298,28 +256,43 @@ export function mapui(models, config) {
       );
       lodashEach(defs, function(def) {
         if (isGraticule(def)) {
-          addGraticule();
+          addGraticule(def.opacity, layerGroupStr);
         } else {
-          self.selected.addLayer(createLayer(def));
+          map.addLayer(createLayer(def));
         }
       });
     } else {
       let stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
-      if (!compareModel.isCompareA && (compareModel.mode === 'spy')) stateArray.reverse();
+      clearLayers(map);
+      if (!compareModel.isCompareA && compareModel.mode === 'spy') {
+        stateArray.reverse();
+      }
       lodashEach(stateArray, arr => {
-        self.selected.addLayer(getCompareLayerGroup(arr));
+        map.addLayer(getCompareLayerGroup(arr));
       });
       compare.create(map, compareModel.mode);
     }
     updateLayerVisibilities();
   };
+  /**
+   * Create a Layergroup given the date and layerGroups
+   * @param {Array} arr | Array of date/layer group strings
+   */
   var getCompareLayerGroup = function(arr) {
     return new OlLayerGroup({
       layers: models.layers
         .get({ reverse: true }, models.layers[arr[0]])
+        .filter(def => {
+          if (isGraticule(def)) {
+            addGraticule(def.opacity, arr[0]);
+            return false;
+          }
+          return true;
+        })
         .map(def => {
           return createLayer(def, {
-            date: models.date[arr[1]]
+            date: models.date[arr[1]],
+            group: arr[0]
           });
         }),
       group: arr[0]
@@ -337,18 +310,33 @@ export function mapui(models, config) {
   var updateLayerVisibilities = function() {
     var renderable;
     var layers = self.selected.getLayers();
-    var compareModel = models.compare;
     var layersModel = models.layers;
-    let layerGroupStr = getActiveLayerGroupString(
-      compareModel.active,
-      compareModel.isCompareA
-    );
+    var layerGroupStr = models.layers.activeLayers;
+    var updateGraticules = function(defs, groupName) {
+      lodashEach(defs, function(def) {
+        if (isGraticule(def)) {
+          renderable = layersModel.isRenderable(
+            def.id,
+            layersModel[layerGroupStr]
+          );
+          if (renderable) {
+            addGraticule(def.opacity, groupName);
+          } else {
+            removeGraticule(groupName);
+          }
+        }
+      });
+    };
     layers.forEach(function(layer) {
       var group = layer.get('group');
       if (layer.wv) {
         renderable = layersModel.isRenderable(layer.wv.id);
         layer.setVisible(renderable);
+        let defs = layersModel.get({}, layersModel[layerGroupStr]);
+        updateGraticules(defs);
       } else if (group) {
+        let defs;
+
         lodashEach(layer.getLayers().getArray(), subLayer => {
           if (subLayer.wv) {
             renderable = layersModel.isRenderable(
@@ -360,20 +348,8 @@ export function mapui(models, config) {
           }
         });
         layer.setVisible(true);
-      }
-    });
-    var defs = layersModel.get({}, layersModel[layerGroupStr]);
-    lodashEach(defs, function(def) {
-      if (isGraticule(def)) {
-        renderable = layersModel.isRenderable(
-          def.id,
-          layersModel[layerGroupStr]
-        );
-        if (renderable) {
-          addGraticule();
-        } else {
-          removeGraticule();
-        }
+        defs = layersModel.get({}, layersModel[group]);
+        updateGraticules(defs, group);
       }
     });
   };
@@ -389,10 +365,16 @@ export function mapui(models, config) {
    *
    * @returns {void}
    */
-  var updateOpacity = function(def, value) {
-    var layer = findLayer(def);
-    layer.setOpacity(value);
-    updateLayerVisibilities();
+  var updateOpacity = function(def, value, activeLayersString) {
+    if (isGraticule(def)) {
+      let strokeStyle = self['graticule-' + activeLayersString + '-style'];
+      strokeStyle.setColor('rgba(255, 255, 255,' + value + ')');
+      self.selected.render();
+    } else {
+      let layer = findLayer(def, activeLayersString);
+      layer.setOpacity(value);
+      updateLayerVisibilities();
+    }
   };
   /*
    *Initiates the adding of a layer or Graticule
@@ -406,7 +388,8 @@ export function mapui(models, config) {
    */
 
   var addLayer = function(def, date, activeLayers) {
-    date = date || models.date.selected;
+    date = date || models.date[models.date.activeDate];
+    activeLayers = activeLayers || models.layers[models.layers.activeLayers];
     if (models.compare.active) return reloadLayers();
     var reverseLayers = lodashCloneDeep(activeLayers).reverse();
     var mapIndex = lodashFindIndex(reverseLayers, {
@@ -415,7 +398,7 @@ export function mapui(models, config) {
     var layers = self.selected.getLayers().getArray();
     var firstLayer = layers[0]; // needs to be upated, won't always be first layer
     if (isGraticule(def)) {
-      addGraticule();
+      addGraticule(def.opacity, models.layers.activeLayers);
     } else {
       def.availableDates = util.datesinDateRanges(def, date, true);
       if (firstLayer && firstLayer.get('group')) {
@@ -442,9 +425,9 @@ export function mapui(models, config) {
    */
   var removeLayer = function(def) {
     if (isGraticule(def)) {
-      removeGraticule();
+      removeGraticule(models.layers.activeLayers);
     } else {
-      var layer = findLayer(def);
+      var layer = findLayer(def, models.layers.activeLayers);
       self.selected.removeLayer(layer);
     }
     updateLayerVisibilities();
@@ -473,15 +456,9 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var updateDate = function() {
-    var layerGroupString = 'active';
-    if (models.compare && models.compare.active) {
-      layerGroupString = getActiveLayerGroupString(
-        true,
-        models.compare.isCompareA
-      );
-    }
-    var layers = models.layers.get({}, models.layers[layerGroupString]);
-    console.log(layers);
+    var layerModel = models.layers;
+    var layers = layerModel.get({}, layerModel[layerModel.activeLayers]);
+
     lodashEach(layers, function(def) {
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
         return;
@@ -545,13 +522,27 @@ export function mapui(models, config) {
    *
    * @returns {object} Layer object
    */
-  var findLayer = function(def) {
+  var findLayer = function(def, layerGroupStr) {
     var layers = self.selected.getLayers().getArray();
     var layer = lodashFind(layers, {
       wv: {
         id: def.id
       }
     });
+    if (!layer && layers[0].get('group')) {
+      let subGroup, olGroupLayer;
+      lodashEach(layers, layerGroup => {
+        if (layerGroup.get('group') === layerGroupStr) {
+          olGroupLayer = layerGroup;
+        }
+      });
+      subGroup = olGroupLayer.getLayers().getArray();
+      layer = lodashFind(subGroup, {
+        wv: {
+          id: def.id
+        }
+      });
+    }
     return layer;
   };
 
@@ -566,7 +557,7 @@ export function mapui(models, config) {
    *
    * @returns {number} Index of layer in OpenLayers layer array
    */
-  var findLayerIndex = function(def, lengthOfComparisonGroups) {
+  var findLayerIndex = function(def) {
     var layers = self.selected.getLayers().getArray();
 
     var layer = lodashFindIndex(layers, {
@@ -608,19 +599,26 @@ export function mapui(models, config) {
    *
    * @returns {void}
    */
-  var addGraticule = function() {
-    if (self.selected.graticule) {
+  var addGraticule = function(opacity, groupStr) {
+    groupStr = groupStr || 'active';
+    opacity = opacity || 0.5;
+    var graticule = self.selected['graticule-' + groupStr];
+    if (graticule) {
       return;
     }
-
-    self.selected.graticule = new OlGraticule({
-      map: self.selected,
-      strokeStyle: new OlStyleStroke({
-        color: 'rgba(255, 255, 255, 0.5)',
-        width: 2,
-        lineDash: [0.5, 4]
-      })
+    var strokeStyle = new OlStyleStroke({
+      color: 'rgba(255, 255, 255,' + opacity + ')',
+      width: 2,
+      lineDash: [0.5, 4],
+      opacity: opacity
     });
+
+    self.selected['graticule-' + groupStr] = new OlGraticule({
+      map: self.selected,
+      group: groupStr,
+      strokeStyle: strokeStyle
+    });
+    self['graticule-' + groupStr + '-style'] = strokeStyle;
   };
 
   /*
@@ -633,12 +631,13 @@ export function mapui(models, config) {
    *
    * @returns {void}
    */
-  var removeGraticule = function() {
-    if (self.selected.graticule) {
-      self.selected.graticule.setMap(null);
+  var removeGraticule = function(groupStr) {
+    groupStr = groupStr || 'active';
+    var graticule = self.selected['graticule-' + groupStr];
+    if (graticule) {
+      graticule.setMap(null);
     }
-
-    self.selected.graticule = null;
+    self.selected['graticule-' + groupStr] = null;
   };
 
   var triggerExtent = lodashThrottle(
@@ -678,7 +677,7 @@ export function mapui(models, config) {
    * @returns {object} OpenLayers Map Object
    */
   var createMap = function(proj, dateSelected) {
-    dateSelected = dateSelected || models.date.selected;
+    dateSelected = dateSelected || models.date[models.date.activeDate];
     var id,
       $map,
       scaleMetric,
@@ -778,6 +777,7 @@ export function mapui(models, config) {
       switch (e.key) {
         case 'resolution':
           self.mapIsbeingZoomed = true;
+          self.events.trigger('zooming');
           break;
       }
     });
@@ -992,7 +992,7 @@ export function mapui(models, config) {
       var coords;
       var pixels;
       var outside;
-
+      if (compare && compare.dragging) return;
       // if mobile return
       if (util.browser.small) {
         return;
