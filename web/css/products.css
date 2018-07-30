@@ -88,7 +88,9 @@
   background: url("../images/icon-sprite.svg") transparent 0 -10px;
   margin: 0 4px 0 0;
 }
-
+.ab-tab.active .productsIcon {
+  background-position: 0 20px;
+}
 /***********************************Icons***********************************/
 .icon-layers {
   background-position: 0 -10px;
@@ -98,20 +100,12 @@
   background-position: 0 20px;
 }
 
-.ui-state-active .tab:hover .icon-layers {
-  background-position: 0 -10px;
-}
-
 .icon-download {
   background-position: -30px -10px;
 }
 
 .tab:hover .icon-download {
   background-position: -30px 20px;
-}
-
-.ui-state-active .tab:hover .icon-download {
-  background-position: -30px -10px;
 }
 
 .icon-download-alt {
@@ -126,10 +120,6 @@
   background-position: -90px 20px;
 }
 
-.ui-state-active .tab:hover .icon-add {
-  background-position: -90px -10px;
-}
-
 .icon-add-alt {
   background-position: -120px -10px;
 }
@@ -140,8 +130,4 @@
 
 .tab:hover .icon-events {
   background-position: -150px 20px;
-}
-
-.ui-state-active .tab:hover .icon-events {
-  background-position: -150px -10px;
 }

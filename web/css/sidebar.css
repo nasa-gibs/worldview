@@ -23,6 +23,9 @@
   position: relative;
   border: 1px solid transparent;
 }
+#productsHolder .scrollbar-visible .sidebar-panel {
+  padding-right: 10px;
+}
 #productsHolder .main-nav {
   background: rgba(40, 40, 40, 0.85);
 }
@@ -39,10 +42,13 @@
 .nav-tabs {
   border-bottom: 3px solid #00457b;
 }
+.nav-tabs .nav-link {
+  padding: 0.3rem 0.55rem;
+}
 #productsHolder .nav-tabs .disabled {
-  cursor: not-allowed;
   color: white;
   opacity: 0.5;
+  cursor: default;
 }
 
 .tab-content .nav-tabs {
@@ -82,7 +88,9 @@ footer .compare-toggle-button {
   position: absolute;
   right: 5px;
 }
-
+.layer-group-case {
+  overflow: hidden;
+}
 .wv-ab-mode-selection-case {
   margin: 5px;
 }
