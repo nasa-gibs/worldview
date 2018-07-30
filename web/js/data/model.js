@@ -7,7 +7,8 @@ import { dataHandlerGetByName } from './handler';
 export function dataModel(models, config) {
   var NO_PRODUCT_ID = '__NO_PRODUCT';
   var NO_PRODUCT = {
-    name: 'Not available for download &nbsp;&nbsp;<span class=\'link\'>(?)</span>',
+    name:
+      "Not available for download &nbsp;&nbsp;<span class='link'>(?)</span>",
     notSelectable: true
   };
 
@@ -74,7 +75,7 @@ export function dataModel(models, config) {
   self.crs = null;
   self.time = null;
 
-  var init = function () {
+  var init = function() {
     models.layers.events.on('change', updateLayers);
     models.proj.events.on('select', updateProjection);
     models.date.events.on('select', updateDate);
@@ -89,7 +90,7 @@ export function dataModel(models, config) {
    *
    * @method activate
    */
-  self.activate = function (productName) {
+  self.activate = function(productName) {
     if (!self.active) {
       try {
         if (productName) {
@@ -102,8 +103,7 @@ export function dataModel(models, config) {
         } else if (!self.selectedProduct) {
           self.selectProduct(findAvailableProduct());
         } else {
-          self.events.trigger(self.EVENT_PRODUCT_SELECT,
-            self.selectedProduct);
+          self.events.trigger(self.EVENT_PRODUCT_SELECT, self.selectedProduct);
           query();
         }
       } catch (error) {
@@ -120,7 +120,7 @@ export function dataModel(models, config) {
    *
    * @method deactivate
    */
-  self.deactivate = function () {
+  self.deactivate = function() {
     if (self.active) {
       self.active = false;
       self.events.trigger(self.EVENT_DEACTIVATE);
@@ -133,7 +133,7 @@ export function dataModel(models, config) {
    *
    * @method toggleMode
    */
-  self.toggleMode = function () {
+  self.toggleMode = function() {
     if (self.active) {
       self.deactivate();
     } else {
@@ -141,7 +141,7 @@ export function dataModel(models, config) {
     }
   };
 
-  self.groupByProducts = function () {
+  self.groupByProducts = function() {
     let products = {};
     for (let layer of self.layers) {
       // If products is a list, use it. If a single item, convert to a list.
@@ -168,13 +168,13 @@ export function dataModel(models, config) {
           }
         });
       }
-    };
+    }
 
     // FIXME: This is a hack to force the not availables to the bottom
     // especially for IE9. This whole function needs clean up.
     var results = {};
     var none = products.__NO_PRODUCT;
-    lodashEach(products, function (product, key) {
+    lodashEach(products, function(product, key) {
       if (key !== NO_PRODUCT_ID) {
         results[key] = product;
       }
@@ -185,12 +185,12 @@ export function dataModel(models, config) {
     return results;
   };
 
-  self.getProductsString = function () {
+  self.getProductsString = function() {
     var parts = [];
     var products = self.groupByProducts();
-    $.each(products, function (key, product) {
+    $.each(products, function(key, product) {
       var layers = [];
-      $.each(product.items, function (index, item) {
+      $.each(product.items, function(index, item) {
         layers.push(item.value);
       });
       parts.push(key + ',' + layers.join(','));
@@ -198,7 +198,7 @@ export function dataModel(models, config) {
     return parts.join('~');
   };
 
-  self.selectProduct = function (productName) {
+  self.selectProduct = function(productName) {
     if (self.selectedProduct === productName) {
       return;
     }
@@ -212,19 +212,19 @@ export function dataModel(models, config) {
     }
   };
 
-  self.selectGranule = function (granule) {
+  self.selectGranule = function(granule) {
     self.selectedGranules[granule.id] = granule;
     self.events.trigger(self.EVENT_GRANULE_SELECT, granule);
   };
 
-  self.unselectGranule = function (granule) {
+  self.unselectGranule = function(granule) {
     if (self.selectedGranules[granule.id]) {
       delete self.selectedGranules[granule.id];
       self.events.trigger(self.EVENT_GRANULE_UNSELECT, granule);
     }
   };
 
-  self.toggleGranule = function (granule) {
+  self.toggleGranule = function(granule) {
     if (self.isSelected(granule)) {
       self.unselectGranule(granule);
     } else {
@@ -232,9 +232,9 @@ export function dataModel(models, config) {
     }
   };
 
-  self.isSelected = function (granule) {
+  self.isSelected = function(granule) {
     var selected = false;
-    $.each(self.selectedGranules, function (index, selection) {
+    $.each(self.selectedGranules, function(index, selection) {
       if (granule.id === selection.id) {
         selected = true;
       }
@@ -242,10 +242,10 @@ export function dataModel(models, config) {
     return selected;
   };
 
-  self.getSelectionSize = function () {
+  self.getSelectionSize = function() {
     var totalSize = 0;
     var sizeValid = true;
-    $.each(self.selectedGranules, function (index, granule) {
+    $.each(self.selectedGranules, function(index, granule) {
       if (sizeValid && granule.granule_size) {
         totalSize += parseFloat(granule.granule_size);
       } else {
@@ -260,7 +260,7 @@ export function dataModel(models, config) {
   // For each product displayed in the sidebar, gets the count of
   // granules that have been selected by the user. Returns an object
   // in the form of product_id = count.
-  self.getSelectionCounts = function () {
+  self.getSelectionCounts = function() {
     var counts = {};
     for (let layer of self.layers) {
       if (layer.product) {
@@ -276,37 +276,36 @@ export function dataModel(models, config) {
     return counts;
   };
 
-  self.setPreference = function (preference) {
+  self.setPreference = function(preference) {
     self.prefer = preference;
     query();
   };
 
-  self.save = function (state) {
+  self.save = function(state) {
     if (self.active) {
       state.download = self.selectedProduct;
     }
   };
 
-  self.load = function (state, errors) {
+  self.load = function(state, errors) {
     var productId = state.download;
     if (productId) {
-      var found = lodashFind(models.layers.active, {
+      var found = lodashFind(models.layers[models.layers.activeLayers], {
         product: productId
       });
       if (!found) {
         errors.push({
-          message: 'No active layers match product: ' +
-            productId
+          message: 'No active layers match product: ' + productId
         });
       } else {
-        models.wv.events.on('startup', function () {
+        models.wv.events.on('startup', function() {
           self.activate(productId);
         });
       }
     }
   };
 
-  var query = function () {
+  var query = function() {
     if (!self.active) {
       return;
     }
@@ -325,10 +324,11 @@ export function dataModel(models, config) {
 
     var handlerFactory = dataHandlerGetByName(productConfig.handler);
     var handler = handlerFactory(config, self);
-    handler.events.on('query', function () {
-      self.events.trigger(self.EVENT_QUERY);
-    })
-      .on('results', function (results) {
+    handler.events
+      .on('query', function() {
+        self.events.trigger(self.EVENT_QUERY);
+      })
+      .on('results', function(results) {
         queryExecuting = false;
         if (self.active && !nextQuery) {
           self.events.trigger(self.EVENT_QUERY_RESULTS, results);
@@ -339,14 +339,13 @@ export function dataModel(models, config) {
           executeQuery(q);
         }
       })
-      .on('error', function (textStatus, errorThrown) {
+      .on('error', function(textStatus, errorThrown) {
         queryExecuting = false;
         if (self.active) {
-          self.events.trigger(self.EVENT_QUERY_ERROR, textStatus,
-            errorThrown);
+          self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
         }
       })
-      .on('timeout', function () {
+      .on('timeout', function() {
         queryExecuting = false;
         if (self.active) {
           self.events.trigger(self.EVENT_QUERY_TIMEOUT);
@@ -355,7 +354,7 @@ export function dataModel(models, config) {
     executeQuery(handler);
   };
 
-  var executeQuery = function (handler) {
+  var executeQuery = function(handler) {
     if (!queryExecuting) {
       try {
         queryExecuting = true;
@@ -369,10 +368,10 @@ export function dataModel(models, config) {
     }
   };
 
-  var updateLayers = function () {
+  var updateLayers = function() {
     self.layers = [];
     var foundSelected = false;
-    lodashEach(models.layers.get(), function (layer) {
+    lodashEach(models.layers.get(), function(layer) {
       var id = layer.id;
       var names = models.layers.getTitles(layer.id);
       var layerName = names.title;
@@ -401,17 +400,16 @@ export function dataModel(models, config) {
     // FIXME: This is a hack for now and should be cleaned up when
     // everything changes to models.
     var products = self.groupByProducts();
-    lodashEach(self.selectedGranules, function (selected) {
-      if (!products[selected.product] &&
-        !productActive(selected.product)) {
+    lodashEach(self.selectedGranules, function(selected) {
+      if (!products[selected.product] && !productActive(selected.product)) {
         self.unselectGranule(selected);
       }
     });
   };
 
-  var productActive = function (product) {
+  var productActive = function(product) {
     var active = false;
-    lodashEach(layersModel.active, function (layer) {
+    lodashEach(layersModel.active, function(layer) {
       if (layer.product === product) {
         active = true;
         return false;
@@ -420,12 +418,12 @@ export function dataModel(models, config) {
     return active;
   };
 
-  var updateProjectionInfo = function () {
+  var updateProjectionInfo = function() {
     self.projection = models.proj.selected.id;
     self.crs = models.proj.selected.crs;
   };
 
-  var updateProjection = function () {
+  var updateProjection = function() {
     updateProjectionInfo();
     self.events.trigger('projectionUpdate');
     updateLayers();
@@ -434,12 +432,12 @@ export function dataModel(models, config) {
   // FIXME: This is a hack
   self.updateProjection = updateProjection;
 
-  var updateDate = function () {
-    self.time = models.date.selected;
+  var updateDate = function() {
+    self.time = models.date[models.date.activeDate];
     query();
   };
 
-  var findAvailableProduct = function () {
+  var findAvailableProduct = function() {
     var foundProduct = null;
     var list = models.layers.get({
       flat: true
@@ -458,9 +456,9 @@ export function dataModel(models, config) {
     return foundProduct;
   };
 
-  var validateProduct = function (productName) {
+  var validateProduct = function(productName) {
     var found = false;
-    $.each(self.layers, function (index, layer) {
+    $.each(self.layers, function(index, layer) {
       var layerProduct = layer.product;
       if (layerProduct === productName) {
         found = true;
@@ -474,4 +472,4 @@ export function dataModel(models, config) {
 
   init();
   return self;
-};
+}
