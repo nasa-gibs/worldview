@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import util from '../util/util';
-import { getActiveDateString } from '../compare/util';
 import { DateSelector } from 'worldview-components';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -28,6 +27,7 @@ export function timelineInput(models, config, ui) {
   var $decrementBtn = $('#left-arrow-group');
 
   var init = function() {
+    models.layers.events.on('subdaily-updated', updateMaxZoom);
     $incrementBtn
       .mousedown(function(e) {
         e.preventDefault();
@@ -134,36 +134,24 @@ export function timelineInput(models, config, ui) {
       document.getElementById(dateSelectorStr)
     );
     model.events.on('select', date => {
-      console.log('select');
       self.reactComponent.setState({ date: date });
     });
 
     if (config.features.compare) {
-      models.compare.events.on('toggle-state', () => {
-        var dateModel = models.date;
-        var activeDate =
-          model.activeDate === 'selected' ? 'selectedB' : 'selected';
-        model.activeDate = activeDate;
+      let dateModel = models.date;
+      dateModel.events.on('state-update', () => {
         self.reactComponent.setState({
-          date: dateModel[activeDate]
+          date: dateModel[dateModel.activeDate]
         });
       });
     }
     self.update();
   };
   var getProps = function() {
-    var dateSelection = 'selected';
     var model = models.date;
     var min = model.minDate();
     var max = model.maxDate();
-    if (models.compare.active) {
-      let compareModel = models.compare;
-      dateSelection = getActiveDateString(
-        compareModel.active,
-        compareModel.isCompareA
-      );
-    }
-    var date = model[dateSelection];
+    var date = model[model.activeDate];
     return {
       width: '120',
       height: '30',
@@ -173,19 +161,12 @@ export function timelineInput(models, config, ui) {
       maxDate: max,
       maxZoom: model.maxZoom,
       onDateChange: onDateSelect,
-      date: date
+      date: date,
+      fontSize: null
     };
   };
   var onDateSelect = function(date) {
-    var dateSelection = '';
-    if (models.compare.active) {
-      let compareModel = models.compare;
-      dateSelection = getActiveDateString(
-        compareModel.active,
-        compareModel.isCompareA
-      );
-    }
-    models.date.select(date, dateSelection);
+    models.date.select(date);
   };
   /**
    * Add timeout to date change when buttons are being held so that
@@ -200,18 +181,10 @@ export function timelineInput(models, config, ui) {
    */
   var animateByIncrement = function(delta, increment) {
     self.delta = Math.abs(delta);
-    var dateSelection = '';
-    if (models.compare.active) {
-      let compareModel = models.compare;
-      dateSelection = getActiveDateString(
-        compareModel.active,
-        compareModel.isCompareA
-      );
-    }
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
       if (tl.data.start() <= nextTime <= util.now()) {
-        models.date.add(increment, delta, dateSelection);
+        models.date.add(increment, delta);
       }
       animator = setTimeout(animate, self.delay);
     }
@@ -282,6 +255,18 @@ export function timelineInput(models, config, ui) {
     }
 
     tl.pick.update();
+  };
+  var updateMaxZoom = function() {
+    if (model.maxZoom >= 4) {
+      document.getElementById('timeline-header').classList.add('subdaily');
+    } else {
+      if (ui.timeline && ui.timeline.config.currentZoom > 3) {
+        document.getElementById('zoom-days').click();
+      }
+      document.getElementById('timeline-header').classList.remove('subdaily');
+    }
+    self.reactComponent.setState({ maxZoom: model.maxZoom });
+    model.events.trigger('update-timewheel');
   };
 
   init();
