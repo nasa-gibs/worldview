@@ -121,6 +121,7 @@
     "yargs": "^11.0.0"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bluebird": "3.4.6",
     "bootstrap": "^4.1.0",
     "cachai": "^1.0.2",
@@ -146,6 +147,7 @@
     "promise-queue": "2.2.3",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
+    "simplebar": "^3.0.0-beta.1",
     "supercluster": "3.0.2",
     "web-streams-polyfill": "^1.3.2",
     "worldview-components": "1.9.0",
