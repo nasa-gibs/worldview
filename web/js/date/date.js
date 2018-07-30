@@ -5,30 +5,27 @@ export function parse(state, errors) {
     state.t = state.time;
     delete state.time;
   }
-  var tryCatchDate = function(stateDate) {
+  var tryCatchDate = function(str) {
     try {
-      state.t = util.parseDateUTC(stateDate);
+      return util.parseDateUTC(state[str]);
     } catch (error) {
       errors.push({
-        message: 'Invalid date: ' + stateDate,
+        message: 'Invalid date: ' + state[str],
         cause: error
       });
     }
   };
   if (state.t) {
-    state.t = tryCatchDate(state.t);
+    state.t = tryCatchDate('t');
   }
   if (state.t1) {
-    state.t1 = tryCatchDate(state.t1);
-  }
-  if (state.t2) {
-    state.t2 = tryCatchDate(state.t2);
+    state.t1 = tryCatchDate('t1');
   }
 
   if (state.now) {
     try {
       state.now = util.parseDateUTC(state.now);
-      util.now = function () {
+      util.now = function() {
         return new Date(state.now.getTime());
       };
       util.warn('Overriding now: ' + state.now.toISOString());
@@ -40,4 +37,4 @@ export function parse(state, errors) {
       });
     }
   }
-};
+}

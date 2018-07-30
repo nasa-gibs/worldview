@@ -196,6 +196,10 @@ export function timeline(models, config, ui) {
       .attr('transform', 'translate(0,16)');
     self.animboundary.append('g').attr('id', 'wv-rangeselector-case');
   };
+  var updateTimeUi = function() {
+    self.input.update();
+    self.pick.shiftView();
+  };
 
   var init = function() {
     var $timelineFooter = $('#timeline-footer');
@@ -246,10 +250,8 @@ export function timeline(models, config, ui) {
       self.setClip();
     });
 
-    model.events.on('select', function() {
-      self.input.update();
-      self.pick.shiftView();
-    });
+    model.events.on('select', updateTimeUi);
+    model.events.on('state-update', updateTimeUi);
 
     models.layers.events.on('change', function() {
       self.data.set();

@@ -6,7 +6,8 @@ import lodashDebounce from 'lodash/debounce';
 import util from '../util/util';
 
 const DEBOUCE_TIME = 100;
-
+const PICK_PATH =
+  'M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z';
 export function timelineCompare(models, config, ui) {
   var self = {};
   var xmlns = 'http://www.w3.org/2000/svg';
@@ -17,17 +18,17 @@ export function timelineCompare(models, config, ui) {
   var $timeline = $('#timeline');
   var mountObjectA;
   var mountObjectB;
+  var parentSvg;
   if (models.compare.active) {
     $timeline.addClass('ab-active');
   }
   var init = function() {
     mountObjectA = document.createElementNS(xmlns, 'g');
     mountObjectB = document.createElementNS(xmlns, 'g');
+    parentSvg = document.getElementById('timeline-footer-svg');
+    parentSvg.appendChild(mountObjectA);
+    parentSvg.appendChild(mountObjectB);
     applyActiveClasses();
-
-    var svg = document.getElementById('timeline-footer-svg');
-    svg.appendChild(mountObjectA);
-    svg.appendChild(mountObjectB);
     self.comparePickA = ReactDOM.render(
       React.createElement(TimelineDragger, getInitialProps('', 'A')),
       mountObjectA
@@ -41,15 +42,20 @@ export function timelineCompare(models, config, ui) {
       updateState();
     });
     models.compare.events.on('toggle-state', applyActiveClasses);
-    models.date.events.on('timeline-change', updateState);
+    models.date.events
+      .on('timeline-change', updateState)
+      .on('select', updateState);
   };
+
   var applyActiveClasses = function() {
     if (models.compare.isCompareA) {
       mountObjectA.setAttribute('class', 'ab-group-case ab-group-case-active');
       mountObjectB.setAttribute('class', 'ab-group-case');
+      parentSvg.insertBefore(mountObjectB, mountObjectA);
     } else {
       mountObjectA.setAttribute('class', 'ab-group-case ');
       mountObjectB.setAttribute('class', 'ab-group-case ab-group-case-active');
+      parentSvg.insertBefore(mountObjectA, mountObjectB);
     }
   };
   var getInitialProps = function(compareLetter, label) {
@@ -57,6 +63,11 @@ export function timelineCompare(models, config, ui) {
       id: 'selected' + compareLetter,
       onDrag: lodashDebounce(onDrag, DEBOUCE_TIME),
       yOffset: 15,
+      path: PICK_PATH,
+      height: 59.51,
+      width: 58.42,
+      textColor: null,
+      color: null,
       draggerID: 'compare-dragger-' + compareLetter,
       position: getLocationFromStringDate(
         models.date['selected' + compareLetter]
