@@ -23,7 +23,7 @@
   color: #fff;
   background: transparent;
   border: 0;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   vertical-align: middle;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -125,7 +125,11 @@
   left: 50%;
   margin-left: -12px;
 }
-
+.wv-date-selector-widget input {
+  height: inherit;
+  text-align: center;
+  width: 100%;
+}
 .wv-date-selector-widget #left-arrow-group {
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
