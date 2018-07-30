@@ -7,10 +7,10 @@ var bottomLayers = [];
 var map;
 const DEFAULT_RADIUS = 70;
 var radius = DEFAULT_RADIUS;
-var firstLabel = null;
-var secondLabel = null;
+var label = null;
 export class Spy {
   constructor(olMap, isBInside) {
+    this.mapCase = document.getElementById('wv-map');
     map = olMap;
     this.create(isBInside);
   }
@@ -31,8 +31,7 @@ export class Spy {
   }
   destroy() {
     spy.removeEventListener('mousemove', this.updateSpy);
-    firstLabel.remove();
-    secondLabel.remove();
+    this.mapCase.removeChild(label);
     removeListenersFromLayers(topLayers);
     removeInverseListenersFromLayers(bottomLayers);
   }
@@ -43,35 +42,27 @@ export class Spy {
   }
   hideSpy(e) {
     radius = 0;
-    firstLabel.style.display = 'none';
-    secondLabel.style.display = 'none';
+    label.style.display = 'none';
     map.render();
   }
   showSpy() {
     radius = DEFAULT_RADIUS;
-    firstLabel.style.display = 'block';
-    secondLabel.style.display = 'block';
+    label.style.display = 'block';
     map.render();
   }
   addSpy(map, isBInside) {
-    var mapCase = document.getElementById('wv-map');
     var insideText = !isBInside ? 'A' : 'B';
-    var outsideText = !isBInside ? 'B' : 'A';
-    firstLabel = document.createElement('span');
-    secondLabel = document.createElement('span');
-    firstLabel.className = 'ab-spy-span inside-label';
-    secondLabel.className = 'ab-spy-span outside-label';
-    firstLabel.appendChild(document.createTextNode(insideText));
-    secondLabel.appendChild(document.createTextNode(outsideText));
+    label = document.createElement('span');
+    label.className = 'ab-spy-span inside-label';
+    label.appendChild(document.createTextNode(insideText));
 
-    mapCase.appendChild(firstLabel);
-    mapCase.appendChild(secondLabel);
+    this.mapCase.appendChild(label);
 
-    mapCase.addEventListener('mousemove', this.updateSpy);
-    mapCase.addEventListener('mouseleave', this.hideSpy);
-    mapCase.addEventListener('mouseenter', this.showSpy);
+    this.mapCase.addEventListener('mousemove', this.updateSpy);
+    this.mapCase.addEventListener('mouseleave', this.hideSpy);
+    this.mapCase.addEventListener('mouseenter', this.showSpy);
 
-    return mapCase;
+    return this.mapCase;
   }
 }
 var applyreverseLayerListeners = function(layer) {
@@ -120,12 +111,12 @@ var clip = function(event) {
       0,
       2 * Math.PI
     );
-    firstLabel.style.top = y + 45 + 'px';
-    firstLabel.style.left = x + 'px';
-    secondLabel.style.top = y + 80 + 'px';
-    secondLabel.style.left = x + 'px';
-    ctx.lineWidth = 5 * pixelRatio;
-    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+    let offSetXandY = Math.sqrt(DEFAULT_RADIUS * DEFAULT_RADIUS) / 2;
+    label.style.top = y + offSetXandY + 10 + 'px';
+    label.style.left = x + offSetXandY + 5 + 'px';
+
+    ctx.lineWidth = 4 * pixelRatio;
+    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
     ctx.stroke();
   }
   ctx.clip();
