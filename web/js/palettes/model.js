@@ -54,6 +54,10 @@ export function palettesModel(models, config) {
     if (!palettes.supported) {
       return false;
     }
+    let palette = config.layers[layerId].palette;
+    if (!palette || palette.immutable) {
+      return false;
+    }
     return config.layers[layerId].palette;
   };
 
