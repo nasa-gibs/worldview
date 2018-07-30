@@ -159,7 +159,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @returns {object} layer key Object
    */
   self.layerKey = function(def, options) {
-    layerGroupStr = layerGroupStr || models.layers.activeLayers;
     var date;
     var layerGroupStr;
     var layerId = def.id;
