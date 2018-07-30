@@ -23,11 +23,12 @@ export function layersModel(models, config) {
   self.updateLayerGroup = function(newGroupStr) {
     self.activeLayers = newGroupStr;
   };
-  self.reset = function() {
+  self.reset = function(layerStr) {
+    layerStr = layerStr || 'active';
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
       lodashEach(config.defaults.startingLayers, function(start) {
-        self['active'] = self.add(start.id, start, 'active');
+        self[layerStr] = self.add(start.id, start, layerStr);
       });
     }
   };
