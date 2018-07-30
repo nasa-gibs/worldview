@@ -13,6 +13,7 @@
 @import url("../../node_modules/jquery-jcrop/css/jquery.Jcrop.css");
 @import url("../../node_modules/ol/ol.css");
 @import url("../../node_modules/nouislider/src/jquery.nouislider.css");
+@import url("../../../worldview-components/node_modules/simplebar/dist/simplebar.css");
 
 /* App CSS */
 @import url("fonts.css");
