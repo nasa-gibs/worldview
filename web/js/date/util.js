@@ -10,3 +10,13 @@ export function timelineDataHightlight(layerId, isActivate) {
     ).classed('data-bar-hovered', false);
   }
 }
+export function getMaxTimelineWidth(ui) {
+  var timeline = ui.timeline;
+  var $footer = $('#timeline-footer');
+  var $elWidth = $footer.width();
+  var $dataWidth = timeline.x(timeline.data.end());
+  if ($elWidth > $dataWidth) {
+    return $dataWidth;
+  }
+  return $elWidth;
+}
