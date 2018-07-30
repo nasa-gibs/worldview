@@ -35,9 +35,10 @@ const GRATICLE_WARNING =
   'The graticule layer cannot be used to take a snapshot. Would you ' +
   'like to hide this layer?';
 
-const ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to reset rotation?';
+const ROTATE_WARNING =
+  'Image may not be downloaded when rotated. Would you like to reset rotation?';
 
-export function imageRubberband (models, ui, config) {
+export function imageRubberband(models, ui, config) {
   var self = {};
 
   var containerId = 'wv-image-button';
@@ -50,6 +51,7 @@ export function imageRubberband (models, ui, config) {
   var jcropAPI = null;
   var previousPalettes = null;
   var $button;
+  var $label;
 
   self.panel = imagePanel(models, ui, config, dialogConfig);
   self.events = util.events();
@@ -59,16 +61,18 @@ export function imageRubberband (models, ui, config) {
    *
    * @this {RubberBand}
    */
-  var init = function () {
+  var init = function() {
+    var compareModel = models.compare;
+
     container = document.getElementById(containerId);
     if (container === null) {
-      throw new Error('Error: element \'' + containerId + '\' not found!');
+      throw new Error("Error: element '" + containerId + "' not found!");
     }
     $button = $('<input></input>')
       .attr('type', 'checkbox')
       .attr('id', 'wv-image-button-check')
       .val('');
-    var $label = $('<label></label>')
+    $label = $('<label></label>')
       .attr('for', 'wv-image-button-check')
       .attr('title', 'Take a snapshot');
     var $icon = $('<i></i>')
@@ -76,57 +80,66 @@ export function imageRubberband (models, ui, config) {
       .addClass('fa-camera')
       .addClass('fa-2x');
     $label.append($icon);
-    $(selector)
-      .append($label);
-    $(selector)
-      .append($button);
+    $(selector).append($label);
+    $(selector).append($button);
     $button.button({
       text: false
     });
     $button.on('click', toggle);
+    if (compareModel) {
+      compareModel.events.on('toggle', toggleButton);
+    }
+    toggleButton();
+  };
+  var toggleButton = function() {
+    var compareModel = models.compare;
+    if (compareModel && compareModel.active) {
+      $button.button('disable');
+      $label.attr(
+        'title',
+        'You must exit comparison mode to use the snapshot feature'
+      );
+    } else {
+      $button.button('enable');
+      $label.attr('title', 'Take a snapshot');
+    }
+  };
+  var toolbarButtons = function(action) {
+    $('#wv-info-button input').button(action);
+    $('#wv-proj-button input').button(action);
+    $('#wv-link-button input').button(action);
   };
 
-  var toolbarButtons = function (action) {
-    $('#wv-info-button input')
-      .button(action);
-    $('#wv-proj-button input')
-      .button(action);
-    $('#wv-link-button input')
-      .button(action);
-  };
-
-  var toggle = function () {
+  var toggle = function() {
     var geographic = models.proj.selected.id === 'geographic';
     // Enables UI to select an area on the map while darkening the view
-    var toggleOn = function () {
+    var toggleOn = function() {
       state = 'on';
       toolbarButtons('disable');
       self.panel.show();
-      $('.ui-dialog')
-        .on('dialogclose', function () {
-          if (state === 'on') {
-            toggle();
-          }
-          document.activeElement.blur();
-        });
+      $('.ui-dialog').on('dialogclose', function() {
+        if (state === 'on') {
+          toggle();
+        }
+        document.activeElement.blur();
+      });
       draw();
     };
-    var resetRotation = function () {
-      ui.map.selected.getView()
-        .animate({
-          rotation: 0,
-          duration: 400
-        });
+    var resetRotation = function() {
+      ui.map.selected.getView().animate({
+        rotation: 0,
+        duration: 400
+      });
     };
 
-    var disablePalettes = function () {
+    var disablePalettes = function() {
       // Save the previous state to be restored later
       previousPalettes = models.palettes.active;
       models.palettes.clear();
       toggle();
     };
 
-    var disableGraticle = function () {
+    var disableGraticle = function() {
       models.layers.setVisibility('Graticule', false);
       toggle();
     };
@@ -134,16 +147,18 @@ export function imageRubberband (models, ui, config) {
       var layers = models.layers.get({
         renderable: true
       });
-      if (lodashFind(layers, {
-        id: 'Graticule'
-      }) && geographic) {
+      if (
+        lodashFind(layers, {
+          id: 'Graticule'
+        }) &&
+        geographic
+      ) {
         wvui.ask({
           header: 'Notice',
           message: GRATICLE_WARNING,
           onOk: disableGraticle,
-          onCancel: function () {
-            $button.prop('checked', false)
-              .button('refresh');
+          onCancel: function() {
+            $button.prop('checked', false).button('refresh');
           }
         });
         return;
@@ -156,20 +171,20 @@ export function imageRubberband (models, ui, config) {
           header: 'Notice',
           message: PALETTE_WARNING,
           onOk: disablePalettes,
-          onCancel: function () {
-            $button.prop('checked', false)
-              .button('refresh');
+          onCancel: function() {
+            $button.prop('checked', false).button('refresh');
           }
         });
         return;
       }
       // Don't toggle area select UI for downloading image if image rotated
-      if (ui.map.selected.getView()
-        .getRotation() === 0.0) { toggleOn(); } else {
+      if (ui.map.selected.getView().getRotation() === 0.0) {
+        toggleOn();
+      } else {
         wvui.ask({
           header: 'Reset rotation?',
           message: ROTATE_WARNING,
-          onOk: function () {
+          onOk: function() {
             resetRotation();
             setTimeout(toggle, 500); // Let rotation finish before image download can occur
           }
@@ -177,20 +192,19 @@ export function imageRubberband (models, ui, config) {
       }
     } else {
       state = 'off';
-      $button.prop('checked', false)
-        .button('refresh');
-      $cropee
-        .insertAfter('#productsHolder');
+      $button.prop('checked', false).button('refresh');
+      $cropee.insertAfter('#productsHolder');
       jcropAPI.destroy();
-      if (geographic) { ui.map.events.trigger('selectiondone'); } // Should be a changed to a image event
+      if (geographic) {
+        ui.map.events.trigger('selectiondone');
+      } // Should be a changed to a image event
       if (previousPalettes) {
         models.palettes.restore(previousPalettes);
         previousPalettes = null;
       }
       toolbarButtons('enable');
       wvui.closeDialog();
-      $('.wv-image-coords')
-        .hide();
+      $('.wv-image-coords').hide();
     }
   };
 
@@ -200,7 +214,7 @@ export function imageRubberband (models, ui, config) {
    * @param {String} coordinates object of JCrop
    *
    */
-  var setCoords = function (c, panel) {
+  var setCoords = function(c, panel) {
     previousCoords = coords;
     coords = c;
     self.panel.update(coords);
@@ -213,18 +227,18 @@ export function imageRubberband (models, ui, config) {
    *
    *
    */
-  var draw = function () {
+  var draw = function() {
     $cropee.Jcrop({
       bgColor: 'black',
       bgOpacity: 0.3,
-      onSelect: function (c) {
+      onSelect: function(c) {
         previousCoords = coords;
         handleChange(c);
       },
-      onChange: function (c) {
+      onChange: function(c) {
         handleChange(c);
       },
-      onRelease: function (c) {
+      onRelease: function(c) {
         coords = previousCoords;
         toggle();
       },
@@ -232,22 +246,25 @@ export function imageRubberband (models, ui, config) {
     });
 
     jcropAPI = $cropee.data('Jcrop');
-    if (models.proj.selected.id === 'geographic') { ui.map.events.trigger('selecting'); } // Should be a changed to a image event
+    if (models.proj.selected.id === 'geographic') {
+      ui.map.events.trigger('selecting');
+    } // Should be a changed to a image event
     if (coords) {
       jcropAPI.setSelect([coords.x, coords.y, coords.x2, coords.y2]);
     } else {
-      jcropAPI.setSelect([($(window)
-        .width() / 2) - 100, ($(window)
-        .height() / 2) - 100, ($(window)
-        .width() / 2) + 100, ($(window)
-        .height() / 2) + 100]);
+      jcropAPI.setSelect([
+        $(window).width() / 2 - 100,
+        $(window).height() / 2 - 100,
+        $(window).width() / 2 + 100,
+        $(window).height() / 2 + 100
+      ]);
     }
   };
 
-  var handleChange = function (c) {
+  var handleChange = function(c) {
     setCoords(c);
   };
 
   init();
   return self;
-};
+}
