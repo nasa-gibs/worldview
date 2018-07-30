@@ -4,12 +4,12 @@ import lodashFind from 'lodash/find';
 import util from '../util/util';
 import wvui from '../ui/ui';
 
-export default (function (self) {
+export default (function(self) {
   var checkerboard;
 
   self.supported = true;
 
-  var init = function () {
+  var init = function() {
     var browser = util.browser;
     if (browser.ie || !browser.webWorkers || !browser.cors) {
       self.supported = false;
@@ -18,11 +18,10 @@ export default (function (self) {
     }
   };
 
-  self.colorbar = function (target, colors) {
+  self.colorbar = function(target, colors) {
     var canvas;
     if (target.length) {
-      canvas = $(target)
-        .get(0);
+      canvas = $(target).get(0);
     } else {
       canvas = target;
     }
@@ -37,15 +36,14 @@ export default (function (self) {
       var bins = colors.length;
       var binWidth = canvas.width / bins;
       var drawWidth = Math.ceil(binWidth);
-      lodashEach(colors, function (color, i) {
+      lodashEach(colors, function(color, i) {
         g.fillStyle = util.hexToRGBA(color);
-        g.fillRect(Math.floor(binWidth * i), 0, drawWidth,
-          canvas.height);
+        g.fillRect(Math.floor(binWidth * i), 0, drawWidth, canvas.height);
       });
     }
   };
 
-  var drawCheckerboard = function () {
+  var drawCheckerboard = function() {
     var size = 2;
     var canvas = document.createElement('canvas');
 
@@ -67,9 +65,9 @@ export default (function (self) {
     checkerboard = g.createPattern(canvas, 'repeat');
   };
 
-  self.translate = function (source, target) {
+  self.translate = function(source, target) {
     var translation = [];
-    lodashEach(source, function (color, index) {
+    lodashEach(source, function(color, index) {
       var sourcePercent = index / source.length;
       var targetIndex = Math.floor(sourcePercent * target.length);
       translation.push(target[targetIndex]);
@@ -77,13 +75,16 @@ export default (function (self) {
     return translation;
   };
 
-  self.lookup = function (sourcePalette, targetPalette) {
+  self.lookup = function(sourcePalette, targetPalette) {
     var lookup = {};
-    lodashEach(sourcePalette.colors, function (sourceColor, index) {
+    lodashEach(sourcePalette.colors, function(sourceColor, index) {
       var source =
-        parseInt(sourceColor.substring(0, 2), 16) + ',' +
-        parseInt(sourceColor.substring(2, 4), 16) + ',' +
-        parseInt(sourceColor.substring(4, 6), 16) + ',' +
+        parseInt(sourceColor.substring(0, 2), 16) +
+        ',' +
+        parseInt(sourceColor.substring(2, 4), 16) +
+        ',' +
+        parseInt(sourceColor.substring(4, 6), 16) +
+        ',' +
         '255';
       var targetColor = targetPalette.colors[index];
       var target = {
@@ -97,23 +98,29 @@ export default (function (self) {
     return lookup;
   };
 
-  self.loadCustom = function (config) {
-    return util.load.config(config.palettes,
-      'custom', 'config/palettes-custom.json');
+  self.loadCustom = function(config) {
+    return util.load.config(
+      config.palettes,
+      'custom',
+      'config/palettes-custom.json'
+    );
   };
 
-  self.loadRenderedPalette = function (config, layerId) {
+  self.loadRenderedPalette = function(config, layerId) {
     var layer = config.layers[layerId];
-    return util.load.config(config.palettes.rendered,
-      layer.palette.id, 'config/palettes/' + layer.palette.id + '.json');
+    return util.load.config(
+      config.palettes.rendered,
+      layer.palette.id,
+      'config/palettes/' + layer.palette.id + '.json'
+    );
   };
-  self.requirements = function (state, config) {
+  self.requirements = function(state, config) {
     var promises = [];
     config.palettes = {
       rendered: {},
       custom: {}
     };
-    lodashEach(state.l, function (qsLayer) {
+    lodashEach(state.l, function(qsLayer) {
       var layerId = qsLayer.id;
       if (config.layers[layerId] && config.layers[layerId].palette) {
         promises.push(self.loadRenderedPalette(config, layerId));
@@ -127,7 +134,8 @@ export default (function (self) {
     });
     if (promises.length > 0) {
       var promise = $.Deferred();
-      $.when.apply(null, promises)
+      $.when
+        .apply(null, promises)
         .then(promise.resolve)
         .fail(promise.reject);
       return promise;
@@ -135,30 +143,30 @@ export default (function (self) {
   };
 
   // Only for permalink 1.1 support
-  self.parse = function (state, errors, config) {
+  self.parse = function(state, errors, config) {
     if (state.palettes) {
       if (!self.supported) {
         // FIXME: This should go in errors
         delete state.palettes;
-        wvui.notify('The custom palette feature is not supported ' +
-          'with your web browser. Upgrade or try again in a ' +
-          'different browser');
+        wvui.notify(
+          'The custom palette feature is not supported ' +
+            'with your web browser. Upgrade or try again in a ' +
+            'different browser'
+        );
         return;
       }
       var parts = state.palettes.split('~');
-      lodashEach(parts, function (part) {
+      lodashEach(parts, function(part) {
         var items = part.split(',');
         var layerId = items[0];
         var paletteId = items[1];
         if (!config.layers[layerId]) {
           errors.push({
-            message: 'Invalid layer for palette ' +
-              paletteId + ': ' + layerId
+            message: 'Invalid layer for palette ' + paletteId + ': ' + layerId
           });
         } else if (!config.layers[layerId].palette) {
           errors.push({
-            message: 'Layer ' + layerId + ' does not ' +
-              'support palettes'
+            message: 'Layer ' + layerId + ' does not ' + 'support palettes'
           });
         } else {
           var layer = lodashFind(state.l, {
@@ -171,8 +179,7 @@ export default (function (self) {
             });
           } else {
             errors.push({
-              message: 'Layer ' + layerId + ' is not ' +
-                'active'
+              message: 'Layer ' + layerId + ' is not ' + 'active'
             });
           }
         }
