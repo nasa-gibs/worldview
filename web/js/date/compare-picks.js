@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { TimelineDragger } from 'worldview-components';
+import { getMaxTimelineWidth } from './util';
 import $ from 'jquery';
 import lodashDebounce from 'lodash/debounce';
 import util from '../util/util';
@@ -41,12 +42,23 @@ export function timelineCompare(models, config, ui) {
       $timeline.toggleClass('ab-active');
       updateState();
     });
+    models.date.events.on('timeline-change', setMax);
+    $(window).resize(setMax);
+
     models.compare.events.on('toggle-state', applyActiveClasses);
     models.date.events
       .on('timeline-change', updateState)
       .on('select', updateState);
   };
-
+  var setMax = function() {
+    var max = getMaxTimelineWidth(ui);
+    self.comparePickA.setState({
+      max: max
+    });
+    self.comparePickB.setState({
+      max: max
+    });
+  };
   var applyActiveClasses = function() {
     if (models.compare.isCompareA) {
       mountObjectA.setAttribute('class', 'ab-group-case ab-group-case-active');
@@ -68,6 +80,7 @@ export function timelineCompare(models, config, ui) {
       width: 58.42,
       textColor: null,
       color: null,
+      max: getMaxTimelineWidth(ui),
       draggerID: 'compare-dragger-' + compareLetter,
       position: getLocationFromStringDate(
         models.date['selected' + compareLetter]
