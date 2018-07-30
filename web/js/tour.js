@@ -201,13 +201,13 @@ export default function(models, ui, config) {
 
   var initTourState = function() {
     var map = ui.map.selected;
-    models.layers.reset(models.layers.activeLayers);
+
     if (models.compare) {
       if (models.compare.active) models.compare.toggle();
     }
     models.proj.selectDefault();
+    models.layers.reset(models.layers.activeLayers);
     models.date.select(util.today());
-
     var leading = models.map.getLeadingExtent();
     map.getView().fit(leading, map.getSize());
     setTourState();
