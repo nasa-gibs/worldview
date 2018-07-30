@@ -18,13 +18,22 @@
   background: white;
   text-align: center;
 }
+.ab-swipe-line:hover {
+  cursor: grabbing;
+}
 .ab-swipe-dragger:hover {
   transform: scale(1.2);
-  cursor: grabbing;
+  cursor: pointer;
 }
 .ab-swipe-dragger i {
   font-size: 18px;
   margin-top: 7px;
+}
+.ab-swipe-line .left-label {
+  left: -25px;
+}
+.ab-swipe-line .right-label {
+  left: 13px;
 }
 .ab-slider-case {
   position: absolute;
@@ -33,19 +42,30 @@
   left: 0;
   right: 0;
   bottom: 25%;
-  width: 160px;
+  width: 172px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
   color: white;
+  height: 25px;
 }
-.ab-slider-case span {
-  position: absolute;
-  top: 5px;
+.ab-slider-case .input-range {
+  width: 140px;
+  display: inline-block;
+  margin-top: 10px;
+  vertical-align: top;
+}
+.ab-slider-case .wv-slider-label {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 5px;
+  width: 15px;
   font-size: 14px;
+  text-align: center;
 }
+
 .ab-swipe-line .ab-swipe-span {
   position: absolute;
-  top: 50%;
+  top: 55%;
   padding: 2px;
   background: white;
   color: black;
@@ -54,17 +74,13 @@
   margin-top: -7px;
   border-radius: 3px;
   border: 1px solid black;
+  cursor: default;
 }
-.ab-swipe-line .left-label {
-  left: -35px;
-}
-.ab-swipe-line .right-label {
-  left: 24px;
-}
+
 .ab-spy-span {
   position: absolute;
-  background: white;
-  color: black;
+  background: rgba(40, 40, 40, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   display: block;
   font-size: 14px;
   border-radius: 3px;
@@ -72,9 +88,7 @@
   padding: 2px;
   margin-left: -4px;
 }
-.ab-slider-case .left-label {
-  left: 3px;
-}
-.ab-slider-case .right-label {
-  right: 3px;
-}
+
+/* .ab-slider-input {
+  width: 100%;
+} */

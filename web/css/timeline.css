@@ -175,15 +175,15 @@ g.plot rect.data-bar-invisible {
   -webkit-box-sizing: border-box;
 }
 
-#timeline-header .input-wrapper:nth-child(2) {
+#timeline-header .input-wrapper-year {
   max-width: 62px;
 }
 
-#timeline-header .input-wrapper:nth-child(3) {
+#timeline-header .input-wrapper-month {
   max-width: 46px;
 }
 
-#timeline-header .input-wrapper:nth-child(4) {
+#timeline-header .input-wrapper-day {
   max-width: 32px;
 }
 
@@ -242,18 +242,15 @@ g.plot rect.data-bar-invisible {
   font-family: "Roboto Mono", monospace;
   color: #fff;
   font-size: 24px;
-  vertical-align: middle;
-  width: 8px;
-  margin-top: -5px;
-  margin-left: -9px;
+  width: 13px;
+  margin-top: 23px;
 }
 
 #timeline-header .input-time-zmark {
   font-family: "Roboto Mono", monospace;
   color: #fff;
   font-size: 24px;
-  vertical-align: middle;
-  margin-left: -4px;
+  margin-top: 25px;
 }
 
 #zoom-buttons-group {
@@ -576,6 +573,9 @@ g.plot rect.data-bar-invisible {
 #timeline-hide:hover .hamburger path {
   fill: #1a1a1a;
 }
+#timeline-footer .ab-group-case text {
+  font-size: 20px;
+}
 .ab-group-case {
   display: none;
 }
@@ -583,16 +583,30 @@ g.plot rect.data-bar-invisible {
   fill: white;
 }
 .ab-group-case polygon,
+.ab-group-case path,
 .ab-group-case rect {
   fill: gray;
   opacity: 0.7;
   pointer-events: none;
 }
+.ab-group-case-active path {
+  stroke: #515151;
+  stroke-width: 1;
+  stroke-opacity: 1;
+}
 .ab-group-case-active polygon,
+.ab-group-case-active path,
 .ab-group-case-active rect {
   fill: white;
   opacity: 1;
   pointer-events: initial;
+  cursor: pointer;
+}
+.ab-group-case text {
+  fill: white;
+}
+.ab-group-case-active text {
+  fill: black;
 }
 .ab-active .ab-group-case {
   display: block;
