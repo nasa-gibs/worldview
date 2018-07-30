@@ -5,14 +5,12 @@ import lodashFind from 'lodash/find';
 import lodashFindIndex from 'lodash/findIndex';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashCloneDeep from 'lodash/cloneDeep';
-import { getActiveDateString } from '../compare/util';
 import util from '../util/util';
 var loaded = false;
-self.activeLayers = 'active';
 
 export function layersModel(models, config) {
   var self = {};
-
+  self.activeLayers = 'active';
   var split = { active: 0, activeB: 0 };
   self.events = util.events();
 
@@ -22,7 +20,9 @@ export function layersModel(models, config) {
   var init = function() {
     self.reset();
   };
-
+  self.updateLayerGroup = function(newGroupStr) {
+    self.activeLayers = newGroupStr;
+  };
   self.reset = function() {
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
@@ -60,8 +60,7 @@ export function layersModel(models, config) {
     return baselayers.concat(overlays);
   };
 
-<<<<<<< HEAD
-  self.getTitles = function (layerId, proj) {
+  self.getTitles = function(layerId, proj) {
     try {
       proj = proj || models.proj.selected.id;
       var title, subtitle, tags;
@@ -82,32 +81,19 @@ export function layersModel(models, config) {
       };
     } catch (err) {
       throw new Error(`error in layer ${layerId}: ${err}`);
-=======
-  self.getTitles = function(layerId, proj) {
-    proj = proj || models.proj.selected.id;
-    var title, subtitle, tags;
-    if (config.layers[layerId].projections[proj]) {
-      var forProj = config.layers[layerId].projections[proj];
-      title = forProj.title;
-      subtitle = forProj.subtitle;
-      tags = forProj.tags;
->>>>>>> update Date and layer models #986
     }
   };
 
-  self.available = function(id, date, activeLayers) {
-    activeLayers = activeLayers || self.active;
-    var activeDateString = getActiveDateString(
-      models.compare.abIsActive,
-      models.compareisCompareA
-    );
-    date = date || models.date[activeDateString] || models.date.selected;
+  self.available = function(id, date, activeLayers, activeLayersString) {
+    activeLayers = activeLayers || self[activeLayersString] || self.active;
+    date = date || models.date[models.date.activeDate];
     var range = self.dateRange(
       {
         layer: id
       },
       activeLayers
     );
+
     if (range) {
       if (date < range.start || date > range.end) {
         return false;
@@ -129,7 +115,7 @@ export function layersModel(models, config) {
   };
 
   self.dateRange = function(spec, activeLayers) {
-    activeLayers = activeLayers || self.active;
+    activeLayers = activeLayers || self[self.activeLayers];
     spec = spec || {};
     var layers = spec.layer
       ? [
@@ -185,7 +171,7 @@ export function layersModel(models, config) {
   };
 
   self.add = function(id, spec, activeLayerString) {
-    activeLayerString = activeLayerString || 'active';
+    activeLayerString = activeLayerString || self.activeLayers;
     if (
       lodashFind(self[activeLayerString], {
         id: id
@@ -217,7 +203,7 @@ export function layersModel(models, config) {
   };
 
   self.remove = function(id, activeLayerString) {
-    activeLayerString = activeLayerString || 'active';
+    activeLayerString = activeLayerString || self.activeLayers;
     var index = lodashFindIndex(self[activeLayerString], {
       id: id
     });
@@ -233,7 +219,7 @@ export function layersModel(models, config) {
   };
 
   self.replace = function(idOld, idNew, activeLayerString) {
-    activeLayerString = activeLayerString || 'active';
+    activeLayerString = activeLayerString || self.activeLayers;
     var index = lodashFindIndex(self[activeLayerString], {
       id: idOld
     });
@@ -247,9 +233,18 @@ export function layersModel(models, config) {
     self.events.trigger('update');
     self.events.trigger('change');
   };
-
+  self.replaceSubGroup = function(newSubGroup, activeLayerString, subGroup) {
+    activeLayerString = activeLayerString || self.activeLayers;
+    var layers = self.get({ group: 'all' }, self[activeLayerString]);
+    var baseLayers =
+      subGroup === 'baselayers' ? newSubGroup : layers.baselayers;
+    var overlays = subGroup === 'overlays' ? newSubGroup : layers.overlays;
+    self[activeLayerString] = baseLayers.concat(overlays);
+    self.events.trigger('update');
+    self.events.trigger('change');
+  };
   self.clear = function(projId, activeLayerString) {
-    activeLayerString = activeLayerString || 'active';
+    activeLayerString = activeLayerString || self.activeLayers;
     if (!self[activeLayerString]) self[activeLayerString] = [];
     projId = projId || models.proj.selected.id;
     var defs = self[activeLayerString].slice(0);
@@ -261,7 +256,7 @@ export function layersModel(models, config) {
   };
 
   self.pushToBottom = function(id, activeLayersString) {
-    activeLayersString = activeLayersString || 'active';
+    activeLayersString = activeLayersString || self.activeLayers;
     var oldIndex = lodashFindIndex(self[activeLayersString], {
       id: id
     });
@@ -280,7 +275,7 @@ export function layersModel(models, config) {
   };
 
   self.moveBefore = function(sourceId, targetId, activeLayersString) {
-    activeLayersString = activeLayersString || 'active';
+    activeLayersString = activeLayersString || self.activeLayers;
     var sourceIndex = lodashFindIndex(self[activeLayersString], {
       id: sourceId
     });
@@ -306,7 +301,7 @@ export function layersModel(models, config) {
   };
 
   self.setVisibility = function(id, visible, activeLayersString) {
-    activeLayersString = activeLayersString || 'active';
+    activeLayersString = activeLayersString || self.activeLayers;
     var def = lodashFind(self[activeLayersString], {
       id: id
     });
@@ -321,7 +316,7 @@ export function layersModel(models, config) {
     }
   };
   self.toggleVisibility = function(id, activeLayersString) {
-    activeLayersString = activeLayersString || 'active';
+    activeLayersString = activeLayersString || self.activeLayers;
     var index = lodashFindIndex(self[activeLayersString], {
       id: id
     });
@@ -329,21 +324,22 @@ export function layersModel(models, config) {
     var visibility = !self[activeLayersString][index].visible;
     self[activeLayersString][index].visible = visibility;
     self.events.trigger('visibility', id, visibility, activeLayersString);
+    self.events.trigger('change');
   };
   self.setOpacity = function(id, opacity, activeLayersString) {
-    activeLayersString = activeLayersString || 'active';
+    activeLayersString = activeLayersString || self.activeLayers;
     var def = lodashFind(self[activeLayersString], {
       id: id
     });
     if (def.opacity !== opacity) {
       def.opacity = opacity;
-      self.events.trigger('opacity', def, opacity);
+      self.events.trigger('opacity', def, opacity, activeLayersString);
       self.events.trigger('change');
     }
   };
 
   self.isRenderable = function(id, activeLayers, date) {
-    activeLayers = activeLayers || self.active;
+    activeLayers = activeLayers || self[self.activeLayers];
     var def = lodashFind(activeLayers, {
       id: id
     });
@@ -385,23 +381,28 @@ export function layersModel(models, config) {
   };
 
   self.save = function(state) {
-    var layers;
     state.l = state.l || [];
-    if (config.features.compare) {
-      state.l1 = state.l1 || [];
-      state.l2 = state.l2 || [];
-      layers = [
-        {
-          state: 'l',
-          str: 'active'
-        },
-        {
-          state: 'l1',
-          str: 'activeB'
-        }
-      ];
-    } else {
-      layers = [{ state: 'l', active: 'active' }];
+    var layers = [{ state: 'l', str: 'active' }];
+    if (models.compare) {
+      if (models.compare.active) {
+        state.l1 = state.l1 || [];
+        layers = [
+          {
+            state: 'l',
+            str: 'active'
+          },
+          {
+            state: 'l1',
+            str: 'activeB'
+          }
+        ];
+      }
+      if (!models.compare.active && !models.compare.isCompareA) {
+        layers = [{ state: 'l', str: 'activeB' }];
+      }
+      if (!models.compare.active) {
+        if (state.l1) delete state.l1;
+      }
     }
     lodashEach(layers, obj => {
       lodashEach(self.get({}, self[obj.str]), function(def) {
@@ -482,6 +483,9 @@ export function layersModel(models, config) {
         });
       }
     });
+    if (state.ca && state.ca !== 'true') {
+      self.activeLayers = 'activeB';
+    }
     loaded = true;
   };
   var forGroup = function(group, spec, activeLayers) {
