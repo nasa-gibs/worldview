@@ -53,7 +53,7 @@ const fileTypesPolar = {
   ]
 };
 
-export function imagePanel (models, ui, config, dialogConfig) {
+export function imagePanel(models, ui, config, dialogConfig) {
   var self = {};
 
   var container;
@@ -93,7 +93,6 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
   var init = function() {
     var options;
-
     checkConfig();
     htmlElements = document.createElement('div');
     setProjectionGlobals();
@@ -112,10 +111,13 @@ export function imagePanel (models, ui, config, dialogConfig) {
     models.proj.events.on('select', setProjectionGlobals);
   };
   var setProjectionGlobals = function() {
-    var isGeoProjection = (models.proj.selected.id === 'geographic');
-    var curZoom = Math.round(ui.map.selected.getView()
-      .getZoom());
-    imgRes = imageUtilCalculateResolution(curZoom, isGeoProjection, models.proj.selected.resolutions);
+    var isGeoProjection = models.proj.selected.id === 'geographic';
+    var curZoom = Math.round(ui.map.selected.getView().getZoom());
+    imgRes = imageUtilCalculateResolution(
+      curZoom,
+      isGeoProjection,
+      models.proj.selected.resolutions
+    );
     if (isGeoProjection) {
       resolutions = resolutionsGeo;
       fileTypes = fileTypesGeo;
@@ -160,7 +162,10 @@ export function imagePanel (models, ui, config, dialogConfig) {
     };
   };
   var renderPanel = function(options, mountEl) {
-    return ReactDOM.render(React.createElement(ImageResSelection, options), mountEl);
+    return ReactDOM.render(
+      React.createElement(ImageResSelection, options),
+      mountEl
+    );
   };
   var updatePanel = function(options) {
     self.reactComponent.setState(options);
@@ -182,40 +187,38 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     container.setAttribute('class', 'imagedownload');
 
-    var $dialog = wvui.getDialog()
-      .html(htmlElements);
+    var $dialog = wvui.getDialog().html(htmlElements);
     $dialog.dialog(dialogConfig);
     // $("#wv-image-resolution").buttonset();
     // $("#wv-image-format").buttonset();
-    $('#wv-image-download-button')
-      .button();
-    $('.ui-dialog')
-      .zIndex(600);
-    $(window)
-      .resize(setPosition);
+    $('#wv-image-download-button').button();
+    $('.ui-dialog').zIndex(600);
+    $(window).resize(setPosition);
 
     // Auto-set default resolution to map's current zoom level; round it
     // for incremental zoom steps
-    var curZoom = Math.round(ui.map.selected.getView()
-      .getZoom());
+    var curZoom = Math.round(ui.map.selected.getView().getZoom());
     // Don't do anything if the user hasn't changed zoom levels; we want to
     // preserve their existing settings
     if (curZoom !== lastZoom) {
       lastZoom = curZoom;
-      let isGeoProjection = (models.proj.selected.id === 'geographic');
-      imgRes = imageUtilCalculateResolution(curZoom, isGeoProjection, models.proj.selected.resolutions);
+      let isGeoProjection = models.proj.selected.id === 'geographic';
+      imgRes = imageUtilCalculateResolution(
+        curZoom,
+        isGeoProjection,
+        models.proj.selected.resolutions
+      );
       updatePanel(getUpdatedProps());
     }
 
     wvui.positionDialog($dialog, {
       my: 'right top',
       at: 'right bottom+5',
-      of: ('#wv-image-button')
+      of: '#wv-image-button'
     });
     $dialog.dialog('open');
 
-    $('.wv-image-coords')
-      .show();
+    $('.wv-image-coords').show();
   };
 
   self.update = function(c) {
@@ -247,7 +250,14 @@ export function imagePanel (models, ui, config, dialogConfig) {
       bottomLeftCoordinates = util.formatCoordinate([minLon, maxLat]);
       topRightCoordinates = util.formatCoordinate([maxLon, minLat]);
 
-      setBoundingBoxLabels(x1, x2, y1, y2, bottomLeftCoordinates, topRightCoordinates);
+      setBoundingBoxLabels(
+        x1,
+        x2,
+        y1,
+        y2,
+        bottomLeftCoordinates,
+        topRightCoordinates
+      );
       imgFilesize = calulateFileSize(imgRes, lonlats[0], lonlats[1]);
       updatePanel(getUpdatedProps());
     } catch (cause) {
@@ -267,7 +277,14 @@ export function imagePanel (models, ui, config, dialogConfig) {
    *
    * @returns {void}
    */
-  var setBoundingBoxLabels = function(x1, x2, y1, y2, bottomLeftCoordinates, topRightCoordinates) {
+  var setBoundingBoxLabels = function(
+    x1,
+    x2,
+    y1,
+    y2,
+    bottomLeftCoordinates,
+    topRightCoordinates
+  ) {
     if (x2 - x1 < 150) {
       bottomLeftCoordinates = '';
       topRightCoordinates = '';
@@ -277,14 +294,16 @@ export function imagePanel (models, ui, config, dialogConfig) {
         left: x1 - 10,
         top: y1 - 20,
         width: x2 - x1
-      }).html(topRightCoordinates);
+      })
+      .html(topRightCoordinates);
 
     $('#wv-image-bottom')
       .css({
         left: x1,
         top: y2,
         width: x2 - x1
-      }).html(bottomLeftCoordinates);
+      })
+      .html(bottomLeftCoordinates);
   };
 
   var calulateFileSize = function(imgRes, lonlat1, lonlat2) {
@@ -292,27 +311,37 @@ export function imagePanel (models, ui, config, dialogConfig) {
 
     conversionFactor = imageUtilGetConversionFactor(models.proj.selected.id);
     resolution = imgRes;
-    imgWidth = Math.round((Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor) / Number(imgRes));
-    imgHeight = Math.round((Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor) / Number(imgRes));
+    imgWidth = Math.round(
+      Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor / Number(imgRes)
+    );
+    imgHeight = Math.round(
+      Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor / Number(imgRes)
+    );
 
     return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2);
   };
 
   var fileSizeValid = function() {
-    return (imgFilesize < 250 && imgHeight !== 0 && imgWidth !== 0);
+    return imgFilesize < 250 && imgHeight !== 0 && imgWidth !== 0;
   };
 
   var setPosition = function() {
-    var offset = $('#' + alignTo.id)
-      .offset();
-    var left = offset.left + parseInt($('#' + alignTo.id)
-      .css('width')) - parseInt($('#' + id)
-      .css('width'));
-    $('#' + id)
-      .css('left', left + 'px');
+    var offset = $('#' + alignTo.id).offset();
+    var left =
+      offset.left +
+      parseInt($('#' + alignTo.id).css('width')) -
+      parseInt($('#' + id).css('width'));
+    $('#' + id).css('left', left + 'px');
   };
 
-  var createDownloadURL = function(time, lonlats, epsg, products, opacities, dlURL) {
+  var createDownloadURL = function(
+    time,
+    lonlats,
+    epsg,
+    products,
+    opacities,
+    dlURL
+  ) {
     var layers, jStart, jDate;
 
     time = new Date(time.getTime());
@@ -321,9 +350,16 @@ export function imagePanel (models, ui, config, dialogConfig) {
     // Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
     jStart = util.parseDateUTC(time.getUTCFullYear() + '-01-01');
     jDate = '00' + (1 + Math.ceil((time.getTime() - jStart) / 86400000));
-    dlURL += 'TIME=' + time.getUTCFullYear() + (jDate)
-      .substr((jDate.length) - 3);
-    dlURL += '&extent=' + lonlats[0][0] + ',' + lonlats[0][1] + ',' + lonlats[1][0] + ',' + lonlats[1][1];
+    dlURL += 'TIME=' + time.getUTCFullYear() + jDate.substr(jDate.length - 3);
+    dlURL +=
+      '&extent=' +
+      lonlats[0][0] +
+      ',' +
+      lonlats[0][1] +
+      ',' +
+      lonlats[1][0] +
+      ',' +
+      lonlats[1][1];
     dlURL += '&epsg=' + epsg;
     dlURL += '&layers=' + layers.join(',');
     dlURL += '&opacities=' + opacities.join(',');
@@ -339,12 +375,43 @@ export function imagePanel (models, ui, config, dialogConfig) {
       renderable: true
     });
 
-    dlURL = createDownloadURL(models.date.selected, lonlats, models.proj.selected.epsg, products, imageUtilGetLayerOpacities(products), url);
+    dlURL = createDownloadURL(
+      models.date[models.date.activeDate],
+      lonlats,
+      models.proj.selected.epsg,
+      products,
+      imageUtilGetLayerOpacities(products),
+      url
+    );
     googleAnalytics.event('Image Download', 'Click', 'Download');
-    util.metrics('lc=' + encodeURIComponent(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight));
-    window.open(dlURL + '&worldfile=' + imgWorldfile + '&format=' + imgFormat + '&width=' + imgWidth + '&height=' + imgHeight, '_blank');
+    util.metrics(
+      'lc=' +
+        encodeURIComponent(
+          dlURL +
+            '&worldfile=' +
+            imgWorldfile +
+            '&format=' +
+            imgFormat +
+            '&width=' +
+            imgWidth +
+            '&height=' +
+            imgHeight
+        )
+    );
+    window.open(
+      dlURL +
+        '&worldfile=' +
+        imgWorldfile +
+        '&format=' +
+        imgFormat +
+        '&width=' +
+        imgWidth +
+        '&height=' +
+        imgHeight,
+      '_blank'
+    );
   };
 
   init();
   return self;
-};
+}
