@@ -7,6 +7,7 @@
 }
 
 #wv-toolbar li {
+  font-size: 14px;
   display: inline-block;
   margin: 0;
   background: rgba(40, 40, 40, 0.85);
