@@ -188,8 +188,6 @@ export function imagePanel (models, ui, config, dialogConfig) {
     // $("#wv-image-format").buttonset();
     $('#wv-image-download-button')
       .button();
-    $('.ui-dialog')
-      .zIndex(600);
     $(window)
       .resize(setPosition);
 
