@@ -202,8 +202,6 @@ export function linkUi(models, config) {
         of: $label
       });
     }
-    $('.ui-dialog')
-      .zIndex(600);
 
     $('#permalink_content')
       .val(models.link.get());
