@@ -39,3 +39,16 @@
   background-color: #fff;
   color: #1a1a1a;
 }
+
+.wv-menu .ui-menu .ui-menu-item a {
+  border: 0;
+  margin: 0;
+}
+
+.wv-menu .ui-menu .ui-menu-item .ui-state-active,
+.wv-menu .ui-menu .ui-menu-item a:hover,
+.wv-menu .ui-menu .ui-menu-item a:focus {
+  color: #333;
+  background: #eee;
+  border: 0;
+}
