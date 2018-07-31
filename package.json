@@ -134,6 +134,7 @@
     "isotope-packery": "2.x.x",
     "jquery": "^2.1.4",
     "jquery-jcrop": "^0.9.13",
+    "jquery-ui": "1.10.4",
     "jquery-ui-bundle": "1.12.1-migrate",
     "jquery-ui-touch-punch": "0.2.3",
     "jquery.joyride": "git+https://git@github.com/nasa-gibs/joyride.git",
