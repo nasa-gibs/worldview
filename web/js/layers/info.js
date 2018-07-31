@@ -51,6 +51,7 @@ export function layersInfo(config, models, layer) {
               .scrollTop('0');
           });
       },
+      closeText: '',
       close: dispose
     });
 

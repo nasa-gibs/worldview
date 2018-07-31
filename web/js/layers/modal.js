@@ -890,6 +890,7 @@ export function layersModal(models, ui, config) {
         // fade in time for show is 400 above, so after that
         setTimeout(unfocusInput, 410);
       },
+      closeText: '',
       close: function (event, ui) {
         $('.ui-widget-overlay').unbind('click');
       }

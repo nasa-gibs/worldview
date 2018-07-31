@@ -178,7 +178,8 @@ export function linkUi(models, config) {
       minHeight: 10,
       draggable: false,
       resizable: false,
-      autoOpen: false
+      autoOpen: false,
+      closeText: ''
     })
       .on('dialogcreate',
         $dialog.prepend(item)

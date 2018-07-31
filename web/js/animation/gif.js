@@ -225,7 +225,8 @@ export function animationGif(models, config, ui) {
           .dialog({ // dialog for progress
             title: 'Collecting Images...',
             width: 300,
-            height: 100
+            height: 100,
+            closeText: ''
           });
         $progress.attr('value', 0);
       };
@@ -644,6 +645,7 @@ export function animationGif(models, config, ui) {
         resizable: false,
         maxWidth: window.innerWidth,
         maxHeight: window.innerHeight,
+        closeText: '',
         close: function() {
           $imgDialog.find('img')
             .remove();
@@ -704,7 +706,7 @@ export function animationGif(models, config, ui) {
         at: 'right+10 top',
         of: $('.jcrop-tracker')
       },
-
+      closeText: '',
       close: onCloseSelector
     });
     return $dialogBox;

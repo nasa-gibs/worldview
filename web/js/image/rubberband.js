@@ -22,7 +22,8 @@ const dialogConfig = {
   minHeight: 10,
   draggable: false,
   resizable: false,
-  autoOpen: false
+  autoOpen: false,
+  closeText: ''
 };
 
 const PALETTE_WARNING =

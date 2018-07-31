@@ -96,7 +96,8 @@ export function uiInfo (ui, config) {
             },
             hide: {
               effect: 'fade'
-            }
+            },
+            closeText: ''
           })
           .load('pages/about.html?v=@BUILD_NONCE@ #page')
           .addClass('wv-opaque');

@@ -86,7 +86,8 @@ export default function (models, ui, config) {
         width: 700,
         height: 'auto',
         draggable: false,
-        resizable: false
+        resizable: false,
+        closeText: ''
       });
 
     if (introduction) {
@@ -117,7 +118,8 @@ export default function (models, ui, config) {
           width: 600,
           height: 'auto',
           draggable: false,
-          resizable: false
+          resizable: false,
+          closeText: ''
         });
       feedbackModal.decorate($dialog.find('.feedback'));
       $('#repeat')
