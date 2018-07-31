@@ -63,7 +63,8 @@ export default (function (self) {
         hide: {
           effect: 'fade',
           duration: 200
-        }
+        },
+        closeText: ''
       })
       .on('dialogclose', function () {
         $(this)
@@ -95,7 +96,8 @@ export default (function (self) {
         effect: 'fade',
         duration: 200
       },
-      dialogClass: 'no-titlebar notify-alert'
+      dialogClass: 'no-titlebar notify-alert',
+      closeText: ''
     });
     $message.empty().append(title);
     return $alert;
@@ -147,7 +149,8 @@ export default (function (self) {
       title: spec.header || 'Notice',
       resizable: false,
       modal: true,
-      buttons: buttons
+      buttons: buttons,
+      closeText: ''
     })
       .html(spec.message)
       .on('dialogclose', function () {

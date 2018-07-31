@@ -80,6 +80,7 @@ export function layersOptions(config, models, layer) {
         at: 'right+5 top',
         of: $('#products')
       },
+      closeText: '',
       close: dispose
     });
 

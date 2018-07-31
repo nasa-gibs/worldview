@@ -414,7 +414,8 @@ export function notificationsUi(models, config) {
       },
       hide: {
         effect: 'fade'
-      }
+      },
+      closeText: ''
     });
   };
 
@@ -522,7 +523,8 @@ export function notificationsUi(models, config) {
       },
       hide: {
         effect: 'fade'
-      }
+      },
+      closeText: ''
     });
   };
 
