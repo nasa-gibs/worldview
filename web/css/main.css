@@ -19,6 +19,7 @@
 /* App CSS */
 @import url("fonts.css");
 @import url("reset.css");
+@import url("jquery-ui-override.css");
 @import url("util.css");
 @import url("toolbar.css");
 @import url("alert.css");
@@ -47,4 +48,4 @@
 @import url("tooltip.css");
 @import url("mobile.css");
 @import url("../pages/css/document.css");
-@import url("jquery-ui-override.css");
+

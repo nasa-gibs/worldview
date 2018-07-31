@@ -382,7 +382,7 @@ export function layersModal(models, ui, config) {
         $categories.isotope({
           filter: '.layer-category-' + interestCssName(metaCategoryName)
         });
-        $nav.find('.ui-button').removeClass('nav-selected');
+        $nav.find('.layer-category-button').removeClass('nav-selected');
         $('label[for=' + $(this).attr('id') + ']').addClass('nav-selected');
       });
 
