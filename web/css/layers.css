@@ -374,6 +374,8 @@
 
 .layers-all .layers-all-layer .layers-all-layer-icon,
 .layer-modal-content .selected-category .ui-accordion-header-icon {
+  position: absolute;
+  top: 50%;
   left: auto;
   right: 1.2em;
 }

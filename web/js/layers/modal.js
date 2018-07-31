@@ -167,7 +167,7 @@ export function layersModal(models, ui, config) {
     if (sizeMultiplier < 1) { sizeMultiplier = 1; }
     if (sizeMultiplier > 3) { sizeMultiplier = 3; }
     modalHeight = $(window).height() - 100;
-    modalWidth = gridItemWidth * sizeMultiplier + 10;
+    modalWidth = gridItemWidth * sizeMultiplier + 12;
   };
 
   $.fn.hasScrollBar = function () {
