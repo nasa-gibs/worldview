@@ -23,16 +23,18 @@
   opacity: 0.4;
 }
 
-.wv-map-zoom .ui-button-text {
+.wv-map-zoom .fa {
   padding: 1em;
+  display: block;
+  line-height: normal;
 }
 
-.wv-map-zoom.ui-state-default {
+.wv-map-zoom {
   background: none rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
 }
 
-.wv-map-zoom.ui-state-hover {
+.wv-map-zoom:hover {
   background-color: #fff;
   color: #1a1a1a;
   border: 1px solid #333;
