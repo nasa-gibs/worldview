@@ -343,16 +343,13 @@ export function dataUi(models, ui, config) {
       var totalSize = model.getSelectionSize();
       if (totalSize) {
         var formattedSize = Math.round(totalSize * 100) / 100;
-        $button.find('.ui-button-text')
-          .html('Download Data (' + formattedSize + ' MB)');
+        $button.html('Download Data (' + formattedSize + ' MB)');
       } else {
-        $button.find('.ui-button-text')
-          .html('Download Selected Data');
+        $button.html('Download Selected Data');
       }
     } else {
       $button.button('disable');
-      $button.find('.ui-button-text')
-        .html('No Data Selected');
+      $button.html('No Data Selected');
     }
 
     var counts = model.getSelectionCounts();

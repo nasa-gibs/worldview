@@ -144,13 +144,10 @@
 
 .layer-modal .layer-modal-content nav span {
   display: none;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  height: 30px;
-  line-height: 30px;
-  padding: 1px 15px;
+}
+
+.layer-modal .layer-modal-content nav.category-breadcrumb span {
+  display: inline;
 }
 
 .layer-modal .layer-modal-content .category-breadcrumb span {
@@ -283,13 +280,21 @@
 }
 
 .layer-modal-content .categories-nav label {
-  text-transform: capitalize;
+  color: #383838;
+  font-family: "Open Sans", sans-serif;
   font-size: 16px;
+  font-weight: 300;
+  text-transform: capitalize;
   border: 0;
   background: 0;
-  height: 30px;
+  height: 32px;
   line-height: 30px;
   padding: 1px 15px;
+  vertical-align: middle;
+}
+
+.layer-modal-content .categories-nav label:hover {
+  cursor: pointer;
 }
 
 .button-input-scientific {
@@ -439,8 +444,9 @@
 
 .layer-modal-content .selected-category .ui-tabs .ui-tabs-nav li {
   max-width: 200px;
-  border-left: 10px solid transparent;
-  margin: 0;
+  border: transparent;
+  background: none;
+  margin: 0 0 0 10px;
   padding: 0;
   clear: both;
   box-sizing: border-box;
@@ -466,6 +472,7 @@
 
 .layer-modal-content .selected-category .ui-tabs-nav li.ui-tabs-active {
   background: rgba(255, 255, 255, 0.9);
+  margin-left: 0;
   border-left: 10px solid #d54e21;
 }
 

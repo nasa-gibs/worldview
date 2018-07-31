@@ -57,6 +57,7 @@
 }
 
 #productsHolder footer .action:hover {
+  color: #333;
   background: #ccc;
 }
 
@@ -64,7 +65,7 @@
   background-color: #000;
   color: #bebebe;
   opacity: 1;
-  border-color: #666;
+  border: 1px solid #666;
 }
 
 #productsHolder footer .action.ui-state-hover {
