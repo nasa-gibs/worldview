@@ -43,7 +43,7 @@
 }
 
 #productsHolder footer .action {
-  display: inline-block;
+  display: block;
   border-color: transparent;
   color: #fff;
   cursor: pointer;
@@ -51,6 +51,9 @@
   background: #d54e21;
   background-image: none;
   margin-right: 5px;
+  font-weight: 700;
+  padding: .4em 1em;
+  line-height: normal;
 }
 
 #productsHolder footer .action:hover {
