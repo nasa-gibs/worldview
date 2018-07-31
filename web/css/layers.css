@@ -143,6 +143,7 @@
 }
 
 .layer-modal .layer-modal-content nav span {
+  display: none;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -194,9 +195,6 @@
 
 .layer-modal .layer-modal-content .categories-nav .nav-selected {
   background: #00457b;
-}
-
-.layer-modal .layer-modal-content .categories-nav .nav-selected span {
   color: #fff;
 }
 
@@ -285,13 +283,24 @@
 }
 
 .layer-modal-content .categories-nav label {
-  border: 0;
-  background: 0;
-}
-
-.layer-modal-content .categories-nav label span {
   text-transform: capitalize;
   font-size: 16px;
+  border: 0;
+  background: 0;
+  height: 30px;
+  line-height: 30px;
+  padding: 1px 15px;
+}
+
+.button-input-scientific {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 /* Measurement accordion view */

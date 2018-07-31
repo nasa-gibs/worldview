@@ -19,6 +19,8 @@
   margin: 0;
   border: 0;
   padding: 5.72px 14.3px;
+  background-color: transparent;
+  background-image: none;
 }
 
 #wv-toolbar li label span {
@@ -33,7 +35,7 @@
   background-image: none;
 }
 
-#wv-toolbar li .ui-state-hover {
+#wv-toolbar li:hover label {
   background-color: #fff;
   color: #1a1a1a;
 }
