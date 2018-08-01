@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DateInputColumn from './input';
-import Util from '../util/util';
-
-const util = new Util();
+import util from '../../util/util';
 
 /*
  * A react component, is a draggable svg

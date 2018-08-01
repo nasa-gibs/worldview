@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Util from '../../util/util';
+import util from '../../../util/util';
 import lodashIsEqual from 'lodash/isEqual';
-
-const util = new Util();
 
 class Legend extends React.Component {
   constructor(props) {
@@ -344,11 +342,11 @@ class Legend extends React.Component {
           style={
             legendObj && isRunningData
               ? this.getClassLabelStyle(
-                legendObj.index,
-                boxWidth,
-                textWidth,
-                width
-              )
+                  legendObj.index,
+                  boxWidth,
+                  textWidth,
+                  width
+                )
               : {}
           }
         >

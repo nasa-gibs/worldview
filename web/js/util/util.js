@@ -27,6 +27,20 @@ export default (function (self) {
   self.browser = browser;
   self.events = events;
   self.load = load;
+  self.monthStringArray = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC'
+  ];
 
   // Needed anymore?
   self.LAYER_GROUPS = {
@@ -1077,6 +1091,20 @@ export default (function (self) {
     });
     return dateArray;
   };
+  /**
+   * Find index value of string in array
+   * @param {Array} arra | Array of strings
+   * @param {String} value | String to return index of
+   * @return {Number}
+   */
+  self.stringInArray = function(arra, value) {
+    for (var i = 0, len = arra.length; i < len; i++) {
+      if (arra[i] === value) {
+        return i;
+      }
+    }
+    return false;
+  }
 
   /**
    * Find the closest previous date from an array of dates

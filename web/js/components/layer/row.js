@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup, ListGroupItem } from 'reactstrap';
-import Util from '../util/util.js';
-
-const util = new Util();
+import util from '../../util/util.js';
 
 /**
  * A single layer search result row
@@ -440,46 +438,46 @@ class LayerRow extends React.Component {
         </div>
         {isMetadataExpanded &&
           metadata && (
-          <div className="source-metadata visible">
-            {layer.startDate && (
-              <p className="layer-date-range">
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: this.dateRangeText(layer)
-                  }}
-                />
-                {layer.dateRanges &&
+            <div className="source-metadata visible">
+              {layer.startDate && (
+                <p className="layer-date-range">
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: this.dateRangeText(layer)
+                    }}
+                  />
+                  {layer.dateRanges &&
                     layer.dateRanges.length > 1 &&
                     dateRanges.overlap === false && (
-                  <a
-                    id="layer-date-ranges-button"
-                    title="View all date ranges"
-                    className="layer-date-ranges-button"
-                    onClick={e => this.toggleDateRanges(e)}
-                  >
-                    {' '}
-                    <sup>*View Dates</sup>
-                  </a>
-                )}
-              </p>
-            )}
-            {isDateRangesExpanded && (
-              <div className="layer-date-wrap">
-                <p>Date Ranges:</p>
-                <ListGroup className="layer-date-ranges">
-                  {listItems}
-                </ListGroup>
+                      <a
+                        id="layer-date-ranges-button"
+                        title="View all date ranges"
+                        className="layer-date-ranges-button"
+                        onClick={e => this.toggleDateRanges(e)}
+                      >
+                        {' '}
+                        <sup>*View Dates</sup>
+                      </a>
+                    )}
+                </p>
+              )}
+              {isDateRangesExpanded && (
+                <div className="layer-date-wrap">
+                  <p>Date Ranges:</p>
+                  <ListGroup className="layer-date-ranges">
+                    {listItems}
+                  </ListGroup>
+                </div>
+              )}
+              <div dangerouslySetInnerHTML={{ __html: metadata }} />
+              <div
+                className="metadata-more"
+                onClick={e => this.toggleMetadataButtons(e)}
+              >
+                <span className="ellipsis up">^</span>
               </div>
-            )}
-            <div dangerouslySetInnerHTML={{ __html: metadata }} />
-            <div
-              className="metadata-more"
-              onClick={e => this.toggleMetadataButtons(e)}
-            >
-              <span className="ellipsis up">^</span>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }

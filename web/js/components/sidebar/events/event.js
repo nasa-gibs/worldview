@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Util from '../../util/util';
+import util from '../../../util/util';
 import lodashFind from 'lodash/find';
-const util = new Util();
 
 class Event extends React.Component {
   getDateLists() {
