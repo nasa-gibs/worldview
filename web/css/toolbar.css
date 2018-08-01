@@ -42,8 +42,15 @@
 }
 
 .wv-menu .ui-menu .ui-menu-item a {
+  position: relative;
   border: 0;
   margin: 0;
+  text-decoration: none;
+  display: block;
+  padding: 2px 0.4em 2px 2em;
+  line-height: 1.5;
+  min-height: 0;
+  font-weight: 400;
 }
 
 .wv-menu .ui-menu .ui-menu-item .ui-state-active,
