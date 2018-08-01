@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import util from '../../../util/util';
-import lodashIsEqual from 'lodash/isEqual';
+import React from "react";
+import PropTypes from "prop-types";
+import util from "../../../util/util";
+import lodashIsEqual from "lodash/isEqual";
 
 class Legend extends React.Component {
   constructor(props) {
@@ -67,7 +67,7 @@ class Legend extends React.Component {
     var boundingRec = e.target.getBoundingClientRect();
     var x = e.clientX - boundingRec.left;
     var y = e.clientY - boundingRec.top;
-    var rgba = canvas.current.getContext('2d').getImageData(x, y, 1, 1).data;
+    var rgba = canvas.current.getContext("2d").getImageData(x, y, 1, 1).data;
     var hex = util.rgbaToHex(rgba[0], rgba[1], rgba[2]);
 
     this.setState({
@@ -93,12 +93,12 @@ class Legend extends React.Component {
    * @param {Number} acceptableDifference
    */
   getLegendObject(legend, hex, acceptableDifference) {
-    var units = legend.units || '';
+    var units = legend.units || "";
     for (var i = 0, len = legend.colors.length; i < len; i++) {
       if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
         // If the two colors are close
         return {
-          label: legend.tooltips[i] + ' ' + units,
+          label: legend.tooltips[i] + " " + units,
           len: len,
           index: i
         };
@@ -125,8 +125,8 @@ class Legend extends React.Component {
     const { legends } = this.state;
 
     legends.forEach((colorMap, index) => {
-      if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
-        let ctxStr = 'canvas_' + index;
+      if (colorMap.type === "continuous" || colorMap.type === "discrete") {
+        let ctxStr = "canvas_" + index;
         if (this[ctxStr]) {
           let newWidth = this[ctxStr].current.getBoundingClientRect().width;
           if (newWidth !== this.state.width) {
@@ -146,7 +146,7 @@ class Legend extends React.Component {
    * @param {*} colors | array of color values
    */
   drawOnCanvas(ctxStr, checkerBoardPattern, colors) {
-    var context = this[ctxStr].current.getContext('2d');
+    var context = this[ctxStr].current.getContext("2d");
     const { height, width } = this.props;
     context.fillStyle = checkerBoardPattern;
     context.fillRect(0, 0, width, height);
@@ -171,11 +171,11 @@ class Legend extends React.Component {
     var halfTextWidth = textWidth / 2 || 0;
     var xOffset = boxWidth * index + boxWidth / 2 || 0;
     if (halfTextWidth > xOffset) {
-      return { left: '0', visibility: 'visible' };
+      return { left: "0", visibility: "visible" };
     } else if (xOffset + halfTextWidth > width) {
-      return { right: '0', visibility: 'visible' };
+      return { right: "0", visibility: "visible" };
     }
-    return { left: xOffset - halfTextWidth + 'px', visibility: 'visible' };
+    return { left: xOffset - halfTextWidth + "px", visibility: "visible" };
   }
   /**
    * @param {*} xOffset | X px Location of running-data
@@ -186,11 +186,11 @@ class Legend extends React.Component {
     var halfTextWidth = textWidth / 2 || 0;
 
     if (halfTextWidth > xOffset) {
-      return { left: '0' };
+      return { left: "0" };
     } else if (xOffset + halfTextWidth > width) {
-      return { right: '0' };
+      return { right: "0" };
     }
-    return { left: xOffset - halfTextWidth + 'px' };
+    return { left: xOffset - halfTextWidth + "px" };
   }
   /**
    * Render scale-type legends
@@ -209,7 +209,7 @@ class Legend extends React.Component {
       legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
-        textWidth = util.getTextWidth(legendObj.label, 'Lucida Sans');
+        textWidth = util.getTextWidth(legendObj.label, "Lucida Sans");
         xOffset = this.state.width * percent;
       }
     }
@@ -217,15 +217,15 @@ class Legend extends React.Component {
     var min = legend.minLabel || legend.tooltips[0];
     var max = legend.maxLabel || legend.tooltips[toolTipLength];
 
-    min = legend.units ? min + ' ' + legend.units : min;
-    max = legend.units ? max + ' ' + legend.units : max;
+    min = legend.units ? min + " " + legend.units : min;
+    max = legend.units ? max + " " + legend.units : max;
     return (
       <div
         className={
-          legendObj ? 'wv-running wv-palettes-legend' : 'wv-palettes-legend'
+          legendObj ? "wv-running wv-palettes-legend" : "wv-palettes-legend"
         }
-        id={layer.id + '_' + legend.id + '_' + index}
-        key={layer.id + '_' + legend.id + '_' + index}
+        id={layer.id + "_" + legend.id + "_" + index}
+        key={layer.id + "_" + legend.id + "_" + index}
       >
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
@@ -235,22 +235,22 @@ class Legend extends React.Component {
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
-            id={layer.id + '-' + legend.id + index + 'colorbar'}
+            id={layer.id + "-" + legend.id + index + "colorbar"}
             width={width}
             height={12}
-            ref={this['canvas_' + index]}
+            ref={this["canvas_" + index]}
             onMouseEnter={this.onMouseEnter.bind(this)}
             onMouseLeave={this.hideValue.bind(this)}
             onMouseMove={this.onHoverColorbar.bind(
               this,
-              this['canvas_' + index]
+              this["canvas_" + index]
             )}
           />
           <div
             className="wv-running-bar"
             style={{
               left: isHoveringLegend ? 0 : xOffset,
-              visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden'
+              visibility: legendObj && !isHoveringLegend ? "visible" : "hidden"
             }}
           />
         </div>
@@ -261,10 +261,10 @@ class Legend extends React.Component {
           style={
             isRunningData
               ? this.getRunningLabelStyle(xOffset, textWidth, this.state.width)
-              : { display: 'none' }
+              : { display: "none" }
           }
         >
-          {legendObj ? legendObj.label : ''}
+          {legendObj ? legendObj.label : ""}
         </span>
       </div>
     );
@@ -292,32 +292,32 @@ class Legend extends React.Component {
     if (isRunningData && colorHex) {
       legendObj = this.getLegendObject(legend, colorHex, 40); // {label,len,index}
       if (legendObj) {
-        textWidth = util.getTextWidth(legendObj.label, 'Lucida Sans');
+        textWidth = util.getTextWidth(legendObj.label, "Lucida Sans");
       }
     }
     return (
       <div
         className={
           legendObj
-            ? 'wv-running wv-palettes-legend wv-palettes-classes'
-            : 'wv-palettes-legend wv-palettes-classes'
+            ? "wv-running wv-palettes-legend wv-palettes-classes"
+            : "wv-palettes-legend wv-palettes-classes"
         }
-        key={legend.id + '_' + index}
+        key={legend.id + "_" + index}
       >
         {legend.colors.map((color, index) => {
           return (
-            <React.Fragment key={legend.id + '-color-' + index}>
+            <React.Fragment key={legend.id + "-color-" + index}>
               <span
                 className={
                   legendObj && legendObj.index === index
-                    ? 'wv-active wv-palettes-class'
-                    : 'wv-palettes-class'
+                    ? "wv-active wv-palettes-class"
+                    : "wv-palettes-class"
                 }
                 style={{ backgroundColor: util.hexToRGBA(color) }}
                 onMouseMove={this.onMove.bind(this, color)}
                 onMouseEnter={this.onMouseEnter.bind(this)}
                 onMouseLeave={this.hideValue.bind(this)}
-                dangerouslySetInnerHTML={{ __html: '&nbsp' }}
+                dangerouslySetInnerHTML={{ __html: "&nbsp" }}
               />
               {isRunningData && legendObj && index === legendObj.index ? (
                 <span
@@ -332,7 +332,7 @@ class Legend extends React.Component {
                   {legendObj.label}
                 </span>
               ) : (
-                ''
+                ""
               )}
             </React.Fragment>
           );
@@ -350,7 +350,7 @@ class Legend extends React.Component {
               : {}
           }
         >
-          {legendObj ? legendObj.label : ''}
+          {legendObj ? legendObj.label : ""}
         </span>
       </div>
     );
@@ -361,10 +361,10 @@ class Legend extends React.Component {
   renderLegends() {
     const { legends } = this.state;
     return legends.map((colorMap, index) => {
-      if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
-        this['canvas_' + index] = React.createRef();
+      if (colorMap.type === "continuous" || colorMap.type === "discrete") {
+        this["canvas_" + index] = React.createRef();
         return this.renderScale(colorMap, index, legends.length > 1);
-      } else if (colorMap.type === 'classification') {
+      } else if (colorMap.type === "classification") {
         return this.renderClasses(colorMap, index);
       }
     });
@@ -377,11 +377,11 @@ class Legend extends React.Component {
       <div
         className={
           isHoveringLegend
-            ? 'active-lengend wv-palettes-panel'
-            : 'wv-palettes-panel'
+            ? "active-lengend wv-palettes-panel"
+            : "wv-palettes-panel"
         }
         datalayer={layer.id}
-        id={palette.id + '_panel'}
+        id={palette.id + "_panel"}
       >
         {this.renderLegends()}
       </div>

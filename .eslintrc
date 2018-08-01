@@ -7,10 +7,11 @@
     "ecmaVersion": 2017,
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": false
+      "jsx": true
     }
   },
-  "extends": "standard",
+  "plugins": ["react"],
+  "extends": ["standard", "plugin:react/recommended"],
   "rules": {
     "semi": ["error", "always"],
     "space-before-function-paren": "off",
@@ -18,7 +19,7 @@
   },
   "overrides": [
     {
-      "files": [ "web/**/*.js", "test/**/*.js" ],
+      "files": ["web/**/*.js", "test/**/*.js"],
       "rules": {
         "no-octal": "error",
         "no-unused-vars": "error",
@@ -52,7 +53,12 @@
         "no-trailing-spaces": "error",
         "standard/computed-property-even-spacing": "error",
         "wrap-iife": "error",
-        "new-cap": "error"
+        "new-cap": "error",
+        "semi": ["error", "always"],
+        "space-before-function-paren": "off",
+        "react/no-danger": "warn",
+        "react/prop-types": "warn",
+        "react/no-did-update-set-state": "warn"
       }
     }
   ]

@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import DateInputColumn from './input';
-import util from '../../util/util';
+import React from "react";
+import PropTypes from "prop-types";
+import DateInputColumn from "./input";
+import util from "../../util/util";
 
 /*
  * A react component, is a draggable svg
@@ -68,11 +68,11 @@ class DateSelector extends React.Component {
             today={new Date()}
             date={this.state.date}
             type="hour"
-            inputId={this.props.idSuffix ? 'hour-' + this.props.idSuffix : ''}
+            inputId={this.props.idSuffix ? "hour-" + this.props.idSuffix : ""}
             height={this.props.height}
             width={this.props.width}
             updateDate={this.updateDate.bind(this)}
-            value={util.pad(this.state.date.getUTCHours(), 2, '0')}
+            value={util.pad(this.state.date.getUTCHours(), 2, "0")}
             tabIndex={4}
             focused={this.state.tab === 4}
             nextTab={this.nextTab.bind(this)}
@@ -91,8 +91,8 @@ class DateSelector extends React.Component {
             height={this.props.height}
             width={this.props.width}
             updateDate={this.updateDate.bind(this)}
-            value={util.pad(this.state.date.getUTCMinutes(), 2, '0')}
-            inputId={this.props.idSuffix ? 'minute-' + this.props.idSuffix : ''}
+            value={util.pad(this.state.date.getUTCMinutes(), 2, "0")}
+            inputId={this.props.idSuffix ? "minute-" + this.props.idSuffix : ""}
             tabIndex={5}
             focused={this.state.tab === 5}
             nextTab={this.nextTab.bind(this)}
@@ -119,7 +119,7 @@ class DateSelector extends React.Component {
           height={this.props.height}
           width={this.props.width}
           updateDate={this.updateDate.bind(this)}
-          inputId={this.props.idSuffix ? 'year-' + this.props.idSuffix : ''}
+          inputId={this.props.idSuffix ? "year-" + this.props.idSuffix : ""}
           tabIndex={1}
           focused={this.state.tab === 1}
           nextTab={this.nextTab.bind(this)}
@@ -135,7 +135,7 @@ class DateSelector extends React.Component {
           date={this.state.date}
           value={util.monthStringArray[this.state.date.getUTCMonth()]}
           type="month"
-          inputId={this.props.idSuffix ? 'month-' + this.props.idSuffix : ''}
+          inputId={this.props.idSuffix ? "month-" + this.props.idSuffix : ""}
           height={this.props.height}
           width={this.props.width}
           updateDate={this.updateDate.bind(this)}
@@ -156,9 +156,9 @@ class DateSelector extends React.Component {
           height={this.props.height}
           width={this.props.width}
           updateDate={this.updateDate.bind(this)}
-          value={util.pad(this.state.date.getUTCDate(), 2, '0')}
+          value={util.pad(this.state.date.getUTCDate(), 2, "0")}
           tabIndex={3}
-          inputId={this.props.idSuffix ? 'day-' + this.props.idSuffix : ''}
+          inputId={this.props.idSuffix ? "day-" + this.props.idSuffix : ""}
           focused={this.state.tab === 3}
           nextTab={this.nextTab.bind(this)}
           maxDate={this.props.maxDate}

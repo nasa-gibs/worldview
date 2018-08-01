@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import OlOverlay from 'ol/overlay';
+import React from "react";
+import ReactDOM from "react-dom";
+import OlOverlay from "ol/overlay";
 
-import util from '../util/util';
-import DateLine from '../components/dateline/dateline';
-import LineText from '../components/dateline/text';
+import util from "../util/util";
+import DateLine from "../components/dateline/dateline";
+import LineText from "../components/dateline/text";
 
 var map,
   overlay1,
@@ -38,7 +38,7 @@ export function mapDateLineBuilder(models, config) {
     drawDatelines(map, date);
     proj = models.proj.selected.id;
 
-    Parent.events.on('moveend', function() {
+    Parent.events.on("moveend", function() {
       if (!isGeoProjection()) {
         return;
       }
@@ -46,27 +46,27 @@ export function mapDateLineBuilder(models, config) {
       dimensions = position(map);
       update(dimensions);
     });
-    Parent.events.on('drag', function() {
+    Parent.events.on("drag", function() {
       if (!isGeoProjection()) {
         return;
       }
       updateLineVisibility(false);
     });
-    Parent.events.on('movestart', function() {
+    Parent.events.on("movestart", function() {
       if (!isGeoProjection()) {
         return;
       }
       updateLineVisibility(false);
     });
-    models.date.events.on('select', function() {
+    models.date.events.on("select", function() {
       updateDate(models.date[models.date.activeDate]);
     });
-    models.proj.events.on('select', function() {
+    models.proj.events.on("select", function() {
       proj = models.proj.selected.id;
     });
   };
   var isGeoProjection = function() {
-    if (proj === 'geographic') {
+    if (proj === "geographic") {
       return true;
     }
     return false;
@@ -124,7 +124,7 @@ export function mapDateLineBuilder(models, config) {
    */
   var setTextDefaults = function(ReactComponent, reactCase, date) {
     var props = {
-      dateLeft: util.toISOStringDate(util.dateAdd(date, 'day', 1)),
+      dateLeft: util.toISOStringDate(util.dateAdd(date, "day", 1)),
       dateRight: util.toISOStringDate(date)
     };
     return ReactDOM.render(
@@ -164,10 +164,10 @@ export function mapDateLineBuilder(models, config) {
   var drawDatelines = function(map, date) {
     var height, leftLineCase, rightLineCase, leftTextCase, rightTextCase;
 
-    leftLineCase = document.createElement('div');
-    rightLineCase = document.createElement('div');
-    leftTextCase = document.createElement('div');
-    rightTextCase = document.createElement('div');
+    leftLineCase = document.createElement("div");
+    rightLineCase = document.createElement("div");
+    leftTextCase = document.createElement("div");
+    rightTextCase = document.createElement("div");
     height = 0;
 
     overlay1 = drawOverlay([-180, 90], leftLineCase);
@@ -184,7 +184,7 @@ export function mapDateLineBuilder(models, config) {
     textRight = setTextDefaults(
       LineText,
       rightTextCase,
-      util.dateAdd(date, 'day', -1)
+      util.dateAdd(date, "day", -1)
     );
     lineLeft = setLineDefaults(
       DateLine,
@@ -256,12 +256,12 @@ export function mapDateLineBuilder(models, config) {
   var updateDate = function(date) {
     var leftState, rightState;
     leftState = {
-      dateLeft: util.toISOStringDate(util.dateAdd(date, 'day', 1)),
+      dateLeft: util.toISOStringDate(util.dateAdd(date, "day", 1)),
       dateRight: util.toISOStringDate(date)
     };
     rightState = {
       dateLeft: util.toISOStringDate(date),
-      dateRight: util.toISOStringDate(util.dateAdd(date, 'day', -1))
+      dateRight: util.toISOStringDate(util.dateAdd(date, "day", -1))
     };
     textLeft.setState(leftState);
     textRight.setState(rightState);
