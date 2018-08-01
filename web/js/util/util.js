@@ -1104,7 +1104,7 @@ export default (function (self) {
       }
     }
     return false;
-  }
+  };
 
   /**
    * Find the closest previous date from an array of dates
