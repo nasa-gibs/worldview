@@ -26,7 +26,7 @@
 }
 
 .wv-map-zoom .fa {
-  padding: 1em;
+  padding: 1.2em;
   display: block;
   line-height: normal;
 }
@@ -50,7 +50,9 @@
 }
 
 .wv-map-reset-rotation {
-  top: 300px;
+  top: 296px;
+  border: 1px solid #333;
+  height: 54px;
 }
 
 .wv-map-rotate-left {

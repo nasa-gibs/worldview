@@ -103,9 +103,16 @@
 }
 
 #wv-link-shorten {
+  position: relative;
   margin-top: 15px;
   width: 100%;
   color: #fff;
+}
+
+#wv-link-shorten label {
+  position: relative;
+  top: -3px;
+  margin-left: 4px;
 }
 
 #social-share {

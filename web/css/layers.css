@@ -279,6 +279,10 @@
   border-bottom: 3px solid #00457b;
 }
 
+.layer-modal-content .categories-nav input {
+  display: none;
+}
+
 .layer-modal-content .categories-nav label {
   color: #383838;
   font-family: "Open Sans", sans-serif;

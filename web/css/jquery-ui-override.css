@@ -50,6 +50,10 @@ a.ui-button.ui-state-default.ui-state-hover {
   margin-left: -7px;
 }
 
+.ui-widget.ui-widget-content {
+  border: 0;
+}
+
 .ui-widget-content {
   background: rgb(40, 40, 40);
   border: 0;
@@ -65,7 +69,12 @@ a.ui-button.ui-state-default.ui-state-hover {
   z-index: 600;
 }
 
+.ui-dialog .ui-dialog-titlebar {
+  border: 0;
+}
+
 .ui-dialog .ui-dialog-content {
+  color: #fff;
   background-image: none;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -169,6 +178,7 @@ label {
 }
 
 .ui-widget-header {
+  color: #fff;
   background: rgb(40, 40, 40);
 }
 
@@ -220,6 +230,22 @@ label {
 
 .ui-widget-content .ui-dialog-titlebar-close.ui-state-focus {
   background: none;
+}
+
+.ui-visual-focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.ui-button.ui-state-active:hover,
+.ui-button:active,
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active {
+  font-weight: 300;
+  border: 0;
+  background: transparent;
 }
 
 /* Counter intuitive override: All OpenLayers overlays get the
