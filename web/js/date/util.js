@@ -1,4 +1,6 @@
 import d3 from 'd3';
+import $ from 'jquery';
+
 export function timelineDataHightlight(layerId, isActivate) {
   if (isActivate) {
     d3.select(
