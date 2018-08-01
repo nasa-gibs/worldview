@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { RangeSelector } from 'worldview-components';
+import RangeSelector from '../components/range-selection/range-selection';
 import d3 from 'd3';
 import util from '../util/util';
 

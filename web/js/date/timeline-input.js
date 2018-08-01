@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import util from '../util/util';
-import { DateSelector } from 'worldview-components';
+import DateSelector from '../components/date-selector/date-selector';
 import React from 'react';
 import ReactDOM from 'react-dom';
 

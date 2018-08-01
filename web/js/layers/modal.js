@@ -8,7 +8,7 @@ import 'isotope-layout';
 import 'perfect-scrollbar/jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LayerList } from 'worldview-components';
+import LayerList from '../components/layer/list';
 import lodashFind from 'lodash/find';
 import lodashIndexOf from 'lodash/indexOf';
 import lodashSortBy from 'lodash/sortBy';

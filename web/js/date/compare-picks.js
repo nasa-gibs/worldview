@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { TimelineDragger } from 'worldview-components';
+import TimelineDragger from '../components/range-selection/dragger';
 import { getMaxTimelineWidth } from './util';
 import $ from 'jquery';
 import lodashDebounce from 'lodash/debounce';

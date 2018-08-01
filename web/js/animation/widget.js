@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import { AnimationWidget, GA as googleAnalytics } from 'worldview-components';
+import AnimationWidget from '../components/animation-widget/animation-widget';
+import googleAnalytics from '../components/util/google-analytics';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import lodashWithout from 'lodash/without';

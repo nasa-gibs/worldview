@@ -3,7 +3,7 @@ import 'jquery-ui/dialog';
 import lodashFind from 'lodash/find';
 import lodashDebounce from 'lodash/debounce';
 import util from '../util/util';
-import { Sidebar } from 'worldview-components';
+import Sidebar from '../components/sidebar/sidebar';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { getCompareObjects } from '../compare/util';

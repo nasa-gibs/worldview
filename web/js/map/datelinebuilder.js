@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import OlOverlay from 'ol/overlay';
 
 import util from '../util/util';
-import { DateLine, LineText } from 'worldview-components';
+import DateLine from '../components/dateline/dateline';
+import LineText from '../components/dateline/text';
 
 var map,
   overlay1,

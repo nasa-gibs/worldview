@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import lodashSize from 'lodash/size';
 import lodashEach from 'lodash/each';
-import { GA as GoogleAnalytics } from 'worldview-components';
+import googleAnalytics from '../components/util/google-analytics';
 import olExtent from 'ol/extent';
 
 import { dataMap } from './map';
@@ -148,7 +148,7 @@ export function dataUi(models, ui, config) {
   };
 
   self.showDownloadList = function() {
-    GoogleAnalytics.event('Data Download', 'Click', 'Download Button');
+    googleAnalytics.event('Data Download', 'Click', 'Download Button');
     if (selectionListPanel) {
       selectionListPanel.setVisible(false);
     }

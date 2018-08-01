@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { OpacitySlider } from 'worldview-components';
+import OpacitySlider from '../../components/compare/opacity-slider';
+
 var map;
 var slider;
 var value = 50;

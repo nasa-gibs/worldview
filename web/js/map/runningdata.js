@@ -1,8 +1,6 @@
-import { Util } from 'worldview-components';
+import util from '../util/util';
 import lodashIsEqual from 'lodash/isEqual';
 import lodashIsEmpty from 'lodash/isEmpty';
-
-const util = new Util();
 
 export function MapRunningData(models, compareUi) {
   var self;
