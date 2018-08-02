@@ -42,27 +42,31 @@
   left: 0;
   right: 0;
   bottom: 25%;
-  width: 172px;
+  width: 200px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
   color: white;
-  height: 25px;
+  height: 33px;
 }
 .ab-slider-case .input-range {
-  width: 140px;
+  width: 156px;
   display: inline-block;
-  margin-top: 10px;
+  margin: 15px 7px;
   vertical-align: top;
 }
 .ab-slider-case .wv-slider-label {
   display: inline-block;
   vertical-align: top;
-  margin-top: 5px;
+  margin-top: 10px;
   width: 15px;
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
 }
-
+.ab-slider-case .input-range__slider {
+  height: 20px;
+  width: 20px;
+  margin-top: -12px;
+}
 .ab-swipe-line .ab-swipe-span {
   position: absolute;
   top: 55%;
@@ -88,7 +92,3 @@
   padding: 2px;
   margin-left: -4px;
 }
-
-/* .ab-slider-input {
-  width: 100%;
-} */
