@@ -42,7 +42,7 @@
   left: 0;
   right: 0;
   bottom: 25%;
-  width: 200px;
+  width: 216px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
   color: white;
@@ -51,7 +51,7 @@
 .ab-slider-case .input-range {
   width: 156px;
   display: inline-block;
-  margin: 15px 7px;
+  margin: 15px 10px;
   vertical-align: top;
 }
 .ab-slider-case .wv-slider-label {
@@ -66,6 +66,7 @@
   height: 20px;
   width: 20px;
   margin-top: -12px;
+  margin-left: -10px;
 }
 .ab-swipe-line .ab-swipe-span {
   position: absolute;
