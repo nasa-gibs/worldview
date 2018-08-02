@@ -30,7 +30,7 @@ export function dateModel(config, spec) {
   };
   self.initCompare = function() {
     if (!self.selectedB) {
-      self.select(util.dateAdd(self.selected, 'day', -5), 'selectedB');
+      self.select(util.dateAdd(self.selected, 'day', -1), 'selectedB');
     }
   };
   self.setActiveDate = function(dateString) {
