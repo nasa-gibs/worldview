@@ -17,8 +17,8 @@ for (let file of files) {
 }
 
 console.log('Copying options to web directory');
-shell.cp('-r', 'build/options/config', 'web/config');
-shell.cp('-r', 'build/options/brand', 'web/brand');
+shell.cp('-r', 'build/options/config', 'web');
+shell.cp('-r', 'build/options/brand', 'web');
 shell.cp('-r', 'build/options/brand.json', 'web/brand');
 
 console.log('Adding .htaccess files to options');
