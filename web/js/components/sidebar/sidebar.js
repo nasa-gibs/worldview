@@ -1,14 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Products from "./products/products";
-import Events from "./events/events";
-import Data from "./data/data";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Products from './products/products';
+import Events from './events/events';
+import Data from './data/data';
 // import Tabs from './tabs';
-import CompareCase from "./compare";
-import FooterContent from "./footer-content";
-import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
-import { SidebarProvider as Provider } from "./provider";
-import CollapsedButton from "./collapsed-button";
+import CompareCase from './compare';
+import FooterContent from './footer-content';
+import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import { SidebarProvider as Provider } from './provider';
+import CollapsedButton from './collapsed-button';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -76,15 +76,15 @@ class Sidebar extends React.Component {
   }
   wasCollapsedRequested() {
     if (this.props.localStorage) {
-      return localStorage.getItem("sidebarState") === "collapsed";
+      return localStorage.getItem('sidebarState') === 'collapsed';
     }
     return false;
   }
   toggleSidebar() {
     var isNowCollapsed = !this.state.isCollapsed;
     if (this.props.localStorage) {
-      let storageValue = isNowCollapsed ? "collapsed" : "expanded";
-      localStorage.setItem("sidebarState", storageValue);
+      let storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
+      localStorage.setItem('sidebarState', storageValue);
     }
     this.setState({
       isCollapsed: isNowCollapsed,
@@ -104,7 +104,7 @@ class Sidebar extends React.Component {
     if (isCompareMode) {
       return (
         <CompareCase
-          isActive={activeTab === "layers"}
+          isActive={activeTab === 'layers'}
           firstDateObject={firstDateObject}
           secondDateObject={secondDateObject}
           height={subComponentHeight}
@@ -116,10 +116,10 @@ class Sidebar extends React.Component {
       return (
         <Products
           height={subComponentHeight}
-          isActive={activeTab === "layers"}
+          isActive={activeTab === 'layers'}
           activeOverlays={layers}
           isMobile={isMobile}
-          layerGroupName={isCompareA ? "active" : "activeB"}
+          layerGroupName={isCompareA ? 'active' : 'activeB'}
         />
       );
     }
@@ -167,7 +167,7 @@ class Sidebar extends React.Component {
       changeCompareMode,
       checkerBoardPattern
     } = this.props;
-    const tabClasses = "sidebar-tab";
+    const tabClasses = 'sidebar-tab';
     return (
       <Provider
         palettePromise={palettePromise}
@@ -200,17 +200,17 @@ class Sidebar extends React.Component {
                   secondDateObject.layers.baselayers.length
           }
         />
-        <div id="productsHolder" style={isCollapsed ? { display: "none" } : {}}>
+        <div id="productsHolder" style={isCollapsed ? { display: 'none' } : {}}>
           <Nav tabs className="main-nav">
             <NavItem>
               <NavLink
                 title="layers"
                 className={
-                  activeTab === "layers"
-                    ? tabClasses + " first-tab active"
-                    : tabClasses + " first-tab"
+                  activeTab === 'layers'
+                    ? tabClasses + ' first-tab active'
+                    : tabClasses + ' first-tab'
                 }
-                onClick={() => onTabClick("layers")}
+                onClick={() => onTabClick('layers')}
               >
                 <i className="productsIcon selected icon-layers" />
                 Layers
@@ -221,40 +221,40 @@ class Sidebar extends React.Component {
                 disabled={!!isCompareMode}
                 title={
                   isCompareMode
-                    ? "You must exit comparison mode to use the natural events feature"
-                    : "Events"
+                    ? 'You must exit comparison mode to use the natural events feature'
+                    : 'Events'
                 }
                 className={
-                  activeTab === "events"
-                    ? tabClasses + " second-tab active"
+                  activeTab === 'events'
+                    ? tabClasses + ' second-tab active'
                     : isCompareMode
-                      ? tabClasses + " second-tab disabled"
-                      : tabClasses + " second-tab"
+                      ? tabClasses + ' second-tab disabled'
+                      : tabClasses + ' second-tab'
                 }
-                onClick={() => onTabClick("events")}
+                onClick={() => onTabClick('events')}
               >
                 <i className="productsIcon selected icon-events" />
                 Events
               </NavLink>
             </NavItem>
             <NavItem
-              style={isMobile ? { display: "none" } : { display: "block" }}
+              style={isMobile ? { display: 'none' } : { display: 'block' }}
             >
               <NavLink
                 disabled={!!isCompareMode}
                 title={
                   isCompareMode
-                    ? "You must exit comparison mode to download data"
-                    : "events"
+                    ? 'You must exit comparison mode to download data'
+                    : 'events'
                 }
                 className={
-                  activeTab === "download"
-                    ? tabClasses + " first-tab active"
+                  activeTab === 'download'
+                    ? tabClasses + ' first-tab active'
                     : isCompareMode
-                      ? tabClasses + " third-tab disabled"
-                      : tabClasses + " third-tab"
+                      ? tabClasses + ' third-tab disabled'
+                      : tabClasses + ' third-tab'
                 }
-                onClick={() => onTabClick("download")}
+                onClick={() => onTabClick('download')}
               >
                 <i className="productsIcon selected icon-download" />
                 Data
@@ -275,7 +275,7 @@ class Sidebar extends React.Component {
             </TabPane>
             <TabPane tabId="events">
               <Events
-                isActive={activeTab === "events"}
+                isActive={activeTab === 'events'}
                 visibleEvents={visibleEvents}
                 events={eventsData.events}
                 sources={eventsData.sources}
@@ -287,7 +287,7 @@ class Sidebar extends React.Component {
             </TabPane>
             <TabPane tabId="download">
               <Data
-                isActive={activeTab === "download"}
+                isActive={activeTab === 'download'}
                 data={dataDownloadObject}
                 getCounts={getDataSelectionCounts}
                 selected={selectedDataProduct}

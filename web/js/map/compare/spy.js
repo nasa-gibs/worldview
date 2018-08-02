@@ -54,6 +54,7 @@ export class Spy {
     var insideText = !isBInside ? 'A' : 'B';
     label = document.createElement('span');
     label.className = 'ab-spy-span inside-label';
+    label.style.display = 'none';
     label.appendChild(document.createTextNode(insideText));
 
     this.mapCase.appendChild(label);

@@ -1,23 +1,23 @@
-import { Swipe } from "./swipe";
-import { Opacity } from "./opacity";
-import { Spy } from "./spy";
-import util from "../../util/util";
+import { Swipe } from './swipe';
+import { Opacity } from './opacity';
+import { Spy } from './spy';
+import util from '../../util/util';
 
 const TOUCH_EVENT = {
-  start: "touchstart",
-  move: "touchmove",
-  end: "touchend"
+  start: 'touchstart',
+  move: 'touchmove',
+  end: 'touchend'
 };
 const MOUSE_EVENT = {
-  start: "mousedown",
-  move: "mousemove",
-  end: "mouseup"
+  start: 'mousedown',
+  move: 'mousemove',
+  end: 'mouseup'
 };
 export function mapCompare(models, config) {
   var self = {};
   var comparison = null;
-  var mode = "swipe";
-  var proj = "";
+  var mode = 'swipe';
+  var proj = '';
   self.events = util.events();
   self.swipe = Swipe;
   self.opacity = Opacity;
@@ -59,7 +59,7 @@ export function mapCompare(models, config) {
     proj = models.proj.selected;
   };
   self.getOffset = function() {
-    if (mode === "swipe") {
+    if (mode === 'swipe') {
       return comparison.getSwipeOffset();
     } else {
       return null;

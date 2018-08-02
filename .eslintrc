@@ -15,7 +15,8 @@
   "rules": {
     "semi": ["error", "always"],
     "space-before-function-paren": "off",
-    "object-curly-spacing": ["error", "always"]
+    "object-curly-spacing": ["error", "always"],
+    "quotes": [2, "single", { "avoidEscape": true }]
   },
   "overrides": [
     {
