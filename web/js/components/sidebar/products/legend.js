@@ -50,10 +50,8 @@ class Legend extends React.Component {
       segmentWidth = width / len;
       location = segmentWidth * index + 0.5 * segmentWidth;
       return location / width;
-    } else if (len) {
-      return 0;
     } else {
-      return index / len;
+      return index / len || 0;
     }
   }
   /**
@@ -184,7 +182,6 @@ class Legend extends React.Component {
    */
   getRunningLabelStyle(xOffset, textWidth, width) {
     var halfTextWidth = textWidth / 2 || 0;
-
     if (halfTextWidth > xOffset) {
       return { left: "0" };
     } else if (xOffset + halfTextWidth > width) {
