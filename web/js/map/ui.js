@@ -470,33 +470,41 @@ export function mapui(models, config) {
    */
   var updateDate = function() {
     var layerModel = models.layers;
-    var layers = layerModel.get({}, layerModel[layerModel.activeLayers]);
-
+    var layers = layerModel
+      .get({}, layerModel[layerModel.activeLayers])
+      .reverse();
+    let groupName = layerModel.activeLayers;
+    var layerGroups;
+    var layerGroup;
+    if (models.compare.active) {
+      layerGroups = self.selected.getLayers().getArray();
+      if (layerGroups.length === 2) {
+        layerGroup =
+          layerGroups[0].get('group') === groupName
+            ? layerGroups[0]
+            : layerGroups[1].get('group') === groupName
+              ? layerGroups[1]
+              : null;
+      }
+    }
     lodashEach(layers, function(def) {
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
         return;
       }
-      if (models.compare.active) {
-        let layerGroups = self.selected.getLayers().getArray();
-        let layerGroup = layerGroups[0];
-        lodashEach(layers, layer => {
-          var layerGroupArray = layerGroup.getLayers();
-          self.selected.removeLayer(layerGroup);
-          lodashEach(layerGroup.getLayers(), layer => {
-            var index = lodashFindIndex(layerGroup, {
-              wv: {
-                id: def.id
-              }
-            });
-            layerGroupArray[index] = createLayer(def);
-            layerGroup.setLayers(layerGroupArray);
-          });
-          self.selected.addLayer(layerGroup);
-        });
-        reloadLayers();
-      } else {
-        var index = findLayerIndex(def);
 
+      if (models.compare.active) {
+        if (layerGroup) {
+          let index = findLayerIndex(def, layerGroup);
+          layerGroup.getLayers().setAt(
+            index,
+            createLayer(def, {
+              group: groupName,
+              date: models.date[models.date.activeDate]
+            })
+          );
+        }
+      } else {
+        let index = findLayerIndex(def);
         self.selected.getLayers().setAt(index, createLayer(def));
       }
     });
@@ -570,8 +578,9 @@ export function mapui(models, config) {
    *
    * @returns {number} Index of layer in OpenLayers layer array
    */
-  var findLayerIndex = function(def) {
-    var layers = self.selected.getLayers().getArray();
+  var findLayerIndex = function(def, layerGroup) {
+    layerGroup = layerGroup || self.selected;
+    var layers = layerGroup.getLayers().getArray();
 
     var layer = lodashFindIndex(layers, {
       wv: {
