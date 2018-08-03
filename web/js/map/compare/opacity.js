@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import lodashDebounce from 'lodash/debounce';
 import OpacitySlider from '../../components/compare/opacity-slider';
 
 var map;
