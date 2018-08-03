@@ -70,7 +70,7 @@ export function mapui(models, config) {
    *
    * @returns {void}
    */
-  var init = function () {
+  var init = function() {
     // NOTE: iOS sometimes bombs if this is _.each instead. In that case,
     // it is possible that config.projections somehow becomes array-like.
     lodashForOwn(config.projections, function(proj) {
@@ -87,9 +87,16 @@ export function mapui(models, config) {
       .on('visibility', updateLayerVisibilities)
       .on('update', updateLayerOrder)
       .on('opacity', updateOpacity);
-    models.compare.events.on('toggle', reloadLayers);
-    models.compare.events.on('toggle-state', reloadLayers);
-    models.compare.events.on('mode', reloadLayers);
+    if (models.compare) {
+      models.compare.events
+        .on('toggle', reloadLayers)
+        .on('mode', reloadLayers)
+        .on('toggle-state', () => {
+          if (models.compare.mode === 'spy') {
+            reloadLayers();
+          }
+        });
+    }
     models.date.events.on('select', updateDate);
     models.palettes.events
       .on('set-custom', updateLookup)
@@ -390,27 +397,33 @@ export function mapui(models, config) {
   var addLayer = function(def, date, activeLayers) {
     date = date || models.date[models.date.activeDate];
     activeLayers = activeLayers || models.layers[models.layers.activeLayers];
-    if (models.compare.active) return reloadLayers();
     var reverseLayers = lodashCloneDeep(activeLayers).reverse();
     var mapIndex = lodashFindIndex(reverseLayers, {
       id: def.id
     });
     var layers = self.selected.getLayers().getArray();
-    var firstLayer = layers[0]; // needs to be upated, won't always be first layer
+    var firstLayer = layers[0];
     if (isGraticule(def)) {
       addGraticule(def.opacity, models.layers.activeLayers);
     } else {
       def.availableDates = util.datesinDateRanges(def, date, true);
-      if (firstLayer && firstLayer.get('group')) {
-        let subLayers = firstLayer
-          .getLayers()
-          .insertAt(mapIndex, createLayer(def));
-        subLayers.splice(mapIndex, 0, def);
+      if (firstLayer.get('group')) {
+        let activelayer =
+          firstLayer.get('group') === models.layers.activeLayers
+            ? firstLayer
+            : layers[1];
+        let newLayer = createLayer(def, {
+          date: date,
+          group: models.layers.activeLayers
+        });
+        activelayer.getLayers().insertAt(mapIndex, newLayer);
+        compare.create(self.selected, models.compare.mode);
       } else {
         self.selected.getLayers().insertAt(mapIndex, createLayer(def));
       }
     }
     updateLayerVisibilities();
+
     self.events.trigger('added-layer');
   };
   /*
