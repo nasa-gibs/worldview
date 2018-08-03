@@ -19,6 +19,11 @@ export function compareModel(models, config) {
     self.events.trigger('toggle-state');
     self.events.trigger('change');
   };
+  self.setValue = function(value) {
+    self.value = value;
+    self.events.trigger('value');
+    self.events.trigger('change');
+  };
   self.setMode = function(mode) {
     self.mode = mode;
     self.events.trigger('mode');
@@ -27,13 +32,22 @@ export function compareModel(models, config) {
   self.save = function(state) {
     if (!self.active) {
       if (state.ca) delete state.ca;
-      if (state.cm) delete state.ca;
+      if (state.cm) delete state.cm;
+      if (state.cv) delete state.cv;
     } else {
       if (self.isCompareA !== state.ca) {
         state.ca = self.isCompareA;
       }
       if (self.mode !== state.cm) {
         state.cm = self.mode;
+      }
+      if (self.value) {
+        var stringValue = self.value.toString();
+        if (self.mode === 'spy') {
+          if (state.cv) delete state.cv;
+        } else if (state.cv !== stringValue) {
+          state.cv = stringValue;
+        }
       }
     }
   };
@@ -45,6 +59,9 @@ export function compareModel(models, config) {
     if (state.cm) {
       self.active = true;
       self.mode = state.cm;
+    }
+    if (state.cv) {
+      self.value = Number(state.cv);
     }
   };
   return self;

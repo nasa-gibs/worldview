@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import lodashDebounce from 'lodash/debounce';
 import OpacitySlider from '../../components/compare/opacity-slider';
 
 var map;
@@ -7,9 +8,11 @@ var slider;
 var value = 50;
 
 export class Opacity {
-  constructor(olMap, isAactive, events) {
+  constructor(olMap, isAactive, events, eventListenerStringObj, valueOverride) {
     map = olMap;
+    this.compareEvents = events;
     this.sliderCase = document.createElement('div');
+    value = valueOverride || value;
     this.create();
   }
   create() {
@@ -29,6 +32,9 @@ export class Opacity {
     this.mapCase = document.getElementById('wv-map');
     const Props = {
       onSlide: this.oninput.bind(this),
+      onSlideEnd: value => {
+        this.compareEvents.trigger('moveend', value);
+      },
       value: value
     };
     this.mapCase.appendChild(this.sliderCase);

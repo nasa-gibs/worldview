@@ -46,6 +46,7 @@ class OpacitySlider extends React.Component {
           value={this.state.value}
           formatLabel={() => ''}
           onChange={this.onSlide.bind(this)}
+          onChangeComplete={this.props.onSlideEnd}
         />
         <span className="wv-slider-label right">B</span>
       </div>
@@ -57,7 +58,8 @@ OpacitySlider.defaultProps = {
 };
 OpacitySlider.propTypes = {
   value: PropTypes.number,
-  onSlide: PropTypes.func
+  onSlide: PropTypes.func,
+  onSlideEnd: PropTypes.func
 };
 
 export default OpacitySlider;

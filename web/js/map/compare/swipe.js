@@ -1,4 +1,5 @@
 import lodashEach from 'lodash/each';
+import lodashRound from 'lodash/round';
 
 var swipeOffset = null;
 var line = null;
@@ -8,10 +9,18 @@ var map;
 var events;
 var mapCase;
 var listenerObj;
+var percentSwipe = null;
 export class Swipe {
-  constructor(olMap, isAactive, compareEvents, eventListenerStringObj) {
+  constructor(
+    olMap,
+    isAactive,
+    compareEvents,
+    eventListenerStringObj,
+    valueOverride
+  ) {
     listenerObj = eventListenerStringObj;
     map = olMap;
+    percentSwipe = valueOverride / 100;
     events = compareEvents;
     this.create();
   }
@@ -55,12 +64,14 @@ var addLineOverlay = function(map) {
   draggerEl.appendChild(iconEl);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
-  swipeOffset = swipeOffset || mapCase.offsetWidth / 2;
+  swipeOffset = percentSwipe
+    ? mapCase.offsetWidth * percentSwipe
+    : swipeOffset || mapCase.offsetWidth / 2;
   lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
 
   [lineCaseEl, draggerEl].forEach(el => {
     el.addEventListener(listenerObj.start, evt => {
-      events.trigger(listenerObj.start);
+      events.trigger('moveStart');
       evt.preventDefault();
       evt.stopPropagation();
       function move(evt) {
@@ -72,7 +83,11 @@ var addLineOverlay = function(map) {
         map.render();
       }
       function end(evt) {
-        events.trigger(listenerObj.end);
+        events.trigger(
+          'moveend',
+          lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0)
+        );
+
         window.removeEventListener(listenerObj.move, move);
         window.removeEventListener(listenerObj.end, end);
       }

@@ -27,11 +27,12 @@ export function mapCompare(models, config) {
   self.EventTypeObject = util.browser.touchDevice ? TOUCH_EVENT : MOUSE_EVENT;
   var init = function() {
     self.events
-      .on(self.EventTypeObject.start, () => {
+      .on('movestart', () => {
         self.dragging = true;
       })
-      .on(self.EventTypeObject.end, () => {
+      .on('moveend', value => {
         self.dragging = false;
+        models.compare.setValue(value);
       });
   };
   self.create = function(map, compareMode) {
@@ -44,7 +45,8 @@ export function mapCompare(models, config) {
         map,
         models.compare.isCompareA,
         self.events,
-        self.EventTypeObject
+        self.EventTypeObject,
+        models.compare.value || null
       ); // e.g. new self.swipe()
     } else {
       mode = compareMode;
@@ -52,7 +54,8 @@ export function mapCompare(models, config) {
         map,
         models.compare.isCompareA,
         self.events,
-        self.EventTypeObject
+        self.EventTypeObject,
+        models.compare.value || null
       ); // e.g. new self.swipe()
     }
     self.active = true;
