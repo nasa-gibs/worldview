@@ -33,10 +33,10 @@ import { layersActive } from './layers/active';
 import { mapParser } from './map/map';
 import { mapModel } from './map/model';
 import { mapui } from './map/ui';
-import { mapRotate } from './map/rotation';
+import { MapRotate } from './map/rotation';
 import { MapRunningData } from './map/runningdata';
 import { mapLayerBuilder } from './map/layerbuilder';
-import { mapDatelineBuilder } from './map/datelinebuilder';
+import { mapDateLineBuilder } from './map/datelinebuilder';
 import { mapPrecacheTile } from './map/precachetile';
 import { mapAnimate } from './map/animate';
 
@@ -86,6 +86,10 @@ import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
 import tour from './tour';
 import { uiInfo } from './ui/info';
+
+// App and Dependency CSS imports
+import 'font-awesome-webpack';
+import '../css/main.css';
 
 import { polyfill } from './polyfill';
 polyfill(); // Polyfills some browser features
@@ -212,10 +216,10 @@ window.onload = () => {
     }
     // HACK: Map needs to be created before the data download model
     var mapComponents = {
-      Rotation: mapRotate,
+      Rotation: MapRotate,
       Runningdata: MapRunningData,
       Layerbuilder: mapLayerBuilder,
-      Dateline: mapDatelineBuilder,
+      Dateline: mapDateLineBuilder,
       Precache: mapPrecacheTile
     };
     ui.map = mapui(models, config, mapComponents);
