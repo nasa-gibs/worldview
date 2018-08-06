@@ -111,14 +111,16 @@ export function timelinePick(models, config, ui) {
     model.select(newDate);
     self.hoverDate(newDate);
   };
-  self.hoverDate = function(date) {
+  self.hoverDate = function(date, alternatePick) {
     var d, tickBg;
-
+    d = date;
     tl.zoom.current.pick.hoverTick(date);
     tickBg = tl.zoom.current.pick.hoveredTick.select(
       'rect.normaltick-background'
     )[0][0];
-    d = d3.select(tl.zoom.current.pick.hoveredTick[0][0]).data()[0];
+    if (!alternatePick) {
+      d = d3.select(tl.zoom.current.pick.hoveredTick[0][0]).data()[0];
+    }
     tl.ticks.label.remove();
     tl.ticks.normal.hover.call(tickBg, d);
   };

@@ -137,7 +137,7 @@ export function timelineCompare(models, config, ui) {
    */
   var onDrag = function(e, id, offsetX) {
     var date = timeline.x.invert(offsetX);
-    ui.timeline.pick.hoverDate(date);
+    ui.timeline.pick.hoverDate(date, true);
     models.date.select(date, id);
   };
   var onDragEnd = function() {
