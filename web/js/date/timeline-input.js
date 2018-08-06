@@ -143,6 +143,7 @@ export function timelineInput(models, config, ui) {
         self.reactComponent.setState({
           date: dateModel[dateModel.activeDate]
         });
+        self.update();
       });
     }
     self.update();
@@ -236,7 +237,7 @@ export function timelineInput(models, config, ui) {
 
   // TODO: Cleanup
   self.update = function(date) {
-    var ms = date || new Date(model.selected);
+    var ms = date || new Date(model[model.activeDate]);
     var nd = new Date(ms.setUTCDate(ms.getUTCDate() + 1));
     var pd = new Date(ms.setUTCDate(ms.getUTCDate() - 1));
 
