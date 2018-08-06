@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import TimelineDragger from '../components/range-selection/dragger';
 import { getMaxTimelineWidth } from './util';
 import $ from 'jquery';
-import lodashDebounce from 'lodash/debounce';
+import lodashThrottle from 'lodash/throttle';
 import util from '../util/util';
 
-const DEBOUCE_TIME = 100;
+const THROTTLE_TIME = 100;
 const PICK_PATH =
   'M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z';
 export function timelineCompare(models, config, ui) {
@@ -79,7 +79,8 @@ export function timelineCompare(models, config, ui) {
   var getInitialProps = function(compareLetter, label) {
     return {
       id: 'selected' + compareLetter,
-      onDrag: lodashDebounce(onDrag, DEBOUCE_TIME),
+      onDrag: lodashThrottle(onDrag, THROTTLE_TIME),
+      onStop: onDragEnd,
       yOffset: 15,
       path: PICK_PATH,
       height: 59.51,
@@ -136,9 +137,12 @@ export function timelineCompare(models, config, ui) {
    */
   var onDrag = function(e, id, offsetX) {
     var date = timeline.x.invert(offsetX);
+    ui.timeline.pick.hoverDate(date);
     models.date.select(date, id);
   };
-
+  var onDragEnd = function() {
+    ui.timeline.ticks.label.remove();
+  };
   init();
   return self;
 }
