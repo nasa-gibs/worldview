@@ -502,6 +502,7 @@ export function mapui(models, config) {
               date: models.date[models.date.activeDate]
             })
           );
+          compare.update(groupName);
         }
       } else {
         let index = findLayerIndex(def);

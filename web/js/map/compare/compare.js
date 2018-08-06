@@ -35,6 +35,11 @@ export function mapCompare(models, config) {
         models.compare.setValue(value);
       });
   };
+  self.update = function(group) {
+    if (comparison) {
+      comparison.update(models.compare.isCompareA, group);
+    }
+  };
   self.create = function(map, compareMode) {
     if (compareMode === mode && comparison && proj === models.proj.selected) {
       comparison.update(models.compare.isCompareA);

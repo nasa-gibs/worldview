@@ -32,10 +32,16 @@ export class Swipe {
   getSwipeOffset() {
     return swipeOffset;
   }
-  update() {
+  update(isCompareA, groupName) {
     var mapLayers = map.getLayers().getArray();
-    applyEventsToBaseLayers(mapLayers[1], map, applyLayerListeners);
-    applyEventsToBaseLayers(mapLayers[0], map, applyReverseLayerListeners);
+    if (!groupName) {
+      applyEventsToBaseLayers(mapLayers[1], map, applyLayerListeners);
+      applyEventsToBaseLayers(mapLayers[0], map, applyReverseLayerListeners);
+    } else if (groupName === 'active') {
+      applyEventsToBaseLayers(mapLayers[0], map, applyReverseLayerListeners);
+    } else {
+      applyEventsToBaseLayers(mapLayers[1], map, applyLayerListeners);
+    }
   }
   destroy() {
     mapCase.removeChild(line);
