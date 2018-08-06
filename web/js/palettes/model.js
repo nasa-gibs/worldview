@@ -18,7 +18,7 @@ export function palettesModel(models, config) {
   self.active = {};
   self.activeB = {};
 
-  self.getRenderedPalette = function (layerId, index) {
+  self.getRenderedPalette = function(layerId, index) {
     var name = config.layers[layerId].palette.id;
     var palette = config.palettes.rendered[name];
     if (!lodashIsUndefined(index)) {
@@ -29,7 +29,7 @@ export function palettesModel(models, config) {
     return palette;
   };
 
-  self.getCustomPalette = function (paletteId) {
+  self.getCustomPalette = function(paletteId) {
     var palette = config.palettes.custom[paletteId];
     if (!palette) {
       throw new Error('Invalid palette: ' + paletteId);
@@ -42,12 +42,11 @@ export function palettesModel(models, config) {
     self[groupStr][layerId] = self[groupStr][layerId] || {};
     var active = self[groupStr][layerId];
     active.maps = active.maps || [];
-    lodashEach(self.getRenderedPalette(layerId).maps,
-      function (palette, index) {
-        if (!active.maps[index]) {
-          active.maps[index] = lodashCloneDeep(palette);
-        }
-      });
+    lodashEach(self.getRenderedPalette(layerId).maps, function(palette, index) {
+      if (!active.maps[index]) {
+        active.maps[index] = lodashCloneDeep(palette);
+      }
+    });
   };
 
   self.allowed = function(layerId) {
@@ -115,7 +114,7 @@ export function palettesModel(models, config) {
     self.events.trigger('change');
   };
 
-  self.getCount = function (layerId) {
+  self.getCount = function(layerId) {
     if (self.getRenderedPalette(layerId).maps) {
       return self.getRenderedPalette(layerId).maps.length;
     } else {
@@ -168,7 +167,7 @@ export function palettesModel(models, config) {
    * object.
    * @return {object} object of the legend
    */
-  self.getDefaultLegend = function (layerId, index) {
+  self.getDefaultLegend = function(layerId, index) {
     var palette = self.getRenderedPalette(layerId, index);
     return palette.legend || palette.entries;
   };
@@ -550,15 +549,9 @@ export function palettesModel(models, config) {
         id: oldLegend.id
       };
       var source = entries.colors;
-<<<<<<< HEAD
-      var target = (palette.custom)
-        ? self.getCustomPalette(palette.custom)
-          .colors : source;
-=======
       var target = palette.custom
-        ? self.getCustom(palette.custom).colors
+        ? self.getCustomPalette(palette.custom).colors
         : source;
->>>>>>> AB model updates #986
 
       var min = palette.min || 0;
       var max = palette.max || source.length;
