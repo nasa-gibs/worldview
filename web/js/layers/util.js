@@ -18,7 +18,7 @@ export function getZoomLevel(layer, zoom, proj, sources) {
   var zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
   var matrixSet = layer.projections[proj].matrixSet;
 
-  if (matrixSet !== undefined) {
+  if (matrixSet !== undefined && layer.type !== 'vector') {
     var source = layer.projections[proj].source;
     var zoomLimit =
       sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
