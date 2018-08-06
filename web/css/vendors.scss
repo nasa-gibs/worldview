@@ -1,0 +1,16 @@
+/* Dependency CSS */
+@import "bootstrap/dist/css/bootstrap.css";
+// @import "font-awesome/css/font-awesome.css"; import via webpack
+@import "jquery-ui/themes/base/jquery-ui.css";
+@import "jquery-ui/themes/ui-darkness/jquery-ui.css";
+@import "icheck/skins/square/grey.css";
+@import "icheck/skins/square/red.css";
+@import "icheck/skins/line/red.css";
+@import "jscrollpane/style/jquery.jscrollpane.css";
+@import "perfect-scrollbar/dist/css/perfect-scrollbar.css";
+@import "../ext/mobiscroll-2.6.0/mobiscroll.css";
+@import "../ext/jquery-jcrop/jquery.Jcrop.css";
+@import "jquery.joyride/jquery.joyride.css";
+// @import "jquery-jcrop/css/jquery.Jcrop.css"; import via 'ext' dir
+@import "ol/ol.css";
+@import "nouislider/src/jquery.nouislider.css";
