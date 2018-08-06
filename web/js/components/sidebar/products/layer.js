@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Legend from './legend';
 import { Draggable } from 'react-beautiful-dnd';
+import util from '../../../util/util';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 
@@ -89,7 +90,7 @@ class Layer extends React.Component {
               ref={provided.innerRef}
               {...provided.draggableProps}
               {...provided.dragHandleProps}
-              id={layerGroupName + '-' + encodeURIComponent(layer.id)}
+              id={layerGroupName + '-' + util.encodeId(layer.id)}
               className={
                 isDisabled
                   ? layerClasses + ' disabled layer-hidden'
@@ -110,7 +111,7 @@ class Layer extends React.Component {
                       ? visibilityButtonClasses + ' layer-hidden'
                       : visibilityButtonClasses + ' layer-enabled layer-visible'
                 }
-                id={'hide' + encodeURIComponent(layer.id)}
+                id={'hide' + util.encodeId(layer.id)}
                 onClick={this.toggleVisibility.bind(this)}
                 title={
                   !isVisible && !isDisabled
@@ -145,7 +146,7 @@ class Layer extends React.Component {
               </div>
               <div className="layer-main">
                 <a
-                  id={'close' + layerGroupName + encodeURIComponent(layer.id)}
+                  id={'close' + layerGroupName + util.encodeId(layer.id)}
                   title={'Remove Layer'}
                   className="button close bank-item-img"
                   onClick={this.onRemoveClick.bind(this)}
@@ -198,6 +199,7 @@ Layer.propTypes = {
   isMobile: PropTypes.bool,
   palette: PropTypes.object,
   runningObject: PropTypes.object,
-  getLegend: PropTypes.func
+  getLegend: PropTypes.func,
+  index: PropTypes.number
 };
 export default Layer;

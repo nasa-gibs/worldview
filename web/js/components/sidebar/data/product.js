@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import util from '../../../util/util';
 const listId = 'wv-data';
+
 class Data extends React.Component {
   getHeaderContents() {
     const {
@@ -59,7 +61,7 @@ class Data extends React.Component {
             return (
               <li
                 key={layer + index}
-                id={listId + '-' + id + encodeURIComponent(layer.value)}
+                id={listId + '-' + id + util.encodeId(layer.value)}
                 className="item item-static"
               >
                 <h4> {layer.label} </h4>

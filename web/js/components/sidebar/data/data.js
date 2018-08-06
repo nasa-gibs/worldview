@@ -44,7 +44,10 @@ class Data extends React.Component {
 Data.propTypes = {
   height: PropTypes.number,
   data: PropTypes.object,
-  getCounts: PropTypes.func
+  getCounts: PropTypes.func,
+  showUnavailableReason: PropTypes.bool,
+  selected: PropTypes.string,
+  selectProduct: PropTypes.func
 };
 
 export default Data;
