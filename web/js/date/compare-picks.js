@@ -26,6 +26,8 @@ export function timelineCompare(models, config, ui) {
   var init = function() {
     mountObjectA = document.createElementNS(xmlns, 'g');
     mountObjectB = document.createElementNS(xmlns, 'g');
+    mountObjectA.onmousedown = toggleCheck;
+    mountObjectB.onmousedown = toggleCheck;
     parentSvg = document.getElementById('timeline-footer-svg');
     parentSvg.appendChild(mountObjectA);
     parentSvg.appendChild(mountObjectB);
@@ -69,6 +71,10 @@ export function timelineCompare(models, config, ui) {
       mountObjectB.setAttribute('class', 'ab-group-case ab-group-case-active');
       parentSvg.insertBefore(mountObjectA, mountObjectB);
     }
+  };
+  var toggleCheck = function(e) {
+    if (this.classList.contains('ab-group-case-active')) return;
+    models.compare.toggleState();
   };
   var getInitialProps = function(compareLetter, label) {
     return {

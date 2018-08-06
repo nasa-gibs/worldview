@@ -587,7 +587,6 @@ g.plot rect.data-bar-invisible {
 .ab-group-case rect {
   fill: gray;
   opacity: 0.7;
-  pointer-events: none;
 }
 .ab-group-case-active path {
   stroke: #515151;
