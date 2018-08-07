@@ -167,7 +167,9 @@ class TimelineDragger extends React.Component {
       <Draggable
         onDrag={this.handleDrag.bind(this)}
         position={{ x: this.state.position, y: this.props.yOffset }}
-        onStop={this.props.onStop}
+        onStop={() => {
+          this.props.onStop(this.props.id, this.state.position);
+        }}
         axis="x"
       >
         <g>

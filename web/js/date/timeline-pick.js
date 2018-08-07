@@ -133,6 +133,7 @@ export function timelinePick(models, config, ui) {
   // Pan the timeline if the pick is dragged off the side
   // or if the date input goes outside of the shown range
   self.shiftView = function() {
+    if (models.compare && models.compare.active) return;
     var zt = tl.pan.xPosition;
     var activeDate = model[model.activeDate];
     if (tl.x(activeDate) >= tl.width - 15) {
