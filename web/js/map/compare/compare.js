@@ -4,11 +4,13 @@ import { Spy } from './spy';
 import util from '../../util/util';
 
 const TOUCH_EVENT = {
+  type: 'touch',
   start: 'touchstart',
   move: 'touchmove',
   end: 'touchend'
 };
 const MOUSE_EVENT = {
+  type: 'default',
   start: 'mousedown',
   move: 'mousemove',
   end: 'mouseup'

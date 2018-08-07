@@ -83,7 +83,12 @@ var addLineOverlay = function(map) {
       function move(evt) {
         evt.preventDefault();
         evt.stopPropagation();
-        swipeOffset = evt.clientX;
+        if (listenerObj.type === 'touch') {
+          swipeOffset = evt.touches[0].pageX;
+        } else {
+          swipeOffset = evt.clientX;
+        }
+
         lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
 
         map.render();
