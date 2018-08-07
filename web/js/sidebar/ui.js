@@ -10,7 +10,6 @@ import { getCompareObjects } from '../compare/util';
 import { getCheckerboard } from '../palettes/util';
 import { layersOptions } from '../layers/options';
 import { layersInfo } from '../layers/info';
-import palettes from '../palettes/palettes';
 import { getZotsForActiveLayers } from '../layers/util';
 import { timelineDataHightlight } from '../date/util';
 import wvui from '../ui/ui';
@@ -134,7 +133,7 @@ export function sidebarUi(models, config, ui) {
       comparisonType: compareModeType,
       changeCompareMode: compareModel.setMode,
       checkerBoardPattern: getCheckerboard(),
-      palettePromise: palettePromise,
+      palettePromise: models.palettes.palettePromise,
       getLegend: models.palettes.getLegends,
       replaceSubGroup: model.replaceSubGroup,
       runningLayers: null,
@@ -221,17 +220,6 @@ export function sidebarUi(models, config, ui) {
     }
     models.compare.toggle();
   };
-  var palettePromise = function(layerId, paletteId) {
-    return new Promise((resolve, reject) => {
-      if (config.palettes.rendered[paletteId]) {
-        resolve();
-      } else {
-        palettes.loadRenderedPalette(config, layerId).done(function(result) {
-          resolve(result);
-        });
-      }
-    });
-  };
   var getActiveTabs = function() {
     const features = config.features;
     return {
@@ -308,7 +296,6 @@ export function sidebarUi(models, config, ui) {
         break;
       case 'options':
         layer = lodashFind(models.layers[layerGroupString], { id: layerId });
-        console.log(models, layer, layerGroupString);
         layersOptions(config, models, layer, layerGroupString);
         break;
       case 'hover':

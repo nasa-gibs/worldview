@@ -237,7 +237,17 @@ export function palettesModel(models, config) {
       });
     });
   };
-
+  self.palettePromise = function(layerId, paletteId) {
+    return new Promise((resolve, reject) => {
+      if (config.palettes.rendered[paletteId]) {
+        resolve();
+      } else {
+        palettes.loadRenderedPalette(config, layerId).done(function(result) {
+          resolve(result);
+        });
+      }
+    });
+  };
   self.saveSingle = function(state, layerId, groupStr) {
     groupStr = groupStr || 'active';
     var stateStr = 'l';
