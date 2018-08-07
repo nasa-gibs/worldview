@@ -1,5 +1,6 @@
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
+import util from '../../util/util';
 
 var swipeOffset = null;
 var line = null;
@@ -10,6 +11,7 @@ var events;
 var mapCase;
 var listenerObj;
 var percentSwipe = null;
+const SWIPE_PADDING = 30;
 export class Swipe {
   constructor(
     olMap,
@@ -56,6 +58,7 @@ var addLineOverlay = function(map) {
   var iconEl = document.createElement('i');
   var firstLabel = document.createElement('span');
   var secondLabel = document.createElement('span');
+  var windowWidth = util.browser.dimensions[0];
   mapCase = document.getElementById('wv-map');
   firstLabel.className = 'ab-swipe-span left-label';
   secondLabel.className = 'ab-swipe-span right-label';
@@ -88,6 +91,13 @@ var addLineOverlay = function(map) {
         } else {
           swipeOffset = evt.clientX;
         }
+        // Prevent swiper from being swiped off screen
+        swipeOffset =
+          swipeOffset > windowWidth - SWIPE_PADDING
+            ? windowWidth - SWIPE_PADDING
+            : swipeOffset < SWIPE_PADDING
+              ? SWIPE_PADDING
+              : swipeOffset;
 
         lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
 
