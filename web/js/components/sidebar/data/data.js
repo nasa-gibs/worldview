@@ -45,7 +45,7 @@ Data.propTypes = {
   height: PropTypes.number,
   data: PropTypes.object,
   getCounts: PropTypes.func,
-  showUnavailableReason: PropTypes.bool,
+  showUnavailableReason: PropTypes.func,
   selected: PropTypes.string,
   selectProduct: PropTypes.func
 };
