@@ -77,6 +77,7 @@ export function mapCompare(models, config) {
   };
   self.destroy = function() {
     comparison.destroy();
+    models.compare.setValue(null); // Remove Value from state
     comparison = null;
     self.active = false;
   };
