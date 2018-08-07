@@ -78,7 +78,13 @@ Data.defaultProps = {
   count: 0
 };
 Data.propTypes = {
-  count: PropTypes.number
+  count: PropTypes.number,
+  selectProduct: PropTypes.func,
+  id: PropTypes.string,
+  productObject: PropTypes.object,
+  countsObject: PropTypes.object,
+  isSelected: PropTypes.bool,
+  showUnavailableReason: PropTypes.func
 };
 
 export default Data;

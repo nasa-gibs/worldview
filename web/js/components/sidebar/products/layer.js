@@ -200,6 +200,7 @@ Layer.propTypes = {
   palette: PropTypes.object,
   runningObject: PropTypes.object,
   getLegend: PropTypes.func,
-  index: PropTypes.number
+  index: PropTypes.number,
+  checkerBoardPattern: PropTypes.object
 };
 export default Layer;

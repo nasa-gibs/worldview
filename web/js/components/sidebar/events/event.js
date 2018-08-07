@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import util from "../../../util/util";
-import lodashFind from "lodash/find";
+import React from 'react';
+import PropTypes from 'prop-types';
+import util from '../../../util/util';
+import lodashFind from 'lodash/find';
 
 class Event extends React.Component {
   getDateLists() {
@@ -10,18 +10,18 @@ class Event extends React.Component {
       return (
         <ul
           className="dates"
-          style={!selectedDate ? { display: "none" } : { display: "block" }}
+          style={!selectedDate ? { display: 'none' } : { display: 'block' }}
         >
           {event.geometries.map((geometry, index) => {
-            var date = geometry.date.split("T")[0];
+            var date = geometry.date.split('T')[0];
             return (
-              <li key={event.id + "-" + date} className="dates">
+              <li key={event.id + '-' + date} className="dates">
                 <a
                   onClick={this.onClick.bind(this, date, null)}
                   className={
                     selectedDate === date
-                      ? "date item-selected active"
-                      : "date item-selected "
+                      ? 'date item-selected active'
+                      : 'date item-selected '
                   }
                 >
                   {date}
@@ -61,7 +61,7 @@ class Event extends React.Component {
               rel="noopener noreferrer"
               className="natural-event-link"
               href={reference.url}
-              key={event.id + "-" + reference.id}
+              key={event.id + '-' + reference.id}
               onClick={e => {
                 e.stopPropagation();
               }}
@@ -71,7 +71,7 @@ class Event extends React.Component {
             </a>
           );
         } else {
-          return source.title + " ";
+          return source.title + ' ';
         }
       });
     }
@@ -81,26 +81,26 @@ class Event extends React.Component {
     const eventDate = util.parseDateUTC(event.geometries[0].date);
     var dateString =
       util.giveWeekDay(eventDate) +
-      ", " +
+      ', ' +
       util.giveMonth(eventDate) +
-      " " +
+      ' ' +
       eventDate.getUTCDate();
     if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
-      dateString += ", " + eventDate.getUTCFullYear();
+      dateString += ', ' + eventDate.getUTCFullYear();
     }
     return (
       <li
         className={
           selectedDate
-            ? "item-selected selectorItem item item-visible"
+            ? 'item-selected selectorItem item item-visible'
             : isVisible
-              ? "selectorItem item"
-              : "selectorItem item hidden"
+              ? 'selectorItem item'
+              : 'selectorItem item hidden'
         }
         onClick={this.onClick.bind(this, null, !!selectedDate)}
       >
         <i
-          className={"event-icon event-icon-" + event.categories[0].slug}
+          className={'event-icon event-icon-' + event.categories[0].slug}
           title={event.categories[0].title}
         />
         <h4 className="title">

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Products from './products/products';
 import Events from './events/events';
 import Data from './data/data';
-// import Tabs from './tabs';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
@@ -350,7 +349,20 @@ Sidebar.propTypes = {
   zotsObject: PropTypes.object,
   isMobile: PropTypes.bool,
   replaceSubGroup: PropTypes.func,
-  maxHeight: PropTypes.number
+  maxHeight: PropTypes.number,
+  getDataSelectionCounts: PropTypes.func,
+  selectDataProduct: PropTypes.func,
+  getDataSelectionSize: PropTypes.func,
+  checkerBoardPattern: PropTypes.object,
+  visibleEvents: PropTypes.array,
+  showListAllButton: PropTypes.func,
+  eventsData: PropTypes.object,
+  selectedEvent: PropTypes.string,
+  selectEvent: PropTypes.func,
+  deselectEvent: PropTypes.func,
+  filterEventList: PropTypes.func,
+  selectedDataProduct: PropTypes.string,
+  showDataUnavailableReason: PropTypes.func
 };
 
 export default Sidebar;

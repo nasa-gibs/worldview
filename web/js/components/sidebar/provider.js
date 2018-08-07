@@ -1,5 +1,7 @@
 import React from 'react';
 import lodashIsEqual from 'lodash/isEqual';
+import PropTypes from 'prop-types';
+
 export const SidebarContext = React.createContext();
 export class SidebarProvider extends React.Component {
   constructor(props) {
@@ -33,3 +35,16 @@ export class SidebarProvider extends React.Component {
     );
   }
 }
+SidebarProvider.propTypes = {
+  children: PropTypes.array,
+  isMobile: PropTypes.bool,
+  replaceSubGroup: PropTypes.func,
+  updateLayer: PropTypes.func,
+  checkerBoardPattern: PropTypes.object,
+  getAvailability: PropTypes.func,
+  getNames: PropTypes.func,
+  palettePromise: PropTypes.func,
+  runningLayers: PropTypes.object,
+  getLegend: PropTypes.func,
+  zotsObject: PropTypes.object
+};

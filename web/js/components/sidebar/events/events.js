@@ -58,7 +58,8 @@ Events.propTypes = {
   selectEvent: PropTypes.func,
   selectedEvent: PropTypes.object,
   visibleEvents: PropTypes.object,
-  height: PropTypes.number
+  height: PropTypes.number,
+  deselectEvent: PropTypes.func
 };
 
 export default Events;

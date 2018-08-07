@@ -84,7 +84,9 @@ CompareCase.propTypes = {
   getAvailability: PropTypes.func,
   toggleActiveCompare: PropTypes.func,
   toggleComparisonObject: PropTypes.func,
-  children: PropTypes.node
+  children: PropTypes.node,
+  isCompareA: PropTypes.bool,
+  height: PropTypes.number
 };
 
 export default CompareCase;
