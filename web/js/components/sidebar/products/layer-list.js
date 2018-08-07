@@ -25,6 +25,11 @@ class LayerList extends React.Component {
       this.setState({ layers: props.layers });
     }
   }
+  /**
+   * Get Palette and setState with promise results when palette is retrieved
+   * @param {Object} layer | Layer
+   * @param {Function} palettePromise | Retrieve palette
+   */
   getPalette(layer, palettePromise) {
     if (this.state.palettes[layer.id]) {
       return this.state.palettes[layer.id];
@@ -39,6 +44,11 @@ class LayerList extends React.Component {
     }
     return null;
   }
+  /**
+   * Update Layer order after drag
+   * @param {Function} replaceSubGroup | Replace a products subgroup (Baselayer or Overlay) with new order
+   * @param {Object} result | Result of layer drag
+   */
   onDragEnd(replaceSubGroup, result) {
     const { layerGroupName, groupId } = this.props;
     const { layers } = this.state;

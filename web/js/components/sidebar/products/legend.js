@@ -40,7 +40,7 @@ class Legend extends React.Component {
     this.updateCanvas();
   }
   /**
-   * g
+   * Get percent of selected point position in parent
    */
   getPercent(len, index) {
     var segmentWidth;
@@ -176,9 +176,9 @@ class Legend extends React.Component {
     return { left: xOffset - halfTextWidth + 'px', visibility: 'visible' };
   }
   /**
-   * @param {*} xOffset | X px Location of running-data
+   * @param {Number} xOffset | X px Location of running-data
    * @param {Number} textWidth | px width of text calculated with canvas
-   * @param {*} width | Case width
+   * @param {Number} width | Case width
    */
   getRunningLabelStyle(xOffset, textWidth, width) {
     var halfTextWidth = textWidth / 2 || 0;
@@ -277,7 +277,7 @@ class Legend extends React.Component {
     this.setState({ colorHex: color });
   }
   /**
-
+   * Render a legend of class type
    * @param {Object} legend | Legend Object
    * @param {Number} index | Legend Index
    */
@@ -353,7 +353,7 @@ class Legend extends React.Component {
     );
   }
   /**
-   * Render correct legend type
+   * Loop through colormaps and render correct legend type
    */
   renderLegends() {
     const { legends } = this.state;

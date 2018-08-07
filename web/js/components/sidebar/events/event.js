@@ -4,6 +4,9 @@ import util from '../../../util/util';
 import lodashFind from 'lodash/find';
 
 class Event extends React.Component {
+  /**
+   * Return date list for selected event
+   */
   getDateLists() {
     const { event, selectedDate } = this.props;
     if (event.geometries.length > 1) {
@@ -33,6 +36,12 @@ class Event extends React.Component {
       );
     }
   }
+  /**
+   *
+   * @param {String} date | Date of event clicked
+   * @param {Boolean} isSelected | Is this event already selected
+   * @param {Object} e | Event Object
+   */
   onClick(date, isSelected, e) {
     e.preventDefault();
     e.stopPropagation();
@@ -43,6 +52,9 @@ class Event extends React.Component {
       selectEvent(event.id, date);
     }
   }
+  /**
+   * Return reference list for an event
+   */
   getReferenceList() {
     const { sources, event, selectedDate } = this.props;
     if (!selectedDate) return;

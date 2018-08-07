@@ -41,6 +41,9 @@ class Data extends React.Component {
       );
     }
   }
+  /**
+   * When this product is clicked execute selectProduct function
+   */
   onSelectProduct() {
     const { selectProduct, id, productObject } = this.props;
     if (productObject.notSelectable) return;

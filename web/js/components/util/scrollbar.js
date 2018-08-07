@@ -17,7 +17,10 @@ export default class SimpleBar extends React.Component {
     this.updateBoolean();
     this.scrollBar.recalculate(); // Necessary for IE10 and below
   }
-  // https://stackoverflow.com/a/42026562/4589331
+  /**
+   * Use offsetHeight to determine if scrollbar should be visible
+   * https://stackoverflow.com/a/42026562/4589331
+   */
   updateBoolean() {
     const element = this.content;
     const hasOverflowingChildren = element.offsetHeight < element.scrollHeight;
@@ -43,5 +46,6 @@ export default class SimpleBar extends React.Component {
 }
 
 SimpleBar.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  style: PropTypes.object
 };
