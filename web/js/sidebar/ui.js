@@ -168,6 +168,9 @@ export function sidebarUi(models, config, ui) {
       showDataUnavailableReason: ui.data.showUnavailableReason
     });
   };
+  /**
+   * Update layer when something happens (Event listeners)
+   */
   var updateLayers = function() {
     if (models.compare.active) {
       updateState('layerObjects');
@@ -183,6 +186,9 @@ export function sidebarUi(models, config, ui) {
   var getAvailability = function(id, date, groupStr) {
     return model.available(id, date, model[groupStr]);
   };
+  /**
+   * Update collapse state based on window width on resize
+   */
   var resize = function() {
     var state = self.reactComponent.state;
     var isMobile = state.isMobile;
@@ -208,7 +214,9 @@ export function sidebarUi(models, config, ui) {
     $('#layer-modal').dialog('open');
   };
 
-  // Need to rethink what is going on here
+  /**
+   * Toggle A|B and init layer and date values if not already created
+   */
   var toggleComparisonMode = function() {
     if (!models.layers.activeB || !models.date.selectedB) {
       if (!models.date.selectedB) {
@@ -228,6 +236,11 @@ export function sidebarUi(models, config, ui) {
       events: features.naturalEvents != null
     };
   };
+  /**
+   * Update react component state
+   * @param {String} type | State key to update
+   * @param {Object} value
+   */
   var updateState = function(type, value) {
     switch (type) {
       case 'isCollapsed':
@@ -260,21 +273,36 @@ export function sidebarUi(models, config, ui) {
         });
     }
   };
+  /**
+   * Force Timeline expand
+   */
   self.expandNow = function() {
     isCollapsed = false;
     updateState('isCollapsed');
   };
+  /**
+   * Toggle sidebar collapsed state
+   */
   var toggleSidebar = function() {
     isCollapsed = !isCollapsed;
     updateState('isCollapsed');
   };
-
+  /**
+   * Select a tab
+   * @param {String} tab | Tab to activate
+   */
   self.selectTab = function(tab) {
     if (activeTab === tab) return;
     activeTab = tab;
     self.events.trigger('selectTab', tab);
     updateState('activeTab');
   };
+  /**
+   * Trigger correct callback based on layer event
+   * @param {String} layerId
+   * @param {String} typeOfUpdate | Type of Layer event
+   * @param {Boolean} value | Value related to type of event
+   */
   var updateLayer = function(layerId, typeOfUpdate, value) {
     var layer;
     var layerGroupString = models.layers.activeLayers;
@@ -288,7 +316,7 @@ export function sidebarUi(models, config, ui) {
         break;
       case 'visibility':
         models.layers.toggleVisibility(layerId, layerGroupString);
-        updateState(removeLayerState(isCompareMode));
+        updateState(getStateType(isCompareMode));
         break;
       case 'info':
         layer = lodashFind(models.layers[layerGroupString], { id: layerId });
@@ -302,15 +330,21 @@ export function sidebarUi(models, config, ui) {
         timelineDataHightlight(layerId, value);
         break;
       default:
-        updateState(removeLayerState(isCompareMode));
+        updateState(getStateType(isCompareMode));
     }
   };
-  var removeLayerState = function(isCompareActive) {
+  var getStateType = function(isCompareActive) {
     return isCompareActive ? 'layers' : 'layerObjects';
   };
+  /**
+   * Update visibility of layer (on eye click)
+   * @param {String} layerId
+   * @param {Boolean} isVisible
+   */
   var toggleLayerVisibility = function(layerId, isVisible) {
     var layerGroupString = models.layers.activeLayers;
     models.layers.setVisibility(layerId, isVisible, layerGroupString);
+    // Update correct layer object
     if (layerGroupString === 'active') {
       updateState('layers');
     } else {
