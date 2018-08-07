@@ -1,10 +1,10 @@
 .ab-swipe-line {
   height: 100%;
-  padding: 0 2px 0 2px;
+  padding: 0 2px;
   position: absolute;
   top: 0;
   width: 1px;
-  background: white;
+  background: #fff;
 }
 .ab-swipe-dragger {
   position: absolute;
@@ -14,8 +14,8 @@
   margin-top: -15px;
   left: -13px;
   border-radius: 50%;
-  color: black;
-  background: white;
+  color: #000;
+  background: #fff;
   text-align: center;
 }
 .ab-swipe-line:hover {
@@ -45,7 +45,7 @@
   width: 216px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
-  color: white;
+  color: #fff;
   height: 33px;
 }
 .ab-slider-case .input-range {
@@ -72,13 +72,13 @@
   position: absolute;
   top: 55%;
   padding: 2px;
-  background: white;
-  color: black;
+  background: #fff;
+  color: #000;
   display: block;
   font-size: 14px;
   margin-top: -7px;
   border-radius: 3px;
-  border: 1px solid black;
+  border: 1px solid #000;
   cursor: default;
 }
 
@@ -89,7 +89,7 @@
   display: block;
   font-size: 14px;
   border-radius: 3px;
-  border: 1px solid black;
+  border: 1px solid #000;
   padding: 2px;
   margin-left: -4px;
 }

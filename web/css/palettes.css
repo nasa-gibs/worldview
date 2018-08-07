@@ -190,7 +190,7 @@
   width: 13px;
   display: inline-block;
   border: 1px solid #000;
-  margin: 0 2px 15px 2px;
+  margin: 0 2px 15px;
 }
 .wv-running .wv-palettes-class {
   opacity: 0.25;

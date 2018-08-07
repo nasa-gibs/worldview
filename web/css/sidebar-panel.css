@@ -15,8 +15,8 @@
   height: 30px;
   width: 30px;
   border: 1px solid transparent;
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 .atcollapse {
   position: absolute;
@@ -279,6 +279,7 @@ li.item.productsitem.inmotion,
 .productsitem.disabled .hdanchor {
   pointer-events: none;
 }
+
 /* .productsitem a.hdanchor.hideReg i {
   width: 21px;
   height: 12px;

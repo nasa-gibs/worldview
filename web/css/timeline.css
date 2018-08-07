@@ -318,10 +318,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header > .button-action-group .button-disabled:hover,
-#timeline-header
-  #zoom-buttons-group
-  .button-action-group
-  .button-disabled:hover {
+#timeline-header #zoom-buttons-group .button-disabled:hover {
   background-color: transparent;
   cursor: default;
 }
@@ -353,18 +350,12 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header > .button-action-group.button-disabled .arrow,
-#timeline-header
-  #zoom-buttons-group
-  .button-action-group.button-disabled
-  .arrow {
+#timeline-header #zoom-buttons-group .button-disabled .arrow {
   fill: #333;
 }
 
 #timeline-header > .button-action-group.button-disabled:hover .arrow,
-#timeline-header
-  #zoom-buttons-group
-  .button-action-group.button-disabled:hover
-  .arrow {
+#timeline-header #zoom-buttons-group .button-disabled:hover .arrow {
   fill: #333;
 }
 
@@ -580,12 +571,12 @@ g.plot rect.data-bar-invisible {
   display: none;
 }
 .ab-group-case-active {
-  fill: white;
+  fill: #fff;
 }
 .ab-group-case polygon,
 .ab-group-case path,
 .ab-group-case rect {
-  fill: gray;
+  fill: #808080;
   opacity: 0.7;
 }
 .ab-group-case-active path {
@@ -596,23 +587,21 @@ g.plot rect.data-bar-invisible {
 .ab-group-case-active polygon,
 .ab-group-case-active path,
 .ab-group-case-active rect {
-  fill: white;
+  fill: #fff;
   opacity: 1;
   pointer-events: initial;
   cursor: pointer;
 }
 .ab-group-case text {
-  fill: white;
+  fill: #fff;
+  pointer-events: none;
 }
 .ab-group-case-active text {
-  fill: black;
+  fill: #000;
 }
 .ab-active .ab-group-case {
   display: block;
 }
 .ab-active #guitarpick {
   display: none !important;
-}
-.ab-group-case text {
-  pointer-events: none;
 }

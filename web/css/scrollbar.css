@@ -43,14 +43,14 @@
 }
 
 /***************** simple-scrollbar customizations ***********************/
-.vertical .simplebar-scrollbar:before {
+.vertical .simplebar-scrollbar::before {
   background-color: #999;
   width: 9px;
 }
 .scrollbar-hidden .simplebar-scrollbar {
   display: none;
 }
-.scrollbar-visible .vertical .simplebar-scrollbar:before {
+.scrollbar-visible .vertical .simplebar-scrollbar::before {
   opacity: 0.8;
   border-radius: 0;
 }

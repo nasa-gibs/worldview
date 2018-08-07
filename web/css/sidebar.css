@@ -43,10 +43,10 @@
   border-bottom: 3px solid #00457b;
 }
 .nav-tabs .nav-link {
-  padding: 0.3rem 0.55rem;
+  padding: 4px 8px;
 }
 #productsHolder .nav-tabs .disabled {
-  color: white;
+  color: #fff;
   opacity: 0.5;
   cursor: default;
 }
@@ -56,11 +56,12 @@
 }
 
 .nav-item {
-  color: white;
+  color: #fff;
 }
 .nav-item .active {
   cursor: pointer;
 }
+
 /* override bootstrap styles */
 .tab-content .ab-tabs-case .nav-item .active {
   color: #495057;
@@ -68,7 +69,7 @@
 .nav-item .sidebar-tab.active {
   background: #00457b;
   border-color: #00457b;
-  color: white;
+  color: #fff;
 }
 #productsHolder footer {
   padding: 5px;
@@ -93,6 +94,7 @@ footer .compare-toggle-button {
 }
 .wv-ab-mode-selection-case {
   margin: 5px;
+  color: #fff;
 }
 .wv-ab-mode-selection-case > div {
   margin-left: 10px;
@@ -101,9 +103,7 @@ footer .compare-toggle-button {
 .wv-ab-mode-selection-case h3 {
   display: inline-block;
 }
-.wv-ab-mode-selection-case {
-  color: white;
-}
+
 #productsHolder footer p {
   color: #ccc;
   margin: 3px 0 8px;

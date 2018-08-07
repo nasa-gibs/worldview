@@ -19,7 +19,6 @@
 }
 
 .wv-date-selector-widget input {
-  height: 40px;
   color: #fff;
   background: transparent;
   border: 0;
@@ -29,6 +28,9 @@
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   padding: 0;
+  height: inherit;
+  text-align: center;
+  width: 100%;
 }
 
 .wv-date-selector-widget .input-wrapper:hover {
@@ -124,11 +126,6 @@
   margin-top: -15px;
   left: 50%;
   margin-left: -12px;
-}
-.wv-date-selector-widget input {
-  height: inherit;
-  text-align: center;
-  width: 100%;
 }
 .wv-date-selector-widget #left-arrow-group {
   -webkit-transform: scaleX(-1);
