@@ -41,6 +41,7 @@ export function dataUi(models, ui, config) {
 
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'download') {
+        googleAnalytics.event('Data Download', 'Click', 'Data Download Tab');
         model.activate();
       } else {
         model.deactivate();

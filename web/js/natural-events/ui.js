@@ -5,10 +5,10 @@ import olProj from 'ol/proj';
 
 import markers from './markers';
 import track from './track';
-
 import wvui from '../ui/ui';
 import util from '../util/util';
 import { naturalEventsUtilGetEventById } from './util';
+import googleAnalytics from '../components/util/google-analytics';
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -66,6 +66,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'events') {
         model.active = true;
+        googleAnalytics.event('Natural Events', 'Click', 'Events Tab');
 
         if (self.markers.length === 0) {
           // createEventList();
