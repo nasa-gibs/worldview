@@ -80,7 +80,7 @@ class Layer extends React.Component {
     } = this.props;
     return (
       <Draggable
-        draggableId={layer.id + '-' + layerGroupName}
+        draggableId={util.encodeId(layer.id) + '-' + layerGroupName}
         index={index}
         direction="vertical"
       >
