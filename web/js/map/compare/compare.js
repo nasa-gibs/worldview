@@ -27,6 +27,7 @@ export function mapCompare(models, config) {
   self.active = false;
   self.dragging = false;
   self.EventTypeObject = util.browser.touchDevice ? TOUCH_EVENT : MOUSE_EVENT;
+
   var init = function() {
     self.events
       .on('movestart', () => {
@@ -42,6 +43,11 @@ export function mapCompare(models, config) {
       comparison.update(models.compare.isCompareA, group);
     }
   };
+  /**
+   * Create, update, or replace a Compare instance with a given compare-type
+   * @param {Object} map | OpenLayers Map object
+   * @param {String} compareMode | Active compare mode
+   */
   self.create = function(map, compareMode) {
     if (compareMode === mode && comparison && proj === models.proj.selected) {
       comparison.update(models.compare.isCompareA);
@@ -68,6 +74,9 @@ export function mapCompare(models, config) {
     self.active = true;
     proj = models.proj.selected;
   };
+  /**
+   * Return offset value (for running-data use)
+   */
   self.getOffset = function() {
     if (mode === 'swipe') {
       return comparison.getSwipeOffset();
@@ -75,6 +84,9 @@ export function mapCompare(models, config) {
       return null;
     }
   };
+  /**
+   * Destroy instance in full and nullify vars
+   */
   self.destroy = function() {
     comparison.destroy();
     models.compare.setValue(null); // Remove Value from state

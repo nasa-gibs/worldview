@@ -51,7 +51,10 @@ export class Swipe {
     removeListenersFromBottomLayers(bottomLayers);
   }
 }
-
+/**
+ * Add Swiper
+ * @param {Object} map | OL map object
+ */
 var addLineOverlay = function(map) {
   var lineCaseEl = document.createElement('div');
   var draggerEl = document.createElement('div');
@@ -78,6 +81,7 @@ var addLineOverlay = function(map) {
     : swipeOffset || mapCase.offsetWidth / 2;
   lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
 
+  // Add event listeners to Elements
   [lineCaseEl, draggerEl].forEach(el => {
     el.addEventListener(listenerObj.start, evt => {
       events.trigger('moveStart');
@@ -118,17 +122,29 @@ var addLineOverlay = function(map) {
   });
   return lineCaseEl;
 };
+/**
+ * Add listeners for layer clipping
+ * @param {Object} layer | Ol Layer object
+ */
 var applyLayerListeners = function(layer) {
   layer.on('precompose', clip);
   layer.on('postcompose', restore);
   bottomLayers.push(layer);
 };
+/**
+ * Layers need to be inversly clipped so that they can't be seen through
+ * the other layergroup in cases where the layergroups layer opacity is < 100%
+ * @param {Object} layer | Ol Layer object
+ */
 var applyReverseLayerListeners = function(layer) {
   layer.on('precompose', reverseClip);
   layer.on('postcompose', restore);
   topLayers.push(layer);
 };
-
+/**
+ * Clip the top layer at the right xOffset
+ * @param {Object} event | OL Precompose event object
+ */
 var clip = function(event) {
   var ctx = event.context;
   var viewportWidth = map.getSize()[0];
@@ -138,6 +154,11 @@ var clip = function(event) {
   ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
   ctx.clip();
 };
+/**
+ * Clip the reverse so users don't see this layerGroup when the other
+ * Layer group is transparent
+ * @param {Object} event | OL Precompose event object
+ */
 var reverseClip = function(event) {
   var ctx = event.context;
   var viewportWidth = map.getSize()[0];
@@ -151,19 +172,32 @@ var restore = function(event) {
   var ctx = event.context;
   ctx.restore();
 };
+/**
+ * Remove all listeners from layer group
+ * @param {Array} layers | Layer group
+ */
 var removeListenersFromBottomLayers = function(layers) {
   lodashEach(layers, layer => {
     layer.un('precompose', reverseClip);
     layer.un('postcompose', restore);
   });
 };
+/**
+ * Remove all listeners from layer group
+ * @param {Array} layers | Layer group
+ */
 var removeListenersFromLayers = function(layers) {
   lodashEach(layers, layer => {
     layer.un('precompose', clip);
     layer.un('postcompose', restore);
   });
 };
-
+/**
+ * Recursively apply listeners to layers
+ * @param {Object} layer | Layer or layer Group obj
+ * @param {Object} map | OL Map Object
+ * @param {Function} callback | Function that will apply event listeners to layer
+ */
 var applyEventsToBaseLayers = function(layer, map, callback) {
   var layers = layer.get('layers');
   if (layers) {

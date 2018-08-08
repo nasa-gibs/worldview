@@ -7,12 +7,22 @@ export function MapRunningData(models, compareUi) {
 
   self = this;
   var dataObj = {};
+  /**
+   * Clear running data value
+   */
   self.clearAll = function() {
     if (!lodashIsEmpty(dataObj)) {
       dataObj = {};
       models.map.events.trigger('data-running', dataObj);
     }
   };
+  /**
+   * When in A|B only show Running-data from active side of Map while in swipe mode -
+   * No other modes will allow for running-data
+   * @param {Object} map | OL map object
+   * @param {Array} coords | Coordinates of hover point
+   * @param {Object} layerAttributes | Layer Properties
+   */
   var isFromActiveCompareRegion = function(map, coords, layerAttributes) {
     var compareModel = models.compare;
     if (compareModel && compareModel.active) {
