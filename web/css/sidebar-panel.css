@@ -296,7 +296,7 @@ img.hideReg {
 }
 
 .wv-layers-info-icon {
-  font-size: 11px;
+  font-size: 11px !important;
   border: 1px solid #333;
   width: 14px;
   height: 14px;
