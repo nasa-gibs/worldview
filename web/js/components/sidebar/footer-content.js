@@ -18,7 +18,8 @@ class FooterContent extends React.Component {
       addLayers,
       toggleMode,
       getDataSelectionCounts,
-      getDataSelectionSize
+      getDataSelectionSize,
+      compareFeature
     } = this.props;
     if (activeTab === 'layers') {
       return (
@@ -43,7 +44,7 @@ class FooterContent extends React.Component {
                   : 'compare-toggle-button'
               }
               id="compare-toggle-button"
-              style={isMobile ? { display: 'none' } : null}
+              style={isMobile || !compareFeature ? { display: 'none' } : null}
               text={!isCompareMode ? 'Start Comparison' : 'Exit Comparison'}
             />
           </div>

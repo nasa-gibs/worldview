@@ -74,15 +74,17 @@ export function sidebarUi(models, config, ui) {
           filterEventList: ui.naturalEvents.filterEventList
         });
       });
-    models.compare.events
-      .on('toggle', () => {
-        updateState('isCompareMode');
-        updateState('layerObjects');
-        updateState('layers');
-      })
-      .on('toggle-state', () => {
-        updateState('isCompareA');
-      });
+    if (models.compare) {
+      models.compare.events
+        .on('toggle', () => {
+          updateState('isCompareMode');
+          updateState('layerObjects');
+          updateState('layers');
+        })
+        .on('toggle-state', () => {
+          updateState('isCompareA');
+        });
+    }
     models.date.events.on('select', updateLayers);
     models.proj.events.on('select', updateLayers);
     models.map.events.on('data-running', runningLayers => {
@@ -120,6 +122,7 @@ export function sidebarUi(models, config, ui) {
       onTabClick: self.selectTab,
       toggleSidebar: toggleSidebar,
       toggleLayerVisibility: toggleLayerVisibility,
+      compareFeature: config.features.compare,
       tabTypes: getActiveTabs(),
       getNames: model.getTitles,
       firstDateObject: compareObj.a,
@@ -131,7 +134,7 @@ export function sidebarUi(models, config, ui) {
       updateLayer: updateLayer,
       addLayers: onAddLayerCLick,
       comparisonType: compareModeType,
-      changeCompareMode: compareModel.setMode,
+      changeCompareMode: compareModel ? compareModel.setMode : null,
       checkerBoardPattern: getCheckerboard(),
       palettePromise: models.palettes.palettePromise,
       getLegend: models.palettes.getLegends,
@@ -172,7 +175,7 @@ export function sidebarUi(models, config, ui) {
    * Update layer when something happens (Event listeners)
    */
   var updateLayers = function() {
-    if (models.compare.active) {
+    if (models.compare && models.compare.active) {
       updateState('layerObjects');
       updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
     } else {

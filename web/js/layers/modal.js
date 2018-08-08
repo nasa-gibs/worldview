@@ -41,10 +41,12 @@ export function layersModal(models, ui, config) {
       $allLayers[0]
     );
     model.events.on('remove', onLayerRemoved);
-    models.compare.events.on('change', () => {
-      self.reactList.setState({ activeLayers: model[model.activeLayers] });
-      drawDefaultPage();
-    });
+    if (models.compare) {
+      models.compare.events.on('change', () => {
+        self.reactList.setState({ activeLayers: model[model.activeLayers] });
+        drawDefaultPage();
+      });
+    }
     models.proj.events.on('select', drawDefaultPage);
 
     // Create tiles

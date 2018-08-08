@@ -250,7 +250,7 @@ export function mapui(models, config) {
     var layerGroupStr = models.layers.activeLayers;
     var activeLayers = models.layers[layerGroupStr];
 
-    if (!models.compare.active) {
+    if (!compareModel || !compareModel.active) {
       if (compare.active) {
         compare.destroy();
       }
@@ -271,8 +271,12 @@ export function mapui(models, config) {
     } else {
       let stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
-      if (!compareModel.isCompareA && compareModel.mode === 'spy') {
-        stateArray.reverse();
+      if (
+        compareModel &&
+        !compareModel.isCompareA &&
+        compareModel.mode === 'spy'
+      ) {
+        stateArray.reverse(); // Set Layer order based on active A|B group
       }
       lodashEach(stateArray, arr => {
         map.addLayer(getCompareLayerGroup(arr));
@@ -336,11 +340,13 @@ export function mapui(models, config) {
     };
     layers.forEach(function(layer) {
       var group = layer.get('group');
+      // Not in A|B
       if (layer.wv) {
         renderable = layersModel.isRenderable(layer.wv.id);
         layer.setVisible(renderable);
         let defs = layersModel.get({}, layersModel[layerGroupStr]);
         updateGraticules(defs);
+        // If in A|B layer-group will have a 'group' string
       } else if (group) {
         let defs;
 
@@ -408,6 +414,8 @@ export function mapui(models, config) {
     } else {
       def.availableDates = util.datesinDateRanges(def, date, true);
       if (firstLayer.get('group')) {
+        // Find which map layer-group is the active LayerGroup
+        // and add layer to layerGroup in correct location
         let activelayer =
           firstLayer.get('group') === models.layers.activeLayers
             ? firstLayer
@@ -476,7 +484,7 @@ export function mapui(models, config) {
     let groupName = layerModel.activeLayers;
     var layerGroups;
     var layerGroup;
-    if (models.compare.active) {
+    if (models.compare && models.compare.active) {
       layerGroups = self.selected.getLayers().getArray();
       if (layerGroups.length === 2) {
         layerGroup =
@@ -492,7 +500,7 @@ export function mapui(models, config) {
         return;
       }
 
-      if (models.compare.active) {
+      if (models.compare && models.compare.active) {
         if (layerGroup) {
           let index = findLayerIndex(def, layerGroup);
           layerGroup.getLayers().setAt(
@@ -813,8 +821,8 @@ export function mapui(models, config) {
     });
 
     // Clicking on a vector shows it's attributes in console.
-    map.on('click', function (e) {
-      map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+    map.on('click', function(e) {
+      map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
         console.log(feature.getProperties());
       });
     });
