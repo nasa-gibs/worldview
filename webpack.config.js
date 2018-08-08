@@ -9,16 +9,21 @@ const WriteFilePlugin = require('write-file-webpack-plugin');
 const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
+  mode: devMode ? 'development' : 'production',
   entry: './web/js/main.js',
-  devtool: 'inline-source-map',
+  devtool: 'cheap-module-eval-source-map',
   devServer: {
-    contentBase: './web/build',
-    port: 3020
+    contentBase: path.join(__dirname, '/web'),
+    compress: true,
+    hot: true,
+    watchContentBase: true,
+    port: 3000
   },
   output: {
     filename: 'wv.js',
     chunkFilename: 'wv-chunk.js',
-    path: path.join(__dirname, '/web/build')
+    path: path.join(__dirname, '/web/build'),
+    pathinfo: false
   },
   plugins: [
     new CleanWebpackPlugin(['web/build']),
@@ -41,6 +46,8 @@ module.exports = {
       'window.jQuery': 'jquery',
       'window.$': 'jquery'
     }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
     new MiniCssExtractPlugin({
       filename: 'wv.css'
     }),
