@@ -89,7 +89,7 @@ import { uiInfo } from './ui/info';
 
 // App and Dependency CSS imports
 import 'font-awesome-webpack';
-import '../css/vendors.scss';
+import '../css/vendors.css';
 import '../css/main.css';
 
 import { polyfill } from './polyfill';
