@@ -134,7 +134,6 @@ window.onload = () => {
 
     // Attach to wvx object for debugging
     wvx.config = config;
-    config.features.compare = true;
     debugConfig(config);
 
     // Load any additional scripts as needed
