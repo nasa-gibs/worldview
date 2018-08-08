@@ -3,6 +3,7 @@ import $ from 'jquery';
 
 export function timelineDataHightlight(layerId, isActivate) {
   if (isActivate) {
+    $('.data-bar-hovered').removeClass('data-bar-hovered');
     d3.select(
       '#timeline-footer svg g.plot rect[data-layer="' + layerId + '"]'
     ).classed('data-bar-hovered', true);
