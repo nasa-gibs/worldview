@@ -1,61 +1,61 @@
-import $ from "jquery";
-import "jquery-jcrop";
-import React from "react";
-import ReactDOM from "react-dom";
-import GifStream from "./gif-stream";
-import lodashFind from "lodash/find";
-import lodashEach from "lodash/each";
-import lodashRound from "lodash/round";
-import lodashThrottle from "lodash/throttle";
-import lodashCapitalize from "lodash/capitalize";
-import canvg from "canvg-browser";
-import FileSaver from "file-saver";
-import googleAnalytics from "../components/util/google-analytics";
-import GifResSelection from "../components/animation-widget/gif-panel";
+import $ from 'jquery';
+import 'jquery-jcrop';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import GifStream from './gif-stream';
+import lodashFind from 'lodash/find';
+import lodashEach from 'lodash/each';
+import lodashRound from 'lodash/round';
+import lodashThrottle from 'lodash/throttle';
+import lodashCapitalize from 'lodash/capitalize';
+import canvg from 'canvg-browser';
+import FileSaver from 'file-saver';
+import googleAnalytics from '../components/util/google-analytics';
+import GifResSelection from '../components/animation-widget/gif-panel';
 import {
   imageUtilGetLayerOpacities,
   imageUtilCalculateResolution,
   imageUtilGetLayers,
   imageUtilGetCoordsFromPixelValues,
   imageUtilGetConversionFactor
-} from "../image/util";
-import util from "../util/util";
-import wvui from "../ui/ui";
-import uiIndicator from "../ui/indicator";
+} from '../image/util';
+import util from '../util/util';
+import wvui from '../ui/ui';
+import uiIndicator from '../ui/indicator';
 const gifStream = new GifStream();
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
 const maxGifSize = 250;
 const GRATICULE_WARNING =
-  "The graticule layer cannot be used to take a snapshot. Would you " +
-  "like to hide this layer?";
+  'The graticule layer cannot be used to take a snapshot. Would you ' +
+  'like to hide this layer?';
 const PALETTE_WARNING =
-  "One or more layers on the map have been modified (changed palette, " +
-  "thresholds, etc.). These modifications cannot be used to take a " +
-  "snapshot. Would you like to temporarily revert to the original " +
-  "layer(s)?";
+  'One or more layers on the map have been modified (changed palette, ' +
+  'thresholds, etc.). These modifications cannot be used to take a ' +
+  'snapshot. Would you like to temporarily revert to the original ' +
+  'layer(s)?';
 const ROTATE_WARNING =
-  "Image may not be downloaded when rotated. Would you like to reset rotation?";
+  'Image may not be downloaded when rotated. Would you like to reset rotation?';
 
 const resolutionsGeo = {
   values: [
-    { value: "0.125", text: "30m" },
-    { value: "0.25", text: "60m" },
-    { value: "0.5", text: "125m" },
-    { value: "1", text: "250m" },
-    { value: "2", text: "500m" },
-    { value: "4", text: "1km" },
-    { value: "20", text: "5km" },
-    { value: "40", text: "10km" }
+    { value: '0.125', text: '30m' },
+    { value: '0.25', text: '60m' },
+    { value: '0.5', text: '125m' },
+    { value: '1', text: '250m' },
+    { value: '2', text: '500m' },
+    { value: '4', text: '1km' },
+    { value: '20', text: '5km' },
+    { value: '40', text: '10km' }
   ]
 };
 const resolutionsPolar = {
   values: [
-    { value: "1", text: "250m" },
-    { value: "2", text: "500m" },
-    { value: "4", text: "1km" },
-    { value: "20", text: "5km" },
-    { value: "40", text: "10km" }
+    { value: '1', text: '250m' },
+    { value: '2', text: '500m' },
+    { value: '4', text: '1km' },
+    { value: '20', text: '5km' },
+    { value: '40', text: '10km' }
   ]
 };
 
@@ -96,20 +96,20 @@ export function animationGif(models, config, ui) {
    */
   self.init = function() {
     var options;
-    models.anim.events.on("gif-click", setImageCoords);
-    panelCase = document.createElement("div");
-    panelCase.className = "gif-dialog";
+    models.anim.events.on('gif-click', setImageCoords);
+    panelCase = document.createElement('div');
+    panelCase.className = 'gif-dialog';
     throttleSetDownloadButton = lodashThrottle(setDownloadButtonClass, 300, {
       trailing: true
     });
 
     options = {
-      resolution: "1",
+      resolution: '1',
       onSelectionChange: onSelectionChange,
       onClick: getGif,
       valid: true,
       resolutions:
-        models.proj.selected.id === "geographic"
+        models.proj.selected.id === 'geographic'
           ? resolutionsGeo
           : resolutionsPolar,
       onCheck: onchecked,
@@ -128,8 +128,8 @@ export function animationGif(models, config, ui) {
     var state = animModel.rangeState;
 
     if (models.date.maxZoom < 4) {
-      startDate = state.startDate.split("T")[0];
-      endDate = state.endDate.split("T")[0];
+      startDate = state.startDate.split('T')[0];
+      endDate = state.endDate.split('T')[0];
     } else {
       startDate = state.startDate;
       endDate = state.endDate;
@@ -138,7 +138,7 @@ export function animationGif(models, config, ui) {
     return {
       resolution: resolution,
       resolutions:
-        models.proj.selected.id === "geographic"
+        models.proj.selected.id === 'geographic'
           ? resolutionsGeo
           : resolutionsPolar,
       valid: fileSizeValid(),
@@ -157,7 +157,7 @@ export function animationGif(models, config, ui) {
     if (!animationCoordinates) return;
     var numDays, stateObj, dimensions, isGeoProjection;
 
-    isGeoProjection = models.proj.selected.id === "geographic";
+    isGeoProjection = models.proj.selected.id === 'geographic';
     resolution = selectedRes;
     stateObj = animModel.rangeState;
     numDays = util.getNumberOfDays(
@@ -208,14 +208,14 @@ export function animationGif(models, config, ui) {
   var setDownloadButtonClass = function() {
     var $iconCase;
     var boo;
-    $iconCase = $(".wv-dl-gif-bt-case");
+    $iconCase = $('.wv-dl-gif-bt-case');
     if (!$iconCase.length) return;
     boo = fileSizeValid();
 
-    if (!boo && !$iconCase.hasClass("disabled")) {
-      $iconCase.addClass("disabled");
-    } else if (boo && $iconCase.hasClass("disabled")) {
-      $iconCase.removeClass("disabled");
+    if (!boo && !$iconCase.hasClass('disabled')) {
+      $iconCase.addClass('disabled');
+    } else if (boo && $iconCase.hasClass('disabled')) {
+      $iconCase.removeClass('disabled');
     }
   };
 
@@ -247,30 +247,30 @@ export function animationGif(models, config, ui) {
     loader = uiIndicator.loading();
     build = function(stamp, dateStamp, stampHeight) {
       var buildProgressBar = function() {
-        $progress = $("<progress />") // display progress for GIF creation
-          .attr("class", "wv-gif-progress");
+        $progress = $('<progress />') // display progress for GIF creation
+          .attr('class', 'wv-gif-progress');
         wvui
           .getDialog()
           .append($progress)
           .dialog({
             // dialog for progress
-            title: "Collecting Images...",
+            title: 'Collecting Images...',
             width: 300,
             height: 100
           });
-        $progress.attr("value", 0);
+        $progress.attr('value', 0);
       };
       var onGifProgress = function(captureProgress) {
-        $("#timeline-footer").removeClass("wv-anim-active");
-        models.anim.rangeState.state = "off";
+        $('#timeline-footer').removeClass('wv-anim-active');
+        models.anim.rangeState.state = 'off';
 
         if (!progressing) {
           buildProgressBar();
           progressing = true;
           uiIndicator.hide(loader);
-          $progress.parent().dialog("option", "title", "Creating GIF..."); // set dialog title
+          $progress.parent().dialog('option', 'title', 'Creating GIF...'); // set dialog title
         }
-        $progress.attr("value", captureProgress / 100); // before value set, it is in indeterminate state
+        $progress.attr('value', captureProgress / 100); // before value set, it is in indeterminate state
       };
 
       imageArra = getImageArray(startDate, endDate, interval);
@@ -288,20 +288,20 @@ export function animationGif(models, config, ui) {
           waterMarkHeight: stamp.height,
           waterMark: stampHeight > 20 ? stamp : null,
           waterMarkWidth: stamp.width,
-          fontSize: dateStamp.fontSize + "px",
+          fontSize: dateStamp.fontSize + 'px',
           textXCoordinate: dateStamp.x,
           textYCoordinate: dateStamp.y, // date location based on Dimensions
           textAlign: dateStamp.align, // If textXCoordinate is null this takes precedence
-          textBaseline: "top", // If textYCoordinate is null this takes precedence
-          fontColor: "#fff",
-          fontWeight: "300",
-          fontFamily: "Open Sans, sans-serif",
+          textBaseline: 'top', // If textYCoordinate is null this takes precedence
+          fontColor: '#fff',
+          fontWeight: '300',
+          fontFamily: 'Open Sans, sans-serif',
           progressCallback: onGifProgress,
           showFrameText: stampHeight > 20,
           extraLastFrameDelay: 1000,
-          text: "",
+          text: '',
           stroke: {
-            color: "#000",
+            color: '#000',
             pixels: dateStamp.fontSize * 0.05
           },
           pause: 1
@@ -311,7 +311,7 @@ export function animationGif(models, config, ui) {
     };
     stampProps = getStampProps(stampWidthRatio, breakPointOne, stampWidth);
     newImage = svgToPng(
-      "brand/images/wv-logo-w-shadow.svg",
+      'brand/images/wv-logo-w-shadow.svg',
       stampProps.stampHeight
     );
 
@@ -320,7 +320,7 @@ export function animationGif(models, config, ui) {
 
   var svgToPng = function(svgURL, stampHeight) {
     var newImage;
-    var canvasEl = document.createElement("canvas");
+    var canvasEl = document.createElement('canvas');
     var canvgOptions = {
       log: false,
       ignoreMouse: true,
@@ -328,7 +328,7 @@ export function animationGif(models, config, ui) {
     };
     canvg(canvasEl, svgURL, canvgOptions);
     newImage = new Image();
-    newImage.src = canvasEl.toDataURL("image/png");
+    newImage.src = canvasEl.toDataURL('image/png');
     newImage.width = canvasEl.width;
     newImage.height = canvasEl.height;
 
@@ -349,7 +349,7 @@ export function animationGif(models, config, ui) {
         lastRequestedDimensions.h > stampHeight * 1.5
           ? lodashRound(stampHeight * 0.65)
           : 0;
-      dateStamp.align = "left";
+      dateStamp.align = 'left';
       dateStamp.x = imgWidth * 0.01;
       dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.01) - 4;
     } else {
@@ -367,7 +367,7 @@ export function animationGif(models, config, ui) {
           : 0;
       dateStamp.y = imgHeight - (dateStamp.fontSize + imgHeight * 0.01) - 4;
       dateStamp.x = imgWidth * 0.01;
-      dateStamp.align = "left";
+      dateStamp.align = 'left';
     }
     return { stampHeight: stampHeight, dateStamp: dateStamp };
   };
@@ -392,7 +392,7 @@ export function animationGif(models, config, ui) {
     });
     if (models.palettes.inUse()) {
       wvui.ask({
-        header: "Notice",
+        header: 'Notice',
         message: PALETTE_WARNING,
         onOk: function() {
           models.palettes.clear();
@@ -403,15 +403,15 @@ export function animationGif(models, config, ui) {
     }
     if (
       lodashFind(layers, {
-        id: "Graticule"
+        id: 'Graticule'
       }) &&
-      models.proj.selected.id === "geographic"
+      models.proj.selected.id === 'geographic'
     ) {
       wvui.ask({
-        header: "Notice",
+        header: 'Notice',
         message: GRATICULE_WARNING,
         onOk: function() {
-          models.layers.setVisibility("Graticule", false);
+          models.layers.setVisibility('Graticule', false);
           self.getGif();
         }
       });
@@ -419,7 +419,7 @@ export function animationGif(models, config, ui) {
     }
     if (ui.map.selected.getView().getRotation() !== 0.0) {
       wvui.ask({
-        header: "Reset rotation?",
+        header: 'Reset rotation?',
         message: ROTATE_WARNING,
         onOk: function() {
           resetRotation();
@@ -429,7 +429,7 @@ export function animationGif(models, config, ui) {
       });
       return;
     }
-    googleAnalytics.event("Animation", "Click", "Create GIF");
+    googleAnalytics.event('Animation', 'Click', 'Create GIF');
     self.createGIF();
   };
 
@@ -472,7 +472,7 @@ export function animationGif(models, config, ui) {
    *
    */
   var getDimensions = function(lonlat, proj, res) {
-    var conversionFactor = proj === "geographic" ? 0.002197 : 256;
+    var conversionFactor = proj === 'geographic' ? 0.002197 : 256;
     return [
       Math.round(
         Math.abs(lonlat[1][0] - lonlat[0][0]) / conversionFactor / Number(res)
@@ -520,8 +520,8 @@ export function animationGif(models, config, ui) {
       host = config.features.imageDownload.host;
       path = config.parameters.imagegen || config.features.imageDownload.path;
     } else {
-      host = "https://gibs.earthdata.nasa.gov";
-      path = "image-download";
+      host = 'https://gibs.earthdata.nasa.gov';
+      path = 'image-download';
     }
 
     while (current <= toDate) {
@@ -537,30 +537,30 @@ export function animationGif(models, config, ui) {
       opacities = imageUtilGetLayerOpacities(products);
       url = util.format(
         host +
-          "/" +
+          '/' +
           path +
-          "?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}",
-        "TIME={1}",
+          '?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}',
+        'TIME={1}',
         lonlat[0][0] +
-          "," +
+          ',' +
           lonlat[0][1] +
-          "," +
+          ',' +
           lonlat[1][0] +
-          "," +
+          ',' +
           lonlat[1][1],
         epsg,
-        layers.join(","),
-        opacities.join(","),
+        layers.join(','),
+        opacities.join(','),
         imgWidth,
         imgHeight
       );
       src = util.format(url, strDate);
       a.push({
         src: src,
-        text: showDates ? strDate : "",
+        text: showDates ? strDate : '',
         delay: 1000 / interval
       });
-      if (ui.anim.ui.getInterval() === "minute") {
+      if (ui.anim.ui.getInterval() === 'minute') {
         intervalAmount = 10;
       } else {
         intervalAmount = 1;
@@ -591,11 +591,11 @@ export function animationGif(models, config, ui) {
     var headerMsg =
       "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
     var bodyMsg =
-      "Too many frames were selected. Please request less than 40 frames if you would like to generate a GIF";
+      'Too many frames were selected. Please request less than 40 frames if you would like to generate a GIF';
     var callback = function() {
-      $("#timeline-footer").toggleClass("wv-anim-active");
+      $('#timeline-footer').toggleClass('wv-anim-active');
     };
-    wvui.notify(headerMsg + bodyMsg, "Notice", 600, callback);
+    wvui.notify(headerMsg + bodyMsg, 'Notice', 600, callback);
   };
 
   /*
@@ -629,13 +629,13 @@ export function animationGif(models, config, ui) {
    */
   var onGifComplete = function(obj) {
     // callback function for when image is finished
-    $("#timeline-footer").removeClass("wv-anim-active");
-    models.anim.rangeState.state = "off";
+    $('#timeline-footer').removeClass('wv-anim-active');
+    models.anim.rangeState.state = 'off';
     if (!obj.error) {
       const blob = obj.blob;
       $progress.remove();
       progressing = false;
-      var animatedImage = document.createElement("img");
+      var animatedImage = document.createElement('img');
       const blobURL = URL.createObjectURL(blob);
       animatedImage.src = blobURL;
       animatedImage.width =
@@ -647,7 +647,7 @@ export function animationGif(models, config, ui) {
           ? window.innerHeight - 120
           : lastRequestedDimensions.h;
       var dlURL = util.format(
-        "nasa-worldview-{1}-to-{2}.gif",
+        'nasa-worldview-{1}-to-{2}.gif',
         animModel.rangeState.startDate,
         animModel.rangeState.endDate
       );
@@ -655,71 +655,71 @@ export function animationGif(models, config, ui) {
 
       // Create download link and apply button CSS
       var $download = $(
-        "<button><span class=ui-button-text>Download</span></button>"
+        '<button><span class=ui-button-text>Download</span></button>'
       )
-        .attr("class", "wv-button")
+        .attr('class', 'wv-button')
         .hover(
           function() {
-            $(this).addClass("ui-state-hover");
+            $(this).addClass('ui-state-hover');
           },
           function() {
-            $(this).removeClass("ui-state-hover");
+            $(this).removeClass('ui-state-hover');
           }
         )
         .click(function(e) {
           e.preventDefault();
           FileSaver.saveAs(blob, dlURL);
-          googleAnalytics.event("Animation", "Download", "GIF", downloadSize);
+          googleAnalytics.event('Animation', 'Download', 'GIF', downloadSize);
         });
 
       var $catalog =
         "<div class='gif-results-dialog' style='height: " +
         animatedImage.height +
         "px; min-height: 210px;' >" +
-        "<div>" +
-        "<div><b>" +
-        "Size: " +
-        "</b></div>" +
-        "<div>" +
+        '<div>' +
+        '<div><b>' +
+        'Size: ' +
+        '</b></div>' +
+        '<div>' +
         downloadSize +
-        " MB" +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div><b>" +
-        "Speed: " +
-        "</b></div>" +
-        "<div>" +
+        ' MB' +
+        '</div>' +
+        '</div>' +
+        '<div>' +
+        '<div><b>' +
+        'Speed: ' +
+        '</b></div>' +
+        '<div>' +
         animModel.rangeState.speed +
-        " fps" +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div><b>" +
-        "Date Range: " +
-        "</b></div>" +
-        "<div>" +
+        ' fps' +
+        '</div>' +
+        '</div>' +
+        '<div>' +
+        '<div><b>' +
+        'Date Range: ' +
+        '</b></div>' +
+        '<div>' +
         animModel.rangeState.startDate +
-        "</div>" +
-        "<div>" +
-        " - " +
-        "</div>" +
-        "<div>" +
+        '</div>' +
+        '<div>' +
+        ' - ' +
+        '</div>' +
+        '<div>' +
         animModel.rangeState.endDate +
-        "</div>" +
-        "</div>" +
-        "<div>" +
-        "<div><b>" +
-        "Increments: " +
-        "</b></div>" +
-        "<div>" +
+        '</div>' +
+        '</div>' +
+        '<div>' +
+        '<div><b>' +
+        'Increments: ' +
+        '</b></div>' +
+        '<div>' +
         lodashCapitalize(ui.anim.widget.getIncrements()) +
-        "</div>" +
-        "</div>" +
-        "</div>";
-      var $dialogBodyCase = $("<div></div>");
-      $dialogBodyCase.addClass("gif-results-dialog-case clearfix");
-      $dialogBodyCase.css("padding", "10px 0");
+        '</div>' +
+        '</div>' +
+        '</div>';
+      var $dialogBodyCase = $('<div></div>');
+      $dialogBodyCase.addClass('gif-results-dialog-case clearfix');
+      $dialogBodyCase.css('padding', '10px 0');
       $dialogBodyCase.append(animatedImage);
       $dialogBodyCase.append($catalog);
       // calculate the offset of the dialog position based on image size to display it properly
@@ -727,11 +727,11 @@ export function animationGif(models, config, ui) {
       var posWidth = (lastRequestedDimensions.w * 1) / window.innerWidth;
       var posHeight = (lastRequestedDimensions.h * 50) / window.innerHeight;
       var atString =
-        "center-" +
+        'center-' +
         posWidth.toFixed() +
-        "% center-" +
+        '% center-' +
         posHeight.toFixed() +
-        "%";
+        '%';
 
       // Create a dialog over the view and place the image there
       var $imgDialog = wvui
@@ -739,20 +739,20 @@ export function animationGif(models, config, ui) {
         .append($dialogBodyCase)
         .append($download);
       $imgDialog.dialog({
-        dialogClass: "wv-panel wv-gif-results",
-        title: "Your GIF",
+        dialogClass: 'wv-panel wv-gif-results',
+        title: 'Your GIF',
         width: animatedImage.width + 204,
         resizable: false,
         maxWidth: window.innerWidth,
         maxHeight: window.innerHeight,
         close: function() {
-          $imgDialog.find("img").remove();
-          models.anim.rangeState.state = "on";
-          $("#timeline-footer").toggleClass("wv-anim-active");
+          $imgDialog.find('img').remove();
+          models.anim.rangeState.state = 'on';
+          $('#timeline-footer').toggleClass('wv-anim-active');
         },
         position: {
           // based on image size
-          my: "center center",
+          my: 'center center',
           at: atString,
           of: window
         }
@@ -761,12 +761,12 @@ export function animationGif(models, config, ui) {
       var headerMsg =
         "<h3 class='wv-data-unavailable-header'>GIF Not Available</h3>";
       var bodyMsg =
-        "One or more of the frames requested was unable to be processed";
+        'One or more of the frames requested was unable to be processed';
       uiIndicator.hide(loader);
       var callback = function() {
-        $("#timeline-footer").toggleClass("wv-anim-active");
+        $('#timeline-footer').toggleClass('wv-anim-active');
       };
-      wvui.notify(headerMsg + bodyMsg, "Notice", 600, callback);
+      wvui.notify(headerMsg + bodyMsg, 'Notice', 600, callback);
     }
   };
 
@@ -786,24 +786,24 @@ export function animationGif(models, config, ui) {
     $dialogBox = wvui.getDialog();
     $dialogBox.html(panelCase);
     $dialogBox.css({
-      paddingBottom: "10px"
+      paddingBottom: '10px'
     });
     $dialogBox.dialog({
-      dialogClass: "wv-panel wv-image",
-      title: "Create An Animated GIF",
-      height: "auto",
+      dialogClass: 'wv-panel wv-image',
+      title: 'Create An Animated GIF',
+      height: 'auto',
       width: width,
       minHeight: 40,
       minWidth: 287,
       resizable: false,
       show: {
-        effect: "slide",
-        direction: "right"
+        effect: 'slide',
+        direction: 'right'
       },
       position: {
-        my: "left top",
-        at: "right+10 top",
-        of: $(".jcrop-tracker")
+        my: 'left top',
+        at: 'right+10 top',
+        of: $('.jcrop-tracker')
       },
 
       close: onCloseSelector
@@ -812,11 +812,11 @@ export function animationGif(models, config, ui) {
   };
 
   var onCloseSelector = function() {
-    $("#wv-map").insertAfter("#productsHolder"); // retain map element before disabling jcrop
+    $('#wv-map').insertAfter('#productsHolder'); // retain map element before disabling jcrop
     jcropAPI.destroy();
-    $("#timeline-footer").toggleClass("wv-anim-active");
-    if (models.proj.selected.id === "geographic") {
-      ui.map.events.trigger("selectiondone");
+    $('#timeline-footer').toggleClass('wv-anim-active');
+    if (models.proj.selected.id === 'geographic') {
+      ui.map.events.trigger('selectiondone');
     }
   };
 
@@ -866,11 +866,11 @@ export function animationGif(models, config, ui) {
    *
    */
   var removeCrop = function() {
-    $("#wv-map").insertAfter("#productsHolder"); // retain map element before disabling jcrop
+    $('#wv-map').insertAfter('#productsHolder'); // retain map element before disabling jcrop
     animationCoordinates = undefined;
     jcropAPI.destroy();
-    if (models.proj.selected.id === "geographic") {
-      ui.map.events.trigger("selectiondone");
+    if (models.proj.selected.id === 'geographic') {
+      ui.map.events.trigger('selectiondone');
     }
   };
 
@@ -909,10 +909,10 @@ export function animationGif(models, config, ui) {
     if ($dialog) {
       $parent = $dialog.parent();
       $parent.position({
-        my: "left top",
-        at: "right+10 top",
-        collision: "flipfit",
-        of: $(".jcrop-tracker")
+        my: 'left top',
+        at: 'right+10 top',
+        collision: 'flipfit',
+        of: $('.jcrop-tracker')
       });
     }
   };
@@ -936,7 +936,7 @@ export function animationGif(models, config, ui) {
     var fontSize = Math.abs(width / 4); // Font size is 25% width
     fontSize = fontSize < 30 ? 30 : fontSize > 100 ? 100 : fontSize; // Set max and min font-size
 
-    $el.css("font-size", fontSize);
+    $el.css('font-size', fontSize);
   };
 
   var onBoundingBoxChange = function(c, $dialog, $dlButton) {
@@ -984,14 +984,14 @@ export function animationGif(models, config, ui) {
       ];
     }
 
-    if (models.proj.selected.id === "geographic") {
-      ui.map.events.trigger("selecting");
+    if (models.proj.selected.id === 'geographic') {
+      ui.map.events.trigger('selecting');
     }
     starterWidth = previousCoords[0] - previousCoords[2];
     // Start the image cropping. Show the dialog
-    $("#wv-map").Jcrop(
+    $('#wv-map').Jcrop(
       {
-        bgColor: "black",
+        bgColor: 'black',
         bgOpacity: 0.3,
         fullScreen: true,
         setSelect: previousCoords,
@@ -1020,15 +1020,15 @@ export function animationGif(models, config, ui) {
         $dlButton =
           "<div class='wv-dl-gif-bt-case'>" +
           "<i class='fa fa-download'>" +
-          "</div>";
+          '</div>';
         jcropAPI = this;
-        $("#timeline-footer").toggleClass("wv-anim-active");
+        $('#timeline-footer').toggleClass('wv-anim-active');
         $dialog = getSelectorDialog(342);
-        $tracker = this.ui.selection.find(".jcrop-tracker");
+        $tracker = this.ui.selection.find('.jcrop-tracker');
         $tracker.append($dlButton);
-        $dlButton = $(".wv-dl-gif-bt-case i");
+        $dlButton = $('.wv-dl-gif-bt-case i');
         setIconFontSize($dlButton, starterWidth);
-        $dlButton.on("click", getGif);
+        $dlButton.on('click', getGif);
       }
     );
 

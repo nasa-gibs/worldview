@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import util from "../../util/util";
+import React from 'react';
+import PropTypes from 'prop-types';
+import util from '../../util/util';
 
 /*
  * A react component, is a draggable svg
@@ -30,9 +30,9 @@ class DateInputColumn extends React.Component {
     var size;
     var type;
     type = this.props.type;
-    if (type === "year") {
-      size = "4";
-    } else if (type === "day") {
+    if (type === 'year') {
+      size = '4';
+    } else if (type === 'day') {
       size = 2;
     } else {
       size = 3;
@@ -70,26 +70,26 @@ class DateInputColumn extends React.Component {
       this.onClickDown();
       return;
     }
-    if (e.type === "focusout" || entered) {
-      if (this.props.type === "year" || this.props.type === "day") {
+    if (e.type === 'focusout' || entered) {
+      if (this.props.type === 'year' || this.props.type === 'day') {
         if (!((keyCode >= 48 && keyCode <= 57) || entered || keyCode === 8)) {
           return;
         }
       }
       switch (this.props.type) {
-        case "year":
+        case 'year':
           newDate = this.yearValidation(value);
           break;
-        case "month":
+        case 'month':
           newDate = this.monthValidation(value);
           break;
-        case "day":
+        case 'day':
           newDate = this.dayValidation(value);
           break;
-        case "hour":
+        case 'hour':
           newDate = this.hourValidation(value);
           break;
-        case "minute":
+        case 'minute':
           newDate = this.minuteValidation(value);
           break;
       }
@@ -107,7 +107,7 @@ class DateInputColumn extends React.Component {
     }
   }
   onClickUp() {
-    if (this.props.type === "minute") {
+    if (this.props.type === 'minute') {
       this.rollDate(10);
     } else {
       this.rollDate(1);
@@ -117,7 +117,7 @@ class DateInputColumn extends React.Component {
     });
   }
   onClickDown() {
-    if (this.props.type === "minute") {
+    if (this.props.type === 'minute') {
       this.rollDate(-10);
     } else {
       this.rollDate(-1);
@@ -232,8 +232,8 @@ class DateInputColumn extends React.Component {
   render() {
     return (
       <div
-        className={"input-wrapper" + " input-wrapper-" + this.props.type}
-        style={this.state.valid ? {} : { borderColor: "#ff0000" }}
+        className={'input-wrapper' + ' input-wrapper-' + this.props.type}
+        style={this.state.valid ? {} : { borderColor: '#ff0000' }}
       >
         <div
           onClick={this.onClickUp.bind(this)}
@@ -259,7 +259,7 @@ class DateInputColumn extends React.Component {
           onKeyDown={this.onKeyPress.bind(this) /* currently not working */}
           onChange={this.onChange.bind(this)}
           style={
-            this.props.fontSize ? { fontSize: this.props.fontSize + "px" } : {}
+            this.props.fontSize ? { fontSize: this.props.fontSize + 'px' } : {}
           }
           step={this.props.step}
           onBlur={this.blur.bind(this)}

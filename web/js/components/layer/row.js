@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { ListGroup, ListGroupItem } from "reactstrap";
-import util from "../../util/util.js";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { ListGroup, ListGroupItem } from 'reactstrap';
+import util from '../../util/util.js';
 
 /**
  * A single layer search result row
@@ -67,81 +67,81 @@ class LayerRow extends React.Component {
    */
   dateRangeText(layer) {
     var startDate, startDateId, endDate, endDateId;
-    var dateRange = "";
+    var dateRange = '';
     if (layer.startDate) {
       startDate = util.parseDate(layer.startDate);
-      if (layer.period === "subdaily") {
+      if (layer.period === 'subdaily') {
         startDate =
           startDate.getDate() +
-          " " +
+          ' ' +
           util.giveMonth(startDate) +
-          " " +
+          ' ' +
           startDate.getFullYear() +
-          " " +
-          util.pad(startDate.getHours(), 2, "0") +
-          ":" +
-          util.pad(startDate.getMinutes(), 2, "0");
-      } else if (layer.period === "yearly") {
+          ' ' +
+          util.pad(startDate.getHours(), 2, '0') +
+          ':' +
+          util.pad(startDate.getMinutes(), 2, '0');
+      } else if (layer.period === 'yearly') {
         startDate = startDate.getFullYear();
-      } else if (layer.period === "monthly") {
-        startDate = util.giveMonth(startDate) + " " + startDate.getFullYear();
+      } else if (layer.period === 'monthly') {
+        startDate = util.giveMonth(startDate) + ' ' + startDate.getFullYear();
       } else {
         startDate =
           startDate.getDate() +
-          " " +
+          ' ' +
           util.giveMonth(startDate) +
-          " " +
+          ' ' +
           startDate.getFullYear();
       }
-      if (layer.id) startDateId = layer.id + "-startDate";
+      if (layer.id) startDateId = layer.id + '-startDate';
 
       if (layer.endDate) {
         endDate = util.parseDate(layer.endDate);
-        if (layer.period === "subdaily") {
+        if (layer.period === 'subdaily') {
           endDate =
             endDate.getDate() +
-            " " +
+            ' ' +
             util.giveMonth(endDate) +
-            " " +
+            ' ' +
             endDate.getFullYear() +
-            " " +
-            util.pad(endDate.getHours(), 2, "0") +
-            ":" +
-            util.pad(endDate.getMinutes(), 2, "0");
-        } else if (layer.period === "yearly") {
+            ' ' +
+            util.pad(endDate.getHours(), 2, '0') +
+            ':' +
+            util.pad(endDate.getMinutes(), 2, '0');
+        } else if (layer.period === 'yearly') {
           endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
           endDate = endDate.getFullYear();
-        } else if (layer.period === "monthly") {
+        } else if (layer.period === 'monthly') {
           endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
-          endDate = util.giveMonth(endDate) + " " + endDate.getFullYear();
+          endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
         } else {
           if (
             layer.dateRanges &&
-            layer.dateRanges.slice(-1)[0].dateInterval !== "1"
+            layer.dateRanges.slice(-1)[0].dateInterval !== '1'
           ) {
             endDate = new Date(endDate.setTime(endDate.getTime() - 86400000));
           }
           endDate =
             endDate.getDate() +
-            " " +
+            ' ' +
             util.giveMonth(endDate) +
-            " " +
+            ' ' +
             endDate.getFullYear();
         }
       } else {
-        endDate = "Present";
+        endDate = 'Present';
       }
-      if (layer.id) endDateId = layer.id + "-endDate";
+      if (layer.id) endDateId = layer.id + '-endDate';
       dateRange =
         'Temporal coverage: <span class="layer-date-start" id=' +
         startDateId +
-        ">" +
+        '>' +
         startDate +
         '</span> - <span class="layer-end-date" id=' +
         endDateId +
-        ">" +
+        '>' +
         endDate +
-        "</span>";
+        '</span>';
     }
 
     return dateRange;
@@ -183,7 +183,7 @@ class LayerRow extends React.Component {
         // check for any overlap
         var previousEnd = util.parseDate(previous.endDate);
         // Add dateInterval
-        if (previous.dateInterval > 1 && period === "daily") {
+        if (previous.dateInterval > 1 && period === 'daily') {
           previousEnd = new Date(
             previousEnd.setTime(
               previousEnd.getTime() +
@@ -191,13 +191,13 @@ class LayerRow extends React.Component {
             )
           );
         }
-        if (period === "monthly") {
+        if (period === 'monthly') {
           previousEnd = new Date(
             previousEnd.setMonth(
               previousEnd.getMonth() + (previous.dateInterval - 1)
             )
           );
-        } else if (period === "yearly") {
+        } else if (period === 'yearly') {
           previousEnd = new Date(
             previousEnd.setFullYear(
               previousEnd.getFullYear() + (previous.dateInterval - 1)
@@ -246,7 +246,7 @@ class LayerRow extends React.Component {
     var { layer } = this.props;
     var { title, description, subtitle, metadata } = layer;
     var listItems;
-    var headerClass = "layers-all-header has-checkbox";
+    var headerClass = 'layers-all-header has-checkbox';
     if (layer.dateRanges && layer.dateRanges.length > 1) {
       let firstDateRange = true;
 
@@ -262,47 +262,47 @@ class LayerRow extends React.Component {
             let listItemStartDate;
             let listItemEndDate;
 
-            if (layer.period === "subdaily") {
+            if (layer.period === 'subdaily') {
               listItemStartDate =
                 startDate.getDate() +
-                " " +
+                ' ' +
                 util.giveMonth(startDate) +
-                " " +
+                ' ' +
                 startDate.getFullYear() +
-                " " +
-                util.pad(startDate.getHours(), 2, "0") +
-                ":" +
-                util.pad(startDate.getMinutes(), 2, "0");
+                ' ' +
+                util.pad(startDate.getHours(), 2, '0') +
+                ':' +
+                util.pad(startDate.getMinutes(), 2, '0');
 
               listItemEndDate =
                 endDate.getDate() +
-                " " +
+                ' ' +
                 util.giveMonth(endDate) +
-                " " +
+                ' ' +
                 endDate.getDate() +
-                " " +
+                ' ' +
                 util.giveMonth(endDate) +
-                " " +
+                ' ' +
                 endDate.getFullYear() +
-                " " +
-                util.pad(endDate.getHours(), 2, "0") +
-                ":" +
-                util.pad(endDate.getMinutes(), 2, "0");
+                ' ' +
+                util.pad(endDate.getHours(), 2, '0') +
+                ':' +
+                util.pad(endDate.getMinutes(), 2, '0');
 
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
-                  listItemEndDate = "Present";
+                  listItemEndDate = 'Present';
                 }
                 firstDateRange = false;
               }
 
               return (
-                <ListGroupItem key={l.startDate + " - " + l.endDate}>
-                  {listItemStartDate + " - " + listItemEndDate}
+                <ListGroupItem key={l.startDate + ' - ' + l.endDate}>
+                  {listItemStartDate + ' - ' + listItemEndDate}
                 </ListGroupItem>
               );
-            } else if (layer.period === "yearly") {
-              if (l.dateInterval === "1" && l.startDate === l.endDate) {
+            } else if (layer.period === 'yearly') {
+              if (l.dateInterval === '1' && l.startDate === l.endDate) {
                 listItemStartDate = startDate.getFullYear();
 
                 return (
@@ -312,7 +312,7 @@ class LayerRow extends React.Component {
                 );
               } else {
                 listItemStartDate = startDate.getFullYear();
-                if (l.dateInterval !== "1") {
+                if (l.dateInterval !== '1') {
                   listItemEndDate = new Date(
                     endDate.setFullYear(
                       endDate.getFullYear() - 1 + l.dateInterval
@@ -323,21 +323,21 @@ class LayerRow extends React.Component {
 
                 if (firstDateRange) {
                   if (layer.endDate === undefined) {
-                    listItemEndDate = "Present";
+                    listItemEndDate = 'Present';
                   }
                   firstDateRange = false;
                 }
 
                 return (
                   <ListGroupItem key={l.startDate}>
-                    {listItemStartDate + " - " + listItemEndDate}
+                    {listItemStartDate + ' - ' + listItemEndDate}
                   </ListGroupItem>
                 );
               }
-            } else if (layer.period === "monthly") {
-              if (l.dateInterval === "1" && l.startDate === l.endDate) {
+            } else if (layer.period === 'monthly') {
+              if (l.dateInterval === '1' && l.startDate === l.endDate) {
                 listItemStartDate =
-                  util.giveMonth(startDate) + " " + startDate.getFullYear();
+                  util.giveMonth(startDate) + ' ' + startDate.getFullYear();
 
                 return (
                   <ListGroupItem key={l.startDate}>
@@ -346,50 +346,50 @@ class LayerRow extends React.Component {
                 );
               } else {
                 listItemStartDate =
-                  util.giveMonth(startDate) + " " + startDate.getFullYear();
-                if (l.dateInterval !== "1") {
+                  util.giveMonth(startDate) + ' ' + startDate.getFullYear();
+                if (l.dateInterval !== '1') {
                   listItemEndDate = new Date(
                     endDate.setMonth(endDate.getMonth() - 1 + l.dateInterval)
                   );
                 }
                 listItemEndDate =
-                  util.giveMonth(endDate) + " " + endDate.getFullYear();
+                  util.giveMonth(endDate) + ' ' + endDate.getFullYear();
 
                 if (firstDateRange) {
                   if (layer.endDate === undefined) {
-                    listItemEndDate = "Present";
+                    listItemEndDate = 'Present';
                   }
                   firstDateRange = false;
                 }
 
                 return (
                   <ListGroupItem key={l.startDate}>
-                    {listItemStartDate + " - " + listItemEndDate}
+                    {listItemStartDate + ' - ' + listItemEndDate}
                   </ListGroupItem>
                 );
               }
             } else if (layer.period) {
-              if (l.dateInterval === "1" && l.startDate === l.endDate) {
+              if (l.dateInterval === '1' && l.startDate === l.endDate) {
                 let listItemStartDate =
                   startDate.getDate() +
-                  " " +
+                  ' ' +
                   util.giveMonth(startDate) +
-                  " " +
+                  ' ' +
                   startDate.getFullYear();
 
                 return (
-                  <ListGroupItem key={l.startDate + " - " + l.endDate}>
+                  <ListGroupItem key={l.startDate + ' - ' + l.endDate}>
                     {listItemStartDate}
                   </ListGroupItem>
                 );
               } else {
                 let listItemStartDate =
                   startDate.getDate() +
-                  " " +
+                  ' ' +
                   util.giveMonth(startDate) +
-                  " " +
+                  ' ' +
                   startDate.getFullYear();
-                if (l.dateInterval !== "1") {
+                if (l.dateInterval !== '1') {
                   listItemEndDate = new Date(
                     endDate.setTime(
                       endDate.getTime() - 86400000 + l.dateInterval * 86400000
@@ -398,21 +398,21 @@ class LayerRow extends React.Component {
                 }
                 listItemEndDate =
                   endDate.getDate() +
-                  " " +
+                  ' ' +
                   util.giveMonth(endDate) +
-                  " " +
+                  ' ' +
                   endDate.getFullYear();
 
                 if (firstDateRange) {
                   if (layer.endDate === undefined) {
-                    listItemEndDate = "Present";
+                    listItemEndDate = 'Present';
                   }
                   firstDateRange = false;
                 }
 
                 return (
-                  <ListGroupItem key={l.startDate + " - " + l.endDate}>
-                    {listItemStartDate + " - " + listItemEndDate}
+                  <ListGroupItem key={l.startDate + ' - ' + l.endDate}>
+                    {listItemStartDate + ' - ' + listItemEndDate}
                   </ListGroupItem>
                 );
               }
@@ -420,7 +420,7 @@ class LayerRow extends React.Component {
           });
       }
     }
-    if (checked) headerClass += " checked";
+    if (checked) headerClass += ' checked';
 
     return (
       <div className="layers-all-layer">
@@ -438,46 +438,46 @@ class LayerRow extends React.Component {
         </div>
         {isMetadataExpanded &&
           metadata && (
-            <div className="source-metadata visible">
-              {layer.startDate && (
-                <p className="layer-date-range">
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: this.dateRangeText(layer)
-                    }}
-                  />
-                  {layer.dateRanges &&
+          <div className="source-metadata visible">
+            {layer.startDate && (
+              <p className="layer-date-range">
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: this.dateRangeText(layer)
+                  }}
+                />
+                {layer.dateRanges &&
                     layer.dateRanges.length > 1 &&
                     dateRanges.overlap === false && (
-                      <a
-                        id="layer-date-ranges-button"
-                        title="View all date ranges"
-                        className="layer-date-ranges-button"
-                        onClick={e => this.toggleDateRanges(e)}
-                      >
-                        {" "}
-                        <sup>*View Dates</sup>
-                      </a>
-                    )}
-                </p>
-              )}
-              {isDateRangesExpanded && (
-                <div className="layer-date-wrap">
-                  <p>Date Ranges:</p>
-                  <ListGroup className="layer-date-ranges">
-                    {listItems}
-                  </ListGroup>
-                </div>
-              )}
-              <div dangerouslySetInnerHTML={{ __html: metadata }} />
-              <div
-                className="metadata-more"
-                onClick={e => this.toggleMetadataButtons(e)}
-              >
-                <span className="ellipsis up">^</span>
+                  <a
+                    id="layer-date-ranges-button"
+                    title="View all date ranges"
+                    className="layer-date-ranges-button"
+                    onClick={e => this.toggleDateRanges(e)}
+                  >
+                    {' '}
+                    <sup>*View Dates</sup>
+                  </a>
+                )}
+              </p>
+            )}
+            {isDateRangesExpanded && (
+              <div className="layer-date-wrap">
+                <p>Date Ranges:</p>
+                <ListGroup className="layer-date-ranges">
+                  {listItems}
+                </ListGroup>
               </div>
+            )}
+            <div dangerouslySetInnerHTML={{ __html: metadata }} />
+            <div
+              className="metadata-more"
+              onClick={e => this.toggleMetadataButtons(e)}
+            >
+              <span className="ellipsis up">^</span>
             </div>
-          )}
+          </div>
+        )}
       </div>
     );
   }

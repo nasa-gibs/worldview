@@ -1,13 +1,13 @@
-import $ from "jquery";
-import "jquery-ui/button";
-import "jquery-ui/dialog";
-import olProj from "ol/proj";
-import ImageResSelection from "../components/image-panel/select";
-import googleAnalytics from "../components/util/google-analytics";
-import util from "../util/util";
-import wvui from "../ui/ui";
-import React from "react";
-import ReactDOM from "react-dom";
+import $ from 'jquery';
+import 'jquery-ui/button';
+import 'jquery-ui/dialog';
+import olProj from 'ol/proj';
+import ImageResSelection from '../components/image-panel/select';
+import googleAnalytics from '../components/util/google-analytics';
+import util from '../util/util';
+import wvui from '../ui/ui';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 import {
   imageUtilCalculateResolution,
@@ -15,42 +15,42 @@ import {
   imageUtilGetCoordsFromPixelValues,
   imageUtilGetLayers,
   imageUtilGetConversionFactor
-} from "./util";
+} from './util';
 
 const resolutionsGeo = {
   values: [
-    { value: "0.125", text: "30m" },
-    { value: "0.25", text: "60m" },
-    { value: "0.5", text: "125m" },
-    { value: "1", text: "250m" },
-    { value: "2", text: "500m" },
-    { value: "4", text: "1km" },
-    { value: "20", text: "5km" },
-    { value: "40", text: "10km" }
+    { value: '0.125', text: '30m' },
+    { value: '0.25', text: '60m' },
+    { value: '0.5', text: '125m' },
+    { value: '1', text: '250m' },
+    { value: '2', text: '500m' },
+    { value: '4', text: '1km' },
+    { value: '20', text: '5km' },
+    { value: '40', text: '10km' }
   ]
 };
 const resolutionsPolar = {
   values: [
-    { value: "1", text: "250m" },
-    { value: "2", text: "500m" },
-    { value: "4", text: "1km" },
-    { value: "20", text: "5km" },
-    { value: "40", text: "10km" }
+    { value: '1', text: '250m' },
+    { value: '2', text: '500m' },
+    { value: '4', text: '1km' },
+    { value: '20', text: '5km' },
+    { value: '40', text: '10km' }
   ]
 };
 const fileTypesGeo = {
   values: [
-    { value: "image/jpeg", text: "JPEG" },
-    { value: "image/png", text: "PNG" },
-    { value: "image/geotiff", text: "GeoTIFF" },
-    { value: "image/kmz", text: "KMZ" }
+    { value: 'image/jpeg', text: 'JPEG' },
+    { value: 'image/png', text: 'PNG' },
+    { value: 'image/geotiff', text: 'GeoTIFF' },
+    { value: 'image/kmz', text: 'KMZ' }
   ]
 };
 const fileTypesPolar = {
   values: [
-    { value: "image/jpeg", text: "JPEG" },
-    { value: "image/png", text: "PNG" },
-    { value: "image/geotiff", text: "GeoTIFF" }
+    { value: 'image/jpeg', text: 'JPEG' },
+    { value: 'image/png', text: 'PNG' },
+    { value: 'image/geotiff', text: 'GeoTIFF' }
   ]
 };
 
@@ -61,17 +61,17 @@ export function imagePanel(models, ui, config, dialogConfig) {
   var url;
   var alignTo = config.alignTo;
   var coords;
-  var resolution = "1";
+  var resolution = '1';
   var lastZoom = -1;
   var htmlElements;
   var host;
   var path;
-  var containerId = "wv-image-button";
+  var containerId = 'wv-image-button';
   var id = containerId;
   // state items as global vars
   var lonlats;
-  var imgWorldfile = "false";
-  var imgFormat = "image/jpeg";
+  var imgWorldfile = 'false';
+  var imgFormat = 'image/jpeg';
   var imgWidth;
   var imgHeight;
   var imgRes;
@@ -83,19 +83,19 @@ export function imagePanel(models, ui, config, dialogConfig) {
     host = config.features.imageDownload.host;
     path = config.parameters.imagegen || config.features.imageDownload.path;
   } else {
-    host = "http://map2.vis.earthdata.nasa.gov";
-    path = "imagegen/index.php";
+    host = 'http://map2.vis.earthdata.nasa.gov';
+    path = 'imagegen/index.php';
   }
-  url = host + "/" + path + "?";
+  url = host + '/' + path + '?';
 
   if (config.parameters.imagegen) {
-    util.warn("Redirecting image download to: " + url);
+    util.warn('Redirecting image download to: ' + url);
   }
 
   var init = function() {
     var options;
     checkConfig();
-    htmlElements = document.createElement("div");
+    htmlElements = document.createElement('div');
     setProjectionGlobals();
     options = {
       resolution: resolution,
@@ -108,11 +108,14 @@ export function imagePanel(models, ui, config, dialogConfig) {
       fileTypes: fileTypes
     };
 
-    self.reactComponent = renderPanel(options, htmlElements);
-    models.proj.events.on("select", setProjectionGlobals);
+    self.reactComponent = ReactDOM.render(
+      React.createElement(ImageResSelection, options),
+      htmlElements
+    );
+    models.proj.events.on('select', setProjectionGlobals);
   };
   var setProjectionGlobals = function() {
-    var isGeoProjection = models.proj.selected.id === "geographic";
+    var isGeoProjection = models.proj.selected.id === 'geographic';
     var curZoom = Math.round(ui.map.selected.getView().getZoom());
     imgRes = imageUtilCalculateResolution(
       curZoom,
@@ -139,13 +142,13 @@ export function imagePanel(models, ui, config, dialogConfig) {
       host = config.features.imageDownload.host;
       path = config.parameters.imagegen || config.features.imageDownload.path;
     } else {
-      host = "http://map2.vis.earthdata.nasa.gov";
-      path = "imagegen/index.php";
+      host = 'http://map2.vis.earthdata.nasa.gov';
+      path = 'imagegen/index.php';
     }
-    url = host + "/" + path + "?";
+    url = host + '/' + path + '?';
 
     if (config.parameters.imagegen) {
-      util.warn("Redirecting image download to: " + url);
+      util.warn('Redirecting image download to: ' + url);
     }
   };
   var getUpdatedProps = function() {
@@ -162,12 +165,6 @@ export function imagePanel(models, ui, config, dialogConfig) {
       fileType: imgFormat
     };
   };
-  var renderPanel = function(options, mountEl) {
-    return ReactDOM.render(
-      React.createElement(ImageResSelection, options),
-      mountEl
-    );
-  };
   var updatePanel = function(options) {
     self.reactComponent.setState(options);
   };
@@ -178,7 +175,7 @@ export function imagePanel(models, ui, config, dialogConfig) {
    */
   self.show = function() {
     alignTo = {
-      id: "wv-image-button"
+      id: 'wv-image-button'
     };
     container = document.getElementById(containerId);
 
@@ -186,14 +183,14 @@ export function imagePanel(models, ui, config, dialogConfig) {
       throw new Error("Error: element '" + containerId + "' not found!");
     }
 
-    container.setAttribute("class", "imagedownload");
+    container.setAttribute('class', 'imagedownload');
 
     var $dialog = wvui.getDialog().html(htmlElements);
     $dialog.dialog(dialogConfig);
     // $("#wv-image-resolution").buttonset();
     // $("#wv-image-format").buttonset();
-    $("#wv-image-download-button").button();
-    $(".ui-dialog").zIndex(600);
+    $('#wv-image-download-button').button();
+    $('.ui-dialog').zIndex(600);
     $(window).resize(setPosition);
 
     // Auto-set default resolution to map's current zoom level; round it
@@ -203,7 +200,7 @@ export function imagePanel(models, ui, config, dialogConfig) {
     // preserve their existing settings
     if (curZoom !== lastZoom) {
       lastZoom = curZoom;
-      let isGeoProjection = models.proj.selected.id === "geographic";
+      let isGeoProjection = models.proj.selected.id === 'geographic';
       imgRes = imageUtilCalculateResolution(
         curZoom,
         isGeoProjection,
@@ -213,13 +210,13 @@ export function imagePanel(models, ui, config, dialogConfig) {
     }
 
     wvui.positionDialog($dialog, {
-      my: "right top",
-      at: "right bottom+5",
-      of: "#wv-image-button"
+      my: 'right top',
+      at: 'right bottom+5',
+      of: '#wv-image-button'
     });
-    $dialog.dialog("open");
+    $dialog.dialog('open');
 
-    $(".wv-image-coords").show();
+    $('.wv-image-coords').show();
   };
 
   self.update = function(c) {
@@ -240,8 +237,8 @@ export function imagePanel(models, ui, config, dialogConfig) {
 
       lonlats = imageUtilGetCoordsFromPixelValues(pixels, map);
 
-      geolonlat1 = olProj.transform(lonlats[0], crs, "EPSG:4326");
-      geolonlat2 = olProj.transform(lonlats[1], crs, "EPSG:4326");
+      geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+      geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
       minLon = geolonlat1[0];
       maxLon = geolonlat2[0];
@@ -287,10 +284,10 @@ export function imagePanel(models, ui, config, dialogConfig) {
     topRightCoordinates
   ) {
     if (x2 - x1 < 150) {
-      bottomLeftCoordinates = "";
-      topRightCoordinates = "";
+      bottomLeftCoordinates = '';
+      topRightCoordinates = '';
     }
-    $("#wv-image-top")
+    $('#wv-image-top')
       .css({
         left: x1 - 10,
         top: y1 - 20,
@@ -298,7 +295,7 @@ export function imagePanel(models, ui, config, dialogConfig) {
       })
       .html(topRightCoordinates);
 
-    $("#wv-image-bottom")
+    $('#wv-image-bottom')
       .css({
         left: x1,
         top: y2,
@@ -327,12 +324,12 @@ export function imagePanel(models, ui, config, dialogConfig) {
   };
 
   var setPosition = function() {
-    var offset = $("#" + alignTo.id).offset();
+    var offset = $('#' + alignTo.id).offset();
     var left =
       offset.left +
-      parseInt($("#" + alignTo.id).css("width")) -
-      parseInt($("#" + id).css("width"));
-    $("#" + id).css("left", left + "px");
+      parseInt($('#' + alignTo.id).css('width')) -
+      parseInt($('#' + id).css('width'));
+    $('#' + id).css('left', left + 'px');
   };
 
   var createDownloadURL = function(
@@ -349,21 +346,21 @@ export function imagePanel(models, ui, config, dialogConfig) {
     time.setUTCHours(0, 0, 0, 0);
     layers = imageUtilGetLayers(products, models.proj.selected.id);
     // Julian date, padded with two zeros (to ensure the julian date is always in DDD format).
-    jStart = util.parseDateUTC(time.getUTCFullYear() + "-01-01");
-    jDate = "00" + (1 + Math.ceil((time.getTime() - jStart) / 86400000));
-    dlURL += "TIME=" + time.getUTCFullYear() + jDate.substr(jDate.length - 3);
+    jStart = util.parseDateUTC(time.getUTCFullYear() + '-01-01');
+    jDate = '00' + (1 + Math.ceil((time.getTime() - jStart) / 86400000));
+    dlURL += 'TIME=' + time.getUTCFullYear() + jDate.substr(jDate.length - 3);
     dlURL +=
-      "&extent=" +
+      '&extent=' +
       lonlats[0][0] +
-      "," +
+      ',' +
       lonlats[0][1] +
-      "," +
+      ',' +
       lonlats[1][0] +
-      "," +
+      ',' +
       lonlats[1][1];
-    dlURL += "&epsg=" + epsg;
-    dlURL += "&layers=" + layers.join(",");
-    dlURL += "&opacities=" + opacities.join(",");
+    dlURL += '&epsg=' + epsg;
+    dlURL += '&layers=' + layers.join(',');
+    dlURL += '&opacities=' + opacities.join(',');
 
     return dlURL;
   };
@@ -384,32 +381,32 @@ export function imagePanel(models, ui, config, dialogConfig) {
       imageUtilGetLayerOpacities(products),
       url
     );
-    googleAnalytics.event("Image Download", "Click", "Download");
+    googleAnalytics.event('Image Download', 'Click', 'Download');
     util.metrics(
-      "lc=" +
+      'lc=' +
         encodeURIComponent(
           dlURL +
-            "&worldfile=" +
+            '&worldfile=' +
             imgWorldfile +
-            "&format=" +
+            '&format=' +
             imgFormat +
-            "&width=" +
+            '&width=' +
             imgWidth +
-            "&height=" +
+            '&height=' +
             imgHeight
         )
     );
     window.open(
       dlURL +
-        "&worldfile=" +
+        '&worldfile=' +
         imgWorldfile +
-        "&format=" +
+        '&format=' +
         imgFormat +
-        "&width=" +
+        '&width=' +
         imgWidth +
-        "&height=" +
+        '&height=' +
         imgHeight,
-      "_blank"
+      '_blank'
     );
   };
 

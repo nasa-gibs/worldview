@@ -59,7 +59,8 @@
         "space-before-function-paren": "off",
         "react/no-danger": "warn",
         "react/prop-types": "warn",
-        "react/no-did-update-set-state": "warn"
+        "react/no-did-update-set-state": "warn",
+        "react/no-render-return-value": "warn"
       }
     }
   ]

@@ -2,7 +2,7 @@ import React from 'react';
 import SelectionList from '../util/selector';
 import { GifPanelGrid } from './gif-panel-grid';
 import Button from '../util/button';
-import {Checkbox} from '../util/checkbox';
+import { Checkbox } from '../util/checkbox';
 import PropTypes from 'prop-types';
 
 /*
@@ -36,13 +36,13 @@ export default class GifPanel extends React.Component {
   render() {
     return (
       <div className="animation-gif-dialog-wrapper">
-        <div className='gif-selector-case'>
+        <div className="gif-selector-case">
           {this.props.firstLabel}
           <SelectionList
-            id='gif-resolution'
+            id="gif-resolution"
             optionArray={this.state.resolutions}
             value={this.state.resolution}
-            optionName='resolution'
+            optionName="resolution"
             onChange={this.handleChange.bind(this)}
           />
         </div>
@@ -60,16 +60,16 @@ export default class GifPanel extends React.Component {
         />
         <Button
           onClick={this.props.onClick}
-          text='Create GIF'
+          text="Create GIF"
           valid={this.state.valid}
         />
         <Checkbox
           id="wv-checkbox-gif"
           classNames="wv-checkbox-gif"
-          title='Check box to remove dates from Animating GIF'
+          title="Check box to remove dates from Animating GIF"
           checked={this.props.checked}
           onCheck={this.props.onCheck}
-          label='Include Date Stamps'
+          label="Include Date Stamps"
         />
       </div>
     );

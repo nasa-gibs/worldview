@@ -103,10 +103,11 @@ export function mapDateLineBuilder(models, config) {
       overlay: overlay,
       tooltip: tooltip
     };
-    return ReactDOM.render(
+    var component = ReactDOM.render(
       React.createElement(ReactComponent, props),
       reactCase
     );
+    return component;
   };
 
   /*
