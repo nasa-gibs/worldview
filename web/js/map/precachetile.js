@@ -43,6 +43,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
     });
     return new Promise(function(resolve) {
       Promise.all(promiseArray).then(function() {
+        console.log(date);
         resolve(date);
       });
     });
@@ -163,42 +164,47 @@ export function mapPrecacheTile(models, config, cache, parent) {
       if (!extent) {
         resolve('resolve tile layer');
       }
-      if (layer.type === 'VECTOR_TILE') {
-        resolve(); // No need to look up tiles, vectors can resolve ASAP
-      }
       projection = viewState.projection;
       i = 0;
-      renderer = new OlRendererCanvasTileLayer(layer);
-      tileSource = layer.getSource();
-      tileGrid = tileSource.getTileGridForProjection(projection);
-      currentZ = tileGrid.getZForResolution(
-        viewState.resolution,
-        renderer.zDirection
-      );
-      tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
-        var tile;
-        tile = tileSource.getTile(
-          tileCoord[0],
-          tileCoord[1],
-          tileCoord[2],
-          pixelRatio,
-          projection
+      if (layer.type === 'VECTOR_TILE') {
+        // No need to look up tiles, vectors can resolve ASAP
+        resolve();
+      } else {
+        renderer = new OlRendererCanvasTileLayer(layer);
+        tileSource = layer.getSource();
+        tileGrid = tileSource.getTileGridForProjection(projection);
+        currentZ = tileGrid.getZForResolution(
+          viewState.resolution,
+          renderer.zDirection
         );
-        tile.load();
-        var loader = function(e) {
-          if (e.type === 'tileloadend') {
-            --i;
-            if (i === 0) {
-              resolve();
+        tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
+          var tile;
+          tile = tileSource.getTile(
+            tileCoord[0],
+            tileCoord[1],
+            tileCoord[2],
+            pixelRatio,
+            projection
+          );
+          tile.load();
+          var loader = function(e) {
+            if (e.type === 'tileloadend') {
+              --i;
+              if (i === 0) {
+                resolve();
+              }
+            } else {
+              reject(new Error('No response at this URL'));
+              // resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
             }
             this.un('tileloadend', loader); // remove event listeners from memory
             this.un('tileloaderror', loader);
-          }
+          };
           tileSource.on('tileloadend', loader);
           tileSource.on('tileloaderror', loader);
           ++i;
-        };
-      });
+        });
+      }
     });
   };
   return self;
