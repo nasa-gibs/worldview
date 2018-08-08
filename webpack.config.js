@@ -49,41 +49,40 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            compact: false
+          }
+        }
+      },
+      {
+        test: /\.css$/,
         use: [{
           loader: MiniCssExtractPlugin.loader
         },
         {
-          loader: 'css-loader', // translates CSS into CommonJS modules
-          options: {
-            url: false
-          }
+          loader: 'css-loader',
+          options: { importLoaders: 1 }
         },
         {
           loader: 'postcss-loader', // Run post css actions
           options: {
-            plugins: function () { // post css plugins
-              return [
-                require('postcss-import'),
-                require('precss'),
-                require('autoprefixer')
-              ];
-            }
+            plugins: [
+              require('autoprefixer')({
+                // handle browserlist restrictions
+                'browsers': ['last 5 versions', 'not ie < 11', 'not edge < 15', '> 2%']
+              }),
+              require('cssnano')()
+            ]
           }
-        },
-        {
-          loader: 'resolve-url-loader'
-        },
-        {
-          loader: 'sass-loader' // compiles Sass to CSS
-        }]
+        }
+        ]
       },
       {
-        test: /\.(js|jsx)$/,
-        use: ['babel-loader']
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif)$/,
+        test: /\.(png|jpg|jpeg|gif|svg)$/,
+        exclude: /(fontawesome-webfont.svg)/,
         use: {
           loader: 'file-loader',
           options: {
@@ -104,7 +103,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /((fontawesome-webfont.svg)|(\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?))/,
         use: {
           loader: 'file-loader',
           options: {
