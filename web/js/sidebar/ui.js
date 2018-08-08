@@ -41,15 +41,17 @@ export function sidebarUi(models, config, ui) {
     };
 
     // Set Event Listeners
-    models.data.events
-      .on('activate', () => {
-        self.selectTab('download');
-        debounceUpdateData();
-      })
-      .on('productSelect', onProductSelect)
-      .on('layerUpdate', debounceUpdateData)
-      .on('granuleSelect', debounceUpdateData)
-      .on('granuleUnselect', debounceUpdateData);
+    if (models.data) {
+      models.data.events
+        .on('activate', () => {
+          self.selectTab('download');
+          debounceUpdateData();
+        })
+        .on('productSelect', onProductSelect)
+        .on('layerUpdate', debounceUpdateData)
+        .on('granuleSelect', debounceUpdateData)
+        .on('granuleUnselect', debounceUpdateData);
+    }
     models.layers.events
       .on('add', layerAdd)
       .on('remove', updateLayers)
@@ -60,20 +62,22 @@ export function sidebarUi(models, config, ui) {
       .on('clear-custom', updateLayers)
       .on('range', updateLayers)
       .on('update', updateLayers);
-    models.naturalEvents.events
-      .on('activate', () => self.selectTab('events'))
-      .on('list-change', debounceUpdateEventsList)
-      .on('selected-event', selected => {
-        self.reactComponent.setState({ selectedEvent: selected });
-      })
-      .on('hasData', () => {
-        self.reactComponent.setState({
-          eventsData: models.naturalEvents.data,
-          selectEvent: ui.naturalEvents.selectEvent,
-          deselectEvent: ui.naturalEvents.deselectEvent,
-          filterEventList: ui.naturalEvents.filterEventList
+    if (models.naturalEvents) {
+      models.naturalEvents.events
+        .on('activate', () => self.selectTab('events'))
+        .on('list-change', debounceUpdateEventsList)
+        .on('selected-event', selected => {
+          self.reactComponent.setState({ selectedEvent: selected });
+        })
+        .on('hasData', () => {
+          self.reactComponent.setState({
+            eventsData: models.naturalEvents.data,
+            selectEvent: ui.naturalEvents.selectEvent,
+            deselectEvent: ui.naturalEvents.deselectEvent,
+            filterEventList: ui.naturalEvents.filterEventList
+          });
         });
-      });
+    }
     if (models.compare) {
       models.compare.events
         .on('toggle', () => {
@@ -86,7 +90,7 @@ export function sidebarUi(models, config, ui) {
         });
     }
     models.date.events.on('select', updateLayers);
-    models.proj.events.on('select', updateLayers);
+    if (models.proj) models.proj.events.on('select', updateLayers);
     models.map.events.on('data-running', runningLayers => {
       self.reactComponent.setState({ runningLayers: runningLayers });
     });
@@ -101,11 +105,12 @@ export function sidebarUi(models, config, ui) {
 
   var getInitialProps = function() {
     var compareModel;
-    activeTab = models.naturalEvents.active
-      ? 'events'
-      : models.data.active
-        ? 'download'
-        : 'layers';
+    activeTab =
+      models.naturalEvents && models.naturalEvents.active
+        ? 'events'
+        : models.data && models.data.active
+          ? 'download'
+          : 'layers';
     if (config.features.compare) {
       compareModel = models.compare;
       if (models.compare.active) {
@@ -140,7 +145,7 @@ export function sidebarUi(models, config, ui) {
       getLegend: models.palettes.getLegends,
       replaceSubGroup: model.replaceSubGroup,
       runningLayers: null,
-      selectedDataProduct: models.data.selectedProduct,
+      selectedDataProduct: models.data ? models.data.selectedProduct : null,
       isMobile: util.browser.small,
       localStorage: util.browser.localStorage,
       zotsObject: getZotsForActiveLayers(config, models, ui),
@@ -149,11 +154,16 @@ export function sidebarUi(models, config, ui) {
       filterEventList: null,
       selectEvent: null,
       deselectEvent: null,
-      selectedEvent: models.naturalEvents.selected || {},
-      getDataSelectionCounts: models.data.getSelectionCounts,
-      selectDataProduct: models.data.selectProduct,
+      selectedEvent:
+        models.naturalEvents && models.naturalEvents.selected
+          ? models.naturalEvents.selected
+          : {},
+      getDataSelectionCounts: models.data
+        ? models.data.getSelectionCounts
+        : null,
+      selectDataProduct: models.data ? models.data.selectProduct : null,
       showListAllButton: true,
-      getDataSelectionSize: models.data.getSelectionSize,
+      getDataSelectionSize: models.data ? models.data.getSelectionSize : null,
       onGetData: null,
       showDataUnavailableReason: null
     };
@@ -236,7 +246,7 @@ export function sidebarUi(models, config, ui) {
     return {
       download: features.dataDownload,
       layers: true,
-      events: features.naturalEvents != null
+      events: features.naturalEvents
     };
   };
   /**

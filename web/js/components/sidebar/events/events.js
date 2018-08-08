@@ -13,8 +13,10 @@ class Events extends React.Component {
       visibleEvents,
       sources,
       height,
-      deselectEvent
+      deselectEvent,
+      tabTypes
     } = this.props;
+    if (!tabTypes.events) return null;
     return (
       <Scrollbars style={{ maxHeight: height + 'px' }}>
         <div id="wv-events">
@@ -59,7 +61,8 @@ Events.propTypes = {
   selectedEvent: PropTypes.object,
   visibleEvents: PropTypes.object,
   height: PropTypes.number,
-  deselectEvent: PropTypes.func
+  deselectEvent: PropTypes.func,
+  tabTypes: PropTypes.object
 };
 
 export default Events;

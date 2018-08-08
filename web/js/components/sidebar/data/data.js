@@ -12,10 +12,13 @@ class Data extends React.Component {
       getCounts,
       selected,
       selectProduct,
-      showUnavailableReason
+      showUnavailableReason,
+      tabTypes
     } = this.props;
+    if (!tabTypes.download) return null;
     const dataArray = Object.entries(data);
     const counts = getCounts();
+
     return (
       <Scrollbars style={{ maxHeight: height + 'px' }}>
         <div id="wv-data">
@@ -47,7 +50,8 @@ Data.propTypes = {
   getCounts: PropTypes.func,
   showUnavailableReason: PropTypes.func,
   selected: PropTypes.string,
-  selectProduct: PropTypes.func
+  selectProduct: PropTypes.func,
+  tabTypes: PropTypes.object
 };
 
 export default Data;

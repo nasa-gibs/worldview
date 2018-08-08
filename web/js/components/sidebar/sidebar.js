@@ -5,9 +5,10 @@ import Events from './events/events';
 import Data from './data/data';
 import CompareCase from './compare';
 import FooterContent from './footer-content';
-import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import { TabContent, TabPane } from 'reactstrap';
 import { SidebarProvider as Provider } from './provider';
 import CollapsedButton from './collapsed-button';
+import NavCase from './nav/nav-case';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -164,9 +165,10 @@ class Sidebar extends React.Component {
       addLayers,
       getDataSelectionSize,
       changeCompareMode,
-      checkerBoardPattern
+      checkerBoardPattern,
+      compareFeature,
+      tabTypes
     } = this.props;
-    const tabClasses = 'sidebar-tab';
     return (
       <Provider
         palettePromise={palettePromise}
@@ -200,74 +202,14 @@ class Sidebar extends React.Component {
           }
         />
         <div id="productsHolder" style={isCollapsed ? { display: 'none' } : {}}>
-          <Nav tabs className="main-nav">
-            <NavItem>
-              <NavLink
-                title="layers"
-                className={
-                  activeTab === 'layers'
-                    ? tabClasses + ' first-tab active'
-                    : tabClasses + ' first-tab'
-                }
-                onClick={() => onTabClick('layers')}
-              >
-                <i className="productsIcon selected icon-layers" />
-                Layers
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                disabled={!!isCompareMode}
-                title={
-                  isCompareMode
-                    ? 'You must exit comparison mode to use the natural events feature'
-                    : 'Events'
-                }
-                className={
-                  activeTab === 'events'
-                    ? tabClasses + ' second-tab active'
-                    : isCompareMode
-                      ? tabClasses + ' second-tab disabled'
-                      : tabClasses + ' second-tab'
-                }
-                onClick={() => onTabClick('events')}
-              >
-                <i className="productsIcon selected icon-events" />
-                Events
-              </NavLink>
-            </NavItem>
-            <NavItem
-              style={isMobile ? { display: 'none' } : { display: 'block' }}
-            >
-              <NavLink
-                disabled={!!isCompareMode}
-                title={
-                  isCompareMode
-                    ? 'You must exit comparison mode to download data'
-                    : 'events'
-                }
-                className={
-                  activeTab === 'download'
-                    ? tabClasses + ' first-tab active'
-                    : isCompareMode
-                      ? tabClasses + ' third-tab disabled'
-                      : tabClasses + ' third-tab'
-                }
-                onClick={() => onTabClick('download')}
-              >
-                <i className="productsIcon selected icon-download" />
-                Data
-              </NavLink>
-            </NavItem>
-            <div className="toggleIconHolder">
-              <a
-                id="accordionTogglerButton"
-                className="accordionToggler atcollapse arrow"
-                onClick={this.toggleSidebar.bind(this)}
-                title="Hide"
-              />
-            </div>
-          </Nav>
+          <NavCase
+            tabTypes={tabTypes}
+            isMobile={isMobile}
+            isCompareMode={isCompareMode}
+            onTabClick={onTabClick}
+            activeTab={activeTab}
+            toggleSidebar={this.toggleSidebar.bind(this)}
+          />
           <TabContent activeTab={activeTab}>
             <TabPane tabId="layers">
               {this.getProductsToRender(activeTab, isCompareMode)}
@@ -282,6 +224,7 @@ class Sidebar extends React.Component {
                 selectEvent={selectEvent}
                 deselectEvent={deselectEvent}
                 height={subComponentHeight}
+                tabTypes={tabTypes}
               />
             </TabPane>
             <TabPane tabId="download">
@@ -293,6 +236,7 @@ class Sidebar extends React.Component {
                 selectProduct={selectDataProduct}
                 showUnavailableReason={showDataUnavailableReason}
                 height={subComponentHeight}
+                tabTypes={tabTypes}
               />
             </TabPane>
             <footer ref={footerElement => (this.footerElement = footerElement)}>
@@ -310,6 +254,7 @@ class Sidebar extends React.Component {
                 toggleMode={toggleMode}
                 getDataSelectionCounts={getDataSelectionCounts}
                 getDataSelectionSize={getDataSelectionSize}
+                compareFeature={compareFeature}
               />
             </footer>
           </TabContent>
@@ -362,7 +307,8 @@ Sidebar.propTypes = {
   deselectEvent: PropTypes.func,
   filterEventList: PropTypes.func,
   selectedDataProduct: PropTypes.string,
-  showDataUnavailableReason: PropTypes.func
+  showDataUnavailableReason: PropTypes.func,
+  compareFeature: PropTypes.bool
 };
 
 export default Sidebar;
