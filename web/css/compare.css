@@ -9,10 +9,10 @@
 .ab-swipe-dragger {
   position: absolute;
   top: 50%;
-  width: 30px;
-  height: 30px;
-  margin-top: -15px;
-  left: -13px;
+  width: 45px;
+  height: 45px;
+  margin-top: -35px;
+  left: -20px;
   border-radius: 50%;
   color: #000;
   background: #fff;
@@ -26,11 +26,11 @@
   cursor: pointer;
 }
 .ab-swipe-dragger i {
-  font-size: 18px;
-  margin-top: 7px;
+  font-size: 26px;
+  margin-top: 11px;
 }
 .ab-swipe-line .left-label {
-  left: -25px;
+  left: -23px;
 }
 .ab-swipe-line .right-label {
   left: 13px;
