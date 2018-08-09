@@ -61,7 +61,7 @@ export function palettesModel(models, config) {
   };
 
   self.setCustom = function(layerId, paletteId, index, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     if (!config.layers[layerId]) {
       throw new Error('Invalid layer: ' + layerId);
     }
@@ -79,7 +79,7 @@ export function palettesModel(models, config) {
   };
 
   self.clearCustom = function(layerId, index, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     index = lodashIsUndefined(index) ? 0 : index;
     var active = self[groupStr][layerId];
     if (!active) {
@@ -213,7 +213,7 @@ export function palettesModel(models, config) {
   };
 
   self.save = function(state) {
-    var groupArray = ['active'];
+    var groupArray = [models.layers.activeLayers];
     if (self.inUse() && !state.l) {
       throw new Error('No layers in state');
     }
@@ -223,7 +223,7 @@ export function palettesModel(models, config) {
     lodashEach(groupArray, groupStr => {
       lodashEach(self[groupStr], function(def, layerId) {
         if (
-          !lodashFind(models.layers.get({}, groupStr), {
+          !lodashFind(models.layers.get({}, models.layers[groupStr]), {
             id: layerId
           })
         ) {
@@ -249,9 +249,9 @@ export function palettesModel(models, config) {
     });
   };
   self.saveSingle = function(state, layerId, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     var stateStr = 'l';
-
+    console.log(state, layerId, groupStr);
     if (groupStr === 'activeB') stateStr = 'l1';
 
     var attr = lodashFind(state[stateStr], {
@@ -286,7 +286,7 @@ export function palettesModel(models, config) {
   };
 
   self.saveMulti = function(state, layerId, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     var stateStr = 'l';
     var palettes = [];
     var hasPalettes = false;
