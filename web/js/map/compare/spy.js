@@ -5,7 +5,7 @@ var spy = null;
 var topLayers = [];
 var bottomLayers = [];
 var map;
-const DEFAULT_RADIUS = 70;
+const DEFAULT_RADIUS = 140;
 var radius = DEFAULT_RADIUS;
 var label = null;
 export class Spy {
@@ -150,16 +150,12 @@ var clip = function(event) {
     // only show a circle around the mouse
     let x = mousePosition[0];
     let y = mousePosition[1];
-    ctx.arc(
-      x * pixelRatio,
-      y * pixelRatio,
-      radius * pixelRatio,
-      0,
-      2 * Math.PI
-    );
-    let offSetXandY = Math.sqrt(DEFAULT_RADIUS * DEFAULT_RADIUS) / 2;
-    label.style.top = y + offSetXandY + 10 + 'px';
-    label.style.left = x + offSetXandY + 5 + 'px';
+    let pixelRadius = radius * pixelRatio;
+
+    ctx.arc(x * pixelRatio, y * pixelRatio, pixelRadius, 0, 2 * Math.PI);
+    let offSetXandY = Math.sqrt((radius * radius) / 2);
+    label.style.top = y + offSetXandY - 10 + 'px';
+    label.style.left = x + offSetXandY - 5 + 'px';
 
     ctx.lineWidth = 4 * pixelRatio;
     ctx.strokeStyle = 'rgba(0,0,0,0.4)';
