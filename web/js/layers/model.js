@@ -6,11 +6,11 @@ import lodashFindIndex from 'lodash/findIndex';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import util from '../util/util';
-var loaded = false;
 
 export function layersModel(models, config) {
   var self = {};
   self.activeLayers = 'active';
+  self.loaded = false;
   var split = { active: 0, activeB: 0 };
   self.events = util.events();
 
@@ -40,7 +40,7 @@ export function layersModel(models, config) {
   };
   self.get = function(spec, activeLayers) {
     spec = spec || {};
-    activeLayers = activeLayers || self.active;
+    activeLayers = activeLayers || self[self.activeLayers];
     var baselayers = forGroup('baselayers', spec, activeLayers);
     var overlays = forGroup('overlays', spec, activeLayers);
     if (spec.group === 'baselayers') {
@@ -371,7 +371,7 @@ export function layersModel(models, config) {
         if (
           otherDef.visible &&
           otherDef.opacity === 1.0 &&
-          self.available(otherDef.id, activeLayers)
+          self.available(otherDef.id, date, activeLayers)
         ) {
           obscured = true;
           return false;
@@ -434,7 +434,7 @@ export function layersModel(models, config) {
     });
   };
   self.load = function(state, errors) {
-    if (loaded) return;
+    if (self.loaded) return;
 
     var layers;
     if (config.features.compare) {
@@ -487,7 +487,7 @@ export function layersModel(models, config) {
     if (state.ca && state.ca !== 'true') {
       self.activeLayers = 'activeB';
     }
-    loaded = true;
+    self.loaded = true;
   };
   var forGroup = function(group, spec, activeLayers) {
     spec = spec || {};

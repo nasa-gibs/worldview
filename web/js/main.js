@@ -198,13 +198,13 @@ window.onload = () => {
     models.proj = projectionModel(config);
     models.palettes = palettesModel(models, config);
     models.layers = layersModel(models, config);
-    models.date = dateModel(config, {
+    models.date = dateModel(models, config, {
       initial: initialDate
     });
     models.map = mapModel(models, config);
     models.link = linkModel(config);
     if (config.features.compare) {
-      models.compare = compareModel(models, config, ui);
+      models.compare = compareModel(models, config);
       models.link.register(models.compare);
     }
     models.link

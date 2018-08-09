@@ -38,7 +38,7 @@ export function palettesModel(models, config) {
   };
 
   var prepare = function(layerId, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     self[groupStr][layerId] = self[groupStr][layerId] || {};
     var active = self[groupStr][layerId];
     active.maps = active.maps || [];
@@ -96,7 +96,7 @@ export function palettesModel(models, config) {
   };
 
   self.setRange = function(layerId, min, max, squash, index, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     prepare(layerId);
     index = lodashIsUndefined(index) ? 0 : index;
     var palette = self[groupStr][layerId].maps[index];
@@ -133,7 +133,7 @@ export function palettesModel(models, config) {
    * @return {object} object including the entries and legend
    */
   self.get = function(layerId, index, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     index = lodashIsUndefined(index) ? 0 : index;
     if (self[groupStr][layerId]) {
       return self[groupStr][layerId].maps[index];
@@ -152,7 +152,7 @@ export function palettesModel(models, config) {
    * @return {object} object of the legend
    */
   self.getLegend = function(layerId, index, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     var value = self.get(layerId, index, groupStr);
     return value.legend || value.entries;
   };
@@ -173,7 +173,7 @@ export function palettesModel(models, config) {
   };
 
   self.getLegends = function(layerId, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     var legends = [];
     var count = self.getCount(layerId);
     for (var i = 0; i < count; i++) {
@@ -184,13 +184,13 @@ export function palettesModel(models, config) {
 
   // Is a canvas required?
   self.isActive = function(layerId, group) {
-    group = group || 'active';
+    group = group || models.layers.activeLayers;
     return self[group][layerId];
   };
 
   // Looks up options/colormaps/layer.xml colormap entry
   self.getLookup = function(layerId, groupstr) {
-    groupstr = groupstr || 'active';
+    groupstr = groupstr || models.layers.activeLayers;
     return self[groupstr][layerId].lookup;
   };
 
@@ -251,7 +251,6 @@ export function palettesModel(models, config) {
   self.saveSingle = function(state, layerId, groupStr) {
     groupStr = groupStr || models.layers.activeLayers;
     var stateStr = 'l';
-    console.log(state, layerId, groupStr);
     if (groupStr === 'activeB') stateStr = 'l1';
 
     var attr = lodashFind(state[stateStr], {
@@ -359,7 +358,7 @@ export function palettesModel(models, config) {
   };
 
   self.key = function(layerId, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     if (!self.isActive(layerId, groupStr)) {
       return '';
     }
@@ -473,7 +472,7 @@ export function palettesModel(models, config) {
   };
 
   var findIndex = function(layerId, type, value, index, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     index = index || 0;
     var values = self.get(layerId, index, groupStr).entries.values;
     var result;
@@ -495,8 +494,8 @@ export function palettesModel(models, config) {
   // If any custom rendering is being used, image download must turn it
   // off
   self.inUse = function(groupStr) {
-    groupStr = groupStr || 'active';
-    var layers = models.layers.get({}, groupStr);
+    groupStr = groupStr || models.layers.activeLayers;
+    var layers = models.layers.get({}, models.layers[groupStr]);
     var found = false;
     lodashEach(layers, function(layer) {
       if (self[groupStr][layer.id]) {
@@ -508,7 +507,7 @@ export function palettesModel(models, config) {
   };
 
   var useLookup = function(layerId, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     var use = false;
     var active = self[groupStr][layerId].maps;
 
@@ -538,7 +537,7 @@ export function palettesModel(models, config) {
   };
 
   var updateLookup = function(layerId, groupStr) {
-    groupStr = groupStr || 'active';
+    groupStr = groupStr || models.layers.activeLayers;
     if (!useLookup(layerId, groupStr)) {
       delete self[groupStr][layerId];
       return;

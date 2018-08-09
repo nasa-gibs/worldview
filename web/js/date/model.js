@@ -1,6 +1,6 @@
 import util from '../util/util';
 
-export function dateModel(config, spec) {
+export function dateModel(models, config, spec) {
   spec = spec || {};
 
   var self = {};
@@ -42,6 +42,7 @@ export function dateModel(config, spec) {
   };
 
   self.select = function(date, selectionStr) {
+    if (!date) return null;
     selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);
     var updated = false;
