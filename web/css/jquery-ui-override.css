@@ -84,6 +84,7 @@ a.ui-button.ui-state-default.ui-state-hover {
   border-radius: 0;
 }
 
+button.ui-button:focus .ui-icon-closethick,
 button.ui-button .ui-icon-closethick {
   background-position: 0 0;
   background-image: url("../images/close.png");
@@ -246,6 +247,21 @@ a.ui-button:active {
   font-weight: 300;
   border: 0;
   background: transparent;
+}
+
+.ui-dialog-buttonpane .ui-dialog-buttonset .ui-button {
+  padding: 0.4em 1em;
+  border: 1px solid #666;
+  background: #242424;
+  font-weight: 700;
+  color: #eee;
+}
+
+.ui-dialog-buttonpane .ui-dialog-buttonset .ui-button:hover {
+  border-color: #eee;
+  background-color: #eee;
+  background-image: none;
+  color: #404040;
 }
 
 /* Counter intuitive override: All OpenLayers overlays get the
