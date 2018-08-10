@@ -11,7 +11,7 @@ const cssnano = require('cssnano');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const devMode = process.env.NODE_ENV !== 'production';
+const devMode = process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'testing';
 
 const pluginSystem = [
   new CleanWebpackPlugin(['web/build']),
@@ -119,7 +119,7 @@ module.exports = {
       {
         test: /\.js$/,
         use: {
-          loader: 'babel-loader?cacheDirectory=true',
+          loader: devMode ? 'babel-loader?cacheDirectory=true' : 'babel-loader',
           options: {
             compact: false
           }
