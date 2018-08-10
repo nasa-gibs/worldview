@@ -29,10 +29,10 @@
     "analyze": "cross-env NODE_ENV=analyze webpack",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack ",
     "build": "run-s clean \"getcapabilities -- {1}\" \"build:config -- {1}\" start:build --",
-    "build:css": "node ./tasks/buildCSS",
+    "build:dev": "webpack",
     "build:config": "bash -c 'tasks/buildOptions.sh ${1}' 0 && node ./tasks/config.js",
-    "build:js": "node ./tasks/buildJS",
-    "build:tests": "node ./tasks/buildJS --tests",
+    "build:prod": "cross-env NODE_ENV=production webpack",
+    "build:tests": "cross-env NODE_ENV=testing webpack",
     "clean": "node ./tasks/clean.js",
     "dist": "NODE_ENV=production npm run build && node ./tasks/dist.js",
     "dist:dev": "NODE_ENV=development npm run build && node ./tasks/dist.js",
@@ -52,8 +52,6 @@
     "python:win32": "bash -c 'PATH=.python/Scripts:${PATH} pip install -r requirements.txt'",
     "report": "node e2e/create-report.js",
     "start": "node ./tasks/start.js",
-    "start:build": "cross-env NODE_ENV=production webpack",
-    "start:dev": "webpack",
     "test": "npm run lint && run-p test:server test:run",
     "test:server": "buster-server -c",
     "test:run": "sleep 2 && buster-test && npm run test:end",
@@ -63,15 +61,6 @@
     "updateconfig": "run-s getcapabilities build:config",
     "watch": "cross-env NODE_ENV=development webpack-dev-server",
     "upload": "node tasks/upload.js"
-  },
-  "watch": {
-    "build:css": {
-      "patterns": [
-        "web/css/**/*"
-      ],
-      "extensions": "css"
-    },
-    "build:js": "This task self-watches as long as $WORLDVIEW_WATCH=active"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.1",
@@ -84,20 +73,17 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babelify": "^7.3.0",
-    "browserify": "^14.4.0",
-    "browserify-css": "^0.13.1",
-    "browserify-shim": "^3.8.14",
     "browserstack-capabilities": "^0.4.0",
     "browserstack-local": "^1.3.0",
     "buster": "github:busterjs/buster#v0.8.0",
     "cheerio": "^1.0.0-rc.2",
     "chromedriver": "2.25.1",
+    "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.2",
     "cross-env": "^5.2.0",
     "css-hot-loader": "^1.4.1",
     "css-loader": "^1.0.0",
     "cssnano": "^4.0.5",
-    "envify": "^4.1.0",
     "eslint": "^4.13.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.8.0",
@@ -113,11 +99,9 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "imports-loader": "^0.8.0",
-    "inline-source-map": "^0.6.2",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.1",
-    "minimist": "^1.2.0",
     "moment": "2.13.x",
     "nightwatch": "^0.9.16",
     "node-fetch": "^2.1.2",
@@ -142,11 +126,9 @@
     "stylelint": "^8.0.0",
     "tar": "^4.4.4",
     "uglify-js": "^3.4.0",
-    "uglifyify": "^4.0.5",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "underscore": "^1.8.3",
     "url-loader": "^1.0.1",
-    "watchify": "^3.9.0",
     "webpack": "^4.16.3",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.1.0",
@@ -193,11 +175,5 @@
     "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
     "jquery-jcrop": "./node_modules/jquery-jcrop/js/jquery.Jcrop.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
-  },
-  "browserify-shim": {
-    "mobiscroll": "mobiscroll",
-    "isotope-layout": "isotope",
-    "jquery-jcrop": "Jcrop",
-    "jquery": "$"
   }
 }
