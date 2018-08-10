@@ -1,19 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
+
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const cssnano = require('cssnano');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const devMode = process.env.NODE_ENV !== 'production';
 
 const pluginSystem = [
+  new CleanWebpackPlugin(['web/build']),
   new CopyWebpackPlugin([
-    { from: 'web/images', to: 'images' },
-    { from: 'web/fonts', to: 'fonts' },
     { from: 'web/brand', to: 'brand' },
     { from: 'web/pages', to: 'pages' }
   ]),
@@ -49,6 +51,14 @@ if (process.env.NODE_ENV === 'analyze') {
   pluginSystem.push(new BundleAnalyzerPlugin());
 };
 
+// handle testing entry point and output file name
+let entryPoint = './web/js/main.js';
+let outputFileName = 'wv.js';
+if (process.env.NODE_ENV === 'testing') {
+  entryPoint = './test/main.js';
+  outputFileName = 'wv-test-bundle.js';
+};
+
 module.exports = {
   mode: devMode ? 'development' : 'production',
   stats: { // reduce output text on build - remove for more verbose
@@ -56,8 +66,7 @@ module.exports = {
     modules: false,
     children: false
   },
-  entry: './web/js/main.js',
-  // devtool: 'cheap-module-eval-source-map',
+  entry: entryPoint,
   devtool: 'cheap-module-source-map',
   devServer: {
     contentBase: path.join(__dirname, '/web'),
@@ -67,8 +76,7 @@ module.exports = {
     port: 3000
   },
   output: {
-    filename: 'wv.js',
-    chunkFilename: 'wv-chunk.js',
+    filename: outputFileName,
     path: path.join(__dirname, '/web/build'),
     pathinfo: false
   },
@@ -76,21 +84,21 @@ module.exports = {
     minimizer: [
       new UglifyJsPlugin({
         uglifyOptions: {
-          ecma: 5,
+          ecma: 5, // dependent on ie11 support
           compress: true,
           mangle: true,
           topLevel: true,
-          ie8: false,
+          safari10: true,
           output: {
             comments: false,
             beautify: false
           }
         },
         cache: true,
-        parallel: 2
+        parallel: true
       }),
       new OptimizeCSSAssetsPlugin({
-        cssProcessor: require('cssnano'),
+        cssProcessor: cssnano,
         cssProcessorOptions: {
           discardComments: {
             removeAll: true
@@ -108,9 +116,8 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        // exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: 'babel-loader?cacheDirectory=true',
           options: {
             compact: false
           }
