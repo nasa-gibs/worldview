@@ -56,7 +56,6 @@
         "wrap-iife": "error",
         "new-cap": "error",
         "semi": ["error", "always"],
-        "space-before-function-paren": "off",
         "react/no-danger": "warn",
         "react/prop-types": "warn",
         "react/no-did-update-set-state": "warn",
