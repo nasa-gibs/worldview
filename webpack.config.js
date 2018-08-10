@@ -117,7 +117,7 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
+        test: /\.(sa|sc|c)ss$/,
         use: [
           {
             loader: 'css-hot-loader'
@@ -146,6 +146,9 @@ module.exports = {
                 })
               ]
             }
+          },
+          {
+            loader: 'sass-loader'
           }
         ]
       },
