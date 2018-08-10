@@ -15,10 +15,6 @@ const devMode = process.env.NODE_ENV !== 'production';
 
 const pluginSystem = [
   new CleanWebpackPlugin(['web/build']),
-  new CopyWebpackPlugin([
-    { from: 'web/brand', to: 'brand' },
-    { from: 'web/pages', to: 'pages' }
-  ]),
   new HtmlWebpackPlugin({
     hash: true,
     title: 'Worldview',
@@ -57,7 +53,13 @@ let outputFileName = 'wv.js';
 if (process.env.NODE_ENV === 'testing') {
   entryPoint = './test/main.js';
   outputFileName = 'wv-test-bundle.js';
-};
+} else {
+  // prevent folder copying if in testing
+  pluginSystem.push(new CopyWebpackPlugin([
+    { from: 'web/brand', to: 'brand' },
+    { from: 'web/pages', to: 'pages' }
+  ]));
+}
 
 module.exports = {
   mode: devMode ? 'development' : 'production',
