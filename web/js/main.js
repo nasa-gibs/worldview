@@ -87,10 +87,53 @@ import Brand from './brand';
 import tour from './tour';
 import { uiInfo } from './ui/info';
 
-// App and Dependency CSS imports
+// Dependency CSS
+import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import 'font-awesome-webpack';
-import '../css/vendors.css';
-import '../css/main.css';
+import '../../node_modules/jquery-ui/themes/base/jquery-ui.css';
+import '../../node_modules/jquery-ui/themes/ui-darkness/jquery-ui.css';
+import '../../node_modules/icheck/skins/square/grey.css';
+import '../../node_modules/icheck/skins/square/red.css';
+import '../../node_modules/icheck/skins/line/red.css';
+import '../../node_modules/jscrollpane/style/jquery.jscrollpane.css';
+import '../../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css';
+import '../ext/mobiscroll-2.6.0/mobiscroll.css';
+import '../../node_modules/jquery.joyride/jquery.joyride.css';
+import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
+import '../../node_modules/ol/ol.css';
+import '../../node_modules/nouislider/src/jquery.nouislider.css';
+
+// App CSS
+import '../css/fonts.css';
+import '../css/reset.css';
+import '../css/util.css';
+import '../css/alert.css';
+import '../css/sidebar-panel.css';
+import '../css/button.css';
+import '../css/checkbox.css';
+import '../css/map.css';
+import '../css/link.css';
+import '../css/palettes.css';
+import '../css/image.css';
+import '../css/debug.css';
+import '../css/projection.css';
+import '../css/date.css';
+import '../css/menuPicker.css';
+import '../css/tour.css';
+import '../css/products.css';
+import '../css/indicator.css';
+import '../css/events.css';
+import '../css/dataDownload.css';
+import '../css/sidebar.css';
+import '../css/layers.css';
+import '../css/scrollbar.css';
+import '../css/timeline.css';
+import '../css/anim.widget.css';
+import '../css/dateselector.css';
+import '../css/tooltip.css';
+import '../css/mobile.css';
+import '../pages/css/document.css';
+import '../css/jquery-ui-override.css';
 
 import { polyfill } from './polyfill';
 polyfill(); // Polyfills some browser features
