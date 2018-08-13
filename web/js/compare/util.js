@@ -1,7 +1,6 @@
 import util from '../util/util';
-const DEFAULT_COMPARE_OBJ = {};
 export function getCompareObjects(models) {
-  if (!models.layers.activeB) return DEFAULT_COMPARE_OBJ;
+  if (!models.layers.activeB) return {};
   var obj = {};
   obj.a = {
     dateString: util.toISOStringDate(models.date.selected),
