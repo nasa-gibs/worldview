@@ -51,8 +51,12 @@ export class Spy {
    * @param {Object} e | mousemove event object
    */
   updateSpy(e) {
+    var offSetXandY;
     mousePosition = map.getEventPixel(e);
     radius = DEFAULT_RADIUS;
+    offSetXandY = Math.sqrt((radius * radius) / 2);
+    label.style.top = mousePosition[1] + offSetXandY - 10 + 'px';
+    label.style.left = mousePosition[0] + offSetXandY - 5 + 'px';
     map.render();
   }
   /**
@@ -101,8 +105,7 @@ export class Spy {
  * @param {Object} layer | Ol Layer object
  */
 var applyreverseLayerListeners = function(layer) {
-  layer.on('precompose', inverseClip);
-  layer.on('postcompose', restore);
+  layer.on('postcompose', inverseClip);
   bottomLayers.push(layer);
 };
 /**
@@ -153,9 +156,6 @@ var clip = function(event) {
     let pixelRadius = radius * pixelRatio;
 
     ctx.arc(x * pixelRatio, y * pixelRatio, pixelRadius, 0, 2 * Math.PI);
-    let offSetXandY = Math.sqrt((radius * radius) / 2);
-    label.style.top = y + offSetXandY - 10 + 'px';
-    label.style.left = x + offSetXandY - 5 + 'px';
 
     ctx.lineWidth = 4 * pixelRatio;
     ctx.strokeStyle = 'rgba(0,0,0,0.4)';
