@@ -206,6 +206,7 @@
 .layer-modal-content {
   overflow: auto;
   position: relative;
+  padding-top: 3px;
 }
 
 .stamp {
@@ -273,9 +274,9 @@
 
 /* Categories view */
 .layer-modal-content .categories-nav {
-  height: 35px;
+  height: 31px;
   line-height: 35px;
-  margin: 0 10px 0 0;
+  margin: 0 12px 0 0;
   border-bottom: 3px solid #00457b;
 }
 
@@ -295,6 +296,7 @@
   line-height: 30px;
   padding: 1px 15px;
   vertical-align: middle;
+  float: left;
 }
 
 .layer-modal-content .categories-nav label:hover {

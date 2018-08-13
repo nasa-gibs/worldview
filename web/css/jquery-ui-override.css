@@ -70,7 +70,8 @@ a.ui-button.ui-state-default.ui-state-hover {
 }
 
 .ui-dialog .ui-dialog-titlebar {
-  border: 0;
+  padding: 0.4em 1em;
+  border: 1px solid #333;
 }
 
 .ui-dialog .ui-dialog-content {

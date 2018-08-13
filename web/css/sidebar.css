@@ -31,7 +31,7 @@
 
 #productsHolder footer {
   bottom: 0;
-  padding: 2px 5px 5px;
+  padding: 2px 5px 3px;
   position: absolute;
   background-color: transparent;
 }
@@ -52,7 +52,7 @@
   background-image: none;
   margin-right: 5px;
   font-weight: 700;
-  padding: 0.4em 1em;
+  padding: 0.5em 1em;
   line-height: normal;
 }
 
