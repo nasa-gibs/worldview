@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Scrollbars } from 'react-custom-scrollbars';
 import Product from './product';
 import Scrollbars from '../../util/scrollbar';
 

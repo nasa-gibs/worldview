@@ -35,7 +35,7 @@ export class Spy {
       applyEventsToBaseLayers(
         mapLayers[0],
         this.map,
-        applyreverseLayerListeners
+        applyReverseLayerListeners
       );
       applyEventsToBaseLayers(mapLayers[1], this.map, applyLayerListeners);
     }
@@ -107,7 +107,7 @@ export class Spy {
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */
-var applyreverseLayerListeners = function(layer) {
+var applyReverseLayerListeners = function(layer) {
   layer.on('postcompose', inverseClip);
   bottomLayers.push(layer);
 };

@@ -14,11 +14,11 @@ class CompareCase extends React.Component {
       isCompareA,
       height
     } = this.props;
-    const outterClass = 'layer-container sidebar-panel';
+    const outerClass = 'layer-container sidebar-panel';
     const tabClasses = 'ab-tab';
     return (
       <div className={isActive ? '' : 'hidden '}>
-        <div className={outterClass}>
+        <div className={outerClass}>
           <div className="ab-tabs-case">
             <Nav tabs>
               <NavItem>

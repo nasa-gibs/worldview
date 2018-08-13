@@ -14,7 +14,7 @@ const SWIPE_PADDING = 30;
 export class Swipe {
   constructor(
     olMap,
-    isAactive,
+    isActiveA,
     compareEvents,
     eventListenerStringObj,
     valueOverride
@@ -33,7 +33,7 @@ export class Swipe {
   getSwipeOffset() {
     return swipeOffset;
   }
-  update(isCompareA, groupName) {
+  update(isActiveA, groupName) {
     var mapLayers = this.map.getLayers().getArray();
     if (!groupName) {
       applyEventsToBaseLayers.call(this, mapLayers[1], applyLayerListeners);
