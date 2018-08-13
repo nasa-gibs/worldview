@@ -2,27 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import OpacitySlider from '../../components/compare/opacity-slider';
 
-var map;
 var slider;
 var value = 50;
 
 export class Opacity {
   constructor(olMap, isAactive, events, eventListenerStringObj, valueOverride) {
-    map = olMap;
+    this.map = olMap;
     this.compareEvents = events;
     this.sliderCase = document.createElement('div');
     value = valueOverride || value;
     this.create();
   }
   create() {
-    slider = this.createSlider(map, map.getLayers().getArray()[1]);
+    slider = this.createSlider(this.map.getLayers().getArray());
     this.oninput(value);
   }
   /**
    * Refresh secondLayer layer group (after date change for example)
    */
   update() {
-    this.secondLayer = map.getLayers().getArray()[1];
+    this.secondLayer = this.map.getLayers().getArray()[1];
+    this.firstLayer = this.map.getLayers().getArray()[0];
     this.oninput(value);
   }
   /**
@@ -37,8 +37,10 @@ export class Opacity {
    * @param {Object} map | OL Map Object
    * @param {Object} secondLayer | Second layer group on Map
    */
-  createSlider(map, secondLayer) {
-    this.secondLayer = secondLayer;
+  createSlider(layerArray) {
+    this.firstLayer = layerArray[0];
+    this.secondLayer = layerArray[1];
+
     this.mapCase = document.getElementById('wv-map');
     const Props = {
       onSlide: this.oninput.bind(this),
@@ -56,7 +58,10 @@ export class Opacity {
    * @param {Number} newValue
    */
   oninput(newValue) {
+    var convertedValue;
     value = newValue;
-    this.secondLayer.setOpacity(value / 100);
+    convertedValue = value / 100;
+    this.firstLayer.setOpacity(1 - convertedValue);
+    this.secondLayer.setOpacity(convertedValue);
   }
 }
