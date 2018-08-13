@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
@@ -34,6 +33,7 @@ const pluginSystem = [
   new WriteFilePlugin()
 ];
 
+/* Conditional Plugin Management */
 // add hot module replacement
 if (process.env.NODE_ENV === 'development') {
   pluginSystem.push(
@@ -53,12 +53,6 @@ let outputFileName = 'wv.js';
 if (process.env.NODE_ENV === 'testing') {
   entryPoint = './test/main.js';
   outputFileName = 'wv-test-bundle.js';
-} else {
-  // prevent folder copying if in testing
-  pluginSystem.push(new CopyWebpackPlugin([
-    { from: 'web/brand', to: 'brand' },
-    { from: 'web/pages', to: 'pages' }
-  ]));
 }
 
 module.exports = {
@@ -69,7 +63,7 @@ module.exports = {
     children: false
   },
   entry: entryPoint,
-  devtool: 'cheap-module-eval-source-map',
+  devtool: devMode ? 'cheap-module-eval-source-map' : 'source-map',
   devServer: {
     contentBase: path.join(__dirname, '/web'),
     compress: true,
@@ -106,8 +100,7 @@ module.exports = {
             removeAll: true
           },
           map: {
-            inline: false,
-            annotation: true
+            inline: false
           }
         }
       })
@@ -121,7 +114,7 @@ module.exports = {
         use: {
           loader: devMode ? 'babel-loader?cacheDirectory=true' : 'babel-loader',
           options: {
-            compact: false
+            compact: false // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
           }
         }
       },
@@ -148,6 +141,7 @@ module.exports = {
           {
             loader: 'postcss-loader', // Run post css actions
             options: {
+              sourceMap: true,
               plugins: [
                 require('autoprefixer')({
                   // handle browserlist restrictions
@@ -157,7 +151,10 @@ module.exports = {
             }
           },
           {
-            loader: 'sass-loader'
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
           }
         ]
       },
