@@ -413,7 +413,7 @@ export function mapui(models, config) {
       addGraticule(def.opacity, models.layers.activeLayers);
     } else {
       def.availableDates = util.datesinDateRanges(def, date, true);
-      if (firstLayer.get('group')) {
+      if (firstLayer && firstLayer.get('group')) {
         // Find which map layer-group is the active LayerGroup
         // and add layer to layerGroup in correct location
         let activelayer =
