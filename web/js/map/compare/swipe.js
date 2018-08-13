@@ -6,7 +6,6 @@ var swipeOffset = null;
 var line = null;
 var bottomLayers = [];
 var topLayers = [];
-var map;
 var events;
 var mapCase;
 var listenerObj;
@@ -21,13 +20,13 @@ export class Swipe {
     valueOverride
   ) {
     listenerObj = eventListenerStringObj;
-    map = olMap;
+    this.map = olMap;
     percentSwipe = valueOverride / 100;
     events = compareEvents;
     this.create();
   }
   create() {
-    line = addLineOverlay(map);
+    line = addLineOverlay(this.map);
     this.update();
   }
 
@@ -35,14 +34,22 @@ export class Swipe {
     return swipeOffset;
   }
   update(isCompareA, groupName) {
-    var mapLayers = map.getLayers().getArray();
+    var mapLayers = this.map.getLayers().getArray();
     if (!groupName) {
-      applyEventsToBaseLayers(mapLayers[1], map, applyLayerListeners);
-      applyEventsToBaseLayers(mapLayers[0], map, applyReverseLayerListeners);
+      applyEventsToBaseLayers.call(this, mapLayers[1], applyLayerListeners);
+      applyEventsToBaseLayers.call(
+        this,
+        mapLayers[0],
+        applyReverseLayerListeners
+      );
     } else if (groupName === 'active') {
-      applyEventsToBaseLayers(mapLayers[0], map, applyReverseLayerListeners);
+      applyEventsToBaseLayers.call(
+        this,
+        mapLayers[0],
+        applyReverseLayerListeners
+      );
     } else {
-      applyEventsToBaseLayers(mapLayers[1], map, applyLayerListeners);
+      applyEventsToBaseLayers.call(this, mapLayers[1], applyLayerListeners);
     }
   }
   destroy() {
@@ -127,7 +134,7 @@ var addLineOverlay = function(map) {
  * @param {Object} layer | Ol Layer object
  */
 var applyLayerListeners = function(layer) {
-  layer.on('precompose', clip);
+  layer.on('precompose', clip.bind(this));
   layer.on('postcompose', restore);
   bottomLayers.push(layer);
 };
@@ -137,7 +144,7 @@ var applyLayerListeners = function(layer) {
  * @param {Object} layer | Ol Layer object
  */
 var applyReverseLayerListeners = function(layer) {
-  layer.on('precompose', reverseClip);
+  layer.on('precompose', reverseClip.bind(this));
   layer.on('postcompose', restore);
   topLayers.push(layer);
 };
@@ -147,7 +154,7 @@ var applyReverseLayerListeners = function(layer) {
  */
 var clip = function(event) {
   var ctx = event.context;
-  var viewportWidth = map.getSize()[0];
+  var viewportWidth = this.map.getSize()[0];
   var width = ctx.canvas.width * (swipeOffset / viewportWidth);
   ctx.save();
   ctx.beginPath();
@@ -161,7 +168,7 @@ var clip = function(event) {
  */
 var reverseClip = function(event) {
   var ctx = event.context;
-  var viewportWidth = map.getSize()[0];
+  var viewportWidth = this.map.getSize()[0];
   var width = ctx.canvas.width * (1 - swipeOffset / viewportWidth);
   ctx.save();
   ctx.beginPath();
@@ -198,13 +205,13 @@ var removeListenersFromLayers = function(layers) {
  * @param {Object} map | OL Map Object
  * @param {Function} callback | Function that will apply event listeners to layer
  */
-var applyEventsToBaseLayers = function(layer, map, callback) {
+var applyEventsToBaseLayers = function(layer, callback) {
   var layers = layer.get('layers');
   if (layers) {
     lodashEach(layers.getArray(), layer => {
-      applyEventsToBaseLayers(layer, map, callback);
+      applyEventsToBaseLayers.call(this, layer, callback);
     });
   } else {
-    callback(layer);
+    callback.call(this, layer);
   }
 };
