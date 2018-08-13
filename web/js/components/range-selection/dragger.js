@@ -95,6 +95,9 @@ class TimelineDragger extends React.Component {
             visibility: visibility
           }}
           d={this.props.path}
+          onMouseDown={() => {
+            this.props.onMouseDown(this.props.id);
+          }}
           transform={
             'translate(' +
             -this.props.width / 2 +
@@ -209,7 +212,8 @@ TimelineDragger.propTypes = {
   yOffset: PropTypes.number,
   path: PropTypes.string,
   textColor: PropTypes.string,
-  text: PropTypes.string
+  text: PropTypes.string,
+  onMouseDown: PropTypes.func
 };
 
 export default TimelineDragger;

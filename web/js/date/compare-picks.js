@@ -94,6 +94,7 @@ export function timelineCompare(models, config, ui) {
       },
       yOffset: 15,
       path: PICK_PATH,
+      onMouseDown: onMouseDown,
       height: 59.51,
       width: 58.42,
       textColor: null,
@@ -105,6 +106,11 @@ export function timelineCompare(models, config, ui) {
       ),
       text: label
     };
+  };
+  var onMouseDown = function(id) {
+    if (models.date.activeDate !== id) {
+      models.compare.toggleState();
+    }
   };
   var updateState = function() {
     self.comparePickA.setState({
