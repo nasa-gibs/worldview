@@ -4,14 +4,13 @@ var mousePosition = null;
 var spy = null;
 var topLayers = [];
 var bottomLayers = [];
-var map;
 const DEFAULT_RADIUS = 140;
 var radius = DEFAULT_RADIUS;
 var label = null;
 export class Spy {
   constructor(olMap, isBInside) {
     this.mapCase = document.getElementById('wv-map');
-    map = olMap;
+    this.map = olMap;
     this.create(isBInside);
   }
   /**
@@ -19,7 +18,7 @@ export class Spy {
    * @param {Boolean} isBInside | B is the spy value -- true|false
    */
   create(isBInside) {
-    spy = this.addSpy(map, isBInside);
+    spy = this.addSpy(this.map, isBInside);
     this.isBInside = isBInside;
     this.update(isBInside);
   }
@@ -32,9 +31,13 @@ export class Spy {
       this.destroy();
       this.create(isBInside);
     } else {
-      var mapLayers = map.getLayers().getArray();
-      applyEventsToBaseLayers(mapLayers[0], map, applyreverseLayerListeners);
-      applyEventsToBaseLayers(mapLayers[1], map, applyLayerListeners);
+      var mapLayers = this.map.getLayers().getArray();
+      applyEventsToBaseLayers(
+        mapLayers[0],
+        this.map,
+        applyreverseLayerListeners
+      );
+      applyEventsToBaseLayers(mapLayers[1], this.map, applyLayerListeners);
     }
   }
   /**
@@ -52,12 +55,12 @@ export class Spy {
    */
   updateSpy(e) {
     var offSetXandY;
-    mousePosition = map.getEventPixel(e);
+    mousePosition = this.map.getEventPixel(e);
     radius = DEFAULT_RADIUS;
     offSetXandY = Math.sqrt((radius * radius) / 2);
     label.style.top = mousePosition[1] + offSetXandY - 10 + 'px';
     label.style.left = mousePosition[0] + offSetXandY - 5 + 'px';
-    map.render();
+    this.map.render();
   }
   /**
    * Hide spy stuff when mouse is not hovering map
@@ -66,7 +69,7 @@ export class Spy {
   hideSpy(e) {
     radius = 0;
     label.style.display = 'none';
-    map.render();
+    this.map.render();
   }
   /**
    * Show spy stuff when mouse is not hovering map
@@ -75,7 +78,7 @@ export class Spy {
   showSpy() {
     radius = DEFAULT_RADIUS;
     label.style.display = 'block';
-    map.render();
+    this.map.render();
   }
   /**
    * Add Correct listeners for layer clipping based on whether
@@ -92,9 +95,9 @@ export class Spy {
 
     this.mapCase.appendChild(label);
 
-    this.mapCase.addEventListener('mousemove', this.updateSpy);
-    this.mapCase.addEventListener('mouseleave', this.hideSpy);
-    this.mapCase.addEventListener('mouseenter', this.showSpy);
+    this.mapCase.addEventListener('mousemove', this.updateSpy.bind(this));
+    this.mapCase.addEventListener('mouseleave', this.hideSpy.bind(this));
+    this.mapCase.addEventListener('mouseenter', this.showSpy.bind(this));
 
     return this.mapCase;
   }
