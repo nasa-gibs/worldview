@@ -58,9 +58,15 @@
         <hr/>
         <h2>Acknowledgements</h2>
         <p>
-            <ul>
-                <li>Near real-time data is courtesy of the [Land, Atmosphere Near Real-Time Capability for EOS (LANCE)](https://earthdata.nasa.gov/earth-observation-data/near-real-time)
-                    data providers:
+          With over 700 imagery layers, Worldview acknowledges the data providers of the near real-time (NRT) and standard quality imagery layers. </p>
+          <p>
+          While Worldview provides the highest priority products/parameters as decided by the data providers and users, not all NASA standard products (or all parameters within each product) are available via Worldview, see <a href="https://search.earthdata.nasa.gov/">Earthdata Search</a> for a full listing of available data products.
+        </p>
+
+
+            <p>
+              Near real-time imagery is courtesy of the <a href="https://earthdata.nasa.gov/earth-observation-data/near-real-time">Land, Atmosphere Near Real-Time Capability for EOS (LANCE)</a> data providers:
+            </p>
                     <ul>
                         <li>
                             <a href='https://earthdata.nasa.gov/about/science-system-description/eosdis-components/lance/about-amsr2-sips'>AMSR SIPS</a>
@@ -87,13 +93,36 @@
                         </li>
                     </ul>
                 </li>
-                <li>Ocean color and sea surface temperature products provided by <a href='https://oceancolor.gsfc.nasa.gov/'>OB.DAAC</a>
-                    and <a href='https://podaac.jpl.nasa.gov/'>PO.DAAC</a>.</li>
+
+                <p>
+                  Standard quality/ Science quality imagery is courtesy of the <a href="https://earthdata.nasa.gov/about/daacs">EOSDIS Distributed Active Archive Centers (DAACs)</a>:
+                </p>
+                <ul>
+                <li>Atmospheric layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-asdc">ASDC DAAC</a></li>
+                <li>Atmospheric layers, modeled atmospheric layers and soil moisture layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-ges-disc">GES DISC</a></li>
+                <li>Hydrology related layers and Lightning layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-ghrc">GHRC DAAC</a></li>
+                <li>Level 1 MODIS and VIIRS Atmosphere and Land layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-laads">LAADS DAAC</a></li>
+                <li>Web Enabled Landsat Data (WELD) layers and Digital Elevation Models (DEMs) layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-lpdaac">LP DAAC</a></li>
+                <li>Snow and Ice layers, Freeze/Thaw and Soil Moisture layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-nsidc">NSIDC DAAC</a></li>
+                <li>Chlorophyll-a layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-obdaac">OB.DAAC</a></li>
+                <li>Daymet layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-ornl">ORNL DAAC</a></li>
+                <li>Ocean related layers like Sea Surface Temperature, Sea Surface Height and Sea Surface Salinity from <a href="https://earthdata.nasa.gov/about/daacs/daac-podaac">PO.DAAC</a></li>
+                <li>Socioeconomic layers from <a href="https://earthdata.nasa.gov/about/daacs/daac-sedac">SEDAC</a></li>
+              </ul>
+                <p>
+                  There are also many DAAC-specific tools for working directly with the data as listed here.
+                </p>
+
+                <p>
+                  Please also note that Worldview provides the “best available” layer information to users; this often means providing a “best” layer that prioritizes the composition of imagery products as follows: 1) Latest Version Standard Product; 2) Latest Version NRT; 3) Previous Version Standard Product; 4) Previous Version NRT. <a href="https://wiki.earthdata.nasa.gov/display/GIBS/GIBS+API+for+Developers#GIBSAPIforDevelopers-%22BestAvailable%22Layers">Learn more about “Best Available” Layers from GIBS</a>.
+                </p>
+
+                <p>
+                  Other layers and information are provided by:
+                </p>
+                <ul>
                 <li>Precipitation products provided by <a href='https://pps.gsfc.nasa.gov/'>Precipitation Processing System (PPS)</a> and
                     <a href='https://earthdata.nasa.gov/about/science-system-description/eosdis-components/lance/about-amsr2-sips'>AMSR SIPS</a>.</li>
-                <li>Freeze/Thaw products, soil moisture and related products supplied by <a href='https://nsidc.org/daac'>NSIDC DAAC</a>.</li>
-                <li>Socioeconomic layers supplied by <a href='http://sedac.ciesin.org/'>SEDAC</a>.</li>
-                <li>Digital Elevation Model layers supplied by <a href='https://lpdaac.usgs.gov/'>LP DAAC</a>.</li>
                 <li>Orbit tracks provided by <a href='https://www.space-track.org'>space-track.org</a>.</li>
                 <li>Polar coastlines and graticules courtesy of <a href='https://www.add.scar.org/'>SCAR Antarctic Digital Database</a>,
                     <a href='https://www.openstreetmap.org/'>OpenStreetMap</a>, and <a href='https://www.polarview.aq/'>PolarView</a>.</li>
