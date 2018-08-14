@@ -149,6 +149,7 @@ class Sidebar extends React.Component {
       showListAllButton,
       comparisonType,
       onGetData,
+      windowHeight,
       filterEventList
     } = this.state;
     const {
@@ -201,7 +202,14 @@ class Sidebar extends React.Component {
                   secondDateObject.layers.baselayers.length
           }
         />
-        <div id="productsHolder" style={isCollapsed ? { display: 'none' } : {}}>
+        <div
+          id="productsHolder"
+          style={
+            isCollapsed
+              ? { maxHeight: '0' }
+              : { maxHeight: windowHeight + 'px' }
+          }
+        >
           <NavCase
             tabTypes={tabTypes}
             isMobile={isMobile}

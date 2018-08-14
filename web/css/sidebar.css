@@ -14,6 +14,8 @@
   box-sizing: border-box;
   padding: 0;
   border-top: none;
+  transition: max-height 0.1s ease;
+  overflow: hidden;
 }
 #productsHolder .layer-container {
   box-sizing: border-box;
