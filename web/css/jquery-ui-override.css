@@ -55,6 +55,7 @@ a.ui-button.ui-state-default.ui-state-hover {
 }
 
 .ui-widget-content {
+  color: #fff;
   background: rgb(40, 40, 40);
   border: 0;
   border-radius: 0;
