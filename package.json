@@ -28,7 +28,7 @@
   "scripts": {
     "analyze": "cross-env NODE_ENV=analyze webpack",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack ",
-    "build": "run-s clean \"getcapabilities -- {1}\" \"build:config -- {1}\" webpack --",
+    "build": "run-s clean \"getcapabilities -- {1}\" \"build:config -- {1}\" build:dev --",
     "build:dev": "webpack",
     "build:config": "bash -c 'tasks/buildOptions.sh ${1}' 0 && node ./tasks/config.js",
     "build:prod": "cross-env NODE_ENV=production webpack",
