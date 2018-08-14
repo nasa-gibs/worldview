@@ -65,7 +65,7 @@ a.staticLayers::after {
   width: 20px;
   background: url("../images/icon-sprite.svg") -180px -10px;
   display: block;
-  right: 5px;
+  right: 10px;
   top: 6px;
 }
 
