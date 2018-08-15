@@ -63,7 +63,7 @@ module.exports = {
     children: false
   },
   entry: entryPoint,
-  devtool: devMode ? 'cheap-module-eval-source-map' : 'source-map',
+  devtool: devMode ? 'cheap-module-source-map' : 'source-map',
   devServer: {
     contentBase: path.join(__dirname, '/web'),
     compress: true,
