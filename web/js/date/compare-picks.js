@@ -27,8 +27,8 @@ export function timelineCompare(models, config, ui) {
   var init = function() {
     mountObjectA = document.createElementNS(xmlns, 'g');
     mountObjectB = document.createElementNS(xmlns, 'g');
-    mountObjectA.onmousedown = toggleCheck;
-    mountObjectB.onmousedown = toggleCheck;
+    mountObjectA.addEventListener('mousedown', toggleCheck);
+    mountObjectB.addEventListener('mousedown', toggleCheck);
     parentSvg = document.getElementById('timeline-footer-svg');
     parentSvg.appendChild(mountObjectA);
     parentSvg.appendChild(mountObjectB);
@@ -94,7 +94,6 @@ export function timelineCompare(models, config, ui) {
       },
       yOffset: 15,
       path: PICK_PATH,
-      onMouseDown: onMouseDown,
       height: 59.51,
       width: 58.42,
       textColor: null,
@@ -106,11 +105,6 @@ export function timelineCompare(models, config, ui) {
       ),
       text: label
     };
-  };
-  var onMouseDown = function(id) {
-    if (models.date.activeDate !== id) {
-      models.compare.toggleState();
-    }
   };
   var updateState = function() {
     self.comparePickA.setState({
