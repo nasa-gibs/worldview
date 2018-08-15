@@ -89,6 +89,7 @@
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
+    "expose-loader": "^0.7.5",
     "express": "4.15.2",
     "file-loader": "^1.1.11",
     "font-awesome-loader": "^1.0.2",
@@ -172,6 +173,7 @@
     "neuquant": "./web/ext/neuquant/neuquant.js",
     "mobiscroll": "./web/ext/mobiscroll-2.6.0/mobiscroll.js",
     "isotope-layout": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
+    "isotope": "./node_modules/isotope-layout/dist/isotope.pkgd.js",
     "jquery-jcrop": "./node_modules/jquery-jcrop/js/jquery.Jcrop.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   }
