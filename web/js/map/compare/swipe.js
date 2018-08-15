@@ -1,6 +1,7 @@
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
+import $ from 'jquery';
 
 var swipeOffset = null;
 var line = null;
@@ -24,6 +25,10 @@ export class Swipe {
     percentSwipe = valueOverride / 100;
     events = compareEvents;
     this.create();
+    $(window).resize(() => {
+      this.destroy();
+      this.create();
+    });
   }
   create() {
     line = addLineOverlay(this.map);
@@ -125,7 +130,6 @@ var addLineOverlay = function(map) {
   var iconEl = document.createElement('i');
   var firstLabel = document.createElement('span');
   var secondLabel = document.createElement('span');
-  var windowWidth = util.browser.dimensions[0];
   mapCase = document.getElementById('wv-map');
   firstLabel.className = 'ab-swipe-span left-label';
   secondLabel.className = 'ab-swipe-span right-label';
@@ -152,8 +156,10 @@ var addLineOverlay = function(map) {
       evt.preventDefault();
       evt.stopPropagation();
       function move(evt) {
+        var windowWidth = util.browser.dimensions[0];
         evt.preventDefault();
         evt.stopPropagation();
+
         if (listenerObj.type === 'touch') {
           swipeOffset = evt.touches[0].pageX;
         } else {
@@ -166,7 +172,7 @@ var addLineOverlay = function(map) {
             : swipeOffset < SWIPE_PADDING
               ? SWIPE_PADDING
               : swipeOffset;
-
+        percentSwipe = swipeOffset / windowWidth;
         lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
 
         map.render();
