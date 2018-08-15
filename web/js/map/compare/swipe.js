@@ -88,8 +88,30 @@ export class Swipe {
   }
   destroy() {
     mapCase.removeChild(line);
-    removeListenersFromLayers(topLayers);
-    removeListenersFromBottomLayers(bottomLayers);
+    this.removeListenersFromLayers(topLayers);
+    this.removeListenersFromBottomLayers(bottomLayers);
+    topLayers = [];
+    bottomLayers = [];
+  }
+  /**
+   * Remove all listeners from layer group
+   * @param {Array} layers | Layer group
+   */
+  removeListenersFromBottomLayers(layers) {
+    lodashEach(layers, layer => {
+      layer.un('precompose', this.reverseClip);
+      layer.un('postcompose', restore);
+    });
+  }
+  /**
+   * Remove all listeners from layer group
+   * @param {Array} layers | Layer group
+   */
+  removeListenersFromLayers(layers) {
+    lodashEach(layers, layer => {
+      layer.un('precompose', this.clip);
+      layer.un('postcompose', restore);
+    });
   }
 }
 
@@ -187,24 +209,4 @@ var applyReverseLayerListeners = function(layer) {
 var restore = function(event) {
   var ctx = event.context;
   ctx.restore();
-};
-/**
- * Remove all listeners from layer group
- * @param {Array} layers | Layer group
- */
-var removeListenersFromBottomLayers = function(layers) {
-  lodashEach(layers, layer => {
-    layer.un('precompose', this.reverseClip);
-    layer.un('postcompose', restore);
-  });
-};
-/**
- * Remove all listeners from layer group
- * @param {Array} layers | Layer group
- */
-var removeListenersFromLayers = function(layers) {
-  lodashEach(layers, layer => {
-    layer.un('precompose', this.clip);
-    layer.un('postcompose', restore);
-  });
 };
