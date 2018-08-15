@@ -200,7 +200,11 @@ export function timeline(models, config, ui) {
     self.input.update();
     self.pick.shiftView();
   };
-
+  var onLayerUpdate = function() {
+    self.data.set();
+    self.resize();
+    self.setClip();
+  };
   var init = function() {
     var $timelineFooter = $('#timeline-footer');
     models.layers.events.trigger('toggle-subdaily');
@@ -252,12 +256,8 @@ export function timeline(models, config, ui) {
 
     model.events.on('select', updateTimeUi);
     model.events.on('state-update', updateTimeUi);
-
-    models.layers.events.on('change', function() {
-      self.data.set();
-      self.resize();
-      self.setClip();
-    });
+    models.compare.events.on('toggle-state', onLayerUpdate);
+    models.layers.events.on('change', onLayerUpdate);
 
     models.proj.events.on('select', function() {
       self.resize();
