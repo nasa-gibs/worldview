@@ -89,7 +89,9 @@ export function timelineCompare(models, config, ui) {
       onDrag: (e, id, position) => {
         self.events.trigger('drag', e, id, position);
       },
+
       onStop: (id, position) => {
+        self.dragging = false;
         self.events.trigger('drag-end', null, id, position);
       },
       yOffset: 15,
@@ -135,9 +137,9 @@ export function timelineCompare(models, config, ui) {
   };
   var dateSelect = function(e, id, offsetX) {
     var position = offsetX;
-    if (position > max) {
-      position = max - 10;
-    } else if (position <= 0) {
+    if (position > max - 5) {
+      position = max - 5;
+    } else if (position <= 5) {
       position = 5;
     }
     var date = timeline.x.invert(position);
@@ -160,13 +162,14 @@ export function timelineCompare(models, config, ui) {
    *
    */
   var showPickHoverDate = function(e, id, offsetX) {
-    if (offsetX < max && offsetX > 0) {
+    if (offsetX < max - 5 && offsetX > 5) {
       let date = timeline.x.invert(offsetX);
       ui.timeline.pick.hoverDate(date, true);
     }
   };
   var removeTicks = function() {
     ui.timeline.ticks.label.remove();
+    updateState();
   };
   init();
   return self;

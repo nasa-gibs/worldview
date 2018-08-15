@@ -153,6 +153,7 @@ class TimelineDragger extends React.Component {
    */
   handleDrag(e, d) {
     e.stopPropagation();
+    e.preventDefault();
     var position = this.state.position + e.movementX;
     this.props.onDrag(d.deltaX, this.props.id, d.x);
     this.setState({ position: position });
