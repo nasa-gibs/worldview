@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
 import lodashIsEqual from 'lodash/isEqual';
+import lodashIsNumber from 'lodash/isNumber';
 
 class Legend extends React.Component {
   constructor(props) {
@@ -49,9 +50,9 @@ class Legend extends React.Component {
     if (len < 250) {
       segmentWidth = width / len;
       location = segmentWidth * index + 0.5 * segmentWidth;
-      return location / width;
+      return lodashIsNumber(location / width) ? location / width : 0;
     } else {
-      return index / len || 0;
+      return lodashIsNumber(index / len) ? index / len : 0;
     }
   }
   /**
@@ -168,6 +169,7 @@ class Legend extends React.Component {
   getClassLabelStyle(index, boxWidth, textWidth, width) {
     var halfTextWidth = textWidth / 2 || 0;
     var xOffset = boxWidth * index + boxWidth / 2 || 0;
+
     if (halfTextWidth > xOffset) {
       return { left: '0', visibility: 'visible' };
     } else if (xOffset + halfTextWidth > width) {
@@ -181,6 +183,7 @@ class Legend extends React.Component {
    * @param {Number} width | Case width
    */
   getRunningLabelStyle(xOffset, textWidth, width) {
+    if (!xOffset || !textWidth || !width) return { left: '0' };
     var halfTextWidth = textWidth / 2 || 0;
     if (halfTextWidth > xOffset) {
       return { left: '0' };
@@ -202,7 +205,7 @@ class Legend extends React.Component {
     var percent, textWidth, xOffset, legendObj;
     var toolTipLength = legend.tooltips.length;
 
-    if (isRunningData && colorHex) {
+    if (isRunningData && colorHex && this.state.width > 0) {
       legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
