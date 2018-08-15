@@ -79,7 +79,7 @@ export function timelineCompare(models, config, ui) {
     }
   };
   var toggleCheck = function(e) {
-    if (this.classList.contains('ab-group-case-active')) return;
+    if ($(this).hasClass('ab-group-case-active')) return;
     models.compare.toggleState();
   };
   var getInitialProps = function(compareLetter, label) {
