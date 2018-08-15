@@ -130,7 +130,8 @@ var addLineOverlay = function(map) {
   var iconEl = document.createElement('i');
   var firstLabel = document.createElement('span');
   var secondLabel = document.createElement('span');
-  mapCase = document.getElementById('wv-map');
+  var windowWidth = util.browser.dimensions[0];
+  mapCase = map.getTargetElement();
   firstLabel.className = 'ab-swipe-span left-label';
   secondLabel.className = 'ab-swipe-span right-label';
   firstLabel.appendChild(document.createTextNode('A'));
@@ -145,8 +146,8 @@ var addLineOverlay = function(map) {
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe
-    ? mapCase.offsetWidth * percentSwipe
-    : swipeOffset || mapCase.offsetWidth / 2;
+    ? windowWidth * percentSwipe
+    : swipeOffset || windowWidth / 2;
   lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
 
   // Add event listeners to Elements
