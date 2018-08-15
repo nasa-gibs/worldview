@@ -13,6 +13,8 @@
   right: 10px;
   position: absolute;
   z-index: 10000;
+  background: none rgba(40, 40, 40, 0.85);
+  border: 1px solid #333;
 }
 
 .wv-map-zoom.ui-button-click-prevent {
@@ -29,12 +31,7 @@
   line-height: normal;
 }
 
-.wv-map-zoom.ui-state-default {
-  background: none rgba(40, 40, 40, 0.85);
-  border: 1px solid #333;
-}
-
-.wv-map-zoom.ui-state-hover {
+.wv-map-zoom:hover {
   background-color: #fff;
   color: #1a1a1a;
   border: 1px solid #333;
@@ -53,7 +50,9 @@
 }
 
 .wv-map-reset-rotation {
-  top: 300px;
+  top: 296px;
+  border: 1px solid #333;
+  height: 54px;
 }
 
 .wv-map-rotate-left {

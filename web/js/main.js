@@ -90,8 +90,8 @@ import { uiInfo } from './ui/info';
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import 'font-awesome-webpack';
-import '../../node_modules/jquery-ui/themes/base/jquery-ui.css';
-import '../../node_modules/jquery-ui/themes/ui-darkness/jquery-ui.css';
+import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.css';
+import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.css';
 import '../../node_modules/icheck/skins/square/grey.css';
 import '../../node_modules/icheck/skins/square/red.css';
 import '../../node_modules/icheck/skins/line/red.css';
@@ -106,7 +106,9 @@ import '../../node_modules/nouislider/src/jquery.nouislider.css';
 // App CSS
 import '../css/fonts.css';
 import '../css/reset.css';
+import '../css/jquery-ui-override.css';
 import '../css/util.css';
+import '../css/toolbar.css';
 import '../css/alert.css';
 import '../css/sidebar-panel.css';
 import '../css/button.css';
@@ -133,7 +135,6 @@ import '../css/dateselector.css';
 import '../css/tooltip.css';
 import '../css/mobile.css';
 import '../pages/css/document.css';
-import '../css/jquery-ui-override.css';
 
 import { polyfill } from './polyfill';
 polyfill(); // Polyfills some browser features
