@@ -569,6 +569,7 @@ g.plot rect.data-bar-invisible {
 }
 .ab-group-case {
   display: none;
+  cursor: pointer;
 }
 .ab-group-case-active {
   fill: #fff;
@@ -590,7 +591,6 @@ g.plot rect.data-bar-invisible {
   fill: #fff;
   opacity: 1;
   pointer-events: initial;
-  cursor: pointer;
 }
 .ab-group-case text {
   fill: #fff;
@@ -603,5 +603,5 @@ g.plot rect.data-bar-invisible {
   display: block;
 }
 .ab-active #guitarpick {
-  display: none !important;
+  display: none;
 }

@@ -154,7 +154,7 @@ export function timelinePick(models, config, ui) {
       tl.pan.xPosition = tl.axisZoom.translate()[0];
       tl.pan.axis();
     }
-    $('#guitarpick').show();
+    $('#guitarpick').removeClass('hidden');
   };
 
   // Hide/show pick if it goes off/on the timeline
@@ -163,9 +163,9 @@ export function timelinePick(models, config, ui) {
       self.offset - width / 2 >= tl.width - tl.margin.left - tl.margin.right ||
       self.offset <= -30
     ) {
-      $('#guitarpick').hide();
+      $('#guitarpick').addClass('hidden');
     } else {
-      $('#guitarpick').show();
+      $('#guitarpick').removeClass('hidden');
     }
   };
 
