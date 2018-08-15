@@ -119,6 +119,16 @@ module.exports = {
         }
       },
       {
+        test: require.resolve('jquery'), // expose globally for jQuery plugins
+        use: [{
+          loader: 'expose-loader',
+          options: 'jQuery'
+        }, {
+          loader: 'expose-loader',
+          options: '$'
+        }]
+      },
+      {
         test: /\.(sa|sc|c)ss$/,
         use: [
           {
