@@ -2,8 +2,8 @@ module.exports = {
   url: 'http://localhost:3000/',
   production: 'https://worldview.earthdata.nasa.gov/',
   selectors: {
-    'eventsTab': '[data-tab="events"]',
-    'dataTab': '[data-tab="download"]',
+    'eventsTab': '#events-sidebar-tab',
+    'dataTab': '#download-sidebar-tab',
     'yearlyResolutionTooltip': '#zoom-years',
     'timelineSetToYears': '#current-zoom.zoom-years',
     'modalCloseButton': '.ui-dialog.ui-draggable.ui-resizable .ui-dialog-titlebar-close',
