@@ -29,7 +29,7 @@ import { mapDateLineBuilder } from './datelinebuilder';
 import { mapLayerBuilder } from './layerbuilder';
 import { MapRunningData } from './runningdata';
 import { mapPrecacheTile } from './precachetile';
-import { mapUtilZoomAction } from './util';
+import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import { mapCompare } from './compare/compare';
 import Cache from 'cachai';
 
@@ -445,11 +445,17 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var removeLayer = function(def) {
+    var activeLayerString = models.layers.activeLayers;
     if (isGraticule(def)) {
-      removeGraticule(models.layers.activeLayers);
+      removeGraticule(activeLayerString);
     } else {
-      var layer = findLayer(def, models.layers.activeLayers);
-      self.selected.removeLayer(layer);
+      var layer = findLayer(def, activeLayerString);
+      if (models.compare && models.compare.active) {
+        let layerGroup = getActiveLayerGroup(self.selected, activeLayerString);
+        layerGroup.getLayers().remove(layer);
+      } else {
+        self.selected.removeLayer(layer);
+      }
     }
     updateLayerVisibilities();
   };
