@@ -1,4 +1,5 @@
 import util from '../util/util';
+import wvui from '../ui/ui';
 
 export function compareModel(models, config) {
   var self = {};
@@ -9,6 +10,7 @@ export function compareModel(models, config) {
 
   self.toggle = function() {
     self.active = !self.active;
+    wvui.close();
     self.events.trigger('toggle');
     self.events.trigger('change');
   };
@@ -16,6 +18,7 @@ export function compareModel(models, config) {
     self.isCompareA = !self.isCompareA;
     models.layers.updateLayerGroup(self.isCompareA ? 'active' : 'activeB');
     models.date.setActiveDate(self.isCompareA ? 'selected' : 'selectedB');
+    wvui.close();
     self.events.trigger('toggle-state');
     self.events.trigger('change');
   };
