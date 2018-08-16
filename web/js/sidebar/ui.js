@@ -320,6 +320,7 @@ export function sidebarUi(models, config, ui) {
     var layer;
     var layerGroupString = models.layers.activeLayers;
     var isCompareMode = models.compare && models.compare.active;
+
     switch (typeOfUpdate) {
       case 'remove':
         models.layers.remove(layerId, layerGroupString);
@@ -332,12 +333,24 @@ export function sidebarUi(models, config, ui) {
         updateState(getStateType(isCompareMode));
         break;
       case 'info':
-        layer = lodashFind(models.layers[layerGroupString], { id: layerId });
-        layersInfo(config, models, layer);
+        let $infoDialog = $('#wv-layers-info-dialog');
+        if ($infoDialog.attr('data-layer') !== layerId || $infoDialog.length === 0) {
+          layer = lodashFind(models.layers[layerGroupString], { id: layerId });
+          layersInfo(config, models, layer);
+        } else {
+          wvui.close();
+        }
+
         break;
       case 'options':
-        layer = lodashFind(models.layers[layerGroupString], { id: layerId });
-        layersOptions(config, models, layer, layerGroupString);
+        let $optionDialog = $('#wv-layers-options-dialog');
+        if ($optionDialog.attr('data-layer') !== layerId || $optionDialog.length === 0) {
+          layer = lodashFind(models.layers[layerGroupString], { id: layerId });
+          layersOptions(config, models, layer, layerGroupString);
+        } else {
+          wvui.close();
+        }
+
         break;
       case 'hover':
         timelineDataHightlight(layerId, value);

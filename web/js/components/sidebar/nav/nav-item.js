@@ -27,6 +27,7 @@ class CustomNavItem extends React.Component {
           disabled={isDisabled}
           title={title}
           className={className}
+          id={this.props.id + '-sidebar-tab'}
           onClick={() => onTabClick(id)}
         >
           <i className={'productsIcon selected ' + iconClassName} />
