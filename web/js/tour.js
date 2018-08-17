@@ -137,6 +137,7 @@ export default function (models, ui, config) {
         .dialog('close');
       $('#joyRideTipContent')
         .joyride({
+          scroll: false,
           autoStart: true,
           includepage: true,
           template: {
@@ -186,6 +187,7 @@ export default function (models, ui, config) {
       googleAnalytics.event('Tour', 'Click', 'Take Tour');
       $('#joyRideTipContent')
         .joyride({
+          scroll: false,
           autoStart: true,
           includepage: true,
           template: {
