@@ -16,7 +16,12 @@ let brand = require('../build/worldview/brand/brand.json');
 let applyTo = [
   'build/worldview/index.html',
   'build/worldview/build/wv.js',
-  'build/worldview/pages/about.html'
+  'build/worldview/build/wv.css.map',
+  'build/worldview/pages/about.html',
+  'build/worldview/pages/tour.html',
+  'build/worldview/pages/unsupported_browser.html',
+  'build/worldview/pages/curl.html',
+  'build/worldview/pages/wget.html'
 ];
 
 // Build date shown in the About box

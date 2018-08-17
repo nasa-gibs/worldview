@@ -17,8 +17,7 @@ const pluginSystem = [
   new HtmlWebpackPlugin({
     hash: true,
     title: 'Worldview',
-    template: 'web/index.html',
-    filename: './index.html',
+    filename: 'web/index.html',
     inject: false
   }),
   new webpack.ProvidePlugin({
@@ -206,7 +205,6 @@ module.exports = {
           loader: 'html-loader',
           options: {
             minimize: !devMode,
-            removeComments: !devMode,
             removeEmptyAttributes: !devMode,
             sortAttributes: !devMode,
             sortClassName: !devMode
