@@ -20,6 +20,10 @@ a.ui-button.ui-state-default.ui-state-hover {
   color: #404040;
 }
 
+.ui-button.ui-state-disabled {
+  pointer-events: auto;
+}
+
 .ui-button {
   padding: 0;
   color: #eee;
@@ -276,8 +280,10 @@ or dateline overlays to be selectable. */
   user-select: none !important;
 }
 
-.wv-map-zoom:focus {
+.wv-map-zoom:focus,
+.wv-map-zoom.ui-button.ui-state-disabled:hover {
   border: 1px solid #333;
-  color: #eee;
+  color: #eeee;
   background-color: rgba(40, 40, 40, 0.85);
 }
+
