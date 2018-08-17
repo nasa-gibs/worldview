@@ -17,11 +17,7 @@ let applyTo = [
   'build/worldview/index.html',
   'build/worldview/build/wv.js',
   'build/worldview/build/wv.css.map',
-  'build/worldview/pages/about.html',
-  'build/worldview/pages/tour.html',
-  'build/worldview/pages/unsupported_browser.html',
-  'build/worldview/pages/curl.html',
-  'build/worldview/pages/wget.html'
+  'build/worldview/pages/*.html'
 ];
 
 // Build date shown in the About box
