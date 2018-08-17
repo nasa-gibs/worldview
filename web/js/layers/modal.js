@@ -407,7 +407,8 @@ export function layersModal(models, ui, config) {
               });
 
               var $measurementItem = $('<li />', {
-                class: 'layer-category-item'
+                class: 'layer-category-item',
+                id: 'layer-category-item-' + category.id + '-' + current.id
               });
 
               $measurementItem.append($measurement);
