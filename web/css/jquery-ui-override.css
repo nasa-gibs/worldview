@@ -275,3 +275,9 @@ or dateline overlays to be selectable. */
   -ms-user-select: none !important;
   user-select: none !important;
 }
+
+.wv-map-zoom:focus {
+  border: 1px solid #333;
+  color: #eee;
+  background-color: rgba(40, 40, 40, 0.85);
+}
