@@ -15,7 +15,7 @@ python
 .settings
 .pydevproject
 .DS_Store
-bitly_config.py*
+bitly.json
 tools
 *~
 *.swp

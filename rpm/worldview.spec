@@ -1,10 +1,10 @@
-Name: @WORLDVIEW@
+Name: worldview
 Version: @BUILD_VERSION@
 Release: 1.@BUILD_NUMBER@%{?dist}
 Summary: Browse full-resolution, near real-time satellite imagery.
 License: NASA-1.3
 URL: http://earthdata.nasa.gov
-Source0: @WORLDVIEW@.tar.gz
+Source0: worldview.tar.gz
 Source1: httpd.conf
 Source2: bitly.json
 BuildArch: noarch
@@ -56,14 +56,14 @@ rm -rf %{buildroot}
 
 %post
 if [ $1 -gt 0 ] ; then
-   if /sbin/service httpd status >/dev/null ; then
-      /sbin/service httpd reload
+   if /bin/systemctl show httpd.service | grep ActiveState=active >/dev/null ; then
+      /bin/systemctl reload httpd.service
    fi
 fi
 
 %postun
 if [ $1 -eq 0 ] ; then
-   if /sbin/service httpd status >/dev/null ; then
-       /sbin/service httpd reload
+   if /bin/systemctl show httpd.service | grep ActiveState=active >/dev/null ; then
+      /bin/systemctl reload httpd.service
    fi
 fi
