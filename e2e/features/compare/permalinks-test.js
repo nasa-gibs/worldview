@@ -12,7 +12,7 @@ module.exports = {
    */
   'Swipe mode and A|B state A are active and date is correct': function(client) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
-    client.waitForElementVisible('.ab-swipe-line .ab-swipe-dragger', TIME_LIMIT, function() {
+    client.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT, function() {
       client.expect.element(localSelectors.swipeButton).to.not.be.enabled;
       client.assert.cssClassPresent(localSelectors.aTab, 'active');
       client.useCss().assert.containsText(localSelectors.aTab, 'A: 2018-08-17');
