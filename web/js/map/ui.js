@@ -111,6 +111,7 @@ export function mapui(models, config) {
     // Update the rotation buttons if polar projection to display correct value
     if (models.proj.selected.id !== 'geographic' && models.proj.selected.id !== 'webmerc') {
       let currentRotation = map.getView().getRotation();
+      models.map.rotation = currentRotation;
       rotation.setResetButton(currentRotation);
     }
 
