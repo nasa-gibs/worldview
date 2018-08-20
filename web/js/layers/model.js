@@ -132,15 +132,8 @@ export function layersModel(models, config) {
         max = Math.max(max, end);
       } else if (def.endDate) {
         range = true;
-        let end = util.parseDateUTC(def.endDate)
+        max = util.now()
           .getTime();
-        let today = util.today()
-          .getTime();
-        if (end > today) {
-          max = Math.max(max, end);
-        } else {
-          max = Math.max(max, today);
-        }
       }
       // If there is a start date but no end date, this is a
       // product that is currently being created each day, set
