@@ -113,10 +113,6 @@
     top: -2px;
   }
 
-  .layer-modal-content .categories-nav input {
-    display: block;
-  }
-
   #selected-category .ui-tabs-panel li.measurement-settings-item {
     margin-left: 0;
   }
