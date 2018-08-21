@@ -120,6 +120,11 @@ export function mapLayerBuilder(models, config, cache, Parent) {
       date = options.date;
     } else {
       date = models.date.selected;
+      // If this not a subdaily layer, truncate the selected time to
+      // UTC midnight
+      if (def.period !== 'subdaily') {
+        date = util.clearTimeUTC(date);
+      }
     }
     // Perform extensive checks before finding closest date
     if (!options.precache && (animRange && animRange.playing === false) &&
@@ -156,11 +161,6 @@ export function mapLayerBuilder(models, config, cache, Parent) {
     var projId = models.proj.selected.id;
     var palette = '';
 
-    if (options.date) {
-      date = options.date;
-    } else {
-      date = models.date.selected;
-    }
     date = self.closestDate(def, options);
 
     if (models.palettes.isActive(def.id)) {
