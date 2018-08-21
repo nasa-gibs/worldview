@@ -657,9 +657,7 @@ export default (function (self) {
    * @return {Date} The current time or an overriden value.
    */
   var now = function () {
-    var now = new Date();
-    var nowOffset = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
-    return nowOffset;
+    return new Date();
   };
 
   self.now = now;
