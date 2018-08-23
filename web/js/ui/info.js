@@ -1,7 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/button';
-import 'jquery-ui/dialog';
-import 'jquery-ui/menu';
+import 'jquery-ui-bundle/jquery-ui';
 import wvui from './ui';
 import util from '../util/util';
 import feedbackModal from '../feedback';
@@ -98,7 +96,8 @@ export function uiInfo (ui, config) {
             },
             hide: {
               effect: 'fade'
-            }
+            },
+            closeText: ''
           })
           .load('pages/about.html?v=@BUILD_NONCE@ #page')
           .addClass('wv-opaque');

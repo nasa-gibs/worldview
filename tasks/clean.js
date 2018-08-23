@@ -6,7 +6,6 @@ let dirs = [
   'build',
   'dist',
   'web/brand',
-  'web/build',
   'web/config'
 ];
 

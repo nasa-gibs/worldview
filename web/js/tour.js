@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/dialog';
+import 'jquery-ui-bundle/jquery-ui';
 import 'jquery.joyride';
 import util from './util/util';
 import wvui from './ui/ui';
@@ -85,7 +85,8 @@ export default function(models, ui, config) {
       width: 700,
       height: 'auto',
       draggable: false,
-      resizable: false
+      resizable: false,
+      closeText: ''
     });
 
     if (introduction) {
@@ -116,7 +117,8 @@ export default function(models, ui, config) {
         width: 600,
         height: 'auto',
         draggable: false,
-        resizable: false
+        resizable: false,
+        closeText: ''
       });
       feedbackModal.decorate($dialog.find('.feedback'));
       $('#repeat').click(repeatTour);
@@ -130,6 +132,7 @@ export default function(models, ui, config) {
       e.stopPropagation();
       $('.ui-dialog-content').dialog('close');
       $('#joyRideTipContent').joyride({
+        scroll: false,
         autoStart: true,
         includepage: true,
         template: {
@@ -175,6 +178,7 @@ export default function(models, ui, config) {
       initTourState();
       googleAnalytics.event('Tour', 'Click', 'Take Tour');
       $('#joyRideTipContent').joyride({
+        scroll: false,
         autoStart: true,
         includepage: true,
         template: {

@@ -1,6 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/button';
-import 'jquery-ui/dialog';
+import 'jquery-ui-bundle/jquery-ui';
 import 'icheck';
 import 'nouislider/distribute/jquery.nouislider';
 import 'perfect-scrollbar/jquery';
@@ -83,6 +82,7 @@ export function layersOptions(config, models, layer, layerGroupStr) {
         at: 'right+5 top',
         of: $('#productsHolder')
       },
+      closeText: '',
       close: dispose
     });
 

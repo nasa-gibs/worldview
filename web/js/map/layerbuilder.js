@@ -125,6 +125,11 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       date = options.date;
     } else {
       date = models.date[models.date.activeDate];
+      // If this not a subdaily layer, truncate the selected time to
+      // UTC midnight
+      if (def.period !== 'subdaily') {
+        date = util.clearTimeUTC(date);
+      }
     }
     // Perform extensive checks before finding closest date
     if (
@@ -164,7 +169,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var layerId = def.id;
     var projId = models.proj.selected.id;
     var palette = '';
-    date = options.date ? options.date : models.date[models.date.activeDate];
     layerGroupStr = options.group
       ? options.group
       : models.layers[models.layers.activeLayers];

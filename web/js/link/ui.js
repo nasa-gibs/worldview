@@ -1,6 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/button';
-import 'jquery-ui/dialog';
+import 'jquery-ui-bundle/jquery-ui';
 import 'icheck';
 import lodashThrottle from 'lodash/throttle';
 import React from 'react';
@@ -220,7 +219,8 @@ export function linkUi(models, config) {
         minHeight: 10,
         draggable: false,
         resizable: false,
-        autoOpen: false
+        autoOpen: false,
+        closeText: ''
       })
       .on('dialogcreate', $dialog.prepend(item))
       .on('dialogclose', function() {
@@ -241,7 +241,6 @@ export function linkUi(models, config) {
         of: $label
       });
     }
-    $('.ui-dialog').zIndex(600);
 
     $('#permalink_content').val(models.link.get());
     $dialog.dialog('open');

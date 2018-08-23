@@ -38,6 +38,7 @@ git clone https://github.com/nasa-gibs/worldview.git
 cd worldview
 npm install
 ```
+
 View the [Configuration](doc/configuration.md) section for information on how to install the official EOSDIS Worldview configuration, or to add your own custom configuration.
 
 ### Dependencies
@@ -47,14 +48,16 @@ The following are required to install and run Worldview:
 - [Node v8.8.1 or Later](https://nodejs.org/en/download/)
   - **Note:** Ubuntu users may run into issues with the `node` command not being available. See [this question on StackOverflow](https://stackoverflow.com/q/18130164/417629) for possible solutions.
 - [Python v2.7.14 or Later](https://www.python.org/)
+
   - **Note:** It is recommended that Windows users install Python with [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools).
-  - macOS users should use the `--with-brewed-openssl` option when using Homebrew.
+  - macOS users should use homebrew to install **Python v2**
+    - `brew install python@2`
 
 Windows users will also need the following:
 
-  - [Git Bash](https://git-scm.com/downloads), or [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/)
-  - [.NET Framework](https://www.microsoft.com/net/download/dotnet-framework-runtime) or [Visual Studio Team Services](https://www.visualstudio.com/)
-  - [Add `python` to the path](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables)
+- [Git Bash](https://git-scm.com/downloads), or [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/)
+- [.NET Framework](https://www.microsoft.com/net/download/dotnet-framework-runtime) or [Visual Studio Team Services](https://www.visualstudio.com/)
+- [Add `python` to the path](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables)
 
 ## Usage
 
@@ -75,16 +78,16 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 
 ## Other Information
 
-* [Configuration](doc/configuration.md)
-* [Custom Branding](doc/branding.md)
-* [Optional Features](doc/features.md)
-* [Data Download](doc/data_download.md)
-* [URL Parameters](doc/url_parameters.md)
-* [Developing](doc/developing.md)
-* [Deployment](doc/deployment.md)
-* [Using Apache (deprecated)](doc/apache_setup.md)
-* [Testing](doc/testing.md)
-* [Uploading](doc/upload.md)
+- [Configuration](doc/configuration.md)
+- [Custom Branding](doc/branding.md)
+- [Optional Features](doc/features.md)
+- [Data Download](doc/data_download.md)
+- [URL Parameters](doc/url_parameters.md)
+- [Developing](doc/developing.md)
+- [Deployment](doc/deployment.md)
+- [Using Apache (deprecated)](doc/apache_setup.md)
+- [Testing](doc/testing.md)
+- [Uploading](doc/upload.md)
 
 ## Contact
 

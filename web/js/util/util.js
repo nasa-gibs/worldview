@@ -164,6 +164,7 @@ export default (function (self) {
   self.parseTimestampUTC = function (str) {
     return self.parseDateUTC(str);
   };
+
   /**
    * Gets a pixel RGBA value from Canvas
    *
@@ -672,7 +673,9 @@ export default (function (self) {
   var now = function () {
     return new Date();
   };
+
   self.now = now;
+
   self.resetNow = function () {
     self.now = now;
   };
@@ -965,8 +968,10 @@ export default (function (self) {
         coord[0].toFixed(4) + '&deg;';
     }
   };
-  // allows simple printf functionality with strings
-  // arguments array contains all args passed. String must be formatted so that first replacement starts with "{1}"
+
+  // Allows simple printf functionality with strings
+  // arguments array contains all args passed. String must be formatted
+  // so that first replacement starts with "{1}"
   // usage example: wv.util.format("{1}{2}",'World','view')
   self.format = function () {
     var formatted = arguments[0];

@@ -171,6 +171,18 @@ export function layersModel(models, config) {
     }
   };
 
+  self.lastDate = function () {
+    var endDate;
+    var layersDateRange = self.dateRange();
+    var now = util.today();
+    if (layersDateRange && layersDateRange.end > now) {
+      endDate = layersDateRange.end;
+    } else {
+      endDate = util.today();
+    }
+    return endDate;
+  };
+
   self.add = function(id, spec, activeLayerString) {
     activeLayerString = activeLayerString || self.activeLayers;
     if (

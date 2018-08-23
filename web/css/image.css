@@ -1,3 +1,11 @@
+.wv-image {
+  color: #fff;
+}
+
+.wv-image .wv-re-pick-wrapper {
+  color: #fff;
+}
+
 .wv-image .ui-dialog-content {
   padding: 0 10px;
 }
@@ -6,12 +14,14 @@
   width: 6em;
   margin-right: 1em;
 }
+
 .wv-image-download-grid {
   display: flex;
   margin-top: 0.5em;
   flex-wrap: wrap;
   width: 100%;
 }
+
 .wv-image-download-grid .grid-child {
   font-weight: 400;
   font-size: 10px;
@@ -20,9 +30,11 @@
   border: 0;
   flex: 0 45%;
 }
+
 .wv-image-download-grid .grid-head {
   font-size: 12px;
 }
+
 .wv-image-download-grid .grid-child.wv-image-dimensions {
   display: flex;
   align-items: center;
@@ -42,6 +54,7 @@
 .wv-image-download-grid .wv-image-max-size.wv-image-size-invalid {
   border-left: none;
 }
+
 .wv-image-download-grid button span {
   padding: 0.2em 1em;
   font-weight: 700;

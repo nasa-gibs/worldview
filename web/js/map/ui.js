@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/button';
+import 'jquery-ui-bundle/jquery-ui';
 import lodashFindIndex from 'lodash/findIndex';
 import lodashEach from 'lodash/each';
 import lodashForOwn from 'lodash/forOwn';
@@ -132,6 +132,7 @@ export function mapui(models, config) {
       models.proj.selected.id !== 'webmerc'
     ) {
       let currentRotation = map.getView().getRotation();
+      models.map.rotation = currentRotation;
       rotation.setResetButton(currentRotation);
     }
 

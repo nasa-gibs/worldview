@@ -143,13 +143,11 @@
 }
 
 .layer-modal .layer-modal-content nav span {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  height: 30px;
-  line-height: 30px;
-  padding: 1px 15px;
+  display: none;
+}
+
+.layer-modal .layer-modal-content nav.category-breadcrumb span {
+  display: inline;
 }
 
 .layer-modal .layer-modal-content .category-breadcrumb span {
@@ -194,9 +192,6 @@
 
 .layer-modal .layer-modal-content .categories-nav .nav-selected {
   background: #00457b;
-}
-
-.layer-modal .layer-modal-content .categories-nav .nav-selected span {
   color: #fff;
 }
 
@@ -211,6 +206,7 @@
 .layer-modal-content {
   overflow: auto;
   position: relative;
+  padding-top: 3px;
 }
 
 .stamp {
@@ -278,20 +274,44 @@
 
 /* Categories view */
 .layer-modal-content .categories-nav {
-  height: 35px;
+  height: 31px;
   line-height: 35px;
-  margin: 0 10px 0 0;
+  margin: 0 12px 0 0;
   border-bottom: 3px solid #00457b;
 }
 
-.layer-modal-content .categories-nav label {
-  border: 0;
-  background: 0;
+.layer-modal-content .categories-nav input {
+  display: none;
 }
 
-.layer-modal-content .categories-nav label span {
-  text-transform: capitalize;
+.layer-modal-content .categories-nav label {
+  color: #383838;
+  font-family: "Open Sans", sans-serif;
   font-size: 16px;
+  font-weight: 300;
+  text-transform: capitalize;
+  border: 0;
+  background: 0;
+  height: 30px;
+  line-height: 30px;
+  padding: 1px 15px;
+  vertical-align: middle;
+  float: left;
+}
+
+.layer-modal-content .categories-nav label:hover {
+  cursor: pointer;
+}
+
+.button-input-scientific {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 /* Measurement accordion view */
@@ -360,6 +380,8 @@
 
 .layers-all .layers-all-layer .layers-all-layer-icon,
 .layer-modal-content .selected-category .ui-accordion-header-icon {
+  position: absolute;
+  top: 50%;
   left: auto;
   right: 1.2em;
 }
@@ -430,8 +452,9 @@
 
 .layer-modal-content .selected-category .ui-tabs .ui-tabs-nav li {
   max-width: 200px;
-  border-left: 10px solid transparent;
-  margin: 0;
+  border: transparent;
+  background: none;
+  margin: 0 0 0 10px;
   padding: 0;
   clear: both;
   box-sizing: border-box;
@@ -457,6 +480,7 @@
 
 .layer-modal-content .selected-category .ui-tabs-nav li.ui-tabs-active {
   background: rgba(255, 255, 255, 0.9);
+  margin-left: 0;
   border-left: 10px solid #d54e21;
 }
 

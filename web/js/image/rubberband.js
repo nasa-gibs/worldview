@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/button';
+import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-jcrop';
 import lodashFind from 'lodash/find';
 import util from '../util/util';
@@ -22,7 +22,8 @@ const dialogConfig = {
   minHeight: 10,
   draggable: false,
   resizable: false,
-  autoOpen: false
+  autoOpen: false,
+  closeText: ''
 };
 
 const PALETTE_WARNING =

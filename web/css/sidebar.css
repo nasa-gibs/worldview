@@ -75,8 +75,7 @@
 }
 #productsHolder footer {
   padding: 5px;
-  background-color: transparent;
-  position: relative;
+  width: initial;
 }
 footer .product-buttons {
   padding: 5px;
@@ -113,7 +112,7 @@ footer .compare-toggle-button {
 }
 
 #productsHolder footer .action {
-  display: inline-block;
+  display: block;
   border-color: transparent;
   color: #fff;
   cursor: pointer;
@@ -121,9 +120,13 @@ footer .compare-toggle-button {
   background: #d54e21;
   background-image: none;
   margin-right: 5px;
+  font-weight: 700;
+  padding: 0.5em 1em;
+  line-height: normal;
 }
 
 #productsHolder footer .action:hover {
+  color: #333;
   background: #ccc;
 }
 
@@ -131,7 +134,7 @@ footer .compare-toggle-button {
   background-color: #000;
   color: #bebebe;
   opacity: 1;
-  border-color: #666;
+  border: 1px solid #666;
 }
 
 #productsHolder footer .action.ui-state-hover {

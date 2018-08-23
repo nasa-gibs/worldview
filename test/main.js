@@ -30,10 +30,6 @@ ui.mouse = uiMouse;
 
 window.wv = {
   brand: brand,
-  date: {
-    parse: dateParser,
-    model: dateModel
-  },
   data: {
     parse: dataParser,
     model: dataModel
@@ -41,6 +37,10 @@ window.wv = {
   layers: {
     parse: layerParser,
     model: layersModel
+  },
+  date: {
+    parse: dateParser,
+    model: dateModel
   },
   link: {
     model: linkModel

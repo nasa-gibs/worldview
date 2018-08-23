@@ -1,6 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/button';
-import 'jquery-ui/dialog';
+import 'jquery-ui-bundle/jquery-ui';
 import olProj from 'ol/proj';
 import ImageResSelection from '../components/image-panel/select';
 import googleAnalytics from '../components/util/google-analytics';
@@ -190,7 +189,6 @@ export function imagePanel(models, ui, config, dialogConfig) {
     // $("#wv-image-resolution").buttonset();
     // $("#wv-image-format").buttonset();
     $('#wv-image-download-button').button();
-    $('.ui-dialog').zIndex(600);
     $(window).resize(setPosition);
 
     // Auto-set default resolution to map's current zoom level; round it

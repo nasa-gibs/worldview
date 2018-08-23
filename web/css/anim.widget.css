@@ -172,34 +172,49 @@
   color: #999;
   cursor: pointer;
 }
+
 .gif-dialog {
   color: #fff;
 }
+
 .gif-dialog .wv-button {
   margin: 10px 0 0 10px;
 }
+
 .gif-dialog .wv-button,
 .gif-dialog .wv-checkbox {
   display: inline-block;
 }
+
 .gif-dialog .wv-checkbox {
   margin-left: 18px;
 }
+
 .gif-dialog select {
   margin-left: 1em;
 }
+
 .gif-results-dialog-case, {
   text-transform: capitalize;
 }
+
+.wv-gif-results .wv-button .ui-button-text,
+.wv-gif-results .wv-button:hover .ui-button-text,
+.wv-gif-results .ui-state-hover .ui-button-text {
+  font-weight: 700;
+}
+
 .gif-selector-case {
   padding: 10px 8px 15px;
 }
+
 .gif-download-grid {
   display: flex;
   flex-wrap: wrap;
   font-size: 12px;
   font-weight: 400;
 }
+
 .gif-download-grid .grid-child {
   width: 190px;
   font-size: 12px;
@@ -208,12 +223,15 @@
   margin-bottom: 4px;
   transition: border 0.5s ease;
 }
+
 .gif-download-grid .grid-child.label {
   width: 120px;
 }
+
 .gif-download-grid .grid-child.gif-size-invalid {
   border: 1px solid #faa;
 }
+
 .gif-results-dialog-case .gif-results-dialog,
 .gif-results-dialog-case img {
   display: block;

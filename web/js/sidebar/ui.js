@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/dialog';
+import 'jquery-ui-bundle/jquery-ui';
 import lodashFind from 'lodash/find';
 import lodashDebounce from 'lodash/debounce';
 import util from '../util/util';
@@ -334,7 +334,10 @@ export function sidebarUi(models, config, ui) {
         break;
       case 'info':
         let $infoDialog = $('#wv-layers-info-dialog');
-        if ($infoDialog.attr('data-layer') !== layerId || $infoDialog.length === 0) {
+        if (
+          $infoDialog.attr('data-layer') !== layerId ||
+          $infoDialog.length === 0
+        ) {
           layer = lodashFind(models.layers[layerGroupString], { id: layerId });
           layersInfo(config, models, layer);
         } else {
@@ -344,7 +347,10 @@ export function sidebarUi(models, config, ui) {
         break;
       case 'options':
         let $optionDialog = $('#wv-layers-options-dialog');
-        if ($optionDialog.attr('data-layer') !== layerId || $optionDialog.length === 0) {
+        if (
+          $optionDialog.attr('data-layer') !== layerId ||
+          $optionDialog.length === 0
+        ) {
           layer = lodashFind(models.layers[layerGroupString], { id: layerId });
           layersOptions(config, models, layer, layerGroupString);
         } else {

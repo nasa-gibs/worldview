@@ -1,10 +1,8 @@
 import $ from 'jquery';
-import 'jquery-ui/dialog';
-import 'jquery-ui/accordion';
-import 'jquery-ui/button';
-import 'jquery-ui/tabs';
+import 'jquery-ui-bundle/jquery-ui';
 import 'icheck';
-import 'isotope-layout';
+import jQueryBridget from 'jquery-bridget';
+import Isotope from 'isotope-layout';
 import 'perfect-scrollbar/jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -34,7 +32,7 @@ export function layersModal(models, ui, config) {
   var sizeMultiplier;
   var searchBool;
   var hasMeasurement;
-
+  jQueryBridget('isotope', Isotope, $);
   var init = function() {
     self.reactList = ReactDOM.render(
       React.createElement(LayerList, getInitialProps(models.proj.selected.id)),
@@ -195,7 +193,7 @@ export function layersModal(models, ui, config) {
       sizeMultiplier = 3;
     }
     modalHeight = $(window).height() - 100;
-    modalWidth = gridItemWidth * sizeMultiplier + 10;
+    modalWidth = gridItemWidth * sizeMultiplier + 12;
   };
 
   $.fn.hasScrollBar = function() {
@@ -437,7 +435,7 @@ export function layersModal(models, ui, config) {
         $categories.isotope({
           filter: '.layer-category-' + interestCssName(metaCategoryName)
         });
-        $nav.find('.ui-button').removeClass('nav-selected');
+        $nav.find('.layer-category-button').removeClass('nav-selected');
         $('label[for=' + $(this).attr('id') + ']').addClass('nav-selected');
       });
 

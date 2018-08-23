@@ -103,8 +103,14 @@
     margin-bottom: 15px;
   }
 
-  #categories-nav label span {
+  #categories-nav label {
     font-size: 1em;
+    position: relative;
+    padding-top: 1px;
+  }
+
+  .button-label-scientific {
+    top: -2px;
   }
 
   #selected-category .ui-tabs-panel li.measurement-settings-item {

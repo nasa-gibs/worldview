@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'jquery-ui/dialog';
+import 'jquery-ui-bundle/jquery-ui';
 import 'perfect-scrollbar/jquery';
 import lodashForEachRight from 'lodash/forEachRight';
 import wvui from '../ui/ui';
@@ -22,7 +22,6 @@ export function layersInfo(config, models, layer) {
       .attr('id', 'wv-layers-info-dialog')
       .attr('data-layer', layer.id);
     renderDescription($dialog);
-
     names = models.layers.getTitles(layer.id);
     $dialog.dialog({
       dialogClass: 'wv-panel',
@@ -50,6 +49,7 @@ export function layersInfo(config, models, layer) {
             $('.ui-dialog-content').scrollTop('0');
           });
       },
+      closeText: '',
       close: dispose
     });
 
@@ -298,6 +298,11 @@ export function layersInfo(config, models, layer) {
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
                   rangeEndDate = 'Present';
+                } else if (
+                  util.parseDate(layer.endDate) <= util.today() &&
+                  !layer.inactive
+                ) {
+                  rangeEndDate = 'Present';
                 }
                 firstDateRange = false;
               }
@@ -337,6 +342,11 @@ export function layersInfo(config, models, layer) {
                 util.giveMonth(rangeEndDate) + ' ' + rangeEndDate.getFullYear();
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
+                  rangeEndDate = 'Present';
+                } else if (
+                  util.parseDate(layer.endDate) <= util.today() &&
+                  !layer.inactive
+                ) {
                   rangeEndDate = 'Present';
                 }
                 firstDateRange = false;
@@ -387,6 +397,11 @@ export function layersInfo(config, models, layer) {
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
                   rangeEndDate = 'Present';
+                } else if (
+                  util.parseDate(layer.endDate) <= util.today() &&
+                  !layer.inactive
+                ) {
+                  rangeEndDate = 'Present';
                 }
                 firstDateRange = false;
               }
@@ -421,6 +436,11 @@ export function layersInfo(config, models, layer) {
               util.pad(rangeEndDate.getMinutes(), 2, '0');
             if (firstDateRange) {
               if (layer.endDate === undefined) {
+                rangeEndDate = 'Present';
+              } else if (
+                util.parseDate(layer.endDate) <= util.today() &&
+                !layer.inactive
+              ) {
                 rangeEndDate = 'Present';
               }
               firstDateRange = false;

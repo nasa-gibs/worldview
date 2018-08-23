@@ -259,6 +259,16 @@ export function timeline(models, config, ui) {
     models.compare.events.on('toggle-state', onLayerUpdate);
     models.layers.events.on('change', onLayerUpdate);
 
+    // Determine maximum end date and move tl pick there if selected date is
+    // greater than the max end date
+    models.layers.events.on('remove', function() {
+      var endDate = models.date.maxDate();
+      var selectedDate = models.date[models.date.activeDate];
+      if (selectedDate > endDate) {
+        models.date.select(endDate);
+      }
+    });
+
     models.proj.events.on('select', function() {
       self.resize();
       self.setClip();

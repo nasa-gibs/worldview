@@ -318,7 +318,8 @@ var dataUiDownloadListPanel = function(config, model) {
       title: 'Download Links',
       width: 650,
       height: 500,
-      autoOpen: false
+      autoOpen: false,
+      closeText: ''
     });
     var $bottomPane = $('<div></div>')
       .attr('id', 'wv-data-bulk-download-links')
@@ -656,7 +657,8 @@ var dataUiSelectionListPanel = function(model, results) {
       .dialog({
         title: 'Select data',
         width: 400,
-        height: 400
+        height: 400,
+        closeText: ''
       });
     $('button.ui-dialog-titlebar-close').hide();
 
