@@ -395,6 +395,7 @@ export function animationGif(models, config, ui) {
       wvui.ask({
         header: 'Notice',
         message: PALETTE_WARNING,
+        class: 'gif-palette-warning',
         onOk: function() {
           models.palettes.clear();
           getGif();
@@ -411,6 +412,7 @@ export function animationGif(models, config, ui) {
       wvui.ask({
         header: 'Notice',
         message: GRATICULE_WARNING,
+        class: 'gif-graticule-warning',
         onOk: function() {
           models.layers.setVisibility('Graticule', false);
           self.getGif();
@@ -422,6 +424,7 @@ export function animationGif(models, config, ui) {
       wvui.ask({
         header: 'Reset rotation?',
         message: ROTATE_WARNING,
+        class: 'gif-rotation-warning',
         onOk: function() {
           resetRotation();
           // Let rotation finish before reselecting can occur
