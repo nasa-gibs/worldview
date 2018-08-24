@@ -158,20 +158,12 @@ fixtures.config = function() {
 fixtures.models = function(config) {
   var models = {};
 
-<<<<<<< HEAD
-  models.date = dateModel(models, config);
-=======
->>>>>>> 4f75552779ce3dc38c3ff329f5fe30d7b5c991d7
   models.proj = projectionModel(config);
   models.layers = layersModel(models, config);
   models.palettes = palettesModel(models, config);
   models.map = mapModel(models, config);
-<<<<<<< HEAD
   models.compare = compareModel(models, config);
-=======
   models.date = dateModel(models, config);
->>>>>>> 4f75552779ce3dc38c3ff329f5fe30d7b5c991d7
-
   return models;
 };
 

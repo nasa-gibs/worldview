@@ -20,7 +20,6 @@ buster.testCase(
         time: '2013-01-05'
       };
       wv.date.parse(state, errors);
-      console.log(state.t);
       buster.assert.equals(state.t, d);
       buster.assert.equals(errors.length, 0);
     };
