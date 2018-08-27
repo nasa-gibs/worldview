@@ -253,10 +253,12 @@ export function timeline(models, config, ui) {
       self.zoom.refresh();
       self.setClip();
     });
-
     model.events.on('select', updateTimeUi);
     model.events.on('state-update', updateTimeUi);
-    models.compare.events.on('toggle-state', onLayerUpdate);
+    if (models.compare) {
+      models.compare.events.on('toggle-state', onLayerUpdate);
+    }
+
     models.layers.events.on('change', onLayerUpdate);
 
     // Determine maximum end date and move tl pick there if selected date is
