@@ -25,9 +25,8 @@ die() {
 
 [ -d "$SRC_DIR" ] || die "Options directory does not exist"
 
-# Set $OPT_SUBDIR to the first argument passed into this script
-# Or "release" if there is no argument passed
-OPT_SUBDIR="${1-release}"
+# Set $OPT_SUBDIR to the value of CONFIG_ENV or "release"
+OPT_SUBDIR="${CONFIG_ENV-release}"
 
 # Activate virtual Python environment
 PATH=.python/bin:.python/Scripts:${PATH}
