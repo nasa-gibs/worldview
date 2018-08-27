@@ -24,7 +24,7 @@ as needed or use `npm run updateconfig` as a shortcut to run both.
 
 If you have a custom configuration in a subdirectory of `options/` other than
 `options/release/`, pass in the name of the subdirectory to use with
-`npm run build:config -- subdirectory_name`. To build an incomplete configuration,
+`CONFIG_ENV=subdirectory_name npm run build:config`. To build an incomplete configuration,
 prefix the command like this: `IGNORE_ERRORS=true npm run build:config`.
 
 ## New Layers
