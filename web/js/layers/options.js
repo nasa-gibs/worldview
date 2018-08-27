@@ -67,7 +67,7 @@ export function layersOptions(config, models, layer, layerGroupStr) {
     }
     var names = models.layers.getTitles(layer.id);
     $dialog.dialog({
-      dialogClass: 'wv-panel',
+      dialogClass: 'wv-panel wv-options-panel wv-options-panel-' + layer.id,
       title: names.title,
       show: {
         effect: 'slide',

@@ -24,7 +24,7 @@ export function layersInfo(config, models, layer) {
     renderDescription($dialog);
     names = models.layers.getTitles(layer.id);
     $dialog.dialog({
-      dialogClass: 'wv-panel',
+      dialogClass: 'wv-panel wv-info-panel wv-info-panel-' + layer.id,
       title: names.title,
       show: {
         effect: 'slide',
