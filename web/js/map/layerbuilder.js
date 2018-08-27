@@ -169,11 +169,10 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var layerId = def.id;
     var projId = models.proj.selected.id;
     var palette = '';
-    layerGroupStr = options.group
-      ? options.group
-      : models.layers[models.layers.activeLayers];
-    date = self.closestDate(def, options);
-
+    layerGroupStr = options.group ? options.group : models.layers.activeLayers;
+    date = util.toISOStringSeconds(
+      util.roundTimeOneMinute(self.closestDate(def, options))
+    );
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
     }
