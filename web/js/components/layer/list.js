@@ -15,9 +15,7 @@ class LayerList extends React.Component {
       filteredLayers: props.filteredLayers,
       expandedMetadataLayers: [],
       expandedDateRangesLayers: [],
-      activeLayers: props.activeLayers,
-      addLayer: props.addLayer,
-      removeLayer: props.removeLayer
+      activeLayers: props.activeLayers
     };
   }
 
@@ -86,13 +84,12 @@ class LayerList extends React.Component {
 
   render() {
     var {
-      addLayer,
-      removeLayer,
       filteredLayers,
       expandedMetadataLayers,
       expandedDateRangesLayers,
       activeLayers
     } = this.state;
+    var { addLayer, removeLayer } = this.props;
     return (
       <div
         style={{

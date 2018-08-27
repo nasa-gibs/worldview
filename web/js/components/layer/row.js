@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import util from '../../util/util.js';
-
 /**
  * A single layer search result row
  * @class LayerRow
@@ -97,36 +96,40 @@ class LayerRow extends React.Component {
 
       if (layer.endDate) {
         endDate = util.parseDate(layer.endDate);
-        if (layer.period === 'subdaily') {
-          endDate =
-            endDate.getDate() +
-            ' ' +
-            util.giveMonth(endDate) +
-            ' ' +
-            endDate.getFullYear() +
-            ' ' +
-            util.pad(endDate.getHours(), 2, '0') +
-            ':' +
-            util.pad(endDate.getMinutes(), 2, '0');
-        } else if (layer.period === 'yearly') {
-          endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
-          endDate = endDate.getFullYear();
-        } else if (layer.period === 'monthly') {
-          endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
-          endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
+        if (endDate <= util.today() && !layer.inactive) {
+          endDate = 'Present';
         } else {
-          if (
-            layer.dateRanges &&
-            layer.dateRanges.slice(-1)[0].dateInterval !== '1'
-          ) {
-            endDate = new Date(endDate.setTime(endDate.getTime() - 86400000));
+          if (layer.period === 'subdaily') {
+            endDate =
+              endDate.getDate() +
+              ' ' +
+              util.giveMonth(endDate) +
+              ' ' +
+              endDate.getFullYear() +
+              ' ' +
+              util.pad(endDate.getHours(), 2, '0') +
+              ':' +
+              util.pad(endDate.getMinutes(), 2, '0');
+          } else if (layer.period === 'yearly') {
+            endDate = new Date(endDate.setFullYear(endDate.getFullYear() - 1));
+            endDate = endDate.getFullYear();
+          } else if (layer.period === 'monthly') {
+            endDate = new Date(endDate.setMonth(endDate.getMonth() - 1));
+            endDate = util.giveMonth(endDate) + ' ' + endDate.getFullYear();
+          } else {
+            if (
+              layer.dateRanges &&
+              layer.dateRanges.slice(-1)[0].dateInterval !== '1'
+            ) {
+              endDate = new Date(endDate.setTime(endDate.getTime() - 86400000));
+            }
+            endDate =
+              endDate.getDate() +
+              ' ' +
+              util.giveMonth(endDate) +
+              ' ' +
+              endDate.getFullYear();
           }
-          endDate =
-            endDate.getDate() +
-            ' ' +
-            util.giveMonth(endDate) +
-            ' ' +
-            endDate.getFullYear();
         }
       } else {
         endDate = 'Present';
@@ -243,6 +246,7 @@ class LayerRow extends React.Component {
 
   render() {
     var { checked, isMetadataExpanded, isDateRangesExpanded } = this.state;
+
     var { layer } = this.props;
     var { title, description, subtitle, metadata } = layer;
     var listItems;
@@ -292,6 +296,11 @@ class LayerRow extends React.Component {
               if (firstDateRange) {
                 if (layer.endDate === undefined) {
                   listItemEndDate = 'Present';
+                } else if (
+                  util.parseDate(layer.endDate) <= util.today() &&
+                  !layer.inactive
+                ) {
+                  listItemEndDate = 'Present';
                 }
                 firstDateRange = false;
               }
@@ -323,6 +332,11 @@ class LayerRow extends React.Component {
 
                 if (firstDateRange) {
                   if (layer.endDate === undefined) {
+                    listItemEndDate = 'Present';
+                  } else if (
+                    util.parseDate(layer.endDate) <= util.today() &&
+                    !layer.inactive
+                  ) {
                     listItemEndDate = 'Present';
                   }
                   firstDateRange = false;
@@ -357,6 +371,11 @@ class LayerRow extends React.Component {
 
                 if (firstDateRange) {
                   if (layer.endDate === undefined) {
+                    listItemEndDate = 'Present';
+                  } else if (
+                    util.parseDate(layer.endDate) <= util.today() &&
+                    !layer.inactive
+                  ) {
                     listItemEndDate = 'Present';
                   }
                   firstDateRange = false;
@@ -406,6 +425,11 @@ class LayerRow extends React.Component {
                 if (firstDateRange) {
                   if (layer.endDate === undefined) {
                     listItemEndDate = 'Present';
+                  } else if (
+                    util.parseDate(layer.endDate) <= util.today() &&
+                    !layer.inactive
+                  ) {
+                    listItemEndDate = 'Present';
                   }
                   firstDateRange = false;
                 }
@@ -436,8 +460,7 @@ class LayerRow extends React.Component {
           </h3>
           {subtitle && <h5>{subtitle}</h5>}
         </div>
-        {isMetadataExpanded &&
-          metadata && (
+        {isMetadataExpanded && (
           <div className="source-metadata visible">
             {layer.startDate && (
               <p className="layer-date-range">
@@ -447,8 +470,8 @@ class LayerRow extends React.Component {
                   }}
                 />
                 {layer.dateRanges &&
-                    layer.dateRanges.length > 1 &&
-                    dateRanges.overlap === false && (
+                  layer.dateRanges.length > 1 &&
+                  dateRanges.overlap === false && (
                   <a
                     id="layer-date-ranges-button"
                     title="View all date ranges"
@@ -464,9 +487,7 @@ class LayerRow extends React.Component {
             {isDateRangesExpanded && (
               <div className="layer-date-wrap">
                 <p>Date Ranges:</p>
-                <ListGroup className="layer-date-ranges">
-                  {listItems}
-                </ListGroup>
+                <ListGroup className="layer-date-ranges">{listItems}</ListGroup>
               </div>
             )}
             <div dangerouslySetInnerHTML={{ __html: metadata }} />
