@@ -3,7 +3,6 @@ const localSelectors = require('./selectors.js');
 const localQuerystrings = require('./querystrings.js');
 const TIME_LIMIT = 10000;
 const aerosolLayer = '#active-MODIS_Terra_Aerosol';
-const aerosolLayerB = '#activeB-MODIS_Terra_Aerosol';
 const AodOptionsPanel = '.wv-options-panel-MODIS_Terra_Aerosol';
 const AodInfoPanel = '.wv-info-panel-MODIS_Terra_Aerosol';
 const correctedReflectanceBLayer =
@@ -33,8 +32,10 @@ module.exports = {
               AodOptionsPanel + ' .ui-dialog-title',
               'Aerosol Optical Depth'
             );
-          client.expect.element(AodOptionsPanel + ' #wv-palette-selector').to.be
-            .visible;
+          if (client.options.desiredCapabilities.browser !== 'ie') {
+            client.expect.element(AodOptionsPanel + ' #wv-palette-selector').to
+              .be.visible;
+          }
         }
       );
     });
@@ -69,9 +70,10 @@ module.exports = {
           AodOptionsPanel + ' .ui-dialog-title',
           'Aerosol Optical Depth'
         );
-      client.expect.element(
-        AodOptionsPanel + ' #wv-palette-selector'
-      ).to.be.visible;
+      if (client.options.desiredCapabilities.browser !== 'ie') {
+        client.expect.element(AodOptionsPanel + ' #wv-palette-selector').to.be
+          .visible;
+      }
     });
   },
   'Layer info dialog works after exiting A|B mode': function(client) {
@@ -115,9 +117,11 @@ module.exports = {
                 correctedReflectanceOptionsPanel + ' .ui-dialog-title',
                 'Corrected Reflectance (True Color)'
               );
-            client.expect.element(
-              correctedReflectanceOptionsPanel + ' #wv-palette-selector'
-            ).to.not.be.present;
+            if (client.options.desiredCapabilities.browser !== 'ie') {
+              client.expect.element(
+                correctedReflectanceOptionsPanel + ' #wv-palette-selector'
+              ).to.not.be.present;
+            }
           }
         );
       }
