@@ -70,10 +70,16 @@ export function timelineCompare(models, config, ui) {
   var applyActiveClasses = function() {
     if (models.compare.isCompareA) {
       mountObjectA.setAttribute('class', 'ab-group-case ab-group-case-active');
-      mountObjectB.setAttribute('class', 'ab-group-case');
+      mountObjectB.setAttribute(
+        'class',
+        'ab-group-case ab-group-case-inactive'
+      );
       parentSvg.insertBefore(mountObjectB, mountObjectA);
     } else {
-      mountObjectA.setAttribute('class', 'ab-group-case ');
+      mountObjectA.setAttribute(
+        'class',
+        'ab-group-case ab-group-case-inactive'
+      );
       mountObjectB.setAttribute('class', 'ab-group-case ab-group-case-active');
       parentSvg.insertBefore(mountObjectA, mountObjectB);
     }
