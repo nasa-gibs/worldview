@@ -6,7 +6,7 @@ const blueMarbleCheckBox =
   '#blue-marble-nasaeo-modis .measurement-settings-item .iCheck';
 const aodCheckBox =
   '#aerosol-optical-depth-terra-misr .measurement-settings-item .iCheck';
-const TIME_LIMIT = 10000;
+const TIME_LIMIT = 20000;
 module.exports = {
   before: function(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);

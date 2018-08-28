@@ -9,7 +9,7 @@ const ModisTruecolorLayerA =
   '#active-MODIS_Terra_CorrectedReflectance_TrueColor';
 const ModisTruecolorLayerB =
   '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
-const TIME_LIMIT = 10000;
+const TIME_LIMIT = 20000;
 module.exports = {
   before: function(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);

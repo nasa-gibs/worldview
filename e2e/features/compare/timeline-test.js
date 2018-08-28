@@ -5,7 +5,7 @@ const activeDragger = '.ab-group-case-active';
 const inactiveDragger = '.ab-group-case-inactive';
 const dateSelectorDayInput = '#date-selector-main .input-wrapper-day input';
 const dateSelectorMonthInput = '#date-selector-main .input-wrapper-month input';
-const TIME_LIMIT = 10000;
+const TIME_LIMIT = 20000;
 
 module.exports = {
   before: function(client) {
