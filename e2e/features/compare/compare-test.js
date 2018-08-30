@@ -9,6 +9,10 @@ const ModisTruecolorLayerA =
   '#active-MODIS_Terra_CorrectedReflectance_TrueColor';
 const ModisTruecolorLayerB =
   '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
+const toggleButton = '.toggleIconHolder .accordionToggler';
+const collapsedToggleButton =
+  '#productsHoldertoggleButtonHolder .accordionToggler';
+
 const TIME_LIMIT = 20000;
 module.exports = {
   before: function(client) {
@@ -76,43 +80,54 @@ module.exports = {
     client.waitForElementVisible(ModisTruecolorLayerB, TIME_LIMIT);
   },
   /**
+   * B state can layer list collapse
+   */
+  'Collapse layer list with B state and test label shows correct number of layers': function(
+    client
+  ) {
+    client.url(client.globals.url + localQuerystrings.spyAndBIsActive);
+
+    client.waitForElementVisible(toggleButton, TIME_LIMIT, function() {
+      client.expect.element(collapsedToggleButton).to.not.be.visible;
+      client.click(toggleButton);
+      client.pause(100);
+      client.expect.element(collapsedToggleButton).to.be.visible;
+      client.expect.element(toggleButton).to.not.be.visible;
+      client.useCss().assert.containsText(collapsedToggleButton, 'Layers(6)');
+      client.click(collapsedToggleButton);
+      client.pause(100);
+      client.waitForElementVisible('#activeB-Reference_Features', TIME_LIMIT);
+    });
+  },
+  /**
    * Remove some layers from active state B and then toggle out of A|B mode to verify
    * that layer-sidebar inherits B state layers
    */
   'If you exit A|B with B selection active, the active state will then be the B state': function(
     client
   ) {
-    client.url(client.globals.url + localQuerystrings.spyAndBIsActive);
-    client.waitForElementVisible(
-      '#activeB-Reference_Features',
-      TIME_LIMIT,
-      function() {
-        client.expect.element(
-          '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor'
-        ).to.be.visible;
-        client.expect.element(
-          '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor'
-        ).to.be.visible;
-        client.click('#closeactiveBReference_Labels');
-        client.click('#closeactiveBReference_Features');
-        client.click('#closeactiveBVIIRS_SNPP_CorrectedReflectance_TrueColor');
-        client.click('#closeactiveBMODIS_Aqua_CorrectedReflectance_TrueColor');
-        client.pause(1000);
-        client.click(localSelectors.compareButton);
-        client.waitForElementVisible('#guitarpick', TIME_LIMIT, function() {
-          client.expect.element('#activeB-Coastlines').to.be.visible;
-          client.expect.element(
-            '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor'
-          ).to.be.visible;
-          client.expect.element(
-            '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor'
-          ).to.not.be.present;
-          client.expect.element(
-            '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor'
-          ).to.not.be.present;
-        });
-      }
-    );
+    client.expect.element('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor')
+      .to.be.visible;
+    client.expect.element('#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor')
+      .to.be.visible;
+    client.click('#closeactiveBReference_Labels');
+    client.click('#closeactiveBReference_Features');
+    client.click('#closeactiveBVIIRS_SNPP_CorrectedReflectance_TrueColor');
+    client.click('#closeactiveBMODIS_Aqua_CorrectedReflectance_TrueColor');
+    client.pause(1000);
+    client.click(localSelectors.compareButton);
+    client.waitForElementVisible('#guitarpick', TIME_LIMIT, function() {
+      client.expect.element('#activeB-Coastlines').to.be.visible;
+      client.expect.element(
+        '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor'
+      ).to.be.visible;
+      client.expect.element(
+        '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor'
+      ).to.not.be.present;
+      client.expect.element(
+        '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor'
+      ).to.not.be.present;
+    });
   },
   after: function(client) {
     client.end();
