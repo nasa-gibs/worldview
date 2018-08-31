@@ -19,12 +19,18 @@ export class SidebarProvider extends React.Component {
       isMobile: props.isMobile
     };
   }
-  componentWillReceiveProps(props, prevProps) {
-    if (prevProps.runningLayers !== props.runningLayers) {
+  componentWillReceiveProps(props) {
+    if (this.state.runningLayers !== props.runningLayers) {
       this.setState({ runningLayers: props.runningLayers });
     }
-    if (!lodashIsEqual(prevProps.zotsObject, props.zotsObject)) {
+    if (!lodashIsEqual(this.state.zotsObject, props.zotsObject)) {
       this.setState({ zotsObject: props.zotsObject });
+    }
+    if (!lodashIsEqual(this.state.zotsObject, props.zotsObject)) {
+      this.setState({ zotsObject: props.zotsObject });
+    }
+    if (this.state.isMobile !== props.isMobile) {
+      this.setState({ isMobile: props.isMobile });
     }
   }
   render() {

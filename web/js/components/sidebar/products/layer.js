@@ -164,7 +164,9 @@ class Layer extends React.Component {
                 </a>
                 <a
                   title={'Layer description for ' + names.title}
-                  className="wv-layers-info"
+                  className={
+                    isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'
+                  }
                   onClick={this.onInfoClick.bind(this)}
                 >
                   <i className="fa fa-info wv-layers-info-icon" />
