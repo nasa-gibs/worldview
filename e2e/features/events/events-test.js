@@ -23,25 +23,26 @@ module.exports = {
   ) {
     client.url(client.globals.url + localQuerystrings.mockEvents);
     client.waitForElementVisible(listOfEvents, TIME_LIMIT, function() {
-      client.assert.elementCountEquals(eventIcons, 6);
+      client.assert.elementCountEquals(eventIcons, 7);
     });
+  },
+  'On events tab click events list is loaded': function(client) {
+    client.url(client.globals.url + localQuerystrings.mockEvents);
+    client.waitForElementVisible(listOfEvents, TIME_LIMIT);
   },
   'Use Mock Ensure number of event track points is correct and event markers and tabs are not visible when layer tab is clicked': function(
     client
   ) {
     const globalSelectors = client.globals.selectors;
-    client.url(client.globals.url + localQuerystrings.mockEvents);
-    client.waitForElementVisible(listOfEvents, TIME_LIMIT, function() {
-      client.click(firstEvent);
-      client.waitForElementVisible(trackMarker, TIME_LIMIT, function() {
-        client.assert.elementCountEquals(trackMarker, 5);
-        client.click(globalSelectors.dataTab).pause(2000);
-        client.expect.element(trackMarker).to.not.be.present;
-        client.expect.element(eventIcons).to.not.be.present;
-        client.click(globalSelectors.eventsTab).pause(2000);
-        client.expect.element(trackMarker).to.be.present;
-        client.expect.element(eventIcons).to.be.present;
-      });
+    client.click(firstEvent);
+    client.waitForElementVisible(trackMarker, TIME_LIMIT, function() {
+      client.assert.elementCountEquals(trackMarker, 5);
+      client.click(globalSelectors.dataTab).pause(2000);
+      client.expect.element(trackMarker).to.not.be.present;
+      client.expect.element(eventIcons).to.not.be.present;
+      client.click(globalSelectors.eventsTab).pause(2000);
+      client.expect.element(trackMarker).to.be.present;
+      client.expect.element(eventIcons).to.be.present;
     });
   },
   'Click Events tab and select an Event from the List': function(client) {
@@ -89,11 +90,6 @@ module.exports = {
     client.expect.element(globalSelectors.notificationDismissButton).to.not.be
       .visible;
   },
-  'Check that at least 4 overlays are now present': function(client) {
-    const globalSelectors = client.globals.selectors;
-
-    client.assert.elementCountGreater(globalSelectors.overlayLayerItems, 4);
-  },
   'Clicking selected event deselects event': function(client) {
     client.click(selectedFirstEvent).pause(500);
     client.expect.element(selectedFirstEvent).to.not.be.present;
@@ -107,6 +103,33 @@ module.exports = {
     client.windowHandles(function(tabs) {
       client.assert.equal(tabs.value.length, 2);
     });
+  },
+  'Make sure that 4 fire layers are not present in layer list': function(
+    client
+  ) {
+    client.expect.element('#overlays-VIIRS_SNPP_Fires_375m_Night').to.not.be
+      .present;
+    client.expect.element('#overlays-VIIRS_SNPP_Fires_375m_Day').to.not.be
+      .present;
+    client.expect.element('#overlays-MODIS_Fires_Aqua').to.not.be.present;
+    client.expect.element('#overlays-MODIS_Fires_Terra').to.not.be.present;
+  },
+  'Expand event list and click fire event': function(client) {
+    client.click('.events-footer-case. .wv-button'); // Expand list
+    client.pause(1000);
+    client.click('#sidebar-event-EONET_3931');
+  },
+  'Check that 4 fire layers are now present': function(client) {
+    client.waitForElementPresent(
+      '#overlays-VIIRS_SNPP_Fires_375m_Night',
+      TIME_LIMIT,
+      function() {
+        client.expect.element('#overlays-VIIRS_SNPP_Fires_375m_Day').to.be
+          .present;
+        client.expect.element('#overlays-MODIS_Fires_Aqua').to.be.present;
+        client.expect.element('#overlays-MODIS_Fires_Terra').to.be.present;
+      }
+    );
   },
   after: function(client) {
     client.end();

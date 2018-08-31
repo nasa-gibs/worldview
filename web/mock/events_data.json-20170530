@@ -132,6 +132,31 @@
 			]
 		},
 		{
+      "id": "EONET_3931",
+      "title": "Rattlesnake Fire",
+      "description": "",
+      "link": "https://eonet.sci.gsfc.nasa.gov/api/v2/events/EONET_3931",
+      "categories": [
+        {
+          "id": 8,
+          "title": "Wildfires"
+        }
+      ],
+      "sources": [
+        {
+          "id": "InciWeb",
+          "url": "http://inciweb.nwcg.gov/incident/6182/"
+        }
+      ],
+      "geometries": [
+        {
+          "date": "2015-08-30T15:00:00Z",
+          "type": "Point",
+          "coordinates": [-114.529, 47.753]
+        }
+      ]
+    },
+		{
 			"id": "EONET_2792",
 			"title": "Santiago, Chile Flooding",
             "description": "",

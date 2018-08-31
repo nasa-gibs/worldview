@@ -117,6 +117,7 @@ class Event extends React.Component {
               : 'selectorItem item hidden'
         }
         onClick={this.onClick.bind(this, null, !!selectedDate)}
+        id={'sidebar-event-' + util.encodeId(event.id)}
       >
         <i
           className={'event-icon event-icon-' + event.categories[0].slug}
