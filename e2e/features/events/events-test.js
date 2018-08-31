@@ -18,6 +18,38 @@ module.exports = {
   before: function(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
+  'Make sure that 4 fire layers are not present in layer list: use mock': function(
+    client
+  ) {
+    client.url(client.globals.url + localQuerystrings.mockEvents);
+    client.waitForElementVisible(
+      '#sidebar-event-EONET_3931',
+      TIME_LIMIT,
+      function() {
+        client.expect.element('#active-VIIRS_SNPP_Fires_375m_Night').to.not.be
+          .present;
+        client.expect.element('#active-VIIRS_SNPP_Fires_375m_Day').to.not.be
+          .present;
+        client.expect.element('#active-MODIS_Fires_Aqua').to.not.be.present;
+        client.expect.element('#active-MODIS_Fires_Terra').to.not.be.present;
+      }
+    );
+  },
+  'Click fire event': function(client) {
+    client.click('#sidebar-event-EONET_3931');
+  },
+  'Check that 4 fire layers are now present': function(client) {
+    client.waitForElementPresent(
+      '#active-VIIRS_SNPP_Fires_375m_Night',
+      TIME_LIMIT,
+      function() {
+        client.expect.element('#active-VIIRS_SNPP_Fires_375m_Day').to.be
+          .present;
+        client.expect.element('#active-MODIS_Fires_Aqua').to.be.present;
+        client.expect.element('#active-MODIS_Fires_Terra').to.be.present;
+      }
+    );
+  },
   'Use Mock to make sure appropriate number of event markers are appended to map': function(
     client
   ) {
@@ -73,9 +105,15 @@ module.exports = {
     client
   ) {
     const globalSelectors = client.globals.selectors;
-    client.assert.containsText(
+    client.waitForElementVisible(
       globalSelectors.notifyMessage,
-      'Events may not be visible at all times'
+      TIME_LIMIT,
+      function() {
+        client.assert.containsText(
+          globalSelectors.notifyMessage,
+          'Events may not be visible at all times'
+        );
+      }
     );
   },
   'Clicking event notifcation opens explanation in dialog': function(client) {
@@ -103,33 +141,6 @@ module.exports = {
     client.windowHandles(function(tabs) {
       client.assert.equal(tabs.value.length, 2);
     });
-  },
-  'Make sure that 4 fire layers are not present in layer list': function(
-    client
-  ) {
-    client.expect.element('#overlays-VIIRS_SNPP_Fires_375m_Night').to.not.be
-      .present;
-    client.expect.element('#overlays-VIIRS_SNPP_Fires_375m_Day').to.not.be
-      .present;
-    client.expect.element('#overlays-MODIS_Fires_Aqua').to.not.be.present;
-    client.expect.element('#overlays-MODIS_Fires_Terra').to.not.be.present;
-  },
-  'Expand event list and click fire event': function(client) {
-    client.click('.events-footer-case. .wv-button'); // Expand list
-    client.pause(1000);
-    client.click('#sidebar-event-EONET_3931');
-  },
-  'Check that 4 fire layers are now present': function(client) {
-    client.waitForElementPresent(
-      '#overlays-VIIRS_SNPP_Fires_375m_Night',
-      TIME_LIMIT,
-      function() {
-        client.expect.element('#overlays-VIIRS_SNPP_Fires_375m_Day').to.be
-          .present;
-        client.expect.element('#overlays-MODIS_Fires_Aqua').to.be.present;
-        client.expect.element('#overlays-MODIS_Fires_Terra').to.be.present;
-      }
-    );
   },
   after: function(client) {
     client.end();
