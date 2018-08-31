@@ -74,6 +74,12 @@ class Sidebar extends React.Component {
       }
     }
   }
+  selectEvent(id, date) {
+    this.state.selectEvent(id, date);
+    if (this.state.isMobile) {
+      this.setState({ isCollapsed: true });
+    }
+  }
   wasCollapsedRequested() {
     if (this.props.localStorage) {
       return localStorage.getItem('sidebarState') === 'collapsed';
@@ -137,7 +143,6 @@ class Sidebar extends React.Component {
       visibleEvents,
       eventsData,
       selectedEvent,
-      selectEvent,
       subComponentHeight,
       secondDateObject,
       firstDateObject,
@@ -229,7 +234,7 @@ class Sidebar extends React.Component {
                 events={eventsData.events}
                 sources={eventsData.sources}
                 selectedEvent={selectedEvent}
-                selectEvent={selectEvent}
+                selectEvent={this.selectEvent.bind(this)}
                 deselectEvent={deselectEvent}
                 height={subComponentHeight}
                 tabTypes={tabTypes}
