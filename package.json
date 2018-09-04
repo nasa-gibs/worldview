@@ -32,7 +32,6 @@
     "build:dev": "webpack",
     "build:config": "bash -c 'tasks/buildOptions.sh' && node ./tasks/config.js",
     "build:prod": "cross-env NODE_ENV=production webpack",
-    "build:tests": "cross-env NODE_ENV=testing webpack",
     "clean": "node ./tasks/clean.js",
     "dist": "npm run clean && npm run getcapabilities && npm run build:config && npm run build:prod && node ./tasks/dist.js",
     "dist:dev": "npm run clean && npm run getcapabilities && npm run build:config && npm run build:dev && node ./tasks/dist.js",
@@ -193,8 +192,12 @@
     "setupFiles": [
       "./test-env.js"
     ],
+    "moduleDirectories": [
+      "node_modules",
+      "./web/ext/d3"
+    ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(ol)/)"
+      "node_modules/(?!(ol|d3)/)"
     ]
   }
 }
