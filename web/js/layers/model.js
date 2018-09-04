@@ -13,7 +13,7 @@ export function layersModel(models, config) {
   self.loaded = false;
   var split = { active: 0, activeB: 0 };
   self.events = util.events();
-
+  self.resetting = false;
   self.active = [];
   self.activeB = null;
 
@@ -25,12 +25,15 @@ export function layersModel(models, config) {
   };
   self.reset = function(layerStr) {
     layerStr = layerStr || 'active';
+    self.resetting = true;
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
       lodashEach(config.defaults.startingLayers, function(start) {
         self[layerStr] = self.add(start.id, start, layerStr);
       });
     }
+    self.resetting = false;
+    self.events.trigger('update');
   };
 
   self.initCompare = function() {

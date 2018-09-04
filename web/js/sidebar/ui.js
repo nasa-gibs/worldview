@@ -36,8 +36,10 @@ export function sidebarUi(models, config, ui) {
       trailing: true
     });
     var layerAdd = function(layer) {
-      updateLayers();
-      updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
+      if (!models.layers.resetting) {
+        updateLayers();
+        updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
+      }
     };
 
     // Set Event Listeners
@@ -175,22 +177,26 @@ export function sidebarUi(models, config, ui) {
     });
   };
   var updateData = function() {
-    self.reactComponent.setState({
-      dataDownloadObject: models.data.groupByProducts(),
-      onGetData: ui.data.showDownloadList,
-      showDataUnavailableReason: ui.data.showUnavailableReason
-    });
+    if (!models.layers.resetting) {
+      self.reactComponent.setState({
+        dataDownloadObject: models.data.groupByProducts(),
+        onGetData: ui.data.showDownloadList,
+        showDataUnavailableReason: ui.data.showUnavailableReason
+      });
+    }
   };
   /**
    * Update layer when something happens (Event listeners)
    */
   var updateLayers = function() {
-    if (models.compare && models.compare.active) {
-      updateState('layerObjects');
-      updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
-    } else {
-      updateState('layers');
-      updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
+    if (!models.layers.resetting) {
+      if (models.compare && models.compare.active) {
+        updateState('layerObjects');
+        updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
+      } else {
+        updateState('layers');
+        updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
+      }
     }
   };
   var onProductSelect = function(product) {
