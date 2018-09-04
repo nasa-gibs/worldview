@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -28,9 +28,9 @@
   "scripts": {
     "analyze": "cross-env NODE_ENV=analyze webpack",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack ",
-    "build": "run-s clean \"getcapabilities -- {1}\" \"build:config -- {1}\" build:dev --",
+    "build": "run-s clean getcapabilities build:config build:dev",
     "build:dev": "webpack",
-    "build:config": "bash -c 'tasks/buildOptions.sh ${1}' 0 && node ./tasks/config.js",
+    "build:config": "bash -c 'tasks/buildOptions.sh' && node ./tasks/config.js",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:tests": "cross-env NODE_ENV=testing webpack",
     "clean": "node ./tasks/clean.js",
@@ -40,7 +40,7 @@
     "e2e": "run-s --continue-on-error --silent e2e:*",
     "e2e:chrome": "nightwatch -e chrome",
     "e2e:firefox": "nightwatch -e firefox --skiptags wip",
-    "getcapabilities": "bash -c 'FETCH_GC=1 tasks/buildOptions.sh ${1}' 0",
+    "getcapabilities": "bash -c 'FETCH_GC=1 tasks/buildOptions.sh'",
     "linkcheck": "node ./tasks/linkcheck",
     "lint": "run-s lint:*",
     "lint:css": "stylelint ./web/css/**/*.css",
