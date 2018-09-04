@@ -23,11 +23,11 @@ export function dataCmrClient(spec) {
     timeout: QUERY_TIMEOUT
   };
 
-  var init = function () {
+  var init = function() {
     ns.ajax = util.ajaxCache();
   };
 
-  self.submit = function (parameters) {
+  self.submit = function(parameters) {
     var queryParameters = $.extend(true, {}, ajaxOptions, parameters);
     var startTimeDelta = parameters.startTimeDelta || 0;
     var endTimeDelta = parameters.endTimeDelta || 0;
@@ -38,14 +38,26 @@ export function dataCmrClient(spec) {
     }
     queryParameters.url += searchType;
     if (t) {
-      var startTime = new Date(Date.UTC(
-        t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(),
-        0, 0 + startTimeDelta, 0
-      ));
-      var endTime = new Date(Date.UTC(
-        t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(),
-        23, 59 + endTimeDelta, 59
-      ));
+      var startTime = new Date(
+        Date.UTC(
+          t.getUTCFullYear(),
+          t.getUTCMonth(),
+          t.getUTCDate(),
+          0,
+          0 + startTimeDelta,
+          0
+        )
+      );
+      var endTime = new Date(
+        Date.UTC(
+          t.getUTCFullYear(),
+          t.getUTCMonth(),
+          t.getUTCDate(),
+          23,
+          59 + endTimeDelta,
+          59
+        )
+      );
 
       startTime = startTime.toISOString();
       endTime = endTime.toISOString();
@@ -56,11 +68,12 @@ export function dataCmrClient(spec) {
     var deferred = $.Deferred();
     var metrics = 'ev=data-download&' + $.param(queryParameters.data, true);
     util.metrics(metrics);
-    ns.ajax.submit(queryParameters)
-      .done(function (data) {
+    ns.ajax
+      .submit(queryParameters)
+      .done(function(data) {
         deferred.resolve(data.feed.entry);
       })
-      .fail(function (jqXHR, textStatus, errorThrown) {
+      .fail(function(jqXHR, textStatus, errorThrown) {
         deferred.reject(jqXHR, textStatus, errorThrown);
       });
     return deferred.promise();
@@ -68,13 +81,13 @@ export function dataCmrClient(spec) {
 
   init();
   return self;
-};
+}
 
 export function dataCmrGeometry(result) {
   var self = {};
   self.polygons = [];
 
-  var init = function () {
+  var init = function() {
     if (result.polygons) {
       initFromPolygons(result.polygons);
     } else if (result.boxes) {
@@ -84,13 +97,13 @@ export function dataCmrGeometry(result) {
     }
   };
 
-  self.toOpenLayers = function () {
+  self.toOpenLayers = function() {
     var olPolygons = [];
-    $.each(self.polygons, function (index, polygon) {
+    $.each(self.polygons, function(index, polygon) {
       var olRings = [];
-      $.each(polygon, function (index, ring) {
+      $.each(polygon, function(index, ring) {
         var olPoints = [];
-        $.each(ring, function (index, point) {
+        $.each(ring, function(index, point) {
           var p = [point.x, point.y];
           olPoints.push(p);
         });
@@ -101,10 +114,10 @@ export function dataCmrGeometry(result) {
     return olPolygons[0];
   };
 
-  var initFromPolygons = function (cmrPolygons) {
-    $.each(cmrPolygons, function (index, cmrPolygon) {
+  var initFromPolygons = function(cmrPolygons) {
+    $.each(cmrPolygons, function(index, cmrPolygon) {
       var rings = [];
-      $.each(cmrPolygon, function (index, cmrRing) {
+      $.each(cmrPolygon, function(index, cmrRing) {
         var ring = [];
         var parts = cmrRing.split(' ');
         for (var i = 0; i < parts.length; i += 2) {
@@ -121,8 +134,8 @@ export function dataCmrGeometry(result) {
     });
   };
 
-  var initFromBoxes = function (cmrBoxes) {
-    $.each(cmrBoxes, function (index, cmrBox) {
+  var initFromBoxes = function(cmrBoxes) {
+    $.each(cmrBoxes, function(index, cmrBox) {
       var ring = [];
       var fields = cmrBox.split(' ');
       var ymin = parseFloat(fields[0]);
@@ -156,7 +169,7 @@ export function dataCmrGeometry(result) {
 
   init();
   return self;
-};
+}
 
 export function dataCmrMockClient(suffix, models) {
   var endpoint;
@@ -164,41 +177,40 @@ export function dataCmrMockClient(suffix, models) {
 
   var self = {};
 
-  var init = function () {
+  var init = function() {
     if (!suffix) {
       throw new Error('No mock CMR suffix specified');
     }
     endpoint = 'mock/cmr.cgi-' + suffix;
   };
 
-  self.submit = function (parameters) {
+  self.submit = function(parameters) {
     console.warn('Mocking CMR query', endpoint);
     var deferred = $.Deferred();
     if (!results) {
-      $.getJSON(endpoint, function (data) {
+      $.getJSON(endpoint, function(data) {
         try {
           results = adjustResults(parameters, data);
           deferred.resolve(results.feed.entry);
         } catch (error) {
           util.error(error);
         }
-      })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-          deferred.reject(jqXHR, textStatus, errorThrown);
-        });
+      }).fail(function(jqXHR, textStatus, errorThrown) {
+        deferred.reject(jqXHR, textStatus, errorThrown);
+      });
     } else {
       deferred.resolve(results.feed.entry);
     }
     return deferred.promise();
   };
 
-  var adjustResults = function (parameters, data) {
-    var day = models.date.selected;
+  var adjustResults = function(parameters, data) {
+    var day = models.date[models.date.activeDate];
     // Mock data was retrieved for Aug 6, 2013
     var resultsDay = new Date(Date.UTC(2013, 7, 6));
     var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);
 
-    $.each(data.feed.entry, function (index, entry) {
+    $.each(data.feed.entry, function(index, entry) {
       var timeStart = util.parseTimestampUTC(entry.time_start);
       timeStart.setUTCDate(timeStart.getUTCDate() + diffDays);
       entry.time_start = timeStart.toISOString();
@@ -214,7 +226,7 @@ export function dataCmrMockClient(suffix, models) {
   init();
 
   return self;
-};
+}
 
 export function dataCmrRoundTime(timeString) {
   var time = util.parseTimestampUTC(timeString);
@@ -223,4 +235,4 @@ export function dataCmrRoundTime(timeString) {
   }
   time.setUTCMilliseconds(0);
   return time.toISOString();
-};
+}

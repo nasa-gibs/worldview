@@ -1,4 +1,5 @@
 const ZOOM_DURATION = 250;
+
 /*
  * Setting a zoom action
  *
@@ -23,4 +24,17 @@ export function mapUtilZoomAction(map, amount, duration, center) {
     duration: zoomDuration,
     center: centerPoint
   });
+};
+export function getActiveLayerGroup (map, layerGroupString) {
+  var group = null;
+  var array = map.getLayers().getArray();
+  for (var i = 0, len = array.length; i < len; i++) {
+    let layerGroup = array[i];
+    console.log(layerGroup.get('group'), layerGroupString);
+    if (layerGroup.get('group') === layerGroupString) {
+      group = layerGroup;
+      break;
+    }
+  };
+  return group;
 };

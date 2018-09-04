@@ -1,0 +1,95 @@
+.ab-swipe-line {
+  height: 100%;
+  padding: 0 2px;
+  position: absolute;
+  top: 0;
+  width: 1px;
+  background: #fff;
+}
+.ab-swipe-dragger {
+  position: absolute;
+  top: 50%;
+  width: 45px;
+  height: 45px;
+  margin-top: -35px;
+  left: -20px;
+  border-radius: 50%;
+  color: #000;
+  background: #fff;
+  text-align: center;
+}
+.ab-swipe-line:hover {
+  cursor: grabbing;
+}
+.ab-swipe-dragger:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+.ab-swipe-dragger i {
+  font-size: 26px;
+  margin-top: 11px;
+}
+.ab-swipe-line .left-label {
+  left: -23px;
+}
+.ab-swipe-line .right-label {
+  left: 13px;
+}
+.ab-slider-case {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  bottom: 25%;
+  width: 216px;
+  text-align: center;
+  background: rgba(40, 40, 40, 0.85);
+  color: #fff;
+  height: 33px;
+}
+.ab-slider-case .input-range {
+  width: 156px;
+  display: inline-block;
+  margin: 15px 10px;
+  vertical-align: top;
+}
+.ab-slider-case .wv-slider-label {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 10px;
+  width: 15px;
+  font-size: 16px;
+  text-align: center;
+}
+.ab-slider-case .input-range__slider {
+  height: 20px;
+  width: 20px;
+  margin-top: -12px;
+  margin-left: -10px;
+}
+.ab-swipe-line .ab-swipe-span {
+  position: absolute;
+  top: 55%;
+  padding: 2px;
+  background: #fff;
+  color: #000;
+  display: block;
+  font-size: 14px;
+  margin-top: -7px;
+  border-radius: 3px;
+  border: 1px solid #000;
+  cursor: default;
+}
+
+.ab-spy-span {
+  position: absolute;
+  background: rgba(40, 40, 40, 0.8);
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+  font-size: 14px;
+  border-radius: 3px;
+  border: 1px solid #000;
+  padding: 2px;
+  margin-left: -4px;
+}

@@ -11,7 +11,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {object} date Date of data to be displayed on the map.
    * @return {object}      Promise.all
    */
-  self.promiseDay = function (date) {
+  self.promiseDay = function(date) {
     var viewState;
     var frameState;
     var pixelRatio;
@@ -24,7 +24,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
     frameState = parent.selected.frameState_; // OL object describing the current map frame
     pixelRatio = frameState.pixelRatio;
     viewState = frameState.viewState;
-    promiseArray = layers.map(function (def) {
+    promiseArray = layers.map(function(def) {
       var key;
       var layer;
 
@@ -41,11 +41,11 @@ export function mapPrecacheTile(models, config, cache, parent) {
       });
       return promiseLayerGroup(layer, viewState, pixelRatio, map);
     });
-    return new Promise(function (resolve) {
-      Promise.all(promiseArray)
-        .then(function (yo) {
-          resolve(date);
-        });
+    return new Promise(function(resolve) {
+      Promise.all(promiseArray).then(function() {
+        console.log(date);
+        resolve(date);
+      });
     });
   };
 
@@ -56,11 +56,11 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {object} date Date of data to be displayed on the map.
    * @return {array}       An array of visible layers within the date.
    */
-  var getActiveLayersWithData = function (date) {
+  var getActiveLayersWithData = function(date) {
     var layers;
     var arra = [];
     layers = models.layers.get();
-    lodashEach(layers, function (layer) {
+    lodashEach(layers, function(layer) {
       if (layer.visible && new Date(layer.startDate > date)) {
         arra.push(layer);
       }
@@ -78,16 +78,19 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @return {array}                An extent array. Used to calculate
    * the extent for prev, next & current day
    */
-  var calculateExtent = function (extent, viewportExtent) {
-    if (extent[1] < -180) { // Previous day
+  var calculateExtent = function(extent, viewportExtent) {
+    if (extent[1] < -180) {
+      // Previous day
       extent = getExtent(viewportExtent, extent);
       extent[1] = extent[1] + 360;
       extent[3] = extent[3] + 360;
-    } else if (extent[1] > 180) { // Next day
+    } else if (extent[1] > 180) {
+      // Next day
       extent = getExtent(viewportExtent, extent);
       extent[1] = extent[1] - 360;
       extent[3] = extent[3] - 360;
-    } else { // Current day (within map extent)
+    } else {
+      // Current day (within map extent)
       extent = getExtent(extent, viewportExtent);
     }
     if (!isFinite(extent[0])) {
@@ -104,7 +107,7 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {array} extent2 Extent 2.
    * @return {array}         A new extent with intersecting points
    */
-  var getExtent = function (extent1, extent2) {
+  var getExtent = function(extent1, extent2) {
     return olExtent.getIntersection(extent1, extent2);
   };
 
@@ -119,29 +122,29 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {object} map        _ol_Map_ object
    * @return {object}            Promise.all
    */
-  var promiseLayerGroup = function (layer, viewState, pixelRatio, map) {
+  var promiseLayerGroup = function(layer, viewState, pixelRatio, map) {
     var extent;
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       var layers, layerPromiseArray;
       // Current layer's 3 layer array (prev, current, next days)
       layers = layer.values_.layers;
       if (layer.values_.layers) {
-        layers = layer.getLayers()
-          .getArray();
+        layers = layer.getLayers().getArray();
       } else {
         layers = [layer];
       }
       // Calculate the extent of each layer in the layer group
       // and create a promiseTileLayer for prev, current, next day
-      layerPromiseArray = layers.map(function (layer) {
-        extent = calculateExtent(layer.getExtent(), map.getView()
-          .calculateExtent(map.getSize()));
+      layerPromiseArray = layers.map(function(layer) {
+        extent = calculateExtent(
+          layer.getExtent(),
+          map.getView().calculateExtent(map.getSize())
+        );
         return promiseTileLayer(layer, extent, viewState, pixelRatio);
       });
-      Promise.all(layerPromiseArray)
-        .then(function (yo) {
-          resolve('resolve layer group');
-        });
+      Promise.all(layerPromiseArray).then(function(yo) {
+        resolve('resolve layer group');
+      });
     });
   };
 
@@ -155,9 +158,9 @@ export function mapPrecacheTile(models, config, cache, parent) {
    * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
    * @return {object}            promise
    */
-  var promiseTileLayer = function (layer, extent, viewState, pixelRatio) {
+  var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
     var renderer, tileSource, currentZ, i, tileGrid, projection;
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       if (!extent) {
         resolve('resolve tile layer');
       }
@@ -170,12 +173,21 @@ export function mapPrecacheTile(models, config, cache, parent) {
         renderer = new OlRendererCanvasTileLayer(layer);
         tileSource = layer.getSource();
         tileGrid = tileSource.getTileGridForProjection(projection);
-        currentZ = tileGrid.getZForResolution(viewState.resolution, renderer.zDirection);
-        tileGrid.forEachTileCoord(extent, currentZ, function (tileCoord) {
+        currentZ = tileGrid.getZForResolution(
+          viewState.resolution,
+          renderer.zDirection
+        );
+        tileGrid.forEachTileCoord(extent, currentZ, function(tileCoord) {
           var tile;
-          tile = tileSource.getTile(tileCoord[0], tileCoord[1], tileCoord[2], pixelRatio, projection);
+          tile = tileSource.getTile(
+            tileCoord[0],
+            tileCoord[1],
+            tileCoord[2],
+            pixelRatio,
+            projection
+          );
           tile.load();
-          var loader = function (e) {
+          var loader = function(e) {
             if (e.type === 'tileloadend') {
               --i;
               if (i === 0) {
@@ -196,4 +208,4 @@ export function mapPrecacheTile(models, config, cache, parent) {
     });
   };
   return self;
-};
+}

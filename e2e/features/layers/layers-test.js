@@ -67,9 +67,9 @@ module.exports = {
   'Browsing Layers by Category: Aerosol Optical Depth': function(client) {
     client.click(localSelectors.aerosolOpticalDepth);
     client.waitForElementVisible(localSelectors.headerForAOD, 20000, function(e) { // This is a very slow process
-      client.click('#ui-accordion-legacy-all-list-panel-0 > ul > li:nth-child(3) > a')
+      client.click('[aria-labelledby="accordion-legacy-all-aerosol-optical-depth"] > ul > li:nth-child(3) > a')
         .pause(1000);
-      client.useCss().assert.containsText('#modis-terra-and-aqua-combined-value-added-aerosol-optical-depth', 'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth');
+      client.useCss().assert.containsText('#modisterraandaquacombinedvalueaddedaerosolopticaldepth', 'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth');
     });
   },
   after: function(client) {

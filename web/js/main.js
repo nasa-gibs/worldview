@@ -1,7 +1,7 @@
 import 'babel-polyfill'; // Needed for worldview-components in IE and older browsers
 import $ from 'jquery';
 import lodashEach from 'lodash/each';
-import { GA as googleAnalytics } from 'worldview-components';
+import googleAnalytics from './components/util/google-analytics';
 
 // Utils
 import util from './util/util';
@@ -21,13 +21,19 @@ import { timelineTicks } from './date/timeline-ticks';
 import { timelinePick } from './date/timeline-pick';
 import { timelinePan } from './date/timeline-pan';
 import { timelineInput } from './date/timeline-input';
+import { timelineCompare } from './date/compare-picks';
 
 // Layers
-import { parse as layerParser, validate as layerValidate } from './layers/layers';
+import {
+  parse as layerParser,
+  validate as layerValidate
+} from './layers/layers';
 import { layersModel } from './layers/model';
 import { layersModal } from './layers/modal';
-import { layersSidebar } from './layers/sidebar';
+
 import { layersActive } from './layers/active';
+
+import { sidebarUi } from './sidebar/ui';
 
 // Map
 import { mapParser } from './map/map';
@@ -81,6 +87,8 @@ import { parse as projectionParser } from './projection/projection';
 import { projectionModel } from './projection/model';
 import { projectionUi } from './projection/ui';
 
+// A|B comparison
+import { compareModel } from './compare/model';
 // Other
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
@@ -102,10 +110,12 @@ import '../../node_modules/jquery.joyride/jquery.joyride.css';
 import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
 import '../../node_modules/ol/ol.css';
 import '../../node_modules/nouislider/src/jquery.nouislider.css';
+import '../../node_modules/simplebar/dist/simplebar.css';
 
 // App CSS
 import '../css/fonts.css';
 import '../css/reset.css';
+import '../css/compare.css';
 import '../css/jquery-ui-override.css';
 import '../css/util.css';
 import '../css/toolbar.css';
@@ -152,8 +162,7 @@ window.onload = () => {
 
   var main = function() {
     if (parameters.elapsed) {
-      startTime = new Date()
-        .getTime();
+      startTime = new Date().getTime();
     } else {
       elapsed = function() {};
     }
@@ -165,9 +174,7 @@ window.onload = () => {
     elapsed('loading config');
     var configURI = Brand.url('config/wv.json');
     var promise = $.getJSON(configURI);
-    promise
-      .done(util.wrap(onConfigLoaded))
-      .fail(util.error);
+    promise.done(util.wrap(onConfigLoaded)).fail(util.error);
     loadingIndicator.delayed(promise, 1000);
   };
 
@@ -206,11 +213,10 @@ window.onload = () => {
     lodashEach(parsers, function(parser) {
       parser(state, errors, config);
     });
-    requirements = [
-      palettes.requirements(state, config)
-    ];
+    requirements = [palettes.requirements(state, config)];
 
-    $.when.apply(null, requirements)
+    $.when
+      .apply(null, requirements)
       .then(util.wrap(init))
       .fail(util.error);
   };
@@ -248,7 +254,10 @@ window.onload = () => {
     });
     models.map = mapModel(models, config);
     models.link = linkModel(config);
-
+    if (config.features.compare) {
+      models.compare = compareModel(models, config);
+      models.link.register(models.compare);
+    }
     models.link
       .register(models.proj)
       .register(models.layers)
@@ -259,6 +268,7 @@ window.onload = () => {
     if (config.features.googleAnalytics) {
       googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
     }
+
     // HACK: Map needs to be created before the data download model
     var mapComponents = {
       Rotation: MapRotate,
@@ -288,7 +298,7 @@ window.onload = () => {
     elapsed('ui');
     // Create widgets
     ui.proj = projectionUi(models, config);
-    ui.sidebar = layersSidebar(models, config);
+    ui.sidebar = sidebarUi(models, config, ui);
     ui.activeLayers = layersActive(models, ui, config);
     ui.addModal = layersModal(models, ui, config);
 
@@ -320,11 +330,15 @@ window.onload = () => {
         ui.anim.gif = animationGif(models, config, ui);
         ui.anim.ui = animationUi(models, ui);
       }
+      if (config.features.compare) {
+        ui.timeline.compare = timelineCompare(models, config, ui);
+      }
 
       ui.dateLabel = dateLabel(models);
     }
     if (config.startDate) {
-      if (!util.browser.small) { // If mobile device, do not build timeline
+      if (!util.browser.small) {
+        // If mobile device, do not build timeline
         timelineInit();
       }
       ui.dateWheels = dateWheels(models, config);
@@ -334,8 +348,6 @@ window.onload = () => {
     ui.image = imagePanel(models, ui, config);
     if (config.features.dataDownload) {
       ui.data = dataUi(models, ui, config);
-      // FIXME: Why is this here?
-      ui.data.render();
     }
     if (config.features.naturalEvents) {
       var request = naturalEventsRequest(models, ui, config);
@@ -349,31 +361,23 @@ window.onload = () => {
     }
 
     // FIXME: Old hack
-    $(window)
-      .resize(function() {
-        if (util.browser.small) {
-          $('#productsHoldertabs li.first a')
-            .trigger('click');
-        }
-        if (!ui.timeline) {
-          timelineInit();
-        }
-      });
+    $(window).resize(function() {
+      if (util.browser.small) {
+        $('#productsHoldertabs li.first a').trigger('click');
+      }
+      if (!ui.timeline) {
+        timelineInit();
+      }
+    });
 
     document.activeElement.blur();
-    $('input')
-      .blur();
-    $('#eventsHolder')
-      .hide();
+    $('input').blur();
+    $('#eventsHolder').hide();
 
     if (config.features.dataDownload) {
-      models.data.events
-        .on('activate', function() {
-          ui.sidebar.selectTab('download');
-        })
-        .on('queryResults', function() {
-          ui.data.onViewChange();
-        });
+      models.data.events.on('queryResults', function() {
+        ui.data.onViewChange();
+      });
       ui.map.events.on('extent', function() {
         ui.data.onViewChange();
       });
@@ -381,18 +385,21 @@ window.onload = () => {
       models.map.events.on('projection', models.data.updateProjection);
     }
     // Sink all focus on inputs if click unhandled
-    $(document)
-      .click(function(event) {
-        if (event.target.nodeName !== 'INPUT') {
-          $('input')
-            .blur();
-        }
-      });
+    $(document).click(function(event) {
+      if (event.target.nodeName !== 'INPUT') {
+        $('input').blur();
+      }
+    });
 
     // Console notifications
     if (Brand.release()) {
-      console.info(Brand.NAME + ' - Version ' + Brand.VERSION +
-        ' - ' + Brand.BUILD_TIMESTAMP);
+      console.info(
+        Brand.NAME +
+          ' - Version ' +
+          Brand.VERSION +
+          ' - ' +
+          Brand.BUILD_TIMESTAMP
+      );
     } else {
       console.warn('Development version');
     }
@@ -412,7 +419,8 @@ window.onload = () => {
   var resetWorldview = function(e) {
     e.preventDefault();
     if (window.location.search === '') return; // Nothing to reset
-    var msg = 'Do you want to reset Worldview to its defaults? You will lose your current state.';
+    var msg =
+      'Do you want to reset Worldview to its defaults? You will lose your current state.';
     if (confirm(msg)) document.location.href = '/';
   };
 
@@ -420,7 +428,7 @@ window.onload = () => {
     var layersRemoved = 0;
 
     lodashEach(errors, function(error) {
-      var cause = (error.cause) ? ': ' + error.cause : '';
+      var cause = error.cause ? ': ' + error.cause : '';
       util.warn(error.message + cause);
       if (error.layerRemoved) {
         layersRemoved = layersRemoved + 1;
@@ -430,8 +438,7 @@ window.onload = () => {
 
   var elapsed = function(message) {
     if (!parameters.elapsed) return;
-    var t = new Date()
-      .getTime() - startTime;
+    var t = new Date().getTime() - startTime;
     console.log(t, message);
   };
   util.wrap(main)();

@@ -1,18 +1,37 @@
 .toggleButtonHolder {
-  position: absolute;
-  right: 0;
-  top: 0;
+  position: relative;
 }
 
-a.accordionToggler {
-  display: block;
+.accordionToggler {
   overflow: hidden;
   z-index: 1;
-  height: 33px;
-  width: 30px;
+  height: 28px;
+  width: 28px;
   background: none no-repeat scroll left;
 }
-
+.toggleIconHolder {
+  position: absolute;
+  right: 6px;
+  height: 30px;
+  width: 30px;
+  border: 1px solid transparent;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.atcollapse {
+  position: absolute;
+  background: url("../images/icon-sprite.svg") -206px -3px;
+  border-radius: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: 0;
+}
+.toggleIconHolder:hover {
+  background: rgba(220, 220, 220, 1);
+}
+.toggleIconHolder:hover .atcollapse {
+  background-position: -206px -63px;
+}
 a.staticLayers:not([href]):not([tabindex]) {
   float: left;
   left: 10px;
@@ -41,31 +60,17 @@ a.staticLayers:not([href]):not([tabindex]):hover {
 
 a.staticLayers::after {
   position: absolute;
-  content: '';
+  content: "";
   height: 20px;
   width: 20px;
   background: url("../images/icon-sprite.svg") -180px -10px;
   display: block;
-  right: 5px;
+  right: 10px;
   top: 6px;
 }
 
 a.staticLayers:hover::after {
   background-position: -180px -70px;
-}
-
-a.atcollapse {
-  background: url("../images/icon-sprite.svg") -205px 0;
-  border-radius: 0;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  border-right: 0;
-}
-
-a.atcollapse:hover {
-  background-position: -205px -60px;
-  background-color: #ccc;
-  cursor: pointer;
 }
 
 a.atexpand {
@@ -107,16 +112,8 @@ a.atexpand {
   background: none;
   padding: 1px 3px;
   font-size: 0.9em;
-  margin-top: 0;
-  margin-left: 0;
+  margin: 5px 0;
   text-transform: uppercase;
-}
-
-.sidebar-panel div,
-.sidebar-panel ul {
-  display: block;
-  width: 100%;
-  margin: 0 auto;
 }
 
 .sidebar-panel .category {
@@ -163,27 +160,29 @@ a.atexpand {
   color: #88f;
 }
 
-.sidebar-panel li.item h4 {
+.sidebar-panel li.item h4,
+.inmotion h4 {
   font-size: 0.9em;
   line-height: 14px;
   padding: 3px 3px 0;
 }
 
-.sidebar-panel li.item p {
+.sidebar-panel li.item p,
+.inmotion p {
   padding: 0 3px 6px;
   color: #222;
   font-size: 0.8em;
   font-style: italic;
 }
 
-.sidebar-panel li.item span.palette {
+li.item span.palette {
   display: block;
   overflow: hidden;
   margin-top: 5px;
   margin-left: 5px;
 }
 
-.sidebar-panel li.item ul.palette li {
+li.item ul.palette li {
   float: left;
 }
 
@@ -191,13 +190,14 @@ a.atexpand {
   overflow: auto;
 }
 
-.sidebar-panel ul.category li h3 {
+.sidebar-panel ul.category li h3,
+.inmotion h3 {
   display: block;
   clear: both;
   float: none;
 }
 
-.sidebar-panel .layer-metadata.overflow {
+.layer-metadata.overflow {
   height: 40px;
   overflow: hidden;
 }
@@ -230,9 +230,11 @@ img.hideReg {
 }
 
 .sidebar-panel li.item.productsitem,
+li.item.productsitem.inmotion,
 .sidebar-panel li.itemstatic {
   padding: 0;
   min-height: 40px;
+  list-style: none;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -258,10 +260,31 @@ img.hideReg {
   background: #fff;
 }
 
-.productsitem a.hdanchor.hideReg i {
+.productsitem .layer-eye-icon {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  font-size: 20px;
+  color: #333;
+}
+.layer-hidden .layer-eye-icon {
+  color: #c5c5c8;
+}
+.productsitem .hdanchor:hover .layer-eye-icon {
+  color: #000;
+}
+.productsitem.disabled .hdanchor {
+  pointer-events: none;
+}
+
+/* .productsitem a.hdanchor.hideReg i {
   width: 21px;
   height: 12px;
-  background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 0 transparent;
+  background: url("../images/wv.layers/show-hide.png?v=@BUILD_NONCE@") no-repeat
+    0 0 transparent;
   position: absolute;
   top: 50%;
   margin-top: -6px;
@@ -280,7 +303,7 @@ img.hideReg {
 
 .productsitem.layer-hidden a.hdanchor.hideReg:hover i {
   background-position: -63px 0;
-}
+} */
 
 .productsitem a.wv-layers-info,
 .productsitem a.wv-layers-options {
@@ -289,7 +312,10 @@ img.hideReg {
   height: 20px;
   float: right;
 }
-
+.productsitem.inmotion {
+  width: 284px;
+  list-style: none;
+}
 .productsitem a.wv-layers-info:hover,
 .productsitem a.wv-layers-options:hover {
   background: #fff;
@@ -307,7 +333,8 @@ img.hideReg {
 }
 
 i.wv-layers-options-icon {
-  background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 -24px;
+  background: url("../images/wv.layers/show-hide.png?v=@BUILD_NONCE@") no-repeat
+    0 -24px;
   width: 12px;
   height: 12px;
   position: absolute;
@@ -378,7 +405,8 @@ i.wv-layers-options-icon {
 }
 
 .productsitem a.button.close i {
-  background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@') no-repeat 0 -24px;
+  background: url("../images/wv.layers/show-hide.png?v=@BUILD_NONCE@") no-repeat
+    0 -24px;
   width: 12px;
   height: 12px;
   pointer-events: none;
@@ -403,6 +431,7 @@ i.wv-layers-options-icon {
   margin-left: 31px;
   cursor: default;
   min-height: 40px;
+  overflow: hidden;
 }
 
 .productsitem.zotted .layer-main {
@@ -424,6 +453,7 @@ i.wv-layers-options-icon {
 }
 
 .sidebar-panel .layer-main h4,
+.inmotion .layer-main h4,
 .sidebar-panel .layer-main p {
   padding: 0;
 }
@@ -441,23 +471,23 @@ i.wv-layers-options-icon {
   border-color: transparent;
 }
 
-.sidebar-panel li.item.productsitem .layer-main:hover a.hdanchor i {
+/* .sidebar-panel li.item.productsitem .layer-main:hover a.hdanchor i {
   background-position: 5px -36px;
-}
+} */
 
-.disabled.layer-hidden a.hdanchor.hideReg i {
+/* .disabled.layer-hidden a.hdanchor.hideReg i {
   width: 15px;
   height: 15px;
   margin-top: -7.5px;
   margin-left: -7.5px;
   background-position: 0 -54px;
-}
+} */
 
-.disabled.layer-hidden a.hdanchor:hover {
+/* .disabled.layer-hidden a.hdanchor:hover {
   background: rgba(255, 255, 255, 0.2);
   cursor: default;
 }
 
 .productsitem.disabled.layer-hidden a.hdanchor:hover i {
   background-position: 0 -54px;
-}
+} */

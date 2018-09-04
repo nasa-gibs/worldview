@@ -22,7 +22,7 @@ button:focus {
 }
 
 #timeline-footer text {
-  font: 400 12px/125% 'Roboto Mono', monospace;
+  font: 400 12px/125% "Roboto Mono", monospace;
   text-align: start;
   letter-spacing: 0;
   word-spacing: 0;
@@ -175,15 +175,15 @@ g.plot rect.data-bar-invisible {
   -webkit-box-sizing: border-box;
 }
 
-#timeline-header .input-wrapper:nth-child(2) {
+#timeline-header .input-wrapper-year {
   max-width: 62px;
 }
 
-#timeline-header .input-wrapper:nth-child(3) {
+#timeline-header .input-wrapper-month {
   max-width: 46px;
 }
 
-#timeline-header .input-wrapper:nth-child(4) {
+#timeline-header .input-wrapper-day {
   max-width: 32px;
 }
 
@@ -204,7 +204,7 @@ g.plot rect.data-bar-invisible {
   font-size: 24px;
   background: transparent;
   border: 0;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
@@ -235,24 +235,22 @@ g.plot rect.data-bar-invisible {
 
 #timeline-header div {
   display: inline-block;
+  vertical-align: top;
 }
 
 #timeline-header .input-time-divider {
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   color: #fff;
   font-size: 24px;
-  vertical-align: middle;
-  width: 8px;
-  margin-top: -5px;
-  margin-left: -9px;
+  width: 13px;
+  margin-top: 23px;
 }
 
 #timeline-header .input-time-zmark {
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   color: #fff;
   font-size: 24px;
-  vertical-align: middle;
-  margin-left: -4px;
+  margin-top: 25px;
 }
 
 #zoom-buttons-group {
@@ -320,7 +318,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header > .button-action-group .button-disabled:hover,
-#timeline-header #zoom-buttons-group .button-action-group .button-disabled:hover {
+#timeline-header #zoom-buttons-group .button-disabled:hover {
   background-color: transparent;
   cursor: default;
 }
@@ -352,15 +350,20 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header > .button-action-group.button-disabled .arrow,
-#timeline-header #zoom-buttons-group .button-action-group.button-disabled .arrow {
+#timeline-header #zoom-buttons-group .button-disabled .arrow {
   fill: #333;
 }
 
 #timeline-header > .button-action-group.button-disabled:hover .arrow,
-#timeline-header #zoom-buttons-group .button-action-group.button-disabled:hover .arrow {
+#timeline-header #zoom-buttons-group .button-disabled:hover .arrow {
   fill: #333;
 }
 
+#timeline-header .animate-button {
+  margin-top: 10px;
+  height: 40px;
+  width: 40px;
+}
 #timeline-header .animate-button .wv-animate {
   color: #fff;
   font-size: 2.5em;
@@ -380,7 +383,8 @@ g.plot rect.data-bar-invisible {
   color: #ccc;
 }
 
-#timeline-header, #timeline-footer {
+#timeline-header,
+#timeline-footer {
   float: left;
 }
 
@@ -473,7 +477,7 @@ g.plot rect.data-bar-invisible {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   margin-top: -2px;
 }
 
@@ -488,7 +492,7 @@ g.plot rect.data-bar-invisible {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   font-size: 14px;
   line-height: 16px;
   color: #ccc;
@@ -559,4 +563,45 @@ g.plot rect.data-bar-invisible {
 
 #timeline-hide:hover .hamburger path {
   fill: #1a1a1a;
+}
+#timeline-footer .ab-group-case text {
+  font-size: 20px;
+}
+.ab-group-case {
+  display: none;
+  cursor: pointer;
+}
+.ab-group-case-active {
+  fill: #fff;
+}
+.ab-group-case polygon,
+.ab-group-case path,
+.ab-group-case rect {
+  fill: #808080;
+  opacity: 0.7;
+}
+.ab-group-case-active path {
+  stroke: #515151;
+  stroke-width: 1;
+  stroke-opacity: 1;
+}
+.ab-group-case-active polygon,
+.ab-group-case-active path,
+.ab-group-case-active rect {
+  fill: #fff;
+  opacity: 1;
+  pointer-events: initial;
+}
+.ab-group-case text {
+  fill: #fff;
+  pointer-events: none;
+}
+.ab-group-case-active text {
+  fill: #000;
+}
+.ab-active .ab-group-case {
+  display: block;
+}
+.ab-active #guitarpick {
+  display: none;
 }

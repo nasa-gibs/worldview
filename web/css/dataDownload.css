@@ -8,7 +8,7 @@
 }
 
 #wv-data-selection li {
-  font: 300 12px/12px 'Open Sans', sans-serif;
+  font: 300 12px/12px "Open Sans", sans-serif;
   margin-top: 3px;
   display: list-item;
   list-style-type: none;
@@ -199,7 +199,14 @@
 .dl-group {
   cursor: pointer;
 }
+.dl-group .head input,
+.dl-group .head h3 {
+  display: inline;
+}
 
+.dl-group .head i {
+  display: inline-block;
+}
 .dl-group ul {
   padding-bottom: 5px;
 }
@@ -255,7 +262,7 @@
   -o-box-sizing: border-box;
 }
 
-#wv-datacontent div[data-product='__NO_PRODUCT'] a {
+#wv-datacontent div[data-product="__NO_PRODUCT"] a {
   color: #000;
 }
 

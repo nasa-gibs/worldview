@@ -3,6 +3,7 @@ import { layersModel } from '../web/js/layers/model';
 import { mapModel } from '../web/js/map/model';
 import { palettesModel } from '../web/js/palettes/model';
 import { projectionModel } from '../web/js/projection/model';
+import { compareModel } from '../web/js/compare/model';
 
 var fixtures = {
   red: 'ff0000ff',
@@ -15,7 +16,7 @@ var fixtures = {
   dark_blue: '000040'
 };
 
-fixtures.config = function () {
+fixtures.config = function() {
   return {
     defaults: {
       projection: 'geographic'
@@ -61,7 +62,7 @@ fixtures.config = function () {
           antarctic: {}
         }
       },
-      'mask': {
+      mask: {
         id: 'mask',
         group: 'baselayers',
         projections: {
@@ -102,37 +103,44 @@ fixtures.config = function () {
         }
       }
     },
+    features: {
+      compare: true
+    },
     palettes: {
       rendered: {
         'terra-aod': {
           id: 'terra-aod',
-          maps: [{
-            entries: {
-              type: 'scale',
-              colors: [fixtures.green, fixtures.yellow, fixtures.red],
-              values: [0, 1, 2]
-            },
-            legend: {
-              tooltips: ['0', '1', '2'],
-              minLabel: '0',
-              maxLabel: '2'
+          maps: [
+            {
+              entries: {
+                type: 'scale',
+                colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                values: [0, 1, 2]
+              },
+              legend: {
+                tooltips: ['0', '1', '2'],
+                minLabel: '0',
+                maxLabel: '2'
+              }
             }
-          }]
+          ]
         },
         'aqua-aod': {
           id: 'aqua-aod',
-          maps: [{
-            entries: {
-              type: 'scale',
-              colors: [fixtures.green, fixtures.yellow, fixtures.red],
-              values: [0, 1, 2]
-            },
-            legend: {
-              tooltips: ['0', '1', '2'],
-              minLabel: '0',
-              maxLabel: '2'
+          maps: [
+            {
+              entries: {
+                type: 'scale',
+                colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                values: [0, 1, 2]
+              },
+              legend: {
+                tooltips: ['0', '1', '2'],
+                minLabel: '0',
+                maxLabel: '2'
+              }
             }
-          }]
+          ]
         }
       },
       custom: {
@@ -147,15 +155,15 @@ fixtures.config = function () {
   };
 };
 
-fixtures.models = function (config) {
+fixtures.models = function(config) {
   var models = {};
 
   models.proj = projectionModel(config);
   models.layers = layersModel(models, config);
   models.palettes = palettesModel(models, config);
   models.map = mapModel(models, config);
+  models.compare = compareModel(models, config);
   models.date = dateModel(models, config);
-
   return models;
 };
 

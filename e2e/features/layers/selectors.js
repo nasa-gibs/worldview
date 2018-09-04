@@ -11,7 +11,7 @@ module.exports = {
   'layerModal': '#layer-modal-main',
   'sourceMetadataCloseButton': '.source-metadata .metadata-more',
   'layersModalCloseButton': '#layers-modal-close',
-  'aerosolOpticalDepth': '#legacy-all > div > ul > li:nth-child(1)',
+  'aerosolOpticalDepth': '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth',
   'backToCategories': '#category-breadcrumb a',
   'headerForAOD': '#accordion-legacy-all-aerosol-optical-depth'
 };

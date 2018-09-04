@@ -6,35 +6,68 @@ export function dateModel(models, config, spec) {
   var self = {};
   self.events = util.events();
   self.selected = null;
+  self.selectedB = null;
+  self.activeDate = 'selected';
 
-  self.monthAbbr = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  self.monthAbbr = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC'
+  ];
 
-  var init = function () {
+  var init = function() {
     var initial = spec.initial || util.now();
     self.select(initial);
   };
-
-  self.string = function () {
+  self.initCompare = function() {
+    if (!self.selectedB) {
+      self.select(util.dateAdd(self.selected, 'day', -1), 'selectedB');
+    }
+  };
+  self.setActiveDate = function(dateString) {
+    self.activeDate = dateString;
+    self.events.trigger('state-update');
+  };
+  self.string = function() {
     return util.toISOStringDate(self.selected);
   };
 
-  self.select = function (date) {
+  self.select = function(date, selectionStr) {
+    if (!date) return null;
+    selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);
     var updated = false;
-    if (!self.selected || date.getTime() !== self.selected.getTime()) {
-      self.selected = date;
-      self.events.trigger('select', date);
+    if (
+      !self[selectionStr] ||
+      date.getTime() !== self[selectionStr].getTime()
+    ) {
+      self[selectionStr] = date;
+      if (selectionStr === self.activeDate) {
+        self.events.trigger('select', date, selectionStr);
+      }
       updated = true;
     }
     return updated;
   };
 
-  self.add = function (interval, amount) {
-    self.select(util.dateAdd(self.selected, interval, amount));
+  self.add = function(interval, amount, selectionStr) {
+    selectionStr = selectionStr || self.activeDate;
+    self.select(
+      util.dateAdd(self[selectionStr], interval, amount),
+      selectionStr
+    );
   };
 
-  self.clamp = function (date) {
+  self.clamp = function(date) {
     var endDate = models.layers.lastDate(spec);
     if (self.maxZoom > 3) {
       if (date > util.now()) {
@@ -54,7 +87,7 @@ export function dateModel(models, config, spec) {
     return date;
   };
 
-  self.isValid = function (date) {
+  self.isValid = function(date) {
     var endDate = models.layers.lastDate(spec);
     if (self.maxZoom > 3) {
       if (date > util.now()) {
@@ -74,37 +107,58 @@ export function dateModel(models, config, spec) {
     return true;
   };
 
-  self.minDate = function () {
+  self.minDate = function() {
     if (config.startDate) {
       return util.parseDateUTC(config.startDate);
     }
     return util.minDate();
   };
 
-  self.maxDate = function () {
+  self.maxDate = function() {
     var endDate = models.layers.lastDate(spec);
     return endDate;
   };
 
   self.maxZoom = null;
 
-  self.save = function (state) {
-    state.t = self.selected.toISOString()
-      .split('T')[0] + '-' + 'T' + self.selected.toISOString()
-      .split('T')[1].slice(0, -5) + 'Z';
+  var dateToStringForUrl = function(date) {
+    return (
+      date.toISOString().split('T')[0] +
+      '-' +
+      'T' +
+      self.selected
+        .toISOString()
+        .split('T')[1]
+        .slice(0, -5) +
+      'Z'
+    );
+  };
+  self.save = function(state) {
+    state.t = dateToStringForUrl(self.selected);
     if (self.selectedZoom) {
       state.z = self.selectedZoom.toString();
     }
+    if (config.features.compare) {
+      if (self.selectedB) {
+        state.t1 = dateToStringForUrl(self.selectedB);
+      }
+    }
   };
 
-  self.load = function (state) {
+  self.load = function(state) {
+    if (state.ca === 'false') {
+      self.setActiveDate('selectedB');
+    }
     if (state.t) {
-      self.select(state.t);
+      self.select(state.t, 'selected');
     }
     if (state.z) {
       self.selectedZoom = Number(state.z);
     }
+    if (state.t1) {
+      self.select(state.t1, 'selectedB');
+    }
   };
   init();
   return self;
-};
+}
