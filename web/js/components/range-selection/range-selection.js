@@ -19,7 +19,8 @@ class TimelineRangeSelector extends React.Component {
     this.state = {
       startLocation: props.startLocation,
       endLocation: props.endLocation,
-      max: props.max
+      max: props.max,
+      deltaStart: 0
     };
   }
   componentWillReceiveProps(props) {
@@ -83,7 +84,6 @@ class TimelineRangeSelector extends React.Component {
       endLocation: endX
     });
   }
-
   /*
    * Send callback with new locations on
    * Drag Stop
@@ -95,29 +95,56 @@ class TimelineRangeSelector extends React.Component {
   onDragStop() {
     this.props.onDrag(this.state.startLocation, this.state.endLocation);
   }
-  onRangeClick(d) {
-    this.props.onRangeClick(d.nativeEvent);
+  /*
+  * Send callback with click event
+  *
+  * @method onRangeClick
+  *
+  * @param {object} d - proxy click event object
+  *
+  * @return {void}
+  */
+  onRangeClick(e) {
+    this.props.onRangeClick(e.nativeEvent);
+  }
+  /*
+   * Update state based on distance range was dragged
+   *
+   * @method onRangeDrag
+   *
+   * @param {number} d - change in x
+   * @param {number} deltaStart - delta start to track changes
+   *
+   * @return {void}
+   */
+  onRangeDrag(d, deltaStart) {
+    this.setState({
+      startLocation: this.state.startLocation + d,
+      endLocation: this.state.endLocation + d,
+      deltaStart: deltaStart
+    });
+    this.props.onDrag(this.state.startLocation, this.state.endLocation);
   }
   /*
    * @method render
    */
   render() {
     return (
-      <svg
-        id="wv-timeline-range-selector"
-        className="wv-timeline-range-selector"
-      >
+      <svg id="wv-timeline-range-selector" className="wv-timeline-range-selector">
         <DraggerRange
-          width={this.props.pinWidth}
-          endLocation={this.state.endLocation}
           opacity={this.props.rangeOpacity}
-          color={this.props.rangeColor}
-          height={this.props.height}
-          startLocation={this.state.startLocation + this.props.pinWidth}
-          onClick={this.onRangeClick.bind(this)}
+          startLocation={this.state.startLocation}
+          endLocation={this.state.endLocation}
+          deltaStart={this.state.deltaStart}
           max={this.state.max}
-          id="range"
-        />
+          height={this.props.height}
+          width={this.props.pinWidth}
+          color={this.props.rangeColor}
+          draggerID='range-selector-range'
+          onClick={this.onRangeClick.bind(this)}
+          onDrag={this.onRangeDrag.bind(this)}
+          onStop={this.onDragStop.bind(this)}
+          id='range'/>
         <Dragger
           position={this.state.startLocation}
           color={this.props.startColor}
@@ -126,11 +153,10 @@ class TimelineRangeSelector extends React.Component {
           onDrag={this.onItemDrag.bind(this)}
           onStop={this.onDragStop.bind(this)}
           max={this.state.max}
-          draggerID="range-selector-dragger-1"
+          draggerID='range-selector-dragger-1'
           backgroundColor={this.props.startTriangleColor}
           first={true}
-          id="start"
-        />
+          id='start' />
         <Dragger
           max={this.state.max}
           position={this.state.endLocation}
@@ -138,12 +164,11 @@ class TimelineRangeSelector extends React.Component {
           width={this.props.pinWidth}
           height={this.props.height}
           first={false}
-          draggerID="range-selector-dragger-2"
+          draggerID='range-selector-dragger-2'
           onDrag={this.onItemDrag.bind(this)}
           onStop={this.onDragStop.bind(this)}
           backgroundColor={this.props.endTriangleColor}
-          id="end"
-        />
+          id='end'/>
       </svg>
     );
   }
