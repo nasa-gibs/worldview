@@ -36,7 +36,7 @@ export function sidebarUi(models, config, ui) {
       trailing: true
     });
     var layerAdd = function(layer) {
-      if (!models.layers.resetting) {
+      if (!ui.tour.resetting) {
         updateLayers();
         updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
       }
@@ -59,6 +59,11 @@ export function sidebarUi(models, config, ui) {
       .on('remove', updateLayers)
       .on('update', updateLayers);
 
+    ui.tour.events.on('reset', () => {
+      updateState('isCompareMode');
+      updateData();
+      updateLayers();
+    });
     models.palettes.events
       .on('set-custom', updateLayers)
       .on('clear-custom', updateLayers)
@@ -83,12 +88,15 @@ export function sidebarUi(models, config, ui) {
     if (models.compare) {
       models.compare.events
         .on('toggle', () => {
-          updateState('isCompareMode');
-          updateState('layerObjects');
-          updateState('layers');
+          if (!ui.tour.resetting) {
+            updateState('isCompareMode');
+            updateState('layerObjects');
+            updateState('layers');
+          }
         })
         .on('toggle-state', () => {
           updateState('isCompareA');
+          updateData();
         });
     }
     models.date.events.on('select', updateLayers);
@@ -177,7 +185,7 @@ export function sidebarUi(models, config, ui) {
     });
   };
   var updateData = function() {
-    if (!models.layers.resetting) {
+    if (!ui.tour.resetting) {
       self.reactComponent.setState({
         dataDownloadObject: models.data.groupByProducts(),
         onGetData: ui.data.showDownloadList,
@@ -189,7 +197,7 @@ export function sidebarUi(models, config, ui) {
    * Update layer when something happens (Event listeners)
    */
   var updateLayers = function() {
-    if (!models.layers.resetting) {
+    if (!ui.tour.resetting) {
       if (models.compare && models.compare.active) {
         updateState('layerObjects');
         updateState('zotsObject', getZotsForActiveLayers(config, models, ui));

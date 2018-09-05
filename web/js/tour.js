@@ -8,7 +8,8 @@ import feedbackModal from './feedback';
 
 export default function(models, ui, config) {
   var self = {};
-
+  self.resetting = false;
+  self.events = util.events();
   var init = function() {
     $('#wv-tour').click(function() {
       self.start();
@@ -204,17 +205,22 @@ export default function(models, ui, config) {
   };
 
   var initTourState = function() {
+    var leading;
     var map = ui.map.selected;
 
-    if (models.compare) {
-      if (models.compare.active) models.compare.toggle();
+    self.resetting = true;
+    if (models.compare && models.compare.active) {
+      models.compare.toggle();
     }
     models.proj.selectDefault();
     models.layers.reset(models.layers.activeLayers);
     models.date.select(util.today());
-    var leading = models.map.getLeadingExtent();
+
+    leading = models.map.getLeadingExtent();
     map.getView().fit(leading, map.getSize());
     setTourState();
+    self.resetting = false;
+    self.events.trigger('reset');
   };
 
   var setTourState = function() {
