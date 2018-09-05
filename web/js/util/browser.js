@@ -176,6 +176,7 @@ export default (function() {
     return !self.tests.ie();
   };
 
+  // TODO: Probably can be removecd
   self.tests.webWorkers = function() {
     return self.tests.window('Worker');
   };
