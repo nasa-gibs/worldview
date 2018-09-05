@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -171,7 +171,7 @@
     "simplebar": "^3.0.0-beta.1",
     "supercluster": "3.0.2",
     "web-streams-polyfill": "^1.3.2",
-    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.14.1-rc.3"
+    "worldview-options-eosdis": "github:nasa-gibs/worldview-options-eosdis#v2.15.0"
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",
