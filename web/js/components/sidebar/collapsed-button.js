@@ -17,7 +17,7 @@ class CollapsedButton extends React.Component {
           title="Show Layer Selector"
           onClick={onclick}
         >
-          {'Layers(' + numberOfLayers.toString() + ')'}
+          {'Layers (' + numberOfLayers.toString() + ')'}
         </a>
       </div>
     );
