@@ -49,10 +49,12 @@ if (process.env.NODE_ENV === 'analyze') {
 // handle testing entry point and output file name
 let entryPoint = './web/js/main.js';
 let outputFileName = 'wv.js';
+/*
 if (process.env.NODE_ENV === 'testing') {
   entryPoint = './test/main.js';
   outputFileName = 'wv-test-bundle.js';
 }
+*/
 
 module.exports = {
   mode: devMode ? 'development' : 'production',
@@ -115,7 +117,11 @@ module.exports = {
           options: {
             compact: false // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
           }
-        }
+        },
+        exclude: [
+          /\.test\.js$/,
+          /fixtures\.js$/
+        ]
       },
       {
         test: require.resolve('jquery'), // expose globally for jQuery plugins
