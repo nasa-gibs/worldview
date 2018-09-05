@@ -197,7 +197,7 @@
       "./web/ext/d3"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(ol|d3)/)"
+      "node_modules/(?!(ol)/)"
     ]
   }
 }
