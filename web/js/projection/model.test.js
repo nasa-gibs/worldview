@@ -39,7 +39,7 @@ test('selects projection', () => {
   model.select('arctic');
   expect(model.selected.id).toBe('arctic');
   expect(model.selected.crs).toBe('EPSG:3413');
-  expect(listener.mock.calls.length === 1);
+  expect(listener).toBeCalled();
 });
 
 test('event not fired if selection does not change', () => {
@@ -47,7 +47,7 @@ test('event not fired if selection does not change', () => {
   let listener = jest.fn();
   model.events.on('select', listener);
   model.select('geographic');
-  expect(listener.mock.calls.length === 0);
+  expect(listener).toHaveBeenCalledTimes(0);
 });
 
 test('saves state', () => {
