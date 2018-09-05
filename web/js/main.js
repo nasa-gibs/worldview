@@ -298,6 +298,7 @@ window.onload = () => {
     elapsed('ui');
     // Create widgets
     ui.proj = projectionUi(models, config);
+    ui.tour = tour(models, ui, config);
     ui.sidebar = sidebarUi(models, config, ui);
     ui.activeLayers = layersActive(models, ui, config);
     ui.addModal = layersModal(models, ui, config);
@@ -354,7 +355,6 @@ window.onload = () => {
       ui.naturalEvents = naturalEventsUI(models, ui, config, request);
     }
     ui.link = linkUi(models, config);
-    ui.tour = tour(models, ui, config);
     ui.info = uiInfo(ui, config);
     if (config.features.alert) {
       ui.alert = notificationsUi(ui, config);
