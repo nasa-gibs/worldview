@@ -2,7 +2,7 @@ import lodashMap from 'lodash/map';
 import lodashEach from 'lodash/each';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashFind from 'lodash/find';
-import OlGeomPolygon from 'ol/geom/polygon';
+import OlGeomPolygon from 'ol/geom/Polygon';
 
 export const CRS_WGS_84 = 'EPSG:4326';
 

@@ -1,15 +1,15 @@
 import $ from 'jquery';
 import lodashEach from 'lodash/each';
-import OlStyleStyle from 'ol/style/style';
-import OlStyleIcon from 'ol/style/icon';
-import OlStyleText from 'ol/style/text';
-import OlStyleFill from 'ol/style/fill';
-import OlStyleStroke from 'ol/style/stroke';
-import OlLayerVector from 'ol/layer/vector';
-import OlSourceVector from 'ol/source/vector';
-import OlGeomLineString from 'ol/geom/linestring';
-import OlFormatGeoJSON from 'ol/format/geojson';
-import OlFeature from 'ol/feature';
+import OlStyleStyle from 'ol/style/Style';
+import OlStyleIcon from 'ol/style/Icon';
+import OlStyleText from 'ol/style/Text';
+import OlStyleFill from 'ol/style/Fill';
+import OlStyleStroke from 'ol/style/Stroke';
+import OlLayerVector from 'ol/layer/Vector';
+import OlSourceVector from 'ol/source/Vector';
+import OlGeomLineString from 'ol/geom/LineString';
+import OlFormatGeoJSON from 'ol/format/GeoJSON';
+import OlFeature from 'ol/Feature';
 
 import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map/map';
 

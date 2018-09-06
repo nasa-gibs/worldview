@@ -1,5 +1,5 @@
-import OlImageTile from 'ol/imagetile';
-import OlTileState from 'ol/tilestate';
+import OlImageTile from 'ol/ImageTile';
+import OlTileState from 'ol/TileState';
 
 class LookupImageTile extends OlImageTile {
   constructor(lookup, tileCoord, state, src, crossOrigin, tileLoadFunction, sourceOptions) {

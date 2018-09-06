@@ -1,10 +1,10 @@
 import $ from 'jquery';
 
-import OlGeomMultiPolygon from 'ol/geom/multipolygon';
-import OlGeomMultiPoint from 'ol/geom/multipoint';
-import OlFormatGeoJSON from 'ol/format/geojson';
-import OlGeomPolygon from 'ol/geom/polygon';
-import OlGeomPoint from 'ol/geom/point';
+import OlGeomMultiPolygon from 'ol/geom/MultiPolygon';
+import OlGeomMultiPoint from 'ol/geom/MultiPoint';
+import OlFormatGeoJSON from 'ol/format/GeoJSON';
+import OlGeomPolygon from 'ol/geom/Polygon';
+import OlGeomPoint from 'ol/geom/Point';
 import olExtent from 'ol/extent';
 import lodashEach from 'lodash/each';
 import { dataCmrRoundTime, dataCmrGeometry } from './cmr';

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import util from '../util/util';
-import OlGeomPolygon from 'ol/geom/polygon';
+import OlGeomPolygon from 'ol/geom/Polygon';
 
 export const REL_DATA = 'http://esipfed.org/ns/fedsearch/1.1/data#';
 export const REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
