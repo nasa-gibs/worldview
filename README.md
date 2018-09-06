@@ -58,6 +58,7 @@ Windows users will also need the following:
 - [Git Bash](https://git-scm.com/downloads), or [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/)
 - [.NET Framework](https://www.microsoft.com/net/download/dotnet-framework-runtime) or [Visual Studio Team Services](https://www.visualstudio.com/)
 - [Add `python` to the path](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables)
+- To run the tests, GTK needs to be installed using [these instructions](https://github.com/Automattic/node-canvas/wiki/Installation:-Windows)
 
 ## Usage
 
