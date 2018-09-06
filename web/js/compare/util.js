@@ -4,11 +4,17 @@ export function getCompareObjects(models) {
   var obj = {};
   obj.a = {
     dateString: util.toISOStringDate(models.date.selected),
-    layers: models.layers.get({ group: 'all' }, models.layers['active'])
+    layers: models.layers.get(
+      { group: 'all', proj: 'all' },
+      models.layers['active']
+    )
   };
   obj.b = {
     dateString: util.toISOStringDate(models.date.selectedB),
-    layers: models.layers.get({ group: 'all' }, models.layers['activeB'])
+    layers: models.layers.get(
+      { group: 'all', proj: 'all' },
+      models.layers['activeB']
+    )
   };
   return obj;
 }

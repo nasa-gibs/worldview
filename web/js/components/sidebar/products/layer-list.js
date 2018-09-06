@@ -91,44 +91,48 @@ class LayerList extends React.Component {
                       className="category"
                       ref={provided.innerRef}
                     >
-                      {layers.map((object, i) => (
-                        <Layer
-                          layer={object}
-                          groupId={groupId}
-                          layerGroupName={layerGroupName}
-                          getLegend={context.getLegend}
-                          key={i}
-                          index={i}
-                          layerClasses="item productsitem"
-                          zot={
-                            context.zotsObject[object.id]
-                              ? context.zotsObject[object.id].value
-                              : null
-                          }
-                          isMobile={context.isMobile}
-                          names={context.getNames(object.id)}
-                          checkerBoardPattern={context.checkerBoardPattern}
-                          palette={this.getPalette(
-                            object,
-                            context.palettePromise
-                          )}
-                          isDisabled={
-                            !context.getAvailability(
-                              object.id,
-                              undefined,
-                              layerGroupName
-                            )
-                          }
-                          isVisible={object.visible}
-                          updateLayer={context.updateLayer}
-                          runningObject={
-                            context.runningLayers &&
-                            context.runningLayers[object.id]
-                              ? context.runningLayers[object.id]
-                              : null
-                          }
-                        />
-                      ))}
+                      {layers.map((object, i) => {
+                        return object.projections[context.projection] ? (
+                          <Layer
+                            layer={object}
+                            groupId={groupId}
+                            layerGroupName={layerGroupName}
+                            getLegend={context.getLegend}
+                            key={i}
+                            index={i}
+                            layerClasses="item productsitem"
+                            zot={
+                              context.zotsObject[object.id]
+                                ? context.zotsObject[object.id].value
+                                : null
+                            }
+                            isMobile={context.isMobile}
+                            names={context.getNames(object.id)}
+                            checkerBoardPattern={context.checkerBoardPattern}
+                            palette={this.getPalette(
+                              object,
+                              context.palettePromise
+                            )}
+                            isDisabled={
+                              !context.getAvailability(
+                                object.id,
+                                undefined,
+                                layerGroupName
+                              )
+                            }
+                            isVisible={object.visible}
+                            updateLayer={context.updateLayer}
+                            runningObject={
+                              context.runningLayers &&
+                              context.runningLayers[object.id]
+                                ? context.runningLayers[object.id]
+                                : null
+                            }
+                          />
+                        ) : (
+                          ''
+                        );
+                      })}
                       {provided.placeholder}
                     </ul>
                   );

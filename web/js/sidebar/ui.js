@@ -100,7 +100,11 @@ export function sidebarUi(models, config, ui) {
         });
     }
     models.date.events.on('select', updateLayers);
-    if (models.proj) models.proj.events.on('select', updateLayers);
+    if (models.proj) {
+      models.proj.events.on('select', updateLayers).on('select', () => {
+        self.reactComponent.setState({ projection: models.proj.selected.id });
+      });
+    }
     models.map.events.on('data-running', runningLayers => {
       self.reactComponent.setState({ runningLayers: runningLayers });
     });
@@ -164,6 +168,10 @@ export function sidebarUi(models, config, ui) {
       filterEventList: null,
       selectEvent: null,
       deselectEvent: null,
+      projection:
+        models.proj && models.proj.selected.id
+          ? models.proj.selected.id
+          : 'geographic',
       selectedEvent:
         models.naturalEvents && models.naturalEvents.selected
           ? models.naturalEvents.selected
@@ -277,7 +285,7 @@ export function sidebarUi(models, config, ui) {
       case 'layers':
         return self.reactComponent.setState({
           layers: models.layers.get(
-            { group: 'all' },
+            { group: 'all', proj: 'all' },
             models.layers[models.layers.activeLayers]
           )
         });

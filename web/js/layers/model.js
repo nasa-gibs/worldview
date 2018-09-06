@@ -509,7 +509,7 @@ export function layersModel(models, config) {
     });
     lodashEach(defs, function(def) {
       // Skip if this layer isn't available for the selected projection
-      if (!def.projections[projId]) {
+      if (!def.projections[projId] && projId !== 'all') {
         return;
       }
       if (

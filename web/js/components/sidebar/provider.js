@@ -16,7 +16,8 @@ export class SidebarProvider extends React.Component {
       getLegend: props.getLegend,
       zotsObject: props.zotsObject,
       replaceSubGroup: props.replaceSubGroup,
-      isMobile: props.isMobile
+      isMobile: props.isMobile,
+      projection: props.projection
     };
   }
   componentWillReceiveProps(props) {
@@ -31,6 +32,9 @@ export class SidebarProvider extends React.Component {
     }
     if (this.state.isMobile !== props.isMobile) {
       this.setState({ isMobile: props.isMobile });
+    }
+    if (this.state.projection !== props.projection) {
+      this.setState({ projection: props.projection });
     }
   }
   render() {
@@ -52,5 +56,6 @@ SidebarProvider.propTypes = {
   palettePromise: PropTypes.func,
   runningLayers: PropTypes.object,
   getLegend: PropTypes.func,
-  zotsObject: PropTypes.object
+  zotsObject: PropTypes.object,
+  projection: PropTypes.string
 };
