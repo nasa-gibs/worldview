@@ -37,7 +37,9 @@ export function dataUi(models, ui, config) {
       .on('queryResults', onQueryResults)
       .on('queryCancel', onQueryCancel)
       .on('queryError', onQueryError)
-      .on('queryTimeout', onQueryTimeout);
+      .on('queryTimeout', onQueryTimeout)
+      .on('granuleSelect', updateSelection)
+      .on('granuleUnselect', updateSelection);
 
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'download') {
@@ -75,7 +77,11 @@ export function dataUi(models, ui, config) {
       indicators.noneInView = uiIndicator.show('Zoom out or move map');
     }
   };
-
+  var updateSelection = function() {
+    if (downloadListPanel && downloadListPanel.visible()) {
+      downloadListPanel.refresh();
+    }
+  };
   var onActivate = function() {
     if (!mapController) {
       mapController = dataMap(model, maps, config);
@@ -619,7 +625,6 @@ var dataUiDownloadListPanel = function(config, model) {
 
   var removeGranule = function() {
     var id = $(this).attr('data-granule');
-    $('#wv-data-selection tr[data-granule="' + id + '"]').remove();
     model.unselectGranule(model.selectedGranules[id]);
     onHoverOut.apply(this);
   };
