@@ -2,39 +2,6 @@ import util from '../util/util';
 import d3 from 'd3';
 
 export default {
-  click: function ($element, callback) {
-    var self = {};
-    self.sensitivity = 5; // pixels
-
-    var startX, startY;
-
-    var init = function () {
-      $element.mousedown(mousedown);
-      $element.mouseup(mouseup);
-    };
-
-    var mousedown = function (event) {
-      startX = event.clientX;
-      startY = event.clientY;
-    };
-
-    var mouseup = function (event) {
-      if (withinClickDistance(event)) {
-        callback.call(this);
-      }
-    };
-
-    var withinClickDistance = function (event) {
-      var targetX = event.clientX;
-      var targetY = event.clientY;
-      var distance = Math.sqrt(Math.pow(startX - targetX, 2) +
-        Math.pow(startY - targetY, 2));
-      return distance <= self.sensitivity;
-    };
-
-    init();
-    return self;
-  },
   wheel: function (element, ui, options) {
     options = options || {};
 
