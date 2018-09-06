@@ -413,6 +413,259 @@ test('replace overlay layer', () => {
   ]);
 });
 
+test('push base layer to bottom', () => {
+  let { models } = testData();
+  models.layers.add('terra-cr');
+  models.layers.add('aqua-cr');
+  models.layers.add('terra-aod');
+  models.layers.add('aqua-aod');
+  models.layers.pushToBottom('aqua-cr');
+
+  let layerList = models.layers.get().map(x => x.id);
+  expect(layerList).toEqual([
+    'terra-cr',
+    'aqua-cr',
+    'aqua-aod',
+    'terra-aod'
+  ]);
+});
+
+test('push overlay to bottom', () => {
+  let { models } = testData();
+  models.layers.add('terra-cr');
+  models.layers.add('aqua-cr');
+  models.layers.add('terra-aod');
+  models.layers.add('aqua-aod');
+  models.layers.pushToBottom('aqua-aod');
+
+  let layerList = models.layers.get().map(x => x.id);
+  expect(layerList).toEqual([
+    'aqua-cr',
+    'terra-cr',
+    'terra-aod',
+    'aqua-aod'
+  ]);
+});
+
+test('move base layer before', () => {
+  let { models } = testData();
+  models.layers.add('terra-cr');
+  models.layers.add('aqua-cr');
+  models.layers.add('terra-aod');
+  models.layers.add('aqua-aod');
+  models.layers.moveBefore('terra-cr', 'aqua-cr');
+
+  let layerList = models.layers.get().map(x => x.id);
+  expect(layerList).toEqual([
+    'terra-cr',
+    'aqua-cr',
+    'aqua-aod',
+    'terra-aod'
+  ]);
+});
+
+test('move overlay before', () => {
+  let { models } = testData();
+  models.layers.add('terra-cr');
+  models.layers.add('aqua-cr');
+  models.layers.add('terra-aod');
+  models.layers.add('aqua-aod');
+  models.layers.moveBefore('terra-aod', 'aqua-aod');
+
+  let layerList = models.layers.get().map(x => x.id);
+  expect(layerList).toEqual([
+    'aqua-cr',
+    'terra-cr',
+    'terra-aod',
+    'aqua-aod'
+  ]);
+});
+
+test('saves state', () => {
+  let { models } = testData();
+  models.layers.add('terra-cr');
+  models.layers.add('terra-aod');
+  let state = {};
+  models.layers.save(state);
+  expect(state.l).toEqual([
+    {
+      id: 'terra-cr',
+      attributes: []
+    },
+    {
+      id: 'terra-aod',
+      attributes: []
+    }
+  ]);
+});
+
+test('Saves state with hidden layer', () => {
+  let { models } = testData();
+  models.layers.add('terra-cr');
+  models.layers.setVisibility('terra-cr', false);
+  let state = {};
+  models.layers.save(state);
+  expect(state.l).toEqual([
+    {
+      id: 'terra-cr',
+      attributes: [
+        {
+          id: 'hidden'
+        }
+      ]
+    }
+  ]);
+});
+
+test('loads state', () => {
+  let { models } = testData();
+  let errors = [];
+  models.layers.loaded = false;
+  var state = {
+    l: [
+      {
+        id: 'terra-cr',
+        attributes: []
+      },
+      {
+        id: 'terra-aod',
+        attributes: []
+      }
+    ]
+  };
+  models.layers.load(state, errors);
+  let terraAodObj = models.layers.active.find(x => x.id === 'terra-aod');
+  let terraCrObj = models.layers.active.find(x => x.id === 'terra-cr');
+
+  expect(terraAodObj).toBeTruthy();
+  expect(terraCrObj).toBeTruthy();
+  expect(errors).toHaveLength(0);
+});
+
+test('loads state with hidden layer', () => {
+  let { models } = testData();
+  let errors = [];
+  models.layers.loaded = false;
+  let state = {
+    l: [
+      {
+        id: 'terra-cr',
+        attributes: [
+          {
+            id: 'hidden',
+            value: true
+          }
+        ]
+      }
+    ]
+  };
+  models.layers.load(state, errors);
+  var def = models.layers.active.find(x => x.id === 'terra-cr');
+
+  expect(def).toBeTruthy();
+  expect(def.visible).toBe(false);
+  expect(errors).toHaveLength(0);
+});
+
+test('loads state with opacity', () => {
+  let { models } = testData();
+  let errors = [];
+  let state = {
+    l: [
+      {
+        id: 'terra-cr',
+        attributes: [
+          {
+            id: 'opacity',
+            value: 0.12
+          }
+        ]
+      }
+    ]
+  };
+  models.layers.load(state, errors);
+  let def = models.layers.active.find(x => x.id === 'terra-cr');
+
+  expect(def.opacity).toBe(0.12);
+  expect(errors).toHaveLength(0);
+});
+
+test('loads state, opacity clamped at 1', () => {
+  let { models } = testData();
+  let errors = [];
+  let state = {
+    l: [
+      {
+        id: 'terra-cr',
+        attributes: [
+          {
+            id: 'opacity',
+            value: 5
+          }
+        ]
+      }
+    ]
+  };
+  models.layers.load(state, errors);
+  let def = models.layers.active.find(x => x.id === 'terra-cr');
+
+  expect(def.opacity).toBe(1);
+  expect(errors).toHaveLength(0);
+});
+
+test('loads state, opacity clamped at 0', () => {
+  let { models } = testData();
+  let errors = [];
+  models.layers.loaded = false;
+  var state = {
+    l: [
+      {
+        id: 'terra-cr',
+        attributes: [
+          {
+            id: 'opacity',
+            value: -5
+          }
+        ]
+      }
+    ]
+  };
+  models.layers.load(state, errors);
+  let def = models.layers.active.find(x => x.id === 'terra-cr');
+
+  expect(def.opacity).toBe(0);
+  expect(errors).toHaveLength(0);
+});
+
+test('starts with default layers when no permalink', () => {
+  let { config, models } = testData();
+  config.defaults.startingLayers = [
+    {
+      id: 'terra-cr'
+    }
+  ];
+  models.layers = layersModel(models, config);
+  models.layers.load({});
+
+  expect(models.layers.active[0].id).toBe('terra-cr');
+  expect(models.layers.active[0].visible).toBe(true);
+});
+
+test('starts with a default hidden layer', () => {
+  let { config, models } = testData();
+  config.defaults.startingLayers = [
+    {
+      id: 'terra-cr',
+      hidden: true
+    }
+  ];
+  models.layers = layersModel(models, config);
+  models.layers.load({});
+
+  expect(models.layers.active[0].id).toBe('terra-cr');
+  expect(models.layers.active[0].visible).toBe(false);
+});
+
 // Date Ranges
 
 function testDataDateRanges() {
