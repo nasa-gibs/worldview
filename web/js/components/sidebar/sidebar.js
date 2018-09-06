@@ -39,7 +39,8 @@ class Sidebar extends React.Component {
       getDataSelectionCounts: props.getDataSelectionCounts,
       dataDownloadObject: {},
       selectedDataProduct: props.selectedDataProduct,
-      showDataUnavailableReason: props.showDataUnavailableReason
+      showDataUnavailableReason: props.showDataUnavailableReason,
+      projection: props.projection
     };
   }
   componentDidMount() {
@@ -155,7 +156,8 @@ class Sidebar extends React.Component {
       comparisonType,
       onGetData,
       windowHeight,
-      filterEventList
+      filterEventList,
+      projection
     } = this.state;
     const {
       onTabClick,
@@ -187,6 +189,7 @@ class Sidebar extends React.Component {
         replaceSubGroup={replaceSubGroup}
         isMobile={isMobile}
         checkerBoardPattern={checkerBoardPattern}
+        projection={projection}
       >
         <a
           href="/"
