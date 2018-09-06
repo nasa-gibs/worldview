@@ -218,16 +218,16 @@ export default function(models, ui, config) {
 
     leading = models.map.getLeadingExtent();
     map.getView().fit(leading, map.getSize());
-    setTourState();
     self.resetting = false;
     self.events.trigger('reset');
+    setTourState();
   };
 
   var setTourState = function() {
+    models.proj.selectDefault();
     ui.sidebar.expandNow();
     ui.sidebar.selectTab('layers');
     ui.timeline.expandNow();
-    models.proj.selectDefault();
   };
 
   var validScreenSize = function() {
