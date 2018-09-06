@@ -619,6 +619,7 @@ var dataUiDownloadListPanel = function(config, model) {
 
   var removeGranule = function() {
     var id = $(this).attr('data-granule');
+    $('#wv-data-selection tr[data-granule="' + id + '"]').remove();
     model.unselectGranule(model.selectedGranules[id]);
     onHoverOut.apply(this);
   };
