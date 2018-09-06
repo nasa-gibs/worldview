@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import OlOverlay from 'ol/overlay';
+import OlOverlay from 'ol/Overlay';
 
 import util from '../util/util';
 import DateLine from '../components/dateline/dateline';
