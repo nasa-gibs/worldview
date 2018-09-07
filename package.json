@@ -26,10 +26,10 @@
     "node": "8.8.1"
   },
   "scripts": {
-    "analyze": "cross-env NODE_ENV=analyze webpack",
+    "analyze": "cross-env ANALYZE_MODE=true NODE_ENV=production webpack",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack ",
     "build": "run-s clean getcapabilities build:config build:dev",
-    "build:dev": "webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack",
     "build:config": "bash -c 'tasks/buildOptions.sh' && node ./tasks/config.js",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "clean": "node ./tasks/clean.js",
