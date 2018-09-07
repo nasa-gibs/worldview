@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import lodashSize from 'lodash/size';
 import wvui from '../ui/ui';
 import brand from '../brand';

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import lodashEach from 'lodash/each';
 import wvui from '../ui/ui';

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-jcrop';
 import React from 'react';
 import ReactDOM from 'react-dom';

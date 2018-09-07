@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import util from '../util/util';
 import DateSelector from '../components/date-selector/date-selector';
 import React from 'react';

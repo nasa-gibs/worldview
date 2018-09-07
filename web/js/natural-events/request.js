@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import lodashOrderBy from 'lodash/orderBy';
 import lodashUniqBy from 'lodash/uniqBy';
 

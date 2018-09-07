@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import AnimationWidget from '../components/animation-widget/animation-widget';
 import googleAnalytics from '../components/util/google-analytics';
 import React from 'react';

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import util from '../util/util';
 
 /**

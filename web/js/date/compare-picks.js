@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TimelineDragger from '../components/compare/pick';
 import { getMaxTimelineWidth } from './util';
-import $ from 'jquery';
 import util from '../util/util';
 
 const PICK_PATH =

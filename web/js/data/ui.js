@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import lodashSize from 'lodash/size';
 import lodashEach from 'lodash/each';
 import googleAnalytics from '../components/util/google-analytics';

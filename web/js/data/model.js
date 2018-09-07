@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import lodashEach from 'lodash/each';
 import lodashFind from 'lodash/find';
 import util from '../util/util';
