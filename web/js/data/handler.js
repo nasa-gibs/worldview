@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 import { dataCmrMockClient, dataCmrClient } from './cmr';
 
 import util from '../util/util';

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import lodashFind from 'lodash/find';
 import lodashDebounce from 'lodash/debounce';

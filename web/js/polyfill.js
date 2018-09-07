@@ -7,7 +7,6 @@
 
 /* eslint-disable no-extend-native */
 
-import $ from 'jquery';
 import util from './util/util';
 
 export function polyfill () {

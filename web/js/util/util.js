@@ -5,7 +5,6 @@
  * which is included via config.scripts in web/config/wv.json
 */
 
-import $ from 'jquery';
 import lodashEach from 'lodash/each';
 import lodashIsNull from 'lodash/isNull';
 import wvui from '../ui/ui';

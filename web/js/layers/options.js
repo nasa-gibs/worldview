@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import 'icheck';
 import 'nouislider/distribute/jquery.nouislider';

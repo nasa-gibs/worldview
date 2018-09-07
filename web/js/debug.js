@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import lodashEach from 'lodash/each';
 import lodashIsNaN from 'lodash/isNaN';
 import lodashParseInt from 'lodash/parseInt';

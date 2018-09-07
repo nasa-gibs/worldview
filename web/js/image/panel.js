@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import * as olProj from 'ol/proj';
 import ImageResSelection from '../components/image-panel/select';

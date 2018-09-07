@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import lodashUniqueId from 'lodash/uniqueId';
 import lodashIsString from 'lodash/isString';
 import lodashEach from 'lodash/each';
