@@ -37,7 +37,9 @@ export function dataUi(models, ui, config) {
       .on('queryResults', onQueryResults)
       .on('queryCancel', onQueryCancel)
       .on('queryError', onQueryError)
-      .on('queryTimeout', onQueryTimeout);
+      .on('queryTimeout', onQueryTimeout)
+      .on('granuleSelect', updateSelection)
+      .on('granuleUnselect', updateSelection);
 
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'download') {
@@ -75,7 +77,11 @@ export function dataUi(models, ui, config) {
       indicators.noneInView = uiIndicator.show('Zoom out or move map');
     }
   };
-
+  var updateSelection = function() {
+    if (downloadListPanel && downloadListPanel.visible()) {
+      downloadListPanel.refresh();
+    }
+  };
   var onActivate = function() {
     if (!mapController) {
       mapController = dataMap(model, maps, config);
