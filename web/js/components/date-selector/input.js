@@ -203,7 +203,14 @@ class DateInputColumn extends React.Component {
     );
     this.props.updateDate(newDate);
   }
-
+  /**
+   * Select all text on focus
+   * https://stackoverflow.com/a/40261505/4589331
+   * @param {Object} e | Event Object
+   */
+  handleFocus(e) {
+    e.target.select();
+  }
   blur() {
     this.setState({
       value: this.props.value,
@@ -263,6 +270,7 @@ class DateInputColumn extends React.Component {
           }
           step={this.props.step}
           onBlur={this.blur.bind(this)}
+          onFocus={this.handleFocus}
         />
         <div
           onClick={this.onClickDown.bind(this)}
