@@ -281,7 +281,6 @@ export function imagePanel(models, ui, config, dialogConfig) {
     bottomLeftCoordinates,
     topRightCoordinates
   ) {
-    console.log(x1, x2, y1, y2, bottomLeftCoordinates, topRightCoordinates);
     if (x2 - x1 < 150) {
       bottomLeftCoordinates = '';
       topRightCoordinates = '';
