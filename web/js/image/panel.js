@@ -288,7 +288,7 @@ export function imagePanel(models, ui, config, dialogConfig) {
     $('#wv-image-top')
       .css({
         left: x1 - 10,
-        top: y1 - 20,
+        top: y1 - 10,
         width: x2 - x1
       })
       .html(topRightCoordinates);
@@ -296,7 +296,7 @@ export function imagePanel(models, ui, config, dialogConfig) {
     $('#wv-image-bottom')
       .css({
         left: x1,
-        top: y2,
+        top: y2 + 12,
         width: x2 - x1
       })
       .html(bottomLeftCoordinates);
