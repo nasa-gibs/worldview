@@ -13,7 +13,7 @@
   background-image: -o-linear-gradient(#555, #666);
   font-family: "Segoe UI", "Arial", sans-serif;
   padding: 0;
-  transition: background 0.5s ease;
+  transition: background 0.5s ease, border-color 0.5s ease;
 }
 .wv-button span {
   padding: 6px 13px 7px;
@@ -27,7 +27,7 @@
   border-color: #666;
 }
 .wv-button:hover {
-  border-color: #eee;
+  border-color: transparent;
   background-color: #eee;
   background-image: none;
   color: #404040;
