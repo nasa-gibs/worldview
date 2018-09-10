@@ -230,7 +230,7 @@ class Legend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-          <div className="wv-palettes-title" />
+          ''
         )}
         <div className="colorbar-case">
           <canvas
