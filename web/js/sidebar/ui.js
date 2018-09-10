@@ -329,6 +329,7 @@ export function sidebarUi(models, config, ui) {
   self.selectTab = function(tab) {
     if (activeTab === tab) return;
     activeTab = tab;
+    wvui.close();
     self.events.trigger('selectTab', tab);
     updateState('activeTab');
   };
