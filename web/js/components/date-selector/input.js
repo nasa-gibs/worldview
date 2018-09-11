@@ -17,6 +17,7 @@ class DateInputColumn extends React.Component {
     super(props);
     this.state = {
       value: this.props.value,
+      selected: false,
       valid: true
     };
     this.inputs = [];
@@ -203,11 +204,20 @@ class DateInputColumn extends React.Component {
     );
     this.props.updateDate(newDate);
   }
-
+  /**
+   * Select all text on focus
+   * https://stackoverflow.com/a/40261505/4589331
+   * @param {Object} e | Event Object
+   */
+  handleFocus(e) {
+    e.target.select();
+    this.setState({ selected: true });
+  }
   blur() {
     this.setState({
       value: this.props.value,
-      valid: true
+      valid: true,
+      selected: false
     });
 
     this.props.blur();
@@ -232,7 +242,11 @@ class DateInputColumn extends React.Component {
   render() {
     return (
       <div
-        className={'input-wrapper' + ' input-wrapper-' + this.props.type}
+        className={
+          this.state.selected
+            ? 'input-wrapper selected' + ' input-wrapper-' + this.props.type
+            : 'input-wrapper ' + 'input-wrapper-' + this.props.type
+        }
         style={this.state.valid ? {} : { borderColor: '#ff0000' }}
       >
         <div
@@ -263,6 +277,7 @@ class DateInputColumn extends React.Component {
           }
           step={this.props.step}
           onBlur={this.blur.bind(this)}
+          onFocus={this.handleFocus.bind(this)}
         />
         <div
           onClick={this.onClickDown.bind(this)}
