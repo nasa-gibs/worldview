@@ -5,7 +5,13 @@ import { Draggable } from 'react-beautiful-dnd';
 import util from '../../../util/util';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
-
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // some basic styles to make the items look a bit nicer
+  ...draggableStyle,
+  position: isDragging ? 'absolute' : 'relative',
+  top: null,
+  left: null
+});
 class Layer extends React.Component {
   constructor(props) {
     super(props);
@@ -91,6 +97,10 @@ class Layer extends React.Component {
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               id={layerGroupName + '-' + util.encodeId(layer.id)}
+              style={getItemStyle(
+                snapshot.isDragging,
+                provided.draggableProps.style
+              )}
               className={
                 isDisabled
                   ? layerClasses + ' disabled layer-hidden'

@@ -187,7 +187,8 @@ li.item ul.palette li {
 }
 
 .sidebar-panel ul.category {
-  overflow: auto;
+  position: relative;
+  overflow: hidden;
 }
 
 .sidebar-panel ul.category li h3,
