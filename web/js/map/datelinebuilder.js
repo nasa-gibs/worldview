@@ -61,6 +61,15 @@ export function mapDateLineBuilder(models, config) {
     models.date.events.on('select', function() {
       updateDate(models.date[models.date.activeDate]);
     });
+    if (models.compare) {
+      models.compare.events.on('toggle', function() {
+        var state = {
+          isTooltipActive: !(models.compare && models.compare.active)
+        };
+        lineRight.setState(state);
+        lineLeft.setState(state);
+      });
+    }
     models.proj.events.on('select', function() {
       proj = models.proj.selected.id;
     });
@@ -101,7 +110,8 @@ export function mapDateLineBuilder(models, config) {
       lineOut: onMouseOut,
       lineX: lineX,
       overlay: overlay,
-      tooltip: tooltip
+      tooltip: tooltip,
+      isTooltipActive: !(models.compare && models.compare.active)
     };
     var component = ReactDOM.render(
       React.createElement(ReactComponent, props),

@@ -17,7 +17,8 @@ class Line extends React.Component {
     this.state = {
       hovered: false,
       height: props.height,
-      active: true
+      active: true,
+      isTooltipActive: props.isTooltipActive
     };
   }
 
@@ -52,6 +53,7 @@ class Line extends React.Component {
    * return {Void}
    */
   mouseOverHidden(e) {
+    if (!this.state.isTooltipActive) return;
     this.props.lineOver(
       [e.clientX, e.clientY],
       this.props.overlay,
@@ -68,6 +70,7 @@ class Line extends React.Component {
    * return {Void}
    */
   mouseOutHidden() {
+    if (!this.state.isTooltipActive) return;
     this.props.lineOut(this.props.tooltip);
   }
 
@@ -140,7 +143,8 @@ Line.propTypes = {
   overlay: PropTypes.object,
   style: PropTypes.object,
   id: PropTypes.string,
-  classes: PropTypes.string
+  classes: PropTypes.string,
+  isTooltipActive: PropTypes.bool
 };
 
 export default Line;
