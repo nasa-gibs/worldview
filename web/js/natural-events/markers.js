@@ -167,7 +167,7 @@ export default function markers (models, ui) {
 
   var passEventToTarget = function (event, target) {
     try {
-      var eventCopy = new event.constructor(event.type, event);
+      var eventCopy = new CustomEvent(event.type, event);
       target.dispatchEvent(eventCopy);
     } catch (err) {
       console.log(err);
