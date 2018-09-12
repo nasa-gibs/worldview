@@ -40,7 +40,9 @@
   background-color: #fff;
   color: #1a1a1a;
 }
-
+#wv-toolbar li:hover label.ui-state-disabled {
+  background-color: transparent;
+}
 .wv-menu .ui-menu .ui-menu-item a {
   position: relative;
   border: 0;
