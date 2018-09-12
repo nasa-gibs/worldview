@@ -38,9 +38,9 @@
 }
 .wv-button:disabled {
   opacity: 0.35;
+  background: #555;
   background-image: none;
   border: 1px solid #666;
-  background: #555;
   border-radius: 0;
   color: #eee;
   cursor: not-allowed;
