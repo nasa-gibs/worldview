@@ -68,6 +68,7 @@ export function mapDateLineBuilder(models, config) {
         };
         lineRight.setState(state);
         lineLeft.setState(state);
+        updateDate(models.date[models.date.activeDate]);
       });
     }
     models.proj.events.on('select', function() {
