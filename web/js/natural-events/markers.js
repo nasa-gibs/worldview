@@ -167,7 +167,14 @@ export default function markers (models, ui) {
 
   var passEventToTarget = function (event, target) {
     try {
-      var eventCopy = new CustomEvent(event.type, event);
+      let eventCopy;
+      // polyfill fix for IE11 CustomEvent from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
+      if (typeof window.CustomEvent !== 'function') {
+        eventCopy = document.createEvent('CustomEvent');
+        eventCopy.initCustomEvent(event, event.bubbles, event.cancelable, event.detail);
+      } else {
+        eventCopy = new event.constructor(event.type, event);
+      }
       target.dispatchEvent(eventCopy);
     } catch (err) {
       console.log(err);
