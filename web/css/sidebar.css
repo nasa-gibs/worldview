@@ -1,3 +1,6 @@
+#wv-sidebar {
+  position: absolute;
+}
 #productsHolder {
   border-bottom: 1px solid #333;
   border-bottom-left-radius: 5px;
