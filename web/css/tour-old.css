@@ -1,0 +1,516 @@
+#joyRideTipContent {
+  display: none;
+}
+
+#wv-tour-content {
+  display: none;
+}
+
+#splash_c div {
+  background-color: rgb(175, 181, 196);
+}
+
+#conclusionPanel_c div {
+  background-color: rgb(175, 181, 196);
+}
+
+.joyride-tip-guide p,
+.joyride-tip-guide ul {
+  margin: 0 0 14px;
+}
+
+.joyride-tip-guide.bordered,
+.joyride-bordered {
+  border: #808080 solid 1px;
+}
+
+.joyride-tip-guide.wide,
+.joyride-wide {
+  width: 450px;
+}
+
+.joyride-close-tip {
+  color: rgba(38, 43, 49, 0.4) !important;
+}
+
+.tour h3 {
+  color: rgb(38, 43, 49);
+  font: 18px 'Open Sans', sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  margin-bottom: 1em;
+}
+
+.tour .ui-dialog-content {
+  background: #afb5c4;
+  padding-top: 8px;
+}
+
+.tour .ui-dialog-titlebar {
+  font-size: 20px;
+  line-height: 24px;
+  background: #afb5c4;
+  color: rgb(38, 43, 49);
+  border: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.tour .ui-button {
+  background: #f4f5f5;
+  border-color: #f4f5f5;
+}
+
+.tour .ui-button:hover:enabled {
+  background: #d9dddd;
+}
+
+.tour .ui-dialog-titlebar .ui-button {
+  background: transparent;
+  border: none;
+}
+
+.tour .ui-dialog-titlebar .ui-icon-closethick {
+  background-image: url("../images/close-highlight.png");
+}
+
+.tour img.wv-tour-map {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+  width: 200px;
+  height: 100px;
+}
+
+table.splash td {
+  padding: 10px;
+}
+
+p.splash {
+  color: rgb(38, 43, 49);
+}
+
+.splashwelcome {
+  color: rgb(38, 43, 49);
+  text-align: left;
+  font-size: 14px;
+  padding: 0 10px;
+}
+
+p.splash span.highlight {
+  font-weight: 700;
+}
+
+button.takeTour {
+  font: 400 12px/18px 'Open Sans', sans-serif;
+  border: 1px solid #d7dada;
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+  color: #000;
+  background-color: #f4f5f5;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
+  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
+  width: 110px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+button.takeTour:hover {
+  color: #000;
+  background-color: #d9dddd;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
+  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
+  cursor: pointer;
+}
+
+button.skipTour {
+  font: 400 12px/18px 'Open Sans', sans-serif;
+  border: 1px solid #d7dada;
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+  color: #000;
+  background-color: #f4f5f5;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
+  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
+  width: 110px;
+  height: 40px;
+  margin-left: 10px;
+}
+
+button.skipTour:hover {
+  color: #000;
+  background-color: #d9dddd;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
+  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
+  cursor: pointer;
+}
+
+/* tour panels */
+.tour td {
+  padding: 2px;
+  vertical-align: top;
+}
+
+.tour p,
+.tour ul {
+  color: rgb(38, 43, 49);
+  font: 400 13px/16px 'Open Sans', sans-serif;
+}
+
+.joyride-content-wrapper {
+  padding-bottom: 0;
+}
+
+.joyride-prev-tip {
+  font: 400 13px/16px 'Open Sans', sans-serif;
+}
+
+.joyride-next-tip {
+  font: 400 13px/16px 'Open Sans', sans-serif;
+}
+
+.tour span.highlight {
+  font-weight: 700;
+}
+
+.tour span.tryIt {
+  font-weight: 700;
+}
+
+button.repeatTour {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+  color: #000;
+  background-color: #f4f5f5;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
+  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
+  width: 110px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+button.repeatTour:hover {
+  color: #000;
+  background-color: #d9dddd;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
+  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
+  cursor: pointer;
+}
+
+button.done {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+  color: #000;
+  background-color: #f4f5f5;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
+  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
+  width: 110px;
+  height: 40px;
+  margin-left: 10px;
+}
+
+button.done:hover {
+  background-color: #d9dddd;
+  color: #000;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
+  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
+  cursor: pointer;
+}
+
+.toolbarTip {
+  margin-left: -195px;
+}
+
+.tour img {
+  display: inline;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tour ul {
+  margin-left: 1.5em;
+  color: rgb(38, 43, 49);
+}
+
+.tour li {
+  margin-left: 1.5em;
+  display: list-item;
+  font: 400 13px/16px 'Open Sans', sans-serif;
+}
+
+/* CSS-only modal
+ * Source: http://blog.avtex.com/2012/01/26/cross-browser-css-only-modal-box/
+ */
+.dumbBoxWrap {
+  display: none;
+  z-index: 40001;
+}
+
+.dumbBoxOverlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.5;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+  z-index: 40001;
+}
+
+.vertical-offset {
+  position: fixed;
+  top: 30%;
+  width: 100%;
+  z-index: 40002;
+}
+
+.dumbBox {
+  width: 405px;
+  position: relative;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #000;
+}
+
+.joyride-tip-guide {
+  z-index: 293;
+  background: rgb(175, 181, 196);
+  padding-bottom: 32px;
+  width: 350px;
+}
+
+.joyride-tip-guide[data-index="0"] {
+  z-index: 296;
+}
+
+.joyride-tip-guide a:hover {
+  color: #000 !important;
+  border-bottom: 0;
+}
+
+.joyride-tip-guide .joyride-next-tip,
+.joyride-tip-guide .joyride-prev-tip {
+  width: auto;
+  float: left;
+  padding: 6px 18px 4px;
+  font-size: 13px;
+  border: 1px solid #d7dada;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  text-align: center;
+  text-shadow: none;
+  color: #000;
+  background-color: #f4f5f5;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4f5f5), color-stop(100%, #dfdddd));
+  background-image: -webkit-linear-gradient(top, #f4f5f5, #dfdddd);
+  background-image: -moz-linear-gradient(top, #f4f5f5, #dfdddd);
+  background-image: -ms-linear-gradient(top, #f4f5f5, #dfdddd);
+  background-image: -o-linear-gradient(top, #f4f5f5, #dfdddd);
+  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
+}
+
+.joyride-tip-guide .joyride-next-tip {
+  float: right;
+  margin-right: 0;
+}
+
+.joyride-tip-guide .joyride-next-tip:hover,
+.joyride-tip-guide .joyride-prev-tip:hover {
+  border: 1px solid #bfc4c4 !important;
+  background-color: #d9dddd;
+  color: #000;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d9dddd), color-stop(100%, #c6c3c3));
+  background-image: -webkit-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -moz-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -ms-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: -o-linear-gradient(top, #d9dddd, #c6c3c3);
+  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
+}
+
+table.splash td.splash-info {
+  vertical-align: top;
+}
+
+.splashwelcome a {
+  color: #00f;
+}
+
+.splashwelcome a:hover {
+  color: #66f;
+}
+
+p.wv-tour-page-count {
+  font: 400 13px/16px 'Open Sans', sans-serif;
+  color: #262b31;
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 12px;
+}
+
+.wv-tour-visible-icon {
+  display: inline-block;
+  height: 12px;
+  width: 21px;
+  background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@');
+  background-position: 0 0;
+}
+
+.wv-tour-close-icon {
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@');
+  background-position: 0 -24px;
+}
+
+.wv-tour-active-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url('../images/icon-sprite.svg?v=@BUILD_NONCE@');
+  background-position: 0 -70px;
+}
+
+.wv-tour-timeline-bars-icon {
+  display: inline-block;
+  width: 99px;
+  height: 66px;
+  background: url("../images/tour/timeline-bars-0.7.png");
+}
+
+.wv-tour-timeline-interval-icon {
+  display: inline-block;
+  width: 99px;
+  height: 120px;
+  background: url("../images/tour/timeline-interval-2.0.jpg");
+}
+
+.wv-tour-timeline-day-buttons-icon {
+  display: inline-block;
+  width: 95px;
+  height: 65px;
+  background: url("../images/tour/timeline-day-buttons-0.7.png");
+}
+
+.wv-tour-timeline-entry-icon {
+  display: inline-block;
+  width: 95px;
+  height: 65px;
+  background: url("../images/tour/timeline-entry-0.7.png");
+}
+
+.wv-tour-toolbar-icon {
+  border-radius: 5px;
+  display: inline-block;
+  background: rgb(40, 40, 40);
+  color: #fff;
+  padding: 0.3em 0.6em;
+}
+
+.wv-tour-table-icon {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.joyride-nub,
+.joyride-nub-border {
+  pointer-events: none;
+}
+
+.joyride-tip-guide.bordered span.joyride-nub::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: -1;
+}
+
+.joyride-tip-guide span.joyride-nub.top {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+}
+
+.joyride-tip-guide.toolbarTip span.joyride-nub.top {
+  left: 250px;
+}
+
+.joyride-tip-guide.bordered span.joyride-nub.top::after {
+  top: -16px;
+  left: -15px;
+  border: 15px solid #808080;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.joyride-tip-guide span.joyride-nub.right {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.joyride-tip-guide.bordered span.joyride-nub.right::after {
+  top: -15px;
+  left: -14px;
+  border: 15px solid #808080;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.joyride-tip-guide span.joyride-nub.bottom {
+  border-color: #afb5c4 !important;
+  border-bottom-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+}
+
+.joyride-tip-guide.bordered span.joyride-nub.bottom::after {
+  top: -14px;
+  left: -15px;
+  border: 15px solid #808080;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.joyride-tip-guide span.joyride-nub.left {
+  border-color: #afb5c4 !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+.joyride-tip-guide.bordered span.joyride-nub.left::after {
+  top: -15px;
+  left: -16px;
+  border: 15px solid #808080;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+}
