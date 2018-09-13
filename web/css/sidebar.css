@@ -50,6 +50,9 @@
 .nav-tabs .nav-link {
   padding: 4px 8px;
 }
+.main-nav .nav-link {
+  margin: 1px 0;
+}
 #productsHolder .nav-tabs .disabled {
   color: #fff;
   opacity: 0.5;
