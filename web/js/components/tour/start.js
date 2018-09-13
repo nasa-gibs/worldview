@@ -12,13 +12,16 @@ class TourStart extends React.Component {
       steps: [
         {
           element: '.element1',
-          intro: 'Element 1 step'
+          intro: 'Element 1 step',
         },
         {
           element: '.element2',
           intro: 'Element 2 step'
         }
-      ]
+      ],
+      options: {
+        overlayOpacity: 0
+      }
     };
 
     this.onExit = this.onExit.bind(this);
@@ -34,7 +37,7 @@ class TourStart extends React.Component {
   };
 
   render() {
-    const { stepsEnabled, steps, initialStep } = this.state;
+    const { stepsEnabled, steps, initialStep, options } = this.state;
 
     return (
       <div>
@@ -43,6 +46,7 @@ class TourStart extends React.Component {
           steps={steps}
           initialStep={initialStep}
           onExit={this.onExit}
+          options={options}
         />
 
         <div className="controls">
@@ -61,12 +65,11 @@ class TourStart extends React.Component {
   }
 }
 
-// TourStart.propTypes = {
-//   // fbLink: PropTypes.string,
-//   // twLink: PropTypes.string,
-//   // rdLink: PropTypes.string,
-//   // emailLink: PropTypes.string,
-//   // clickFunction: PropTypes.func
-// };
+TourStart.propTypes = {
+  stepsEnabled: PropTypes.bool,
+  initialStep: PropTypes.number,
+  steps: PropTypes.object,
+  options: PropTypes.object
+};
 
 export default TourStart;
