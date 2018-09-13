@@ -1,70 +1,29 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { Steps } from 'intro.js-react';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TourStart from '../components/tour/start';
 
-import 'intro.js/introjs.css';
+export function tourUi(models, ui, config) {
+  var self = {};
 
-export default class Tour extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      stepsEnabled: true,
-      initialStep: 0,
-      steps: [
-        {
-          element: '.hello',
-          intro: 'Hello step',
-        }
-        // {
-        //   element: '.world',
-        //   intro: 'World step',
-        // },
-      ]
-    };
-  }
-
-  render() {
-    const { stepsEnabled, steps, initialStep } = this.state;
-
-    return (
-      <div>
-        <Steps
-          enabled={stepsEnabled}
-          steps={steps}
-          initialStep={initialStep}
-          onExit={this.onExit}
-        />
-
-        <div className="controls">
-          <div>
-            <button onClick={this.toggleSteps}>Toggle Steps</button>
-            <button onClick={this.addStep}>Add Step</button>
-          </div>
-        </div>
-
-        <h1 className="hello">Hello,</h1>
-      </div>
+  var init = function() {
+    self.reactComponent = ReactDOM.render(
+      React.createElement(TourStart),
+      document.getElementById('wv-tour')
     );
-  }
-
-  onExit = () => {
-    this.setState(() => ({ stepsEnabled: false }));
   };
-
-  toggleSteps = () => {
-    this.setState(prevState => ({ stepsEnabled: !prevState.stepsEnabled }));
-  };
-
-  addStep = () => {
-    const newStep = {
-      element: '.alive',
-      intro: 'Alive step',
-    };
-
-    this.setState(prevState => ({ steps: [...prevState.steps, newStep] }));
-  };
-
+  init();
+  return self;
 }
+//   var init = function() {
+//     self.show();
+//   };
 
-render(<Tour />, document.getElementById('wv-map'));
+//   self.show = function() {
+//     var TourWidget = React.createElement(TourStart);
+
+//     self.reactComponent = ReactDOM.render(TourWidget, document.getElementById('app'));
+//   };
+
+//   init();
+//   return self;
+// }
