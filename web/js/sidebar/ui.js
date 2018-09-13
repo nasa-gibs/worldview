@@ -85,11 +85,9 @@ export function sidebarUi(models, config, ui) {
     if (models.compare) {
       models.compare.events
         .on('toggle', () => {
-          if (!ui.tour.resetting) {
-            updateState('isCompareMode');
-            updateState('layerObjects');
-            updateState('layers');
-          }
+          updateState('isCompareMode');
+          updateState('layerObjects');
+          updateState('layers');
         })
         .on('toggle-state', () => {
           updateState('isCompareA');
@@ -198,13 +196,11 @@ export function sidebarUi(models, config, ui) {
     });
   };
   var updateData = function() {
-    if (!ui.tour.resetting) {
-      self.reactComponent.setState({
-        dataDownloadObject: models.data.groupByProducts(),
-        onGetData: ui.data.showDownloadList,
-        showDataUnavailableReason: ui.data.showUnavailableReason
-      });
-    }
+    self.reactComponent.setState({
+      dataDownloadObject: models.data.groupByProducts(),
+      onGetData: ui.data.showDownloadList,
+      showDataUnavailableReason: ui.data.showUnavailableReason
+    });
   };
   /**
    * Update layer when something happens (Event listeners)
