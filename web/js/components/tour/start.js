@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Steps } from 'intro.js-react';
 
-// import 'intro.js/introjs.css';
-// import './index.css';
-
 class TourStart extends React.Component {
   constructor(props) {
     super(props);
@@ -14,20 +11,12 @@ class TourStart extends React.Component {
       initialStep: 0,
       steps: [
         {
-          element: '.hello',
-          intro: 'Hello step'
+          element: '.element1',
+          intro: 'Element 1 step'
         },
         {
-          element: '.world',
-          intro: 'World step'
-        }
-      ],
-      hintsEnabled: true,
-      hints: [
-        {
-          element: '.hello',
-          hint: 'Hello hint',
-          hintPosition: 'middle-right'
+          element: '.element2',
+          intro: 'Element 2 step'
         }
       ]
     };
@@ -45,7 +34,7 @@ class TourStart extends React.Component {
   };
 
   render() {
-    const { stepsEnabled, steps, initialStep, hintsEnabled, hints } = this.state;
+    const { stepsEnabled, steps, initialStep } = this.state;
 
     return (
       <div>
@@ -61,12 +50,23 @@ class TourStart extends React.Component {
             <button onClick={this.toggleSteps}>Toggle Steps</button>
           </div>
         </div>
+
+        <h1 className="element1">Element 1</h1>
+        <hr />
+        <h1 className="element2">Element 2!</h1>
+        <hr />
+        <h1 className="element3">Element 3!</h1>
       </div>
     );
   }
 }
 
 // TourStart.propTypes = {
+//   // fbLink: PropTypes.string,
+//   // twLink: PropTypes.string,
+//   // rdLink: PropTypes.string,
+//   // emailLink: PropTypes.string,
+//   // clickFunction: PropTypes.func
 // };
 
 export default TourStart;
