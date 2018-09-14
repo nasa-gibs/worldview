@@ -137,18 +137,13 @@ export function mapDateLineBuilder(models, config) {
   };
 
   /*
-   * Add Props to React Compents that creates an
-   *  SVG text component
-   *
    * @method updateTextState
    * @private
    *
-   * @param {object} Factory - React component Factory
-   * @param {object} reactCase - Dom El in which to render component
    * @param {object} date - JS date object
    * @param {boolean} isLeft - is this on left or right side of map
    *
-   * @returns {object} React Component
+   * @returns {object} Object with tooltip state
    */
   var getTextState = function(date, isLeft) {
     const isCompareActive = models.compare && models.compare.active;
