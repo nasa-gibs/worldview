@@ -202,4 +202,5 @@ button[data-tooltip] {
 
 input[type="checkbox"] {
   margin: 3px 1px;
+  vertical-align: middle;
 }
