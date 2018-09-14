@@ -173,6 +173,7 @@
 
 #wv-data-list td {
   padding: 3px;
+  vertical-align: middle;
 }
 
 #wv-data-list tr:nth-child(even) {
