@@ -25,10 +25,11 @@ export function timelineCompare(models, config, ui) {
     $timeline.addClass('ab-active');
   }
   var init = function() {
+    const START_EVENT = util.browser.touchDevice ? 'touchstart' : 'mousedown';
     mountObjectA = document.createElementNS(xmlns, 'g');
     mountObjectB = document.createElementNS(xmlns, 'g');
-    mountObjectA.addEventListener('mousedown', toggleCheck);
-    mountObjectB.addEventListener('mousedown', toggleCheck);
+    mountObjectA.addEventListener(START_EVENT, toggleCheck);
+    mountObjectB.addEventListener(START_EVENT, toggleCheck);
     parentSvg = document.getElementById('timeline-footer-svg');
     parentSvg.appendChild(mountObjectA);
     parentSvg.appendChild(mountObjectB);
