@@ -3,6 +3,8 @@
 [![Worldview Screenshot](screenshot.png)](https://worldview.earthdata.nasa.gov)
 
 [![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
+[![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/nasa-gibs/worldview.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/nasa-gibs/worldview/context:javascript)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/nasa-gibs/worldview.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/nasa-gibs/worldview/alerts)
 
 > Interactive interface for browsing full-resolution, global satellite imagery
 
