@@ -60,7 +60,6 @@
 }
 .wv-palettes-max,
 .wv-palettes-min,
-.wv-running-category-label,
 .wv-running-label {
   position: absolute;
 }
@@ -121,10 +120,14 @@
 
 .sidebar-panel div .wv-palettes-panel .wv-running-category-label {
   bottom: 1px;
-  position: absolute;
   visibility: hidden;
+  display: block;
 }
-
+.wv-running-category-label-case {
+  min-height: 15px;
+  margin: 3px 0 0;
+  width: 100%;
+}
 .wv-palettes-panel .wv-running-bar {
   top: 0;
   width: 1px;
@@ -190,7 +193,7 @@
   width: 13px;
   display: inline-block;
   border: 1px solid #000;
-  margin: 0 2px 15px;
+  margin: 0 2px;
 }
 .wv-running .wv-palettes-class {
   opacity: 0.25;
