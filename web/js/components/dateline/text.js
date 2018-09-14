@@ -37,7 +37,7 @@ class LineText extends React.Component {
       <svg className="dateline-text" style={svgStyle}>
         <rect
           fill={this.props.fill}
-          width={leftTextWidth + 10}
+          width={leftTextWidth + 12}
           height={this.props.textHeight}
           x={0}
           rx={this.props.recRadius}
@@ -62,7 +62,7 @@ class LineText extends React.Component {
         </text>
         <rect
           fill={this.props.fill}
-          width={rightTextWidth + 10}
+          width={rightTextWidth + 12}
           height={this.props.textHeight}
           x={leftTextWidth + 40}
           rx={this.props.recRadius}
@@ -95,14 +95,9 @@ LineText.defaultProps = {
   color: 'white',
   textY: 14,
   fill: 'rgba(40,40,40,0.5)',
-  x2: 155,
-  x1: 45,
   textWidth: 80,
   textHeight: 20,
-  recRadius: 3,
-  svgStyle: {
-    transform: 'translateX(-140px)'
-  }
+  recRadius: 3
 };
 
 LineText.propTypes = {
@@ -114,8 +109,6 @@ LineText.propTypes = {
   fill: PropTypes.string,
   dateLeft: PropTypes.string,
   dateRight: PropTypes.string,
-  x2: PropTypes.number,
-  x1: PropTypes.number,
   textWidth: PropTypes.number,
   textHeight: PropTypes.number,
   recRadius: PropTypes.number,
