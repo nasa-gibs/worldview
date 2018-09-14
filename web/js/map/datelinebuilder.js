@@ -59,16 +59,11 @@ export function mapDateLineBuilder(models, config) {
       updateLineVisibility(false);
     });
     models.date.events.on('select', function() {
-      updateDate(models.date[models.date.activeDate]);
+      updateDate(new Date(models.date[models.date.activeDate]));
     });
     if (models.compare) {
       models.compare.events.on('toggle', function() {
-        var state = {
-          isTooltipActive: !(models.compare && models.compare.active)
-        };
-        lineRight.setState(state);
-        lineLeft.setState(state);
-        updateDate(models.date[models.date.activeDate]);
+        updateDate(new Date(models.date[models.date.activeDate]));
       });
     }
     models.proj.events.on('select', function() {
@@ -111,8 +106,7 @@ export function mapDateLineBuilder(models, config) {
       lineOut: onMouseOut,
       lineX: lineX,
       overlay: overlay,
-      tooltip: tooltip,
-      isTooltipActive: !(models.compare && models.compare.active)
+      tooltip: tooltip
     };
     var component = ReactDOM.render(
       React.createElement(ReactComponent, props),
@@ -134,15 +128,43 @@ export function mapDateLineBuilder(models, config) {
    *
    * @returns {object} React Component
    */
-  var setTextDefaults = function(ReactComponent, reactCase, date) {
-    var props = {
-      dateLeft: util.toISOStringDate(util.dateAdd(date, 'day', 1)),
-      dateRight: util.toISOStringDate(date)
-    };
+  var setTextDefaults = function(ReactComponent, reactCase, date, isLeft) {
+    const props = getTextState(date, isLeft);
     return ReactDOM.render(
       React.createElement(ReactComponent, props),
       reactCase
     );
+  };
+
+  /*
+   * Add Props to React Compents that creates an
+   *  SVG text component
+   *
+   * @method updateTextState
+   * @private
+   *
+   * @param {object} Factory - React component Factory
+   * @param {object} reactCase - Dom El in which to render component
+   * @param {object} date - JS date object
+   * @param {boolean} isLeft - is this on left or right side of map
+   *
+   * @returns {object} React Component
+   */
+  var getTextState = function(date, isLeft) {
+    const isCompareActive = models.compare && models.compare.active;
+    var state = {
+      dateLeft: !isCompareActive
+        ? util.toISOStringDate(util.dateAdd(date, 'day', 1))
+        : isLeft
+          ? '+ 1 day'
+          : '',
+      dateRight: !isCompareActive
+        ? util.toISOStringDate(date)
+        : isLeft
+          ? ''
+          : '- 1 day'
+    };
+    return state;
   };
 
   /*
@@ -192,11 +214,12 @@ export function mapDateLineBuilder(models, config) {
     map.addOverlay(textOverlay1);
     map.addOverlay(textOverlay2);
 
-    textLeft = setTextDefaults(LineText, leftTextCase, date);
+    textLeft = setTextDefaults(LineText, leftTextCase, date, true);
     textRight = setTextDefaults(
       LineText,
       rightTextCase,
-      util.dateAdd(date, 'day', -1)
+      util.dateAdd(date, 'day', -1),
+      false
     );
     lineLeft = setLineDefaults(
       DateLine,
@@ -266,15 +289,8 @@ export function mapDateLineBuilder(models, config) {
    * @returns {void}
    */
   var updateDate = function(date) {
-    var leftState, rightState;
-    leftState = {
-      dateLeft: util.toISOStringDate(util.dateAdd(date, 'day', 1)),
-      dateRight: util.toISOStringDate(date)
-    };
-    rightState = {
-      dateLeft: util.toISOStringDate(date),
-      dateRight: util.toISOStringDate(util.dateAdd(date, 'day', -1))
-    };
+    const leftState = getTextState(date, true);
+    const rightState = getTextState(util.dateAdd(date, 'day', -1), false);
     textLeft.setState(leftState);
     textRight.setState(rightState);
   };
