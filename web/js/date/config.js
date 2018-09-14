@@ -173,9 +173,6 @@ export function timelineConfig(models, config, ui) {
           } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
             prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
           }
-          prevDate = new Date(
-            prevDate.getTime() - prevDate.getTimezoneOffset() * 60000
-          );
           return new Date(
             d.getUTCFullYear(),
             prevDate.getUTCMonth(),
@@ -227,9 +224,6 @@ export function timelineConfig(models, config, ui) {
           } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
             prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
           }
-          prevDate = new Date(
-            prevDate.getTime() - prevDate.getTimezoneOffset() * 60000
-          );
           return new Date(
             d.getUTCFullYear(),
             prevDate.getUTCMonth(),
