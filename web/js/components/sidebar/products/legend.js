@@ -166,16 +166,20 @@ class Legend extends React.Component {
    * @param {Number} textWidth | Label width
    * @param {Number} width | Case width
    */
-  getClassLabelStyle(index, boxWidth, textWidth, width) {
+  getClassLabelStyle(index, boxWidth, textWidth, width, rowEndIndex) {
     var halfTextWidth = textWidth / 2 || 0;
-    var xOffset = boxWidth * index + boxWidth / 2 || 0;
+    var xOffset = boxWidth * (index - rowEndIndex) + boxWidth / 2 || 0;
 
     if (halfTextWidth > xOffset) {
-      return { left: '0', visibility: 'visible' };
+      return { textAlign: 'left', visibility: 'visible' };
     } else if (xOffset + halfTextWidth > width) {
-      return { right: '0', visibility: 'visible' };
+      return { textAlign: 'right', visibility: 'visible' };
     }
-    return { left: xOffset - halfTextWidth + 'px', visibility: 'visible' };
+    return {
+      marginLeft: xOffset - halfTextWidth + 'px',
+      visibility: 'visible',
+      textAlign: 'left'
+    };
   }
   /**
    * @param {Number} xOffset | X px Location of running-data
@@ -288,9 +292,13 @@ class Legend extends React.Component {
     const { isRunningData, colorHex } = this.state;
     const { width } = this.props;
     const boxWidth = 17; // width (13) + margin (4)
+    const len = legend.colors.length;
+    const maxInRow = Math.round((this.state.width - 8) / boxWidth);
+    var rowEndIndex = 0;
+    var isEndOfRow = false;
     var legendObj, textWidth;
     if (isRunningData && colorHex) {
-      legendObj = this.getLegendObject(legend, colorHex, 40); // {label,len,index}
+      legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
         textWidth = util.getTextWidth(legendObj.label, 'Lucida Sans');
       }
@@ -305,6 +313,8 @@ class Legend extends React.Component {
         key={legend.id + '_' + index}
       >
         {legend.colors.map((color, index) => {
+          rowEndIndex = isEndOfRow ? index : rowEndIndex;
+          isEndOfRow = index === maxInRow - 1 || index === len - 1;
           return (
             <React.Fragment key={legend.id + '-color-' + index}>
               <span
@@ -319,39 +329,34 @@ class Legend extends React.Component {
                 onMouseLeave={this.hideValue.bind(this)}
                 dangerouslySetInnerHTML={{ __html: '&nbsp' }}
               />
-              {isRunningData && legendObj && index === legendObj.index ? (
-                <span
-                  className="wv-running-category-label"
-                  style={this.getClassLabelStyle(
-                    index,
-                    boxWidth,
-                    textWidth,
-                    width
-                  )}
-                >
-                  {legendObj.label}
-                </span>
+              {isEndOfRow ? (
+                <div className="wv-running-category-label-case">
+                  {isRunningData &&
+                  legendObj &&
+                  (legendObj.index >= rowEndIndex && // legend is in this row
+                    legendObj.index <= index) ? (
+                      <span
+                        className="wv-running-category-label"
+                        style={this.getClassLabelStyle(
+                          legendObj.index,
+                          boxWidth,
+                          textWidth,
+                          width,
+                          rowEndIndex
+                        )}
+                      >
+                        {legendObj ? legendObj.label : ''}
+                      </span>
+                    ) : (
+                      ''
+                    )}
+                </div>
               ) : (
                 ''
               )}
             </React.Fragment>
           );
         })}
-        <span
-          className="wv-running-category-label"
-          style={
-            legendObj && isRunningData
-              ? this.getClassLabelStyle(
-                legendObj.index,
-                boxWidth,
-                textWidth,
-                width
-              )
-              : {}
-          }
-        >
-          {legendObj ? legendObj.label : ''}
-        </span>
       </div>
     );
   }
