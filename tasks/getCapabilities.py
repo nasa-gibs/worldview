@@ -6,9 +6,11 @@ from collections import OrderedDict
 import os
 import sys
 import json
-import urllib2 as urllib
+import urllib3
+import urllib3.contrib.pyopenssl
 import xmltodict
 import traceback
+import certifi
 
 prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
@@ -32,6 +34,12 @@ colormaps_dir = os.path.join(output_dir, "colormaps")
 remote_count = 0
 error_count = 0
 warning_count = 0
+
+urllib3.contrib.pyopenssl.inject_into_urllib3()
+http = urllib3.PoolManager(
+    cert_reqs='CERT_REQUIRED',
+    ca_certs=certifi.where()
+)
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -60,8 +68,8 @@ def process_layer(layer):
 def process_remote(entry):
     url = entry["from"]
     print "%s: %s" % (prog, url)
-    response = urllib.urlopen(url)
-    contents = response.read()
+    response = http.request('GET', url)
+    contents = response.data
     output_file = os.path.join(output_dir, entry["to"])
 
     # Write GetCapabilities responses to XML files
@@ -93,8 +101,8 @@ def process_colormaps():
         os.makedirs(colormaps_dir)
     for link in colormaps.values():
         try:
-            response = urllib.urlopen(link)
-            contents = response.read()
+            response = http.request("GET", link)
+            contents = response.data
             output_file = os.path.join(colormaps_dir, os.path.basename(link))
             with open(output_file, "w") as fp:
                 fp.write(contents)
@@ -103,7 +111,6 @@ def process_colormaps():
                 (prog, link, str(e)))
             global warning_count
             warning_count += 1
-    print "%s: Fetching %d colormaps" % (prog, len(colormaps))
 
 tolerant = config.get("tolerant", False)
 if "wv-options-fetch" in config:
