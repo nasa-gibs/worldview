@@ -529,7 +529,9 @@ export function layersModal(models, ui, config) {
         $measurementContent.append($sourceTabs);
 
         // Begin source level
-        lodashValues(current.sources).forEach(function(source) {
+        let values = Object.values(current.sources);
+        values.sort((a, b) => a.title > b.title);
+        values.forEach((source) => {
           var isMetadataExpanded;
           // Check if sources have settings with the same projection.
           if (hasMeasurementSetting(current, source)) {
