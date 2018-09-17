@@ -448,10 +448,10 @@
   clear: both;
   overflow: auto;
   padding: 0;
+  width: 160px;
 }
 
 .layer-modal-content .selected-category .ui-tabs .ui-tabs-nav li {
-  max-width: 200px;
   border: transparent;
   background: none;
   margin: 0 0 0 10px;
@@ -471,7 +471,7 @@
   -webkit-box-sizing: border-box;
   -o-box-sizing: border-box;
   padding: 0.5em;
-  width: 150px;
+  min-width: 150px;
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   text-align: left;
