@@ -17,6 +17,10 @@ build a testable version of Worldview.
 ## End-to-end Tests
 End to end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by End to End tests to cover any new functionality you add.
 
+Run end-to-end tests using `npm run e2e`
+
+To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Start the container with `npm run docker:start` and run the tests with `npm run docker:e2e`.
+
 ### Browserstack
 
 Run `npm run browserstack`  to test the app in `Chrome(OS X and Windows)`, `Firefox(Windows)`, `Internet Exporer(windows)`, and `Safari(OS X)` on BrowserStack. The tests run the `nightwatch.js` features found in `./e2e/features` using Selenium.
