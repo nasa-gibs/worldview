@@ -531,7 +531,6 @@ export function layersModal(models, ui, config) {
         // Begin source level
         let values = Object.values(current.sources);
         values.sort((a, b) => a.title.localeCompare(b.title));
-        console.log('SORTED', values);
         values.forEach((source) => {
           var isMetadataExpanded;
           // Check if sources have settings with the same projection.
