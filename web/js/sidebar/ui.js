@@ -75,14 +75,6 @@ export function sidebarUi(models, config, ui) {
         .on('list-change', debounceUpdateEventsList)
         .on('selected-event', selected => {
           self.reactComponent.setState({ selectedEvent: selected });
-        })
-        .on('hasData', () => {
-          self.reactComponent.setState({
-            eventsData: models.naturalEvents.data,
-            selectEvent: ui.naturalEvents.selectEvent,
-            deselectEvent: ui.naturalEvents.deselectEvent,
-            filterEventList: ui.naturalEvents.filterEventList
-          });
         });
     }
     if (models.compare) {
@@ -116,7 +108,14 @@ export function sidebarUi(models, config, ui) {
       }, 300)
     );
   };
-
+  self.renderEvents = function() {
+    self.reactComponent.setState({
+      eventsData: models.naturalEvents.data,
+      selectEvent: ui.naturalEvents.selectEvent,
+      deselectEvent: ui.naturalEvents.deselectEvent,
+      filterEventList: ui.naturalEvents.filterEventList
+    });
+  };
   var getInitialProps = function() {
     var compareModel;
     activeTab =
