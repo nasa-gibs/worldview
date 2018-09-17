@@ -13,7 +13,7 @@ import OlKinetic from 'ol/Kinetic';
 import OlGraticule from 'ol/Graticule';
 import OlStyleStroke from 'ol/style/Stroke';
 import OlControlScaleLine from 'ol/control/ScaleLine';
-import olEventsCondition from 'ol/events/condition';
+import { altKeyOnly } from 'ol/events/condition';
 import OlInteractionPinchRotate from 'ol/interaction/PinchRotate';
 import OlInteractionDragRotate from 'ol/interaction/DragRotate';
 import OlInteractionDoubleClickZoom from 'ol/interaction/DoubleClickZoom';
@@ -22,8 +22,8 @@ import OlInteractionDragPan from 'ol/interaction/DragPan';
 import OlInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import OlInteractionDragZoom from 'ol/interaction/DragZoom';
 import OlLayerGroup from 'ol/layer/Group';
-import olExtent from 'ol/extent';
-import olProj from 'ol/proj';
+import * as olExtent from 'ol/extent';
+import * as olProj from 'ol/proj';
 import { MapRotate } from './rotation';
 import { mapDateLineBuilder } from './datelinebuilder';
 import { mapLayerBuilder } from './layerbuilder';
@@ -743,7 +743,7 @@ export function mapui(models, config) {
     });
 
     rotateInteraction = new OlInteractionDragRotate({
-      condition: olEventsCondition.altKeyOnly,
+      condition: altKeyOnly,
       duration: animationDuration
     });
     mobileRotation = new OlInteractionPinchRotate({

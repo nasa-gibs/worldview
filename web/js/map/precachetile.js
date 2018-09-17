@@ -1,5 +1,5 @@
 import lodashEach from 'lodash/each';
-import olExtent from 'ol/extent';
+import * as olExtent from 'ol/extent';
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 
 export function mapPrecacheTile(models, config, cache, parent) {

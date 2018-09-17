@@ -1,6 +1,6 @@
 import util from '../util/util';
 import lodashClone from 'lodash/clone';
-import olExtent from 'ol/extent';
+import { intersects } from 'ol/extent';
 
 export function mapModel(models, config) {
   var self = {};
@@ -44,7 +44,7 @@ export function mapModel(models, config) {
       if (proj.id === 'geographic') {
         proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
       }
-      if (olExtent.intersects(extent, maxExtent)) {
+      if (intersects(extent, maxExtent)) {
         self.extent = state.v;
       } else {
         self.extent = lodashClone(proj.maxExtent);

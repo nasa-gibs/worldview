@@ -5,7 +5,7 @@ import OlGeomMultiPoint from 'ol/geom/MultiPoint';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlGeomPolygon from 'ol/geom/Polygon';
 import OlGeomPoint from 'ol/geom/Point';
-import olExtent from 'ol/extent';
+import * as olExtent from 'ol/extent';
 import lodashEach from 'lodash/each';
 import { dataCmrRoundTime, dataCmrGeometry } from './cmr';
 import util from '../util/util';

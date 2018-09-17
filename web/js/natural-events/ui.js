@@ -1,7 +1,7 @@
 import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
-import olExtent from 'ol/extent';
-import olProj from 'ol/proj';
+import * as olExtent from 'ol/extent';
+import * as olProj from 'ol/proj';
 
 import markers from './markers';
 import track from './track';

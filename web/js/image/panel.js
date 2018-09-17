@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
-import olProj from 'ol/proj';
+import * as olProj from 'ol/proj';
 import ImageResSelection from '../components/image-panel/select';
 import googleAnalytics from '../components/util/google-analytics';
 import util from '../util/util';
