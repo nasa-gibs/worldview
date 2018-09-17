@@ -143,15 +143,18 @@ export function timelineCompare(models, config, ui) {
     return timeline.x(util.roundTimeTenMinute(date));
   };
   var dateSelect = function(e, id, offsetX) {
+    const padding = 10;
     var position = offsetX;
-    if (position > max - 5) {
-      position = max - 5;
-    } else if (position <= 5) {
-      position = 5;
+    if (position > max - padding) {
+      position = max - padding;
+    } else if (position <= padding) {
+      position = padding;
     }
     var date = timeline.x.invert(position);
-    if (models.date[id] !== date) {
+    if (models.date[id] !== date && util.isValidDate(date)) {
       models.date.select(date, id);
+    } else {
+      models.date.select(models.date[id], id);
     }
   };
   var debounceDateSelect = lodashDebounce(dateSelect, DEBOUNCE_TIME);
