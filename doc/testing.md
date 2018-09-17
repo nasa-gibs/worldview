@@ -19,7 +19,7 @@ End to end tests are integrated into our CI and are required to pass before a su
 
 Run end-to-end tests using `npm run e2e`
 
-To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Start the container with `npm run docker:start` and run the tests with `npm run docker:e2e`.
+To run the end-to-end tests using Firefox in a docker container, create an image using `npm run docker:image`. Start the container with `npm run docker:start` and run the tests with `npm run docker:e2e`. See the [Docker](docker.md) page for more information.
 
 ### Browserstack
 
