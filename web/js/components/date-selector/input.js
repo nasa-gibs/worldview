@@ -58,7 +58,13 @@ class DateInputColumn extends React.Component {
     var keyCode = e.keyCode;
     var value = e.target.value;
     var newDate;
+    var shiftTab;
     var entered = keyCode === 13 || keyCode === 9;
+
+    // shift down when tab pressed
+    if (e.shiftKey && keyCode === 9) {
+      shiftTab = true;
+    }
     if (keyCode === 38) {
       // up
       e.preventDefault();
@@ -97,8 +103,13 @@ class DateInputColumn extends React.Component {
       if (newDate) {
         this.props.updateDate(newDate);
         if (entered) {
-          // if enetered or tabbed
-          this.nextTab();
+          if (shiftTab) {
+            // shift-tabbed - move backward
+            this.previousTab();
+          } else {
+            // entered or tabbed - move forward
+            this.nextTab();
+          }
         }
       } else if (entered) {
         this.setState({
@@ -212,6 +223,7 @@ class DateInputColumn extends React.Component {
   handleFocus(e) {
     e.target.select();
     this.setState({ selected: true });
+    this.props.setFocusedTab(this.props.tabIndex);
   }
   blur() {
     this.setState({
@@ -228,7 +240,10 @@ class DateInputColumn extends React.Component {
     });
   }
   nextTab() {
-    this.props.nextTab(this.props.tabIndex);
+    this.props.changeTab(this.props.tabIndex + 1);
+  }
+  previousTab() {
+    this.props.changeTab(this.props.tabIndex - 1);
   }
   validateDate(date) {
     if (date > this.props.minDate && date <= this.props.maxDate) {
@@ -305,7 +320,8 @@ DateInputColumn.propTypes = {
   maxDate: PropTypes.object,
   maxZoom: PropTypes.number,
   blur: PropTypes.func,
-  nextTab: PropTypes.func,
+  setFocusedTab: PropTypes.func,
+  changeTab: PropTypes.func,
   height: PropTypes.string,
   inputId: PropTypes.string,
   fontSize: PropTypes.number

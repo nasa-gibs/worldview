@@ -35,18 +35,27 @@ class DateSelector extends React.Component {
   blur() {
     this.setState({ tab: null });
   }
-  nextTab(index) {
-    var nextTab;
+  setFocusedTab(tab) {
+    this.setState({ tab: tab });
+  }
+  changeTab(index) {
+    var nextTab = index;
     var maxTab;
     if (this.state.maxZoom >= 4) {
       maxTab = 5;
     } else {
       maxTab = 3;
     }
-    if (index < maxTab) {
-      nextTab = index + 1;
+    if (index > this.state.tab) {
+      // past max tab
+      if (index > maxTab) {
+        nextTab = 1;
+      }
     } else {
-      nextTab = 1;
+      // below min tab
+      if (index < 1) {
+        nextTab = maxTab;
+      }
     }
     this.setState({
       tab: nextTab
@@ -75,7 +84,8 @@ class DateSelector extends React.Component {
             value={util.pad(this.state.date.getUTCHours(), 2, '0')}
             tabIndex={4}
             focused={this.state.tab === 4}
-            nextTab={this.nextTab.bind(this)}
+            setFocusedTab={this.setFocusedTab.bind(this)}
+            changeTab={this.changeTab.bind(this)}
             maxDate={this.props.maxDate}
             minDate={this.props.minDate}
             blur={this.blur.bind(this)}
@@ -95,7 +105,8 @@ class DateSelector extends React.Component {
             inputId={this.props.idSuffix ? 'minute-' + this.props.idSuffix : ''}
             tabIndex={5}
             focused={this.state.tab === 5}
-            nextTab={this.nextTab.bind(this)}
+            setFocusedTab={this.setFocusedTab.bind(this)}
+            changeTab={this.changeTab.bind(this)}
             maxDate={this.props.maxDate}
             minDate={this.props.minDate}
             blur={this.blur.bind(this)}
@@ -122,7 +133,8 @@ class DateSelector extends React.Component {
           inputId={this.props.idSuffix ? 'year-' + this.props.idSuffix : ''}
           tabIndex={1}
           focused={this.state.tab === 1}
-          nextTab={this.nextTab.bind(this)}
+          setFocusedTab={this.setFocusedTab.bind(this)}
+          changeTab={this.changeTab.bind(this)}
           maxDate={this.props.maxDate}
           minDate={this.props.minDate}
           blur={this.blur.bind(this)}
@@ -141,7 +153,8 @@ class DateSelector extends React.Component {
           updateDate={this.updateDate.bind(this)}
           tabIndex={2}
           focused={this.state.tab === 2}
-          nextTab={this.nextTab.bind(this)}
+          setFocusedTab={this.setFocusedTab.bind(this)}
+          changeTab={this.changeTab.bind(this)}
           maxDate={this.props.maxDate}
           minDate={this.props.minDate}
           blur={this.blur.bind(this)}
@@ -160,7 +173,8 @@ class DateSelector extends React.Component {
           tabIndex={3}
           inputId={this.props.idSuffix ? 'day-' + this.props.idSuffix : ''}
           focused={this.state.tab === 3}
-          nextTab={this.nextTab.bind(this)}
+          setFocusedTab={this.setFocusedTab.bind(this)}
+          changeTab={this.changeTab.bind(this)}
           maxDate={this.props.maxDate}
           minDate={this.props.minDate}
           blur={this.blur.bind(this)}
