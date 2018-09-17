@@ -56,7 +56,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       lodashMerge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
         layer = createLayerWMTS(def, options);
-        if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
+        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
           layerNext = createLayerWMTS(def, options, 1);
           layerPrior = createLayerWMTS(def, options, -1);
 
@@ -70,7 +70,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         }
       } else if (def.type === 'vector') {
         layer = createLayerVector(def, options, null);
-        if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
+        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
           layerNext = createLayerVector(def, options, 1);
           layerPrior = createLayerVector(def, options, -1);
 
@@ -84,7 +84,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         }
       } else if (def.type === 'wms') {
         layer = createLayerWMS(def, options);
-        if (proj.id === 'geographic' && def.wrapadjacentdays === true) {
+        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
           layerNext = createLayerWMS(def, options, 1);
           layerPrior = createLayerWMS(def, options, -1);
 
@@ -460,7 +460,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
 
     for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
-      if (layer.wrapadjacentdays && layer.visible) {
+      if ((layer.wrapadjacentdays || layer.wrapX) && layer.visible) {
         key = self.layerKey(layer, {
           date: models.date[models.date.activeDate]
         });
@@ -477,7 +477,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     layers = models.layers[models.layers.activeLayers];
     for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
-      if (layer.wrapadjacentdays && layer.visible) {
+      if ((layer.wrapadjacentdays || layer.wrapX) && layer.visible) {
         key = self.layerKey(layer, {
           date: models.date[models.date.activeDate]
         });

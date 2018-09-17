@@ -106,6 +106,7 @@ The `config/wv.json/layerOrder.json` file must be updated to include the new lay
 - **daynight**: Classify a layer as day or night. This information will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 - **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 - **description**: Point to a markdown file within the metadata folder to provide a layer description.
+- **wrapadjacentdays**, **wrapX**: Wrap the layer across the anti-meridian.
 
 To display a color palette legend, a *palette* object should exist with the following properties:
 
