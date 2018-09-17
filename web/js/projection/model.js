@@ -1,5 +1,4 @@
-import lodashEach from 'lodash/each';
-import olProj from 'ol/proj';
+import * as olProj from 'ol/proj';
 import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import util from '../util/util';
@@ -11,13 +10,9 @@ export function projectionModel(config) {
 
   var init = function () {
     self.selectDefault();
-    // olProj.setProj4(proj4);
-    register(proj4);
-    lodashEach(config.projections, function (proj) {
+    Object.values(config.projections).forEach((proj) => {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
-        olProj.get(proj.crs)
-          .setExtent(proj.maxExtent);
       }
     });
   };
@@ -55,6 +50,8 @@ export function projectionModel(config) {
   self.register = function (crs, def) {
     if (def && proj4) {
       proj4.defs(crs, def);
+      register(proj4);
+      olProj.get(crs).setExtent(def.maxExtent);
     }
   };
 

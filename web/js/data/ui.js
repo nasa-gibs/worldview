@@ -2,7 +2,7 @@ import $ from 'jquery';
 import lodashSize from 'lodash/size';
 import lodashEach from 'lodash/each';
 import googleAnalytics from '../components/util/google-analytics';
-import olExtent from 'ol/extent';
+import * as olExtent from 'ol/extent';
 
 import { dataMap } from './map';
 import uiIndicator from '../ui/indicator';

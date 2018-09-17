@@ -1,5 +1,6 @@
-import olExtent from 'ol/extent';
+import * as olExtent from 'ol/extent';
 import OlGeomLineString from 'ol/geom/LineString';
+
 export function mapAnimate(models, config, ui) {
   var self = {};
 

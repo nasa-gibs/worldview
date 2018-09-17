@@ -1,6 +1,6 @@
 import lodashFind from 'lodash/find';
 import lodashIsEmpty from 'lodash/isEmpty';
-import olExtent from 'ol/extent';
+import * as olExtent from 'ol/extent';
 import OlOverlay from 'ol/Overlay';
 import OlFeature from 'ol/Feature';
 import OlStyleStyle from 'ol/style/Style';
@@ -8,7 +8,7 @@ import OlStyleStroke from 'ol/style/Stroke';
 import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
 import OlGeomPolygon from 'ol/geom/Polygon';
-import olProj from 'ol/proj';
+import * as olProj from 'ol/proj';
 
 export default function markers (models, ui) {
   var self = {};
