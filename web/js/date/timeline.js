@@ -42,7 +42,7 @@ export function timeline(models, config, ui) {
     if (tl.is(':hidden')) {
       var afterShow = function() {
         tlg.attr('style', 'clip-path:url("#timeline-boundary")');
-        gp.attr('style', 'display:block;clip-path:url(#guitarpick-boundary);');
+        gp.attr('style', 'clip-path:url(#guitarpick-boundary);');
       };
       if (now) {
         tl.show();
