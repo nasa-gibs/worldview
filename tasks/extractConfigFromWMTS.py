@@ -59,14 +59,14 @@ class SkipException(Exception):
     pass
 
 def process_layer(gc_layer, wv_layers, colormaps):
-    id = gc_layer["ows:Identifier"]
-    if id in skip:
-        print "%s: skipping" % id
-        raise SkipException(id)
+    ident = gc_layer["ows:Identifier"]
+    if ident in skip:
+        print "%s: skipping" % ident
+        raise SkipException(ident)
 
-    wv_layers[id] = {}
-    wv_layer = wv_layers[id]
-    wv_layer["id"] = id
+    wv_layers[ident] = {}
+    wv_layer = wv_layers[ident]
+    wv_layer["id"] = ident
     wv_layer["type"] = "wmts"
     wv_layer["format"] = gc_layer["Format"]
 
@@ -86,9 +86,9 @@ def process_layer(gc_layer, wv_layers, colormaps):
 
     # Colormap links
     if "ows:Metadata" in gc_layer:
-        if "skipPalettes" in config and id in config["skipPalettes"]:
+        if "skipPalettes" in config and ident in config["skipPalettes"]:
             sys.stderr.write("%s: WARNING: Skipping palette for %s\n" % (
-                prog, id))
+                prog, ident))
             global total_warning_count
             total_warning_count += 1
         else:
@@ -145,20 +145,20 @@ def process_entry(entry, colormaps):
 
     if(type(gc["Capabilities"]["Contents"]["Layer"]) is OrderedDict):
         gc_layer = gc["Capabilities"]["Contents"]["Layer"]
-        id = gc_layer["ows:Identifier"]
+        ident = gc_layer["ows:Identifier"]
         try:
             layer_count += 1
             process_layer(gc_layer, wv_layers, colormaps)
         except SkipException as se:
             warning_count += 1
-            sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, id))
+            sys.stderr.write("%s: WARNING: [%s] Skipping\n" % (prog, ident))
         except Exception as e:
             error_count += 1
             sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
-                    id, str(e)))
+                    ident, str(e)))
     else:
         for gc_layer in gc_contents["Layer"]:
-            id = gc_layer["ows:Identifier"]
+            ident = gc_layer["ows:Identifier"]
             try:
                 layer_count += 1
                 process_layer(gc_layer, wv_layers, colormaps)
@@ -168,17 +168,17 @@ def process_entry(entry, colormaps):
             except Exception as e:
                 error_count += 1
                 sys.stderr.write("%s: ERROR: [%s:%s] %s\n" % (prog, gc_id,
-                        id, str(e)))
+                        ident, str(e)))
 
     def process_matrix_set(gc_matrix_set):
-        id = gc_matrix_set["ows:Identifier"]
+        ident = gc_matrix_set["ows:Identifier"]
         zoom_levels = len(gc_matrix_set["TileMatrix"])
         resolutions = []
         max_resolution = entry["maxResolution"]
         for zoom in xrange(0, zoom_levels):
             resolutions = resolutions + [max_resolution / (2 ** zoom)]
-        wv_matrix_sets[id] = {
-            "id": id,
+        wv_matrix_sets[ident] = {
+            "id": ident,
             "maxResolution": max_resolution,
             "resolutions": resolutions,
             "tileSize": [
