@@ -222,7 +222,13 @@ export default (function (self) {
     }
     return date;
   };
-
+  /**
+   * Test if is valid Date
+   * @param {Object} d | Date object
+   */
+  self.isValidDate = function(d) {
+    return d instanceof Date && !isNaN(d);
+  };
   /**
    * Parses a UTC ISO 8601 date to a non UTC date
    *
