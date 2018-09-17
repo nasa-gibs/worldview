@@ -39,7 +39,7 @@
   margin-top: 10px;
 }
 #wv-logo {
-  border-bottom: none;
+  border-bottom: 1px solid transparent;
 }
 #productsHolder ul#overlays {
   margin-bottom: 10px;
