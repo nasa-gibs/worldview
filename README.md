@@ -88,6 +88,7 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 - [Using Apache (deprecated)](doc/apache_setup.md)
 - [Testing](doc/testing.md)
 - [Uploading](doc/upload.md)
+- [Docker](doc/docker.md)
 
 ## Contact
 
