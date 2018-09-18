@@ -447,6 +447,7 @@
   float: left;
   clear: both;
   overflow: auto;
+  -ms-overflow-style: scrollbar;
   padding: 0;
 }
 
