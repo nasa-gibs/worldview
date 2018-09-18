@@ -5,6 +5,10 @@ ExpiresActive On
    Header set Pragma "no-cache"
 </FilesMatch>
 
+<FilesMatch "\.(eot|ttf|woff|woff2|svg|jpg|png|gif)">
+   ExpiresDefault "modification plus 1 year"
+</FilesMatch>
+
 AddOutputFilterByType DEFLATE text/html
 AddOutputFilterByType DEFLATE text/css
 AddOutputFilterByType DEFLATE text/javascript
