@@ -305,11 +305,11 @@ export function dataMap(model, maps, config) {
       return;
     }
     granule.feature.changed();
-    // selectionLayer.getSource().removeFeature(granule.selectedFeature);
-    // delete granule.selectedFeature;
-    selectionLayer.getSource()
-      .removeFeature(selectedFeatures[granule.id]);
-    delete selectedFeatures[granule.id];
+    let toRemove = selectedFeatures[granule.id];
+    if (toRemove) {
+      selectionLayer.getSource().removeFeature(toRemove);
+      delete selectedFeatures[granule.id];
+    }
   };
 
   var updateProjection = function () {
