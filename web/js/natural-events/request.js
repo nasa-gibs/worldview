@@ -63,8 +63,8 @@ export default function naturalEventsRequest(models, ui, config) {
         },
         'desc'
       );
-
-      model.events.trigger('hasData');
+      ui.sidebar.renderEvents();
+      if (model.active) model.events.trigger('hasData');
     }
   };
 
