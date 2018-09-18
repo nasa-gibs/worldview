@@ -440,15 +440,26 @@ var dataUiDownloadListPanel = function(config, model) {
       product.links = [];
       product.list = [];
 
-      // Check the first granule, and populate product level links
-      // where the count equals the number of granules
-      var granule = product.granules[0];
-      $.each(granule.links, function(index, link) {
-        var count = product.counts[link.href];
-        if (count % product.granules.length === 0) {
-          product.links.push(reformatLink(link));
-        }
-      });
+      // Some links found in a granule are not specific to that granule
+      // and appear for every entry. If that is the case, hoist it up
+      // to the product level instead. Every link in the results
+      // are counted and this is true if the number of appearances is the
+      // same as the number of granules. This check cannot be done
+      // if there is only one granule returned.
+      //
+      // The code below checks for when the modulus is zero instead of
+      // checking for equality. Not sure why this is the case but it
+      // is probably important? Is there a case when a link appears
+      // every other granule instead?
+      if (product.granules.length > 1) {
+        var granule = product.granules[0];
+        $.each(granule.links, function(index, link) {
+          var count = product.counts[link.href];
+          if (count % product.granules.length === 0) {
+            product.links.push(reformatLink(link));
+          }
+        });
+      }
 
       $.each(product.granules, function(index, granule) {
         var item = {
@@ -460,7 +471,7 @@ var dataUiDownloadListPanel = function(config, model) {
         $.each(granule.links, function(index, link) {
           // Skip this link if now at the product level
           var count = product.counts[link.href];
-          if (count % product.granules.length === 0) {
+          if (count % product.granules.length === 0 && count !== 1) {
             return;
           }
           // Skip browse images per Kevin's request
