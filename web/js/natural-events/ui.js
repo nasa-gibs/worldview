@@ -103,6 +103,10 @@ export default function naturalEventsUI(models, ui, config, request) {
       } else {
         model.active = false;
         naturalEventMarkers.remove(self.markers);
+        if (eventVisibilityAlert) {
+          eventVisibilityAlert.dialog('close');
+          eventVisibilityAlert = null;
+        }
       }
       model.events.trigger('change');
     });
