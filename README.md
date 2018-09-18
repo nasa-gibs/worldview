@@ -85,7 +85,6 @@ To update Worldview, pull down any branch or tag from GitHub. From the `master` 
 - [URL Parameters](doc/url_parameters.md)
 - [Developing](doc/developing.md)
 - [Deployment](doc/deployment.md)
-- [Using Apache (deprecated)](doc/apache_setup.md)
 - [Testing](doc/testing.md)
 - [Uploading](doc/upload.md)
 
