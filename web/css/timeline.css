@@ -604,5 +604,5 @@ g.plot rect.data-bar-invisible {
   display: block;
 }
 .ab-active #guitarpick {
-  display: none;
+  opacity: 0;
 }
