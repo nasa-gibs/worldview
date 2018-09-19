@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import d3 from 'd3';
+
 /**
  * Implements the timeline pick
  */
@@ -92,6 +93,8 @@ export function timelinePick(models, config, ui) {
       prevChange = undefined;
       nextChange = undefined;
       tl.guitarPick.classed('pick-clicked', false);
+
+      self.update();
     });
 
   var change = function() {
@@ -174,7 +177,6 @@ export function timelinePick(models, config, ui) {
     if (mousedown === false) {
       self.offset = tl.x(model[model.activeDate]) - width / 2;
     }
-
     tl.guitarPick
       .data([
         {
