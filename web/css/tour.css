@@ -1,8 +1,4 @@
 /* Breakpoint: Extra Small (< 576px) */
-.tour {
-
-}
-
 .tour .close {
   position: absolute;
   top: auto;
@@ -20,7 +16,7 @@
   height: 26px;
   width: 26px;
   margin: 0;
-  background: url(../images/wv-icons.png) -26px 0;
+  background: url("../images/wv-icons.png") -26px 0;
   background-repeat: no-repeat;
 }
 
@@ -47,11 +43,6 @@
 }
 
 /* .tour-start */
-
-.tour-start {
-
-}
-
 .tour-start .modal {
   overflow-y: auto;
 }
@@ -107,10 +98,6 @@
 .tour-start .tour-intro a:hover {
   color: #2276ac;
   text-decoration: none;
-}
-
-.tour-start .tour-box-container {
-
 }
 
 .tour-start .tour-box-row {
@@ -209,11 +196,6 @@
 }
 
 /* .tour-in-progress */
-
-.tour-in-progress {
-
-}
-
 .tour-in-progress .modal {
   left: auto;
   top: 410px;
@@ -275,9 +257,6 @@
 
 .tour-in-progress .critical .modal-header  {
   background-color: rgb(88, 88, 88);
-}
-
-.tour-in-progress .modal-header .close {
 }
 
 .tour-in-progress .modal-title {
@@ -446,13 +425,6 @@
   background-color: rgba(88, 88, 88, 0.80);
 }
 
-.tour-in-progress .modal-title {
-}
-
-.tour-in-progress .modal-title .close {
-
-}
-
 .tour-in-progress .step-container {
   display: flex;
   height: 40px;
@@ -521,15 +493,6 @@
 }
 
 /* .tour-complete */
-
-.tour-complete {
-
-}
-
-.tour-complete .modal {
-
-}
-
 .tour-complete .modal-dialog {
   border: 1px solid #333;
 }
@@ -541,6 +504,7 @@
 
 .tour-complete .modal-header {
   position: relative;
+  padding: 7px 12px 8px;
   border-radius: 0;
   background-color: rgb(0, 69, 123);
 }
@@ -585,7 +549,6 @@
   background-color: rgb(88, 88, 88);
 }
 
-
 .tour-complete .modal-title {
   color: #fff;
   font-size: 20px;
@@ -593,12 +556,8 @@
   font-weight: 300;
 }
 
-.tour-complete .modal-title .close {
-
-}
-
 .tour-complete .modal-body {
-
+  padding: 15px;
 }
 
 .tour-complete .modal-body p {
@@ -672,58 +631,9 @@
     display: block;
   }
 
-  .tour-start {
-
-  }
-
-  .tour-in-progress {
-
-  }
-
-  .tour-complete {
-
-  }
-
   /* .tour-start */
-
-  .tour-start .modal {
-
-  }
-
   .tour-start .modal-dialog {
     max-width: 618px;
-  }
-
-  .tour-start .modal-content {
-
-  }
-
-  .tour-start .modal-header {
-
-  }
-
-  .tour-start .modal-title {
-
-  }
-
-  .tour-start .modal-title .close {
-
-  }
-
-  .tour-start .modal-body {
-
-  }
-
-  .tour-start .modal-body .tour-intro {
-
-  }
-
-  .tour-start .modal-body .tour-intro p {
-
-  }
-
-  .tour-start .modal-body .tour-box-container {
-
   }
 
   .tour-start .modal-body .tour-box {
@@ -731,385 +641,8 @@
     width: 200px;
   }
 
-  /* .tour-in-progress */
-
-  .tour-in-progress .modal {
-
-  }
-
-  .tour-in-progress .modal-dialog {
-
-  }
-
-  .tour-in-progress .modal-content {
-
-  }
-
-  .tour-in-progress .modal-header {
-
-  }
-
-  .tour-in-progress .modal-title {
-
-  }
-
-  .tour-in-progress .modal-title .close {
-
-  }
-
-  .tour-in-progress .modal-body {
-
-  }
-
-  .tour-in-progress .modal-footer {
-
-  }
-
-  .tour-in-progress .modal-footer .btn {
-
-  }
-
-  .tour-in-progress .modal-footer .btn-primary {
-
-  }
-
-  .tour-in-progress .modal-footer .btn-secondary {
-
-  }
-
   /* .tour-complete */
-
-  .tour-complete .modal {
-
-  }
-
   .tour-complete .modal-dialog {
     max-width: 572px;
-  }
-
-  .tour-complete .modal-content {
-
-
-  }
-
-  .tour-complete .modal-header {
-    padding: 7px 12px 8px;
-
-  }
-
-  .tour-complete .modal-title {
-
-  }
-
-  .tour-complete .modal-title .close {
-
-  }
-
-  .tour-complete .modal-body {
-    padding: 15px;
-  }
-
-  .tour-complete .modal-footer {
-  }
-
-  .tour-complete .modal-footer .btn {
-
-  }
-
-  .tour-complete .modal-footer .btn-primary {
-  }
-
-  .tour-complete .modal-footer .btn-primary:hover,
-  .tour-complete .modal-footer .btn-primary:focus {
-  }
-
-  .tour-complete .modal-footer .btn-secondary {
-  }
-
-  .tour-complete .modal-footer .btn-secondary:hover,
-  .tour-complete .modal-footer .btn-secondary:focus {
-  }
-}
-
-/* Breakpoint: Large (992px to 1199px) */
-@media (min-width: 992px) {
-  .tour {
-
-  }
-
-  .tour-start {
-
-  }
-
-  .tour-in-progress {
-
-  }
-
-  .tour-complete {
-
-  }
-
-  /* .tour-start */
-
-  .tour-start .modal {
-
-  }
-
-  .tour-start .modal-dialog {
-
-  }
-
-  .tour-start .modal-content {
-
-  }
-
-  .tour-start .modal-header {
-
-  }
-
-  .tour-start .modal-title {
-
-  }
-
-  .tour-start .modal-title .close {
-
-  }
-
-  .tour-start .modal-body {
-
-  }
-
-  /* .tour-in-progress */
-
-  .tour-in-progress .modal {
-
-  }
-
-  .tour-in-progress .modal-dialog {
-
-  }
-
-  .tour-in-progress .modal-content {
-
-  }
-
-  .tour-in-progress .modal-header {
-
-  }
-
-  .tour-in-progress .modal-title {
-
-  }
-
-  .tour-in-progress .modal-title .close {
-
-  }
-
-  .tour-in-progress .modal-body {
-
-  }
-
-  .tour-in-progress .modal-footer {
-
-  }
-
-  .tour-in-progress .modal-footer .btn {
-
-  }
-
-  .tour-in-progress .modal-footer .btn-primary {
-
-  }
-
-  .tour-in-progress .modal-footer .btn-secondary {
-
-  }
-
-  /* .tour-complete */
-
-  .tour-complete .modal {
-
-  }
-
-  .tour-complete .modal-dialog {
-
-  }
-
-  .tour-complete .modal-content {
-
-  }
-
-  .tour-complete .modal-header {
-
-  }
-
-  .tour-complete .modal-title {
-
-  }
-
-  .tour-complete .modal-title .close {
-
-  }
-
-  .tour-complete .modal-body {
-
-  }
-
-  .tour-complete .modal-footer {
-
-  }
-
-  .tour-complete .modal-footer .btn {
-
-  }
-
-  .tour-complete .modal-footer .btn-primary {
-
-  }
-
-  .tour-complete .modal-footer .btn-secondary {
-
-  }
-}
-
-/* Breakpoint: Extra Large (1200px +) */
-@media (min-width: 1200px) {
-  .tour {
-
-  }
-
-  .tour-start {
-
-  }
-
-  .tour-in-progress {
-
-  }
-
-  .tour-complete {
-
-  }
-
-  /* .tour-start */
-
-  .tour-start .modal {
-
-  }
-
-  .tour-start .modal-dialog {
-
-  }
-
-  .tour-start .modal-content {
-
-  }
-
-  .tour-start .modal-header {
-
-  }
-
-  .tour-start .modal-title {
-
-  }
-
-  .tour-start .modal-title .close {
-
-  }
-
-  .tour-start .modal-body {
-
-  }
-
-  /* .tour-in-progress */
-
-  .tour-in-progress .modal {
-
-  }
-
-  .tour-in-progress .modal-dialog {
-
-  }
-
-  .tour-in-progress .modal-content {
-
-
-  }
-
-  .tour-in-progress .modal-header {
-
-  }
-
-  .tour-in-progress .modal-title {
-
-  }
-
-  .tour-in-progress .modal-title .close {
-
-  }
-
-  .tour-in-progress .modal-body {
-
-  }
-
-  .tour-in-progress .modal-footer {
-
-  }
-
-  .tour-in-progress .modal-footer .btn {
-
-  }
-
-  .tour-in-progress .modal-footer .btn-primary {
-
-  }
-
-  .tour-in-progress .modal-footer .btn-secondary {
-
-  }
-
-  /* .tour-complete */
-
-  .tour-complete .modal {
-
-  }
-
-  .tour-complete .modal-dialog {
-
-  }
-
-  .tour-complete .modal-content {
-
-  }
-
-  .tour-complete .modal-header {
-
-  }
-
-  .tour-complete .modal-title {
-
-  }
-
-  .tour-complete .modal-title .close {
-
-  }
-
-  .tour-complete .modal-body {
-
-  }
-
-  .tour-complete .modal-footer {
-
-  }
-
-  .tour-complete .modal-footer .btn {
-
-  }
-
-  .tour-complete .modal-footer .btn-primary {
-
-  }
-
-  .tour-complete .modal-footer .btn-secondary {
-
   }
 }
