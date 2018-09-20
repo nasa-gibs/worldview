@@ -277,34 +277,6 @@ li.item.productsitem.inmotion,
 .productsitem .hdanchor:hover .layer-eye-icon {
   color: #000;
 }
-.productsitem.disabled .hdanchor {
-  pointer-events: none;
-}
-
-/* .productsitem a.hdanchor.hideReg i {
-  width: 21px;
-  height: 12px;
-  background: url("../images/wv.layers/show-hide.png?v=@BUILD_NONCE@") no-repeat
-    0 0 transparent;
-  position: absolute;
-  top: 50%;
-  margin-top: -6px;
-  left: 50%;
-  margin-left: -10.5px;
-  pointer-events: none;
-}
-
-.productsitem.layer-visible a.hdanchor.hideReg i {
-  background-position: 0 0;
-}
-
-.productsitem.layer-hidden a.hdanchor.hideReg i {
-  background-position: -42px 0;
-}
-
-.productsitem.layer-hidden a.hdanchor.hideReg:hover i {
-  background-position: -63px 0;
-} */
 
 .productsitem a.wv-layers-info,
 .productsitem a.wv-layers-options {
@@ -472,23 +444,11 @@ i.wv-layers-options-icon {
   border-color: transparent;
 }
 
-/* .sidebar-panel li.item.productsitem .layer-main:hover a.hdanchor i {
-  background-position: 5px -36px;
-} */
-
-/* .disabled.layer-hidden a.hdanchor.hideReg i {
-  width: 15px;
-  height: 15px;
-  margin-top: -7.5px;
-  margin-left: -7.5px;
-  background-position: 0 -54px;
-} */
-
-/* .disabled.layer-hidden a.hdanchor:hover {
+.disabled.layer-hidden a.hdanchor:hover {
   background: rgba(255, 255, 255, 0.2);
   cursor: default;
 }
 
 .productsitem.disabled.layer-hidden a.hdanchor:hover i {
-  background-position: 0 -54px;
-} */
+  color: #c5c5c8;
+}

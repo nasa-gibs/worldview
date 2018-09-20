@@ -73,7 +73,41 @@ class Layer extends React.Component {
       );
     }
   }
-
+  getDisabledTitle(layer) {
+    var startDate, endDate;
+    if (layer.startDate && layer.endDate) {
+      startDate = util.parseDate(layer.startDate);
+      endDate = util.parseDate(layer.endDate);
+      if (layer.period !== 'subdaily') {
+        startDate =
+          startDate.getDate() +
+          ' ' +
+          util.giveMonth(startDate) +
+          ' ' +
+          startDate.getFullYear();
+        endDate =
+          endDate.getDate() +
+          ' ' +
+          util.giveMonth(endDate) +
+          ' ' +
+          endDate.getFullYear();
+      }
+      return 'Data available between ' + startDate + ' - ' + endDate;
+    } else if (layer.startDate) {
+      startDate = util.parseDate(layer.startDate);
+      if (layer.period !== 'subdaily') {
+        startDate =
+          startDate.getDate() +
+          ' ' +
+          util.giveMonth(startDate) +
+          ' ' +
+          startDate.getFullYear();
+      }
+      return 'Data available between ' + startDate + ' - Present';
+    } else {
+      return 'No data on selected date for this layer';
+    }
+  }
   onLayerHover() {}
   getPalette() {}
   render() {
@@ -88,6 +122,7 @@ class Layer extends React.Component {
       isMobile,
       index
     } = this.props;
+
     return (
       <Draggable
         draggableId={util.encodeId(layer.id) + '-' + layerGroupName}
@@ -131,7 +166,7 @@ class Layer extends React.Component {
                   !isVisible && !isDisabled
                     ? 'Show Layer'
                     : isDisabled
-                      ? 'No data on selected date for this layer'
+                      ? this.getDisabledTitle(layer)
                       : 'Hide Layer'
                 }
               >
