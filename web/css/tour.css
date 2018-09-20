@@ -28,7 +28,7 @@
 .tour .close-sm .icon-close {
   height: 13px;
   width: 13px;
-  background: url(../images/wv-icons.png) -13px 0;
+  background: url("../images/wv-icons.png") -13px 0;
   background-size: 39px 26px;
 }
 
@@ -102,14 +102,13 @@
 
 .tour-start .tour-box-row {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   justify-content: space-between;
 }
 
 .tour-start .tour-box {
   position: relative;
-  background: url(../images/tour/tour-box-background.jpg);
+  background: url("../images/tour/tour-box-background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -123,8 +122,8 @@
 .tour-start .tour-box-content {
   height: 198px;
   display: flex;
+  flex-flow: row nowrap;
   flex-direction: column-reverse;
-  flex-wrap: nowrap;
   justify-content: flex-start;
   overflow: hidden;
 }
@@ -213,7 +212,7 @@
 .tour-in-progress .modal-header {
   position: relative;
   color: #fff;
-  border-radius: 8px 0 0 0;
+  border-radius: 8px 0 0;
   background-color: rgb(0, 69, 123);
   padding: 8px 20px 8px 16px;
   border-bottom: 2px solid #fff;
@@ -223,39 +222,39 @@
   background-color: rgb(141, 59, 54);
 }
 
-.tour-in-progress .volcano .modal-header  {
+.tour-in-progress .volcano .modal-header {
   background-color: rgb(165, 115, 75);
 }
 
-.tour-in-progress .snow .modal-header  {
+.tour-in-progress .snow .modal-header {
   background-color: rgb(90, 119, 132);
 }
 
-.tour-in-progress .sea-and-lake-ice .modal-header  {
+.tour-in-progress .sea-and-lake-ice .modal-header {
   background-color: rgb(50, 134, 151);
 }
 
-.tour-in-progress .iceberg .modal-header  {
+.tour-in-progress .iceberg .modal-header {
   background-color: rgb(56, 137, 173);
 }
 
-.tour-in-progress .water-color .modal-header  {
+.tour-in-progress .water-color .modal-header {
   background-color: rgb(69, 125, 115);
 }
 
-.tour-in-progress .dust-and-haze .modal-header  {
+.tour-in-progress .dust-and-haze .modal-header {
   background-color: rgb(160, 151, 88);
 }
 
-.tour-in-progress .severe-storm .modal-header  {
+.tour-in-progress .severe-storm .modal-header {
   background-color: rgb(70, 90, 100);
 }
 
-.tour-in-progress .man-made .modal-header  {
+.tour-in-progress .man-made .modal-header {
   background-color: rgb(62, 62, 62);
 }
 
-.tour-in-progress .critical .modal-header  {
+.tour-in-progress .critical .modal-header {
   background-color: rgb(88, 88, 88);
 }
 
@@ -275,7 +274,7 @@
   z-index: 3;
   background-color: #fff;
   border-radius: 50%;
-  background-image: url(../images/natural-events/icon-default.svg);
+  background-image: url("../images/natural-events/icon-default.svg");
   background-size: 64px 64px;
   background-position: -2px -2px;
 }
@@ -284,75 +283,75 @@
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-wildfires.svg);
+  background-image: url("../images/natural-events/icon-wildfires.svg");
 }
 
 .tour-in-progress .volcano .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-volcanoes.svg);
+  background-image: url("../images/natural-events/icon-volcanoes.svg");
 }
 
 .tour-in-progress .snow .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-snow.svg);
+  background-image: url("../images/natural-events/icon-snow.svg");
 }
 
 .tour-in-progress .sea-and-lake-ice .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-sea-and-lake-ice.svg);
+  background-image: url("../images/natural-events/icon-sea-and-lake-ice.svg");
 }
 
 .tour-in-progress .iceberg .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-icebergs.svg);
+  background-image: url("../images/natural-events/icon-icebergs.svg");
 }
 
 .tour-in-progress .water-color .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-water-color.svg);
+  background-image: url("../images/natural-events/icon-water-color.svg");
 }
 
 .tour-in-progress .dust-and-haze .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-dust-and-haze.svg);
+  background-image: url("../images/natural-events/icon-dust-and-haze.svg");
 }
 
 .tour-in-progress .severe-storm .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-severe-storms.svg);
+  background-image: url("../images/natural-events/icon-severe-storms.svg");
 }
 
 .tour-in-progress .man-made .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-manmade.svg);
+  background-image: url("../images/natural-events/icon-manmade.svg");
 }
 
 .tour-in-progress .critical .modal-icon {
   background-color: transparent;
   background-size: 68px 68px;
   background-position: -4px -4px;
-  background-image: url(../images/natural-events/icon-critical.svg);
+  background-image: url("../images/natural-events/icon-critical.svg");
 }
 
 .tour-in-progress .modal-body {
   color: #fff;
-  padding: 16px 20px 16px 20px;
+  padding: 16px 20px;
   max-height: 248px;
   overflow-y: scroll;
   border-bottom: 2px solid #fff;
@@ -372,57 +371,57 @@
 
 .tour-in-progress .modal-body,
 .tour-in-progress .modal-footer {
-  background-color: rgba(0, 69, 123, 0.80);
+  background-color: rgba(0, 69, 123, 0.8);
 }
 
 .tour-in-progress .wildfire .modal-body,
 .tour-in-progress .wildfire .modal-footer {
-  background-color: rgba(141, 59, 54, 0.80);
+  background-color: rgba(141, 59, 54, 0.8);
 }
 
 .tour-in-progress .volcano .modal-body,
-.tour-in-progress .volcano .modal-footer  {
-  background-color: rgba(165, 115, 75, 0.80);
+.tour-in-progress .volcano .modal-footer {
+  background-color: rgba(165, 115, 75, 0.8);
 }
 
 .tour-in-progress .snow .modal-body,
-.tour-in-progress .snow .modal-footer  {
-  background-color: rgba(90, 119, 132, 0.80);
+.tour-in-progress .snow .modal-footer {
+  background-color: rgba(90, 119, 132, 0.8);
 }
 
 .tour-in-progress .sea-and-lake-ice .modal-body,
-.tour-in-progress .sea-and-lake-ice .modal-footer  {
-  background-color: rgba(50, 134, 151, 0.80);
+.tour-in-progress .sea-and-lake-ice .modal-footer {
+  background-color: rgba(50, 134, 151, 0.8);
 }
 
 .tour-in-progress .iceberg .modal-body,
-.tour-in-progress .iceberg .modal-footer  {
-  background-color: rgba(56, 137, 173, 0.80);
+.tour-in-progress .iceberg .modal-footer {
+  background-color: rgba(56, 137, 173, 0.8);
 }
 
 .tour-in-progress .water-color .modal-body,
-.tour-in-progress .water-color .modal-footer  {
-  background-color: rgba(69, 125, 115, 0.80);
+.tour-in-progress .water-color .modal-footer {
+  background-color: rgba(69, 125, 115, 0.8);
 }
 
 .tour-in-progress .dust-and-haze .modal-body,
-.tour-in-progress .dust-and-haze .modal-footer  {
-  background-color: rgba(160, 151, 88, 0.80);
+.tour-in-progress .dust-and-haze .modal-footer {
+  background-color: rgba(160, 151, 88, 0.8);
 }
 
 .tour-in-progress .severe-storm .modal-body,
-.tour-in-progress .severe-storm .modal-footer  {
-  background-color: rgba(70, 90, 100, 0.80);
+.tour-in-progress .severe-storm .modal-footer {
+  background-color: rgba(70, 90, 100, 0.8);
 }
 
 .tour-in-progress .man-made .modal-body,
-.tour-in-progress .man-made .modal-footer  {
-  background-color: rgba(62, 62, 62, 0.80);
+.tour-in-progress .man-made .modal-footer {
+  background-color: rgba(62, 62, 62, 0.8);
 }
 
 .tour-in-progress .critical .modal-body,
-.tour-in-progress .critical .modal-footer  {
-  background-color: rgba(88, 88, 88, 0.80);
+.tour-in-progress .critical .modal-footer {
+  background-color: rgba(88, 88, 88, 0.8);
 }
 
 .tour-in-progress .step-container {
@@ -489,7 +488,7 @@
 .tour-in-progress .step-next.disabled {
   cursor: default;
   color: #ddd;
-  opacity: 0.50;
+  opacity: 0.5;
 }
 
 /* .tour-complete */
@@ -513,39 +512,39 @@
   background-color: rgb(141, 59, 54);
 }
 
-.tour-complete .volcano .modal-header  {
+.tour-complete .volcano .modal-header {
   background-color: rgb(165, 115, 75);
 }
 
-.tour-complete .snow .modal-header  {
+.tour-complete .snow .modal-header {
   background-color: rgb(90, 119, 132);
 }
 
-.tour-complete .sea-and-lake-ice .modal-header  {
+.tour-complete .sea-and-lake-ice .modal-header {
   background-color: rgb(50, 134, 151);
 }
 
-.tour-complete .iceberg .modal-header  {
+.tour-complete .iceberg .modal-header {
   background-color: rgb(56, 137, 173);
 }
 
-.tour-complete .water-color .modal-header  {
+.tour-complete .water-color .modal-header {
   background-color: rgb(69, 125, 115);
 }
 
-.tour-complete .dust-and-haze .modal-header  {
+.tour-complete .dust-and-haze .modal-header {
   background-color: rgb(160, 151, 88);
 }
 
-.tour-complete .severe-storm .modal-header  {
+.tour-complete .severe-storm .modal-header {
   background-color: rgb(70, 90, 100);
 }
 
-.tour-complete .man-made .modal-header  {
+.tour-complete .man-made .modal-header {
   background-color: rgb(62, 62, 62);
 }
 
-.tour-complete .critical .modal-header  {
+.tour-complete .critical .modal-header {
   background-color: rgb(88, 88, 88);
 }
 
@@ -578,7 +577,7 @@
   font-weight: 300;
   padding: 2px 25px 4px;
   border-radius: 0;
-  margin: 0 0 4px 0;
+  margin: 0 0 4px;
   width: 100%;
 }
 
@@ -589,7 +588,7 @@
 
 .tour-complete .modal-footer .btn-primary:hover,
 .tour-complete .modal-footer .btn-primary:focus {
-  background-color:#133f77;
+  background-color: #133f77;
   border-color: #133f77;
 }
 
