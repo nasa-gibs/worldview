@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import d3 from 'd3';
+
 /**
  * Implements the timeline pick
  */
@@ -92,6 +93,8 @@ export function timelinePick(models, config, ui) {
       prevChange = undefined;
       nextChange = undefined;
       tl.guitarPick.classed('pick-clicked', false);
+
+      self.update();
     });
 
   var change = function() {
@@ -133,7 +136,6 @@ export function timelinePick(models, config, ui) {
   // Pan the timeline if the pick is dragged off the side
   // or if the date input goes outside of the shown range
   self.shiftView = function() {
-    if (models.compare && models.compare.active) return;
     var zt = tl.pan.xPosition;
     var activeDate = model[model.activeDate];
     if (tl.x(activeDate) >= tl.width - 15) {
@@ -154,6 +156,7 @@ export function timelinePick(models, config, ui) {
       tl.pan.xPosition = tl.axisZoom.translate()[0];
       tl.pan.axis();
     }
+
     $('#guitarpick').removeClass('hidden');
   };
 
@@ -174,7 +177,6 @@ export function timelinePick(models, config, ui) {
     if (mousedown === false) {
       self.offset = tl.x(model[model.activeDate]) - width / 2;
     }
-
     tl.guitarPick
       .data([
         {
