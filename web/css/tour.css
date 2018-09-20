@@ -20,7 +20,7 @@
   height: 26px;
   width: 26px;
   margin: 0;
-  background: url(../images/wv-icons.png) 52px 0;
+  background: url(../images/wv-icons.png) -26px 0;
   background-repeat: no-repeat;
 }
 
@@ -294,47 +294,80 @@
   height: 60px;
   width: 60px;
   z-index: 3;
-  background-image: url(../images/natural-events/icon-default.png);
-  background-size: 60px 60px;
+  background-color: #fff;
+  border-radius: 50%;
+  background-image: url(../images/natural-events/icon-default.svg);
+  background-size: 64px 64px;
+  background-position: -2px -2px;
 }
 
 .tour-in-progress .wildfire .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-wildfires.svg);
 }
 
 .tour-in-progress .volcano .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-volcanoes.svg);
 }
 
 .tour-in-progress .snow .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-snow.svg);
 }
 
 .tour-in-progress .sea-and-lake-ice .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-sea-and-lake-ice.svg);
 }
 
 .tour-in-progress .iceberg .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-icebergs.svg);
 }
 
 .tour-in-progress .water-color .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-water-color.svg);
 }
 
 .tour-in-progress .dust-and-haze .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-dust-and-haze.svg);
 }
 
 .tour-in-progress .severe-storm .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-severe-storms.svg);
 }
 
 .tour-in-progress .man-made .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-manmade.svg);
 }
 
 .tour-in-progress .critical .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
   background-image: url(../images/natural-events/icon-critical.svg);
 }
 
