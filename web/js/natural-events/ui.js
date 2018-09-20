@@ -43,7 +43,6 @@ export default function naturalEventsUI(models, ui, config, request) {
         self.markers = naturalEventMarkers.draw();
       }
 
-      /// createEventList();
       var isZoomed = Math.floor(view.getZoom()) >= 3;
       if (isZoomed || models.proj.selected.id !== 'geographic') {
         self.filterEventList();
@@ -68,9 +67,6 @@ export default function naturalEventsUI(models, ui, config, request) {
         model.active = true;
         googleAnalytics.event('Natural Events', 'Click', 'Events Tab');
 
-        if (self.markers.length === 0) {
-          // createEventList();
-        }
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
         // Store markers so the can be referenced later
