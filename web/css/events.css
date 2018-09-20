@@ -265,7 +265,7 @@
   display: block;
   height: 30px;
   width: 30px;
-  background: url("../images/natural-events/icon-default.svg");
+  background: url('../images/natural-events/icon-critical.svg');
 }
 .wv-map .event-icon {
   height: 26px;
