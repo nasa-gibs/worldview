@@ -1,0 +1,14 @@
+# /node_modules/* and /bower_components/* ignored by default
+
+build/*
+dist/*
+etc/*
+lib/*
+options/*
+reports/*
+web/ext/*
+web/dist/*
+web/build/*
+test/*
+web/js/edsc/*
+
