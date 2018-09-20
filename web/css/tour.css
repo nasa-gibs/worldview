@@ -8,6 +8,16 @@
   opacity: 1;
 }
 
+.tour a {
+  color: #00457b;
+  font-weight: 600;
+}
+
+.tour a:hover {
+  color: #2276ac;
+  text-decoration: none;
+}
+
 /* .tour-start */
 
 .tour-start {
@@ -15,7 +25,7 @@
 }
 
 .tour-start .modal {
-  overflow-y:auto;
+  overflow-y: auto;
 }
 
 .tour-start .modal-dialog {
@@ -33,6 +43,7 @@
   color: #fff;
   background-color: #00457b;
   border-radius: 0;
+  padding: 8px 12px 7px;
 }
 
 .tour-start .modal-title {
@@ -177,7 +188,7 @@
 
 .tour-in-progress .modal {
   left: auto;
-  top: 300px;
+  top: 410px;
   overflow: visible;
 }
 
@@ -309,16 +320,19 @@
   padding: 16px 20px 16px 20px;
   max-height: 248px;
   overflow-y: scroll;
+  border-bottom: 2px solid #fff;
 }
 
 .tour-in-progress .modal-body p {
   font-size: 13px;
   line-height: 20px;
+  font-weight: 300;
   margin-bottom: 16px;
 }
 
 .tour-in-progress .modal-footer {
   border-radius: 0 0 0 8px;
+  padding: 12px;
 }
 
 .tour-in-progress .modal-body,
@@ -384,7 +398,6 @@
 }
 
 .tour-in-progress .step-container {
-  color: #fff;
   display: flex;
   height: 40px;
   width: 220px;
@@ -393,6 +406,7 @@
 }
 
 .tour-in-progress .step-previous {
+  color: #fff;
   font-size: 40px;
   height: 40px;
   width: 40px;
@@ -400,6 +414,7 @@
 }
 
 .tour-in-progress .step-counter {
+  color: #fff;
   width: 132px;
   margin: auto;
   text-align: center;
@@ -408,13 +423,45 @@
 .tour-in-progress .step-counter p {
   font-size: 22px;
   line-height: 24px;
+  font-weight: 300;
 }
 
 .tour-in-progress .step-next {
+  color: #fff;
   font-size: 40px;
   height: 40px;
   width: 40px;
   margin: auto;
+}
+
+/* (Worst Bootstrap specificty ever) */
+.tour-in-progress .step-previous:not([href]):not([tabindex]):hover,
+.tour-in-progress .step-previous:not([tabindex]):hover,
+.tour-in-progress .step-previous:hover,
+.tour-in-progress .step-next:not([href]):not([tabindex]):hover,
+.tour-in-progress .step-next:not([tabindex]):hover,
+.tour-in-progress .step-next:hover {
+  color: #fff;
+  opacity: 0.75;
+}
+
+.tour-in-progress .step-previous.disabled:not([href]):not([tabindex]):hover,
+.tour-in-progress .step-previous.disabled:not([href]):not([tabindex]):focus,
+.tour-in-progress .step-previous.disabled:not([tabindex]):hover,
+.tour-in-progress .step-previous.disabled:not([tabindex]):focus,
+.tour-in-progress .step-previous.disabled:hover,
+.tour-in-progress .step-previous.disabled:focus,
+.tour-in-progress .step-previous.disabled,
+.tour-in-progress .step-next.disabled:not([href]):not([tabindex]):hover,
+.tour-in-progress .step-next.disabled:not([href]):not([tabindex]):focus,
+.tour-in-progress .step-next.disabled:not([tabindex]):hover,
+.tour-in-progress .step-next.disabled:not([tabindex]):focus,
+.tour-in-progress .step-next.disabled:hover,
+.tour-in-progress .step-next.disabled:focus,
+.tour-in-progress .step-next.disabled {
+  cursor: default;
+  color: #ddd;
+  opacity: 0.50;
 }
 
 /* .tour-complete */
@@ -428,21 +475,65 @@
 }
 
 .tour-complete .modal-dialog {
-
-
+  border: 1px solid #333;
 }
 
 .tour-complete .modal-content {
-
-
+  border: 0;
+  border-radius: 0;
 }
 
 .tour-complete .modal-header {
-
+  border-radius: 0;
+  background-color: rgb(0, 69, 123);
 }
 
-.tour-complete .modal-title {
+.tour-complete .wildfire .modal-header {
+  background-color: rgb(141, 59, 54);
+}
 
+.tour-complete .volcano .modal-header  {
+  background-color: rgb(165, 115, 75);
+}
+
+.tour-complete .snow .modal-header  {
+  background-color: rgb(90, 119, 132);
+}
+
+.tour-complete .sea-and-lake-ice .modal-header  {
+  background-color: rgb(50, 134, 151);
+}
+
+.tour-complete .iceberg .modal-header  {
+  background-color: rgb(56, 137, 173);
+}
+
+.tour-complete .water-color .modal-header  {
+  background-color: rgb(69, 125, 115);
+}
+
+.tour-complete .dust-and-haze .modal-header  {
+  background-color: rgb(160, 151, 88);
+}
+
+.tour-complete .severe-storm .modal-header  {
+  background-color: rgb(70, 90, 100);
+}
+
+.tour-complete .man-made .modal-header  {
+  background-color: rgb(62, 62, 62);
+}
+
+.tour-complete .critical .modal-header  {
+  background-color: rgb(88, 88, 88);
+}
+
+
+.tour-complete .modal-title {
+  color: #fff;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 300;
 }
 
 .tour-complete .modal-title .close {
@@ -453,12 +544,22 @@
 
 }
 
+.tour-complete .modal-body p {
+  color: #333;
+  font-size: 16px;
+  line-height: 24px;
+}
+
 .tour-complete .modal-footer {
 
 }
 
 .tour-complete .modal-footer .btn {
-
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 300;
+  padding: 2px 25px 4px;
+  border-radius: 0;
 }
 
 .tour-complete .modal-footer .btn-primary {
@@ -590,8 +691,7 @@
   }
 
   .tour-complete .modal-dialog {
-
-
+    max-width: 572px;
   }
 
   .tour-complete .modal-content {
@@ -600,6 +700,7 @@
   }
 
   .tour-complete .modal-header {
+    padding: 7px 12px 8px;
 
   }
 
@@ -612,11 +713,21 @@
   }
 
   .tour-complete .modal-body {
-
+    padding: 15px;
   }
 
   .tour-complete .modal-footer {
+    justify-content: center;
+    border-top: none;
+    padding: 8px 15px 15px;
+  }
 
+  .tour-complete .modal-footer > :not(:last-child) {
+    margin-right: 10px;
+  }
+
+  .tour-complete .modal-footer > :not(:first-child) {
+    margin-left: 10px;
   }
 
   .tour-complete .modal-footer .btn {
@@ -624,11 +735,25 @@
   }
 
   .tour-complete .modal-footer .btn-primary {
+    background-color: #133f90;
+    border-color: #133f90;
+  }
 
+  .tour-complete .modal-footer .btn-primary:hover,
+  .tour-complete .modal-footer .btn-primary:focus {
+    background-color:#133f77;
+    border-color: #133f77;
   }
 
   .tour-complete .modal-footer .btn-secondary {
+    background-color: #f15521;
+    border-color: #f15521;
+  }
 
+  .tour-complete .modal-footer .btn-secondary:hover,
+  .tour-complete .modal-footer .btn-secondary:focus {
+    background-color: #d54e21;
+    border-color: #d54e21;
   }
 }
 
