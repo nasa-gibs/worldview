@@ -93,7 +93,7 @@ module.exports = {
       client.pause(100);
       client.expect.element(collapsedToggleButton).to.be.visible;
       client.expect.element(toggleButton).to.not.be.visible;
-      client.useCss().assert.containsText(collapsedToggleButton, 'Layers(6)');
+      client.useCss().assert.containsText(collapsedToggleButton, 'Layers (6)');
       client.click(collapsedToggleButton);
       client.pause(100);
       client.waitForElementVisible('#activeB-Reference_Features', TIME_LIMIT);
