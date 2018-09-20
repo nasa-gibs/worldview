@@ -1,6 +1,6 @@
 /* Breakpoint: Extra Small (< 576px) */
 .tour {
-  display: none;
+
 }
 
 .tour .close {
@@ -15,10 +15,11 @@
 }
 
 .tour-start .modal {
-
+  overflow-y:auto;
 }
 
 .tour-start .modal-dialog {
+  overflow-y: initial;
   border: 1px solid #333;
 }
 
@@ -35,6 +36,9 @@
 }
 
 .tour-start .modal-title {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 300;
 }
 
 .tour-start .modal-title .close {
@@ -48,7 +52,12 @@
 .tour-start .tour-intro {
   background-color: #fff;
   border: 1px solid #333;
-  margin-bottom: 4px;
+  padding: 15px;
+}
+
+.tour-start .modal-body .tour-intro p {
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .tour-start .tour-intro a {
@@ -67,29 +76,40 @@
 
 .tour-start .tour-box-row {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
-  margin-top: 4px;
 }
 
 .tour-start .tour-box {
   position: relative;
   background: url(../images/tour/tour-box-background.jpg);
-  background-size: 200px 200px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   height: 200px;
-  width: 200px;
+  width: 100%;
+  margin: 4px auto 0;
+  text-decoration: none;
+  border: 1px solid #333;
 }
 
 .tour-start .tour-box-content {
+  height: 198px;
+  display: flex;
+  flex-direction: column-reverse;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
 .tour-start .tour-box .tour-box-header {
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  background-color: #00457b;
   color: #fff;
+  background-color: #00457b;
   text-align: center;
   padding: 4px;
+  order: 0;
 }
 
 .tour-start .tour-box.wildfire .tour-box-header {
@@ -141,8 +161,12 @@
 }
 
 .tour-start .tour-box:hover .tour-box-description {
-  cursor: pointer;
   display: block;
+  cursor: pointer;
+  color: #fff;
+  background-color: rgba(20, 20, 20, 0.75);
+  padding: 4px;
+  order: 1;
 }
 
 /* .tour-in-progress */
@@ -152,49 +176,245 @@
 }
 
 .tour-in-progress .modal {
-
+  left: auto;
+  top: 300px;
+  overflow: visible;
 }
 
 .tour-in-progress .modal-dialog {
-
-
+  max-width: 248px;
 }
 
 .tour-in-progress .modal-content {
-
-
+  border-radius: 8px 0 0 8px;
 }
 
 .tour-in-progress .modal-header {
+  position: relative;
+  color: #fff;
+  border-radius: 8px 0 0 0;
+  background-color: rgb(0, 69, 123);
+  padding: 8px 20px 8px 16px;
+  border-bottom: 2px solid #fff;
+}
 
+.tour-in-progress .wildfire .modal-header {
+  background-color: rgb(141, 59, 54);
+}
+
+.tour-in-progress .volcano .modal-header  {
+  background-color: rgb(165, 115, 75);
+}
+
+.tour-in-progress .snow .modal-header  {
+  background-color: rgb(90, 119, 132);
+}
+
+.tour-in-progress .sea-and-lake-ice .modal-header  {
+  background-color: rgb(50, 134, 151);
+}
+
+.tour-in-progress .iceberg .modal-header  {
+  background-color: rgb(56, 137, 173);
+}
+
+.tour-in-progress .water-color .modal-header  {
+  background-color: rgb(69, 125, 115);
+}
+
+.tour-in-progress .dust-and-haze .modal-header  {
+  background-color: rgb(160, 151, 88);
+}
+
+.tour-in-progress .severe-storm .modal-header  {
+  background-color: rgb(70, 90, 100);
+}
+
+.tour-in-progress .man-made .modal-header  {
+  background-color: rgb(62, 62, 62);
+}
+
+.tour-in-progress .critical .modal-header  {
+  background-color: rgb(88, 88, 88);
+}
+
+.tour-in-progress .modal-header .close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 0;
+  margin: 0;
 }
 
 .tour-in-progress .modal-title {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 300;
+  padding-left: 28px;
+}
 
+.tour-in-progress .modal-icon {
+  position: absolute;
+  top: -9px;
+  left: -20px;
+  height: 60px;
+  width: 60px;
+  z-index: 3;
+  background-image: url(../images/natural-events/icon-default.png);
+  background-size: 60px 60px;
+}
+
+.tour-in-progress .wildfire .modal-icon {
+  background-image: url(../images/natural-events/icon-wildfires.svg);
+}
+
+.tour-in-progress .volcano .modal-icon {
+  background-image: url(../images/natural-events/icon-volcanoes.svg);
+}
+
+.tour-in-progress .snow .modal-icon {
+  background-image: url(../images/natural-events/icon-snow.svg);
+}
+
+.tour-in-progress .sea-and-lake-ice .modal-icon {
+  background-image: url(../images/natural-events/icon-sea-and-lake-ice.svg);
+}
+
+.tour-in-progress .iceberg .modal-icon {
+  background-image: url(../images/natural-events/icon-icebergs.svg);
+}
+
+.tour-in-progress .water-color .modal-icon {
+  background-image: url(../images/natural-events/icon-water-color.svg);
+}
+
+.tour-in-progress .dust-and-haze .modal-icon {
+  background-image: url(../images/natural-events/icon-dust-and-haze.svg);
+}
+
+.tour-in-progress .severe-storm .modal-icon {
+  background-image: url(../images/natural-events/icon-severe-storms.svg);
+}
+
+.tour-in-progress .man-made .modal-icon {
+  background-image: url(../images/natural-events/icon-manmade.svg);
+}
+
+.tour-in-progress .critical .modal-icon {
+  background-image: url(../images/natural-events/icon-critical.svg);
+}
+
+.tour-in-progress .modal-body {
+  color: #fff;
+  padding: 16px 20px 16px 20px;
+  max-height: 248px;
+  overflow-y: scroll;
+}
+
+.tour-in-progress .modal-body p {
+  font-size: 13px;
+  line-height: 20px;
+  margin-bottom: 16px;
+}
+
+.tour-in-progress .modal-footer {
+  border-radius: 0 0 0 8px;
+}
+
+.tour-in-progress .modal-body,
+.tour-in-progress .modal-footer {
+  background-color: rgba(0, 69, 123, 0.80);
+}
+
+.tour-in-progress .wildfire .modal-body,
+.tour-in-progress .wildfire .modal-footer {
+  background-color: rgba(141, 59, 54, 0.80);
+}
+
+.tour-in-progress .volcano .modal-body,
+.tour-in-progress .volcano .modal-footer  {
+  background-color: rgba(165, 115, 75, 0.80);
+}
+
+.tour-in-progress .snow .modal-body,
+.tour-in-progress .snow .modal-footer  {
+  background-color: rgba(90, 119, 132, 0.80);
+}
+
+.tour-in-progress .sea-and-lake-ice .modal-body,
+.tour-in-progress .sea-and-lake-ice .modal-footer  {
+  background-color: rgba(50, 134, 151, 0.80);
+}
+
+.tour-in-progress .iceberg .modal-body,
+.tour-in-progress .iceberg .modal-footer  {
+  background-color: rgba(56, 137, 173, 0.80);
+}
+
+.tour-in-progress .water-color .modal-body,
+.tour-in-progress .water-color .modal-footer  {
+  background-color: rgba(69, 125, 115, 0.80);
+}
+
+.tour-in-progress .dust-and-haze .modal-body,
+.tour-in-progress .dust-and-haze .modal-footer  {
+  background-color: rgba(160, 151, 88, 0.80);
+}
+
+.tour-in-progress .severe-storm .modal-body,
+.tour-in-progress .severe-storm .modal-footer  {
+  background-color: rgba(70, 90, 100, 0.80);
+}
+
+.tour-in-progress .man-made .modal-body,
+.tour-in-progress .man-made .modal-footer  {
+  background-color: rgba(62, 62, 62, 0.80);
+}
+
+.tour-in-progress .critical .modal-body,
+.tour-in-progress .critical .modal-footer  {
+  background-color: rgba(88, 88, 88, 0.80);
+}
+
+.tour-in-progress .modal-title {
 }
 
 .tour-in-progress .modal-title .close {
 
 }
 
-.tour-in-progress .modal-body {
-
+.tour-in-progress .step-container {
+  color: #fff;
+  display: flex;
+  height: 40px;
+  width: 220px;
+  flex-flow: row wrap;
+  justify-content: space-between;
 }
 
-.tour-in-progress .modal-footer {
-
+.tour-in-progress .step-previous {
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+  margin: auto;
 }
 
-.tour-in-progress .modal-footer .btn {
-
+.tour-in-progress .step-counter {
+  width: 132px;
+  margin: auto;
+  text-align: center;
 }
 
-.tour-in-progress .modal-footer .btn-primary {
-
+.tour-in-progress .step-counter p {
+  font-size: 22px;
+  line-height: 24px;
 }
 
-.tour-in-progress .modal-footer .btn-secondary {
-
+.tour-in-progress .step-next {
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+  margin: auto;
 }
 
 /* .tour-complete */
@@ -289,9 +509,7 @@
   }
 
   .tour-start .modal-title {
-    font-size: 24px;
-    line-height: 24px;
-    font-weight: 300;
+
   }
 
   .tour-start .modal-title .close {
@@ -303,12 +521,11 @@
   }
 
   .tour-start .modal-body .tour-intro {
-    padding: 15px;
+
   }
 
   .tour-start .modal-body .tour-intro p {
-    font-size: 16px;
-    line-height: 24px;
+
   }
 
   .tour-start .modal-body .tour-box-container {
@@ -316,7 +533,8 @@
   }
 
   .tour-start .modal-body .tour-box {
-
+    flex: none;
+    width: 200px;
   }
 
   /* .tour-in-progress */
