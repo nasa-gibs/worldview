@@ -1,4 +1,7 @@
 @media only screen and (max-width: 739px) {
+  #wv-sidebar {
+    position: static;
+  }
   #productsHolder {
     display: block;
     float: left;
