@@ -1,75 +1,60 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Steps } from 'intro.js-react';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
 
-class TourStart extends React.Component {
+class ModalExample extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      stepsEnabled: true,
-      initialStep: 0,
-      steps: [
-        {
-          element: '.element1',
-          intro: 'Element 1 step',
-        },
-        {
-          element: '.element2',
-          intro: 'Element 2 step'
-        }
-      ],
-      options: {
-        overlayOpacity: 0
-      }
+      modal: false,
+      backdrop: true
     };
 
-    this.onExit = this.onExit.bind(this);
-    this.toggleSteps = this.toggleSteps.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.changeBackdrop = this.changeBackdrop.bind(this);
   }
 
-  onExit() {
-    this.setState(() => ({ stepsEnabled: false }));
-  };
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
 
-  toggleSteps() {
-    this.setState(prevState => ({ stepsEnabled: !prevState.stepsEnabled }));
-  };
+  changeBackdrop(e) {
+    let value = e.target.value;
+    if (value !== 'static') {
+      value = JSON.parse(value);
+    }
+    this.setState({ backdrop: value });
+  }
 
   render() {
-    const { stepsEnabled, steps, initialStep, options } = this.state;
-
     return (
       <div>
-        <Steps
-          enabled={stepsEnabled}
-          steps={steps}
-          initialStep={initialStep}
-          onExit={this.onExit}
-          options={options}
-        />
-
-        <div className="controls">
-          <div>
-            <button onClick={this.toggleSteps}>Toggle Steps</button>
-          </div>
-        </div>
-
-        <h1 className="element1">Element 1</h1>
-        <hr />
-        <h1 className="element2">Element 2!</h1>
-        <hr />
-        <h1 className="element3">Element 3!</h1>
+        <Form inline onSubmit={(e) => e.preventDefault()}>
+          <FormGroup>
+            <Label for="backdrop">Backdrop value</Label>{' '}
+            <Input type="select" name="backdrop" id="backdrop" onChange={this.changeBackdrop}>
+              <option value="true">true</option>
+              <option value="false">false</option>
+              <option value="static">"static"</option>
+            </Input>
+          </FormGroup>
+          {' '}
+          <Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button>
+        </Form>
+        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} backdrop={this.state.backdrop}>
+          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalBody>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
+            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }
 }
 
-TourStart.propTypes = {
-  stepsEnabled: PropTypes.bool,
-  initialStep: PropTypes.number,
-  steps: PropTypes.object,
-  options: PropTypes.object
-};
-
-export default TourStart;
+export default ModalExample;
