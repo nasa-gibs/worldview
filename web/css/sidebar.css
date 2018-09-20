@@ -2,9 +2,6 @@
   position: absolute;
 }
 #productsHolder {
-  border-bottom: 1px solid #333;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
   position: absolute;
   z-index: 2;
   min-width: 286px;
@@ -33,10 +30,15 @@
 }
 #productsHolder .main-nav {
   background: rgba(40, 40, 40, 0.85);
+  border-right: 1px solid #333;
+  border-left: 1px solid #333;
 }
 #productsHolder > .tab-content {
   background: rgba(40, 40, 40, 0.85);
   margin-top: 10px;
+  border: 1px solid #333;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 #wv-logo {
   border-bottom: 1px solid transparent;
