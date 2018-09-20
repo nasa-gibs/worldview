@@ -9,7 +9,6 @@ const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
-
   return result;
 };
 class LayerList extends React.Component {
@@ -58,15 +57,12 @@ class LayerList extends React.Component {
     if (result.source.index === result.destination.index) {
       return;
     }
-
     const newLayerArray = reorder(
       layers,
       result.source.index,
       result.destination.index
     );
-
     replaceSubGroup(newLayerArray, layerGroupName, groupId);
-    this.setState({ layers: newLayerArray });
   }
   render() {
     const { groupId, title, layerGroupName } = this.props;
@@ -91,48 +87,47 @@ class LayerList extends React.Component {
                       className="category"
                       ref={provided.innerRef}
                     >
-                      {layers.map((object, i) => {
-                        return object.projections[context.projection] ? (
-                          <Layer
-                            layer={object}
-                            groupId={groupId}
-                            layerGroupName={layerGroupName}
-                            getLegend={context.getLegend}
-                            key={i}
-                            index={i}
-                            layerClasses="item productsitem"
-                            zot={
-                              context.zotsObject[object.id]
-                                ? context.zotsObject[object.id].value
-                                : null
-                            }
-                            isMobile={context.isMobile}
-                            names={context.getNames(object.id)}
-                            checkerBoardPattern={context.checkerBoardPattern}
-                            palette={this.getPalette(
-                              object,
-                              context.palettePromise
-                            )}
-                            isDisabled={
-                              !context.getAvailability(
-                                object.id,
-                                undefined,
-                                layerGroupName
-                              )
-                            }
-                            isVisible={object.visible}
-                            updateLayer={context.updateLayer}
-                            runningObject={
-                              context.runningLayers &&
-                              context.runningLayers[object.id]
-                                ? context.runningLayers[object.id]
-                                : null
-                            }
-                          />
-                        ) : (
-                          ''
-                        );
-                      })}
+                      {layers.map((object, i) => (
+                        <Layer
+                          layer={object}
+                          groupId={groupId}
+                          layerGroupName={layerGroupName}
+                          isInProjection={
+                            !!object.projections[context.projection]
+                          }
+                          getLegend={context.getLegend}
+                          key={i}
+                          index={i}
+                          layerClasses="item productsitem"
+                          zot={
+                            context.zotsObject[object.id]
+                              ? context.zotsObject[object.id].value
+                              : null
+                          }
+                          isMobile={context.isMobile}
+                          names={context.getNames(object.id)}
+                          checkerBoardPattern={context.checkerBoardPattern}
+                          palette={this.getPalette(
+                            object,
+                            context.palettePromise
+                          )}
+                          isDisabled={
+                            !context.getAvailability(
+                              object.id,
+                              undefined,
+                              layerGroupName
+                            )
+                          }
+                          isVisible={object.visible}
+                          updateLayer={context.updateLayer}
+                          runningObject={
+                            context.runningLayers &&
+                            context.runningLayers[object.id]
+                              ? context.runningLayers[object.id]
+                              : null
+                          }
+                        />
+                      ))}
                       {provided.placeholder}
                     </ul>
                   );

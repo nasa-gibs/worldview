@@ -58,7 +58,9 @@
   opacity: 0.5;
   cursor: default;
 }
-
+#productsHolder .layer-list-placeholder {
+  height: 0;
+}
 .tab-content .nav-tabs {
   border-bottom: 3px solid #dee2e6;
 }

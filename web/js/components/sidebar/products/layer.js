@@ -17,12 +17,16 @@ class Layer extends React.Component {
     super(props);
     this.state = {
       zot: props.zot,
-      index: props.index
+      index: props.index,
+      isInProjection: props.isInProjection
     };
   }
   componentWillReceiveProps(props) {
     if (props.zot !== this.state.zot) {
       this.setState({ zot: props.zot });
+    }
+    if (props.isInProjection !== this.state.isInProjection) {
+      this.setState({ isInProjection: props.isInProjection });
     }
   }
   hover(value) {
@@ -73,7 +77,7 @@ class Layer extends React.Component {
   onLayerHover() {}
   getPalette() {}
   render() {
-    const { zot } = this.state;
+    const { zot, isInProjection } = this.state;
     const {
       layerGroupName,
       layer,
@@ -91,7 +95,7 @@ class Layer extends React.Component {
         direction="vertical"
       >
         {(provided, snapshot) => {
-          return (
+          return isInProjection ? (
             <li
               ref={provided.innerRef}
               {...provided.draggableProps}
@@ -186,6 +190,13 @@ class Layer extends React.Component {
                 {this.getLegend()}
               </div>
             </li>
+          ) : (
+            <li
+              className="layer-list-placeholder"
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+            />
           );
         }}
       </Draggable>
@@ -213,6 +224,8 @@ Layer.propTypes = {
   runningObject: PropTypes.object,
   getLegend: PropTypes.func,
   index: PropTypes.number,
-  checkerBoardPattern: PropTypes.object
+  checkerBoardPattern: PropTypes.object,
+  isInProjection: PropTypes.bool,
+  zot: PropTypes.number
 };
 export default Layer;
