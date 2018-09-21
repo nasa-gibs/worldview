@@ -33,16 +33,12 @@ class FooterContent extends React.Component {
             <Button
               text="+ Add Layers"
               id="layers-add"
-              className={isCompareMode ? 'layers-add ' : 'layers-add red'}
+              className="layers-add red"
               onClick={addLayers}
             />
             <Button
               onClick={toggleMode}
-              className={
-                isCompareMode
-                  ? 'compare-toggle-button red'
-                  : 'compare-toggle-button'
-              }
+              className="compare-toggle-button"
               id="compare-toggle-button"
               style={isMobile || !compareFeature ? { display: 'none' } : null}
               text={!isCompareMode ? 'Start Comparison' : 'Exit Comparison'}
@@ -117,6 +113,7 @@ FooterContent.propTypes = {
   addLayers: PropTypes.func,
   toggleMode: PropTypes.func,
   getDataSelectionCounts: PropTypes.func,
-  getDataSelectionSize: PropTypes.func
+  getDataSelectionSize: PropTypes.func,
+  compareFeature: PropTypes.bool
 };
 export default FooterContent;
