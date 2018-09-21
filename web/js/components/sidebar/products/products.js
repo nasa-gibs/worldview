@@ -20,7 +20,7 @@ class Products extends React.Component {
             layers={activeOverlays.overlays}
           />
           <LayerList
-            title="Baselayers"
+            title="Base Layers"
             groupId="baselayers"
             layerGroupName={layerGroupName}
             layers={activeOverlays.baselayers}
