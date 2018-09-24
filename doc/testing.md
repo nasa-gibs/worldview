@@ -63,3 +63,4 @@ To run tests for both browsers in sequence: `npm run e2e`.
 | `now` | date | *`YYYY-MM-DDThh:mm:ssZ`* | Overrides the current date and time. This only works when using the `now()` function from `js/util/util.js`. |
 | `showError` | boolean | *`true` or `false`* | If any value is specified, an error dialog will be shown on startup. |
 | `showSubdaily` | boolean | *`true` or `false`* | If any value is specified, the hour input, minute input and "minutes" timeline zoom option will be shown. |
+| `notificationURL` | string | `https://testing.url.com` | Overrides the notification URL found in the features.json configuration file. |
