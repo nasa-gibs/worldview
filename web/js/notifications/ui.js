@@ -48,6 +48,9 @@ export function notificationsUi(models, config) {
     if (config.parameters.mockAlerts) {
       url = 'mock/notify_' + config.parameters.mockAlerts + '.json';
     }
+    if (config.parameters.notificationURL) {
+      url = 'https://status.earthdata.nasa.gov/api/v1/notifications?domain=' + config.parameters.notificationURL;
+    }
 
     mainIcon = $('#wv-info-button')[0];
     mainIconLabel = $('#wv-info-button label')[0];
