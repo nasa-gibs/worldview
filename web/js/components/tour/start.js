@@ -3,6 +3,16 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 class ModalStart extends React.Component {
   render() {
+    fetch('../stories/stories.json', {
+      method: 'get'
+    }).then(function(response) {
+      return response.json();
+    }).then(function(myJson) {
+      var obj = JSON.stringify(myJson);
+      console.log(JSON.parse(obj));
+    }).catch(function(err) {
+      console.log(err);
+    });
     return (
       <div>
         <Modal isOpen={this.props.modalStart} toggle={this.props.toggleModalStart} wrapClassName='tour tour-start' className={this.props.className} backdrop={true}>
