@@ -1,5 +1,9 @@
 import util from './util';
 
+test('pad', () => {
+  expect(util.pad('0.000', 6, '0')).toBe('00.000');
+});
+
 test('repeat', () => {
   expect(util.repeat('.', 5)).toBe('.....');
 });
@@ -335,6 +339,35 @@ describe('formatDMS', () => {
     test(t.name, () => {
       let lat = util.formatDMS(t.dd[0], 'latitude');
       let lon = util.formatDMS(t.dd[1], 'longitude');
+      expect(lat).toBe(t.str[0]);
+      expect(lon).toBe(t.str[1]);
+    });
+  });
+});
+
+describe('formatDM', () => {
+  let tests = [{
+    name: 'zero',
+    dd: [0, 0],
+    str: [' 0&deg;00.000\'N', '  0&deg;00.000\'E']
+  }, {
+    name: 'positive',
+    dd: [12.582222, 12.582222],
+    str: ['12&deg;34.933\'N', ' 12&deg;34.933\'E']
+  }, {
+    name: 'negative',
+    dd: [-12.582222, -12.582222],
+    str: ['12&deg;34.933\'S', ' 12&deg;34.933\'W']
+  }, {
+    name: 'max',
+    dd: [89.999997, 179.999997],
+    str: ['89&deg;59.999\'N', '179&deg;59.999\'E']
+  }];
+
+  tests.forEach((t) => {
+    test(t.name, () => {
+      let lat = util.formatDM(t.dd[0], 'latitude');
+      let lon = util.formatDM(t.dd[1], 'longitude');
       expect(lat).toBe(t.str[0]);
       expect(lon).toBe(t.str[1]);
     });

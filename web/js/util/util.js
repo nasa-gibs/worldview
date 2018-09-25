@@ -930,8 +930,8 @@ export default (function (self) {
     DOWN: 40
   };
 
-  self.formatDMS = function (value, type) {
-    var width, signs;
+  function formatDegrees(value, type, withSeconds) {
+    let width, signs;
     if (type === 'longitude') {
       width = 3;
       signs = 'EW';
@@ -939,21 +939,35 @@ export default (function (self) {
       width = 2;
       signs = 'NS';
     }
-    var sign = (value >= 0) ? signs[0] : signs[1];
+    let sign = (value >= 0) ? signs[0] : signs[1];
     value = Math.abs(value);
-    var degrees = Math.floor(value);
-    var minutes = Math.floor((value * 60) - (degrees * 60));
-    var seconds = Math.floor((value * 3600) - (degrees * 3600) - (minutes * 60));
 
-    var sdegrees = self.pad(degrees, width, ' ');
-    var sminutes = self.pad(minutes, 2, '0');
-    var sseconds = self.pad(seconds, 2, '0');
-    return sdegrees + '&deg;' + sminutes + '\'' + sseconds + '"' + sign;
+    let degrees = Math.floor(value);
+    let minutes = Math.floor((value * 60) - (degrees * 60));
+    let fminutes = (value * 60) - (degrees * 60);
+    let seconds = Math.floor((value * 3600) - (degrees * 3600) - (minutes * 60));
+
+    if (withSeconds) {
+      let sdegrees = self.pad(degrees, width, ' ');
+      let sminutes = self.pad(minutes, 2, '0');
+      let sseconds = self.pad(seconds, 2, '0');
+      return sdegrees + '&deg;' + sminutes + '\'' + sseconds + '"' + sign;
+    } else {
+      let sdegrees = self.pad(degrees, width, ' ');
+      // toFixed rounds and to prevent seeing 60.000, get it out to
+      // four digits and then chop off the last one
+      let sminutes = self.pad(fminutes.toFixed(4), 7, '0');
+      sminutes = sminutes.substring(0, sminutes.length - 1);
+      return sdegrees + '&deg;' + sminutes + '\'' + sign;
+    }
   };
+
+  self.formatDMS = (value, type) => formatDegrees(value, type, true);
+  self.formatDM = (value, type) => formatDegrees(value, type, false);
 
   self.setCoordinateFormat = function (type) {
     if (!browser.localStorage) return;
-    if (type !== 'latlon-dd' && type !== 'latlon-dms') {
+    if (type !== 'latlon-dd' && type !== 'latlon-dms' && type !== 'latlon-dm') {
       throw new Error('Invalid coordinate format: ' + type);
     }
     localStorage.setItem('coordinateFormat', type);
@@ -968,6 +982,9 @@ export default (function (self) {
     var type = format || self.getCoordinateFormat();
     if (type === 'latlon-dms') {
       return self.formatDMS(coord[1], 'latitude') + ', ' +
+        self.formatDMS(coord[0], 'longitude');
+    } else if (type === 'latlon-dm') {
+      return self.formatDMS(coord[0], 'latitude') + ', ' +
         self.formatDMS(coord[0], 'longitude');
     } else {
       return coord[1].toFixed(4) + '&deg;, ' +
