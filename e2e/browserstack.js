@@ -18,7 +18,7 @@ var environment_names = environments.map(
 );
 
 try {
-  process.mainModule.filename = './node_modules/.bin/nightwatch';
+  process.mainModule.filename = './node_modules/nightwatch/bin/nightwatch';
 
   // Code to start browserstack local before start of test
   console.log('Connecting localhost to Browserstack...');
