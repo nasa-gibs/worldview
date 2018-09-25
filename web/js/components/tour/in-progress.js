@@ -32,7 +32,7 @@ class ModalInProgress extends React.Component {
                     </div>
                   </div>
                 </a>
-                <a  href="#" className="tour-box volcano">
+                <a href="#" className="tour-box volcano">
                   <div className="tour-box-content">
                     <div className="tour-box-header">
                       <h3 className="tour-box-title">

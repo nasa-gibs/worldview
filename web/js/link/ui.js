@@ -4,7 +4,7 @@ import lodashThrottle from 'lodash/throttle';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
-import Share from '../components/share/share';
+import Share from '../components/toolbar/share/share';
 import googleTagManager from 'googleTagManager';
 
 import util from '../util/util';
