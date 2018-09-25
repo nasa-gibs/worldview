@@ -10,6 +10,12 @@ export function projectionModel(config) {
 
   var init = function () {
     self.selectDefault();
+
+    // Return if no projections have been defined
+    if (!config.projections) {
+      return;
+    }
+
     Object.values(config.projections).forEach((proj) => {
       if (proj.crs && proj.proj4) {
         self.register(proj.crs, proj.proj4);
