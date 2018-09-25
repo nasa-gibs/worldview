@@ -10,7 +10,7 @@
   opacity: 1;
 }
 
-.tour .icon-close {
+.tour .close span {
   display: block;
   position: relative;
   height: 26px;
@@ -25,7 +25,7 @@
   width: 13px;
 }
 
-.tour .close-sm .icon-close {
+.tour .close-sm span {
   height: 13px;
   width: 13px;
   background: url("../images/wv-icons.png") -13px 0;

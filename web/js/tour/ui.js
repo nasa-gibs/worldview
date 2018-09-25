@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TourStart from '../components/tour/start';
+import Tour from '../components/tour/tour';
 
 export function tourUi(models, ui, config) {
   var self = {};
 
   var init = function() {
     self.reactComponent = ReactDOM.render(
-      React.createElement(TourStart),
+      React.createElement(Tour),
       document.getElementById('wv-tour')
     );
   };
