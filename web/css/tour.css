@@ -20,12 +20,12 @@
   background-repeat: no-repeat;
 }
 
-.tour .close-sm {
+.tour-in-progress .close {
   height: 13px;
   width: 13px;
 }
 
-.tour .close-sm span {
+.tour-in-progress .close span {
   height: 13px;
   width: 13px;
   background: url("../images/wv-icons.png") -13px 0;
@@ -197,7 +197,7 @@
 /* .tour-in-progress */
 .tour-in-progress .modal {
   left: auto;
-  top: 410px;
+  top: 382px;
   overflow: visible;
 }
 
@@ -206,6 +206,7 @@
 }
 
 .tour-in-progress .modal-content {
+  min-width: 248px;
   border-radius: 8px 0 0 8px;
 }
 

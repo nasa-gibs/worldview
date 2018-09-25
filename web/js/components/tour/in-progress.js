@@ -3,125 +3,44 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 class ModalInProgress extends React.Component {
   render() {
+
     return (
       <div>
-        <Modal isOpen={this.props.modalInProgress} toggle={this.toggleInProgress} wrapClassName='tour tour-in-progress' className={this.props.className} backdrop={false}>
-          <ModalHeader toggle={this.toggle} charCode="">In Progress</ModalHeader>
+        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' wildfire'} backdrop={false}>
+          <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">Story Title<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
           <ModalBody>
-            <div className="tour-intro">
-              <p className="intro">
-                The NASA Worldview app provides a satellite's perspective of the planet as it
-                looks today and as it has in the past. Click an event below to analyze the event in
-                great detail within the application. These guides will walk you through new and
-                create ways to use Worldview. <a href="#" title="Start using Worldview">Start using Worldview <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
-              </p>
-            </div>
-            <div className="tour-box-container">
-              <div className="tour-box-row">
-                <a href="#" className="tour-box wildfire">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">
-                        Wildfire Event<br />
-                        Wildfire Event<br />
-                        Wildfire Event
-                      </h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" className="tour-box volcano">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">
-                        Volcano Event<br />
-                        Volcano Event
-                      </h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" className="tour-box snow">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">Snow Event</h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-              <div className="tour-box-row">
-                <a href="#" className="tour-box sea-and-lake-ice">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">Sea and Lake Ice Event</h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" className="tour-box iceberg">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">Iceberg Event</h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" className="tour-box water-color">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">Water Color Event</h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-              <div className="tour-box-row">
-                <a href="#" className="tour-box dust-and-haze">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">Dust and Haze Event</h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" className="tour-box severe-storm">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">Severe Storm Event</h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" className="tour-box man-made">
-                  <div className="tour-box-content">
-                    <div className="tour-box-header">
-                      <h3 className="tour-box-title">Man Made Event</h3>
-                    </div>
-                    <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
+            <p>An iceberg about the size of the
+            state of Delaware split off from
+            Antarctica's Larsen C ice shelf
+            between July 10 & July 12, 2017.</p>
+
+            <p>In this view, we can see a distinct
+            crack in the ice shelf. Note the date
+            in the timeline is on 2018 JUL 12.
+            Let’s change the date in the timeline
+            to 2018 JUL 10. Move either the
+            guitar pick to the left 2 steps or</p>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
+            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+            ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+            deserunt mollit anim id est laborum.</p>
           </ModalBody>
+          <ModalFooter>
+            <div className="step-container">
+              <a href="#" className={this.props.steps === 1 ? 'step-previous disabled' : 'step-previous'} aria-label="Previous" onClick={this.props.decreaseStep}>
+                <i className="fa fa-arrow-circle-left" aria-hidden="true"></i>
+              </a>
+              <div className="step-counter">
+                <p>Step <span className="step-current">{this.props.steps}</span>/<span className="step-total">{this.props.totalSteps}</span>
+                </p>
+              </div>
+              <a href="#" className={this.props.steps === this.props.totalSteps ? 'step-next disabled' : 'step-next'} aria-label="Next" onClick={this.props.incrementStep}>
+                <i className="fa fa-arrow-circle-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </ModalFooter>
         </Modal>
       </div>
     );
