@@ -1,0 +1,70 @@
+{
+  "id": "larsen_c_ice_shelf_iceberg_a68a_july_2017",
+  "title": "Larsen C Ice Shelf / Iceberg A68A - July 2017",
+  "description": "Explore the Larsen C Ice Shelf using different map projections, zoom
+  levels and layers. Use the event tab to quickly acess other events.",
+  "read-more-link": "https://earthdata.nasa.gov/larsen-c-ice-shelf-calving",
+  "steps": [
+    {
+      "id": "001",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step001.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2P2Jr56"
+    },
+    {
+      "id": "002",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step002.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2vFqJbY"
+    },
+    {
+      "id": "003",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step003.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2BdBvLQ"
+    },
+    {
+      "id": "004",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step004.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2B2CXjQ"
+    },
+    {
+      "id": "005",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step005.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2MH5A7H"
+    },
+    {
+      "id": "006",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step006.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2B3cB12"
+    },
+    {
+      "id": "007",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step007.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2vEvX7P"
+    },
+    {
+      "id": "008",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step008.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2vLWJLF"
+    },
+    {
+      "id": "009",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step009.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2B6T0wZ"
+    },
+    {
+      "id": "010",
+      "description": "metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step010.html",
+      "transistion-element": "",
+      "app-link": "https://go.nasa.gov/2vGTXHl"
+    }
+  ]
+
+}
