@@ -7,7 +7,11 @@ export function tourUi(models, ui, config) {
 
   var init = function() {
     self.reactComponent = ReactDOM.render(
-      React.createElement(Tour),
+      React.createElement(Tour, {
+        models: models,
+        ui: ui,
+        config: config
+      }),
       document.getElementById('wv-tour')
     );
   };

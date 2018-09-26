@@ -7,6 +7,9 @@ class Tour extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      models: this.props.models,
+      ui: this.props.ui,
+      config: this.props.config,
       modalStart: true,
       modalInProgress: false,
       modalComplete: false,
@@ -78,7 +81,7 @@ class Tour extends React.Component {
     return (
       <div>
         <TourStart modalStart={this.state.modalStart} toggleModalStart={this.toggleModalStart} toggleModalInProgress={this.toggleModalInProgress} toggleModalComplete={this.toggleModalComplete} startTour={this.startTour}></TourStart>
-        <TourInProgress modalInProgress={this.state.modalInProgress} toggleModalStart={this.toggleModalStart} toggleModalInProgress={this.toggleModalInProgress} toggleModalComplete={this.toggleModalComplete} startTour={this.startTour} steps={this.state.steps} totalSteps={this.state.totalSteps} incrementStep={this.incrementStep} decreaseStep={this.decreaseStep}></TourInProgress>
+        <TourInProgress models={this.state.models} config={this.state.config} ui={this.state.ui} modalInProgress={this.state.modalInProgress} toggleModalStart={this.toggleModalStart} toggleModalInProgress={this.toggleModalInProgress} toggleModalComplete={this.toggleModalComplete} startTour={this.startTour} steps={this.state.steps} totalSteps={this.state.totalSteps} incrementStep={this.incrementStep} decreaseStep={this.decreaseStep}></TourInProgress>
         <TourComplete modalComplete={this.state.modalComplete} toggleModalStart={this.toggleModalStart} toggleModalInProgress={this.toggleModalInProgress} toggleModalComplete={this.toggleModalComplete} restartTour={this.restartTour}></TourComplete>
       </div>
     );
