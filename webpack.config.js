@@ -4,13 +4,16 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 
-const devMode = process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'testing';
+const devMode =
+  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'testing';
 
 const pluginSystem = [
   new CleanWebpackPlugin(['web/build']),
@@ -21,15 +24,16 @@ const pluginSystem = [
     inject: false
   }),
   new webpack.ProvidePlugin({
-    '$': 'jquery',
-    'jQuery': 'jquery',
+    $: 'jquery',
+    jQuery: 'jquery',
     'window.jQuery': 'jquery',
     'window.$': 'jquery'
   }),
   new MiniCssExtractPlugin({
     filename: 'wv.css'
   }),
-  new WriteFilePlugin()
+  new WriteFilePlugin(),
+  new CopyWebpackPlugin([{ from: 'web/images', to: 'images' }])
 ];
 
 /* Conditional Plugin Management */
@@ -39,12 +43,12 @@ if (process.env.NODE_ENV === 'development') {
     new webpack.HotModuleReplacementPlugin(), // use path to module for development performance
     new webpack.NamedModulesPlugin()
   );
-};
+}
 
 // add bundle analzyer
 if (process.env.NODE_ENV === 'analyze') {
   pluginSystem.push(new BundleAnalyzerPlugin());
-};
+}
 
 // handle testing entry point and output file name
 let entryPoint = './web/js/main.js';
@@ -58,7 +62,8 @@ if (process.env.NODE_ENV === 'testing') {
 
 module.exports = {
   mode: devMode ? 'development' : 'production',
-  stats: { // reduce output text on build - remove for more verbose
+  stats: {
+    // reduce output text on build - remove for more verbose
     chunks: false,
     modules: false,
     children: false
@@ -119,20 +124,20 @@ module.exports = {
             compact: false // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
           }
         },
-        exclude: [
-          /\.test\.js$/,
-          /fixtures\.js$/
-        ]
+        exclude: [/\.test\.js$/, /fixtures\.js$/]
       },
       {
         test: require.resolve('jquery'), // expose globally for jQuery plugins
-        use: [{
-          loader: 'expose-loader',
-          options: 'jQuery'
-        }, {
-          loader: 'expose-loader',
-          options: '$'
-        }]
+        use: [
+          {
+            loader: 'expose-loader',
+            options: 'jQuery'
+          },
+          {
+            loader: 'expose-loader',
+            options: '$'
+          }
+        ]
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -161,7 +166,12 @@ module.exports = {
               plugins: [
                 require('autoprefixer')({
                   // handle browserlist restrictions
-                  'browsers': ['last 5 versions', 'not ie < 11', 'not edge < 15', '> 2%']
+                  browsers: [
+                    'last 5 versions',
+                    'not ie < 11',
+                    'not edge < 15',
+                    '> 2%'
+                  ]
                 })
               ]
             }
@@ -208,15 +218,17 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        use: [ {
-          loader: 'html-loader',
-          options: {
-            minimize: !devMode,
-            removeEmptyAttributes: !devMode,
-            sortAttributes: !devMode,
-            sortClassName: !devMode
+        use: [
+          {
+            loader: 'html-loader',
+            options: {
+              minimize: !devMode,
+              removeEmptyAttributes: !devMode,
+              sortAttributes: !devMode,
+              sortClassName: !devMode
+            }
           }
-        }]
+        ]
       }
     ]
   }

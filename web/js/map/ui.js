@@ -22,7 +22,6 @@ import OlInteractionDragPan from 'ol/interaction/DragPan';
 import OlInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import OlInteractionDragZoom from 'ol/interaction/DragZoom';
 import OlLayerGroup from 'ol/layer/Group';
-import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
 import { MapRotate } from './rotation';
 import { mapDateLineBuilder } from './datelinebuilder';
@@ -936,100 +935,11 @@ export function mapui(models, config) {
    * @todo move this component to another Location
    */
   var createMousePosSel = function(map, proj) {
-    var $map;
-    var mapId;
-    var $mousePosition;
-    var $latlonDD;
-    var $latlonDMS;
-    var $coordBtn;
-    var $coordWrapper;
-    var coordinateFormat;
     var hoverThrottle;
-    var extent;
-
-    // var timer = null;
-    // var isIntervalSet = false;
-
-    $map = $('#' + map.getTarget());
-    map = map || self.selected;
-    mapId = 'coords-' + proj.id;
-    extent = proj.maxExtent;
-
-    $mousePosition = $('<div></div>')
-      .attr('id', mapId)
-      .addClass('wv-coords-map wv-coords-map-btn');
-
-    /*
-     * Creates map events based on mouse position
-     *
-     * @function coordinateFormat
-     * @static
-     *
-     * @param {Array} source - Coordinates
-     * @param {String} format - units of coordinates
-     *
-     * @returns {void}
-     */
-    coordinateFormat = function(source, format, outsideExtent) {
-      var target, crs;
-      crs = models.proj.selected.crs;
-      if (outsideExtent) {
-        return crs;
-      }
-      target = olProj.transform(source, proj.crs, 'EPSG:4326');
-      return util.formatCoordinate(target, format) + ' ' + crs;
-    };
-
-    $map.append($mousePosition);
-
-    $latlonDD = $('<span></span>')
-      .attr('id', mapId + '-latlon-dd')
-      .attr('data-format', 'latlon-dd')
-      .addClass('map-coord');
-    $latlonDMS = $('<span></span>')
-      .attr('id', mapId + '-latlon-dms')
-      .attr('data-format', 'latlon-dms')
-      .addClass('map-coord');
-
-    if (util.getCoordinateFormat() === 'latlon-dd') {
-      $('div.map-coord').removeClass('latlon-selected');
-      $latlonDD.addClass('latlon-selected');
-    } else {
-      $('div.map-coord').removeClass('latlon-selected');
-      $latlonDMS.addClass('latlon-selected');
-    }
-    $coordBtn = $('<i></i>').addClass('coord-switch');
-
-    $coordWrapper = $('<div></div>').addClass('coord-btn');
-
-    $coordWrapper.append($coordBtn);
-
-    $mousePosition
-      .append($latlonDD)
-      .append($latlonDMS)
-      .append($coordWrapper)
-      .click(function() {
-        var $format = $(this).find('.latlon-selected');
-
-        if ($format.attr('data-format') === 'latlon-dd') {
-          $('span.map-coord').removeClass('latlon-selected');
-          $('span.map-coord[data-format="latlon-dms"]').addClass(
-            'latlon-selected'
-          );
-          util.setCoordinateFormat('latlon-dms');
-        } else {
-          $('span.map-coord').removeClass('latlon-selected');
-          $('span.map-coord[data-format="latlon-dd"]').addClass(
-            'latlon-selected'
-          );
-          util.setCoordinateFormat('latlon-dd');
-        }
-      });
 
     function onMouseMove(e) {
       var coords;
       var pixels;
-      var outside;
       if (compare && compare.dragging) return;
       // if mobile return
       if (util.browser.small) {
@@ -1045,9 +955,6 @@ export function mapui(models, config) {
       pixels = map.getEventPixel(e.originalEvent);
       coords = map.getCoordinateFromPixel(pixels);
       if (!coords) return;
-      if (!olExtent.containsCoordinate(extent, coords)) {
-        outside = true;
-      }
 
       if (Math.abs(coords[0]) > 180) {
         if (coords[0] > 0) {
@@ -1056,12 +963,6 @@ export function mapui(models, config) {
           coords[0] = coords[0] + 360;
         }
       }
-
-      $('#' + mapId).show();
-      $('#' + mapId + ' span.map-coord').each(function() {
-        var format = $(this).attr('data-format');
-        $(this).html(coordinateFormat(coords, format, outside));
-      });
 
       // setting a limit on running-data retrievel
       if (self.mapIsbeingDragged || util.browser.small) {
@@ -1080,15 +981,6 @@ export function mapui(models, config) {
       dataRunner.newPoint(pixels, map);
     }
     $(map.getViewport())
-      .mouseover(function(e) {
-        if (
-          $(e.relatedTarget).hasClass('map-coord') ||
-          $(e.relatedTarget).hasClass('coord-btn')
-        ) {
-          return;
-        }
-        $('#' + mapId).show();
-      })
       .mouseout(function(e) {
         if (
           $(e.relatedTarget).hasClass('map-coord') ||
@@ -1096,7 +988,7 @@ export function mapui(models, config) {
         ) {
           return;
         }
-        $('#' + mapId).hide();
+        // $('#' + mapId).hide();
         hoverThrottle.cancel();
         dataRunner.clearAll();
       })
