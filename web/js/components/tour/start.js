@@ -5,6 +5,7 @@ class ModalStart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: '',
       description: '',
       isLoading: false,
       error: null
@@ -23,15 +24,16 @@ class ModalStart extends React.Component {
         throw new Error('Something went wrong ...');
       }
     })
-      .then(data => this.setState({ description: data[0].description, isLoading: false }))
+      .then(data => this.setState({ data: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
 
   render() {
-    var { description, isLoading, error } = this.state;
+    var { data, description, isLoading, error } = this.state;
 
     if (isLoading) description = 'Loading ..';
     if (error) description = error.message;
+    if (data) description = data[0].description;
 
     return (
       <div>
