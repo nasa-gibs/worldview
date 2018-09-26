@@ -1,7 +1,7 @@
 import React from 'react';
-import TourStart from './start';
-import TourInProgress from './in-progress';
-import TourComplete from './complete';
+import TourStart from './modal-start';
+import TourInProgress from './modal-in-progress';
+import TourComplete from './modal-complete';
 
 class Tour extends React.Component {
   constructor(props) {
@@ -10,7 +10,7 @@ class Tour extends React.Component {
       models: this.props.models,
       ui: this.props.ui,
       config: this.props.config,
-      data: [],
+      data: null,
       modalStart: true,
       modalInProgress: false,
       modalComplete: false,
@@ -36,7 +36,6 @@ class Tour extends React.Component {
 
   getStoriesJSON() {
     this.setState({ isLoading: true });
-
     fetch('../stories/stories.json', {
       method: 'get'
     }).then(response => {
@@ -71,8 +70,9 @@ class Tour extends React.Component {
     });
   }
 
-  startTour(e) {
-    e.preventDefault();
+  startTour(event, color) {
+    event.preventDefault();
+    console.log(color);
     this.setState({
       steps: 1,
       modalStart: false,
@@ -107,6 +107,7 @@ class Tour extends React.Component {
     return (
       <div>
         <TourStart
+          data={this.state.data}
           modalStart={this.state.modalStart}
           toggleModalStart={this.toggleModalStart}
           toggleModalInProgress={this.toggleModalInProgress}
