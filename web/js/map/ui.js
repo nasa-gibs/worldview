@@ -307,7 +307,8 @@ export function mapui(models, config) {
             group: arr[0]
           });
         }),
-      group: arr[0]
+      group: arr[0],
+      date: models.date[arr[1]]
     });
   };
   /*
