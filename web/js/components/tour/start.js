@@ -2,17 +2,37 @@ import React from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 class ModalStart extends React.Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      description: '',
+      isLoading: false,
+      error: null
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ isLoading: true });
+
     fetch('../stories/stories.json', {
       method: 'get'
-    }).then(function(response) {
-      return response.json();
-    }).then(function(myJson) {
-      var obj = JSON.stringify(myJson);
-      console.log(JSON.parse(obj));
-    }).catch(function(err) {
-      console.log(err);
-    });
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Something went wrong ...');
+      }
+    })
+      .then(data => this.setState({ description: data[0].description, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
+  }
+
+  render() {
+    var { description, isLoading, error } = this.state;
+
+    if (isLoading) description = 'Loading ..';
+    if (error) description = error.message;
+
     return (
       <div>
         <Modal isOpen={this.props.modalStart} toggle={this.props.toggleModalStart} wrapClassName='tour tour-start' className={this.props.className} backdrop={true}>
@@ -38,7 +58,7 @@ class ModalStart extends React.Component {
                       </h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
@@ -51,7 +71,7 @@ class ModalStart extends React.Component {
                       </h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
@@ -61,7 +81,7 @@ class ModalStart extends React.Component {
                       <h3 className="tour-box-title">Snow Event</h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
@@ -73,7 +93,7 @@ class ModalStart extends React.Component {
                       <h3 className="tour-box-title">Sea and Lake Ice Event</h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
@@ -83,7 +103,7 @@ class ModalStart extends React.Component {
                       <h3 className="tour-box-title">Iceberg Event</h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
@@ -93,7 +113,7 @@ class ModalStart extends React.Component {
                       <h3 className="tour-box-title">Water Color Event</h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
@@ -105,7 +125,7 @@ class ModalStart extends React.Component {
                       <h3 className="tour-box-title">Dust and Haze Event</h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
@@ -115,7 +135,7 @@ class ModalStart extends React.Component {
                       <h3 className="tour-box-title">Severe Storm Event</h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
@@ -125,7 +145,7 @@ class ModalStart extends React.Component {
                       <h3 className="tour-box-title">Man Made Event</h3>
                     </div>
                     <div className="tour-box-description">
-                      <p>Lorem ipsum dolor sit amet, consect adipiscing elit. Nam eget quam id turpis sceler isque faucibo. Etiam faucibo nisi dignissim consequat rut. Nullam rhoncus placerat posuere. Lorem ipsum dolor sit amet.</p>
+                      <p>{description}</p>
                     </div>
                   </div>
                 </a>
