@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Steps from './widget-steps';
 import util from '../../util/util';
 
 class ModalInProgress extends React.Component {
@@ -19,25 +20,24 @@ class ModalInProgress extends React.Component {
 
   componentDidMount() {
     let step = this.props.steps;
-    step = step.toString().padStart(3, '0');
     this.fetchMetadata(step);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.steps !== this.props.steps) {
       let step = nextProps.steps;
-      step = step.toString().padStart(3, '0');
       this.fetchMetadata(step);
       this.stepLink(step);
     }
   }
 
   fetchMetadata(step) {
+    step = step.toString().padStart(3, '0');
     this.setState({ isLoading: true });
 
     var { origin, pathname } = window.location;
     var errorMessage = '<p>There was an error loading this description.</p>';
-    var uri = `${origin}${pathname}stories/metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step${step}.html`;
+    var uri = `${origin}${pathname}stories/larsen_c_ice_shelf_iceberg_a68a_july_2017/step${step}.html`;
     fetch(uri)
       .then(res => (res.ok ? res.text() : errorMessage))
       .then(body => {
@@ -52,9 +52,9 @@ class ModalInProgress extends React.Component {
   }
 
   stepLink(step) {
-    var models, config, ui, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
+    var models, config, ui, stepLink, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
     step = (step - 1).toString().padStart(0, '0');
-    var stepLink = this.props.data[0].steps[`${step}`].stepLink;
+    stepLink = this.props.data[0].steps[`${step}`].stepLink;
     models = this.props.models;
     config = this.props.config;
     ui = this.props.ui;
@@ -141,18 +141,7 @@ class ModalInProgress extends React.Component {
             <div dangerouslySetInnerHTML={{ __html: description }} />
           </ModalBody>
           <ModalFooter>
-            <div className="step-container">
-              <a href="#" className={this.props.steps === 1 ? 'step-previous disabled' : 'step-previous'} aria-label="Previous" onClick={this.props.decreaseStep}>
-                <i className="fa fa-arrow-circle-left" aria-hidden="true"></i>
-              </a>
-              <div className="step-counter">
-                <p>Step <span className="step-current">{this.props.steps}</span>/<span className="step-total">{this.props.totalSteps + 1}</span>
-                </p>
-              </div>
-              <a href="#" className={this.props.steps === this.props.totalSteps + 1 ? 'step-next disabled' : 'step-next'} aria-label="Next" onClick={this.props.incrementStep}>
-                <i className="fa fa-arrow-circle-right" aria-hidden="true"></i>
-              </a>
-            </div>
+            <Steps steps={this.props.steps} totalSteps={this.props.totalSteps} decreaseStep={this.props.decreaseStep} incrementStep={this.props.incrementStep}></Steps>
           </ModalFooter>
         </Modal>
       </div>
