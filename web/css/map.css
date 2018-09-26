@@ -144,7 +144,6 @@
   border: none;
   border-radius: 0;
   background: none;
-  display: none;
   cursor: pointer;
   height: 35px;
   padding: 0 0 0 5px;
@@ -164,7 +163,6 @@
 }
 
 .wv-coords-map span.map-coord {
-  display: none !important;
   line-height: 35px;
   float: left;
   height: 35px;
@@ -209,3 +207,4 @@
   background: url("../images/map/latlon.png") no-repeat;
   background-position: -14px;
 }
+

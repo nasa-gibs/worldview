@@ -951,14 +951,14 @@ export default (function (self) {
       let sdegrees = self.pad(degrees, width, ' ');
       let sminutes = self.pad(minutes, 2, '0');
       let sseconds = self.pad(seconds, 2, '0');
-      return sdegrees + '&deg;' + sminutes + '\'' + sseconds + '"' + sign;
+      return sdegrees + '°' + sminutes + '\'' + sseconds + '"' + sign;
     } else {
       let sdegrees = self.pad(degrees, width, ' ');
       // toFixed rounds and to prevent seeing 60.000, get it out to
       // four digits and then chop off the last one
       let sminutes = self.pad(fminutes.toFixed(4), 7, '0');
       sminutes = sminutes.substring(0, sminutes.length - 1);
-      return sdegrees + '&deg;' + sminutes + '\'' + sign;
+      return sdegrees + '°' + sminutes + '\'' + sign;
     }
   };
 
@@ -984,11 +984,11 @@ export default (function (self) {
       return self.formatDMS(coord[1], 'latitude') + ', ' +
         self.formatDMS(coord[0], 'longitude');
     } else if (type === 'latlon-dm') {
-      return self.formatDMS(coord[0], 'latitude') + ', ' +
-        self.formatDMS(coord[0], 'longitude');
+      return self.formatDM(coord[1], 'latitude') + ', ' +
+        self.formatDM(coord[0], 'longitude');
     } else {
-      return coord[1].toFixed(4) + '&deg;, ' +
-        coord[0].toFixed(4) + '&deg;';
+      return coord[1].toFixed(4) + '°, ' +
+        coord[0].toFixed(4) + '°';
     }
   };
 
