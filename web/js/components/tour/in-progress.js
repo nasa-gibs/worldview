@@ -5,25 +5,56 @@ import util from '../../util/util';
 class ModalInProgress extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      title: 'Story Title',
+      desciption: '',
+      metaLoaded: false,
+      isLoading: false,
+      error: null
+    };
 
-    this.appLink = this.appLink.bind(this);
+    this.fetchMetadata = this.fetchMetadata.bind(this);
+    this.stepLink = this.stepLink.bind(this);
   }
 
-  // appLink(url) {
-  //   var events = util.events();
-  //   if (util.browser.history) {
-  //     window.history.pushState(
-  //       '',
-  //       '@OFFICIAL_NAME@',
-  //       '?' + 'p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875'
-  //     );
-  //     // window.location.reload();
-  //     events.trigger('update');
-  //   }
-  // }
-  appLink(url) {
-    var models, config, ui, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
+  componentDidMount() {
+    let step = this.props.steps;
+    step = step.toString().padStart(3, '0');
+    this.fetchMetadata(step);
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.steps !== this.props.steps) {
+      let step = nextProps.steps;
+      step = step.toString().padStart(3, '0');
+      this.fetchMetadata(step);
+      this.stepLink(step);
+    }
+  }
+
+  fetchMetadata(step) {
+    this.setState({ isLoading: true });
+
+    var { origin, pathname } = window.location;
+    var errorMessage = '<p>There was an error loading this description.</p>';
+    var uri = `${origin}${pathname}stories/metadata/larsen_c_ice_shelf_iceberg_a68a_july_2017/step${step}.html`;
+    fetch(uri)
+      .then(res => (res.ok ? res.text() : errorMessage))
+      .then(body => {
+        // Check that we have a metadata html snippet, rather than a fully
+        // formed HTML file. Also avoid executing any script or style tags.
+        var isMetadataSnippet = !body.match(
+          /<(head|body|html|style|script)[^>]*>/i
+        );
+        let description = isMetadataSnippet ? body : errorMessage;
+        this.setState({ description: description, isLoading: false });
+      }).catch(error => this.setState({ error, isLoading: false }));
+  }
+
+  stepLink(step) {
+    var models, config, ui, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
+    step = (step - 1).toString().padStart(0, '0');
+    var stepLink = this.props.data[0].steps[`${step}`].stepLink;
     models = this.props.models;
     config = this.props.config;
     ui = this.props.ui;
@@ -34,11 +65,11 @@ class ModalInProgress extends React.Component {
       window.history.pushState(
         '',
         '@OFFICIAL_NAME@',
-        '?' + '?p=geographic&l=MODIS_Terra_CorrectedReflectance_TrueColor(hidden),NDH_Drought_Hazard_Frequency_Distribution_1980-2000&t=2017-09-12-T00%3A00%3A00Z&z=3&v=-92.97100941425803,-120.65365504255328,66.357115585742,5.998701948972162'
+        '?' + stepLink
       );
     }
     state = util.fromQueryString(location.search);
-    console.log(state);
+    // console.log(state);
     comparisonOn = state.ca;
     timeA = state.t;
     timeB = state.t1;
@@ -65,7 +96,12 @@ class ModalInProgress extends React.Component {
     // Turn string of layersA into an array
     var layersAArray = layersA.split(',');
 
-    // Remove layers in the list first
+    // Set current layers visible
+    models.layers[layerString].forEach(function(layer) {
+      models.layers.setVisibility(layer.id, false, layerString);
+    });
+
+    // Remove layers in the list
     models.layers[layerString].forEach(function(layer) {
       models.layers.remove(layer.id, false, layerString);
     });
@@ -89,12 +125,20 @@ class ModalInProgress extends React.Component {
   }
 
   render() {
+    var { description, metaLoaded } = this.state;
+
+    var modalStarted = this.props.modalInProgress;
+    if (modalStarted && !metaLoaded) {
+      this.setState({ metaLoaded: true });
+      this.stepLink(1);
+    }
+
     return (
       <div>
-        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' wildfire'} backdrop={false}>
-          <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">Story Title<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
+        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' iceberg'} backdrop={false}>
+          <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.state.title}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
           <ModalBody>
-
+            <div dangerouslySetInnerHTML={{ __html: description }} />
           </ModalBody>
           <ModalFooter>
             <div className="step-container">
@@ -102,10 +146,10 @@ class ModalInProgress extends React.Component {
                 <i className="fa fa-arrow-circle-left" aria-hidden="true"></i>
               </a>
               <div className="step-counter">
-                <p>Step <span className="step-current">{this.props.steps}</span>/<span className="step-total">{this.props.totalSteps}</span>
+                <p>Step <span className="step-current">{this.props.steps}</span>/<span className="step-total">{this.props.totalSteps + 1}</span>
                 </p>
               </div>
-              <a href="#" className={this.props.steps === this.props.totalSteps ? 'step-next disabled' : 'step-next'} aria-label="Next" onClick={this.appLink}>
+              <a href="#" className={this.props.steps === this.props.totalSteps + 1 ? 'step-next disabled' : 'step-next'} aria-label="Next" onClick={this.props.incrementStep}>
                 <i className="fa fa-arrow-circle-right" aria-hidden="true"></i>
               </a>
             </div>

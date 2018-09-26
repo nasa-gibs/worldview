@@ -354,7 +354,7 @@
 .tour-in-progress .modal-body {
   color: #fff;
   padding: 16px 20px;
-  max-height: 248px;
+  height: 248px;
   overflow-y: scroll;
   border-bottom: 2px solid #fff;
 }
@@ -364,6 +364,10 @@
   line-height: 20px;
   font-weight: 300;
   margin-bottom: 16px;
+}
+
+.tour-in-progress .modal-body strong {
+  font-weight: 600;
 }
 
 .tour-in-progress .modal-footer {
