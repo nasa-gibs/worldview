@@ -4,8 +4,11 @@ RUN yum install -y epel-release && \
     yum install -y https://centos7.iuscommunity.org/ius-release.rpm && \
     yum install -y \
         "@Development Tools" \
+        cairo-devel \
         firefox \
+        giflib-devel \
         httpd \
+        libjpeg-turbo-devel \
         java-1.8.0-openjdk \
         python27 \
         python2-pip \
