@@ -27,26 +27,19 @@ class Tour extends React.Component {
     this.restartTour = this.restartTour.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
-    this.getStoriesJSON = this.getStoriesJSON.bind(this);
   }
 
-  componentDidMount() {
-    this.getStoriesJSON();
-  }
-
-  getStoriesJSON() {
-    this.setState({ isLoading: true });
-    fetch('../stories/stories.json', {
-      method: 'get'
-    }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Something went wrong ...');
+  async componentDidMount() {
+    try {
+      const response = await fetch('../stories/stories.json');
+      if (!response.ok) {
+        throw Error(response.statusText);
       }
-    })
-      .then(data => { this.setState({ data: data, isLoading: false }); })
-      .catch(error => { this.setState({ error, isLoading: false }); });
+      const json = await response.json();
+      this.setState({ data: json });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   toggleModalStart(e) {
