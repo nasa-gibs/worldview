@@ -308,7 +308,7 @@ export function mapui(models, config) {
           });
         }),
       group: arr[0],
-      date: models.date[arr[1]]
+      date: arr[1]
     });
   };
   /*
@@ -357,7 +357,7 @@ export function mapui(models, config) {
             renderable = layersModel.isRenderable(
               subLayer.wv.id,
               layersModel[group],
-              layer.get('date')
+              models.date[layer.get('date')]
             );
             subLayer.setVisible(renderable);
           }
