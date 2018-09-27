@@ -19,25 +19,28 @@ class ModalInProgress extends React.Component {
   }
 
   componentDidMount() {
-    let step = this.props.steps;
-    this.fetchMetadata(step);
+    var tourId = this.props.tourId;
+    var stepIndex = this.props.steps;
+    this.fetchMetadata(tourId, stepIndex);
   }
 
   componentWillReceiveProps(nextProps) {
+    var tourIndex = this.props.tourIndex;
+    var tourId = this.props.tourId;
     if (nextProps.steps !== this.props.steps) {
-      let step = nextProps.steps;
-      this.fetchMetadata(step);
-      this.stepLink(step);
+      var stepIndex = nextProps.steps;
+      this.fetchMetadata(tourId, stepIndex);
+      this.stepLink(tourIndex, stepIndex);
     }
   }
 
-  fetchMetadata(step) {
-    step = step.toString().padStart(3, '0');
+  fetchMetadata(tourId, stepIndex) {
+    stepIndex = stepIndex.toString().padStart(3, '0');
     this.setState({ isLoading: true });
 
     var { origin, pathname } = window.location;
     var errorMessage = '<p>There was an error loading this description.</p>';
-    var uri = `${origin}${pathname}stories/larsen_c_ice_shelf_iceberg_a68a_july_2017/step${step}.html`;
+    var uri = `${origin}${pathname}stories/${tourId}/step${stepIndex}.html`;
     fetch(uri)
       .then(res => (res.ok ? res.text() : errorMessage))
       .then(body => {
@@ -51,10 +54,10 @@ class ModalInProgress extends React.Component {
       }).catch(error => this.setState({ error, isLoading: false }));
   }
 
-  stepLink(step) {
+  stepLink(tourIndex, stepIndex) {
     var models, config, ui, stepLink, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
-    step = (step - 1).toString().padStart(0, '0');
-    stepLink = this.props.data[0].steps[`${step}`].stepLink;
+    stepIndex = (stepIndex - 1).toString().padStart(0, '0');
+    stepLink = this.props.tourSteps[`${stepIndex}`].stepLink;
     models = this.props.models;
     config = this.props.config;
     ui = this.props.ui;
@@ -69,7 +72,6 @@ class ModalInProgress extends React.Component {
       );
     }
     state = util.fromQueryString(location.search);
-    // console.log(state);
     comparisonOn = state.ca;
     timeA = state.t;
     timeB = state.t1;
@@ -126,17 +128,17 @@ class ModalInProgress extends React.Component {
 
   render() {
     var { description, metaLoaded } = this.state;
-
+    var tourIndex = this.props.tourIndex;
     var modalStarted = this.props.modalInProgress;
     if (modalStarted && !metaLoaded) {
       this.setState({ metaLoaded: true });
-      this.stepLink(1);
+      this.stepLink(tourIndex, 1);
     }
 
     return (
       <div>
-        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' iceberg'} backdrop={false}>
-          <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.state.title}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
+        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' ' + this.props.tourType} backdrop={false}>
+          <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.props.tourTitle}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
           <ModalBody>
             <div dangerouslySetInnerHTML={{ __html: description }} />
           </ModalBody>

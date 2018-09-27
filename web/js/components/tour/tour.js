@@ -17,7 +17,8 @@ class Tour extends React.Component {
       steps: 1,
       totalSteps: 10,
       isLoading: false,
-      error: null
+      error: null,
+      tourIndex: 0
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
@@ -29,7 +30,7 @@ class Tour extends React.Component {
     this.decreaseStep = this.decreaseStep.bind(this);
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     try {
       const response = await fetch('../stories/stories.json');
       if (!response.ok) {
@@ -63,11 +64,11 @@ class Tour extends React.Component {
     });
   }
 
-  startTour(event, color) {
-    event.preventDefault();
-    console.log(color);
+  startTour(e, tourIndex) {
+    e.preventDefault();
     this.setState({
       steps: 1,
+      tourIndex: tourIndex,
       modalStart: false,
       modalInProgress: true,
       modalComplete: false
@@ -97,41 +98,50 @@ class Tour extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <TourStart
-          data={this.state.data}
-          modalStart={this.state.modalStart}
-          toggleModalStart={this.toggleModalStart}
-          toggleModalInProgress={this.toggleModalInProgress}
-          toggleModalComplete={this.toggleModalComplete}
-          startTour={this.startTour}
-        ></TourStart>
+    if (this.state.data) {
+      return (
+        <div>
+          <TourStart
+            data={this.state.data}
+            modalStart={this.state.modalStart}
+            toggleModalStart={this.toggleModalStart}
+            toggleModalInProgress={this.toggleModalInProgress}
+            toggleModalComplete={this.toggleModalComplete}
+            startTour={this.startTour}
+          ></TourStart>
 
-        <TourInProgress
-          models={this.state.models}
-          config={this.state.config}
-          ui={this.state.ui}
-          data={this.state.data}
-          modalInProgress={this.state.modalInProgress}
-          toggleModalStart={this.toggleModalStart}
-          toggleModalInProgress={this.toggleModalInProgress}
-          toggleModalComplete={this.toggleModalComplete}
-          startTour={this.startTour} steps={this.state.steps}
-          totalSteps={this.state.totalSteps}
-          incrementStep={this.incrementStep}
-          decreaseStep={this.decreaseStep}
-        ></TourInProgress>
+          <TourInProgress
+            models={this.state.models}
+            config={this.state.config}
+            ui={this.state.ui}
+            modalInProgress={this.state.modalInProgress}
+            toggleModalStart={this.toggleModalStart}
+            toggleModalInProgress={this.toggleModalInProgress}
+            toggleModalComplete={this.toggleModalComplete}
+            startTour={this.startTour}
+            steps={this.state.steps}
+            totalSteps={this.state.totalSteps}
+            incrementStep={this.incrementStep}
+            decreaseStep={this.decreaseStep}
+            tourIndex={this.state.tourIndex}
+            tourId={this.state.data[this.state.tourIndex].id}
+            tourType={this.state.data[this.state.tourIndex].type}
+            tourTitle={this.state.data[this.state.tourIndex].title}
+            tourSteps={this.state.data[this.state.tourIndex].steps}
+          ></TourInProgress>
 
-        <TourComplete
-          modalComplete={this.state.modalComplete}
-          toggleModalStart={this.toggleModalStart}
-          toggleModalInProgress={this.toggleModalInProgress}
-          toggleModalComplete={this.toggleModalComplete}
-          restartTour={this.restartTour}
-        ></TourComplete>
-      </div>
-    );
+          <TourComplete
+            modalComplete={this.state.modalComplete}
+            toggleModalStart={this.toggleModalStart}
+            toggleModalInProgress={this.toggleModalInProgress}
+            toggleModalComplete={this.toggleModalComplete}
+            restartTour={this.restartTour}
+          ></TourComplete>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
