@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Coordinates from './coordinates';
 import util from '../../util/util';
-import olProj from 'ol/proj';
+import { transform } from 'ol/proj';
 import throttle from 'lodash/throttle';
 
 class OlCoordinates extends React.Component {
@@ -17,27 +17,15 @@ class OlCoordinates extends React.Component {
     this.mouseMove = throttle(this.mouseMove, 100).bind(this);
     this.mouseOut = this.mouseOut.bind(this);
     this.changeFormat = this.changeFormat.bind(this);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.maps && prevProps.maps !== this.props.maps) {
-      this.registerMouseListeners();
-    }
+    this.registerMouseListeners();
   }
 
   registerMouseListeners() {
-    Object.values(this.props.maps).forEach(map => {
-      let target = map.getTarget();
-      let mapElement = document.getElementById(target);
-      let crs = map.getView().getProjection().getCode();
-      mapElement.addEventListener('mousemove', event =>
-        this.mouseMove(map, crs, event)
-      );
-      mapElement.addEventListener('mouseout', this.mouseOut);
-    });
+    this.props.mouseEvents.on('mousemove', this.mouseMove);
+    this.props.mouseEvents.on('mouseout', this.mouseOut);
   }
 
-  mouseMove(map, crs, event) {
+  mouseMove(event, map, crs) {
     let pixels = map.getEventPixel(event);
     let coord = map.getCoordinateFromPixel(pixels);
     if (!coord) {
@@ -45,7 +33,7 @@ class OlCoordinates extends React.Component {
       return;
     }
 
-    let pcoord = olProj.transform(coord, crs, 'EPSG:4326');
+    let pcoord = transform(coord, crs, 'EPSG:4326');
     let [lon, lat] = pcoord;
     if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
       this.clearCoord();
@@ -84,23 +72,25 @@ class OlCoordinates extends React.Component {
   render() {
     // if mobile return
     if (util.browser.small) {
-      return;
+      return null;
     }
 
     return (
-      <Coordinates
-        format={this.state.format}
-        latitude={this.state.latitude}
-        longitude={this.state.longitude}
-        crs={this.state.crs}
-        onFormatChange={this.changeFormat}
-      />
+      <div>
+        <Coordinates
+          format={this.state.format}
+          latitude={this.state.latitude}
+          longitude={this.state.longitude}
+          crs={this.state.crs}
+          onFormatChange={this.changeFormat}
+        />
+      </div>
     );
   }
 }
 
 OlCoordinates.propTypes = {
-  maps: PropTypes.object
+  mouseEvents: PropTypes.object.isRequired
 };
 
 export default OlCoordinates;

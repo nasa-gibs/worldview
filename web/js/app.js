@@ -158,6 +158,7 @@ class App extends React.Component {
     this.state = {
       maps: null
     };
+    this.mapMouseEvents = util.events();
     this.onload();
   }
 
@@ -272,13 +273,13 @@ class App extends React.Component {
             </svg>
           </div>
         </section>
-        <OlCoordinates maps={this.state.maps} />
+        <OlCoordinates mouseEvents={this.mapMouseEvents} />
       </div>
     );
   }
 
   onload() {
-    const self = this;
+    var self = this;
     var errors = [];
     var requirements;
     var startTime;
@@ -406,9 +407,8 @@ class App extends React.Component {
         Precache: mapPrecacheTile
       };
       ui.map = mapui(models, config, mapComponents);
-      self.setState({
-        maps: ui.map.proj
-      });
+      registerMapMouseHandlers(ui.map.proj, self.mapMouseEvents);
+
       ui.map.animate = mapAnimate(models, config, ui);
       if (config.features.animation) {
         models.anim = animationModel(models, config);
@@ -574,6 +574,19 @@ class App extends React.Component {
     };
     util.wrap(main)();
   }
+}
+
+function registerMapMouseHandlers(maps, events) {
+  Object.values(maps).forEach((map) => {
+    let element = map.getTargetElement();
+    let crs = map.getView().getProjection().getCode();
+    element.addEventListener('mousemove', event => {
+      events.trigger('mousemove', event, map, crs);
+    });
+    element.addEventListener('mouseout', event => {
+      events.trigger('mouseout', event, map, crs);
+    });
+  });
 }
 
 export default App;
