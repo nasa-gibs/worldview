@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formats latlon-dd 1`] = `
+<div
+  className="wv-coords-map wv-coords-map-btn"
+  onClick={[Function]}
+>
+  <span
+    className="map-coord"
+  >
+    0.0000°, 0.0000°
+     
+    EPSG:4326
+  </span>
+  <div
+    className="coord-btn"
+  >
+    <i
+      className="coord-switch"
+    />
+  </div>
+</div>
+`;
+
+exports[`formats latlon-dm 1`] = `
+<div
+  className="wv-coords-map wv-coords-map-btn"
+  onClick={[Function]}
+>
+  <span
+    className="map-coord"
+  >
+     0°00.000'N,   0°00.000'E
+     
+    EPSG:4326
+  </span>
+  <div
+    className="coord-btn"
+  >
+    <i
+      className="coord-switch"
+    />
+  </div>
+</div>
+`;
+
+exports[`formats latlon-dms 1`] = `
+<div
+  className="wv-coords-map wv-coords-map-btn"
+  onClick={[Function]}
+>
+  <span
+    className="map-coord"
+  >
+     0°00'00"N,   0°00'00"E
+     
+    EPSG:4326
+  </span>
+  <div
+    className="coord-btn"
+  >
+    <i
+      className="coord-switch"
+    />
+  </div>
+</div>
+`;

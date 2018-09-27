@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mouse move 1`] = `
+<div>
+  <div
+    className="wv-coords-map wv-coords-map-btn"
+    onClick={[Function]}
+  >
+    <span
+      className="map-coord"
+    >
+      10.0000°, 20.0000°
+       
+      EPSG:4326
+    </span>
+    <div
+      className="coord-btn"
+    >
+      <i
+        className="coord-switch"
+      />
+    </div>
+  </div>
+</div>
+`;

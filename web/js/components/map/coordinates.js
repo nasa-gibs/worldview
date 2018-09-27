@@ -15,7 +15,7 @@ class Coordinates extends React.Component {
     this.changeFormat = this.changeFormat.bind(this);
   }
 
-  changeFormat(event) {
+  changeFormat() {
     let thisFormat = this.props.format;
     let nextFormat = formatOrder[thisFormat];
     this.props.onFormatChange(nextFormat);
