@@ -4,7 +4,7 @@
     "type": "severe-storm",
     "title": "Hurricane Florence (September 2018)",
     "description": "Hurricane Florence wrecked havoc on the Carolinas. Use the A|B tool to see a before and after of the coast.",
-    "backgroundImage": "",
+    "backgroundImage": "background.png",
     "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
@@ -73,8 +73,8 @@
   {
     "id": "california_british_columbia_wildfires_summer_2018",
     "type": "wildfire",
-    "title": "California Wildfires & British Columbia Wildfires (Summer 2018)",
-    "description": "Explore the Larsen C Ice Shelf using different map projections, zoom levels and layers. Use the event tab to quickly acess other events.",
+    "title": "California & British Columbia Wildfires (Summer 2018)",
+    "description": "Use different layers to look at the wildfires on the west North American coasts. See how smoke from the wildfire travels eastward.",
     "backgroundImage": "background.png",
     "backgroundImageHover": "",
     "readMoreLink": "",
@@ -217,7 +217,7 @@
     "type": "dust-and-haze",
     "title": "Saharan Dust Storms (2018)",
     "description": "Did you know dust from the African Sahara can travel across the ocean to North America? See for yourself!",
-    "backgroundImage": "",
+    "backgroundImage": "background.png",
     "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
@@ -359,7 +359,7 @@
     "type": "severe-storm",
     "title": "Hurricane Maria (September 2017)",
     "description": "Hurricane Maria devastated Puerto Rico. Follow the storm as it forms from a tropical depression to a category 4 hurricane.",
-    "backgroundImage": "",
+    "backgroundImage": "background.png",
     "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
@@ -430,6 +430,8 @@
     "type": "iceberg",
     "title": "Larsen C Ice Shelf / Iceberg A68A - July 2017",
     "description": "Explore the Larsen C Ice Shelf using different map projections, zoom levels and layers. Use the event tab to quickly acess other events.",
+    "backgroundImage": "background.png",
+    "backgroundImageHover": "",
     "readMoreLink": "https://earthdata.nasa.gov/larsen-c-ice-shelf-calving",
     "steps": [
       {
@@ -499,7 +501,7 @@
     "type": "default",
     "title": "Explore The Earth at Night (2012 - 2016)",
     "description": "Use various layers to explore regions of the earth at night!",
-    "backgroundImage": "",
+    "backgroundImage": "background.png",
     "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
@@ -570,7 +572,7 @@
     "type": "man-made",
     "title": "Shrinking Aral Sea (2001 - 2018)",
     "description": "See how decades of water diversion, coupled with regional droughts, have caused the Aral Sea basic to dry out.",
-    "backgroundImage": "",
+    "backgroundImage": "background.png",
     "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
