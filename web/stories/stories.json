@@ -4,65 +4,67 @@
     "type": "severe-storm",
     "title": "Hurricane Florence (September 2018)",
     "description": "Hurricane Florence wrecked havoc on the Carolinas. Use the A|B tool to see a before and after of the coast.",
+    "backgroundImage": "",
+    "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
       {
         "id": "001",
-        "description": "metadata/hurricane_florence_september_2018/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "metadata/hurricane_florence_september_2018/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "metadata/hurricane_florence_september_2018/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "metadata/hurricane_florence_september_2018/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "metadata/hurricane_florence_september_2018/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "metadata/hurricane_florence_september_2018/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "metadata/hurricane_florence_september_2018/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "metadata/hurricane_florence_september_2018/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "metadata/hurricane_florence_september_2018/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "metadata/hurricane_florence_september_2018/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
@@ -73,65 +75,67 @@
     "type": "wildfire",
     "title": "California Wildfires & British Columbia Wildfires (Summer 2018)",
     "description": "Explore the Larsen C Ice Shelf using different map projections, zoom levels and layers. Use the event tab to quickly acess other events.",
+    "backgroundImage": "",
+    "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
       {
         "id": "001",
-        "description": "california_british_columbia_wildfires_summer_2018/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "california_british_columbia_wildfires_summer_2018/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "california_british_columbia_wildfires_summer_2018/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "california_british_columbia_wildfires_summer_2018/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "california_british_columbia_wildfires_summer_2018/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "california_british_columbia_wildfires_summer_2018/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "california_british_columbia_wildfires_summer_2018/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "california_british_columbia_wildfires_summer_2018/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "california_british_columbia_wildfires_summer_2018/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "california_british_columbia_wildfires_summer_2018/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
@@ -142,65 +146,67 @@
     "type": "snow",
     "title": "Snow in Lesotho, South Africa (August 2018)",
     "description": "Snow in South Africa is a rare event. Use the zoom tool and percipitation layers to look at this event.",
+    "backgroundImage": "background.png",
+    "backgroundImageHover": "backgroundHover.gif",
     "readMoreLink": "",
     "steps": [
       {
         "id": "001",
-        "description": "snow_in_south_africa_august_2018/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "snow_in_south_africa_august_2018/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "snow_in_south_africa_august_2018/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "snow_in_south_africa_august_2018/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "snow_in_south_africa_august_2018/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "snow_in_south_africa_august_2018/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "snow_in_south_africa_august_2018/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "snow_in_south_africa_august_2018/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "snow_in_south_africa_august_2018/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "snow_in_south_africa_august_2018/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
@@ -211,65 +217,67 @@
     "type": "dust-and-haze",
     "title": "Saharan Dust Storms (2018)",
     "description": "Did you know dust from the African Sahara can travel across the ocean to North America? See for yourself!",
+    "backgroundImage": "",
+    "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
       {
         "id": "001",
-        "description": "saharan_dust_storms_2018/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "saharan_dust_storms_2018/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "saharan_dust_storms_2018/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "saharan_dust_storms_2018/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "saharan_dust_storms_2018/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "saharan_dust_storms_2018/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "saharan_dust_storms_2018/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "saharan_dust_storms_2018/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "saharan_dust_storms_2018/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "saharan_dust_storms_2018/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
@@ -280,65 +288,67 @@
     "type": "volcano",
     "title": "Sinabung Volcano Eruption (February 2018)",
     "description": "Use carbon dioxide and sulfur layers to look at the Sinabung Volcano.",
+    "backgroundImage": "",
+    "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
       {
         "id": "001",
-        "description": "sinabung_volcano_eruption_february_2018/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "sinabung_volcano_eruption_february_2018/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "sinabung_volcano_eruption_february_2018/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "sinabung_volcano_eruption_february_2018/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "sinabung_volcano_eruption_february_2018/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "sinabung_volcano_eruption_february_2018/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "sinabung_volcano_eruption_february_2018/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "sinabung_volcano_eruption_february_2018/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "sinabung_volcano_eruption_february_2018/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "sinabung_volcano_eruption_february_2018/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
@@ -349,65 +359,67 @@
     "type": "severe-storm",
     "title": "Hurricane Maria (September 2017)",
     "description": "Hurricane Maria devastated Puerto Rico. Follow the storm as it forms from a tropical depression to a category 4 hurricane.",
+    "backgroundImage": "",
+    "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
       {
         "id": "001",
-        "description": "hurricane_maria_september_2017/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "hurricane_maria_september_2017/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "hurricane_maria_september_2017/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "hurricane_maria_september_2017/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "hurricane_maria_september_2017/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "hurricane_maria_september_2017/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "hurricane_maria_september_2017/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "hurricane_maria_september_2017/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "hurricane_maria_september_2017/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "hurricane_maria_september_2017/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
@@ -422,61 +434,61 @@
     "steps": [
       {
         "id": "001",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "larsen_c_ice_shelf_iceberg_a68a_july_2017/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
@@ -487,65 +499,67 @@
     "type": "default",
     "title": "Explore The Earth at Night (2012 - 2016)",
     "description": "Use various layers to explore regions of the earth at night!",
+    "backgroundImage": "",
+    "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
       {
         "id": "001",
-        "description": "explore_the_earth_at_night_2012_2016/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "explore_the_earth_at_night_2012_2016/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "explore_the_earth_at_night_2012_2016/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "explore_the_earth_at_night_2012_2016/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "explore_the_earth_at_night_2012_2016/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "explore_the_earth_at_night_2012_2016/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "explore_the_earth_at_night_2012_2016/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "explore_the_earth_at_night_2012_2016/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "explore_the_earth_at_night_2012_2016/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "explore_the_earth_at_night_2012_2016/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
@@ -556,65 +570,67 @@
     "type": "man-made",
     "title": "Shrinking Aral Sea (2001 - 2018)",
     "description": "See how decades of water diversion, coupled with regional droughts, have caused the Aral Sea basic to dry out.",
+    "backgroundImage": "",
+    "backgroundImageHover": "",
     "readMoreLink": "",
     "steps": [
       {
         "id": "001",
-        "description": "shrinking_aral_sea_2001_2018/step001.html",
+        "description": "step001.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-12-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "002",
-        "description": "shrinking_aral_sea_2001_2018/step002.html",
+        "description": "step002.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-64.10884765624996,-69.967890625,-58.48384765624997,-65.79748046875"
       },
       {
         "id": "003",
-        "description": "shrinking_aral_sea_2001_2018/step003.html",
+        "description": "step003.html",
         "highlightElement": "",
         "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Reference_Labels,Reference_Features,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-124.8058657020246,-101.245966796875,2.2131703895246773,-34.519404296875"
       },
       {
         "id": "004",
-        "description": "shrinking_aral_sea_2001_2018/step004.html",
+        "description": "step004.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00:00:00Z&z=3&v=-7196672,-3780608,7196672,3780608"
       },
       {
         "id": "005",
-        "description": "shrinking_aral_sea_2001_2018/step005.html",
+        "description": "step005.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines(hidden)&t=2017-07-10-T00%3A00%3A00Z&z=3&v=-7196672,-3780608,7196672,3780608&e=true"
       },
       {
         "id": "006",
-        "description": "shrinking_aral_sea_2001_2018/step006.html",
+        "description": "step006.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
       },
       {
         "id": "007",
-        "description": "shrinking_aral_sea_2001_2018/step007.html",
+        "description": "step007.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00%3A00%3A00Z&z=3&v=-2601296.969455067,935552.4147922904,-1633977.225318607,1408128.4147922904&e=EONET_2934,2017-07-12"
       },
       {
         "id": "008",
-        "description": "shrinking_aral_sea_2001_2018/step008.html",
+        "description": "step008.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "009",
-        "description": "shrinking_aral_sea_2001_2018/step009.html",
+        "description": "step009.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       },
       {
         "id": "010",
-        "description": "shrinking_aral_sea_2001_2018/step010.html",
+        "description": "step010.html",
         "highlightElement": "",
         "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night,MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC,Coastlines&t=2017-07-12-T00:00:00Z&z=3&v=-2567429.097386837,935552.4147922904,-1667845.097386837,1408128.4147922904"
       }
