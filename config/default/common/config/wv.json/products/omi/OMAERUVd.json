@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OMAERUVd": {
+            "name": "OMI/Aura Near UV Aerosol Optical Depth and Single Scattering Albedo L3 1 day 0.25 degree x 0.25 degree",
+            "handler": "List",
+            "query": {
+                "shortName": "OMAERUVd"
+            }
+        }
+    }
+}

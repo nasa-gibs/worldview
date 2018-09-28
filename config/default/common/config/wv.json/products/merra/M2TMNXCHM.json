@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2TMNXCHM": {
+            "name": "MERRA-2 tavgM_2d_chm_Nx: 2d,Monthly mean,Time-Averaged,Single-Level,Assimilation,Carbon Monoxide and Ozone Diagnostics 0.625 x 0.5 degree V5.12.4 (M2TMNXCHM) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2TMNXCHM"
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MIL3MCLD": {
+            "name": "MISR Level 3 Component Global Cloud Product covering a month",
+            "handler": "List",
+            "query": {
+                "shortName": "MIL3MCLD"
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MOP03JM": {
+            "name": "MOPITT Gridded Monthly CO Retrievals (Near and Thermal Infrared Radiances)",
+            "handler": "List",
+            "query": {
+                "shortName": "MOP03JM"
+            }
+        }
+    }
+}

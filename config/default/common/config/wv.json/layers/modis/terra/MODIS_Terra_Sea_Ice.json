@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MODIS_Terra_Sea_Ice": {
+            "id":       "MODIS_Terra_Sea_Ice",
+            "title":    "Sea Ice",
+            "subtitle": "Terra / MODIS",
+            "description": "modis/terra/MODIS_Terra_Sea_Ice",
+            "group":    "overlays",
+            "layergroup": [
+              "modis",
+              "modis_terra"
+            ],
+            "product":  "MOD29",
+            "wrapadjacentdays": true
+        }
+    }
+}

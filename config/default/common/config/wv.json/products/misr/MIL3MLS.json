@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MIL3MLS": {
+            "name": "MISR Level 3 Component Global Land Product covering a month",
+            "handler": "List",
+            "query": {
+                "shortName": "MIL3MLS"
+            }
+        }
+    }
+}

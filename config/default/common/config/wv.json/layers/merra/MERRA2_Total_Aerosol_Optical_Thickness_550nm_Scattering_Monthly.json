@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly": {
+            "id":       "MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly",
+            "title":    "Total Aerosol Optical Thickness Scattering 550nm (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Total_Aerosol_Optical_Thickness_550nm_Scattering_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXAER",
+            "wrapadjacentdays": true
+        }
+    }
+}

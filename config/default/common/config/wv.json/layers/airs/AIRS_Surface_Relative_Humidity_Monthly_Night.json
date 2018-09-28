@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "AIRS_Surface_Relative_Humidity_Monthly_Night": {
+            "id":       "AIRS_Surface_Relative_Humidity_Monthly_Night",
+            "title":    "Surface Relative Humidity (Night, Monthly)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Surface_Relative_Humidity_Monthly_Night",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STM",
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}

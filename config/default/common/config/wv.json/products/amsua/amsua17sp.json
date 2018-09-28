@@ -1,0 +1,11 @@
+{
+    "products": {
+        "amsua17sp": {
+            "name": "ADVANCED MICROWAVE SOUNDING UNIT-A (AMSU-A) SWATH FROM NOAA-17",
+            "handler": "List",
+            "query": {
+                "shortName": "amsua17sp"
+            }
+        }
+    }
+}

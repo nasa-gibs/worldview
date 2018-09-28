@@ -1,0 +1,11 @@
+{
+    "products": {
+        "lislip": {
+            "name": "Lightning Imaging Sensor (LIS) on TRMM Science Data V4",
+            "handler": "List",
+            "query": {
+                "shortName": "lislip"
+            }
+        }
+    }
+}

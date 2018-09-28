@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Evaporation": {
+            "id": "evaporation",
+            "title":    "Evaporation",
+            "subtitle": "MERRA-2",
+            "sources": {
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/Evaporation",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_Evaporation_Land_Monthly",
+                        "MERRA2_Evaporation_from_Turbulence_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

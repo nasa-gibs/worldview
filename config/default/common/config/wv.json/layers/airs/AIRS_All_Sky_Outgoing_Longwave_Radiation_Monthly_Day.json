@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "AIRS_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day": {
+            "id":       "AIRS_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
+            "title":    "Outgoing Longwave Radiation (Day, Monthly)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_All_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STM",
+
+            "layergroup": [
+              "airs"
+            ]
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MERGED_TP_J1_OSTM_OST_CYCLES_V4": {
+            "name": "PODAAC-ALTCY-TJ124",
+            "handler": "List",
+            "query": {
+                "shortName": "MERGED_TP_J1_OSTM_OST_CYCLES_V4"
+            }
+        }
+    }
+}

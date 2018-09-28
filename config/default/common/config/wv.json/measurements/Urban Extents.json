@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Urban Extents": {
+            "id": "urban-extents",
+            "title": "Urban Extents",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/UrbanExtents",
+                    "image": "",
+                    "settings": [
+                        "GRUMP_Urban_Extents_Grid_1995"
+                    ]
+                }
+            }
+        }
+    }
+}

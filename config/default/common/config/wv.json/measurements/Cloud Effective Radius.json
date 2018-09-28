@@ -1,0 +1,38 @@
+{
+    "measurements": {
+        "Cloud Effective Radius": {
+            "id": "cloud-effective-radius",
+            "title":    "Cloud Effective Radius",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudEffectiveRadius",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Effective_Radius",
+                        "MODIS_Aqua_Cloud_Effective_Radius_PCL",
+                        "MODIS_Aqua_Cloud_Effective_Radius_37",
+                        "MODIS_Aqua_Cloud_Effective_Radius_37_PCL",
+                        "Aqua_Orbit_Asc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudEffectiveRadius",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Effective_Radius",
+                        "MODIS_Terra_Cloud_Effective_Radius_PCL",
+                        "MODIS_Terra_Cloud_Effective_Radius_37",
+                        "MODIS_Terra_Cloud_Effective_Radius_37_PCL",
+                        "Terra_Orbit_Dsc"
+                    ]
+
+                }
+            }
+        }
+    }
+}

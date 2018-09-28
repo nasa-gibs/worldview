@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Carbon_Monoxide_Emission_Monthly": {
+            "id":       "MERRA2_Carbon_Monoxide_Emission_Monthly",
+            "title":    "Carbon Monoxide Emission ENSEMBLE (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Carbon_Monoxide_Emission_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXCHM",
+            "wrapadjacentdays": true
+        }
+    }
+}

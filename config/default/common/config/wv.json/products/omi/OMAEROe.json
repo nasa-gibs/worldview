@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OMAEROe": {
+            "name": "OMI/Aura Multi-wavelength Aerosol Optical Depth and Single Scattering Albedo L3 1 day Best Pixel in 0.25 degree x 0.25 degree",
+            "handler": "List",
+            "query": {
+                "shortName": "OMAEROe"
+            }
+        }
+    }
+}

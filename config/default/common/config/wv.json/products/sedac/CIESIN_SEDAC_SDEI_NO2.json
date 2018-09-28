@@ -1,0 +1,12 @@
+{
+    "products": {
+        "CIESIN_SEDAC_SDEI_NO2": {
+            "name": "Global 3-Year Running Mean Ground-Level Nitrogen Dioxide (NO2) Grids from GOME, SCIAMACHY and GOME-2",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "CIESIN_SEDAC_SDEI_NO2"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

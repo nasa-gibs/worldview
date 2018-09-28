@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MIL3MRD": {
+            "name": "MISR Level 3 Component Global Radiance Product covering a month",
+            "handler": "List",
+            "query": {
+                "shortName": "MIL3MRD"
+            }
+        }
+    }
+}

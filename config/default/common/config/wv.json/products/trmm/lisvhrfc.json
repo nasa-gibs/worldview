@@ -1,0 +1,11 @@
+{
+    "products": {
+        "lisvhrfc": {
+            "name": "LIS 0.1 DEGREE VERY HIGH RESOLUTION GRIDDED LIGHTNING FULL CLIMATOLOGY (VHRFC)",
+            "handler": "List",
+            "query": {
+                "shortName": "lisvhrfc"
+            }
+        }
+    }
+}

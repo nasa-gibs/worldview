@@ -1,0 +1,11 @@
+{
+    "products": {
+        "NSIDC-0478": {
+            "name": "MEaSUREs Greenland Ice Sheet Velocity Map from InSAR Data",
+            "handler": "List",
+            "query": {
+                "shortName": "NSIDC-0478"
+            }
+        }
+    }
+}

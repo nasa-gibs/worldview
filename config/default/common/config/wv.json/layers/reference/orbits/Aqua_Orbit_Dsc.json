@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "Aqua_Orbit_Dsc": {
+            "id":       "Aqua_Orbit_Dsc",
+            "title":    "Aqua Orbital Track & Overpass Time (Descending/Night)",
+            "subtitle": "Aqua / Space-Track.org",
+            "description": "reference/orbits/Aqua_Orbit_Dsc",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "night",
+            "track": "descending",
+            "startDate": "2002-05-04",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "Aqua_Orbit_Dsc",
+                "immutable": true
+            }
+        }
+    }
+}

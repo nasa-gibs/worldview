@@ -1,0 +1,11 @@
+{
+    "products": {
+        "rss1windnv7r01": {
+            "name": "RSS MONTHLY 1-DEG MERGED WIND CLIMATOLOGY NETCDF V7R01",
+            "handler": "List",
+            "query": {
+                "shortName": "rss1windnv7r01"
+            }
+        }
+    }
+}

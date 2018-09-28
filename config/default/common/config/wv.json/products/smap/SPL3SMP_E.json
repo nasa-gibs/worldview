@@ -1,0 +1,11 @@
+{
+    "products": {
+        "SPL3SMP_E": {
+            "name": "SMAP Enhanced L3 Radiometer Global Daily 9 km EASE-Grid Soil Moisture",
+            "handler": "List",
+            "query": {
+                "shortName": "SPL3SMP_E"
+            }
+        }
+    }
+}

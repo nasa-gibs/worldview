@@ -1,0 +1,12 @@
+{
+    "products": {
+        "MI1B2_ELLIPSOID_BA": {
+            "name": "MISR Level 1B2 Ellipsoid Data - Ba Sensor",
+            "handler": "MODISSwath",
+            "query": {
+                "shortName": "MI1B2E",
+                "sensor": "BA"
+            }
+        }
+    }
+}

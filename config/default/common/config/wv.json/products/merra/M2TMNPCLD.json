@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2TMNPCLD": {
+            "name": "MERRA-2 tavgM_3d_cld_Np: 3d,Monthly mean,Time-Averaged,Pressure-Level,Assimilation,Cloud Diagnostics 0.625 x 0.5 degree V5.12.4 (M2TMNPCLD) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2TMNPCLD"
+            }
+        }
+    }
+}

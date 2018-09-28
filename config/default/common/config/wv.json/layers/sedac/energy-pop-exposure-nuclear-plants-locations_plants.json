@@ -1,0 +1,34 @@
+{
+    "layers": {
+        "energy-pop-exposure-nuclear-plants-locations_plants": {
+            "id":       "energy-pop-exposure-nuclear-plants-locations_plants",
+            "layer":    "energy:energy-pop-exposure-nuclear-plants-locations_plants",
+            "title":    "Power Plants, Nuclear",
+            "subtitle": "SEDAC Population Exposure Estimates in Proximity to Nuclear Power Plants, Locations, v1 (1956 – 2012)",
+            "description": "sedac/energy-pop-exposure-nuclear-plants-locations_plants",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "layergroup": [
+              "sedac"
+            ],
+            "product":  "CIESIN_SEDAC_ENERGY_NPPL",
+
+            "projections": {
+                "arctic": {
+                    "source": "SEDAC:wms"
+                },
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+
+            "palette": {
+                "id":           "energy-pop-exposure-nuclear-plants-locations_plants",
+                "immutable":    true
+            },
+            "wrapX": true
+        }
+    }
+}

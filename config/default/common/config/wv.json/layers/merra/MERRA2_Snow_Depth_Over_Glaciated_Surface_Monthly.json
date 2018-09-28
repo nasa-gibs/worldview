@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Snow_Depth_Over_Glaciated_Surface_Monthly": {
+            "id":       "MERRA2_Snow_Depth_Over_Glaciated_Surface_Monthly",
+            "title":    "Snow Depth Over Glaciated Surface (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Snow_Depth_Over_Glaciated_Surface_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXGLC",
+            "wrapadjacentdays": true
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Air Quality": {
+                "title": "Air Quality",
+                "id": "air-quality",
+                "image": "air-quality.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Index",
+                    "Aerosol Optical Depth",
+                    "Carbon Monoxide",
+                    "Corrected Reflectance",
+                    "Dust",
+                    "Fires and Thermal Anomalies",
+                    "Nitric Acid",
+                    "Nitrogen Dioxide",
+                    "Nitrous Oxide",
+                    "Ozone",
+                    "Particulate Matter",
+                    "Sulfur Dioxide"
+                ]
+            }
+        }
+    }
+}

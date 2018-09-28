@@ -1,0 +1,34 @@
+{
+    "categories": {
+        "scientific": {
+            "Human Dimensions": {
+                "title": "Human Dimensions",
+                "id": "human-dimensions",
+                "image": "human-dimensions.jpg",
+                "description": "",
+                "measurements": [
+                    "Cyclone Hazard",
+                    "Dams",
+                    "Drought Hazard",
+                    "Earth at Night",
+                    "Fires and Thermal Anomalies",
+                    "Flood Hazard",
+                    "Human Footprint",
+                    "Land Cover",
+                    "Land Surface Temperature",
+                    "Landslide Hazard",
+                    "Net Migration",
+                    "Particulate Matter",
+                    "Population Density",
+                    "Power Plants, Nuclear",
+                    "Reservoirs",
+                    "Settlements",
+                    "Urban Expansion",
+                    "Urban Extents",
+                    "Urban Rural Extents Below 10m Elevation",
+                    "Volcano Hazard"
+                ]
+            }
+        }
+    }
+}

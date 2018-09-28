@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "GPM_Orbit_Dsc": {
+            "id":       "GPM_Orbit_Dsc",
+            "title":    "GPM Orbital Track & Overpass Time (Descending)",
+            "subtitle": "GPM / Space-Track.org",
+            "description": "reference/orbits/GPM_Orbit_Dsc",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "",
+            "track": "descending",
+            "startDate": "2014-02-27",
+
+            "projections": {
+              "antarctic": {
+                  "source":   "GIBS:wms"
+              },
+              "arctic": {
+                  "source":   "GIBS:wms"
+              },
+              "geographic": {
+                  "source":   "GIBS:wms"
+              }
+            },
+
+            "palette": {
+                "id": "GPM_Orbit_Dsc",
+                "immutable": true
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "OMI_UV_Erythemal_Daily_Dose": {
+            "id":       "OMI_UV_Erythemal_Daily_Dose",
+            "title":    "UV Erythemal Daily Dose (Local Noon)",
+            "subtitle": "Aura / OMI",
+            "description": "omi/OMI_UV_Erythemal_Daily_Dose",
+            "group":    "overlays",
+            "layergroup": [
+              "omi"
+            ],
+            "product":  "OMUVBd",
+            "tags":     "ultra violet",
+            "inactive": true
+
+        }
+    }
+}

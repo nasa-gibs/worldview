@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Methane": {
+            "id": "methane",
+            "title":    "Methane",
+            "subtitle": "Aqua / AIRS",
+            "sources": {
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/Methane",
+                    "image": "",
+                    "settings": [
+                      "AIRS_Methane_Volume_Mixing_Ratio_Daily_Day",
+                      "AIRS_Methane_Volume_Mixing_Ratio_Daily_Night",
+                      "AIRS_Methane_Volume_Mixing_Ratio_Monthly_Day",
+                      "AIRS_Methane_Volume_Mixing_Ratio_Monthly_Night"
+                    ]
+                }
+            }
+        }
+    }
+}

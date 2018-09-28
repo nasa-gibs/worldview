@@ -1,0 +1,11 @@
+{
+    "products": {
+        "CER_SYN1deg-Month_Terra-MODIS_Edition3A": {
+            "name": "CER_SYN1deg-Month_Terra-MODIS_Edition3A",
+            "handler": "List",
+            "query": {
+                "shortName": "CER_SYN1deg-Month_Terra-MODIS_Edition3A"
+            }
+        }
+    }
+}

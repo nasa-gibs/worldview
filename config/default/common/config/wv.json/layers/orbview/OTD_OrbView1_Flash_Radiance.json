@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "OTD_OrbView1_Flash_Radiance": {
+            "id":       "OTD_OrbView1_Flash_Radiance",
+            "title":    "Calibrated Flash Radiance (OTD / Microlab-1)",
+            "subtitle": "OrbView-1 / OTD",
+            "description": "orbview/OTD_OrbView1_Flash_Radiance",
+            "tags":     "lightning",
+            "group":    "overlays",
+            "layergroup": [
+              "orbview"
+            ],
+            "product":  "otdlip",
+            "inactive": true,
+            "wrapadjacentdays": true
+        }
+    }
+}

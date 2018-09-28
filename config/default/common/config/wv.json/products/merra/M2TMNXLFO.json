@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2TMNXLFO": {
+            "name": "MERRA-2 tavgM_2d_lfo_Nx: 2d,Monthly mean,Time-Averaged,Single-Level,Assimilation,Land Surface Forcings 0.625 x 0.5 degree V5.12.4 (M2TMNXLFO) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2TMNXLFO"
+            }
+        }
+    }
+}

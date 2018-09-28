@@ -1,0 +1,24 @@
+{
+    "categories": {
+        "scientific": {
+            "Cryosphere": {
+                "title": "Cryosphere",
+                "id": "cryosphere",
+                "image": "cryosphere.jpg",
+                "description": "",
+                "measurements": [
+                    "Freeze/Thaw",
+                    "Frozen Area",
+                    "Ice Surface Temperature",
+                    "Sea Ice",
+                    "Sea Ice Brightness Temperature",
+                    "Sea Surface Temperature",
+                    "Snow Cover",
+                    "Snow Depth",
+                    "Snow Mass",
+                    "Snow Water Equivalent"
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "measurements": {
+        "Cyclone Hazard": {
+            "id": "cyclone-hazard",
+            "title":    "Cyclone Hazard",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/CycloneHazard",
+                    "image": "",
+                    "settings": [
+                        "ndh-cyclone-hazard-frequency-distribution",
+                        "ndh-cyclone-mortality-risks-distribution",
+                        "ndh-cyclone-proportional-economic-loss-risk-deciles"
+                    ]
+                }
+            }
+        }
+    }
+}

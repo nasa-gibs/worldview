@@ -1,0 +1,32 @@
+{
+    "measurements": {
+        "Aerosol Index": {
+            "id": "aerosol-index",
+            "title":    "Aerosol Index",
+            "subtitle": "Aura/OMI, Suomi-NPP/OMPS",
+            "sources": {
+                "Aura/OMI": {
+                    "id": "aura-omi",
+                    "title": "Aura/OMI",
+                    "description": "omi/AerosolIndex",
+                    "image": "",
+                    "settings": [
+                        "OMI_Aerosol_Index",
+                        "Aura_Orbit_Asc"
+                    ]
+                },
+                "Suomi NPP/OMPS": {
+                    "id": "suominpp-omps",
+                    "title": "Suomi NPP/OMPS",
+                    "description": "omps/AerosolIndex",
+                    "image": "",
+                    "settings": [
+                        "OMPS_Aerosol_Index",
+                        "OMPS_Aerosol_Index_PyroCumuloNimbus",
+                        "Suomi_NPP_Orbit_Asc"
+                    ]
+                }
+            }
+        }
+    }
+}

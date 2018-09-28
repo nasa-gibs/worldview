@@ -1,0 +1,22 @@
+{
+    "products": {
+        "MOD021KM_NIGHT": {
+            "name": "MODIS/Terra Calibrated Radiances 5-Min L1B Swath 1km, Night",
+            "handler": "TerraSwathMultiDay",
+            "query": {
+                "shortName": "MOD021KM",
+                "day_night_flag": "night"
+            },
+            "nrt": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            },
+            "urs": {
+                "by": "value",
+                "field": "data_center",
+                "value": "LANCEMODIS"
+            }
+        }
+    }
+}

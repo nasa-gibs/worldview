@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "LPRM_AMSR2_Downscaled_Surface_Soil_Moisture_C1_Band_Day_Daily": {
+            "id":       "LPRM_AMSR2_Downscaled_Surface_Soil_Moisture_C1_Band_Day_Daily",
+            "title":    "Surface Soil Moisture C1-band (Downscaled, Day, Daily)",
+            "subtitle": "GCOM-W1 / AMSR2 LPRM",
+            "description": "amsr2/LPRM_AMSR2_Downscaled_Surface_Soil_Moisture_C1_Band_Day_Daily",
+            "tags": "amsr-2",
+            "group":    "overlays",
+            "layergroup": [
+              "amsr2"
+            ],
+            "product":  "LPRM_AMSR2_DS_A_SOILM3"
+        }
+    }
+}

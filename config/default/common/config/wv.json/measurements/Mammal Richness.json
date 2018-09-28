@@ -1,0 +1,24 @@
+{
+    "measurements": {
+        "Mammal Richness": {
+            "id": "mammal-richness",
+            "title":    "Mammal Richness",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/MammalRichness",
+                    "image": "",
+                    "settings": [
+                        "Mammal_Richness_All_Species_2013",
+                        "Mammal_Richness_All_Threats_2013",
+                        "Mammal_Richness_Critically_Endangered_Species_2013",
+                        "Mammal_Richness_Endangered_Species_2013",
+                        "Mammal_Richness_Vulnerable_Species_2013"
+                    ]
+                }
+            }
+        }
+    }
+}

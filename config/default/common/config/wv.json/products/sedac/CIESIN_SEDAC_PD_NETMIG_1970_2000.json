@@ -1,0 +1,12 @@
+{
+    "products": {
+        "CIESIN_SEDAC_PD_NETMIG_1970_2000": {
+            "name": "Global Estimated Net Migration Grids by Decade: 1970-2000",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "CIESIN_SEDAC_PD_NETMIG_1970_2000"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

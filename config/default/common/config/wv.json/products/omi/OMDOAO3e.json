@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OMDOAO3e": {
+            "name": "OMI/Aura Ozone (O3) DOAS Total Column Daily L3 1 day 0.25 degree x 0.25 degree",
+            "handler": "List",
+            "query": {
+                "shortName": "OMDOAO3e"
+            }
+        }
+    }
+}

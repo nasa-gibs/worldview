@@ -1,0 +1,45 @@
+{
+    "measurements": {
+        "Cloud Top Height": {
+            "id": "cloud-top-height",
+            "title":    "Cloud Top Height",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Terra/MISR",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudTopHeight",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Top_Height_Day",
+                        "MODIS_Aqua_Cloud_Top_Height_Night",
+                        "Aqua_Orbit_Asc",
+                        "Aqua_Orbit_Dsc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudTopHeight",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Top_Height_Day",
+                        "MODIS_Terra_Cloud_Top_Height_Night",
+                        "Terra_Orbit_Asc",
+                        "Terra_Orbit_Dsc"
+                    ]
+                },
+                "Terra/MISR": {
+                    "id": "terra-misr",
+                    "title": "Terra/MISR",
+                    "description": "misr/CloudStereoHeight",
+                    "image": "",
+                    "settings": [
+                        "MISR_Cloud_Stereo_Height_Histogram_Bin_0.5km_Monthly",
+                        "MISR_Cloud_Stereo_Height_Histogram_Bin_1.5-2.0km_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

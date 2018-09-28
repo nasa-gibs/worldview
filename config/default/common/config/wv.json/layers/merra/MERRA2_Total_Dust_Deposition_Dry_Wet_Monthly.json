@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Total_Dust_Deposition_Dry_Wet_Monthly": {
+            "id":       "MERRA2_Total_Dust_Deposition_Dry_Wet_Monthly",
+            "title":    "Total Dust Deposition, Dry+Wet All Bins (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Total_Dust_Deposition_Dry_Wet_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXADG",
+            "wrapadjacentdays": true
+        }
+    }
+}

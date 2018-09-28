@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Soil_Water_Root_Zone_Monthly": {
+            "id":       "MERRA2_Soil_Water_Root_Zone_Monthly",
+            "title":    "Soil Water Root Zone (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Soil_Water_Root_Zone_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXLND",
+            "wrapadjacentdays": true
+        }
+    }
+}

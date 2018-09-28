@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MODIS_AQUA_L3_SST_THERMAL_DAILY_4KM_DAYTIME_V2014.0": {
+            "name": "PODAAC-MODSA-1D4D4",
+            "handler": "List",
+            "query": {
+                "shortName": "MODIS_AQUA_L3_SST_THERMAL_DAILY_4KM_DAYTIME_V2014.0"
+            }
+        }
+    }
+}

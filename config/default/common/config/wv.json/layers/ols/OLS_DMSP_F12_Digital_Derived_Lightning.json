@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "OLS_DMSP_F12_Digital_Derived_Lightning": {
+            "id":       "OLS_DMSP_F12_Digital_Derived_Lightning",
+            "title":    "Digital Derived Lightning (Level 3, Standard",
+            "subtitle": "DMSP-F12 / OLS",
+            "description": "ols/OLS_DMSP_F12_Digital_Derived_Lightning",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "trmm"
+            ],
+            "product":  "olsdig12",
+            "inactive": true,
+            "wrapadjacentdays": true
+        }
+    }
+}

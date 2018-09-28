@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "AMSRE_Surface_Rain_Rate_Night": {
+            "id":       "AMSRE_Surface_Rain_Rate_Night",
+            "title":    "Surface Rain Rate (Night)",
+            "subtitle": "Aqua / AMSR-E",
+            "description": "amsre/AMSRE_Surface_Rain_Rate_Night",
+            "group":    "overlays",
+            "product":  "AE_Rain",
+            "layergroup": [
+              "amsre"
+            ],
+            "inactive": true
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MOP02R_NRT": {
+            "name": "MOPITT Retrieved CO Near Real Time",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "MOP02R_NRT"
+            }
+        }
+    }
+}

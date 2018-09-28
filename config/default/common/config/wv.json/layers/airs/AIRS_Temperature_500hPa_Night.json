@@ -1,0 +1,32 @@
+{
+    "layers": {
+        "AIRS_Temperature_500hPa_Night": {
+            "id":       "AIRS_Temperature_500hPa_Night",
+            "title":    "Temperature (500 hPa, Night)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Temperature_500hPa_Night",
+            "group":    "overlays",
+            "product":  "AIRX2RET_NIGHT",
+
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "period":       "daily",
+
+            "projections": {
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "2km"
+                }
+            },
+
+            "layergroup": [
+              "airs"
+            ],
+            "palette": {
+                "id":   "AIRS_Temperature_500hPa_Night"
+            }
+        }
+    }
+}

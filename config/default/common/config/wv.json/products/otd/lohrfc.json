@@ -1,0 +1,11 @@
+{
+    "products": {
+        "lohrfc": {
+            "name": "LIS/OTD 0.5 DEGREE HIGH RESOLUTION FULL CLIMATOLOGY (HRFC) V2.3.2014",
+            "handler": "List",
+            "query": {
+                "shortName": "lohrfc"
+            }
+        }
+    }
+}

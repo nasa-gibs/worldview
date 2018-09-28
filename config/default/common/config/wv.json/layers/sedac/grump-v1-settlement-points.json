@@ -1,0 +1,35 @@
+{
+    "layers": {
+        "grump-v1-settlement-points": {
+            "id":       "grump-v1-settlement-points",
+            "layer":    "grump-v1:grump-v1-settlement-points",
+            "title":    "Settlements",
+            "subtitle": "SEDAC Global Rural-Urban Mapping Project (GRUMP), v1",
+            "description": "sedac/grump-v1-settlement-points",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "styles":   "grump-v1-settlement-points:scale-dependent",
+            "layergroup": [
+              "sedac"
+            ],
+            "product":  "CIESIN_SEDAC_GRUMPv1_STLMNT",
+
+            "projections": {
+                "arctic": {
+                    "source": "SEDAC:wms"
+                },
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+
+            "palette": {
+                "id":           "grump-v1-settlement-points",
+                "immutable":    true
+            },
+            "wrapX": true
+        }
+    }
+}

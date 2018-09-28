@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "GOSAT_Orbit_Dsc": {
+            "id":       "GOSAT_Orbit_Dsc",
+            "title":    "GOSAT Orbital Track & Overpass Time (Descending/Night)",
+            "subtitle": "GOSAT / Space-Track.org",
+            "description": "reference/orbits/GOSAT_Orbit_Dsc",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "night",
+            "track": "descending",
+            "startDate": "2009-01-23",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "GOSAT_Orbit_Dsc",
+                "immutable": true
+            }
+        }
+    }
+}

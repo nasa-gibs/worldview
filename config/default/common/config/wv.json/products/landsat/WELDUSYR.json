@@ -1,0 +1,11 @@
+{
+    "products": {
+        "WELDUSYR": {
+            "name": "NASA Web-Enabled Landsat Data CONUS 30m Composites over Annual Periods",
+            "handler": "WELDGranuleFootprints",
+            "query": {
+                "shortName": "WELDUSYR"
+            }
+        }
+    }
+}

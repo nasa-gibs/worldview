@@ -1,0 +1,12 @@
+{
+    "products": {
+        "CIESIN_SEDAC_LWP2_HF_GEOG": {
+            "name": "Last of the Wild Project, Version 2, 2005 (LWP-2): Global Human Footprint Dataset (Geographic)",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "CIESIN_SEDAC_LWP2_HF_GEOG"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

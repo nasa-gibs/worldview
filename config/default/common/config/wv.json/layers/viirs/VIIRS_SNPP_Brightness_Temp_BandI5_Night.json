@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "VIIRS_SNPP_Brightness_Temp_BandI5_Night": {
+            "id":       "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
+            "title":    "Brightness Temperature (Band I5, Night)",
+            "subtitle": "Suomi NPP / VIIRS",
+            "description": "viirs/VIIRS_SNPP_Brightness_Temp_BandI5_Night",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "viirs"
+            ],
+            "product":  "VNP02IMG_NRT"
+
+        }
+    }
+}

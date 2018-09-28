@@ -1,0 +1,15 @@
+{
+    "layers": {
+        "GMI_Snow_Rate_Asc": {
+            "id":       "GMI_Snow_Rate_Asc",
+            "title":    "Snow Rate (Ascending)",
+            "subtitle": "GPM / GMI",
+            "description": "gpm/GMI_Snow_Rate_Asc",
+            "group":    "overlays",
+            "layergroup": [
+              "gpm"
+            ],
+            "product":  "GPM_2AGPROFGPMGMI"
+        }
+    }
+}

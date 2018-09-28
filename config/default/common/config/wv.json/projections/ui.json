@@ -1,0 +1,21 @@
+{
+    "ui": {
+        "projections": [
+            {
+                "id": "arctic",
+                "name": "Arctic",
+                "style": "fa fa-arrow-circle-up fa-fw"
+            },
+            {
+                "id": "geographic",
+                "name": "Geographic",
+                "style": "fa fa-circle fa-fw"
+            },
+            {
+                "id": "antarctic",
+                "name": "Antarctic",
+                "style": "fa fa-arrow-circle-down fa-fw"
+            }
+        ]
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "NLDAS_FORA0125_M": {
+            "name": "NLDAS Primary Forcing Data L4 Monthly 0.125 x 0.125 degree V002 (NLDAS_FORA0125_M) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "NLDAS_FORA0125_M"
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "VIIRS_SNPP_Brightness_Temp_BandI5_Day": {
+            "id":       "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
+            "title":    "Brightness Temperature (Band I5, Day)",
+            "subtitle": "Suomi NPP / VIIRS",
+            "description": "viirs/VIIRS_SNPP_Brightness_Temp_BandI5_Day",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "viirs"
+            ],
+            "product":  "VNP02IMG_NRT",
+            "wrapadjacentdays": true
+        }
+    }
+}

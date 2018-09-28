@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2TMNPMST": {
+            "name": "MERRA-2 tavgM_3d_mst_Np: 3d,Monthly mean,Time-Averaged,Pressure-Level,Assimilation,Moist Processes Diagnostics 0.625 x 0.5 degree V5.12.4 (M2TMNPMST) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2TMNPMST"
+            }
+        }
+    }
+}

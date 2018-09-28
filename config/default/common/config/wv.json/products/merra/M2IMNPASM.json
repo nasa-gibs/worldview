@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2IMNPASM": {
+            "name": "MERRA-2 instM_3d_asm_Np: 3d,Monthly mean,Instantaneous,Pressure-Level,Assimilation,Assimilated Meteorological Fields 0.5 x 0.625 degree V5.12.4 (M2IMNPASM) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2IMNPASM"
+            }
+        }
+    }
+}

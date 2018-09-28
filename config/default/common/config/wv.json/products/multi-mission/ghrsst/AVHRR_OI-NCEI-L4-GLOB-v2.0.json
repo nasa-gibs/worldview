@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AVHRR_OI-NCEI-L4-GLOB-v2.0": {
+            "name": "PODAAC-GHAAO-4BC02",
+            "handler": "List",
+            "query": {
+                "shortName": "AVHRR_OI-NCEI-L4-GLOB-v2.0"
+            }
+        }
+    }
+}

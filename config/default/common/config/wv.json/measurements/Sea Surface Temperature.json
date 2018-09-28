@@ -1,0 +1,86 @@
+{
+    "measurements": {
+        "Sea Surface Temperature": {
+            "id": "sea-surface-temperature",
+            "title":    "Sea Surface Temperature",
+            "subtitle": "GHRSST, Terra/MODIS, Aqua/MODIS",
+            "sources": {
+                "GHRSST": {
+                    "id": "ghrsst",
+                    "title": "GHRSST",
+                    "description": "multi-mission/SeaSurfaceTemperature",
+                    "image": "",
+                    "settings": [
+                        "GHRSST_L4_G1SST_Sea_Surface_Temperature",
+                        "GHRSST_L4_MUR_Sea_Surface_Temperature",
+                        "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature"
+                    ]
+                },
+                    "Aqua/MODIS": {
+                        "id": "aqua-modis",
+                        "title": "Aqua/MODIS",
+                        "description": "modis/aqua/SeaSurfaceTemperature",
+                        "image": "",
+                        "settings": [
+                          "MODIS_Aqua_L3_SST_MidIR_4km_Night_Daily",
+                          "MODIS_Aqua_L3_SST_MidIR_4km_Night_8Day",
+                          "MODIS_Aqua_L3_SST_MidIR_4km_Night_Monthly",
+                          "MODIS_Aqua_L3_SST_MidIR_4km_Night_Annual",
+                          "MODIS_Aqua_L3_SST_MidIR_9km_Night_Daily",
+                          "MODIS_Aqua_L3_SST_MidIR_9km_Night_8Day",
+                          "MODIS_Aqua_L3_SST_MidIR_9km_Night_Monthly",
+                          "MODIS_Aqua_L3_SST_MidIR_9km_Night_Annual",
+                          "MODIS_Aqua_L3_SST_Thermal_4km_Day_Daily",
+                          "MODIS_Aqua_L3_SST_Thermal_4km_Day_8Day",
+                          "MODIS_Aqua_L3_SST_Thermal_4km_Day_Monthly",
+                          "MODIS_Aqua_L3_SST_Thermal_4km_Day_Annual",
+                          "MODIS_Aqua_L3_SST_Thermal_4km_Night_Daily",
+                          "MODIS_Aqua_L3_SST_Thermal_4km_Night_8Day",
+                          "MODIS_Aqua_L3_SST_Thermal_4km_Night_Monthly",
+                          "MODIS_Aqua_L3_SST_Thermal_4km_Night_Annual",
+                          "MODIS_Aqua_L3_SST_Thermal_9km_Day_Daily",
+                          "MODIS_Aqua_L3_SST_Thermal_9km_Day_8Day",
+                          "MODIS_Aqua_L3_SST_Thermal_9km_Day_Monthly",
+                          "MODIS_Aqua_L3_SST_Thermal_9km_Day_Annual",
+                          "MODIS_Aqua_L3_SST_Thermal_9km_Night_Daily",
+                          "MODIS_Aqua_L3_SST_Thermal_9km_Night_8Day",
+                          "MODIS_Aqua_L3_SST_Thermal_9km_Night_Monthly",
+                          "MODIS_Aqua_L3_SST_Thermal_9km_Night_Annual"
+                        ]
+                    },
+                        "Terra/MODIS": {
+                            "id": "terra-modis",
+                            "title": "Terra/MODIS",
+                            "description": "modis/aqua/SeaSurfaceTemperature",
+                            "image": "",
+                            "settings": [
+                              "MODIS_Terra_L3_SST_MidIR_4km_Night_Daily",
+                              "MODIS_Terra_L3_SST_MidIR_4km_Night_8Day",
+                              "MODIS_Terra_L3_SST_MidIR_4km_Night_Monthly",
+                              "MODIS_Terra_L3_SST_MidIR_4km_Night_Annual",
+                              "MODIS_Terra_L3_SST_MidIR_9km_Night_Daily",
+                              "MODIS_Terra_L3_SST_MidIR_9km_Night_8Day",
+                              "MODIS_Terra_L3_SST_MidIR_9km_Night_Monthly",
+                              "MODIS_Terra_L3_SST_MidIR_9km_Night_Annual",
+                              "MODIS_Terra_L3_SST_Thermal_4km_Day_Daily",
+                              "MODIS_Terra_L3_SST_Thermal_4km_Day_8Day",
+                              "MODIS_Terra_L3_SST_Thermal_4km_Day_Monthly",
+                              "MODIS_Terra_L3_SST_Thermal_4km_Day_Annual",
+                              "MODIS_Terra_L3_SST_Thermal_4km_Night_Daily",
+                              "MODIS_Terra_L3_SST_Thermal_4km_Night_8Day",
+                              "MODIS_Terra_L3_SST_Thermal_4km_Night_Monthly",
+                              "MODIS_Terra_L3_SST_Thermal_4km_Night_Annual",
+                              "MODIS_Terra_L3_SST_Thermal_9km_Day_Daily",
+                              "MODIS_Terra_L3_SST_Thermal_9km_Day_8Day",
+                              "MODIS_Terra_L3_SST_Thermal_9km_Day_Monthly",
+                              "MODIS_Terra_L3_SST_Thermal_9km_Day_Annual",
+                              "MODIS_Terra_L3_SST_Thermal_9km_Night_Daily",
+                              "MODIS_Terra_L3_SST_Thermal_9km_Night_8Day",
+                              "MODIS_Terra_L3_SST_Thermal_9km_Night_Monthly",
+                              "MODIS_Terra_L3_SST_Thermal_9km_Night_Annual"
+                            ]
+                        }
+            }
+        }
+    }
+}

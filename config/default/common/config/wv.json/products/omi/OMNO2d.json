@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OMNO2d": {
+            "name": "OMI/Aura NO2 Cloud-Screened Total and Tropospheric Column L3 Global Gridded 0.25 degree x 0.25 degree",
+            "handler": "List",
+            "query": {
+                "shortName": "OMNO2d"
+            }
+        }
+    }
+}

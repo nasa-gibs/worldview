@@ -1,0 +1,12 @@
+{
+  "products": {
+      "CIESIN_SEDAC_SDEI_PM25_MMSAOD": {
+          "name": "Global Annual PM2.5 Grids from MODIS, MISR and SeaWiFS Aerosol Optical Depth (AOD), 1998-2012",
+          "handler": "CollectionList",
+          "query": {
+              "shortName": "CIESIN_SEDAC_SDEI_PM25_MMSAOD"
+          },
+          "noBulkDownload": "true"
+      }
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2TMNXADG": {
+            "name": "MERRA-2 tavgM_2d_adg_Nx: 2d,Monthly mean,Time-averaged,Single-Level,Assimilation,Aerosol Diagnostics (extended) 0.625 x 0.5 degree V5.12.4 (M2TMNXADG) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2TMNXADG"
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Convective_Rainwater_Source_700hPa_Monthly": {
+            "id":       "MERRA2_Convective_Rainwater_Source_700hPa_Monthly",
+            "title":    "Convective Rainwater Source at 700hPa (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Convective_Rainwater_Source_700hPa_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNPMST",
+            "wrapadjacentdays": true
+        }
+    }
+}

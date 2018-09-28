@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "SMAP_L3_Passive_Enhanced_Night_Soil_Moisture": {
+            "id":       "SMAP_L3_Passive_Enhanced_Night_Soil_Moisture",
+            "title":    "Soil Moisture 9 km (L3, Passive, Night)",
+            "subtitle": "SMAP / Radiometer",
+            "description": "smap/SMAP_L3_Passive_Enhanced_Night_Soil_Moisture",
+            "group":    "overlays",
+            "tags":     "enhanced",
+            "layergroup": [
+              "smap"
+            ],
+            "product":  "SPL3SMP",
+            "wrapadjacentdays": true
+        }
+    }
+}

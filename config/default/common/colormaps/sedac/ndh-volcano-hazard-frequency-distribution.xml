@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Volcano Hazard Frequency and Distribution">
+    <Entries>
+      <ColorMapEntry rgb="255,255,178" transparent="false" ref="1"/>
+      <ColorMapEntry rgb="254,204,92" transparent="false" ref="2"/>
+      <ColorMapEntry rgb="253,141,60" transparent="false" ref="3"/>
+      <ColorMapEntry rgb="227,26,28" transparent="false" ref="4"/>
+    </Entries>
+    <Legend type="classification">X
+      <LegendEntry rgb="255,255,178" tooltip="1 - 10" id="1" showLabel="true"/>
+      <LegendEntry rgb="254,204,92" tooltip="11 - 30" id="2" showLabel="true"/>
+      <LegendEntry rgb="253,141,60" tooltip="31 - 60" id="3" showLabel="true"/>
+      <LegendEntry rgb="227,26,28" tooltip="61 - 130" id="4" showLabel="true"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

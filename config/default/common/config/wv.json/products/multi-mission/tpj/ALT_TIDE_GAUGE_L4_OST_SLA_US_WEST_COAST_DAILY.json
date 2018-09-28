@@ -1,0 +1,11 @@
+{
+    "products": {
+        "ALT_TIDE_GAUGE_L4_OST_SLA_US_WEST_COAST_DAILY": {
+            "name": "PODAAC-USWCD-ALT01",
+            "handler": "List",
+            "query": {
+                "shortName": "ALT_TIDE_GAUGE_L4_OST_SLA_US_WEST_COAST_DAILY"
+            }
+        }
+    }
+}

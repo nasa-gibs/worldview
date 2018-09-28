@@ -4,15 +4,15 @@ PROG=$(basename "$0")
 BASE=$(dirname "$0")/..
 
 TASKS_DIR="$BASE/tasks"
-SRC_DIR="$BASE/node_modules/worldview-options-eosdis"
+SRC_DIR="$BASE/config/default"
+OPT_DIR="$BASE/config/default"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
-OPT_DIR="$BASE/node_modules/worldview-options-eosdis"
 
-# If there is an options directory, use instead of node_modules
-if [ -d "$BASE/options" ]; then
-    SRC_DIR="$BASE/options"
-    OPT_DIR="$BASE/options"
+# If there is an active directory, use instead of defaults
+if [ -d "$BASE/config/active" ]; then
+    SRC_DIR="$BASE/config/active"
+    OPT_DIR="$BASE/config/active"
 fi
 
 # If $IGNORE_ERRORS is true, don't fail on errors
@@ -27,6 +27,9 @@ die() {
 
 # Set $OPT_SUBDIR to the value of CONFIG_ENV or "release"
 OPT_SUBDIR="${CONFIG_ENV-release}"
+
+CONFIG=$(echo $SRC_DIR | sed s_tasks/../__)
+echo "Using $CONFIG ($OPT_SUBDIR)"
 
 # Activate virtual Python environment
 PATH=.python/bin:.python/Scripts:${PATH}

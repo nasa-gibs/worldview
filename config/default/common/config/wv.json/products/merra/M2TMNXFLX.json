@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2TMNXFLX": {
+            "name": "MERRA-2 tavgM_2d_flx_Nx: 2d,Monthly mean,Time-Averaged,Single-Level,Assimilation,Surface Flux Diagnostics 0.625 x 0.5 degree V5.12.4 (M2TMNXFLX) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2TMNXFLX"
+            }
+        }
+    }
+}

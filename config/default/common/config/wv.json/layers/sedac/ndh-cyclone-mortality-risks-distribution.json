@@ -1,0 +1,30 @@
+{
+    "layers": {
+        "ndh-cyclone-mortality-risks-distribution": {
+            "id":       "ndh-cyclone-mortality-risks-distribution",
+            "title":    "Cyclone Hazard: Mortality Risk",
+            "subtitle": "SEDAC Global Cyclone Mortality Risks and Distribution, v1 (2000)",
+            "description": "sedac/ndh-cyclone-mortality-risks-distribution",
+            "group":    "overlays",
+            "format":   "image/png",
+            "tileSize": [512, 512],
+            "type":     "wms",
+            "layergroup": [
+              "sedac"
+            ],
+            "product":  "CIESIN_CHRR_NDH_CYCLONE_MRD",
+
+            "projections": {
+                "geographic": {
+                    "source": "SEDAC:wms"
+                }
+            },
+
+            "palette": {
+            	"id":			"ndh-cyclone-mortality-risks-distribution",
+                "immutable":    true
+            },
+            "wrapX": true
+        }
+    }
+}

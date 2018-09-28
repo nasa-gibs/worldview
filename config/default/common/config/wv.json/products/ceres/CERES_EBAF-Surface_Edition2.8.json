@@ -1,0 +1,11 @@
+{
+    "products": {
+        "CERES_EBAF-Surface_Edition2.8": {
+            "name": "CERES_EBAF-Surface_Edition2.8",
+            "handler": "List",
+            "query": {
+                "shortName": "CERES_EBAF-Surface_Edition2.8"
+            }
+        }
+    }
+}

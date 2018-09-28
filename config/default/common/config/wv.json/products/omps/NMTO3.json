@@ -1,0 +1,11 @@
+{
+    "products": {
+        "NMTO3": {
+            "name": "OMPS-NPP L2 NM Ozone (O3) Total Column swath orbital",
+            "handler": "List",
+            "query": {
+                "shortName": ["OMPS_NPP_NMTO3_L2", "NMTO3NRT"]
+            }
+        }
+    }
+}

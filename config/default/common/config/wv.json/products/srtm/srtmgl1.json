@@ -1,0 +1,12 @@
+{
+    "products": {
+        "SRTMGL1": {
+            "name": "Shuttle Radar Topography Mission",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "SRTMGL1"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

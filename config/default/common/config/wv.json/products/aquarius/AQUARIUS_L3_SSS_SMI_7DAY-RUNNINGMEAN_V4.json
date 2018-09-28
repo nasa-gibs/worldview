@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AQUARIUS_L3_SSS_SMI_7DAY-RUNNINGMEAN_V4": {
+            "name": "PODAAC-AQR40-3SQCS",
+            "handler": "List",
+            "query": {
+                "shortName": "AQUARIUS_L3_SSS_SMI_7DAY-RUNNINGMEAN_V4"
+            }
+        }
+    }
+}

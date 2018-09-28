@@ -1,0 +1,37 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Severe Storms": {
+                "title": "Severe Storms",
+                "id": "severe-storms",
+                "image": "severe-storms.jpg",
+                "description": "",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Cloud Fraction",
+                    "Cloud Multi Layer Flag",
+                    "Cloud Phase",
+                    "Cloud Pressure",
+                    "Cloud Effective Radius",
+                    "Cloud Optical Thickness",
+                    "Cloud Top Temperature",
+                    "Cloud Top Height",
+                    "Cloud Water Path",
+                    "Cyclone Hazard",
+                    "Flood Hazard",
+                    "Land Surface Temperature",
+                    "Lightning",
+                    "Precipitation Estimate",
+					          "Precipitation Rate",
+                    "Relative Humidity",
+                    "Sea Surface Temperature",
+                    "Soil Moisture",
+                    "Snow Cover",
+                    "Temperature",
+                    "Water Vapor",
+                    "Wind Speed"
+                ]
+            }
+        }
+    }
+}

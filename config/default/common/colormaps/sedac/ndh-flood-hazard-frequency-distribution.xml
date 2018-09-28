@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1..xsd">
+  <ColorMap title="Flood Hazard Frequency and Distribution">
+    <Entries>
+      <ColorMapEntry rgb="241,238,246" transparent="false" ref="1"/>
+      <ColorMapEntry rgb="189,201,225" transparent="false" ref="2"/>
+      <ColorMapEntry rgb="116,169,207" transparent="false" ref="3"/>
+      <ColorMapEntry rgb="5,112,176" transparent="false" ref="4"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="241,238,246" tooltip="1 - 2" id="1" showLabel="true"/>
+      <LegendEntry rgb="189,201,225" tooltip="3 - 5" id="2" showLabel="true"/>
+      <LegendEntry rgb="116,169,207" tooltip="6 - 11" id="3" showLabel="true"/>
+      <LegendEntry rgb="5,112,176" tooltip="12 - 25" id="4" showLabel="true"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

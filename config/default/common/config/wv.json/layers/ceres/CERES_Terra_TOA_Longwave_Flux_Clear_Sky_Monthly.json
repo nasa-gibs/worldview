@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "CERES_Terra_TOA_Longwave_Flux_Clear_Sky_Monthly": {
+            "id":       "CERES_Terra_TOA_Longwave_Flux_Clear_Sky_Monthly",
+            "title":    "TOA Longwave Flux (Monthly, All-Sky)",
+            "subtitle": "Terra / CERES",
+            "description": "ceres/CERES_Terra_TOA_Longwave_Flux_Clear_Sky_Monthly",
+            "tags":     "top of atmosphere",
+            "group":    "overlays",
+            "layergroup": [
+              "ceres"
+            ],
+            "product":  "",
+            "inactive": true,
+            "wrapadjacentdays": true
+        }
+    }
+}

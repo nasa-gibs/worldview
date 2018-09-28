@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AQ3_WKSM": {
+            "name": "Aquarius L3 Gridded 1-Degree Weekly Soil Moisture V004",
+            "handler": "List",
+            "query": {
+                "shortName": "AQ3_WKSM"
+            }
+        }
+    }
+}

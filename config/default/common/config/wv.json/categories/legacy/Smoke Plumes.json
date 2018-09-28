@@ -1,0 +1,19 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Smoke Plumes": {
+                "title": "Smoke Plumes",
+                "id": "smoke-plumes",
+                "image": "smoke-plumes.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Optical Depth",
+                    "Carbon Monoxide",
+                    "Corrected Reflectance",
+                    "Fires and Thermal Anomalies",
+                    "Land Surface Reflectance"
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "lisvhrac": {
+            "name": "LIS 0.1 DEGREE VERY HIGH RESOLUTION GRIDDED LIGHTNING ANNUAL CLIMATOLOGY (VHRAC)",
+            "handler": "List",
+            "query": {
+                "shortName": "lisvhrac"
+            }
+        }
+    }
+}

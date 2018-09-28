@@ -1,0 +1,20 @@
+{
+    "layers": {
+        "OMI_Aerosol_Optical_Depth": {
+            "id":       "OMI_Aerosol_Optical_Depth",
+            "title":    "Aerosol Optical Depth (Extinction, Near-UV, 388.0 nm)",
+            "subtitle": "Aura / OMI",
+            "description": "omi/OMI_Aerosol_Optical_Depth",
+            "group":    "overlays",
+            "layergroup": [
+              "omi"
+            ],
+            "product":  "OMAERUVd",
+            "tags":     "aod",
+
+            "palette": {
+                "recommended":  ["orange_1"]
+            }
+        }
+    }
+}

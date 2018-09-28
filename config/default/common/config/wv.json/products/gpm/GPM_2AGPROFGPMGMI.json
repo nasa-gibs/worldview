@@ -1,0 +1,11 @@
+{
+    "products": {
+        "GPM_2AGPROFGPMGMI": {
+            "name": "GPM, GMI Level 2A Radiometer Profiling",
+            "handler": "List",
+            "query": {
+                "shortName": "GPM_2AGPROFGPMGMI"
+            }
+        }
+    }
+}

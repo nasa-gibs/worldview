@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Cyclone Hazard Frequency and Distribution">
+    <Entries>
+      <ColorMapEntry rgb="255,255,212" transparent="false" ref="1"/>
+      <ColorMapEntry rgb="254,217,142" transparent="false" ref="2"/>
+      <ColorMapEntry rgb="254,153,41" transparent="false" ref="3"/>
+      <ColorMapEntry rgb="204,76,2" transparent="false" ref="4"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="255,255,212" tooltip="1 - 5" id="1" showLabel="true"/>
+      <LegendEntry rgb="254,217,142" tooltip="6 - 15" id="2" showLabel="true"/>
+      <LegendEntry rgb="254,153,41" tooltip="16 - 30" id="3" showLabel="true"/>
+      <LegendEntry rgb="204,76,2" tooltip="31 - 65" id="4" showLabel="true"/>
+    </Legend>
+  </ColorMap>
+</ColorMaps>

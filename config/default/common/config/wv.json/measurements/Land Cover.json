@@ -1,0 +1,31 @@
+{
+    "measurements": {
+        "Land Cover": {
+            "id": "land-cover",
+            "title":    "Land Cover",
+            "subtitle": "Landsat / WELD, SEDAC",
+            "sources": {
+                "Landsat/WELD": {
+                    "id": "landsat-weld",
+                    "title": "Landsat / WELD",
+                    "description": "landsat/LandCover",
+                    "image": "",
+                    "settings": [
+                        "Landsat_WELD_CONUS_5_Year_Tree_Cover"
+                    ]
+                },
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/LandCover",
+                    "image": "",
+                    "settings": [
+                        "Anthropogenic_Biomes_of_the_World_2001-2006",
+                        "Agricultural_Lands_Croplands_2000",
+                        "Agricultural_Lands_Pastures_2000"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "categories": {
+        "scientific": {
+            "Oceans": {
+                "title": "Oceans",
+                "id": "oceans",
+                "image": "oceans.jpg",
+                "description": "",
+                "measurements": [
+                    "Absolute Dynamic Topography",
+                    "Chlorophyll A",
+                    "Liquid Water Equivalent",
+                    "Cloud Liquid Water",
+                    "Open Water Latent Energy Flux",
+                    "Precipitation Rate",
+                    "Radiance",
+                    "Sea Ice",
+                    "Sea Surface Currents",
+                    "Sea Surface Height Anomalies",
+                    "Sea Surface Salinity",
+                    "Sea Surface Temperature",
+                    "Water Vapor",
+                    "Wind Speed"
+                ]
+            }
+        }
+    }
+}

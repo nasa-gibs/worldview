@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AIRX3C2M": {
+            "name": "AIRS/Aqua L3 Monthly CO2 in the free troposphere (AIRS+AMSU) 2.5 degrees x 2 degrees",
+            "handler": "List",
+            "query": {
+                "shortName": "AIRX3C2M"
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "layers": {
+        "AIRS_Clear_Sky_Outgoing_Longwave_Radiation_Daily_Night": {
+            "id":       "AIRS_Clear_Sky_Outgoing_Longwave_Radiation_Daily_Night",
+            "title":    "Clear Sky Outgoing Longwave Radiation (Night, Daily)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Clear_Sky_Outgoing_Longwave_Radiation_Daily_Night",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STD",
+            "wrapadjacentdays": true,
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}

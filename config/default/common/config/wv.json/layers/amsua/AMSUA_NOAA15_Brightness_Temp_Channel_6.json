@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "AMSUA_NOAA15_Brightness_Temp_Channel_6": {
+            "id":       "AMSUA_NOAA15_Brightness_Temp_Channel_6",
+            "title":    "Brightness Temperature (Channel 06)",
+            "subtitle": "AMSU-A / NOAA-15",
+            "description": "amsua/AMSUA_NOAA15_Brightness_Temp_Channel_6",
+            "group":    "overlays",
+            "layergroup": [
+              "amsua"
+            ],
+            "product":  "amsua15sp",
+            "tags":     ""
+        }
+    }
+}

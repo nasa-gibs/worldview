@@ -1,0 +1,11 @@
+{
+    "products": {
+        "SMAP_JPL_L3_SSS_CAP_8DAY-RUNNINGMEAN_V4": {
+            "name": "PODAAC-SMP40-3TPCS",
+            "handler": "List",
+            "query": {
+                "shortName": "SMAP_JPL_L3_SSS_CAP_8DAY-RUNNINGMEAN_V4"
+            }
+        }
+    }
+}

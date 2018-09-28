@@ -1,0 +1,25 @@
+{
+    "measurements": {
+        "Reference Map": {
+            "id": "reference-map",
+            "title":    "Reference Map",
+            "subtitle": "OpenStreetMap.org",
+            "multichoice": true,
+            "sources": {
+                "OpenStreetMap.org": {
+                    "id": "openstreetmap",
+                    "title": "OpenStreetMap.org",
+                    "description": "reference/ReferenceMap",
+                    "image": "",
+                    "settings": [
+                        "Reference_Features",
+                        "Reference_Labels",
+                        "Coastlines",
+                        "Land_Mask",
+                        "Land_Water_Map"
+                    ]
+                }
+            }
+        }
+    }
+}

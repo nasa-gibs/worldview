@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Drought Hazard": {
+            "id": "drought-hazard",
+            "title":    "Drought Hazard",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/DroughtHazard",
+                    "image": "",
+                    "settings": [
+                        "NDH_Drought_Hazard_Frequency_Distribution_1980-2000",
+                        "ndh-drought-mortality-risks-distribution",
+                        "ndh-drought-proportional-economic-loss-risk-deciles"
+
+                    ]
+                }
+            }
+        }
+    }
+}

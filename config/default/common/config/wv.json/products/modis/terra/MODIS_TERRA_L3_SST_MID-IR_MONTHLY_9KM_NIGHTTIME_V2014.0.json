@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MODIS_TERRA_L3_SST_MID-IR_MONTHLY_9KM_NIGHTTIME_V2014.0": {
+            "name": "PODAAC-MODTM-MO9N4",
+            "handler": "List",
+            "query": {
+                "shortName": "MODIS_TERRA_L3_SST_MID-IR_MONTHLY_9KM_NIGHTTIME_V2014.0"
+            }
+        }
+    }
+}

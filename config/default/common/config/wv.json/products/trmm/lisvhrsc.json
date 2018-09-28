@@ -1,0 +1,11 @@
+{
+    "products": {
+        "lisvhrsc": {
+            "name": "LIS 0.1 DEGREE VERY HIGH RESOLUTION GRIDDED LIGHTNING SEASONAL CLIMATOLOGY (VHRSC)",
+            "handler": "List",
+            "query": {
+                "shortName": "lisvhrsc"
+            }
+        }
+    }
+}

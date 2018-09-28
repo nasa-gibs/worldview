@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Aerosol_Optical_Depth_Analysis_Monthly": {
+            "id":       "MERRA2_Aerosol_Optical_Depth_Analysis_Monthly",
+            "title":    "Aerosol Optical Depth Analysis (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Aerosol_Optical_Depth_Analysis_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2IMNXGAS",
+            "wrapadjacentdays": true
+        }
+    }
+}

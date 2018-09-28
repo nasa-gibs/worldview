@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2IMNXGAS": {
+            "name": "MERRA-2 instM_2d_gas_Nx: 2d,Monthly mean,Instantaneous,Single-Level,Assimilation,Aerosol Optical Depth Analysis 0.625 x 0.5 degree V5.12.4 (M2IMNXGAS) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2IMNXGAS"
+            }
+        }
+    }
+}

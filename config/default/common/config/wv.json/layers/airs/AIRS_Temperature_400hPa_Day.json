@@ -1,0 +1,32 @@
+{
+    "layers": {
+        "AIRS_Temperature_400hPa_Day": {
+            "id":       "AIRS_Temperature_400hPa_Day",
+            "title":    "Temperature (400 hPa, Day)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Temperature_400hPa_Day",
+            "group":    "overlays",
+            "product":  "AIRX2RET_DAY",
+
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "period":       "daily",
+
+            "projections": {
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "2km"
+                }
+            },
+
+            "layergroup": [
+              "airs"
+            ],
+            "palette": {
+                "id":   "AIRS_Temperature_400hPa_Day"
+            }
+        }
+    }
+}

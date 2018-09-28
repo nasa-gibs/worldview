@@ -1,0 +1,24 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Fires": {
+                "title": "Fires",
+                "id": "fires",
+                "image": "fires.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Index",
+                    "Aerosol Optical Depth",
+                    "Fires and Thermal Anomalies",
+                    "Carbon Monoxide",
+                    "Corrected Reflectance",
+                    "Earth at Night",
+                    "Land Cover",
+                    "Land Surface Reflectance",
+                    "Land Surface Temperature",
+                    "Sulfur Dioxide"
+                ]
+            }
+        }
+    }
+}

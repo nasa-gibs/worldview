@@ -1,0 +1,36 @@
+{
+    "measurements": {
+        "Cloud Fraction": {
+            "id": "cloud-fraction",
+            "title":    "Cloud Fraction",
+            "subtitle": "Aqua / MODIS, Terra / MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua / MODIS",
+                    "description": "modis/CloudFraction",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Fraction_Day",
+                        "MODIS_Aqua_Cloud_Fraction_Night",
+                        "Aqua_Orbit_Asc",
+                        "Aqua_Orbit_Dsc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra / MODIS",
+                    "description": "modis/CloudFraction",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Fraction_Day",
+                        "MODIS_Terra_Cloud_Fraction_Night",
+                        "Terra_Orbit_Asc",
+                        "Terra_Orbit_Dsc"
+                    ]
+
+                }
+            }
+        }
+    }
+}

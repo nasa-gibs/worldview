@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_ISCCP_Cloud_Albedo_Monthly": {
+            "id":       "MERRA2_ISCCP_Cloud_Albedo_Monthly",
+            "title":    "ISCCP Cloud Albedo (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_ISCCP_Cloud_Albedo_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXCSP",
+            "wrapadjacentdays": true
+        }
+    }
+}

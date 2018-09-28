@@ -1,0 +1,19 @@
+### Sea Surface Salinity (L3, Daily | 7-Day Running Mean | 7 Day Snapshot | Monthly | 3-Month)
+Temporal Coverage: 25 August 2011 - 7 June 2015 (Daily), 25 August 2011 - 7 June 2015 (7-Day Running Mean); 27 August 2011 - 4 June 2015 (7 Day Snapshot); 25 August 2011 - 1 May 2015 (Monthly); 25 August 2011 - 21 December 2014 (3 Month)
+
+Aquarius Level 3 sea surface salinity (SSS) standard mapped image data contains gridded 1 degree spatial resolution SSS averaged over a range of temporal scales, from daily to seasonal. These layers are based on the Aquarius version 4.0 sea surface salinity (SSS) product, which is the official end of prime mission public data release from the AQUARIUS/SAC-D mission.  
+
+Aquarius was a NASA pathfinder mission providing routine, global remotely sensed sea surface salinity measurements from space over the ocean for the period 25 August, 2011 through 7 June, 2015. It was a collaborative mission between NASA and CONAE, the Argentinean space agency. Salinity is a key measurement in oceanographic investigations, serving as a tracer of different water masses, aspects of circulation, and water column structure. Sea surface salinity is also an important parameter in studies of the Earth's water cycle and an indicator of the net effect of critical processes implicated, including evaporation and precipitation. Salinity is measured in units of PSU (practical salinity units), and is defined as the number of grams of salt in 1000 grams of water. The typical salinity of seawater is 35 psu with values in the open ocean varying regionally between 33 and 38 psu. More locally in coastal areas subject to riverine flows, values can be lower, with salinities in estuarine areas potentially as low as 0.5 psu.
+
+References:
+Lee, T., G. Lagerloef, M.M. Gierach, H.-Y. Kao, S. Yueh, and K. Dohan (2012), Aquarius reveals salinity structure of tropical instability waves, Geophys. Res. Lett., 39, L12610, [doi:10.1029/2012GL052232](http://dx.doi.org/10.1029/2012GL052232).
+
+NASA Aquarius project. 2015. Aquarius Official Release Level 3 Sea Surface Salinity Standard Mapped Image Daily Data V4.0. Ver. 4.0. PO.DAAC, CA,	USA. doi: [10.5067/AQR40-3S1CS](http://dx.doi.org/10.5067/AQR40-3S1CS).
+
+NASA Aquarius project. 2015. Aquarius Official Release Level 3 Sea Surface Salinity Standard Mapped Image 7-Day Data V4.0. Ver. 4.0. PO.DAAC, CA,	USA. doi: [10.5067/AQR40-3S7CS](http://dx.doi.org/10.5067/AQR40-3S7CS).
+
+NASA Aquarius project. 2015. Aquarius Official Release Level 3 Sea Surface Salinity Standard Mapped Image 7-Day Running Mean Data V4.0. Ver. 4.0. PO.DAAC, CA, USA. doi: [10.5067/AQR40-3SQCS](http://dx.doi.org/10.5067/AQR40-3SQCS).
+
+NASA Aquarius project. 2015. Aquarius Official Release Level 3 Sea Surface Salinity Standard Mapped Image Monthly Data V4.0. Ver. 4.0. PO.DAAC, CA,	USA. doi: [10.5067/AQR40-3SMCS](http://dx.doi.org/10.5067/AQR40-3SMCS).
+
+NASA Aquarius project. 2015. Aquarius Official Release Level 3 Sea Surface Salinity Standard Mapped Image Seasonal Data V4.0. Ver. 4.0. PO.DAAC,	CA,	USA. doi: [10.5067/AQR40-3S3CS](http://dx.doi.org/10.5067/AQR40-3S3CS).

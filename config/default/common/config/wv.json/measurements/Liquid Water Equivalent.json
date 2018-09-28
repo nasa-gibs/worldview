@@ -1,0 +1,30 @@
+{
+    "measurements": {
+        "Liquid Water Equivalent": {
+            "id": "liquid-water-equivalent",
+            "title":    "Liquid Water Equivalent",
+            "subtitle": "GRACE Tellus",
+            "sources": {
+                "GRACE Tellus": {
+                    "id": "grace-tellus",
+                    "title": "GRACE Tellus",
+                    "description": "grace/LiquidWaterEquivalent",
+                    "image": "",
+                    "settings": [
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Mascon_CRI",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Mascon",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Land_GFZ",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Land_JPL",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Land_CSR",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_GFZ",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_JPL",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_CSR",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_EOF_GFZ",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_EOF_JPL",
+                      "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_EOF_CSR"
+                    ]
+                }
+            }
+        }
+    }
+}

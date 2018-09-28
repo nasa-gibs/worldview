@@ -1,0 +1,11 @@
+{
+    "products": {
+        "LPRM_AMSR2_A_SOILM3": {
+            "name": "AMSR2/GCOM-W1 surface soil moisture (LPRM) L3 1 day 25 km x 25 km ascending V001",
+            "handler": "List",
+            "query": {
+                "shortName": "LPRM_AMSR2_A_SOILM3"
+            }
+        }
+    }
+}

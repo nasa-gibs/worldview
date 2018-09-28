@@ -1,0 +1,11 @@
+{
+    "products": {
+        "rssmif10d": {
+            "name": "RSS SSM/I Ocean Product Grids Daily from DMSP F10 NetCDF V7",
+            "handler": "List",
+            "query": {
+                "shortName": "rssmif10d"
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "SPL2SMAP_S": {
+            "name": "SMAP/Sentinel-1 L2 Radiometer/Radar 30-Second Scene 3 km EASE-Grid Soil Moisture, Version 1",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "SPL2SMAP_S"
+            }
+        }
+    }
+}

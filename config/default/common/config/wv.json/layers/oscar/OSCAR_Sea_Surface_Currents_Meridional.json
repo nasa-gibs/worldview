@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "OSCAR_Sea_Surface_Currents_Meridional": {
+            "id":       "OSCAR_Sea_Surface_Currents_Meridional",
+            "title":    "Sea Surface Currents (Meridional)",
+            "subtitle": "OSCAR",
+            "description": "oscar/OSCAR_Sea_Surface_Currents_Meridional",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "oscar"
+            ],
+            "product":  "OSCAR_L4_OC_third-deg"
+        }
+    }
+}

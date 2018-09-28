@@ -1,0 +1,11 @@
+{
+    "products": {
+        "otdlip": {
+            "name": "OPTICAL TRANSIENT DETECTOR (OTD) LIGHTNING V1",
+            "handler": "List",
+            "query": {
+                "shortName": "otdlip"
+            }
+        }
+    }
+}

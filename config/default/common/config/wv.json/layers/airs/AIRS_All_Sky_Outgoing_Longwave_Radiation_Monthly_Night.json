@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "AIRS_All_Sky_Outgoing_Longwave_Radiation_Monthly_Night": {
+            "id":       "AIRS_All_Sky_Outgoing_Longwave_Radiation_Monthly_Night",
+            "title":    "Outgoing Longwave Radiation (Night, Monthly)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_All_Sky_Outgoing_Longwave_Radiation_Monthly_Night",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STM",
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}
