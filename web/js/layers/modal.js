@@ -580,7 +580,7 @@ export function layersModal(models, ui, config) {
 
             // Simple test to see if theres a link to some metadata
             if (source.description) {
-              $.get('config/metadata/' + source.description + '.html').success(
+              $.get('config/metadata/' + source.description + '.html').done(
                 function(data) {
                   $sourceMeta.html(data);
                   $sourceContent.append($sourceMeta);
