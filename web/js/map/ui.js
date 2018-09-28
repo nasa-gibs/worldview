@@ -989,7 +989,6 @@ export function mapui(models, config) {
         ) {
           return;
         }
-        // $('#' + mapId).hide();
         hoverThrottle.cancel();
         dataRunner.clearAll();
       })
