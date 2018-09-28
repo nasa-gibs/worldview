@@ -5,7 +5,7 @@ import Coordinates from './coordinates';
 describe('formats', () => {
   let formats = ['latlon-dd', 'latlon-dm', 'latlon-dms'];
   for (let format of formats) {
-    test(format, () => {
+    test(`coordinate in ${format} format`, () => {
       let component = renderer.create(<Coordinates
         format={format}
         latitude={0}
@@ -18,7 +18,7 @@ describe('formats', () => {
   }
 });
 
-test('change format', () => {
+test('change format from latlon-dd to latlon-dm', () => {
   let callback = jest.fn();
   let component = renderer.create(<Coordinates
     format='latlon-dd'

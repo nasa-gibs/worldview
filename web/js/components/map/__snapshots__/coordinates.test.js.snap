@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`formats latlon-dd 1`] = `
+exports[`formats coordinate in latlon-dd format 1`] = `
 <div
   className="wv-coords-map wv-coords-map-btn"
   onClick={[Function]}
@@ -22,7 +22,7 @@ exports[`formats latlon-dd 1`] = `
 </div>
 `;
 
-exports[`formats latlon-dm 1`] = `
+exports[`formats coordinate in latlon-dm format 1`] = `
 <div
   className="wv-coords-map wv-coords-map-btn"
   onClick={[Function]}
@@ -44,7 +44,7 @@ exports[`formats latlon-dm 1`] = `
 </div>
 `;
 
-exports[`formats latlon-dms 1`] = `
+exports[`formats coordinate in latlon-dms format 1`] = `
 <div
   className="wv-coords-map wv-coords-map-btn"
   onClick={[Function]}

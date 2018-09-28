@@ -42,8 +42,8 @@ class OlCoordinates extends React.Component {
 
     this.setState({
       format: util.getCoordinateFormat(),
-      latitude: pcoord[0],
-      longitude: pcoord[1],
+      latitude: pcoord[1],
+      longitude: pcoord[0],
       crs
     });
   }
