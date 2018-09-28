@@ -198,6 +198,12 @@ export default (function() {
   };
 
   self.tests.small = function() {
+    let dim = self.tests.getWindowDimensions();
+    // If the dimensions are (0,0), this is not being run in a real browser
+    // so assume desktop mode unless otherwise changed.
+    if (dim[0] === 0 && dim[1] === 0) {
+      return false;
+    }
     return self.tests.getWindowDimensions()[0] < self.mobileWidth;
   };
 
