@@ -1,0 +1,29 @@
+{
+    "measurements": {
+        "Snow Cover": {
+            "id": "snow-cover",
+            "title":    "Snow Cover",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/SnowCover",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_NDSI_Snow_Cover"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/SnowCover",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_NDSI_Snow_Cover"
+                    ]
+                }
+            }
+        }
+    }
+}

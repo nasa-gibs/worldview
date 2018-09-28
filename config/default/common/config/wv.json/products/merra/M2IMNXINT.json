@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2IMNXINT": {
+            "name": "MERRA-2 instM_2d_int_Nx: 2d,Monthly mean,Instantaneous,Single-Level,Assimilation,Vertically Integrated Diagnostics 0.625 x 0.5 degree V5.12.4 (M2IMNXINT) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2IMNXINT"
+            }
+        }
+    }
+}

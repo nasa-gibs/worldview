@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OSCAR_L4_OC_third-deg": {
+            "name": "PODAAC-OSCAR-03D01",
+            "handler": "List",
+            "query": {
+                "shortName": "OSCAR_L4_OC_third-deg"
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+The Population Density, 2010 layer is from the Gridded Population of the World, Version 4 (GPWv4) Population Count Adjusted to Match 2015 Revision of UN WPP Country Totals. It consists of estimates of human population consistent with national censuses and population registers with respect to relative spatial distribution, but adjusted to match 2015 Revision of UN World Population Prospects country totals for the years 2000, 2005, 2010, 2015, and 2020. A proportional allocation gridding algorithm, utilizing approximately 12.5 million national and sub-national administrative units, is used to assign population values to 30 arc-second (~1 km) grid cells. The grids contain estimates of the number of persons per grid cell.
+
+The purpose of the data set is to provide estimates of population count for the years 2000, 2005, 2010, 2015, and 2020, consistent with national censuses and population registers with respect to relative spatial distribution, but adjusted to match United Nations country totals.
+
+References: [doi:10.7927/H4SF2T42](https://dx.doi.org/10.7927/H4SF2T42)

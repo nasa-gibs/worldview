@@ -1,0 +1,27 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Drought": {
+                "title": "Drought",
+                "id": "drought",
+                "description": "",
+                "image": "drought.jpg",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Dams",
+                    "Drought Hazard",
+                    "Land Surface Reflectance",
+                    "Land Surface Temperature",
+                    "Precipitation Estimate",
+                    "Precipitation Rate",
+                    "Temperature",
+                    "Reservoirs",
+                    "Snow Cover",
+                    "Snow Water Equivalent",
+                    "Soil Moisture",
+                    "Vegetation Indices"
+                ]
+            }
+        }
+    }
+}

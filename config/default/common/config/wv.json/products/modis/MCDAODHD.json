@@ -1,0 +1,15 @@
+{
+    "products": {
+        "MCDAODHD": {
+            "name": "MODIS/Terra+Aqua NRT value-added Aerosol Optical Depth",
+            "handler": "DailyGranuleList",
+            "query": {
+                "shortName": "MCDAODHD"
+            },
+            "urs": {
+                "by": "constant",
+                "value": true
+            }
+        }
+    }
+}

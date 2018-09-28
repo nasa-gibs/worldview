@@ -1,0 +1,41 @@
+{
+    "layers": {
+        "Suomi_NPP_Orbit_Asc": {
+            "id":       "Suomi_NPP_Orbit_Asc",
+            "title":    "Suomi-NPP Orbital Track & Overpass Time (Ascending/Day)",
+            "subtitle": "Suomi-NPP / Space-Track.org",
+            "description": "reference/orbits/Suomi_NPP_Orbit_Asc",
+            "group":    "overlays",
+            "tags":     "snpp s-npp",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "wrapadjacentdays": true,
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "day",
+            "track": "ascending",
+            "startDate": "2011-10-28",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "Suomi_NPP_Orbit_Asc",
+                "immutable": true
+            }
+        }
+    }
+}

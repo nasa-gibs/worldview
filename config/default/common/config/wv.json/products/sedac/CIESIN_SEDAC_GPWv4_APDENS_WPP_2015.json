@@ -1,0 +1,12 @@
+{
+    "products": {
+        "CIESIN_SEDAC_GPWv4_APDENS_WPP_2015": {
+            "name": "Gridded Population of the World, Version 4 (GPWv4): Population Density Adjusted to Match 2015 Revision UN WPP Country Totals",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "CIESIN_SEDAC_GPWv4_APDENS_WPP_2015"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

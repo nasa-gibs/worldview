@@ -1,0 +1,19 @@
+{
+    "layers": {
+        "AIRS_Methane_Volume_Mixing_Ratio_Daily_Night": {
+            "id":       "AIRS_Methane_Volume_Mixing_Ratio_Daily_Night",
+            "title":    "Methane (400 hPa, Night, Daily)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Methane_Volume_Mixing_Ratio_Daily_Night",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STD",
+            "wrapadjacentdays": true,
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}

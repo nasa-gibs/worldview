@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MIL3MAE": {
+            "name": "MISR Level 3 Component Global Aerosol Product covering a month",
+            "handler": "List",
+            "query": {
+                "shortName": "MIL3MAE"
+            }
+        }
+    }
+}

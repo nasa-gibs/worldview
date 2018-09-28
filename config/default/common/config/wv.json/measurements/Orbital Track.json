@@ -1,0 +1,171 @@
+{
+    "measurements": {
+        "Orbital Track": {
+            "id": "orbital-track",
+            "title":    "Orbital Track & Overpass Time",
+            "subtitle": "Space-Track.org / Aqua, Terra, Aura, CALIPSO, GPM, GCOM-W1, Suomi-NPP, NOAA-20, SMAP, Landsat 7, Landsat 8, Sentinel-2A, Sentinel-2B, Sentinel-5P, ISS, GOSAT",
+            "sources": {
+                "Terra / Space-Track.org": {
+                    "id": "space-track-org-terra",
+                    "title": "Terra / Space-Track.org",
+                    "description": "reference/orbits/Terra",
+                    "image": "",
+                    "settings": [
+                        "Terra_Orbit_Asc",
+                        "Terra_Orbit_Dsc"
+                    ]
+                },
+                "Aqua / Space-Track.org": {
+                    "id": "space-track-org-aqua",
+                    "title": "Aqua / Space-Track.org",
+                    "description": "reference/orbits/Aqua",
+                    "image": "",
+                    "settings": [
+                        "Aqua_Orbit_Asc",
+                        "Aqua_Orbit_Dsc"
+                    ]
+                },
+                "Aura / Space-Track.org": {
+                    "id": "space-track-org-aura",
+                    "title": "Aura / Space-Track.org",
+                    "description": "reference/orbits/Aura",
+                    "image": "",
+                    "settings": [
+                        "Aura_Orbit_Asc",
+                        "Aura_Orbit_Dsc"
+                    ]
+                },
+                "CALIPSO / Space-Track.org": {
+                    "id": "space-track-org-calipso",
+                    "title": "CALIPSO / Space-Track.org",
+                    "description": "reference/orbits/CALIPSO",
+                    "image": "",
+                    "settings": [
+                        "Calipso_Orbit_Asc",
+                        "Calipso_Orbit_Dsc"
+                    ]
+                },
+                "GPM / Space-Track.org": {
+                    "id": "space-track-org-gpm",
+                    "title": "GPM / Space-Track.org",
+                    "description": "reference/orbits/GPM",
+                    "image": "",
+                    "settings": [
+                        "GPM_Orbit_Asc",
+                        "GPM_Orbit_Dsc"
+                    ]
+                },
+                "GCOM-W1 / Space-Track.org": {
+                    "id": "space-track-org-gcom",
+                    "title": "GCOM-W1 / Space-Track.org",
+                    "description": "reference/orbits/GCOM-W1",
+                    "image": "",
+                    "settings": [
+                        "GCOM_W1_Orbit_Asc",
+                        "GCOM_W1_Orbit_Dsc"
+                    ]
+                },
+                "Sentinel-2A / Space-Track.org": {
+                    "id": "space-track-org-sentinel-2a",
+                    "title": "Sentinel-2A / Space-Track.org",
+                    "description": "reference/orbits/Sentinel_2A",
+                    "image": "",
+                    "settings": [
+                        "Sentinel_2A_Orbit_Asc",
+                        "Sentinel_2A_Orbit_Dsc"
+                    ]
+                },
+                "Sentinel-2B / Space-Track.org": {
+                    "id": "space-track-org-sentinel-2b",
+                    "title": "Sentinel-2B / Space-Track.org",
+                    "description": "reference/orbits/Sentinel_2B",
+                    "image": "",
+                    "settings": [
+                        "Sentinel_2B_Orbit_Asc",
+                        "Sentinel_2B_Orbit_Dsc"
+                    ]
+                },
+                "Sentinel-5P / Space-Track.org": {
+                    "id": "space-track-org-sentinel-5p",
+                    "title": "Sentinel-5P / Space-Track.org",
+                    "description": "reference/orbits/Sentinel_5P",
+                    "image": "",
+                    "settings": [
+                        "Sentinel_5P_Orbit_Asc",
+                        "Sentinel_5P_Orbit_Dsc"
+                    ]
+                },
+                "Suomi-NPP / Space-Track.org": {
+                    "id": "space-track-org-suomi-npp",
+                    "title": "Suomi-NPP / Space-Track.org",
+                    "description": "reference/orbits/SNPP",
+                    "image": "",
+                    "settings": [
+                        "Suomi_NPP_Orbit_Asc",
+                        "Suomi_NPP_Orbit_Dsc"
+                    ]
+                },
+                "NOAA-20 / Space-Track.org": {
+                    "id": "space-track-org-noaa-20",
+                    "title": "NOAA-20 / Space-Track.org",
+                    "description": "reference/orbits/NOAA_20",
+                    "image": "",
+                    "settings": [
+                        "NOAA_20_Orbit_Asc",
+                        "NOAA_20_Orbit_Dsc"
+                    ]
+                },
+                "SMAP / Space-Track.org": {
+                    "id": "space-track-org-smap",
+                    "title": "SMAP / Space-Track.org",
+                    "description": "reference/orbits/SMAP",
+                    "image": "",
+                    "settings": [
+                        "SMAP_Orbit_Asc",
+                        "SMAP_Orbit_Dsc"
+                    ]
+                },
+                "Landsat 7 / Space-Track.org": {
+                    "id": "space-track-org-landsat-7",
+                    "title": "Landsat 7 / Space-Track.org",
+                    "description": "reference/orbits/Landsat_7",
+                    "image": "",
+                    "settings": [
+                        "Landsat_7_Orbit_Asc",
+                        "Landsat_7_Orbit_Dsc"
+                    ]
+                },
+                "Landsat 8 / Space-Track.org": {
+                    "id": "space-track-org-landsat-8",
+                    "title": "Landsat 8 / Space-Track.org",
+                    "description": "reference/orbits/Landsat_8",
+                    "image": "",
+                    "settings": [
+                        "Landsat_8_Orbit_Asc",
+                        "Landsat_8_Orbit_Dsc"
+                    ]
+                },
+                "ISS / Space-Track.org": {
+                    "id": "space-track-org-iss",
+                    "title": "ISS / Space-Track.org",
+                    "description": "reference/orbits/ISS",
+                    "image": "",
+                    "settings": [
+                        "ISS_Orbit_Asc",
+                        "ISS_Orbit_Dsc"
+                    ]
+                },
+                "GOSAT / Space-Track.org": {
+                    "id": "space-track-org-gosat",
+                    "title": "GOSAT / Space-Track.org",
+                    "description": "reference/orbits/GOSAT",
+                    "image": "",
+                    "settings": [
+                        "GOSAT_Orbit_Asc",
+                        "GOSAT_Orbit_Dsc"
+                    ]
+                }
+            }
+        }
+    }
+}

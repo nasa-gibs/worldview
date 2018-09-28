@@ -1,0 +1,11 @@
+{
+    "products": {
+        "SWDB_L305": {
+            "name": "SeaWiFS Deep Blue Aerosol Optical Depth and Angstrom Exponent Daily Level 3 Data Gridded at 0.5 Degrees",
+            "handler": "List",
+            "query": {
+                "shortName": "SWDB_L305"
+            }
+        }
+    }
+}

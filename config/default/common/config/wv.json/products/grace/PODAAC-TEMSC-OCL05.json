@@ -1,0 +1,11 @@
+{
+    "products": {
+        "TELLUS_GRACE_MASCON_GRID_RL05_V1": {
+            "name": "PODAAC-TEMSC-OCL05",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "TELLUS_GRACE_MASCON_GRID_RL05_V1"
+            }
+        }
+    }
+}

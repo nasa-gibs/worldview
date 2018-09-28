@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Human Footprint": {
+            "id": "human-footprint",
+            "title":    "Human Footprint",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/HumanFootprint",
+                    "image": "",
+                    "settings": [
+                        "Human_Footprint_1995-2004",
+                        "Last_of_the_Wild_1995-2004"
+                    ]
+                }
+            }
+        }
+    }
+}

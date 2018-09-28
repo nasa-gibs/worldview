@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_2m_Air_Temperature_Monthly": {
+            "id":       "MERRA2_2m_Air_Temperature_Monthly",
+            "title":    "2-meter Air Temperature (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_2m_Air_Temperature_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXSLV",
+            "wrapadjacentdays": true
+        }
+    }
+}

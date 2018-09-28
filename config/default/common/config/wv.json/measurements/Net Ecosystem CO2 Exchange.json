@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Net Ecosystem CO2 Exchange": {
+            "id": "net-ecosystem-co2-exchange",
+            "title":    "Net Ecosystem CO2 Exchange",
+            "subtitle": "SMAP/Model Value-Added",
+            "sources": {
+                "SMAP/Model Value-Added": {
+                    "id": "smap-model-value-added",
+                    "title": "SMAP / Model Value-Added",
+                    "description": "smap/NetEcosystemCO2Exchange",
+                    "image": "",
+                    "settings": [
+			                  "SMAP_L4_Mean_Net_Ecosystem_Exchange",
+                        "SMAP_L4_Uncertainty_Mean_Net_Ecosystem_Exchange"
+                    ]
+                }
+            }
+        }
+    }
+}

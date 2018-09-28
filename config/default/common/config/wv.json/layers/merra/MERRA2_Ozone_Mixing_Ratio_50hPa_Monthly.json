@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Ozone_Mixing_Ratio_50hPa_Monthly": {
+            "id":       "MERRA2_Ozone_Mixing_Ratio_50hPa_Monthly",
+            "title":    "Ozone Mixing Ratio at 50hPa (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Ozone_Mixing_Ratio_50hPa_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2IMNPANA",
+            "wrapadjacentdays": true
+        }
+    }
+}

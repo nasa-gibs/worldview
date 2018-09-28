@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AU_Land": {
+            "name": "AMSR-E/AMSR2 Unified L2B Half-Orbit 25 km EASE-Grid Surface Soil Moisture",
+            "handler": "HalfOrbit",
+            "query": {
+                "shortName": "AU_Land"
+            }
+        }
+    }
+}

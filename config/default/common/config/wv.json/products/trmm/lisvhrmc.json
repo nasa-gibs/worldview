@@ -1,0 +1,11 @@
+{
+    "products": {
+        "lisvhrmc": {
+            "name": "LIS 0.1 DEGREE VERY HIGH RESOLUTION GRIDDED LIGHTNING MONTHLY CLIMATOLOGY (VHRMC)",
+            "handler": "List",
+            "query": {
+                "shortName": "lisvhrmc"
+            }
+        }
+    }
+}

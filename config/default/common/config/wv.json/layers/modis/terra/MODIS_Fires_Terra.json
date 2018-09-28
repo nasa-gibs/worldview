@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "MODIS_Fires_Terra": {
+            "id":       "MODIS_Fires_Terra",
+            "title":    "Fires and Thermal Anomalies (Day and Night)",
+            "subtitle": "Terra / MODIS",
+            "description": "modis/terra/MODIS_Fires_Terra",
+            "tags":     "hotspot",
+            "group":    "overlays",
+            "format":   "image/png",
+            "period":   "daily",
+            "layergroup": [
+              "modis",
+              "modis_terra"
+            ],
+            "product":  "MOD14",
+
+            "tileSize": [512, 512],
+            "type":     "wms",
+
+            "transition":   "true",
+            "startDate":    "2012-05-08",
+
+            "projections": {
+              "arctic": {
+                 "source":   "GIBS:wms"
+              },
+                "geographic": {
+                    "source": "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id":       "MODIS_Fires_Terra",
+                "immutable": "true"
+            }
+        }
+    }
+}

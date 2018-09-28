@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Cloud Albedo": {
+            "id": "cloud-albedo",
+            "title":    "Cloud Albedo",
+            "subtitle": "MERRA-2",
+            "sources": {
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/CloudAlbedo",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_ISCCP_Cloud_Albedo_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

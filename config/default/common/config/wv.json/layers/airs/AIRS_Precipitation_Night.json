@@ -1,0 +1,20 @@
+{
+    "layers": {
+        "AIRS_Precipitation_Night": {
+            "id":       "AIRS_Precipitation_Night",
+            "title":    "Precipitation Estimate (Night)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Precipitation_Night",
+            "tags":     "rain snow",
+            "group":    "overlays",
+            "product":  "AIRX2SUP_NIGHT",
+
+            "layergroup": [
+              "airs"
+            ],
+            "palette": {
+                "recommended": ["blue_1", "blue_3"]
+            }
+        }
+    }
+}

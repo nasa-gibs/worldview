@@ -1,0 +1,54 @@
+{
+    "measurements": {
+        "Fires and Thermal Anomalies": {
+            "id": "fires-thermal-anomalies",
+            "title":    "Fires and Thermal Anomalies",
+            "subtitle": "Aqua / MODIS, Terra / MODIS, Aqua and Terra / MODIS, Suomi NPP / VIIRS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua / MODIS",
+                    "description": "modis/Fires_ThermalAnomalies",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Fires_Aqua",
+                        "Aqua_Orbit_Asc",
+                        "Aqua_Orbit_Dsc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra / MODIS",
+                    "description": "modis/Fires_ThermalAnomalies",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Fires_Terra",
+                        "Terra_Orbit_Asc",
+                        "Terra_Orbit_Dsc"
+                    ]
+                },
+                "Aqua and Terra/MODIS": {
+                    "id": "aqua-terra-modis",
+                    "title": "Aqua and Terra / MODIS",
+                    "description": "modis/Fires_ThermalAnomalies",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Fires_All"
+                    ]
+                },
+                "S-NPP/VIIRS": {
+                    "id": "snpp-viirs",
+                    "title": "Suomi NPP / VIIRS",
+                    "description": "viirs/Fires_ThermalAnomalies",
+                    "image": "",
+                    "settings": [
+                      	"VIIRS_SNPP_Fires_375m_Day",
+	                      "VIIRS_SNPP_Fires_375m_Night",
+                        "Suomi_NPP_Orbit_Asc",
+                        "Suomi_NPP_Orbit_Dsc"
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Convective Rainwater Source": {
+            "id": "convective-rainwater-source",
+            "title":    "Convective Rainwater Source",
+            "subtitle": "MERRA-2",
+            "sources": {
+                "MERRA-2": {
+                    "id": "merra2",
+                    "title": "MERRA-2",
+                    "description": "merra/ConvectiveRainwaterSource",
+                    "image": "",
+                    "settings": [
+                        "MERRA2_Convective_Rainwater_Source_700hPa_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

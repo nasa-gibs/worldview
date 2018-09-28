@@ -1,0 +1,19 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Dust Storms": {
+                "title": "Dust Storms",
+                "id": "dust-storms",
+                "image": "dust-storms.jpg",
+                "description": "",
+                "measurements": [
+                    "Aerosol Optical Depth",
+                    "Dust",
+                    "Corrected Reflectance",
+                    "Land Surface Reflectance"
+
+                ]
+            }
+        }
+    }
+}

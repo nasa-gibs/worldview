@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AQUARIUS_L3_SSS_SMI_DAILY_V4": {
+            "name": "PODAAC-AQR40-3S1CS",
+            "handler": "List",
+            "query": {
+                "shortName": "AQUARIUS_L3_SSS_SMI_DAILY_V4"
+            }
+        }
+    }
+}

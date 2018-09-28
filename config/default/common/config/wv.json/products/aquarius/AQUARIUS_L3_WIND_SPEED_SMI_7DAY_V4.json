@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AQUARIUS_L3_WIND_SPEED_SMI_7DAY_V4": {
+            "name": "PODAAC-AQR40-3W7CS",
+            "handler": "List",
+            "query": {
+                "shortName": "AQUARIUS_L3_WIND_SPEED_SMI_7DAY_V4"
+            }
+        }
+    }
+}

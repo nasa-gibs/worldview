@@ -1,0 +1,12 @@
+{
+    "products": {
+        "A2_Land_NRT": {
+            "name": "NRT AMSR2 UNIFIED L2B HALF-ORBIT 25 KM EASE-GRID SURFACE SOIL MOISTURE",
+            "handler": "List",
+            "query": {
+                "shortName": "A2_Land_NRT"
+            },
+            "version": 0
+        }
+    }
+}

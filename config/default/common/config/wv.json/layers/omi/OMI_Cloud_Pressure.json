@@ -1,0 +1,19 @@
+{
+    "layers": {
+        "OMI_Cloud_Pressure": {
+            "id":       "OMI_Cloud_Pressure",
+            "title":    "Cloud Pressure",
+            "subtitle": "Aura / OMI",
+            "description": "omi/OMI_Cloud_Pressure",
+            "group":    "overlays",
+            "layergroup": [
+              "omi"
+            ],
+            "product":  "OMCLDRR",
+
+            "palette": {
+                "recommended":  ["blue_4"]
+            }
+        }
+    }
+}

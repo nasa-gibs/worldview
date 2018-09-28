@@ -1,0 +1,103 @@
+{
+    "measurements": {
+        "Cloud Liquid Water": {
+            "id": "cloud-liquid-water",
+            "title":    "Cloud Liquid Water",
+            "subtitle": "GCOM-W1/AMSR2, DMSP-F8/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
+            "sources": {
+                "GCOM-W1/AMSR2": {
+                    "id": "gcom-w1-amsr2",
+                    "title": "GCOM-W1/AMSR2",
+                    "description": "amsr2/CloudLiquidWater",
+                    "image": "",
+                    "settings": [
+                        "AMSR2_Cloud_Liquid_Water_Day",
+                        "AMSR2_Cloud_Liquid_Water_Night",
+                        "GCOM_W1_Orbit_Asc",
+                        "GCOM_W1_Orbit_Dsc"
+                    ]
+                },
+                "DMSP-F8/SSMI": {
+                    "id": "dmsp-f8-ssmi",
+                    "title": "DMSP-F8/SSMI",
+                    "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F8",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F8_Cloud_Liquid_Water_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F8_Cloud_Liquid_Water_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F10/SSMI": {
+                    "id": "dmsp-f10-ssmi",
+                    "title": "DMSP-F10/SSMI",
+                    "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F10",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F10_Cloud_Liquid_Water_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F10_Cloud_Liquid_Water_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F11/SSMI": {
+                    "id": "dmsp-f11-ssmi",
+                    "title": "DMSP-F11/SSMI",
+                    "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F11",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F11_Cloud_Liquid_Water_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F11_Cloud_Liquid_Water_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F13/SSMI": {
+                    "id": "dmsp-f13-ssmi",
+                    "title": "DMSP-F13/SSMI",
+                    "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F13",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F13_Cloud_Liquid_Water_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F13_Cloud_Liquid_Water_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F14/SSMI": {
+                    "id": "dmsp-f14-ssmi",
+                    "title": "DMSP-F14/SSMI",
+                    "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F14",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F14_Cloud_Liquid_Water_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F14_Cloud_Liquid_Water_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F15/SSMI": {
+                    "id": "dmsp-f15-ssmi",
+                    "title": "DMSP-F15/SSMI",
+                    "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F15",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F15_Cloud_Liquid_Water_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F15_Cloud_Liquid_Water_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F16/SSMIS": {
+                    "id": "dmsp-f16-ssmis",
+                    "title": "DMSP-F16/SSMIS",
+                    "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F16",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F16_Cloud_Liquid_Water_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F16_Cloud_Liquid_Water_Over_Oceans_Descending"
+                    ]
+                },
+                "DMSP-F17/SSMIS": {
+                    "id": "dmsp-f17-ssmis",
+                    "title": "DMSP-F17/SSMIS",
+                    "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F17",
+                    "image": "",
+                    "settings": [
+                        "SSMI_DMSP_F17_Cloud_Liquid_Water_Over_Oceans_Ascending",
+                        "SSMI_DMSP_F17_Cloud_Liquid_Water_Over_Oceans_Descending"
+                    ]
+                }
+            }
+        }
+    }
+}

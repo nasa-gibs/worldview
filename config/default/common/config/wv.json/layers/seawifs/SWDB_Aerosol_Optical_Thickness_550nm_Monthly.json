@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "SWDB_Aerosol_Optical_Thickness_550nm_Monthly": {
+            "id":       "SWDB_Aerosol_Optical_Thickness_550nm_Monthly",
+            "title":    "Aerosol Optical Thickness 550nm (Monthly)",
+            "subtitle": "SeaWiFS Deep Blue",
+            "description": "seawifs/SWDB_Aerosol_Optical_Thickness_550nm_Monthly",
+            "tags":     "swdb",
+            "group":    "overlays",
+            "layergroup": [
+              "seawifs"
+            ],
+            "product":  "SWDB_L3M05",
+            "inactive": true,
+            "wrapadjacentdays": true
+        }
+    }
+}

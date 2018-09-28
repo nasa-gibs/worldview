@@ -1,0 +1,15 @@
+{
+  "products": {
+      "VNP14IMGTDL_NRT": {
+          "name": "VIIRS 375m, I-Band Active Fire Product NRT (Vector Data)",
+          "handler": "List",
+          "query": {
+              "shortName": "VNP14IMGTDL_NRT"
+          },
+          "urs": {
+              "by": "constant",
+              "value": "true"
+          }
+      }
+  }
+}

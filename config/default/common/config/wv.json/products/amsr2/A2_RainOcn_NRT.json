@@ -1,0 +1,12 @@
+{
+    "products": {
+        "A2_RainOcn_NRT": {
+            "name": "NRT AMSR2 L2B Global Swath GSFC Profiling Algorithm 2010: Surface Precipitation, Wind Speed over Ocean, Water Vapor over Ocean and Cloud Liquid Water over Ocean",
+            "handler": "List",
+            "query": {
+                "shortName": "A2_RainOcn_NRT"
+            },
+            "version": 0
+        }
+    }
+}

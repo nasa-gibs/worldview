@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Faraday Rotation": {
+            "id": "faraday-rotation",
+            "title":    "Faraday Rotation Angle",
+            "subtitle": "SMAP / Radiometer",
+            "sources": {
+                "SMAP/Radiometer": {
+                    "id": "smap-radiometer",
+                    "title": "SMAP / Radiometer",
+                    "description": "smap/FaradayRotationAngle",
+                    "image": "",
+                    "settings": [
+                        "SMAP_L1_Passive_Faraday_Rotation_Aft",
+                        "SMAP_L1_Passive_Faraday_Rotation_Fore",
+                        "SMAP_Orbit_Asc",
+                        "SMAP_Orbit_Dsc"
+                    ]
+                }
+            }
+        }
+    }
+}

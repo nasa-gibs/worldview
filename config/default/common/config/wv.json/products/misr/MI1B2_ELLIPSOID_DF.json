@@ -1,0 +1,12 @@
+{
+    "products": {
+        "MI1B2_ELLIPSOID_DF": {
+            "name": "MISR Level 1B2 Ellipsoid Data - Df Sensor",
+            "handler": "MODISSwath",
+            "query": {
+                "shortName": "MI1B2E",
+                "sensor": "DF"
+            }
+        }
+    }
+}

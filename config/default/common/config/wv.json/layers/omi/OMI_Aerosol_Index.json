@@ -1,0 +1,20 @@
+{
+    "layers": {
+        "OMI_Aerosol_Index": {
+            "id":       "OMI_Aerosol_Index",
+            "title":    "Aerosol Index",
+            "subtitle": "Aura / OMI",
+            "description": "omi/OMI_Aerosol_Index",
+            "group":    "overlays",
+            "layergroup": [
+              "omi"
+            ],
+            "product":  "OMAERUV",
+            "tags":     "ai",
+
+            "palette": {
+                "recommended":  ["orange_1"]
+            }
+        }
+    }
+}

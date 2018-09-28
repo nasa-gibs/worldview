@@ -1,0 +1,6 @@
+### Landslide Hazard
+The Landslide Hazard layer is from the Global Landslide Hazard Distribution. The Global Landslide Hazard Distribution is a 2.5 minute grid of global landslide and snow avalanche hazards based upon work of the Norwegian Geotechnical Institute (NGI). The hazards mapping of NGI incorporates a range of data including slope, soil, soil moisture conditions, precipitation, seismicity, and temperature. Shuttle Radar Topography Mission (SRTM) elevation data at 30 second resolution are also incorporated. Hazards values less than or equal to 4 are considered negligible and only values 5 through 9 are utilized in further analyses. To ensure compatibility with other datasets, value 1 is added to each of the values to provide a hazard ranking ranging 6 through 10 in increasing hazard. This data set is the result of collaboration among the Columbia University Center for Hazards and Risk Research (CHRR), Norwegian Geotechnical Institute (NGI), and Columbia University Center for International Earth Science and Information Network (CIESIN).
+
+The purpose of the data set is to provide a means of assessing the relative distribution and frequency of global landslide hazard.
+
+References: [doi: 10.7927/H4P848VZ](https://dx.doi.org/10.7927/H4P848VZ)

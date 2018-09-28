@@ -1,0 +1,40 @@
+{
+    "measurements": {
+        "Vegetation Indices": {
+            "id": "vegetation-indices",
+            "title":    "Vegetation Indices",
+            "subtitle": "Terra / MODIS, Landsat/WELD, Terra/MISR",
+            "sources": {
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra / MODIS",
+                    "description": "modis/VegetationIndices",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_NDVI_8Day",
+                        "MODIS_Terra_EVI_8Day"
+                    ]
+                },
+                "Landsat/WELD": {
+                      "id": "landsat-weld",
+                      "title": "Landsat/WELD",
+                      "description": "landsat/NDVI",
+                      "image": "",
+                      "settings": [
+                          "Landsat_WELD_NDVI_Global_Monthly",
+                          "Landsat_WELD_NDVI_Global_Annual"
+                      ]
+                  },
+                  "Terra/MISR": {
+                      "id": "terra-misr",
+                      "title": "Terra / MISR",
+                      "description": "misr/NDVI",
+                      "image": "",
+                      "settings": [
+                          "MISR_Land_NDVI_Average_Monthly"
+                      ]
+                  }
+            }
+        }
+    }
+}

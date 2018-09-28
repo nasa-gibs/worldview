@@ -1,0 +1,33 @@
+{
+    "features": {
+        "dataDownload": true,
+        "animation": true,
+        "urlShortening": true,
+        "customPalettes": true,
+        "compare": true,
+        "tour": true,
+        "whatsNew": true,
+        "feedback": true,
+        "googleAnalytics": {
+            "id": "UA-88182106-1"
+        },
+        "googleTagManager": {
+            "id": "GTM-WNP7MLF"
+        },
+        "alert": {
+            "url": "https://status.earthdata.nasa.gov/api/v1/notifications?domain=https%3A%2F%2Fworldview.earthdata.nasa.gov",
+            "releases": "https://github.com/nasa-gibs/worldview/releases"
+        },
+        "imageDownload": {
+            "host": "https://gibs.earthdata.nasa.gov",
+            "path": "image-download"
+        },
+        "naturalEvents": {
+            "host": "https://eonet.sci.gsfc.nasa.gov/api/v2.1"
+        }
+    },
+    "scripts": [
+        "https://earthdata.nasa.gov/lib/ntpagetag.js",
+        "https://fbm.earthdata.nasa.gov/for/worldview/feedback.js"
+    ]
+}

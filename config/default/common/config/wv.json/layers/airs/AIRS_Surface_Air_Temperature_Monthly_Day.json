@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "AIRS_Surface_Air_Temperature_Monthly_Day": {
+            "id":       "AIRS_Surface_Air_Temperature_Monthly_Day",
+            "title":    "Surface Air Temperature (Day, Monthly)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Surface_Air_Temperature_Monthly_Day",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STM",
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}

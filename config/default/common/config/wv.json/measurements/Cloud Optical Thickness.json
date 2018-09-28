@@ -1,0 +1,34 @@
+{
+    "measurements": {
+        "Cloud Optical Thickness": {
+            "id": "cloud-optical-thickness",
+            "title":    "Cloud Optical Thickness",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/CloudOpticalThickness",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Cloud_Optical_Thickness",
+                        "MODIS_Aqua_Cloud_Optical_Thickness_PCL",
+                          "Aqua_Orbit_Asc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/CloudOpticalThickness",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Cloud_Optical_Thickness",
+                        "MODIS_Terra_Cloud_Optical_Thickness_PCL",
+                        "Terra_Orbit_Dsc"
+                    ]
+
+                }
+            }
+        }
+    }
+}

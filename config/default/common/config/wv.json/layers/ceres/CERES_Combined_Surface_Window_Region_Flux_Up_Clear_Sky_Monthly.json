@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "CERES_Combined_Surface_Window_Region_Flux_Up_Clear_Sky_Monthly": {
+            "id":       "CERES_Combined_Surface_Window_Region_Flux_Up_Clear_Sky_Monthly",
+            "title":    "Untuned Window-Region Surface Flux (Monthly, Up, Clear-Sky)",
+            "subtitle": "Terra and Aqua/ CERES",
+            "description": "ceres/CERES_Combined_Surface_Window_Region_Flux_Up_Clear_Sky_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "ceres"
+            ],
+            "product":  "",
+            "inactive": true,
+            "wrapadjacentdays": true
+        }
+    }
+}

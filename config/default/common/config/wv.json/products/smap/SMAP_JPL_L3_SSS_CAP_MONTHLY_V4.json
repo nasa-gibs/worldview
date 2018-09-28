@@ -1,0 +1,11 @@
+{
+    "products": {
+        "SMAP_JPL_L3_SSS_CAP_MONTHLY_V4": {
+            "name": "PODAAC-SMP40-3TMCS",
+            "handler": "List",
+            "query": {
+                "shortName": "SMAP_JPL_L3_SSS_CAP_MONTHLY_V4"
+            }
+        }
+    }
+}

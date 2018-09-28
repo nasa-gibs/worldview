@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2IMNXASM": {
+            "name": "MERRA-2 instM_2d_asm_Nx: 2d,Monthly mean,Single-Level,Assimilation,Single-Level Diagnostics 0.625 x 0.5 degree V5.12.4 (M2IMNXASM) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2IMNXASM"
+            }
+        }
+    }
+}

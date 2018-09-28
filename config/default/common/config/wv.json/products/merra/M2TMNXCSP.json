@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2TMNXCSP": {
+            "name": "MERRA-2 tavgM_2d_csp_Nx: 2d,Monthly mean,Time-averaged,Single-Level,Assimilation,COSP Satellite Simulator 0.625 x 0.5 degree V5.12.4 (M2TMNXCSP) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2TMNXCSP"
+            }
+        }
+    }
+}

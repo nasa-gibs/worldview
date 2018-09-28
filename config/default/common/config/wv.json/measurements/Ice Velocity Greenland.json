@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Ice Velocity (Greenland)": {
+            "id": "ice-velocity-greenland",
+            "title":    "Ice Velocity (Greenland)",
+            "subtitle": "MEaSUREs",
+            "sources": {
+                "SSMI": {
+                    "id": "ssmi",
+                    "title": "SSMI",
+                    "description": "multi-mission/IceVelocityGreenland",
+                    "image": "",
+                    "settings": [
+                        "MEaSUREs_Ice_Velocity_Greenland"
+                    ]
+                }
+            }
+        }
+    }
+}

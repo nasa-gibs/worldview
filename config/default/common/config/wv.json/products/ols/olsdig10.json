@@ -1,0 +1,11 @@
+{
+    "products": {
+        "olsdig10": {
+            "name": "OLS DIGITAL DERIVED LIGHTNING FROM DMSP F10 V1",
+            "handler": "List",
+            "query": {
+                "shortName": "olsdig10"
+            }
+        }
+    }
+}

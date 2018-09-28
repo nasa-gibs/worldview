@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AIRS3STD": {
+            "name": "AIRS/Aqua L3 Daily Standard Physical Retrieval (AIRS-only) 1 degree x 1 degree V006 (AIRS3STD)",
+            "handler": "List",
+            "query": {
+                "shortName": "AIRS3STD"
+            }
+        }
+    }
+}

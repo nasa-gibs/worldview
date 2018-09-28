@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "SMAP_Orbit_Asc": {
+            "id":       "SMAP_Orbit_Asc",
+            "title":    "SMAP Orbital Track & Overpass Time (Ascending/Night)",
+            "subtitle": "SMAP / Space-Track.org",
+            "description": "reference/orbits/SMAP_Orbit_Asc",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "night",
+            "track": "ascending",
+            "startDate": "2012-05-08",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "SMAP_Orbit_Asc",
+                "immutable": true
+            }
+        }
+    }
+}

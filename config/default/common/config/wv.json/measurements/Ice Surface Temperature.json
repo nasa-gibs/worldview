@@ -1,0 +1,31 @@
+{
+    "measurements": {
+        "Ice Surface Temperature": {
+            "id": "ice-surface-temperature",
+            "title":    "Ice Surface Temperature",
+            "subtitle": "MODIS/Aqua, MODIS/Terra",
+            "sources": {
+                    "Aqua/MODIS": {
+                        "id": "aqua-modis",
+                        "title": "Aqua/MODIS",
+                        "description": "modis/IceSurfaceTemperature",
+                        "image": "",
+                        "settings": [
+                            "MODIS_Aqua_Ice_Surface_Temp_Day",
+                            "MODIS_Aqua_Ice_Surface_Temp_Night"
+                        ]
+                    },
+                    "Terra/MODIS": {
+                        "id": "terra-modis",
+                        "title": "Terra/MODIS",
+                        "description": "modis/IceSurfaceTemperature",
+                        "image": "",
+                        "settings": [
+                            "MODIS_Terra_Ice_Surface_Temp_Day",
+                            "MODIS_Terra_Ice_Surface_Temp_Night"
+                        ]
+                    }
+                }
+            }
+        }
+    }

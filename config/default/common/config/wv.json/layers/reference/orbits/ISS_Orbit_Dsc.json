@@ -1,0 +1,40 @@
+{
+    "layers": {
+        "ISS_Orbit_Dsc": {
+            "id":       "ISS_Orbit_Dsc",
+            "title":    "ISS Orbital Track & Overpass Time (Descending)",
+            "subtitle": "Int'l Space Station / Space-Track.org",
+            "description": "reference/orbits/ISS_Orbit_Dsc",
+            "tags":     "iss international",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "",
+            "track": "descending",
+            "startDate": "1998-11-20",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "ISS_Orbit_Dsc",
+                "immutable": true
+            }
+        }
+    }
+}

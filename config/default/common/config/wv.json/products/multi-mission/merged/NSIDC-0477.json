@@ -1,0 +1,11 @@
+{
+    "products": {
+        "NSIDC-0477": {
+            "name": "MEaSUREs Global Record of Daily Landscape Freeze/Thaw Status V003",
+            "handler": "List",
+            "query": {
+                "shortName": "NSIDC-0477"
+            }
+        }
+    }
+}

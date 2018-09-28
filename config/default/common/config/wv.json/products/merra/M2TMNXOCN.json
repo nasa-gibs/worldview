@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2TMNXOCN": {
+            "name": "MERRA-2 tavgM_2d_ocn_Nx: 2d,Monthly mean,Time-Averaged,Single-Level,Assimilation,Ocean Surface Diagnostics 0.625 x 0.5 degree V5.12.4 (M2TMNXOCN) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2TMNXOCN"
+            }
+        }
+    }
+}

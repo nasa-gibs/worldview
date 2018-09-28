@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MODIS_AQUA_L3_SST_THERMAL_ANNUAL_9KM_NIGHTTIME_V2014.0": {
+            "name": "PODAAC-MODSA-AN9N4",
+            "handler": "List",
+            "query": {
+                "shortName": "MODIS_AQUA_L3_SST_THERMAL_ANNUAL_9KM_NIGHTTIME_V2014.0"
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "OSCAR_Sea_Surface_Currents_Zonal": {
+            "id":       "OSCAR_Sea_Surface_Currents_Zonal",
+            "title":    "Sea Surface Currents (Zonal)",
+            "subtitle": "OSCAR",
+            "description": "oscar/OSCAR_Sea_Surface_Currents_Zonal",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "oscar"
+            ],
+            "product":  "OSCAR_L4_OC_third-deg"
+        }
+    }
+}

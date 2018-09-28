@@ -1,0 +1,11 @@
+{
+    "products": {
+        "CAL_WFC_L1_1Km-ValStage1-V3-02": {
+            "name": "CAL_WFC_L1_1Km-ValStage1-V3-02",
+            "handler": "MODISSwath",
+            "query": {
+                "shortName": "CAL_WFC_L1_1Km-ValStage1-V3-02"
+            }
+        }
+    }
+}

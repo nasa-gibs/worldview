@@ -1,0 +1,11 @@
+{
+    "products": {
+        "NSIDC-0484": {
+            "name": "MEaSUREs InSAR-Based Antarctica Ice Velocity Map",
+            "handler": "List",
+            "query": {
+                "shortName": "NSIDC-0484"
+            }
+        }
+    }
+}

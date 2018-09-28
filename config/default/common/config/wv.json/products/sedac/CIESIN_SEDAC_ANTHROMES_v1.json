@@ -1,0 +1,12 @@
+{
+    "products": {
+        "CIESIN_SEDAC_ANTHROMES_v1": {
+            "name": "Anthropogenic Biomes of the World, Version 1",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "CIESIN_SEDAC_ANTHROMES_v1"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

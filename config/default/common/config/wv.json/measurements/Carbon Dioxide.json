@@ -1,0 +1,21 @@
+{
+    "measurements": {
+        "Carbon Dioxide": {
+            "id": "carbon-Dioxide",
+            "title":    "Carbon Dioxide",
+            "subtitle": "Aqua/AIRS+AMSU",
+            "sources": {
+
+                "Aqua/AIRS+AMSU": {
+                    "id": "aqua-airs-amsu",
+                    "title": "Aqua / AIRS+AMSU",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AIRS_Carbon_Dioxide_AIRS_AMSU_Monthly"
+                    ]
+                }
+            }
+        }
+    }
+}

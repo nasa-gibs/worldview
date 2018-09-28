@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_2m_Air_Temperature_Assimilated_Monthly": {
+            "id":       "MERRA2_2m_Air_Temperature_Assimilated_Monthly",
+            "title":    "2-meter Air Temperature, Assimilated (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_2m_Air_Temperature_Assimilated_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2IMNXASM",
+            "wrapadjacentdays": true
+        }
+    }
+}

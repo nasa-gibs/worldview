@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AIRS3STM": {
+            "name": "AIRS/Aqua L3 Monthly Standard Physical Retrieval (AIRS-only) 1 degree x 1 degree",
+            "handler": "List",
+            "query": {
+                "shortName": "AIRS3STM"
+            }
+        }
+    }
+}

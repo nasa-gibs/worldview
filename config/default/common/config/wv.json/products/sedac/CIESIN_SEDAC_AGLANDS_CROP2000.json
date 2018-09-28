@@ -1,0 +1,12 @@
+{
+    "products": {
+        "CIESIN_SEDAC_AGLANDS_CROP2000": {
+            "name": "Global Agricultural Lands: Croplands, 2000",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "CIESIN_SEDAC_AGLANDS_CROP2000"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

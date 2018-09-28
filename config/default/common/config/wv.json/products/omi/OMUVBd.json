@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OMUVBd": {
+            "name": "OMI/Aura Surface UVB Irradiance and Erythemal Dose Daily L3 Global Gridded 1.0 degree x 1.0 degree V3 (OMUVBd) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "OMUVBd"
+            }
+        }
+    }
+}

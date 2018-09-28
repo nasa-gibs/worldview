@@ -1,0 +1,22 @@
+{
+    "measurements": {
+        "Sea Surface Height Anomalies": {
+            "id": "sea-surface-height-anomalies",
+            "title":    "Sea Surface Height Anomalies",
+            "subtitle": "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2, and Jason-3",
+            "sources": {
+                "TPJ": {
+                    "id": "tpj",
+                    "title": "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2, and Jason-3",
+                    "description": "multi-mission/tpj/SeaSurfaceHeightAnomalies",
+                    "image": "",
+                    "settings": [
+                      "TOPEX-Poseidon_JASON_Sea_Surface_Height_Anomalies_GDR_Cycles",
+                      "TOPEX-Poseidon_JASON_Sea_Surface_Height_Anomalies_US_West_Coast_GAFECC",
+                      "TOPEX-Poseidon_JASON_Sea_Surface_Height_Anomalies_Reconstructed"
+                    ]
+                }
+            }
+        }
+    }
+}

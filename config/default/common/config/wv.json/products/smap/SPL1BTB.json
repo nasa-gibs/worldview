@@ -1,0 +1,17 @@
+{
+    "products": {
+        "SPL1BTB": {
+            "name": "SMAP L1B Radiometer Half-Orbit Time-Ordered Brightness Temperatures",
+            "handler": "HalfOrbit",
+            "query": {
+                "shortName": "SPL1BTB"
+            },
+            "orbit": {
+                "type": "regex_group",
+                "field": "producer_granule_id",
+                "regex": ".*([AD])_.*\\.h5$",
+                "match": "D"
+            }
+        }
+    }
+}

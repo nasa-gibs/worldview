@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "SWDB_Aerosol_Angstrom_Exponent_Monthly": {
+            "id":       "SWDB_Aerosol_Angstrom_Exponent_Monthly",
+            "title":    "Aerosol Angstrom Exponent (Monthly)",
+            "subtitle": "SeaWiFS Deep Blue",
+            "description": "seawifs/SWDB_Aerosol_Angstrom_Exponent_Monthly",
+            "tags":     "swdb",
+            "group":    "overlays",
+            "layergroup": [
+              "seawifs"
+            ],
+            "product":  "SWDB_L3M05",
+            "inactive": true,
+            "wrapadjacentdays": true
+        }
+    }
+}

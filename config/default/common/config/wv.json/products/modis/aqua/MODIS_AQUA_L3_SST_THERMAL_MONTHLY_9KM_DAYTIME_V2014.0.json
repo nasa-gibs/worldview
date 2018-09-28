@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MODIS_AQUA_L3_SST_THERMAL_MONTHLY_9KM_DAYTIME_V2014.0": {
+            "name": "PODAAC-MODSA-MO9D4",
+            "handler": "List",
+            "query": {
+                "shortName": "MODIS_AQUA_L3_SST_THERMAL_MONTHLY_9KM_DAYTIME_V2014.0"
+            }
+        }
+    }
+}

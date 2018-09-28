@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "CALIPSO_Wide_Field_Camera_Radiance_v3-01": {
+            "id":       "CALIPSO_Wide_Field_Camera_Radiance_v3-01",
+            "title":    "Radiance (Daily, V3-01)",
+            "subtitle": "CALIPSO / WFC ",
+            "description": "calipso/CALIPSO_Wide_Field_Camera_Radiance_v3-01",
+            "group":    "overlays",
+            "layergroup": [
+              "calipso"
+            ],
+            "product":  "",
+            "inactive": true
+        }
+    }
+}

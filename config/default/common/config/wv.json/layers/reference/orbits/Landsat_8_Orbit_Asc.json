@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "Landsat_8_Orbit_Asc": {
+            "id":       "Landsat_8_Orbit_Asc",
+            "title":    "Landsat 8 Orbital Track & Overpass Time (Ascending/Night)",
+            "subtitle": "Landsat 8 / Space-Track.org",
+            "description": "reference/orbits/Landsat_8_Orbit_Asc",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "night",
+            "track": "ascending",
+            "startDate": "2013-02-11",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "Landsat_8_Orbit_Asc",
+                "immutable": true
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "products": {
+        "M2IMNPANA": {
+            "name": "MERRA-2 instM_3d_ana_Np: 3d,Monthly mean,Instantaneous,Pressure-Level,Analysis,Analyzed Meteorological Fields 0.625 x 0.5 degree V5.12.4 (M2IMNPANA) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "M2IMNPANA"
+            }
+        }
+    }
+}

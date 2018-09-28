@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MODIS_TERRA_L3_SST_THERMAL_8DAY_4KM_NIGHTTIME_V2014.0": {
+            "name": "PODAAC-MODST-8D4N4",
+            "handler": "List",
+            "query": {
+                "shortName": "MODIS_TERRA_L3_SST_THERMAL_8DAY_4KM_NIGHTTIME_V2014.0"
+            }
+        }
+    }
+}

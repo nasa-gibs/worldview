@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Precipitation_Bias_Corrected_Monthly": {
+            "id":       "MERRA2_Precipitation_Bias_Corrected_Monthly",
+            "title":    "Total Precipitation Bias Corrected (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Precipitation_Bias_Corrected_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXFLX",
+            "wrapadjacentdays": true
+        }
+    }
+}

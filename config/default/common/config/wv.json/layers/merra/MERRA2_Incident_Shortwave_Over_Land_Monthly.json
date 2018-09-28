@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Incident_Shortwave_Over_Land_Monthly": {
+            "id":       "MERRA2_Incident_Shortwave_Over_Land_Monthly",
+            "title":    "Incident Shortwave Over Land (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Incident_Shortwave_Over_Land_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXLFO",
+            "wrapadjacentdays": true
+        }
+    }
+}

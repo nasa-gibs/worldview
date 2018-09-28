@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "AIRS_Surface_Air_Temperature_Monthly_Night": {
+            "id":       "AIRS_Surface_Air_Temperature_Monthly_Night",
+            "title":    "Surface Air Temperature (Night, Monthly)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Surface_Air_Temperature_Monthly_Day",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STM",
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}

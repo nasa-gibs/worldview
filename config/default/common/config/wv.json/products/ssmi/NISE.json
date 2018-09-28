@@ -1,0 +1,11 @@
+{
+    "products": {
+        "NISE": {
+            "name": "Near-Real-Time SSMIS EASE-Grid Daily Global Ice Concentration and Snow Extent",
+            "handler": "List",
+            "query": {
+                "shortName": "NISE"
+            }
+        }
+    }
+}

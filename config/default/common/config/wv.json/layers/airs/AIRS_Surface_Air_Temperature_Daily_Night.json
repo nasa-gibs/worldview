@@ -1,0 +1,19 @@
+{
+    "layers": {
+        "AIRS_Surface_Air_Temperature_Daily_Night": {
+            "id":       "AIRS_Surface_Air_Temperature_Daily_Night",
+            "title":    "Surface Air Temperature (Night, Daily)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Surface_Air_Temperature_Daily_Night",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STD",
+            "wrapadjacentdays": true,
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}

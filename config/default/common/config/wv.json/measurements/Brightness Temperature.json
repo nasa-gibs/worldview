@@ -1,0 +1,204 @@
+{
+    "measurements": {
+        "Brightness Temperature": {
+            "id": "brightness-temperature",
+            "title":    "Brightness Temperature",
+            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, AMSU-A/NOAA-15, AMSU-A/NOAA-16, AMSU-A/NOAA-17",
+            "sources": {
+                "Aqua/AMSR-E": {
+                    "id": "aqua-amsre",
+                    "title": "Aqua/AMSR-E",
+                    "description": "amsre/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "AMSRE_Brightness_Temp_89H_Day",
+                        "AMSRE_Brightness_Temp_89H_Night",
+                        "AMSRE_Brightness_Temp_89V_Day",
+                        "AMSRE_Brightness_Temp_89V_Night",
+                        "AMSRE_Sea_Ice_Brightness_Temp_89H",
+                        "AMSRE_Sea_Ice_Brightness_Temp_89V",
+                        "Aqua_Orbit_Asc",
+                        "Aqua_Orbit_Dsc"
+                    ]
+                },
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Brightness_Temp_Band31_Day",
+                        "MODIS_Aqua_Brightness_Temp_Band31_Night",
+                        "Aqua_Orbit_Asc",
+                        "Aqua_Orbit_Dsc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Brightness_Temp_Band31_Day",
+                        "MODIS_Terra_Brightness_Temp_Band31_Night",
+                        "Terra_Orbit_Asc",
+                        "Terra_Orbit_Dsc"
+                    ]
+                },
+                "GCOM-W1/AMSR2": {
+                    "id": "gcom-w1-amsr2",
+                    "title": "GCOM-W1 / AMSR2",
+                    "description": "amsr2/SeaIceBrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "AMSRU2_Sea_Ice_Brightness_Temp_89H",
+                        "AMSRU2_Sea_Ice_Brightness_Temp_89V",
+                        "GCOM_W1_Orbit_Asc",
+                        "GCOM_W1_Orbit_Dsc"
+                    ]
+                },
+                "GPM/GMI": {
+                    "id": "gpm-gmi",
+                    "title": "GPM/GMI",
+                    "description": "gpm/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "GMI_Brightness_Temp_Asc",
+                        "GMI_Brightness_Temp_Dsc",
+                        "GPM_Orbit_Asc",
+                        "GPM_Orbit_Dsc"
+                    ]
+                },
+                "SMAP/Radar/Radiometer": {
+                    "id": "smap-radar-radiometer",
+                    "title": "SMAP/Radar/Radiometer",
+                    "description": "smap/DisaggregatedBrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "SMAP_L3_Active_Passive_Brightness_Temp_H",
+			                  "SMAP_L3_Active_Passive_Brightness_Temp_V",
+                        "SMAP_Orbit_Asc",
+                        "SMAP_Orbit_Dsc"
+		    ]
+		},
+                "SMAP/Radiometer": {
+                    "id": "smap-radiometer",
+                    "title": "SMAP / Radiometer",
+                    "description": "smap/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H",
+                       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_H",
+                       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V",
+                       "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_V",
+                        "SMAP_L1_Passive_Brightness_Temp_Fore_H",
+                        "SMAP_L1_Passive_Brightness_Temp_Aft_H",
+                        "SMAP_L1_Passive_Brightness_Temp_Fore_V",
+                        "SMAP_L1_Passive_Brightness_Temp_Aft_V",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_RFI",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_H_RFI",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V_RFI",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_V_RFI",
+                        "SMAP_L1_Passive_Brightness_Temp_Fore_H_RFI",
+                        "SMAP_L1_Passive_Brightness_Temp_Aft_H_RFI",
+                        "SMAP_L1_Passive_Brightness_Temp_Fore_V_RFI",
+                        "SMAP_L1_Passive_Brightness_Temp_Aft_V_RFI",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_H_QA",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_H_QA",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Fore_V_QA",
+                        "SMAP_L1_Passive_Enhanced_Brightness_Temp_Aft_V_QA",
+                        "SMAP_L1_Passive_Brightness_Temp_Fore_H_QA",
+                        "SMAP_L1_Passive_Brightness_Temp_Aft_H_QA",
+                        "SMAP_L1_Passive_Brightness_Temp_Fore_V_QA",
+                        "SMAP_L1_Passive_Brightness_Temp_Aft_V_QA",
+                        "SMAP_L3_Passive_Brightness_Temp_H",
+                        "SMAP_L3_Passive_Brightness_Temp_V",
+                        "SMAP_Orbit_Asc",
+                        "SMAP_Orbit_Dsc"
+                    ]
+                },
+                "SNPP/VIIRS": {
+                    "id": "snpp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
+                        "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
+                        "Suomi_NPP_Orbit_Asc",
+                        "Suomi_NPP_Orbit_Dsc"
+                    ]
+                },
+                "AMSU-A/NOAA-15": {
+                    "id": "amsua-noaa15",
+                    "title": "AMSU-A/NOAA-15",
+                    "description": "amsua/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_1",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_2",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_3",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_4",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_5",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_6",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_7",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_8",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_9",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_10",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_11",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_12",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_13",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_14",
+                      "AMSUA_NOAA15_Brightness_Temp_Channel_15"
+                    ]
+                },
+                "AMSU-A/NOAA-16": {
+                    "id": "amsua-noaa16",
+                    "title": "AMSU-A/NOAA-16",
+                    "description": "amsua/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_1",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_2",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_3",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_4",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_5",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_6",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_7",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_8",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_9",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_10",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_11",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_12",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_13",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_14",
+                      "AMSUA_NOAA16_Brightness_Temp_Channel_15"
+                    ]
+                },
+                "AMSU-A/NOAA-17": {
+                    "id": "amsua-noaa17",
+                    "title": "AMSU-A/NOAA-17",
+                    "description": "amsua/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_1",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_2",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_3",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_4",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_5",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_6",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_7",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_8",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_9",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_10",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_11",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_12",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_13",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_14",
+                      "AMSUA_NOAA17_Brightness_Temp_Channel_15"
+                    ]
+                }
+            }
+        }
+    }
+}

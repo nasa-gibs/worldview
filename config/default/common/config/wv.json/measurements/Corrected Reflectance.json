@@ -1,0 +1,62 @@
+{
+    "measurements": {
+        "Corrected Reflectance": {
+            "id": "corrected-reflectance",
+            "title":    "Corrected Reflectance",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, Landsat/WELD",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua / MODIS",
+                    "description": "modis/CorrectedReflectance",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        "MODIS_Aqua_CorrectedReflectance_Bands721",
+                        "Aqua_Orbit_Asc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra / MODIS",
+                    "description": "modis/CorrectedReflectance",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_CorrectedReflectance_TrueColor",
+                        "MODIS_Terra_CorrectedReflectance_Bands367",
+                        "MODIS_Terra_CorrectedReflectance_Bands721",
+                        "Terra_Orbit_Dsc"
+                    ]
+                },
+                "SNPP/VIIRS": {
+                    "id": "snpp-viirs",
+                    "title": "Suomi NPP / VIIRS",
+                    "description": "viirs/CorrectedReflectance",
+                    "image": "",
+                    "settings": [
+                	"VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                	"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
+                	"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
+                        "Suomi_NPP_Orbit_Asc"
+                    ]
+                },
+                "Landsat/WELD": {
+                    "id": "landsat-weld",
+                    "title": "Landsat / WELD",
+                    "description": "landsat/Reflectance",
+                    "image": "",
+                    "settings": [
+                       "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Monthly",
+                       "Landsat_WELD_CorrectedReflectance_TrueColor_Global_Annual",
+                       "Landsat_WELD_CorrectedReflectance_TrueColor_Alaska_Monthly",
+                       "Landsat_WELD_CorrectedReflectance_TrueColor_Alaska_Seasonal",
+                       "Landsat_WELD_CorrectedReflectance_TrueColor_Alaska_Annual",
+                       "Landsat_WELD_CorrectedReflectance_TrueColor_CONUS_Monthly",
+                	     "Landsat_WELD_CorrectedReflectance_TrueColor_CONUS_Seasonal",
+                       "Landsat_WELD_CorrectedReflectance_TrueColor_CONUS_Annual"
+                    ]
+                }
+            }
+        }
+    }
+}

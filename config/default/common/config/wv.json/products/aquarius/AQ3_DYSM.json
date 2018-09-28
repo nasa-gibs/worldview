@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AQ3_DYSM": {
+            "name": "Aquarius L3 Gridded 1-Degree Daily Soil Moisture V004",
+            "handler": "List",
+            "query": {
+                "shortName": "AQ3_DYSM"
+            }
+        }
+    }
+}

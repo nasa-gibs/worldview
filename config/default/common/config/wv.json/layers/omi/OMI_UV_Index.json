@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "OMI_UV_Index": {
+            "id":       "OMI_UV_Index",
+            "title":    "UV Index (Local Noon)",
+            "subtitle": "Aura / OMI",
+            "description": "omi/OMI_UV_Index",
+            "group":    "overlays",
+            "layergroup": [
+              "omi"
+            ],
+            "product":  "OMUVBd",
+            "tags":     "ultra violet",
+            "inactive": true
+
+        }
+    }
+}

@@ -23,10 +23,13 @@ options
 \#*
 npm-debug.log
 .vagrant
-customize
 # Nightwatch stuff
 reports
 selenium-debug.log
 *.jar
 local.log
+# Config
+/config/*
+!/config/default
+gc
 

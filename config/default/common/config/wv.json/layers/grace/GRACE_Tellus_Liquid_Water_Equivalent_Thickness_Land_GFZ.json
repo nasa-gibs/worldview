@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Land_GFZ": {
+      "id": "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Land_GFZ",
+      "title": "Liquid Water Equivalent Thickness (Land, GFZ)",
+      "subtitle": "GRACE Tellus",
+      "description": "grace/GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Land_GFZ",
+      "tags": "lwet",
+      "group": "overlays",
+      "layergroup": [
+        "grace"
+      ],
+      "product": "",
+      "inactive": true
+    }
+  }
+}

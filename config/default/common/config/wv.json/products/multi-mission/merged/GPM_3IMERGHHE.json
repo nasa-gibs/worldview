@@ -1,0 +1,11 @@
+{
+    "products": {
+        "GPM_3IMERGHHE": {
+            "name": "GPM IMERG Early Precipitation L3 Half Hourly 0.1 degree x 0.1 degree",
+            "handler": "List",
+            "query": {
+                "shortName": "GPM_3IMERGHHE"
+            }
+        }
+    }
+}

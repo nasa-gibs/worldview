@@ -1,0 +1,11 @@
+{
+    "products": {
+        "AVISO_L4_DYN_TOPO_1DEG_1MO": {
+            "name": "PODAAC-DYNTO-1D1M1",
+            "handler": "List",
+            "query": {
+                "shortName": "AVISO_L4_DYN_TOPO_1DEG_1MO"
+            }
+        }
+    }
+}

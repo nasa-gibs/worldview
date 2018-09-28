@@ -1,0 +1,11 @@
+{
+    "products": {
+        "GLDAS_NOAH10_M.2.0": {
+            "name": "GLDAS Noah Land Surface Model L4 monthly 1.0 x 1.0 degree V2.0 (GLDAS_NOAH10_M) at GES DISC",
+            "handler": "List",
+            "query": {
+                "shortName": "GLDAS_NOAH10_M.2.0"
+            }
+        }
+    }
+}

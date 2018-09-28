@@ -1,0 +1,41 @@
+{
+    "layers": {
+        "Sentinel_2B_Orbit_Dsc": {
+            "id":       "Sentinel_2B_Orbit_Dsc",
+            "title":    "Sentinel-2B Orbital Track & Overpass Time (Descending/Day)",
+            "subtitle": "Sentinel-2B / Space-Track.org",
+            "description": "reference/orbits/Sentinel_2B_Orbit_Dsc",
+            "tags":     "",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "wrapadjacentdays": true,
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "day",
+            "track": "descending",
+            "startDate": "2017-03-08",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "Sentinel_2B_Orbit_Dsc",
+                "immutable": true
+            }
+        }
+    }
+}

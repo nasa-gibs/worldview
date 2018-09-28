@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "OMPS_Aerosol_Index_PyroCumuloNimbus": {
+            "id":       "OMPS_Aerosol_Index_PyroCumuloNimbus",
+            "title":    "Aerosol Index (PyroCumuloNimbus)",
+            "subtitle": "Suomi NPP / OMPS",
+            "description": "omps/OMPS_Aerosol_Index_PyroCumuloNimbus",
+            "tags":     "ai PyroCb",
+            "group":    "overlays",
+            "layergroup": [
+              "omps"
+            ],
+            "product":  "NMTO3"
+        }
+    }
+}

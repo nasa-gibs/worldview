@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Total_Aerosol_Optical_Thickness_550nm_Extinction_Monthly": {
+            "id":       "MERRA2_Total_Aerosol_Optical_Thickness_550nm_Extinction_Monthly",
+            "title":    "Total Aerosol Optical Thickness Extinction 550nm (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Total_Aerosol_Optical_Thickness_550nm_Extinction_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXAER",
+            "wrapadjacentdays": true
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "LIS_TRMM_Flash_Radiance": {
+            "id":       "LIS_TRMM_Flash_Radiance",
+            "title":    "Flash Radiance (Level 2, Standard)",
+            "subtitle": "TRMM / LIS",
+            "description": "trmm/LIS_TRMM_Flash_Radiance",
+            "tags":     "lightning",
+            "group":    "overlays",
+            "layergroup": [
+              "trmm"
+            ],
+            "product":  "lislip",
+            "inactive": true,
+            "wrapadjacentdays": true
+        }
+    }
+}

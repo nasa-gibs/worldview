@@ -1,0 +1,12 @@
+{
+    "products": {
+        "CIESIN_SEDAC_LWP2_LW_GEOG": {
+            "name": "Last of the Wild Project, Version 2, 2005 (LWP-2): Last of the Wild Dataset (Geographic)",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "CIESIN_SEDAC_LWP2_LW_GEOG"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

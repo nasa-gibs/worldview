@@ -1,0 +1,20 @@
+{
+    "layers": {
+        "AMSRE_Sea_Ice_Concentration_25km": {
+            "id":       "AMSRE_Sea_Ice_Concentration_25km",
+            "title":    "Sea Ice Concentration, 25km",
+            "subtitle": "Aqua / AMSR-E",
+            "description": "amsre/AMSRE_Sea_Ice_Concentration_25km",
+            "group":    "overlays",
+            "product":  "AE_SI25",
+            "layergroup": [
+              "amsre"
+            ],
+            "inactive": true,
+
+            "palette": {
+                "recommended": ["blue_4", "purple_2"]
+            }
+        }
+    }
+}

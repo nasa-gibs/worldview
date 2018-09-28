@@ -1,0 +1,12 @@
+{
+    "products": {
+        "MI1B2_ELLIPSOID_AF": {
+            "name": "MISR Level 1B2 Ellipsoid Data - Af Sensor",
+            "handler": "MODISSwath",
+            "query": {
+                "shortName": "MI1B2E",
+                "sensor": "AF"
+            }
+        }
+    }
+}

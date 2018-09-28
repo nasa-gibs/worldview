@@ -1,0 +1,19 @@
+{
+    "categories": {
+        "hazards and disasters": {
+            "Shipping": {
+                "title": "Shipping",
+                "id": "shipping",
+                "image": "shipping.jpg",
+                "description": "",
+                "measurements": [
+                    "Corrected Reflectance",
+                    "Brightness Temperature",
+                    "Land Surface Reflectance",
+                    "Sea Ice",
+                    "Sea Surface Temperature"
+                ]
+            }
+        }
+    }
+}

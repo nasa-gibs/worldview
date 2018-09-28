@@ -1,0 +1,41 @@
+{
+    "layers": {
+        "NOAA_20_Orbit_Asc": {
+            "id":       "NOAA_20_Orbit_Asc",
+            "title":    "NOAA-20 Orbital Track & Overpass Time (Ascending/Day)",
+            "subtitle": "NOAA-20 / Space-Track.org",
+            "description": "reference/orbits/NOAA_20_Orbit_Asc",
+            "tags":     "JPSS-1",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "wrapadjacentdays": true,
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "day",
+            "track": "ascending",
+            "startDate": "2017-11-19",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "NOAA_20_Orbit_Asc",
+                "immutable": true
+            }
+        }
+    }
+}

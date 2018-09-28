@@ -1,0 +1,11 @@
+{
+    "products": {
+        "GPM_1CGPMGMI": {
+            "name": "GPM GMI Level 1C Common Calibrated Brightness Temperatures Collocated",
+            "handler": "List",
+            "query": {
+                "shortName": "GPM_1CGPMGMI"
+            }
+        }
+    }
+}

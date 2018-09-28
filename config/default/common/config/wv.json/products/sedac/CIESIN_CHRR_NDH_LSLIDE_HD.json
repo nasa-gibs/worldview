@@ -1,0 +1,12 @@
+{
+    "products": {
+        "CIESIN_CHRR_NDH_LSLIDE_HD": {
+            "name": "Global Landslide Hazard Distribution",
+            "handler": "CollectionList",
+            "query": {
+                "shortName": "CIESIN_CHRR_NDH_LSLIDE_HD"
+            },
+            "noBulkDownload": "true"
+        }
+    }
+}

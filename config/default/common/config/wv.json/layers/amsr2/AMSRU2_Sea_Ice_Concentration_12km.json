@@ -1,0 +1,16 @@
+{
+    "layers": {
+        "AMSRU2_Sea_Ice_Concentration_12km": {
+            "id":       "AMSRU2_Sea_Ice_Concentration_12km",
+            "title":    "Sea Ice Concentration (12 km)",
+            "subtitle": "GCOM-W1 / AMSR2",
+            "description": "amsr2/AMSRU2_Sea_Ice_Concentration_12km",
+            "tags":     "amsr-u2",
+            "group":    "overlays",
+            "layergroup": [
+              "amsr2"
+            ],
+            "product":  ""
+        }
+    }
+}

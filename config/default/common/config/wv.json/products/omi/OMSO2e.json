@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OMSO2e": {
+            "name": "OMI/Aura Sulfur Dioxide (SO2) Total Column Daily L3 1 day Best Pixel in 0.25 degree x 0.25 degree",
+            "handler": "List",
+            "query": {
+                "shortName": "OMSO2e"
+            }
+        }
+    }
+}

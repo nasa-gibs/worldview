@@ -1,0 +1,24 @@
+{
+    "categories": {
+        "scientific": {
+            "Biosphere": {
+                "title": "Biosphere",
+                "id": "biosphere",
+                "image": "biosphere.jpg",
+                "description": "",
+                "measurements": [
+                    "Amphibian Richness",
+                    "Forests, Mangrove",
+                    "Gross Primary Productivity",
+                    "Heterotrophic Respiration",
+                    "Human Footprint",
+                    "Land Cover",
+                    "Mammal Richness",
+                    "Net Ecosystem CO2 Exchange",
+                    "Vegetation Indices",
+                    "Vegetation Light Use Efficiency"
+                ]
+            }
+        }
+    }
+}

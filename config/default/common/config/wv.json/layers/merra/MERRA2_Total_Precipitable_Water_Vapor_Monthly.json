@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Total_Precipitable_Water_Vapor_Monthly": {
+            "id":       "MERRA2_Total_Precipitable_Water_Vapor_Monthly",
+            "title":    "Total Precipitable Water Vapor (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Total_Precipitable_Water_Vapor_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2IMNXINT",
+            "wrapadjacentdays": true
+        }
+    }
+}

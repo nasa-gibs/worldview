@@ -1,0 +1,19 @@
+{
+    "layers": {
+        "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Daily_Day": {
+            "id":       "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Daily_Day",
+            "title":    "Carbon Monoxide (500 hPa, Day, Daily)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Daily_Day",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRS3STD",
+            "wrapadjacentdays": true,
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}

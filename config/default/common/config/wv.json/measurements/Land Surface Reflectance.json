@@ -1,0 +1,35 @@
+{
+    "measurements": {
+        "Land Surface Reflectance": {
+            "id": "land-surface-reflectance",
+            "title":    "Land Surface Reflectance",
+            "subtitle": "Aqua / MODIS, Terra / MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua / MODIS",
+                    "description": "modis/LandSurfaceReflectance",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_SurfaceReflectance_Bands143",
+                        "MODIS_Aqua_SurfaceReflectance_Bands121",
+                        "MODIS_Aqua_SurfaceReflectance_Bands721",
+                        "Aqua_Orbit_Asc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra / MODIS",
+                    "description": "modis/LandSurfaceReflectance",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_SurfaceReflectance_Bands143",
+                        "MODIS_Terra_SurfaceReflectance_Bands121",
+                        "MODIS_Terra_SurfaceReflectance_Bands721",
+                        "Terra_Orbit_Dsc"
+                    ]
+                }
+            }
+        }
+    }
+}

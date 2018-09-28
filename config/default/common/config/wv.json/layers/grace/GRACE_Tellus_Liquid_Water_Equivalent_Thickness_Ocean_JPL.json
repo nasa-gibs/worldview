@@ -1,0 +1,17 @@
+{
+  "layers": {
+    "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_JPL": {
+      "id": "GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_JPL",
+      "title": "Liquid Water Equivalent Thickness (Ocean, JPL)",
+      "subtitle": "GRACE Tellus",
+      "description": "grace/GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Ocean_JPL",
+      "tags": "lwet",
+      "group": "overlays",
+      "layergroup": [
+        "grace"
+      ],
+      "product": "",
+      "inactive": true
+    }
+  }
+}

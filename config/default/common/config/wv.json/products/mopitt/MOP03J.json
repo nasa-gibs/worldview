@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MOP03J": {
+            "name": "MOPITT Gridded Daily CO Retrievals (Near and Thermal Infrared Radiances)",
+            "handler": "List",
+            "query": {
+                "shortName": "MOP03J"
+            }
+        }
+    }
+}

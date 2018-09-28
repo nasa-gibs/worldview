@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "GCOM_W1_Orbit_Dsc": {
+            "id":       "GCOM_W1_Orbit_Dsc",
+            "title":    "GCOM-W1 Orbital Track & Overpass Time (Descending/Night)",
+            "subtitle": "GCOM-W1 / Space-Track.org",
+            "description": "reference/orbits/GCOM_W1_Orbit_Dsc",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "night",
+            "track": "descending",
+            "startDate": "2012-05-17",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "GCOM_W1_Orbit_Dsc",
+                "immutable": true
+            }
+        }
+    }
+}

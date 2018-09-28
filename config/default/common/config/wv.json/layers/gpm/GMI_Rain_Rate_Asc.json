@@ -1,0 +1,15 @@
+{
+    "layers": {
+        "GMI_Rain_Rate_Asc": {
+            "id":       "GMI_Rain_Rate_Asc",
+            "title":    "Rain Rate (Ascending)",
+            "subtitle": "GPM / GMI",
+            "description": "gpm/GMI_Rain_Rate_Asc",
+            "group":    "overlays",
+            "layergroup": [
+              "gpm"
+            ],
+            "product":  "GPM_2AGPROFGPMGMI"
+        }
+    }
+}

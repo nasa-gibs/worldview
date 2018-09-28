@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Surface_Albedo_Monthly": {
+            "id":       "MERRA2_Surface_Albedo_Monthly",
+            "title":    "Surface Albedo (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Surface_Albedo_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXRAD",
+            "wrapadjacentdays": true
+        }
+    }
+}

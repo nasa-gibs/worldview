@@ -1,0 +1,19 @@
+{
+    "layers": {
+        "AIRS_Carbon_Dioxide_AIRS_AMSU_Monthly": {
+            "id":       "AIRS_Carbon_Dioxide_AIRS_AMSU_Monthly",
+            "title":    "Carbon Dioxide (Free Troposphere, Monthly)",
+            "subtitle": "Aqua / AIRS+AMSRU",
+            "description": "airs/AIRS_Carbon_Dioxide_AIRS_AMSU_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "product":  "AIRX3C2M",
+            "inactive": true,
+
+            "layergroup": [
+              "airs"
+            ]
+
+        }
+    }
+}

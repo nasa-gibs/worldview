@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MERRA2_Dust_Surface_Mass_Concentration_PM25_Monthly": {
+            "id":       "MERRA2_Dust_Surface_Mass_Concentration_PM25_Monthly",
+            "title":    "Dust Surface Mass Concentration PM2.5 (Monthly)",
+            "subtitle": "MERRA-2",
+            "description": "merra/MERRA2_Dust_Surface_Mass_Concentration_PM25_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "merra"
+            ],
+            "product":  "M2TMNXAER",
+            "wrapadjacentdays": true
+        }
+    }
+}

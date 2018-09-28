@@ -1,0 +1,40 @@
+{
+    "layers": {
+        "Suomi_NPP_Orbit_Dsc": {
+            "id":       "Suomi_NPP_Orbit_Dsc",
+            "title":    "Suomi-NPP Orbital Track & Overpass Time (Descending/Night)",
+            "subtitle": "Suomi-NPP / Space-Track.org",
+            "description": "reference/orbits/Suomi_NPP_Orbit_Dsc",
+            "group":    "overlays",
+            "tags":     "snpp s-npp",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "night",
+            "track": "descending",
+            "startDate": "2011-10-28",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "Suomi_NPP_Orbit_Dsc",
+                "immutable": true
+            }
+        }
+    }
+}

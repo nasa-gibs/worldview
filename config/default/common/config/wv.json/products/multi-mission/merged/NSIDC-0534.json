@@ -1,0 +1,11 @@
+{
+    "products": {
+        "NSIDC-0534": {
+            "name": "MEaSUREs Northern Hemisphere State of Cryosphere Daily 25km EASE-Grid 2.0",
+            "handler": "List",
+            "query": {
+                "shortName": "NSIDC-0534"
+            }
+        }
+    }
+}

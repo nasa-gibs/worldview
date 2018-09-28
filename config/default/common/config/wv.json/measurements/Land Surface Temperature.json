@@ -1,0 +1,49 @@
+{
+    "measurements": {
+        "Land Surface Temperature": {
+            "id": "land-surface-temperature",
+            "title":    "Land Surface Temperature",
+            "subtitle": "Aqua / MODIS, Terra / MODIS, SEDAC",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua / MODIS",
+                    "description": "modis/LandSurfaceTemperature",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_Land_Surface_Temp_Day",
+                        "MODIS_Aqua_Land_Surface_Temp_Night",
+                        "Aqua_Orbit_Asc",
+                        "Aqua_Orbit_Dsc"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra / MODIS",
+                    "description": "modis/LandSurfaceTemperature",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_Land_Surface_Temp_Day",
+                        "MODIS_Terra_Land_Surface_Temp_Night",
+                        "Terra_Orbit_Dsc",
+                        "Terra_Orbit_Asc"
+                    ]
+                },
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/LandSurfaceTemperature",
+                    "image": "",
+                    "settings": [
+                        "Summer_Day_Max_Land_Surface_Temp_2013",
+                        "Summer_Night_Min_Land_Surface_Temp_2013",
+                        "UHI_Avg_Summer_Day_Max_Land_Surface_Temp_2013",
+                        "UHI_Avg_Summer_Night_Min_Land_Surface_Temp_2013",
+                        "UHI_Urban-Rural_Summer_Day_Max_Land_Surface_Temp_Difference_2013",
+                        "UHI_Urban-Rural_Summer_Night_Min_Land_Surface_Temp_Difference_2013"
+                    ]
+                }
+            }
+        }
+    }
+}

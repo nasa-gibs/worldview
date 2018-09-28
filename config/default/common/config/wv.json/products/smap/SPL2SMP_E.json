@@ -1,0 +1,17 @@
+{
+    "products": {
+        "SPL2SMP_E": {
+            "name": "SMAP Enhanced L2 Radiometer Half-Orbit 9 km EASE-Grid Soil Moisture",
+            "handler": "HalfOrbit",
+            "query": {
+                "shortName": "SPL2SMP_E"
+            },
+            "orbit": {
+                "type": "regex_group",
+                "field": "producer_granule_id",
+                "regex": ".*([AD])_.*\\.h5$",
+                "match": "D"
+            }
+        }
+    }
+}

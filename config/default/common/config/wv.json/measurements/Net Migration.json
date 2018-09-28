@@ -1,0 +1,22 @@
+{
+    "measurements": {
+        "Net Migration": {
+            "id": "net-migration",
+            "title": "Net Migration",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/NetMigration",
+                    "image": "",
+                    "settings": [
+                        "Estimated_Net_Migration_1970-1980",
+                        "Estimated_Net_Migration_1980-1990",
+                        "Estimated_Net_Migration_1990-2000"
+                    ]
+                }
+            }
+        }
+    }
+}

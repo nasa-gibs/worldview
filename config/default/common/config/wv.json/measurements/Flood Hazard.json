@@ -1,0 +1,22 @@
+{
+    "measurements": {
+        "Flood Hazard": {
+            "id": "flood-hazard",
+            "title":    "Flood Hazard",
+            "subtitle": "SEDAC",
+            "sources": {
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/FloodHazard",
+                    "image": "",
+                    "settings": [
+                      "NDH_Flood_Hazard_Frequency_Distribution_1985-2003",
+                      "ndh-flood-mortality-risks-distribution",
+                      "ndh-flood-proportional-economic-loss-risk-deciles"
+                    ]
+                }
+            }
+        }
+    }
+}
