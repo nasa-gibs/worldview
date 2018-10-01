@@ -15,12 +15,6 @@ git clone https://github.com/nasa-gibs/worldview-options-template.git options
 
 To quickly switch between different configurations, use a symlink for `config/active`
 
-```bash
-mkdir customize
-git clone https://github.com/nasa-gibs/worldview-options-eosdis.git customize/worldview-options-eosdis
-git clone  https://example.com/other-options.git customize/other-options
-ln -s customize/worldview-options-eosdis options
-```
 ## Updating the Configuration
 
 After making any changes to a custom configuration, rebuild the app for the
