@@ -1,21 +1,19 @@
 # Configuration
 
-The Worldview app uses [the official EOSDIS configuration](https://github.com/nasa-gibs/worldview-options-eosdis).
-To create a custom configuration, clone the default configuration repo into the `options/` directory and modify it:
-```bash
-git clone https://github.com/nasa-gibs/worldview-options-eosdis.git options
-```
-Or clone the [the configuration template repo](https://github.com/nasa-gibs/worldview-options-template.git)
-into the `options/` directory and modify it:
+The configuration used in the main application at `https://worldview.earthdata.nasa.gov` is built from the various JSON files found in the `config/default` directory.
 
+To create a custom configuration, either:
+  * Copy the `config/default` directory to `config/active` and modify it as needed.
+  * Clone the basic template repository with a minimual configuration to `config/active`
+
+Any configuration found in `config/active` will be used instead of `config/default`.
+
+Clone the template repository with:
 ```bash
 git clone https://github.com/nasa-gibs/worldview-options-template.git options
 ```
 
-To quickly switch between different configurations, create a `customize`
-directory in the repository root and clone the option repositories there.
-Then symlink the configuration to use in as the options directory.
-For example:
+To quickly switch between different configurations, use a symlink for `config/active`
 
 ```bash
 mkdir customize
