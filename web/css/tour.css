@@ -59,6 +59,11 @@
   margin-bottom: 0;
 }
 
+.tour-start .modal.fade .modal-dialog {
+  transform: translate(0, 0);
+  -webkit-transform: translate(0, 0);
+}
+
 .tour-start .modal-content {
   background-color: #eee;
   border: 0;
@@ -210,6 +215,17 @@
 
 .tour-in-progress .modal-dialog {
   max-width: 248px;
+}
+
+.tour-in-progress .modal.fade .modal-dialog {
+  transform: translate(100%, 0);
+  -webkit-transform: translate(100%, 0);
+  transition: transform 0.5s ease-out;
+}
+
+.tour-in-progress .modal.show .modal-dialog {
+  transform: translate(0, 0);
+  -webkit-transform: translate(0, 0);
 }
 
 .tour-in-progress .modal-content {
@@ -508,6 +524,11 @@
 /* .tour-complete */
 .tour-complete .modal-dialog {
   border: 1px solid #333;
+}
+
+.tour-complete .modal.fade .modal-dialog {
+  transform: translate(0, 0);
+  -webkit-transform: translate(0, 0);
 }
 
 .tour-complete .modal-content {
