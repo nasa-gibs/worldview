@@ -112,3 +112,7 @@
   border-bottom: 1px solid #404040;
   margin: 0;
 }
+
+.wv-dialog .wv-notify-modal ul li div {
+  padding: 0;
+}
