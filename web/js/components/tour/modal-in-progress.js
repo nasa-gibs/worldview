@@ -7,7 +7,6 @@ class ModalInProgress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Story Title',
       desciption: '',
       metaLoaded: false,
       isLoading: false,
@@ -19,28 +18,28 @@ class ModalInProgress extends React.Component {
   }
 
   componentDidMount() {
-    var tourId = this.props.tourId;
-    var stepIndex = this.props.steps;
-    this.fetchMetadata(tourId, stepIndex);
+    var currentStoryIndex = this.props.currentStoryIndex;
+    var currentStepIndex = this.props.currentStep;
+    this.fetchMetadata(currentStoryIndex, currentStepIndex);
   }
 
   componentWillReceiveProps(nextProps) {
-    var tourIndex = this.props.tourIndex;
-    var tourId = this.props.tourId;
-    if (nextProps.steps !== this.props.steps) {
-      var stepIndex = nextProps.steps;
-      this.fetchMetadata(tourId, stepIndex);
-      this.stepLink(tourIndex, stepIndex);
+    var currentStoryIndex = this.props.currentStoryIndex;
+    if (nextProps.currentStep !== this.props.currentStep) {
+      var currentStepIndex = nextProps.currentStep;
+      this.fetchMetadata(currentStoryIndex, currentStepIndex);
+      this.stepLink(currentStoryIndex, currentStepIndex);
     }
   }
 
-  fetchMetadata(tourId, stepIndex) {
-    stepIndex = stepIndex.toString().padStart(3, '0');
+  fetchMetadata(currentStoryIndex, currentStepIndex) {
+    currentStepIndex = currentStepIndex.toString().padStart(3, '0');
     this.setState({ isLoading: true });
 
     var { origin, pathname } = window.location;
+    var currentStoryId = this.props.currentStory['id'];
     var errorMessage = '<p>There was an error loading this description.</p>';
-    var uri = `${origin}${pathname}stories/${tourId}/step${stepIndex}.html`;
+    var uri = `${origin}${pathname}config/metadata/stories/${currentStoryId}/step${currentStepIndex}.html`;
     fetch(uri)
       .then(res => (res.ok ? res.text() : errorMessage))
       .then(body => {
@@ -54,10 +53,11 @@ class ModalInProgress extends React.Component {
       }).catch(error => this.setState({ error, isLoading: false }));
   }
 
-  stepLink(tourIndex, stepIndex) {
+  stepLink(currentStoryIndex, currentStepIndex) {
     var models, config, ui, stepLink, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
-    stepIndex = (stepIndex - 1).toString().padStart(0, '0');
-    stepLink = this.props.tourSteps[`${stepIndex}`].stepLink;
+    currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
+    var currentStoryId = this.props.currentStoryId;
+    stepLink = currentStoryId.stepLink;
     models = this.props.models;
     config = this.props.config;
     ui = this.props.ui;
@@ -96,7 +96,7 @@ class ModalInProgress extends React.Component {
     // Set layers
     var layerString = models.layers.activeLayers;
     // Turn string of layersA into an array
-    var layersAArray = layersA.split(',');
+    // var layersAArray = layersA.split(',');
 
     // Set current layers visible
     models.layers[layerString].forEach(function(layer) {
@@ -109,41 +109,41 @@ class ModalInProgress extends React.Component {
     });
 
     // Turn on or add new layers
-    layersAArray.forEach(function(layer) {
-      var id = layer.split('(')[0];
-      var visible = !layer.includes('hidden');
-      if (models.layers.exists(id, models.layers[layerString])) {
-        models.layers.setVisibility(id, visible, layerString);
-      } else {
-        models.layers.add(
-          id,
-          {
-            visible: visible
-          },
-          layerString
-        );
-      }
-    });
+    // layersAArray.forEach(function(layer) {
+    //   var id = layer.split('(')[0];
+    //   var visible = !layer.includes('hidden');
+    //   if (models.layers.exists(id, models.layers[layerString])) {
+    //     models.layers.setVisibility(id, visible, layerString);
+    //   } else {
+    //     models.layers.add(
+    //       id,
+    //       {
+    //         visible: visible
+    //       },
+    //       layerString
+    //     );
+    //   }
+    // });
   }
 
   render() {
     var { description, metaLoaded } = this.state;
-    var tourIndex = this.props.tourIndex;
+    var currentStoryIndex = this.props.currentStoryIndex;
     var modalStarted = this.props.modalInProgress;
     if (modalStarted && !metaLoaded) {
       this.setState({ metaLoaded: true });
-      this.stepLink(tourIndex, 1);
+      this.stepLink(currentStoryIndex, 1);
     }
 
     return (
       <div>
-        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' ' + this.props.tourType} backdrop={false}>
-          <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.props.tourTitle}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
+        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' ' + this.props.currentStory['type']} backdrop={false}>
+          <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.props.currentStory['title']}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
           <ModalBody>
             <div dangerouslySetInnerHTML={{ __html: description }} />
           </ModalBody>
           <ModalFooter>
-            <Steps steps={this.props.steps} totalSteps={this.props.totalSteps} decreaseStep={this.props.decreaseStep} incrementStep={this.props.incrementStep}></Steps>
+            <Steps currentStep={this.props.currentStep} totalSteps={this.props.totalSteps} decreaseStep={this.props.decreaseStep} incrementStep={this.props.incrementStep}></Steps>
           </ModalFooter>
         </Modal>
       </div>

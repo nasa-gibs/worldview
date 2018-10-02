@@ -19,8 +19,8 @@ export function tourModel(config) {
   };
 
   self.save = function (state) {
-    console.log(self.selected);
-    state.tr = self.selected.id;
+    // console.log(self.selected);
+    // state.tr = self.selected.id;
   };
 
   self.load = function (state) {
