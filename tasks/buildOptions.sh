@@ -96,6 +96,9 @@ done
 cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
+# Copy story files from build to dest
+cp -r "$BUILD_DIR/stories" "$DEST_DIR"
+
 # Validate the options build
 "$TASKS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"
 

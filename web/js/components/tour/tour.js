@@ -18,7 +18,8 @@ class Tour extends React.Component {
       totalSteps: 10,
       isLoading: false,
       error: null,
-      tourIndex: 0
+      tourIndex: 0,
+      tourParameter: this.props.config.parameters.tr || null
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
@@ -30,9 +31,15 @@ class Tour extends React.Component {
     this.decreaseStep = this.decreaseStep.bind(this);
   }
 
+  // componentWillMount() {
+  //   if (this.state.tourParameter) {
+  //     this.startTour(null, 1); // need to change out 1 for the tour id
+  //   }
+  // }
+
   async componentWillMount() {
     try {
-      const response = await fetch('../stories/stories.json');
+      const response = await fetch('../config/stories/stories.json');
       if (!response.ok) {
         throw Error(response.statusText);
       }
@@ -65,7 +72,7 @@ class Tour extends React.Component {
   }
 
   startTour(e, tourIndex) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     this.setState({
       steps: 1,
       tourIndex: tourIndex,
