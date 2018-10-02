@@ -93,10 +93,15 @@ import { projectionUi } from './projection/ui';
 // A|B comparison
 import { compareModel } from './compare/model';
 import { compareUi } from './compare/ui';
+
+// Tour
+import { parse as tourParser } from './tour/tour';
+import { tourModel } from './tour/model';
+import { tourUi } from './tour/ui';
+
 // Other
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
-import { tourUi } from './tour/ui';
 import { uiInfo } from './ui/info';
 
 // Dependency CSS
@@ -331,7 +336,8 @@ class App extends React.Component {
         layerParser,
         dateParser,
         mapParser,
-        palettes.parse
+        palettes.parse,
+        tourParser
       ];
       if (config.features.dataDownload) {
         parsers.push(dataParser);
@@ -387,12 +393,14 @@ class App extends React.Component {
         models.compare = compareModel(models, config);
         models.link.register(models.compare);
       }
+      models.tour = tourModel(models, config);
       models.link
         .register(models.proj)
         .register(models.layers)
         .register(models.date)
         .register(models.palettes)
-        .register(models.map);
+        .register(models.map)
+        .register(models.tour);
       models.link.load(state);
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
