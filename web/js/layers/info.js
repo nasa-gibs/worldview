@@ -463,7 +463,7 @@ export function layersInfo(config, models, layer) {
     }
 
     if (layer.description) {
-      $.get('config/metadata/' + layer.description + '.html').done(function(
+      $.get('config/metadata/layers/' + layer.description + '.html').done(function(
         data
       ) {
         $layerMeta.html(data);

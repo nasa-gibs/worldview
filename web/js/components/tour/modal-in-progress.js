@@ -58,6 +58,7 @@ class ModalInProgress extends React.Component {
     currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
     var currentStoryId = this.props.currentStoryId;
     stepLink = currentStoryId.stepLink;
+    console.log(stepLink);
     models = this.props.models;
     config = this.props.config;
     ui = this.props.ui;
@@ -96,7 +97,6 @@ class ModalInProgress extends React.Component {
     // Set layers
     var layerString = models.layers.activeLayers;
     // Turn string of layersA into an array
-    // var layersAArray = layersA.split(',');
 
     // Set current layers visible
     models.layers[layerString].forEach(function(layer) {
@@ -108,22 +108,25 @@ class ModalInProgress extends React.Component {
       models.layers.remove(layer.id, false, layerString);
     });
 
-    // Turn on or add new layers
-    // layersAArray.forEach(function(layer) {
-    //   var id = layer.split('(')[0];
-    //   var visible = !layer.includes('hidden');
-    //   if (models.layers.exists(id, models.layers[layerString])) {
-    //     models.layers.setVisibility(id, visible, layerString);
-    //   } else {
-    //     models.layers.add(
-    //       id,
-    //       {
-    //         visible: visible
-    //       },
-    //       layerString
-    //     );
-    //   }
-    // });
+    if (layersA) {
+      var layersAArray = layersA.split(',');
+      // Turn on or add new layers
+      layersAArray.forEach(function(layer) {
+        var id = layer.split('(')[0];
+        var visible = !layer.includes('hidden');
+        if (models.layers.exists(id, models.layers[layerString])) {
+          models.layers.setVisibility(id, visible, layerString);
+        } else {
+          models.layers.add(
+            id,
+            {
+              visible: visible
+            },
+            layerString
+          );
+        }
+      });
+    }
   }
 
   render() {
