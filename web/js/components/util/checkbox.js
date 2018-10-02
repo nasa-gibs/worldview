@@ -23,7 +23,9 @@ export class Checkbox extends React.Component {
   }
   render() {
     return (
-      <div className={this.state.checked ? 'wv-checkbox checked' : 'wv-checkbox'}>
+      <div
+        className={this.state.checked ? 'wv-checkbox checked' : 'wv-checkbox'}
+      >
         <input
           type="checkbox"
           id={this.props.id}
@@ -33,13 +35,11 @@ export class Checkbox extends React.Component {
           className={this.props.classNames}
           onChange={this.handleChange.bind(this)}
         />
-        <label htmlFor={this.props.id}>
-          {this.props.label}
-        </label>
+        <label htmlFor={this.props.id}>{this.props.label}</label>
       </div>
     );
   }
-};
+}
 Checkbox.defaultProps = {
   checked: true
 };
