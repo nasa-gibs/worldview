@@ -557,7 +557,6 @@ export function layersModal(models, ui, config) {
     // Remove perfectScrollbar for the search list window
     $('#layer-modal-content').perfectScrollbar('destroy');
     var layerGroupStr = model.activeLayers;
-    console.log('setState');
     self.reactList.setState({
       activeLayers: model[layerGroupStr],
       selectedProjection: projection,
