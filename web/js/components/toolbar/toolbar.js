@@ -4,7 +4,7 @@ import React from 'react';
 // import Snapshot from './snapshot/index.js';
 // import Info from './info/index.js'
 
-class Tour extends React.Component {
+class Toolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,14 +50,14 @@ class Tour extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <ul id="wv-toolbar" className="wv-toolbar">
         <li id="wv-link-button" className="wv-toolbar-button"></li>
         <li id="wv-proj-button" className="wv-toolbar-button"></li>
         <li id="wv-image-button" className="wv-toolbar-button"></li>
         <li id="wv-info-button" className="wv-toolbar-button wv-status-hide"></li>
-      </React.Fragment>
+      </ul>
     );
   }
 }
 
-export default Tour;
+export default Toolbar;

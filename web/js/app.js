@@ -1,4 +1,5 @@
 import React from 'react';
+import Toolbar from './components/toolbar/toolbar';
 
 import lodashEach from 'lodash/each';
 import googleTagManager from 'googleTagManager';
@@ -95,7 +96,7 @@ import { compareUi } from './compare/ui';
 // Other
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
-import tour from './tour';
+import { tourUi } from './tour/ui';
 import { uiInfo } from './ui/info';
 
 // Dependency CSS
@@ -166,15 +167,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="wv-content" data-role="content">
-        <ul id="wv-toolbar">
-          <li id="wv-link-button" className="wv-toolbar-button" />
-          <li id="wv-proj-button" className="wv-toolbar-button" />
-          <li id="wv-image-button" className="wv-toolbar-button" />
-          <li
-            id="wv-info-button"
-            className="wv-toolbar-button wv-status-hide"
-          />
-        </ul>
+        <Toolbar />
         <section id="wv-sidebar" />
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
@@ -436,7 +429,7 @@ class App extends React.Component {
       elapsed('ui');
       // Create widgets
       ui.proj = projectionUi(models, config);
-      ui.tour = tour(models, ui, config);
+      ui.tour = tourUi(models, ui, config);
       ui.sidebar = sidebarUi(models, config, ui);
       ui.activeLayers = layersActive(models, ui, config);
       ui.addModal = layersModal(models, ui, config);

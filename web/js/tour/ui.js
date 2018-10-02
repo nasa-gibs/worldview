@@ -18,16 +18,3 @@ export function tourUi(models, ui, config) {
   init();
   return self;
 }
-//   var init = function() {
-//     self.show();
-//   };
-
-//   self.show = function() {
-//     var TourWidget = React.createElement(TourStart);
-
-//     self.reactComponent = ReactDOM.render(TourWidget, document.getElementById('app'));
-//   };
-
-//   init();
-//   return self;
-// }
