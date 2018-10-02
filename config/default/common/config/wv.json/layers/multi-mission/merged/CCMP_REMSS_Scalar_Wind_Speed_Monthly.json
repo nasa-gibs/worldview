@@ -5,7 +5,7 @@
             "title":    "Wind Speed (Scalar, Monthly)",
             "subtitle": "CCMP",
             "description": "CCMP_REMSS_Scalar_Wind_Speed_Monthly",
-            "tags":     "",
+            "tags":     "podaac PO.DAAC",
             "layergroup": [
               "multi-mission",
               "multi-mission_merged"

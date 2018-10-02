@@ -5,7 +5,7 @@
             "title":    "Wind Speed (L3, 7-Day Snapshot)",
             "subtitle": "SAC-D / Aquarius",
             "description": "aquarius/Aquarius_Wind_Speed_L3_7Day_Snapshot",
-            "tags":     "",
+            "tags":     "podaac PO.DAAC",
             "group":    "overlays",
             "layergroup": [
               "aquarius"

@@ -6,6 +6,7 @@
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_L3_SST_Thermal_9km_Day_Monthly",
             "group":    "overlays",
+            "tags": "ssc podaac PO.DAAC",
             "layergroup": [
               "modis",
               "modis_terra"
