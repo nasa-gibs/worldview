@@ -3,7 +3,7 @@
         "Cloud Liquid Water": {
             "id": "cloud-liquid-water",
             "title":    "Cloud Liquid Water",
-            "subtitle": "GCOM-W1/AMSR2, DMSP-F8/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
+            "subtitle": "GCOM-W1/AMSR2, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
             "sources": {
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
@@ -17,9 +17,9 @@
                         "GCOM_W1_Orbit_Dsc"
                     ]
                 },
-                "DMSP-F8/SSMI": {
-                    "id": "dmsp-f8-ssmi",
-                    "title": "DMSP-F8/SSMI",
+                "DMSP-F08/SSMI": {
+                    "id": "dmsp-f08-ssmi",
+                    "title": "DMSP-F08/SSMI",
                     "description": "ssmi/CloudLiquidWaterOverOceansDMSP-F8",
                     "image": "",
                     "settings": [
