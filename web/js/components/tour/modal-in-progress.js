@@ -15,6 +15,7 @@ class ModalInProgress extends React.Component {
 
     this.fetchMetadata = this.fetchMetadata.bind(this);
     this.stepLink = this.stepLink.bind(this);
+    this.selectLink = this.selectLink.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +30,7 @@ class ModalInProgress extends React.Component {
       var currentStepIndex = nextProps.currentStep;
       this.fetchMetadata(currentStoryIndex, currentStepIndex);
       this.stepLink(currentStoryIndex, currentStepIndex);
+      this.selectLink();
     }
   }
 
@@ -54,14 +56,11 @@ class ModalInProgress extends React.Component {
   }
 
   stepLink(currentStoryIndex, currentStepIndex) {
-    var models, config, ui, stepLink, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
+    var stepLink;
     currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
     var currentStoryId = this.props.currentStoryId;
     stepLink = currentStoryId.stepLink;
     console.log(stepLink);
-    models = this.props.models;
-    config = this.props.config;
-    ui = this.props.ui;
 
     // Get URL Link here from JSON file (for each step)
     // Push Link to Browser URL
@@ -72,6 +71,14 @@ class ModalInProgress extends React.Component {
         '?' + stepLink
       );
     }
+  }
+
+  selectLink() {
+    var models, config, ui, state, stepLink, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
+
+    models = this.props.models;
+    config = this.props.config;
+    ui = this.props.ui;
     state = util.fromQueryString(location.search);
     comparisonOn = state.ca;
     timeA = state.t;
@@ -135,7 +142,9 @@ class ModalInProgress extends React.Component {
     var modalStarted = this.props.modalInProgress;
     if (modalStarted && !metaLoaded) {
       this.setState({ metaLoaded: true });
+      this.fetchMetadata(currentStoryIndex, 1);
       this.stepLink(currentStoryIndex, 1);
+      this.selectLink();
     }
 
     return (
