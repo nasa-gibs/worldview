@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
+import googleTagManager from 'googleTagManager';
 const listId = 'wv-data';
 
 class Data extends React.Component {
@@ -32,6 +33,9 @@ class Data extends React.Component {
           <span
             onClick={e => {
               showUnavailableReason();
+              googleTagManager.pushEvent({
+                'event': 'data_download_not_available'
+              });
             }}
             className="link"
           >

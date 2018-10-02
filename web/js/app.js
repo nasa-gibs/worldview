@@ -3,6 +3,7 @@ import React from 'react';
 import 'babel-polyfill'; // Needed for worldview-components in IE and older browsers
 import lodashEach from 'lodash/each';
 import googleAnalytics from './components/util/google-analytics';
+import googleTagManager from './components/util/google-tag-manager';
 
 // Utils
 import util from './util/util';
@@ -395,6 +396,9 @@ class App extends React.Component {
       models.link.load(state);
       if (config.features.googleAnalytics) {
         googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
+      }
+      if (config.features.googleTagManager) {
+        googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
       }
 
       // HACK: Map needs to be created before the data download model

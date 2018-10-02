@@ -1,5 +1,6 @@
 import util from '../util/util';
 import d3 from 'd3';
+import googleTagManager from 'googleTagManager';
 
 export function timeline(models, config, ui) {
   var self = {};
@@ -246,6 +247,9 @@ export function timeline(models, config, ui) {
     }
 
     $('#timeline-hide').click(function() {
+      googleTagManager.pushEvent({
+        'event': 'timeline_hamburger'
+      });
       self.toggle();
     });
 

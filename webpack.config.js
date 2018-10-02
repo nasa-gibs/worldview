@@ -55,6 +55,11 @@ if (process.env.TESTING_MODE === 'true') {
 */
 
 module.exports = {
+  resolve: {
+    alias: {
+      googleTagManager$: path.resolve(__dirname, './web/js/components/util/google-tag-manager.js')
+    }
+  },
   mode: devMode ? 'development' : 'production',
   stats: {
     // reduce output text on build - remove for more verbose

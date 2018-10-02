@@ -8,7 +8,7 @@ import track from './track';
 import wvui from '../ui/ui';
 import util from '../util/util';
 import { naturalEventsUtilGetEventById } from './util';
-import googleAnalytics from '../components/util/google-analytics';
+import googleTagManager from 'googleTagManager';
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -65,7 +65,9 @@ export default function naturalEventsUI(models, ui, config, request) {
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'events') {
         model.active = true;
-        googleAnalytics.event('Natural Events', 'Click', 'Events Tab');
+        googleTagManager.pushEvent({
+          'event': 'natural_events_tab'
+        });
 
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
@@ -359,7 +361,8 @@ export default function naturalEventsUI(models, ui, config, request) {
           {
             visible: visible
           },
-          layerString
+          layerString,
+          'natural-event'
         );
       }
     });

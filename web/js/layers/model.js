@@ -6,6 +6,7 @@ import lodashFindIndex from 'lodash/findIndex';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import util from '../util/util';
+import googleTagManager from 'googleTagManager';
 
 export function layersModel(models, config) {
   var self = {};
@@ -27,7 +28,7 @@ export function layersModel(models, config) {
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
       lodashEach(config.defaults.startingLayers, function(start) {
-        self[layerStr] = self.add(start.id, start, layerStr);
+        self[layerStr] = self.add(start.id, start, layerStr, 'reset');
       });
     }
   };
@@ -208,7 +209,7 @@ export function layersModel(models, config) {
     return endDate;
   };
 
-  self.add = function(id, spec, activeLayerString) {
+  self.add = function(id, spec, activeLayerString, addType) {
     activeLayerString = activeLayerString || self.activeLayers;
     if (
       lodashFind(self[activeLayerString], {
@@ -234,6 +235,15 @@ export function layersModel(models, config) {
       split[activeLayerString] += 1;
     } else {
       self[activeLayerString].splice(split[activeLayerString], 0, def);
+    }
+
+    if (self.loaded && addType !== 'natural-event' && addType !== 'reset') {
+      googleTagManager.pushEvent({
+        'event': 'layer_added',
+        'layers': {
+          'id': id
+        }
+      });
     }
     self.events.trigger('add', def, null, self[activeLayerString]);
     self.events.trigger('change');
