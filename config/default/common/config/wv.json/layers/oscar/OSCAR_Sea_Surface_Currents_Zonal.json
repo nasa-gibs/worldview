@@ -5,7 +5,7 @@
             "title":    "Sea Surface Currents (Zonal)",
             "subtitle": "OSCAR",
             "description": "oscar/OSCAR_Sea_Surface_Currents_Zonal",
-            "tags":     "",
+            "tags":     "podaac PO.DAAC",
             "group":    "overlays",
             "layergroup": [
               "oscar"

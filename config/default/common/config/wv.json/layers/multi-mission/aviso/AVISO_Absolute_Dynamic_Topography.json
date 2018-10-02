@@ -5,7 +5,7 @@
       "title": "Absolute Dynamic Topography (AVISO ADT)",
       "subtitle": "AVISO",
       "description": "multi-mission/aviso/AVISO_Absolute_Dynamic_Topography",
-      "tags": "adt",
+      "tags": "adt podaac PO.DAAC",
       "group": "overlays",
       "layergroup": [
         "multi-mission",

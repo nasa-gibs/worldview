@@ -5,7 +5,7 @@
       "title": "Liquid Water Equivalent Thickness (Land, JPL)",
       "subtitle": "GRACE Tellus",
       "description": "grace/GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Land_JPL",
-      "tags": "lwet",
+      "tags": "lwet podaac PO.DAAC",
       "group": "overlays",
       "layergroup": [
         "grace"
