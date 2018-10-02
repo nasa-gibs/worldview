@@ -11,7 +11,7 @@ class ModalStart extends React.Component {
           <ModalHeader toggle={this.props.toggleModalStart} charCode="">Welcome to Worldview!</ModalHeader>
           <ModalBody>
             <TourIntro toggleModalStart={this.props.toggleModalStart}></TourIntro>
-            <TourBoxes data={this.props.data} startTour={this.props.startTour}></TourBoxes>
+            <TourBoxes stories={this.props.stories} storyOrder={this.props.storyOrder} startTour={this.props.startTour}></TourBoxes>
           </ModalBody>
         </Modal>
       </div>

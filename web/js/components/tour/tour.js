@@ -10,16 +10,19 @@ class Tour extends React.Component {
       models: this.props.models,
       ui: this.props.ui,
       config: this.props.config,
-      data: null,
+      stories: this.props.config.stories,
+      storyOrder: this.props.config.storyOrder,
       modalStart: true,
       modalInProgress: false,
       modalComplete: false,
-      steps: 1,
+      currentStep: 1,
       totalSteps: 10,
       isLoading: false,
       error: null,
-      tourIndex: 0,
-      tourParameter: this.props.config.parameters.tr || null
+      tourParameter: this.props.config.parameters.tr || null,
+      currentStoryIndex: 0,
+      currentStory: {},
+      currentStoryId: ''
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
@@ -29,25 +32,6 @@ class Tour extends React.Component {
     this.restartTour = this.restartTour.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
-  }
-
-  // componentWillMount() {
-  //   if (this.state.tourParameter) {
-  //     this.startTour(null, 1); // need to change out 1 for the tour id
-  //   }
-  // }
-
-  async componentWillMount() {
-    try {
-      const response = await fetch('../config/stories/stories.json');
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      const json = await response.json();
-      this.setState({ data: json });
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   toggleModalStart(e) {
@@ -71,14 +55,16 @@ class Tour extends React.Component {
     });
   }
 
-  startTour(e, tourIndex) {
+  startTour(e, currentStory, currentStoryIndex, currentStoryId) {
     if (e) e.preventDefault();
     this.setState({
       steps: 1,
-      tourIndex: tourIndex,
+      currentStoryIndex: currentStoryIndex,
       modalStart: false,
       modalInProgress: true,
-      modalComplete: false
+      modalComplete: false,
+      currentStory: currentStory,
+      currentStoryId: currentStoryId
     });
   }
 
@@ -93,23 +79,24 @@ class Tour extends React.Component {
   }
 
   incrementStep(e) {
-    if (this.state.steps + 1 <= this.state.totalSteps) this.setState({ steps: this.state.steps + 1 });
-    if (this.state.steps + 1 === this.state.totalSteps + 1) {
+    if (this.state.currentStep + 1 <= this.state.totalSteps) this.setState({ currentStep: this.state.currentStep + 1 });
+    if (this.state.currentStep + 1 === this.state.totalSteps + 1) {
       this.toggleModalInProgress(e);
       this.toggleModalComplete(e);
     }
   }
 
   decreaseStep(e) {
-    if (this.state.steps - 1 >= 1) this.setState({ steps: this.state.steps - 1 });
+    if (this.state.currentStep - 1 >= 1) this.setState({ currentStep: this.state.currentStep - 1 });
   }
 
   render() {
-    if (this.state.data) {
+    if (this.state.stories) {
       return (
         <div>
           <TourStart
-            data={this.state.data}
+            stories={this.state.stories}
+            storyOrder={this.state.storyOrder}
             modalStart={this.state.modalStart}
             toggleModalStart={this.toggleModalStart}
             toggleModalInProgress={this.toggleModalInProgress}
@@ -126,15 +113,14 @@ class Tour extends React.Component {
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
             startTour={this.startTour}
-            steps={this.state.steps}
+            currentStep={this.state.currentStep}
             totalSteps={this.state.totalSteps}
             incrementStep={this.incrementStep}
             decreaseStep={this.decreaseStep}
-            tourIndex={this.state.tourIndex}
-            tourId={this.state.data[this.state.tourIndex].id}
-            tourType={this.state.data[this.state.tourIndex].type}
-            tourTitle={this.state.data[this.state.tourIndex].title}
-            tourSteps={this.state.data[this.state.tourIndex].steps}
+            currentStoryIndex={this.state.currentStoryIndex}
+            stories={this.state.stories}
+            currentStoryId={this.state.currentStoryId}
+            currentStory={this.state.currentStory}
           ></TourInProgress>
 
           <TourComplete

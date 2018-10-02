@@ -6,6 +6,9 @@ export function tourUi(models, ui, config) {
   var self = {};
 
   var init = function() {
+    if (!config.features.tour) {
+      return;
+    }
     self.reactComponent = ReactDOM.render(
       React.createElement(Tour, {
         models: models,

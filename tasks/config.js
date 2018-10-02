@@ -25,7 +25,6 @@ for (let configFile of storyFiles) {
 }
 
 console.log('Copying options to web directory');
-shell.cp('-r', 'build/options/stories', 'web');
 shell.cp('-r', 'build/options/config', 'web');
 shell.cp('-r', 'build/options/brand', 'web');
 shell.cp('-r', 'build/options/brand.json', 'web/brand');
@@ -39,4 +38,3 @@ Header set Pragma "no-cache"
 `;
 fs.writeFileSync('web/brand/.htaccess', htaccess);
 fs.writeFileSync('web/config/.htaccess', htaccess);
-fs.writeFileSync('web/stories/.htaccess', htaccess);
