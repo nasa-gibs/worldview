@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
 import lodashFind from 'lodash/find';
+import googleTagManager from 'googleTagManager';
 
 class Event extends React.Component {
   /**
@@ -50,6 +51,12 @@ class Event extends React.Component {
       deselectEvent();
     } else {
       selectEvent(event.id, date);
+      googleTagManager.pushEvent({
+        'event': 'natural_event_selected',
+        'natural_events': {
+          'category': event.categories[0].title
+        }
+      });
     }
   }
   /**

@@ -3,7 +3,7 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'jquery.joyride';
 import util from './util/util';
 import wvui from './ui/ui';
-import googleAnalytics from './components/util/google-analytics';
+import googleTagManager from 'googleTagManager';
 import feedbackModal from './feedback';
 
 export default function(models, ui, config) {
@@ -122,6 +122,9 @@ export default function(models, ui, config) {
         closeText: ''
       });
       feedbackModal.decorate($dialog.find('.feedback'));
+      googleTagManager.pushEvent({
+        'event': 'tour_completed'
+      });
       $('#repeat').click(repeatTour);
       $('#done').click(handleDone);
     };
@@ -164,7 +167,6 @@ export default function(models, ui, config) {
 
     var onStop = function(index, tip, button) {
       setTourState();
-      googleAnalytics.event('Tour', 'Click', 'Post Tour View', index + 1);
       if (index === 5 && button === false) {
         endTour();
       }
@@ -177,7 +179,9 @@ export default function(models, ui, config) {
       e.stopPropagation();
       $('.ui-dialog-content').dialog('close');
       initTourState();
-      googleAnalytics.event('Tour', 'Click', 'Take Tour');
+      googleTagManager.pushEvent({
+        'event': 'tour_start'
+      });
       $('#joyRideTipContent').joyride({
         scroll: false,
         autoStart: true,

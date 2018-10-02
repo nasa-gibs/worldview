@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import lodashSize from 'lodash/size';
 import lodashEach from 'lodash/each';
-import googleAnalytics from '../components/util/google-analytics';
+import googleTagManager from 'googleTagManager';
 import * as olExtent from 'ol/extent';
 
 import { dataMap } from './map';
@@ -43,7 +43,9 @@ export function dataUi(models, ui, config) {
 
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'download') {
-        googleAnalytics.event('Data Download', 'Click', 'Data Download Tab');
+        googleTagManager.pushEvent({
+          'event': 'data_download_tab'
+        });
         model.activate();
       } else {
         model.deactivate();
@@ -155,7 +157,6 @@ export function dataUi(models, ui, config) {
   };
 
   self.showDownloadList = function() {
-    googleAnalytics.event('Data Download', 'Click', 'Download Button');
     if (selectionListPanel) {
       selectionListPanel.setVisible(false);
     }
@@ -627,10 +628,16 @@ var dataUiDownloadListPanel = function(config, model) {
   };
 
   var showWgetPage = function() {
+    googleTagManager.pushEvent({
+      'event': 'data_download_list_wget'
+    });
     dataUiBulkDownloadPage.show(selection, 'wget');
   };
 
   var showCurlPage = function() {
+    googleTagManager.pushEvent({
+      'event': 'data_download_list_curl'
+    });
     dataUiBulkDownloadPage.show(selection, 'curl');
   };
 

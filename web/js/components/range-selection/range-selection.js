@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dragger from './dragger.js';
 import DraggerRange from './dragger-range.js';
+import googleTagManager from 'googleTagManager';
 
 /*
  * A react component, is a draggable svg
@@ -94,6 +95,9 @@ class TimelineRangeSelector extends React.Component {
    */
   onDragStop() {
     this.props.onDrag(this.state.startLocation, this.state.endLocation);
+    googleTagManager.pushEvent({
+      'event': 'GIF_animation_dragger'
+    });
   }
   onRangeClick(d) {
     this.props.onRangeClick(d.nativeEvent);

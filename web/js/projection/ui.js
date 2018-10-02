@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import lodashEach from 'lodash/each';
 import wvui from '../ui/ui';
+import googleTagManager from 'googleTagManager';
 
 export function projectionUi(models, config) {
   var self = {};
@@ -61,6 +62,10 @@ export function projectionUi(models, config) {
         '</i>' + ui.name + '</a></li>');
       $menuItems.append($item);
       $item.click(function () {
+        googleTagManager.pushEvent({
+          'event': 'change_projection',
+          'projection': ui.name
+        });
         models.proj.select(ui.id);
         $('#wv-proj-button-check')
           .prop('checked', false);

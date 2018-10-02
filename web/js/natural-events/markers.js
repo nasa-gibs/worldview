@@ -9,6 +9,7 @@ import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
 import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
+import googleTagManager from 'googleTagManager';
 
 export default function markers (models, ui) {
   var self = {};
@@ -132,6 +133,12 @@ export default function markers (models, ui) {
         pinEl.addEventListener('click', function (e) {
           if (willSelect && !isSelected) {
             ui.naturalEvents.selectEvent(event.id, date);
+            googleTagManager.pushEvent({
+              'event': 'natural_event_selected',
+              'natural_events': {
+                'category': category.title
+              }
+            });
           } else {
             passEventToTarget(e, olViewport);
           }

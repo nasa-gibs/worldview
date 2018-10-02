@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
 import Share from '../components/share/share';
-import googleAnalytics from '../components/util/google-analytics';
+import googleTagManager from 'googleTagManager';
 
 import util from '../util/util';
 import wvui from '../ui/ui';
@@ -35,7 +35,9 @@ export function linkUi(models, config) {
       })
       .click(function() {
         var checked = $('#wv-link-button-check').prop('checked');
-        googleAnalytics.event('Link', 'Click', 'Share link Button');
+        googleTagManager.pushEvent({
+          'event': 'social_link_share'
+        });
         if (checked) {
           self.show();
         } else {
@@ -115,6 +117,10 @@ export function linkUi(models, config) {
     var shareMessage = 'Check out what I found in NASA Worldview!';
     var twMessage = 'Check out what I found in #NASAWorldview -';
     var emailBody = shareMessage + ' - ' + url;
+    googleTagManager.pushEvent({
+      'event': 'social_share_platform',
+      'social_type': type
+    });
 
     switch (type) {
       case 'twitter':
@@ -250,7 +256,9 @@ export function linkUi(models, config) {
       var checked = $('#wv-link-shorten-check').prop('checked');
       if (checked) {
         var promise = models.link.shorten();
-        googleAnalytics.event('Link', 'Check', 'Shorten');
+        googleTagManager.pushEvent({
+          'event': 'social_link_shorten'
+        });
         $('#permalink_content').val('Please wait...');
         promise
           .done(function(result) {
@@ -265,7 +273,6 @@ export function linkUi(models, config) {
           });
       } else {
         $('#permalink_content').val(models.link.get());
-        googleAnalytics.event('Link', 'Check', 'Lengthen');
       }
       $('#permalink_content').focus();
       $('#permalink_content').select();

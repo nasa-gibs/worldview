@@ -9,6 +9,7 @@ import { TabContent, TabPane } from 'reactstrap';
 import { SidebarProvider as Provider } from './provider';
 import CollapsedButton from './collapsed-button';
 import NavCase from './nav/nav-case';
+import googleTagManager from 'googleTagManager';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -89,6 +90,9 @@ class Sidebar extends React.Component {
   }
   toggleSidebar() {
     var isNowCollapsed = !this.state.isCollapsed;
+    googleTagManager.pushEvent({
+      'event': 'sidebar_chevron'
+    });
     if (this.props.localStorage) {
       let storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
       localStorage.setItem('sidebarState', storageValue);
@@ -324,7 +328,8 @@ Sidebar.propTypes = {
   filterEventList: PropTypes.func,
   selectedDataProduct: PropTypes.string,
   showDataUnavailableReason: PropTypes.func,
-  compareFeature: PropTypes.bool
+  compareFeature: PropTypes.bool,
+  projection: PropTypes.string
 };
 
 export default Sidebar;

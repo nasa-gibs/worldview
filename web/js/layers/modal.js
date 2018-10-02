@@ -13,6 +13,7 @@ import lodashSortBy from 'lodash/sortBy';
 import lodashStartCase from 'lodash/startCase';
 import lodashValues from 'lodash/values';
 import util from '../util/util';
+import googleTagManager from 'googleTagManager';
 
 export function layersModal(models, ui, config) {
   var crumbText;
@@ -361,6 +362,12 @@ export function layersModal(models, ui, config) {
             alt: category.title
           }).click(function(e) {
             drawMeasurements(category);
+            googleTagManager.pushEvent({
+              'event': 'layers_category',
+              'layers': {
+                'category': category.title
+              }
+            });
           });
 
           $categoryTitle.append($categoryLink);
@@ -434,6 +441,12 @@ export function layersModal(models, ui, config) {
       }).click(function(e) {
         $categories.isotope({
           filter: '.layer-category-' + interestCssName(metaCategoryName)
+        });
+        googleTagManager.pushEvent({
+          'event': 'layers_meta_category',
+          'layers': {
+            'meta_category': metaCategoryName
+          }
         });
         $nav.find('.layer-category-button').removeClass('nav-selected');
         $('label[for=' + $(this).attr('id') + ']').addClass('nav-selected');

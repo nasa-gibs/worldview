@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../util/button';
 import ModeSelection from './mode-selection';
+import googleTagManager from 'googleTagManager';
 
 class FooterContent extends React.Component {
   render() {
@@ -34,10 +35,20 @@ class FooterContent extends React.Component {
               text="+ Add Layers"
               id="layers-add"
               className="layers-add red"
-              onClick={addLayers}
+              onClick={() => {
+                addLayers();
+                googleTagManager.pushEvent({
+                  'event': 'add_layers'
+                });
+              }}
             />
             <Button
-              onClick={toggleMode}
+              onClick={() => {
+                toggleMode();
+                googleTagManager.pushEvent({
+                  'event': 'comparison_mode'
+                });
+              }}
               className="compare-toggle-button"
               id="compare-toggle-button"
               style={isMobile || !compareFeature ? { display: 'none' } : null}
@@ -62,6 +73,9 @@ class FooterContent extends React.Component {
             onClick={() => {
               if (filterEventList) {
                 filterEventList(true);
+                googleTagManager.pushEvent({
+                  'event': 'natural_events_list_all'
+                });
               }
             }}
             text="List All"
@@ -79,7 +93,12 @@ class FooterContent extends React.Component {
       return (
         <div className="data-download-footer-case">
           <Button
-            onClick={onGetData}
+            onClick={() => {
+              onGetData();
+              googleTagManager.pushEvent({
+                'event': 'data_download_button'
+              });
+            }}
             className={
               noDataSelected
                 ? 'wv-data-download-button black no-pointer-events'
