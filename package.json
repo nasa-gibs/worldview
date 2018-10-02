@@ -197,6 +197,9 @@
       "node_modules",
       "./web/ext/d3"
     ],
+    "moduleNameMapper": {
+      "^googleTagManager$": "<rootDir>/web/js/components/util/google-tag-manager.js"
+    },
     "transformIgnorePatterns": [
       "node_modules/(?!(ol)/)"
     ]
