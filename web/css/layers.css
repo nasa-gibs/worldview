@@ -19,7 +19,7 @@
 .layer-modal h4,
 .layer-modal p,
 .layer-modal span {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   color: #383838;
 }
@@ -53,7 +53,7 @@
   margin: -16px 0 0 -16px;
   top: 50%;
   left: 50%;
-  background: url("../images/wv-icons.png") 32px 32px;
+  background: url('../images/wv-icons.png') 32px 32px;
 }
 
 .no-titlebar .ui-dialog-titlebar {
@@ -90,7 +90,7 @@
   height: 40px;
   line-height: 40px;
   font-size: 28px;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   padding: 0 10px;
   position: absolute;
@@ -116,7 +116,7 @@
   width: 25px;
   height: 26px;
   margin: -13px 0 0 -13px;
-  background: url("../images/wv-icons.png") 0 26px;
+  background: url('../images/wv-icons.png') 0 26px;
 }
 
 .layer-modal .layer-search .search-on i {
@@ -171,7 +171,7 @@
   width: 26px;
   height: 26px;
   margin: -13px 0 0 -13px;
-  background: url("../images/wv-icons.png") 52px 26px;
+  background: url('../images/wv-icons.png') 52px 26px;
 }
 
 .layer-modal .layers-modal-close:hover {
@@ -285,7 +285,7 @@
 
 .layer-modal-content .categories-nav label {
   color: #383838;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   font-weight: 300;
   text-transform: capitalize;
@@ -317,7 +317,7 @@
 .layer-modal-content .category-breadcrumb {
   height: 30px;
   line-height: 30px;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   font-size: 16px;
   color: #000;
@@ -363,8 +363,8 @@
   right: 1.2em;
 }
 
-.layer-modal .layers-all-layer h3,
-.layer-modal .ui-accordion-header h3 {
+.layers-all-header > h3,
+.measurement-row-header > h3 {
   color: #ddd;
   font-size: 20px;
   line-height: 100%;
@@ -453,7 +453,7 @@
   font-size: 14px;
   line-height: 18px;
   margin: 16px 0 6px;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   margin-top: 4px;
 }
 
@@ -472,7 +472,7 @@
 }
 
 .layers-all-header.has-checkbox::before {
-  content: "";
+  content: '';
   display: block;
   height: 24px;
   width: 24px;
@@ -487,14 +487,14 @@
 
 .layers-all-header.has-checkbox.checked::before {
   color: #fff;
-  content: "\2713";
+  content: '\2713';
   background-color: #d54f21;
 }
 
 .layers-all-header .fa {
   position: absolute;
   color: #ddd;
-  font-family: "FontAwesome";
+  font-family: 'FontAwesome';
   font-size: 14px;
   padding: 12px 16px;
   margin-left: -8px;
@@ -513,7 +513,7 @@
 .layer-modal-content .selected-category .ui-tabs-panel p,
 .layer-modal-content .selected-category .ui-tabs-panel span {
   font-size: 11px;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   color: #bbb;
 }
@@ -532,7 +532,7 @@
 .layer-date-wrap,
 .layer-metadata a,
 .layer-metadata p {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;
