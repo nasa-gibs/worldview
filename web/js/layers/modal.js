@@ -514,15 +514,14 @@ export function layersModal(models, ui, config) {
     $breadcrumb
       .append($homeCrumb)
       .append('<span> / ' + category.title + '</span>');
+    $selectedCategory.prepend($breadcrumb);
+    $selectedCategory.show();
     $('#layers-search-input').show();
 
     // Switch navs
     $categories.hide();
     $nav.hide();
-    // $allLayers.hide();
     $allLayers.show();
-
-    // redoScrollbar();
     $('#layer-modal-content').perfectScrollbar('destroy');
   };
 
