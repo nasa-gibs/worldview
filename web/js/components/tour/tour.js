@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TourStart from './modal-start';
-import TourInProgress from './modal-in-progress';
-import TourComplete from './modal-complete';
+import TourStart from './modal-tour-start';
+import TourInProgress from './modal-tour-in-progress';
+import TourComplete from './modal-tour-complete';
 
 class Tour extends React.Component {
   constructor(props) {
@@ -19,7 +19,8 @@ class Tour extends React.Component {
       tourParameter: props.tourParameter,
       currentStoryIndex: props.currentStoryIndex,
       currentStory: props.currentStory,
-      currentStoryId: props.currentStoryId
+      currentStoryId: props.currentStoryId,
+      showTourAlert: props.showTourAlert
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
@@ -74,6 +75,7 @@ class Tour extends React.Component {
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
             selectTour={this.props.selectTour}
+            showTourAlert={this.props.showTourAlert}
           ></TourStart>
 
           <TourInProgress
@@ -122,7 +124,8 @@ Tour.propTypes = {
   currentStory: PropTypes.object,
   currentStoryId: PropTypes.string,
   startTour: PropTypes.func.isRequired,
-  selectTour: PropTypes.func.isRequired
+  selectTour: PropTypes.func.isRequired,
+  showTourAlert: PropTypes.func.isRequired
 };
 
 export default Tour;

@@ -149,7 +149,7 @@ class ModalInProgress extends React.Component {
 
     return (
       <div>
-        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' ' + this.props.currentStory['type']} backdrop={false}>
+        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} onClosed={this.props.showTourAlert} wrapClassName='tour tour-in-progress' className={this.props.className + ' ' + this.props.currentStory['type']} backdrop={false}>
           <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.props.currentStory['title']}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
           <ModalBody>
             {/* eslint-disable */}
@@ -176,6 +176,7 @@ ModalInProgress.propTypes = {
   currentStoryId: PropTypes.string.isRequired,
   decreaseStep: PropTypes.func.isRequired,
   incrementStep: PropTypes.func.isRequired,
+  showTourAlert: PropTypes.func.isRequired,
   className: PropTypes.string
 };
 

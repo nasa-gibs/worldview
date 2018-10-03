@@ -307,15 +307,30 @@
 .event-icon-wildfires {
   background: url("../images/natural-events/icon-wildfires.svg");
 }
+
 .events-loading-text {
   color: #fff;
   padding: 10px;
 }
+
+.wv-alert,
 .notify-alert {
   position: absolute;
   top: 60px !important;
   right: 10px !important;
   left: auto !important;
+  color: #fff;
+  background: #282828;
+  border: #282828;
+  border-radius: 0;
+}
+
+/* combine with notify-alert after dialog boxes have been converted to reacstrap */
+.wv-alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
 }
 
 .notify-alert .ui-dialog-content div::after {

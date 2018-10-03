@@ -9,6 +9,7 @@ export function tourUi(models, ui, config) {
     if (!config.features.tour || !config.stories || !config.storyOrder) {
       return;
     }
+
     self.reactComponent = ReactDOM.render(
       React.createElement(Tour, getInitialProps()),
       document.getElementById('wv-tour')
@@ -30,7 +31,9 @@ export function tourUi(models, ui, config) {
       currentStory: {},
       currentStoryId: '',
       startTour: self.startTour,
-      selectTour: self.selectTour
+      selectTour: self.selectTour,
+      notifyUserOfTour: self.notifyUserOfTour,
+      showTourAlert: ui.alert.showTourAlert
     };
   };
 
@@ -45,6 +48,7 @@ export function tourUi(models, ui, config) {
   };
 
   self.selectTour = function(e, currentStory, currentStoryIndex, currentStoryId) {
+    console.log('test');
     if (e) e.preventDefault();
     self.reactComponent.setState({
       currentStep: 1,
