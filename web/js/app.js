@@ -99,6 +99,9 @@ import { parse as tourParser } from './tour/tour';
 import { tourModel } from './tour/model';
 import { tourUi } from './tour/ui';
 
+// Alert
+import { alertUi } from './alert/ui';
+
 // Other
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
@@ -436,6 +439,7 @@ class App extends React.Component {
 
       elapsed('ui');
       // Create widgets
+      ui.alert = alertUi(ui);
       ui.proj = projectionUi(models, config);
       ui.tour = tourUi(models, ui, config);
       ui.sidebar = sidebarUi(models, config, ui);
