@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
@@ -74,20 +75,20 @@ class ModalInProgress extends React.Component {
   }
 
   selectLink() {
-    var models, config, ui, state, stepLink, state, projection, layersA, layersB, timeA, timeB, view, zoom, comparisonOn;
+    var models, state, projection, layersA, timeA, timeB;
 
     models = this.props.models;
-    config = this.props.config;
-    ui = this.props.ui;
+    // var config = this.props.config;
+    // var ui = this.props.ui;
     state = util.fromQueryString(location.search);
-    comparisonOn = state.ca;
+    // var comparisonOn = state.ca;
     timeA = state.t;
     timeB = state.t1;
     layersA = state.l;
-    layersB = state.l1;
+    // var layersB = state.l1;
     projection = state.p;
-    view = state.v;
-    zoom = state.z;
+    // var view = state.v;
+    // var zoom = state.z;
 
     // Set Projection
     if (projection) models.proj.select(projection);
@@ -162,5 +163,19 @@ class ModalInProgress extends React.Component {
     );
   }
 }
+
+ModalInProgress.propTypes = {
+  models: PropTypes.object.isRequired,
+  modalInProgress: PropTypes.bool.isRequired,
+  toggleModalInProgress: PropTypes.func.isRequired,
+  currentStep: PropTypes.number.isRequired,
+  totalSteps: PropTypes.number.isRequired,
+  currentStoryIndex: PropTypes.number.isRequired,
+  currentStory: PropTypes.object.isRequired,
+  currentStoryId: PropTypes.string.isRequired,
+  decreaseStep: PropTypes.func.isRequired,
+  incrementStep: PropTypes.func.isRequired,
+  className: PropTypes.string
+};
 
 export default ModalInProgress;

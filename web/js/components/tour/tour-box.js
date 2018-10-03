@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class TourBox extends React.Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class TourBox extends React.Component {
 
   render() {
     return (
-      <a href="#" style={this.state.styles} onMouseOver={(e) => this.onMouseOver(e)} onMouseOut={(e) => this.onMouseOut(e)} className={this.props.className} onClick={(e) => this.props.startTour(e, this.props.story, this.props.box, this.props.storyId)}>
+      <a href="#" style={this.state.styles} onMouseOver={(e) => this.onMouseOver(e)} onMouseOut={(e) => this.onMouseOut(e)} className={this.props.className} onClick={(e) => this.props.startTour(e, this.props.story, this.props.key, this.props.storyId)}>
         <div className="tour-box-content">
           <div className="tour-box-header">
             <h3 className="tour-box-title">{this.props.title}</h3>
@@ -55,5 +56,17 @@ class TourBox extends React.Component {
     );
   }
 }
+
+TourBox.propTypes = {
+  key: PropTypes.number.isRequired,
+  story: PropTypes.object.isRequired,
+  storyId: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  backgroundImage: PropTypes.string,
+  backgroundImageHover: PropTypes.string,
+  className: PropTypes.string,
+  startTour: PropTypes.func.isRequired
+};
 
 export default TourBox;
