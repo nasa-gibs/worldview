@@ -15,7 +15,7 @@ class TourBox extends React.Component {
     if (this.props.backgroundImage) {
       let { origin, pathname } = window.location;
       this.setState({
-        styles: { backgroundImage: `url(${origin}${pathname}stories/${this.props.storyId}/${this.props.backgroundImage})` }
+        styles: { backgroundImage: `url(${origin}${pathname}config/metadata/stories/${this.props.storyId}/${this.props.backgroundImage})` }
       });
     }
   }
@@ -25,7 +25,7 @@ class TourBox extends React.Component {
     if (this.props.backgroundImageHover) {
       let { origin, pathname } = window.location;
       this.setState({
-        styles: { backgroundImage: `url(${origin}${pathname}stories/${this.props.storyId}/${this.props.backgroundImageHover})` }
+        styles: { backgroundImage: `url(${origin}${pathname}config/metadata/stories/${this.props.storyId}/${this.props.backgroundImageHover})` }
       });
     }
   }
@@ -35,7 +35,7 @@ class TourBox extends React.Component {
     if (this.props.backgroundImage) {
       let { origin, pathname } = window.location;
       this.setState({
-        styles: { backgroundImage: `url(${origin}${pathname}stories/${this.props.storyId}/${this.props.backgroundImage})` }
+        styles: { backgroundImage: `url(${origin}${pathname}config/metadata/stories/${this.props.storyId}/${this.props.backgroundImage})` }
       });
     }
   }
