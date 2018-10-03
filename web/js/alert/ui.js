@@ -31,6 +31,12 @@ export function alertUi(ui) {
     self.reactComponent.setState({
       visible: true
     });
+
+    setTimeout(() => {
+      self.reactComponent.setState({
+        visible: false
+      });
+    }, 5000);
   };
 
   init();

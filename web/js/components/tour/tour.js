@@ -93,6 +93,7 @@ class Tour extends React.Component {
             stories={this.state.stories}
             currentStoryId={this.state.currentStoryId}
             currentStory={this.state.currentStory}
+            showTourAlert={this.props.showTourAlert}
           ></TourInProgress>
 
           <TourComplete
