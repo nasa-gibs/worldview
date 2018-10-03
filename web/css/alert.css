@@ -88,6 +88,10 @@
   background: rgba(229, 201, 55, 0.3);
 }
 
+.wv-notify-modal .message h2 {
+  background: rgba(64, 169, 219, 0.3);
+}
+
 .wv-notify-modal h2 span {
   font-size: 13px;
   font-weight: 300;
