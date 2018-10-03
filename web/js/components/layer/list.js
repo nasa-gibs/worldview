@@ -108,7 +108,7 @@ class LayerList extends React.Component {
       this.setState({ selectedMeasurement: null });
     }
   }
-  renderCategoryList(filteredRows) {
+  renderCategoryList() {
     const {
       expandedMeasurements,
       selectedMeasurement,
@@ -200,7 +200,7 @@ class LayerList extends React.Component {
         <div className="layer-picker-list-case">
           {listType === 'search'
             ? this.renderSearchList(filteredRows)
-            : this.renderCategoryList(filteredRows)}
+            : this.renderCategoryList()}
         </div>
       </Scrollbars>
     );
