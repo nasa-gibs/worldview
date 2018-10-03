@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { transform } from 'ol/proj';
-import throttle from 'lodash/throttle';
 
 class OlCoordinates extends React.Component {
   constructor(props) {
@@ -14,7 +13,7 @@ class OlCoordinates extends React.Component {
       crs: null,
       format: null
     };
-    this.mouseMove = throttle(this.mouseMove, 100).bind(this);
+    this.mouseMove = this.mouseMove.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
     this.changeFormat = this.changeFormat.bind(this);
     this.registerMouseListeners();
@@ -49,11 +48,11 @@ class OlCoordinates extends React.Component {
   }
 
   mouseOut(event) {
-    // Ignore when the mouse goes over the coordinate display. Clearing
-    // the coordinates in this situation causes a flicker.
     if (event.relatedTarget) {
-      let element = event.relatedTarget;
-      if (element.classList.contains('map-coord')) {
+      let cl = event.relatedTarget.classList;
+      // Ignore when the mouse goes over the coordinate display. Clearing
+      // the coordinates in this situation causes a flicker.
+      if (cl.contains('map-coord') || cl.contains('coord-btn')) {
         return;
       }
     }
