@@ -25,7 +25,6 @@ class Tour extends React.Component {
     this.toggleModalStart = this.toggleModalStart.bind(this);
     this.toggleModalInProgress = this.toggleModalInProgress.bind(this);
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
-    this.restartTour = this.restartTour.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
   }
@@ -48,16 +47,6 @@ class Tour extends React.Component {
     e.preventDefault();
     this.setState({
       modalComplete: !this.state.modalComplete
-    });
-  }
-
-  restartTour(e) {
-    e.preventDefault();
-    this.setState({
-      steps: 1,
-      modalStart: true,
-      modalInProgress: false,
-      modalComplete: false
     });
   }
 
@@ -84,7 +73,7 @@ class Tour extends React.Component {
             toggleModalStart={this.toggleModalStart}
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
-            startTour={this.props.startTour}
+            selectTour={this.props.selectTour}
           ></TourStart>
 
           <TourInProgress
@@ -93,7 +82,7 @@ class Tour extends React.Component {
             toggleModalStart={this.toggleModalStart}
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
-            startTour={this.props.startTour}
+            selectTour={this.props.selectTour}
             currentStep={this.state.currentStep}
             totalSteps={this.state.totalSteps}
             incrementStep={this.incrementStep}
@@ -109,7 +98,7 @@ class Tour extends React.Component {
             toggleModalStart={this.toggleModalStart}
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
-            restartTour={this.restartTour}
+            startTour={this.props.startTour}
           ></TourComplete>
         </div>
       );
@@ -132,7 +121,8 @@ Tour.propTypes = {
   currentStoryIndex: PropTypes.number,
   currentStory: PropTypes.object,
   currentStoryId: PropTypes.string,
-  startTour: PropTypes.func.isRequired
+  startTour: PropTypes.func.isRequired,
+  selectTour: PropTypes.func.isRequired
 };
 
 export default Tour;

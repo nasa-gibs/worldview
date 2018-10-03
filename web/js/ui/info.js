@@ -101,7 +101,7 @@ export function uiInfo (ui, config) {
     feedbackModal.decorate($feedback.find('a'));
 
     $tour.click(function () {
-      ui.tour.start();
+      ui.tour.startTour();
     });
 
     $('#wv-toolbar')

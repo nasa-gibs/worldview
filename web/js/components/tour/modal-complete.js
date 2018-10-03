@@ -12,7 +12,7 @@ class ModalComplete extends React.Component {
             <p>You have now completed a story in Worldview. To view more stories, click the "More Stories" button below or, <a href="#">explore more events</a> within the app. Click the "Exit Tutorial" button or close this window to start using Worldview on your own.</p>
           </ModalBody>
           <ModalFooter>
-            <button type="button" className="btn btn-primary" onClick={this.props.restartTour}>More Stories</button>
+            <button type="button" className="btn btn-primary" onClick={this.props.startTour}>More Stories</button>
             <button type="button" className="btn btn-secondary" onClick={this.props.toggleModalComplete}>Exit Tutorial</button>
           </ModalFooter>
         </Modal>
@@ -24,7 +24,7 @@ class ModalComplete extends React.Component {
 ModalComplete.propTypes = {
   modalComplete: PropTypes.bool.isRequired,
   toggleModalComplete: PropTypes.func.isRequired,
-  restartTour: PropTypes.func.isRequired,
+  startTour: PropTypes.func.isRequired,
   className: PropTypes.string
 };
 

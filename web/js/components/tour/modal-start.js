@@ -12,7 +12,7 @@ class ModalStart extends React.Component {
           <ModalHeader toggle={this.props.toggleModalStart} charCode="">Welcome to Worldview!</ModalHeader>
           <ModalBody>
             <TourIntro toggleModalStart={this.props.toggleModalStart}></TourIntro>
-            <TourBoxes stories={this.props.stories} storyOrder={this.props.storyOrder} startTour={this.props.startTour}></TourBoxes>
+            <TourBoxes stories={this.props.stories} storyOrder={this.props.storyOrder} selectTour={this.props.selectTour}></TourBoxes>
           </ModalBody>
         </Modal>
       </div>
@@ -25,7 +25,7 @@ ModalStart.propTypes = {
   storyOrder: PropTypes.array.isRequired,
   modalStart: PropTypes.bool.isRequired,
   toggleModalStart: PropTypes.func.isRequired,
-  startTour: PropTypes.func.isRequired,
+  selectTour: PropTypes.func.isRequired,
   className: PropTypes.string
 };
 

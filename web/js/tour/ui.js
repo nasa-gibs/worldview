@@ -29,14 +29,25 @@ export function tourUi(models, ui, config) {
       currentStoryIndex: 0,
       currentStory: {},
       currentStoryId: '',
-      startTour: self.startTour
+      startTour: self.startTour,
+      selectTour: self.selectTour
     };
   };
 
-  self.startTour = function(e, currentStory, currentStoryIndex, currentStoryId) {
+  self.startTour = function(e) {
     if (e) e.preventDefault();
     self.reactComponent.setState({
-      steps: 1,
+      currentStep: 1,
+      modalStart: true,
+      modalInProgress: false,
+      modalComplete: false
+    });
+  };
+
+  self.selectTour = function(e, currentStory, currentStoryIndex, currentStoryId) {
+    if (e) e.preventDefault();
+    self.reactComponent.setState({
+      currentStep: 1,
       currentStoryIndex: currentStoryIndex,
       modalStart: false,
       modalInProgress: true,
