@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class TourIntro extends React.Component {
   render() {
@@ -14,5 +15,9 @@ class TourIntro extends React.Component {
     );
   }
 }
+
+TourIntro.propTypes = {
+  toggleModalStart: PropTypes.func.isRequired
+};
 
 export default TourIntro;

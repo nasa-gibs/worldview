@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 class ModalComplete extends React.Component {
@@ -19,5 +20,12 @@ class ModalComplete extends React.Component {
     );
   }
 }
+
+ModalComplete.propTypes = {
+  modalComplete: PropTypes.bool.isRequired,
+  toggleModalComplete: PropTypes.func.isRequired,
+  restartTour: PropTypes.func.isRequired,
+  className: PropTypes.string
+};
 
 export default ModalComplete;

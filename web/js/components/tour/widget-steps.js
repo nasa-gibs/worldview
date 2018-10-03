@@ -1,7 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Steps extends React.Component {
-
   render() {
     return (
       <div className="step-container">
@@ -19,5 +19,12 @@ class Steps extends React.Component {
     );
   }
 }
+
+Steps.propTypes = {
+  currentStep: PropTypes.number.isRequired,
+  totalSteps: PropTypes.number.isRequired,
+  decreaseStep: PropTypes.func.isRequired,
+  incrementStep: PropTypes.func.isRequired
+};
 
 export default Steps;

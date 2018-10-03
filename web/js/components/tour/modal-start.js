@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
@@ -18,5 +19,14 @@ class ModalStart extends React.Component {
     );
   }
 }
+
+ModalStart.propTypes = {
+  stories: PropTypes.object.isRequired,
+  storyOrder: PropTypes.array.isRequired,
+  modalStart: PropTypes.bool.isRequired,
+  toggleModalStart: PropTypes.func.isRequired,
+  startTour: PropTypes.func.isRequired,
+  className: PropTypes.string
+};
 
 export default ModalStart;

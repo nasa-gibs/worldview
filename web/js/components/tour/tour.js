@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TourStart from './modal-start';
 import TourInProgress from './modal-in-progress';
 import TourComplete from './modal-complete';
@@ -17,8 +18,6 @@ class Tour extends React.Component {
       modalComplete: false,
       currentStep: 1,
       totalSteps: 10,
-      isLoading: false,
-      error: null,
       tourParameter: this.props.config.parameters.tr || null,
       currentStoryIndex: 0,
       currentStory: {},
@@ -137,5 +136,22 @@ class Tour extends React.Component {
     }
   }
 }
+
+Tour.propTypes = {
+  models: PropTypes.object.isRequired,
+  ui: PropTypes.object.isRequired,
+  config: PropTypes.object.isRequired,
+  stories: PropTypes.object.isRequired,
+  storyOrder: PropTypes.array.isRequired,
+  modalStart: PropTypes.bool.isRequired,
+  modalInProgress: PropTypes.bool.isRequired,
+  modalComplete: PropTypes.bool.isRequired,
+  currentStep: PropTypes.number,
+  totalSteps: PropTypes.number,
+  tourParameter: PropTypes.string,
+  currentStoryIndex: PropTypes.number,
+  currentStory: PropTypes.object,
+  currentStoryId: PropTypes.string
+};
 
 export default Tour;
