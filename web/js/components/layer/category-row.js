@@ -33,19 +33,6 @@ class LayerRow extends React.Component {
   }
 
   /**
-   * Toggle layer checked state
-   * @method toggleCheck
-   * @return {void}
-   */
-  toggleCheck() {
-    var { checked } = this.state;
-    var { onState, offState, layer } = this.props;
-    if (checked) offState(layer.id);
-    if (!checked) onState(layer.id);
-    this.setState({ checked: !checked });
-  }
-
-  /**
    * Toggle switch for the metadata info button and close arrow
    * @method toggleMetadataButtons
    * @param {e} event
@@ -328,14 +315,19 @@ class LayerRow extends React.Component {
   }
 }
 LayerRow.propTypes = {
-  layer: PropTypes.object,
-  isEnabled: PropTypes.bool,
-  isMetadataExpanded: PropTypes.bool,
-  isDateRangesExpanded: PropTypes.bool,
-  onState: PropTypes.func,
-  offState: PropTypes.func,
-  toggleMetadataExpansion: PropTypes.func,
-  toggleDateRangesExpansion: PropTypes.func
+  layerConfig: PropTypes.object,
+  measurement: PropTypes.object,
+  activeLayers: PropTypes.object,
+  category: PropTypes.object,
+  updateSelectedMeasurement: PropTypes.func,
+  id: PropTypes.string,
+  hasMeasurementSetting: PropTypes.func,
+  sourceMetadata: PropTypes.object,
+  getSourceMetadata: PropTypes.func,
+  removeLayer: PropTypes.func,
+  addLayer: PropTypes.func,
+  isSelected: PropTypes.bool,
+  projection: PropTypes.string
 };
 
 export default LayerRow;

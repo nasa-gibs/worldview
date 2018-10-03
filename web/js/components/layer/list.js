@@ -222,7 +222,8 @@ LayerList.propTypes = {
   height: PropTypes.number,
   listType: PropTypes.string,
   expandedMeasurements: PropTypes.object,
-  activeMeasurementIndex: PropTypes.number
+  activeMeasurementIndex: PropTypes.number,
+  selectedProjection: PropTypes.string
 };
 
 export default LayerList;
