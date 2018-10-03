@@ -79,7 +79,7 @@ export function notificationsUi(models, config) {
     if (message && !objectAlreadySeen(message)) {
       priority = 'message';
       mainNotification = 'message';
-      activeNotifications.messages = message.created_at;
+      activeNotifications.message = message.created_at;
     }
 
     if (alert && !objectAlreadySeen(alert)) {
@@ -307,8 +307,8 @@ export function notificationsUi(models, config) {
       localStorage.setItem('alert', activeNotifications.alert);
     }
 
-    if (activeNotifications.messages) {
-      localStorage.setItem('message', activeNotifications.messages);
+    if (activeNotifications.message) {
+      localStorage.setItem('message', activeNotifications.message);
     }
 
     activeNotifications = {};
