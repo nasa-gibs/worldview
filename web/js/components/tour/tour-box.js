@@ -43,7 +43,7 @@ class TourBox extends React.Component {
 
   render() {
     return (
-      <a href="#" style={this.state.styles} onMouseOver={(e) => this.onMouseOver(e)} onMouseOut={(e) => this.onMouseOut(e)} className={this.props.className} onClick={(e) => this.props.startTour(e, this.props.story, this.props.key, this.props.storyId)}>
+      <a href="#" style={this.state.styles} onMouseOver={(e) => this.onMouseOver(e)} onMouseOut={(e) => this.onMouseOut(e)} className={this.props.className} onClick={(e) => this.props.startTour(e, this.props.story, this.props.index, this.props.storyId)}>
         <div className="tour-box-content">
           <div className="tour-box-header">
             <h3 className="tour-box-title">{this.props.title}</h3>
@@ -58,7 +58,7 @@ class TourBox extends React.Component {
 }
 
 TourBox.propTypes = {
-  key: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired,
   story: PropTypes.object.isRequired,
   storyId: PropTypes.string.isRequired,
   title: PropTypes.string,

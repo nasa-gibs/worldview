@@ -61,7 +61,6 @@ class ModalInProgress extends React.Component {
     currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
     var currentStoryId = this.props.currentStoryId;
     stepLink = currentStoryId.stepLink;
-    console.log(stepLink);
 
     // Get URL Link here from JSON file (for each step)
     // Push Link to Browser URL
@@ -153,7 +152,9 @@ class ModalInProgress extends React.Component {
         <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} wrapClassName='tour tour-in-progress' className={this.props.className + ' ' + this.props.currentStory['type']} backdrop={false}>
           <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.props.currentStory['title']}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
           <ModalBody>
+            {/* eslint-disable */}
             <div dangerouslySetInnerHTML={{ __html: description }} />
+            {/* eslint-enable */}
           </ModalBody>
           <ModalFooter>
             <Steps currentStep={this.props.currentStep} totalSteps={this.props.totalSteps} decreaseStep={this.props.decreaseStep} incrementStep={this.props.incrementStep}></Steps>

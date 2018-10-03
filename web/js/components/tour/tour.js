@@ -8,26 +8,23 @@ class Tour extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      models: this.props.models,
-      ui: this.props.ui,
-      config: this.props.config,
-      stories: this.props.config.stories,
-      storyOrder: this.props.config.storyOrder,
-      modalStart: true,
-      modalInProgress: false,
-      modalComplete: false,
-      currentStep: 1,
-      totalSteps: 10,
-      tourParameter: this.props.config.parameters.tr || null,
-      currentStoryIndex: 0,
-      currentStory: {},
-      currentStoryId: ''
+      models: props.models,
+      stories: props.stories,
+      storyOrder: props.storyOrder,
+      modalStart: props.modalStart,
+      modalInProgress: props.modalInProgress,
+      modalComplete: props.modalComplete,
+      currentStep: props.currentStep,
+      totalSteps: props.totalSteps,
+      tourParameter: props.tourParameter,
+      currentStoryIndex: props.currentStoryIndex,
+      currentStory: props.currentStory,
+      currentStoryId: props.currentStoryId
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
     this.toggleModalInProgress = this.toggleModalInProgress.bind(this);
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
-    this.startTour = this.startTour.bind(this);
     this.restartTour = this.restartTour.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
@@ -51,19 +48,6 @@ class Tour extends React.Component {
     e.preventDefault();
     this.setState({
       modalComplete: !this.state.modalComplete
-    });
-  }
-
-  startTour(e, currentStory, currentStoryIndex, currentStoryId) {
-    if (e) e.preventDefault();
-    this.setState({
-      steps: 1,
-      currentStoryIndex: currentStoryIndex,
-      modalStart: false,
-      modalInProgress: true,
-      modalComplete: false,
-      currentStory: currentStory,
-      currentStoryId: currentStoryId
     });
   }
 
@@ -100,18 +84,16 @@ class Tour extends React.Component {
             toggleModalStart={this.toggleModalStart}
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
-            startTour={this.startTour}
+            startTour={this.props.startTour}
           ></TourStart>
 
           <TourInProgress
             models={this.state.models}
-            config={this.state.config}
-            ui={this.state.ui}
             modalInProgress={this.state.modalInProgress}
             toggleModalStart={this.toggleModalStart}
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
-            startTour={this.startTour}
+            startTour={this.props.startTour}
             currentStep={this.state.currentStep}
             totalSteps={this.state.totalSteps}
             incrementStep={this.incrementStep}
@@ -139,8 +121,6 @@ class Tour extends React.Component {
 
 Tour.propTypes = {
   models: PropTypes.object.isRequired,
-  ui: PropTypes.object.isRequired,
-  config: PropTypes.object.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
   modalStart: PropTypes.bool.isRequired,
@@ -151,7 +131,8 @@ Tour.propTypes = {
   tourParameter: PropTypes.string,
   currentStoryIndex: PropTypes.number,
   currentStory: PropTypes.object,
-  currentStoryId: PropTypes.string
+  currentStoryId: PropTypes.string,
+  startTour: PropTypes.func.isRequired
 };
 
 export default Tour;
