@@ -13,6 +13,14 @@ export function animationRangeSelect(models, config, ui) {
   var $header = $('#timeline-header');
   var $timeline = $('#timeline');
 
+  // get timeline min/max date, zero out end date, and format to ISO
+  var timelineStartDateLimit = config.startDate;
+  var timelineEndDateLimit = models.layers.lastDate().toISOString();
+  // endDateLimit used in limiting updateRange
+  let endDateLimit = models.layers.lastDate();
+  endDateLimit.setHours(0, 0, 0, 0);
+  timelineEndDateLimit = endDateLimit.toISOString();
+
   /*
    * set listeners and initiates
    * widget
@@ -84,6 +92,10 @@ export function animationRangeSelect(models, config, ui) {
     options = {
       startLocation: startLocation, // or zero
       endLocation: endLocation,
+      startLocationDate: model.rangeState.startDate,
+      endLocationDate: model.rangeState.endDate,
+      timelineStartDateLimit: timelineStartDateLimit,
+      timelineEndDateLimit: timelineEndDateLimit,
       max: self.getMaxWidth(),
       startColor: '#40a9db',
       endColor: '#295f92',
@@ -156,16 +168,31 @@ export function animationRangeSelect(models, config, ui) {
    * @method getMaxWidth
    * @static
    *
-   * @returns {number} max width
+   * @returns {object} maxWidth
    *
    */
   self.getMaxWidth = function() {
-    var $elWidth = $footer.width();
-    var $dataWidth = timeline.x(timeline.data.end());
-    if ($elWidth > $dataWidth) {
-      return $dataWidth;
+    // end of timeline
+    let $dataWidth = timeline.x(timeline.data.end());
+    // start of timeline
+    let $dataStart = timeline.x(timeline.data.start());
+    // default start/end false
+    let maxWidth = {
+      width: $footer.width(),
+      startOffset: $dataStart,
+      start: false,
+      end: false
+    };
+    // end of timeline in view
+    if (maxWidth.width > $dataWidth) {
+      maxWidth.width = $dataWidth;
+      maxWidth.end = true;
     }
-    return $elWidth;
+    // start of timeline in view
+    if ($dataStart > 0) {
+      maxWidth.start = true;
+    }
+    return maxWidth;
   };
 
   /*
@@ -182,6 +209,8 @@ export function animationRangeSelect(models, config, ui) {
     var props = {};
     props.startLocation = self.getLocationFromStringDate(state.startDate);
     props.endLocation = self.getLocationFromStringDate(state.endDate);
+    props.startLocationDate = state.startDate;
+    props.endLocationDate = state.endDate;
     props.max = self.getMaxWidth();
 
     return props;
@@ -225,7 +254,15 @@ export function animationRangeSelect(models, config, ui) {
     var endDate = util.roundTimeTenMinute(timeline.x.invert(EndLocation));
     var state = model.rangeState;
     state.startDate = util.toISOStringSeconds(startDate) || 0;
-    state.endDate = util.toISOStringSeconds(endDate);
+    // prevent endDate overdrag from occuring in monthly/yearly by setting to max date limit
+    if (models.date.selectedZoom < 3) {
+      state.endDate = endDate <= endDateLimit
+        ? util.toISOStringSeconds(endDate)
+        : util.toISOStringSeconds(endDateLimit);
+    } else {
+      state.endDate = util.toISOStringSeconds(endDate);
+    }
+
     model.rangeState.playing = false;
     model.events.trigger('change');
     model.events.trigger('datechange');
