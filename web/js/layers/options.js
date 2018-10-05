@@ -99,7 +99,6 @@ export function layersOptions(config, models, layer, layerGroupStr) {
 
     $('#wv-squash-button-check').on('ifChanged', function() {
       var squash = $('#wv-squash-button-check').prop('checked');
-      // var $slider = $("#wv-range-slider");
       var $slider = $range;
       models.palettes.setRange(
         layer.id,
@@ -248,10 +247,13 @@ export function layersOptions(config, models, layer, layerGroupStr) {
       $range.val([imin, imax]);
     }
 
-    if (palette.squash) {
-      $('#wv-squash-button-check').iCheck('check');
-    } else {
-      $('#wv-squash-button-check').iCheck('uncheck');
+    // If the squash value is undefined, no custom pallete is in effect.
+    if (palette.squash !== undefined) {
+      if (palette.squash) {
+        $('#wv-squash-button-check').iCheck('check');
+      } else {
+        $('#wv-squash-button-check').iCheck('uncheck');
+      }
     }
   };
 
