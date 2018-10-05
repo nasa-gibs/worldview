@@ -202,6 +202,7 @@ export function timeline(models, config, ui) {
   var onLayerUpdate = function() {
     self.data.set();
     self.resize();
+    self.zoom.refresh();
     self.setClip();
   };
   var init = function() {
