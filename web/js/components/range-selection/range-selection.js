@@ -19,6 +19,8 @@ class TimelineRangeSelector extends React.Component {
     this.state = {
       startLocation: props.startLocation,
       endLocation: props.endLocation,
+      startLocationDate: props.startLocationDate,
+      endLocationDate: props.endLocationDate,
       max: props.max,
       deltaStart: 0
     };
@@ -27,6 +29,8 @@ class TimelineRangeSelector extends React.Component {
     this.setState({
       startLocation: props.startLocation,
       endLocation: props.endLocation,
+      startLocationDate: props.startLocationDate,
+      endLocationDate: props.endLocationDate,
       max: props.max
     });
   }
@@ -55,7 +59,7 @@ class TimelineRangeSelector extends React.Component {
         return;
       }
       if (startX + this.props.pinWidth >= endX) {
-        if (startX + this.props.pinWidth >= this.state.max) {
+        if (startX + this.props.pinWidth >= this.state.max.width) {
           return;
         } else {
           endX = startX + this.props.pinWidth;
@@ -64,7 +68,7 @@ class TimelineRangeSelector extends React.Component {
     } else if (id === 'end') {
       startX = this.state.startLocation;
       endX = deltaX + this.state.endLocation;
-      if (endX > this.state.max || startX > endX) {
+      if (endX > this.state.max.width || startX > endX) {
         return;
       }
       if (startX + 2 * this.props.pinWidth >= endX) {
@@ -73,7 +77,7 @@ class TimelineRangeSelector extends React.Component {
     } else {
       startX = deltaX + this.state.startLocation;
       endX = deltaX + this.state.endLocation;
-      if (endX >= this.state.max || startX < 0) {
+      if (endX >= this.state.max.width || startX < 0) {
         return;
       }
     }
@@ -135,6 +139,10 @@ class TimelineRangeSelector extends React.Component {
           opacity={this.props.rangeOpacity}
           startLocation={this.state.startLocation}
           endLocation={this.state.endLocation}
+          startLocationDate={this.state.startLocationDate}
+          endLocationDate={this.state.endLocationDate}
+          timelineStartDateLimit={this.props.timelineStartDateLimit}
+          timelineEndDateLimit={this.props.timelineEndDateLimit}
           deltaStart={this.state.deltaStart}
           max={this.state.max}
           height={this.props.height}
@@ -152,13 +160,13 @@ class TimelineRangeSelector extends React.Component {
           height={this.props.height}
           onDrag={this.onItemDrag.bind(this)}
           onStop={this.onDragStop.bind(this)}
-          max={this.state.max}
+          max={this.state.max.width}
           draggerID='range-selector-dragger-1'
           backgroundColor={this.props.startTriangleColor}
           first={true}
           id='start' />
         <Dragger
-          max={this.state.max}
+          max={this.state.max.width}
           position={this.state.endLocation}
           color={this.props.endColor}
           width={this.props.pinWidth}
@@ -177,7 +185,11 @@ class TimelineRangeSelector extends React.Component {
 TimelineRangeSelector.propTypes = {
   startLocation: PropTypes.number,
   endLocation: PropTypes.number,
-  max: PropTypes.number,
+  startLocationDate: PropTypes.string,
+  endLocationDate: PropTypes.string,
+  timelineStartDateLimit: PropTypes.string,
+  timelineEndDateLimit: PropTypes.string,
+  max: PropTypes.object,
   pinWidth: PropTypes.number,
   height: PropTypes.number,
   onDrag: PropTypes.func,
