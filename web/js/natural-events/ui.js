@@ -156,10 +156,20 @@ export default function naturalEventsUI(models, ui, config, request) {
           if (!findSelectedInProjection) {
             self.deselectEvent();
             self.filterEventList();
+          } else {
+            let event = naturalEventsUtilGetEventById(
+              model.data.events,
+              self.selected.id
+            );
+            naturalEventsTrack.update(
+              event,
+              ui.map.selected,
+              self.selected.date,
+              self.selectEvent
+            );
           }
         }
       }
-      models.proj.events.trigger('change');
     });
   };
 

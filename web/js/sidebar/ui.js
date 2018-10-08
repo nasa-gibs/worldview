@@ -92,9 +92,11 @@ export function sidebarUi(models, config, ui) {
     }
     models.date.events.on('select', updateLayers);
     if (models.proj) {
-      models.proj.events.on('select', updateLayers).on('select', () => {
-        self.reactComponent.setState({ projection: models.proj.selected.id });
-      });
+      models.proj.events
+        .on('select', updateLayers)
+        .on('select', () => {
+          self.reactComponent.setState({ projection: models.proj.selected.id });
+        });
     }
     models.map.events.on('data-running', runningLayers => {
       self.reactComponent.setState({ runningLayers: runningLayers });
