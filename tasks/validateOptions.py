@@ -126,10 +126,10 @@ for layer_id in wv["layers"].keys():
     if "temporal" in layer:
         warn("[%s] GC Layer temporal values overwritten by Options" % layer_id)
         layer = process_temporal(layer, layer["temporal"])
-    if layer.get("addedTime"):
+    if layer.get("futureTime"):
         if "endDate" in layer:
            del layer["endDate"]
-    if layer.get("inactive", False) or layer.get("futurelayer", False):
+    if layer.get("inactive", False) or layer.get("futureLayer", False):
         pass
     else:
         if "endDate" in layer:

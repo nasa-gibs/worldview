@@ -145,7 +145,7 @@ export function layersModel(models, config) {
       }
       // For now, we assume that any layer with an end date is
       // an ongoing product unless it is marked as inactive.
-      if (def.futurelayer & def.endDate) {
+      if (def.futureLayer && def.endDate) {
         range = true;
         max = util.parseDateUTC(def.endDate).getTime();
         maxDates.push(new Date(max));
@@ -162,30 +162,33 @@ export function layersModel(models, config) {
       // If there is a start date but no end date, this is a
       // product that is currently being created each day, set
       // the max day to today.
-      if (def.futurelayer && def.addedTime && !def.endDate) {
-        // Calculate endDate + parsed addedTime from layer JSON
-        max = util.now().getTime();
-        max = new Date(max);
-        var addedTime = def.addedTime;
-        var dateType = addedTime.slice(-1);
-        var dateInterval = addedTime.slice(0, -1);
+      if (def.futureLayer && def.futureTime && !def.endDate) {
+        // Calculate endDate + parsed futureTime from layer JSON
+        max = new Date();
+        var futureTime = def.futureTime;
+        var dateType = futureTime.slice(-1);
+        var dateInterval = futureTime.slice(0, -1);
         if (dateType === 'D') {
-          max.setDate(max.getDate() + dateInterval);
+          max.setDate(max.getDate() + parseInt(dateInterval));
+          maxDates.push(new Date(max));
         } else if (dateType === 'M') {
-          max.setMonth(max.getMonth() + dateInterval);
+          max.setMonth(max.getMonth() + parseInt(dateInterval));
+          maxDates.push(new Date(max));
         } else if (dateType === 'Y') {
-          max.setYear(max.getYear() + dateInterval);
+          max.setYear(max.getYear() + parseInt(dateInterval));
+          maxDates.push(new Date(max));
         }
       } else if (def.startDate && !def.endDate) {
         max = util.now().getTime();
+        maxDates.push(new Date(max));
       }
     });
     if (range) {
       if (max === 0) {
         max = util.now().getTime();
-        maxDates.push(new Date(max));
+        maxDates.push(max);
       }
-      var maxDate = new Date(Math.max.apply(null, maxDates));
+      var maxDate = Math.max.apply(max, maxDates);
       return {
         start: new Date(min),
         end: new Date(maxDate)
