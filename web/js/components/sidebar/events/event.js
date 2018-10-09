@@ -115,11 +115,9 @@ class Event extends React.Component {
           className={'event-icon event-icon-' + event.categories[0].slug}
           title={event.categories[0].title}
         />
-        <h4 className="title">
-          {event.title}
-          <br />
-          {dateString}
-        </h4>
+        <h4 className="title" dangerouslySetInnerHTML={{
+          __html: event.title + '<br />' + dateString
+        }}/>
         <p className="subtitle">{this.getReferenceList()}</p>
 
         {this.getDateLists()}
