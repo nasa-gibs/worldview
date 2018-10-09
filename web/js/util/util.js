@@ -444,12 +444,11 @@ export default (function (self) {
     return lastDay.getUTCDate();
   };
 
-  self.daysInYear = function (time) {
-    var start = new Date(time.getUTCFullYear(), 0, 0);
-    var diff = (time - start) + ((start.getTimezoneOffset() - time.getTimezoneOffset()) * 60 * 1000);
-    var oneDay = 1000 * 60 * 60 * 24;
-    var day = Math.floor(diff / oneDay);
-    return day;
+  self.daysInYear = function (date) {
+    var jStart, jDate;
+    jStart = self.parseDateUTC(date.getUTCFullYear() + '-01-01');
+    jDate = '00' + (Math.ceil((date.getTime() - jStart) / 86400000));
+    return (jDate).substr((jDate.length) - 3);
   };
 
   self.objectLength = function (obj) {
