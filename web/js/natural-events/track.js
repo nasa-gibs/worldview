@@ -6,7 +6,7 @@ import OlStyleStroke from 'ol/style/Stroke';
 import OlStyleStyle from 'ol/style/Style';
 import * as olExtent from 'ol/extent';
 import OlGeomMultiLineString from 'ol/geom/MultiLineString';
-import olProj from 'ol/proj';
+import * as olProj from 'ol/proj';
 import lodashEach from 'lodash/each';
 import lodashDebounce from 'lodash/debounce';
 import { naturalEventsUtilGetEventById } from './util';
@@ -242,7 +242,6 @@ var naturalEventsTrackPoint = function(
   var date = properties.date;
   var eventID = properties.event_id;
   var coordinates = clusterPoint.geometry.coordinates;
-
   if (models.proj.selected.id !== 'geographic') {
     coordinates = olProj.transform(
       coordinates,
