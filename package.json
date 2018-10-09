@@ -201,8 +201,7 @@
       "./test-env.js"
     ],
     "moduleDirectories": [
-      "node_modules",
-      "./web/ext/d3"
+      "node_modules"
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!(ol)/)"

@@ -503,6 +503,7 @@ export function timelineTicks(models, config, ui) {
     var sibElem = d3.select($(self.normal.lastElem)
       .next()[0]);
 
+    // TODO: Restore this functionality
     // if (sibElem.classed('domain')) {
     //   end = tl.zoom.current.ticks.boundary.last();
     //   self.add(end, 'path.domain');

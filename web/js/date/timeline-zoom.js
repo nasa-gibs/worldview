@@ -72,6 +72,7 @@ export function timelineZoom(models, config, ui) {
       .ticks(dateInterval, dateStep)
       .tickFormat(labelFormat);
 
+    // TODO: Restore functionality here? This is a major pain point
     tl.axisZoom = d3.zoom()
       // .scale(1)
       // .scaleExtent([1, 1])

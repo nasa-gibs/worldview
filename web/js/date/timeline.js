@@ -229,7 +229,7 @@ export function timeline(models, config, ui) {
       .tickSize(-self.height)
       .tickPadding(5);
 
-    // TODO: Check this
+    // TODO: Re-look at this function; scaleExtent might be good enough
     self.axisZoom = d3.zoom()
       // .scale(1)
       .scaleExtent([1, 1]);
