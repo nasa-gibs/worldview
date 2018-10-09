@@ -1132,6 +1132,26 @@ export default (function (self) {
     return false;
   };
 
+  // Replaces d3.transform(String).translate
+  // See: https://stackoverflow.com/questions/38224875/replacing-d3-transform-in-d3-v4
+  self.getTranslation = function(transform) {
+    // Create a dummy g for calculation purposes only. This will never
+    // be appended to the DOM and will be discarded once this function
+    // returns.
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+    // Set the transform attribute to the provided string value.
+    g.setAttributeNS(null, 'transform', transform);
+
+    // consolidate the SVGTransformList containing all transformations
+    // to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get
+    // its SVGMatrix.
+    var matrix = g.transform.baseVal.consolidate().matrix;
+
+    // As per definition values e and f are the ones for the translation.
+    return [matrix.e, matrix.f];
+  };
+
   /**
    * Find the closest previous date from an array of dates
    *

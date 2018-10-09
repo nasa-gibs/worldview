@@ -1,4 +1,4 @@
-import d3 from 'd3';
+import * as d3 from 'd3';
 
 export function timelineData(models, config, ui) {
   var tl = ui.timeline;
@@ -30,15 +30,12 @@ export function timelineData(models, config, ui) {
       activeLayersTitles[i] = this.id;
     });
 
-    tl.y = d3.scale
-      .ordinal()
+    tl.y = d3.scaleBand()
       .domain(activeLayersTitles)
-      .rangeBands([5, tl.height - 12]);
+      .range([5, tl.height - 12]);
 
-    tl.yAxis = d3.svg
-      .axis()
+    tl.yAxis = d3.axisLeft()
       .scale(tl.y)
-      .orient('left')
       .ticks(layerCount);
 
     $(activeLayersDynamic).each(function(al) {

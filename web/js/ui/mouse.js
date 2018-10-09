@@ -1,5 +1,5 @@
 import util from '../util/util';
-import d3 from 'd3';
+import * as d3 from 'd3';
 
 export default {
   wheel: function (element, ui, options) {

@@ -1,4 +1,4 @@
-import d3 from 'd3';
+import * as d3 from 'd3';
 
 /**
  * Implements the timeline pick
@@ -75,19 +75,18 @@ export function timelinePick(models, config, ui) {
     }
   };
 
-  var drag = d3.behavior
-    .drag()
-    .origin(function(d) {
+  var drag = d3.drag()
+    .subject(function(d) {
       return d;
     })
-    .on('dragstart', function() {
+    .on('start', function() {
       mousedown = true;
       d3.event.sourceEvent.preventDefault();
       d3.event.sourceEvent.stopPropagation();
       tl.guitarPick.classed('pick-clicked', true);
     })
     .on('drag', dragmove)
-    .on('dragend', function() {
+    .on('end', function() {
       mousedown = false;
       prevChange = undefined;
       nextChange = undefined;
@@ -139,20 +138,20 @@ export function timelinePick(models, config, ui) {
     var activeDate = model[model.activeDate];
     if (tl.x(activeDate) >= tl.width - 15) {
       if (mousedown) {
-        tl.axisZoom.translate([zt - tl.x(activeDate) + (tl.width - 15), 0]);
+        tl.axisZoom.translateExtent([zt - tl.x(activeDate) + (tl.width - 15), 0]);
       } else {
-        tl.axisZoom.translate([zt - tl.x(activeDate) + (tl.width / 8) * 7, 0]);
+        tl.axisZoom.translateExtent([zt - tl.x(activeDate) + (tl.width / 8) * 7, 0]);
       }
-      tl.pan.xPosition = tl.axisZoom.translate()[0];
+      tl.pan.xPosition = tl.axisZoom.translateExtent()[0];
       tl.pan.axis();
     } else if (tl.x(activeDate) < 15) {
       if (mousedown) {
-        tl.axisZoom.translate([zt - tl.x(activeDate) + 15, 0]);
+        tl.axisZoom.translateExtent([zt - tl.x(activeDate) + 15, 0]);
       } else {
-        tl.axisZoom.translate([zt - tl.x(activeDate) + tl.width / 8, 0]);
+        tl.axisZoom.translateExtent([zt - tl.x(activeDate) + tl.width / 8, 0]);
       }
 
-      tl.pan.xPosition = tl.axisZoom.translate()[0];
+      tl.pan.xPosition = tl.axisZoom.translateExtent()[0];
       tl.pan.axis();
     }
 

@@ -1,4 +1,4 @@
-import d3 from 'd3';
+import * as d3 from 'd3';
 import util from '../util/util';
 import moment from 'moment';
 
@@ -55,8 +55,8 @@ export function timelineConfig(models, config, ui) {
     switch (level) {
       case 1: // Year
         dateStep = 1;
-        labelFormat = d3.time.format.utc('%Y');
-        dateInterval = d3.time.year;
+        labelFormat = d3.utcFormat('%Y');
+        dateInterval = d3.timeYear;
         tickCount =
           tl.data.end().getUTCFullYear() - tl.data.start().getUTCFullYear();
         tickWidth = 15;
@@ -268,8 +268,8 @@ export function timelineConfig(models, config, ui) {
         break;
       case 2: // Month
         dateStep = 1;
-        labelFormat = d3.time.format.utc('%Y');
-        dateInterval = d3.time.month;
+        labelFormat = d3.utcFormat('%Y');
+        dateInterval = d3.timeMonth;
 
         tickCount =
           (tl.data.end().getUTCFullYear() - tl.data.start().getUTCFullYear()) *
@@ -483,8 +483,8 @@ export function timelineConfig(models, config, ui) {
         break;
       case 3: // Day
         dateStep = 1;
-        labelFormat = d3.time.format.utc('%b');
-        dateInterval = d3.time.day;
+        labelFormat = d3.utcFormat('%b');
+        dateInterval = d3.timeDay;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 60 / 24;
         tickWidth = 11;
         tickCountMax = Math.ceil(tl.width / tickWidth);
@@ -698,8 +698,8 @@ export function timelineConfig(models, config, ui) {
         break;
       case 4: // 10-Minute
         dateStep = 10;
-        labelFormat = d3.time.format.utc('%H:%M');
-        dateInterval = d3.time.minutes;
+        labelFormat = d3.utcFormat('%H:%M');
+        dateInterval = d3.timeMinutes;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 10;
         tickWidth = 1;
         tickCountMax = tl.width;

@@ -1,4 +1,4 @@
-import d3 from 'd3';
+import * as d3 from 'd3';
 import util from '../util/util';
 /**
  * Perform timeline tick functions
@@ -18,8 +18,8 @@ export function timelineTicks(models, config, ui) {
   };
 
   self.setAll = function () {
-    self.all = d3.selectAll('.x.axis>g.tick');
-    self.firstElem = self.all[0][0];
+    self.all = d3.selectAll('.x.axis > g.tick');
+    self.firstElem = self.all[0];
     self.firstDate = self.all.data()[0];
     self.lastDate = self.all.data()[self.all.data().length - 1];
     // remove previous classes for labels
@@ -30,9 +30,9 @@ export function timelineTicks(models, config, ui) {
       var all = self.normal.all;
       self.normal.all.classed('end-tick', false);
       self.normal.firstDate = all.data()[0];
-      self.normal.firstElem = all[0][0];
+      self.normal.firstElem = all[0];
       self.normal.lastDate = all.data()[all.data().length - 1];
-      self.normal.lastElem = all[0][all[0].length - 1];
+      self.normal.lastElem = all[all.length - 1];
       d3.select(self.normal.lastElem)
         .classed('end-tick', true);
     },
@@ -503,10 +503,10 @@ export function timelineTicks(models, config, ui) {
     var sibElem = d3.select($(self.normal.lastElem)
       .next()[0]);
 
-    if (sibElem.classed('domain')) {
-      end = tl.zoom.current.ticks.boundary.last();
-      self.add(end, 'path.domain');
-    }
+    // if (sibElem.classed('domain')) {
+    //   end = tl.zoom.current.ticks.boundary.last();
+    //   self.add(end, 'path.domain');
+    // }
     // } End terrible
 
     self.setAll();

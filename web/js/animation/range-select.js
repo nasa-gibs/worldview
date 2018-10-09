@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import RangeSelector from '../components/range-selection/range-selection';
-import d3 from 'd3';
+import * as d3 from 'd3';
 import util from '../util/util';
 
 export function animationRangeSelect(models, config, ui) {
@@ -69,7 +69,7 @@ export function animationRangeSelect(models, config, ui) {
     var pick = d3.select('#guitarpick');
     var pickWidth = pick.node().getBoundingClientRect().width;
     var animEndLocation =
-      d3.transform(pick.attr('transform')).translate[0] - pickWidth / 2; // getting guitar pick location
+      util.getTranslation(pick.attr('transform')) - pickWidth / 2; // getting guitar pick location
     if (model.rangeState.startDate) {
       startLocation = self.getLocationFromStringDate(
         model.rangeState.startDate

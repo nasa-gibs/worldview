@@ -1,5 +1,5 @@
 import util from '../util/util';
-import d3 from 'd3';
+import * as d3 from 'd3';
 
 export function timeline(models, config, ui) {
   var self = {};
@@ -222,17 +222,16 @@ export function timeline(models, config, ui) {
       );
     }
 
-    self.x = d3.time.scale.utc();
+    self.x = d3.scaleUtc();
 
-    self.xAxis = d3.svg
-      .axis()
-      .orient('bottom')
+    self.xAxis = d3
+      .axisBottom()
       .tickSize(-self.height)
       .tickPadding(5);
 
-    self.axisZoom = d3.behavior
-      .zoom()
-      .scale(1)
+    // TODO: Check this
+    self.axisZoom = d3.zoom()
+      // .scale(1)
       .scaleExtent([1, 1]);
 
     self.resize();

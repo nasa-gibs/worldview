@@ -1,5 +1,5 @@
 import uiMouse from '../ui/mouse';
-import d3 from 'd3';
+import * as d3 from 'd3';
 /**
  * Perform timeline zooming functions
 
@@ -72,16 +72,17 @@ export function timelineZoom(models, config, ui) {
       .ticks(dateInterval, dateStep)
       .tickFormat(labelFormat);
 
-    tl.axisZoom = d3.behavior.zoom()
-      .scale(1)
-      .scaleExtent([1, 1])
-      .x(tl.x);
+    tl.axisZoom = d3.zoom()
+      // .scale(1)
+      // .scaleExtent([1, 1])
+      // .x(tl.x);
 
-    if (tl.isCropped) {
-      tl.axisZoom.xExtent(paddedRange);
-    } else {
-      tl.axisZoom.xExtent([tl.data.start(), tl.data.end()]);
-    }
+    // TODO: Add this back in
+    // if (tl.isCropped) {
+    //   tl.axisZoom.xExtent(paddedRange);
+    // } else {
+    //   tl.axisZoom.xExtent([tl.data.start(), tl.data.end()]);
+    // }
 
     uiMouse.wheel(tl.axisZoom, ui)
       .change(self.change);

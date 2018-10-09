@@ -7,7 +7,7 @@ export function timelinePan(models, config, ui) {
   var model = models.date;
   var self = {};
 
-  self.xPosition = tl.axisZoom.translate()[0];
+  self.xPosition = tl.axisZoom.translateExtent()[0];
 
   self.axis = function (event) {
     if (event) {
@@ -17,7 +17,7 @@ export function timelinePan(models, config, ui) {
         update(self.xPosition - delX, 0);
       }
     } else {
-      self.xPosition = tl.axisZoom.translate()[0];
+      self.xPosition = tl.axisZoom.translateExtent()[0];
     }
 
     tl.axis.call(tl.xAxis);
@@ -35,8 +35,8 @@ export function timelinePan(models, config, ui) {
   };
 
   var update = function (x, y) {
-    tl.axisZoom.translate([x, y]);
-    self.xPosition = tl.axisZoom.translate()[0];
+    tl.axisZoom.translateExtent([x, y]);
+    self.xPosition = tl.axisZoom.translateExtent()[0];
   };
 
   self.toSelection = function () {
