@@ -12,4 +12,4 @@ cache:
     - .python
 install: npm install
 
-script: npm run ci
+script: npm test
