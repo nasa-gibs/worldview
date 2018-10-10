@@ -390,7 +390,7 @@ export default (function (self) {
 
   self.dateAdd = function (date, interval, amount) {
     var month, maxDay, year;
-    var newDate = new Date(date.getTime());
+    var newDate = new Date(date);
     switch (interval) {
       case 'minute':
         newDate.setUTCMinutes(newDate.getUTCMinutes() + amount);
@@ -447,7 +447,7 @@ export default (function (self) {
   self.daysInYear = function (date) {
     var jStart, jDate;
     jStart = self.parseDateUTC(date.getUTCFullYear() + '-01-01');
-    jDate = '00' + (Math.ceil((date.getTime() - jStart) / 86400000));
+    jDate = '00' + (Math.ceil((date.getTime() - jStart) / 86400000) + 1);
     return (jDate).substr((jDate.length) - 3);
   };
 

@@ -32,6 +32,7 @@
     "build:dev": "cross-env NODE_ENV=development webpack",
     "build:config": "bash -c 'tasks/buildOptions.sh' && node ./tasks/config.js",
     "build:prod": "cross-env NODE_ENV=production webpack",
+    "ci": "npm run test:unit && npm run test:unit:tz && npm run test:lint",
     "clean": "node ./tasks/clean.js",
     "dist": "npm run clean && npm run getcapabilities && npm run build:config && npm run build:prod && node ./tasks/dist.js",
     "dist:dev": "npm run clean && npm run getcapabilities && npm run build:config && npm run build:dev && node ./tasks/dist.js",
@@ -61,6 +62,7 @@
     "test": "npm run test:unit && npm run test:lint",
     "test:lint": "npx eslint .",
     "test:unit": "npx jest",
+    "test:unit:tz": "TZ=Australia/Sydney npx jest",
     "updateconfig": "run-s getcapabilities build:config",
     "watch": "cross-env NODE_ENV=development webpack-dev-server",
     "upload": "node tasks/upload.js"

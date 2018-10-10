@@ -28,7 +28,6 @@ export function parse(state, errors) {
       util.now = function() {
         return new Date(state.now.getTime());
       };
-      util.warn('Overriding now: ' + state.now.toISOString());
     } catch (error) {
       delete state.now;
       errors.push({

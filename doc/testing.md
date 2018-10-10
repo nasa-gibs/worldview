@@ -9,10 +9,11 @@ Use `npm run lint:css` or `npm run lint:js` to check CSS or JS files separately.
 ## Unit Tests
 
 Unit tests are run using the BusterJS test runner. To run unit tests, run
-`npm test`. Make sure to run `npm run build` or `npm run build:tests` first to
-build a testable version of Worldview.
+`npm test`. Make sure to run `npm run getcapabilities` and
+`npm run build:config` first to build the configuration.
 
-*Note for Windows users:* `npm test` may fail unless you [install PhantomJS manually](http://phantomjs.org/download.html).
+To test against a different time zone, run `npm run test:unit:tz`. This
+currently doesn't work in Windows.
 
 ## End-to-end Tests
 End to end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by End to End tests to cover any new functionality you add.
