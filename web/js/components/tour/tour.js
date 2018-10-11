@@ -9,6 +9,7 @@ class Tour extends React.Component {
     super(props);
     this.state = {
       models: props.models,
+      config: props.config,
       stories: props.stories,
       storyOrder: props.storyOrder,
       modalStart: props.modalStart,
@@ -80,6 +81,8 @@ class Tour extends React.Component {
 
           <TourInProgress
             models={this.state.models}
+            config={this.state.config}
+            ui={this.state.ui}
             modalInProgress={this.state.modalInProgress}
             toggleModalStart={this.toggleModalStart}
             toggleModalInProgress={this.toggleModalInProgress}
@@ -113,6 +116,7 @@ class Tour extends React.Component {
 
 Tour.propTypes = {
   models: PropTypes.object.isRequired,
+  config: PropTypes.object.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
   modalStart: PropTypes.bool.isRequired,

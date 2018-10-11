@@ -19,6 +19,8 @@ export function tourUi(models, ui, config) {
   var getInitialProps = function() {
     return {
       models: models,
+      config: config,
+      ui: ui,
       stories: config['stories'],
       storyOrder: config['storyOrder'],
       modalStart: !localStorage.tourAlert,
@@ -48,7 +50,6 @@ export function tourUi(models, ui, config) {
   };
 
   self.selectTour = function(e, currentStory, currentStoryIndex, currentStoryId) {
-    console.log('test');
     if (e) e.preventDefault();
     self.reactComponent.setState({
       currentStep: 1,

@@ -3,6 +3,17 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
+import lodashEach from 'lodash/each';
+import lodashMap from 'lodash/map';
+
+import { parse as dateParser } from '../../date/date';
+import { parse as layerParser } from '../../layers/layers';
+import { mapParser } from '../../map/map';
+import { parse as animationParser } from '../../animation/anim';
+import palettes from '../../palettes/palettes';
+import { dataParser } from '../../data/data';
+import { parse as projectionParser } from '../../projection/projection';
+import { parse as tourParser } from '../../tour/tour';
 
 class ModalInProgress extends React.Component {
   constructor(props) {
@@ -17,25 +28,25 @@ class ModalInProgress extends React.Component {
     this.fetchMetadata = this.fetchMetadata.bind(this);
     this.stepLink = this.stepLink.bind(this);
     this.selectLink = this.selectLink.bind(this);
+    this.registerMapMouseHandlers = this.registerMapMouseHandlers.bind(this);
   }
 
   componentDidMount() {
-    var currentStoryIndex = this.props.currentStoryIndex;
     var currentStepIndex = this.props.currentStep;
-    this.fetchMetadata(currentStoryIndex, currentStepIndex);
+    this.fetchMetadata(currentStepIndex);
   }
 
   componentWillReceiveProps(nextProps) {
-    var currentStoryIndex = this.props.currentStoryIndex;
+    var currentStory = this.props.currentStory;
     if (nextProps.currentStep !== this.props.currentStep) {
       var currentStepIndex = nextProps.currentStep;
-      this.fetchMetadata(currentStoryIndex, currentStepIndex);
-      this.stepLink(currentStoryIndex, currentStepIndex);
+      this.fetchMetadata(currentStepIndex);
+      this.stepLink(currentStory, currentStepIndex);
       this.selectLink();
     }
   }
 
-  fetchMetadata(currentStoryIndex, currentStepIndex) {
+  fetchMetadata(currentStepIndex) {
     currentStepIndex = currentStepIndex.toString().padStart(3, '0');
     this.setState({ isLoading: true });
 
@@ -56,11 +67,10 @@ class ModalInProgress extends React.Component {
       }).catch(error => this.setState({ error, isLoading: false }));
   }
 
-  stepLink(currentStoryIndex, currentStepIndex) {
+  stepLink(currentStory, currentStepIndex) {
     var stepLink;
     currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
-    var currentStoryId = this.props.currentStoryId;
-    stepLink = currentStoryId.stepLink;
+    stepLink = currentStory.steps[currentStepIndex]['stepLink'];
 
     // Get URL Link here from JSON file (for each step)
     // Push Link to Browser URL
@@ -73,33 +83,53 @@ class ModalInProgress extends React.Component {
     }
   }
 
-  selectLink() {
-    var models, state, projection, layersA, timeA, timeB;
+  registerMapMouseHandlers(maps, events) {
+    Object.values(maps).forEach((map) => {
+      let element = map.getTargetElement();
+      let crs = map.getView().getProjection().getCode();
+      element.addEventListener('mousemove', event => {
+        events.trigger('mousemove', event, map, crs);
+      });
+      element.addEventListener('mouseout', event => {
+        events.trigger('mouseout', event, map, crs);
+      });
+    });
+  }
 
-    models = this.props.models;
-    // var config = this.props.config;
+  selectLink() {
+    var parsers;
+    var errors = [];
+    var config = this.props.config;
+    var models = this.props.models;
     // var ui = this.props.ui;
-    state = util.fromQueryString(location.search);
+    var state = util.fromQueryString(location.search);
+
     // var comparisonOn = state.ca;
-    timeA = state.t;
-    timeB = state.t1;
-    layersA = state.l;
-    // var layersB = state.l1;
-    projection = state.p;
-    // var view = state.v;
+    // var timeA = state.t;
+    // var timeB = state.t1;
+    var layersA = state.l;
+    // // var layersB = state.l1;
+    // var projection = state.p;
+    var view = state.v;
     // var zoom = state.z;
 
-    // Set Projection
-    if (projection) models.proj.select(projection);
+    // // Set Projection
+    // if (projection) models.proj.select(projection);
 
-    // Set Layer A time
-    if (timeA) models.date.select(util.parseDateUTC(timeA));
-    // Set Layer B time
-    if (timeB) models.date.select(util.parseDateUTC(timeB));
+    // // Set Layer A time
+    // if (timeA) models.date.select(util.parseDateUTC(timeA));
+    // // Set Layer B time
+    // if (timeB) models.date.select(util.parseDateUTC(timeB));
 
     // Set Zoom & View
-    // if (view) models.map.update(view);
-    // if (zoom && view) ui.naturalEvents.zoomToEvent(event, date, isSameEventID)
+    if (view) {
+      let extent = lodashMap(state.v.split(','), function (str) {
+        return parseFloat(str);
+      });
+
+      models.map.update(extent);
+    }
+    // // if (zoom && view) ui.naturalEvents.zoomToEvent(event, date, isSameEventID)
 
     // Set layers
     var layerString = models.layers.activeLayers;
@@ -134,16 +164,35 @@ class ModalInProgress extends React.Component {
         }
       });
     }
+
+    parsers = [
+      projectionParser,
+      // layerParser,
+      dateParser,
+      mapParser,
+      palettes.parse,
+      tourParser
+    ];
+    if (config.features.dataDownload) {
+      parsers.push(dataParser);
+    }
+    if (config.features.animation) {
+      parsers.push(animationParser);
+    }
+    lodashEach(parsers, function(parser) {
+      parser(state, errors, config);
+    });
+    models.link.load(state);
   }
 
   render() {
     var { description, metaLoaded } = this.state;
-    var currentStoryIndex = this.props.currentStoryIndex;
+    var currentStory = this.props.currentStory;
     var modalStarted = this.props.modalInProgress;
     if (modalStarted && !metaLoaded) {
       this.setState({ metaLoaded: true });
-      this.fetchMetadata(currentStoryIndex, 1);
-      this.stepLink(currentStoryIndex, 1);
+      this.fetchMetadata(1);
+      this.stepLink(currentStory, 1);
       this.selectLink();
     }
 
@@ -167,6 +216,7 @@ class ModalInProgress extends React.Component {
 
 ModalInProgress.propTypes = {
   models: PropTypes.object.isRequired,
+  config: PropTypes.object.isRequired,
   modalInProgress: PropTypes.bool.isRequired,
   toggleModalInProgress: PropTypes.func.isRequired,
   currentStep: PropTypes.number.isRequired,
