@@ -1147,6 +1147,7 @@ export default (function (self) {
     // to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get
     // its SVGMatrix.
     var matrix = g.transform.baseVal.consolidate().matrix;
+    console.log([matrix.e, matrix.f]);
 
     // As per definition values e and f are the ones for the translation.
     return [matrix.e, matrix.f];
