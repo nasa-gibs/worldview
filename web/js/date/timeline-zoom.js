@@ -72,18 +72,15 @@ export function timelineZoom(models, config, ui) {
       .ticks(dateInterval, dateStep)
       .tickFormat(labelFormat);
 
-    // TODO: Restore functionality here? This is a major pain point
+    // TODO: Check functionality here
     tl.axisZoom = d3.zoom()
-      // .scale(1)
-      // .scaleExtent([1, 1])
-      // .x(tl.x);
+      .scaleExtent([1, 1]);
 
-    // TODO: Add this back in
-    // if (tl.isCropped) {
-    //   tl.axisZoom.xExtent(paddedRange);
-    // } else {
-    //   tl.axisZoom.xExtent([tl.data.start(), tl.data.end()]);
-    // }
+    if (tl.isCropped) {
+      tl.axisZoom.extent(paddedRange);
+    } else {
+      tl.axisZoom.extent([tl.data.start(), tl.data.end()]);
+    }
 
     uiMouse.wheel(tl.axisZoom, ui)
       .change(self.change);
