@@ -118,9 +118,9 @@ export function timelinePick(models, config, ui) {
     tl.zoom.current.pick.hoverTick(date);
     tickBg = tl.zoom.current.pick.hoveredTick.select(
       'rect.normaltick-background'
-    )[0][0];
+    )['_groups'][0][0];
     if (!alternatePick) {
-      d = d3.select(tl.zoom.current.pick.hoveredTick[0][0]).data()[0];
+      d = d3.select(tl.zoom.current.pick.hoveredTick['_groups'][0][0]).data()[0];
     }
     tl.ticks.label.remove();
     tl.ticks.normal.hover.call(tickBg, d);

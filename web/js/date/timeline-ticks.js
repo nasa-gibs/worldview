@@ -56,7 +56,7 @@ export function timelineTicks(models, config, ui) {
             .attr('y1', '-2');
         }
         if (current.classed('end-tick')) {
-          if (current.select('line.tick-close')[0][0] === null) {
+          if (current.select('line.tick-close')['_groups'][0][0] === null) {
             d3.select(self.normal.lastElem)
               .append('line')
               .classed('tick-close', true)
@@ -178,6 +178,7 @@ export function timelineTicks(models, config, ui) {
         })
         .on('mouseleave', self.label.remove)
         .on('mousedown', function () {
+          d3.event.stopPropagation();
           cancelClick = setTimeout(notClick, notClickDelay);
         })
         .on('mouseup', function () {
@@ -335,6 +336,7 @@ export function timelineTicks(models, config, ui) {
         })
         .on('mouseleave', self.label.remove)
         .on('mousedown', function () {
+          d3.event.stopPropagation();
           cancelClick = setTimeout(notClick, notClickDelay);
         })
         .on('mouseup', function () {
@@ -500,14 +502,12 @@ export function timelineTicks(models, config, ui) {
 
     // FIXME: Passing from d3 to jQuery to d3 in order to check if its the last tick elem.  WAT.
     // Select element that follows last non-boundary tick
-    var sibElem = d3.select($(self.normal.lastElem)
-      .next()[0]);
-
+    var sibElem = d3.select($(self.normal.lastElem)[0]);
     // TODO: Restore this functionality
-    // if (sibElem.classed('domain')) {
-    //   end = tl.zoom.current.ticks.boundary.last();
-    //   self.add(end, 'path.domain');
-    // }
+    if (sibElem.classed('domain')) {
+      end = tl.zoom.current.ticks.boundary.last();
+      self.add(end, 'path.domain');
+    }
     // } End terrible
 
     self.setAll();
