@@ -204,6 +204,7 @@ export function timeline(models, config, ui) {
     self.resize();
     self.zoom.refresh();
     self.setClip();
+    self.input.update();
   };
   var init = function() {
     var $timelineFooter = $('#timeline-footer');
