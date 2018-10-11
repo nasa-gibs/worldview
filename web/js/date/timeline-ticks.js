@@ -30,9 +30,9 @@ export function timelineTicks(models, config, ui) {
       var all = self.normal.all;
       self.normal.all.classed('end-tick', false);
       self.normal.firstDate = all.data()[0];
-      self.normal.firstElem = all[0];
+      self.normal.firstElem = all['_groups'][0][0];
       self.normal.lastDate = all.data()[all.data().length - 1];
-      self.normal.lastElem = all[all.length - 1];
+      self.normal.lastElem = all['_groups'][0][all['_groups'][0].length - 1];
       d3.select(self.normal.lastElem)
         .classed('end-tick', true);
     },
