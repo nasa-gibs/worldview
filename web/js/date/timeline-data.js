@@ -1,4 +1,5 @@
 import d3 from 'd3';
+import util from '../util/util';
 
 export function timelineData(models, config, ui) {
   var tl = ui.timeline;
@@ -14,6 +15,7 @@ export function timelineData(models, config, ui) {
   };
 
   self.set = function() {
+    var futureLayers = [];
     var activeLayers = models.layers.get({});
     var activeLayersDynamic = activeLayers.filter(function(al) {
       return al.startDate;
@@ -28,6 +30,9 @@ export function timelineData(models, config, ui) {
 
     $(activeLayersDynamic).each(function(i) {
       activeLayersTitles[i] = this.id;
+      if (this.futureLayer === true) {
+        futureLayers.push(this.id);
+      }
     });
 
     tl.y = d3.scale
@@ -52,8 +57,11 @@ export function timelineData(models, config, ui) {
       } else {
         layerStart = self.start();
       }
-      if (this.inactive === true) {
+
+      if (this.inactive === true || this.futureLayer === true) {
         layerEnd = new Date(this.endDate);
+      } else if (Array.isArray(futureLayers) && futureLayers.length) {
+        layerEnd = util.now();
       } else {
         layerEnd = new Date(self.end().setUTCDate(self.end().getUTCDate() + 1));
       }
