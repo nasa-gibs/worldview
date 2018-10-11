@@ -21,7 +21,7 @@ export function tourUi(models, ui, config) {
       models: models,
       stories: config['stories'],
       storyOrder: config['storyOrder'],
-      modalStart: true,
+      modalStart: !localStorage.tourAlert,
       modalInProgress: false,
       modalComplete: false,
       currentStep: 1,
