@@ -60,6 +60,19 @@ export function timelineData(models, config, ui) {
 
       if (this.inactive === true || this.futureLayer === true) {
         layerEnd = new Date(this.endDate);
+        if (this.futureTime) {
+          layerEnd = util.now();
+          var futureTime = this.futureTime;
+          var dateType = futureTime.slice(-1);
+          var dateInterval = futureTime.slice(0, -1);
+          if (dateType === 'D') {
+            layerEnd.setDate(layerEnd.getDate() + parseInt(dateInterval));
+          } else if (dateType === 'M') {
+            layerEnd.setMonth(layerEnd.getMonth() + parseInt(dateInterval));
+          } else if (dateType === 'Y') {
+            layerEnd.setYear(layerEnd.getYear() + parseInt(dateInterval));
+          }
+        }
       } else if (Array.isArray(futureLayers) && futureLayers.length) {
         layerEnd = util.now();
       } else {
