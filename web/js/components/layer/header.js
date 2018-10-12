@@ -86,7 +86,7 @@ ProductPickerHeader.propTypes = {
   runSearch: PropTypes.func,
   selectedProjection: PropTypes.string,
   listType: PropTypes.string,
-  category: PropTypes.string,
+  category: PropTypes.object,
   updateListState: PropTypes.func
 };
 
