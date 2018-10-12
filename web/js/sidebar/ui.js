@@ -244,8 +244,7 @@ export function sidebarUi(models, config, ui) {
     models.compare.toggleState();
   };
   var onAddLayerCLick = function() {
-    wvui.closeDialog();
-    $('#layer-modal').dialog('open');
+    ui.addModal.open();
   };
 
   /**

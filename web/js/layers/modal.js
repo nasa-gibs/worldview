@@ -6,7 +6,7 @@ import Isotope from 'isotope-layout';
 import 'perfect-scrollbar/jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LayerList from '../components/layer/list';
+import LayerList from '../components/layer/product-picker';
 import lodashIndexOf from 'lodash/indexOf';
 import lodashSortBy from 'lodash/sortBy';
 import lodashValues from 'lodash/values';
@@ -40,28 +40,39 @@ export function layersModal(models, ui, config) {
     if (models.compare) {
       models.compare.events.on('change', () => {
         self.reactList.setState({ activeLayers: model[model.activeLayers] });
-        drawDefaultPage();
       });
     }
-    models.proj.events.on('select', drawDefaultPage);
+    models.proj.events.on('select', () => {
+      self.reactList.setState({
+        selectedProjection: models.proj.selected.id,
+        allLayers: getLayersForProjection(models.proj.selected.id)
+      });
+    });
 
     // Create tiles
-    render();
+    // render();
 
     $(window).resize(resize);
   };
   var getInitialProps = function(proj) {
+    setModalSize();
     return {
       addLayer: layerId => model.add(layerId, {}),
       removeLayer: layerId => model.remove(layerId),
+      allLayers: getLayersForProjection(models.proj.selected.id),
       activeLayers: model[model.activeLayers],
       selectedProjection: proj,
+      filterProjections: filterProjections,
+      filterSearch: filterSearch,
       filteredRows: getLayersForProjection(proj),
-      height: getModalHeight(),
+      getModalHeight: getModalHeight,
       hasMeasurementSource: hasMeasurementSource,
       hasMeasurementSetting: hasMeasurementSetting,
       measurementConfig: config.measurements,
-      layerConfig: config.layers
+      layerConfig: config.layers,
+      categoryConfig: config.categories,
+      width: modalWidth,
+      height: modalHeight
     };
   };
   var getLayersForProjection = function(projection) {
@@ -89,20 +100,6 @@ export function layersModal(models, ui, config) {
     txt.innerHTML = html;
     return txt.value;
   };
-
-  var allLayers = getLayersForProjection(models.proj.selected.id);
-
-  // Create container for 'by interest' filters buttons
-  var $nav = $('<nav />', {
-    id: 'categories-nav',
-    class: 'categories-nav'
-  });
-
-  // Create container for breadcrumb
-  var $breadcrumb = $('<nav />', {
-    id: 'category-breadcrumb',
-    class: 'category-breadcrumb'
-  });
 
   /**
    * var hasMeasurementSetting - Checks the (current) measurement's source
@@ -168,24 +165,24 @@ export function layersModal(models, ui, config) {
    *
    * @return {string}  Returns a console warn message.
    */
-  var checkModalView = function() {
-    var modalView = config.parameters.modalView;
-    switch (modalView) {
-      case 'categories':
-        console.warn("'Add Layers' view changed to Categories");
-        break;
-      case 'measurements':
-        console.warn("'Add Layers' view changed to Measurements");
-        break;
-      case 'layers':
-        console.warn("'Add Layers' view changed to Layers");
-        break;
-      case undefined:
-        break;
-      default:
-        console.warn('Invalid parameter; showing Categories view');
-    }
-  };
+  // var checkModalView = function() {
+  //   var modalView = config.parameters.modalView;
+  //   switch (modalView) {
+  //     case 'categories':
+  //       console.warn("'Add Layers' view changed to Categories");
+  //       break;
+  //     case 'measurements':
+  //       console.warn("'Add Layers' view changed to Measurements");
+  //       break;
+  //     case 'layers':
+  //       console.warn("'Add Layers' view changed to Layers");
+  //       break;
+  //     case undefined:
+  //       break;
+  //     default:
+  //       console.warn('Invalid parameter; showing Categories view');
+  //   }
+  // };
   var getModalHeight = function() {
     return $(window).height() - 100;
   };
@@ -206,51 +203,26 @@ export function layersModal(models, ui, config) {
     return this.get(0).scrollHeight > this.height();
   };
   // Update modal size
-  var redo = function() {
-    setModalSize();
-    $(self.selector).dialog('option', {
-      height: modalHeight,
-      width: modalWidth
-    });
-    $('#layers-all').css('height', modalHeight - 70); // 40 search box height + 30 breadcrub height
-    $('#layer-modal-content')
-      .css('height', modalHeight - 40)
-      .perfectScrollbar('update');
-  };
-
-  var redoScrollbar = function() {
-    $('#layer-modal-content').perfectScrollbar('update');
-  };
-
-  // This draws the default page, depending on projection
-  // and hides the breadcrumb, and sets the search back to normal
-  // and updates the scrollbar.
-  var removeSearch = function() {
-    $selectedCategory.hide();
-    $breadcrumb.hide();
-    searchBool = false;
-    if (self.reactList) {
-      $('#layer-modal-content').perfectScrollbar();
-    }
-    $('#layers-search-input').val('');
-    $('#layer-search label.search-icon')
-      .removeClass('search-on')
-      .off('click');
-  };
-
+  // var redo = function() {
+  //   setModalSize();
+  //   $(self.selector).dialog('option', {
+  //     height: modalHeight,
+  //     width: modalWidth
+  //   });
+  //   $('#layers-all').css('height', modalHeight - 70); // 40 search box height + 30 breadcrub height
+  //   $('#layer-modal-content')
+  //     .css('height', modalHeight - 40)
+  //     .perfectScrollbar('update');
+  // };
   var resize = function() {
-    self.reactList.setState({ height: getModalHeight() });
-    if ($(self.selector).dialog('isOpen')) {
-      redo();
-    }
+    setModalSize();
+    self.reactList.setState({ height: modalHeight, width: modalWidth });
   };
 
-  var drawDefaultPage = function() {
-    removeSearch();
-    drawModal();
-    redoScrollbar();
-    allLayers = getLayersForProjection(models.proj.selected.id);
-  };
+  // var drawDefaultPage = function() {
+  //   // drawModal();
+  //   allLayers = getLayersForProjection(models.proj.selected.id);
+  // };
 
   /**
    * var drawModal - Draws the contents of the layers modal based on the
@@ -259,40 +231,40 @@ export function layersModal(models, ui, config) {
    * @return {void}  Calls the categories, measurements, or layers view functions
    *  to which renders the html. Also sets the breadcrumb text based on the view.
    */
-  var drawModal = function() {
-    var projection = models.proj.selected.id;
-    var modalView = config.parameters.modalView;
-
-    // If URL parameter is set, draw that type of modal view.
-    switch (modalView) {
-      case 'categories':
-        crumbText = 'Categories';
-        drawCategories();
-        break;
-      case 'measurements':
-        crumbText = 'Measurements';
-        drawAllMeasurements();
-        break;
-      case 'layers':
-        crumbText = 'Layers';
-        drawAllLayers();
-        break;
-      case undefined:
-        // Set the default views per projection if modalView is not defined.
-        if (projection === 'geographic') {
-          crumbText = 'Categories';
-          drawCategories();
-        } else {
-          crumbText = 'Measurements';
-          drawAllMeasurements();
-        }
-        break;
-      default:
-        crumbText = 'Categories';
-        drawCategories();
-        break;
-    }
-  };
+  // var drawModal = function() {
+  //   var projection = models.proj.selected.id;
+  //   var modalView = config.parameters.modalView;
+  //   var listSyle;
+  //   // If URL parameter is set, draw that type of modal view.
+  //   switch (modalView) {
+  //     case 'categories':
+  //       crumbText = 'Categories';
+  //       self.reactList.setState()
+  //       break;
+  //     case 'measurements':
+  //       crumbText = 'Measurements';
+  //       drawAllMeasurements();
+  //       break;
+  //     case 'layers':
+  //       crumbText = 'Layers';
+  //       drawAllLayers();
+  //       break;
+  //     case undefined:
+  //       // Set the default views per projection if modalView is not defined.
+  //       if (projection === 'geographic') {
+  //         crumbText = 'Categories';
+  //         drawCategories();
+  //       } else {
+  //         crumbText = 'Measurements';
+  //         drawAllMeasurements();
+  //       }
+  //       break;
+  //     default:
+  //       crumbText = 'Categories';
+  //       drawCategories();
+  //       break;
+  //   }
+  // };
 
   /**
    * var drawCategories - Draws all categories if it has non-empty measurements.
@@ -303,184 +275,184 @@ export function layersModal(models, ui, config) {
    * @return {HTMLElement}  Returns html to output measurements grouped by categories with
    *  categories grouped by interest.
    */
-  var drawCategories = function() {
-    $categories.empty();
-    if ($categories.data('isotope')) {
-      $categories.isotope('destroy');
-    }
-    $allLayers.hide();
-    $nav.empty();
+  // var drawCategories = function() {
+  //   $categories.empty();
+  //   if ($categories.data('isotope')) {
+  //     $categories.isotope('destroy');
+  //   }
+  //   $allLayers.hide();
+  //   $nav.empty();
 
-    Object.keys(config.categories).forEach(function(metaCategoryName) {
-      lodashValues(config.categories[metaCategoryName]).forEach(function(
-        category
-      ) {
-        var sortNumber = 2;
-        var $i = 0;
+  //   Object.keys(config.categories).forEach(function(metaCategoryName) {
+  //     lodashValues(config.categories[metaCategoryName]).forEach(function(
+  //       category
+  //     ) {
+  //       var sortNumber = 2;
+  //       var $i = 0;
 
-        // Check if categories have settings with the same projection.
-        hasMeasurement = false;
-        lodashValues(category.measurements).forEach(function(measurement) {
-          if (measurement in config.measurements === false) {
-            console.error(
-              'in category',
-              category.title,
-              'unknown measurement',
-              measurement
-            );
-          }
-          hasMeasurementSource(config.measurements[measurement]);
-        });
+  //       // Check if categories have settings with the same projection.
+  //       hasMeasurement = false;
+  //       lodashValues(category.measurements).forEach(function(measurement) {
+  //         if (measurement in config.measurements === false) {
+  //           console.error(
+  //             'in category',
+  //             category.title,
+  //             'unknown measurement',
+  //             measurement
+  //           );
+  //         }
+  //         hasMeasurementSource(config.measurements[measurement]);
+  //       });
 
-        if (hasMeasurement) {
-          if (category.placement === 'first') {
-            sortNumber = 1;
-          } else if (category.placement === 'last') {
-            sortNumber = 3;
-          }
+  //       if (hasMeasurement) {
+  //         if (category.placement === 'first') {
+  //           sortNumber = 1;
+  //         } else if (category.placement === 'last') {
+  //           sortNumber = 3;
+  //         }
 
-          var $category = $('<div />', {
-            id: category.id,
-            class:
-              'layer-category layer-category-' +
-              interestCssName(metaCategoryName),
-            'data-sort': sortNumber
-          });
+  //         var $category = $('<div />', {
+  //           id: category.id,
+  //           class:
+  //             'layer-category layer-category-' +
+  //             interestCssName(metaCategoryName),
+  //           'data-sort': sortNumber
+  //         });
 
-          if (category.image) {
-            $category.css(
-              'background-image',
-              'url("images/wv.layers/categories/' + category.image + '")'
-            );
-          }
+  //         if (category.image) {
+  //           $category.css(
+  //             'background-image',
+  //             'url("images/wv.layers/categories/' + category.image + '")'
+  //           );
+  //         }
 
-          var $categoryOpaque = $('<div />', {
-            class: 'category-background-cover'
-          });
+  //         var $categoryOpaque = $('<div />', {
+  //           class: 'category-background-cover'
+  //         });
 
-          $category.append($categoryOpaque);
+  //         $category.append($categoryOpaque);
 
-          var $categoryTitle = $('<h3 />');
+  //         var $categoryTitle = $('<h3 />');
 
-          var $categoryLink = $('<a />', {
-            text: category.title,
-            class: 'layer-category-name',
-            alt: category.title
-          }).click(function(e) {
-            drawMeasurements(category);
-          });
+  //         var $categoryLink = $('<a />', {
+  //           text: category.title,
+  //           class: 'layer-category-name',
+  //           alt: category.title
+  //         }).click(function(e) {
+  //           drawMeasurements(category);
+  //         });
 
-          $categoryTitle.append($categoryLink);
-          $categoryOpaque.append($categoryTitle);
+  //         $categoryTitle.append($categoryLink);
+  //         $categoryOpaque.append($categoryTitle);
 
-          var $measurements = $('<ul />');
+  //         var $measurements = $('<ul />');
 
-          lodashValues(category.measurements).forEach(function(
-            measurement,
-            index
-          ) {
-            var current = config.measurements[measurement];
-            // Check if measurements have settings with the same projection.
-            if (hasMeasurementSource(current)) {
-              $i++;
+  //         lodashValues(category.measurements).forEach(function(
+  //           measurement,
+  //           index
+  //         ) {
+  //           var current = config.measurements[measurement];
+  //           // Check if measurements have settings with the same projection.
+  //           if (hasMeasurementSource(current)) {
+  //             $i++;
 
-              if ($i > 6) {
-                setCategoryOverflow(category, $measurements);
-              }
+  //             if ($i > 6) {
+  //               setCategoryOverflow(category, $measurements);
+  //             }
 
-              if (config.measurements[measurement] === undefined) {
-                throw new Error(
-                  "Error: Measurement '" +
-                    measurement +
-                    "' stated in category '" +
-                    category.title +
-                    "' does not exist " +
-                    'in measurement list!'
-                );
-              }
+  //             if (config.measurements[measurement] === undefined) {
+  //               throw new Error(
+  //                 "Error: Measurement '" +
+  //                   measurement +
+  //                   "' stated in category '" +
+  //                   category.title +
+  //                   "' does not exist " +
+  //                   'in measurement list!'
+  //               );
+  //             }
 
-              var $measurement = $('<a />', {
-                text: current.title,
-                class: 'layer-category-name',
-                'data-category': category.id,
-                'data-measurement': current.id,
-                title: category.title + ' - ' + current.title
-              });
+  //             var $measurement = $('<a />', {
+  //               text: current.title,
+  //               class: 'layer-category-name',
+  //               'data-category': category.id,
+  //               'data-measurement': current.id,
+  //               title: category.title + ' - ' + current.title
+  //             });
 
-              $measurement.click(function(e) {
-                drawMeasurements(category, current.id, index);
-              });
+  //             $measurement.click(function(e) {
+  //               drawMeasurements(category, current.id, index);
+  //             });
 
-              var $measurementItem = $('<li />', {
-                class: 'layer-category-item',
-                id: 'layer-category-item-' + category.id + '-' + current.id
-              });
+  //             var $measurementItem = $('<li />', {
+  //               class: 'layer-category-item',
+  //               id: 'layer-category-item-' + category.id + '-' + current.id
+  //             });
 
-              $measurementItem.append($measurement);
+  //             $measurementItem.append($measurement);
 
-              $measurements.append($measurementItem);
+  //             $measurements.append($measurementItem);
 
-              $categoryOpaque.append($measurements);
+  //             $categoryOpaque.append($measurements);
 
-              $categories.append($category);
-            }
-          });
+  //             $categories.append($category);
+  //           }
+  //         });
 
-          $breadcrumb.show();
-        }
-      });
+  //         $breadcrumb.show();
+  //       }
+  //     });
 
-      $categories.show();
+  //     $categories.show();
 
-      var $filterButton = $('<input />', {
-        text: interestLabelName(metaCategoryName),
-        id: 'button-filter-' + interestCssName(metaCategoryName),
-        class: 'button-input-' + interestCssName(metaCategoryName),
-        'data-filter': interestCssName(metaCategoryName),
-        type: 'radio'
-      }).click(function(e) {
-        $categories.isotope({
-          filter: '.layer-category-' + interestCssName(metaCategoryName)
-        });
-        $nav.find('.layer-category-button').removeClass('nav-selected');
-        $('label[for=' + $(this).attr('id') + ']').addClass('nav-selected');
-      });
+  //     var $filterButton = $('<input />', {
+  //       text: interestLabelName(metaCategoryName),
+  //       id: 'button-filter-' + interestCssName(metaCategoryName),
+  //       class: 'button-input-' + interestCssName(metaCategoryName),
+  //       'data-filter': interestCssName(metaCategoryName),
+  //       type: 'radio'
+  //     }).click(function(e) {
+  //       $categories.isotope({
+  //         filter: '.layer-category-' + interestCssName(metaCategoryName)
+  //       });
+  //       $nav.find('.layer-category-button').removeClass('nav-selected');
+  //       $('label[for=' + $(this).attr('id') + ']').addClass('nav-selected');
+  //     });
 
-      var $label = $('<label />', {
-        text: interestLabelName(metaCategoryName),
-        class:
-          'layer-category-button button-label-' +
-          interestCssName(metaCategoryName),
-        for: 'button-filter-' + interestCssName(metaCategoryName)
-      });
+  //     var $label = $('<label />', {
+  //       text: interestLabelName(metaCategoryName),
+  //       class:
+  //         'layer-category-button button-label-' +
+  //         interestCssName(metaCategoryName),
+  //       for: 'button-filter-' + interestCssName(metaCategoryName)
+  //     });
 
-      $nav.append($filterButton);
-      $nav.append($label);
-      // Create radiobuttons with filter buttons
-      $nav.buttonset();
-      $nav.show();
-    });
+  //     $nav.append($filterButton);
+  //     $nav.append($label);
+  //     // Create radiobuttons with filter buttons
+  //     $nav.buttonset();
+  //     $nav.show();
+  //   });
 
-    $categories.isotope({
-      itemSelector: '.layer-category',
-      // stamp: '.stamp',
-      getSortData: {
-        name: '.layer-category-name', // text from querySelector
-        order: '[data-sort]'
-      },
-      sortBy: ['order', 'name'],
-      filter: '.layer-category-legacy',
-      masonry: {
-        gutter: 10
-      }
-    });
+  //   $categories.isotope({
+  //     itemSelector: '.layer-category',
+  //     // stamp: '.stamp',
+  //     getSortData: {
+  //       name: '.layer-category-name', // text from querySelector
+  //       order: '[data-sort]'
+  //     },
+  //     sortBy: ['order', 'name'],
+  //     filter: '.layer-category-legacy',
+  //     masonry: {
+  //       gutter: 10
+  //     }
+  //   });
 
-    $('#layer-modal-content').prepend($nav);
+  //   $('#layer-modal-content').prepend($nav);
 
-    $('label[for=button-filter-legacy]').addClass(
-      'layer-category-button button-label-legacy nav-selected'
-    );
-  };
+  //   $('label[for=button-filter-legacy]').addClass(
+  //     'layer-category-button button-label-legacy nav-selected'
+  //   );
+  // };
 
   /**
    * var drawMeasurements - Draws a measurement if it contains sources with settings.
@@ -493,37 +465,37 @@ export function layersModal(models, ui, config) {
    *  sources which contain settings. Each source has a description. Layers
    *  can be added to the map using a checkbox.
    */
-  var drawMeasurements = function(category, selectedMeasurement) {
-    var projection = models.proj.selected.id;
+  // var drawMeasurements = function(category, selectedMeasurement) {
+  //   var projection = models.proj.selected.id;
 
-    $breadcrumb.empty();
-    self.reactList.setState({
-      listType: 'measurement',
-      selectedProjection: projection,
-      category: category,
-      activeLayers: model[model.activeLayers],
-      selectedMeasurement: selectedMeasurement
-    });
+  //   // $breadcrumb.empty();
+  //   self.reactList.setState({
+  //     listType: 'measurement',
+  //     selectedProjection: projection,
+  //     category: category,
+  //     activeLayers: model[model.activeLayers],
+  //     selectedMeasurement: selectedMeasurement
+  //   });
+  // };
+  // var $homeCrumb = $('<a />', {
+  //   text: crumbText,
+  //   alt: 'categories',
+  //   title: 'Back to Layer Categories'
+  // }).click(drawDefaultPage);
 
-    var $homeCrumb = $('<a />', {
-      text: crumbText,
-      alt: 'categories',
-      title: 'Back to Layer Categories'
-    }).click(drawDefaultPage);
+  // $breadcrumb
+  //   .append($homeCrumb)
+  //   .append('<span> / ' + category.title + '</span>');
+  // $selectedCategory.prepend($breadcrumb);
+  // $selectedCategory.show();
+  // $('#layers-search-input').show();
 
-    $breadcrumb
-      .append($homeCrumb)
-      .append('<span> / ' + category.title + '</span>');
-    $selectedCategory.prepend($breadcrumb);
-    $selectedCategory.show();
-    $('#layers-search-input').show();
-
-    // Switch navs
-    $categories.hide();
-    $nav.hide();
-    $allLayers.show();
-    $('#layer-modal-content').perfectScrollbar('destroy');
-  };
+  // Switch navs
+  // $categories.hide();
+  // $nav.hide();
+  // $allLayers.show();
+  // $('#layer-modal-content').perfectScrollbar('destroy');
+  // };
 
   /**
    * var drawAllMeasurements - Shows all the measurments within the legacy-all
@@ -532,17 +504,17 @@ export function layersModal(models, ui, config) {
    * @return {void}  Returns a list of measurements with a dropdown containing
    *  sources which contain settings. Each source has a description.
    */
-  var drawAllMeasurements = function() {
-    Object.keys(config.categories).forEach(function(metaCategoryName) {
-      lodashValues(config.categories[metaCategoryName]).forEach(function(
-        category
-      ) {
-        if (category.id === 'legacy-all') {
-          drawMeasurements(category);
-        }
-      });
-    });
-  };
+  // var drawAllMeasurements = function() {
+  //   Object.keys(config.categories).forEach(function(metaCategoryName) {
+  //     lodashValues(config.categories[metaCategoryName]).forEach(function(
+  //       category
+  //     ) {
+  //       if (category.id === 'legacy-all') {
+  //         drawMeasurements(category);
+  //       }
+  //     });
+  //   });
+  // };
 
   /**
    * var drawAllLayers - Draws all layers contained within a specific projection
@@ -551,59 +523,51 @@ export function layersModal(models, ui, config) {
    * @return {HTMLElement}  Returns html with title, substitle, description and option to
    *  add layer to the map.
    */
-  var drawAllLayers = function() {
-    var projection = models.proj.selected.id;
-    // Remove perfectScrollbar for the search list window
-    $('#layer-modal-content').perfectScrollbar('destroy');
-    var layerGroupStr = model.activeLayers;
-    self.reactList.setState({
-      activeLayers: model[layerGroupStr],
-      selectedProjection: projection,
-      filteredRows: getLayersForProjection(projection),
-      listType: 'search'
-    });
-    $selectedCategory.hide();
-    $categories.hide();
-    $nav.hide();
-    $allLayers.show();
+  // var drawAllLayers = function() {
+  //   var projection = models.proj.selected.id;
+  //   // Remove perfectScrollbar for the search list window
+  //   $('#layer-modal-content').perfectScrollbar('destroy');
+  //   var layerGroupStr = model.activeLayers;
+  //   self.reactList.setState({
+  //     activeLayers: model[layerGroupStr],
+  //     selectedProjection: projection,
+  //     filteredRows: getLayersForProjection(projection),
+  //     listType: 'search'
+  //   });
+  // $selectedCategory.hide();
+  // $categories.hide();
+  // $nav.hide();
+  // $allLayers.show();
 
-    // Create breadcrumb crumbs
-    $breadcrumb.empty();
+  // Create breadcrumb crumbs
+  // $breadcrumb.empty();
 
-    if (searchBool) {
-      var $homeCrumb = $('<a />', {
-        text: crumbText,
-        alt: crumbText,
-        title: 'Back to ' + crumbText
-      }).click(drawDefaultPage);
+  // if (searchBool) {
+  // var $homeCrumb = $('<a />', {
+  //   text: crumbText,
+  //   alt: crumbText,
+  //   title: 'Back to ' + crumbText
+  // }).click(drawDefaultPage);
 
-      $breadcrumb.append($homeCrumb).append('<span> / Search Results</span>');
+  // $breadcrumb.append($homeCrumb).append('<span> / Search Results</span>');
 
-      $allLayers.prepend($breadcrumb);
-      $('#layers-search-input').show();
+  // $allLayers.prepend($breadcrumb);
+  // $('#layers-search-input').show();
 
-      $('label.search-icon').addClass('search-on');
-      $('label.search-on').click(drawDefaultPage);
+  // $('label.search-icon').addClass('search-on');
+  // $('label.search-on').click(drawDefaultPage);
 
-      $breadcrumb.show();
-    }
-  };
+  // $breadcrumb.show();
+  //   }
+  // };
 
-  var interestCssName = function(name) {
-    if (name === 'hazards and disasters') {
-      return 'legacy';
-    } else {
-      return name;
-    }
-  };
-
-  var interestLabelName = function(name) {
-    if (name === 'scientific') {
-      return 'science disciplines';
-    } else {
-      return name;
-    }
-  };
+  // var interestLabelName = function(name) {
+  //   if (name === 'scientific') {
+  //     return 'science disciplines';
+  //   } else {
+  //     return name;
+  //   }
+  // };
 
   /**
    * var setCategoryOverflow - Apends an ellipsis to category overview measurement list.
@@ -612,30 +576,34 @@ export function layersModal(models, ui, config) {
    * @param  {string} $measurements The measurements contained within the category.
    * @return {HTMLElement}               Returns html to add the ellipsis to the category list.
    */
-  var setCategoryOverflow = function(category, $measurements) {
-    var $dotContinueItem = $('<li />', {
-      class: 'layer-category-item'
-    });
+  // var setCategoryOverflow = function(category, $measurements) {
+  //   var $dotContinueItem = $('<li />', {
+  //     class: 'layer-category-item'
+  //   });
 
-    var $dotContinueLink = $('<a />', {
-      text: '...',
-      class: 'layer-category-name',
-      'data-category': category.id
-    });
+  //   var $dotContinueLink = $('<a />', {
+  //     text: '...',
+  //     class: 'layer-category-name',
+  //     'data-category': category.id
+  //   });
 
-    $dotContinueLink.click(function(e) {
-      drawMeasurements(category);
-    });
+  //   $dotContinueLink.click(function(e) {
+  //     drawMeasurements(category);
+  //   });
 
-    $dotContinueItem.append($dotContinueLink);
-    $measurements.append($dotContinueItem);
+  //   $dotContinueItem.append($dotContinueLink);
+  //   $measurements.append($dotContinueItem);
+  // };
+  self.open = function() {
+    self.reactList.setState({
+      isOpen: true,
+      selectedProjection: models.proj.selected.id
+    });
   };
-
+  self.isOpen = function() {
+    return self.reactList.state.isOpen;
+  };
   var onLayerRemoved = function(layer) {
-    var $element = $(
-      self.selector + ' [data-layer="' + util.encodeId(layer.id) + '"]'
-    );
-    $element.iCheck('uncheck');
     if (self.reactList) {
       self.reactList.setState({
         activeLayers: model[model.activeLayers]
@@ -643,114 +611,113 @@ export function layersModal(models, ui, config) {
     }
   };
 
-  var unfocusInput = function() {
-    if (!util.browser.small) {
-      $('#layers-search-input').focus();
-    } else {
-      $('#layers-search-input').blur();
-      $('#layer-modal-content').focus();
-    }
-  };
+  // var unfocusInput = function() {
+  //   if (!util.browser.small) {
+  //     $('#layers-search-input').focus();
+  //   } else {
+  //     $('#layers-search-input').blur();
+  //     $('#layer-modal-content').focus();
+  //   }
+  // };
 
-  var render = function() {
-    checkModalView();
-    setModalSize();
+  // var render = function() {
+  //   checkModalView();
+  //   setModalSize();
 
-    $('#layer-modal-content')
-      .css('height', modalHeight - 40)
-      .perfectScrollbar();
+  //   $('#layer-modal-content')
+  //     .css('height', modalHeight - 40)
+  //     .perfectScrollbar();
 
-    var $search = $('<div />', {
-      id: 'layer-search',
-      class: 'layer-search'
-    });
+  //   var $search = $('<div />', {
+  //     id: 'layer-search',
+  //     class: 'layer-search'
+  //   });
 
-    var $searchInput = $('<input />', {
-      id: 'layers-search-input',
-      placeholder: 'Search'
-    });
+  //   var $searchInput = $('<input />', {
+  //     id: 'layers-search-input',
+  //     placeholder: 'Search'
+  //   });
 
-    var $searchBtn = $('<label />', {
-      class: 'search-icon'
-    })
-      .click(function(e) {
-        // TODO: Click for search icon
-      })
-      .append('<i />');
+  //   var $searchBtn = $('<label />', {
+  //     class: 'search-icon'
+  //   })
+  //     .click(function(e) {
+  //       // TODO: Click for search icon
+  //     })
+  //     .append('<i />');
 
-    $search.append($searchBtn).append($searchInput);
+  //   $search.append($searchBtn).append($searchInput);
 
-    $header.append($search);
+  //   $header.append($search);
 
-    var $closeButton = $('<div />', {
-      id: 'layers-modal-close',
-      class: 'layers-modal-close'
-    })
-      .click(function() {
-        $(self.selector).dialog('close');
-      })
-      .append('<i></i>');
+  //   var $closeButton = $('<div />', {
+  //     id: 'layers-modal-close',
+  //     class: 'layers-modal-close'
+  //   })
+  //     .click(function() {
+  //       $(self.selector).dialog('close');
+  //     })
+  //     .append('<i></i>');
 
-    $header.append($closeButton);
+  //   $header.append($closeButton);
 
-    $(self.selector).dialog({
-      autoOpen: false,
-      resizable: false,
-      height: modalHeight,
-      width: modalWidth,
-      modal: true,
-      dialogClass: 'layer-modal-dialog no-titlebar',
-      draggable: false,
-      title: 'Layer Picker',
-      show: {
-        effect: 'fade',
-        duration: 400
-      },
-      hide: {
-        effect: 'fade',
-        duration: 200
-      },
-      open: function(event, ui) {
-        redo();
-        if ($categories.data('isotope')) {
-          $categories.isotope();
-        }
+  //   $(self.selector).dialog({
+  //     autoOpen: false,
+  //     resizable: false,
+  //     height: modalHeight,
+  //     width: modalWidth,
+  //     modal: true,
+  //     dialogClass: 'layer-modal-dialog no-titlebar',
+  //     draggable: false,
+  //     title: 'Layer Picker',
+  //     show: {
+  //       effect: 'fade',
+  //       duration: 400
+  //     },
+  //     hide: {
+  //       effect: 'fade',
+  //       duration: 200
+  //     },
+  //     open: function(event, ui) {
+  //       redo();
+  //       if ($categories.data('isotope')) {
+  //         $categories.isotope();
+  //       }
 
-        redoScrollbar();
+  //       redoScrollbar();
 
-        $('.ui-widget-overlay').click(function(e) {
-          $(self.selector).dialog('close');
-        });
+  //       $('.ui-widget-overlay').click(function(e) {
+  //         $(self.selector).dialog('close');
+  //       });
 
-        // fade in time for show is 400 above, so after that
-        setTimeout(unfocusInput, 410);
-      },
-      close: function(event, ui) {
-        $('.ui-widget-overlay').unbind('click');
-      }
-    });
+  //       // fade in time for show is 400 above, so after that
+  //       setTimeout(unfocusInput, 410);
+  //     },
+  //     close: function(event, ui) {
+  //       $('.ui-widget-overlay').unbind('click');
+  //     }
+  //   });
 
-    // $(self.selector + "select").on('change', filter);
-    $searchInput.keyup(filter);
-    drawDefaultPage();
-  };
+  //   // $(self.selector + "select").on('change', filter);
+  //   $searchInput.keyup(filter);
+  //   drawDefaultPage();
+  // };
 
   // returns each term from search field
-  var searchTerms = function() {
-    var search = $('#layers-search-input')
-      .val()
-      .toLowerCase();
-    var terms = search.split(/ +/);
-    return terms;
-  };
+  // var searchTerms = function() {
+  //   var search = $('#layers-search-input')
+  //     .val()
+  //     .toLowerCase();
+  //   var terms = search.split(/ +/);
+  //   return terms;
+  // };
 
   var filterProjections = function(layer) {
     return !layer.projections[models.proj.selected.id];
   };
-  // Takes the terms and returns true if the layer isnt part of search
-  var filterSearch = function(layer, terms) {
-    var search = $(self.selector + 'search').val();
-    if (search === '') return false;
+  // // Takes the terms and returns true if the layer isnt part of search
+  var filterSearch = function(layer, val, terms) {
+    if (!val) return false;
     var filtered = false;
     var names = models.layers.getTitles(layer.id);
 
@@ -765,39 +732,28 @@ export function layersModal(models, ui, config) {
     });
     return filtered;
   };
-
-  var runSearch = function() {
-    var search = searchTerms();
-    var filteredRows = allLayers.filter(function(layer) {
-      return !(filterProjections(layer) || filterSearch(layer, search));
-    });
-    self.reactList.setState({
-      filteredRows: filteredRows
-    });
-  };
-
-  var filter = function(e) {
-    if ($('#layers-search-input').val().length !== 0) {
-      searchBool = true;
-    } else {
-      searchBool = false;
-      drawModal();
-      removeSearch();
-    }
-    // Ran on every keystroke in search
-    if (searchBool) {
-      if (
-        $allLayers.css('display') === 'none' ||
-        $breadcrumb.css('display') === 'none' ||
-        self.reactList.state.listType !== 'search'
-      ) {
-        drawAllLayers();
-      }
-      runSearch();
-    } else {
-      drawModal();
-    }
-  };
+  // var filter = function(e) {
+  //   if ($('#layers-search-input').val().length !== 0) {
+  //     searchBool = true;
+  //   } else {
+  //     searchBool = false;
+  //     drawModal();
+  //     removeSearch();
+  //   }
+  //   // Ran on every keystroke in search
+  //   if (searchBool) {
+  //     if (
+  //       $allLayers.css('display') === 'none' ||
+  //       $breadcrumb.css('display') === 'none' ||
+  //       self.reactList.state.listType !== 'search'
+  //     ) {
+  //       drawAllLayers();
+  //     }
+  //     runSearch();
+  //   } else {
+  //     drawModal();
+  //   }
+  // };
 
   init();
   return self;

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SearchLayerRow from './search-row';
-import CategoryLayerRow from './category-row';
-import Scrollbars from '../util/scrollbar';
+import CategoryLayerRow from './measurement-row';
 import util from '../../util/util';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 
@@ -15,14 +14,10 @@ class LayerList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filteredRows: props.filteredRows,
       expandedMetadataLayers: [],
       expandedDateRangesLayers: [],
       sourceMetadata: {},
       expandedMeasurements: props.expandedMeasurements,
-      activeLayers: props.activeLayers,
-      height: props.height,
-      listType: props.listType,
       selectedProjection: props.selectedProjection
     };
   }
@@ -40,7 +35,8 @@ class LayerList extends React.Component {
    * @return {void}
    */
   toggleMetadataExpansion(layerId) {
-    var { filteredRows, expandedMetadataLayers } = this.state;
+    var { expandedMetadataLayers } = this.state;
+    var { filteredRows } = this.props;
     var isMetadataExpanded = expandedMetadataLayers.find(id => id === layerId);
     if (isMetadataExpanded) {
       expandedMetadataLayers.splice(expandedMetadataLayers.indexOf(layerId), 1);
@@ -101,20 +97,9 @@ class LayerList extends React.Component {
       this.setState({ expandedDateRangesLayers: expandedDateRangesLayers });
     }
   }
-  updateSelectedMeasurement(id) {
-    if (this.state.selectedMeasurement !== id) {
-      this.setState({ selectedMeasurement: id });
-    } else {
-      this.setState({ selectedMeasurement: null });
-    }
-  }
   renderCategoryList() {
     const {
       expandedMeasurements,
-      selectedMeasurement,
-      category,
-      activeLayers,
-      selectedProjection,
       activeMeasurementIndex,
       sourceMetadata
     } = this.state;
@@ -122,9 +107,14 @@ class LayerList extends React.Component {
       measurementConfig,
       layerConfig,
       addLayer,
+      category,
       removeLayer,
+      selectedProjection,
+      activeLayers,
       hasMeasurementSource,
-      hasMeasurementSetting
+      selectedMeasurement,
+      hasMeasurementSetting,
+      updateSelectedMeasurement
     } = this.props;
     return (
       <div id={category.id + '-list'}>
@@ -151,9 +141,7 @@ class LayerList extends React.Component {
                 projection={selectedProjection}
                 isSelected={isSelected}
                 getSourceMetadata={this.getSourceMetadata.bind(this)}
-                updateSelectedMeasurement={this.updateSelectedMeasurement.bind(
-                  this
-                )}
+                updateSelectedMeasurement={updateSelectedMeasurement}
                 activeMeasurementIndex={activeMeasurementIndex}
                 toggleMetadataExpansion={id => this.toggleMetadataExpansion(id)}
               />
@@ -164,12 +152,8 @@ class LayerList extends React.Component {
     );
   }
   renderSearchList(filteredRows) {
-    const {
-      expandedMetadataLayers,
-      expandedDateRangesLayers,
-      activeLayers
-    } = this.state;
-    var { addLayer, removeLayer } = this.props;
+    const { expandedMetadataLayers, expandedDateRangesLayers } = this.state;
+    var { addLayer, removeLayer, activeLayers } = this.props;
     return filteredRows.length < 1 ? (
       <div>No results.</div>
     ) : (
@@ -194,15 +178,13 @@ class LayerList extends React.Component {
     );
   }
   render() {
-    var { filteredRows, height, listType } = this.state;
+    const { filteredRows, listType } = this.props;
     return (
-      <Scrollbars style={{ maxHeight: height + 'px' }}>
-        <div className="layer-picker-list-case">
-          {listType === 'search'
-            ? this.renderSearchList(filteredRows)
-            : this.renderCategoryList()}
-        </div>
-      </Scrollbars>
+      <div className="layer-picker-list-case layers-all">
+        {listType === 'search'
+          ? this.renderSearchList(filteredRows)
+          : this.renderCategoryList()}
+      </div>
     );
   }
   _setListRef(ref) {
@@ -219,7 +201,6 @@ LayerList.propTypes = {
   removeLayer: PropTypes.func,
   activeLayers: PropTypes.array,
   filteredRows: PropTypes.array,
-  height: PropTypes.number,
   listType: PropTypes.string,
   expandedMeasurements: PropTypes.object,
   activeMeasurementIndex: PropTypes.number,

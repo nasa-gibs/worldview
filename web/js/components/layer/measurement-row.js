@@ -207,8 +207,6 @@ class LayerRow extends React.Component {
         getSourceMetadata(source);
         return <div>loading Metadata </div>;
       }
-    } else {
-      return <div> No Metadata </div>;
     }
   }
   renderSourceContent(measurement, source) {
@@ -317,7 +315,7 @@ class LayerRow extends React.Component {
 LayerRow.propTypes = {
   layerConfig: PropTypes.object,
   measurement: PropTypes.object,
-  activeLayers: PropTypes.object,
+  activeLayers: PropTypes.array,
   category: PropTypes.object,
   updateSelectedMeasurement: PropTypes.func,
   id: PropTypes.string,
