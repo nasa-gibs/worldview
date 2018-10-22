@@ -415,8 +415,7 @@ var updateSelection = function(newDate) {
   var newSelectedPoint = document.getElementById(
     'track-marker-case-' + newDate
   );
-
-  oldSelectedPoint.className = 'track-marker-case';
+  if (oldSelectedPoint) oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
 };
 /**
