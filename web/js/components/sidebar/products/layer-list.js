@@ -18,7 +18,9 @@ class LayerList extends React.Component {
       palettes: {},
       layers: props.layers
     };
+    this._promises = [];
   }
+
   componentWillReceiveProps(props) {
     if (!lodashIsEqual(props.layers, this.state.layers)) {
       this.setState({ layers: props.layers });
@@ -33,13 +35,16 @@ class LayerList extends React.Component {
     if (this.state.palettes[layer.id]) {
       return this.state.palettes[layer.id];
     } else if (layer.palette) {
-      palettePromise(layer.id).then(palette => {
-        var palettes = this.state.palettes;
-        palettes[layer.id] = palette;
-        this.setState({
-          palettes: palettes
-        });
+      let promise = palettePromise(layer.id).then(palette => {
+        if (this._mounted) {
+          var palettes = this.state.palettes;
+          palettes[layer.id] = palette;
+          this.setState({
+            palettes: palettes
+          });
+        }
       });
+      this._promises.push(promise);
     }
     return null;
   }
