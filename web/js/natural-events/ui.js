@@ -24,6 +24,7 @@ export default function naturalEventsUI(models, ui, config, request) {
   model.active = false;
   self.markers = [];
   self.selected = {};
+  self.selecting = false;
   var naturalEventMarkers = markers(models, ui, config);
   var naturalEventsTrack = track(models, ui, config);
 
@@ -158,10 +159,20 @@ export default function naturalEventsUI(models, ui, config, request) {
           if (!findSelectedInProjection) {
             self.deselectEvent();
             self.filterEventList();
+          } else {
+            let event = naturalEventsUtilGetEventById(
+              model.data.events,
+              self.selected.id
+            );
+            naturalEventsTrack.update(
+              event,
+              ui.map.selected,
+              self.selected.date,
+              self.selectEvent
+            );
           }
         }
       }
-      models.proj.events.trigger('change');
     });
   };
 
@@ -194,6 +205,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
     zoomToEvent(event, date, !isIdChange).then(function() {
+      self.selecting = true;
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
       }
@@ -236,6 +248,7 @@ export default function naturalEventsUI(models, ui, config, request) {
         eventVisibilityAlert.dialog('open');
       }
       naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
+      self.selecting = false;
     });
     model.events.trigger('selected-event', self.selected);
   };

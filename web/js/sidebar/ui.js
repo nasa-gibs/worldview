@@ -36,7 +36,7 @@ export function sidebarUi(models, config, ui) {
       trailing: true
     });
     var layerAdd = function(layer) {
-      if (!ui.tour.resetting) {
+      if (!ui.tour.resetting && !ui.naturalEvents.selecting) {
         updateLayers();
         updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
       }
@@ -75,6 +75,7 @@ export function sidebarUi(models, config, ui) {
         .on('list-change', debounceUpdateEventsList)
         .on('selected-event', selected => {
           self.reactComponent.setState({ selectedEvent: selected });
+          updateLayers();
         });
     }
     if (models.compare) {
