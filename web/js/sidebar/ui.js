@@ -35,7 +35,7 @@ export function sidebarUi(models, config, ui) {
       trailing: true
     });
     var layerAdd = function(layer) {
-      if (!ui.tour.resetting) {
+      if (!ui.tour.resetting && !ui.naturalEvents.selecting) {
         updateLayers();
         updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
       }
@@ -74,6 +74,7 @@ export function sidebarUi(models, config, ui) {
         .on('list-change', debounceUpdateEventsList)
         .on('selected-event', selected => {
           self.reactComponent.setState({ selectedEvent: selected });
+          updateLayers();
         });
     }
     if (models.compare) {
@@ -92,11 +93,9 @@ export function sidebarUi(models, config, ui) {
     }
     models.date.events.on('select', updateLayers);
     if (models.proj) {
-      models.proj.events
-        .on('select', updateLayers)
-        .on('select', () => {
-          self.reactComponent.setState({ projection: models.proj.selected.id });
-        });
+      models.proj.events.on('select', updateLayers).on('select', () => {
+        self.reactComponent.setState({ projection: models.proj.selected.id });
+      });
     }
     models.map.events.on('data-running', runningLayers => {
       self.reactComponent.setState({ runningLayers: runningLayers });
