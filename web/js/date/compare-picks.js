@@ -22,7 +22,7 @@ export function timelineCompare(models, config, ui) {
     $timeline.addClass('ab-active');
   }
   var init = function() {
-    const START_EVENT = util.browser.touchDevice ? 'touchstart' : 'mousedown';
+    const START_EVENT = util.browser.mobileAndTabletDevice ? 'touchstart' : 'mousedown';
     var guitarPick = document.getElementById('guitarpick');
     mountObjectA = document.createElementNS(xmlns, 'g');
     mountObjectB = document.createElementNS(xmlns, 'g');

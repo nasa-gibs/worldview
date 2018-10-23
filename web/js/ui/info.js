@@ -74,7 +74,7 @@ export function uiInfo (ui, config) {
     $menuItems.hide();
 
     $about.click(function () {
-      if (util.browser.small || util.browser.touchDevice) {
+      if (util.browser.small) {
         window.open('pages/about.html?v=@BUILD_NONCE@', '_blank');
       } else {
         wvui.getDialog()

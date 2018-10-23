@@ -124,9 +124,6 @@ export function timelineInput(models, config, ui) {
         keyDown = null;
       });
 
-    if (util.browser.tests.touchDevice()) {
-      $('.button-input-group').prop('disabled', true);
-    }
     self.reactComponent = ReactDOM.render(
       React.createElement(DateSelector, getProps()),
       document.getElementById(dateSelectorStr)
