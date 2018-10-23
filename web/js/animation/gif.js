@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-jcrop';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -10,7 +9,7 @@ import lodashThrottle from 'lodash/throttle';
 import lodashCapitalize from 'lodash/capitalize';
 import canvg from 'canvg-browser';
 import FileSaver from 'file-saver';
-import googleAnalytics from '../components/util/google-analytics';
+import googleTagManager from 'googleTagManager';
 import GifResSelection from '../components/animation-widget/gif-panel';
 import {
   imageUtilGetLayerOpacities,
@@ -433,7 +432,15 @@ export function animationGif(models, config, ui) {
       });
       return;
     }
-    googleAnalytics.event('Animation', 'Click', 'Create GIF');
+    googleTagManager.pushEvent({
+      'event': 'GIF_create',
+      'layers': {
+        'activeCount': models.layers.active.length
+      },
+      'GIF': {
+        'resolution': resolution
+      }
+    });
     self.createGIF();
   };
 
@@ -673,7 +680,14 @@ export function animationGif(models, config, ui) {
         .click(function(e) {
           e.preventDefault();
           FileSaver.saveAs(blob, dlURL);
-          googleAnalytics.event('Animation', 'Download', 'GIF', downloadSize);
+          googleTagManager.pushEvent({
+            'event': 'GIF_download',
+            'GIF': {
+              'downloadSize': downloadSize,
+              'increments': ui.anim.widget.getIncrements(),
+              'frameSpeed': animModel.rangeState.speed
+            }
+          });
         });
 
       var $catalog =

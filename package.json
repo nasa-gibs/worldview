@@ -26,10 +26,10 @@
     "node": "8.8.1"
   },
   "scripts": {
-    "analyze": "cross-env NODE_ENV=analyze webpack",
+    "analyze": "cross-env ANALYZE_MODE=true NODE_ENV=production webpack",
     "browserstack": "node e2e/browserstack.js -c e2e/browserstack.conf.js -e browserstack ",
     "build": "run-s clean getcapabilities build:config build:dev",
-    "build:dev": "webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack",
     "build:config": "bash -c 'tasks/buildOptions.sh' && node ./tasks/config.js",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "clean": "node ./tasks/clean.js",
@@ -170,7 +170,7 @@
     "proj4": "2.3.3",
     "promise-queue": "2.2.3",
     "react": "^16.3.0",
-    "react-beautiful-dnd": "^8.0.7",
+    "react-beautiful-dnd": "^9.0.2",
     "react-dom": "^16.3.0",
     "react-draggable": "^3.0.5",
     "react-input-range": "^1.3.0",
@@ -198,6 +198,9 @@
       "node_modules",
       "./web/ext/d3"
     ],
+    "moduleNameMapper": {
+      "^googleTagManager$": "<rootDir>/web/js/components/util/google-tag-manager.js"
+    },
     "transformIgnorePatterns": [
       "node_modules/(?!(ol)/)"
     ]

@@ -73,6 +73,8 @@ The following properties are required if this information is not available via t
 - **startDate**: The first day that data is available, represented in YYYY-MM-DD or YYYY-MM-DDThh:mm:ssZ format.
 - **endDate**: The last day that data is available, represented in YYYY-MM-DD or YYYY-MM-DDThh:mm:ssZ format.
 - **inactive**: Use *true* if the layer is no longer being produced.
+- **futureLayer**: Use *true* if the layer has an end date after the current date.
+- **futureTime**: Use `[number][type="D,M,Y"]` (i.e. "3D")  with the `futurelayer` parameter to denote a layer that has a dynamic, future end date. The `[number]` parameter represents the dateInterval, `[type]` can be equal to `"D"`, `"M"`, or `"Y"` to represent day, month or year interval.
 
 A *projections* object must exist which contains an object for each projection supported by this layer. Projection information is keyed by the projection identifier (found in `config/wv.json/projections`). Example:
 

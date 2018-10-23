@@ -5,6 +5,7 @@ import CategoryList from './category-list';
 import ProductPickerHeader from './header';
 import lodashValues from 'lodash/values';
 import Scrollbars from '../util/scrollbar';
+import googleTagManager from 'googleTagManager';
 import {
   Modal,
   ModalBody,
@@ -83,6 +84,12 @@ class ProductPicker extends React.Component {
       selectedMeasurement: selectedMeasurement,
       category: category
     });
+    googleTagManager.pushEvent({
+      event: 'layers_category',
+      layers: {
+        category: category.title
+      }
+    });
   }
 
   /**
@@ -105,6 +112,12 @@ class ProductPicker extends React.Component {
   sort(key) {
     this.setState({
       categoryType: key
+    });
+    googleTagManager.pushEvent({
+      event: 'layers_meta_category',
+      layers: {
+        meta_category: key
+      }
     });
   }
   render() {

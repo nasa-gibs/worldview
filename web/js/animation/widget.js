@@ -1,6 +1,5 @@
-import $ from 'jquery';
 import AnimationWidget from '../components/animation-widget/animation-widget';
-import googleAnalytics from '../components/util/google-analytics';
+import googleTagManager from 'googleTagManager';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import lodashWithout from 'lodash/without';
@@ -56,7 +55,7 @@ export function animationWidget(models, config, ui) {
     );
     $timelineFooter = $('#timeline-footer');
     $animateButton.on('click', function() {
-      googleAnalytics.event('Animation', 'Click', 'Animation Icon');
+      googleTagManager.pushEvent({ 'event': 'GIF_setup_animation_button' });
       self.toggleAnimationWidget();
     });
     if (model.rangeState.state === 'on') {
@@ -405,10 +404,22 @@ export function animationWidget(models, config, ui) {
    */
   self.onPressGIF = function() {
     let zoomLevel = ui.anim.ui.getInterval();
+    let looping = ui.anim.widget.reactComponent.state.looping;
     if (zoomLevel !== 'minute') {
       // zero out start/end date times
       self.setZeroDateTimes();
     }
+
+    let increment = self.getIncrements();
+    let frameSpeed = model.rangeState.speed;
+    googleTagManager.pushEvent({
+      'event': 'GIF_create_animated_button',
+      'GIF': {
+        'increment': increment,
+        'frameSpeed': frameSpeed,
+        'looping': looping
+      }
+    });
     model.events.trigger('gif-click');
   };
 

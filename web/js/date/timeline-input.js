@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import util from '../util/util';
 import DateSelector from '../components/date-selector/date-selector';
 import React from 'react';
@@ -152,6 +151,12 @@ export function timelineInput(models, config, ui) {
     var min = model.minDate();
     var max = model.maxDate();
     var date = model[model.activeDate];
+    var maxZoom = model.maxZoom;
+    if (config.parameters.showSubdaily) {
+      document.getElementById('timeline-header').classList.add('subdaily');
+      maxZoom = 4;
+    }
+
     return {
       width: '120',
       height: '30',
@@ -159,7 +164,7 @@ export function timelineInput(models, config, ui) {
       idSuffix: 'animation-widget-main',
       minDate: min,
       maxDate: max,
-      maxZoom: model.maxZoom,
+      maxZoom: maxZoom,
       onDateChange: onDateSelect,
       date: date,
       fontSize: null

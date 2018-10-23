@@ -9,7 +9,7 @@
 #wv-toolbar li {
   font-size: 14.3px;
   display: inline-block;
-  margin: 0;
+  margin: 0 0 0 4px;
   background: rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
   border-radius: 5px;

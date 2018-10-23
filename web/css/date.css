@@ -31,33 +31,6 @@ menu {
   -webkit-padding-start: 0;
 }
 
-.spanContainerLabel {
-  width: 25%;
-  float: left;
-  text-shadow: none;
-  display: block;
-  margin-top: 20px;
-  text-align: center;
-  font-size: 0.1em;
-  color: #fff;
-}
-
-.spanContainerLabelDate,
-.spanContainerLabelDay {
-  display: block;
-  font-size: 0.25em;
-}
-
-.spanContainerLabelDay {
-  font-size: 0.16em;
-}
-
-.spanContainer {
-  float: left;
-  min-height: 100%;
-  width: 100%;
-}
-
 div.datespan {
   width: auto;
   overflow: hidden;
@@ -76,26 +49,6 @@ div.datespan {
   display: block;
 }
 
-a.ecbutton {
-  display: block;
-  width: 24px;
-  height: 24px;
-  float: left;
-  position: relative;
-  background: transparent;
-  left: -28px;
-  top: 3px;
-}
-
-.dateSpanSlider {
-  display: none !important;
-}
-
-input.ui-slider-input {
-  width: 0;
-  margin: 0;
-}
-
 .slider {
   margin-bottom: 0;
   background: --webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.6)), color-stop(50%, rgba(0, 0, 0, 0.7)), to(rgba(0, 0, 0, 0.8)));
@@ -103,46 +56,6 @@ input.ui-slider-input {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.8) 100%);
   height: 23px;
   cursor: pointer;
-}
-
-:root ul.sliderLabel {
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr= '#90000', endColorstr='#c0000', GradientType=0) \0/IE9;
-}
-
-/* IE9 */
-ul.sliderLabel {
-  text-shadow: none;
-  color: #fff;
-  margin: -20px 0 0;
-  background: none;
-  overflow: hidden;
-}
-
-ul.sliderLabel li {
-  float: left;
-  background: none;
-  margin: 0;
-  text-align: center;
-  overflow: hidden;
-  font-weight: 700;
-  font-size: 0.9em;
-  padding: 0.1em 0;
-}
-
-div.sliderDivYear {
-  clear: both;
-}
-
-div.sliderDivMonth {
-  background: rgba(25, 30, 35, 0.5);
-}
-
-#timesliderLabelDay {
-  margin: -24px 0 0;
-}
-
-.disabledItem {
-  color: rgba(125, 125, 125, 0.9) !important;
 }
 
 a.ui-slider-handle {
@@ -182,20 +95,4 @@ div.ui-slider {
 
 a.ui-btn {
   margin: 0;
-}
-
-a.ui-shadow {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-a.ui-btn-up-c {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-#mapdiv {
-  margin: 0;
-  padding: 0;
-  left: 0;
 }

@@ -5,6 +5,7 @@ import TimeSelector from '../date-selector/date-selector';
 import LoopButton from './loop-button';
 import PlayButton from './play-button';
 import AnimWidgetHeader from './header';
+import googleTagManager from 'googleTagManager';
 
 /*
  * A react component, Builds a rather specific
@@ -91,6 +92,9 @@ class AnimationWidget extends React.Component {
   }
   onDateChange(date, id) {
     const { endDate, startDate } = this.state;
+    googleTagManager.pushEvent({
+      'event': 'GIF_animation_date_case'
+    });
     if (id === 'start') {
       this.setState({
         startDate: date

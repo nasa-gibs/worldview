@@ -6,9 +6,6 @@ etc/*
 lib/*
 options/*
 reports/*
-web/ext/*
-web/dist/*
-web/build/*
 test/*
-web/js/edsc/*
-
+web/*
+!web/css

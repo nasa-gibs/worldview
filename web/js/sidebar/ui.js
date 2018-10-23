@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import lodashFind from 'lodash/find';
 import lodashDebounce from 'lodash/debounce';
@@ -13,6 +12,7 @@ import { layersInfo } from '../layers/info';
 import { getZotsForActiveLayers } from '../layers/util';
 import { timelineDataHightlight } from '../date/util';
 import wvui from '../ui/ui';
+import googleTagManager from 'googleTagManager';
 
 export function sidebarUi(models, config, ui) {
   var isCollapsed = false;
@@ -36,7 +36,7 @@ export function sidebarUi(models, config, ui) {
       trailing: true
     });
     var layerAdd = function(layer) {
-      if (!ui.tour.resetting) {
+      if (!ui.tour.resetting && !ui.naturalEvents.selecting) {
         updateLayers();
         updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
       }
@@ -75,6 +75,7 @@ export function sidebarUi(models, config, ui) {
         .on('list-change', debounceUpdateEventsList)
         .on('selected-event', selected => {
           self.reactComponent.setState({ selectedEvent: selected });
+          updateLayers();
         });
     }
     if (models.compare) {
@@ -354,6 +355,9 @@ export function sidebarUi(models, config, ui) {
         updateState(getStateType(isCompareMode));
         break;
       case 'info':
+        googleTagManager.pushEvent({
+          'event': 'sidebar_layer_info'
+        });
         let $infoDialog = $('#wv-layers-info-dialog');
         if (
           $infoDialog.attr('data-layer') !== layerId ||
@@ -367,6 +371,9 @@ export function sidebarUi(models, config, ui) {
 
         break;
       case 'options':
+        googleTagManager.pushEvent({
+          'event': 'sidebar_layer_options'
+        });
         let $optionDialog = $('#wv-layers-options-dialog');
         if (
           $optionDialog.attr('data-layer') !== layerId ||

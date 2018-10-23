@@ -1,7 +1,6 @@
 import lodashEach from 'lodash/each';
 import lodashRound from 'lodash/round';
 import util from '../../util/util';
-import $ from 'jquery';
 
 var swipeOffset = null;
 var line = null;

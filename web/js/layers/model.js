@@ -6,6 +6,7 @@ import lodashFindIndex from 'lodash/findIndex';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import util from '../util/util';
+import googleTagManager from 'googleTagManager';
 
 export function layersModel(models, config) {
   var self = {};
@@ -27,7 +28,7 @@ export function layersModel(models, config) {
     self.clear();
     if (config.defaults && config.defaults.startingLayers) {
       lodashEach(config.defaults.startingLayers, function(start) {
-        self[layerStr] = self.add(start.id, start, layerStr);
+        self[layerStr] = self.add(start.id, start, layerStr, 'reset');
       });
     }
   };
@@ -136,6 +137,7 @@ export function layersModel(models, config) {
     var min = Number.MAX_VALUE;
     var max = 0;
     var range = false;
+    var maxDates = [];
     lodashEach(layers, function(def) {
       if (def.startDate) {
         range = true;
@@ -144,28 +146,53 @@ export function layersModel(models, config) {
       }
       // For now, we assume that any layer with an end date is
       // an ongoing product unless it is marked as inactive.
-      if (def.inactive && def.endDate) {
+      if (def.futureLayer && def.endDate) {
+        range = true;
+        max = util.parseDateUTC(def.endDate).getTime();
+        maxDates.push(new Date(max));
+      } else if (def.inactive && def.endDate) {
         range = true;
         var end = util.parseDateUTC(def.endDate).getTime();
         max = Math.max(max, end);
+        maxDates.push(new Date(max));
       } else if (def.endDate) {
         range = true;
         max = util.now().getTime();
+        maxDates.push(new Date(max));
       }
       // If there is a start date but no end date, this is a
       // product that is currently being created each day, set
       // the max day to today.
-      if (def.startDate && !def.endDate) {
+      if (def.futureLayer && def.futureTime && !def.endDate) {
+        // Calculate endDate + parsed futureTime from layer JSON
+        max = new Date();
+        var futureTime = def.futureTime;
+        var dateType = futureTime.slice(-1);
+        var dateInterval = futureTime.slice(0, -1);
+        if (dateType === 'D') {
+          max.setDate(max.getDate() + parseInt(dateInterval));
+          maxDates.push(new Date(max));
+        } else if (dateType === 'M') {
+          max.setMonth(max.getMonth() + parseInt(dateInterval));
+          maxDates.push(new Date(max));
+        } else if (dateType === 'Y') {
+          max.setYear(max.getYear() + parseInt(dateInterval));
+          maxDates.push(new Date(max));
+        }
+      } else if (def.startDate && !def.endDate) {
         max = util.now().getTime();
+        maxDates.push(new Date(max));
       }
     });
     if (range) {
       if (max === 0) {
         max = util.now().getTime();
+        maxDates.push(max);
       }
+      var maxDate = Math.max.apply(max, maxDates);
       return {
         start: new Date(min),
-        end: new Date(max)
+        end: new Date(maxDate)
       };
     }
   };
@@ -182,7 +209,7 @@ export function layersModel(models, config) {
     return endDate;
   };
 
-  self.add = function(id, spec, activeLayerString) {
+  self.add = function(id, spec, activeLayerString, addType) {
     activeLayerString = activeLayerString || self.activeLayers;
     if (
       lodashFind(self[activeLayerString], {
@@ -208,6 +235,15 @@ export function layersModel(models, config) {
       split[activeLayerString] += 1;
     } else {
       self[activeLayerString].splice(split[activeLayerString], 0, def);
+    }
+
+    if (self.loaded && addType !== 'natural-event' && addType !== 'reset') {
+      googleTagManager.pushEvent({
+        'event': 'layer_added',
+        'layers': {
+          'id': id
+        }
+      });
     }
     self.events.trigger('add', def, null, self[activeLayerString]);
     self.events.trigger('change');
@@ -251,7 +287,7 @@ export function layersModel(models, config) {
     var baseLayers =
       subGroup === 'baselayers' ? newSubGroup : layers.baselayers;
     var overlays = subGroup === 'overlays' ? newSubGroup : layers.overlays;
-    self[activeLayerString] = baseLayers.concat(overlays);
+    self[activeLayerString] = overlays.concat(baseLayers);
     self.events.trigger('update');
     self.events.trigger('change');
   };

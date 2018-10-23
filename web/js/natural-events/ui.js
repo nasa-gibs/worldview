@@ -8,7 +8,7 @@ import track from './track';
 import wvui from '../ui/ui';
 import util from '../util/util';
 import { naturalEventsUtilGetEventById } from './util';
-import googleAnalytics from '../components/util/google-analytics';
+import googleTagManager from 'googleTagManager';
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -24,6 +24,7 @@ export default function naturalEventsUI(models, ui, config, request) {
   model.active = false;
   self.markers = [];
   self.selected = {};
+  self.selecting = false;
   var naturalEventMarkers = markers(models, ui, config);
   var naturalEventsTrack = track(models, ui, config);
 
@@ -65,7 +66,9 @@ export default function naturalEventsUI(models, ui, config, request) {
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'events') {
         model.active = true;
-        googleAnalytics.event('Natural Events', 'Click', 'Events Tab');
+        googleTagManager.pushEvent({
+          'event': 'natural_events_tab'
+        });
 
         // Remove previously stored markers
         naturalEventMarkers.remove(self.markers);
@@ -156,10 +159,20 @@ export default function naturalEventsUI(models, ui, config, request) {
           if (!findSelectedInProjection) {
             self.deselectEvent();
             self.filterEventList();
+          } else {
+            let event = naturalEventsUtilGetEventById(
+              model.data.events,
+              self.selected.id
+            );
+            naturalEventsTrack.update(
+              event,
+              ui.map.selected,
+              self.selected.date,
+              self.selectEvent
+            );
           }
         }
       }
-      models.proj.events.trigger('change');
     });
   };
 
@@ -192,6 +205,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
     zoomToEvent(event, date, !isIdChange).then(function() {
+      self.selecting = true;
       if (isIdChange && !isSameCategory) {
         activateLayersForCategory(event.categories[0].title);
       }
@@ -234,6 +248,7 @@ export default function naturalEventsUI(models, ui, config, request) {
         eventVisibilityAlert.dialog('open');
       }
       naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
+      self.selecting = false;
     });
     model.events.trigger('selected-event', self.selected);
   };
@@ -359,7 +374,8 @@ export default function naturalEventsUI(models, ui, config, request) {
           {
             visible: visible
           },
-          layerString
+          layerString,
+          'natural-event'
         );
       }
     });

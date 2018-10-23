@@ -39,20 +39,10 @@ describe('browser', () => {
     answer: true,
     userAgent: 'Mozilla/5.0 (MSIE 9.0; Windows NT 6.1; Trident/5.0)'
   }, {
-    name: 'internet explorer 10',
-    fn: 'ie',
-    answer: true,
-    userAgent: 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C)'
-  }, {
     name: 'not internet explorer',
     fn: 'ie',
     answer: false,
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:26.0) Gecko/20100101 Firefox/26.0'
-  }, {
-    name: 'internet explorer version',
-    fn: 'ieVersion',
-    answer: 9,
-    userAgent: 'Mozilla/5.0 (MSIE 9.0; Windows NT 6.1; Trident/5.0)'
   }];
 
   tests.forEach((t) => {

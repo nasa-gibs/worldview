@@ -6,6 +6,7 @@
                 ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
                 ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
                 ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
+                ["VIIRS_SNPP_DayNightBand_ENCC", false],
                 ["MODIS_Fires_Terra", true],
                 ["MODIS_Fires_Aqua", false],
                 ["Reference_Features", true],
@@ -44,6 +45,7 @@
             "Severe Storms": [
                 ["Reference_Features", true],
                 ["Reference_Labels", true],
+                ["VIIRS_SNPP_DayNightBand_ENCC", false],
                 ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true],
                 ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
                 ["MODIS_Terra_CorrectedReflectance_TrueColor", false]
@@ -85,6 +87,7 @@
                 ["MODIS_Terra_CorrectedReflectance_TrueColor", true],
                 ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
                 ["VIIRS_SNPP_CorrectedReflectance_TrueColor", false],
+                ["VIIRS_SNPP_DayNightBand_ENCC", false],
                 ["MODIS_Fires_Terra", true],
                 ["MODIS_Fires_Aqua", false],
                 ["Reference_Features", true],
@@ -127,6 +130,7 @@
             "Severe Storms": [
                 ["Reference_Features", true],
                 ["Reference_Labels", true],
+                ["VIIRS_SNPP_DayNightBand_ENCC", false],
                 ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true],
                 ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
                 ["MODIS_Terra_CorrectedReflectance_TrueColor", false],
@@ -189,6 +193,7 @@
                 ["Reference_Features", true],
                 ["Reference_Labels", true],
                 ["Coastlines", true],
+                ["VIIRS_SNPP_DayNightBand_ENCC", false],
                 ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true],
                 ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
                 ["MODIS_Terra_CorrectedReflectance_TrueColor", false]

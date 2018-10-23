@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dragger from './dragger.js';
 import DraggerRange from './dragger-range.js';
+import googleTagManager from 'googleTagManager';
 
 /*
  * A react component, is a draggable svg
@@ -19,13 +20,18 @@ class TimelineRangeSelector extends React.Component {
     this.state = {
       startLocation: props.startLocation,
       endLocation: props.endLocation,
-      max: props.max
+      startLocationDate: props.startLocationDate,
+      endLocationDate: props.endLocationDate,
+      max: props.max,
+      deltaStart: 0
     };
   }
   componentWillReceiveProps(props) {
     this.setState({
       startLocation: props.startLocation,
       endLocation: props.endLocation,
+      startLocationDate: props.startLocationDate,
+      endLocationDate: props.endLocationDate,
       max: props.max
     });
   }
@@ -54,7 +60,7 @@ class TimelineRangeSelector extends React.Component {
         return;
       }
       if (startX + this.props.pinWidth >= endX) {
-        if (startX + this.props.pinWidth >= this.state.max) {
+        if (startX + this.props.pinWidth >= this.state.max.width) {
           return;
         } else {
           endX = startX + this.props.pinWidth;
@@ -63,7 +69,7 @@ class TimelineRangeSelector extends React.Component {
     } else if (id === 'end') {
       startX = this.state.startLocation;
       endX = deltaX + this.state.endLocation;
-      if (endX > this.state.max || startX > endX) {
+      if (endX > this.state.max.width || startX > endX) {
         return;
       }
       if (startX + 2 * this.props.pinWidth >= endX) {
@@ -72,7 +78,7 @@ class TimelineRangeSelector extends React.Component {
     } else {
       startX = deltaX + this.state.startLocation;
       endX = deltaX + this.state.endLocation;
-      if (endX >= this.state.max || startX < 0) {
+      if (endX >= this.state.max.width || startX < 0) {
         return;
       }
     }
@@ -83,7 +89,6 @@ class TimelineRangeSelector extends React.Component {
       endLocation: endX
     });
   }
-
   /*
    * Send callback with new locations on
    * Drag Stop
@@ -94,30 +99,64 @@ class TimelineRangeSelector extends React.Component {
    */
   onDragStop() {
     this.props.onDrag(this.state.startLocation, this.state.endLocation);
+    googleTagManager.pushEvent({
+      'event': 'GIF_animation_dragger'
+    });
   }
-  onRangeClick(d) {
-    this.props.onRangeClick(d.nativeEvent);
+  /*
+  * Send callback with click event
+  *
+  * @method onRangeClick
+  *
+  * @param {object} d - proxy click event object
+  *
+  * @return {void}
+  */
+  onRangeClick(e) {
+    this.props.onRangeClick(e.nativeEvent);
+  }
+  /*
+   * Update state based on distance range was dragged
+   *
+   * @method onRangeDrag
+   *
+   * @param {number} d - change in x
+   * @param {number} deltaStart - delta start to track changes
+   *
+   * @return {void}
+   */
+  onRangeDrag(d, deltaStart) {
+    this.setState({
+      startLocation: this.state.startLocation + d,
+      endLocation: this.state.endLocation + d,
+      deltaStart: deltaStart
+    });
+    this.props.onDrag(this.state.startLocation, this.state.endLocation);
   }
   /*
    * @method render
    */
   render() {
     return (
-      <svg
-        id="wv-timeline-range-selector"
-        className="wv-timeline-range-selector"
-      >
+      <svg id="wv-timeline-range-selector" className="wv-timeline-range-selector">
         <DraggerRange
-          width={this.props.pinWidth}
-          endLocation={this.state.endLocation}
           opacity={this.props.rangeOpacity}
-          color={this.props.rangeColor}
-          height={this.props.height}
-          startLocation={this.state.startLocation + this.props.pinWidth}
-          onClick={this.onRangeClick.bind(this)}
+          startLocation={this.state.startLocation}
+          endLocation={this.state.endLocation}
+          startLocationDate={this.state.startLocationDate}
+          endLocationDate={this.state.endLocationDate}
+          timelineStartDateLimit={this.props.timelineStartDateLimit}
+          timelineEndDateLimit={this.props.timelineEndDateLimit}
+          deltaStart={this.state.deltaStart}
           max={this.state.max}
-          id="range"
-        />
+          height={this.props.height}
+          width={this.props.pinWidth}
+          color={this.props.rangeColor}
+          draggerID='range-selector-range'
+          onClick={this.onRangeClick.bind(this)}
+          onDrag={this.onRangeDrag.bind(this)}
+          onStop={this.onDragStop.bind(this)}
+          id='range'/>
         <Dragger
           position={this.state.startLocation}
           color={this.props.startColor}
@@ -125,25 +164,23 @@ class TimelineRangeSelector extends React.Component {
           height={this.props.height}
           onDrag={this.onItemDrag.bind(this)}
           onStop={this.onDragStop.bind(this)}
-          max={this.state.max}
-          draggerID="range-selector-dragger-1"
+          max={this.state.max.width}
+          draggerID='range-selector-dragger-1'
           backgroundColor={this.props.startTriangleColor}
           first={true}
-          id="start"
-        />
+          id='start' />
         <Dragger
-          max={this.state.max}
+          max={this.state.max.width}
           position={this.state.endLocation}
           color={this.props.endColor}
           width={this.props.pinWidth}
           height={this.props.height}
           first={false}
-          draggerID="range-selector-dragger-2"
+          draggerID='range-selector-dragger-2'
           onDrag={this.onItemDrag.bind(this)}
           onStop={this.onDragStop.bind(this)}
           backgroundColor={this.props.endTriangleColor}
-          id="end"
-        />
+          id='end'/>
       </svg>
     );
   }
@@ -152,7 +189,11 @@ class TimelineRangeSelector extends React.Component {
 TimelineRangeSelector.propTypes = {
   startLocation: PropTypes.number,
   endLocation: PropTypes.number,
-  max: PropTypes.number,
+  startLocationDate: PropTypes.string,
+  endLocationDate: PropTypes.string,
+  timelineStartDateLimit: PropTypes.string,
+  timelineEndDateLimit: PropTypes.string,
+  max: PropTypes.object,
   pinWidth: PropTypes.number,
   height: PropTypes.number,
   onDrag: PropTypes.func,

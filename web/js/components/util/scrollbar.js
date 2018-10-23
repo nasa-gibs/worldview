@@ -15,7 +15,6 @@ export default class SimpleBar extends React.Component {
   }
   componentDidUpdate() {
     this.updateBoolean();
-    this.scrollBar.recalculate(); // Necessary for IE10 and below
   }
   /**
    * Use offsetHeight to determine if scrollbar should be visible

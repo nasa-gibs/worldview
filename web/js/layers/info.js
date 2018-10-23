@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import 'perfect-scrollbar/jquery';
 import lodashForEachRight from 'lodash/forEachRight';

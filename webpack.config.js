@@ -6,14 +6,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+// production optimizations
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
 
-const devMode =
-  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'testing';
+// environment dev flag
+const devMode = process.env.NODE_ENV !== 'production';
 
 const pluginSystem = [
   new CleanWebpackPlugin(['web/build']),
@@ -22,12 +21,6 @@ const pluginSystem = [
     title: 'Worldview',
     filename: 'web/index.html',
     inject: false
-  }),
-  new webpack.ProvidePlugin({
-    $: 'jquery',
-    jQuery: 'jquery',
-    'window.jQuery': 'jquery',
-    'window.$': 'jquery'
   }),
   new MiniCssExtractPlugin({
     filename: 'wv.css'
@@ -38,15 +31,16 @@ const pluginSystem = [
 
 /* Conditional Plugin Management */
 // add hot module replacement
-if (process.env.NODE_ENV === 'development') {
+if (devMode) {
   pluginSystem.push(
     new webpack.HotModuleReplacementPlugin(), // use path to module for development performance
     new webpack.NamedModulesPlugin()
   );
 }
 
-// add bundle analzyer
-if (process.env.NODE_ENV === 'analyze') {
+// conditionally required and add plugin bundle analzyer
+if (process.env.ANALYZE_MODE === 'true') {
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
 
@@ -54,13 +48,18 @@ if (process.env.NODE_ENV === 'analyze') {
 let entryPoint = './web/js/main.js';
 let outputFileName = 'wv.js';
 /*
-if (process.env.NODE_ENV === 'testing') {
+if (process.env.TESTING_MODE === 'true') {
   entryPoint = './test/main.js';
   outputFileName = 'wv-test-bundle.js';
 }
 */
 
 module.exports = {
+  resolve: {
+    alias: {
+      googleTagManager$: path.resolve(__dirname, './web/js/components/util/google-tag-manager.js')
+    }
+  },
   mode: devMode ? 'development' : 'production',
   stats: {
     // reduce output text on build - remove for more verbose

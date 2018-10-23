@@ -52,6 +52,7 @@ export function layersActive(models, ui, config) {
     } else {
       setMaxZoomlevel(3);
     }
+    if (ui.timeline) ui.timeline.resize();
   };
 
   init();

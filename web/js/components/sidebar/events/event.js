@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
 import lodashFind from 'lodash/find';
+import googleTagManager from 'googleTagManager';
 
 class Event extends React.Component {
   /**
@@ -50,6 +51,12 @@ class Event extends React.Component {
       deselectEvent();
     } else {
       selectEvent(event.id, date);
+      googleTagManager.pushEvent({
+        'event': 'natural_event_selected',
+        'natural_events': {
+          'category': event.categories[0].title
+        }
+      });
     }
   }
   /**
@@ -115,11 +122,9 @@ class Event extends React.Component {
           className={'event-icon event-icon-' + event.categories[0].slug}
           title={event.categories[0].title}
         />
-        <h4 className="title">
-          {event.title}
-          <br />
-          {dateString}
-        </h4>
+        <h4 className="title" dangerouslySetInnerHTML={{
+          __html: event.title + '<br />' + dateString
+        }}/>
         <p className="subtitle">{this.getReferenceList()}</p>
 
         {this.getDateLists()}

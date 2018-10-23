@@ -5,7 +5,7 @@
             "title":    "Wind Speed (Meridional, Monthly)",
             "subtitle": "CCMP",
             "description": "CCMP_REMSS_Meridional_Wind_Speed_Monthly",
-            "tags":     "",
+            "tags":     "podaac PO.DAAC",
             "layergroup": [
               "multi-mission",
               "multi-mission_merged"

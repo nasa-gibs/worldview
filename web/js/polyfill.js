@@ -7,9 +7,6 @@
 
 /* eslint-disable no-extend-native */
 
-import $ from 'jquery';
-import util from './util/util';
-
 export function polyfill () {
   /*
    * Date.toISOString
@@ -79,35 +76,6 @@ export function polyfill () {
   (function () {
     window.scrollTo(0, 0);
   })();
-
-  /*
-   * setTimeout that properly sets this and allows arguments. The only case where
-   * this is helpful at the moment is IE9 -- only attempt to do this in that case
-   *
-   * https://developer.mozilla.org/en-US/docs/Web/API/Window.setTimeout
-   */
-  if (util.browser.ie && util.browser.version <= 9) {
-    (function () {
-      var __nativeST__ = window.setTimeout;
-      var __nativeSI__ = window.setInterval;
-
-      window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
-        var oThis = this;
-        var aArgs = Array.prototype.slice.call(arguments, 2);
-        return __nativeST__(vCallback instanceof Function ? function () {
-          vCallback.apply(oThis, aArgs);
-        } : vCallback, nDelay);
-      };
-
-      window.setInterval = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
-        var oThis = this;
-        var aArgs = Array.prototype.slice.call(arguments, 2);
-        return __nativeSI__(vCallback instanceof Function ? function () {
-          vCallback.apply(oThis, aArgs);
-        } : vCallback, nDelay);
-      };
-    })();
-  }
 
   /*
    * String.contains

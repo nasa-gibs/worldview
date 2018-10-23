@@ -39,6 +39,10 @@
         "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
         "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
 
+        "GHRSST_L4_G1SST_Sea_Surface_Temperature",
+        "GHRSST_L4_MUR_Sea_Surface_Temperature",
+        "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",
+
         "MODIS_Terra_Aerosol",
         "MODIS_Aqua_Aerosol",
         "MODIS_Combined_Value_Added_AOD",
@@ -448,9 +452,6 @@
         "MEaSUREs_Daily_Landscape_Freeze_Thaw_AMSRE",
         "MEaSUREs_Daily_Landscape_Freeze_Thaw_SSMI",
 
-        "GHRSST_L4_G1SST_Sea_Surface_Temperature",
-        "GHRSST_L4_MUR_Sea_Surface_Temperature",
-        "GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature",
         "OSCAR_Sea_Surface_Currents_Meridional",
         "OSCAR_Sea_Surface_Currents_Zonal",
         "TOPEX-Poseidon_JASON_Sea_Surface_Height_Anomalies_GDR_Cycles",

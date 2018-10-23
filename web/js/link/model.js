@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import lodashEach from 'lodash/each';
 import lodashMap from 'lodash/map';
 import lodashIsArray from 'lodash/isArray';

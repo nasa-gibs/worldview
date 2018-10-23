@@ -1,8 +1,7 @@
-import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import * as olProj from 'ol/proj';
 import ImageResSelection from '../components/image-panel/select';
-import googleAnalytics from '../components/util/google-analytics';
+import googleTagManager from 'googleTagManager';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import React from 'react';
@@ -379,7 +378,18 @@ export function imagePanel(models, ui, config, dialogConfig) {
       imageUtilGetLayerOpacities(products),
       url
     );
-    googleAnalytics.event('Image Download', 'Click', 'Download');
+    googleTagManager.pushEvent({
+      'event': 'image_download',
+      'layers': {
+        'activeCount': models.layers.active.length
+      },
+      'image': {
+        'resolution': imgRes,
+        'format': imgFormat,
+        'worldfile': imgWorldfile
+      }
+    });
+
     util.metrics(
       'lc=' +
         encodeURIComponent(

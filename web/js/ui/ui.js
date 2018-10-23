@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import loadingIndicator from './indicator';
 import uiInfo from './info';
