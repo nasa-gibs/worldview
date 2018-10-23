@@ -204,7 +204,14 @@ LayerList.propTypes = {
   listType: PropTypes.string,
   expandedMeasurements: PropTypes.object,
   activeMeasurementIndex: PropTypes.number,
-  selectedProjection: PropTypes.string
+  selectedProjection: PropTypes.string,
+  hasMeasurementSource: PropTypes.func,
+  selectedMeasurement: PropTypes.string,
+  hasMeasurementSetting: PropTypes.func,
+  updateSelectedMeasurement: PropTypes.func,
+  measurementConfig: PropTypes.object,
+  layerConfig: PropTypes.object,
+  category: PropTypes.object
 };
 
 export default LayerList;

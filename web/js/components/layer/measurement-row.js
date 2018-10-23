@@ -35,7 +35,6 @@ class LayerRow extends React.Component {
   /**
    * Toggle switch for the metadata info button and close arrow
    * @method toggleMetadataButtons
-   * @param {e} event
    * @return {void}
    */
   toggleMetadataExpansion() {
@@ -49,6 +48,11 @@ class LayerRow extends React.Component {
       isDateRangesExpanded: nextProps.isDateRangesExpanded
     });
   }
+  /**
+   * @param {String} orbitTitle
+   * @param {Object} measurement | Measurement Object
+   * @param {Object} layer | Layer Object
+   */
   renderOrbitListItem(orbitTitle, measurement, layer) {
     const { activeLayers } = this.props;
     return (
@@ -64,6 +68,11 @@ class LayerRow extends React.Component {
       </ListGroupItem>
     );
   }
+  /**
+   * Render orbits and layer selections for
+   * selected source
+   * @param {Object} source | Object containing source info
+   */
   renderSourceSettings(source) {
     const { layerConfig, measurement, activeLayers } = this.props;
     const { projection } = this.state;
@@ -148,6 +157,10 @@ class LayerRow extends React.Component {
       </div>
     );
   }
+  /**
+   * Toggle layer
+   * @param {String} id | Layer ID
+   */
   onClickLayer(id) {
     const { removeLayer, addLayer, activeLayers } = this.props;
     if (lodashFind(activeLayers, { id: id })) {
@@ -156,20 +169,11 @@ class LayerRow extends React.Component {
       addLayer(id);
     }
   }
-  requestMetaData(layer, palettePromise) {
-    if (this.state.palettes[layer.id]) {
-      return this.state.palettes[layer.id];
-    } else if (layer.palette) {
-      palettePromise(layer.id).then(palette => {
-        var palettes = this.state.palettes;
-        palettes[layer.id] = palette;
-        this.setState({
-          palettes: palettes
-        });
-      });
-    }
-    return null;
-  }
+  /**
+   * Request metadata if row is active and
+   * hide metadata when too many chars
+   * @param {Object} source | Source Object
+   */
   renderSourceMetaData(source) {
     const { sourceMetadata, getSourceMetadata } = this.props;
     const { isMetadataExpanded } = this.state;
@@ -209,6 +213,12 @@ class LayerRow extends React.Component {
       }
     }
   }
+  /**
+   * Render measurement content for selected source in
+   * `TabPane`
+   * @param {Object} measurement | Measurement Object
+   * @param {Object} source | Source Object
+   */
   renderSourceContent(measurement, source) {
     return (
       <TabContent
@@ -222,6 +232,13 @@ class LayerRow extends React.Component {
       </TabContent>
     );
   }
+  /**
+   * Render Possible sources for measurement
+   * @param {Object} measurement | Measurement Object
+   * @param {Object} source | Source Object
+   * @param {Number} index | Index of measurement
+   * @param {Number} activeSourceIndex | Index of active measurement
+   */
   renderSourceTabs(measurement, source, index, activeSourceIndex) {
     return (
       <NavItem
@@ -243,6 +260,9 @@ class LayerRow extends React.Component {
     const { isSelected } = this.state;
     this.setState({ isSelected: !isSelected });
   }
+  /**
+   * Render content when Active
+   */
   renderContent() {
     const { hasMeasurementSetting, measurement } = this.props;
     const { activeSourceIndex } = this.state;

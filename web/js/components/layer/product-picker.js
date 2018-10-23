@@ -35,11 +35,21 @@ class ProductPicker extends React.Component {
       selectedProjection: props.selectedProjection
     };
   }
+  /**
+   * Update modal visibility
+   * @function toggle
+   */
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
+  /**
+   * Either filter layers with search object or
+   * revert to initial state
+   * @function runSearch
+   * @param e | onChange event object
+   */
   runSearch(e) {
     const { filterProjections, filterSearch } = this.props;
     const { allLayers } = this.props;
@@ -61,6 +71,12 @@ class ProductPicker extends React.Component {
       });
     }
   }
+  /**
+   * Draw measurement list when category is clicked
+   * @function drawMeasurements
+   * @param {Object} category | category object
+   * @param {String} selectedMeasurement | Measurement ID
+   */
   drawMeasurements(category, selectedMeasurement) {
     this.setState({
       listType: 'measurements',
@@ -68,6 +84,11 @@ class ProductPicker extends React.Component {
       category: category
     });
   }
+
+  /**
+   * @function updateSelectedMeasurement
+   * @param {String} id | Measurement ID
+   */
   updateSelectedMeasurement(id) {
     if (this.state.selectedMeasurement !== id) {
       this.setState({ selectedMeasurement: id });
@@ -75,6 +96,12 @@ class ProductPicker extends React.Component {
       this.setState({ selectedMeasurement: null });
     }
   }
+  /**
+   * Update category type in which to sort
+   * e.g. Hazards and disasters or science
+   * disciplines
+   * @param {String} key | categoryType identifier
+   */
   sort(key) {
     this.setState({
       categoryType: key
