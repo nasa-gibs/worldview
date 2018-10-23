@@ -175,7 +175,9 @@ class ProductPicker extends React.Component {
                         active={sortKey === categoryType}
                       >
                         <NavLink onClick={this.sort.bind(this, sortKey)}>
-                          {sortKey}
+                          {sortKey === 'scientific'
+                            ? 'Science Disciplines'
+                            : sortKey}
                         </NavLink>
                       </NavItem>
                     ))}
