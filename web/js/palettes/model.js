@@ -252,8 +252,7 @@ export function palettesModel(models, config) {
   self.saveSingle = function(state, layerId, groupStr) {
     groupStr = groupStr || models.layers.activeLayers;
     var stateStr = 'l';
-    if (groupStr === 'activeB') stateStr = 'l1';
-
+    if (groupStr === 'activeB' && models.compare && models.compare.active) stateStr = 'l1';
     var attr = lodashFind(state[stateStr], {
       id: layerId
     }).attributes;
@@ -296,7 +295,7 @@ export function palettesModel(models, config) {
     var hasMax = false;
     var squash = [];
     var hasSquash = false;
-    if (groupStr === 'activeB') stateStr = 'l1';
+    if (groupStr === 'activeB' && models.compare && models.compare.active) stateStr = 'l1';
 
     for (var i = 0; i < self.getCount(layerId); i++) {
       var def = self.get(layerId, i, groupStr);
