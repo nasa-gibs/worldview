@@ -1,4 +1,5 @@
 ### Wind Speed (Daily)
+Temporal coverage: 18 March 2017 - present
 
 The CYGNSS/DDMI Ocean Surface Wind Speed (L3, 0.2x0.2 Degree Grid, Daily) layer is the Daily ocean surface wind speed (meters per second) as provided by the Delay Doppler Mapping Instrument (DDMI) on board the CYGNSS spacecraft constellation. The layer provides high resolution wind speed data that allows for global tropical ocean observation. The primary mission objective for CYGNSS is to provide frequent space‐based measurements of ocean surface wind speed in the inner core of tropical cyclones. The orbital asynchronicity with respect to the local solar daytime/nightime patterns may provide additional scientific opportunity to study wind speed variations and patterns due to the diurnal cycle.
 
