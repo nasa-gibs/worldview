@@ -369,6 +369,7 @@
 }
 
 .layers-all .layers-all-layer .source-metadata {
+  margin-top: 10px;
   border-top-width: 1px;
   color: #ddd;
   padding-right: 1.2em;
