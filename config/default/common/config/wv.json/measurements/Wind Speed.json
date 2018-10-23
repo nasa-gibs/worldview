@@ -3,7 +3,7 @@
         "Wind Speed": {
             "id": "wind-speed",
             "title":    "Wind Speed",
-            "subtitle": "GCOM-W1/AMSR2, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS, Merged Microwave Radiometers, CCMP, MERRA-2",
+            "subtitle": "GCOM-W1/AMSR2, CYGNSS/DDMI, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS, Merged Microwave Radiometers, CCMP, MERRA-2",
             "sources": {
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
@@ -15,6 +15,15 @@
                         "AMSR2_Wind_Speed_Night",
                         "GCOM_W1_Orbit_Asc",
                         "GCOM_W1_Orbit_Dsc"
+                    ]
+                },
+                "CYGNSS/DDMI": {
+                    "id": "cygnss-ddmi",
+                    "title": "CYGNSS/DDMI",
+                    "description": "cygnss/WindSpeed",
+                    "image": "",
+                    "settings": [
+                        "CYGNSS_L3_Wind_Speed_Daily"
                     ]
                 },
                 "DMSP-F08/SSMI": {
