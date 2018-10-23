@@ -287,7 +287,7 @@ export function layersModel(models, config) {
     var baseLayers =
       subGroup === 'baselayers' ? newSubGroup : layers.baselayers;
     var overlays = subGroup === 'overlays' ? newSubGroup : layers.overlays;
-    self[activeLayerString] = baseLayers.concat(overlays);
+    self[activeLayerString] = overlays.concat(baseLayers);
     self.events.trigger('update');
     self.events.trigger('change');
   };
