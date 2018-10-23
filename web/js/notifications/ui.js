@@ -369,7 +369,7 @@ export function notificationsUi(models, config) {
     width = 625;
     height = 'auto';
 
-    if (util.browser.small || util.browser.touchDevice) {
+    if (util.browser.small) {
       width = $(window)
         .width();
       height = $(window)
