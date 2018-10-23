@@ -6,6 +6,7 @@ import lodashIsUndefined from 'lodash/isUndefined';
 import lodashParseInt from 'lodash/parseInt';
 import util from '../util/util';
 import palettes from './palettes';
+import Promise from 'bluebird';
 
 export function palettesModel(models, config) {
   config.palettes = config.palettes || {
