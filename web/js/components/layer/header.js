@@ -58,7 +58,11 @@ class ProductPickerHeader extends React.Component {
                 Categories
               </BreadcrumbItem>
               <BreadcrumbItem active tag="span">
-                {category ? category.title : ''}
+                {listType === 'search'
+                  ? 'Search Results'
+                  : category
+                    ? category.title
+                    : ''}
               </BreadcrumbItem>
             </Breadcrumb>
           </React.Fragment>
