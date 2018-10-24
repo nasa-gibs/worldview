@@ -204,7 +204,7 @@
       "node_modules/(?!(ol)/)"
     ],
     "modulePathIgnorePatterns": [
-      "build/"
+      "<rootDir>/build/"
     ]
   },
   "prettier": {

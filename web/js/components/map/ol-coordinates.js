@@ -54,7 +54,7 @@ class OlCoordinates extends React.Component {
       let cl = event.relatedTarget.classList;
       // Ignore when the mouse goes over the coordinate display. Clearing
       // the coordinates in this situation causes a flicker.
-      if (cl.contains('map-coord') || cl.contains('coord-btn')) {
+      if (cl.contains('map-coord')) {
         return;
       }
     }
