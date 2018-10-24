@@ -56,7 +56,10 @@ class LayerRow extends React.Component {
   renderOrbitListItem(orbitTitle, measurement, layer) {
     const { activeLayers } = this.props;
     return (
-      <ListGroupItem key={measurement.id + '-' + layer.id}>
+      <ListGroupItem
+        key={measurement.id + '-' + layer.id}
+        onClick={this.onClickLayer.bind(this, layer.id)}
+      >
         <Checkbox
           name={layer.title}
           checked={!!activeLayers[layer.id]}
