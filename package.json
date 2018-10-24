@@ -203,6 +203,9 @@
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(ol)/)"
+    ],
+    "modulePathIgnorePatterns": [
+      "build/"
     ]
   },
   "prettier": {
