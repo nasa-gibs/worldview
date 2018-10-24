@@ -8,6 +8,7 @@ class OlCoordinates extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      hasMouse: false,
       latitude: null,
       longitude: null,
       crs: null,
@@ -40,6 +41,7 @@ class OlCoordinates extends React.Component {
     }
 
     this.setState({
+      hasMouse: true,
       format: util.getCoordinateFormat(),
       latitude: pcoord[1],
       longitude: pcoord[0],
@@ -69,8 +71,8 @@ class OlCoordinates extends React.Component {
   }
 
   render() {
-    // if mobile return
-    if (util.browser.small) {
+    // Don't render until a mouse is being used
+    if (!this.state.hasMouse) {
       return null;
     }
 
