@@ -23,7 +23,7 @@ export function layersModal(models, ui, config) {
       React.createElement(LayerList, getInitialProps(models.proj.selected.id)),
       $(self.selector + ' #layers-all')[0]
     );
-    model.events.on('remove', onLayerRemoved);
+    model.events.on('remove', onLayerAddRemove).on('add', onLayerAddRemove);
     if (models.compare) {
       models.compare.events.on('change', () => {
         self.reactList.setState({ activeLayers: model[model.activeLayers] });
@@ -171,7 +171,7 @@ export function layersModal(models, ui, config) {
   self.isOpen = function() {
     return self.reactList.state.isOpen;
   };
-  var onLayerRemoved = function(layer) {
+  var onLayerAddRemove = function(layer) {
     if (self.reactList) {
       self.reactList.setState({
         activeLayers: model[model.activeLayers]

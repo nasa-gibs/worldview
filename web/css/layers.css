@@ -569,6 +569,7 @@
   background: transparent;
   border-color: transparent;
   padding: 6px 10px;
+  cursor: pointer;
 }
 .measurement-row .source-sub-group .list-group-item:hover {
   background: #ffffff4d;
@@ -580,6 +581,8 @@
 .measurement-row .wv-checkbox label {
   display: inline;
   color: #ddd;
+  padding-left: 5px;
+  pointer-events: none;
 }
 .layers-all .metadata-more,
 .measurement-row .metadata-more {

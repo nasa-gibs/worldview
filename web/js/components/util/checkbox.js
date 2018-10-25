@@ -13,18 +13,34 @@ export class Checkbox extends React.Component {
       checked: props.checked
     };
   }
-
+  componentWillReceiveProps(nextProps) {
+    if (this.state.checked !== nextProps.checked) {
+      this.setState({
+        checked: nextProps.checked
+      });
+    }
+  }
+  onClick(e) {
+    const { onClick } = this.props;
+    console.log('onClick');
+    if (onClick) {
+      e.stopPropagation();
+      onClick(e);
+    }
+  }
   handleChange(e) {
-    var boo = !this.state.checked;
+    const { onCheck } = this.props;
+    const boo = !this.state.checked;
     this.setState({
       checked: boo
     });
-    this.props.onCheck(boo);
+    if (onCheck) onCheck(boo);
   }
   render() {
     return (
       <div
         className={this.state.checked ? 'wv-checkbox checked' : 'wv-checkbox'}
+        onClick={this.onClick.bind(this)}
       >
         <input
           type="checkbox"

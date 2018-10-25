@@ -42,11 +42,18 @@ class LayerRow extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      checked: nextProps.isEnabled,
-      isMetadataExpanded: nextProps.isMetadataExpanded,
-      isDateRangesExpanded: nextProps.isDateRangesExpanded
-    });
+    const { isEnabled, isMetadataExpanded, isDateRangesExpanded } = this.state;
+    if (
+      nextProps.checked !== isEnabled ||
+      nextProps.isMetadataExpanded !== isMetadataExpanded ||
+      nextProps.isDateRangesExpanded !== isDateRangesExpanded
+    ) {
+      this.setState({
+        checked: nextProps.isEnabled,
+        isMetadataExpanded: nextProps.isMetadataExpanded,
+        isDateRangesExpanded: nextProps.isDateRangesExpanded
+      });
+    }
   }
   /**
    * @param {String} orbitTitle
@@ -55,6 +62,7 @@ class LayerRow extends React.Component {
    */
   renderOrbitListItem(orbitTitle, measurement, layer) {
     const { activeLayers } = this.props;
+
     return (
       <ListGroupItem
         key={measurement.id + '-' + layer.id}
@@ -62,8 +70,8 @@ class LayerRow extends React.Component {
       >
         <Checkbox
           name={layer.title}
-          checked={!!activeLayers[layer.id]}
-          onCheck={this.onClickLayer.bind(this, layer.id)}
+          checked={!!lodashFind(activeLayers, { id: layer.id })}
+          onClick={this.onClickLayer.bind(this, layer.id)}
           label={orbitTitle}
           id={'setting-' + layer.id}
           classNames="settings-check"
@@ -109,11 +117,14 @@ class LayerRow extends React.Component {
           );
         } else {
           LayerSouceList.push(
-            <ListGroupItem key={measurement.id + '-' + layer.id}>
+            <ListGroupItem
+              key={measurement.id + '-' + layer.id}
+              onClick={this.onClickLayer.bind(this, layer.id)}
+            >
               <Checkbox
                 name={layer.title}
-                checked={!!activeLayers[layer.id]}
-                onCheck={this.onClickLayer.bind(this, layer.id)}
+                onClick={this.onClickLayer.bind(this, layer.id)}
+                checked={!!lodashFind(activeLayers, { id: layer.id })}
                 label={layer.title}
                 id={'setting-' + layer.id}
                 classNames="settings-check"
