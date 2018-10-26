@@ -63,7 +63,12 @@ class Sidebar extends React.Component {
       newHeight =
         windowHeight -
         (iconHeight + topOffset + tabHeight + basePadding + footerHeight);
-      if (subComponentHeight !== newHeight) {
+      // Issue #1415: This was checking for subComponentHeight !== newHeight.
+      // Sometimes it would get stuck in a loop in which the newHeight
+      // would vary by a single pixel on each render. Hack fix is to
+      // only update when changed by more than a single pixel. This probably
+      // needs a refactoring.
+      if (Math.abs(subComponentHeight - newHeight) > 1) {
         this.setState({ subComponentHeight: newHeight });
       }
     } else {
@@ -71,7 +76,8 @@ class Sidebar extends React.Component {
       let tabHeight = 32;
       let footerHeight = this.footerElement.clientHeight;
       newHeight = windowHeight - (tabHeight + footerHeight);
-      if (subComponentHeight !== newHeight) {
+      // See note above
+      if (Math.abs(subComponentHeight - newHeight) > 1) {
         this.setState({ subComponentHeight: newHeight });
       }
     }
