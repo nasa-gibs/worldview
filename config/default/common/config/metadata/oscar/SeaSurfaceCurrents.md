@@ -1,5 +1,6 @@
 ### Sea Surface Currents (Meridional)
-Temporal coverage: 6 December 2011 - Present
+Temporal coverage: 12 October 1992 - present
+
 
 ### Sea Surface Currents (Zonal)
-Temporal coverage: 6 December 2011 - Present
+Temporal coverage: 12 October 1992 - present
