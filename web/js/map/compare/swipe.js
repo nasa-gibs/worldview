@@ -11,6 +11,7 @@ var mapCase;
 var listenerObj;
 var percentSwipe = null;
 const SWIPE_PADDING = 30;
+
 export class Swipe {
   constructor(
     olMap,
@@ -37,6 +38,7 @@ export class Swipe {
   getSwipeOffset() {
     return swipeOffset;
   }
+
   /**
    * Recursively apply listeners to layers
    * @param {Object} layer | Layer or layer Group obj
@@ -151,46 +153,64 @@ var addLineOverlay = function(map) {
 
   // Add event listeners to Elements
   [lineCaseEl, draggerEl].forEach(el => {
-    el.addEventListener(listenerObj.start, evt => {
-      events.trigger('moveStart');
-      evt.preventDefault();
-      evt.stopPropagation();
-      function move(evt) {
-        var windowWidth = util.browser.dimensions[0];
-        evt.preventDefault();
-        evt.stopPropagation();
+    el.addEventListener('mousedown', function onTouchEnd() {
+      listenerObj = {
+        type: 'default',
+        start: 'mousedown',
+        move: 'mousemove',
+        end: 'mouseup'
+      };
+      dragLine(listenerObj, lineCaseEl, map);
+    }, true);
 
-        if (listenerObj.type === 'touch') {
-          swipeOffset = evt.touches[0].pageX;
-        } else {
-          swipeOffset = evt.clientX;
-        }
-        // Prevent swiper from being swiped off screen
-        swipeOffset =
-          swipeOffset > windowWidth - SWIPE_PADDING
-            ? windowWidth - SWIPE_PADDING
-            : swipeOffset < SWIPE_PADDING
-              ? SWIPE_PADDING
-              : swipeOffset;
-        percentSwipe = swipeOffset / windowWidth;
-        lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
-
-        map.render();
-      }
-      function end(evt) {
-        events.trigger(
-          'moveend',
-          lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0)
-        );
-
-        window.removeEventListener(listenerObj.move, move);
-        window.removeEventListener(listenerObj.end, end);
-      }
-      window.addEventListener(listenerObj.move, move);
-      window.addEventListener(listenerObj.end, end);
-    });
+    el.addEventListener('touchstart', function onTouchStart() {
+      listenerObj = {
+        type: 'touch',
+        start: 'touchstart',
+        move: 'touchmove',
+        end: 'touchend'
+      };
+      dragLine(listenerObj, lineCaseEl, map);
+    }, true);
   });
+
   return lineCaseEl;
+};
+
+var dragLine = function(listenerObj, lineCaseEl, map) {
+  function move(evt) {
+    var windowWidth = util.browser.dimensions[0];
+    if (listenerObj.type === 'mouse') evt.preventDefault();
+    evt.stopPropagation();
+
+    if (listenerObj.type === 'touch') {
+      swipeOffset = evt.touches[0].pageX;
+    } else {
+      swipeOffset = evt.clientX;
+    }
+    // Prevent swiper from being swiped off screen
+    swipeOffset =
+      swipeOffset > windowWidth - SWIPE_PADDING
+        ? windowWidth - SWIPE_PADDING
+        : swipeOffset < SWIPE_PADDING
+          ? SWIPE_PADDING
+          : swipeOffset;
+    percentSwipe = swipeOffset / windowWidth;
+    lineCaseEl.style.transform = 'translateX( ' + swipeOffset + 'px)';
+
+    map.render();
+  }
+  function end(evt) {
+    events.trigger(
+      'moveend',
+      lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0)
+    );
+
+    window.removeEventListener(listenerObj.move, move);
+    window.removeEventListener(listenerObj.end, end);
+  }
+  window.addEventListener(listenerObj.move, move);
+  window.addEventListener(listenerObj.end, end);
 };
 /**
  * Add listeners for layer clipping
