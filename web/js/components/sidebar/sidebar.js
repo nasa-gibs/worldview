@@ -41,7 +41,8 @@ class Sidebar extends React.Component {
       dataDownloadObject: {},
       selectedDataProduct: props.selectedDataProduct,
       showDataUnavailableReason: props.showDataUnavailableReason,
-      projection: props.projection
+      projection: props.projection,
+      modalOpen: false
     };
   }
   componentDidMount() {
@@ -91,7 +92,7 @@ class Sidebar extends React.Component {
   toggleSidebar() {
     var isNowCollapsed = !this.state.isCollapsed;
     googleTagManager.pushEvent({
-      'event': 'sidebar_chevron'
+      event: 'sidebar_chevron'
     });
     if (this.props.localStorage) {
       let storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
@@ -161,6 +162,7 @@ class Sidebar extends React.Component {
       onGetData,
       windowHeight,
       filterEventList,
+      modalOpen,
       projection
     } = this.state;
     const {
@@ -216,6 +218,11 @@ class Sidebar extends React.Component {
         />
         <div
           id="productsHolder"
+          className={
+            modalOpen
+              ? 'layer-modal-open products-holder-case'
+              : 'products-holder-case'
+          }
           style={
             isCollapsed
               ? { maxHeight: '0' }

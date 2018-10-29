@@ -57,6 +57,11 @@ export function sidebarUi(models, config, ui) {
     models.layers.events
       .on('add', layerAdd)
       .on('remove', updateLayers)
+      .on('modal', val => {
+        self.reactComponent.setState({
+          modalOpen: val
+        });
+      })
       .on('update', updateLayers);
 
     ui.tour.events.on('reset', () => {
@@ -64,6 +69,7 @@ export function sidebarUi(models, config, ui) {
       updateData();
       updateState('isCompareMode');
     });
+
     models.palettes.events
       .on('set-custom', updateLayers)
       .on('clear-custom', updateLayers)
@@ -356,7 +362,7 @@ export function sidebarUi(models, config, ui) {
         break;
       case 'info':
         googleTagManager.pushEvent({
-          'event': 'sidebar_layer_info'
+          event: 'sidebar_layer_info'
         });
         let $infoDialog = $('#wv-layers-info-dialog');
         if (
@@ -372,7 +378,7 @@ export function sidebarUi(models, config, ui) {
         break;
       case 'options':
         googleTagManager.pushEvent({
-          'event': 'sidebar_layer_options'
+          event: 'sidebar_layer_options'
         });
         let $optionDialog = $('#wv-layers-options-dialog');
         if (

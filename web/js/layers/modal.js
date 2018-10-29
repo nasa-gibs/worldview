@@ -61,7 +61,10 @@ export function layersModal(models, ui, config) {
       layerConfig: config.layers,
       categoryConfig: config.categories,
       width: modalWidth,
-      height: modalHeight
+      height: modalHeight,
+      onToggleModal: boo => {
+        model.events.trigger('modal', boo);
+      }
     };
   };
   var getLayersForProjection = function(projection) {
@@ -174,6 +177,7 @@ export function layersModal(models, ui, config) {
       isOpen: true,
       selectedProjection: models.proj.selected.id
     });
+    model.events.trigger('modal', true);
   };
   self.isOpen = function() {
     return self.reactList.state.isOpen;

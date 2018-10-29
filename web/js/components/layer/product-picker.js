@@ -42,9 +42,11 @@ class ProductPicker extends React.Component {
    * @function toggle
    */
   toggle() {
+    const val = !this.state.isOpen;
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: val
     });
+    this.props.onToggleModal(val);
   }
   /**
    * Either filter layers with search object or
