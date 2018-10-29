@@ -34,7 +34,7 @@ class CategoryList extends React.Component {
       ['asc']
     );
     return (
-      <Masonry options={masonryOptions}>
+      <Masonry className="category-masonry-case" options={masonryOptions}>
         {orderedCategories.map(category => (
           <Category
             key={category.id}

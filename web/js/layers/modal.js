@@ -11,7 +11,6 @@ export function layersModal(models, ui, config) {
   var model = models.layers;
   var self = {};
   self.selector = '#layer-modal';
-  self.id = 'layer-modal';
   self.metadata = {};
 
   var gridItemWidth = 320; // with of grid item + spacing
@@ -21,7 +20,7 @@ export function layersModal(models, ui, config) {
   var init = function() {
     self.reactList = ReactDOM.render(
       React.createElement(LayerList, getInitialProps(models.proj.selected.id)),
-      $(self.selector + ' #layers-all')[0]
+      $(self.selector)[0]
     );
     model.events.on('remove', onLayerAddRemove).on('add', onLayerAddRemove);
     if (models.compare) {

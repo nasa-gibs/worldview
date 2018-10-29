@@ -672,6 +672,9 @@
 .custom-layer-dialog .modal-body {
   padding-top: 0;
 }
+.custom-layer-dialog .category-masonry-case {
+  overflow: hidden;
+}
 .layer-bread-crumb .breadcrumb {
   margin-bottom: 0;
   background-color: #fff;
