@@ -822,6 +822,8 @@
         "GPM_Orbit_Dsc",
         "GCOM_W1_Orbit_Asc",
         "GCOM_W1_Orbit_Dsc",
+        "GCOM_C_Orbit_Asc",
+        "GCOM_C_Orbit_Dsc",
         "Sentinel_2A_Orbit_Asc",
         "Sentinel_2A_Orbit_Dsc",
         "Sentinel_2B_Orbit_Asc",
