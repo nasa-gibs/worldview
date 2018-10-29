@@ -3,7 +3,7 @@
         "Orbital Track": {
             "id": "orbital-track",
             "title":    "Orbital Track & Overpass Time",
-            "subtitle": "Space-Track.org / Aqua, Terra, Aura, CALIPSO, GPM, GCOM-W1, Suomi-NPP, NOAA-20, SMAP, Landsat 7, Landsat 8, Sentinel-2A, Sentinel-2B, Sentinel-5P, ISS, GOSAT",
+            "subtitle": "Space-Track.org / Aqua, Terra, Aura, CALIPSO, GPM, GCOM-W1, GCOM-C, Suomi-NPP, NOAA-20, SMAP, Landsat 7, Landsat 8, Sentinel-2A, Sentinel-2B, Sentinel-5P, ISS, GOSAT",
             "sources": {
                 "Terra / Space-Track.org": {
                     "id": "space-track-org-terra",
@@ -56,13 +56,23 @@
                     ]
                 },
                 "GCOM-W1 / Space-Track.org": {
-                    "id": "space-track-org-gcom",
+                    "id": "space-track-org-gcomw1",
                     "title": "GCOM-W1 / Space-Track.org",
                     "description": "reference/orbits/GCOM-W1",
                     "image": "",
                     "settings": [
                         "GCOM_W1_Orbit_Asc",
                         "GCOM_W1_Orbit_Dsc"
+                    ]
+                },
+                "GCOM-C / Space-Track.org": {
+                    "id": "space-track-org-gcomc",
+                    "title": "GCOM-C / Space-Track.org",
+                    "description": "reference/orbits/GCOM-C",
+                    "image": "",
+                    "settings": [
+                        "GCOM_C_Orbit_Asc",
+                        "GCOM_C_Orbit_Dsc"
                     ]
                 },
                 "Sentinel-2A / Space-Track.org": {
