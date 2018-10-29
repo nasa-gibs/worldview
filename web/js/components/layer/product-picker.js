@@ -29,10 +29,11 @@ class ProductPicker extends React.Component {
       categoryType: Object.keys(props.categoryConfig)[0],
       height: props.height,
       width: props.width,
-      category: null,
+      category: props.category,
       activeLayers: props.activeLayers,
       allLayers: props.allLayers,
       selectedMeasurement: null,
+      filteredRows: props.filteredRows,
       selectedProjection: props.selectedProjection
     };
   }
@@ -143,6 +144,7 @@ class ProductPicker extends React.Component {
       layerConfig,
       modalView
     } = this.props;
+
     return (
       <Modal
         isOpen={isOpen}
@@ -165,51 +167,53 @@ class ProductPicker extends React.Component {
         <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
           <ModalBody>
             <div id="layer-modal-content" className="layer-modal-content">
-              {listType === 'category' ? (
-                <React.Fragment>
-                  <Nav tabs id="categories-nav" className="categories-nav">
-                    {Object.keys(categoryConfig).map(sortKey => (
-                      <NavItem
-                        key={sortKey}
-                        className="layer-category-navigation"
-                        active={sortKey === categoryType}
-                      >
-                        <NavLink onClick={this.sort.bind(this, sortKey)}>
-                          {sortKey === 'scientific'
-                            ? 'Science Disciplines'
-                            : sortKey}
-                        </NavLink>
-                      </NavItem>
-                    ))}
-                  </Nav>
-                  <CategoryList
-                    categories={lodashValues(categoryConfig[categoryType])}
-                    measurementConfig={measurementConfig}
-                    drawMeasurements={this.drawMeasurements.bind(this)}
+              {listType === 'category' &&
+              selectedProjection === 'geographic' ? (
+                  <React.Fragment>
+                    <Nav tabs id="categories-nav" className="categories-nav">
+                      {Object.keys(categoryConfig).map(sortKey => (
+                        <NavItem
+                          key={sortKey}
+                          className="layer-category-navigation"
+                          active={sortKey === categoryType}
+                        >
+                          <NavLink onClick={this.sort.bind(this, sortKey)}>
+                            {sortKey === 'scientific'
+                              ? 'Science Disciplines'
+                              : sortKey}
+                          </NavLink>
+                        </NavItem>
+                      ))}
+                    </Nav>
+                    <CategoryList
+                      categories={lodashValues(categoryConfig[categoryType])}
+                      measurementConfig={measurementConfig}
+                      drawMeasurements={this.drawMeasurements.bind(this)}
+                      hasMeasurementSource={hasMeasurementSource}
+                      categoryType={categoryType}
+                      width={width}
+                    />
+                  </React.Fragment>
+                ) : (
+                  <LayerList
+                    addLayer={addLayer}
+                    removeLayer={removeLayer}
+                    activeLayers={activeLayers}
                     hasMeasurementSource={hasMeasurementSource}
-                    categoryType={categoryType}
-                    width={width}
+                    selectedProjection={selectedProjection}
+                    filteredRows={filteredRows}
+                    hasMeasurementSetting={hasMeasurementSetting}
+                    measurementConfig={measurementConfig}
+                    layerConfig={layerConfig}
+                    listType={listType}
+                    category={category}
+                    categoryConfig={categoryConfig[categoryType]}
+                    selectedMeasurement={selectedMeasurement}
+                    updateSelectedMeasurement={this.updateSelectedMeasurement.bind(
+                      this
+                    )}
                   />
-                </React.Fragment>
-              ) : (
-                <LayerList
-                  addLayer={addLayer}
-                  removeLayer={removeLayer}
-                  activeLayers={activeLayers}
-                  hasMeasurementSource={hasMeasurementSource}
-                  selectedProjection={selectedProjection}
-                  filteredRows={filteredRows}
-                  hasMeasurementSetting={hasMeasurementSetting}
-                  measurementConfig={measurementConfig}
-                  layerConfig={layerConfig}
-                  listType={listType}
-                  category={category}
-                  selectedMeasurement={selectedMeasurement}
-                  updateSelectedMeasurement={this.updateSelectedMeasurement.bind(
-                    this
-                  )}
-                />
-              )}
+                )}
             </div>
           </ModalBody>
         </Scrollbars>

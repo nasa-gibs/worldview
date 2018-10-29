@@ -67,13 +67,13 @@ class LayerRow extends React.Component {
       <ListGroupItem
         key={measurement.id + '-' + layer.id}
         onClick={this.onClickLayer.bind(this, layer.id)}
+        id={'checkbox-case-' + layer.id}
       >
         <Checkbox
           name={layer.title}
           checked={!!lodashFind(activeLayers, { id: layer.id })}
           onClick={this.onClickLayer.bind(this, layer.id)}
           label={orbitTitle}
-          id={'setting-' + layer.id}
           classNames="settings-check"
         />
       </ListGroupItem>
@@ -120,13 +120,13 @@ class LayerRow extends React.Component {
             <ListGroupItem
               key={measurement.id + '-' + layer.id}
               onClick={this.onClickLayer.bind(this, layer.id)}
+              id={'checkbox-case-' + layer.id}
             >
               <Checkbox
                 name={layer.title}
                 onClick={this.onClickLayer.bind(this, layer.id)}
                 checked={!!lodashFind(activeLayers, { id: layer.id })}
                 label={layer.title}
-                id={'setting-' + layer.id}
                 classNames="settings-check"
               />
             </ListGroupItem>

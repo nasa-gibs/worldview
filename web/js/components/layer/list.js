@@ -114,11 +114,14 @@ class LayerList extends React.Component {
       hasMeasurementSource,
       selectedMeasurement,
       hasMeasurementSetting,
-      updateSelectedMeasurement
+      updateSelectedMeasurement,
+      categoryConfig
     } = this.props;
+
+    const categoryToUse = category || categoryConfig['All'];
     return (
-      <div id={category.id + '-list'}>
-        {category.measurements.map((measurement, index) => {
+      <div id={categoryToUse.id + '-list'}>
+        {categoryToUse.measurements.map((measurement, index) => {
           var current = measurementConfig[measurement];
           var isMeasurementExpanded = !!expandedMeasurements[current.id];
           var isSelected = selectedMeasurement === current.id;
@@ -129,7 +132,7 @@ class LayerList extends React.Component {
                 id={current.id}
                 index={index}
                 activeLayers={activeLayers}
-                category={category}
+                category={categoryToUse}
                 measurement={current}
                 sourceMetadata={sourceMetadata}
                 measurementConfig={measurementConfig}
@@ -211,7 +214,8 @@ LayerList.propTypes = {
   updateSelectedMeasurement: PropTypes.func,
   measurementConfig: PropTypes.object,
   layerConfig: PropTypes.object,
-  category: PropTypes.object
+  category: PropTypes.object,
+  categoryConfig: PropTypes.object
 };
 
 export default LayerList;
