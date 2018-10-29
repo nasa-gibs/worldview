@@ -201,6 +201,9 @@
 }
 
 /* Categories view */
+.layer-modal-content .categories-nav {
+  margin-right: 13px;
+}
 .layer-modal-content .categories-nav .nav-item {
   height: 31px;
   line-height: 35px;
@@ -670,10 +673,15 @@
   width: 100%;
 }
 .custom-layer-dialog .modal-body {
-  padding-top: 0;
+  padding: 0 0 0 13px;
 }
 .custom-layer-dialog .category-masonry-case {
   overflow: hidden;
+  padding: 13px;
+}
+.custom-layer-dialog .category-masonry-case,
+.custom-layer-dialog .layers-all {
+  padding: 0 13px 13px 0;
 }
 .layer-bread-crumb .breadcrumb {
   margin-bottom: 0;

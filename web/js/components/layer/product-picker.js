@@ -144,7 +144,8 @@ class ProductPicker extends React.Component {
       layerConfig,
       modalView
     } = this.props;
-
+    const isCategoryDisplay =
+      listType === 'category' && selectedProjection === 'geographic';
     return (
       <Modal
         isOpen={isOpen}
@@ -164,36 +165,40 @@ class ProductPicker extends React.Component {
             }}
           />
         </ModalHeader>
-        <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
-          <ModalBody>
-            <div id="layer-modal-content" className="layer-modal-content">
-              {listType === 'category' &&
-              selectedProjection === 'geographic' ? (
-                  <React.Fragment>
-                    <Nav tabs id="categories-nav" className="categories-nav">
-                      {Object.keys(categoryConfig).map(sortKey => (
-                        <NavItem
-                          key={sortKey}
-                          className="layer-category-navigation"
-                          active={sortKey === categoryType}
-                        >
-                          <NavLink onClick={this.sort.bind(this, sortKey)}>
-                            {sortKey === 'scientific'
-                              ? 'Science Disciplines'
-                              : sortKey}
-                          </NavLink>
-                        </NavItem>
-                      ))}
-                    </Nav>
-                    <CategoryList
-                      categories={lodashValues(categoryConfig[categoryType])}
-                      measurementConfig={measurementConfig}
-                      drawMeasurements={this.drawMeasurements.bind(this)}
-                      hasMeasurementSource={hasMeasurementSource}
-                      categoryType={categoryType}
-                      width={width}
-                    />
-                  </React.Fragment>
+
+        <ModalBody>
+          <div id="layer-modal-content" className="layer-modal-content">
+            {isCategoryDisplay ? (
+              <Nav tabs id="categories-nav" className="categories-nav">
+                {Object.keys(categoryConfig).map(sortKey => (
+                  <NavItem
+                    key={sortKey}
+                    className="layer-category-navigation"
+                    active={sortKey === categoryType}
+                  >
+                    <NavLink onClick={this.sort.bind(this, sortKey)}>
+                      {sortKey === 'scientific'
+                        ? 'Science Disciplines'
+                        : sortKey}
+                    </NavLink>
+                  </NavItem>
+                ))}
+              </Nav>
+            ) : (
+              ''
+            )}
+
+            <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
+              <div>
+                {isCategoryDisplay ? (
+                  <CategoryList
+                    categories={lodashValues(categoryConfig[categoryType])}
+                    measurementConfig={measurementConfig}
+                    drawMeasurements={this.drawMeasurements.bind(this)}
+                    hasMeasurementSource={hasMeasurementSource}
+                    categoryType={categoryType}
+                    width={width}
+                  />
                 ) : (
                   <LayerList
                     addLayer={addLayer}
@@ -214,9 +219,10 @@ class ProductPicker extends React.Component {
                     )}
                   />
                 )}
-            </div>
-          </ModalBody>
-        </Scrollbars>
+              </div>
+            </Scrollbars>
+          </div>
+        </ModalBody>
       </Modal>
     );
   }
