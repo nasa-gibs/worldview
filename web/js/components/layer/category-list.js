@@ -21,7 +21,7 @@ class CategoryList extends React.Component {
     } = this.props;
     const masonryOptions = {
       transitionDuration: '0.6s',
-      columnWidth: width >= 700 ? 310 : width,
+      columnWidth: width >= 656 ? 310 : width - 26,
       gutter: 10
     };
     categories.map(item => {

@@ -13,7 +13,7 @@ export function layersModal(models, ui, config) {
   self.selector = '#layer-modal';
   self.metadata = {};
 
-  var gridItemWidth = 320; // with of grid item + spacing
+  var gridItemWidth = 310; // with of grid item + spacing
   var modalHeight;
   var modalWidth;
   var sizeMultiplier;
@@ -159,8 +159,10 @@ export function layersModal(models, ui, config) {
     if (sizeMultiplier > 3) {
       sizeMultiplier = 3;
     }
+    const gutterSpace = (sizeMultiplier - 1) * 10;
+    const modalPadding = 26;
     modalHeight = getModalHeight();
-    modalWidth = gridItemWidth * sizeMultiplier + 12;
+    modalWidth = gridItemWidth * sizeMultiplier + gutterSpace + modalPadding;
   };
 
   var resize = function() {
