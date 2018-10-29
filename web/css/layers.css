@@ -24,38 +24,6 @@
   color: #383838;
 }
 
-.layer-modal .ui-dialog-titlebar {
-  height: 40px;
-  padding: 5px 5px 5px 10px;
-  line-height: 40px;
-}
-
-.layer-modal .ui-dialog-title {
-  width: auto;
-  font-weight: 300;
-  font-size: 32px;
-  line-height: 40px;
-  margin: 0;
-}
-
-.layer-modal .ui-dialog-titlebar-close {
-  position: relative;
-  top: 0;
-  margin: 0;
-  width: 40px;
-  height: 40px;
-  float: right;
-}
-
-.layer-modal .ui-dialog-titlebar-close .ui-icon-closethick {
-  width: 32px;
-  height: 32px;
-  margin: -16px 0 0 -16px;
-  top: 50%;
-  left: 50%;
-  background: url('../images/wv-icons.png') 32px 32px;
-}
-
 .no-titlebar .ui-dialog-titlebar {
   display: none;
 }
@@ -153,33 +121,6 @@
   font-weight: 400;
   margin-left: 0;
   padding: 0;
-}
-
-.layer-modal .layers-modal-close {
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  float: right;
-  cursor: pointer;
-}
-
-.layer-modal .layers-modal-close i {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 26px;
-  height: 26px;
-  margin: -13px 0 0 -13px;
-  background: url('../images/wv-icons.png') 52px 26px;
-}
-
-.layer-modal .layers-modal-close:hover {
-  background-color: #1a1a1a;
-}
-
-.layer-modal .layers-modal-close:hover i {
-  background-position: 52px -52px;
 }
 
 /* Tile layout */
@@ -721,6 +662,9 @@
 }
 .custom-layer-dialog .modal-header {
   border-bottom: none;
+}
+.custom-layer-dialog .modal-header .close {
+  font-size: 30px;
 }
 .custom-layer-dialog .modal-title {
   width: 100%;
