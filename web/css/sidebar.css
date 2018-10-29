@@ -106,6 +106,7 @@ footer .layers-add {
 footer .compare-toggle-button {
   position: absolute;
   right: 5px;
+  border-bottom: none;
 }
 .layer-group-case {
   overflow: hidden;
