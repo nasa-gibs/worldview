@@ -56,7 +56,7 @@ export function timelineConfig(models, config, ui) {
       case 1: // Year
         dateStep = 1;
         labelFormat = d3.time.format.utc('%Y');
-        dateInterval = d3.time.year;
+        dateInterval = d3.time.year.utc;
         tickCount =
           tl.data.end().getUTCFullYear() - tl.data.start().getUTCFullYear();
         tickWidth = 15;
@@ -269,7 +269,7 @@ export function timelineConfig(models, config, ui) {
       case 2: // Month
         dateStep = 1;
         labelFormat = d3.time.format.utc('%Y');
-        dateInterval = d3.time.month;
+        dateInterval = d3.time.month.utc;
 
         tickCount =
           (tl.data.end().getUTCFullYear() - tl.data.start().getUTCFullYear()) *
@@ -484,7 +484,7 @@ export function timelineConfig(models, config, ui) {
       case 3: // Day
         dateStep = 1;
         labelFormat = d3.time.format.utc('%b');
-        dateInterval = d3.time.day;
+        dateInterval = d3.time.day.utc;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 60 / 24;
         tickWidth = 11;
         tickCountMax = Math.ceil(tl.width / tickWidth);
@@ -699,7 +699,7 @@ export function timelineConfig(models, config, ui) {
       case 4: // 10-Minute
         dateStep = 10;
         labelFormat = d3.time.format.utc('%H:%M');
-        dateInterval = d3.time.minutes;
+        dateInterval = d3.time.minutes.utc;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 10;
         tickWidth = 1;
         tickCountMax = tl.width;
