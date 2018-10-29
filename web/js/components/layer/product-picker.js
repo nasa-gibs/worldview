@@ -189,7 +189,7 @@ class ProductPicker extends React.Component {
             )}
 
             <Scrollbars style={{ maxHeight: height - 40 + 'px' }}>
-              <div>
+              <div className="product-outter-list-case">
                 {isCategoryDisplay ? (
                   <CategoryList
                     categories={lodashValues(categoryConfig[categoryType])}

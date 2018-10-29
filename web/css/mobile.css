@@ -14,7 +14,7 @@
     background: rgb(38, 43, 49);
     border-radius: 0 10px 10px 0;
     top: 0;
-    z-index: 10100;
+    z-index: 1000;
   }
 
   .sidebar-panel {
@@ -36,7 +36,7 @@
   }
 
   #wv-logo {
-    background: url("../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@")
+    background: url('../brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@')
       no-repeat center rgba(40, 40, 40, 0.85);
     display: block;
     height: 42px;
