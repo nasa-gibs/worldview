@@ -857,7 +857,7 @@ export function mapui(models, config) {
   var createZoomButtons = function(map, proj) {
     var $map = $('#' + map.getTarget());
 
-    var $zoomOut = $('<button></button>')
+    var $zoomOut = $('<div></div>')
       .addClass('wv-map-zoom-out')
       .addClass('wv-map-zoom');
     var $outIcon = $('<i></i>')
@@ -874,7 +874,7 @@ export function mapui(models, config) {
     });
     $zoomOut.mousemove((e) => e.stopPropagation());
 
-    var $zoomIn = $('<button></button>')
+    var $zoomIn = $('<div></div>')
       .addClass('wv-map-zoom-in')
       .addClass('wv-map-zoom');
     var $inIcon = $('<i></i>')
