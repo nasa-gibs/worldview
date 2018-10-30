@@ -1087,6 +1087,7 @@ export function timelineConfig(models, config, ui) {
   var switchZoom = function(zoomLevel) {
     var clone;
     var zoomElement;
+    model.events.trigger('update-timewheel');
     switch (zoomLevel) {
       case 1:
         zoomElement = '#zoom-years';
