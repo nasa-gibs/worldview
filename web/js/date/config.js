@@ -532,23 +532,41 @@ export function timelineConfig(models, config, ui) {
 
         // When the date updates while dragging the pick forward
         tl.zoom.current.pick.nextChange = function(d) {
+          var prevDate = model.selected;
+          var maxDayInMonth = new Date(d.getUTCFullYear(), d.getUTCMonth() + 1, 0).getDate();
+
+          if (prevDate.getUTCDate() > maxDayInMonth) {
+            prevDate = new Date(
+              new Date(prevDate).setUTCDate(
+                maxDayInMonth
+              )
+            );
+          }
+
           return new Date(
-            Date.UTC(
-              d.getUTCFullYear(),
-              d.getUTCMonth() + 1,
-              model.selected.getUTCDate()
-            )
+            d.getUTCFullYear(),
+            d.getUTCMonth(),
+            prevDate.getUTCDate()
           );
         };
 
         // When the date updates while dragging the pick backward
         tl.zoom.current.pick.prevChange = function(d) {
+          var prevDate = model.selected;
+          var maxDayInMonth = new Date(d.getUTCFullYear(), d.getUTCMonth() + 1, 0).getDate();
+
+          if (prevDate.getUTCDate() > maxDayInMonth) {
+            prevDate = new Date(
+              new Date(prevDate).setUTCDate(
+                maxDayInMonth
+              )
+            );
+          }
+
           return new Date(
-            Date.UTC(
-              d.getUTCFullYear(),
-              d.getUTCMonth(),
-              model.selected.getUTCDate()
-            )
+            d.getUTCFullYear(),
+            d.getUTCMonth(),
+            prevDate.getUTCDate()
           );
         };
 
