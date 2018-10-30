@@ -304,7 +304,7 @@ export function timelineConfig(models, config, ui) {
           tl.zoom.current.pick.hoveredTick = d3
             .selectAll('.x.axis>g.tick')
             .filter(function(d) {
-              return d.getFullYear() === newDate.getFullYear();
+              return d.getUTCFullYear() === newDate.getUTCFullYear();
             });
         };
 
@@ -559,8 +559,8 @@ export function timelineConfig(models, config, ui) {
             .selectAll('.x.axis>g.tick')
             .filter(function(d) {
               return (
-                d.getFullYear() === newDate.getFullYear() &&
-                d.getMonth() === newDate.getMonth()
+                d.getUTCFullYear() === newDate.getUTCFullYear() &&
+                d.getUTCMonth() === newDate.getUTCMonth()
               );
             });
         };
@@ -777,9 +777,9 @@ export function timelineConfig(models, config, ui) {
             .selectAll('.x.axis>g.tick')
             .filter(function(d) {
               return (
-                d.getFullYear() === newDate.getFullYear() &&
-                (d.getMonth() === newDate.getMonth() &&
-                  d.getDate() === newDate.getDate())
+                d.getUTCFullYear() === newDate.getUTCFullYear() &&
+                (d.getUTCMonth() === newDate.getUTCMonth() &&
+                  d.getUTCDate() === newDate.getUTCDate())
               );
             });
         };
@@ -927,26 +927,41 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function(d) {
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          return new Date(
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
             d.getUTCMinutes()
           );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes()
+          ));
         };
 
         // Value for boundary ribbon hover label
         tl.zoom.current.ticks.boundary.hover = function(d) {
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          return new Date(
+
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
             d.getUTCMinutes()
           );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes()
+          ));
         };
 
         // Displayed default label
@@ -968,18 +983,30 @@ export function timelineConfig(models, config, ui) {
         // TODO: Return to 6 hr with 0 minute if pick is within 6 hour range, otherwise
         // maintain the minute interval
         tl.zoom.current.ticks.boundary.clickDate = function(d) {
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          var selected = model.selected;
-          selected = new Date(
-            selected.getTime() - selected.getTimezoneOffset() * 60000
-          );
-          return new Date(
+          var prevDate = model.selected;
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
-            selected.getUTCMinutes()
+            d.getUTCMinutes()
           );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            d.getUTCHours(),
+            prevDate.getUTCMinutes()
+          ));
         };
 
         // When the date updates while dragging the pick forward
