@@ -595,17 +595,29 @@ export function timelineConfig(models, config, ui) {
         // Value for hovered boundary tick
         tl.zoom.current.ticks.boundary.hover = function(d) {
           var prevDate = model.selected;
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
-          return new Date(
+          console.log('d', d);
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
+            d.getUTCDate(),
+            0,
+            0
+          );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            0,
+            0
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
             prevDate.getDate(),
-            prevDate.getHours(),
-            prevDate.getMinutes()
+            0,
+            0)
           );
         };
 
@@ -622,18 +634,28 @@ export function timelineConfig(models, config, ui) {
         // Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function(d) {
           var prevDate = model.selected;
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
-
-          return new Date(
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
+            d.getUTCDate(),
+            0,
+            0
+          );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            0,
+            0
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
             prevDate.getDate(),
-            prevDate.getHours(),
-            prevDate.getMinutes()
+            0,
+            0)
           );
         };
 
