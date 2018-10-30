@@ -1,6 +1,5 @@
 import d3 from 'd3';
 import util from '../util/util';
-import moment from 'moment';
 
 /**
  * Modify zoom levels here. Maybe this isnt the best way to do this.
@@ -154,25 +153,25 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
             d.getFullYear(),
             prevDate.getMonth(),
             prevDate.getDate(),
-            0,
-            0)
-          );
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Value for clicked normal tick
@@ -183,16 +182,16 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
@@ -215,25 +214,25 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
             d.getFullYear() + yearOffset,
             prevDate.getMonth(),
             prevDate.getDate(),
-            0,
-            0)
-          );
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Displayed default label
@@ -257,25 +256,25 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
             d.getFullYear() + yearOffset,
             prevDate.getMonth(),
             prevDate.getDate(),
-            0,
-            0)
-          );
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // When the date updates while dragging the pick forward
@@ -413,25 +412,25 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
             d.getFullYear(),
             d.getMonth(),
             prevDate.getDate(),
-            0,
-            0)
-          );
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Value for clicked normal tick
@@ -442,18 +441,17 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
-
 
           return new Date(Date.UTC(
             d.getFullYear(),
@@ -472,25 +470,25 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
             d.getFullYear(),
             prevDate.getMonth(),
             prevDate.getDate(),
-            0,
-            0)
-          );
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Displayed default label
@@ -511,25 +509,25 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
             d.getFullYear(),
             prevDate.getMonth(),
             prevDate.getDate(),
-            0,
-            0)
-          );
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // When the date updates while dragging the pick forward
@@ -671,16 +669,16 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
@@ -699,25 +697,25 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
             d.getFullYear(),
             d.getMonth(),
             prevDate.getDate(),
-            0,
-            0)
-          );
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Displayed default label
@@ -737,25 +735,25 @@ export function timelineConfig(models, config, ui) {
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            0,
-            0
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
 
           prevDate = new Date(
             prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            0,
-            0
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
           );
 
           return new Date(Date.UTC(
             d.getFullYear(),
             d.getMonth(),
             prevDate.getDate(),
-            0,
-            0)
-          );
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // When the date updates while dragging the pick forward
@@ -946,7 +944,6 @@ export function timelineConfig(models, config, ui) {
 
         // Value for boundary ribbon hover label
         tl.zoom.current.ticks.boundary.hover = function(d) {
-
           d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
@@ -1004,8 +1001,8 @@ export function timelineConfig(models, config, ui) {
             d.getFullYear(),
             d.getMonth(),
             d.getDate(),
-            d.getUTCHours(),
-            prevDate.getUTCMinutes()
+            d.getHours(),
+            prevDate.getMinutes()
           ));
         };
 
