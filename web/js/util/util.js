@@ -591,6 +591,7 @@ export default (function (self) {
     var range = self.rollRange(date, interval, minDate, maxDate);
     var min = range.first;
     var max = range.last;
+    var second = date.getUTCSeconds();
     var minute = date.getUTCMinutes();
     var hour = date.getUTCHours();
     var day = date.getUTCDate();
@@ -623,7 +624,7 @@ export default (function (self) {
     if (day > daysInMonth) {
       day = daysInMonth;
     }
-    var newDate = new Date(Date.UTC(year, month, day, hour, minute));
+    var newDate = new Date(Date.UTC(year, month, day, hour, minute, second));
     newDate = new Date(self.clamp(newDate, minDate, maxDate));
     return newDate;
   };
