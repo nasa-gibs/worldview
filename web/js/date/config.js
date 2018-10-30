@@ -601,9 +601,9 @@ export function timelineConfig(models, config, ui) {
             prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
           }
           return new Date(
-            d.getFullYear(),
-            d.getMonth(),
-            d.getDate(),
+            d.getUTCFullYear(),
+            d.getUTCMonth(),
+            prevDate.getDate(),
             prevDate.getHours(),
             prevDate.getMinutes()
           );
@@ -627,10 +627,11 @@ export function timelineConfig(models, config, ui) {
           } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
             prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
           }
+
           return new Date(
-            d.getFullYear(),
-            d.getMonth(),
-            d.getDate(),
+            d.getUTCFullYear(),
+            d.getUTCMonth(),
+            prevDate.getDate(),
             prevDate.getHours(),
             prevDate.getMinutes()
           );
