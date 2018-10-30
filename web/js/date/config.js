@@ -372,37 +372,46 @@ export function timelineConfig(models, config, ui) {
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function(d) {
           var prevDate = model.selected;
-          d = new Date(
-            d.getUTCFullYear(),
-            d.getUTCMonth(),
-            prevDate.getUTCDate(),
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
-          );
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
           if (!moment(prevDate).isDST() && moment(d).isDST()) {
             prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
           } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
             prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
           }
-          prevDate = new Date(
-            prevDate.getTime() - prevDate.getTimezoneOffset() * 60000
-          );
           return new Date(
-            d.getUTCFullYear(),
-            d.getUTCMonth(),
-            d.getUTCDate() - 1,
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
+            d.getFullYear(),
+            d.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
           );
         };
 
         // Value for hovered boundary tick
         tl.zoom.current.ticks.boundary.hover = function(d) {
-          return new Date(
+          var prevDate = model.selected;
+
+          d = new Date(
             d.getUTCFullYear(),
-            model.selected.getUTCMonth(),
-            model.selected.getUTCDate()
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            0,
+            0
+          );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            0,
+            0
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            prevDate.getMonth(),
+            prevDate.getDate(),
+            0,
+            0)
           );
         };
 
@@ -419,28 +428,29 @@ export function timelineConfig(models, config, ui) {
         // Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function(d) {
           var prevDate = model.selected;
+
           d = new Date(
             d.getUTCFullYear(),
-            prevDate.getUTCMonth(),
-            prevDate.getUTCDate(),
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            0,
+            0
           );
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
+
           prevDate = new Date(
-            prevDate.getTime() - prevDate.getTimezoneOffset() * 60000
-          );
-          return new Date(
-            d.getUTCFullYear(),
+            prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
+            0,
+            0
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            prevDate.getMonth(),
+            prevDate.getDate(),
+            0,
+            0)
           );
         };
 
@@ -471,8 +481,8 @@ export function timelineConfig(models, config, ui) {
             .selectAll('.x.axis>g.tick')
             .filter(function(d) {
               return (
-                d.getUTCFullYear() === newDate.getUTCFullYear() &&
-                d.getUTCMonth() === newDate.getUTCMonth()
+                d.getFullYear() === newDate.getFullYear() &&
+                d.getMonth() === newDate.getMonth()
               );
             });
         };
@@ -595,7 +605,6 @@ export function timelineConfig(models, config, ui) {
         // Value for hovered boundary tick
         tl.zoom.current.ticks.boundary.hover = function(d) {
           var prevDate = model.selected;
-          console.log('d', d);
           d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
