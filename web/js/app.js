@@ -175,6 +175,7 @@ class App extends React.Component {
           />
         </ul>
         <section id="wv-sidebar" />
+        <div id="layer-modal" className="layer-modal" />
         <div id="wv-map" className="wv-map" />
         <div id="eventsHolder" />
         <div id="imagedownload" />

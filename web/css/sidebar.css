@@ -83,6 +83,13 @@
   border-color: #00457b;
   color: #fff;
 }
+
+/** IE Scrollbar hack */
+#productsHolder.layer-modal-open .simplebar-scroll-content,
+#productsHolder.layer-modal-open .simplebar-content {
+  overflow: hidden;
+}
+
 #productsHolder footer {
   padding: 5px;
   width: initial;
@@ -99,6 +106,7 @@ footer .layers-add {
 footer .compare-toggle-button {
   position: absolute;
   right: 5px;
+  border-bottom: none;
 }
 .layer-group-case {
   overflow: hidden;

@@ -107,7 +107,7 @@ export function animationWidget(models, config, ui) {
     $(window).keypress(function(e) {
       if (
         (e.keyCode === 32 || e.charCode === 32) && // space click
-        !$('#layer-modal').dialog('isOpen')
+        !ui.addModal.isOpen()
       ) {
         // layer selector is not open
         e.preventDefault();
