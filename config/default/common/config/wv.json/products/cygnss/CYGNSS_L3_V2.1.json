@@ -1,0 +1,11 @@
+{
+    "products": {
+        "CYGNSS_L3_V2.1": {
+            "name": "CYGNSS_L3_V2.1",
+            "handler": "List",
+            "query": {
+                "shortName": "CYGNSS_L3_V2.1"
+            }
+        }
+    }
+}

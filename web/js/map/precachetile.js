@@ -43,7 +43,6 @@ export function mapPrecacheTile(models, config, cache, parent) {
     });
     return new Promise(function(resolve) {
       Promise.all(promiseArray).then(function() {
-        console.log(date);
         resolve(date);
       });
     });

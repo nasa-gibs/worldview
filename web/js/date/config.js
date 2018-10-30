@@ -1,6 +1,5 @@
 import d3 from 'd3';
 import util from '../util/util';
-import moment from 'moment';
 
 /**
  * Modify zoom levels here. Maybe this isnt the best way to do this.
@@ -56,7 +55,7 @@ export function timelineConfig(models, config, ui) {
       case 1: // Year
         dateStep = 1;
         labelFormat = d3.time.format.utc('%Y');
-        dateInterval = d3.time.year;
+        dateInterval = d3.time.year.utc;
         tickCount =
           tl.data.end().getUTCFullYear() - tl.data.start().getUTCFullYear();
         tickWidth = 15;
@@ -148,50 +147,92 @@ export function timelineConfig(models, config, ui) {
 
         // Value for hovered normal label
         tl.zoom.current.ticks.normal.hover = function(d) {
-          // No modifications to date obj at this zoom level
-          return new Date(
+          var prevDate = model.selected;
+
+          d = new Date(
             d.getUTCFullYear(),
-            model.selected.getUTCMonth(),
-            model.selected.getUTCDate()
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            prevDate.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function(d) {
           var prevDate = model.selected;
+
           d = new Date(
             d.getUTCFullYear(),
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
+          );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes()
           );
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
-          return new Date(
-            d.getUTCFullYear(),
-            prevDate.getUTCMonth(),
-            prevDate.getUTCDate(),
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
-          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            prevDate.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Value for hovered boundary tick
         tl.zoom.current.ticks.boundary.hover = function(d) {
+          var prevDate = model.selected;
           var yearOffset =
-            model.selected.getUTCFullYear() -
-            Math.ceil(new Date(model.selected.getUTCFullYear() / 10) * 10);
+            prevDate.getUTCFullYear() -
+            Math.ceil(new Date(prevDate.getUTCFullYear() / 10) * 10);
 
-          return new Date(
-            d.getUTCFullYear() + yearOffset,
-            model.selected.getUTCMonth(),
-            model.selected.getUTCDate()
+          d = new Date(
+            d.getUTCFullYear(),
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear() + yearOffset,
+            prevDate.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Displayed default label
@@ -210,26 +251,30 @@ export function timelineConfig(models, config, ui) {
           var yearOffset =
             prevDate.getUTCFullYear() -
             Math.ceil(new Date(prevDate.getUTCFullYear() / 10) * 10);
+
           d = new Date(
-            d.getUTCFullYear() + yearOffset,
-            prevDate.getUTCMonth(),
-            prevDate.getUTCDate(),
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
-          );
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
-          return new Date(
             d.getUTCFullYear(),
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
+          );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes()
           );
+
+          return new Date(Date.UTC(
+            d.getFullYear() + yearOffset,
+            prevDate.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // When the date updates while dragging the pick forward
@@ -269,7 +314,7 @@ export function timelineConfig(models, config, ui) {
       case 2: // Month
         dateStep = 1;
         labelFormat = d3.time.format.utc('%Y');
-        dateInterval = d3.time.month;
+        dateInterval = d3.time.month.utc;
 
         tickCount =
           (tl.data.end().getUTCFullYear() - tl.data.start().getUTCFullYear()) *
@@ -361,49 +406,89 @@ export function timelineConfig(models, config, ui) {
 
         // Value for hovered normal label
         tl.zoom.current.ticks.normal.hover = function(d) {
-          // No modifications to date obj at this zoom level
-          return new Date(
+          var prevDate = model.selected;
+
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
-            model.selected.getUTCDate()
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function(d) {
           var prevDate = model.selected;
+
           d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
+          );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes()
           );
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
-          prevDate = new Date(
-            prevDate.getTime() - prevDate.getTimezoneOffset() * 60000
-          );
-          return new Date(
-            d.getUTCFullYear(),
-            d.getUTCMonth(),
-            d.getUTCDate() - 1,
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
-          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Value for hovered boundary tick
         tl.zoom.current.ticks.boundary.hover = function(d) {
-          return new Date(
+          var prevDate = model.selected;
+
+          d = new Date(
             d.getUTCFullYear(),
-            model.selected.getUTCMonth(),
-            model.selected.getUTCDate()
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            prevDate.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Displayed default label
@@ -419,50 +504,69 @@ export function timelineConfig(models, config, ui) {
         // Value for clicked boundary tick
         tl.zoom.current.ticks.boundary.clickDate = function(d) {
           var prevDate = model.selected;
+
           d = new Date(
             d.getUTCFullYear(),
-            prevDate.getUTCMonth(),
-            prevDate.getUTCDate(),
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
+            d.getUTCMonth(),
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
+
           prevDate = new Date(
-            prevDate.getTime() - prevDate.getTimezoneOffset() * 60000
-          );
-          return new Date(
-            d.getUTCFullYear(),
+            prevDate.getUTCFullYear(),
             prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes()
           );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            prevDate.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // When the date updates while dragging the pick forward
         tl.zoom.current.pick.nextChange = function(d) {
+          var prevDate = model.selected;
+          var maxDayInMonth = new Date(d.getUTCFullYear(), d.getUTCMonth() + 1, 0).getDate();
+
+          if (prevDate.getUTCDate() > maxDayInMonth) {
+            prevDate = new Date(
+              new Date(prevDate).setUTCDate(
+                maxDayInMonth
+              )
+            );
+          }
+
           return new Date(
-            Date.UTC(
-              d.getUTCFullYear(),
-              d.getUTCMonth() + 1,
-              model.selected.getUTCDate()
-            )
+            d.getUTCFullYear(),
+            d.getUTCMonth(),
+            prevDate.getUTCDate()
           );
         };
 
         // When the date updates while dragging the pick backward
         tl.zoom.current.pick.prevChange = function(d) {
+          var prevDate = model.selected;
+          var maxDayInMonth = new Date(d.getUTCFullYear(), d.getUTCMonth() + 1, 0).getDate();
+
+          if (prevDate.getUTCDate() > maxDayInMonth) {
+            prevDate = new Date(
+              new Date(prevDate).setUTCDate(
+                maxDayInMonth
+              )
+            );
+          }
+
           return new Date(
-            Date.UTC(
-              d.getUTCFullYear(),
-              d.getUTCMonth(),
-              model.selected.getUTCDate()
-            )
+            d.getUTCFullYear(),
+            d.getUTCMonth(),
+            prevDate.getUTCDate()
           );
         };
 
@@ -484,7 +588,7 @@ export function timelineConfig(models, config, ui) {
       case 3: // Day
         dateStep = 1;
         labelFormat = d3.time.format.utc('%b');
-        dateInterval = d3.time.day;
+        dateInterval = d3.time.day.utc;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 60 / 24;
         tickWidth = 11;
         tickCountMax = Math.ceil(tl.width / tickWidth);
@@ -578,38 +682,58 @@ export function timelineConfig(models, config, ui) {
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function(d) {
           var prevDate = model.selected;
+
           d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
+
           prevDate = new Date(
-            prevDate.getTime() - prevDate.getTimezoneOffset() * 60000
-          );
-          return new Date(
-            d.getUTCFullYear(),
-            d.getUTCMonth(),
-            d.getUTCDate() - 1,
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes()
           );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Value for hovered boundary tick
         tl.zoom.current.ticks.boundary.hover = function(d) {
-          return new Date(
+          var prevDate = model.selected;
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
-            model.selected.getUTCDate()
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // Displayed default label
@@ -628,26 +752,26 @@ export function timelineConfig(models, config, ui) {
           d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
-            prevDate.getUTCDate(),
-            prevDate.getUTCHours(),
-            prevDate.getUTCMinutes()
+            d.getUTCDate(),
+            d.getUTCHours(),
+            d.getUTCMinutes()
           );
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          if (!moment(prevDate).isDST() && moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() + 1 * 60 * 60 * 1000);
-          } else if (moment(prevDate).isDST() && !moment(d).isDST()) {
-            prevDate = new Date(prevDate.getTime() - 1 * 60 * 60 * 1000);
-          }
+
           prevDate = new Date(
-            prevDate.getTime() - prevDate.getTimezoneOffset() * 60000
-          );
-          return new Date(
-            d.getUTCFullYear(),
-            d.getUTCMonth(),
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
             prevDate.getUTCDate(),
             prevDate.getUTCHours(),
             prevDate.getUTCMinutes()
           );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            prevDate.getDate(),
+            prevDate.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // When the date updates while dragging the pick forward
@@ -699,7 +823,7 @@ export function timelineConfig(models, config, ui) {
       case 4: // 10-Minute
         dateStep = 10;
         labelFormat = d3.time.format.utc('%H:%M');
-        dateInterval = d3.time.minutes;
+        dateInterval = d3.time.minutes.utc;
         tickCount = (tl.data.end() - tl.data.start()) / 1000 / 60 / 10;
         tickWidth = 1;
         tickCountMax = tl.width;
@@ -819,26 +943,40 @@ export function timelineConfig(models, config, ui) {
 
         // Value for clicked normal tick
         tl.zoom.current.ticks.normal.clickDate = function(d) {
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          return new Date(
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
             d.getUTCMinutes()
           );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes()
+          ));
         };
 
         // Value for boundary ribbon hover label
         tl.zoom.current.ticks.boundary.hover = function(d) {
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          return new Date(
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
             d.getUTCMinutes()
           );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes()
+          ));
         };
 
         // Displayed default label
@@ -860,18 +998,30 @@ export function timelineConfig(models, config, ui) {
         // TODO: Return to 6 hr with 0 minute if pick is within 6 hour range, otherwise
         // maintain the minute interval
         tl.zoom.current.ticks.boundary.clickDate = function(d) {
-          d = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          var selected = model.selected;
-          selected = new Date(
-            selected.getTime() - selected.getTimezoneOffset() * 60000
-          );
-          return new Date(
+          var prevDate = model.selected;
+          d = new Date(
             d.getUTCFullYear(),
             d.getUTCMonth(),
             d.getUTCDate(),
             d.getUTCHours(),
-            selected.getUTCMinutes()
+            d.getUTCMinutes()
           );
+
+          prevDate = new Date(
+            prevDate.getUTCFullYear(),
+            prevDate.getUTCMonth(),
+            prevDate.getUTCDate(),
+            prevDate.getUTCHours(),
+            prevDate.getUTCMinutes()
+          );
+
+          return new Date(Date.UTC(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            prevDate.getMinutes()
+          ));
         };
 
         // When the date updates while dragging the pick forward
@@ -952,6 +1102,7 @@ export function timelineConfig(models, config, ui) {
   var switchZoom = function(zoomLevel) {
     var clone;
     var zoomElement;
+    model.events.trigger('update-timewheel');
     switch (zoomLevel) {
       case 1:
         zoomElement = '#zoom-years';

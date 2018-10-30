@@ -793,6 +793,12 @@ export function mapui(models, config) {
     createZoomButtons(map, proj);
     createMousePosSel(map, proj);
 
+    // This component is inside the map viewport container. Allowing
+    // mouse move events to bubble up displays map coordinates--let those
+    // be blank when over a component.
+    $('.wv-map-scale-metric').mousemove((e) => e.stopPropagation());
+    $('.wv-map-scale-imperial').mousemove((e) => e.stopPropagation());
+
     // allow rotation by dragging for polar projections
     if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
       rotation.init(map, proj.id);
@@ -851,7 +857,7 @@ export function mapui(models, config) {
   var createZoomButtons = function(map, proj) {
     var $map = $('#' + map.getTarget());
 
-    var $zoomOut = $('<button></button>')
+    var $zoomOut = $('<div></div>')
       .addClass('wv-map-zoom-out')
       .addClass('wv-map-zoom');
     var $outIcon = $('<i></i>')
@@ -866,8 +872,9 @@ export function mapui(models, config) {
     $zoomOut.click(() => {
       mapUtilZoomAction(map, -1);
     });
+    $zoomOut.mousemove((e) => e.stopPropagation());
 
-    var $zoomIn = $('<button></button>')
+    var $zoomIn = $('<div></div>')
       .addClass('wv-map-zoom-in')
       .addClass('wv-map-zoom');
     var $inIcon = $('<i></i>')
@@ -882,6 +889,7 @@ export function mapui(models, config) {
     $zoomIn.click(() => {
       mapUtilZoomAction(map, 1);
     });
+    $zoomIn.mousemove((e) => e.stopPropagation());
 
     /*
      * Sets zoom buttons as active or inactive based

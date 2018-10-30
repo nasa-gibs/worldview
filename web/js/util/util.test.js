@@ -117,15 +117,15 @@ test('clearTimeUTC', () => {
 
 describe('dateAdd', () => {
   let tests = [
-    { part: 'day', fn: 'getDate', answer: 5 },
-    { part: 'month', fn: 'getMonth', answer: 5 },
-    { part: 'year', fn: 'getFullYear', answer: 2015 },
+    { part: 'day', fn: 'getUTCDate', answer: 5 },
+    { part: 'month', fn: 'getUTCMonth', answer: 5 },
+    { part: 'year', fn: 'getUTCFullYear', answer: 2015 },
     { part: 'foo' }
   ];
 
   tests.forEach((t) => {
     test(t.part, () => {
-      let d = new Date(2011, 1, 1);
+      let d = new Date(Date.UTC(2011, 1, 1));
       if (t.answer) {
         let result = util.dateAdd(d, t.part, 4);
         expect(result[t.fn]()).toBe(t.answer);
@@ -138,13 +138,28 @@ describe('dateAdd', () => {
 
 describe('daysInMonth', () => {
   test('feb, non-leap', () => {
-    var d = new Date(2015, 1, 15);
+    var d = new Date(Date.UTC(2015, 1, 15));
     expect(util.daysInMonth(d)).toBe(28);
   });
 
   test('feb, leap', () => {
-    var d = new Date(2016, 1, 15);
+    var d = new Date(Date.UTC(2016, 1, 15));
     expect(util.daysInMonth(d)).toBe(29);
+  });
+});
+
+describe('daysInYear', () => {
+  let tests = [
+    { date: Date.UTC(2015, 5, 26), doy: '177', name: '2015 jun 26 => 177' },
+    { date: Date.UTC(2015, 0, 1), doy: '001', name: 'first of year' },
+    { date: Date.UTC(2015, 11, 31), doy: '365', name: 'last day of year' },
+    { date: Date.UTC(2016, 11, 31), doy: '366', name: 'last day of leap year' }
+  ];
+  tests.forEach((t) => {
+    test(t.name, () => {
+      let d = new Date(t.date);
+      expect(util.daysInYear(d)).toBe(t.doy);
+    });
   });
 });
 

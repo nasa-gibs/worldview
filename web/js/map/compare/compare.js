@@ -26,7 +26,7 @@ export function mapCompare(models, config) {
   self.spy = Spy;
   self.active = false;
   self.dragging = false;
-  self.EventTypeObject = util.browser.touchDevice ? TOUCH_EVENT : MOUSE_EVENT;
+  self.EventTypeObject = util.browser.mobileAndTabletDevice ? TOUCH_EVENT : MOUSE_EVENT;
 
   var init = function() {
     self.events

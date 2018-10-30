@@ -20,7 +20,6 @@ beforeEach(() => {
 
 afterEach(() => {
   util.setCoordinateFormat('latlon-dd');
-  util.browser.small = false;
 });
 
 test('shows coordinates of (10, 20) when moving the mouse', () => {
@@ -45,12 +44,6 @@ test('clears coordinates when mouse moves off the map', () => {
 
 test('reprojects (0,0) to (-45, 90) for EPSG:3413', () => {
   map.getCoordinateFromPixel = () => [0, 0];
-  events.trigger('mousemove', {}, map, 'EPSG:3413');
-  expect(component.toJSON()).toMatchSnapshot();
-});
-
-test('does not display on small devices', () => {
-  util.browser.small = true;
   events.trigger('mousemove', {}, map, 'EPSG:3413');
   expect(component.toJSON()).toMatchSnapshot();
 });

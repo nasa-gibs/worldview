@@ -256,6 +256,8 @@
         "AMSUA_NOAA17_Brightness_Temp_Channel_14",
         "AMSUA_NOAA17_Brightness_Temp_Channel_15",
 
+        "CYGNSS_L3_Wind_Speed_Daily",
+
         "CCMP_REMSS_Meridional_Wind_Speed_Monthly",
         "CCMP_REMSS_Scalar_Wind_Speed_Monthly",
         "CCMP_REMSS_Zonal_Wind_Speed_Monthly",
@@ -423,6 +425,7 @@
         "OMI_Absorbing_Aerosol_Optical_Depth",
         "OMI_Absorbing_Aerosol_Optical_Thickness_MW_388",
         "OMI_Aerosol_Index",
+        "OMI_UV_Aerosol_Index",
         "OMI_Aerosol_Optical_Depth",
         "OMI_Cloud_Pressure",
         "OMI_SO2_Lower_Troposphere",
@@ -819,6 +822,8 @@
         "GPM_Orbit_Dsc",
         "GCOM_W1_Orbit_Asc",
         "GCOM_W1_Orbit_Dsc",
+        "GCOM_C_Orbit_Asc",
+        "GCOM_C_Orbit_Dsc",
         "Sentinel_2A_Orbit_Asc",
         "Sentinel_2A_Orbit_Dsc",
         "Sentinel_2B_Orbit_Asc",

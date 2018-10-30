@@ -58,9 +58,10 @@
     "python:win32": "bash -c 'tasks/pythonInstall.sh'",
     "report": "node e2e/create-report.js",
     "start": "node ./tasks/start.js",
-    "test": "npm run test:unit && npm run test:lint",
+    "test": "npm run test:unit && npm run test:unit:tz && npm run test:lint",
     "test:lint": "npx eslint .",
     "test:unit": "npx jest",
+    "test:unit:tz": "TZ=Australia/Sydney npx jest",
     "updateconfig": "run-s getcapabilities build:config",
     "watch": "cross-env NODE_ENV=development webpack-dev-server",
     "upload": "node tasks/upload.js"
@@ -111,7 +112,6 @@
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.1",
-    "moment": "^2.19.3",
     "nightwatch": "^0.9.16",
     "node-fetch": "^2.1.2",
     "node-sass": "^4.9.2",
@@ -178,7 +178,8 @@
     "reactstrap": "^6.3.1",
     "simplebar": "^3.0.0-beta.1",
     "supercluster": "3.0.2",
-    "web-streams-polyfill": "^1.3.2"
+    "web-streams-polyfill": "^1.3.2",
+    "whatwg-fetch": "^3.0.0"
   },
   "browser": {
     "d3": "./web/ext/d3/d3.js",
@@ -203,6 +204,9 @@
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(ol)/)"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/build/"
     ]
   },
   "prettier": {
