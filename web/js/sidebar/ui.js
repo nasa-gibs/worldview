@@ -62,12 +62,6 @@ export function sidebarUi(models, config, ui) {
       })
       .on('update', updateLayers);
 
-    ui.tour.events.on('reset', () => {
-      updateLayers();
-      updateData();
-      updateState('isCompareMode');
-    });
-
     models.palettes.events
       .on('set-custom', updateLayers)
       .on('clear-custom', updateLayers)
