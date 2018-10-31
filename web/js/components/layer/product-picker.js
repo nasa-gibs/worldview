@@ -34,7 +34,8 @@ class ProductPicker extends React.Component {
       allLayers: props.allLayers,
       selectedMeasurement: null,
       filteredRows: props.filteredRows,
-      selectedProjection: props.selectedProjection
+      selectedProjection: props.selectedProjection,
+      inputValue: ''
     };
   }
   /**
@@ -62,7 +63,8 @@ class ProductPicker extends React.Component {
     if (val.length === 0) {
       this.setState({
         filteredRows: [],
-        listType: 'category'
+        listType: 'category',
+        inputValue: ''
       });
     } else {
       let terms = val.split(/ +/);
@@ -71,7 +73,8 @@ class ProductPicker extends React.Component {
       });
       this.setState({
         filteredRows: filteredRows,
-        listType: 'search'
+        listType: 'search',
+        inputValue: e.target.value
       });
     }
   }
@@ -133,6 +136,7 @@ class ProductPicker extends React.Component {
       categoryType,
       height,
       category,
+      inputValue,
       width,
       selectedMeasurement
     } = this.state;
@@ -159,11 +163,12 @@ class ProductPicker extends React.Component {
           <ProductPickerHeader
             selectedProjection={selectedProjection}
             listType={listType}
+            inputValue={inputValue}
             category={category}
             modalView={modalView}
             runSearch={this.runSearch.bind(this)}
             updateListState={str => {
-              this.setState({ listType: str });
+              this.setState({ listType: str, inputValue: '' });
             }}
           />
         </ModalHeader>

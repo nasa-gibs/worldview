@@ -18,7 +18,7 @@ class ProductPickerHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: ''
+      inputValue: props.inputValue
     };
   }
   /**
@@ -90,6 +90,7 @@ class ProductPickerHeader extends React.Component {
 }
 
 ProductPickerHeader.propTypes = {
+  inputValue: PropTypes.string,
   modalView: PropTypes.string,
   runSearch: PropTypes.func,
   selectedProjection: PropTypes.string,

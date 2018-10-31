@@ -27,7 +27,8 @@ export function layersModal(models, ui, config) {
       models.compare.events.on('change', () => {
         self.reactList.setState({
           activeLayers: model[model.activeLayers],
-          listType: 'category'
+          listType: 'category',
+          inputValue: ''
         });
       });
     }
@@ -37,7 +38,8 @@ export function layersModal(models, ui, config) {
         selectedProjection: models.proj.selected.id,
         allLayers: allLayers,
         filteredRows: allLayers,
-        listType: 'category'
+        listType: 'category',
+        inputValue: ''
       });
     });
 
