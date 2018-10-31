@@ -378,7 +378,7 @@ class App extends React.Component {
 
       models.proj = projectionModel(config);
       models.palettes = palettesModel(models, config);
-      models.layers = layersModel(models, config, ui);
+      models.layers = layersModel(models, config);
       models.date = dateModel(models, config, {
         initial: initialDate
       });
