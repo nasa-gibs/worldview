@@ -182,8 +182,8 @@ export function timelineInput(models, config, ui) {
    * @return {void}
    */
   var animateByIncrement = function(delta, increment) {
-    var endTime = models.layers.lastDate();
-    var endDate = util.today();
+    var endTime = models.layers.lastDateTime();
+    var endDate = models.layers.lastDate();
     self.delta = Math.abs(delta);
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
@@ -252,9 +252,10 @@ export function timelineInput(models, config, ui) {
     var nd = new Date(ms.setUTCDate(ms.getUTCDate() + 1));
     var pd = new Date(ms.setUTCDate(ms.getUTCDate() - 1));
     var endDate = models.layers.lastDate();
+    var endDateTime = models.layers.lastDateTime();
 
     // Disable arrows if nothing before/after selection
-    if (model.selectedZoom > 3 && nt >= endDate) {
+    if (model.selectedZoom > 3 && nt >= endDateTime) {
       $incrementBtn.addClass('button-disabled');
     } else if (model.selectedZoom < 4 && nd > endDate) {
       $incrementBtn.addClass('button-disabled');
