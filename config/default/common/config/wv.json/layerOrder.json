@@ -587,6 +587,9 @@
         "MEaSUREs_Ice_Velocity_Antarctica",
         "MEaSUREs_Sea_Ice_Snow_Extent",
 
+        "LIS_ISS_Flash_Count",
+        "LIS_ISS_Flash_Radiance",
+
         "LIS_High_Resolution_Full_Climatology_LIS_Raw_Flashes",
         "LIS_High_Resolution_Full_Climatology_LIS_Scaled_Flashes",
         "LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology",

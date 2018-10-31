@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "LIS_ISS_Flash_Count": {
+            "id":       "LIS_ISS_Flash_Count",
+            "title":    "ISS LIS Flash Count (Level 2, NRT)",
+            "subtitle": "ISS / LIS",
+            "description": "iss/LIS_ISS_Flash_Count",
+            "tags":     "lightning international space station iss",
+            "group":    "overlays",
+            "layergroup": [
+              "iss"
+            ],
+            "product":  "isslis_p0_nrt",
+            "wrapadjacentdays": true
+        }
+    }
+}
