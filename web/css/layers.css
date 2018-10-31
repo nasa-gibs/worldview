@@ -269,13 +269,7 @@
   box-sizing: border-box;
   border: 0;
   position: relative;
-}
-
-.layers-all .layers-all-layer {
   background: rgba(0, 0, 0, 0.85);
-}
-
-.layers-all .layers-all-layer {
   padding-left: 1.2em;
   line-height: 0;
 }
@@ -487,7 +481,7 @@
 .measurement-row .source-nav-item {
   margin-left: 10px;
   cursor: pointer;
-  font-family: Open Sans, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
   font-weight: 300;
 }
@@ -520,7 +514,7 @@
 }
 .measurement-row .source-sub-group .wv-checkbox {
   color: #fff;
-  font: 400 13px/13px Open Sans, sans-serif;
+  font: 400 13px/13px "Open Sans", sans-serif;
 }
 .measurement-row .wv-checkbox label {
   display: inline;
