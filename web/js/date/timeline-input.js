@@ -246,15 +246,15 @@ export function timelineInput(models, config, ui) {
     }
   };
 
-  // TODO: Cleanup
   self.update = function(date) {
     var ms = date || new Date(model[model.activeDate]);
+    var nt = new Date(ms.setUTCMinutes(ms.getUTCMinutes() + 10));
     var nd = new Date(ms.setUTCDate(ms.getUTCDate() + 1));
     var pd = new Date(ms.setUTCDate(ms.getUTCDate() - 1));
     var endDate = models.layers.lastDate();
 
     // Disable arrows if nothing before/after selection
-    if (model.selectedZoom > 3 && ms >= endDate) {
+    if (model.selectedZoom > 3 && nt >= endDate) {
       $incrementBtn.addClass('button-disabled');
     } else if (model.selectedZoom < 4 && nd > endDate) {
       $incrementBtn.addClass('button-disabled');
@@ -269,6 +269,7 @@ export function timelineInput(models, config, ui) {
 
     tl.pick.update();
   };
+
   var updateMaxZoom = function() {
     if (model.maxZoom >= 4) {
       document.getElementById('timeline-header').classList.add('subdaily');
