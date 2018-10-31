@@ -182,12 +182,19 @@ export function timelineInput(models, config, ui) {
    * @return {void}
    */
   var animateByIncrement = function(delta, increment) {
-    var endDate = models.layers.lastDate();
+    var endTime = models.layers.lastDate();
+    var endDate = util.today();
     self.delta = Math.abs(delta);
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
-      if (tl.data.start() <= nextTime <= endDate) {
-        models.date.add(increment, delta);
+      if (ui.timeline.config.currentZoom >= 4) {
+        if ((tl.data.start() <= nextTime) && (nextTime <= endTime)) {
+          models.date.add(increment, delta);
+        }
+      } else {
+        if ((tl.data.start() <= nextTime) && (nextTime <= endDate)) {
+          models.date.add(increment, delta);
+        }
       }
       animator = setTimeout(animate, self.delay);
     }
@@ -209,29 +216,31 @@ export function timelineInput(models, config, ui) {
    * @return {Object} JS Date Object
    */
   var getNextTimeSelection = function(delta, increment) {
+    var prevDate = model.selected;
+
     switch (increment) {
       case 'year':
         return new Date(
-          new Date(model.selected).setUTCFullYear(
-            model.selected.getUTCFullYear() + increment
+          new Date(prevDate).setUTCFullYear(
+            prevDate.getUTCFullYear() + delta
           )
         );
       case 'month':
         return new Date(
-          new Date(model.selected).setUTCMonth(
-            model.selected.getUTCMonth() + increment
+          new Date(prevDate).setUTCMonth(
+            prevDate.getUTCMonth() + delta
           )
         );
       case 'day':
         return new Date(
-          new Date(model.selected).setUTCDate(
-            model.selected.getUTCDate() + increment
+          new Date(prevDate).setUTCDate(
+            prevDate.getUTCDate() + delta
           )
         );
       case 'minute':
         return new Date(
-          new Date(model.selected).setUTCMinutes(
-            model.selected.getUTCMinutes() + increment
+          new Date(prevDate).setUTCMinutes(
+            prevDate.getUTCMinutes() + delta
           )
         );
     }
