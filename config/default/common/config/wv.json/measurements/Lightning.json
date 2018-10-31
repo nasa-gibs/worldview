@@ -3,22 +3,32 @@
         "Lightning": {
             "id": "lightning",
             "title":    "Lightning",
-            "subtitle": "TRMM/LIS, OrbView-1/OTD, TRMM/LIS & OrbView/OTD, DMSP-F10/OLS, DMSP-F12/OTD",
+            "subtitle": "ISS/LIS, TRMM/LIS, OrbView-1/OTD, TRMM/LIS & OrbView/OTD, DMSP-F10/OLS, DMSP-F12/OTD",
             "sources": {
+                "ISS/LIS": {
+                    "id": "iss-lis",
+                    "title": "ISS/LIS",
+                    "description": "iss/LightningFlashCount&Radiance",
+                    "image": "",
+                    "settings": [
+                       "LIS_ISS_Flash_Count",
+                       "LIS_ISS_Flash_Radiance"
+                    ]
+                },
                 "TRMM/LIS": {
                     "id": "trmm-lis",
                     "title": "TRMM/LIS",
                     "description": "trmm/LightningFlashes&Rate",
                     "image": "",
                     "settings": [
-                       "LIS_High_Resolution_Full_Climatology_LIS_Raw_Flashes",
-                       "LIS_High_Resolution_Full_Climatology_LIS_Scaled_Flashes",
-                       "LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology",
-                       "LIS_Very_High_Resolution_Lightning_Daily_Climatology_LIS_Mean_Flash_Rate",
-                       "LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate",
-                       "LIS_Very_High_Resolution_Lightning_Monthly_Climatology_LIS_Mean_Flash_Rate",
-                       "LIS_Very_High_Resolution_Lightning_Seasonal_Climatology_LIS_Mean_Flash_Rate",
-                       "LIS_TRMM_Flash_Radiance"
+                      "LIS_High_Resolution_Full_Climatology_LIS_Raw_Flashes",
+                      "LIS_High_Resolution_Full_Climatology_LIS_Scaled_Flashes",
+                      "LIS_High_Resolution_Full_Climatology_LIS_Flash_Rate_Climatology",
+                      "LIS_Very_High_Resolution_Lightning_Daily_Climatology_LIS_Mean_Flash_Rate",
+                      "LIS_Very_High_Resolution_Lightning_Full_Climatology_LIS_Mean_Flash_Rate",
+                      "LIS_Very_High_Resolution_Lightning_Monthly_Climatology_LIS_Mean_Flash_Rate",
+                      "LIS_Very_High_Resolution_Lightning_Seasonal_Climatology_LIS_Mean_Flash_Rate",
+                      "LIS_TRMM_Flash_Radiance"
                     ]
                 },
                 "OrbView-1/OTD": {
