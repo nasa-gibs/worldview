@@ -1097,6 +1097,7 @@ export function timelineConfig(models, config, ui) {
     model.selectedZoom = level;
     model.events.trigger('zoom-change');
     model.events.trigger('timeline-change');
+    ui.timeline.input.update();
   };
 
   var switchZoom = function(zoomLevel) {

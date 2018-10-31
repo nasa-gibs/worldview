@@ -8,7 +8,7 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import util from '../util/util';
 import googleTagManager from 'googleTagManager';
 
-export function layersModel(models, config) {
+export function layersModel(models, config, ui) {
   var self = {};
   self.activeLayers = 'active';
   self.loaded = false;
@@ -200,11 +200,11 @@ export function layersModel(models, config) {
   self.lastDate = function () {
     var endDate;
     var layersDateRange = self.dateRange();
-    var now = util.today();
+    var now = util.now();
     if (layersDateRange && layersDateRange.end > now) {
       endDate = layersDateRange.end;
     } else {
-      endDate = util.today();
+      endDate = now;
     }
     return endDate;
   };
