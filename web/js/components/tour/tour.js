@@ -10,6 +10,7 @@ class Tour extends React.Component {
     this.state = {
       models: props.models,
       config: props.config,
+      ui: props.ui,
       stories: props.stories,
       storyOrder: props.storyOrder,
       modalStart: props.modalStart,
@@ -117,6 +118,7 @@ class Tour extends React.Component {
 Tour.propTypes = {
   models: PropTypes.object.isRequired,
   config: PropTypes.object.isRequired,
+  ui: PropTypes.object.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
   modalStart: PropTypes.bool.isRequired,

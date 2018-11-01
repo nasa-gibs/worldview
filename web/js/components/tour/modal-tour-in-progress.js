@@ -7,7 +7,7 @@ import lodashEach from 'lodash/each';
 import lodashMap from 'lodash/map';
 
 import { parse as dateParser } from '../../date/date';
-import { parse as layerParser } from '../../layers/layers';
+// import { parse as layerParser } from '../../layers/layers';
 import { mapParser } from '../../map/map';
 import { parse as animationParser } from '../../animation/anim';
 import palettes from '../../palettes/palettes';
@@ -99,10 +99,11 @@ class ModalInProgress extends React.Component {
   selectLink() {
     var parsers;
     var errors = [];
+    var state = util.fromQueryString(location.search);
     var config = this.props.config;
     var models = this.props.models;
-    // var ui = this.props.ui;
-    var state = util.fromQueryString(location.search);
+    var ui = this.props.ui;
+    var map = ui.map.selected;
 
     // var comparisonOn = state.ca;
     // var timeA = state.t;
@@ -112,7 +113,6 @@ class ModalInProgress extends React.Component {
     // var projection = state.p;
     var view = state.v;
     // var zoom = state.z;
-
     // // Set Projection
     // if (projection) models.proj.select(projection);
 
@@ -121,13 +121,20 @@ class ModalInProgress extends React.Component {
     // // Set Layer B time
     // if (timeB) models.date.select(util.parseDateUTC(timeB));
 
+    // var coordinates =
+    //   olProj.transform(
+    //     geometry.coordinates,
+    //     'EPSG:4326',
+    //     models.proj.selected.crs
+    //   );
     // Set Zoom & View
     if (view) {
       let extent = lodashMap(state.v.split(','), function (str) {
         return parseFloat(str);
       });
 
-      models.map.update(extent);
+      map.getView().fit(extent, map.getSize());
+      // ui.map.animate.fly(coordinates, zoom);
     }
     // // if (zoom && view) ui.naturalEvents.zoomToEvent(event, date, isSameEventID)
 
@@ -182,6 +189,7 @@ class ModalInProgress extends React.Component {
     lodashEach(parsers, function(parser) {
       parser(state, errors, config);
     });
+
     models.link.load(state);
   }
 
@@ -217,6 +225,7 @@ class ModalInProgress extends React.Component {
 ModalInProgress.propTypes = {
   models: PropTypes.object.isRequired,
   config: PropTypes.object.isRequired,
+  ui: PropTypes.object.isRequired,
   modalInProgress: PropTypes.bool.isRequired,
   toggleModalInProgress: PropTypes.func.isRequired,
   currentStep: PropTypes.number.isRequired,
