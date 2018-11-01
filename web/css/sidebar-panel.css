@@ -242,6 +242,7 @@ li.item.productsitem.inmotion,
   -o-box-sizing: border-box;
   position: relative;
   border: 1px solid transparent;
+  overflow: hidden;
 }
 
 .sidebar-panel li.item.productsitem:hover {
