@@ -5,6 +5,7 @@ import Steps from './widget-steps';
 import util from '../../util/util';
 import lodashEach from 'lodash/each';
 import lodashMap from 'lodash/map';
+// import { getCenter } from 'ol/extent';
 
 import { parse as dateParser } from '../../date/date';
 // import { parse as layerParser } from '../../layers/layers';
@@ -127,6 +128,7 @@ class ModalInProgress extends React.Component {
     //     'EPSG:4326',
     //     models.proj.selected.crs
     //   );
+
     // Set Zoom & View
     if (view) {
       let extent = lodashMap(state.v.split(','), function (str) {
@@ -134,24 +136,23 @@ class ModalInProgress extends React.Component {
       });
 
       map.getView().fit(extent, map.getSize());
+
+      // TODO: FLY TO MAP LOGIC
+      // var coordinateX = extent[0] + (extent[2]-extent[0])/2;
+      // var coordinateY = extent[1] + (extent[3]-extent[1])/2;
+      // let coordinates = [coordinateX, coordinateY];
+      // console.log(extent);
+      // let coordinates = getCenter(extent);
+      // let zoom = ui.map.selected.getView().getZoom();
+      // console.log(coordinates);
+      // console.log(zoom);
       // ui.map.animate.fly(coordinates, zoom);
     }
-    // // if (zoom && view) ui.naturalEvents.zoomToEvent(event, date, isSameEventID)
 
     // Set layers
     var layerString = models.layers.activeLayers;
+
     // Turn string of layersA into an array
-
-    // Set current layers visible
-    models.layers[layerString].forEach(function(layer) {
-      models.layers.setVisibility(layer.id, false, layerString);
-    });
-
-    // Remove layers in the list
-    models.layers[layerString].forEach(function(layer) {
-      models.layers.remove(layer.id, false, layerString);
-    });
-
     if (layersA) {
       var layersAArray = layersA.split(',');
       // Turn on or add new layers
@@ -161,16 +162,15 @@ class ModalInProgress extends React.Component {
         if (models.layers.exists(id, models.layers[layerString])) {
           models.layers.setVisibility(id, visible, layerString);
         } else {
-          models.layers.add(
-            id,
-            {
-              visible: visible
-            },
-            layerString
-          );
+          models.layers.add(id, { visible: visible }, layerString);
         }
       });
     }
+
+    // Remove layers in the list
+    models.layers[layerString].forEach(function(layer) {
+      if (layer) models.layers.remove(layer.id);
+    });
 
     parsers = [
       projectionParser,
