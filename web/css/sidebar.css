@@ -84,10 +84,16 @@
   color: #fff;
 }
 
-/** IE Scrollbar hack */
+/**
+ * IE Scrollbar hack
+ * For strange ui when
+ * you have overlapping
+ * Scrollable elements
+ */
 #productsHolder.layer-modal-open .simplebar-scroll-content,
 #productsHolder.layer-modal-open .simplebar-content {
   overflow: hidden;
+  width: 100%;
 }
 
 #productsHolder footer {
