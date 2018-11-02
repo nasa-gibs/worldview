@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import util from '../../util/util';
 
 import {
   Breadcrumb,
@@ -30,6 +31,7 @@ class ProductPickerHeader extends React.Component {
     this.setState({ inputValue: '' });
   }
   render() {
+    const isAutoFocus = !util.browser.touchDevice;
     const {
       modalView,
       runSearch,
@@ -83,6 +85,7 @@ class ProductPickerHeader extends React.Component {
           value={this.state.inputValue}
           placeholder="Search"
           type="search"
+          autoFocus={isAutoFocus}
         />
       </InputGroup>
     );
