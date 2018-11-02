@@ -1,6 +1,5 @@
 import React from 'react';
 
-import 'babel-polyfill'; // Needed for worldview-components in IE and older browsers
 import lodashEach from 'lodash/each';
 import googleAnalytics from './components/util/google-analytics';
 import googleTagManager from './components/util/google-tag-manager';
