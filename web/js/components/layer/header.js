@@ -41,6 +41,7 @@ class ProductPickerHeader extends React.Component {
       !modalView &&
       selectedProjection === 'geographic' &&
       listType !== 'category';
+    const isSearching = listType === 'search';
     return (
       <InputGroup id="layer-search" className="layer-search">
         {isBreadCrumb ? (
@@ -70,6 +71,14 @@ class ProductPickerHeader extends React.Component {
               </BreadcrumbItem>
             </Breadcrumb>
           </React.Fragment>
+        ) : isSearching ? (
+          <Button
+            className="back-button"
+            color="secondary"
+            onClick={this.revertToInitialScreen.bind(this)}
+          >
+            <i className="fa fa-arrow-left" />{' '}
+          </Button>
         ) : (
           ''
         )}
