@@ -50,7 +50,7 @@ class OlCoordinates extends React.Component {
   }
 
   mouseOut(event) {
-    if (event.relatedTarget) {
+    if (event.relatedTarget && event.relatedTarget.classList) {
       let cl = event.relatedTarget.classList;
       // Ignore when the mouse goes over the coordinate display. Clearing
       // the coordinates in this situation causes a flicker.
