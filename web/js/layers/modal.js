@@ -39,7 +39,8 @@ export function layersModal(models, ui, config) {
         allLayers: allLayers,
         filteredRows: allLayers,
         listType: 'category',
-        inputValue: ''
+        inputValue: '',
+        category: null
       });
     });
 

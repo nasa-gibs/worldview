@@ -237,7 +237,8 @@ class ProductPicker extends React.Component {
 
 ProductPicker.defaultProps = {
   listType: 'category',
-  isOpen: false
+  isOpen: false,
+  category: null
 };
 ProductPicker.propTypes = {
   listType: PropTypes.string,
