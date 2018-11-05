@@ -127,7 +127,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       date = models.date[models.date.activeDate];
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
-      if (models.layers.maxZoom < 4) {
+      if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
       }
     }
@@ -465,6 +465,9 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
           date: models.date[models.date.activeDate]
         });
         layer = cache.getItem(key);
+        if (!layer) {
+          throw new Error(`no such layer in cache: ${key}`);
+        }
         layer.setExtent([-180, -90, 180, 90]);
       }
     }
