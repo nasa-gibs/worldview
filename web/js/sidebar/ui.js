@@ -38,7 +38,6 @@ export function sidebarUi(models, config, ui) {
     var layerAdd = function(layer) {
       if (!ui.tour.resetting && !ui.naturalEvents.selecting) {
         updateLayers();
-        updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
       }
     };
 
@@ -213,11 +212,20 @@ export function sidebarUi(models, config, ui) {
   var updateLayers = function() {
     if (!ui.tour.resetting) {
       if (models.compare && models.compare.active) {
-        updateState('layerObjects');
-        updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
+        let compareObj = getCompareObjects(models);
+        return self.reactComponent.setState({
+          firstDateObject: compareObj.a,
+          secondDateObject: compareObj.b,
+          zotsObject: getZotsForActiveLayers(config, models, ui)
+        });
       } else {
-        updateState('layers');
-        updateState('zotsObject', getZotsForActiveLayers(config, models, ui));
+        self.reactComponent.setState({
+          layers: models.layers.get(
+            { group: 'all', proj: 'all' },
+            models.layers[models.layers.activeLayers]
+          ),
+          zotsObject: getZotsForActiveLayers(config, models, ui)
+        });
       }
     }
   };
