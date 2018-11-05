@@ -58,7 +58,7 @@ export function dataMap(model, maps, config) {
     var dimensions = getButtonDimensions(feature);
     var offset = -(dimensions.size / 2.0 + 14);
     var textStyle = new OlStyleText({
-      exceedLength: true,
+      overflow: true,
       font: 'bold 14px ‘Lucida Sans’, Arial, Sans-Serif',
       text: feature.granule.label,
       fill: new OlStyleFill({
