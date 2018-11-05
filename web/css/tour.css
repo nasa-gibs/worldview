@@ -45,7 +45,7 @@
 /* .tour-start */
 .tour-start .modal {
   overflow-y: auto;
-  height: 794px;
+  height: 830px;
   width: 635px;
   margin-left: auto;
   margin-right: auto;
@@ -204,6 +204,10 @@
   background-color: rgba(20, 20, 20, 0.75);
   padding: 4px;
   order: 1;
+}
+
+.tour-start .modal-footer {
+  padding: 0 4px 4px;
 }
 
 /* .tour-in-progress */
