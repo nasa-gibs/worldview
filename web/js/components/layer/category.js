@@ -15,9 +15,12 @@ class Category extends React.Component {
       hasMeasurementSource,
       categoryType
     } = this.props;
-    const categoryBgImage = category.image
+    const bgImage = category.image
+      ? 'images/wv.layers/categories/' + category.image
+      : '';
+    const categoryBgImage = bgImage
       ? {
-        backgroundImage: 'url("images/wv.layers/categories/' + category.image
+        backgroundImage: `url(${bgImage})`
       }
       : {};
 
