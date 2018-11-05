@@ -284,17 +284,19 @@ class LayerRow extends React.Component {
 
     const Tabs = (
       <Nav vertical className="source-tabs col-md-3 col-sm-12">
-        {sources.map(
-          (source, index) =>
-            hasMeasurementSetting(measurement, source)
-              ? this.renderSourceTabs(
-                measurement,
-                source,
-                index,
-                activeSourceIndex
-              )
-              : ''
-        )}
+        {sources
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map(
+            (source, index) =>
+              hasMeasurementSetting(measurement, source)
+                ? this.renderSourceTabs(
+                  measurement,
+                  source,
+                  index,
+                  activeSourceIndex
+                )
+                : ''
+          )}
       </Nav>
     );
 
