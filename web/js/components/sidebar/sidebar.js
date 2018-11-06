@@ -168,7 +168,6 @@ class Sidebar extends React.Component {
       onGetData,
       windowHeight,
       filterEventList,
-      modalOpen,
       projection
     } = this.state;
     const {
@@ -224,11 +223,7 @@ class Sidebar extends React.Component {
         />
         <div
           id="productsHolder"
-          className={
-            modalOpen
-              ? 'layer-modal-open products-holder-case'
-              : 'products-holder-case'
-          }
+          className="products-holder-case"
           style={
             isCollapsed
               ? { maxHeight: '0' }
