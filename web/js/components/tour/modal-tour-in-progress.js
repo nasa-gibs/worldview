@@ -29,7 +29,6 @@ class ModalInProgress extends React.Component {
     this.fetchMetadata = this.fetchMetadata.bind(this);
     this.stepLink = this.stepLink.bind(this);
     this.selectLink = this.selectLink.bind(this);
-    this.registerMapMouseHandlers = this.registerMapMouseHandlers.bind(this);
   }
 
   componentDidMount() {
@@ -76,9 +75,11 @@ class ModalInProgress extends React.Component {
     // Get steplink from the currentstory's current step
     currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
     stepLink = currentStory.steps[currentStepIndex]['stepLink'];
+
     // TESTING HERE:
     // stepLink = 'p=arctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,AMSR2_Snow_Water_Equivalent,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-11-06-T00%3A00%3A00Z&z=3&v=-8382951.387251401,-7726888.724782713,8382951.387251401,7726888.724782713&r=-38.5164';
     state = util.fromQueryString(stepLink);
+
     // Parse the step link
     projectionParser(state, errors, config);
     layerParser(state, errors, config);
@@ -93,10 +94,10 @@ class ModalInProgress extends React.Component {
       animationParser(state, errors, config);
     }
 
+    // Create a query string again to be passed to the URL
     stepLink = models.link.toQueryString(state);
 
-    // Get URL Link here from JSON file (for each step)
-    // Push Link to Browser URL
+    // Push query string to browser url
     if (util.browser.history) {
       window.history.pushState(
         '',
@@ -105,20 +106,8 @@ class ModalInProgress extends React.Component {
       );
     }
 
+    // Process the state of the application
     this.selectLink(state);
-  }
-
-  registerMapMouseHandlers(maps, events) {
-    Object.values(maps).forEach((map) => {
-      let element = map.getTargetElement();
-      let crs = map.getView().getProjection().getCode();
-      element.addEventListener('mousemove', event => {
-        events.trigger('mousemove', event, map, crs);
-      });
-      element.addEventListener('mouseout', event => {
-        events.trigger('mouseout', event, map, crs);
-      });
-    });
   }
 
   selectLink(state) {
