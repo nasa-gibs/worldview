@@ -24,7 +24,7 @@ export function tourUi(models, ui, config) {
       ui: ui,
       stories: config['stories'],
       storyOrder: config['storyOrder'],
-      modalStart: !localStorage.hideTour,
+      modalStart: self.checkBuildTimestamp(),
       modalInProgress: false,
       modalComplete: false,
       currentStep: 1,
@@ -40,6 +40,27 @@ export function tourUi(models, ui, config) {
       hideTour: self.hideTour,
       showTour: self.showTour
     };
+  };
+
+  self.checkBuildTimestamp = function() {
+    var hideTour = localStorage.getItem('hideTour');
+
+    if (!util.browser.localStorage) return;
+
+    if (hideTour && config.buildDate) {
+      let buildDate = new Date(config.buildDate);
+      let tourDate = new Date(hideTour);
+      if (buildDate > tourDate) {
+        localStorage.removeItem('hideTour');
+        return true;
+      } else {
+        return false;
+      }
+    } else if (hideTour) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   self.startTour = function(e) {
@@ -71,7 +92,7 @@ export function tourUi(models, ui, config) {
     if (!util.browser.localStorage) return;
     if (hideTour) return;
 
-    localStorage.setItem('hideTour', !hideTour);
+    localStorage.setItem('hideTour', new Date());
   };
 
   self.showTour = function(e) {
@@ -80,7 +101,7 @@ export function tourUi(models, ui, config) {
     if (!util.browser.localStorage) return;
     if (!hideTour) return;
 
-    localStorage.removeItem('hideTour', !hideTour);
+    localStorage.removeItem('hideTour');
   };
 
   init();
