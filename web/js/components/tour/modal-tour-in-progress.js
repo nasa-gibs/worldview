@@ -117,7 +117,7 @@ class ModalInProgress extends React.Component {
     var ui = this.props.ui;
     // var map = ui.map.selected;
 
-    // Changes projection, date
+    // Map Projection, Map Date
     models.link.load(state);
 
     // Map Rotation (Animated)
@@ -131,20 +131,22 @@ class ModalInProgress extends React.Component {
       }
     }
 
-    // Set Zoom & View
+    // Map Zoom & View (Animated)
     if (state.v) {
-      ui.map.selected.getView().fit(state.v, ui.map.selected.getSize());
+      // No animation option
+      // ui.map.selected.getView().fit(state.v, ui.map.selected.getSize());
 
-      // TODO: FLY TO MAP LOGIC
-      // var coordinateX = extent[0] + (extent[2]-extent[0])/2;
-      // var coordinateY = extent[1] + (extent[3]-extent[1])/2;
-      // let coordinates = [coordinateX, coordinateY];
-      // console.log(extent);
-      // let coordinates = getCenter(extent);
-      // let zoom = ui.map.selected.getView().getZoom();
-      // console.log(coordinates);
-      // console.log(zoom);
-      // ui.map.animate.fly(coordinates, zoom);
+      // Animate to extent & zoom
+      let extent = state.v;
+      var coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
+      var coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
+      let coordinates = [coordinateX, coordinateY];
+      let resolution = ui.map.selected.getView().getResolutionForExtent(extent);
+      ui.map.selected.getView().animate({
+        center: coordinates,
+        duration: 2000,
+        resolution: resolution
+      });
     }
 
     // var comparisonOn = state.ca;
