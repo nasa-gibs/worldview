@@ -56,7 +56,8 @@ export class Checkbox extends React.Component {
   }
 }
 Checkbox.defaultProps = {
-  checked: true
+  checked: true,
+  onCheck: null
 };
 
 Checkbox.propTypes = {

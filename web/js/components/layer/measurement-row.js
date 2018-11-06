@@ -10,11 +10,9 @@ import {
   NavItem,
   NavLink,
   Row,
-  ListGroup,
-  ListGroupItem
+  ListGroup
 } from 'reactstrap';
-
-import { Checkbox } from '../util/checkbox';
+import MeasurementLayerRow from './measurement-layer-row';
 
 /**
  * A single layer search result row
@@ -56,36 +54,18 @@ class LayerRow extends React.Component {
     }
   }
   /**
-   * @param {String} orbitTitle
-   * @param {Object} measurement | Measurement Object
-   * @param {Object} layer | Layer Object
-   */
-  renderOrbitListItem(orbitTitle, measurement, layer) {
-    const { activeLayers } = this.props;
-
-    return (
-      <ListGroupItem
-        key={measurement.id + '-' + layer.id}
-        onClick={this.onClickLayer.bind(this, layer.id)}
-        id={'checkbox-case-' + layer.id}
-      >
-        <Checkbox
-          name={layer.title}
-          checked={!!lodashFind(activeLayers, { id: layer.id })}
-          onClick={this.onClickLayer.bind(this, layer.id)}
-          label={orbitTitle}
-          classNames="settings-check"
-        />
-      </ListGroupItem>
-    );
-  }
-  /**
    * Render orbits and layer selections for
    * selected source
    * @param {Object} source | Object containing source info
    */
   renderSourceSettings(source) {
-    const { layerConfig, measurement, activeLayers } = this.props;
+    const {
+      layerConfig,
+      measurement,
+      activeLayers,
+      removeLayer,
+      addLayer
+    } = this.props;
     const { projection } = this.state;
     let OrbitSourceList = [];
     let LayerSouceList = [];
@@ -113,23 +93,27 @@ class LayerRow extends React.Component {
           }
 
           OrbitSourceList.push(
-            this.renderOrbitListItem(orbitTitle, measurement, layer)
+            <MeasurementLayerRow
+              measurementId={measurement.id}
+              key={measurement.id + layer.id}
+              checked={!!lodashFind(activeLayers, { id: layer.id })}
+              layerId={layer.id}
+              title={orbitTitle}
+              removeLayer={removeLayer}
+              addLayer={addLayer}
+            />
           );
         } else {
           LayerSouceList.push(
-            <ListGroupItem
-              key={measurement.id + '-' + layer.id}
-              onClick={this.onClickLayer.bind(this, layer.id)}
-              id={'checkbox-case-' + layer.id}
-            >
-              <Checkbox
-                name={layer.title}
-                onClick={this.onClickLayer.bind(this, layer.id)}
-                checked={!!lodashFind(activeLayers, { id: layer.id })}
-                label={layer.title}
-                classNames="settings-check"
-              />
-            </ListGroupItem>
+            <MeasurementLayerRow
+              measurementId={measurement.id}
+              key={measurement.id + layer.id}
+              checked={!!lodashFind(activeLayers, { id: layer.id })}
+              layerId={layer.id}
+              title={layer.title}
+              removeLayer={removeLayer}
+              addLayer={addLayer}
+            />
           );
         }
       } else if (layer.title.indexOf('Orbital Track') !== -1) {

@@ -23,7 +23,6 @@ export function layersModal(models, ui, config) {
       React.createElement(LayerList, getInitialProps(models.proj.selected.id)),
       $(self.selector)[0]
     );
-    model.events.on('remove', onLayerAddRemove).on('add', onLayerAddRemove);
     if (models.compare) {
       models.compare.events.on('change', () => {
         self.reactList.setState({
@@ -186,13 +185,7 @@ export function layersModal(models, ui, config) {
   self.isOpen = function() {
     return self.reactList.state.isOpen;
   };
-  var onLayerAddRemove = function(layer) {
-    if (self.reactList) {
-      self.reactList.setState({
-        activeLayers: model[model.activeLayers]
-      });
-    }
-  };
+
   var filterProjections = function(layer) {
     return !layer.projections[models.proj.selected.id];
   };
