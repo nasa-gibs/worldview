@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
-import lodashEach from 'lodash/each';
-import lodashMap from 'lodash/map';
+// import lodashEach from 'lodash/each';
+// import lodashMap from 'lodash/map';
 // import { getCenter } from 'ol/extent';
 
 import { parse as dateParser } from '../../date/date';
-// import { parse as layerParser } from '../../layers/layers';
+import { parse as layerParser } from '../../layers/layers';
 import { mapParser } from '../../map/map';
 import { parse as animationParser } from '../../animation/anim';
 import palettes from '../../palettes/palettes';
@@ -68,9 +68,30 @@ class ModalInProgress extends React.Component {
   }
 
   stepLink(currentStory, currentStepIndex) {
-    var stepLink;
+    var state, stepLink;
+    var config = this.props.config;
+    var models = this.props.models;
+    var errors = [];
+
+    // Get steplink from the currentstory's current step
     currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
     stepLink = currentStory.steps[currentStepIndex]['stepLink'];
+    state = util.fromQueryString(stepLink);
+    // Parse the step link
+    projectionParser(state, errors, config);
+    layerParser(state, errors, config);
+    dateParser(state, errors, config);
+    mapParser(state, errors, config);
+    palettes.parse(state, errors, config);
+    tourParser(state, errors, config);
+    if (config.features.dataDownload) {
+      dataParser(state, errors, config);
+    }
+    if (config.features.animation) {
+      animationParser(state, errors, config);
+    }
+
+    stepLink = models.link.toQueryString(state);
 
     // Get URL Link here from JSON file (for each step)
     // Push Link to Browser URL
@@ -81,7 +102,8 @@ class ModalInProgress extends React.Component {
         '?' + stepLink
       );
     }
-    this.selectLink(stepLink);
+
+    this.selectLink(state);
   }
 
   registerMapMouseHandlers(maps, events) {
@@ -97,22 +119,23 @@ class ModalInProgress extends React.Component {
     });
   }
 
-  selectLink(stepLink) {
-    var parsers;
-    var errors = [];
-    var state = util.fromQueryString(stepLink);
-    var config = this.props.config;
+  selectLink(state) {
+    // var errors = [];
+    // var config = this.props.config;
     var models = this.props.models;
-    var ui = this.props.ui;
-    var map = ui.map.selected;
+    // var ui = this.props.ui;
+    // var map = ui.map.selected;
+
+    // console.log(state);
+    // console.log(config);
 
     // var comparisonOn = state.ca;
     // var timeA = state.t;
     // var timeB = state.t1;
-    var layersA = state.l;
+    // var layersA = state.l;
     // // var layersB = state.l1;
     // var projection = state.p;
-    var view = state.v;
+    // var view = state.v;
     // var zoom = state.z;
     // // Set Projection
     // if (projection) models.proj.select(projection);
@@ -130,66 +153,51 @@ class ModalInProgress extends React.Component {
     //   );
 
     // Set Zoom & View
-    if (view) {
-      let extent = lodashMap(state.v.split(','), function (str) {
-        return parseFloat(str);
-      });
+    // if (view) {
+    //   let extent = lodashMap(state.v.split(','), function (str) {
+    //     return parseFloat(str);
+    //   });
 
-      map.getView().fit(extent, map.getSize());
+    //   map.getView().fit(extent, map.getSize());
 
-      // TODO: FLY TO MAP LOGIC
-      // var coordinateX = extent[0] + (extent[2]-extent[0])/2;
-      // var coordinateY = extent[1] + (extent[3]-extent[1])/2;
-      // let coordinates = [coordinateX, coordinateY];
-      // console.log(extent);
-      // let coordinates = getCenter(extent);
-      // let zoom = ui.map.selected.getView().getZoom();
-      // console.log(coordinates);
-      // console.log(zoom);
-      // ui.map.animate.fly(coordinates, zoom);
-    }
+    //   // TODO: FLY TO MAP LOGIC
+    //   // var coordinateX = extent[0] + (extent[2]-extent[0])/2;
+    //   // var coordinateY = extent[1] + (extent[3]-extent[1])/2;
+    //   // let coordinates = [coordinateX, coordinateY];
+    //   // console.log(extent);
+    //   // let coordinates = getCenter(extent);
+    //   // let zoom = ui.map.selected.getView().getZoom();
+    //   // console.log(coordinates);
+    //   // console.log(zoom);
+    //   // ui.map.animate.fly(coordinates, zoom);
+    // }
 
     // Set layers
-    var layerString = models.layers.activeLayers;
+    // var layerString = models.layers.activeLayers;
 
-    // Turn string of layersA into an array
-    if (layersA) {
-      var layersAArray = layersA.split(',');
-      // Turn on or add new layers
-      layersAArray.forEach(function(layer) {
-        var id = layer.split('(')[0];
-        var visible = !layer.includes('hidden');
-        if (models.layers.exists(id, models.layers[layerString])) {
-          models.layers.setVisibility(id, visible, layerString);
-        } else {
-          models.layers.add(id, { visible: visible }, layerString);
-        }
-      });
-    }
+    // // Turn string of layersA into an array
+    // if (layersA) {
+    //   var layersAArray = layersA.split(',');
+    //   // Turn on or add new layers
+    //   layersAArray.forEach(function(layer) {
+    //     var id = layer.split('(')[0];
+    //     var visible = !layer.includes('hidden');
+    //     if (models.layers.exists(id, models.layers[layerString])) {
+    //       models.layers.setVisibility(id, visible, layerString);
+    //     } else {
+    //       models.layers.add(id, { visible: visible }, layerString);
+    //     }
+    //   });
+    // }
 
     // Remove layers in the list
     // models.layers[layerString].forEach(function(layer) {
     //   if (layer) models.layers.remove(layer.id);
     // });
 
-    parsers = [
-      projectionParser,
-      // layerParser,
-      dateParser,
-      mapParser,
-      palettes.parse,
-      tourParser
-    ];
-    if (config.features.dataDownload) {
-      parsers.push(dataParser);
-    }
-    if (config.features.animation) {
-      parsers.push(animationParser);
-    }
-    lodashEach(parsers, function(parser) {
-      parser(state, errors, config);
-    });
+    // console.log(JSON.stringify(state, null, 4));
 
+    // console.log(JSON.stringify(state, null, 4));
     models.link.load(state);
   }
 
