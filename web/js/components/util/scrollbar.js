@@ -22,7 +22,7 @@ export default class SimpleBar extends React.Component {
    */
   updateBoolean() {
     const element = this.content;
-    const hasOverflowingChildren = element.offsetHeight < element.scrollHeight;
+    const hasOverflowingChildren = element.offsetHeight + 1 < element.scrollHeight;
     if (this.state.needsScrollBar !== hasOverflowingChildren) {
       this.setState({ needsScrollBar: hasOverflowingChildren });
     }
