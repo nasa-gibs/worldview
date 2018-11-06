@@ -595,13 +595,14 @@
 }
 
 .tour-complete .modal-body {
-  padding: 15px;
+  padding: 15px 15px 0;
 }
 
 .tour-complete .modal-body p {
   color: #333;
   font-size: 16px;
   line-height: 24px;
+  margin-bottom: 16px;
 }
 
 .tour-complete .modal-footer {

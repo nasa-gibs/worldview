@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TourAlert from '../components/alert/alert-tour';
-import util from '../util/util';
 
 export function alertUi(ui) {
   var self = {};
@@ -21,12 +20,8 @@ export function alertUi(ui) {
   };
 
   self.showTourAlert = function(e) {
-    var tourAlert = localStorage.getItem('tourAlert');
-
-    if (!util.browser.localStorage) return;
-    if (tourAlert) return;
-
-    localStorage.setItem('tourAlert', !tourAlert);
+    var hideTour = localStorage.getItem('hideTour');
+    if (!hideTour) return;
 
     self.reactComponent.setState({
       visible: true
@@ -36,7 +31,7 @@ export function alertUi(ui) {
       self.reactComponent.setState({
         visible: false
       });
-    }, 5000);
+    }, 10000);
   };
 
   init();
