@@ -43,7 +43,6 @@ class ModalInProgress extends React.Component {
       var currentStepIndex = nextProps.currentStep;
       this.fetchMetadata(currentStepIndex);
       this.stepLink(currentStory, currentStepIndex);
-      this.selectLink();
     }
   }
 
@@ -82,6 +81,7 @@ class ModalInProgress extends React.Component {
         '?' + stepLink
       );
     }
+    this.selectLink(stepLink);
   }
 
   registerMapMouseHandlers(maps, events) {
@@ -97,10 +97,10 @@ class ModalInProgress extends React.Component {
     });
   }
 
-  selectLink() {
+  selectLink(stepLink) {
     var parsers;
     var errors = [];
-    var state = util.fromQueryString(location.search);
+    var state = util.fromQueryString(stepLink);
     var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
@@ -168,9 +168,9 @@ class ModalInProgress extends React.Component {
     }
 
     // Remove layers in the list
-    models.layers[layerString].forEach(function(layer) {
-      if (layer) models.layers.remove(layer.id);
-    });
+    // models.layers[layerString].forEach(function(layer) {
+    //   if (layer) models.layers.remove(layer.id);
+    // });
 
     parsers = [
       projectionParser,
@@ -201,7 +201,6 @@ class ModalInProgress extends React.Component {
       this.setState({ metaLoaded: true });
       this.fetchMetadata(1);
       this.stepLink(currentStory, 1);
-      this.selectLink();
     }
 
     return (
