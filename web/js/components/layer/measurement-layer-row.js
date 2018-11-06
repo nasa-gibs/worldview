@@ -52,7 +52,6 @@ MeasurementLayerRow.propTypes = {
   measurementId: PropTypes.string,
   layerId: PropTypes.string,
   title: PropTypes.string,
-  check: PropTypes.boo,
   removeLayer: PropTypes.func,
   addLayer: PropTypes.func,
   checked: PropTypes.boo
