@@ -4,7 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
 // import lodashEach from 'lodash/each';
-// import lodashMap from 'lodash/map';
+import lodashMap from 'lodash/map';
 // import { getCenter } from 'ol/extent';
 
 import { parse as dateParser } from '../../date/date';
@@ -76,6 +76,8 @@ class ModalInProgress extends React.Component {
     // Get steplink from the currentstory's current step
     currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
     stepLink = currentStory.steps[currentStepIndex]['stepLink'];
+    // TESTING HERE:
+    // stepLink = 'p=arctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,AMSR2_Snow_Water_Equivalent,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-11-06-T00%3A00%3A00Z&z=3&v=-8382951.387251401,-7726888.724782713,8382951.387251401,7726888.724782713&r=-38.5164';
     state = util.fromQueryString(stepLink);
     // Parse the step link
     projectionParser(state, errors, config);
@@ -123,11 +125,38 @@ class ModalInProgress extends React.Component {
     // var errors = [];
     // var config = this.props.config;
     var models = this.props.models;
-    // var ui = this.props.ui;
+    var ui = this.props.ui;
     // var map = ui.map.selected;
 
-    // console.log(state);
-    // console.log(config);
+    // Changes projection, date
+    models.link.load(state);
+
+    // Map Rotation (Animated)
+    if (state.p === 'arctic' || state.p === 'antarctic') {
+      if (!isNaN(state.r)) {
+        let rotation = state.r * (Math.PI / 180.0);
+        ui.map.selected.getView().animate({
+          duration: 800,
+          rotation: rotation
+        });
+      }
+    }
+
+    // Set Zoom & View
+    if (state.v) {
+      ui.map.selected.getView().fit(state.v, ui.map.selected.getSize());
+
+      // TODO: FLY TO MAP LOGIC
+      // var coordinateX = extent[0] + (extent[2]-extent[0])/2;
+      // var coordinateY = extent[1] + (extent[3]-extent[1])/2;
+      // let coordinates = [coordinateX, coordinateY];
+      // console.log(extent);
+      // let coordinates = getCenter(extent);
+      // let zoom = ui.map.selected.getView().getZoom();
+      // console.log(coordinates);
+      // console.log(zoom);
+      // ui.map.animate.fly(coordinates, zoom);
+    }
 
     // var comparisonOn = state.ca;
     // var timeA = state.t;
@@ -151,26 +180,6 @@ class ModalInProgress extends React.Component {
     //     'EPSG:4326',
     //     models.proj.selected.crs
     //   );
-
-    // Set Zoom & View
-    // if (view) {
-    //   let extent = lodashMap(state.v.split(','), function (str) {
-    //     return parseFloat(str);
-    //   });
-
-    //   map.getView().fit(extent, map.getSize());
-
-    //   // TODO: FLY TO MAP LOGIC
-    //   // var coordinateX = extent[0] + (extent[2]-extent[0])/2;
-    //   // var coordinateY = extent[1] + (extent[3]-extent[1])/2;
-    //   // let coordinates = [coordinateX, coordinateY];
-    //   // console.log(extent);
-    //   // let coordinates = getCenter(extent);
-    //   // let zoom = ui.map.selected.getView().getZoom();
-    //   // console.log(coordinates);
-    //   // console.log(zoom);
-    //   // ui.map.animate.fly(coordinates, zoom);
-    // }
 
     // Set layers
     // var layerString = models.layers.activeLayers;
@@ -198,7 +207,8 @@ class ModalInProgress extends React.Component {
     // console.log(JSON.stringify(state, null, 4));
 
     // console.log(JSON.stringify(state, null, 4));
-    models.link.load(state);
+
+
   }
 
   render() {
