@@ -47,6 +47,11 @@ export function tourUi(models, ui, config) {
 
     if (!util.browser.localStorage) return;
 
+    // Don't start tour if coming in via a permalink
+    if (window.location.search && !config.parameters.tour) {
+      return false;
+    }
+
     if (hideTour && config.buildDate) {
       let buildDate = new Date(config.buildDate);
       let tourDate = new Date(hideTour);
@@ -74,9 +79,11 @@ export function tourUi(models, ui, config) {
   };
 
   self.selectTour = function(e, currentStory, currentStoryIndex, currentStoryId) {
+    let totalSteps = currentStory.steps;
     if (e) e.preventDefault();
     self.reactComponent.setState({
       currentStep: 1,
+      totalSteps: totalSteps.length,
       currentStoryIndex: currentStoryIndex,
       modalStart: false,
       modalInProgress: true,
