@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Tour from '../components/tour/tour';
+import util from '../util/util';
 
 export function tourUi(models, ui, config) {
   var self = {};
@@ -23,7 +24,7 @@ export function tourUi(models, ui, config) {
       ui: ui,
       stories: config['stories'],
       storyOrder: config['storyOrder'],
-      modalStart: !localStorage.tourAlert,
+      modalStart: !localStorage.hideTour,
       modalInProgress: false,
       modalComplete: false,
       currentStep: 1,
@@ -35,7 +36,9 @@ export function tourUi(models, ui, config) {
       startTour: self.startTour,
       selectTour: self.selectTour,
       notifyUserOfTour: self.notifyUserOfTour,
-      showTourAlert: ui.alert.showTourAlert
+      showTourAlert: ui.alert.showTourAlert,
+      hideTour: self.hideTour,
+      showTour: self.showTour
     };
   };
 
@@ -60,6 +63,24 @@ export function tourUi(models, ui, config) {
       currentStory: currentStory,
       currentStoryId: currentStoryId
     });
+  };
+
+  self.hideTour = function(e) {
+    var hideTour = localStorage.getItem('hideTour');
+
+    if (!util.browser.localStorage) return;
+    if (hideTour) return;
+
+    localStorage.setItem('hideTour', !hideTour);
+  };
+
+  self.showTour = function(e) {
+    var hideTour = localStorage.getItem('hideTour');
+
+    if (!util.browser.localStorage) return;
+    if (!hideTour) return;
+
+    localStorage.removeItem('hideTour', !hideTour);
   };
 
   init();

@@ -22,7 +22,8 @@ class Tour extends React.Component {
       currentStoryIndex: props.currentStoryIndex,
       currentStory: props.currentStory,
       currentStoryId: props.currentStoryId,
-      showTourAlert: props.showTourAlert
+      showTourAlert: props.showTourAlert,
+      hideTour: props.hideTour
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
@@ -78,6 +79,8 @@ class Tour extends React.Component {
             toggleModalComplete={this.toggleModalComplete}
             selectTour={this.props.selectTour}
             showTourAlert={this.props.showTourAlert}
+            hideTour={this.props.hideTour}
+            showTour={this.props.showTour}
           ></TourStart>
 
           <TourInProgress
@@ -101,6 +104,7 @@ class Tour extends React.Component {
           ></TourInProgress>
 
           <TourComplete
+            currentStory={this.state.currentStory}
             modalComplete={this.state.modalComplete}
             toggleModalStart={this.toggleModalStart}
             toggleModalInProgress={this.toggleModalInProgress}
@@ -132,7 +136,9 @@ Tour.propTypes = {
   currentStoryId: PropTypes.string,
   startTour: PropTypes.func.isRequired,
   selectTour: PropTypes.func.isRequired,
-  showTourAlert: PropTypes.func.isRequired
+  showTourAlert: PropTypes.func.isRequired,
+  hideTour: PropTypes.func.isRequired,
+  showTour: PropTypes.func.isRequired
 };
 
 export default Tour;
