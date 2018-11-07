@@ -13,6 +13,7 @@ export default class Button extends React.Component {
     return (
       <button
         onClick={this.props.onClick}
+        onMouseDown={e => e.stopPropagation()}
         style={this.props.style}
         id={this.props.id}
         disabled={!this.props.valid}
