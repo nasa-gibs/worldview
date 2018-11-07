@@ -5,7 +5,9 @@ import Steps from './widget-steps';
 import util from '../../util/util';
 import wvui from '../../ui/ui';
 import lodashFind from 'lodash/find';
-// import lodashEach from 'lodash/each';
+import lodashEach from 'lodash/each';
+import lodashIsUndefined from 'lodash/isUndefined';
+import lodashEachRight from 'lodash/eachRight';
 // import lodashMap from 'lodash/map';
 // import { getCenter } from 'ol/extent';
 
@@ -83,7 +85,7 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    currentStepLink = 'p=geographic&l=MODIS_Terra_SurfaceReflectance_Bands143,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-11-07-T00%3A00%3A00Z&z=3&v=-132.41327958422175,-46.546875,71.38202958422175,53.015625&ab=off&as=2018-10-31T00%3A00%3A00Z&ae=2018-11-07T00%3A00%3A00Z&av=3&al=false&download=MOD09GA';
+    // currentStepLink = 'p=geographic&l=MODIS_Terra_SurfaceReflectance_Bands143,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-11-07-T00%3A00%3A00Z&z=3&v=-132.41327958422175,-46.546875,71.38202958422175,53.015625&ab=off&as=2018-10-31T00%3A00%3A00Z&ae=2018-11-07T00%3A00%3A00Z&av=3&al=false&download=MOD09GA';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -133,9 +135,10 @@ class ModalInProgress extends React.Component {
 
   selectLink(currentState, stepTransition, prevState) {
     var errors = [];
-    // var config = this.props.config;
+    var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
+    // var layersLoaded = false;
     // var map = ui.map.selected;
     // Map Projection, Map Date
     models.link.load(currentState);
@@ -153,9 +156,6 @@ class ModalInProgress extends React.Component {
 
     // Map Zoom & View (Animated)
     if (currentState.v) {
-      // No animation option
-      // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
-
       // Animate to extent & zoom
       let extent = currentState.v;
       var coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
@@ -167,7 +167,66 @@ class ModalInProgress extends React.Component {
         duration: 2000,
         resolution: resolution
       });
+
+      // No animation option
+      // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
+
+    // Layers
+    // if (layersLoaded) return;
+    var layers;
+    if (config.features.compare) {
+      layers = [
+        {
+          state: 'l',
+          active: 'active'
+        },
+        {
+          state: 'l1',
+          active: 'activeB'
+        }
+      ];
+    } else {
+      layers = [{ state: 'l', active: 'active' }];
+    }
+    lodashEach(layers, obj => {
+      console.log(obj);
+      if (!lodashIsUndefined(currentState[obj.state])) {
+        models.layers.clear(models.proj.selected.id, obj.active);
+        lodashEachRight(currentState[obj.state], function(layerDef) {
+          if (!config.layers[layerDef.id]) {
+            errors.push({
+              message: 'No such layer: ' + layerDef.id
+            });
+            return;
+          }
+          var hidden = false;
+          var opacity = 1.0;
+          lodashEach(layerDef.attributes, function(attr) {
+            if (attr.id === 'hidden') {
+              hidden = true;
+            }
+            if (attr.id === 'opacity') {
+              opacity = util.clamp(parseFloat(attr.value), 0, 1);
+              if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
+            }
+          });
+
+          models.layers[obj.active] = models.layers.add(
+            layerDef.id,
+            {
+              hidden: hidden,
+              opacity: opacity
+            },
+            obj.active
+          );
+        });
+      }
+    });
+    if (currentState.ca && currentState.ca !== 'true') {
+      models.layers.activeLayers = 'activeB';
+    }
+    // layersLoaded = true;
 
     // Animation
     if (prevState.ab === 'on' && currentState.ab === 'off') {
@@ -185,39 +244,6 @@ class ModalInProgress extends React.Component {
       ui.anim.widget.toggleAnimationWidget();
     }
 
-    if (stepTransition) {
-      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
-        ui.anim.widget.onPressPlay();
-      } else {
-        ui.anim.widget.onPressPause();
-      }
-    }
-
-    if (currentState.ca === 'true') {
-      wvui.close();
-      if (currentState.cv) {
-        models.compare.setValue(currentState.cv);
-      } else {
-        models.compare.setValue(50);
-      }
-      models.compare.setMode(currentState.cm);
-      models.compare.events.trigger('change');
-    }
-
-    // Data Download (NEED TO CHECK ONCE LAYERS HAVE BEEN ADDED);
-    var productId = currentState.download;
-    console.log(productId);
-    if (productId) {
-      var found = lodashFind(models.layers[models.layers.activeLayers], {
-        product: productId
-      });
-      if (!found) {
-        errors.push({
-          message: 'No active layers match product: ' + productId
-        });
-      }
-    }
-
     // }
     // if (currentState.as && currentState.ae) {
     //   if (currentState.ae.length >= 10 && currentState.as.length >= 10) {
@@ -232,54 +258,41 @@ class ModalInProgress extends React.Component {
     //   self.rangeState.loop = Boolean(currentState.al);
     // }
 
-    // var comparisonOn = currentState.ca;
-    // var timeA = currentState.t;
-    // var timeB = currentState.t1;
-    // var layersA = currentState.l;
-    // // var layersB = currentState.l1;
-    // var projection = currentState.p;
-    // var view = currentState.v;
-    // var zoom = currentState.z;
-    // // Set Projection
-    // if (projection) models.proj.select(projection);
+    // Comparison
+    if (currentState.ca === 'true') {
+      wvui.close();
+      if (currentState.cv) {
+        models.compare.setValue(currentState.cv);
+      } else {
+        models.compare.setValue(50);
+      }
+      models.compare.setMode(currentState.cm);
+      models.compare.events.trigger('change');
+    }
 
-    // // Set Layer A time
-    // if (timeA) models.date.select(util.parseDateUTC(timeA));
-    // // Set Layer B time
-    // if (timeB) models.date.select(util.parseDateUTC(timeB));
+    // Data Download (NEED TO CHECK ONCE LAYERS HAVE BEEN ADDED);
+    var productId = currentState.download;
+    if (productId) {
+      var found = lodashFind(models.layers[models.layers.activeLayers], {
+        product: productId
+      });
+      if (!found) {
+        errors.push({
+          message: 'No active layers match product: ' + productId
+        });
+      }
+    }
 
-    // var coordinates =
-    //   olProj.transform(
-    //     geometry.coordinates,
-    //     'EPSG:4326',
-    //     models.proj.selected.crs
-    //   );
-
-    // Set layers
-    // var layerString = models.layers.activeLayers;
-
-    // // Turn string of layersA into an array
-    // if (layersA) {
-    //   var layersAArray = layersA.split(',');
-    //   // Turn on or add new layers
-    //   layersAArray.forEach(function(layer) {
-    //     var id = layer.split('(')[0];
-    //     var visible = !layer.includes('hidden');
-    //     if (models.layers.exists(id, models.layers[layerString])) {
-    //       models.layers.setVisibility(id, visible, layerString);
-    //     } else {
-    //       models.layers.add(id, { visible: visible }, layerString);
-    //     }
-    //   });
-    // }
-
-    // Remove layers in the list
-    // models.layers[layerString].forEach(function(layer) {
-    //   if (layer) models.layers.remove(layer.id);
-    // });
+    // Step Transistions
+    if (stepTransition) {
+      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
+        ui.anim.widget.onPressPlay();
+      } else {
+        ui.anim.widget.onPressPause();
+      }
+    }
 
     // console.log(JSON.stringify(currentState, null, 4));
-
     // console.log(JSON.stringify(currentState, null, 4));
   }
 
