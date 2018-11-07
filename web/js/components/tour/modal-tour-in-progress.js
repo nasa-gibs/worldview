@@ -86,7 +86,7 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    currentStepLink = 'p=geographic&l=MODIS_Terra_SurfaceReflectance_Bands143,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-11-07-T00%3A00%3A00Z&z=3&v=-132.41327958422175,-46.546875,71.38202958422175,53.015625&ab=off&as=2018-10-31T00%3A00%3A00Z&ae=2018-11-07T00%3A00%3A00Z&av=3&al=false&download=MOD09GA';
+    // currentStepLink = 'p=geographic&l=MODIS_Terra_SurfaceReflectance_Bands143(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-04-20-T00%3A00%3A00Z&z=3&v=-240.4465521284557,-168.37095562787738,17.806552128455706,23.270955627877385&ab=off&as=2018-10-31T00%3A00%3A00Z&ae=2018-11-07T00%3A00%3A00Z&av=3&al=true&e=EONET_2881,2018-04-20';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -269,7 +269,7 @@ class ModalInProgress extends React.Component {
     }
     // layersLoaded = true;
 
-    // Data Download (NEED TO CHECK ONCE LAYERS HAVE BEEN ADDED);
+    // Data Download
     var productId = currentState.download;
     if (productId) {
       var found = lodashFind(models.layers[models.layers.activeLayers], {
@@ -282,6 +282,18 @@ class ModalInProgress extends React.Component {
       } else {
         models.data.activate(productId);
       }
+    }
+
+    // Events
+    if (!currentState.e) return;
+    models.naturalEvents.events.trigger('activate');
+    var values = currentState.e.split(',');
+    var id = values[0] || '';
+    var date = values[1] || '';
+    id = id.match(/^EONET_[0-9]+/i) ? values[0] : null;
+    date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
+    if (id) {
+      ui.naturalEvents.selectEvent(id, date);
     }
 
     // Step Transistions
