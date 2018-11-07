@@ -139,7 +139,6 @@ class ModalInProgress extends React.Component {
     var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
-    var animation = {};
 
     // var layersLoaded = false;
     // var map = ui.map.selected;
@@ -178,16 +177,25 @@ class ModalInProgress extends React.Component {
     // Animation*
     // * Seems like this must come before comparison
     if (currentState.al) {
-      ui.anim.widget.reactComponent.state.looping = true;
+      ui.anim.widget.reactComponent.setState({ looping: true });
     } else {
-      ui.anim.widget.reactComponent.state.looping = false;
+      ui.anim.widget.reactComponent.setState({ looping: false });
     }
-    if (currentState.as) ui.anim.widget.reactComponent.state.startDate = currentState.as;
-    if (currentState.ae) ui.anim.widget.reactComponent.state.endDate = currentState.ae;
-    if (currentState.av) ui.anim.widget.reactComponent.state.value = Number(currentState.av);
+    if (currentState.as) ui.anim.widget.reactComponent.setState({ startDate: currentState.as });
+    if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
+    if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
+
+    // This has to be set before the animation widget is toggled
+    // if (stepTransition) {
+    //   if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
+    //     ui.anim.widget.reactComponent.state.playing = true;
+    //   } else {
+    //     ui.anim.widget.reactComponent.state.playing = false;
+    //   }
+    // }
 
     if (prevState.ab === 'on' && currentState.ab === 'off') {
-      models.anim.activate();
+      models.anim.ctivate();
       ui.anim.widget.toggleAnimationWidget();
     } else
     if (prevState.ab === 'on' && !currentState.ab) {
@@ -272,11 +280,11 @@ class ModalInProgress extends React.Component {
     // Step Transistions: Animation
     if (stepTransition) {
       if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
-        animation.playing = true;
         ui.anim.widget.onPressPlay();
+        ui.anim.widget.reactComponent.setState({ playing: true });
       } else {
-        animation.playing = false;
         ui.anim.widget.onPressPause();
+        ui.anim.widget.reactComponent.setState({ playing: false });
       }
     }
 
