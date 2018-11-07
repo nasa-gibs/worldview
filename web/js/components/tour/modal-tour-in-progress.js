@@ -8,7 +8,7 @@ import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashEachRight from 'lodash/eachRight';
-import lodashWithout from 'lodash/without';
+// import lodashWithout from 'lodash/without';
 // import lodashMap from 'lodash/map';
 // import { getCenter } from 'ol/extent';
 
@@ -136,7 +136,6 @@ class ModalInProgress extends React.Component {
 
   selectLink(currentState, stepTransition, prevState) {
     var errors = [];
-    var zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
     var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
