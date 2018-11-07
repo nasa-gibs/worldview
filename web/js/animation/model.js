@@ -72,6 +72,32 @@ export function animationModel(models, config) {
   };
 
   /*
+   * Activates state object
+   *
+   * @method activate
+   * @static
+   *
+   * @returns {void}
+   *
+   */
+  self.activate = function() {
+    self.rangeState.state = 'on';
+  };
+
+  /*
+   * Deactivate state object
+   *
+   * @method deactivate
+   * @static
+   *
+   * @returns {void}
+   *
+   */
+  self.deactivate = function() {
+    self.rangeState.state = 'off';
+  };
+
+  /*
    * saves animation state to permalink
    *
    * @method save
