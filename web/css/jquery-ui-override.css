@@ -292,5 +292,5 @@ or dateline overlays to be selectable. */
 
 /* Overide jQuery joyride */
 body {
-  position: static !important;
+  position: static;
 }
