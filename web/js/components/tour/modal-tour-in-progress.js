@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
+import wvui from '../../ui/ui';
 // import lodashEach from 'lodash/each';
 // import lodashMap from 'lodash/map';
 // import { getCenter } from 'ol/extent';
@@ -81,7 +82,7 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    // stepLink = 'p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features(hidden),Coastlines(hidden)&t=2018-08-31-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-113.05825121261012,-7.7039155910611115,-10.61293871261011,58.24920940893889&ab=on&as=2018-08-31T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=10&al=false';
+    // currentStepLink = 'ca=true&cm=swipe&cv=50&switch=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&t=2018-09-06-T00%3A00%3A00Z&z=2&t1=2018-09-19-T00%3A00%3A00Z&v=-81.00856222007965,31.36000753998159,-72.57106222007965,36.79197390923348';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -190,6 +191,18 @@ class ModalInProgress extends React.Component {
         ui.anim.widget.onPressPause();
       }
     }
+
+    if (currentState.ca === 'true') {
+      wvui.close();
+      if (currentState.cv) {
+        models.compare.setValue(currentState.cv);
+      } else {
+        models.compare.setValue(50);
+      }
+      models.compare.setMode(currentState.cm);
+      models.compare.events.trigger('change');
+    }
+
     // }
     // if (currentState.as && currentState.ae) {
     //   if (currentState.ae.length >= 10 && currentState.as.length >= 10) {
