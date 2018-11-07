@@ -48,8 +48,8 @@
           "description": "step004.html",
           "transition": [
             {
-              "element": "",
-              "action": ""
+              "element": "animation",
+              "action": "play"
             }
           ],
           "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features(hidden),Coastlines(hidden)&t=2018-09-14-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-105.3766105876101,15.639834408938874,-54.1539543376101,48.616396908938874&ab=on&as=2018-08-31T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=10&al=false"
