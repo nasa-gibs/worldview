@@ -8,6 +8,7 @@ import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashEachRight from 'lodash/eachRight';
+import lodashWithout from 'lodash/without';
 // import lodashMap from 'lodash/map';
 // import { getCenter } from 'ol/extent';
 
@@ -135,9 +136,11 @@ class ModalInProgress extends React.Component {
 
   selectLink(currentState, stepTransition, prevState) {
     var errors = [];
+    var zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
     var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
+    var animation = {};
     // var layersLoaded = false;
     // var map = ui.map.selected;
     // Map Projection, Map Date
@@ -172,6 +175,45 @@ class ModalInProgress extends React.Component {
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
 
+    // Animation*
+    // * Seems like this must come before comparison
+    if (currentState.al) {
+      ui.anim.widget.reactComponent.state.looping = true;
+    } else {
+      ui.anim.widget.reactComponent.state.looping = false;
+    }
+    if (currentState.as) ui.anim.widget.reactComponent.state.startDate = currentState.as;
+    if (currentState.ae) ui.anim.widget.reactComponent.state.endDate = currentState.ae;
+    if (currentState.av) ui.anim.widget.reactComponent.state.value = currentState.av;
+
+    if (prevState.ab === 'on' && currentState.ab === 'off') {
+      models.anim.activate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else
+    if (prevState.ab === 'on' && !currentState.ab) {
+      models.anim.activate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else if (prevState.ab === 'off' && currentState.ab === 'on') {
+      models.anim.deactivate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else if (!prevState.ab && currentState.ab === 'on') {
+      models.anim.deactivate();
+      ui.anim.widget.toggleAnimationWidget();
+    }
+
+    // Comparison
+    if (currentState.ca === 'true') {
+      // Close dialogs
+      wvui.close();
+      if (currentState.cv) {
+        models.compare.setValue(currentState.cv);
+      } else {
+        models.compare.setValue(50);
+      }
+      models.compare.setMode(currentState.cm);
+      models.compare.events.trigger('change');
+    }
+
     // Layers
     // if (layersLoaded) return;
     var layers;
@@ -190,7 +232,6 @@ class ModalInProgress extends React.Component {
       layers = [{ state: 'l', active: 'active' }];
     }
     lodashEach(layers, obj => {
-      console.log(obj);
       if (!lodashIsUndefined(currentState[obj.state])) {
         models.layers.clear(models.proj.selected.id, obj.active);
         lodashEachRight(currentState[obj.state], function(layerDef) {
@@ -228,48 +269,6 @@ class ModalInProgress extends React.Component {
     }
     // layersLoaded = true;
 
-    // Animation
-    if (prevState.ab === 'on' && currentState.ab === 'off') {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else
-    if (prevState.ab === 'on' && !currentState.ab) {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if (prevState.ab === 'off' && currentState.ab === 'on') {
-      models.anim.deactivate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if (!prevState.ab && currentState.ab === 'on') {
-      models.anim.deactivate();
-      ui.anim.widget.toggleAnimationWidget();
-    }
-
-    // }
-    // if (currentState.as && currentState.ae) {
-    //   if (currentState.ae.length >= 10 && currentState.as.length >= 10) {
-    //     self.rangeState.startDate = currentState.as;
-    //     self.rangeState.endDate = currentState.ae;
-    //   }
-    // }
-    // if (currentState.av) {
-    //   self.rangeState.speed = Number(currentState.av);
-    // }
-    // if (currentState.al) {
-    //   self.rangeState.loop = Boolean(currentState.al);
-    // }
-
-    // Comparison
-    if (currentState.ca === 'true') {
-      wvui.close();
-      if (currentState.cv) {
-        models.compare.setValue(currentState.cv);
-      } else {
-        models.compare.setValue(50);
-      }
-      models.compare.setMode(currentState.cm);
-      models.compare.events.trigger('change');
-    }
-
     // Data Download (NEED TO CHECK ONCE LAYERS HAVE BEEN ADDED);
     var productId = currentState.download;
     if (productId) {
@@ -286,8 +285,10 @@ class ModalInProgress extends React.Component {
     // Step Transistions
     if (stepTransition) {
       if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
+        animation.playing = true;
         ui.anim.widget.onPressPlay();
       } else {
+        animation.playing = false;
         ui.anim.widget.onPressPause();
       }
     }
