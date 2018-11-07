@@ -39,7 +39,7 @@ class ProductPicker extends React.Component {
       selectedProjection: props.selectedProjection,
       inputValue: ''
     };
-    this.runSearch = lodashDebounce(this.runSearch, 100);
+    this.runSearch = lodashDebounce(this.runSearch, 300);
   }
   /**
    * Update modal visibility
@@ -155,6 +155,7 @@ class ProductPicker extends React.Component {
     } = this.props;
     const isCategoryDisplay =
       listType === 'category' && selectedProjection === 'geographic';
+
     return (
       <Modal
         isOpen={isOpen}
