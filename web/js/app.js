@@ -117,7 +117,6 @@ import '../../node_modules/icheck/skins/line/red.css';
 import '../../node_modules/jscrollpane/style/jquery.jscrollpane.css';
 import '../../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css';
 import '../ext/mobiscroll-2.6.0/mobiscroll.css';
-import '../../node_modules/jquery.joyride/jquery.joyride.css';
 import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
 import '../../node_modules/ol/ol.css';
 import '../../node_modules/rc-slider/dist/rc-slider.css';
