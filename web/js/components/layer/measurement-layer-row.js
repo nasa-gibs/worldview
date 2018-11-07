@@ -28,7 +28,6 @@ class MeasurementLayerRow extends React.Component {
   render() {
     const { layerId, measurementId, title } = this.props;
     const { checked } = this.state;
-
     return (
       <ListGroupItem
         key={measurementId + '-' + layerId}
@@ -46,7 +45,9 @@ class MeasurementLayerRow extends React.Component {
     );
   }
 }
-
+MeasurementLayerRow.defaultProps = {
+  checked: false
+};
 MeasurementLayerRow.propTypes = {
   onClick: PropTypes.func,
   measurementId: PropTypes.string,
@@ -54,7 +55,7 @@ MeasurementLayerRow.propTypes = {
   title: PropTypes.string,
   removeLayer: PropTypes.func,
   addLayer: PropTypes.func,
-  checked: PropTypes.boo
+  checked: PropTypes.bool
 };
 
 export default MeasurementLayerRow;
