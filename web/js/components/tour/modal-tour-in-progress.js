@@ -140,12 +140,11 @@ class ModalInProgress extends React.Component {
     var models = this.props.models;
     var ui = this.props.ui;
 
-    // var layersLoaded = false;
-    // var map = ui.map.selected;
-    // Map Projection, Map Date
+    // LOAD: Map Projection, Map Date
+    // TODO: THIS PROBABLY NEEDS REWORKED
     models.link.load(currentState);
 
-    // Map Rotation (Animated)
+    // LOAD: Map Rotation (Animated)
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
         let rotation = currentState.r * (Math.PI / 180.0);
@@ -156,9 +155,9 @@ class ModalInProgress extends React.Component {
       }
     }
 
-    // Map Zoom & View (Animated)
+    // LOAD: Map Zoom & View (Animated)
     if (currentState.v) {
-      // Animate to extent & zoom
+      // Animate to extent & zoom:
       let extent = currentState.v;
       var coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
       var coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
@@ -170,12 +169,13 @@ class ModalInProgress extends React.Component {
         resolution: resolution
       });
 
-      // No animation option
+      // Don't animate to extent & zoom:
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
 
-    // Animation*
-    // * Seems like this must come before comparison
+    // LOAD: Animation
+    // Note: Seems like animation must come before comparison
+    // Set state from URL
     if (currentState.al) {
       ui.anim.widget.reactComponent.setState({ looping: true });
     } else {
@@ -185,17 +185,9 @@ class ModalInProgress extends React.Component {
     if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
     if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
 
-    // This has to be set before the animation widget is toggled
-    // if (stepTransition) {
-    //   if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
-    //     ui.anim.widget.reactComponent.state.playing = true;
-    //   } else {
-    //     ui.anim.widget.reactComponent.state.playing = false;
-    //   }
-    // }
-
+    // If animation is current on, toggle the state and animation widget
     if (prevState.ab === 'on' && currentState.ab === 'off') {
-      models.anim.ctivate();
+      models.anim.activate();
       ui.anim.widget.toggleAnimationWidget();
     } else
     if (prevState.ab === 'on' && !currentState.ab) {
@@ -209,9 +201,9 @@ class ModalInProgress extends React.Component {
       ui.anim.widget.toggleAnimationWidget();
     }
 
-    // Comparison
+    // LOAD: Comparison
     if (currentState.ca === 'true') {
-      // Close dialogs
+      // Close all the open dialogs
       wvui.close();
       if (currentState.cv) {
         models.compare.setValue(currentState.cv);
@@ -222,8 +214,7 @@ class ModalInProgress extends React.Component {
       models.compare.events.trigger('change');
     }
 
-    // Layers
-    // if (layersLoaded) return;
+    // LOAD: Layers
     var layers;
     if (config.features.compare) {
       layers = [
@@ -275,9 +266,8 @@ class ModalInProgress extends React.Component {
     if (currentState.ca && currentState.ca !== 'true') {
       models.layers.activeLayers = 'activeB';
     }
-    // layersLoaded = true;
 
-    // Step Transistions: Animation
+    // ACTION: Animation
     if (stepTransition) {
       if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
         ui.anim.widget.onPressPlay();
@@ -288,7 +278,7 @@ class ModalInProgress extends React.Component {
       }
     }
 
-    // Data Download
+    // LOAD: Data Download
     var productId = currentState.download;
     if (productId) {
       var found = lodashFind(models.layers[models.layers.activeLayers], {
@@ -303,7 +293,7 @@ class ModalInProgress extends React.Component {
       }
     }
 
-    // Events
+    // LOAD: Events
     if (!currentState.e) return;
     models.naturalEvents.events.trigger('activate');
     var values = currentState.e.split(',');
@@ -314,9 +304,6 @@ class ModalInProgress extends React.Component {
     if (id) {
       ui.naturalEvents.selectEvent(id, date);
     }
-
-    // console.log(JSON.stringify(currentState, null, 4));
-    // console.log(JSON.stringify(currentState, null, 4));
   }
 
   render() {
