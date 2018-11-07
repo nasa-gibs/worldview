@@ -6,6 +6,8 @@ import ProductPickerHeader from './header';
 import lodashValues from 'lodash/values';
 import Scrollbars from '../util/scrollbar';
 import googleTagManager from 'googleTagManager';
+import lodashDebounce from 'lodash/debounce';
+
 import {
   Modal,
   ModalBody,
@@ -37,6 +39,7 @@ class ProductPicker extends React.Component {
       selectedProjection: props.selectedProjection,
       inputValue: ''
     };
+    this.runSearch = lodashDebounce(this.runSearch, 100);
   }
   /**
    * Update modal visibility
@@ -55,10 +58,10 @@ class ProductPicker extends React.Component {
    * @function runSearch
    * @param e | onChange event object
    */
-  runSearch(e) {
+  runSearch(value) {
     const { filterProjections, filterSearch } = this.props;
     const { allLayers } = this.props;
-    let val = e.target.value.toLowerCase();
+    let val = value.toLowerCase();
 
     if (val.length === 0) {
       this.setState({
@@ -74,7 +77,7 @@ class ProductPicker extends React.Component {
       this.setState({
         filteredRows: filteredRows,
         listType: 'search',
-        inputValue: e.target.value
+        inputValue: value
       });
     }
   }
