@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
 import wvui from '../../ui/ui';
+import lodashFind from 'lodash/find';
 // import lodashEach from 'lodash/each';
 // import lodashMap from 'lodash/map';
 // import { getCenter } from 'ol/extent';
@@ -82,7 +83,7 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    // currentStepLink = 'ca=true&cm=swipe&cv=50&switch=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&t=2018-09-06-T00%3A00%3A00Z&z=2&t1=2018-09-19-T00%3A00%3A00Z&v=-81.00856222007965,31.36000753998159,-72.57106222007965,36.79197390923348';
+    currentStepLink = 'p=geographic&l=MODIS_Terra_SurfaceReflectance_Bands143,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-11-07-T00%3A00%3A00Z&z=3&v=-132.41327958422175,-46.546875,71.38202958422175,53.015625&ab=off&as=2018-10-31T00%3A00%3A00Z&ae=2018-11-07T00%3A00%3A00Z&av=3&al=false&download=MOD09GA';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -131,7 +132,7 @@ class ModalInProgress extends React.Component {
   }
 
   selectLink(currentState, stepTransition, prevState) {
-    // var errors = [];
+    var errors = [];
     // var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
@@ -201,6 +202,20 @@ class ModalInProgress extends React.Component {
       }
       models.compare.setMode(currentState.cm);
       models.compare.events.trigger('change');
+    }
+
+    // Data Download (NEED TO CHECK ONCE LAYERS HAVE BEEN ADDED);
+    var productId = currentState.download;
+    console.log(productId);
+    if (productId) {
+      var found = lodashFind(models.layers[models.layers.activeLayers], {
+        product: productId
+      });
+      if (!found) {
+        errors.push({
+          message: 'No active layers match product: ' + productId
+        });
+      }
     }
 
     // }
