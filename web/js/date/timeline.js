@@ -5,7 +5,7 @@ import googleTagManager from 'googleTagManager';
 export function timeline(models, config, ui) {
   var self = {};
   var model = models.date;
-
+  var subdaily;
   self.enabled = false;
 
   self.margin = {
@@ -201,15 +201,20 @@ export function timeline(models, config, ui) {
     self.pick.shiftView();
   };
   var onLayerUpdate = function() {
+    const layersContainSubdaily = models.layers.hasSubDaily();
     self.data.set();
     self.resize();
-    self.zoom.refresh();
     self.setClip();
-    self.input.update();
+    if (subdaily !== layersContainSubdaily) {
+      self.zoom.refresh();
+      self.input.update();
+      subdaily = layersContainSubdaily;
+    }
   };
   var init = function() {
     var $timelineFooter = $('#timeline-footer');
     models.layers.events.trigger('toggle-subdaily');
+    subdaily = models.layers.hasSubDaily();
     drawContainers();
 
     if (!models.anim) {
@@ -248,7 +253,7 @@ export function timeline(models, config, ui) {
 
     $('#timeline-hide').click(function() {
       googleTagManager.pushEvent({
-        'event': 'timeline_hamburger'
+        event: 'timeline_hamburger'
       });
       self.toggle();
     });
@@ -264,13 +269,14 @@ export function timeline(models, config, ui) {
       models.compare.events.on('toggle-state', onLayerUpdate);
     }
 
-    models.layers.events.on('change', onLayerUpdate);
+    models.layers.events.on('add', onLayerUpdate);
 
     // Determine maximum end date and move tl pick there if selected date is
     // greater than the max end date
     models.layers.events.on('remove', function() {
       var endDate = models.date.maxDate();
       var selectedDate = models.date[models.date.activeDate];
+      onLayerUpdate();
       if (selectedDate > endDate) {
         models.date.select(endDate);
       }

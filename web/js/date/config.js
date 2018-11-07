@@ -32,19 +32,11 @@ export function timelineConfig(models, config, ui) {
     var altEnd;
     var paddedRange;
 
-    // Needs reworked. Repeated from layers/active/toggleSubdaily
-    var activeLayers = models.layers[models.layers.activeLayers];
     var subdailyFound = false;
     if (config.parameters.showSubdaily) {
       subdailyFound = true;
     } else {
-      for (var i = 0; i < activeLayers.length; i++) {
-        switch (activeLayers[i].period) {
-          case 'subdaily':
-            subdailyFound = true;
-            break;
-        }
-      }
+      subdailyFound = models.layers.hasSubDaily();
     }
 
     // If zoom is not within range, set it to level 3 (daily)
