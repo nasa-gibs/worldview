@@ -4,7 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
 // import lodashEach from 'lodash/each';
-import lodashMap from 'lodash/map';
+// import lodashMap from 'lodash/map';
 // import { getCenter } from 'ol/extent';
 
 import { parse as dateParser } from '../../date/date';
@@ -31,28 +31,31 @@ class ModalInProgress extends React.Component {
     this.selectLink = this.selectLink.bind(this);
   }
 
-  componentDidMount() {
-    var currentStepIndex = this.props.currentStep;
-    this.fetchMetadata(currentStepIndex);
-  }
+  // componentDidMount() {
+  //   var currentStory = this.props.currentStory;
+  //   var currentStepIndex = this.props.currentStep;
+  //   this.fetchMetadata(currentStory, currentStepIndex);
+  // }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     var currentStory = this.props.currentStory;
-    if (nextProps.currentStep !== this.props.currentStep) {
-      var currentStepIndex = nextProps.currentStep;
-      this.fetchMetadata(currentStepIndex);
-      this.stepLink(currentStory, currentStepIndex);
+    var currentStepIndex = this.props.currentStep - 1;
+    if (prevProps.currentStep !== this.props.currentStep) {
+      var prevStepIndex = prevProps.currentStep - 1;
+
+      this.fetchMetadata(currentStory, currentStepIndex);
+      this.stepLink(currentStory, currentStepIndex, prevStepIndex);
     }
   }
 
-  fetchMetadata(currentStepIndex) {
-    currentStepIndex = currentStepIndex.toString().padStart(3, '0');
+  fetchMetadata(currentStory, stepIndex) {
+    var description = currentStory.steps[stepIndex]['description'];
     this.setState({ isLoading: true });
 
     var { origin, pathname } = window.location;
     var currentStoryId = this.props.currentStory['id'];
     var errorMessage = '<p>There was an error loading this description.</p>';
-    var uri = `${origin}${pathname}config/metadata/stories/${currentStoryId}/step${currentStepIndex}.html`;
+    var uri = `${origin}${pathname}config/metadata/stories/${currentStoryId}/${description}`;
     fetch(uri)
       .then(res => (res.ok ? res.text() : errorMessage))
       .then(body => {
@@ -66,36 +69,21 @@ class ModalInProgress extends React.Component {
       }).catch(error => this.setState({ error, isLoading: false }));
   }
 
-  stepLink(currentStory, currentStepIndex) {
-    var prevState, currentState, prevStepLink, currentStepLink, stepTransition;
+  stepLink(currentStory, currentStepIndex, prevStepIndex) {
+    var currentState, currentStepLink, stepTransition, prevState, prevStepLink;
     var config = this.props.config;
     var models = this.props.models;
     var errors = [];
-
     // Get steplink from the currentstory's current step
-    currentStepIndex = (currentStepIndex - 1).toString().padStart(0, '0');
-    if (currentStory.steps[currentStepIndex - 1]) prevStepLink = currentStory.steps[currentStepIndex - 1]['stepLink'];
     currentStepLink = currentStory.steps[currentStepIndex]['stepLink'];
     stepTransition = currentStory.steps[currentStepIndex]['transition'];
 
+    if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
+
     // TESTING HERE:
     // stepLink = 'p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),Reference_Labels,Reference_Features(hidden),Coastlines(hidden)&t=2018-08-31-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-113.05825121261012,-7.7039155910611115,-10.61293871261011,58.24920940893889&ab=on&as=2018-08-31T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=10&al=false';
-    prevState = util.fromQueryString(prevStepLink);
     currentState = util.fromQueryString(currentStepLink);
-
-    // Parse the previous step link
-    projectionParser(prevState, errors, config);
-    layerParser(prevState, errors, config);
-    dateParser(prevState, errors, config);
-    mapParser(prevState, errors, config);
-    palettes.parse(prevState, errors, config);
-    tourParser(prevState, errors, config);
-    if (config.features.dataDownload) {
-      dataParser(prevState, errors, config);
-    }
-    if (config.features.animation) {
-      animationParser(prevState, errors, config);
-    }
+    prevState = util.fromQueryString(prevStepLink);
 
     // Parse the current step link
     projectionParser(currentState, errors, config);
@@ -114,6 +102,20 @@ class ModalInProgress extends React.Component {
     // Create a query string again to be passed to the URL
     currentStepLink = models.link.toQueryString(currentState);
 
+    // Parse the prev step link
+    projectionParser(prevState, errors, config);
+    layerParser(prevState, errors, config);
+    dateParser(prevState, errors, config);
+    mapParser(prevState, errors, config);
+    palettes.parse(prevState, errors, config);
+    tourParser(prevState, errors, config);
+    if (config.features.dataDownload) {
+      dataParser(prevState, errors, config);
+    }
+    if (config.features.animation) {
+      animationParser(prevState, errors, config);
+    }
+
     // Push query string to browser url
     if (util.browser.history) {
       window.history.pushState(
@@ -124,10 +126,10 @@ class ModalInProgress extends React.Component {
     }
 
     // Process the state of the application
-    this.selectLink(currentState, prevState, stepTransition);
+    this.selectLink(currentState, stepTransition, prevState);
   }
 
-  selectLink(currentState, prevState, stepTransition) {
+  selectLink(currentState, stepTransition, prevState) {
     // var errors = [];
     // var config = this.props.config;
     var models = this.props.models;
@@ -166,18 +168,27 @@ class ModalInProgress extends React.Component {
     }
 
     // Animation
-    if (currentState.ab) {
-      if (currentState.ab === 'on') {
-        models.anim.activate();
-      } else {
-        models.anim.deactivate();
-      }
-    }
-    if (prevState.ab !== currentState.ab) {
+    if (prevState.ab === 'on' && currentState.ab === 'off') {
+      models.anim.activate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else
+    if (prevState.ab === 'on' && !currentState.ab) {
+      models.anim.activate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else if (prevState.ab === 'off' && currentState.ab === 'on') {
+      models.anim.deactivate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else if (!prevState.ab && currentState.ab === 'on') {
+      models.anim.deactivate();
       ui.anim.widget.toggleAnimationWidget();
     }
-    if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
-      ui.anim.widget.onPressPlay();
+
+    if (stepTransition) {
+      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
+        ui.anim.widget.onPressPlay();
+      } else {
+        ui.anim.widget.onPressPause();
+      }
     }
     // }
     // if (currentState.as && currentState.ae) {
@@ -250,8 +261,8 @@ class ModalInProgress extends React.Component {
     var modalStarted = this.props.modalInProgress;
     if (modalStarted && !metaLoaded) {
       this.setState({ metaLoaded: true });
-      this.fetchMetadata(1);
-      this.stepLink(currentStory, 1);
+      this.fetchMetadata(currentStory, 0);
+      this.stepLink(currentStory, 0);
     }
 
     return (
