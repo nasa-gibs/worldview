@@ -86,7 +86,7 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    // currentStepLink = 'p=geographic&l=MODIS_Terra_SurfaceReflectance_Bands143,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-11-07-T00%3A00%3A00Z&z=3&v=-132.41327958422175,-46.546875,71.38202958422175,53.015625&ab=off&as=2018-10-31T00%3A00%3A00Z&ae=2018-11-07T00%3A00%3A00Z&av=3&al=false&download=MOD09GA';
+    currentStepLink = 'p=geographic&l=MODIS_Terra_SurfaceReflectance_Bands143,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2018-11-07-T00%3A00%3A00Z&z=3&v=-132.41327958422175,-46.546875,71.38202958422175,53.015625&ab=off&as=2018-10-31T00%3A00%3A00Z&ae=2018-11-07T00%3A00%3A00Z&av=3&al=false&download=MOD09GA';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -140,6 +140,7 @@ class ModalInProgress extends React.Component {
     var models = this.props.models;
     var ui = this.props.ui;
     var animation = {};
+
     // var layersLoaded = false;
     // var map = ui.map.selected;
     // Map Projection, Map Date
@@ -183,7 +184,7 @@ class ModalInProgress extends React.Component {
     }
     if (currentState.as) ui.anim.widget.reactComponent.state.startDate = currentState.as;
     if (currentState.ae) ui.anim.widget.reactComponent.state.endDate = currentState.ae;
-    if (currentState.av) ui.anim.widget.reactComponent.state.value = currentState.av;
+    if (currentState.av) ui.anim.widget.reactComponent.state.value = Number(currentState.av);
 
     if (prevState.ab === 'on' && currentState.ab === 'off') {
       models.anim.activate();
@@ -278,6 +279,8 @@ class ModalInProgress extends React.Component {
         errors.push({
           message: 'No active layers match product: ' + productId
         });
+      } else {
+        models.data.activate(productId);
       }
     }
 
