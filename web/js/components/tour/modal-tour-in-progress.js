@@ -269,6 +269,17 @@ class ModalInProgress extends React.Component {
     }
     // layersLoaded = true;
 
+    // Step Transistions: Animation
+    if (stepTransition) {
+      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
+        animation.playing = true;
+        ui.anim.widget.onPressPlay();
+      } else {
+        animation.playing = false;
+        ui.anim.widget.onPressPause();
+      }
+    }
+
     // Data Download
     var productId = currentState.download;
     if (productId) {
@@ -294,17 +305,6 @@ class ModalInProgress extends React.Component {
     date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
     if (id) {
       ui.naturalEvents.selectEvent(id, date);
-    }
-
-    // Step Transistions
-    if (stepTransition) {
-      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
-        animation.playing = true;
-        ui.anim.widget.onPressPlay();
-      } else {
-        animation.playing = false;
-        ui.anim.widget.onPressPause();
-      }
     }
 
     // console.log(JSON.stringify(currentState, null, 4));
