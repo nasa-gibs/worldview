@@ -27,9 +27,6 @@ export class SidebarProvider extends React.Component {
     if (!lodashIsEqual(this.state.zotsObject, props.zotsObject)) {
       this.setState({ zotsObject: props.zotsObject });
     }
-    if (!lodashIsEqual(this.state.zotsObject, props.zotsObject)) {
-      this.setState({ zotsObject: props.zotsObject });
-    }
     if (this.state.isMobile !== props.isMobile) {
       this.setState({ isMobile: props.isMobile });
     }

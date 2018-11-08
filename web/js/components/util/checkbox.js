@@ -22,7 +22,6 @@ export class Checkbox extends React.Component {
   }
   onClick(e) {
     const { onClick } = this.props;
-    console.log('onClick');
     if (onClick) {
       e.stopPropagation();
       onClick(e);
@@ -57,7 +56,8 @@ export class Checkbox extends React.Component {
   }
 }
 Checkbox.defaultProps = {
-  checked: true
+  checked: true,
+  onCheck: null
 };
 
 Checkbox.propTypes = {
@@ -67,5 +67,6 @@ Checkbox.propTypes = {
   classNames: PropTypes.string,
   title: PropTypes.string,
   name: PropTypes.string,
-  label: PropTypes.string
+  label: PropTypes.string,
+  onClick: PropTypes.func
 };

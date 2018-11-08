@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import util from '../../util/util';
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,6 +7,8 @@ import {
   Input,
   Button
 } from 'reactstrap';
+
+import util from '../../util/util';
 
 /*
  * A scrollable list of layers
@@ -30,15 +30,13 @@ class ProductPickerHeader extends React.Component {
     this.props.updateListState('category');
     this.setState({ inputValue: '' });
   }
+  handleChange(e) {
+    this.props.runSearch(e.target.value);
+    this.setState({ inputValue: e.target.value });
+  }
   render() {
     const isAutoFocus = !util.browser.touchDevice;
-    const {
-      modalView,
-      runSearch,
-      selectedProjection,
-      listType,
-      category
-    } = this.props;
+    const { modalView, selectedProjection, listType, category } = this.props;
     const isBreadCrumb =
       !modalView &&
       selectedProjection === 'geographic' &&
@@ -83,10 +81,7 @@ class ProductPickerHeader extends React.Component {
         )}
 
         <Input
-          onChange={e => {
-            runSearch(e);
-            this.setState({ inputValue: e.target.value });
-          }}
+          onChange={this.handleChange.bind(this)}
           id="layers-search-input"
           value={this.state.inputValue}
           placeholder="Search"

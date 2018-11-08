@@ -38,6 +38,15 @@ export function layersModel(models, config) {
       self.activeB = lodashCloneDeep(self.active);
     }
   };
+  self.hasSubDaily = function(activeLayers) {
+    activeLayers = activeLayers || self[self.activeLayers];
+    for (var i = 0; i < activeLayers.length; i++) {
+      if (activeLayers[i].period === 'subdaily') {
+        return true;
+      }
+    }
+    return false;
+  };
   self.get = function(spec, activeLayers) {
     spec = spec || {};
     activeLayers = activeLayers || self[self.activeLayers];

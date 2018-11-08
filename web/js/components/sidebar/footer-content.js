@@ -35,18 +35,20 @@ class FooterContent extends React.Component {
               text="+ Add Layers"
               id="layers-add"
               className="layers-add red"
-              onClick={() => {
+              onClick={e => {
+                e.stopPropagation();
                 addLayers();
                 googleTagManager.pushEvent({
-                  'event': 'add_layers'
+                  event: 'add_layers'
                 });
               }}
             />
             <Button
-              onClick={() => {
+              onClick={e => {
+                e.stopPropagation();
                 toggleMode();
                 googleTagManager.pushEvent({
-                  'event': 'comparison_mode'
+                  event: 'comparison_mode'
                 });
               }}
               className="compare-toggle-button"
@@ -70,11 +72,12 @@ class FooterContent extends React.Component {
           <p>Only selected events and events in current map view are listed</p>
           <Button
             className="red"
-            onClick={() => {
+            onClick={e => {
+              e.stopPropagation();
               if (filterEventList) {
                 filterEventList(true);
                 googleTagManager.pushEvent({
-                  'event': 'natural_events_list_all'
+                  event: 'natural_events_list_all'
                 });
               }
             }}
@@ -93,10 +96,11 @@ class FooterContent extends React.Component {
       return (
         <div className="data-download-footer-case">
           <Button
-            onClick={() => {
+            onClick={e => {
+              e.stopPropagation();
               onGetData();
               googleTagManager.pushEvent({
-                'event': 'data_download_button'
+                event: 'data_download_button'
               });
             }}
             className={
