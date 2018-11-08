@@ -138,9 +138,16 @@ section {
 }
 
 body {
+  position: relative;
   line-height: 1;
   min-width: 320px;
   background: #000;
+}
+
+.wv-content {
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 
 nav ul {
@@ -374,4 +381,3 @@ div.horizontalContainer {
   -o-box-sizing: border-box;
   box-sizing: border-box;
 }
-

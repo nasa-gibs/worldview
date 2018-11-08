@@ -163,7 +163,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div data-role="content">
+      <div className="wv-content" data-role="content">
         <ul id="wv-toolbar">
           <li id="wv-link-button" className="wv-toolbar-button" />
           <li id="wv-proj-button" className="wv-toolbar-button" />
