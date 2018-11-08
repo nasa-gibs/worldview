@@ -22,7 +22,7 @@ button:focus {
 }
 
 #timeline-footer text {
-  font: 400 12px/125% "Roboto Mono", monospace;
+  font: 400 12px/125% 'Roboto Mono', monospace;
   text-align: start;
   letter-spacing: 0;
   word-spacing: 0;
@@ -205,7 +205,7 @@ g.plot rect.data-bar-invisible {
   font-size: 24px;
   background: transparent;
   border: 0;
-  font-family: "Roboto Mono", monospace;
+  font-family: 'Roboto Mono', monospace;
   line-height: 1.2em;
   vertical-align: baseline;
   box-sizing: border-box;
@@ -240,7 +240,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .input-time-divider {
-  font-family: "Roboto Mono", monospace;
+  font-family: 'Roboto Mono', monospace;
   color: #fff;
   font-size: 24px;
   width: 13px;
@@ -248,7 +248,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .input-time-zmark {
-  font-family: "Roboto Mono", monospace;
+  font-family: 'Roboto Mono', monospace;
   color: #fff;
   font-size: 24px;
   margin-top: 25px;
@@ -308,7 +308,7 @@ g.plot rect.data-bar-invisible {
   transform: scaleY(-1);
   -webkit-filter: FlipV;
   filter: FlipV;
-  -ms-filter: "FlipV";
+  -ms-filter: 'FlipV';
 }
 
 #timeline-header .date-arrows:hover,
@@ -340,7 +340,7 @@ g.plot rect.data-bar-invisible {
 #timeline-header #left-arrow-group svg {
   -webkit-filter: FlipH;
   filter: FlipH;
-  -ms-filter: "FlipH";
+  -ms-filter: 'FlipH';
 }
 
 #timeline-header > .button-action-group:hover .arrow,
@@ -368,7 +368,7 @@ g.plot rect.data-bar-invisible {
 #timeline-header .animate-button .wv-animate {
   color: #fff;
   font-size: 2.5em;
-  margin: 4px 0 0 2px;
+  margin: 5px 0 0 2px;
 }
 
 #timeline-header .animate-button:hover .wv-animate {
@@ -461,7 +461,7 @@ g.plot rect.data-bar-invisible {
   position: absolute;
   top: 100%;
   left: 15%;
-  content: "";
+  content: '';
   border-top: 5px solid #000;
   border-top: 5px solid rgba(51, 51, 51, 0.9);
   border-right: 5px solid transparent;
@@ -478,7 +478,7 @@ g.plot rect.data-bar-invisible {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: "Roboto Mono", monospace;
+  font-family: 'Roboto Mono', monospace;
   margin-top: -2px;
 }
 
@@ -493,7 +493,7 @@ g.plot rect.data-bar-invisible {
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
-  font-family: "Roboto Mono", monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 14px;
   line-height: 16px;
   color: #ccc;
@@ -523,8 +523,8 @@ g.plot rect.data-bar-invisible {
 
 #guitarpick {
   cursor: pointer;
-  -webkit-clip-path: url("#guitarpick-boundary");
-  clip-path: url("#guitarpick-boundary");
+  -webkit-clip-path: url('#guitarpick-boundary');
+  clip-path: url('#guitarpick-boundary');
 }
 
 #guitarpick path {
