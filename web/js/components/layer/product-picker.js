@@ -171,6 +171,7 @@ class ProductPicker extends React.Component {
             inputValue={inputValue}
             category={category}
             modalView={modalView}
+            width={width}
             runSearch={this.runSearch.bind(this)}
             updateListState={str => {
               this.setState({ listType: str, inputValue: '' });

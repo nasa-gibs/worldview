@@ -36,11 +36,18 @@ class ProductPickerHeader extends React.Component {
   }
   render() {
     const isAutoFocus = !util.browser.touchDevice;
-    const { modalView, selectedProjection, listType, category } = this.props;
+    const {
+      modalView,
+      selectedProjection,
+      listType,
+      category,
+      width
+    } = this.props;
     const isBreadCrumb =
       !modalView &&
       selectedProjection === 'geographic' &&
-      listType !== 'category';
+      listType !== 'category' &&
+      width > 650;
     const isSearching = listType === 'search';
     const BackButton = (
       <Button
@@ -100,7 +107,8 @@ ProductPickerHeader.propTypes = {
   selectedProjection: PropTypes.string,
   listType: PropTypes.string,
   category: PropTypes.object,
-  updateListState: PropTypes.func
+  updateListState: PropTypes.func,
+  width: PropTypes.number
 };
 
 export default ProductPickerHeader;
