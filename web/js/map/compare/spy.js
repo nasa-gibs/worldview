@@ -1,4 +1,5 @@
 import lodashEach from 'lodash/each';
+import olObservable from 'ol/Observable';
 
 var mousePosition = null;
 var spy = null;
@@ -7,6 +8,7 @@ var bottomLayers = [];
 const DEFAULT_RADIUS = 140;
 var radius = DEFAULT_RADIUS;
 var label = null;
+
 export class Spy {
   constructor(olMap, isBInside) {
     this.mapCase = document.getElementById('wv-map');
@@ -45,6 +47,7 @@ export class Spy {
    */
   destroy() {
     spy.removeEventListener('mousemove', this.updateSpy);
+    olObservable.un('pointerdrag', this.updateSpy);
     this.mapCase.removeChild(label);
     removeListenersFromLayers(topLayers);
     removeInverseListenersFromLayers(bottomLayers);
@@ -55,7 +58,7 @@ export class Spy {
    */
   updateSpy(e) {
     var offSetXandY;
-    mousePosition = this.map.getEventPixel(e);
+    mousePosition = e.pixel || this.map.getEventPixel(e);
     radius = DEFAULT_RADIUS;
     offSetXandY = Math.sqrt((radius * radius) / 2);
     label.style.top = mousePosition[1] + offSetXandY - 10 + 'px';
@@ -94,8 +97,8 @@ export class Spy {
     label.appendChild(document.createTextNode(insideText));
 
     this.mapCase.appendChild(label);
-
     this.mapCase.addEventListener('mousemove', this.updateSpy.bind(this));
+    map.on('pointerdrag', this.updateSpy.bind(this));
     this.mapCase.addEventListener('mouseleave', this.hideSpy.bind(this));
     this.mapCase.addEventListener('mouseenter', this.showSpy.bind(this));
 
