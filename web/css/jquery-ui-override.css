@@ -289,8 +289,3 @@ or dateline overlays to be selectable. */
 #wv-toolbar .ui-button.ui-state-disabled:hover {
   color: #eeee;
 }
-
-/* Overide jQuery joyride */
-body {
-  position: static;
-}
