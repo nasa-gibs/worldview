@@ -221,7 +221,7 @@ export function sidebarUi(models, config, ui) {
       } else {
         self.reactComponent.setState({
           layers: models.layers.get(
-            { group: 'all', proj: 'all' },
+            { group: 'all', proj: models.proj.selected.id },
             models.layers[models.layers.activeLayers]
           ),
           zotsObject: getZotsForActiveLayers(config, models, ui)
