@@ -1,5 +1,3 @@
-<p>Step 6: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-  ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-  deserunt mollit anim id est laborum.</p>
+<p>During the animation we can see small fires crop up and quickly expand to much larger clusters. You can use the loop button to watch the animation continuously and change the frames per second to speed up or slow down the animation.</p>
+
+<p>Next, let's use a temperature layer to see if we can detect any changes that may have causes these fires.</p>

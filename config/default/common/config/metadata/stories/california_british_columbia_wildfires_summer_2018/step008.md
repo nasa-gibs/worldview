@@ -1,5 +1,3 @@
-<p>Step 8: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-  ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-  deserunt mollit anim id est laborum.</p>
+<p>From this view we can see that temperature may not have been a large underlying factor in the wildfires in British Columbia. But, if we look at the western US, we see that temperatures there were very high.</p>
+
+<p>Its a bit hard to differentiate the Fire Anomalies with the Land Surface temperature. So let's change the Lande Surface temperature palette using the "controls" icon on that layer row in the layer list.</p>

@@ -1,5 +1,3 @@
-<p>Step 9: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-  ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-  deserunt mollit anim id est laborum.</p>
+<p>We have now selected the Blue 4" palette for the Land Surface Temperature (Day) layer to better differentiate it from the Fire and Thermal Anomalies layer points.</p>
+
+<p>With the palette, changes, we can see that there are quite a few fires already occuring around the time the fires in British Columbia were starting. Let's zoom in and take a closer look.</p>

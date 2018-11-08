@@ -1,5 +1,3 @@
-<p>Step 10: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-  ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-  deserunt mollit anim id est laborum.</p>
+<p>In this view, we see three clusters of fires somewhere on the west coast. Because the Land Surface layer is laid on top of the "Place Labels" and "Coastlines / Borders / Roads" layers, we can not see these layers. </p>
+
+<p>Let's Change the order of the layers by dragging the "Land Surface Temperature (Day)" layer below the other layers </p>
