@@ -153,25 +153,33 @@ var addLineOverlay = function(map) {
 
   // Add event listeners to Elements
   [lineCaseEl, draggerEl].forEach(el => {
-    el.addEventListener('mousedown', function onTouchEnd() {
-      listenerObj = {
-        type: 'default',
-        start: 'mousedown',
-        move: 'mousemove',
-        end: 'mouseup'
-      };
-      dragLine(listenerObj, lineCaseEl, map);
-    }, true);
+    el.addEventListener(
+      'mousedown',
+      function onTouchEnd() {
+        listenerObj = {
+          type: 'default',
+          start: 'mousedown',
+          move: 'mousemove',
+          end: 'mouseup'
+        };
+        dragLine(listenerObj, lineCaseEl, map);
+      },
+      true
+    );
 
-    el.addEventListener('touchstart', function onTouchStart() {
-      listenerObj = {
-        type: 'touch',
-        start: 'touchstart',
-        move: 'touchmove',
-        end: 'touchend'
-      };
-      dragLine(listenerObj, lineCaseEl, map);
-    }, true);
+    el.addEventListener(
+      'touchstart',
+      function onTouchStart() {
+        listenerObj = {
+          type: 'touch',
+          start: 'touchstart',
+          move: 'touchmove',
+          end: 'touchend'
+        };
+        dragLine(listenerObj, lineCaseEl, map);
+      },
+      true
+    );
   });
 
   return lineCaseEl;
@@ -180,7 +188,7 @@ var addLineOverlay = function(map) {
 var dragLine = function(listenerObj, lineCaseEl, map) {
   function move(evt) {
     var windowWidth = util.browser.dimensions[0];
-    if (listenerObj.type === 'mouse') evt.preventDefault();
+    if (listenerObj.type === 'default') evt.preventDefault();
     evt.stopPropagation();
 
     if (listenerObj.type === 'touch') {
