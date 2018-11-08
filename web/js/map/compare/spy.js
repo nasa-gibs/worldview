@@ -1,5 +1,4 @@
 import lodashEach from 'lodash/each';
-import olObservable from 'ol/Observable';
 
 var mousePosition = null;
 var spy = null;
@@ -47,7 +46,7 @@ export class Spy {
    */
   destroy() {
     spy.removeEventListener('mousemove', this.updateSpy);
-    olObservable.un('pointerdrag', this.updateSpy);
+    this.map.un('pointerdrag', this.updateSpy);
     this.mapCase.removeChild(label);
     removeListenersFromLayers(topLayers);
     removeInverseListenersFromLayers(bottomLayers);
