@@ -139,6 +139,16 @@ class ModalInProgress extends React.Component {
     var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
+    var rotation;
+    if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
+      if (!isNaN(currentState.r)) {
+        rotation = currentState.r * (Math.PI / 180.0);
+      } else {
+        rotation = 0;
+      }
+    } else {
+      rotation = 0;
+    }
 
     // LOAD: Map Projection, Map Date
     // TODO: THIS PROBABLY NEEDS REWORKED
@@ -150,18 +160,8 @@ class ModalInProgress extends React.Component {
       ui.timeline.config.zoom(zoomLevel);
     }
 
-    // LOAD: Map Rotation (Animated)
-    if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
-      if (!isNaN(currentState.r)) {
-        let rotation = currentState.r * (Math.PI / 180.0);
-        ui.map.selected.getView().animate({
-          duration: 800,
-          rotation: rotation
-        });
-      }
-    }
-
-    // LOAD: Map Zoom & View (Animated)
+    // LOAD: Map Zoom & View & Rotation(Animated)
+    // TODO: Fix rotation animation
     if (currentState.v) {
       // Animate to extent & zoom:
       let extent = currentState.v;
@@ -171,8 +171,9 @@ class ModalInProgress extends React.Component {
       let resolution = ui.map.selected.getView().getResolutionForExtent(extent);
       ui.map.selected.getView().animate({
         center: coordinates,
-        duration: 2000,
-        resolution: resolution
+        duration: 4000,
+        resolution: resolution,
+        rotation: rotation
       });
 
       // Don't animate to extent & zoom:

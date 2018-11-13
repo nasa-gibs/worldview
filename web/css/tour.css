@@ -605,6 +605,19 @@
   margin-bottom: 16px;
 }
 
+.tour-complete .modal-body ul {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 16px;
+  padding-left: 16px;
+}
+
+.tour-complete .modal-body ul li {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 4px;
+}
+
 .tour-complete .modal-footer {
   display: block;
   border-top: none;
