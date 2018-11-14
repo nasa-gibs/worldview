@@ -7,9 +7,6 @@
         "compare": true,
         "tour": true,
         "feedback": true,
-        "googleAnalytics": {
-            "id": "UA-88182106-1"
-        },
         "googleTagManager": {
             "id": "GTM-WNP7MLF"
         },
