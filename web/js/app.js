@@ -1,8 +1,7 @@
 import React from 'react';
 
 import lodashEach from 'lodash/each';
-import googleAnalytics from './components/util/google-analytics';
-import googleTagManager from './components/util/google-tag-manager';
+import googleTagManager from 'googleTagManager';
 
 // Utils
 import util from './util/util';
@@ -394,9 +393,6 @@ class App extends React.Component {
         .register(models.palettes)
         .register(models.map);
       models.link.load(state);
-      if (config.features.googleAnalytics) {
-        googleAnalytics.init(config.features.googleAnalytics.id); // Insert google tracking
-      }
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
       }
