@@ -39,7 +39,7 @@ test('error added if date is invalid', () => {
 
 test('overrides now', () => {
   let errors = [];
-  let d = new Date(2013, 0, 5);
+  let d = new Date(Date.UTC(2013, 0, 5));
   let state = {
     now: '2013-01-05'
   };
