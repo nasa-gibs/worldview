@@ -24,7 +24,7 @@ export function parse(state, errors) {
 
   if (state.now) {
     try {
-      state.now = util.parseDate(state.now);
+      state.now = util.parseDateUTC(state.now);
       util.now = function() {
         return new Date(state.now.getTime());
       };

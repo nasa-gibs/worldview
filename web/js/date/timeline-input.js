@@ -248,11 +248,15 @@ export function timelineInput(models, config, ui) {
 
   self.update = function(date) {
     var ms = date || new Date(model[model.activeDate]);
-    var nt = new Date(ms.setUTCMinutes(ms.getUTCMinutes() + 10));
-    var nd = new Date(ms.setUTCDate(ms.getUTCDate() + 1));
-    var pd = new Date(ms.setUTCDate(ms.getUTCDate() - 1));
     var endDate = models.layers.lastDate();
     var endDateTime = models.layers.lastDateTime();
+    let nt = new Date(ms);
+    let nd = new Date(ms);
+    let pd = new Date(ms);
+
+    nt = new Date(nt.setUTCMinutes(nt.getUTCMinutes() + 10));
+    nd = new Date(nd.setUTCDate(nd.getUTCDate() + 1));
+    pd = new Date(pd.setUTCDate(pd.getUTCDate() - 1));
 
     // Disable arrows if nothing before/after selection
     if (model.selectedZoom > 3 && nt >= endDateTime) {
