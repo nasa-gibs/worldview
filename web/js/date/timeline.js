@@ -269,7 +269,7 @@ export function timeline(models, config, ui) {
       models.compare.events.on('toggle-state', onLayerUpdate);
     }
 
-    models.layers.events.on('add', onLayerUpdate);
+    models.layers.events.on('change', onLayerUpdate);
 
     // Determine maximum end date and move tl pick there if selected date is
     // greater than the max end date
