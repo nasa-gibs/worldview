@@ -170,9 +170,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var projId = models.proj.selected.id;
     var palette = '';
     layerGroupStr = options.group ? options.group : models.layers.activeLayers;
-    date = util.toISOStringSeconds(
-      util.roundTimeOneMinute(self.closestDate(def, options))
-    );
+    // Don't key by time if this is a static layer--it is valid for
+    // every date.
+    if (def.period) {
+      date = util.toISOStringSeconds(
+        util.roundTimeOneMinute(self.closestDate(def, options))
+      );
+    }
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
     }
