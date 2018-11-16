@@ -75,13 +75,7 @@
   vertical-align: middle;
   cursor: pointer;
   background-color: #ccc;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    from(#dcdcdc),
-    to(#ccc)
-  );
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#ccc));
   background-image: linear-gradient(#dcdcdc, #ccc);
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -99,13 +93,7 @@
 .wv-link .copy-btn:hover {
   text-decoration: none;
   background-color: #bbb;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    from(#ccc),
-    to(#bbb)
-  );
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#bbb));
   background-image: linear-gradient(#ccc, #bbb);
   border-color: #bbb;
 }
