@@ -41,7 +41,7 @@
 .wv-link .hide-icon[data-tooltip]::after,
 .wv-link .hide-icon[data-tooltip]:hover::before,
 .wv-link .hide-icon[data-tooltip]:hover::after {
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)';
   filter: alpha(opacity=0);
   -khtml-opacity: 0;
   -moz-opacity: 0;
@@ -59,7 +59,7 @@
   transform-origin: top;
 }
 
-.wv-link [data-tooltip-length="xsmall"]::after {
+.wv-link [data-tooltip-length='xsmall']::after {
   width: 75px;
 }
 
@@ -75,7 +75,13 @@
   vertical-align: middle;
   cursor: pointer;
   background-color: #ccc;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#ccc));
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#dcdcdc),
+    to(#ccc)
+  );
   background-image: linear-gradient(#dcdcdc, #ccc);
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -93,7 +99,13 @@
 .wv-link .copy-btn:hover {
   text-decoration: none;
   background-color: #bbb;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#bbb));
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(#ccc),
+    to(#bbb)
+  );
   background-image: linear-gradient(#ccc, #bbb);
   border-color: #bbb;
 }
@@ -123,7 +135,7 @@
   justify-content: space-around;
 }
 
-#social-share [class*="fa fa-"] {
+#social-share .icon-link {
   background-color: #000;
   border-radius: 50%;
   color: #fff;
@@ -135,15 +147,15 @@
   text-align: center;
 }
 
-#social-share .fa-facebook {
+#social-share .facebook {
   background-color: #3b5998;
 }
 
-#social-share .fa-twitter {
+#social-share .twitter {
   background-color: #00aced;
 }
 
-#social-share .fa-reddit {
+#social-share .reddit {
   position: relative;
   color: #ff5700;
   background-color: #fff;
@@ -153,17 +165,17 @@
   margin-left: 1px;
 }
 
-#social-share .fa-reddit::before {
+#social-share .reddit::before {
   border-radius: 50%;
   position: absolute;
   left: -1px;
-  top: 0;
+  top: -1px;
 }
 
 #social-share .fa-google-plus {
   background-color: #d34836;
 }
 
-#social-share .fa-envelope {
+#social-share .email {
   background-color: #505050;
 }

@@ -173,10 +173,10 @@ class Layer extends React.Component {
                 <i
                   className={
                     isDisabled
-                      ? 'fa fa-ban layer-eye-icon'
+                      ? 'far fa-ban layer-eye-icon'
                       : !isVisible
-                        ? 'fa fa-eye-slash layer-eye-icon'
-                        : 'fa fa-eye layer-eye-icon'
+                        ? 'far fa-eye-slash layer-eye-icon'
+                        : 'far fa-eye layer-eye-icon'
                   }
                 />
               </a>
@@ -197,10 +197,10 @@ class Layer extends React.Component {
                 <a
                   id={'close' + layerGroupName + util.encodeId(layer.id)}
                   title={'Remove Layer'}
-                  className="button close bank-item-img"
+                  className="button wv-layers-close"
                   onClick={this.onRemoveClick.bind(this)}
                 >
-                  <i />
+                  <i className="fa fa-times" />
                 </a>
                 <a
                   title={'Layer options for ' + names.title}
@@ -209,7 +209,7 @@ class Layer extends React.Component {
                   }
                   onClick={this.onOptionsClick.bind(this)}
                 >
-                  <i className="wv-layers-options-icon" />
+                  <i className="fas fa-sliders-h wv-layers-options-icon" />
                 </a>
                 <a
                   title={'Layer description for ' + names.title}

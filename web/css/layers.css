@@ -381,7 +381,7 @@
   width: 30px;
   height: 30px;
   opacity: 0.8;
-  font-size: 30px;
+  font-size: 26px;
   position: absolute;
   right: 12px;
   top: 50%;
@@ -390,7 +390,7 @@
 .measurement-row .source-nav-item {
   margin-left: 10px;
   cursor: pointer;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   font-weight: 300;
 }
@@ -423,7 +423,7 @@
 }
 .measurement-row .source-sub-group .wv-checkbox {
   color: #fff;
-  font: 400 13px/13px "Open Sans", sans-serif;
+  font: 400 13px/13px 'Open Sans', sans-serif;
 }
 .measurement-row .wv-checkbox label {
   display: inline;

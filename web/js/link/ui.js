@@ -24,7 +24,7 @@ export function linkUi(models, config) {
     $label = $('<label></label>')
       .attr('for', 'wv-link-button-check')
       .attr('title', 'Share this map');
-    var $icon = $('<i></i>').addClass('fa fa-share-square-o fa-2x');
+    var $icon = $('<i></i>').addClass('fas fa-share-square fa-2x');
     $label.append($icon);
     $(selector).append($label);
     $(selector).append($button);
@@ -35,7 +35,7 @@ export function linkUi(models, config) {
       .click(function() {
         var checked = $('#wv-link-button-check').prop('checked');
         googleTagManager.pushEvent({
-          'event': 'social_link_share'
+          event: 'social_link_share'
         });
         if (checked) {
           self.show();
@@ -117,8 +117,8 @@ export function linkUi(models, config) {
     var twMessage = 'Check out what I found in #NASAWorldview -';
     var emailBody = shareMessage + ' - ' + url;
     googleTagManager.pushEvent({
-      'event': 'social_share_platform',
-      'social_type': type
+      event: 'social_share_platform',
+      social_type: type
     });
 
     switch (type) {
@@ -256,7 +256,7 @@ export function linkUi(models, config) {
       if (checked) {
         var promise = models.link.shorten();
         googleTagManager.pushEvent({
-          'event': 'social_link_shorten'
+          event: 'social_link_shorten'
         });
         $('#permalink_content').val('Please wait...');
         promise

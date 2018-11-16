@@ -93,7 +93,7 @@ class AnimationWidget extends React.Component {
   onDateChange(date, id) {
     const { endDate, startDate } = this.state;
     googleTagManager.pushEvent({
-      'event': 'GIF_animation_date_case'
+      event: 'GIF_animation_date_case'
     });
     if (id === 'start') {
       this.setState({
@@ -147,7 +147,7 @@ class AnimationWidget extends React.Component {
           className="wv-icon-case"
           onClick={this.props.onPushGIF}
         >
-          <i className="fa fa-file-video-o wv-animation-widget-icon" />
+          <i className="fas fa-file-video wv-animation-widget-icon" />
         </a>
         <div className="wv-anim-dates-case">
           <TimeSelector
