@@ -38,30 +38,26 @@ export function layersOptions(config, models, layer, layerGroupStr) {
       .attr('data-layer', layer.id);
     renderOpacity($dialog);
     if (config.features.customPalettes) {
-      if (
-        models.palettes.allowed(layer.id, layerGroupStr) &&
-        models.palettes.getLegends(layer.id, layerGroupStr).length < 2
-      ) {
-        // TODO: Dual Colormap options
-        /* if ( models.palettes.getLegends(layer.id).length > 1 ) {
-          renderLegendButtons($dialog);
-          } */
-        var legend = models.palettes.getLegend(layer.id, index, layerGroupStr);
-        if (legend) {
-          if (legend.type === 'continuous' || legend.type === 'discrete') {
-            renderRange($dialog);
-            if (config.layers[layer.id].type !== 'wms') {
-              renderPaletteSelector($dialog);
-            }
-          } else if (
-            models.palettes.getDefaultLegend(layer.id, index, layerGroupStr)
-              .colors.length === 1
-          ) {
-            if (config.layers[layer.id].type !== 'wms') {
-              renderPaletteSelector($dialog);
+      if (models.palettes.allowed(layer.id, layerGroupStr)) {
+        const legends = models.palettes.getLegends(layer.id, layerGroupStr);
+        const len = legends.length;
+        lodashEach(legends, (legend, i) => {
+          if (legend) {
+            if (legend.type === 'continuous' || legend.type === 'discrete') {
+              if (len === 1) renderRange($dialog);
+              if (config.layers[layer.id].type !== 'wms') {
+                renderPaletteSelector($dialog, i, legend, len);
+              }
+            } else if (
+              models.palettes.getDefaultLegend(layer.id, i, layerGroupStr)
+                .colors.length === 1
+            ) {
+              if (config.layers[layer.id].type !== 'wms') {
+                renderPaletteSelector($dialog, i, legend, len);
+              }
             }
           }
-        }
+        });
       }
     }
     var names = models.layers.getTitles(layer.id);
@@ -86,13 +82,13 @@ export function layersOptions(config, models, layer, layerGroupStr) {
     });
 
     $('#wv-squash-button-check').addClass('custom-check');
-    $('#wv-palette-selector').addClass('custom-check');
+    $('.wv-palette-selector').addClass('custom-check');
     $('#wv-layers-options-dialog .custom-check').iCheck({
       radioClass: 'iCheck iCheck-radio iradio_square-grey',
       checkboxClass: 'iCheck iCheck-checkbox icheckbox_square-grey'
     });
 
-    $('#wv-layers-options-dialog #wv-palette-selector').each(function() {
+    $('#wv-layers-options-dialog .wv-palette-selector').each(function() {
       $(this).perfectScrollbar('update');
     });
 
@@ -276,19 +272,28 @@ export function layersOptions(config, models, layer, layerGroupStr) {
     onPaletteUpdate();
   };
 
-  var renderPaletteSelector = function($dialog) {
+  var renderPaletteSelector = function(
+    $dialog,
+    index,
+    legend,
+    legendArrayLength
+  ) {
+    const title =
+      legendArrayLength > 1 && legend.title ? ': ' + legend.title : '';
     var $header = $('<div></div>')
       .addClass('wv-header')
       .addClass('wv-color-palette-label')
-      .html('Color Palette');
-    var $pane = $('<div></div>').attr('id', 'wv-palette-selector');
+      .html('Color Palette' + title);
+    var $pane = $('<div></div>')
+      .attr('id', 'wv-palette-selector' + index)
+      .attr('class', 'wv-palette-selector');
     $dialog.append($header).append($pane);
-    renderColorPaletteSelector(true);
+    renderColorPaletteSelector(true, index);
   };
 
-  var renderColorPaletteSelector = function(firstTime) {
-    var $pane = $('#wv-palette-selector').empty();
-    $pane.append(defaultLegend());
+  var renderColorPaletteSelector = function(firstTime, index) {
+    var $pane = $('#wv-palette-selector' + index).empty();
+    $pane.append(defaultLegend(index));
     var recommended = layer.palette.recommended || [];
     lodashEach(recommended, function(id) {
       var item = customLegend(id);
@@ -318,7 +323,7 @@ export function layersOptions(config, models, layer, layerGroupStr) {
       );
     }
 
-    $('#wv-palette-selector input').on('ifChecked', function() {
+    $('#wv-palette-selector' + index + ' input').on('ifChecked', function() {
       var that = this;
       setTimeout(function() {
         var id = $(that).attr('data-palette');
@@ -331,7 +336,7 @@ export function layersOptions(config, models, layer, layerGroupStr) {
     });
 
     if (!firstTime) {
-      $('#wv-palette-selector').iCheck({
+      $('#wv-palette-selector' + index).iCheck({
         radioClass: 'iCheck iCheck-radio iradio_square-grey'
       });
     }
@@ -341,10 +346,16 @@ export function layersOptions(config, models, layer, layerGroupStr) {
     var palette = models.palettes.get(layer.id, index, layerGroupStr);
     if (palette.custom) {
       $(
-        "#wv-palette-selector input[data-palette='" + palette.custom + "']"
+        '#wv-palette-selector' +
+          index +
+          "  input[data-palette='" +
+          palette.custom +
+          "']"
       ).iCheck('check');
     } else {
-      $("#wv-palette-selector input[data-palette='__default']").iCheck('check');
+      $(
+        '#wv-palette-selector' + index + " input[data-palette='__default']"
+      ).iCheck('check');
     }
   };
 
@@ -398,7 +409,7 @@ export function layersOptions(config, models, layer, layerGroupStr) {
     return $row;
   };
 
-  var defaultLegend = function() {
+  var defaultLegend = function(index) {
     var legend = models.palettes.getDefaultLegend(
       layer.id,
       index,

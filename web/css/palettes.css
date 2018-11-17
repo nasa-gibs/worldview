@@ -1,4 +1,4 @@
-#wv-palette-selector {
+.wv-palette-selector {
   width: 280px;
   height: 200px;
   overflow: auto;
@@ -6,11 +6,11 @@
 }
 
 /* perfect scrollbars */
-#wv-palette-selector .ps__scrollbar-y-rail {
+.wv-palette-selector .ps__scrollbar-y-rail {
   background-color: transparent;
 }
 
-#wv-palette-selector .ps__scrollbar-y {
+.wv-palette-selector .ps__scrollbar-y {
   background: #ccc;
 }
 
