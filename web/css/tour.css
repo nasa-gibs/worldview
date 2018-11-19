@@ -21,6 +21,7 @@
 }
 
 .tour-in-progress .close {
+  top: 8px;
   height: 13px;
   width: 13px;
 }
@@ -240,6 +241,7 @@
 }
 
 .tour-in-progress .modal-header {
+  display: block;
   position: relative;
   color: #fff;
   border-radius: 8px 0 0;
