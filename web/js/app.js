@@ -395,7 +395,7 @@ class App extends React.Component {
         models.compare = compareModel(models, config);
         models.link.register(models.compare);
       }
-      models.tour = tourModel(models, config);
+      models.tour = tourModel(config);
       models.link
         .register(models.proj)
         .register(models.layers)
@@ -499,8 +499,8 @@ class App extends React.Component {
       }
       ui.link = linkUi(models, config);
       ui.info = uiInfo(ui, config);
-      if (config.features.alert) {
-        ui.alert = notificationsUi(ui, config);
+      if (config.features.notification) {
+        ui.notification = notificationsUi(ui, config);
       }
       if (config.features.compare) {
         ui.compare = compareUi(models, ui, config);
