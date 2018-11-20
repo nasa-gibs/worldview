@@ -7,6 +7,7 @@ export function tourUi(models, ui, config) {
   var self = {};
 
   var init = function() {
+
     if (!config.features.tour || !config.stories || !config.storyOrder) {
       return;
     }
@@ -15,6 +16,15 @@ export function tourUi(models, ui, config) {
       React.createElement(Tour, getInitialProps()),
       document.getElementById('wv-tour')
     );
+
+    models.wv.events.on('startup', function() {
+      let story = models.tour.selected;
+      let storyLoaded = false;
+      if (story && storyLoaded === false) {
+        self.selectTour(null, story, 1, story.id);
+        storyLoaded = true;
+      }
+    });
   };
 
   var getInitialProps = function() {
@@ -82,6 +92,9 @@ export function tourUi(models, ui, config) {
     let totalSteps = currentStory.steps;
     if (e) e.preventDefault();
     self.reactComponent.setState({
+      models: models,
+      config: config,
+      ui: ui,
       currentStep: 1,
       totalSteps: totalSteps.length,
       currentStoryIndex: currentStoryIndex,

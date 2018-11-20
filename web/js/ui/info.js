@@ -48,8 +48,8 @@ export function uiInfo (ui, config) {
     var $source = $('<li><a><i class=\'ui-icon fa fa-code fa-fw\'></i>Source Code</a></li>');
     var $new = $('<li><a target=\'_blank\' href=\'' + whatsNewUrl + '\'><i class=\'ui-icon fa fa-flag fa-fw\'></i>What\'s New</a></li>');
 
-    if (config.features.alert) {
-      $alerts = ui.alert.getAlert();
+    if (config.features.notification) {
+      $alerts = ui.notification.getAlert();
     }
     if (config.features.feedback) {
       $menuItems.append($feedback);
