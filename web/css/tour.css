@@ -135,8 +135,7 @@
 .tour-start .tour-box-content {
   height: 198px;
   display: flex;
-  flex-flow: row nowrap;
-  flex-direction: column-reverse;
+  flex-flow: column-reverse nowrap;
   justify-content: flex-start;
   overflow: hidden;
 }
