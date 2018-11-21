@@ -266,27 +266,65 @@ class LayerRow extends React.Component {
     const { activeSourceIndex } = this.state;
     const sources = lodashValues(measurement.sources);
 
+    // handle low empty activeSourceIndex values on projection change
+    let validIndexSelected = false;
+    let minValidIndex = -1;
+
     const Tabs = (
       <Nav vertical className="source-tabs col-md-3 col-sm-12">
         {sources
           .sort((a, b) => a.title.localeCompare(b.title))
           .map(
-            (source, index) =>
-              hasMeasurementSetting(measurement, source)
-                ? this.renderSourceTabs(
+            (source, index) => {
+              let hasSetting = hasMeasurementSetting(measurement, source);
+
+              if (hasSetting) {
+                // only set minValidIndex once
+                if (minValidIndex < 0) {
+                  minValidIndex = index;
+                }
+                // check if activeSourceIndex is satisfied
+                if (activeSourceIndex === index) {
+                  validIndexSelected = true;
+                }
+              }
+              return [source, hasSetting];
+            }
+          )
+          .map(
+            (sourceCheckResults, index) => {
+              let [source, hasSetting] = sourceCheckResults;
+
+              if (hasSetting) {
+                // if activeSourceIndex does not match any valid indexes, make minValidIndex active tab
+                let validActiveIndex = activeSourceIndex;
+                if (!validIndexSelected && minValidIndex === index) {
+                  validActiveIndex = minValidIndex;
+                }
+                return this.renderSourceTabs(
                   measurement,
                   source,
                   index,
-                  activeSourceIndex
-                )
-                : ''
-          )}
+                  validActiveIndex
+                );
+              } else {
+                return '';
+              }
+            }
+          )
+        }
       </Nav>
     );
 
+    // if no match of valid indexes, make minValidIndex active content
+    let validActiveSourceIndex = activeSourceIndex;
+    if (!validIndexSelected) {
+      validActiveSourceIndex = minValidIndex;
+    }
+
     const Content = this.renderSourceContent(
       measurement,
-      sources[activeSourceIndex]
+      sources[validActiveSourceIndex]
     );
     return (
       <div className="container">
