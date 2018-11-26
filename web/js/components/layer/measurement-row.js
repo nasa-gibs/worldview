@@ -266,7 +266,7 @@ class LayerRow extends React.Component {
     const { activeSourceIndex } = this.state;
     const sources = lodashValues(measurement.sources);
 
-    // handle low empty activeSourceIndex values on projection change
+    // handle activeSourceIndex values not valid after projection change
     let validIndexSelected = false;
     let minValidIndex = -1;
 
@@ -279,13 +279,13 @@ class LayerRow extends React.Component {
               let hasSetting = hasMeasurementSetting(measurement, source);
 
               if (hasSetting) {
+                // check if activeSourceIndex is satisfied to set flag
+                if (activeSourceIndex === index) {
+                  validIndexSelected = true;
+                }
                 // only set minValidIndex once
                 if (minValidIndex < 0) {
                   minValidIndex = index;
-                }
-                // check if activeSourceIndex is satisfied
-                if (activeSourceIndex === index) {
-                  validIndexSelected = true;
                 }
               }
               return [source, hasSetting];
@@ -293,7 +293,7 @@ class LayerRow extends React.Component {
           )
           .map(
             (sourceCheckResults, index) => {
-              let [source, hasSetting] = sourceCheckResults;
+              const [source, hasSetting] = sourceCheckResults;
 
               if (hasSetting) {
                 // if activeSourceIndex does not match any valid indexes, make minValidIndex active tab
