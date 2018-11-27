@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LayerList from '../components/layer/product-picker';
+import LayerList from '../components/layer/product-picker/product-picker';
 import lodashIndexOf from 'lodash/indexOf';
 import lodashSortBy from 'lodash/sortBy';
 import lodashValues from 'lodash/values';

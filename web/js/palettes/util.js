@@ -1,4 +1,5 @@
 import lodashEach from 'lodash/each';
+import util from '../util/util';
 export function getCheckerboard() {
   var size = 2;
   var canvas = document.createElement('canvas');
@@ -28,4 +29,30 @@ export function palettesTranslate(source, target) {
     translation.push(target[targetIndex]);
   });
   return translation;
+}
+/**
+ * Redraw canvas with selected colormap
+ * @param {*} ctxStr | String of wanted cavnas
+ * @param {*} checkerBoardPattern | Background for canvas threshold
+ * @param {*} colors | array of color values
+ */
+export function drawPaletteOnCanvas(
+  ctx,
+  checkerBoardPattern,
+  colors,
+  width,
+  height
+) {
+  ctx.fillStyle = checkerBoardPattern;
+  ctx.fillRect(0, 0, width, height);
+
+  if (colors) {
+    var bins = colors.length;
+    var binWidth = width / bins;
+    var drawWidth = Math.ceil(binWidth);
+    colors.forEach((color, i) => {
+      ctx.fillStyle = util.hexToRGBA(color);
+      ctx.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
+    });
+  }
 }

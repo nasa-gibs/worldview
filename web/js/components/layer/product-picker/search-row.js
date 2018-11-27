@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup, ListGroupItem } from 'reactstrap';
-import util from '../../util/util.js';
+import util from '../../../util/util.js';
 /**
  * A single layer search result row
  * @class LayerRow

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
+import { drawPaletteOnCanvas } from '../../../palettes/util';
 import lodashIsEqual from 'lodash/isEqual';
 import lodashIsNumber from 'lodash/isNumber';
 
@@ -120,7 +121,7 @@ class Legend extends React.Component {
    * Style Canvas bases on updates to legend or canvas-width
    */
   updateCanvas() {
-    const { checkerBoardPattern } = this.props;
+    const { checkerBoardPattern, height, width } = this.props;
     const { legends } = this.state;
 
     legends.forEach((colorMap, index) => {
@@ -133,7 +134,13 @@ class Legend extends React.Component {
             // This value is needed for calculating running data offsets
             this.setState({ width: newWidth });
           }
-          this.drawOnCanvas(ctxStr, checkerBoardPattern, colorMap.colors);
+          drawPaletteOnCanvas(
+            this[ctxStr].current.getContext('2d'),
+            checkerBoardPattern,
+            colorMap.colors,
+            width,
+            height
+          );
         }
       }
     });
@@ -144,19 +151,18 @@ class Legend extends React.Component {
    * @param {*} checkerBoardPattern | Background for canvas threshold
    * @param {*} colors | array of color values
    */
-  drawOnCanvas(ctxStr, checkerBoardPattern, colors) {
-    var context = this[ctxStr].current.getContext('2d');
+  drawOnCanvas(ctx, checkerBoardPattern, colors) {
     const { height, width } = this.props;
-    context.fillStyle = checkerBoardPattern;
-    context.fillRect(0, 0, width, height);
+    ctx.fillStyle = checkerBoardPattern;
+    ctx.fillRect(0, 0, width, height);
 
     if (colors) {
       var bins = colors.length;
       var binWidth = width / bins;
       var drawWidth = Math.ceil(binWidth);
       colors.forEach((color, i) => {
-        context.fillStyle = util.hexToRGBA(color);
-        context.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
+        ctx.fillStyle = util.hexToRGBA(color);
+        ctx.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
       });
     }
   }

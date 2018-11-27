@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SearchLayerRow from './search-row';
 import CategoryLayerRow from './measurement-row';
-import util from '../../util/util';
+import util from '../../../util/util';
 import 'whatwg-fetch'; // fetch() polyfill for IE
 
 /*
