@@ -26,7 +26,7 @@ module.exports = {
   },
   'No Results - No Data Available indicator displayed when no data': function(client) {
     // December 31, 2022 no results
-    let queryString = '?now=2022-12-31T12&p=geographic&l=MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Coastlines&t=2020-12-31&v=-91.125,-53.3671875,82.40625,59.8359375&download=MOD04_L2';
+    let queryString = '?now=2022-12-31T12&p=geographic&l=MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Coastlines&t=2022-12-31&v=-91.125,-53.3671875,82.40625,59.8359375&download=MOD04_L2';
     client.url(client.globals.url + queryString);
 
     // 'No Data Available' indicator present
