@@ -26,8 +26,10 @@ export class Swipe {
     events = compareEvents;
     this.create();
     $(window).resize(() => {
-      this.destroy();
-      this.create();
+      if (document.querySelector('.ab-swipe-line')) {
+        this.destroy();
+        this.create();
+      }
     });
   }
   create() {
