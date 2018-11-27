@@ -60,6 +60,7 @@ const resolutionsPolar = {
 
 export function animationGif(models, config, ui) {
   var self = {};
+  var creatingGIF = false;
   var jcropAPI = null;
   var animationCoordinates = null;
   var previousCoords = null;
@@ -229,6 +230,8 @@ export function animationGif(models, config, ui) {
    *
    */
   self.createGIF = function() {
+    // set creating GIF status flag
+    creatingGIF = true;
     var imageArra;
     var stampWidth;
     var build;
@@ -383,6 +386,10 @@ export function animationGif(models, config, ui) {
    *
    */
   var getGif = function() {
+    // prevent if status flag shows already creating a GIF
+    if (creatingGIF) {
+      return;
+    }
     var layers;
     // check for rotation, changed palettes, and graticule layers and ask for reset if so
 
@@ -639,6 +646,8 @@ export function animationGif(models, config, ui) {
    *
    */
   var onGifComplete = function(obj) {
+    // reset GIF creating status flag
+    creatingGIF = false;
     // callback function for when image is finished
     $('#timeline-footer').removeClass('wv-anim-active');
     models.anim.rangeState.state = 'off';
