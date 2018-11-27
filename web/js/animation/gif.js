@@ -646,7 +646,7 @@ export function animationGif(models, config, ui) {
    *
    */
   var onGifComplete = function(obj) {
-    // reset GIF creating status flag
+    // reset creating GIF status flag
     creatingGIF = false;
     // callback function for when image is finished
     $('#timeline-footer').removeClass('wv-anim-active');
