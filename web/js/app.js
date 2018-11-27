@@ -434,7 +434,7 @@ class App extends React.Component {
       ui.sidebar = sidebarUi(models, config, ui);
       ui.activeLayers = layersActive(models, ui, config);
       ui.addModal = layersModal(models, ui, config);
-      ui.layerSettingsModal = layersOptions(models, config);
+      ui.layerSettingsModal = layersOptions(models, ui, config);
 
       // Test via a getter in the options object to see if the passive property is accessed
       ui.supportsPassive = false;
