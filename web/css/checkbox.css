@@ -5,8 +5,8 @@
   position: absolute;
   opacity: 0;
   cursor: pointer;
-  height: 20px;
-  width: 20px;
+  height: 24px;
+  width: 24px;
   left: 0;
 }
 .wv-checkbox::before {
@@ -20,8 +20,17 @@
   line-height: 20px;
   margin-right: 5px;
 }
+.wv-checkbox.gray::before {
+  border: 2px solid #808080;
+}
 .wv-checkbox.checked::before {
   color: #fff;
   content: '\2713';
   background-color: #d54f21;
+}
+.wv-checkbox.gray.checked::before {
+  background-color:#808080;
+}
+.wv-checkbox.wv-checkbox-round::before {
+  border-radius: 50%;
 }

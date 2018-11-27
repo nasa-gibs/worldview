@@ -36,28 +36,35 @@ export class Checkbox extends React.Component {
     if (onCheck) onCheck(boo);
   }
   render() {
+    const { checked } = this.state;
+    const { isRound, color, classNames, id, name, title, label } = this.props;
+    const roundClassName = isRound ? 'wv-checkbox-round ' : '';
+    const defaultClassName = 'wv-checkbox ';
+    const checkedClassName = checked ? 'checked ' : '';
+    const caseClassName =
+      defaultClassName + roundClassName + checkedClassName + color;
+
     return (
-      <div
-        className={this.state.checked ? 'wv-checkbox checked' : 'wv-checkbox'}
-        onClick={this.onClick.bind(this)}
-      >
+      <div className={caseClassName} onClick={this.onClick.bind(this)}>
         <input
           type="checkbox"
-          id={this.props.id}
-          title={this.props.title}
-          name={this.props.name}
-          checked={this.state.checked}
-          className={this.props.classNames}
+          id={id}
+          title={title}
+          name={name}
+          checked={checked}
+          className={classNames}
           onChange={this.handleChange.bind(this)}
         />
-        <label htmlFor={this.props.id}>{this.props.label}</label>
+        <label htmlFor={id}>{label}</label>
       </div>
     );
   }
 }
 Checkbox.defaultProps = {
   checked: true,
-  onCheck: null
+  onCheck: null,
+  isRound: false,
+  color: ''
 };
 
 Checkbox.propTypes = {
@@ -68,5 +75,7 @@ Checkbox.propTypes = {
   title: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  isRound: PropTypes.bool,
+  color: PropTypes.string
 };
