@@ -434,7 +434,7 @@ export function layersOptions(config, models, layer, layerGroupStr) {
   };
 
   var onLayerRemoved = function(removedLayer) {
-    if (layer.id === removedLayer.id && $dialog) {
+    if (layer.id === removedLayer.id && $dialog && $dialog.hasClass('ui-dialog-content')) {
       $dialog.dialog('close');
     }
   };
