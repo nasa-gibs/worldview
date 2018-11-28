@@ -88,7 +88,7 @@ class OpacitySelect extends React.Component {
     drawPaletteOnCanvas(
       ctx,
       checkerBoard,
-      legend.colors,
+      palette,
       canvas.width,
       canvas.height
     );
