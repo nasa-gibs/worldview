@@ -47,43 +47,60 @@ class LayerSettings extends React.Component {
       const activeClass = activeIndex === i ? 'active' : '';
       const dualStr = legends.length === 2 ? ' dual' : '';
       const navItemEl = (
-        <NavItem className={'settings-customs-title ' + activeClass + dualStr}>
+        <NavItem
+          key={legend.id + 'nav'}
+          className={'settings-customs-title ' + activeClass + dualStr}
+        >
           <NavLink onClick={() => this.setState({ activeIndex: i })}>
             {legend.title}
           </NavLink>
         </NavItem>
       );
       let palette = getPalette(layer.id, i);
-      let max = palette.entries.values.length - 1;
+      let max = legend.colors.length - 1;
       let start = palette.min || 0;
       let end = palette.max || max;
-      let paneItemEl = (
-        <TabPane tabId={i}>
-          <Threshold
-            legend={legend}
-            setRange={setRange}
-            min={0}
-            max={max}
-            start={start}
-            end={end}
-            layerId={layer.id}
-            squashed={!!palette.squash}
-          />
-          <Palette
-            setCustom={setCustom}
-            clearCustom={clearCustom}
-            getDefaultLegend={getDefaultLegend}
-            getCustomPalette={getCustomPalette}
-            palettesTranslate={palettesTranslate}
-            activePalette={palette.custom || '__default'}
-            checkerboard={checkerboard}
-            layer={layer}
-            canvas={canvas}
-            index={i}
-            paletteOrder={paletteOrder}
-          />
-        </TabPane>
-      );
+      let paneItemEl;
+      if (
+        legend.type !== 'continuous' &&
+        legend.type !== 'discrete' &&
+        legend.colors.length > 1
+      ) {
+        paneItemEl = (
+          <TabPane key={legend.id + 'pane'} tabId={i}>
+            No customizations available for this palette.
+          </TabPane>
+        );
+      } else {
+        paneItemEl = (
+          <TabPane key={legend.id + 'pane'} tabId={i}>
+            <Threshold
+              legend={legend}
+              setRange={setRange}
+              min={0}
+              max={max}
+              start={start}
+              end={end}
+              layerId={layer.id}
+              squashed={!!palette.squash}
+              index={i}
+            />
+            <Palette
+              setCustom={setCustom}
+              clearCustom={clearCustom}
+              getDefaultLegend={getDefaultLegend}
+              getCustomPalette={getCustomPalette}
+              palettesTranslate={palettesTranslate}
+              activePalette={palette.custom || '__default'}
+              checkerboard={checkerboard}
+              layer={layer}
+              canvas={canvas}
+              index={i}
+              paletteOrder={paletteOrder}
+            />
+          </TabPane>
+        );
+      }
 
       paneElements.push(paneItemEl);
       navElements.push(navItemEl);
@@ -116,25 +133,32 @@ class LayerSettings extends React.Component {
     const len = legends.length;
     const palette = getPalette(layer.id, 0);
     const legend = getLegend(layer.id, 0);
-    const max = palette.entries.values.length - 1;
+    const max = palette.legend.colors.length - 1;
     const start = palette.min || 0;
     const end = palette.max || max;
-
     if (len > 1) {
       return this.renderMultiColormapCustoms(legends);
+    } else if (legend.type === 'classification' && legend.colors.length > 1) {
+      return '';
     }
+
     return (
       <React.Fragment>
-        <Threshold
-          legend={legend}
-          setRange={setRange}
-          min={0}
-          max={max}
-          start={start}
-          layerId={layer.id}
-          end={end}
-          squashed={!!palette.squash}
-        />
+        {legend.type !== 'classification' ? (
+          <Threshold
+            legend={legend}
+            setRange={setRange}
+            min={0}
+            max={max}
+            start={start}
+            layerId={layer.id}
+            end={end}
+            squashed={!!palette.squash}
+            index={0}
+          />
+        ) : (
+          ''
+        )}
         <Palette
           setCustom={setCustom}
           clearCustom={clearCustom}
@@ -152,8 +176,14 @@ class LayerSettings extends React.Component {
     );
   }
   render() {
-    const { setOpacity, customPalettesIsActive, close } = this.props;
+    const {
+      setOpacity,
+      customPalettesIsActive,
+      close,
+      getLegends
+    } = this.props;
     const { isOpen, layer, palettedAllowed } = this.state;
+
     const customPalettes =
       customPalettesIsActive && palettedAllowed ? this.renderCustoms() : '';
     return (
