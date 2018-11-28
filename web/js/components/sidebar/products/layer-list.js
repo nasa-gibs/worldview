@@ -114,6 +114,7 @@ class LayerList extends React.Component {
                           isMobile={context.isMobile}
                           names={context.getNames(object.id)}
                           checkerBoardPattern={context.checkerBoardPattern}
+                          getPalette={context.getPalette}
                           palette={this.getPalette(
                             object,
                             context.palettePromise

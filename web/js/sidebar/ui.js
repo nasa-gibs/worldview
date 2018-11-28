@@ -160,6 +160,7 @@ export function sidebarUi(models, config, ui) {
       changeCompareMode: compareModel ? compareModel.setMode : null,
       checkerBoardPattern: getCheckerboard(),
       palettePromise: models.palettes.palettePromise,
+      getPalette: models.palettes.get,
       getLegend: models.palettes.getLegends,
       replaceSubGroup: model.replaceSubGroup,
       runningLayers: null,

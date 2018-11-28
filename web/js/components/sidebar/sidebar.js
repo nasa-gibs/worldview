@@ -186,11 +186,13 @@ class Sidebar extends React.Component {
       changeCompareMode,
       checkerBoardPattern,
       compareFeature,
-      tabTypes
+      tabTypes,
+      getPalette
     } = this.props;
     return (
       <Provider
         palettePromise={palettePromise}
+        getPalette={getPalette}
         updateLayer={updateLayer}
         getNames={getNames}
         getAvailability={getAvailability}
@@ -317,6 +319,7 @@ Sidebar.propTypes = {
   runningLayers: PropTypes.object,
   changeCompareMode: PropTypes.func,
   palettePromise: PropTypes.func,
+  getPalette: PropTypes.func,
   localStorage: PropTypes.bool,
   getLegend: PropTypes.func,
   zotsObject: PropTypes.object,

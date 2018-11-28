@@ -57,8 +57,8 @@ class ThresholdSelect extends React.Component {
     }
     this.debounceSetRange(
       layerId,
-      parseFloat(start),
-      parseFloat(end),
+      parseFloat(newStart),
+      parseFloat(newEnd),
       this.state.squashed,
       index
     );
@@ -82,7 +82,6 @@ class ThresholdSelect extends React.Component {
     const units = legend.units || '';
     const startLabel = legend.tooltips[start] + ' ' + units;
     const endLabel = legend.tooltips[end] + ' ' + units;
-    console.log(activeDragger);
     return (
       <div className="layer-threshold-select settings-component">
         <h2 className="wv-header">Thresholds</h2>

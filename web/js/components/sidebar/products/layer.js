@@ -56,7 +56,8 @@ class Layer extends React.Component {
       runningObject,
       getLegend,
       layerGroupName,
-      checkerBoardPattern
+      checkerBoardPattern,
+      getPalette
     } = this.props;
     if (palette) {
       let isRunningData = !!runningObject;
@@ -64,7 +65,8 @@ class Layer extends React.Component {
       return (
         <Legend
           layer={layer}
-          palette={palette}
+          paletteId={palette.id}
+          getPalette={getPalette}
           legends={getLegend(layer.id, layerGroupName)}
           isRunningData={isRunningData}
           checkerBoardPattern={checkerBoardPattern}
@@ -247,6 +249,7 @@ Layer.propTypes = {
   isVisible: PropTypes.bool,
   layerClasses: PropTypes.string,
   isDisabled: PropTypes.bool,
+  getPalette: PropTypes.func,
   updateLayer: PropTypes.func,
   layer: PropTypes.object,
   layerGroupName: PropTypes.string,
