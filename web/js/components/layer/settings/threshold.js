@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
 import RangeInput from '../../util/range-input';
-import util from '../../../util/util';
 import { Checkbox } from '../../util/checkbox';
 
 class ThresholdSelect extends React.Component {
@@ -23,13 +22,6 @@ class ThresholdSelect extends React.Component {
     setRange(layerId, parseFloat(start), parseFloat(end), isSquashed, index);
     this.setState({ squashed: isSquashed });
   }
-  setStartEnd(start, end, activeDragger) {
-    this.setState({
-      start: start,
-      end: end,
-      activeDragger: activeDragger
-    });
-  }
   updateThreshold(thresholdArray) {
     const { layerId, index } = this.props;
     const { start, end } = this.state;
@@ -39,18 +31,15 @@ class ThresholdSelect extends React.Component {
     if (newStart !== start && newEnd !== end) {
       this.setState({
         start: newStart,
-        end: newEnd,
-        activeDragger: 'start'
+        end: newEnd
       });
     } else if (newStart !== start) {
       this.setState({
-        start: newStart,
-        activeDragger: 'start'
+        start: newStart
       });
     } else if (newEnd !== end) {
       this.setState({
-        end: newEnd,
-        activeDragger: 'end'
+        end: newEnd
       });
     } else {
       return;
@@ -63,22 +52,9 @@ class ThresholdSelect extends React.Component {
       index
     );
   }
-  positionText(str, position, len) {
-    const labelDivWidth = 262;
-    const padding = 10;
-    const textWidth = util.getTextWidth(str, '13px Open Sans');
-    const textOffset = (textWidth + padding) / 2;
-    const offset = (position / len) * labelDivWidth - textOffset;
-    return offset < 0
-      ? 0
-      : offset + textOffset > labelDivWidth
-        ? labelDivWidth - (textWidth + padding)
-        : offset;
-  }
   render() {
-    const { start, end, squashed, activeDragger } = this.state;
+    const { start, end, squashed } = this.state;
     const { index, min, max, legend } = this.props;
-    const len = legend.tooltips.length;
     const units = legend.units || '';
     const startLabel = legend.tooltips[start] + ' ' + units;
     const endLabel = legend.tooltips[end] + ' ' + units;
@@ -107,24 +83,12 @@ class ThresholdSelect extends React.Component {
             onSlide={this.updateThreshold.bind(this)}
           />
           <div className="wv-label">
-            <div
-              style={{
-                left: this.positionText(startLabel, start, len) + 'px',
-                zIndex: activeDragger === 'start' ? 10 : 5
-              }}
-              className="wv-label-range-min wv-label-range-case"
-            >
-              <span>{startLabel}</span>
-            </div>
-            <div
-              style={{
-                right: this.positionText(endLabel, max - end, len) + 'px',
-                zIndex: activeDragger === 'end' ? 10 : 5
-              }}
-              className="wv-label-range-max wv-label-range-case"
-            >
-              <span>{endLabel}</span>
-            </div>
+            <span className="wv-label-range-min wv-label-range">
+              {startLabel}
+            </span>
+            <span className="wv-label-range-max wv-label-range">
+              {endLabel}
+            </span>
           </div>
         </div>
       </div>

@@ -569,23 +569,16 @@
 .wv-layers-options-dialog .wv-label-opacity {
   text-align: right;
 }
-.wv-layers-options-dialog .wv-label-range-case {
-  padding: 4px;
-  background: #eee;
-  color: #000;
-  border: 1px solid #000;
-  font-family: 13px/13px 'Open Sans', sans-serif;
-  width: max-content;
+.wv-layers-options-dialog .wv-label-range {
+  color: #fff;
 }
 
 .wv-layers-options-dialog .wv-label-range-min {
-  position: absolute;
-  text-align: left;
+  float: left;
 }
 
 .wv-layers-options-dialog .wv-label-range-max {
-  position: absolute;
-  text-align: right;
+  float: right;
 }
 
 .wv-layers-options-dialog .wv-palette-squash {
