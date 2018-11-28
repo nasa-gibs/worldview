@@ -93,7 +93,7 @@ class OpacitySelect extends React.Component {
       canvas.height
     );
     return (
-      <div className={caseDefaultClassName + checkedClassName}>
+      <div key={id} className={caseDefaultClassName + checkedClassName}>
         <input
           id={'wv-palette-radio-' + id}
           type="radio"
