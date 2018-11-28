@@ -504,10 +504,13 @@
   width: 300px;
 }
 .wv-layers-options-dialog .nav-item {
-  width: 136px;
+  width: 100%;
   border: 1px solid transparent;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+}
+.wv-layers-options-dialog .nav-item.dual {
+  width: 136px;
 }
 .wv-layers-options-dialog .nav-item:hover {
   border: 1px solid #fff;
@@ -570,7 +573,6 @@
   padding: 4px;
   background: #eee;
   color: #000;
-  border-radius: 4px;
   border: 1px solid #000;
   font-family: 13px/13px 'Open Sans', sans-serif;
   width: max-content;

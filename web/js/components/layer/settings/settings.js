@@ -45,8 +45,9 @@ class LayerSettings extends React.Component {
     let paneElements = [];
     lodashEach(legends, (legend, i) => {
       const activeClass = activeIndex === i ? 'active' : '';
+      const dualStr = legends.length === 2 ? ' dual' : '';
       const navItemEl = (
-        <NavItem className={'settings-customs-title ' + activeClass}>
+        <NavItem className={'settings-customs-title ' + activeClass + dualStr}>
           <NavLink onClick={() => this.setState({ activeIndex: i })}>
             {legend.title}
           </NavLink>
