@@ -67,7 +67,7 @@ class LayerSettings extends React.Component {
             start={start}
             end={end}
             layerId={layer.id}
-            squashed={palette.squash}
+            squashed={!!palette.squash}
           />
           <Palette
             setCustom={setCustom}
@@ -128,7 +128,6 @@ class LayerSettings extends React.Component {
     if (len > 1) {
       return this.renderMultiColormapCustoms(legends);
     }
-
     return (
       <React.Fragment>
         <Threshold
@@ -139,7 +138,7 @@ class LayerSettings extends React.Component {
           start={start}
           layerId={layer.id}
           end={end}
-          squashed={palette.squash}
+          squashed={!!palette.squash}
         />
         <Palette
           setCustom={setCustom}
