@@ -95,11 +95,6 @@ class LayerSettings extends React.Component {
       </React.Fragment>
     );
   }
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
   renderCustoms() {
     const {
       setCustom,
@@ -157,7 +152,7 @@ class LayerSettings extends React.Component {
     );
   }
   render() {
-    const { setOpacity, customPalettesIsActive } = this.props;
+    const { setOpacity, customPalettesIsActive, close } = this.props;
     const { isOpen, layer, palettedAllowed } = this.state;
     const customPalettes =
       customPalettesIsActive && palettedAllowed ? this.renderCustoms() : '';
@@ -167,14 +162,12 @@ class LayerSettings extends React.Component {
         className="wv-layers-options-dialog"
         modalClassName="layer-settings-modal"
         isOpen={isOpen}
-        toggle={this.toggle.bind(this)}
+        toggle={close}
         backdrop={false}
       >
         {layer.id ? (
           <React.Fragment>
-            <ModalHeader toggle={this.toggle.bind(this)}>
-              {layer.title}
-            </ModalHeader>
+            <ModalHeader toggle={close}>{layer.title}</ModalHeader>
             <ModalBody>
               <Opacity
                 start={Math.ceil(layer.opacity * 100)}

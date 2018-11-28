@@ -57,6 +57,7 @@ export function layersOptions(models, ui, config) {
         customPalettesIsActive={!!config.features.customPalettes}
         palettesTranslate={palettesTranslate}
         paletteOrder={config.paletteOrder}
+        close={self.close}
       />,
       document.getElementById('layer-settings-modal')
     );
