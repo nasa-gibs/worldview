@@ -23,12 +23,14 @@ class Tour extends React.Component {
       currentStory: props.currentStory,
       currentStoryId: props.currentStoryId,
       showTourAlert: props.showTourAlert,
-      hideTour: props.hideTour
+      hideTour: props.hideTour,
+      restartTour: props.restartTour
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
     this.toggleModalInProgress = this.toggleModalInProgress.bind(this);
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
+    this.toggleRestartTour = this.toggleRestartTour.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
   }
@@ -51,6 +53,12 @@ class Tour extends React.Component {
     e.preventDefault();
     this.setState({
       modalComplete: !this.state.modalComplete
+    });
+  }
+
+  toggleRestartTour() {
+    this.setState({
+      restartTour: !this.state.restartTour
     });
   }
 
@@ -101,6 +109,8 @@ class Tour extends React.Component {
             currentStoryId={this.state.currentStoryId}
             currentStory={this.state.currentStory}
             showTourAlert={this.props.showTourAlert}
+            restartTour={this.state.restartTour}
+            toggleRestartTour={this.toggleRestartTour}
           ></TourInProgress>
 
           <TourComplete
@@ -110,7 +120,7 @@ class Tour extends React.Component {
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
             startTour={this.props.startTour}
-            restartTour={this.props.restartTour}
+            resetTour={this.props.resetTour}
           ></TourComplete>
         </div>
       );
@@ -136,11 +146,12 @@ Tour.propTypes = {
   currentStory: PropTypes.object,
   currentStoryId: PropTypes.string,
   startTour: PropTypes.func.isRequired,
-  restartTour: PropTypes.func.isRequired,
+  resetTour: PropTypes.func.isRequired,
   selectTour: PropTypes.func.isRequired,
   showTourAlert: PropTypes.func.isRequired,
   hideTour: PropTypes.func.isRequired,
-  showTour: PropTypes.func.isRequired
+  showTour: PropTypes.func.isRequired,
+  restartTour: PropTypes.bool.isRequired
 };
 
 export default Tour;

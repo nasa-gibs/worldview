@@ -36,17 +36,13 @@ class ModalInProgress extends React.Component {
     this.selectLink = this.selectLink.bind(this);
   }
 
-  // componentDidMount() {
-  //   var currentStory = this.props.currentStory;
-  //   var currentStepIndex = this.props.currentStep;
-  //   this.fetchMetadata(currentStory, currentStepIndex);
-  // }
-
   componentDidUpdate(prevProps) {
     var currentStory = this.props.currentStory;
     var currentStepIndex = this.props.currentStep - 1;
     if (prevProps.currentStep !== this.props.currentStep) {
       var prevStepIndex = prevProps.currentStep - 1;
+      // Reset the prevStepIndex when a new tour is selected
+      if (currentStepIndex === 0 && prevStepIndex !== 1) prevStepIndex = null;
 
       this.fetchMetadata(currentStory, currentStepIndex);
       this.stepLink(currentStory, currentStepIndex, prevStepIndex);
@@ -339,6 +335,14 @@ class ModalInProgress extends React.Component {
     var { description, metaLoaded } = this.state;
     var currentStory = this.props.currentStory;
     var modalStarted = this.props.modalInProgress;
+
+    if (this.props.restartTour) {
+      this.setState({
+        metaLoaded: false
+      });
+      this.props.toggleRestartTour();
+    }
+
     if (modalStarted && !metaLoaded) {
       this.setState({ metaLoaded: true });
       this.fetchMetadata(currentStory, 0);
@@ -377,6 +381,8 @@ ModalInProgress.propTypes = {
   decreaseStep: PropTypes.func.isRequired,
   incrementStep: PropTypes.func.isRequired,
   showTourAlert: PropTypes.func.isRequired,
+  restartTour: PropTypes.bool.isRequired,
+  toggleRestartTour: PropTypes.func.isRequired,
   className: PropTypes.string
 };
 

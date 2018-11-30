@@ -27,7 +27,7 @@ class ModalComplete extends React.Component {
             {list}
           </ModalBody>
           <ModalFooter>
-            <button type="button" className="btn btn-primary" onClick={this.props.restartTour}>More Stories</button>
+            <button type="button" className="btn btn-primary" onClick={this.props.resetTour}>More Stories</button>
             <button type="button" className="btn btn-secondary" onClick={this.props.toggleModalComplete}>Exit Tutorial</button>
           </ModalFooter>
         </Modal>
@@ -41,7 +41,7 @@ ModalComplete.propTypes = {
   currentStory: PropTypes.object.isRequired,
   toggleModalComplete: PropTypes.func.isRequired,
   startTour: PropTypes.func.isRequired,
-  restartTour: PropTypes.func.isRequired,
+  resetTour: PropTypes.func.isRequired,
   className: PropTypes.string
 };
 

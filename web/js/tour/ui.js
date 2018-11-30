@@ -45,7 +45,8 @@ export function tourUi(models, ui, config) {
       currentStory: {},
       currentStoryId: '',
       startTour: self.startTour,
-      restartTour: self.restartTour,
+      resetTour: self.resetTour,
+      restartTour: false,
       selectTour: self.selectTour,
       notifyUserOfTour: self.notifyUserOfTour,
       showTourAlert: ui.alert.showTourAlert,
@@ -106,9 +107,10 @@ export function tourUi(models, ui, config) {
     }
   };
 
-  self.restartTour = function(e) {
+  self.resetTour = function(e) {
     if (e) e.preventDefault();
     initTourState();
+    self.startTour();
   };
 
   self.startTour = function(e) {
@@ -116,7 +118,8 @@ export function tourUi(models, ui, config) {
     self.reactComponent.setState({
       modalStart: true,
       modalInProgress: false,
-      modalComplete: false
+      modalComplete: false,
+      restartTour: true
     });
   };
 
