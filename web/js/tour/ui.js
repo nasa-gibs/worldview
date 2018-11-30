@@ -5,9 +5,10 @@ import util from '../util/util';
 
 export function tourUi(models, ui, config) {
   var self = {};
+  self.resetting = false;
+  self.events = util.events();
 
   var init = function() {
-
     if (!config.features.tour || !config.stories || !config.storyOrder) {
       return;
     }
@@ -44,12 +45,39 @@ export function tourUi(models, ui, config) {
       currentStory: {},
       currentStoryId: '',
       startTour: self.startTour,
+      restartTour: self.restartTour,
       selectTour: self.selectTour,
       notifyUserOfTour: self.notifyUserOfTour,
       showTourAlert: ui.alert.showTourAlert,
       hideTour: self.hideTour,
       showTour: self.showTour
     };
+  };
+
+  var initTourState = function() {
+    var leading;
+    var map = ui.map.selected;
+
+    self.resetting = true;
+    if (models.compare && models.compare.active) {
+      models.compare.toggle();
+    }
+    models.proj.selectDefault();
+    models.layers.reset(models.layers.activeLayers);
+    models.date.select(util.today());
+
+    leading = models.map.getLeadingExtent();
+    map.getView().fit(leading, map.getSize());
+    self.resetting = false;
+    self.events.trigger('reset');
+    setTourState();
+  };
+
+  var setTourState = function() {
+    models.proj.selectDefault();
+    ui.sidebar.expandNow();
+    ui.sidebar.selectTab('layers');
+    ui.timeline.expandNow();
   };
 
   self.checkBuildTimestamp = function() {
@@ -78,10 +106,14 @@ export function tourUi(models, ui, config) {
     }
   };
 
+  self.restartTour = function(e) {
+    if (e) e.preventDefault();
+    initTourState();
+  };
+
   self.startTour = function(e) {
     if (e) e.preventDefault();
     self.reactComponent.setState({
-      currentStep: 1,
       modalStart: true,
       modalInProgress: false,
       modalComplete: false
