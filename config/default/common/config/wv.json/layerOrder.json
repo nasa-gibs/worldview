@@ -845,10 +845,20 @@
         "Landsat_8_Orbit_Dsc",
         "ISS_Orbit_Asc",
         "ISS_Orbit_Dsc",
-	 	    "OCO_2_Orbit_Asc",
-		    "OCO_2_Orbit_Dsc",
+        "OCO_2_Orbit_Asc",
+        "OCO_2_Orbit_Dsc",
         "GOSAT_Orbit_Asc",
-        "GOSAT_Orbit_Dsc"
+        "GOSAT_Orbit_Dsc",
+        "CYGNSS_Orbit_Asc",
+        "CYGNSS_Orbit_Dsc",
+        "GOSAT_2_Orbit_Asc",
+        "GOSAT_2_Orbit_Dsc",
+        "METOP_A_Orbit_Asc",
+        "METOP_A_Orbit_Dsc",
+        "METOP_B_Orbit_Asc",
+        "METOP_B_Orbit_Dsc",
+        "SAOCOM1_A_Orbit_Asc",
+        "SAOCOM1_A_Orbit_Dsc"
     ],
     "layerOrderExceptions": [
         "SCAR_Land_Mask",

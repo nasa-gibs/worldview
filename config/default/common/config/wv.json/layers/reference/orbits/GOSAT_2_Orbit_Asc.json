@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "GOSAT_2_Orbit_Asc": {
+            "id":       "GOSAT_2_Orbit_Asc",
+            "title":    "GOSAT-2 Orbital Track & Overpass Time (Ascending/Day)",
+            "subtitle": "GOSAT-2 / Space-Track.org",
+            "description": "reference/orbits/GOSAT_2_Orbit_Asc",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "day",
+            "track": "ascending",
+            "startDate": "2018-12-01",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "GOSAT_2_Orbit_Asc",
+                "immutable": true
+            }
+        }
+    }
+}
