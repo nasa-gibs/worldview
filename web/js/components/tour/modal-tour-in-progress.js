@@ -140,6 +140,8 @@ class ModalInProgress extends React.Component {
     var models = this.props.models;
     var ui = this.props.ui;
     var rotation;
+
+    // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
         rotation = currentState.r * (Math.PI / 180.0);
@@ -150,11 +152,26 @@ class ModalInProgress extends React.Component {
       rotation = 0;
     }
 
-    // LOAD: Map Projection, Map Date
-    // TODO: THIS PROBABLY NEEDS REWORKED
-    models.link.load(currentState);
+    // LOAD: Date(s)
+    if (currentState.ca === 'false') {
+      models.date.setActiveDate('selectedB');
+    }
+    if (currentState.t) {
+      models.date.select(currentState.t, 'selected');
+    }
+    if (currentState.z) {
+      models.date.selectedZoom = Number(currentState.z);
+    }
+    if (currentState.t1) {
+      models.date.select(currentState.t1, 'selectedB');
+    }
 
-    // Zoom Level
+    // LOAD: Map Projection
+    if (currentState.p) {
+      models.proj.select(currentState.p);
+    }
+
+    // Load: Timeline Zoom Level
     if (currentState.z) {
       let zoomLevel = Number(currentState.z);
       ui.timeline.config.zoom(zoomLevel);
@@ -176,7 +193,7 @@ class ModalInProgress extends React.Component {
         rotation: rotation
       });
 
-      // Don't animate to extent & zoom:
+      // To jump to extent & zoom (instead of animate):
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
 
@@ -286,9 +303,9 @@ class ModalInProgress extends React.Component {
     }
 
     // LOAD: Data Download
-    var productId = currentState.download;
-    if (productId) {
-      var found = lodashFind(models.layers[models.layers.activeLayers], {
+    if (currentState.download) {
+      let productId = currentState.download;
+      let found = lodashFind(models.layers[models.layers.activeLayers], {
         product: productId
       });
       if (!found) {
@@ -298,18 +315,23 @@ class ModalInProgress extends React.Component {
       } else {
         models.data.activate(productId);
       }
+    } else {
+      ui.sidebar.selectTab('layers');
     }
 
     // LOAD: Events
-    if (!currentState.e) return;
-    models.naturalEvents.events.trigger('activate');
-    var values = currentState.e.split(',');
-    var id = values[0] || '';
-    var date = values[1] || '';
-    id = id.match(/^EONET_[0-9]+/i) ? values[0] : null;
-    date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
-    if (id) {
-      ui.naturalEvents.selectEvent(id, date);
+    if (currentState.e) {
+      let values = currentState.e.split(',');
+      let id = values[0] || '';
+      let date = values[1] || '';
+      id = id.match(/^EONET_[0-9]+/i) ? values[0] : null;
+      date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
+      models.naturalEvents.events.trigger('activate');
+      if (id) {
+        ui.naturalEvents.selectEvent(id, date);
+      }
+    } else {
+      ui.sidebar.selectTab('layers');
     }
   }
 

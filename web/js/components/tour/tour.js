@@ -110,6 +110,7 @@ class Tour extends React.Component {
             toggleModalInProgress={this.toggleModalInProgress}
             toggleModalComplete={this.toggleModalComplete}
             startTour={this.props.startTour}
+            restartTour={this.props.restartTour}
           ></TourComplete>
         </div>
       );
@@ -135,6 +136,7 @@ Tour.propTypes = {
   currentStory: PropTypes.object,
   currentStoryId: PropTypes.string,
   startTour: PropTypes.func.isRequired,
+  restartTour: PropTypes.func.isRequired,
   selectTour: PropTypes.func.isRequired,
   showTourAlert: PropTypes.func.isRequired,
   hideTour: PropTypes.func.isRequired,
