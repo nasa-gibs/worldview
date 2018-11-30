@@ -1,0 +1,39 @@
+{
+    "layers": {
+        "SAOCOM1_A_Orbit_Dsc": {
+            "id":       "SAOCOM1_A_Orbit_Dsc",
+            "title":    "SAOCOM-1A Orbital Track & Overpass Time (Descending/Night)",
+            "subtitle": "SAOCOM-1A / Space-Track.org",
+            "description": "reference/orbits/SAOCOM1_A_Orbit_Dsc",
+            "group":    "overlays",
+            "format":   "image/png",
+            "type":     "wms",
+            "tileSize": [512, 512],
+            "period":   "daily",
+            "layergroup": [
+              "reference",
+              "reference_orbits"
+            ],
+            "daynight": "night",
+            "track": "descending",
+            "startDate": "2018-12-01",
+
+            "projections": {
+                "antarctic": {
+                    "source":   "GIBS:wms"
+                },
+                "arctic": {
+                    "source":   "GIBS:wms"
+                },
+                "geographic": {
+                    "source":   "GIBS:wms"
+                }
+            },
+
+            "palette": {
+                "id": "SAOCOM1_A_Orbit_Dsc",
+                "immutable": true
+            }
+        }
+    }
+}
