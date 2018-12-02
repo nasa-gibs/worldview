@@ -82,7 +82,7 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    currentStepLink = 'ca=true&cm=swipe&cv=50&p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&t=2018-09-06-T00%3A00%3A00Z&z=2&t1=2018-09-19-T00%3A00%3A00Z&v=-81.00856222007965,31.36000753998159,-72.57106222007965,36.79197390923348';
+    // currentStepLink = 'ca=true&cm=swipe&cv=50&p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&t=2018-09-06-T00%3A00%3A00Z&z=2&t1=2018-09-19-T00%3A00%3A00Z&v=-81.00856222007965,31.36000753998159,-72.57106222007965,36.79197390923348';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -169,26 +169,14 @@ class ModalInProgress extends React.Component {
       if (currentState.ca && currentState.ca !== 'true') {
         models.layers.activeLayers = 'activeB';
       }
-      if (!models.layers.activeB || !models.date.selectedB) {
-        if (!models.date.selectedB) {
-          models.date.initCompare();
-        }
-        if (!models.layers.activeB) {
-          models.layers.initCompare();
-        }
-      }
-      models.compare.toggle();
       if (currentState.cv) {
         models.compare.setValue(currentState.cv);
       } else {
         models.compare.setValue(50);
       }
       models.compare.setMode(currentState.cm);
-      models.compare.events.trigger('toggle-state');
-      models.compare.events.trigger('change');
-      ui.sidebar.reactComponent.setState({
-        isCompareMode: true
-      });
+      models.compare.toggle();
+      models.compare.toggleState();
     }
 
     // LOAD: Map Projection
