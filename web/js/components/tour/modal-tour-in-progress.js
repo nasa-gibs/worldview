@@ -82,7 +82,7 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    // currentStepLink = 'p=geographic&l=MODIS_Terra_SurfaceReflectance_Bands143(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Reference_Labels,Reference_Features,Coastlines(hidden)&t=2018-04-20-T00%3A00%3A00Z&z=1&v=-240.4465521284557,-168.37095562787738,17.806552128455706,23.270955627877385&ab=off&as=2018-10-31T00%3A00%3A00Z&ae=2018-11-07T00%3A00%3A00Z&av=3&al=true&e=EONET_2881,2018-04-20';
+    currentStepLink = 'ca=true&cm=swipe&cv=50&p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&t=2018-09-06-T00%3A00%3A00Z&z=2&t1=2018-09-19-T00%3A00%3A00Z&v=-81.00856222007965,31.36000753998159,-72.57106222007965,36.79197390923348';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -162,6 +162,35 @@ class ModalInProgress extends React.Component {
       models.date.select(currentState.t1, 'selectedB');
     }
 
+    // LOAD: Comparison
+    if (currentState.ca === 'true') {
+      // Close all the open dialogs
+      wvui.close();
+      if (currentState.ca && currentState.ca !== 'true') {
+        models.layers.activeLayers = 'activeB';
+      }
+      if (!models.layers.activeB || !models.date.selectedB) {
+        if (!models.date.selectedB) {
+          models.date.initCompare();
+        }
+        if (!models.layers.activeB) {
+          models.layers.initCompare();
+        }
+      }
+      models.compare.toggle();
+      if (currentState.cv) {
+        models.compare.setValue(currentState.cv);
+      } else {
+        models.compare.setValue(50);
+      }
+      models.compare.setMode(currentState.cm);
+      models.compare.events.trigger('toggle-state');
+      models.compare.events.trigger('change');
+      ui.sidebar.reactComponent.setState({
+        isCompareMode: true
+      });
+    }
+
     // LOAD: Map Projection
     if (currentState.p) {
       models.proj.select(currentState.p);
@@ -221,19 +250,6 @@ class ModalInProgress extends React.Component {
       ui.anim.widget.toggleAnimationWidget();
     }
 
-    // LOAD: Comparison
-    if (currentState.ca === 'true') {
-      // Close all the open dialogs
-      wvui.close();
-      if (currentState.cv) {
-        models.compare.setValue(currentState.cv);
-      } else {
-        models.compare.setValue(50);
-      }
-      models.compare.setMode(currentState.cm);
-      models.compare.events.trigger('change');
-    }
-
     // LOAD: Layers
     var layers;
     if (config.features.compare) {
@@ -283,20 +299,6 @@ class ModalInProgress extends React.Component {
         });
       }
     });
-    if (currentState.ca && currentState.ca !== 'true') {
-      models.layers.activeLayers = 'activeB';
-    }
-
-    // ACTION: Animation
-    if (stepTransition) {
-      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
-        ui.anim.widget.onPressPlay();
-        ui.anim.widget.reactComponent.setState({ playing: true });
-      } else {
-        ui.anim.widget.onPressPause();
-        ui.anim.widget.reactComponent.setState({ playing: false });
-      }
-    }
 
     // LOAD: Data Download
     if (currentState.download) {
@@ -328,6 +330,17 @@ class ModalInProgress extends React.Component {
       }
     } else {
       ui.sidebar.selectTab('layers');
+    }
+
+    // ACTION: Animation
+    if (stepTransition) {
+      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
+        ui.anim.widget.onPressPlay();
+        ui.anim.widget.reactComponent.setState({ playing: true });
+      } else {
+        ui.anim.widget.onPressPause();
+        ui.anim.widget.reactComponent.setState({ playing: false });
+      }
     }
   }
 

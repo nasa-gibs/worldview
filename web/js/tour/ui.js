@@ -48,7 +48,6 @@ export function tourUi(models, ui, config) {
       resetTour: self.resetTour,
       restartTour: false,
       selectTour: self.selectTour,
-      notifyUserOfTour: self.notifyUserOfTour,
       showTourAlert: ui.alert.showTourAlert,
       hideTour: self.hideTour,
       showTour: self.showTour
