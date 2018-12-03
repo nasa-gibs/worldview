@@ -60,14 +60,14 @@ export default function naturalEventsUI(models, ui, config, request) {
 
       // Reselect previously selected event
       if (self.selected.id) {
-        self.selectEvent(self.selected.id, self.selected.date || null);
+        self.selectEvent(self.selected.id, self.selected.date || null, true);
       }
     });
     ui.sidebar.events.on('selectTab', function(tab) {
       if (tab === 'events') {
         model.active = true;
         googleTagManager.pushEvent({
-          'event': 'natural_events_tab'
+          event: 'natural_events_tab'
         });
 
         // Remove previously stored markers
@@ -175,8 +175,14 @@ export default function naturalEventsUI(models, ui, config, request) {
       }
     });
   };
-
-  self.selectEvent = function(id, date) {
+  var zoomPromise = function(event, date, isIdChange, isInitialLoad) {
+    return isInitialLoad
+      ? new Promise(function(resolve, reject) {
+        resolve();
+      })
+      : zoomToEvent(event, date, isIdChange, isInitialLoad);
+  };
+  self.selectEvent = function(id, date, isInitialLoad) {
     var isIdChange = !self.selected || self.selected.id !== id;
     var prevId = self.selected.id ? self.selected.id : false;
     var prevEvent = prevId
@@ -204,18 +210,19 @@ export default function naturalEventsUI(models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-    zoomToEvent(event, date, !isIdChange).then(function() {
+    const zmPromise = zoomPromise(event, date, !isIdChange, isInitialLoad);
+    zmPromise.then(function() {
       self.selecting = true;
-      if (isIdChange && !isSameCategory) {
+      if (isIdChange && !isSameCategory && !isInitialLoad) {
         activateLayersForCategory(event.categories[0].title);
       }
-      models.date.select(util.parseDateUTC(date));
+      if (!isInitialLoad) models.date.select(util.parseDateUTC(date));
       /* For Wildfires that didn't happen today, move the timeline forward a day
        * to improve the chance that the fire is visible.
        * NOTE: If the fire happened yesterday and the imagery isn't yet available
        * for today, this may not help.
        */
-      if (event.categories[0].title === 'Wildfires') {
+      if (event.categories[0].title === 'Wildfires' && !isInitialLoad) {
         var now = new Date();
         var today = now.toISOString().split('T')[0];
         var yesterday = new Date(now.setDate(now.getDate() - 1))
@@ -250,6 +257,7 @@ export default function naturalEventsUI(models, ui, config, request) {
       naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
       self.selecting = false;
     });
+
     model.events.trigger('selected-event', self.selected);
   };
 
