@@ -29,7 +29,7 @@
   background-color: #d54f21;
 }
 .wv-checkbox.gray.checked::before {
-  background-color:#808080;
+  background-color: #808080;
 }
 .wv-checkbox.wv-checkbox-round::before {
   border-radius: 50%;

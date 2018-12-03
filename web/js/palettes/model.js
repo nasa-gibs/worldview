@@ -104,7 +104,8 @@ export function palettesModel(models, config) {
     if (min === 0) {
       min = undefined;
     }
-    if (max === self.get(layerId, index, groupStr).legend.colors.length - 1) {
+    const legend = self.get(layerId, index, groupStr);
+    if (legend.entries && legend.entries.values && max === legend.entries.values.length - 1) {
       max = undefined;
     }
     palette.min = min;
