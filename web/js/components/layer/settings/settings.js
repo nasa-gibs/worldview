@@ -74,17 +74,21 @@ class LayerSettings extends React.Component {
       } else {
         paneItemEl = (
           <TabPane key={legend.id + 'pane'} tabId={i}>
-            <Threshold
-              legend={legend}
-              setRange={setRange}
-              min={0}
-              max={max}
-              start={start}
-              end={end}
-              layerId={layer.id}
-              squashed={!!palette.squash}
-              index={i}
-            />
+            {legend.type !== 'classification' ? (
+              <Threshold
+                legend={legend}
+                setRange={setRange}
+                min={0}
+                max={max}
+                start={start}
+                end={end}
+                layerId={layer.id}
+                squashed={!!palette.squash}
+                index={i}
+              />
+            ) : (
+              ''
+            )}
             <Palette
               setCustom={setCustom}
               clearCustom={clearCustom}
