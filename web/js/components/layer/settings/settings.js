@@ -27,6 +27,10 @@ class LayerSettings extends React.Component {
       title: props.title
     };
   }
+  /**
+   * Render multicolormap layers inside a tab pane
+   * @param {object} legends | legend object
+   */
   renderMultiColormapCustoms(legends) {
     const {
       clearCustom,
@@ -116,6 +120,9 @@ class LayerSettings extends React.Component {
       </React.Fragment>
     );
   }
+  /**
+   * Render Opacity, threshold, and custom palette options
+   */
   renderCustoms() {
     const {
       setCustom,

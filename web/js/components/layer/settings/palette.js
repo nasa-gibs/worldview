@@ -12,6 +12,9 @@ class OpacitySelect extends React.Component {
       activePalette: props.activePalette
     };
   }
+  /**
+   * Render default legend option
+   */
   renderDefault() {
     const { layer, index, getDefaultLegend } = this.props;
     const { activePalette } = this.state;
@@ -32,9 +35,16 @@ class OpacitySelect extends React.Component {
       );
     }
   }
+  /**
+   * Pass palette to model after selection
+   * @param {String} id | custom Palette Id
+   */
   onChangePalette(id) {
     const { layer, clearCustom, setCustom, index } = this.props;
 
+    // Applying customs takes a while and
+    // it looks more natural to make this async
+    // instead of waiting
     setTimeout(function() {
       if (id === '__default') {
         clearCustom(layer.id, index);
@@ -44,6 +54,10 @@ class OpacitySelect extends React.Component {
     }, 0);
     this.setState({ activePalette: id });
   }
+  /**
+   * Apply logic to render correct palette selection
+   * @param {String} id | Legend Id
+   */
   customLegend(id) {
     const {
       getDefaultLegend,
@@ -79,6 +93,13 @@ class OpacitySelect extends React.Component {
       );
     }
   }
+  /**
+   * Render customs palette options
+   * @param {Object} palette | Palette object
+   * @param {String} id | colormap Id
+   * @param {Object} legend | Legend Object
+   * @param {Boolean} isSelected | is this colormap active
+   */
   renderSelectorItemScale(palette, id, legend, isSelected) {
     const { canvas, checkerBoard } = this.props;
     const caseDefaultClassName =
@@ -107,6 +128,14 @@ class OpacitySelect extends React.Component {
       </div>
     );
   }
+  /**
+   * Render classification customs when there is only one
+   * Color in colormap
+   * @param {Object} palette | Palette object
+   * @param {String} id | colormap Id
+   * @param {String} description | Colormap name
+   * @param {Boolean} isSelected | is this colormap active
+   */
   renderSelectorItemSingle(palette, id, description, isSelected) {
     const color = palette.classes
       ? palette.classes.colors[0]

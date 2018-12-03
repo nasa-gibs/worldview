@@ -15,6 +15,10 @@ class ThresholdSelect extends React.Component {
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
   }
+  /**
+   * Apply squash
+   * @param {Boolean} boo
+   */
   updateSquash(boo) {
     const { setRange, layerId, index } = this.props;
     const { start, end, squashed } = this.state;
@@ -22,6 +26,10 @@ class ThresholdSelect extends React.Component {
     setRange(layerId, parseFloat(start), parseFloat(end), isSquashed, index);
     this.setState({ squashed: isSquashed });
   }
+  /**
+   * Update threshold values
+   * @param {Array} thresholdArray | Array of start/end indexs for colormap
+   */
   updateThreshold(thresholdArray) {
     const { layerId, index } = this.props;
     const { start, end } = this.state;
@@ -44,6 +52,7 @@ class ThresholdSelect extends React.Component {
     } else {
       return;
     }
+    // Update local state on every range-selector change but debounce threshold model update
     this.debounceSetRange(
       layerId,
       parseFloat(newStart),

@@ -25,6 +25,10 @@ export function layersOptions(models, ui, config) {
     self.reactComponent.setState({ isOpen: false });
     self.layerId = null;
   };
+  /**
+   * Open react component with new layer info
+   * @param {Object} layer | Active layer object
+   */
   self.createNewLayer = function(layer) {
     if (layer.id === self.layerId) {
       return self.close();
@@ -38,7 +42,10 @@ export function layersOptions(models, ui, config) {
       isOpen: true
     });
   };
-  var loaded = function(custom) {
+  /**
+   * Mount component once customs Config is loaded
+   */
+  var loaded = function() {
     self.reactComponent = render(
       <LayerSettings
         setCustom={models.palettes.setCustom}
