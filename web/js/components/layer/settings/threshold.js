@@ -99,7 +99,13 @@ ThresholdSelect.propTypes = {
   start: PropTypes.number,
   end: PropTypes.number,
   onSlide: PropTypes.func,
-  index: PropTypes.number
+  index: PropTypes.number,
+  min: PropTypes.number,
+  max: PropTypes.number,
+  legend: PropTypes.object,
+  setRange: PropTypes.func,
+  layerId: PropTypes.string,
+  squashed: PropTypes.bool
 };
 
 export default ThresholdSelect;

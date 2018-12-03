@@ -36,7 +36,8 @@ OpacitySelect.defaultProps = {
 };
 OpacitySelect.propTypes = {
   start: PropTypes.number,
-  setOpacity: PropTypes.func
+  setOpacity: PropTypes.func,
+  layer: PropTypes.object
 };
 
 export default OpacitySelect;

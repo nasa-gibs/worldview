@@ -115,7 +115,7 @@ class OpacitySelect extends React.Component {
       'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
     return (
-      <div className={caseDefaultClassName + checkedClassName}>
+      <div key={id} className={caseDefaultClassName + checkedClassName}>
         <input
           id={'wv-palette-radio-' + id}
           type="radio"
@@ -160,7 +160,17 @@ class OpacitySelect extends React.Component {
   }
 }
 OpacitySelect.propTypes = {
-  index: PropTypes.number
+  index: PropTypes.number,
+  layer: PropTypes.object,
+  clearCustom: PropTypes.func,
+  setCustom: PropTypes.func,
+  paletteOrder: PropTypes.array,
+  palettesTranslate: PropTypes.func,
+  getDefaultLegend: PropTypes.func,
+  getCustomPalette: PropTypes.func,
+  canvas: PropTypes.object,
+  checkerBoard: PropTypes.object,
+  activePalette: PropTypes.string
 };
 
 export default OpacitySelect;

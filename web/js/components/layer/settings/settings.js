@@ -180,12 +180,7 @@ class LayerSettings extends React.Component {
     );
   }
   render() {
-    const {
-      setOpacity,
-      customPalettesIsActive,
-      close,
-      getLegends
-    } = this.props;
+    const { setOpacity, customPalettesIsActive, close } = this.props;
     const { isOpen, layer, palettedAllowed } = this.state;
 
     const customPalettes =
@@ -226,7 +221,25 @@ LayerSettings.defaultProps = {
 };
 LayerSettings.propTypes = {
   index: PropTypes.number,
-  setOpacity: PropTypes.func
+  setOpacity: PropTypes.func,
+  clearCustom: PropTypes.func,
+  getPalette: PropTypes.func,
+  paletteOrder: PropTypes.array,
+  getDefaultLegend: PropTypes.func,
+  getCustomPalette: PropTypes.func,
+  getLegends: PropTypes.func,
+  getLegend: PropTypes.func,
+  setCustom: PropTypes.func,
+  canvas: PropTypes.object,
+  palettesTranslate: PropTypes.func,
+  setRange: PropTypes.func,
+  checkerboard: PropTypes.object,
+  customPalettesIsActive: PropTypes.bool,
+  close: PropTypes.func,
+  isOpen: PropTypes.bool,
+  palettedAllowed: PropTypes.bool,
+  layer: PropTypes.object,
+  title: PropTypes.string
 };
 
 export default LayerSettings;
