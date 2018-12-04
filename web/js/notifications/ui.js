@@ -14,7 +14,7 @@ export function notificationsUi(models, config) {
   self.notifyIconActive = false;
   self.messageIconActive = false;
 
-  url = config.features.alert.url;
+  url = config.features.notification.url;
   alertBlockExists = false;
   classes = {
     alert: 'bolt',
