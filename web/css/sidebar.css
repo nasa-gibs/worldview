@@ -121,6 +121,10 @@ footer .compare-toggle-button {
   margin: 5px;
   color: #fff;
 }
+.wv-ab-mode-selection-case .compare-button.disabled {
+  background-color: #01457b;
+  opacity: 1;
+}
 .wv-ab-mode-selection-case > div {
   margin-left: 10px;
 }
