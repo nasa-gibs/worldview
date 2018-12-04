@@ -10,7 +10,7 @@ export class Opacity {
     this.map = olMap;
     this.compareEvents = events;
     this.sliderCase = document.createElement('div');
-    value = valueOverride || value;
+    value = Number(valueOverride) || value;
     this.create();
   }
   create() {
