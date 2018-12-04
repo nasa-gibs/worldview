@@ -10,14 +10,21 @@
 .ab-swipe-dragger {
   position: absolute;
   top: 50%;
+  width: 65px;
+  height: 65px;
+  margin-top: -45px;
+  border-radius: 50%;
+  left: -30px;
+  text-align: center;
+}
+.ab-swipe-dragger .swipe-dragger-circle {
   width: 45px;
   height: 45px;
-  margin-top: -35px;
-  left: -20px;
+  left: -25px;
   border-radius: 50%;
-  color: #000;
   background: #fff;
-  text-align: center;
+  color: #000;
+  margin: 10px;
 }
 .ab-swipe-dragger:hover {
   transform: scale(1.2);
