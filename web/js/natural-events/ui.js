@@ -175,7 +175,7 @@ export default function naturalEventsUI(models, ui, config, request) {
       }
     });
   };
-  var zoomPromise = function(event, date, isIdChange, isInitialLoad) {
+  var getZoomPromise = function(event, date, isIdChange, isInitialLoad) {
     return isInitialLoad
       ? new Promise(function(resolve, reject) {
         resolve();
@@ -203,6 +203,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     var isSameCategory = category === prevCategory;
 
     date = date || self.getDefaultEventDate(event);
+    const zoomPromise = getZoomPromise(event, date, !isIdChange, isInitialLoad);
     self.selected.date = date;
 
     // highlightEventInList(id, date);
@@ -210,8 +211,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-    const zmPromise = zoomPromise(event, date, !isIdChange, isInitialLoad);
-    zmPromise.then(function() {
+    zoomPromise.then(function() {
       self.selecting = true;
       if (isIdChange && !isSameCategory && !isInitialLoad) {
         activateLayersForCategory(event.categories[0].title);
