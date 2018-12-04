@@ -155,6 +155,7 @@ class ModalInProgress extends React.Component {
 
     // LOAD: Layers
     models.layers.save(currentState);
+
     models.layers.load(currentState);
 
     // LOAD: Date(s)
@@ -324,6 +325,9 @@ class ModalInProgress extends React.Component {
       // To jump to extent & zoom (instead of animate):
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
+    palettes.loadCustom(config);
+    models.palettes.save(currentState);
+    models.palettes.load(currentState);
 
     // ACTION: Animation
     if (stepTransition) {
