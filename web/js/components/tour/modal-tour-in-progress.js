@@ -80,7 +80,7 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    // currentStepLink = 'ca=true&cm=swipe&cv=50&p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&t=2018-09-06-T00%3A00%3A00Z&z=2&t1=2018-09-19-T00%3A00%3A00Z&v=-81.00856222007965,31.36000753998159,-72.57106222007965,36.79197390923348';
+    // currentStepLink = 'ca=false&cm=swipe&cv=50&p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,AMSUA_NOAA15_Brightness_Temp_Channel_1,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&t=2018-09-06-T00%3A00%3A00Z&z=2&t1=2018-03-06-T00%3A00%3A00Z&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -137,6 +137,11 @@ class ModalInProgress extends React.Component {
 
     models.link.load(currentState);
 
+    // LOAD: Map Projection
+    if (currentState.p) {
+      models.proj.select(currentState.p);
+    }
+
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
@@ -147,6 +152,10 @@ class ModalInProgress extends React.Component {
     } else {
       rotation = 0;
     }
+
+    // LOAD: Layers
+    models.layers.save(currentState);
+    models.layers.load(currentState);
 
     // LOAD: Date(s)
     if (currentState.ca === 'false') {
@@ -160,6 +169,40 @@ class ModalInProgress extends React.Component {
     }
     if (currentState.t1) {
       models.date.select(currentState.t1, 'selectedB');
+    }
+
+    // Load: Timeline Zoom Level
+    if (currentState.z) {
+      let zoomLevel = Number(currentState.z);
+      ui.timeline.config.zoom(zoomLevel);
+    }
+
+    // LOAD: Animation
+    // Note: Seems like animation must come before comparison
+    // Set state from URL
+    if (currentState.al) {
+      ui.anim.widget.reactComponent.setState({ looping: true });
+    } else {
+      ui.anim.widget.reactComponent.setState({ looping: false });
+    }
+    if (currentState.as) ui.anim.widget.reactComponent.setState({ startDate: currentState.as });
+    if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
+    if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
+
+    // If animation is current on, toggle the state and animation widget
+    if (prevState.ab === 'on' && currentState.ab === 'off') {
+      models.anim.activate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else
+    if (prevState.ab === 'on' && !currentState.ab) {
+      models.anim.activate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else if (prevState.ab === 'off' && currentState.ab === 'on') {
+      models.anim.deactivate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else if (!prevState.ab && currentState.ab === 'on') {
+      models.anim.deactivate();
+      ui.anim.widget.toggleAnimationWidget();
     }
 
     // LOAD: Comparison
@@ -213,7 +256,7 @@ class ModalInProgress extends React.Component {
       }
       models.compare.toggle();
     };
-    console.log(compareObj);
+
     ui.sidebar.reactComponent.setState({
       isCompareMode:
         compareModel && compareModel.active ? compareModel.active : false,
@@ -224,115 +267,6 @@ class ModalInProgress extends React.Component {
       isCompareA: compareModel && compareModel.isCompareA,
       comparisonType: compareModeType,
       changeCompareMode: compareModel ? compareModel.setMode : null
-    });
-
-    // LOAD: Map Projection
-    if (currentState.p) {
-      models.proj.select(currentState.p);
-    }
-
-    // Load: Timeline Zoom Level
-    if (currentState.z) {
-      let zoomLevel = Number(currentState.z);
-      ui.timeline.config.zoom(zoomLevel);
-    }
-
-    // LOAD: Map Zoom & View & Rotation(Animated)
-    // TODO: Fix rotation animation
-    if (currentState.v) {
-      // Animate to extent & zoom:
-      let extent = currentState.v;
-      var coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
-      var coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
-      let coordinates = [coordinateX, coordinateY];
-      let resolution = ui.map.selected.getView().getResolutionForExtent(extent);
-      ui.map.selected.getView().animate({
-        center: coordinates,
-        duration: 4000,
-        resolution: resolution,
-        rotation: rotation
-      });
-
-      // To jump to extent & zoom (instead of animate):
-      // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
-    }
-
-    // LOAD: Animation
-    // Note: Seems like animation must come before comparison
-    // Set state from URL
-    if (currentState.al) {
-      ui.anim.widget.reactComponent.setState({ looping: true });
-    } else {
-      ui.anim.widget.reactComponent.setState({ looping: false });
-    }
-    if (currentState.as) ui.anim.widget.reactComponent.setState({ startDate: currentState.as });
-    if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
-    if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
-
-    // If animation is current on, toggle the state and animation widget
-    if (prevState.ab === 'on' && currentState.ab === 'off') {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else
-    if (prevState.ab === 'on' && !currentState.ab) {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if (prevState.ab === 'off' && currentState.ab === 'on') {
-      models.anim.deactivate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if (!prevState.ab && currentState.ab === 'on') {
-      models.anim.deactivate();
-      ui.anim.widget.toggleAnimationWidget();
-    }
-
-    // LOAD: Layers
-    var layers;
-    if (config.features.compare) {
-      layers = [
-        {
-          state: 'l',
-          active: 'active'
-        },
-        {
-          state: 'l1',
-          active: 'activeB'
-        }
-      ];
-    } else {
-      layers = [{ state: 'l', active: 'active' }];
-    }
-    lodashEach(layers, obj => {
-      if (!lodashIsUndefined(currentState[obj.state])) {
-        models.layers.clear(models.proj.selected.id, obj.active);
-        lodashEachRight(currentState[obj.state], function(layerDef) {
-          if (!config.layers[layerDef.id]) {
-            errors.push({
-              message: 'No such layer: ' + layerDef.id
-            });
-            return;
-          }
-          var hidden = false;
-          var opacity = 1.0;
-          lodashEach(layerDef.attributes, function(attr) {
-            if (attr.id === 'hidden') {
-              hidden = true;
-            }
-            if (attr.id === 'opacity') {
-              opacity = util.clamp(parseFloat(attr.value), 0, 1);
-              if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
-            }
-          });
-
-          models.layers[obj.active] = models.layers.add(
-            layerDef.id,
-            {
-              hidden: hidden,
-              opacity: opacity
-            },
-            obj.active
-          );
-        });
-      }
     });
 
     // LOAD: Data Download
@@ -365,6 +299,28 @@ class ModalInProgress extends React.Component {
       }
     } else {
       ui.sidebar.selectTab('layers');
+    }
+
+    // LOAD: Map Zoom & View & Rotation(Animated)
+    if (currentState.v) {
+      // Animate to extent & zoom:
+      let extent = currentState.v;
+      var coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
+      var coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
+      let coordinates = [coordinateX, coordinateY];
+      let resolution = ui.map.selected.getView().getResolutionForExtent(extent);
+      var duration;
+      // Don't animate when projection changes
+      if (prevState.p !== currentState.p) { duration = 0; } else { duration = 5000; }
+      ui.map.selected.getView().animate({
+        center: coordinates,
+        duration: duration,
+        resolution: resolution,
+        rotation: rotation
+      });
+
+      // To jump to extent & zoom (instead of animate):
+      // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
 
     // ACTION: Animation
