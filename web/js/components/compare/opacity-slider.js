@@ -19,7 +19,8 @@ class OpacitySlider extends React.Component {
     };
     this.debounceOpacityUpdate = lodashDebounce(this.onUpdate.bind(this), 100);
   }
-  onUpdate(value) {
+  onUpdate(arra) {
+    const value = Math.ceil(arra[0]);
     this.props.onSlide(value);
   }
   /*
@@ -33,7 +34,8 @@ class OpacitySlider extends React.Component {
    *
    * @return {void}
    */
-  onSlide(value) {
+  onSlide(arra) {
+    const value = Math.ceil(arra[0]);
     this.props.onSlide(value);
     this.setState({
       value: value
