@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import InputRange from 'react-input-range';
 import RangeInput from '../util/range-input';
+import lodashDebounce from 'lodash/debounce';
 
 /*
  * A react component, Builds a rather specific
@@ -16,8 +17,11 @@ class OpacitySlider extends React.Component {
     this.state = {
       value: props.value
     };
+    this.debounceOpacityUpdate = lodashDebounce(this.onUpdate.bind(this), 100);
   }
-
+  onUpdate(value) {
+    this.props.onSlide(value);
+  }
   /*
    * Sets a new state value when a
    * when the slider is adjusted
@@ -47,7 +51,8 @@ class OpacitySlider extends React.Component {
             start={[this.state.value]}
             range={{ min: 0, max: 100 }}
             step={1}
-            onChange={this.onSlide.bind(this)}
+            onUpdate={this.debounceOpacityUpdate}
+            onSlide={this.onSlide.bind(this)}
           />
         </div>
         <label className="wv-slider-label right">
