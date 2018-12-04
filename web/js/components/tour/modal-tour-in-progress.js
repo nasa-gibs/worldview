@@ -8,9 +8,7 @@ import lodashFind from 'lodash/find';
 import lodashEach from 'lodash/each';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashEachRight from 'lodash/eachRight';
-// import lodashWithout from 'lodash/without';
-// import lodashMap from 'lodash/map';
-// import { getCenter } from 'ol/extent';
+import { getCompareObjects } from '../../compare/util';
 
 import { parse as dateParser } from '../../date/date';
 import { parse as layerParser } from '../../layers/layers';
@@ -165,21 +163,68 @@ class ModalInProgress extends React.Component {
     }
 
     // LOAD: Comparison
-    if (currentState.ca === 'true') {
-      // Close all the open dialogs
-      wvui.close();
-      if (currentState.ca && currentState.ca !== 'true') {
-        models.layers.activeLayers = 'activeB';
-      }
-      if (currentState.cv) {
-        models.compare.setValue(currentState.cv);
-      } else {
-        models.compare.setValue(50);
-      }
-      models.compare.setMode(currentState.cm);
-      // models.compare.toggle();
-      // models.compare.toggleState();
+    if (currentState.ca) {
+      models.compare.active = true;
+      models.compare.isCompareA = currentState.ca === 'true';
     }
+    if (currentState.cm) {
+      models.compare.active = true;
+      models.compare.mode = currentState.cm;
+    }
+    if (currentState.cv) {
+      models.compare.value = Number(currentState.cv);
+    }
+    var compareModel;
+    var compareObj = {};
+    var compareModeType = 'swipe';
+    if (config.features.compare) {
+      compareModel = models.compare;
+      if (models.compare.active) {
+        compareObj.a = {
+          dateString: util.toISOStringDate(currentState.t),
+          layers: models.layers.get(
+            { group: 'all', proj: 'all' },
+            models.layers['active']
+          )
+        };
+        compareObj.b = {
+          dateString: util.toISOStringDate(currentState.t1),
+          layers: models.layers.get(
+            { group: 'all', proj: 'all' },
+            models.layers['activeB']
+          )
+        };
+        compareModeType = compareModel.mode;
+      }
+    }
+
+    var toggleComparisonObject = function() {
+      models.compare.toggleState();
+    };
+
+    var toggleComparisonMode = function() {
+      if (!models.layers.activeB || !models.date.selectedB) {
+        if (!models.date.selectedB) {
+          models.date.initCompare();
+        }
+        if (!models.layers.activeB) {
+          models.layers.initCompare();
+        }
+      }
+      models.compare.toggle();
+    };
+    console.log(compareObj);
+    ui.sidebar.reactComponent.setState({
+      isCompareMode:
+        compareModel && compareModel.active ? compareModel.active : false,
+      firstDateObject: compareObj.a,
+      secondDateObject: compareObj.b,
+      toggleComparisonObject: toggleComparisonObject,
+      toggleMode: toggleComparisonMode,
+      isCompareA: compareModel && compareModel.isCompareA,
+      comparisonType: compareModeType,
+      changeCompareMode: compareModel ? compareModel.setMode : null
+    });
 
     // LOAD: Map Projection
     if (currentState.p) {
