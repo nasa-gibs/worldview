@@ -174,7 +174,7 @@ class AnimationWidget extends React.Component {
             maxZoom={this.state.maxZoom}
           />
         </div>
-        <i className="fa fa-close wv-close" onClick={this.props.onClose} />
+        <i className="fa fa-times wv-close" onClick={this.props.onClose} />
       </div>
     );
   }
