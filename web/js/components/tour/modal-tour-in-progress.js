@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
-import wvui from '../../ui/ui';
 import lodashFind from 'lodash/find';
-import lodashEach from 'lodash/each';
-import lodashIsUndefined from 'lodash/isUndefined';
-import lodashEachRight from 'lodash/eachRight';
-import { getCompareObjects } from '../../compare/util';
 
 import { parse as dateParser } from '../../date/date';
 import { parse as layerParser } from '../../layers/layers';
@@ -58,8 +53,6 @@ class ModalInProgress extends React.Component {
     fetch(uri)
       .then(res => (res.ok ? res.text() : errorMessage))
       .then(body => {
-        // Check that we have a metadata html snippet, rather than a fully
-        // formed HTML file. Also avoid executing any script or style tags.
         var isMetadataSnippet = !body.match(
           /<(head|body|html|style|script)[^>]*>/i
         );
@@ -73,10 +66,12 @@ class ModalInProgress extends React.Component {
     var config = this.props.config;
     var models = this.props.models;
     var errors = [];
-    // Get steplink from the currentstory's current step
-    currentStepLink = currentStory.steps[currentStepIndex]['stepLink'];
-    stepTransition = currentStory.steps[currentStepIndex]['transition'];
 
+    // Get current step link
+    currentStepLink = currentStory.steps[currentStepIndex]['stepLink'];
+    // Get the current step transistion
+    stepTransition = currentStory.steps[currentStepIndex]['transition'];
+    // Get the prev step link (if there is a previous step)
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
@@ -98,7 +93,7 @@ class ModalInProgress extends React.Component {
       animationParser(currentState, errors, config);
     }
 
-    // Create a query string again to be passed to the URL
+    // Create a query string to be passed to the URL
     currentStepLink = models.link.toQueryString(currentState);
 
     // Parse the prev step link
@@ -115,7 +110,7 @@ class ModalInProgress extends React.Component {
       animationParser(prevState, errors, config);
     }
 
-    // Push query string to browser url
+    // Push query string to the browser url
     if (util.browser.history) {
       window.history.pushState(
         '',
@@ -135,13 +130,6 @@ class ModalInProgress extends React.Component {
     var ui = this.props.ui;
     var rotation;
 
-    models.link.load(currentState);
-
-    // LOAD: Map Projection
-    if (currentState.p) {
-      models.proj.select(currentState.p);
-    }
-
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
@@ -153,9 +141,18 @@ class ModalInProgress extends React.Component {
       rotation = 0;
     }
 
-    // LOAD: Layers
-    models.layers.save(currentState);
+    // LOAD: Initial Load
+    models.link.load(currentState);
 
+    // LOAD: Map Projection
+    if (currentState.p) {
+      models.proj.select(currentState.p);
+    }
+
+    // LOAD: Palettes
+    palettes.loadCustom(config);
+
+    // LOAD: Layers
     models.layers.load(currentState);
 
     // LOAD: Date(s)
@@ -179,8 +176,6 @@ class ModalInProgress extends React.Component {
     }
 
     // LOAD: Animation
-    // Note: Seems like animation must come before comparison
-    // Set state from URL
     if (currentState.al) {
       ui.anim.widget.reactComponent.setState({ looping: true });
     } else {
@@ -325,9 +320,6 @@ class ModalInProgress extends React.Component {
       // To jump to extent & zoom (instead of animate):
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
-    palettes.loadCustom(config);
-    models.palettes.save(currentState);
-    models.palettes.load(currentState);
 
     // ACTION: Animation
     if (stepTransition) {
