@@ -295,7 +295,7 @@ class ModalInProgress extends React.Component {
       date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
       models.naturalEvents.events.trigger('activate');
       if (id) {
-        ui.naturalEvents.selectEvent(id, date);
+        ui.naturalEvents.selectEvent(id, date, rotation);
       }
     } else {
       ui.sidebar.selectTab('layers');
@@ -311,13 +311,15 @@ class ModalInProgress extends React.Component {
       let resolution = ui.map.selected.getView().getResolutionForExtent(extent);
       var duration;
       // Don't animate when projection changes
-      if (prevState.p !== currentState.p) { duration = 0; } else { duration = 5000; }
-      ui.map.selected.getView().animate({
-        center: coordinates,
-        duration: duration,
-        resolution: resolution,
-        rotation: rotation
-      });
+      if (prevState.p !== currentState.p) { duration = 0; } else { duration = 4000; }
+      if (!currentState.e) {
+        ui.map.selected.getView().animate({
+          center: coordinates,
+          duration: duration,
+          resolution: resolution,
+          rotation: rotation
+        });
+      }
 
       // To jump to extent & zoom (instead of animate):
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
