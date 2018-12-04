@@ -137,6 +137,8 @@ class ModalInProgress extends React.Component {
     var ui = this.props.ui;
     var rotation;
 
+    models.link.load(currentState);
+
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
@@ -175,8 +177,8 @@ class ModalInProgress extends React.Component {
         models.compare.setValue(50);
       }
       models.compare.setMode(currentState.cm);
-      models.compare.toggle();
-      models.compare.toggleState();
+      // models.compare.toggle();
+      // models.compare.toggleState();
     }
 
     // LOAD: Map Projection
