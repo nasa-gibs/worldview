@@ -285,6 +285,7 @@ export function timeline(models, config, ui) {
     models.proj.events.on('select', function() {
       self.resize();
       self.setClip();
+      onLayerUpdate();
     });
   };
 
