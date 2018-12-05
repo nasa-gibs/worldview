@@ -75,7 +75,17 @@ class ModalInProgress extends React.Component {
     if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    // currentStepLink = 'ca=false&cm=swipe&cv=50&p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,AMSUA_NOAA15_Brightness_Temp_Channel_1,IMERG_Rain_Rate,Reference_Labels,Reference_Features,Coastlines&t=2018-09-06-T00%3A00%3A00Z&z=2&t1=2018-03-06-T00%3A00%3A00Z&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481';
+    currentStepLink =
+      'ca=true' +
+      '&cm=opacity' +
+      '&cv=50' +
+      '&p=geographic' +
+      '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
+      '&l1=BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
+      '&t=2018-09-06-T00%3A00%3A00Z' +
+      '&z=2' +
+      '&t1=2018-03-06-T00%3A00%3A00Z' +
+      '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -141,9 +151,6 @@ class ModalInProgress extends React.Component {
       rotation = 0;
     }
 
-    // LOAD: Initial Load
-    models.link.load(currentState);
-
     // LOAD: Map Projection
     if (currentState.p) {
       models.proj.select(currentState.p);
@@ -154,6 +161,88 @@ class ModalInProgress extends React.Component {
 
     // LOAD: Layers
     models.layers.load(currentState);
+
+    // LOAD: Comparison
+    if (currentState.ca) {
+      models.compare.active = true;
+      models.compare.isCompareA = 'true';
+      if (currentState.ca === 'false') {
+        models.compare.isCompareA = 'false';
+      }
+    }
+    if (currentState.cm) {
+      models.compare.active = true;
+      models.compare.isCompareA = 'true';
+      if (currentState.ca === 'false') {
+        models.compare.isCompareA = 'false';
+      }
+      models.compare.mode = currentState.cm;
+      models.compare.setMode(currentState.cm);
+    }
+    if (currentState.cv) {
+      models.compare.value = Number(currentState.cv);
+      models.compare.setValue(currentState.cv);
+    }
+
+    if (currentState.ca || currentState.cm) {
+      models.compare.save(currentState);
+      models.compare.load(currentState);
+
+      // TODO: Tweak this
+      models.date.events.trigger('state-update');
+      ui.timeline.input.update();
+
+      var compareObj = {};
+      if (config.features.compare) {
+        if (models.compare.active) {
+          compareObj.a = {
+            dateString: util.toISOStringDate(currentState.t),
+            layers: models.layers.get(
+              { group: 'all', proj: 'all' },
+              models.layers['active']
+            )
+          };
+          compareObj.b = {
+            dateString: util.toISOStringDate(currentState.t1),
+            layers: models.layers.get(
+              { group: 'all', proj: 'all' },
+              models.layers['activeB']
+            )
+          };
+        }
+      }
+
+      var toggleComparisonObject = function() {
+        models.compare.toggleState();
+      };
+
+      var toggleComparisonMode = function() {
+        console.log(models.date.selectedB);
+        if (!models.layers.activeB || !models.date.selectedB) {
+          if (!models.date.selectedB) {
+            models.date.initCompare();
+          }
+          if (!models.layers.activeB) {
+            models.layers.initCompare();
+          }
+        }
+        models.compare.toggle();
+      };
+      console.log(models.compare.isCompareA);
+      ui.sidebar.reactComponent.setState({
+        compareFeature: config.features.compare,
+        isCompareMode:
+          models.compare && models.compare.active ? models.compare.active : false,
+        firstDateObject: compareObj.a,
+        secondDateObject: compareObj.b,
+        toggleComparisonObject: toggleComparisonObject,
+        toggleMode: toggleComparisonMode,
+        isCompareA: models.compare && models.compare.isCompareA,
+        comparisonType: currentState.cm
+      });
+
+      // models.compare.events.trigger('toggle');
+    }
 
     // LOAD: Date(s)
     if (currentState.ca === 'false') {
@@ -176,6 +265,10 @@ class ModalInProgress extends React.Component {
     }
 
     // LOAD: Animation
+    models.anim.save(currentState);
+    models.anim.load(currentState);
+
+    // SET UI: ANIMATION
     if (currentState.al) {
       ui.anim.widget.reactComponent.setState({ looping: true });
     } else {
@@ -200,70 +293,6 @@ class ModalInProgress extends React.Component {
       models.anim.deactivate();
       ui.anim.widget.toggleAnimationWidget();
     }
-
-    // LOAD: Comparison
-    if (currentState.ca) {
-      models.compare.active = true;
-      models.compare.isCompareA = currentState.ca === 'true';
-    }
-    if (currentState.cm) {
-      models.compare.active = true;
-      models.compare.mode = currentState.cm;
-    }
-    if (currentState.cv) {
-      models.compare.value = Number(currentState.cv);
-    }
-    var compareModel;
-    var compareObj = {};
-    var compareModeType = 'swipe';
-    if (config.features.compare) {
-      compareModel = models.compare;
-      if (models.compare.active) {
-        compareObj.a = {
-          dateString: util.toISOStringDate(currentState.t),
-          layers: models.layers.get(
-            { group: 'all', proj: 'all' },
-            models.layers['active']
-          )
-        };
-        compareObj.b = {
-          dateString: util.toISOStringDate(currentState.t1),
-          layers: models.layers.get(
-            { group: 'all', proj: 'all' },
-            models.layers['activeB']
-          )
-        };
-        compareModeType = compareModel.mode;
-      }
-    }
-
-    var toggleComparisonObject = function() {
-      models.compare.toggleState();
-    };
-
-    var toggleComparisonMode = function() {
-      if (!models.layers.activeB || !models.date.selectedB) {
-        if (!models.date.selectedB) {
-          models.date.initCompare();
-        }
-        if (!models.layers.activeB) {
-          models.layers.initCompare();
-        }
-      }
-      models.compare.toggle();
-    };
-
-    ui.sidebar.reactComponent.setState({
-      isCompareMode:
-        compareModel && compareModel.active ? compareModel.active : false,
-      firstDateObject: compareObj.a,
-      secondDateObject: compareObj.b,
-      toggleComparisonObject: toggleComparisonObject,
-      toggleMode: toggleComparisonMode,
-      isCompareA: compareModel && compareModel.isCompareA,
-      comparisonType: compareModeType,
-      changeCompareMode: compareModel ? compareModel.setMode : null
-    });
 
     // LOAD: Data Download
     if (currentState.download) {
