@@ -36,7 +36,7 @@ export default function naturalEventsModel(models, config, ui) {
     date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
     if (id) {
       self.events.on('hasData', function() {
-        ui.naturalEvents.selectEvent(id, date, true);
+        ui.naturalEvents.selectEvent(id, date, null, true);
       });
     }
   };
