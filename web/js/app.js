@@ -440,8 +440,8 @@ class App extends React.Component {
       // Create widgets
       ui.alert = alertUi(ui);
       ui.proj = projectionUi(models, config);
-      ui.tour = tourUi(models, ui, config);
       ui.sidebar = sidebarUi(models, config, ui);
+      ui.tour = tourUi(models, ui, config);
       ui.activeLayers = layersActive(models, ui, config);
       ui.addModal = layersModal(models, ui, config);
       ui.layerSettingsModal = layersOptions(models, ui, config);
