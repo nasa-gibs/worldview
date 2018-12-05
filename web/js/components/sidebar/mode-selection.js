@@ -6,7 +6,8 @@ class ModeSelection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: props.selected
+      selected: props.selected,
+      loaded: false
     };
   }
   onclick(mode) {
@@ -15,7 +16,10 @@ class ModeSelection extends React.Component {
   }
   render() {
     const { isActive } = this.props;
-    const { selected } = this.state;
+    var { selected } = this.state;
+    if (this.props.selected !== 'swipe' && this.state.loaded !== true) {
+      this.setState({ selected: this.props.selected, loaded: true });
+    }
     return (
       <div
         id="wv-ab-mode-selection-case"

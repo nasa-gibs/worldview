@@ -212,36 +212,14 @@ class ModalInProgress extends React.Component {
         }
       }
 
-      var toggleComparisonObject = function() {
-        models.compare.toggleState();
-      };
-
-      var toggleComparisonMode = function() {
-        console.log(models.date.selectedB);
-        if (!models.layers.activeB || !models.date.selectedB) {
-          if (!models.date.selectedB) {
-            models.date.initCompare();
-          }
-          if (!models.layers.activeB) {
-            models.layers.initCompare();
-          }
-        }
-        models.compare.toggle();
-      };
-      console.log(models.compare.isCompareA);
+      console.log(config.features.compare);
       ui.sidebar.reactComponent.setState({
-        compareFeature: config.features.compare,
-        isCompareMode:
-          models.compare && models.compare.active ? models.compare.active : false,
+        isCompareMode: true,
         firstDateObject: compareObj.a,
         secondDateObject: compareObj.b,
-        toggleComparisonObject: toggleComparisonObject,
-        toggleMode: toggleComparisonMode,
         isCompareA: models.compare && models.compare.isCompareA,
         comparisonType: currentState.cm
       });
-
-      // models.compare.events.trigger('toggle');
     }
 
     // LOAD: Date(s)
