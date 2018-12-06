@@ -144,19 +144,7 @@
 }
 
 #social-share .reddit {
-  position: relative;
-  color: #ff5700;
-  background-color: #fff;
-  font-size: 48px;
-  height: 46px;
-  width: 46px;
-}
-
-#social-share .reddit::before {
-  border-radius: 50%;
-  position: absolute;
-  left: -1px;
-  top: -1px;
+  background-color:#ff5700;
 }
 
 #social-share .fa-google-plus {

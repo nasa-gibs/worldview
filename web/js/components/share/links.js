@@ -26,7 +26,7 @@ class ShareLinks extends React.Component {
         />
         <a
           id="rd-share"
-          className="icon-link fab reddit fa-reddit fa-2x"
+          className="icon-link fab reddit fa-reddit-alien fa-2x"
           href={this.props.rdLink}
           onClick={e => this.onClick(e, 'reddit')}
           title="Share via Reddit!"
