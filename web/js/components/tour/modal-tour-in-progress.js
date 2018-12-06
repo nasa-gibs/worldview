@@ -80,12 +80,15 @@ class ModalInProgress extends React.Component {
     //   '&cm=opacity' +
     //   '&cv=50' +
     //   '&p=geographic' +
-    //   '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
+    //   '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,MODIS_Terra_Aerosol_Optical_Depth_3km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
     //   '&l1=BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
     //   '&t=2018-09-06-T00%3A00%3A00Z' +
     //   '&z=2' +
     //   '&t1=2018-03-06-T00%3A00%3A00Z' +
-    //   '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481';
+    //   '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481' +
+    //   '&download=MOD04_3K' +
+    //   '&e=true' +
+    //   '';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -226,8 +229,18 @@ class ModalInProgress extends React.Component {
     models.anim.save(currentState);
     models.anim.load(currentState);
 
-    // LOAD: Data Download
-    if (currentState.download) {
+    // LOAD: Events && Data Download
+    if (currentState.e) {
+      let values = currentState.e.split(',');
+      let id = values[0] || '';
+      let date = values[1] || '';
+      id = id.match(/^EONET_[0-9]+/i) ? values[0] : null;
+      date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
+      models.naturalEvents.events.trigger('activate');
+      if (id) {
+        ui.naturalEvents.selectEvent(id, date, rotation);
+      }
+    } else if (currentState.download) {
       let productId = currentState.download;
       let found = lodashFind(models.layers[models.layers.activeLayers], {
         product: productId
@@ -238,21 +251,6 @@ class ModalInProgress extends React.Component {
         });
       } else {
         models.data.activate(productId);
-      }
-    } else {
-      ui.sidebar.selectTab('layers');
-    }
-
-    // LOAD: Events
-    if (currentState.e) {
-      let values = currentState.e.split(',');
-      let id = values[0] || '';
-      let date = values[1] || '';
-      id = id.match(/^EONET_[0-9]+/i) ? values[0] : null;
-      date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
-      models.naturalEvents.events.trigger('activate');
-      if (id) {
-        ui.naturalEvents.selectEvent(id, date, rotation);
       }
     } else {
       ui.sidebar.selectTab('layers');
