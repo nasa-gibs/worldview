@@ -12,7 +12,6 @@ import { parse as animationParser } from '../../animation/anim';
 import palettes from '../../palettes/palettes';
 import { dataParser } from '../../data/data';
 import { parse as projectionParser } from '../../projection/projection';
-import { parse as tourParser } from '../../tour/tour';
 
 class ModalInProgress extends React.Component {
   constructor(props) {
@@ -23,9 +22,9 @@ class ModalInProgress extends React.Component {
       error: null
     };
     this.fetchMetadata = this.fetchMetadata.bind(this);
-    this.stepLink = this.stepLink.bind(this);
-    this.selectLink = this.selectLink.bind(this);
-    this.stepActions = this.stepActions.bind(this);
+    this.loadLink = this.loadLink.bind(this);
+    this.processLink = this.processLink.bind(this);
+    this.processActions = this.processActions.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -38,7 +37,7 @@ class ModalInProgress extends React.Component {
       // Reset the prevStepIndex when a new tour is selected
       if (currentStepIndex === 0 && prevStepIndex !== 1) prevStepIndex = null;
       this.fetchMetadata(currentStory, currentStepIndex);
-      this.stepLink(currentStory, currentStepIndex, prevStepIndex);
+      this.loadLink(currentStory, currentStepIndex, prevStepIndex);
     }
   }
 
@@ -61,7 +60,7 @@ class ModalInProgress extends React.Component {
       }).catch(error => this.setState({ error, isLoading: false }));
   }
 
-  stepLink(currentStory, currentStepIndex, prevStepIndex) {
+  loadLink(currentStory, currentStepIndex, prevStepIndex) {
     var currentState, currentStepLink, stepTransition, prevState, prevStepLink;
     var errors = [];
     var config = this.props.config;
@@ -142,10 +141,10 @@ class ModalInProgress extends React.Component {
     }
 
     // Process the state of the application
-    this.selectLink(currentState, stepTransition, prevState, currentStepIndex);
+    this.processLink(currentState, stepTransition, prevState, currentStepIndex);
   }
 
-  selectLink(currentState, stepTransition, prevState, currentStepIndex) {
+  processLink(currentState, stepTransition, prevState, currentStepIndex) {
     var errors = [];
     var config = this.props.config;
     var models = this.props.models;
@@ -227,7 +226,6 @@ class ModalInProgress extends React.Component {
     models.date.load(currentState, errors);
 
     // LOAD: Animation
-    models.anim.save(currentState);
     if (!currentState.download) {
       models.anim.load(currentState, errors);
     }
@@ -269,8 +267,10 @@ class ModalInProgress extends React.Component {
     // SET UI: Animation
     if (currentState.al === 'true') {
       ui.anim.widget.reactComponent.setState({ looping: true });
+      models.anim.rangeState.loop = true;
     } else {
       ui.anim.widget.reactComponent.setState({ looping: false });
+      models.anim.rangeState.loop = false;
     }
     if (currentState.as) ui.anim.widget.reactComponent.setState({ startDate: currentState.as });
     if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
@@ -316,22 +316,23 @@ class ModalInProgress extends React.Component {
       // Jump to extent & zoom (instead of animate):
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
-
-    this.stepActions(stepTransition);
+    this.processActions(currentState, stepTransition);
   }
 
-  stepActions(stepTransition) {
+  processActions(currentState, stepTransition) {
     var ui = this.props.ui;
 
     if (!stepTransition) return;
 
     // ACTION: Play & pause animation
-    if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
-      ui.anim.widget.onPressPlay();
-      ui.anim.widget.reactComponent.setState({ playing: true });
-    } else {
-      ui.anim.widget.onPressPause();
-      ui.anim.widget.reactComponent.setState({ playing: false });
+    if (currentState.ab === 'on') {
+      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
+        ui.anim.widget.onPressPlay();
+        ui.anim.widget.reactComponent.setState({ playing: true });
+      } else {
+        ui.anim.widget.onPressPause();
+        ui.anim.widget.reactComponent.setState({ playing: false });
+      }
     }
   }
 
@@ -350,7 +351,7 @@ class ModalInProgress extends React.Component {
     if (modalStarted && !metaLoaded) {
       this.setState({ metaLoaded: true });
       this.fetchMetadata(currentStory, 0);
-      this.stepLink(currentStory, 0);
+      this.loadLink(currentStory, 0);
     }
 
     return (
