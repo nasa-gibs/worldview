@@ -18,25 +18,25 @@ class ModalInProgress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      desciption: '',
       metaLoaded: false,
       isLoading: false,
       error: null
     };
-
     this.fetchMetadata = this.fetchMetadata.bind(this);
     this.stepLink = this.stepLink.bind(this);
     this.selectLink = this.selectLink.bind(this);
+    this.stepActions = this.stepActions.bind(this);
   }
 
   componentDidUpdate(prevProps) {
     var currentStory = this.props.currentStory;
     var currentStepIndex = this.props.currentStep - 1;
+
     if (prevProps.currentStep !== this.props.currentStep) {
-      var prevStepIndex = prevProps.currentStep - 1;
+      let prevStepIndex = prevProps.currentStep - 1;
+
       // Reset the prevStepIndex when a new tour is selected
       if (currentStepIndex === 0 && prevStepIndex !== 1) prevStepIndex = null;
-
       this.fetchMetadata(currentStory, currentStepIndex);
       this.stepLink(currentStory, currentStepIndex, prevStepIndex);
     }
@@ -44,16 +44,16 @@ class ModalInProgress extends React.Component {
 
   fetchMetadata(currentStory, stepIndex) {
     var description = currentStory.steps[stepIndex]['description'];
-    this.setState({ isLoading: true });
-
     var { origin, pathname } = window.location;
     var currentStoryId = this.props.currentStory['id'];
     var errorMessage = '<p>There was an error loading this description.</p>';
     var uri = `${origin}${pathname}config/metadata/stories/${currentStoryId}/${description}`;
+
+    this.setState({ isLoading: true });
     fetch(uri)
       .then(res => (res.ok ? res.text() : errorMessage))
       .then(body => {
-        var isMetadataSnippet = !body.match(
+        let isMetadataSnippet = !body.match(
           /<(head|body|html|style|script)[^>]*>/i
         );
         let description = isMetadataSnippet ? body : errorMessage;
@@ -63,16 +63,20 @@ class ModalInProgress extends React.Component {
 
   stepLink(currentStory, currentStepIndex, prevStepIndex) {
     var currentState, currentStepLink, stepTransition, prevState, prevStepLink;
+    var errors = [];
     var config = this.props.config;
     var models = this.props.models;
-    var errors = [];
 
     // Get current step link
     currentStepLink = currentStory.steps[currentStepIndex]['stepLink'];
-    // Get the current step transistion
+
+    // Get current step transistion
     stepTransition = currentStory.steps[currentStepIndex]['transition'];
-    // Get the prev step link (if there is a previous step)
-    if (prevStepIndex && !isNaN(prevStepIndex)) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
+
+    // Get previous step link (if there is a previous step)
+    if (prevStepIndex !== null && !isNaN(prevStepIndex)) {
+      prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
+    }
 
     // TESTING HERE:
     // currentStepLink =
@@ -94,16 +98,17 @@ class ModalInProgress extends React.Component {
     //   '&av=5' +
     //   '&al=true' +
     //   '';
+
+    // Create current and previous states from step links
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
-    // Parse the current step link
+    // Parse the current state
     projectionParser(currentState, errors, config);
     layerParser(currentState, errors, config);
     dateParser(currentState, errors, config);
     mapParser(currentState, errors, config);
     palettes.parse(currentState, errors, config);
-    tourParser(currentState, errors, config);
     if (config.features.dataDownload) {
       dataParser(currentState, errors, config);
     }
@@ -111,16 +116,12 @@ class ModalInProgress extends React.Component {
       animationParser(currentState, errors, config);
     }
 
-    // Create a query string to be passed to the URL
-    currentStepLink = models.link.toQueryString(currentState);
-
-    // Parse the prev step link
+    // Parse the previous state
     projectionParser(prevState, errors, config);
     layerParser(prevState, errors, config);
     dateParser(prevState, errors, config);
     mapParser(prevState, errors, config);
     palettes.parse(prevState, errors, config);
-    tourParser(prevState, errors, config);
     if (config.features.dataDownload) {
       dataParser(prevState, errors, config);
     }
@@ -128,7 +129,10 @@ class ModalInProgress extends React.Component {
       animationParser(prevState, errors, config);
     }
 
-    // Push query string to the browser url
+    // Create a query string from the current state
+    currentStepLink = models.link.toQueryString(currentState);
+
+    // Pass current step query string to the browser url
     if (util.browser.history) {
       window.history.pushState(
         '',
@@ -146,55 +150,47 @@ class ModalInProgress extends React.Component {
     var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
-    var rotation;
+    var rotation = 0;
 
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
         rotation = currentState.r * (Math.PI / 180.0);
-      } else {
-        rotation = 0;
       }
-    } else {
-      rotation = 0;
     }
 
     // LOAD: Projection
-    models.proj.load(currentState);
+    models.proj.load(currentState, errors);
 
     // LOAD: Palettes
     palettes.loadCustom(config);
 
     // LOAD: Layers
-    models.layers.load(currentState);
+    models.layers.load(currentState, errors);
 
     // LOAD: Comparison
-    if (currentState.ca) {
-      models.compare.active = true;
-      models.compare.isCompareA = 'true';
-      if (currentState.ca === 'false') {
-        models.compare.isCompareA = 'false';
-      }
-    }
-    if (currentState.cm) {
-      models.compare.active = true;
-      models.compare.isCompareA = 'true';
-      if (currentState.ca === 'false') {
-        models.compare.isCompareA = 'false';
-      }
-      models.compare.mode = currentState.cm;
-      models.compare.setMode(currentState.cm);
-    }
-    if (currentState.cv) {
-      models.compare.value = Number(currentState.cv);
-      models.compare.setValue(currentState.cv);
-    }
-
     if (currentState.ca || currentState.cm) {
-      models.compare.save(currentState);
-      models.compare.load(currentState);
+      models.compare.load(currentState, errors);
+      models.compare.active = true;
+      models.compare.isCompareA = 'true';
+      if (currentState.ca === 'false') {
+        models.compare.isCompareA = 'false';
+      }
 
-      // TODO: Tweak this
+      if (currentState.cm) {
+        models.compare.mode = currentState.cm;
+        models.compare.setMode(currentState.cm);
+      }
+
+      if (currentState.cv) {
+        models.compare.value = Number(currentState.cv);
+        models.compare.setValue(currentState.cv);
+      }
+    }
+
+    // TODO: Fix this area of code
+    // SET UI: Set sidebar & timeline to comparison mode
+    if (currentState.ca || currentState.cm) {
       models.date.events.trigger('state-update');
       ui.timeline.input.update();
 
@@ -228,15 +224,16 @@ class ModalInProgress extends React.Component {
     }
 
     // LOAD: Date(s)
-    models.date.load(currentState);
+    models.date.load(currentState, errors);
 
     // LOAD: Animation
     models.anim.save(currentState);
     if (!currentState.download) {
-      models.anim.load(currentState);
+      models.anim.load(currentState, errors);
     }
 
-    // LOAD: Events && Data Download
+    // LOAD: Events & Data Download
+    // Note: Can't simple load from model since these check for startup events
     if (currentState.e) {
       let values = currentState.e.split(',');
       let id = values[0] || '';
@@ -270,7 +267,7 @@ class ModalInProgress extends React.Component {
     }
 
     // SET UI: Animation
-    if (currentState.al) {
+    if (currentState.al === 'true') {
       ui.anim.widget.reactComponent.setState({ looping: true });
     } else {
       ui.anim.widget.reactComponent.setState({ looping: false });
@@ -279,13 +276,12 @@ class ModalInProgress extends React.Component {
     if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
     if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
 
-    // SET UI (Transistion): Toggle Animation
+    // SET UI (During step transistion): Toggle Animation
     // If animation is current on, toggle the state and animation widget
     if (prevState.ab === 'on' && currentState.ab === 'off') {
       models.anim.activate();
       ui.anim.widget.toggleAnimationWidget();
-    } else
-    if (prevState.ab === 'on' && !currentState.ab) {
+    } else if (prevState.ab === 'on' && !currentState.ab) {
       models.anim.activate();
       ui.anim.widget.toggleAnimationWidget();
     } else if (prevState.ab === 'off' && currentState.ab === 'on') {
@@ -296,17 +292,18 @@ class ModalInProgress extends React.Component {
       ui.anim.widget.toggleAnimationWidget();
     }
 
-    // SET UI: Map Zoom & View & Rotation(Animated)
+    // SET UI: Map Zoom & View & Rotation (Animated)
     if (currentState.v) {
-      // Animate to extent & zoom:
+      // Animate to extent, zoom & rotate:
+      let duration = 0;
       let extent = currentState.v;
-      var coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
-      var coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
+      let coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
+      let coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
       let coordinates = [coordinateX, coordinateY];
       let resolution = ui.map.selected.getView().getResolutionForExtent(extent);
-      var duration;
       // Don't animate when projection changes
-      if (prevState.p !== currentState.p && currentStepIndex !== 0) { duration = 0; } else { duration = 4000; }
+      if (prevState.p === currentState.p || currentStepIndex === 0) duration = 4000;
+      // Don't animate when an event is selected (Event selection already animates)
       if (!currentState.e) {
         ui.map.selected.getView().animate({
           center: coordinates,
@@ -316,19 +313,25 @@ class ModalInProgress extends React.Component {
         });
       }
 
-      // To jump to extent & zoom (instead of animate):
+      // Jump to extent & zoom (instead of animate):
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
 
-    // ACTION: Animation
-    if (stepTransition) {
-      if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
-        ui.anim.widget.onPressPlay();
-        ui.anim.widget.reactComponent.setState({ playing: true });
-      } else {
-        ui.anim.widget.onPressPause();
-        ui.anim.widget.reactComponent.setState({ playing: false });
-      }
+    this.stepActions(stepTransition);
+  }
+
+  stepActions(stepTransition) {
+    var ui = this.props.ui;
+
+    if (!stepTransition) return;
+
+    // ACTION: Play & pause animation
+    if (stepTransition.element === 'animation' && stepTransition.action === 'play') {
+      ui.anim.widget.onPressPlay();
+      ui.anim.widget.reactComponent.setState({ playing: true });
+    } else {
+      ui.anim.widget.onPressPause();
+      ui.anim.widget.reactComponent.setState({ playing: false });
     }
   }
 
