@@ -72,7 +72,7 @@ class ModalInProgress extends React.Component {
     // Get the current step transistion
     stepTransition = currentStory.steps[currentStepIndex]['transition'];
     // Get the prev step link (if there is a previous step)
-    if (!isNaN(prevStepIndex)) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
+    if (prevStepIndex && !isNaN(prevStepIndex)) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
     // currentStepLink =
@@ -151,7 +151,7 @@ class ModalInProgress extends React.Component {
       rotation = 0;
     }
 
-    // LOAD: Map Projection
+    // LOAD: Projection
     models.proj.load(currentState);
 
     // LOAD: Palettes
@@ -226,38 +226,6 @@ class ModalInProgress extends React.Component {
     models.anim.save(currentState);
     models.anim.load(currentState);
 
-    // SET UI: Timeline Zoom Level
-    if (currentState.z) {
-      let zoomLevel = Number(currentState.z);
-      ui.timeline.config.zoom(zoomLevel);
-    }
-
-    // SET UI: ANIMATION
-    if (currentState.al) {
-      ui.anim.widget.reactComponent.setState({ looping: true });
-    } else {
-      ui.anim.widget.reactComponent.setState({ looping: false });
-    }
-    if (currentState.as) ui.anim.widget.reactComponent.setState({ startDate: currentState.as });
-    if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
-    if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
-
-    // If animation is current on, toggle the state and animation widget
-    if (prevState.ab === 'on' && currentState.ab === 'off') {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else
-    if (prevState.ab === 'on' && !currentState.ab) {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if (prevState.ab === 'off' && currentState.ab === 'on') {
-      models.anim.deactivate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if (!prevState.ab && currentState.ab === 'on') {
-      models.anim.deactivate();
-      ui.anim.widget.toggleAnimationWidget();
-    }
-
     // LOAD: Data Download
     if (currentState.download) {
       let productId = currentState.download;
@@ -288,6 +256,39 @@ class ModalInProgress extends React.Component {
       }
     } else {
       ui.sidebar.selectTab('layers');
+    }
+
+    // SET UI: Timeline Zoom Level
+    if (currentState.z) {
+      let zoomLevel = Number(currentState.z);
+      ui.timeline.config.zoom(zoomLevel);
+    }
+
+    // SET UI: Animation
+    if (currentState.al) {
+      ui.anim.widget.reactComponent.setState({ looping: true });
+    } else {
+      ui.anim.widget.reactComponent.setState({ looping: false });
+    }
+    if (currentState.as) ui.anim.widget.reactComponent.setState({ startDate: currentState.as });
+    if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
+    if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
+
+    // SET UI (Transistion): Toggle Animation
+    // If animation is current on, toggle the state and animation widget
+    if (prevState.ab === 'on' && currentState.ab === 'off') {
+      models.anim.activate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else
+    if (prevState.ab === 'on' && !currentState.ab) {
+      models.anim.activate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else if (prevState.ab === 'off' && currentState.ab === 'on') {
+      models.anim.deactivate();
+      ui.anim.widget.toggleAnimationWidget();
+    } else if (!prevState.ab && currentState.ab === 'on') {
+      models.anim.deactivate();
+      ui.anim.widget.toggleAnimationWidget();
     }
 
     // SET UI: Map Zoom & View & Rotation(Animated)
