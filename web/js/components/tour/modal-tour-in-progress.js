@@ -72,20 +72,20 @@ class ModalInProgress extends React.Component {
     // Get the current step transistion
     stepTransition = currentStory.steps[currentStepIndex]['transition'];
     // Get the prev step link (if there is a previous step)
-    if (prevStepIndex) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
+    if (!isNaN(prevStepIndex)) prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
 
     // TESTING HERE:
-    currentStepLink =
-      'ca=true' +
-      '&cm=opacity' +
-      '&cv=50' +
-      '&p=geographic' +
-      '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
-      '&l1=BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
-      '&t=2018-09-06-T00%3A00%3A00Z' +
-      '&z=2' +
-      '&t1=2018-03-06-T00%3A00%3A00Z' +
-      '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481';
+    // currentStepLink =
+    //   'ca=true' +
+    //   '&cm=opacity' +
+    //   '&cv=50' +
+    //   '&p=geographic' +
+    //   '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
+    //   '&l1=BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
+    //   '&t=2018-09-06-T00%3A00%3A00Z' +
+    //   '&z=2' +
+    //   '&t1=2018-03-06-T00%3A00%3A00Z' +
+    //   '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481';
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
 
@@ -130,10 +130,10 @@ class ModalInProgress extends React.Component {
     }
 
     // Process the state of the application
-    this.selectLink(currentState, stepTransition, prevState);
+    this.selectLink(currentState, stepTransition, prevState, currentStepIndex);
   }
 
-  selectLink(currentState, stepTransition, prevState) {
+  selectLink(currentState, stepTransition, prevState, currentStepIndex) {
     var errors = [];
     var config = this.props.config;
     var models = this.props.models;
@@ -152,9 +152,7 @@ class ModalInProgress extends React.Component {
     }
 
     // LOAD: Map Projection
-    if (currentState.p) {
-      models.proj.select(currentState.p);
-    }
+    models.proj.load(currentState);
 
     // LOAD: Palettes
     palettes.loadCustom(config);
@@ -212,7 +210,6 @@ class ModalInProgress extends React.Component {
         }
       }
 
-      console.log(config.features.compare);
       ui.sidebar.reactComponent.setState({
         isCompareMode: true,
         firstDateObject: compareObj.a,
@@ -223,28 +220,17 @@ class ModalInProgress extends React.Component {
     }
 
     // LOAD: Date(s)
-    if (currentState.ca === 'false') {
-      models.date.setActiveDate('selectedB');
-    }
-    if (currentState.t) {
-      models.date.select(currentState.t, 'selected');
-    }
-    if (currentState.z) {
-      models.date.selectedZoom = Number(currentState.z);
-    }
-    if (currentState.t1) {
-      models.date.select(currentState.t1, 'selectedB');
-    }
-
-    // Load: Timeline Zoom Level
-    if (currentState.z) {
-      let zoomLevel = Number(currentState.z);
-      ui.timeline.config.zoom(zoomLevel);
-    }
+    models.date.load(currentState);
 
     // LOAD: Animation
     models.anim.save(currentState);
     models.anim.load(currentState);
+
+    // SET UI: Timeline Zoom Level
+    if (currentState.z) {
+      let zoomLevel = Number(currentState.z);
+      ui.timeline.config.zoom(zoomLevel);
+    }
 
     // SET UI: ANIMATION
     if (currentState.al) {
@@ -304,7 +290,7 @@ class ModalInProgress extends React.Component {
       ui.sidebar.selectTab('layers');
     }
 
-    // LOAD: Map Zoom & View & Rotation(Animated)
+    // SET UI: Map Zoom & View & Rotation(Animated)
     if (currentState.v) {
       // Animate to extent & zoom:
       let extent = currentState.v;
@@ -314,7 +300,7 @@ class ModalInProgress extends React.Component {
       let resolution = ui.map.selected.getView().getResolutionForExtent(extent);
       var duration;
       // Don't animate when projection changes
-      if (prevState.p !== currentState.p) { duration = 0; } else { duration = 4000; }
+      if (prevState.p !== currentState.p && currentStepIndex !== 0) { duration = 0; } else { duration = 4000; }
       if (!currentState.e) {
         ui.map.selected.getView().animate({
           center: coordinates,
