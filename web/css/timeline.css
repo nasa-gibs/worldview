@@ -381,7 +381,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .animate-button.wv-disabled-button .wv-animate {
-  color: #ccc;
+  opacity: 0.5;
 }
 
 #timeline-header,
