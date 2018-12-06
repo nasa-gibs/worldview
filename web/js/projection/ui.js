@@ -11,13 +11,13 @@ export function projectionUi(models, config) {
 
   var selector = '#wv-proj-button';
 
-  var init = function () {
+  var init = function() {
     if (config.ui && config.ui.projections) {
       render();
     }
   };
 
-  var render = function () {
+  var render = function() {
     $button = $('<input></input>')
       .attr('type', 'checkbox')
       .attr('id', 'wv-proj-button-check');
@@ -25,49 +25,53 @@ export function projectionUi(models, config) {
       .attr('for', 'wv-proj-button-check')
       .attr('title', 'Switch projection');
     var $icon = $('<i></i>')
-      .addClass('fa')
-      .addClass('fa-globe')
+      .addClass('fas')
+      .addClass('fa-globe-asia')
       .addClass('fa-2x');
     $label.append($icon);
-    $(selector)
-      .append($label);
-    $(selector)
-      .append($button);
+    $(selector).append($label);
+    $(selector).append($button);
     $button.button({
       text: false
     });
 
-    $button.click(function (event) {
+    $button.click(function(event) {
       event.stopPropagation();
       wvui.close();
-      var checked = $('#wv-proj-button-check')
-        .prop('checked');
+      var checked = $('#wv-proj-button-check').prop('checked');
       if (checked) {
         show();
       }
     });
   };
 
-  var show = function () {
-    var $menu = wvui.getMenu()
-      .attr('id', 'wv-proj-menu');
+  var show = function() {
+    var $menu = wvui.getMenu().attr('id', 'wv-proj-menu');
     $menuItems = $('<ul></ul>');
 
-    lodashEach(config.ui.projections, function (ui) {
+    lodashEach(config.ui.projections, function(ui) {
       var $item = $(
-        '<li data-proj=\'' + ui.id + '\'>' +
-        '<a data-proj=\'' + ui.id + '\'>' +
-        '<i class=\'ui-icon icon-large ' + ui.style + '\'>' +
-        '</i>' + ui.name + '</a></li>');
+        "<li data-proj='" +
+          ui.id +
+          "'>" +
+          "<a data-proj='" +
+          ui.id +
+          "'>" +
+          "<i class='ui-icon icon-large " +
+          ui.style +
+          "'>" +
+          '</i>' +
+          ui.name +
+          '</a></li>'
+      );
       $menuItems.append($item);
-      $item.click(function () {
+      $item.click(function() {
         googleTagManager.pushEvent({
-          'event': 'change_projection',
-          'projection': ui.name
+          event: 'change_projection',
+          projection: ui.name
         });
         models.proj.select(ui.id);
-        $('#wv-proj-button-check')
-          .prop('checked', false);
+        $('#wv-proj-button-check').prop('checked', false);
         $button.button('refresh');
       });
     });
@@ -83,28 +87,24 @@ export function projectionUi(models, config) {
     $menuItems.show('slide', {
       direction: 'up'
     });
-    $('#wv-proj-menu li')
-      .removeClass('wv-menu-item-selected');
-    $('#wv-proj-menu li[data-proj=\'' + models.proj.selected.id + '\']')
-      .addClass('wv-menu-item-selected');
+    $('#wv-proj-menu li').removeClass('wv-menu-item-selected');
+    $("#wv-proj-menu li[data-proj='" + models.proj.selected.id + "']").addClass(
+      'wv-menu-item-selected'
+    );
 
-    var clickOut = function (event) {
-      if ($button.parent()
-        .has(event.target)
-        .length > 0) {
+    var clickOut = function(event) {
+      if ($button.parent().has(event.target).length > 0) {
         return;
       }
       $menuItems.hide();
-      $('#wv-proj-button-check')
-        .prop('checked', false);
-      $('#wv-proj-button label')
-        .removeClass('ui-state-hover');
+      $('#wv-proj-button-check').prop('checked', false);
+      $('#wv-proj-button label').removeClass('ui-state-hover');
       $button.button('refresh');
       $('body')
         .off('click', clickOut)
         .off('touchstart', clickOut);
     };
-    $menuItems.on('touchstart', function (event) {
+    $menuItems.on('touchstart', function(event) {
       event.stopPropagation();
     });
     $('body')
@@ -114,4 +114,4 @@ export function projectionUi(models, config) {
 
   init();
   return self;
-};
+}

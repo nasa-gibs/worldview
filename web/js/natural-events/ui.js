@@ -239,7 +239,8 @@ export default function naturalEventsUI(models, ui, config, request) {
           eventVisibilityAlertBody,
           'Events may not be visible at all times.',
           800,
-          'warning',
+          'exclamation-triangle',
+          'fas',
           function() {
             if (util.browser.localStorage) {
               localStorage.setItem('dismissedEventVisibilityAlert', true);
