@@ -286,8 +286,8 @@ export function imagePanel(models, ui, config, dialogConfig) {
     }
     $('#wv-image-top')
       .css({
-        left: x1 - 10,
-        top: y1 - 20,
+        left: x1,
+        top: y1 - 15,
         width: x2 - x1
       })
       .html(topRightCoordinates);
@@ -295,7 +295,7 @@ export function imagePanel(models, ui, config, dialogConfig) {
     $('#wv-image-bottom')
       .css({
         left: x1,
-        top: y2,
+        top: y2 + 5,
         width: x2 - x1
       })
       .html(bottomLeftCoordinates);
@@ -379,14 +379,14 @@ export function imagePanel(models, ui, config, dialogConfig) {
       url
     );
     googleTagManager.pushEvent({
-      'event': 'image_download',
-      'layers': {
-        'activeCount': models.layers.active.length
+      event: 'image_download',
+      layers: {
+        activeCount: models.layers.active.length
       },
-      'image': {
-        'resolution': imgRes,
-        'format': imgFormat,
-        'worldfile': imgWorldfile
+      image: {
+        resolution: imgRes,
+        format: imgFormat,
+        worldfile: imgWorldfile
       }
     });
 
