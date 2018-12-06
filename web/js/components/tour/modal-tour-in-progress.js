@@ -79,7 +79,7 @@ class ModalInProgress extends React.Component {
 
     // TESTING HERE:
     // currentStepLink =
-    //   'ca=true' +
+    //   'ca=false' +
     //   '&cm=opacity' +
     //   '&cv=80' +
     //   '&p=geographic' +
@@ -169,11 +169,23 @@ class ModalInProgress extends React.Component {
 
     // LOAD: Comparison
     if (currentState.ca || currentState.cm) {
-      models.compare.load(currentState, errors);
-      models.compare.active = true;
-      models.compare.isCompareA = 'true';
+      // Note: models.compare.load without re-selecitng t
       if (currentState.ca === 'false') {
-        models.compare.isCompareA = 'false';
+        models.date.setActiveDate('selectedB');
+      }
+      // if (currentState.t) {
+      //   models.date.select(currentState.t, 'selected');
+      // }
+      if (currentState.z) {
+        models.date.selectedZoom = Number(currentState.z);
+      }
+      if (currentState.t1) {
+        models.date.select(currentState.t1, 'selectedB');
+      }
+      models.compare.active = true;
+      models.compare.isCompareA = true;
+      if (currentState.ca === 'false') {
+        models.compare.isCompareA = false;
       }
 
       if (currentState.cm) {
@@ -195,7 +207,7 @@ class ModalInProgress extends React.Component {
 
       var compareObj = {};
       if (config.features.compare) {
-        if (models.compare.active) {
+        if (models.compare.active && models.layers.activeB) {
           compareObj.a = {
             dateString: util.toISOStringDate(currentState.t),
             layers: models.layers.get(
@@ -212,7 +224,6 @@ class ModalInProgress extends React.Component {
           };
         }
       }
-
       ui.sidebar.reactComponent.setState({
         isCompareMode: true,
         firstDateObject: compareObj.a,
