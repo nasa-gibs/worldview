@@ -3,6 +3,8 @@ const layersTab = '#layers-sidebar-tab';
 const dataDownloadTabButton = '#download-sidebar-tab';
 const zoomInButton = '#wv-map-geographic > div.wv-map-zoom-in.wv-map-zoom.ui-button.ui-corner-all.ui-widget';
 const zoomOutButton = '#wv-map-geographic > div.wv-map-zoom-out.wv-map-zoom.ui-button.ui-corner-all.ui-widget';
+const downYearInputButton = '#date-selector-main > div > div.input-wrapper.input-wrapper-year > div.date-arrows.date-arrow-down';
+const upYearInputButton = '#date-selector-main > div > div.input-wrapper.input-wrapper-year > div.date-arrows.date-arrow-up';
 
 const TIME_LIMIT = 20000;
 module.exports = {
@@ -31,19 +33,23 @@ module.exports = {
 
     // 'No Data Available' indicator present
     client.expect.element('#indicator').to.be.present.after(TIME_LIMIT);
-    client.expect.element('#indicator > span').to.have.text.equal('No Data Available').after(500);
+    client.expect.element('#indicator > span').to.have.text.equal('No Data Available').after(TIME_LIMIT);
 
     // On Valid Data Select, 'No Data Available' indicator disappears and data layer is in sidebar
-    client.clearValue('#year-animation-widget-main');
-    client.setValue('#year-animation-widget-main', ['2013', client.Keys.ENTER]);
-    client.expect.element('#indicator').to.not.be.visible;
-    client.expect.element('#wv-data-MOD04_L2MODIS_Terra_Aerosol').to.be.visible;
+    // Click from year 2022 down to 2013
+    for (let i = 0; i <= 8; i++) {
+      client.click(downYearInputButton);
+    }
+    client.expect.element('#indicator').to.not.be.visible.after(1000);
+    client.expect.element('#wv-data-MOD04_L2MODIS_Terra_Aerosol').to.be.visible.after(1000);
 
     // On Valid Data Select, 'No Data Available' indicator appears
-    client.clearValue('#year-animation-widget-main');
-    client.setValue('#year-animation-widget-main', ['2022', client.Keys.ENTER]);
+    // Click from year 2013 up to 2022
+    for (let i = 0; i <= 8; i++) {
+      client.click(upYearInputButton);
+    }
     client.expect.element('#indicator').to.be.present;
-    client.expect.element('#indicator > span').to.have.text.equal('No Data Available').after(500);
+    client.expect.element('#indicator > span').to.have.text.equal('No Data Available').after(1000);
 
     // Click layers tab, indicator disappears
     client.click(layersTab);
@@ -52,7 +58,7 @@ module.exports = {
     // Click data download tab, 'No Data Available' indicator appears
     client.click(dataDownloadTabButton);
     client.expect.element('#indicator').to.be.visible;
-    client.expect.element('#indicator > span').to.have.text.equal('No Data Available').after(500);
+    client.expect.element('#indicator > span').to.have.text.equal('No Data Available').after(1000);
   },
   'No data in view - Zoom out or move map indicator displayed when no data in view': function(client) {
     // zoomed in so no data in view
@@ -61,26 +67,26 @@ module.exports = {
 
     // 'Zoom out or move map' indicator present
     client.expect.element('#indicator').to.be.present.after(TIME_LIMIT);
-    client.expect.element('#indicator > span').to.have.text.equal('Zoom out or move map').after(500);
+    client.expect.element('#indicator > span').to.have.text.equal('Zoom out or move map').after(1000);
 
     // Zoom out three times for a data point granule selection button to be visible and indicator disappears
     client.click(zoomOutButton);
     client.click(zoomOutButton);
     client.click(zoomOutButton);
-    client.expect.element('#indicator').to.not.be.visible.after(500);
+    client.expect.element('#indicator').to.not.be.visible.after(1000);
 
     // Zoom in data point granule selection button is not visible and indicator reappears
     client.click(zoomInButton);
-    client.expect.element('#indicator').to.be.visible.after(500);
+    client.expect.element('#indicator').to.be.visible.after(1000);
 
     // Click layers tab, indicator disappears
     client.click(layersTab);
-    client.expect.element('#indicator').to.not.be.visible.after(500);
+    client.expect.element('#indicator').to.not.be.visible.after(1000);
 
     // Click data download tab, 'No Data Available' indicator appears
     client.click(dataDownloadTabButton);
     client.expect.element('#indicator').to.be.visible;
-    client.expect.element('#indicator > span').to.have.text.equal('Zoom out or move map').after(500);
+    client.expect.element('#indicator > span').to.have.text.equal('Zoom out or move map').after(1000);
   },
   'Query Timeout - No results received yet dialog box displayed': function(client) {
     // query timeout
@@ -90,7 +96,7 @@ module.exports = {
     // Click Data Download tab and show 'No results received yet' dialog box
     client.waitForElementVisible(dataDownloadTabButton, TIME_LIMIT, function() {
       client.click(dataDownloadTabButton);
-      client.expect.element('.wv-dialog').to.have.text.equal('No results received yet. This may be due to a connectivity issue. Please try again later.').after(500);
+      client.expect.element('.wv-dialog').to.have.text.equal('No results received yet. This may be due to a connectivity issue. Please try again later.').after(1000);
     });
   },
   after: function(client) {
