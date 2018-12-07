@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const postcssPresetEnv = require('postcss-preset-env');
 
 // production optimizations
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -162,9 +163,9 @@ module.exports = {
             loader: 'postcss-loader', // Run post css actions
             options: {
               sourceMap: true,
-              plugins: [
-                require('autoprefixer')({
-                  // handle browserlist restrictions
+              ident: 'postcss',
+              plugins: () => [
+                postcssPresetEnv({
                   browsers: [
                     'last 5 versions',
                     'not ie < 11',
