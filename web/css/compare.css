@@ -9,7 +9,7 @@
 }
 .ab-swipe-dragger {
   position: absolute;
-  top: 50%;
+  bottom: 30%;
   width: 65px;
   height: 65px;
   margin-top: -45px;
@@ -78,7 +78,7 @@
 }
 .ab-swipe-line .ab-swipe-span {
   position: absolute;
-  top: 55%;
+  bottom: 25%;
   padding: 2px;
   background: #fff;
   color: #000;
