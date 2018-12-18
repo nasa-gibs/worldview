@@ -30,14 +30,27 @@ class ModalInProgress extends React.Component {
   componentDidUpdate(prevProps) {
     var currentStory = this.props.currentStory;
     var currentStepIndex = this.props.currentStep - 1;
+    var modalStarted = this.props.modalInProgress;
 
-    if (prevProps.currentStep !== this.props.currentStep) {
-      let prevStepIndex = prevProps.currentStep - 1;
+    // When restarting tour, reset the MetaLoaded prop
+    if (this.props.restartTour) {
+      this.props.toggleRestartTour();
+    }
 
-      // Reset the prevStepIndex when a new tour is selected
-      if (currentStepIndex === 0 && prevStepIndex !== 1) prevStepIndex = null;
-      this.fetchMetadata(currentStory, currentStepIndex);
-      this.loadLink(currentStory, currentStepIndex, prevStepIndex);
+    // Fetch meta and load link
+    if (modalStarted && !this.props.metaLoaded) {
+      this.props.toggleMetaLoaded();
+      this.fetchMetadata(currentStory, 0);
+      this.loadLink(currentStory, currentStepIndex);
+    } else {
+      if (prevProps.currentStep !== this.props.currentStep) {
+        let prevStepIndex = prevProps.currentStep - 1;
+
+        // Reset the prevStepIndex when a new tour is selected
+        if (currentStepIndex === 0 && prevStepIndex !== 1) prevStepIndex = null;
+        this.fetchMetadata(currentStory, currentStepIndex);
+        this.loadLink(currentStory, currentStepIndex, prevStepIndex);
+      }
     }
   }
 
@@ -57,7 +70,8 @@ class ModalInProgress extends React.Component {
         );
         let description = isMetadataSnippet ? body : errorMessage;
         this.setState({ description: description, isLoading: false });
-      }).catch(error => this.setState({ error, isLoading: false }));
+      }
+      ).catch(error => this.setState({ error, isLoading: false }));
   }
 
   loadLink(currentStory, currentStepIndex, prevStepIndex) {
@@ -348,22 +362,7 @@ class ModalInProgress extends React.Component {
   }
 
   render() {
-    var { description, metaLoaded } = this.state;
-    var currentStory = this.props.currentStory;
-    var modalStarted = this.props.modalInProgress;
-
-    if (this.props.restartTour) {
-      this.setState({
-        metaLoaded: false
-      });
-      this.props.toggleRestartTour();
-    }
-
-    if (modalStarted && !metaLoaded) {
-      this.setState({ metaLoaded: true });
-      this.fetchMetadata(currentStory, 0);
-      this.loadLink(currentStory, 0);
-    }
+    var { description } = this.state;
 
     return (
       <div>
@@ -399,6 +398,8 @@ ModalInProgress.propTypes = {
   showTourAlert: PropTypes.func.isRequired,
   restartTour: PropTypes.bool.isRequired,
   toggleRestartTour: PropTypes.func.isRequired,
+  toggleMetaLoaded: PropTypes.func.isRequired,
+  metaLoaded: PropTypes.bool.isRequired,
   className: PropTypes.string
 };
 
