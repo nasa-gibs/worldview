@@ -41,7 +41,7 @@ const fileTypesGeo = {
     { value: 'image/jpeg', text: 'JPEG' },
     { value: 'image/png', text: 'PNG' },
     { value: 'image/geotiff', text: 'GeoTIFF' },
-    { value: 'image/kmz', text: 'KMZ' }
+    { value: 'application/vnd.google-earth.kmz', text: 'KMZ' }
   ]
 };
 const fileTypesPolar = {
@@ -61,8 +61,6 @@ export function imagePanel(models, ui, config, dialogConfig) {
   let resolution = '1';
   let lastZoom = -1;
   let htmlElements;
-  let host;
-  let path;
   let containerId = 'wv-image-button';
   let id = containerId;
   // state items as global lets
@@ -75,12 +73,13 @@ export function imagePanel(models, ui, config, dialogConfig) {
   let imgFilesize;
   let resolutions;
   let fileTypes;
+  let debugUrl;
 
   let url = 'http://localhost:3002/api/v1/snapshot';
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
   }
-  if (config.parameters.imageDownload) {
+  if ('imageDownload' in config.parameters) {
     url = config.parameters.imageDownload;
     util.warn('Redirecting image download to: ' + url);
   }
@@ -105,6 +104,11 @@ export function imagePanel(models, ui, config, dialogConfig) {
       htmlElements
     );
     models.proj.events.on('select', setProjectionGlobals);
+
+    debugUrl = document.createElement('div');
+    debugUrl.setAttribute('id', 'wv-image-download-url');
+    debugUrl.setAttribute('style', 'visbility: hidden');
+    document.querySelector('body').appendChild(debugUrl);
   };
   let setProjectionGlobals = function() {
     let isGeoProjection = models.proj.selected.id === 'geographic';
@@ -332,9 +336,11 @@ export function imagePanel(models, ui, config, dialogConfig) {
       `WIDTH=${imgWidth}`,
       `HEIGHT=${imgHeight}`,
       `OPACITIES=${opacities.join(',')}`,
-      `WORLDFILE=${imgWorldfile}`,
       `ts=${Date.now()}`
     ];
+    if (imgWorldfile === 'true') {
+      params.push('WORLDFILE=true');
+    }
     let dlURL = url + '?' + params.join('&');
 
     googleTagManager.pushEvent({
@@ -349,8 +355,14 @@ export function imagePanel(models, ui, config, dialogConfig) {
       }
     });
 
-    util.metrics('lc=' + encodeURIComponent(dlURL));
-    window.open(dlURL, '_blank');
+    debugUrl.setAttribute('url', dlURL);
+    // A blank URL is used for testing. If blank, don't open in a new window.
+    if (url) {
+      util.metrics('lc=' + encodeURIComponent(dlURL));
+      window.open(dlURL, '_blank');
+    } else {
+      console.log(url);
+    }
   };
 
   init();
