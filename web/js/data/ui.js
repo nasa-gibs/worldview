@@ -345,7 +345,7 @@ var dataUiDownloadListPanel = function(config, model) {
       collapsible: true,
       active: false,
       icons: {
-        header: 'fa fa-caret-right fa-fw',
+        header: 'fas fa-caret-right fa-fw',
         activeHeader: 'fa fa-caret-down fa-fw'
       }
     });

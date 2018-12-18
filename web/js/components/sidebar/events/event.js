@@ -52,9 +52,9 @@ class Event extends React.Component {
     } else {
       selectEvent(event.id, date);
       googleTagManager.pushEvent({
-        'event': 'natural_event_selected',
-        'natural_events': {
-          'category': event.categories[0].title
+        event: 'natural_event_selected',
+        natural_events: {
+          category: event.categories[0].title
         }
       });
     }
@@ -85,8 +85,8 @@ class Event extends React.Component {
                 e.stopPropagation();
               }}
             >
-              <i className="fa fa-external-link fa-1" />
-              {source.title}
+              <i className="fa fa-external-link-alt fa-1" />{' '}
+              {' ' + source.title}
             </a>
           );
         } else {
@@ -123,9 +123,12 @@ class Event extends React.Component {
           className={'event-icon event-icon-' + event.categories[0].slug}
           title={event.categories[0].title}
         />
-        <h4 className="title" dangerouslySetInnerHTML={{
-          __html: event.title + '<br />' + dateString
-        }}/>
+        <h4
+          className="title"
+          dangerouslySetInnerHTML={{
+            __html: event.title + '<br />' + dateString
+          }}
+        />
         <p className="subtitle">{this.getReferenceList()}</p>
 
         {this.getDateLists()}

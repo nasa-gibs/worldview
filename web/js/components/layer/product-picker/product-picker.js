@@ -60,7 +60,7 @@ class ProductPicker extends React.Component {
    */
   runSearch(value) {
     const { filterProjections, filterSearch } = this.props;
-    const { allLayers } = this.props;
+    const { allLayers } = this.state;
     let val = value.toLowerCase();
 
     if (val.length === 0) {

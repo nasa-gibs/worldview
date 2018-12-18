@@ -452,7 +452,7 @@ class LayerRow extends React.Component {
           <h3>
             {title}
             {description && (
-              <span
+              <i
                 className="fa fa-info-circle"
                 onClick={e => this.toggleMetadataButtons(e)}
               />

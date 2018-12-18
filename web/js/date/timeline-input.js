@@ -185,14 +185,15 @@ export function timelineInput(models, config, ui) {
     var endTime = models.layers.lastDateTime();
     var endDate = models.layers.lastDate();
     self.delta = Math.abs(delta);
+
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
       if (ui.timeline.config.currentZoom >= 4) {
-        if ((tl.data.start() <= nextTime) && (nextTime <= endTime)) {
+        if (tl.data.start() <= nextTime && nextTime <= endTime) {
           models.date.add(increment, delta);
         }
       } else {
-        if ((tl.data.start() <= nextTime) && (nextTime <= endDate)) {
+        if (tl.data.start() <= nextTime && nextTime <= endDate) {
           models.date.add(increment, delta);
         }
       }
@@ -216,32 +217,24 @@ export function timelineInput(models, config, ui) {
    * @return {Object} JS Date Object
    */
   var getNextTimeSelection = function(delta, increment) {
-    var prevDate = model.selected;
+    var prevDate = model[model.activeDate];
 
     switch (increment) {
       case 'year':
         return new Date(
-          new Date(prevDate).setUTCFullYear(
-            prevDate.getUTCFullYear() + delta
-          )
+          new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta)
         );
       case 'month':
         return new Date(
-          new Date(prevDate).setUTCMonth(
-            prevDate.getUTCMonth() + delta
-          )
+          new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta)
         );
       case 'day':
         return new Date(
-          new Date(prevDate).setUTCDate(
-            prevDate.getUTCDate() + delta
-          )
+          new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta)
         );
       case 'minute':
         return new Date(
-          new Date(prevDate).setUTCMinutes(
-            prevDate.getUTCMinutes() + delta
-          )
+          new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta)
         );
     }
   };

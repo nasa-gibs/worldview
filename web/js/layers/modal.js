@@ -48,15 +48,16 @@ export function layersModal(models, ui, config) {
   };
   var getInitialProps = function(proj) {
     setModalSize();
+    const allLayers = getLayersForProjection(proj);
     return {
       addLayer: layerId => model.add(layerId, {}),
       removeLayer: layerId => model.remove(layerId),
-      allLayers: getLayersForProjection(proj),
+      allLayers: allLayers,
       activeLayers: model[model.activeLayers],
       selectedProjection: proj,
       filterProjections: filterProjections,
       filterSearch: filterSearch,
-      filteredRows: getLayersForProjection(proj),
+      filteredRows: allLayers,
       getModalHeight: getModalHeight,
       hasMeasurementSource: hasMeasurementSource,
       hasMeasurementSetting: hasMeasurementSetting,
@@ -194,7 +195,6 @@ export function layersModal(models, ui, config) {
     if (!val) return false;
     var filtered = false;
     var names = models.layers.getTitles(layer.id);
-
     $.each(terms, function(index, term) {
       filtered =
         !names.title.toLowerCase().contains(term) &&

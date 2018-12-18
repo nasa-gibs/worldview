@@ -99,7 +99,6 @@ import { uiInfo } from './ui/info';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import 'font-awesome-webpack';
 import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.css';
 import '../../node_modules/jquery-ui-bundle/jquery-ui.theme.css';
 import '../../node_modules/icheck/skins/square/grey.css';
@@ -113,6 +112,7 @@ import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
 import '../../node_modules/ol/ol.css';
 import '../../node_modules/nouislider/distribute/nouislider.css';
 import '../../node_modules/simplebar/dist/simplebar.css';
+import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
 // App CSS
 import '../css/fonts.css';
@@ -262,7 +262,7 @@ class App extends React.Component {
               id="animate-button"
               title="Set up animation"
             >
-              <i id="wv-animate" className="fa fa-video-camera wv-animate" />
+              <i id="wv-animate" className="fas fa-video wv-animate" />
             </div>
           </div>
           <div id="timeline-footer">
@@ -289,6 +289,10 @@ class App extends React.Component {
     var parsers;
     var state = util.fromQueryString(location.search);
     var parameters = util.fromQueryString(location.search);
+
+    // Add font Awesome fonts
+    // library.add(faInfoCircle);
+    // dom.watch();
 
     var main = function() {
       if (parameters.elapsed) {

@@ -6,7 +6,7 @@
   color: #eee;
   font-weight: 700;
   border: 1px solid;
-  border-color: transparent;
+  border-color: #666;
   font-size: 1em;
   background-image: linear-gradient(#555, #666);
   background-image: -ms-linear-gradient(#555, #666);
@@ -20,15 +20,15 @@
 }
 .wv-button.red {
   background: #d54e21;
+  border-color: #d54e21;
 }
 .wv-button.black {
   background: #212121;
-  border-color: #666;
 }
 .wv-button:hover {
-  border-color: transparent;
+  border-color: #eee;
   background-color: #eee;
-  transition: background 0.5s ease, border-color 0.5s ease;
+  transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
   background-image: none;
   color: #404040;
   cursor: pointer;

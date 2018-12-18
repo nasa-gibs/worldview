@@ -26,8 +26,10 @@ export class Swipe {
     events = compareEvents;
     this.create();
     $(window).resize(() => {
-      this.destroy();
-      this.create();
+      if (document.querySelector('.ab-swipe-line')) {
+        this.destroy();
+        this.create();
+      }
     });
   }
   create() {
@@ -138,7 +140,7 @@ var addLineOverlay = function(map) {
   firstLabel.appendChild(document.createTextNode('A'));
   secondLabel.appendChild(document.createTextNode('B'));
 
-  iconEl.className = 'fa fa-arrows-h';
+  iconEl.className = 'fas fa-arrows-alt-h';
   draggerEl.className = 'ab-swipe-dragger';
   lineCaseEl.className = 'ab-swipe-line';
   lineCaseEl.appendChild(firstLabel);

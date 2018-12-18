@@ -10,7 +10,7 @@ a.ui-button.ui-state-default {
   background-image: linear-gradient(#555, #666);
   background-image: -ms-linear-gradient(#555, #666);
   background-image: -o-linear-gradient(#555, #666);
-  font-family: "Segoe UI", "Arial", sans-serif;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
 }
 
 a.ui-button.ui-state-default.ui-state-hover {
@@ -45,12 +45,12 @@ a.ui-button.ui-state-default.ui-state-hover {
  * Remove the jQuery UI Icon
  * Remove the jQuery UI Text Indent
  */
-.ui-icon[class*=" fa-"] {
+.ui-icon[class*=' fa-'] {
   background: none repeat scroll 0 0 transparent;
   text-indent: 0;
 }
 
-.ui-button-icon-only .ui-icon[class*=" fa-"] {
+.ui-button-icon-only .ui-icon[class*=' fa-'] {
   margin-left: -7px;
 }
 
@@ -93,12 +93,12 @@ a.ui-button.ui-state-default.ui-state-hover {
 button.ui-button:focus .ui-icon-closethick,
 button.ui-button .ui-icon-closethick {
   background-position: 0 0;
-  background-image: url("../images/close.png");
+  background-image: url('../images/close.png');
 }
 
 button.ui-button:hover .ui-icon-closethick {
   background-position: 0 0;
-  background-image: url("../images/close-highlight.png");
+  background-image: url('../images/close-highlight.png');
 }
 
 .ui-tooltip {
@@ -148,7 +148,7 @@ a:hover {
 }
 
 .ui-menu-item i {
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .iCheck-checkbox {

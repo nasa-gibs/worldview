@@ -24,7 +24,7 @@ export default (function(self) {
 
     self.notify(
       "<div class='error-header'>" +
-        "<i class='error-icon fa fa-exclamation-triangle fa-3x'></i>" +
+        "<i class='error-icon fas fa-exclamation-triangle fa-3x'></i>" +
         'An unexpected error has occurred' +
         '</div>' +
         "<div class='error-body'>Please reload the page and try " +
@@ -75,9 +75,13 @@ export default (function(self) {
       });
   };
 
-  self.alert = function(body, title, size, glyph, closeFn) {
+  self.alert = function(body, title, size, glyph, glyphType, closeFn) {
     var $message = $('<span/>', { class: 'notify-message' });
-    var $icon = $('<i/>', { class: 'fa fa-' + glyph + ' fa-1x', title: title });
+    glyphType = glyphType || 'fa';
+    var $icon = $('<i/>', {
+      class: glyphType + ' fa-' + glyph + ' fa-1x',
+      title: title
+    });
     var $messageWrapper = $('<div/>')
       .click(function() {
         self.notify(body, title, size);
