@@ -14,7 +14,6 @@ import googleTagManager from 'googleTagManager';
 export default function markers(models, ui) {
   var self = {};
   var map = ui.map.selected;
-  var olViewport = map.getViewport();
 
   self.draw = function() {
     if (!(models.naturalEvents && models.naturalEvents.data)) return null;
