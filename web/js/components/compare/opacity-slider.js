@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InputRange from 'react-input-range';
 import RangeInput from '../util/range-input';
 import lodashDebounce from 'lodash/debounce';
 
