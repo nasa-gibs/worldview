@@ -96,7 +96,14 @@ export function imageUtilGetLayers (products, proj) {
 export function imageUtilGetLayerOpacities (products) {
   var opacities = [];
   lodashEach(products, function(product) {
-    opacities.push((lodashIsUndefined(product.opacity)) ? 1 : product.opacity);
+    let opacity = '';
+    if ('opacity' in product) {
+      opacity = product.opacity;
+    }
+    if (opacity === 1) {
+      opacity = '';
+    }
+    opacities.push(opacity);
   });
   return opacities;
 };
