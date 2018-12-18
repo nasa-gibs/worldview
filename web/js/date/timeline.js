@@ -217,11 +217,9 @@ export function timeline(models, config, ui) {
     subdaily = models.layers.hasSubDaily();
     drawContainers();
     let timelineCase = document.getElementById('timeline');
-    ['mousewheel', 'wheel'].forEach(function(type) {
-      timelineCase.addEventListener(type, function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-      });
+    timelineCase.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
     });
 
     if (!models.anim) {

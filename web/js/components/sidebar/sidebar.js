@@ -269,10 +269,6 @@ class Sidebar extends React.Component {
             </TabPane>
             <footer
               ref={footerElement => (this.footerElement = footerElement)}
-              onMouseWheel={e => {
-                e.stopPropagation();
-                e.preventDefault();
-              }}
               onWheel={e => {
                 e.stopPropagation();
                 e.preventDefault();
