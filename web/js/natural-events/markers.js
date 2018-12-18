@@ -11,16 +11,16 @@ import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
 
-export default function markers (models, ui) {
+export default function markers(models, ui) {
   var self = {};
   var map = ui.map.selected;
   var olViewport = map.getViewport();
 
-  self.draw = function () {
+  self.draw = function() {
     if (!(models.naturalEvents && models.naturalEvents.data)) return null;
     var events = models.naturalEvents.data.events;
     if (!events) return null;
-    var markers = events.reduce(function (collection, event) {
+    var markers = events.reduce(function(collection, event) {
       var marker = {};
       var selected = ui.naturalEvents.selected;
       var isSelected = event.id === selected.id;
@@ -30,9 +30,10 @@ export default function markers (models, ui) {
         date = selected.date;
       }
 
-      var geometry = lodashFind(event.geometries, function (geom) {
-        return geom.date.split('T')[0] === date;
-      }) || event.geometries[0];
+      var geometry =
+        lodashFind(event.geometries, function(geom) {
+          return geom.date.split('T')[0] === date;
+        }) || event.geometries[0];
       if (!geometry) return marker;
 
       var coordinates = geometry.coordinates;
@@ -41,8 +42,12 @@ export default function markers (models, ui) {
       if (models.proj.selected.id !== 'geographic') {
         // check for polygon geometries
         if (geometry.type === 'Polygon') {
-          let coordinatesTransform = coordinates[0].map((coordinate) => {
-            return olProj.transform(coordinate, 'EPSG:4326', models.proj.selected.crs);
+          let coordinatesTransform = coordinates[0].map(coordinate => {
+            return olProj.transform(
+              coordinate,
+              'EPSG:4326',
+              models.proj.selected.crs
+            );
           });
           let extent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(extent);
@@ -52,7 +57,11 @@ export default function markers (models, ui) {
           }
         } else {
           // if normal geometries, transform given lon/lat array
-          coordinates = olProj.transform(coordinates, 'EPSG:4326', models.proj.selected.crs);
+          coordinates = olProj.transform(
+            coordinates,
+            'EPSG:4326',
+            models.proj.selected.crs
+          );
         }
       } else {
         if (geometry.type === 'Polygon') {
@@ -100,49 +109,67 @@ export default function markers (models, ui) {
         var pinEl = marker.pin.element_ || marker.pin.element;
 
         // Use passiveSupport detect in ui. passive applied if supported, capture will be false either way.
-        ['pointerdown', 'mousedown', 'touchstart'].forEach(function (type) {
-          pinEl.addEventListener(type, function (e) {
-            willSelect = true;
-            moveCount = 0;
-            passEventToTarget(e, olViewport);
-          }, ui.supportsPassive ? { passive: true } : false);
+        ['pointerdown', 'mousedown', 'touchstart'].forEach(function(type) {
+          pinEl.addEventListener(
+            type,
+            function(e) {
+              willSelect = true;
+              moveCount = 0;
+              passEventToTarget(e, olViewport);
+            },
+            ui.supportsPassive ? { passive: true } : false
+          );
         });
 
         [
-          'pointermove',
-          'wheel',
           'pointerdrag',
           'pointerup',
-          'mousemove',
-          'touchmove'
-        ].forEach(function (type) {
-          pinEl.addEventListener(type, function (e) {
+          'touchmove',
+          'wheel',
+          'mousewheel'
+        ].forEach(function(type) {
+          pinEl.addEventListener(type, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             passEventToTarget(e, olViewport);
-          }, ui.supportsPassive ? { passive: true } : false);
+          });
         });
-
-        ['pointermove', 'mousemove'].forEach(function (type) {
-          pinEl.addEventListener(type, function (e) {
-            moveCount++;
-            if (moveCount > 2) {
-              willSelect = false;
-            }
-          }, ui.supportsPassive ? { passive: true } : false);
+        pinEl.addEventListener('wheel', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          passEventToTarget(e, olViewport);
         });
-
-        pinEl.addEventListener('click', function (e) {
-          if (willSelect && !isSelected) {
-            ui.naturalEvents.selectEvent(event.id, date);
-            googleTagManager.pushEvent({
-              'event': 'natural_event_selected',
-              'natural_events': {
-                'category': category.title
+        ['pointermove', 'mousemove'].forEach(function(type) {
+          pinEl.addEventListener(
+            type,
+            function(e) {
+              moveCount++;
+              passEventToTarget(e, olViewport);
+              if (moveCount > 2) {
+                willSelect = false;
               }
-            });
-          } else {
-            passEventToTarget(e, olViewport);
-          }
-        }, ui.supportsPassive ? { passive: true } : false);
+            },
+            ui.supportsPassive ? { passive: true } : false
+          );
+        });
+
+        pinEl.addEventListener(
+          'click',
+          function(e) {
+            if (willSelect && !isSelected) {
+              ui.naturalEvents.selectEvent(event.id, date);
+              googleTagManager.pushEvent({
+                event: 'natural_event_selected',
+                natural_events: {
+                  category: category.title
+                }
+              });
+            } else {
+              passEventToTarget(e, olViewport);
+            }
+          },
+          ui.supportsPassive ? { passive: true } : false
+        );
       }
       // empty objects (i.e., markers not within projection range) are not pushed to collection
       if (lodashIsEmpty(marker) !== true) {
@@ -155,7 +182,7 @@ export default function markers (models, ui) {
     return markers;
   };
 
-  self.remove = function (markers) {
+  self.remove = function(markers) {
     markers = markers || [];
     if (markers.length < 1) return;
     markers.forEach(function(marker) {
@@ -172,13 +199,18 @@ export default function markers (models, ui) {
     });
   };
 
-  var passEventToTarget = function (event, target) {
+  var passEventToTarget = function(event, target) {
     try {
       let eventCopy;
       // polyfill fix for IE11 CustomEvent from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
       if (typeof window.CustomEvent !== 'function') {
         eventCopy = document.createEvent('CustomEvent');
-        eventCopy.initCustomEvent(event, event.bubbles, event.cancelable, event.detail);
+        eventCopy.initCustomEvent(
+          event,
+          event.bubbles,
+          event.cancelable,
+          event.detail
+        );
       } else {
         eventCopy = new event.constructor(event.type, event);
       }
@@ -188,7 +220,7 @@ export default function markers (models, ui) {
     }
   };
 
-  var createPin = function (id, category, isSelected) {
+  var createPin = function(id, category, isSelected) {
     var overlayEl = document.createElement('div');
     var icon = document.createElement('i');
     overlayEl.className = 'marker';
@@ -203,7 +235,7 @@ export default function markers (models, ui) {
     });
   };
 
-  var createBoundingBox = function (coordinates) {
+  var createBoundingBox = function(coordinates) {
     var lightStroke = new OlStyleStyle({
       stroke: new OlStyleStroke({
         color: [255, 255, 255, 0.6],
@@ -221,10 +253,12 @@ export default function markers (models, ui) {
     });
     return new OlLayerVector({
       source: new OlSourceVector({
-        features: [new OlFeature({
-          geometry: new OlGeomPolygon(coordinates),
-          name: 'NaturalEvent'
-        })],
+        features: [
+          new OlFeature({
+            geometry: new OlGeomPolygon(coordinates),
+            name: 'NaturalEvent'
+          })
+        ],
         wrapX: false
       }),
       style: [lightStroke, darkStroke]
@@ -232,4 +266,4 @@ export default function markers (models, ui) {
   };
 
   return self;
-};
+}
