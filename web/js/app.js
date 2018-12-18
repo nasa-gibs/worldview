@@ -32,6 +32,7 @@ import { layersModel } from './layers/model';
 import { layersModal } from './layers/modal';
 
 import { layersActive } from './layers/active';
+import { layersOptions } from './layers/options';
 
 import { sidebarUi } from './sidebar/ui';
 
@@ -109,7 +110,7 @@ import '../ext/mobiscroll-2.6.0/mobiscroll.css';
 import '../../node_modules/jquery.joyride/jquery.joyride.css';
 import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
 import '../../node_modules/ol/ol.css';
-import '../../node_modules/nouislider/src/jquery.nouislider.css';
+import '../../node_modules/nouislider/distribute/nouislider.css';
 import '../../node_modules/simplebar/dist/simplebar.css';
 import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 
@@ -174,6 +175,7 @@ class App extends React.Component {
         </ul>
         <section id="wv-sidebar" />
         <div id="layer-modal" className="layer-modal" />
+        <div id="layer-settings-modal" />
         <div id="wv-map" className="wv-map" />
         <div id="eventsHolder" />
         <div id="imagedownload" />
@@ -436,6 +438,7 @@ class App extends React.Component {
       ui.sidebar = sidebarUi(models, config, ui);
       ui.activeLayers = layersActive(models, ui, config);
       ui.addModal = layersModal(models, ui, config);
+      ui.layerSettingsModal = layersOptions(models, ui, config);
 
       // Test via a getter in the options object to see if the passive property is accessed
       ui.supportsPassive = false;

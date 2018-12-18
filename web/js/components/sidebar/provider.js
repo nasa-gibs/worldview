@@ -12,6 +12,7 @@ export class SidebarProvider extends React.Component {
       getAvailability: props.getAvailability,
       getNames: props.getNames,
       palettePromise: props.palettePromise,
+      getPalette: props.getPalette,
       runningLayers: props.runningLayers,
       getLegend: props.getLegend,
       zotsObject: props.zotsObject,

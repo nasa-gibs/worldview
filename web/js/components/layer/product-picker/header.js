@@ -8,7 +8,7 @@ import {
   Button
 } from 'reactstrap';
 
-import util from '../../util/util';
+import util from '../../../util/util';
 
 /*
  * A scrollable list of layers

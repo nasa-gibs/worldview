@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem } from 'reactstrap';
-import { Checkbox } from '../util/checkbox';
+import { Checkbox } from '../../util/checkbox';
 
 /*
  * A scrollable list of layers

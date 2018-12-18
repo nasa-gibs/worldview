@@ -4,7 +4,7 @@ import LayerList from './list';
 import CategoryList from './category-list';
 import ProductPickerHeader from './header';
 import lodashValues from 'lodash/values';
-import Scrollbars from '../util/scrollbar';
+import Scrollbars from '../../util/scrollbar';
 import googleTagManager from 'googleTagManager';
 import lodashDebounce from 'lodash/debounce';
 

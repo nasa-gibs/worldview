@@ -7,7 +7,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { getCompareObjects } from '../compare/util';
 import { getCheckerboard } from '../palettes/util';
-import { layersOptions } from '../layers/options';
 import { layersInfo } from '../layers/info';
 import { getZotsForActiveLayers } from '../layers/util';
 import { timelineDataHightlight } from '../date/util';
@@ -161,6 +160,7 @@ export function sidebarUi(models, config, ui) {
       changeCompareMode: compareModel ? compareModel.setMode : null,
       checkerBoardPattern: getCheckerboard(),
       palettePromise: models.palettes.palettePromise,
+      getPalette: models.palettes.get,
       getLegend: models.palettes.getLegends,
       replaceSubGroup: model.replaceSubGroup,
       runningLayers: null,
@@ -373,6 +373,7 @@ export function sidebarUi(models, config, ui) {
           event: 'sidebar_layer_info'
         });
         let $infoDialog = $('#wv-layers-info-dialog');
+        ui.layerSettingsModal.close();
         if (
           $infoDialog.attr('data-layer') !== layerId ||
           $infoDialog.length === 0
@@ -388,17 +389,9 @@ export function sidebarUi(models, config, ui) {
         googleTagManager.pushEvent({
           event: 'sidebar_layer_options'
         });
-        let $optionDialog = $('#wv-layers-options-dialog');
-        if (
-          $optionDialog.attr('data-layer') !== layerId ||
-          $optionDialog.length === 0
-        ) {
-          layer = lodashFind(models.layers[layerGroupString], { id: layerId });
-          layersOptions(config, models, layer, layerGroupString);
-        } else {
-          wvui.close();
-        }
-
+        wvui.close();
+        layer = lodashFind(models.layers[layerGroupString], { id: layerId });
+        ui.layerSettingsModal.createNewLayer(layer);
         break;
       case 'hover':
         timelineDataHightlight(layerId, value);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
+import { drawPaletteOnCanvas } from '../../../palettes/util';
 import lodashIsEqual from 'lodash/isEqual';
 import lodashIsNumber from 'lodash/isNumber';
 
@@ -120,7 +121,7 @@ class Legend extends React.Component {
    * Style Canvas bases on updates to legend or canvas-width
    */
   updateCanvas() {
-    const { checkerBoardPattern } = this.props;
+    const { checkerBoardPattern, height, width } = this.props;
     const { legends } = this.state;
 
     legends.forEach((colorMap, index) => {
@@ -133,7 +134,13 @@ class Legend extends React.Component {
             // This value is needed for calculating running data offsets
             this.setState({ width: newWidth });
           }
-          this.drawOnCanvas(ctxStr, checkerBoardPattern, colorMap.colors);
+          drawPaletteOnCanvas(
+            this[ctxStr].current.getContext('2d'),
+            checkerBoardPattern,
+            colorMap.colors,
+            width,
+            height
+          );
         }
       }
     });
@@ -144,19 +151,18 @@ class Legend extends React.Component {
    * @param {*} checkerBoardPattern | Background for canvas threshold
    * @param {*} colors | array of color values
    */
-  drawOnCanvas(ctxStr, checkerBoardPattern, colors) {
-    var context = this[ctxStr].current.getContext('2d');
+  drawOnCanvas(ctx, checkerBoardPattern, colors) {
     const { height, width } = this.props;
-    context.fillStyle = checkerBoardPattern;
-    context.fillRect(0, 0, width, height);
+    ctx.fillStyle = checkerBoardPattern;
+    ctx.fillRect(0, 0, width, height);
 
     if (colors) {
       var bins = colors.length;
       var binWidth = width / bins;
       var drawWidth = Math.ceil(binWidth);
       colors.forEach((color, i) => {
-        context.fillStyle = util.hexToRGBA(color);
-        context.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
+        ctx.fillStyle = util.hexToRGBA(color);
+        ctx.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
       });
     }
   }
@@ -203,12 +209,11 @@ class Legend extends React.Component {
    * @param {Boolean} isMoreThanOneColorBar
    */
   renderScale(legend, index, isMoreThanOneColorBar) {
-    const { layer, width } = this.props;
+    const { layer, width, getPalette } = this.props;
     const { isRunningData, colorHex, isHoveringLegend } = this.state;
-
+    const palette = getPalette(layer.id, index);
     var percent, textWidth, xOffset, legendObj;
     var toolTipLength = legend.tooltips.length;
-
     if (isRunningData && colorHex && this.state.width > 0) {
       legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
@@ -220,6 +225,8 @@ class Legend extends React.Component {
 
     var min = legend.minLabel || legend.tooltips[0];
     var max = legend.maxLabel || legend.tooltips[toolTipLength];
+    min = palette.min ? legend.tooltips[palette.min] : min;
+    max = palette.max ? legend.tooltips[palette.max] : max;
 
     min = legend.units ? min + ' ' + legend.units : min;
     max = legend.units ? max + ' ' + legend.units : max;
@@ -375,7 +382,7 @@ class Legend extends React.Component {
     });
   }
   render() {
-    const { palette, layer } = this.props;
+    const { paletteId, layer } = this.props;
     const { isHoveringLegend } = this.state;
     if (!layer.palette) return;
     return (
@@ -386,7 +393,7 @@ class Legend extends React.Component {
             : 'wv-palettes-panel'
         }
         datalayer={layer.id}
-        id={palette.id + '_panel'}
+        id={paletteId + '_panel'}
       >
         {this.renderLegends()}
       </div>
@@ -401,11 +408,12 @@ Legend.defaultProps = {
   height: 12
 };
 Legend.propTypes = {
-  palette: PropTypes.object,
+  paletteId: PropTypes.string,
   layer: PropTypes.object,
   checkerBoardPattern: PropTypes.object,
   isHoveringLegend: PropTypes.bool,
   isRunningDataEnabled: PropTypes.bool,
+  getPalette: PropTypes.func,
   legends: PropTypes.array,
   width: PropTypes.number,
   height: PropTypes.number,
