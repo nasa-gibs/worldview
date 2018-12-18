@@ -115,31 +115,15 @@ export default function markers(models, ui) {
             function(e) {
               willSelect = true;
               moveCount = 0;
-              passEventToTarget(e, olViewport);
             },
             ui.supportsPassive ? { passive: true } : false
           );
-        });
-
-        [
-          'pointerdrag',
-          'pointerup',
-          'touchmove',
-          'wheel',
-          'mousewheel'
-        ].forEach(function(type) {
-          pinEl.addEventListener(type, function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            passEventToTarget(e, olViewport);
-          });
         });
         ['pointermove', 'mousemove'].forEach(function(type) {
           pinEl.addEventListener(
             type,
             function(e) {
               moveCount++;
-              passEventToTarget(e, olViewport);
               if (moveCount > 2) {
                 willSelect = false;
               }
@@ -159,8 +143,6 @@ export default function markers(models, ui) {
                   category: category.title
                 }
               });
-            } else {
-              passEventToTarget(e, olViewport);
             }
           },
           ui.supportsPassive ? { passive: true } : false
@@ -194,27 +176,6 @@ export default function markers(models, ui) {
     });
   };
 
-  var passEventToTarget = function(event, target) {
-    try {
-      let eventCopy;
-      // polyfill fix for IE11 CustomEvent from https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
-      if (typeof window.CustomEvent !== 'function') {
-        eventCopy = document.createEvent('CustomEvent');
-        eventCopy.initCustomEvent(
-          event,
-          event.bubbles,
-          event.cancelable,
-          event.detail
-        );
-      } else {
-        eventCopy = new event.constructor(event.type, event);
-      }
-      target.dispatchEvent(eventCopy);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   var createPin = function(id, category, isSelected) {
     var overlayEl = document.createElement('div');
     var icon = document.createElement('i');
@@ -226,6 +187,7 @@ export default function markers(models, ui) {
     return new OlOverlay({
       element: overlayEl,
       positioning: 'bottom-center',
+      stopEvent: false,
       id: id
     });
   };
