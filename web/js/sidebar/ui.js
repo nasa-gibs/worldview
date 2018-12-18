@@ -97,6 +97,9 @@ export function sidebarUi(models, config, ui) {
     models.map.events.on('data-running', runningLayers => {
       self.reactComponent.setState({ runningLayers: runningLayers });
     });
+    models.compare.events.on('mode', () => {
+      self.reactComponent.setState({ comparisonType: models.compare.mode });
+    });
     $(window).resize(resize);
     ui.map.events.on(
       'zooming',
