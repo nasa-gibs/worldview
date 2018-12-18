@@ -55,16 +55,18 @@ export function compareModel(models, config) {
     }
   };
   self.load = function(state) {
-    if (state.ca) {
-      self.active = true;
-      self.isCompareA = state.ca === 'true';
-    }
-    if (state.cm) {
-      self.active = true;
-      self.mode = state.cm;
-    }
-    if (state.cv) {
-      self.value = Number(state.cv);
+    if (!util.browser.small && !util.browser.mobileDevice) {
+      if (state.ca) {
+        self.active = true;
+        self.isCompareA = state.ca === 'true';
+      }
+      if (state.cm) {
+        self.active = true;
+        self.mode = state.cm;
+      }
+      if (state.cv) {
+        self.value = Number(state.cv);
+      }
     }
   };
   return self;
