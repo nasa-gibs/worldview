@@ -134,11 +134,6 @@ export default function markers(models, ui) {
             passEventToTarget(e, olViewport);
           });
         });
-        pinEl.addEventListener('wheel', function(e) {
-          e.stopPropagation();
-          e.preventDefault();
-          passEventToTarget(e, olViewport);
-        });
         ['pointermove', 'mousemove'].forEach(function(type) {
           pinEl.addEventListener(
             type,
