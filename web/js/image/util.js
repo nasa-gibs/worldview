@@ -1,4 +1,3 @@
-import lodashIsUndefined from 'lodash/isUndefined';
 import lodashEach from 'lodash/each';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
