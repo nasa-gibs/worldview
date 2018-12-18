@@ -42,7 +42,7 @@ const fileTypesGeo = {
   values: [
     { value: 'image/jpeg', text: 'JPEG' },
     { value: 'image/png', text: 'PNG' },
-    { value: 'image/geotiff', text: 'GeoTIFF' },
+    { value: 'image/tiff', text: 'GeoTIFF' },
     { value: 'application/vnd.google-earth.kmz', text: 'KMZ' }
   ]
 };
@@ -50,7 +50,7 @@ const fileTypesPolar = {
   values: [
     { value: 'image/jpeg', text: 'JPEG' },
     { value: 'image/png', text: 'PNG' },
-    { value: 'image/geotiff', text: 'GeoTIFF' }
+    { value: 'image/tiff', text: 'GeoTIFF' }
   ]
 };
 
@@ -343,14 +343,15 @@ export function imagePanel(models, ui, config, dialogConfig) {
       `LAYERS=${layers.join(',')}`,
       `FORMAT=${imgFormat}`,
       `WIDTH=${imgWidth}`,
-      `HEIGHT=${imgHeight}`,
-      `OPACITIES=${opacities.join(',')}`,
-      `ts=${Date.now()}`
+      `HEIGHT=${imgHeight}`
     ];
+    if (opacities.length > 0) {
+      params.push(`OPACITIES=${opacities.join(',')}`);
+    }
     if (imgWorldfile === 'true') {
       params.push('WORLDFILE=true');
     }
-    let dlURL = url + '?' + params.join('&');
+    let dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
 
     googleTagManager.pushEvent({
       event: 'image_download',

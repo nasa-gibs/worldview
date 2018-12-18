@@ -92,18 +92,22 @@ export function imageUtilGetLayers (products, proj) {
  * @returns {array} array of opacities
  *
  */
-export function imageUtilGetLayerOpacities (products) {
-  var opacities = [];
-  lodashEach(products, function(product) {
+export function imageUtilGetLayerOpacities (layers) {
+  let opacities = [];
+  let found = false;
+  layers.forEach((layer) => {
     let opacity = '';
-    if ('opacity' in product) {
-      opacity = product.opacity;
-    }
-    if (opacity === 1) {
+    if ('opacity' in layer && layer.opacity !== 1) {
+      opacity = layer.opacity;
+      found = true;
+    } else {
       opacity = '';
     }
     opacities.push(opacity);
   });
+  if (!found) {
+    return [];
+  }
   return opacities;
 };
 
