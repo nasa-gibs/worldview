@@ -216,9 +216,9 @@ class Sidebar extends React.Component {
               ? layers.baselayers.length + layers.overlays.length
               : isCompareA
                 ? firstDateObject.layers.overlays.length +
-                  firstDateObject.layers.baselayers.length
+                firstDateObject.layers.baselayers.length
                 : secondDateObject.layers.overlays.length +
-                  secondDateObject.layers.baselayers.length
+                secondDateObject.layers.baselayers.length
           }
         />
         <div
@@ -267,7 +267,17 @@ class Sidebar extends React.Component {
                 tabTypes={tabTypes}
               />
             </TabPane>
-            <footer ref={footerElement => (this.footerElement = footerElement)}>
+            <footer
+              ref={footerElement => (this.footerElement = footerElement)}
+              onMouseWheel={e => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+              onWheel={e => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+            >
               <FooterContent
                 showListAllButton={showListAllButton}
                 isCompareMode={isCompareMode}
