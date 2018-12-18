@@ -12,7 +12,8 @@ import {
   imageUtilGetLayerOpacities,
   imageUtilGetCoordsFromPixelValues,
   imageUtilGetLayers,
-  imageUtilGetConversionFactor
+  imageUtilGetConversionFactor,
+  bboxWMS13
 } from './util';
 
 const maxSize = 8200;
@@ -334,11 +335,10 @@ export function imagePanel(models, ui, config, dialogConfig) {
     let opacities = imageUtilGetLayerOpacities(layerList);
     let crs = models.proj.selected.crs;
 
-    // WMS 1.3 flips the coordinate order from X,Y to Y,X
     let params = [
       'REQUEST=GetSnapshot',
       `TIME=${util.toISOStringDate(time)}`,
-      `BBOX=${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${lonlats[1][0]}`,
+      `BBOX=${bboxWMS13(lonlats, crs)}`,
       `CRS=${crs}`,
       `LAYERS=${layers.join(',')}`,
       `FORMAT=${imgFormat}`,
