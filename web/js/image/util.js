@@ -134,3 +134,17 @@ export function imageUtilGetCoordsFromPixelValues (pixels, map) {
     map.getCoordinateFromPixel([Math.floor(pixels.x2), Math.floor(pixels.y)])
   ];
 };
+
+/**
+ * Given a bounding box as an array of a lower left coordinate pair
+ * and an upper right coordinate pair, return the BBOX parameter value
+ * suitable in a WMS 1.3 call. For EPSG:4326, the coordinates are in
+ * Y,X order, otherwise in X,Y order.
+ */
+export function bboxWMS13(lonlats, crs) {
+  if (crs === 'EPSG:4326') {
+    return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${lonlats[1][0]}`;
+  } else {
+    return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${lonlats[1][1]}`;
+  }
+}
