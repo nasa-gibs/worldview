@@ -24,13 +24,15 @@ class Tour extends React.Component {
       currentStoryId: props.currentStoryId,
       showTourAlert: props.showTourAlert,
       hideTour: props.hideTour,
-      restartTour: props.restartTour
+      restartTour: props.restartTour,
+      metaLoaded: props.metaLoaded
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
     this.toggleModalInProgress = this.toggleModalInProgress.bind(this);
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
     this.toggleRestartTour = this.toggleRestartTour.bind(this);
+    this.toggleMetaLoaded = this.toggleMetaLoaded.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
   }
@@ -47,6 +49,7 @@ class Tour extends React.Component {
     this.setState({
       modalInProgress: !this.state.modalInProgress
     });
+    this.toggleMetaLoaded();
   }
 
   toggleModalComplete(e) {
@@ -58,7 +61,14 @@ class Tour extends React.Component {
 
   toggleRestartTour() {
     this.setState({
-      restartTour: !this.state.restartTour
+      restartTour: !this.state.restartTour,
+      metaLoaded: false
+    });
+  }
+
+  toggleMetaLoaded() {
+    this.setState({
+      metaLoaded: !this.state.metaLoaded
     });
   }
 
@@ -110,7 +120,9 @@ class Tour extends React.Component {
             currentStory={this.state.currentStory}
             showTourAlert={this.props.showTourAlert}
             restartTour={this.state.restartTour}
+            metaLoaded={this.state.metaLoaded}
             toggleRestartTour={this.toggleRestartTour}
+            toggleMetaLoaded={this.toggleMetaLoaded}
           ></TourInProgress>
 
           <TourComplete
@@ -151,7 +163,8 @@ Tour.propTypes = {
   showTourAlert: PropTypes.func.isRequired,
   hideTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
-  restartTour: PropTypes.bool.isRequired
+  restartTour: PropTypes.bool.isRequired,
+  metaLoaded: PropTypes.bool.isRequired
 };
 
 export default Tour;

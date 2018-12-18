@@ -47,6 +47,7 @@ export function tourUi(models, ui, config) {
       startTour: self.startTour,
       resetTour: self.resetTour,
       restartTour: false,
+      metaLoaded: false,
       selectTour: self.selectTour,
       showTourAlert: ui.alert.showTourAlert,
       hideTour: self.hideTour,
@@ -134,6 +135,7 @@ export function tourUi(models, ui, config) {
       currentStoryIndex: currentStoryIndex,
       modalStart: false,
       modalInProgress: true,
+      metaLoaded: false,
       modalComplete: false,
       currentStory: currentStory,
       currentStoryId: currentStoryId
