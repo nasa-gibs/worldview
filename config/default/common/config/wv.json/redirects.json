@@ -74,7 +74,13 @@
       "Suomi_NPP_Orbit_Asc": "OrbitTracks_Suomi_NPP_Ascending",
       "Suomi_NPP_Orbit_Dsc": "OrbitTracks_Suomi_NPP_Descending",
       "Terra_Orbit_Asc": "OrbitTracks_Terra_Ascending",
-      "Terra_Orbit_Dsc": "OrbitTracks_Terra_Descending"
+      "Terra_Orbit_Dsc": "OrbitTracks_Terra_Descending",
+
+      "VIIRS_SNPP_Fires_375m_Day": "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
+      "VIIRS_SNPP_Fires_375m_Night": "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
+      "MODIS_Fires_All": "MODIS_Combined_Thermal_Anomalies_All",
+      "MODIS_Fires_Terra": "MODIS_Terra_Thermal_Anomalies_All",
+      "MODIS_Fires_Aqua": "MODIS_Aqua_Thermal_Anomalies_All"
     }
   }
 }

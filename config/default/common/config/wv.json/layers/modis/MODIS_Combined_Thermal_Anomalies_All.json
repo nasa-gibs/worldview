@@ -1,0 +1,33 @@
+{
+  "layers": {
+    "MODIS_Combined_Thermal_Anomalies_All": {
+      "id": "MODIS_Combined_Thermal_Anomalies_All",
+      "title": "Fires and Thermal Anomalies (Day and Night)",
+      "subtitle": "Terra and Aqua / MODIS",
+      "description": "modis/MODIS_Combined_Thermal_Anomalies_All",
+      "tags": "hotspot",
+      "group": "overlays",
+      "format": "image/png",
+      "period": "daily",
+      "tileSize": [512, 512],
+      "type": "wms",
+      "layergroup": ["modis", "modis_terra"],
+      "transition": "true",
+      "startDate": "2012-05-08",
+
+      "projections": {
+        "arctic": {
+          "source": "GIBS:wms:arctic"
+        },
+        "geographic": {
+          "source": "GIBS:wms"
+        }
+      },
+
+      "palette": {
+        "id": "MODIS_Combined_Thermal_Anomalies_All",
+        "immutable": "true"
+      }
+    }
+  }
+}
