@@ -1,40 +1,40 @@
 {
   "layers": {
     "OrbitTracks_GPM_Ascending": {
-      "id": "OrbitTracks_GPM_Ascending", 
-      "title": "GPM Orbital Track & Overpass Time (Ascending)", 
-      "subtitle": "GPM / Space-Track.org", 
-      "description": "reference/orbits/OrbitTracks_GPM_Ascending", 
-      "group": "overlays", 
-      "format": "image/png", 
-      "type": "wms", 
+      "id": "OrbitTracks_GPM_Ascending",
+      "title": "GPM Orbital Track & Overpass Time (Ascending)",
+      "subtitle": "GPM / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_GPM_Ascending",
+      "group": "overlays",
+      "format": "image/png",
+      "type": "wms",
       "tileSize": [
-        512, 
+        512,
         512
-      ], 
-      "period": "daily", 
+      ],
+      "period": "daily",
       "layergroup": [
-        "reference", 
+        "reference",
         "reference_orbits"
-      ], 
-      "daynight": "", 
-      "track": "ascending", 
-      "startDate": "2014-02-27", 
+      ],
+      "daynight": "",
+      "track": "ascending",
+      "startDate": "2014-02-27",
       "projections": {
         "antarctic": {
-          "source": "GIBS:wms"
-        }, 
+          "source": "GIBS:wms:antarctic"
+        },
         "arctic": {
-          "source": "GIBS:wms"
-        }, 
+          "source": "GIBS:wms:arctic"
+        },
         "geographic": {
           "source": "GIBS:wms"
         }
-      }, 
+      },
       "palette": {
-        "id": "OrbitTracks_GPM_Ascending", 
+        "id": "OrbitTracks_GPM_Ascending",
         "immutable": true
-      }, 
+      },
       "tags": "tracks"
     }
   }
