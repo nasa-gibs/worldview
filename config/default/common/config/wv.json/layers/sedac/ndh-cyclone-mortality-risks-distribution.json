@@ -16,7 +16,7 @@
 
             "projections": {
                 "geographic": {
-                    "source": "SEDAC:wms"
+                    "source": "GIBS:wms"
                 }
             },
 
