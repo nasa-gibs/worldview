@@ -120,6 +120,7 @@ import '../css/fonts.css';
 import '../css/reset.css';
 import '../css/compare.css';
 import '../css/jquery-ui-override.css';
+import '../css/nouislider-override.css';
 import '../css/util.css';
 import '../css/toolbar.css';
 import '../css/alert.css';
