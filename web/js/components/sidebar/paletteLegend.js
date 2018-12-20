@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
-import { drawPaletteOnCanvas } from '../../modules/palettes/util';
+import { drawPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
+import lodashIsEqual from 'lodash/isEqual';
 import lodashIsNumber from 'lodash/isNumber';
 
 class PaletteLegend extends React.Component {
@@ -136,10 +137,17 @@ class PaletteLegend extends React.Component {
             // This value is needed for calculating running data offsets
             this.setState({ width: newWidth });
           }
+          let ctx = this[ctxStr].current.getContext('2d');
           drawPaletteOnCanvas(
-            this[ctxStr].current.getContext('2d'),
+            ctx,
             checkerBoardPattern,
             colorMap.colors,
+            width,
+            height
+          );
+          drawTicksOnCanvas(
+            ctx,
+            colorMap,
             width,
             height
           );
@@ -246,8 +254,8 @@ class PaletteLegend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-          ''
-        )}
+            ''
+          )}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
@@ -347,9 +355,9 @@ class PaletteLegend extends React.Component {
               {isEndOfRow ? (
                 <div className="wv-running-category-label-case">
                   {isRunningData &&
-                  legendObj &&
-                  (legendObj.index >= rowEndIndex && // legend is in this row
-                    legendObj.index <= index) ? (
+                    legendObj &&
+                    (legendObj.index >= rowEndIndex && // legend is in this row
+                      legendObj.index <= index) ? (
                       <span
                         className="wv-running-category-label"
                         style={this.getClassLabelStyle(
@@ -367,8 +375,8 @@ class PaletteLegend extends React.Component {
                     )}
                 </div>
               ) : (
-                ''
-              )}
+                  ''
+                )}
             </React.Fragment>
           );
         })}
