@@ -1,18 +1,13 @@
 import util from '../util/util';
 import wvui from '../ui/ui';
-var compareAlertBody =
-  '<h3 class="compare-dialog-header">What can I compare?</h3>' +
+const compareAlertBody =
+  '<div class="compare-dialog">' +
+  '<p>How to get started?</p>' +
   '<ul>' +
-  '<li>The same imagery at different times.</li>' +
-  '<li>The same time with different imagery products</li>' +
-  '<li>A mix of different times and layers</li>' +
-  '</ul>' +
-  '<p>You can toggle between three different comparison modes found at the base of the sidebar</p>' +
-  '<ul>' +
-  '<li>Swipe</li>' +
-  '<li>Opacity</li>' +
-  '<li>Spy</li>' +
-  '</ul>';
+  '<li class="compare-dialog-list-item"><p>Toggle between states by clicking the <b>A</b> or <b>B</b> tabs. Toggling a state on allows you to update the layers and date of that state.<p><img src="images/ab-tabs.png"/></li>' +
+  '<li class="compare-dialog-list-item"><p>There are now time sliders on the timeline. You can click on the deactivated time slider to toggle that state on and change the date.</p><img src="images/ab-picks.png"/></li>' +
+  '<li class="compare-dialog-list-item"><p>There are three compare modes. You can choose different modes using the selection at the bottom of the layer list.</p><img src="images/ab-modes.png"/></li>' +
+  '</ul></div>';
 
 export function compareUi(models, ui, config) {
   var self = {};
@@ -22,7 +17,7 @@ export function compareUi(models, ui, config) {
     if (!alertDialog) {
       alertDialog = wvui.alert(
         compareAlertBody,
-        'You are in comparison mode',
+        'You are now in comparison mode',
         800,
         'warning',
         function() {

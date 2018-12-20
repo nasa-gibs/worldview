@@ -101,3 +101,19 @@
   padding: 2px;
   margin-left: -4px;
 }
+.compare-dialog ul {
+  display: flex;
+}
+.compare-dialog .compare-dialog-list-item {
+  flex: 0 32%;
+  margin: 0 auto;
+  list-style: none;
+}
+.compare-dialog p {
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.compare-dialog img {
+  display: block;
+  max-width: 100%;
+}
