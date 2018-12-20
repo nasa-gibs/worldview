@@ -2,7 +2,6 @@
     "layers": {
         "grand-v1-reservoirs-rev01": {
             "id":       "grand-v1-reservoirs-rev01",
-            "layer":    "grand-v1:grand-v1-reservoirs-rev01",
             "title":    "Reservoirs",
             "subtitle": "SEDAC Global Reservoir and Dam Database (GRanD), v 1.1",
             "description": "sedac/grand-v1-reservoirs-rev01",
@@ -17,10 +16,10 @@
 
             "projections": {
                 "arctic": {
-                    "source": "SEDAC:wms"
+                    "source": "GIBS:wms:arctic"
                 },
                 "geographic": {
-                    "source": "SEDAC:wms"
+                    "source": "GIBS:wms"
                 }
             },
 

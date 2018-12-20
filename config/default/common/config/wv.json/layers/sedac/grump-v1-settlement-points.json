@@ -2,7 +2,6 @@
     "layers": {
         "grump-v1-settlement-points": {
             "id":       "grump-v1-settlement-points",
-            "layer":    "grump-v1:grump-v1-settlement-points",
             "title":    "Settlements",
             "subtitle": "SEDAC Global Rural-Urban Mapping Project (GRUMP), v1",
             "description": "sedac/grump-v1-settlement-points",
@@ -18,10 +17,10 @@
 
             "projections": {
                 "arctic": {
-                    "source": "SEDAC:wms"
+                    "source": "GIBS:wms:arctic"
                 },
                 "geographic": {
-                    "source": "SEDAC:wms"
+                    "source": "GIBS:wms"
                 }
             },
 
