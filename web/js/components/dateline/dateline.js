@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import util from '../../util/util';
 /*
  * A react component, Builds a SVG line who's dimensions and styles
  * are customizable
@@ -86,7 +86,10 @@ class Line extends React.Component {
           strokeWidth={this.props.strokeWidth}
           stroke={this.props.color}
           opacity={
-            this.state.hovered && this.state.active ? this.props.opacity : '0'
+            (this.state.hovered && this.state.active) ||
+            (this.state.active && util.browser.mobileDevice)
+              ? this.props.opacity
+              : '0'
           }
           x1={this.props.strokeWidth / 2}
           x2={this.props.strokeWidth / 2}
