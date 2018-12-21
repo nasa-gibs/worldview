@@ -288,7 +288,7 @@ export function dataModel(models, config) {
 
   self.load = function(state, errors) {
     var productId = state.download;
-    if (productId) {
+    if (productId && !util.browser.small && !util.browser.mobileDevice) {
       var found = lodashFind(models.layers[models.layers.activeLayers], {
         product: productId
       });
