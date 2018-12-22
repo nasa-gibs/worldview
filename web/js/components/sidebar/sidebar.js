@@ -10,6 +10,7 @@ import { SidebarProvider as Provider } from './provider';
 import CollapsedButton from './collapsed-button';
 import NavCase from './nav/nav-case';
 import googleTagManager from 'googleTagManager';
+import util from '../../util/util';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -188,6 +189,7 @@ class Sidebar extends React.Component {
       compareFeature,
       tabTypes
     } = this.props;
+    const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     return (
       <Provider
         palettePromise={palettePromise}
@@ -207,6 +209,7 @@ class Sidebar extends React.Component {
           title="Click to Reset Worldview to Defaults"
           id="wv-logo"
           ref={iconElement => (this.iconElement = iconElement)}
+          onWheel={wheelCallBack}
         />
         <CollapsedButton
           isCollapsed={isCollapsed}
@@ -229,6 +232,7 @@ class Sidebar extends React.Component {
               ? { maxHeight: '0' }
               : { maxHeight: windowHeight + 'px' }
           }
+          onWheel={wheelCallBack}
         >
           <NavCase
             tabTypes={tabTypes}
@@ -267,13 +271,7 @@ class Sidebar extends React.Component {
                 tabTypes={tabTypes}
               />
             </TabPane>
-            <footer
-              ref={footerElement => (this.footerElement = footerElement)}
-              onWheel={e => {
-                e.stopPropagation();
-                e.preventDefault();
-              }}
-            >
+            <footer ref={footerElement => (this.footerElement = footerElement)}>
               <FooterContent
                 showListAllButton={showListAllButton}
                 isCompareMode={isCompareMode}

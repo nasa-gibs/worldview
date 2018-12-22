@@ -71,7 +71,12 @@ export default (function (self) {
     }
     return value;
   };
-
+  self.preventPinch = function(e) {
+    if (e.deltaY && !Number.isInteger(e.deltaY)) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  };
   /**
    * Creates an object representation of a query string.
    *
