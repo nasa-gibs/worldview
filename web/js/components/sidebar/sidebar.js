@@ -48,6 +48,15 @@ class Sidebar extends React.Component {
   }
   componentDidMount() {
     this.updateDimensions();
+    // prevent browserzooming in safari
+    if (util.browser.safari) {
+      let onGestureCallback = e => {
+        e.preventDefault();
+        e.stopPropagation();
+      };
+      this.iconElement.addEventListener('gesturestart', onGestureCallback);
+      this.sideBarCase.addEventListener('gesturestart', onGestureCallback);
+    }
   }
   componentDidUpdate() {
     this.updateDimensions();
@@ -227,6 +236,9 @@ class Sidebar extends React.Component {
         <div
           id="productsHolder"
           className="products-holder-case"
+          ref={el => {
+            this.sideBarCase = el;
+          }}
           style={
             isCollapsed
               ? { maxHeight: '0' }
