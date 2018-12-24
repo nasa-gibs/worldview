@@ -175,7 +175,7 @@ class Layer extends React.Component {
                 <i
                   className={
                     isDisabled
-                      ? 'far fa-ban layer-eye-icon'
+                      ? 'fas fa-ban layer-eye-icon'
                       : !isVisible
                         ? 'far fa-eye-slash layer-eye-icon'
                         : 'far fa-eye layer-eye-icon'
