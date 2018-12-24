@@ -10,6 +10,7 @@ import { SidebarProvider as Provider } from './provider';
 import CollapsedButton from './collapsed-button';
 import NavCase from './nav/nav-case';
 import googleTagManager from 'googleTagManager';
+import util from '../../util/util';
 
 class Sidebar extends React.Component {
   constructor(props) {
@@ -47,6 +48,15 @@ class Sidebar extends React.Component {
   }
   componentDidMount() {
     this.updateDimensions();
+    // prevent browserzooming in safari
+    if (util.browser.safari) {
+      let onGestureCallback = e => {
+        e.preventDefault();
+        e.stopPropagation();
+      };
+      this.iconElement.addEventListener('gesturestart', onGestureCallback);
+      this.sideBarCase.addEventListener('gesturestart', onGestureCallback);
+    }
   }
   componentDidUpdate() {
     this.updateDimensions();
@@ -189,6 +199,7 @@ class Sidebar extends React.Component {
       tabTypes,
       getPalette
     } = this.props;
+    const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     return (
       <Provider
         palettePromise={palettePromise}
@@ -209,6 +220,7 @@ class Sidebar extends React.Component {
           title="Click to Reset Worldview to Defaults"
           id="wv-logo"
           ref={iconElement => (this.iconElement = iconElement)}
+          onWheel={wheelCallBack}
         />
         <CollapsedButton
           isCollapsed={isCollapsed}
@@ -218,19 +230,23 @@ class Sidebar extends React.Component {
               ? layers.baselayers.length + layers.overlays.length
               : isCompareA
                 ? firstDateObject.layers.overlays.length +
-                  firstDateObject.layers.baselayers.length
+                firstDateObject.layers.baselayers.length
                 : secondDateObject.layers.overlays.length +
-                  secondDateObject.layers.baselayers.length
+                secondDateObject.layers.baselayers.length
           }
         />
         <div
           id="productsHolder"
           className="products-holder-case"
+          ref={el => {
+            this.sideBarCase = el;
+          }}
           style={
             isCollapsed
               ? { maxHeight: '0' }
               : { maxHeight: windowHeight + 'px' }
           }
+          onWheel={wheelCallBack}
         >
           <NavCase
             tabTypes={tabTypes}

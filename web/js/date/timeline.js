@@ -216,6 +216,11 @@ export function timeline(models, config, ui) {
     models.layers.events.trigger('toggle-subdaily');
     subdaily = models.layers.hasSubDaily();
     drawContainers();
+    let timelineCase = document.getElementById('timeline');
+    timelineCase.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
 
     if (!models.anim) {
       // Hack: margin if anim is present
