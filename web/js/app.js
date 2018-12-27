@@ -91,6 +91,7 @@ import { projectionUi } from './projection/ui';
 
 // A|B comparison
 import { compareModel } from './compare/model';
+import { compareUi } from './compare/ui';
 // Other
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
@@ -496,7 +497,9 @@ class App extends React.Component {
       if (config.features.alert) {
         ui.alert = notificationsUi(ui, config);
       }
-
+      if (config.features.compare) {
+        ui.compare = compareUi(models, ui, config);
+      }
       // FIXME: Old hack
       $(window).resize(function() {
         if (util.browser.small) {

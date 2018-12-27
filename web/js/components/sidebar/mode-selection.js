@@ -26,7 +26,7 @@ class ModeSelection extends React.Component {
         <ButtonGroup size="sm">
           <Button
             id="compare-swipe-button"
-            className="compare-button"
+            className="compare-button compare-swipe-button"
             disabled={selected === 'swipe'}
             onClick={this.onclick.bind(this, 'swipe')}
           >
@@ -34,7 +34,7 @@ class ModeSelection extends React.Component {
           </Button>
           <Button
             id="compare-opacity-button"
-            className="compare-button"
+            className="compare-button compare-opacity-button"
             disabled={selected === 'opacity'}
             onClick={this.onclick.bind(this, 'opacity')}
           >
@@ -42,7 +42,7 @@ class ModeSelection extends React.Component {
           </Button>
           <Button
             id="compare-spy-button"
-            className="compare-button"
+            className="compare-button compare-spy-button"
             disabled={selected === 'spy'}
             onClick={this.onclick.bind(this, 'spy')}
           >

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InputRange from 'react-input-range';
+import RangeInput from '../util/range-input';
+import lodashDebounce from 'lodash/debounce';
 
 /*
  * A react component, Builds a rather specific
@@ -15,8 +16,12 @@ class OpacitySlider extends React.Component {
     this.state = {
       value: props.value
     };
+    this.debounceOpacityUpdate = lodashDebounce(this.onUpdate.bind(this), 100);
   }
-
+  onUpdate(arra) {
+    const value = Math.ceil(arra[0]);
+    this.props.onSlide(value);
+  }
   /*
    * Sets a new state value when a
    * when the slider is adjusted
@@ -28,7 +33,8 @@ class OpacitySlider extends React.Component {
    *
    * @return {void}
    */
-  onSlide(value) {
+  onSlide(arra) {
+    const value = Math.ceil(arra[0]);
     this.props.onSlide(value);
     this.setState({
       value: value
@@ -38,17 +44,21 @@ class OpacitySlider extends React.Component {
   render() {
     return (
       <div id="ab-slider-case" className="ab-slider-case">
-        <span className="wv-slider-label left">A</span>
-        <InputRange
-          step={5}
-          maxValue={100}
-          minValue={0}
-          value={this.state.value}
-          formatLabel={() => ''}
-          onChange={this.onSlide.bind(this)}
-          onChangeComplete={this.props.onSlideEnd}
-        />
-        <span className="wv-slider-label right">B</span>
+        <label className="wv-slider-label left">
+          <h4>A</h4>
+        </label>
+        <div className="input-range ">
+          <RangeInput
+            start={[this.state.value]}
+            range={{ min: 0, max: 100 }}
+            step={1}
+            onUpdate={this.debounceOpacityUpdate}
+            onSlide={this.onSlide.bind(this)}
+          />
+        </div>
+        <label className="wv-slider-label right">
+          <h4>B</h4>
+        </label>
       </div>
     );
   }

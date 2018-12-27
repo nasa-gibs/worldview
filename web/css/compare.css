@@ -9,15 +9,22 @@
 }
 .ab-swipe-dragger {
   position: absolute;
-  top: 50%;
+  bottom: 30%;
+  width: 65px;
+  height: 65px;
+  margin-top: -45px;
+  border-radius: 50%;
+  left: -30px;
+  text-align: center;
+}
+.ab-swipe-dragger .swipe-dragger-circle {
   width: 45px;
   height: 45px;
-  margin-top: -35px;
-  left: -20px;
+  left: -25px;
   border-radius: 50%;
-  color: #000;
   background: #fff;
-  text-align: center;
+  color: #000;
+  margin: 10px;
 }
 .ab-swipe-dragger:hover {
   transform: scale(1.2);
@@ -39,26 +46,29 @@
   left: 0;
   right: 0;
   bottom: 25%;
-  width: 216px;
+  width: 232px;
   text-align: center;
   background: rgba(40, 40, 40, 0.85);
   border-radius: 3px;
   color: #fff;
-  height: 33px;
+  height: 46px;
 }
 .ab-slider-case .input-range {
-  width: 156px;
+  width: 146px;
   display: inline-block;
-  margin: 15px 10px;
-  vertical-align: top;
+  margin: 14px 17px;
 }
 .ab-slider-case .wv-slider-label {
   display: inline-block;
   vertical-align: top;
-  margin-top: 10px;
+  margin-top: 17px;
   width: 15px;
   font-size: 16px;
   text-align: center;
+}
+.ab-slider-case .wv-slider-label h4 {
+  font-weight: 700;
+  font-size: 16px;
 }
 .ab-slider-case .input-range__slider {
   height: 20px;
@@ -68,7 +78,7 @@
 }
 .ab-swipe-line .ab-swipe-span {
   position: absolute;
-  top: 55%;
+  bottom: 25%;
   padding: 2px;
   background: #fff;
   color: #000;
@@ -90,4 +100,20 @@
   border: 1px solid #000;
   padding: 2px;
   margin-left: -4px;
+}
+.compare-dialog ul {
+  display: flex;
+}
+.compare-dialog .compare-dialog-list-item {
+  flex: 0 32%;
+  margin: 0 auto;
+  list-style: none;
+}
+.compare-dialog p {
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.compare-dialog img {
+  display: block;
+  max-width: 100%;
 }

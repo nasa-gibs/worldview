@@ -130,11 +130,13 @@ export class Swipe {
 var addLineOverlay = function(map) {
   var lineCaseEl = document.createElement('div');
   var draggerEl = document.createElement('div');
+  var draggerCircleEl = document.createElement('div');
   var iconEl = document.createElement('i');
   var firstLabel = document.createElement('span');
   var secondLabel = document.createElement('span');
   var windowWidth = util.browser.dimensions[0];
   mapCase = map.getTargetElement();
+  draggerCircleEl.className = 'swipe-dragger-circle';
   firstLabel.className = 'ab-swipe-span left-label';
   secondLabel.className = 'ab-swipe-span right-label';
   firstLabel.appendChild(document.createTextNode('A'));
@@ -145,7 +147,8 @@ var addLineOverlay = function(map) {
   lineCaseEl.className = 'ab-swipe-line';
   lineCaseEl.appendChild(firstLabel);
   lineCaseEl.appendChild(secondLabel);
-  draggerEl.appendChild(iconEl);
+  draggerEl.appendChild(draggerCircleEl);
+  draggerCircleEl.appendChild(iconEl);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe
