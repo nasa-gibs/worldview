@@ -102,7 +102,7 @@ export default class gifWriter {
 
     return new ReadableStream({
       start: function start(controller) {
-        controller.enqueue(buf);
+        controller.enqueue(new Uint8Array(buf));
       },
       pull: function pull(controller) {
         return reader.read().then(function (_ref2) {
@@ -110,8 +110,7 @@ export default class gifWriter {
               value = _ref2.value;
 
           if (done) {
-            buf[p++] = 0x3b;
-            controller.enqueue(buf);
+            controller.enqueue(new Uint8Array([0x3b]));
             controller.close();
             return;
           }
@@ -220,7 +219,7 @@ export default class gifWriter {
 
     p = GifWriterOutputLZWCodeStream(
       buf, p, min_code_size < 2 ? 2 : min_code_size, indexed_pixels);
-    controller.enqueue(buf);
+    controller.enqueue(new Uint8Array(buf));
   };
 }
 // Main compression routine, palette indexes -> LZW code stream.
@@ -374,4 +373,3 @@ function check_palette_and_num_colors(palette) {
     throw "Invalid code/color length, must be power of 2 and 2 .. 256.";
   return num_colors;
 }
-
