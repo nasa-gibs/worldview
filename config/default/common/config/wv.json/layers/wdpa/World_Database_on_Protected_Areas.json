@@ -12,7 +12,7 @@
       "tileSize": [512, 512],
       "type": "wms",
       "layergroup": ["wdpa"],
-      "wrapadjacentdays": true,
+      "wrapX": true,
       "projections": {
         "geographic": {
           "source": "WDPA:wms"
