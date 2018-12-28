@@ -79,7 +79,8 @@ import { notificationsUi } from './notifications/ui';
 
 // UI
 import loadingIndicator from './ui/indicator';
-
+// Toolbar
+import Toolbar from './containers/toolbar';
 // Link
 import { linkModel } from './link/model';
 import { linkUi } from './link/ui';
@@ -92,6 +93,9 @@ import { projectionUi } from './projection/ui';
 // A|B comparison
 import { compareModel } from './compare/model';
 import { compareUi } from './compare/ui';
+
+// Modal
+import Modal from './containers/modal';
 // Other
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
@@ -166,15 +170,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="wv-content" data-role="content">
-        <ul id="wv-toolbar">
-          <li id="wv-link-button" className="wv-toolbar-button" />
-          <li id="wv-proj-button" className="wv-toolbar-button" />
-          <li id="wv-image-button" className="wv-toolbar-button" />
-          <li
-            id="wv-info-button"
-            className="wv-toolbar-button wv-status-hide"
-          />
-        </ul>
+        <Toolbar />
         <section id="wv-sidebar" />
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
@@ -277,6 +273,7 @@ class App extends React.Component {
           </div>
         </section>
         <OlCoordinates mouseEvents={this.mapMouseEvents} />
+        <Modal />
       </div>
     );
   }
