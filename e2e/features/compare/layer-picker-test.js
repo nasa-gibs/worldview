@@ -1,7 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localSelectors = require('./selectors.js');
-const layerSelectors = require('../layers/selectors.js');
-const localQuerystrings = require('./querystrings.js');
+const selectors = require('../../reuseables/selectors.js');
+const localQuerystrings = require('../../reuseables/querystrings.js');
 const aodCheckBox =
   '#checkbox-case-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly .wv-checkbox';
 const aodIndexCheckbox = '#checkbox-case-OMI_Aerosol_Index .wv-checkbox';
@@ -13,22 +12,22 @@ module.exports = {
   'Add AOD Layer to Layer Group A': function(client) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
     client.waitForElementVisible(
-      localSelectors.swipeDragger,
+      selectors.swipeDragger,
       TIME_LIMIT,
       function() {
-        client.click(layerSelectors.addLayers);
+        client.click(selectors.addLayers);
         client.waitForElementVisible(
-          layerSelectors.aerosolOpticalDepth,
+          selectors.aerosolOpticalDepth,
           TIME_LIMIT,
           function() {
-            client.click(layerSelectors.aerosolOpticalDepth);
+            client.click(selectors.aerosolOpticalDepth);
             client.waitForElementVisible(aodCheckBox, 20000, function() {
               client.click(aodCheckBox);
               client.waitForElementVisible(
                 '#active-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly',
                 TIME_LIMIT
               );
-              client.click(layerSelectors.layersModalCloseButton);
+              client.click(selectors.layersModalCloseButton);
             });
           }
         );
@@ -36,7 +35,7 @@ module.exports = {
     );
   },
   'Toggle compare mode to Active state B': function(client) {
-    client.click(localSelectors.bTab);
+    client.click(selectors.bTab);
     client.waitForElementVisible('#activeB-Coastlines', TIME_LIMIT);
   },
   'Verify that AOD layer is not visible': function(client) {
@@ -47,9 +46,9 @@ module.exports = {
   'Add AOD index layer to Active state B and verify it has been added': function(
     client
   ) {
-    client.click(layerSelectors.addLayers);
+    client.click(selectors.addLayers);
     client.waitForElementVisible(
-      layerSelectors.aerosolOpticalDepth,
+      selectors.aerosolOpticalDepth,
       TIME_LIMIT,
       function() {
         client.click(
@@ -74,9 +73,9 @@ module.exports = {
   'Verify that AOD green is visible and AOD index is not present in Layer list A': function(
     client
   ) {
-    client.click(layerSelectors.layersModalCloseButton);
+    client.click(selectors.layersModalCloseButton);
     client.pause(100);
-    client.click(localSelectors.aTab);
+    client.click(selectors.aTab);
     client.waitForElementVisible(
       '#active-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly',
       TIME_LIMIT,

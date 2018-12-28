@@ -1,5 +1,5 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localSelectors = require('./selectors.js');
+const localSelectors = require('../../reuseables/selectors.js');
 const TIME_LIMIT = 10000;
 
 module.exports = {
