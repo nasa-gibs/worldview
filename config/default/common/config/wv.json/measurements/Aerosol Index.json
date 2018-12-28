@@ -13,7 +13,7 @@
                     "settings": [
                         "OMI_Aerosol_Index",
                         "OMI_UV_Aerosol_Index",
-                        "Aura_Orbit_Asc"
+                        "OrbitTracks_Aura_Ascending"
                     ]
                 },
                 "Suomi NPP/OMPS": {
@@ -24,7 +24,7 @@
                     "settings": [
                         "OMPS_Aerosol_Index",
                         "OMPS_Aerosol_Index_PyroCumuloNimbus",
-                        "Suomi_NPP_Orbit_Asc"
+                        "OrbitTracks_Suomi_NPP_Ascending"
                     ]
                 }
             }

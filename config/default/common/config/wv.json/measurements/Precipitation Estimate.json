@@ -13,8 +13,8 @@
                     "settings": [
                         "AIRS_Precipitation_Day",
                         "AIRS_Precipitation_Night",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 }
             }

@@ -17,8 +17,8 @@
                         "AMSRE_Brightness_Temp_89V_Night",
                         "AMSRE_Sea_Ice_Brightness_Temp_89H",
                         "AMSRE_Sea_Ice_Brightness_Temp_89V",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Aqua/MODIS": {
@@ -29,8 +29,8 @@
                     "settings": [
                         "MODIS_Aqua_Brightness_Temp_Band31_Day",
                         "MODIS_Aqua_Brightness_Temp_Band31_Night",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -41,8 +41,8 @@
                     "settings": [
                         "MODIS_Terra_Brightness_Temp_Band31_Day",
                         "MODIS_Terra_Brightness_Temp_Band31_Night",
-                        "Terra_Orbit_Asc",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
                     ]
                 },
                 "GCOM-W1/AMSR2": {
@@ -53,8 +53,8 @@
                     "settings": [
                         "AMSRU2_Sea_Ice_Brightness_Temp_89H",
                         "AMSRU2_Sea_Ice_Brightness_Temp_89V",
-                        "GCOM_W1_Orbit_Asc",
-                        "GCOM_W1_Orbit_Dsc"
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
                     ]
                 },
                 "GPM/GMI": {
@@ -65,8 +65,8 @@
                     "settings": [
                         "GMI_Brightness_Temp_Asc",
                         "GMI_Brightness_Temp_Dsc",
-                        "GPM_Orbit_Asc",
-                        "GPM_Orbit_Dsc"
+                        "OrbitTracks_GPM_Ascending",
+                        "OrbitTracks_GPM_Descending"
                     ]
                 },
                 "SMAP/Radar/Radiometer": {
@@ -77,8 +77,8 @@
                     "settings": [
                         "SMAP_L3_Active_Passive_Brightness_Temp_H",
 			                  "SMAP_L3_Active_Passive_Brightness_Temp_V",
-                        "SMAP_Orbit_Asc",
-                        "SMAP_Orbit_Dsc"
+                        "OrbitTracks_SMAP_Ascending",
+                        "OrbitTracks_SMAP_Descending"
 		    ]
 		},
                 "SMAP/Radiometer": {
@@ -113,8 +113,8 @@
                         "SMAP_L1_Passive_Brightness_Temp_Aft_V_QA",
                         "SMAP_L3_Passive_Brightness_Temp_H",
                         "SMAP_L3_Passive_Brightness_Temp_V",
-                        "SMAP_Orbit_Asc",
-                        "SMAP_Orbit_Dsc"
+                        "OrbitTracks_SMAP_Ascending",
+                        "OrbitTracks_SMAP_Descending"
                     ]
                 },
                 "SNPP/VIIRS": {
@@ -125,8 +125,8 @@
                     "settings": [
                         "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
                         "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
-                        "Suomi_NPP_Orbit_Asc",
-                        "Suomi_NPP_Orbit_Dsc"
+                        "OrbitTracks_Suomi_NPP_Ascending",
+                        "OrbitTracks_Suomi_NPP_Descending"
                     ]
                 },
                 "AMSU-A/NOAA-15": {

@@ -20,8 +20,8 @@
                         "SMAP_L3_Active_Sigma0_HH_QA",
                         "SMAP_L3_Active_Sigma0_VV_QA",
                         "SMAP_L3_Active_Sigma0_XPOL_QA",
-                        "SMAP_Orbit_Asc",
-                        "SMAP_Orbit_Dsc"
+                        "OrbitTracks_SMAP_Ascending",
+                        "OrbitTracks_SMAP_Descending"
                     ]
                 }
             }

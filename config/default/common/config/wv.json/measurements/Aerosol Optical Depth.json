@@ -14,7 +14,7 @@
                         "OMI_Aerosol_Optical_Depth",
                         "OMI_Absorbing_Aerosol_Optical_Depth",
                         "OMI_Absorbing_Aerosol_Optical_Thickness_MW_388",
-                        "Aura_Orbit_Asc"
+                        "OrbitTracks_Aura_Ascending"
                     ]
                 },
                 "Aqua/MODIS": {
@@ -29,7 +29,7 @@
                         "MODIS_Aqua_Angstrom_Exponent_Ocean",
                         "MODIS_Aqua_AOD_Deep_Blue_Land",
                         "MODIS_Aqua_AOD_Deep_Blue_Combined",
-                        "Aqua_Orbit_Asc"
+                        "OrbitTracks_Aqua_Ascending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -44,7 +44,7 @@
                         "MODIS_Terra_Angstrom_Exponent_Ocean",
                         "MODIS_Terra_AOD_Deep_Blue_Land",
                         "MODIS_Terra_AOD_Deep_Blue_Combined",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Descending"
                     ]
                 },
                 "Aqua and Terra/MODIS": {

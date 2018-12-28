@@ -13,8 +13,8 @@
                     "settings": [
                         "MLS_O3_46hPa_Day",
                         "MLS_O3_46hPa_Night",
-                        "Aura_Orbit_Asc",
-                        "Aura_Orbit_Dsc"
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
                     ]
                 },
                 "Aura/OMI": {
@@ -25,7 +25,7 @@
                     "settings": [
                         "OMI_Ozone_DOAS_Total_Column",
                         "OMI_Ozone_TOMS_Total_Column",
-                        "Aura_Orbit_Asc"
+                        "OrbitTracks_Aura_Ascending"
                     ]
                 },
                 "Suomi NPP/OMPS": {

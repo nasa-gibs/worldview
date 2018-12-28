@@ -13,8 +13,8 @@
                     "settings": [
                         "SMAP_L1_Passive_Faraday_Rotation_Aft",
                         "SMAP_L1_Passive_Faraday_Rotation_Fore",
-                        "SMAP_Orbit_Asc",
-                        "SMAP_Orbit_Dsc"
+                        "OrbitTracks_SMAP_Ascending",
+                        "OrbitTracks_SMAP_Descending"
                     ]
                 }
             }

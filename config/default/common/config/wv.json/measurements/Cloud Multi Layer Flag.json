@@ -12,7 +12,7 @@
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Cloud_Multi_Layer_Flag",
-                        "Aqua_Orbit_Asc"
+                        "OrbitTracks_Aqua_Ascending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -22,7 +22,7 @@
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Cloud_Multi_Layer_Flag",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Descending"
                     ]
                 }
             }

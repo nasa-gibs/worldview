@@ -12,7 +12,7 @@
                     "image": "",
                     "settings": [
                         "OMI_Single_Scattering_Albedo",
-                        "Aura_Orbit_Asc"
+                        "OrbitTracks_Aura_Ascending"
                     ]
                 }
             }

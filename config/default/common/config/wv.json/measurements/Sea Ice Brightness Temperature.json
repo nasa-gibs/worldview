@@ -17,8 +17,8 @@
                             "AMSRE_Brightness_Temp_89V_Night",
                             "AMSRE_Sea_Ice_Brightness_Temp_89H",
                             "AMSRE_Sea_Ice_Brightness_Temp_89V",
-                            "Aqua_Orbit_Asc",
-                            "Aqua_Orbit_Dsc"
+                            "OrbitTracks_Aqua_Ascending",
+                            "OrbitTracks_Aqua_Descending"
                         ]
                     },
                 "GCOM-W1/AMSR2": {
@@ -29,8 +29,8 @@
                     "settings": [
                         "AMSRU2_Sea_Ice_Brightness_Temp_89H",
                         "AMSRU2_Sea_Ice_Brightness_Temp_89V",
-                        "GCOM_W1_Orbit_Asc",
-                        "GCOM_W1_Orbit_Dsc"
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
                     ]
                   }
             }

@@ -11,11 +11,11 @@
                     "description": "sedac/MammalRichness",
                     "image": "",
                     "settings": [
-                        "Mammal_Richness_All_Species_2013",
-                        "Mammal_Richness_All_Threats_2013",
-                        "Mammal_Richness_Critically_Endangered_Species_2013",
-                        "Mammal_Richness_Endangered_Species_2013",
-                        "Mammal_Richness_Vulnerable_Species_2013"
+                        "Mammal_Richness_Grids_All_Species_2013",
+                        "Mammal_Richness_Grids_All_Threats_2013",
+                        "Mammal_Richness_Grids_Critically_Endangered_Species_2013",
+                        "Mammal_Richness_Grids_Endangered_Species_2013",
+                        "Mammal_Richness_Grids_Vulnerable_Species_2013"
                     ]
                 }
             }
