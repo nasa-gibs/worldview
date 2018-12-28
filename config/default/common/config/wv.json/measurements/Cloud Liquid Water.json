@@ -13,8 +13,8 @@
                     "settings": [
                         "AMSR2_Cloud_Liquid_Water_Day",
                         "AMSR2_Cloud_Liquid_Water_Night",
-                        "GCOM_W1_Orbit_Asc",
-                        "GCOM_W1_Orbit_Dsc"
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
                     ]
                 },
                 "DMSP-F08/SSMI": {

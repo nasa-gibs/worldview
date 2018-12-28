@@ -11,8 +11,8 @@
                     "description": "reference/orbits/Terra",
                     "image": "",
                     "settings": [
-                        "Terra_Orbit_Asc",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
                     ]
                 },
                 "Aqua / Space-Track.org": {
@@ -21,8 +21,8 @@
                     "description": "reference/orbits/Aqua",
                     "image": "",
                     "settings": [
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Aura / Space-Track.org": {
@@ -31,8 +31,8 @@
                     "description": "reference/orbits/Aura",
                     "image": "",
                     "settings": [
-                        "Aura_Orbit_Asc",
-                        "Aura_Orbit_Dsc"
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
                     ]
                 },
                 "CALIPSO / Space-Track.org": {
@@ -41,8 +41,8 @@
                     "description": "reference/orbits/CALIPSO",
                     "image": "",
                     "settings": [
-                        "Calipso_Orbit_Asc",
-                        "Calipso_Orbit_Dsc"
+                        "OrbitTracks_Calipso_Ascending",
+                        "OrbitTracks_Calipso_Descending"
                     ]
                 },
                 "GPM / Space-Track.org": {
@@ -51,8 +51,8 @@
                     "description": "reference/orbits/GPM",
                     "image": "",
                     "settings": [
-                        "GPM_Orbit_Asc",
-                        "GPM_Orbit_Dsc"
+                        "OrbitTracks_GPM_Ascending",
+                        "OrbitTracks_GPM_Descending"
                     ]
                 },
                 "GCOM-W1 / Space-Track.org": {
@@ -61,8 +61,8 @@
                     "description": "reference/orbits/GCOM-W1",
                     "image": "",
                     "settings": [
-                        "GCOM_W1_Orbit_Asc",
-                        "GCOM_W1_Orbit_Dsc"
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
                     ]
                 },
                 "GCOM-C / Space-Track.org": {
@@ -71,8 +71,8 @@
                     "description": "reference/orbits/GCOM-C",
                     "image": "",
                     "settings": [
-                        "GCOM_C_Orbit_Asc",
-                        "GCOM_C_Orbit_Dsc"
+                        "OrbitTracks_GCOM-C_Ascending",
+                        "OrbitTracks_GCOM-C_Descending"
                     ]
                 },
                 "Sentinel-2A / Space-Track.org": {
@@ -81,8 +81,8 @@
                     "description": "reference/orbits/Sentinel_2A",
                     "image": "",
                     "settings": [
-                        "Sentinel_2A_Orbit_Asc",
-                        "Sentinel_2A_Orbit_Dsc"
+                        "OrbitTracks_Sentinel-2A_Ascending",
+                        "OrbitTracks_Sentinel-2A_Descending"
                     ]
                 },
                 "Sentinel-2B / Space-Track.org": {
@@ -91,8 +91,8 @@
                     "description": "reference/orbits/Sentinel_2B",
                     "image": "",
                     "settings": [
-                        "Sentinel_2B_Orbit_Asc",
-                        "Sentinel_2B_Orbit_Dsc"
+                        "OrbitTracks_Sentinel-2B_Ascending",
+                        "OrbitTracks_Sentinel-2B_Descending"
                     ]
                 },
                 "Sentinel-5P / Space-Track.org": {
@@ -101,8 +101,8 @@
                     "description": "reference/orbits/Sentinel_5P",
                     "image": "",
                     "settings": [
-                        "Sentinel_5P_Orbit_Asc",
-                        "Sentinel_5P_Orbit_Dsc"
+                        "OrbitTracks_Sentinel-5P_Ascending",
+                        "OrbitTracks_Sentinel-5P_Descending"
                     ]
                 },
                 "Suomi-NPP / Space-Track.org": {
@@ -111,8 +111,8 @@
                     "description": "reference/orbits/SNPP",
                     "image": "",
                     "settings": [
-                        "Suomi_NPP_Orbit_Asc",
-                        "Suomi_NPP_Orbit_Dsc"
+                        "OrbitTracks_Suomi_NPP_Ascending",
+                        "OrbitTracks_Suomi_NPP_Descending"
                     ]
                 },
                 "NOAA-20 / Space-Track.org": {
@@ -121,8 +121,8 @@
                     "description": "reference/orbits/NOAA_20",
                     "image": "",
                     "settings": [
-                        "NOAA_20_Orbit_Asc",
-                        "NOAA_20_Orbit_Dsc"
+                        "OrbitTracks_NOAA-20_Ascending",
+                        "OrbitTracks_NOAA-20_Descending"
                     ]
                 },
                 "SMAP / Space-Track.org": {
@@ -131,8 +131,8 @@
                     "description": "reference/orbits/SMAP",
                     "image": "",
                     "settings": [
-                        "SMAP_Orbit_Asc",
-                        "SMAP_Orbit_Dsc"
+                        "OrbitTracks_SMAP_Ascending",
+                        "OrbitTracks_SMAP_Descending"
                     ]
                 },
                 "Landsat 7 / Space-Track.org": {
@@ -141,8 +141,8 @@
                     "description": "reference/orbits/Landsat_7",
                     "image": "",
                     "settings": [
-                        "Landsat_7_Orbit_Asc",
-                        "Landsat_7_Orbit_Dsc"
+                        "OrbitTracks_Landsat-7_Ascending",
+                        "OrbitTracks_Landsat-7_Descending"
                     ]
                 },
                 "Landsat 8 / Space-Track.org": {
@@ -151,8 +151,8 @@
                     "description": "reference/orbits/Landsat_8",
                     "image": "",
                     "settings": [
-                        "Landsat_8_Orbit_Asc",
-                        "Landsat_8_Orbit_Dsc"
+                        "OrbitTracks_Landsat-8_Ascending",
+                        "OrbitTracks_Landsat-8_Descending"
                     ]
                 },
                 "ISS / Space-Track.org": {
@@ -161,8 +161,8 @@
                     "description": "reference/orbits/ISS",
                     "image": "",
                     "settings": [
-                        "ISS_Orbit_Asc",
-                        "ISS_Orbit_Dsc"
+                        "OrbitTracks_ISS_Ascending",
+                        "OrbitTracks_ISS_Descending"
                     ]
                 },
                 "GOSAT / Space-Track.org": {
@@ -171,8 +171,8 @@
                     "description": "reference/orbits/GOSAT",
                     "image": "",
                     "settings": [
-                        "GOSAT_Orbit_Asc",
-                        "GOSAT_Orbit_Dsc"
+                        "OrbitTracks_GOSAT_Ascending",
+                        "OrbitTracks_GOSAT_Descending"
                     ]
                 }
             }

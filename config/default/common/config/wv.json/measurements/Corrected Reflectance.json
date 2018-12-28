@@ -13,7 +13,7 @@
                     "settings": [
                         "MODIS_Aqua_CorrectedReflectance_TrueColor",
                         "MODIS_Aqua_CorrectedReflectance_Bands721",
-                        "Aqua_Orbit_Asc"
+                        "OrbitTracks_Aqua_Ascending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -25,7 +25,7 @@
                         "MODIS_Terra_CorrectedReflectance_TrueColor",
                         "MODIS_Terra_CorrectedReflectance_Bands367",
                         "MODIS_Terra_CorrectedReflectance_Bands721",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Descending"
                     ]
                 },
                 "SNPP/VIIRS": {
@@ -37,7 +37,7 @@
                 	"VIIRS_SNPP_CorrectedReflectance_TrueColor",
                 	"VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
                 	"VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
-                        "Suomi_NPP_Orbit_Asc"
+                        "OrbitTracks_Suomi_NPP_Ascending"
                     ]
                 },
                 "Landsat/WELD": {

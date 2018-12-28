@@ -12,8 +12,8 @@
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Sea_Ice",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -23,8 +23,8 @@
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Sea_Ice",
-                        "Terra_Orbit_Dsc",
-                        "Terra_Orbit_Asc"
+                        "OrbitTracks_Terra_Descending",
+                        "OrbitTracks_Terra_Ascending"
                     ]
                 },
                 "Aqua/AMSR-E": {
@@ -35,8 +35,8 @@
                     "settings": [
                         "AMSRE_Sea_Ice_Concentration_12km",
                         "AMSRE_Sea_Ice_Concentration_25km",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "GCOM-W1/AMSR2": {
@@ -47,8 +47,8 @@
                     "settings": [
                         "AMSRU2_Sea_Ice_Concentration_12km",
                         "AMSRU2_Sea_Ice_Concentration_25km",
-                        "GCOM_W1_Orbit_Asc",
-                        "GCOM_W1_Orbit_Dsc"
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
                     ]
                 },
                 "SSMI": {

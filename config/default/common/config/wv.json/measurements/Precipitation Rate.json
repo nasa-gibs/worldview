@@ -25,8 +25,8 @@
                         "GMI_Rain_Rate_Dsc",
                         "GMI_Snow_Rate_Asc",
                         "GMI_Snow_Rate_Dsc",
-                        "GPM_Orbit_Asc",
-                        "GPM_Orbit_Dsc"
+                        "OrbitTracks_GPM_Ascending",
+                        "OrbitTracks_GPM_Descending"
                     ]
                 },
                 "GCOM-W1/AMSR2": {
@@ -39,8 +39,8 @@
                         "AMSR2_Surface_Precipitation_Rate_Night",
                         "AMSR2_Surface_Rain_Rate_Day",
                         "AMSR2_Surface_Rain_Rate_Night",
-                        "GCOM_W1_Orbit_Asc",
-                        "GCOM_W1_Orbit_Dsc"
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
                     ]
                   },
                   "Aqua/AMSR-E": {
@@ -53,8 +53,8 @@
                           "AMSRE_Surface_Precipitation_Rate_Night",
                           "AMSRE_Surface_Rain_Rate_Day",
                           "AMSRE_Surface_Rain_Rate_Night",
-                          "Aqua_Orbit_Asc",
-                          "Aqua_Orbit_Dsc"
+                          "OrbitTracks_Aqua_Ascending",
+                          "OrbitTracks_Aqua_Descending"
                       ]
                 },
                 "DMSP-F08/SSMI": {

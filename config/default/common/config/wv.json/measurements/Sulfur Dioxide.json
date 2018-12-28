@@ -13,8 +13,8 @@
                     "settings": [
                         "AIRS_Prata_SO2_Index_Day",
                         "AIRS_Prata_SO2_Index_Night",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Aura/MLS": {
@@ -25,8 +25,8 @@
                     "settings": [
                         "MLS_SO2_147hPa_Day",
                         "MLS_SO2_147hPa_Night",
-                        "Aura_Orbit_Asc",
-                        "Aura_Orbit_Dsc"
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
                     ]
                 },
                 "Aura/OMI": {
@@ -39,7 +39,7 @@
                         "OMI_SO2_Middle_Troposphere",
                         "OMI_SO2_Upper_Troposphere_and_Stratosphere",
                         "OMI_SO2_Planetary_Boundary_Layer",
-                        "Aura_Orbit_Asc"
+                        "OrbitTracks_Aura_Ascending"
                     ]
                 },
                 "Suomi NPP/OMPS": {

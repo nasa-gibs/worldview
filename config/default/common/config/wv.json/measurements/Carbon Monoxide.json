@@ -17,8 +17,8 @@
                         "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Daily_Night",
                         "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Monthly_Day",
                         "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Monthly_Night",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Aura/MLS": {
@@ -29,8 +29,8 @@
                     "settings": [
                         "MLS_CO_215hPa_Day",
                         "MLS_CO_215hPa_Night",
-                        "Aura_Orbit_Asc",
-                        "Aura_Orbit_Dsc"
+                        "OrbitTracks_Aura_Ascending",
+                        "OrbitTracks_Aura_Descending"
                     ]
                 },
                 "Terra/MOPITT": {

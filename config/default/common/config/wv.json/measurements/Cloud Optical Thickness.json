@@ -13,7 +13,7 @@
                     "settings": [
                         "MODIS_Aqua_Cloud_Optical_Thickness",
                         "MODIS_Aqua_Cloud_Optical_Thickness_PCL",
-                          "Aqua_Orbit_Asc"
+                          "OrbitTracks_Aqua_Ascending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -24,7 +24,7 @@
                     "settings": [
                         "MODIS_Terra_Cloud_Optical_Thickness",
                         "MODIS_Terra_Cloud_Optical_Thickness_PCL",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Descending"
                     ]
 
                 }

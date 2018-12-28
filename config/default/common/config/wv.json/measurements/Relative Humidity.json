@@ -25,8 +25,8 @@
                         "AIRS_Surface_Relative_Humidity_Daily_Night",
                         "AIRS_Surface_Relative_Humidity_Monthly_Day",
                         "AIRS_Surface_Relative_Humidity_Monthly_Night",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "MERRA-2": {

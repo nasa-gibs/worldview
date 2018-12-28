@@ -52,8 +52,8 @@
                         "SMAP_L3_Passive_Enhanced_Night_Soil_Moisture",
                         "SMAP_L3_Passive_Day_Soil_Moisture",
                         "SMAP_L3_Passive_Night_Soil_Moisture",
-                        "SMAP_Orbit_Asc",
-                        "SMAP_Orbit_Dsc"
+                        "OrbitTracks_SMAP_Ascending",
+                        "OrbitTracks_SMAP_Descending"
                     ]
                 },
                 "SMAP/Sentinel-1": {

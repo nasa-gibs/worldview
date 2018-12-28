@@ -12,7 +12,7 @@
                     "image": "",
                     "settings": [
                         "OMI_Nitrogen_Dioxide_Tropo_Column",
-                        "Aura_Orbit_Asc"
+                        "OrbitTracks_Aura_Ascending"
                     ]
                 },
                 "SEDAC": {

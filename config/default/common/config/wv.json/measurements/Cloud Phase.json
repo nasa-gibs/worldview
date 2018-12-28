@@ -14,8 +14,8 @@
                         "MODIS_Aqua_Cloud_Phase_Infrared_Day",
                         "MODIS_Aqua_Cloud_Phase_Infrared_Night",
                         "MODIS_Aqua_Cloud_Phase_Optical_Properties",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -27,8 +27,8 @@
                         "MODIS_Terra_Cloud_Phase_Infrared_Day",
                         "MODIS_Terra_Cloud_Phase_Infrared_Night",
                         "MODIS_Terra_Cloud_Phase_Optical_Properties",
-                        "Terra_Orbit_Asc",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
                     ]
 
                 }

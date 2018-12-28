@@ -11,9 +11,9 @@
                     "description": "modis/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
-                        "MODIS_Fires_Aqua",
-                        "Aqua_Orbit_Asc",
-                        "Aqua_Orbit_Dsc"
+                        "MODIS_Aqua_Thermal_Anomalies_All",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -22,9 +22,9 @@
                     "description": "modis/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
-                        "MODIS_Fires_Terra",
-                        "Terra_Orbit_Asc",
-                        "Terra_Orbit_Dsc"
+                        "MODIS_Terra_Thermal_Anomalies_All",
+                        "OrbitTracks_Terra_Ascending",
+                        "OrbitTracks_Terra_Descending"
                     ]
                 },
                 "Aqua and Terra/MODIS": {
@@ -33,7 +33,7 @@
                     "description": "modis/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
-                        "MODIS_Fires_All"
+                        "MODIS_Combined_Thermal_Anomalies_All"
                     ]
                 },
                 "S-NPP/VIIRS": {
@@ -42,10 +42,10 @@
                     "description": "viirs/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
-                      	"VIIRS_SNPP_Fires_375m_Day",
-	                      "VIIRS_SNPP_Fires_375m_Night",
-                        "Suomi_NPP_Orbit_Asc",
-                        "Suomi_NPP_Orbit_Dsc"
+                      	"VIIRS_SNPP_Thermal_Anomalies_375m_Day",
+	                    "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
+                        "OrbitTracks_Suomi_NPP_Ascending",
+                        "OrbitTracks_Suomi_NPP_Descending"
                     ]
                 }
             }

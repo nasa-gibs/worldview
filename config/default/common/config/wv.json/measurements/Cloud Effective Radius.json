@@ -15,7 +15,7 @@
                         "MODIS_Aqua_Cloud_Effective_Radius_PCL",
                         "MODIS_Aqua_Cloud_Effective_Radius_37",
                         "MODIS_Aqua_Cloud_Effective_Radius_37_PCL",
-                        "Aqua_Orbit_Asc"
+                        "OrbitTracks_Aqua_Ascending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -28,7 +28,7 @@
                         "MODIS_Terra_Cloud_Effective_Radius_PCL",
                         "MODIS_Terra_Cloud_Effective_Radius_37",
                         "MODIS_Terra_Cloud_Effective_Radius_37_PCL",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Descending"
                     ]
 
                 }

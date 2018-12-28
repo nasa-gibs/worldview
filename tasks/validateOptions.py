@@ -158,6 +158,17 @@ for startingLayer in wv["defaults"]["startingLayers"]:
 wv["defaults"]["startingLayers"] = startingLayers
 wv["buildDate"] = datetime.now().isoformat(" ")
 
+for measurement in wv["measurements"].values():
+    if "sources" not in measurement:
+        continue
+    for source in measurement["sources"].values():
+        if "settings" not in source:
+            continue
+        for setting in source["settings"]:
+            if setting not in wv["layers"]:
+                error("In measurement %s, source %s, layer not found: %s" %
+                    (measurement["id"], source["id"], setting))
+
 print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
         warning_count, remove_count)
 

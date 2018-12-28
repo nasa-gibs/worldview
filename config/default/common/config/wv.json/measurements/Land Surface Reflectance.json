@@ -14,7 +14,7 @@
                         "MODIS_Aqua_SurfaceReflectance_Bands143",
                         "MODIS_Aqua_SurfaceReflectance_Bands121",
                         "MODIS_Aqua_SurfaceReflectance_Bands721",
-                        "Aqua_Orbit_Asc"
+                        "OrbitTracks_Aqua_Ascending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -26,7 +26,7 @@
                         "MODIS_Terra_SurfaceReflectance_Bands143",
                         "MODIS_Terra_SurfaceReflectance_Bands121",
                         "MODIS_Terra_SurfaceReflectance_Bands721",
-                        "Terra_Orbit_Dsc"
+                        "OrbitTracks_Terra_Descending"
                     ]
                 }
             }
