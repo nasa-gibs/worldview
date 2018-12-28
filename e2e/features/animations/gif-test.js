@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localSelectors = require('./selectors.js');
-const localQuerystrings = require('./querystrings.js');
+const localSelectors = require('../../reuseables/selectors.js');
+const localQuerystrings = require('../../reuseables/querystrings.js');
 const TIME_LIMIT = 30000; // Sometimes takes a while to generate GIFs
 const askDialog = '.wv-dialog-ask';
 const paletteDialogOkButton =

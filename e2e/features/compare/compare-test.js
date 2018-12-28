@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localSelectors = require('./selectors.js');
-const localQuerystrings = require('./querystrings.js');
+const localSelectors = require('../../reuseables/selectors.js');
+const localQuerystrings = require('../../reuseables/querystrings.js');
 const animationButton = '#timeline-header #animate-button';
 const ImageDownloadButton = '#wv-image-button';
 const eventsTabButton = '#events-sidebar-tab';

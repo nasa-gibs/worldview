@@ -1,6 +1,6 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localSelectors = require('./selectors.js');
-const localQuerystrings = require('./querystrings.js');
+const localSelectors = require('../../reuseables/selectors.js');
+const localQuerystrings = require('../../reuseables/querystrings.js');
 const TIME_LIMIT = 20000;
 module.exports = {
   before: function(client) {

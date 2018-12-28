@@ -36,5 +36,5 @@ COPY tasks /build/tasks
 RUN npm install --unsafe-perm
 
 EXPOSE 80
-CMD npm run watch
+CMD npm run watch >/var/log/worldview-webpack.log 2>&1
 

@@ -1,5 +1,5 @@
 const reuseables = require('../../reuseables/skip-tour.js');
-const localQuerystrings = require('./querystrings.js');
+const localQuerystrings = require('../../reuseables/querystrings.js');
 const TIME_LIMIT = 10000;
 /**
  * Selectors

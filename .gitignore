@@ -24,7 +24,7 @@ options
 npm-debug.log
 .vagrant
 # Nightwatch stuff
-reports
+e2e/reports
 selenium-debug.log
 *.jar
 local.log
