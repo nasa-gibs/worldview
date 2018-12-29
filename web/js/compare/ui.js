@@ -19,7 +19,8 @@ export function compareUi(models, ui, config) {
         compareAlertBody,
         'You are now in comparison mode',
         800,
-        'warning',
+        'exclamation-triangle',
+        'fas',
         function() {
           if (util.browser.localStorage) {
             localStorage.setItem('dismissedCompareAlert', true);
