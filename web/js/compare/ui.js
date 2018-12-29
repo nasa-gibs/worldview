@@ -14,34 +14,39 @@ export function compareUi(models, ui, config) {
   var alertDialog;
 
   var alert = function() {
-    if (!alertDialog) {
-      alertDialog = wvui.alert(
-        compareAlertBody,
-        'You are now in comparison mode',
-        800,
-        'exclamation-triangle',
-        'fas',
-        function() {
-          if (util.browser.localStorage) {
-            localStorage.setItem('dismissedCompareAlert', true);
+    if (!localStorage.getItem('dismissedCompareAlert')) {
+      if (!alertDialog) {
+        alertDialog = wvui.alert(
+          compareAlertBody,
+          'You are now in comparison mode',
+          800,
+          'exclamation-triangle',
+          'fas',
+          function() {
+            if (util.browser.localStorage) {
+              localStorage.setItem('dismissedCompareAlert', true);
+            }
+            alertDialog.dialog('close');
           }
-          alertDialog.dialog('close');
-        }
-      );
-    }
-    if (
-      util.browser.localStorage &&
-      !localStorage.getItem('dismissedCompareAlert')
-    ) {
+        );
+      }
       alertDialog.dialog('open');
     }
   };
   var init = function() {
     var model = models.compare;
-    if (model.active) alert();
-    model.events.on('toggle', function() {
+    if (util.browser.localStorage) {
       if (model.active) alert();
-    });
+
+      model.events.on('toggle', function() {
+        if (model.active) {
+          alert();
+        } else if (alertDialog) {
+          alertDialog.dialog('close');
+          alertDialog = null;
+        }
+      });
+    }
   };
   init();
   return self;
