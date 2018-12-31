@@ -3,12 +3,15 @@ const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
 const TIME_LIMIT = 20000;
 const aerosolLayer = '#active-MODIS_Terra_Aerosol';
-const AodOptionsPanel = '.wv-options-panel-MODIS_Terra_Aerosol';
+const AodOptionsPanelBody = '#wv-options-body-MODIS_Terra_Aerosol';
+const AodOptionsPanelHeader = '#wv-options-header-MODIS_Terra_Aerosol';
 const AodInfoPanel = '.wv-info-panel-MODIS_Terra_Aerosol';
 const correctedReflectanceBLayer =
   '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
-const correctedReflectanceOptionsPanel =
-  '.wv-options-panel-MODIS_Terra_CorrectedReflectance_TrueColor';
+const correctedReflectanceOptionsPanelHeader =
+  '#wv-options-header-MODIS_Terra_CorrectedReflectance_TrueColor';
+const correctedReflectanceOptionsPanelBody =
+  '#wv-options-body-MODIS_Terra_CorrectedReflectance_TrueColor';
 const correctedReflectanceInfoPanel =
   '.wv-info-panel-MODIS_Terra_CorrectedReflectance_TrueColor';
 
@@ -20,7 +23,7 @@ module.exports = {
     client.url(client.globals.url + localQuerystrings.swipeAOD);
 
     client.waitForElementVisible(aerosolLayer, TIME_LIMIT, function() {
-      client.expect.element(AodOptionsPanel).to.not.be.present;
+      client.expect.element(AodOptionsPanelBody).to.not.be.present;
       client.click(aerosolLayer + ' .wv-layers-options');
       client.waitForElementVisible(
         '#wv-layers-options-dialog',
@@ -29,12 +32,12 @@ module.exports = {
           client
             .useCss()
             .assert.containsText(
-              AodOptionsPanel + ' .ui-dialog-title',
+              AodOptionsPanelHeader + ' .modal-title',
               'Aerosol Optical Depth'
             );
           if (client.options.desiredCapabilities.browser !== 'ie') {
-            client.expect.element(AodOptionsPanel + ' #wv-palette-selector').to
-              .be.visible;
+            client.expect.element(AodOptionsPanelBody + ' .wv-palette-selector')
+              .to.be.visible;
           }
         }
       );
@@ -58,21 +61,21 @@ module.exports = {
   'expect clicking A|B button to close options dialog': function(client) {
     client.click(localSelectors.compareButton);
     client.waitForElementVisible(aerosolLayer, TIME_LIMIT, function() {
-      client.expect.element(AodOptionsPanel).to.not.be.present;
+      client.expect.element(AodOptionsPanelBody).to.not.be.present;
     });
   },
   'Layer option features after exiting A|B mode': function(client) {
     client.click(aerosolLayer + ' .wv-layers-options');
-    client.waitForElementVisible(AodOptionsPanel, TIME_LIMIT, function() {
+    client.waitForElementVisible(AodOptionsPanelBody, TIME_LIMIT, function() {
       client
         .useCss()
         .assert.containsText(
-          AodOptionsPanel + ' .ui-dialog-title',
+          AodOptionsPanelHeader + ' .modal-title',
           'Aerosol Optical Depth'
         );
       if (client.options.desiredCapabilities.browser !== 'ie') {
-        client.expect.element(AodOptionsPanel + ' #wv-palette-selector').to.be
-          .visible;
+        client.expect.element(AodOptionsPanelBody + ' .wv-palette-selector').to
+          .be.visible;
       }
     });
   },
@@ -96,7 +99,7 @@ module.exports = {
   ) {
     client.click(localSelectors.compareButton);
     client.waitForElementVisible(aerosolLayer, TIME_LIMIT, function() {
-      client.expect.element(AodOptionsPanel).to.not.be.present;
+      client.expect.element(AodOptionsPanelBody).to.not.be.present;
       client.click(localSelectors.bTab);
     });
   },
@@ -105,7 +108,7 @@ module.exports = {
       correctedReflectanceBLayer,
       TIME_LIMIT,
       function() {
-        client.expect.element(AodOptionsPanel).to.not.be.present;
+        client.expect.element(AodOptionsPanelBody).to.not.be.present;
         client.click(correctedReflectanceBLayer + ' .wv-layers-options');
         client.waitForElementVisible(
           '#wv-layers-options-dialog',
@@ -114,12 +117,12 @@ module.exports = {
             client
               .useCss()
               .assert.containsText(
-                correctedReflectanceOptionsPanel + ' .ui-dialog-title',
+                correctedReflectanceOptionsPanelHeader + ' .modal-title',
                 'Corrected Reflectance (True Color)'
               );
             if (client.options.desiredCapabilities.browser !== 'ie') {
               client.expect.element(
-                correctedReflectanceOptionsPanel + ' #wv-palette-selector'
+                correctedReflectanceOptionsPanelBody + ' .wv-palette-selector'
               ).to.not.be.present;
             }
           }

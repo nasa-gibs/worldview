@@ -203,8 +203,10 @@ class LayerSettings extends React.Component {
       >
         {layer.id ? (
           <React.Fragment>
-            <ModalHeader toggle={close}>{layer.title}</ModalHeader>
-            <ModalBody>
+            <ModalHeader id={'wv-options-header-' + layer.id} toggle={close}>
+              {layer.title}
+            </ModalHeader>
+            <ModalBody id={'wv-options-body-' + layer.id}>
               <Opacity
                 start={Math.ceil(layer.opacity * 100)}
                 setOpacity={setOpacity}
