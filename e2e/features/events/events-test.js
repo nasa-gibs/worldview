@@ -78,20 +78,13 @@ module.exports = {
     });
   },
   'Click Events tab and select an Event from the List': function(client) {
-    const globalSelectors = client.globals.selectors;
-    reuseables.loadAndSkipTour(client, TIME_LIMIT);
-    client.waitForElementVisible(
-      globalSelectors.eventsTab,
-      TIME_LIMIT,
-      function() {
-        client.click(globalSelectors.eventsTab);
-        client.waitForElementVisible(listOfEvents, TIME_LIMIT, function() {
-          client.click(firstEvent).pause(3000);
-          client.expect.element(selectedMarker).to.be.visible;
-          client.expect.element(selectedFirstEvent).to.be.visible;
-        });
-      }
-    );
+    client.url(client.globals.url + localQuerystrings.mockEvents);
+    client.waitForElementVisible(listOfEvents, TIME_LIMIT, function() {
+      client.click(firstEvent);
+      client.waitForElementVisible(selectedMarker, TIME_LIMIT, function() {
+        client.expect.element(selectedFirstEvent).to.be.visible;
+      });
+    });
   },
   'Verify that Url is updated': function(client) {
     client.assert
