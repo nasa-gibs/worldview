@@ -1,6 +1,6 @@
 module.exports = {
   // animations
-  createGifIcon: '.fa-file-video-o.wv-animation-widget-icon',
+  createGifIcon: '#wv-animation-widget-file-video-icon',
   createGifButton: '.gif-dialog .button-text',
   gifPreviewStartDate: '.gif-download-grid .grid-child:nth-child(2) span',
   gifPreviewEndDate: '.gif-download-grid .grid-child:nth-child(4) span',
