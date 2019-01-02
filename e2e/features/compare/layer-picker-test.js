@@ -1,8 +1,9 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const selectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
+const aodCombinedValueId = 'MODIS_Combined_Value_Added_AOD';
 const aodCheckBox =
-  '#checkbox-case-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly .wv-checkbox';
+  '#checkbox-case-MODIS_Combined_Value_Added_AOD .wv-checkbox';
 const aodIndexCheckbox = '#checkbox-case-OMI_Aerosol_Index .wv-checkbox';
 const TIME_LIMIT = 20000;
 module.exports = {
@@ -24,7 +25,7 @@ module.exports = {
             client.waitForElementVisible(aodCheckBox, 20000, function() {
               client.click(aodCheckBox);
               client.waitForElementVisible(
-                '#active-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly',
+                '#active-' + aodCombinedValueId,
                 TIME_LIMIT
               );
               client.click(selectors.layersModalCloseButton);
@@ -35,13 +36,11 @@ module.exports = {
     );
   },
   'Toggle compare mode to Active state B': function(client) {
-    client.click(selectors.bTab);
+    client.click(selectors.bTab + ' .productsIcon');
     client.waitForElementVisible('#activeB-Coastlines', TIME_LIMIT);
   },
   'Verify that AOD layer is not visible': function(client) {
-    client.expect.element(
-      '#active-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly'
-    ).to.not.be.visible;
+    client.expect.element('#active-' + aodCombinedValueId).to.not.be.visible;
   },
   'Add AOD index layer to Active state B and verify it has been added': function(
     client
@@ -61,10 +60,10 @@ module.exports = {
             TIME_LIMIT
           );
           client.expect.element(
-            '#activeB-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly'
+            '#activeB-' + aodCombinedValueId
           ).to.not.be.present;
           client.expect.element(
-            '#active-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly'
+            '#active-' + aodCombinedValueId
           ).to.not.be.visible;
         });
       }
@@ -77,7 +76,7 @@ module.exports = {
     client.pause(100);
     client.click(selectors.aTab);
     client.waitForElementVisible(
-      '#active-MISR_Aerosol_Optical_Depth_Avg_Green_Monthly',
+      '#active-' + aodCombinedValueId,
       TIME_LIMIT,
       function() {
         client.expect.element('#activeB-OMI_Aerosol_Index').to.not.be.visible;
