@@ -51,17 +51,17 @@
   background: rgba(40, 40, 40, 0.85);
   border-radius: 3px;
   color: #fff;
-  height: 46px;
+  height: 36px;
 }
 .ab-slider-case .input-range {
   width: 146px;
   display: inline-block;
-  margin: 14px 17px;
+  margin: 15px 17px;
 }
 .ab-slider-case .wv-slider-label {
   display: inline-block;
   vertical-align: top;
-  margin-top: 17px;
+  margin-top: 12px;
   width: 15px;
   font-size: 16px;
   text-align: center;
