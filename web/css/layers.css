@@ -527,11 +527,11 @@
   background: #484848;
 }
 .wv-layers-options-dialog .settings-component {
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  padding: 0 4px;
 }
 .wv-layers-options-dialog .layer-threshold-select {
-  height: 68px;
-  padding: 0 4px;
+  height: 48px;
 }
 .wv-layers-options-dialog .tab-content .wv-palette-selector {
   width: 266px;
@@ -546,9 +546,8 @@
   margin: 10px 18px;
 }
 .wv-layers-options-dialog .wv-header {
-  margin-top: 1em;
   font-size: 14px;
-  margin-bottom: 1em;
+  margin-bottom: 8px;
 }
 .layer-opacity-select .wv-header {
   margin-top: 0;
@@ -582,7 +581,7 @@
 
 .wv-layers-options-dialog .wv-palette-squash {
   float: right;
-  margin-top: -37px;
+  margin-top: -30px;
 }
 
 /* Layers Info */
