@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RangeInput from '../util/range-input';
+import Slider, { createSliderWithTooltip } from 'rc-slider';
 import lodashDebounce from 'lodash/debounce';
 
+const SliderWithTooltip = createSliderWithTooltip(Slider);
+const percentFormatter = function(v) {
+  return `${v} %`;
+};
 /*
  * A react component, Builds a rather specific
  * interactive widget
@@ -16,15 +20,11 @@ class OpacitySlider extends React.Component {
     this.state = {
       value: props.value
     };
-    this.debounceOpacityUpdate = lodashDebounce(this.onUpdate.bind(this), 100);
+    this.debounceOpacityUpdate = lodashDebounce(this.onSlide.bind(this), 100);
   }
-  onUpdate(arra) {
-    const value = Math.ceil(arra[0]);
-    this.props.onSlide(value);
-  }
+
   /*
-   * Sets a new state value when a
-   * when the slider is adjusted
+   * trigger onSlide Callback
    *
    * @method onSlide
    *
@@ -33,12 +33,8 @@ class OpacitySlider extends React.Component {
    *
    * @return {void}
    */
-  onSlide(arra) {
-    const value = Math.ceil(arra[0]);
+  onSlide(value) {
     this.props.onSlide(value);
-    this.setState({
-      value: value
-    });
   }
 
   render() {
@@ -48,12 +44,11 @@ class OpacitySlider extends React.Component {
           <h4>A</h4>
         </label>
         <div className="input-range ">
-          <RangeInput
-            start={[this.state.value]}
-            range={{ min: 0, max: 100 }}
-            step={1}
-            onUpdate={this.debounceOpacityUpdate}
-            onSlide={this.onSlide.bind(this)}
+          <SliderWithTooltip
+            defaultValue={this.state.value}
+            tipFormatter={percentFormatter}
+            onChange={this.debounceOpacityUpdate}
+            onAfterChange={this.onSlide.bind(this)}
           />
         </div>
         <label className="wv-slider-label right">

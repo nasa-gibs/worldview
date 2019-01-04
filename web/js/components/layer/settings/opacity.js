@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RangeInput from '../../util/range-input';
+import Slider from 'rc-slider';
 
 class OpacitySelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      start: props.start || 100
+      value: props.start
     };
   }
   render() {
@@ -14,18 +14,15 @@ class OpacitySelect extends React.Component {
     return (
       <div className="layer-opacity-select settings-component">
         <h2 className="wv-header">Opacity</h2>
-        <RangeInput
-          start={[this.state.start]}
-          range={{ min: 0, max: 100 }}
-          step={1}
-          onSlide={val => {
-            const opacity = Number(val[0]);
-            setOpacity(layer.id, (opacity / 100).toFixed(2));
-            this.setState({ start: opacity });
+        <Slider
+          defaultValue={this.props.start}
+          onChange={val => {
+            setOpacity(layer.id, (val / 100).toFixed(2));
+            this.setState({ value: val });
           }}
         />
         <div className="wv-label wv-label-opacity">
-          {this.state.start + '%'}
+          {this.state.value + '%'}
         </div>
       </div>
     );
