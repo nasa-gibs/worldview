@@ -184,6 +184,11 @@ export default function naturalEventsUI(models, ui, config, request) {
   };
   self.selectEvent = function(id, date, isInitialLoad) {
     var isIdChange = !self.selected || self.selected.id !== id;
+    var prevId = self.selected.id ? self.selected.id : false;
+    var prevEvent = prevId
+      ? naturalEventsUtilGetEventById(model.data.events, prevId)
+      : false;
+    var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
 
     // Store selected id and date in model
     self.selected = { id: id };
@@ -193,6 +198,9 @@ export default function naturalEventsUI(models, ui, config, request) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
     }
+
+    var category = event.categories[0].title;
+    var isSameCategory = category === prevCategory;
 
     date = date || self.getDefaultEventDate(event);
     const zoomPromise = getZoomPromise(event, date, !isIdChange, isInitialLoad);
@@ -205,7 +213,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     self.markers = naturalEventMarkers.draw();
     zoomPromise.then(function() {
       self.selecting = true;
-      if (!isInitialLoad && isIdChange) {
+      if (isIdChange && !isSameCategory && !isInitialLoad) {
         activateLayersForCategory(event.categories[0].title);
       }
       if (!isInitialLoad) models.date.select(util.parseDateUTC(date));
@@ -249,6 +257,7 @@ export default function naturalEventsUI(models, ui, config, request) {
       }
       naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
       self.selecting = false;
+      model.events.trigger('selection-done', self.selected);
     });
 
     model.events.trigger('selected-event', self.selected);

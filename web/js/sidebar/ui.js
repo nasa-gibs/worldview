@@ -77,9 +77,9 @@ export function sidebarUi(models, config, ui) {
       models.naturalEvents.events
         .on('activate', () => self.selectTab('events'))
         .on('list-change', debounceUpdateEventsList)
+        .on('selection-done', updateLayers)
         .on('selected-event', selected => {
           self.reactComponent.setState({ selectedEvent: selected });
-          updateLayers();
         });
     }
     if (models.compare) {
