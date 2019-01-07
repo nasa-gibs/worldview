@@ -147,7 +147,10 @@ class AnimationWidget extends React.Component {
           className="wv-icon-case"
           onClick={this.props.onPushGIF}
         >
-          <i className="fas fa-file-video wv-animation-widget-icon" />
+          <i
+            id="wv-animation-widget-file-video-icon"
+            className="fas fa-file-video wv-animation-widget-icon"
+          />
         </a>
         <div className="wv-anim-dates-case">
           <TimeSelector
