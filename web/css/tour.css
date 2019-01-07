@@ -213,7 +213,8 @@
 /* .tour-in-progress */
 .tour-in-progress .modal {
   left: auto;
-  top: 382px;
+  top: auto;
+  bottom: 154px;
   overflow: visible;
 }
 
