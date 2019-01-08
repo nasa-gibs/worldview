@@ -257,6 +257,7 @@ export default function naturalEventsUI(models, ui, config, request) {
       }
       naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
       self.selecting = false;
+      model.events.trigger('selection-done', self.selected);
     });
 
     model.events.trigger('selected-event', self.selected);
