@@ -530,6 +530,9 @@
   margin-bottom: 14px;
   padding: 0 4px;
 }
+.wv-layers-options-dialog .tab-content .layer-threshold-select {
+  margin-top: 10px
+}
 .wv-layers-options-dialog .layer-threshold-select {
   height: 48px;
 }
