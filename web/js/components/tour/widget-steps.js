@@ -9,11 +9,11 @@ class Steps extends React.Component {
           <i className="fa fa-arrow-circle-left" aria-hidden="true"></i>
         </a>
         <div className="step-counter">
-          <p>Step <span className="step-current">{this.props.currentStep}</span>/<span className="step-total">{this.props.totalSteps + 1}</span>
+          <p>Step <span className="step-current">{this.props.currentStep}</span>/<span className="step-total">{this.props.totalSteps}</span>
           </p>
         </div>
-        <a href="#" className={this.props.currentStep === this.props.totalSteps + 1 ? 'step-next disabled' : 'step-next'} aria-label="Next" onClick={this.props.incrementStep}>
-          <i className="fa fa-arrow-circle-right" aria-hidden="true"></i>
+        <a href="#" className="step-next" aria-label="Next" onClick={this.props.incrementStep}>
+          <i className={this.props.currentStep === this.props.totalSteps ? 'fa fa-check-circle' : 'fa fa-arrow-circle-right'} aria-hidden="true"></i>
         </a>
       </div>
     );
