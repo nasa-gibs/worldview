@@ -93,24 +93,24 @@ class ModalInProgress extends React.Component {
 
     // TESTING HERE:
     // currentStepLink =
-    //   'ca=false' +
-    //   '&cm=opacity' +
-    //   '&cv=80' +
-    //   '&p=geographic' +
-    //   '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,MODIS_Terra_Aerosol_Optical_Depth_3km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
-    //   '&l1=BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
-    //   '&t=2018-09-06-T00%3A00%3A00Z' +
-    //   '&t1=2018-03-06-T00%3A00%3A00Z' +
-    //   '&z=2' +
-    //   '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481' +
-    //   '&download=MOD04_3K' +
-    //   '&e=true' +
-    //   '&ab=on' +
-    //   '&as=2018-03-26T00%3A00%3A00Z' +
-    //   '&ae=2018-09-26T00%3A00%3A00Z' +
-    //   '&av=5' +
-    //   '&al=true' +
-    //   '';
+    // 'ca=false' +
+    // '&cm=opacity' +
+    // '&cv=80' +
+    // 'p=geographic' +
+    // '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,MODIS_Terra_Aerosol_Optical_Depth_3km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
+    // '&l1=BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
+    // '&t=2018-09-06-T00%3A00%3A00Z' +
+    // '&t1=2018-03-06-T00%3A00%3A00Z' +
+    // '&z=2' +
+    // '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481' +
+    // '&download=MOD04_3K' +
+    // '&e=true' +
+    // '&ab=on' +
+    // '&as=2018-03-26T00%3A00%3A00Z' +
+    // '&ae=2018-09-26T00%3A00%3A00Z' +
+    // '&av=5' +
+    // '&al=true' +
+    // '';
 
     // Create current and previous states from step links
     currentState = util.fromQueryString(currentStepLink);
