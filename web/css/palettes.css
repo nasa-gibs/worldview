@@ -30,14 +30,9 @@
   vertical-align: middle;
 }
 
-
 .wv-palette-selector-row img {
-  margin-left: 10px;
   border: 1px solid #404040;
   vertical-align: middle;
-}
-.tab-pane .wv-palette-selector-row img {
-  margin-left: 0px;
 }
 .wv-palette {
   padding-bottom: 2px;
