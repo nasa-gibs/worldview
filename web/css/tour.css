@@ -151,6 +151,10 @@
 }
 
 .tour-start .tour-box.wildfire .tour-box-header {
+  background-color: rgb(213, 78, 33);
+}
+
+.tour-start .tour-box.wildfire .tour-box-header {
   background-color: #8d3b36;
 }
 
@@ -251,6 +255,10 @@
   border-bottom: 2px solid #fff;
 }
 
+.tour-in-progress .feature .modal-header {
+  background-color: rgb(213, 78, 33);
+}
+
 .tour-in-progress .wildfire .modal-header {
   background-color: rgb(141, 59, 54);
 }
@@ -310,6 +318,31 @@
   background-image: url("../images/natural-events/icon-default.svg");
   background-size: 64px 64px;
   background-position: -2px -2px;
+}
+
+.tour-in-progress .feature .modal-icon {
+  background-color: #d54e21;
+  background-size: 68px 68px;
+  background-position: 0;
+  background-image: none;
+  font-size: 32px;
+  padding-top: 14px;
+  padding-left: 8px;
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  -webkit-font-feature-settings: normal;
+  font-feature-settings: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+.tour-in-progress .feature .modal-icon:before {
+  content: "\F1D8";
 }
 
 .tour-in-progress .wildfire .modal-icon {
@@ -422,6 +455,11 @@
 .tour-in-progress .modal-body,
 .tour-in-progress .modal-footer {
   background-color: rgba(0, 69, 123, 0.8);
+}
+
+.tour-in-progress .feature .modal-body,
+.tour-in-progress .feature .modal-footer {
+  background-color: rgba(213, 78, 33, 0.8);
 }
 
 .tour-in-progress .wildfire .modal-body,
@@ -561,6 +599,10 @@
   padding: 7px 12px 8px;
   border-radius: 0;
   background-color: rgb(0, 69, 123);
+}
+
+.tour-complete .feature .modal-header {
+  background-color: rgb(213, 78, 33);
 }
 
 .tour-complete .wildfire .modal-header {
