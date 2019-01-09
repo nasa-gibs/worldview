@@ -396,6 +396,18 @@
   margin-bottom: 16px;
 }
 
+.tour-in-progress .modal-body a {
+  text-decoration: underline;
+}
+
+.tour-in-progress .default .modal-body a {
+  color: #7bf;
+  font-weight: 600;
+}
+.tour-in-progress .default .modal-body a:hover {
+  color: #9df;
+}
+
 .tour-in-progress .modal-body strong {
   font-weight: 600;
 }
