@@ -8,7 +8,7 @@ export function tourModel(config) {
   self.select = function (storyId) {
     var story = config.stories[storyId];
     if (!story) {
-      throw new Error('Invalid tour: ' + storyId);
+      console.warn('Unsupported tour: ' + storyId);
     }
     var updated = false;
     if (!self.selected || self.selected.id !== storyId) {

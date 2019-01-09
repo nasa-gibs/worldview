@@ -7,7 +7,8 @@ class TourAlert extends React.Component {
     super(props);
 
     this.state = {
-      visible: props.visible
+      visible: props.visible,
+      message: props.message
     };
 
     this.onDismiss = this.onDismiss.bind(this);
@@ -21,7 +22,7 @@ class TourAlert extends React.Component {
     return (
       <div>
         <Alert className="wv-alert" isOpen={this.state.visible} toggle={this.onDismiss}>
-          <p>To view these tours again. Click the 'Start Tour' link in the "i" button menu above.</p>
+          <p>{this.state.message}</p>
         </Alert>
       </div>
     );
@@ -29,7 +30,8 @@ class TourAlert extends React.Component {
 }
 
 TourAlert.propTypes = {
-  visible: PropTypes.bool.isRequired
+  visible: PropTypes.bool.isRequired,
+  message: PropTypes.string
 };
 
 export default TourAlert;

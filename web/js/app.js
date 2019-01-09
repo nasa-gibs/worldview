@@ -95,7 +95,6 @@ import { compareModel } from './compare/model';
 import { compareUi } from './compare/ui';
 
 // Tour
-import { parse as tourParser } from './tour/tour';
 import { tourModel } from './tour/model';
 import { tourUi } from './tour/ui';
 
@@ -338,8 +337,7 @@ class App extends React.Component {
         layerParser,
         dateParser,
         mapParser,
-        palettes.parse,
-        tourParser
+        palettes.parse
       ];
       if (config.features.dataDownload) {
         parsers.push(dataParser);
@@ -395,14 +393,12 @@ class App extends React.Component {
         models.compare = compareModel(models, config);
         models.link.register(models.compare);
       }
-      models.tour = tourModel(config);
       models.link
         .register(models.proj)
         .register(models.layers)
         .register(models.date)
         .register(models.palettes)
-        .register(models.map)
-        .register(models.tour);
+        .register(models.map);
       models.link.load(state);
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
@@ -431,6 +427,10 @@ class App extends React.Component {
       if (config.features.naturalEvents) {
         models.naturalEvents = naturalEventsModel(models, config, ui);
         models.link.register(models.naturalEvents);
+      }
+      if (config.features.tour) {
+        models.tour = tourModel(config, ui);
+        models.link.register(models.tour);
       }
       // HACK: Map needs permalink state loaded before starting. But
       // data download now needs it too.

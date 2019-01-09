@@ -15,7 +15,8 @@ export function alertUi(ui) {
   var getInitialAlertProps = function() {
     return {
       visible: false,
-      showTourAlert: self.showTourAlert
+      showTourAlert: self.showTourAlert,
+      message: null
     };
   };
 
@@ -24,7 +25,21 @@ export function alertUi(ui) {
     if (!hideTour) return;
 
     self.reactComponent.setState({
-      visible: true
+      visible: true,
+      message: 'To view these tours again. Click the \'Start Tour\' link in the "i" button menu above.'
+    });
+
+    setTimeout(() => {
+      self.reactComponent.setState({
+        visible: false
+      });
+    }, 10000);
+  };
+
+  self.noTourAvailable = function(e) {
+    self.reactComponent.setState({
+      visible: true,
+      message: 'Sorry, this tour is no longer supported.'
     });
 
     setTimeout(() => {

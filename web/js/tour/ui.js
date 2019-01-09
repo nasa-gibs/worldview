@@ -24,6 +24,8 @@ export function tourUi(models, ui, config) {
       if (story && storyLoaded === false) {
         self.selectTour(null, story, 1, story.id);
         storyLoaded = true;
+      } else if (typeof story === 'undefined') {
+        ui.alert.noTourAvailable();
       }
     });
   };
