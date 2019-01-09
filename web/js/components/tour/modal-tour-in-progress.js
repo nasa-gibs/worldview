@@ -38,7 +38,7 @@ class ModalInProgress extends React.Component {
     }
 
     // Scroll content div to the top when step updates
-    this.refs.stepContent.parentNode.scrollTop = 0;
+    if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
 
     // Fetch meta and load link
     if (modalStarted && !this.props.metaLoaded) {
