@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TourStart from './modal-tour-start';
 import TourInProgress from './modal-tour-in-progress';
 import TourComplete from './modal-tour-complete';
+import googleTagManager from 'googleTagManager';
 
 class Tour extends React.Component {
   constructor(props) {
@@ -56,6 +57,9 @@ class Tour extends React.Component {
     e.preventDefault();
     this.setState({
       modalComplete: !this.state.modalComplete
+    });
+    googleTagManager.pushEvent({
+      'event': 'tour_completed'
     });
   }
 

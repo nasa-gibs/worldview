@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Tour from '../components/tour/tour';
 import util from '../util/util';
+import googleTagManager from 'googleTagManager';
 
 export function tourUi(models, ui, config) {
   var self = {};
@@ -96,6 +97,11 @@ export function tourUi(models, ui, config) {
     if (hideTour && config.buildDate) {
       let buildDate = new Date(config.buildDate);
       let tourDate = new Date(hideTour);
+      googleTagManager.pushEvent({
+        'event': 'tour_start_hidden',
+        'buildDate': buildDate,
+        'tourDate': tourDate
+      });
       if (buildDate > tourDate) {
         localStorage.removeItem('hideTour');
         return true;
@@ -105,18 +111,28 @@ export function tourUi(models, ui, config) {
     } else if (hideTour) {
       return false;
     } else {
+      // Tour auto start
+      googleTagManager.pushEvent({
+        'event': 'tour_start'
+      });
       return true;
     }
   };
 
   self.resetTour = function(e) {
     if (e) e.preventDefault();
+    googleTagManager.pushEvent({
+      'event': 'tour_more_stories_button'
+    });
     initTourState();
     self.startTour();
   };
 
   self.startTour = function(e) {
     if (e) e.preventDefault();
+    googleTagManager.pushEvent({
+      'event': 'tour_start_button'
+    });
     self.reactComponent.setState({
       modalStart: true,
       modalInProgress: false,
@@ -128,6 +144,12 @@ export function tourUi(models, ui, config) {
   self.selectTour = function(e, currentStory, currentStoryIndex, currentStoryId) {
     let totalSteps = currentStory.steps;
     if (e) e.preventDefault();
+    googleTagManager.pushEvent({
+      'event': 'tour_selected_story',
+      'story': {
+        'id': currentStoryId
+      }
+    });
     self.reactComponent.setState({
       models: models,
       config: config,
@@ -147,6 +169,10 @@ export function tourUi(models, ui, config) {
   self.hideTour = function(e) {
     var hideTour = localStorage.getItem('hideTour');
 
+    googleTagManager.pushEvent({
+      'event': 'tour_hide_checked'
+    });
+
     if (!util.browser.localStorage) return;
     if (hideTour) return;
 
@@ -155,6 +181,10 @@ export function tourUi(models, ui, config) {
 
   self.showTour = function(e) {
     var hideTour = localStorage.getItem('hideTour');
+
+    googleTagManager.pushEvent({
+      'event': 'tour_hide_unchecked'
+    });
 
     if (!util.browser.localStorage) return;
     if (!hideTour) return;
