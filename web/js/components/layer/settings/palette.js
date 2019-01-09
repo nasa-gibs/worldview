@@ -169,7 +169,7 @@ class OpacitySelect extends React.Component {
 
     return (
       <div
-        className="wv-palette-selector settings-component"
+        className="wv-palette-selector settings-component noselect"
         id={'wv-palette-selector' + index}
       >
         <h2 className="wv-header">Color Palette</h2>
