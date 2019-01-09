@@ -13,6 +13,8 @@ import palettes from '../../palettes/palettes';
 import { dataParser } from '../../data/data';
 import { parse as projectionParser } from '../../projection/projection';
 
+import googleTagManager from 'googleTagManager';
+
 class ModalInProgress extends React.Component {
   constructor(props) {
     super(props);
@@ -82,6 +84,15 @@ class ModalInProgress extends React.Component {
     var errors = [];
     var config = this.props.config;
     var models = this.props.models;
+
+    googleTagManager.pushEvent({
+      'event': 'tour_selected_story',
+      'story': {
+        'id': this.props.currentStoryId,
+        'selectedStep': this.props.currentStep,
+        'totalSteps': this.props.totalSteps
+      }
+    });
 
     // Get current step link
     currentStepLink = currentStory.steps[currentStepIndex]['stepLink'];
