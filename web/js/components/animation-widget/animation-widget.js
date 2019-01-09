@@ -8,7 +8,8 @@ import AnimWidgetHeader from './header';
 import googleTagManager from 'googleTagManager';
 
 const RangeHandle = props => {
-  const { value, offset, ...restProps } = props;
+  const { value, offset, dragging, ...restProps } = props;
+
   const positionStyle = {
     position: 'absolute',
     left: `${(offset - 6).toFixed(2)}%`,
@@ -18,7 +19,12 @@ const RangeHandle = props => {
   return (
     <React.Fragment>
       <span style={positionStyle}>{value < 10 ? value.toFixed(1) : value}</span>
-      <Handle value={value} offset={offset} {...restProps} />
+      <Handle
+        dragging={dragging.toString()}
+        value={value}
+        offset={offset}
+        {...restProps}
+      />
     </React.Fragment>
   );
 };
