@@ -51,6 +51,7 @@
   margin-left: auto;
   margin-right: auto;
   top: 20px;
+  bottom: 20px;
 }
 
 .tour-start .modal-dialog {
@@ -415,6 +416,7 @@
 .tour-in-progress .modal-footer {
   border-radius: 0 0 0 8px;
   padding: 12px;
+  min-height: 52px;
 }
 
 .tour-in-progress .modal-body,
@@ -718,5 +720,18 @@
 @media (max-height: 815px) {
   .tour-start .modal {
     height: auto;
+  }
+}
+
+@media (max-height: 776px) {
+  .tour-in-progress .modal-content {
+    max-height: 250px;
+  }
+}
+
+
+@media (max-height: 664px) {
+  .tour {
+    display: none;
   }
 }
