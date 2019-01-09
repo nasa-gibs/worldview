@@ -37,6 +37,9 @@ class ModalInProgress extends React.Component {
       this.props.toggleRestartTour();
     }
 
+    // Scroll content div to the top when step updates
+    this.refs.stepContent.parentNode.scrollTop = 0;
+
     // Fetch meta and load link
     if (modalStarted && !this.props.metaLoaded) {
       this.props.toggleMetaLoaded();
@@ -370,7 +373,7 @@ class ModalInProgress extends React.Component {
           <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.props.currentStory['title']}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
           <ModalBody>
             {/* eslint-disable */}
-            <div dangerouslySetInnerHTML={{ __html: description }} />
+            <div ref="stepContent" dangerouslySetInnerHTML={{ __html: description }} />
             {/* eslint-enable */}
           </ModalBody>
           <ModalFooter>
