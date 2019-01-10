@@ -1,12 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InputRange from 'react-input-range';
+import Slider, { Handle } from 'rc-slider';
 import TimeSelector from '../date-selector/date-selector';
 import LoopButton from './loop-button';
 import PlayButton from './play-button';
 import AnimWidgetHeader from './header';
 import googleTagManager from 'googleTagManager';
 
+const RangeHandle = props => {
+  const { value, offset, dragging, ...restProps } = props;
+
+  const positionStyle = {
+    position: 'absolute',
+    left: `${(offset - 6).toFixed(2)}%`,
+    bottom: 17
+  };
+
+  return (
+    <React.Fragment>
+      <span style={positionStyle}>{value < 10 ? value.toFixed(1) : value}</span>
+      <Handle
+        dragging={dragging.toString()}
+        value={value}
+        offset={offset}
+        {...restProps}
+      />
+    </React.Fragment>
+  );
+};
 /*
  * A react component, Builds a rather specific
  * interactive widget
@@ -131,12 +152,14 @@ class AnimationWidget extends React.Component {
           onLoop={this.onLoop.bind(this)}
         />
         <div className="wv-slider-case">
-          <InputRange
+          <Slider
+            className="input-range"
             step={0.5}
-            maxValue={10}
-            minValue={0.5}
+            max={10}
+            min={0.5}
             value={this.state.value}
             onChange={this.onSlide.bind(this)}
+            handle={RangeHandle}
           />
           <span className="wv-slider-label">{this.props.sliderLabel}</span>
         </div>
@@ -182,7 +205,10 @@ class AnimationWidget extends React.Component {
     );
   }
 }
-
+RangeHandle.propTypes = {
+  value: PropTypes.number,
+  offset: PropTypes.number
+};
 AnimationWidget.propTypes = {
   sliderSpeed: PropTypes.number,
   looping: PropTypes.bool,

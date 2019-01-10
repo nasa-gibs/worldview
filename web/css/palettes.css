@@ -31,11 +31,9 @@
 }
 
 .wv-palette-selector-row img {
-  margin-left: 10px;
   border: 1px solid #404040;
   vertical-align: middle;
 }
-
 .wv-palette {
   padding-bottom: 2px;
 }

@@ -111,7 +111,7 @@ import '../ext/mobiscroll-2.6.0/mobiscroll.css';
 import '../../node_modules/jquery.joyride/jquery.joyride.css';
 import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
 import '../../node_modules/ol/ol.css';
-import '../../node_modules/nouislider/distribute/nouislider.css';
+import '../../node_modules/rc-slider/dist/rc-slider.css';
 import '../../node_modules/simplebar/dist/simplebar.css';
 import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 

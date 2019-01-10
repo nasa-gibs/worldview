@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
-import RangeInput from '../../util/range-input';
+import { Range as RangeInput } from 'rc-slider';
+
 import { Checkbox } from '../../util/checkbox';
 
 class ThresholdSelect extends React.Component {
@@ -86,10 +87,10 @@ class ThresholdSelect extends React.Component {
           className="wv-layer-options-threshold"
         >
           <RangeInput
-            start={[start, end]}
-            range={{ min: min, max: max }}
-            step={1}
-            onSlide={this.updateThreshold.bind(this)}
+            defaultValue={[start, end]}
+            min={min}
+            max={max}
+            onChange={this.updateThreshold.bind(this)}
           />
           <div className="wv-label">
             <span className="wv-label-range-min wv-label-range">
