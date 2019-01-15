@@ -1,0 +1,1 @@
+export const TOGGLE_URL = 'TOGGLE_SHARE_LINK';

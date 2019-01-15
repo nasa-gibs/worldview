@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import lodashEach from 'lodash/each';
 import googleTagManager from 'googleTagManager';
@@ -71,11 +72,11 @@ import naturalEventsUI from './natural-events/ui';
 import naturalEventsRequest from './natural-events/request';
 
 // Image
-import { imageRubberband } from './image/rubberband';
-import { imagePanel } from './image/panel';
+// import { imageRubberband } from './image/rubberband';
+// import { imagePanel } from './image/panel';
 
 // Notifications
-import { notificationsUi } from './notifications/ui';
+// import { notificationsUi } from './notifications/ui';
 
 // UI
 import loadingIndicator from './ui/indicator';
@@ -83,12 +84,10 @@ import loadingIndicator from './ui/indicator';
 import Toolbar from './containers/toolbar';
 // Link
 import { linkModel } from './link/model';
-import { linkUi } from './link/ui';
 
 // Projections
 import { parse as projectionParser } from './projection/projection';
 import { projectionModel } from './projection/model';
-import { projectionUi } from './projection/ui';
 
 // A|B comparison
 import { compareModel } from './compare/model';
@@ -100,7 +99,9 @@ import Modal from './containers/modal';
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
 import tour from './tour';
-import { uiInfo } from './ui/info';
+
+// Crutch between state systems
+import { sendModelsToStore } from './modules/migration/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -118,7 +119,7 @@ import '../../node_modules/ol/ol.css';
 import '../../node_modules/rc-slider/dist/rc-slider.css';
 import '../../node_modules/simplebar/dist/simplebar.css';
 import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
-
+import 'react-image-crop/dist/ReactCrop.css';
 // App CSS
 import '../css/fonts.css';
 import '../css/reset.css';
@@ -152,9 +153,12 @@ import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';
 import '../css/mobile.css';
+import '../css/modal.css';
+import '../css/list.css';
 import '../pages/css/document.css';
 
 import { polyfill } from './polyfill';
+
 polyfill(); // Polyfills some browser features
 
 class App extends React.Component {
@@ -166,7 +170,6 @@ class App extends React.Component {
     this.mapMouseEvents = util.events();
     this.onload();
   }
-
   render() {
     return (
       <div className="wv-content" data-role="content">
@@ -289,10 +292,6 @@ class App extends React.Component {
     var state = util.fromQueryString(location.search);
     var parameters = util.fromQueryString(location.search);
 
-    // Add font Awesome fonts
-    // library.add(faInfoCircle);
-    // dom.watch();
-
     var main = function() {
       if (parameters.elapsed) {
         startTime = new Date().getTime();
@@ -367,7 +366,6 @@ class App extends React.Component {
           initialDate.setUTCDate(initialDate.getUTCDate() - 1);
         }
       }
-
       // Models
       var models = {
         wv: {
@@ -377,6 +375,7 @@ class App extends React.Component {
       var ui = {};
       // Attach to wvx object for debugging
       wvx.models = models;
+
       wvx.ui = ui;
 
       models.proj = projectionModel(config);
@@ -429,10 +428,9 @@ class App extends React.Component {
       // HACK: Map needs permalink state loaded before starting. But
       // data download now needs it too.
       models.link.load(state); // needs to be loaded twice
-
+      self.props.updateModels(models); // crutch between old state system and redux
       elapsed('ui');
       // Create widgets
-      ui.proj = projectionUi(models, config);
       ui.tour = tour(models, ui, config);
       ui.sidebar = sidebarUi(models, config, ui);
       ui.activeLayers = layersActive(models, ui, config);
@@ -481,8 +479,6 @@ class App extends React.Component {
         ui.dateWheels = dateWheels(models, config);
       }
 
-      ui.rubberband = imageRubberband(models, ui, config);
-      ui.image = imagePanel(models, ui, config);
       if (config.features.dataDownload) {
         ui.data = dataUi(models, ui, config);
       }
@@ -490,10 +486,8 @@ class App extends React.Component {
         var request = naturalEventsRequest(models, ui, config);
         ui.naturalEvents = naturalEventsUI(models, ui, config, request);
       }
-      ui.link = linkUi(models, config);
-      ui.info = uiInfo(ui, config);
       if (config.features.alert) {
-        ui.alert = notificationsUi(ui, config);
+        // ui.alert = notificationsUi(ui, config);
       }
       if (config.features.compare) {
         ui.compare = compareUi(models, ui, config);
@@ -599,4 +593,13 @@ function registerMapMouseHandlers(maps, events) {
   });
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  updateModels: modelsObject => {
+    dispatch(sendModelsToStore(modelsObject));
+  }
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App);

@@ -1,12 +1,13 @@
 import { TOGGLE, OPEN_CUSTOM, OPEN_BASIC } from './constants';
 import { assign as lodashAssign } from 'lodash';
+import update from 'immutability-helper';
 
 const modalState = {
   headerText: 'header Text',
   bodyText: 'Body Text',
-  isOpen: true,
-  key: '__default__',
-  ModalClassName: '',
+  isOpen: false,
+  id: '__default__',
+  modalClassName: '',
   headerChildren: null,
   bodyHeader: null,
   bodyChildren: null,
@@ -20,20 +21,21 @@ export default function modalReducer(state = modalState, action) {
         isOpen: !state.isOpen
       });
     case OPEN_BASIC:
-      return lodashAssign({}, state, {
+      return Object.assign({}, state, {
         isOpen: action.key === state.key ? !state.isOpen : true,
         isCustom: false,
-        key: action.key,
+        id: action.key,
         headerText: action.headerText,
         bodyText: action.bodyText
       });
     case OPEN_CUSTOM:
-      return lodashAssign({}, state, {
-        isOpen: action.key === state.key ? !state.isOpen : true,
-        isCustom: true,
-        key: action.key,
-        headerText: action.headerText,
-        bodyText: action.bodyText
+      console.log(action, state);
+      return update(state, {
+        isOpen: { $set: action.key === state.key ? !state.isOpen : true },
+        isCustom: { $set: true },
+        id: { $set: action.key },
+        headerText: { $set: action.headerText },
+        bodyText: { $set: action.bodyText }
       });
     default:
       return state;

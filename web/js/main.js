@@ -3,9 +3,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import modalReducer from './modules/modal/reducer';
-const store = createStore(modalReducer);
+import modelReducer from './modules/migration/reducer';
+import projectionReducer from './modules/projection/reducer';
+
+const reducers = {
+  projection: projectionReducer,
+  modal: modalReducer,
+  models: modelReducer
+};
+
+const store = createStore(combineReducers(reducers));
 
 // Document ready function
 window.onload = () => {
