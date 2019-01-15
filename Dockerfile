@@ -29,12 +29,19 @@ RUN cd /usr/local/stow && \
 RUN ln -s /usr/bin/virtualenv-2.7 /usr/bin/virtualenv
 
 WORKDIR /build
+RUN mkdir -p /build/node_modules && ls -ld /build/node_modules
+# Only what is needed to run the development server and run the Selenium tests
+RUN npm --unsafe-perm install \
+    chromedriver \
+    express \
+    geckodriver \
+    selenium-server-standalone-jar \
+    nightwatch
 
-COPY package.json /build
-COPY requirements.txt /build
-COPY tasks /build/tasks
-RUN npm install --unsafe-perm
+VOLUME /build/node_modules
+VOLUME /build/.python
 
 EXPOSE 80
-CMD npm run watch >/var/log/worldview-webpack.log 2>&1
+CMD npm start >/var/log/worldview.log 2>&1
+
 

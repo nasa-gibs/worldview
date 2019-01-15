@@ -1,7 +1,7 @@
 const normalizeViewport = require('./normalize-viewport.js').normalizeViewport;
 module.exports = {
   loadAndSkipTour: function(client, wait) {
-    normalizeViewport(client, 1000, 1024);
+    normalizeViewport(client, 1024, 768);
     client.url(client.globals.url)
       .execute(function() {
         return !(window.localStorage.getItem('hideSplash')); // See if there should be a tour
