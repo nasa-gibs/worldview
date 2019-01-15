@@ -13,28 +13,28 @@ class ShareLinks extends React.Component {
         <a
           id="fb-share"
           className="icon-link fab facebook fa-facebook-f fa-2x"
-          href={this.props.fbLink}
+          href="#"
           onClick={e => this.onClick(e, 'facebook')}
           title="Share via Facebook!"
         />
         <a
           id="tw-share"
           className="icon-link twitter fab fa-twitter fa-2x"
-          href={this.props.twLink}
+          href="#"
           onClick={e => this.onClick(e, 'twitter')}
           title="Share via Twitter!"
         />
         <a
           id="rd-share"
           className="icon-link fab reddit fa-reddit-alien fa-2x"
-          href={this.props.rdLink}
+          href="#"
           onClick={e => this.onClick(e, 'reddit')}
           title="Share via Reddit!"
         />
         <a
           id="email-share"
           className="icon-link email fa fa-envelope fa-2x"
-          href={this.props.emailLink}
+          href="#"
           onClick={e => this.onClick(e, 'email')}
           title="Share via Email!"
         />
