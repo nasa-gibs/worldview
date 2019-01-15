@@ -29,7 +29,7 @@ RUN cd /usr/local/stow && \
 RUN ln -s /usr/bin/virtualenv-2.7 /usr/bin/virtualenv
 
 WORKDIR /build
-RUN mkdir -p /build/node_modules && ls -ld /build/node_modules
+RUN mkdir -p /build/node_modules
 # Only what is needed to run the development server and run the Selenium tests
 RUN npm --unsafe-perm install \
     chromedriver \
