@@ -1,4 +1,4 @@
-#wv-toolbar {
+.wv-toolbar {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -6,59 +6,17 @@
   border-radius: 0;
 }
 
-#wv-toolbar li {
+.wv-toolbar .wv-toolbar-button {
   font-size: 14.3px;
   display: inline-block;
   margin: 0 0 0 4px;
   background: rgba(40, 40, 40, 0.85);
   border: 1px solid #333;
-  border-radius: 5px;
-}
-
-#wv-toolbar li label {
-  border-radius: 5px;
-  margin: 0;
-  border: 0;
   padding: 5.72px 14.3px;
-  background-color: transparent;
-  background-image: none;
+  border-radius: 5px;
 }
-
-#wv-toolbar li label span {
-  display: inline-block;
-  width: 0;
-  padding: 0;
-  line-height: normal;
-}
-
-#wv-toolbar li .ui-state-default {
-  background-color: transparent;
-  background-image: none;
-}
-
-#wv-toolbar li:hover label {
+.wv-toolbar .wv-toolbar-button:hover {
   background-color: #fff;
   color: #1a1a1a;
 }
-#wv-toolbar li:hover label.ui-state-disabled {
-  background-color: transparent;
-}
-.wv-menu .ui-menu .ui-menu-item a {
-  position: relative;
-  border: 0;
-  margin: 0;
-  text-decoration: none;
-  display: block;
-  padding: 2px 0.4em 2px 2em;
-  line-height: 1.5;
-  min-height: 0;
-  font-weight: 400;
-}
 
-.wv-menu .ui-menu .ui-menu-item .ui-state-active,
-.wv-menu .ui-menu .ui-menu-item a:hover,
-.wv-menu .ui-menu .ui-menu-item a:focus {
-  color: #333;
-  background: #eee;
-  border: 0;
-}
