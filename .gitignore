@@ -21,13 +21,11 @@ tools
 *.swp
 options
 \#*
-npm-debug.log
 .vagrant
+*.log
 # Nightwatch stuff
 e2e/reports
-selenium-debug.log
 *.jar
-local.log
 # Config
 /config/*
 !/config/default
