@@ -50,10 +50,10 @@ export default class ImageResSelection extends React.Component {
   _renderFileTypeSelect() {
     if (this.props.fileTypeOptions) {
       return (
-        <div className='wv-image-header'>
+        <div className="wv-image-header">
           <SelectionList
-            id='wv-image-format'
-            optionName='filetype'
+            id="wv-image-format"
+            optionName="filetype"
             value={this.state.fileType}
             optionArray={this.state.fileTypes}
             onChange={this.handleChange.bind(this)}
@@ -66,19 +66,21 @@ export default class ImageResSelection extends React.Component {
   _renderWorldfileSelect() {
     if (this.props.worldFileOptions) {
       return (
-        <div className='wv-image-header'>
-
-          {this.state.fileType === 'image/kmz'
-            ? <select disabled>
-              <option value='false'>No</option>
+        <div className="wv-image-header">
+          {this.state.fileType === 'image/kmz' ? (
+            <select disabled>
+              <option value="false">No</option>
             </select>
-            : <select
-              id='wv-image-worldfile'
+          ) : (
+            <select
+              id="wv-image-worldfile"
               value={this.state.worldfile}
-              onChange={(e) => this.handleChange('worldfile', e.target.value)}>
-              <option value='false'>No</option>
-              <option value='true'>Yes</option>
-            </select> }
+              onChange={e => this.handleChange('worldfile', e.target.value)}
+            >
+              <option value="false">No</option>
+              <option value="true">Yes</option>
+            </select>
+          )}
           Worldfile (.zip)
         </div>
       );
@@ -90,12 +92,12 @@ export default class ImageResSelection extends React.Component {
 
     return (
       <div className="wv-re-pick-wrapper">
-        <div className='wv-image-header'>
+        <div className="wv-image-header">
           <SelectionList
-            id='wv-image-resolution'
+            id="wv-image-resolution"
             optionArray={this.state.resolutions}
             value={this.state.resolution}
-            optionName='resolution'
+            optionName="resolution"
             onChange={this.handleChange.bind(this)}
           />
           {this.props.firstLabel}
@@ -111,7 +113,6 @@ export default class ImageResSelection extends React.Component {
           onClick={this.props.onDownloadClick}
         />
       </div>
-
     );
   }
 }
