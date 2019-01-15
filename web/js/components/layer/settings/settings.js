@@ -200,6 +200,7 @@ class LayerSettings extends React.Component {
         isOpen={isOpen}
         toggle={close}
         backdrop={false}
+        modalTransition={{ timeout: 150 }}
       >
         {layer.id ? (
           <React.Fragment>

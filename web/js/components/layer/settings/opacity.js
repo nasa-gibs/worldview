@@ -10,12 +10,12 @@ class OpacitySelect extends React.Component {
     };
   }
   render() {
-    const { layer, setOpacity } = this.props;
+    const { layer, setOpacity, start } = this.props;
     return (
       <div className="layer-opacity-select settings-component">
         <h2 className="wv-header">Opacity</h2>
         <Slider
-          defaultValue={this.props.start}
+          defaultValue={start}
           onChange={val => {
             setOpacity(layer.id, (val / 100).toFixed(2));
             this.setState({ value: val });

@@ -21,9 +21,15 @@ export function layersOptions(models, ui, config) {
       loaded();
     }
   };
-  self.close = function() {
+  self.close = function(timeout) {
+    timeout = timeout || 0;
     self.reactComponent.setState({ isOpen: false });
     self.layerId = null;
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve();
+      }, timeout);
+    });
   };
   /**
    * Open react component with new layer info
@@ -31,15 +37,19 @@ export function layersOptions(models, ui, config) {
    */
   self.createNewLayer = function(layer) {
     if (layer.id === self.layerId) {
-      return self.close();
+      self.close();
+      return;
     }
-    var names = models.layers.getTitles(layer.id);
-    self.layerId = layer.id;
-    self.reactComponent.setState({
-      layer: layer,
-      title: names.title,
-      palettedAllowed: models.palettes.allowed(layer.id),
-      isOpen: true
+    const timeout = layer.id ? 300 : 0;
+    self.close(timeout).then(() => {
+      const names = models.layers.getTitles(layer.id);
+      self.layerId = layer.id;
+      self.reactComponent.setState({
+        layer: layer,
+        title: names.title,
+        palettedAllowed: models.palettes.allowed(layer.id),
+        isOpen: true
+      });
     });
   };
   /**
