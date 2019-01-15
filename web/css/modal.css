@@ -1,0 +1,22 @@
+/* universal/default modal styles */
+.modal-dialog .default-modal,
+.modal-dialog .modal-content {
+  background: #282828;
+  color: #eee;
+}
+.modal-dialog .close {
+  color: #fff;
+}
+
+/* toolbar modal list styles */
+.toolbar-list-modal,
+.toolbar-list-modal .modal-content {
+  width: 150px;
+}
+.toolbar-list-modal.modal-dialog {
+  position: absolute;
+  top: 33px;
+}
+.toolbar-list-modal .modal-body {
+  padding: 0;
+};
