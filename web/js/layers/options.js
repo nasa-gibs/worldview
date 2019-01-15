@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import palettes from '../palettes/palettes';
 import { palettesTranslate, getCheckerboard } from '../palettes/util';
 import LayerSettings from '../components/layer/settings/settings';
+import Promise from 'bluebird';
 
 export function layersOptions(models, ui, config) {
   var self = {};
