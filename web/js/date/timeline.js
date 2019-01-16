@@ -99,7 +99,7 @@ export function timeline(models, config, ui) {
         .attr('width', self.width)
         .attr(
           'viewBox',
-          '0 1 ' +
+          '0 9 ' +
             self.width +
             ' ' +
             (self.height + self.margin.top + self.margin.bottom + 26)
@@ -143,7 +143,7 @@ export function timeline(models, config, ui) {
       .attr('id', 'timeline-footer-svg')
       .attr(
         'viewBox',
-        '0 1 ' +
+        '0 9 ' +
           self.width +
           ' ' +
           (self.height + self.margin.top + self.margin.bottom + 26)
@@ -169,7 +169,7 @@ export function timeline(models, config, ui) {
       .append('svg:g')
       .attr('clip-path', 'url(#timeline-boundary)')
       .attr('style', 'clip-path:url(#timeline-boundary)')
-      .attr('transform', 'translate(0,16)');
+      .attr('transform', 'translate(0,1)');
 
     self.axis = self.boundary
       .append('svg:g')
