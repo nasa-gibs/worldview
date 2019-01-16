@@ -5,28 +5,28 @@ const aodCombinedValueId = 'MODIS_Combined_Value_Added_AOD';
 const aodCheckBox =
   '#checkbox-case-MODIS_Combined_Value_Added_AOD .wv-checkbox';
 const aodIndexCheckbox = '#checkbox-case-OMI_Aerosol_Index .wv-checkbox';
-const TIME_LIMIT = 20000;
+
 module.exports = {
   before: function(client) {
-    reuseables.loadAndSkipTour(client, TIME_LIMIT);
+    reuseables.loadAndSkipTour(client, client.globals.timeout);
   },
   'Add AOD Layer to Layer Group A': function(client) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
     client.waitForElementVisible(
       selectors.swipeDragger,
-      TIME_LIMIT,
+      client.globals.timeout,
       function() {
         client.click(selectors.addLayers);
         client.waitForElementVisible(
           selectors.aerosolOpticalDepth,
-          TIME_LIMIT,
+          client.globals.timeout,
           function() {
             client.click(selectors.aerosolOpticalDepth);
-            client.waitForElementVisible(aodCheckBox, 20000, function() {
+            client.waitForElementVisible(aodCheckBox, client.globals.timeout, function() {
               client.click(aodCheckBox);
               client.waitForElementVisible(
                 '#active-' + aodCombinedValueId,
-                TIME_LIMIT
+                client.globals.timeout
               );
               client.click(selectors.layersModalCloseButton);
             });
@@ -37,7 +37,7 @@ module.exports = {
   },
   'Toggle compare mode to Active state B': function(client) {
     client.click(selectors.bTab + ' .productsIcon');
-    client.waitForElementVisible('#activeB-Coastlines', TIME_LIMIT);
+    client.waitForElementVisible('#activeB-Coastlines', client.globals.timeout);
   },
   'Verify that AOD layer is not visible': function(client) {
     client.expect.element('#active-' + aodCombinedValueId).to.not.be.visible;
@@ -48,16 +48,16 @@ module.exports = {
     client.click(selectors.addLayers);
     client.waitForElementVisible(
       selectors.aerosolOpticalDepth,
-      TIME_LIMIT,
+      client.globals.timeout,
       function() {
         client.click(
           '#layer-category-item-legacy-all-aerosol-index .layer-category-name'
         );
-        client.waitForElementVisible(aodIndexCheckbox, 20000, function() {
+        client.waitForElementVisible(aodIndexCheckbox, client.globals.timeout, function() {
           client.click(aodIndexCheckbox);
           client.waitForElementVisible(
             '#activeB-OMI_Aerosol_Index',
-            TIME_LIMIT
+            client.globals.timeout
           );
           client.expect.element(
             '#activeB-' + aodCombinedValueId
@@ -77,7 +77,7 @@ module.exports = {
     client.click(selectors.aTab);
     client.waitForElementVisible(
       '#active-' + aodCombinedValueId,
-      TIME_LIMIT,
+      client.globals.timeout,
       function() {
         client.expect.element('#activeB-OMI_Aerosol_Index').to.not.be.visible;
         client.expect.element('#activeA-OMI_Aerosol_Index').to.not.be.present;

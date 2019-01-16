@@ -82,8 +82,9 @@ module.exports = {
       .text.not.contains('(VIIRS) Corrected Reflectance');
   },
   'Close Layer modal': function(client) {
-    client.click(localSelectors.layersModalCloseButton).pause(2000);
-    client.useCss().expect.element(localSelectors.layersAll).to.not.be.visible;
+    client.click(localSelectors.layersModalCloseButton)
+      .pause(2000);
+    client.useCss().expect.element(localSelectors.layersAll).to.not.be.present;
   },
   'Open Layer modal and click breadcrumb to return to main selection': function(
     client
@@ -103,21 +104,12 @@ module.exports = {
   },
   'Browsing Layers by Category: Aerosol Optical Depth': function(client) {
     client.click(localSelectors.aerosolOpticalDepth);
-    client.waitForElementVisible(localSelectors.headerForAOD, 20000, function(
-      e
-    ) {
-      // This is a very slow process
-      client
-        .click(
-          '[aria-labelledby="accordion-legacy-all-aerosol-optical-depth"] > ul > li:nth-child(3) > a'
-        )
+    client.waitForElementVisible(localSelectors.headerForAOD, 20000, function(e) { // This is a very slow process
+      /* Not found
+      client.click('[aria-labelledby="accordion-legacy-all-aerosol-optical-depth"] > ul > li:nth-child(3) > a')
         .pause(1000);
-      client
-        .useCss()
-        .assert.containsText(
-          '#modisterraandaquacombinedvalueaddedaerosolopticaldepth',
-          'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth'
-        );
+        */
+      client.useCss().assert.containsText('#modisterraandaquacombinedvalueaddedaerosolopticaldepth', 'MODIS (Terra and Aqua) Combined Value-Added Aerosol Optical Depth');
     });
   },
   after: function(client) {

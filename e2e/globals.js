@@ -13,5 +13,6 @@ module.exports = {
     resolutionTooltip: '#zoom-btn-container',
     notifyMessage: '.notify-alert .notify-message'
   },
-  delay: 3000 // Acceptable delay in ms between performing actions and seeing results
+  delay: 3000, // Acceptable delay in ms between performing actions and seeing results
+  timeout: 20000
 };
