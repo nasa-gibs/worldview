@@ -37,7 +37,7 @@
     "dist:dev": "npm run clean && npm run getcapabilities && npm run build:config && npm run build:dev && node ./tasks/dist.js",
     "distclean": "npm run clean && node ./tasks/distclean.js",
     "docker:ci": "npm run docker:restart && docker exec -it worldview /bin/bash /build/e2e/docker-run.sh ; npm run docker:stop",
-    "docker:e2e": "docker exec -it worldview xvfb-run npx nightwatch --env firefox",
+    "docker:e2e": "docker exec -it worldview xvfb-run -s '-screen 0, 1920x1080x24' npx nightwatch --env firefox",
     "docker:image": "docker build -t worldview .",
     "docker:reimage": "docker rmi -f worldview && docker build --no-cache -t worldview .",
     "docker:restart": "npm run docker:stop && npm run docker:start",
