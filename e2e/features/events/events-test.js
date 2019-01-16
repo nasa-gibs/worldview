@@ -26,12 +26,12 @@ module.exports = {
       '#sidebar-event-EONET_3931',
       TIME_LIMIT,
       function() {
-        client.expect.element('#active-VIIRS_SNPP_Fires_375m_Night').to.not.be
+        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Night').to.not.be
           .present;
-        client.expect.element('#active-VIIRS_SNPP_Fires_375m_Day').to.not.be
+        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day').to.not.be
           .present;
-        client.expect.element('#active-MODIS_Fires_Aqua').to.not.be.present;
-        client.expect.element('#active-MODIS_Fires_Terra').to.not.be.present;
+        client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.not.be.present;
+        client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to.not.be.present;
       }
     );
   },
@@ -40,13 +40,13 @@ module.exports = {
   },
   'Check that 4 fire layers are now present': function(client) {
     client.waitForElementPresent(
-      '#active-VIIRS_SNPP_Fires_375m_Night',
+      '#active-VIIRS_SNPP_Thermal_Anomalies_375m_Night',
       TIME_LIMIT,
       function() {
-        client.expect.element('#active-VIIRS_SNPP_Fires_375m_Day').to.be
+        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day').to.be
           .present;
-        client.expect.element('#active-MODIS_Fires_Aqua').to.be.present;
-        client.expect.element('#active-MODIS_Fires_Terra').to.be.present;
+        client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.be.present;
+        client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to.be.present;
       }
     );
   },

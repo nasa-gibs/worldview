@@ -27,9 +27,10 @@ module.exports = {
   infoButton: '.wv-layers-info',
   optionsButton: '.wv-layers-options',
   infoDialog: '[aria-describedby="wv-layers-info-dialog"]',
-  optionsDialog: '[aria-describedby="wv-layers-options-dialog"]',
+  optionsDialog: '#wv-layers-options-dialog',
   layersSearchField: 'input#layers-search-input',
-  layersAll: '#layers-all',
+  // layersAll: '#layers-all',
+  layersAll: '.layers-all-layer',
   sourceInfoIcon: '.layers-all-layer .fa-info-circle',
   layerHeader: '.layers-all-header',
   addLayers: '#layers-add',
@@ -38,6 +39,6 @@ module.exports = {
   layersModalCloseButton: '.custom-layer-dialog .modal-header .close',
   aerosolOpticalDepth:
     '#legacy-all #layer-category-item-legacy-all-aerosol-optical-depth',
-  backToCategories: '#category-breadcrumb a',
+  backToCategories: 'a.breadcrumb-item',
   headerForAOD: '#accordion-legacy-all-aerosol-optical-depth'
 };
