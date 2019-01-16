@@ -190,7 +190,7 @@ TimelineDragger.defaultProps = {
   color: '#fff',
   position: 0,
   visibility: 'visible',
-  yOffset: 0,
+  yOffset: -16,
   path: null,
   textColor: '#000'
 };

@@ -86,7 +86,7 @@ export function timelineCompare(models, config, ui) {
   var getInitialProps = function(compareLetter, label) {
     max = getMaxTimelineWidth(ui);
     return {
-      yOffset: 15,
+      yOffset: 0,
       path: PICK_PATH,
       height: 59.51,
       width: 58.42,

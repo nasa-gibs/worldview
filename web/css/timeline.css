@@ -396,11 +396,6 @@ g.plot rect.data-bar-invisible {
 
 #timeline-footer svg {
   overflow: visible;
-  margin-top: -16px;
-}
-
-#timeline-footer > svg {
-  margin-top: -23px;
 }
 
 #wv-rangeselector-case > .wv-timeline-range-selector {
@@ -548,7 +543,8 @@ g.plot rect.data-bar-invisible {
 }
 
 #guitarpick.pick-clicked rect,
-#guitarpick:hover rect {
+#guitarpick:hover rect,
+#guitarpick:hover {
   fill: #999;
 }
 

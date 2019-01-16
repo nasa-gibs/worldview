@@ -99,13 +99,13 @@ export function timelinePick(models, config, ui) {
   var change = function() {
     var newDate = tipDate;
 
-    tl.guitarPick.attr('transform', 'translate(' + self.offset + ',' + 0 + ')');
+    tl.guitarPick.attr('transform', 'translate(' + self.offset + ',' + -16 + ')');
 
     tl.guitarPick
       .data([
         {
           x: self.offset,
-          y: 0
+          y: -16
         }
       ])
       .call(drag);
@@ -180,10 +180,10 @@ export function timelinePick(models, config, ui) {
       .data([
         {
           x: self.offset,
-          y: 0
+          y: -16
         }
       ])
-      .attr('transform', 'translate(' + self.offset + ',0)')
+      .attr('transform', 'translate(' + self.offset + ', -16)')
       .call(drag);
 
     prevChange = undefined;
