@@ -10,7 +10,7 @@
             "layergroup": [
               "amsr2"
             ],
-            "product":  ""
+            "product":  "AU_SI25" 
         }
     }
 }
