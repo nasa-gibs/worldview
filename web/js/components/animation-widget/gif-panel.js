@@ -51,6 +51,7 @@ export default class GifPanel extends React.Component {
           height={this.state.imgHeight}
           requestSize={this.state.requestSize}
           maxGifSize={this.props.maxGifSize}
+          maxImageDimensionSize={this.props.maxImageDimensionSize}
           valid={this.state.valid}
           onClick={this.props.onDownloadClick}
           startDate={this.state.startDate}
@@ -88,6 +89,7 @@ GifPanel.propTypes = {
   imgWidth: PropTypes.number,
   imgHeight: PropTypes.number,
   maxGifSize: PropTypes.number,
+  maxImageDimensionSize: PropTypes.number,
   showDates: PropTypes.bool,
   onDownloadClick: PropTypes.func,
   onClick: PropTypes.func,
