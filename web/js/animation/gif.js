@@ -16,7 +16,8 @@ import {
   imageUtilCalculateResolution,
   imageUtilGetLayers,
   imageUtilGetCoordsFromPixelValues,
-  imageUtilGetConversionFactor
+  imageUtilGetConversionFactor,
+  bboxWMS13
 } from '../image/util';
 import util from '../util/util';
 import wvui from '../ui/ui';
@@ -24,6 +25,7 @@ import uiIndicator from '../ui/indicator';
 const gifStream = new GifStream();
 
 const conversionConstant = 3.6; // we are saying that the gif compresses each total by about 3.6x
+const maxImageDimensionSize = 8200;
 const maxGifSize = 250;
 const GRATICULE_WARNING =
   'The graticule layer cannot be used to take a snapshot. Would you ' +
@@ -117,6 +119,7 @@ export function animationGif(models, config, ui) {
       endDate: null,
       speed: null,
       maxGifSize: maxGifSize,
+      maxImageDimensionSize: maxImageDimensionSize,
       checked: true,
       increment: lodashCapitalize(ui.anim.widget.getIncrements())
     };
@@ -202,7 +205,9 @@ export function animationGif(models, config, ui) {
   };
 
   var fileSizeValid = function() {
-    return requestSize < maxGifSize && imgHeight !== 0 && imgWidth !== 0;
+    return requestSize < maxGifSize &&
+      imgHeight !== 0 && imgWidth !== 0 &&
+      imgHeight <= maxImageDimensionSize && imgWidth <= maxImageDimensionSize;
   };
 
   var setDownloadButtonClass = function() {
@@ -513,33 +518,29 @@ export function animationGif(models, config, ui) {
    *
    */
   var getImageArray = function(startDate, endDate, interval) {
-    var url;
     var a = [];
     var fromDate = new Date(startDate);
     var toDate = new Date(endDate);
     var current = fromDate;
-    var host;
-    var path;
     var j = 0;
     var src;
     var strDate;
-    var lonlat = imageUtilGetCoordsFromPixelValues(
+    var lonlats = imageUtilGetCoordsFromPixelValues(
       animationCoordinates,
       ui.map.selected
     );
     var layers;
     var proj = models.proj.selected.id;
     var opacities;
-    var epsg = models.proj.selected.epsg;
+    let crs = models.proj.selected.crs;
+    let imgFormat = 'image/jpeg';
     var products = getProducts();
     var intervalAmount = 1;
 
-    if (config.features.imageDownload) {
-      host = config.features.imageDownload.host;
-      path = config.parameters.imagegen || config.features.imageDownload.path;
-    } else {
-      host = 'https://gibs.earthdata.nasa.gov';
-      path = 'image-download';
+    let url = 'http://localhost:3002/api/v1/snapshot';
+    if (config.features.imageDownload && config.features.imageDownload.url) {
+      url = config.features.imageDownload.url;
+      util.warn('Redirecting GIF download to: ' + url);
     }
 
     while (current <= toDate) {
@@ -553,26 +554,24 @@ export function animationGif(models, config, ui) {
 
       layers = imageUtilGetLayers(products, proj);
       opacities = imageUtilGetLayerOpacities(products);
-      url = util.format(
-        host +
-          '/' +
-          path +
-          '?{1}&extent={2}&epsg={3}&layers={4}&opacities={5}&worldfile=false&format=image/jpeg&width={6}&height={7}',
-        'TIME={1}',
-        lonlat[0][0] +
-          ',' +
-          lonlat[0][1] +
-          ',' +
-          lonlat[1][0] +
-          ',' +
-          lonlat[1][1],
-        epsg,
-        layers.join(','),
-        opacities.join(','),
-        imgWidth,
-        imgHeight
-      );
-      src = util.format(url, strDate);
+
+      let params = [
+        'REQUEST=GetSnapshot',
+        `TIME=${util.toISOStringDate(current)}`,
+        `BBOX=${bboxWMS13(lonlats, crs)}`,
+        `CRS=${crs}`,
+        `LAYERS=${layers.join(',')}`,
+        `FORMAT=${imgFormat}`,
+        `WIDTH=${imgWidth}`,
+        `HEIGHT=${imgHeight}`
+      ];
+      if (opacities.length > 0) {
+        params.push(`OPACITIES=${opacities.join(',')}`);
+      }
+
+      let dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
+
+      src = util.format(dlURL, strDate);
       a.push({
         src: src,
         text: showDates ? strDate : '',

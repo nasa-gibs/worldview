@@ -14,13 +14,13 @@ export class GifPanelGrid extends React.Component {
       return (
         <div id='gif-size' className='gif-size gif-size-invalid grid-child'>
           <i className='fa fa-times fa-fw' />
-          <span>{'~' + size + ' MB (Before Compression)'}</span>
+          <span>{this.props.maxGifSize + ' MB' + '~' + size + ' MB'}</span>
         </div>
       );
     } else {
       return (
         <div id='gif-size' className='gif-size grid-child'>
-          <span>{'~' + size + ' MB (Before Compression)'} </span>
+          <span>{this.props.maxGifSize + ' MB / ~' + size + ' MB'} </span>
         </div>
       );
     }
@@ -37,15 +37,15 @@ export class GifPanelGrid extends React.Component {
         <div className='grid-child'><span>{this.props.speed + ' Frames Per Second'}</span></div>
         <div className='grid-child label'><span>Increment:</span></div>
         <div className='grid-child'><span>{this.props.increment}</span></div>
-        <div className='grid-child label'><span>Request Size:</span></div>
+        <div className='grid-child label'><span>Max / Raw Size:</span></div>
         {imageSize}
-        <div className='grid-child label'><span>Max Request Size: </span></div>
+        <div className='grid-child label'><span>Max Dimension: </span></div>
         <div className={this.props.valid ? 'grid-child gif-max-size' : 'grid-child gif-max-size gif-size-invalid'}>
-          <span>{this.props.maxGifSize + ' MB (Before Compression)'}</span>
+          <span>{this.props.maxImageDimensionSize + 'px'}</span>
         </div>
         <div className='grid-child label'><span>Image Dimensions:</span></div>
         <div className='grid-child' id='wv-image-width'>
-          <span>{this.props.width + ' x ' + this.props.height + 'px' }</span>
+          <span>{this.props.width + 'px x ' + this.props.height + 'px' }</span>
         </div>
       </div>
     );
@@ -55,6 +55,7 @@ GifPanelGrid.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   maxGifSize: PropTypes.number,
+  maxImageDimensionSize: PropTypes.number,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
   speed: PropTypes.number,
