@@ -35,7 +35,7 @@ export function compareUi(models, ui, config) {
   };
   var init = function() {
     var model = models.compare;
-    if (util.browser.localStorage) {
+    if (util.browser.localStorage && !util.browser.mobileAndTabletDevice) {
       if (model.active) alert();
 
       model.events.on('toggle', function() {
