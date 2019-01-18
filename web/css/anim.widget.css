@@ -1,4 +1,4 @@
-#wv-animation-widget {
+.wv-animation-widget {
   width: 330px;
   border-radius: 8px;
   height: 125px;
@@ -12,24 +12,27 @@
   color: #fff;
 }
 
-#wv-animation-widget.subdaily {
+.wv-animation-widget.subdaily {
   width: 402px;
 }
-
-#wv-animation-widget > a,
-#wv-animation-widget > div {
+.wv-animation-widget .wv-slider-case {
+  padding-right: 3px;
+  padding-left: 3px;
+}
+.wv-animation-widget > a,
+.wv-animation-widget > div {
   display: inline-block;
   margin: 7px 0 0 10px;
 }
 
-#wv-animation-widget .wv-animation-widget-header {
+.wv-animation-widget .wv-animation-widget-header {
   display: block;
   text-align: center;
   margin-bottom: 7px;
   text-transform: capitalize;
 }
 
-#wv-animation-widget .wv-icon-case {
+.wv-animation-widget .wv-icon-case {
   display: inline-block;
   height: 35px;
   width: 42px;
@@ -38,7 +41,7 @@
   border-radius: 5px;
 }
 
-#wv-animation-widget a .wv-animation-widget-icon {
+.wv-animation-widget a .wv-animation-widget-icon {
   font-size: 23px;
   color: #fff;
   position: absolute;
@@ -48,39 +51,39 @@
   top: 50%;
 }
 
-#wv-animation-widget a .wv-animation-widget-icon:hover {
+.wv-animation-widget a .wv-animation-widget-icon:hover {
   color: #fff;
   opacity: 0.5;
 }
-#wv-animation-widget a .wv-animation-widget-icon.fa-file-video {
+.wv-animation-widget a .wv-animation-widget-icon.fa-file-video {
   font-size: 29px;
 }
-#wv-animation-widget a .wv-animation-widget-icon.fa-retweet {
+.wv-animation-widget a .wv-animation-widget-icon.fa-retweet {
   font-size: 31px;
   color: #212121;
   opacity: 0.7;
 }
 
-#wv-animation-widget .active .wv-animation-widget-icon.fa-retweet {
+.wv-animation-widget .active .wv-animation-widget-icon.fa-retweet {
   color: #fff;
   opacity: 1;
 }
 
-#wv-animation-widget div .wv-slider-label {
+.wv-animation-widget div .wv-slider-label {
   font-size: 10px;
   color: #fff;
   display: block;
   text-align: center;
 }
 
-#wv-animation-widget .wv-anim-dates-case {
+.wv-animation-widget .wv-anim-dates-case {
   height: 48px;
   width: 100%;
   position: relative;
   margin: 0;
 }
 
-#wv-animation-widget .thru-label {
+.wv-animation-widget .thru-label {
   position: absolute;
   transform: translate(-50%, 0);
   -webkit-transform: translate(-50%, 0);
@@ -91,55 +94,55 @@
   z-index: 0;
 }
 
-#wv-animation-widget .wv-date-selector-widget {
+.wv-animation-widget .wv-date-selector-widget {
   display: inline-block;
   position: absolute;
   top: 6px;
 }
 
-#wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(1) {
+.wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(1) {
   left: 5px;
 }
 
-#wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(3) {
+.wv-animation-widget .wv-anim-dates-case .wv-date-selector-widget:nth-child(3) {
   right: 10px;
 }
 
-#wv-animation-widget .wv-date-selector-widget svg {
+.wv-animation-widget .wv-date-selector-widget svg {
   margin: 0 auto;
 }
 
-#wv-animation-widget .wv-date-selector-widget input {
+.wv-animation-widget .wv-date-selector-widget input {
   height: inherit;
   text-align: center;
   width: 100%;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper {
+.wv-animation-widget .wv-date-selector-widget .input-wrapper {
   z-index: 99;
   text-align: center;
   margin: 0 1px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper-year {
+.wv-animation-widget .wv-date-selector-widget .input-wrapper-year {
   max-width: 38px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper-month {
+.wv-animation-widget .wv-date-selector-widget .input-wrapper-month {
   max-width: 30px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper-day,
-#wv-animation-widget .wv-date-selector-widget .input-wrapper-hour,
-#wv-animation-widget .wv-date-selector-widget .input-wrapper-minute {
+.wv-animation-widget .wv-date-selector-widget .input-wrapper-day,
+.wv-animation-widget .wv-date-selector-widget .input-wrapper-hour,
+.wv-animation-widget .wv-date-selector-widget .input-wrapper-minute {
   max-width: 25px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-wrapper-hour {
+.wv-animation-widget .wv-date-selector-widget .input-wrapper-hour {
   margin-left: 8px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-time-divider {
+.wv-animation-widget .wv-date-selector-widget .input-time-divider {
   font-family: 'Roboto Mono', monospace;
   font-size: 15px;
   vertical-align: middle;
@@ -147,7 +150,7 @@
   margin-left: -5px;
 }
 
-#wv-animation-widget .wv-date-selector-widget .input-time-zmark {
+.wv-animation-widget .wv-date-selector-widget .input-time-zmark {
   font-family: 'Roboto Mono', monospace;
   font-size: 15px;
   vertical-align: middle;
@@ -159,7 +162,7 @@
   display: none;
 }
 
-.wv-anim-active #wv-animation-widget,
+.wv-anim-active .wv-animation-widget,
 .wv-anim-active #wv-rangeselector-case {
   display: block;
 }

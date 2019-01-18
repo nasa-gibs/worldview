@@ -12,8 +12,9 @@ const RangeHandle = props => {
 
   const positionStyle = {
     position: 'absolute',
-    left: `${(offset - 6).toFixed(2)}%`,
-    bottom: 17
+    left: `${(offset - 5).toFixed(2)}%`,
+    bottom: 25,
+    fontSize: '11px'
   };
 
   return (
