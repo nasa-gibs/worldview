@@ -35,7 +35,7 @@
 
 .tour a {
   color: #00457b;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .tour a:hover {
@@ -426,7 +426,7 @@
 .tour-in-progress .modal-body p {
   font-size: 13px;
   line-height: 20px;
-  font-weight: 300;
+  font-weight: 400;
   margin-bottom: 16px;
 }
 
@@ -436,7 +436,7 @@
 
 .tour-in-progress .default .modal-body a {
   color: #7bf;
-  font-weight: 600;
+  font-weight: 400;
 }
 .tour-in-progress .default .modal-body a:hover {
   color: #9df;
