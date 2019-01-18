@@ -4,3 +4,9 @@
   width: 22px;
   height: 22px;
 }
+.rc-slider {
+  padding: 11px 0 16px;
+}
+.rc-slider-handle:focus {
+  box-shadow: none;
+}
