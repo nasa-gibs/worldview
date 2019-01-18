@@ -110,7 +110,7 @@ class ModalInProgress extends React.Component {
     // 'ca=false' +
     // '&cm=opacity' +
     // '&cv=80' +
-    // 'p=geographic' +
+    // '&p=geographic' +
     // '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,MODIS_Terra_Aerosol_Optical_Depth_3km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
     // '&l1=BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
     // '&t=2018-09-06-T00%3A00%3A00Z' +
@@ -317,17 +317,11 @@ class ModalInProgress extends React.Component {
 
     // SET UI (During step transistion): Toggle Animation
     // If animation is current on, toggle the state and animation widget
-    if (prevState.ab === 'on' && currentState.ab === 'off') {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if (prevState.ab === 'on' && !currentState.ab) {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if (prevState.ab === 'off' && currentState.ab === 'on') {
+    if (currentState.ab === 'on' && !document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
       models.anim.deactivate();
       ui.anim.widget.toggleAnimationWidget();
-    } else if (!prevState.ab && currentState.ab === 'on') {
-      models.anim.deactivate();
+    } else if (document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
+      models.anim.activate();
       ui.anim.widget.toggleAnimationWidget();
     }
 
