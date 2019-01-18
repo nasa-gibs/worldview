@@ -251,7 +251,8 @@ export default function naturalEventsUI(models, ui, config, request) {
       }
       if (
         util.browser.localStorage &&
-        !localStorage.getItem('dismissedEventVisibilityAlert')
+        !localStorage.getItem('dismissedEventVisibilityAlert') &&
+        !util.browser.mobileAndTabletDevice
       ) {
         eventVisibilityAlert.dialog('open');
       }
