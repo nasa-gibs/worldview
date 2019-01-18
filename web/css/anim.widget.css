@@ -75,7 +75,11 @@
   display: block;
   text-align: center;
 }
-
+.wv-animation-widget .anim-frame-rate-label {
+  bottom: 25px;
+  font-size: 11px;
+  cursor: default;
+}
 .wv-animation-widget .wv-anim-dates-case {
   height: 48px;
   width: 100%;
