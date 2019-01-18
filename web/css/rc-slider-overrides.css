@@ -1,0 +1,13 @@
+.rc-slider-handle {
+  margin-left: -11px;
+  margin-top: -9px;
+  width: 22px;
+  height: 22px;
+}
+.rc-slider {
+  padding: 11px 0 16px;
+  cursor: pointer;
+}
+.rc-slider-handle:focus {
+  box-shadow: none;
+}

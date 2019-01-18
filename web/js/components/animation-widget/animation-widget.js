@@ -12,13 +12,14 @@ const RangeHandle = props => {
 
   const positionStyle = {
     position: 'absolute',
-    left: `${(offset - 6).toFixed(2)}%`,
-    bottom: 17
+    left: `${(offset - 5).toFixed(2)}%`
   };
 
   return (
     <React.Fragment>
-      <span style={positionStyle}>{value < 10 ? value.toFixed(1) : value}</span>
+      <span className="anim-frame-rate-label" style={positionStyle}>
+        {value < 10 ? value.toFixed(1) : value}
+      </span>
       <Handle
         dragging={dragging.toString()}
         value={value}

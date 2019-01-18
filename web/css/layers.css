@@ -534,7 +534,7 @@
   margin-top: 10px;
 }
 .wv-layers-options-dialog .layer-threshold-select {
-  height: 48px;
+  height: 58px;
 }
 .wv-layers-options-dialog .tab-content .wv-palette-selector {
   width: 266px;
@@ -584,7 +584,7 @@
 
 .wv-layers-options-dialog .wv-palette-squash {
   float: right;
-  margin-top: -30px;
+  margin-top: -26px;
 }
 
 /* Layers Info */
