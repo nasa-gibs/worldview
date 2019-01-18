@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
 import lodashFind from 'lodash/find';
+import { getCompareObjects } from '../../compare/util';
 
 import { parse as dateParser } from '../../date/date';
 import { parse as layerParser } from '../../layers/layers';
@@ -195,74 +196,11 @@ class ModalInProgress extends React.Component {
     // LOAD: Layers
     models.layers.load(currentState, errors);
 
-    // LOAD: Comparison
-    if (currentState.ca || currentState.cm) {
-      // Note: models.compare.load without re-selecitng t
-      if (currentState.ca === 'false') {
-        models.date.setActiveDate('selectedB');
-      }
-      // if (currentState.t) {
-      //   models.date.select(currentState.t, 'selected');
-      // }
-      if (currentState.z) {
-        models.date.selectedZoom = Number(currentState.z);
-      }
-      if (currentState.t1) {
-        models.date.select(currentState.t1, 'selectedB');
-      }
-      models.compare.active = true;
-      models.compare.isCompareA = true;
-      if (currentState.ca === 'false') {
-        models.compare.isCompareA = false;
-      }
-
-      if (currentState.cm) {
-        models.compare.mode = currentState.cm;
-        models.compare.setMode(currentState.cm);
-      }
-
-      if (currentState.cv) {
-        models.compare.value = Number(currentState.cv);
-        models.compare.setValue(currentState.cv);
-      }
-    }
-
-    // TODO: Fix this area of code
-    // SET UI: Set sidebar & timeline to comparison mode
-    if (currentState.ca || currentState.cm) {
-      models.date.events.trigger('state-update');
-      ui.timeline.input.update();
-
-      var compareObj = {};
-      if (config.features.compare) {
-        if (models.compare.active && models.layers.activeB) {
-          compareObj.a = {
-            dateString: util.toISOStringDate(currentState.t),
-            layers: models.layers.get(
-              { group: 'all', proj: 'all' },
-              models.layers['active']
-            )
-          };
-          compareObj.b = {
-            dateString: util.toISOStringDate(currentState.t1),
-            layers: models.layers.get(
-              { group: 'all', proj: 'all' },
-              models.layers['activeB']
-            )
-          };
-        }
-      }
-      ui.sidebar.reactComponent.setState({
-        isCompareMode: true,
-        firstDateObject: compareObj.a,
-        secondDateObject: compareObj.b,
-        isCompareA: models.compare && models.compare.isCompareA,
-        comparisonType: currentState.cm
-      });
-    }
-
     // LOAD: Date(s)
     models.date.load(currentState, errors);
+
+    // LOAD: Comparison
+    models.compare.load(currentState, errors);
 
     // LOAD: Animation
     if (!currentState.download) {
@@ -295,6 +233,23 @@ class ModalInProgress extends React.Component {
       }
     } else {
       ui.sidebar.selectTab('layers');
+    }
+
+    // SET UI: Comparison Mode
+    if (currentState.ca || currentState.cm) {
+      var compareObj = getCompareObjects(models);
+
+      models.compare.events.trigger('toggle');
+      models.compare.events.trigger('toggle-state');
+      models.date.events.trigger('state-update');
+
+      ui.sidebar.reactComponent.setState({
+        isCompareMode: true,
+        firstDateObject: compareObj.a,
+        secondDateObject: compareObj.b,
+        isCompareA: models.compare && models.compare.isCompareA,
+        comparisonType: currentState.cm
+      });
     }
 
     // SET UI: Timeline Zoom Level
