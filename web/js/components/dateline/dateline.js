@@ -87,7 +87,7 @@ class Line extends React.Component {
           stroke={this.props.color}
           opacity={
             (this.state.hovered && this.state.active) ||
-            (this.state.active && util.browser.mobileDevice)
+            (this.state.active && util.browser.mobileAndTabletDevice)
               ? this.props.opacity
               : '0'
           }
