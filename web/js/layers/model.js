@@ -302,15 +302,13 @@ export function layersModel(models, config) {
     self.events.trigger('update');
     self.events.trigger('change');
   };
-  self.replaceSubGroup = function(newSubGroup, activeLayerString, subGroup) {
+  self.replaceSubGroup = function(layerId, nextLayerId, activeLayerString, subGroup) {
     activeLayerString = activeLayerString || self.activeLayers;
-    var layers = self.get({ group: 'all' }, self[activeLayerString]);
-    var baseLayers =
-      subGroup === 'baselayers' ? newSubGroup : layers.baselayers;
-    var overlays = subGroup === 'overlays' ? newSubGroup : layers.overlays;
-    self[activeLayerString] = overlays.concat(baseLayers);
-    self.events.trigger('update');
-    self.events.trigger('change');
+    if (nextLayerId) {
+      self.moveBefore(layerId, nextLayerId, activeLayerString);
+    } else {
+      self.pushToBottom(layerId, activeLayerString);
+    }
   };
   self.clear = function(projId, activeLayerString) {
     activeLayerString = activeLayerString || self.activeLayers;

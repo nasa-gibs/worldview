@@ -64,12 +64,21 @@ class LayerList extends React.Component {
     if (result.source.index === result.destination.index) {
       return;
     }
+    const regex = new RegExp('-' + layerGroupName + '$');
+    const layerId = result.draggableId.replace(regex, '');
     const newLayerArray = reorder(
       layers,
       result.source.index,
       result.destination.index
     );
-    replaceSubGroup(newLayerArray, layerGroupName, groupId);
+    // In the new ordering, find the layer right after the layer that just
+    // moved. Leave null if moved to the end of the list.
+    let nextLayerId = null;
+    const nextIndex = result.destination.index + 1;
+    if (nextIndex < newLayerArray.length) {
+      nextLayerId = newLayerArray[nextIndex].id;
+    }
+    replaceSubGroup(layerId, nextLayerId, layerGroupName, groupId);
   }
   render() {
     const { groupId, title, layerGroupName } = this.props;
