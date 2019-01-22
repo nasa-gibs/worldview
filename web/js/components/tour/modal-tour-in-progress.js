@@ -113,11 +113,8 @@ class ModalInProgress extends React.Component {
 
     // TESTING HERE:
     // currentStepLink =
-    // 'ca=false' +
-    // '&cm=opacity' +
-    // '&cv=80' +
-    // '&p=geographic' +
-    // '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,MODIS_Terra_Aerosol_Optical_Depth_3km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
+    // 'p=geographic' +
+    // '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),MODIS_Combined_Value_Added_AOD(opacity=0.33,palette=blue_4,min=0.25,0.255,max=0.52,0.525,squash),MODIS_Terra_Aerosol_Optical_Depth_3km(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
     // '&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
     // '&t=2018-09-06-T00%3A00%3A00Z' +
     // '&t1=2018-03-06-T00%3A00%3A00Z' +
@@ -130,6 +127,9 @@ class ModalInProgress extends React.Component {
     // '&ae=2018-09-26T00%3A00%3A00Z' +
     // '&av=5' +
     // '&al=true' +
+    // '&ca=false' +
+    // '&cm=opacity' +
+    // '&cv=80' +
     // '&tr=' + this.props.currentStoryId;
 
     // Remove base URL from step links string
@@ -166,9 +166,6 @@ class ModalInProgress extends React.Component {
       animationParser(prevState, errors, config);
     }
 
-    // Create a query string from the current state
-    currentStepLink = models.link.toQueryString(currentState);
-
     // Pass current step query string to the browser url
     if (util.browser.history) {
       window.history.pushState(
@@ -179,12 +176,14 @@ class ModalInProgress extends React.Component {
     }
 
     // Process the state of the application
-    this.processLink(currentState, stepTransition, prevState, currentStepIndex);
+    // a timeout is added so that the palette data can load properly
+    setTimeout(() => { this.processLink(currentState, stepTransition, prevState, currentStepIndex); }, 750);
+    setTimeout(() => { this.setUI(currentState, prevState, currentStepIndex); }, 950);
+    setTimeout(() => { this.processActions(currentState, stepTransition); }, 1200);
   }
 
-  processLink(currentState, stepTransition, prevState, currentStepIndex) {
+  processLink(currentState) {
     var errors = [];
-    var config = this.props.config;
     var models = this.props.models;
     var ui = this.props.ui;
     var rotation = 0;
@@ -205,11 +204,11 @@ class ModalInProgress extends React.Component {
     // LOAD: Layers
     models.layers.load(currentState, errors);
 
+    // LOAD: Palettes
+    models.palettes.load(currentState, errors);
+
     // LOAD: Date(s)
     models.date.load(currentState, errors);
-
-    // LOAD: Palettes
-    palettes.loadCustom(config);
 
     // LOAD: Animation
     if (!currentState.download) {
@@ -243,6 +242,19 @@ class ModalInProgress extends React.Component {
     } else {
       ui.sidebar.selectTab('layers');
     }
+  }
+
+  setUI(currentState, prevState, currentStepIndex) {
+    var models = this.props.models;
+    var ui = this.props.ui;
+    var rotation = 0;
+
+    // Set rotation value if it exists
+    if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
+      if (!isNaN(currentState.r)) {
+        rotation = currentState.r * (Math.PI / 180.0);
+      }
+    }
 
     // SET UI: Comparison Mode
     if (currentState.ca || currentState.cm) {
@@ -275,12 +287,7 @@ class ModalInProgress extends React.Component {
       ui.anim.widget.reactComponent.setState({ looping: false });
       models.anim.rangeState.loop = false;
     }
-    if (currentState.as) ui.anim.widget.reactComponent.setState({ startDate: currentState.as });
-    if (currentState.ae) ui.anim.widget.reactComponent.setState({ endDate: currentState.ae });
     if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
-
-    // SET UI (During step transistion): Toggle Animation
-    // If animation is current on, toggle the state and animation widget
     if (currentState.ab === 'on' && !document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
       models.anim.deactivate();
       ui.anim.widget.toggleAnimationWidget();
@@ -313,7 +320,6 @@ class ModalInProgress extends React.Component {
       // Jump to extent & zoom (instead of animate):
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
-    this.processActions(currentState, stepTransition);
   }
 
   processActions(currentState, stepTransition) {
