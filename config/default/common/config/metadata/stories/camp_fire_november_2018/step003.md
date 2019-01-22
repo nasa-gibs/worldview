@@ -1,0 +1,1 @@
+<p>Let's compare imagery from different dates using the comparison feature - Change the date on the "A"/left side of the layer list to 8 November 2018 and the date on the "B"/right side of the layer list. Using the swipe mode, you can drag the middle line back and forth to look at the changes between the dates.</p>

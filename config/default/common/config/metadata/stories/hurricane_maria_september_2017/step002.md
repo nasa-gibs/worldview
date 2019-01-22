@@ -1,13 +1,1 @@
-<p>On 2018 JUL 10, the crack in the
-  ice shelf is not yet visible. At this
-  zoom level, it is difficult to discern
-  the location of the ice self in the
-  antarctic. Let’s zoom out using the
-  “-” icon. Click the icon 3 times to get
-  an idea of where the iceberg is
-  located on our earth. </p>
-
-<p>Experiment with using both zoom
-  buttons to zoom in and out. Note
-  the yellow overzoomed indicators
-  present on some layers</p>
+<p>Hurricane Maria made landfall on 20 September 2017 in southeastern Puerto Rico. The storm had sustained winds of 155 miles per hour (250 kilometers per hour), making it the fifth strongest hurricane to hit the United States.</p>

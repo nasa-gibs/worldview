@@ -1,1 +1,1 @@
-<p>Observe how the storm dissapates the week following landfall.</p>
+<p>Observe how the storm dissipates the week following landfall.</p>

@@ -1,9 +1,1 @@
-<p>In this map projection, we see the
-anarctic ice cape from directly
-above the pole. This allows us to
-see icebergs in a slightly less
-distorted perspective. </p>
-
-<p>To find the iceberg again, click on
-the Events tab to bring up a list of
-all events within view. </p>
+<p>This is the brightness temperature layer showing the colder clouds in dark purple, which are generally higher in the atmosphere. The warmer, lower clouds are in a lighter purple.</p>
