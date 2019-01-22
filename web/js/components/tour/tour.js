@@ -50,6 +50,9 @@ class Tour extends React.Component {
     this.setState({
       modalInProgress: !this.state.modalInProgress
     });
+    // When tour is not in progress, remove from URL
+    this.props.models.tour.active = false;
+    this.props.models.tour.select(this.state.currentStoryId);
     this.toggleMetaLoaded();
   }
 

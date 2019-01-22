@@ -270,7 +270,9 @@ export function layersModel(models, config) {
         }
       });
     }
-    // self.events.trigger('add', def, null, self[activeLayerString]);
+    if (addType !== 'tour') {
+      self.events.trigger('add', def, null, self[activeLayerString]);
+    }
     self.events.trigger('change');
     return self[activeLayerString];
   };
@@ -525,14 +527,15 @@ export function layersModel(models, config) {
       if (!lodashIsUndefined(state[obj.state])) {
         self.clear(models.proj.selected.id, obj.active);
         lodashEachRight(state[obj.state], function(layerDef) {
+          let addType = null;
+          let hidden = false;
+          let opacity = 1.0;
           if (!config.layers[layerDef.id]) {
             errors.push({
               message: 'No such layer: ' + layerDef.id
             });
             return;
           }
-          var hidden = false;
-          var opacity = 1.0;
           lodashEach(layerDef.attributes, function(attr) {
             if (attr.id === 'hidden') {
               hidden = true;
@@ -542,14 +545,17 @@ export function layersModel(models, config) {
               if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
             }
           });
-
+          if (state.tr && (state.ca || state.cm)) {
+            addType = 'tour';
+          }
           self[obj.active] = self.add(
             layerDef.id,
             {
               hidden: hidden,
               opacity: opacity
             },
-            obj.active
+            obj.active,
+            addType
           );
         });
       }
