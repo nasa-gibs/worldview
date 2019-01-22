@@ -86,6 +86,10 @@ class ModalInProgress extends React.Component {
     var config = this.props.config;
     var models = this.props.models;
 
+    // When the link is loaded properly, save the tour to URL
+    models.tour.active = true;
+    models.tour.select(this.props.currentStoryId);
+
     googleTagManager.pushEvent({
       'event': 'tour_selected_story',
       'story': {
@@ -95,8 +99,9 @@ class ModalInProgress extends React.Component {
       }
     });
 
-    // Get current step link
-    currentStepLink = currentStory.steps[currentStepIndex]['stepLink'];
+    // Get current step link + current tour parameter
+    currentStepLink = currentStory.steps[currentStepIndex]['stepLink'] +
+      '&tr=' + this.props.currentStoryId;
 
     // Get current step transistion
     stepTransition = currentStory.steps[currentStepIndex]['transition'];
@@ -107,17 +112,17 @@ class ModalInProgress extends React.Component {
     }
 
     // TESTING HERE:
-    currentStepLink =
-    'ca=false' +
-    '&cm=opacity' +
-    '&cv=80' +
-    '&p=geographic' +
-    '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,MODIS_Terra_Aerosol_Optical_Depth_3km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
-    '&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
-    '&t=2018-09-06-T00%3A00%3A00Z' +
-    '&t1=2018-03-06-T00%3A00%3A00Z' +
-    '&z=2' +
-    '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481' +
+    // currentStepLink =
+    // 'ca=false' +
+    // '&cm=opacity' +
+    // '&cv=80' +
+    // '&p=geographic' +
+    // '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Combined_Value_Added_AOD,MODIS_Terra_Aerosol_Optical_Depth_3km,Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
+    // '&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
+    // '&t=2018-09-06-T00%3A00%3A00Z' +
+    // '&t1=2018-03-06-T00%3A00%3A00Z' +
+    // '&z=2' +
+    // '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481' +
     // '&download=MOD04_3K' +
     // '&e=true' +
     // '&ab=on' +
@@ -125,7 +130,7 @@ class ModalInProgress extends React.Component {
     // '&ae=2018-09-26T00%3A00%3A00Z' +
     // '&av=5' +
     // '&al=true' +
-    '';
+    // '&tr=' + this.props.currentStoryId;
 
     // Create current and previous states from step links
     currentState = util.fromQueryString(currentStepLink);
@@ -187,21 +192,20 @@ class ModalInProgress extends React.Component {
       }
     }
 
+    // LOAD: Comparison
+    models.compare.load(currentState, errors);
+
     // LOAD: Projection
     models.proj.load(currentState, errors);
 
-    // LOAD: Palettes
-    palettes.loadCustom(config);
-
     // LOAD: Layers
     models.layers.load(currentState, errors);
-    ui.map.reloadLayers();
 
     // LOAD: Date(s)
     models.date.load(currentState, errors);
 
-    // LOAD: Comparison
-    models.compare.load(currentState, errors);
+    // LOAD: Palettes
+    palettes.loadCustom(config);
 
     // LOAD: Animation
     if (!currentState.download) {

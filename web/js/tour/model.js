@@ -2,8 +2,14 @@ import util from '../util/util';
 
 export function tourModel(config) {
   var self = {};
+  self.active = false;
   self.selected = null;
   self.events = util.events();
+
+  self.toggle = function() {
+    self.active = !self.active;
+    self.events.trigger('toggle');
+  };
 
   self.select = function (storyId) {
     var story = config.stories[storyId];
@@ -19,7 +25,9 @@ export function tourModel(config) {
   };
 
   self.save = function (state) {
-    if (state.tr) {
+    if (!self.active) {
+      if (state.tr) delete state.tr;
+    } else {
       state.tr = self.selected.id;
     }
   };
