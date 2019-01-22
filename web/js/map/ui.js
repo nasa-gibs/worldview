@@ -87,11 +87,11 @@ export function mapui(models, config) {
       .on('opacity', updateOpacity);
     if (models.compare) {
       models.compare.events
-        .on('toggle', reloadLayers)
-        .on('mode', reloadLayers)
+        .on('toggle', self.reloadLayers)
+        .on('mode', self.reloadLayers)
         .on('toggle-state', () => {
           if (models.compare.mode === 'spy') {
-            reloadLayers();
+            self.reloadLayers();
           }
         });
     }
@@ -122,7 +122,7 @@ export function mapui(models, config) {
     }
     self.selected = self.proj[models.proj.selected.id];
     var map = self.selected;
-    reloadLayers();
+    self.reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
     if (
@@ -236,14 +236,14 @@ export function mapui(models, config) {
    * get layers from models obj
    * and add each layer to the map
    *
-   * @method reloadLayers
+   * @method self.reloadLayers
    * @static
    *
    * @param {object} map - Openlayers Map obj
    *
    * @returns {void}
    */
-  var reloadLayers = function(map) {
+  self.reloadLayers = function(map) {
     map = map || self.selected;
     var compareModel = models.compare;
     var layerGroupStr = models.layers.activeLayers;
@@ -427,6 +427,7 @@ export function mapui(models, config) {
         activelayer.getLayers().insertAt(mapIndex, newLayer);
         compare.create(self.selected, models.compare.mode);
       } else {
+        console.log(self.selected.getLayers());
         self.selected.getLayers().insertAt(mapIndex, createLayer(def));
       }
     }
@@ -470,7 +471,7 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var updateLayerOrder = function() {
-    reloadLayers();
+    self.reloadLayers();
   };
 
   /*
@@ -538,7 +539,7 @@ export function mapui(models, config) {
    * @todo Check if this function can be combined with updateLayerOrder
    */
   var updateLookup = function(layerId) {
-    reloadLayers();
+    self.reloadLayers();
   };
 
   self.getCustomLayerTimeout = function(layer) {
