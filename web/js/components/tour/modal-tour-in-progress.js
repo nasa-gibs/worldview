@@ -132,6 +132,10 @@ class ModalInProgress extends React.Component {
     // '&al=true' +
     // '&tr=' + this.props.currentStoryId;
 
+    // Remove base URL from step links string
+    currentStepLink = currentStepLink.split('/?').pop();
+    prevStepLink = currentStepLink.split('/?').pop();
+
     // Create current and previous states from step links
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
