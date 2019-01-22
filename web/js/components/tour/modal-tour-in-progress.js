@@ -284,7 +284,7 @@ class ModalInProgress extends React.Component {
     if (currentState.ab === 'on' && !document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
       models.anim.deactivate();
       ui.anim.widget.toggleAnimationWidget();
-    } else if (document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
+    } else if ((currentState.ab === 'off' || !currentState.ab) && document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
       models.anim.activate();
       ui.anim.widget.toggleAnimationWidget();
     }
