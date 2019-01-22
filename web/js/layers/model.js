@@ -270,7 +270,7 @@ export function layersModel(models, config) {
         }
       });
     }
-    self.events.trigger('add', def, null, self[activeLayerString]);
+    // self.events.trigger('add', def, null, self[activeLayerString]);
     self.events.trigger('change');
     return self[activeLayerString];
   };
