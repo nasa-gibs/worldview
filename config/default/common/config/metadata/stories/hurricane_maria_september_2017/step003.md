@@ -1,12 +1,1 @@
-<p>From this zoom level we can see
-the iceberg is located in the region
-of the Antarctica closest to the
-southern tip of South America.</p>
-
-<p>Let’s see if we can get a better view
-of the event by changing the
-map projection. Click the Globe
-icon and select “Antarctic”. This will
-show the map with a Antarctic Polar
-Stereographic projection (WGS 84 /
-EPSG:3031). </p>
+<p>Here we've added the Rain Rate layer to show the rain rates associated with the storm. You can change the opacity of this layer so that you can still see the imagery underneath. You can also change the color palette by clicking on the "Layer Options" icon.</p>
