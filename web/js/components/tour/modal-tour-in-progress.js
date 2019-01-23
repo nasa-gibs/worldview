@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
-import lodashFind from 'lodash/find';
+import lodashDebounce from 'lodash/debounce';
 import { getCompareObjects } from '../../compare/util';
 
 import { parse as dateParser } from '../../date/date';
@@ -26,7 +26,8 @@ class ModalInProgress extends React.Component {
     };
     this.fetchMetadata = this.fetchMetadata.bind(this);
     this.processLink = this.processLink.bind(this);
-    this.loadLink = this.loadLink.bind(this);
+    this.loadLink = lodashDebounce(this.loadLink.bind(this), 2000);
+    this.setUI = lodashDebounce(this.setUI.bind(this), 300);
     this.processActions = this.processActions.bind(this);
   }
 
@@ -127,7 +128,7 @@ class ModalInProgress extends React.Component {
     // 'p=geographic' +
     // '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),MODIS_Combined_Value_Added_AOD(opacity=0.33,palette=blue_4,min=0.25,0.255,max=0.52,0.525,squash),MODIS_Terra_Aerosol_Optical_Depth_3km(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
     // '&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
-    // '&t=2018-09-06-T00%3A00%3A00Z' +
+    // '&time=2018-09-06-T00%3A00%3A00Z' +
     // '&t1=2018-03-06-T00%3A00%3A00Z' +
     // '&z=2' +
     // '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481' +
@@ -136,10 +137,10 @@ class ModalInProgress extends React.Component {
     // '&ab=on' +
     // '&as=2018-03-26T00%3A00%3A00Z' +
     // '&ae=2018-09-26T00%3A00%3A00Z' +
-    // '&av=5' +
-    // '&al=true' +
-    // '&ca=false' +
-    // '&cm=opacity' +
+    // '&av=8' +
+    // '&al=false' +
+    // '&ca=true' +
+    // '&cm=swipe' +
     // '&cv=80' +
     // '&tr=' + this.props.currentStoryId;
 
@@ -186,6 +187,9 @@ class ModalInProgress extends React.Component {
       );
     }
 
+    // Layers have not yet loaded
+    models.layers.loaded = false;
+
     // Load palette requirements
     palettes.requirements(currentState, config);
 
@@ -198,7 +202,7 @@ class ModalInProgress extends React.Component {
 
     // Load the step link
     // A timeout is added so that the palette data can load properly
-    setTimeout(() => { this.loadLink(currentState, stepTransition, prevState, currentStepIndex); }, 500);
+    this.loadLink(currentState, stepTransition, prevState, currentStepIndex);
   }
 
   loadLink(currentState, stepTransition, prevState, currentStepIndex) {
@@ -206,9 +210,6 @@ class ModalInProgress extends React.Component {
     var models = this.props.models;
     var ui = this.props.ui;
     var rotation = 0;
-
-    // Layers have not yet loaded
-    models.layers.loaded = false;
 
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
@@ -233,13 +234,13 @@ class ModalInProgress extends React.Component {
     models.date.load(currentState, errors);
 
     // LOAD: Animation
-    if (!currentState.download) {
+    if (!currentState.ca || !currentState.cm) {
       models.anim.load(currentState, errors);
     }
 
-    // LOAD: Events & Data Download
+    // LOAD: Events
     // Note: Can't simple load from model since these check for startup events
-    if (currentState.e) {
+    if (currentState.e && (!currentState.ca || !currentState.cm)) {
       let values = currentState.e.split(',');
       let id = values[0] || '';
       let date = values[1] || '';
@@ -249,20 +250,11 @@ class ModalInProgress extends React.Component {
       if (id) {
         ui.naturalEvents.selectEvent(id, date, rotation);
       }
-    } else if (currentState.download) {
-      let productId = currentState.download;
-      let found = lodashFind(models.layers[models.layers.activeLayers], {
-        product: productId
-      });
-      if (!found) {
-        errors.push({
-          message: 'No active layers match product: ' + productId
-        });
-      } else {
-        models.data.activate(productId);
-      }
-    } else {
-      ui.sidebar.selectTab('layers');
+    }
+
+    // LOAD: Data Download
+    if (currentState.download && (!currentState.ca || !currentState.cm)) {
+      models.anim.load(currentState, errors);
     }
 
     this.setUI(currentState, stepTransition, prevState, currentStepIndex);
@@ -272,6 +264,15 @@ class ModalInProgress extends React.Component {
     var models = this.props.models;
     var ui = this.props.ui;
     var rotation = 0;
+
+    // SET UI: Select sidebar tab based on what has been loaded
+    if (currentState.e && (!currentState.ca || !currentState.cm)) {
+      ui.sidebar.selectTab('events');
+    } else if (currentState.download && (!currentState.ca || !currentState.cm)) {
+      ui.sidebar.selectTab('download');
+    } else {
+      ui.sidebar.selectTab('layers');
+    }
 
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
@@ -304,20 +305,22 @@ class ModalInProgress extends React.Component {
     }
 
     // SET UI: Animation
-    if (currentState.al === 'true') {
-      ui.anim.widget.reactComponent.setState({ looping: true });
-      models.anim.rangeState.loop = true;
-    } else {
-      ui.anim.widget.reactComponent.setState({ looping: false });
-      models.anim.rangeState.loop = false;
-    }
-    if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
-    if (currentState.ab === 'on' && !document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
-      models.anim.deactivate();
-      ui.anim.widget.toggleAnimationWidget();
-    } else if ((currentState.ab === 'off' || !currentState.ab) && document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
-      models.anim.activate();
-      ui.anim.widget.toggleAnimationWidget();
+    if (!currentState.ca || !currentState.cm) {
+      if (currentState.al === 'true') {
+        ui.anim.widget.reactComponent.setState({ looping: true });
+        models.anim.rangeState.loop = true;
+      } else {
+        ui.anim.widget.reactComponent.setState({ looping: false });
+        models.anim.rangeState.loop = false;
+      }
+      if (currentState.av) ui.anim.widget.reactComponent.setState({ value: Number(currentState.av) });
+      if (currentState.ab === 'on' && !document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
+        models.anim.deactivate();
+        ui.anim.widget.toggleAnimationWidget();
+      } else if ((currentState.ab === 'off' || !currentState.ab) && document.getElementById('timeline-footer').classList.contains('wv-anim-active')) {
+        models.anim.activate();
+        ui.anim.widget.toggleAnimationWidget();
+      }
     }
 
     // SET UI: Map Zoom & View & Rotation (Animated)
