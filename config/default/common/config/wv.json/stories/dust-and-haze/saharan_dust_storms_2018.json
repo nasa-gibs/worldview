@@ -61,7 +61,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30"
+          "stepLink": "p=antarctic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Sea_Ice(hidden),MODIS_Aqua_Sea_Ice(hidden),MODIS_Aqua_Brightness_Temp_Band31_Night(hidden),MODIS_Aqua_Brightness_Temp_Band31_Day(hidden),MODIS_Terra_Brightness_Temp_Band31_Night(hidden),MODIS_Terra_Brightness_Temp_Band31_Day(hidden),VIIRS_SNPP_DayNightBand_ENCC(hidden),Coastlines&t=2018-03-30-T00%3A00%3A00Z&z=3&v=-2634478.7487170836,976584.7260544659,-1639910.5610838216,1462472.7260544659&e=EONET_2934,2018-03-30&r=89.9390"
         },
         {
           "id": "007",
