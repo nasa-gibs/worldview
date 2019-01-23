@@ -51,11 +51,11 @@ class ModalInProgress extends React.Component {
       if (models.compare.active === true) {
         models.compare.toggle();
         models.compare.load({});
+        ui.sidebar.reactComponent.setState({
+          isCompareMode: false
+        });
       }
 
-      ui.sidebar.reactComponent.setState({
-        isCompareMode: false
-      });
       this.props.toggleMetaLoaded();
       this.fetchMetadata(currentStory, 0);
       this.loadLink(currentStory, currentStepIndex);
@@ -189,11 +189,9 @@ class ModalInProgress extends React.Component {
     // Process the state of the application
     // a timeout is added so that the palette data can load properly
     setTimeout(() => { this.processLink(currentState, stepTransition, prevState, currentStepIndex); }, 750);
-    setTimeout(() => { this.setUI(currentState, prevState, currentStepIndex); }, 950);
-    setTimeout(() => { this.processActions(currentState, stepTransition); }, 1200);
   }
 
-  processLink(currentState) {
+  processLink(currentState, stepTransition, prevState, currentStepIndex) {
     var errors = [];
     var models = this.props.models;
     var ui = this.props.ui;
@@ -253,9 +251,11 @@ class ModalInProgress extends React.Component {
     } else {
       ui.sidebar.selectTab('layers');
     }
+
+    this.setUI(currentState, stepTransition, prevState, currentStepIndex);
   }
 
-  setUI(currentState, prevState, currentStepIndex) {
+  setUI(currentState, stepTransition, prevState, currentStepIndex) {
     var models = this.props.models;
     var ui = this.props.ui;
     var rotation = 0;
@@ -278,7 +278,7 @@ class ModalInProgress extends React.Component {
       ui.sidebar.reactComponent.setState({
         isCompareMode: true,
         firstDateObject: compareObj.a,
-        secondDateObject: compareObj.b,
+        secondDateObject: compareObj.b || null,
         isCompareA: models.compare && models.compare.isCompareA,
         comparisonType: currentState.cm
       });
@@ -331,6 +331,8 @@ class ModalInProgress extends React.Component {
       // Jump to extent & zoom (instead of animate):
       // ui.map.selected.getView().fit(currentState.v, ui.map.selected.getSize());
     }
+
+    this.processActions(currentState, stepTransition);
   }
 
   processActions(currentState, stepTransition) {
