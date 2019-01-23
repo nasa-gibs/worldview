@@ -25,8 +25,8 @@ class ModalInProgress extends React.Component {
       error: null
     };
     this.fetchMetadata = this.fetchMetadata.bind(this);
-    this.loadLink = this.loadLink.bind(this);
     this.processLink = this.processLink.bind(this);
+    this.loadLink = this.loadLink.bind(this);
     this.processActions = this.processActions.bind(this);
   }
 
@@ -58,7 +58,7 @@ class ModalInProgress extends React.Component {
 
       this.props.toggleMetaLoaded();
       this.fetchMetadata(currentStory, 0);
-      this.loadLink(currentStory, currentStepIndex);
+      this.processLink(currentStory, currentStepIndex);
     } else {
       if (prevProps.currentStep !== this.props.currentStep) {
         let prevStepIndex = prevProps.currentStep - 1;
@@ -66,7 +66,7 @@ class ModalInProgress extends React.Component {
         // Reset the prevStepIndex when a new tour is selected
         if (currentStepIndex === 0 && prevStepIndex !== 1) prevStepIndex = null;
         this.fetchMetadata(currentStory, currentStepIndex);
-        this.loadLink(currentStory, currentStepIndex, prevStepIndex);
+        this.processLink(currentStory, currentStepIndex, prevStepIndex);
       }
     }
   }
@@ -91,7 +91,7 @@ class ModalInProgress extends React.Component {
       ).catch(error => this.setState({ error, isLoading: false }));
   }
 
-  loadLink(currentStory, currentStepIndex, prevStepIndex) {
+  processLink(currentStory, currentStepIndex, prevStepIndex) {
     var currentState, currentStepLink, stepTransition, prevState, prevStepLink;
     var errors = [];
     var config = this.props.config;
@@ -186,12 +186,22 @@ class ModalInProgress extends React.Component {
       );
     }
 
-    // Process the state of the application
-    // a timeout is added so that the palette data can load properly
-    setTimeout(() => { this.processLink(currentState, stepTransition, prevState, currentStepIndex); }, 750);
+    // Load palette requirements
+    palettes.requirements(currentState, config);
+
+    // Ensure selectedB is set in the models before loading link
+    if (currentState.t1) {
+      let selectedB = util.toISOStringSeconds(currentState.t1);
+      selectedB = new Date(selectedB);
+      models.date.selectedB = selectedB;
+    }
+
+    // Load the step link
+    // A timeout is added so that the palette data can load properly
+    setTimeout(() => { this.loadLink(currentState, stepTransition, prevState, currentStepIndex); }, 500);
   }
 
-  processLink(currentState, stepTransition, prevState, currentStepIndex) {
+  loadLink(currentState, stepTransition, prevState, currentStepIndex) {
     var errors = [];
     var models = this.props.models;
     var ui = this.props.ui;
@@ -281,7 +291,7 @@ class ModalInProgress extends React.Component {
       ui.sidebar.reactComponent.setState({
         isCompareMode: true,
         firstDateObject: compareObj.a,
-        secondDateObject: compareObj.b || null,
+        secondDateObject: compareObj.b,
         isCompareA: models.compare && models.compare.isCompareA,
         comparisonType: currentState.cm
       });
