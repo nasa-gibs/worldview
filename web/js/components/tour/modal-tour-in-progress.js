@@ -197,6 +197,9 @@ class ModalInProgress extends React.Component {
     var ui = this.props.ui;
     var rotation = 0;
 
+    // Layers have not yet loaded
+    models.layers.loaded = false;
+
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
