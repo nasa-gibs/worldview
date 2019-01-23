@@ -34,6 +34,8 @@ class ModalInProgress extends React.Component {
     var currentStory = this.props.currentStory;
     var currentStepIndex = this.props.currentStep - 1;
     var modalStarted = this.props.modalInProgress;
+    var models = this.props.models;
+    var ui = this.props.ui;
 
     // When restarting tour, reset the MetaLoaded prop
     if (this.props.restartTour) {
@@ -43,8 +45,17 @@ class ModalInProgress extends React.Component {
     // Scroll content div to the top when step updates
     if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
 
-    // Fetch meta and load link
+    // Fetch meta and load link on first step if not already loaded
     if (modalStarted && !this.props.metaLoaded) {
+      // If the comparison mode is open, close it before starting
+      if (models.compare.active === true) {
+        models.compare.toggle();
+        models.compare.load({});
+      }
+
+      ui.sidebar.reactComponent.setState({
+        isCompareMode: false
+      });
       this.props.toggleMetaLoaded();
       this.fetchMetadata(currentStory, 0);
       this.loadLink(currentStory, currentStepIndex);
