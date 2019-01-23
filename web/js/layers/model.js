@@ -545,7 +545,7 @@ export function layersModel(models, config) {
               if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
             }
           });
-          if (state.tr && (state.ca || state.cm)) {
+          if (state.tr && state.l1) {
             addType = 'tour';
           }
           self[obj.active] = self.add(
