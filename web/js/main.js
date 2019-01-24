@@ -3,18 +3,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers } from 'redux';
-import modalReducer from './modules/modal/reducer';
-import modelReducer from './modules/migration/reducer';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { modalReducer, modalAboutPage } from './modules/modal/reducers';
+import modelReducer from './modules/migration/reducers';
+import feedbackReducer from './modules/feedback/reducers';
 import projectionReducer from './modules/projection/reducer';
+import thunk from 'redux-thunk';
 
 const reducers = {
   projection: projectionReducer,
   modal: modalReducer,
-  models: modelReducer
+  models: modelReducer,
+  feedback: feedbackReducer,
+  modalAboutPage
 };
 
-const store = createStore(combineReducers(reducers));
+const store = createStore(combineReducers(reducers), applyMiddleware(thunk));
 
 // Document ready function
 window.onload = () => {
