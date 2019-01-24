@@ -20,11 +20,13 @@ export default class List extends React.Component {
             item.key && disabled ? item.key === disabled : false;
           const badge = item.badge;
           const className = item.className ? item.className : '';
+          const tagType = item.href ? 'a' : 'button';
           return (
             <ListGroupItem
-              tag="button"
+              tag={tagType}
               active={isActive}
               className={className + ' ' + size + '-item'}
+              href={item.href ? item.href : 'false'}
               onClick={
                 item.onClick
                   ? item.onClick
