@@ -17,8 +17,19 @@ class ModalContainer extends Component {
       width: props.width
     };
   }
+  getTemplateBody() {
+    const { bodyTemplate } = this.props;
+    return bodyTemplate.isLoading ? (
+      <span> Loading </span>
+    ) : (
+      <div
+        id="page"
+        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+      />
+    );
+  }
   render() {
-    const { isCustom, id, isOpen } = this.props;
+    const { isCustom, id, isOpen, isTemplateModal } = this.props;
     // Populate props from custom obj
     const newProps =
       isCustom && id
@@ -40,6 +51,7 @@ class ModalContainer extends Component {
         ? customProps[id].bodyComponent
         : '';
     const style = this.getStyle(newProps);
+
     return (
       <React.Fragment>
         <Modal
@@ -61,7 +73,13 @@ class ModalContainer extends Component {
             )}
             <ModalBody>
               {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-              {BodyComponent ? <BodyComponent /> : bodyText || ''}
+              {BodyComponent ? (
+                <BodyComponent />
+              ) : isTemplateModal ? (
+                this.getTemplateBody()
+              ) : (
+                bodyText || ''
+              )}
             </ModalBody>
           </DetectOuterClick>
         </Modal>
@@ -73,7 +91,13 @@ class ModalContainer extends Component {
 
 function mapStateToProps(state) {
   const { models } = state.models;
-  const { bodyText, headerText, isCustom, id, isOpen } = state.modal;
+  const { bodyText, headerText, isCustom, id, isOpen, template } = state.modal;
+  let bodyTemplate;
+  let isTemplateModal = false;
+  if (template) {
+    bodyTemplate = state[template];
+    isTemplateModal = true;
+  }
 
   return {
     isOpen: isOpen,
@@ -81,7 +105,9 @@ function mapStateToProps(state) {
     headerText,
     isCustom,
     id,
-    models
+    models,
+    bodyTemplate,
+    isTemplateModal
   };
 }
 const mapDispatchToProps = dispatch => ({
