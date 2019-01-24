@@ -16,7 +16,8 @@ export const customProps = {
     headerText: 'Copy link to share:',
     type: 'toolbar',
     backdrop: false,
-    modalClassName: 'toolbar-share-modal toolbar-modal',
+    offsetRight: '198px',
+    modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
     bodyComponent: ShareLinks
   },
   TOOLBAR_INFO: {
@@ -31,7 +32,8 @@ export const customProps = {
     headerText: 'Take a Snapshot',
     backdrop: false,
     type: 'selection',
-    modalClassName: 'toolbar-snapshot-modal toolbar-modal',
+    offsetRight: '70px',
+    modalClassName: 'toolbar-snapshot-modal toolbar-modal toolbar-medium-modal',
     bodyComponent: ImageDownload
   }
 };

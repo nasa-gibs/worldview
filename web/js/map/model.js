@@ -6,6 +6,7 @@ export function mapModel(models, config) {
   var self = {};
 
   self.extent = null;
+  self.zoom = null;
   self.events = util.events();
   self.rotation = 0;
   /*
@@ -18,11 +19,14 @@ export function mapModel(models, config) {
    *
    * @returns {void}
    */
-  self.update = function (extent) {
+  self.update = function(extent) {
     self.extent = extent;
     self.events.trigger('update', extent);
   };
-
+  // Give other components access to zoom Level
+  self.updateZoom = function(zoom) {
+    self.zoom = Math.round(zoom);
+  };
   /*
    * Sets map view from parsed URL
    *
@@ -35,7 +39,7 @@ export function mapModel(models, config) {
    *
    * @returns {void}
    */
-  self.load = function (state, errors) {
+  self.load = function(state, errors) {
     if (state.v) {
       var proj = models.proj.selected;
       var extent = state.v;
@@ -55,7 +59,9 @@ export function mapModel(models, config) {
     }
     // get rotation if it exists
     if (state.p === 'arctic' || state.p === 'antarctic') {
-      if (!isNaN(state.r)) { self.rotation = state.r * (Math.PI / 180.0); } // convert to radians
+      if (!isNaN(state.r)) {
+        self.rotation = state.r * (Math.PI / 180.0);
+      } // convert to radians
     }
   };
 
@@ -71,11 +77,14 @@ export function mapModel(models, config) {
    *
    * @returns {void}
    */
-  self.save = function (state) {
+  self.save = function(state) {
     state.v = lodashClone(self.extent);
-    if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic') {
-      state.r = (self.rotation * (180.0 / Math.PI))
-        .toPrecision(6);
+    if (
+      self.rotation !== 0.0 &&
+      self.rotation !== 0 &&
+      models.proj.selected.id !== 'geographic'
+    ) {
+      state.r = (self.rotation * (180.0 / Math.PI)).toPrecision(6);
     } // convert from radians to degrees
   };
 
@@ -94,9 +103,8 @@ export function mapModel(models, config) {
    *
    * @returns {object} Extent Array
    */
-  self.getLeadingExtent = function () {
-    var curHour = util.now()
-      .getUTCHours();
+  self.getLeadingExtent = function() {
+    var curHour = util.now().getUTCHours();
 
     // For earlier hours when data is still being filled in, force a far eastern perspective
     if (curHour < 3) {
@@ -116,4 +124,4 @@ export function mapModel(models, config) {
   };
 
   return self;
-};
+}

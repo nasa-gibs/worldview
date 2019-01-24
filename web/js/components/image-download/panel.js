@@ -1,7 +1,14 @@
 import React from 'react';
+import {
+  imageSizeValid,
+  getDimensions
+} from '../../modules/image-download/util';
+
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import PropTypes from 'prop-types';
+
+const MAX_DIMENSION_SIZE = 8200;
 
 /*
  * A react component, Builds a rather specific
@@ -13,14 +20,9 @@ import PropTypes from 'prop-types';
 export default class ImageResSelection extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      imageSize: props.imageSize,
-      imgHeight: props.imgHeight,
-      imgWidth: props.imgWidth,
-      resolutions: props.resolutions,
-      onSelectionChange: props.onSelectionChange,
       fileType: props.fileType,
-      fileTypes: props.fileTypes,
       fileSize: props.fileSize,
       proj: this.props.proj,
       worldfile: props.worldfile,
@@ -28,24 +30,21 @@ export default class ImageResSelection extends React.Component {
       valid: props.valid
     };
   }
+  onDownloadClick() {}
   handleChange(type, value) {
-    var fileType = this.state.fileType;
-    var resolution = this.state.resolution;
-    var worldfile = this.state.worldfile;
-
     if (type === 'resolution') {
-      resolution = value;
+      this.setState({
+        resolution: value
+      });
     } else if (type === 'worldfile') {
-      worldfile = value;
+      this.setState({
+        worldfile: value
+      });
     } else {
-      fileType = value;
+      this.setState({
+        fileType: value
+      });
     }
-    this.state = {
-      resolution: resolution,
-      fileType: fileType,
-      worldfile: worldfile
-    };
-    this.props.onSelectionChange(resolution, worldfile, fileType);
   }
   _renderFileTypeSelect() {
     if (this.props.fileTypeOptions) {
@@ -55,7 +54,7 @@ export default class ImageResSelection extends React.Component {
             id="wv-image-format"
             optionName="filetype"
             value={this.state.fileType}
-            optionArray={this.state.fileTypes}
+            optionArray={this.props.fileTypes}
             onChange={this.handleChange.bind(this)}
           />
           {this.props.secondLabel}
@@ -69,7 +68,7 @@ export default class ImageResSelection extends React.Component {
         <div className="wv-image-header">
           {this.state.fileType === 'image/kmz' ? (
             <select disabled>
-              <option value="false">No</option>
+              <option value={false}>No</option>
             </select>
           ) : (
             <select
@@ -77,8 +76,8 @@ export default class ImageResSelection extends React.Component {
               value={this.state.worldfile}
               onChange={e => this.handleChange('worldfile', e.target.value)}
             >
-              <option value="false">No</option>
-              <option value="true">Yes</option>
+              <option value={false}>No</option>
+              <option value={true}>Yes</option>
             </select>
           )}
           Worldfile (.zip)
@@ -87,16 +86,20 @@ export default class ImageResSelection extends React.Component {
     }
   }
   render() {
-    var filetypeSelect = this._renderFileTypeSelect();
-    var worldfileSelect = this._renderWorldfileSelect();
-
+    const { projection, boundaries, resolutions, maxImageSize } = this.props;
+    const { resolution } = this.state;
+    const dimensions = getDimensions(projection, boundaries, resolution);
+    const height = dimensions.height;
+    const width = dimensions.width;
+    const filetypeSelect = this._renderFileTypeSelect();
+    const worldfileSelect = this._renderWorldfileSelect();
     return (
       <div className="wv-re-pick-wrapper">
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-resolution"
-            optionArray={this.state.resolutions}
-            value={this.state.resolution}
+            optionArray={resolutions}
+            value={resolution}
             optionName="resolution"
             onChange={this.handleChange.bind(this)}
           />
@@ -105,12 +108,12 @@ export default class ImageResSelection extends React.Component {
         {filetypeSelect}
         {worldfileSelect}
         <ResTable
-          width={this.state.imgWidth}
-          height={this.state.imgHeight}
-          fileSize={this.state.fileSize}
-          maxImageSize={this.props.maxImageSize}
-          valid={this.state.valid}
-          onClick={this.props.onDownloadClick}
+          width={width}
+          height={height}
+          fileSize={((width * height * 24) / 8388608).toFixed(2)}
+          maxImageSize={maxImageSize}
+          valid={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+          onClick={this.onDownloadClick.bind(this)}
         />
       </div>
     );
@@ -126,22 +129,17 @@ ImageResSelection.defaultProps = {
   maxImageSize: '250 MB',
   worldfile: false,
   resolution: '1',
-  imgHeight: null,
-  imgWidth: null,
   worldFileOptions: true,
-  fileTypeOptions: true
+  fileTypeOptions: true,
+  fileType: 'image/jpeg'
 };
 ImageResSelection.propTypes = {
-  imageSize: PropTypes.string,
-  imgHeight: PropTypes.number,
-  imgWidth: PropTypes.number,
   resolutions: PropTypes.object,
-  onSelectionChange: PropTypes.func,
   fileType: PropTypes.string,
   fileTypes: PropTypes.object,
   fileSize: PropTypes.string,
   proj: PropTypes.string,
-  worldfile: PropTypes.string,
+  worldfile: PropTypes.bool,
   resolution: PropTypes.string,
   valid: PropTypes.bool,
   onDownloadClick: PropTypes.func,

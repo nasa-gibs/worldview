@@ -51,40 +51,39 @@ class ModalContainer extends Component {
         ? customProps[id].bodyComponent
         : '';
     const style = this.getStyle(newProps);
-
     return (
-      <React.Fragment>
-        <Modal
-          isOpen={isOpen}
-          toggle={onToggle}
-          backdrop={backdrop}
-          id={id}
-          className={modalClassName || 'default-modal'}
-          autoFocus={autoFocus || false}
-          style={style}
+      <Modal
+        isOpen={isOpen}
+        toggle={onToggle}
+        backdrop={backdrop && type !== 'selection'}
+        id={id}
+        className={modalClassName || 'default-modal'}
+        autoFocus={autoFocus || false}
+        style={style}
+      >
+        <DetectOuterClick
+          onClick={onToggle}
+          disabled={!isOpen || type === 'selection'}
         >
-          <DetectOuterClick onClick={onToggle} disabled={!isOpen}>
-            {headerComponent || headerText ? (
-              <ModalHeader toggle={onToggle}>
-                {headerComponent ? <headerComponent /> : headerText || ''}
-              </ModalHeader>
+          {headerComponent || headerText ? (
+            <ModalHeader toggle={onToggle}>
+              {headerComponent ? <headerComponent /> : headerText || ''}
+            </ModalHeader>
+          ) : (
+            ''
+          )}
+          <ModalBody>
+            {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
+            {BodyComponent ? (
+              <BodyComponent />
+            ) : isTemplateModal ? (
+              this.getTemplateBody()
             ) : (
-              ''
+              bodyText || ''
             )}
-            <ModalBody>
-              {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-              {BodyComponent ? (
-                <BodyComponent />
-              ) : isTemplateModal ? (
-                this.getTemplateBody()
-              ) : (
-                bodyText || ''
-              )}
-            </ModalBody>
-          </DetectOuterClick>
-        </Modal>
-        {isOpen && type === 'selection' ? <Crop /> : ''}
-      </React.Fragment>
+          </ModalBody>
+        </DetectOuterClick>
+      </Modal>
     );
   }
 }

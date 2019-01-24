@@ -101,7 +101,7 @@ import Brand from './brand';
 import tour from './tour';
 
 // Crutch between state systems
-import { sendModelsToStore } from './modules/migration/actions';
+import { sendConfigToStore } from './modules/migration/actions';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -428,7 +428,7 @@ class App extends React.Component {
       // HACK: Map needs permalink state loaded before starting. But
       // data download now needs it too.
       models.link.load(state); // needs to be loaded twice
-      self.props.updateModels(models); // crutch between old state system and redux
+      self.props.updateConfig(models, config); // crutch between old state system and redux
       elapsed('ui');
       // Create widgets
       ui.tour = tour(models, ui, config);
@@ -594,8 +594,8 @@ function registerMapMouseHandlers(maps, events) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  updateModels: modelsObject => {
-    dispatch(sendModelsToStore(modelsObject));
+  updateConfig: (models, configObject) => {
+    dispatch(sendConfigToStore(models, configObject));
   }
 });
 

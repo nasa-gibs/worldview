@@ -697,8 +697,10 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var updateExtent = function() {
-    var map = self.selected;
-    models.map.update(map.getView().calculateExtent(map.getSize()));
+    const map = self.selected;
+    const view = map.getView();
+    const extent = view.calculateExtent(map.getSize());
+    models.map.update(extent);
     triggerExtent();
   };
   /*
@@ -904,6 +906,7 @@ export function mapui(models, config) {
     var onZoomChange = function() {
       var maxZoom = proj.resolutions.length;
       var zoom = map.getView().getZoom();
+      models.map.updateZoom(zoom);
       if (zoom === 0) {
         $zoomIn.button('enable');
         $zoomOut.button('disable');

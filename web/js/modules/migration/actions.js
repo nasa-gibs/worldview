@@ -1,8 +1,9 @@
-import { MODELS_HAVE_BEEN_LOADED } from './constants';
+import { CONFIG_HAS_BEEN_LOADED } from './constants';
 
-export function sendModelsToStore(models) {
+export function sendConfigToStore(models, config) {
   return {
-    type: MODELS_HAVE_BEEN_LOADED,
-    models: models
+    type: CONFIG_HAS_BEEN_LOADED,
+    models: models,
+    config: config
   };
 }

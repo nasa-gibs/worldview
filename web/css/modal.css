@@ -13,10 +13,14 @@
 .toolbar-list-modal .modal-content {
   width: 150px;
 }
-.toolbar-list-modal.modal-dialog {
+.toolbar-medium-modal,
+.toolbar-medium-modal .modal-content {
+  width: 230px;
+}
+.toolbar-modal.modal-dialog {
   position: absolute;
   top: 33px;
 }
-.toolbar-list-modal .modal-body {
+.toolbar-modal .modal-body {
   padding: 0;
 };

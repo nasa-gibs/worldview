@@ -1,4 +1,4 @@
-// Take from https://stackoverflow.com/a/42234988
+// Taken from https://stackoverflow.com/a/42234988
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 

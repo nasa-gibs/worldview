@@ -23,6 +23,7 @@ export default class List extends React.Component {
           const tagType = item.href ? 'a' : 'button';
           return (
             <ListGroupItem
+              key={item.key || item.id || ''}
               tag={tagType}
               active={isActive}
               className={className + ' ' + size + '-item'}
