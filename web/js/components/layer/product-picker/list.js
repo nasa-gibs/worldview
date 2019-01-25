@@ -71,7 +71,7 @@ class LayerList extends React.Component {
     util.get('config/metadata/' + source.description + '.html').then(data => {
       if (data) {
         let sourceMetadata = this.state.sourceMetadata;
-        sourceMetadata[source.id] = { data: data };
+        sourceMetadata[source.description] = { data: data };
         this.setState({ sourceMetaData: sourceMetadata });
       }
     });
