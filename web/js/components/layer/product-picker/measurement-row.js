@@ -177,8 +177,8 @@ class LayerRow extends React.Component {
     const { isMetadataExpanded } = this.state;
     // Simple test to see if theres a link to some metadata
     if (source.description) {
-      if (sourceMetadata[source.id]) {
-        let data = sourceMetadata[source.id].data;
+      if (sourceMetadata[source.description]) {
+        let data = sourceMetadata[source.description].data;
         let doesMetaDataNeedExpander = data.length >= 1000;
         let isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
         return (
