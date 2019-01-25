@@ -55,6 +55,7 @@ class ModalInProgress extends React.Component {
         ui.sidebar.reactComponent.setState({
           isCompareMode: false
         });
+        models.compare.active = false;
       }
 
       this.props.toggleMetaLoaded();
@@ -218,6 +219,7 @@ class ModalInProgress extends React.Component {
       ui.sidebar.reactComponent.setState({
         isCompareMode: false
       });
+      models.compare.active = false;
     }
 
     // Set rotation value if it exists
