@@ -211,6 +211,15 @@ class ModalInProgress extends React.Component {
     var ui = this.props.ui;
     var rotation = 0;
 
+    // Close the comparison mode if there is no comparison mode in the step link
+    if ((!currentState.ca || !currentState.cm) && models.compare.active === true) {
+      models.compare.toggle();
+      models.compare.load({});
+      ui.sidebar.reactComponent.setState({
+        isCompareMode: false
+      });
+    }
+
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
