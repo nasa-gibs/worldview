@@ -4,7 +4,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
 import lodashDebounce from 'lodash/debounce';
-import View from 'ol/View.js';
 import { getCompareObjects } from '../../compare/util';
 import { parse as dateParser } from '../../date/date';
 import { parse as layerParser } from '../../layers/layers';
@@ -25,9 +24,9 @@ class ModalInProgress extends React.Component {
       error: null
     };
     this.fetchMetadata = this.fetchMetadata.bind(this);
-    this.processLink = this.processLink.bind(this);
-    this.loadLink = lodashDebounce(this.loadLink.bind(this), 1000);
-    this.setUI = lodashDebounce(this.setUI.bind(this), 300);
+    this.processLink = lodashDebounce(this.processLink.bind(this), 200);
+    this.loadLink = lodashDebounce(this.loadLink.bind(this), 800);
+    this.setUI = lodashDebounce(this.setUI.bind(this), 200);
     this.processActions = this.processActions.bind(this);
   }
 
