@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
+import lodashEach from 'lodash/each';
 import lodashDebounce from 'lodash/debounce';
 import { getCompareObjects } from '../../compare/util';
 import { parse as dateParser } from '../../date/date';
-import { parse as layerParser } from '../../layers/layers';
+import {
+  parse as layerParser,
+  validate as layerValidate
+} from '../../layers/layers';
 import { mapParser } from '../../map/map';
 import { parse as animationParser } from '../../animation/anim';
 import palettes from '../../palettes/palettes';
@@ -25,8 +29,8 @@ class ModalInProgress extends React.Component {
     };
     this.fetchMetadata = this.fetchMetadata.bind(this);
     this.processLink = lodashDebounce(this.processLink.bind(this), 200);
-    this.loadLink = lodashDebounce(this.loadLink.bind(this), 800);
-    this.setUI = lodashDebounce(this.setUI.bind(this), 200);
+    this.loadLink = this.loadLink.bind(this);
+    this.setUI = this.setUI.bind(this);
     this.processActions = this.processActions.bind(this);
   }
 
@@ -54,7 +58,6 @@ class ModalInProgress extends React.Component {
         ui.sidebar.reactComponent.setState({
           isCompareMode: false
         });
-        models.compare.active = false;
       }
 
       this.props.toggleMetaLoaded();
@@ -93,15 +96,16 @@ class ModalInProgress extends React.Component {
   }
 
   processLink(currentStory, currentStepIndex, prevStepIndex) {
-    var currentState, currentStepLink, stepTransition, prevState, prevStepLink;
+    var currentStateParsers, prevStateParsers, requirements, currentState, currentStepLink, stepTransition, prevState, prevStepLink;
     var errors = [];
     var config = this.props.config;
     var models = this.props.models;
 
-    // When the link is loaded properly, save the tour to URL
+    // When the link is loaded, save the tour to URL
     models.tour.active = true;
     models.tour.select(this.props.currentStoryId);
 
+    // Google Analytics: record current story id and steps
     googleTagManager.pushEvent({
       'event': 'tour_selected_story',
       'story': {
@@ -123,27 +127,6 @@ class ModalInProgress extends React.Component {
       prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
     }
 
-    // TESTING HERE:
-    // currentStepLink =
-    // 'p=geographic' +
-    // '&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden),MODIS_Combined_Value_Added_AOD(opacity=0.33,palette=blue_4,min=0.25,0.255,max=0.52,0.525,squash),MODIS_Terra_Aerosol_Optical_Depth_3km(hidden),Reference_Labels(hidden),Reference_Features(hidden),Coastlines' +
-    // '&l1=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),BlueMarble_NextGeneration,IMERG_Snow_Rate,IMERG_Rain_Rate' +
-    // '&time=2018-09-06-T00%3A00%3A00Z' +
-    // '&t1=2018-03-06-T00%3A00%3A00Z' +
-    // '&z=2' +
-    // '&v=-202.1385353269304,-23.272676762951903,67.8614646730696,108.6335732370481' +
-    // '&download=MOD04_3K' +
-    // '&e=true' +
-    // '&ab=on' +
-    // '&as=2018-03-26T00%3A00%3A00Z' +
-    // '&ae=2018-09-26T00%3A00%3A00Z' +
-    // '&av=8' +
-    // '&al=false' +
-    // '&ca=true' +
-    // '&cm=swipe' +
-    // '&cv=80' +
-    // '&tr=' + this.props.currentStoryId;
-
     // Remove base URL from step links string
     currentStepLink = currentStepLink.split('/?').pop();
     prevStepLink = currentStepLink.split('/?').pop();
@@ -151,32 +134,6 @@ class ModalInProgress extends React.Component {
     // Create current and previous states from step links
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
-
-    // Parse the current state
-    projectionParser(currentState, errors, config);
-    layerParser(currentState, errors, config);
-    dateParser(currentState, errors, config);
-    mapParser(currentState, errors, config);
-    palettes.parse(currentState, errors, config);
-    if (config.features.dataDownload) {
-      dataParser(currentState, errors, config);
-    }
-    if (config.features.animation) {
-      animationParser(currentState, errors, config);
-    }
-
-    // Parse the previous state
-    projectionParser(prevState, errors, config);
-    layerParser(prevState, errors, config);
-    dateParser(prevState, errors, config);
-    mapParser(prevState, errors, config);
-    palettes.parse(prevState, errors, config);
-    if (config.features.dataDownload) {
-      dataParser(prevState, errors, config);
-    }
-    if (config.features.animation) {
-      animationParser(prevState, errors, config);
-    }
 
     // Pass current step query string to the browser url
     if (util.browser.history) {
@@ -187,29 +144,68 @@ class ModalInProgress extends React.Component {
       );
     }
 
-    // Layers have not yet loaded
-    models.layers.loaded = false;
+    // Start Parsing
+    layerValidate(errors, config);
 
-    // Load palette requirements
+    // Parse the current state
+    currentStateParsers = [
+      projectionParser,
+      layerParser,
+      dateParser,
+      mapParser,
+      palettes.parse
+    ];
+    if (config.features.dataDownload) {
+      currentStateParsers.push(dataParser);
+    }
+    if (config.features.animation) {
+      currentStateParsers.push(animationParser);
+    }
+    lodashEach(currentStateParsers, function(parser) {
+      parser(currentState, errors, config);
+    });
+
+    // Parse the previous state
+    prevStateParsers = [
+      projectionParser,
+      layerParser,
+      dateParser,
+      mapParser,
+      palettes.parse
+    ];
+    if (config.features.dataDownload) {
+      prevStateParsers.push(dataParser);
+    }
+    if (config.features.animation) {
+      prevStateParsers.push(animationParser);
+    }
+    lodashEach(prevStateParsers, function(parser) {
+      parser(prevState, errors, config);
+    });
+
+    // Reset the palettes
     config.palettes = {
       rendered: {},
       custom: {}
     };
-    palettes.requirements(currentState, config);
 
-    // Ensure selectedB is set in the models before loading link
-    if (currentState.t1) {
-      let selectedB = util.toISOStringSeconds(currentState.t1);
-      selectedB = new Date(selectedB);
-      models.date.selectedB = selectedB;
-    }
+    requirements = palettes.requirements(currentState, config);
 
-    // Load the step link
-    // A timeout is added so that the palette data can load properly
-    this.loadLink(currentState, stepTransition, prevState, currentStepIndex);
+    // Load the step link after the palettes & defaults loaded
+    Promise.all([requirements])
+      .then(models.layers.loaded = false) // Layers have not yet loaded
+      .then(() => { // Ensure selectedB is set in the models before loading link
+        if (currentState.t1) {
+          let selectedB = util.toISOStringSeconds(currentState.t1);
+          selectedB = new Date(selectedB);
+          models.date.selectedB = selectedB;
+        }
+      })
+      .then(util.wrap(() => this.loadLink(currentState, stepTransition, prevState, currentStepIndex)));
   }
 
   loadLink(currentState, stepTransition, prevState, currentStepIndex) {
+    var promises = [];
     var errors = [];
     var models = this.props.models;
     var ui = this.props.ui;
@@ -233,23 +229,23 @@ class ModalInProgress extends React.Component {
     }
 
     // LOAD: Comparison
-    models.compare.load(currentState, errors);
+    promises.push(models.compare.load(currentState, errors));
 
     // LOAD: Projection
-    models.proj.load(currentState, errors);
+    promises.push(models.proj.load(currentState, errors));
 
     // LOAD: Layers
-    models.layers.load(currentState, errors);
+    promises.push(models.layers.load(currentState, errors));
 
     // LOAD: Palettes
-    models.palettes.load(currentState, errors);
+    promises.push(models.palettes.load(currentState, errors));
 
     // LOAD: Date(s)
-    models.date.load(currentState, errors);
+    promises.push(models.date.load(currentState, errors));
 
     // LOAD: Animation
     if (!currentState.ca || !currentState.cm) {
-      models.anim.load(currentState, errors);
+      promises.push(models.anim.load(currentState, errors));
     }
 
     // LOAD: Events
@@ -262,16 +258,17 @@ class ModalInProgress extends React.Component {
       date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
       models.naturalEvents.events.trigger('activate');
       if (id) {
-        ui.naturalEvents.selectEvent(id, date, rotation);
+        promises.push(ui.naturalEvents.selectEvent(id, date, rotation));
       }
     }
 
     // LOAD: Data Download
     if (currentState.download && (!currentState.ca || !currentState.cm)) {
-      models.anim.load(currentState, errors);
+      promises.push(models.anim.load(currentState, errors));
     }
 
-    this.setUI(currentState, stepTransition, prevState, currentStepIndex);
+    Promise.all([promises])
+      .then(() => this.setUI(currentState, stepTransition, prevState, currentStepIndex));
   }
 
   setUI(currentState, stepTransition, prevState, currentStepIndex) {
