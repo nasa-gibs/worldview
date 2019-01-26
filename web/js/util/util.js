@@ -1170,5 +1170,17 @@ export default (function (self) {
     }
   };
 
+  /**
+   * Check if objects have the same keys
+   *
+   * @param  {array} comment seperated list of objects
+   * @return {bool}
+   */
+  self.objectsHaveSameKeys = function(...objects) {
+    const allKeys = objects.reduce((keys, object) => keys.concat(Object.keys(object)), []);
+    const union = new Set(allKeys);
+    return objects.every(object => union.size === Object.keys(object).length);
+  };
+
   return self;
 })({});

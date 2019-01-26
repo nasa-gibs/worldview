@@ -119,21 +119,22 @@ class ModalInProgress extends React.Component {
     currentStepLink = currentStory.steps[currentStepIndex]['stepLink'] +
       '&tr=' + this.props.currentStoryId;
 
-    // Get current step transistion
-    stepTransition = currentStory.steps[currentStepIndex]['transition'];
-
-    // Get previous step link (if there is a previous step)
-    if (prevStepIndex !== null && !isNaN(prevStepIndex)) {
-      prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
-    }
-
     // Remove base URL from step links string
     currentStepLink = currentStepLink.split('/?').pop();
-    prevStepLink = currentStepLink.split('/?').pop();
+
+    // Get previous step link (if there is a previous step)
+    // Remove base URL from step links string
+    if (prevStepIndex !== null && !isNaN(prevStepIndex)) {
+      prevStepLink = currentStory.steps[prevStepIndex]['stepLink'];
+      prevStepLink = prevStepLink.split('/?').pop();
+    }
 
     // Create current and previous states from step links
     currentState = util.fromQueryString(currentStepLink);
     prevState = util.fromQueryString(prevStepLink);
+
+    // Get current step transistion
+    stepTransition = currentStory.steps[currentStepIndex]['transition'];
 
     // Pass current step query string to the browser url
     if (util.browser.history) {
@@ -183,11 +184,37 @@ class ModalInProgress extends React.Component {
       parser(prevState, errors, config);
     });
 
-    // Reset the palettes
-    config.palettes = {
-      rendered: {},
-      custom: {}
-    };
+    // Reset the palette, min and max values if these are not present in the
+    // current step url but were present in previous step.
+    if (prevStepLink) {
+      Object.values(prevState.l).forEach(prevLayer => {
+        if (prevLayer.id) {
+          Object.values(currentState.l).forEach(currentLayer => {
+            if (prevLayer.id === currentLayer.id) {
+              if (!util.objectsHaveSameKeys(prevLayer.attributes, currentLayer.attributes)) {
+                let prevAttrArray = prevLayer.attributes;
+                let currentAttrArray = currentLayer.attributes;
+                if (prevAttrArray.find(prevAttrArray => (prevAttrArray.id === 'palette')) &&
+                !currentAttrArray.find(currentAttrArray => (currentAttrArray.id === 'palette'))) {
+                  let array = currentLayer.attributes;
+                  array.push({ id: 'palette', value: '' });
+                }
+                if (prevAttrArray.find(prevAttrArray => (prevAttrArray.id === 'min')) &&
+                !currentAttrArray.find(currentAttrArray => (currentAttrArray.id === 'min'))) {
+                  let array = currentLayer.attributes;
+                  array.push({ id: 'min', value: '' });
+                }
+                if (prevAttrArray.find(prevAttrArray => (prevAttrArray.id === 'max')) &&
+                !currentAttrArray.find(currentAttrArray => (currentAttrArray.id === 'max'))) {
+                  let array = currentLayer.attributes;
+                  array.push({ id: 'max', value: '' });
+                }
+              }
+            }
+          });
+        }
+      });
+    }
 
     requirements = palettes.requirements(currentState, config);
 

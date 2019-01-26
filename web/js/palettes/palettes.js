@@ -115,10 +115,12 @@ export default (function(self) {
   };
   self.requirements = function(state, config) {
     var promises = [];
-    config.palettes = {
-      rendered: {},
-      custom: {}
-    };
+    if (!state.tr) {
+      config.palettes = {
+        rendered: {},
+        custom: {}
+      };
+    }
     lodashEach(state.l, function(qsLayer) {
       var layerId = qsLayer.id;
       if (config.layers[layerId] && config.layers[layerId].palette) {
