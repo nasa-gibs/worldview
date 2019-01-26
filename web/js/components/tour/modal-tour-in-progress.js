@@ -4,8 +4,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 import util from '../../util/util';
 import lodashDebounce from 'lodash/debounce';
+import View from 'ol/View.js';
 import { getCompareObjects } from '../../compare/util';
-
 import { parse as dateParser } from '../../date/date';
 import { parse as layerParser } from '../../layers/layers';
 import { mapParser } from '../../map/map';
@@ -26,7 +26,7 @@ class ModalInProgress extends React.Component {
     };
     this.fetchMetadata = this.fetchMetadata.bind(this);
     this.processLink = this.processLink.bind(this);
-    this.loadLink = lodashDebounce(this.loadLink.bind(this), 2000);
+    this.loadLink = lodashDebounce(this.loadLink.bind(this), 1000);
     this.setUI = lodashDebounce(this.setUI.bind(this), 300);
     this.processActions = this.processActions.bind(this);
   }
@@ -192,6 +192,10 @@ class ModalInProgress extends React.Component {
     models.layers.loaded = false;
 
     // Load palette requirements
+    config.palettes = {
+      rendered: {},
+      custom: {}
+    };
     palettes.requirements(currentState, config);
 
     // Ensure selectedB is set in the models before loading link
@@ -336,23 +340,17 @@ class ModalInProgress extends React.Component {
 
     // SET UI: Map Zoom & View & Rotation (Animated)
     if (currentState.v) {
-      // Animate to extent, zoom & rotate:
-      let duration = 0;
       let extent = currentState.v;
       let coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
       let coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
       let coordinates = [coordinateX, coordinateY];
       let resolution = ui.map.selected.getView().getResolutionForExtent(extent);
-      // Don't animate when projection changes
-      if (prevState.p === currentState.p || currentStepIndex === 0) duration = 4000;
+      let zoom = ui.map.selected.getView().getZoomForResolution(resolution);
+
+      // Animate to extent, zoom & rotate:
       // Don't animate when an event is selected (Event selection already animates)
       if (!currentState.e) {
-        ui.map.selected.getView().animate({
-          center: coordinates,
-          duration: duration,
-          resolution: resolution,
-          rotation: rotation
-        });
+        ui.map.animate.fly(coordinates, zoom, rotation);
       }
 
       // Jump to extent & zoom (instead of animate):
