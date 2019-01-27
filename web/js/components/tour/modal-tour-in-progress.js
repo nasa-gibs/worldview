@@ -16,7 +16,6 @@ import { parse as animationParser } from '../../animation/anim';
 import palettes from '../../palettes/palettes';
 import { dataParser } from '../../data/data';
 import { parse as projectionParser } from '../../projection/projection';
-
 import googleTagManager from 'googleTagManager';
 
 class ModalInProgress extends React.Component {
@@ -105,7 +104,7 @@ class ModalInProgress extends React.Component {
     models.tour.active = true;
     models.tour.select(this.props.currentStoryId);
 
-    // Google Analytics: record current story id and steps
+    // Record selected story's id, current steps, and total steps to analytics
     googleTagManager.pushEvent({
       'event': 'tour_selected_story',
       'story': {
