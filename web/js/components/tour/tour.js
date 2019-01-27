@@ -38,6 +38,20 @@ class Tour extends React.Component {
     this.decreaseStep = this.decreaseStep.bind(this);
   }
 
+  componentDidMount() {
+    window.addEventListener('resize', this.resize.bind(this));
+    this.resize();
+  }
+
+  resize() {
+    if (window.innerWidth < 740) {
+      this.setState({ modalStart: false, modalInProgress: false, modalComplete: false });
+    }
+    if (window.innerHeight < 665) {
+      this.setState({ modalStart: false, modalInProgress: false, modalComplete: false });
+    }
+  }
+
   toggleModalStart(e) {
     e.preventDefault();
     this.setState({

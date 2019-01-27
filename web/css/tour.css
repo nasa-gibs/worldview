@@ -47,7 +47,7 @@
 .tour-start .modal {
   overflow-y: auto;
   height: 830px;
-  width: 635px;
+  width: 500px;
   margin-left: auto;
   margin-right: auto;
   top: 20px;
@@ -737,13 +737,20 @@
   }
 }
 
-/* Breakpoint: Medium (768px to 991px) */
-@media (min-width: 768px) {
+@media (min-width: 740px) {
   .tour {
     display: block;
   }
+}
+
+/* Breakpoint: Medium (768px to 991px) */
+@media (min-width: 768px) {
 
   /* .tour-start */
+  .tour-start .modal {
+    width: 635px;
+  }
+
   .tour-start .modal-dialog {
     max-width: 618px;
   }
@@ -772,8 +779,9 @@
 }
 
 
-@media (max-height: 664px) {
+@media (min-height: 665px) {
   .tour {
-    display: none;
+    display: block;
   }
 }
+
