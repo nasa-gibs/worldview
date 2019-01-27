@@ -61,8 +61,12 @@ class Tour extends React.Component {
     this.setState({
       modalComplete: !this.state.modalComplete
     });
+    // The tour completed modal has been shown (all steps complete)
     googleTagManager.pushEvent({
-      'event': 'tour_completed'
+      'event': 'tour_completed',
+      'story': {
+        'id': this.state.currentStoryId
+      }
     });
   }
 

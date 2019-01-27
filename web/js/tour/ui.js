@@ -97,6 +97,7 @@ export function tourUi(models, ui, config) {
     if (hideTour && config.buildDate) {
       let buildDate = new Date(config.buildDate);
       let tourDate = new Date(hideTour);
+      // Tour hidden when visiting fresh URL
       googleTagManager.pushEvent({
         'event': 'tour_start_hidden',
         'buildDate': buildDate,
@@ -111,7 +112,7 @@ export function tourUi(models, ui, config) {
     } else if (hideTour) {
       return false;
     } else {
-      // Tour auto start
+      // Tour shown when visiting fresh URL
       googleTagManager.pushEvent({
         'event': 'tour_start'
       });
@@ -121,6 +122,7 @@ export function tourUi(models, ui, config) {
 
   self.resetTour = function(e) {
     if (e) e.preventDefault();
+    // Tour startup modal shown by clicking "More Stories" button at end of story
     googleTagManager.pushEvent({
       'event': 'tour_more_stories_button'
     });
@@ -130,6 +132,7 @@ export function tourUi(models, ui, config) {
 
   self.startTour = function(e) {
     if (e) e.preventDefault();
+    // Tour shown by manually clicking "Start Tour" button
     googleTagManager.pushEvent({
       'event': 'tour_start_button'
     });
@@ -144,12 +147,6 @@ export function tourUi(models, ui, config) {
   self.selectTour = function(e, currentStory, currentStoryIndex, currentStoryId) {
     let totalSteps = currentStory.steps;
     if (e) e.preventDefault();
-    googleTagManager.pushEvent({
-      'event': 'tour_selected_story',
-      'story': {
-        'id': currentStoryId
-      }
-    });
     self.reactComponent.setState({
       models: models,
       config: config,
@@ -169,6 +166,7 @@ export function tourUi(models, ui, config) {
   self.hideTour = function(e) {
     var hideTour = localStorage.getItem('hideTour');
 
+    // Checkbox to "hide tour modal until a new story has been added" has been checked
     googleTagManager.pushEvent({
       'event': 'tour_hide_checked'
     });
@@ -182,6 +180,7 @@ export function tourUi(models, ui, config) {
   self.showTour = function(e) {
     var hideTour = localStorage.getItem('hideTour');
 
+    // Checkbox to "hide tour modal until a new story has been added" has been checked
     googleTagManager.pushEvent({
       'event': 'tour_hide_unchecked'
     });
