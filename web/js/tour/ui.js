@@ -58,36 +58,6 @@ export function tourUi(models, ui, config) {
     };
   };
 
-  var initTourState = function() {
-    resetMap();
-    setTourState();
-  };
-
-  var resetMap = function() {
-    var leading;
-    var map = ui.map.selected;
-
-    self.resetting = true;
-    if (models.compare && models.compare.active) {
-      models.compare.toggle();
-    }
-    models.proj.selectDefault();
-    models.layers.reset(models.layers.activeLayers);
-    models.date.select(util.today());
-
-    leading = models.map.getLeadingExtent();
-    map.getView().fit(leading, map.getSize());
-    self.resetting = false;
-    self.events.trigger('reset');
-  };
-
-  var setTourState = function() {
-    models.proj.selectDefault();
-    ui.sidebar.expandNow();
-    ui.sidebar.selectTab('layers');
-    ui.timeline.expandNow();
-  };
-
   self.checkBuildTimestamp = function() {
     var hideTour = localStorage.getItem('hideTour');
 
@@ -130,7 +100,6 @@ export function tourUi(models, ui, config) {
     googleTagManager.pushEvent({
       'event': 'tour_more_stories_button'
     });
-    initTourState();
     self.startTour();
   };
 
