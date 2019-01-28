@@ -6,7 +6,6 @@ import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 
 import { customProps } from '../modules/modal/customs';
 import { onToggle } from '../modules/modal/actions';
-import Crop from '../components/util/image-crop';
 import DetectOuterClick from '../components/util/detect-outer-click';
 
 class ModalContainer extends Component {
@@ -44,7 +43,8 @@ class ModalContainer extends Component {
       modalClassName,
       backdrop,
       autoFocus,
-      type
+      type,
+      wrapClassName
     } = newProps;
     const BodyComponent =
       customProps[id] && customProps[id].bodyComponent
@@ -60,6 +60,7 @@ class ModalContainer extends Component {
         className={modalClassName || 'default-modal'}
         autoFocus={autoFocus || false}
         style={style}
+        wrapClassName={wrapClassName}
       >
         <DetectOuterClick
           onClick={onToggle}
@@ -75,7 +76,7 @@ class ModalContainer extends Component {
           <ModalBody>
             {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
             {BodyComponent ? (
-              <BodyComponent />
+              <BodyComponent onClose={onToggle} />
             ) : isTemplateModal ? (
               this.getTemplateBody()
             ) : (

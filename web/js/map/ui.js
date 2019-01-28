@@ -122,6 +122,7 @@ export function mapui(models, config) {
     }
     self.selected = self.proj[models.proj.selected.id];
     var map = self.selected;
+    models.map.updateMap(map);
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
@@ -906,7 +907,6 @@ export function mapui(models, config) {
     var onZoomChange = function() {
       var maxZoom = proj.resolutions.length;
       var zoom = map.getView().getZoom();
-      models.map.updateZoom(zoom);
       if (zoom === 0) {
         $zoomIn.button('enable');
         $zoomOut.button('disable');

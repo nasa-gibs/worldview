@@ -7,7 +7,9 @@
 .modal-dialog .close {
   color: #fff;
 }
-
+.clickable-behind-modal .modal {
+  position: inherit
+}
 /* toolbar modal list styles */
 .toolbar-list-modal,
 .toolbar-list-modal .modal-content {

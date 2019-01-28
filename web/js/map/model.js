@@ -6,7 +6,7 @@ export function mapModel(models, config) {
   var self = {};
 
   self.extent = null;
-  self.zoom = null;
+  self.selectedMap = null;
   self.events = util.events();
   self.rotation = 0;
   /*
@@ -24,8 +24,11 @@ export function mapModel(models, config) {
     self.events.trigger('update', extent);
   };
   // Give other components access to zoom Level
-  self.updateZoom = function(zoom) {
-    self.zoom = Math.round(zoom);
+  self.updateMap = function(map) {
+    self.selectedMap = map;
+  };
+  self.getZoom = function() {
+    return self.selectedMap ? self.selectedMap.getView().getZoom() : null;
   };
   /*
    * Sets map view from parsed URL

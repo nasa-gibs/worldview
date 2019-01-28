@@ -172,7 +172,7 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div className="wv-content" data-role="content">
+      <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
         <section id="wv-sidebar" />
         <div id="layer-modal" className="layer-modal" />

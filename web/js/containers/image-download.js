@@ -3,7 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Panel from '../components/image-download/panel';
 import Crop from '../components/util/image-crop';
-import { imageUtilCalculateResolution } from '../modules/image-download/util';
+import { debounce } from 'lodash';
+import * as olProj from 'ol/proj';
+
+import {
+  imageUtilCalculateResolution,
+  imageUtilGetCoordsFromPixelValues,
+  getPercentageFromPixel,
+  getPixelFromPercentage
+} from '../modules/image-download/util';
 import util from '../util/util';
 
 import {
@@ -20,72 +28,110 @@ class ImageDownloadContainer extends Component {
     super(props);
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
-    const bounds = [
-      [windowWidth / 2 - 100, windowHeight / 2 - 100],
-      [windowWidth / 2 + 100, windowHeight / 2 + 100]
-    ];
     this.state = {
-      boundaries: bounds
+      windowWidth: windowWidth,
+      windowHeight: windowHeight,
+      boundaries: {
+        x: windowWidth / 2 - 100,
+        y: windowHeight / 2 - 100,
+        x2: windowWidth / 2 + 100,
+        y2: windowHeight / 2 + 100
+      }
     };
   }
-  // onDownload() {
-  //   let time = new Date(models.date[models.date.activeDate].getTime());
-  //   time.setUTCHours(0, 0, 0, 0);
-
-  //   let layerList = models.layers.get({
-  //     reverse: true,
-  //     renderable: true
-  //   });
-  //   let layers = imageUtilGetLayers(layerList, models.proj.selected.id);
-  //   let opacities = imageUtilGetLayerOpacities(layerList);
-  //   let crs = models.proj.selected.crs;
-
-  //   let params = [
-  //     'REQUEST=GetSnapshot',
-  //     `TIME=${util.toISOStringDate(time)}`,
-  //     `BBOX=${bboxWMS13(lonlats, crs)}`,
-  //     `CRS=${crs}`,
-  //     `LAYERS=${layers.join(',')}`,
-  //     `FORMAT=${imgFormat}`,
-  //     `WIDTH=${imgWidth}`,
-  //     `HEIGHT=${imgHeight}`
-  //   ];
-  //   if (opacities.length > 0) {
-  //     params.push(`OPACITIES=${opacities.join(',')}`);
-  //   }
-  //   if (imgWorldfile === 'true') {
-  //     params.push('WORLDFILE=true');
-  //   }
-  //   let dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
-  // }
+  updateDimensions() {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    this.setState({
+      windowWidth: windowWidth,
+      windowHeight: windowHeight
+    });
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.updateDimensions.bind(this));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDimensions.bind(this));
+  }
+  onBoundaryChange(boundaries) {
+    const { windowWidth, windowHeight } = this.state;
+    const x = getPixelFromPercentage(windowWidth, boundaries.x);
+    const y = getPixelFromPercentage(windowHeight, boundaries.y);
+    const x2 = x + getPixelFromPercentage(windowWidth, boundaries.width);
+    const y2 = y + getPixelFromPercentage(windowHeight, boundaries.height);
+    this.setState({
+      boundaries: {
+        x: x,
+        y: y,
+        x2: x2,
+        y2: y2
+      }
+    });
+  }
   render() {
-    const { projection, models } = this.props;
-    const { boundaries } = this.state;
+    const { projection, models, url, onClose } = this.props;
+    const { boundaries, windowWidth, windowHeight } = this.state;
+    const { x, y, x2, y2 } = boundaries;
     const isGeoProjection = projection === 'geographic';
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
-    console.log(projection, isGeoProjection, models.proj.selected.resolutions);
+    const lonlats = imageUtilGetCoordsFromPixelValues(
+      boundaries,
+      models.map.selectedMap
+    );
+    const crs = models.proj.selected.crs;
+    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+
     const resolution = imageUtilCalculateResolution(
-      models.map.zoom,
+      Math.round(models.map.getZoom()),
       isGeoProjection,
       models.proj.selected.resolutions
     );
+
     return (
       <React.Fragment>
         <Panel
           projection={projection}
           fileTypes={fileTypes}
           resolutions={resolutions}
-          boundaries={boundaries}
+          lonlats={lonlats}
           resolution={resolution}
+          models={models}
+          url={url}
+          crs={crs}
         />
-        <Crop />
+        <Crop
+          x={getPercentageFromPixel(windowWidth, x)}
+          y={getPercentageFromPixel(windowHeight, y)}
+          maxHeight={windowHeight}
+          maxWidth={windowWidth}
+          width={getPercentageFromPixel(windowWidth, x2 - x)}
+          height={getPercentageFromPixel(windowHeight, y2 - y)}
+          onChange={debounce(this.onBoundaryChange.bind(this), 10)}
+          onClose={onClose}
+          bottomLeftStyle={{
+            left: x,
+            top: y2 + 5,
+            width: x2 - x
+          }}
+          topRightStyle={{
+            left: x,
+            top: y - 20,
+            width: x2 - x
+          }}
+          coordinates={{
+            bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
+            topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
+          }}
+          showCoordinates={true}
+        />
       </React.Fragment>
     );
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const { id } = state.projection;
   const { config, models } = state.models;
   let url = DEFAULT_URL;
@@ -100,12 +146,16 @@ function mapStateToProps(state) {
   return {
     projection: id,
     url,
-    models
+    models,
+    onClose: ownProps.onClose
   };
 }
 
 export default connect(mapStateToProps)(ImageDownloadContainer);
 
 ImageDownloadContainer.propTypes = {
-  projection: PropTypes.string
+  projection: PropTypes.string,
+  models: PropTypes.object.isRequired,
+  url: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired
 };

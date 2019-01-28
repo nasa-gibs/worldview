@@ -31,6 +31,7 @@ export const customProps = {
   TOOLBAR_SNAPSHOT: {
     headerText: 'Take a Snapshot',
     backdrop: false,
+    wrapClassName: 'clickable-behind-modal',
     type: 'selection',
     offsetRight: '70px',
     modalClassName: 'toolbar-snapshot-modal toolbar-modal toolbar-medium-modal',
