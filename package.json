@@ -181,7 +181,7 @@
     "react-masonry-component": "^6.2.1",
     "react-portal": "^4.2.0",
     "react-redux": "^6.0.0",
-    "reactstrap": "^6.3.1",
+    "reactstrap": "^7.0.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "simplebar": "^3.0.0-beta.1",
