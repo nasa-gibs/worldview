@@ -113,9 +113,9 @@ export default (function(self) {
       'config/palettes/' + layer.palette.id + '.json'
     );
   };
-  self.requirements = function(state, config) {
+  self.requirements = function(state, config, startup) {
     var promises = [];
-    if (!state.tr) {
+    if (startup || !state.tr) {
       config.palettes = {
         rendered: {},
         custom: {}

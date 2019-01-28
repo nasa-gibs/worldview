@@ -348,7 +348,7 @@ class App extends React.Component {
       lodashEach(parsers, function(parser) {
         parser(state, errors, config);
       });
-      requirements = [palettes.requirements(state, config)];
+      requirements = [palettes.requirements(state, config, true)];
 
       $.when
         .apply(null, requirements)
