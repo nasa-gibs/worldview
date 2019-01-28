@@ -59,6 +59,11 @@ export function tourUi(models, ui, config) {
   };
 
   var initTourState = function() {
+    resetMap();
+    setTourState();
+  };
+
+  var resetMap = function() {
     var leading;
     var map = ui.map.selected;
 
@@ -74,7 +79,6 @@ export function tourUi(models, ui, config) {
     map.getView().fit(leading, map.getSize());
     self.resetting = false;
     self.events.trigger('reset');
-    setTourState();
   };
 
   var setTourState = function() {
