@@ -150,8 +150,8 @@
   order: 0;
 }
 
-.tour-start .tour-box.wildfire .tour-box-header {
-  background-color: rgb(213, 78, 33);
+.tour-start .tour-box.feature .tour-box-header {
+  background-color: #d54e21;
 }
 
 .tour-start .tour-box.wildfire .tour-box-header {
@@ -341,7 +341,7 @@
   line-height: 1;
 }
 
-.tour-in-progress .feature .modal-icon:before {
+.tour-in-progress .feature .modal-icon::before {
   content: "\F1D8";
 }
 
@@ -777,7 +777,6 @@
     max-height: 250px;
   }
 }
-
 
 @media (min-height: 665px) {
   .tour {
