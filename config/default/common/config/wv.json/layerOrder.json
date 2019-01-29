@@ -859,9 +859,7 @@
         "OrbitTracks_Suomi_NPP_Ascending",
         "OrbitTracks_Suomi_NPP_Descending",
         "OrbitTracks_Terra_Ascending",
-        "OrbitTracks_Terra_Descending",
-
-        "World_Database_on_Protected_Areas"
+        "OrbitTracks_Terra_Descending"
     ],
     "layerOrderExceptions": [
         "SCAR_Land_Mask",
