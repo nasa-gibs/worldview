@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Panel from '../components/image-download/panel';
 import Crop from '../components/util/image-crop';
+import { onToggle } from '../modules/modal/actions';
 import { debounce } from 'lodash';
 import * as olProj from 'ol/proj';
 
@@ -131,7 +132,7 @@ class ImageDownloadContainer extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const { id } = state.projection;
   const { config, models } = state.models;
   let url = DEFAULT_URL;
@@ -146,12 +147,19 @@ function mapStateToProps(state, ownProps) {
   return {
     projection: id,
     url,
-    models,
-    onClose: ownProps.onClose
+    models
   };
 }
+const mapDispatchToProps = dispatch => ({
+  onClose: () => {
+    dispatch(onToggle());
+  }
+});
 
-export default connect(mapStateToProps)(ImageDownloadContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ImageDownloadContainer);
 
 ImageDownloadContainer.propTypes = {
   projection: PropTypes.string,

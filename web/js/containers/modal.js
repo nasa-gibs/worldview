@@ -76,7 +76,7 @@ class ModalContainer extends Component {
           <ModalBody>
             {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
             {BodyComponent ? (
-              <BodyComponent onClose={onToggle} />
+              <BodyComponent />
             ) : isTemplateModal ? (
               this.getTemplateBody()
             ) : (
