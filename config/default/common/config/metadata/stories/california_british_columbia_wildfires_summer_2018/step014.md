@@ -1,1 +1,1 @@
-<p>In June, we can see now fires were occurring. Let's move then a few months forward to October.</p>
+<p>In this view, we can see the high aerosol index that was a result of the different fires occurring on the west coast of North America. The aerosols in the smoke are from the fires and you can see the trail of the smoke extending across the continent and even out across the seas.</p>

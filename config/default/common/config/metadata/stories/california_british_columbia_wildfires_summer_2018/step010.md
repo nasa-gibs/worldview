@@ -1,3 +1,3 @@
-<p>In this view, we see three clusters of fires somewhere on the west coast. Because the Land Surface layer is laid on top of the "Place Labels" and "Coastlines / Borders / Roads" layers, we can not see these layers. </p>
+<p>Now that the timeline is in Months view, we can use the left/right arrows to move by monthly increments. Alternatively, you can drag the guitar pick left/ right to move by monthly increments.</p>
 
-<p>Let's Change the order of the layers by dragging the "Land Surface Temperature (Day)" layer below the other layers </p>
+<p>Let's go back a month, to June.</p>

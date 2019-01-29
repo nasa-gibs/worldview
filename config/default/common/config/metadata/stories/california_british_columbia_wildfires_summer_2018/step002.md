@@ -1,1 +1,1 @@
-<p>In this view, the red dots represent actively burning fires. <br> Let's zoom into the cluster in British Columbia, to see these fires in more detail.</p>
+<p>In this view, we've added the Fires and Thermal Anomalies (Day and Night) layer from the Moderate Resolution Imaging Spectroradiometer (MODIS) sensor on board the Terra satellite. The red dots represent actively burning fires within a 1 km pixel. <br> Let's zoom into the cluster in British Columbia, Canada to see these fires in more detail.</p>
