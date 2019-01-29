@@ -4,12 +4,12 @@ module.exports = {
     normalizeViewport(client, 1024, 768);
     client.url(client.globals.url)
       .execute(function() {
-        return !(window.localStorage.getItem('hideSplash')); // See if there should be a tour
+        return !(window.localStorage.getItem('hideTour')); // See if there should be a tour
       }, [], function(result) {
         const hasTour = result.value;
         if (hasTour) {
-          client.waitForElementVisible('#skipTour', wait, function() {
-            client.click('#skipTour');
+          client.waitForElementVisible('.tour button.close', wait, function() {
+            client.click('.tour button.close');
             client.pause(1000);
           });
         } else {
