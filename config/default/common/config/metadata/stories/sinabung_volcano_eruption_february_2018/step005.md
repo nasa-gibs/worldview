@@ -1,5 +1,1 @@
-<p>Step 5: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-deserunt mollit anim id est laborum.</p>
+<p>Compare the four Sulfur Dioxide layers to see at which level of the vertical column density where Sulfur Dioxide levels were the highest by clicking on the "eye" icon next to each layer. The planetary boundary layer corresponds to the center of mass altitude (CMA) of 0.9 km. The lower troposphere corresponds to CMA of 3 km, middle troposphere corresponds to CMA of 8 km, the upper troposphere and stratosphere corresponds to CMA of 18 km. </p>

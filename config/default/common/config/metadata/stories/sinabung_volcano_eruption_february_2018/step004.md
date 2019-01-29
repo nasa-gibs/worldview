@@ -1,9 +1,1 @@
-<p>In this map projection, we see the
-anarctic ice cape from directly
-above the pole. This allows us to
-see icebergs in a slightly less
-distorted perspective. </p>
-
-<p>To find the iceberg again, click on
-the Events tab to bring up a list of
-all events within view. </p>
+<p>Next let's look at the differing Sulfur Dioxide layers we have from the Ozone Mapping and Profiler Suite (OMPS) sensor on the joint NASA/NOAA Suomi-NPP satellite. We've turned on the Sulfur Dioxide (Lower Troposphere) in this view.</p>

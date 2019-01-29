@@ -1,5 +1,1 @@
-<p>Step 7: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-  ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-  deserunt mollit anim id est laborum.</p>
+<p>Looking back in time - can you spot the eruption of Mount Sinabung on 6 January 2014? Try changing the date to 22 May 2016 and change to the MODIS/Terra corrected reflectance imagery layer. In comparison, the ash plume from the February 2018 eruption was very large. As you can see, it is also very cloudy in this region for most of the year, which sometimes makes it difficult to spot volcanic eruptions.</p>
