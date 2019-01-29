@@ -265,7 +265,7 @@
   display: block;
   height: 30px;
   width: 30px;
-  background: url('../images/natural-events/icon-critical.svg');
+  background: url("../images/natural-events/icon-critical.svg");
 }
 .wv-map .event-icon {
   height: 26px;
@@ -325,7 +325,6 @@
   border-radius: 0;
 }
 
-/* combine with notify-alert after dialog boxes have been converted to reacstrap */
 .wv-alert {
   display: flex;
   align-items: center;

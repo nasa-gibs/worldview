@@ -50,7 +50,7 @@ class LayerList extends React.Component {
       if (!layer.metadata) {
         var { origin, pathname } = window.location;
         var errorMessage = '<p>There was an error loading layer metadata.</p>';
-        var uri = `${origin}${pathname}config/metadata/${
+        var uri = `${origin}${pathname}config/metadata/layers/${
           layer.description
         }.html`;
         fetch(uri)
@@ -68,7 +68,7 @@ class LayerList extends React.Component {
     }
   }
   getSourceMetadata(source) {
-    util.get('config/metadata/' + source.description + '.html').then(data => {
+    util.get('config/metadata/layers/' + source.description + '.html').then(data => {
       if (data) {
         let sourceMetadata = this.state.sourceMetadata;
         sourceMetadata[source.description] = { data: data };
