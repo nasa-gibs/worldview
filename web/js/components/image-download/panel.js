@@ -137,7 +137,7 @@ export default class ImageResSelection extends React.Component {
     const worldfileSelect = this._renderWorldfileSelect();
 
     return (
-      <div className="wv-re-pick-wrapper">
+      <div className="wv-re-pick-wrapper wv-image">
         <div
           id="wv-image-download-url"
           style={{ display: 'none' }}
