@@ -1,5 +1,1 @@
-<p>Step 6: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-  ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-  ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-  deserunt mollit anim id est laborum.</p>
+<p>After comparing each layer, it appears the middle troposphere layer shows the highest levels of sulfur dioxide in the center of the plume - this layer is recommended for use in studies on moderate eruptions and long-range transport of sulfur pollution. The planetary boundary layer is often used in studies on near-surface pollution, the lower troposphere can be used to study degassing from volcanic sources and, the upper troposphere and stratosphere is recommended for use in studies on explosive volcanic eruptions.</p>
