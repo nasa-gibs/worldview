@@ -32,8 +32,14 @@ export function naturalEventsClusterCreateObject() {
         accumulated.startDate = newDate;
         accumulated.endDate = newDate;
       } else {
-        accumulated.startDate = Date.parse(new Date(pastStartDate)) > Date.parse(new Date(newDate)) ? newDate : pastStartDate;
-        accumulated.endDate = Date.parse(new Date(pastEndDate)) < Date.parse(new Date(newDate)) ? newDate : pastEndDate;
+        accumulated.startDate =
+          Date.parse(new Date(pastStartDate)) > Date.parse(new Date(newDate))
+            ? newDate
+            : pastStartDate;
+        accumulated.endDate =
+          Date.parse(new Date(pastEndDate)) < Date.parse(new Date(newDate))
+            ? newDate
+            : pastEndDate;
       }
     },
     setPolar: function() {
@@ -45,7 +51,7 @@ export function naturalEventsClusterCreateObject() {
       this.maxZoom = 12;
     }
   });
-};
+}
 /**
  * Create a geoJSON point out of a point
  *
@@ -67,7 +73,7 @@ export function naturalEventsClusterPointToGeoJSON(id, coordinates, date) {
       coordinates: coordinates
     }
   };
-};
+}
 /**
  * @param  {Array}
  * @return {void}
@@ -80,7 +86,7 @@ export function naturalEventsClusterSort(clusterArray) {
     return new Date(secondDate) - new Date(firstDate);
   });
   return newArray;
-};
+}
 /**
  * Load points given superCluster Object
  *
@@ -89,7 +95,12 @@ export function naturalEventsClusterSort(clusterArray) {
  * @param  {number} zoomLevel
  * @return {Object}
  */
-export function naturalEventsClusterGetPoints(superClusterObj, pointArray, zoomLevel) {
+export function naturalEventsClusterGetPoints(
+  superClusterObj,
+  pointArray,
+  zoomLevel,
+  extent
+) {
   superClusterObj.load(pointArray);
-  return superClusterObj.getClusters([-180, -90, 180, 90], lodashRound(zoomLevel));
-};
+  return superClusterObj.getClusters(extent, lodashRound(zoomLevel));
+}

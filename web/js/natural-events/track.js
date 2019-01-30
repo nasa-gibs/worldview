@@ -7,8 +7,12 @@ import OlStyleStyle from 'ol/style/Style';
 import * as olExtent from 'ol/extent';
 import OlGeomMultiLineString from 'ol/geom/MultiLineString';
 import * as olProj from 'ol/proj';
-import lodashEach from 'lodash/each';
-import lodashDebounce from 'lodash/debounce';
+import {
+  find as lodashFind,
+  each as lodashEach,
+  debounce as lodashDebounce
+} from 'lodash';
+
 import { naturalEventsUtilGetEventById } from './util';
 import {
   naturalEventsClusterPointToGeoJSON,
@@ -204,6 +208,33 @@ export default function naturalEventsTrack(models, ui, config) {
   return self;
 }
 /**
+ * Determine if track point is across the date line from the
+ * selected point
+ * @param {Array} activeCoord Coordinate array of selected track point
+ * @param {Array} nextCoord Coordinate to test against active coord
+ * @return {Boolean}
+ */
+const crossesDateLine = function(activeCoord, nextCoord) {
+  return (
+    Math.abs(Math.abs(activeCoord[0]) - Math.abs(nextCoord[0])) <
+    Math.abs(activeCoord[0] - nextCoord[0])
+  );
+};
+/**
+ * Convert coordinates to be over date line
+ * in geographic projections
+ *
+ * @param {Array} coordinates Coordinate array
+ * @return {Array}
+ */
+const getOverDateLineCoordinates = function(coordinates) {
+  const long = coordinates[0];
+  const lat = coordinates[1];
+  return long < 0
+    ? [Math.abs(180 + 180 - Math.abs(long)), lat]
+    : [-Math.abs(180 + 180 - Math.abs(long)), lat];
+};
+/**
  * Create vector layer
  *
  * @param  {Array} featuresArray Array of linstring
@@ -215,7 +246,10 @@ var naturalEventsTrackLayer = function(models, featuresArray) {
     source: new OlSourceVector({
       features: featuresArray
     }),
-    extent: models.proj.selected.maxExtent,
+    extent:
+      models.proj.selected.id === 'geographic'
+        ? [-250, -90, 250, 90]
+        : models.proj.selected.maxExtent,
     style: [getLineStyle('black', 2), getLineStyle('white', 1)]
   });
 };
@@ -313,13 +347,28 @@ var createTrack = function(models, eventObj, map, selectedDate, callback) {
   var clustersAfterSelected;
 
   var selectedPoint;
-  var zoom = map.getView().getZoom();
   var clusters;
   var afterSelected = false;
+  const zoom = map.getView().getZoom();
+  const extent =
+    models.proj.selected.id === 'geographic'
+      ? [-250, -90, 250, 90]
+      : models.proj.selected.maxExtent;
+  const selectedCoords = lodashFind(eventObj.geometries, function(geometry) {
+    return geometry.date.split('T')[0] === selectedDate;
+  }).coordinates;
   lodashEach(eventObj.geometries, function(geometry, index) {
-    var date = geometry.date.split('T')[0];
-    var coordinates = geometry.coordinates;
-    var isSelected = selectedDate === date;
+    let coordinates = geometry.coordinates;
+    const date = geometry.date.split('T')[0];
+    const isSelected = selectedDate === date;
+    const isOverDateline =
+      models.proj.selected.id === 'geographic'
+        ? crossesDateLine(selectedCoords, coordinates)
+        : false;
+    if (isOverDateline) {
+      // replace coordinates
+      coordinates = getOverDateLineCoordinates(coordinates);
+    }
     // Cluster in three groups
     if (isSelected) {
       selectedPoint = naturalEventsClusterPointToGeoJSON(
@@ -351,12 +400,14 @@ var createTrack = function(models, eventObj, map, selectedDate, callback) {
   clustersBeforeSelected = naturalEventsClusterGetPoints(
     firstClusterObj,
     geoJSONPointsBeforeSelected,
-    zoom
+    zoom,
+    extent
   );
   clustersAfterSelected = naturalEventsClusterGetPoints(
     secondClusterObj,
     geoJSONPointsAfterSelected,
-    zoom
+    zoom,
+    extent
   );
   clusters = clustersBeforeSelected.concat(
     [selectedPoint],
