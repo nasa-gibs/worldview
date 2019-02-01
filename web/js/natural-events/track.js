@@ -350,7 +350,7 @@ var createTrack = function(models, eventObj, map, selectedDate, callback) {
   const extent =
     models.proj.selected.id === 'geographic'
       ? [-250, -90, 250, 90]
-      : models.proj.selected.maxExtent;
+      : [-180, -90, 180, 90];
   const selectedCoords = lodashFind(eventObj.geometries, function(geometry) {
     return geometry.date.split('T')[0] === selectedDate;
   }).coordinates;
