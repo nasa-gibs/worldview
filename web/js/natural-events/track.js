@@ -215,10 +215,7 @@ export default function naturalEventsTrack(models, ui, config) {
  * @return {Boolean}
  */
 const crossesDateLine = function(activeCoord, nextCoord) {
-  return (
-    Math.abs(Math.abs(activeCoord[0]) - Math.abs(nextCoord[0])) <
-    Math.abs(activeCoord[0] - nextCoord[0])
-  );
+  return Math.abs(activeCoord[0] - nextCoord[0]) > 180;
 };
 /**
  * Convert coordinates to be over date line
