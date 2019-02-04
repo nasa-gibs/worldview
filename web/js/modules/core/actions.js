@@ -1,17 +1,21 @@
 import { fetch } from 'whatwg-fetch';
 
-export function requestAction(dispatch, actionName, url, fileType) {
+export function requestAction(dispatch, actionName, url, fileType, signal) {
   dispatch(startRequest(actionName));
-  fetch(url)
-    .then(function(response) {
-      return fileType === 'json' ? response.json() : response.text();
-    })
-    .then(function(body) {
-      dispatch(fetchSuccess(actionName, body));
-    })
-    .catch(function(err) {
-      dispatch(fetchFailure(actionName, err));
-    });
+  return new Promise(function(resolve, reject) {
+    return fetch(url, { signal })
+      .then(function(response) {
+        return fileType === 'json' ? response.json() : response.text();
+      })
+      .then(function(data) {
+        dispatch(fetchSuccess(actionName, data));
+        resolve(data);
+      })
+      .catch(function(err) {
+        dispatch(fetchFailure(actionName, err));
+        reject(err);
+      });
+  });
 }
 export function startRequest(actionName) {
   return {

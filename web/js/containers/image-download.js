@@ -134,7 +134,7 @@ class ImageDownloadContainer extends Component {
 
 function mapStateToProps(state) {
   const { id } = state.projection;
-  const { config, models } = state.models;
+  const { config, models } = state.legacy;
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;

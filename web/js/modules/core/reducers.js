@@ -5,8 +5,8 @@ export function requestResponse(props = {}) {
     {},
     {
       isLoading: false,
-      error: {},
-      response: {},
+      error: null,
+      response: null,
       type: null
     },
     props
@@ -21,19 +21,17 @@ export function requestReducer(actionName, state, action) {
     case START:
       return requestResponse({
         response: state.response,
-        isLoading: true,
-        type: action.type
+        isLoading: true
       });
     case SUCCESS:
       return requestResponse({
         response: action.response,
-        isLoading: false,
-        type: action.type
+        isLoading: false
       });
     case FAILURE:
       return requestResponse({
         error: action.error,
-        type: action.type
+        isLoading: false
       });
     default:
       return state;

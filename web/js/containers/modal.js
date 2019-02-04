@@ -44,7 +44,8 @@ class ModalContainer extends Component {
       backdrop,
       autoFocus,
       type,
-      wrapClassName
+      wrapClassName,
+      clickableBehindModal
     } = newProps;
     const BodyComponent =
       customProps[id] && customProps[id].bodyComponent
@@ -64,7 +65,7 @@ class ModalContainer extends Component {
       >
         <DetectOuterClick
           onClick={onToggle}
-          disabled={!isOpen || type === 'selection'}
+          disabled={!isOpen || type === 'selection' || clickableBehindModal}
         >
           {headerComponent || headerText ? (
             <ModalHeader toggle={onToggle}>
@@ -90,7 +91,7 @@ class ModalContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { models } = state.models;
+  const { models } = state.legacy;
   const { bodyText, headerText, isCustom, id, isOpen, template } = state.modal;
   let bodyTemplate;
   let isTemplateModal = false;

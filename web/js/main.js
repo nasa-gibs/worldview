@@ -5,17 +5,20 @@ import App from './app';
 import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { modalReducer, modalAboutPage } from './modules/modal/reducers';
-import modelReducer from './modules/migration/reducers';
+import legacyReducer from './modules/migration/reducers';
 import feedbackReducer from './modules/feedback/reducers';
 import projectionReducer from './modules/projection/reducer';
+import { shortLink, linkReducer } from './modules/link/reducers';
 import thunk from 'redux-thunk';
 
 const reducers = {
   projection: projectionReducer,
   modal: modalReducer,
-  models: modelReducer,
+  legacy: legacyReducer,
   feedback: feedbackReducer,
-  modalAboutPage
+  link: linkReducer,
+  modalAboutPage,
+  shortLink
 };
 
 const store = createStore(combineReducers(reducers), applyMiddleware(thunk));

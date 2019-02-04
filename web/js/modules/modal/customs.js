@@ -13,11 +13,13 @@ export const customProps = {
     offsetRight: '40px'
   },
   TOOLBAR_SHARE_LINK: {
-    headerText: 'Copy link to share:',
+    headerText: 'Copy Link to Share',
     type: 'toolbar',
     backdrop: false,
     offsetRight: '198px',
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
+    clickableBehindModal: true,
+    wrapClassName: 'clickable-behind-modal',
     bodyComponent: ShareLinks
   },
   TOOLBAR_INFO: {
@@ -25,6 +27,7 @@ export const customProps = {
     backdrop: false,
     type: 'toolbar',
     modalClassName: 'toolbar-list-modal toolbar-modal',
+
     offsetRight: '10px',
     bodyComponent: InfoList
   },

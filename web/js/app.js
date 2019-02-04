@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import lodashEach from 'lodash/each';
+import { debounce as lodashDebounce, each as lodashEach } from 'lodash';
 import googleTagManager from 'googleTagManager';
 
+// Permalink
+import Permalink from './containers/permalink';
 // Utils
 import util from './util/util';
 
@@ -71,15 +73,9 @@ import naturalEventsModel from './natural-events/model';
 import naturalEventsUI from './natural-events/ui';
 import naturalEventsRequest from './natural-events/request';
 
-// Image
-// import { imageRubberband } from './image/rubberband';
-// import { imagePanel } from './image/panel';
-
-// Notifications
-// import { notificationsUi } from './notifications/ui';
-
 // UI
 import loadingIndicator from './ui/indicator';
+
 // Toolbar
 import Toolbar from './containers/toolbar';
 // Link
@@ -102,7 +98,7 @@ import tour from './tour';
 
 // Crutch between state systems
 import { sendConfigToStore } from './modules/migration/actions';
-
+import { updatePermalink } from './modules/link/actions';
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.css';
@@ -173,6 +169,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="wv-content" id="wv-content" data-role="content">
+        <Permalink />
         <Toolbar />
         <section id="wv-sidebar" />
         <div id="layer-modal" className="layer-modal" />
@@ -386,6 +383,7 @@ class App extends React.Component {
       });
       models.map = mapModel(models, config);
       models.link = linkModel(config);
+
       if (config.features.compare) {
         models.compare = compareModel(models, config);
         models.link.register(models.compare);
@@ -486,12 +484,21 @@ class App extends React.Component {
         var request = naturalEventsRequest(models, ui, config);
         ui.naturalEvents = naturalEventsUI(models, ui, config, request);
       }
+      // ui.link = linkUi(models, config);
       if (config.features.alert) {
         // ui.alert = notificationsUi(ui, config);
       }
       if (config.features.compare) {
         ui.compare = compareUi(models, ui, config);
       }
+      // permalink Cruch
+      models.link.events.on(
+        'update',
+        lodashDebounce(
+          () => self.props.updatePermalink(models.link.toQueryString()),
+          100
+        )
+      );
       // FIXME: Old hack
       $(window).resize(function() {
         if (util.browser.small) {
@@ -596,6 +603,9 @@ function registerMapMouseHandlers(maps, events) {
 const mapDispatchToProps = dispatch => ({
   updateConfig: (models, configObject) => {
     dispatch(sendConfigToStore(models, configObject));
+  },
+  updatePermalink: permalink => {
+    dispatch(updatePermalink(permalink));
   }
 });
 

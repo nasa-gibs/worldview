@@ -1,6 +1,6 @@
 import util from '../../util/util';
 import { OPEN_BASIC, OPEN_CUSTOM, TOGGLE, RENDER_TEMPLATE } from './constants';
-import { actionOrienter, requestAction } from '../core/actions';
+import { requestAction } from '../core/actions';
 
 export function openBasicContent(modalHeader, bodyText) {
   return {

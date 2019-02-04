@@ -45,7 +45,7 @@ class ProjectionList extends Component {
 }
 function mapStateToProps(state) {
   return {
-    models: state.models.models,
+    models: state.legacy.models,
     projection: state.projection.id
   };
 }

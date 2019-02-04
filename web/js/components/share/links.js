@@ -9,7 +9,7 @@ class ShareLinks extends React.Component {
 
   render() {
     return (
-      <div id="social-share">
+      <div id="social-share" className="social-share">
         <a
           id="fb-share"
           className="icon-link fab facebook fa-facebook-f fa-2x"
