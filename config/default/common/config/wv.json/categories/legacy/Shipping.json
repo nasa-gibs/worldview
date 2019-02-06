@@ -11,6 +11,7 @@
                     "Brightness Temperature",
                     "Land Surface Reflectance",
                     "Sea Ice",
+                    "Sea Ice Brightness Temperature",
                     "Sea Surface Temperature"
                 ]
             }
