@@ -3,7 +3,7 @@
         "Orbital Track": {
             "id": "orbital-track",
             "title":    "Orbital Track & Overpass Time",
-            "subtitle": "Space-Track.org / Aqua, Terra, Aura, CALIPSO, CYGNSS, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESAT-2, ISS, Suomi-NPP, Landsat 7, Landsat 8, METOP-A, METOP-B, METOP-C, NOAA-20, OCO-2, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-5P, SMAP, Suomi-NPP",
+            "subtitle": "Space-Track.org / Aqua, Terra, Aura, CALIPSO, CYGNSS, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESAT-2, ISS, Suomi-NPP, Landsat 7, Landsat 8, MetOp-A, MetOp-B, MetOp-C, NOAA-20, OCO-2, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-5P, SMAP, Suomi-NPP",
             "sources": {
               "Aqua / Space-Track.org": {
                   "id": "space-track-org-aqua",
@@ -145,9 +145,9 @@
                         "OrbitTracks_Landsat-8_Descending"
                     ]
                 },
-                "METOP-A / Space-Track.org": {
+                "MetOp-A / Space-Track.org": {
                     "id": "space-track-org-metop-a",
-                    "title": "METOP-A / Space-Track.org",
+                    "title": "MetOp-A / Space-Track.org",
                     "description": "reference/orbits/metop-a",
                     "image": "",
                     "settings": [
@@ -155,9 +155,9 @@
                         "OrbitTracks_METOP-A_Descending"
                     ]
                 },
-                "METOP-B / Space-Track.org": {
+                "MetOp-B / Space-Track.org": {
                     "id": "space-track-org-metop-b",
-                    "title": "METOP-B / Space-Track.org",
+                    "title": "MetOp-B / Space-Track.org",
                     "description": "reference/orbits/metop-b",
                     "image": "",
                     "settings": [
@@ -165,9 +165,9 @@
                         "OrbitTracks_METOP-B_Descending"
                     ]
                 },
-                "METOP-C / Space-Track.org": {
+                "MetOp-C / Space-Track.org": {
                     "id": "space-track-org-metop-c",
-                    "title": "METOP-C / Space-Track.org",
+                    "title": "MetOp-C / Space-Track.org",
                     "description": "reference/orbits/metop-c",
                     "image": "",
                     "settings": [
