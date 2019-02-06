@@ -1,12 +1,12 @@
 {
   "layers": {
-    "OrbitTracks_Suomi_NPP_Descending": {
-      "id": "OrbitTracks_Suomi_NPP_Descending",
-      "title": "Suomi-NPP Orbital Track & Overpass Time (Descending/Night)",
-      "subtitle": "Suomi-NPP / Space-Track.org",
-      "description": "reference/orbits/OrbitTracks_Suomi_NPP_Descending",
+    "OrbitTracks_Sentinel-1B_Descending": {
+      "id": "OrbitTracks_Sentinel-1B_Descending",
+      "title": "Sentinel-1B Orbital Track & Overpass Time (Descending/Day)",
+      "subtitle": "Sentinel-1B / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_Sentinel-1B_Descending",
+      "tags": "tracks",
       "group": "overlays",
-      "tags": "snpp s-npp tracks",
       "format": "image/png",
       "type": "wms",
       "tileSize": [
@@ -18,9 +18,9 @@
         "reference",
         "reference_orbits"
       ],
-      "daynight": "night",
+      "daynight": "day",
       "track": "descending",
-      "startDate": "2011-10-28",
+      "startDate": "2016-04-25",
       "projections": {
         "antarctic": {
           "source": "GIBS:wms:antarctic"
@@ -33,7 +33,7 @@
         }
       },
       "palette": {
-        "id": "OrbitTracks_Suomi_NPP_Descending",
+        "id": "OrbitTracks_Sentinel-1B_Descending",
         "immutable": true
       }
     }

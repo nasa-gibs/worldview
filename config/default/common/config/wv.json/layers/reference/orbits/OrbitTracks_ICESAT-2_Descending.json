@@ -1,12 +1,12 @@
 {
   "layers": {
-    "OrbitTracks_Suomi_NPP_Descending": {
-      "id": "OrbitTracks_Suomi_NPP_Descending",
-      "title": "Suomi-NPP Orbital Track & Overpass Time (Descending/Night)",
-      "subtitle": "Suomi-NPP / Space-Track.org",
-      "description": "reference/orbits/OrbitTracks_Suomi_NPP_Descending",
+    "OrbitTracks_ICESAT-2_Descending": {
+      "id": "OrbitTracks_ICESAT-2_Descending",
+      "title": "ICESAT-2 Orbital Tracks (Descending/Night)",
+      "subtitle": "ICESAT-2 / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_ICESAT-2_Descending",
+      "tags": "tracks",
       "group": "overlays",
-      "tags": "snpp s-npp tracks",
       "format": "image/png",
       "type": "wms",
       "tileSize": [
@@ -20,7 +20,7 @@
       ],
       "daynight": "night",
       "track": "descending",
-      "startDate": "2011-10-28",
+      "startDate": "2018-09-15",
       "projections": {
         "antarctic": {
           "source": "GIBS:wms:antarctic"
@@ -33,7 +33,7 @@
         }
       },
       "palette": {
-        "id": "OrbitTracks_Suomi_NPP_Descending",
+        "id": "OrbitTracks_ICESAT-2_Descending",
         "immutable": true
       }
     }

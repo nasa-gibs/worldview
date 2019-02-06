@@ -13,7 +13,6 @@
         512
       ],
       "period": "daily",
-      "wrapadjacentdays": true,
       "layergroup": [
         "reference",
         "reference_orbits"
