@@ -782,6 +782,8 @@
         "GPW_Population_Density_2020",
         "GRUMP_Urban_Extents_Grid_1995",
         "Human_Footprint_1995-2004",
+        "Landsat_Global_Man-made_Impervious_Surface",
+        "Landsat_Human_Built-up_And_Settlement_Extent",
         "Last_of_the_Wild_1995-2004",
         "LECZ_Urban_Rural_Extents_Below_10m",
         "Particulate_Matter_Below_2.5micrometers_2001-2010",
