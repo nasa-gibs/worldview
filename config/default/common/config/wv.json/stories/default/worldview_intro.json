@@ -5,13 +5,9 @@
       "type": "default",
       "title": "Introduction to Worldview",
       "description": "Discover and learn how to use Worldview's tools and features!",
-      "backgroundImage": "background.png",
+      "backgroundImage": "wv_background.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
-      {
-        "title": "",
-        "link": ""
-      }
     ],
       "steps": [
         {
