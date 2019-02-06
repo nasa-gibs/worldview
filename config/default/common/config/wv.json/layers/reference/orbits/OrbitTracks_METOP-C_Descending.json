@@ -2,8 +2,8 @@
   "layers": {
     "OrbitTracks_METOP-C_Descending": {
       "id": "OrbitTracks_METOP-C_Descending",
-      "title": "METOP-C Orbital Track & Overpass Time (Descending/Night)",
-      "subtitle": "METOP-C / Space-Track.org",
+      "title": "MetOp-C Orbital Track & Overpass Time (Descending/Night)",
+      "subtitle": "MetOp-C / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_METOP-C_Descending",
       "group": "overlays",
       "format": "image/png",

@@ -2,8 +2,8 @@
   "layers": {
     "OrbitTracks_METOP-A_Ascending": {
       "id": "OrbitTracks_METOP-A_Ascending",
-      "title": "METOP-A Orbital Track & Overpass Time (Ascending/Day)",
-      "subtitle": "METOP-A / Space-Track.org",
+      "title": "MetOp-A Orbital Track & Overpass Time (Ascending/Day)",
+      "subtitle": "MetOp-A / Space-Track.org",
       "description": "reference/orbits/OrbitTracks_METOP-A_Ascending",
       "group": "overlays",
       "format": "image/png",
