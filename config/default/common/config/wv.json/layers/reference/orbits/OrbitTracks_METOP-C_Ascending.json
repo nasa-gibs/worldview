@@ -1,12 +1,11 @@
 {
   "layers": {
-    "OrbitTracks_Suomi_NPP_Descending": {
-      "id": "OrbitTracks_Suomi_NPP_Descending",
-      "title": "Suomi-NPP Orbital Track & Overpass Time (Descending/Night)",
-      "subtitle": "Suomi-NPP / Space-Track.org",
-      "description": "reference/orbits/OrbitTracks_Suomi_NPP_Descending",
+    "OrbitTracks_METOP-C_Ascending": {
+      "id": "OrbitTracks_METOP-C_Ascending",
+      "title": "METOP-C Orbital Track & Overpass Time (Ascending/Day)",
+      "subtitle": "METOP-C / Space-Track.org",
+      "description": "reference/orbits/OrbitTracks_METOP-C_Ascending",
       "group": "overlays",
-      "tags": "snpp s-npp tracks",
       "format": "image/png",
       "type": "wms",
       "tileSize": [
@@ -18,9 +17,9 @@
         "reference",
         "reference_orbits"
       ],
-      "daynight": "night",
-      "track": "descending",
-      "startDate": "2011-10-28",
+      "daynight": "day",
+      "track": "ascending",
+      "startDate": "2018-11-07",
       "projections": {
         "antarctic": {
           "source": "GIBS:wms:antarctic"
@@ -33,9 +32,10 @@
         }
       },
       "palette": {
-        "id": "OrbitTracks_Suomi_NPP_Descending",
+        "id": "OrbitTracks_METOP-C_Ascending",
         "immutable": true
-      }
+      },
+      "tags": "tracks"
     }
   }
 }
