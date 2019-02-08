@@ -123,3 +123,6 @@
 .wv-notify-modal ul li div {
   padding: 0;
 }
+.notification_list_modal .modal-body {
+  padding-top: 0;
+}

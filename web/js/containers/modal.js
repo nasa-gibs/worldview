@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
+import { toLower } from 'lodash';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { customProps } from '../modules/modal/customs';
 import { onToggle } from '../modules/modal/actions';
@@ -51,16 +52,17 @@ class ModalContainer extends Component {
         ? customProps[id].bodyComponent
         : '';
     const style = this.getStyle(newProps);
+    const lowerCaseId = toLower(id);
     return (
       <Modal
         isOpen={isOpen}
         toggle={onToggle}
         backdrop={backdrop && type !== 'selection'}
-        id={id}
+        id={lowerCaseId}
         className={modalClassName || 'default-modal'}
         autoFocus={autoFocus || false}
         style={style}
-        wrapClassName={wrapClassName}
+        wrapClassName={wrapClassName + ' ' + lowerCaseId}
       >
         <DetectOuterClick
           onClick={onToggle}
