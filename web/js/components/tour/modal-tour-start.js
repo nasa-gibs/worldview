@@ -38,7 +38,7 @@ class ModalStart extends React.Component {
           <InputGroup>
             <InputGroupText className="w-100">
               <Input addon type="checkbox" className="float-right m-0" defaultChecked={this.state.checked} onChange={this.handleCheck} aria-label="Hide this box until a new story has been added." />
-              <span className="ml-2">Check the box to hide this modal until a new story has been added.</span>
+              <span className="ml-2">Do not show until a new story has been added.</span>
             </InputGroupText>
           </InputGroup>
         </ModalFooter>

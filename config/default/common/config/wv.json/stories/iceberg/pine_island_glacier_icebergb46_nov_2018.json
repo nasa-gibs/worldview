@@ -5,7 +5,7 @@
       "type": "iceberg",
       "title": "Pine Island Glacier/Iceberg B-46, Nov 2018",
       "description": "View the newest iceberg, B-46, from the Pine Island Glacier, Antarctica.",
-      "backgroundImage": "background.png",
+      "backgroundImage": "b46iceberg_background.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
