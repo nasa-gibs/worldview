@@ -2,13 +2,14 @@ import ImageDownload from '../../containers/image-download';
 import Projection from '../../containers/projection';
 import InfoList from '../../containers/info';
 import ShareLinks from '../../containers/share';
+import Notifications from '../../containers/notifications';
 
 export const customProps = {
   TOOLBAR_PROJECTION: {
     headerText: null,
     type: 'toolbar',
     modalClassName: 'toolbar-list-modal toolbar-modal',
-    backdrop: false,
+    backdrop: true,
     bodyComponent: Projection,
     offsetRight: '40px'
   },
@@ -27,7 +28,6 @@ export const customProps = {
     backdrop: false,
     type: 'toolbar',
     modalClassName: 'toolbar-list-modal toolbar-modal',
-
     offsetRight: '10px',
     bodyComponent: InfoList
   },
@@ -39,5 +39,9 @@ export const customProps = {
     offsetRight: '70px',
     modalClassName: 'toolbar-snapshot-modal toolbar-modal toolbar-medium-modal',
     bodyComponent: ImageDownload
+  },
+  NOTIFICATION_LIST_MODAL: {
+    headerText: 'Notifications',
+    bodyComponent: Notifications
   }
 };

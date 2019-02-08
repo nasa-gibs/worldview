@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { openCustomContent } from '../modules/modal/actions';
 import { ButtonToolbar, Button } from 'reactstrap';
+import { openCustomContent } from '../modules/modal/actions';
 
 class LinksContainer extends Component {
   render() {
-    const { openModal } = this.props;
+    const {
+      openModal,
+      notificationType,
+      notificationContentNumber
+    } = this.props;
+    const notificationClass = notificationType
+      ? ' wv-status-' + notificationType
+      : ' wv-status-hide';
     return (
-      <ButtonToolbar id="wv-toolbar" className="wv-toolbar">
+      <ButtonToolbar id="wv-toolbar" className={'wv-toolbar'}>
         <Button
           id="wv-link-button"
           className="wv-toolbar-button"
@@ -36,8 +43,9 @@ class LinksContainer extends Component {
         <Button
           id="wv-info-button"
           title="Information"
-          className="wv-toolbar-button wv-status-hide"
+          className={'wv-toolbar-button' + notificationClass}
           onClick={() => openModal('TOOLBAR_INFO')}
+          datacontent={notificationContentNumber}
         >
           <i className="fa fa-info-circle fa-2x" />{' '}
         </Button>
@@ -45,7 +53,14 @@ class LinksContainer extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  const { number, type } = state.notifications;
 
+  return {
+    notificationType: type,
+    notificationContentNumber: number
+  };
+}
 const mapDispatchToProps = dispatch => ({
   openModal: text => {
     dispatch(openCustomContent(text));
@@ -53,7 +68,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(LinksContainer);
 

@@ -1,16 +1,49 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { requestLoadedPage, renderTemplate } from '../modules/modal/actions';
+import {
+  requestLoadedPage,
+  renderTemplate,
+  openCustomContent
+} from '../modules/modal/actions';
+import { ABOUT_PAGE_REQUEST } from '../modules/modal/constants';
 import IconList from '../components/util/list';
 import { onClickFeedback } from '../modules/feedback/util';
+import { addToLocalStorage } from '../modules/notifications/util';
+
 import { initFeedback } from '../modules/feedback/actions';
+import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
 
 class InfoList extends Component {
-  render() {
-    const { sendFeedback, feedbackIsInitiated, aboutClick } = this.props;
-    const infoArray = [
+  getNotificationListItem(obj) {
+    const { number, type, object } = this.props.notifications;
+    const baseIconclass = 'ui-icon fa fa-fw fa-';
+
+    return {
+      text: 'Notifications',
+      iconClass:
+        type === 'message'
+          ? baseIconclass + 'gift'
+          : type === 'outage'
+            ? baseIconclass + 'exclamation-circle'
+            : baseIconclass + 'bolt',
+      id: 'notifications_info_item',
+      badge: number,
+      className: type ? type + '-notification' : '',
+      onClick: () => {
+        this.props.notificationClick(object, number);
+      }
+    };
+  }
+  getListArray() {
+    const {
+      sendFeedback,
+      feedbackIsInitiated,
+      aboutClick,
+      notifications
+    } = this.props;
+    let arr = [
       {
         text: 'Send feedback',
         iconClass: 'ui-icon fa fa-envelope fa-fw',
@@ -45,14 +78,24 @@ class InfoList extends Component {
         }
       }
     ];
+    if (notifications.isActive) {
+      let obj = this.getNotificationListItem();
+      arr.splice(4, 0, obj);
+    }
+    return arr;
+  }
+  render() {
+    const infoArray = this.getListArray();
     return <IconList list={infoArray} size="small" />;
   }
 }
+
 function mapStateToProps(state) {
   const { isInitiated } = state.feedback;
 
   return {
-    feedbackIsInitiated: isInitiated
+    feedbackIsInitiated: isInitiated,
+    notifications: state.notifications
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -63,13 +106,21 @@ const mapDispatchToProps = dispatch => ({
     }
   },
   startTour: () => {},
+  notificationClick: (obj, num) => {
+    if (num > 0) {
+      dispatch(notificationsSeen());
+      addToLocalStorage(obj);
+    }
+
+    dispatch(openCustomContent('NOTIFICATION_LIST_MODAL'));
+  },
   aboutClick: () => {
     if (util.browser.small) {
       window.open('pages/about.html?v=@BUILD_NONCE@', '_blank');
     } else {
       dispatch(
         requestLoadedPage(
-          'MODAL_ABOUT_PAGE_REQUEST',
+          ABOUT_PAGE_REQUEST,
           'pages/about.html?v=@BUILD_NONCE@',
           'html'
         )
@@ -85,5 +136,11 @@ export default connect(
 )(InfoList);
 
 InfoList.propTypes = {
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  notificationsRequest: PropTypes.object,
+  sendFeedback: PropTypes.func,
+  feedbackIsInitiated: PropTypes.bool,
+  aboutClick: PropTypes.func,
+  notificationClick: PropTypes.func,
+  notifications: PropTypes.object
 };

@@ -208,5 +208,8 @@ export default connect(
 )(ShareLinkContainer);
 
 ShareLinkContainer.propTypes = {
-  projection: PropTypes.string
+  projection: PropTypes.string,
+  queryString: PropTypes.string,
+  requestShortLink: PropTypes.function,
+  mock: PropTypes.function
 };

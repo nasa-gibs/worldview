@@ -9,6 +9,10 @@ import legacyReducer from './modules/migration/reducers';
 import feedbackReducer from './modules/feedback/reducers';
 import projectionReducer from './modules/projection/reducer';
 import { shortLink, linkReducer } from './modules/link/reducers';
+import {
+  notificationsRequest,
+  notificationsReducer
+} from './modules/notifications/reducers';
 import thunk from 'redux-thunk';
 
 const reducers = {
@@ -17,8 +21,10 @@ const reducers = {
   legacy: legacyReducer,
   feedback: feedbackReducer,
   link: linkReducer,
+  notifications: notificationsReducer,
   modalAboutPage,
-  shortLink
+  shortLink,
+  notificationsRequest
 };
 
 const store = createStore(combineReducers(reducers), applyMiddleware(thunk));

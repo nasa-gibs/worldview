@@ -33,7 +33,7 @@ export default class List extends React.Component {
                   ? item.onClick
                   : onClick
                     ? () => {
-                      onClick(item.key);
+                      onClick(item.key || item.id);
                     }
                     : null
               }
@@ -53,5 +53,10 @@ List.defaultProps = {
   size: 'medium'
 };
 List.propTypes = {
-  list: PropTypes.array
+  list: PropTypes.array,
+  listClass: PropTypes.string,
+  active: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.function,
+  size: PropTypes.string
 };

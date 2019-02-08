@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
-
 import { customProps } from '../modules/modal/customs';
 import { onToggle } from '../modules/modal/actions';
 import DetectOuterClick from '../components/util/detect-outer-click';
@@ -124,9 +123,8 @@ export default connect(
 
 ModalContainer.propTypes = {
   isCustom: PropTypes.bool,
-  id: PropTypes.string
-};
-ModalContainer.defualtProps = {
-  type: 'default',
-  backdrop: true
+  id: PropTypes.string,
+  bodyTemplate: PropTypes.node,
+  isOpen: PropTypes.bool,
+  isTemplateModal: PropTypes.bool
 };

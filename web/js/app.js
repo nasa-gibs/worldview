@@ -78,6 +78,16 @@ import loadingIndicator from './ui/indicator';
 
 // Toolbar
 import Toolbar from './containers/toolbar';
+
+// Notifications
+import {
+  STATUS_REQUEST_URL,
+  REQUEST_NOTIFICATIONS
+} from './modules/notifications/constants';
+import {
+  requestNotifications,
+  setNotifications
+} from './modules/notifications/actions';
 // Link
 import { linkModel } from './link/model';
 
@@ -124,7 +134,7 @@ import '../css/jquery-ui-override.css';
 import '../css/rc-slider-overrides.css';
 import '../css/util.css';
 import '../css/toolbar.css';
-import '../css/alert.css';
+import '../css/notifications.css';
 import '../css/sidebar-panel.css';
 import '../css/button.css';
 import '../css/checkbox.css';
@@ -486,7 +496,19 @@ class App extends React.Component {
       }
       // ui.link = linkUi(models, config);
       if (config.features.alert) {
-        // ui.alert = notificationsUi(ui, config);
+        let notificationURL = config.features.alert
+          ? config.features.alert.url
+          : STATUS_REQUEST_URL;
+        if (config.parameters.mockAlerts) {
+          notificationURL =
+            'mock/notify_' + config.parameters.mockAlerts + '.json';
+        }
+        if (config.parameters.notificationURL) {
+          notificationURL =
+            'https://status.earthdata.nasa.gov/api/v1/notifications?domain=' +
+            config.parameters.notificationURL;
+        }
+        self.props.requestNotifications(notificationURL);
       }
       if (config.features.compare) {
         ui.compare = compareUi(models, ui, config);
@@ -606,6 +628,17 @@ const mapDispatchToProps = dispatch => ({
   },
   updatePermalink: permalink => {
     dispatch(updatePermalink(permalink));
+  },
+  requestNotifications: location => {
+    const promise = dispatch(
+      requestNotifications(location, REQUEST_NOTIFICATIONS, 'json')
+    );
+    promise.then(data => {
+      const obj = JSON.parse(data);
+      if (obj.notifications) {
+        dispatch(setNotifications(obj.notifications));
+      }
+    });
   }
 });
 

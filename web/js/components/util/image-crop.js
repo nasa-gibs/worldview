@@ -101,5 +101,11 @@ Crop.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   onChange: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  coordinates: PropTypes.object,
+  topRightStyle: PropTypes.object,
+  bottomLeftStyle: PropTypes.object,
+  maxWidth: PropTypes.number,
+  maxHeight: PropTypes.number,
+  showCoordinates: PropTypes.bool
 };

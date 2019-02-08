@@ -13,7 +13,7 @@ export function requestResponse(props = {}) {
   );
 }
 
-export function requestReducer(actionName, state, action) {
+export function requestReducer(actionName, state, action, callback) {
   const START = `${actionName}_START`;
   const SUCCESS = `${actionName}_SUCCESS`;
   const FAILURE = `${actionName}_FAILURE`;

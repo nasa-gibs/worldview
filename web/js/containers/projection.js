@@ -61,5 +61,8 @@ export default connect(
 )(ProjectionList);
 
 ProjectionList.propTypes = {
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  updateProjection: PropTypes.func,
+  models: PropTypes.object,
+  projection: PropTypes.string
 };

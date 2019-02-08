@@ -24,9 +24,9 @@ export function renderTemplate(headerText, template) {
     headerText: headerText
   };
 }
-export function requestLoadedPage(pageName, location, type) {
+export function requestLoadedPage(pageActionName, location, type) {
   return dispatch => {
-    return requestAction(dispatch, pageName, location);
+    return requestAction(dispatch, pageActionName, location);
   };
 }
 export function onToggle() {

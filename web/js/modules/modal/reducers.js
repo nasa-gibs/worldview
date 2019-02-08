@@ -1,4 +1,10 @@
-import { TOGGLE, OPEN_CUSTOM, OPEN_BASIC, RENDER_TEMPLATE } from './constants';
+import {
+  TOGGLE,
+  OPEN_CUSTOM,
+  OPEN_BASIC,
+  RENDER_TEMPLATE,
+  ABOUT_PAGE_REQUEST
+} from './constants';
 import { requestReducer } from '../core/reducers';
 import { assign as lodashAssign } from 'lodash';
 import update from 'immutability-helper';
@@ -16,7 +22,7 @@ const modalState = {
   bodyHTML: null
 };
 export function modalAboutPage(state = {}, action) {
-  return requestReducer('MODAL_ABOUT_PAGE_REQUEST', state, action);
+  return requestReducer(ABOUT_PAGE_REQUEST, state, action);
 }
 export function modalReducer(state = modalState, action) {
   switch (action.type) {
