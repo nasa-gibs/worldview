@@ -1,0 +1,1 @@
+<p>Ever wondered why there are black areas of missing imagery near the equator every day in the Moderate Resolution Imaging Spectroradiometer (MODIS) Reflectance imagery from the Terra and Aqua satellites? </p>

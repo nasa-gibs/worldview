@@ -1,0 +1,1 @@
+<p>When you view imagery from the newer sensor/satellite - the joint NASA/NOAA Suomi-National Poplar-orbiting Partnership (Suomi-NPP)/Visibie Infrared Imaging Radiometer Suite (VIIRS), there are no black swath gaps because the swath width is 3,040 km wide which enables ~15% image overlap between consecutive orbits at the equator, but there is still the issue of sunglint!</p>
