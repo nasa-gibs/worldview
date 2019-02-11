@@ -1,1 +1,1 @@
-<p>In this view, we see three clusters of fires in southern Oregon, northern California, and central California.</p>
+<p>Click on play in the animation feature. We have set it to animate the map in monthly increments. Here we can see some fires lasted the whole summer while others were extinguished and new ones popped up in other locations.</p>

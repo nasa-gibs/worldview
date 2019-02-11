@@ -1,1 +1,1 @@
-<p>Most of the fires are clustered within the Sutherland River Provincial Park, Tweedsmuir Provincial Park, Kluskail Lake Provincial Park, and the Nadina River. <br> Let's go back in time a few weeks to see if we can see when these fires started.</p>
+<p>Each red dot/active fire detection represents the center of an approximately 1km pixel flagged as containing one or more fires. The "location" of the dot is the center point of the pixel, and not necessarily the coordinates of the actual fire. <br> Let's use the animation feature to see when these fires started.</p>
