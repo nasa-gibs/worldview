@@ -1,1 +1,1 @@
-<p>During the animation we can see small fires crop up and quickly expand to much larger clusters. You can use the loop button to watch the animation continuously and change the frames per second to speed up or slow down the animation.</p>
+<p>Let's zoom out and see if there are fires occurring elsewhere in North America.</p>
