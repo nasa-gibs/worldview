@@ -1,0 +1,1 @@
+<p>You can see these sunglint areas roughly in the center of each of these MODIS/Terra swaths. You may also be wondering what the black areas of missing imagery near the equator are too! This occurs with MODIS/Terra and MODIS/Aqua imagery because the swath width is 2,330km wide.</p>
