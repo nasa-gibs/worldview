@@ -1,1 +1,1 @@
-<p>Let's zoom out and see if there are fires occurring elsewhere in North America.</p>
+<p>In this view, we see three clusters of fires in southern Oregon, northern California, and central California.</p>
