@@ -1,5 +1,3 @@
-import { fetch } from 'whatwg-fetch';
-
 export function requestAction(dispatch, actionName, url, fileType, signal) {
   dispatch(startRequest(actionName));
   return new Promise(function(resolve, reject) {

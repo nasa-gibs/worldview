@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import 'whatwg-fetch';
 
 import { debounce as lodashDebounce, each as lodashEach } from 'lodash';
 import googleTagManager from 'googleTagManager';
