@@ -1,1 +1,1 @@
-<p>Click on the Events tab in the layer list to see what kinds of events are occurring in the Antarctic.</p>
+<p>Here we've changed to the Arctic view. Click on the "Globe" icon again and select the Antarctic view.</p>
