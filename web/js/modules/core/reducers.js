@@ -1,18 +1,14 @@
 import { assign as lodashAssign } from 'lodash';
 
+export const defaultRequestState = {
+  isLoading: false,
+  error: null,
+  response: null,
+  type: null
+};
 export function requestResponse(props = {}) {
-  return lodashAssign(
-    {},
-    {
-      isLoading: false,
-      error: null,
-      response: null,
-      type: null
-    },
-    props
-  );
+  return lodashAssign({}, defaultRequestState, props);
 }
-
 export function requestReducer(actionName, state, action, callback) {
   const START = `${actionName}_START`;
   const SUCCESS = `${actionName}_SUCCESS`;
@@ -20,7 +16,6 @@ export function requestReducer(actionName, state, action, callback) {
   switch (action.type) {
     case START:
       return requestResponse({
-        response: state.response,
         isLoading: true
       });
     case SUCCESS:
@@ -34,6 +29,6 @@ export function requestReducer(actionName, state, action, callback) {
         isLoading: false
       });
     default:
-      return state;
+      return requestResponse({});
   }
 }

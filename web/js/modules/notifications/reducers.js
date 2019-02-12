@@ -7,7 +7,7 @@ import {
 } from './constants';
 import { assign } from 'lodash';
 
-const notificationState = {
+export const notificationReducerState = {
   number: null,
   type: '',
   isActive: false,
@@ -18,7 +18,7 @@ export function notificationsRequest(state = {}, action) {
   return requestReducer(REQUEST_NOTIFICATIONS, state, action);
 }
 
-export function notificationsReducer(state = notificationState, action) {
+export function notificationsReducer(state = notificationReducerState, action) {
   switch (action.type) {
     case SET_NOTIFICATIONS:
       if (action.array.length > 0) {
@@ -33,7 +33,7 @@ export function notificationsReducer(state = notificationState, action) {
     case NOTIFICATIONS_SEEN:
       return assign({}, state, {
         number: null,
-        type: null,
+        type: '',
         isActive: true
       });
     default:
