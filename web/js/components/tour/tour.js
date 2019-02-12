@@ -47,7 +47,7 @@ class Tour extends React.Component {
     if (window.innerWidth < 740) {
       this.setState({ modalStart: false, modalInProgress: false, modalComplete: false });
     }
-    if (window.innerHeight < 665) {
+    if (window.innerHeight < 615) {
       this.setState({ modalStart: false, modalInProgress: false, modalComplete: false });
     }
   }
