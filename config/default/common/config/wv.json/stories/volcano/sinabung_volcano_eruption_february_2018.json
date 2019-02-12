@@ -7,7 +7,12 @@
       "description": "Use sulfur dioxide layers to investigate Sinabung Volcano eruptions.",
       "backgroundImage": "background.png",
       "backgroundImageHover": "",
-      "readMoreLinks": [],
+      "readMoreLinks": [
+        {
+          "title": "Earth Observatory - Violent Blast from Sinabung",
+          "link": "https://earthobservatory.nasa.gov/images/91753/violent-blast-from-sinabung"
+        }
+      ],
       "steps": [
         {
           "id": "001",
