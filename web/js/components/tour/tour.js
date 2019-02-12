@@ -106,7 +106,15 @@ class Tour extends React.Component {
   }
 
   decreaseStep(e) {
-    if (this.state.currentStep - 1 >= 1) this.setState({ currentStep: this.state.currentStep - 1 });
+    if (this.state.currentStep - 1 >= 1) {
+      this.setState({ currentStep: this.state.currentStep - 1 });
+    } else {
+      this.setState({
+        currentStep: 1,
+        modalInProgress: false,
+        modalStart: true
+      });
+    }
   }
 
   render() {

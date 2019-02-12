@@ -5,7 +5,7 @@ class Steps extends React.Component {
   render() {
     return (
       <div className="step-container">
-        <a href="#" className={this.props.currentStep === 1 ? 'step-previous disabled' : 'step-previous'} aria-label="Previous" onClick={this.props.decreaseStep}>
+        <a href="#" className={'step-previous'} aria-label="Previous" onClick={this.props.decreaseStep}>
           <i className="fa fa-arrow-circle-left" aria-hidden="true"></i>
         </a>
         <div className="step-counter">
