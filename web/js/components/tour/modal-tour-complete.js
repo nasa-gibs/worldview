@@ -6,7 +6,7 @@ class ModalComplete extends React.Component {
   render() {
     let readMoreLinks = this.props.currentStory.readMoreLinks;
     let list;
-    if (readMoreLinks && Array.isArray(readMoreLinks)) {
+    if (readMoreLinks && (Array.isArray(readMoreLinks) && readMoreLinks.length)) {
       list = (
         <React.Fragment>
           <p>Read more about this story at the links below:</p>
