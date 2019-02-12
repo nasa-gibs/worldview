@@ -68,7 +68,7 @@
             "element": "animation",
             "action": "play"
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features,GHRSST_L4_MUR_Sea_Surface_Temperature(opacity=0.72,min=14.4,14.55,squash),Reference_Labels(hidden),Coastlines&t=2018-09-12-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-104.63907079524378,14.257746126582298,-36.99695696331915,46.52867126722967&ab=on&as=2018-09-09T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=1.5&al=true&tr=hurricane_florence_september_2018"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features,GHRSST_L4_MUR_Sea_Surface_Temperature(opacity=0.72,min=14.4,14.55,squash),Reference_Labels(hidden),Coastlines&t=2018-09-12-T00%3A00%3A00Z&z=3&t1=2018-09-19-T00%3A00%3A00Z&v=-104.63907079524378,14.257746126582298,-36.99695696331915,46.52867126722967&ab=on&as=2018-09-09T00%3A00%3A00Z&ae=2018-09-14T00%3A00%3A00Z&av=1.5&al=false"
         }
       ]
     }
