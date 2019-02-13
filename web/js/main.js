@@ -1,33 +1,14 @@
 import 'babel-polyfill'; // Needed for worldview-components in IE and older browsers
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { modalReducer, modalAboutPage } from './modules/modal/reducers';
-import legacyReducer from './modules/migration/reducers';
-import feedbackReducer from './modules/feedback/reducers';
-import projectionReducer from './modules/projection/reducer';
-import { shortLink, linkReducer } from './modules/link/reducers';
-import {
-  notificationsRequest,
-  notificationsReducer
-} from './modules/notifications/reducers';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-const reducers = {
-  projection: projectionReducer,
-  modal: modalReducer,
-  legacy: legacyReducer,
-  feedback: feedbackReducer,
-  link: linkReducer,
-  notifications: notificationsReducer,
-  modalAboutPage,
-  shortLink,
-  notificationsRequest
-};
+import reducers from './modules/reducers';
+import App from './app';
 
-const store = createStore(combineReducers(reducers), applyMiddleware(thunk));
+const store = createStore(reducers, applyMiddleware(thunk));
 
 // Document ready function
 window.onload = () => {
