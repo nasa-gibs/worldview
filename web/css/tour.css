@@ -774,19 +774,19 @@
 
 @media (max-height: 776px) {
   .tour-in-progress .modal-content {
-    max-height: 300px;
+    height: 300px;
   }
 }
 
 @media (max-height: 712px) {
   .tour-in-progress .modal-content {
-    max-height: 250px;
+    height: 250px;
   }
 }
 
 @media (max-height: 665px) {
   .tour-in-progress .modal-content {
-    max-height: 200px;
+    height: 200px;
   }
 }
 
