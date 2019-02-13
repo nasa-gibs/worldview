@@ -1,0 +1,54 @@
+import { linkReducer, deafultLinkState, shortLink } from './reducers';
+import * as constants from './constants';
+import { defaultRequestState } from '../core/reducers';
+
+describe('shortLink reducer', () => {
+  test('should return the initial state', () => {
+    expect(shortLink([], {})).toEqual(defaultRequestState);
+  });
+  test('Should set isLoading to true on Request Start', () => {
+    expect(
+      shortLink([], {
+        type: constants.REQUEST_SHORT_LINK_START
+      })
+    ).toEqual({
+      isLoading: true,
+      error: null,
+      response: null,
+      type: null
+    });
+  });
+  test('Should return response upon request success ', () => {
+    expect(
+      shortLink([], {
+        type: constants.REQUEST_SHORT_LINK_SUCCESS,
+        response: constants.MOCK_SHORT_LINK_RESPONSE_BODY
+      })
+    ).toEqual({
+      isLoading: false,
+      error: null,
+      response: constants.MOCK_SHORT_LINK_RESPONSE_BODY,
+      type: null
+    });
+  });
+});
+describe('notificationsReducer', () => {
+  test('should return the initial state', () => {
+    expect(linkReducer(undefined, {})).toEqual(deafultLinkState);
+  });
+  test(
+    constants.UPDATE_PERMALINK +
+      'action type should return object containing sorted mock object',
+    () => {
+      const testString = 'thisIsATestString';
+      expect(
+        linkReducer([], {
+          type: constants.UPDATE_PERMALINK,
+          queryString: testString
+        })
+      ).toEqual({
+        queryString: testString
+      });
+    }
+  );
+});
