@@ -53,7 +53,7 @@ class InfoList extends Component {
         }
       },
       {
-        text: 'Start Tour',
+        text: 'Explore Worldview',
         iconClass: 'ui-icon fa fa-truck fa-fw',
         id: 'start_tour_info_item'
       },

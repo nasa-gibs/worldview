@@ -106,7 +106,8 @@ import { compareUi } from './compare/ui';
 // Tour
 import { tourModel } from './tour/model';
 import { tourUi } from './tour/ui';
-
+// Alert
+import { alertUi } from './alert/ui';
 // Other
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
@@ -447,6 +448,7 @@ class App extends React.Component {
       self.props.updateConfig(models, config); // crutch between old state system and redux
       elapsed('ui');
       // Create widgets
+      ui.alert = alertUi(ui);
       ui.sidebar = sidebarUi(models, config, ui);
       ui.tour = tourUi(models, ui, config);
       ui.activeLayers = layersActive(models, ui, config);
