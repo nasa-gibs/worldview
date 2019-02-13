@@ -1,0 +1,1 @@
+<p>Change back to the Geographic projection by clicking on the "Globe" icon. You can see the iceberg track on the map here too, and this projection makes it appear as if the iceberg moved across the bottom of the map!</p>

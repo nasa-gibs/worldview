@@ -60,7 +60,7 @@ export default function naturalEventsUI(models, ui, config, request) {
 
       // Reselect previously selected event
       if (self.selected.id) {
-        self.selectEvent(self.selected.id, self.selected.date || null, true);
+        self.selectEvent(self.selected.id, self.selected.date || null, null, true);
       }
     });
     ui.sidebar.events.on('selectTab', function(tab) {
@@ -175,14 +175,14 @@ export default function naturalEventsUI(models, ui, config, request) {
       }
     });
   };
-  var getZoomPromise = function(event, date, isIdChange, isInitialLoad) {
+  var getZoomPromise = function(event, date, rotation, isIdChange, isInitialLoad) {
     return isInitialLoad
       ? new Promise(function(resolve, reject) {
         resolve();
       })
-      : zoomToEvent(event, date, isIdChange, isInitialLoad);
+      : zoomToEvent(event, date, rotation, isIdChange);
   };
-  self.selectEvent = function(id, date, isInitialLoad) {
+  self.selectEvent = function(id, date, rotation, isInitialLoad) {
     var isIdChange = !self.selected || self.selected.id !== id;
     var prevId = self.selected.id ? self.selected.id : false;
     var prevEvent = prevId
@@ -203,7 +203,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     var isSameCategory = category === prevCategory;
 
     date = date || self.getDefaultEventDate(event);
-    const zoomPromise = getZoomPromise(event, date, !isIdChange, isInitialLoad);
+    const zoomPromise = getZoomPromise(event, date, rotation, !isIdChange, isInitialLoad);
     self.selected.date = date;
 
     // highlightEventInList(id, date);
@@ -392,7 +392,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     });
   };
 
-  var zoomToEvent = function(event, date, isSameEventID) {
+  var zoomToEvent = function(event, date, rotation, isSameEventID) {
     var category = event.categories[0].title;
     var zoom = isSameEventID
       ? ui.map.selected.getView().getZoom()
@@ -428,8 +428,7 @@ export default function naturalEventsUI(models, ui, config, request) {
         models.proj.selected.crs
       );
     }
-
-    return ui.map.animate.fly(coordinates, zoom);
+    return ui.map.animate.fly(coordinates, zoom, rotation);
   };
 
   init();

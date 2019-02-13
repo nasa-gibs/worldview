@@ -35,7 +35,7 @@ export function sidebarUi(models, config, ui) {
       trailing: true
     });
     var layerAdd = function(layer) {
-      if (!ui.tour.resetting && !ui.naturalEvents.selecting) {
+      if (!ui.naturalEvents.selecting) {
         updateLayers();
       }
     };
@@ -62,12 +62,6 @@ export function sidebarUi(models, config, ui) {
       })
       .on('update', updateLayers);
 
-    ui.tour.events.on('reset', () => {
-      updateLayers();
-      updateData();
-      updateState('isCompareMode');
-    });
-
     models.palettes.events
       .on('set-custom', updateLayers)
       .on('clear-custom', updateLayers)
@@ -85,11 +79,9 @@ export function sidebarUi(models, config, ui) {
     if (models.compare) {
       models.compare.events
         .on('toggle', () => {
-          if (!ui.tour.resetting) {
-            updateState('isCompareMode');
-            updateState('layerObjects');
-            updateState('layers');
-          }
+          updateState('isCompareMode');
+          updateState('layerObjects');
+          updateState('layers');
         })
         .on('toggle-state', () => {
           updateState('isCompareA');
@@ -104,6 +96,9 @@ export function sidebarUi(models, config, ui) {
     }
     models.map.events.on('data-running', runningLayers => {
       self.reactComponent.setState({ runningLayers: runningLayers });
+    });
+    models.compare.events.on('mode', () => {
+      self.reactComponent.setState({ comparisonType: models.compare.mode });
     });
     $(window).resize(resize);
     ui.map.events.on(
@@ -198,35 +193,31 @@ export function sidebarUi(models, config, ui) {
     });
   };
   var updateData = function() {
-    if (!ui.tour.resetting) {
-      self.reactComponent.setState({
-        dataDownloadObject: models.data.groupByProducts(),
-        onGetData: ui.data.showDownloadList,
-        showDataUnavailableReason: ui.data.showUnavailableReason
-      });
-    }
+    self.reactComponent.setState({
+      dataDownloadObject: models.data.groupByProducts(),
+      onGetData: ui.data.showDownloadList,
+      showDataUnavailableReason: ui.data.showUnavailableReason
+    });
   };
   /**
    * Update layer when something happens (Event listeners)
    */
   var updateLayers = function() {
-    if (!ui.tour.resetting) {
-      if (models.compare && models.compare.active) {
-        let compareObj = getCompareObjects(models);
-        return self.reactComponent.setState({
-          firstDateObject: compareObj.a,
-          secondDateObject: compareObj.b,
-          zotsObject: getZotsForActiveLayers(config, models, ui)
-        });
-      } else {
-        self.reactComponent.setState({
-          layers: models.layers.get(
-            { group: 'all', proj: models.proj.selected.id },
-            models.layers[models.layers.activeLayers]
-          ),
-          zotsObject: getZotsForActiveLayers(config, models, ui)
-        });
-      }
+    if (models.compare && models.compare.active) {
+      let compareObj = getCompareObjects(models);
+      return self.reactComponent.setState({
+        firstDateObject: compareObj.a,
+        secondDateObject: compareObj.b,
+        zotsObject: getZotsForActiveLayers(config, models, ui)
+      });
+    } else {
+      self.reactComponent.setState({
+        layers: models.layers.get(
+          { group: 'all', proj: models.proj.selected.id },
+          models.layers[models.layers.activeLayers]
+        ),
+        zotsObject: getZotsForActiveLayers(config, models, ui)
+      });
     }
   };
   var onProductSelect = function(product) {

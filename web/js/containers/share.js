@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ShareLinks from '../components/share/links';
+import ShareLinks from '../components/toolbar/share/links';
 import { getSharelink, openPromisedSocial } from '../modules/link/util';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Checkbox } from '../components/util/checkbox';

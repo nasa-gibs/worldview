@@ -1,516 +1,797 @@
-#joyRideTipContent {
-  display: none;
+/* Breakpoint: Extra Small (< 576px) */
+.tour .close {
+  position: absolute;
+  top: auto;
+  right: 6px;
+  height: 26px;
+  width: 26px;
+  padding: 0;
+  margin: 0;
+  opacity: 1;
 }
 
-#wv-tour-content {
-  display: none;
+.tour .close span {
+  display: block;
+  position: relative;
+  height: 26px;
+  width: 26px;
+  margin: 0;
+  background: url("../images/wv-icons.png") -26px 0;
+  background-repeat: no-repeat;
 }
 
-#splash_c div {
-  background-color: rgb(175, 181, 196);
+.tour-in-progress .close {
+  top: 8px;
+  height: 13px;
+  width: 13px;
 }
 
-#conclusionPanel_c div {
-  background-color: rgb(175, 181, 196);
+.tour-in-progress .close span {
+  height: 13px;
+  width: 13px;
+  background: url("../images/wv-icons.png") -13px 0;
+  background-size: 39px 26px;
 }
 
-.joyride-tip-guide p,
-.joyride-tip-guide ul {
-  margin: 0 0 14px;
-}
-
-.joyride-tip-guide.bordered,
-.joyride-bordered {
-  border: #808080 solid 1px;
-}
-
-.joyride-tip-guide.wide,
-.joyride-wide {
-  width: 450px;
-}
-
-.joyride-close-tip {
-  color: rgba(38, 43, 49, 0.4) !important;
-}
-
-.tour h3 {
-  color: rgb(38, 43, 49);
-  font: 18px 'Open Sans', sans-serif;
+.tour a {
+  color: #00457b;
   font-weight: 400;
+}
+
+.tour a:hover {
+  color: #2276ac;
   text-decoration: none;
-  margin-bottom: 1em;
 }
 
-.tour .ui-dialog-content {
-  background: #afb5c4;
-  padding-top: 8px;
+/* .tour-start */
+.tour-start .modal {
+  overflow-y: auto;
+  height: 830px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  top: 20px;
+  bottom: 20px;
 }
 
-.tour .ui-dialog-titlebar {
+.tour-start .modal-dialog {
+  overflow-y: initial;
+  border: 1px solid #333;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tour-start .modal.fade .modal-dialog {
+  transform: translate(0, 0);
+  -webkit-transform: translate(0, 0);
+}
+
+.tour-start .modal-content {
+  background-color: #eee;
+  border: 0;
+  border-radius: 0;
+}
+
+.tour-start .modal-header {
+  color: #fff;
+  background-color: #00457b;
+  border-radius: 0;
+  padding: 8px 12px 7px;
+}
+
+.tour-start .modal-title {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 300;
+}
+
+.tour-start .modal-title .close {
+  color: #fff;
+}
+
+.tour-start .modal-body {
+  padding: 4px;
+}
+
+.tour-start .tour-intro {
+  background-color: #fff;
+  border: 1px solid #333;
+  padding: 15px;
+}
+
+.tour-start .modal-body .tour-intro p {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.tour-start .tour-intro a {
+  color: #00457b;
+  font-weight: 600;
+}
+
+.tour-start .tour-intro a:hover {
+  color: #2276ac;
+  text-decoration: none;
+}
+
+.tour-start .tour-box-row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.tour-start .tour-box {
+  position: relative;
+  background: url("../images/tour/tour-box-background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 200px;
+  width: 100%;
+  margin: 4px auto 0;
+  text-decoration: none;
+  border: 1px solid #333;
+}
+
+.tour-start .tour-box-content {
+  height: 198px;
+  display: flex;
+  flex-flow: column-reverse nowrap;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.tour-start .tour-box .tour-box-header {
+  width: 100%;
+  color: #fff;
+  background-color: #00457b;
+  text-align: center;
+  padding: 4px;
+  order: 0;
+}
+
+.tour-start .tour-box.feature .tour-box-header {
+  background-color: #d54e21;
+}
+
+.tour-start .tour-box.wildfire .tour-box-header {
+  background-color: #8d3b36;
+}
+
+.tour-start .tour-box.volcano .tour-box-header {
+  background-color: #a5734b;
+}
+
+.tour-start .tour-box.snow .tour-box-header {
+  background-color: #5a7784;
+}
+
+.tour-start .tour-box.sea-and-lake-ice .tour-box-header {
+  background-color: #328697;
+}
+
+.tour-start .tour-box.iceberg .tour-box-header {
+  background-color: #3889ad;
+}
+
+.tour-start .tour-box.water-color .tour-box-header {
+  background-color: #457d73;
+}
+
+.tour-start .tour-box.dust-and-haze .tour-box-header {
+  background-color: #a09758;
+}
+
+.tour-start .tour-box.severe-storm .tour-box-header {
+  background-color: #465a64;
+}
+
+.tour-start .tour-box.man-made .tour-box-header {
+  background-color: #3e3e3e;
+}
+
+.tour-start .tour-box.critical .tour-box-header {
+  background-color: #585858;
+}
+
+.tour-start .tour-box-title {
+  line-height: 16px;
+}
+
+.tour-start .tour-box-description {
+  display: none;
+}
+
+.tour-start .tour-box:hover .tour-box-description {
+  display: block;
+  cursor: pointer;
+  color: #fff;
+  background-color: rgba(20, 20, 20, 0.75);
+  padding: 4px;
+  order: 1;
+}
+
+.tour-start .modal-footer {
+  padding: 0 4px 4px;
+}
+
+/* .tour-in-progress */
+.tour-in-progress .modal {
+  left: auto;
+  top: auto;
+  bottom: 154px;
+  overflow: visible;
+}
+
+.tour-in-progress .modal-dialog {
+  max-width: 248px;
+}
+
+.tour-in-progress .modal.fade .modal-dialog {
+  transform: translate(100%, 0);
+  -webkit-transform: translate(100%, 0);
+  transition: transform 0.5s ease-out;
+}
+
+.tour-in-progress .modal.show .modal-dialog {
+  transform: translate(0, 0);
+  -webkit-transform: translate(0, 0);
+}
+
+.tour-in-progress .modal-content {
+  min-width: 248px;
+  max-height: 357px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px 0 0 8px;
+}
+
+.tour-in-progress .modal-header {
+  display: block;
+  position: relative;
+  color: #fff;
+  border-radius: 8px 0 0;
+  background-color: rgb(0, 69, 123);
+  padding: 8px 20px 8px 16px;
+  border-bottom: 2px solid #fff;
+}
+
+.tour-in-progress .feature .modal-header {
+  background-color: rgb(213, 78, 33);
+}
+
+.tour-in-progress .wildfire .modal-header {
+  background-color: rgb(141, 59, 54);
+}
+
+.tour-in-progress .volcano .modal-header {
+  background-color: rgb(165, 115, 75);
+}
+
+.tour-in-progress .snow .modal-header {
+  background-color: rgb(90, 119, 132);
+}
+
+.tour-in-progress .sea-and-lake-ice .modal-header {
+  background-color: rgb(50, 134, 151);
+}
+
+.tour-in-progress .iceberg .modal-header {
+  background-color: rgb(56, 137, 173);
+}
+
+.tour-in-progress .water-color .modal-header {
+  background-color: rgb(69, 125, 115);
+}
+
+.tour-in-progress .dust-and-haze .modal-header {
+  background-color: rgb(160, 151, 88);
+}
+
+.tour-in-progress .severe-storm .modal-header {
+  background-color: rgb(70, 90, 100);
+}
+
+.tour-in-progress .man-made .modal-header {
+  background-color: rgb(62, 62, 62);
+}
+
+.tour-in-progress .critical .modal-header {
+  background-color: rgb(88, 88, 88);
+}
+
+.tour-in-progress .modal-title {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 300;
+  padding-left: 28px;
+}
+
+.tour-in-progress .modal-icon {
+  position: absolute;
+  top: -9px;
+  left: -20px;
+  height: 60px;
+  width: 60px;
+  z-index: 3;
+  background-color: #fff;
+  border-radius: 50%;
+  background-image: url("../images/natural-events/icon-default.svg");
+  background-size: 64px 64px;
+  background-position: -2px -2px;
+}
+
+.tour-in-progress .feature .modal-icon {
+  background-color: #d54e21;
+  background-size: 68px 68px;
+  background-position: 0;
+  background-image: none;
+  font-size: 32px;
+  padding-top: 14px;
+  padding-left: 8px;
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  -webkit-font-feature-settings: normal;
+  font-feature-settings: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+.tour-in-progress .feature .modal-icon::before {
+  content: "\F1D8";
+}
+
+.tour-in-progress .wildfire .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-wildfires.svg");
+}
+
+.tour-in-progress .volcano .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-volcanoes.svg");
+}
+
+.tour-in-progress .snow .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-snow.svg");
+}
+
+.tour-in-progress .sea-and-lake-ice .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-sea-and-lake-ice.svg");
+}
+
+.tour-in-progress .iceberg .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-icebergs.svg");
+}
+
+.tour-in-progress .water-color .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-water-color.svg");
+}
+
+.tour-in-progress .dust-and-haze .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-dust-and-haze.svg");
+}
+
+.tour-in-progress .severe-storm .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-severe-storms.svg");
+}
+
+.tour-in-progress .man-made .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-manmade.svg");
+}
+
+.tour-in-progress .critical .modal-icon {
+  background-color: transparent;
+  background-size: 68px 68px;
+  background-position: -4px -4px;
+  background-image: url("../images/natural-events/icon-critical.svg");
+}
+
+.tour-in-progress .modal-body {
+  color: #fff;
+  padding: 16px 20px;
+  height: 248px;
+  overflow-y: scroll;
+  border-bottom: 2px solid #fff;
+}
+
+.tour-in-progress .modal-body p {
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.tour-in-progress .modal-body a {
+  text-decoration: underline;
+}
+
+.tour-in-progress .default .modal-body a {
+  color: #7bf;
+  font-weight: 400;
+}
+.tour-in-progress .default .modal-body a:hover {
+  color: #9df;
+}
+
+.tour-in-progress .modal-body strong {
+  font-weight: 600;
+}
+
+.tour-in-progress .modal-footer {
+  border-radius: 0 0 0 8px;
+  padding: 12px;
+  min-height: 52px;
+}
+
+.tour-in-progress .modal-body,
+.tour-in-progress .modal-footer {
+  background-color: rgba(0, 69, 123, 0.8);
+}
+
+.tour-in-progress .feature .modal-body,
+.tour-in-progress .feature .modal-footer {
+  background-color: rgba(213, 78, 33, 0.8);
+}
+
+.tour-in-progress .wildfire .modal-body,
+.tour-in-progress .wildfire .modal-footer {
+  background-color: rgba(141, 59, 54, 0.8);
+}
+
+.tour-in-progress .volcano .modal-body,
+.tour-in-progress .volcano .modal-footer {
+  background-color: rgba(165, 115, 75, 0.8);
+}
+
+.tour-in-progress .snow .modal-body,
+.tour-in-progress .snow .modal-footer {
+  background-color: rgba(90, 119, 132, 0.8);
+}
+
+.tour-in-progress .sea-and-lake-ice .modal-body,
+.tour-in-progress .sea-and-lake-ice .modal-footer {
+  background-color: rgba(50, 134, 151, 0.8);
+}
+
+.tour-in-progress .iceberg .modal-body,
+.tour-in-progress .iceberg .modal-footer {
+  background-color: rgba(56, 137, 173, 0.8);
+}
+
+.tour-in-progress .water-color .modal-body,
+.tour-in-progress .water-color .modal-footer {
+  background-color: rgba(69, 125, 115, 0.8);
+}
+
+.tour-in-progress .dust-and-haze .modal-body,
+.tour-in-progress .dust-and-haze .modal-footer {
+  background-color: rgba(160, 151, 88, 0.8);
+}
+
+.tour-in-progress .severe-storm .modal-body,
+.tour-in-progress .severe-storm .modal-footer {
+  background-color: rgba(70, 90, 100, 0.8);
+}
+
+.tour-in-progress .man-made .modal-body,
+.tour-in-progress .man-made .modal-footer {
+  background-color: rgba(62, 62, 62, 0.8);
+}
+
+.tour-in-progress .critical .modal-body,
+.tour-in-progress .critical .modal-footer {
+  background-color: rgba(88, 88, 88, 0.8);
+}
+
+.tour-in-progress .step-container {
+  display: flex;
+  height: 40px;
+  width: 220px;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.tour-in-progress .step-previous {
+  color: #fff;
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+  margin: auto;
+}
+
+.tour-in-progress .step-counter {
+  color: #fff;
+  width: 132px;
+  margin: auto;
+  text-align: center;
+}
+
+.tour-in-progress .step-counter p {
+  font-size: 22px;
+  line-height: 24px;
+  font-weight: 300;
+}
+
+.tour-in-progress .step-next {
+  color: #fff;
+  font-size: 40px;
+  height: 40px;
+  width: 40px;
+  margin: auto;
+}
+
+/* (Worst Bootstrap specificty ever) */
+.tour-in-progress .step-previous:not([href]):not([tabindex]):hover,
+.tour-in-progress .step-previous:not([tabindex]):hover,
+.tour-in-progress .step-previous:hover,
+.tour-in-progress .step-next:not([href]):not([tabindex]):hover,
+.tour-in-progress .step-next:not([tabindex]):hover,
+.tour-in-progress .step-next:hover {
+  color: #fff;
+  opacity: 0.75;
+}
+
+.tour-in-progress .step-previous.disabled:not([href]):not([tabindex]):hover,
+.tour-in-progress .step-previous.disabled:not([href]):not([tabindex]):focus,
+.tour-in-progress .step-previous.disabled:not([tabindex]):hover,
+.tour-in-progress .step-previous.disabled:not([tabindex]):focus,
+.tour-in-progress .step-previous.disabled:hover,
+.tour-in-progress .step-previous.disabled:focus,
+.tour-in-progress .step-previous.disabled,
+.tour-in-progress .step-next.disabled:not([href]):not([tabindex]):hover,
+.tour-in-progress .step-next.disabled:not([href]):not([tabindex]):focus,
+.tour-in-progress .step-next.disabled:not([tabindex]):hover,
+.tour-in-progress .step-next.disabled:not([tabindex]):focus,
+.tour-in-progress .step-next.disabled:hover,
+.tour-in-progress .step-next.disabled:focus,
+.tour-in-progress .step-next.disabled {
+  cursor: default;
+  color: #ddd;
+  opacity: 0.5;
+}
+
+/* .tour-complete */
+.tour-complete .modal-dialog {
+  border: 1px solid #333;
+}
+
+.tour-complete .modal.fade .modal-dialog {
+  transform: translate(0, 0);
+  -webkit-transform: translate(0, 0);
+}
+
+.tour-complete .modal-content {
+  border: 0;
+  border-radius: 0;
+}
+
+.tour-complete .modal-header {
+  position: relative;
+  padding: 7px 12px 8px;
+  border-radius: 0;
+  background-color: rgb(0, 69, 123);
+}
+
+.tour-complete .feature .modal-header {
+  background-color: rgb(213, 78, 33);
+}
+
+.tour-complete .wildfire .modal-header {
+  background-color: rgb(141, 59, 54);
+}
+
+.tour-complete .volcano .modal-header {
+  background-color: rgb(165, 115, 75);
+}
+
+.tour-complete .snow .modal-header {
+  background-color: rgb(90, 119, 132);
+}
+
+.tour-complete .sea-and-lake-ice .modal-header {
+  background-color: rgb(50, 134, 151);
+}
+
+.tour-complete .iceberg .modal-header {
+  background-color: rgb(56, 137, 173);
+}
+
+.tour-complete .water-color .modal-header {
+  background-color: rgb(69, 125, 115);
+}
+
+.tour-complete .dust-and-haze .modal-header {
+  background-color: rgb(160, 151, 88);
+}
+
+.tour-complete .severe-storm .modal-header {
+  background-color: rgb(70, 90, 100);
+}
+
+.tour-complete .man-made .modal-header {
+  background-color: rgb(62, 62, 62);
+}
+
+.tour-complete .critical .modal-header {
+  background-color: rgb(88, 88, 88);
+}
+
+.tour-complete .modal-title {
+  color: #fff;
   font-size: 20px;
   line-height: 24px;
-  background: #afb5c4;
-  color: rgb(38, 43, 49);
-  border: 0;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  font-weight: 300;
 }
 
-.tour .ui-button {
-  background: #f4f5f5;
-  border-color: #f4f5f5;
+.tour-complete .modal-body {
+  padding: 15px 15px 0;
 }
 
-.tour .ui-button:hover:enabled {
-  background: #d9dddd;
+.tour-complete .modal-body p {
+  color: #333;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 16px;
 }
 
-.tour .ui-dialog-titlebar .ui-button {
-  background: transparent;
-  border: none;
+.tour-complete .modal-body ul {
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: -8px;
+  margin-left: 8px;
+  margin-bottom: 16px;
+  padding-left: 16px;
 }
 
-.tour .ui-dialog-titlebar .ui-icon-closethick {
-  background-image: url("../images/close-highlight.png");
+.tour-complete .modal-body ul li {
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 4px;
 }
 
-.tour img.wv-tour-map {
+.tour-complete .modal-footer {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 5px;
-  width: 200px;
-  height: 100px;
+  border-top: none;
+  padding: 8px 15px 15px;
 }
 
-table.splash td {
-  padding: 10px;
-}
-
-p.splash {
-  color: rgb(38, 43, 49);
-}
-
-.splashwelcome {
-  color: rgb(38, 43, 49);
-  text-align: left;
-  font-size: 14px;
-  padding: 0 10px;
-}
-
-p.splash span.highlight {
-  font-weight: 700;
-}
-
-button.takeTour {
-  font: 400 12px/18px 'Open Sans', sans-serif;
-  border: 1px solid #d7dada;
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
-  color: #000;
-  background-color: #f4f5f5;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
-  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
-  width: 110px;
-  height: 40px;
-  margin-right: 10px;
-}
-
-button.takeTour:hover {
-  color: #000;
-  background-color: #d9dddd;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
-  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
-  cursor: pointer;
-}
-
-button.skipTour {
-  font: 400 12px/18px 'Open Sans', sans-serif;
-  border: 1px solid #d7dada;
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
-  color: #000;
-  background-color: #f4f5f5;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
-  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
-  width: 110px;
-  height: 40px;
-  margin-left: 10px;
-}
-
-button.skipTour:hover {
-  color: #000;
-  background-color: #d9dddd;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
-  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
-  cursor: pointer;
-}
-
-/* tour panels */
-.tour td {
-  padding: 2px;
-  vertical-align: top;
-}
-
-.tour p,
-.tour ul {
-  color: rgb(38, 43, 49);
-  font: 400 13px/16px 'Open Sans', sans-serif;
-}
-
-.joyride-content-wrapper {
-  padding-bottom: 0;
-}
-
-.joyride-prev-tip {
-  font: 400 13px/16px 'Open Sans', sans-serif;
-}
-
-.joyride-next-tip {
-  font: 400 13px/16px 'Open Sans', sans-serif;
-}
-
-.tour span.highlight {
-  font-weight: 700;
-}
-
-.tour span.tryIt {
-  font-weight: 700;
-}
-
-button.repeatTour {
-  border: 0;
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
-  color: #000;
-  background-color: #f4f5f5;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
-  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
-  width: 110px;
-  height: 40px;
-  margin-right: 10px;
-}
-
-button.repeatTour:hover {
-  color: #000;
-  background-color: #d9dddd;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
-  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
-  cursor: pointer;
-}
-
-button.done {
-  border: 0;
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
-  color: #000;
-  background-color: #f4f5f5;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f5f5), to(#dfdddd));
-  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
-  width: 110px;
-  height: 40px;
-  margin-left: 10px;
-}
-
-button.done:hover {
-  background-color: #d9dddd;
-  color: #000;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#d9dddd), to(#c6c3c3));
-  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
-  cursor: pointer;
-}
-
-.toolbarTip {
-  margin-left: -195px;
-}
-
-.tour img {
-  display: inline;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.tour ul {
-  margin-left: 1.5em;
-  color: rgb(38, 43, 49);
-}
-
-.tour li {
-  margin-left: 1.5em;
-  display: list-item;
-  font: 400 13px/16px 'Open Sans', sans-serif;
-}
-
-/* CSS-only modal
- * Source: http://blog.avtex.com/2012/01/26/cross-browser-css-only-modal-box/
- */
-.dumbBoxWrap {
-  display: none;
-  z-index: 40001;
-}
-
-.dumbBoxOverlay {
-  position: fixed;
+.tour-complete .modal-footer .btn {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 300;
+  padding: 2px 25px 4px;
+  border-radius: 0;
+  margin: 0 0 4px;
   width: 100%;
-  height: 100%;
-  background-color: #000;
-  opacity: 0.5;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-  filter: alpha(opacity=50);
-  z-index: 40001;
 }
 
-.vertical-offset {
-  position: fixed;
-  top: 30%;
-  width: 100%;
-  z-index: 40002;
+.tour-complete .modal-footer .btn-primary {
+  background-color: #133f90;
+  border-color: #133f90;
 }
 
-.dumbBox {
-  width: 405px;
-  position: relative;
-  margin: 0 auto;
-  background-color: #fff;
-  padding: 10px;
-  border: 1px solid #000;
+.tour-complete .modal-footer .btn-primary:hover,
+.tour-complete .modal-footer .btn-primary:focus {
+  background-color: #133f77;
+  border-color: #133f77;
 }
 
-.joyride-tip-guide {
-  z-index: 293;
-  background: rgb(175, 181, 196);
-  padding-bottom: 32px;
-  width: 350px;
+.tour-complete .modal-footer .btn-secondary {
+  background-color: #f15521;
+  border-color: #f15521;
 }
 
-.joyride-tip-guide[data-index="0"] {
-  z-index: 296;
+.tour-complete .modal-footer .btn-secondary:hover,
+.tour-complete .modal-footer .btn-secondary:focus {
+  background-color: #d54e21;
+  border-color: #d54e21;
 }
 
-.joyride-tip-guide a:hover {
-  color: #000 !important;
-  border-bottom: 0;
+/* Breakpoint: Small (576px to 767px) */
+@media (min-width: 576px) {
+  .tour-complete .modal-footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .tour-complete .modal-footer .btn {
+    width: auto;
+    margin-bottom: 0;
+  }
+
+  .tour-complete .modal-footer > :not(:last-child) {
+    margin-right: 10px;
+  }
+
+  .tour-complete .modal-footer > :not(:first-child) {
+    margin-left: 10px;
+  }
 }
 
-.joyride-tip-guide .joyride-next-tip,
-.joyride-tip-guide .joyride-prev-tip {
-  width: auto;
-  float: left;
-  padding: 6px 18px 4px;
-  font-size: 13px;
-  border: 1px solid #d7dada;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-  text-align: center;
-  text-shadow: none;
-  color: #000;
-  background-color: #f4f5f5;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4f5f5), color-stop(100%, #dfdddd));
-  background-image: -webkit-linear-gradient(top, #f4f5f5, #dfdddd);
-  background-image: -moz-linear-gradient(top, #f4f5f5, #dfdddd);
-  background-image: -ms-linear-gradient(top, #f4f5f5, #dfdddd);
-  background-image: -o-linear-gradient(top, #f4f5f5, #dfdddd);
-  background-image: linear-gradient(to bottom, #f4f5f5, #dfdddd);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#f4f5f5, endColorstr=#dfdddd);
+@media (min-width: 740px) {
+  .tour {
+    display: block;
+  }
 }
 
-.joyride-tip-guide .joyride-next-tip {
-  float: right;
-  margin-right: 0;
+/* Breakpoint: Medium (768px to 991px) */
+@media (min-width: 768px) {
+
+  /* .tour-start */
+  .tour-start .modal {
+    width: 635px;
+  }
+
+  .tour-start .modal-dialog {
+    max-width: 618px;
+  }
+
+  .tour-start .modal-body .tour-box {
+    flex: none;
+    width: 200px;
+  }
+
+  /* .tour-complete */
+  .tour-complete .modal-dialog {
+    max-width: 572px;
+  }
 }
 
-.joyride-tip-guide .joyride-next-tip:hover,
-.joyride-tip-guide .joyride-prev-tip:hover {
-  border: 1px solid #bfc4c4 !important;
-  background-color: #d9dddd;
-  color: #000;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d9dddd), color-stop(100%, #c6c3c3));
-  background-image: -webkit-linear-gradient(top, #d9dddd, #c6c3c3);
-  background-image: -moz-linear-gradient(top, #d9dddd, #c6c3c3);
-  background-image: -ms-linear-gradient(top, #d9dddd, #c6c3c3);
-  background-image: -o-linear-gradient(top, #d9dddd, #c6c3c3);
-  background-image: linear-gradient(to bottom, #d9dddd, #c6c3c3);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#d9dddd, endColorstr=#c6c3c3);
+@media (max-height: 815px) {
+  .tour-start .modal {
+    height: auto;
+  }
 }
 
-table.splash td.splash-info {
-  vertical-align: top;
+@media (max-height: 776px) {
+  .tour-in-progress .modal-content {
+    max-height: 300px;
+  }
 }
 
-.splashwelcome a {
-  color: #00f;
+@media (max-height: 712px) {
+  .tour-in-progress .modal-content {
+    max-height: 250px;
+  }
 }
 
-.splashwelcome a:hover {
-  color: #66f;
+@media (max-height: 665px) {
+  .tour-in-progress .modal-content {
+    max-height: 200px;
+  }
 }
 
-p.wv-tour-page-count {
-  font: 400 13px/16px 'Open Sans', sans-serif;
-  color: #262b31;
-  text-align: right;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 12px;
-}
-
-.wv-tour-visible-icon {
-  display: inline-block;
-  height: 12px;
-  width: 21px;
-  background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@');
-  background-position: 0 0;
-}
-
-.wv-tour-close-icon {
-  display: inline-block;
-  height: 12px;
-  width: 12px;
-  background: url('../images/wv.layers/show-hide.png?v=@BUILD_NONCE@');
-  background-position: 0 -24px;
-}
-
-.wv-tour-active-icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: url('../images/icon-sprite.svg?v=@BUILD_NONCE@');
-  background-position: 0 -70px;
-}
-
-.wv-tour-timeline-bars-icon {
-  display: inline-block;
-  width: 99px;
-  height: 66px;
-  background: url("../images/tour/timeline-bars-0.7.png");
-}
-
-.wv-tour-timeline-interval-icon {
-  display: inline-block;
-  width: 99px;
-  height: 120px;
-  background: url("../images/tour/timeline-interval-2.0.jpg");
-}
-
-.wv-tour-timeline-day-buttons-icon {
-  display: inline-block;
-  width: 95px;
-  height: 65px;
-  background: url("../images/tour/timeline-day-buttons-0.7.png");
-}
-
-.wv-tour-timeline-entry-icon {
-  display: inline-block;
-  width: 95px;
-  height: 65px;
-  background: url("../images/tour/timeline-entry-0.7.png");
-}
-
-.wv-tour-toolbar-icon {
-  border-radius: 5px;
-  display: inline-block;
-  background: rgb(40, 40, 40);
-  color: #fff;
-  padding: 0.3em 0.6em;
-}
-
-.wv-tour-table-icon {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.joyride-nub,
-.joyride-nub-border {
-  pointer-events: none;
-}
-
-.joyride-tip-guide.bordered span.joyride-nub::after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 0;
-  height: 0;
-  z-index: -1;
-}
-
-.joyride-tip-guide span.joyride-nub.top {
-  border-color: #afb5c4 !important;
-  border-top-color: transparent !important;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-}
-
-.joyride-tip-guide.toolbarTip span.joyride-nub.top {
-  left: 250px;
-}
-
-.joyride-tip-guide.bordered span.joyride-nub.top::after {
-  top: -16px;
-  left: -15px;
-  border: 15px solid #808080;
-  border-top-color: transparent;
-  border-left-color: transparent;
-  border-right-color: transparent;
-}
-
-.joyride-tip-guide span.joyride-nub.right {
-  border-color: #afb5c4 !important;
-  border-top-color: transparent !important;
-  border-right-color: transparent !important;
-  border-bottom-color: transparent !important;
-}
-
-.joyride-tip-guide.bordered span.joyride-nub.right::after {
-  top: -15px;
-  left: -14px;
-  border: 15px solid #808080;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-}
-
-.joyride-tip-guide span.joyride-nub.bottom {
-  border-color: #afb5c4 !important;
-  border-bottom-color: transparent !important;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-}
-
-.joyride-tip-guide.bordered span.joyride-nub.bottom::after {
-  top: -14px;
-  left: -15px;
-  border: 15px solid #808080;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-  border-right-color: transparent;
-}
-
-.joyride-tip-guide span.joyride-nub.left {
-  border-color: #afb5c4 !important;
-  border-top-color: transparent !important;
-  border-left-color: transparent !important;
-  border-bottom-color: transparent !important;
-}
-
-.joyride-tip-guide.bordered span.joyride-nub.left::after {
-  top: -15px;
-  left: -16px;
-  border: 15px solid #808080;
-  border-top-color: transparent;
-  border-left-color: transparent;
-  border-bottom-color: transparent;
+@media (min-height: 665px) {
+  .tour {
+    display: block;
+  }
 }

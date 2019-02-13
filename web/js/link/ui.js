@@ -1,5 +1,4 @@
 import lodashThrottle from 'lodash/throttle';
-
 import util from '../util/util';
 
 export function linkUi(models, config) {

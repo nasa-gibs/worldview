@@ -2,7 +2,7 @@
     "layers": {
         "NDH_Drought_Hazard_Frequency_Distribution_1980-2000": {
             "id":       "NDH_Drought_Hazard_Frequency_Distribution_1980-2000",
-            "title":    "Drought Hazard",
+            "title":    "Drought Hazard: Frequency and Distribution",
             "subtitle": "Drought Hazard Frequency and Distribution, v1 (1980-2000)",
             "description": "sedac/NDH_Drought_Hazard_Frequency_Distribution_1980-2000",
             "tags":     "human sedac",

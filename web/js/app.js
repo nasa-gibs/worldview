@@ -80,6 +80,9 @@ import loadingIndicator from './ui/indicator';
 // Toolbar
 import Toolbar from './containers/toolbar';
 
+// Modal
+import Modal from './containers/modal';
+
 // Notifications
 import {
   STATUS_REQUEST_URL,
@@ -100,12 +103,13 @@ import { projectionModel } from './projection/model';
 import { compareModel } from './compare/model';
 import { compareUi } from './compare/ui';
 
-// Modal
-import Modal from './containers/modal';
+// Tour
+import { tourModel } from './tour/model';
+import { tourUi } from './tour/ui';
+
 // Other
 import { debugConfig, debugLayers } from './debug';
 import Brand from './brand';
-import tour from './tour';
 
 // Crutch between state systems
 import { sendConfigToStore } from './modules/migration/actions';
@@ -120,7 +124,6 @@ import '../../node_modules/icheck/skins/line/red.css';
 import '../../node_modules/jscrollpane/style/jquery.jscrollpane.css';
 import '../../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css';
 import '../ext/mobiscroll-2.6.0/mobiscroll.css';
-import '../../node_modules/jquery.joyride/jquery.joyride.css';
 import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
 import '../../node_modules/ol/ol.css';
 import '../../node_modules/rc-slider/dist/rc-slider.css';
@@ -353,7 +356,7 @@ class App extends React.Component {
       lodashEach(parsers, function(parser) {
         parser(state, errors, config);
       });
-      requirements = [palettes.requirements(state, config)];
+      requirements = [palettes.requirements(state, config, true)];
 
       $.when
         .apply(null, requirements)
@@ -434,14 +437,18 @@ class App extends React.Component {
         models.naturalEvents = naturalEventsModel(models, config, ui);
         models.link.register(models.naturalEvents);
       }
+      if (config.features.tour) {
+        models.tour = tourModel(config, ui);
+        models.link.register(models.tour);
+      }
       // HACK: Map needs permalink state loaded before starting. But
       // data download now needs it too.
       models.link.load(state); // needs to be loaded twice
       self.props.updateConfig(models, config); // crutch between old state system and redux
       elapsed('ui');
       // Create widgets
-      ui.tour = tour(models, ui, config);
       ui.sidebar = sidebarUi(models, config, ui);
+      ui.tour = tourUi(models, ui, config);
       ui.activeLayers = layersActive(models, ui, config);
       ui.addModal = layersModal(models, ui, config);
       ui.layerSettingsModal = layersOptions(models, ui, config);

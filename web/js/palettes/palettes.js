@@ -113,12 +113,14 @@ export default (function(self) {
       'config/palettes/' + layer.palette.id + '.json'
     );
   };
-  self.requirements = function(state, config) {
+  self.requirements = function(state, config, startup) {
     var promises = [];
-    config.palettes = {
-      rendered: {},
-      custom: {}
-    };
+    if (startup || !state.tr) {
+      config.palettes = {
+        rendered: {},
+        custom: {}
+      };
+    }
     lodashEach(state.l, function(qsLayer) {
       var layerId = qsLayer.id;
       if (config.layers[layerId] && config.layers[layerId].palette) {

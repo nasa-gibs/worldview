@@ -6,16 +6,20 @@ class ModeSelection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: props.selected
+      selected: props.selected,
+      loaded: false
     };
+  }
+  componentWillReceiveProps(newProp) {
+    if (this.state.selected !== newProp.selected) {
+      this.setState({ selected: newProp.selected });
+    }
   }
   onclick(mode) {
     this.props.onclick(mode);
-    this.setState({ selected: mode });
   }
   render() {
-    const { isActive } = this.props;
-    const { selected } = this.state;
+    const { isActive, selected } = this.props;
     return (
       <div
         id="wv-ab-mode-selection-case"

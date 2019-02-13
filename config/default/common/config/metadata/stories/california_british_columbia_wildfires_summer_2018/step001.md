@@ -1,0 +1,1 @@
+<p>During the summer of 2018, wildfires broke out on the western coast of the United States and Canada. <br> Let's add some additional information to make it easier to see the source of the fires.</p>

@@ -40,9 +40,11 @@ export function layersModel(models, config) {
   };
   self.hasSubDaily = function(activeLayers) {
     activeLayers = activeLayers || self[self.activeLayers];
-    for (var i = 0; i < activeLayers.length; i++) {
-      if (activeLayers[i].period === 'subdaily') {
-        return true;
+    if (activeLayers) {
+      for (var i = 0; i < activeLayers.length; i++) {
+        if (activeLayers[i].period === 'subdaily') {
+          return true;
+        }
       }
     }
     return false;
@@ -148,49 +150,51 @@ export function layersModel(models, config) {
     var range = false;
     var maxDates = [];
     lodashEach(layers, function(def) {
-      if (def.startDate) {
-        range = true;
-        var start = util.parseDateUTC(def.startDate).getTime();
-        min = Math.min(min, start);
-      }
-      // For now, we assume that any layer with an end date is
-      // an ongoing product unless it is marked as inactive.
-      if (def.futureLayer && def.endDate) {
-        range = true;
-        max = util.parseDateUTC(def.endDate).getTime();
-        maxDates.push(new Date(max));
-      } else if (def.inactive && def.endDate) {
-        range = true;
-        var end = util.parseDateUTC(def.endDate).getTime();
-        max = Math.max(max, end);
-        maxDates.push(new Date(max));
-      } else if (def.endDate) {
-        range = true;
-        max = util.now().getTime();
-        maxDates.push(new Date(max));
-      }
-      // If there is a start date but no end date, this is a
-      // product that is currently being created each day, set
-      // the max day to today.
-      if (def.futureLayer && def.futureTime && !def.endDate) {
-        // Calculate endDate + parsed futureTime from layer JSON
-        max = new Date();
-        var futureTime = def.futureTime;
-        var dateType = futureTime.slice(-1);
-        var dateInterval = futureTime.slice(0, -1);
-        if (dateType === 'D') {
-          max.setDate(max.getDate() + parseInt(dateInterval));
+      if (def) {
+        if (def.startDate) {
+          range = true;
+          var start = util.parseDateUTC(def.startDate).getTime();
+          min = Math.min(min, start);
+        }
+        // For now, we assume that any layer with an end date is
+        // an ongoing product unless it is marked as inactive.
+        if (def.futureLayer && def.endDate) {
+          range = true;
+          max = util.parseDateUTC(def.endDate).getTime();
           maxDates.push(new Date(max));
-        } else if (dateType === 'M') {
-          max.setMonth(max.getMonth() + parseInt(dateInterval));
+        } else if (def.inactive && def.endDate) {
+          range = true;
+          var end = util.parseDateUTC(def.endDate).getTime();
+          max = Math.max(max, end);
           maxDates.push(new Date(max));
-        } else if (dateType === 'Y') {
-          max.setYear(max.getYear() + parseInt(dateInterval));
+        } else if (def.endDate) {
+          range = true;
+          max = util.now().getTime();
           maxDates.push(new Date(max));
         }
-      } else if (def.startDate && !def.endDate) {
-        max = util.now().getTime();
-        maxDates.push(new Date(max));
+        // If there is a start date but no end date, this is a
+        // product that is currently being created each day, set
+        // the max day to today.
+        if (def.futureLayer && def.futureTime && !def.endDate) {
+          // Calculate endDate + parsed futureTime from layer JSON
+          max = new Date();
+          var futureTime = def.futureTime;
+          var dateType = futureTime.slice(-1);
+          var dateInterval = futureTime.slice(0, -1);
+          if (dateType === 'D') {
+            max.setDate(max.getDate() + parseInt(dateInterval));
+            maxDates.push(new Date(max));
+          } else if (dateType === 'M') {
+            max.setMonth(max.getMonth() + parseInt(dateInterval));
+            maxDates.push(new Date(max));
+          } else if (dateType === 'Y') {
+            max.setYear(max.getYear() + parseInt(dateInterval));
+            maxDates.push(new Date(max));
+          }
+        } else if (def.startDate && !def.endDate) {
+          max = util.now().getTime();
+          maxDates.push(new Date(max));
+        }
       }
     });
     if (range) {
@@ -266,7 +270,9 @@ export function layersModel(models, config) {
         }
       });
     }
-    self.events.trigger('add', def, null, self[activeLayerString]);
+    if (addType !== 'tour') {
+      self.events.trigger('add', def, null, self[activeLayerString]);
+    }
     self.events.trigger('change');
     return self[activeLayerString];
   };
@@ -521,14 +527,15 @@ export function layersModel(models, config) {
       if (!lodashIsUndefined(state[obj.state])) {
         self.clear(models.proj.selected.id, obj.active);
         lodashEachRight(state[obj.state], function(layerDef) {
+          let addType = null;
+          let hidden = false;
+          let opacity = 1.0;
           if (!config.layers[layerDef.id]) {
             errors.push({
               message: 'No such layer: ' + layerDef.id
             });
             return;
           }
-          var hidden = false;
-          var opacity = 1.0;
           lodashEach(layerDef.attributes, function(attr) {
             if (attr.id === 'hidden') {
               hidden = true;
@@ -538,14 +545,17 @@ export function layersModel(models, config) {
               if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
             }
           });
-
+          if (state.tr && state.l1) {
+            addType = 'tour';
+          }
           self[obj.active] = self.add(
             layerDef.id,
             {
               hidden: hidden,
               opacity: opacity
             },
-            obj.active
+            obj.active,
+            addType
           );
         });
       }

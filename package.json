@@ -167,7 +167,6 @@
     "jquery-jcrop": "^0.9.13",
     "jquery-ui-bundle": "1.12.1-migrate",
     "jquery-ui-touch-punch": "0.2.3",
-    "jquery.joyride": "git+https://git@github.com/nasa-gibs/joyride.git",
     "jscrollpane": "^2.0.22",
     "lodash": "^4.15.0",
     "ol": "^5.2.0",

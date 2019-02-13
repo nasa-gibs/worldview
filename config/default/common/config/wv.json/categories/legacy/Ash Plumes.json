@@ -7,6 +7,7 @@
                 "description": "",
                 "image": "ash-plumes.jpg",
                 "measurements": [
+                    "Aerosol Index",
                     "Aerosol Optical Depth",
                     "Corrected Reflectance",
                     "Fires and Thermal Anomalies",

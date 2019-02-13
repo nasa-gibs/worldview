@@ -453,7 +453,7 @@ export function mapui(models, config) {
       var layer = findLayer(def, activeLayerString);
       if (models.compare && models.compare.active) {
         let layerGroup = getActiveLayerGroup(self.selected, activeLayerString);
-        layerGroup.getLayers().remove(layer);
+        if (layerGroup) layerGroup.getLayers().remove(layer);
       } else {
         self.selected.removeLayer(layer);
       }

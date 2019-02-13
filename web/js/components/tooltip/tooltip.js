@@ -1,13 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-/*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class AnimationWidget
- * @extends React.Component
- */
 class Tooltip extends React.Component {
   constructor(props) {
     super(props);
