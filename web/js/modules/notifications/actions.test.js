@@ -5,8 +5,12 @@ import * as actions from './actions';
 import * as constants from './constants';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
+const ERROR_MESSAGE = 'There was an error';
 
 describe('Notification fetch action', () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
   test('triggers start and success action types', () => {
     const loc = 'mock/';
     fetchMock.getOnce(loc, {
@@ -28,6 +32,25 @@ describe('Notification fetch action', () => {
     return store
       .dispatch(actions.requestNotifications(loc, 'json'))
       .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+  test('creates ' + constants.REQUEST_NOTIFICATIONS_FAILURE + ' Action', () => {
+    const loc = 'mock/';
+    fetchMock.mock(loc, {
+      throws: ERROR_MESSAGE
+    });
+    const expectedActions = [
+      { type: constants.REQUEST_NOTIFICATIONS_START },
+      {
+        type: constants.REQUEST_NOTIFICATIONS_FAILURE,
+        error: ERROR_MESSAGE
+      }
+    ];
+    const store = mockStore({ shortLink: {} });
+    return store
+      .dispatch(actions.requestNotifications(loc, 'json'))
+      .catch(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   });

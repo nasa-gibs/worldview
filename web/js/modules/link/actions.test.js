@@ -3,23 +3,17 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 import * as actions from './actions';
 import * as constants from './constants';
+
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
+const ERROR_MESSAGE = 'There was an error';
 
-const RESPONSE_BODY = {
-  data: {
-    url: 'http://go.nasa.gov/1iKIZ4j'
-  },
-  status_code: 200,
-  status_txt: 'OK'
-};
+// throw new Error(ERROR_MESSAGE);
+describe('Short Link request action', () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
 
-const MOCK_RESPONSE = {
-  success: true,
-  notifications: RESPONSE_BODY
-};
-
-describe('Short Link fetch action', () => {
   test(
     'creates ' +
       constants.REQUEST_SHORT_LINK_SUCESSS +
@@ -27,7 +21,7 @@ describe('Short Link fetch action', () => {
     () => {
       const loc = 'mock/';
       fetchMock.getOnce(loc, {
-        body: MOCK_RESPONSE,
+        body: constants.MOCK_SHORT_LINK_RESPONSE,
         headers: {
           'content-type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -38,7 +32,7 @@ describe('Short Link fetch action', () => {
         { type: constants.REQUEST_SHORT_LINK_START },
         {
           type: constants.REQUEST_SHORT_LINK_SUCCESS,
-          response: MOCK_RESPONSE
+          response: constants.MOCK_SHORT_LINK_RESPONSE
         }
       ];
       const store = mockStore({ shortLink: {} });
@@ -47,6 +41,23 @@ describe('Short Link fetch action', () => {
       });
     }
   );
+  test('creates ' + constants.REQUEST_SHORT_LINK_FAILURE + ' Action', () => {
+    const loc = 'mock/';
+    fetchMock.mock(loc, {
+      throws: ERROR_MESSAGE
+    });
+    const expectedActions = [
+      { type: constants.REQUEST_SHORT_LINK_START },
+      {
+        type: constants.REQUEST_SHORT_LINK_FAILURE,
+        error: ERROR_MESSAGE
+      }
+    ];
+    const store = mockStore({ shortLink: {} });
+    return store.dispatch(actions.requestShortLink(loc, 'json')).catch(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
 });
 describe('updatePermalink action', () => {
   test(

@@ -9,9 +9,9 @@ export function requestAction(dispatch, actionName, url, fileType, signal) {
         dispatch(fetchSuccess(actionName, data));
         resolve(data);
       })
-      .catch(function(err) {
-        dispatch(fetchFailure(actionName, err));
-        reject(err);
+      .catch(function(error) {
+        dispatch(fetchFailure(actionName, error));
+        reject(error);
       });
   });
 }
@@ -31,6 +31,6 @@ export function fetchSuccess(actionName, response) {
 export function fetchFailure(actionName, error) {
   return {
     type: `${actionName}_FAILURE`,
-    error: { error }
+    error: error
   };
 }
