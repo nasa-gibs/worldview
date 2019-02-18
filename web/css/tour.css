@@ -741,10 +741,6 @@
   .tour {
     display: block;
   }
-}
-
-/* Breakpoint: Medium (768px to 991px) */
-@media (min-width: 768px) {
 
   /* .tour-start */
   .tour-start .modal {

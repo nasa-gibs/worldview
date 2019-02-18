@@ -30,6 +30,15 @@ class ModalInProgress extends React.Component {
     this.loadLink = this.loadLink.bind(this);
     this.setUI = this.setUI.bind(this);
     this.processActions = this.processActions.bind(this);
+    this.escFunction = this.escFunction.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.escFunction, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.escFunction, false);
   }
 
   componentDidUpdate(prevProps) {
@@ -70,6 +79,13 @@ class ModalInProgress extends React.Component {
         this.fetchMetadata(currentStory, currentStepIndex);
         this.processLink(currentStory, currentStepIndex, prevStepIndex);
       }
+    }
+  }
+
+  // Use custom escFunction since tabIndex prevents escape key use on loading WV
+  escFunction(e) {
+    if (e.keyCode === 27 && this.props.modalInProgress) {
+      this.props.toggleModalInProgress(e);
     }
   }
 
@@ -403,7 +419,7 @@ class ModalInProgress extends React.Component {
 
     return (
       <div>
-        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} onClosed={this.props.showTourAlert} wrapClassName='tour tour-in-progress' className={this.props.className + ' ' + this.props.currentStory['type']} backdrop={false}>
+        <Modal isOpen={this.props.modalInProgress} toggle={this.props.toggleModalInProgress} onClosed={this.props.showTourAlert} wrapClassName='tour tour-in-progress' className={this.props.className + ' ' + this.props.currentStory['type']} backdrop={false} keyboard={false}>
           <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">{this.props.currentStory['title']}<i className="modal-icon" aria-hidden="true"></i></ModalHeader>
           <ModalBody>
             {/* eslint-disable */}

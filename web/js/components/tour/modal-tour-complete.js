@@ -20,7 +20,7 @@ class ModalComplete extends React.Component {
     }
     return (
       <div>
-        <Modal isOpen={this.props.modalComplete} toggle={this.props.toggleModalComplete} wrapClassName='tour tour-complete' className={this.props.className} backdrop={true}>
+        <Modal isOpen={this.props.modalComplete} toggle={this.props.toggleModalComplete} wrapClassName='tour tour-complete' className={this.props.className} backdrop={'static'} fade={false} keyboard={true}>
           <ModalHeader toggle={this.props.toggleModalComplete} charCode="">Story Complete</ModalHeader>
           <ModalBody>
             <p>You have now completed a story in Worldview. To view more stories, click the "More Stories" button below to explore more events within the app. Click the "Exit Tutorial" button or close this window to start using Worldview on your own.</p>
