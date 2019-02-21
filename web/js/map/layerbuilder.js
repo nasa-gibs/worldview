@@ -1,4 +1,5 @@
 import util from '../util/util';
+import palettes from '../palettes/palettes';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -8,9 +9,15 @@ import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
+import Style from 'ol/style/style';
+import Circle from 'ol/style/circle';
+import Fill from 'ol/style/fill';
+import Text from 'ol/style/text';
+import Stroke from 'ol/style/stroke';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
+import lodashIsEmpty from 'lodash/isEmpty';
 import { lookupFactory } from '../ol/lookupimagetile';
 import {
   isActive as isPaletteActive,
@@ -21,6 +28,7 @@ import {
 export function mapLayerBuilder(models, config, cache, mapUi, store) {
   var self = {};
   self.init = function(Parent) {
+    console.log(config);
     self.extentLayers = [];
     mapUi.events.on('selecting', hideWrap);
     mapUi.events.on('selectiondone', showWrap);
@@ -385,11 +393,215 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       })
     });
 
+    var scaleFeature = function (base, resolution) {
+      // var zoom = map.getView()
+      //   .getZoom();
+      // var zoom = resolution;
+      // Minimum size of the button is 15 pixels
+      base = 5;
+      // Double the size for each zoom level
+      var add = Math.pow(2, resolution);
+      // But 47 pixels is the maximum size
+      var size = Math.min(base + add, base + 32);
+      return {
+        scale: size / 48,
+        size: size
+      };
+    };
+
+    // Create style options and store them in a styleCache Object
+    // ref: http://openlayers.org/en/v3.10.1/examples/kml-earthquakes.html
+    // ref: http://openlayersbook.github.io/ch06-styling-vector-layers/example-07.html
+    var featureStyles = function(feature, resolution) {
+      var featureStyle, color, fill, stroke, image, text, label, labelFillColor, labelStrokeColor;
+      var fillColor = 'rgba(255,255,255,0.4)';
+      var strokeColor = '#3399CC';
+      var width = 1.25;
+      var radius = 5;
+
+      if (config.vectorStyles.rendered[def.vectorStyle.id]) {
+        var layerStyles = config.vectorStyles.rendered[def.vectorStyle.id].styles;
+        var styleGroup = Object.keys(layerStyles).map(e => layerStyles[e]);
+      }
+      var styleGroupCount = 0;
+      var matchedPropertyStyles = [];
+      var matchedLineStyles = [];
+
+      if (config.vectorStyles.rendered[def.vectorStyle.id]) {
+        // Match JSON styles from GC to vector features and add styleValue to arrays
+        lodashEach(styleGroup, function(styleValues) {
+          let stylePropertyKey = styleValues.property;
+          if (stylePropertyKey in feature.properties_) matchedPropertyStyles.push(styleValues);
+          if (feature.type_ === 'LineString' && styleValues.lines) matchedLineStyles.push(styleValues);
+        });
+      }
+
+      if (lodashIsEmpty(matchedPropertyStyles) && lodashIsEmpty(matchedLineStyles)) {
+        featureStyle = styleCache['default'];
+
+        let defaultFill = new Fill({
+          color: fillColor
+        });
+        let deafultStroke = new Stroke({
+          color: strokeColor,
+          width: width
+        });
+
+        if (!featureStyle) {
+          featureStyle = new Style({
+            image: new Circle({
+              fill: defaultFill,
+              stroke: deafultStroke,
+              radius: radius
+            }),
+            fill: defaultFill,
+            stroke: deafultStroke
+          });
+          styleCache['default'] = featureStyle;
+        }
+      } else {
+        // Style vector points
+        lodashEach(matchedPropertyStyles, function(matchedStyle) {
+          styleGroupCount++;
+          let pointStyle = feature.get(matchedStyle.property) + '_' + styleGroupCount;
+          if (pointStyle) {
+            featureStyle = styleCache[pointStyle];
+
+            // If there is a range, style properties based on ranges
+            if (matchedStyle.range) {
+              let ranges = matchedStyle.range.split(',');
+              let lowRange = ranges[ranges.length - 2].substring(1).trim();
+              let highRange = ranges[ranges.length - 1].slice(0, -1).trim();
+              if (matchedStyle.range.startsWith('[') && matchedStyle.range.endsWith(']')) { // greater than or equal to + less than or equal to
+                if (feature.properties_[matchedStyle.property] >= lowRange && feature.properties_[matchedStyle.property] <= highRange) {
+                  color = matchedStyle.points.color;
+                }
+              } else if (matchedStyle.range.startsWith('[') && matchedStyle.range.endsWith(')')) { // greater than or equal to + less than
+                if (feature.properties_[matchedStyle.property] >= lowRange && feature.properties_[matchedStyle.property] < highRange) {
+                  color = matchedStyle.points.color;
+                }
+              } else if (matchedStyle.range.startsWith('(') && matchedStyle.range.endsWith(']')) { // greater than + less than or equal to
+                if (feature.properties_[matchedStyle.property] > lowRange && feature.properties_[matchedStyle.property] <= highRange) {
+                  color = matchedStyle.points.color;
+                }
+              } else if (matchedStyle.range.startsWith('(') && matchedStyle.range.endsWith(')')) { // greater than + less than
+                if (feature.properties_[matchedStyle.property] > lowRange && feature.properties_[matchedStyle.property] < highRange) {
+                  color = matchedStyle.points.color;
+                }
+              } else {
+                color = matchedStyle.points.color;
+              }
+            //  If there is a regexp and time property, style time vector points
+            } else if (feature.properties_.time && matchedStyle.property === 'time' && matchedStyle.regex) {
+              let time = feature.properties_.time;
+              let pattern = new RegExp(matchedStyle.regex);
+              let timeTest = pattern.test(time);
+              if (timeTest) {
+                color = matchedStyle.points.color;
+                radius = matchedStyle.points.radius;
+                if (matchedStyle.label) {
+                  label = feature.properties_.time;
+                  labelFillColor = matchedStyle.label.fill_color;
+                  labelStrokeColor = matchedStyle.label.stroke_color;
+                }
+              }
+            // Else set default styles
+            } else {
+              color = matchedStyle.points.color;
+              radius = matchedStyle.points.radius;
+              width = matchedStyle.points.width;
+            }
+
+            if (!featureStyle) {
+              fill = new Fill({
+                color: color || fillColor
+              });
+
+              stroke = new Stroke({
+                color: color || strokeColor,
+                width: width
+              });
+
+              image = new Circle({
+                fill: fill,
+                stroke: stroke,
+                radius: radius
+              });
+
+              text = new Text({
+                text: label || '',
+                fill: new Fill({
+                  color: labelFillColor || fillColor
+                }),
+                stroke: new Stroke({
+                  color: labelStrokeColor || strokeColor
+                }),
+                font: '9px sans-serif',
+                offsetX: 24
+              });
+
+              featureStyle = new Style({
+                fill: fill,
+                stroke: stroke,
+                image: image,
+                text: text
+              });
+
+              var radiusDimensions = scaleFeature(radius, resolution);
+              radius = radiusDimensions.size;
+
+              var widthDimensions = scaleFeature(width, resolution);
+              width = widthDimensions.size;
+              // if ((width / (resolution * 100)) > width) {
+              //   width = width / (resolution * 100);
+              // }
+
+              stroke.setWidth(width);
+
+              styleCache[pointStyle] = featureStyle;
+            }
+          }
+        });
+
+        // Style vector lines
+        lodashEach(matchedLineStyles, function(matchedStyle) {
+          let lineStyle = feature.type;
+          let lineColor = matchedStyle.lines.color;
+          let lineWidth = matchedStyle.lines.width;
+          let width = lineWidth || 1.25;
+
+          if (!featureStyle) {
+            var stroke = new Stroke({
+              color: lineColor || '#3399CC',
+              width: width
+            });
+
+            featureStyle = new Style({
+              stroke: stroke
+            });
+
+            var widthDimensions = scaleFeature(width, resolution);
+            width = widthDimensions.size;
+            // if ((width / (resolution * 100)) > width) {
+            //   width = width / (resolution * 100);
+            // }
+
+            stroke.setWidth(width);
+            styleCache[lineStyle] = featureStyle;
+          }
+        });
+      }
+
+      // The style for this feature is in the cache. Return it as an array
+      return featureStyle;
+    };
+
     var layer = new LayerVectorTile({
       renderMode: 'image',
       preload: 1,
       extent: extent,
-      source: sourceOptions
+      source: sourceOptions,
+      style: featureStyles
     });
 
     return layer;

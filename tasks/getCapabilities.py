@@ -30,7 +30,9 @@ if len(args) != 2:
 config_file = args[0]
 output_dir = args[1]
 colormaps = {}
+vectorstyles = {}
 colormaps_dir = os.path.join(output_dir, "colormaps")
+vectorstyles_dir = os.path.join(output_dir, "vectorstyles")
 remote_count = 0
 error_count = 0
 warning_count = 0
@@ -65,6 +67,12 @@ def process_layer(layer):
                     colormap_id = os.path.splitext(colormap_file)[0]
                     colormaps[colormap_id] = colormap_link
 
+                elif schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0":
+                    vector_style_link = item["@xlink:href"]
+                    vector_style_file = os.path.basename(vector_style_link)
+                    vector_style_id = os.path.splitext(vector_style_file)[0]
+                    vectorstyles[vector_style_id] = vector_style_link
+
 def process_remote(entry):
     url = entry["from"]
     print "%s: %s" % (prog, url)
@@ -77,7 +85,7 @@ def process_remote(entry):
         fp.write(contents)
     gc = xmltodict.parse(contents)
 
-    # Find all colormaps in GetCapabilities responses and store them in memory
+    # Find all colormaps and vectorstyles in GetCapabilities responses and store them in memory
     if gc["Capabilities"]["Contents"] is None:
         print('error: %s: no layers' % url)
         return
@@ -112,6 +120,27 @@ def process_colormaps():
             global warning_count
             warning_count += 1
 
+# Fetch every colormap from the API and write response to file system
+def process_vectorstyles():
+    print "%s: Fetching %d vectorstyles" % (prog, len(vectorstyles))
+    sys.stdout.flush()
+    if not os.path.exists(vectorstyles_dir):
+        os.makedirs(vectorstyles_dir)
+    for link in vectorstyles.values():
+        try:
+            response = http.request("GET", link)
+            contents = response.data
+            if link.endswith('.json'):
+                output_file = os.path.join(vectorstyles_dir, os.path.basename(link))
+            with open(output_file, "w") as fp:
+                fp.write(contents)
+        except Exception as e:
+            sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
+                (prog, link, str(e)))
+            global warning_count
+            warning_count += 1
+    print "%s: Fetching %d vectorstyles" % (prog, len(vectorstyles))
+
 tolerant = config.get("tolerant", False)
 if "wv-options-fetch" in config:
     for entry in config["wv-options-fetch"]:
@@ -127,6 +156,8 @@ if "wv-options-fetch" in config:
                 sys.stderr.write("%s: ERROR: %s\n" % (prog, str(e)))
     if colormaps:
         process_colormaps()
+    if vectorstyles:
+        process_vectorstyles()
 
 print "%s: %d error(s), %d remote(s)" % (prog, error_count, remote_count)
 
