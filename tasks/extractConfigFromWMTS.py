@@ -104,6 +104,13 @@ def process_layer(gc_layer, wv_layers, colormaps):
                     wv_layer["palette"] = {
                         "id": colormap_id
                     }
+                elif schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0":
+                    colormap_link = item["@xlink:href"]
+                    colormap_file = os.path.basename(colormap_link)
+                    colormap_id = os.path.splitext(colormap_file)[0]
+                    wv_layer["vectorStyle"] = {
+                        "id": colormap_id
+                    }
 
 def process_entry(entry, colormaps):
     layer_count = 0
