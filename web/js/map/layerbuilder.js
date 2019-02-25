@@ -28,7 +28,6 @@ import {
 export function mapLayerBuilder(models, config, cache, mapUi, store) {
   var self = {};
   self.init = function(Parent) {
-    console.log(config);
     self.extentLayers = [];
     mapUi.events.on('selecting', hideWrap);
     mapUi.events.on('selectiondone', showWrap);

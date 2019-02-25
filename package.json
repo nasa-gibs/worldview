@@ -164,6 +164,7 @@
     "jscrollpane": "^2.0.22",
     "lodash": "^4.15.0",
     "ol": "^5.2.0",
+    "ol-mapbox-style": "^3.9.0",
     "perfect-scrollbar": "^0.8.1",
     "proj4": "2.3.3",
     "promise-queue": "2.2.3",
