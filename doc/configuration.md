@@ -314,8 +314,8 @@ The `config/wv.json/storyOrder.json` file must be updated to include the new sto
 
 - **type**: Use `wildfire`, `volcano`, `snow`, `sea-and-lake-ice`, `iceberg`, `water-color`, `dust-and-haze`, `severe-storm`, `man-made` or `critical` to set the display of the event. Each event will have a color and icon associated with it's type. If left blank, the event will default to dark blue and a world icon.
 - **description**: A description of the story displayed to the end user when hovering the story's box on the overview modal.
-- **backgroundImage**: The background image shown on the story overview modal. If no image is provided, a NASA logo will be shown as a placeholder.
-- **backgroundImageHover**: The image shown when overing the background image on the story overview modal. If no image is provided, no roll-over image will appear.
+- **backgroundImage**: The background image shown on the story overview modal. This image should be **396px x 396px**, a JPG/JPEG, GIF or PNG, and optimized in size for the web. If no image is provided, a NASA logo will be shown as a placeholder.
+- **backgroundImageHover**: The image shown when overing the background image on the story overview modal. This image should be **396px x 396px**, a JPG/JPEG, GIF or PNG, and optimized in size for the web. If no image is provided, no roll-over image will appear.
 
 To display read more links on the end of story modal, a *readMoreLinks* object should exist with the following properties:
 
