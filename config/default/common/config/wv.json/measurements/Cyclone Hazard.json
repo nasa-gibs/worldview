@@ -11,9 +11,9 @@
                     "description": "sedac/CycloneHazard",
                     "image": "",
                     "settings": [
-                        "ndh-cyclone-hazard-frequency-distribution",
-                        "ndh-cyclone-mortality-risks-distribution",
-                        "ndh-cyclone-proportional-economic-loss-risk-deciles"
+                        "NDH_Cyclone_Hazard_Frequency_Distribution_1980-2000",
+                        "NDH_Cyclone_Mortality_Risks_Distribution_2000",
+                        "NDH_Cyclone_Proportional_Economic_Loss_Risk_Deciles_2000"
                     ]
                 }
             }
