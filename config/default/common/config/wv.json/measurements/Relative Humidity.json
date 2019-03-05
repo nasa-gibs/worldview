@@ -11,12 +11,8 @@
                     "description": "airs/RelativeHumidity",
                     "image": "",
                     "settings": [
-                        "AIRS_RelativeHumidity_400hPa_Day",
-                        "AIRS_RelativeHumidity_400hPa_Night",
                         "AIRS_RelativeHumidity_500hPa_Day",
                         "AIRS_RelativeHumidity_500hPa_Night",
-                        "AIRS_RelativeHumidity_600hPa_Day",
-                        "AIRS_RelativeHumidity_600hPa_Night",
                         "AIRS_RelativeHumidity_700hPa_Day",
                         "AIRS_RelativeHumidity_700hPa_Night",
                         "AIRS_RelativeHumidity_850hPa_Day",
