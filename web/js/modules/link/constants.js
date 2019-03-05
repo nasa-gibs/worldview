@@ -20,3 +20,18 @@ export const MOCK_SHORT_LINK_RESPONSE = {
   success: true,
   notifications: MOCK_SHORT_LINK_RESPONSE_BODY
 };
+
+export const ENCODING_EXCEPTIONS = [
+  {
+    match: new RegExp('%2C', 'g'),
+    replace: ','
+  },
+  {
+    match: new RegExp('%3B', 'g'),
+    replace: ';'
+  },
+  {
+    match: new RegExp('%3D', 'g'),
+    replace: '='
+  }
+];

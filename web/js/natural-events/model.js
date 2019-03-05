@@ -5,7 +5,6 @@ export default function naturalEventsModel(models, config, ui) {
   self.selected = null;
   self.active = false;
   self.layers = config.naturalEvents.layers;
-
   /**
    * Handler for events fired by this class.
    *
@@ -15,17 +14,19 @@ export default function naturalEventsModel(models, config, ui) {
    */
   self.events = util.events();
 
+  self.events.on('selected-event', function(selected) {
+    var id = selected.id;
+    var date = selected.date;
+    self.selected = id ? (date ? [id, date].join(',') : id) : 'true';
+  });
   self.save = function(state) {
     if (self.active) {
-      var id = ui.naturalEvents.selected.id;
-      var date = ui.naturalEvents.selected.date;
-      var value = id ? (date ? [id, date].join(',') : id) : true;
-      state.e = value;
+      state.e = self.selected;
     }
   };
 
   self.load = function(state) {
-    if (!state.e) return;
+    if (!state.e) return self;
     models.wv.events.on('startup', function() {
       self.events.trigger('activate');
     });
@@ -36,9 +37,11 @@ export default function naturalEventsModel(models, config, ui) {
     date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
     if (id) {
       self.events.on('hasData', function() {
-        ui.naturalEvents.selectEvent(id, date, null, true);
+        self.events.trigger('select-init-event', id, date, null, true);
       });
     }
+    self.loaded = true;
+    return self;
   };
 
   return self;

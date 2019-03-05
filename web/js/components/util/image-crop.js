@@ -34,14 +34,14 @@ export default class Crop extends React.Component {
       <React.Fragment>
         <div
           id="wv-image-top"
-          className="wv-image-coords wv-image-top"
+          className="wv-image-coords wv-image-top noselect"
           style={topRightStyle}
         >
           {coordinates.topRight}
         </div>
         <div
           id="wv-image-bottom"
-          className="wv-image-coords wv-image-bottom"
+          className="wv-image-coords wv-image-bottom noselect"
           style={bottomLeftStyle}
         >
           {coordinates.bottomLeft}

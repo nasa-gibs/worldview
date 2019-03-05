@@ -2,6 +2,7 @@ import lodashEach from 'lodash/each';
 import lodashMap from 'lodash/map';
 import lodashIsArray from 'lodash/isArray';
 import lodashIsObject from 'lodash/isObject';
+import { assign, isEmpty, forOwn, keys as lodashKeys } from 'lodash';
 import util from '../util/util';
 
 export function linkModel(config) {
@@ -25,11 +26,11 @@ export function linkModel(config) {
 
   var init = function() {};
 
-  self.register = function(component) {
+  self.register = function(component, key, dispatchLegacyUpdate, legacy) {
     components.push(component);
     if (component.events) {
       component.events.any(function() {
-        self.events.trigger('update');
+        // self.events.trigger('update');
       });
     }
     return self;
@@ -71,12 +72,20 @@ export function linkModel(config) {
     return strings.join('&');
   };
 
-  self.load = function(state, errors) {
-    errors = errors || [];
-    lodashEach(components, function(component) {
-      component.load(state, errors);
-    });
-  };
+  // self.load = function(state, errors, dispatchLegacyUpdate, legacy) {
+  //   errors = errors || [];
+  //   console.log(components);
+  //   lodashEach(components, function(component, i) {
+  //     // component.load(state, errors);
+  //     console.log(component);
+  //     // if (!isEmpty(legacy[keys[i]])) {
+  //     //   forOwn(legacy[keys[i]], (value, subKey) => {
+  //     //     console.log(component[subKey], value);
+  //     //     component[subKey] = value;
+  //     //   });
+  //     // }
+  //   });
+  // };
 
   var encode = function(value) {
     var encoded = encodeURIComponent(value);

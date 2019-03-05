@@ -130,12 +130,12 @@ export default class ImageResSelection extends React.Component {
   render() {
     const { projection, lonlats, resolutions, maxImageSize } = this.props;
     const { resolution, debugUrl } = this.state;
-    const dimensions = getDimensions(projection, lonlats, resolution);
+    const dimensions = getDimensions(projection.id, lonlats, resolution);
     const height = dimensions.height;
     const width = dimensions.width;
     const filetypeSelect = this._renderFileTypeSelect();
     const worldfileSelect = this._renderWorldfileSelect();
-
+    console.log(projection, lonlats, resolution);
     return (
       <div className="wv-re-pick-wrapper wv-image">
         <div

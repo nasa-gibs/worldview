@@ -41,7 +41,9 @@ class InfoList extends Component {
       sendFeedback,
       feedbackIsInitiated,
       aboutClick,
-      notifications
+      notifications,
+      config,
+      models
     } = this.props;
     let arr = [
       {
@@ -51,11 +53,6 @@ class InfoList extends Component {
         onClick: () => {
           sendFeedback(feedbackIsInitiated);
         }
-      },
-      {
-        text: 'Explore Worldview',
-        iconClass: 'ui-icon fa fa-truck fa-fw',
-        id: 'start_tour_info_item'
       },
       {
         text: 'Source Code',
@@ -78,6 +75,23 @@ class InfoList extends Component {
         }
       }
     ];
+    if (
+      config.features.tour &&
+      config.stories &&
+      config.storyOrder &&
+      window.innerWidth >= 740 &&
+      window.innerHeight >= 615
+    ) {
+      const exploreWorlviewObj = {
+        text: 'Explore Worldview',
+        iconClass: 'ui-icon fa fa-truck fa-fw',
+        id: 'start_tour_info_item',
+        onClick: () => {
+          models.tour.events.trigger('start-tour');
+        }
+      };
+      arr.splice(1, 0, exploreWorlviewObj);
+    }
     if (notifications.isActive) {
       let obj = this.getNotificationListItem();
       arr.splice(4, 0, obj);
@@ -95,7 +109,9 @@ function mapStateToProps(state) {
 
   return {
     feedbackIsInitiated: isInitiated,
-    notifications: state.notifications
+    notifications: state.notifications,
+    config: state.config,
+    models: state.models
   };
 }
 const mapDispatchToProps = dispatch => ({

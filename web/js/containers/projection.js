@@ -27,9 +27,9 @@ const infoArray = [
 
 class ProjectionList extends Component {
   updateProjection(id) {
-    const { updateProjection, models } = this.props;
+    const { updateProjection, models, config } = this.props;
     models.proj.select(id); // state migration crutch
-    updateProjection(id);
+    updateProjection(id, config);
   }
   render() {
     const { projection } = this.props;
@@ -45,13 +45,14 @@ class ProjectionList extends Component {
 }
 function mapStateToProps(state) {
   return {
-    models: state.legacy.models,
-    projection: state.projection.id
+    models: state.models,
+    config: state.config,
+    projection: state.proj.id
   };
 }
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateProjection: id => {
-    dispatch(changeProjection(id));
+  updateProjection: (id, config) => {
+    dispatch(changeProjection(id, config));
   }
 });
 

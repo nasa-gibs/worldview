@@ -42,9 +42,7 @@ export function mapui(models, config) {
   var dateline = mapDateLineBuilder(models, config);
   var precache = mapPrecacheTile(models, config, cache, self);
   var compare = mapCompare(models, config);
-
   var dataRunner = (self.runningdata = new MapRunningData(models, compare));
-
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection

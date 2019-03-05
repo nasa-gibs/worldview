@@ -1,4 +1,7 @@
 import util from '../util/util';
+import * as olProj from 'ol/proj';
+import { register } from 'ol/proj/proj4';
+import proj4 from 'proj4';
 import lodashClone from 'lodash/clone';
 import { intersects } from 'ol/extent';
 
@@ -9,6 +12,24 @@ export function mapModel(models, config) {
   self.selectedMap = null;
   self.events = util.events();
   self.rotation = 0;
+  const init = function() {
+    if (!config.projections) {
+      return;
+    }
+
+    Object.values(config.projections).forEach(proj => {
+      if (proj.crs && proj.proj4) {
+        self.register(proj.crs, proj.proj4);
+      }
+    });
+  };
+  self.register = function(crs, def) {
+    if (def && proj4) {
+      proj4.defs(crs, def);
+      register(proj4);
+      olProj.get(crs).setExtent(def.maxExtent);
+    }
+  };
   /*
    * Emits update event
    *
@@ -26,6 +47,7 @@ export function mapModel(models, config) {
   // Give other components access to zoom Level
   self.updateMap = function(map) {
     self.selectedMap = map;
+    self.events.trigger('update-map');
   };
   self.getZoom = function() {
     return self.selectedMap ? self.selectedMap.getView().getZoom() : null;
@@ -66,6 +88,8 @@ export function mapModel(models, config) {
         self.rotation = state.r * (Math.PI / 180.0);
       } // convert to radians
     }
+    self.loaded = true;
+    return self;
   };
 
   /*
@@ -125,6 +149,6 @@ export function mapModel(models, config) {
 
     return [minLon, minLat, maxLon, maxLat];
   };
-
+  init();
   return self;
 }

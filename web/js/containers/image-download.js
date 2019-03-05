@@ -70,30 +70,30 @@ class ImageDownloadContainer extends Component {
     });
   }
   render() {
-    const { projection, models, url, onClose } = this.props;
+    const { proj, map, url, onClose, models } = this.props;
     const { boundaries, windowWidth, windowHeight } = this.state;
     const { x, y, x2, y2 } = boundaries;
-    const isGeoProjection = projection === 'geographic';
+    const isGeoProjection = proj.id === 'geographic';
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
-      models.map.selectedMap
+      map.selectedMap
     );
-    const crs = models.proj.selected.crs;
+    const crs = proj.selected.crs;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
     const resolution = imageUtilCalculateResolution(
-      Math.round(models.map.getZoom()),
+      Math.round(map.getZoom()),
       isGeoProjection,
-      models.proj.selected.resolutions
+      proj.selected.resolutions
     );
-
+    console.log(proj.selected.resolutions);
     return (
       <React.Fragment>
         <Panel
-          projection={projection}
+          projection={proj}
           fileTypes={fileTypes}
           resolutions={resolutions}
           lonlats={lonlats}
@@ -133,8 +133,8 @@ class ImageDownloadContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { id } = state.projection;
-  const { config, models } = state.legacy;
+  const { config, models, proj } = state;
+  const { map } = state.legacy;
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -143,10 +143,10 @@ function mapStateToProps(state) {
     url = config.parameters.imageDownload;
     util.warn('Redirecting image download to: ' + url);
   }
-
   return {
-    projection: id,
+    proj,
     url,
+    map,
     models
   };
 }
@@ -162,7 +162,8 @@ export default connect(
 )(ImageDownloadContainer);
 
 ImageDownloadContainer.propTypes = {
-  projection: PropTypes.string,
+  proj: PropTypes.object.isRequired,
+  map: PropTypes.object.isRequired,
   models: PropTypes.object.isRequired,
   url: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired

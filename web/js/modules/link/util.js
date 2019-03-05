@@ -1,3 +1,5 @@
+import { each as lodashEach } from 'lodash';
+import { ENCODING_EXCEPTIONS } from './constants';
 // Facebook: https://developers.facebook.com/docs/sharing/reference/share-dialog#redirect
 export function facebookUrlParams(appId, href, redirectUri, display) {
   return (
@@ -64,4 +66,11 @@ export function getSharelink(type, url) {
 }
 export function openPromisedSocial(url, win) {
   win.location.assign(url);
+}
+export function encode(value) {
+  var encoded = encodeURIComponent(value);
+  lodashEach(ENCODING_EXCEPTIONS, function(exception) {
+    encoded = encoded.replace(exception.match, exception.replace);
+  });
+  return encoded;
 }

@@ -173,6 +173,7 @@ export function imageSizeValid(imgHeight, imgWidth, maxSize) {
   return true;
 }
 export function getDimensions(projection, bounds, resolution) {
+  console.log(projection);
   const conversionFactor = imageUtilGetConversionFactor(projection);
   const imgWidth = Math.round(
     Math.abs(bounds[1][0] - bounds[0][0]) /

@@ -8,14 +8,28 @@ import {
   notificationsRequest,
   notificationsReducer
 } from './notifications/reducers';
+import { getProjInitialState } from './projection/util';
 
+export function getInitialState(models, config, parameters) {
+  return {
+    parameters,
+    config,
+    models,
+    legacy: models,
+    proj: getProjInitialState(config)
+  };
+}
+const defaultReducer = (state = {}) => state;
 const reducers = {
-  projection: projectionReducer,
+  proj: projectionReducer,
   modal: modalReducer,
   legacy: legacyReducer,
   feedback: feedbackReducer,
   link: linkReducer,
   notifications: notificationsReducer,
+  config: defaultReducer,
+  models: defaultReducer,
+  parameters: defaultReducer,
   modalAboutPage,
   shortLink,
   notificationsRequest

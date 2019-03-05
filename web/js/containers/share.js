@@ -60,7 +60,7 @@ class ShareLinkContainer extends Component {
     let url = window.location.href;
     let prefix = url.split('?')[0];
     prefix = prefix !== null && prefix !== undefined ? prefix : url;
-    return !queryString ? prefix : prefix + '?' + queryString;
+    return !queryString ? prefix : prefix + queryString;
   }
   onLinkClick(type) {
     const permalink = this.getPermalink();
@@ -185,7 +185,7 @@ class ShareLinkContainer extends Component {
 
 function mapStateToProps(state) {
   const { queryString } = state.link;
-  const { config } = state.legacy;
+  const { config } = state;
 
   return {
     queryString: queryString,
@@ -211,5 +211,5 @@ ShareLinkContainer.propTypes = {
   projection: PropTypes.string,
   queryString: PropTypes.string,
   requestShortLink: PropTypes.function,
-  mock: PropTypes.function
+  mock: PropTypes.string
 };

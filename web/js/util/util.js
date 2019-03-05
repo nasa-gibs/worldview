@@ -5,8 +5,11 @@
  * which is included via config.scripts in web/config/wv.json
 */
 
-import lodashEach from 'lodash/each';
-import lodashIsNull from 'lodash/isNull';
+import {
+  isObject as lodashIsObject,
+  each as lodashEach,
+  isNull as lodashIsNull
+} from 'lodash';
 import wvui from '../ui/ui';
 import browser from './browser';
 import { events } from './events';
@@ -114,7 +117,12 @@ export default (function (self) {
     }
     return result;
   };
-
+  self.elapsed = function(message, startTime, parameters) {
+    if (parameters && !parameters.elapsed) return;
+    var t = new Date().getTime() - startTime;
+    console.log(t, message);
+    return t;
+  };
   /**
    * Converts an object to a query string. For exaple, the following
    * object:
@@ -218,13 +226,31 @@ export default (function (self) {
       second = hhmmss[2] || 0;
       millisecond = hhmmss[3] || 0;
     }
-
     var date = new Date(Date.UTC(year, month, day, hour, minute, second,
       millisecond));
     if (isNaN(date.getTime())) {
       throw new Error('Invalid date: ' + dateAsString);
     }
     return date;
+  };
+  self.appendAttributesForURL = function (item) {
+    if (lodashIsObject(item)) {
+      let part = item.id || '';
+      let attributes = [];
+      if (item.attributes && item.attributes.length > 0) {
+        lodashEach(item.attributes, function(attribute) {
+          if (attribute.value) {
+            attributes.push(attribute.id + '=' + attribute.value);
+          } else {
+            attributes.push(attribute.id);
+          }
+        });
+        part += '(' + attributes.join(',') + ')';
+      }
+      return part;
+    }
+    self.warn('Is not an object: ' + item);
+    return '';
   };
   /**
    * Test if is valid Date

@@ -302,6 +302,8 @@ export function dataModel(models, config) {
         });
       }
     }
+    self.loaded = true;
+    return self;
   };
 
   var query = function() {
