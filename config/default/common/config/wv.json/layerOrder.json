@@ -591,6 +591,12 @@
         "LIS_TRMM_Flash_Radiance",
         "OTD_OrbView1_Flash_Radiance",
 
+        "TRMM_Precipitation_Rate_Asc",
+        "TRMM_Precipitation_Rate_Dsc",
+        "TRMM_Brightness_Temp_Asc",
+        "TRMM_Brightness_Temp_Dsc",
+
+
         "OTD_High_Resolution_Full_Climatology_OTD_Raw_Flashes",
         "OTD_High_Resolution_Full_Climatology_OTD_Scaled_Flashes",
         "OTD_High_Resolution_Full_Climatology_OTD_Flash_Rate_Climatology",

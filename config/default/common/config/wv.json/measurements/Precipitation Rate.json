@@ -3,7 +3,7 @@
         "Precipitation Rate": {
             "id": "precipitation-rate",
             "title":    "Precipitation Rate",
-            "subtitle": "IMERG, GPM/GMI, GCOM-W1/AMSR2, Aqua/AMSR-E, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS, GLDAS, NLDAS, Merged Microwave Radiometers, MERRA-2",
+            "subtitle": "IMERG, GPM/GMI, GCOM-W1/AMSR2, TRMM, Aqua/AMSR-E, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS, GLDAS, NLDAS, Merged Microwave Radiometers, MERRA-2",
             "sources": {
               "IMERG": {
                   "id": "imerg",
@@ -43,6 +43,16 @@
                         "OrbitTracks_GCOM-W1_Descending"
                     ]
                   },
+                  "TRMM": {
+                      "id": "trmm",
+                      "title": "TRMM",
+                      "description": "trmm/PrecipitationRate",
+                      "image": "",
+                      "settings": [
+                          "TRMM_Precipitation_Rate_Asc",
+                          "TRMM_Precipitation_Rate_Dsc"
+                      ]
+                    },
                   "Aqua/AMSR-E": {
                       "id": "aqua-amsr-e",
                       "title": "Aqua/AMSR-E",

@@ -1,0 +1,33 @@
+{
+    "layers": {
+        "AIRS_RelativeHumidity_400hPa_Night": {
+            "id":       "AIRS_RelativeHumidity_400hPa_Night",
+            "title":    "Relative Humidity (400 hPa, Night)",
+            "subtitle": "Aqua / AIRS",
+            "description": "airs/AIRS_RelativeHumidity_400hPa_Night",
+            "tags":     "rh",
+            "group":    "overlays",
+            "product":  "AIRX2RET_NIGHT",
+
+            "format":   "image/png",
+            "type":     "wmts",
+            "tileSize": [ 512, 512 ],
+
+            "period":       "daily",
+
+            "projections": {
+                "geographic": {
+                    "source":       "GIBS:geographic",
+                    "matrixSet":    "2km"
+                }
+            },
+
+            "layergroup": [
+              "airs"
+            ],
+            "palette": {
+                "id": "AIRS_RelativeHumidity_400hPa_Night"
+            }
+        }
+    }
+}

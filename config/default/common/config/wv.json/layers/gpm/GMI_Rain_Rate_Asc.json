@@ -5,6 +5,7 @@
             "title":    "Rain Rate (Ascending)",
             "subtitle": "GPM / GMI",
             "description": "gpm/GMI_Rain_Rate_Asc",
+            "tags":     "precipitation",
             "group":    "overlays",
             "layergroup": [
               "gpm"

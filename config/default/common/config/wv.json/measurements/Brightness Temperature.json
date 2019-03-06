@@ -3,7 +3,7 @@
         "Brightness Temperature": {
             "id": "brightness-temperature",
             "title":    "Brightness Temperature",
-            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, AMSU-A/NOAA-15, AMSU-A/NOAA-16, AMSU-A/NOAA-17",
+            "subtitle": "Aqua/AMSR-E, Aqua/MODIS, Terra/MODIS, GCOM-W1/AMSR2, GPM/GMI, TRMM, SMAP/Radar/Radiometer, Suomi NPP/VIIRS, AMSU-A/NOAA-15, AMSU-A/NOAA-16, AMSU-A/NOAA-17",
             "sources": {
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsre",
@@ -69,6 +69,16 @@
                         "OrbitTracks_GPM_Descending"
                     ]
                 },
+                "TRMM": {
+                    "id": "trmm",
+                    "title": "TRMM",
+                    "description": "trmm/BrightnessTemperature",
+                    "image": "",
+                    "settings": [
+                        "TRMM_Brightness_Temp_Asc",
+                        "TRMM_Brightness_Temp_Dsc"
+                    ]
+                  },
                 "SMAP/Radar/Radiometer": {
                     "id": "smap-radar-radiometer",
                     "title": "SMAP/Radar/Radiometer",
