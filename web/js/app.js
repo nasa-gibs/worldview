@@ -234,12 +234,9 @@ class App extends React.Component {
       });
     }
     const main = function() {
-      layerValidate(errors, config);
-      util.wrap(init);
-    };
-    var init = function() {
       // If at the beginning of the day, wait on the previous day until GIBS
       // catches up (about three hours)
+      layerValidate(errors, config);
       var initialDate;
       if (config.defaults.startDate) {
         initialDate = util.parseDateUTC(config.defaults.startDate);
@@ -250,20 +247,18 @@ class App extends React.Component {
         }
       }
       const models = self.props.models;
+
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
       }
-
-      // registerMapMouseHandlers(ui.map.proj, self.mapMouseEvents);
-      if (config.features.alert) {
+      if (config.features.notification) {
         let notificationURL = config.features.alert
-          ? config.features.alert.url
+          ? config.features.notification.url
           : STATUS_REQUEST_URL;
         if (config.parameters.mockAlerts) {
           notificationURL =
             'mock/notify_' + config.parameters.mockAlerts + '.json';
-        }
-        if (config.parameters.notificationURL) {
+        } else if (config.parameters.notificationURL) {
           notificationURL =
             'https://status.earthdata.nasa.gov/api/v1/notifications?domain=' +
             config.parameters.notificationURL;
