@@ -5,6 +5,7 @@
             "title":    "Snow Rate (Ascending)",
             "subtitle": "GPM / GMI",
             "description": "gpm/GMI_Snow_Rate_Asc",
+            "tags":     "precipitation",
             "group":    "overlays",
             "layergroup": [
               "gpm"

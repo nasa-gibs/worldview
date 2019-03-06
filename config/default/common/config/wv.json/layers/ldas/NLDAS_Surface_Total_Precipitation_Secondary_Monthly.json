@@ -5,7 +5,7 @@
             "title":    "Precipitation Total (Monthly, Surface, Secondary Forcing Data)",
             "subtitle": "NLDAS",
             "description": "ldas/NLDAS_Surface_Total_Precipitation_Secondary_Monthly",
-            "tags":     "north american land data assimilation system",
+            "tags":     "north american land data assimilation system rain",
             "group":    "overlays",
             "layergroup": [
               "ldas"

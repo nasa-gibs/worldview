@@ -5,7 +5,7 @@
             "title":    "Total Precipitation Bias Corrected (Monthly)",
             "subtitle": "MERRA-2",
             "description": "merra/MERRA2_Precipitation_Bias_Corrected_Monthly",
-            "tags":     "",
+            "tags":     "rain",
             "group":    "overlays",
             "layergroup": [
               "merra"
