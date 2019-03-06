@@ -25,6 +25,20 @@ export function getMapParameterSetup(
           return encode(models.map.extent || leadingExtent);
         }
       }
+    },
+    r: {
+      stateKey: 'legacy.map.rotation',
+      initialState: 0,
+      options: {
+        parse: () => {
+          return loadedModel.rotation || 0;
+        },
+        serialize: (currentItemState, currentState) => {
+          return models.map.rotation
+            ? (models.map.rotation * (180.0 / Math.PI)).toPrecision(6)
+            : undefined;
+        }
+      }
     }
   };
 }

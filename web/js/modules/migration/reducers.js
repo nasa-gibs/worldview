@@ -19,7 +19,7 @@ const legacyState = {
     active: [],
     activeB: []
   },
-  map: { selectedMap: null },
+  map: { selectedMap: null, rotation: 0 },
   initComplete: false
 };
 
