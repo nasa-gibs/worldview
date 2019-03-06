@@ -635,7 +635,7 @@
   width: 963px;
   padding: 0 13px 13px 0;
 }
-.custom-layer-dialog .modal-content {
+.modal-dialog.custom-layer-dialog .modal-content {
   background-color: #dcdcdc;
 }
 .custom-layer-dialog .modal-header {
@@ -643,6 +643,7 @@
 }
 .custom-layer-dialog .modal-header .close {
   font-size: 30px;
+  color: #000;
 }
 .custom-layer-dialog .modal-title {
   width: 100%;
