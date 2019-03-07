@@ -1,12 +1,12 @@
 {
     "wv-options-fetch": [
         {
-            "from": "https://sit.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi?request=GetCapabilities",
-            "to": "gibs-geographic.xml"
+            "from": "http://cache1-sit.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi?request=GetCapabilities",
+            "to": "gibs-geographic-nrt.xml"
         },
         {
-            "from": "https://sit.gibs.earthdata.nasa.gov/wmts/epsg3413/nrt/wmts.cgi?request=GetCapabilities",
-            "to": "gibs-arctic.xml"
+            "from": "http://cache1-sit.gibs.earthdata.nasa.gov/wmts/epsg4326/std/wmts.cgi?request=GetCapabilities",
+            "to": "gibs-geographic-std.xml"
         },
         {
             "from": "https://sit.gibs.earthdata.nasa.gov/wmts/epsg3031/nrt/wmts.cgi?request=GetCapabilities",
@@ -16,22 +16,36 @@
     "wv-options-wmts": [
         {
             "source": "GIBS:geographic",
-            "from": "gibs-geographic.xml",
-            "to": "gibs-geographic.json",
+            "from": "gibs-geographic-nrt.xml",
+            "to": "gibs-geographic-nrt.json",
+            "projection": "geographic",
+            "maxResolution": 0.5625
+        },
+        {
+            "source": "GIBS:geographic",
+            "from": "gibs-geographic-std.xml",
+            "to": "gibs-geographic-std.json",
             "projection": "geographic",
             "maxResolution": 0.5625
         },
         {
             "source": "GIBS:arctic",
-            "from": "gibs-arctic.xml",
-            "to": "gibs-arctic.json",
+            "from": "gibs-arctic-std.xml",
+            "to": "gibs-arctic-std.json",
+            "projection": "arctic",
+            "maxResolution": 8192.0
+        },
+        {
+            "source": "GIBS:arctic",
+            "from": "gibs-arctic-std.xml",
+            "to": "gibs-arctic-std.json",
             "projection": "arctic",
             "maxResolution": 8192.0
         },
         {
             "source": "GIBS:antarctic",
-            "from": "gibs-antarctic.xml",
-            "to": "gibs-antarctic.json",
+            "from": "gibs-antarctic-std.xml",
+            "to": "gibs-antarctic-std.json",
             "projection": "antarctic",
             "maxResolution": 8192.0
         }

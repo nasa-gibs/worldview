@@ -11,7 +11,10 @@
           "layergroup": [
             "vector"
           ],
-          "inactive": true
+          "inactive": true,
+          "vectorStyle": {
+            "id": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT"
+          }
       }
   }
 }
