@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import update from 'immutability-helper';
 import { toLower } from 'lodash';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
-import { customProps } from '../modules/modal/customs';
 import { onToggle } from '../modules/modal/actions';
 import DetectOuterClick from '../components/util/detect-outer-click';
 
@@ -28,12 +27,10 @@ class ModalContainer extends Component {
     );
   }
   render() {
-    const { isCustom, id, isOpen, isTemplateModal } = this.props;
+    const { isCustom, id, isOpen, isTemplateModal, customProps } = this.props;
     // Populate props from custom obj
     const newProps =
-      isCustom && id
-        ? update(this.props, { $merge: customProps[id] })
-        : this.props;
+      isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
       onToggle,
       bodyText,
@@ -45,14 +42,12 @@ class ModalContainer extends Component {
       autoFocus,
       type,
       wrapClassName,
-      clickableBehindModal
+      clickableBehindModal,
+      bodyComponent
     } = newProps;
-    const BodyComponent =
-      customProps[id] && customProps[id].bodyComponent
-        ? customProps[id].bodyComponent
-        : '';
     const style = this.getStyle(newProps);
     const lowerCaseId = toLower(id);
+    const BodyComponent = bodyComponent || '';
     return (
       <Modal
         isOpen={isOpen}
@@ -93,7 +88,15 @@ class ModalContainer extends Component {
 
 function mapStateToProps(state) {
   const { models } = state.legacy;
-  const { bodyText, headerText, isCustom, id, isOpen, template } = state.modal;
+  const {
+    bodyText,
+    headerText,
+    isCustom,
+    id,
+    isOpen,
+    template,
+    customProps
+  } = state.modal;
   let bodyTemplate;
   let isTemplateModal = false;
   if (template) {
@@ -109,7 +112,8 @@ function mapStateToProps(state) {
     id,
     models,
     bodyTemplate,
-    isTemplateModal
+    isTemplateModal,
+    customProps
   };
 }
 const mapDispatchToProps = dispatch => ({

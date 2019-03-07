@@ -65,10 +65,6 @@ export function getDateParameterSetup(
         }
       }
     }
-    // now: {
-    //   stateKey: 'legacy.date.now',
-    //   initialState: ''
-    // }
   };
 }
 export function serializeDate(date) {

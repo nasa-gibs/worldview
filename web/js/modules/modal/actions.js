@@ -10,10 +10,11 @@ export function openBasicContent(modalHeader, bodyText) {
     key: util.encodeId('__BASIC_MODAL__' + modalHeader)
   };
 }
-export function openCustomContent(key) {
+export function openCustomContent(key, params) {
   return {
     type: OPEN_CUSTOM,
-    key: key
+    key: key,
+    customProps: params
   };
 }
 export function renderTemplate(headerText, template) {

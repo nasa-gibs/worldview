@@ -14,6 +14,12 @@ import { addToLocalStorage } from '../modules/notifications/util';
 import { initFeedback } from '../modules/feedback/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
+import Notifications from '../containers/notifications';
+
+const NOTIFICATION_CUSTOM_MODAL_PARAMS = {
+  headerText: 'Notifications',
+  bodyComponent: Notifications
+};
 
 class InfoList extends Component {
   getNotificationListItem(obj) {
@@ -121,14 +127,18 @@ const mapDispatchToProps = dispatch => ({
       dispatch(initFeedback());
     }
   },
-  startTour: () => {},
   notificationClick: (obj, num) => {
     if (num > 0) {
       dispatch(notificationsSeen());
       addToLocalStorage(obj);
     }
 
-    dispatch(openCustomContent('NOTIFICATION_LIST_MODAL'));
+    dispatch(
+      openCustomContent(
+        'NOTIFICATION_LIST_MODAL',
+        NOTIFICATION_CUSTOM_MODAL_PARAMS
+      )
+    );
   },
   aboutClick: () => {
     if (util.browser.small) {
