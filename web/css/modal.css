@@ -10,30 +10,3 @@
 .clickable-behind-modal .modal {
   position: inherit
 }
-/* toolbar modal list styles */
-.toolbar-list-modal,
-.toolbar-list-modal .modal-content {
-  width: 150px;
-}
-.toolbar-list-modal .modal-body {
-  padding: 0;
-}
-.toolbar-snapshot-modal .modal-body {
-  padding: 5px 10px;
-}
-.toolbar-medium-modal,
-.toolbar-medium-modal .modal-content {
-  width: 230px;
-}
-.toolbar-share-modal .modal-content {
-  width: 300px;
-}
-.toolbar-medium-modal .modal-header {
-  border-bottom:none;
-  padding: 5px 8px 0px;
-
-}
-.toolbar-modal.modal-dialog {
-  position: absolute;
-  top: 33px;
-}
