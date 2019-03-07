@@ -604,21 +604,23 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       source: sourceOptions
     });
 
-    // TODO:  Check performance of fetch here and move somewhere else if needed / do some cachinng magic
-    fetch('../../config/vectorstyles/FIRMS_MODIS_MAPBOX_STYLE.json').then(function(response) {
-      response.json().then(function(glStyle) {
-        $(document).ready(function() {
-          $(document).on('change', document.getElementById('frpCheckbox'), function(e) {
-            if (document.getElementById('frpCheckbox').checked === true) {
-              stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP');
-            } else {
-              stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence');
-            }
-          });
+    if (config.vectorStyles && def.vectorStyle.id) {
+      var vectorStyles = config.vectorStyles.rendered;
+      var vectorStyle = def.vectorStyle.id;
+      var glStyle = vectorStyles[vectorStyle];
+      stylefunction(layer, glStyle, 'default_style');
+      $(document).ready(function() {
+        $(document).on('change', document.getElementById('frpCheckbox'), function(e) {
+          if (document.getElementById('frpCheckbox').checked === true) {
+            stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP');
+          } else if (document.getElementById('confidenceCheckbox').checked === true) {
+            stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence');
+          } else {
+            stylefunction(layer, glStyle, 'default_style');
+          }
         });
-        stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence');
       });
-    });
+    }
 
     return layer;
   };

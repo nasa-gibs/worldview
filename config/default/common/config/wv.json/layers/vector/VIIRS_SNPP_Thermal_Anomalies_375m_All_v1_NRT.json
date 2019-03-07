@@ -11,7 +11,10 @@
           "layergroup": [
             "vector"
           ],
-          "inactive": true
+          "inactive": true,
+          "vectorStyle": {
+            "id": "VIIRS_SNPP_Thermal_Anomalies_375m_All_v1_NRT"
+          }
       }
   }
 }
