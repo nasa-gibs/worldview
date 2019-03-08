@@ -29,9 +29,13 @@ const simpleParameters = {
     initialState: 'geographic'
   }
 };
-export function getParamObject(parameters, config, models, legacyState) {
-  let errors = [];
-
+export function getParamObject(
+  parameters,
+  config,
+  models,
+  legacyState,
+  errors
+) {
   let compareParamObject = {};
   let eventParamObject = {};
   let tourParamObject = {};

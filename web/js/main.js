@@ -1,4 +1,5 @@
 import 'babel-polyfill'; // Needed for worldview-components in IE and older browsers
+import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -23,7 +24,9 @@ import { updatePermalink } from './modules/link/actions';
 import { combineUi } from './combine-ui';
 import palettes from './palettes/palettes';
 import { updateLegacyModule } from './modules/migration/actions';
+import { validate as layerValidate } from './layers/layers';
 
+const history = createBrowserHistory();
 const isDevelop = !!(
   process &&
   process.env &&
@@ -34,6 +37,7 @@ const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
 
 let elapsed = util.elapsed;
+let errors = [];
 
 // Document ready function
 window.onload = () => {
@@ -47,22 +51,28 @@ window.onload = () => {
   promise
     .done(config => {
       elapsed('Config loaded', startTime, parameters);
-      let legacyState = parse(parameters, config);
+      let legacyState = parse(parameters, config, errors);
+      layerValidate(errors, config);
       let requirements = [palettes.requirements(legacyState, config, true)];
       $.when
         .apply(null, requirements)
-        .then(() => render(config, parameters, legacyState));
+        .then(() => util.wrap(render(config, parameters, legacyState))); // Wrap render up
     })
     .fail(util.error);
 };
 
 const render = (config, parameters, legacyState) => {
   config.parameters = parameters;
-  let models = combineModels(config, legacyState);
+  let models = combineModels(config, legacyState); // Get legacy models
 
-  const paramSetup = getParamObject(parameters, config, models, legacyState);
-  let errors = [];
-  const history = createBrowserHistory();
+  // Get Permalink parse/serializers
+  const paramSetup = getParamObject(
+    parameters,
+    config,
+    models,
+    legacyState,
+    errors
+  );
 
   const {
     locationMiddleware,
@@ -74,7 +84,7 @@ const render = (config, parameters, legacyState) => {
     reducers,
     stateToParams
   );
-  const middleware = getMiddleware(isDevelop, locationMiddleware);
+  const middleware = getMiddleware(isDevelop, locationMiddleware); // Get Various Middlewares
   const store = createStore(
     reducersWithLocation,
     getInitialState(models, config, parameters),
@@ -87,7 +97,7 @@ const render = (config, parameters, legacyState) => {
     const dispatchUpdate = lodashDebounce(() => {
       store.dispatch(updateLegacyModule(i, component));
     }, 100);
-    // replace link register
+    // sync old and new state
     component.events.any(dispatchUpdate);
   });
 
@@ -96,18 +106,21 @@ const render = (config, parameters, legacyState) => {
     const newString = location.search;
     if (queryString !== newString) {
       queryString = newString;
-      store.dispatch(updatePermalink(queryString));
+      store.dispatch(updatePermalink(queryString)); // Keep permalink in redux-store
     }
   });
   listenForHistoryChange(store, history);
   elapsed('Render', startTime, parameters);
 
   let mouseMoveEvents = util.events();
+
   ReactDOM.render(
     <Provider store={store}>
       <App models={models} mapMouseEvents={mouseMoveEvents} />
     </Provider>,
     document.getElementById('app')
   );
-  combineUi(models, config, mouseMoveEvents);
+
+  combineUi(models, config, mouseMoveEvents); // Legacy UI
+  util.errorReport(errors);
 };

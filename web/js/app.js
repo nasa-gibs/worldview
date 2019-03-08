@@ -1,27 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import 'whatwg-fetch';
-
+import PropTypes from 'prop-types';
 import { each as lodashEach } from 'lodash';
 import googleTagManager from 'googleTagManager';
-
 // Utils
 import util from './util/util';
-
-// Date
-// Layers
-import { validate as layerValidate } from './layers/layers';
-
-// Map
-
 import OlCoordinates from './components/map/ol-coordinates';
-
 // Toolbar
 import Toolbar from './containers/toolbar';
-
 // Modal
 import Modal from './containers/modal';
-
 // Notifications
 import {
   STATUS_REQUEST_URL,
@@ -31,13 +19,9 @@ import {
   requestNotifications,
   setNotifications
 } from './modules/notifications/actions';
-// Link
-
-// Projections
-
 // Other
-import { debugConfig } from './debug';
 import Brand from './brand';
+import { debugConfig } from './debug';
 
 // Crutch between state systems
 import { updateLegacyInitComplete } from './modules/migration/actions';
@@ -93,10 +77,6 @@ import '../css/mobile.css';
 import '../css/modal.css';
 import '../css/list.css';
 import '../pages/css/document.css';
-
-import { polyfill } from './polyfill';
-
-polyfill(); // Polyfills some browser features
 
 class App extends React.Component {
   constructor(props) {
@@ -219,14 +199,12 @@ class App extends React.Component {
 
   onload() {
     var self = this;
-    var errors = [];
     var config;
     var state = self.props.parameters;
 
     config = self.props.config;
     config.parameters = state;
     debugConfig(config);
-
     // Load any additional scripts as needed
     if (config.scripts) {
       lodashEach(config.scripts, function(script) {
@@ -236,7 +214,6 @@ class App extends React.Component {
     const main = function() {
       // If at the beginning of the day, wait on the previous day until GIBS
       // catches up (about three hours)
-      layerValidate(errors, config);
       var initialDate;
       if (config.defaults.startDate) {
         initialDate = util.parseDateUTC(config.defaults.startDate);
@@ -282,8 +259,6 @@ class App extends React.Component {
         console.warn('Development version');
       }
 
-      errorReport();
-
       models.wv.events.trigger('startup');
 
       // Reset Worldview when clicking on logo
@@ -299,18 +274,6 @@ class App extends React.Component {
       var msg =
         'Do you want to reset Worldview to its defaults? You will lose your current state.';
       if (confirm(msg)) document.location.href = '/';
-    };
-
-    var errorReport = function() {
-      var layersRemoved = 0;
-
-      lodashEach(errors, function(error) {
-        var cause = error.cause ? ': ' + error.cause : '';
-        util.warn(error.message + cause);
-        if (error.layerRemoved) {
-          layersRemoved = layersRemoved + 1;
-        }
-      });
     };
     util.wrap(main)();
   }
@@ -346,3 +309,6 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(App);
+App.propTypes = {
+  mapMouseEvents: PropTypes.object
+};

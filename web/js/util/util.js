@@ -840,7 +840,16 @@ export default (function (self) {
       }
     };
   };
-
+  self.errorReport = function(errors) {
+    var layersRemoved = 0;
+    lodashEach(errors, function(error) {
+      var cause = error.cause ? ': ' + error.cause : '';
+      self.warn(error.message + cause);
+      if (error.layerRemoved) {
+        layersRemoved = layersRemoved + 1;
+      }
+    });
+  };
   /**
    * Wraps a function in a try/catch block that invokes wv.util.error
    * if an exception is thrown.
