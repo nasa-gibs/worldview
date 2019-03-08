@@ -72,9 +72,11 @@ function serializeLayers(layers, models, groupStr) {
         value: def.opacity
       });
     }
-    if (!isEmpty(def.custom)) {
-      let def1 = models.palettes.get(def.id, undefined, groupStr);
-
+    let def1 =
+      def.id && def.palette
+        ? models.palettes.get(def.id, undefined, groupStr)
+        : undefined;
+    if (def1) {
       if (def1.custom) {
         item.attributes.push({
           id: 'palette',
