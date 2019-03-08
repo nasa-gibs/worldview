@@ -168,5 +168,7 @@ InfoList.propTypes = {
   feedbackIsInitiated: PropTypes.bool,
   aboutClick: PropTypes.func,
   notificationClick: PropTypes.func,
-  notifications: PropTypes.object
+  notifications: PropTypes.object,
+  config: PropTypes.object,
+  models: PropTypes.object
 };

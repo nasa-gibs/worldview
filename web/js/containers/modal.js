@@ -132,5 +132,6 @@ ModalContainer.propTypes = {
   id: PropTypes.string,
   bodyTemplate: PropTypes.node,
   isOpen: PropTypes.bool,
-  isTemplateModal: PropTypes.bool
+  isTemplateModal: PropTypes.bool,
+  customProps: PropTypes.object
 };

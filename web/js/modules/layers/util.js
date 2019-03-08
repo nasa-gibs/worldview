@@ -1,4 +1,4 @@
-import { cloneDeep as lodashCloneDeep, isEmpty } from 'lodash';
+import { cloneDeep as lodashCloneDeep } from 'lodash';
 import { get } from 'redux-location-state/lib/helpers';
 import util from '../../util/util';
 

@@ -78,7 +78,7 @@ export function palettesModel(models, config) {
     updateLookup(layerId, groupStr);
     self.events.trigger('set-custom', layerId, active, groupStr);
     self.events.trigger('change');
-    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId } );
+    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
     if (layerIndex >= 0) {
       models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
       models.layers.events.trigger('change');
@@ -100,7 +100,7 @@ export function palettesModel(models, config) {
     updateLookup(layerId, groupStr);
     self.events.trigger('clear-custom', layerId, groupStr);
     self.events.trigger('change');
-    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId } );
+    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
     if (layerIndex >= 0) {
       models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
       models.layers.events.trigger('change');
@@ -125,7 +125,7 @@ export function palettesModel(models, config) {
     updateLookup(layerId, groupStr);
     self.events.trigger('range', layerId, palette.min, palette.max, groupStr);
     self.events.trigger('change');
-    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId } );
+    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
     if (layerIndex >= 0) {
       models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
       models.layers.events.trigger('change');
