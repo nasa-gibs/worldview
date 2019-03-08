@@ -29,7 +29,6 @@ export default class ImageResSelection extends React.Component {
     this.state = {
       fileType: props.fileType,
       fileSize: props.fileSize,
-      proj: this.props.proj,
       isWorldfile: props.isWorldfile,
       resolution: props.resolution,
       valid: props.valid,
@@ -197,14 +196,18 @@ ImageResSelection.propTypes = {
   fileType: PropTypes.string,
   fileTypes: PropTypes.object,
   fileSize: PropTypes.string,
-  proj: PropTypes.string,
+  projection: PropTypes.object,
   resolution: PropTypes.string,
   valid: PropTypes.bool,
+  lonlats: PropTypes.array,
   isWorldfile: PropTypes.bool,
   onDownloadClick: PropTypes.func,
   firstLabel: PropTypes.string,
   maxImageSize: PropTypes.string,
   worldFileOptions: PropTypes.bool,
   secondLabel: PropTypes.string,
-  fileTypeOptions: PropTypes.bool
+  fileTypeOptions: PropTypes.bool,
+  models: PropTypes.object,
+  url: PropTypes.string,
+  crs: PropTypes.string
 };

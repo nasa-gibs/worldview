@@ -28,9 +28,9 @@ const infoArray = [
 
 class ProjectionList extends Component {
   updateProjection(id) {
-    const { updateProjection, models } = this.props;
+    const { updateProjection, models, config } = this.props;
     models.proj.select(id); // migration crutch
-    updateProjection(id);
+    updateProjection(id, config);
     googleTagManager.pushEvent({
       event: 'change_projection',
       projection: id
@@ -70,5 +70,6 @@ ProjectionList.propTypes = {
   openModal: PropTypes.func,
   updateProjection: PropTypes.func,
   models: PropTypes.object,
-  projection: PropTypes.string
+  projection: PropTypes.string,
+  config: PropTypes.object
 };
