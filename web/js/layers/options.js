@@ -57,7 +57,6 @@ export function layersOptions(models, ui, config) {
    * Mount component once customs Config is loaded
    */
   var loaded = function() {
-    console.log(config);
     self.reactComponent = render(
       <LayerSettings
         setCustom={models.palettes.setCustom}

@@ -57,6 +57,6 @@ List.propTypes = {
   listClass: PropTypes.string,
   active: PropTypes.string,
   disabled: PropTypes.bool,
-  onClick: PropTypes.function,
+  onClick: PropTypes.func,
   size: PropTypes.string
 };
