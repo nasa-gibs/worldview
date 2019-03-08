@@ -49,7 +49,8 @@ class LinksContainer extends Component {
     const {
       openModal,
       notificationType,
-      notificationContentNumber
+      notificationContentNumber,
+      config
     } = this.props;
     const notificationClass = notificationType
       ? ' wv-status-' + notificationType
@@ -69,19 +70,23 @@ class LinksContainer extends Component {
         >
           <i className="fas fa-share-square fa-2x" />
         </Button>
-        <Button
-          id="wv-proj-button"
-          className="wv-toolbar-button"
-          title="Switch projection"
-          onClick={() =>
-            openModal(
-              'TOOLBAR_PROJECTION',
-              CUSTOM_MODAL_PROPS['TOOLBAR_PROJECTION']
-            )
-          }
-        >
-          <i className="fas fa-globe-asia fa-2x" />{' '}
-        </Button>
+        {config.ui && config.ui.projections ? (
+          <Button
+            id="wv-proj-button"
+            className="wv-toolbar-button"
+            title="Switch projection"
+            onClick={() =>
+              openModal(
+                'TOOLBAR_PROJECTION',
+                CUSTOM_MODAL_PROPS['TOOLBAR_PROJECTION']
+              )
+            }
+          >
+            <i className="fas fa-globe-asia fa-2x" />{' '}
+          </Button>
+        ) : (
+          ''
+        )}
         <Button
           id="wv-image-button"
           className="wv-toolbar-button"
@@ -115,7 +120,8 @@ function mapStateToProps(state) {
 
   return {
     notificationType: type,
-    notificationContentNumber: number
+    notificationContentNumber: number,
+    config: state.config
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -130,5 +136,8 @@ export default connect(
 )(LinksContainer);
 
 LinksContainer.propTypes = {
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  notificationType: PropTypes.string,
+  notificationContentNumber: PropTypes.number,
+  config: PropTypes.object
 };

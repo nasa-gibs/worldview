@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeProjection } from '../modules/projection/actions';
 import IconList from '../components/util/list';
+import googleTagManager from 'googleTagManager';
 
 const infoArray = [
   {
@@ -27,9 +28,13 @@ const infoArray = [
 
 class ProjectionList extends Component {
   updateProjection(id) {
-    const { updateProjection, models, config } = this.props;
-    models.proj.select(id); // state migration crutch
-    updateProjection(id, config);
+    const { updateProjection, models } = this.props;
+    models.proj.select(id); // migration crutch
+    updateProjection(id);
+    googleTagManager.pushEvent({
+      event: 'change_projection',
+      projection: id
+    });
   }
   render() {
     const { projection } = this.props;
