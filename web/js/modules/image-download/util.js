@@ -68,7 +68,7 @@ export function imageUtilCalculateResolution(
 }
 
 /*
- * Retieves avtive layers by day
+ * Retieves active layers by day
  *
  * @method getLayersForDay
  * @private
@@ -125,8 +125,8 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
     : resolution / GEO_ESTIMATION_CONSTANT;
 }
 export function imageUtilGetConversionFactor(proj) {
-  if (proj === 'geographic') return 0.002197;
-  return 256;
+  if (proj === 'geographic') return POLAR_ESTIMATION_CONSTANT;
+  return GEO_ESTIMATION_CONSTANT;
 }
 
 /*
