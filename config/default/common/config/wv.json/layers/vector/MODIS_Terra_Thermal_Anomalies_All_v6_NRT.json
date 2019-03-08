@@ -14,7 +14,8 @@
           "inactive": true,
           "vectorStyle": {
             "id": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT"
-          }
+          },
+          "period": "daily"
       }
   }
 }

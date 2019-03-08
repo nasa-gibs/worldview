@@ -914,10 +914,22 @@ export function mapui(models, config, store, ui) {
     map.on('rendercomplete', onRenderComplete);
     // Clicking on a vector shows it's attributes in console.
     map.on('click', function(e) {
+      var attsCollector = [];
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-        console.log(feature.getProperties());
+        var feats = feature.getProperties();
+        attsCollector.push(feats);
       });
+
+      const unique = attsCollector
+        .map(e => e['layer'])
+        // store the keys of the unique objects
+        .map((e, i, final) => final.indexOf(e) === i && i)
+        // eliminate the dead keys & store unique objects
+        .filter(e => attsCollector[e]).map(e => attsCollector[e]);
+
+      console.log(unique);
     });
+
     return map;
   };
   /*
