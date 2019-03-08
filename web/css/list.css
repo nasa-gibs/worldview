@@ -1,7 +1,7 @@
 .list-group-item {
   background: #282828;
   color: #eee;
-  text-align: left
+  text-align: left;
 }
 .list-group-item.active {
   background: #888;
@@ -19,5 +19,5 @@ button.list-group-item {
   cursor: pointer;
 }
 .list-group-item.small-item {
-  padding: 5px
+  padding: 5px;
 }

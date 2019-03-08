@@ -39,9 +39,8 @@
   width: 300px;
 }
 .toolbar-medium-modal .modal-header {
-  border-bottom:none;
-  padding: 5px 8px 0px;
-
+  border-bottom: none;
+  padding: 5px 8px 0;
 }
 .toolbar-modal.modal-dialog {
   position: absolute;
@@ -49,4 +48,4 @@
 }
 .toolbar_projection .modal-backdrop {
   opacity: 0;
- }
+}
