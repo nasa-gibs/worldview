@@ -11,6 +11,7 @@ import SelectionList from '../util/selector';
 import ResTable from './grid';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
+import googleTagManager from 'googleTagManager';
 
 const MAX_DIMENSION_SIZE = 8200;
 
@@ -37,7 +38,7 @@ export default class ImageResSelection extends React.Component {
   }
   onDownload(imgWidth, imgHeight) {
     const { models, url, lonlats, crs } = this.props;
-    const { fileType, isWorldfile } = this.state;
+    const { fileType, isWorldfile, resolution } = this.state;
     let time = new Date(models.date[models.date.activeDate].getTime());
     time.setUTCHours(0, 0, 0, 0);
 
@@ -71,6 +72,17 @@ export default class ImageResSelection extends React.Component {
     } else {
       console.log(url);
     }
+    googleTagManager.pushEvent({
+      event: 'image_download',
+      layers: {
+        activeCount: layers.length
+      },
+      image: {
+        resolution: resolution,
+        format: fileType,
+        worldfile: isWorldfile
+      }
+    });
     this.setState({ debugUrl: dlURL });
   }
   handleChange(type, value) {

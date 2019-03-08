@@ -89,7 +89,6 @@ class ImageDownloadContainer extends Component {
       isGeoProjection,
       proj.selected.resolutions
     );
-    console.log(proj.selected.resolutions);
     return (
       <React.Fragment>
         <Panel
