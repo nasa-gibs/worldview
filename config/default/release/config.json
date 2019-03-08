@@ -2,7 +2,7 @@
     "wv-options-fetch": [
         {
             "from": "http://cache1-sit.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi?request=GetCapabilities",
-            "to": "gibs-geographic-nrt.xml"
+            "to": "gibs-geographic.xml"
         },
         {
             "from": "http://cache1-sit.gibs.earthdata.nasa.gov/wmts/epsg4326/std/wmts.cgi?request=GetCapabilities",
@@ -16,36 +16,22 @@
     "wv-options-wmts": [
         {
             "source": "GIBS:geographic",
-            "from": "gibs-geographic-nrt.xml",
-            "to": "gibs-geographic-nrt.json",
-            "projection": "geographic",
-            "maxResolution": 0.5625
-        },
-        {
-            "source": "GIBS:geographic",
-            "from": "gibs-geographic-std.xml",
-            "to": "gibs-geographic-std.json",
+            "from": "gibs-geographic.xml",
+            "to": "gibs-geographic.json",
             "projection": "geographic",
             "maxResolution": 0.5625
         },
         {
             "source": "GIBS:arctic",
-            "from": "gibs-arctic-std.xml",
-            "to": "gibs-arctic-std.json",
-            "projection": "arctic",
-            "maxResolution": 8192.0
-        },
-        {
-            "source": "GIBS:arctic",
-            "from": "gibs-arctic-std.xml",
-            "to": "gibs-arctic-std.json",
+            "from": "gibs-arctic.xml",
+            "to": "gibs-arctic.json",
             "projection": "arctic",
             "maxResolution": 8192.0
         },
         {
             "source": "GIBS:antarctic",
-            "from": "gibs-antarctic-std.xml",
-            "to": "gibs-antarctic-std.json",
+            "from": "gibs-antarctic.xml",
+            "to": "gibs-antarctic.json",
             "projection": "antarctic",
             "maxResolution": 8192.0
         }

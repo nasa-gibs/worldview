@@ -14,7 +14,8 @@
           "inactive": true,
           "vectorStyle": {
             "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT"
-          }
+          },
+          "period": "daily"
       }
   }
 }
