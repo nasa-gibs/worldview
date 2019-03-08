@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { each as lodashEach, debounce as lodashDebounce } from 'lodash';
-import { getMiddleware } from './redux-config-helpers';
+import { getMiddleware } from './combine-middleware';
 import {
   createReduxLocationActions,
   listenForHistoryChange
@@ -25,6 +25,7 @@ import { combineUi } from './combine-ui';
 import palettes from './palettes/palettes';
 import { updateLegacyModule } from './modules/migration/actions';
 import { validate as layerValidate } from './layers/layers';
+import { polyfill } from './polyfill';
 
 const history = createBrowserHistory();
 const isDevelop = !!(
@@ -44,6 +45,7 @@ window.onload = () => {
   if (!parameters.elapsed) {
     elapsed = function() {};
   }
+  polyfill();
   elapsed('loading config', startTime, parameters);
   var promise = $.getJSON(configURI);
 

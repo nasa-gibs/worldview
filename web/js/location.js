@@ -40,7 +40,6 @@ export function getParamObject(
   let eventParamObject = {};
   let tourParamObject = {};
   let animationParamObject = {};
-  models.proj.load(legacyState, []);
 
   const mapParamObject = getMapParameterSetup(
     parameters,

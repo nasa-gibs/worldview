@@ -6,21 +6,8 @@ import {
 } from 'redux-location-state/lib/helpers';
 import isEqualDate from 'date-fns/is_equal';
 import { typeHandles } from 'redux-location-state/lib/typeHandles';
+import { ENCODING_EXCEPTIONS } from './modules/link/constants';
 
-const ENCODING_EXCEPTIONS = [
-  {
-    match: new RegExp('%2C', 'g'),
-    replace: ','
-  },
-  {
-    match: new RegExp('%3B', 'g'),
-    replace: ';'
-  },
-  {
-    match: new RegExp('%3D', 'g'),
-    replace: '='
-  }
-];
 function isNotDefined(value) {
   return typeof value === 'undefined' || value === null;
 }
