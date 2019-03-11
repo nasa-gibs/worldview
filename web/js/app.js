@@ -81,9 +81,6 @@ import '../pages/css/document.css';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      maps: null
-    };
     this.onload();
   }
   render() {
@@ -212,35 +209,10 @@ class App extends React.Component {
       });
     }
     const main = function() {
-      // If at the beginning of the day, wait on the previous day until GIBS
-      // catches up (about three hours)
-      var initialDate;
-      if (config.defaults.startDate) {
-        initialDate = util.parseDateUTC(config.defaults.startDate);
-      } else {
-        initialDate = util.now();
-        if (initialDate.getUTCHours() < 3) {
-          initialDate.setUTCDate(initialDate.getUTCDate() - 1);
-        }
-      }
       const models = self.props.models;
 
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
-      }
-      if (config.features.notification) {
-        let notificationURL = config.features.alert
-          ? config.features.notification.url
-          : STATUS_REQUEST_URL;
-        if (config.parameters.mockAlerts) {
-          notificationURL =
-            'mock/notify_' + config.parameters.mockAlerts + '.json';
-        } else if (config.parameters.notificationURL) {
-          notificationURL =
-            'https://status.earthdata.nasa.gov/api/v1/notifications?domain=' +
-            config.parameters.notificationURL;
-        }
-        self.props.requestNotifications(notificationURL);
       }
       document.activeElement.blur();
       $('input').blur();

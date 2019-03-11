@@ -66,7 +66,9 @@ export function combineUi(models, config, MapMouseEvents) {
     });
     window.addEventListener('testPassive', null, opts);
     window.removeEventListener('testPassive', null, opts);
-  } catch (e) {}
+  } catch (e) {
+    util.warn(e);
+  }
   function timelineInit() {
     ui.timeline = timeline(models, config, ui);
     ui.timeline.data = timelineData(models, config, ui);

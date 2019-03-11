@@ -7,6 +7,15 @@ import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
 import ShareLinks from './share';
+import {
+  requestNotifications,
+  setNotifications
+} from '../modules/notifications/actions';
+import {
+  STATUS_REQUEST_URL,
+  REQUEST_NOTIFICATIONS
+} from '../modules/notifications/constants';
+
 const CUSTOM_MODAL_PROPS = {
   TOOLBAR_PROJECTION: {
     headerText: null,
@@ -45,6 +54,28 @@ const CUSTOM_MODAL_PROPS = {
   }
 };
 class toolbarContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.requestNotifications();
+  }
+  requestNotifications() {
+    const { config, requestNotifications } = this.props;
+    if (config.features.notification) {
+      let notificationURL = config.features.notification.url
+        ? config.features.notification.url
+        : STATUS_REQUEST_URL;
+      if (config.parameters.mockAlerts) {
+        notificationURL =
+          'mock/notify_' + config.parameters.mockAlerts + '.json';
+      } else if (config.parameters.notificationURL) {
+        console.log('mock notificationURL');
+        notificationURL =
+          'https://status.earthdata.nasa.gov/api/v1/notifications?domain=' +
+          config.parameters.notificationURL;
+      }
+      requestNotifications(notificationURL);
+    }
+  }
   render() {
     const {
       openModal,
@@ -127,6 +158,17 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   openModal: (key, customParams) => {
     dispatch(openCustomContent(key, customParams));
+  },
+  requestNotifications: location => {
+    const promise = dispatch(
+      requestNotifications(location, REQUEST_NOTIFICATIONS, 'json')
+    );
+    promise.then(data => {
+      const obj = JSON.parse(data);
+      if (obj.notifications) {
+        dispatch(setNotifications(obj.notifications));
+      }
+    });
   }
 });
 
