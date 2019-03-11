@@ -10,18 +10,9 @@ import OlCoordinates from './components/map/ol-coordinates';
 import Toolbar from './containers/toolbar';
 // Modal
 import Modal from './containers/modal';
-// Notifications
-import {
-  STATUS_REQUEST_URL,
-  REQUEST_NOTIFICATIONS
-} from './modules/notifications/constants';
-import {
-  requestNotifications,
-  setNotifications
-} from './modules/notifications/actions';
+
 // Other
 import Brand from './brand';
-import { debugConfig } from './debug';
 
 // Crutch between state systems
 import { updateLegacyInitComplete } from './modules/migration/actions';
@@ -201,22 +192,21 @@ class App extends React.Component {
 
     config = self.props.config;
     config.parameters = state;
-    debugConfig(config);
-    // Load any additional scripts as needed
-    if (config.scripts) {
-      lodashEach(config.scripts, function(script) {
-        $.getScript(script);
-      });
-    }
+
     const main = function() {
       const models = self.props.models;
 
+      // Load any additional scripts as needed
+      if (config.scripts) {
+        lodashEach(config.scripts, function(script) {
+          $.getScript(script);
+        });
+      }
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
       }
       document.activeElement.blur();
       $('input').blur();
-      $('#eventsHolder').hide();
 
       // Console notifications
       if (Brand.release()) {
@@ -232,20 +222,7 @@ class App extends React.Component {
       }
 
       models.wv.events.trigger('startup');
-
-      // Reset Worldview when clicking on logo
-      $(document).click(function(e) {
-        if (e.target.id === 'wv-logo') resetWorldview(e);
-      });
-      self.props.updateLegacyInitComplete();
-    };
-
-    var resetWorldview = function(e) {
-      e.preventDefault();
-      if (window.location.search === '') return; // Nothing to reset
-      var msg =
-        'Do you want to reset Worldview to its defaults? You will lose your current state.';
-      if (confirm(msg)) document.location.href = '/';
+      self.props.updateLegacyInitComplete(); // notify state that legacy initiation has finished
     };
     util.wrap(main)();
   }
@@ -263,17 +240,6 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = dispatch => ({
   updateLegacyInitComplete: () => {
     dispatch(updateLegacyInitComplete());
-  },
-  requestNotifications: location => {
-    const promise = dispatch(
-      requestNotifications(location, REQUEST_NOTIFICATIONS, 'json')
-    );
-    promise.then(data => {
-      const obj = JSON.parse(data);
-      if (obj.notifications) {
-        dispatch(setNotifications(obj.notifications));
-      }
-    });
   }
 });
 

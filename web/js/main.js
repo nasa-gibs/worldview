@@ -26,6 +26,7 @@ import palettes from './palettes/palettes';
 import { updateLegacyModule } from './modules/migration/actions';
 import { validate as layerValidate } from './layers/layers';
 import { polyfill } from './polyfill';
+import { debugConfig } from './debug';
 
 const history = createBrowserHistory();
 const isDevelop = !!(
@@ -65,6 +66,7 @@ window.onload = () => {
 
 const render = (config, parameters, legacyState) => {
   config.parameters = parameters;
+  debugConfig(config);
   let models = combineModels(config, legacyState); // Get legacy models
 
   // Get Permalink parse/serializers
