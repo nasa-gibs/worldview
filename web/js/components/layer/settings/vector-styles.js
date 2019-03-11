@@ -55,8 +55,8 @@ class VectorStyleSelect extends React.Component {
       getDefaultLegend,
       getCustomPalette,
       layer,
-      index,
-      palettesTranslate
+      index
+      // palettesTranslate
     } = this.props;
     const { activeVectorStyle } = this.state;
     var source = getDefaultLegend(layer.id, index);
