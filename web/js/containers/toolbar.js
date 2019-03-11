@@ -44,7 +44,7 @@ const CUSTOM_MODAL_PROPS = {
     bodyComponent: ImageDownload
   }
 };
-class LinksContainer extends Component {
+class toolbarContainer extends Component {
   render() {
     const {
       openModal,
@@ -133,9 +133,9 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LinksContainer);
+)(toolbarContainer);
 
-LinksContainer.propTypes = {
+toolbarContainer.propTypes = {
   openModal: PropTypes.func,
   notificationType: PropTypes.string,
   notificationContentNumber: PropTypes.number,
