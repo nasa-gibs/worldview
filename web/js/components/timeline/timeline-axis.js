@@ -964,29 +964,29 @@ class TimelineAxis extends Component {
   }
 
   //# HANDLE INCREMENT FORM TESTING
-  handleChangeZoomLevel(event) {
-    event.preventDefault();
-    this.setState({
-      timeScale: event.target.value,
-      leftOffset: this.state.axisWidth/2
-    });
-  }
+//   handleChangeZoomLevel(event) {
+//     event.preventDefault();
+//     this.setState({
+//       timeScale: event.target.value,
+//       leftOffset: this.state.axisWidth/2
+//     });
+//   }
 
-  handleChange(event) {
-    this.setState({ increment: Number(event.target.value) });
-  }
+//  handleChange(event) {
+//     this.setState({ increment: Number(event.target.value) });
+//   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-  }
+//   handleSubmit(event) {
+//     event.preventDefault();
+//   }
 
-  handleReset(event) {
-    this.setState({ increment: 1 });
-  }
+//   handleReset(event) {
+//     this.setState({ increment: 1 });
+//   }
 
-  handleTimeScaleSelectChange(event) {
-    this.setState({ timeScaleSelectValue: event.target.value })
-  }
+//   handleTimeScaleSelectChange(event) {
+//     this.setState({ timeScaleSelectValue: event.target.value })
+//   }
 
   showHoverOn = () => {
     this.setState({ showHoverLine: true });
@@ -1015,7 +1015,7 @@ class TimelineAxis extends Component {
     window.moment = moment;
     return (
       <div>
-        <div style={{display: 'flex', position: 'relative', left: (window.innerWidth * 0.05)}}>
+        {/* <div style={{display: 'flex', position: 'relative', left: (window.innerWidth * 0.05)}}>
           <div style={{display: 'flex', background: '#999', border: '1px solid black', width: '155px', height: '100px'}}>
             <form onSubmit={this.handleSubmit.bind(this)}>
               <label>
@@ -1045,7 +1045,7 @@ class TimelineAxis extends Component {
           <div>
             <button onClick={(e) => this.toggleCompareMode(e)}>Compare Mode</button>
           </div>
-        </div>
+        </div> */}
       <div id="wv-timeline-axis"
         // ref={this.timelineRef} //# REF
         style={{width: `${this.state.axisWidth}px`}}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TimelineAxis from './timeline-axis';
-import TimelineDragger from './timeline-dragger';
+// import TimelineDragger from './timeline-dragger';
 
 class TimelineAxisContainer extends React.Component {
   constructor(props) {
@@ -12,8 +12,11 @@ class TimelineAxisContainer extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <TimelineAxis width={this.props.width} />
-        <TimelineDragger />
+        <TimelineAxis {...this.props} />
+
+        {/* imported in TimelineAxis currently */}
+        {/* <TimelineDragger />
+        <TimelineDragger /> */}
       </React.Fragment>
     );
   };

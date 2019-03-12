@@ -1,57 +1,37 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import Draggable from 'react-draggable';
 
-// VARIABLE TYPE
-// model.activeDate
-// tl.width
-
-
-// FUNCTION TYPE
-// d3.event.x
-// tl.x.invert(tempPickTipOffset)
-
-class TimelineDragger extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      position: props.position
-    };
-  }
-
-  getDefaultDragger() {
-    return (
-      <React.Fragment>
-        <g style={{cursor: 'pointer'}} id="draggerHandle">
-          {/* <path id="cow" fill="#ccc" stroke="#515151" d="M 7.3151,0.7426 C 3.5507,0.7426 0.5,3.7926 0.5,7.5553 l 0,21.2724 14.6038,15.7112 14.6039,15.7111 14.6038,-15.7111 14.6037,-15.7112 0,-21.2724 c 0,-3.7627 -3.051,-6.8127 -6.8151,-6.8127 l -44.785,0 z"></path> */}
-          <polygon fill="#ccc" stroke="#515151" points="50,25, 90,90, 10,90"></polygon>
-          <rect fill="#515151" width="4" height="20" x="41" y="55"></rect>
-          <rect fill="#515151" width="4" height="20" x="48" y="55"></rect>
-          <rect fill="#515151" width="4" height="20" x="55" y="55"></rect>
-        </g>
-      </React.Fragment>
-    );
-  }
-
+class Dragger extends PureComponent {
   render() {
+    // console.log(this.props)
+    let { transformX, draggerPosition, draggerName, handleDragDragger, selectDragger, compareOn } = this.props;
     return (
       <Draggable
-        handle="#draggerHandle"
-        position={{ x: 500, y: 0 }}
-        axis="x"
+        axis='x'
+        onMouseDown={() => selectDragger(draggerName)}
+        onDrag={handleDragDragger.bind(this, draggerName)}
+        position={{ x: draggerPosition, y: -25 }}
+        // onStart={this.handleStartDrag.bind(this)}
+        // onStop={this.handleStopDrag.bind(this)}
+        // onStop={() => {
+        // this.props.onStop(this.props.id, this.state.position);
+        // }}
       >
-        <svg 
-        id="guitarpickX">
-          {this.getDefaultDragger()}
-        </svg>
+        <g style={{cursor: 'pointer', display: this.props.draggerVisible ? 'flex' : 'none'}} className='gridShell dragger' transform={`translate(${transformX}, 0)`}>
+          <polygon fill='#ccc' stroke={this.props.draggerSelected ? 'yellow' : '#515151'} strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon>
+          {compareOn ?
+            <text fontSize='30px' fontWeight='700' x='0' y='65' fill='#515151' transform='translate(39, 10)' textRendering='optimizeLegibility' clipPath='url(#textDisplay)'>{draggerName}</text>
+            :
+            <React.Fragment>
+              <rect fill='#515151' width='4' height='20' x='41' y='55'></rect>
+              <rect fill='#515151' width='4' height='20' x='48' y='55'></rect>
+              <rect fill='#515151' width='4' height='20' x='55' y='55'></rect>
+            </React.Fragment>
+          }
+        </g>
       </Draggable>
     );
-  };
+  }
 }
 
-TimelineDragger.defaultProps = {
-};
-TimelineDragger.propTypes = {
-};
-
-export default TimelineDragger;
+export default Dragger;

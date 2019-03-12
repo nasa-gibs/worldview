@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import DateChangeControls from './timeline-controls/date-change-controls';
 import './timeline.css';
-import TimelineAxis from './timeline-axis';
-// import TimelineAxisContainer from './timeline-axis/timeline-axis-container';
+// import TimelineAxis from './timeline-axis';
+import TimelineAxisContainer from './timeline-axis/timeline-axis-container';
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -20,13 +20,25 @@ class Timeline extends React.Component {
 
   render() {
     let dateFormatted = this.state.selectedDate.toISOString();
+    // let tempStyle = {
+    //   position: 'absolute',
+    //   border: '1px solid #333',
+    //   background: 'rgba(40, 40, 40, 0.9)',
+    //   borderRadius: '5px',
+    //   display: 'flex',
+    //   flexFlow: 'row nowrap',
+    //   marginLeft: '10px',
+    //   marginRight: '10px',
+    //   height: '67px',
+    //   bottom: '10px'
+    // }
     return (
-      <div>
+      <React.Fragment>
         <DateChangeControls />
-        <TimelineAxis {...this.state} selectedDate={dateFormatted}/>
+        {/* <TimelineAxis {...this.state} selectedDate={dateFormatted}/> */}
 
         {/* new modular version - currently a shell */}
-        {/* <TimelineAxisContainer {...this.state} selectedDate={dateFormatted}/> */}
+        <TimelineAxisContainer {...this.state} selectedDate={dateFormatted}/>
 
         {/* hammmmmmmmmmmburger 🍔 */}
         {/* <div id="timeline-hide">
@@ -34,7 +46,7 @@ class Timeline extends React.Component {
             <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
           </svg>
         </div> */}
-      </div>
+      </React.Fragment>
     );
   }
 }
