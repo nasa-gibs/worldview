@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:500');
+
+html, body {
+  background: #999;
+  overflow-x: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#timelineContainer {
+  /* margin-top: 200px;
+  background: yellow; */
+  position: absolute;
+  top: 200px;
+}
+
+#wv-timeline-axis {
+  /* margin: 0 20px 0 0; */
+  margin-left: 25%;
+  width: 800px;
+  height: 100px;
+  /* position: absolute;
+  
+  right: 50px; */
+  /* border: 1px solid black; */
+  /* background-image: url('mock-wv-background.jpg');
+  background-repeat: repeat-x;
+  background-size: 3000px 72px; */
+  /* overflow: hidden; */
+}
+
+.inner {
+  background: rgba(0, 0, 0, 0.5);
+  height: 71px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1.5px solid white;
+}
+
+.dateToolTip {
+  background: rgb(233, 233, 233);
+  font-size: 9px;
+  text-align: center;
+  border-radius: 5px;
+  width: 110px;
+  height: 25px;
+  line-height: 25px;
+  white-space: nowrap;
+}
+
+.gridShell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: 100px;
+}
+
+.grid {
+  color: white;
+  font-size: 12px;
+  height: 75px;
+} 
+
+.gridText {
+  font-size: 24px;
+  font-weight: 500;
+  /* font-size: 10px; */
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+  pointer-events: none;
+  user-select: none;
+}
+
+line {
+  pointer-events: none;
+}
+
+/* DEVELOPMENT */
+.line {
+  top: 152px;
+  width: 2px;
+  height: 70px;
+  background: rgba(21,21,255,0.4);
+  position: absolute;
+  pointer-events: none;
+}
+
+.linered {
+  width: 3px;
+  height: 70px;
+  background: red;
+  position: absolute;
+  pointer-events: none;
+}
+
+.dateTempHolderTextBlock {
+  height: 90px;
+  width: 300px;
+  border: 2px solid;
+  text-align: center;
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.tick {
+  margin-left: -1px;
+}
+
+form button, form input, form select {
+  border: none;
+  outline: 1px solid black;
+  width: 96px;
+  text-align: center;
+}
+form button {
+  height: 30px;
+}
+form select {
+  text-align-last: center;
+  padding-left: 15px;
+}
+.incrementButton {
+  width: 70px;
+  height: 99px;
+  font-weight: 700;
+}
+.changeZoomLevelButtons button {
+  background: dimgrey;
+  color: white;
+}

@@ -32,19 +32,19 @@ export function timelineInput(models, config, ui) {
         e.preventDefault();
         switch (ui.timeline.config.currentZoom) {
           case 1:
-            animateByIncrement(1, 'year');
+            self.animateByIncrement(1, 'year');
             break;
           case 2:
-            animateByIncrement(1, 'month');
+            self.animateByIncrement(1, 'month');
             break;
           case 3:
-            animateByIncrement(1, 'day');
+            self.animateByIncrement(1, 'day');
             break;
           case 4:
-            animateByIncrement(10, 'minute');
+            self.animateByIncrement(10, 'minute');
             break;
           default:
-            animateByIncrement(1, 'day');
+            self.animateByIncrement(1, 'day');
         }
       })
       .mouseup(stopper);
@@ -54,19 +54,19 @@ export function timelineInput(models, config, ui) {
         e.preventDefault();
         switch (ui.timeline.config.currentZoom) {
           case 1:
-            animateByIncrement(-1, 'year');
+            self.animateByIncrement(-1, 'year');
             break;
           case 2:
-            animateByIncrement(-1, 'month');
+            self.animateByIncrement(-1, 'month');
             break;
           case 3:
-            animateByIncrement(-1, 'day');
+            self.animateByIncrement(-1, 'day');
             break;
           case 4:
-            animateByIncrement(-10, 'minute');
+            self.animateByIncrement(-10, 'minute');
             break;
           default:
-            animateByIncrement(-1, 'day');
+            self.animateByIncrement(-1, 'day');
         }
       })
       .mouseup(stopper);
@@ -80,32 +80,32 @@ export function timelineInput(models, config, ui) {
           case util.key.LEFT:
             switch (models.date.selectedZoom) {
               case 1:
-                animateByIncrement(-1, 'year');
+                self.animateByIncrement(-1, 'year');
                 break;
               case 2:
-                animateByIncrement(-1, 'month');
+                self.animateByIncrement(-1, 'month');
                 break;
               case 3:
-                animateByIncrement(-1, 'day');
+                self.animateByIncrement(-1, 'day');
                 break;
               case 4:
-                animateByIncrement(-10, 'minute');
+                self.animateByIncrement(-10, 'minute');
                 break;
             }
             break;
           case util.key.RIGHT:
             switch (models.date.selectedZoom) {
               case 1:
-                animateByIncrement(1, 'year');
+                self.animateByIncrement(1, 'year');
                 break;
               case 2:
-                animateByIncrement(1, 'month');
+                self.animateByIncrement(1, 'month');
                 break;
               case 3:
-                animateByIncrement(1, 'day');
+                self.animateByIncrement(1, 'day');
                 break;
               case 4:
-                animateByIncrement(10, 'minute');
+                self.animateByIncrement(10, 'minute');
                 break;
             }
             event.preventDefault();
@@ -181,7 +181,7 @@ export function timelineInput(models, config, ui) {
    *                  e.g. months,minutes, years, days
    * @return {void}
    */
-  var animateByIncrement = function(delta, increment) {
+  self.animateByIncrement = function(delta, increment) {
     var endTime = models.layers.lastDateTime();
     var endDate = models.layers.lastDate();
     self.delta = Math.abs(delta);

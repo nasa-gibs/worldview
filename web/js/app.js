@@ -15,12 +15,12 @@ import dateWheels from './date/wheels';
 
 // Timeline
 import { timeline } from './date/timeline';
-import { timelineData } from './date/timeline-data';
-import { timelineConfig } from './date/config';
-import { timelineZoom } from './date/timeline-zoom';
-import { timelineTicks } from './date/timeline-ticks';
-import { timelinePick } from './date/timeline-pick';
-import { timelinePan } from './date/timeline-pan';
+import { timelineData } from './date/timeline-data'; // remove
+import { timelineConfig } from './date/config'; // replaced
+import { timelineZoom } from './date/timeline-zoom'; // replaced
+import { timelineTicks } from './date/timeline-ticks'; // replaced
+import { timelinePick } from './date/timeline-pick'; // replaced
+import { timelinePan } from './date/timeline-pan'; // replaced
 import { timelineInput } from './date/timeline-input';
 import { timelineCompare } from './date/compare-picks';
 
@@ -183,6 +183,10 @@ class App extends React.Component {
         <div id="dlMap" />
 
         <div id="timewheels" style={{ display: 'none' }} />
+
+        <div
+          id="timelineContainer"
+        ></div>
 
         <section
           id="timeline"
@@ -480,6 +484,7 @@ class App extends React.Component {
 
         ui.dateLabel = dateLabel(models);
       }
+
       if (config.startDate) {
         if (!util.browser.small) {
           // If mobile device, do not build timeline
@@ -487,6 +492,8 @@ class App extends React.Component {
         }
         ui.dateWheels = dateWheels(models, config);
       }
+
+      console.log(models.date, ui.timeline)
 
       ui.rubberband = imageRubberband(models, ui, config);
       ui.image = imagePanel(models, ui, config);

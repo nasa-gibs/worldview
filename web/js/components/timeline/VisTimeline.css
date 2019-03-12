@@ -1,0 +1,61 @@
+.vis-timeline {
+  border: 2px solid purple;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-size: 12px;
+  background: #000000c4;
+}
+
+.vis-time-axis .vis-text {
+  color: #fff;
+}
+
+/* can be used as end? */
+.vis-current-time {
+}
+
+.timelineDragger {
+  z-index: 5 !important;
+}
+
+#tf > div > div.vis-panel.vis-background.vis-vertical > div.vis-custom-time.timelineDragger > div {
+  left: -29px !important;
+  width: 60px !important;
+  content: url("data:image/svg+xml;charset=UTF-8, <svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='100' width='100'><clipPath id='timelineDragger'><polygon points='50,15, 100,100, 0,100' /></clipPath><g><polygon fill='#ccc' stroke='#515151' points='50,15, 100,100, 0,100' /><rect width='6' height='30' x='35' y='60' fill='#515151' /><rect width='6' height='30' x='47' y='60' fill='#515151' /><rect width='6' height='30' x='59' y='60' fill='#515151' /></g></svg>");
+
+  clip-path: url("#timelineDragger");
+  -webkit-clip-path: polygon(50% 15%, 100% 100%, 0% 100%);
+}
+
+.timelineHover {
+}
+
+.timelineHover > div {
+  left: 0;
+  width: 2px;
+}
+
+#newTimeline {
+  /* margin-top: 250px; */
+}
+
+.vis-panel.vis-center {
+  border: none;
+}
+
+.vis-time-axis .vis-grid.vis-minor {
+  border-width: 2px;
+}
+
+.vis-time-axis.vis-background {
+  /* height: 10px; */
+}
+
+.vis-panel.vis-bottom {
+  border-left: none;
+  border-right: none;
+}
+
+#guitarpickX {
+  width: 100px;
+  user-select: none;
+}
