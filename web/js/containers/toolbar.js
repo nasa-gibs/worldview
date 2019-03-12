@@ -181,5 +181,6 @@ toolbarContainer.propTypes = {
   openModal: PropTypes.func,
   notificationType: PropTypes.string,
   notificationContentNumber: PropTypes.number,
+  requestNotifications: PropTypes.func,
   config: PropTypes.object
 };

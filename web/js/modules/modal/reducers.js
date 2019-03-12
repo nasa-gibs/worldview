@@ -19,7 +19,8 @@ export const modalState = {
   bodyChildren: null,
   isCustom: false,
   bodyHTML: null,
-  customProps: {}
+  customProps: {},
+  template: null
 };
 export function modalAboutPage(state = {}, action) {
   return requestReducer(ABOUT_PAGE_REQUEST, state, action);
@@ -37,7 +38,8 @@ export function modalReducer(state = modalState, action) {
         id: action.key,
         headerText: action.headerText || '',
         bodyText: action.bodyText || '',
-        customProps: {}
+        customProps: {},
+        template: null
       });
     case OPEN_CUSTOM:
       return lodashAssign({}, state, {
@@ -46,7 +48,8 @@ export function modalReducer(state = modalState, action) {
         customProps: action.customProps,
         id: action.key,
         headerText: action.headerText || '',
-        bodyText: action.bodyText || ''
+        bodyText: action.bodyText || '',
+        template: null
       });
     case RENDER_TEMPLATE:
       return lodashAssign({}, state, {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
-import { toLower } from 'lodash';
+import { toLower as lodashToLower } from 'lodash';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { onToggle } from '../modules/modal/actions';
 import DetectOuterClick from '../components/util/detect-outer-click';
@@ -21,7 +21,7 @@ class ModalContainer extends Component {
       <span> Loading </span>
     ) : (
       <div
-        id="page"
+        id="template-content"
         dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
       />
     );
@@ -46,15 +46,18 @@ class ModalContainer extends Component {
       bodyComponent
     } = newProps;
     const style = this.getStyle(newProps);
-    const lowerCaseId = toLower(id);
+    const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
+
     return (
       <Modal
         isOpen={isOpen}
         toggle={onToggle}
         backdrop={backdrop && type !== 'selection'}
         id={lowerCaseId}
-        className={modalClassName || 'default-modal'}
+        className={
+          isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'
+        }
         autoFocus={autoFocus || false}
         style={style}
         wrapClassName={wrapClassName + ' ' + lowerCaseId}
@@ -130,7 +133,7 @@ export default connect(
 ModalContainer.propTypes = {
   isCustom: PropTypes.bool,
   id: PropTypes.string,
-  bodyTemplate: PropTypes.node,
+  bodyTemplate: PropTypes.object,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
   customProps: PropTypes.object
