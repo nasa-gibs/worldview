@@ -32,7 +32,6 @@ export function timeline(models, config, ui) {
       self.margin.left -
       self.margin.right +
       28;
-      console.log(self.width)
     return self.width;
   };
 

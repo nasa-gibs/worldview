@@ -63,15 +63,15 @@ class GridRange extends PureComponent {
 const tileTextConditionOptions = {
   minute: (itemDateObject) => {
     let timeScaleUnit = itemDateObject.minutes;
-    return timeScaleUnit === 0 || 
-      timeScaleUnit === 15 || 
+    return timeScaleUnit === 0 ||
+      timeScaleUnit === 15 ||
       timeScaleUnit === 30 ||
       timeScaleUnit === 45;
   },
   hour: (itemDateObject) => {
     let timeScaleUnit = itemDateObject.hours;
-    return timeScaleUnit === 0 || 
-    timeScaleUnit === 6 || 
+    return timeScaleUnit === 0 ||
+    timeScaleUnit === 6 ||
     timeScaleUnit === 12 ||
     timeScaleUnit === 18;
   },
@@ -127,8 +127,8 @@ class TileHolder extends PureComponent {
 const axisScaleGridElement = {
   minute: (gridWidth, index, item) => {
     let timeScaleUnit = item.dateObject.minutes;
-    let lineLengthY = timeScaleUnit === 0 || 
-        timeScaleUnit === 15 || 
+    let lineLengthY = timeScaleUnit === 0 ||
+        timeScaleUnit === 15 ||
         timeScaleUnit === 30 ||
         timeScaleUnit === 45 ? 58 : timeScaleUnit % 5 === 0 ? 20 : 10;
     return (
@@ -141,8 +141,8 @@ const axisScaleGridElement = {
   },
   hour: (gridWidth, index, item) => {
     let timeScaleUnit = item.dateObject.hours;
-    let lineLengthY = timeScaleUnit === 0 ? 58 : 
-                      timeScaleUnit === 6 || 
+    let lineLengthY = timeScaleUnit === 0 ? 58 :
+                      timeScaleUnit === 6 ||
                       timeScaleUnit === 12 ||
                       timeScaleUnit === 18 ? 22 : 10;
     // let lineLengthY = timeScaleUnit === 0 ? 58 : timeScaleUnit === 12 ? 22 : 10;

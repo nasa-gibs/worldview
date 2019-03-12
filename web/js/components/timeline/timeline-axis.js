@@ -18,7 +18,7 @@ import GridRange from './grid-range';
 //! CONCERNS: #################################################################################################################################
 //! hover over & show time - how to handle too fast/too slow date updates - debounce? real time is an ugly blur, too slow would defeat the purpose ?
 //! what kind of realistic time scaling should i expect, is hovering over the first pixel of a year and getting Jan 5th 5:30am all right?
-//! 
+//!
 
 const timeScales = [ 'minute', 'hour', 'day', 'month', 'year' ];
 
@@ -49,7 +49,7 @@ const timeScaleOptions = {
     timeAxis: {
       scale: 'month',
       gridWidth: 12,
-      scaleMs: null //# null set to require a 
+      scaleMs: null //# null set to require a
       // scaleMs: 2678400000
     }
   },
@@ -137,11 +137,11 @@ class TimelineAxis extends Component {
     //# taken from older, working commit -  current version being used, but may need to still handle floating point issues
     let midPoint = -((gridWidth * gridNumber) / 2) + ((numberOfVisibleTiles / 2) * gridWidth);
     // midPoint = midPointWorkingCommit
-    
-    //# this causing offset issue, but "fixes" floating point 
+
+    //# this causing offset issue, but "fixes" floating point
     // let midPoint = +(-(+((gridWidth * +(numberOfVisibleTiles * 1.5).toFixed(10)) / 2).toFixed(10)) + +(+(numberOfVisibleTiles / 2).toFixed(10) * gridWidth).toFixed(10)).toFixed(10); //# CAN'T FLOOR numberOfVisibleTiles / 2
     //# -0.5(12 * 1.5numberOfVisibleTiles)    +    0.5numberOfVisibleTiles * 12
-    
+
     // let mockPropsSelectedDate = '1941-01-01';
     // console.log(hoverTime, draggerDateActual, hoverTime)
     let hoverTime = moment.utc(this.state.hoverTime);
@@ -173,7 +173,7 @@ class TimelineAxis extends Component {
       hoverTimeNextZero = hoverTimeZero.clone().add(1, timeScale);
     }
 
-    console.log(hoverTime.format(), hoverTimeZero.format(), hoverTimeNextZero.format())
+    // console.log(hoverTime.format(), hoverTimeZero.format(), hoverTimeNextZero.format())
 
     // value of hover time, hover time timeunit zeroed, hover time next unit timeunit zeroed
     let hoverTimeValue = hoverTime.valueOf();
@@ -185,7 +185,7 @@ class TimelineAxis extends Component {
     let diffStartAndZeroed = hoverTimeValue - hoverTimeZeroValue;
 
     let pixelsToAdd = diffStartAndZeroed / diffFactor;
-    console.log(pixelsToAdd)
+    // console.log(pixelsToAdd)
 
     // console.log(hoverTime, hoverTime.format(), pixelsToAdd);
     // console.log(Math.floor(leftOffset / gridWidth));
@@ -195,7 +195,7 @@ class TimelineAxis extends Component {
     //! additional offset needed for midPoint and/or position
     let offSetGrids = Math.floor(leftOffset / gridWidth);
 
-    console.log(Math.floor(gridNumber/2), offSetGrids, gridNumber/2)
+    // console.log(Math.floor(gridNumber/2), offSetGrids, gridNumber/2)
     //# MOST EXPENSIVE FUNCTION!!!! Greater the gridNumber === longer. 960 els ~23ms vs 100 at 3.5ms)
     let current = this.getDateArray(Math.floor(gridNumber/2), Math.floor(gridNumber/2), timeScale, hoverTime);
     // console.log(current)
@@ -205,7 +205,7 @@ class TimelineAxis extends Component {
     //# get front and back dates
     let frontDate = moment.utc(deque.peekFront().rawDate);
     let backDate = moment.utc(deque.peekBack().rawDate);
-    console.log(frontDate.format())
+    // console.log(frontDate.format())
     // check if dragger date is between front/back dates, null set to ignore granularity (go to ms), [] for inclusive of front/back dates
     let isBetween = draggerDateActual.isBetween(frontDate, backDate, null, '[]');
     // let pixelsToAddToDragger = 0;
@@ -214,7 +214,7 @@ class TimelineAxis extends Component {
     if (isBetween) {
       // let frontDateValue = moment.utc(frontDate.rawDate).valueOf(); // ZERO
       // let draggerPositionFromFront = draggerDateActualValue - frontDateValue;
-      
+
       // pixelsToAddToDragger = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth);
       draggerPosition = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth);
       draggerVisible = true;
@@ -245,8 +245,8 @@ class TimelineAxis extends Component {
         position += gridWidth/2;
       }
       let position2 = midPoint - (axisWidth / 2 - leftOffset);
-      console.log(position, position2)
-      console.log(midPoint, position, (axisWidth / 2 - leftOffset), axisWidth / 2, leftOffset)
+      // console.log(position, position2)
+      // console.log(midPoint, position, (axisWidth / 2 - leftOffset), axisWidth / 2, leftOffset)
     }
     // console.log(pixelsToAddToDragger, midPoint, (axisWidth / 2 - leftOffset), pixelsToAdd, position)
 
@@ -257,21 +257,17 @@ class TimelineAxis extends Component {
     let currentTransformX = 0;
     //? this.addLine(...) added as a callback in this.setState due to relying on changed timescale/grid state
     //? can change later if passing more arguments is more performant or required due to asynchronous behavior of setState
-    console.log(midPoint, position, pixelsToAdd, leftOffset);
+    // console.log(midPoint, position, pixelsToAdd, leftOffset);
 
     // console.log(draggerPosition - pixelsToAdd + position - 49)
     // console.log(draggerPositionB - pixelsToAdd + position - 49)
     this.setState({
-      // draggerPosition: draggerPosition + draggerPixelsToAdd,
-      // draggerPosition: pixelsToAddToDragger + position - pixelsToAdd - 49,
-      // draggerPosition: gridWidth - 49,
       draggerPosition: draggerPosition - pixelsToAdd + position - 49,
       draggerVisible: draggerVisible,
       draggerPositionB: draggerPositionB - pixelsToAdd + position - 49,
       draggerVisibleB: draggerVisibleB,
       deque: deque,
       currentDateRange: current.dates,
-      // currentDate: moment.utc().subtract(12, timeScale),
       currentTransformX: currentTransformX,
       gridNumber: gridNumber,
       gridWidth: gridWidth,
@@ -279,14 +275,9 @@ class TimelineAxis extends Component {
       moved: false,
       timeScaleChange: true,
       dragSentinelChangeNumber: dragSentinelChangeNumber,
-    // }, function() {
-    //   this.setState({
-        // position: position - pixelsToAdd - 1, //# NEED TO CLEAN UP LOGIC/VARIABLE NAMES, why - 1 pixel off?
-        position: position - pixelsToAdd, //# above 1 pixel off was making handleStopDrag have d.x & midPoint inequality,
-                                          //# requiring a double click to move dragger after updateScale timeScale change
-        midPoint: position,
-        dragSentinelCount: 0
-      // })
+      position: position - pixelsToAdd,
+      midPoint: position,
+      dragSentinelCount: 0
     })
   }
 
@@ -522,7 +513,7 @@ class TimelineAxis extends Component {
       draggerPositionRevision: draggerPositionRevision
     }
   }
-  
+
   // deque extension to pop NUM times
   removeBackMultipleInPlace = (deque, num) => {
     for (let i = 0; i < num; i++) {
@@ -535,7 +526,7 @@ class TimelineAxis extends Component {
       deque.shift();
     }
   }
-  
+
   // return array of days based on:
   // subtract - integer (negative numbers selects start date in the future)
   // add - integer (negative numbers selects end date in the past)
@@ -561,16 +552,16 @@ class TimelineAxis extends Component {
       }
       startDate = dayZeroed.clone().subtract(subtract, timeScale);
       endDate = dayZeroed.clone().add(add, timeScale);
-    } 
+    }
     // console.log(inputDate, dayZeroed.format(), startDate.format(), endDate.format(), subtract, add)
     dateArray = dateCalc.getTimeRange(startDate, endDate, timeScale);
     // console.log(dateArray)
     return dateArray;
   }
 
-  
+
   // Called when AXIS dragging starts. If `false` is returned any handler,
-  // the action will cancel.  
+  // the action will cancel.
   // handleStartDrag = () => {
     // this.setState({
     //   dragging: !this.state.dragging
@@ -587,7 +578,7 @@ class TimelineAxis extends Component {
   // set temp place holder for where hover line was when clicked to check for drag vs click
   setLineClick = () => {
     // console.log('hit', this.state.hoverTime)
-    this.setState({ 
+    this.setState({
       // draggerTimeState: this.state.hoverTime,
       redLineClick: this.state.leftOffset,
     })
@@ -631,7 +622,6 @@ class TimelineAxis extends Component {
   handleResize = (e) => {
     // let axisWidth = Math.floor(window.innerWidth * 0.9);
     let axisWidth = this.props.width;
-    console.log(axisWidth)
     let timeScale = this.state.timeScale;
     this.updateScale(timeScale, axisWidth);
     console.log('resize')
@@ -639,7 +629,7 @@ class TimelineAxis extends Component {
       axisWidth: axisWidth
     }, function() {
       let parentBoundingClientRect = document.querySelector('#wv-timeline-axis').getBoundingClientRect();
-      this.setState({ 
+      this.setState({
         parentBoundingClientRectLeft: parentBoundingClientRect.left
       });
     })
@@ -650,7 +640,6 @@ class TimelineAxis extends Component {
     window.addEventListener("resize", this.handleResize);
     // let axisWidth = Number((window.innerWidth * 0.9).toFixed(2));
     let axisWidth = this.props.width;
-    console.log(axisWidth)
     let timeScale = this.props.timeScale; // 'day'
     let time = moment.utc(this.props.selectedDate).format() //'1941-01-01T12:00:00Z';
 
@@ -669,7 +658,7 @@ class TimelineAxis extends Component {
     let numberOfVisibleTiles = Number((axisWidth / gridWidth).toFixed(8));
     // let tilesTillSelectedDAte = Math.floor(numberOfVisibleTiles / 2);
     // let draggerPosition = Number(((axisWidth / 2) - 50).toFixed(8));
-    
+
     // let draggerPosition = tilesTillSelectedDAte * gridWidth - 49; //# CENTER DRAGGER A
     let draggerVisible = true;
 
@@ -688,14 +677,11 @@ class TimelineAxis extends Component {
     // console.log(dragSentinelChangeNumber)
     //# get midPoint for position based on # of tiles and gridWidth
     //# 120 test case - this.getDateArray(60, 60, timeScale, selectedDate);
-    let midPointOLD = -((gridWidth * (numberOfVisibleTiles * 1.5)) / 2) + (numberOfVisibleTiles / 2 * gridWidth);
+    // let midPointOLD = -((gridWidth * (numberOfVisibleTiles * 1.5)) / 2) + (numberOfVisibleTiles / 2 * gridWidth);
+    // let midPoint = +(-(+((gridWidth * +(numberOfVisibleTiles * 1.5).toFixed(10)) / 2).toFixed(10)) + +(+(numberOfVisibleTiles / 2).toFixed(10) * gridWidth).toFixed(10)).toFixed(10); //# CAN'T FLOOR numberOfVisibleTiles / 2
 
-    let midPoint = +(-(+((gridWidth * +(numberOfVisibleTiles * 1.5).toFixed(10)) / 2).toFixed(10)) + +(+(numberOfVisibleTiles / 2).toFixed(10) * gridWidth).toFixed(10)).toFixed(10); //# CAN'T FLOOR numberOfVisibleTiles / 2
+    let midPoint = -((gridWidth * gridNumber) / 2) + (numberOfVisibleTiles / 2 * gridWidth);
 
-    let midPointWorkingCommit = -((gridWidth * gridNumber) / 2) + (numberOfVisibleTiles / 2 * gridWidth);
-    midPoint = midPointWorkingCommit
-
-    console.log(midPointWorkingCommit, midPointOLD, midPoint)
     let draggerTime = moment.utc(time);
     let draggerTimeZero = moment.utc(time).startOf(timeScale)
     let draggerTimeNextZero = moment.utc(draggerTime).startOf(timeScale).add(1, timeScale);
@@ -763,7 +749,7 @@ class TimelineAxis extends Component {
     // if (this.state.timeScale !== nextState.timeScale) {
     //   console.log('update')
     //   return true;
-    // } 
+    // }
     // return false;
     return true;
   }
@@ -777,13 +763,13 @@ class TimelineAxis extends Component {
     // console.log(propsSelectedDate, stateSelectedDate)
     if (this.state.timeScale !== prevState.timeScale) {
       this.updateScale(this.state.timeScale);
-    } 
+    }
 
     if (this.props.width !== prevProps.width) {
       this.handleResize();
     }
-    
-    
+
+
     // else if (propsSelectedDate !== stateSelectedDate) {
     //   this.setState({
     //     selectedDate: propsSelectedDate,
@@ -913,20 +899,20 @@ class TimelineAxis extends Component {
       // console.log(draggerPosition, time)
       // update draggerTimeState based on deltaX from state draggerTimeState
       // TODO: test consistency throught timescales, currently seems off 0.5 on ocassion
-      let draggerTime = moment.utc(time); 
+      let draggerTime = moment.utc(time);
       let draggerTimeZero = draggerTime.clone().startOf(timeScale);
       let draggerTimeNextZero = draggerTimeZero.clone().add(1, timeScale);
 
       let draggerTimeValue = draggerTime.valueOf();
       let draggerTimeZeroValue = draggerTimeZero.valueOf();
       let draggerTimeNextZeroValue = draggerTimeNextZero.valueOf();
-      
+
       let diffZeroValues = draggerTimeNextZeroValue - draggerTimeZeroValue;
       let diffFactor = diffZeroValues / gridWidth;
       let newDraggerTime = moment.utc(draggerTimeValue + (diffFactor * deltaX)).format();
 
       // handle drag timeline
-      // TODO: updatePanel 
+      // TODO: updatePanel
       if (draggerPosition < -49) { // handle drag timeline towards PAST
         this.setState({
           draggerPosition: -48,
@@ -1015,7 +1001,7 @@ class TimelineAxis extends Component {
     let backDate = moment.utc(this.state.deque.peekBack().rawDate);
     let draggerTimeStateB = moment.utc(this.state.draggerTimeStateB, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
     let isBetween = draggerTimeStateB.isBetween(frontDate, backDate, null, '[]');
-    
+
     let draggerVisibleB = isBetween ? true : false;
     this.setState({
       compareMode: !this.state.compareMode,
@@ -1087,7 +1073,7 @@ class TimelineAxis extends Component {
           </clipPath>
         </defs>
         <Draggable
-          axis="x" 
+          axis="x"
           onDrag={this.handleDrag.bind(this)}
           position={{ x: this.state.position, y: 0 }}
           // onStart={this.handleStartDrag.bind(this)}
@@ -1111,7 +1097,7 @@ class TimelineAxis extends Component {
           draggerName='A'
           draggerPosition={this.state.draggerPosition}
           draggerVisible={this.state.draggerVisible}
-          transformX={this.state.currentTransformX} 
+          transformX={this.state.currentTransformX}
           draggerSelected={this.state.draggerSelected}
           parentPosition={this.state.position} />
         <Dragger
@@ -1121,7 +1107,7 @@ class TimelineAxis extends Component {
           draggerName='B'
           draggerPosition={this.state.draggerPositionB}
           draggerVisible={this.state.compareMode ? this.state.draggerVisibleB : false}
-          transformX={this.state.currentTransformX} 
+          transformX={this.state.currentTransformX}
           draggerSelected={this.state.draggerSelectedB}
           parentPosition={this.state.position} />
         </svg>
@@ -1161,7 +1147,7 @@ class Dragger extends PureComponent {
     let { transformX, draggerPosition, draggerName, handleDragDragger, selectDragger, compareOn } = this.props;
     return (
       <Draggable
-        axis="x" 
+        axis="x"
         onMouseDown={() => selectDragger(draggerName)}
         onDrag={handleDragDragger.bind(this, draggerName)}
         position={{ x: draggerPosition, y: -25 }}
@@ -1173,7 +1159,7 @@ class Dragger extends PureComponent {
         >
         <g style={{cursor: 'pointer', display: this.props.draggerVisible ? 'flex' : 'none'}} className="gridShell dragger" transform={`translate(${transformX}, 0)`}>
           <polygon fill='#ccc' stroke={this.props.draggerSelected ? 'yellow' : '#515151'} strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon>
-          {compareOn ? 
+          {compareOn ?
           <text fontSize='30px' fontWeight='700' x='0' y='65' fill='#515151' transform={`translate(39, 10)`} textRendering='optimizeLegibility' clipPath='url(#textDisplay)'>{draggerName}</text>
           :
           <React.Fragment>

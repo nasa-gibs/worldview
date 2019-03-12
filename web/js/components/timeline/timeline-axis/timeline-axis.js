@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TimelineScale from './timeline-scale';
-import TimelineDragger from './timeline-dragger';
-import TimelineDateDialog from './timeline-date-dialog';
+import GridRange from './grid-range/grid-range';
 
 class TimelineAxis extends React.Component {
   constructor(props) {
@@ -10,15 +8,10 @@ class TimelineAxis extends React.Component {
     this.state = { };
   }
 
-  onHoverx() {
-    console.log('hovered');
-  }
-
   render() {
     return (
       <React.Fragment>
-        <TimelineScale width={this.props.width} />
-        <TimelineDragger />
+        <GridRange />
       </React.Fragment>
     );
   };
