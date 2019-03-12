@@ -1,9 +1,11 @@
-export function requestAction(dispatch, actionName, url, fileType, signal) {
+export function requestAction(dispatch, actionName, url, mimeType, signal) {
   dispatch(startRequest(actionName));
   return new Promise(function(resolve, reject) {
     return fetch(url, { signal })
       .then(function(response) {
-        return fileType === 'json' ? response.json() : response.text();
+        return mimeType === 'application/json'
+          ? response.json()
+          : response.text();
       })
       .then(function(data) {
         dispatch(fetchSuccess(actionName, data));

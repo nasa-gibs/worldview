@@ -36,9 +36,11 @@ describe('Short Link request action', () => {
         }
       ];
       const store = mockStore({ shortLink: {} });
-      return store.dispatch(actions.requestShortLink(loc, 'json')).then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      });
+      return store
+        .dispatch(actions.requestShortLink(loc, 'application/json'))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
     }
   );
   test('creates ' + constants.REQUEST_SHORT_LINK_FAILURE + ' Action', () => {
@@ -54,9 +56,11 @@ describe('Short Link request action', () => {
       }
     ];
     const store = mockStore({ shortLink: {} });
-    return store.dispatch(actions.requestShortLink(loc, 'json')).catch(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    return store
+      .dispatch(actions.requestShortLink(loc, 'application/json'))
+      .catch(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
   });
 });
 describe('updatePermalink action', () => {

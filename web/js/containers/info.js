@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  requestLoadedPage,
+  requestTemplate,
   renderTemplate,
   openCustomContent
 } from '../modules/modal/actions';
@@ -145,10 +145,10 @@ const mapDispatchToProps = dispatch => ({
       window.open('pages/about.html?v=@BUILD_NONCE@', '_blank');
     } else {
       dispatch(
-        requestLoadedPage(
+        requestTemplate(
           ABOUT_PAGE_REQUEST,
           'pages/about.html?v=@BUILD_NONCE@',
-          'html'
+          'text/html'
         )
       );
       dispatch(renderTemplate('About', 'modalAboutPage'));

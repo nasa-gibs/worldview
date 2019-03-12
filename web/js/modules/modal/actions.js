@@ -20,12 +20,12 @@ export function openCustomContent(key, params) {
 export function renderTemplate(headerText, template) {
   return {
     type: RENDER_TEMPLATE,
-    key: template,
+    key: util.encodeId(template),
     template: template,
     headerText: headerText
   };
 }
-export function requestLoadedPage(pageActionName, location, type) {
+export function requestTemplate(pageActionName, location, type) {
   return dispatch => {
     return requestAction(dispatch, pageActionName, location);
   };

@@ -8,7 +8,7 @@ import {
 import { requestReducer } from '../core/reducers';
 import { assign as lodashAssign } from 'lodash';
 
-const modalState = {
+export const modalState = {
   headerText: '',
   bodyText: '',
   isOpen: false,
@@ -35,8 +35,8 @@ export function modalReducer(state = modalState, action) {
         isOpen: action.key === state.key ? !state.isOpen : true,
         isCustom: false,
         id: action.key,
-        headerText: action.headerText,
-        bodyText: action.bodyText,
+        headerText: action.headerText || '',
+        bodyText: action.bodyText || '',
         customProps: {}
       });
     case OPEN_CUSTOM:
@@ -45,16 +45,16 @@ export function modalReducer(state = modalState, action) {
         isCustom: true,
         customProps: action.customProps,
         id: action.key,
-        headerText: action.headerText,
-        bodyText: action.bodyText
+        headerText: action.headerText || '',
+        bodyText: action.bodyText || ''
       });
     case RENDER_TEMPLATE:
       return lodashAssign({}, state, {
         isOpen: action.key === state.key ? !state.isOpen : true,
         isCustom: false,
         id: action.key,
-        headerText: action.headerText,
-        bodyText: null,
+        headerText: action.headerText || '',
+        bodyText: '',
         template: action.template,
         customProps: {}
       });
