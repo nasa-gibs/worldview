@@ -31,7 +31,7 @@ export function projectionModel(config) {
     var updated = false;
     if (!self.selected || self.selected.id !== id) {
       self.selected = proj;
-      self.events.trigger('select', proj);
+      self.events.trigger('select', proj, id);
     }
     return updated;
   };

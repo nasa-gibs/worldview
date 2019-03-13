@@ -27,6 +27,7 @@ import { updateLegacyModule } from './modules/migration/actions';
 import { validate as layerValidate } from './layers/layers';
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
+import { changeProjection } from './modules/projection/actions';
 
 const history = createBrowserHistory();
 const isDevelop = !!(
@@ -94,15 +95,22 @@ const render = (config, parameters, legacyState) => {
     getInitialState(models, config, parameters),
     applyMiddleware(...middleware)
   );
-  lodashEach(models, function(component, i) {
+  lodashEach(models, function(component, key) {
     if (component.load && !component.loaded) {
       component.load(legacyState, errors);
     }
     const dispatchUpdate = lodashDebounce(() => {
-      store.dispatch(updateLegacyModule(i, component));
+      store.dispatch(updateLegacyModule(key, component));
     }, 100);
     // sync old and new state
     component.events.any(dispatchUpdate);
+  });
+  // Big HACKY sync up of proj state
+  models.proj.events.on('select', (projObj, id) => {
+    const state = store.getState();
+    if (state.proj.id !== id) {
+      store.dispatch(changeProjection(id, config));
+    }
   });
 
   let queryString = '';
