@@ -55,7 +55,8 @@ describe('main modalReducer', () => {
         id: util.encodeId('__BASIC_MODAL__' + constants.TEST_HEADER),
         headerText: constants.TEST_HEADER,
         bodyText: constants.TEST_BODY,
-        customProps: {}
+        customProps: {},
+        template: null
       };
 
       expect(
@@ -76,7 +77,8 @@ describe('main modalReducer', () => {
         isOpen: true,
         isCustom: true,
         id: constants.TEST_KEY,
-        customProps: customProps
+        customProps: customProps,
+        template: null
       });
       expect(
         modalReducer(modalState, {
