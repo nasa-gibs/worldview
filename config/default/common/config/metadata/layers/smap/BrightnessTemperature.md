@@ -7,7 +7,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L1C Radiometer Half-Orbit 36 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB)
 
-Data fields: cell_tb_h_fore, cell_tb_h_aft, cell_tb_v_fore, cell_tb_v_aft
+Data fields: `cell_tb_h_fore`, `cell_tb_h_aft`, `cell_tb_v_fore`, `cell_tb_v_aft`
 
 ### Uncorrected Brightness Temperature 36 km QA and RFI Flags
 Temporal coverage: 31 March 2015 - present
@@ -25,7 +25,7 @@ Within the image, green indicates that TB observations are free of RFI and appro
 
 References: [SMAP L1C Radiometer Half-Orbit 36 km EASE-Grid Brightness Temperatures](http://nsidc.org/data/SPL1CTB)
 
-Data fields: cell_tb_qual_flag_h_fore, cell_tb_qual_flag_h_aft, cell_tb_qual_flag_v_fore, cell_tb_qual_flag_v_aft
+Data fields: `cell_tb_qual_flag_h_fore`, `cell_tb_qual_flag_h_aft`, `cell_tb_qual_flag_v_fore`, `cell_tb_qual_flag_v_aft`
 
 ### Uncorrected Brightness Temperature 9 km (L1, Passive, Fore | Aft, H Polarization | V Polarization)
 Temporal coverage: 31 March 2015 - present
@@ -36,7 +36,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP Enhanced L1C Radiometer Half-Orbit 9 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB_E)
 
-Data fields: cell_tb_h_fore, cell_tb_h_aft, cell_tb_v_fore, cell_tb_v_aft
+Data fields: `cell_tb_h_fore`, `cell_tb_h_aft`, `cell_tb_v_fore`, `cell_tb_v_aft`
 
 ### Uncorrected Brightness Temperature 9 km QA and RFI Flags
 Temporal coverage: 31 March 2015 - present
@@ -53,7 +53,7 @@ Within the image, green indicates that TB observations are free of RFI and appro
 
 References: [SMAP Enhanced L1C Radiometer Half-Orbit 9 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB_E)
 
-Data fields: cell_tb_qual_flag_h_fore, cell_tb_qual_flag_h_aft, cell_tb_qual_flag_v_fore, cell_tb_qual_flag_v_aft
+Data fields: `cell_tb_qual_flag_h_fore`, `cell_tb_qual_flag_h_aft`, `cell_tb_qual_flag_v_fore`, `cell_tb_qual_flag_v_aft`
 
 ### Corrected Brightness Temperature (L3, Passive, H Polarization | V Polarization)
 Temporal coverage: 31 March 2015 - present
@@ -64,4 +64,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L3 Radiometer Global Daily 36 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL3SMP)
 
-Data fields: tb_h_corrected, tb_v_corrected
+Data fields: `tb_h_corrected`, `tb_v_corrected`

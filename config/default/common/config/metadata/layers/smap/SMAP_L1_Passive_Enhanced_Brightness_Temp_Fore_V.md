@@ -4,4 +4,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP Enhanced L1C Radiometer Half-Orbit 9 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB_E)
 
-Data fields: cell_tb_v_fore
+Data field: `cell_tb_v_fore`

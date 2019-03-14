@@ -4,4 +4,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L3 Radiometer Global and Northern Hemisphere Daily 36 km EASE-Grid Freeze/Thaw State](https://nsidc.org/data/spl3ftp)
 
-Data field : freeze_thaw
+Data field: `freeze_thaw`
