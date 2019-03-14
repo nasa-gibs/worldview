@@ -6,4 +6,4 @@ References: [SMAP/Sentinel-1 L2 Radiometer/Radar 30-Second Scene 3 km EASE-Grid 
 
 This data set contains modified Copernicus Sentinel-1 data (2015-present), acquired by the European Space Agency (ESA), distributed through the Alaska Satellite Facility (ASF), and processed by the SMAP Science Data System.
 
-Data field: soil_moisture_3km
+Data field: `soil_moisture_3km`

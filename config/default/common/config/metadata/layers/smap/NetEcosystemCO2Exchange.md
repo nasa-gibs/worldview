@@ -7,7 +7,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L4 Global Daily 9 km Carbon Net Ecosystem Exchange](https://nsidc.org/data/spl4cmdl/)
 
-Data field: nee_mean
+Data field: `nee_mean`
 
 ### Net Ecosystem CO2 Exchange Uncertainty (L4, 9 km Grid Cell Mean, Model Value-Added)
 Temporal coverage: 13 April 2015 - present
@@ -18,4 +18,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L4 Global Daily 9 km Carbon Net Ecosystem Exchange](https://nsidc.org/data/spl4cmdl/)
 
-Data field: nee_mean
+Data field: `nee_mean`
