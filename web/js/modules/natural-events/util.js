@@ -1,4 +1,4 @@
-import { get } from 'redux-location-state/lib/helpers';
+import { get } from 'lodash';
 import { encode } from '../link/util';
 export function getNaturalEventsParameterSetup(
   parameters,

@@ -11,7 +11,11 @@ import { compareModel } from './compare/model';
 import { tourModel } from './tour/model';
 import naturalEventsModel from './natural-events/model';
 
-export function combineModels(config, state) {
+/**
+ * Return initiated legacy models Object
+ * @param {Object} config
+ */
+export function combineModels(config) {
   let models = {
     wv: {
       events: util.events()

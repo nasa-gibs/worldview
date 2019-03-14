@@ -37,6 +37,13 @@ import { animationGif } from './animation/gif';
 import naturalEventsUI from './natural-events/ui';
 import naturalEventsRequest from './natural-events/request';
 import { debugLayers } from './debug';
+
+/**
+ *  Legacy UI Rendering
+ * @param {Object} models | Legacy Models Object
+ * @param {Object} config
+ * @param {Object} MapMouseEvents | Map events object that is registered here and used in react to render coords
+ */
 export function combineUi(models, config, MapMouseEvents) {
   let ui = {};
   let mapComponents = {

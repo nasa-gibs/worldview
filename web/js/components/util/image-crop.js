@@ -6,13 +6,13 @@ import { Portal } from 'react-portal';
 // https://stackoverflow.com/a/13139830
 const TRANSPARENT_GIF =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
 /*
  * A react reuseable list component
  *
  * @class List
  * @extends React.Component
  */
-
 export default class Crop extends React.Component {
   constructor(props) {
     super(props);
