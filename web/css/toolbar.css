@@ -15,6 +15,10 @@
   padding: 5.72px 14.3px;
   border-radius: 5px;
 }
+.wv-toolbar-button:focus {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
 .wv-toolbar .wv-toolbar-button:hover {
   background-color: #fff;
   color: #1a1a1a;
