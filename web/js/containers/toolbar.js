@@ -138,7 +138,7 @@ class toolbarContainer extends Component {
           onClick={() =>
             openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS['TOOLBAR_INFO'])
           }
-          datacontent={notificationContentNumber}
+          data-content={notificationContentNumber}
         >
           <i className="fa fa-info-circle fa-2x" />{' '}
         </Button>
