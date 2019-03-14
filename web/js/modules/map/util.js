@@ -43,13 +43,6 @@ export function getMapParameterSetup(
   };
 }
 
-// const LEADING_EXTENT = getLeadingExtent();
-
-// export function serializeExtent(arr) {
-//   if (!arr || !arr.length || arr.length !== 4) return LEADING_EXTENT;
-//   return encode(arr.join(','));
-// }
-
 export function getLeadingExtent() {
   var curHour = util.now().getUTCHours();
 
@@ -69,38 +62,3 @@ export function getLeadingExtent() {
 
   return [minLon, minLat, maxLon, maxLat];
 }
-
-// export function parseMapExtent(str) {
-//   const extent = str.split(',').map(parseFloat);
-//   var valid = mapIsExtentValid(extent);
-//   if (!valid) {
-//     util.warn('Invalid extent: ' + extent);
-//     return getLeadingExtent();
-//   } else {
-//     return extent;
-//   }
-// }
-// /**
-//  * Determines if an exent object contains valid values.
-//  *
-//  * @method isExtentValid
-//  * @static
-//  *
-//  * @param extent {OpenLayers.Bound} The extent to check.
-//  *
-//  * @return {boolean} False if any of the values is NaN, otherwise returns
-//  * true.
-//  */
-// export function mapIsExtentValid(extent) {
-//   if (lodashIsUndefined(extent)) {
-//     return false;
-//   }
-//   var valid = true;
-//   lodashEach(extent, function(value) {
-//     if (isNaN(value)) {
-//       valid = false;
-//       return false;
-//     }
-//   });
-//   return valid;
-// }

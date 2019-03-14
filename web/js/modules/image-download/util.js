@@ -68,7 +68,7 @@ export function imageUtilCalculateResolution(
 }
 
 /*
- * Retieves active layers by day
+ * Retrieves active layers by day
  *
  * @method getLayersForDay
  * @private
@@ -90,7 +90,7 @@ export function imageUtilGetLayers(products, proj) {
   return layers;
 }
 /*
- * Retieves opacities from palettes
+ * Retrieves opacities from palettes
  *
  * @method getOpacities
  * @private
@@ -130,7 +130,7 @@ export function imageUtilGetConversionFactor(proj) {
 }
 
 /*
- * Retieves coordinates from pixel
+ * Retrieves coordinates from pixel
  *
  * @method getCoords
  * @private

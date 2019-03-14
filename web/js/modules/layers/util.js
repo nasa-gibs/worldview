@@ -1,5 +1,4 @@
-import { cloneDeep as lodashCloneDeep } from 'lodash';
-import { get } from 'redux-location-state/lib/helpers';
+import { cloneDeep as lodashCloneDeep, get } from 'lodash';
 import util from '../../util/util';
 
 export function getLayersParameterSetup(
