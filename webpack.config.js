@@ -41,8 +41,12 @@ if (devMode) {
 
 // conditionally required and add plugin bundle analzyer
 if (process.env.ANALYZE_MODE === 'true') {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+    .BundleAnalyzerPlugin;
   pluginSystem.push(new BundleAnalyzerPlugin());
+}
+if (process.env.LOG === 'true') {
+  pluginSystem.push(new webpack.DefinePlugin({ LOG: JSON.stringify('true') }));
 }
 
 // handle testing entry point and output file name
@@ -58,7 +62,10 @@ if (process.env.TESTING_MODE === 'true') {
 module.exports = {
   resolve: {
     alias: {
-      googleTagManager$: path.resolve(__dirname, './web/js/components/util/google-tag-manager.js')
+      googleTagManager$: path.resolve(
+        __dirname,
+        './web/js/components/util/google-tag-manager.js'
+      )
     }
   },
   mode: devMode ? 'development' : 'production',

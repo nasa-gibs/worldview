@@ -1,3 +1,4 @@
+/* global LOG */
 import 'babel-polyfill'; // Needed for worldview-components in IE and older browsers
 import 'whatwg-fetch';
 import React from 'react';
@@ -28,13 +29,8 @@ import { validate as layerValidate } from './layers/layers';
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
 import { changeProjection } from './modules/projection/actions';
-
 const history = createBrowserHistory();
-const isDevelop = !!(
-  process &&
-  process.env &&
-  process.env.NODE_ENV === 'development'
-);
+
 let parameters = util.fromQueryString(location.search);
 const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
@@ -89,7 +85,7 @@ const render = (config, parameters, legacyState) => {
     reducers,
     stateToParams
   );
-  const middleware = getMiddleware(isDevelop, locationMiddleware); // Get Various Middlewares
+  const middleware = getMiddleware(LOG, locationMiddleware); // Get Various Middlewares
   const store = createStore(
     reducersWithLocation,
     getInitialState(models, config, parameters),
