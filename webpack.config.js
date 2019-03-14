@@ -11,7 +11,6 @@ const postcssPresetEnv = require('postcss-preset-env');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-console.log(process.env)
 // environment dev flag
 const devMode = process.env.NODE_ENV !== 'production';
 
