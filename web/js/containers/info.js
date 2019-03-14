@@ -16,11 +16,6 @@ import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
 import Notifications from '../containers/notifications';
 
-const NOTIFICATION_CUSTOM_MODAL_PARAMS = {
-  headerText: 'Notifications',
-  bodyComponent: Notifications
-};
-
 class InfoList extends Component {
   getNotificationListItem(obj) {
     const { number, type, object } = this.props.notifications;
@@ -128,16 +123,17 @@ const mapDispatchToProps = dispatch => ({
     }
   },
   notificationClick: (obj, num) => {
-    if (num > 0) {
-      dispatch(notificationsSeen());
-      addToLocalStorage(obj);
-    }
-
     dispatch(
-      openCustomContent(
-        'NOTIFICATION_LIST_MODAL',
-        NOTIFICATION_CUSTOM_MODAL_PARAMS
-      )
+      openCustomContent('NOTIFICATION_LIST_MODAL', {
+        headerText: 'Notifications',
+        bodyComponent: Notifications,
+        onClose: () => {
+          if (num > 0) {
+            dispatch(notificationsSeen());
+            addToLocalStorage(obj);
+          }
+        }
+      })
     );
   },
   aboutClick: () => {

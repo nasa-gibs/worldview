@@ -43,16 +43,22 @@ class ModalContainer extends Component {
       type,
       wrapClassName,
       clickableBehindModal,
-      bodyComponent
+      bodyComponent,
+      onClose
     } = newProps;
     const style = this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
-
+    const toggleWithClose = () => {
+      onToggle();
+      if (onClose && isOpen) {
+        onClose();
+      }
+    };
     return (
       <Modal
         isOpen={isOpen}
-        toggle={onToggle}
+        toggle={toggleWithClose}
         backdrop={backdrop && type !== 'selection'}
         id={lowerCaseId}
         className={
@@ -63,11 +69,11 @@ class ModalContainer extends Component {
         wrapClassName={wrapClassName + ' ' + lowerCaseId}
       >
         <DetectOuterClick
-          onClick={onToggle}
+          onClick={toggleWithClose}
           disabled={!isOpen || type === 'selection' || clickableBehindModal}
         >
           {headerComponent || headerText ? (
-            <ModalHeader toggle={onToggle}>
+            <ModalHeader toggle={toggleWithClose}>
               {headerComponent ? <headerComponent /> : headerText || ''}
             </ModalHeader>
           ) : (
