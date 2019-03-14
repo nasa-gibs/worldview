@@ -14,8 +14,18 @@ class Timeline extends React.Component {
       selectedDate: this.props.selectedDate,
       changeDate: this.props.changeDate,
       timeScale: this.props.timeScale,
-      incrementDate: this.props.incrementDate
+      incrementDate: this.props.incrementDate,
+      timeScaleChangeUnit: this.props.timeScaleChangeUnit,
+      changeAmt: 1,
     };
+  }
+
+  dateChange = (date, id, type, amt) => {
+    this.setState({
+      selectedDate: date,
+      timeScaleChangeUnit: type,
+      changeAmt: amt
+    })
   }
 
   render() {
@@ -32,9 +42,11 @@ class Timeline extends React.Component {
     //   height: '67px',
     //   bottom: '10px'
     // }
+
+    console.log(this.props)
     return (
       <React.Fragment>
-        <DateChangeControls />
+        <DateChangeControls selectedDate={dateFormatted} dateChange={this.dateChange} />
         {/* <TimelineAxis {...this.state} selectedDate={dateFormatted}/> */}
 
         {/* new modular version - currently a shell */}

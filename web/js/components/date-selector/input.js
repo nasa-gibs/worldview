@@ -101,7 +101,7 @@ class DateInputColumn extends React.Component {
           break;
       }
       if (newDate) {
-        this.props.updateDate(newDate);
+        this.props.updateDate(newDate, this.props.type, null);
         if (entered) {
           if (shiftTab) {
             // shift-tabbed - move backward
@@ -213,7 +213,7 @@ class DateInputColumn extends React.Component {
       this.props.minDate,
       this.props.maxDate
     );
-    this.props.updateDate(newDate);
+    this.props.updateDate(newDate, this.props.type, amt);
   }
   /**
    * Select all text on focus

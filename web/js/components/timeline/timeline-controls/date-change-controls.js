@@ -15,8 +15,10 @@ class DateChangeControls extends React.Component {
   render() {
     // ZOOM LEVELS:
     // 1-YEAR,  2-MONTH,  3-DAY,  4-MINUTE,  5-DAY??
+    // console.log(this.props, new Date())
+    let selectedDate = this.props.selectedDate;
     let mockDateSelectorProps = {
-      date: new Date(),
+      date: new Date(selectedDate),
       fontSize: null,
       height: '30',
       id: 'main',
@@ -24,7 +26,7 @@ class DateChangeControls extends React.Component {
       maxDate: new Date('2019-04-01'),
       maxZoom: 5, // 3 === DAY, 5 TRIGGERS CONDITIONAL TO SHOW SUBDAILY
       minDate: new Date('1947-02-01'),
-      onDateChange: (date) => console.log('mock', date),
+      onDateChange: this.props.dateChange,
       width: '120'
     }
     return (

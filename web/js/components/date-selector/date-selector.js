@@ -61,11 +61,11 @@ class DateSelector extends React.Component {
       tab: nextTab
     });
   }
-  updateDate(date) {
+  updateDate(date, type, amt) {
     this.setState({
       date: date
     });
-    this.props.onDateChange(date, this.props.id);
+    this.props.onDateChange(date, this.props.id, type, amt);
   }
   renderSubdaily() {
     if (this.state.maxZoom >= 4) {
