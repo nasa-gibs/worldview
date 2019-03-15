@@ -31,6 +31,7 @@ To build the app with an incomplete configuration, prefix the command like this:
 **`npm run analyze`**: Runs Webpack Bundle Analyzer to visualize size of output files with an interactive zoomable treemap. Default analyze interface is served at [http://127.0.0.1:8888/](http://127.0.0.1:8888/).
 
 **`npm run watch`**: Builds and serves local Development mode Webpack bundle in watch mode using Webpack Dev Server (*Note: It is necessary to wait for the initial build to finish before being able to develop*). JS and CSS bundles are updated automatically when source files change. You must run `npm run build` or `npm run build:config` first to make a request to the GIBS `GetCapabilities` API and build the configuration files.
+**`npm run watch:debug`**: Injects a global `DEBUG` object into `main.js`. This will activate `react-logger` which logs the before and after state of each action.
 
 ## Starting
 
