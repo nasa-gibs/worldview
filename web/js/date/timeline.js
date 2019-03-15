@@ -149,14 +149,26 @@ export function timeline(models, config, ui) {
     self.input.animateByIncrement(increment, timeScale);
   };
 
+  var updateDate = (date) => {
+    let updatedDate = new Date(date);
+    // console.log(models)
+    // self.input.update(updatedDate);
+    // models.date.setActiveDate(updatedDate);
+
+    //# ALLOWS UPDATE OF MODELS DATE WHICH LAYERS IS CONNECTED TO
+    models.date.select(updatedDate);
+  };
+
   var getInitialProps = () => {
+    console.log(self)
     return {
       width: self.width,
       height: self.height,
       selectedDate: models.date[models.date.activeDate],
       changeDate: changeDate,
       timeScale: 'day',
-      incrementDate: incrementDate
+      incrementDate: incrementDate,
+      updateDate: updateDate
     };
   };
 

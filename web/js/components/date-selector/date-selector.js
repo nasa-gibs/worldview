@@ -32,6 +32,13 @@ class DateSelector extends React.Component {
       maxZoom: props.maxZoom
     });
   }
+  // shouldComponentUpdate(prevProps, prevState) {
+  //   console.log(prevProps.date, prevState.date, this.props.date, this.state.date)
+  //   if (prevProps.date === this.props.date) {
+  //     return false;
+  //   }
+  //   return true;
+  // }
   blur() {
     this.setState({ tab: null });
   }
@@ -62,6 +69,7 @@ class DateSelector extends React.Component {
     });
   }
   updateDate(date, type, amt) {
+    console.log(date);
     this.setState({
       date: date
     });

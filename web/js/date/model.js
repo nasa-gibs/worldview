@@ -42,6 +42,7 @@ export function dateModel(models, config, spec) {
   };
 
   self.select = function(date, selectionStr) {
+    // console.log(date, selectionStr)
     if (!date) return null;
     selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);

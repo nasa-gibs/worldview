@@ -10,26 +10,68 @@ class Timeline extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: this.props.width,
-      selectedDate: this.props.selectedDate,
-      changeDate: this.props.changeDate,
-      timeScale: this.props.timeScale,
-      incrementDate: this.props.incrementDate,
-      timeScaleChangeUnit: this.props.timeScaleChangeUnit,
-      changeAmt: 1,
+      dateFormatted: '',
+      width: '',
+      selectedDate: '',
+      changeDate: '',
+      timeScale: '',
+      incrementDate: '',
+      timeScaleChangeUnit: '',
+      changeAmt: '',
     };
   }
 
   dateChange = (date, id, type, amt) => {
+    // console.log(date, id, type, amt)
+    let dateFormatted = date.toISOString();
+    console.log(dateFormatted)
     this.setState({
-      selectedDate: date,
+      selectedDate: date.toISOString(),
       timeScaleChangeUnit: type,
-      changeAmt: amt
+      changeAmt: amt,
+      dateFormatted: dateFormatted
     })
   }
 
+  updateDate = (date) => {
+    console.log(date)
+    this.props.updateDate(date);
+    let dateFormatted = new Date(date).toISOString();
+    // this.setState({
+    //   selectedDate: dateFormatted,
+    //   dateFormatted: dateFormatted
+    // })
+  }
+
+  componentDidUpdate() {
+    // console.log('CDU')
+  }
+
+  componentDidMount() {
+    this.init();
+  }
+
+  init = () => {
+    this.setState({
+      dateFormatted: this.props.selectedDate.toISOString(),
+      width: this.props.width,
+      selectedDate: this.props.selectedDate.toISOString(),
+      changeDate: this.props.changeDate,
+      timeScale: this.props.timeScale,
+      incrementDate: this.props.incrementDate,
+      timeScaleChangeUnit: this.props.timeScaleChangeUnit,
+      changeAmt: 1
+    })
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // console.log(this.props, nextProps, this.state, nextState)
+    return true;
+  }
+
   render() {
-    let dateFormatted = this.state.selectedDate.toISOString();
+    // console.log(this.state)
+    // let dateFormatted = this.state.selectedDate.toISOString();
     // let tempStyle = {
     //   position: 'absolute',
     //   border: '1px solid #333',
@@ -43,14 +85,18 @@ class Timeline extends React.Component {
     //   bottom: '10px'
     // }
 
-    console.log(this.props)
+    // console.log(this.props)
+    // console.log('DATE', dateFormatted)
+
+
     return (
+      this.state.dateFormatted ?
       <React.Fragment>
-        <DateChangeControls selectedDate={dateFormatted} dateChange={this.dateChange} />
+        <DateChangeControls selectedDate={this.state.dateFormatted} dateChange={this.dateChange} />
         {/* <TimelineAxis {...this.state} selectedDate={dateFormatted}/> */}
 
         {/* new modular version - currently a shell */}
-        <TimelineAxisContainer {...this.state} selectedDate={dateFormatted}/>
+        <TimelineAxisContainer {...this.state} selectedDate={this.state.dateFormatted} updateDate={this.updateDate} />
 
         {/* hammmmmmmmmmmburger 🍔 */}
         {/* <div id="timeline-hide">
@@ -59,6 +105,8 @@ class Timeline extends React.Component {
           </svg>
         </div> */}
       </React.Fragment>
+      :
+      null
     );
   }
 }

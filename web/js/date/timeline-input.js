@@ -73,6 +73,7 @@ export function timelineInput(models, config, ui) {
     $(document)
       .mouseout(stopper)
       .keydown(function(event) {
+        console.log('asdasd')
         if (event.target.nodeName === 'INPUT' || keyDown === event.keyCode) {
           return;
         }
@@ -182,12 +183,14 @@ export function timelineInput(models, config, ui) {
    * @return {void}
    */
   self.animateByIncrement = function(delta, increment) {
+    console.log(delta, increment)
     var endTime = models.layers.lastDateTime();
     var endDate = models.layers.lastDate();
     self.delta = Math.abs(delta);
 
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
+      console.log(tl.data.start(), nextTime, endTime)
       if (ui.timeline.config.currentZoom >= 4) {
         if (tl.data.start() <= nextTime && nextTime <= endTime) {
           models.date.add(increment, delta);
@@ -207,6 +210,9 @@ export function timelineInput(models, config, ui) {
    * @return {void}
    */
   var stopper = function() {
+    // invokes when mouse over < > and date selector arrows/boxes
+    // sticks on new timeline date selector
+    console.log('STOPPPPPPPP')
     clearInterval(animator);
     animator = 0;
   };

@@ -120,7 +120,8 @@ class DateInputColumn extends React.Component {
   }
   onClickUp() {
     if (this.props.type === 'minute') {
-      this.rollDate(10);
+      // this.rollDate(10);
+      this.rollDate(1);
     } else {
       this.rollDate(1);
     }
@@ -130,7 +131,8 @@ class DateInputColumn extends React.Component {
   }
   onClickDown() {
     if (this.props.type === 'minute') {
-      this.rollDate(-10);
+      // this.rollDate(-10);
+      this.rollDate(-1);
     } else {
       this.rollDate(-1);
     }
