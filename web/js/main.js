@@ -31,7 +31,7 @@ import { debugConfig } from './debug';
 import { changeProjection } from './modules/projection/actions';
 
 const history = createBrowserHistory();
-const isDebugMode = DEBUG === 'true';
+const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
 let parameters = util.fromQueryString(location.search);
