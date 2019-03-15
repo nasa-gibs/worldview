@@ -8,5 +8,5 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The CERES TOA Longwave Flux (Monthly, Energy Balanced and Filled, Clear-Sky) layer is available from the CERES instruments on the Terra satellite. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameter: toa_lw_clr_mon  
-Data product: CERES_EBAF-SFC_Edition2.8
+Data parameter: `toa_lw_clr_mon`  
+Data product: `CERES_EBAF-SFC_Edition2.8`
