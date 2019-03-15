@@ -45,8 +45,10 @@ if (process.env.ANALYZE_MODE === 'true') {
     .BundleAnalyzerPlugin;
   pluginSystem.push(new BundleAnalyzerPlugin());
 }
-if (process.env.LOG === 'true') {
-  pluginSystem.push(new webpack.DefinePlugin({ LOG: JSON.stringify('true') }));
+if (process.env.DEBUG === 'true') {
+  pluginSystem.push(
+    new webpack.DefinePlugin({ DEBUG: JSON.stringify('true') })
+  );
 }
 
 // handle testing entry point and output file name
