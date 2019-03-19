@@ -7,7 +7,7 @@ import util from '../util/util';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
 import OlKinetic from 'ol/Kinetic';
-import OlGraticule from 'ol/Graticule';
+import OlGraticule from 'ol/layer/Graticule';
 import OlStyleStroke from 'ol/style/Stroke';
 import OlControlScaleLine from 'ol/control/ScaleLine';
 import { altKeyOnly } from 'ol/events/condition';

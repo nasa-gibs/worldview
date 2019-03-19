@@ -375,12 +375,36 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       })
     });
 
+    // var clusterSource = new OlCluster({
+    //   distance: parseInt(20, 10),
+    //   source: sourceOptions
+    // });
+
+    // var styleCache = {};
+
+    // var styles = function(feature) {
+    //   var style = styleCache['default'];
+    //   if (!style) {
+    //     style = new Style({
+    //       image: new CircleStyle({
+    //         radius: 5,
+    //         fill: new Fill({
+    //           color: '#ff0000'
+    //         })
+    //       })
+    //     });
+    //     styleCache['default'] = style;
+    //   }
+    //   return style;
+    // };
+
     var layer = new LayerVectorTile({
       renderMode: 'image',
-      renderBuffer: '100',
+      renderBuffer: '5',
       extent: extent,
       source: sourceOptions,
       declutter: true
+      // style: styles
     });
 
     if (config.vectorStyles && def.vectorStyle.id) {
@@ -388,18 +412,21 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       var vectorStyle = def.vectorStyle.id;
       var glStyle = vectorStyles[vectorStyle];
 
+      console.log(vectorStyles);
+      console.log(vectorStyle);
+
       $(document).ready(function() {
         $(document).on('change', document.getElementById('frpCheckbox'), function(e) {
           if (document.getElementById('frpCheckbox').checked === true) {
-            applyStyle(layer, glStyle, 'MODIS_Fire_Points_FRP', matrixSet.resolutions);
+            stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP', matrixSet.resolutions);
           } else if (document.getElementById('confidenceCheckbox').checked === true) {
-            applyStyle(layer, glStyle, 'MODIS_Fire_Points_Confidence', matrixSet.resolutions);
+            stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence', matrixSet.resolutions);
           } else {
-            applyStyle(layer, glStyle, 'default_style', matrixSet.resolutions);
+            stylefunction(layer, glStyle, 'default_style', matrixSet.resolutions);
           }
         });
-        applyStyle(layer, glStyle, 'default_style', matrixSet.resolutions);
       });
+      stylefunction(layer, glStyle, 'default_style', matrixSet.resolutions);
     }
 
     return layer;

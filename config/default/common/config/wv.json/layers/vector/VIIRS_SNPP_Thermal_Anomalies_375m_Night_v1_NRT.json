@@ -13,7 +13,7 @@
           ],
           "inactive": true,
           "vectorStyle": {
-            "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT"
+            "id": "FIRMS_SNPP_Thermal_Anomalies"
           },
           "period": "daily"
       }
