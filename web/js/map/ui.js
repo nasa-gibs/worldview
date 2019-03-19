@@ -148,12 +148,6 @@ export function mapui(models, config, store, ui) {
     models.map.events.on('update-layers', reloadLayers);
     ui.events.on('last-action', subscribeToStore);
     updateProjection(true);
-
-    $(document).ready(function() {
-      $(document).on('change', document.getElementById('frpCheckbox'), function(e) {
-        reloadLayers();
-      });
-    });
   };
   const flyToNewExtent = function(extent, rotation) {
     let coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
