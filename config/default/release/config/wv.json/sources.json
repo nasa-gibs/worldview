@@ -7,10 +7,10 @@
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi"
         },
         "GIBS:geographic": {
-            "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
+            "url": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/all/wmts.cgi"
         },
         "GIBS:wms": {
-            "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi"
+            "url": "https://uat.gibs.earthdata.nasa.gov/wms/epsg4326/all/wms.cgi"
         },
         "GIBS:wms:arctic": {
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg3413/best/wms.cgi"

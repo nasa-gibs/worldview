@@ -146,7 +146,8 @@ export function timeline(models, config, ui) {
     // self.expand(true);
     // console.log(timeScale, increment)
     // models.date.add(timeScale, increment);
-    self.input.animateByIncrement(increment, timeScale);
+    // self.input.animateByIncrement(increment, timeScale);
+    // models.date.select(date);
   };
 
   var updateDate = (date) => {
@@ -154,7 +155,7 @@ export function timeline(models, config, ui) {
     // console.log(models)
     // self.input.update(updatedDate);
     // models.date.setActiveDate(updatedDate);
-
+console.log('updateDate', updatedDate)
     //# ALLOWS UPDATE OF MODELS DATE WHICH LAYERS IS CONNECTED TO
     models.date.select(updatedDate);
   };
@@ -174,7 +175,6 @@ export function timeline(models, config, ui) {
 
   var drawContainers = function() {
     self.getWidth();
-    console.log(self.width)
     let initialProps = getInitialProps();
     self.reactComponent = ReactDOM.render(
       React.createElement(Timeline, initialProps),
@@ -245,8 +245,11 @@ export function timeline(models, config, ui) {
 
   var updateReactTimelineDate = function() {
     let selectedDate = models.date[models.date.activeDate];
-    // console.log(selectedDate)
-    self.reactComponent.setState({ selectedDate: selectedDate });
+    console.log(selectedDate, new Date(selectedDate).toISOString())
+    self.reactComponent.setState({
+      selectedDate: selectedDate,
+      dateFormatted: new Date(selectedDate).toISOString()
+    });
   };
 
   var updateTimeUi = function() {

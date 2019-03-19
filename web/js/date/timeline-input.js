@@ -22,6 +22,8 @@ export function timelineInput(models, config, ui) {
   var animator = null;
   var keyDown;
 
+  let animationInProcess = false;
+
   var $incrementBtn = $('#right-arrow-group');
   var $decrementBtn = $('#left-arrow-group');
 
@@ -41,7 +43,7 @@ export function timelineInput(models, config, ui) {
             self.animateByIncrement(1, 'day');
             break;
           case 4:
-            self.animateByIncrement(10, 'minute');
+            self.animateByIncrement(1, 'minute');
             break;
           default:
             self.animateByIncrement(1, 'day');
@@ -63,17 +65,17 @@ export function timelineInput(models, config, ui) {
             self.animateByIncrement(-1, 'day');
             break;
           case 4:
-            self.animateByIncrement(-10, 'minute');
+            self.animateByIncrement(-1, 'minute');
             break;
           default:
             self.animateByIncrement(-1, 'day');
         }
       })
       .mouseup(stopper);
+
     $(document)
       .mouseout(stopper)
       .keydown(function(event) {
-        console.log('asdasd')
         if (event.target.nodeName === 'INPUT' || keyDown === event.keyCode) {
           return;
         }
@@ -90,7 +92,7 @@ export function timelineInput(models, config, ui) {
                 self.animateByIncrement(-1, 'day');
                 break;
               case 4:
-                self.animateByIncrement(-10, 'minute');
+                self.animateByIncrement(-1, 'minute');
                 break;
             }
             break;
@@ -106,7 +108,7 @@ export function timelineInput(models, config, ui) {
                 self.animateByIncrement(1, 'day');
                 break;
               case 4:
-                self.animateByIncrement(10, 'minute');
+                self.animateByIncrement(1, 'minute');
                 break;
             }
             event.preventDefault();
@@ -190,7 +192,7 @@ export function timelineInput(models, config, ui) {
 
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
-      console.log(tl.data.start(), nextTime, endTime)
+      console.log(tl.data.start(), nextTime, endTime, increment)
       if (ui.timeline.config.currentZoom >= 4) {
         if (tl.data.start() <= nextTime && nextTime <= endTime) {
           models.date.add(increment, delta);
@@ -200,6 +202,7 @@ export function timelineInput(models, config, ui) {
           models.date.add(increment, delta);
         }
       }
+      animationInProcess = true;
       animator = setTimeout(animate, self.delay);
     }
     animate();
@@ -210,11 +213,14 @@ export function timelineInput(models, config, ui) {
    * @return {void}
    */
   var stopper = function() {
-    // invokes when mouse over < > and date selector arrows/boxes
-    // sticks on new timeline date selector
-    console.log('STOPPPPPPPP')
-    clearInterval(animator);
-    animator = 0;
+    if (animationInProcess) {
+      animationInProcess = false;
+      // # invokes when mouse over < > and date selector arrows/boxes
+      // # sticks on new timeline date selector
+      console.log('STOPPPPPPPP')
+      clearInterval(animator);
+      animator = 0;
+    }
   };
   /**
    * @param  {Number} delta Date and direction to change

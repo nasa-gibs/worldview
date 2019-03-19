@@ -868,7 +868,9 @@
         "OrbitTracks_Suomi_NPP_Ascending",
         "OrbitTracks_Suomi_NPP_Descending",
         "OrbitTracks_Terra_Ascending",
-        "OrbitTracks_Terra_Descending"
+        "OrbitTracks_Terra_Descending",
+
+        "GOES16_Air_Mass_v0_STD"
     ],
     "layerOrderExceptions": [
         "SCAR_Land_Mask",

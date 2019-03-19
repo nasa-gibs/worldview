@@ -1,0 +1,16 @@
+{
+  "layers": {
+      "GOES16_Air_Mass_v0_STD": {
+          "id":       "GOES16_Air_Mass_v0_STD",
+          "title":    "Air Mass (RGB, GOES-16)",
+          "subtitle": "GOES",
+          "description": "goes/GOES16_Air_Mass_v0_STD",
+          "group":    "baselayers",
+          "tags":     "goes",
+          "layergroup": [
+            "goes"
+          ],
+          "wrapadjacentdays": true
+      }
+  }
+}

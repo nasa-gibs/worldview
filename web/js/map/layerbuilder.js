@@ -115,6 +115,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @return {object}         Closest date
    */
   self.closestDate = function(def, options) {
+    console.log(def)
     var date;
     var animRange;
     if (models.anim) {

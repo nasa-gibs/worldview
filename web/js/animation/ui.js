@@ -199,9 +199,11 @@ export function animationUi(models, ui) {
    * @returns {object} JS Date
    *
    */
+
+   // # need to change subdaily argument for custom intervals - rework for all zoom levels presumably
   self.nextDate = function (date) {
     if (models.date.selectedZoom === 4) {
-      return util.dateAdd(date, self.getInterval(), 10);
+      return util.dateAdd(date, self.getInterval(), 15);
     } else {
       return util.dateAdd(date, self.getInterval(), 1);
     }

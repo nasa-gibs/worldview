@@ -79,7 +79,7 @@ line {
 
 /* DEVELOPMENT */
 .line {
-  top: 2px;
+  top: 102px;
   width: 2px;
   height: 70px;
   background: rgba(21,21,255,0.4);
@@ -130,4 +130,8 @@ form select {
 .changeZoomLevelButtons button {
   background: dimgrey;
   color: white;
+}
+
+#timelineContainer > div:nth-child(1) > div.wv-date-selector-widget {
+  background: #999;
 }

@@ -21,6 +21,7 @@ class Timeline extends React.Component {
     };
   }
 
+  //# may not be necessary if incrementing doesn't matter for performance
   dateChange = (date, id, type, amt) => {
     // console.log(date, id, type, amt)
     let dateFormatted = date.toISOString();
@@ -44,7 +45,7 @@ class Timeline extends React.Component {
   }
 
   componentDidUpdate() {
-    // console.log('CDU')
+    console.log('CDU', this.state)
   }
 
   componentDidMount() {
@@ -70,7 +71,7 @@ class Timeline extends React.Component {
   }
 
   render() {
-    // console.log(this.state)
+    console.log(this.props.selectedDate, this.state.dateFormatted)
     // let dateFormatted = this.state.selectedDate.toISOString();
     // let tempStyle = {
     //   position: 'absolute',
@@ -92,7 +93,7 @@ class Timeline extends React.Component {
     return (
       this.state.dateFormatted ?
       <React.Fragment>
-        <DateChangeControls selectedDate={this.state.dateFormatted} dateChange={this.dateChange} />
+        <DateChangeControls selectedDate={this.state.dateFormatted} dateChange={this.updateDate} />
         {/* <TimelineAxis {...this.state} selectedDate={dateFormatted}/> */}
 
         {/* new modular version - currently a shell */}

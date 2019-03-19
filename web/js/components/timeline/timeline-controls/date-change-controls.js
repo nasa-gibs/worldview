@@ -23,7 +23,7 @@ class DateChangeControls extends React.Component {
   // }
 
   componentDidUpdate() {
-    // console.log('update')
+    console.log('update', this.props.selectedDate)
   }
 
   render() {
@@ -36,7 +36,7 @@ class DateChangeControls extends React.Component {
       fontSize: null,
       height: '30',
       id: 'main-TEST',
-      idSuffix: 'animation-widget-main',
+      idSuffix: 'date-selector-main',
       maxDate: new Date('2020-01-01T00:00:00.000'),
       maxZoom: 5, // 3 === DAY, 5 TRIGGERS CONDITIONAL TO SHOW SUBDAILY
       minDate: new Date('1940-01-01T00:00:00.000'),

@@ -493,7 +493,7 @@ class App extends React.Component {
         ui.dateWheels = dateWheels(models, config);
       }
 
-      console.log(models.date, ui.timeline)
+      console.log(models, ui)
 
       ui.rubberband = imageRubberband(models, ui, config);
       ui.image = imagePanel(models, ui, config);
