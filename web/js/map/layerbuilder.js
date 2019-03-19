@@ -9,7 +9,7 @@ import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
 import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
-import { applyStyle } from 'ol-mapbox-style';
+// import { applyStyle } from 'ol-mapbox-style';
 import stylefunction from 'ol-mapbox-style/stylefunction';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
@@ -380,31 +380,31 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     //   source: sourceOptions
     // });
 
-    // var styleCache = {};
+    var styleCache = {};
 
-    // var styles = function(feature) {
-    //   var style = styleCache['default'];
-    //   if (!style) {
-    //     style = new Style({
-    //       image: new CircleStyle({
-    //         radius: 5,
-    //         fill: new Fill({
-    //           color: '#ff0000'
-    //         })
-    //       })
-    //     });
-    //     styleCache['default'] = style;
-    //   }
-    //   return style;
-    // };
+    var styles = function(feature) {
+      var style = styleCache['default'];
+      if (!style) {
+        style = new Style({
+          image: new CircleStyle({
+            radius: 5,
+            fill: new Fill({
+              color: '#ff0000'
+            })
+          })
+        });
+        styleCache['default'] = style;
+      }
+      return style;
+    };
 
     var layer = new LayerVectorTile({
-      renderMode: 'image',
-      renderBuffer: '5',
+      renterType: 'image',
+      renderBuffer: 5,
       extent: extent,
       source: sourceOptions,
-      declutter: true
-      // style: styles
+      declutter: true,
+      style: styles
     });
 
     if (config.vectorStyles && def.vectorStyle.id) {
@@ -412,22 +412,33 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       var vectorStyle = def.vectorStyle.id;
       var glStyle = vectorStyles[vectorStyle];
 
-      console.log(vectorStyles);
-      console.log(vectorStyle);
-
-      $(document).ready(function() {
-        $(document).on('change', document.getElementById('frpCheckbox'), function(e) {
-          if (document.getElementById('frpCheckbox').checked === true) {
-            stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP', matrixSet.resolutions);
-          } else if (document.getElementById('confidenceCheckbox').checked === true) {
-            stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence', matrixSet.resolutions);
-          } else {
-            stylefunction(layer, glStyle, 'default_style', matrixSet.resolutions);
-          }
-        });
+      console.log(layer);
+      // const source = layer.getSource();
+      const styleFunction = stylefunction(layer, glStyle, 'default_style');
+      // console.log(styleFunction);
+      layer.setStyle(function(feature, resolution) {
+        if (feature.get('CONFIDENCE') > '95') {
+          // console.log('yes')
+          return styleFunction(feature, resolution);
+        } else {
+          // return styleFunction(feature, resolution);
+        }
       });
-      stylefunction(layer, glStyle, 'default_style', matrixSet.resolutions);
     }
+
+    // $(document).ready(function() {
+    //   $(document).on('change', document.getElementById('confidenceCheckbox'), function(e) {
+    //     if (document.getElementById('frpCheckbox').checked === true) {
+    //       stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP');
+    //     } else if (document.getElementById('confidenceCheckbox').checked === true) {
+    //       stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence');
+    //     } else {
+    //       stylefunction(layer, glStyle, 'default_style');
+    //     }
+    //   });
+    // });
+    // stylefunction(layer, glStyle, 'default_style');
+    // }
 
     return layer;
   };
