@@ -58,6 +58,7 @@ class TimelineAxis extends React.Component {
     super(props);
     this.state = {
       // midTileDate: '',
+      showDraggerTime: false,
       compareMode: true,
       dragSentinelCount: 0,
       draggerPosition: 0,
@@ -1100,7 +1101,9 @@ handleDragDragger = (draggerName, e, d) => {
   }
 
   showHoverOn = () => {
-    this.setState({ showHoverLine: true });
+    if (!this.state.showDraggerTime) {
+      this.setState({ showHoverLine: true });
+    }
   }
 
   showHoverOff = () => {
@@ -1118,6 +1121,13 @@ handleDragDragger = (draggerName, e, d) => {
       compareMode: !this.state.compareMode,
       draggerVisibleB: draggerVisibleB
     });
+  }
+
+  toggleShowDraggerTime = (toggleBoolean) => {
+    this.setState({
+      showDraggerTime: toggleBoolean,
+      showHoverLine: false
+    })
   }
 
   render() {
@@ -1194,6 +1204,7 @@ handleDragDragger = (draggerName, e, d) => {
         {/* <g clipPath="url(#myClip)"> */}
         <g>
           <GridRange
+          showHoverLine={this.state.showHoverLine}
             timeScale={this.state.timeScale}
             displayDate={this.displayDate}
             gridWidth={this.state.gridWidth}
@@ -1202,6 +1213,7 @@ handleDragDragger = (draggerName, e, d) => {
         </g>
         </Draggable>
         <Dragger
+          toggleShowDraggerTime={this.toggleShowDraggerTime}
           handleDragDragger={this.handleDragDragger}
           selectDragger={this.selectDragger}
           compareOn={this.state.compareMode}
@@ -1212,6 +1224,7 @@ handleDragDragger = (draggerName, e, d) => {
           draggerSelected={this.state.draggerSelected}
           parentPosition={this.state.position} />
         <Dragger
+          toggleShowDraggerTime={this.toggleShowDraggerTime}
           handleDragDragger={this.handleDragDragger}
           selectDragger={this.selectDragger}
           compareOn={this.state.compareMode}
@@ -1223,9 +1236,9 @@ handleDragDragger = (draggerName, e, d) => {
           parentPosition={this.state.position} />
         </svg>
         : null }
-        <div className="line" style={{transform: `translate(${this.state.leftOffset}px, 0px)`, display: this.state.showHoverLine ? 'block' : 'none'}}></div>
-        <div className="dateToolTip" style={{transform: `translate(${this.state.draggerPosition - 5}px, -100px)`}}>{this.state.draggerTimeState ? this.state.draggerTimeState : null}</div>
-        <div className="dateToolTip" style={{transform: `translate(${this.state.leftOffset - 52}px, -125px)`, display: this.state.showHoverLine ? 'block' : 'none'}}>{this.state.hoverTime ? this.state.hoverTime : null}</div>
+        {/* <div className="line" style={{transform: `translate(${this.state.leftOffset}px, 0px)`, display: this.state.showHoverLine ? 'block' : 'none'}}></div> */}
+        <div className="dateToolTip" style={{transform: `translate(${this.state.draggerPosition - 5}px, -100px)`, display: this.state.showDraggerTime && this.state.redLineTime ? 'block' : 'none'}}>{this.state.showDraggerTime && this.state.redLineTime ? this.state.redLineTime : null}</div>
+        <div className="dateToolTip" style={{transform: `translate(${this.state.leftOffset - 52}px, -100px)`, display: !this.state.showDraggerTime && this.state.showHoverLine ? 'block' : 'none'}}>{!this.state.showDraggerTime && this.state.hoverTime ? this.state.hoverTime : null}</div>
 
       </div>
       <div style={{ display: 'flex', marginTop: 10 }}>

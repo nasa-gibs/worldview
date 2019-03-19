@@ -4,15 +4,15 @@ import Draggable from 'react-draggable';
 class Dragger extends PureComponent {
   render() {
     // console.log(this.props)
-    let { transformX, draggerPosition, draggerName, handleDragDragger, selectDragger, compareOn } = this.props;
+    let { transformX, draggerPosition, draggerName, handleDragDragger, toggleShowDraggerTime, selectDragger, compareOn } = this.props;
     return (
       <Draggable
         axis='x'
         onMouseDown={() => selectDragger(draggerName)}
         onDrag={handleDragDragger.bind(this, draggerName)}
         position={{ x: draggerPosition, y: -25 }}
-        // onStart={this.handleStartDrag.bind(this)}
-        // onStop={this.handleStopDrag.bind(this)}
+        onStart={() => toggleShowDraggerTime(true)}
+        onStop={() => toggleShowDraggerTime(false)}
         // onStop={() => {
         // this.props.onStop(this.props.id, this.state.position);
         // }}
@@ -23,9 +23,9 @@ class Dragger extends PureComponent {
             <text fontSize='30px' fontWeight='700' x='0' y='65' fill='#515151' transform='translate(39, 10)' textRendering='optimizeLegibility' clipPath='url(#textDisplay)'>{draggerName}</text>
             :
             <React.Fragment>
-              <rect fill='#515151' width='4' height='20' x='41' y='55'></rect>
-              <rect fill='#515151' width='4' height='20' x='48' y='55'></rect>
-              <rect fill='#515151' width='4' height='20' x='55' y='55'></rect>
+              <rect pointerEvents="none" fill='#515151' width='4' height='20' x='41' y='55'></rect>
+              <rect pointerEvents="none" fill='#515151' width='4' height='20' x='48' y='55'></rect>
+              <rect pointerEvents="none" fill='#515151' width='4' height='20' x='55' y='55'></rect>
             </React.Fragment>
           }
         </g>
