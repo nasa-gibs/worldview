@@ -6,5 +6,5 @@
 npm cache verify
 npm install --unsafe-perm
 npm run build:dev
-npm start
+npm start &
 xvfb-run npx nightwatch --env firefox --skiptags wip -o e2e/reports
