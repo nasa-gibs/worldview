@@ -1,9 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Layer from './layer';
-import { SidebarContext } from '../provider';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
-import lodashIsEqual from 'lodash/isEqual';
+import {
+  replaceSubGroup,
+  getZotsForActiveLayers,
+  getTitles,
+  available
+} from '../../../modules/layers/selectors';
+import { palettePromise } from '../../../modules/palettes/selectors';
+import { reorderLayers } from '../../../modules/layers/actions';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -19,12 +26,6 @@ class LayerList extends React.Component {
       layers: props.layers
     };
     this.promises = {};
-  }
-
-  componentWillReceiveProps(props) {
-    if (!lodashIsEqual(props.layers, this.state.layers)) {
-      this.setState({ layers: props.layers });
-    }
   }
   /**
    * Get Palette and setState with promise results when palette is retrieved
@@ -56,7 +57,7 @@ class LayerList extends React.Component {
    * @param {Object} result | Result of layer drag
    */
   onDragEnd(replaceSubGroup, result) {
-    const { layerGroupName, groupId } = this.props;
+    const { layerGroupName, groupId, reorderLayers } = this.props;
     const { layers } = this.state;
     if (!result.destination) {
       return;
@@ -78,82 +79,64 @@ class LayerList extends React.Component {
     if (nextIndex < newLayerArray.length) {
       nextLayerId = newLayerArray[nextIndex].id;
     }
-    replaceSubGroup(layerId, nextLayerId, layerGroupName, groupId);
+    reorderLayers(
+      replaceSubGroup(layerId, nextLayerId, layerGroupName, groupId)
+    );
   }
   render() {
-    const { groupId, title, layerGroupName } = this.props;
-    const { layers } = this.state;
+    const {
+      groupId,
+      title,
+      layerGroupName,
+      zots,
+      layers,
+      runningLayers,
+      projId,
+      checkerBoardPattern,
+      getNames,
+      available
+    } = this.props;
     return (
-      <SidebarContext.Consumer>
-        {context => (
-          <div className="layer-group-case">
-            <h3 className="head">{title}</h3>
-            <DragDropContext
-              onDragEnd={this.onDragEnd.bind(this, context.replaceSubGroup)}
-            >
-              <Droppable
-                droppableId={layerGroupName + '-' + groupId}
-                type="layerSubGroup"
-                direction="vertical"
-              >
-                {(provided, snapshot) => {
-                  return (
-                    <ul
-                      id={groupId}
-                      className="category"
-                      ref={provided.innerRef}
-                    >
-                      {layers.map((object, i) => (
-                        <Layer
-                          layer={object}
-                          groupId={groupId}
-                          layerGroupName={layerGroupName}
-                          isInProjection={
-                            !!object.projections[context.projection]
-                          }
-                          getLegend={context.getLegend}
-                          key={i}
-                          index={i}
-                          layerClasses="item productsitem"
-                          zot={
-                            context.zotsObject[object.id]
-                              ? context.zotsObject[object.id].value
-                              : null
-                          }
-                          isMobile={context.isMobile}
-                          names={context.getNames(object.id)}
-                          checkerBoardPattern={context.checkerBoardPattern}
-                          getPalette={context.getPalette}
-                          palette={this.getPalette(
-                            object,
-                            context.palettePromise
-                          )}
-                          isDisabled={
-                            !context.getAvailability(
-                              object.id,
-                              undefined,
-                              layerGroupName
-                            )
-                          }
-                          isVisible={object.visible}
-                          updateLayer={context.updateLayer}
-                          runningObject={
-                            context.runningLayers &&
-                            context.runningLayers[object.id]
-                              ? context.runningLayers[object.id]
-                              : null
-                          }
-                        />
-                      ))}
-                      {provided.placeholder}
-                    </ul>
-                  );
-                }}
-              </Droppable>
-            </DragDropContext>
-          </div>
-        )}
-      </SidebarContext.Consumer>
+      <div className="layer-group-case">
+        <h3 className="head">{title}</h3>
+        <DragDropContext onDragEnd={this.onDragEnd.bind(this, replaceSubGroup)}>
+          <Droppable
+            droppableId={layerGroupName + '-' + groupId}
+            type="layerSubGroup"
+            direction="vertical"
+          >
+            {(provided, snapshot) => {
+              return (
+                <ul id={groupId} className="category" ref={provided.innerRef}>
+                  {layers.map((object, i) => (
+                    <Layer
+                      layer={object}
+                      groupId={groupId}
+                      layerGroupName={layerGroupName}
+                      isInProjection={!!object.projections[projId]}
+                      key={i}
+                      index={i}
+                      layerClasses="item productsitem"
+                      zot={zots[object.id] ? zots[object.id].value : null}
+                      names={getNames(object.id)}
+                      checkerBoardPattern={checkerBoardPattern}
+                      palette={this.getPalette(object, palettePromise)}
+                      isDisabled={!available(object.id)}
+                      isVisible={object.visible}
+                      runningObject={
+                        runningLayers && runningLayers[object.id]
+                          ? runningLayers[object.id]
+                          : null
+                      }
+                    />
+                  ))}
+                  {provided.placeholder}
+                </ul>
+              );
+            }}
+          </Droppable>
+        </DragDropContext>
+      </div>
     );
   }
 }
@@ -163,5 +146,44 @@ LayerList.propTypes = {
   title: PropTypes.string,
   layerGroupName: PropTypes.string
 };
+function mapStateToProps(state, ownProps) {
+  const {
+    layers,
+    groupId,
+    title,
+    layerGroupName,
+    checkerBoardPattern
+  } = ownProps;
+  const { runningLayers } = state.layers;
+  const { id } = state.proj;
+  const zoom = state.legacy.map.getZoom();
+  const zots = getZotsForActiveLayers(layers, zoom) || {};
 
-export default LayerList;
+  return {
+    zots,
+    layers,
+    groupId,
+    title,
+    layerGroupName,
+    runningLayers,
+    projId: id,
+    checkerBoardPattern,
+    getNames: (layerId, proj) => {
+      return getTitles(state.config, layerId, proj, state);
+    },
+    available: id => {
+      const date = state.legacy.date['active'];
+      return available(id, date, layers, state.config, state);
+    }
+  };
+}
+const mapDispatchToProps = dispatch => ({
+  reorderLayers: newLayerArray => {
+    dispatch(reorderLayers(newLayerArray));
+  },
+  palettePromise: () => {}
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LayerList);

@@ -1,4 +1,12 @@
-import { cloneDeep as lodashCloneDeep, get } from 'lodash';
+import {
+  cloneDeep as lodashCloneDeep,
+  get as lodashGet,
+  find as lodashFind,
+  findIndex as lodashFindIndex,
+  each as lodashEach
+} from 'lodash';
+
+import update from 'immutability-helper';
 import util from '../../util/util';
 
 export function getLayersParameterSetup(
@@ -23,10 +31,10 @@ export function getLayersParameterSetup(
         return layerModelLoaded.active ? layerModelLoaded.active : initialState;
       },
       (currentItemState, state) => {
-        const isActive = get(models, 'compare.active');
-        const isCompareA = get(models, 'compare.isCompareA');
-        const layersB = get(models, 'layers.activeB');
-        const layersA = get(models, 'layers.active');
+        const isActive = lodashGet(models, 'compare.active');
+        const isCompareA = lodashGet(models, 'compare.isCompareA');
+        const layersB = lodashGet(models, 'layers.activeB');
+        const layersA = lodashGet(models, 'layers.active');
         return !isActive && !isCompareA
           ? serializeLayers(layersB, models, 'activeB')
           : serializeLayers(layersA, models, 'active');
@@ -39,8 +47,8 @@ export function getLayersParameterSetup(
         return layerModelLoaded.activeB;
       },
       (currentItemState, state) => {
-        const isActive = get(models, 'compare.active');
-        const layersB = get(models, 'layers.activeB');
+        const isActive = lodashGet(models, 'compare.active');
+        const layersB = lodashGet(models, 'layers.activeB');
         return isActive
           ? serializeLayers(layersB, models, 'activeB')
           : undefined;
@@ -105,6 +113,7 @@ function serializeLayers(layers, models, groupStr) {
     return util.appendAttributesForURL(item);
   });
 }
+
 function getPermalinkManagementObject(
   initialState,
   stateKey,
@@ -122,4 +131,25 @@ function getPermalinkManagementObject(
       serialize: serialize
     }
   };
+}
+
+export function toggleVisibility(id, layers) {
+  var index = lodashFindIndex(layers, {
+    id: id
+  });
+  if (index === -1) {
+    throw new Error('Invalid layer ID: ' + id);
+  }
+  var visibility = !layers[index].visible;
+
+  return update(layers, { [index]: { visible: { $set: visibility } } });
+}
+export function removeLayer(id, layers) {
+  var index = lodashFindIndex(layers, {
+    id: id
+  });
+  if (index === -1) {
+    throw new Error('Invalid layer ID: ' + id);
+  }
+  return update(layers, { $splice: [[index, 1]] });
 }

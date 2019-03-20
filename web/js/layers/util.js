@@ -1,4 +1,9 @@
-import lodashEach from 'lodash/each';
+import {
+  findIndex as lodashFindIndex,
+  each as lodashEach,
+  get as lodashGet
+} from 'lodash';
+import update from 'immutability-helper';
 
 export function addZoomLevel(config, models, ui, layer, zoomObj) {
   var newObj = zoomObj;

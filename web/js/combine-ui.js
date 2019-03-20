@@ -20,7 +20,6 @@ import { tourUi } from './tour/ui';
 import { layersModal } from './layers/modal';
 import { layersActive } from './layers/active';
 import { layersOptions } from './layers/options';
-import { sidebarUi } from './sidebar/ui';
 import { mapui } from './map/ui';
 import { MapRotate } from './map/rotation';
 import { MapRunningData } from './map/runningdata';
@@ -55,14 +54,13 @@ export function combineUi(models, config, MapMouseEvents) {
   };
   ui.map = mapui(models, config, mapComponents);
   ui.map.animate = mapAnimate(models, config, ui);
-  ui.sidebar = sidebarUi(models, config, ui);
   if (config.features.tour) {
     ui.alert = alertUi(ui, config);
     ui.tour = tourUi(models, ui, config);
   }
   ui.activeLayers = layersActive(models, ui, config);
   ui.addModal = layersModal(models, ui, config);
-  ui.layerSettingsModal = layersOptions(models, ui, config);
+  // ui.layerSettingsModal = layersOptions(models, ui, config);
   // Test via a getter in the options object to see if the passive property is accessed
   ui.supportsPassive = false;
   try {

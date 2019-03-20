@@ -4,8 +4,9 @@ import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { each as lodashEach, debounce as lodashDebounce } from 'lodash';
+import { responsiveStoreEnhancer } from 'redux-responsive';
 import { getMiddleware } from './combine-middleware';
 import {
   createReduxLocationActions,
@@ -89,7 +90,10 @@ const render = (config, parameters, legacyState) => {
   const store = createStore(
     reducersWithLocation,
     getInitialState(models, config, parameters),
-    applyMiddleware(...middleware)
+    compose(
+      responsiveStoreEnhancer,
+      applyMiddleware(...middleware)
+    )
   );
   lodashEach(models, function(component, key) {
     if (component.load && !component.loaded) {

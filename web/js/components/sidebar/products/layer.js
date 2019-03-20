@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import Legend from './legend';
 import { Draggable } from 'react-beautiful-dnd';
 import util from '../../../util/util';
+import { get } from '../../../modules/palettes/selectors';
+import {
+  toggleVisibility,
+  removeLayer,
+  layerHover
+} from '../../../modules/layers/actions';
+import { connect } from 'react-redux';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -28,26 +35,6 @@ class Layer extends React.Component {
     if (props.isInProjection !== this.state.isInProjection) {
       this.setState({ isInProjection: props.isInProjection });
     }
-  }
-  hover(value) {
-    const { updateLayer, layer } = this.props;
-    updateLayer(layer.id, 'hover', value);
-  }
-  toggleVisibility(e) {
-    const { updateLayer, layer } = this.props;
-    updateLayer(layer.id, 'visibility');
-  }
-  onRemoveClick(e) {
-    const { updateLayer, layer } = this.props;
-    updateLayer(layer.id, 'remove');
-  }
-  onOptionsClick() {
-    const { updateLayer, layer } = this.props;
-    updateLayer(layer.id, 'options');
-  }
-  onInfoClick() {
-    const { updateLayer, layer } = this.props;
-    updateLayer(layer.id, 'info');
   }
   getLegend() {
     const {
@@ -110,19 +97,22 @@ class Layer extends React.Component {
       return 'No data on selected date for this layer';
     }
   }
-  onLayerHover() {}
-  getPalette() {}
   render() {
     const { zot, isInProjection } = this.state;
     const {
       layerGroupName,
+      onRemoveClick,
+      toggleVisibility,
+      onInfoClick,
+      hover,
       layer,
       isDisabled,
       isVisible,
       layerClasses,
       names,
       isMobile,
-      index
+      index,
+      onOptionsClick
     } = this.props;
 
     return (
@@ -151,8 +141,8 @@ class Layer extends React.Component {
                       ? layerClasses + ' layer-enabled layer-visible zotted'
                       : layerClasses + ' layer-enabled layer-visible'
               }
-              onMouseEnter={this.hover.bind(this, true)}
-              onMouseLeave={this.hover.bind(this, false)}
+              onMouseEnter={() => hover(layer.id, true)}
+              onMouseLeave={() => hover(layer.id, false)}
             >
               <a
                 className={
@@ -163,7 +153,7 @@ class Layer extends React.Component {
                       : visibilityButtonClasses + ' layer-enabled layer-visible'
                 }
                 id={'hide' + util.encodeId(layer.id)}
-                onClick={this.toggleVisibility.bind(this)}
+                onClick={() => toggleVisibility(layer.id)}
                 title={
                   !isVisible && !isDisabled
                     ? 'Show Layer'
@@ -200,7 +190,7 @@ class Layer extends React.Component {
                   id={'close' + layerGroupName + util.encodeId(layer.id)}
                   title={'Remove Layer'}
                   className="button wv-layers-close"
-                  onClick={this.onRemoveClick.bind(this)}
+                  onClick={() => onRemoveClick(layer.id)}
                 >
                   <i className="fa fa-times" />
                 </a>
@@ -209,7 +199,7 @@ class Layer extends React.Component {
                   className={
                     isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'
                   }
-                  onClick={this.onOptionsClick.bind(this)}
+                  onClick={() => onOptionsClick(layer.id)}
                 >
                   <i className="fas fa-sliders-h wv-layers-options-icon" />
                 </a>
@@ -218,7 +208,7 @@ class Layer extends React.Component {
                   className={
                     isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'
                   }
-                  onClick={this.onInfoClick.bind(this)}
+                  onClick={() => onInfoClick(layer.id)}
                 >
                   <i className="fa fa-info wv-layers-info-icon" />
                 </a>
@@ -264,6 +254,59 @@ Layer.propTypes = {
   index: PropTypes.number,
   checkerBoardPattern: PropTypes.object,
   isInProjection: PropTypes.bool,
-  zot: PropTypes.number
+  zot: PropTypes.number,
+  onRemoveClick: PropTypes.func,
+  toggleVisibility: PropTypes.func,
+  onInfoClick: PropTypes.func,
+  hover: PropTypes.func
 };
-export default Layer;
+function mapStateToProps(state, ownProps) {
+  const {
+    layer,
+    isDisabled,
+    isVisible,
+    layerClasses,
+    names,
+    index,
+    layerGroupName
+  } = ownProps;
+
+  return {
+    layer,
+    isDisabled,
+    isVisible,
+    layerClasses,
+    names,
+    index,
+    layerGroupName,
+    isMobile: state.browser.is.small,
+    getPalette: () => {
+      get(layer.id, index, layerGroupName, state);
+    }
+  };
+}
+
+const mapDispatchToProps = dispatch => ({
+  hover: (id, value) => {
+    dispatch(layerHover(id, value));
+  },
+  toggleVisibility: id => {
+    dispatch(toggleVisibility(id));
+  },
+  onRemoveClick: id => {
+    dispatch(removeLayer(id));
+  },
+  onOptionsClick: id => {
+    // dispatch(layerOptions(id));
+  },
+  onInfoClick: id => {
+    // googleTagManager.pushEvent({
+    //   event: 'sidebar_layer_info'
+    // });
+    // dispatch(layerInfo(id));
+  }
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Layer);

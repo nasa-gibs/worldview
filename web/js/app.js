@@ -8,6 +8,7 @@ import util from './util/util';
 import OlCoordinates from './components/map/ol-coordinates';
 // Toolbar
 import Toolbar from './containers/toolbar';
+import Sidebar from './containers/sidebar';
 // Modal
 import Modal from './containers/modal';
 
@@ -16,6 +17,11 @@ import Brand from './brand';
 
 // Crutch between state systems
 import { updateLegacyInitComplete } from './modules/migration/actions';
+
+// actions
+// import { screenResize } from './modules/browser/actions';
+import { calculateResponsiveState } from 'redux-responsive';
+
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.css';
@@ -78,7 +84,7 @@ class App extends React.Component {
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
-        <section id="wv-sidebar" />
+        <Sidebar />
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
         <div id="wv-map" className="wv-map" />
@@ -205,8 +211,6 @@ class App extends React.Component {
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
       }
-      document.activeElement.blur();
-      $('input').blur();
 
       // Console notifications
       if (Brand.release()) {
@@ -220,7 +224,10 @@ class App extends React.Component {
       } else {
         console.warn('Development version');
       }
-
+      window.addEventListener('resize', () => {
+        self.props.screenResize(window);
+      });
+      self.props.screenResize(window);
       models.wv.events.trigger('startup');
       self.props.updateLegacyInitComplete(); // notify state that legacy initiation has finished
     };
@@ -240,6 +247,9 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = dispatch => ({
   updateLegacyInitComplete: () => {
     dispatch(updateLegacyInitComplete());
+  },
+  screenResize: (width, height) => {
+    dispatch(calculateResponsiveState(window));
   }
 });
 
