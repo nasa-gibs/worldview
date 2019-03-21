@@ -4,8 +4,8 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashIsNaN from 'lodash/isNaN';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashParseInt from 'lodash/parseInt';
-import util from '../util/util';
-import styles from '../styles/styles';
+import util from '../../util/util';
+import styles from '../styles';
 import Promise from 'bluebird';
 
 export function vectorStylesModel(models, config) {

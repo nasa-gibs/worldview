@@ -6,7 +6,7 @@ import Sidebar from '../components/sidebar/sidebar';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { getCompareObjects } from '../compare/util';
-import { getCheckerboard } from '../palettes/util';
+import { getCheckerboard } from '../styles/util';
 import { layersInfo } from '../layers/info';
 import { getZotsForActiveLayers } from '../layers/util';
 import { timelineDataHightlight } from '../date/util';
