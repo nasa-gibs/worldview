@@ -870,7 +870,8 @@
         "OrbitTracks_Terra_Ascending",
         "OrbitTracks_Terra_Descending",
 
-        "GOES16_Air_Mass_v0_STD"
+        "GOES16_Air_Mass_v0_STD",
+        "GOES16_Band13_Clean_Infrared_v0_STD"
     ],
     "layerOrderExceptions": [
         "SCAR_Land_Mask",

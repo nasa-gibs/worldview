@@ -1,4 +1,4 @@
-.wv-date-selector-widget .input-wrapper {
+.wv-date-selector-widget .input-wrapper, .date-arrow-wrapper {
   background: transparent;
   border: 1px solid transparent;
   vertical-align: middle;
@@ -82,26 +82,26 @@
   display: inline-block;
 }
 
-.wv-date-selector-widget .date-arrows {
+.wv-date-selector-widget .date-arrows, .date-arrows {
   display: block;
   height: 10px;
 }
 
-.wv-date-selector-widget .date-arrows svg {
+.wv-date-selector-widget .date-arrows svg, .date-arrows svg {
   vertical-align: top;
   display: block;
   margin: 0 auto;
 }
 
-.wv-date-selector-widget .date-arrows svg path {
+.wv-date-selector-widget .date-arrows svg path, .date-arrows svg path {
   fill: #444;
 }
 
-.wv-date-selector-widget .input-wrapper:hover .date-arrows:hover svg path {
+.wv-date-selector-widget .input-wrapper:hover .date-arrows:hover svg path, .date-arrows:hover svg path {
   fill: #1a1a1a;
 }
 
-.wv-date-selector-widget .date-arrow-down {
+.wv-date-selector-widget .date-arrow-down, .date-arrow-down {
   -webkit-transform: scaleY(-1);
   transform: scaleY(-1);
   -webkit-filter: FlipV;

@@ -138,9 +138,9 @@ export function timeline(models, config, ui) {
     }, 50);
   };
 
-  var changeDate = (date) => {
-    self.reactComponent.setState({ selectedDate: date });
-  };
+  // var changeDate = (date) => {
+  //   self.reactComponent.setState({ selectedDate: date });
+  // };
 
   var incrementDate = (timeScale, increment) => {
     // self.expand(true);
@@ -155,21 +155,32 @@ export function timeline(models, config, ui) {
     // console.log(models)
     // self.input.update(updatedDate);
     // models.date.setActiveDate(updatedDate);
-console.log('updateDate', updatedDate)
+// console.log('updateDate', date, updatedDate)
     //# ALLOWS UPDATE OF MODELS DATE WHICH LAYERS IS CONNECTED TO
     models.date.select(updatedDate);
   };
 
-  var getInitialProps = () => {
+  var setIntervalInput = (intervalValue, zoomLevel) => {
+    // console.log(self.input.delta)
+    self.input.delta = intervalValue;
+    self.input.interval = zoomLevel;
+
+    let zoomCustomText = document.querySelector('#zoom-custom');
+    zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
     console.log(self)
+  }
+
+  var getInitialProps = () => {
+    // console.log(self)
     return {
       width: self.width,
       height: self.height,
       selectedDate: models.date[models.date.activeDate],
-      changeDate: changeDate,
+      // changeDate: changeDate,
       timeScale: 'day',
       incrementDate: incrementDate,
-      updateDate: updateDate
+      updateDate: updateDate,
+      setIntervalInput: setIntervalInput
     };
   };
 
@@ -244,8 +255,10 @@ console.log('updateDate', updatedDate)
   };
 
   var updateReactTimelineDate = function() {
+    // debugger;
     let selectedDate = models.date[models.date.activeDate];
-    console.log(selectedDate, new Date(selectedDate).toISOString())
+    // console.log(selectedDate, new Date(selectedDate).toISOString())
+    // console.log(selectedDate);
     self.reactComponent.setState({
       selectedDate: selectedDate,
       dateFormatted: new Date(selectedDate).toISOString()
@@ -277,6 +290,12 @@ console.log('updateDate', updatedDate)
     timelineCase.addEventListener('wheel', function(e) {
       e.preventDefault();
       e.stopPropagation();
+    });
+
+    $('#zoom-custom').on('click', function() {
+      self.reactComponent.setState({
+        customIntervalModalOpen: true
+      });
     });
 
     if (!models.anim) {

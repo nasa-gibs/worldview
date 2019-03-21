@@ -119,7 +119,7 @@ class TimelineAxis extends React.Component {
     let hoverTime = moment.utc(this.state.hoverTime);
 
     hoverTime = inputDate ? moment.utc(inputDate) : hoverTime;
-    console.log(hoverTime.format())
+    // console.log(hoverTime.format())
     let hoverTimeZero;
     let hoverTimeNextZero;
 
@@ -349,6 +349,7 @@ class TimelineAxis extends React.Component {
             draggerPositionB: draggerPositionB,
             draggerVisibleB: draggerVisibleB,
             position: position,
+            showHoverLine: false
           }));
         } else {
           // reset dragSentinelCount on direction change to remaining distance to dragSentinelChangeNumber
@@ -357,7 +358,8 @@ class TimelineAxis extends React.Component {
             draggerPosition: draggerPosition,
             draggerPositionB: draggerPositionB,
             position: position,
-            dragSentinelCount: newDragSentinelCount
+            dragSentinelCount: newDragSentinelCount,
+            showHoverLine: false
           }));
         }
       } else if (deltaX < 0) { // dragging left - exposing future dates
@@ -392,6 +394,7 @@ class TimelineAxis extends React.Component {
             draggerPositionB: draggerPositionB,
             draggerVisibleB: draggerVisibleB,
             position: position,
+            showHoverLine: false
           }));
         } else {
           // reset dragSentinelCount on direction change to remaining distance to dragSentinelChangeNumber
@@ -400,7 +403,8 @@ class TimelineAxis extends React.Component {
             draggerPosition: draggerPosition,
             draggerPositionB: draggerPositionB,
             position: position,
-            dragSentinelCount: newDragSentinelCount
+            dragSentinelCount: newDragSentinelCount,
+            showHoverLine: false
           }));
         }
       }
@@ -457,7 +461,7 @@ class TimelineAxis extends React.Component {
       if (draggerVisible === false) {
         // draggerPositionRevision = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth);
         draggerPositionRevision = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth) + position + transform - 50;
-        console.log('NOW VISIBLE', draggerPositionRevision)
+        // console.log('NOW VISIBLE', draggerPositionRevision)
       }
       draggerVisible = true;
     } else {
@@ -569,7 +573,7 @@ class TimelineAxis extends React.Component {
     // if (this.state.leftOffset === this.state.redLineClick) {
     // console.log(!this.state.moved && !this.state.timeScaleChange)
     if (!this.state.moved) {
-      console.log('inner')
+      // console.log('inner')
       // let draggerTimeState = this.showTime(this.state.leftOffsetRelativeToInnerParent);
       // this.handleDragDragger(null, {'deltaX': this.state.leftOffset})
       let draggerPosition = this.state.draggerSelected ? this.state.leftOffset - 49 : this.state.draggerPosition;
@@ -593,7 +597,7 @@ class TimelineAxis extends React.Component {
     let axisWidth = this.props.width;
     let timeScale = this.state.timeScale;
     this.updateScale(null, timeScale, axisWidth);
-    console.log('resize')
+    // console.log('resize')
     this.setState({
       axisWidth: axisWidth
     }, function() {
@@ -613,7 +617,7 @@ class TimelineAxis extends React.Component {
     let time = moment.utc(this.props.selectedDate).format() //'1941-01-01T12:00:00Z';
 
     // time = moment.utc(time.toISOString());
-    console.log(time)
+    // console.log(time)
     // let draggerTimeStateBDraggerBTest = '1941-01-03T12:00:00Z';
     let draggerTimeStateBDraggerBTest = moment.utc(time).add(7, timeScale).format();
 
@@ -755,9 +759,9 @@ class TimelineAxis extends React.Component {
       // console.log(newSelectedDate.format(), frontDate.format(), manualTimeScaleChangeUnit, gridWidth)
       // console.log(moment.utc(this.props.selectedDate).format(), moment.utc(prevProps.selectedDate).format())
       let newDraggerPosition = this.getDraggerPosition(newSelectedDate, frontDate, manualTimeScaleChangeUnit, gridWidth)
-      console.log(this.state.draggerPosition, newDraggerPosition)
+      // console.log(this.state.draggerPosition, newDraggerPosition)
 
-
+      // console.log(this.props, newSelectedDate, moment.utc(this.props.selectedDate).format())
       this.setDraggerToTime(this.props.selectedDate)
       // if (this.props.changeAmt !== null) {
       //   console.log('hit')
@@ -782,7 +786,7 @@ class TimelineAxis extends React.Component {
 
     // move red line forward one timeScale unit and update time
     setDraggerToTime = (inputTime) => {
-      console.log(inputTime)
+      // console.log(inputTime)
       // let timeScaleSelected = manualTimeScaleChangeUnit ? manualTimeScaleChangeUnit : this.state.timeScaleSelectValue;
       let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
       let backDate = moment.utc(this.state.deque.peekBack().rawDate);
@@ -821,10 +825,12 @@ class TimelineAxis extends React.Component {
   // TODO: may need to restrict based on zoom levels, year zoom adding 7 minutes does nothing for example
   // move red line forward one timeScale unit and update time
   addTimeUnit = (manualTimeScaleChangeUnit, manualIncrementAmount) => {
-    let timeScaleSelected = manualTimeScaleChangeUnit ? manualTimeScaleChangeUnit : this.state.timeScaleSelectValue;
+    // let timeScaleSelected = manualTimeScaleChangeUnit ? manualTimeScaleChangeUnit : this.state.timeScaleSelectValue;
+    let timeScaleSelected = this.props.customIntervalZoomLevel;
     let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
     let backDate = moment.utc(this.state.deque.peekBack().rawDate);
-    let increment = manualIncrementAmount ? manualIncrementAmount : this.state.increment;
+    // let increment = manualIncrementAmount ? manualIncrementAmount : this.state.increment;
+    let increment = this.props.customIntervalValue;
     let draggerTimeState = moment.utc(this.state.draggerTimeState, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
     let draggerTimeStateAdded = draggerTimeState.clone().add(increment, timeScaleSelected);
 
@@ -857,10 +863,12 @@ class TimelineAxis extends React.Component {
 
   // move red line backward one timeScale unit and update time
   minusTimeUnit = (manualTimeScaleChangeUnit, manualIncrementAmount) => {
-    let timeScaleSelected = manualTimeScaleChangeUnit ? manualTimeScaleChangeUnit : this.state.timeScaleSelectValue;
+    // let timeScaleSelected = manualTimeScaleChangeUnit ? manualTimeScaleChangeUnit : this.state.timeScaleSelectValue;
+    let timeScaleSelected = this.props.customIntervalZoomLevel;
     let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
     let backDate = moment.utc(this.state.deque.peekBack().rawDate);
-    let increment = manualIncrementAmount ? manualIncrementAmount : this.state.increment;
+    // let increment = manualIncrementAmount ? manualIncrementAmount : this.state.increment;
+    let increment = this.props.customIntervalValue;
     let draggerTimeState = moment.utc(this.state.draggerTimeState, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
     let draggerTimeStateSubtracted = draggerTimeState.clone().subtract(increment, timeScaleSelected);
 
@@ -1136,7 +1144,7 @@ handleDragDragger = (draggerName, e, d) => {
     window.moment = moment;
     return (
       <div>
-        <div style={{display: 'flex', position: 'relative', left: (window.innerWidth * 0.05)}}>
+        {/* <div style={{display: 'flex', position: 'relative', left: (window.innerWidth * 0.05)}}>
           <div style={{display: 'flex', background: '#999', border: '1px solid black', width: '155px', height: '100px'}}>
             <form onSubmit={this.handleSubmit.bind(this)}>
               <label>
@@ -1166,7 +1174,7 @@ handleDragDragger = (draggerName, e, d) => {
           <div>
             <button onClick={(e) => this.toggleCompareMode(e)}>Compare Mode</button>
           </div>
-        </div>
+        </div> */}
       <div id="wv-timeline-axis"
         // ref={this.timelineRef} //# REF
         style={{width: `${this.state.axisWidth}px`}}
@@ -1241,7 +1249,7 @@ handleDragDragger = (draggerName, e, d) => {
         <div className="dateToolTip" style={{transform: `translate(${this.state.leftOffset - 52}px, -100px)`, display: !this.state.showDraggerTime && this.state.showHoverLine ? 'block' : 'none'}}>{!this.state.showDraggerTime && this.state.hoverTime ? this.state.hoverTime : null}</div>
 
       </div>
-      <div style={{ display: 'flex', marginTop: 10 }}>
+      {/* <div style={{ display: 'flex', marginTop: 10 }}>
           <div className="dateTempHolderTextBlock" style={{borderColor: 'blue'}}>
             <h4 style={{marginTop: 5, marginBottom: 5}}>HOVER TIME</h4>
             <p style={{marginTop: 5, marginBottom: 0, fontSize: 20}}>{this.state.hoverTime ? this.state.hoverTime : null}</p>
@@ -1258,7 +1266,7 @@ handleDragDragger = (draggerName, e, d) => {
             <h4 style={{marginTop: 5, marginBottom: 5}}>TIMESCALE ZOOM</h4>
             <p style={{marginTop: 5, marginBottom: 0, fontSize: 20}}>{this.state.timeScale ? this.state.timeScale.toUpperCase() : null}</p>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

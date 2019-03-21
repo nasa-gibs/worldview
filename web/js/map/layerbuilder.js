@@ -37,10 +37,14 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var date, key, group, proj, layer, layerNext, layerPrior, attributes;
     options = options || {};
     group = options.group || null;
+    console.log(date, models.date[models.date.activeDate])
     date = self.closestDate(def, options);
+    console.log(date, models.date[models.date.activeDate])
     key = self.layerKey(def, options, group);
     proj = models.proj.selected;
     layer = cache.getItem(key);
+    // console.log(def, options, group, date, key, proj, layer)
+    // console.log(def.period)
     if (!layer) {
       // layer is not in the cache
       if (!date) date = options.date || models.date[models.date.activeDate];
@@ -115,7 +119,9 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @return {object}         Closest date
    */
   self.closestDate = function(def, options) {
-    console.log(def)
+    // console.log(cache)
+    // console.log(def)
+    // console.log(def.period)
     var date;
     var animRange;
     if (models.anim) {
@@ -125,11 +131,15 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     if (options.date) {
       date = options.date;
     } else {
-      date = models.date[models.date.activeDate];
+      // # mutation of models date causing overwrite issue for SUBDAILY vs NON-SUBDAILY
+      date = new Date(models.date[models.date.activeDate]);
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
+      console.log(def.period, date)
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
+
+        console.log(def, def.period, date)
       }
     }
     // Perform extensive checks before finding closest date

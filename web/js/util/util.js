@@ -364,6 +364,7 @@ export default (function (self) {
     timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
     timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
     timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes()));
+    // console.log('roundTimeOneMinute', time, timeToReturn);
     return timeToReturn;
   };
 
@@ -373,6 +374,7 @@ export default (function (self) {
     timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
     timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
     timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes() / 10) * 10);
+    // console.log('roundTimeTenMinute', time, timeToReturn);
     return timeToReturn;
   };
 
@@ -390,6 +392,7 @@ export default (function (self) {
     date.setUTCMinutes(0);
     date.setUTCSeconds(0);
     date.setUTCMilliseconds(0);
+
     return date;
   };
 

@@ -234,6 +234,14 @@ class App extends React.Component {
                     >
                       Minutes
                     </span>
+                    <span
+                      id="zoom-custom"
+                      className="zoom-btn zoom-btn-inactive zoom-custom"
+                      data-zoom="custom"
+                      style={{color: '#7890cd'}}
+                    >
+                      Custom
+                    </span>
                   </div>
                 </div>
               </div>

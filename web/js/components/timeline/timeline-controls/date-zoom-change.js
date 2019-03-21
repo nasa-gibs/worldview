@@ -5,18 +5,18 @@ class DateZoomChange extends PureComponent {
     return (
       <div>
 
-        {/* <div id="zoom-btn-container"> */}
+        <div id="zoom-btn-container">
           {/* timeScale display */}
-          {/* <span
+          <span
             id="current-zoom"
             className="zoom-btn zoom-btn-active"
             data-zoom="3"
           >
             Days
-          </span> */}
+          </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
-          {/* <div className="wv-tooltip">
+          <div className="wv-tooltip">
             <div id="timeline-zoom" className="timeline-zoom">
               <span
                 id="zoom-years"
@@ -46,9 +46,16 @@ class DateZoomChange extends PureComponent {
               >
                 Minutes
               </span>
+              <span
+                id="zoom-custom"
+                className="zoom-btn zoom-btn-inactive zoom-custom"
+                data-zoom="5"
+              >
+                Custom
+              </span>
             </div>
           </div>
-        </div> */}
+        </div>
 
       </div>
     );

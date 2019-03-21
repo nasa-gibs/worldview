@@ -11,12 +11,14 @@ html, body {
   /* margin-top: 200px;
   background: yellow; */
   position: absolute;
-  top: 200px;
+  /* top: 200px; */
+  bottom: -24px;
+  left: 416px;
 }
 
 #wv-timeline-axis {
   /* margin: 0 20px 0 0; */
-  margin-left: 25%;
+  /* margin-left: 25%; */
   width: 800px;
   height: 100px;
   /* position: absolute;
@@ -31,7 +33,7 @@ html, body {
 
 .inner {
   background: rgba(0, 0, 0, 0.5);
-  height: 71px;
+  height: 66px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -135,3 +137,94 @@ form select {
 #timelineContainer > div:nth-child(1) > div.wv-date-selector-widget {
   background: #999;
 }
+
+.interval-input {
+  width: 80px;
+  height: 40px;
+  color: #7890cd;
+  opacity: 1;
+  font-size: 24px;
+  background: transparent;
+  border: 0;
+  font-family: 'Roboto Mono', monospace;
+  line-height: 1.2em;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 0;
+  text-align: center;
+  border: 1px solid #fff;
+  margin: 5px 0 5px 0;
+}
+
+.interval-timescale-select {
+  width: 70px;
+  height: 40px;
+  color: #7890cd;
+  opacity: 1;
+  font-size: 24px;
+  background: transparent;
+  border: 0;
+  font-family: 'Roboto Mono', monospace;
+  line-height: 1.2em;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 15px;
+  text-align: center;
+}
+
+.interval-timescale-select select {
+  padding: 0;
+  background: #212121;
+  color: #7890cd;
+  height: 40px;
+  width: 130px;
+  border: 1px solid #fff;
+  margin-top: 1px;
+}
+
+.custom-interval-buttons {
+  margin-right: 15px;
+}
+
+#set-interval-button {
+}
+
+#reset-interval-button {
+
+}
+
+/* DEMO DOM CLEANUP */
+
+#timeline-footer-svg {
+  opacity: 0;
+  display: none;
+}
+
+#timeline-header {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.timeline-inner {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+#wv-animation-widget-custom-interval {
+  left: -180px;
+}
+
+#timeline-hide {
+  opacity: 0;
+}
+
+#timeline-footer {
+  margin-right: 0px !important;
+}
+
+#wv-animation-widget {
+  margin-left: 500px;
+}
+

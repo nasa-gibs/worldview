@@ -18,7 +18,8 @@ class Dragger extends PureComponent {
         // }}
       >
         <g style={{cursor: 'pointer', display: this.props.draggerVisible ? 'flex' : 'none'}} className='gridShell dragger' transform={`translate(${transformX}, 0)`}>
-          <polygon fill='#ccc' stroke={this.props.draggerSelected ? 'yellow' : '#515151'} strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon>
+          {/* <polygon fill='#ccc' stroke={this.props.draggerSelected ? 'yellow' : '#515151'} strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon> */}
+          <polygon fill='#ccc' stroke='#515151' strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon>
           {compareOn ?
             <text fontSize='30px' fontWeight='700' x='0' y='65' fill='#515151' transform='translate(39, 10)' textRendering='optimizeLegibility' clipPath='url(#textDisplay)'>{draggerName}</text>
             :

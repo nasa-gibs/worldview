@@ -126,6 +126,7 @@ class DateSelector extends React.Component {
     }
   }
   render() {
+    // console.log(this.props.date)
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn

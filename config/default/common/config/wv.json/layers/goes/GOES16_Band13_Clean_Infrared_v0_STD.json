@@ -1,0 +1,16 @@
+{
+  "layers": {
+      "GOES16_Band13_Clean_Infrared_v0_STD": {
+          "id":       "GOES16_Band13_Clean_Infrared_v0_STD",
+          "title":    "Clean Infrared (Band 13, 10.3 µm, GOES-16)",
+          "subtitle": "GOES",
+          "description": "goes/GOES16_Band13_Clean_Infrared_v0_STD",
+          "group":    "baselayers",
+          "tags":     "goes",
+          "layergroup": [
+            "goes"
+          ],
+          "wrapadjacentdays": true
+      }
+  }
+}

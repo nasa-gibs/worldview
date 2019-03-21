@@ -5,6 +5,7 @@ import DateChangeControls from './timeline-controls/date-change-controls';
 import './timeline.css';
 // import TimelineAxis from './timeline-axis';
 import TimelineAxisContainer from './timeline-axis/timeline-axis-container';
+import IntervalSelectorWidget from './interval-selector/interval-selector';
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -18,24 +19,27 @@ class Timeline extends React.Component {
       incrementDate: '',
       timeScaleChangeUnit: '',
       changeAmt: '',
+      customIntervalValue: '',
+      customIntervalZoomLevel: '',
+      customIntervalModalOpen: false
     };
   }
 
   //# may not be necessary if incrementing doesn't matter for performance
-  dateChange = (date, id, type, amt) => {
-    // console.log(date, id, type, amt)
-    let dateFormatted = date.toISOString();
-    console.log(dateFormatted)
-    this.setState({
-      selectedDate: date.toISOString(),
-      timeScaleChangeUnit: type,
-      changeAmt: amt,
-      dateFormatted: dateFormatted
-    })
-  }
+  // dateChange = (date, id, type, amt) => {
+  //   // console.log(date, id, type, amt)
+  //   let dateFormatted = date.toISOString();
+  //   console.log(dateFormatted)
+  //   this.setState({
+  //     selectedDate: date.toISOString(),
+  //     timeScaleChangeUnit: type,
+  //     changeAmt: amt,
+  //     dateFormatted: dateFormatted
+  //   })
+  // }
 
   updateDate = (date) => {
-    console.log(date)
+    // console.log(date)
     this.props.updateDate(date);
     let dateFormatted = new Date(date).toISOString();
     // this.setState({
@@ -44,8 +48,14 @@ class Timeline extends React.Component {
     // })
   }
 
+  toggleCustomIntervalModal = () => {
+    this.setState(prevState => ({
+      customIntervalModalOpen: !prevState.customIntervalModalOpen
+    }))
+  }
+
   componentDidUpdate() {
-    console.log('CDU', this.state)
+    // console.log('CDU', this.state, this.props)
   }
 
   componentDidMount() {
@@ -61,8 +71,17 @@ class Timeline extends React.Component {
       timeScale: this.props.timeScale,
       incrementDate: this.props.incrementDate,
       timeScaleChangeUnit: this.props.timeScaleChangeUnit,
-      changeAmt: 1
+      changeAmt: 1,
+      customIntervalValue: 1,
+      customIntervalZoomLevel: this.props.timeScale
     })
+  }
+
+  setInterval = (intervalValue, zoomLevel) => {
+    this.setState({
+      customIntervalValue: intervalValue,
+      customIntervalZoomLevel: zoomLevel
+    }, this.props.setIntervalInput(intervalValue, zoomLevel))
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -71,7 +90,7 @@ class Timeline extends React.Component {
   }
 
   render() {
-    console.log(this.props.selectedDate, this.state.dateFormatted)
+    // console.log(this.props.selectedDate, this.state.dateFormatted)
     // let dateFormatted = this.state.selectedDate.toISOString();
     // let tempStyle = {
     //   position: 'absolute',
@@ -93,11 +112,22 @@ class Timeline extends React.Component {
     return (
       this.state.dateFormatted ?
       <React.Fragment>
-        <DateChangeControls selectedDate={this.state.dateFormatted} dateChange={this.updateDate} />
+        {/* <DateChangeControls
+          toggleCustomIntervalModal={this.toggleCustomIntervalModal}
+          selectedDate={this.state.dateFormatted}
+          dateChange={this.updateDate} /> */}
         {/* <TimelineAxis {...this.state} selectedDate={dateFormatted}/> */}
 
         {/* new modular version - currently a shell */}
         <TimelineAxisContainer {...this.state} selectedDate={this.state.dateFormatted} updateDate={this.updateDate} />
+
+        {/* custom interval selector */}
+        <IntervalSelectorWidget
+          setInterval={this.setInterval}
+          customIntervalValue={1}
+          customIntervalZoomLevel={this.props.timeScale}
+          toggleCustomIntervalModal={this.toggleCustomIntervalModal}
+          customIntervalModalOpen={this.state.customIntervalModalOpen} />
 
         {/* hammmmmmmmmmmburger 🍔 */}
         {/* <div id="timeline-hide">

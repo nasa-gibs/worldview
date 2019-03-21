@@ -54,8 +54,8 @@ class DateChangeControls extends React.Component {
         <DateSelector
           {...mockDateSelectorProps}
         />
-        <DateZoomChange />
-        <DateChangeArrows />
+        {/* <DateZoomChange />
+        <DateChangeArrows /> */}
 
         {/* animation button */}
         {/* <div

@@ -132,11 +132,12 @@ class CustomIntervalSelectorWidget extends React.Component {
   render() {
     return (
       <div
-        id="wv-animation-widget"
+        id="wv-animation-widget-custom-interval"
         // className={
         //   'wv-animation-widget' + (this.state.maxZoom >= 4 ? ' subdaily' : '')
         // }
         className='wv-animation-widget'
+        style={{display: }}
       >
         {/* <AnimWidgetHeader
           text={this.state.increment}
