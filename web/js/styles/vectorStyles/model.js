@@ -4,19 +4,14 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashIsNaN from 'lodash/isNaN';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashParseInt from 'lodash/parseInt';
-import lodashFindIndex from 'lodash/findIndex';
 import util from '../util/util';
-import palettes from './palettes';
+import styles from '../styles/styles';
 import Promise from 'bluebird';
 
-export function palettesModel(models, config) {
-  config.palettes = config.palettes || {
+export function vectorStylesModel(models, config) {
+  config.vectorStyles = config.vectorStyles || {
     rendered: {},
     custom: {}
-  };
-
-  config.vectorStyles = config.vectorStyles || {
-    rendered: {}
   };
 
   var self = {};
@@ -24,34 +19,23 @@ export function palettesModel(models, config) {
   self.active = {};
   self.activeB = {};
 
-  self.getRenderedPalette = function(layerId, index) {
-    var name = config.layers[layerId].palette.id;
-    var palette = config.palettes.rendered[name];
-    if (!lodashIsUndefined(index)) {
-      if (palette && palette.maps) {
-        palette = palette.maps[index];
-      }
-    }
-    return palette;
-  };
-
-  self.getRenderedVectorStyle = function (layerId, index) {
+  self.getRenderedVectorStyle = function(layerId, index) {
     var name = config.layers[layerId].vectorStyle.id;
     var vectorStyle = config.vectorStyles.rendered[name];
     if (!lodashIsUndefined(index)) {
-      if (vectorStyle.styles) {
-        vectorStyle = vectorStyle.styles[index];
+      if (vectorStyle.maps) {
+        vectorStyle = vectorStyle.maps[index];
       }
     }
     return vectorStyle;
   };
 
-  self.getCustomPalette = function(paletteId) {
-    var palette = config.palettes.custom[paletteId];
-    if (!palette) {
-      throw new Error('Invalid palette: ' + paletteId);
+  self.getCustomVectorStyle = function(vectorStyleId) {
+    var vectorStyle = config.vectorStyles.custom[vectorStyleId];
+    if (!vectorStyle) {
+      throw new Error('Invalid vectorStyle: ' + vectorStyleId);
     }
-    return palette;
+    return vectorStyle;
   };
 
   var prepare = function(layerId, groupStr) {
@@ -59,25 +43,22 @@ export function palettesModel(models, config) {
     self[groupStr][layerId] = self[groupStr][layerId] || {};
     var active = self[groupStr][layerId];
     active.maps = active.maps || [];
-    lodashEach(self.getRenderedPalette(layerId).maps, function(palette, index) {
+    lodashEach(self.getRenderedVectorStyle(layerId).maps, function(vectorStyle, index) {
       if (!active.maps[index]) {
-        active.maps[index] = lodashCloneDeep(palette);
+        active.maps[index] = lodashCloneDeep(vectorStyle);
       }
     });
   };
 
   self.allowed = function(layerId) {
-    if (!palettes.supported) {
+    let vectorStyle = config.layers[layerId].vectorStyle;
+    if (!vectorStyle || vectorStyle.immutable) {
       return false;
     }
-    let palette = config.layers[layerId].palette;
-    if (!palette || palette.immutable) {
-      return false;
-    }
-    return config.layers[layerId].palette;
+    return config.layers[layerId].vectorStyle;
   };
 
-  self.setCustom = function(layerId, paletteId, index, groupStr) {
+  self.setCustom = function(layerId, vectorStyleId, index, groupStr) {
     groupStr = groupStr || models.layers.activeLayers;
     if (!config.layers[layerId]) {
       throw new Error('Invalid layer: ' + layerId);
@@ -85,19 +66,14 @@ export function palettesModel(models, config) {
     prepare(layerId, groupStr);
     index = lodashIsUndefined(index) ? 0 : index;
     var active = self[groupStr][layerId];
-    var palette = active.maps[index];
-    if (palette.custom === paletteId) {
+    var vectorStyle = active.maps[index];
+    if (vectorStyle.custom === vectorStyleId) {
       return;
     }
-    palette.custom = paletteId;
+    vectorStyle.custom = vectorStyleId;
     updateLookup(layerId, groupStr);
     self.events.trigger('set-custom', layerId, active, groupStr);
     self.events.trigger('change');
-    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
-    if (layerIndex >= 0) {
-      models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
-      models.layers.events.trigger('change');
-    }
   };
 
   self.clearCustom = function(layerId, index, groupStr) {
@@ -107,26 +83,21 @@ export function palettesModel(models, config) {
     if (!active) {
       return;
     }
-    var palette = active.maps[index];
-    if (!palette.custom) {
+    var vectorStyle = active.maps[index];
+    if (!vectorStyle.custom) {
       return;
     }
-    delete palette.custom;
+    delete vectorStyle.custom;
     updateLookup(layerId, groupStr);
     self.events.trigger('clear-custom', layerId, groupStr);
     self.events.trigger('change');
-    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
-    if (layerIndex >= 0) {
-      models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
-      models.layers.events.trigger('change');
-    }
   };
 
   self.setRange = function(layerId, min, max, squash, index, groupStr) {
     groupStr = groupStr || models.layers.activeLayers;
     prepare(layerId);
     index = lodashIsUndefined(index) ? 0 : index;
-    var palette = self[groupStr][layerId].maps[index];
+    var vectorStyle = self[groupStr][layerId].maps[index];
     if (min === 0) {
       min = undefined;
     }
@@ -134,22 +105,17 @@ export function palettesModel(models, config) {
     if (legend.entries && legend.entries.values && max === legend.entries.values.length - 1) {
       max = undefined;
     }
-    palette.min = min;
-    palette.max = max;
-    palette.squash = squash;
+    vectorStyle.min = min;
+    vectorStyle.max = max;
+    vectorStyle.squash = squash;
     updateLookup(layerId, groupStr);
-    self.events.trigger('range', layerId, palette.min, palette.max, groupStr);
+    self.events.trigger('range', layerId, vectorStyle.min, vectorStyle.max, groupStr);
     self.events.trigger('change');
-    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
-    if (layerIndex >= 0) {
-      models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
-      models.layers.events.trigger('change');
-    }
   };
 
   self.getCount = function(layerId) {
-    if (self.getRenderedPalette(layerId).maps) {
-      return self.getRenderedPalette(layerId).maps.length;
+    if (self.getRenderedVectorStyle(layerId).maps) {
+      return self.getRenderedVectorStyle(layerId).maps.length;
     } else {
       return 0;
     }
@@ -171,7 +137,7 @@ export function palettesModel(models, config) {
     if (self[groupStr][layerId]) {
       return self[groupStr][layerId].maps[index];
     }
-    return self.getRenderedPalette(layerId, index);
+    return self.getRenderedVectorStyle(layerId, index);
   };
 
   /**
@@ -201,8 +167,8 @@ export function palettesModel(models, config) {
    * @return {object} object of the legend
    */
   self.getDefaultLegend = function(layerId, index) {
-    var palette = self.getRenderedPalette(layerId, index);
-    return palette.legend || palette.entries;
+    var vectorStyle = self.getRenderedVectorStyle(layerId, index);
+    return vectorStyle.legend || vectorStyle.entries;
   };
 
   self.getLegends = function(layerId, groupStr) {
@@ -270,12 +236,12 @@ export function palettesModel(models, config) {
       });
     });
   };
-  self.palettePromise = function(layerId, paletteId) {
+  self.vectorStylePromise = function(layerId, vectorStyleId) {
     return new Promise((resolve, reject) => {
-      if (config.palettes.rendered[paletteId]) {
+      if (config.vectorStyles.rendered[vectorStyleId]) {
         resolve();
       } else {
-        palettes.loadRenderedPalette(config, layerId).done(function(result) {
+        styles.loadRenderedVectorStyle(config, layerId).done(function(result) {
           resolve(result);
         });
       }
@@ -289,10 +255,9 @@ export function palettesModel(models, config) {
       id: layerId
     }).attributes;
     var def = self.get(layerId, undefined, groupStr);
-
     if (def.custom) {
       attr.push({
-        id: 'palette',
+        id: 'vectorStyle',
         value: def.custom
       });
     }
@@ -320,8 +285,8 @@ export function palettesModel(models, config) {
   self.saveMulti = function(state, layerId, groupStr) {
     groupStr = groupStr || models.layers.activeLayers;
     var stateStr = 'l';
-    var palettes = [];
-    var hasPalettes = false;
+    var vectorStyles = [];
+    var hasVectorStyles = false;
     var min = [];
     var hasMin = false;
     var max = [];
@@ -333,10 +298,10 @@ export function palettesModel(models, config) {
     for (var i = 0; i < self.getCount(layerId); i++) {
       var def = self.get(layerId, i, groupStr);
       if (def.custom) {
-        palettes.push(def.custom);
-        hasPalettes = true;
+        vectorStyles.push(def.custom);
+        hasVectorStyles = true;
       } else {
-        palettes.push('');
+        vectorStyles.push('');
       }
 
       if (def.min) {
@@ -364,10 +329,10 @@ export function palettesModel(models, config) {
     var attr = lodashFind(state[stateStr], {
       id: layerId
     }).attributes;
-    if (hasPalettes) {
+    if (hasVectorStyles) {
       attr.push({
-        id: 'palette',
-        value: palettes.join(';')
+        id: 'vectorStyle',
+        value: vectorStyles.join(';')
       });
     }
     if (hasMin) {
@@ -398,7 +363,7 @@ export function palettesModel(models, config) {
     var def = self.get(layerId, undefined, groupStr);
     var keys = [];
     if (def.custom) {
-      keys.push('palette=' + def.custom);
+      keys.push('vectorStyle=' + def.custom);
     }
     if (def.min) {
       keys.push('min=' + def.min);
@@ -414,9 +379,6 @@ export function palettesModel(models, config) {
 
   self.load = function(state, errors) {
     var stateArray = [{ stateStr: 'l', groupStr: 'active' }];
-    if (!palettes.supported) {
-      return self;
-    }
     if (state.l1) {
       stateArray = [
         { stateStr: 'l', groupStr: 'active' },
@@ -433,14 +395,14 @@ export function palettesModel(models, config) {
         var count = 0;
         lodashEach(layerDef.attributes, function(attr) {
           var values;
-          if (attr.id === 'palette') {
+          if (attr.id === 'vectorStyle') {
             count = self.getCount(layerId);
             values = util.toArray(attr.value.split(';'));
             lodashEach(values, function(value, index) {
               try {
                 self.setCustom(layerId, value, index, stateObj.groupStr);
               } catch (error) {
-                errors.push('Invalid palette: ' + value);
+                errors.push('Invalid vectorStyle: ' + value);
               }
             });
           }
@@ -502,8 +464,6 @@ export function palettesModel(models, config) {
         }
       });
     });
-    self.loaded = true;
-    return self;
   };
 
   var findIndex = function(layerId, type, value, index, groupStr) {
@@ -546,22 +506,22 @@ export function palettesModel(models, config) {
     var use = false;
     var active = self[groupStr][layerId].maps;
 
-    lodashEach(active, function(palette, index) {
-      if (palette.custom) {
+    lodashEach(active, function(vectorStyle, index) {
+      if (vectorStyle.custom) {
         use = true;
         return false;
       }
-      var rendered = self.getRenderedPalette(layerId, index);
-      if (palette.type !== 'classification') {
-        if (palette.min <= 0) {
-          delete palette.min;
+      var rendered = self.getRenderedVectorStyle(layerId, index);
+      if (vectorStyle.type !== 'classification') {
+        if (vectorStyle.min <= 0) {
+          delete vectorStyle.min;
         }
-        if (palette.max >= rendered.entries.values.length) {
-          delete palette.max;
+        if (vectorStyle.max >= rendered.entries.values.length) {
+          delete vectorStyle.max;
         }
         if (
-          !lodashIsUndefined(palette.min) ||
-          !lodashIsUndefined(palette.max)
+          !lodashIsUndefined(vectorStyle.min) ||
+          !lodashIsUndefined(vectorStyle.max)
         ) {
           use = true;
           return false;
@@ -579,9 +539,9 @@ export function palettesModel(models, config) {
     }
     var lookup = {};
     var active = self[groupStr][layerId].maps;
-    lodashEach(active, function(palette, index) {
-      var oldLegend = palette.legend;
-      var entries = palette.entries;
+    lodashEach(active, function(vectorStyle, index) {
+      var oldLegend = vectorStyle.legend;
+      var entries = vectorStyle.entries;
       var legend = {
         colors: [],
         minLabel: oldLegend.minLabel,
@@ -593,12 +553,12 @@ export function palettesModel(models, config) {
         id: oldLegend.id
       };
       var source = entries.colors;
-      var target = palette.custom
-        ? self.getCustomPalette(palette.custom).colors
+      var target = vectorStyle.custom
+        ? self.getCustomVectorStyle(vectorStyle.custom).colors
         : source;
 
-      var min = palette.min || 0;
-      var max = palette.max || source.length;
+      var min = vectorStyle.min || 0;
+      var max = vectorStyle.max || source.length;
 
       var sourceCount = source.length;
       var targetCount = target.length;
@@ -609,7 +569,7 @@ export function palettesModel(models, config) {
           targetColor = '00000000';
         } else {
           var sourcePercent, targetIndex;
-          if (palette.squash) {
+          if (vectorStyle.squash) {
             sourcePercent = (index - min) / (max - min);
             if (index === max) {
               sourcePercent = 1.0;
@@ -641,7 +601,7 @@ export function palettesModel(models, config) {
         };
         lookup[lookupSource] = lookupTarget;
       });
-      palette.legend = legend;
+      vectorStyle.legend = legend;
     });
     self[groupStr][layerId].lookup = lookup;
   };

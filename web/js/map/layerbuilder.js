@@ -1,5 +1,5 @@
 import util from '../util/util';
-import palettes from '../palettes/palettes';
+import styles from '../styles/styles';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -412,7 +412,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       var vectorStyle = def.vectorStyle.id;
       var glStyle = vectorStyles[vectorStyle];
 
-      console.log(layer);
       // const source = layer.getSource();
       const styleFunction = stylefunction(layer, glStyle, 'default_style');
       // console.log(styleFunction);
