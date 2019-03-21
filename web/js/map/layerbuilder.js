@@ -412,32 +412,27 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       var vectorStyle = def.vectorStyle.id;
       var glStyle = vectorStyles[vectorStyle];
 
-      // const source = layer.getSource();
-      const styleFunction = stylefunction(layer, glStyle, 'default_style');
-      // console.log(styleFunction);
-      layer.setStyle(function(feature, resolution) {
-        if (feature.get('CONFIDENCE') > '0') {
-          // console.log('yes')
-          return styleFunction(feature, resolution);
-        } else {
-          // return styleFunction(feature, resolution);
-        }
+      // Set default styles
+      var styleFunction = stylefunction(layer, glStyle, 'default_style');
+
+      $(document).ready(function() {
+        $(document).on('change', document.getElementById('confidenceCheckbox'), function(e) {
+          if (document.getElementById('frpCheckbox').checked === true) {
+            styleFunction = stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP');
+          } else if (document.getElementById('confidenceCheckbox').checked === true) {
+            styleFunction = stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence');
+          } else {
+            styleFunction = stylefunction(layer, glStyle, 'default_style');
+          }
+          // Filter by a feature
+          layer.setStyle(function(feature, resolution) {
+            if (feature.get('CONFIDENCE') >= '1' && feature.get('CONFIDENCE') <= '100') {
+              return styleFunction(feature, resolution);
+            }
+          });
+        });
       });
     }
-
-    // $(document).ready(function() {
-    //   $(document).on('change', document.getElementById('confidenceCheckbox'), function(e) {
-    //     if (document.getElementById('frpCheckbox').checked === true) {
-    //       stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP');
-    //     } else if (document.getElementById('confidenceCheckbox').checked === true) {
-    //       stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence');
-    //     } else {
-    //       stylefunction(layer, glStyle, 'default_style');
-    //     }
-    //   });
-    // });
-    // stylefunction(layer, glStyle, 'default_style');
-    // }
 
     return layer;
   };
