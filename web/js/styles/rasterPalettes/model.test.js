@@ -1,6 +1,6 @@
 import jQuery from 'jquery';
-import styles from './styles';
-import fixtures from '../fixtures';
+import styles from '../styles';
+import fixtures from '../../fixtures';
 
 var unmocked = {};
 

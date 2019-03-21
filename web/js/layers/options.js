@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import styles from '../styles/styles';
-import { palettesTranslate, getCheckerboard } from '../palettes/util';
+import { palettesTranslate, getCheckerboard } from '../styles/util';
 import LayerSettings from '../components/layer/settings/settings';
 import Promise from 'bluebird';
 

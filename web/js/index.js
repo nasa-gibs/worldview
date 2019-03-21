@@ -14,7 +14,7 @@ export { layersModel } from './layers/model';
 export { layersOptions } from './layers/options';
 export { layersSidebar } from './layers/sidebar';
 export { palettes } from './styles/styles';
-export { palettesModel } from './styles/model';
+export { palettesModel } from './styles/rasterPalettes/model';
 export { projectionParse } from './projection/projection';
 export { projectionChange } from './projection/change';
 export { projectionModel } from './projection/model';
