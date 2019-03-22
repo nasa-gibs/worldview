@@ -7,7 +7,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L2 Radiometer Half-Orbit 36 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL2SMP)
 
-Data field: soil_moisture_option1
+Data field: `soil_moisture_option1`
 
 ### Soil Moisture 36 km (L2, Passive, Day | Night, Single Channel Algorithm, V Polarization)
 Temporal coverage: 31 March 2015 - present
@@ -18,7 +18,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L2 Radiometer Half-Orbit 36 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL2SMP)
 
-Data field: soil_moisture_option2
+Data field: `soil_moisture_option2`
 
 ### Soil Moisture 36 km (L2, Passive, Day | Night, Dual Channel Algorithm)
 Temporal coverage: 31 March 2015 - present
@@ -29,7 +29,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L2 Radiometer Half-Orbit 36 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL2SMP)
 
-Data field: soil_moisture_option3
+Data field: `soil_moisture_option3`
 
 ### Soil Moisture 9 km (L2, Passive, Day | Night, Single Channel Algorithm, H Polarization)
 Temporal coverage: 31 March 2015 - present
@@ -40,7 +40,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP Enhanced L2 Radiometer Half-Orbit 9 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL2SMP_E)
 
-Data field: soil_moisture_option1
+Data field: `soil_moisture_option1`
 
 ### Soil Moisture 9 km (L2, Passive, Day | Night, Single Channel Algorithm, V Polarization)
 Temporal coverage: 31 March 2015 - present
@@ -51,7 +51,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP Enhanced L2 Radiometer Half-Orbit 9 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL2SMP_E)
 
-Data field: soil_moisture_option2
+Data field: `soil_moisture_option2`
 
 ### Soil Moisture 9 km (L2, Passive, Day | Night, Dual Channel Algorithm)
 Temporal coverage: 31 March 2015 - present
@@ -62,7 +62,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP Enhanced L2 Radiometer Half-Orbit 9 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL2SMP_E)
 
-Data field: soil_moisture_option3
+Data field: `soil_moisture_option3`
 
 ### Soil Moisture 36 km (L3, Passive, Day | Night)
 Temporal coverage: 31 March 2015 - present
@@ -73,7 +73,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L3 Radiometer Global Daily 36 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL3SMP)
 
-Data field: soil_moisture
+Data field: `soil_moisture`
 
 ### Soil Moisture 9 km (L3, Passive, Day | Night)
 Temporal coverage: 31 March 2015 - present
@@ -84,4 +84,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP Enhanced L3 Radiometer Global Daily 9 km EASE-Grid Soil Moisture](https://nsidc.org/data/SPL3SMP_E)
 
-Data field: soil_moisture
+Data field: `soil_moisture`

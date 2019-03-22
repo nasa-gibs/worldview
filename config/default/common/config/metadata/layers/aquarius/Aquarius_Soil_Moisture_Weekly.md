@@ -4,4 +4,4 @@ The Aquarius instrument includes three radiometers and one scatterometer. The so
 
 References: [Aquarius L3 Gridded 1-Degree Weekly Soil Moisture](http://nsidc.org/data/AQ3_WKSM/versions/4); [Aquarius Soil Moisture ATBD Users Guide](http://nsidc.org/data/docs/daac/aquarius/pdfs/Aquarius_VSM_ATBD_UsersGuide.pdf)
 
-Data Field: l3m_data
+Data Field: `l3m_data`

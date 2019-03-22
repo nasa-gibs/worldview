@@ -7,11 +7,11 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 The CERES TOA Longwave | Shortwave | Window-Region Flux (Monthly, Clear-Sky) layers are available from the CERES instruments on the Terra and Aqua satellites. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
 Data parameters:  
-LW_TOA_Total_Sky - TOA Longwave Flux, Monthly means, All-Sky conditions  
-LW_TOA_Clear_Sky  - TOA Longwave Flux, Monthly means, Clear-Sky conditions  
-SW_TOA_Total_Sky - TOA Shortwave Flux, Monthly means, All-Sky conditions  
-SW_TOA_Clear_Sky - TOA Shortwave Flux, Monthly means, Clear-Sky conditions  
-WN_TOA_Total_Sky - TOA Window-Region Flux, Monthly means, All-Sky conditions  
-WN_TOA_Clear_Sky - TOA Window-Region Flux, Monthly means, Clear-Sky conditions  
+`LW_TOA_Total_Sky` - TOA Longwave Flux, Monthly means, All-Sky conditions  
+`LW_TOA_Clear_Sky`  - TOA Longwave Flux, Monthly means, Clear-Sky conditions  
+`SW_TOA_Total_Sky` - TOA Shortwave Flux, Monthly means, All-Sky conditions  
+`SW_TOA_Clear_Sky` - TOA Shortwave Flux, Monthly means, Clear-Sky conditions  
+`WN_TOA_Total_Sky` - TOA Window-Region Flux, Monthly means, All-Sky conditions  
+`WN_TOA_Clear_Sky` - TOA Window-Region Flux, Monthly means, Clear-Sky conditions  
 
-Data product: CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A
+Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A`

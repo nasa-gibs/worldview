@@ -23,7 +23,7 @@ The Surface Soil Moisture C1-band (Day | Night, Daily) layer is from the AMSR2/G
 
 The LPRM is based on a forward radiative transfer model to retrieve surface soil moisture and vegetation optical depth. The land surface temperature is derived separately from the AMSR2's Ka-band (36.5 GHz). A unique feature of this method is that it can be applied at any microwave frequency, making it very suitable to exploit all the available passive microwave data from various satellites.
 
-Input data are from the AMSR2 spatial-resolution-matched brightness temperatures (L1SGRTBR) product, nighttime passes, as processed using LPRM (i.e., LPRM/AMSR2/GCOM-W1 Level 2 product, LPRM_AMSR2_SOILM2_V001).
+Input data are from the AMSR2 spatial-resolution-matched brightness temperatures (L1SGRTBR) product, nighttime passes, as processed using LPRM (i.e., LPRM/AMSR2/GCOM-W1 Level 2 product, `LPRM_AMSR2_SOILM2_V001`).
 
 References: [doi:10.5067/M5DTR2QUYLS2](https://dx.doi.org/10.5067/M5DTR2QUYLS2); [doi:10.5067/CGDEOBASZ178](https://dx.doi.org/10.5067/CGDEOBASZ178)
 
@@ -34,6 +34,6 @@ The Surface Soil Moisture C1-band (Downscaled, Day | Night, Daily) layer is from
 
 The LPRM is based on a forward radiative transfer model to retrieve surface soil moisture and vegetation optical depth. The land surface temperature is derived separately from the AMSR2's Ka-band (36.5 GHz). A unique feature of this method is that it can be applied at any microwave frequency, making it very suitable to exploit all the available passive microwave data from various satellites.
 
-Input data are from the AMSR2 spatial-resolution-matched brightness temperatures (L1SGRTBR) product, daytime passes, as processed using LPRM (i.e., LPRM/AMSR2/GCOM-W1 Downscaled Level 2 product, LPRM_AMSR2_DS_SOILM2_V001).
+Input data are from the AMSR2 spatial-resolution-matched brightness temperatures (L1SGRTBR) product, daytime passes, as processed using LPRM (i.e., LPRM/AMSR2/GCOM-W1 Downscaled Level 2 product, `LPRM_AMSR2_DS_SOILM2_V001`).
 
 References: [doi:10.5067/B0GHODHJLDA8](https://dx.doi.org/10.5067/B0GHODHJLDA8); References: [doi:10.5067/SITUTTDUKYZE](https://dx.doi.org/10.5067/SITUTTDUKYZE)

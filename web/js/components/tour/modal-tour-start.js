@@ -11,9 +11,43 @@ class ModalStart extends React.Component {
       checked: localStorage.hideTour
     };
 
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
+    this.escFunction = this.escFunction.bind(this);
   }
 
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+    document.addEventListener('keydown', this.escFunction, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+    document.removeEventListener('keydown', this.escFunction, false);
+  }
+
+  // Set a reference to the inner div for checking clicks outside of the scrollbar
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
+  // Use custom escFunction since tabIndex prevents escape key use on loading WV
+  escFunction(e) {
+    if (e.keyCode === 27 && this.props.modalStart) {
+      this.props.toggleModalStart(e);
+    }
+  }
+
+  // Use custom clickOutside function since we contained the clickable area with
+  // CSS to have a cleaner looking scrollbar
+  handleClickOutside(e) {
+    if (this.wrapperRef && !this.wrapperRef.contains(e.target)) {
+      this.props.toggleModalStart(e);
+    }
+  }
+
+  // Handle the show/hide checkbox state
   handleCheck() {
     this.setState({
       checked: !this.state.checked,
@@ -28,7 +62,7 @@ class ModalStart extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={this.props.modalStart} toggle={this.props.toggleModalStart} onClosed={this.props.showTourAlert} wrapClassName='tour tour-start' className={this.props.className} backdrop={true}>
+      <Modal isOpen={this.props.modalStart} toggle={this.props.toggleModalStart} onClosed={this.props.showTourAlert} wrapClassName='tour tour-start' className={this.props.className} backdrop={true} fade={false} keyboard={false} innerRef={this.setWrapperRef}>
         <ModalHeader toggle={this.props.toggleModalStart} charCode="">Welcome to Worldview!</ModalHeader>
         <ModalBody>
           <TourIntro toggleModalStart={this.props.toggleModalStart}></TourIntro>

@@ -12,8 +12,8 @@
                     "image": "",
                     "settings": [
                       "NDH_Flood_Hazard_Frequency_Distribution_1985-2003",
-                      "ndh-flood-mortality-risks-distribution",
-                      "ndh-flood-proportional-economic-loss-risk-deciles"
+                      "NDH_Flood_Mortality_Risks_Distribution_2000",
+                      "NDH_Flood_Proportional_Economic_Loss_Risk_Deciles_2000"
                     ]
                 }
             }

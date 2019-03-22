@@ -5,7 +5,7 @@
             "title":    "Rain Rate Over Oceans (Descending, Local AM)",
             "subtitle": "DMSP-F10 / SSMI",
             "description": "ssmi/SSMI_DMSP_F10_Rain_Rate_Over_Oceans_Descending",
-            "tags":     "",
+            "tags":     "precipitation",
             "group":    "overlays",
             "layergroup": [
               "ssmi"

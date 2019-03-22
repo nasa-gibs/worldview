@@ -7,7 +7,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L3 Radiometer Global and Northern Hemisphere Daily 36 km EASE-Grid Freeze/Thaw State](https://nsidc.org/data/spl3ftp)
 
-Data field : freeze_thaw
+Data field: `freeze_thaw`
 
 ### Freeze/Thaw 9 km (L3, Passive)
 Temporal coverage: 31 March 2015 - present
@@ -18,7 +18,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP Enhanced L3 Radiometer Global and Northern Hemisphere Daily 9 km EASE-Grid Freeze/Thaw State](https://nsidc.org/data/spl3ftp_e)
 
-Data field : freeze_thaw
+Data field: `freeze_thaw`
 
 ### Freeze/Thaw 3 km (L3, Active)
 Temporal coverage: 13 April 2015 - 7 July 2015
@@ -29,4 +29,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L3 Radar Northern Hemisphere Daily 3 km EASE-Grid Freeze/Thaw State](https://nsidc.org/data/spl3fta/)
 
-Data field : freeze_thaw
+Data field: `freeze_thaw`

@@ -5,7 +5,7 @@ import { drawPaletteOnCanvas } from '../../../palettes/util';
 import util from '../../../util/util';
 import Scrollbar from '../../util/scrollbar';
 
-class OpacitySelect extends React.Component {
+class PaletteSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -188,7 +188,7 @@ class OpacitySelect extends React.Component {
     );
   }
 }
-OpacitySelect.propTypes = {
+PaletteSelect.propTypes = {
   index: PropTypes.number,
   layer: PropTypes.object,
   clearCustom: PropTypes.func,
@@ -202,4 +202,4 @@ OpacitySelect.propTypes = {
   activePalette: PropTypes.string
 };
 
-export default OpacitySelect;
+export default PaletteSelect;

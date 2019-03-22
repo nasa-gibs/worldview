@@ -9,7 +9,7 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 References: [AMSR-E/Aqua L2B Global Swath Surface Precipitation GSFC Profiling Algorithm](http://nsidc.org/data/ae_rain)
 
-Data field: surfacePrecipitation
+Data field: `surfacePrecipitation`
 
 ### AMSR-E Surface Rain Rate (Day | Night)
 Temporal coverage: 1 June 2002 - 4 October 2011
@@ -22,4 +22,4 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 References: [AMSR-E/Aqua L2B Global Swath Surface Precipitation GSFC Profiling Algorithm](http://nsidc.org/data/ae_rain)
 
-Data field: surfaceRain
+Data field: `surfaceRain`
