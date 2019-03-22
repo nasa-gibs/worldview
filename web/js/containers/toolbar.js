@@ -23,6 +23,7 @@ const CUSTOM_MODAL_PROPS = {
     modalClassName: 'toolbar-list-modal toolbar-modal',
     backdrop: true,
     bodyComponent: Projection,
+    wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
     offsetRight: '40px'
   },
   TOOLBAR_SHARE_LINK: {
@@ -32,7 +33,7 @@ const CUSTOM_MODAL_PROPS = {
     offsetRight: '198px',
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
     clickableBehindModal: true,
-    wrapClassName: 'clickable-behind-modal',
+    wrapClassName: 'clickable-behind-modal toolbar_modal_outer',
     bodyComponent: ShareLinks
   },
   TOOLBAR_INFO: {
@@ -41,12 +42,13 @@ const CUSTOM_MODAL_PROPS = {
     type: 'toolbar',
     modalClassName: 'toolbar-list-modal toolbar-modal',
     offsetRight: '10px',
-    bodyComponent: InfoList
+    bodyComponent: InfoList,
+    wrapClassName: 'toolbar_modal_outer toolbar_modal_outer'
   },
   TOOLBAR_SNAPSHOT: {
     headerText: 'Take a Snapshot',
     backdrop: false,
-    wrapClassName: 'clickable-behind-modal',
+    wrapClassName: 'clickable-behind-modal toolbar_modal_outer',
     type: 'selection',
     offsetRight: '70px',
     modalClassName: 'toolbar-snapshot-modal toolbar-modal toolbar-medium-modal',
