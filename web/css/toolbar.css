@@ -29,6 +29,9 @@
 .toolbar-list-modal .modal-content {
   width: 150px;
 }
+.toolbar_info  .modal-content {
+  width: 156px;
+}
 .toolbar-list-modal .modal-body {
   padding: 0;
 }
