@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { modalReducer, modalAboutPage } from './modal/reducers';
+import { createResponsiveStateReducer } from 'redux-responsive';
 import legacyReducer from './migration/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
@@ -19,6 +20,21 @@ export function getInitialState(models, config, parameters) {
     proj: getProjInitialState(config)
   };
 }
+const responsiveStateReducer = createResponsiveStateReducer(
+  {
+    extraSmall: 500,
+    small: 740,
+    medium: 1000,
+    large: 1280,
+    extraLarge: 1400
+  },
+  {
+    extraFields: () => ({
+      screenWidth: window.innerWidth,
+      screenHeight: window.innerHeight
+    })
+  }
+);
 const defaultReducer = (state = {}) => state;
 const reducers = {
   proj: projectionReducer,
@@ -30,6 +46,7 @@ const reducers = {
   config: defaultReducer,
   models: defaultReducer,
   parameters: defaultReducer,
+  browser: responsiveStateReducer,
   modalAboutPage,
   shortLink,
   notificationsRequest
