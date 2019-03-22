@@ -83,7 +83,7 @@
     "buster": "github:busterjs/buster#v0.8.0",
     "canvas": "^1.6.11",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "2.25.1",
+    "chromedriver": "2.46.0",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.2",
     "cross-env": "^5.2.0",
