@@ -187,7 +187,7 @@
     "reactstrap": "^7.0.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "simplebar": "^3.0.0-beta.1",
+    "simplebar": "3.0.0-beta.3",
     "supercluster": "3.0.2",
     "web-streams-polyfill": "^1.3.2",
     "whatwg-fetch": "^3.0.0"
