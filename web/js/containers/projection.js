@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { changeProjection } from '../modules/projection/actions';
+import { onToggle } from '../modules/modal/actions';
 import IconList from '../components/util/list';
 import googleTagManager from 'googleTagManager';
 
@@ -28,9 +29,10 @@ const infoArray = [
 
 class ProjectionList extends Component {
   updateProjection(id) {
-    const { updateProjection, models, config } = this.props;
+    const { updateProjection, models, config, onCloseModal } = this.props;
     models.proj.select(id); // migration crutch
     updateProjection(id, config);
+    onCloseModal();
     googleTagManager.pushEvent({
       event: 'change_projection',
       projection: id
@@ -58,6 +60,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateProjection: (id, config) => {
     dispatch(changeProjection(id, config));
+  },
+  onCloseModal: () => {
+    dispatch(onToggle());
   }
 });
 
@@ -71,5 +76,6 @@ ProjectionList.propTypes = {
   updateProjection: PropTypes.func,
   models: PropTypes.object,
   projection: PropTypes.string,
-  config: PropTypes.object
+  config: PropTypes.object,
+  onCloseModal: PropTypes.func
 };
