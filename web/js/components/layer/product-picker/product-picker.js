@@ -161,7 +161,7 @@ class ProductPicker extends React.Component {
         isOpen={isOpen}
         toggle={this.toggle.bind(this)}
         backdrop={true}
-        className="custom-layer-dialog"
+        className="custom-layer-dialog light"
         autoFocus={false}
       >
         <ModalHeader toggle={this.toggle.bind(this)}>

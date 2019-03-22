@@ -25,3 +25,6 @@
   list-style-type: disc;
   margin: 2px 0 2px 20px;
 }
+.modal-dialog.light .modal-content {
+  background-color: #dcdcdc;
+}
