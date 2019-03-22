@@ -786,7 +786,7 @@
   }
 }
 
-@media (min-height: 550px) {
+@media (min-height: 450px) {
   .tour {
     display: block;
   }
