@@ -37,19 +37,12 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var date, key, group, proj, layer, layerNext, layerPrior, attributes;
     options = options || {};
     group = options.group || null;
-    // console.log(date, models.date[models.date.activeDate])
     date = self.closestDate(def, options);
-    // date = new Date('Wed Feb 06 2019 11:15:00 GMT-0500 (Eastern Standard Time)')
-    console.log(date, models.date[models.date.activeDate])
     key = self.layerKey(def, options, group);
     proj = models.proj.selected;
     layer = cache.getItem(key);
 
-    // console.log(def, options, date, key, proj, layer)
-    // console.log(def, options, group, date, key, proj, layer)
-    // console.log(def.period)
     if (!layer) {
-      console.log('NO LAYER')
       // layer is not in the cache
       if (!date) date = options.date || models.date[models.date.activeDate];
       attributes = {
@@ -63,7 +56,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
 
-      console.log(def.type)
       if (def.type === 'wmts') {
         layer = createLayerWMTS(def, options);
         if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
@@ -125,10 +117,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @return {object}         Closest date
    */
   self.closestDate = function(def, options) {
-    // debugger;
-    // console.log(cache)
-    // console.log(def)
-    // console.log(def.period)
     var date;
     var animRange;
     if (models.anim) {
@@ -142,20 +130,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       date = new Date(models.date[models.date.activeDate]);
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
-      console.log(def.period, date)
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
-
-        // console.log(def, def.period, date)
-
       } else {
-        // console.log(date);
         date.setUTCSeconds(0);
         date.setUTCMilliseconds(0);
-        // console.log(date)
-
+        // # memoize third argument dateArray ?
         date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
-        // console.log(util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true)))
       }
     }
     // Perform extensive checks before finding closest date
@@ -172,12 +153,9 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       if (date && !dateArray.includes(date)) {
         // Then, update layer object with new array of dates
         def.availableDates = util.datesinDateRanges(def, date, true);
-        console.log(def.availableDates)
         date = util.prevDateInDateRange(def, date, dateArray);
       }
     }
-    console.log(date)
-    // return new Date('Wed Feb 06 2019 11:15:00 GMT-0500 (Eastern Standard Time)')
     return date;
   };
 
@@ -202,14 +180,10 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     layerGroupStr = options.group ? options.group : models.layers.activeLayers;
     // Don't key by time if this is a static layer--it is valid for
     // every date.
-    // minDate = new Date(minDate.getTime() + (minDate.getTimezoneOffset() * 60000));
-
     if (def.period) {
       date = util.toISOStringSeconds(
         util.roundTimeOneMinute(self.closestDate(def, options))
       );
-console.log(date, self.closestDate(def, options).toUTCString())
-      // date = "GOES16_Band13_Clean_Infrared_v0_STD:geographic:2019-02-06T16:15:00Z::active"
     }
     if (models.palettes.isActive(def.id)) {
       palette = models.palettes.key(def.id);
@@ -230,7 +204,6 @@ console.log(date, self.closestDate(def, options).toUTCString())
    * @returns {object} OpenLayers WMTS layer
    */
   var createLayerWMTS = function(def, options, day) {
-    // console.log(def, options, day)
     var proj, source, matrixSet, matrixIds, urlParameters, date, extent, start;
     proj = models.proj.selected;
     source = config.sources[def.source];
@@ -265,8 +238,8 @@ console.log(date, self.closestDate(def, options).toUTCString())
     date = options.date || models.date[models.date.activeDate];
     if (def.period === 'subdaily') {
       date = self.closestDate(def, options);
+      // TODO: FIX +/- DATE OFFSETS TO GET UTC - SOURCE SINGLE STATE TRUTH
       date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-      console.log('SUB', date)
     }
     if (day) {
       date = util.dateAdd(date, 'day', day);
@@ -274,15 +247,6 @@ console.log(date, self.closestDate(def, options).toUTCString())
 
     urlParameters =
       '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-    console.log(date, urlParameters)
-console.log(self.closestDate(def, options))
-    // date.setUTCSeconds(0);
-    // date.setUTCMilliseconds(0);
-    // console.log(date)
-
-    // date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
-    // console.log(date)
-// console.log(def, self.closestDate(def, options), options);
 
     var sourceOptions = {
       url: source.url + urlParameters,
