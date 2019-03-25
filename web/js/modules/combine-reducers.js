@@ -41,7 +41,6 @@ const reducers = {
   modal: modalReducer,
   legacy: legacyReducer,
   feedback: feedbackReducer,
-  link: linkReducer,
   notifications: notificationsReducer,
   config: defaultReducer,
   models: defaultReducer,

@@ -14,6 +14,8 @@ import {
   Tooltip
 } from 'reactstrap';
 
+import { history } from '../main';
+
 const getShortenRequestString = function(mock, permalink) {
   const mockStr = mock || '';
   if (/localhost/.test(location)) {
@@ -32,8 +34,22 @@ class ShareLinkContainer extends Component {
     this.state = {
       shortLinkKey: '',
       isShort: false,
-      tooltipOpen: false
+      tooltipOpen: false,
+      queryString: history.location.search || ''
     };
+  }
+  componentDidMount() {
+    this.unlisten = history.listen((location, action) => {
+      const newString = location.search;
+      const { queryString } = this.state;
+      if (queryString !== newString) {
+        this.setState({ queryString: newString });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    if (this.unlisten) this.unlisten();
   }
   getShortLink() {
     const { requestShortLink, mock } = this.props;
@@ -42,8 +58,7 @@ class ShareLinkContainer extends Component {
     return requestShortLink(location);
   }
   onToggleShorten() {
-    const { queryString } = this.props;
-    const { shortLinkKey, isShort } = this.state;
+    const { shortLinkKey, isShort, queryString } = this.state;
 
     if (!isShort && shortLinkKey !== queryString) {
       this.getShortLink();
@@ -56,7 +71,7 @@ class ShareLinkContainer extends Component {
     }
   }
   getPermalink() {
-    const { queryString } = this.props;
+    const { queryString } = this.state;
     let url = window.location.href;
     let prefix = url.split('?')[0];
     prefix = prefix !== null && prefix !== undefined ? prefix : url;
@@ -184,11 +199,9 @@ class ShareLinkContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { queryString } = state.link;
   const { config } = state;
 
   return {
-    queryString: queryString,
     shortLink: state.shortLink,
     mock:
       config.parameters && config.parameters.shorten
