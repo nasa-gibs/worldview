@@ -27,39 +27,23 @@ const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 class ImageDownloadContainer extends Component {
   constructor(props) {
     super(props);
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+    const screenHeight = props.screenHeight;
+    const screenWidth = props.screenWidth;
     this.state = {
-      windowWidth: windowWidth,
-      windowHeight: windowHeight,
       boundaries: {
-        x: windowWidth / 2 - 100,
-        y: windowHeight / 2 - 100,
-        x2: windowWidth / 2 + 100,
-        y2: windowHeight / 2 + 100
+        x: screenWidth / 2 - 100,
+        y: screenHeight / 2 - 100,
+        x2: screenWidth / 2 + 100,
+        y2: screenHeight / 2 + 100
       }
     };
   }
-  updateDimensions() {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    this.setState({
-      windowWidth: windowWidth,
-      windowHeight: windowHeight
-    });
-  }
-  componentDidMount() {
-    window.addEventListener('resize', this.updateDimensions.bind(this));
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions.bind(this));
-  }
   onBoundaryChange(boundaries) {
-    const { windowWidth, windowHeight } = this.state;
-    const x = getPixelFromPercentage(windowWidth, boundaries.x);
-    const y = getPixelFromPercentage(windowHeight, boundaries.y);
-    const x2 = x + getPixelFromPercentage(windowWidth, boundaries.width);
-    const y2 = y + getPixelFromPercentage(windowHeight, boundaries.height);
+    const { screenWidth, screenHeight } = this.props;
+    const x = getPixelFromPercentage(screenWidth, boundaries.x);
+    const y = getPixelFromPercentage(screenHeight, boundaries.y);
+    const x2 = x + getPixelFromPercentage(screenWidth, boundaries.width);
+    const y2 = y + getPixelFromPercentage(screenHeight, boundaries.height);
     this.setState({
       boundaries: {
         x: x,
@@ -70,8 +54,16 @@ class ImageDownloadContainer extends Component {
     });
   }
   render() {
-    const { proj, map, url, onClose, models } = this.props;
-    const { boundaries, windowWidth, windowHeight } = this.state;
+    const {
+      proj,
+      map,
+      url,
+      onClose,
+      models,
+      screenWidth,
+      screenHeight
+    } = this.props;
+    const { boundaries } = this.state;
     const { x, y, x2, y2 } = boundaries;
     const isGeoProjection = proj.id === 'geographic';
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
@@ -102,12 +94,12 @@ class ImageDownloadContainer extends Component {
           crs={crs}
         />
         <Crop
-          x={getPercentageFromPixel(windowWidth, x)}
-          y={getPercentageFromPixel(windowHeight, y)}
-          maxHeight={windowHeight}
-          maxWidth={windowWidth}
-          width={getPercentageFromPixel(windowWidth, x2 - x)}
-          height={getPercentageFromPixel(windowHeight, y2 - y)}
+          x={getPercentageFromPixel(screenWidth, x)}
+          y={getPercentageFromPixel(screenHeight, y)}
+          maxHeight={screenHeight}
+          maxWidth={screenWidth}
+          width={getPercentageFromPixel(screenWidth, x2 - x)}
+          height={getPercentageFromPixel(screenHeight, y2 - y)}
           onChange={debounce(this.onBoundaryChange.bind(this), 10)}
           onClose={onClose}
           bottomLeftStyle={{
@@ -132,7 +124,8 @@ class ImageDownloadContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { config, models, proj } = state;
+  const { config, models, proj, browser } = state;
+  const { screenWidth, screenHeight } = browser;
   const { map } = state.legacy;
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
@@ -142,11 +135,14 @@ function mapStateToProps(state) {
     url = config.parameters.imageDownload;
     util.warn('Redirecting image download to: ' + url);
   }
+
   return {
     proj,
     url,
     map,
-    models
+    models,
+    screenWidth,
+    screenHeight
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -165,5 +161,7 @@ ImageDownloadContainer.propTypes = {
   map: PropTypes.object.isRequired,
   models: PropTypes.object.isRequired,
   url: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  screenWidth: PropTypes.number,
+  screenHeight: PropTypes.number
 };

@@ -5,7 +5,7 @@
   color: #eee;
 }
 .modal-dialog .close, .modal-body pre {
-  color: #fff;
+  color: #eee;
 }
 .clickable-behind-modal .modal {
   position: inherit;
@@ -24,4 +24,13 @@
   display: list-item;
   list-style-type: disc;
   margin: 2px 0 2px 20px;
+}
+.modal-dialog.light .modal-content {
+  background-color: #dcdcdc;
+}
+.modal-dialog .modal-header .close:hover {
+  color: #fff;
+}
+.modal-dialog.light .modal-header .close:hover {
+  color: #000;
 }

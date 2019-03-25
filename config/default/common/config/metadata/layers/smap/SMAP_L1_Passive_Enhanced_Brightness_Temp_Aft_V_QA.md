@@ -4,4 +4,4 @@ Within the image, green indicates that TB observations have acceptable quality f
 
 References: [SMAP Enhanced L1C Radiometer Half-Orbit 9 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB_E)
 
-Data fields: cell_tb_qual_flag_v_aft
+Data field: `cell_tb_qual_flag_v_aft`

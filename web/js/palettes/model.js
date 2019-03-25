@@ -24,7 +24,7 @@ export function palettesModel(models, config) {
     var name = config.layers[layerId].palette.id;
     var palette = config.palettes.rendered[name];
     if (!lodashIsUndefined(index)) {
-      if (palette.maps) {
+      if (palette && palette.maps) {
         palette = palette.maps[index];
       }
     }

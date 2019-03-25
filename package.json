@@ -1,6 +1,6 @@
 {
   "name": "worldview",
-  "version": "2.12.0",
+  "version": "2.14.1",
   "description": "Interactive interface for browsing full-resolution, global satellite imagery",
   "keywords": [
     "NASA",
@@ -36,7 +36,7 @@
     "dist": "npm run clean && npm run getcapabilities && npm run build:config && npm run build:prod && node ./tasks/dist.js",
     "dist:dev": "npm run clean && npm run getcapabilities && npm run build:config && npm run build:dev && node ./tasks/dist.js",
     "distclean": "npm run clean && node ./tasks/distclean.js",
-    "docker:ci": "npm run docker:restart && docker exec -it worldview /bin/bash /build/e2e/docker-run.sh ; npm run docker:stop",
+    "docker:ci": "npm run docker:restart && docker exec -it worldview /bin/bash /build/e2e/docker-ci.sh ; npm run docker:stop",
     "docker:e2e": "npm run docker:restart && docker exec -it worldview xvfb-run -s '-screen 0, 1920x1080x24' npx nightwatch --env firefox",
     "docker:image": "docker build -t worldview .",
     "docker:reimage": "docker rmi -f worldview && docker build --no-cache -t worldview .",
@@ -83,7 +83,7 @@
     "browserstack-local": "^1.3.0",
     "canvas": "^1.6.11",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "2.25.1",
+    "chromedriver": "2.46.0",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.2",
     "cross-env": "^5.2.0",
@@ -188,7 +188,7 @@
     "redux": "^4.0.1",
     "redux-responsive": "^4.3.8",
     "redux-thunk": "^2.3.0",
-    "simplebar": "^3.0.0-beta.1",
+    "simplebar": "3.0.0-beta.3",
     "supercluster": "3.0.2",
     "web-streams-polyfill": "^1.3.2",
     "whatwg-fetch": "^3.0.0"

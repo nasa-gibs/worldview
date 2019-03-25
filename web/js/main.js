@@ -22,7 +22,6 @@ import loadingIndicator from './ui/indicator';
 import Brand from './brand';
 import { combineModels } from './combine-models';
 import { parse } from './parse';
-import { updatePermalink } from './modules/link/actions';
 import { combineUi } from './combine-ui';
 import palettes from './palettes/palettes';
 import { updateLegacyModule } from './modules/migration/actions';
@@ -31,7 +30,7 @@ import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
 import { changeProjection } from './modules/projection/actions';
 
-const history = createBrowserHistory();
+export const history = createBrowserHistory();
 const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
@@ -110,15 +109,6 @@ const render = (config, parameters, legacyState) => {
     const state = store.getState();
     if (state.proj.id !== id) {
       store.dispatch(changeProjection(id, config));
-    }
-  });
-
-  let queryString = '';
-  history.listen((location, action) => {
-    const newString = location.search;
-    if (queryString !== newString) {
-      queryString = newString;
-      store.dispatch(updatePermalink(queryString)); // Keep permalink in redux-store
     }
   });
   listenForHistoryChange(store, history);

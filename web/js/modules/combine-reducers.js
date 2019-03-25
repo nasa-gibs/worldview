@@ -4,14 +4,14 @@ import { modalReducer, modalAboutPage } from './modal/reducers';
 import legacyReducer from './migration/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
-import sidebarReducer from './sidebar/reducers';
-import { shortLink, linkReducer } from './link/reducers';
+import { shortLink } from './link/reducers';
 import {
   notificationsRequest,
   notificationsReducer
 } from './notifications/reducers';
 import { getProjInitialState } from './projection/util';
 import { compareReducer } from './compare/reducers';
+import sidebarReducer from './sidebar/reducers';
 import {
   layerReducer,
   getInitialState as getLayersInitialState
@@ -48,7 +48,6 @@ const reducers = {
   modal: modalReducer,
   legacy: legacyReducer,
   feedback: feedbackReducer,
-  link: linkReducer,
   notifications: notificationsReducer,
   config: defaultReducer,
   models: defaultReducer,

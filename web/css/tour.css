@@ -66,6 +66,7 @@
   -webkit-transform: translate(0, 0);
 }
 
+.tour-complete .modal-dialog .modal-content,
 .tour-start .modal-dialog .modal-content {
   background-color: #eee;
   border: 0;
@@ -742,10 +743,6 @@
   .tour {
     display: block;
   }
-}
-
-/* Breakpoint: Medium (768px to 991px) */
-@media (min-width: 768px) {
 
   /* .tour-start */
   .tour-start .modal {
@@ -775,23 +772,23 @@
 
 @media (max-height: 776px) {
   .tour-in-progress .modal-content {
-    max-height: 300px;
+    height: 300px;
   }
 }
 
 @media (max-height: 712px) {
   .tour-in-progress .modal-content {
-    max-height: 250px;
+    height: 250px;
   }
 }
 
 @media (max-height: 665px) {
   .tour-in-progress .modal-content {
-    max-height: 200px;
+    height: 200px;
   }
 }
 
-@media (min-height: 665px) {
+@media (min-height: 450px) {
   .tour {
     display: block;
   }

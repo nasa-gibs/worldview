@@ -11,9 +11,9 @@
                     "description": "sedac/VolcanoHazard",
                     "image": "",
                     "settings": [
-                        "ndh-volcano-hazard-frequency-distribution",
-                        "ndh-volcano-mortality-risks-distribution",
-                        "ndh-volcano-proportional-economic-loss-risk-deciles"
+                        "NDH_Volcano_Hazard_Frequency_Distribution_1979-2000",
+                        "NDH_Volcano_Mortality_Risks_Distribution_2000",
+                        "NDH_Volcano_Proportional_Economic_Loss_Risk_Deciles_2000"
                     ]
                 }
             }

@@ -54,7 +54,7 @@ export function uiInfo (ui, config) {
     if (config.features.feedback) {
       $menuItems.append($feedback);
     }
-    if (config.features.tour && config.stories && config.storyOrder) {
+    if (config.features.tour && config.stories && config.storyOrder && window.innerWidth >= 740 && window.innerHeight >= 450) {
       $menuItems.append($tour);
     }
     $menuItems.append($source);

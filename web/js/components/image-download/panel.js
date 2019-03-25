@@ -61,7 +61,7 @@ export default class ImageResSelection extends React.Component {
     if (opacities.length > 0) {
       params.push(`OPACITIES=${opacities.join(',')}`);
     }
-    if (isWorldfile === true) {
+    if (isWorldfile === 'true') {
       params.push('WORLDFILE=true');
     }
     let dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
@@ -185,7 +185,7 @@ ImageResSelection.defaultProps = {
   height: '0',
   imageSize: '0',
   maxImageSize: '250 MB',
-  isWorldfile: false,
+  isWorldfile: 'false',
   resolution: '1',
   worldFileOptions: true,
   fileTypeOptions: true,
@@ -200,7 +200,7 @@ ImageResSelection.propTypes = {
   resolution: PropTypes.string,
   valid: PropTypes.bool,
   lonlats: PropTypes.array,
-  isWorldfile: PropTypes.bool,
+  isWorldfile: PropTypes.string,
   onDownloadClick: PropTypes.func,
   firstLabel: PropTypes.string,
   maxImageSize: PropTypes.string,

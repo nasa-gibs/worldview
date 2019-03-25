@@ -29,6 +29,9 @@
 .toolbar-list-modal .modal-content {
   width: 150px;
 }
+.toolbar_info .modal-content {
+  width: 156px;
+}
 .toolbar-list-modal .modal-body {
   padding: 0;
 }
@@ -49,6 +52,15 @@
 .toolbar-modal.modal-dialog {
   position: absolute;
   top: 33px;
+}
+.toolbar_modal_outer .modal.fade .modal-dialog {
+  -webkit-transform: translate(0, 25%);
+  transform: translate(0, 25%);
+  transition: transform 0.3s ease-out, -webkit-transform  0.3s ease-out;
+}
+.toolbar_modal_outer .modal.fade.show .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
 }
 .toolbar_projection .modal-backdrop {
   opacity: 0;

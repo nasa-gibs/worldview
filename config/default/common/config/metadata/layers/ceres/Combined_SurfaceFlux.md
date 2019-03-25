@@ -8,20 +8,20 @@ The Untuned Longwave | Shortwave | Window-Region Surface Flux, Up | Down,
 All-Sky | Clear-Sky layers are available from the CERES instruments on the Terra and Aqua satellites. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
 Data parameters:  
-Untuned_Total_Sky_LW_Surface_Down - Untuned Longwave Surface Flux (Monthly, Down, All-Sky)    
-Untuned_Clear_Sky_LW_Surface_Down - Untuned Longwave Surface Flux (Monthly, Down, Clear-Sky)  
-Untuned_Total_Sky_LW_Surface_Up - Untuned Longwave Surface Flux (Monthly, Up, All-Sky)  
-Untuned_Clear_Sky_LW_Surface_Up - Untuned Longwave Surface Flux (Monthly, Up, Clear-Sky)   
-Untuned_Total_Sky_SW_Surface_Down - Untuned Shortwave Surface Flux (Monthly, Down, All-Sky)  
-Untuned_Clear_Sky_SW_Surface_Down - Untuned Shortwave Surface Flux (Monthly, Down, Clear-Sky)  
-Untuned_Total_Sky_SW_Surface_Up - Untuned Shortwave Surface Flux (Monthly, Up, All-Sky)  
-Untuned_Clear_Sky_SW_Surface_Up - Untuned Shortwave Surface Flux (Monthly, Up, Clear-Sky)  
-Untuned_Total_Sky_WN_Surface_Down - Untuned Window-Region Surface Flux (Monthly, Down, All-Sky)  
-Untuned_Clear_Sky_WN_Surface_Down - Untuned Window-Region Surface Flux (Monthly, Down, Clear-Sky)  
-Untuned_Total_Sky_WN_Surface_Up - Untuned Window-Region Surface Flux (Monthly, Up, All-Sky)  
-Untuned_Clear_Sky_WN_Surface_Up - Untuned Window-Region Surface Flux (Monthly, Up, Clear-Sky)  
+`Untuned_Total_Sky_LW_Surface_Down` - Untuned Longwave Surface Flux (Monthly, Down, All-Sky)    
+`Untuned_Clear_Sky_LW_Surface_Down` - Untuned Longwave Surface Flux (Monthly, Down, Clear-Sky)  
+`Untuned_Total_Sky_LW_Surface_Up` - Untuned Longwave Surface Flux (Monthly, Up, All-Sky)  
+`Untuned_Clear_Sky_LW_Surface_Up` - Untuned Longwave Surface Flux (Monthly, Up, Clear-Sky)   
+`Untuned_Total_Sky_SW_Surface_Down` - Untuned Shortwave Surface Flux (Monthly, Down, All-Sky)  
+`Untuned_Clear_Sky_SW_Surface_Down` - Untuned Shortwave Surface Flux (Monthly, Down, Clear-Sky)  
+`Untuned_Total_Sky_SW_Surface_Up` - Untuned Shortwave Surface Flux (Monthly, Up, All-Sky)  
+`Untuned_Clear_Sky_SW_Surface_Up` - Untuned Shortwave Surface Flux (Monthly, Up, Clear-Sky)  
+`Untuned_Total_Sky_WN_Surface_Down` - Untuned Window-Region Surface Flux (Monthly, Down, All-Sky)  
+`Untuned_Clear_Sky_WN_Surface_Down` - Untuned Window-Region Surface Flux (Monthly, Down, Clear-Sky)  
+`Untuned_Total_Sky_WN_Surface_Up` - Untuned Window-Region Surface Flux (Monthly, Up, All-Sky)  
+`Untuned_Clear_Sky_WN_Surface_Up` - Untuned Window-Region Surface Flux (Monthly, Up, Clear-Sky)  
 
-Data product: CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A
+Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A`
 
 ### Diffuse | Direct Shortwave Surface Flux (All-Sky | Clear-Sky)
 
@@ -32,12 +32,12 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 The Diffuse | Direct Shortwave Surface Flux (All-Sky | Clear-Sky) layers are available from the CERES instruments on the Terra and Aqua satellites. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
 Data parameters:  
-Total_Sky_SW_Surface_Flux_Diffuse - Diffuse Shortwave Surface Flux (Monthly, All-Sky)  
-Clear_Sky_SW_Surface_Flux_Diffuse - Diffuse Shortwave Surface Flux (Monthly, Clear-Sky)  
-Total_Sky_SW_Surface_Flux_Direct - Direct Shortwave Surface Flux (Monthly, All-Sky)  
-Clear_Sky_SW_Surface_Flux_Direct - Direct Shortwave Surface Flux (Monthly, Clear-Sky)  
+`Total_Sky_SW_Surface_Flux_Diffuse` - Diffuse Shortwave Surface Flux (Monthly, All-Sky)  
+`Clear_Sky_SW_Surface_Flux_Diffuse` - Diffuse Shortwave Surface Flux (Monthly, Clear-Sky)  
+`Total_Sky_SW_Surface_Flux_Direct` - Direct Shortwave Surface Flux (Monthly, All-Sky)  
+`Clear_Sky_SW_Surface_Flux_Direct` - Direct Shortwave Surface Flux (Monthly, Clear-Sky)  
 
-Data product: CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A
+Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A`
 
 ### Surface UV Index (Monthly, All-Sky)
 
@@ -47,5 +47,5 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The Surface UV Index (Monthly, All-Sky) layer is available from the CERES instruments on the Terra and Aqua satellites. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data parameters: Total_Sky_Surface_UV_Index  
-Data product: CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A
+Data parameters: `Total_Sky_Surface_UV_Index`  
+Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A`

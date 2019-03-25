@@ -5,7 +5,7 @@
             "title":    "Surface Rain Rate (Day)",
             "subtitle": "GCOM-W1 / AMSR2",
             "description": "amsr2/AMSR2_Surface_Rain_Rate_Day",
-            "tags":     "amsr-2",
+            "tags":     "amsr-2 precipitation",
             "group":    "overlays",
             "layergroup": [
               "amsr2"
