@@ -395,7 +395,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-footer svg {
-  overflow: visible;
+  /* overflow: visible; */
 }
 
 #wv-rangeselector-case > .wv-timeline-range-selector {
@@ -444,7 +444,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #zoom-btn-container .wv-tooltip {
-  display: none;
+  /* display: none; */
   position: absolute;
   bottom: 100%;
   border-bottom: 8px solid transparent;

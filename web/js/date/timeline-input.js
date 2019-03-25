@@ -31,7 +31,7 @@ export function timelineInput(models, config, ui) {
     models.layers.events.on('subdaily-updated', updateMaxZoom);
     $incrementBtn
       .mousedown(function(e) {
-        console.log(self.delta)
+        console.log(self.delta, self.interval)
         e.preventDefault();
         switch (ui.timeline.config.currentZoom) {
           case 1:
@@ -186,14 +186,14 @@ export function timelineInput(models, config, ui) {
    * @return {void}
    */
   self.animateByIncrement = function(delta, increment) {
-    console.log(delta, increment)
+    // console.log(delta, increment)
     var endTime = models.layers.lastDateTime();
     var endDate = models.layers.lastDate();
     self.delta = Math.abs(delta);
 
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
-      console.log(tl.data.start(), nextTime, endTime, increment)
+      // console.log(tl.data.start(), nextTime, endTime, increment)
       if (ui.timeline.config.currentZoom >= 4) {
         if (tl.data.start() <= nextTime && nextTime <= endTime) {
           models.date.add(increment, delta);
@@ -277,7 +277,7 @@ export function timelineInput(models, config, ui) {
       $decrementBtn.removeClass('button-disabled');
     }
 
-    tl.pick.update();
+    // tl.pick.update();
   };
 
   var updateMaxZoom = function() {
@@ -290,7 +290,7 @@ export function timelineInput(models, config, ui) {
       document.getElementById('timeline-header').classList.remove('subdaily');
     }
     self.reactComponent.setState({ maxZoom: model.maxZoom });
-    model.events.trigger('update-timewheel');
+    // model.events.trigger('update-timewheel');
   };
 
   init();

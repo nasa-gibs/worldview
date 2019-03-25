@@ -13,13 +13,13 @@ html, body {
   position: absolute;
   /* top: 200px; */
   bottom: -24px;
-  left: 416px;
+  /* left: 416px; */
 }
 
 #wv-timeline-axis {
   /* margin: 0 20px 0 0; */
   /* margin-left: 25%; */
-  width: 800px;
+  /* width: 800px; */
   height: 100px;
   /* position: absolute;
 
@@ -199,7 +199,7 @@ form select {
 
 /* DEMO DOM CLEANUP */
 
-#timeline-footer-svg {
+/* #timeline-footer-svg {
   opacity: 0;
   display: none;
 }
@@ -226,5 +226,5 @@ form select {
 
 #wv-animation-widget {
   margin-left: 500px;
-}
+} */
 

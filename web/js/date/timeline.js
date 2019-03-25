@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import googleTagManager from 'googleTagManager';
 import Timeline from '../components/timeline/timeline';
 
+import DateZoomChange from '../components/timeline/timeline-controls/date-zoom-change';
+
 export function timeline(models, config, ui) {
   var self = {};
   var model = models.date;
@@ -24,11 +26,14 @@ export function timeline(models, config, ui) {
   };
 
   self.getWidth = function() {
+    let subdaily = models.layers.hasSubDaily();
 
     self.width =
       $(window).outerWidth(true) -
-      $('#timeline-header').outerWidth(true) -
-      $('#timeline-hide').outerWidth(true) -
+      // $('#timeline-header').outerWidth(true) -
+      // $('#timeline-hide').outerWidth(true) -
+      (subdaily ? 404 : 310) -
+      20 -
       self.margin.left -
       self.margin.right +
       28;
@@ -41,12 +46,12 @@ export function timeline(models, config, ui) {
 
   self.toggle = function(now) {
     var tl = $('#timeline-footer');
-    var tlg = self.boundary;
-    var gp = d3.select('#guitarpick');
+    // var tlg = self.boundary;
+    // var gp = d3.select('#guitarpick');
     if (tl.is(':hidden')) {
       var afterShow = function() {
-        tlg.attr('style', 'clip-path:url("#timeline-boundary")');
-        gp.attr('style', 'clip-path:url(#guitarpick-boundary);');
+        // tlg.attr('style', 'clip-path:url("#timeline-boundary")');
+        // gp.attr('style', 'clip-path:url(#guitarpick-boundary);');
       };
       if (now) {
         tl.show();
@@ -56,8 +61,8 @@ export function timeline(models, config, ui) {
       }
       $('#timeline').removeClass('closed');
     } else {
-      tlg.attr('style', 'clip-path:none');
-      gp.attr('style', 'display:none;clip-path:none');
+      // tlg.attr('style', 'clip-path:none');
+      // gp.attr('style', 'display:none;clip-path:none');
       tl.hide('slow');
       $('#timeline').addClass('closed');
     }
@@ -100,42 +105,42 @@ export function timeline(models, config, ui) {
     if (self.enabled) {
       self.getWidth();
 
-      self.svg
-        .attr('width', self.width)
-        .attr(
-          'viewBox',
-          '0 9 ' +
-            self.width +
-            ' ' +
-            (self.height + self.margin.top + self.margin.bottom + 26)
-        );
+    //   self.svg
+    //     .attr('width', self.width)
+    //     .attr(
+    //       'viewBox',
+    //       '0 9 ' +
+    //         self.width +
+    //         ' ' +
+    //         (self.height + self.margin.top + self.margin.bottom + 26)
+    //     );
 
-      d3.select('#timeline-boundary rect').attr('width', self.width);
+    //   d3.select('#timeline-boundary rect').attr('width', self.width);
 
-      d3.select('#guitarpick-boundary rect').attr(
-        'width',
-        self.width + self.margin.left + self.margin.right
-      );
+    //   d3.select('#guitarpick-boundary rect').attr(
+    //     'width',
+    //     self.width + self.margin.left + self.margin.right
+    //   );
 
-      self.axis.select('line:first-child').attr('x2', self.width);
+    //   self.axis.select('line:first-child').attr('x2', self.width);
     }
     self.reactComponent.setState({ width: self.getWidth() });
   };
 
   self.setClip = function() {
     // This is a hack until Firefox fixes their svg rendering problems
-    d3.select('#timeline-footer svg > g:nth-child(2)').attr(
-      'visibility',
-      'hidden'
-    );
-    d3.select('#timeline-footer svg > g:nth-child(2)').attr('style', '');
-    setTimeout(function() {
-      d3.select('#timeline-footer svg > g:nth-child(2)').attr(
-        'style',
-        'clip-path:url("#timeline-boundary")'
-      );
-      d3.select('#timeline-footer svg > g:nth-child(2)').attr('visibility', '');
-    }, 50);
+    // d3.select('#timeline-footer svg > g:nth-child(2)').attr(
+    //   'visibility',
+    //   'hidden'
+    // );
+    // d3.select('#timeline-footer svg > g:nth-child(2)').attr('style', '');
+    // setTimeout(function() {
+    //   d3.select('#timeline-footer svg > g:nth-child(2)').attr(
+    //     'style',
+    //     'clip-path:url("#timeline-boundary")'
+    //   );
+    //   d3.select('#timeline-footer svg > g:nth-child(2)').attr('visibility', '');
+    // }, 50);
   };
 
   // var changeDate = (date) => {
@@ -161,26 +166,30 @@ export function timeline(models, config, ui) {
   };
 
   var setIntervalInput = (intervalValue, zoomLevel) => {
-    // console.log(self.input.delta)
+    console.log(self.input.delta)
     self.input.delta = intervalValue;
     self.input.interval = zoomLevel;
 
     let zoomCustomText = document.querySelector('#zoom-custom');
     zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
-    console.log(self)
+    // console.log(self)
   }
 
   var getInitialProps = () => {
     // console.log(self)
+    let selectedDate = models.date[models.date.activeDate];
+    let subdaily = models.layers.hasSubDaily();
     return {
       width: self.width,
+      subdailyLayers: subdaily,
       height: self.height,
-      selectedDate: models.date[models.date.activeDate],
+      selectedDate: selectedDate,
       // changeDate: changeDate,
       timeScale: 'day',
       incrementDate: incrementDate,
       updateDate: updateDate,
-      setIntervalInput: setIntervalInput
+      setIntervalInput: setIntervalInput,
+      dateFormatted: new Date(selectedDate).toISOString()
     };
   };
 
@@ -189,69 +198,79 @@ export function timeline(models, config, ui) {
     let initialProps = getInitialProps();
     self.reactComponent = ReactDOM.render(
       React.createElement(Timeline, initialProps),
-      document.getElementById('timelineContainer')
+      document.getElementById('timeline')
     );
 
-    self.svg = d3
-      .select('#timeline-footer')
-      .append('svg:svg')
-      .attr('width', self.width) // + margin.left + margin.right)
-      .attr('height', self.height + self.margin.top + self.margin.bottom + 42)
-      .attr('id', 'timeline-footer-svg')
-      .attr(
-        'viewBox',
-        '0 9 ' +
-          self.width +
-          ' ' +
-          (self.height + self.margin.top + self.margin.bottom + 26)
-      );
+    // self.reactComponent = ReactDOM.render(
+    //   React.createElement(Timeline, initialProps),
+    //   document.getElementById('timelineContainer')
+    // );
 
-    self.svg
-      .append('svg:defs')
-      .append('svg:clipPath')
-      .attr('id', 'timeline-boundary')
-      .append('svg:rect')
-      .attr('width', self.width) // + margin.left + margin.right)
-      .attr('height', self.height + self.margin.top + self.margin.bottom);
+    // self.reactComponent2 = ReactDOM.render(
+    //   React.createElement(DateZoomChange),
+    //   document.getElementById('zoom-btn-container')
+    // );
 
-    d3.select('#timeline-footer svg defs')
-      .append('svg:clipPath')
-      .attr('id', 'guitarpick-boundary')
-      .append('svg:rect')
-      .attr('width', self.width + self.margin.left + self.margin.right) // + margin.left + margin.right)
-      .attr('height', self.height + self.margin.top + self.margin.bottom)
-      .attr('x', -self.margin.left);
+    // self.svg = d3
+    //   .select('#timeline-footer')
+    //   .append('svg:svg')
+    //   .attr('width', self.width) // + margin.left + margin.right)
+    //   .attr('height', self.height + self.margin.top + self.margin.bottom + 42)
+    //   .attr('id', 'timeline-footer-svg')
+    //   .attr(
+    //     'viewBox',
+    //     '0 9 ' +
+    //       self.width +
+    //       ' ' +
+    //       (self.height + self.margin.top + self.margin.bottom + 26)
+    //   );
 
-    self.boundary = self.svg
-      .append('svg:g')
-      .attr('clip-path', 'url(#timeline-boundary)')
-      .attr('style', 'clip-path:url(#timeline-boundary)')
-      .attr('transform', 'translate(0,1)');
+    // self.svg
+    //   .append('svg:defs')
+    //   .append('svg:clipPath')
+    //   .attr('id', 'timeline-boundary')
+    //   .append('svg:rect')
+    //   .attr('width', self.width) // + margin.left + margin.right)
+    //   .attr('height', self.height + self.margin.top + self.margin.bottom);
 
-    self.axis = self.boundary
-      .append('svg:g')
-      .attr('class', 'x axis')
-      .attr('transform', 'translate(0,' + self.height + ')');
+    // d3.select('#timeline-footer svg defs')
+    //   .append('svg:clipPath')
+    //   .attr('id', 'guitarpick-boundary')
+    //   .append('svg:rect')
+    //   .attr('width', self.width + self.margin.left + self.margin.right) // + margin.left + margin.right)
+    //   .attr('height', self.height + self.margin.top + self.margin.bottom)
+    //   .attr('x', -self.margin.left);
 
-    self.axis
-      .insert('line', ':first-child')
-      .attr('x1', 0)
-      .attr('x2', self.width); // +margin.left+margin.right);
+    // self.boundary = self.svg
+    //   .append('svg:g')
+    //   .attr('clip-path', 'url(#timeline-boundary)')
+    //   .attr('style', 'clip-path:url(#timeline-boundary)')
+    //   .attr('transform', 'translate(0,1)');
 
-    self.dataBars = self.boundary
-      .insert('svg:g', '.x.axis')
-      .attr('height', self.height)
-      .classed('plot', true);
+    // self.axis = self.boundary
+    //   .append('svg:g')
+    //   .attr('class', 'x axis')
+    //   .attr('transform', 'translate(0,' + self.height + ')');
 
-    self.verticalAxis = self.boundary
-      .append('svg:g')
-      .attr('class', 'y axis')
-      .attr('transform', 'translate(0,0)');
-    self.animboundary = self.svg
-      .append('svg:g')
-      .attr('clip-path', '#timeline-boundary')
-      .attr('transform', 'translate(0,16)');
-    self.animboundary.append('g').attr('id', 'wv-rangeselector-case');
+    // self.axis
+    //   .insert('line', ':first-child')
+    //   .attr('x1', 0)
+    //   .attr('x2', self.width); // +margin.left+margin.right);
+
+    // self.dataBars = self.boundary
+    //   .insert('svg:g', '.x.axis')
+    //   .attr('height', self.height)
+    //   .classed('plot', true);
+
+    // self.verticalAxis = self.boundary
+    //   .append('svg:g')
+    //   .attr('class', 'y axis')
+    //   .attr('transform', 'translate(0,0)');
+    // self.animboundary = self.svg
+    //   .append('svg:g')
+    //   .attr('clip-path', '#timeline-boundary')
+    //   .attr('transform', 'translate(0,16)');
+    // self.animboundary.append('g').attr('id', 'wv-rangeselector-case');
   };
 
   var updateReactTimelineDate = function() {
@@ -268,7 +287,7 @@ export function timeline(models, config, ui) {
   var updateTimeUi = function() {
     updateReactTimelineDate();
     self.input.update();
-    self.pick.shiftView();
+    // self.pick.shiftView();
   };
   var onLayerUpdate = function() {
     const layersContainSubdaily = models.layers.hasSubDaily();
@@ -276,7 +295,7 @@ export function timeline(models, config, ui) {
     self.resize();
     self.setClip();
     if (subdaily !== layersContainSubdaily) {
-      self.zoom.refresh();
+      // self.zoom.refresh();
       self.input.update();
       subdaily = layersContainSubdaily;
     }
@@ -286,11 +305,11 @@ export function timeline(models, config, ui) {
     models.layers.events.trigger('toggle-subdaily');
     subdaily = models.layers.hasSubDaily();
     drawContainers();
-    let timelineCase = document.getElementById('timeline');
-    timelineCase.addEventListener('wheel', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    });
+    // let timelineCase = document.getElementById('timeline');
+    // timelineCase.addEventListener('wheel', function(e) {
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    // });
 
     $('#zoom-custom').on('click', function() {
       self.reactComponent.setState({
@@ -313,16 +332,16 @@ export function timeline(models, config, ui) {
 
     self.x = d3.time.scale.utc();
 
-    self.xAxis = d3.svg
-      .axis()
-      .orient('bottom')
-      .tickSize(-self.height)
-      .tickPadding(5);
+    // self.xAxis = d3.svg
+    //   .axis()
+    //   .orient('bottom')
+    //   .tickSize(-self.height)
+    //   .tickPadding(5);
 
-    self.axisZoom = d3.behavior
-      .zoom()
-      .scale(1)
-      .scaleExtent([1, 1]);
+    // self.axisZoom = d3.behavior
+    //   .zoom()
+    //   .scale(1)
+    //   .scaleExtent([1, 1]);
 
     self.resize();
 

@@ -95,6 +95,7 @@ const tileTextConditionOptions = {
 class TileHolder extends PureComponent {
   render() {
     let timeScale = this.props.timeScale;
+    console.log(timeScale)
     let tileTextCondition = tileTextConditionOptions[timeScale];
     let midTile = Math.floor(this.props.dateArray.length / 2);
     return (

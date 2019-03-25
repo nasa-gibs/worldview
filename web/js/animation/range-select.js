@@ -74,10 +74,13 @@ export function animationRangeSelect(models, config, ui) {
     var options;
     var startLocation;
     var endLocation;
-    var pick = d3.select('#guitarpick');
-    var pickWidth = pick.node().getBoundingClientRect().width;
-    var animEndLocation =
-      d3.transform(pick.attr('transform')).translate[0] - pickWidth / 2; // getting guitar pick location
+    // TODO: Pull in new dragger pick
+    // var pick = d3.select('#guitarpick');
+    // var pickWidth = pick.node().getBoundingClientRect().width;
+    var pickWidth = 50;
+    // var animEndLocation =
+    //   d3.transform(pick.attr('transform')).translate[0] - pickWidth / 2; // getting guitar pick location
+    var animEndLocation = 300;
     if (model.rangeState.startDate) {
       startLocation = self.getLocationFromStringDate(
         model.rangeState.startDate

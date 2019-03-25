@@ -1,63 +1,89 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
-class DateZoomChange extends PureComponent {
+class DateZoomChange extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      toolTipHovered: false
+    }
+  }
+
+  // Toggle zoom select tooltip
+  toggleTooltipHover = (isHovered) => {
+    this.setState({
+      toolTipHovered: isHovered
+    })
+  }
+
+  handleClickZoom = (zoomSelected) => {
+    // close tooltip
+    // send props function to change timescale zoom level throughout app
+    this.setState({
+      toolTipHovered: false
+    }, this.props.setTimeScale(zoomSelected));
+  }
+
   render() {
     return (
-      <div>
-
-        <div id="zoom-btn-container">
+      <React.Fragment>
+        <div id="zoom-btn-container"
+        onMouseEnter={() => this.toggleTooltipHover(true)}
+        onMouseLeave={() => this.toggleTooltipHover(false)}
+        >
           {/* timeScale display */}
           <span
             id="current-zoom"
             className="zoom-btn zoom-btn-active"
-            data-zoom="3"
           >
-            Days
+            {this.props.timeScaleChangeUnit}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
-          <div className="wv-tooltip">
+          <div className="wv-tooltip" 
+          style={{ display: this.state.toolTipHovered ? 'block' : 'none' }}
+          >
             <div id="timeline-zoom" className="timeline-zoom">
               <span
                 id="zoom-years"
                 className="zoom-btn zoom-btn-inactive zoom-years"
-                data-zoom="1"
+                onClick={() => this.handleClickZoom('year')}
               >
                 Years
               </span>
               <span
                 id="zoom-months"
                 className="zoom-btn zoom-btn-inactive zoom-months"
-                data-zoom="2"
+                onClick={() => this.handleClickZoom('month')}
               >
                 Months
               </span>
               <span
                 id="zoom-days"
                 className="zoom-btn zoom-btn-inactive zoom-days"
-                data-zoom="3"
+                onClick={() => this.handleClickZoom('day')}
               >
                 Days
               </span>
               <span
                 id="zoom-minutes"
                 className="zoom-btn zoom-btn-inactive zoom-minutes"
-                data-zoom="4"
+                onClick={() => this.handleClickZoom('minute')}
               >
                 Minutes
               </span>
               <span
                 id="zoom-custom"
+                style={{color: '#7890cd'}}
                 className="zoom-btn zoom-btn-inactive zoom-custom"
-                data-zoom="5"
+                onClick={() => this.handleClickZoom('custom')}
               >
-                Custom
+                {this.props.customTimeInterval ? this.props.customTimeInterval : 'Custom'}
               </span>
             </div>
           </div>
         </div>
 
-      </div>
+      </React.Fragment>
     );
   }
 }

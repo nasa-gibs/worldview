@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import DateChangeControls from './timeline-controls/date-change-controls';
+import DateZoomChange from './timeline-controls/date-zoom-change';
 import './timeline.css';
 // import TimelineAxis from './timeline-axis';
 import TimelineAxisContainer from './timeline-axis/timeline-axis-container';
@@ -70,7 +71,7 @@ class Timeline extends React.Component {
       changeDate: this.props.changeDate,
       timeScale: this.props.timeScale,
       incrementDate: this.props.incrementDate,
-      timeScaleChangeUnit: this.props.timeScaleChangeUnit,
+      timeScaleChangeUnit: this.props.timeScale,
       changeAmt: 1,
       customIntervalValue: 1,
       customIntervalZoomLevel: this.props.timeScale
@@ -84,42 +85,48 @@ class Timeline extends React.Component {
     }, this.props.setIntervalInput(intervalValue, zoomLevel))
   }
 
+  setTimeScale = (timeScaleChangeUnit) => {
+
+    if (timeScaleChangeUnit === 'custom') {
+      console.log(timeScaleChangeUnit)
+      // let toggle = this.state.customIntervalModalOpen;
+      // console.log(toggle)
+      // this.setState({
+      //   customIntervalModalOpen: toggle
+      // })
+    } else {
+      this.setState({
+        timeScaleChangeUnit: timeScaleChangeUnit
+      })
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     // console.log(this.props, nextProps, this.state, nextState)
     return true;
   }
 
   render() {
-    // console.log(this.props.selectedDate, this.state.dateFormatted)
-    // let dateFormatted = this.state.selectedDate.toISOString();
-    // let tempStyle = {
-    //   position: 'absolute',
-    //   border: '1px solid #333',
-    //   background: 'rgba(40, 40, 40, 0.9)',
-    //   borderRadius: '5px',
-    //   display: 'flex',
-    //   flexFlow: 'row nowrap',
-    //   marginLeft: '10px',
-    //   marginRight: '10px',
-    //   height: '67px',
-    //   bottom: '10px'
-    // }
-
-    // console.log(this.props)
-    // console.log('DATE', dateFormatted)
-
+    console.log(this.props.selectedDate, this.props.dateFormatted, this.state.dateFormatted, this.props)
 
     return (
       this.state.dateFormatted ?
       <React.Fragment>
+          <div id="timeline-header">
+            <div id="date-selector-main" />
+            <div id="zoom-buttons-group">
+              {/* <div id="zoom-btn-container"> */}
+
+                <DateZoomChange timeScaleChangeUnit={this.state.timeScaleChangeUnit} setTimeScale={this.setTimeScale} />
+              
+              {/* </div> */}
         {/* <DateChangeControls
           toggleCustomIntervalModal={this.toggleCustomIntervalModal}
           selectedDate={this.state.dateFormatted}
           dateChange={this.updateDate} /> */}
         {/* <TimelineAxis {...this.state} selectedDate={dateFormatted}/> */}
 
-        {/* new modular version - currently a shell */}
-        <TimelineAxisContainer {...this.state} selectedDate={this.state.dateFormatted} updateDate={this.updateDate} />
+        
 
         {/* custom interval selector */}
         <IntervalSelectorWidget
@@ -135,6 +142,52 @@ class Timeline extends React.Component {
             <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
           </svg>
         </div> */}
+
+              <div
+                className="button-action-group"
+                id="left-arrow-group"
+                title="Click and hold to animate backwards"
+              >
+                <svg id="timeline-svg" width="24" height="30">
+                  <path
+                    d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
+                    className="arrow"
+                  />
+                </svg>
+              </div>
+              <div
+                className="button-action-group"
+                id="right-arrow-group"
+                title="Click and hold to animate forwards"
+              >
+                <svg width="24" height="30">
+                  <path
+                    d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
+                    className="arrow"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              className="button-action-group animate-button"
+              id="animate-button"
+              title="Set up animation"
+            >
+              <i id="wv-animate" className="fas fa-video wv-animate" />
+            </div>
+          </div>
+          <div id="timeline-footer">
+            <div id="wv-animation-widet-case"> </div>
+            {/* <svg width="1207" height="107" id="timeline-footer-svg" viewBox="0 9 1207 91"> */}
+            {/* new modular version - currently a shell */}
+              <TimelineAxisContainer {...this.state} selectedDate={this.state.dateFormatted} updateDate={this.updateDate} subdaily={this.props.subdaily} />
+              {/* </svg> */}
+          </div>
+          <div id="timeline-hide">
+            <svg className="hamburger" width="10" height="9">
+              <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
+            </svg>
+          </div>
       </React.Fragment>
       :
       null

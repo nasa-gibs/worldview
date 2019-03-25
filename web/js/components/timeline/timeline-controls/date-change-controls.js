@@ -51,9 +51,9 @@ class DateChangeControls extends React.Component {
     // console.log(this.props.selectedDate)
     return (
       <div>
-        <DateSelector
+        {/* <DateSelector
           {...mockDateSelectorProps}
-        />
+        /> */}
         {/* <DateZoomChange />
         <DateChangeArrows /> */}
 

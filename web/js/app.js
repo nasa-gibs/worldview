@@ -16,11 +16,11 @@ import dateWheels from './date/wheels';
 // Timeline
 import { timeline } from './date/timeline';
 import { timelineData } from './date/timeline-data'; // remove
-import { timelineConfig } from './date/config'; // replaced
-import { timelineZoom } from './date/timeline-zoom'; // replaced
-import { timelineTicks } from './date/timeline-ticks'; // replaced
-import { timelinePick } from './date/timeline-pick'; // replaced
-import { timelinePan } from './date/timeline-pan'; // replaced
+// import { timelineConfig } from './date/config'; // replaced
+// import { timelineZoom } from './date/timeline-zoom'; // replaced
+// import { timelineTicks } from './date/timeline-ticks'; // replaced
+// import { timelinePick } from './date/timeline-pick'; // replaced
+// import { timelinePan } from './date/timeline-pan'; // replaced
 import { timelineInput } from './date/timeline-input';
 import { timelineCompare } from './date/compare-picks';
 
@@ -192,12 +192,18 @@ class App extends React.Component {
           id="timeline"
           className="timeline-inner clearfix"
           style={{ display: 'none' }}
+        ></section>
+
+        {/* <section
+          id="timeline"
+          className="timeline-inner clearfix"
+          style={{ display: 'none' }}
         >
           <div id="timeline-header">
             <div id="date-selector-main" />
             <div id="zoom-buttons-group">
-              <div id="zoom-btn-container">
-                <span
+              <div id="zoom-btn-container"> */}
+                {/* <span
                   id="current-zoom"
                   className="zoom-btn zoom-btn-active"
                   data-zoom="3"
@@ -243,8 +249,8 @@ class App extends React.Component {
                       Custom
                     </span>
                   </div>
-                </div>
-              </div>
+                </div> */}
+              {/* </div>
               <div
                 className="button-action-group"
                 id="left-arrow-group"
@@ -286,7 +292,7 @@ class App extends React.Component {
               <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
             </svg>
           </div>
-        </section>
+        </section> */}
         <OlCoordinates mouseEvents={this.mapMouseEvents} />
       </div>
     );
@@ -473,19 +479,19 @@ class App extends React.Component {
       function timelineInit() {
         ui.timeline = timeline(models, config, ui);
         ui.timeline.data = timelineData(models, config, ui);
-        ui.timeline.zoom = timelineZoom(models, config, ui);
-        ui.timeline.ticks = timelineTicks(models, config, ui);
-        ui.timeline.pick = timelinePick(models, config, ui);
-        ui.timeline.pan = timelinePan(models, config, ui);
+        // ui.timeline.zoom = timelineZoom(models, config, ui);
+        // ui.timeline.ticks = timelineTicks(models, config, ui);
+        // ui.timeline.pick = timelinePick(models, config, ui);
+        // ui.timeline.pan = timelinePan(models, config, ui);
         ui.timeline.input = timelineInput(models, config, ui);
-        ui.timeline.config = timelineConfig(models, config, ui);
-        if (config.features.animation) {
-          ui.anim = {};
-          ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-          ui.anim.widget = animationWidget(models, config, ui);
-          ui.anim.gif = animationGif(models, config, ui);
-          ui.anim.ui = animationUi(models, ui);
-        }
+        // ui.timeline.config = timelineConfig(models, config, ui);
+        // if (config.features.animation) {
+        //   ui.anim = {};
+        //   ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+        //   ui.anim.widget = animationWidget(models, config, ui);
+        //   ui.anim.gif = animationGif(models, config, ui);
+        //   ui.anim.ui = animationUi(models, ui);
+        // }
         if (config.features.compare) {
           ui.timeline.compare = timelineCompare(models, config, ui);
         }

@@ -233,6 +233,7 @@ class TimelineAxis extends React.Component {
       numberOfVisibleTiles: numberOfVisibleTiles,
       moved: false,
       timeScaleChange: true,
+      timeScale: timeScale,
       dragSentinelChangeNumber: dragSentinelChangeNumber,
       position: position - pixelsToAdd,
       midPoint: position,
@@ -576,7 +577,9 @@ class TimelineAxis extends React.Component {
       // console.log('inner')
       // let draggerTimeState = this.showTime(this.state.leftOffsetRelativeToInnerParent);
       // this.handleDragDragger(null, {'deltaX': this.state.leftOffset})
-      let draggerPosition = this.state.draggerSelected ? this.state.leftOffset - 49 : this.state.draggerPosition;
+      // console.log(this.state.leftOffset)
+      // TODO: FIX PARENT OFFSET
+      let draggerPosition = this.state.draggerSelected ? this.state.leftOffset - (this.props.subdaily ? 404 : 310) - 10 - 49 : this.state.draggerPosition;
       let draggerPositionB = this.state.draggerSelectedB ? this.state.leftOffset - 49 : this.state.draggerPositionB;
 
       // console.log(this.state.draggerSelected, this.state.draggerSelectedB)
@@ -735,8 +738,13 @@ class TimelineAxis extends React.Component {
     // let stateSelectedDate = moment.utc(prevState.selectedDate).format();
 
     // console.log(propsSelectedDate, stateSelectedDate)
+    console.log(prevProps.timeScaleChangeUnit, this.props.timeScaleChangeUnit, this.state.timeScaleChangeUnit, prevState.timeScaleChangeUnit)
     if (this.state.timeScale !== prevState.timeScale) {
       this.updateScale(null, this.state.timeScale);
+    }
+
+    if (prevProps.timeScaleChangeUnit !== this.props.timeScaleChangeUnit) {
+      this.updateScale(null, this.props.timeScaleChangeUnit);
     }
 
     if (this.props.width !== prevProps.width) {
@@ -919,6 +927,7 @@ class TimelineAxis extends React.Component {
 
   displayDate = (date, leftOffset) => {
     requestAnimationFrame(() => {
+      // console.log(this.state.parentBoundingClientRectLeft)
     //! IE11 undefined parentElement issue fix
       this.setState({
         hoverTime: date,
@@ -1143,7 +1152,7 @@ handleDragDragger = (draggerName, e, d) => {
     window.deque = Deque;
     window.moment = moment;
     return (
-      <div>
+      <React.Fragment>
         {/* <div style={{display: 'flex', position: 'relative', left: (window.innerWidth * 0.05)}}>
           <div style={{display: 'flex', background: '#999', border: '1px solid black', width: '155px', height: '100px'}}>
             <form onSubmit={this.handleSubmit.bind(this)}>
@@ -1189,6 +1198,7 @@ handleDragDragger = (draggerName, e, d) => {
       >
       {this.state.currentDateRange ?
       <svg className="inner"
+        id="timeline-footer-svg"
         width={this.state.axisWidth}
         height={70}
         viewBox={`0 0 ${this.state.axisWidth} 75`}
@@ -1212,7 +1222,7 @@ handleDragDragger = (draggerName, e, d) => {
         {/* <g clipPath="url(#myClip)"> */}
         <g>
           <GridRange
-          showHoverLine={this.state.showHoverLine}
+            showHoverLine={this.state.showHoverLine}
             timeScale={this.state.timeScale}
             displayDate={this.displayDate}
             gridWidth={this.state.gridWidth}
@@ -1246,7 +1256,9 @@ handleDragDragger = (draggerName, e, d) => {
         : null }
         {/* <div className="line" style={{transform: `translate(${this.state.leftOffset}px, 0px)`, display: this.state.showHoverLine ? 'block' : 'none'}}></div> */}
         <div className="dateToolTip" style={{transform: `translate(${this.state.draggerPosition - 5}px, -100px)`, display: this.state.showDraggerTime && this.state.redLineTime ? 'block' : 'none'}}>{this.state.showDraggerTime && this.state.redLineTime ? this.state.redLineTime : null}</div>
-        <div className="dateToolTip" style={{transform: `translate(${this.state.leftOffset - 52}px, -100px)`, display: !this.state.showDraggerTime && this.state.showHoverLine ? 'block' : 'none'}}>{!this.state.showDraggerTime && this.state.hoverTime ? this.state.hoverTime : null}</div>
+        
+        {/* 404 is #timeline-header width and 10 is margin - parent offset issue most likely */}
+        <div className="dateToolTip" style={{transform: `translate(${this.state.leftOffset - 52 - (this.props.subdaily ? 404 : 310) - 10}px, -100px)`, display: !this.state.showDraggerTime && this.state.showHoverLine ? 'block' : 'none'}}>{!this.state.showDraggerTime && this.state.hoverTime ? this.state.hoverTime : null}</div>
 
       </div>
       {/* <div style={{ display: 'flex', marginTop: 10 }}>
@@ -1267,7 +1279,7 @@ handleDragDragger = (draggerName, e, d) => {
             <p style={{marginTop: 5, marginBottom: 0, fontSize: 20}}>{this.state.timeScale ? this.state.timeScale.toUpperCase() : null}</p>
           </div>
         </div> */}
-      </div>
+      </React.Fragment>
     );
   }
 }
