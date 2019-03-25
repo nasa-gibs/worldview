@@ -4,7 +4,7 @@ import { createResponsiveStateReducer } from 'redux-responsive';
 import legacyReducer from './migration/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
-import { shortLink, linkReducer } from './link/reducers';
+import { shortLink } from './link/reducers';
 import {
   notificationsRequest,
   notificationsReducer
