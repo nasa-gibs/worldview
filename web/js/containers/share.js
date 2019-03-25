@@ -43,7 +43,11 @@ class ShareLinkContainer extends Component {
       const newString = location.search;
       const { queryString } = this.state;
       if (queryString !== newString) {
-        this.setState({ queryString: newString });
+        this.setState({
+          queryString: newString,
+          isShort: false,
+          shortLinkKey: ''
+        });
       }
     });
   }
@@ -59,7 +63,6 @@ class ShareLinkContainer extends Component {
   }
   onToggleShorten() {
     const { shortLinkKey, isShort, queryString } = this.state;
-
     if (!isShort && shortLinkKey !== queryString) {
       this.getShortLink();
       this.setState({
@@ -104,12 +107,7 @@ class ShareLinkContainer extends Component {
     }
   }
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.shortLinkKey !== nextProps.queryString) {
-      return {
-        isShort: false,
-        shortLinkKey: ''
-      };
-    } else if (nextProps.shortLink.error && prevState.isShort) {
+    if (nextProps.shortLink.error && prevState.isShort) {
       return { isShort: false, showErrorTooltip: true };
     } else return null;
   }
@@ -142,7 +140,6 @@ class ShareLinkContainer extends Component {
   render() {
     const { shortLink } = this.props;
     const { isShort } = this.state;
-
     const value =
       shortLink.isLoading && isShort
         ? 'Please wait...'
