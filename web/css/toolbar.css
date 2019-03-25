@@ -29,7 +29,7 @@
 .toolbar-list-modal .modal-content {
   width: 150px;
 }
-.toolbar_info  .modal-content {
+.toolbar_info .modal-content {
   width: 156px;
 }
 .toolbar-list-modal .modal-body {
@@ -53,13 +53,10 @@
   position: absolute;
   top: 33px;
 }
-.toolbar_modal_outer .modal.fade .modal-dialog   {
+.toolbar_modal_outer .modal.fade .modal-dialog {
   -webkit-transform: translate(0, 25%);
   transform: translate(0, 25%);
-  transition-property: transform, -webkit-transform;
-  transition-duration: 0.3s, 0.3s;
-  transition-timing-function: ease-out, ease-out;
-  transition-delay: 0s, 0s;
+  transition: transform 0.3s ease-out, -webkit-transform  0.3s ease-out;
 }
 .toolbar_modal_outer .modal.fade.show .modal-dialog {
   -webkit-transform: translate(0, 0);
