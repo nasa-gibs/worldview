@@ -483,15 +483,15 @@ class App extends React.Component {
         // ui.timeline.ticks = timelineTicks(models, config, ui);
         // ui.timeline.pick = timelinePick(models, config, ui);
         // ui.timeline.pan = timelinePan(models, config, ui);
-        ui.timeline.input = timelineInput(models, config, ui);
+        // ui.timeline.input = timelineInput(models, config, ui);
         // ui.timeline.config = timelineConfig(models, config, ui);
-        // if (config.features.animation) {
-        //   ui.anim = {};
-        //   ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-        //   ui.anim.widget = animationWidget(models, config, ui);
-        //   ui.anim.gif = animationGif(models, config, ui);
-        //   ui.anim.ui = animationUi(models, ui);
-        // }
+        if (config.features.animation) {
+          ui.anim = {};
+          ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+          ui.anim.widget = animationWidget(models, config, ui);
+          ui.anim.gif = animationGif(models, config, ui);
+          ui.anim.ui = animationUi(models, ui);
+        }
         if (config.features.compare) {
           ui.timeline.compare = timelineCompare(models, config, ui);
         }

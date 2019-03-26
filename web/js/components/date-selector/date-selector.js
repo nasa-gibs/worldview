@@ -73,7 +73,9 @@ class DateSelector extends React.Component {
     this.setState({
       date: date
     });
-    this.props.onDateChange(date, this.props.id, type, amt);
+    // this.props.onDateChange(date, this.props.id, type, amt);
+    // # send argument to indicate input change for time axis updateScale call
+    this.props.onDateChange(date, true);
   }
   renderSubdaily() {
     if (this.state.maxZoom >= 4) {
@@ -126,7 +128,6 @@ class DateSelector extends React.Component {
     }
   }
   render() {
-    // console.log(this.props.date)
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn

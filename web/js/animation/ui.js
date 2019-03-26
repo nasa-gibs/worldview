@@ -184,7 +184,8 @@ export function animationUi(models, ui) {
    *
    */
   self.getInterval = function () {
-    return zooms[ui.timeline.config.currentZoom - 1];
+    // return zooms[ui.timeline.config.currentZoom - 1];
+    return zooms[3];
   };
 
   /*

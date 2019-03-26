@@ -4,11 +4,13 @@ class DateChangeArrows extends PureComponent {
   render() {
     return (
       <div>
-        {/* left arrow */}
-        {/* <div
+        {/* LEFT ARROW */}
+        <div
           className="button-action-group"
           id="left-arrow-group"
           title="Click and hold to animate backwards"
+          onMouseDown={this.props.leftArrowDown}
+          onMouseUp={this.props.leftArrowUp}
         >
           <svg id="timeline-svg" width="24" height="30">
             <path
@@ -16,13 +18,15 @@ class DateChangeArrows extends PureComponent {
               className="arrow"
             />
           </svg>
-        </div> */}
+        </div>
 
-        {/* right arrow */}
-        {/* <div
+        {/* RIGHT ARROW */}
+        <div
           className="button-action-group"
           id="right-arrow-group"
           title="Click and hold to animate forwards"
+          onMouseDown={this.props.rightArrowDown}
+          onMouseUp={this.props.rightArrowUp}
         >
           <svg width="24" height="30">
             <path
@@ -30,7 +34,7 @@ class DateChangeArrows extends PureComponent {
               className="arrow"
             />
           </svg>
-        </div> */}
+        </div>
       </div>
     );
   }

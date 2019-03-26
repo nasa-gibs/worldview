@@ -174,7 +174,8 @@ export function animationWidget(models, config, ui) {
     } else {
       zooms = ['yearly', 'monthly', 'daily'];
     }
-    return zooms[timeline.config.currentZoom - 1];
+    // return zooms[timeline.config.currentZoom - 1];
+    return zooms[2];
   };
 
   /*

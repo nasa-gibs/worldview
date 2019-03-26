@@ -259,13 +259,13 @@ g.plot rect.data-bar-invisible {
   width: 86px;
 }
 
-.button-action-group,
+/* .button-action-group,
 .date-arrows {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
+} */
 
 .button-action-group {
   height: 60px;
