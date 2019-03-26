@@ -6,6 +6,13 @@ import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
 import { shortLink } from './link/reducers';
 import {
+  requestedEvents,
+  requestedEventSources,
+  requestedEventCategories,
+  eventsReducer,
+  eventRequestResponse
+} from './natural-events/reducers';
+import {
   notificationsRequest,
   notificationsReducer
 } from './notifications/reducers';
@@ -16,6 +23,7 @@ import {
   layerReducer,
   getInitialState as getLayersInitialState
 } from './layers/reducers';
+import { get as lodashGet } from 'lodash';
 
 const responsiveStateReducer = createResponsiveStateReducer(
   {
@@ -33,13 +41,20 @@ const responsiveStateReducer = createResponsiveStateReducer(
   }
 );
 export function getInitialState(models, config, parameters) {
+  const eventsIgnoreArray = {
+    ignore: lodashGet(config, 'naturalEvents.skip') || []
+  };
+
   return {
     parameters,
     config,
     models,
     legacy: models,
     proj: getProjInitialState(config),
-    layers: getLayersInitialState(config)
+    layers: getLayersInitialState(config),
+    requestedEvents: eventRequestResponse(eventsIgnoreArray),
+    requestedEventSources: eventRequestResponse(eventsIgnoreArray),
+    requestedEventCategories: eventRequestResponse(eventsIgnoreArray)
   };
 }
 const defaultReducer = (state = {}) => state;
@@ -56,6 +71,10 @@ const reducers = {
   sidebar: sidebarReducer,
   compare: compareReducer,
   layers: layerReducer,
+  events: eventsReducer,
+  requestedEvents,
+  requestedEventSources,
+  requestedEventCategories,
   modalAboutPage,
   shortLink,
   notificationsRequest

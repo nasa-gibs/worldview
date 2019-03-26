@@ -154,17 +154,17 @@ class Sidebar extends React.Component {
           onWheel={wheelCallBack}
         >
           {/* <NavCase activeTab={activeTab} onTabClick={onTabClick} /> */}
-          <TabContent activeTab={activeTab}>
+          <TabContent activeTab={'events'}>
             <TabPane tabId="layers">
               {this.getProductsToRender(activeTab, isCompareMode)}
             </TabPane>
-            {/* <TabPane tabId="events">
+            <TabPane tabId="events">
               <Events
                 isActive={activeTab === 'events'}
                 height={subComponentHeight}
               />
             </TabPane>
-            <TabPane tabId="download">
+            {/* <TabPane tabId="download">
               <Data
                 isActive={activeTab === 'download'}
                 height={subComponentHeight}

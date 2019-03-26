@@ -116,8 +116,8 @@ export function combineUi(models, config, MapMouseEvents) {
     ui.data = dataUi(models, ui, config);
   }
   if (config.features.naturalEvents) {
-    var request = naturalEventsRequest(models, ui, config);
-    ui.naturalEvents = naturalEventsUI(models, ui, config, request);
+    // var request = naturalEventsRequest(models, ui, config);
+    // ui.naturalEvents = naturalEventsUI(models, ui, config, request);
   }
   if (config.features.compare) {
     ui.compare = compareUi(models, ui, config);

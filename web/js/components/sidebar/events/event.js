@@ -107,6 +107,7 @@ class Event extends React.Component {
     if (eventDate.getUTCFullYear() !== util.today().getUTCFullYear()) {
       dateString += ', ' + eventDate.getUTCFullYear();
     }
+    console.log(event.categories);
     return (
       <li
         className={

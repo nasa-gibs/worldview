@@ -16,7 +16,8 @@ export function requestReducer(actionName, state, action, callback) {
   switch (action.type) {
     case START:
       return requestResponse({
-        isLoading: true
+        isLoading: true,
+        response: null
       });
     case SUCCESS:
       return requestResponse({
@@ -25,10 +26,11 @@ export function requestReducer(actionName, state, action, callback) {
       });
     case FAILURE:
       return requestResponse({
+        response: null,
         error: action.error,
         isLoading: false
       });
     default:
-      return requestResponse({});
+      return requestResponse(state);
   }
 }

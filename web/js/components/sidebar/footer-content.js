@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../util/button';
 import ModeSelection from './mode-selection';
 import googleTagManager from 'googleTagManager';
+import { connect } from 'react-redux';
 
 class FooterContent extends React.Component {
   render() {
@@ -122,6 +123,14 @@ class FooterContent extends React.Component {
     }
   }
 }
+const mapDispatchToProps = dispatch => ({});
+function mapStateToProps(state) {
+  return {};
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FooterContent);
 
 FooterContent.propTypes = {
   showListAllButton: PropTypes.bool,
@@ -139,4 +148,3 @@ FooterContent.propTypes = {
   getDataSelectionSize: PropTypes.func,
   compareFeature: PropTypes.bool
 };
-export default FooterContent;
