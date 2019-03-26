@@ -21,6 +21,14 @@ import {
   expandSidebar
 } from '../modules/sidebar/actions';
 
+const getActiveTabs = function(config) {
+  const features = config.features;
+  return {
+    download: features.dataDownload,
+    layers: true,
+    events: features.naturalEvents
+  };
+};
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
@@ -28,7 +36,7 @@ class Sidebar extends React.Component {
     this.checkerBoardPattern = getCheckerboard();
   }
   componentDidMount() {
-    // this.updateDimensions();
+    this.updateDimensions();
     // prevent browserzooming in safari
     if (util.browser.safari) {
       let onGestureCallback = e => {
@@ -40,12 +48,11 @@ class Sidebar extends React.Component {
     }
   }
   componentDidUpdate() {
-    // this.updateDimensions();
+    this.updateDimensions();
   }
   updateDimensions() {
     const { subComponentHeight } = this.state;
     const { isMobile, screenHeight } = this.props;
-
     if (!isMobile) {
       let newHeight;
       let iconHeight = this.iconElement.clientHeight;
@@ -123,7 +130,8 @@ class Sidebar extends React.Component {
       screenHeight,
       isCollapsed,
       isCompareMode,
-      activeTab
+      activeTab,
+      tabTypes
     } = this.props;
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     return (
@@ -153,8 +161,12 @@ class Sidebar extends React.Component {
           }
           onWheel={wheelCallBack}
         >
-          {/* <NavCase activeTab={activeTab} onTabClick={onTabClick} /> */}
-          <TabContent activeTab={'events'}>
+          <NavCase
+            activeTab={activeTab}
+            onTabClick={onTabClick}
+            tabTypes={tabTypes}
+          />
+          <TabContent activeTab={activeTab}>
             <TabPane tabId="layers">
               {this.getProductsToRender(activeTab, isCompareMode)}
             </TabPane>
@@ -169,10 +181,10 @@ class Sidebar extends React.Component {
                 isActive={activeTab === 'download'}
                 height={subComponentHeight}
               />
-            </TabPane>
+            </TabPane> */}
             <footer ref={footerElement => (this.footerElement = footerElement)}>
-              <FooterContent />
-            </footer> */}
+              <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
+            </footer>
           </TabContent>
         </div>
       </section>
@@ -180,18 +192,21 @@ class Sidebar extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { browser, sidebar, compare, layers } = state;
+  const { browser, sidebar, compare, layers, config } = state;
   const { screenHeight } = browser;
   const { activeTab } = sidebar;
   const { activeString } = layers;
   const numberOfLayers = getLayers(layers[activeString], {}, state).length;
+  const tabTypes = getActiveTabs(config);
+  console.log(browser);
   return {
     activeTab,
     isMobile: browser.is.small,
     hasLocalStorage: util.browser.localStorage,
     screenHeight: screenHeight,
     isCompareMode: compare.active,
-    numberOfLayers
+    numberOfLayers,
+    tabTypes
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -220,6 +235,7 @@ Sidebar.defaultProps = {
 };
 Sidebar.propTypes = {
   isMobile: PropTypes.bool,
+  tabTypes: PropTypes.obj,
   hasLocalStorage: PropTypes.bool,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,

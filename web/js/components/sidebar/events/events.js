@@ -132,7 +132,7 @@ function mapStateToProps(state) {
   let visibleEvents = {};
   const events = lodashGet(requestedEvents, 'response');
   const sources = lodashGet(requestedEventSources, 'response');
-  console.log(events);
+
   if (events) {
     visibleEvents = getEventsWithinExtent(
       events,

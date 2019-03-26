@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Button from '../util/button';
 import ModeSelection from './mode-selection';
 import googleTagManager from 'googleTagManager';
+import { get as lodashGet } from 'lodash';
+import { changeMode } from '../../modules/compare/actions';
 import { connect } from 'react-redux';
 
 class FooterContent extends React.Component {
@@ -12,15 +14,15 @@ class FooterContent extends React.Component {
       isCompareMode,
       comparisonType,
       isMobile,
-      eventsData,
+      events,
       activeTab,
       filterEventList,
       onGetData,
       changeCompareMode,
       addLayers,
       toggleMode,
-      getDataSelectionCounts,
-      getDataSelectionSize,
+      // getDataSelectionCounts,
+      // getDataSelectionSize,
       compareFeature
     } = this.props;
     if (activeTab === 'layers') {
@@ -65,7 +67,7 @@ class FooterContent extends React.Component {
         <div
           className="events-footer-case"
           style={
-            !showListAllButton || !eventsData.events.length
+            !showListAllButton || !events
               ? { display: 'none' }
               : { display: 'block' }
           }
@@ -87,45 +89,59 @@ class FooterContent extends React.Component {
         </div>
       );
     } else {
-      var counts = getDataSelectionCounts();
-      var validSize = getDataSelectionSize();
-      var countArray = Object.values(counts);
-      var noDataSelected =
-        countArray.length === 0
-          ? true
-          : countArray.reduce((a, b) => a + b, 0) === 0;
-      return (
-        <div className="data-download-footer-case">
-          <Button
-            onClick={e => {
-              e.stopPropagation();
-              onGetData();
-              googleTagManager.pushEvent({
-                event: 'data_download_button'
-              });
-            }}
-            className={
-              noDataSelected
-                ? 'wv-data-download-button black no-pointer-events'
-                : 'wv-data-download-button red'
-            }
-            id="compare-toggle-button"
-            text={
-              validSize
-                ? 'Download Data (' + Math.round(validSize * 100) / 100 + ' MB)'
-                : noDataSelected
-                  ? 'No Data Selected'
-                  : 'Download Selected Data'
-            }
-          />
-        </div>
-      );
+      // var counts = getDataSelectionCounts();
+      // var validSize = getDataSelectionSize();
+      // var countArray = Object.values(counts);
+      // var noDataSelected =
+      //   countArray.length === 0
+      //     ? true
+      //     : countArray.reduce((a, b) => a + b, 0) === 0;
+      // return (
+      //   <div className="data-download-footer-case">
+      //     <Button
+      //       onClick={e => {
+      //         e.stopPropagation();
+      //         onGetData();
+      //         googleTagManager.pushEvent({
+      //           event: 'data_download_button'
+      //         });
+      //       }}
+      //       className={
+      //         noDataSelected
+      //           ? 'wv-data-download-button black no-pointer-events'
+      //           : 'wv-data-download-button red'
+      //       }
+      //       id="compare-toggle-button"
+      //       text={
+      //         validSize
+      //           ? 'Download Data (' + Math.round(validSize * 100) / 100 + ' MB)'
+      //           : noDataSelected
+      //             ? 'No Data Selected'
+      //             : 'Download Selected Data'
+      //       }
+      //     />
+      //   </div>
+      // );
     }
   }
 }
-const mapDispatchToProps = dispatch => ({});
-function mapStateToProps(state) {
-  return {};
+const mapDispatchToProps = dispatch => ({
+  toggleMode: str => {
+    dispatch(changeMode(str));
+  }
+});
+function mapStateToProps(state, ownProps) {
+  const { activeTab } = ownProps;
+  const { requestedEvents, config } = state;
+  const { showAll } = state.events;
+  const showListAllButton = !showAll;
+  const events = lodashGet(requestedEvents, 'response');
+  return {
+    showListAllButton,
+    activeTab,
+    events,
+    compareFeature: config.features.compare
+  };
 }
 export default connect(
   mapStateToProps,
@@ -137,7 +153,7 @@ FooterContent.propTypes = {
   isCompareMode: PropTypes.bool,
   comparisonType: PropTypes.string,
   isMobile: PropTypes.bool,
-  eventsData: PropTypes.object,
+  events: PropTypes.array,
   activeTab: PropTypes.string,
   filterEventList: PropTypes.func,
   onGetData: PropTypes.func,

@@ -43,7 +43,7 @@ export const eventsReducerState = {
     id: '',
     date: null
   },
-  showAll: true
+  showAll: false
 };
 
 export function eventsReducer(state = eventsReducerState, action) {

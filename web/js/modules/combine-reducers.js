@@ -36,7 +36,7 @@ const responsiveStateReducer = createResponsiveStateReducer(
   {
     extraFields: () => ({
       screenWidth: window.innerWidth,
-      sreenHeight: window.innerHeight
+      screenHeight: window.innerHeight
     })
   }
 );
