@@ -11,7 +11,7 @@ export function tourModel(config) {
     self.events.trigger('toggle');
   };
 
-  self.select = function (storyId) {
+  self.select = function(storyId) {
     var story = config.stories[storyId];
     if (!story) {
       console.warn('Unsupported tour: ' + storyId);
@@ -24,7 +24,7 @@ export function tourModel(config) {
     return updated;
   };
 
-  self.save = function (state) {
+  self.save = function(state) {
     if (!self.active) {
       if (state.tr) delete state.tr;
     } else {
@@ -32,12 +32,13 @@ export function tourModel(config) {
     }
   };
 
-  self.load = function (state) {
+  self.load = function(state) {
     var storyId = state.tr;
     if (storyId) {
       self.select(storyId);
     }
+    return self;
   };
 
   return self;
-};
+}

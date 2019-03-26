@@ -4,6 +4,7 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashIsNaN from 'lodash/isNaN';
 import lodashIsUndefined from 'lodash/isUndefined';
 import lodashParseInt from 'lodash/parseInt';
+import lodashFindIndex from 'lodash/findIndex';
 import util from '../util/util';
 import palettes from './palettes';
 import Promise from 'bluebird';
@@ -23,7 +24,7 @@ export function palettesModel(models, config) {
     var name = config.layers[layerId].palette.id;
     var palette = config.palettes.rendered[name];
     if (!lodashIsUndefined(index)) {
-      if (palette.maps) {
+      if (palette && palette.maps) {
         palette = palette.maps[index];
       }
     }
@@ -77,6 +78,11 @@ export function palettesModel(models, config) {
     updateLookup(layerId, groupStr);
     self.events.trigger('set-custom', layerId, active, groupStr);
     self.events.trigger('change');
+    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
+    if (layerIndex >= 0) {
+      models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
+      models.layers.events.trigger('change');
+    }
   };
 
   self.clearCustom = function(layerId, index, groupStr) {
@@ -94,6 +100,11 @@ export function palettesModel(models, config) {
     updateLookup(layerId, groupStr);
     self.events.trigger('clear-custom', layerId, groupStr);
     self.events.trigger('change');
+    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
+    if (layerIndex >= 0) {
+      models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
+      models.layers.events.trigger('change');
+    }
   };
 
   self.setRange = function(layerId, min, max, squash, index, groupStr) {
@@ -114,6 +125,11 @@ export function palettesModel(models, config) {
     updateLookup(layerId, groupStr);
     self.events.trigger('range', layerId, palette.min, palette.max, groupStr);
     self.events.trigger('change');
+    const layerIndex = lodashFindIndex(models.layers[groupStr], { id: layerId });
+    if (layerIndex >= 0) {
+      models.layers[groupStr][layerIndex].custom = self[groupStr][layerId];
+      models.layers.events.trigger('change');
+    }
   };
 
   self.getCount = function(layerId) {
@@ -258,6 +274,7 @@ export function palettesModel(models, config) {
       id: layerId
     }).attributes;
     var def = self.get(layerId, undefined, groupStr);
+
     if (def.custom) {
       attr.push({
         id: 'palette',
@@ -383,7 +400,7 @@ export function palettesModel(models, config) {
   self.load = function(state, errors) {
     var stateArray = [{ stateStr: 'l', groupStr: 'active' }];
     if (!palettes.supported) {
-      return;
+      return self;
     }
     if (state.l1) {
       stateArray = [
@@ -470,6 +487,8 @@ export function palettesModel(models, config) {
         }
       });
     });
+    self.loaded = true;
+    return self;
   };
 
   var findIndex = function(layerId, type, value, index, groupStr) {

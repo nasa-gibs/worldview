@@ -7,6 +7,8 @@ import lodashIndexOf from 'lodash/indexOf';
 import lodashSortBy from 'lodash/sortBy';
 import lodashValues from 'lodash/values';
 import lodashDebounce from 'lodash/debounce';
+import lodashToLower from 'lodash/toLower';
+import lodashIncludes from 'lodash/includes';
 
 export function layersModal(models, ui, config) {
   var model = models.layers;
@@ -197,10 +199,10 @@ export function layersModal(models, ui, config) {
     var names = models.layers.getTitles(layer.id);
     $.each(terms, function(index, term) {
       filtered =
-        !names.title.toLowerCase().contains(term) &&
-        !names.subtitle.toLowerCase().contains(term) &&
-        !names.tags.toLowerCase().contains(term) &&
-        !config.layers[layer.id].id.toLowerCase().contains(term);
+        !lodashIncludes(lodashToLower(names.title), term) &&
+        !lodashIncludes(lodashToLower(names.subtitle), term) &&
+        !lodashIncludes(lodashToLower(names.tags), term) &&
+        !lodashIncludes(lodashToLower(config.layers[layer.id].id), term);
 
       if (filtered) return false;
     });

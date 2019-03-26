@@ -51,6 +51,7 @@ export function animationModel(models, config) {
     if (state.al) {
       self.rangeState.loop = Boolean(state.al);
     }
+    return self;
   };
 
   /*

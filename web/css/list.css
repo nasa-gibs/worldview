@@ -1,0 +1,23 @@
+.list-group-item {
+  background: #282828;
+  color: #eee;
+  text-align: left;
+}
+.list-group-item.active {
+  background: #888;
+  border-color: #888;
+}
+.list-group-item:hover {
+  background: #eee;
+  color: #282828;
+}
+.list-group-item i {
+  margin-right: 6px;
+  line-height: 1.5;
+}
+button.list-group-item {
+  cursor: pointer;
+}
+.list-group-item.small-item {
+  padding: 5px;
+}

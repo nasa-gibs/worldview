@@ -8,20 +8,28 @@ const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
  * This is only run if user has not already selected
  * a resolution
  */
-export function imageUtilCalculateResolution(zoom, isGeoProjection, resolutions) {
+export function imageUtilCalculateResolution(
+  zoom,
+  isGeoProjection,
+  resolutions
+) {
   var resolution;
   var resolutionEstimate;
   var nZoomLevels = resolutions.length;
   var currentZoom = zoom < 0 ? 0 : zoom;
-  var curResolution = (currentZoom >= nZoomLevels)
-    ? resolutions[nZoomLevels - 1]
-    : resolutions[currentZoom];
+  var curResolution =
+    currentZoom >= nZoomLevels
+      ? resolutions[nZoomLevels - 1]
+      : resolutions[currentZoom];
 
   // Estimate the option value used by "wv-image-resolution"
-  resolutionEstimate = imageUtilEstimateResolution(curResolution, isGeoProjection);
+  resolutionEstimate = imageUtilEstimateResolution(
+    curResolution,
+    isGeoProjection
+  );
 
   // Find the closest match of resolution within the available values
-  var possibleResolutions = (isGeoProjection)
+  var possibleResolutions = isGeoProjection
     ? [0.125, 0.25, 0.5, 1, 2, 4, 20, 40]
     : [1, 2, 4, 20, 40];
   var bestDiff = Infinity;
@@ -57,10 +65,10 @@ export function imageUtilCalculateResolution(zoom, isGeoProjection, resolutions)
     }
   }
   return resolution.toString();
-};
+}
 
 /*
- * Retieves avtive layers by day
+ * Retrieves active layers by day
  *
  * @method getLayersForDay
  * @private
@@ -70,7 +78,7 @@ export function imageUtilCalculateResolution(zoom, isGeoProjection, resolutions)
  * @returns {array} array of layer ids
  *
  */
-export function imageUtilGetLayers (products, proj) {
+export function imageUtilGetLayers(products, proj) {
   var layers = [];
   lodashEach(products, function(layer) {
     if (layer.projections[proj].layer) {
@@ -80,9 +88,9 @@ export function imageUtilGetLayers (products, proj) {
     }
   });
   return layers;
-};
+}
 /*
- * Retieves opacities from palettes
+ * Retrieves opacities from palettes
  *
  * @method getOpacities
  * @private
@@ -92,10 +100,10 @@ export function imageUtilGetLayers (products, proj) {
  * @returns {array} array of opacities
  *
  */
-export function imageUtilGetLayerOpacities (layers) {
+export function imageUtilGetLayerOpacities(layers) {
   let opacities = [];
   let found = false;
-  layers.forEach((layer) => {
+  layers.forEach(layer => {
     let opacity = '';
     if ('opacity' in layer && layer.opacity !== 1) {
       opacity = layer.opacity;
@@ -109,18 +117,20 @@ export function imageUtilGetLayerOpacities (layers) {
     return [];
   }
   return opacities;
-};
+}
 
 export function imageUtilEstimateResolution(resolution, isGeoProjection) {
-  return (isGeoProjection) ? resolution / POLAR_ESTIMATION_CONSTANT : resolution / GEO_ESTIMATION_CONSTANT;
+  return isGeoProjection
+    ? resolution / POLAR_ESTIMATION_CONSTANT
+    : resolution / GEO_ESTIMATION_CONSTANT;
 }
-export function imageUtilGetConversionFactor (proj) {
-  if (proj === 'geographic') return 0.002197;
-  return 256;
-};
+export function imageUtilGetConversionFactor(proj) {
+  if (proj === 'geographic') return POLAR_ESTIMATION_CONSTANT;
+  return GEO_ESTIMATION_CONSTANT;
+}
 
 /*
- * Retieves coordinates from pixel
+ * Retrieves coordinates from pixel
  *
  * @method getCoords
  * @private
@@ -128,12 +138,12 @@ export function imageUtilGetConversionFactor (proj) {
  * @returns {array} array of coords
  *
  */
-export function imageUtilGetCoordsFromPixelValues (pixels, map) {
+export function imageUtilGetCoordsFromPixelValues(pixels, map) {
   return [
     map.getCoordinateFromPixel([Math.floor(pixels.x), Math.floor(pixels.y2)]),
     map.getCoordinateFromPixel([Math.floor(pixels.x2), Math.floor(pixels.y)])
   ];
-};
+}
 
 /**
  * Given a bounding box as an array of a lower left coordinate pair
@@ -143,8 +153,42 @@ export function imageUtilGetCoordsFromPixelValues (pixels, map) {
  */
 export function bboxWMS13(lonlats, crs) {
   if (crs === 'EPSG:4326') {
-    return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${lonlats[1][0]}`;
+    return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${
+      lonlats[1][0]
+    }`;
   } else {
-    return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${lonlats[1][1]}`;
+    return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${
+      lonlats[1][1]
+    }`;
   }
+}
+
+export function imageSizeValid(imgHeight, imgWidth, maxSize) {
+  if (imgHeight === 0 && imgWidth === 0) {
+    return false;
+  }
+  if (imgHeight > maxSize || imgWidth > maxSize) {
+    return false;
+  }
+  return true;
+}
+export function getDimensions(projection, bounds, resolution) {
+  const conversionFactor = imageUtilGetConversionFactor(projection);
+  const imgWidth = Math.round(
+    Math.abs(bounds[1][0] - bounds[0][0]) /
+      conversionFactor /
+      Number(resolution)
+  );
+  const imgHeight = Math.round(
+    Math.abs(bounds[1][1] - bounds[0][1]) /
+      conversionFactor /
+      Number(resolution)
+  );
+  return { width: imgWidth, height: imgHeight };
+}
+export function getPercentageFromPixel(maxDimension, dimension) {
+  return Math.round((dimension / maxDimension) * 100);
+}
+export function getPixelFromPercentage(maxDimension, percent) {
+  return Math.round((percent / 100) * maxDimension);
 }

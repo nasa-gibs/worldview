@@ -6,6 +6,7 @@ export function compareModel(models, config) {
   self.active = false;
   self.isCompareA = true;
   self.mode = 'swipe';
+  self.value = 50;
   self.events = util.events();
 
   self.toggle = function() {
@@ -68,6 +69,7 @@ export function compareModel(models, config) {
         self.value = Number(state.cv);
       }
     }
+    return self;
   };
   return self;
 }

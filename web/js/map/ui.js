@@ -42,9 +42,7 @@ export function mapui(models, config) {
   var dateline = mapDateLineBuilder(models, config);
   var precache = mapPrecacheTile(models, config, cache, self);
   var compare = mapCompare(models, config);
-
   var dataRunner = (self.runningdata = new MapRunningData(models, compare));
-
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
@@ -122,6 +120,7 @@ export function mapui(models, config) {
     }
     self.selected = self.proj[models.proj.selected.id];
     var map = self.selected;
+    models.map.updateMap(map);
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
@@ -697,8 +696,10 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var updateExtent = function() {
-    var map = self.selected;
-    models.map.update(map.getView().calculateExtent(map.getSize()));
+    const map = self.selected;
+    const view = map.getView();
+    const extent = view.calculateExtent(map.getSize());
+    models.map.update(extent);
     triggerExtent();
   };
   /*

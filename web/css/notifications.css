@@ -4,7 +4,7 @@
   position: relative;
 }
 
-#wv-info-button label::before {
+#wv-info-button::before {
   content: attr(data-content) '';
   display: block;
   width: 20px;
@@ -19,19 +19,19 @@
   line-height: 1.45;
 }
 
-#wv-info-button.wv-status-outage label::before {
+#wv-info-button.wv-status-outage::before {
   background: #ff1a1e;
 }
 
-#wv-info-button.wv-status-alert label::before {
+#wv-info-button.wv-status-alert::before {
   background: #e5c937;
 }
 
-#wv-info-button.wv-status-message label::before {
+#wv-info-button.wv-status-message::before {
   background: #40a9db;
 }
 
-#wv-info-button.wv-status-hide label::before {
+#wv-info-button.wv-status-hide::before {
   display: none;
 }
 
@@ -54,16 +54,19 @@
   top: 4px;
   z-index: 33;
 }
-
-.ui-menu-item.exclamation-circle a::before {
+.list-group-item .badge {
+  position: absolute;
+  right: 5px;
+}
+.outage-notification .badge {
   background: #ff1a1e;
 }
 
-.ui-menu-item.bolt a::before {
+.alert-notification .badge {
   background: #e5c937;
 }
 
-.ui-menu-item.gift a::before {
+.message-notification .badge {
   background: #40a9db;
 }
 
@@ -80,15 +83,15 @@
   padding: 0.75em 10px;
 }
 
-.wv-notify-modal .outage h2 {
+.wv-notify-modal .outage-notification-item h2 {
   background: rgba(179, 41, 43, 0.3);
 }
 
-.wv-notify-modal .alert h2 {
+.wv-notify-modal .alert-notification-item h2 {
   background: rgba(229, 201, 55, 0.3);
 }
 
-.wv-notify-modal .message h2 {
+.wv-notify-modal .message-notification-item h2 {
   background: rgba(64, 169, 219, 0.3);
 }
 
@@ -106,17 +109,20 @@
   margin: 10px;
 }
 
-.wv-dialog .wv-notify-modal ul {
+.wv-notify-modal ul {
   margin: 0;
   padding: 0;
 }
 
-.wv-dialog .wv-notify-modal ul li {
+.wv-notify-modal ul li {
   list-style-type: none;
   border-bottom: 1px solid #404040;
   margin: 0;
 }
 
-.wv-dialog .wv-notify-modal ul li div {
+.wv-notify-modal ul li div {
   padding: 0;
+}
+.notification_list_modal .modal-body {
+  padding-top: 0;
 }

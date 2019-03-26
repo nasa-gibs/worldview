@@ -1,4 +1,7 @@
 import util from '../util/util';
+import * as olProj from 'ol/proj';
+import { register } from 'ol/proj/proj4';
+import proj4 from 'proj4';
 import lodashClone from 'lodash/clone';
 import { intersects } from 'ol/extent';
 
@@ -6,8 +9,27 @@ export function mapModel(models, config) {
   var self = {};
 
   self.extent = null;
+  self.selectedMap = null;
   self.events = util.events();
   self.rotation = 0;
+  const init = function() {
+    if (!config.projections) {
+      return;
+    }
+
+    Object.values(config.projections).forEach(proj => {
+      if (proj.crs && proj.proj4) {
+        self.register(proj.crs, proj.proj4);
+      }
+    });
+  };
+  self.register = function(crs, def) {
+    if (def && proj4) {
+      proj4.defs(crs, def);
+      register(proj4);
+      olProj.get(crs).setExtent(def.maxExtent);
+    }
+  };
   /*
    * Emits update event
    *
@@ -18,11 +40,18 @@ export function mapModel(models, config) {
    *
    * @returns {void}
    */
-  self.update = function (extent) {
+  self.update = function(extent) {
     self.extent = extent;
     self.events.trigger('update', extent);
   };
-
+  // Give other components access to zoom Level
+  self.updateMap = function(map) {
+    self.selectedMap = map;
+    self.events.trigger('update-map');
+  };
+  self.getZoom = function() {
+    return self.selectedMap ? self.selectedMap.getView().getZoom() : null;
+  };
   /*
    * Sets map view from parsed URL
    *
@@ -35,7 +64,7 @@ export function mapModel(models, config) {
    *
    * @returns {void}
    */
-  self.load = function (state, errors) {
+  self.load = function(state, errors) {
     if (state.v) {
       var proj = models.proj.selected;
       var extent = state.v;
@@ -55,8 +84,12 @@ export function mapModel(models, config) {
     }
     // get rotation if it exists
     if (state.p === 'arctic' || state.p === 'antarctic') {
-      if (!isNaN(state.r)) { self.rotation = state.r * (Math.PI / 180.0); } // convert to radians
+      if (!isNaN(state.r)) {
+        self.rotation = state.r * (Math.PI / 180.0);
+      } // convert to radians
     }
+    self.loaded = true;
+    return self;
   };
 
   /*
@@ -71,11 +104,14 @@ export function mapModel(models, config) {
    *
    * @returns {void}
    */
-  self.save = function (state) {
+  self.save = function(state) {
     state.v = lodashClone(self.extent);
-    if (self.rotation !== 0.0 && self.rotation !== 0 && models.proj.selected.id !== 'geographic') {
-      state.r = (self.rotation * (180.0 / Math.PI))
-        .toPrecision(6);
+    if (
+      self.rotation !== 0.0 &&
+      self.rotation !== 0 &&
+      models.proj.selected.id !== 'geographic'
+    ) {
+      state.r = (self.rotation * (180.0 / Math.PI)).toPrecision(6);
     } // convert from radians to degrees
   };
 
@@ -94,9 +130,8 @@ export function mapModel(models, config) {
    *
    * @returns {object} Extent Array
    */
-  self.getLeadingExtent = function () {
-    var curHour = util.now()
-      .getUTCHours();
+  self.getLeadingExtent = function() {
+    var curHour = util.now().getUTCHours();
 
     // For earlier hours when data is still being filled in, force a far eastern perspective
     if (curHour < 3) {
@@ -114,6 +149,6 @@ export function mapModel(models, config) {
 
     return [minLon, minLat, maxLon, maxLat];
   };
-
+  init();
   return self;
-};
+}

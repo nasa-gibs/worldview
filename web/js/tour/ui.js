@@ -18,7 +18,7 @@ export function tourUi(models, ui, config) {
       React.createElement(Tour, getInitialProps()),
       document.getElementById('wv-tour')
     );
-
+    models.tour.events.on('start-tour', self.startTour);
     models.wv.events.on('startup', function() {
       let story = models.tour.selected;
       let storyLoaded = false;
@@ -73,9 +73,9 @@ export function tourUi(models, ui, config) {
       let tourDate = new Date(hideTour);
       // Tour hidden when visiting fresh URL
       googleTagManager.pushEvent({
-        'event': 'tour_start_hidden',
-        'buildDate': buildDate,
-        'tourDate': tourDate
+        event: 'tour_start_hidden',
+        buildDate: buildDate,
+        tourDate: tourDate
       });
       if (buildDate > tourDate) {
         localStorage.removeItem('hideTour');
@@ -88,7 +88,7 @@ export function tourUi(models, ui, config) {
     } else {
       // Tour shown when visiting fresh URL
       googleTagManager.pushEvent({
-        'event': 'tour_start'
+        event: 'tour_start'
       });
       return true;
     }
@@ -98,7 +98,7 @@ export function tourUi(models, ui, config) {
     if (e) e.preventDefault();
     // Tour startup modal shown by clicking "More Stories" button at end of story
     googleTagManager.pushEvent({
-      'event': 'tour_more_stories_button'
+      event: 'tour_more_stories_button'
     });
     self.startTour();
   };
@@ -107,7 +107,7 @@ export function tourUi(models, ui, config) {
     if (e) e.preventDefault();
     // Tour shown by manually clicking "Start Tour" button
     googleTagManager.pushEvent({
-      'event': 'tour_start_button'
+      event: 'tour_start_button'
     });
     self.reactComponent.setState({
       modalStart: true,
@@ -117,7 +117,12 @@ export function tourUi(models, ui, config) {
     });
   };
 
-  self.selectTour = function(e, currentStory, currentStoryIndex, currentStoryId) {
+  self.selectTour = function(
+    e,
+    currentStory,
+    currentStoryIndex,
+    currentStoryId
+  ) {
     let totalSteps = currentStory.steps;
     if (e) e.preventDefault();
     self.reactComponent.setState({
@@ -141,7 +146,7 @@ export function tourUi(models, ui, config) {
 
     // Checkbox to "hide tour modal until a new story has been added" has been checked
     googleTagManager.pushEvent({
-      'event': 'tour_hide_checked'
+      event: 'tour_hide_checked'
     });
 
     if (!util.browser.localStorage) return;
@@ -155,7 +160,7 @@ export function tourUi(models, ui, config) {
 
     // Checkbox to "hide tour modal until a new story has been added" has been checked
     googleTagManager.pushEvent({
-      'event': 'tour_hide_unchecked'
+      event: 'tour_hide_unchecked'
     });
 
     if (!util.browser.localStorage) return;

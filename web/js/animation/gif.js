@@ -18,7 +18,7 @@ import {
   imageUtilGetCoordsFromPixelValues,
   imageUtilGetConversionFactor,
   bboxWMS13
-} from '../image/util';
+} from '../modules/image-download/util';
 import util from '../util/util';
 import wvui from '../ui/ui';
 import uiIndicator from '../ui/indicator';

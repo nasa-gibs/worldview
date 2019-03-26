@@ -5,8 +5,8 @@ export function dateModel(models, config, spec) {
 
   var self = {};
   self.events = util.events();
-  self.selected = null;
-  self.selectedB = null;
+  self.selected = util.now();
+  self.selectedB = util.dateAdd(self.selected, 'day', -7);
   self.activeDate = 'selected';
 
   self.monthAbbr = [
@@ -158,6 +158,7 @@ export function dateModel(models, config, spec) {
     if (state.t1) {
       self.select(state.t1, 'selectedB');
     }
+    return self;
   };
   init();
   return self;

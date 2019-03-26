@@ -33,7 +33,7 @@ export default function naturalEventsUI(models, ui, config, request) {
     // Display loading information for user feedback on slow network
 
     view = map.getView();
-
+    model.events.on('select-init-event', self.selectEvent);
     request.events.on('queryResults', function() {
       if (!(model.data.events || model.data.sources)) return;
 
@@ -60,7 +60,12 @@ export default function naturalEventsUI(models, ui, config, request) {
 
       // Reselect previously selected event
       if (self.selected.id) {
-        self.selectEvent(self.selected.id, self.selected.date || null, null, true);
+        self.selectEvent(
+          self.selected.id,
+          self.selected.date || null,
+          null,
+          true
+        );
       }
     });
     ui.sidebar.events.on('selectTab', function(tab) {
@@ -175,7 +180,13 @@ export default function naturalEventsUI(models, ui, config, request) {
       }
     });
   };
-  var getZoomPromise = function(event, date, rotation, isIdChange, isInitialLoad) {
+  var getZoomPromise = function(
+    event,
+    date,
+    rotation,
+    isIdChange,
+    isInitialLoad
+  ) {
     return isInitialLoad
       ? new Promise(function(resolve, reject) {
         resolve();
@@ -203,7 +214,13 @@ export default function naturalEventsUI(models, ui, config, request) {
     var isSameCategory = category === prevCategory;
 
     date = date || self.getDefaultEventDate(event);
-    const zoomPromise = getZoomPromise(event, date, rotation, !isIdChange, isInitialLoad);
+    const zoomPromise = getZoomPromise(
+      event,
+      date,
+      rotation,
+      !isIdChange,
+      isInitialLoad
+    );
     self.selected.date = date;
 
     // highlightEventInList(id, date);

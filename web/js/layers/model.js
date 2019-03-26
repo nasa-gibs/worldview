@@ -506,8 +506,9 @@ export function layersModel(models, config) {
     });
   };
   self.load = function(state, errors) {
-    if (self.loaded) return;
-
+    if (self.loaded) {
+      return self;
+    }
     var layers;
     if (config.features.compare) {
       layers = [
@@ -564,6 +565,7 @@ export function layersModel(models, config) {
       self.activeLayers = 'activeB';
     }
     self.loaded = true;
+    return self;
   };
   var forGroup = function(group, spec, activeLayers) {
     spec = spec || {};

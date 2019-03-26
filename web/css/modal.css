@@ -1,0 +1,36 @@
+/* universal/default modal styles */
+.modal-dialog .default-modal,
+.modal-dialog .modal-content {
+  background: #282828;
+  color: #eee;
+}
+.modal-dialog .close, .modal-body pre {
+  color: #eee;
+}
+.clickable-behind-modal .modal {
+  position: inherit;
+}
+.template-modal.modal-dialog {
+  max-width: 625px;
+}
+.template-modal .modal-content {
+  width: 625px;
+}
+.template-modal .modal-body ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+.template-modal .modal-body li {
+  display: list-item;
+  list-style-type: disc;
+  margin: 2px 0 2px 20px;
+}
+.modal-dialog.light .modal-content {
+  background-color: #dcdcdc;
+}
+.modal-dialog .modal-header .close:hover {
+  color: #fff;
+}
+.modal-dialog.light .modal-header .close:hover {
+  color: #000;
+}
