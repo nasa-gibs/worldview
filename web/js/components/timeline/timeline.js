@@ -27,7 +27,8 @@ class Timeline extends React.Component {
       customIntervalValue: '',
       customIntervalZoomLevel: '',
       customIntervalModalOpen: false,
-      inputChange: false
+      inputChange: false,
+      timelineHidden: false
     };
   }
 
@@ -129,6 +130,14 @@ class Timeline extends React.Component {
     this.props.clickAnimationButton();
   }
 
+  // toggle hide timeline
+  toggleHideTimeline = () => {
+    console.log('hey')
+    this.setState({
+      timelineHidden: !this.state.timelineHidden
+    }, this.props.toggleHideTimeline());
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     // console.log(this.props, nextProps, this.state, nextState)
     // if (this.state.inputChange) {
@@ -203,10 +212,16 @@ class Timeline extends React.Component {
         </div>
 
         {/* hammmmmmmmmmmburger 🍔 */}
-        <div id="timeline-hide">
-          <svg className="hamburger" width="10" height="9">
+        <div className="timeline-hamburger-date">DAY</div>
+        <div id="timeline-hide" onClick={this.toggleHideTimeline}>
+        {this.state.timelineHidden ?
+        <i className="far fa-caret-square-right wv-timeline-hide-arrow"></i>
+        :
+        <i className="far fa-caret-square-left wv-timeline-hide-arrow"></i>
+        }
+          {/* <svg className="hamburger" width="10" height="9">
             <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
-          </svg>
+          </svg> */}
         </div>
       </React.Fragment>
       :

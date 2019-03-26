@@ -197,6 +197,38 @@ form select {
 
 }
 
+.wv-timeline-hide-arrow {
+  vertical-align: middle;
+  display: block;
+  margin: 26px 0 0 10px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+  background: rgba(40, 40, 40, 0.9);
+  width: 40px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding-left: 2px;
+  transform: scale(1.5,1);
+}
+
+.wv-timeline-hide-arrow:hover {
+  color: #1a1a1a;
+  background: white;
+}
+
+.timeline-hamburger-date {
+  position: relative;
+  width: 20px;
+  left: 15px;
+  top: 5px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-size: 14px;
+  color: white;
+  background: rgba(40, 40, 40, 0.9);
+}
+
 /* DEMO DOM CLEANUP */
 
 /* #timeline-footer-svg {

@@ -392,6 +392,7 @@ g.plot rect.data-bar-invisible {
 #timeline-footer {
   border-left: 1px solid #666;
   border-right: 1px solid #666;
+  /* margin-right: 58px; */
 }
 
 #timeline-footer svg {
@@ -505,16 +506,16 @@ g.plot rect.data-bar-invisible {
   top: 0;
   right: 0;
   height: 64px;
-  width: 20px;
-  cursor: pointer;
+  width: 0;
+  /* cursor: pointer; */
   border-left: 1px solid #1a1a1a;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
 
-#timeline-hide:hover {
+/* #timeline-hide:hover {
   background-color: #fff;
-}
+} */
 
 #guitarpick {
   cursor: pointer;

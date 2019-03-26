@@ -473,6 +473,8 @@ export function timeline(models, config, ui) {
     console.log(ui);
   };
 
+  
+
   var getInitialProps = () => {
     // console.log(self)
     let selectedDate = models.date[models.date.activeDate];
@@ -493,7 +495,8 @@ export function timeline(models, config, ui) {
       dateFormatted: new Date(selectedDate).toISOString(),
       inputProps: inputProps,
       stopper: stopper,
-      clickAnimationButton: clickAnimationButton
+      clickAnimationButton: clickAnimationButton,
+      toggleHideTimeline: self.toggle
     };
   };
 
@@ -660,12 +663,12 @@ export function timeline(models, config, ui) {
       }
     }
 
-    $('#timeline-hide').click(function() {
-      googleTagManager.pushEvent({
-        event: 'timeline_hamburger'
-      });
-      self.toggle();
-    });
+    // $('#timeline-hide').click(function() {
+    //   googleTagManager.pushEvent({
+    //     event: 'timeline_hamburger'
+    //   });
+    //   self.toggle();
+    // });
 
     $(window).resize(function() {
       self.resize();
