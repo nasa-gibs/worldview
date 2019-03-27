@@ -39,6 +39,10 @@ class CustomIntervalSelectorWidget extends React.Component {
     })
   }
 
+  setIntervalChangeUnit = () => {
+    this.props.setIntervalChangeUnit(this.state.intervalValue, this.state.zoomLevel);
+  }
+
   componentDidMount() {
     this.setState({
       intervalValue: this.props.customIntervalValue,
@@ -72,7 +76,8 @@ class CustomIntervalSelectorWidget extends React.Component {
 
         <div style={{display: 'flex', flexDirection: 'column' }} className="custom-interval-buttons">
           <Button
-            onClick={() => this.props.setInterval(this.state.intervalValue, this.state.zoomLevel)}
+            // onClick={() => this.props.setInterval(this.state.intervalValue, this.state.zoomLevel)}
+            onClick={this.setIntervalChangeUnit}
             id='set-interval-button'
             text='Set'
             className='red'

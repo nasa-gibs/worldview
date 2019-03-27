@@ -190,6 +190,10 @@ form select {
   margin-right: 15px;
 }
 
+.custom-interval-text {
+  color: #7890cd !important;
+}
+
 #set-interval-button {
 }
 
@@ -227,6 +231,10 @@ form select {
   font-size: 14px;
   color: white;
   background: rgba(40, 40, 40, 0.9);
+}
+
+.date-arrow-wrapper {
+  width: 80px;
 }
 
 /* DEMO DOM CLEANUP */

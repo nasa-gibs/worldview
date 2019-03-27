@@ -42,7 +42,7 @@ export function dateModel(models, config, spec) {
   };
 
   self.select = function(date, selectionStr) {
-    console.log(date)
+    console.log(date, self.selected)
     if (!date) return null;
     selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);
@@ -61,7 +61,10 @@ export function dateModel(models, config, spec) {
   };
 
   self.add = function(interval, amount, selectionStr) {
+    console.log(interval, amount, selectionStr)
     selectionStr = selectionStr || self.activeDate;
+    console.log(interval, amount, selectionStr)
+    console.log(self[selectionStr])
     self.select(
       util.dateAdd(self[selectionStr], interval, amount),
       selectionStr
@@ -85,6 +88,7 @@ export function dateModel(models, config, spec) {
         date = startDate;
       }
     }
+    console.log(date)
     return date;
   };
 

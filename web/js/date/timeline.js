@@ -150,15 +150,20 @@ export function timeline(models, config, ui) {
   };
 
   var updateMaxZoom = function() {
-    if (model.maxZoom >= 4) {
-      document.getElementById('timeline-header').classList.add('subdaily');
+    let subdaily = models.layers.hasSubDaily();
+
+    // if (model.maxZoom >= 4) {
+    if (subdaily) {
+      // document.getElementById('timeline-header').classList.add('subdaily');
     } else {
-      if (ui.timeline && ui.timeline.config.currentZoom > 3) {
+      // if (ui.timeline && ui.timeline.config.currentZoom > 3) {
+      if (ui.timeline && !subdaily) {
         document.getElementById('zoom-days').click();
       }
-      document.getElementById('timeline-header').classList.remove('subdaily');
+      // document.getElementById('timeline-header').classList.remove('subdaily');
     }
-    self.reactComponent.setState({ maxZoom: model.maxZoom });
+
+    // self.reactComponent.setState({ maxZoom: model.maxZoom });
     // model.events.trigger('update-timewheel');
   };
 
@@ -225,11 +230,11 @@ export function timeline(models, config, ui) {
     var min = model.minDate();
     var max = model.maxDate();
     var date = model[model.activeDate];
-    var maxZoom = model.maxZoom;
-    if (model.maxZoom >= 4 || config.parameters.showSubdaily) {
-      document.getElementById('timeline-header').classList.add('subdaily');
-      maxZoom = 4;
-    }
+    // var maxZoom = model.maxZoom;
+    // if (model.maxZoom >= 4 || config.parameters.showSubdaily) {
+    //   document.getElementById('timeline-header').classList.add('subdaily');
+    //   maxZoom = 4;
+    // }
 
     return {
       width: '120',
@@ -238,7 +243,7 @@ export function timeline(models, config, ui) {
       idSuffix: 'animation-widget-main',
       minDate: min,
       maxDate: max,
-      maxZoom: maxZoom,
+      // maxZoom: maxZoom,
       // onDateChange: onDateSelect,
       date: date,
       fontSize: null
@@ -265,6 +270,8 @@ export function timeline(models, config, ui) {
     var endTime = models.layers.lastDateTime();
     var endDate = models.layers.lastDate();
     self.delta = Math.abs(delta);
+
+    let subdaily = models.layers.hasSubDaily();
 
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
@@ -417,7 +424,7 @@ export function timeline(models, config, ui) {
 
     //   self.axis.select('line:first-child').attr('x2', self.width);
     }
-    self.reactComponent.setState({ width: self.getWidth() });
+    self.reactComponent.setState({ timelineWidth: self.getWidth() });
   };
 
   self.setClip = function() {
@@ -442,15 +449,22 @@ export function timeline(models, config, ui) {
 
   var incrementDate = (increment, timeScale) => {
     // self.expand(true);
-    console.log(increment, timeScale)
+    // console.log(increment, timeScale)
     self.animateByIncrement(increment, timeScale);
+    // let newDate = models.date[models.date.activeDate];
+    // console.log('XXXXX', newDate);
     // models.date.add(timeScale, increment);
     // self.input.animateByIncrement(increment, timeScale);
     // models.date.select(date);
+    // self.reactComponent.setState({
+    //   selectedDate: newDate,
+    //   dateFormatted: new Date(newDate).toISOString()
+    // });
   };
 
   var updateDate = (date) => {
     let updatedDate = new Date(date);
+    console.log(date)
     // console.log(models)
     // self.input.update(updatedDate);
     // models.date.setActiveDate(updatedDate);
@@ -473,19 +487,17 @@ export function timeline(models, config, ui) {
     console.log(ui);
   };
 
-  
-
   var getInitialProps = () => {
     // console.log(self)
     let selectedDate = models.date[models.date.activeDate];
     let subdaily = models.layers.hasSubDaily();
 
     let inputProps = getInputProps();
-    return {
-      width: self.width,
+    return Object.assign(inputProps, {
+      timelineWidth: self.width,
       parentOffset: self.parentOffset,
-      subdailyLayers: subdaily,
-      height: self.height,
+      hasSubdailyLayers: subdaily,
+      timelineHeight: self.height,
       selectedDate: selectedDate,
       // changeDate: changeDate,
       timeScale: 'day',
@@ -493,11 +505,10 @@ export function timeline(models, config, ui) {
       updateDate: updateDate,
       setIntervalInput: setIntervalInput,
       dateFormatted: new Date(selectedDate).toISOString(),
-      inputProps: inputProps,
       stopper: stopper,
       clickAnimationButton: clickAnimationButton,
       toggleHideTimeline: self.toggle
-    };
+    });
   };
 
   var drawContainers = function() {
@@ -584,7 +595,7 @@ export function timeline(models, config, ui) {
     // debugger;
     let selectedDate = models.date[models.date.activeDate];
     // console.log(selectedDate, new Date(selectedDate).toISOString())
-    // console.log(selectedDate);
+    console.log(selectedDate);
     self.reactComponent.setState({
       selectedDate: selectedDate,
       dateFormatted: new Date(selectedDate).toISOString()
@@ -592,23 +603,36 @@ export function timeline(models, config, ui) {
   };
 
   var updateTimeUi = function() {
-    console.log('%c updateTimeUi ', 'background: #555; color: cornflowerblue');
+    // console.log('%c updateTimeUi ', 'background: #555; color: cornflowerblue');
 
     updateReactTimelineDate();
     // updateInput();
     // self.input.update();
     // self.pick.shiftView();
   };
+
+  // Update status of subdaily layers being in sidebar
+  var updateSubdailyState = function() {
+    let subdaily = models.layers.hasSubDaily();
+    self.reactComponent.setState({ hasSubdailyLayers: subdaily });
+  };
+
   var onLayerUpdate = function() {
-    const layersContainSubdaily = models.layers.hasSubDaily();
+    // const layersContainSubdaily = models.layers.hasSubDaily();
+
+    // let subdaily = models.layers.hasSubDaily();
+
     self.data.set();
     self.resize();
-    self.setClip();
-    if (subdaily !== layersContainSubdaily) {
-      // self.zoom.refresh();
-      self.input.update();
-      subdaily = layersContainSubdaily;
-    }
+    // self.setClip();
+    // if (subdaily !== layersContainSubdaily) {
+    //   // self.zoom.refresh();
+    //   self.input.update();
+    //   subdaily = layersContainSubdaily;
+    // }
+    // console.log(ui.anim)
+    ui.anim.widget.update();
+    updateSubdailyState();
   };
   var init = function() {
     var $timelineFooter = $('#timeline-footer');
@@ -673,7 +697,7 @@ export function timeline(models, config, ui) {
     $(window).resize(function() {
       self.resize();
       // self.zoom.refresh();
-      self.setClip();
+      // self.setClip();
     });
     model.events.on('select', updateTimeUi);
     model.events.on('state-update', updateTimeUi);
@@ -696,7 +720,7 @@ export function timeline(models, config, ui) {
 
     models.proj.events.on('select', function() {
       self.resize();
-      self.setClip();
+      // self.setClip();
       onLayerUpdate();
     });
   };

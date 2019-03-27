@@ -21,7 +21,8 @@ class DateSelector extends React.Component {
       maxDate: props.maxDate,
       minDate: props.minDate,
       tab: null,
-      maxZoom: props.maxZoom
+      // maxZoom: props.maxZoom,
+      hasSubdailyLayers: props.hasSubdailyLayers
     };
   }
   componentWillReceiveProps(props) {
@@ -29,7 +30,8 @@ class DateSelector extends React.Component {
       date: props.date,
       maxDate: props.maxDate,
       minDate: props.minDate,
-      maxZoom: props.maxZoom
+      // maxZoom: props.maxZoom,
+      hasSubdailyLayers: props.hasSubdailyLayers
     });
   }
   // shouldComponentUpdate(prevProps, prevState) {
@@ -48,7 +50,8 @@ class DateSelector extends React.Component {
   changeTab(index) {
     var nextTab = index;
     var maxTab;
-    if (this.state.maxZoom >= 4) {
+    // if (this.state.maxZoom >= 4) {
+    if (this.state.hasSubdailyLayers) {
       maxTab = 5;
     } else {
       maxTab = 3;
@@ -78,7 +81,7 @@ class DateSelector extends React.Component {
     this.props.onDateChange(date, true);
   }
   renderSubdaily() {
-    if (this.state.maxZoom >= 4) {
+    if (this.props.hasSubdailyLayers) {
       return (
         <React.Fragment>
           <DateInputColumn
@@ -128,6 +131,7 @@ class DateSelector extends React.Component {
     }
   }
   render() {
+    console.log(this.props.date)
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn
@@ -208,7 +212,8 @@ DateSelector.propTypes = {
   height: PropTypes.string,
   width: PropTypes.string,
   idSuffix: PropTypes.string,
-  fontSize: PropTypes.number
+  fontSize: PropTypes.number,
+  hasSubdailyLayers: PropTypes.bool
 };
 
 export default DateSelector;

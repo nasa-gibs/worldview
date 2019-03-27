@@ -197,12 +197,15 @@ class DateInputColumn extends React.Component {
 
   minuteValidation(input) {
     var newDate;
-    var coeff = 1000 * 60 * 10;
+    // var coeff = 1000 * 60 * 10;
+    console.log(input);
     if (input >= 0 && input <= 59) {
-      newDate = new Date(
-        Math.round(new Date(this.props.date).setUTCMinutes(input) / coeff) *
-          coeff
-      );
+      // newDate = new Date(
+      //   Math.round(new Date(this.props.date).setUTCMinutes(input) / coeff) *
+      //     coeff
+      // );
+      newDate = new Date(new Date(this.props.date).setUTCMinutes(input));
+      console.log(newDate)
       return this.validateDate(newDate);
     }
   }

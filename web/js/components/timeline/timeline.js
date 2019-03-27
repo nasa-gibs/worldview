@@ -17,18 +17,21 @@ class Timeline extends React.Component {
     super(props);
     this.state = {
       dateFormatted: '',
-      width: '',
+      timelineWidth: '',
       selectedDate: '',
       changeDate: '',
       timeScale: '',
       incrementDate: '',
       timeScaleChangeUnit: '',
       changeAmt: '',
+      intervalText: '',
       customIntervalValue: '',
       customIntervalZoomLevel: '',
+      customIntervalText: '',
+      hasSubdailyLayers: '',
       customIntervalModalOpen: false,
       inputChange: false,
-      timelineHidden: false
+      timelineHidden: false,
     };
   }
 
@@ -46,7 +49,7 @@ class Timeline extends React.Component {
   // }
 
   updateDate = (date, inputChange) => {
-    console.log(date)
+    console.log(date, inputChange)
     if (inputChange) {
       this.setState({
         inputChange: true
@@ -74,7 +77,7 @@ class Timeline extends React.Component {
     }));
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     // console.log('CDU', this.state, this.props)
   }
 
@@ -85,7 +88,7 @@ class Timeline extends React.Component {
   init = () => {
     this.setState({
       dateFormatted: this.props.selectedDate.toISOString(),
-      width: this.props.width,
+      timelineWidth: this.props.timelineWidth,
       selectedDate: this.props.selectedDate.toISOString(),
       changeDate: this.props.changeDate,
       timeScale: this.props.timeScale,
@@ -93,7 +96,9 @@ class Timeline extends React.Component {
       timeScaleChangeUnit: this.props.timeScale,
       changeAmt: 1,
       customIntervalValue: 1,
-      customIntervalZoomLevel: this.props.timeScale
+      customIntervalZoomLevel: this.props.timeScale,
+      hasSubdailyLayers: this.props.hasSubdailyLayers,
+      intervalText: this.props.timeScale
     });
   }
 
@@ -104,25 +109,46 @@ class Timeline extends React.Component {
     }, this.props.setIntervalInput(intervalValue, zoomLevel));
   }
 
-  setTimeScale = (timeScaleChangeUnit) => {
+  setIntervalChangeUnit = (intervalValue, zoomLevel) => {
+    const timeUnitAbbreviations = {
+      year: 'year',
+      month: 'mon',
+      day: 'day',
+      hour: 'hour',
+      minute: 'min'
+    };
 
-    if (timeScaleChangeUnit === 'custom') {
-      console.log(timeScaleChangeUnit)
-      // let toggle = this.state.customIntervalModalOpen;
-      // console.log(toggle)
-      // this.setState({
-      //   customIntervalModalOpen: toggle
-      // })
+    let timeScaleChangeUnitString = `${intervalValue} ${timeUnitAbbreviations[zoomLevel]}`;
+
+      this.setState({
+        customIntervalText: timeScaleChangeUnitString,
+        intervalText: timeScaleChangeUnitString,
+        customIntervalValue: intervalValue,
+        customIntervalZoomLevel: zoomLevel,
+        changeAmt: intervalValue,
+        timeScaleChangeUnit: zoomLevel
+      })
+  }
+
+  setIntervalChangeUnitFromZoom = (customIntervalChangeUnit) => {
+    if (customIntervalChangeUnit === 'custom') {
+      this.setState({
+        intervalText: this.state.customIntervalText ? this.state.customIntervalText : 'Custom',
+        changeAmt: this.state.customIntervalValue ? this.state.customIntervalValue : 1,
+        timeScaleChangeUnit: this.state.customIntervalZoomLevel ? this.state.customIntervalZoomLevel : this.state.timeScale
+      })
     } else {
       this.setState({
-        timeScaleChangeUnit: timeScaleChangeUnit
+        intervalText: customIntervalChangeUnit,
+        changeAmt: 1,
+        timeScaleChangeUnit: customIntervalChangeUnit
       })
     }
   }
-
   // left/right arrows increment date
   incrementDate = (multiplier) => {
-    this.props.incrementDate((multiplier * this.state.customIntervalValue), this.state.customIntervalZoomLevel);
+    console.log(this.state.changeAmt, this.state.timeScaleChangeUnit)
+    this.props.incrementDate((multiplier * this.state.changeAmt), this.state.timeScaleChangeUnit);
   }
 
   // open animation dialog
@@ -132,7 +158,6 @@ class Timeline extends React.Component {
 
   // toggle hide timeline
   toggleHideTimeline = () => {
-    console.log('hey')
     this.setState({
       timelineHidden: !this.state.timelineHidden
     }, this.props.toggleHideTimeline());
@@ -152,21 +177,26 @@ class Timeline extends React.Component {
   render() {
     console.log(this.props.selectedDate, this.props.dateFormatted, this.state.dateFormatted, this.props)
     console.log(this.state)
+    console.log(this.props.hasSubdailyLayers, this.state.hasSubdailyLayers)
+    console.log(this.props)
     return (
       this.state.dateFormatted ?
       <React.Fragment>
-        <div id="timeline-header">
+        <div id="timeline-header" className={this.state.hasSubdailyLayers ? 'subdaily' : ''}>
           <div id="date-selector-main">
             <DateSelector
-              {...this.props.inputProps}
+              {...this.props}
               onDateChange={this.updateDate}
               date={new Date(this.state.dateFormatted)}
+              hasSubdailyLayers={this.state.hasSubdailyLayers}
             />
           </div>
           <div id="zoom-buttons-group">
             <DateZoomChange
-              timeScaleChangeUnit={this.state.timeScaleChangeUnit}
-              setTimeScale={this.setTimeScale}
+              // timeScaleChangeUnit={this.state.timeScaleChangeUnit}
+              setIntervalChangeUnitFromZoom={this.setIntervalChangeUnitFromZoom}
+              intervalText={this.state.intervalText}
+              customIntervalText={this.state.customIntervalText}
             />
 
             {/* </div> */}
@@ -182,6 +212,7 @@ class Timeline extends React.Component {
               customIntervalZoomLevel={this.props.timeScale}
               toggleCustomIntervalModal={this.toggleCustomIntervalModal}
               customIntervalModalOpen={this.state.customIntervalModalOpen}
+              setIntervalChangeUnit={this.setIntervalChangeUnit}
             />
 
             <DateChangeArrows
@@ -212,7 +243,7 @@ class Timeline extends React.Component {
         </div>
 
         {/* hammmmmmmmmmmburger 🍔 */}
-        <div className="timeline-hamburger-date">DAY</div>
+        {/* <div className="timeline-hamburger-date">DAY</div> */}
         <div id="timeline-hide" onClick={this.toggleHideTimeline}>
         {this.state.timelineHidden ?
         <i className="far fa-caret-square-right wv-timeline-hide-arrow"></i>

@@ -600,7 +600,7 @@ class TimelineAxis extends React.Component {
 
   handleResize = (e) => {
     // let axisWidth = Math.floor(window.innerWidth * 0.9);
-    let axisWidth = this.props.width;
+    let axisWidth = this.props.timelineWidth;
     let timeScale = this.state.timeScale;
     this.updateScale(null, timeScale, axisWidth);
     // console.log('resize')
@@ -619,7 +619,7 @@ class TimelineAxis extends React.Component {
     //# resize
     window.addEventListener("resize", this.handleResize);
     // let axisWidth = Number((window.innerWidth * 0.9).toFixed(2));
-    let axisWidth = this.props.width;
+    let axisWidth = this.props.timelineWidth;
     let timeScale = this.props.timeScale; // 'day'
     let time = moment.utc(this.props.selectedDate).format() //'1941-01-01T12:00:00Z';
 
@@ -736,6 +736,7 @@ class TimelineAxis extends React.Component {
   //# BEST WAY TO HANDLE THIS?
   componentDidUpdate(prevProps, prevState) {
     // console.log(this.props)
+// console.log(prevProps.selectedDate, this.props.selectedDate, this.state.selectedDate, prevState.selectedDate)
 
     if (this.props.inputChange === true) {
       console.log(this.props.selectedDate)
@@ -753,37 +754,37 @@ class TimelineAxis extends React.Component {
       this.updateScale(null, this.state.timeScale);
     }
 
-    if (prevProps.timeScaleChangeUnit !== this.props.timeScaleChangeUnit) {
-      this.updateScale(null, this.props.timeScaleChangeUnit);
-    }
+    // if (prevProps.timeScaleChangeUnit !== this.props.timeScaleChangeUnit) {
+    //   this.updateScale(null, this.props.timeScaleChangeUnit);
+    // }
 
-    if (this.props.width !== prevProps.width) {
+    if (this.props.timelineWidth !== prevProps.timelineWidth) {
       this.handleResize();
     }
 
 // console.log(prevProps.selectedDate, this.props.selectedDate, this.state.selectedDate, prevState.selectedDate)
 // console.log(prevProps.draggerTimeState, this.props.draggerTimeState, this.state.draggerTimeState, prevState.draggerTimeState)
-
-    if (this.props.selectedDate !== prevProps.selectedDate &&
-      this.state.draggerTimeState !== prevState.draggerTimeState &&
+// # CHANGED CONDITIONAL FROM "&&" TO "||" TO DEBUG LEFT/RIGHT ARROW UPDATE ISSUE
+    if (this.props.selectedDate !== prevProps.selectedDate ||
+      this.state.draggerTimeState !== prevState.draggerTimeState ||
       moment.utc(this.state.draggerTimeState).format() !== moment.utc(prevState.draggerTimeState).format()) {
 
       // moment.utc(this.state.draggerTimeState).format() !== moment.utc(prevState.draggerTimeState).format()) {s
 
-        // if (this.props.selectedDate !== prevProps.selectedDate && 
+        // if (this.props.selectedDate !== prevProps.selectedDate &&
         //   moment.utc(this.state.hoverTime).format() !== moment.utc(this.props.selectedDate).format()
         //   && moment.utc(this.state.draggerTimeState).format() !== moment.utc(this.props.selectedDate).format()) {
 
       // console.log(this.props.selectedDate, prevProps.selectedDate, this.state.hoverTime, this.state.draggerTimeState)
       // console.log(moment.utc(this.state.hoverTime).format(), moment.utc(this.props.selectedDate).format())
 
-      let manualTimeScaleChangeUnit = this.props.timeScaleChangeUnit || this.state.timeScale;
+      // let manualTimeScaleChangeUnit = this.props.timeScaleChangeUnit || this.state.timeScale;
 
-      let options = timeScaleOptions[manualTimeScaleChangeUnit].timeAxis;
-      let gridWidth = options.gridWidth;
+      // let options = timeScaleOptions[manualTimeScaleChangeUnit].timeAxis;
+      // let gridWidth = options.gridWidth;
 
-      let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
-      let newSelectedDate = moment.utc(this.props.selectedDate);
+      // let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
+      // let newSelectedDate = moment.utc(this.props.selectedDate);
 
       // console.log(newSelectedDate.format(), frontDate.format(), manualTimeScaleChangeUnit, gridWidth)
       // console.log(moment.utc(this.props.selectedDate).format(), moment.utc(prevProps.selectedDate).format())
@@ -1279,7 +1280,7 @@ handleDragDragger = (draggerName, e, d) => {
         : null }
         {/* <div className="line" style={{transform: `translate(${this.state.leftOffset}px, 0px)`, display: this.state.showHoverLine ? 'block' : 'none'}}></div> */}
         <div className="dateToolTip" style={{transform: `translate(${this.state.draggerPosition - 5}px, -100px)`, display: this.state.showDraggerTime && this.state.draggerTimeState ? 'block' : 'none'}}>{this.state.showDraggerTime && this.state.draggerTimeState ? this.state.draggerTimeState : null}</div>
-        
+
         {/* 404 is #timeline-header width and 10 is margin - parent offset issue most likely */}
         <div className="dateToolTip" style={{transform: `translate(${this.state.leftOffset - 52}px, -100px)`, display: !this.state.showDraggerTime && this.state.showHoverLine ? 'block' : 'none'}}>{!this.state.showDraggerTime && this.state.hoverTime ? this.state.hoverTime : null}</div>
 

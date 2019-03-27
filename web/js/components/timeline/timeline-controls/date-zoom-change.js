@@ -4,7 +4,9 @@ class DateZoomChange extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      toolTipHovered: false
+      toolTipHovered: false,
+      intervalText: this.props.intervalText,
+      customSelected: false
     }
   }
 
@@ -16,11 +18,32 @@ class DateZoomChange extends Component {
   }
 
   handleClickZoom = (zoomSelected) => {
+    console.log(zoomSelected)
     // close tooltip
     // send props function to change timescale zoom level throughout app
-    this.setState({
-      toolTipHovered: false
-    }, this.props.setTimeScale(zoomSelected));
+    if (zoomSelected === 'custom') {
+      let text = this.props.customIntervalText ? this.props.customIntervalText : 'Custom';
+      this.setState({
+        customSelected: true,
+        toolTipHovered: false,
+        intervalText: text
+      }, this.props.setIntervalChangeUnitFromZoom(zoomSelected));
+    } else {
+      this.setState({
+        customSelected: false,
+        toolTipHovered: false,
+        intervalText: zoomSelected
+      }, this.props.setIntervalChangeUnitFromZoom(zoomSelected));
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.intervalText !== this.props.intervalText) {
+      this.setState({
+        intervalText: this.props.intervalText
+      })
+    }
+
   }
 
   render() {
@@ -33,13 +56,13 @@ class DateZoomChange extends Component {
           {/* timeScale display */}
           <span
             id="current-zoom"
-            className="zoom-btn zoom-btn-active"
+            className={`zoom-btn zoom-btn-active${this.state.customSelected ? ' custom-interval-text' : ''}`}
           >
-            {this.props.timeScaleChangeUnit}
+            {this.state.intervalText}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
-          <div className="wv-tooltip" 
+          <div className="wv-tooltip"
           style={{ display: this.state.toolTipHovered ? 'block' : 'none' }}
           >
             <div id="timeline-zoom" className="timeline-zoom">
@@ -48,36 +71,35 @@ class DateZoomChange extends Component {
                 className="zoom-btn zoom-btn-inactive zoom-years"
                 onClick={() => this.handleClickZoom('year')}
               >
-                Years
+                Year
               </span>
               <span
                 id="zoom-months"
                 className="zoom-btn zoom-btn-inactive zoom-months"
                 onClick={() => this.handleClickZoom('month')}
               >
-                Months
+                Month
               </span>
               <span
                 id="zoom-days"
                 className="zoom-btn zoom-btn-inactive zoom-days"
                 onClick={() => this.handleClickZoom('day')}
               >
-                Days
+                Day
               </span>
               <span
                 id="zoom-minutes"
                 className="zoom-btn zoom-btn-inactive zoom-minutes"
                 onClick={() => this.handleClickZoom('minute')}
               >
-                Minutes
+                Minute
               </span>
               <span
                 id="zoom-custom"
-                style={{color: '#7890cd'}}
-                className="zoom-btn zoom-btn-inactive zoom-custom"
+                className="zoom-btn zoom-btn-inactive zoom-custom custom-interval-text"
                 onClick={() => this.handleClickZoom('custom')}
               >
-                {this.props.customTimeInterval ? this.props.customTimeInterval : 'Custom'}
+                {this.props.customIntervalText ? this.props.customIntervalText : 'Custom'}
               </span>
             </div>
           </div>

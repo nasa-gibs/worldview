@@ -45,7 +45,7 @@ export function animationWidget(models, config, ui) {
       endDate: new Date(model.rangeState.endDate),
       minDate: models.date.minDate(),
       maxDate: models.date.maxDate(),
-      maxZoom: models.date.maxZoom,
+      hasSubdailyLayers: models.layers.hasSubDaily(),
       onClose: self.toggleAnimationWidget
     };
 
@@ -152,7 +152,8 @@ export function animationWidget(models, config, ui) {
     self.reactComponent.setState({
       startDate: new Date(state.startDate),
       endDate: new Date(state.endDate),
-      maxZoom: models.date.maxZoom,
+      // maxZoom: models.date.maxZoom,
+      hasSubdailyLayers: models.layers.hasSubDaily(),
       playing: state.playing,
       increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
       incrementArray: lodashWithout(zooms, self.getIncrements()) // array of zooms without current zoom
@@ -169,7 +170,8 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.getIncrements = function() {
-    if (models.date.maxZoom > 3) {
+    // if (models.date.maxZoom > 3) {
+    if (models.layers.hasSubDaily()) {
       zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
     } else {
       zooms = ['yearly', 'monthly', 'daily'];
