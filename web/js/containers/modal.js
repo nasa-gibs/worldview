@@ -44,7 +44,8 @@ class ModalContainer extends Component {
       wrapClassName,
       clickableBehindModal,
       bodyComponent,
-      onClose
+      onClose,
+      CompletelyCustomModal
     } = newProps;
     const style = this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
@@ -68,28 +69,32 @@ class ModalContainer extends Component {
         style={style}
         wrapClassName={wrapClassName + ' ' + lowerCaseId}
       >
-        <DetectOuterClick
-          onClick={toggleWithClose}
-          disabled={!isOpen || type === 'selection' || clickableBehindModal}
-        >
-          {headerComponent || headerText ? (
-            <ModalHeader toggle={toggleWithClose}>
-              {headerComponent ? <headerComponent /> : headerText || ''}
-            </ModalHeader>
-          ) : (
-            ''
-          )}
-          <ModalBody>
-            {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-            {BodyComponent ? (
-              <BodyComponent />
-            ) : isTemplateModal ? (
-              this.getTemplateBody()
+        {CompletelyCustomModal ? (
+          <CompletelyCustomModal />
+        ) : (
+          <DetectOuterClick
+            onClick={toggleWithClose}
+            disabled={!isOpen || type === 'selection' || clickableBehindModal}
+          >
+            {headerComponent || headerText ? (
+              <ModalHeader toggle={toggleWithClose}>
+                {headerComponent ? <headerComponent /> : headerText || ''}
+              </ModalHeader>
             ) : (
-              bodyText || ''
+              ''
             )}
-          </ModalBody>
-        </DetectOuterClick>
+            <ModalBody>
+              {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
+              {BodyComponent ? (
+                <BodyComponent />
+              ) : isTemplateModal ? (
+                this.getTemplateBody()
+              ) : (
+                bodyText || ''
+              )}
+            </ModalBody>
+          </DetectOuterClick>
+        )}
       </Modal>
     );
   }

@@ -4,11 +4,78 @@ import {
   filter as lodashFilter,
   find as lodashFind,
   cloneDeep as lodashCloneDeep,
-  isUndefined as lodashIsUndefined
+  isUndefined as lodashIsUndefined,
+  values as lodashValues,
+  sortBy as lodashSortBy,
+  indexOf as lodashIndexOf
 } from 'lodash';
 
 import util from '../../util/util';
-
+export function hasMeasurementSource(current, config, projId) {
+  var hasSource;
+  lodashValues(current.sources).forEach(function(source) {
+    if (hasMeasurementSetting(current, source, config, projId)) {
+      hasSource = true;
+    }
+  });
+  return hasSource;
+}
+/**
+ * var hasMeasurementSetting - Checks the (current) measurement's source
+ *  for a setting and returns true if present.
+ *
+ * @param  {string} current The current config.measurements measurement.
+ * @param  {string} source  The current measurement source.
+ * @return {boolean}         Return true if the source contains settings.
+ *
+ */
+export function hasMeasurementSetting(current, source, config, projId) {
+  var hasSetting;
+  lodashValues(source.settings).forEach(function(setting) {
+    var layer = config.layers[setting];
+    if (layer) {
+      var proj = layer.projections;
+      if (layer.id === setting && Object.keys(proj).indexOf(projId) > -1) {
+        if (
+          layer.layergroup &&
+          layer.layergroup.indexOf('reference_orbits') !== -1
+        ) {
+          if (current.id === 'orbital-track') {
+            hasSetting = true;
+          }
+          // Don't output sources with only orbit tracks
+        } else {
+          hasSetting = true;
+        }
+      }
+    }
+  });
+  return hasSetting;
+}
+export function getLayersForProjection(config, projection) {
+  var filteredRows = lodashValues(config.layers)
+    .filter(function(layer) {
+      // Only use the layers for the active projection
+      return layer.projections[projection];
+    })
+    .map(function(layer) {
+      // If there is metadata for the current projection, use that
+      var projectionMeta = layer.projections[projection];
+      if (projectionMeta.title) layer.title = projectionMeta.title;
+      if (projectionMeta.subtitle) layer.subtitle = projectionMeta.subtitle;
+      // Decode HTML entities in the subtitle
+      if (layer.subtitle) layer.subtitle = decodeHtml(layer.subtitle);
+      return layer;
+    });
+  return lodashSortBy(filteredRows, function(layer) {
+    return lodashIndexOf(config.layerOrder, layer.id);
+  });
+}
+var decodeHtml = function(html) {
+  var txt = document.createElement('textarea');
+  txt.innerHTML = html;
+  return txt.value;
+};
 /**
  * See if an array of layers has a subdaily
  * product in it
@@ -25,7 +92,7 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export function addLayer(id, spec, layers, config) {
+export function addLayer(id, spec, layers, layerConfig) {
   if (
     lodashFind(layers, {
       id: id
@@ -34,7 +101,7 @@ export function addLayer(id, spec, layers, config) {
     return layers;
   }
   spec = spec || {};
-  var def = lodashCloneDeep(config.layers[id]);
+  var def = lodashCloneDeep(layerConfig[id]);
   if (!def) {
     throw new Error('No such layer: ' + id);
   }
@@ -52,12 +119,11 @@ export function addLayer(id, spec, layers, config) {
   }
   return layers;
 }
-export function resetLayers(config) {
+export function resetLayers(startingLayers, layerConfig) {
   let layers = [];
-  const startingLayers = lodashGet(config, 'defaults.startingLayers');
   if (startingLayers) {
     lodashEach(startingLayers, function(start) {
-      layers = addLayer(start.id, start, layers, config);
+      layers = addLayer(start.id, start, layers, layerConfig);
     });
   }
   return layers;
@@ -74,7 +140,8 @@ export function getTitles(config, layerId, projId) {
       subtitle = forProj.subtitle;
       tags = forProj.tags;
     }
-    const forLayer = lodashGet(config, `layers.${layerId}`);
+    // const forLayer = lodashGet(config, `layers.${layerId}`);
+    var forLayer = config.layers[layerId];
     title = title || forLayer.title || '[' + layerId + ']';
     subtitle = subtitle || forLayer.subtitle || '';
     tags = tags || forLayer.tags || '';

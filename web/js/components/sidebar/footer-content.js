@@ -10,6 +10,8 @@ import {
   getSelectionCounts,
   getDataSelectionSize
 } from '../../modules/data/selectors';
+import ProductPicker from '../layer/product-picker/product-picker';
+import { openCustomContent } from '../../modules/modal/actions';
 
 class FooterContent extends React.Component {
   render() {
@@ -132,6 +134,17 @@ class FooterContent extends React.Component {
 const mapDispatchToProps = dispatch => ({
   toggleMode: str => {
     dispatch(changeMode(str));
+  },
+  addLayers: () => {
+    dispatch(
+      openCustomContent('LAYER_PICKER_COMPONENT', {
+        headerText: null,
+        modalClassName: 'custom-layer-dialog light',
+        backdrop: true,
+        CompletelyCustomModal: ProductPicker,
+        wrapClassName: ''
+      })
+    );
   }
 });
 function mapStateToProps(state, ownProps) {

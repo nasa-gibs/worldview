@@ -59,7 +59,7 @@ export function combineUi(models, config, MapMouseEvents) {
     ui.tour = tourUi(models, ui, config);
   }
   ui.activeLayers = layersActive(models, ui, config);
-  ui.addModal = layersModal(models, ui, config);
+  // ui.addModal = layersModal(models, ui, config);
   // ui.layerSettingsModal = layersOptions(models, ui, config);
   // Test via a getter in the options object to see if the passive property is accessed
   ui.supportsPassive = false;
@@ -112,26 +112,26 @@ export function combineUi(models, config, MapMouseEvents) {
       timelineInit();
     }
   });
-  if (config.features.dataDownload) {
-    ui.data = dataUi(models, ui, config);
-  }
+  // if (config.features.dataDownload) {
+  //   ui.data = dataUi(models, ui, config);
+  // }
   if (config.features.naturalEvents) {
     // var request = naturalEventsRequest(models, ui, config);
     // ui.naturalEvents = naturalEventsUI(models, ui, config, request);
   }
-  if (config.features.compare) {
-    ui.compare = compareUi(models, ui, config);
-  }
-  if (config.features.dataDownload) {
-    models.data.events.on('queryResults', function() {
-      ui.data.onViewChange();
-    });
-    ui.map.events.on('extent', function() {
-      ui.data.onViewChange();
-    });
-    // FIXME: This is a hack
-    models.map.events.on('projection', models.data.updateProjection);
-  }
+  // if (config.features.compare) {
+  //   ui.compare = compareUi(models, ui, config);
+  // }
+  // if (config.features.dataDownload) {
+  //   models.data.events.on('queryResults', function() {
+  //     ui.data.onViewChange();
+  //   });
+  //   ui.map.events.on('extent', function() {
+  //     ui.data.onViewChange();
+  //   });
+  //   // FIXME: This is a hack
+  //   models.map.events.on('projection', models.data.updateProjection);
+  // }
   registerMapMouseHandlers(ui.map.proj, MapMouseEvents);
   // Sink all focus on inputs if click unhandled
   $(document).click(function(event) {

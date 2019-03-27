@@ -17,11 +17,16 @@ export const initialState = {
   layersB: [],
   layersConfig: {},
   activeString: 'A',
-  hoveredLayer: ''
+  hoveredLayer: '',
+  layerConfig: {},
+  startingLayers: []
 };
 export function getInitialState(config) {
+  console.log(resetLayers(config.defaults.startingLayers, config.layers));
   return lodashAssign({}, initialState, {
-    layersA: resetLayers(config)
+    layersA: resetLayers(config.defaults.startingLayers, config.layers),
+    layerConfig: config.layers,
+    startingLayers: config.defaults.startingLayers
   });
 }
 
@@ -43,8 +48,14 @@ export function layerReducer(state = initialState, action) {
       }
 
     case ADD_LAYER:
+      console.log('add layer');
       return lodashAssign({}, state, {
-        [layerGroupStr]: addLayer(action.id, state[layerGroupStr])
+        [layerGroupStr]: addLayer(
+          action.id,
+          {},
+          state[layerGroupStr],
+          state.layerConfig
+        )
       });
     case INIT_SECOND_LAYER_GROUP:
       if (state.layersB.length > 0) return state;

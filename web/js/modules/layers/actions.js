@@ -12,7 +12,7 @@ import {
 export function addLayer(layerId) {
   return {
     type: ADD_LAYER,
-    layerId: layerId
+    id: layerId
   };
 }
 export function resetLayers(stateStr) {

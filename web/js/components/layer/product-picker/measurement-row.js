@@ -70,8 +70,10 @@ class LayerRow extends React.Component {
     let OrbitSourceList = [];
     let LayerSouceList = [];
     let orbitTitle = '';
+
     source.settings.forEach(setting => {
       const layer = layerConfig[setting];
+      console.log(layer);
       if (
         layer &&
         layer.id === setting &&
@@ -120,14 +122,14 @@ class LayerRow extends React.Component {
         // The following complex if statement is a placeholder
         // for truncating the layer names, until the rest of
         // the interface is implemented
-        if (layer.title.indexOf('(') !== -1) {
-          var regExp = /\(([^)]+)\)/;
-          var matches = regExp.exec(layer.title);
-          orbitTitle = matches[1];
-        }
-        OrbitSourceList.push(
-          this.renderOrbitListItem(orbitTitle, measurement, layer)
-        );
+        // if (layer.title.indexOf('(') !== -1) {
+        //   var regExp = /\(([^)]+)\)/;
+        //   var matches = regExp.exec(layer.title);
+        //   orbitTitle = matches[1];
+        // }
+        // OrbitSourceList.push(
+        //   this.renderOrbitListItem(orbitTitle, measurement, layer)
+        // );
       }
     });
     return (
@@ -274,27 +276,27 @@ class LayerRow extends React.Component {
       <Nav vertical className="source-tabs col-md-3 col-sm-12">
         {sources
           .sort((a, b) => a.title.localeCompare(b.title))
-          .map(
-            (source, index) => {
-              if (hasMeasurementSetting(measurement, source)) {
-                // only set minValidIndex once to find init active tab/content
-                if (minValidIndex < 0) {
-                  minValidIndex = index;
-                }
-                // if activeSourceIndex is less than first valid index, make minValidIndex active tab
-                validActiveIndex = minValidIndex > activeSourceIndex ? minValidIndex : activeSourceIndex;
-                return this.renderSourceTabs(
-                  measurement,
-                  source,
-                  index,
-                  validActiveIndex
-                );
-              } else {
-                return '';
+          .map((source, index) => {
+            if (hasMeasurementSetting(measurement, source)) {
+              // only set minValidIndex once to find init active tab/content
+              if (minValidIndex < 0) {
+                minValidIndex = index;
               }
+              // if activeSourceIndex is less than first valid index, make minValidIndex active tab
+              validActiveIndex =
+                minValidIndex > activeSourceIndex
+                  ? minValidIndex
+                  : activeSourceIndex;
+              return this.renderSourceTabs(
+                measurement,
+                source,
+                index,
+                validActiveIndex
+              );
+            } else {
+              return '';
             }
-          )
-        }
+          })}
       </Nav>
     );
 
