@@ -176,12 +176,13 @@ class Sidebar extends React.Component {
                 height={subComponentHeight}
               />
             </TabPane>
-            {/* <TabPane tabId="download">
+            <TabPane tabId="download">
               <Data
                 isActive={activeTab === 'download'}
                 height={subComponentHeight}
+                tabTypes={tabTypes}
               />
-            </TabPane> */}
+            </TabPane>
             <footer ref={footerElement => (this.footerElement = footerElement)}>
               <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
             </footer>
@@ -198,7 +199,7 @@ function mapStateToProps(state) {
   const { activeString } = layers;
   const numberOfLayers = getLayers(layers[activeString], {}, state).length;
   const tabTypes = getActiveTabs(config);
-  console.log(browser);
+
   return {
     activeTab,
     isMobile: browser.is.small,

@@ -6,6 +6,10 @@ import googleTagManager from 'googleTagManager';
 import { get as lodashGet } from 'lodash';
 import { changeMode } from '../../modules/compare/actions';
 import { connect } from 'react-redux';
+import {
+  getSelectionCounts,
+  getDataSelectionSize
+} from '../../modules/data/selectors';
 
 class FooterContent extends React.Component {
   render() {
@@ -21,8 +25,8 @@ class FooterContent extends React.Component {
       changeCompareMode,
       addLayers,
       toggleMode,
-      // getDataSelectionCounts,
-      // getDataSelectionSize,
+      counts,
+      dataSelectionSize,
       compareFeature
     } = this.props;
     if (activeTab === 'layers') {
@@ -89,39 +93,39 @@ class FooterContent extends React.Component {
         </div>
       );
     } else {
-      // var counts = getDataSelectionCounts();
-      // var validSize = getDataSelectionSize();
-      // var countArray = Object.values(counts);
-      // var noDataSelected =
-      //   countArray.length === 0
-      //     ? true
-      //     : countArray.reduce((a, b) => a + b, 0) === 0;
-      // return (
-      //   <div className="data-download-footer-case">
-      //     <Button
-      //       onClick={e => {
-      //         e.stopPropagation();
-      //         onGetData();
-      //         googleTagManager.pushEvent({
-      //           event: 'data_download_button'
-      //         });
-      //       }}
-      //       className={
-      //         noDataSelected
-      //           ? 'wv-data-download-button black no-pointer-events'
-      //           : 'wv-data-download-button red'
-      //       }
-      //       id="compare-toggle-button"
-      //       text={
-      //         validSize
-      //           ? 'Download Data (' + Math.round(validSize * 100) / 100 + ' MB)'
-      //           : noDataSelected
-      //             ? 'No Data Selected'
-      //             : 'Download Selected Data'
-      //       }
-      //     />
-      //   </div>
-      // );
+      var countArray = Object.values(counts);
+      var noDataSelected =
+        countArray.length === 0
+          ? true
+          : countArray.reduce((a, b) => a + b, 0) === 0;
+      return (
+        <div className="data-download-footer-case">
+          <Button
+            onClick={e => {
+              e.stopPropagation();
+              onGetData();
+              googleTagManager.pushEvent({
+                event: 'data_download_button'
+              });
+            }}
+            className={
+              noDataSelected
+                ? 'wv-data-download-button black no-pointer-events'
+                : 'wv-data-download-button red'
+            }
+            id="compare-toggle-button"
+            text={
+              dataSelectionSize
+                ? 'Download Data (' +
+                  Math.round(dataSelectionSize * 100) / 100 +
+                  ' MB)'
+                : noDataSelected
+                  ? 'No Data Selected'
+                  : 'Download Selected Data'
+            }
+          />
+        </div>
+      );
     }
   }
 }
@@ -132,14 +136,22 @@ const mapDispatchToProps = dispatch => ({
 });
 function mapStateToProps(state, ownProps) {
   const { activeTab } = ownProps;
-  const { requestedEvents, config } = state;
+  const { requestedEvents, config, layers, data } = state;
   const { showAll } = state.events;
   const showListAllButton = !showAll;
   const events = lodashGet(requestedEvents, 'response');
+  const { activeString } = layers;
+  const { selectedGranules } = data;
+  const activeLayers = layers['layers' + activeString];
+  const counts = getSelectionCounts(activeLayers, selectedGranules);
+  const dataSelectionSize = getDataSelectionSize(selectedGranules);
+
   return {
     showListAllButton,
     activeTab,
     events,
+    counts,
+    dataSelectionSize,
     compareFeature: config.features.compare
   };
 }
@@ -160,7 +172,7 @@ FooterContent.propTypes = {
   changeCompareMode: PropTypes.func,
   addLayers: PropTypes.func,
   toggleMode: PropTypes.func,
-  getDataSelectionCounts: PropTypes.func,
-  getDataSelectionSize: PropTypes.func,
+  counts: PropTypes.obj,
+  dataSelectionSize: PropTypes.num,
   compareFeature: PropTypes.bool
 };

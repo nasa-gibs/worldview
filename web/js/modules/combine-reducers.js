@@ -23,6 +23,7 @@ import {
   layerReducer,
   getInitialState as getLayersInitialState
 } from './layers/reducers';
+import dataDownloadReducer from './data/reducers';
 import { get as lodashGet } from 'lodash';
 
 const responsiveStateReducer = createResponsiveStateReducer(
@@ -72,6 +73,7 @@ const reducers = {
   compare: compareReducer,
   layers: layerReducer,
   events: eventsReducer,
+  data: dataDownloadReducer,
   requestedEvents,
   requestedEventSources,
   requestedEventCategories,

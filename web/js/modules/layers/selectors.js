@@ -62,11 +62,13 @@ export function resetLayers(config) {
   }
   return layers;
 }
-export function getTitles(config, layerId, proj, state) {
+export function getTitles(config, layerId, projId) {
   try {
-    proj = proj || state.proj.id;
     var title, subtitle, tags;
-    const forProj = lodashGet(config, `layers.${layerId}.projections.${proj}`);
+    const forProj = lodashGet(
+      config,
+      `layers.${layerId}.projections.${projId}`
+    );
     if (forProj) {
       title = forProj.title;
       subtitle = forProj.subtitle;
