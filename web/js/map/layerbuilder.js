@@ -387,7 +387,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       if (!style) {
         style = new Style({
           image: new CircleStyle({
-            radius: 5,
+            radius: 2,
             fill: new Fill({
               color: '#ff0000'
             })
@@ -400,10 +400,10 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
 
     var layer = new LayerVectorTile({
       renterType: 'image',
-      renderBuffer: 5,
+      renderBuffer: 2,
       extent: extent,
       source: sourceOptions,
-      declutter: false,
+      declutter: declutterBool,
       style: styles
     });
 
@@ -464,6 +464,14 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
 
           document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
           document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
+
+          if (document.getElementById('declutterCheckbox').checked === true) {
+            console.log(layer);
+            layer.declutter = true;
+          } else {
+            layer.declutter = false;
+          }
+
           // Filter by a feature
           layer.setStyle(function(feature, resolution) {
             if (feature.get('CONFIDENCE') >= confidenceMinFilter.value && feature.get('CONFIDENCE') <= confidenceMaxFilter.value) {
