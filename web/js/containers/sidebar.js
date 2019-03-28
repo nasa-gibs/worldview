@@ -165,6 +165,7 @@ class Sidebar extends React.Component {
             activeTab={activeTab}
             onTabClick={onTabClick}
             tabTypes={tabTypes}
+            toggleSidebar={this.toggleSidebar.bind(this)}
           />
           <TabContent activeTab={activeTab}>
             <TabPane tabId="layers">
@@ -195,9 +196,10 @@ class Sidebar extends React.Component {
 function mapStateToProps(state) {
   const { browser, sidebar, compare, layers, config } = state;
   const { screenHeight } = browser;
-  const { activeTab } = sidebar;
+  const { activeTab, isCollapsed } = sidebar;
   const { activeString } = layers;
-  const numberOfLayers = getLayers(layers[activeString], {}, state).length;
+  const numberOfLayers = getLayers(layers['layers' + activeString], {}, state)
+    .length;
   const tabTypes = getActiveTabs(config);
 
   return {
@@ -207,6 +209,7 @@ function mapStateToProps(state) {
     screenHeight: screenHeight,
     isCompareMode: compare.active,
     numberOfLayers,
+    isCollapsed,
     tabTypes
   };
 }
