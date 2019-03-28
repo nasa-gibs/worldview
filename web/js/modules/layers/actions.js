@@ -18,7 +18,7 @@ export function addLayer(layerId) {
 export function resetLayers(stateStr) {
   return {
     type: RESET_LAYERS,
-    stateStr: stateStr || 'A'
+    stateStr: stateStr || 'active'
   };
 }
 export function initSecondLayerGroup() {

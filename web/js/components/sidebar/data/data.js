@@ -73,7 +73,7 @@ function mapStateToProps(state, ownProps) {
   const { layers, proj, data, config } = state;
   const { selectedProduct, selectedGranules } = data;
   const { activeString } = layers;
-  const activeLayers = layers['layers' + activeString];
+  const activeLayers = layers[activeString];
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const products = getDataProductsFromActiveLayers(
     activeLayers,

@@ -155,7 +155,7 @@ function mapStateToProps(state, ownProps) {
   const events = lodashGet(requestedEvents, 'response');
   const { activeString } = layers;
   const { selectedGranules } = data;
-  const activeLayers = layers['layers' + activeString];
+  const activeLayers = layers[activeString];
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const dataSelectionSize = getDataSelectionSize(selectedGranules);
 

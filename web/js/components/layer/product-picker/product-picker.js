@@ -276,7 +276,7 @@ function mapStateToProps(state, ownProps) {
   const height = screenHeight - 100;
   const width = getModalWidth(screenWidth);
   const allLayers = getLayersForProjection(config, proj.id);
-  const activeLayers = layers['layers' + activeString];
+  const activeLayers = layers[activeString];
 
   return {
     categoryConfig: config.categories,

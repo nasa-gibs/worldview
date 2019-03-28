@@ -115,7 +115,7 @@ class Sidebar extends React.Component {
         <Products
           height={subComponentHeight}
           isActive={activeTab === 'layers'}
-          layerGroupName="A"
+          layerGroupName="active"
           checkerBoardPattern={this.checkerBoardPattern}
         />
       );
@@ -198,8 +198,7 @@ function mapStateToProps(state) {
   const { screenHeight } = browser;
   const { activeTab, isCollapsed } = sidebar;
   const { activeString } = layers;
-  const numberOfLayers = getLayers(layers['layers' + activeString], {}, state)
-    .length;
+  const numberOfLayers = getLayers(layers[activeString], {}, state).length;
   const tabTypes = getActiveTabs(config);
 
   return {

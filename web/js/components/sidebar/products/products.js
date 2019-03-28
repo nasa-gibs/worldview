@@ -46,8 +46,8 @@ function mapStateToProps(state, ownProps) {
   const { layers, proj } = state;
   const { activeString } = layers;
   const { isActive, layerGroupName, height, checkerBoardPattern } = ownProps;
-  const group = 'layers' + layerGroupName;
-  const componentLayers = layers[group] || layers['layers' + activeString];
+  const group = layerGroupName;
+  const componentLayers = layers[group] || layers[activeString];
   const layerObj = getLayers(componentLayers, { proj: proj.id, group: 'all' });
 
   return {

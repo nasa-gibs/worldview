@@ -13,10 +13,10 @@ import { toggleVisibility, removeLayer } from './util';
 import { cloneDeep as lodashCloneDeep, assign as lodashAssign } from 'lodash';
 
 export const initialState = {
-  layersA: [],
-  layersB: [],
+  active: [],
+  activeB: [],
   layersConfig: {},
-  activeString: 'A',
+  activeString: 'active',
   hoveredLayer: '',
   layerConfig: {},
   startingLayers: []
@@ -24,19 +24,19 @@ export const initialState = {
 export function getInitialState(config) {
   console.log(resetLayers(config.defaults.startingLayers, config.layers));
   return lodashAssign({}, initialState, {
-    layersA: resetLayers(config.defaults.startingLayers, config.layers),
+    active: resetLayers(config.defaults.startingLayers, config.layers),
     layerConfig: config.layers,
     startingLayers: config.defaults.startingLayers
   });
 }
 
 export function layerReducer(state = initialState, action) {
-  const layerGroupStr = 'layers' + state.activeString;
+  const layerGroupStr = state.activeString;
   switch (action.type) {
     case RESET_LAYERS:
       if (
-        (action.stateStr && action.stateStr === 'B') ||
-        state.activeString === 'B'
+        (action.stateStr && action.stateStr === 'activeB') ||
+        state.activeString === 'activeB'
       ) {
         return lodashAssign({}, state, {
           layersB: resetLayers()
@@ -68,7 +68,7 @@ export function layerReducer(state = initialState, action) {
       });
     case TOGGLE_ACTIVE_STATE:
       return lodashAssign({}, state, {
-        activeString: state.activeString === 'A' ? 'B' : 'A'
+        activeString: state.activeString === 'active' ? 'activeB' : 'active'
       });
     case ON_LAYER_HOVER:
       return lodashAssign({}, state, {
