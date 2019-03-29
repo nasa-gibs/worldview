@@ -22,7 +22,6 @@ export const initialState = {
   startingLayers: []
 };
 export function getInitialState(config) {
-  console.log(resetLayers(config.defaults.startingLayers, config.layers));
   return lodashAssign({}, initialState, {
     active: resetLayers(config.defaults.startingLayers, config.layers),
     layerConfig: config.layers,
@@ -48,7 +47,6 @@ export function layerReducer(state = initialState, action) {
       }
 
     case ADD_LAYER:
-      console.log('add layer');
       return lodashAssign({}, state, {
         [layerGroupStr]: addLayer(
           action.id,

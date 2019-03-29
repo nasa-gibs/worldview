@@ -7,7 +7,8 @@ import {
   isUndefined as lodashIsUndefined,
   values as lodashValues,
   sortBy as lodashSortBy,
-  indexOf as lodashIndexOf
+  indexOf as lodashIndexOf,
+  findIndex as lodashFindIndex
 } from 'lodash';
 
 import util from '../../util/util';
@@ -222,11 +223,17 @@ export function available(id, date, layers, config) {
   }
   return true;
 }
-export function replaceSubGroup(layerId, nextLayerId, layers, subGroup) {
+export function replaceSubGroup(
+  layerId,
+  nextLayerId,
+  layers,
+  subGroup,
+  layerSplit
+) {
   if (nextLayerId) {
     return moveBefore(layerId, nextLayerId, layers);
   } else {
-    return pushToBottom(layerId, layers);
+    return pushToBottom(layerId, layers, layerSplit);
   }
 }
 function dateRange(spec, activeLayers, config) {
@@ -310,45 +317,43 @@ function dateRange(spec, activeLayers, config) {
     };
   }
 }
-function pushToBottom(id, activeLayersString) {
-  // activeLayersString = activeLayersString || self.activeLayers;
-  // var oldIndex = lodashFindIndex(self[activeLayersString], {
-  //   id: id
-  // });
-  // if (oldIndex < 0) {
-  //   throw new Error('Layer is not active: ' + id);
-  // }
-  // var def = self[activeLayersString][oldIndex];
-  // self[activeLayersString].splice(oldIndex, 1);
-  // if (def.group === 'baselayers') {
-  //   self[activeLayersString].push(def);
-  // } else {
-  //   self[activeLayersString].splice(split[activeLayersString] - 1, 0, def);
-  // }
+function pushToBottom(id, layers, layerSplit) {
+  var oldIndex = lodashFindIndex(layers, {
+    id: id
+  });
+  if (oldIndex < 0) {
+    throw new Error('Layer is not active: ' + id);
+  }
+  var def = layers[oldIndex];
+  layers.splice(oldIndex, 1);
+  if (def.group === 'baselayers') {
+    layers.push(def);
+  } else {
+    layers.splice(layerSplit - 1, 0, def);
+  }
+  return layers;
 }
 
-function moveBefore(sourceId, targetId, activeLayersString) {
-  // activeLayersString = activeLayersString || self.activeLayers;
-  // var sourceIndex = lodashFindIndex(self[activeLayersString], {
-  //   id: sourceId
-  // });
-  // if (sourceIndex < 0) {
-  //   throw new Error('Layer is not active: ' + sourceId);
-  // }
-  // var sourceDef = self[activeLayersString][sourceIndex];
-  // var targetIndex = lodashFindIndex(self[activeLayersString], {
-  //   id: targetId
-  // });
-  // if (targetIndex < 0) {
-  //   throw new Error('Layer is not active: ' + targetId);
-  // }
-  // self[activeLayersString].splice(targetIndex, 0, sourceDef);
-  // if (sourceIndex > targetIndex) {
-  //   sourceIndex++;
-  // }
-  // self[activeLayersString].splice(sourceIndex, 1);
-  // self.events.trigger('update', sourceDef, targetIndex);
-  // self.events.trigger('change');
+function moveBefore(sourceId, targetId, layers) {
+  var sourceIndex = lodashFindIndex(layers, {
+    id: sourceId
+  });
+  if (sourceIndex < 0) {
+    throw new Error('Layer is not active: ' + sourceId);
+  }
+  var sourceDef = layers[sourceIndex];
+  var targetIndex = lodashFindIndex(layers, {
+    id: targetId
+  });
+  if (targetIndex < 0) {
+    throw new Error('Layer is not active: ' + targetId);
+  }
+  layers.splice(targetIndex, 0, sourceDef);
+  if (sourceIndex > targetIndex) {
+    sourceIndex++;
+  }
+  layers.splice(sourceIndex, 1);
+  return layers;
 }
 export function getZotsForActiveLayers(config, models, ui) {
   // var zotObj = {};

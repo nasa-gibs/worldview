@@ -13,7 +13,8 @@ class Products extends React.Component {
       isActive,
       layerGroupName,
       height,
-      checkerBoardPattern
+      checkerBoardPattern,
+      layerSplit
     } = this.props;
     const outterClass = 'layer-container sidebar-panel';
     return (
@@ -26,6 +27,7 @@ class Products extends React.Component {
             title="Overlays"
             groupId="overlays"
             layerGroupName={layerGroupName}
+            layerSplit={layerSplit}
             layers={baselayers}
             checkerBoardPattern={checkerBoardPattern}
           />
@@ -34,6 +36,7 @@ class Products extends React.Component {
             groupId="baselayers"
             layerGroupName={layerGroupName}
             layers={overlays}
+            layerSplit={layerSplit}
             checkerBoardPattern={checkerBoardPattern}
           />
         </div>
@@ -53,6 +56,7 @@ function mapStateToProps(state, ownProps) {
   return {
     baselayers: layerObj.baselayers,
     overlays: layerObj.overlays,
+    layerSplit: layerObj.overlays.length,
     layerGroupName,
     height,
     isActive,

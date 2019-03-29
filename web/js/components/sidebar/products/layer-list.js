@@ -57,8 +57,14 @@ class LayerList extends React.Component {
    * @param {Object} result | Result of layer drag
    */
   onDragEnd(replaceSubGroup, result) {
-    const { layerGroupName, groupId, reorderLayers } = this.props;
-    const { layers } = this.state;
+    const {
+      layerGroupName,
+      groupId,
+      reorderLayers,
+      layerSplit,
+      activeLayers,
+      layers
+    } = this.props;
     if (!result.destination) {
       return;
     }
@@ -79,9 +85,14 @@ class LayerList extends React.Component {
     if (nextIndex < newLayerArray.length) {
       nextLayerId = newLayerArray[nextIndex].id;
     }
-    reorderLayers(
-      replaceSubGroup(layerId, nextLayerId, layerGroupName, groupId)
+    const newLayers = replaceSubGroup(
+      layerId,
+      nextLayerId,
+      activeLayers,
+      groupId,
+      layerSplit
     );
+    reorderLayers(newLayers);
   }
   render() {
     const {
@@ -152,12 +163,15 @@ function mapStateToProps(state, ownProps) {
     groupId,
     title,
     layerGroupName,
-    checkerBoardPattern
+    checkerBoardPattern,
+    layerSplit
   } = ownProps;
+  const { proj } = state;
   const { runningLayers } = state.layers;
-  const { id } = state.proj;
+  const { id } = proj;
   const zoom = state.legacy.map.getZoom();
   const zots = getZotsForActiveLayers(layers, zoom) || {};
+  const activeLayers = state.layers[layerGroupName];
 
   return {
     zots,
@@ -165,9 +179,11 @@ function mapStateToProps(state, ownProps) {
     groupId,
     title,
     layerGroupName,
+    activeLayers,
     runningLayers,
     projId: id,
     checkerBoardPattern,
+    layerSplit,
     getNames: (layerId, proj) => {
       return getTitles(state.config, layerId, proj, state);
     },
