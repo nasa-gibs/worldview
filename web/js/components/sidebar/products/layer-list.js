@@ -9,7 +9,7 @@ import {
   getTitles,
   available
 } from '../../../modules/layers/selectors';
-import { palettePromise } from '../../../modules/palettes/selectors';
+// import { palettePromise } from '../../../modules/palettes/selectors';
 import { reorderLayers } from '../../../modules/layers/actions';
 
 const reorder = (list, startIndex, endIndex) => {
@@ -33,8 +33,9 @@ class LayerList extends React.Component {
    * @param {Function} palettePromise | Retrieve palette
    */
   getPalette(layer, palettePromise) {
-    if (this.state.palettes[layer.id]) {
-      return this.state.palettes[layer.id];
+    const { renderedPalettes } = this.props;
+    if (renderedPalettes[layer.id]) {
+      return renderedPalettes[layer.id];
     } else if (this.promises[layer.id]) {
       return null;
     } else if (layer.palette) {
@@ -131,7 +132,6 @@ class LayerList extends React.Component {
                       zot={zots[object.id] ? zots[object.id].value : null}
                       names={getNames(object.id)}
                       checkerBoardPattern={checkerBoardPattern}
-                      palette={this.getPalette(object, palettePromise)}
                       isDisabled={!available(object.id)}
                       isVisible={object.visible}
                       runningObject={
@@ -196,8 +196,7 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = dispatch => ({
   reorderLayers: newLayerArray => {
     dispatch(reorderLayers(newLayerArray));
-  },
-  palettePromise: () => {}
+  }
 });
 export default connect(
   mapStateToProps,

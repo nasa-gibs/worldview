@@ -23,6 +23,7 @@ import {
   layerReducer,
   getInitialState as getLayersInitialState
 } from './layers/reducers';
+import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
 import dataDownloadReducer from './data/reducers';
 import { get as lodashGet } from 'lodash';
 
@@ -55,7 +56,8 @@ export function getInitialState(models, config, parameters) {
     layers: getLayersInitialState(config),
     requestedEvents: eventRequestResponse(eventsIgnoreArray),
     requestedEventSources: eventRequestResponse(eventsIgnoreArray),
-    requestedEventCategories: eventRequestResponse(eventsIgnoreArray)
+    requestedEventCategories: eventRequestResponse(eventsIgnoreArray),
+    palettes: getInitialPaletteState(config)
   };
 }
 const defaultReducer = (state = {}) => state;
@@ -74,6 +76,7 @@ const reducers = {
   layers: layerReducer,
   events: eventsReducer,
   data: dataDownloadReducer,
+  palettes: paletteReducer,
   requestedEvents,
   requestedEventSources,
   requestedEventCategories,

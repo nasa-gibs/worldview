@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import Legend from './legend';
 import { Draggable } from 'react-beautiful-dnd';
 import util from '../../../util/util';
-import { get } from '../../../modules/palettes/selectors';
+import { get as lodashGet, isEmpty as lodashIsEmpty } from 'lodash';
+import { getPalette, getLegends } from '../../../modules/palettes/selectors';
 import {
   toggleVisibility,
   removeLayer,
   layerHover
 } from '../../../modules/layers/actions';
+import { requestPalette } from '../../../modules/palettes/actions';
 import { connect } from 'react-redux';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
@@ -22,31 +24,35 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 class Layer extends React.Component {
   constructor(props) {
     super(props);
+    const { zot, index, isInProjection } = props;
     this.state = {
-      zot: props.zot,
-      index: props.index,
-      isInProjection: props.isInProjection
+      zot: zot,
+      index: index,
+      isInProjection: isInProjection
     };
   }
-  componentWillReceiveProps(props) {
-    if (props.zot !== this.state.zot) {
-      this.setState({ zot: props.zot });
-    }
-    if (props.isInProjection !== this.state.isInProjection) {
-      this.setState({ isInProjection: props.isInProjection });
-    }
-  }
+  // componentWillReceiveProps(props) {
+  //   if (props.zot !== this.state.zot) {
+  //     this.setState({ zot: props.zot });
+  //   }
+  //   if (props.isInProjection !== this.state.isInProjection) {
+  //     this.setState({ isInProjection: props.isInProjection });
+  //   }
+  // }
   getLegend() {
     const {
       layer,
-      palette,
       runningObject,
-      getLegend,
-      layerGroupName,
+      legends,
       checkerBoardPattern,
-      getPalette
+      getPalette,
+      palette,
+      renderedPalette,
+      requestPalette,
+      hasPalette,
+      isLoading
     } = this.props;
-    if (palette) {
+    if (!lodashIsEmpty(renderedPalette)) {
       let isRunningData = !!runningObject;
       let colorHex = isRunningData ? runningObject.hex : null;
       return (
@@ -54,12 +60,14 @@ class Layer extends React.Component {
           layer={layer}
           paletteId={palette.id}
           getPalette={getPalette}
-          legends={getLegend(layer.id, layerGroupName)}
+          legends={legends}
           isRunningData={isRunningData}
           checkerBoardPattern={checkerBoardPattern}
           colorHex={colorHex}
         />
       );
+    } else if (!isLoading) {
+      requestPalette(layer.id);
     }
   }
   getDisabledTitle(layer) {
@@ -112,7 +120,8 @@ class Layer extends React.Component {
       names,
       isMobile,
       index,
-      onOptionsClick
+      onOptionsClick,
+      hasPalette
     } = this.props;
 
     return (
@@ -214,7 +223,7 @@ class Layer extends React.Component {
                 </a>
                 <h4 title={name.title}>{names.title}</h4>
                 <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-                {this.getLegend()}
+                {hasPalette ? this.getLegend() : ''}
               </div>
             </li>
           ) : (
@@ -250,7 +259,7 @@ Layer.propTypes = {
   isMobile: PropTypes.bool,
   palette: PropTypes.object,
   runningObject: PropTypes.object,
-  getLegend: PropTypes.func,
+  legends: PropTypes.object,
   index: PropTypes.number,
   checkerBoardPattern: PropTypes.object,
   isInProjection: PropTypes.bool,
@@ -270,18 +279,35 @@ function mapStateToProps(state, ownProps) {
     index,
     layerGroupName
   } = ownProps;
+  const { palettes, layers, config } = state;
+  const hasPalette = !lodashIsEmpty(layer.palette);
+  const renderedPalettes = palettes.rendered;
+  const legends =
+    hasPalette && renderedPalettes[layer.id]
+      ? getLegends(layer.id, layers, renderedPalettes, config)
+      : {};
 
   return {
     layer,
     isDisabled,
     isVisible,
     layerClasses,
+    legends,
     names,
     index,
+    isLoading: palettes.isLoading[layer.id],
+    renderedPalette: renderedPalettes[layer.id],
     layerGroupName,
     isMobile: state.browser.is.small,
-    getPalette: () => {
-      get(layer.id, index, layerGroupName, state);
+    hasPalette,
+    getPalette: (layerId, index) => {
+      return getPalette(
+        layer.id,
+        index,
+        layers[layerGroupName],
+        renderedPalettes,
+        config
+      );
     }
   };
 }
@@ -304,6 +330,10 @@ const mapDispatchToProps = dispatch => ({
     //   event: 'sidebar_layer_info'
     // });
     // dispatch(layerInfo(id));
+  },
+  requestPalette(id) {
+    const location = 'config/palettes/' + id + '.json';
+    return dispatch(requestPalette(location, id));
   }
 });
 export default connect(

@@ -11,7 +11,7 @@ import {
   NavItem,
   NavLink
 } from 'reactstrap';
-
+import { connect } from 'react-redux';
 import Palette from './palette';
 import Opacity from './opacity';
 import Threshold from './threshold';
@@ -223,6 +223,19 @@ class LayerSettings extends React.Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  const { config } = state;
+
+  return {};
+}
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LayerSettings);
+
 LayerSettings.defaultProps = {
   palettedAllowed: false,
   layer: { id: null, name: null },
@@ -251,5 +264,3 @@ LayerSettings.propTypes = {
   layer: PropTypes.object,
   title: PropTypes.string
 };
-
-export default LayerSettings;

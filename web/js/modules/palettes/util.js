@@ -78,3 +78,11 @@ export function lookup(sourcePalette, targetPalette) {
   });
   return lookup;
 }
+export function loadRenderedPalette(config, layerId) {
+  var layer = config.layers[layerId];
+  return util.load.config(
+    config.palettes.rendered,
+    layer.palette.id,
+    'config/palettes/' + layer.palette.id + '.json'
+  );
+}

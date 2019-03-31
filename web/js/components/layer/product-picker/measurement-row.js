@@ -73,7 +73,6 @@ class LayerRow extends React.Component {
 
     source.settings.forEach(setting => {
       const layer = layerConfig[setting];
-      console.log(layer);
       if (
         layer &&
         layer.id === setting &&
