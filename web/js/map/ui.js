@@ -918,6 +918,11 @@ export function mapui(models, config, store, ui) {
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
         var feats = feature.getProperties();
         attsCollector.push(feats);
+        if (layer.wv.def.vectorData && layer.wv.def.vectorData.id) {
+          // var errorMessage = '<p>There was an error loading vector metadata.</p>';
+          var data = 'config/vectordata/' + layer.wv.def.vectorData.id + '.json';
+          console.log(data);
+        }
       });
 
       const unique = attsCollector
