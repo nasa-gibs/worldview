@@ -153,3 +153,88 @@ export function removeLayer(id, layers) {
   }
   return update(layers, { $splice: [[index, 1]] });
 }
+// this function takes an array of date ranges in this format:
+// [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
+// the array is first sorted, and then checked for any overlap
+export function dateOverlap(period, dateRanges) {
+  var sortedRanges = dateRanges.sort((previous, current) => {
+    // get the start date from previous and current
+    var previousTime = util.parseDate(previous.startDate);
+    previousTime = previousTime.getTime();
+    var currentTime = util.parseDate(current.startDate);
+    currentTime = currentTime.getTime();
+
+    // if the previous is earlier than the current
+    if (previousTime < currentTime) {
+      return -1;
+    }
+
+    // if the previous time is the same as the current time
+    if (previousTime === currentTime) {
+      return 0;
+    }
+
+    // if the previous time is later than the current time
+    return 1;
+  });
+
+  var result = sortedRanges.reduce(
+    (result, current, idx, arr) => {
+      // get the previous range
+      if (idx === 0) {
+        return result;
+      }
+      var previous = arr[idx - 1];
+
+      // check for any overlap
+      var previousEnd = util.parseDate(previous.endDate);
+      // Add dateInterval
+      if (previous.dateInterval > 1 && period === 'daily') {
+        previousEnd = new Date(
+          previousEnd.setTime(
+            previousEnd.getTime() +
+              (previous.dateInterval * 86400000 - 86400000)
+          )
+        );
+      }
+      if (period === 'monthly') {
+        previousEnd = new Date(
+          previousEnd.setMonth(
+            previousEnd.getMonth() + (previous.dateInterval - 1)
+          )
+        );
+      } else if (period === 'yearly') {
+        previousEnd = new Date(
+          previousEnd.setFullYear(
+            previousEnd.getFullYear() + (previous.dateInterval - 1)
+          )
+        );
+      }
+      previousEnd = previousEnd.getTime();
+
+      var currentStart = util.parseDate(current.startDate);
+      currentStart = currentStart.getTime();
+
+      var overlap = previousEnd >= currentStart;
+      // store the result
+      if (overlap) {
+        // yes, there is overlap
+        result.overlap = true;
+        // store the specific ranges that overlap
+        result.ranges.push({
+          previous: previous,
+          current: current
+        });
+      }
+
+      return result;
+    },
+    {
+      overlap: false,
+      ranges: []
+    }
+  );
+
+  // return the final results
+  return result;
+}

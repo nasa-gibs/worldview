@@ -4,7 +4,11 @@ import Legend from './legend';
 import { Draggable } from 'react-beautiful-dnd';
 import util from '../../../util/util';
 import { get as lodashGet, isEmpty as lodashIsEmpty } from 'lodash';
+import googleTagManager from 'googleTagManager';
 import { getPalette, getLegends } from '../../../modules/palettes/selectors';
+import { openCustomContent } from '../../../modules/modal/actions';
+import LayerInfo from '../../layer/info/info';
+
 import {
   toggleVisibility,
   removeLayer,
@@ -217,7 +221,7 @@ class Layer extends React.Component {
                   className={
                     isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'
                   }
-                  onClick={() => onInfoClick(layer.id)}
+                  onClick={() => onInfoClick(layer, names.title)}
                 >
                   <i className="fa fa-info wv-layers-info-icon" />
                 </a>
@@ -325,11 +329,20 @@ const mapDispatchToProps = dispatch => ({
   onOptionsClick: id => {
     // dispatch(layerOptions(id));
   },
-  onInfoClick: id => {
-    // googleTagManager.pushEvent({
-    //   event: 'sidebar_layer_info'
-    // });
-    // dispatch(layerInfo(id));
+  onInfoClick: (layer, title) => {
+    googleTagManager.pushEvent({
+      event: 'sidebar_layer_info'
+    });
+    dispatch(
+      openCustomContent('LAYER_INFO_MODAL' + '-' + layer.id, {
+        headerText: title || 'Layer Description',
+        backdrop: true,
+        bodyComponent: LayerInfo,
+        bodyComponentProps: {
+          layer: layer
+        }
+      })
+    );
   },
   requestPalette(id) {
     const location = 'config/palettes/' + id + '.json';

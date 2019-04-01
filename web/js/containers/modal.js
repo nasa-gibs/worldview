@@ -45,7 +45,8 @@ class ModalContainer extends Component {
       clickableBehindModal,
       bodyComponent,
       onClose,
-      CompletelyCustomModal
+      CompletelyCustomModal,
+      bodyComponentProps
     } = newProps;
     const style = this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
@@ -86,7 +87,7 @@ class ModalContainer extends Component {
             <ModalBody>
               {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
               {BodyComponent ? (
-                <BodyComponent />
+                <BodyComponent {...bodyComponentProps} />
               ) : isTemplateModal ? (
                 this.getTemplateBody()
               ) : (
