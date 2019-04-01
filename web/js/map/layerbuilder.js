@@ -465,12 +465,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
           document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
           document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
 
-          if (document.getElementById('declutterCheckbox').checked === true) {
-            layer.declutter = true;
-          } else {
-            layer.declutter = false;
-          }
-
           // Filter by a feature
           layer.setStyle(function(feature, resolution) {
             if (feature.get('CONFIDENCE') >= confidenceMinFilter.value && feature.get('CONFIDENCE') <= confidenceMaxFilter.value) {
