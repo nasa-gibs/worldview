@@ -403,7 +403,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       renderBuffer: 2,
       extent: extent,
       source: sourceOptions,
-      declutter: declutterBool,
+      declutter: false,
       style: styles
     });
 
@@ -466,7 +466,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
           document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
 
           if (document.getElementById('declutterCheckbox').checked === true) {
-            console.log(layer);
             layer.declutter = true;
           } else {
             layer.declutter = false;
