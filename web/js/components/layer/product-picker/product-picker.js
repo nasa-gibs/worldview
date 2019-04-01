@@ -35,8 +35,6 @@ class ProductPicker extends React.Component {
     this.state = {
       listType: props.listType,
       categoryType: Object.keys(props.categoryConfig)[0],
-      height: props.height,
-      width: props.width,
       category: props.category,
       selectedMeasurement: null,
       filteredRows: props.filteredRows,
@@ -53,7 +51,6 @@ class ProductPicker extends React.Component {
   runSearch(value) {
     const { filterProjections, filterSearch, allLayers } = this.props;
     let val = value.toLowerCase();
-
     if (val.length === 0) {
       this.setState({
         filteredRows: [],
@@ -328,13 +325,12 @@ const filterSearch = function(layer, val, terms, config, projId) {
   var filtered = false;
 
   var names = getTitles(config, layer.id, projId);
-  lodashEach(terms, function(index, term) {
+  lodashEach(terms, function(term, index) {
     filtered =
       !lodashIncludes(lodashToLower(names.title), term) &&
       !lodashIncludes(lodashToLower(names.subtitle), term) &&
       !lodashIncludes(lodashToLower(names.tags), term) &&
       !lodashIncludes(lodashToLower(config.layers[layer.id].id), term);
-
     if (filtered) return false;
   });
   return filtered;
