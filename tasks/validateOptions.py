@@ -108,6 +108,14 @@ for layer_id in wv["layers"].keys():
                 vector_style_id + ".json")):
             error("[%s] Unknown vector style: %s" % (layer_id, vector_style_id))
             del layer["vectorStyle"]
+    if "vectorData" in layer and "id" not in layer["vectorData"]:
+        error("[%s] No vectorData definition" % (layer_id))
+    elif "vectorData" in layer:
+        vector_data_id = layer["vectorData"]["id"]
+        if not os.path.exists(os.path.join(config_dir, "vectordata",
+                vector_data_id + ".json")):
+            error("[%s] Unknown vector data: %s" % (layer_id, vector_data_id))
+            del layer["vectorData"]
     if "group" not in layer and opt.get("warnOnUnexpectedLayer"):
         error("[%s] Possible unexpected layer, no group defined" % layer_id)
         remove_layer(wv, layer_id)
