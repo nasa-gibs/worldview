@@ -23,7 +23,24 @@ class AxisZoomChange extends React.Component {
 
   // Toggle zoom select tooltip
   toggleTooltipHover = (isHovered) => {
-    console.log(isHovered)
+    // toggle visibility of map scales
+    let imperialMapScale = document.querySelectorAll('.wv-map-scale-imperial');
+    let metricMapScale = document.querySelectorAll('.wv-map-scale-metric');
+    if (isHovered) {
+      for (let el of imperialMapScale) {
+        el.style.display = 'none';
+      }
+      for (let el of metricMapScale) {
+        el.style.display = 'none';
+      }
+    } else {
+      for (let el of imperialMapScale) {
+        el.style.display = 'block';
+      }
+      for (let el of metricMapScale) {
+        el.style.display = 'block';
+      }
+    }
     this.setState({
       toolTipHovered: isHovered
     })
@@ -107,7 +124,6 @@ class AxisZoomChange extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       this.state.zoomLevel ?
       <div

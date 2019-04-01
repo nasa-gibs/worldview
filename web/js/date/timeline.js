@@ -463,8 +463,9 @@ export function timeline(models, config, ui) {
   };
 
   var updateDate = (date) => {
-    let updatedDate = new Date(date);
     console.log(date)
+    let updatedDate = new Date(date);
+    console.log(date, updatedDate)
     // console.log(models)
     // self.input.update(updatedDate);
     // models.date.setActiveDate(updatedDate);

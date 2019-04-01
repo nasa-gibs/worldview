@@ -592,7 +592,6 @@ export default (function (self) {
   };
 
   self.rollDate = function (date, interval, amount, minDate, maxDate) {
-    console.log(date, interval, amount, minDate, maxDate)
     minDate = minDate || self.minDate();
     maxDate = maxDate || self.maxDate();
     var range = self.rollRange(date, interval, minDate, maxDate);
@@ -633,7 +632,6 @@ export default (function (self) {
     }
     var newDate = new Date(Date.UTC(year, month, day, hour, minute, second));
     newDate = new Date(self.clamp(newDate, minDate, maxDate));
-    console.log(newDate)
     return newDate;
   };
 

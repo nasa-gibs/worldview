@@ -119,23 +119,13 @@ class DateInputColumn extends React.Component {
     }
   }
   onClickUp() {
-    if (this.props.type === 'minute') {
-      // this.rollDate(10);
-      this.rollDate(1);
-    } else {
-      this.rollDate(1);
-    }
+    this.rollDate(1);
     this.setState({
       valid: true
     });
   }
   onClickDown() {
-    if (this.props.type === 'minute') {
-      // this.rollDate(-10);
-      this.rollDate(-1);
-    } else {
-      this.rollDate(-1);
-    }
+    this.rollDate(-1);
     this.setState({
       valid: true
     });
@@ -189,6 +179,7 @@ class DateInputColumn extends React.Component {
 
   hourValidation(input) {
     var newDate;
+    console.log(input, this.validateDate(newDate));
     if (input >= 0 && input <= 23) {
       newDate = new Date(new Date(this.props.date).setUTCHours(input));
       return this.validateDate(newDate);

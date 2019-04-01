@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import moment from 'moment';
+
 import DateChangeControls from './timeline-controls/date-change-controls';
 import DateZoomChange from './timeline-controls/date-zoom-change';
 import './timeline.css';
@@ -52,13 +54,13 @@ class Timeline extends React.Component {
 
   updateDate = (date, inputChange) => {
     console.log(date, inputChange)
-    if (inputChange) {
-      this.setState({
-        inputChange: true
-      }, this.props.updateDate(date));
-    } else {
+    // if (inputChange) {
+    //   this.setState({
+    //     inputChange: true
+    //   }, this.props.updateDate(date));
+    // } else {
       this.props.updateDate(date);
-    }
+    // }
 
     // let dateFormatted = new Date(date).toISOString();
     // this.setState({
@@ -73,6 +75,7 @@ class Timeline extends React.Component {
     });
   }
 
+  // show/hide custom interval modal
   toggleCustomIntervalModal = () => {
     this.setState(prevState => ({
       customIntervalModalOpen: !prevState.customIntervalModalOpen
@@ -89,6 +92,12 @@ class Timeline extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log(this.state.dateFormatted, prevState.dateFormatted)
+    // if(this.state.dateFormatted !== prevState.dateFormatted) {
+    //   this.setState({
+    //     dateFormatted: this.props.dateFormatted
+    //   })
+    // }
     // console.log('CDU', this.state, this.props)
   }
 
@@ -158,8 +167,12 @@ class Timeline extends React.Component {
   }
   // left/right arrows increment date
   incrementDate = (multiplier) => {
-    console.log(this.state.changeAmt, this.state.timeScaleChangeUnit)
-    this.props.incrementDate((multiplier * this.state.changeAmt), this.state.timeScaleChangeUnit);
+    console.log(moment(this.state.dateFormatted).format(), moment.utc(this.state.dateFormatted).format())
+    let newDate = moment.utc(this.state.dateFormatted).add((multiplier * this.state.changeAmt), this.state.timeScaleChangeUnit)
+
+    // this.props.incrementDate((multiplier * this.state.changeAmt), this.state.timeScaleChangeUnit);
+    console.log(this.state.dateFormatted, newDate.format())
+    this.updateDate(new Date(newDate.format()));
   }
 
   // open animation dialog

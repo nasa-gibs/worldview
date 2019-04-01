@@ -759,7 +759,8 @@ class TimelineAxis extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     // console.log(prevProps.selectedDate, this.props.selectedDate, this.state.selectedDate, prevState.selectedDate)
-console.log(this.props.timeScale)
+    // console.log(prevProps.dateFormatted, this.props.dateFormatted)
+// console.log(this.props.timeScale)
     if (this.props.inputChange === true) {
       this.props.resetInput();
       // check if newDraggerDate will be within acceptable visible axis width
@@ -1065,6 +1066,8 @@ handleDragDragger = (draggerName, e, d) => {
     // TODO: debug globals added to window temporarily
     window.deque = Deque;
     window.moment = moment;
+    // console.log(this.props, this.state);
+    // debugger;
     return (
       <React.Fragment>
       <div id="wv-timeline-axis"

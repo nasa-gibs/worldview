@@ -34,13 +34,6 @@ class DateSelector extends React.Component {
       hasSubdailyLayers: props.hasSubdailyLayers
     });
   }
-  // shouldComponentUpdate(prevProps, prevState) {
-  //   console.log(prevProps.date, prevState.date, this.props.date, this.state.date)
-  //   if (prevProps.date === this.props.date) {
-  //     return false;
-  //   }
-  //   return true;
-  // }
   blur() {
     this.setState({ tab: null });
   }
@@ -50,7 +43,6 @@ class DateSelector extends React.Component {
   changeTab(index) {
     var nextTab = index;
     var maxTab;
-    // if (this.state.maxZoom >= 4) {
     if (this.state.hasSubdailyLayers) {
       maxTab = 5;
     } else {
@@ -131,7 +123,6 @@ class DateSelector extends React.Component {
     }
   }
   render() {
-    console.log(this.props.date)
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn
