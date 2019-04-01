@@ -58,7 +58,7 @@ class DateZoomChange extends Component {
             id="current-zoom"
             className={`zoom-btn zoom-btn-active${this.state.customSelected ? ' custom-interval-text' : ''}`}
           >
-            {this.state.intervalText}
+            {this.state.customSelected ? this.state.intervalText : '1 ' + this.state.intervalText}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
@@ -86,6 +86,13 @@ class DateZoomChange extends Component {
                 onClick={() => this.handleClickZoom('day')}
               >
                 Day
+              </span>
+              <span
+                id="zoom-hours"
+                className="zoom-btn zoom-btn-inactive zoom-hours"
+                onClick={() => this.handleClickZoom('hour')}
+              >
+                Hour
               </span>
               <span
                 id="zoom-minutes"

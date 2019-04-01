@@ -94,11 +94,11 @@ class TimelineAxis extends React.Component {
     // this.showHoverOff = this.showHoverOff.bind(this);
   }
   //? how do position and transforms change between scale changes? lock into one line would be ideal
-  updateScale = (inputDate, timeScale, axisWidthInput) => {
+  updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff) => {
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
     let axisWidth = axisWidthInput ? axisWidthInput : this.state.axisWidth;
-    let leftOffset = this.state.leftOffset;
+    let leftOffset = leftOffsetFixedCoeff ? axisWidth * leftOffsetFixedCoeff : this.state.leftOffset;
 
     if (leftOffset === 0) {
       leftOffset = axisWidth / 2;
@@ -250,25 +250,17 @@ class TimelineAxis extends React.Component {
 
   // changes timeScale state
   wheelZoom = (e) => {
-    // e.preventDefault();
+    // e.preventDefault(); //TODO: investigate treated as passive event error/warning when on
     let arrayIndex = timeScales.indexOf(this.state.timeScale);
     if (e.deltaY > 0) { // wheel zoom out
       if (arrayIndex < 4) {
         let nextGreaterTimeScale = timeScales[arrayIndex + 1];
-
-        //# componentDidUpdate catches this change - BEST WAY TO HANDLE THIS?
-        this.setState({
-          timeScale: nextGreaterTimeScale
-        });
+        this.props.changeTimescale(nextGreaterTimeScale);
       }
     } else {
       if (arrayIndex > 0) { // wheel zoom in
         let nextSmallerTimeScale = timeScales[arrayIndex - 1];
-
-        //# componentDidUpdate catches this change - BEST WAY TO HANDLE THIS?
-        this.setState({
-          timeScale: nextSmallerTimeScale
-        });
+        this.props.changeTimescale(nextSmallerTimeScale);
       }
     }
   }
@@ -690,6 +682,8 @@ class TimelineAxis extends React.Component {
     // console.log(draggerPosition, pixelsToAdd, midPoint)
     // console.log(this.getDraggerPosition(draggerTimeStateBDraggerBTest, current.dates[0].rawDate, 'day', gridWidth))
 
+    console.log(current.dates[Math.floor(gridNumber/2)].rawDate)
+
     this.setState({
       compareMode: false,
       timeScaleSelectValue: timeScale,
@@ -733,37 +727,62 @@ class TimelineAxis extends React.Component {
     // return true;
   // }
 
-  //# BEST WAY TO HANDLE THIS?
+/**
+ * check if newDraggerDate will be within acceptable visible axis width
+ *
+ * @param {String} selectedDate
+ * @return {Boolean} withinRange
+ * @return {Boolean} newDateInThePast
+ * @return {Number} newDraggerDiff
+ */
+  checkDraggerMoveOrUpdateScale = (selectedDate) => {
+    let draggerTimeState = this.state.draggerTimeState;
+    let draggerPosition = this.state.draggerPosition;
+
+    let timeScale = this.state.timeScale;
+    let gridWidth = this.state.gridWidth;
+
+    let selectedDateMoment = moment.utc(selectedDate);
+    let draggerDateMoment = moment.utc(draggerTimeState);
+
+    let newDraggerDiff = selectedDateMoment.diff(draggerDateMoment, timeScale, true);
+    let newDraggerPosition = draggerPosition + (newDraggerDiff * gridWidth);
+    let newDateInThePast = selectedDateMoment < draggerDateMoment;
+    let newDraggerWithinRangeCheck = newDraggerPosition <= (this.state.axisWidth - 80) && newDraggerPosition >= -26;
+
+    return {
+      withinRange: newDraggerWithinRangeCheck,
+      newDateInThePast: newDateInThePast,
+      newDraggerDiff: Math.abs(newDraggerDiff)
+    };
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    // console.log(this.props)
-// console.log(prevProps.selectedDate, this.props.selectedDate, this.state.selectedDate, prevState.selectedDate)
-
+    // console.log(prevProps.selectedDate, this.props.selectedDate, this.state.selectedDate, prevState.selectedDate)
+console.log(this.props.timeScale)
     if (this.props.inputChange === true) {
-      console.log(this.props.selectedDate)
-      this.updateScale(this.props.selectedDate, this.state.timeScale);
       this.props.resetInput();
+      // check if newDraggerDate will be within acceptable visible axis width
+      let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDate);
+      if (newDraggerDate.withinRange) {
+        this.setDraggerToTime(this.props.selectedDate);
+      } else {
+        let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
+        this.updateScale(this.props.selectedDate, this.state.timeScale, null, leftOffsetFixedCoeff);
+      }
     }
-    // console.log(this.props.selectedDate, prevProps.selectedDate)
-    // console.log(moment.utc(prevProps.selectedDate).format(), moment.utc(prevState.selectedDate).format())
-    // let propsSelectedDate = moment.utc(prevProps.selectedDate).format();
-    // let stateSelectedDate = moment.utc(prevState.selectedDate).format();
-
-    // console.log(propsSelectedDate, stateSelectedDate)
-    // console.log(prevProps.timeScaleChangeUnit, this.props.timeScaleChangeUnit, this.state.timeScaleChangeUnit, prevState.timeScaleChangeUnit)
     if (this.state.timeScale !== prevState.timeScale) {
       this.updateScale(null, this.state.timeScale);
     }
 
-    // if (prevProps.timeScaleChangeUnit !== this.props.timeScaleChangeUnit) {
-    //   this.updateScale(null, this.props.timeScaleChangeUnit);
-    // }
+    if (this.props.timeScale !== this.state.timeScale) {
+      this.updateScale(null, this.props.timeScale);
+    }
 
     if (this.props.timelineWidth !== prevProps.timelineWidth) {
       this.handleResize();
     }
 
-// console.log(prevProps.selectedDate, this.props.selectedDate, this.state.selectedDate, prevState.selectedDate)
-// console.log(prevProps.draggerTimeState, this.props.draggerTimeState, this.state.draggerTimeState, prevState.draggerTimeState)
 // # CHANGED CONDITIONAL FROM "&&" TO "||" TO DEBUG LEFT/RIGHT ARROW UPDATE ISSUE
     if (this.props.selectedDate !== prevProps.selectedDate ||
       this.state.draggerTimeState !== prevState.draggerTimeState ||
@@ -776,52 +795,26 @@ class TimelineAxis extends React.Component {
         //   && moment.utc(this.state.draggerTimeState).format() !== moment.utc(this.props.selectedDate).format()) {
 
       // console.log(this.props.selectedDate, prevProps.selectedDate, this.state.hoverTime, this.state.draggerTimeState)
-      // console.log(moment.utc(this.state.hoverTime).format(), moment.utc(this.props.selectedDate).format())
 
-      // let manualTimeScaleChangeUnit = this.props.timeScaleChangeUnit || this.state.timeScale;
 
-      // let options = timeScaleOptions[manualTimeScaleChangeUnit].timeAxis;
-      // let gridWidth = options.gridWidth;
+      if (!this.props.inputChange && (moment.utc(this.state.draggerTimeState).format() !== moment.utc(this.props.selectedDate).format())) {
+        // check if newDraggerDate will be within acceptable visible axis width
+        let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDate);
+        if (newDraggerDate.withinRange) {
+          this.setDraggerToTime(this.props.selectedDate);
+        } else {
+          let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
+          this.updateScale(this.props.selectedDate, this.state.timeScale, null, leftOffsetFixedCoeff);
+        }
+      }
 
-      // let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
-      // let newSelectedDate = moment.utc(this.props.selectedDate);
-
-      // console.log(newSelectedDate.format(), frontDate.format(), manualTimeScaleChangeUnit, gridWidth)
-      // console.log(moment.utc(this.props.selectedDate).format(), moment.utc(prevProps.selectedDate).format())
-      // let newDraggerPosition = this.getDraggerPosition(newSelectedDate, frontDate, manualTimeScaleChangeUnit, gridWidth)
-      // console.log(this.state.draggerPosition, newDraggerPosition)
-
-      // console.log(this.props, newSelectedDate, moment.utc(this.props.selectedDate).format())
-      // this.setDraggerToTime(this.props.selectedDate)
-      // this.updateScale(this.props.selectedDate, this.state.timeScale);
-      // if (this.props.changeAmt !== null) {
-      //   console.log('hit')
-      //   if (this.props.changeAmt > 0) {
-      //     this.addTimeUnit(manualTimeScaleChangeUnit, this.props.changeAmt)
-      //     // this.props.incrementDate(manualTimeScaleChangeUnit, this.props.changeAmt);
-      //   } else {
-      //     this.minusTimeUnit(manualTimeScaleChangeUnit, -this.props.changeAmt)
-      //     // this.props.incrementDate(manualTimeScaleChangeUnit, this.props.changeAmt);
-      //   }
-
-      // }
     }
-    // else if (propsSelectedDate !== stateSelectedDate) {
-    //   this.setState({
-    //     selectedDate: propsSelectedDate,
-    //     hoverTime: propsSelectedDate,
-    //     draggerTimeState: propsSelectedDate
-    //   }, this.updateScale(this.state.timeScale))
-    // }
   }
 
-    // move red line forward one timeScale unit and update time
+    // move draggerTimeState to inputTime
     setDraggerToTime = (inputTime) => {
-      // console.log(inputTime)
-      // let timeScaleSelected = manualTimeScaleChangeUnit ? manualTimeScaleChangeUnit : this.state.timeScaleSelectValue;
       let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
       let backDate = moment.utc(this.state.deque.peekBack().rawDate);
-      // let increment = manualIncrementAmount ? manualIncrementAmount : this.state.increment;
       let draggerTimeState = moment.utc(this.state.draggerTimeState, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
       let draggerTimeStateAdded = moment.utc(inputTime);
 
@@ -852,83 +845,6 @@ class TimelineAxis extends React.Component {
       })
       // this.props.incrementDate(timeScaleSelected, increment));
     }
-
-  // TODO: may need to restrict based on zoom levels, year zoom adding 7 minutes does nothing for example
-  // move red line forward one timeScale unit and update time
-  addTimeUnit = (manualTimeScaleChangeUnit, manualIncrementAmount) => {
-    // let timeScaleSelected = manualTimeScaleChangeUnit ? manualTimeScaleChangeUnit : this.state.timeScaleSelectValue;
-    let timeScaleSelected = this.props.customIntervalZoomLevel;
-    let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
-    let backDate = moment.utc(this.state.deque.peekBack().rawDate);
-    // let increment = manualIncrementAmount ? manualIncrementAmount : this.state.increment;
-    let increment = this.props.customIntervalValue;
-    let draggerTimeState = moment.utc(this.state.draggerTimeState, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
-    let draggerTimeStateAdded = draggerTimeState.clone().add(increment, timeScaleSelected);
-
-    let isBetween = draggerTimeStateAdded.isBetween(frontDate, backDate, null, '[]');
-    let draggerVisible = false;
-    let newDraggerPosition;
-    if (isBetween) {
-      draggerVisible = true;
-    }
-    let gridWidth = this.state.gridWidth;
-    let timeScale = this.state.timeScale;
-    let pixelsToAddToDragger = Math.abs(frontDate.diff(draggerTimeState, timeScale, true) * gridWidth);
-    let pixelsToAddToDraggerNew = Math.abs(frontDate.diff(draggerTimeStateAdded, timeScale, true) * gridWidth);
-    let pixelsToAddBasedOnFrontDate = pixelsToAddToDraggerNew - pixelsToAddToDragger;
-
-    let isVisible = this.state.draggerVisible;
-    if (isVisible) {
-      newDraggerPosition = this.state.draggerPosition + pixelsToAddBasedOnFrontDate;
-    } else {
-      newDraggerPosition = pixelsToAddToDraggerNew + this.state.position - 49 + this.state.currentTransformX;
-    }
-
-    this.setState({
-      draggerPosition: newDraggerPosition,
-      draggerVisible: draggerVisible,
-      draggerTimeState: draggerTimeStateAdded.format(),
-    }, this.props.updateDate(draggerTimeStateAdded.format()))
-    // this.props.incrementDate(timeScaleSelected, increment));
-  }
-
-  // move red line backward one timeScale unit and update time
-  minusTimeUnit = (manualTimeScaleChangeUnit, manualIncrementAmount) => {
-    // let timeScaleSelected = manualTimeScaleChangeUnit ? manualTimeScaleChangeUnit : this.state.timeScaleSelectValue;
-    let timeScaleSelected = this.props.customIntervalZoomLevel;
-    let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
-    let backDate = moment.utc(this.state.deque.peekBack().rawDate);
-    // let increment = manualIncrementAmount ? manualIncrementAmount : this.state.increment;
-    let increment = this.props.customIntervalValue;
-    let draggerTimeState = moment.utc(this.state.draggerTimeState, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
-    let draggerTimeStateSubtracted = draggerTimeState.clone().subtract(increment, timeScaleSelected);
-
-    let isBetween = draggerTimeStateSubtracted.isBetween(frontDate, backDate, null, '[]');
-    let draggerVisible = false;
-    let newDraggerPosition;
-    if (isBetween) {
-      draggerVisible = true;
-    }
-
-    let gridWidth = this.state.gridWidth;
-    let timeScale = this.state.timeScale;
-    let pixelsToAddToDragger = Math.abs(frontDate.diff(draggerTimeState, timeScale, true) * gridWidth);
-    let pixelsToAddToDraggerNew = Math.abs(frontDate.diff(draggerTimeStateSubtracted, timeScale, true) * gridWidth);
-    let pixelsToAddBasedOnFrontDate = pixelsToAddToDraggerNew - pixelsToAddToDragger;
-
-    let isVisible = this.state.draggerVisible;
-    if (isVisible) {
-      newDraggerPosition = this.state.draggerPosition + pixelsToAddBasedOnFrontDate;
-    } else {
-      newDraggerPosition = pixelsToAddToDraggerNew + this.state.position - 49 + this.state.currentTransformX;
-    }
-    this.setState({
-      draggerPosition: newDraggerPosition,
-      draggerVisible: draggerVisible,
-      draggerTimeState: draggerTimeStateSubtracted.format(),
-    }, this.props.updateDate(draggerTimeStateSubtracted.format()))
-    // this.props.incrementDate(timeScaleSelected, increment));
-  }
 
   handleStopDrag = (e, d) => {
     let midPoint = this.state.midPoint;
@@ -1115,31 +1031,6 @@ handleDragDragger = (draggerName, e, d) => {
     )
   }
 
-  //# HANDLE INCREMENT FORM TESTING
-  handleChangeZoomLevel(event) {
-    event.preventDefault();
-    this.setState({
-      timeScale: event.target.value,
-      leftOffset: this.state.axisWidth/2
-    });
-  }
-
- handleChange(event) {
-    this.setState({ increment: Number(event.target.value) });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-  }
-
-  handleReset(event) {
-    this.setState({ increment: 1 });
-  }
-
-  handleTimeScaleSelectChange(event) {
-    this.setState({ timeScaleSelectValue: event.target.value })
-  }
-
   showHoverOn = () => {
     if (!this.state.showDraggerTime) {
       this.setState({ showHoverLine: true });
@@ -1176,37 +1067,6 @@ handleDragDragger = (draggerName, e, d) => {
     window.moment = moment;
     return (
       <React.Fragment>
-        {/* <div style={{display: 'flex', position: 'relative', left: (window.innerWidth * 0.05)}}>
-          <div style={{display: 'flex', background: '#999', border: '1px solid black', width: '155px', height: '100px'}}>
-            <form onSubmit={this.handleSubmit.bind(this)}>
-              <label>
-                <input type="text" value={this.state.increment} onChange={(e) => this.handleChange(e)} />
-              </label>
-              <select value={this.state.timeScaleSelectValue} onChange={(e) => this.handleTimeScaleSelectChange(e)}>
-                <option value="minute">minute</option>
-                <option value="hour">hour</option>
-                <option value="day">day</option>
-                <option value="month">month</option>
-                <option value="year">year</option>
-              </select>
-              <button >Set</button>
-              <button onClick={() => this.handleReset()}>Reset</button>
-
-            </form>
-            <button className="incrementButton" onClick={() => this.minusTimeUnit()}>{"<"}</button>
-            <button className="incrementButton" onClick={() => this.addTimeUnit()}>{">"}</button>
-          </div>
-          <div className="changeZoomLevelButtons" style={{display: 'flex', border: '1px solid black'}}>
-            <button value="minute" onClick={(e) => this.handleChangeZoomLevel(e)}>minute</button>
-            <button value="hour" onClick={(e) => this.handleChangeZoomLevel(e)}>hour</button>
-            <button value="day" onClick={(e) => this.handleChangeZoomLevel(e)}>day</button>
-            <button value="month" onClick={(e) => this.handleChangeZoomLevel(e)}>month</button>
-            <button value="year" onClick={(e) => this.handleChangeZoomLevel(e)}>year</button>
-          </div>
-          <div>
-            <button onClick={(e) => this.toggleCompareMode(e)}>Compare Mode</button>
-          </div>
-        </div> */}
       <div id="wv-timeline-axis"
         // ref={this.timelineRef} //# REF
         style={{width: `${this.state.axisWidth}px`}}

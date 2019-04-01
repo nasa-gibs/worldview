@@ -138,6 +138,32 @@ form select {
   background: #999;
 }
 
+.zoom-level-display-text {
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+  text-align: center;
+  font-size: 20px;
+  line-height: 1.2em;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  text-transform: uppercase;
+  margin: 4px 0 4px 0;
+  display: block;
+}
+
+.zoom-level-change-arrows {
+  user-select: none;
+  background: transparent;
+  border: 1px solid transparent;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: 55px;
+  padding-top: 7px;
+}
+
 .interval-input {
   width: 80px;
   height: 40px;
@@ -204,19 +230,21 @@ form select {
 .wv-timeline-hide-arrow {
   vertical-align: middle;
   display: block;
-  margin: 26px 0 0 10px;
-  font-size: 40px;
+  margin: 26px 0 0 7px;
+  /* font-size: 40px; */
   color: white;
   cursor: pointer;
-  background: rgba(40, 40, 40, 0.9);
-  width: 40px;
+  /* background: rgba(40, 40, 40, 0.9); */
+  /* width: 40px; */
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  padding-left: 2px;
-  transform: scale(1.5,1);
+  /* padding-left: 2px; */
+  /* transform: scale(1.75,1); */
+  user-select: none;
 }
 
-.wv-timeline-hide-arrow:hover {
+
+#timeline-hide:hover .wv-timeline-hide-arrow {
   color: #1a1a1a;
   background: white;
 }

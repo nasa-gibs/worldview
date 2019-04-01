@@ -12,6 +12,8 @@ import DateSelector from '../date-selector/date-selector';
 import DateChangeArrows from './timeline-controls/date-change-arrows';
 import AnimationButton from './timeline-controls/animation-button';
 
+import AxisZoomChange from './timeline-controls/axis-zoom-change';
+
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
@@ -75,6 +77,15 @@ class Timeline extends React.Component {
     this.setState(prevState => ({
       customIntervalModalOpen: !prevState.customIntervalModalOpen
     }));
+  }
+
+  // Change the timescale parent state
+  changeTimescale = (timeScale) => {
+    if (this.state.timeScale !== timeScale) {
+      this.setState({
+        timeScale: timeScale
+      });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -238,17 +249,27 @@ class Timeline extends React.Component {
               subdaily={this.props.subdaily}
               parentOffset={this.props.parentOffset}
               resetInput={this.resetInput}
+              changeTimescale={this.changeTimescale}
             />
             {/* </svg> */}
         </div>
 
         {/* hammmmmmmmmmmburger 🍔 */}
         {/* <div className="timeline-hamburger-date">DAY</div> */}
+        <div className="zoom-level-change" style={{ width: '75px', display: this.state.timelineHidden ? 'none' : 'block'}}>
+          <AxisZoomChange
+          zoomLevel={this.state.timeScale}
+          changeTimescale={this.changeTimescale}
+          hasSubdailyLayers={this.state.hasSubdailyLayers}
+          />
+        </div>
+
+
         <div id="timeline-hide" onClick={this.toggleHideTimeline}>
         {this.state.timelineHidden ?
-        <i className="far fa-caret-square-right wv-timeline-hide-arrow"></i>
+        <i className="fas fa-chevron-right wv-timeline-hide-arrow"></i>
         :
-        <i className="far fa-caret-square-left wv-timeline-hide-arrow"></i>
+        <i className="fas fa-chevron-left wv-timeline-hide-arrow"></i>
         }
           {/* <svg className="hamburger" width="10" height="9">
             <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />

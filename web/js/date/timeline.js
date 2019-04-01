@@ -297,7 +297,6 @@ export function timeline(models, config, ui) {
    * @return {void}
    */
   var stopper = function() {
-    console.log('stoppppp')
     if (animationInProcess) {
       animationInProcess = false;
       // # invokes when mouse over < > and date selector arrows/boxes
@@ -333,6 +332,7 @@ export function timeline(models, config, ui) {
       // $('#timeline-header').outerWidth(true) -
       // $('#timeline-hide').outerWidth(true) -
       self.parentOffset -
+      20 -
       20 -
       self.margin.left -
       self.margin.right +

@@ -36,8 +36,8 @@ const axisScaleGridElement = {
     return (
       <React.Fragment>
         {/* <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'} shapeRendering="optimizeSpeed"></rect> */}
-        {/* <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill={midTile ? 'yellow' : 'rgba(0,0,0,0)'} shapeRendering="optimizeSpeed"></rect> */}
-        <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill='rgba(0,0,0,0)' shapeRendering="optimizeSpeed"></rect>
+        <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill={midTile ? 'yellow' : 'rgba(0,0,0,0)'} shapeRendering="optimizeSpeed"></rect>
+        {/* <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill='rgba(0,0,0,0)' shapeRendering="optimizeSpeed"></rect> */}
         <line stroke="black" strokeLinecap="round" strokeWidth="0.2" x1="0" x2="0" y1="0" y2={lineLengthY} transform={`translate(${index * gridWidth + 2.2}, 0)`} />
         <line stroke="white" strokeLinecap="round" strokeWidth="2" x1="0" x2="0" y1="0" y2={lineLengthY} transform={`translate(${index * gridWidth + 1}, 0)`} />
       </React.Fragment>
