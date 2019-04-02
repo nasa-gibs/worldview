@@ -914,26 +914,53 @@ export function mapui(models, config, store, ui) {
     map.on('rendercomplete', onRenderComplete);
     // Clicking on a vector shows it's attributes in console.
     map.on('click', function(e) {
-      var attsCollector = [];
+      var metaArray = [];
+      var def;
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-        var feats = feature.getProperties();
-        attsCollector.push(feats);
-        if (layer.wv.def.vectorData && layer.wv.def.vectorData.id) {
-          let vectorDataId = layer.wv.def.vectorData.id;
-          // var errorMessage = '<p>There was an error loading vector metadata.</p>';
-          var data = config.vectorData[vectorDataId];
-          console.log(data);
+        def = layer.wv.def;
+        if (def.vectorData && def.vectorData.id) {
+          let features = feature.getProperties();
+          let vectorDataId = def.vectorData.id;
+          let data = config.vectorData[vectorDataId];
+          let obj = {
+            'legend': data,
+            'features': features
+          };
+          metaArray.push(obj);
         }
       });
-
-      const unique = attsCollector
+      const uniqueMeta = metaArray
         .map(e => e['layer'])
         // store the keys of the unique objects
         .map((e, i, final) => final.indexOf(e) === i && i)
         // eliminate the dead keys & store unique objects
-        .filter(e => attsCollector[e]).map(e => attsCollector[e]);
+        .filter(e => metaArray[e]).map(e => metaArray[e]);
 
-      console.log(unique);
+      if (uniqueMeta.length) {
+        let vectorPointMeta = uniqueMeta[0];
+        console.log(vectorPointMeta);
+
+        let legend = vectorPointMeta.legend;
+
+        // MVT Features table (Use legend object as tooltips)
+        let features = vectorPointMeta.features;
+        console.log('-------------------');
+        console.log('title: ', def.title);
+        console.log('-------------------');
+        Object.entries(features).forEach(feature => {
+          let featureName = feature[0];
+          console.log(featureName);
+          Object.values(legend['mvt_properties']).forEach(property => {
+            if (property['Identifier'] === featureName) { console.log(property); }
+          });
+        });
+        console.log('-------------------');
+        Object.entries(features).forEach(feature => {
+          let featureData = feature[1];
+          console.log(featureData);
+        });
+        console.log('-------------------');
+      }
     });
 
     return map;
