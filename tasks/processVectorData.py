@@ -31,18 +31,17 @@ with open(config_file) as fp:
 def copy_file(file):
     input_file = os.path.join(root, file)
     if input_file.endswith('.json'):
-        response_json = {}
-        vectordata = []
+        response_data = {}
+        vector_layer_filename = file;
+        vector_layer_id = vector_layer_filename.split(".", 1)[0]
+        response_data["vectorData"] = {}
+        response_data["vectorData"][vector_layer_id] = {}
         with open(input_file) as json_file:
             initial_data = json.load(json_file)
             for i in initial_data:
-                vectordata.append({i: initial_data[i]})
-            vector_layer_filename = file;
-            vector_layer_id = vector_layer_filename.split(".", 1)[0]
-            response_json["vectorData"] = {}
-            response_json["vectorData"][vector_layer_id] = vectordata
+                response_data["vectorData"][vector_layer_id][i] = initial_data[i]
         with open(input_file, 'w') as json_file:
-            json.dump(response_json, json_file,indent=2)
+            json.dump(response_data, json_file,indent=2)
         shutil.copy(input_file, output_dir)
 
 # Main
