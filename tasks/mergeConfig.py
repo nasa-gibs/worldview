@@ -64,7 +64,7 @@ for root, dirs, files in os.walk(input_dir):
             sys.exit(1)
 
 json_options = {}
-json_options["indent"] = 4
+json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
 
 with open(output_file, "w") as fp:

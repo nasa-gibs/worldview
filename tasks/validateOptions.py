@@ -197,7 +197,7 @@ print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
         warning_count, remove_count)
 
 json_options = {}
-json_options["indent"] = 4
+json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
 
 with open(main_config_file, "w") as fp:

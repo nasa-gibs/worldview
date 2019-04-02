@@ -82,13 +82,13 @@ fi
 
 # Run processVectorData.py and move vectordata where we want them
 if [ -e "$BUILD_DIR/vectordata" ] ; then
-    mkdir -p "$BUILD_DIR"/config/vectordata
+    mkdir -p "$BUILD_DIR"/config/wv.json/vectordata
     if [ -d "$BUILD_DIR"/gc/vectordata ] ; then
         cp -r "$BUILD_DIR"/gc/vectordata "$BUILD_DIR"
     fi
     "$TASKS_DIR/processVectorData.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
         "$BUILD_DIR/vectordata" \
-        "$BUILD_DIR/config/vectordata"
+        "$BUILD_DIR/config/wv.json/vectordata"
 fi
 
 # Run processColormap.py and move colormaps where we want them
