@@ -1,4 +1,4 @@
-import lodashEach from 'lodash/each';
+import { each as lodashEach } from 'lodash';
 import util from '../../util/util';
 export function getCheckerboard() {
   var size = 2;
@@ -84,5 +84,12 @@ export function loadRenderedPalette(config, layerId) {
     config.palettes.rendered,
     layer.palette.id,
     'config/palettes/' + layer.palette.id + '.json'
+  );
+}
+export function loadCustom(config) {
+  return util.load.config(
+    config.palettes,
+    'custom',
+    'config/palettes-custom.json'
   );
 }

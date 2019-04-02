@@ -2,24 +2,25 @@ import { assign as lodashAssign, get as lodashGet } from 'lodash';
 import {
   REQUEST_PALETTE_SUCCESS,
   PALETTE_CHANGE,
-  REQUEST_PALETTE_START
+  REQUEST_PALETTE_START,
+  SET_RANGE_AND_SQUASH,
+  LOADED_CUSTOM_PALETTES
 } from './constants';
 import update from 'immutability-helper';
-
+import util from '../../util/util';
+const browser = util.browser;
 export const defaultPaletteState = {
   rendered: {},
   custom: {},
   active: {},
   activeB: {},
-  isLoading: {}
+  isLoading: {},
+  supported: !(browser.ie || !browser.webWorkers || !browser.cors)
 };
 export function getInitialPaletteState(config) {
   const rendered = lodashGet(config, 'palettes.rendered') || {};
-  console.log(config.palettes);
-  const custom = lodashGet(config, 'palettes.custom');
   return lodashAssign({}, defaultPaletteState, {
-    rendered: rendered,
-    custom
+    rendered: rendered
   });
 }
 
@@ -41,9 +42,17 @@ export function paletteReducer(state = defaultPaletteState, action) {
         }),
         isLoading
       });
+    case SET_RANGE_AND_SQUASH:
+      return lodashAssign({}, state, {
+        [groupName]: action.palettes
+      });
     case PALETTE_CHANGE:
       return lodashAssign({}, state, {
         [groupName]: action.palettes
+      });
+    case LOADED_CUSTOM_PALETTES:
+      return lodashAssign({}, state, {
+        custom: action.custom
       });
     default:
       return state;

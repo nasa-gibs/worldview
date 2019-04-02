@@ -21,10 +21,17 @@ class ThresholdSelect extends React.Component {
    * @param {Boolean} boo
    */
   updateSquash(boo) {
-    const { setRange, layerId, index } = this.props;
+    const { setRange, layerId, index, groupName } = this.props;
     const { start, end, squashed } = this.state;
     const isSquashed = !squashed;
-    setRange(layerId, parseFloat(start), parseFloat(end), isSquashed, index);
+    setRange(
+      layerId,
+      parseFloat(start),
+      parseFloat(end),
+      isSquashed,
+      index,
+      groupName
+    );
     this.setState({ squashed: isSquashed });
   }
   /**
@@ -32,7 +39,7 @@ class ThresholdSelect extends React.Component {
    * @param {Array} thresholdArray | Array of start/end indexs for colormap
    */
   updateThreshold(thresholdArray) {
-    const { layerId, index } = this.props;
+    const { layerId, index, groupName } = this.props;
     const { start, end } = this.state;
 
     const newStart = Math.ceil(Number(thresholdArray[0]));
@@ -59,7 +66,8 @@ class ThresholdSelect extends React.Component {
       parseFloat(newStart),
       parseFloat(newEnd),
       this.state.squashed,
-      index
+      index,
+      groupName
     );
   }
   render() {
@@ -115,7 +123,8 @@ ThresholdSelect.propTypes = {
   legend: PropTypes.object,
   setRange: PropTypes.func,
   layerId: PropTypes.string,
-  squashed: PropTypes.bool
+  squashed: PropTypes.bool,
+  groupName: PropTypes.string
 };
 
 export default ThresholdSelect;

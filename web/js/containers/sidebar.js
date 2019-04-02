@@ -10,7 +10,8 @@ import { TabContent, TabPane } from 'reactstrap';
 import CollapsedButton from '../components/sidebar/collapsed-button';
 import NavCase from '../components/sidebar/nav/nav-case';
 import googleTagManager from 'googleTagManager';
-import { getCheckerboard } from '../modules/palettes/util';
+import { getCheckerboard, loadCustom } from '../modules/palettes/util';
+import { loadedCustomPalettes } from '../modules/palettes/actions';
 import { getLayers } from '../modules/layers/selectors';
 
 import util from '../util/util';
@@ -34,6 +35,10 @@ class Sidebar extends React.Component {
     super(props);
     this.state = { subComponentHeight: 700 };
     this.checkerBoardPattern = getCheckerboard();
+    const customPalettePromise = loadCustom(props.config);
+    customPalettePromise.done(customs => {
+      props.loadedCustomPalettes(customs);
+    });
   }
   componentDidMount() {
     this.updateDimensions();
@@ -209,7 +214,8 @@ function mapStateToProps(state) {
     isCompareMode: compare.active,
     numberOfLayers,
     isCollapsed,
-    tabTypes
+    tabTypes,
+    config
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -224,6 +230,9 @@ const mapDispatchToProps = dispatch => ({
   },
   expandSidebar: () => {
     dispatch(expandSidebar());
+  },
+  loadedCustomPalettes: customs => {
+    dispatch(loadedCustomPalettes(customs));
   }
 });
 

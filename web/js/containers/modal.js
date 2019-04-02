@@ -46,7 +46,8 @@ class ModalContainer extends Component {
       bodyComponent,
       onClose,
       CompletelyCustomModal,
-      bodyComponentProps
+      bodyComponentProps,
+      timeout
     } = newProps;
     const style = this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
@@ -69,6 +70,7 @@ class ModalContainer extends Component {
         autoFocus={autoFocus || false}
         style={style}
         wrapClassName={wrapClassName + ' ' + lowerCaseId}
+        modalTransition={{ timeout: timeout || 100 }}
       >
         {CompletelyCustomModal ? (
           <CompletelyCustomModal />

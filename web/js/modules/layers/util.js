@@ -238,3 +238,28 @@ export function dateOverlap(period, dateRanges) {
   // return the final results
   return result;
 }
+var useLookup = function(layerId, groupStr) {
+  var use = false;
+  var active = self[groupStr][layerId].maps;
+
+  lodashEach(active, function(palette, index) {
+    if (palette.custom) {
+      use = true;
+      return false;
+    }
+    var rendered = self.getRenderedPalette(layerId, index);
+    if (palette.type !== 'classification') {
+      if (palette.min <= 0) {
+        delete palette.min;
+      }
+      if (palette.max >= rendered.entries.values.length) {
+        delete palette.max;
+      }
+      if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max)) {
+        use = true;
+        return false;
+      }
+    }
+  });
+  return use;
+};

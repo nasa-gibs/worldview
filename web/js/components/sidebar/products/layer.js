@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import Legend from './legend';
 import { Draggable } from 'react-beautiful-dnd';
 import util from '../../../util/util';
-import { get as lodashGet, isEmpty as lodashIsEmpty } from 'lodash';
+import { isEmpty as lodashIsEmpty } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { getPalette, getLegends } from '../../../modules/palettes/selectors';
 import { openCustomContent } from '../../../modules/modal/actions';
 import LayerInfo from '../../layer/info/info';
+import LayerSettings from '../../layer/settings/settings';
 
 import {
   toggleVisibility,
@@ -53,7 +54,6 @@ class Layer extends React.Component {
       palette,
       renderedPalette,
       requestPalette,
-      hasPalette,
       isLoading
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
@@ -212,7 +212,7 @@ class Layer extends React.Component {
                   className={
                     isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'
                   }
-                  onClick={() => onOptionsClick(layer.id)}
+                  onClick={() => onOptionsClick(layer, names.title)}
                 >
                   <i className="fas fa-sliders-h wv-layers-options-icon" />
                 </a>
@@ -283,12 +283,12 @@ function mapStateToProps(state, ownProps) {
     index,
     layerGroupName
   } = ownProps;
-  const { palettes, layers, config } = state;
+  const { palettes, config } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const legends =
     hasPalette && renderedPalettes[layer.id]
-      ? getLegends(layer.id, layers, renderedPalettes, config)
+      ? getLegends(layer.id, renderedPalettes, config)
       : {};
 
   return {
@@ -305,13 +305,7 @@ function mapStateToProps(state, ownProps) {
     isMobile: state.browser.is.small,
     hasPalette,
     getPalette: (layerId, index) => {
-      return getPalette(
-        layer.id,
-        index,
-        layers[layerGroupName],
-        renderedPalettes,
-        config
-      );
+      return getPalette(layer.id, index, renderedPalettes, config);
     }
   };
 }
@@ -326,8 +320,19 @@ const mapDispatchToProps = dispatch => ({
   onRemoveClick: id => {
     dispatch(removeLayer(id));
   },
-  onOptionsClick: id => {
-    // dispatch(layerOptions(id));
+  onOptionsClick: (layer, title) => {
+    dispatch(
+      openCustomContent('LAYER_OPTIONS_MODAL' + '-' + layer.id, {
+        headerText: title || 'Layer Options',
+        backdrop: false,
+        bodyComponent: LayerSettings,
+        modalClassName: 'layer-settings-modal',
+        timeout: 150,
+        bodyComponentProps: {
+          layer: layer
+        }
+      })
+    );
   },
   onInfoClick: (layer, title) => {
     googleTagManager.pushEvent({
@@ -336,8 +341,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(
       openCustomContent('LAYER_INFO_MODAL' + '-' + layer.id, {
         headerText: title || 'Layer Description',
-        backdrop: true,
+        backdrop: false,
         bodyComponent: LayerInfo,
+        modalClassName: 'layer-info-modal',
+        timeout: 150,
         bodyComponentProps: {
           layer: layer
         }

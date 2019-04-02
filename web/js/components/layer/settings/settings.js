@@ -1,31 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import lodashEach from 'lodash/each';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink
-} from 'reactstrap';
+import { each as lodashEach } from 'lodash';
+import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { connect } from 'react-redux';
 import Palette from './palette';
 import Opacity from './opacity';
 import Threshold from './threshold';
+import {
+  getCheckerboard,
+  palettesTranslate
+} from '../../../modules/palettes/util';
+import {
+  getDefaultLegend,
+  getCustomPalette,
+  getLegends,
+  getPalette,
+  getLegend
+} from '../../../modules/palettes/selectors';
+import {
+  setRange,
+  setCustom,
+  clearCustom
+} from '../../../modules/palettes/actions';
 
 class LayerSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeIndex: 0,
-      isOpen: props.isOpen,
-      palettedAllowed: props.palettedAllowed,
-      layer: props.layer,
-      title: props.title
+      activeIndex: 0
     };
+    this.canvas = document.createElement('canvas');
+    this.checkerboard = getCheckerboard();
   }
   /**
    * Render multicolormap layers inside a tab pane
@@ -39,10 +44,9 @@ class LayerSettings extends React.Component {
       getDefaultLegend,
       getCustomPalette,
       setCustom,
-      canvas,
       palettesTranslate,
-      setRange,
-      checkerboard
+      groupName,
+      setRange
     } = this.props;
     const { layer, activeIndex } = this.state;
     let navElements = [];
@@ -85,6 +89,7 @@ class LayerSettings extends React.Component {
                 min={0}
                 max={max}
                 start={start}
+                groupName={groupName}
                 end={end}
                 layerId={layer.id}
                 squashed={!!palette.squash}
@@ -95,14 +100,15 @@ class LayerSettings extends React.Component {
             )}
             <Palette
               setCustom={setCustom}
+              groupName={groupName}
               clearCustom={clearCustom}
               getDefaultLegend={getDefaultLegend}
               getCustomPalette={getCustomPalette}
               palettesTranslate={palettesTranslate}
               activePalette={palette.custom || '__default'}
-              checkerboard={checkerboard}
+              checkerboard={this.checkerboard}
               layer={layer}
-              canvas={canvas}
+              canvas={this.canvas}
               index={i}
               paletteOrder={paletteOrder}
             />
@@ -134,11 +140,10 @@ class LayerSettings extends React.Component {
       getPalette,
       getLegend,
       setRange,
-      canvas,
-      checkerboard,
-      paletteOrder
+      paletteOrder,
+      groupName,
+      layer
     } = this.props;
-    const { layer } = this.state;
     const legends = getLegends(layer.id);
     if (!legends) return '';
     const len = legends.length;
@@ -165,6 +170,7 @@ class LayerSettings extends React.Component {
             layerId={layer.id}
             end={end}
             squashed={!!palette.squash}
+            groupName={groupName}
             index={0}
           />
         ) : (
@@ -177,9 +183,10 @@ class LayerSettings extends React.Component {
           getCustomPalette={getCustomPalette}
           palettesTranslate={palettesTranslate}
           activePalette={palette.custom || '__default'}
-          checkerboard={checkerboard}
+          checkerboard={this.checkerboard}
           layer={layer}
-          canvas={canvas}
+          canvas={this.canvas}
+          groupName={groupName}
           index={0}
           paletteOrder={paletteOrder}
         />
@@ -187,49 +194,71 @@ class LayerSettings extends React.Component {
     );
   }
   render() {
-    const { setOpacity, customPalettesIsActive, close } = this.props;
-    const { isOpen, layer, palettedAllowed } = this.state;
-
+    const {
+      setOpacity,
+      customPalettesIsActive,
+      layer,
+      palettedAllowed
+    } = this.props;
     const customPalettes =
-      customPalettesIsActive && palettedAllowed ? this.renderCustoms() : '';
+      customPalettesIsActive && palettedAllowed && layer.palette
+        ? this.renderCustoms()
+        : '';
+
+    if (!layer.id) return '';
     return (
-      <Modal
-        id="wv-layers-options-dialog"
-        className="wv-layers-options-dialog"
-        modalClassName="layer-settings-modal"
-        isOpen={isOpen}
-        toggle={close}
-        backdrop={false}
-        modalTransition={{ timeout: 150 }}
-      >
-        {layer.id ? (
-          <React.Fragment>
-            <ModalHeader id={'wv-options-header-' + layer.id} toggle={close}>
-              {layer.title}
-            </ModalHeader>
-            <ModalBody id={'wv-options-body-' + layer.id}>
-              <Opacity
-                start={Math.ceil(layer.opacity * 100)}
-                setOpacity={setOpacity}
-                layer={layer}
-              />
-              {customPalettes}
-            </ModalBody>
-          </React.Fragment>
-        ) : (
-          ''
-        )}
-      </Modal>
+      <React.Fragment>
+        <Opacity
+          start={Math.ceil(layer.opacity * 100)}
+          setOpacity={setOpacity}
+          layer={layer}
+        />
+        {customPalettes}
+      </React.Fragment>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { config } = state;
+  const { config, palettes, layers } = state;
+  const { rendered, supported, custom } = palettes;
+  const { layerGroupName } = layers;
 
-  return {};
+  return {
+    paletteOrder: config.paletteOrder,
+    groupName: layerGroupName,
+    customPalettesIsActive: !!config.features.customPalettes,
+    palettedAllowed: supported,
+    palettesTranslate,
+    getDefaultLegend: (layerId, index) => {
+      return getDefaultLegend(layerId, index, config, rendered);
+    },
+    getCustomPalette: id => {
+      return getCustomPalette(id, custom);
+    },
+    getLegend: (layerId, index) => {
+      return getLegend(layerId, index, rendered, config);
+    },
+
+    getLegends: layerId => {
+      return getLegends(layerId, rendered, config);
+    },
+    getPalette: (layerId, index) => {
+      return getPalette(layerId, index, rendered, config);
+    }
+  };
 }
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  setRange: (layerId, min, max, isSquashed, index, groupName) => {
+    dispatch(setRange(layerId, min, max, isSquashed, index, groupName));
+  },
+  setCustom: (layerId, paletteId, index, groupName) => {
+    dispatch(setCustom(layerId, paletteId, index, groupName));
+  },
+  clearCustom: (layerId, index, groupName) => {
+    dispatch(clearCustom(layerId, index, groupName));
+  }
+});
 
 export default connect(
   mapStateToProps,
@@ -256,11 +285,11 @@ LayerSettings.propTypes = {
   canvas: PropTypes.object,
   palettesTranslate: PropTypes.func,
   setRange: PropTypes.func,
-  checkerboard: PropTypes.object,
   customPalettesIsActive: PropTypes.bool,
   close: PropTypes.func,
   isOpen: PropTypes.bool,
   palettedAllowed: PropTypes.bool,
   layer: PropTypes.object,
-  title: PropTypes.string
+  title: PropTypes.string,
+  groupName: PropTypes.string
 };
