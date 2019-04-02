@@ -52,7 +52,7 @@ total_warning_count = 0
 total_error_count = 0
 
 json_options = {}
-json_options["indent"] = 4
+json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
 
 class SkipException(Exception):
