@@ -267,9 +267,9 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 function mapStateToProps(state, ownProps) {
-  const { config, browser, proj, layers } = state;
+  const { config, browser, proj, layers, compare } = state;
   const { screenWidth, screenHeight } = browser;
-  const { activeString } = layers;
+  const activeString = compare.isActiveA ? 'active' : 'activeB';
   const height = screenHeight - 100;
   const width = getModalWidth(screenWidth);
   const allLayers = getLayersForProjection(config, proj.id);

@@ -1,3 +1,8 @@
+import { findIndex as lodashFindIndex } from 'lodash';
+import {
+  addLayer as addLayerSelector,
+  resetLayers as resetLayersSelector
+} from './selectors';
 import {
   RESET_LAYERS,
   ADD_LAYER,
@@ -6,19 +11,42 @@ import {
   TOGGLE_ACTIVE_STATE,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
-  REMOVE_LAYER
+  REMOVE_LAYER,
+  UPDATE_OPACITY
 } from './constants';
 
-export function addLayer(layerId) {
-  return {
-    type: ADD_LAYER,
-    id: layerId
+export function resetLayers(activeString) {
+  return (dispatch, getState) => {
+    const { config } = getState();
+    const newLayers = resetLayersSelector(
+      config.defaults.startingLayers,
+      config.layers
+    );
+
+    dispatch({
+      type: RESET_LAYERS,
+      activeString,
+      layers: newLayers
+    });
   };
 }
-export function resetLayers(stateStr) {
-  return {
-    type: RESET_LAYERS,
-    stateStr: stateStr || 'active'
+export function addLayer(id) {
+  return (dispatch, getState) => {
+    const { layers, compare } = getState();
+    const activeString = compare.isActiveA ? 'active' : 'activeB';
+    const newLayers = addLayerSelector(
+      id,
+      {},
+      layers[activeString],
+      layers.layerConfig
+    );
+
+    dispatch({
+      type: ADD_LAYER,
+      id,
+      activeString,
+      layers: newLayers
+    });
   };
 }
 export function initSecondLayerGroup() {
@@ -44,15 +72,59 @@ export function layerHover(id, isMouseOver) {
     active: isMouseOver
   };
 }
-export function toggleVisibility(id) {
-  return {
-    type: TOGGLE_LAYER_VISIBILITY,
-    id: id
+export function toggleVisibility(id, visible) {
+  return (dispatch, getState) => {
+    const { layers, compare } = getState();
+    const activeString = compare.isActiveA ? 'active' : 'activeB';
+    const index = lodashFindIndex(layers[activeString], {
+      id: id
+    });
+
+    dispatch({
+      type: TOGGLE_LAYER_VISIBILITY,
+      id,
+      index,
+      visible,
+      activeString
+    });
   };
 }
 export function removeLayer(id) {
-  return {
-    type: REMOVE_LAYER,
-    id: id
+  return (dispatch, getState) => {
+    const { layers, compare } = getState();
+    const activeString = compare.isActiveA ? 'active' : 'activeB';
+    const index = lodashFindIndex(layers[activeString], {
+      id: id
+    });
+    if (index === -1) {
+      throw new Error('Invalid layer ID: ' + id);
+    }
+
+    dispatch({
+      type: REMOVE_LAYER,
+      id,
+      index,
+      activeString
+    });
+  };
+}
+export function setOpacity(id, opacity) {
+  return (dispatch, getState) => {
+    const { layers, compare } = getState();
+    const activeString = compare.isActiveA ? 'active' : 'activeB';
+    const index = lodashFindIndex(layers[activeString], {
+      id: id
+    });
+    if (index === -1) {
+      throw new Error('Invalid layer ID: ' + id);
+    }
+
+    dispatch({
+      type: UPDATE_OPACITY,
+      id,
+      index,
+      opacity,
+      activeString
+    });
   };
 }

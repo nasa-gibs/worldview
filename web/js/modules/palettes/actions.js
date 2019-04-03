@@ -40,11 +40,11 @@ export function setRange(layerId, min, max, squash, index, groupName) {
       palettes.rendered,
       config
     );
-    return {
+    dispatch({
       type: SET_RANGE_AND_SQUASH,
       groupName: groupName,
       palettes: newActivePalettesObj
-    };
+    });
   };
 }
 export function setCustom(layerId, paletteId, index, groupName) {
@@ -58,11 +58,11 @@ export function setCustom(layerId, paletteId, index, groupName) {
       config,
       palettes.rendered
     );
-    return {
+    dispatch({
       type: SET_CUSTOM,
       groupName: groupName,
       palettes: newActivePalettesObj
-    };
+    });
   };
 }
 export function clearCustom(layerId, index, groupName) {
@@ -74,11 +74,11 @@ export function clearCustom(layerId, index, groupName) {
       palettes[groupName]
     );
 
-    return {
+    dispatch({
       type: CLEAR_CUSTOM,
       groupName: groupName,
       palettes: newActivePalettesObj
-    };
+    });
   };
 }
 export function loadedCustomPalettes(customs) {

@@ -149,12 +149,12 @@ const mapDispatchToProps = dispatch => ({
 });
 function mapStateToProps(state, ownProps) {
   const { activeTab } = ownProps;
-  const { requestedEvents, config, layers, data } = state;
+  const { requestedEvents, config, layers, data, compare } = state;
   const { showAll } = state.events;
+  const { selectedGranules } = data;
   const showListAllButton = !showAll;
   const events = lodashGet(requestedEvents, 'response');
-  const { activeString } = layers;
-  const { selectedGranules } = data;
+  const activeString = compare.isCompareA ? 'active' : 'activeB';
   const activeLayers = layers[activeString];
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const dataSelectionSize = getDataSelectionSize(selectedGranules);

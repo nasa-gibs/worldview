@@ -22,6 +22,7 @@ import {
   setCustom,
   clearCustom
 } from '../../../modules/palettes/actions';
+import { setOpacity } from '../../../modules/layers/actions';
 
 class LayerSettings extends React.Component {
   constructor(props) {
@@ -257,6 +258,9 @@ const mapDispatchToProps = dispatch => ({
   },
   clearCustom: (layerId, index, groupName) => {
     dispatch(clearCustom(layerId, index, groupName));
+  },
+  setOpacity: (id, opacity) => {
+    dispatch(setOpacity(id, opacity));
   }
 });
 

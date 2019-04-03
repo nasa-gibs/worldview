@@ -166,7 +166,7 @@ class Layer extends React.Component {
                       : visibilityButtonClasses + ' layer-enabled layer-visible'
                 }
                 id={'hide' + util.encodeId(layer.id)}
-                onClick={() => toggleVisibility(layer.id)}
+                onClick={() => toggleVisibility(layer.id, !isVisible)}
                 title={
                   !isVisible && !isDisabled
                     ? 'Show Layer'
@@ -314,8 +314,8 @@ const mapDispatchToProps = dispatch => ({
   hover: (id, value) => {
     dispatch(layerHover(id, value));
   },
-  toggleVisibility: id => {
-    dispatch(toggleVisibility(id));
+  toggleVisibility: (id, isVisible) => {
+    dispatch(toggleVisibility(id, isVisible));
   },
   onRemoveClick: id => {
     dispatch(removeLayer(id));

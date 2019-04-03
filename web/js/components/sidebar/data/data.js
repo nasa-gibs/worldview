@@ -70,9 +70,9 @@ const mapDispatchToProps = dispatch => ({
 });
 function mapStateToProps(state, ownProps) {
   const { tabTypes } = ownProps;
-  const { layers, proj, data, config } = state;
+  const { layers, proj, data, config, compare } = state;
   const { selectedProduct, selectedGranules } = data;
-  const { activeString } = layers;
+  const activeString = compare.isCompareA ? 'active' : 'activeB';
   const activeLayers = layers[activeString];
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const products = getDataProductsFromActiveLayers(
