@@ -194,7 +194,7 @@ function forGroup(group, spec, activeLayers, state) {
     ) {
       return;
     }
-    if (spec.renderable && !self.isRenderable(def.id, activeLayers)) {
+    if (spec.renderable && !isRenderable(def.id, activeLayers)) {
       return;
     }
     if (spec.visible && !def.visible) {
@@ -354,6 +354,47 @@ function moveBefore(sourceId, targetId, layers) {
   }
   layers.splice(sourceIndex, 1);
   return layers;
+}
+export function isRenderable(id, activeLayers, date, state) {
+  var def = lodashFind(activeLayers, {
+    id: id
+  });
+  if (!def) {
+    return false;
+  }
+  if (!available(id, date, activeLayers, state.config)) {
+    return false;
+  }
+  if (!def.visible || def.opacity === 0) {
+    return false;
+  }
+  if (def.group === 'overlays') {
+    return true;
+  }
+  var obscured = false;
+  lodashEach(
+    getLayers(
+      activeLayers,
+      {
+        group: 'baselayers'
+      },
+      state
+    ),
+    function(otherDef) {
+      if (otherDef.id === def.id) {
+        return false;
+      }
+      if (
+        otherDef.visible &&
+        otherDef.opacity === 1.0 &&
+        available(otherDef.id, date, activeLayers, state.config)
+      ) {
+        obscured = true;
+        return false;
+      }
+    }
+  );
+  return !obscured;
 }
 export function getZotsForActiveLayers(config, models, ui) {
   // var zotObj = {};

@@ -123,6 +123,6 @@ const render = (config, parameters, legacyState) => {
     document.getElementById('app')
   );
 
-  combineUi(models, config, mouseMoveEvents); // Legacy UI
+  combineUi(models, config, mouseMoveEvents, store); // Legacy UI
   util.errorReport(errors);
 };

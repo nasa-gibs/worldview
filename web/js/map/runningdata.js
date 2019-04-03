@@ -1,8 +1,9 @@
 import util from '../util/util';
 import lodashIsEqual from 'lodash/isEqual';
 import lodashIsEmpty from 'lodash/isEmpty';
+import { getPalette } from '../modules/palettes/selectors';
 
-export function MapRunningData(models, compareUi) {
+export function MapRunningData(models, compareUi, store) {
   var self;
 
   self = this;
@@ -24,7 +25,7 @@ export function MapRunningData(models, compareUi) {
    * @param {Object} layerAttributes | Layer Properties
    */
   var isFromActiveCompareRegion = function(map, coords, layerAttributes) {
-    var compareModel = models.compare;
+    var compareModel = store.getState().compare;
     if (compareModel && compareModel.active) {
       if (compareModel.mode !== 'swipe') {
         return false;
@@ -59,19 +60,18 @@ export function MapRunningData(models, compareUi) {
    */
   self.newPoint = function(coords, map) {
     var activeLayerObj = {};
-
+    const { palettes, config } = store.getState().palettes;
     map.forEachLayerAtPixel(coords, function(layer, data) {
       var hex;
       var legends;
       var layerId;
-
       if (!layer.wv) {
         return;
       }
       if (!isFromActiveCompareRegion(map, coords, layer.wv)) return;
       if (layer.wv.def.palette) {
         layerId = layer.wv.id;
-        legends = models.palettes.getLegends(layerId);
+        legends = getPalette(layerId, undefined, palettes.rendered, config);
         hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
         activeLayerObj[layerId] = { legends: legends, hex: hex };
       }

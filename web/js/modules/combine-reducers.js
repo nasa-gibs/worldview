@@ -27,6 +27,9 @@ import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
 import dataDownloadReducer from './data/reducers';
 import { get as lodashGet } from 'lodash';
 
+function lastAction(state = null, action) {
+  return action;
+}
 const responsiveStateReducer = createResponsiveStateReducer(
   {
     extraSmall: 500,
@@ -82,7 +85,8 @@ const reducers = {
   requestedEventCategories,
   modalAboutPage,
   shortLink,
-  notificationsRequest
+  notificationsRequest,
+  lastAction
 };
 
 export default combineReducers(reducers);

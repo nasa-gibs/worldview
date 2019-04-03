@@ -17,9 +17,7 @@ import { timelineInput } from './date/timeline-input';
 import { timelineCompare } from './date/compare-picks';
 // Tour
 import { tourUi } from './tour/ui';
-import { layersModal } from './layers/modal';
 import { layersActive } from './layers/active';
-import { layersOptions } from './layers/options';
 import { mapui } from './map/ui';
 import { MapRotate } from './map/rotation';
 import { MapRunningData } from './map/runningdata';
@@ -27,14 +25,10 @@ import { mapLayerBuilder } from './map/layerbuilder';
 import { mapDateLineBuilder } from './map/datelinebuilder';
 import { mapPrecacheTile } from './map/precachetile';
 import { mapAnimate } from './map/animate';
-import { dataUi } from './data/ui';
 import { animationUi } from './animation/ui';
 import { animationWidget } from './animation/widget';
 import { animationRangeSelect } from './animation/range-select';
 import { animationGif } from './animation/gif';
-// NaturalEvents
-import naturalEventsUI from './natural-events/ui';
-import naturalEventsRequest from './natural-events/request';
 import { debugLayers } from './debug';
 
 /**
@@ -43,16 +37,9 @@ import { debugLayers } from './debug';
  * @param {Object} config
  * @param {Object} MapMouseEvents | Map events object that is registered here and used in react to render coords
  */
-export function combineUi(models, config, MapMouseEvents) {
+export function combineUi(models, config, MapMouseEvents, store) {
   let ui = {};
-  let mapComponents = {
-    Rotation: MapRotate,
-    Runningdata: MapRunningData,
-    Layerbuilder: mapLayerBuilder,
-    Dateline: mapDateLineBuilder,
-    Precache: mapPrecacheTile
-  };
-  ui.map = mapui(models, config, mapComponents);
+  ui.map = mapui(models, config, store);
   ui.map.animate = mapAnimate(models, config, ui);
   if (config.features.tour) {
     ui.alert = alertUi(ui, config);

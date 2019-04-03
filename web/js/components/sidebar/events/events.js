@@ -132,8 +132,7 @@ function mapStateToProps(state) {
   let visibleEvents = {};
   const events = lodashGet(requestedEvents, 'response');
   const sources = lodashGet(requestedEventSources, 'response');
-
-  if (events) {
+  if (events && state.legacy.map.extent) {
     visibleEvents = getEventsWithinExtent(
       events,
       selected,

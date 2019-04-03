@@ -1,7 +1,6 @@
 import {
   cloneDeep as lodashCloneDeep,
   get as lodashGet,
-  find as lodashFind,
   findIndex as lodashFindIndex,
   each as lodashEach
 } from 'lodash';
@@ -132,7 +131,6 @@ function getPermalinkManagementObject(
     }
   };
 }
-
 export function toggleVisibility(id, layers) {
   var index = lodashFindIndex(layers, {
     id: id

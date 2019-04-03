@@ -29,9 +29,15 @@ import { MapRunningData } from './runningdata';
 import { mapPrecacheTile } from './precachetile';
 import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import { mapCompare } from './compare/compare';
+import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
+import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import * as layerConstants from '../modules/layers/constants';
+import * as compareConstants from '../modules/compare/constants';
+import * as paletteConstants from '../modules/palettes/constants';
+import { getLayers, isRenderable as isRenderableLayer } from '../modules/layers/selectors';
 import Cache from 'cachai';
 
-export function mapui(models, config) {
+export function mapui(models, config, store) {
   var layerBuilder, createLayer;
   var id = 'wv-map';
   var selector = '#' + id;
@@ -41,8 +47,8 @@ export function mapui(models, config) {
   var rotation = new MapRotate(self, models);
   var dateline = mapDateLineBuilder(models, config);
   var precache = mapPrecacheTile(models, config, cache, self);
-  var compare = mapCompare(models, config);
-  var dataRunner = (self.runningdata = new MapRunningData(models, compare));
+  var compareMapUi = mapCompare(models, config);
+  var dataRunner = (self.runningdata = new MapRunningData(models, compareMapUi, store));
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
@@ -58,6 +64,41 @@ export function mapui(models, config) {
   createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
 
+  /**
+   * Suscribe to redux store
+   */
+  const subcribeToStore = function() {
+    const state = store.getState();
+    const action = state.lastAction;
+    switch (action.type) {
+      case layerConstants.ADD_LAYER:
+        let def = lodashFind(action.layers, { id: action.id });
+        return addLayer(def);
+      case layerConstants.REMOVE_LAYER:
+        return removeLayer(action);
+      case layerConstants.TOGGLE_LAYER_VISIBILITY:
+        return updateLayerVisibilities(action);
+      case layerConstants.UPDATE_OPACITY:
+        return updateOpacity(action);
+      case layerConstants.REORDER_LAYER_GROUP:
+        return reloadLayers();
+      case compareConstants.CHANGE_STATE:
+        if (action.mode === 'spy') {
+          return reloadLayers();
+        }
+        return;
+      case compareConstants.TOGGLE:
+        return reloadLayers();
+      case compareConstants.CHANGE_MODE:
+        return reloadLayers();
+      case CHANGE_PROJECTION:
+        return updateProjection(action.id);
+      case paletteConstants.SET_RANGE_AND_SQUASH || paletteConstants.SET_CUSTOM || paletteConstants.CLEAR_CUSTOM || paletteConstants.REQUEST_PALETTE_SUCESS:
+        return updateLookup();
+      case CALCULATE_RESPONSIVE_STATE:
+        return onResize();
+    }
+  };
   /*
    * Sets up map listeners
    *
@@ -74,32 +115,8 @@ export function mapui(models, config) {
       self.proj[proj.id] = map;
     });
 
-    models.proj.events.on('select', function() {
-      updateProjection();
-    });
-    models.layers.events
-      .on('add', addLayer)
-      .on('remove', removeLayer)
-      .on('visibility', updateLayerVisibilities)
-      .on('update', updateLayerOrder)
-      .on('opacity', updateOpacity);
-    if (models.compare) {
-      models.compare.events
-        .on('toggle', reloadLayers)
-        .on('mode', reloadLayers)
-        .on('toggle-state', () => {
-          if (models.compare.mode === 'spy') {
-            reloadLayers();
-          }
-        });
-    }
+    store.subscribe(subcribeToStore);
     models.date.events.on('select', updateDate);
-    models.palettes.events
-      .on('set-custom', updateLookup)
-      .on('clear-custom', updateLookup)
-      .on('range', updateLookup)
-      .on('update', updateLookup);
-    $(window).on('resize', onResize);
     updateProjection(true);
   };
   /*
@@ -113,20 +130,22 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var updateProjection = function(start) {
+    const state = store.getState();
+    const { proj } = state;
     if (self.selected) {
       // Keep track of center point on projection switch
       self.selected.previousCenter = self.selected.center;
       hideMap(self.selected);
     }
-    self.selected = self.proj[models.proj.selected.id];
+    self.selected = self.proj[proj.id];
     var map = self.selected;
     models.map.updateMap(map);
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
     if (
-      models.proj.selected.id !== 'geographic' &&
-      models.proj.selected.id !== 'webmerc'
+      proj.id !== 'geographic' &&
+      proj.id !== 'webmerc'
     ) {
       let currentRotation = map.getView().getRotation();
       models.map.rotation = currentRotation;
@@ -145,7 +164,7 @@ export function mapui(models, config) {
 
     // This is awkward and needs a refactoring
     if (start) {
-      var projId = models.proj.selected.id;
+      var projId = proj.selected.id;
       var extent = null;
       if (models.map.extent) {
         extent = models.map.extent;
@@ -244,23 +263,26 @@ export function mapui(models, config) {
    */
   var reloadLayers = function(map) {
     map = map || self.selected;
-    var compareModel = models.compare;
-    var layerGroupStr = models.layers.activeLayers;
-    var activeLayers = models.layers[layerGroupStr];
+    const state = store.getState();
+    const { layers, proj } = state;
+    const compareState = state.compare;
+    var layerGroupStr = compareState.isActiveA ? 'active' : 'activeB';
+    var activeLayers = layers[layerGroupStr];
 
-    if (!compareModel || !compareModel.active) {
-      if (compare.active) {
-        compare.destroy();
+    if (!config.features.compare || !compareState.active) {
+      if (compareState.active) {
+        compareMapUi.destroy();
       }
       clearLayers(map);
-      let defs = models.layers.get(
+      let defs = getLayers(
+        activeLayers,
         {
           reverse: true
         },
-        activeLayers
+        state
       );
       lodashEach(defs, function(def) {
-        if (isGraticule(def)) {
+        if (isGraticule(def, proj.id)) {
           addGraticule(def.opacity, layerGroupStr);
         } else {
           map.addLayer(createLayer(def));
@@ -270,16 +292,16 @@ export function mapui(models, config) {
       let stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
       if (
-        compareModel &&
-        !compareModel.isCompareA &&
-        compareModel.mode === 'spy'
+        compareState &&
+        !compareState.isActiveA &&
+        compareState.mode === 'spy'
       ) {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
       lodashEach(stateArray, arr => {
-        map.addLayer(getCompareLayerGroup(arr));
+        map.addLayer(getCompareLayerGroup(arr, layers, proj.id));
       });
-      compare.create(map, compareModel.mode);
+      compareMapUi.create(map, compareState.mode);
     }
     updateLayerVisibilities();
   };
@@ -287,12 +309,11 @@ export function mapui(models, config) {
    * Create a Layergroup given the date and layerGroups
    * @param {Array} arr | Array of date/layer group strings
    */
-  var getCompareLayerGroup = function(arr) {
+  var getCompareLayerGroup = function(arr, layersState, projId) {
     return new OlLayerGroup({
-      layers: models.layers
-        .get({ reverse: true }, models.layers[arr[0]])
+      layers: getLayers(layersState[arr[0]], { reverse: true }, store.getState())
         .filter(def => {
-          if (isGraticule(def)) {
+          if (isGraticule(def, projId)) {
             addGraticule(def.opacity, arr[0]);
             return false;
           }
@@ -318,16 +339,17 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var updateLayerVisibilities = function() {
+    const state = store.getState();
     var renderable;
     var layers = self.selected.getLayers();
-    var layersModel = models.layers;
-    var layerGroupStr = models.layers.activeLayers;
+    var layersState = state.layers;
+    var activeGroupStr = state.compare.isActiveA ? 'active' : 'activeB';
     var updateGraticules = function(defs, groupName) {
       lodashEach(defs, function(def) {
-        if (isGraticule(def)) {
-          renderable = layersModel.isRenderable(
+        if (isGraticule(def, state.proj.id)) {
+          renderable = isRenderableLayer(
             def.id,
-            layersModel[layerGroupStr]
+            layersState[activeGroupStr], models.date[activeGroupStr], state
           );
           if (renderable) {
             addGraticule(def.opacity, groupName);
@@ -341,9 +363,9 @@ export function mapui(models, config) {
       var group = layer.get('group');
       // Not in A|B
       if (layer.wv) {
-        renderable = layersModel.isRenderable(layer.wv.id);
+        renderable = isRenderableLayer(layer.wv.id, layersState[activeGroupStr], models.date[activeGroupStr], state);
         layer.setVisible(renderable);
-        let defs = layersModel.get({}, layersModel[layerGroupStr]);
+        let defs = getLayers(layersState[activeGroupStr], {}, state);
         updateGraticules(defs);
         // If in A|B layer-group will have a 'group' string
       } else if (group) {
@@ -351,16 +373,16 @@ export function mapui(models, config) {
 
         lodashEach(layer.getLayers().getArray(), subLayer => {
           if (subLayer.wv) {
-            renderable = layersModel.isRenderable(
+            renderable = isRenderableLayer(
               subLayer.wv.id,
-              layersModel[group],
+              layersState[group],
               models.date[layer.get('date')]
             );
             subLayer.setVisible(renderable);
           }
         });
         layer.setVisible(true);
-        defs = layersModel.get({}, layersModel[group]);
+        defs = getLayers(layersState[group], {}, state);
         updateGraticules(defs, group);
       }
     });
@@ -377,13 +399,20 @@ export function mapui(models, config) {
    *
    * @returns {void}
    */
-  var updateOpacity = function(def, value, activeLayersString) {
-    if (isGraticule(def)) {
-      let strokeStyle = self['graticule-' + activeLayersString + '-style'];
+  var updateOpacity = function(id, value) {
+    const state = store.getState();
+    const { layers, compare, proj } = state;
+    const activeStr = compare.isActiveA ? 'active' : 'activeB';
+    const def = lodashFind(layers[activeStr], {
+      id: id
+    });
+
+    if (isGraticule(def, proj.id)) {
+      let strokeStyle = self['graticule-' + activeStr + '-style'];
       strokeStyle.setColor('rgba(255, 255, 255,' + value + ')');
       self.selected.render();
     } else {
-      let layer = findLayer(def, activeLayersString);
+      let layer = findLayer(def, activeStr);
       layer.setOpacity(value);
       updateLayerVisibilities();
     }
@@ -400,31 +429,35 @@ export function mapui(models, config) {
    */
 
   var addLayer = function(def, date, activeLayers) {
-    date = date || models.date[models.date.activeDate];
-    activeLayers = activeLayers || models.layers[models.layers.activeLayers];
+    const state = store.getState();
+    const { compare, layers, proj } = state;
+    const activeDateStr = compare.isActiveA ? 'selected' : 'selectedB';
+    const activeLayerStr = compare.isActiveA ? 'active' : 'activeB';
+    date = date || models.date[activeDateStr];
+    activeLayers = activeLayers || layers[activeLayerStr];
     var reverseLayers = lodashCloneDeep(activeLayers).reverse();
     var mapIndex = lodashFindIndex(reverseLayers, {
       id: def.id
     });
-    var layers = self.selected.getLayers().getArray();
-    var firstLayer = layers[0];
-    if (isGraticule(def)) {
-      addGraticule(def.opacity, models.layers.activeLayers);
+    var mapLayers = self.selected.getLayers().getArray();
+    var firstLayer = mapLayers[0];
+    if (isGraticule(def, proj.id)) {
+      addGraticule(def.opacity, activeLayerStr);
     } else {
       def.availableDates = util.datesinDateRanges(def, date, true);
       if (firstLayer && firstLayer.get('group')) {
         // Find which map layer-group is the active LayerGroup
         // and add layer to layerGroup in correct location
         let activelayer =
-          firstLayer.get('group') === models.layers.activeLayers
+          firstLayer.get('group') === activeLayerStr
             ? firstLayer
-            : layers[1];
+            : mapLayers[1];
         let newLayer = createLayer(def, {
           date: date,
-          group: models.layers.activeLayers
+          group: activeLayerStr
         });
         activelayer.getLayers().insertAt(mapIndex, newLayer);
-        compare.create(self.selected, models.compare.mode);
+        compareMapUi.create(self.selected, compare.mode);
       } else {
         self.selected.getLayers().insertAt(mapIndex, createLayer(def));
       }
@@ -443,33 +476,24 @@ export function mapui(models, config) {
    *
    * @returns {void}
    */
-  var removeLayer = function(def) {
-    var activeLayerString = models.layers.activeLayers;
-    if (isGraticule(def)) {
-      removeGraticule(activeLayerString);
+  var removeLayer = function(action) {
+    const state = store.getState();
+    const { compare, layers, proj } = state;
+    const activeLayerStr = compare.isActiveA ? 'active' : 'activeB';
+    const def = lodashFind(layers[activeLayerStr], { id: action.id });
+
+    if (isGraticule(def, proj.id)) {
+      removeGraticule(activeLayerStr);
     } else {
-      var layer = findLayer(def, activeLayerString);
-      if (models.compare && models.compare.active) {
-        let layerGroup = getActiveLayerGroup(self.selected, activeLayerString);
+      var layer = findLayer(def, activeLayerStr);
+      if (compare && compare.active) {
+        let layerGroup = getActiveLayerGroup(self.selected, activeLayerStr);
         if (layerGroup) layerGroup.getLayers().remove(layer);
       } else {
         self.selected.removeLayer(layer);
       }
     }
     updateLayerVisibilities();
-  };
-
-  /*
-   * Reloads layer on change
-   *
-   * @method updateLayerOrder
-   * @static
-   *
-   *
-   * @returns {void}
-   */
-  var updateLayerOrder = function() {
-    reloadLayers();
   };
 
   /*
@@ -482,40 +506,41 @@ export function mapui(models, config) {
    * @returns {void}
    */
   var updateDate = function() {
-    var layerModel = models.layers;
-    var layers = layerModel
-      .get({}, layerModel[layerModel.activeLayers])
+    const state = store.getState();
+    const { compare } = state;
+    const layerState = state.layers;
+    const activeLayerStr = compare.isActiveA ? 'active' : 'activeB';
+    var activeLayers = getLayers(layerState[activeLayerStr], {}, state)
       .reverse();
-    let groupName = layerModel.activeLayers;
     var layerGroups;
     var layerGroup;
-    if (models.compare && models.compare.active) {
+    if (compare && compare.active) {
       layerGroups = self.selected.getLayers().getArray();
       if (layerGroups.length === 2) {
         layerGroup =
-          layerGroups[0].get('group') === groupName
+          layerGroups[0].get('group') === activeLayerStr
             ? layerGroups[0]
-            : layerGroups[1].get('group') === groupName
+            : layerGroups[1].get('group') === activeLayerStr
               ? layerGroups[1]
               : null;
       }
     }
-    lodashEach(layers, function(def) {
+    lodashEach(activeLayers, function(def) {
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
         return;
       }
 
-      if (models.compare && models.compare.active) {
+      if (compare && compare.active) {
         if (layerGroup) {
           let index = findLayerIndex(def, layerGroup);
           layerGroup.getLayers().setAt(
             index,
             createLayer(def, {
-              group: groupName,
+              group: activeLayerStr,
               date: models.date[models.date.activeDate]
             })
           );
-          compare.update(groupName);
+          compareMapUi.update(activeLayerStr);
         }
       } else {
         let index = findLayerIndex(def);
@@ -540,12 +565,6 @@ export function mapui(models, config) {
     reloadLayers();
   };
 
-  self.getCustomLayerTimeout = function(layer) {
-    if (models.palettes.isActive(layer.id)) {
-      return 200;
-    }
-    return 0;
-  };
   /*
    * Get a layer object from id
    *
@@ -557,11 +576,11 @@ export function mapui(models, config) {
    *
    * @returns {object} Layer object
    */
-  var findLayer = function(def, layerGroupStr) {
+  var findLayer = function(id, layerGroupStr) {
     var layers = self.selected.getLayers().getArray();
     var layer = lodashFind(layers, {
       wv: {
-        id: def.id
+        id: id
       }
     });
     if (!layer && layers[0].get('group')) {
@@ -574,7 +593,7 @@ export function mapui(models, config) {
       subGroup = olGroupLayer.getLayers().getArray();
       layer = lodashFind(subGroup, {
         wv: {
-          id: def.id
+          id: id
         }
       });
     }
@@ -617,8 +636,7 @@ export function mapui(models, config) {
    *
    * @returns {boolean}
    */
-  var isGraticule = function(def) {
-    var proj = models.proj.selected.id;
+  var isGraticule = function(def, proj) {
     return (
       def.projections[proj].type === 'graticule' || def.type === 'graticule'
     );
@@ -723,7 +741,6 @@ export function mapui(models, config) {
       rotateInteraction,
       map,
       mobileRotation;
-
     id = 'wv-map-' + proj.id;
     $map = $('<div></div>')
       .attr('id', id)
@@ -949,7 +966,7 @@ export function mapui(models, config) {
     function onMouseMove(e) {
       var coords;
       var pixels;
-      if (compare && compare.dragging) return;
+      if (compareMapUi && compareMapUi.dragging) return;
       // if mobile return
       if (util.browser.small) {
         return;
