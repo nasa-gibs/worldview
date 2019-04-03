@@ -11,6 +11,7 @@ class TimeScaleSelect extends PureComponent {
   }
 
   render() {
+    console.log(this.props.hasSubdailyLayers)
     return (
       <form className="interval-timescale-select" onSubmit={this.handleSubmit}>
         <label>
@@ -18,8 +19,14 @@ class TimeScaleSelect extends PureComponent {
             <option value="year">year</option>
             <option value="month">month</option>
             <option value="day">day</option>
-            <option value="hour">hour</option>
-            <option value="minute">minute</option>
+            {this.props.hasSubdailyLayers ?
+            <React.Fragment>
+              <option value="hour">hour</option>
+              <option value="minute">minute</option>
+            </React.Fragment>
+            :
+              null
+            }
           </select>
         </label>
       </form>

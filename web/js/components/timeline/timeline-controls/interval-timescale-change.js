@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-class DateZoomChange extends Component {
+class TimeScaleIntervalChange extends Component {
   constructor(props) {
     super(props);
     this.state = {
       toolTipHovered: false,
-      intervalText: this.props.intervalText,
       customSelected: false
     }
   }
@@ -18,33 +18,40 @@ class DateZoomChange extends Component {
   }
 
   handleClickZoom = (zoomSelected) => {
-    console.log(zoomSelected)
     // close tooltip
     // send props function to change timescale zoom level throughout app
-    if (zoomSelected === 'custom') {
-      let text = this.props.customIntervalText ? this.props.customIntervalText : 'Custom';
-      this.setState({
-        customSelected: true,
-        toolTipHovered: false,
-        intervalText: text
-      }, this.props.setIntervalChangeUnitFromZoom(zoomSelected));
-    } else {
-      this.setState({
-        customSelected: false,
-        toolTipHovered: false,
-        intervalText: zoomSelected
-      }, this.props.setIntervalChangeUnitFromZoom(zoomSelected));
-    }
+    let customSelected = zoomSelected === 'custom';
+    this.setState({
+      customSelected: customSelected,
+      toolTipHovered: false,
+      // intervalText: text
+    }, this.props.setTimeScaleIntervalChangeUnit(zoomSelected));
+
+
+    // if (zoomSelected === 'custom') {
+    //   // let text = this.props.customIntervalText ? this.props.customIntervalText : 'Custom';
+    //   this.setState({
+    //     customSelected: true,
+    //     toolTipHovered: false,
+    //     // intervalText: text
+    //   }, this.props.setTimeScaleIntervalChangeUnit(zoomSelected));
+    // } else {
+    //   this.setState({
+    //     customSelected: false,
+    //     toolTipHovered: false,
+    //     // intervalText: zoomSelected
+    //   }, this.props.setTimeScaleIntervalChangeUnit(zoomSelected));
+    // }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.intervalText !== this.props.intervalText) {
-      this.setState({
-        intervalText: this.props.intervalText
-      })
-    }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevProps.intervalText !== this.props.intervalText) {
+  //     this.setState({
+  //       intervalText: this.props.intervalText
+  //     })
+  //   }
 
-  }
+  // }
 
   render() {
     return (
@@ -58,7 +65,7 @@ class DateZoomChange extends Component {
             id="current-zoom"
             className={`zoom-btn zoom-btn-active${this.state.customSelected ? ' custom-interval-text' : ''}`}
           >
-            {this.state.customSelected ? this.state.intervalText : '1 ' + this.state.intervalText}
+            {this.state.customSelected ? this.props.customIntervalText ? this.props.customIntervalText : 'custom' : '1 ' + this.props.intervalText}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
@@ -117,4 +124,10 @@ class DateZoomChange extends Component {
   }
 }
 
-export default DateZoomChange;
+TimeScaleIntervalChange.propTypes = {
+  intervalText: PropTypes.string,
+  customIntervalText: PropTypes.string,
+  setTimeScaleIntervalChangeUnit: PropTypes.func
+};
+
+export default TimeScaleIntervalChange;

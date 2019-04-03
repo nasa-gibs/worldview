@@ -32,7 +32,7 @@ html, body {
 }
 
 .inner {
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
   height: 66px;
   display: flex;
   flex-direction: row;
@@ -42,6 +42,7 @@ html, body {
 
 .dateToolTip {
   background: rgb(233, 233, 233);
+  border: thin solid #555;
   font-size: 9px;
   text-align: center;
   border-radius: 5px;
@@ -156,7 +157,7 @@ form select {
 .zoom-level-change-arrows {
   user-select: none;
   background: transparent;
-  border: 1px solid transparent;
+  border: thin solid transparent;
   vertical-align: middle;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -180,7 +181,7 @@ form select {
   -webkit-box-sizing: border-box;
   padding: 0;
   text-align: center;
-  border: 1px solid #fff;
+  border: thin solid #fff;
   margin: 5px 0 5px 0;
 }
 
@@ -208,7 +209,7 @@ form select {
   color: #7890cd;
   height: 40px;
   width: 130px;
-  border: 1px solid #fff;
+  border: thin solid #fff;
   margin-top: 1px;
 }
 

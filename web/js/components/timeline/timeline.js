@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 
 import moment from 'moment';
 
-import DateChangeControls from './timeline-controls/date-change-controls';
-import DateZoomChange from './timeline-controls/date-zoom-change';
+import TimeScaleIntervalChange from './timeline-controls/interval-timescale-change';
 import './timeline.css';
-// import TimelineAxis from './timeline-axis';
 import TimelineAxisContainer from './timeline-axis/timeline-axis-container';
 import IntervalSelectorWidget from './interval-selector/interval-selector';
 
@@ -14,14 +12,24 @@ import DateSelector from '../date-selector/date-selector';
 import DateChangeArrows from './timeline-controls/date-change-arrows';
 import AnimationButton from './timeline-controls/animation-button';
 
-import AxisZoomChange from './timeline-controls/axis-zoom-change';
+import AxisTimeScaleChange from './timeline-controls/axis-timescale-change';
+
+const timeUnitAbbreviations = {
+  year: 'year',
+  month: 'mon',
+  day: 'day',
+  hour: 'hour',
+  minute: 'min'
+};
 
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      compareModeActive: '',
       dateFormatted: '',
-      timelineWidth: '',
+      dateFormattedB: '',
+      axisWidth: '',
       selectedDate: '',
       changeDate: '',
       timeScale: '',
@@ -39,34 +47,17 @@ class Timeline extends React.Component {
     };
   }
 
-  //# may not be necessary if incrementing doesn't matter for performance
-  // dateChange = (date, id, type, amt) => {
-  //   // console.log(date, id, type, amt)
-  //   let dateFormatted = date.toISOString();
-  //   console.log(dateFormatted)
-  //   this.setState({
-  //     selectedDate: date.toISOString(),
-  //     timeScaleChangeUnit: type,
-  //     changeAmt: amt,
-  //     dateFormatted: dateFormatted
-  //   })
-  // }
-
-  updateDate = (date, inputChange) => {
-    console.log(date, inputChange)
+  // updateDate = (date, inputChange) => {
+  updateDate = (date, selectionStr) => {
+    console.log(date, selectionStr)
     // if (inputChange) {
     //   this.setState({
     //     inputChange: true
     //   }, this.props.updateDate(date));
     // } else {
-      this.props.updateDate(date);
+      this.props.updateDate(date, selectionStr);
     // }
 
-    // let dateFormatted = new Date(date).toISOString();
-    // this.setState({
-    //   selectedDate: dateFormatted,
-    //   dateFormatted: dateFormatted
-    // })
   }
 
   resetInput = () => {
@@ -85,9 +76,10 @@ class Timeline extends React.Component {
   // Change the timescale parent state
   changeTimescale = (timeScale) => {
     if (this.state.timeScale !== timeScale) {
-      this.setState({
-        timeScale: timeScale
-      });
+      // this.setState({
+      //   timeScale: timeScale
+      // });
+      this.props.changeTimeScale(timeScale);
     }
   }
 
@@ -98,7 +90,6 @@ class Timeline extends React.Component {
     //     dateFormatted: this.props.dateFormatted
     //   })
     // }
-    // console.log('CDU', this.state, this.props)
   }
 
   componentDidMount() {
@@ -106,37 +97,36 @@ class Timeline extends React.Component {
   }
 
   init = () => {
+    let timeScaleChangeUnitString = `${this.props.intervalDelta} ${timeUnitAbbreviations[this.props.intervalTimeScale]}`;
     this.setState({
       dateFormatted: this.props.selectedDate.toISOString(),
-      timelineWidth: this.props.timelineWidth,
+      dateFormattedB: this.props.selectedDateB ? this.props.selectedDateB.toISOString() : null,
+      draggerSelected: this.props.draggerSelected,
+      // draggerSelectedB: this.props.draggerSelectedB,
+      axisWidth: this.props.axisWidth,
       selectedDate: this.props.selectedDate.toISOString(),
       changeDate: this.props.changeDate,
       timeScale: this.props.timeScale,
       incrementDate: this.props.incrementDate,
-      timeScaleChangeUnit: this.props.timeScale,
-      changeAmt: 1,
-      customIntervalValue: 1,
-      customIntervalZoomLevel: this.props.timeScale,
+      timeScaleChangeUnit: this.props.intervalTimeScale,
+      changeAmt: this.props.intervalDelta,
+      customIntervalValue: this.props.intervalDelta,
+      customIntervalZoomLevel: this.props.intervalTimeScale,
       hasSubdailyLayers: this.props.hasSubdailyLayers,
-      intervalText: this.props.timeScale
+      intervalText: this.props.timeScale,
+      compareModeActive: this.props.compareModeActive
     });
   }
 
   setInterval = (intervalValue, zoomLevel) => {
-    this.setState({
-      customIntervalValue: intervalValue,
-      customIntervalZoomLevel: zoomLevel
-    }, this.props.setIntervalInput(intervalValue, zoomLevel));
+    // this.setState({
+    //   customIntervalValue: intervalValue,
+    //   customIntervalZoomLevel: zoomLevel
+    // }, this.props.setIntervalInput(intervalValue, zoomLevel));
+    this.props.setIntervalInput(intervalValue, zoomLevel);
   }
 
   setIntervalChangeUnit = (intervalValue, zoomLevel) => {
-    const timeUnitAbbreviations = {
-      year: 'year',
-      month: 'mon',
-      day: 'day',
-      hour: 'hour',
-      minute: 'min'
-    };
 
     let timeScaleChangeUnitString = `${intervalValue} ${timeUnitAbbreviations[zoomLevel]}`;
 
@@ -147,10 +137,10 @@ class Timeline extends React.Component {
         customIntervalZoomLevel: zoomLevel,
         changeAmt: intervalValue,
         timeScaleChangeUnit: zoomLevel
-      })
+      }, this.props.setIntervalInput(intervalValue, zoomLevel))
   }
 
-  setIntervalChangeUnitFromZoom = (customIntervalChangeUnit) => {
+  setTimeScaleIntervalChangeUnit = (customIntervalChangeUnit) => {
     if (customIntervalChangeUnit === 'custom') {
       this.setState({
         intervalText: this.state.customIntervalText ? this.state.customIntervalText : 'Custom',
@@ -167,11 +157,9 @@ class Timeline extends React.Component {
   }
   // left/right arrows increment date
   incrementDate = (multiplier) => {
-    console.log(moment(this.state.dateFormatted).format(), moment.utc(this.state.dateFormatted).format())
     let newDate = moment.utc(this.state.dateFormatted).add((multiplier * this.state.changeAmt), this.state.timeScaleChangeUnit)
 
     // this.props.incrementDate((multiplier * this.state.changeAmt), this.state.timeScaleChangeUnit);
-    console.log(this.state.dateFormatted, newDate.format())
     this.updateDate(new Date(newDate.format()));
   }
 
@@ -203,6 +191,7 @@ class Timeline extends React.Component {
     console.log(this.state)
     console.log(this.props.hasSubdailyLayers, this.state.hasSubdailyLayers)
     console.log(this.props)
+    console.log(this.props.draggerSelected)
     return (
       this.state.dateFormatted ?
       <React.Fragment>
@@ -212,31 +201,28 @@ class Timeline extends React.Component {
               {...this.props}
               onDateChange={this.updateDate}
               date={new Date(this.state.dateFormatted)}
+              dateB={new Date(this.state.dateFormattedB)}
               hasSubdailyLayers={this.state.hasSubdailyLayers}
+              draggerSelected={this.state.draggerSelected}
+              // draggerSelectedB={this.state.draggerSelectedB}
             />
           </div>
           <div id="zoom-buttons-group">
-            <DateZoomChange
-              // timeScaleChangeUnit={this.state.timeScaleChangeUnit}
-              setIntervalChangeUnitFromZoom={this.setIntervalChangeUnitFromZoom}
+            <TimeScaleIntervalChange
+              setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
               intervalText={this.state.intervalText}
               customIntervalText={this.state.customIntervalText}
             />
 
-            {/* </div> */}
-            {/* <DateChangeControls
-              toggleCustomIntervalModal={this.toggleCustomIntervalModal}
-              selectedDate={this.state.dateFormatted}
-              dateChange={this.updateDate} /> */}
-
             {/* custom interval selector */}
             <IntervalSelectorWidget
               setInterval={this.setInterval}
-              customIntervalValue={1}
-              customIntervalZoomLevel={this.props.timeScale}
+              customIntervalValue={this.state.customIntervalValue}
+              customIntervalZoomLevel={this.state.customIntervalZoomLevel}
               toggleCustomIntervalModal={this.toggleCustomIntervalModal}
               customIntervalModalOpen={this.state.customIntervalModalOpen}
               setIntervalChangeUnit={this.setIntervalChangeUnit}
+              hasSubdailyLayers={this.state.hasSubdailyLayers}
             />
 
             <DateChangeArrows
@@ -257,36 +243,37 @@ class Timeline extends React.Component {
           {/* new modular version - currently a shell */}
             <TimelineAxisContainer
               {...this.state}
+              axisWidth={this.state.axisWidth}
               selectedDate={this.state.dateFormatted}
+              selectedDateB={this.state.dateFormattedB}
               updateDate={this.updateDate}
               subdaily={this.props.subdaily}
               parentOffset={this.props.parentOffset}
               resetInput={this.resetInput}
               changeTimescale={this.changeTimescale}
+              compareModeActive={this.state.compareModeActive}
+              draggerSelected={this.state.draggerSelected}
+              // draggerSelectedB={this.state.draggerSelectedB}
+              onChangeSelectedDragger={this.props.onChangeSelectedDragger}
             />
             {/* </svg> */}
         </div>
 
         {/* hammmmmmmmmmmburger 🍔 */}
-        {/* <div className="timeline-hamburger-date">DAY</div> */}
         <div className="zoom-level-change" style={{ width: '75px', display: this.state.timelineHidden ? 'none' : 'block'}}>
-          <AxisZoomChange
-          zoomLevel={this.state.timeScale}
+          <AxisTimeScaleChange
+          timeScale={this.state.timeScale}
           changeTimescale={this.changeTimescale}
           hasSubdailyLayers={this.state.hasSubdailyLayers}
           />
         </div>
 
-
         <div id="timeline-hide" onClick={this.toggleHideTimeline}>
-        {this.state.timelineHidden ?
-        <i className="fas fa-chevron-right wv-timeline-hide-arrow"></i>
-        :
-        <i className="fas fa-chevron-left wv-timeline-hide-arrow"></i>
-        }
-          {/* <svg className="hamburger" width="10" height="9">
-            <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
-          </svg> */}
+          {this.state.timelineHidden ?
+          <i className="fas fa-chevron-right wv-timeline-hide-arrow"></i>
+          :
+          <i className="fas fa-chevron-left wv-timeline-hide-arrow"></i>
+          }
         </div>
       </React.Fragment>
       :

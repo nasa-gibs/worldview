@@ -5,8 +5,6 @@ import ReactDOM from 'react-dom';
 import googleTagManager from 'googleTagManager';
 import Timeline from '../components/timeline/timeline';
 
-import DateZoomChange from '../components/timeline/timeline-controls/date-zoom-change';
-
 export function timeline(models, config, ui) {
   var self = {};
   var model = models.date;
@@ -16,7 +14,9 @@ export function timeline(models, config, ui) {
   self.parentOffset = (subdaily ? 404 : 310) + 10;
 
   // ? INPUT REFACTOR
-  self.interval = 'day';
+  // self.interval = null;
+  // self.delta = 3;
+
   self.delta = 1;
   self.active = false;
   self.delay = 500;
@@ -424,7 +424,9 @@ export function timeline(models, config, ui) {
 
     //   self.axis.select('line:first-child').attr('x2', self.width);
     }
-    self.reactComponent.setState({ timelineWidth: self.getWidth() });
+    self.reactComponent.setState({
+      axisWidth: self.getWidth()
+    });
   };
 
   self.setClip = function() {
@@ -443,16 +445,11 @@ export function timeline(models, config, ui) {
     // }, 50);
   };
 
-  // var changeDate = (date) => {
-  //   self.reactComponent.setState({ selectedDate: date });
-  // };
-
   var incrementDate = (increment, timeScale) => {
     // self.expand(true);
     // console.log(increment, timeScale)
     self.animateByIncrement(increment, timeScale);
     // let newDate = models.date[models.date.activeDate];
-    // console.log('XXXXX', newDate);
     // models.date.add(timeScale, increment);
     // self.input.animateByIncrement(increment, timeScale);
     // models.date.select(date);
@@ -462,53 +459,149 @@ export function timeline(models, config, ui) {
     // });
   };
 
-  var updateDate = (date) => {
-    console.log(date)
+  // invoked when compare mode is toggled
+
+  // # rework in order to allow A and B dates to persist on reopening dialog
+  var onCompareModeToggle = () => {
+    let isCompareModeActive = models.compare.active;
+    if (!isCompareModeActive) {
+      let activeDate = models.date.activeDate;
+      let date = models.date[activeDate];
+      let dateFormatted = new Date(date).toISOString();
+      self.reactComponent.setState({
+        compareModeActive: isCompareModeActive,
+        selectedDate: date,
+        dateFormatted: dateFormatted,
+        draggerSelected: 'selected'
+      });
+    } else {
+      self.reactComponent.setState({
+        compareModeActive: isCompareModeActive
+      });
+    }
+  };
+
+  var onChangeSelectedDragger = (selectionStr) => {
+    let isCompareModeActive = models.compare.active;
+    if (isCompareModeActive) {
+      models.compare.toggleState();
+    }
+    self.reactComponent.setState({
+      draggerSelected: selectionStr
+    });
+  };
+
+  var updateDate = (date, selectionStr) => {
+    console.log(date, selectionStr)
     let updatedDate = new Date(date);
-    console.log(date, updatedDate)
     // console.log(models)
     // self.input.update(updatedDate);
     // models.date.setActiveDate(updatedDate);
     // console.log('updateDate', date, updatedDate)
     //# ALLOWS UPDATE OF MODELS DATE WHICH LAYERS IS CONNECTED TO
-    models.date.select(updatedDate);
+    models.date.select(updatedDate, selectionStr);
   };
 
   var setIntervalInput = (intervalValue, zoomLevel) => {
-    // console.log(self.input.delta)
-    self.delta = intervalValue;
-    self.interval = zoomLevel;
-
+    models.date.setCustomInterval(intervalValue, timeScaleToNumberKey[zoomLevel]);
     let zoomCustomText = document.querySelector('#zoom-custom');
     zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
-    // console.log(self)
+    // model.events.trigger('zoom-change');
+    self.reactComponent.setState({
+      customIntervalValue: intervalValue,
+      customIntervalZoomLevel: zoomLevel
+    });
   };
 
   var clickAnimationButton = () => {
     console.log(ui);
   };
 
+  var changeTimeScale = (timeScale) => {
+    console.log(timeScale)
+    models.date.selectedZoom = timeScaleToNumberKey[timeScale];
+    model.events.trigger('zoom-change');
+    self.reactComponent.setState({
+      timeScale: timeScale
+    });
+  };
+
+  const timeScaleFromNumberKey = {
+    '1': 'year',
+    '2': 'month',
+    '3': 'day',
+    '4': 'hour',
+    '5': 'minute'
+  };
+
+  const timeScaleToNumberKey = {
+    'year': '1',
+    'month': '2',
+    'day': '3',
+    'hour': '4',
+    'minute': '5'
+  };
+
   var getInitialProps = () => {
-    // console.log(self)
-    let selectedDate = models.date[models.date.activeDate];
+    let isCompareModeActive = models.compare.active;
     let subdaily = models.layers.hasSubDaily();
 
+    // timeScale zoom and reset if subdaily zoom in permalink
+    let selectedTimeScaleState = models.date.selectedZoom;
+    if (!subdaily && selectedTimeScaleState > 3) {
+      selectedTimeScaleState = 3;
+    }
+    let selectedTimeScale = selectedTimeScaleState ? timeScaleFromNumberKey[selectedTimeScaleState] : 'day';
+
+    let selectedDate = models.date.selected;
+    let selectedDateB = models.date.selectedB ? models.date.selectedB : util.dateAdd(selectedDate, selectedTimeScale, -7);
+
+    console.log(selectedDate, selectedDateB);
+
+    // custom interval
+    let intervalTimeScale = models.date.interval ? models.date.interval : selectedTimeScale;
+    let intervalDelta = models.date.delta ? models.date.delta : 1;
+
+    console.log(intervalTimeScale, intervalDelta)
+    // console.log(selectedDate, selectedDateB, models.date[models.date.activeDate])
+    // let selectedDate = models.date.selected;
+    // get selected A
+    // get selected B
+    // determine which one is selected
+    // let activeDate = models.date.activeDate;
+
+    // let draggerSelected = activeDate === 'selected';
+    // let draggerSelectedB = activeDate === 'selectedB';
+    let draggerSelected = models.date.activeDate;
     let inputProps = getInputProps();
+
+    let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
+    let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
+    console.log(self)
     return Object.assign(inputProps, {
-      timelineWidth: self.width,
+      compareModeActive: isCompareModeActive,
+      onChangeSelectedDragger: onChangeSelectedDragger,
+      draggerSelected: draggerSelected,
+      // draggerSelectedB: draggerSelectedB,
+      axisWidth: self.width,
       parentOffset: self.parentOffset,
       hasSubdailyLayers: subdaily,
       timelineHeight: self.height,
       selectedDate: selectedDate,
-      // changeDate: changeDate,
-      timeScale: 'day',
+      selectedDateB: selectedDateB,
+      // timeScale: 'day',
+      timeScale: selectedTimeScale,
       incrementDate: incrementDate,
       updateDate: updateDate,
       setIntervalInput: setIntervalInput,
-      dateFormatted: new Date(selectedDate).toISOString(),
+      dateFormatted: dateFormatted,
+      dateFormattedB: dateFormattedB,
       stopper: stopper,
       clickAnimationButton: clickAnimationButton,
-      toggleHideTimeline: self.toggle
+      toggleHideTimeline: self.toggle,
+      changeTimeScale: changeTimeScale,
+      intervalTimeScale: intervalTimeScale,
+      intervalDelta: intervalDelta
     });
   };
 
@@ -519,16 +612,6 @@ export function timeline(models, config, ui) {
       React.createElement(Timeline, initialProps),
       document.getElementById('timeline')
     );
-
-    // self.reactComponent = ReactDOM.render(
-    //   React.createElement(Timeline, initialProps),
-    //   document.getElementById('timelineContainer')
-    // );
-
-    // self.reactComponent2 = ReactDOM.render(
-    //   React.createElement(DateZoomChange),
-    //   document.getElementById('zoom-btn-container')
-    // );
 
     // self.svg = d3
     //   .select('#timeline-footer')
@@ -592,21 +675,45 @@ export function timeline(models, config, ui) {
     // self.animboundary.append('g').attr('id', 'wv-rangeselector-case');
   };
 
-  var updateReactTimelineDate = function() {
+  var updateReactTimelineDate = function(date, selectionStr) {
     // debugger;
-    let selectedDate = models.date[models.date.activeDate];
-    // console.log(selectedDate, new Date(selectedDate).toISOString())
-    console.log(selectedDate);
+    // let selectedDate = models.date[models.date.activeDate];
+    let selectedDate = models.date.selected;
+    let selectedDateB = models.date.selectedB;
+
+    // let activeDate = models.date.activeDate;
+
+    // let draggerSelected = activeDate === 'selected';
+    // let draggerSelectedB = activeDate === 'selectedB';
+    let draggerSelected = models.date.activeDate;
+
+    let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
+    let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
+
+    // // console.log(selectedDate, new Date(selectedDate).toISOString())
+    // console.log(selectedDate);
     self.reactComponent.setState({
       selectedDate: selectedDate,
-      dateFormatted: new Date(selectedDate).toISOString()
+      dateFormatted: dateFormatted,
+      draggerSelected: draggerSelected,
+      selectedDateB: selectedDateB,
+      dateFormattedB: dateFormattedB
+      // draggerSelectedB: draggerSelectedB
     });
+
+    // console.log(selectedDate, date);
+    // self.reactComponent.setState({
+    //   selectedDate: date,
+    //   dateFormatted: date.toISOString()
+    // });
   };
 
-  var updateTimeUi = function() {
+  // arguments passed as date (date object) and selectionStr ('selected' or 'selectedB')
+  var updateTimeUi = function(date, selectionStr) {
+    console.log(date, selectionStr);
     // console.log('%c updateTimeUi ', 'background: #555; color: cornflowerblue');
 
-    updateReactTimelineDate();
+    updateReactTimelineDate(date, selectionStr);
     // updateInput();
     // self.input.update();
     // self.pick.shiftView();
@@ -615,7 +722,15 @@ export function timeline(models, config, ui) {
   // Update status of subdaily layers being in sidebar
   var updateSubdailyState = function() {
     let subdaily = models.layers.hasSubDaily();
-    self.reactComponent.setState({ hasSubdailyLayers: subdaily });
+    if (!subdaily && models.date.selectedZoom > 3) {
+      self.reactComponent.setState({
+        hasSubdailyLayers: subdaily
+      }, changeTimeScale('day'));
+    } else {
+      self.reactComponent.setState({
+        hasSubdailyLayers: subdaily
+      });
+    }
   };
 
   var onLayerUpdate = function() {
@@ -704,6 +819,7 @@ export function timeline(models, config, ui) {
     model.events.on('state-update', updateTimeUi);
     if (models.compare) {
       models.compare.events.on('toggle-state', onLayerUpdate);
+      models.compare.events.on('toggle', onCompareModeToggle);
     }
 
     models.layers.events.on('change', onLayerUpdate);

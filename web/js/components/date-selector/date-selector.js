@@ -17,7 +17,7 @@ class DateSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: props.date,
+      date: props.draggerSelected === 'selectedB' ? props.dateB : props.date,
       maxDate: props.maxDate,
       minDate: props.minDate,
       tab: null,
@@ -27,7 +27,8 @@ class DateSelector extends React.Component {
   }
   componentWillReceiveProps(props) {
     this.setState({
-      date: props.date,
+      // date: props.draggerSelectedB ? props.dateB : props.date,
+      date: props.draggerSelected === 'selectedB' ? props.dateB : props.date,
       maxDate: props.maxDate,
       minDate: props.minDate,
       // maxZoom: props.maxZoom,
@@ -64,13 +65,15 @@ class DateSelector extends React.Component {
     });
   }
   updateDate(date, type, amt) {
-    console.log(date);
+    console.log(this.state.date)
     this.setState({
       date: date
     });
     // this.props.onDateChange(date, this.props.id, type, amt);
     // # send argument to indicate input change for time axis updateScale call
-    this.props.onDateChange(date, true);
+    // let selectionStr = this.props.draggerSelectedB ? 'selectedB' : 'selected';
+    // let selectionStr = this.props.draggerSelectedB ? 'selectedB' : 'selected';
+    this.props.onDateChange(date, this.props.draggerSelected);
   }
   renderSubdaily() {
     if (this.props.hasSubdailyLayers) {
@@ -123,6 +126,8 @@ class DateSelector extends React.Component {
     }
   }
   render() {
+    console.log(this.props.date)
+    console.log(this.props.draggerSelected === 'selected')
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn

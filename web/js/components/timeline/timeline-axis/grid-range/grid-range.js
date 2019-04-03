@@ -56,8 +56,15 @@ constructor(props) {
     let gridWidth = this.props.gridWidth;
     return (
       <g className="gridShell" transform={`translate(${this.props.transformX}, 0)`}>
-        <TileHolder dateArray={this.props.dateArray} gridWidth={gridWidth} showHover={this.showHover} timeScale={this.props.timeScale} />
-        <line className="svgLine" style={{display: this.props.showHoverLine ? 'block' : 'none'}} stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="90" transform={`translate(${this.state.hoverLinePosition + 2}, 0)`} shapeRendering="optimizeSpeed"/>
+        <TileHolder
+          timeScale={this.props.timeScale}
+          dateArray={this.props.dateArray}
+          gridWidth={gridWidth}
+          showHover={this.showHover}
+        />
+        <line className="svgLine" style={{display: this.props.showHoverLine ? 'block' : 'none'}}
+          stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="90"
+          transform={`translate(${this.state.hoverLinePosition + 2}, 0)`} shapeRendering="optimizeSpeed"/>
       </g>
     )
   }
@@ -95,7 +102,6 @@ const tileTextConditionOptions = {
 class TileHolder extends PureComponent {
   render() {
     let timeScale = this.props.timeScale;
-    console.log(timeScale)
     let tileTextCondition = tileTextConditionOptions[timeScale];
     let midTile = Math.floor(this.props.dateArray.length / 2);
     return (

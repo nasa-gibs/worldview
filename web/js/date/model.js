@@ -9,6 +9,9 @@ export function dateModel(models, config, spec) {
   self.selectedB = null;
   self.activeDate = 'selected';
 
+  self.delta = null;
+  self.interval = null;
+
   self.monthAbbr = [
     'JAN',
     'FEB',
@@ -37,11 +40,17 @@ export function dateModel(models, config, spec) {
     self.activeDate = dateString;
     self.events.trigger('state-update');
   };
+  self.setCustomInterval = (delta, interval) => {
+    self.delta = delta;
+    self.interval = interval;
+    self.events.trigger('state-update');
+  };
   self.string = function() {
     return util.toISOStringDate(self.selected);
   };
 
   self.select = function(date, selectionStr) {
+    console.log(self.selected, self.selectedB, self.activeDate)
     if (!date) return null;
     selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);
@@ -147,20 +156,39 @@ export function dateModel(models, config, spec) {
         state.t1 = dateToStringForUrl(self.selectedB);
       }
     }
+    // custom interval delta and interval
+    console.log(state, self.delta, self.interval, models)
+    if (self.delta) {
+      state.intd = self.delta.toString();
+    }
+    if (self.interval) {
+      state.inti = self.interval.toString();
+    }
   };
 
   self.load = function(state) {
+    // COMPARE ACTIVE? - A dragger/tab selected : state.ca === 'true', B is state.ca === 'false
     if (state.ca === 'false') {
       self.setActiveDate('selectedB');
     }
+    // TIME
     if (state.t) {
       self.select(state.t, 'selected');
     }
+    // TIMESCALE (ZOOM) - can't change in order to support older, established permalinks
     if (state.z) {
       self.selectedZoom = Number(state.z);
     }
+    // TIME FOR DRAGGER B
     if (state.t1) {
       self.select(state.t1, 'selectedB');
+    }
+    // # INTERVALS
+    if (state.intd) {
+      self.delta = Number(state.intd);
+    }
+    if (state.inti) {
+      self.interval = state.inti;
     }
   };
   init();

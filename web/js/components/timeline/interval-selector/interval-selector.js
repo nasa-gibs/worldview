@@ -15,8 +15,8 @@ class CustomIntervalSelectorWidget extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      intervalValue: 1,
-      zoomLevel: 'day'
+      intervalValue: '',
+      zoomLevel: ''
     };
   }
 
@@ -69,6 +69,7 @@ class CustomIntervalSelectorWidget extends React.Component {
             changeInterval={this.changeInterval}
           />
           <TimeScaleSelect
+            hasSubdailyLayers={this.props.hasSubdailyLayers}
             zoomLevel={this.state.zoomLevel}
             changeZoomLevel={this.changeZoomLevel}
           />
@@ -98,6 +99,7 @@ class CustomIntervalSelectorWidget extends React.Component {
 }
 
 CustomIntervalSelectorWidget.propTypes = {
+  hasSubdailyLayers: PropTypes.bool,
   setInterval: PropTypes.func,
   toggleCustomIntervalModal: PropTypes.func,
   customIntervalValue: PropTypes.number,
