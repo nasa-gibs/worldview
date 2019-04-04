@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import MetaTable from 'vector-metadata-table';
+import MetaTable from './vector-metadata-table';
 
 export default class VectorMetaModal extends React.Component {
   render() {
