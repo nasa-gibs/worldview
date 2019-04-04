@@ -252,28 +252,6 @@ class TimelineAxis extends React.Component {
     }
   }
 
-  // get left offset to position blue line on mouseover
-  // getLeftOffset = (e, xOffset) => {
-  //   e.preventDefault();
-  //   // TODO: would like to change this parentOffset dom selector to something more React
-  //   //! IE11 DOESN'T LIKE offSetLeft - use getBoundingClientRect() .left
-  //   requestAnimationFrame(() => {
-  //     let parentOffset = document.querySelector('.inner').parentElement.offsetLeft;
-  //     let parentBoundingClientRect = document.querySelector('.inner').parentElement.getBoundingClientRect();
-  //     // console.log(parentOffset, parentBoundingClientRect.left)
-  //     let x = e.pageX - parentOffset;
-  //     let relativeX = x - this.state.position;
-
-  //     let hoverTime = this.showTime(relativeX);
-  //     this.setState({
-  //       leftOffset: x,
-  //       leftOffsetRelativeToInnerParent: relativeX,
-  //       hoverTime: hoverTime
-  //     });
-  //   })
-  // }
-
-
   handleDrag = (e, d) => {
     e.stopPropagation();
     e.preventDefault();
@@ -545,6 +523,7 @@ class TimelineAxis extends React.Component {
 
   // move red line to new position
   setLineTime = (e) => {
+    console.log(this.props.draggerSelected)
     e.preventDefault();
     e.stopPropagation();
     //TODO: handle stop bubbling up to parent wv-timeline-axis to prevent invoking on clicking draggers
@@ -564,26 +543,48 @@ class TimelineAxis extends React.Component {
       let draggerPosition = this.props.draggerSelected === 'selected' ? this.state.leftOffset - 49 : this.state.draggerPosition;
       let draggerPositionB = this.props.draggerSelected === 'selectedB' ? this.state.leftOffset - 49 : this.state.draggerPositionB;
 
-      this.setState({
-        draggerPosition: draggerPosition,
-        draggerVisible: true,
-        draggerPositionB: draggerPositionB,
-        draggerTimeState: this.state.hoverTime,
-        selectedDate: this.state.hoverTime,
-        moved: false
-      }, this.props.updateDate(this.state.hoverTime));
+      // determine which dragger is selected
+
+      // is the other dragger visible after clicking and moving then new dragger ?
+
+      let draggerB = this.props.draggerSelected === 'selectedB';
+
+      //# check for in between visibility of unselected dragger
+      let deque = this.state.deque;
+      //# get front and back dates
+      let frontDate = moment.utc(deque.peekFront().rawDate);
+      let backDate = moment.utc(deque.peekBack().rawDate);
+
+      if (draggerB) {
+        let draggerDateActual = moment.utc(this.state.draggerTimeStateB);
+        let draggerAVisible = draggerDateActual.isBetween(frontDate, backDate, null, '[]');
+        console.log(draggerAVisible)
+        this.setState({
+          draggerVisible: draggerAVisible,
+          draggerVisibleB: true,
+          draggerPositionB: draggerPositionB,
+          draggerTimeStateB: this.state.hoverTime,
+          selectedDateB: this.state.hoverTime,
+          moved: false
+        }, this.props.updateDate(this.state.hoverTime, draggerB));
+      } else {
+        let draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
+        let draggerBVisible = draggerDateActualB.isBetween(frontDate, backDate, null, '[]');
+        console.log(draggerBVisible)
+        this.setState({
+          draggerPosition: draggerPosition,
+          draggerVisible: true,
+          draggerVisibleB: draggerBVisible,
+          draggerTimeState: this.state.hoverTime,
+          selectedDate: this.state.hoverTime,
+          moved: false
+        }, this.props.updateDate(this.state.hoverTime));
+      }
     }
   }
 
-  // handleResize = (e) => {
-  //   let axisWidth = this.props.axisWidth;
-  //   let timeScale = this.props.timeScale;
-  //   this.updateScale(null, timeScale, axisWidth);
-  // };
-
   componentDidMount() {
     console.log(this.props)
-    // window.addEventListener("resize", this.handleResize);
     let axisWidth = this.props.axisWidth;
     let timeScale = this.props.timeScale;
     let time = moment.utc(this.props.selectedDate).format();
@@ -721,7 +722,6 @@ class TimelineAxis extends React.Component {
     }
 
     if (this.props.compareModeActive !== prevProps.compareModeActive) {
-      console.log(this.props.selectedDateB)
       // # TURN ON COMPARE MODE
       // determine what dragger is selected/active at the time of turning on
       // set date and visibility for other dragger
@@ -729,6 +729,10 @@ class TimelineAxis extends React.Component {
         this.setDraggerToTime(this.props.selectedDate);
         this.setDraggerToTime(this.props.selectedDateB, true);
       } else {
+        // # TURN OFF COMPARE MODE
+        // determine what dragger is selected/active at the time of turning off
+        // set visibility for other dragger, but leave date
+        // turn off dragger letter styling A/B
         let draggerSelected = this.props.draggerSelected;
         if (draggerSelected === 'selected') {
           this.setState({
@@ -740,11 +744,6 @@ class TimelineAxis extends React.Component {
           })
         }
       }
-
-      // # TURN OFF COMPARE MODE
-      // determine what dragger is selected/active at the time of turning off
-      // set visibility for other dragger, but leave date
-      // turn off dragger letter styling A/B
     }
 
 // # CHANGED CONDITIONAL FROM "&&" TO "||" TO DEBUG LEFT/RIGHT ARROW UPDATE ISSUE
