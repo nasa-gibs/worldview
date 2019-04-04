@@ -721,7 +721,30 @@ class TimelineAxis extends React.Component {
     }
 
     if (this.props.compareModeActive !== prevProps.compareModeActive) {
-      this.setDraggerToTime(this.props.selectedDateB, true)
+      console.log(this.props.selectedDateB)
+      // # TURN ON COMPARE MODE
+      // determine what dragger is selected/active at the time of turning on
+      // set date and visibility for other dragger
+      if (this.props.compareModeActive) {
+        this.setDraggerToTime(this.props.selectedDate);
+        this.setDraggerToTime(this.props.selectedDateB, true);
+      } else {
+        let draggerSelected = this.props.draggerSelected;
+        if (draggerSelected === 'selected') {
+          this.setState({
+            draggerVisibleB: false
+          })
+        } else {
+          this.setState({
+            draggerVisible: false
+          })
+        }
+      }
+
+      // # TURN OFF COMPARE MODE
+      // determine what dragger is selected/active at the time of turning off
+      // set visibility for other dragger, but leave date
+      // turn off dragger letter styling A/B
     }
 
 // # CHANGED CONDITIONAL FROM "&&" TO "||" TO DEBUG LEFT/RIGHT ARROW UPDATE ISSUE
@@ -752,60 +775,60 @@ class TimelineAxis extends React.Component {
     }
   }
 
-    // move draggerTimeState to inputTime
-    setDraggerToTime = (inputTime, draggerB) => {
-      let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
-      let backDate = moment.utc(this.state.deque.peekBack().rawDate);
-      let draggerTime = draggerB ? this.state.draggerTimeStateB : this.state.draggerTimeState;
-      let draggerTimeState = moment.utc(draggerTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
-      let draggerTimeStateAdded = moment.utc(inputTime);
-
-      let isBetween = draggerTimeStateAdded.isBetween(frontDate, backDate, null, '[]');
-      let draggerVisible = false;
-      let newDraggerPosition;
-      if (isBetween) {
-        draggerVisible = true;
-      }
-      let gridWidth = this.state.gridWidth;
-      let timeScale = this.props.timeScale;
-      let pixelsToAddToDragger = Math.abs(frontDate.diff(draggerTimeState, timeScale, true) * gridWidth);
-      let pixelsToAddToDraggerNew = Math.abs(frontDate.diff(draggerTimeStateAdded, timeScale, true) * gridWidth);
-      let pixelsToAddBasedOnFrontDate = pixelsToAddToDraggerNew - pixelsToAddToDragger;
-
-      let isVisible = draggerB ? this.state.draggerVisibleB : this.state.draggerVisible;
-      if (isVisible) {
-        let draggerPosition = draggerB ? this.state.draggerPositionB : this.state.draggerPosition;
-        newDraggerPosition = draggerPosition + pixelsToAddBasedOnFrontDate;
-      } else {
-        newDraggerPosition = pixelsToAddToDraggerNew + this.state.position - 49 + this.state.currentTransformX;
-      }
-
-      console.log(this.state.draggerTimeStateB, this.state.draggerPositionB, pixelsToAddBasedOnFrontDate)
-      console.log(newDraggerPosition, draggerVisible, draggerTimeStateAdded.format())
-
-      if (draggerB) {
-        this.setState({
-          draggerPositionB: newDraggerPosition,
-          draggerVisibleB: draggerVisible,
-          draggerTimeStateB: draggerTimeStateAdded.format(),
-          selectedDate: draggerTimeStateAdded.format(),
-        })
-      } else {
-        this.setState({
-          draggerPosition: newDraggerPosition,
-          draggerVisible: draggerVisible,
-          draggerTimeState: draggerTimeStateAdded.format(),
-          selectedDate: draggerTimeStateAdded.format(),
-        })
-      }
-      // this.setState({
-      //   draggerPosition: newDraggerPosition,
-      //   draggerVisible: draggerVisible,
-      //   draggerTimeState: draggerTimeStateAdded.format(),
-      //   selectedDate: draggerTimeStateAdded.format(),
-      // })
-      // this.props.incrementDate(timeScaleSelected, increment));
+  // move draggerTimeState to inputTime
+  setDraggerToTime = (inputTime, draggerB) => {
+    let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
+    let backDate = moment.utc(this.state.deque.peekBack().rawDate);
+    let draggerTime = draggerB ? this.state.draggerTimeStateB : this.state.draggerTimeState;
+    let draggerTimeState = moment.utc(draggerTime, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
+    let draggerTimeStateAdded = moment.utc(inputTime);
+    console.log(draggerTime, draggerTimeState, draggerTimeStateAdded)
+    let isBetween = draggerTimeStateAdded.isBetween(frontDate, backDate, null, '[]');
+    let draggerVisible = false;
+    let newDraggerPosition;
+    if (isBetween) {
+      draggerVisible = true;
     }
+    let gridWidth = this.state.gridWidth;
+    let timeScale = this.props.timeScale;
+    let pixelsToAddToDragger = Math.abs(frontDate.diff(draggerTimeState, timeScale, true) * gridWidth);
+    let pixelsToAddToDraggerNew = Math.abs(frontDate.diff(draggerTimeStateAdded, timeScale, true) * gridWidth);
+    let pixelsToAddBasedOnFrontDate = pixelsToAddToDraggerNew - pixelsToAddToDragger;
+
+    let isVisible = draggerB ? this.state.draggerVisibleB : this.state.draggerVisible;
+    if (isVisible) {
+      let draggerPosition = draggerB ? this.state.draggerPositionB : this.state.draggerPosition;
+      newDraggerPosition = draggerPosition + pixelsToAddBasedOnFrontDate;
+    } else {
+      newDraggerPosition = pixelsToAddToDraggerNew + this.state.position - 49 + this.state.currentTransformX;
+    }
+
+    console.log(this.state.draggerTimeStateB, this.state.draggerPositionB, pixelsToAddBasedOnFrontDate)
+    console.log(newDraggerPosition, draggerVisible, draggerTimeStateAdded.format())
+
+    if (draggerB) {
+      this.setState({
+        draggerPositionB: newDraggerPosition,
+        draggerVisibleB: draggerVisible,
+        draggerTimeStateB: draggerTimeStateAdded.format(),
+        selectedDate: draggerTimeStateAdded.format(),
+      })
+    } else {
+      this.setState({
+        draggerPosition: newDraggerPosition,
+        draggerVisible: draggerVisible,
+        draggerTimeState: draggerTimeStateAdded.format(),
+        selectedDate: draggerTimeStateAdded.format(),
+      })
+    }
+    // this.setState({
+    //   draggerPosition: newDraggerPosition,
+    //   draggerVisible: draggerVisible,
+    //   draggerTimeState: draggerTimeStateAdded.format(),
+    //   selectedDate: draggerTimeStateAdded.format(),
+    // })
+    // this.props.incrementDate(timeScaleSelected, increment));
+  }
 
   handleStopDrag = (e, d) => {
     let midPoint = this.state.midPoint;
@@ -982,9 +1005,15 @@ handleDragDragger = (draggerName, e, d) => {
 }
 
   // select dragger
-  selectDragger = (draggerName) => {
+  selectDragger = (draggerName, e ) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    console.log(draggerName, 'selectDragger', 'XXXXXXXXXXXXXXXXXXXX')
     let selectionStr = draggerName === 'A' ? 'selected' : 'selectedB'
     if (selectionStr !== this.props.draggerSelected) {
+      console.log('change it')
       this.props.onChangeSelectedDragger(selectionStr)
     }
   }
@@ -1051,28 +1080,65 @@ handleDragDragger = (draggerName, e, d) => {
             transformX={this.state.currentTransformX} />
         </g>
         </Draggable>
-        <Dragger
-          toggleShowDraggerTime={this.toggleShowDraggerTime}
-          handleDragDragger={this.handleDragDragger}
-          selectDragger={this.selectDragger}
-          compareModeActive={this.props.compareModeActive}
-          draggerName='A'
-          draggerPosition={this.state.draggerPosition}
-          draggerVisible={this.state.draggerVisible}
-          transformX={this.state.currentTransformX}
-          draggerSelected={this.props.draggerSelected === 'selected'}
-          parentPosition={this.state.position} />
-        <Dragger
-          toggleShowDraggerTime={this.toggleShowDraggerTime}
-          handleDragDragger={this.handleDragDragger}
-          selectDragger={this.selectDragger}
-          compareModeActive={this.props.compareModeActive}
-          draggerName='B'
-          draggerPosition={this.state.draggerPositionB}
-          draggerVisible={this.props.compareModeActive ? this.state.draggerVisibleB : false}
-          transformX={this.state.currentTransformX}
-          draggerSelected={this.props.draggerSelected === 'selectedB'}
-          parentPosition={this.state.position} />
+        {this.props.draggerSelected === 'selectedB' ?
+        <React.Fragment>
+          <Dragger
+            toggleShowDraggerTime={this.toggleShowDraggerTime}
+            handleDragDragger={this.handleDragDragger}
+            selectDragger={this.selectDragger}
+            compareModeActive={this.props.compareModeActive}
+            disabled={true}
+            draggerName='A'
+            draggerPosition={this.state.draggerPosition}
+            draggerVisible={this.state.draggerVisible}
+            transformX={this.state.currentTransformX}
+            // draggerSelected={this.props.draggerSelected === 'selected'}
+            draggerSelected={false}
+            parentPosition={this.state.position} />
+          <Dragger
+            toggleShowDraggerTime={this.toggleShowDraggerTime}
+            handleDragDragger={this.handleDragDragger}
+            selectDragger={this.selectDragger}
+            compareModeActive={this.props.compareModeActive}
+            disabled={false}
+            draggerName='B'
+            draggerPosition={this.state.draggerPositionB}
+            draggerVisible={this.state.draggerVisibleB}
+            transformX={this.state.currentTransformX}
+            // draggerSelected={this.props.draggerSelected === 'selectedB'}
+            draggerSelected={true}
+            parentPosition={this.state.position} />
+        </React.Fragment>
+        :
+        <React.Fragment>
+          <Dragger
+            toggleShowDraggerTime={this.toggleShowDraggerTime}
+            handleDragDragger={this.handleDragDragger}
+            selectDragger={this.selectDragger}
+            compareModeActive={this.props.compareModeActive}
+            disabled={true}
+            draggerName='B'
+            draggerPosition={this.state.draggerPositionB}
+            draggerVisible={this.state.draggerVisibleB}
+            transformX={this.state.currentTransformX}
+            // draggerSelected={this.props.draggerSelected === 'selectedB'}
+            draggerSelected={false}
+            parentPosition={this.state.position} />
+          <Dragger
+            toggleShowDraggerTime={this.toggleShowDraggerTime}
+            handleDragDragger={this.handleDragDragger}
+            selectDragger={this.selectDragger}
+            compareModeActive={this.props.compareModeActive}
+            disabled={false}
+            draggerName='A'
+            draggerPosition={this.state.draggerPosition}
+            draggerVisible={this.state.draggerVisible}
+            transformX={this.state.currentTransformX}
+            // draggerSelected={this.props.draggerSelected === 'selected'}
+            draggerSelected={true}
+            parentPosition={this.state.position} />
+        </React.Fragment>
+      }
         </svg>
         : null }
 

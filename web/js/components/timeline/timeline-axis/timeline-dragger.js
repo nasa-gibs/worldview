@@ -3,16 +3,16 @@ import Draggable from 'react-draggable';
 
 class Dragger extends PureComponent {
   render() {
-    // console.log(this.props)
-    let { transformX, draggerPosition, draggerName, handleDragDragger, toggleShowDraggerTime, selectDragger, compareModeActive } = this.props;
+    let { transformX, draggerPosition, draggerName, handleDragDragger, toggleShowDraggerTime, selectDragger, compareModeActive, disabled } = this.props;
     return (
       <Draggable
         axis='x'
-        onMouseDown={() => selectDragger(draggerName)}
+        onMouseDown={selectDragger.bind(this, draggerName)}
         onDrag={handleDragDragger.bind(this, draggerName)}
         position={{ x: draggerPosition, y: -25 }}
         onStart={() => toggleShowDraggerTime(true)}
         onStop={() => toggleShowDraggerTime(false)}
+        disabled={disabled}
         // onStop={() => {
         // this.props.onStop(this.props.id, this.state.position);
         // }}

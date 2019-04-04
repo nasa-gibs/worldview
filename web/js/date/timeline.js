@@ -463,20 +463,31 @@ export function timeline(models, config, ui) {
 
   // # rework in order to allow A and B dates to persist on reopening dialog
   var onCompareModeToggle = () => {
+    // debugger;
     let isCompareModeActive = models.compare.active;
     if (!isCompareModeActive) {
       let activeDate = models.date.activeDate;
-      let date = models.date[activeDate];
-      let dateFormatted = new Date(date).toISOString();
+      // let date = models.date[activeDate];
+      // let dateFormatted = new Date(date).toISOString();
       self.reactComponent.setState({
         compareModeActive: isCompareModeActive,
-        selectedDate: date,
-        dateFormatted: dateFormatted,
-        draggerSelected: 'selected'
+        // selectedDate: date,
+        // dateFormatted: dateFormatted,
+        draggerSelected: activeDate
       });
     } else {
+      // timeScale zoom and reset if subdaily zoom in permalink
+      let selectedTimeScaleState = models.date.selectedZoom;
+      let selectedTimeScale = selectedTimeScaleState ? timeScaleFromNumberKey[selectedTimeScaleState] : 'day';
+
+      let selectedDate = models.date.selected;
+      // default 7 timeScale units away for B dragger if not selected at compare init
+      let selectedDateB = models.date.selectedB ? models.date.selectedB : util.dateAdd(selectedDate, selectedTimeScale, -7);
+      let dateFormattedB = new Date(selectedDateB).toISOString();
       self.reactComponent.setState({
-        compareModeActive: isCompareModeActive
+        compareModeActive: isCompareModeActive,
+        selectedDateB: selectedDateB,
+        dateFormattedB: dateFormattedB
       });
     }
   };
@@ -554,7 +565,8 @@ export function timeline(models, config, ui) {
     let selectedTimeScale = selectedTimeScaleState ? timeScaleFromNumberKey[selectedTimeScaleState] : 'day';
 
     let selectedDate = models.date.selected;
-    let selectedDateB = models.date.selectedB ? models.date.selectedB : util.dateAdd(selectedDate, selectedTimeScale, -7);
+    // let selectedDateB = models.date.selectedB ? models.date.selectedB : util.dateAdd(selectedDate, selectedTimeScale, -7);
+    let selectedDateB = models.date.selectedB ? models.date.selectedB : null;
 
     console.log(selectedDate, selectedDateB);
 
@@ -686,6 +698,7 @@ export function timeline(models, config, ui) {
     // let draggerSelected = activeDate === 'selected';
     // let draggerSelectedB = activeDate === 'selectedB';
     let draggerSelected = models.date.activeDate;
+    console.log(draggerSelected)
 
     let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
     let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';

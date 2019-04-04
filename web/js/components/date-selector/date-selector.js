@@ -126,8 +126,8 @@ class DateSelector extends React.Component {
     }
   }
   render() {
-    console.log(this.props.date)
-    console.log(this.props.draggerSelected === 'selected')
+    // console.log(this.props.date)
+    // console.log(this.props.draggerSelected === 'selected')
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn

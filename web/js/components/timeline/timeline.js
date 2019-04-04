@@ -191,7 +191,7 @@ class Timeline extends React.Component {
     console.log(this.state)
     console.log(this.props.hasSubdailyLayers, this.state.hasSubdailyLayers)
     console.log(this.props)
-    console.log(this.props.draggerSelected)
+    console.log(this.state.draggerSelected)
     return (
       this.state.dateFormatted ?
       <React.Fragment>

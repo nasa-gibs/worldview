@@ -493,7 +493,8 @@ class App extends React.Component {
           ui.anim.ui = animationUi(models, ui);
         }
         if (config.features.compare) {
-          ui.timeline.compare = timelineCompare(models, config, ui);
+          // # need to trigger that it is active somewhere in new timeline parent object
+          // ui.timeline.compare = timelineCompare(models, config, ui);
         }
 
         ui.dateLabel = dateLabel(models);
