@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Metadata from './modal-metadata';
+import VectorMetaModal from './vector-metadata-modal';
 // import googleTagManager from 'googleTagManager';
 
-class VectorMeta extends React.Component {
+export default class VectorMeta extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       models: props.models,
       config: props.config,
       ui: props.ui,
-      modalMeta: props.modalMeta
+      metaModal: props.metaModal
     };
 
-    this.toggleModalMeta = this.toggleModalMeta.bind(this);
+    this.toggleMetaModal = this.toggleMetaModal.bind(this);
   }
 
   componentDidMount() {
@@ -23,22 +23,22 @@ class VectorMeta extends React.Component {
 
   resize() {
     if (window.innerWidth < 740) {
-      this.setState({ modalMeta: false });
+      this.setState({ metaModal: false });
     }
     if (window.innerHeight < 450) {
-      this.setState({ modalMeta: false });
+      this.setState({ metaModal: false });
     }
   }
 
-  toggleModalMeta(e) {
+  toggleMetaModal(e) {
     e.preventDefault();
     this.setState({
-      modalMeta: !this.state.modalMeta
+      metaModal: !this.state.metaModal
     });
     // googleTagManager.pushEvent({
     //   'event': 'meta_toggled',
     //   'meta': {
-    //     'id': this.state.modalMeta
+    //     'id': this.state.metaModal
     //   }
     // });
   }
@@ -47,12 +47,11 @@ class VectorMeta extends React.Component {
     if (this.state.stories) {
       return (
         <div>
-          <Metadata
-            stories={this.state.stories}
-            storyOrder={this.state.storyOrder}
-            modalMeta={this.state.modalMeta}
-            toggleModalMeta={this.toggleModalMeta}
-          ></Metadata>
+          <VectorMetaModal
+            metaModal={this.state.metaModal}
+            toggleMetaModal={this.toggleMetaModal}
+            vectorMeta={this.props.vectorMeta}
+          />
         </div>
       );
     } else {
@@ -65,7 +64,6 @@ VectorMeta.propTypes = {
   models: PropTypes.object.isRequired,
   config: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
-  modalMeta: PropTypes.bool.isRequired
+  metaModal: PropTypes.bool.isRequired,
+  vectorMeta: PropTypes.object.isRequired
 };
-
-export default VectorMeta;
