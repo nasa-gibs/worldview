@@ -17,7 +17,8 @@ export function vectorMetaUI(models, ui, config) {
       models: models,
       config: config,
       ui: ui,
-      modalMeta: false
+      metaModal: false, // initial modal state
+      vectorMeta: {} // legend+feature object gathered onclick
     };
   };
 
