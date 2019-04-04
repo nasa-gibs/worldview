@@ -12,8 +12,13 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import { lookupFactory } from '../ol/lookupimagetile';
+import {
+  isActive as isPaletteActive,
+  getKey as getPaletteKeys,
+  getLookup as getPaletteLookup
+} from '../modules/palettes/selectors';
 
-export function mapLayerBuilder(models, config, cache, mapUi) {
+export function mapLayerBuilder(models, config, cache, mapUi, store) {
   var self = {};
   self.init = function(Parent) {
     self.extentLayers = [];
@@ -34,12 +39,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @returns {object} OpenLayers layer
    */
   self.createLayer = function(def, options) {
+    const state = store.getState();
     var date, key, group, proj, layer, layerNext, layerPrior, attributes;
     options = options || {};
     group = options.group || null;
     date = self.closestDate(def, options);
-    key = self.layerKey(def, options, group);
-    proj = models.proj.selected;
+    key = self.layerKey(def, options, state);
+    proj = state.proj.selected;
     layer = cache.getItem(key);
     if (!layer) {
       // layer is not in the cache
@@ -55,10 +61,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
-        layer = createLayerWMTS(def, options);
-        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
-          layerNext = createLayerWMTS(def, options, 1);
-          layerPrior = createLayerWMTS(def, options, -1);
+        layer = createLayerWMTS(def, options, undefined, state);
+        if (
+          proj.id === 'geographic' &&
+          (def.wrapadjacentdays === true || def.wrapX)
+        ) {
+          layerNext = createLayerWMTS(def, options, 1, state);
+          layerPrior = createLayerWMTS(def, options, -1, state);
 
           layer.wv = attributes;
           layerPrior.wv = attributes;
@@ -69,10 +78,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
           });
         }
       } else if (def.type === 'vector') {
-        layer = createLayerVector(def, options, null);
-        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
-          layerNext = createLayerVector(def, options, 1);
-          layerPrior = createLayerVector(def, options, -1);
+        layer = createLayerVector(def, options, null, state);
+        if (
+          proj.id === 'geographic' &&
+          (def.wrapadjacentdays === true || def.wrapX)
+        ) {
+          layerNext = createLayerVector(def, options, 1, state);
+          layerPrior = createLayerVector(def, options, -1, state);
 
           layer.wv = attributes;
           layerPrior.wv = attributes;
@@ -83,10 +95,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
           });
         }
       } else if (def.type === 'wms') {
-        layer = createLayerWMS(def, options);
-        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
-          layerNext = createLayerWMS(def, options, 1);
-          layerPrior = createLayerWMS(def, options, -1);
+        layer = createLayerWMS(def, options, state);
+        if (
+          proj.id === 'geographic' &&
+          (def.wrapadjacentdays === true || def.wrapX)
+        ) {
+          layerNext = createLayerWMS(def, options, 1, state);
+          layerPrior = createLayerWMS(def, options, -1, state);
 
           layer.wv = attributes;
           layerPrior.wv = attributes;
@@ -163,13 +178,14 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    *
    * @returns {object} layer key Object
    */
-  self.layerKey = function(def, options) {
+  self.layerKey = function(def, options, state) {
+    const { palettes, compare } = state;
     var date;
-    var layerGroupStr;
     var layerId = def.id;
-    var projId = models.proj.selected.id;
+    var projId = state.proj.id;
     var palette = '';
-    layerGroupStr = options.group ? options.group : models.layers.activeLayers;
+    const activeGroupStr = options.group ? options.group : compare.activeString;
+
     // Don't key by time if this is a static layer--it is valid for
     // every date.
     if (def.period) {
@@ -177,10 +193,10 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         util.roundTimeOneMinute(self.closestDate(def, options))
       );
     }
-    if (models.palettes.isActive(def.id)) {
-      palette = models.palettes.key(def.id);
+    if (isPaletteActive(def.id, activeGroupStr, state)) {
+      palette = getPaletteKeys(def.id, undefined, state);
     }
-    return [layerId, projId, date, palette, layerGroupStr].join(':');
+    return [layerId, projId, date, palette, activeGroupStr].join(':');
   };
   /*
    * Create a new WMTS Layer
@@ -195,9 +211,9 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    *
    * @returns {object} OpenLayers WMTS layer
    */
-  var createLayerWMTS = function(def, options, day) {
+  var createLayerWMTS = function(def, options, day, state) {
     var proj, source, matrixSet, matrixIds, urlParameters, date, extent, start;
-    proj = models.proj.selected;
+    proj = state.proj.selected;
     source = config.sources[def.source];
     extent = proj.maxExtent;
     start = [proj.maxExtent[0], proj.maxExtent[3]];
@@ -251,8 +267,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       wrapX: false,
       style: typeof def.style === 'undefined' ? 'default' : def.style
     };
-    if (models.palettes.isActive(def.id, options.group)) {
-      var lookup = models.palettes.getLookup(def.id, options.group);
+    if (isPaletteActive(def.id, options.group, state)) {
+      var lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     return new OlLayerTile({
@@ -275,12 +291,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    *
    * @returns {object} OpenLayers Vector layer
    */
-  var createLayerVector = function(def, options, day) {
-    var date, urlParameters, proj, extent, source, matrixSet, matrixIds, start;
-    proj = models.proj.selected;
+  var createLayerVector = function(def, options, day, state) {
+    const { proj } = state;
+    var date, urlParameters, extent, source, matrixSet, matrixIds, start;
+    const selectedProj = proj.selected;
     source = config.sources[def.source];
-    extent = proj.maxExtent;
-    start = [proj.maxExtent[0], proj.maxExtent[3]];
+    extent = selectedProj.maxExtent;
+    start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
 
     if (!source) {
       throw new Error(def.id + ': Invalid source: ' + def.source);
@@ -367,9 +384,10 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    *
    * @returns {object} OpenLayers WMS layer
    */
-  var createLayerWMS = function(def, options, day) {
-    var proj,
-      source,
+  var createLayerWMS = function(def, options, day, state) {
+    const { palettes, proj } = state;
+    const selectedProj = proj.selected;
+    var source,
       urlParameters,
       transparent,
       date,
@@ -377,17 +395,17 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       start,
       res,
       parameters;
-    proj = models.proj.selected;
+
     source = config.sources[def.source];
-    extent = proj.maxExtent;
-    start = [proj.maxExtent[0], proj.maxExtent[3]];
-    res = proj.resolutions;
+    extent = selectedProj.maxExtent;
+    start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
+    res = selectedProj.resolutions;
     if (!source) {
       throw new Error(def.id + ': Invalid source: ' + def.source);
     }
 
     transparent = def.format === 'image/png';
-    if (proj.id === 'geographic') {
+    if (selectedProj.id === 'geographic') {
       res = [
         0.28125,
         0.140625,
@@ -443,9 +461,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         resolutions: res
       })
     };
-
-    if (models.palettes.isActive(def.id, options.group)) {
-      var lookup = models.palettes.getLookup(def.id, options.group);
+    if (isPaletteActive(def.id, options.group, state)) {
+      var lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     var layer = new OlLayerTile({
@@ -459,15 +476,19 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var layer;
     var key;
     var layers;
-
-    layers = models.layers[models.layers.activeLayers];
+    const state = store.getState();
+    layers = state.layers[state.compare.activeString];
 
     for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
       if ((layer.wrapadjacentdays || layer.wrapX) && layer.visible) {
-        key = self.layerKey(layer, {
-          date: models.date[models.date.activeDate]
-        });
+        key = self.layerKey(
+          layer,
+          {
+            date: models.date[models.date.activeDate]
+          },
+          state
+        );
         layer = cache.getItem(key);
         if (!layer) {
           throw new Error(`no such layer in cache: ${key}`);
@@ -480,14 +501,19 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var layer;
     var layers;
     var key;
+    const state = store.getState();
 
-    layers = models.layers[models.layers.activeLayers];
+    layers = state.layers[state.compare.activeString];
     for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
       if ((layer.wrapadjacentdays || layer.wrapX) && layer.visible) {
-        key = self.layerKey(layer, {
-          date: models.date[models.date.activeDate]
-        });
+        key = self.layerKey(
+          layer,
+          {
+            date: models.date[models.date.activeDate]
+          },
+          state
+        );
         layer = cache.getItem(key);
         layer.setExtent([-250, -90, 250, 90]);
       }

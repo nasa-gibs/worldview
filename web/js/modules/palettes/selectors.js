@@ -2,7 +2,8 @@ import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
   each as lodashEach,
-  parseInt as lodashParseInt
+  parseInt as lodashParseInt,
+  cloneDeep as lodashCloneDeep
 } from 'lodash';
 import update from 'immutability-helper';
 
@@ -17,17 +18,18 @@ import update from 'immutability-helper';
  * object.
  * @return {object} object including the entries and legend
  */
-export function getPalette(layerId, index, renderedPalettes, config) {
+export function getPalette(layerId, index, state) {
+  const palette = lodashGet(state, `palettes.rendered.${layerId}`);
   index = lodashIsUndefined(index) ? 0 : index;
-  const palette = renderedPalettes[layerId];
   if (palette) {
     return palette.maps[index];
   }
-  return getRenderedPalette(config, renderedPalettes, layerId, index);
+  return getRenderedPalette(layerId, index, state);
 }
-export function getRenderedPalette(config, renderedPalettes, layerId, index) {
+export function getRenderedPalette(layerId, index, state) {
+  const { config, palettes } = state;
   var name = lodashGet(config, `layers.${layerId}.palette.id`);
-  var palette = renderedPalettes[name];
+  var palette = palettes.rendered[name];
   if (!palette) {
     throw new Error(name + ' Is not a rendered palette');
   }
@@ -39,11 +41,11 @@ export function getRenderedPalette(config, renderedPalettes, layerId, index) {
   return palette;
 }
 
-export function getLegends(layerId, renderedPalettes, config) {
+export function getLegends(layerId, state) {
   var legends = [];
-  var count = getCount(layerId, config, renderedPalettes);
+  var count = getCount(layerId, state);
   for (var i = 0; i < count; i++) {
-    legends.push(getLegend(layerId, i, renderedPalettes, config));
+    legends.push(getLegend(layerId, i, state));
   }
   return legends;
 }
@@ -58,17 +60,12 @@ export function getLegends(layerId, renderedPalettes, config) {
  * object.
  * @return {object} object of the legend
  */
-export function getLegend(layerId, index, renderedPalettes, config) {
-  var value = getPalette(layerId, index, renderedPalettes, config);
+export function getLegend(layerId, index, state) {
+  var value = getPalette(layerId, index, state);
   return value.legend || value.entries;
 }
-export function getCount(layerId, config, renderedPalettes) {
-  const renderedPalette = getRenderedPalette(
-    config,
-    renderedPalettes,
-    layerId,
-    undefined
-  );
+export function getCount(layerId, state) {
+  const renderedPalette = getRenderedPalette(layerId, undefined, state);
   if (renderedPalette && renderedPalette.maps) {
     return renderedPalette.maps.length;
   } else {
@@ -86,8 +83,8 @@ export function getCount(layerId, config, renderedPalettes) {
  * object.
  * @return {object} object of the legend
  */
-export function getDefaultLegend(layerId, index, config, renderedPalettes) {
-  var palette = getRenderedPalette(config, renderedPalettes, layerId, index);
+export function getDefaultLegend(layerId, index, state) {
+  var palette = getRenderedPalette(layerId, index, state);
   return palette.legend || palette.entries || {};
 }
 
@@ -98,16 +95,16 @@ export function getCustomPalette(paletteId, customsPaletteConfig) {
   }
   return palette;
 }
-var useLookup = function(layerId, palettes, config, renderedPalettes) {
+var useLookup = function(layerId, palettesObj, state) {
   var use = false;
-  var active = palettes[layerId].maps;
+  var active = palettesObj[layerId].maps;
 
   lodashEach(active, function(palette, index) {
     if (palette.custom) {
       use = true;
       return false;
     }
-    var rendered = getRenderedPalette(config, renderedPalettes, layerId, index);
+    var rendered = getRenderedPalette(layerId, index, state);
     if (palette.type !== 'classification') {
       if (palette.min <= 0) {
         delete palette.min;
@@ -123,9 +120,14 @@ var useLookup = function(layerId, palettes, config, renderedPalettes) {
   });
   return use;
 };
-var updateLookup = function(layerId, palettes, config, renderedPalettes) {
-  let newPalettes = palettes;
-  if (!useLookup(layerId, newPalettes, config, renderedPalettes)) {
+// Looks up options/colormaps/layer.xml colormap entry
+export function getLookup(layerId, groupstr, state) {
+  groupstr = groupstr || state.compare.activeString;
+  return state.palettes[groupstr][layerId].lookup;
+}
+var updateLookup = function(layerId, palettesObj, state) {
+  let newPalettes = palettesObj;
+  if (!useLookup(layerId, newPalettes, state)) {
     delete newPalettes[layerId];
     return newPalettes;
   }
@@ -146,7 +148,7 @@ var updateLookup = function(layerId, palettes, config, renderedPalettes) {
     };
     var source = entries.colors;
     var target = palette.custom
-      ? getCustomPalette(palette.custom).colors
+      ? getCustomPalette(palette.custom, state.palettes.custom).colors
       : source;
 
     var min = palette.min || 0;
@@ -154,7 +156,6 @@ var updateLookup = function(layerId, palettes, config, renderedPalettes) {
 
     var sourceCount = source.length;
     var targetCount = target.length;
-
     lodashEach(source, function(color, index) {
       var targetColor;
       if (index < min || index > max) {
@@ -193,24 +194,21 @@ var updateLookup = function(layerId, palettes, config, renderedPalettes) {
       };
       lookup[lookupSource] = lookupTarget;
     });
-    newPalettes = update(palettes, {
-      maps: { [index]: { legend: { $set: legend } } }
+
+    newPalettes = update(newPalettes, {
+      [layerId]: {
+        maps: { [index]: { legend: { $set: legend } } }
+      }
     });
   });
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
-self.setCustom = function(
-  layerId,
-  paletteId,
-  index,
-  palettes,
-  config,
-  renderedPalettes
-) {
+export function setCustom(layerId, paletteId, index, groupName, state) {
+  const { config, palettes } = state;
   if (!config.layers[layerId]) {
     throw new Error('Invalid layer: ' + layerId);
   }
-  let newPalettes = prepare(layerId, palettes, config, renderedPalettes);
+  let newPalettes = prepare(layerId, palettes[groupName], state);
   index = lodashIsUndefined(index) ? 0 : index;
   var active = newPalettes[layerId];
   var palette = active.maps[index];
@@ -218,25 +216,44 @@ self.setCustom = function(
     return;
   }
   palette.custom = paletteId;
-  return updateLookup(layerId, newPalettes, config, renderedPalettes);
-};
-export function setRange(
-  layerId,
-  props,
-  index,
-  palettes,
-  renderedPalettes,
-  config
-) {
+  const paletteslol = updateLookup(layerId, newPalettes, state);
+  return paletteslol;
+}
+export function getKey(layerId, groupStr, state) {
+  groupStr = groupStr || state.compare.activeString;
+  if (!isActive(layerId, groupStr, state)) {
+    return '';
+  }
+  var def = getPalette(layerId, undefined, state);
+  var keys = [];
+  if (def.custom) {
+    keys.push('palette=' + def.custom);
+  }
+  if (def.min) {
+    keys.push('min=' + def.min);
+  }
+  if (def.max) {
+    keys.push('max=' + def.max);
+  }
+  if (def.squash) {
+    keys.push('squash');
+  }
+  return keys.join(',');
+}
+export function isActive(layerId, group, state) {
+  group = group || state.compare.activeString;
+  return state.palettes[group][layerId];
+}
+export function setRange(layerId, props, index, palettes, state) {
   let min = props.min;
   let max = props.max;
   let squash = props.squash;
-  let newPalettes = prepare(layerId, palettes, config, renderedPalettes);
+  let newPalettes = prepare(layerId, palettes, state);
   index = lodashIsUndefined(index) ? 0 : index;
   if (min === 0) {
     min = undefined;
   }
-  const legend = getPalette(layerId, index, renderedPalettes, config);
+  const legend = getPalette(layerId, index, state);
   if (
     legend.entries &&
     legend.entries.values &&
@@ -260,7 +277,7 @@ export function setRange(
     }
   });
 
-  return updateLookup(layerId, newPalettes, config, renderedPalettes);
+  return updateLookup(layerId, newPalettes, state);
 }
 export function clearCustom(layerId, index, palettes) {
   index = lodashIsUndefined(index) ? 0 : index;
@@ -274,19 +291,20 @@ export function clearCustom(layerId, index, palettes) {
   }
   return update(palettes, { layerId: { maps: { $unset: ['custom'] } } }); // remove custom key
 }
-var prepare = function(layerId, palettes, config, renderedPalettes) {
-  var newPalettes = palettes;
-  var active = newPalettes[layerId] || {};
+var prepare = function(layerId, palettesObj, state) {
+  var newPalettes = lodashCloneDeep(palettesObj);
+  if (!newPalettes[layerId]) newPalettes[layerId] = {};
+  var active = newPalettes[layerId];
   active.maps = active.maps || [];
-  lodashEach(
-    getRenderedPalette(config, renderedPalettes, layerId, undefined).maps,
-    function(palette, index) {
-      if (!active.maps[index]) {
-        newPalettes = update(palettes, {
-          [layerId]: { maps: { [index]: palette } }
-        });
-      }
+  lodashEach(getRenderedPalette(layerId, undefined, state).maps, function(
+    palette,
+    index
+  ) {
+    if (!active.maps[index]) {
+      newPalettes = update(newPalettes, {
+        [layerId]: { maps: { [index]: { $set: palette } } }
+      });
     }
-  );
+  });
   return newPalettes;
 };

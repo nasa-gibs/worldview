@@ -59,8 +59,8 @@ export function MapRunningData(models, compareUi, store) {
    *
    */
   self.newPoint = function(coords, map) {
+    const state = store.getState();
     var activeLayerObj = {};
-    const { palettes, config } = store.getState().palettes;
     map.forEachLayerAtPixel(coords, function(layer, data) {
       var hex;
       var legends;
@@ -71,7 +71,7 @@ export function MapRunningData(models, compareUi, store) {
       if (!isFromActiveCompareRegion(map, coords, layer.wv)) return;
       if (layer.wv.def.palette) {
         layerId = layer.wv.id;
-        legends = getPalette(layerId, undefined, palettes.rendered, config);
+        legends = getPalette(layerId, undefined, state);
         hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
         activeLayerObj[layerId] = { legends: legends, hex: hex };
       }

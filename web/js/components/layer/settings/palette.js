@@ -45,13 +45,11 @@ class PaletteSelect extends React.Component {
     // Applying customs takes a while and
     // it looks more natural to make this async
     // instead of waiting
-    setTimeout(function() {
-      if (id === '__default') {
-        clearCustom(layer.id, index, groupName);
-      } else {
-        setCustom(layer.id, id, index, groupName);
-      }
-    }, 0);
+    if (id === '__default') {
+      clearCustom(layer.id, index, groupName);
+    } else {
+      setCustom(layer.id, id, index, groupName);
+    }
     this.setState({ activePalette: id });
   }
   /**

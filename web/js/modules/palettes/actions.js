@@ -26,7 +26,8 @@ export function requestPalette(location, id) {
 
 export function setRange(layerId, min, max, squash, index, groupName) {
   return (dispatch, getState) => {
-    const { config, palettes } = getState();
+    const state = getState();
+    console.log(state);
     const props = {
       min: min,
       max: max,
@@ -36,9 +37,8 @@ export function setRange(layerId, min, max, squash, index, groupName) {
       layerId,
       props,
       index,
-      palettes[groupName],
-      palettes.rendered,
-      config
+      state.palettes[groupName],
+      state
     );
     dispatch({
       type: SET_RANGE_AND_SQUASH,
@@ -49,17 +49,19 @@ export function setRange(layerId, min, max, squash, index, groupName) {
 }
 export function setCustom(layerId, paletteId, index, groupName) {
   return (dispatch, getState) => {
-    const { config, palettes } = getState();
+    const state = getState();
+    console.log(state.palettes.rendered);
     const newActivePalettesObj = setCustomSelector(
       layerId,
       paletteId,
       index,
-      palettes[groupName],
-      config,
-      palettes.rendered
+      groupName,
+      state
     );
     dispatch({
       type: SET_CUSTOM,
+      layerId: layerId,
+      paletteId: paletteId,
       groupName: groupName,
       palettes: newActivePalettesObj
     });

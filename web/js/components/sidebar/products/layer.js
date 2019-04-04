@@ -283,13 +283,11 @@ function mapStateToProps(state, ownProps) {
     index,
     layerGroupName
   } = ownProps;
-  const { palettes, config } = state;
+  const { palettes } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const legends =
-    hasPalette && renderedPalettes[layer.id]
-      ? getLegends(layer.id, renderedPalettes, config)
-      : {};
+    hasPalette && renderedPalettes[layer.id] ? getLegends(layer.id, state) : {};
 
   return {
     layer,
@@ -305,7 +303,7 @@ function mapStateToProps(state, ownProps) {
     isMobile: state.browser.is.small,
     hasPalette,
     getPalette: (layerId, index) => {
-      return getPalette(layer.id, index, renderedPalettes, config);
+      return getPalette(layer.id, index, state);
     }
   };
 }

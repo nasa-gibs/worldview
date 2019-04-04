@@ -11,13 +11,15 @@ const initialState = {
   active: false,
   isActiveA: true,
   mode: 'swipe',
-  value: 50
+  value: 50,
+  activeString: 'active'
 };
 export function compareReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_STATE:
       return lodashAssign({}, state, {
-        isActiveA: action.stateStr === 'A'
+        isActiveA: action.stateStr === 'A',
+        activeString: action.stateStr === 'A' ? 'active' : 'activeB'
       });
     case TOGGLE:
       return lodashAssign({}, state, {

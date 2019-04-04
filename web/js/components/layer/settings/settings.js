@@ -221,31 +221,31 @@ class LayerSettings extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { config, palettes, layers } = state;
-  const { rendered, supported, custom } = palettes;
-  const { layerGroupName } = layers;
+  const { config, palettes, compare } = state;
+  const { supported, custom } = palettes;
+  const groupName = compare.isActiveA ? 'active' : 'activeB';
 
   return {
     paletteOrder: config.paletteOrder,
-    groupName: layerGroupName,
+    groupName,
     customPalettesIsActive: !!config.features.customPalettes,
     palettedAllowed: supported,
     palettesTranslate,
     getDefaultLegend: (layerId, index) => {
-      return getDefaultLegend(layerId, index, config, rendered);
+      return getDefaultLegend(layerId, index, state);
     },
     getCustomPalette: id => {
       return getCustomPalette(id, custom);
     },
     getLegend: (layerId, index) => {
-      return getLegend(layerId, index, rendered, config);
+      return getLegend(layerId, index, state);
     },
 
     getLegends: layerId => {
-      return getLegends(layerId, rendered, config);
+      return getLegends(layerId, state);
     },
     getPalette: (layerId, index) => {
-      return getPalette(layerId, index, rendered, config);
+      return getPalette(layerId, index, state);
     }
   };
 }

@@ -58,14 +58,16 @@ export function mapui(models, config, store) {
     models,
     config,
     cache,
-    self
+    self,
+    store
   );
   self.layerKey = layerBuilder.layerKey;
   createLayer = self.createLayer = layerBuilder.createLayer;
   self.promiseDay = precache.promiseDay;
 
   /**
-   * Suscribe to redux store
+   * Suscribe to redux store and listen for
+   * specific action types
    */
   const subcribeToStore = function() {
     const state = store.getState();
@@ -93,7 +95,11 @@ export function mapui(models, config, store) {
         return reloadLayers();
       case CHANGE_PROJECTION:
         return updateProjection(action.id);
-      case paletteConstants.SET_RANGE_AND_SQUASH || paletteConstants.SET_CUSTOM || paletteConstants.CLEAR_CUSTOM || paletteConstants.REQUEST_PALETTE_SUCESS:
+      case paletteConstants.SET_RANGE_AND_SQUASH:
+      case paletteConstants.SET_CUSTOM:
+      case paletteConstants.CLEAR_CUSTOM:
+      case paletteConstants.REQUEST_PALETTE_SUCESS:
+        console.log('update lookup')
         return updateLookup();
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();

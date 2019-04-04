@@ -1,7 +1,7 @@
 import { assign as lodashAssign, get as lodashGet } from 'lodash';
 import {
   REQUEST_PALETTE_SUCCESS,
-  PALETTE_CHANGE,
+  SET_CUSTOM,
   REQUEST_PALETTE_START,
   SET_RANGE_AND_SQUASH,
   LOADED_CUSTOM_PALETTES
@@ -46,7 +46,7 @@ export function paletteReducer(state = defaultPaletteState, action) {
       return lodashAssign({}, state, {
         [groupName]: action.palettes
       });
-    case PALETTE_CHANGE:
+    case SET_CUSTOM:
       return lodashAssign({}, state, {
         [groupName]: action.palettes
       });
