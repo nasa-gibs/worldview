@@ -1,0 +1,2 @@
+// import { Table } from 'reactstrap';
+
