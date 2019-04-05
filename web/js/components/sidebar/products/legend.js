@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../../util/util';
 import { drawPaletteOnCanvas } from '../../../palettes/util';
-import lodashIsEqual from 'lodash/isEqual';
 import lodashIsNumber from 'lodash/isNumber';
 
 class Legend extends React.Component {
@@ -12,27 +11,22 @@ class Legend extends React.Component {
       isRunningData: props.isRunningData,
       colorHex: props.colorHex,
       isHoveringCanvas: props.isHoveringCanvas,
-      legends: props.legends,
       width: this.props.width
     };
   }
   componentWillReceiveProps(props) {
-    if (!lodashIsEqual(props.legends, this.state.legends)) {
-      this.setState({ legends: props.legends });
-    } else {
-      let setState = false;
-      if (props.isRunningData !== this.state.isRunningData) {
-        setState = true;
-      }
-      if (props.colorHex !== this.state.colorHex) {
-        setState = true;
-      }
-      if (setState) {
-        this.setState({
-          isRunningData: props.isRunningData,
-          colorHex: props.colorHex
-        });
-      }
+    let setState = false;
+    if (props.isRunningData !== this.state.isRunningData) {
+      setState = true;
+    }
+    if (props.colorHex !== this.state.colorHex) {
+      setState = true;
+    }
+    if (setState) {
+      this.setState({
+        isRunningData: props.isRunningData,
+        colorHex: props.colorHex
+      });
     }
   }
   componentDidMount() {
@@ -121,8 +115,7 @@ class Legend extends React.Component {
    * Style Canvas bases on updates to legend or canvas-width
    */
   updateCanvas() {
-    const { checkerBoardPattern, height, width } = this.props;
-    const { legends } = this.state;
+    const { checkerBoardPattern, height, width, legends } = this.props;
 
     legends.forEach((colorMap, index) => {
       if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
@@ -134,6 +127,7 @@ class Legend extends React.Component {
             // This value is needed for calculating running data offsets
             this.setState({ width: newWidth });
           }
+          console.log(colorMap);
           drawPaletteOnCanvas(
             this[ctxStr].current.getContext('2d'),
             checkerBoardPattern,
@@ -371,7 +365,7 @@ class Legend extends React.Component {
    * Loop through colormaps and render correct legend type
    */
   renderLegends() {
-    const { legends } = this.state;
+    const { legends } = this.props;
     return legends.map((colorMap, index) => {
       if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
         this['canvas_' + index] = React.createRef();
@@ -382,15 +376,17 @@ class Legend extends React.Component {
     });
   }
   render() {
-    const { paletteId, layer } = this.props;
+    const { paletteId, layer, isCustomPalette } = this.props;
     const { isHoveringLegend } = this.state;
+    const customClass = isCustomPalette ? ' is_custom' : '';
+    console.log(isCustomPalette);
     if (!layer.palette) return;
     return (
       <div
         className={
           isHoveringLegend
-            ? 'active-lengend wv-palettes-panel'
-            : 'wv-palettes-panel'
+            ? 'active-lengend wv-palettes-panel' + customClass
+            : 'wv-palettes-panel' + customClass
         }
         datalayer={layer.id}
         id={paletteId + '_panel'}

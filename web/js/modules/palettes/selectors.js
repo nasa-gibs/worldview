@@ -18,14 +18,27 @@ import update from 'immutability-helper';
  * object.
  * @return {object} object including the entries and legend
  */
-export function getPalette(layerId, index, state) {
-  const palette = lodashGet(state, `palettes.rendered.${layerId}`);
+export function getPalette(layerId, index, groupStr, state) {
+  groupStr = groupStr || state.compare.activeString;
   index = lodashIsUndefined(index) ? 0 : index;
-  if (palette) {
-    return palette.maps[index];
+  const renderedPalette = lodashGet(
+    state,
+    `palettes.rendered.${layerId}.maps.${index}`
+  );
+  const customPalette = lodashGet(
+    state,
+    `palettes.${groupStr}.${layerId}.maps.${index}`
+  );
+
+  if (customPalette) {
+    return customPalette;
+  }
+  if (renderedPalette) {
+    return renderedPalette;
   }
   return getRenderedPalette(layerId, index, state);
 }
+
 export function getRenderedPalette(layerId, index, state) {
   const { config, palettes } = state;
   var name = lodashGet(config, `layers.${layerId}.palette.id`);
@@ -41,11 +54,11 @@ export function getRenderedPalette(layerId, index, state) {
   return palette;
 }
 
-export function getLegends(layerId, state) {
+export function getLegends(layerId, groupName, state) {
   var legends = [];
   var count = getCount(layerId, state);
   for (var i = 0; i < count; i++) {
-    legends.push(getLegend(layerId, i, state));
+    legends.push(getLegend(layerId, i, groupName, state));
   }
   return legends;
 }
@@ -60,8 +73,8 @@ export function getLegends(layerId, state) {
  * object.
  * @return {object} object of the legend
  */
-export function getLegend(layerId, index, state) {
-  var value = getPalette(layerId, index, state);
+export function getLegend(layerId, index, groupStr, state) {
+  var value = getPalette(layerId, index, groupStr, state);
   return value.legend || value.entries;
 }
 export function getCount(layerId, state) {
@@ -216,15 +229,14 @@ export function setCustom(layerId, paletteId, index, groupName, state) {
     return;
   }
   palette.custom = paletteId;
-  const paletteslol = updateLookup(layerId, newPalettes, state);
-  return paletteslol;
+  return updateLookup(layerId, newPalettes, state);
 }
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
     return '';
   }
-  var def = getPalette(layerId, undefined, state);
+  var def = getPalette(layerId, undefined, groupStr, state);
   var keys = [];
   if (def.custom) {
     keys.push('palette=' + def.custom);
@@ -253,7 +265,7 @@ export function setRange(layerId, props, index, palettes, state) {
   if (min === 0) {
     min = undefined;
   }
-  const legend = getPalette(layerId, index, state);
+  const legend = getPalette(layerId, index, undefined, state);
   if (
     legend.entries &&
     legend.entries.values &&

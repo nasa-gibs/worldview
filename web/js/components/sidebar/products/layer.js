@@ -54,6 +54,7 @@ class Layer extends React.Component {
       palette,
       renderedPalette,
       requestPalette,
+      isCustomPalette,
       isLoading
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
@@ -65,6 +66,7 @@ class Layer extends React.Component {
           paletteId={palette.id}
           getPalette={getPalette}
           legends={legends}
+          isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
           checkerBoardPattern={checkerBoardPattern}
           colorHex={colorHex}
@@ -287,8 +289,10 @@ function mapStateToProps(state, ownProps) {
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const legends =
-    hasPalette && renderedPalettes[layer.id] ? getLegends(layer.id, state) : {};
-
+    hasPalette && renderedPalettes[layer.id]
+      ? getLegends(layer.id, layerGroupName, state)
+      : {};
+  const isCustomPalette = hasPalette && palettes.custom[layer.id];
   return {
     layer,
     isDisabled,
@@ -297,13 +301,14 @@ function mapStateToProps(state, ownProps) {
     legends,
     names,
     index,
+    isCustomPalette,
     isLoading: palettes.isLoading[layer.id],
     renderedPalette: renderedPalettes[layer.id],
     layerGroupName,
     isMobile: state.browser.is.small,
     hasPalette,
     getPalette: (layerId, index) => {
-      return getPalette(layer.id, index, state);
+      return getPalette(layer.id, index, layerGroupName, state);
     }
   };
 }

@@ -223,7 +223,7 @@ class LayerSettings extends React.Component {
 function mapStateToProps(state) {
   const { config, palettes, compare } = state;
   const { supported, custom } = palettes;
-  const groupName = compare.isActiveA ? 'active' : 'activeB';
+  const groupName = compare.activeString;
 
   return {
     paletteOrder: config.paletteOrder,
@@ -238,14 +238,14 @@ function mapStateToProps(state) {
       return getCustomPalette(id, custom);
     },
     getLegend: (layerId, index) => {
-      return getLegend(layerId, index, state);
+      return getLegend(layerId, index, groupName, state);
     },
 
     getLegends: layerId => {
-      return getLegends(layerId, state);
+      return getLegends(layerId, groupName, state);
     },
     getPalette: (layerId, index) => {
-      return getPalette(layerId, index, state);
+      return getPalette(layerId, index, groupName, state);
     }
   };
 }
