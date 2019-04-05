@@ -127,7 +127,6 @@ class Legend extends React.Component {
             // This value is needed for calculating running data offsets
             this.setState({ width: newWidth });
           }
-          console.log(colorMap);
           drawPaletteOnCanvas(
             this[ctxStr].current.getContext('2d'),
             checkerBoardPattern,
@@ -379,7 +378,6 @@ class Legend extends React.Component {
     const { paletteId, layer, isCustomPalette } = this.props;
     const { isHoveringLegend } = this.state;
     const customClass = isCustomPalette ? ' is_custom' : '';
-    console.log(isCustomPalette);
     if (!layer.palette) return;
     return (
       <div

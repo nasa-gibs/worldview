@@ -72,7 +72,7 @@ function mapStateToProps(state, ownProps) {
   const { tabTypes } = ownProps;
   const { layers, proj, data, config, compare } = state;
   const { selectedProduct, selectedGranules } = data;
-  const activeString = compare.isCompareA ? 'active' : 'activeB';
+  const activeString = compare.activeString;
   const activeLayers = layers[activeString];
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const products = getDataProductsFromActiveLayers(
