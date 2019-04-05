@@ -355,8 +355,7 @@ const mapDispatchToProps = dispatch => ({
     );
   },
   requestPalette(id) {
-    const location = 'config/palettes/' + id + '.json';
-    return dispatch(requestPalette(location, id));
+    return dispatch(requestPalette(id));
   }
 });
 export default connect(

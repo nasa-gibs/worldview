@@ -11,9 +11,11 @@ import {
   setCustom as setCustomSelector,
   clearCustom as clearCustomSelector
 } from './selectors';
-
-export function requestPalette(location, id) {
-  return dispatch => {
+export function requestPalette(id) {
+  return (dispatch, getState) => {
+    const config = getState().config;
+    var layer = config.layers[id];
+    const location = 'config/palettes/' + layer.palette.id + '.json';
     return requestAction(
       dispatch,
       REQUEST_PALETTE,
