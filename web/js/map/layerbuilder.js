@@ -117,6 +117,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @return {object}         Closest date
    */
   self.closestDate = function(def, options) {
+    // debugger;
     var date;
     var animRange;
     if (models.anim) {
@@ -124,12 +125,29 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     }
     var dateArray = def.availableDates || [];
     if (options.date) {
-      date = options.date;
+      // TODO: comparison mode using this options.date key
+      // need to continue conditional like below to get prevDateInDateRange ?
+      // how does this interact with subdaily VS. non-subdaily and add/remove in different states?
+      // date = options.date;
+
+      if (def.period !== 'subdaily') {
+        // # timeoffset fix handled here
+        date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
+      } else {
+        // date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
+        // # timeoffset fix handled further down
+        date = options.date;
+        date.setUTCSeconds(0);
+        date.setUTCMilliseconds(0);
+        // # memoize third argument dateArray ?
+        date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
+      }
     } else {
       // # mutation of models date causing overwrite issue for SUBDAILY vs NON-SUBDAILY
       date = new Date(models.date[models.date.activeDate]);
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
+
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
       } else {
@@ -247,7 +265,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
 
     urlParameters =
       '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-
+    console.log(urlParameters)
     var sourceOptions = {
       url: source.url + urlParameters,
       layer: def.layer || def.id,

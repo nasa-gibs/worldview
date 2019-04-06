@@ -546,7 +546,7 @@ class TimelineAxis extends React.Component {
       // determine which dragger is selected
 
       // is the other dragger visible after clicking and moving then new dragger ?
-
+      let isCompareModeActive = this.props.compareModeActive;
       let draggerB = this.props.draggerSelected === 'selectedB';
 
       //# check for in between visibility of unselected dragger
@@ -557,8 +557,8 @@ class TimelineAxis extends React.Component {
 
       if (draggerB) {
         let draggerDateActual = moment.utc(this.state.draggerTimeStateB);
-        let draggerAVisible = draggerDateActual.isBetween(frontDate, backDate, null, '[]');
-        console.log(draggerAVisible)
+        let draggerAVisible = isCompareModeActive && draggerDateActual.isBetween(frontDate, backDate, null, '[]');
+        console.log(isCompareModeActive, draggerAVisible)
         this.setState({
           draggerVisible: draggerAVisible,
           draggerVisibleB: true,
@@ -569,8 +569,8 @@ class TimelineAxis extends React.Component {
         }, this.props.updateDate(this.state.hoverTime, draggerB));
       } else {
         let draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
-        let draggerBVisible = draggerDateActualB.isBetween(frontDate, backDate, null, '[]');
-        console.log(draggerBVisible)
+        let draggerBVisible = isCompareModeActive && draggerDateActualB.isBetween(frontDate, backDate, null, '[]');
+        console.log(isCompareModeActive, draggerBVisible)
         this.setState({
           draggerPosition: draggerPosition,
           draggerVisible: true,
