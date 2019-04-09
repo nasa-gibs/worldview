@@ -410,7 +410,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     if (config.vectorStyles && def.vectorStyle.id) {
       var vectorStyles = config.vectorStyles.rendered;
       var vectorStyle = def.vectorStyle.id;
-      var glStyle = vectorStyles[vectorStyle];
 
       $(document).ready(function() {
         function getVals() {
@@ -448,8 +447,9 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
         };
 
         $(document).on('change', function(e) {
+          var glStyle = vectorStyles[vectorStyle];
           // Set default styles
-          var styleFunction = stylefunction(layer, glStyle, 'default_style');
+          var styleFunction;
 
           if (document.getElementById('frpCheckbox').checked === true) {
             styleFunction = stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP');
