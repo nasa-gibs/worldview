@@ -836,7 +836,8 @@ export function mapui(models, config, store, ui) {
         zoom: proj.startZoom,
         maxZoom: proj.numZoomLevels,
         enableRotation: true,
-        extent: proj.id === 'geographic' ? [-250, -90, 250, 90] : proj.maxExtent
+        extent: proj.id === 'geographic' ? [-250, -90, 250, 90] : proj.maxExtent,
+        constrainOnlyCenter: true
       }),
       target: id,
       renderer: ['canvas'],
