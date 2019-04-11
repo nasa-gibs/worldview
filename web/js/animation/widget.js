@@ -7,7 +7,7 @@ import lodashIndexOf from 'lodash/indexOf';
 import util from '../util/util';
 
 export function animationWidget(models, config, ui) {
-  var zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
+  var zooms = ['yearly', 'monthly', 'daily', 'hourly', 'minutely', 'custom'];
   var self = {};
   var timeline = ui.timeline;
   var model = models.anim;
@@ -172,12 +172,12 @@ export function animationWidget(models, config, ui) {
   self.getIncrements = function() {
     // if (models.date.maxZoom > 3) {
     if (models.layers.hasSubDaily()) {
-      zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
+      zooms = ['yearly', 'monthly', 'daily', 'hourly', 'minutely', 'custom'];
     } else {
-      zooms = ['yearly', 'monthly', 'daily'];
+      zooms = ['yearly', 'monthly', 'daily', 'custom'];
     }
     // return zooms[timeline.config.currentZoom - 1];
-    return zooms[2];
+    return zooms[models.date.selectedZoom - 1];
   };
 
   /*
@@ -194,9 +194,11 @@ export function animationWidget(models, config, ui) {
    * @returns {string} timeline interval
    *
    */
-  self.onZoomSelect = function(increment) {
+  self.onZoomSelect = function(increment) { // ? still want to change zoom level on select???
     var zoomLevel = lodashIndexOf(zooms, increment);
-    return timeline.config.zoom(zoomLevel + 1);
+    models.date.setSelectedZoom(zoomLevel + 1);
+    // return timeline.config.zoom(zoomLevel + 1);
+    models.date.events.trigger('zoom-change');
   };
 
   /*
@@ -267,6 +269,7 @@ export function animationWidget(models, config, ui) {
     var dateModel = models.date;
     var currentDate = new Date(dateModel[dateModel.activeDate]);
     var interval = ui.anim.ui.getInterval();
+    console.log(interval)
     if (dateModel.selectedZoom === 4) {
       intervalStep = 70;
     } else {

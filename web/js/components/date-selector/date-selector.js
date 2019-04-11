@@ -65,15 +65,13 @@ class DateSelector extends React.Component {
     });
   }
   updateDate(date, type, amt) {
-    console.log(this.state.date)
+    // console.log(this.state.date)
     this.setState({
       date: date
     });
     // this.props.onDateChange(date, this.props.id, type, amt);
-    // # send argument to indicate input change for time axis updateScale call
-    // let selectionStr = this.props.draggerSelectedB ? 'selectedB' : 'selected';
-    // let selectionStr = this.props.draggerSelectedB ? 'selectedB' : 'selected';
-    this.props.onDateChange(date, this.props.draggerSelected);
+    // # allows dragger change via main date selector, and id change via anim date selectors
+    this.props.onDateChange(date, this.props.draggerSelected || this.props.id);
   }
   renderSubdaily() {
     if (this.props.hasSubdailyLayers) {

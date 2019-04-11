@@ -40,7 +40,18 @@ class CustomIntervalSelectorWidget extends React.Component {
   }
 
   setIntervalChangeUnit = () => {
-    this.props.setIntervalChangeUnit(this.state.intervalValue, this.state.zoomLevel);
+    if (this.state.intervalValue > 0) {
+      this.props.setIntervalChangeUnit(this.state.intervalValue, this.state.zoomLevel);
+    }
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key == 'Enter') {
+      const value = this.state.intervalValue;
+      if (value > 0) {
+        this.setIntervalChangeUnit();
+      }
+    }
   }
 
   componentDidMount() {
@@ -57,6 +68,7 @@ class CustomIntervalSelectorWidget extends React.Component {
         // className={
         //   'wv-animation-widget' + (this.state.maxZoom >= 4 ? ' subdaily' : '')
         // }
+        onKeyDown={this.handleKeyPress}
         className='wv-animation-widget'
         style={{display: this.props.customIntervalModalOpen ? 'block' : 'none', height: '110px'}}
       >
@@ -77,7 +89,6 @@ class CustomIntervalSelectorWidget extends React.Component {
 
         <div style={{display: 'flex', flexDirection: 'column' }} className="custom-interval-buttons">
           <Button
-            // onClick={() => this.props.setInterval(this.state.intervalValue, this.state.zoomLevel)}
             onClick={this.setIntervalChangeUnit}
             id='set-interval-button'
             text='Set'
@@ -100,7 +111,6 @@ class CustomIntervalSelectorWidget extends React.Component {
 
 CustomIntervalSelectorWidget.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
-  setInterval: PropTypes.func,
   toggleCustomIntervalModal: PropTypes.func,
   customIntervalValue: PropTypes.number,
   customIntervalZoomLevel: PropTypes.string

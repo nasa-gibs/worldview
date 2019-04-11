@@ -9,8 +9,16 @@ export function dateModel(models, config, spec) {
   self.selectedB = null;
   self.activeDate = 'selected';
 
-  self.delta = null;
+  // selected zoom level/timescale
+  self.selectedZoom = null;
+
+  // selected interval
   self.interval = null;
+
+  // custom interval
+  self.customSelected = null; // boolean
+  self.customDelta = null; // number
+  self.customInterval = null;
 
   self.monthAbbr = [
     'JAN',
@@ -36,13 +44,25 @@ export function dateModel(models, config, spec) {
       self.select(util.dateAdd(self.selected, 'day', -7), 'selectedB');
     }
   };
+  // set selectedZoom level
+  self.setSelectedZoom = (zoomLevel) => {
+    self.selectedZoom = zoomLevel;
+    self.events.trigger('state-update');
+  };
   self.setActiveDate = function(dateString) {
     self.activeDate = dateString;
     self.events.trigger('state-update');
   };
+  // set custom interval from panel
   self.setCustomInterval = (delta, interval) => {
-    self.delta = delta;
+    self.customDelta = delta;
+    self.customInterval = interval;
+    self.events.trigger('state-update');
+  };
+  // select interval from tooltip
+  self.setSelectedInterval = (interval, customSelected) => {
     self.interval = interval;
+    self.customSelected = customSelected;
     self.events.trigger('state-update');
   };
   self.string = function() {
@@ -50,7 +70,7 @@ export function dateModel(models, config, spec) {
   };
 
   self.select = function(date, selectionStr) {
-    console.log(self.selected, self.selectedB, self.activeDate)
+    // console.log(self.selected, self.selectedB, self.activeDate)
     if (!date) return null;
     selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);
@@ -157,12 +177,18 @@ export function dateModel(models, config, spec) {
       }
     }
     // custom interval delta and interval
-    console.log(state, self.delta, self.interval, models)
-    if (self.delta) {
-      state.intd = self.delta.toString();
-    }
+    // console.log(state, self.customDelta, self.customInterval, models)
     if (self.interval) {
       state.inti = self.interval.toString();
+    }
+    if (self.customInterval) {
+      state.intci = self.customInterval.toString();
+    }
+    if (self.customDelta) {
+      state.intcd = self.customDelta.toString();
+    }
+    if (self.customSelected) {
+      state.intcs = self.customSelected.toString();
     }
   };
 
@@ -178,17 +204,33 @@ export function dateModel(models, config, spec) {
     // TIMESCALE (ZOOM) - can't change in order to support older, established permalinks
     if (state.z) {
       self.selectedZoom = Number(state.z);
+    } else {
+      self.selectedZoom = 3;
     }
     // TIME FOR DRAGGER B
     if (state.t1) {
       self.select(state.t1, 'selectedB');
     }
     // # INTERVALS
-    if (state.intd) {
-      self.delta = Number(state.intd);
-    }
+    // selected interval timescale
     if (state.inti) {
       self.interval = state.inti;
+    }
+    // custom interval delta
+    if (state.intcd) {
+      self.customDelta = Number(state.intcd);
+    }
+    // custom interval timescale
+    if (state.intci) {
+      self.customInterval = Number(state.intci);
+    }
+    // interval custom selected
+    if (state.intcs) {
+      if (state.intcs === 'true') {
+        self.customSelected = true;
+      } else if (state.intcs === 'false') {
+        self.customSelected = false;
+      }
     }
   };
   init();

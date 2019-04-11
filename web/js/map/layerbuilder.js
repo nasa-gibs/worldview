@@ -265,7 +265,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
 
     urlParameters =
       '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-    console.log(urlParameters)
+    // console.log(urlParameters)
     var sourceOptions = {
       url: source.url + urlParameters,
       layer: def.layer || def.id,

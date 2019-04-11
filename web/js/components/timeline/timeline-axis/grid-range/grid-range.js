@@ -6,22 +6,17 @@ import TileText from './tile-text';
 
 //# PureComponent performs a shallow comparison of props and state - may not need shouldComponentUpdate
 class GridRange extends PureComponent {
-constructor(props) {
-  super(props);
-  this.state= {
-    hoverLinePosition: 0
+  constructor(props) {
+    super(props);
+    this.state={
+      hoverLinePosition: 0
+    }
   }
-}
 
   showHover = (e, itemDate, nextDate, index) => {
     e.preventDefault();
     e.stopPropagation();
     e.persist();
-    // let target = e.target;
-    // let clientX = e.clientX;
-    // let boundingClientRect = target.getBoundingClientRect();
-    // //! IE11 doesn't like boundingClientRect.x
-    // let xHoverPositionInCurrentGrid = Math.floor(clientX) - Math.floor(boundingClientRect.left);
     requestAnimationFrame(() => {
       let target = e.target;
       let clientX = e.clientX;
@@ -47,9 +42,9 @@ constructor(props) {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // console.log(this.state.hoverLinePosition, this.props.transformX)
     //# Dragger changes are tied too close to this.props.transformX since add/minus click dragger and this updates
     //# decouple
-    // console.log('GridRange update', prevProps, prevState)
   }
 
   render() {
@@ -64,7 +59,7 @@ constructor(props) {
         />
         <line className="svgLine" style={{display: this.props.showHoverLine ? 'block' : 'none'}}
           stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="90"
-          transform={`translate(${this.state.hoverLinePosition + 2}, 0)`} shapeRendering="optimizeSpeed"/>
+          transform={`translate(${this.state.hoverLinePosition + 1}, 0)`} shapeRendering="optimizeSpeed"/>
       </g>
     )
   }

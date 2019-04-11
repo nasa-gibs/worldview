@@ -425,7 +425,8 @@ export function timeline(models, config, ui) {
     //   self.axis.select('line:first-child').attr('x2', self.width);
     }
     self.reactComponent.setState({
-      axisWidth: self.getWidth()
+      axisWidth: self.getWidth(),
+      parentOffset: self.parentOffset
     });
   };
 
@@ -503,7 +504,7 @@ export function timeline(models, config, ui) {
   };
 
   var updateDate = (date, selectionStr) => {
-    console.log(date, selectionStr)
+    // console.log(date, selectionStr)
     let updatedDate = new Date(date);
     // console.log(models)
     // self.input.update(updatedDate);
@@ -519,19 +520,41 @@ export function timeline(models, config, ui) {
     zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
     // model.events.trigger('zoom-change');
     self.reactComponent.setState({
+      timeScaleChangeUnit: zoomLevel,
       customIntervalValue: intervalValue,
-      customIntervalZoomLevel: zoomLevel
+      customIntervalZoomLevel: zoomLevel,
+      intervalChangeAmt: intervalValue,
+      customIntervalModalOpen: false
+    });
+  };
+
+  var setSelectedInterval = (interval, intervalChangeAmt, customSelected) => {
+    models.date.setSelectedInterval(timeScaleToNumberKey[interval], customSelected);
+    self.reactComponent.setState({
+      timeScaleChangeUnit: interval,
+      customSelected: customSelected,
+      intervalChangeAmt: intervalChangeAmt,
+      customIntervalModalOpen: customSelected
     });
   };
 
   var clickAnimationButton = () => {
-    console.log(ui);
+    // console.log(ui);
   };
 
   var changeTimeScale = (timeScale) => {
-    console.log(timeScale)
-    models.date.selectedZoom = timeScaleToNumberKey[timeScale];
-    model.events.trigger('zoom-change');
+    // console.log(timeScale, timeScaleToNumberKey[timeScale])
+    // models.date.selectedZoom = timeScaleToNumberKey[timeScale];
+    models.date.setSelectedZoom(timeScaleToNumberKey[timeScale]);
+    // model.events.trigger('zoom-change');
+    // self.reactComponent.setState({
+    //   timeScale: timeScale
+    // });
+    updateTimeScaleState();
+  };
+
+  var updateTimeScaleState = () => {
+    let timeScale = timeScaleFromNumberKey[models.date.selectedZoom];
     self.reactComponent.setState({
       timeScale: timeScale
     });
@@ -559,6 +582,7 @@ export function timeline(models, config, ui) {
 
     // timeScale zoom and reset if subdaily zoom in permalink
     let selectedTimeScaleState = models.date.selectedZoom;
+    // console.log(selectedTimeScaleState)
     if (!subdaily && selectedTimeScaleState > 3) {
       selectedTimeScaleState = 3;
     }
@@ -568,13 +592,17 @@ export function timeline(models, config, ui) {
     // let selectedDateB = models.date.selectedB ? models.date.selectedB : util.dateAdd(selectedDate, selectedTimeScale, -7);
     let selectedDateB = models.date.selectedB ? models.date.selectedB : null;
 
-    console.log(selectedDate, selectedDateB);
+    // console.log(selectedDate, selectedDateB);
 
     // custom interval
-    let intervalTimeScale = models.date.interval ? models.date.interval : selectedTimeScale;
-    let intervalDelta = models.date.delta ? models.date.delta : 1;
+    let intervalTimeScale = models.date.customInterval ? timeScaleFromNumberKey[models.date.customInterval] : selectedTimeScale;
+    let intervalDelta = models.date.customDelta ? models.date.customDelta : 1;
 
-    console.log(intervalTimeScale, intervalDelta)
+    let customSelected = models.date.customSelected ? Boolean(models.date.customSelected) : false;
+
+    let intervalSelected = models.date.interval ? timeScaleFromNumberKey[models.date.interval] : selectedTimeScale;
+    // console.log(models.date.customSelected, customSelected, intervalSelected)
+    // console.log(intervalTimeScale, intervalDelta)
     // console.log(selectedDate, selectedDateB, models.date[models.date.activeDate])
     // let selectedDate = models.date.selected;
     // get selected A
@@ -589,19 +617,18 @@ export function timeline(models, config, ui) {
 
     let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
     let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
-    console.log(self)
+    // console.log(self)
     return Object.assign(inputProps, {
+      customIntervalZoomLevel: intervalTimeScale,
       compareModeActive: isCompareModeActive,
       onChangeSelectedDragger: onChangeSelectedDragger,
       draggerSelected: draggerSelected,
-      // draggerSelectedB: draggerSelectedB,
       axisWidth: self.width,
       parentOffset: self.parentOffset,
       hasSubdailyLayers: subdaily,
       timelineHeight: self.height,
       selectedDate: selectedDate,
       selectedDateB: selectedDateB,
-      // timeScale: 'day',
       timeScale: selectedTimeScale,
       incrementDate: incrementDate,
       updateDate: updateDate,
@@ -612,8 +639,10 @@ export function timeline(models, config, ui) {
       clickAnimationButton: clickAnimationButton,
       toggleHideTimeline: self.toggle,
       changeTimeScale: changeTimeScale,
-      intervalTimeScale: intervalTimeScale,
-      intervalDelta: intervalDelta
+      intervalTimeScale: intervalSelected,
+      intervalDelta: intervalDelta,
+      setSelectedInterval: setSelectedInterval,
+      customSelected: customSelected
     });
   };
 
@@ -698,7 +727,7 @@ export function timeline(models, config, ui) {
     // let draggerSelected = activeDate === 'selected';
     // let draggerSelectedB = activeDate === 'selectedB';
     let draggerSelected = models.date.activeDate;
-    console.log(draggerSelected)
+    // console.log(draggerSelected)
 
     let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
     let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
@@ -723,7 +752,7 @@ export function timeline(models, config, ui) {
 
   // arguments passed as date (date object) and selectionStr ('selected' or 'selectedB')
   var updateTimeUi = function(date, selectionStr) {
-    console.log(date, selectionStr);
+    // console.log(date, selectionStr);
     // console.log('%c updateTimeUi ', 'background: #555; color: cornflowerblue');
 
     updateReactTimelineDate(date, selectionStr);
@@ -834,6 +863,8 @@ export function timeline(models, config, ui) {
       models.compare.events.on('toggle-state', onLayerUpdate);
       models.compare.events.on('toggle', onCompareModeToggle);
     }
+
+    model.events.on('zoom-change', updateTimeScaleState);
 
     models.layers.events.on('change', onLayerUpdate);
 

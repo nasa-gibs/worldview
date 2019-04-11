@@ -10,7 +10,7 @@ export function animationUi(models, ui) {
   var animModel = models.anim;
   var queueLength;
   var queue = new Queue(5, Infinity);
-  var zooms = ['year', 'month', 'day', 'minute'];
+  var zooms = ['year', 'month', 'day', 'hour', 'minute'];
   var preload = {};
   var preloadArray;
   var inQueue;
@@ -185,7 +185,8 @@ export function animationUi(models, ui) {
    */
   self.getInterval = function () {
     // return zooms[ui.timeline.config.currentZoom - 1];
-    return zooms[3];
+    return zooms[models.date.selectedZoom - 1];
+    // return zooms[2];
   };
 
   /*
@@ -203,11 +204,15 @@ export function animationUi(models, ui) {
 
   // # need to change subdaily argument for custom intervals - rework for all zoom levels presumably
   self.nextDate = function (date) {
-    if (models.date.selectedZoom === 4) {
-      return util.dateAdd(date, self.getInterval(), 15);
-    } else {
-      return util.dateAdd(date, self.getInterval(), 1);
-    }
+    // console.log(util.dateAdd(date, self.getInterval(), 1), self.getInterval())
+    let interval = self.getInterval();
+    console.log(interval)
+    return util.dateAdd(date, interval, 1);
+    // if (models.date.selectedZoom === 4) {
+    //   return util.dateAdd(date, self.getInterval(), 15);
+    // } else {
+    //   return util.dateAdd(date, self.getInterval(), 1);
+    // }
   };
 
   /*
