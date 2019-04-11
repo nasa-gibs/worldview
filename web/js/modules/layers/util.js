@@ -16,6 +16,7 @@ export function getLayersParameterSetup(
   errors
 ) {
   const initialState = lodashCloneDeep(models.layers.active);
+  console.log(legacyState);
   models.palettes.load(legacyState, errors);
   if (models.compare.active) {
     models.layers.activeB = lodashCloneDeep(initialState);
@@ -25,38 +26,35 @@ export function getLayersParameterSetup(
   return {
     l: getPermalinkManagementObject(
       initialState,
-      'legacy.layers.active',
+      'layers.active',
       () => {
         return layerModelLoaded.active ? layerModelLoaded.active : initialState;
       },
       (currentItemState, state) => {
-        const isActive = lodashGet(models, 'compare.active');
-        const isCompareA = lodashGet(models, 'compare.isCompareA');
-        const layersB = lodashGet(models, 'layers.activeB');
-        const layersA = lodashGet(models, 'layers.active');
+        const isActive = lodashGet(state, 'compare.active');
+        const isCompareA = lodashGet(state, 'compare.isActiveA');
         return !isActive && !isCompareA
-          ? serializeLayers(layersB, models, 'activeB')
-          : serializeLayers(layersA, models, 'active');
+          ? serializeLayers(state, 'activeB')
+          : serializeLayers(state, 'active');
       }
     ),
     l1: getPermalinkManagementObject(
       initialState,
-      'legacy.layers.activeB',
+      'layers.activeB',
       () => {
         return layerModelLoaded.activeB;
       },
       (currentItemState, state) => {
-        const isActive = lodashGet(models, 'compare.active');
-        const layersB = lodashGet(models, 'layers.activeB');
-        return isActive
-          ? serializeLayers(layersB, models, 'activeB')
-          : undefined;
+        const isActive = lodashGet(state, 'compare.active');
+        return isActive ? serializeLayers(state, 'activeB') : undefined;
       }
     )
   };
 }
-function serializeLayers(layers, models, groupStr) {
-  return layers.map(def => {
+export function serializeLayers(state, groupName) {
+  const layers = state.layers[groupName];
+  const palettes = state.palettes[groupName];
+  return layers.map((def, i) => {
     var item = {};
 
     if (def.id) {
@@ -78,32 +76,29 @@ function serializeLayers(layers, models, groupStr) {
         value: def.opacity
       });
     }
-    let def1 =
-      def.id && def.palette
-        ? models.palettes.get(def.id, undefined, groupStr)
-        : undefined;
-    if (def1) {
-      if (def1.custom) {
+    let paletteDef = def.id && palettes[def.id] ? palettes[def.id] : undefined;
+    if (paletteDef) {
+      if (paletteDef.custom) {
         item.attributes.push({
           id: 'palette',
-          value: def1.custom
+          value: paletteDef.custom
         });
       }
-      if (def1.min) {
-        var minValue = def1.entries.values[def1.min];
+      if (paletteDef.min) {
+        var minValue = paletteDef.entries.values[paletteDef.min];
         item.attributes.push({
           id: 'min',
           value: minValue
         });
       }
-      if (def1.max) {
-        var maxValue = def1.entries.values[def1.max];
+      if (paletteDef.max) {
+        var maxValue = paletteDef.entries.values[paletteDef.max];
         item.attributes.push({
           id: 'max',
           value: maxValue
         });
       }
-      if (def1.squash) {
+      if (paletteDef.squash) {
         item.attributes.push({
           id: 'squash'
         });

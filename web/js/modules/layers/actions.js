@@ -92,10 +92,11 @@ export function toggleVisibility(id, visible) {
 export function removeLayer(id) {
   return (dispatch, getState) => {
     const { layers, compare } = getState();
-    const activeString = compare.isActiveA ? 'active' : 'activeB';
+    const activeString = compare.activeString;
     const index = lodashFindIndex(layers[activeString], {
       id: id
     });
+    const def = layers[activeString][index];
     if (index === -1) {
       throw new Error('Invalid layer ID: ' + id);
     }
@@ -104,7 +105,8 @@ export function removeLayer(id) {
       type: REMOVE_LAYER,
       id,
       index,
-      activeString
+      activeString,
+      def
     });
   };
 }

@@ -1,26 +1,26 @@
-import { merge as lodashMerge, assign, has, set } from 'lodash';
+import { assign, has, set, get } from 'lodash';
 
 // legacy crutches
 import { getLayersParameterSetup } from './modules/layers/util';
 import { getDateParameterSetup } from './modules/date/util';
 import { getNaturalEventsParameterSetup } from './modules/natural-events/util';
 import { getDataDownloadParameterSetup } from './modules/data/util';
-import { getCompareParameterSetup } from './modules/compare/util';
 import { getAnimationParameterSetup } from './modules/animation/util';
 import { getTourParameterSetup } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
-import util from './util/util';
+import update from 'immutability-helper';
 
 export function mapLocationToState(state, location) {
   if (location.search) {
-    let parameters = util.fromQueryString(location.search);
     let stateFromLocation = location.query;
-    if (has(parameters, 'ca')) {
-      set(stateFromLocation, 'legacy.compare.active', true);
-    } else {
-      set(stateFromLocation, 'legacy.compare.active', false);
+    const projId = get(stateFromLocation, 'proj.id');
+    if (projId) {
+      let selected = get(state, `config.projections.${projId}`) || {};
+      stateFromLocation = update(stateFromLocation, {
+        proj: { selected: { $set: selected } }
+      });
     }
-    return lodashMerge({}, state, stateFromLocation);
+    return update(state, { $merge: stateFromLocation });
   } else return state;
 }
 const simpleParameters = {
@@ -29,6 +29,29 @@ const simpleParameters = {
     initialState: 'geographic'
   }
 };
+// ca: {
+//   stateKey: 'compare.isCompareA',
+//   initialState: true,
+//   type: 'bool',
+//   options: {
+//     setAsEmptyItem: true,
+//     serializeNeedsGlobalState: true,
+//     serialize: (currentItemState, state) => {
+//       const compareIsActive = get(state, 'compare.active');
+//       return compareIsActive ? currentItemState : undefined;
+//     }
+//   }
+// },
+// cm: {
+//   stateKey: 'compare.mode',
+//   initialState: 'swipe'
+// },
+// cv: {
+//   stateKey: 'compare.value',
+//   initialState: 50,
+//   type: 'number'
+// }
+// };
 export function getParamObject(
   parameters,
   config,
@@ -36,7 +59,6 @@ export function getParamObject(
   legacyState,
   errors
 ) {
-  let compareParamObject = {};
   let eventParamObject = {};
   let tourParamObject = {};
   let animationParamObject = {};
@@ -48,15 +70,6 @@ export function getParamObject(
     legacyState,
     errors
   );
-  if (config.features.compare) {
-    compareParamObject = getCompareParameterSetup(
-      parameters,
-      config,
-      models,
-      legacyState,
-      errors
-    );
-  }
   if (config.features.tour) {
     tourParamObject = getTourParameterSetup(
       parameters,
@@ -108,15 +121,14 @@ export function getParamObject(
 
   const obj = assign(
     {},
-    simpleParameters, // Once migrated completely to redux most configurations should be here
     dateParamObject,
     layersParamObject,
     animationParamObject,
     eventParamObject,
     dataParamObject,
-    compareParamObject,
     tourParamObject,
-    mapParamObject
+    mapParamObject,
+    simpleParameters
   );
   return {
     global: obj

@@ -169,7 +169,7 @@ function mapStateToProps(state, ownProps) {
   const { proj } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
-  const zoom = state.legacy.map.getZoom();
+  const zoom = state.models.map.getZoom();
   const zots = getZotsForActiveLayers(layers, zoom) || {};
   const activeLayers = state.layers[layerGroupName];
 

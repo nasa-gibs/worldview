@@ -484,9 +484,9 @@ export function mapui(models, config, store) {
    */
   var removeLayer = function(action) {
     const state = store.getState();
-    const { compare, layers, proj } = state;
+    const { compare, proj } = state;
     const activeLayerStr = compare.isActiveA ? 'active' : 'activeB';
-    const def = lodashFind(layers[activeLayerStr], { id: action.id });
+    const def = action.def;
 
     if (isGraticule(def, proj.id)) {
       removeGraticule(activeLayerStr);

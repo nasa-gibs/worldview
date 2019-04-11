@@ -1,15 +1,11 @@
+import { get as lodashGet } from 'lodash';
 export function getProjInitialState(config) {
-  const defaults = config.defaults;
-  const projections = config.projections;
-
+  const selected = lodashGet(
+    config,
+    `projections.${config.defaults.projection}`
+  );
   return {
-    id: 'geographic',
-    selected:
-      defaults &&
-      projections &&
-      defaults.projection &&
-      projections[defaults.projection]
-        ? projections[defaults.projection]
-        : {}
+    id: selected ? selected.id : 'geographic',
+    selected: selected || {}
   };
 }

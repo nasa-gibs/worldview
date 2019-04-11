@@ -30,7 +30,7 @@ import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
 import { changeProjection } from './modules/projection/actions';
 
-export const history = createBrowserHistory();
+export let history = createBrowserHistory();
 const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
@@ -90,8 +90,8 @@ const render = (config, parameters, legacyState) => {
     reducersWithLocation,
     getInitialState(models, config, parameters),
     compose(
-      responsiveStoreEnhancer,
-      applyMiddleware(...middleware)
+      applyMiddleware(...middleware),
+      responsiveStoreEnhancer
     )
   );
   lodashEach(models, function(component, key) {
@@ -103,13 +103,6 @@ const render = (config, parameters, legacyState) => {
     }, 100);
     // sync old and new state
     component.events.any(dispatchUpdate);
-  });
-  // Big HACKY sync up of proj state
-  models.proj.events.on('select', (projObj, id) => {
-    const state = store.getState();
-    if (state.proj.id !== id) {
-      store.dispatch(changeProjection(id, config));
-    }
   });
   listenForHistoryChange(store, history);
   elapsed('Render', startTime, parameters);
