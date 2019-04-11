@@ -39,10 +39,12 @@ class TimeScaleIntervalChange extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    if (this.props.customSelected && this.props.customIntervalValue !== 1 && this.state.customIntervalText === 'Custom') {
-      this.setCustomIntervalText();
-    } else if (this.props.customSelected && (this.props.customIntervalValue !== prevProps.customIntervalValue || this.props.timeScaleChangeUnit !== prevProps.timeScaleChangeUnit)) {
-      this.setCustomIntervalText();
+    if (this.props.customIntervalValue && this.props.timeScaleChangeUnit) {
+      if (this.props.customSelected && this.props.customIntervalValue !== 1 && this.state.customIntervalText === 'Custom') {
+        this.setCustomIntervalText();
+      } else if (this.props.customSelected && (this.props.customIntervalValue !== prevProps.customIntervalValue || this.props.timeScaleChangeUnit !== prevProps.timeScaleChangeUnit)) {
+        this.setCustomIntervalText();
+      }
     }
   }
 

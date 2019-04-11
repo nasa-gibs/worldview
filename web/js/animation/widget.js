@@ -7,7 +7,16 @@ import lodashIndexOf from 'lodash/indexOf';
 import util from '../util/util';
 
 export function animationWidget(models, config, ui) {
-  var zooms = ['yearly', 'monthly', 'daily', 'hourly', 'minutely', 'custom'];
+  const timeScaleFromNumberKey = {
+    '0': 'custom',
+    '1': 'year',
+    '2': 'month',
+    '3': 'day',
+    '4': 'hour',
+    '5': 'minute'
+  };
+  var customText = models.date.customDelta && models.date.customInterval ? `${models.date.customDelta} ${timeScaleFromNumberKey[models.date.customInterval]}` : 'custom';
+  var zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
   var self = {};
   var timeline = ui.timeline;
   var model = models.anim;
@@ -34,8 +43,8 @@ export function animationWidget(models, config, ui) {
       onPushPause: self.onPressPause,
       onPushGIF: self.onPressGIF,
       looping: model.rangeState.loop,
-      increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: lodashWithout(zooms, self.getIncrements()), // array of zooms without current zoom
+      increment: self.getIncrementText(), // config.currentZoom is a number: 1,2,3
+      incrementArray: lodashWithout(zooms, self.getIncrementText()), // array of zooms without current zoom
       onDateChange: self.dateUpdate,
       sliderLabel: 'Frames Per Second',
       sliderSpeed: model.rangeState.speed,
@@ -69,6 +78,7 @@ export function animationWidget(models, config, ui) {
     model.events.trigger('change');
     model.events.on('change', self.update);
     models.date.events.on('timeline-change', self.update);
+    models.date.events.on('custom-interval-update', self.update);
     if (models.data) {
       dataModel = models.data;
       dataModel.events.on('activate', function() {
@@ -155,8 +165,8 @@ export function animationWidget(models, config, ui) {
       // maxZoom: models.date.maxZoom,
       hasSubdailyLayers: models.layers.hasSubDaily(),
       playing: state.playing,
-      increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: lodashWithout(zooms, self.getIncrements()) // array of zooms without current zoom
+      increment: self.getIncrementText(), // config.currentZoom is a number: 1,2,3
+      incrementArray: lodashWithout(zooms, self.getIncrementText()) // array of zooms without current zoom
     });
   };
 
@@ -171,13 +181,33 @@ export function animationWidget(models, config, ui) {
    */
   self.getIncrements = function() {
     // if (models.date.maxZoom > 3) {
+      // debugger;
+    let customText = models.date.customDelta && models.date.customInterval ? `${models.date.customDelta} ${timeScaleFromNumberKey[models.date.customInterval]}` : 'custom';
     if (models.layers.hasSubDaily()) {
-      zooms = ['yearly', 'monthly', 'daily', 'hourly', 'minutely', 'custom'];
+      zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
     } else {
-      zooms = ['yearly', 'monthly', 'daily', 'custom'];
+      zooms = [customText, 'yearly', 'monthly', 'daily'];
     }
-    // return zooms[timeline.config.currentZoom - 1];
-    return zooms[models.date.selectedZoom - 1];
+    // return zooms[models.date.selectedZoom - 1];
+    let interval = models.date.interval ? models.date.interval : models.date.selectedZoom - 1;
+    console.log(customText, zooms[models.date.interval], models.date.interval, models.date.selectedZoom)
+    return zooms[interval];
+  };
+
+  self.getIncrementText = function() {
+    let customText = models.date.customDelta && models.date.customInterval ? `${models.date.customDelta} ${timeScaleFromNumberKey[models.date.customInterval]}` : 'custom';
+    if (models.layers.hasSubDaily()) {
+      zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
+    } else {
+      zooms = [customText, 'yearly', 'monthly', 'daily'];
+    }
+
+    if (models.date.customSelected) {
+      return zooms[0];
+    } else {
+      let interval = models.date.interval ? models.date.interval : models.date.selectedZoom - 1;
+      return zooms[interval];
+    }
   };
 
   /*
@@ -196,9 +226,13 @@ export function animationWidget(models, config, ui) {
    */
   self.onZoomSelect = function(increment) { // ? still want to change zoom level on select???
     var zoomLevel = lodashIndexOf(zooms, increment);
-    models.date.setSelectedZoom(zoomLevel + 1);
+    console.log(zoomLevel, increment)
+    // models.date.setSelectedZoom(zoomLevel);
     // return timeline.config.zoom(zoomLevel + 1);
-    models.date.events.trigger('zoom-change');
+    // models.date.events.trigger('zoom-change');
+    // models.date.events.trigger('interval-change');
+    models.date.changeIncrement(zoomLevel);
+    models.date.events.trigger('interval-change');
   };
 
   /*
@@ -269,6 +303,10 @@ export function animationWidget(models, config, ui) {
     var dateModel = models.date;
     var currentDate = new Date(dateModel[dateModel.activeDate]);
     var interval = ui.anim.ui.getInterval();
+    if (interval === 'custom') {
+      debugger;
+      interval = zooms[models.date.selectedZoom];
+    }
     console.log(interval)
     if (dateModel.selectedZoom === 4) {
       intervalStep = 70;
@@ -299,8 +337,10 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.onPressPlay = function() {
+    // debugger;
     let zoomLevel = ui.anim.ui.getInterval();
-    if (zoomLevel !== 'minute') {
+    console.log(zoomLevel)
+    if (zoomLevel !== 'minute' && zoomLevel !== 'hour' && zoomLevel !== 'custom') {
       // zero out start/end date times
       self.setZeroDateTimes();
     }

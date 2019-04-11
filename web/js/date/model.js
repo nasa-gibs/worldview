@@ -35,6 +35,15 @@ export function dateModel(models, config, spec) {
     'DEC'
   ];
 
+  const timeScaleFromNumberKey = {
+    '0': 'custom',
+    '1': 'year',
+    '2': 'month',
+    '3': 'day',
+    '4': 'hour',
+    '5': 'minute'
+  };
+
   var init = function() {
     var initial = spec.initial || util.now();
     self.select(initial);
@@ -46,8 +55,21 @@ export function dateModel(models, config, spec) {
   };
   // set selectedZoom level
   self.setSelectedZoom = (zoomLevel) => {
+    console.log(zoomLevel)
     self.selectedZoom = zoomLevel;
     self.events.trigger('state-update');
+  };
+  // select increment from animation dialog
+  self.changeIncrement = (zoomLevel) => {
+    // if custom
+    if (zoomLevel === 0) {
+      self.customSelected = true;
+      // check for customInterval selection else default to current interval
+      self.interval = self.customInterval ? self.customInterval : self.interval;
+    } else {
+      self.customSelected = false;
+      self.interval = zoomLevel;
+    }
   };
   self.setActiveDate = function(dateString) {
     self.activeDate = dateString;
@@ -58,6 +80,7 @@ export function dateModel(models, config, spec) {
     self.customDelta = delta;
     self.customInterval = interval;
     self.events.trigger('state-update');
+    self.events.trigger('custom-interval-update');
   };
   // select interval from tooltip
   self.setSelectedInterval = (interval, customSelected) => {
@@ -215,6 +238,8 @@ export function dateModel(models, config, spec) {
     // selected interval timescale
     if (state.inti) {
       self.interval = state.inti;
+    } else {
+      self.interval = 3;
     }
     // custom interval delta
     if (state.intcd) {

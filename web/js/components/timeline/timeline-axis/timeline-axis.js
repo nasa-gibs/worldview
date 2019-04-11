@@ -10,7 +10,8 @@ import Dragger from './timeline-dragger';
 import dateCalc from './date-calc';
 
 
-const timeScales = [ 'minute', 'hour', 'day', 'month', 'year' ];
+// const timeScales = [ 'minute', 'hour', 'day', 'month', 'year' ];
+const timeScales = [ 'year', 'month', 'day', 'hour', 'minute' ];
 const draggerWidth = 49;
 
 //? can set gridWidth, actual daeArrays (assume length will vary? - minute level will be more individual DOM els than day for example)
@@ -242,14 +243,15 @@ class TimelineAxis extends React.Component {
   wheelZoom = (e) => {
     // e.preventDefault(); //TODO: investigate treated as passive event error/warning when on
     let arrayIndex = timeScales.indexOf(this.props.timeScale);
+    let maxIndex = this.props.hasSubdailyLayers ? 4 : 2;
     if (e.deltaY > 0) { // wheel zoom out
-      if (arrayIndex < 4) {
-        let nextGreaterTimeScale = timeScales[arrayIndex + 1];
+      if (arrayIndex > 0) {
+        let nextGreaterTimeScale = timeScales[arrayIndex - 1];
         this.props.changeTimescale(nextGreaterTimeScale);
       }
     } else {
-      if (arrayIndex > 0) { // wheel zoom in
-        let nextSmallerTimeScale = timeScales[arrayIndex - 1];
+      if (arrayIndex < maxIndex) { // wheel zoom in
+        let nextSmallerTimeScale = timeScales[arrayIndex + 1];
         this.props.changeTimescale(nextSmallerTimeScale);
       }
     }

@@ -125,6 +125,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     }
     var dateArray = def.availableDates || [];
     if (options.date) {
+      // debugger;
       // TODO: comparison mode using this options.date key
       // need to continue conditional like below to get prevDateInDateRange ?
       // how does this interact with subdaily VS. non-subdaily and add/remove in different states?
@@ -132,7 +133,11 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
 
       if (def.period !== 'subdaily') {
         // # timeoffset fix handled here
-        date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
+        // date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
+        // date = new Date(options.date.getTime());
+        // date = new Date(util.clearTimeUTC(date));
+        date = util.clearTimeUTC(new Date(options.date.getTime()));
+        // console.log(date)
       } else {
         // date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
         // # timeoffset fix handled further down

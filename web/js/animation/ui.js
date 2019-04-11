@@ -10,7 +10,7 @@ export function animationUi(models, ui) {
   var animModel = models.anim;
   var queueLength;
   var queue = new Queue(5, Infinity);
-  var zooms = ['year', 'month', 'day', 'hour', 'minute'];
+  var zooms = ['custom', 'year', 'month', 'day', 'hour', 'minute'];
   var preload = {};
   var preloadArray;
   var inQueue;
@@ -40,7 +40,8 @@ export function animationUi(models, ui) {
     }
     if (models.data) {
       models.data.events.on('activate', self.refreshState);
-      models.date.events.on('zoom-change', self.refreshState);
+      // models.date.events.on('zoom-change', self.refreshState);
+      models.date.events.on('interval-change', self.refreshState);
       models.date.events.on('select', self.dateChange);
     }
     if (ui.map) {
@@ -184,9 +185,10 @@ export function animationUi(models, ui) {
    *
    */
   self.getInterval = function () {
-    // return zooms[ui.timeline.config.currentZoom - 1];
-    return zooms[models.date.selectedZoom - 1];
-    // return zooms[2];
+    // console.log(models.date.selectedZoom, models.date.interval)
+    // return zooms[models.date.selectedZoom - 1];
+    console.log (models.date.interval)
+    return zooms[models.date.interval];
   };
 
   /*
@@ -204,15 +206,27 @@ export function animationUi(models, ui) {
 
   // # need to change subdaily argument for custom intervals - rework for all zoom levels presumably
   self.nextDate = function (date) {
-    // console.log(util.dateAdd(date, self.getInterval(), 1), self.getInterval())
-    let interval = self.getInterval();
+    let customSelected = models.date.customSelected;
+    let interval;
+    let delta;
+console.log(models.date.customInterval)
+    if (customSelected) {
+      interval = zooms[Number(models.date.customInterval)] || zooms[3];
+      console.log(zooms[Number(models.date.customInterval)], interval)
+      if (interval === 'custom') {
+        interval = zooms[models.date.selectedZoom];
+      }
+      delta = models.date.customDelta || 1;
+    } else {
+      interval = self.getInterval();
+      console.log(interval)
+      delta = 1;
+    }
     console.log(interval)
-    return util.dateAdd(date, interval, 1);
-    // if (models.date.selectedZoom === 4) {
-    //   return util.dateAdd(date, self.getInterval(), 15);
-    // } else {
-    //   return util.dateAdd(date, self.getInterval(), 1);
-    // }
+    // let interval = self.getInterval();
+    // console.log(models.date.customInterval, date, interval, delta)
+    console.log(date,interval,delta)
+    return util.dateAdd(date, interval, delta);
   };
 
   /*

@@ -109,6 +109,7 @@ class Timeline extends React.Component {
 
   // handle SELECT of LEFT/RIGHT interval selection
   setTimeScaleIntervalChangeUnit = (intervalSelected, customSelected) => {
+    console.log('select', intervalSelected, customSelected)
     let intervalChangeAmt;
     if (intervalSelected === 'custom') {
       intervalSelected = this.state.customIntervalZoomLevel;
@@ -205,7 +206,7 @@ class Timeline extends React.Component {
               selectedDate={this.state.dateFormatted}
               selectedDateB={this.state.dateFormattedB}
               updateDate={this.updateDate}
-              subdaily={this.props.subdaily}
+              hasSubdailyLayers={this.state.hasSubdailyLayers}
               parentOffset={this.state.parentOffset}
               changeTimescale={this.changeTimescale}
               compareModeActive={this.state.compareModeActive}

@@ -538,6 +538,70 @@ export function timeline(models, config, ui) {
     });
   };
 
+  var changeToSelectedInterval = () => {
+    // debugger
+    console.log(models.date)
+    let customSelected = models.date.customSelected;
+    let timeScaleInterval = timeScaleFromNumberKey[models.date.interval];
+    let timeScaleChangeUnit = timeScaleFromNumberKey[models.date.customInterval];
+    let intervalChangeAmt = models.date.customDelta;
+
+    // let valueText = customSelected ? intervalChangeAmt : 1;
+    // let intervalUnitText = customSelected ? timeScaleChangeUnit.toUpperCase().substr(0, 3) : timeScaleInterval.toUpperCase().substr(0, 3);
+
+    // let zoomCustomText = document.querySelector('#zoom-custom');
+    // zoomCustomText.textContent = `${valueText} ${intervalUnitText}`;
+
+    if (customSelected) {
+      let customIntervalModalOpen = false;
+      if (!models.date.customDelta || !models.date.customInterval) {
+        customIntervalModalOpen = true;
+      }
+
+      self.reactComponent.setState({
+        timeScaleChangeUnit: timeScaleChangeUnit,
+        customIntervalValue: intervalChangeAmt,
+        intervalChangeAmt: intervalChangeAmt,
+        customIntervalModalOpen: customIntervalModalOpen,
+        customSelected: true
+      });
+    } else {
+      self.reactComponent.setState({
+        timeScaleChangeUnit: timeScaleInterval,
+        intervalChangeAmt: 1,
+        customIntervalModalOpen: false,
+        customSelected: false
+      });
+    }
+
+    // let zoomCustomText = document.querySelector('#zoom-custom');
+    // zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
+    // // model.events.trigger('zoom-change');
+    // self.reactComponent.setState({
+    //   timeScaleChangeUnit: zoomLevel,
+    //   customIntervalValue: intervalValue,
+    //   customIntervalZoomLevel: zoomLevel,
+    //   intervalChangeAmt: intervalValue,
+    //   customIntervalModalOpen: false
+    // });
+
+
+    // // check if selected interval is custom
+
+    // // if custom, check if custom has been set or if still 'custom' text/null state
+
+    // // open custom panel
+    // let customIntervalModalOpen = false;
+
+    // let timeScaleChangeUnit = self.customInterval;
+    // let customSelected = true;
+    // let intervalChangeAmt = self.customDelta;
+
+    // self.customSelected = null; // boolean
+    // self.customDelta = null; // number
+    // self.customInterval = null;
+  };
+
   var clickAnimationButton = () => {
     // console.log(ui);
   };
@@ -561,6 +625,7 @@ export function timeline(models, config, ui) {
   };
 
   const timeScaleFromNumberKey = {
+    '0': 'custom',
     '1': 'year',
     '2': 'month',
     '3': 'day',
@@ -569,6 +634,7 @@ export function timeline(models, config, ui) {
   };
 
   const timeScaleToNumberKey = {
+    'custom': '0',
     'year': '1',
     'month': '2',
     'day': '3',
@@ -864,7 +930,8 @@ export function timeline(models, config, ui) {
       models.compare.events.on('toggle', onCompareModeToggle);
     }
 
-    model.events.on('zoom-change', updateTimeScaleState);
+    // model.events.on('zoom-change', updateTimeScaleState);
+    model.events.on('interval-change', changeToSelectedInterval);
 
     models.layers.events.on('change', onLayerUpdate);
 

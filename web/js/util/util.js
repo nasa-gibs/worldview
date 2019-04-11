@@ -395,6 +395,7 @@ export default (function (self) {
   };
 
   self.dateAdd = function (date, interval, amount) {
+    console.log(date, interval, amount)
     var month, maxDay, year;
     var newDate = new Date(date);
     switch (interval) {

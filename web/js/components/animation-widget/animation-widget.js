@@ -131,6 +131,7 @@ class AnimationWidget extends React.Component {
     }
   }
   render() {
+    console.log(this.state.increment)
     return (
       <div
         id="wv-animation-widget"
