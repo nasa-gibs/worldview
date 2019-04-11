@@ -7,9 +7,9 @@ export default class VectorMetaModal extends React.Component {
   render() {
     return (
       <Modal isOpen={this.props.metaModal} toggle={this.props.toggleMetaModal} className={this.props.className} backdrop={false} fade={false} keyboard={true}>
-        <ModalHeader toggle={this.props.toggleMetaModal} charCode="">"this.props.vectorMeta.title"</ModalHeader>
+        <ModalHeader toggle={this.props.toggleMetaModal} charCode="">{this.props.metaTitle}</ModalHeader>
         <ModalBody>
-          <MetaTable vectorMeta={this.props.vectorMeta} />
+          <MetaTable metaTitle={this.props.metaTitle} metaFeatures={this.props.metaFeatures} metaLegend={this.props.metaLegend} />
         </ModalBody>
         <ModalFooter />
       </Modal>
@@ -20,6 +20,8 @@ export default class VectorMetaModal extends React.Component {
 VectorMetaModal.propTypes = {
   metaModal: PropTypes.bool.isRequired,
   toggleMetaModal: PropTypes.func.isRequired,
-  vectorMeta: PropTypes.object.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  metaTitle: PropTypes.string,
+  metaFeatures: PropTypes.object.isRequired,
+  metaLegend: PropTypes.object.isRequired
 };

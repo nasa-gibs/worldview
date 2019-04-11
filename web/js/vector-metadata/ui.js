@@ -7,11 +7,13 @@ export function vectorMetaUi(models, ui, config) {
   var map;
 
   var init = function() {
+    var metaTitle;
+    map = ui.map.selected;
+
     self.reactComponent = ReactDOM.render(
       React.createElement(VectorMeta, getInitialProps()),
       document.getElementById('wv-vector-metadata')
     );
-    map = ui.map.selected;
 
     // Clicking on a vector shows it's attributes in console.
     map.on('click', function(e) {
@@ -19,6 +21,7 @@ export function vectorMetaUi(models, ui, config) {
       var def;
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
         def = layer.wv.def;
+        metaTitle = def.title;
         if (def.vectorData && def.vectorData.id) {
           let features = feature.getProperties();
           let vectorDataId = def.vectorData.id;
@@ -39,28 +42,29 @@ export function vectorMetaUi(models, ui, config) {
 
       if (uniqueMeta.length) {
         let vectorPointMeta = uniqueMeta[0];
-        console.log(vectorPointMeta);
-
         let legend = vectorPointMeta.legend;
-
         // MVT Features table (Use legend object as tooltips)
         let features = vectorPointMeta.features;
-        console.log('-------------------');
-        console.log('title: ', def.title);
-        console.log('-------------------');
-        Object.entries(features).forEach(feature => {
-          let featureName = feature[0];
-          console.log(featureName);
-          Object.values(legend['mvt_properties']).forEach(property => {
-            if (property['Identifier'] === featureName) { console.log(property); }
-          });
+
+        // Object.entries(features).forEach(feature => {
+        //   let featureName = feature[0];
+        //   console.log(featureName); // TITLE LINE
+        //   Object.values(legend['mvt_properties']).forEach(property => {
+        //     if (property['Identifier'] === featureName) { console.log(property); } //TOOLTIP LINE
+        //   });
+        // });
+        // console.log('-------------------');
+        // Object.entries(features).forEach(feature => {
+        //   let featureData = feature[1];
+        //   console.log(featureData); // DATA LINE (Should match table headings)
+        // });
+        // console.log('-------------------');
+        self.reactComponent.setState({
+          metaModal: true,
+          metaTitle: metaTitle,
+          metaFeatures: features,
+          metaLegend: legend
         });
-        console.log('-------------------');
-        Object.entries(features).forEach(feature => {
-          let featureData = feature[1];
-          console.log(featureData);
-        });
-        console.log('-------------------');
       }
     });
   };
@@ -71,7 +75,9 @@ export function vectorMetaUi(models, ui, config) {
       config: config,
       ui: ui,
       metaModal: false, // initial modal state
-      vectorMeta: {} // legend+feature object gathered onclick
+      metaTitle: '',
+      metaFeatures: {},
+      metaLegend: {}
     };
   };
 

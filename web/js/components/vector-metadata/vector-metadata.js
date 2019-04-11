@@ -10,7 +10,10 @@ export default class VectorMeta extends React.Component {
       models: props.models,
       config: props.config,
       ui: props.ui,
-      metaModal: props.metaModal
+      metaModal: props.metaModal,
+      metaTitle: props.metaTitle,
+      metaFeatures: props.metaFeatures,
+      metaLegend: props.metaLegend
     };
 
     this.toggleMetaModal = this.toggleMetaModal.bind(this);
@@ -44,19 +47,14 @@ export default class VectorMeta extends React.Component {
   }
 
   render() {
-    if (this.state.stories) {
-      return (
-        <div>
-          <VectorMetaModal
-            metaModal={this.state.metaModal}
-            toggleMetaModal={this.toggleMetaModal}
-            vectorMeta={this.props.vectorMeta}
-          />
-        </div>
-      );
-    } else {
-      return null;
-    }
+    return (
+      <VectorMetaModal
+        metaModal={this.state.metaModal}
+        toggleMetaModal={this.toggleMetaModal}
+        vectorMeta={this.props.vectorMeta}
+        metaTitle={this.state.metaTitle}
+      />
+    );
   }
 }
 
@@ -65,5 +63,7 @@ VectorMeta.propTypes = {
   config: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   metaModal: PropTypes.bool.isRequired,
-  vectorMeta: PropTypes.object.isRequired
+  metaTitle: PropTypes.string,
+  metaFeatures: PropTypes.object.isRequired,
+  metaLegend: PropTypes.object.isRequired
 };
