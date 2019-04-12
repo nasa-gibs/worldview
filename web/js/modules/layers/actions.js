@@ -30,13 +30,14 @@ export function resetLayers(activeString) {
     });
   };
 }
-export function addLayer(id) {
+export function addLayer(id, spec) {
+  spec = spec || {};
   return (dispatch, getState) => {
     const { layers, compare } = getState();
     const activeString = compare.isActiveA ? 'active' : 'activeB';
     const newLayers = addLayerSelector(
       id,
-      {},
+      spec,
       layers[activeString],
       layers.layerConfig
     );

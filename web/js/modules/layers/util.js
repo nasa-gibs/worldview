@@ -16,7 +16,6 @@ export function getLayersParameterSetup(
   errors
 ) {
   const initialState = lodashCloneDeep(models.layers.active);
-  console.log(legacyState);
   models.palettes.load(legacyState, errors);
   if (models.compare.active) {
     models.layers.activeB = lodashCloneDeep(initialState);
@@ -231,28 +230,39 @@ export function dateOverlap(period, dateRanges) {
   // return the final results
   return result;
 }
-var useLookup = function(layerId, groupStr) {
-  var use = false;
-  var active = self[groupStr][layerId].maps;
-
-  lodashEach(active, function(palette, index) {
-    if (palette.custom) {
-      use = true;
-      return false;
-    }
-    var rendered = self.getRenderedPalette(layerId, index);
-    if (palette.type !== 'classification') {
-      if (palette.min <= 0) {
-        delete palette.min;
-      }
-      if (palette.max >= rendered.entries.values.length) {
-        delete palette.max;
-      }
-      if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max)) {
-        use = true;
-        return false;
-      }
+// Takes a layer id and returns a true or false value
+// if the layer exists in the active layer list
+export function exists(layer, activeLayers) {
+  var found = false;
+  lodashEach(activeLayers, function(current) {
+    if (layer === current.id) {
+      found = true;
     }
   });
-  return use;
-};
+  return found;
+}
+// var useLookup = function(layerId, groupStr) {
+//   var use = false;
+//   var active = self[groupStr][layerId].maps;
+
+//   lodashEach(active, function(palette, index) {
+//     if (palette.custom) {
+//       use = true;
+//       return false;
+//     }
+//     var rendered = self.getRenderedPalette(layerId, index);
+//     if (palette.type !== 'classification') {
+//       if (palette.min <= 0) {
+//         delete palette.min;
+//       }
+//       if (palette.max >= rendered.entries.values.length) {
+//         delete palette.max;
+//       }
+//       if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max)) {
+//         use = true;
+//         return false;
+//       }
+//     }
+//   });
+//   return use;
+// };

@@ -9,7 +9,7 @@ import { dataModel } from './data/model';
 import { projectionModel } from './projection/model';
 import { compareModel } from './compare/model';
 import { tourModel } from './tour/model';
-import naturalEventsModel from './natural-events/model';
+import naturalEventsModel from './map/natural-events/model';
 
 /**
  * Return initiated legacy models Object

@@ -5,9 +5,18 @@ import * as olProj from 'ol/proj';
 
 import markers from './markers';
 import track from './track';
-import wvui from '../ui/ui';
-import util from '../util/util';
+import wvui from '../../ui/ui';
+import util from '../../util/util';
 import { naturalEventsUtilGetEventById } from './util';
+import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
+import * as EVENT_CONSTANTS from '../../modules/natural-events/constants';
+import { exists as layerExists } from '../../modules/layers/util';
+import {
+  toggleVisibility as setLayerVisibility,
+  addLayer
+} from '../../modules/layers/actions';
+import { deselectEvent as deselectEventAction } from '../../modules/natural-events/actions';
+import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 import googleTagManager from 'googleTagManager';
 
 const zoomLevelReference = {
@@ -15,170 +24,209 @@ const zoomLevelReference = {
   Volcanoes: 6
 };
 
-export default function naturalEventsUI(models, ui, config, request) {
+export default function naturalEventsUI(models, ui, config, store) {
   var self = {};
   var eventVisibilityAlert;
   var map;
   var view;
-  var model = models.naturalEvents;
-  model.active = false;
+  var isLoading = true;
+  self.eventsData = [];
+  self.layers = config.naturalEvents.layers;
+  self.events = util.events();
   self.markers = [];
   self.selected = {};
   self.selecting = false;
-  var naturalEventMarkers = markers(models, ui, config);
-  var naturalEventsTrack = track(models, ui, config);
+  var naturalEventMarkers = markers(ui, store);
+  var naturalEventsTrack = track(ui, store);
+  /**
+   * Suscribe to redux store and listen for
+   * specific action types
+   */
+  const subscribeToStore = function() {
+    const state = store.getState();
+    const events = state.events;
+    const action = state.lastAction;
+    const {
+      requestedEvents,
+      requestedEventSources,
+      requestedEventCategories
+    } = state;
 
+    switch (action.type) {
+      case CHANGE_SIDEBAR_TAB:
+        return onSidebarChange(action.activeTab);
+      case EVENT_CONSTANTS.SELECT_EVENT:
+        return self.selectEvent(action.id, action.date);
+      case EVENT_CONSTANTS.REQUEST_EVENTS_SUCCESS:
+      case EVENT_CONSTANTS.REQUEST_SOURCES_SUCCESS:
+      case EVENT_CONSTANTS.REQUEST_CATEGORIES_SUCCESS:
+        if (!isLoading) return;
+        isLoading =
+          requestedEvents.isLoading ||
+          requestedEventSources.isLoading ||
+          requestedEventCategories.isLoading;
+        if (!isLoading) {
+          self.eventsData = requestedEvents.response;
+        }
+        if (!isLoading && state.sidebar.activeTab === 'events') {
+          onQueryResults();
+
+          const selected = events.selected;
+
+          if (selected.id) {
+            return self.selectEvent(selected.id, selected.date, null, true);
+          }
+        }
+        return;
+      case CHANGE_PROJECTION:
+        return !isLoading ? onProjChange(action.id) : '';
+    }
+  };
+  const onSidebarChange = function(tab) {
+    const proj = store.getState().proj;
+    if (tab === 'events') {
+      googleTagManager.pushEvent({
+        event: 'natural_events_tab'
+      });
+
+      // Remove previously stored markers
+      naturalEventMarkers.remove(self.markers);
+      // Store markers so the can be referenced later
+      self.markers = naturalEventMarkers.draw();
+
+      var isZoomed = Math.floor(view.getZoom()) >= 3;
+      if (isZoomed || proj.selected.id !== 'geographic') {
+        self.filterEventList();
+      }
+      // check if selected event is in changed projection
+      if (self.selected.id) {
+        let findSelectedInProjection = lodashFind(self.markers, function(
+          marker
+        ) {
+          if (marker.pin) {
+            if (marker.pin.id === self.selected.id) {
+              // keep event highlighted when available in changed projection
+              // highlightEventInList(self.selected.id, self.selected.date);
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            // highlightEventInList();
+            return false;
+          }
+        });
+        // remove selected event if not in changed projection
+        if (!findSelectedInProjection) {
+          self.deselectEvent();
+          self.filterEventList();
+        }
+      }
+    } else {
+      naturalEventMarkers.remove(self.markers);
+      if (eventVisibilityAlert) {
+        eventVisibilityAlert.dialog('close');
+        eventVisibilityAlert = null;
+      }
+    }
+  };
+  // get events for projection change
+  const onProjChange = function(e) {
+    const state = store.getState();
+    map = ui.map.selected;
+    view = map.getView();
+    naturalEventMarkers = markers(ui, config);
+    naturalEventsTrack = track(ui, config);
+    // filter events within projection view extent
+    self.filterEventList();
+
+    // handle list filter on map move
+    ui.map.selected.on('moveend', function(e) {
+      self.filterEventList();
+    });
+
+    if (state.sidebar.activeTab === 'events') {
+      // Remove previously stored markers
+      naturalEventMarkers.remove(self.markers);
+      // Store markers so the can be referenced later
+      self.markers = naturalEventMarkers.draw();
+      self.filterEventList();
+      // check if selected event is in changed projection
+      if (self.selected.id) {
+        let findSelectedInProjection = lodashFind(self.markers, function(
+          marker
+        ) {
+          if (marker.pin) {
+            if (marker.pin.id === self.selected.id) {
+              // keep event highlighted when available in changed projection
+              // highlightEventInList(self.selected.id, self.selected.date);
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            // highlightEventInList();
+            return false;
+          }
+        });
+        // remove selected event if not in changed projection
+        if (!findSelectedInProjection) {
+          self.deselectEvent();
+          self.filterEventList();
+        } else {
+          let event = naturalEventsUtilGetEventById(
+            state.requestedEventSources.response,
+            self.selected.id
+          );
+          naturalEventsTrack.update(
+            event,
+            ui.map.selected,
+            self.selected.date,
+            self.selectEvent
+          );
+        }
+      }
+    }
+  };
+  const onQueryResults = function() {
+    const state = store.getState();
+
+    if (state.sidebar.activeTab === 'events') {
+      // Remove previously stored markers
+      naturalEventMarkers.remove(self.markers);
+      // Store markers so the can be referenced later
+      self.markers = naturalEventMarkers.draw();
+    }
+
+    var isZoomed = Math.floor(view.getZoom()) >= 3;
+    if (isZoomed || state.proj.selected.id !== 'geographic') {
+      self.filterEventList();
+    }
+
+    map.on('moveend', function(e) {
+      var isZoomed = Math.floor(view.getZoom()) >= 3;
+      if (isZoomed || state.proj.selected.id !== 'geographic') {
+        self.filterEventList();
+      }
+    });
+
+    // Reselect previously selected event
+    if (self.selected.id) {
+      self.selectEvent(
+        self.selected.id,
+        self.selected.date || null,
+        null,
+        true
+      );
+    }
+  };
   var init = function() {
     map = ui.map.selected;
     // Display loading information for user feedback on slow network
 
     view = map.getView();
-    model.events.on('select-init-event', self.selectEvent);
-    request.events.on('queryResults', function() {
-      if (!(model.data.events || model.data.sources)) return;
 
-      if (model.active) {
-        // Remove previously stored markers
-        naturalEventMarkers.remove(self.markers);
-        // Store markers so the can be referenced later
-        self.markers = naturalEventMarkers.draw();
-      }
-
-      var isZoomed = Math.floor(view.getZoom()) >= 3;
-      if (isZoomed || models.proj.selected.id !== 'geographic') {
-        self.filterEventList();
-      }
-
-      map.on('moveend', function(e) {
-        var isZoomed = Math.floor(view.getZoom()) >= 3;
-        if (isZoomed || models.proj.selected.id !== 'geographic') {
-          self.filterEventList();
-        } else {
-          model.events.trigger('list-change', { all: true }, false);
-        }
-      });
-
-      // Reselect previously selected event
-      if (self.selected.id) {
-        self.selectEvent(
-          self.selected.id,
-          self.selected.date || null,
-          null,
-          true
-        );
-      }
-    });
-    ui.sidebar.events.on('selectTab', function(tab) {
-      if (tab === 'events') {
-        model.active = true;
-        googleTagManager.pushEvent({
-          event: 'natural_events_tab'
-        });
-
-        // Remove previously stored markers
-        naturalEventMarkers.remove(self.markers);
-        // Store markers so the can be referenced later
-        self.markers = naturalEventMarkers.draw();
-
-        var isZoomed = Math.floor(view.getZoom()) >= 3;
-        if (isZoomed || models.proj.selected.id !== 'geographic') {
-          self.filterEventList();
-        }
-        // check if selected event is in changed projection
-        if (self.selected.id) {
-          let findSelectedInProjection = lodashFind(self.markers, function(
-            marker
-          ) {
-            if (marker.pin) {
-              if (marker.pin.id === self.selected.id) {
-                // keep event highlighted when available in changed projection
-                // highlightEventInList(self.selected.id, self.selected.date);
-                return true;
-              } else {
-                return false;
-              }
-            } else {
-              // highlightEventInList();
-              return false;
-            }
-          });
-          // remove selected event if not in changed projection
-          if (!findSelectedInProjection) {
-            self.deselectEvent();
-            self.filterEventList();
-          }
-        }
-      } else {
-        model.active = false;
-        naturalEventMarkers.remove(self.markers);
-        if (eventVisibilityAlert) {
-          eventVisibilityAlert.dialog('close');
-          eventVisibilityAlert = null;
-        }
-      }
-      model.events.trigger('change');
-    });
-
-    // get events for projection change
-    models.proj.events.on('select', function(e) {
-      map = ui.map.selected;
-      view = map.getView();
-      naturalEventMarkers = markers(models, ui, config);
-      naturalEventsTrack = track(models, ui, config);
-
-      if (!(model.data.events || model.data.sources)) return;
-
-      // filter events within projection view extent
-      self.filterEventList();
-
-      // handle list filter on map move
-      ui.map.selected.on('moveend', function(e) {
-        self.filterEventList();
-      });
-
-      if (model.active) {
-        // Remove previously stored markers
-        naturalEventMarkers.remove(self.markers);
-        // Store markers so the can be referenced later
-        self.markers = naturalEventMarkers.draw();
-        self.filterEventList();
-        // check if selected event is in changed projection
-        if (self.selected.id) {
-          let findSelectedInProjection = lodashFind(self.markers, function(
-            marker
-          ) {
-            if (marker.pin) {
-              if (marker.pin.id === self.selected.id) {
-                // keep event highlighted when available in changed projection
-                // highlightEventInList(self.selected.id, self.selected.date);
-                return true;
-              } else {
-                return false;
-              }
-            } else {
-              // highlightEventInList();
-              return false;
-            }
-          });
-          // remove selected event if not in changed projection
-          if (!findSelectedInProjection) {
-            self.deselectEvent();
-            self.filterEventList();
-          } else {
-            let event = naturalEventsUtilGetEventById(
-              model.data.events,
-              self.selected.id
-            );
-            naturalEventsTrack.update(
-              event,
-              ui.map.selected,
-              self.selected.date,
-              self.selectEvent
-            );
-          }
-        }
-      }
-    });
+    store.subscribe(subscribeToStore);
   };
   var getZoomPromise = function(
     event,
@@ -197,14 +245,13 @@ export default function naturalEventsUI(models, ui, config, request) {
     var isIdChange = !self.selected || self.selected.id !== id;
     var prevId = self.selected.id ? self.selected.id : false;
     var prevEvent = prevId
-      ? naturalEventsUtilGetEventById(model.data.events, prevId)
+      ? naturalEventsUtilGetEventById(self.eventsData, prevId)
       : false;
     var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
 
     // Store selected id and date in model
     self.selected = { id: id };
-    var event = naturalEventsUtilGetEventById(model.data.events, id);
-
+    var event = naturalEventsUtilGetEventById(self.eventsData, id);
     if (!event) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
@@ -275,10 +322,10 @@ export default function naturalEventsUI(models, ui, config, request) {
       }
       naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
       self.selecting = false;
-      model.events.trigger('selection-done', self.selected);
+      self.events.trigger('selection-done', self.selected);
     });
 
-    model.events.trigger('selected-event', self.selected);
+    self.events.trigger('selected-event', self.selected);
   };
 
   self.deselectEvent = function() {
@@ -286,8 +333,8 @@ export default function naturalEventsUI(models, ui, config, request) {
     naturalEventMarkers.remove(self.markers);
     self.markers = naturalEventMarkers.draw();
     naturalEventsTrack.update(null, ui.map.selected);
-    model.events.trigger('selected-event', self.selected);
-    model.events.trigger('change');
+    store.dispatch(deselectEventAction);
+    self.events.trigger('change');
   };
 
   self.getDefaultEventDate = function(event) {
@@ -308,14 +355,16 @@ export default function naturalEventsUI(models, ui, config, request) {
    * @param  {Boolean} showAll - show all available points in projection
    */
   self.filterEventList = function(showAll) {
-    if (!model.data.events || !model.active) return;
+    const state = store.getState();
+    const proj = state.proj;
+    if (isLoading || !state.sidebar.activeTab === 'events') return;
     var hiddenEventsCounter = self.markers.length;
     var extent = view.calculateExtent();
-    var maxExtent = models.proj.selected.maxExtent;
+    var maxExtent = proj.selected.maxExtent;
     var visibleListEvents = {};
     var showListAllButton = false;
 
-    model.data.events.forEach(function(naturalEvent) {
+    self.eventsData.forEach(function(naturalEvent) {
       var isSelectedEvent = self.selected.id === naturalEvent.id;
       var date = self.getDefaultEventDate(naturalEvent);
       if (self.selected && self.selected.date) {
@@ -328,15 +377,11 @@ export default function naturalEventsUI(models, ui, config, request) {
 
       var coordinates = geometry.coordinates;
 
-      if (models.proj.selected.id !== 'geographic') {
+      if (proj.selected.id !== 'geographic') {
         // check for polygon geometries for targeted projection coordinate transform
         if (geometry.type === 'Polygon') {
           let coordinatesTransform = coordinates[0].map(coordinate => {
-            return olProj.transform(
-              coordinate,
-              'EPSG:4326',
-              models.proj.selected.crs
-            );
+            return olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs);
           });
           let geomExtent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(geomExtent);
@@ -345,7 +390,7 @@ export default function naturalEventsUI(models, ui, config, request) {
           coordinates = olProj.transform(
             coordinates,
             'EPSG:4326',
-            models.proj.selected.crs
+            proj.selected.crs
           );
         }
       } else {
@@ -371,45 +416,42 @@ export default function naturalEventsUI(models, ui, config, request) {
     });
 
     // hide footer 'List All' button/message if all events are visible
-    if (hiddenEventsCounter > model.data.events.length) {
+    if (hiddenEventsCounter > self.eventsData.length) {
       showListAllButton = true;
     } else {
       showListAllButton = false;
     }
-    model.events.trigger('list-change', visibleListEvents, showListAllButton);
+    self.events.trigger('list-change', visibleListEvents, showListAllButton);
   };
 
   var activateLayersForCategory = function(category) {
+    const state = store.getState();
+    const { layers, compare, proj } = state;
     category = category || 'Default';
-    let currentProjection = models.proj.selected.id;
-    var layerString = models.layers.activeLayers;
+    let currentProjection = proj.selected.id;
     // Turn on the relevant layers for the event type based on projection and category
-    var layers = model.layers[currentProjection][category];
-    if (!layers) layers = model.layers[currentProjection]['Default'];
+    var activeLayers = self.layers[currentProjection][category];
+    if (!activeLayers) activeLayers = self.layers[currentProjection]['Default'];
     // Turn off all layers in list first
-    lodashEach(models.layers[layerString], function(layer) {
-      models.layers.setVisibility(layer.id, false, layerString);
+    lodashEach(layers[compare.activeString], function(layer) {
+      store.dispatch(setLayerVisibility(layer.id, false));
     });
     // Turn on or add new layers
-    lodashEach(layers, function(layer) {
+    lodashEach(activeLayers, function(layer) {
       var id = layer[0];
       var visible = layer[1];
-      if (models.layers.exists(id, models.layers[layerString])) {
-        models.layers.setVisibility(id, visible, layerString);
+      if (layerExists(id, layers[compare.activeString])) {
+        store.dispatch(setLayerVisibility(id, visible));
       } else {
-        models.layers.add(
-          id,
-          {
-            visible: visible
-          },
-          layerString,
-          'natural-event'
-        );
+        addLayer(id, {
+          visible: visible
+        });
       }
     });
   };
 
   var zoomToEvent = function(event, date, rotation, isSameEventID) {
+    const proj = store.getState().proj;
     var category = event.categories[0].title;
     var zoom = isSameEventID
       ? ui.map.selected.getView().getZoom()
@@ -425,24 +467,21 @@ export default function naturalEventsUI(models, ui, config, request) {
           olProj.transform(
             geometry.coordinates[0],
             'EPSG:4326',
-            models.proj.selected.crs
+            proj.selected.crs
           )
         )
         : olProj.transform(
           geometry.coordinates,
           'EPSG:4326',
-          models.proj.selected.crs
+          proj.selected.crs
         );
 
     // handle extent transform for polar
-    if (
-      geometry.type === 'Polygon' &&
-      models.proj.selected.id !== 'geographic'
-    ) {
+    if (geometry.type === 'Polygon' && proj.selected.id !== 'geographic') {
       coordinates = olProj.transformExtent(
         coordinates,
         'EPSG:4326',
-        models.proj.selected.crs
+        proj.selected.crs
       );
     }
     return ui.map.animate.fly(coordinates, zoom, rotation);

@@ -3,6 +3,7 @@ import {
   REQUEST_SOURCES,
   REQUEST_CATEGORIES,
   SELECT_EVENT,
+  DESELECT_EVENT,
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE
 } from './constants';
@@ -40,8 +41,17 @@ export function requestSources(location) {
 }
 
 export function selectEvent(id, date) {
+  console.log(id, date);
   return {
     type: SELECT_EVENT,
+    id: id,
+    date: date
+  };
+}
+
+export function deselectEvent(id, date) {
+  return {
+    type: DESELECT_EVENT,
     id: id,
     date: date
   };

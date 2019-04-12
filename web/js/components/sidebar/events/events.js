@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 import {
   requestEvents,
   requestCategories,
-  requestSources
+  requestSources,
+  selectEvent,
+  deselectEvent
 } from '../../../modules/natural-events/actions';
 import { getEventsWithinExtent } from '../../../modules/natural-events/selectors';
 import { get as lodashGet } from 'lodash';
@@ -84,7 +86,7 @@ class Events extends React.Component {
                   <Event
                     key={event.id}
                     event={event}
-                    selectEvent={selectEvent}
+                    selectEvent={() => selectEvent(event.id, event.date)}
                     deselectEvent={deselectEvent}
                     selectedDate={
                       selected.id === event.id &&
@@ -105,6 +107,12 @@ class Events extends React.Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
+  selectEvent: (id, date) => {
+    dispatch(selectEvent(id, date));
+  },
+  deselectEvent: (id, date) => {
+    dispatch(deselectEvent());
+  },
   requestEvents: url => {
     dispatch(requestEvents(url));
   },
@@ -123,6 +131,7 @@ function mapStateToProps(state) {
     config
   } = state;
   const { selected, showAll } = state.events;
+
   const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoading =
     requestedEvents.isLoading ||

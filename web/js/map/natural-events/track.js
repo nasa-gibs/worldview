@@ -7,6 +7,8 @@ import OlStyleStyle from 'ol/style/Style';
 import * as olExtent from 'ol/extent';
 import OlGeomMultiLineString from 'ol/geom/MultiLineString';
 import * as olProj from 'ol/proj';
+import { CHANGE_PROJECTION } from '../../modules/projection/constants';
+import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import {
   find as lodashFind,
   each as lodashEach,
@@ -20,21 +22,23 @@ import {
   naturalEventsClusterCreateObject,
   naturalEventsClusterSort
 } from './cluster';
+import { mapUtilZoomAction } from '../util';
+import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 
-import { mapUtilZoomAction } from '../map/util';
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
 const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
 
-export default function naturalEventsTrack(models, ui, config) {
+export default function naturalEventsTrack(ui, store) {
   var self = {};
-  var model = models.naturalEvents;
   self.trackDetails = {};
   self.active = false;
+
   /**
    * @return {void}
    */
   var init = function() {
     const map = ui.map.selected;
+    store.subscribe(subscribeToStore);
     map.on('moveend', function(e) {
       if (self.active) {
         if (self.trackDetails.id) {
@@ -43,14 +47,13 @@ export default function naturalEventsTrack(models, ui, config) {
           let selectedEvent = ui.naturalEvents.selected;
           if (selectedEvent.date) {
             let event = naturalEventsUtilGetEventById(
-              model.data.events,
+              ui.naturalEvents.eventsData,
               selectedEvent.id
             );
-            debounceTrackUpdate(
-              event,
-              selectedEvent.date,
-              map,
-              ui.naturalEvents.selectEvent
+            debounceTrackUpdate(event, selectedEvent.date, map, () =>
+              store.dispatch(
+                selectEventAction(selectedEvent.id, selectedEvent.date)
+              )
             );
           }
         }
@@ -89,29 +92,40 @@ export default function naturalEventsTrack(models, ui, config) {
         }
       }
     });
-    ui.sidebar.events.on('selectTab', function(tab) {
-      if (tab === 'events') {
-        let selectedEvent = ui.naturalEvents.selected;
-        if (selectedEvent.date) {
-          let event = naturalEventsUtilGetEventById(
-            model.data.events,
-            selectedEvent.id
-          );
-          self.update(
-            event,
-            map,
-            selectedEvent.date,
-            ui.naturalEvents.selectEvent
-          );
-        }
-      } else {
-        if (self.trackDetails.id) self.update(null, map);
+  };
+  /**
+   * Suscribe to redux store and listen for
+   * specific action types
+   */
+  const subscribeToStore = function() {
+    const state = store.getState();
+    const action = state.lastAction;
+    switch (action.type) {
+      case CHANGE_SIDEBAR_TAB:
+        return onSidebarChange(action.activeTab);
+      case CHANGE_PROJECTION:
+        // update/remove track on projection change
+        if (self.trackDetails.id) return self.update(null, ui.map.selected);
+    }
+  };
+  const onSidebarChange = function(tab) {
+    const map = ui.map.selected;
+    if (tab === 'events') {
+      let selectedEvent = ui.naturalEvents.selected;
+      if (selectedEvent.date) {
+        let event = naturalEventsUtilGetEventById(
+          ui.naturalEvents.eventsData,
+          selectedEvent.id
+        );
+        self.update(event, map, selectedEvent.date, () =>
+          store.dispatch(
+            selectEventAction(selectedEvent.id, selectedEvent.date)
+          )
+        );
       }
-    });
-    // update/remove track on projection change
-    models.proj.events.on('select', function(e) {
+    } else {
       if (self.trackDetails.id) self.update(null, map);
-    });
+    }
   };
   /**
    * Remove track
@@ -137,6 +151,7 @@ export default function naturalEventsTrack(models, ui, config) {
    * @return {[type]}
    */
   self.update = function(event, map, selectedDate, callback) {
+    const proj = store.getState().proj;
     var newTrackDetails;
     var trackDetails = self.trackDetails;
     if (!event || event.geometries.length < 2) {
@@ -159,7 +174,7 @@ export default function naturalEventsTrack(models, ui, config) {
           if (isClusteredSelection) {
             newTrackDetails = self.removeTrack(map, trackDetails);
             newTrackDetails = createTrack(
-              models,
+              proj,
               event,
               map,
               selectedDate,
@@ -179,19 +194,13 @@ export default function naturalEventsTrack(models, ui, config) {
       } else {
         // Remove old DOM Elements
         newTrackDetails = self.removeTrack(map, trackDetails);
-        newTrackDetails = createTrack(
-          models,
-          event,
-          map,
-          selectedDate,
-          callback
-        );
+        newTrackDetails = createTrack(proj, event, map, selectedDate, callback);
         map.addLayer(newTrackDetails.track);
       }
     } else {
       // If no track element currenlty exists,
       // but there is a multiday event, build a new track
-      newTrackDetails = createTrack(models, event, map, selectedDate, callback);
+      newTrackDetails = createTrack(proj, event, map, selectedDate, callback);
       map.addLayer(newTrackDetails.track);
       self.active = true;
     }
@@ -238,15 +247,15 @@ const getOverDateLineCoordinates = function(coordinates) {
  *                               points
  * @return {Object} OpenLayers Vector Layer
  */
-var naturalEventsTrackLayer = function(models, featuresArray) {
+var naturalEventsTrackLayer = function(proj, featuresArray) {
   return new OlLayerVector({
     source: new OlSourceVector({
       features: featuresArray
     }),
     extent:
-      models.proj.selected.id === 'geographic'
+      proj.selected.id === 'geographic'
         ? [-250, -90, 250, 90]
-        : models.proj.selected.maxExtent,
+        : proj.selected.maxExtent,
     style: [getLineStyle('black', 2), getLineStyle('white', 1)]
   });
 };
@@ -259,7 +268,7 @@ var naturalEventsTrackLayer = function(models, featuresArray) {
  * @return {Object} Openlayers overlay object
  */
 var naturalEventsTrackPoint = function(
-  models,
+  proj,
   clusterPoint,
   isSelected,
   map,
@@ -273,12 +282,8 @@ var naturalEventsTrackPoint = function(
   var date = properties.date;
   var eventID = properties.event_id;
   var coordinates = clusterPoint.geometry.coordinates;
-  if (models.proj.selected.id !== 'geographic') {
-    coordinates = olProj.transform(
-      coordinates,
-      'EPSG:4326',
-      models.proj.selected.crs
-    );
+  if (proj.selected.id !== 'geographic') {
+    coordinates = olProj.transform(coordinates, 'EPSG:4326', proj.selected.crs);
   }
   overlayEl.className = isSelected
     ? 'track-marker-case track-marker-case-selected'
@@ -328,14 +333,14 @@ var getLineStyle = function(color, width) {
  * Loop through event geometries and create
  * track points and line
  *
- * @param  {Object} models
+ * @param  {Object} proj
  * @param  {Object} eventObj EONET event Object
  * @param  {Object} map Openlayers map Object
  * @param  {String} selectedDate
  * @param  {Function} callback date-change callback
  * @return {Object} Object with Track elements and info
  */
-var createTrack = function(models, eventObj, map, selectedDate, callback) {
+var createTrack = function(proj, eventObj, map, selectedDate, callback) {
   var olTrackLineFeatures = [];
   var pointObject = {};
   var geoJSONPointsBeforeSelected = [];
@@ -348,7 +353,7 @@ var createTrack = function(models, eventObj, map, selectedDate, callback) {
   var afterSelected = false;
   const zoom = map.getView().getZoom();
   const extent =
-    models.proj.selected.id === 'geographic'
+    proj.selected.id === 'geographic'
       ? [-250, -90, 250, 90]
       : [-180, -90, 180, 90];
   const selectedCoords = lodashFind(eventObj.geometries, function(geometry) {
@@ -359,7 +364,7 @@ var createTrack = function(models, eventObj, map, selectedDate, callback) {
     const date = geometry.date.split('T')[0];
     const isSelected = selectedDate === date;
     const isOverDateline =
-      models.proj.selected.id === 'geographic'
+      proj.selected.id === 'geographic'
         ? crossesDateLine(selectedCoords, coordinates)
         : false;
     if (isOverDateline) {
@@ -386,7 +391,7 @@ var createTrack = function(models, eventObj, map, selectedDate, callback) {
   });
 
   // set radius and maxZoom of superCluster object for polar vs geographic projections
-  if (models.proj.selected.id !== 'geographic') {
+  if (proj.selected.id !== 'geographic') {
     firstClusterObj.options.setPolar();
     secondClusterObj.options.setPolar();
   } else {
@@ -412,12 +417,12 @@ var createTrack = function(models, eventObj, map, selectedDate, callback) {
   );
   clusters = naturalEventsClusterSort(clusters);
 
-  pointObject = addPoints(models, clusters, map, selectedDate, callback);
+  pointObject = addPoints(proj, clusters, map, selectedDate, callback);
   olTrackLineFeatures.push(naturalEventsTrackLine(pointObject.trackArray));
 
   return {
     id: eventObj.id,
-    track: naturalEventsTrackLayer(models, olTrackLineFeatures, map),
+    track: naturalEventsTrackLayer(proj, olTrackLineFeatures, map),
     pointArray: pointObject.overlayArray,
     selectedDate: selectedDate,
     hidden: false
@@ -521,7 +526,7 @@ var createArrows = function(lineSegmentCoords, map) {
  * @param {Function} callback
  * @return {Object} Object Containing track info and elements
  */
-var addPoints = function(models, clusters, map, selectedDate, callback) {
+var addPoints = function(proj, clusters, map, selectedDate, callback) {
   var overlays = [];
   var trackArray = [];
   lodashEach(clusters, function(clusterPoint, index) {
@@ -538,16 +543,16 @@ var addPoints = function(models, clusters, map, selectedDate, callback) {
       let nextCoordinates = clusterPoint.geometry.coordinates;
 
       // polar projections require transform of coordinates to crs
-      if (models.proj.selected.id !== 'geographic') {
+      if (proj.selected.id !== 'geographic') {
         prevCoordinates = olProj.transform(
           prevCoordinates,
           'EPSG:4326',
-          models.proj.selected.crs
+          proj.selected.crs
         );
         nextCoordinates = olProj.transform(
           nextCoordinates,
           'EPSG:4326',
-          models.proj.selected.crs
+          proj.selected.crs
         );
       }
 
@@ -559,7 +564,7 @@ var addPoints = function(models, clusters, map, selectedDate, callback) {
     }
     if (clusterPoint.properties.cluster) {
       point = getClusterPointEl(
-        models,
+        proj,
         clusterPoint,
         map,
         pointClusterObj,
@@ -568,7 +573,7 @@ var addPoints = function(models, clusters, map, selectedDate, callback) {
       overlays.push(point);
     } else {
       point = naturalEventsTrackPoint(
-        models,
+        proj,
         clusterPoint,
         isSelected,
         map,
@@ -589,7 +594,7 @@ var addPoints = function(models, clusters, map, selectedDate, callback) {
  * @param  {Function} callback
  * @return {Object} Openlayers overlay object
  */
-function getClusterPointEl(models, cluster, map, pointClusterObj, callback) {
+function getClusterPointEl(proj, cluster, map, pointClusterObj, callback) {
   var overlayEl = document.createElement('div');
   var circleEl = document.createElement('div');
   var innerCircleEl = document.createElement('div');
@@ -604,12 +609,8 @@ function getClusterPointEl(models, cluster, map, pointClusterObj, callback) {
   );
   var coordinates = cluster.geometry.coordinates;
   var mapView = map.getView();
-  if (models.proj.selected.id !== 'geographic') {
-    coordinates = olProj.transform(
-      coordinates,
-      'EPSG:4326',
-      models.proj.selected.crs
-    );
+  if (proj.selected.id !== 'geographic') {
+    coordinates = olProj.transform(coordinates, 'EPSG:4326', proj.selected.crs);
   }
   var sizeClass = number < 10 ? 'small' : number < 20 ? 'medium' : 'large';
 

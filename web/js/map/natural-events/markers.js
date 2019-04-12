@@ -10,15 +10,16 @@ import OlSourceVector from 'ol/source/Vector';
 import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
+import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
 
-export default function markers(models, ui) {
+export default function markers(ui, store) {
   var self = {};
   var map = ui.map.selected;
 
   self.draw = function() {
-    if (!(models.naturalEvents && models.naturalEvents.data)) return null;
-    var events = models.naturalEvents.data.events;
-    if (!events) return null;
+    const proj = store.getState().proj;
+    var events = ui.naturalEvents.eventsData;
+    if (!events || events.length < 1) return null;
     var markers = events.reduce(function(collection, event) {
       var marker = {};
       var selected = ui.naturalEvents.selected;
@@ -38,15 +39,11 @@ export default function markers(models, ui) {
       var coordinates = geometry.coordinates;
 
       // polar projections require transform of coordinates to crs
-      if (models.proj.selected.id !== 'geographic') {
+      if (proj.selected.id !== 'geographic') {
         // check for polygon geometries
         if (geometry.type === 'Polygon') {
           let coordinatesTransform = coordinates[0].map(coordinate => {
-            return olProj.transform(
-              coordinate,
-              'EPSG:4326',
-              models.proj.selected.crs
-            );
+            return olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs);
           });
           let extent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(extent);
@@ -59,7 +56,7 @@ export default function markers(models, ui) {
           coordinates = olProj.transform(
             coordinates,
             'EPSG:4326',
-            models.proj.selected.crs
+            proj.selected.crs
           );
         }
       } else {
@@ -92,7 +89,7 @@ export default function markers(models, ui) {
         : { title: 'Default', slug: 'default' };
 
       // get maxExtent of current projection and check if marker is within range
-      let maxExtent = models.proj.selected.maxExtent;
+      let maxExtent = proj.selected.maxExtent;
       let maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
       // only create marker if within projection extent range
       if (maxExtentCheck) {
@@ -135,7 +132,7 @@ export default function markers(models, ui) {
           'click',
           function(e) {
             if (willSelect && !isSelected) {
-              ui.naturalEvents.selectEvent(event.id, date);
+              store.dispatch(selectEventAction(event.id, date));
               googleTagManager.pushEvent({
                 event: 'natural_event_selected',
                 natural_events: {

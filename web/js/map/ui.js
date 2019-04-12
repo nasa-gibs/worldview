@@ -69,7 +69,7 @@ export function mapui(models, config, store) {
    * Suscribe to redux store and listen for
    * specific action types
    */
-  const subcribeToStore = function() {
+  const subscribeToStore = function() {
     const state = store.getState();
     const action = state.lastAction;
     switch (action.type) {
@@ -121,7 +121,7 @@ export function mapui(models, config, store) {
       self.proj[proj.id] = map;
     });
 
-    store.subscribe(subcribeToStore);
+    store.subscribe(subscribeToStore);
     models.date.events.on('select', updateDate);
     updateProjection(true);
   };

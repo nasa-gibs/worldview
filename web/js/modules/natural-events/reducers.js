@@ -3,6 +3,7 @@ import {
   REQUEST_SOURCES,
   REQUEST_CATEGORIES,
   SELECT_EVENT,
+  DESELECT_EVENT,
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE
 } from './constants';
@@ -52,8 +53,12 @@ export function eventsReducer(state = eventsReducerState, action) {
       return lodashAssign({}, state, {
         selected: {
           id: action.id,
-          date: action.date || null
+          date: action.date
         }
+      });
+    case DESELECT_EVENT:
+      return lodashAssign({}, state, {
+        selected: {}
       });
     case SHOW_ALL_EVENTS:
       return lodashAssign({}, state, {

@@ -2,7 +2,7 @@ import util from './util/util';
 import { dateLabel } from './date/label';
 
 // compare
-import { compareUi } from './compare/ui';
+// import { compareUi } from './compare/ui';
 import { alertUi } from './alert/ui';
 // Timeline
 import dateWheels from './date/wheels';
@@ -19,17 +19,13 @@ import { timelineCompare } from './date/compare-picks';
 import { tourUi } from './tour/ui';
 import { layersActive } from './layers/active';
 import { mapui } from './map/ui';
-import { MapRotate } from './map/rotation';
-import { MapRunningData } from './map/runningdata';
-import { mapLayerBuilder } from './map/layerbuilder';
-import { mapDateLineBuilder } from './map/datelinebuilder';
-import { mapPrecacheTile } from './map/precachetile';
 import { mapAnimate } from './map/animate';
 import { animationUi } from './animation/ui';
 import { animationWidget } from './animation/widget';
 import { animationRangeSelect } from './animation/range-select';
 import { animationGif } from './animation/gif';
 import { debugLayers } from './debug';
+import naturalEventsUI from './map/natural-events/ui';
 
 /**
  *  Legacy UI Rendering
@@ -90,21 +86,12 @@ export function combineUi(models, config, MapMouseEvents, store) {
     }
     ui.dateWheels = dateWheels(models, config);
   }
-  // FIXME: Old hack
-  $(window).resize(function() {
-    if (util.browser.small) {
-      $('#productsHoldertabs li.first a').trigger('click');
-    }
-    if (!ui.timeline) {
-      timelineInit();
-    }
-  });
   // if (config.features.dataDownload) {
   //   ui.data = dataUi(models, ui, config);
   // }
   if (config.features.naturalEvents) {
     // var request = naturalEventsRequest(models, ui, config);
-    // ui.naturalEvents = naturalEventsUI(models, ui, config, request);
+    ui.naturalEvents = naturalEventsUI(models, ui, config, store);
   }
   // if (config.features.compare) {
   //   ui.compare = compareUi(models, ui, config);

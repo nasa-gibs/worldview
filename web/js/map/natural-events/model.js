@@ -1,4 +1,4 @@
-import util from '../util/util';
+import util from '../../util/util';
 
 export default function naturalEventsModel(models, config, ui) {
   var self = {};
