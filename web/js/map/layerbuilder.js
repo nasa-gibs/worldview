@@ -143,8 +143,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         // date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
         // # timeoffset fix handled further down
         date = options.date;
-        date.setUTCSeconds(0);
-        date.setUTCMilliseconds(0);
+        // date.setUTCSeconds(0);
+        // date.setUTCMilliseconds(0);
         // # memoize third argument dateArray ?
         date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
       }
@@ -159,8 +159,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         date = util.clearTimeUTC(date);
       } else {
         debugger;
-        date.setUTCSeconds(0);
-        date.setUTCMilliseconds(0);
+        // date.setUTCSeconds(0);
+        // date.setUTCMilliseconds(0);
         // # memoize third argument dateArray ?
         date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
       }

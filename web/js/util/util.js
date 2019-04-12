@@ -1137,7 +1137,6 @@ export default (function (self) {
         }
       } else if (def.period === 'subdaily') {
         // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
-
         let interval = Number(def.dateRanges[0].dateInterval);
         if (!containRange) {
           minuteDifference = self.minuteDiff(minDate, maxMinuteDate);
@@ -1147,7 +1146,8 @@ export default (function (self) {
         }
         // Create array of all possible request dates by saying for interval++ <= dayDifference
         for (dateInterval = 0; dateInterval <= (minuteDifference + 1); dateInterval += interval) {
-          dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours(), minDate.getUTCMinutes() + dateInterval, 0));
+          let newDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours(), minDate.getUTCMinutes() + dateInterval, 0);
+          dateArray.push(newDate);
         }
       }
     });
@@ -1178,7 +1178,7 @@ export default (function (self) {
    * @return {object}           The date object with normalized timeszone.
    */
   self.prevDateInDateRange = function (def, date, dateArray) {
-    console.log(def, date, dateArray);
+    // console.log(def, date, dateArray);
     // # NEED TO TRACE BACK AND USE UTC DATES ONLY? WILL REWRITE A LOT BUT WOULD BE CLEANER/MORE TESTABLE
     var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     currentDate = new Date(currentDate.getTime() + (date.getTimezoneOffset() * 60000));
@@ -1195,7 +1195,7 @@ export default (function (self) {
     });
     // Find the closest dates within the current array
     var closestDate = closestTo(currentDate, closestAvailableDates);
-    debugger;
+    // debugger;
     if (closestDate) {
       return new Date(closestDate.getTime() - (date.getTimezoneOffset() * 60000));
     } else {

@@ -49,7 +49,8 @@ class Timeline extends React.Component {
   }
 
   updateDate = (date, selectionStr) => {
-      this.props.updateDate(date, selectionStr);
+    console.log(date,selectionStr)
+    this.props.updateDate(date, selectionStr);
   }
 
   // show/hide custom interval modal

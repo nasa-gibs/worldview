@@ -99,25 +99,19 @@ export function dateModel(models, config, spec) {
     selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);
     var updated = false;
-    let x1 = date;
     if (
       !self[selectionStr] ||
       date.getTime() !== self[selectionStr].getTime()
     ) {
-      let x2 = date;
       self[selectionStr] = date;
       if (selectionStr === self.activeDate) {
-        let x3 = date;
         self.events.trigger('select', date, selectionStr);
-        let x4 = date;
       }
       updated = true;
     } else {
       // necessary to handle 00:00:00 not triggering and saving as either the
       // previous date of 23:00:00 or 01:00:00 - what is the reason for this?
-      let x5 = date;
       self.events.trigger('select', date, selectionStr);
-      let x6 = date;
     }
     return updated;
   };

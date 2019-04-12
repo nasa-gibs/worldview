@@ -323,8 +323,17 @@ export function timeline(models, config, ui) {
   };
 
   self.getWidth = function() {
-    let subdaily = models.layers.hasSubDaily();
+    // let subdaily = models.layers.hasSubDaily();
+    // check for compare mode
+    let isCompareModeActive = models.compare.active;
 
+    // if compare mode is active, check for subdaily in either A or B
+    let subdaily;
+    if (isCompareModeActive) {
+      subdaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
+    } else {
+      subdaily = models.layers.hasSubDaily();
+    }
     self.parentOffset = (subdaily ? 404 : 310) + 10;
 
     self.width =
@@ -464,22 +473,30 @@ export function timeline(models, config, ui) {
 
   // # rework in order to allow A and B dates to persist on reopening dialog
   var onCompareModeToggle = () => {
-    // debugger;
+    debugger;
+    self.getWidth();
     let isCompareModeActive = models.compare.active;
     if (!isCompareModeActive) {
       let activeDate = models.date.activeDate;
+      let active = activeDate === 'selected' ? 'active' : 'activeB';
+      let hasSubDaily = models.layers.hasSubDaily(active);
       // let date = models.date[activeDate];
       // let dateFormatted = new Date(date).toISOString();
       self.reactComponent.setState({
         compareModeActive: isCompareModeActive,
         // selectedDate: date,
         // dateFormatted: dateFormatted,
-        draggerSelected: activeDate
+        draggerSelected: activeDate,
+        axisWidth: self.width,
+        parentOffset: self.parentOffset,
+        hasSubdailyLayers: hasSubDaily
       });
     } else {
       // timeScale zoom and reset if subdaily zoom in permalink
       let selectedTimeScaleState = models.date.selectedZoom;
       let selectedTimeScale = selectedTimeScaleState ? timeScaleFromNumberKey[selectedTimeScaleState] : 'day';
+
+      let hasSubDaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
 
       let selectedDate = models.date.selected;
       // default 7 timeScale units away for B dragger if not selected at compare init
@@ -488,7 +505,10 @@ export function timeline(models, config, ui) {
       self.reactComponent.setState({
         compareModeActive: isCompareModeActive,
         selectedDateB: selectedDateB,
-        dateFormattedB: dateFormattedB
+        dateFormattedB: dateFormattedB,
+        axisWidth: self.width,
+        parentOffset: self.parentOffset,
+        hasSubdailyLayers: hasSubDaily
       });
     }
   };
@@ -646,8 +666,19 @@ export function timeline(models, config, ui) {
   };
 
   var getInitialProps = () => {
+    // check for compare mode
     let isCompareModeActive = models.compare.active;
-    let subdaily = models.layers.hasSubDaily();
+
+    // if compare mode is active, check for subdaily in either A or B
+    let subdaily;
+    if (isCompareModeActive) {
+      subdaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
+    } else {
+      subdaily = models.layers.hasSubDaily();
+    }
+    // subdaily = models.layers.hasSubDaily();
+
+    console.log(models.layers.hasSubDaily('active'), models.layers.hasSubDaily('activeB'))
 
     // timeScale zoom and reset if subdaily zoom in permalink
     let selectedTimeScaleState = models.date.selectedZoom;
@@ -786,7 +817,7 @@ export function timeline(models, config, ui) {
   };
 
   var updateReactTimelineDate = function(date, selectionStr) {
-    debugger;
+    // debugger;
     // let selectedDate = models.date[models.date.activeDate];
     let selectedDate = models.date.selected;
     let selectedDateB = models.date.selectedB;
@@ -832,7 +863,18 @@ export function timeline(models, config, ui) {
 
   // Update status of subdaily layers being in sidebar
   var updateSubdailyState = function() {
-    let subdaily = models.layers.hasSubDaily();
+    // check for compare mode
+    let isCompareModeActive = models.compare.active;
+
+    // if compare mode is active, check for subdaily in either A or B
+    let subdaily;
+    if (isCompareModeActive) {
+      subdaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
+    } else {
+      subdaily = models.layers.hasSubDaily();
+    }
+
+    // let subdaily = models.layers.hasSubDaily();
     if (!subdaily && models.date.selectedZoom > 3) {
       self.reactComponent.setState({
         hasSubdailyLayers: subdaily
@@ -864,7 +906,20 @@ export function timeline(models, config, ui) {
   var init = function() {
     var $timelineFooter = $('#timeline-footer');
     models.layers.events.trigger('toggle-subdaily');
-    subdaily = models.layers.hasSubDaily();
+    // subdaily = models.layers.hasSubDaily();
+
+    // check for compare mode
+    let isCompareModeActive = models.compare.active;
+
+    // if compare mode is active, check for subdaily in either A or B
+    // let subdaily;
+    if (isCompareModeActive) {
+      subdaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
+    } else {
+      subdaily = models.layers.hasSubDaily();
+    }
+
+
     drawContainers();
     // let timelineCase = document.getElementById('timeline');
     // timelineCase.addEventListener('wheel', function(e) {

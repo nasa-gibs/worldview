@@ -515,7 +515,7 @@ class TimelineAxis extends React.Component {
     // if (this.state.leftOffset === this.state.redLineClick) {
     // console.log(!this.state.moved && !this.state.timeScaleChange)
     if (!this.state.moved) {
-      // console.log('inner')
+      console.log(this.props.draggerSelected)
       // let draggerTimeState = this.showTime(this.state.leftOffsetRelativeToInnerParent);
       // this.handleDragDragger(null, {'deltaX': this.state.leftOffset})
       // console.log(this.state.leftOffset)
@@ -539,6 +539,7 @@ class TimelineAxis extends React.Component {
         let draggerDateActual = moment.utc(this.state.draggerTimeStateB);
         let draggerAVisible = isCompareModeActive && draggerDateActual.isBetween(frontDate, backDate, null, '[]');
         // console.log(isCompareModeActive, draggerAVisible)
+        console.log(this.state.hoverTime)
         this.setState({
           draggerVisible: draggerAVisible,
           draggerVisibleB: true,
@@ -546,7 +547,7 @@ class TimelineAxis extends React.Component {
           draggerTimeStateB: this.state.hoverTime,
           selectedDateB: this.state.hoverTime,
           moved: false
-        }, this.props.updateDate(this.state.hoverTime, draggerB));
+        }, this.props.updateDate(this.state.hoverTime, 'selectedB'));
       } else {
         let draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
         let draggerBVisible = isCompareModeActive && draggerDateActualB.isBetween(frontDate, backDate, null, '[]');
@@ -558,7 +559,7 @@ class TimelineAxis extends React.Component {
           draggerTimeState: this.state.hoverTime,
           selectedDate: this.state.hoverTime,
           moved: false
-        }, this.props.updateDate(this.state.hoverTime));
+        }, this.props.updateDate(this.state.hoverTime, 'selected'));
       }
     }
   }
@@ -656,9 +657,17 @@ class TimelineAxis extends React.Component {
  * @return {Boolean} newDateInThePast
  * @return {Number} newDraggerDiff
  */
-  checkDraggerMoveOrUpdateScale = (selectedDate) => {
-    let draggerTimeState = this.state.draggerTimeState;
-    let draggerPosition = this.state.draggerPosition;
+  checkDraggerMoveOrUpdateScale = (selectedDate, draggerB) => {
+    let draggerTimeState;
+    let draggerPosition;
+
+    if (draggerB) {
+      draggerTimeState = this.state.draggerTimeStateB;
+      draggerPosition = this.state.draggerPositionB;
+    } else {
+      draggerTimeState = this.state.draggerTimeState;
+      draggerPosition = this.state.draggerPosition;
+    }
 
     let timeScale = this.props.timeScale;
     let gridWidth = this.state.gridWidth;
@@ -693,7 +702,7 @@ class TimelineAxis extends React.Component {
     //     this.updateScale(this.props.selectedDate, this.props.timeScale, null, leftOffsetFixedCoeff);
     //   }
     // }
-    console.log(this.props.dateFormatted, this.props.dateFormattedB)
+    // console.log(this.props.dateFormatted, this.props.dateFormattedB)
 
     if (this.props.timeScale !== prevProps.timeScale) {
       this.updateScale(null, this.props.timeScale);
@@ -734,14 +743,18 @@ class TimelineAxis extends React.Component {
       this.state.draggerTimeState !== prevState.draggerTimeState ||
       moment.utc(this.state.draggerTimeState).format() !== moment.utc(prevState.draggerTimeState).format()) {
 
-      // console.log(this.props.selectedDate, prevProps.selectedDate, this.state.hoverTime, this.state.draggerTimeState)
-      // console.log(this.state.draggerTimeState, prevState.draggerTimeState)
+      console.log(this.props.selectedDate, prevProps.selectedDate, this.state.hoverTime, this.state.draggerTimeState)
+      console.log(this.state.draggerTimeState, prevState.draggerTimeState)
+      console.log(this.props.dateFormatted, prevProps.dateFormatted)
 
       if (moment.utc(this.state.draggerTimeState).format() !== moment.utc(this.props.selectedDate).format()) {
       //  && this.state.draggerTimeState !== prevState.draggerTimeState) { // # draggerTimeState condition breaks LEFT/RIGHT arrows
         // check if newDraggerDate will be within acceptable visible axis width
         let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDate);
         if (newDraggerDate.withinRange) {
+          // # this is causing a double update on the dragger - may need a flag to know it is/is not a dragger causing
+          // # the change in date - Milliseconds being cleared to ZERO out is causing false inequality for condtional
+          // # somewhere in UTIL (maybe?) the subdaily date must be getting zeroed on Seconds and MS
           this.setDraggerToTime(this.props.selectedDate);
         } else {
           let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
@@ -762,7 +775,7 @@ class TimelineAxis extends React.Component {
       if (moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(this.props.selectedDateB).format()) {
       //  && this.state.draggerTimeState !== prevState.draggerTimeState) { // # draggerTimeState condition breaks LEFT/RIGHT arrows
         // check if newDraggerDate will be within acceptable visible axis width
-        let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDateB);
+        let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDateB, true);
         if (newDraggerDate.withinRange) {
           this.setDraggerToTime(this.props.selectedDateB, true);
         } else {
@@ -775,6 +788,7 @@ class TimelineAxis extends React.Component {
 
   // move draggerTimeState to inputTime
   setDraggerToTime = (inputTime, draggerB) => {
+    debugger;
     let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
     let backDate = moment.utc(this.state.deque.peekBack().rawDate);
     let draggerTime = draggerB ? this.state.draggerTimeStateB : this.state.draggerTimeState;
@@ -850,13 +864,14 @@ class TimelineAxis extends React.Component {
 
   // handle dragger dragging
   handleDragDragger = (draggerName, e, d) => {
-    // console.log(e,d, draggerName)
+    console.log(e,d, draggerName)
     if (e) {
       e.stopPropagation();
       e.preventDefault();
     }
 
     requestAnimationFrame(() => {
+      // debugger;
       // var deltaX = d.deltaX || e.movementX; //# NOT THE SAME
       var deltaX = d.deltaX;
       let gridWidth = this.state.gridWidth;

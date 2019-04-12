@@ -39,7 +39,7 @@ export function layersModel(models, config) {
     }
   };
   self.hasSubDaily = function(activeLayers) {
-    activeLayers = activeLayers || self[self.activeLayers];
+    activeLayers = self[activeLayers] || self[self.activeLayers];
     if (activeLayers) {
       for (var i = 0; i < activeLayers.length; i++) {
         if (activeLayers[i].period === 'subdaily') {
@@ -47,6 +47,10 @@ export function layersModel(models, config) {
         }
       }
     }
+    // if (aBcheck) {
+    //   let activeLayers
+    //   return self.hasSubDaily();
+    // }
     return false;
   };
   self.get = function(spec, activeLayers) {
