@@ -494,6 +494,7 @@ export function timeline(models, config, ui) {
   };
 
   var onChangeSelectedDragger = (selectionStr) => {
+    console.log(selectionStr, models.date.selected, models.date.selectedB)
     let isCompareModeActive = models.compare.active;
     if (isCompareModeActive) {
       models.compare.toggleState();
@@ -504,6 +505,8 @@ export function timeline(models, config, ui) {
   };
 
   var updateDate = (date, selectionStr) => {
+    console.log(date, selectionStr, models.date.selected, models.date.selectedB)
+
     // console.log(date, selectionStr)
     let updatedDate = new Date(date);
     // console.log(models)
@@ -783,7 +786,7 @@ export function timeline(models, config, ui) {
   };
 
   var updateReactTimelineDate = function(date, selectionStr) {
-    // debugger;
+    debugger;
     // let selectedDate = models.date[models.date.activeDate];
     let selectedDate = models.date.selected;
     let selectedDateB = models.date.selectedB;

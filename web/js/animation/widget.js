@@ -487,7 +487,7 @@ export function animationWidget(models, config, ui) {
     let state = model.rangeState;
     let startDate = util.parseDateUTC(state.startDate);
     let endDate = util.parseDateUTC(state.endDate);
-
+debugger;
     util.clearTimeUTC(startDate);
     util.clearTimeUTC(endDate);
 

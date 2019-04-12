@@ -117,12 +117,17 @@ export function animationUi(models, ui) {
     endDate = util.parseDateUTC(state.endDate);
     startDate = util.parseDateUTC(state.startDate);
     // if not index+1 of 4 ('10-Minute'), zero out start/end times and resave
-    if (dateSelectedZoom < 4) {
-      let zeroDate = dateModel.selected;
-      util.clearTimeUTC(zeroDate);
-      util.clearTimeUTC(startDate);
-      dateModel.selected = zeroDate;
-    }
+
+    // # causes UTC zeroing of dates in date model - need to rework if this
+    // # functionality is still going to be used or handle zeroing out
+    // # at actual layer building only
+    // if (dateSelectedZoom < 4) {
+    //   let zeroDate = dateModel.selected;
+    //   debugger;
+    //   util.clearTimeUTC(zeroDate);
+    //   util.clearTimeUTC(startDate);
+    //   dateModel.selected = zeroDate;
+    // }
     currentDate = dateModel.selected;
     if (currentDate > startDate && self.nextDate(currentDate) < endDate) {
       return util.toISOStringSeconds(self.nextDate(currentDate));

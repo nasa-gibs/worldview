@@ -693,6 +693,7 @@ class TimelineAxis extends React.Component {
     //     this.updateScale(this.props.selectedDate, this.props.timeScale, null, leftOffsetFixedCoeff);
     //   }
     // }
+    console.log(this.props.dateFormatted, this.props.dateFormattedB)
 
     if (this.props.timeScale !== prevProps.timeScale) {
       this.updateScale(null, this.props.timeScale);
@@ -727,6 +728,7 @@ class TimelineAxis extends React.Component {
       }
     }
 
+    // # HANDLE A CHANGE ############
     // # CHANGED CONDITIONAL FROM "&&" TO "||" TO DEBUG LEFT/RIGHT ARROW UPDATE ISSUE
     if (this.props.selectedDate !== prevProps.selectedDate ||
       this.state.draggerTimeState !== prevState.draggerTimeState ||
@@ -743,8 +745,29 @@ class TimelineAxis extends React.Component {
           this.setDraggerToTime(this.props.selectedDate);
         } else {
           let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
-          // debugger;
           this.updateScale(this.props.selectedDate, this.props.timeScale, null, leftOffsetFixedCoeff);
+        }
+      }
+    }
+
+    // # HANDLE B CHANGE ############
+    // # CHANGED CONDITIONAL FROM "&&" TO "||" TO DEBUG LEFT/RIGHT ARROW UPDATE ISSUE
+    if (this.props.selectedDateB !== prevProps.selectedDateB ||
+      this.state.draggerTimeStateB !== prevState.draggerTimeStateB ||
+      moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(prevState.draggerTimeStateB).format()) {
+
+      // console.log(this.props.selectedDate, prevProps.selectedDate, this.state.hoverTime, this.state.draggerTimeState)
+      // console.log(this.state.draggerTimeState, prevState.draggerTimeState)
+
+      if (moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(this.props.selectedDateB).format()) {
+      //  && this.state.draggerTimeState !== prevState.draggerTimeState) { // # draggerTimeState condition breaks LEFT/RIGHT arrows
+        // check if newDraggerDate will be within acceptable visible axis width
+        let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDateB);
+        if (newDraggerDate.withinRange) {
+          this.setDraggerToTime(this.props.selectedDateB, true);
+        } else {
+          let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
+          this.updateScale(this.props.selectedDateB, this.props.timeScale, null, leftOffsetFixedCoeff);
         }
       }
     }
@@ -874,7 +897,6 @@ class TimelineAxis extends React.Component {
       // handle drag timeline
       if (draggerPosition < -draggerWidth) { // # handle drag timeline towards PAST
         // console.log('drag off view past', deltaX, (dragSentinelCount + deltaX), -dragSentinelChangeNumber)
-        // debugger;
         let position = this.state.position - deltaX;
 
         if ((dragSentinelCount + deltaX) < -dragSentinelChangeNumber) {
@@ -913,7 +935,6 @@ class TimelineAxis extends React.Component {
           })
         }
       } else if (draggerPosition > axisWidth - draggerWidth) { // handle drag timeline towards FUTURE
-        // debugger;
         // console.log('drag off view future', deltaX)
         let position = this.state.position - deltaX;
 
@@ -1009,7 +1030,6 @@ class TimelineAxis extends React.Component {
     window.deque = Deque;
     window.moment = moment;
     // console.log(this.props, this.state);
-    // debugger;
     return (
       <React.Fragment>
       <div id="wv-timeline-axis"

@@ -122,8 +122,12 @@ class Timeline extends React.Component {
 
   // left/right arrows increment date
   incrementDate = (multiplier) => {
-    let newDate = moment.utc(this.state.dateFormatted).add((multiplier * this.state.intervalChangeAmt), this.state.timeScaleChangeUnit)
-    this.updateDate(new Date(newDate.format()));
+    let draggerSelected = this.state.draggerSelected;
+    let dateSelected = draggerSelected === 'selected' ? this.state.dateFormatted : this.state.dateFormattedB;
+    console.log(draggerSelected, dateSelected)
+    let newDate = moment.utc(dateSelected).add((multiplier * this.state.intervalChangeAmt), this.state.timeScaleChangeUnit)
+    console.log(this.state.draggerSelected, this.state.dateFormatted, this.state.dateFormattedB, newDate)
+    this.updateDate(new Date(newDate.format()), draggerSelected);
   }
 
   // open animation dialog

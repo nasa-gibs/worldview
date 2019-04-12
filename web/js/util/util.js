@@ -386,6 +386,7 @@ export default (function (self) {
    * @return {Date} the date object
    */
   self.clearTimeUTC = function (date) {
+    console.log(date, 'HITT')
     date.setUTCHours(0);
     date.setUTCMinutes(0);
     date.setUTCSeconds(0);
@@ -395,7 +396,7 @@ export default (function (self) {
   };
 
   self.dateAdd = function (date, interval, amount) {
-    console.log(date, interval, amount)
+    // console.log(date, interval, amount)
     var month, maxDay, year;
     var newDate = new Date(date);
     switch (interval) {
@@ -702,7 +703,9 @@ export default (function (self) {
    * fields set to zero or an overriden value.
    */
   self.today = function () {
-    return self.clearTimeUTC(self.now());
+    // console.log(self.now());
+    // return self.clearTimeUTC(self.now());
+    return self.now();
   };
 
   /**
@@ -1148,6 +1151,7 @@ export default (function (self) {
         }
       }
     });
+
     return dateArray;
   };
   /**
@@ -1174,6 +1178,7 @@ export default (function (self) {
    * @return {object}           The date object with normalized timeszone.
    */
   self.prevDateInDateRange = function (def, date, dateArray) {
+    console.log(def, date, dateArray);
     // # NEED TO TRACE BACK AND USE UTC DATES ONLY? WILL REWRITE A LOT BUT WOULD BE CLEANER/MORE TESTABLE
     var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     currentDate = new Date(currentDate.getTime() + (date.getTimezoneOffset() * 60000));
@@ -1190,6 +1195,7 @@ export default (function (self) {
     });
     // Find the closest dates within the current array
     var closestDate = closestTo(currentDate, closestAvailableDates);
+    debugger;
     if (closestDate) {
       return new Date(closestDate.getTime() - (date.getTimezoneOffset() * 60000));
     } else {

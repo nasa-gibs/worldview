@@ -136,6 +136,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         // date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
         // date = new Date(options.date.getTime());
         // date = new Date(util.clearTimeUTC(date));
+        debugger;
         date = util.clearTimeUTC(new Date(options.date.getTime()));
         // console.log(date)
       } else {
@@ -154,8 +155,10 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       // UTC midnight
 
       if (def.period !== 'subdaily') {
+        debugger;
         date = util.clearTimeUTC(date);
       } else {
+        debugger;
         date.setUTCSeconds(0);
         date.setUTCMilliseconds(0);
         // # memoize third argument dateArray ?
