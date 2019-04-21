@@ -7,31 +7,31 @@ export function requestAction(
   signal,
   TIMEOUT_AMOUNT
 ) {
-  let didTimeOut = false;
+  // let didTimeOut = false;
   dispatch(startRequest(actionName, id));
   return new Promise(function(resolve, reject) {
-    const timeout = setTimeout(function() {
-      didTimeOut = true;
-      dispatch(fetchTimeout(actionName, id));
-    }, TIMEOUT_AMOUNT);
+    // const timeout = setTimeout(function() {
+    //   didTimeOut = true;
+    //   dispatch(fetchTimeout(actionName, id));
+    // }, TIMEOUT_AMOUNT);
     return fetch(url, { signal })
       .then(function(response) {
-        clearTimeout(timeout);
-        if (!didTimeOut) {
-          return mimeType === 'application/json'
-            ? response.json()
-            : response.text();
-        }
+        // clearTimeout(timeout);
+        //  if (!didTimeOut) {
+        return mimeType === 'application/json'
+          ? response.json()
+          : response.text();
+        // }
       })
       .then(function(data) {
-        if (!didTimeOut) {
-          dispatch(fetchSuccess(actionName, data, id));
-          resolve(data);
-        }
+        // if (!didTimeOut) {
+        dispatch(fetchSuccess(actionName, data, id));
+        resolve(data);
+        // }
       })
       .catch(function(error) {
-        if (didTimeOut) return;
-        clearTimeout(timeout);
+        // if (didTimeOut) return;
+        // clearTimeout(timeout);
         dispatch(fetchFailure(actionName, error, id));
         reject(error);
       });
@@ -51,12 +51,12 @@ export function fetchSuccess(actionName, response, id) {
     id: id
   };
 }
-export function fetchTimeout(actionName, error, id) {
-  return {
-    type: `${actionName}_TIMEOUT`,
-    id: id
-  };
-}
+// export function fetchTimeout(actionName, error, id) {
+//   return {
+//     type: `${actionName}_TIMEOUT`,
+//     id: id
+//   };
+// }
 export function fetchFailure(actionName, error, id) {
   return {
     type: `${actionName}_FAILURE`,
