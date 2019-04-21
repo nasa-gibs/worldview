@@ -12,7 +12,7 @@ import * as DATA_CONSTANTS from '../../modules/data/constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import { toggleGranule } from '../../modules/data/actions';
 
-export function dataUi(store, ui, config, models) {
+export function dataUi(models, store, ui, config) {
   var queryActive = false;
   var mapController = null;
   var selectionListPanel = null;

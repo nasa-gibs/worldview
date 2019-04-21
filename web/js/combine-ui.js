@@ -88,25 +88,11 @@ export function combineUi(models, config, MapMouseEvents, store) {
     ui.dateWheels = dateWheels(models, config);
   }
   if (config.features.dataDownload) {
-    ui.data = dataUi(store, ui, config);
+    ui.data = dataUi(models, store, ui, config);
   }
   if (config.features.naturalEvents) {
-    // var request = naturalEventsRequest(models, ui, config);
     ui.naturalEvents = naturalEventsUI(models, ui, config, store);
   }
-  // if (config.features.compare) {
-  //   ui.compare = compareUi(models, ui, config);
-  // }
-  // if (config.features.dataDownload) {
-  //   models.data.events.on('queryResults', function() {
-  //     ui.data.onViewChange();
-  //   });
-  //   ui.map.events.on('extent', function() {
-  //     ui.data.onViewChange();
-  //   });
-  //   // FIXME: This is a hack
-  //   models.map.events.on('projection', models.data.updateProjection);
-  // }
   registerMapMouseHandlers(ui.map.proj, MapMouseEvents);
   // Sink all focus on inputs if click unhandled
   $(document).click(function(event) {

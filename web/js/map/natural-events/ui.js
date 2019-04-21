@@ -17,7 +17,6 @@ import {
 } from '../../modules/layers/actions';
 import { deselectEvent as deselectEventAction } from '../../modules/natural-events/actions';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
-import googleTagManager from 'googleTagManager';
 
 const zoomLevelReference = {
   Wildfires: 8,
@@ -51,7 +50,6 @@ export default function naturalEventsUI(models, ui, config, store) {
       requestedEventSources,
       requestedEventCategories
     } = state;
-
     switch (action.type) {
       case CHANGE_SIDEBAR_TAB:
         return onSidebarChange(action.activeTab);
@@ -84,11 +82,8 @@ export default function naturalEventsUI(models, ui, config, store) {
   };
   const onSidebarChange = function(tab) {
     const proj = store.getState().proj;
+    console.log(tab);
     if (tab === 'events') {
-      googleTagManager.pushEvent({
-        event: 'natural_events_tab'
-      });
-
       // Remove previously stored markers
       naturalEventMarkers.remove(self.markers);
       // Store markers so the can be referenced later
@@ -225,7 +220,7 @@ export default function naturalEventsUI(models, ui, config, store) {
     // Display loading information for user feedback on slow network
 
     view = map.getView();
-
+    console.log('suscribe');
     store.subscribe(subscribeToStore);
   };
   var getZoomPromise = function(
