@@ -79,3 +79,8 @@ export function serializeDate(date) {
     'Z'
   );
 }
+export function getActiveTime(state) {
+  const { compare, legacy } = state;
+  const activeStr = compare.isCompareA ? 'selected' : 'selectedB';
+  return legacy.date[activeStr];
+}

@@ -5,7 +5,7 @@ import { parse as projectionParser } from './projection/projection';
 import { parse as layerParser } from './layers/layers';
 import { parse as animationParser } from './animation/anim';
 import palettes from './palettes/palettes';
-import { dataParser } from './data/data';
+import { dataParser } from './map/data/data';
 
 export function parse(parameters, config, errors) {
   let state = parameters;

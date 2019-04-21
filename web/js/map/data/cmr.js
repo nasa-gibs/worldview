@@ -1,12 +1,12 @@
-import util from '../util/util';
+import util from '../../util/util';
+import { getActiveTime } from '../../modules/data/util';
 import OlGeomPolygon from 'ol/geom/Polygon';
-
 export const REL_DATA = 'http://esipfed.org/ns/fedsearch/1.1/data#';
 export const REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
 export const REL_BROWSE = 'http://esipfed.org/ns/fedsearch/1.1/browse#';
 export const DATA_EXTS = ['hdf', 'he5', 'h5', 'hdf5', 'nc', 'bz2'];
 
-export function dataCmrClient(spec) {
+export function dataCmrClient(spec, store) {
   // Abort query after 45 seconds
   var QUERY_TIMEOUT = spec.timeout || 45 * 1000;
   var self = {};
@@ -63,7 +63,6 @@ export function dataCmrClient(spec) {
       queryParameters.data.temporal = startTime + ',' + endTime;
     }
     queryParameters.data.pageSize = '1000';
-
     var deferred = $.Deferred();
     var metrics = 'ev=data-download&' + $.param(queryParameters.data, true);
     util.metrics(metrics);
@@ -170,7 +169,8 @@ export function dataCmrGeometry(result) {
   return self;
 }
 
-export function dataCmrMockClient(suffix, models) {
+export function dataCmrMockClient(suffix, store) {
+  const state = store.getState();
   var endpoint;
   var results;
 
@@ -204,7 +204,7 @@ export function dataCmrMockClient(suffix, models) {
   };
 
   var adjustResults = function(parameters, data) {
-    var day = models.date[models.date.activeDate];
+    var day = getActiveTime(state);
     // Mock data was retrieved for Aug 6, 2013
     var resultsDay = new Date(Date.UTC(2013, 7, 6));
     var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);

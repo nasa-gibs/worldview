@@ -220,6 +220,9 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = dispatch => ({
   onTabClick: str => {
+    googleTagManager.pushEvent({
+      event: str + '_tab'
+    });
     dispatch(changeTab(str));
   },
   collapseExpandToggle: () => {

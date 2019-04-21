@@ -1,8 +1,9 @@
 import { dataCmrMockClient, dataCmrClient } from './cmr';
-
-import util from '../util/util';
-import brand from '../brand';
-import { CRS_WGS_84_QUERY_EXTENT, CRS_WGS_84 } from '../map/map';
+import { getActiveTime } from '../../modules/date/util';
+import util from '../../util/util';
+import { forOwn as lodashForOwn } from 'lodash';
+import brand from '../../brand';
+import { CRS_WGS_84_QUERY_EXTENT, CRS_WGS_84 } from '../map';
 import {
   dataResultsChain,
   dataResultsTagButtonScale,
@@ -38,41 +39,40 @@ import {
 
 export function dataHandlerGetByName(name) {
   var map = {
-    'AquaSwathMultiDay': dataHandlerAquaSwathMultiDay,
-    'CollectionList': dataHandlerCollectionList,
-    'CollectionMix': dataHandlerCollectionMix,
-    'List': dataHandlerList,
-    'DailyGranuleList': dataHandlerDailyGranuleList,
-    'DailyAMSRE': dataHandlerDailyAMSRE,
-    'MODISGrid': dataHandlerModisGrid,
-    'MODISMix': dataHandlerModisMix,
-    'MODISSwath': dataHandlerModisSwath,
-    'TerraSwathMultiDay': dataHandlerTerraSwathMultiDay,
-    'HalfOrbit': dataHandlerHalfOrbit,
-    'VIIRSSwathDay': dataHandlerVIIRSSwathDay,
-    'VIIRSSwathNight': dataHandlerVIIRSSwathNight,
-    'WELDGranuleFootprints': dataHandlerWeldGranuleFootprints
+    AquaSwathMultiDay: dataHandlerAquaSwathMultiDay,
+    CollectionList: dataHandlerCollectionList,
+    CollectionMix: dataHandlerCollectionMix,
+    List: dataHandlerList,
+    DailyGranuleList: dataHandlerDailyGranuleList,
+    DailyAMSRE: dataHandlerDailyAMSRE,
+    MODISGrid: dataHandlerModisGrid,
+    MODISMix: dataHandlerModisMix,
+    MODISSwath: dataHandlerModisSwath,
+    TerraSwathMultiDay: dataHandlerTerraSwathMultiDay,
+    HalfOrbit: dataHandlerHalfOrbit,
+    VIIRSSwathDay: dataHandlerVIIRSSwathDay,
+    VIIRSSwathNight: dataHandlerVIIRSSwathNight,
+    WELDGranuleFootprints: dataHandlerWeldGranuleFootprints
   };
   var handler = map[name];
   if (!handler) {
     throw new Error('No such handler: ' + name);
   }
   return handler;
-};
+}
 
-export function dataHandlerBase(config, model) {
+export function dataHandlerBase(config, store) {
   var self = {};
 
   self.events = util.events();
   self.cmr = null;
   self.ajax = null;
 
-  var init = function () {
+  var init = function() {
     var ns = self;
     if (!ns.cmr) {
       if (config.parameters.mockCMR) {
-        ns.cmr = dataCmrMockClient(
-          config.parameters.mockCMR);
+        ns.cmr = dataCmrMockClient(config.parameters.mockCMR);
       } else {
         ns.cmr = dataCmrClient({
           timeout: config.parameters.timeoutCMR
@@ -87,33 +87,36 @@ export function dataHandlerBase(config, model) {
     self.ajax = ns.ajax;
 
     self.extents = {};
-    $.each(config.projections, function (key, projection) {
+    lodashForOwn(config.projections, function(projection, key) {
       self.extents[projection.crs] = projection.maxExtent;
     });
   };
 
-  self.submit = function () {
-    var productConfig = config.products[model.selectedProduct].query;
+  self.submit = function() {
+    const state = store.getState();
+    const dataState = state.data;
+    var productConfig = config.products[dataState.selectedProduct].query;
     var queryData = $.extend(true, {}, productConfig);
     var promise = self._submit(queryData);
 
-    var queriedProduct = model.selectedProduct;
-    promise.done(function (data) {
-      try {
-        if (model.selectedProduct !== queriedProduct) {
-          self.events.trigger('results', {
-            granules: [],
-            meta: {}
-          });
-          return;
+    var queriedProduct = dataState.selectedProduct;
+    promise
+      .done(function(data) {
+        try {
+          if (dataState.selectedProduct !== queriedProduct) {
+            self.events.trigger('results', {
+              granules: [],
+              meta: {}
+            });
+            return;
+          }
+          var results = self._processResults(data);
+          self.events.trigger('results', results);
+        } catch (error) {
+          self.events.trigger('error', 'exception', error);
         }
-        var results = self._processResults(data);
-        self.events.trigger('results', results);
-      } catch (error) {
-        self.events.trigger('error', 'exception', error);
-      }
-    })
-      .fail(function (jqXHR, textStatus, errorThrown) {
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
         if (textStatus === 'timeout') {
           self.events.trigger('timeout');
         } else {
@@ -127,22 +130,24 @@ export function dataHandlerBase(config, model) {
 
   init();
   return self;
-};
+}
 
-export function dataHandlerModisSwathMultiDay(config, model, spec) {
+export function dataHandlerModisSwathMultiDay(config, store, spec) {
+  const state = store.getState();
+  const dataState = state.data;
+  const crs = state.proj.selected.crs;
   var startTimeDelta = spec.startTimeDelta || 0;
   var endTimeDelta = spec.endTimeDelta || 0;
 
-  var self = dataHandlerBase(config, model);
+  var self = dataHandlerBase(config, store);
 
-  var init = function () {
-    self.extents[CRS_WGS_84] =
-      CRS_WGS_84_QUERY_EXTENT;
+  var init = function() {
+    self.extents[CRS_WGS_84] = CRS_WGS_84_QUERY_EXTENT;
   };
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
-      time: model.time,
+      time: getActiveTime(state),
       startTimeDelta: startTimeDelta,
       endTimeDelta: endTimeDelta,
       data: queryData
@@ -151,46 +156,46 @@ export function dataHandlerModisSwathMultiDay(config, model, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
     };
 
     // var ns = dataResults;
-    var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[dataState.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(dataState.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
-      dataResultsCollectPreferred(model.prefer),
-      dataResultsPreferredFilter(model.prefer),
+      dataResultsCollectPreferred(dataState.prefer),
+      dataResultsPreferredFilter(dataState.prefer),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
       dataResultsGeometryFromCMR(),
-      dataResultsTransform(model.crs),
-      dataResultsExtentFilter(model.crs, self.extents[model.crs]),
+      dataResultsTransform(crs),
+      dataResultsExtentFilter(crs, self.extents[crs]),
       dataResultsTimeFilter({
-        time: model.time,
+        time: getActiveTime(state),
         eastZone: spec.eastZone,
         westZone: spec.westZone,
         maxDistance: spec.maxDistance
       }),
-      dataResultsTimeLabel(model.time),
-      dataResultsConnectSwaths(model.crs)
+      dataResultsTimeLabel(getActiveTime(state)),
+      dataResultsConnectSwaths(crs)
     ];
     return chain.process(results);
   };
 
   init();
   return self;
-};
+}
 
-export function dataHandlerAquaSwathMultiDay(config, model) {
+export function dataHandlerAquaSwathMultiDay(config, store) {
   var spec = {
     startTimeDelta: -180,
     endTimeDelta: 180,
@@ -199,11 +204,11 @@ export function dataHandlerAquaSwathMultiDay(config, model) {
     westZone: 1380
   };
 
-  var self = dataHandlerModisSwathMultiDay(config, model, spec);
+  var self = dataHandlerModisSwathMultiDay(config, store, spec);
   return $.extend(true, self, spec);
-};
+}
 
-export function dataHandlerTerraSwathMultiDay(config, model) {
+export function dataHandlerTerraSwathMultiDay(config, store) {
   var spec = {
     startTimeDelta: -180,
     endTimeDelta: 180,
@@ -212,14 +217,14 @@ export function dataHandlerTerraSwathMultiDay(config, model) {
     westZone: 1260
   };
 
-  var self = dataHandlerModisSwathMultiDay(config, model, spec);
+  var self = dataHandlerModisSwathMultiDay(config, store, spec);
   return $.extend(true, self, spec);
-};
+}
 
-export function dataHandlerCollectionList(config, model, spec) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerCollectionList(config, store, spec) {
+  var self = dataHandlerBase(config, store);
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
       data: queryData,
       search: 'collections.json'
@@ -228,63 +233,65 @@ export function dataHandlerCollectionList(config, model, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[data.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
       dataResultsTagList(),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
-      dataResultsProductLabel(config.products[model.selectedProduct].name)
+      dataResultsProductLabel(config.products[data.selectedProduct].name)
     ];
     return chain.process(results);
   };
 
   return self;
-};
+}
 
-export function dataHandlerCollectionMix(config, model, spec) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerCollectionMix(config, store, spec) {
+  const state = store.getState();
+  const { data } = state;
+  var self = dataHandlerBase(config, store);
   var nrtHandler;
   var scienceHandler;
 
-  var init = function () {
-    var productConfig = config.products[model.selectedProduct];
+  var init = function() {
+    var productConfig = config.products[data.selectedProduct];
 
     var nrtHandlerName = productConfig.nrt.handler;
-    var nrtHandlerFactory =
-      dataHandlerGetByName(nrtHandlerName);
-    nrtHandler = nrtHandlerFactory(config, model, spec);
+    var nrtHandlerFactory = dataHandlerGetByName(nrtHandlerName);
+    nrtHandler = nrtHandlerFactory(config, store, spec);
 
     var scienceHandlerName = productConfig.science.handler;
-    var scienceHandlerFactory =
-      dataHandlerGetByName(scienceHandlerName);
-    scienceHandler = scienceHandlerFactory(config, model, spec);
+    var scienceHandlerFactory = dataHandlerGetByName(scienceHandlerName);
+    scienceHandler = scienceHandlerFactory(config, store, spec);
   };
 
-  self._submit = function () {
+  self._submit = function() {
+    const state = store.getState();
+    const dataState = state.data;
     var nrtQueryOptions = {
-      time: model.time,
+      time: getActiveTime(state),
       startTimeDelta: nrtHandler.startTimeDelta,
       endTimeDelta: nrtHandler.endTimeDelta,
-      data: config.products[model.selectedProduct].query.nrt,
+      data: config.products[dataState.selectedProduct].query.nrt,
       search: 'collections.json'
     };
     var nrt = self.cmr.submit(nrtQueryOptions);
 
     var scienceQueryOptions = {
-      time: model.time,
-      data: config.products[model.selectedProduct].query.science,
+      time: getActiveTime(state),
+      data: config.products[dataState.selectedProduct].query.science,
       search: 'collections.json'
     };
     var science = self.cmr.submit(scienceQueryOptions);
@@ -301,12 +308,13 @@ export function dataHandlerCollectionMix(config, model, spec) {
     ]);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
+    const dataState = store.getState().data;
     var useNRT = false;
     if (data.nrt.length > 0 && data.science.length > 0) {
-      useNRT = (model.prefer === 'nrt');
+      useNRT = dataState.prefer === 'nrt';
     } else {
-      useNRT = (data.nrt.length > 0);
+      useNRT = data.nrt.length > 0;
     }
 
     if (useNRT) {
@@ -318,58 +326,61 @@ export function dataHandlerCollectionMix(config, model, spec) {
 
   init();
   return self;
-};
+}
 
-export function dataHandlerList(config, model, spec) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerList(config, store, spec) {
+  const state = store.getState();
+  const dataState = state.data;
+  var self = dataHandlerBase(config, store);
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
       startTimeDelta: 1,
       endTimeDelta: -1,
-      time: model.time,
+      time: getActiveTime(state),
       data: queryData
     };
 
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[data.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
       dataResultsTagList(),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
-      dataResultsCollectPreferred(model.prefer),
-      dataResultsPreferredFilter(model.prefer),
+      dataResultsCollectPreferred(dataState.prefer),
+      dataResultsPreferredFilter(dataState.prefer),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
-      dataResultsDateTimeLabel(model.time)
+      dataResultsDateTimeLabel(getActiveTime(state))
     ];
     return chain.process(results);
   };
 
   return self;
-};
+}
 
-export function dataHandlerDailyGranuleList(config, model, spec) {
-  var self = dataHandlerList(config, model, spec);
+export function dataHandlerDailyGranuleList(config, store, spec) {
+  const state = store.getState();
+  var self = dataHandlerList(config, store, spec);
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
       startTimeDelta: 180,
       endTimeDelta: -180,
-      time: model.time,
+      time: getActiveTime(state),
       data: queryData
     };
 
@@ -377,57 +388,61 @@ export function dataHandlerDailyGranuleList(config, model, spec) {
   };
 
   return self;
-};
+}
 
-export function dataHandlerDailyAMSRE(config, model, spec) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerDailyAMSRE(config, store, spec) {
+  const state = store.getState();
+  var self = dataHandlerBase(config, store);
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
       startTimeDelta: 180,
       endTimeDelta: -180,
-      time: model.time,
+      time: getActiveTime(state),
       data: queryData
     };
 
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[data.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
       dataResultsTagList(),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsVersionFilterExact(productConfig.version),
-      dataResultsDateTimeLabel(model.time)
+      dataResultsDateTimeLabel(getActiveTime(state))
     ];
     return chain.process(results);
   };
 
   return self;
-};
+}
 
-export function dataHandlerModisGrid(config, model, spec) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerModisGrid(config, store, spec) {
+  const state = store.getState();
+  const dataState = state.data;
+  const projCrs = state.proj.selected.crs;
+  var self = dataHandlerBase(config, store);
 
-  self._submit = function () {
-    var crs = model.crs.replace(/:/, '_');
+  self._submit = function() {
+    var crs = projCrs.replace(/:/, '_');
 
     var queryOptions = {
       startTimeDelta: 1,
       endTimeDelta: -1,
-      time: model.time,
-      data: config.products[model.selectedProduct].query
+      time: getActiveTime(state),
+      data: config.products[dataState.selectedProduct].query
     };
 
     var granules = self.cmr.submit(queryOptions);
@@ -448,8 +463,8 @@ export function dataHandlerModisGrid(config, model, spec) {
     ]);
   };
 
-  self._processResults = function (data) {
-    var productConfig = config.products[model.selectedProduct];
+  self._processResults = function(data) {
+    var productConfig = config.products[dataState.selectedProduct];
     var results = {
       meta: {
         gridFetched: data.grid
@@ -460,56 +475,60 @@ export function dataHandlerModisGrid(config, model, spec) {
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsTagURS(productConfig.urs),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
       dataResultsModisGridIndex(),
-      dataResultsGeometryFromMODISGrid(model.crs),
-      dataResultsExtentFilter(model.crs, self.extents[model.crs]),
+      dataResultsGeometryFromMODISGrid(projCrs),
+      dataResultsExtentFilter(projCrs, self.extents[projCrs]),
       dataResultsModisGridLabel()
     ];
     return chain.process(results);
   };
 
   return self;
-};
+}
 
-export function dataHandlerModisMix(config, model, spec) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerModisMix(config, store, spec) {
+  const state = store.getState();
+  const dataState = state.data;
+  var self = dataHandlerBase(config, store);
   var nrtHandler;
   var scienceHandler;
 
-  var init = function () {
-    var productConfig = config.products[model.selectedProduct];
+  var init = function() {
+    var productConfig = config.products[dataState.selectedProduct];
 
     var nrtHandlerName = productConfig.nrt.handler;
-    var nrtHandlerFactory =
-      dataHandlerGetByName(nrtHandlerName);
-    nrtHandler = nrtHandlerFactory(config, model, spec);
+    var nrtHandlerFactory = dataHandlerGetByName(nrtHandlerName);
+    nrtHandler = nrtHandlerFactory(config, store, spec);
 
     var scienceHandlerName = productConfig.science.handler;
-    var scienceHandlerFactory =
-      dataHandlerGetByName(scienceHandlerName);
-    scienceHandler = scienceHandlerFactory(config, model, spec);
+    var scienceHandlerFactory = dataHandlerGetByName(scienceHandlerName);
+    scienceHandler = scienceHandlerFactory(config, store, spec);
   };
 
-  self._submit = function () {
-    var crs = model.crs.replace(/:/, '_');
+  self._submit = function() {
+    const state = store.getState();
+    const dataState = state.data;
+    const projCrs = state.proj.selected.crs;
+
+    var crs = projCrs.replace(/:/, '_');
 
     var nrtQueryOptions = {
-      time: model.time,
+      time: getActiveTime(state),
       startTimeDelta: nrtHandler.startTimeDelta,
       endTimeDelta: nrtHandler.endTimeDelta,
-      data: config.products[model.selectedProduct].query.nrt
+      data: config.products[dataState.selectedProduct].query.nrt
     };
     var nrt = self.cmr.submit(nrtQueryOptions);
 
     var scienceQueryOptions = {
-      time: model.time,
-      data: config.products[model.selectedProduct].query.science
+      time: getActiveTime(state),
+      data: config.products[dataState.selectedProduct].query.science
     };
     var science = self.cmr.submit(scienceQueryOptions);
 
@@ -534,12 +553,12 @@ export function dataHandlerModisMix(config, model, spec) {
     ]);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var useNRT = false;
     if (data.nrt.length > 0 && data.science.length > 0) {
-      useNRT = (model.prefer === 'nrt');
+      useNRT = dataState.prefer === 'nrt';
     } else {
-      useNRT = (data.nrt.length > 0);
+      useNRT = data.nrt.length > 0;
     }
 
     if (useNRT) {
@@ -554,41 +573,44 @@ export function dataHandlerModisMix(config, model, spec) {
 
   init();
   return self;
-};
+}
 
-export function dataHandlerModisSwath(config, model, spec) {
+export function dataHandlerModisSwath(config, store, spec) {
+  const state = store.getState();
+  const dataState = state.data;
+  const projCrs = state.proj.selected.crs;
+
   var MAX_DISTANCE = 270;
-  var self = dataHandlerBase(config, model);
+  var self = dataHandlerBase(config, store);
 
-  var init = function () {
-    self.extents[CRS_WGS_84] =
-      CRS_WGS_84_QUERY_EXTENT;
+  var init = function() {
+    self.extents[CRS_WGS_84] = CRS_WGS_84_QUERY_EXTENT;
   };
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
-      time: model.time,
+      time: getActiveTime(state),
       data: queryData
     };
 
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[data.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
-      dataResultsCollectPreferred(model.prefer),
-      dataResultsPreferredFilter(model.prefer),
+      dataResultsCollectPreferred(dataState.prefer),
+      dataResultsPreferredFilter(dataState.prefer),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
@@ -596,51 +618,53 @@ export function dataHandlerModisSwath(config, model, spec) {
       dataResultsGeometryFromCMR(),
       dataResultsAntiMeridianMulti(MAX_DISTANCE),
       dataResultsDensify(),
-      dataResultsTransform(model.crs),
-      dataResultsExtentFilter(model.crs, self.extents[model.crs]),
-      dataResultsTimeLabel(model.time),
-      dataResultsConnectSwaths(model.crs)
+      dataResultsTransform(projCrs),
+      dataResultsExtentFilter(projCrs, self.extents[projCrs]),
+      dataResultsTimeLabel(getActiveTime(state)),
+      dataResultsConnectSwaths(projCrs)
     ];
     return chain.process(results);
   };
 
   init();
   return self;
-};
+}
 
-export function dataHandlerHalfOrbit(config, model, spec) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerHalfOrbit(config, store, spec) {
+  const state = store.getState();
+  const dataState = state.data;
+  const projCrs = state.proj.selected.crs;
+  var self = dataHandlerBase(config, store);
 
-  var init = function () {
-    self.extents[CRS_WGS_84] =
-      CRS_WGS_84_QUERY_EXTENT;
+  var init = function() {
+    self.extents[CRS_WGS_84] = CRS_WGS_84_QUERY_EXTENT;
   };
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
-      time: model.time,
+      time: getActiveTime(state),
       data: queryData
     };
 
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[dataState.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
       dataResultsOrbitFilter(productConfig.orbit),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
-      dataResultsCollectPreferred(model.prefer),
-      dataResultsPreferredFilter(model.prefer),
+      dataResultsCollectPreferred(dataState.prefer),
+      dataResultsPreferredFilter(dataState.prefer),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
@@ -648,18 +672,20 @@ export function dataHandlerHalfOrbit(config, model, spec) {
       dataResultsGeometryFromCMR(),
       dataResultsDividePolygon(),
       dataResultsDensify(),
-      dataResultsTransform(model.crs),
-      dataResultsTimeLabel(model.time)
+      dataResultsTransform(projCrs),
+      dataResultsTimeLabel(getActiveTime(state))
     ];
     return chain.process(results);
   };
 
   init();
   return self;
-};
+}
 
-export function dataHandlerVIIRSSwathDay(config, model) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerVIIRSSwathDay(config, store) {
+  const state = store.getState();
+  const projCrs = state.proj.selected.crs;
+  var self = dataHandlerBase(config, store);
 
   var spec = {
     startTimeDelta: -180, // process granules 3 hours before and
@@ -669,15 +695,15 @@ export function dataHandlerVIIRSSwathDay(config, model) {
     westZone: 1380
   };
 
-  var init = function () {
+  var init = function() {
     // Normal north-south extent minus a degree on each side. This removes
     // granules that misbehave at the poles
     self.extents[CRS_WGS_84] = [-180, -59, 180, 59];
   };
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
-      time: model.time,
+      time: getActiveTime(state),
       startTimeDelta: spec.startTimeDelta,
       endTimeDelta: spec.endTimeDelta,
       data: queryData
@@ -686,41 +712,43 @@ export function dataHandlerVIIRSSwathDay(config, model) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[data.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsGeometryFromCMR(),
-      dataResultsTransform(model.crs),
-      dataResultsExtentFilter(model.crs, self.extents[model.crs]),
+      dataResultsTransform(projCrs),
+      dataResultsExtentFilter(projCrs, self.extents[projCrs]),
       dataResultsTimeFilter({
-        time: model.time,
+        time: getActiveTime(state),
         eastZone: spec.eastZone,
         westZone: spec.westZone,
         maxDistance: spec.maxDistance
       }),
-      dataResultsTimeLabel(model.time),
+      dataResultsTimeLabel(getActiveTime(state)),
       // End of one granule is 60 seconds behind the start of the next granule.
       // Use delta of -60.
-      dataResultsConnectSwaths(model.crs, -60)
+      dataResultsConnectSwaths(projCrs, -60)
     ];
     return chain.process(results);
   };
 
   init();
   return self;
-};
+}
 
-export function dataHandlerVIIRSSwathNight(config, model) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerVIIRSSwathNight(config, store) {
+  const state = store.getState();
+  const projCrs = state.proj.selected.crs;
+  var self = dataHandlerBase(config, store);
 
   var spec = {
     startTimeDelta: 0,
@@ -730,15 +758,15 @@ export function dataHandlerVIIRSSwathNight(config, model) {
     westZone: 1440 // Move everything west of the anti-merdian to the east
   };
 
-  var init = function () {
+  var init = function() {
     // Normal north-south extent minus a degree on each side. This removes
     // granules that misbehave at the poles
     self.extents[CRS_WGS_84] = [-180, -59, 180, 59];
   };
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
-      time: model.time,
+      time: getActiveTime(state),
       startTimeDelta: spec.startTimeDelta,
       endTimeDelta: spec.endTimeDelta,
       data: queryData
@@ -747,53 +775,55 @@ export function dataHandlerVIIRSSwathNight(config, model) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[model.selectedProduct];
+    var productConfig = config.products[data.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsGeometryFromCMR(),
       dataResultsAntiMeridianMulti(spec.maxDistance),
-      dataResultsTransform(model.crs),
-      dataResultsExtentFilter(model.crs, self.extents[model.crs]),
+      dataResultsTransform(projCrs),
+      dataResultsExtentFilter(projCrs, self.extents[projCrs]),
       dataResultsTimeFilter({
-        time: model.time,
+        time: getActiveTime(state),
         eastZone: spec.eastZone,
         westZone: spec.westZone,
         maxDistance: spec.maxDistance
       }),
-      dataResultsTimeLabel(model.time),
+      dataResultsTimeLabel(getActiveTime(state)),
       // End of one granule is 60 seconds behind the start of the next granule.
       // Use delta of -60.
-      dataResultsConnectSwaths(model.crs, -60)
+      dataResultsConnectSwaths(projCrs, -60)
     ];
     return chain.process(results);
   };
 
   init();
   return self;
-};
+}
 
-export function dataHandlerWeldGranuleFootprints(config, model, spec) {
-  var self = dataHandlerBase(config, model);
+export function dataHandlerWeldGranuleFootprints(config, store, spec) {
+  const state = store.getState();
+  const projCrs = state.proj.selected.crs;
+  var self = dataHandlerBase(config, store);
 
-  self._submit = function (queryData) {
+  self._submit = function(queryData) {
     var queryOptions = {
-      time: model.time,
+      time: getActiveTime(state),
       data: queryData
     };
 
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function (data) {
+  self._processResults = function(data) {
     var results = {
       meta: {},
       granules: data
@@ -802,16 +832,16 @@ export function dataHandlerWeldGranuleFootprints(config, model, spec) {
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsTagButtonScale(0.35), // standard button size is too big
-      dataResultsTagProduct(model.selectedProduct),
+      dataResultsTagProduct(data.selectedProduct),
       dataResultsTagVersion(),
       dataResultsGeometryFromCMR(),
       dataResultsDensify(),
-      dataResultsTransform(model.crs),
-      dataResultsExtentFilter(model.crs, self.extents[model.crs]),
+      dataResultsTransform(projCrs),
+      dataResultsExtentFilter(projCrs, self.extents[projCrs]),
       dataResultsTitleLabel()
     ];
     return chain.process(results);
   };
 
   return self;
-};
+}

@@ -1,6 +1,6 @@
 import lodashEach from 'lodash/each';
 import lodashFind from 'lodash/find';
-import util from '../util/util';
+import util from '../../util/util';
 import { dataHandlerGetByName } from './handler';
 
 export function dataModel(models, config) {
@@ -306,11 +306,11 @@ export function dataModel(models, config) {
     return self;
   };
 
-  var query = function() {
+  var query = function(selectedProduct) {
     if (!self.active) {
       return;
     }
-    if (!self.selectedProduct) {
+    if (!selectedProduct) {
       self.events.trigger(self.EVENT_QUERY_RESULTS, {
         meta: {},
         granules: []
@@ -318,9 +318,9 @@ export function dataModel(models, config) {
       return;
     }
 
-    var productConfig = config.products[self.selectedProduct];
+    var productConfig = config.products[selectedProduct];
     if (!productConfig) {
-      throw Error('Product not defined: ' + self.selectedProduct);
+      throw Error('Product not defined: ' + selectedProduct);
     }
 
     var handlerFactory = dataHandlerGetByName(productConfig.handler);
@@ -470,7 +470,7 @@ export function dataModel(models, config) {
       throw Error('No layer displayed for product: ' + productName);
     }
   };
-
+  self.query = query;
   init();
   return self;
 }

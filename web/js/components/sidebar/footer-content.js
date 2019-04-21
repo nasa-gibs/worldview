@@ -12,6 +12,7 @@ import {
 } from '../../modules/data/selectors';
 import ProductPicker from '../layer/product-picker/product-picker';
 import { openCustomContent } from '../../modules/modal/actions';
+import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
 
 class FooterContent extends React.Component {
   render() {
@@ -134,6 +135,9 @@ class FooterContent extends React.Component {
 const mapDispatchToProps = dispatch => ({
   toggleMode: str => {
     dispatch(changeMode(str));
+  },
+  onGetData: () => {
+    dispatch({ type: DATA_GET_DATA_CLICK });
   },
   addLayers: () => {
     dispatch(

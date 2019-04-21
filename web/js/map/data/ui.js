@@ -2,21 +2,25 @@ import lodashSize from 'lodash/size';
 import lodashEach from 'lodash/each';
 import googleTagManager from 'googleTagManager';
 import * as olExtent from 'ol/extent';
-
+import { dataHandlerGetByName } from './handler';
 import { dataMap } from './map';
-import uiIndicator from '../ui/indicator';
-import util from '../util/util';
-import wvui from '../ui/ui';
+import uiIndicator from '../../ui/indicator';
+import util from '../../util/util';
+import wvui from '../../ui/ui';
 import { REL_DATA, REL_METADATA, REL_BROWSE, DATA_EXTS } from './cmr';
+import * as DATA_CONSTANTS from '../../modules/data/constants';
+import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
+import { toggleGranule } from '../../modules/data/actions';
 
-export function dataUi(models, ui, config) {
+export function dataUi(store, ui, config, models) {
   var queryActive = false;
-  var model = models.data;
   var mapController = null;
   var selectionListPanel = null;
   var downloadListPanel = null;
   var lastResults = null;
   var maps = ui.map;
+  var queryExecuting = false;
+  var nextQuery = null;
 
   var indicators = {
     query: null,
@@ -25,36 +29,103 @@ export function dataUi(models, ui, config) {
   };
 
   var self = {};
+  self.events = util.events();
+  self.EVENT_QUERY = 'query';
+  self.EVENT_QUERY_RESULTS = 'queryResults';
+  self.EVENT_QUERY_CANCEL = 'queryCancel';
+  self.EVENT_QUERY_ERROR = 'queryError';
   self.selector = '#wv-data';
   self.id = 'wv-data';
+  const subscribeToStore = function() {
+    const state = store.getState();
+    const action = state.lastAction;
+    switch (action.type) {
+      case CHANGE_SIDEBAR_TAB:
+        return action.activeTab === 'download' ? onActivate() : mapController ? onDeactivate() : '';
+      case DATA_CONSTANTS.DATA_GET_DATA_CLICK:
+        return self.showDownloadList();
+      case DATA_CONSTANTS.DATA_GRANULE_SELECT:
+      case DATA_CONSTANTS.DATA_GRANULE_UNSELECT:
+        return updateSelection();
+    }
+  };
+  var query = function() {
+    const state = store.getState();
+    const dataState = state.data;
+    if (state.sidebar.activeTab !== 'download') {
+      return;
+    }
+    if (!dataState.selectedProduct) {
+      self.events.trigger(self.EVENT_QUERY_RESULTS, {
+        meta: {},
+        granules: []
+      });
+      return;
+    }
 
-  var init = function() {
-    model.events
-      .on('activate', onActivate)
-      .on('deactivate', onDeactivate)
-      .on('query', onQuery)
-      .on('queryResults', onQueryResults)
-      .on('queryCancel', onQueryCancel)
-      .on('queryError', onQueryError)
-      .on('queryTimeout', onQueryTimeout)
-      .on('granuleSelect', updateSelection)
-      .on('granuleUnselect', updateSelection);
+    var productConfig = config.products[dataState.selectedProduct];
+    if (!productConfig) {
+      throw Error('Product not defined: ' + dataState.selectedProduct);
+    }
 
-    ui.sidebar.events.on('selectTab', function(tab) {
-      if (tab === 'download') {
-        googleTagManager.pushEvent({
-          'event': 'data_download_tab'
-        });
-        model.activate();
-      } else {
-        model.deactivate();
+    var handlerFactory = dataHandlerGetByName(productConfig.handler);
+    var handler = handlerFactory(config, store);
+    handler.events
+      .on('query', function() {
+        self.events.trigger(self.EVENT_QUERY);
+      })
+      .on('results', function(results) {
+        queryExecuting = false;
+        if (self.active && !nextQuery) {
+          self.events.trigger(self.EVENT_QUERY_RESULTS, results);
+        }
+        if (nextQuery) {
+          var q = nextQuery;
+          nextQuery = null;
+          executeQuery(q);
+        }
+      })
+      .on('error', function(textStatus, errorThrown) {
+        queryExecuting = false;
+        if (self.active) {
+          self.events.trigger(self.EVENT_QUERY_ERROR, textStatus, errorThrown);
+        }
+      })
+      .on('timeout', function() {
+        queryExecuting = false;
+        if (self.active) {
+          self.events.trigger(self.EVENT_QUERY_TIMEOUT);
+        }
+      });
+    executeQuery(handler);
+  };
+
+  var executeQuery = function(handler) {
+    if (!queryExecuting) {
+      try {
+        queryExecuting = true;
+        handler.submit();
+      } catch (error) {
+        queryExecuting = false;
+        throw error;
       }
-    });
+    } else {
+      nextQuery = handler;
+    }
+  };
+  var init = function() {
+    store.subscribe(subscribeToStore);
+    self.events.on('query', onQuery)
+      .on('queryResults', onQueryResults)
+      .on('queryError', onQueryError)
+      .on('queryTimeout', onQueryTimeout);
+    models.date.events.on('select', query);
   };
   self.onViewChange = function() {
+    const state = store.getState();
     var map = ui.map.selected;
 
-    if (!model.active || queryActive || !lastResults) {
+    if (!state.data.active || queryActive || !lastResults) {
       return;
     }
     if (lastResults.granules.length === 0) {
@@ -63,7 +134,7 @@ export function dataUi(models, ui, config) {
     var hasCentroids = false;
     var inView = false;
     var extent = map.getView().calculateExtent(map.getSize());
-    var crs = models.proj.selected.crs;
+    var crs = state.proj.selected.crs;
     lodashEach(lastResults.granules, function(granule) {
       if (granule.centroid && granule.centroid[crs]) {
         hasCentroids = true;
@@ -84,12 +155,15 @@ export function dataUi(models, ui, config) {
     }
   };
   var onActivate = function() {
+    self.active = true;
     if (!mapController) {
-      mapController = dataMap(model, maps, config);
+      mapController = dataMap(store, maps, self);
     }
+    query();
   };
 
   var onDeactivate = function() {
+    self.active = false;
     uiIndicator.hide(indicators);
     if (selectionListPanel) {
       selectionListPanel.hide();
@@ -112,6 +186,7 @@ export function dataUi(models, ui, config) {
   };
 
   var onQueryResults = function(results) {
+    const dataState = store.getState().data;
     if (selectionListPanel) {
       selectionListPanel.hide();
       selectionListPanel = null;
@@ -120,19 +195,14 @@ export function dataUi(models, ui, config) {
     lastResults = results;
     uiIndicator.hide(indicators);
     var hasResults = true;
-    if (model.selectedProduct !== null && results.granules.length === 0) {
+    if (dataState.selectedProduct !== null && results.granules.length === 0) {
       indicators.noData = uiIndicator.noData(indicators);
       hasResults = false;
     }
     if (results.meta.showList && hasResults) {
-      selectionListPanel = dataUiSelectionListPanel(model, results);
+      selectionListPanel = dataUiSelectionListPanel(store, results);
       selectionListPanel.show();
     }
-  };
-
-  var onQueryCancel = function() {
-    queryActive = false;
-    uiIndicator.hide(indicators);
   };
 
   var onQueryError = function(status, error) {
@@ -160,7 +230,7 @@ export function dataUi(models, ui, config) {
       selectionListPanel.setVisible(false);
     }
     if (!downloadListPanel) {
-      downloadListPanel = dataUiDownloadListPanel(config, model);
+      downloadListPanel = dataUiDownloadListPanel(config, store);
       downloadListPanel.events.on('close', function() {
         if (selectionListPanel) {
           selectionListPanel.setVisible(true);
@@ -297,7 +367,9 @@ var dataUiBulkDownloadPage = (function() {
   return ns;
 })();
 
-var dataUiDownloadListPanel = function(config, model) {
+var dataUiDownloadListPanel = function(config, store) {
+  const state = store.getState();
+  const dataStore = state.data;
   var NOTICE =
     "<div id='wv-data-selection-notice'>" +
     "<i class='icon fa fa-info-circle fa-3x'></i>" +
@@ -356,10 +428,11 @@ var dataUiDownloadListPanel = function(config, model) {
   };
 
   self.refresh = function() {
+    const dataState = store.getState().data;
     selection = reformatSelection();
     $('#wv-data-selection').html(bodyText(selection));
     var bulkVisible =
-      isBulkDownloadable() && lodashSize(model.selectedGranules) !== 0;
+      isBulkDownloadable() && lodashSize(dataState.selectedGranules) !== 0;
     if (bulkVisible) {
       $('wv-data-bulk-download-links').show();
     } else {
@@ -389,7 +462,7 @@ var dataUiDownloadListPanel = function(config, model) {
     var selection = {};
 
     urs = false;
-    $.each(model.selectedGranules, function(key, granule) {
+    $.each(dataStore.selectedGranules, function(key, granule) {
       if (granule.urs) {
         urs = true;
       }
@@ -594,7 +667,9 @@ var dataUiDownloadListPanel = function(config, model) {
   };
 
   var bodyText = function() {
-    if (lodashSize(model.selectedGranules) === 0) {
+    const dataState = store.getState().data;
+
+    if (lodashSize(dataState.selectedGranules) === 0) {
       return '<br/><h3>Selection Empty</h3>';
     }
     var elements = [];
@@ -628,35 +703,37 @@ var dataUiDownloadListPanel = function(config, model) {
 
   var showWgetPage = function() {
     googleTagManager.pushEvent({
-      'event': 'data_download_list_wget'
+      event: 'data_download_list_wget'
     });
     dataUiBulkDownloadPage.show(selection, 'wget');
   };
 
   var showCurlPage = function() {
     googleTagManager.pushEvent({
-      'event': 'data_download_list_curl'
+      event: 'data_download_list_curl'
     });
     dataUiBulkDownloadPage.show(selection, 'curl');
   };
 
   var removeGranule = function() {
     var id = $(this).attr('data-granule');
-    model.unselectGranule(model.selectedGranules[id]);
+    store.dispatch(toggleGranule(dataStore.selectedGranules[id]));
     onHoverOut.apply(this);
   };
 
   var onHoverOver = function() {
-    model.events.trigger(
+    const dataState = store.getState().data;
+    self.events.trigger(
       'hoverOver',
-      model.selectedGranules[$(this).attr('data-granule')]
+      dataState.selectedGranules[$(this).attr('data-granule')]
     );
   };
 
   var onHoverOut = function() {
-    model.events.trigger(
+    const dataState = store.getState().data;
+    self.events.trigger(
       'hoverOut',
-      model.selectedGranules[$(this).attr('data-granule')]
+      dataState.selectedGranules[$(this).attr('data-granule')]
     );
   };
 

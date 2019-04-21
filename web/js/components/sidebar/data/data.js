@@ -18,13 +18,16 @@ class Data extends React.Component {
       counts,
       selectedProduct,
       selectProduct,
+      activeLayers,
       products,
       showUnavailableReason,
       tabTypes
     } = this.props;
     if (!tabTypes.download) return null;
     const dataArray = Object.entries(products);
-    if (dataArray.length > 0 && !selectedProduct) findProductToSelect(products);
+    if (dataArray.length > 0 && !selectedProduct) {
+      findProductToSelect(activeLayers);
+    }
     return (
       <Scrollbars style={{ maxHeight: height + 'px' }}>
         <div id="wv-data">
@@ -62,7 +65,10 @@ Data.propTypes = {
 const mapDispatchToProps = dispatch => ({
   findProductToSelect: products => {
     const newSelection = findAvailableProduct(products);
-    if (newSelection) dispatch(selectProduct(newSelection));
+
+    if (newSelection) {
+      dispatch(selectProduct(newSelection));
+    }
   },
   selectProduct: id => {
     dispatch(selectProduct(id));
@@ -80,7 +86,7 @@ function mapStateToProps(state, ownProps) {
     config,
     proj.id
   );
-  return { counts, selectedProduct, products, tabTypes };
+  return { counts, selectedProduct, products, tabTypes, activeLayers };
 }
 export default connect(
   mapStateToProps,

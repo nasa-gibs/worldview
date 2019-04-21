@@ -25,6 +25,7 @@ import { animationWidget } from './animation/widget';
 import { animationRangeSelect } from './animation/range-select';
 import { animationGif } from './animation/gif';
 import { debugLayers } from './debug';
+import { dataUi } from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
 
 /**
@@ -86,9 +87,9 @@ export function combineUi(models, config, MapMouseEvents, store) {
     }
     ui.dateWheels = dateWheels(models, config);
   }
-  // if (config.features.dataDownload) {
-  //   ui.data = dataUi(models, ui, config);
-  // }
+  if (config.features.dataDownload) {
+    ui.data = dataUi(store, ui, config);
+  }
   if (config.features.naturalEvents) {
     // var request = naturalEventsRequest(models, ui, config);
     ui.naturalEvents = naturalEventsUI(models, ui, config, store);

@@ -71,7 +71,7 @@ export function MapRunningData(models, compareUi, store) {
       if (!isFromActiveCompareRegion(map, coords, layer.wv)) return;
       if (layer.wv.def.palette) {
         layerId = layer.wv.id;
-        legends = getPalette(layerId, undefined, state);
+        legends = getPalette(layerId, undefined, undefined, state);
         hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
         activeLayerObj[layerId] = { legends: legends, hex: hex };
       }

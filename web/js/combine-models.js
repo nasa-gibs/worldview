@@ -5,7 +5,7 @@ import { layersModel } from './layers/model';
 import { mapModel } from './map/model';
 import { animationModel } from './animation/model';
 import { palettesModel } from './palettes/model';
-import { dataModel } from './data/model';
+import { dataModel } from './map/data/model';
 import { projectionModel } from './projection/model';
 import { compareModel } from './compare/model';
 import { tourModel } from './tour/model';

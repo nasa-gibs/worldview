@@ -1,4 +1,3 @@
-import lodashEach from 'lodash/each';
 import OlStyleStyle from 'ol/style/Style';
 import OlStyleIcon from 'ol/style/Icon';
 import OlStyleText from 'ol/style/Text';
@@ -9,10 +8,13 @@ import OlSourceVector from 'ol/source/Vector';
 import OlGeomLineString from 'ol/geom/LineString';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlFeature from 'ol/Feature';
+import { toggleGranule } from '../../modules/data/actions';
+import { CHANGE_PROJECTION } from '../../modules/projection/constants';
+import { find as lodashFind, each as lodashEach } from 'lodash';
 
-import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map/map';
+import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map';
 
-export function dataMap(model, maps, config) {
+export function dataMap(store, maps, dataUi) {
   var self = {};
 
   var map = null;
@@ -25,10 +27,18 @@ export function dataMap(model, maps, config) {
   var swathLayer = null;
   var hovering = null;
   var selectedFeatures = null;
+  const subscribeToStore = function() {
+    const state = store.getState();
+    const action = state.lastAction;
 
-  var init = function () {
-    model.events
-      .on('activate', updateProjection)
+    switch (action.type) {
+      case CHANGE_PROJECTION:
+        return updateProjection(action.id);
+    }
+  };
+  var init = function() {
+    self.unSubscribe = store.subscribe(subscribeToStore);
+    dataUi.events
       .on('query', clear)
       .on('queryResults', updateGranules)
       .on('projectionUpdate', updateProjection)
@@ -37,24 +47,28 @@ export function dataMap(model, maps, config) {
     updateProjection();
   };
 
-  var buttonStyle = function (feature) {
+  var buttonStyle = function(feature) {
+    const dataState = store.getState().data;
     var dimensions = getButtonDimensions(feature);
     var image;
-    if (model.isSelected(feature.granule)) {
+    if (lodashFind(dataState.selectedGranules, { id: feature.granule.id })) {
       image = 'images/data.minus-button.png';
     } else {
       image = 'images/data.plus-button.png';
     }
 
-    return [new OlStyleStyle({
-      image: new OlStyleIcon({
-        src: image,
-        scale: dimensions.scale
+    return [
+      new OlStyleStyle({
+        image: new OlStyleIcon({
+          src: image,
+          scale: dimensions.scale
+        })
       })
-    })];
+    ];
   };
 
-  var hoverStyle = function (feature) {
+  var hoverStyle = function(feature) {
+    const dataState = store.getState().data;
     var dimensions = getButtonDimensions(feature);
     var offset = -(dimensions.size / 2.0 + 14);
     var textStyle = new OlStyleText({
@@ -70,32 +84,36 @@ export function dataMap(model, maps, config) {
       }),
       offsetY: offset
     });
-    if (!model.isSelected(feature.granule)) {
-      return [new OlStyleStyle({
-        fill: new OlStyleFill({
-          color: 'rgba(181, 158, 50, 0.25)'
-        }),
-        stroke: new OlStyleStroke({
-          color: 'rgb(251, 226, 109)',
-          width: 3
-        }),
-        text: textStyle
-      })];
+    if (!lodashFind(dataState.selectedGranules, { id: feature.granule.id })) {
+      return [
+        new OlStyleStyle({
+          fill: new OlStyleFill({
+            color: 'rgba(181, 158, 50, 0.25)'
+          }),
+          stroke: new OlStyleStroke({
+            color: 'rgb(251, 226, 109)',
+            width: 3
+          }),
+          text: textStyle
+        })
+      ];
     } else {
-      return [new OlStyleStyle({
-        fill: new OlStyleFill({
-          color: 'rgba(242, 12, 12, 0.25)'
-        }),
-        stroke: new OlStyleStroke({
-          color: 'rgb(255, 6, 0)',
-          width: 3
-        }),
-        text: textStyle
-      })];
+      return [
+        new OlStyleStyle({
+          fill: new OlStyleFill({
+            color: 'rgba(242, 12, 12, 0.25)'
+          }),
+          stroke: new OlStyleStroke({
+            color: 'rgb(255, 6, 0)',
+            width: 3
+          }),
+          text: textStyle
+        })
+      ];
     }
   };
 
-  var createButtonLayer = function () {
+  var createButtonLayer = function() {
     buttonLayer = new OlLayerVector({
       source: new OlSourceVector({
         wrapX: false
@@ -105,7 +123,7 @@ export function dataMap(model, maps, config) {
     map.addLayer(buttonLayer);
   };
 
-  var createHoverLayer = function () {
+  var createHoverLayer = function() {
     hoverLayer = new OlLayerVector({
       source: new OlSourceVector({
         wrapX: false
@@ -115,7 +133,7 @@ export function dataMap(model, maps, config) {
     map.addLayer(hoverLayer);
   };
 
-  var createSelectionLayer = function () {
+  var createSelectionLayer = function() {
     selectionLayer = new OlLayerVector({
       source: new OlSourceVector({
         wrapX: false
@@ -134,7 +152,7 @@ export function dataMap(model, maps, config) {
     map.addLayer(selectionLayer);
   };
 
-  var createSwathLayer = function () {
+  var createSwathLayer = function() {
     swathLayer = new OlLayerVector({
       source: new OlSourceVector({
         wrapX: false
@@ -149,7 +167,7 @@ export function dataMap(model, maps, config) {
     map.addLayer(swathLayer);
   };
 
-  var createGridLayer = function () {
+  var createGridLayer = function() {
     gridLayer = new OlLayerVector({
       source: new OlSourceVector({
         wrapX: false
@@ -164,19 +182,17 @@ export function dataMap(model, maps, config) {
     map.addLayer(gridLayer);
   };
 
-  var create = function () {
+  var create = function() {
     createSelectionLayer();
     createGridLayer();
     createSwathLayer();
     createButtonLayer();
     createHoverLayer();
-    $(maps.selected.getViewport())
-      .on('mousemove', hoverCheck);
-    $(maps.selected.getViewport())
-      .on('click', clickCheck);
+    $(maps.selected.getViewport()).on('mousemove', hoverCheck);
+    $(maps.selected.getViewport()).on('click', clickCheck);
   };
 
-  var dispose = function () {
+  var dispose = function() {
     if (map) {
       map.removeLayer(selectionLayer);
       map.removeLayer(gridLayer);
@@ -185,38 +201,40 @@ export function dataMap(model, maps, config) {
       map.removeLayer(buttonLayer);
     }
     selectedFeatures = [];
-    $(maps.selected.getViewport())
-      .off('mousemove', hoverCheck);
-    $(maps.selected.getViewport())
-      .off('click', clickCheck);
+    $(maps.selected.getViewport()).off('mousemove', hoverCheck);
+    $(maps.selected.getViewport()).off('click', clickCheck);
+    if (self.unSubscribe) {
+      self.unSubscribe(); // unSubscribe redux listeners
+    }
   };
   self.dispose = dispose;
 
-  var updateGranules = function (r) {
+  var updateGranules = function(r) {
+    const dataState = store.getState().data;
     results = r;
     granules = r.granules;
     updateButtons();
     updateSwaths();
     updateGrid();
-    lodashEach(model.selectedGranules, function (granule) {
+    lodashEach(dataState.selectedGranules, function(granule) {
       if (selectedFeatures[granule.id]) {
-        selectionLayer.getSource()
-          .removeFeature(selectedFeatures[granule.id]);
+        selectionLayer.getSource().removeFeature(selectedFeatures[granule.id]);
         delete selectedFeatures[granule.id];
       }
       selectGranule(granule);
     });
   };
 
-  var updateButtons = function () {
-    buttonLayer.getSource()
-      .clear();
+  var updateButtons = function() {
+    const state = store.getState();
+    const projCrs = state.proj.selected.crs;
+    buttonLayer.getSource().clear();
     var features = [];
-    lodashEach(granules, function (granule) {
-      if (!granule.centroid || !granule.centroid[model.crs]) {
+    lodashEach(granules, function(granule) {
+      if (!granule.centroid || !granule.centroid[projCrs]) {
         return;
       }
-      var centroid = granule.centroid[model.crs];
+      var centroid = granule.centroid[projCrs];
       var feature = new OlFeature({
         geometry: centroid
       });
@@ -225,35 +243,32 @@ export function dataMap(model, maps, config) {
       granule.feature = feature;
       features.push(feature);
     });
-    buttonLayer.getSource()
-      .addFeatures(features);
+    buttonLayer.getSource().addFeatures(features);
   };
 
-  var updateSwaths = function () {
-    swathLayer.getSource()
-      .clear();
+  var updateSwaths = function() {
+    const state = store.getState();
+    const projCrs = state.proj.selected.crs;
+    swathLayer.getSource().clear();
     var swaths = results.meta.swaths;
     if (!swaths) {
       return;
     }
-    var maxDistance = (model.crs === CRS_WGS_84)
-      ? 270 : Number.POSITIVE_INFINITY;
+    var maxDistance = projCrs === CRS_WGS_84 ? 270 : Number.POSITIVE_INFINITY;
     var features = [];
-    lodashEach(swaths, function (swath) {
+    lodashEach(swaths, function(swath) {
       var lastGranule = null;
-      lodashEach(swath, function (granule) {
+      lodashEach(swath, function(granule) {
         if (!lastGranule) {
           lastGranule = granule;
           return;
         }
-        var polys1 = mapToPolys(lastGranule.geometry[model.crs]);
-        var polys2 = mapToPolys(granule.geometry[model.crs]);
-        lodashEach(polys1, function (poly1) {
-          lodashEach(polys2, function (poly2) {
-            var c1 = poly1.getInteriorPoint()
-              .getCoordinates();
-            var c2 = poly2.getInteriorPoint()
-              .getCoordinates();
+        var polys1 = mapToPolys(lastGranule.geometry[projCrs]);
+        var polys2 = mapToPolys(granule.geometry[projCrs]);
+        lodashEach(polys1, function(poly1) {
+          lodashEach(polys2, function(poly2) {
+            var c1 = poly1.getInteriorPoint().getCoordinates();
+            var c2 = poly2.getInteriorPoint().getCoordinates();
             var distanceX = mapDistanceX(c1[0], c2[0]);
             if (distanceX < maxDistance) {
               var ls = new OlGeomLineString([c1, c2]);
@@ -264,42 +279,40 @@ export function dataMap(model, maps, config) {
         lastGranule = granule;
       });
     });
-    swathLayer.getSource()
-      .addFeatures(features);
+    swathLayer.getSource().addFeatures(features);
   };
 
-  var updateGrid = function () {
-    gridLayer.getSource()
-      .clear();
+  var updateGrid = function() {
+    gridLayer.getSource().clear();
     var grid = results.meta.grid;
     if (!grid) {
       return;
     }
     var features = [];
     var parser = new OlFormatGeoJSON();
-    lodashEach(grid, function (cell) {
+    lodashEach(grid, function(cell) {
       var geom = parser.readGeometry(cell.geometry);
       var feature = new OlFeature(geom);
       features.push(feature);
     });
-    gridLayer.getSource()
-      .addFeatures(features);
+    gridLayer.getSource().addFeatures(features);
   };
 
-  var selectGranule = function (granule) {
+  var selectGranule = function(granule) {
+    const state = store.getState();
+    const projCrs = state.proj.selected.crs;
     if (!granule.feature) {
       return;
     }
     granule.feature.changed();
-    var select = new OlFeature(granule.geometry[model.crs]);
+    var select = new OlFeature(granule.geometry[projCrs]);
     select.granule = granule;
     // granule.selectedFeature = select;
-    selectionLayer.getSource()
-      .addFeature(select);
+    selectionLayer.getSource().addFeature(select);
     selectedFeatures[granule.id] = select;
   };
 
-  var unselectGranule = function (granule) {
+  var unselectGranule = function(granule) {
     if (!granule.feature) {
       return;
     }
@@ -311,29 +324,25 @@ export function dataMap(model, maps, config) {
     }
   };
 
-  var updateProjection = function () {
+  var updateProjection = function() {
     dispose();
     map = maps.selected;
     create();
   };
 
-  var clear = function () {
+  var clear = function() {
     if (map) {
-      swathLayer.getSource()
-        .clear();
-      gridLayer.getSource()
-        .clear();
-      hoverLayer.getSource()
-        .clear();
-      buttonLayer.getSource()
-        .clear();
+      swathLayer.getSource().clear();
+      gridLayer.getSource().clear();
+      hoverLayer.getSource().clear();
+      buttonLayer.getSource().clear();
     }
   };
 
-  var hoverCheck = function (event) {
+  var hoverCheck = function(event) {
     var pixel = map.getEventPixel(event.originalEvent);
     var newFeature = null;
-    map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+    map.forEachFeatureAtPixel(pixel, function(feature, layer) {
       if (feature.button) {
         newFeature = feature;
       }
@@ -355,38 +364,36 @@ export function dataMap(model, maps, config) {
     hovering = newFeature;
   };
 
-  var clickCheck = function (event) {
+  var clickCheck = function(event) {
     var pixel = map.getEventPixel(event.originalEvent);
-    map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+    map.forEachFeatureAtPixel(pixel, function(feature, layer) {
       if (feature.button) {
-        model.toggleGranule(feature.granule);
+        store.dispatch(toggleGranule(feature.granule));
         hovering = false;
         hoverCheck(event);
       }
     });
   };
 
-  var hoverOver = function (feature) {
+  var hoverOver = function(feature) {
+    const state = store.getState();
+    const projCrs = state.proj.selected.crs;
     var granule = feature.granule;
     if (!granule.geometry) {
       return;
     }
-    var hover = new OlFeature(granule.geometry[model.crs]);
+    var hover = new OlFeature(granule.geometry[projCrs]);
     hover.granule = granule;
-    hoverLayer.getSource()
-      .clear();
-    hoverLayer.getSource()
-      .addFeature(hover);
+    hoverLayer.getSource().clear();
+    hoverLayer.getSource().addFeature(hover);
   };
 
-  var hoverOut = function () {
-    hoverLayer.getSource()
-      .clear();
+  var hoverOut = function() {
+    hoverLayer.getSource().clear();
   };
 
-  var getButtonDimensions = function (feature) {
-    var zoom = map.getView()
-      .getZoom();
+  var getButtonDimensions = function(feature) {
+    var zoom = map.getView().getZoom();
     // Minimum size of the button is 15 pixels
     var base = 12;
     // Double the size for each zoom level
@@ -404,4 +411,4 @@ export function dataMap(model, maps, config) {
 
   init();
   return self;
-};
+}
