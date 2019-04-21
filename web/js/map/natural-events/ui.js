@@ -82,7 +82,6 @@ export default function naturalEventsUI(models, ui, config, store) {
   };
   const onSidebarChange = function(tab) {
     const proj = store.getState().proj;
-    console.log(tab);
     if (tab === 'events') {
       // Remove previously stored markers
       naturalEventMarkers.remove(self.markers);

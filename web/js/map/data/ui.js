@@ -156,6 +156,7 @@ export function dataUi(models, store, ui, config) {
   };
   var onActivate = function() {
     self.active = true;
+    self.events.trigger('activate');
     if (!mapController) {
       mapController = dataMap(store, maps, self);
     }

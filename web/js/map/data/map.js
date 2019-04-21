@@ -39,6 +39,7 @@ export function dataMap(store, maps, dataUi) {
   var init = function() {
     self.unSubscribe = store.subscribe(subscribeToStore);
     dataUi.events
+      .on('activate', updateProjection)
       .on('query', clear)
       .on('queryResults', updateGranules)
       .on('projectionUpdate', updateProjection)
