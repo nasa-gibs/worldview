@@ -8,7 +8,7 @@ import util from './util/util';
 import OlCoordinates from './components/map/ol-coordinates';
 // Toolbar
 import Toolbar from './containers/toolbar';
-import Sidebar from './containers/sidebar';
+import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
 

@@ -99,7 +99,6 @@ export function mapui(models, config, store) {
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.CLEAR_CUSTOM:
       case paletteConstants.REQUEST_PALETTE_SUCESS:
-        console.log('update lookup')
         return updateLookup();
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();

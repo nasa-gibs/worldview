@@ -1,26 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Products from '../components/sidebar/products/products';
-import Events from '../components/sidebar/events/events';
-import Data from '../components/sidebar/data/data';
-import CompareCase from '../components/sidebar/compare';
-import FooterContent from '../components/sidebar/footer-content';
+import Layers from './layers';
+import Events from './events';
+import Data from './data';
+import CompareCase from './compare';
+import FooterContent from '../../components/sidebar/footer-content';
 import { TabContent, TabPane } from 'reactstrap';
-import CollapsedButton from '../components/sidebar/collapsed-button';
-import NavCase from '../components/sidebar/nav/nav-case';
+import CollapsedButton from '../../components/sidebar/collapsed-button';
+import NavCase from '../../components/sidebar/nav/nav-case';
 import googleTagManager from 'googleTagManager';
-import { getCheckerboard, loadCustom } from '../modules/palettes/util';
-import { loadedCustomPalettes } from '../modules/palettes/actions';
-import { getLayers } from '../modules/layers/selectors';
+import { getCheckerboard, loadCustom } from '../../modules/palettes/util';
+import { loadedCustomPalettes } from '../../modules/palettes/actions';
+import { getLayers } from '../../modules/layers/selectors';
 
-import util from '../util/util';
+import util from '../../util/util';
 import {
   changeTab,
   toggleSidebarCollapse,
   collapseSidebar,
   expandSidebar
-} from '../modules/sidebar/actions';
+} from '../../modules/sidebar/actions';
 
 const getActiveTabs = function(config) {
   const features = config.features;
@@ -117,7 +117,7 @@ class Sidebar extends React.Component {
       );
     } else if (!isCompareMode) {
       return (
-        <Products
+        <Layers
           height={subComponentHeight}
           isActive={activeTab === 'layers'}
           layerGroupName="active"
@@ -250,7 +250,7 @@ Sidebar.defaultProps = {
 };
 Sidebar.propTypes = {
   isMobile: PropTypes.bool,
-  tabTypes: PropTypes.obj,
+  tabTypes: PropTypes.object,
   hasLocalStorage: PropTypes.bool,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,

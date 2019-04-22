@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Product from './product';
-import Scrollbars from '../../util/scrollbar';
+import Layers from './layers';
+import Scrollbars from '../../components/util/scrollbar';
 import { connect } from 'react-redux';
 import {
   getSelectionCounts,
   getDataProductsFromActiveLayers,
   findAvailableProduct
-} from '../../../modules/data/selectors';
-import { selectProduct } from '../../../modules/data/actions';
+} from '../../modules/data/selectors';
+import { selectProduct } from '../../modules/data/actions';
 
 class Data extends React.Component {
   render() {
@@ -35,7 +35,7 @@ class Data extends React.Component {
             <div id="wv-datacontent">
               {dataArray.map(product => {
                 return (
-                  <Product
+                  <Layers
                     key={product[0]}
                     id={product[0]}
                     productObject={product[1]}

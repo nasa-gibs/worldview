@@ -189,7 +189,7 @@ FooterContent.propTypes = {
   changeCompareMode: PropTypes.func,
   addLayers: PropTypes.func,
   toggleMode: PropTypes.func,
-  counts: PropTypes.obj,
-  dataSelectionSize: PropTypes.num,
+  counts: PropTypes.object,
+  dataSelectionSize: PropTypes.number,
   compareFeature: PropTypes.bool
 };

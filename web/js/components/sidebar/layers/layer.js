@@ -265,7 +265,7 @@ Layer.propTypes = {
   isMobile: PropTypes.bool,
   palette: PropTypes.object,
   runningObject: PropTypes.object,
-  legends: PropTypes.object,
+  legends: PropTypes.array,
   index: PropTypes.number,
   checkerBoardPattern: PropTypes.object,
   isInProjection: PropTypes.bool,
@@ -291,7 +291,7 @@ function mapStateToProps(state, ownProps) {
   const legends =
     hasPalette && renderedPalettes[layer.id]
       ? getLegends(layer.id, layerGroupName, state)
-      : {};
+      : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
   return {
     layer,

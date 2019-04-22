@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Products from './products/products';
+import Products from './layers';
 
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 const tabHeight = 32;

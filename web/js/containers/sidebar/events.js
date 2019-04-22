@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Event from './event';
-import Scrollbars from '../../util/scrollbar';
+import Event from '../../components/sidebar/event';
+import Scrollbars from '../../components/util/scrollbar';
 import { connect } from 'react-redux';
 import {
   requestEvents,
@@ -9,8 +9,8 @@ import {
   requestSources,
   selectEvent,
   deselectEvent
-} from '../../../modules/natural-events/actions';
-import { getEventsWithinExtent } from '../../../modules/natural-events/selectors';
+} from '../../modules/natural-events/actions';
+import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { get as lodashGet } from 'lodash';
 
 class Events extends React.Component {

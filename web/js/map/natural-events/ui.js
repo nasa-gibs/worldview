@@ -217,9 +217,7 @@ export default function naturalEventsUI(models, ui, config, store) {
   var init = function() {
     map = ui.map.selected;
     // Display loading information for user feedback on slow network
-
     view = map.getView();
-    console.log('suscribe');
     store.subscribe(subscribeToStore);
   };
   var getZoomPromise = function(

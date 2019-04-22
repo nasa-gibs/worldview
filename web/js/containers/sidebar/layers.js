@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import LayerList from './layer-list';
-import { getLayers } from '../../../modules/layers/selectors';
-import Scrollbars from '../../util/scrollbar';
+import LayerList from '../../components/sidebar/layers/layer-list';
+import { getLayers } from '../../modules/layers/selectors';
+import Scrollbars from '../../components/util/scrollbar';
 
 class Products extends React.Component {
   render() {
