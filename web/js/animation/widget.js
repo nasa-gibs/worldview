@@ -338,12 +338,12 @@ export function animationWidget(models, config, ui) {
    */
   self.onPressPlay = function() {
     // debugger;
-    let zoomLevel = ui.anim.ui.getInterval();
-    console.log(zoomLevel)
-    if (zoomLevel !== 'minute' && zoomLevel !== 'hour' && zoomLevel !== 'custom') {
-      // zero out start/end date times
-      self.setZeroDateTimes();
-    }
+    // let zoomLevel = ui.anim.ui.getInterval();
+    // console.log(zoomLevel)
+    // if (zoomLevel !== 'minute' && zoomLevel !== 'hour' && zoomLevel !== 'custom') {
+    //   // zero out start/end date times
+    //   self.setZeroDateTimes();
+    // }
     model.rangeState.playing = true;
     model.events.trigger('play');
   };
@@ -449,12 +449,12 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.onPressGIF = function() {
-    let zoomLevel = ui.anim.ui.getInterval();
+    // let zoomLevel = ui.anim.ui.getInterval();
     let looping = ui.anim.widget.reactComponent.state.looping;
-    if (zoomLevel !== 'minute') {
-      // zero out start/end date times
-      self.setZeroDateTimes();
-    }
+    // if (zoomLevel !== 'minute') {
+    //   // zero out start/end date times
+    //   self.setZeroDateTimes();
+    // }
 
     let increment = self.getIncrements();
     let frameSpeed = model.rangeState.speed;
@@ -484,17 +484,17 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.setZeroDateTimes = function() {
-    let state = model.rangeState;
-    let startDate = util.parseDateUTC(state.startDate);
-    let endDate = util.parseDateUTC(state.endDate);
-debugger;
-    util.clearTimeUTC(startDate);
-    util.clearTimeUTC(endDate);
+//     let state = model.rangeState;
+//     let startDate = util.parseDateUTC(state.startDate);
+//     let endDate = util.parseDateUTC(state.endDate);
+// debugger;
+//     util.clearTimeUTC(startDate);
+//     util.clearTimeUTC(endDate);
 
-    // save changes to model
-    model.rangeState.startDate = util.toISOStringSeconds(startDate);
-    model.rangeState.endDate = util.toISOStringSeconds(endDate);
-    model.events.trigger('change');
+//     // save changes to model
+//     model.rangeState.startDate = util.toISOStringSeconds(startDate);
+//     model.rangeState.endDate = util.toISOStringSeconds(endDate);
+//     model.events.trigger('change');
   };
 
   self.init();

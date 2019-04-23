@@ -266,6 +266,36 @@ form select {
   width: 80px;
 }
 
+.wv-animation-widget-custom-interval {
+  width: 330px;
+  border-radius: 8px;
+  height: 125px;
+  background: #212121;
+  position: absolute;
+  transform: translateX(-50%);
+  -webkit-transform: translate(-50%);
+  top: -160px;
+  /* left: -93px; */
+  display: none;
+  color: #fff;
+}
+
+.wv-animation-widget-custom-interval i.wv-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.wv-animation-widget-custom-interval i.wv-close:hover {
+  color: #999;
+  cursor: pointer;
+}
+
+.wv-animation-widget-custom-interval > div {
+  display: inline-block;
+  margin: 7px 0 0 10px;
+}
+
 /* DEMO DOM CLEANUP */
 
 /* #timeline-footer-svg {

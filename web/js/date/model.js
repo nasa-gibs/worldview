@@ -93,7 +93,7 @@ export function dateModel(models, config, spec) {
   };
 
   self.select = function(date, selectionStr) {
-    debugger;
+    // debugger;
     // console.log(self.selected, self.selectedB, self.activeDate)
     if (!date) return null;
     selectionStr = selectionStr || self.activeDate;

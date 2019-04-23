@@ -192,7 +192,7 @@ export function animationUi(models, ui) {
   self.getInterval = function () {
     // console.log(models.date.selectedZoom, models.date.interval)
     // return zooms[models.date.selectedZoom - 1];
-    console.log (models.date.interval)
+    // console.log (models.date.interval)
     return zooms[models.date.interval];
   };
 
@@ -214,23 +214,23 @@ export function animationUi(models, ui) {
     let customSelected = models.date.customSelected;
     let interval;
     let delta;
-console.log(models.date.customInterval)
+    // console.log(models.date.customInterval)
     if (customSelected) {
       interval = zooms[Number(models.date.customInterval)] || zooms[3];
-      console.log(zooms[Number(models.date.customInterval)], interval)
+      // console.log(zooms[Number(models.date.customInterval)], interval)
       if (interval === 'custom') {
         interval = zooms[models.date.selectedZoom];
       }
       delta = models.date.customDelta || 1;
     } else {
       interval = self.getInterval();
-      console.log(interval)
+      // console.log(interval)
       delta = 1;
     }
-    console.log(interval)
+    // console.log(interval)
     // let interval = self.getInterval();
     // console.log(models.date.customInterval, date, interval, delta)
-    console.log(date,interval,delta)
+    // console.log(date,interval,delta)
     return util.dateAdd(date, interval, delta);
   };
 

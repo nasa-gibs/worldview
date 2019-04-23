@@ -386,7 +386,7 @@ export default (function (self) {
    * @return {Date} the date object
    */
   self.clearTimeUTC = function (date) {
-    console.log(date, 'HITT')
+    console.log(date, 'clearTimeUTC');
     date.setUTCHours(0);
     date.setUTCMinutes(0);
     date.setUTCSeconds(0);

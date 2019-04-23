@@ -69,7 +69,7 @@ class CustomIntervalSelectorWidget extends React.Component {
         //   'wv-animation-widget' + (this.state.maxZoom >= 4 ? ' subdaily' : '')
         // }
         onKeyDown={this.handleKeyPress}
-        className='wv-animation-widget'
+        className='wv-animation-widget-custom-interval'
         style={{display: this.props.customIntervalModalOpen ? 'block' : 'none', height: '110px'}}
       >
 

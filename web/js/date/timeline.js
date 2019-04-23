@@ -473,7 +473,6 @@ export function timeline(models, config, ui) {
 
   // # rework in order to allow A and B dates to persist on reopening dialog
   var onCompareModeToggle = () => {
-    debugger;
     self.getWidth();
     let isCompareModeActive = models.compare.active;
     if (!isCompareModeActive) {

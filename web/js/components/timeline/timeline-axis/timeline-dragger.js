@@ -4,6 +4,7 @@ import Draggable from 'react-draggable';
 class Dragger extends PureComponent {
   render() {
     let { transformX, draggerPosition, draggerName, handleDragDragger, toggleShowDraggerTime, selectDragger, compareModeActive, disabled } = this.props;
+    let draggerLetter = draggerName === 'selected' ? 'A' : 'B';
     return (
       <Draggable
         axis='x'
@@ -21,8 +22,8 @@ class Dragger extends PureComponent {
           style={{ cursor: 'pointer', display: this.props.draggerVisible ? 'flex' : 'none' }}
           className='gridShell dragger' transform={`translate(${transformX}, 0)`}
         >
-          <polygon fill='#ccc' stroke={this.props.draggerSelected ? 'yellow' : '#515151'} strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon>
-          {/* <polygon fill='#ccc' stroke='#515151' strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon> */}
+          {/* <polygon fill='#ccc' stroke={this.props.draggerSelected ? 'yellow' : '#515151'} strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon> */}
+          <polygon fill='#ccc' stroke='#515151' strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon>
           {compareModeActive
             ? <text
               fontSize='30px'
@@ -33,7 +34,7 @@ class Dragger extends PureComponent {
               transform='translate(39, 10)'
               textRendering='optimizeLegibility'
               clipPath='url(#textDisplay)'>
-              {draggerName}
+              {draggerLetter}
             </text>
             : <React.Fragment>
               <rect pointerEvents="none" fill='#515151' width='4' height='20' x='41' y='55'></rect>

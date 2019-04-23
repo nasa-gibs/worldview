@@ -42,7 +42,7 @@ const timeScaleOptions = {
       scale: 'month',
       gridWidth: 12,
       scaleMs: null
-      // scaleMs: 2678400000
+      // scaleMs: 2678400000 - REFERENCE ONLY - 31 days
     }
   },
   'year': {
@@ -50,7 +50,7 @@ const timeScaleOptions = {
       scale: 'year',
       gridWidth: 12,
       scaleMs: null
-      // scaleMs: 31536000000
+      // scaleMs: 31536000000 - REFERENCE ONLY - 365 days
     }
   }
 };
@@ -72,7 +72,7 @@ class TimelineAxis extends React.Component {
       draggerTimeState: null,
       draggerTimeStateB: null,
       leftOffset: 0,
-      selectedDate: this.props.selectedDate, // center of viewport unless restricted by being start/end of available time
+      // selectedDate: this.props.selectedDate, // center of viewport unless restricted by being start/end of available time
       position: -2500,
       currentDateRange: null,
       currentTransformX: 0,
@@ -503,22 +503,17 @@ class TimelineAxis extends React.Component {
 
   // move red line to new position
   setLineTime = (e) => {
-    // console.log(this.props.draggerSelected, this.state.leftOffset, this.props.parentOffset)
+    // debugger;
+    // console.log(this.props.draggerSelected, this.state.leftOffset, this.props.parentOffset, e.target.className.animVal)
     e.preventDefault();
     e.stopPropagation();
     //TODO: handle stop bubbling up to parent wv-timeline-axis to prevent invoking on clicking draggers
     if (e.target.className.animVal !== 'grid') {
       return
     }
-    // console.dir(e.target)
-    // console.log(this.state.position , this.state.leftOffset, this.state.redLineClick, this.state.moved, this.state.draggerPosition)
-    // if (this.state.leftOffset === this.state.redLineClick) {
-    // console.log(!this.state.moved && !this.state.timeScaleChange)
+    let m = this.state.moved;
     if (!this.state.moved) {
       console.log(this.props.draggerSelected)
-      // let draggerTimeState = this.showTime(this.state.leftOffsetRelativeToInnerParent);
-      // this.handleDragDragger(null, {'deltaX': this.state.leftOffset})
-      // console.log(this.state.leftOffset)
       // TODO: FIX PARENT OFFSET
       let draggerPosition = this.props.draggerSelected === 'selected' ? this.state.leftOffset - draggerWidth : this.state.draggerPosition;
       let draggerPositionB = this.props.draggerSelected === 'selectedB' ? this.state.leftOffset - draggerWidth : this.state.draggerPositionB;
@@ -529,35 +524,34 @@ class TimelineAxis extends React.Component {
       let isCompareModeActive = this.props.compareModeActive;
       let draggerB = this.props.draggerSelected === 'selectedB';
 
-      //# check for in between visibility of unselected dragger
+      //get front and back dates
       let deque = this.state.deque;
-      //# get front and back dates
       let frontDate = moment.utc(deque.peekFront().rawDate);
       let backDate = moment.utc(deque.peekBack().rawDate);
 
       if (draggerB) {
         let draggerDateActual = moment.utc(this.state.draggerTimeStateB);
         let draggerAVisible = isCompareModeActive && draggerDateActual.isBetween(frontDate, backDate, null, '[]');
-        // console.log(isCompareModeActive, draggerAVisible)
+        console.log(isCompareModeActive, draggerAVisible)
         console.log(this.state.hoverTime)
         this.setState({
           draggerVisible: draggerAVisible,
           draggerVisibleB: true,
           draggerPositionB: draggerPositionB,
           draggerTimeStateB: this.state.hoverTime,
-          selectedDateB: this.state.hoverTime,
+          // selectedDateB: this.state.hoverTime,
           moved: false
         }, this.props.updateDate(this.state.hoverTime, 'selectedB'));
       } else {
         let draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
         let draggerBVisible = isCompareModeActive && draggerDateActualB.isBetween(frontDate, backDate, null, '[]');
-        // console.log(isCompareModeActive, draggerBVisible)
+        console.log(isCompareModeActive, draggerBVisible)
         this.setState({
           draggerPosition: draggerPosition,
           draggerVisible: true,
           draggerVisibleB: draggerBVisible,
           draggerTimeState: this.state.hoverTime,
-          selectedDate: this.state.hoverTime,
+          // selectedDate: this.state.hoverTime,
           moved: false
         }, this.props.updateDate(this.state.hoverTime, 'selected'));
       }
@@ -632,7 +626,7 @@ class TimelineAxis extends React.Component {
       draggerVisibleB: draggerVisibleB,
       numberOfVisibleTiles: numberOfVisibleTiles,
       dragSentinelChangeNumber: dragSentinelChangeNumber,
-      selectedDate: time,
+      // selectedDate: time,
       currentDateRange: current.dates,
       gridWidth: gridWidth,
       draggerTimeState: time,
@@ -739,13 +733,13 @@ class TimelineAxis extends React.Component {
 
     // # HANDLE A CHANGE ############
     // # CHANGED CONDITIONAL FROM "&&" TO "||" TO DEBUG LEFT/RIGHT ARROW UPDATE ISSUE
-    if (this.props.selectedDate !== prevProps.selectedDate ||
+    if (this.props.selectedDate && (this.props.selectedDate !== prevProps.selectedDate ||
       this.state.draggerTimeState !== prevState.draggerTimeState ||
-      moment.utc(this.state.draggerTimeState).format() !== moment.utc(prevState.draggerTimeState).format()) {
+      moment.utc(this.state.draggerTimeState).format() !== moment.utc(prevState.draggerTimeState).format())) {
 
-      console.log(this.props.selectedDate, prevProps.selectedDate, this.state.hoverTime, this.state.draggerTimeState)
-      console.log(this.state.draggerTimeState, prevState.draggerTimeState)
-      console.log(this.props.dateFormatted, prevProps.dateFormatted)
+      // console.log(this.props.selectedDate, prevProps.selectedDate, this.state.hoverTime, this.state.draggerTimeState)
+      // console.log(this.state.draggerTimeState, prevState.draggerTimeState)
+      // console.log(this.props.dateFormatted, prevProps.dateFormatted)
 
       if (moment.utc(this.state.draggerTimeState).format() !== moment.utc(this.props.selectedDate).format()) {
       //  && this.state.draggerTimeState !== prevState.draggerTimeState) { // # draggerTimeState condition breaks LEFT/RIGHT arrows
@@ -765,11 +759,11 @@ class TimelineAxis extends React.Component {
 
     // # HANDLE B CHANGE ############
     // # CHANGED CONDITIONAL FROM "&&" TO "||" TO DEBUG LEFT/RIGHT ARROW UPDATE ISSUE
-    if (this.props.selectedDateB !== prevProps.selectedDateB ||
+    if (this.props.selectedDateB && (this.props.selectedDateB !== prevProps.selectedDateB ||
       this.state.draggerTimeStateB !== prevState.draggerTimeStateB ||
-      moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(prevState.draggerTimeStateB).format()) {
-
-      // console.log(this.props.selectedDate, prevProps.selectedDate, this.state.hoverTime, this.state.draggerTimeState)
+      moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(prevState.draggerTimeStateB).format())) {
+        debugger;
+      // console.log(this.props.selectedDateB, prevProps.selectedDateB, this.state.hoverTime, this.state.draggerTimeStateB, prevState.draggerTimeStateB)
       // console.log(this.state.draggerTimeState, prevState.draggerTimeState)
 
       if (moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(this.props.selectedDateB).format()) {
@@ -788,7 +782,7 @@ class TimelineAxis extends React.Component {
 
   // move draggerTimeState to inputTime
   setDraggerToTime = (inputTime, draggerB) => {
-    debugger;
+    // debugger;
     let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
     let backDate = moment.utc(this.state.deque.peekBack().rawDate);
     let draggerTime = draggerB ? this.state.draggerTimeStateB : this.state.draggerTimeState;
@@ -823,29 +817,34 @@ class TimelineAxis extends React.Component {
         draggerPositionB: newDraggerPosition,
         draggerVisibleB: draggerVisible,
         draggerTimeStateB: draggerTimeStateAdded.format(),
-        selectedDate: draggerTimeStateAdded.format(),
+        // selectedDate: draggerTimeStateAdded.format(),
       })
     } else {
       this.setState({
         draggerPosition: newDraggerPosition,
         draggerVisible: draggerVisible,
         draggerTimeState: draggerTimeStateAdded.format(),
-        selectedDate: draggerTimeStateAdded.format(),
+        // selectedDate: draggerTimeStateAdded.format(),
       })
     }
   }
 
   handleStopDrag = (e, d) => {
+    // debugger;
+    console.log(e,d)
+
     let midPoint = this.state.midPoint;
     let position = this.state.position - midPoint;
     let moved = false;
     // necesarry for timescale change, d.x and midPoint are off
     // after timeScale change
+    console.log(position === 0)
     if (d.x > midPoint) { // drag right
       moved = true;
     } else if(d.x < midPoint) { // drag left
       moved = true;
     }
+    console.log(midPoint, position, moved, this.state.currentTransformX + position, this.state.position)
     this.setState({
       moved: moved,
       position: midPoint,
@@ -882,10 +881,11 @@ class TimelineAxis extends React.Component {
 
       let time;
       let draggerPosition;
-      if (draggerName === 'A') {
+      let draggerASelected = draggerName === 'selected';
+      if (draggerASelected) { // 'selected is 'A' dragger
         draggerPosition = this.state.draggerPosition + deltaX;
         time = this.state.draggerTimeState;
-      } else { // draggerName === 'B'
+      } else { // 'selectedB' is 'B' dragger
         draggerPosition = this.state.draggerPositionB + deltaX;
         time = this.state.draggerTimeStateB;
       }
@@ -990,7 +990,7 @@ class TimelineAxis extends React.Component {
           })
         }
       } else { // handle drag within axis view
-        if (draggerName === 'A') {
+        if (draggerASelected) {
           this.setState({
             draggerPosition: draggerPosition,
             draggerTimeState: newDraggerTime,
@@ -1013,9 +1013,9 @@ class TimelineAxis extends React.Component {
       e.stopPropagation();
       e.preventDefault();
     }
-    let selectionStr = draggerName === 'A' ? 'selected' : 'selectedB'
-    if (selectionStr !== this.props.draggerSelected) {
-      this.props.onChangeSelectedDragger(selectionStr)
+    // let selectionStr = draggerName === 'A' ? 'selected' : 'selectedB'
+    if (draggerName !== this.props.draggerSelected) {
+      this.props.onChangeSelectedDragger(draggerName)
     }
   }
 
@@ -1091,11 +1091,11 @@ class TimelineAxis extends React.Component {
             selectDragger={this.selectDragger}
             compareModeActive={this.props.compareModeActive}
             disabled={true}
-            draggerName='A'
+            draggerName='selected'
             draggerPosition={this.state.draggerPosition}
             draggerVisible={this.state.draggerVisible}
             transformX={this.state.currentTransformX}
-            draggerSelected={false}
+            // draggerSelected={false}
             parentPosition={this.state.position} />
           <Dragger
             toggleShowDraggerTime={this.toggleShowDraggerTime}
@@ -1103,11 +1103,11 @@ class TimelineAxis extends React.Component {
             selectDragger={this.selectDragger}
             compareModeActive={this.props.compareModeActive}
             disabled={false}
-            draggerName='B'
+            draggerName='selectedB'
             draggerPosition={this.state.draggerPositionB}
             draggerVisible={this.state.draggerVisibleB}
             transformX={this.state.currentTransformX}
-            draggerSelected={true}
+            // draggerSelected={true}
             parentPosition={this.state.position} />
         </React.Fragment>
         :
@@ -1118,11 +1118,11 @@ class TimelineAxis extends React.Component {
             selectDragger={this.selectDragger}
             compareModeActive={this.props.compareModeActive}
             disabled={true}
-            draggerName='B'
+            draggerName='selectedB'
             draggerPosition={this.state.draggerPositionB}
             draggerVisible={this.state.draggerVisibleB}
             transformX={this.state.currentTransformX}
-            draggerSelected={false}
+            // draggerSelected={false}
             parentPosition={this.state.position} />
           <Dragger
             toggleShowDraggerTime={this.toggleShowDraggerTime}
@@ -1130,11 +1130,11 @@ class TimelineAxis extends React.Component {
             selectDragger={this.selectDragger}
             compareModeActive={this.props.compareModeActive}
             disabled={false}
-            draggerName='A'
+            draggerName='selected'
             draggerPosition={this.state.draggerPosition}
             draggerVisible={this.state.draggerVisible}
             transformX={this.state.currentTransformX}
-            draggerSelected={true}
+            // draggerSelected={true}
             parentPosition={this.state.position} />
         </React.Fragment>
       }
