@@ -265,7 +265,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     if (def.period === 'subdaily') {
       date = self.closestDate(def, options);
       // TODO: FIX +/- DATE OFFSETS TO GET UTC - SOURCE SINGLE STATE TRUTH
-      date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+      // date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+      date = new Date(date.getTime());
     }
     if (day) {
       date = util.dateAdd(date, 'day', day);

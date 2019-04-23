@@ -14,13 +14,13 @@ import AnimationButton from './timeline-controls/animation-button';
 
 import AxisTimeScaleChange from './timeline-controls/axis-timescale-change';
 
-const timeUnitAbbreviations = {
-  year: 'year',
-  month: 'mon',
-  day: 'day',
-  hour: 'hour',
-  minute: 'min'
-};
+// const timeUnitAbbreviations = {
+//   year: 'year',
+//   month: 'mon',
+//   day: 'day',
+//   hour: 'hour',
+//   minute: 'min'
+// };
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -39,7 +39,6 @@ class Timeline extends React.Component {
       intervalText: '',
       customIntervalValue: '',
       customIntervalZoomLevel: '',
-      // customIntervalText: '',
       intervalChangeAmt: '',
       hasSubdailyLayers: '',
       customIntervalModalOpen: false,
@@ -49,7 +48,7 @@ class Timeline extends React.Component {
   }
 
   updateDate = (date, selectionStr) => {
-    console.log(date,selectionStr)
+    // console.log(date,selectionStr)
     this.props.updateDate(date, selectionStr);
   }
 
@@ -67,13 +66,44 @@ class Timeline extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    // console.log(this.state.dateFormatted, prevState.dateFormatted)
-    // if(this.state.dateFormatted !== prevState.dateFormatted) {
-    //   this.setState({
-    //     dateFormatted: this.props.dateFormatted
-    //   })
-    // }
+  // handle SET of custom time scale panel
+  setIntervalChangeUnit = (intervalValue, zoomLevel) => {
+    this.props.setIntervalInput(intervalValue, zoomLevel)
+  }
+
+  // handle SELECT of LEFT/RIGHT interval selection
+  setTimeScaleIntervalChangeUnit = (intervalSelected, customSelected) => {
+    // console.log('select', intervalSelected, customSelected)
+    let intervalChangeAmt;
+    if (intervalSelected === 'custom') {
+      intervalSelected = this.state.customIntervalZoomLevel;
+      intervalChangeAmt = this.state.customIntervalValue;
+    } else {
+      intervalChangeAmt = 1;
+    }
+    this.props.setSelectedInterval(intervalSelected, intervalChangeAmt, customSelected);
+  }
+
+  // left/right arrows increment date
+  incrementDate = (multiplier) => {
+    let draggerSelected = this.state.draggerSelected;
+    let dateSelected = draggerSelected === 'selected' ? this.state.dateFormatted : this.state.dateFormattedB;
+    // console.log(draggerSelected, dateSelected)
+    let newDate = moment.utc(dateSelected).add((multiplier * this.state.intervalChangeAmt), this.state.timeScaleChangeUnit)
+    // console.log(this.state.draggerSelected, this.state.dateFormatted, this.state.dateFormattedB, newDate)
+    this.updateDate(new Date(newDate.format()), draggerSelected);
+  }
+
+  // open animation dialog
+  clickAnimationButton = () => {
+    this.props.clickAnimationButton();
+  }
+
+  // toggle hide timeline
+  toggleHideTimeline = () => {
+    this.setState({
+      timelineHidden: !this.state.timelineHidden
+    }, this.props.toggleHideTimeline());
   }
 
   componentDidMount() {
@@ -81,7 +111,7 @@ class Timeline extends React.Component {
   }
 
   init = () => {
-    let timeScaleChangeUnitString = `${this.props.intervalDelta} ${timeUnitAbbreviations[this.props.intervalTimeScale]}`;
+    // let timeScaleChangeUnitString = `${this.props.intervalDelta} ${timeUnitAbbreviations[this.props.intervalTimeScale]}`;
     this.setState({
       dateFormatted: this.props.selectedDate.toISOString(),
       dateFormattedB: this.props.selectedDateB ? this.props.selectedDateB.toISOString() : null,
@@ -103,49 +133,12 @@ class Timeline extends React.Component {
     });
   }
 
-  // handle SET of custom time scale panel
-  setIntervalChangeUnit = (intervalValue, zoomLevel) => {
-    this.props.setIntervalInput(intervalValue, zoomLevel)
-  }
-
-  // handle SELECT of LEFT/RIGHT interval selection
-  setTimeScaleIntervalChangeUnit = (intervalSelected, customSelected) => {
-    console.log('select', intervalSelected, customSelected)
-    let intervalChangeAmt;
-    if (intervalSelected === 'custom') {
-      intervalSelected = this.state.customIntervalZoomLevel;
-      intervalChangeAmt = this.state.customIntervalValue;
-    } else {
-      intervalChangeAmt = 1;
-    }
-    this.props.setSelectedInterval(intervalSelected, intervalChangeAmt, customSelected);
-  }
-
-  // left/right arrows increment date
-  incrementDate = (multiplier) => {
-    let draggerSelected = this.state.draggerSelected;
-    let dateSelected = draggerSelected === 'selected' ? this.state.dateFormatted : this.state.dateFormattedB;
-    console.log(draggerSelected, dateSelected)
-    let newDate = moment.utc(dateSelected).add((multiplier * this.state.intervalChangeAmt), this.state.timeScaleChangeUnit)
-    console.log(this.state.draggerSelected, this.state.dateFormatted, this.state.dateFormattedB, newDate)
-    this.updateDate(new Date(newDate.format()), draggerSelected);
-  }
-
-  // open animation dialog
-  clickAnimationButton = () => {
-    this.props.clickAnimationButton();
-  }
-
-  // toggle hide timeline
-  toggleHideTimeline = () => {
-    this.setState({
-      timelineHidden: !this.state.timelineHidden
-    }, this.props.toggleHideTimeline());
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     // console.log(this.props, nextProps, this.state, nextState)
     return true;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
   }
 
   render() {
@@ -171,8 +164,6 @@ class Timeline extends React.Component {
           <div id="zoom-buttons-group">
             <TimeScaleIntervalChange
               setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
-              // intervalText={this.state.intervalText}
-              // customIntervalText={this.state.customIntervalText}
               customIntervalZoomLevel={this.state.customIntervalZoomLevel}
               customSelected={this.state.customSelected}
               customIntervalValue={this.state.customIntervalValue}
