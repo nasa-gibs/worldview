@@ -8,7 +8,6 @@ import {
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
   REORDER_LAYER_GROUP,
-  TOGGLE_ACTIVE_STATE,
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
   REMOVE_LAYER,
@@ -34,7 +33,7 @@ export function addLayer(id, spec) {
   spec = spec || {};
   return (dispatch, getState) => {
     const { layers, compare } = getState();
-    const activeString = compare.isActiveA ? 'active' : 'activeB';
+    const activeString = compare.isCompareA ? 'active' : 'activeB';
     const newLayers = addLayerSelector(
       id,
       spec,
@@ -61,11 +60,7 @@ export function reorderLayers(layerArray) {
     layerArray: layerArray
   };
 }
-export function toggleActiveState() {
-  return {
-    type: TOGGLE_ACTIVE_STATE
-  };
-}
+
 export function layerHover(id, isMouseOver) {
   return {
     type: ON_LAYER_HOVER,
@@ -76,7 +71,7 @@ export function layerHover(id, isMouseOver) {
 export function toggleVisibility(id, visible) {
   return (dispatch, getState) => {
     const { layers, compare } = getState();
-    const activeString = compare.isActiveA ? 'active' : 'activeB';
+    const activeString = compare.isCompareA ? 'active' : 'activeB';
     const index = lodashFindIndex(layers[activeString], {
       id: id
     });
@@ -114,7 +109,7 @@ export function removeLayer(id) {
 export function setOpacity(id, opacity) {
   return (dispatch, getState) => {
     const { layers, compare } = getState();
-    const activeString = compare.isActiveA ? 'active' : 'activeB';
+    const activeString = compare.isCompareA ? 'active' : 'activeB';
     const index = lodashFindIndex(layers[activeString], {
       id: id
     });

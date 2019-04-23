@@ -47,7 +47,7 @@ export function mapui(models, config, store) {
   var rotation = new MapRotate(self, models);
   var dateline = mapDateLineBuilder(models, config);
   var precache = mapPrecacheTile(models, config, cache, self);
-  var compareMapUi = mapCompare(models, config);
+  var compareMapUi = mapCompare(config, store);
   var dataRunner = (self.runningdata = new MapRunningData(models, compareMapUi, store));
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
@@ -89,8 +89,7 @@ export function mapui(models, config, store) {
           return reloadLayers();
         }
         return;
-      case compareConstants.TOGGLE:
-        return reloadLayers();
+      case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         return reloadLayers();
       case CHANGE_PROJECTION:
@@ -271,9 +270,8 @@ export function mapui(models, config, store) {
     const state = store.getState();
     const { layers, proj } = state;
     const compareState = state.compare;
-    var layerGroupStr = compareState.isActiveA ? 'active' : 'activeB';
+    var layerGroupStr = compareState.isCompareA ? 'active' : 'activeB';
     var activeLayers = layers[layerGroupStr];
-
     if (!config.features.compare || !compareState.active) {
       if (compareState.active) {
         compareMapUi.destroy();
@@ -298,7 +296,7 @@ export function mapui(models, config, store) {
       clearLayers(map);
       if (
         compareState &&
-        !compareState.isActiveA &&
+        !compareState.isCompareA &&
         compareState.mode === 'spy'
       ) {
         stateArray.reverse(); // Set Layer order based on active A|B group
@@ -348,7 +346,7 @@ export function mapui(models, config, store) {
     var renderable;
     var layers = self.selected.getLayers();
     var layersState = state.layers;
-    var activeGroupStr = state.compare.isActiveA ? 'active' : 'activeB';
+    var activeGroupStr = state.compare.isCompareA ? 'active' : 'activeB';
     var updateGraticules = function(defs, groupName) {
       lodashEach(defs, function(def) {
         if (isGraticule(def, state.proj.id)) {
@@ -381,7 +379,8 @@ export function mapui(models, config, store) {
             renderable = isRenderableLayer(
               subLayer.wv.id,
               layersState[group],
-              models.date[layer.get('date')]
+              models.date[layer.get('date')],
+              state
             );
             subLayer.setVisible(renderable);
           }
@@ -407,7 +406,7 @@ export function mapui(models, config, store) {
   var updateOpacity = function(id, value) {
     const state = store.getState();
     const { layers, compare, proj } = state;
-    const activeStr = compare.isActiveA ? 'active' : 'activeB';
+    const activeStr = compare.isCompareA ? 'active' : 'activeB';
     const def = lodashFind(layers[activeStr], {
       id: id
     });
@@ -436,8 +435,8 @@ export function mapui(models, config, store) {
   var addLayer = function(def, date, activeLayers) {
     const state = store.getState();
     const { compare, layers, proj } = state;
-    const activeDateStr = compare.isActiveA ? 'selected' : 'selectedB';
-    const activeLayerStr = compare.isActiveA ? 'active' : 'activeB';
+    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
     date = date || models.date[activeDateStr];
     activeLayers = activeLayers || layers[activeLayerStr];
     var reverseLayers = lodashCloneDeep(activeLayers).reverse();
@@ -484,7 +483,7 @@ export function mapui(models, config, store) {
   var removeLayer = function(action) {
     const state = store.getState();
     const { compare, proj } = state;
-    const activeLayerStr = compare.isActiveA ? 'active' : 'activeB';
+    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
     const def = action.def;
 
     if (isGraticule(def, proj.id)) {
@@ -514,7 +513,7 @@ export function mapui(models, config, store) {
     const state = store.getState();
     const { compare } = state;
     const layerState = state.layers;
-    const activeLayerStr = compare.isActiveA ? 'active' : 'activeB';
+    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
     var activeLayers = getLayers(layerState[activeLayerStr], {}, state)
       .reverse();
     var layerGroups;

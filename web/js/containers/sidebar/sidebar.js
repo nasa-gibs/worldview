@@ -260,5 +260,7 @@ Sidebar.propTypes = {
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
   collapseSidebar: PropTypes.func,
-  collapseExpandToggle: PropTypes.func
+  collapseExpandToggle: PropTypes.func,
+  loadedCustomPalettes: PropTypes.func,
+  config: PropTypes.object
 };

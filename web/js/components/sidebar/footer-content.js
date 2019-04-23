@@ -4,7 +4,7 @@ import Button from '../util/button';
 import ModeSelection from './mode-selection';
 import googleTagManager from 'googleTagManager';
 import { get as lodashGet } from 'lodash';
-import { changeMode } from '../../modules/compare/actions';
+import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
 import { connect } from 'react-redux';
 import {
   getSelectionCounts,
@@ -18,8 +18,8 @@ class FooterContent extends React.Component {
   render() {
     const {
       showListAllButton,
-      isCompareMode,
-      comparisonType,
+      isCompareActive,
+      compareMode,
       isMobile,
       events,
       activeTab,
@@ -27,7 +27,7 @@ class FooterContent extends React.Component {
       onGetData,
       changeCompareMode,
       addLayers,
-      toggleMode,
+      toggleCompare,
       counts,
       dataSelectionSize,
       compareFeature
@@ -36,8 +36,8 @@ class FooterContent extends React.Component {
       return (
         <React.Fragment>
           <ModeSelection
-            isActive={isCompareMode}
-            selected={comparisonType}
+            isActive={isCompareActive}
+            selected={compareMode}
             onclick={changeCompareMode}
           />
           <div className="product-buttons">
@@ -56,7 +56,7 @@ class FooterContent extends React.Component {
             <Button
               onClick={e => {
                 e.stopPropagation();
-                toggleMode();
+                toggleCompare();
                 googleTagManager.pushEvent({
                   event: 'comparison_mode'
                 });
@@ -64,7 +64,7 @@ class FooterContent extends React.Component {
               className="compare-toggle-button"
               id="compare-toggle-button"
               style={isMobile || !compareFeature ? { display: 'none' } : null}
-              text={!isCompareMode ? 'Start Comparison' : 'Exit Comparison'}
+              text={!isCompareActive ? 'Start Comparison' : 'Exit Comparison'}
             />
           </div>
         </React.Fragment>
@@ -133,7 +133,10 @@ class FooterContent extends React.Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  toggleMode: str => {
+  toggleCompare: () => {
+    dispatch(toggleCompareOnOff());
+  },
+  changeCompareMode: str => {
     dispatch(changeMode(str));
   },
   onGetData: () => {
@@ -169,7 +172,9 @@ function mapStateToProps(state, ownProps) {
     events,
     counts,
     dataSelectionSize,
-    compareFeature: config.features.compare
+    compareFeature: config.features.compare,
+    isCompareActive: compare.active,
+    compareMode: compare.mode
   };
 }
 export default connect(
@@ -179,8 +184,8 @@ export default connect(
 
 FooterContent.propTypes = {
   showListAllButton: PropTypes.bool,
-  isCompareMode: PropTypes.bool,
-  comparisonType: PropTypes.string,
+  isCompareActive: PropTypes.bool,
+  compareMode: PropTypes.string,
   isMobile: PropTypes.bool,
   events: PropTypes.array,
   activeTab: PropTypes.string,
@@ -188,7 +193,7 @@ FooterContent.propTypes = {
   onGetData: PropTypes.func,
   changeCompareMode: PropTypes.func,
   addLayers: PropTypes.func,
-  toggleMode: PropTypes.func,
+  toggleCompare: PropTypes.func,
   counts: PropTypes.object,
   dataSelectionSize: PropTypes.number,
   compareFeature: PropTypes.bool

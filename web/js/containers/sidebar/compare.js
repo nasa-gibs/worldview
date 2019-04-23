@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Products from './layers';
+import Layers from './layers';
+import { getLayers } from '../../modules/layers/selectors';
+import { toggleActiveCompareState } from '../../modules/compare/actions';
+import util from '../../util/util';
+import { connect } from 'react-redux';
 
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 const tabHeight = 32;
@@ -8,11 +12,13 @@ class CompareCase extends React.Component {
   render() {
     const {
       isActive,
-      firstDateObject,
-      secondDateObject,
-      toggleComparisonObject,
+      dateStringA,
+      dateStringB,
+      toggleActiveCompareState,
       isCompareA,
-      height
+      height,
+      layersA,
+      layersB
     } = this.props;
     const outerClass = 'layer-container sidebar-panel';
     const tabClasses = 'ab-tab';
@@ -28,10 +34,10 @@ class CompareCase extends React.Component {
                       ? tabClasses + ' first-tab active'
                       : tabClasses + ' first-tab'
                   }
-                  onClick={toggleComparisonObject}
+                  onClick={toggleActiveCompareState}
                 >
                   <i className="productsIcon selected icon-layers" />
-                  {' A: ' + firstDateObject.dateString}
+                  {' A: ' + dateStringA}
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -41,26 +47,26 @@ class CompareCase extends React.Component {
                       ? tabClasses + ' second-tab active'
                       : tabClasses + ' second-tab'
                   }
-                  onClick={toggleComparisonObject}
+                  onClick={toggleActiveCompareState}
                 >
                   <i className="productsIcon selected icon-layers" />
-                  {' B: ' + secondDateObject.dateString}
+                  {' B: ' + dateStringB}
                 </NavLink>
               </NavItem>
             </Nav>
             <TabContent activeTab={isCompareA ? '1' : '2'}>
               <TabPane tabId="1">
-                <Products
+                <Layers
                   isActive={isCompareA}
-                  activeOverlays={firstDateObject.layers}
+                  activeOverlays={layersA}
                   layerGroupName="active"
                   height={height - tabHeight}
                 />
               </TabPane>
               <TabPane tabId="2">
-                <Products
+                <Layers
                   isActive={!isCompareA}
-                  activeOverlays={secondDateObject.layers}
+                  activeOverlays={layersB}
                   layerGroupName="activeB"
                   height={height - tabHeight}
                 />
@@ -72,21 +78,34 @@ class CompareCase extends React.Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => ({
+  toggleActiveCompareState: () => {
+    dispatch(toggleActiveCompareState());
+  }
+});
+function mapStateToProps(state, ownProps) {
+  const { layers, compare, legacy } = state;
+  return {
+    isCompareA: compare.isCompareA,
+    layersA: getLayers(layers.active, { group: 'all', proj: 'all' }, state),
+    layersB: getLayers(layers.activeB, { group: 'all', proj: 'all' }, state),
+    dateStringA: util.toISOStringDate(legacy.date.selected),
+    dateStringB: util.toISOStringDate(legacy.date.selectedB),
+    isActive: compare.active,
+    height: ownProps.height
+  };
+}
 CompareCase.propTypes = {
-  activeOverlays: PropTypes.object,
-  updateLayer: PropTypes.func,
-  getNames: PropTypes.func,
   isActive: PropTypes.bool,
-  firstDateObject: PropTypes.object,
-  secondDateObject: PropTypes.object,
-  onClickCompareTab: PropTypes.func,
-  isFirstDateActive: PropTypes.bool,
-  getAvailability: PropTypes.func,
-  toggleActiveCompare: PropTypes.func,
-  toggleComparisonObject: PropTypes.func,
-  children: PropTypes.node,
+  dateStringA: PropTypes.string,
+  dateStringB: PropTypes.string,
+  toggleActiveCompareState: PropTypes.func,
   isCompareA: PropTypes.bool,
-  height: PropTypes.number
+  height: PropTypes.number,
+  layersA: PropTypes.array,
+  layersB: PropTypes.array
 };
-
-export default CompareCase;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CompareCase);

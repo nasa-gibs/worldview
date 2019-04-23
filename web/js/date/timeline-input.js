@@ -2,14 +2,14 @@ import util from '../util/util';
 import DateSelector from '../components/date-selector/date-selector';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import { INIT_SECOND_LAYER_GROUP } from '../modules/layers/constants';
 const dateSelectorStr = 'date-selector-main';
 /**
  * Implements the date input
  *
  * @class wv.date.timeline.input
  */
-export function timelineInput(models, config, ui) {
+export function timelineInput(models, config, ui, store) {
   var tl = ui.timeline;
   var model = models.date;
   var self = {};
@@ -24,9 +24,19 @@ export function timelineInput(models, config, ui) {
 
   var $incrementBtn = $('#right-arrow-group');
   var $decrementBtn = $('#left-arrow-group');
-
+  /**
+   * Suscribe to redux store and listen for
+   * specific action types
+   */
+  const subscribeToStore = function() {
+    const action = store.getState().lastAction;
+    if (action.type === INIT_SECOND_LAYER_GROUP) {
+      model.initCompare();
+    }
+  };
   var init = function() {
     models.layers.events.on('subdaily-updated', updateMaxZoom);
+    store.subscribe(subscribeToStore);
     $incrementBtn
       .mousedown(function(e) {
         e.preventDefault();

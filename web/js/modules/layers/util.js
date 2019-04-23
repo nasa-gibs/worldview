@@ -31,7 +31,7 @@ export function getLayersParameterSetup(
       },
       (currentItemState, state) => {
         const isActive = lodashGet(state, 'compare.active');
-        const isCompareA = lodashGet(state, 'compare.isActiveA');
+        const isCompareA = lodashGet(state, 'compare.isCompareA');
         return !isActive && !isCompareA
           ? serializeLayers(state, 'activeB')
           : serializeLayers(state, 'active');
@@ -241,28 +241,3 @@ export function exists(layer, activeLayers) {
   });
   return found;
 }
-// var useLookup = function(layerId, groupStr) {
-//   var use = false;
-//   var active = self[groupStr][layerId].maps;
-
-//   lodashEach(active, function(palette, index) {
-//     if (palette.custom) {
-//       use = true;
-//       return false;
-//     }
-//     var rendered = self.getRenderedPalette(layerId, index);
-//     if (palette.type !== 'classification') {
-//       if (palette.min <= 0) {
-//         delete palette.min;
-//       }
-//       if (palette.max >= rendered.entries.values.length) {
-//         delete palette.max;
-//       }
-//       if (!lodashIsUndefined(palette.min) || !lodashIsUndefined(palette.max)) {
-//         use = true;
-//         return false;
-//       }
-//     }
-//   });
-//   return use;
-// };

@@ -1,6 +1,5 @@
 import util from '../util/util';
-
-export function dateModel(models, config, spec) {
+export function dateModel(models, config, spec, store) {
   spec = spec || {};
 
   var self = {};

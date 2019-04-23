@@ -1,15 +1,13 @@
 import { assign as lodashAssign } from 'lodash';
 import {
   CHANGE_STATE,
-  TOGGLE,
-  ACTIVATE,
-  DEACTIVATE,
+  TOGGLE_ON_OFF,
   CHANGE_VALUE,
   CHANGE_MODE
 } from './constants';
 const initialState = {
   active: false,
-  isActiveA: true,
+  isCompareA: true,
   mode: 'swipe',
   value: 50,
   activeString: 'active'
@@ -17,27 +15,21 @@ const initialState = {
 export function compareReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_STATE:
+      const newIsCompareA = !state.isCompareA;
       return lodashAssign({}, state, {
-        isActiveA: action.stateStr === 'A',
-        activeString: action.stateStr === 'A' ? 'active' : 'activeB'
+        isCompareA: newIsCompareA,
+        activeString: newIsCompareA ? 'active' : 'activeB'
       });
-    case TOGGLE:
+    case TOGGLE_ON_OFF:
       return lodashAssign({}, state, {
         active: !state.active
-      });
-    case ACTIVATE:
-      return lodashAssign({}, state, {
-        active: true
-      });
-    case DEACTIVATE:
-      return lodashAssign({}, state, {
-        active: false
       });
     case CHANGE_MODE:
       return lodashAssign({}, state, {
         mode: action.mode,
         value: 50
       });
+
     case CHANGE_VALUE:
       return lodashAssign({}, state, {
         value: action.value

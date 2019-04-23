@@ -65,7 +65,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
     ui.timeline.ticks = timelineTicks(models, config, ui);
     ui.timeline.pick = timelinePick(models, config, ui);
     ui.timeline.pan = timelinePan(models, config, ui);
-    ui.timeline.input = timelineInput(models, config, ui);
+    ui.timeline.input = timelineInput(models, config, ui, store);
     ui.timeline.config = timelineConfig(models, config, ui);
     if (config.features.animation) {
       ui.anim = {};
