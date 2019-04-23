@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Layers from './layers';
+import Products from '../../components/sidebar/data/product';
 import Scrollbars from '../../components/util/scrollbar';
 import { connect } from 'react-redux';
 import {
@@ -35,7 +35,7 @@ class Data extends React.Component {
             <div id="wv-datacontent">
               {dataArray.map(product => {
                 return (
-                  <Layers
+                  <Products
                     key={product[0]}
                     id={product[0]}
                     productObject={product[1]}
@@ -60,8 +60,14 @@ Data.propTypes = {
   showUnavailableReason: PropTypes.func,
   selected: PropTypes.string,
   selectProduct: PropTypes.func,
-  tabTypes: PropTypes.object
+  tabTypes: PropTypes.object,
+  activeLayers: PropTypes.array,
+  products: PropTypes.object,
+  findProductToSelect: PropTypes.func,
+  counts: PropTypes.object,
+  selectedProduct: PropTypes.string
 };
+
 const mapDispatchToProps = dispatch => ({
   findProductToSelect: products => {
     const newSelection = findAvailableProduct(products);
@@ -86,7 +92,14 @@ function mapStateToProps(state, ownProps) {
     config,
     proj.id
   );
-  return { counts, selectedProduct, products, tabTypes, activeLayers };
+
+  return {
+    counts,
+    selectedProduct,
+    products,
+    tabTypes,
+    activeLayers
+  };
 }
 export default connect(
   mapStateToProps,

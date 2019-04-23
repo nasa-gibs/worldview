@@ -34,7 +34,7 @@ class Data extends React.Component {
             onClick={e => {
               showUnavailableReason();
               googleTagManager.pushEvent({
-                'event': 'data_download_not_available'
+                event: 'data_download_not_available'
               });
             }}
             className="link"
@@ -56,6 +56,7 @@ class Data extends React.Component {
 
   render() {
     const { id, productObject, isSelected } = this.props;
+
     return (
       <div
         className={isSelected ? 'dl-group dl-group-selected ' : 'dl-group'}
