@@ -1,1 +1,1 @@
-<p>Rain rate of storm – Animation of IMERG rain rate over false color VIIRS</p>
+<p>Rain Rate of Tropical Cyclone Idai – This animation shows the movement and rain rain rate from the storm./p>

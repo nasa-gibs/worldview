@@ -1,1 +1,1 @@
-<p>Storm moving over Moz channel and Moz – False color animation VIIRS</p>
+<p>Storm moving over Mozambique Channel and Mozambique – False color animation VIIRS</p>
