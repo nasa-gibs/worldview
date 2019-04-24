@@ -1,1 +1,1 @@
-<p>Rain Rate of Tropical Cyclone Idai – This animation shows the movement and rain rain rate from the storm./p>
+<p>Press play in the animation box to see the hourly rate of rainfall that fell during Tropical Cyclone Idai./p>

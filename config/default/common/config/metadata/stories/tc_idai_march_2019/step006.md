@@ -1,1 +1,1 @@
-<p>Who was impacted? Pop density, urban rural extent below 10m elevation, urban extent, human footprint</p>
+<p>Who was impacted? Click on the eye icon next to the Rain Rate layer to toggle seeing the Human Footprint layer beneath the Rain Rate layer. The Human Footprint layer shows the Human Influence Index normalized by biome and realm and shows the storm impacted within areas high on the human influence index.</p>
