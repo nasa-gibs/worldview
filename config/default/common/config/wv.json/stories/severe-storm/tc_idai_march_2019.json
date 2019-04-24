@@ -67,7 +67,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "ca=true&cm=swipe&cv=52&p=geographic&l=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),Reference_Labels(hidden),Reference_Features,Coastlines,VIIRS_SNPP_DayNightBand_ENCC&l1=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),Reference_Labels(hidden),Reference_Features,Coastlines,VIIRS_SNPP_DayNightBand_ENCC&t=2019-02-24-T00%3A00%3A00Z&z=3&t1=2019-03-25-T00%3A00%3A00Z&v=30.973249756668224,-22.419164472808433,39.186628662918224,-18.125707441558433"
+          "stepLink": "ca=true&cm=swipe&cv=52&p=geographic&l=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),Reference_Labels(hidden),Reference_Features,Coastlines,VIIRS_SNPP_DayNightBand_ENCC&l1=VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),Reference_Labels(hidden),Reference_Features,Coastlines,VIIRS_SNPP_DayNightBand_ENCC&t=2019-02-24-T00%3A00%3A00Z&z=3&t1=2019-03-25-T00%3A00%3A00Z&v=30.973249756668224,-22.419164472808433,39.186628662918224,-18.125707441558433"
         },
         {
           "description": "step006.html",

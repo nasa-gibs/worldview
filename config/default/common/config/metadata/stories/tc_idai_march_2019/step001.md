@@ -1,1 +1,1 @@
-<p>TC Idai over Mozambique – true color image of storm over Moz VIIRS</p>
+<p>Tropical Cyclone Idai approaches Madagascar then Mozambique, swirls around and back again over Mozambique.</p>
