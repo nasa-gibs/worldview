@@ -1,1 +1,1 @@
-<p>Risk Factors - Cyclone Hazard layers</p>
+<p>Here we show the Cyclone Hazard: Frequency and Distribution layer. This layer shows that while this area has low frequency of having a cyclone, if you turn on the Cyclone Hazard: Mortality Risk layer, it is evident that there was still a high risk of mortality from the effects of a storm.</p>

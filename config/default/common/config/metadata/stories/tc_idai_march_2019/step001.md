@@ -1,1 +1,1 @@
-<p>Tropical Cyclone Idai approaches Madagascar then Mozambique, swirls around and back again over Mozambique.</p>
+<p>On 14 March 2019, Tropical Cyclone Idai hits the shores of Mozambique.</p>
