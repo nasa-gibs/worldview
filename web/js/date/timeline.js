@@ -13,11 +13,7 @@ export function timeline(models, config, ui) {
   self.startDate = new Date(config.startDate);
   self.parentOffset = (subdaily ? 404 : 310) + 10;
 
-  // ? INPUT REFACTOR
-  // self.interval = null;
-  // self.delta = 3;
-
-  self.delta = 1;
+  // self.delta = 1;
   self.active = false;
   self.delay = 500;
   var animator = null;
@@ -30,112 +26,44 @@ export function timeline(models, config, ui) {
 
   var initInput = function() {
     models.layers.events.on('subdaily-updated', updateMaxZoom);
-    // $incrementBtn
-    //   .mousedown(function(e) {
-    //     console.log(self.delta, self.interval)
-    //     e.preventDefault();
-    //     switch (ui.timeline.config.currentZoom) {
-    //       case 1:
-    //         self.animateByIncrement(self.delta, 'year');
-    //         break;
-    //       case 2:
-    //         self.animateByIncrement(self.delta, 'month');
-    //         break;
-    //       case 3:
-    //         self.animateByIncrement(self.delta, 'day');
-    //         break;
-    //       case 4:
-    //         self.animateByIncrement(self.delta, 'minute');
-    //         break;
-    //       default:
-    //         self.animateByIncrement(self.delta, 'day');
-    //     }
-    //   })
-    //   .mouseup(stopper);
-
-    // $decrementBtn
-    //   .mousedown(function(e) {
-    //     e.preventDefault();
-    //     switch (ui.timeline.config.currentZoom) {
-    //       case 1:
-    //         self.animateByIncrement(-self.delta, 'year');
-    //         break;
-    //       case 2:
-    //         self.animateByIncrement(-self.delta, 'month');
-    //         break;
-    //       case 3:
-    //         self.animateByIncrement(-self.delta, 'day');
-    //         break;
-    //       case 4:
-    //         self.animateByIncrement(-self.delta, 'minute');
-    //         break;
-    //       default:
-    //         self.animateByIncrement(-self.delta, 'day');
-    //     }
-    //   })
-    //   .mouseup(stopper);
-
-    $(document)
-      // .mouseout(stopper)
-      .keydown(function(event) {
-        if (event.target.nodeName === 'INPUT' || keyDown === event.keyCode) {
-          return;
-        }
-        switch (event.keyCode) {
-          case util.key.LEFT:
-            switch (models.date.selectedZoom) {
-              case 1:
-                self.animateByIncrement(-self.delta, 'year');
-                break;
-              case 2:
-                self.animateByIncrement(-self.delta, 'month');
-                break;
-              case 3:
-                self.animateByIncrement(-self.delta, 'day');
-                break;
-              case 4:
-                self.animateByIncrement(-self.delta, 'minute');
-                break;
-            }
-            break;
-          case util.key.RIGHT:
-            switch (models.date.selectedZoom) {
-              case 1:
-                self.animateByIncrement(self.delta, 'year');
-                break;
-              case 2:
-                self.animateByIncrement(self.delta, 'month');
-                break;
-              case 3:
-                self.animateByIncrement(self.delta, 'day');
-                break;
-              case 4:
-                self.animateByIncrement(self.delta, 'minute');
-                break;
-            }
-            event.preventDefault();
-            break;
-        }
-        keyDown = event.keyCode;
-      })
-      .keyup(function(event) {
-        switch (event.keyCode) {
-          case util.key.LEFT:
-          case util.key.RIGHT:
+    document.addEventListener('keydown', function(event) {
+      if (event.target.nodeName === 'INPUT' || keyDown === event.keyCode) {
+        return;
+      }
+      // get selected interval and customDelta or default of 1
+      let interval = models.date.interval;
+      let delta = models.date.customSelected === true ? models.date.customDelta : 1;
+      switch (event.keyCode) {
+        case util.key.LEFT:
+          // prevent quick LEFT/RIGHT arrow switch bug
+          if (keyDown !== event.keyCode) {
             stopper();
-            event.preventDefault();
-            break;
-        }
-        keyDown = null;
-      });
+          }
+          self.animateByIncrement(-delta, timeScaleFromNumberKey[interval]);
+          event.preventDefault();
+          break;
+        case util.key.RIGHT:
+          // prevent quick LEFT/RIGHT arrow switch bug
+          if (keyDown !== event.keyCode) {
+            stopper();
+          }
+          self.animateByIncrement(delta, timeScaleFromNumberKey[interval]);
+          event.preventDefault();
+          break;
+      }
+      keyDown = event.keyCode;
+    });
 
-    // self.reactComponent = ReactDOM.render(
-    //   React.createElement(DateSelector, getProps()),
-    //   document.getElementById(dateSelectorStr)
-    // );
-    // model.events.on('select', date => {
-    //   self.reactComponent.setState({ date: date });
-    // });
+    document.addEventListener('keyup', function(event) {
+      switch (event.keyCode) {
+        case util.key.LEFT:
+        case util.key.RIGHT:
+          stopper();
+          event.preventDefault();
+          break;
+      }
+      keyDown = null;
+    });
 
     if (config.features.compare) {
       let dateModel = models.date;
@@ -204,7 +132,7 @@ export function timeline(models, config, ui) {
    */
   var getNextTimeSelection = function(delta, increment) {
     var prevDate = model[model.activeDate];
-
+    console.log(prevDate)
     switch (increment) {
       case 'year':
         return new Date(
@@ -218,10 +146,65 @@ export function timeline(models, config, ui) {
         return new Date(
           new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta)
         );
+      case 'hour':
+        return new Date(
+          new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta)
+        );
       case 'minute':
         return new Date(
           new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta)
         );
+    }
+  };
+
+  /**
+   * Add timeout to date change when buttons are being held so that
+   * date changes don't happen too quickly
+   *
+   * @todo Create smart precaching so animation is smooth
+   *
+   * @param  {number} delta Amount of time to change
+   * @param  {String} increment Zoom level of timeline
+   *                  e.g. months,minutes, years, days
+   * @return {void}
+   */
+  self.animateByIncrement = function(delta, increment) {
+    console.log(delta, increment)
+    var endTime = models.layers.lastDateTime();
+    var endDate = models.layers.lastDate();
+    // self.delta = Math.abs(delta);
+
+    let subdaily = models.layers.hasSubDaily();
+    function animate() {
+      var nextTime = getNextTimeSelection(delta, increment);
+      console.log(nextTime)
+      // console.log(tl.data.start(), nextTime, endTime, increment)
+      if (subdaily) {
+        if (self.startDate <= nextTime && nextTime <= endTime) {
+          models.date.add(increment, delta);
+        }
+      } else {
+        if (self.startDate <= nextTime && nextTime <= endDate) {
+          models.date.add(increment, delta);
+        }
+      }
+      animationInProcess = true;
+      animator = setTimeout(animate, self.delay);
+    }
+    console.log(animationInProcess)
+    animate();
+  };
+
+  /**
+   *  Clear animateByIncrement's Timeout
+   *
+   * @return {void}
+   */
+  var stopper = function() {
+    if (animationInProcess) {
+      animationInProcess = false;
+      clearInterval(animator);
+      animator = 0;
     }
   };
 
@@ -254,57 +237,6 @@ export function timeline(models, config, ui) {
   //   console.log(date)
   //   models.date.select(date);
   // };
-  /**
-   * Add timeout to date change when buttons are being held so that
-   * date changes don't happen too quickly
-   *
-   * @todo Create smart precaching so animation is smooth
-   *
-   * @param  {number} delta Amount of time to change
-   * @param  {String} increment Zoom level of timeline
-   *                  e.g. months,minutes, years, days
-   * @return {void}
-   */
-  self.animateByIncrement = function(delta, increment) {
-    // console.log(delta, increment)
-    var endTime = models.layers.lastDateTime();
-    var endDate = models.layers.lastDate();
-    self.delta = Math.abs(delta);
-
-    let subdaily = models.layers.hasSubDaily();
-
-    function animate() {
-      var nextTime = getNextTimeSelection(delta, increment);
-      // console.log(tl.data.start(), nextTime, endTime, increment)
-      if (subdaily) {
-        if (self.startDate <= nextTime && nextTime <= endTime) {
-          models.date.add(increment, delta);
-        }
-      } else {
-        if (self.startDate <= nextTime && nextTime <= endDate) {
-          models.date.add(increment, delta);
-        }
-      }
-      animationInProcess = true;
-      animator = setTimeout(animate, self.delay);
-    }
-    animate();
-  };
-
-  /**
-   *  Clear animateByIncrement's Timeout
-   *
-   * @return {void}
-   */
-  var stopper = function() {
-    if (animationInProcess) {
-      animationInProcess = false;
-      // # invokes when mouse over < > and date selector arrows/boxes
-      // # sticks on new timeline date selector
-      clearInterval(animator);
-      animator = 0;
-    }
-  };
 
   // ? INPUT ABOVE
   // ? INPUT ABOVE
@@ -457,7 +389,7 @@ export function timeline(models, config, ui) {
 
   var incrementDate = (increment, timeScale) => {
     // self.expand(true);
-    // console.log(increment, timeScale)
+    console.log(increment, timeScale)
     self.animateByIncrement(increment, timeScale);
     // let newDate = models.date[models.date.activeDate];
     // models.date.add(timeScale, increment);
@@ -667,7 +599,7 @@ export function timeline(models, config, ui) {
   var getInitialProps = () => {
     // check for compare mode
     let isCompareModeActive = models.compare.active;
-
+    console.log(models.date.customSelected)
     // if compare mode is active, check for subdaily in either A or B
     let subdaily;
     if (isCompareModeActive) {
@@ -675,23 +607,17 @@ export function timeline(models, config, ui) {
     } else {
       subdaily = models.layers.hasSubDaily();
     }
-    // subdaily = models.layers.hasSubDaily();
-
-    console.log(models.layers.hasSubDaily('active'), models.layers.hasSubDaily('activeB'))
 
     // timeScale zoom and reset if subdaily zoom in permalink
     let selectedTimeScaleState = models.date.selectedZoom;
-    // console.log(selectedTimeScaleState)
     if (!subdaily && selectedTimeScaleState > 3) {
       selectedTimeScaleState = 3;
     }
     let selectedTimeScale = selectedTimeScaleState ? timeScaleFromNumberKey[selectedTimeScaleState] : 'day';
 
     let selectedDate = models.date.selected;
-    // let selectedDateB = models.date.selectedB ? models.date.selectedB : util.dateAdd(selectedDate, selectedTimeScale, -7);
     let selectedDateB = models.date.selectedB ? models.date.selectedB : null;
 
-    // console.log(selectedDate, selectedDateB);
 
     // custom interval
     let intervalTimeScale = models.date.customInterval ? timeScaleFromNumberKey[models.date.customInterval] : selectedTimeScale;
@@ -700,23 +626,12 @@ export function timeline(models, config, ui) {
     let customSelected = models.date.customSelected ? Boolean(models.date.customSelected) : false;
 
     let intervalSelected = models.date.interval ? timeScaleFromNumberKey[models.date.interval] : selectedTimeScale;
-    // console.log(models.date.customSelected, customSelected, intervalSelected)
-    // console.log(intervalTimeScale, intervalDelta)
-    // console.log(selectedDate, selectedDateB, models.date[models.date.activeDate])
-    // let selectedDate = models.date.selected;
-    // get selected A
-    // get selected B
-    // determine which one is selected
-    // let activeDate = models.date.activeDate;
 
-    // let draggerSelected = activeDate === 'selected';
-    // let draggerSelectedB = activeDate === 'selectedB';
     let draggerSelected = models.date.activeDate;
     let inputProps = getInputProps();
 
     let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
     let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
-    // console.log(self)
     return Object.assign(inputProps, {
       customIntervalZoomLevel: intervalTimeScale,
       compareModeActive: isCompareModeActive,
@@ -816,48 +731,25 @@ export function timeline(models, config, ui) {
   };
 
   var updateReactTimelineDate = function(date, selectionStr) {
-    // debugger;
-    // let selectedDate = models.date[models.date.activeDate];
     let selectedDate = models.date.selected;
     let selectedDateB = models.date.selectedB;
-
-    // let activeDate = models.date.activeDate;
-
-    // let draggerSelected = activeDate === 'selected';
-    // let draggerSelectedB = activeDate === 'selectedB';
     let draggerSelected = models.date.activeDate;
-    // console.log(draggerSelected)
 
     let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
     let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
 
-    // // console.log(selectedDate, new Date(selectedDate).toISOString())
-    // console.log(selectedDate);
     self.reactComponent.setState({
       selectedDate: selectedDate,
       dateFormatted: dateFormatted,
       draggerSelected: draggerSelected,
       selectedDateB: selectedDateB,
       dateFormattedB: dateFormattedB
-      // draggerSelectedB: draggerSelectedB
     });
-
-    // console.log(selectedDate, date);
-    // self.reactComponent.setState({
-    //   selectedDate: date,
-    //   dateFormatted: date.toISOString()
-    // });
   };
 
   // arguments passed as date (date object) and selectionStr ('selected' or 'selectedB')
   var updateTimeUi = function(date, selectionStr) {
-    // console.log(date, selectionStr);
-    // console.log('%c updateTimeUi ', 'background: #555; color: cornflowerblue');
-
     updateReactTimelineDate(date, selectionStr);
-    // updateInput();
-    // self.input.update();
-    // self.pick.shiftView();
   };
 
   // Update status of subdaily layers being in sidebar
@@ -886,46 +778,27 @@ export function timeline(models, config, ui) {
   };
 
   var onLayerUpdate = function() {
-    // const layersContainSubdaily = models.layers.hasSubDaily();
-
-    // let subdaily = models.layers.hasSubDaily();
-
     self.data.set();
     self.resize();
-    // self.setClip();
-    // if (subdaily !== layersContainSubdaily) {
-    //   // self.zoom.refresh();
-    //   self.input.update();
-    //   subdaily = layersContainSubdaily;
-    // }
-    // console.log(ui.anim)
     ui.anim.widget.update();
     updateSubdailyState();
   };
+
   var init = function() {
     var $timelineFooter = $('#timeline-footer');
     models.layers.events.trigger('toggle-subdaily');
-    // subdaily = models.layers.hasSubDaily();
 
     // check for compare mode
     let isCompareModeActive = models.compare.active;
 
     // if compare mode is active, check for subdaily in either A or B
-    // let subdaily;
     if (isCompareModeActive) {
       subdaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
     } else {
       subdaily = models.layers.hasSubDaily();
     }
 
-
     drawContainers();
-    // let timelineCase = document.getElementById('timeline');
-    // timelineCase.addEventListener('wheel', function(e) {
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    // });
-
     initInput();
 
     $('#zoom-custom').on('click', function() {
@@ -947,19 +820,7 @@ export function timeline(models, config, ui) {
       );
     }
 
-    self.x = d3.time.scale.utc();
-
-    // self.xAxis = d3.svg
-    //   .axis()
-    //   .orient('bottom')
-    //   .tickSize(-self.height)
-    //   .tickPadding(5);
-
-    // self.axisZoom = d3.behavior
-    //   .zoom()
-    //   .scale(1)
-    //   .scaleExtent([1, 1]);
-
+    // self.x = d3.time.scale.utc();
     self.resize();
 
     if (util.browser.localStorage) {

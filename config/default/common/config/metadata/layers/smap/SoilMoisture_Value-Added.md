@@ -7,7 +7,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L4 9 km EASE-Grid Surface and Root Zone Soil Moisture Analysis Update](https://nsidc.org/data/spl4smau/)
 
-Data field: sm_rootzone_analysis
+Data field: `sm_rootzone_analysis`
 
 ### Root Zone Soil Moisture 9 km Uncertainty (L4, 12z Instantaneous, Model Value-Added)
 Temporal coverage: 31 March 2015 - present
@@ -18,7 +18,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L4 9 km EASE-Grid Surface and Root Zone Soil Moisture Analysis Update](https://nsidc.org/data/spl4smau/)
 
-Data field: sm_rootzone_analysis_ensstd
+Data field: `sm_rootzone_analysis_ensstd`
 
 ### Surface Soil Moisture 9 km (L4, 12z Instantaneous, Model Value-Added)
 Temporal coverage: 31 March 2015 - present
@@ -29,7 +29,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L4 9 km EASE-Grid Surface and Root Zone Soil Moisture Analysis Update](https://nsidc.org/data/spl4smau/)
 
-Data field: sm_surface_analysis
+Data field: `sm_surface_analysis`
 
 ### Surface Soil Moisture 9 km Uncertainty (L4, 12z Instantaneous, Model Value-Added)
 Temporal coverage: 31 March 2015 - present
@@ -40,4 +40,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L4 9 km EASE-Grid Surface and Root Zone Soil Moisture Analysis Update](https://nsidc.org/data/spl4smau/)
 
-Data field: sm_surface_analysis_ensstd
+Data field: `sm_surface_analysis_ensstd`

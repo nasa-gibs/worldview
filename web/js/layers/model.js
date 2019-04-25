@@ -47,10 +47,6 @@ export function layersModel(models, config) {
         }
       }
     }
-    // if (aBcheck) {
-    //   let activeLayers
-    //   return self.hasSubDaily();
-    // }
     return false;
   };
   self.get = function(spec, activeLayers) {

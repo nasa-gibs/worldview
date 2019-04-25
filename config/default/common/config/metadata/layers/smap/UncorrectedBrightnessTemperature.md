@@ -7,7 +7,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L1C Radiometer Half-Orbit 36 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB)
 
-Data fields: cell_tb_h_fore, cell_tb_h_aft, cell_tb_v_fore, cell_tb_v_aft
+  Data fields: cell_tb_h_fore, cell_tb_h_aft, cell_tb_v_fore, cell_tb_v_aft
 
 ### Uncorrected Brightness Temperature 36 km QA and RFI Flags
 Temporal coverage: 31 March 2015 - present
@@ -17,7 +17,6 @@ The Soil Moisture Active Passive (SMAP) "Uncorrected Brightness Temperature 36 k
 
 Within the image, green indicates that TB observations have acceptable quality for science use, yellow indicates that caution should be used with the TB observations as one or more quality-impacting conditions have been identified, and red indicates that TB observations are flagged as bad due to unacceptable quality.
 
-
 ### Uncorrected Brightness Temperature 36 km RFI (L1, Passive, Fore | Aft, H Polarization | V Polarization)
 The Soil Moisture Active Passive (SMAP) "Uncorrected Brightness Temperature 36 km RFI” layers displays Radio Frequency Interference (RFI) quality flags of uncorrected brightness temperatures (TBs) on a 36 km EASE-Grid 2.0 for the horizontal (H) and vertical (V) polarizations of the fore and aft scans from the SMAP radiometer. RFI refers to the interference in measurements from other transmitters operating at frequencies adjacent to the SMAP L-band frequency.
 
@@ -25,7 +24,7 @@ Within the image, green indicates that TB observations are free of RFI and appro
 
 References: [SMAP L1C Radiometer Half-Orbit 36 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB)
 
-Data fields: cell_tb_qual_flag_h_fore, cell_tb_qual_flag_h_aft, cell_tb_qual_flag_v_fore, cell_tb_qual_flag_v_aft
+  Data fields: `cell_tb_qual_flag_h_fore`, `cell_tb_qual_flag_h_aft`, `cell_tb_qual_flag_v_fore`, `cell_tb_qual_flag_v_aft`
 
 ### Uncorrected Brightness Temperature 9 km (L1, Passive, Fore | Aft, H Polarization | V Polarization)
 Temporal coverage: 31 March 2015 - present
@@ -36,7 +35,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP Enhanced L1C Radiometer Half-Orbit 9 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB_E)
 
-Data fields: cell_tb_h_fore, cell_tb_h_aft, cell_tb_v_fore, cell_tb_v_aft
+  Data fields: `cell_tb_h_fore`, `cell_tb_h_aft`, `cell_tb_v_fore`, `cell_tb_v_aft`
 
 ### Uncorrected Brightness Temperature 9 km QA and RFI Flags
 Temporal coverage: 31 March 2015 - present
@@ -53,4 +52,4 @@ Within the image, green indicates that TB observations are free of RFI and appro
 
 References: [SMAP Enhanced L1C Radiometer Half-Orbit 9 km EASE-Grid Brightness Temperatures](https://nsidc.org/data/SPL1CTB_E)
 
-Data fields: cell_tb_qual_flag_h_fore, cell_tb_qual_flag_h_aft, cell_tb_qual_flag_v_fore, cell_tb_qual_flag_v_aft
+  Data fields: `cell_tb_qual_flag_h_fore`, `cell_tb_qual_flag_h_aft`, `cell_tb_qual_flag_v_fore`, `cell_tb_qual_flag_v_aft`

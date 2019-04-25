@@ -1076,7 +1076,6 @@ export default (function (self) {
 
     // var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     var currentDate = new Date(date.getTime());
-    console.log(date, currentDate)
     lodashEach(def.dateRanges, function (dateRange) {
       var yearDifference;
       var monthDifference;
@@ -1097,8 +1096,9 @@ export default (function (self) {
       maxYearDate = new Date(maxDate.getUTCFullYear() + 1, maxDate.getUTCMonth(), maxDate.getUTCDate());
       maxMonthDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth() + 1, maxDate.getUTCDate());
       maxDayDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth(), maxDate.getUTCDate() + 1);
-      maxMinuteDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours() + 3 + (minDate.getTimezoneOffset() / 60));
-
+      // maxMinuteDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours() + 1 + (minDate.getTimezoneOffset() / 60));
+      maxMinuteDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours());
+console.log(minDate, maxMinuteDate)
       if (def.period === 'yearly') {
         // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
         if (!containRange) {
@@ -1126,6 +1126,7 @@ export default (function (self) {
           dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth() + dateInterval, minDate.getUTCDate(), 0, 0, 0));
         }
       } else if (def.period === 'daily') {
+        debugger;
         // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
         if (!containRange) {
           dayDifference = self.dayDiff(minDate, maxDayDate);
@@ -1133,16 +1134,13 @@ export default (function (self) {
           // Find the dayDifference of the endDate vs startDate
           dayDifference = self.dayDiff(minDate, maxDayDate);
         }
-
         // Create array of all possible request dates by saying for interval++ <= dayDifference
         for (dateInterval = 0; dateInterval <= (dayDifference + 1); dateInterval++) {
           dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate() + dateInterval, 0, 0, 0));
         }
       } else if (def.period === 'subdaily') {
-        debugger;
         // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
         let interval = Number(def.dateRanges[0].dateInterval);
-        console.log(containRange, currentDate, minDate, maxMinuteDate)
         if (!containRange) {
           minuteDifference = self.minuteDiff(minDate, maxMinuteDate);
         } else if (currentDate >= minDate && currentDate <= maxMinuteDate) {
@@ -1156,7 +1154,7 @@ export default (function (self) {
         }
       }
     });
-console.log(dateArray)
+    console.log(dateArray)
     return dateArray;
   };
   /**
@@ -1203,7 +1201,7 @@ console.log(dateArray)
     });
     // Find the closest dates within the current array
     var closestDate = closestTo(currentDate, closestAvailableDates);
-    console.log(closestDate)
+    console.log(closestDate, currentDate, closestAvailableDates, dateArray)
     // debugger;
     if (closestDate) {
       // return new Date(closestDate.getTime() - (date.getTimezoneOffset() * 60000));

@@ -121,7 +121,6 @@ class TimelineAxis extends React.Component {
       draggerDateActualB = moment.utc(inputDate ? inputDate : this.state.draggerTimeStateB);
     }
     // let draggerDateActual = moment.utc(inputDate ? inputDate : this.state.draggerTimeState);
-    // // console.log(draggerDateActual)
     // let draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
 
     if (timeScale === 'minute') {
@@ -213,6 +212,7 @@ class TimelineAxis extends React.Component {
     // console.log(midPoint, position, pixelsToAdd, leftOffset);
     this.setState({
       draggerTimeState: draggerDateActual.format(),
+      draggerTimeStateB: draggerDateActualB.format(),
       draggerPosition: draggerPosition - pixelsToAdd + position - draggerWidth,
       draggerVisible: draggerVisible,
       draggerPositionB: draggerPositionB - pixelsToAdd + position - draggerWidth,
@@ -233,9 +233,9 @@ class TimelineAxis extends React.Component {
     })
   }
 
-  getDraggerPosition = (draggerTime, frontDate, timeScale, gridWidth) => {
-    return Math.abs(moment.utc(frontDate).diff(moment.utc(draggerTime), timeScale, true) * gridWidth);
-  }
+  // getDraggerPosition = (draggerTime, frontDate, timeScale, gridWidth) => {
+  //   return Math.abs(moment.utc(frontDate).diff(moment.utc(draggerTime), timeScale, true) * gridWidth);
+  // }
 
   // changes timeScale state
   wheelZoom = (e) => {
@@ -255,6 +255,7 @@ class TimelineAxis extends React.Component {
     }
   }
 
+  // drag axis
   handleDrag = (e, d) => {
     e.stopPropagation();
     e.preventDefault();
@@ -365,6 +366,7 @@ class TimelineAxis extends React.Component {
     }
   }
 
+  // update dates in range based on dragging axis
   updatePanelDateRange = (position, timeScale, deltaX, draggerPosition, overDrag) => {
     let gridWidth = this.state.gridWidth;
     let deque = this.state.deque;
@@ -487,7 +489,7 @@ class TimelineAxis extends React.Component {
     return dateArray;
   }
 
-  // move red line to new position
+  // move dragger on axis click
   setLineTime = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -509,16 +511,18 @@ class TimelineAxis extends React.Component {
       let backDate = moment.utc(deque.peekBack().rawDate);
 
       if (draggerB) {
-        let draggerDateActual = moment.utc(this.state.draggerTimeStateB);
+        // check other dragger visibility
+        let draggerDateActual = moment.utc(this.state.draggerTimeState);
         let draggerAVisible = isCompareModeActive && draggerDateActual.isBetween(frontDate, backDate, null, '[]');
         this.setState({
+          draggerPositionB: draggerPositionB,
           draggerVisible: draggerAVisible,
           draggerVisibleB: true,
-          draggerPositionB: draggerPositionB,
           draggerTimeStateB: this.state.hoverTime,
           moved: false
         }, this.props.updateDate(this.state.hoverTime, 'selectedB'));
       } else {
+        // check other dragger visibility
         let draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
         let draggerBVisible = isCompareModeActive && draggerDateActualB.isBetween(frontDate, backDate, null, '[]');
         this.setState({
@@ -533,7 +537,6 @@ class TimelineAxis extends React.Component {
   }
 
   componentDidMount() {
-    // console.log(this.props)
     let axisWidth = this.props.axisWidth;
     let timeScale = this.props.timeScale;
     let time = moment.utc(this.props.selectedDate).format();
@@ -717,7 +720,7 @@ class TimelineAxis extends React.Component {
       this.state.draggerTimeStateB !== prevState.draggerTimeStateB ||
       moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(prevState.draggerTimeStateB).format())) {
         // debugger;
-      // console.log(this.props.selectedDateB, prevProps.selectedDateB, this.state.hoverTime, this.state.draggerTimeStateB, prevState.draggerTimeStateB)
+      console.log(this.props.selectedDateB, prevProps.selectedDateB, this.state.hoverTime, this.state.draggerTimeStateB, prevState.draggerTimeStateB)
       // console.log(this.state.draggerTimeState, prevState.draggerTimeState)
 
       if (moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(this.props.selectedDateB).format()) {

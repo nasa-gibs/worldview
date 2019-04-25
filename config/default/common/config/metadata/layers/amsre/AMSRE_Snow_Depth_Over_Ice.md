@@ -4,4 +4,4 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 Reference: [AMSR-E/Aqua Daily L3 12.5 km Brightness Temperature, Sea Ice Concentration, & Snow Depth Polar Grids](http://nsidc.org/data/ae_si12)
 
-Data fields: SI_12km_NH_SNOWDEPTH_5DAY; SI_12km_SH_SNOWDEPTH_5DAY
+Data fields: `SI_12km_NH_SNOWDEPTH_5DAY`; `SI_12km_SH_SNOWDEPTH_5DAY`

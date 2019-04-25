@@ -117,7 +117,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @return {object}         Closest date
    */
   self.closestDate = function(def, options) {
-    // debugger;
     var date;
     var animRange;
     if (models.anim) {
@@ -125,7 +124,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     }
     var dateArray = def.availableDates || [];
     if (options.date) {
-      // debugger;
       // TODO: comparison mode using this options.date key
       // need to continue conditional like below to get prevDateInDateRange ?
       // how does this interact with subdaily VS. non-subdaily and add/remove in different states?
@@ -143,6 +141,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         // date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
         // # timeoffset fix handled further down
         date = options.date;
+
+        // date = util.clearTimeUTC(date);
         // date.setUTCSeconds(0);
         // date.setUTCMilliseconds(0);
         // # memoize third argument dateArray ?
@@ -155,14 +155,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       // UTC midnight
 
       if (def.period !== 'subdaily') {
-        // debugger;
         date = util.clearTimeUTC(date);
       } else {
-        // debugger;
         // date.setUTCSeconds(0);
         // date.setUTCMilliseconds(0);
         // # memoize third argument dateArray ?
         date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
+        debugger;
       }
     }
     // Perform extensive checks before finding closest date
@@ -177,6 +176,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
 
       // Is current "rounded" previous date not in array of availableDates
       if (date && !dateArray.includes(date)) {
+        debugger;
+
         // Then, update layer object with new array of dates
         def.availableDates = util.datesinDateRanges(def, date, true);
         date = util.prevDateInDateRange(def, date, dateArray);

@@ -1,15 +1,16 @@
 {
     "layers": {
-        "GOES-West_ABI_Air_Mass_v0_NRT": {
-            "id":       "GOES-West_ABI_Air_Mass_v0_NRT",
+        "GOES-West_ABI_Air_Mass": {
+            "id":       "GOES-West_ABI_Air_Mass",
             "title":    "Air Mass (ABI, GOES-West)",
             "subtitle":    "GOES-West / ABI",
-            "description": "goes/GOES-West_ABI_Air_Mass_v0_NRT",
+            "description": "goes/GOES-West_ABI_Air_Mass",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [
               "GOES"
             ],
+            "period": "subdaily",
             "inactive": true
         }
     }

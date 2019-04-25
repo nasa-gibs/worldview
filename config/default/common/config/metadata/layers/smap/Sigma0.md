@@ -7,7 +7,7 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L3 Radar Global Daily 3 km EASE-Grid Soil Moisture](https://nsidc.org/data/spl3sma/)
 
-Data fields: sigma0_hh_mean, sigma0_vv_mean, sigma0_xpol_mean
+Data fields: `sigma0_hh_mean`, `sigma0_vv_mean`, `sigma0_xpol_mean`
 
 ### Sigma0 3 km QA and RFI Flags
 Temporal coverage: 13 April 2015 - 7 July 2015
@@ -26,4 +26,4 @@ The SMAP spacecraft carries two instruments, a radar (active) and a radiometer (
 
 References: [SMAP L3 Radar Global Daily 3 km EASE-Grid Soil Moisture](https://nsidc.org/data/spl3sma/)
 
-Data fields: sigma0_qual_flag_hh, sigma0_qual_flag_vv, sigma0_qual_flag_xpol
+Data fields: `sigma0_qual_flag_hh`, `sigma0_qual_flag_vv`, `sigma0_qual_flag_xpol`

@@ -1,16 +1,20 @@
 {
     "wv-options-fetch": [
         {
-            "from": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi?request=GetCapabilities",
+            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-geographic.xml"
         },
         {
-            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3413/nrt/wmts.cgi?request=GetCapabilities",
+            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-arctic.xml"
         },
         {
-            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3031/nrt/wmts.cgi?request=GetCapabilities",
+            "from": "https://gibs.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi?request=GetCapabilities",
             "to": "gibs-antarctic.xml"
+        },
+        {
+            "from": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
+            "to": "gibs-geographic-subdaily.xml"
         }
     ],
     "wv-options-wmts": [
@@ -34,6 +38,13 @@
             "to": "gibs-antarctic.json",
             "projection": "antarctic",
             "maxResolution": 8192.0
+        },
+        {
+            "source": "GIBS:geographic:subdaily",
+            "from": "gibs-geographic-subdaily.xml",
+            "to": "gibs-geographic-subdaily.json",
+            "projection": "geographic",
+            "maxResolution": 0.5625
         }
     ]
 }

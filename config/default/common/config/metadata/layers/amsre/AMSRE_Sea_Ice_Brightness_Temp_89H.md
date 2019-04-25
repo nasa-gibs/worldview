@@ -4,4 +4,4 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 References: [AMSR-E/Aqua Daily L3 6.25 km 89 GHz Brightness Temperature Polar Grids](http://nsidc.org/data/ae_si6)
 
-Data fields: SI_06km_NH_89H_DAY; SI_06km_SH_89H_DAY
+Data fields: `SI_06km_NH_89H_DAY`; `SI_06km_SH_89H_DAY`

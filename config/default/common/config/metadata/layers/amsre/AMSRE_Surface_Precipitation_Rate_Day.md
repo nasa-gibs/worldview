@@ -6,4 +6,4 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 References: [AMSR-E/Aqua L2B Global Swath Surface Precipitation GSFC Profiling Algorithm](http://nsidc.org/data/ae_rain)
 
-Data field: surfacePrecipitation
+Data field: `surfacePrecipitation`

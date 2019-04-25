@@ -146,7 +146,8 @@ export function animationRangeSelect(models, config, ui) {
    *
    */
   self.getLocationFromStringDate = function(date) {
-    return timeline.x(util.roundTimeTenMinute(date));
+    // return timeline.x(util.roundTimeTenMinute(date));
+    return 100;
   };
 
   /*
@@ -176,9 +177,11 @@ export function animationRangeSelect(models, config, ui) {
    */
   self.getMaxWidth = function() {
     // end of timeline
-    let $dataWidth = timeline.x(timeline.data.end());
+    // let $dataWidth = timeline.x(timeline.data.end());
+    let $dataWidth = 1556127454524;
     // start of timeline
-    let $dataStart = timeline.x(timeline.data.start());
+    // let $dataStart = timeline.x(timeline.data.start());
+    let $dataStart = 1556129454524;
     // default start/end false
     let maxWidth = {
       width: $footer.width(),
@@ -235,7 +238,8 @@ export function animationRangeSelect(models, config, ui) {
   self.onRangeClick = function(e) {
     var headerOffset = self.getHeaderOffset();
     var offsetX = e.pageX - headerOffset;
-    var date = timeline.x.invert(offsetX);
+    // var date = timeline.x.invert(offsetX);
+    var date = new Date();
     models.date.select(date);
   };
 
@@ -253,8 +257,10 @@ export function animationRangeSelect(models, config, ui) {
    *
    */
   self.updateRange = function(startLocation, EndLocation) {
-    var startDate = util.roundTimeTenMinute(timeline.x.invert(startLocation));
-    var endDate = util.roundTimeTenMinute(timeline.x.invert(EndLocation));
+    // var startDate = util.roundTimeTenMinute(timeline.x.invert(startLocation));
+    // var endDate = util.roundTimeTenMinute(timeline.x.invert(EndLocation));
+    var startDate = new Date();
+    var endDate = new Date();
     var state = model.rangeState;
     state.startDate = util.toISOStringSeconds(startDate) || 0;
     // prevent endDate overdrag from occuring in monthly/yearly by setting to max date limit

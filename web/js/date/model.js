@@ -55,7 +55,6 @@ export function dateModel(models, config, spec) {
   };
   // set selectedZoom level
   self.setSelectedZoom = (zoomLevel) => {
-    console.log(zoomLevel)
     self.selectedZoom = zoomLevel;
     self.events.trigger('state-update');
   };
@@ -117,7 +116,9 @@ export function dateModel(models, config, spec) {
   };
 
   self.add = function(interval, amount, selectionStr) {
+
     selectionStr = selectionStr || self.activeDate;
+    console.log(interval, amount, selectionStr)
     self.select(
       util.dateAdd(self[selectionStr], interval, amount),
       selectionStr
@@ -201,7 +202,6 @@ export function dateModel(models, config, spec) {
       }
     }
     // custom interval delta and interval
-    // console.log(state, self.customDelta, self.customInterval, models)
     if (self.interval) {
       state.inti = self.interval.toString();
     }

@@ -184,115 +184,11 @@ class App extends React.Component {
 
         <div id="timewheels" style={{ display: 'none' }} />
 
-        <div
-          id="timelineContainer"
-        ></div>
-
         <section
           id="timeline"
           className="timeline-inner clearfix"
           style={{ display: 'none' }}
         ></section>
-
-        {/* <section
-          id="timeline"
-          className="timeline-inner clearfix"
-          style={{ display: 'none' }}
-        >
-          <div id="timeline-header">
-            <div id="date-selector-main" />
-            <div id="zoom-buttons-group">
-              <div id="zoom-btn-container"> */}
-                {/* <span
-                  id="current-zoom"
-                  className="zoom-btn zoom-btn-active"
-                  data-zoom="3"
-                >
-                  Days
-                </span>
-                <div className="wv-tooltip">
-                  <div id="timeline-zoom" className="timeline-zoom">
-                    <span
-                      id="zoom-years"
-                      className="zoom-btn zoom-btn-inactive zoom-years"
-                      data-zoom="1"
-                    >
-                      Years
-                    </span>
-                    <span
-                      id="zoom-months"
-                      className="zoom-btn zoom-btn-inactive zoom-months"
-                      data-zoom="2"
-                    >
-                      Months
-                    </span>
-                    <span
-                      id="zoom-days"
-                      className="zoom-btn zoom-btn-inactive zoom-days"
-                      data-zoom="3"
-                    >
-                      Days
-                    </span>
-                    <span
-                      id="zoom-minutes"
-                      className="zoom-btn zoom-btn-inactive zoom-minutes"
-                      data-zoom="4"
-                    >
-                      Minutes
-                    </span>
-                    <span
-                      id="zoom-custom"
-                      className="zoom-btn zoom-btn-inactive zoom-custom"
-                      data-zoom="custom"
-                      style={{color: '#7890cd'}}
-                    >
-                      Custom
-                    </span>
-                  </div>
-                </div> */}
-              {/* </div>
-              <div
-                className="button-action-group"
-                id="left-arrow-group"
-                title="Click and hold to animate backwards"
-              >
-                <svg id="timeline-svg" width="24" height="30">
-                  <path
-                    d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                    className="arrow"
-                  />
-                </svg>
-              </div>
-              <div
-                className="button-action-group"
-                id="right-arrow-group"
-                title="Click and hold to animate forwards"
-              >
-                <svg width="24" height="30">
-                  <path
-                    d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                    className="arrow"
-                  />
-                </svg>
-              </div>
-            </div>
-            <div
-              className="button-action-group animate-button"
-              id="animate-button"
-              title="Set up animation"
-            >
-              <i id="wv-animate" className="fas fa-video wv-animate" />
-            </div>
-          </div>
-          <div id="timeline-footer">
-            <div id="wv-animation-widet-case"> </div>
-          </div>
-          <div id="timeline-hide">
-            <svg className="hamburger" width="10" height="9">
-              <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
-            </svg>
-          </div>
-        </section> */}
         <OlCoordinates mouseEvents={this.mapMouseEvents} />
       </div>
     );
@@ -499,12 +395,15 @@ class App extends React.Component {
 
         ui.dateLabel = dateLabel(models);
       }
-
+      console.log(config)
+      config.startDate = '1998-11-20T00:00:00Z';
+      // TODO: config.startDate doesn't work anymore?!?!
       if (config.startDate) {
         if (!util.browser.small) {
           // If mobile device, do not build timeline
           timelineInit();
         }
+        // TODO: date wheels break now
         ui.dateWheels = dateWheels(models, config);
       }
 

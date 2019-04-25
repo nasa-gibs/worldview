@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import TimeScaleIntervalChange from './timeline-controls/interval-timescale-change';
 import './timeline.css';
-import TimelineAxisContainer from './timeline-axis/timeline-axis-container';
+import TimelineAxis from './timeline-axis/timeline-axis';
 import CustomIntervalSelectorWidget from './interval-selector/interval-selector';
 
 import DateSelector from '../date-selector/date-selector';
@@ -73,7 +73,6 @@ class Timeline extends React.Component {
 
   // handle SELECT of LEFT/RIGHT interval selection
   setTimeScaleIntervalChangeUnit = (intervalSelected, customSelected) => {
-    // console.log('select', intervalSelected, customSelected)
     let intervalChangeAmt;
     if (intervalSelected === 'custom') {
       intervalSelected = this.state.customIntervalZoomLevel;
@@ -86,12 +85,8 @@ class Timeline extends React.Component {
 
   // left/right arrows increment date
   incrementDate = (multiplier) => {
-    let draggerSelected = this.state.draggerSelected;
-    let dateSelected = draggerSelected === 'selected' ? this.state.dateFormatted : this.state.dateFormattedB;
-    // console.log(draggerSelected, dateSelected)
-    let newDate = moment.utc(dateSelected).add((multiplier * this.state.intervalChangeAmt), this.state.timeScaleChangeUnit)
-    // console.log(this.state.draggerSelected, this.state.dateFormatted, this.state.dateFormattedB, newDate)
-    this.updateDate(new Date(newDate.format()), draggerSelected);
+    let delta = this.state.customSelected ? this.state.intervalChangeAmt : 1;
+    this.props.incrementDate(Number(delta * multiplier), this.state.timeScaleChangeUnit)
   }
 
   // open animation dialog
@@ -133,20 +128,14 @@ class Timeline extends React.Component {
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // console.log(this.props, nextProps, this.state, nextState)
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return true;
+  // }
 
-  componentDidUpdate(prevProps, prevState) {
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  // }
 
   render() {
-    // console.log(this.props.selectedDate, this.props.dateFormatted, this.state.dateFormatted, this.props)
-    // console.log(this.state)
-    // console.log(this.props.hasSubdailyLayers, this.state.hasSubdailyLayers)
-    // console.log(this.props)
-    // console.log(this.state.draggerSelected)
     return (
       this.state.dateFormatted ?
       <React.Fragment>
@@ -194,25 +183,23 @@ class Timeline extends React.Component {
         </div>
         <div id="timeline-footer">
           <div id="wv-animation-widet-case"> </div>
-          {/* <svg width="1207" height="107" id="timeline-footer-svg" viewBox="0 9 1207 91"> */}
-          {/* new modular version - currently a shell */}
-            <TimelineAxisContainer
-              {...this.state}
-              axisWidth={this.state.axisWidth}
-              selectedDate={this.state.dateFormatted}
-              selectedDateB={this.state.dateFormattedB}
-              updateDate={this.updateDate}
-              hasSubdailyLayers={this.state.hasSubdailyLayers}
-              parentOffset={this.state.parentOffset}
-              changeTimescale={this.changeTimescale}
-              compareModeActive={this.state.compareModeActive}
-              draggerSelected={this.state.draggerSelected}
-              onChangeSelectedDragger={this.props.onChangeSelectedDragger}
-            />
-            {/* </svg> */}
+          {/* Timeline */}
+          <TimelineAxis
+            {...this.state}
+            axisWidth={this.state.axisWidth}
+            selectedDate={this.state.dateFormatted}
+            selectedDateB={this.state.dateFormattedB}
+            updateDate={this.updateDate}
+            hasSubdailyLayers={this.state.hasSubdailyLayers}
+            parentOffset={this.state.parentOffset}
+            changeTimescale={this.changeTimescale}
+            compareModeActive={this.state.compareModeActive}
+            draggerSelected={this.state.draggerSelected}
+            onChangeSelectedDragger={this.props.onChangeSelectedDragger}
+          />
         </div>
 
-        {/* hammmmmmmmmmmburger 🍔 */}
+        {/* Zoom Level Change */}
         <div className="zoom-level-change" style={{ width: '75px', display: this.state.timelineHidden ? 'none' : 'block'}}>
           <AxisTimeScaleChange
           timeScale={this.state.timeScale}
@@ -221,6 +208,7 @@ class Timeline extends React.Component {
           />
         </div>
 
+        {/* 🍔 Open/Close Chevron 🍔 */}
         <div id="timeline-hide" onClick={this.toggleHideTimeline}>
           {this.state.timelineHidden ?
           <i className="fas fa-chevron-right wv-timeline-hide-arrow"></i>
