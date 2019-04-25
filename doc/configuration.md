@@ -9,8 +9,9 @@ To create a custom configuration, either:
 Any configuration found in `config/active` will be used instead of `config/default`.
 
 Clone the template repository with:
+
 ```bash
-git clone https://github.com/nasa-gibs/worldview-options-template.git options
+git clone https://github.com/nasa-gibs/worldview-options-template.git config/active
 ```
 
 To quickly switch between different configurations, use a symlink for `config/active`
