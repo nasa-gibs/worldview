@@ -62,7 +62,9 @@ class ProjectionList extends Component {
 }
 function mapStateToProps(state) {
   const projArray = lodashGet(state, 'config.ui.projections');
-  const projectionArray = getInfoArray(projArray) || DEFAULT_PROJ_ARRAY;
+  const projectionArray = projArray
+    ? getInfoArray(projArray)
+    : DEFAULT_PROJ_ARRAY;
   return {
     models: state.models,
     config: state.config,
