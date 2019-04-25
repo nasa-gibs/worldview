@@ -3,9 +3,9 @@
     "tc_idai_march_2019": {
       "id": "tc_idai_march_2019",
       "type": "severe-storm",
-      "title": "Tropical Cyclone Idai",
-      "description": "View the after effects of Tropical Cyclone Idai",
-      "backgroundImage": "background.png",
+      "title": "Tropical Cyclone Idai (March 2019)",
+      "description": "See the impact of the storm on Mozambique and Zimbabwe.",
+      "backgroundImage": "TCIdal_background.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
