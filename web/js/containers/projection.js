@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { changeProjection } from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import IconList from '../components/util/list';
+import { get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 
-const infoArray = [
+const DEFAULT_PROJ_ARRAY = [
   {
     text: 'Arctic',
     iconClass: 'ui-icon icon-large fa fa-arrow-circle-up fa-fw',
@@ -26,7 +27,16 @@ const infoArray = [
     key: 'antarctic'
   }
 ];
-
+const getInfoArray = function(projArray) {
+  return projArray.map(el => {
+    return {
+      text: el.name,
+      iconClass: el.style + ' ui-icon icon-large',
+      id: 'change-' + el.id + '-button',
+      key: el.id
+    };
+  });
+};
 class ProjectionList extends Component {
   updateProjection(id) {
     const { updateProjection, models, config, onCloseModal } = this.props;
@@ -39,10 +49,10 @@ class ProjectionList extends Component {
     });
   }
   render() {
-    const { projection } = this.props;
+    const { projection, projectionArray } = this.props;
     return (
       <IconList
-        list={infoArray}
+        list={projectionArray}
         active={projection}
         onClick={this.updateProjection.bind(this)}
         size="small"
@@ -51,10 +61,13 @@ class ProjectionList extends Component {
   }
 }
 function mapStateToProps(state) {
+  const projArray = lodashGet(state, 'config.ui.projections');
+  const projectionArray = getInfoArray(projArray) || DEFAULT_PROJ_ARRAY;
   return {
     models: state.models,
     config: state.config,
-    projection: state.proj.id
+    projection: state.proj.id,
+    projectionArray
   };
 }
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -77,5 +90,6 @@ ProjectionList.propTypes = {
   models: PropTypes.object,
   projection: PropTypes.string,
   config: PropTypes.object,
-  onCloseModal: PropTypes.func
+  onCloseModal: PropTypes.func,
+  projectionArray: PropTypes.array
 };
