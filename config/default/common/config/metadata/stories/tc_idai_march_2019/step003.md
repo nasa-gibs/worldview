@@ -1,1 +1,1 @@
-<p>Press play in the animation box to see the hourly rate of rainfall that fell during Tropical Cyclone Idai./p>
+<p>Press "play" in the animation tool to see the hourly rate of rainfall that fell during Tropical Cyclone Idai over the course of 2 weeks.</p>
