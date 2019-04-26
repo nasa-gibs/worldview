@@ -7,6 +7,7 @@ import {
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE
 } from './constants';
+import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 import {
   assign as lodashAssign,
   orderBy as lodashOrderBy,
@@ -44,6 +45,7 @@ export const eventsReducerState = {
     id: '',
     date: null
   },
+  active: false,
   showAll: false
 };
 
@@ -67,6 +69,12 @@ export function eventsReducer(state = eventsReducerState, action) {
     case ONLY_SHOW_VISIBLE:
       return lodashAssign({}, state, {
         showAll: false
+      });
+    case CHANGE_SIDEBAR_TAB:
+      const isActive = action.activeTab === 'events';
+      if (isActive === state.active) return state;
+      return lodashAssign({}, state, {
+        active: isActive
       });
     default:
       return state;

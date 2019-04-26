@@ -1,57 +1,18 @@
 import {
   cloneDeep as lodashCloneDeep,
-  get as lodashGet,
+  eachRight as lodashEachRight,
+  isUndefined as lodashIsUndefined,
+  remove as lodashRemove,
   findIndex as lodashFindIndex,
   each as lodashEach
 } from 'lodash';
 
+import { addLayer } from './selectors';
 import update from 'immutability-helper';
 import util from '../../util/util';
 
-export function getLayersParameterSetup(
-  parameters,
-  config,
-  models,
-  legacyState,
-  errors
-) {
-  const initialState = lodashCloneDeep(models.layers.active);
-  models.palettes.load(legacyState, errors);
-  if (models.compare.active) {
-    models.layers.activeB = lodashCloneDeep(initialState);
-  }
-  const layerModelLoaded = models.layers.load(legacyState, errors);
-
-  return {
-    l: getPermalinkManagementObject(
-      initialState,
-      'layers.active',
-      () => {
-        return layerModelLoaded.active ? layerModelLoaded.active : initialState;
-      },
-      (currentItemState, state) => {
-        const isActive = lodashGet(state, 'compare.active');
-        const isCompareA = lodashGet(state, 'compare.isCompareA');
-        return !isActive && !isCompareA
-          ? serializeLayers(state, 'activeB')
-          : serializeLayers(state, 'active');
-      }
-    ),
-    l1: getPermalinkManagementObject(
-      initialState,
-      'layers.activeB',
-      () => {
-        return layerModelLoaded.activeB;
-      },
-      (currentItemState, state) => {
-        const isActive = lodashGet(state, 'compare.active');
-        return isActive ? serializeLayers(state, 'activeB') : undefined;
-      }
-    )
-  };
-}
-export function serializeLayers(state, groupName) {
-  const layers = state.layers[groupName];
+export function serializeLayers(currentLayers, state, groupName) {
+  const layers = currentLayers;
   const palettes = state.palettes[groupName];
   return layers.map((def, i) => {
     var item = {};
@@ -75,8 +36,8 @@ export function serializeLayers(state, groupName) {
         value: def.opacity
       });
     }
-    let paletteDef = def.id && palettes[def.id] ? palettes[def.id] : undefined;
-    if (paletteDef) {
+    if (def.custom) {
+      let paletteDef = palettes[def.id];
       if (paletteDef.custom) {
         item.attributes.push({
           id: 'palette',
@@ -107,24 +68,6 @@ export function serializeLayers(state, groupName) {
   });
 }
 
-function getPermalinkManagementObject(
-  initialState,
-  stateKey,
-  parser,
-  serialize
-) {
-  return {
-    stateKey: stateKey,
-    initialState: initialState,
-    type: 'array',
-    options: {
-      delimiter: ',',
-      serializeNeedsGlobalState: true,
-      parse: parser,
-      serialize: serialize
-    }
-  };
-}
 export function toggleVisibility(id, layers) {
   var index = lodashFindIndex(layers, {
     id: id
@@ -240,4 +183,150 @@ export function exists(layer, activeLayers) {
     }
   });
   return found;
+}
+// Permalink versions 1.0 and 1.1
+export function layersParse11(str, config) {
+  var layers = [];
+  var ids = str.split(/[~,.]/);
+  lodashEach(ids, function(id) {
+    if (id === 'baselayers' || id === 'overlays') {
+      return;
+    }
+    var visible = true;
+    if (id.startsWith('!')) {
+      visible = false;
+      id = id.substring(1);
+    }
+    if (config.redirects && config.redirects.layers) {
+      id = config.redirects.layers[id] || id;
+    }
+    if (!config.layers[id]) {
+      console.warn('No such layer: ' + id);
+      return;
+    }
+    var lstate = {
+      id: id,
+      attributes: []
+    };
+    if (!visible) {
+      lstate.attributes.push({
+        id: 'hidden',
+        value: true
+      });
+    }
+    layers.push(lstate);
+  });
+  return createLayerArrayFromState(layers, config);
+}
+
+// Permalink version 1.2
+export function layersParse12(stateObj, config) {
+  var parts;
+  var str = stateObj;
+  // Split by layer definitions (commas not in parens)
+  var layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
+  var lstates = [];
+  lodashEach(layerDefs, function(layerDef) {
+    // Get the text before any paren or comma
+    var layerId = layerDef.match(/[^(,]+/)[0];
+    if (config.redirects && config.redirects.layers) {
+      layerId = config.redirects.layers[layerId] || layerId;
+    }
+    var lstate = {
+      id: layerId,
+      attributes: []
+    };
+    // Everything inside parens
+    var arrayAttr = layerDef.match(/\(.*\)/);
+    if (arrayAttr) {
+      // Get single match and remove parens
+      var strAttr = arrayAttr[0].replace(/[()]/g, '');
+      // Key value pairs
+      var kvps = strAttr.split(',');
+      lodashEach(kvps, function(kvp) {
+        parts = kvp.split('=');
+        if (parts.length === 1) {
+          lstate.attributes.push({
+            id: parts[0],
+            value: true
+          });
+        } else {
+          lstate.attributes.push({
+            id: parts[0],
+            value: parts[1]
+          });
+        }
+      });
+    }
+    lstates.push(lstate);
+  });
+  return createLayerArrayFromState(lstates, config);
+}
+const createLayerArrayFromState = function(state, config) {
+  let layerArray = [];
+  lodashEach(state, obj => {
+    if (!lodashIsUndefined(state)) {
+      lodashEachRight(state, function(layerDef) {
+        let hidden = false;
+        let opacity = 1.0;
+        if (!config.layers[layerDef.id]) {
+          console.warn('No such layer: ' + layerDef.id);
+          return;
+        }
+        lodashEach(layerDef.attributes, function(attr) {
+          if (attr.id === 'hidden') {
+            hidden = true;
+          }
+          if (attr.id === 'opacity') {
+            opacity = util.clamp(parseFloat(attr.value), 0, 1);
+            if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
+          }
+        });
+        layerArray = addLayer(
+          layerDef.id,
+          {
+            hidden: hidden,
+            opacity: opacity
+          },
+          layerArray,
+          config.layers
+        );
+      });
+    }
+  });
+  return layerArray;
+};
+export function validate(errors, config) {
+  var error = function(layerId, cause) {
+    errors.push({
+      message: 'Invalid layer: ' + layerId,
+      cause: cause,
+      layerRemoved: true
+    });
+    delete config.layers[layerId];
+    lodashRemove(config.layerOrder.baselayers, function(e) {
+      return e === layerId;
+    });
+    lodashRemove(config.layerOrder.overlays, function(e) {
+      return e === layerId;
+    });
+  };
+
+  var layers = lodashCloneDeep(config.layers);
+  lodashEach(layers, function(layer) {
+    if (!layer.group) {
+      error(layer.id, 'No group defined');
+      return;
+    }
+    if (!layer.projections) {
+      error(layer.id, 'No projections defined');
+    }
+  });
+
+  var orders = lodashCloneDeep(config.layerOrder);
+  lodashEach(orders, function(layerId) {
+    if (!config.layers[layerId]) {
+      error(layerId, 'No configuration');
+    }
+  });
 }

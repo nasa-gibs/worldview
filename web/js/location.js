@@ -1,13 +1,21 @@
 import { assign, has, set, get } from 'lodash';
 
 // legacy crutches
-import { getLayersParameterSetup } from './modules/layers/util';
+// import { getLayersParameterSetup } from './modules/layers/util';
 import { getDateParameterSetup } from './modules/date/util';
-import { getNaturalEventsParameterSetup } from './modules/natural-events/util';
+
 import { getDataDownloadParameterSetup } from './modules/data/util';
 import { getAnimationParameterSetup } from './modules/animation/util';
 import { getTourParameterSetup } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
+import { eventParse, serializeEvent } from './modules/natural-events/util';
+import {
+  layersParse11,
+  layersParse12,
+  serializeLayers
+} from './modules/layers/util';
+import { resetLayers } from './modules/layers/selectors';
+import { eventsReducerState } from './modules/natural-events/reducers';
 import update from 'immutability-helper';
 
 export function mapLocationToState(state, location) {
@@ -20,15 +28,71 @@ export function mapLocationToState(state, location) {
         proj: { selected: { $set: selected } }
       });
     }
+    // legacy layers permalink
+    if (state.parameters.product) {
+      stateFromLocation = update(stateFromLocation, {
+        layers: {
+          active: {
+            $set: layersParse11(state.parameters.product, state.config)
+          }
+        }
+      });
+    }
+    // one level deep merge
+    for (var key in stateFromLocation) {
+      state = update(state, {
+        [key]: { $merge: stateFromLocation[key] }
+      });
+    }
     return update(state, { $merge: stateFromLocation });
   } else return state;
 }
-const simpleParameters = {
-  p: {
-    stateKey: 'proj.id',
-    initialState: 'geographic'
-  }
+const getParameters = function(config) {
+  return {
+    p: {
+      stateKey: 'proj.id',
+      initialState: 'geographic'
+    },
+    e: {
+      stateKey: 'events',
+      type: 'object',
+      initialState: eventsReducerState,
+      options: {
+        parse: eventParse,
+        serialize: serializeEvent
+      }
+    },
+    l: {
+      stateKey: 'layers.active',
+      initialState: resetLayers(config.defaults.startingLayers, config.layers),
+      type: 'array',
+      options: {
+        parse: permalink => {
+          return layersParse12(permalink, config);
+        },
+        serializeNeedsGlobalState: true,
+        serialize: (currentLayers, state) => {
+          return serializeLayers(currentLayers, state, 'active');
+        }
+      }
+    },
+    l1: {
+      stateKey: 'layers.activeB',
+      initialState: [],
+      type: 'array',
+      options: {
+        parse: permalink => {
+          return layersParse12(permalink, config);
+        },
+        serializeNeedsGlobalState: true,
+        serialize: (currentLayers, state) => {
+          return serializeLayers(currentLayers, state, 'activeB');
+        }
+      }
+    }
+  };
 };
+
 // ca: {
 //   stateKey: 'compare.isCompareA',
 //   initialState: true,
@@ -59,7 +123,6 @@ export function getParamObject(
   legacyState,
   errors
 ) {
-  let eventParamObject = {};
   let tourParamObject = {};
   let animationParamObject = {};
 
@@ -88,13 +151,6 @@ export function getParamObject(
       errors
     );
   }
-  const layersParamObject = getLayersParameterSetup(
-    parameters,
-    config,
-    models,
-    legacyState,
-    errors
-  );
   const dateParamObject = getDateParameterSetup(
     parameters,
     config,
@@ -102,15 +158,6 @@ export function getParamObject(
     legacyState,
     errors
   );
-  if (config.features.naturalEvents) {
-    eventParamObject = getNaturalEventsParameterSetup(
-      parameters,
-      config,
-      models,
-      legacyState,
-      errors
-    );
-  }
   const dataParamObject = getDataDownloadParameterSetup(
     parameters,
     config,
@@ -122,13 +169,11 @@ export function getParamObject(
   const obj = assign(
     {},
     dateParamObject,
-    layersParamObject,
     animationParamObject,
-    eventParamObject,
     dataParamObject,
     tourParamObject,
     mapParamObject,
-    simpleParameters
+    getParameters(config)
   );
   return {
     global: obj

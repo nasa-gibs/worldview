@@ -8,6 +8,7 @@ import {
   REMOVE_LAYER,
   UPDATE_OPACITY
 } from './constants';
+import { SET_CUSTOM as SET_CUSTOM_PALETTE } from '../palettes/constants';
 import { resetLayers } from './selectors';
 import { cloneDeep as lodashCloneDeep, assign as lodashAssign } from 'lodash';
 import update from 'immutability-helper';
@@ -53,6 +54,16 @@ export function layerReducer(state = initialState, action) {
       return update(state, {
         [layerGroupStr]: {
           [action.index]: { visible: { $set: action.visible } }
+        }
+      });
+    case SET_CUSTOM_PALETTE:
+      return update(state, {
+        [layerGroupStr]: {
+          [action.layerId]: {
+            customs: {
+              $set: action.paletteId
+            }
+          }
         }
       });
     case REMOVE_LAYER:
