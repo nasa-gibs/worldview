@@ -68,13 +68,15 @@ class LayerList extends React.Component {
     }
   }
   getSourceMetadata(source) {
-    util.get('config/metadata/layers/' + source.description + '.html').then(data => {
-      if (data) {
-        let sourceMetadata = this.state.sourceMetadata;
-        sourceMetadata[source.description] = { data: data };
-        this.setState({ sourceMetaData: sourceMetadata });
-      }
-    });
+    if (source.description) {
+      util.get('config/metadata/layers/' + source.description + '.html').then(data => {
+        if (data) {
+          let sourceMetadata = this.state.sourceMetadata;
+          sourceMetadata[source.description] = { data: data };
+          this.setState({ sourceMetaData: sourceMetadata });
+        }
+      });
+    }
   }
   /*
    * Toggles expansion of date ranges for a layer given that layer's ID

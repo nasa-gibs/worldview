@@ -73,7 +73,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
     # Extract start and end dates
     if "Dimension" in gc_layer:
         dimension = gc_layer["Dimension"]
-        if dimension["ows:Identifier"] == "time":
+        if dimension["ows:Identifier"] == "Time":
             wv_layer = process_temporal(wv_layer, dimension["Value"])
     # Extract matrix set
     matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]
