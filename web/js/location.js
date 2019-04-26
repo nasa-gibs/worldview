@@ -1,4 +1,4 @@
-import { assign, has, set, get } from 'lodash';
+import { assign as lodashAssign, has, set, get } from 'lodash';
 
 // legacy crutches
 // import { getLayersParameterSetup } from './modules/layers/util';
@@ -28,6 +28,12 @@ export function mapLocationToState(state, location) {
         proj: { selected: { $set: selected } }
       });
     }
+    if (stateFromLocation.compare) {
+      stateFromLocation = update(stateFromLocation, {
+        compare: { active: { $set: true } }
+      });
+      console.log(stateFromLocation);
+    }
     // legacy layers permalink
     if (state.parameters.product) {
       stateFromLocation = update(stateFromLocation, {
@@ -40,8 +46,9 @@ export function mapLocationToState(state, location) {
     }
     // one level deep merge
     for (var key in stateFromLocation) {
-      state = update(state, {
-        [key]: { $merge: stateFromLocation[key] }
+      const obj = lodashAssign({}, state[key], stateFromLocation[key]);
+      stateFromLocation = update(stateFromLocation, {
+        [key]: { $set: obj }
       });
     }
     return update(state, { $merge: stateFromLocation });
@@ -89,33 +96,32 @@ const getParameters = function(config) {
           return serializeLayers(currentLayers, state, 'activeB');
         }
       }
+    },
+    ca: {
+      stateKey: 'compare.isCompareA',
+      initialState: true,
+      type: 'bool',
+      options: {
+        setAsEmptyItem: true,
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          const compareIsActive = get(state, 'compare.active');
+          return compareIsActive ? currentItemState : undefined;
+        }
+      }
+    },
+    cm: {
+      stateKey: 'compare.mode',
+      initialState: 'swipe'
+    },
+    cv: {
+      stateKey: 'compare.value',
+      initialState: 50,
+      type: 'number'
     }
   };
 };
 
-// ca: {
-//   stateKey: 'compare.isCompareA',
-//   initialState: true,
-//   type: 'bool',
-//   options: {
-//     setAsEmptyItem: true,
-//     serializeNeedsGlobalState: true,
-//     serialize: (currentItemState, state) => {
-//       const compareIsActive = get(state, 'compare.active');
-//       return compareIsActive ? currentItemState : undefined;
-//     }
-//   }
-// },
-// cm: {
-//   stateKey: 'compare.mode',
-//   initialState: 'swipe'
-// },
-// cv: {
-//   stateKey: 'compare.value',
-//   initialState: 50,
-//   type: 'number'
-// }
-// };
 export function getParamObject(
   parameters,
   config,
@@ -166,7 +172,7 @@ export function getParamObject(
     errors
   );
 
-  const obj = assign(
+  const obj = lodashAssign(
     {},
     dateParamObject,
     animationParamObject,
