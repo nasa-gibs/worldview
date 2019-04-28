@@ -46,7 +46,10 @@ export default (function (self) {
     // const startTime = performance.now();
     let dates = [];
     let { format } = timeScaleOptions[timeScale].timeAxis;
+    let currentDate = moment.utc(new Date()).add(1, timeScale);
 
+// endDate = endDate.isAfter(currentDate) ? currentDate : endDate;
+// console.log(endDate.format(), currentDate.format)
     while (startDate <= endDate) {
       let date = startDate.format(format);
       let rawDate = startDate.format();
@@ -54,7 +57,7 @@ export default (function (self) {
       let rawNextDate = nextDate.format();
 
       // # EXPENSIVE IN BETWEEN FOR LARGE NUMBERS - removing cuts function time down some, but may be neglible - main focus is smaller total request size
-      let withinRange = startDate.isBetween(pastDateLimit, futureDateLimit, null, '[]');
+      let withinRange = startDate.isBetween(pastDateLimit, currentDate.format(), null, '[]');
 
       let timeObject = {
         dateObject: startDate.toObject(),

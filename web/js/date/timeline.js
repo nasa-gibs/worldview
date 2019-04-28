@@ -1,5 +1,4 @@
 import util from '../util/util';
-import d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import googleTagManager from 'googleTagManager';
@@ -13,7 +12,6 @@ export function timeline(models, config, ui) {
   self.startDate = new Date(config.startDate);
   self.parentOffset = (subdaily ? 404 : 310) + 10;
 
-  // self.delta = 1;
   self.active = false;
   self.delay = 500;
   var animator = null;
@@ -35,7 +33,7 @@ export function timeline(models, config, ui) {
       let delta = models.date.customSelected === true ? models.date.customDelta : 1;
       switch (event.keyCode) {
         case util.key.LEFT:
-          // prevent quick LEFT/RIGHT arrow switch bug
+          // prevent quick LEFT/RIGHT arrow conflicting animations
           if (keyDown !== event.keyCode) {
             stopper();
           }
@@ -43,7 +41,7 @@ export function timeline(models, config, ui) {
           event.preventDefault();
           break;
         case util.key.RIGHT:
-          // prevent quick LEFT/RIGHT arrow switch bug
+          // prevent quick LEFT/RIGHT arrow conflicting animations
           if (keyDown !== event.keyCode) {
             stopper();
           }
@@ -132,7 +130,6 @@ export function timeline(models, config, ui) {
    */
   var getNextTimeSelection = function(delta, increment) {
     var prevDate = model[model.activeDate];
-    console.log(prevDate)
     switch (increment) {
       case 'year':
         return new Date(
@@ -169,16 +166,12 @@ export function timeline(models, config, ui) {
    * @return {void}
    */
   self.animateByIncrement = function(delta, increment) {
-    console.log(delta, increment)
     var endTime = models.layers.lastDateTime();
     var endDate = models.layers.lastDate();
-    // self.delta = Math.abs(delta);
 
     let subdaily = models.layers.hasSubDaily();
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
-      console.log(nextTime)
-      // console.log(tl.data.start(), nextTime, endTime, increment)
       if (subdaily) {
         if (self.startDate <= nextTime && nextTime <= endTime) {
           models.date.add(increment, delta);
@@ -191,7 +184,6 @@ export function timeline(models, config, ui) {
       animationInProcess = true;
       animator = setTimeout(animate, self.delay);
     }
-    console.log(animationInProcess)
     animate();
   };
 
@@ -255,23 +247,21 @@ export function timeline(models, config, ui) {
   };
 
   self.getWidth = function() {
-    // let subdaily = models.layers.hasSubDaily();
     // check for compare mode
     let isCompareModeActive = models.compare.active;
 
     // if compare mode is active, check for subdaily in either A or B
-    let subdaily;
+    let hasSubDaily;
     if (isCompareModeActive) {
-      subdaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
+      hasSubDaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
     } else {
-      subdaily = models.layers.hasSubDaily();
+      hasSubDaily = models.layers.hasSubDaily();
     }
-    self.parentOffset = (subdaily ? 404 : 310) + 10;
+    self.parentOffset = (hasSubDaily ? 404 : 310) + 10;
 
     self.width =
-      $(window).outerWidth(true) -
-      // $('#timeline-header').outerWidth(true) -
-      // $('#timeline-hide').outerWidth(true) -
+      // $(window).outerWidth(true) -
+      window.innerWidth -
       self.parentOffset -
       20 -
       20 -
@@ -317,10 +307,6 @@ export function timeline(models, config, ui) {
     }
   };
 
-  // self.expandNow = function() {
-  //   self.expand(true);
-  // };
-
   self.collapse = function(now) {
     now = now || false;
     var tl = $('#timeline-footer');
@@ -328,10 +314,6 @@ export function timeline(models, config, ui) {
       self.toggle(now);
     }
   };
-
-  // self.collapseNow = function() {
-  //   self.collapse(true);
-  // };
 
   self.resize = function() {
     var small = util.browser.small || util.browser.constrained;
@@ -388,17 +370,7 @@ export function timeline(models, config, ui) {
   };
 
   var incrementDate = (increment, timeScale) => {
-    // self.expand(true);
-    console.log(increment, timeScale)
     self.animateByIncrement(increment, timeScale);
-    // let newDate = models.date[models.date.activeDate];
-    // models.date.add(timeScale, increment);
-    // self.input.animateByIncrement(increment, timeScale);
-    // models.date.select(date);
-    // self.reactComponent.setState({
-    //   selectedDate: newDate,
-    //   dateFormatted: new Date(newDate).toISOString()
-    // });
   };
 
   // invoked when compare mode is toggled
@@ -445,7 +417,6 @@ export function timeline(models, config, ui) {
   };
 
   var onChangeSelectedDragger = (selectionStr) => {
-    console.log(selectionStr, models.date.selected, models.date.selectedB)
     let isCompareModeActive = models.compare.active;
     if (isCompareModeActive) {
       models.compare.toggleState();
@@ -456,7 +427,7 @@ export function timeline(models, config, ui) {
   };
 
   var updateDate = (date, selectionStr) => {
-    console.log(date, selectionStr, models.date.selected, models.date.selectedB)
+    // console.log(date, selectionStr, models.date.selected, models.date.selectedB)
 
     // console.log(date, selectionStr)
     let updatedDate = new Date(date);

@@ -8,7 +8,7 @@ import TileText from './tile-text';
 class GridRange extends PureComponent {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       hoverLinePosition: 0
     }
   }
@@ -21,13 +21,8 @@ class GridRange extends PureComponent {
       let target = e.target;
       let clientX = e.clientX;
       let boundingClientRect = target.getBoundingClientRect();
-      //! IE11 doesn't like boundingClientRect.x
       let xHoverPositionInCurrentGrid = Math.floor(clientX) - Math.floor(boundingClientRect.left);
-
       let gridWidth = this.props.gridWidth;
-      // let boundingClientRect = e.target.getBoundingClientRect();
-      // //! IE11 doesn't like boundingClientRect.x
-      // let xHoverPositionInCurrentGrid = Math.floor(e.clientX) - Math.floor(boundingClientRect.left);
 
       let currentDateValue = moment.utc(itemDate).valueOf();
       let nextDateValue = moment.utc(nextDate).valueOf();
@@ -42,9 +37,6 @@ class GridRange extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log(this.state.hoverLinePosition, this.props.transformX)
-    //# Dragger changes are tied too close to this.props.transformX since add/minus click dragger and this updates
-    //# decouple
   }
 
   render() {
@@ -98,7 +90,6 @@ class TileHolder extends PureComponent {
   render() {
     let timeScale = this.props.timeScale;
     let tileTextCondition = tileTextConditionOptions[timeScale];
-    let midTile = Math.floor(this.props.dateArray.length / 2);
     return (
       <React.Fragment>
         {this.props.dateArray.map((item, index) => {
@@ -110,7 +101,6 @@ class TileHolder extends PureComponent {
                 index={index}
                 gridWidth={this.props.gridWidth}
                 showHover={this.props.showHover}
-                midTile={midTile === index ? true : false}
               />
               {tileTextCondition(item.dateObject) ?
               <TileText

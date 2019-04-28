@@ -113,7 +113,6 @@ class AnimationWidget extends React.Component {
     this.props.onPushLoop(loop);
   }
   onDateChange(date, id) {
-    console.log(date, id)
     const { endDate, startDate } = this.state;
     googleTagManager.pushEvent({
       event: 'GIF_animation_date_case'
@@ -131,7 +130,6 @@ class AnimationWidget extends React.Component {
     }
   }
   render() {
-    console.log(this.state.increment)
     return (
       <div
         id="wv-animation-widget"

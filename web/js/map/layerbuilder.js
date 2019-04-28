@@ -124,28 +124,11 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     }
     var dateArray = def.availableDates || [];
     if (options.date) {
-      // TODO: comparison mode using this options.date key
-      // need to continue conditional like below to get prevDateInDateRange ?
-      // how does this interact with subdaily VS. non-subdaily and add/remove in different states?
-      // date = options.date;
-
       if (def.period !== 'subdaily') {
-        // # timeoffset fix handled here
-        // date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
-        // date = new Date(options.date.getTime());
-        // date = new Date(util.clearTimeUTC(date));
-        // debugger;
         date = util.clearTimeUTC(new Date(options.date.getTime()));
-        // console.log(date)
       } else {
-        // date = new Date(options.date.getTime() + (options.date.getTimezoneOffset() * 60000));
-        // # timeoffset fix handled further down
         date = options.date;
-
-        // date = util.clearTimeUTC(date);
-        // date.setUTCSeconds(0);
-        // date.setUTCMilliseconds(0);
-        // # memoize third argument dateArray ?
+        // # possible to memoize third argument dateArray ?
         date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
       }
     } else {
@@ -153,31 +136,28 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       date = new Date(models.date[models.date.activeDate]);
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
-
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
       } else {
-        // date.setUTCSeconds(0);
-        // date.setUTCMilliseconds(0);
-        // # memoize third argument dateArray ?
+        let da = util.datesinDateRanges(def, date, true);
+        // console.log(da)
         date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
-        debugger;
       }
     }
     // Perform extensive checks before finding closest date
     if (
       !options.precache &&
       (animRange && animRange.playing === false) &&
-      ((def.period === 'daily' && models.date.selectedZoom > 3) ||
-        (def.period === 'monthly' && models.date.selectedZoom >= 2) ||
-        (def.period === 'yearly' && models.date.selectedZoom >= 1))
+      models.date.selectedZoom !== 0 &&
+      ((def.period === 'daily' && models.date.selectedZoom < 3) ||
+        (def.period === 'monthly' && models.date.selectedZoom <= 2) ||
+        (def.period === 'yearly' && models.date.selectedZoom === 1))
     ) {
       date = util.prevDateInDateRange(def, date, dateArray);
 
       // Is current "rounded" previous date not in array of availableDates
       if (date && !dateArray.includes(date)) {
         debugger;
-
         // Then, update layer object with new array of dates
         def.availableDates = util.datesinDateRanges(def, date, true);
         date = util.prevDateInDateRange(def, date, dateArray);
@@ -275,7 +255,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
 
     urlParameters =
       '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-    // console.log(urlParameters)
     var sourceOptions = {
       url: source.url + urlParameters,
       layer: def.layer || def.id,

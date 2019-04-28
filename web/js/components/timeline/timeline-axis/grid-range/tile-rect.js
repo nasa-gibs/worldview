@@ -21,7 +21,6 @@ const axisScaleGridElement = {
                       timeScaleUnit === 6 ||
                       timeScaleUnit === 12 ||
                       timeScaleUnit === 18 ? 22 : 10;
-    // let lineLengthY = timeScaleUnit === 0 ? 58 : timeScaleUnit === 12 ? 22 : 10;
     return (
       <React.Fragment>
         <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'} shapeRendering="optimizeSpeed"></rect>
@@ -30,14 +29,12 @@ const axisScaleGridElement = {
       </React.Fragment>
     )
   },
-  day: (gridWidth, index, item, midTile) => {
+  day: (gridWidth, index, item) => {
     let dayOfWeek = item.dayOfWeek;
     let lineLengthY = item.dateObject.date === 1 ? 58 : dayOfWeek === 0 ? 22 : 10;
     return (
       <React.Fragment>
-        {/* <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'} shapeRendering="optimizeSpeed"></rect> */}
-        <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill={midTile ? 'yellow' : 'rgba(0,0,0,0)'} shapeRendering="optimizeSpeed"></rect>
-        {/* <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill='rgba(0,0,0,0)' shapeRendering="optimizeSpeed"></rect> */}
+        <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'} shapeRendering="optimizeSpeed"></rect>
         <line stroke="black" strokeLinecap="round" strokeWidth="0.2" x1="0" x2="0" y1="0" y2={lineLengthY} transform={`translate(${index * gridWidth + 2.2}, 0)`} />
         <line stroke="white" strokeLinecap="round" strokeWidth="2" x1="0" x2="0" y1="0" y2={lineLengthY} transform={`translate(${index * gridWidth + 1}, 0)`} />
       </React.Fragment>
@@ -68,28 +65,16 @@ const axisScaleGridElement = {
 }
 
 class TileRect extends PureComponent {
-  // componentDidUpdate() {
-  //   console.log('TileRect update')
-  // }
   render() {
-    let { item, gridWidth, index, midTile, showHover } = this.props;
-    // console.log(item.dateObject)
+    let { item, gridWidth, index, showHover } = this.props;
     return (
       <React.Fragment>
         <g onMouseMove={(e) => showHover(e, item.rawDate, item.rawNextDate, index)}>
-          { axisScaleGridElement[item.timeScale](gridWidth, index, item, midTile) }
+          { axisScaleGridElement[item.timeScale](gridWidth, index, item) }
         </g>
       </React.Fragment>
-    )
+    );
   }
 }
-
-
-// FUNCTIONAL COMPONENT VERSION OF ABOVE - less code in compile
-// const TileText = ({ item, gridWidth, index }) => {
-//   return (
-//     axisScaleTextElement[item.timeScale](gridWidth, index, item)
-//   )
-// }
 
 export default TileRect;

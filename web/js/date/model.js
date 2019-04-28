@@ -76,6 +76,7 @@ export function dateModel(models, config, spec) {
   };
   // set custom interval from panel
   self.setCustomInterval = (delta, interval) => {
+    self.interval = interval;
     self.customDelta = delta;
     self.customInterval = interval;
     self.events.trigger('state-update');
@@ -93,7 +94,7 @@ export function dateModel(models, config, spec) {
 
   self.select = function(date, selectionStr) {
     // debugger;
-    // console.log(self.selected, self.selectedB, self.activeDate)
+    // console.log(date, self.selected, self.selectedB, self.activeDate, selectionStr)
     if (!date) return null;
     selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);
@@ -116,9 +117,7 @@ export function dateModel(models, config, spec) {
   };
 
   self.add = function(interval, amount, selectionStr) {
-
     selectionStr = selectionStr || self.activeDate;
-    console.log(interval, amount, selectionStr)
     self.select(
       util.dateAdd(self[selectionStr], interval, amount),
       selectionStr
@@ -184,7 +183,7 @@ export function dateModel(models, config, spec) {
       date.toISOString().split('T')[0] +
       '-' +
       'T' +
-      self.selected
+      date
         .toISOString()
         .split('T')[1]
         .slice(0, -5) +
