@@ -28,14 +28,14 @@ class Products extends React.Component {
             groupId="overlays"
             layerGroupName={layerGroupName}
             layerSplit={layerSplit}
-            layers={baselayers}
+            layers={overlays}
             checkerBoardPattern={checkerBoardPattern}
           />
           <LayerList
             title="Base Layers"
             groupId="baselayers"
             layerGroupName={layerGroupName}
-            layers={overlays}
+            layers={baselayers}
             layerSplit={layerSplit}
             checkerBoardPattern={checkerBoardPattern}
           />
