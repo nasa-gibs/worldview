@@ -34,7 +34,10 @@ import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
 import * as paletteConstants from '../modules/palettes/constants';
-import { getLayers, isRenderable as isRenderableLayer } from '../modules/layers/selectors';
+import {
+  getLayers,
+  isRenderable as isRenderableLayer
+} from '../modules/layers/selectors';
 import Cache from 'cachai';
 
 export function mapui(models, config, store) {
@@ -48,7 +51,11 @@ export function mapui(models, config, store) {
   var dateline = mapDateLineBuilder(models, config);
   var precache = mapPrecacheTile(models, config, cache, self);
   var compareMapUi = mapCompare(config, store);
-  var dataRunner = (self.runningdata = new MapRunningData(models, compareMapUi, store));
+  var dataRunner = (self.runningdata = new MapRunningData(
+    models,
+    compareMapUi,
+    store
+  ));
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection
@@ -147,10 +154,7 @@ export function mapui(models, config, store) {
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
-    if (
-      proj.id !== 'geographic' &&
-      proj.id !== 'webmerc'
-    ) {
+    if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
       let currentRotation = map.getView().getRotation();
       models.map.rotation = currentRotation;
       rotation.setResetButton(currentRotation);
@@ -314,7 +318,11 @@ export function mapui(models, config, store) {
    */
   var getCompareLayerGroup = function(arr, layersState, projId) {
     return new OlLayerGroup({
-      layers: getLayers(layersState[arr[0]], { reverse: true }, store.getState())
+      layers: getLayers(
+        layersState[arr[0]],
+        { reverse: true },
+        store.getState()
+      )
         .filter(def => {
           if (isGraticule(def, projId)) {
             addGraticule(def.opacity, arr[0]);
@@ -352,7 +360,9 @@ export function mapui(models, config, store) {
         if (isGraticule(def, state.proj.id)) {
           renderable = isRenderableLayer(
             def.id,
-            layersState[activeGroupStr], models.date[activeGroupStr], state
+            layersState[activeGroupStr],
+            models.date[activeGroupStr],
+            state
           );
           if (renderable) {
             addGraticule(def.opacity, groupName);
@@ -366,7 +376,12 @@ export function mapui(models, config, store) {
       var group = layer.get('group');
       // Not in A|B
       if (layer.wv) {
-        renderable = isRenderableLayer(layer.wv.id, layersState[activeGroupStr], models.date[activeGroupStr], state);
+        renderable = isRenderableLayer(
+          layer.wv.id,
+          layersState[activeGroupStr],
+          models.date[activeGroupStr],
+          state
+        );
         layer.setVisible(renderable);
         let defs = getLayers(layersState[activeGroupStr], {}, state);
         updateGraticules(defs);
@@ -403,21 +418,21 @@ export function mapui(models, config, store) {
    *
    * @returns {void}
    */
-  var updateOpacity = function(id, value) {
+  var updateOpacity = function(action) {
     const state = store.getState();
     const { layers, compare, proj } = state;
     const activeStr = compare.isCompareA ? 'active' : 'activeB';
     const def = lodashFind(layers[activeStr], {
-      id: id
+      id: action.id
     });
 
     if (isGraticule(def, proj.id)) {
       let strokeStyle = self['graticule-' + activeStr + '-style'];
-      strokeStyle.setColor('rgba(255, 255, 255,' + value + ')');
+      strokeStyle.setColor('rgba(255, 255, 255,' + action.opacity + ')');
       self.selected.render();
     } else {
       let layer = findLayer(def, activeStr);
-      layer.setOpacity(value);
+      layer.setOpacity(action.opacity);
       updateLayerVisibilities();
     }
   };
@@ -514,8 +529,11 @@ export function mapui(models, config, store) {
     const { compare } = state;
     const layerState = state.layers;
     const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
-    var activeLayers = getLayers(layerState[activeLayerStr], {}, state)
-      .reverse();
+    var activeLayers = getLayers(
+      layerState[activeLayerStr],
+      {},
+      state
+    ).reverse();
     var layerGroups;
     var layerGroup;
     if (compare && compare.active) {
@@ -580,11 +598,11 @@ export function mapui(models, config, store) {
    *
    * @returns {object} Layer object
    */
-  var findLayer = function(id, layerGroupStr) {
+  var findLayer = function(def, layerGroupStr) {
     var layers = self.selected.getLayers().getArray();
     var layer = lodashFind(layers, {
       wv: {
-        id: id
+        id: def.id
       }
     });
     if (!layer && layers[0].get('group')) {
@@ -597,7 +615,7 @@ export function mapui(models, config, store) {
       subGroup = olGroupLayer.getLayers().getArray();
       layer = lodashFind(subGroup, {
         wv: {
-          id: id
+          id: def.id
         }
       });
     }
@@ -818,8 +836,8 @@ export function mapui(models, config, store) {
     // This component is inside the map viewport container. Allowing
     // mouse move events to bubble up displays map coordinates--let those
     // be blank when over a component.
-    $('.wv-map-scale-metric').mousemove((e) => e.stopPropagation());
-    $('.wv-map-scale-imperial').mousemove((e) => e.stopPropagation());
+    $('.wv-map-scale-metric').mousemove(e => e.stopPropagation());
+    $('.wv-map-scale-imperial').mousemove(e => e.stopPropagation());
 
     // allow rotation by dragging for polar projections
     if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
@@ -894,7 +912,7 @@ export function mapui(models, config, store) {
     $zoomOut.click(() => {
       mapUtilZoomAction(map, -1);
     });
-    $zoomOut.mousemove((e) => e.stopPropagation());
+    $zoomOut.mousemove(e => e.stopPropagation());
 
     var $zoomIn = $('<div></div>')
       .addClass('wv-map-zoom-in')
@@ -911,7 +929,7 @@ export function mapui(models, config, store) {
     $zoomIn.click(() => {
       mapUtilZoomAction(map, 1);
     });
-    $zoomIn.mousemove((e) => e.stopPropagation());
+    $zoomIn.mousemove(e => e.stopPropagation());
 
     /*
      * Sets zoom buttons as active or inactive based
