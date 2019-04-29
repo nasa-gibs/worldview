@@ -277,7 +277,7 @@ export function mapui(models, config, store) {
     var layerGroupStr = compareState.isCompareA ? 'active' : 'activeB';
     var activeLayers = layers[layerGroupStr];
     if (!config.features.compare || !compareState.active) {
-      if (compareState.active) {
+      if (!compareState.active) {
         compareMapUi.destroy();
       }
       clearLayers(map);
