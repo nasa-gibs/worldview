@@ -1,7 +1,7 @@
 {
     "wv-options-fetch": [
         {
-            "from": "http://cache2-sit.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi?request=GetCapabilities",
+            "from": "http://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi?request=GetCapabilities",
             "to": "gibs-geographic.xml"
         },
         {
