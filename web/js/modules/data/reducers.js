@@ -4,12 +4,12 @@ import {
   DATA_GRANULE_UNSELECT
 } from './constants';
 import { assign as lodashAssign } from 'lodash';
-const initDataState = {
+export const defaultDataState = {
   selectedProduct: '',
   selectedGranules: {},
   prefer: 'science'
 };
-export default function dataDownloadReducer(state = initDataState, action) {
+export default function dataDownloadReducer(state = defaultDataState, action) {
   switch (action.type) {
     case SELECT_PRODUCT:
       return lodashAssign({}, state, {

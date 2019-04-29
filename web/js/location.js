@@ -1,10 +1,11 @@
 import { assign as lodashAssign, has, set, get } from 'lodash';
+import { encode } from './modules/link/util';
 
 // legacy crutches
 // import { getLayersParameterSetup } from './modules/layers/util';
 import { getDateParameterSetup } from './modules/date/util';
 
-import { getDataDownloadParameterSetup } from './modules/data/util';
+import { defaultDataState } from './modules/data/constants';
 import { getAnimationParameterSetup } from './modules/animation/util';
 import { getTourParameterSetup } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
@@ -32,7 +33,6 @@ export function mapLocationToState(state, location) {
       stateFromLocation = update(stateFromLocation, {
         compare: { active: { $set: true } }
       });
-      console.log(stateFromLocation);
     }
     // legacy layers permalink
     if (state.parameters.product) {
@@ -54,6 +54,7 @@ export function mapLocationToState(state, location) {
     return update(state, { $merge: stateFromLocation });
   } else return state;
 }
+
 const getParameters = function(config) {
   return {
     p: {
@@ -118,6 +119,26 @@ const getParameters = function(config) {
       stateKey: 'compare.value',
       initialState: 50,
       type: 'number'
+    },
+    download: {
+      stateKey: 'data.selectedProduct',
+      initialState: '',
+      type: 'string',
+      options: {
+        delimiter: ',',
+        serializeNeedsGlobalState: true,
+        parse: id => {
+          if (!config.products[id]) {
+            console.warn('No such product: ' + id);
+            return '';
+          }
+          return id;
+        },
+        serialize: (currentItemState, state) => {
+          if (!state.sidebar.activeTab !== 'download') return undefined;
+          return encode(currentItemState);
+        }
+      }
     }
   };
 };
@@ -164,19 +185,19 @@ export function getParamObject(
     legacyState,
     errors
   );
-  const dataParamObject = getDataDownloadParameterSetup(
-    parameters,
-    config,
-    models,
-    legacyState,
-    errors
-  );
+  // const dataParamObject = getDataDownloadParameterSetup(
+  //   parameters,
+  //   config,
+  //   models,
+  //   legacyState,
+  //   errors
+  // );
 
   const obj = lodashAssign(
     {},
     dateParamObject,
     animationParamObject,
-    dataParamObject,
+    // dataParamObject,
     tourParamObject,
     mapParamObject,
     getParameters(config)
