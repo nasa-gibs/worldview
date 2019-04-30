@@ -717,7 +717,6 @@ console.log(leftOffset,axisWidth)
             if (this.props.draggerSelected === 'selectedB') {
               let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
               this.updateScale(this.props.selectedDateB, this.props.timeScale, null, leftOffsetFixedCoeff);
-              // this.updateScale(this.props.selectedDateB, this.props.timeScale, null, 0.5);
             }
           }
         }
