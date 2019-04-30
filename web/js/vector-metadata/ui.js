@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import VectorMeta from '../components/vector-metadata/vector-metadata';
+import VectorMeta from '../containers/vector-metadata';
 
 export function vectorMetaUi(models, ui, config) {
   var self = {};

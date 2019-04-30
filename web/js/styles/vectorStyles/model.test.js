@@ -1,19 +1,19 @@
 import jQuery from 'jquery';
-import vectorStyles from './vectorStyles';
+import styles from '../styles';
 import fixtures from '../fixtures';
 
 var unmocked = {};
 
 beforeAll(() => {
   unmocked.getJSON = jQuery.getJSON;
-  unmocked.supported = vectorStyles.supported;
+  unmocked.supported = styles.supported;
 });
 
-beforeEach(() => { vectorStyles.supported = true; });
+beforeEach(() => { styles.supported = true; });
 
 afterEach(() => {
   jQuery.getJSON = unmocked.getJSON;
-  vectorStyles.supported = unmocked.supported;
+  styles.supported = unmocked.supported;
 });
 
 function testData() {

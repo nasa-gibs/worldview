@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import VectorMetaModal from './vector-metadata-modal';
+import VectorMetaModal from '../components/vector-metadata/vector-metadata-modal';
 // import googleTagManager from 'googleTagManager';
 
 export default class VectorMeta extends React.Component {
@@ -45,14 +45,14 @@ export default class VectorMeta extends React.Component {
     //   }
     // });
   }
-
   render() {
     return (
       <VectorMetaModal
         metaModal={this.state.metaModal}
         toggleMetaModal={this.toggleMetaModal}
-        vectorMeta={this.props.vectorMeta}
         metaTitle={this.state.metaTitle}
+        metaFeatures={this.state.metaFeatures}
+        metaLegend={this.state.metaLegend}
       />
     );
   }
