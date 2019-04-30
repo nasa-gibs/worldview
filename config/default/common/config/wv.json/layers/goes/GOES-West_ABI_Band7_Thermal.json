@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-West_ABI_Band2_Red_Visible": {
-            "id":       "GOES-West_ABI_Band2_Red_Visible",
-            "title":    "Red Visible (0.64 µm, Band 2, ABI, GOES-West)",
+        "GOES-West_ABI_Band7_Thermal": {
+            "id":       "GOES-West_ABI_Band7_Thermal",
+            "title":    "Thermal (3.9 µm, Band 7, ABI, GOES-West)",
             "subtitle":    "GOES-West",
-            "description": "goes/GOES-West_ABI_Band2_Red_Visible",
+            "description": "goes/GOES-West_ABI_Band7_Thermal",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [

@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-East_ABI_Air_Mass": {
-            "id":       "GOES-East_ABI_Air_Mass",
-            "title":    "Air Mass (ABI, GOES-East)",
+        "GOES-East_ABI_Dust": {
+            "id":       "GOES-East_ABI_Dust",
+            "title":    "Dust (ABI, GOES-East)",
             "subtitle":    "GOES-East / ABI",
-            "description": "goes/GOES-East_ABI_Air_Mass",
+            "description": "goes/GOES-East_ABI_Dust",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [

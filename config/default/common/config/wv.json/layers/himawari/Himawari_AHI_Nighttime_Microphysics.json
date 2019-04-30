@@ -1,0 +1,17 @@
+{
+  "layers": {
+      "Himawari_AHI_Nighttime_Microphysics": {
+          "id":       "Himawari_AHI_Nighttime_Microphysics",
+          "title":    "Nighttime Microphysics (AHI, Himawari)",
+          "subtitle":    "Himawari / AHI",
+          "description": "himawari/Himawari_AHI_Nighttime_Microphysics",
+          "tags":     "Himawari subdaily",
+          "group":    "overlays",
+          "layergroup": [
+            "Himawari"
+          ],
+          "inactive": true,
+          "period": "subdaily"
+      }
+  }
+}

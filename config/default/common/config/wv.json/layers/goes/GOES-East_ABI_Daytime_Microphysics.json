@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-East_ABI_Air_Mass": {
-            "id":       "GOES-East_ABI_Air_Mass",
-            "title":    "Air Mass (ABI, GOES-East)",
+        "GOES-East_ABI_Daytime_Microphysics": {
+            "id":       "GOES-East_ABI_Daytime_Microphysics",
+            "title":    "Daytime Microphysics (ABI, GOES-East)",
             "subtitle":    "GOES-East / ABI",
-            "description": "goes/GOES-East_ABI_Air_Mass",
+            "description": "goes/GOES-East_ABI_Daytime_Microphysics",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [

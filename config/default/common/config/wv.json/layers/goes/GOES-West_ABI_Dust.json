@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-West_ABI_Band13_Clean_Infrared": {
-            "id":       "GOES-West_ABI_Band13_Clean_Infrared",
-            "title":    "Clean Infrared (10.3 µm, Band 13, ABI, GOES-West)",
+        "GOES-West_ABI_Dust": {
+            "id":       "GOES-West_ABI_Dust",
+            "title":    "Dust (ABI, GOES-West)",
             "subtitle":    "GOES-West / ABI",
-            "description": "goes/GOES-West_ABI_Band13_Clean_Infrared",
+            "description": "goes/GOES-West_ABI_Dust",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [
