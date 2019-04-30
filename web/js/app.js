@@ -395,8 +395,6 @@ class App extends React.Component {
 
         ui.dateLabel = dateLabel(models);
       }
-      console.log(config)
-      config.startDate = '1998-11-20T00:00:00Z';
       // TODO: config.startDate doesn't work anymore?!?!
       if (config.startDate) {
         if (!util.browser.small) {
@@ -406,8 +404,6 @@ class App extends React.Component {
         // TODO: date wheels break now
         ui.dateWheels = dateWheels(models, config);
       }
-
-      console.log(models, ui)
 
       ui.rubberband = imageRubberband(models, ui, config);
       ui.image = imagePanel(models, ui, config);

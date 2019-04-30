@@ -55,6 +55,7 @@ class TimelineAxis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isDraggerDragging: false,
       showDraggerTime: false,
       dragSentinelCount: 0,
       draggerPosition: 0,
@@ -123,27 +124,6 @@ console.log(leftOffset,axisWidth)
       draggerDateActualB = moment.utc(inputDate ? inputDate : this.state.draggerTimeStateB);
     }
 
-    // if (timeScale === 'minute') {
-    //   hoverTimeZero = hoverTime.clone().startOf('minute');
-    //   hoverTimeNextZero = hoverTimeZero.clone().add(1, timeScale);
-    // }
-    // if (timeScale === 'hour') {
-    //   hoverTimeZero = hoverTime.clone().startOf('hour');
-    //   hoverTimeNextZero = hoverTimeZero.clone().add(1, timeScale);
-    // }
-    // if (timeScale === 'day') {
-    //   hoverTimeZero = hoverTime.clone().startOf('day');
-    //   hoverTimeNextZero = hoverTimeZero.clone().add(1, timeScale);
-    // }
-    // if (timeScale === 'month') {
-    //   hoverTimeZero = hoverTime.clone().startOf('month');
-    //   hoverTimeNextZero = hoverTimeZero.clone().add(1, timeScale);
-    // }
-    // if (timeScale === 'year') {
-    //   hoverTimeZero = moment.utc(this.state.pastDateLimit);
-    //   hoverTimeNextZero = hoverTimeZero.clone().add(1, timeScale);
-    // }
-
     // value of hover time, hover time timeunit zeroed, hover time next unit timeunit zeroed
     let hoverTimeValue = hoverTime.valueOf();
     let hoverTimeZeroValue = hoverTimeZero.valueOf();
@@ -156,11 +136,9 @@ console.log(leftOffset,axisWidth)
     let pixelsToAdd = diffStartAndZeroed / diffFactor;
 
     //! offset grids needed since each zoom in won't be centered
-    //! maybe non equal past/future dates - this.getDateArray(80, 40, timeScale, hoverTime);
-    //! additional offset needed for midPoint and/or position
     let offSetGrids = Math.floor(leftOffset / gridWidth);
     let offSetGridsDiff = offSetGrids - Math.floor(numberOfVisibleTiles / 2);
-    // console.log(offSetGrids, leftOffset / gridWidth,  offSetGridsDiff, offSetGrids - (numberOfVisibleTiles / 2))
+
     let gridsToSubtract = Math.floor(gridNumber/2) + offSetGridsDiff;
     let gridsToAdd = Math.floor(gridNumber/2) - offSetGridsDiff;
 
@@ -190,7 +168,7 @@ console.log(leftOffset,axisWidth)
     }
 
     let position;
-    //# axisWidthInput conditional in place to handle resize centering of position
+    // axisWidthInput conditional in place to handle resize centering of position
     if (axisWidthInput) {
       position = midPoint;
     } else {
@@ -284,7 +262,8 @@ console.log(leftOffset,axisWidth)
                   draggerVisible,
                  draggerVisibleB,
                    overDragGrids,
-          draggerPositionRevision } = this.updatePanelDateRange(position, timeScale, deltaX, draggerPosition, overDrag);
+          draggerPositionRevision,
+          draggerPositionRevisionB } = this.updatePanelDateRange(position, timeScale, deltaX, draggerPosition, draggerPositionB, overDrag);
 
           this.setState(() => ({
             currentDateRange: currentDateRange,
@@ -293,7 +272,7 @@ console.log(leftOffset,axisWidth)
             dragSentinelCount: (dragSentinelCount + deltaX) - dragSentinelChangeNumber - (overDragGrids * gridWidth),
             draggerPosition: draggerPositionRevision,
             draggerVisible: draggerVisible,
-            draggerPositionB: draggerPositionB,
+            draggerPositionB: draggerPositionRevisionB,
             draggerVisibleB: draggerVisibleB,
             position: position,
             showHoverLine: false
@@ -322,7 +301,8 @@ console.log(leftOffset,axisWidth)
                   draggerVisible,
                  draggerVisibleB,
                    overDragGrids,
-          draggerPositionRevision } = this.updatePanelDateRange(position, timeScale, deltaX, draggerPosition, overDrag);
+          draggerPositionRevision,
+          draggerPositionRevisionB } = this.updatePanelDateRange(position, timeScale, deltaX, draggerPosition, draggerPositionB, overDrag);
 
           this.setState(() => ({
             currentDateRange: currentDateRange,
@@ -331,7 +311,7 @@ console.log(leftOffset,axisWidth)
             dragSentinelCount: (dragSentinelCount + deltaX) - -dragSentinelChangeNumber + (overDragGrids * gridWidth),
             draggerPosition: draggerPositionRevision,
             draggerVisible: draggerVisible,
-            draggerPositionB: draggerPositionB,
+            draggerPositionB: draggerPositionRevisionB,
             draggerVisibleB: draggerVisibleB,
             position: position,
             showHoverLine: false
@@ -352,14 +332,16 @@ console.log(leftOffset,axisWidth)
   }
 
   // update dates in range based on dragging axis
-  updatePanelDateRange = (position, timeScale, deltaX, draggerPosition, overDrag) => {
+  updatePanelDateRange = (position, timeScale, deltaX, draggerPosition, draggerPositionB, overDrag) => {
     let gridWidth = this.state.gridWidth;
     let deque = this.state.deque;
     let numberOfVisibleTiles = Math.floor(this.state.numberOfVisibleTiles * 0.25);
     let overDragGrids = Math.ceil(overDrag / gridWidth);
+    let draggerSelected = this.props.draggerSelected;
     let draggerVisible = this.state.draggerVisible;
     let draggerVisibleB = this.state.draggerVisibleB;
     let draggerDateActual = moment.utc(this.state.draggerTimeState);
+    let draggerDateActualB = this.state.draggerTimeStateB ? moment.utc(this.state.draggerTimeStateB) : null;
     let dateArrayAdd;
     let dateArray;
     let transform;
@@ -386,23 +368,52 @@ console.log(leftOffset,axisWidth)
     // check if dragger is in between range and visible
     let frontDate = moment.utc(dateArray[0].rawDate);
     let backDate = moment.utc(dateArray[dateArray.length - 1].rawDate);
-    let isBetween = moment.utc(this.state.draggerTimeState).isBetween(frontDate, backDate, null, '[]');
+
     let draggerPositionRevision = draggerPosition;
-    if (isBetween) {
-      if (draggerVisible === false) {
-        draggerPositionRevision = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth) + position + transform - 50;
-      }
-      draggerVisible = true;
-    } else {
-      draggerVisible = false;
-    }
+    let draggerPositionRevisionB = draggerPositionB;
 
     if (this.props.compareModeActive) {
+      // check if both draggers are in between for visibility/position updates
+      let isBetween = moment.utc(this.state.draggerTimeState).isBetween(frontDate, backDate, null, '[]');
       let isBetweenB = moment.utc(this.state.draggerTimeStateB).isBetween(frontDate, backDate, null, '[]');
-      if (isBetweenB) {
+      if (isBetween) { // A dragger
+        if (draggerVisible === false) {
+          draggerPositionRevision = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth) + position + transform - 50;
+        }
+        draggerVisible = true;
+      } else {
+        draggerVisible = false;
+      }
+
+      if (isBetweenB) { // B dragger
+        if (draggerVisibleB === false) {
+          draggerPositionRevisionB = Math.abs(frontDate.diff(draggerDateActualB, timeScale, true) * gridWidth) + position + transform - 50;
+        }
         draggerVisibleB = true;
       } else {
         draggerVisibleB = false;
+      }
+    } else { // check individual draggers based on which is currently selected
+      if (draggerSelected === 'selected') { // dragger A selected
+        let isBetween = moment.utc(this.state.draggerTimeState).isBetween(frontDate, backDate, null, '[]');
+        if (isBetween) { // A dragger
+          if (draggerVisible === false) {
+            draggerPositionRevision = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth) + position + transform - 50;
+          }
+          draggerVisible = true;
+        } else {
+          draggerVisible = false;
+        }
+      } else { // dragger B selectedB
+        let isBetweenB = moment.utc(this.state.draggerTimeStateB).isBetween(frontDate, backDate, null, '[]');
+        if (isBetweenB) { // B dragger
+          if (draggerVisibleB === false) {
+            draggerPositionRevisionB = Math.abs(frontDate.diff(draggerDateActualB, timeScale, true) * gridWidth) + position + transform - 50;
+          }
+          draggerVisibleB = true;
+        } else {
+          draggerVisibleB = false;
+        }
       }
     }
 
@@ -413,7 +424,8 @@ console.log(leftOffset,axisWidth)
       draggerVisible: draggerVisible,
       draggerVisibleB: draggerVisibleB,
       overDragGrids: overDragGrids,
-      draggerPositionRevision: draggerPositionRevision
+      draggerPositionRevision: draggerPositionRevision,
+      draggerPositionRevisionB: draggerPositionRevisionB
     }
   }
 
@@ -430,7 +442,7 @@ console.log(leftOffset,axisWidth)
     }
   }
 
-  // return array of days based on:
+  // return date array of days based on:
   // subtract - integer (negative numbers selects start date in the future)
   // add - integer (negative numbers selects end date in the past)
   getDateArray = (subtract, add, timeScale, inputDate) => {
@@ -668,43 +680,50 @@ console.log(leftOffset,axisWidth)
       }
     }
 
-    // # HANDLE A DRAGGER CHANGE
-    if (this.props.selectedDate && (this.props.selectedDate !== prevProps.selectedDate ||
-      this.state.draggerTimeState !== prevState.draggerTimeState ||
-      moment.utc(this.state.draggerTimeState).format() !== moment.utc(prevState.draggerTimeState).format())) {
+    if(!this.state.isDraggerDragging) {
+      // # HANDLE A DRAGGER CHANGE
+      if (this.props.selectedDate && (this.props.selectedDate !== prevProps.selectedDate ||
+        this.state.draggerTimeState !== prevState.draggerTimeState ||
+        moment.utc(this.state.draggerTimeState).format() !== moment.utc(prevState.draggerTimeState).format())) {
 
-      if (moment.utc(this.state.draggerTimeState).format() !== moment.utc(this.props.selectedDate).format()) {
-        // check if newDraggerDate will be within acceptable visible axis width
-        let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDate);
-        if (newDraggerDate.withinRange) {
-          this.setDraggerToTime(this.props.selectedDate);
-        } else {
-          if (this.props.draggerSelected === 'selected') {
-            let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
-            this.updateScale(this.props.selectedDate, this.props.timeScale, null, leftOffsetFixedCoeff);
+        if (moment.utc(this.state.draggerTimeState).format() !== moment.utc(this.props.selectedDate).format()) {
+          // check if newDraggerDate will be within acceptable visible axis width
+          let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDate);
+          if (newDraggerDate.withinRange) {
+            this.setDraggerToTime(this.props.selectedDate);
+          } else {
+            if (this.props.draggerSelected === 'selected') {
+              let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
+              this.updateScale(this.props.selectedDate, this.props.timeScale, null, leftOffsetFixedCoeff);
+            }
           }
         }
       }
-    }
 
-    // # HANDLE B DRAGGER CHANGE
-    if (this.props.selectedDateB && (this.props.selectedDateB !== prevProps.selectedDateB ||
-      this.state.draggerTimeStateB !== prevState.draggerTimeStateB ||
-      moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(prevState.draggerTimeStateB).format())) {
+      // # HANDLE B DRAGGER CHANGE
+      if (this.props.selectedDateB && (this.props.selectedDateB !== prevProps.selectedDateB ||
+        this.state.draggerTimeStateB !== prevState.draggerTimeStateB ||
+        moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(prevState.draggerTimeStateB).format())) {
 
-      if (moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(this.props.selectedDateB).format()) {
-        // check if newDraggerDate will be within acceptable visible axis width
-        let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDateB, true);
-        if (newDraggerDate.withinRange) {
-          this.setDraggerToTime(this.props.selectedDateB, true);
-        } else {
-          if (this.props.draggerSelected === 'selectedB') {
-            let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
-            this.updateScale(this.props.selectedDateB, this.props.timeScale, null, leftOffsetFixedCoeff);
+        if (moment.utc(this.state.draggerTimeStateB).format() !== moment.utc(this.props.selectedDateB).format()) {
+          // check if newDraggerDate will be within acceptable visible axis width
+          let newDraggerDate = this.checkDraggerMoveOrUpdateScale(this.props.selectedDateB, true);
+          if (newDraggerDate.withinRange) {
+            this.setDraggerToTime(this.props.selectedDateB, true);
+          } else {
+            if (this.props.draggerSelected === 'selectedB') {
+              let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
+              this.updateScale(this.props.selectedDateB, this.props.timeScale, null, leftOffsetFixedCoeff);
+            }
           }
         }
       }
+
+
+
+
     }
+
   }
 
   // move draggerTimeState to inputTime
@@ -950,7 +969,8 @@ console.log(leftOffset,axisWidth)
   toggleShowDraggerTime = (toggleBoolean) => {
     this.setState({
       showDraggerTime: toggleBoolean,
-      showHoverLine: false
+      showHoverLine: false,
+      isDraggerDragging: toggleBoolean
     })
   }
 

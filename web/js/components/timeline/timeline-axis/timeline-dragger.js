@@ -14,15 +14,11 @@ class Dragger extends PureComponent {
         onStart={() => toggleShowDraggerTime(true)}
         onStop={() => toggleShowDraggerTime(false)}
         disabled={disabled}
-        // onStop={() => {
-        // this.props.onStop(this.props.id, this.state.position);
-        // }}
       >
         <g
           style={{ cursor: 'pointer', display: this.props.draggerVisible ? 'flex' : 'none' }}
           className='gridShell dragger' transform={`translate(${transformX}, 0)`}
         >
-          {/* <polygon fill='#ccc' stroke={this.props.draggerSelected ? 'yellow' : '#515151'} strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon> */}
           <polygon fill='#ccc' stroke='#515151' strokeWidth='2px' points='50,25, 90,90, 10,90'></polygon>
           {compareModeActive
             ? <text
