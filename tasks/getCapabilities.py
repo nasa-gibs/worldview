@@ -153,8 +153,6 @@ def process_vectorstyles():
                 (prog, link, str(e)))
             global warning_count
             warning_count += 1
-    print "%s: Fetching %d vectorstyles" % (prog, len(vectorstyles))
-
 
 # Fetch every vectordata from the API and write response to file system
 def process_vectordata():
@@ -175,7 +173,6 @@ def process_vectordata():
                 (prog, link, str(e)))
             global warning_count
             warning_count += 1
-    print "%s: Fetching %d vectordata" % (prog, len(vectordata))
 
 tolerant = config.get("tolerant", False)
 if "wv-options-fetch" in config:
