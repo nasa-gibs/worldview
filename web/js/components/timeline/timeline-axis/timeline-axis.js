@@ -85,7 +85,7 @@ class TimelineAxis extends React.Component {
     let gridWidth = options.gridWidth;
     let axisWidth = axisWidthInput ? axisWidthInput : this.props.axisWidth;
     let leftOffset = leftOffsetFixedCoeff ? axisWidth * leftOffsetFixedCoeff : this.state.leftOffset;
-// debugger;
+debugger;
     if (leftOffset === 0) {
       leftOffset = axisWidth / 2;
     }
@@ -149,17 +149,20 @@ console.log(leftOffset,axisWidth)
     let frontDate = moment.utc(deque.peekFront().rawDate);
     let backDate = moment.utc(deque.peekBack().rawDate);
     // check if dragger date is between front/back dates, null set to ignore granularity (go to ms), [] for inclusive of front/back dates
-    let isBetween = draggerDateActual.isBetween(frontDate, backDate, null, '[]');
+
     let draggerPosition = 0;
     let draggerVisible = false;
-    if (isBetween) {
-      draggerPosition = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth);
-      draggerVisible = true;
+    if (this.props.compareModeActive || this.props.draggerSelected === 'selected') {
+      let isBetween = draggerDateActual.isBetween(frontDate, backDate, null, '[]');
+      if (isBetween) {
+        draggerPosition = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth);
+        draggerVisible = true;
+      }
     }
 
     let draggerPositionB = 0;
     let draggerVisibleB = false;
-    if (this.props.compareModeActive) {
+    if (this.props.compareModeActive || this.props.draggerSelected === 'selectedB') {
       let isBetweenB = draggerDateActualB.isBetween(frontDate, backDate, null, '[]');
       if (isBetweenB) {
         draggerPositionB = Math.abs(frontDate.diff(draggerDateActualB, timeScale, true) * gridWidth);
@@ -714,14 +717,11 @@ console.log(leftOffset,axisWidth)
             if (this.props.draggerSelected === 'selectedB') {
               let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
               this.updateScale(this.props.selectedDateB, this.props.timeScale, null, leftOffsetFixedCoeff);
+              // this.updateScale(this.props.selectedDateB, this.props.timeScale, null, 0.5);
             }
           }
         }
       }
-
-
-
-
     }
 
   }
@@ -831,6 +831,7 @@ console.log(leftOffset,axisWidth)
       let newDraggerTime = moment.utc(draggerTimeValue + (diffFactor * deltaX)).format();
 
       // handle drag timeline
+      // TODO: fix drag off current view - doesn't drag/update date of hover properly
       if (draggerPosition < -draggerWidth) { // # handle drag timeline towards PAST
         // console.log('drag off view past', deltaX, (dragSentinelCount + deltaX), -dragSentinelChangeNumber)
         let position = this.state.position - deltaX;

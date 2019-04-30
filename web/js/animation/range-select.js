@@ -147,7 +147,7 @@ export function animationRangeSelect(models, config, ui) {
    */
   self.getLocationFromStringDate = function(date) {
     // return timeline.x(util.roundTimeTenMinute(date));
-    return 100;
+    return -100;
   };
 
   /*

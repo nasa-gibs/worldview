@@ -18,7 +18,6 @@ export function animationWidget(models, config, ui) {
   var customText = models.date.customDelta && models.date.customInterval ? `${models.date.customDelta} ${timeScaleFromNumberKey[models.date.customInterval]}` : 'custom';
   var zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
   var self = {};
-  var timeline = ui.timeline;
   var model = models.anim;
   var $timelineFooter;
   var $animateButton;
@@ -180,17 +179,13 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.getIncrements = function() {
-    // if (models.date.maxZoom > 3) {
-      // debugger;
     let customText = models.date.customDelta && models.date.customInterval ? `${models.date.customDelta} ${timeScaleFromNumberKey[models.date.customInterval]}` : 'custom';
     if (models.layers.hasSubDaily()) {
       zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
     } else {
       zooms = [customText, 'yearly', 'monthly', 'daily'];
     }
-    // return zooms[models.date.selectedZoom - 1];
     let interval = models.date.interval ? models.date.interval : models.date.selectedZoom - 1;
-    console.log(customText, zooms[models.date.interval], models.date.interval, models.date.selectedZoom)
     return zooms[interval];
   };
 
@@ -226,11 +221,6 @@ export function animationWidget(models, config, ui) {
    */
   self.onZoomSelect = function(increment) { // ? still want to change zoom level on select???
     var zoomLevel = lodashIndexOf(zooms, increment);
-    console.log(zoomLevel, increment)
-    // models.date.setSelectedZoom(zoomLevel);
-    // return timeline.config.zoom(zoomLevel + 1);
-    // models.date.events.trigger('zoom-change');
-    // models.date.events.trigger('interval-change');
     models.date.changeIncrement(zoomLevel);
     models.date.events.trigger('interval-change');
   };
@@ -304,10 +294,8 @@ export function animationWidget(models, config, ui) {
     var currentDate = new Date(dateModel[dateModel.activeDate]);
     var interval = ui.anim.ui.getInterval();
     if (interval === 'custom') {
-      debugger;
       interval = zooms[models.date.selectedZoom];
     }
-    console.log(interval)
     if (dateModel.selectedZoom === 4) {
       intervalStep = 70;
     } else {
@@ -337,13 +325,6 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.onPressPlay = function() {
-    // debugger;
-    // let zoomLevel = ui.anim.ui.getInterval();
-    // console.log(zoomLevel)
-    // if (zoomLevel !== 'minute' && zoomLevel !== 'hour' && zoomLevel !== 'custom') {
-    //   // zero out start/end date times
-    //   self.setZeroDateTimes();
-    // }
     model.rangeState.playing = true;
     model.events.trigger('play');
   };
@@ -449,12 +430,7 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.onPressGIF = function() {
-    // let zoomLevel = ui.anim.ui.getInterval();
     let looping = ui.anim.widget.reactComponent.state.looping;
-    // if (zoomLevel !== 'minute') {
-    //   // zero out start/end date times
-    //   self.setZeroDateTimes();
-    // }
 
     let increment = self.getIncrements();
     let frameSpeed = model.rangeState.speed;
