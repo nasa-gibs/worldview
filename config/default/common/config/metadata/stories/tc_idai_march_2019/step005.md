@@ -1,0 +1,1 @@
+<p>The storm also caused power outages in Beira, Mozambique, which can be seen in the center of the image. On the left is an image of the city lights from Beira on 24 February 2019, and on the right is 25 March 2019, about a week after the storm. Swipe left and right to see the difference between the two dates.</p>

@@ -1,0 +1,1 @@
+<p>The storm brought two rounds of rain to Mozambique - watch the movement of the storm in this animation, you can see the storm starting in the Mozambique Channel, moving over Mozambique, swirling east over Madagascar, and back west to Mozambique. </p>
