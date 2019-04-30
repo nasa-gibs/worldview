@@ -93,8 +93,6 @@ export function dateModel(models, config, spec) {
   };
 
   self.select = function(date, selectionStr) {
-    // debugger;
-    // console.log(date, self.selected, self.selectedB, self.activeDate, selectionStr)
     if (!date) return null;
     selectionStr = selectionStr || self.activeDate;
     date = self.clamp(date);
@@ -110,7 +108,7 @@ export function dateModel(models, config, spec) {
       updated = true;
     } else {
       // necessary to handle 00:00:00 not triggering and saving as either the
-      // previous date of 23:00:00 or 01:00:00 - what is the reason for this?
+      // previous date of 23:00:00 or 01:00:00
       self.events.trigger('select', date, selectionStr);
     }
     return updated;

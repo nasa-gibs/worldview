@@ -911,18 +911,25 @@ console.log(leftOffset,axisWidth)
           })
         }
       } else { // handle drag within axis view
+        debugger;
         if (draggerASelected) {
-          this.setState({
-            draggerPosition: draggerPosition,
-            draggerTimeState: newDraggerTime,
-            moved: true,
-          }, this.props.updateDate(newDraggerTime, 'selected'));
+          // prevent function invoke on dragger click, but no date change
+          if (moment.utc(this.props.dateFormatted).format() !== newDraggerTime) {
+            this.setState({
+              draggerPosition: draggerPosition,
+              draggerTimeState: newDraggerTime,
+              moved: true,
+            }, this.props.updateDate(newDraggerTime, 'selected'));
+          }
         } else {
-          this.setState({
-            draggerPositionB: draggerPosition,
-            draggerTimeStateB: newDraggerTime,
-            moved: true,
-          }, this.props.updateDate(newDraggerTime, 'selectedB'));
+          // prevent function invoke on dragger click, but no date change
+          if (moment.utc(this.props.dateFormattedB).format() !== newDraggerTime) {
+            this.setState({
+              draggerPositionB: draggerPosition,
+              draggerTimeStateB: newDraggerTime,
+              moved: true,
+            }, this.props.updateDate(newDraggerTime, 'selectedB'));
+          }
         }
       }
     })
