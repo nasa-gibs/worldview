@@ -1,10 +1,10 @@
 {
   "layers": {
-      "Himawari_AHI_Band7_Upper_Level_Water_Vapor": {
-          "id":       "Himawari_AHI_Band7_Upper_Level_Water_Vapor",
+      "Himawari_AHI_Band7_Upper_Level_Water_Vapor_v0_NRT": {
+          "id":       "Himawari_AHI_Band7_Upper_Level_Water_Vapor_v0_NRT",
           "title":    "Upper-Level Water Vapor (6.2 µm, Band 8, AHI, Himawari)",
           "subtitle":    "Himawari / AHI",
-          "description": "himawari/Himawari_AHI_Band7_Upper_Level_Water_Vapor",
+          "description": "himawari/Himawari_AHI_Band7_Upper_Level_Water_Vapor_v0_NRT",
           "tags":     "Himawari subdaily",
           "group":    "overlays",
           "layergroup": [

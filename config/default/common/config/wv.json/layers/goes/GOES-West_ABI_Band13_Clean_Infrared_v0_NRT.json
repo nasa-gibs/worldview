@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-West_ABI_Nighttime_Microphysics": {
-            "id":       "GOES-West_ABI_Nighttime_Microphysics",
-            "title":    "Nighttime Microphysics (ABI, GOES-West)",
+        "GOES-West_ABI_Band13_Clean_Infrared_v0_NRT": {
+            "id":       "GOES-West_ABI_Band13_Clean_Infrared_v0_NRT",
+            "title":    "Clean Infrared (10.3 µm, Band 13, ABI, GOES-West)",
             "subtitle":    "GOES-West / ABI",
-            "description": "goes/GOES-West_ABI_Nighttime_Microphysics",
+            "description": "goes/GOES-West_ABI_Band13_Clean_Infrared_v0_NRT",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [

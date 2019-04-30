@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-West_ABI_Daytime_Microphysics": {
-            "id":       "GOES-West_ABI_Daytime_Microphysics",
-            "title":    "Daytime Microphysics (ABI, GOES-West)",
+        "GOES-West_ABI_Dust_v0_NRT": {
+            "id":       "GOES-West_ABI_Dust_v0_NRT",
+            "title":    "Dust (ABI, GOES-West)",
             "subtitle":    "GOES-West / ABI",
-            "description": "goes/GOES-West_ABI_Daytime_Microphysics",
+            "description": "goes/GOES-West_ABI_Dust_v0_NRT",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [

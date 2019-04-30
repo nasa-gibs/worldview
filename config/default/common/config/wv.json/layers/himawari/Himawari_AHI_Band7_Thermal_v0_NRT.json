@@ -1,10 +1,10 @@
 {
   "layers": {
-      "Himawari_AHI_Nighttime_Microphysics": {
-          "id":       "Himawari_AHI_Nighttime_Microphysics",
-          "title":    "Nighttime Microphysics (AHI, Himawari)",
+      "Himawari_AHI_Band7_Thermal_v0_NRT": {
+          "id":       "Himawari_AHI_Band7_Thermal_v0_NRT",
+          "title":    "Thermal (3.9 µm, Band 7, AHI, Himawari)",
           "subtitle":    "Himawari / AHI",
-          "description": "himawari/Himawari_AHI_Nighttime_Microphysics",
+          "description": "himawari/Himawari_AHI_Band7_Thermal_v0_NRT",
           "tags":     "Himawari subdaily",
           "group":    "overlays",
           "layergroup": [

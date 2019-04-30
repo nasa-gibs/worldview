@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-West_ABI_Band7_Thermal": {
-            "id":       "GOES-West_ABI_Band7_Thermal",
+        "GOES-West_ABI_Band7_Thermal_v0_NRT": {
+            "id":       "GOES-West_ABI_Band7_Thermal_v0_NRT",
             "title":    "Thermal (3.9 µm, Band 7, ABI, GOES-West)",
             "subtitle":    "GOES-West",
-            "description": "goes/GOES-West_ABI_Band7_Thermal",
+            "description": "goes/GOES-West_ABI_Band7_Thermal_v0_NRT",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [

@@ -13,7 +13,7 @@
             "to": "gibs-antarctic.xml"
         },
         {
-            "from": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi?request=GetCapabilities",
+            "from": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/wmts.cgi?request=GetCapabilities",
             "to": "gibs-geographic-subdaily.xml"
         }
     ],
