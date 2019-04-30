@@ -114,6 +114,7 @@ class ModalInProgress extends React.Component {
     var errors = [];
     var config = this.props.config;
     var models = this.props.models;
+    var ui = this.props.ui;
 
     // When the link is loaded, save the tour to URL
     models.tour.active = true;
@@ -241,8 +242,26 @@ class ModalInProgress extends React.Component {
           selectedB = new Date(selectedB);
           models.date.selectedB = selectedB;
         }
-      })
-      .then(util.wrap(() => this.loadLink(currentState, stepTransition, prevState, currentStepIndex)));
+      }).then(() => {
+        // Close the comparison mode if there is no comparison mode in the step link
+        if ((!currentState.ca || !currentState.cm) && models.compare.active === true) {
+          models.compare.toggle();
+          models.compare.load({});
+          ui.sidebar.reactComponent.setState({
+            isCompareMode: false
+          });
+          models.compare.active = false;
+        } else {
+          if (!models.compare.isCompareA) {
+            models.compare.load({});
+            models.compare.toggleState();
+            ui.sidebar.reactComponent.setState({
+              isCompareA: true
+            });
+            models.compare.isCompareA = true;
+          }
+        }
+      }).then(util.wrap(() => this.loadLink(currentState, stepTransition, prevState, currentStepIndex)));
   }
 
   loadLink(currentState, stepTransition, prevState, currentStepIndex) {
@@ -251,16 +270,6 @@ class ModalInProgress extends React.Component {
     var models = this.props.models;
     var ui = this.props.ui;
     var rotation = 0;
-
-    // Close the comparison mode if there is no comparison mode in the step link
-    if (((!currentState.ca || !currentState.cm) && models.compare.active === true) || (prevState.ca || prevState.cm)) {
-      models.compare.toggle();
-      models.compare.load({});
-      ui.sidebar.reactComponent.setState({
-        isCompareMode: false
-      });
-      models.compare.active = false;
-    }
 
     // Set rotation value if it exists
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
