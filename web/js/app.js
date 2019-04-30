@@ -73,6 +73,7 @@ import '../css/tooltip.css';
 import '../css/mobile.css';
 import '../css/modal.css';
 import '../css/list.css';
+import '../css/vectorMeta.css';
 import '../pages/css/document.css';
 
 class App extends React.Component {
