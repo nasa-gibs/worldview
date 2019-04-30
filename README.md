@@ -52,8 +52,7 @@ The following are required to install and run Worldview:
   - **Note:** It is recommended that Windows users install Python with [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools).
   - macOS users should use homebrew to install **Python v2**
     - `brew install python@2`
-- Cairo and Pango, dependencies of [node-canvas](https://github.com/Automattic/node-canvas)
-  - Check the node-canvas [README](https://github.com/Automattic/node-canvas/blob/master/Readme.md) for installation instructions.
+- Necessary `node-canvas` [dependencies for your Operating System](https://github.com/Automattic/node-canvas#compiling)
 
 Windows users will also need the following:
 
