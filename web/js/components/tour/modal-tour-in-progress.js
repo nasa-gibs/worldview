@@ -241,7 +241,8 @@ class ModalInProgress extends React.Component {
           selectedB = new Date(selectedB);
           models.date.selectedB = selectedB;
         }
-      }).then(util.wrap(() => this.loadLink(currentState, stepTransition, prevState, currentStepIndex)));
+      })
+      .then(util.wrap(() => this.loadLink(currentState, stepTransition, prevState, currentStepIndex)));
   }
 
   loadLink(currentState, stepTransition, prevState, currentStepIndex) {
@@ -251,15 +252,8 @@ class ModalInProgress extends React.Component {
     var ui = this.props.ui;
     var rotation = 0;
 
-    // Set rotation value if it exists
-    if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
-      if (!isNaN(currentState.r)) {
-        rotation = currentState.r * (Math.PI / 180.0);
-      }
-    }
-
     // Close the comparison mode if there is no comparison mode in the step link
-    if ((!currentState.ca || !currentState.cm) && models.compare.active === true) {
+    if (((!currentState.ca || !currentState.cm) && models.compare.active === true) || (prevState.ca || prevState.cm)) {
       models.compare.toggle();
       models.compare.load({});
       ui.sidebar.reactComponent.setState({
@@ -275,6 +269,13 @@ class ModalInProgress extends React.Component {
           isCompareA: true
         });
         models.compare.isCompareA = true;
+      }
+    }
+
+    // Set rotation value if it exists
+    if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
+      if (!isNaN(currentState.r)) {
+        rotation = currentState.r * (Math.PI / 180.0);
       }
     }
 
