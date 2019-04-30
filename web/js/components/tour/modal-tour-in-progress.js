@@ -114,7 +114,6 @@ class ModalInProgress extends React.Component {
     var errors = [];
     var config = this.props.config;
     var models = this.props.models;
-    var ui = this.props.ui;
 
     // When the link is loaded, save the tour to URL
     models.tour.active = true;
@@ -242,25 +241,6 @@ class ModalInProgress extends React.Component {
           selectedB = new Date(selectedB);
           models.date.selectedB = selectedB;
         }
-      }).then(() => {
-        // Close the comparison mode if there is no comparison mode in the step link
-        if ((!currentState.ca || !currentState.cm) && models.compare.active === true) {
-          models.compare.toggle();
-          models.compare.load({});
-          ui.sidebar.reactComponent.setState({
-            isCompareMode: false
-          });
-          models.compare.active = false;
-        } else {
-          if (!models.compare.isCompareA) {
-            models.compare.load({});
-            models.compare.toggleState();
-            ui.sidebar.reactComponent.setState({
-              isCompareA: true
-            });
-            models.compare.isCompareA = true;
-          }
-        }
       }).then(util.wrap(() => this.loadLink(currentState, stepTransition, prevState, currentStepIndex)));
   }
 
@@ -275,6 +255,26 @@ class ModalInProgress extends React.Component {
     if (currentState.p === 'arctic' || currentState.p === 'antarctic') {
       if (!isNaN(currentState.r)) {
         rotation = currentState.r * (Math.PI / 180.0);
+      }
+    }
+
+    // Close the comparison mode if there is no comparison mode in the step link
+    if ((!currentState.ca || !currentState.cm) && models.compare.active === true) {
+      models.compare.toggle();
+      models.compare.load({});
+      ui.sidebar.reactComponent.setState({
+        isCompareMode: false
+      });
+      models.compare.active = false;
+    } else {
+      if (!models.compare.isCompareA) {
+        models.layers.activeLayers = 'active';
+        models.compare.load({});
+        models.compare.toggleState();
+        ui.sidebar.reactComponent.setState({
+          isCompareA: true
+        });
+        models.compare.isCompareA = true;
       }
     }
 
