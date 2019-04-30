@@ -139,8 +139,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
       } else {
-        let da = util.datesinDateRanges(def, date, true);
-        // console.log(da)
         date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
       }
     }
@@ -157,8 +155,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
 
       // Is current "rounded" previous date not in array of availableDates
       if (date && !dateArray.includes(date)) {
-        debugger;
         // Then, update layer object with new array of dates
+        // # time complexity searching through array can be improved with object lookup
         def.availableDates = util.datesinDateRanges(def, date, true);
         date = util.prevDateInDateRange(def, date, dateArray);
       }

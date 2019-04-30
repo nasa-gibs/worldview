@@ -396,7 +396,6 @@ export default (function (self) {
   };
 
   self.dateAdd = function (date, interval, amount) {
-    // console.log(date, interval, amount)
     var month, maxDay, year;
     var newDate = new Date(date);
     switch (interval) {
@@ -703,8 +702,6 @@ export default (function (self) {
    * fields set to zero or an overriden value.
    */
   self.today = function () {
-    // console.log(self.now());
-    // return self.clearTimeUTC(self.now());
     return self.now();
   };
 
@@ -1073,8 +1070,6 @@ export default (function (self) {
    */
   self.datesinDateRanges = function (def, date, containRange) {
     var dateArray = [];
-
-    // var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     var currentDate = new Date(date.getTime());
     lodashEach(def.dateRanges, function (dateRange) {
       var yearDifference;
@@ -1088,7 +1083,6 @@ export default (function (self) {
       let dateInterval = dateRange.dateInterval;
       let minDate = new Date(dateRange.startDate);
       let maxDate = new Date(dateRange.endDate);
-// console.log(minDate, maxDate, dateRange.startDate)
       // Offset timezone
       minDate = new Date(minDate.getTime() - (minDate.getTimezoneOffset() * 60000));
       maxDate = new Date(maxDate.getTime() - (maxDate.getTimezoneOffset() * 60000));
@@ -1104,10 +1098,8 @@ export default (function (self) {
       maxYearDate = new Date(maxDate.getUTCFullYear() + 1, maxDate.getUTCMonth(), maxDate.getUTCDate());
       maxMonthDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth() + 1, maxDate.getUTCDate());
       maxDayDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth(), maxDate.getUTCDate() + 1);
-      // maxMinuteDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours() + 1 + (minDate.getTimezoneOffset() / 60));
-      // maxMinuteDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours());
       maxMinuteDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth(), maxDate.getUTCDate(), maxDate.getUTCHours(), maxDate.getUTCMinutes() + interval);
-// console.log(currentDate, minDate, maxMinuteDate)
+
       if (def.period === 'yearly') {
         // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
         if (!containRange) {
@@ -1187,9 +1179,7 @@ export default (function (self) {
    * @return {object}           The date object with normalized timeszone.
    */
   self.prevDateInDateRange = function (def, date, dateArray) {
-    // console.log(def, date, dateArray);
     // # NEED TO TRACE BACK AND USE UTC DATES ONLY? WILL REWRITE A LOT BUT WOULD BE CLEANER/MORE TESTABLE
-    // var currentDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     var currentDate = new Date(date.getTime());
     if (!dateArray) return date;
     if ((def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
@@ -1205,7 +1195,6 @@ export default (function (self) {
     // Find the closest dates within the current array
     var closestDate = closestTo(currentDate, closestAvailableDates);
     if (closestDate) {
-      // return new Date(closestDate.getTime() - (date.getTimezoneOffset() * 60000));
       return new Date(closestDate.getTime());
     } else {
       return date;
