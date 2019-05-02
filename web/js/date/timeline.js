@@ -447,9 +447,9 @@ export function timeline(models, config, ui) {
   };
 
   var getInitialProps = () => {
-    // check for compare mode
+    // check for compare mode and what dragger is active
     let isCompareModeActive = models.compare.active;
-    console.log(models.date.customSelected)
+    let draggerSelected = models.date.activeDate;
     // if compare mode is active, check for subdaily in either A or B
     let subdaily;
     if (isCompareModeActive) {
@@ -465,22 +465,25 @@ export function timeline(models, config, ui) {
     }
     let selectedTimeScale = selectedTimeScaleState ? timeScaleFromNumberKey[selectedTimeScaleState] : 'day';
 
+    // get selected dates, start, and end dates
     let selectedDate = models.date.selected;
     let selectedDateB = models.date.selectedB ? models.date.selectedB : null;
+    // TODO: date formatted props necessary in dev to handle model.select date rounding - remove now?
+    let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
+    let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
+    let timelineStartDateLimit = config.startDate;
+    let timelineEndDateLimit = models.layers.lastDate().toISOString();
 
-    // custom interval
+    // make custom interval, custom delta available and determine currently selected interval
     let intervalTimeScale = models.date.customInterval ? timeScaleFromNumberKey[models.date.customInterval] : selectedTimeScale;
     let intervalDelta = models.date.customDelta ? models.date.customDelta : 1;
 
     let customSelected = models.date.customSelected ? Boolean(models.date.customSelected) : false;
-
     let intervalSelected = models.date.interval ? timeScaleFromNumberKey[models.date.interval] : selectedTimeScale;
 
-    let draggerSelected = models.date.activeDate;
+    // get separate input props
+    // TODO: combined props cleaner or too long?
     let inputProps = getInputProps();
-
-    let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
-    let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
     return { ...inputProps,
       customIntervalZoomLevel: intervalTimeScale,
       compareModeActive: isCompareModeActive,
@@ -492,6 +495,8 @@ export function timeline(models, config, ui) {
       timelineHeight: self.height,
       selectedDate: selectedDate,
       selectedDateB: selectedDateB,
+      timelineStartDateLimit: timelineStartDateLimit,
+      timelineEndDateLimit: timelineEndDateLimit,
       timeScale: selectedTimeScale,
       incrementDate: incrementDate,
       updateDate: updateDate,

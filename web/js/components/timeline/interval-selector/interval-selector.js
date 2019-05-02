@@ -70,7 +70,7 @@ class CustomIntervalSelectorWidget extends React.Component {
         // }
         onKeyDown={this.handleKeyPress}
         className='wv-animation-widget-custom-interval'
-        style={{display: this.props.customIntervalModalOpen ? 'block' : 'none', height: '110px'}}
+        style={{display: this.props.customIntervalModalOpen ? 'block' : 'none'}}
       >
 
       <div>Custom Interval Selector</div>

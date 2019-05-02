@@ -8,27 +8,12 @@ html, body {
 }
 
 #timelineContainer {
-  /* margin-top: 200px;
-  background: yellow; */
   position: absolute;
-  /* top: 200px; */
   bottom: -24px;
-  /* left: 416px; */
 }
 
 #wv-timeline-axis {
-  /* margin: 0 20px 0 0; */
-  /* margin-left: 25%; */
-  /* width: 800px; */
-  height: 100px;
-  /* position: absolute;
-
-  right: 50px; */
-  /* border: 1px solid black; */
-  /* background-image: url('mock-wv-background.jpg');
-  background-repeat: repeat-x;
-  background-size: 3000px 72px; */
-  /* overflow: hidden; */
+  height: 60px;
 }
 
 .inner {
@@ -38,6 +23,8 @@ html, body {
   flex-direction: row;
   align-items: center;
   border-top: 1.5px solid white;
+    /* -webkit-clip-path: url('#timelineBoundary');
+  clip-path: url('#timelineBoundary'); */
 }
 
 .dateToolTip {
@@ -56,7 +43,9 @@ html, body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  position: 100px;
+    /* -webkit-clip-path: url('#timelineBoundary');
+  clip-path: url('#timelineBoundary'); */
+  /* position: 100px; */
 }
 
 .grid {
@@ -84,7 +73,7 @@ line {
 .line {
   top: 102px;
   width: 2px;
-  height: 70px;
+  height: 60px;
   background: rgba(21,21,255,0.4);
   position: absolute;
   pointer-events: none;
@@ -186,11 +175,11 @@ form select {
 }
 
 .interval-timescale-select {
-  width: 70px;
+  width: 100px;
   height: 40px;
   color: #7890cd;
   opacity: 1;
-  font-size: 24px;
+  font-size: 20px;
   background: transparent;
   border: 0;
   font-family: 'Roboto Mono', monospace;
@@ -208,13 +197,13 @@ form select {
   background: #212121;
   color: #7890cd;
   height: 40px;
-  width: 130px;
+  width: 118px;
   border: thin solid #fff;
   margin-top: 1px;
 }
 
 .custom-interval-buttons {
-  margin-right: 15px;
+  margin-right: 8px;
 }
 
 .custom-interval-text {
@@ -263,21 +252,21 @@ form select {
 }
 
 .date-arrow-wrapper {
-  width: 80px;
+  width: 60px;
 }
 
 .wv-animation-widget-custom-interval {
-  width: 330px;
-  border-radius: 8px;
-  height: 125px;
+  height: 110px;
+  width: 286px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   background: #212121;
   position: absolute;
-  transform: translateX(-50%);
-  -webkit-transform: translate(-50%);
-  top: -160px;
-  /* left: -93px; */
+  top: -113px;
+  left: -153px;
   display: none;
   color: #fff;
+  border-bottom: 2px solid #444;
 }
 
 .wv-animation-widget-custom-interval i.wv-close {
@@ -327,3 +316,6 @@ form select {
   margin-left: 500px;
 } */
 
+/* #timeline-footer svg {
+  overflow: visible !important;
+} */

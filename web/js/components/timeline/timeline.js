@@ -43,7 +43,9 @@ class Timeline extends React.Component {
       hasSubdailyLayers: '',
       customIntervalModalOpen: false,
       timelineHidden: false,
-      parentOffset: ''
+      parentOffset: '',
+      timelineStartDateLimit: '',
+      timelineEndDateLimit: ''
     };
   }
 
@@ -124,7 +126,9 @@ class Timeline extends React.Component {
       intervalText: this.props.timeScale,
       compareModeActive: this.props.compareModeActive,
       customSelected: this.props.customSelected,
-      parentOffset: this.props.parentOffset
+      parentOffset: this.props.parentOffset,
+      timelineStartDateLimit: this.props.timelineStartDateLimit,
+      timelineEndDateLimit: this.props.timelineEndDateLimit
     });
   }
 
@@ -136,6 +140,7 @@ class Timeline extends React.Component {
   // }
 
   render() {
+    console.log(this.state.selectedDate, this.state.dateFormatted)
     return (
       this.state.dateFormatted ?
       <React.Fragment>
@@ -196,6 +201,9 @@ class Timeline extends React.Component {
             compareModeActive={this.state.compareModeActive}
             draggerSelected={this.state.draggerSelected}
             onChangeSelectedDragger={this.props.onChangeSelectedDragger}
+            timelineStartDateLimit={this.state.timelineStartDateLimit}
+            timelineEndDateLimit={this.state.timelineEndDateLimit}
+            customIntervalModalOpen={this.state.customIntervalModalOpen}
           />
         </div>
 

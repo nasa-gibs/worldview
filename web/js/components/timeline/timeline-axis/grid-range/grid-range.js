@@ -50,7 +50,7 @@ class GridRange extends PureComponent {
           showHover={this.showHover}
         />
         <line className="svgLine" style={{display: this.props.showHoverLine ? 'block' : 'none'}}
-          stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="90"
+          stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="74"
           transform={`translate(${this.state.hoverLinePosition + 1}, 0)`} shapeRendering="optimizeSpeed"/>
       </g>
     )

@@ -93,8 +93,10 @@ export function animationRangeSelect(models, config, ui) {
     }
 
     options = {
-      startLocation: startLocation, // or zero
-      endLocation: endLocation,
+      // startLocation: startLocation, // or zero
+      // endLocation: endLocation,
+      startLocation: -250, // or zero
+      endLocation: -260,
       startLocationDate: model.rangeState.startDate,
       endLocationDate: model.rangeState.endDate,
       timelineStartDateLimit: timelineStartDateLimit,
@@ -147,7 +149,7 @@ export function animationRangeSelect(models, config, ui) {
    */
   self.getLocationFromStringDate = function(date) {
     // return timeline.x(util.roundTimeTenMinute(date));
-    return -100;
+    return -200;
   };
 
   /*

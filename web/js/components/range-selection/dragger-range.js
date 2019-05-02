@@ -215,7 +215,7 @@ class TimelineDraggerRange extends React.Component {
         handle=".dragger-range"
         axis="x"
         position={null}
-        defaultPosition={{ x: 0, y: -16 }}
+        defaultPosition={{ x: 0, y: 0 }}
         onStop={this.props.onStop}
         onDrag={this.handleDrag.bind(this)}
       >

@@ -405,6 +405,8 @@ class App extends React.Component {
         ui.dateWheels = dateWheels(models, config);
       }
 
+      console.log(ui)
+
       ui.rubberband = imageRubberband(models, ui, config);
       ui.image = imagePanel(models, ui, config);
       if (config.features.dataDownload) {
