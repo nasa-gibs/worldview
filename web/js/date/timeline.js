@@ -175,11 +175,6 @@ export function timeline(models, config, ui) {
     };
   };
 
-  // var onDateSelect = function(date) {
-  //   console.log(date)
-  //   models.date.select(date);
-  // };
-
   // ? INPUT ABOVE
   self.margin = {
     top: 0,
@@ -367,6 +362,11 @@ export function timeline(models, config, ui) {
     });
   };
 
+  // TEST updateRange
+  var updateAnimationRange = (startDate, endDate) => {
+    ui.anim.rangeselect.updateRange(startDate, endDate, true);
+  };
+
   // update date in model
   var updateDate = (date, selectionStr) => {
     let updatedDate = new Date(date);
@@ -375,6 +375,7 @@ export function timeline(models, config, ui) {
 
   // set custom interval
   var setIntervalInput = (intervalValue, zoomLevel) => {
+    console.log(intervalValue, zoomLevel)
     models.date.setCustomInterval(intervalValue, timeScaleToNumberKey[zoomLevel]);
     let zoomCustomText = document.querySelector('#zoom-custom');
     zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
@@ -384,12 +385,13 @@ export function timeline(models, config, ui) {
       customIntervalValue: intervalValue,
       customIntervalZoomLevel: zoomLevel,
       intervalChangeAmt: intervalValue,
-      customIntervalModalOpen: false
+      // customIntervalModalOpen: false
     });
   };
 
   // set selected interval either custom or standard delta of 1
   var setSelectedInterval = (interval, intervalChangeAmt, customSelected) => {
+    console.log(interval, intervalChangeAmt, customSelected)
     models.date.setSelectedInterval(timeScaleToNumberKey[interval], customSelected);
     self.reactComponent.setState({
       timeScaleChangeUnit: interval,
@@ -510,7 +512,8 @@ export function timeline(models, config, ui) {
       intervalTimeScale: intervalSelected,
       intervalDelta: intervalDelta,
       setSelectedInterval: setSelectedInterval,
-      customSelected: customSelected
+      customSelected: customSelected,
+      updateAnimationRange: updateAnimationRange
     };
   };
 
@@ -614,9 +617,12 @@ export function timeline(models, config, ui) {
     } else {
       subdaily = models.layers.hasSubDaily();
     }
+console.log(models.date.selectedZoom)
 
+console.log(models.date.customInterval, timeScaleFromNumberKey[models.date.customInterval], models.date.interval, timeScaleFromNumberKey[models.date.interval])
     // let subdaily = models.layers.hasSubDaily();
-    if (!subdaily && models.date.selectedZoom > 3) {
+    if (!subdaily && (models.date.customInterval > 3 || models.date.interval > 3)) {
+      setIntervalInput(1, 'day')
       self.reactComponent.setState({
         hasSubdailyLayers: subdaily
       }, changeTimeScale('day'));

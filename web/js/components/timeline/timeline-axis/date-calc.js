@@ -1,11 +1,6 @@
 
 import moment from 'moment';
 
-// const pastDateLimit = '1940-01-01T00:00:00.000';
-// const futureDateLimit = '2020-01-01T00:00:00.000';
-const pastDateLimit = moment.utc('1940-01-01T00:00:00.000');
-const futureDateLimit = moment.utc('2020-01-01T00:00:00.000');
-
 const timeScaleOptions = {
   'minute': {
     timeAxis: {
@@ -50,10 +45,6 @@ export default (function (self) {
     let startDateLimit = moment.utc(timelineStartDateLimit);
     let endDateLimit = moment.utc(timelineEndDateLimit);
 
-    console.log(timelineStartDateLimit, timelineEndDateLimit)
-
-// endDate = endDate.isAfter(currentDate) ? currentDate : endDate;
-// console.log(endDate.format(), currentDate.format)
     while (startDate <= endDate) {
       let date = startDate.format(format);
       let rawDate = startDate.format();

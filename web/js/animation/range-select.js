@@ -258,11 +258,16 @@ export function animationRangeSelect(models, config, ui) {
    * @returns {object} props
    *
    */
-  self.updateRange = function(startLocation, EndLocation) {
+  self.updateRange = function(startLocation, EndLocation, TEST) {
     // var startDate = util.roundTimeTenMinute(timeline.x.invert(startLocation));
     // var endDate = util.roundTimeTenMinute(timeline.x.invert(EndLocation));
     var startDate = new Date();
     var endDate = new Date();
+    if (TEST) {
+      startDate = new Date(startLocation);
+      endDate = new Date(EndLocation);
+    }
+
     var state = model.rangeState;
     state.startDate = util.toISOStringSeconds(startDate) || 0;
     // prevent endDate overdrag from occuring in monthly/yearly by setting to max date limit

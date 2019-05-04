@@ -30,7 +30,7 @@ html, body {
 .dateToolTip {
   background: rgb(233, 233, 233);
   border: thin solid #555;
-  font-size: 9px;
+  font-size: 16px;
   text-align: center;
   border-radius: 5px;
   width: 110px;
@@ -43,9 +43,6 @@ html, body {
   display: flex;
   flex-direction: row;
   align-items: center;
-    /* -webkit-clip-path: url('#timelineBoundary');
-  clip-path: url('#timelineBoundary'); */
-  /* position: 100px; */
 }
 
 .grid {
@@ -57,8 +54,6 @@ html, body {
 .gridText {
   font-size: 24px;
   font-weight: 500;
-  /* font-size: 10px; */
-  /* font-family: Arial, Helvetica, sans-serif; */
   font-family: 'Roboto Mono', monospace;
   color: white;
   pointer-events: none;
@@ -202,34 +197,18 @@ form select {
   margin-top: 1px;
 }
 
-.custom-interval-buttons {
-  margin-right: 8px;
-}
-
 .custom-interval-text {
   color: #7890cd !important;
-}
-
-#set-interval-button {
-}
-
-#reset-interval-button {
-
 }
 
 .wv-timeline-hide-arrow {
   vertical-align: middle;
   display: block;
   margin: 26px 0 0 7px;
-  /* font-size: 40px; */
   color: white;
   cursor: pointer;
-  /* background: rgba(40, 40, 40, 0.9); */
-  /* width: 40px; */
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  /* padding-left: 2px; */
-  /* transform: scale(1.75,1); */
   user-select: none;
 }
 
@@ -257,7 +236,7 @@ form select {
 
 .wv-animation-widget-custom-interval {
   height: 110px;
-  width: 286px;
+  width: 225px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   background: #212121;
@@ -286,36 +265,6 @@ form select {
 }
 
 /* DEMO DOM CLEANUP */
-
-/* #timeline-footer-svg {
-  opacity: 0;
-  display: none;
-}
-
-#timeline-header {
-  background: rgba(0, 0, 0, 0.8) !important;
-}
-
-.timeline-inner {
-  background: rgba(0, 0, 0, 0.5) !important;
-}
-
-#wv-animation-widget-custom-interval {
-  left: -180px;
-}
-
-#timeline-hide {
-  opacity: 0;
-}
-
-#timeline-footer {
-  margin-right: 0px !important;
-}
-
-#wv-animation-widget {
-  margin-left: 500px;
-} */
-
 /* #timeline-footer svg {
   overflow: visible !important;
 } */

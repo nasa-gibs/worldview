@@ -204,6 +204,7 @@ class Timeline extends React.Component {
             timelineStartDateLimit={this.state.timelineStartDateLimit}
             timelineEndDateLimit={this.state.timelineEndDateLimit}
             customIntervalModalOpen={this.state.customIntervalModalOpen}
+            updateAnimationRange={this.props.updateAnimationRange}
           />
         </div>
 

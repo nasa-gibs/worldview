@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-// import util from '../../util/util';
 
 /*
  * A react component, is a draggable svg
@@ -19,7 +18,9 @@ class IntervalInput extends PureComponent {
   }
   onClickUp = () => {
     let value = this.props.intervalValue;
-    this.props.changeInterval(value + 1);
+    if (value < 1000) {
+      this.props.changeInterval(value + 1);
+    }
   }
 
   onClickDown = () => {
@@ -56,23 +57,9 @@ class IntervalInput extends PureComponent {
   }
 }
 
-// IntervalInput.propTypes = {
-//   value: PropTypes.node,
-//   focused: PropTypes.bool,
-//   tabIndex: PropTypes.number,
-//   step: PropTypes.number,
-//   type: PropTypes.string,
-//   updateDate: PropTypes.func,
-//   date: PropTypes.object,
-//   minDate: PropTypes.object,
-//   maxDate: PropTypes.object,
-//   maxZoom: PropTypes.number,
-//   blur: PropTypes.func,
-//   setFocusedTab: PropTypes.func,
-//   changeTab: PropTypes.func,
-//   height: PropTypes.string,
-//   inputId: PropTypes.string,
-//   fontSize: PropTypes.number
-// };
+IntervalInput.propTypes = {
+  intervalValue: PropTypes.number,
+  changeInterval: PropTypes.func
+};
 
 export default IntervalInput;

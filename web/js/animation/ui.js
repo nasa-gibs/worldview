@@ -209,6 +209,7 @@ export function animationUi(models, ui) {
 
   // # need to change subdaily argument for custom intervals - rework for all zoom levels presumably
   self.nextDate = function (date) {
+    // console.log(date)
     let customSelected = models.date.customSelected;
     let interval;
     let delta;
@@ -337,6 +338,7 @@ export function animationUi(models, ui) {
     var day = new Date(self.state.playIndex);
     var startDate = new Date(animModel.rangeState.startDate);
     var endDate = new Date(animModel.rangeState.endDate);
+    console.log(startDate, endDate);
     var jsTestDate = new Date(testDate);
     while (i < queueLength) {
       if (self.nextDate(day) > endDate) {
@@ -386,6 +388,7 @@ export function animationUi(models, ui) {
     var currentDate;
     var startDate = util.parseDateUTC(animModel.rangeState.startDate);
     var endDate = util.parseDateUTC(animModel.rangeState.endDate);
+
     var lastToQueue;
     if (!animModel.rangeState.playing) {
       return self.refreshState();

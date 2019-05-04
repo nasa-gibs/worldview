@@ -567,8 +567,8 @@ console.log(leftOffset,axisWidth)
 
     // let isBackDateSameOrAfterCurrentDate = time.isSameOrAfter(currentDate);
     // if (isBackDateSameOrAfterCurrentDate) {
-      let diff = time.diff(currentDate, timeScale);
-      console.log(diff)
+      // let diff = time.diff(currentDate, timeScale);
+      // console.log(diff)
     // }
 
     // format to strings
@@ -1091,10 +1091,16 @@ console.log(leftOffset,axisWidth)
       animationEndLocation: endLocation,
       animationStartLocationDate: animationStartLocationDate,
       animationEndLocationDate: animationEndLocationDate
+    }, function() {
+      this.props.updateAnimationRange(animationStartLocationDate, animationEndLocationDate)
     })
   }
 
   render() {
+    let draggerTimeLeftOffest = this.props.draggerSelected === 'selected'
+      ? this.state.draggerPosition - (this.props.hasSubdailyLayers ? 33 : 3)
+      : this.state.draggerPositionB - (this.props.hasSubdailyLayers ? 33 : 3);
+    let hoverTimeLeftOffset = this.props.hasSubdailyLayers ? this.state.leftOffset - 82 : this.state.leftOffset - 52;
     return (
       <React.Fragment>
       <div id="wv-timeline-axis"
@@ -1152,7 +1158,7 @@ console.log(leftOffset,axisWidth)
           endLocationDate={this.state.animationEndLocationDate}
           timelineStartDateLimit={this.props.timelineStartDateLimit}
           timelineEndDateLimit={this.props.timelineEndDateLimit}
-          max={{end: false, start: false, startOffset: -50, width: 1000}}
+          max={{end: false, start: false, startOffset: -50, width: this.props.axisWidth}}
           pinWidth={5}
           height={45}
           // onDrag={(sx, ex) => console.log('onDrag', sx, ex)}
@@ -1223,21 +1229,33 @@ console.log(leftOffset,axisWidth)
         <div
           className="dateToolTip"
           style={{
-            transform: `translate(${this.props.draggerSelected === 'selected' ? this.state.draggerPosition - 5 : this.state.draggerPositionB - 5 }px, -100px)`,
-            display: this.state.showDraggerTime && this.state.draggerTimeState ? 'block' : 'none'
-        }}>
-          {this.state.showDraggerTime && this.state.draggerTimeState ? this.props.draggerSelected === 'selected' ? this.state.draggerTimeState : this.state.draggerTimeStateB : null}
+            transform: `translate(${draggerTimeLeftOffest}px, -100px)`,
+            display: this.state.showDraggerTime && this.state.draggerTimeState ? 'block' : 'none',
+            width: this.props.hasSubdailyLayers ? '170px' : '110px'
+          }}
+        >
+          { this.state.showDraggerTime && this.state.draggerTimeState
+            ? this.props.draggerSelected === 'selected'
+            ? this.props.hasSubdailyLayers ? this.state.draggerTimeState : this.state.draggerTimeState.split('T')[0]
+            : this.props.hasSubdailyLayers ? this.state.draggerTimeStateB : this.state.draggerTimeStateB.split('T')[0]
+            : null
+          }
         </div>
 
         {/* HOVER TIME */}
         <div
           className="dateToolTip"
           style={{
-            transform: `translate(${this.state.leftOffset - 52}px, -100px)`,
-            display: !this.state.showDraggerTime && this.state.showHoverLine ? 'block' : 'none'
-          }}>
-            {!this.state.showDraggerTime && this.state.hoverTime ? this.state.hoverTime : null}
-          </div>
+            transform: `translate(${hoverTimeLeftOffset}px, -100px)`,
+            display: !this.state.showDraggerTime && this.state.showHoverLine ? 'block' : 'none',
+            width: this.props.hasSubdailyLayers ? '170px' : '110px'
+          }}
+        >
+          { !this.state.showDraggerTime && this.state.hoverTime
+            ? this.props.hasSubdailyLayers ? this.state.hoverTime : this.state.hoverTime.split('T')[0]
+            : null
+          }
+        </div>
       </div>
       </React.Fragment>
     );
