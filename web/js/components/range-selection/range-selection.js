@@ -98,7 +98,7 @@ class TimelineRangeSelector extends React.Component {
    * @return {void}
    */
   onDragStop() {
-    this.props.onDrag(this.state.startLocation, this.state.endLocation);
+    this.props.onDrag(this.state.startLocation, this.state.endLocation, true);
     googleTagManager.pushEvent({
       'event': 'GIF_animation_dragger'
     });

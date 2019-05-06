@@ -375,7 +375,6 @@ export function timeline(models, config, ui) {
 
   // set custom interval
   var setIntervalInput = (intervalValue, zoomLevel) => {
-    console.log(intervalValue, zoomLevel)
     models.date.setCustomInterval(intervalValue, timeScaleToNumberKey[zoomLevel]);
     let zoomCustomText = document.querySelector('#zoom-custom');
     zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
@@ -391,7 +390,6 @@ export function timeline(models, config, ui) {
 
   // set selected interval either custom or standard delta of 1
   var setSelectedInterval = (interval, intervalChangeAmt, customSelected) => {
-    console.log(interval, intervalChangeAmt, customSelected)
     models.date.setSelectedInterval(timeScaleToNumberKey[interval], customSelected);
     self.reactComponent.setState({
       timeScaleChangeUnit: interval,
@@ -486,7 +484,10 @@ export function timeline(models, config, ui) {
     // animation dates
     let animStartLocationDate = models.anim.rangeState.startDate;
     let animEndLocationDate = models.anim.rangeState.endDate;
+    let isAnimationWidgetOpen = models.anim.rangeState.state === 'on';
     // console.log(animStartLocationDate, animEndLocationDate)
+
+    console.log(models.anim.rangeState.state)
 
     // get separate input props
     // TODO: combined props cleaner or too long?
@@ -520,7 +521,8 @@ export function timeline(models, config, ui) {
       customSelected: customSelected,
       updateAnimationRange: updateAnimationRange,
       animStartLocationDate: animStartLocationDate,
-      animEndLocationDate: animEndLocationDate
+      animEndLocationDate: animEndLocationDate,
+      isAnimationWidgetOpen: isAnimationWidgetOpen
     };
   };
 
@@ -655,6 +657,13 @@ export function timeline(models, config, ui) {
     });
   };
 
+  var onAnimationWidgetToggle = () => {
+    let isAnimationWidgetOpen = models.anim.rangeState.state === 'on';
+    self.reactComponent.setState({
+      isAnimationWidgetOpen: isAnimationWidgetOpen
+    });
+  };
+
   var init = function() {
     var $timelineFooter = $('#timeline-footer');
     models.layers.events.trigger('toggle-subdaily');
@@ -724,7 +733,8 @@ export function timeline(models, config, ui) {
 
     models.layers.events.on('change', onLayerUpdate);
 
-    // models.anim.events.on('datechange', onAnimationDateChange);
+    models.anim.events.on('datechange', onAnimationDateChange);
+    models.anim.events.on('toggle-widget', onAnimationWidgetToggle);
 
     // Determine maximum end date and move tl pick there if selected date is
     // greater than the max end date

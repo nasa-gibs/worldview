@@ -75,22 +75,23 @@ class TimelineAxis extends React.Component {
       currentTransformX: 0,
       gridWidth: 100,
       animationStartLocation: 0,
-      animationEndLocation: 0
+      animationEndLocation: 0,
+      isAnimationDraggerDragging: false
     }
   }
   //? how do position and transforms change between scale changes? lock into one line would be ideal
   updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff) => {
-    console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff)
+    // console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff)
     let maxDateTEMP = moment.utc(new Date());
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
     let axisWidth = axisWidthInput ? axisWidthInput : this.props.axisWidth;
     let leftOffset = leftOffsetFixedCoeff ? axisWidth * leftOffsetFixedCoeff : this.state.leftOffset;
-// debugger;
+    // debugger;
     if (leftOffset === 0) {
       leftOffset = axisWidth / 2;
     }
-console.log(leftOffset,axisWidth)
+    // console.log(leftOffset,axisWidth)
     // console.log(leftOffset, this.state.draggerPosition)
 
     let numberOfVisibleTiles = Number((axisWidth / gridWidth).toFixed(8));
@@ -195,11 +196,11 @@ console.log(leftOffset,axisWidth)
 
     if (true || this.props.startLocationDate) {
       // animationStartLocationDate = moment.utc(this.props.startLocationDate);
-      animationStartLocationDate = this.state.animationStartLocationDate;
+      animationStartLocationDate = this.props.animStartLocationDate;
       animationStartDraggerLocation = Math.abs(frontDate.diff(animationStartLocationDate, timeScale, true) * gridWidth);
 
       // animationEndLocationDate = moment.utc(this.props.endLocationDate);
-      animationEndLocationDate = this.state.animationEndLocationDate;
+      animationEndLocationDate = this.props.animEndLocationDate;
       animationEndDraggerLocation = Math.abs(frontDate.diff(animationEndLocationDate, timeScale, true) * gridWidth);
     }
 
@@ -229,8 +230,8 @@ console.log(leftOffset,axisWidth)
       showHoverLine: false,
       animationStartLocation: animationStartDraggerLocation + position -pixelsToAdd - 2,
       animationEndLocation: animationEndDraggerLocation + position -pixelsToAdd - 2,
-      animationStartLocationDate: animationStartLocationDate,
-      animationEndLocationDate: animationEndLocationDate
+      // animationStartLocationDate: animationStartLocationDate,
+      // animationEndLocationDate: animationEndLocationDate
     })
   }
 
@@ -657,8 +658,8 @@ console.log(leftOffset,axisWidth)
       position: midPoint,
       animationStartLocation: animationStartDraggerLocation + midPoint,
       animationEndLocation: animationEndDraggerLocation + midPoint,
-      animationStartLocationDate: animationStartLocationDate,
-      animationEndLocationDate: animationEndLocationDate
+      // animationStartLocationDate: animationStartLocationDate,
+      // animationEndLocationDate: animationEndLocationDate
     })
     // }, function() {
     //   this.updateScale(time, timeScale, this.props.axisWidth, 0.90)
@@ -709,10 +710,12 @@ console.log(leftOffset,axisWidth)
 
   componentDidUpdate(prevProps, prevState) {
     // console.log(prevProps.selectedDate, this.props.selectedDate, this.state.selectedDate, prevState.selectedDate)
-    // if (this.props.animStartLocationDate !== prevProps.animStartLocationDate ||
-    //     this.props.animEndLocationDate !== prevProps.animEndLocationDate) {
-    //   this.animationDraggerDateUpdate(this.props.animStartLocationDate, this.props.animEndLocationDate)
-    // }
+    if (!this.state.isAnimationDraggerDragging) {
+      if (this.props.animStartLocationDate !== prevProps.animStartLocationDate ||
+        this.props.animEndLocationDate !== prevProps.animEndLocationDate) {
+      this.animationDraggerDateUpdate(this.props.animStartLocationDate, this.props.animEndLocationDate)
+    }
+    }
 
     if (this.props.timeScale !== prevProps.timeScale) {
       this.updateScale(null, this.props.timeScale);
@@ -1052,19 +1055,20 @@ console.log(leftOffset,axisWidth)
   // }
 
   // handle animation dragger drag change
-  animationDraggerPositionUpdate = (startLocation, endLocation) => {
+  animationDraggerPositionUpdate = (startLocation, endLocation, stopDragging) => {
+    let isDragging = stopDragging ? false : true;
     let timeScale = this.props.timeScale;
     let gridWidth = this.state.gridWidth;
     // calculate new start and end positions
     let deltaXStart = startLocation - this.state.animationStartLocation;
-    let animationStartLocationDate = this.state.animationStartLocationDate;
+    let animationStartLocationDate = this.props.animStartLocationDate;
     let deltaXEnd = endLocation - this.state.animationEndLocation;
-    let animationEndLocationDate = this.state.animationEndLocationDate;
+    let animationEndLocationDate = this.props.animEndLocationDate;
 
     if (deltaXStart !== 0 || deltaXEnd !== 0) {
       let diffZeroValues = timeScaleOptions[timeScale].timeAxis.scaleMs;
       // get startDate for diff calculation
-      let draggerTimeStart = moment.utc(this.state.animationStartLocationDate);
+      let draggerTimeStart = moment.utc(this.props.animStartLocationDate);
       // only need to calculate difference in time unit for varying timescales - month and year
       if (!diffZeroValues) {
         let draggerTimeStartZero = draggerTimeStart.clone().startOf(timeScale);
@@ -1078,13 +1082,12 @@ console.log(leftOffset,axisWidth)
       let diffFactor = diffZeroValues / gridWidth;
 
       if (deltaXStart !== 0) { // update new start date
-        // let draggerTimeStart = moment.utc(this.state.animationStartLocationDate);
         let draggerTimeStartValue = draggerTimeStart.valueOf();
         animationStartLocationDate = moment.utc(draggerTimeStartValue + (diffFactor * deltaXStart)).format();
       }
 
       if (deltaXEnd !== 0) { // update new end date
-        let draggerTimeEnd = moment.utc(this.state.animationEndLocationDate);
+        let draggerTimeEnd = moment.utc(this.props.animEndLocationDate);
         let draggerTimeEndValue = draggerTimeEnd.valueOf();
         animationEndLocationDate = moment.utc(draggerTimeEndValue + (diffFactor * deltaXEnd)).format();
       }
@@ -1092,10 +1095,9 @@ console.log(leftOffset,axisWidth)
 
     // need props function to handle state update?!
     this.setState({
+      isAnimationDraggerDragging: isDragging,
       animationStartLocation: startLocation,
-      animationEndLocation: endLocation,
-      animationStartLocationDate: animationStartLocationDate,
-      animationEndLocationDate: animationEndLocationDate
+      animationEndLocation: endLocation
     }, function() {
       this.props.updateAnimationRange(animationStartLocationDate, animationEndLocationDate)
     })
@@ -1113,10 +1115,8 @@ console.log(leftOffset,axisWidth)
 
     // console.log(startLocation, endLocation)
     this.setState({
-      animationStartLocation: position - startLocation,
-      animationEndLocation: position - endLocation,
-      animationStartLocationDate: animationStartLocationDate,
-      animationEndLocationDate: animationEndLocationDate
+      animationStartLocation: position - startLocation + this.state.currentTransformX,
+      animationEndLocation: position - endLocation + this.state.currentTransformX
     })
   }
 
@@ -1173,25 +1173,28 @@ console.log(leftOffset,axisWidth)
         </Draggable>
 
         {/* //? INSERT RANGE SELECTION HERE */}
-        {/* <TimelineRangeSelector
-          startLocation={this.state.animationStartLocation}
-          endLocation={this.state.animationEndLocation}
-          startLocationDate={this.state.animationStartLocationDate}
-          endLocationDate={this.state.animationEndLocationDate}
-          timelineStartDateLimit={this.props.timelineStartDateLimit}
-          timelineEndDateLimit={this.props.timelineEndDateLimit}
-          max={{end: false, start: false, startOffset: -50, width: this.props.axisWidth}}
-          pinWidth={5}
-          height={45}
-          // onDrag={(sx, ex) => console.log('onDrag', sx, ex)}
-          onDrag={this.animationDraggerPositionUpdate.bind(this)}
-          onRangeClick={() => console.log('onRangeClick')}
-          rangeOpacity={0.3}
-          rangeColor={"#45bdff"}
-          startColor={"#40a9db"}
-          startTriangleColor={"#fff"}
-          endColor={"#295f92"}
-          endTriangleColor={"#4b7aab"} /> */}
+        {this.props.isAnimationWidgetOpen ?
+          <TimelineRangeSelector
+            startLocation={this.state.animationStartLocation}
+            endLocation={this.state.animationEndLocation}
+            startLocationDate={this.props.animStartLocationDate}
+            endLocationDate={this.props.animEndLocationDate}
+            timelineStartDateLimit={this.props.timelineStartDateLimit}
+            timelineEndDateLimit={this.props.timelineEndDateLimit}
+            max={{end: false, start: false, startOffset: -50, width: this.props.axisWidth}}
+            pinWidth={5}
+            height={45}
+            // onDrag={(sx, ex) => console.log('onDrag', sx, ex)}
+            onDrag={this.animationDraggerPositionUpdate.bind(this)}
+            onRangeClick={() => console.log('onRangeClick')}
+            rangeOpacity={0.3}
+            rangeColor={"#45bdff"}
+            startColor={"#40a9db"}
+            startTriangleColor={"#fff"}
+            endColor={"#295f92"}
+            endTriangleColor={"#4b7aab"} />
+        : null
+        }
 
         {this.props.draggerSelected === 'selectedB' ?
         <React.Fragment>

@@ -130,7 +130,8 @@ class Timeline extends React.Component {
       timelineStartDateLimit: this.props.timelineStartDateLimit,
       timelineEndDateLimit: this.props.timelineEndDateLimit,
       animStartLocationDate: this.props.animStartLocationDate,
-      animEndLocationDate: this.props.animEndLocationDate
+      animEndLocationDate: this.props.animEndLocationDate,
+      isAnimationWidgetOpen: this.props.isAnimationWidgetOpen
     });
   }
 
@@ -209,6 +210,7 @@ class Timeline extends React.Component {
             updateAnimationRange={this.props.updateAnimationRange}
             animStartLocationDate={this.state.animStartLocationDate}
             animEndLocationDate={this.state.animEndLocationDate}
+            isAnimationWidgetOpen={this.state.isAnimationWidgetOpen}
           />
         </div>
 
