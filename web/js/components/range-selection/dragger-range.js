@@ -227,7 +227,8 @@ class TimelineDraggerRange extends React.Component {
             fillOpacity: this.props.opacity,
             cursor: 'pointer'
           }}
-          height={this.props.height}
+          // height={this.props.height}
+          height={30}
           className='dragger-range'
           id={this.props.draggerID}
           onClick={this.handleDraggerClick.bind(this)}

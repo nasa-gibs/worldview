@@ -13,12 +13,12 @@ html, body {
 }
 
 #wv-timeline-axis {
-  height: 60px;
+  height: 70px;
 }
 
 .inner {
   /* background: rgba(0, 0, 0, 0.5); */
-  height: 66px;
+  height: 70px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -48,7 +48,7 @@ html, body {
 .grid {
   color: white;
   font-size: 12px;
-  height: 75px;
+  height: 70px;
 }
 
 .gridText {

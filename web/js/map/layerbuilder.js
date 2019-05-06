@@ -125,7 +125,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var dateArray = def.availableDates || [];
     if (options.date) {
       if (def.period !== 'subdaily') {
-        console.log(options.date)
         date = util.clearTimeUTC(new Date(options.date.getTime()));
       } else {
         date = options.date;

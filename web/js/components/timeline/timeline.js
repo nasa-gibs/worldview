@@ -128,7 +128,9 @@ class Timeline extends React.Component {
       customSelected: this.props.customSelected,
       parentOffset: this.props.parentOffset,
       timelineStartDateLimit: this.props.timelineStartDateLimit,
-      timelineEndDateLimit: this.props.timelineEndDateLimit
+      timelineEndDateLimit: this.props.timelineEndDateLimit,
+      animStartLocationDate: this.props.animStartLocationDate,
+      animEndLocationDate: this.props.animEndLocationDate
     });
   }
 
@@ -140,7 +142,7 @@ class Timeline extends React.Component {
   // }
 
   render() {
-    console.log(this.state.selectedDate, this.state.dateFormatted)
+    // console.log(this.state.selectedDate, this.state.dateFormatted)
     return (
       this.state.dateFormatted ?
       <React.Fragment>
@@ -205,6 +207,8 @@ class Timeline extends React.Component {
             timelineEndDateLimit={this.state.timelineEndDateLimit}
             customIntervalModalOpen={this.state.customIntervalModalOpen}
             updateAnimationRange={this.props.updateAnimationRange}
+            animStartLocationDate={this.state.animStartLocationDate}
+            animEndLocationDate={this.state.animEndLocationDate}
           />
         </div>
 

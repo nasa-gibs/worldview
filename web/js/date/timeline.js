@@ -483,6 +483,11 @@ export function timeline(models, config, ui) {
     let customSelected = models.date.customSelected ? Boolean(models.date.customSelected) : false;
     let intervalSelected = models.date.interval ? timeScaleFromNumberKey[models.date.interval] : selectedTimeScale;
 
+    // animation dates
+    let animStartLocationDate = models.anim.rangeState.startDate;
+    let animEndLocationDate = models.anim.rangeState.endDate;
+    // console.log(animStartLocationDate, animEndLocationDate)
+
     // get separate input props
     // TODO: combined props cleaner or too long?
     let inputProps = getInputProps();
@@ -513,7 +518,9 @@ export function timeline(models, config, ui) {
       intervalDelta: intervalDelta,
       setSelectedInterval: setSelectedInterval,
       customSelected: customSelected,
-      updateAnimationRange: updateAnimationRange
+      updateAnimationRange: updateAnimationRange,
+      animStartLocationDate: animStartLocationDate,
+      animEndLocationDate: animEndLocationDate
     };
   };
 
@@ -617,9 +624,7 @@ export function timeline(models, config, ui) {
     } else {
       subdaily = models.layers.hasSubDaily();
     }
-console.log(models.date.selectedZoom)
 
-console.log(models.date.customInterval, timeScaleFromNumberKey[models.date.customInterval], models.date.interval, timeScaleFromNumberKey[models.date.interval])
     // let subdaily = models.layers.hasSubDaily();
     if (!subdaily && (models.date.customInterval > 3 || models.date.interval > 3)) {
       setIntervalInput(1, 'day')
@@ -638,6 +643,16 @@ console.log(models.date.customInterval, timeScaleFromNumberKey[models.date.custo
     self.resize();
     ui.anim.widget.update();
     updateSubdailyState();
+  };
+
+  var onAnimationDateChange = () => {
+    let animationStartLocationDate = models.anim.rangeState.startDate;
+    let animationEndLocationDate = models.anim.rangeState.endDate;
+
+    self.reactComponent.setState({
+      animStartLocationDate: animationStartLocationDate,
+      animEndLocationDate: animationEndLocationDate
+    });
   };
 
   var init = function() {
@@ -708,6 +723,8 @@ console.log(models.date.customInterval, timeScaleFromNumberKey[models.date.custo
     model.events.on('interval-change', changeToSelectedInterval);
 
     models.layers.events.on('change', onLayerUpdate);
+
+    // models.anim.events.on('datechange', onAnimationDateChange);
 
     // Determine maximum end date and move tl pick there if selected date is
     // greater than the max end date

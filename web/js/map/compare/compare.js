@@ -16,7 +16,6 @@ const MOUSE_EVENT = {
   end: 'mouseup'
 };
 export function mapCompare(models, config) {
-  console.log(models.compare)
   var self = {};
   var comparison = null;
   var mode = 'swipe';

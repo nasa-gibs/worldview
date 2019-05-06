@@ -41,7 +41,8 @@ class TimelineDragger extends React.Component {
       <React.Fragment>
         <rect
           width={this.props.width}
-          height={this.props.height}
+          // height={this.props.height}
+          height={40}
           style={{
             fill: this.props.color,
             visibility: visibility

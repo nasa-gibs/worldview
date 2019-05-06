@@ -338,7 +338,7 @@ export function animationUi(models, ui) {
     var day = new Date(self.state.playIndex);
     var startDate = new Date(animModel.rangeState.startDate);
     var endDate = new Date(animModel.rangeState.endDate);
-    console.log(startDate, endDate);
+    // console.log(startDate, endDate);
     var jsTestDate = new Date(testDate);
     while (i < queueLength) {
       if (self.nextDate(day) > endDate) {

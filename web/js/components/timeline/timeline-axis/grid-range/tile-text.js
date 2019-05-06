@@ -74,7 +74,7 @@ const axisScaleTextElementWrapper = (gridWidth, index, item) => {
   return (
     <React.Fragment>
       <g>
-        <text className="gridText" x="0" y="45" fill={item.withinRange ? 'white' : ''} transform={`translate(${(index * gridWidth) + xOffsetAdded}, 20)`} textRendering="optimizeLegibility" clipPath="url(#textDisplay)">{dateText}</text>
+        <text className="gridText" x="0" y="35" fill={item.withinRange ? 'white' : ''} transform={`translate(${(index * gridWidth) + xOffsetAdded}, 20)`} textRendering="optimizeLegibility" clipPath="url(#textDisplay)">{dateText}</text>
       </g>
     </React.Fragment>
   );
