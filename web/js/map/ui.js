@@ -88,10 +88,16 @@ export function mapui(models, config, store) {
       case LOCATION_POP_ACTION:
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(action, 'payload.query.legacy.map.extent');
-        const rotation = lodashGet(action, 'payload.query.legacy.map.rotation') || 0;
-        updateProjection();
+        const rotation =
+          lodashGet(action, 'payload.query.legacy.map.rotation') || 0;
         if (newState.v && !newState.e && extent) {
-          flyToNewExtent(extent, rotation);
+          flyToNewExtent(extent, rotation)
+        }
+        if (newState.p) {
+          updateProjection();
+        }
+        if (newState.l || newState.l1 || newState.ca) {
+          reloadLayers();
         }
         return;
       case layerConstants.REMOVE_LAYER:
@@ -163,7 +169,6 @@ export function mapui(models, config, store) {
    * @returns {void}
    */
   var updateProjection = function(start) {
-    console.log('update proj')
     const state = store.getState();
     const { proj } = state;
     if (self.selected) {

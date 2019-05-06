@@ -281,6 +281,7 @@ Tour.propTypes = {
 };
 const mapDispatchToProps = dispatch => ({
   processStepLink: search => {
+    search = search.split('/?').pop();
     const location = update(history.location, {
       search: { $set: search }
     });
