@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import googleTagManager from 'googleTagManager';
 import {
   requestTemplate,
   renderTemplate,
@@ -12,6 +13,7 @@ import { onClickFeedback } from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
 
 import { initFeedback } from '../modules/feedback/actions';
+import { startTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
 import Notifications from '../containers/notifications';
@@ -43,8 +45,7 @@ class InfoList extends Component {
       feedbackIsInitiated,
       aboutClick,
       notifications,
-      config,
-      models
+      config
     } = this.props;
     let arr = [
       {
@@ -88,7 +89,10 @@ class InfoList extends Component {
         iconClass: 'ui-icon fa fa-truck fa-fw',
         id: 'start_tour_info_item',
         onClick: () => {
-          models.tour.events.trigger('start-tour');
+          startTour();
+          googleTagManager.pushEvent({
+            event: 'tour_start_button'
+          });
         }
       };
       arr.splice(1, 0, exploreWorlviewObj);

@@ -66,7 +66,6 @@ export function mapCompare(config, store) {
         state.compare.value || null
       ); // e.g. new self.swipe()
     } else {
-      console.log(compareMode);
       mode = compareMode;
       comparison = new self[compareMode](
         map,

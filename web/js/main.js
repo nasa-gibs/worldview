@@ -28,7 +28,6 @@ import { updateLegacyModule } from './modules/migration/actions';
 import { validate as layerValidate } from './layers/layers';
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
-import { changeProjection } from './modules/projection/actions';
 
 export let history = createBrowserHistory();
 const isDebugMode = typeof DEBUG !== 'undefined';

@@ -1,7 +1,7 @@
 import * as olExtent from 'ol/extent';
 import OlGeomLineString from 'ol/geom/LineString';
 import Promise from 'bluebird';
-export function mapAnimate(models, config, ui) {
+export function mapAnimate(config, ui, store) {
   var self = {};
 
   /**
@@ -11,9 +11,10 @@ export function mapAnimate(models, config, ui) {
    * @param  {integer} endZoom Ending Zoom Level
    * @return {Promise}         Promise that is fulfilled when animation completes
    */
-  self.fly = function (endPoint, endZoom, rotation) {
+  self.fly = function(endPoint, endZoom, rotation) {
+    const state = store.getState();
     var view = ui.map.selected.getView();
-    var polarProjectionCheck = models.proj.selected.id !== 'geographic'; // boolean if current projection is polar
+    var polarProjectionCheck = state.proj.selected.id !== 'geographic'; // boolean if current projection is polar
     view.cancelAnimations();
     var startPoint = view.getCenter();
     var startZoom = Math.floor(view.getZoom());
@@ -24,9 +25,9 @@ export function mapAnimate(models, config, ui) {
     var line = new OlGeomLineString([startPoint, endPoint]);
     var distance = line.getLength(); // In map units, which is usually degrees
     var distanceDuration = polarProjectionCheck ? distance / 50000 : distance; // limit large polar projection distances from coordinate transforms
-    var duration = Math.floor((distanceDuration * 20) + 1000); // approx 6 seconds to go 360 degrees
+    var duration = Math.floor(distanceDuration * 20 + 1000); // approx 6 seconds to go 360 degrees
     if (!rotation) rotation = 0;
-    var animationPromise = function () {
+    var animationPromise = function() {
       var args = Array.prototype.slice.call(arguments);
       return new Promise(function(resolve, reject) {
         args.push(function(complete) {
@@ -41,15 +42,31 @@ export function mapAnimate(models, config, ui) {
       duration = duration < 1200 ? duration / 2 : duration;
       // If the event is already visible, don't zoom out
       return Promise.all([
-        animationPromise({ center: endPoint, duration: duration, rotation: rotation }),
-        animationPromise({ zoom: endZoom, duration: duration, rotation: rotation })
+        animationPromise({
+          center: endPoint,
+          duration: duration,
+          rotation: rotation
+        }),
+        animationPromise({
+          zoom: endZoom,
+          duration: duration,
+          rotation: rotation
+        })
       ]);
     }
     // Default animation zooms out to arc
     return Promise.all([
-      animationPromise({ center: endPoint, duration: duration, rotation: rotation }),
+      animationPromise({
+        center: endPoint,
+        duration: duration,
+        rotation: rotation
+      }),
       animationPromise(
-        { zoom: getBestZoom(distance, startZoom, endZoom, view), duration: duration / 2, rotation: rotation },
+        {
+          zoom: getBestZoom(distance, startZoom, endZoom, view),
+          duration: duration / 2,
+          rotation: rotation
+        },
         { zoom: endZoom, duration: duration / 2, rotation: rotation }
       )
     ]);

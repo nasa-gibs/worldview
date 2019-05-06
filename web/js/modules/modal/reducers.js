@@ -3,7 +3,8 @@ import {
   OPEN_CUSTOM,
   OPEN_BASIC,
   RENDER_TEMPLATE,
-  ABOUT_PAGE_REQUEST
+  ABOUT_PAGE_REQUEST,
+  CLOSE
 } from './constants';
 import { requestReducer } from '../core/reducers';
 import { assign as lodashAssign } from 'lodash';
@@ -60,6 +61,10 @@ export function modalReducer(state = modalState, action) {
         bodyText: '',
         template: action.template,
         customProps: {}
+      });
+    case CLOSE:
+      return lodashAssign({}, state, {
+        isOpen: false
       });
     default:
       return state;

@@ -32,15 +32,14 @@ export function getDateParameterSetup(
               ? undefined
               : serializeDate(currentItemState);
         },
-        parse: () => {
-          return modelLoaded.selected;
+        parse: str => {
+          return tryCatchDate(str, initialState);
         }
       }
     },
     t1: {
       stateKey: 'legacy.date.selectedB',
       initialState: bInit,
-      type: 'date',
       options: {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
@@ -49,17 +48,18 @@ export function getDateParameterSetup(
           if (!currentItemState) currentItemState = bInit;
           return serializeDate(currentItemState || bInit);
         },
-        parse: () => {
-          return modelLoaded.selectedB || bInit;
+        parse: str => {
+          return tryCatchDate(str, bInit);
         }
       }
     },
     z: {
       stateKey: 'legacy.date.selectedZoom',
       initialState: 3,
-      type: 'number',
       options: {
-        parse: () => modelLoaded.selectedZoom,
+        parse: str => {
+          return str ? Number(str) : 3;
+        },
         serialize: () => {
           return models.date.selectedZoom.toString();
         }
@@ -84,3 +84,11 @@ export function getActiveTime(state) {
   const activeStr = compare.isCompareA ? 'selected' : 'selectedB';
   return legacy.date[activeStr];
 }
+var tryCatchDate = function(str, initialState) {
+  try {
+    return util.parseDateUTC(str);
+  } catch (error) {
+    console.warn('Invalid date: ' + str);
+    return initialState;
+  }
+};

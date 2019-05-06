@@ -16,7 +16,7 @@ import { timelinePan } from './date/timeline-pan';
 import { timelineInput } from './date/timeline-input';
 import { timelineCompare } from './date/compare-picks';
 // Tour
-import { tourUi } from './tour/ui';
+// import { tourUi } from './tour/ui';
 import { layersActive } from './layers/active';
 import { mapui } from './map/ui';
 import { mapAnimate } from './map/animate';
@@ -37,10 +37,10 @@ import naturalEventsUI from './map/natural-events/ui';
 export function combineUi(models, config, MapMouseEvents, store) {
   let ui = {};
   ui.map = mapui(models, config, store);
-  ui.map.animate = mapAnimate(models, config, ui);
+  ui.map.animate = mapAnimate(config, ui, store);
   if (config.features.tour) {
-    ui.alert = alertUi(ui, config);
-    ui.tour = tourUi(models, ui, config);
+    // ui.alert = alertUi(ui, config);
+    // ui.tour = tourUi(models, ui, config);
   }
   ui.activeLayers = layersActive(models, ui, config);
   // ui.addModal = layersModal(models, ui, config);

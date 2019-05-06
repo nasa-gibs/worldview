@@ -7,7 +7,7 @@ import {
 import isEqualDate from 'date-fns/is_equal';
 import { typeHandles } from 'redux-location-state/lib/typeHandles';
 import { ENCODING_EXCEPTIONS } from './modules/link/constants';
-
+export const LOCATION_POP_ACTION = 'REDUX-LOCATION-POP-ACTION';
 function isNotDefined(value) {
   return typeof value === 'undefined' || value === null;
 }

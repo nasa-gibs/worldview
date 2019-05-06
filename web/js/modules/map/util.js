@@ -1,5 +1,10 @@
 import util from '../../util/util';
 import { encode } from '../link/util';
+import {
+  each as lodashEach,
+  isUndefined as lodashIsUndefined,
+  map as lodashMap
+} from 'lodash';
 
 export function getMapParameterSetup(
   parameters,
@@ -8,7 +13,7 @@ export function getMapParameterSetup(
   legacyState,
   errors
 ) {
-  const loadedModel = models.map.load(legacyState, errors);
+  models.map.load(legacyState, errors);
   const leadingExtent = getLeadingExtent();
   return {
     v: {
@@ -17,11 +22,25 @@ export function getMapParameterSetup(
       type: 'array',
       options: {
         delimiter: ',',
-        parse: () => {
-          return loadedModel.extent || leadingExtent;
+        parse: state => {
+          var extent = lodashMap(state.split(','), function(str) {
+            return parseFloat(str);
+          });
+          var valid = mapIsExtentValid(extent);
+          if (!valid) {
+            errors.push({
+              message: 'Invalid extent: ' + state
+            });
+            return leadingExtent;
+          } else {
+            return extent;
+          }
         },
         serialize: (currentItemState, currentState) => {
-          return encode(models.map.extent || leadingExtent);
+          const extent = mapIsExtentValid(currentItemState)
+            ? currentItemState
+            : leadingExtent;
+          return encode(extent);
         }
       }
     },
@@ -29,8 +48,8 @@ export function getMapParameterSetup(
       stateKey: 'legacy.map.rotation',
       initialState: 0,
       options: {
-        parse: () => {
-          return loadedModel.rotation || 0;
+        parse: state => {
+          return !isNaN(state) ? state * (Math.PI / 180.0) : 0;
         },
         serialize: (currentItemState, currentState) => {
           return models.map.rotation
@@ -41,7 +60,33 @@ export function getMapParameterSetup(
     }
   };
 }
-
+/**
+ * Determines if an exent object contains valid values.
+ *
+ * @method isExtentValid
+ * @static
+ *
+ * @param extent {OpenLayers.Bound} The extent to check.
+ *
+ * @return {boolean} False if any of the values is NaN, otherwise returns
+ * true.
+ */
+export function mapIsExtentValid(extent) {
+  if (lodashIsUndefined(extent)) {
+    return false;
+  }
+  var valid = true;
+  if (extent.toArray) {
+    extent = extent.toArray();
+  }
+  lodashEach(extent, function(value) {
+    if (isNaN(value)) {
+      valid = false;
+      return false;
+    }
+  });
+  return valid;
+}
 export function getLeadingExtent() {
   var curHour = util.now().getUTCHours();
 

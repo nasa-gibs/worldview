@@ -110,7 +110,7 @@ export function tourUi(models, ui, config) {
       event: 'tour_start_button'
     });
     self.reactComponent.setState({
-      modalStart: true,
+      checkBuildTimestamp: true,
       modalInProgress: false,
       modalComplete: false,
       restartTour: true
@@ -126,9 +126,6 @@ export function tourUi(models, ui, config) {
     let totalSteps = currentStory.steps;
     if (e) e.preventDefault();
     self.reactComponent.setState({
-      models: models,
-      config: config,
-      ui: ui,
       currentStep: 1,
       totalSteps: totalSteps.length,
       currentStoryIndex: currentStoryIndex,

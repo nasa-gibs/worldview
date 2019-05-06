@@ -2,7 +2,10 @@ import util from '../util/util';
 import DateSelector from '../components/date-selector/date-selector';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { get as lodashGet } from 'lodash';
 import { INIT_SECOND_LAYER_GROUP } from '../modules/layers/constants';
+import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
+
 const dateSelectorStr = 'date-selector-main';
 /**
  * Implements the date input
@@ -24,14 +27,29 @@ export function timelineInput(models, config, ui, store) {
 
   var $incrementBtn = $('#right-arrow-group');
   var $decrementBtn = $('#left-arrow-group');
+
   /**
-   * Suscribe to redux store and listen for
+   * Subscribe to redux store and listen for
    * specific action types
    */
   const subscribeToStore = function() {
-    const action = store.getState().lastAction;
+    const state = store.getState();
+    const action = state.lastAction;
     if (action.type === INIT_SECOND_LAYER_GROUP) {
       model.initCompare();
+    } else if (action.type === LOCATION_POP_ACTION) {
+      const newState = util.fromQueryString(action.payload.search);
+      const selected = lodashGet(action, 'payload.query.legacy.date.selected');
+      const selectedB = lodashGet(
+        action,
+        'payload.query.legacy.date.selectedB'
+      );
+      if (newState.t && selected) {
+        model.select(selected, 'selected');
+      }
+      if (newState.t1 && selectedB) {
+        model.select(selectedB, 'selectedB');
+      }
     }
   };
   var init = function() {

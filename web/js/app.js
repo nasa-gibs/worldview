@@ -21,6 +21,7 @@ import { updateLegacyInitComplete } from './modules/migration/actions';
 // actions
 // import { screenResize } from './modules/browser/actions';
 import { calculateResponsiveState } from 'redux-responsive';
+import Tour from './containers/tour';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -85,6 +86,7 @@ class App extends React.Component {
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
         <Sidebar />
+        <Tour />
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
         <div id="wv-map" className="wv-map" />

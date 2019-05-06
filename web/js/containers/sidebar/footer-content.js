@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../util/button';
-import ModeSelection from './mode-selection';
+import Button from '../../components/util/button';
+import ModeSelection from '../../components/sidebar/mode-selection';
 import googleTagManager from 'googleTagManager';
 import { get as lodashGet } from 'lodash';
 import { toggleCompareOnOff, changeMode } from '../../modules/compare/actions';
@@ -10,7 +10,7 @@ import {
   getSelectionCounts,
   getDataSelectionSize
 } from '../../modules/data/selectors';
-import ProductPicker from '../layer/product-picker/product-picker';
+import ProductPicker from '../../components/layer/product-picker/product-picker';
 import { openCustomContent } from '../../modules/modal/actions';
 import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
 

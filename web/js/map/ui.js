@@ -5,6 +5,7 @@ import lodashForOwn from 'lodash/forOwn';
 import lodashThrottle from 'lodash/throttle';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashFind from 'lodash/find';
+import { get as lodashGet } from 'lodash';
 import util from '../util/util';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
@@ -30,6 +31,7 @@ import { mapPrecacheTile } from './precachetile';
 import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import { mapCompare } from './compare/compare';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
+import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -83,6 +85,15 @@ export function mapui(models, config, store) {
       case layerConstants.ADD_LAYER:
         let def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);
+      case LOCATION_POP_ACTION:
+        const newState = util.fromQueryString(action.payload.search);
+        const extent = lodashGet(action, 'payload.query.legacy.map.extent');
+        const rotation = lodashGet(action, 'payload.query.legacy.map.rotation') || 0;
+        updateProjection();
+        if (newState.v && !newState.e && extent) {
+          flyToNewExtent(extent, rotation);
+        }
+        return;
       case layerConstants.REMOVE_LAYER:
         return removeLayer(action);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
@@ -130,6 +141,17 @@ export function mapui(models, config, store) {
     models.date.events.on('select', updateDate);
     updateProjection(true);
   };
+  const flyToNewExtent = function(extent, rotation) {
+    let coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
+    let coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
+    let coordinates = [coordinateX, coordinateY];
+    let resolution = self.selected.getView().getResolutionForExtent(extent);
+    let zoom = self.selected.getView().getZoomForResolution(resolution);
+    // Animate to extent, zoom & rotate:
+    // Don't animate when an event is selected (Event selection already animates)
+    return self.animate.fly(coordinates, zoom, rotation);
+  };
+
   /*
    * Changes visual projection
    *
@@ -141,6 +163,7 @@ export function mapui(models, config, store) {
    * @returns {void}
    */
   var updateProjection = function(start) {
+    console.log('update proj')
     const state = store.getState();
     const { proj } = state;
     if (self.selected) {
@@ -277,7 +300,7 @@ export function mapui(models, config, store) {
     var layerGroupStr = compareState.isCompareA ? 'active' : 'activeB';
     var activeLayers = layers[layerGroupStr];
     if (!config.features.compare || !compareState.active) {
-      if (!compareState.active) {
+      if (!compareState.active && compareMapUi.active) {
         compareMapUi.destroy();
       }
       clearLayers(map);

@@ -5,7 +5,7 @@ import Layers from './layers';
 import Events from './events';
 import Data from './data';
 import CompareCase from './compare';
-import FooterContent from '../../components/sidebar/footer-content';
+import FooterContent from './footer-content';
 import { TabContent, TabPane } from 'reactstrap';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';

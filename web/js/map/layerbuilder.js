@@ -61,7 +61,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
-        layer = createLayerWMTS(def, options, undefined, state);
+        layer = createLayerWMTS(def, options, null, state);
         if (
           proj.id === 'geographic' &&
           (def.wrapadjacentdays === true || def.wrapX)
@@ -95,7 +95,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
           });
         }
       } else if (def.type === 'wms') {
-        layer = createLayerWMS(def, options, state);
+        layer = createLayerWMS(def, options, null, state);
         if (
           proj.id === 'geographic' &&
           (def.wrapadjacentdays === true || def.wrapX)
@@ -179,7 +179,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    * @returns {object} layer key Object
    */
   self.layerKey = function(def, options, state) {
-    const { palettes, compare } = state;
+    const { compare } = state;
     var date;
     var layerId = def.id;
     var projId = state.proj.id;
@@ -385,7 +385,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    * @returns {object} OpenLayers WMS layer
    */
   var createLayerWMS = function(def, options, day, state) {
-    const { palettes, proj } = state;
+    const { proj } = state;
     const selectedProj = proj.selected;
     var source,
       urlParameters,
