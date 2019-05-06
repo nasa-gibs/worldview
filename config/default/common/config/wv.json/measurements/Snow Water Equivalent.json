@@ -11,7 +11,9 @@
                     "description": "amsr2/SnowWaterEquivalent",
                     "image": "",
                     "settings": [
-                        "AMSR2_Snow_Water_Equivalent"
+                        "AMSR2_Snow_Water_Equivalent",
+                        "AMSRU2_Snow_Water_Equivalent_5Day",
+                        "AMSRU2_Snow_Water_Equivalent_Monthly"
                     ]
                 }
             }
