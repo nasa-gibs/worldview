@@ -84,16 +84,16 @@ export function tourUi(models, ui, config) {
     }
 
     if (hideTour && config.buildDate) {
+      let buildDate = new Date(config.buildDate);
+      let tourDate = new Date(hideTour);
+
       // Tour hidden when visiting fresh URL
       googleTagManager.pushEvent({
         'event': 'tour_start_hidden',
-        'buildDate': config.buildDate,
-        'tourDate': hideTour
+        'buildDate': buildDate,
+        'tourDate': tourDate
       });
-      console.log('config.buildDate', config.buildDate);
-      // console.log('buildDate', buildDate)
-      // console.log('buildDateUTC', buildDateUTC);
-      console.log('hideTour', hideTour);
+
       if (config.buildDate > hideTour) {
         localStorage.removeItem('hideTour');
         return true;
