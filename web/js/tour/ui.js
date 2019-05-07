@@ -84,21 +84,17 @@ export function tourUi(models, ui, config) {
     }
 
     if (hideTour && config.buildDate) {
-      let buildDate = new Date(config.buildDate);
-      let buildDateUTC = Date.UTC(buildDate.getUTCFullYear(), buildDate.getUTCMonth(),
-        buildDate.getUTCDate(), buildDate.getUTCHours(),
-        buildDate.getUTCMinutes(), buildDate.getUTCSeconds());
-
       // Tour hidden when visiting fresh URL
       googleTagManager.pushEvent({
         'event': 'tour_start_hidden',
-        'buildDate': buildDateUTC,
+        'buildDate': config.buildDate,
         'tourDate': hideTour
       });
       console.log('config.buildDate', config.buildDate);
-      console.log('buildDateUTC', buildDateUTC);
+      // console.log('buildDate', buildDate)
+      // console.log('buildDateUTC', buildDateUTC);
       console.log('hideTour', hideTour);
-      if (buildDateUTC > hideTour) {
+      if (config.buildDate > hideTour) {
         localStorage.removeItem('hideTour');
         return true;
       } else {
