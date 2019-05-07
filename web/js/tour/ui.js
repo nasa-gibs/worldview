@@ -92,7 +92,10 @@ export function tourUi(models, ui, config) {
         'buildDate': buildDate,
         'tourDate': tourDate
       });
+      console.log('buildDate', buildDate);
+      console.log('tourDate', tourDate);
       if (buildDate > tourDate) {
+        console.log('build newer than tour');
         localStorage.removeItem('hideTour');
         return true;
       } else {
@@ -152,6 +155,7 @@ export function tourUi(models, ui, config) {
   };
 
   self.hideTour = function(e) {
+    console.log('tour hidden');
     if (!util.browser.localStorage) return;
     var hideTour = localStorage.getItem('hideTour');
 
@@ -175,7 +179,7 @@ export function tourUi(models, ui, config) {
     });
 
     if (!hideTour) return;
-
+    console.log('show tour ran');
     localStorage.removeItem('hideTour');
   };
 
