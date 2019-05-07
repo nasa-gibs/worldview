@@ -166,7 +166,7 @@ export function tourUi(models, ui, config) {
 
     if (hideTour) return;
 
-    localStorage.setItem('hideTour', new Date());
+    localStorage.setItem('hideTour', new Date(Date.UTC()));
   };
 
   self.showTour = function(e) {
