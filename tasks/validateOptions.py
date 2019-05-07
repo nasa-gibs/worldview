@@ -156,7 +156,7 @@ for startingLayer in wv["defaults"]["startingLayers"]:
     else:
         startingLayers += [startingLayer]
 wv["defaults"]["startingLayers"] = startingLayers
-wv["buildDate"] = datetime.now().isoformat(" ")
+wv["buildDate"] = datetime.utcnow()
 
 for projection, projectionValue in wv["naturalEvents"]["layers"].iteritems():
     for eventType, eventTypeLayerList in projectionValue.iteritems():

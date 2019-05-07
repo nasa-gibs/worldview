@@ -95,6 +95,7 @@ export function tourUi(models, ui, config) {
         'buildDate': buildDateUTC,
         'tourDate': hideTour
       });
+      console.log('config.buildDate', config.buildDate);
       console.log('buildDateUTC', buildDateUTC);
       console.log('hideTour', hideTour);
       if (buildDateUTC > hideTour) {
