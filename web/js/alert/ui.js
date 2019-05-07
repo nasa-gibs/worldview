@@ -28,7 +28,7 @@ export function alertUi(ui) {
 
     self.reactComponent.setState({
       visible: true,
-      message: 'To view these tours again, click the \'Start Tour\' link within the "i" button menu.'
+      message: 'To view these tours again, click the \'Explore Worldview\' link within the "i" button menu.'
     });
 
     setTimeout(() => {
