@@ -88,19 +88,16 @@ export function tourUi(models, ui, config) {
       let buildDateUTC = Date.UTC(buildDate.getUTCFullYear(), buildDate.getUTCMonth(),
         buildDate.getUTCDate(), buildDate.getUTCHours(),
         buildDate.getUTCMinutes(), buildDate.getUTCSeconds());
-      let tourDate = new Date(hideTour);
-      let tourDateUTC = Date.UTC(tourDate.getUTCFullYear(), tourDate.getUTCMonth(),
-        tourDate.getUTCDate(), tourDate.getUTCHours(),
-        tourDate.getUTCMinutes(), tourDate.getUTCSeconds());
 
       // Tour hidden when visiting fresh URL
       googleTagManager.pushEvent({
         'event': 'tour_start_hidden',
-        'buildDate': buildDate,
-        'tourDate': tourDate
+        'buildDate': buildDateUTC,
+        'tourDate': hideTour
       });
-
-      if (buildDateUTC > tourDateUTC) {
+      console.log('buildDateUTC', buildDateUTC);
+      console.log('hideTour', hideTour);
+      if (buildDateUTC > hideTour) {
         localStorage.removeItem('hideTour');
         return true;
       } else {
@@ -169,8 +166,12 @@ export function tourUi(models, ui, config) {
     });
 
     if (hideTour) return;
+    let date = new Date();
+    let dateUTC = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+      date.getUTCDate(), date.getUTCHours(),
+      date.getUTCMinutes(), date.getUTCSeconds());
 
-    localStorage.setItem('hideTour', new Date());
+    localStorage.setItem('hideTour', dateUTC);
   };
 
   self.showTour = function(e) {
