@@ -132,6 +132,7 @@ class Tour extends React.Component {
             showTourAlert={this.props.showTourAlert}
             hideTour={this.props.hideTour}
             showTour={this.props.showTour}
+            storageCheck={this.props.storageCheck}
           ></TourStart>
 
           <TourInProgress
@@ -197,7 +198,8 @@ Tour.propTypes = {
   hideTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
   restartTour: PropTypes.bool.isRequired,
-  metaLoaded: PropTypes.bool.isRequired
+  metaLoaded: PropTypes.bool.isRequired,
+  storageCheck: PropTypes.bool.isRequired
 };
 
 export default Tour;

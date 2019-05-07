@@ -5,6 +5,7 @@ import json
 from optparse import OptionParser
 import os
 import sys
+import time
 from processTemporalLayer import process_temporal
 
 prog = os.path.basename(__file__)
@@ -156,7 +157,7 @@ for startingLayer in wv["defaults"]["startingLayers"]:
     else:
         startingLayers += [startingLayer]
 wv["defaults"]["startingLayers"] = startingLayers
-wv["buildDate"] = datetime.now().isoformat(" ")
+wv["buildDate"] = int(round(time.time() * 1000))
 
 for projection, projectionValue in wv["naturalEvents"]["layers"].iteritems():
     for eventType, eventTypeLayerList in projectionValue.iteritems():
