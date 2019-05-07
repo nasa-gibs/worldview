@@ -74,14 +74,13 @@ export function tourUi(models, ui, config) {
   };
 
   self.checkBuildTimestamp = function() {
-    // If there is no localStorage, always show the tour start modal
-    if (!util.browser.localStorage) return true;
-    var hideTour = localStorage.getItem('hideTour');
-
     // Don't start tour if coming in via a permalink
     if (window.location.search && !config.parameters.tour) {
       return false;
     }
+    // If there is no localStorage, always show the tour start modal
+    if (!util.browser.localStorage) return true;
+    let hideTour = localStorage.getItem('hideTour');
 
     if (hideTour && config.buildDate) {
       let buildDate = new Date(config.buildDate);
