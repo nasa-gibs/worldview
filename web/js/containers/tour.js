@@ -85,7 +85,11 @@ class Tour extends React.Component {
     var uri = `${origin}${pathname}config/metadata/stories/${
       currentStory.id
     }/${description}`;
-    this.setState({ isLoadingMeta: true, metaLoaded: false });
+    this.setState({
+      isLoadingMeta: true,
+      metaLoaded: false,
+      description: 'Loading story description...'
+    });
     fetch(uri)
       .then(res => (res.ok ? res.text() : errorMessage))
       .then(body => {
