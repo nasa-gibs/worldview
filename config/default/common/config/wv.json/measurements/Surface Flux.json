@@ -34,13 +34,13 @@
                       "CERES_Terra_Surface_Longwave_Flux_Down_All_Sky_Monthly",
                       "CERES_Terra_Surface_Shortwave_Flux_Direct_All_Sky_Monthly",
                       "CERES_Terra_Surface_Shortwave_Flux_Diffuse_All_Sky_Monthly",
-                      "CERES_Terra_Surface_UV_Index_All_Sky_Monthly",
                       "CERES_Terra_Surface_Shortwave_Flux_Up_Clear_Sky_Monthly",
                       "CERES_Terra_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
                       "CERES_Terra_Surface_Longwave_Flux_Up_Clear_Sky_Monthly",
                       "CERES_Terra_Surface_Longwave_Flux_Down_Clear_Sky_Monthly",
                       "CERES_Terra_Surface_Shortwave_Flux_Direct_Clear_Sky_Monthly",
-                      "CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly"
+                      "CERES_Terra_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly",
+                      "CERES_Terra_Surface_UV_Index_All_Sky_Monthly"
                     ]
                   },
 
@@ -56,13 +56,13 @@
                             "CERES_Combined_Surface_Longwave_Flux_Down_All_Sky_Monthly",
                             "CERES_Combined_Surface_Shortwave_Flux_Direct_All_Sky_Monthly",
                             "CERES_Combined_Surface_Shortwave_Flux_Diffuse_All_Sky_Monthly",
-                            "CERES_Combined_Surface_UV_Index_All_Sky_Monthly",
                             "CERES_Combined_Surface_Shortwave_Flux_Up_Clear_Sky_Monthly",
                             "CERES_Combined_Surface_Shortwave_Flux_Down_Clear_Sky_Monthly",
                             "CERES_Combined_Surface_Longwave_Flux_Up_Clear_Sky_Monthly",
                             "CERES_Combined_Surface_Longwave_Flux_Down_Clear_Sky_Monthly",
                             "CERES_Combined_Surface_Shortwave_Flux_Direct_Clear_Sky_Monthly",
-                            "CERES_Combined_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly"
+                            "CERES_Combined_Surface_Shortwave_Flux_Diffuse_Clear_Sky_Monthly",
+                            "CERES_Combined_Surface_UV_Index_All_Sky_Monthly"
                           ]
                 }
             }
