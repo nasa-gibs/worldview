@@ -56,7 +56,6 @@ class Data extends React.Component {
 
   render() {
     const { id, productObject, isSelected } = this.props;
-
     return (
       <div
         className={isSelected ? 'dl-group dl-group-selected ' : 'dl-group'}

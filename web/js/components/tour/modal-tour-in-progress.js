@@ -22,7 +22,7 @@ class ModalInProgress extends React.Component {
   // Use custom escFunction since tabIndex prevents escape key use on loading WV
   escFunction(e) {
     if (e.keyCode === 27 && this.props.modalInProgress) {
-      this.props.toggleModalInProgress(e);
+      this.props.endTour();
     }
   }
 
@@ -33,7 +33,7 @@ class ModalInProgress extends React.Component {
       <div>
         <Modal
           isOpen={this.props.modalInProgress}
-          toggle={this.props.toggleModalInProgress}
+          toggle={this.props.endTour}
           onClosed={this.props.showTourAlert}
           wrapClassName="tour tour-in-progress"
           className={
@@ -42,7 +42,7 @@ class ModalInProgress extends React.Component {
           backdrop={false}
           keyboard={false}
         >
-          <ModalHeader toggle={this.props.toggleModalInProgress} charCode="">
+          <ModalHeader toggle={this.props.endTour} charCode="">
             {this.props.currentStory['title']}
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>

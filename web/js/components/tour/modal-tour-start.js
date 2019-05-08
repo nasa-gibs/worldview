@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, InputGroup, InputGroupText, Input } from 'reactstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  InputGroup,
+  InputGroupText,
+  Input
+} from 'reactstrap';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
 
@@ -62,17 +70,42 @@ class ModalStart extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={this.props.modalStart} toggle={this.props.toggleModalStart} onClosed={this.props.showTourAlert} wrapClassName='tour tour-start' className={this.props.className} backdrop={true} fade={false} keyboard={false} innerRef={this.setWrapperRef}>
-        <ModalHeader toggle={this.props.toggleModalStart} charCode="">Welcome to Worldview!</ModalHeader>
+      <Modal
+        isOpen={this.props.modalStart}
+        toggle={this.props.endTour}
+        onClosed={this.props.showTourAlert}
+        wrapClassName="tour tour-start"
+        className={this.props.className}
+        backdrop={true}
+        fade={false}
+        keyboard={false}
+        innerRef={this.setWrapperRef}
+      >
+        <ModalHeader toggle={this.props.endTour} charCode="">
+          Welcome to Worldview!
+        </ModalHeader>
         <ModalBody>
-          <TourIntro toggleModalStart={this.props.toggleModalStart}></TourIntro>
-          <TourBoxes stories={this.props.stories} storyOrder={this.props.storyOrder} selectTour={this.props.selectTour}></TourBoxes>
+          <TourIntro toggleModalStart={this.props.toggleModalStart} />
+          <TourBoxes
+            stories={this.props.stories}
+            storyOrder={this.props.storyOrder}
+            selectTour={this.props.selectTour}
+          />
         </ModalBody>
         <ModalFooter>
           <InputGroup>
             <InputGroupText className="w-100">
-              <Input addon type="checkbox" className="float-right m-0" defaultChecked={this.state.checked} onChange={this.handleCheck} aria-label="Hide this box until a new story has been added." />
-              <span className="ml-2">Do not show until a new story has been added.</span>
+              <Input
+                addon
+                type="checkbox"
+                className="float-right m-0"
+                defaultChecked={this.state.checked}
+                onChange={this.handleCheck}
+                aria-label="Hide this box until a new story has been added."
+              />
+              <span className="ml-2">
+                Do not show until a new story has been added.
+              </span>
             </InputGroupText>
           </InputGroup>
         </ModalFooter>

@@ -5,14 +5,14 @@ import {
   CHANGE_VALUE,
   CHANGE_MODE
 } from './constants';
-const initialState = {
+export const initialCompareState = {
   active: false,
   isCompareA: true,
   mode: 'swipe',
   value: 50,
   activeString: 'active'
 };
-export function compareReducer(state = initialState, action) {
+export function compareReducer(state = initialCompareState, action) {
   switch (action.type) {
     case CHANGE_STATE:
       const newIsCompareA = !state.isCompareA;

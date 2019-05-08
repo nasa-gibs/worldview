@@ -91,14 +91,11 @@ export function mapui(models, config, store) {
         const rotation =
           lodashGet(action, 'payload.query.legacy.map.rotation') || 0;
         if (newState.v && !newState.e && extent) {
-          flyToNewExtent(extent, rotation)
+          flyToNewExtent(extent, rotation);
         }
-        if (newState.p) {
-          updateProjection();
-        }
-        if (newState.l || newState.l1 || newState.ca) {
-          reloadLayers();
-        }
+        // if (newState.l || newState.l1 || newState.ca || newState.p) {
+        updateProjection();
+        // ''}
         return;
       case layerConstants.REMOVE_LAYER:
         return removeLayer(action);
@@ -304,6 +301,7 @@ export function mapui(models, config, store) {
     const compareState = state.compare;
     var layerGroupStr = compareState.isCompareA ? 'active' : 'activeB';
     var activeLayers = layers[layerGroupStr];
+
     if (!config.features.compare || !compareState.active) {
       if (!compareState.active && compareMapUi.active) {
         compareMapUi.destroy();

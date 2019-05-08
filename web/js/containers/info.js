@@ -45,7 +45,8 @@ class InfoList extends Component {
       feedbackIsInitiated,
       aboutClick,
       notifications,
-      config
+      config,
+      startTour
     } = this.props;
     let arr = [
       {
@@ -139,6 +140,9 @@ const mapDispatchToProps = dispatch => ({
         }
       })
     );
+  },
+  startTour: () => {
+    dispatch(startTour());
   },
   aboutClick: () => {
     if (util.browser.small) {

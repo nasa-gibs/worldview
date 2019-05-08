@@ -5,12 +5,24 @@ import TourInProgress from '../components/tour/modal-tour-in-progress';
 import TourComplete from '../components/tour/modal-tour-complete';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
-import { endTour, selectStory } from '../modules/tour/actions';
+import { endTour, selectStory, startTour } from '../modules/tour/actions';
 import { findIndex as lodashFindIndex, get as lodashGet } from 'lodash';
 import update from 'immutability-helper';
 import { history } from '../main';
 import util from '../util/util';
 
+const DEFAULT_STATE = {
+  modalStart: true,
+  modalInProgress: false,
+  modalComplete: false,
+  currentStep: 0,
+  totalSteps: 0,
+  metaLoaded: false,
+  isLoadingMeta: false,
+  currentStory: {},
+  currentStoryId: '',
+  currentStoryIndex: -1
+};
 class Tour extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +42,6 @@ class Tour extends React.Component {
       totalSteps: steps.length,
       metaLoaded: false,
       isLoadingMeta: false,
-      restartTour: true,
       currentStory,
       currentStoryId: props.currentStoryId,
       currentStoryIndex: currentStoryIndex
@@ -39,7 +50,6 @@ class Tour extends React.Component {
     this.toggleModalStart = this.toggleModalStart.bind(this);
     this.toggleModalInProgress = this.toggleModalInProgress.bind(this);
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
-    this.toggleRestartTour = this.toggleRestartTour.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
   }
@@ -96,14 +106,16 @@ class Tour extends React.Component {
   resetTour(e) {
     if (e) e.preventDefault();
     // Tour startup modal shown by clicking "More Stories" button at end of story
-    selectStory('');
+    this.props.startTour();
     googleTagManager.pushEvent({
       event: 'tour_more_stories_button'
     });
     this.setState({
       modalInProgress: false,
       modalComplete: false,
-      restartTour: true
+      metaLoaded: false,
+      modalStart: true,
+      currentStep: 0
     });
   }
   toggleModalInProgress(e) {
@@ -111,13 +123,13 @@ class Tour extends React.Component {
     this.setState({
       modalInProgress: !this.state.modalInProgress
     });
-    this.toggleMetaLoaded();
   }
 
   toggleModalComplete(e) {
     e.preventDefault();
     this.setState({
-      modalComplete: !this.state.modalComplete
+      modalComplete: !this.state.modalComplete,
+      currentStep: this.state.totalSteps
     });
     // The tour completed modal has been shown (all steps complete)
     googleTagManager.pushEvent({
@@ -125,13 +137,6 @@ class Tour extends React.Component {
       story: {
         id: this.state.currentStoryId
       }
-    });
-  }
-
-  toggleRestartTour() {
-    this.setState({
-      restartTour: !this.state.restartTour,
-      metaLoaded: false
     });
   }
   incrementStep(e) {
@@ -167,13 +172,17 @@ class Tour extends React.Component {
       );
     } else {
       this.setState({
-        currentStep: 1,
+        currentStep: 0,
         modalInProgress: false,
         modalStart: true
       });
     }
   }
-
+  endTour(e) {
+    e.preventDefault();
+    this.setState(DEFAULT_STATE);
+    this.props.endTour();
+  }
   render() {
     const {
       stories,
@@ -182,10 +191,8 @@ class Tour extends React.Component {
       hideTour,
       showTour,
       config,
-      restartTour,
       screenHeight,
       screenWidth,
-      endTour,
       processStepLink,
       isActive
     } = this.props;
@@ -207,6 +214,9 @@ class Tour extends React.Component {
       endTour();
     }
     if (stories && isActive) {
+      if (!modalStart && !modalInProgress && !modalComplete) {
+        this.setState({ modalStart: true });
+      }
       return (
         <div>
           {modalStart ? (
@@ -221,12 +231,13 @@ class Tour extends React.Component {
               showTourAlert={showTourAlert}
               hideTour={hideTour}
               showTour={showTour}
+              endTour={this.endTour.bind(this)}
             />
           ) : modalInProgress ? (
             <TourInProgress
               config={config}
               models={models}
-              endTour={endTour}
+              endTour={this.endTour.bind(this)}
               modalInProgress={modalInProgress}
               toggleModalStart={this.toggleModalStart}
               toggleModalInProgress={this.toggleModalInProgress}
@@ -240,12 +251,9 @@ class Tour extends React.Component {
               currentStoryId={currentStoryId}
               currentStory={currentStory}
               showTourAlert={showTourAlert}
-              restartTour={restartTour}
               metaLoaded={metaLoaded}
               isLoadingMeta={isLoadingMeta}
               description={description}
-              toggleRestartTour={this.toggleRestartTour}
-              toggleMetaLoaded={this.toggleMetaLoaded}
               processStepLink={processStepLink}
             />
           ) : (
@@ -256,6 +264,7 @@ class Tour extends React.Component {
               toggleModalInProgress={this.toggleModalInProgress}
               toggleModalComplete={this.toggleModalComplete}
               resetTour={this.resetTour.bind(this)}
+              endTour={this.endTour.bind(this)}
             />
           )}
         </div>
@@ -287,6 +296,12 @@ const mapDispatchToProps = dispatch => ({
     });
     dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
   },
+  startTour: () => {
+    dispatch(startTour());
+  },
+  endTour: () => {
+    dispatch(endTour());
+  },
   showTourAlert: message => {
     // dispatch(showAlert(message));
   },
@@ -316,7 +331,6 @@ function mapStateToProps(state) {
 }
 const hideTour = function(e) {
   var hideTour = localStorage.getItem('hideTour');
-
   // Checkbox to "hide tour modal until a new story has been added" has been checked
   googleTagManager.pushEvent({
     event: 'tour_hide_checked'

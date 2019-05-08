@@ -102,8 +102,8 @@ CompareCase.propTypes = {
   toggleActiveCompareState: PropTypes.func,
   isCompareA: PropTypes.bool,
   height: PropTypes.number,
-  layersA: PropTypes.array,
-  layersB: PropTypes.array
+  layersA: PropTypes.object,
+  layersB: PropTypes.object
 };
 export default connect(
   mapStateToProps,

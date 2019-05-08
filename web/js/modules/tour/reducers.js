@@ -1,4 +1,4 @@
-import { START, UPDATE_SELECTED, EXIT } from './constants';
+import { START, UPDATE_SELECTED, END_TOUR } from './constants';
 import { assign as lodashAssign } from 'lodash';
 
 const INITIAL_STATE = {
@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 
 export default function tourReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case EXIT:
+    case END_TOUR:
       return lodashAssign({}, state, {
         selected: '',
         active: false

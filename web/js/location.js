@@ -5,8 +5,6 @@ import { encode } from './modules/link/util';
 import { getDateParameterSetup } from './modules/date/util';
 import { getAnimationParameterSetup } from './modules/animation/util';
 import { checkTourBuildTimestamp } from './modules/tour/util';
-
-import { tourStartModalCustomProps } from './modules/tour/constants';
 import { getMapParameterSetup } from './modules/map/util';
 import { eventParse, serializeEvent } from './modules/natural-events/util';
 import {
@@ -14,6 +12,7 @@ import {
   layersParse12,
   serializeLayers
 } from './modules/layers/util';
+import { initialCompareState } from './modules/compare/reducers';
 import { resetLayers } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import util from './util/util';
@@ -40,6 +39,10 @@ export function mapLocationToState(state, location) {
           layers: { activeB: { $set: stateFromLocation.layers.active } }
         });
       }
+    } else {
+      stateFromLocation = update(stateFromLocation, {
+        compare: { $set: initialCompareState }
+      });
     }
     // legacy layers permalink
     if (state.parameters.product) {
@@ -115,10 +118,10 @@ const getParameters = function(config, parameters) {
       type: 'array',
       options: {
         parse: permalink => {
-          if (parameters.ca !== undefined) {
-            return layersParse12(permalink, config);
-          }
-          return [];
+          //   if (parameters.ca !== undefined) {
+          return layersParse12(permalink, config);
+          // }
+          // return [];
         },
         serializeNeedsGlobalState: true,
         serialize: (currentLayers, state) => {
@@ -147,10 +150,10 @@ const getParameters = function(config, parameters) {
       initialState: 'swipe',
       options: {
         parse: str => {
-          if (parameters.ca !== undefined) {
-            return str;
-          }
-          return 'swipe';
+          // if (parameters.ca !== undefined) {
+          return str;
+          // }
+          // return 'swipe';
         }
       }
     },
@@ -160,10 +163,10 @@ const getParameters = function(config, parameters) {
       type: 'number',
       options: {
         parse: num => {
-          if (parameters.ca !== undefined) {
-            return num;
-          }
-          return 50;
+          // if (parameters.ca !== undefined) {
+          return num;
+          // }
+          // return 50;
         }
       }
     },

@@ -35,7 +35,6 @@ export class Swipe {
   create() {
     line = addLineOverlay(this.map);
     this.update();
-    console.log('updaating');
   }
 
   getSwipeOffset() {

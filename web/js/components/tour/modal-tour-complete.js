@@ -4,7 +4,14 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 class ModalComplete extends React.Component {
   render() {
-    let readMoreLinks = this.props.currentStory.readMoreLinks;
+    const {
+      currentStory,
+      modalComplete,
+      toggleModalComplete,
+      resetTour,
+      endTour
+    } = this.props;
+    let readMoreLinks = currentStory.readMoreLinks;
     let list;
     if (
       readMoreLinks &&
@@ -28,14 +35,14 @@ class ModalComplete extends React.Component {
     return (
       <div>
         <Modal
-          isOpen={this.props.modalComplete}
-          toggle={this.props.toggleModalComplete}
+          isOpen={modalComplete}
+          toggle={endTour}
           wrapClassName="tour tour-complete"
           backdrop={'static'}
           fade={false}
           keyboard={true}
         >
-          <ModalHeader toggle={this.props.toggleModalComplete} charCode="">
+          <ModalHeader toggle={endTour} charCode="">
             Story Complete
           </ModalHeader>
           <ModalBody>
@@ -51,14 +58,14 @@ class ModalComplete extends React.Component {
             <button
               type="button"
               className="btn btn-primary"
-              onClick={this.props.resetTour}
+              onClick={resetTour}
             >
               More Stories
             </button>
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={this.props.toggleModalComplete}
+              onClick={toggleModalComplete}
             >
               Exit Tutorial
             </button>
@@ -73,7 +80,6 @@ ModalComplete.propTypes = {
   modalComplete: PropTypes.bool.isRequired,
   currentStory: PropTypes.object.isRequired,
   toggleModalComplete: PropTypes.func.isRequired,
-  startTour: PropTypes.func.isRequired,
   resetTour: PropTypes.func.isRequired,
   className: PropTypes.string
 };
