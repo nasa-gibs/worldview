@@ -13,10 +13,16 @@
                     "Carbon Monoxide",
                     "Corrected Reflectance",
                     "Earth at Night",
+                    "Human Built-up And Settlement Extent",
                     "Land Cover",
                     "Land Surface Reflectance",
                     "Land Surface Temperature",
-                    "Sulfur Dioxide"
+                    "Population Density",
+                    "Radiance",
+                    "Settlements",
+                    "Sulfur Dioxide",
+                    "Urban Extents",
+                    "Urban Expansion"
                 ]
             }
         }
