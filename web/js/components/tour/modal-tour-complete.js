@@ -65,7 +65,7 @@ class ModalComplete extends React.Component {
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={toggleModalComplete}
+              onClick={endTour}
             >
               Exit Tutorial
             </button>
