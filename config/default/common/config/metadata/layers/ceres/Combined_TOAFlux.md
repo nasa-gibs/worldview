@@ -14,4 +14,4 @@ Data parameters:
 `WN_TOA_Total_Sky` - TOA Window-Region Flux, Monthly means, All-Sky conditions  
 `WN_TOA_Clear_Sky` - TOA Window-Region Flux, Monthly means, Clear-Sky conditions  
 
-Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition3A`
+Data product: `CER_SYN1deg-Month_Terra-Aqua-MODIS_Edition4A`
