@@ -19,11 +19,12 @@
                     "Orbital Track",
                     "Population Density",
                     "Power Plants, Nuclear",
+                    "Radiance",
                     "Reference Map",
                     "Reservoirs",
                     "Sea Surface Temperature",
                     "Settlements",
-                    "Urban Rural Extents Below 10m Elevation"
+                    "Urban Extents"
                 ]
             }
         }

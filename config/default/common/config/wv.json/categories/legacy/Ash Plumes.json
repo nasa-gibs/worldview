@@ -11,8 +11,13 @@
                     "Aerosol Optical Depth",
                     "Corrected Reflectance",
                     "Fires and Thermal Anomalies",
+                    "Human Built-up And Settlement Extent",
                     "Land Surface Reflectance",
+                    "Population Density",
+                    "Radiance",
+                    "Settlements",
                     "Sulfur Dioxide",
+                    "Urban Extents",
                     "Volcano Hazard"
                 ]
             }

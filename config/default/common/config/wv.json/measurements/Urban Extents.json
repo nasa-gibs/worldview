@@ -11,7 +11,8 @@
                     "description": "sedac/UrbanExtents",
                     "image": "",
                     "settings": [
-                        "GRUMP_Urban_Extents_Grid_1995"
+                        "GRUMP_Urban_Extents_Grid_1995",
+                        "LECZ_Urban_Rural_Extents_Below_10m"
                     ]
                 }
             }
