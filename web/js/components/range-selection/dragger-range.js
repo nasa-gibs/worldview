@@ -228,7 +228,7 @@ class TimelineDraggerRange extends React.Component {
             cursor: 'pointer'
           }}
           // height={this.props.height}
-          height={30}
+          height={65}
           className='dragger-range'
           id={this.props.draggerID}
           onClick={this.handleDraggerClick.bind(this)}

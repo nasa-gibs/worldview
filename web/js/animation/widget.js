@@ -325,6 +325,10 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.onPressPlay = function() {
+    let hasSubDaily = models.layers.hasSubDaily();
+    if (!hasSubDaily) {
+      self.setZeroDateTimes();
+    }
     model.rangeState.playing = true;
     model.events.trigger('play');
   };
@@ -460,17 +464,16 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.setZeroDateTimes = function() {
-//     let state = model.rangeState;
-//     let startDate = util.parseDateUTC(state.startDate);
-//     let endDate = util.parseDateUTC(state.endDate);
-// debugger;
-//     util.clearTimeUTC(startDate);
-//     util.clearTimeUTC(endDate);
+    let state = model.rangeState;
+    let startDate = util.parseDateUTC(state.startDate);
+    let endDate = util.parseDateUTC(state.endDate);
+    util.clearTimeUTC(startDate);
+    util.clearTimeUTC(endDate);
 
-//     // save changes to model
-//     model.rangeState.startDate = util.toISOStringSeconds(startDate);
-//     model.rangeState.endDate = util.toISOStringSeconds(endDate);
-//     model.events.trigger('change');
+    // save changes to model
+    model.rangeState.startDate = util.toISOStringSeconds(startDate);
+    model.rangeState.endDate = util.toISOStringSeconds(endDate);
+    model.events.trigger('change');
   };
 
   self.init();

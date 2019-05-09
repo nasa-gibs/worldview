@@ -40,6 +40,8 @@ export default (function (self) {
   self.getTimeRange = (startDate, endDate, timeScale, timelineStartDateLimit, timelineEndDateLimit) => {
     // const startTime = performance.now();
     let dates = [];
+    let outOfRangeFutureDateCount = 0;
+    let outOfRangePastDateCount = 0;
     let { format } = timeScaleOptions[timeScale].timeAxis;
     // let currentDate = moment.utc(new Date()).add(1, timeScale);
     let startDateLimit = moment.utc(timelineStartDateLimit);
@@ -53,6 +55,11 @@ export default (function (self) {
 
       // # EXPENSIVE IN BETWEEN FOR LARGE NUMBERS - removing cuts function time down some, but may be neglible - main focus is smaller total request size
       let withinRange = startDate.isBetween(startDateLimit, endDateLimit, null, '[]');
+      let outOfRangeFuture = startDate.isAfter(endDateLimit, timeScale);
+
+      if (outOfRangeFuture) {
+        outOfRangeFutureDateCount++;
+      }
 
       let timeObject = {
         dateObject: startDate.toObject(),
@@ -67,7 +74,8 @@ export default (function (self) {
       startDate = nextDate;
     }
     let timeRange = {
-      dates: dates
+      dates: dates,
+      outOfRangeFutureDateCount: outOfRangeFutureDateCount
     };
     // const duration = performance.now() - startTime;
     // console.log(`87 someMethodIThinkMightBeSlow took ${duration}ms`);

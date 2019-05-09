@@ -14,6 +14,7 @@ html, body {
 
 #wv-timeline-axis {
   height: 70px;
+  border-top: 1.5px solid white;
 }
 
 .inner {
@@ -22,21 +23,23 @@ html, body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  border-top: 1.5px solid white;
+  /* border-top: 1.5px solid white; */
     /* -webkit-clip-path: url('#timelineBoundary');
   clip-path: url('#timelineBoundary'); */
 }
 
 .dateToolTip {
-  background: rgb(233, 233, 233);
-  border: thin solid #555;
-  font-size: 16px;
+  background: #212121;
+  color: #fff;
+  border: thin solid #666;
+  font-size: 18px;
   text-align: center;
   border-radius: 5px;
-  width: 110px;
+  width: 115px;
   height: 25px;
   line-height: 25px;
   white-space: nowrap;
+  /* transition: opacity 0.2s ease-in; */
 }
 
 .gridShell {
@@ -201,21 +204,46 @@ form select {
   color: #7890cd !important;
 }
 
-.wv-timeline-hide-arrow {
-  vertical-align: middle;
+.wv-timeline-hide {
+  /* vertical-align: middle; */
   display: block;
-  margin: 26px 0 0 7px;
+  /* margin: 26px 0 0 7px; */
+  top: 18px;
+  right: -5px;
   color: white;
   cursor: pointer;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   user-select: none;
+  height: 30px;
+  width: 30px;
 }
 
+.wv-timeline-hide-double-chevron-left {
+  position: absolute;
+  background: url(../../../images/icon-sprite.svg) -206px -3px no-repeat;
+  border-radius: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: 0;
+  transform: rotate(90deg);
+}
 
-#timeline-hide:hover .wv-timeline-hide-arrow {
-  color: #1a1a1a;
-  background: white;
+.wv-timeline-hide-double-chevron-right {
+  position: absolute;
+  background: url(../../../images/icon-sprite.svg) -206px -3px no-repeat;
+  border-radius: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: 0;
+  transform: rotate(270deg);
+}
+
+#timeline-hide:hover .wv-timeline-hide-double-chevron-left,
+#timeline-hide:hover .wv-timeline-hide-double-chevron-right,
+.wv-timeline-hide-double-chevron-left:hover,
+.wv-timeline-hide-double-chevron-right:hover {
+  background-position: -206px -63px;
 }
 
 .timeline-hamburger-date {
@@ -241,8 +269,8 @@ form select {
   border-top-right-radius: 8px;
   background: #212121;
   position: absolute;
-  top: -113px;
-  left: -153px;
+  top: -111px;
+  left: 0;
   display: none;
   color: #fff;
   border-bottom: 2px solid #444;

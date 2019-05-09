@@ -56,6 +56,7 @@ class TimelineAxis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      hoverLinePosition: 0,
       isDraggerDragging: false,
       showDraggerTime: false,
       dragSentinelCount: 0,
@@ -73,26 +74,24 @@ class TimelineAxis extends React.Component {
       position: 0,
       currentDateRange: null,
       currentTransformX: 0,
-      gridWidth: 100,
+      gridWidth: 12,
       animationStartLocation: 0,
       animationEndLocation: 0,
-      isAnimationDraggerDragging: false
+      isAnimationDraggerDragging: false,
+      wheelZoom: false
     }
   }
   //? how do position and transforms change between scale changes? lock into one line would be ideal
-  updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff) => {
+  updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange) => {
     // console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff)
     let maxDateTEMP = moment.utc(new Date());
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
     let axisWidth = axisWidthInput ? axisWidthInput : this.props.axisWidth;
     let leftOffset = leftOffsetFixedCoeff ? axisWidth * leftOffsetFixedCoeff : this.state.leftOffset;
-    // debugger;
     if (leftOffset === 0) {
       leftOffset = axisWidth / 2;
     }
-    // console.log(leftOffset,axisWidth)
-    // console.log(leftOffset, this.state.draggerPosition)
 
     let numberOfVisibleTiles = Number((axisWidth / gridWidth).toFixed(8));
     let gridNumber = Math.floor(numberOfVisibleTiles * 1.5); // should get from state?
@@ -119,11 +118,11 @@ class TimelineAxis extends React.Component {
     let draggerDateActual;
     let draggerDateActualB;
     if (this.props.draggerSelected === 'selected') {
-      draggerDateActual = moment.utc(inputDate ? inputDate : this.state.draggerTimeState);
+      draggerDateActual = hoverChange ? moment.utc(this.state.draggerTimeState) : moment.utc(inputDate ? inputDate : this.state.draggerTimeState);
       draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
     } else {
       draggerDateActual = moment.utc(this.state.draggerTimeState);
-      draggerDateActualB = moment.utc(inputDate ? inputDate : this.state.draggerTimeStateB);
+      draggerDateActualB = hoverChange ? moment.utc(this.state.draggerTimeStateB) : moment.utc(inputDate ? inputDate : this.state.draggerTimeStateB);
     }
 
     // value of hover time, hover time timeunit zeroed, hover time next unit timeunit zeroed
@@ -189,19 +188,24 @@ class TimelineAxis extends React.Component {
     }
 
     // update animation draggers
-    let animationStartLocationDate;
     let animationStartDraggerLocation;
-    let animationEndLocationDate;
     let animationEndDraggerLocation;
 
     if (true || this.props.startLocationDate) {
-      // animationStartLocationDate = moment.utc(this.props.startLocationDate);
-      animationStartLocationDate = this.props.animStartLocationDate;
-      animationStartDraggerLocation = Math.abs(frontDate.diff(animationStartLocationDate, timeScale, true) * gridWidth);
+      animationStartDraggerLocation = Math.abs(frontDate.diff(this.props.animStartLocationDate, timeScale, true) * gridWidth);
+      animationEndDraggerLocation = Math.abs(frontDate.diff(this.props.animEndLocationDate, timeScale, true) * gridWidth);
+    }
 
-      // animationEndLocationDate = moment.utc(this.props.endLocationDate);
-      animationEndLocationDate = this.props.animEndLocationDate;
-      animationEndDraggerLocation = Math.abs(frontDate.diff(animationEndLocationDate, timeScale, true) * gridWidth);
+    // get axis bounds
+    let timelineStartDateLimit = this.props.timelineStartDateLimit;
+    let timelineEndDateLimit = this.props.timelineEndDateLimit;
+    let diff = hoverTime.diff(timelineEndDateLimit, timeScale);
+    let leftBound = (diff * gridWidth) + midPoint;
+    let rightBound = 5000;
+
+    if (timeScale === 'year') {
+      leftBound = position;
+      rightBound = position;
     }
 
     let currentTransformX = 0;
@@ -230,8 +234,9 @@ class TimelineAxis extends React.Component {
       showHoverLine: false,
       animationStartLocation: animationStartDraggerLocation + position -pixelsToAdd - 2,
       animationEndLocation: animationEndDraggerLocation + position -pixelsToAdd - 2,
-      // animationStartLocationDate: animationStartLocationDate,
-      // animationEndLocationDate: animationEndLocationDate
+      leftBound: leftBound,
+      rightBound: rightBound,
+      wheelZoom: false
     })
   }
 
@@ -243,12 +248,17 @@ class TimelineAxis extends React.Component {
     if (e.deltaY > 0) { // wheel zoom out
       if (arrayIndex > 0) {
         let nextGreaterTimeScale = timeScales[arrayIndex - 1];
-        this.props.changeTimescale(nextGreaterTimeScale);
+        this.setState({
+          wheelZoom: true
+        }, this.props.changeTimescale(nextGreaterTimeScale))
       }
     } else {
       if (arrayIndex < maxIndex) { // wheel zoom in
         let nextSmallerTimeScale = timeScales[arrayIndex + 1];
-        this.props.changeTimescale(nextSmallerTimeScale);
+        // this.props.changeTimescale(nextSmallerTimeScale);
+        this.setState({
+          wheelZoom: true
+        }, this.props.changeTimescale(nextSmallerTimeScale))
       }
     }
   }
@@ -404,6 +414,12 @@ class TimelineAxis extends React.Component {
     let frontDate = moment.utc(dateArray[0].rawDate);
     let backDate = moment.utc(dateArray[dateArray.length - 1].rawDate);
 
+    let midTileDate = moment.utc(dateArray[Math.floor(dateArray.length / 2)].rawDate);
+    console.log(midTileDate)
+    let timelineEndDateLimit = this.props.timelineEndDateLimit;
+    let diff = midTileDate.diff(timelineEndDateLimit, timeScale);
+    console.log(diff)
+
     let draggerPositionRevision = draggerPosition;
     let draggerPositionRevisionB = draggerPositionB;
 
@@ -510,11 +526,13 @@ class TimelineAxis extends React.Component {
       timeScale,
       this.props.timelineStartDateLimit,
       this.props.timelineEndDateLimit);
+      console.log(dateArray.outOfRangeFutureDateCount)
     return dateArray;
   }
 
   // move dragger on axis click
   setLineTime = (e) => {
+    console.log(e, this.state.hoverTime)
     e.preventDefault();
     e.stopPropagation();
     //TODO: handle stop bubbling up to parent wv-timeline-axis to prevent invoking on clicking draggers
@@ -563,6 +581,9 @@ class TimelineAxis extends React.Component {
   componentDidMount() {
     let axisWidth = this.props.axisWidth;
     let timeScale = this.props.timeScale;
+    let timelineStartDateLimit = this.props.timelineStartDateLimit;
+    let timelineEndDateLimit = this.props.timelineEndDateLimit;
+
     let time = moment.utc(this.props.selectedDate);
     let currentDate = moment.utc(new Date());
 
@@ -571,6 +592,10 @@ class TimelineAxis extends React.Component {
       // let diff = time.diff(currentDate, timeScale);
       // console.log(diff)
     // }
+    console.log(timelineStartDateLimit, timelineEndDateLimit)
+
+    let diff = time.diff(timelineEndDateLimit, timeScale);
+    console.log(diff)
 
     // format to strings
     time = time.format();
@@ -587,7 +612,7 @@ class TimelineAxis extends React.Component {
 
     //# calculate number of grids viewable based on axisWidth and gridWidth of timeScale
     let numberOfVisibleTiles = Number((axisWidth / gridWidth).toFixed(8));
-
+    let leftOffset = axisWidth * 0.90;
     // let draggerPosition = tilesTillSelectedDAte * gridWidth - draggerWidth; //# CENTER DRAGGER A
     let draggerVisible = true;
 
@@ -600,6 +625,15 @@ class TimelineAxis extends React.Component {
     //# times 1.5 is cutting it close (down to 1 grid at leading edge - will continue to test)
     let gridNumber = Math.floor(numberOfVisibleTiles * 1.5);
     let dragSentinelChangeNumber = gridWidth * (Math.floor(numberOfVisibleTiles * 0.25) + 1);
+
+    //! offset grids needed since each zoom in won't be centered
+    let offSetGrids = Math.floor(leftOffset / gridWidth);
+    let offSetGridsDiff = offSetGrids - Math.floor(numberOfVisibleTiles / 2);
+
+    let gridsToSubtract = Math.floor(gridNumber/2) + offSetGridsDiff;
+    let gridsToAdd = Math.floor(gridNumber/2) - offSetGridsDiff;
+
+    console.log(offSetGrids, offSetGridsDiff, gridsToSubtract, gridsToAdd)
 
     //# get midPoint for position based on # of tiles and gridWidth
     let midPoint = -((gridWidth * gridNumber) / 2) + (numberOfVisibleTiles / 2 * gridWidth);
@@ -625,19 +659,21 @@ class TimelineAxis extends React.Component {
     let draggerPositionB = Math.abs(frontDate.diff(moment.utc(draggerTimeStateB), timeScale, true) * gridWidth);
 
     // animation dragger positioning
-    let animationStartLocationDate;
     let animationStartDraggerLocation;
-    let animationEndLocationDate;
     let animationEndDraggerLocation;
 
     if (true || this.props.startLocationDate) {
-      animationStartLocationDate = this.props.animStartLocationDate;
-      // animationStartLocationDate = '2019-04-26T18:00:00Z';
-      animationStartDraggerLocation = Math.abs(frontDate.diff(animationStartLocationDate, timeScale, true) * gridWidth);
+      animationStartDraggerLocation = Math.abs(frontDate.diff(this.props.animStartLocationDate, timeScale, true) * gridWidth);
+      animationEndDraggerLocation = Math.abs(frontDate.diff(this.props.animEndLocationDate, timeScale, true) * gridWidth);
+    }
 
-      animationEndLocationDate = this.props.animEndLocationDate;
-      // animationEndLocationDate = '2019-05-02T00:00:00Z';
-      animationEndDraggerLocation = Math.abs(frontDate.diff(animationEndLocationDate, timeScale, true) * gridWidth);
+    // get axis bounds
+    let leftBound = (diff * gridWidth) + midPoint;
+    let rightBound = 5000;
+
+    if (timeScale === 'year') {
+      leftBound = 0;
+      rightBound = 0;
     }
 
     this.setState({
@@ -658,12 +694,12 @@ class TimelineAxis extends React.Component {
       position: midPoint,
       animationStartLocation: animationStartDraggerLocation + midPoint,
       animationEndLocation: animationEndDraggerLocation + midPoint,
-      // animationStartLocationDate: animationStartLocationDate,
-      // animationEndLocationDate: animationEndLocationDate
+      leftBound: leftBound,
+      rightBound: rightBound
+
+    }, function() {
+      this.updateScale(time, timeScale, this.props.axisWidth, 0.90)
     })
-    // }, function() {
-    //   this.updateScale(time, timeScale, this.props.axisWidth, 0.90)
-    // })
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -718,7 +754,19 @@ class TimelineAxis extends React.Component {
     }
 
     if (this.props.timeScale !== prevProps.timeScale) {
-      this.updateScale(null, this.props.timeScale);
+      let draggerDate;
+      let leftOffset;
+      if (this.state.wheelZoom === true) {
+        draggerDate = this.state.hoverTime;
+      } else {
+        leftOffset = 0.5;
+        if (this.props.draggerSelected === 'selected') {
+          draggerDate = this.state.draggerTimeState;
+        } else {
+          draggerDate = this.state.draggerTimeStateB;
+        }
+      }
+      this.updateScale(draggerDate, this.props.timeScale, null, leftOffset, true);
     }
 
     if (this.props.axisWidth !== prevProps.axisWidth) {
@@ -749,6 +797,7 @@ class TimelineAxis extends React.Component {
 
     if(!this.state.isDraggerDragging) {
       // # HANDLE A DRAGGER CHANGE
+      // console.log(this.props.selectedDate, prevProps.selectedDate, this.state.draggerTimeState, prevState.draggerTimeState, this.props.selectedDate, prevProps.selectedDate, this.state.draggerTimeState, prevState.draggerTimeState, moment.utc(this.state.draggerTimeState).format(), moment.utc(prevState.draggerTimeState).format())
       if (this.props.selectedDate && (this.props.selectedDate !== prevProps.selectedDate ||
         this.state.draggerTimeState !== prevState.draggerTimeState ||
         moment.utc(this.state.draggerTimeState).format() !== moment.utc(prevState.draggerTimeState).format())) {
@@ -760,6 +809,7 @@ class TimelineAxis extends React.Component {
             this.setDraggerToTime(this.props.selectedDate);
           } else {
             if (this.props.draggerSelected === 'selected') {
+              debugger;
               let leftOffsetFixedCoeff = newDraggerDate.newDraggerDiff > 5 ? 0.5 : newDraggerDate.newDateInThePast ? 0.25 : 0.75;
               this.updateScale(this.props.selectedDate, this.props.timeScale, null, leftOffsetFixedCoeff);
             }
@@ -835,6 +885,19 @@ class TimelineAxis extends React.Component {
   // handle stop drag of axis
   // moved === false means an axis click
   handleStopDrag = (e, d) => {
+    let timeScale = this.props.timeScale;
+    let options = timeScaleOptions[timeScale].timeAxis;
+    let gridWidth = options.gridWidth;
+
+    // let time = moment.utc(this.props.selectedDate);
+    let currentDateRangeLength = this.state.deque.length;
+    let midTileDate = moment.utc(this.state.deque.get(Math.floor(currentDateRangeLength / 2)).rawDate);
+    console.log(midTileDate)
+    let time = moment.utc(new Date());
+    let timelineEndDateLimit = this.props.timelineEndDateLimit;
+    let diff = midTileDate.diff(timelineEndDateLimit, timeScale);
+
+
     let midPoint = this.state.midPoint;
     let position = this.state.position - midPoint;
     let moved = false;
@@ -842,7 +905,16 @@ class TimelineAxis extends React.Component {
     if (d.x < midPoint || d.x > midPoint) {
       moved = true;
     }
+
+    let leftBound = (diff * gridWidth)
+    if (Math.abs(diff) < Math.floor(currentDateRangeLength / 2)) {
+      console.log('hit')
+      leftBound = midPoint
+    }
+
+    console.log(diff, leftBound, Math.floor(currentDateRangeLength / 2), ((diff * gridWidth)))
     this.setState({
+      leftBound: leftBound,
       moved: moved,
       position: midPoint,
       currentTransformX: this.state.currentTransformX + position,
@@ -891,7 +963,14 @@ class TimelineAxis extends React.Component {
         diffZeroValues = draggerTimeNextZeroValue - draggerTimeZeroValue;
       }
       let diffFactor = diffZeroValues / gridWidth;
-      let newDraggerTime = moment.utc(draggerTimeValue + (diffFactor * deltaX)).format();
+      let newDraggerTime = moment.utc(draggerTimeValue + (diffFactor * deltaX));
+
+      if (newDraggerTime.isAfter(this.props.timelineEndDateLimit, timeScale) ||
+          newDraggerTime.isBefore(this.props.timelineStartDateLimit, timeScale)) {
+        return false;
+      } else {
+        newDraggerTime = newDraggerTime.format();
+      }
 
       // handle drag timeline
       // // TODO: fix drag off current view - doesn't drag/update date of hover properly
@@ -1021,8 +1100,9 @@ class TimelineAxis extends React.Component {
   }
 
   // show hover line
-  showHoverOn = () => {
-    if (!this.state.showDraggerTime) {
+  showHoverOn = (e) => {
+    // console.log(e.target, e.target.className.animVal)
+    if (e.target.className.animVal === 'grid' && !this.state.showDraggerTime) {
       this.setState({
         showHoverLine: true
       });
@@ -1046,13 +1126,13 @@ class TimelineAxis extends React.Component {
   }
 
   //TODO: dynamic bounds to stop axis from dragging too far
-  // getLeftAxisBound = () => {
-  //   return -200;
-  // }
+  getLeftAxisBound = () => {
+    return -200;
+  }
 
-  // getRightAxisBound = () => {
-  //   return 200;
-  // }
+  getRightAxisBound = () => {
+    return 200;
+  }
 
   // handle animation dragger drag change
   animationDraggerPositionUpdate = (startLocation, endLocation, stopDragging) => {
@@ -1097,7 +1177,10 @@ class TimelineAxis extends React.Component {
     this.setState({
       isAnimationDraggerDragging: isDragging,
       animationStartLocation: startLocation,
-      animationEndLocation: endLocation
+      animationEndLocation: endLocation,
+      showHoverLine: false,
+      showDraggerTime: false
+
     }, function() {
       this.props.updateAnimationRange(animationStartLocationDate, animationEndLocationDate)
     })
@@ -1120,18 +1203,43 @@ class TimelineAxis extends React.Component {
     })
   }
 
+  // handle svg blue line hover
+  showHover = (e, itemDate, nextDate, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.persist();
+    requestAnimationFrame(() => {
+      let target = e.target;
+      let clientX = e.clientX;
+      let boundingClientRect = target.getBoundingClientRect();
+      let xHoverPositionInCurrentGrid = Math.floor(clientX) - Math.floor(boundingClientRect.left);
+      let options = timeScaleOptions[this.props.timeScale].timeAxis;
+      let gridWidth = options.gridWidth;
+
+      let currentDateValue = moment.utc(itemDate).valueOf();
+      let nextDateValue = moment.utc(nextDate).valueOf();
+      let diff = nextDateValue - currentDateValue;
+      let diffFactor = diff / gridWidth;
+      let displayDate = moment.utc(currentDateValue + (xHoverPositionInCurrentGrid * diffFactor)).format();
+      this.displayDate(displayDate, clientX);
+      this.setState({
+        hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid + this.state.currentTransformX + this.state.position
+      })
+    })
+  }
+
   render() {
     let draggerTimeLeftOffest = this.props.draggerSelected === 'selected'
-      ? this.state.draggerPosition - (this.props.hasSubdailyLayers ? 33 : 3)
-      : this.state.draggerPositionB - (this.props.hasSubdailyLayers ? 33 : 3);
-    let hoverTimeLeftOffset = this.props.hasSubdailyLayers ? this.state.leftOffset - 82 : this.state.leftOffset - 52;
+      ? this.state.draggerPosition - (this.props.hasSubdailyLayers ? 44 : 8)
+      : this.state.draggerPositionB - (this.props.hasSubdailyLayers ? 44 : 8);
+    let hoverTimeLeftOffset = this.props.hasSubdailyLayers ? this.state.leftOffset - 93 : this.state.leftOffset - 57;
     return (
       <React.Fragment>
       <div id="wv-timeline-axis"
         style={{width: `${this.props.axisWidth}px`}}
         onMouseUp={(e) => this.setLineTime(e)}
         onWheel={(e) => this.wheelZoom(e)}
-        onMouseOver={this.showHoverOn}
+        onMouseOver={(e) => this.showHoverOn(e)}
         onMouseLeave={this.showHoverOff}
       >
       {this.state.currentDateRange ?
@@ -1159,11 +1267,13 @@ class TimelineAxis extends React.Component {
           position={{ x: this.state.position, y: 0 }}
           onStop={this.handleStopDrag.bind(this)}
           // bounds={{ left: this.getLeftAxisBound(), top: 0, bottom: 0, right: this.getRightAxisBound() }}
-          // bounds={{left: -200, top: 0, bottom: 0, right: 200}}
+          // bounds={{left: -400, top: 0, bottom: 0, right: 0}}
+          // bounds={{left: this.state.leftBound, top: 0, bottom: 0, right: this.state.rightBound}}
         >
         <g>
           <GridRange
-            showHoverLine={this.state.showHoverLine}
+            // showHoverLine={this.state.showHoverLine}
+            showHover={this.showHover}
             timeScale={this.props.timeScale}
             displayDate={this.displayDate}
             gridWidth={this.state.gridWidth}
@@ -1172,7 +1282,10 @@ class TimelineAxis extends React.Component {
         </g>
         </Draggable>
 
-        {/* //? INSERT RANGE SELECTION HERE */}
+        <line className="svgLine" style={{display: this.state.showHoverLine ? 'block' : 'none'}}
+          stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="63"
+          transform={`translate(${this.state.hoverLinePosition + 1}, 0)`} shapeRendering="optimizeSpeed"/>
+
         {this.props.isAnimationWidgetOpen ?
           <TimelineRangeSelector
             startLocation={this.state.animationStartLocation}
@@ -1181,12 +1294,12 @@ class TimelineAxis extends React.Component {
             endLocationDate={this.props.animEndLocationDate}
             timelineStartDateLimit={this.props.timelineStartDateLimit}
             timelineEndDateLimit={this.props.timelineEndDateLimit}
-            max={{end: false, start: false, startOffset: -50, width: this.props.axisWidth}}
+            max={{end: false, start: false, startOffset: -50, width: 50000}}
             pinWidth={5}
             height={45}
-            // onDrag={(sx, ex) => console.log('onDrag', sx, ex)}
             onDrag={this.animationDraggerPositionUpdate.bind(this)}
-            onRangeClick={() => console.log('onRangeClick')}
+            onHover={this.showHoverOff}
+            onRangeClick={this.setLineTime.bind(this)}
             rangeOpacity={0.3}
             rangeColor={"#45bdff"}
             startColor={"#40a9db"}
@@ -1256,13 +1369,14 @@ class TimelineAxis extends React.Component {
           style={{
             transform: `translate(${draggerTimeLeftOffest}px, -100px)`,
             display: this.state.showDraggerTime && this.state.draggerTimeState ? 'block' : 'none',
-            width: this.props.hasSubdailyLayers ? '170px' : '110px'
+            // opacity: this.state.showDraggerTime && this.state.draggerTimeState ? '1' : '0',
+            width: this.props.hasSubdailyLayers ? '185px' : '115px'
           }}
         >
           { this.state.showDraggerTime && this.state.draggerTimeState
             ? this.props.draggerSelected === 'selected'
-            ? this.props.hasSubdailyLayers ? this.state.draggerTimeState : this.state.draggerTimeState.split('T')[0]
-            : this.props.hasSubdailyLayers ? this.state.draggerTimeStateB : this.state.draggerTimeStateB.split('T')[0]
+            ? this.props.hasSubdailyLayers ? this.state.draggerTimeState.split('T').join(' ') : this.state.draggerTimeState.split('T')[0]
+            : this.props.hasSubdailyLayers ? this.state.draggerTimeStateB.split('T').join(' ') : this.state.draggerTimeStateB.split('T')[0]
             : null
           }
         </div>
@@ -1273,11 +1387,12 @@ class TimelineAxis extends React.Component {
           style={{
             transform: `translate(${hoverTimeLeftOffset}px, -100px)`,
             display: !this.state.showDraggerTime && this.state.showHoverLine ? 'block' : 'none',
-            width: this.props.hasSubdailyLayers ? '170px' : '110px'
+            // opacity: !this.state.showDraggerTime && this.state.showHoverLine ? '1' : '0',
+            width: this.props.hasSubdailyLayers ? '185px' : '115px'
           }}
         >
           { !this.state.showDraggerTime && this.state.hoverTime
-            ? this.props.hasSubdailyLayers ? this.state.hoverTime : this.state.hoverTime.split('T')[0]
+            ? this.props.hasSubdailyLayers ? this.state.hoverTime.split('T').join(' ') : this.state.hoverTime.split('T')[0]
             : null
           }
         </div>

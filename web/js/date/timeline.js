@@ -485,7 +485,7 @@ export function timeline(models, config, ui) {
     let animStartLocationDate = models.anim.rangeState.startDate;
     let animEndLocationDate = models.anim.rangeState.endDate;
     let isAnimationWidgetOpen = models.anim.rangeState.state === 'on';
-    // console.log(animStartLocationDate, animEndLocationDate)
+    console.log(animStartLocationDate, animEndLocationDate)
 
     console.log(models.anim.rangeState.state)
 
@@ -658,9 +658,14 @@ export function timeline(models, config, ui) {
   };
 
   var onAnimationWidgetToggle = () => {
+    let animationStartLocationDate = models.anim.rangeState.startDate;
+    let animationEndLocationDate = models.anim.rangeState.endDate;
     let isAnimationWidgetOpen = models.anim.rangeState.state === 'on';
+
     self.reactComponent.setState({
-      isAnimationWidgetOpen: isAnimationWidgetOpen
+      isAnimationWidgetOpen: isAnimationWidgetOpen,
+      animStartLocationDate: animationStartLocationDate,
+      animEndLocationDate: animationEndLocationDate
     });
   };
 
@@ -700,7 +705,6 @@ export function timeline(models, config, ui) {
       );
     }
 
-    // self.x = d3.time.scale.utc();
     self.resize();
 
     if (util.browser.localStorage) {
@@ -733,7 +737,7 @@ export function timeline(models, config, ui) {
 
     models.layers.events.on('change', onLayerUpdate);
 
-    models.anim.events.on('datechange', onAnimationDateChange);
+    models.anim.events.on('change', onAnimationDateChange);
     models.anim.events.on('toggle-widget', onAnimationWidgetToggle);
 
     // Determine maximum end date and move tl pick there if selected date is

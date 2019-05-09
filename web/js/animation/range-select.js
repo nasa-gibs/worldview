@@ -1,8 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import RangeSelector from '../components/range-selection/range-selection';
-import d3 from 'd3';
+// import d3 from 'd3';
 import util from '../util/util';
+
+const timeScaleFromNumberKey = {
+  '0': 'custom',
+  '1': 'year',
+  '2': 'month',
+  '3': 'day',
+  '4': 'hour',
+  '5': 'minute'
+};
 
 export function animationRangeSelect(models, config, ui) {
   var self = {};
@@ -77,46 +86,48 @@ export function animationRangeSelect(models, config, ui) {
     // TODO: Pull in new dragger pick
     // var pick = d3.select('#guitarpick');
     // var pickWidth = pick.node().getBoundingClientRect().width;
-    var pickWidth = 50;
+    // var pickWidth = 50;
     // var animEndLocation =
     //   d3.transform(pick.attr('transform')).translate[0] - pickWidth / 2; // getting guitar pick location
-    var animEndLocation = 300;
+    // var animEndLocation = 300;
     if (model.rangeState.startDate) {
       startLocation = self.getLocationFromStringDate(
         model.rangeState.startDate
       );
       endLocation = self.getLocationFromStringDate(model.rangeState.endDate);
     } else {
-      startLocation = animEndLocation - 100;
-      endLocation = animEndLocation;
+      // startLocation = animEndLocation - 100;
+      // endLocation = animEndLocation;
+      startLocation = 0;
+      endLocation = 0;
       self.updateRange(startLocation, endLocation);
     }
 
-    options = {
-      // startLocation: startLocation, // or zero
-      // endLocation: endLocation,
-      startLocation: -250, // or zero
-      endLocation: -260,
-      startLocationDate: model.rangeState.startDate,
-      endLocationDate: model.rangeState.endDate,
-      timelineStartDateLimit: timelineStartDateLimit,
-      timelineEndDateLimit: timelineEndDateLimit,
-      max: self.getMaxWidth(),
-      startColor: '#40a9db',
-      endColor: '#295f92',
-      startTriangleColor: '#fff',
-      endTriangleColor: '#4b7aab',
-      rangeColor: '#45bdff',
-      rangeOpacity: 0.3,
-      pinWidth: 5,
-      height: 45,
-      onDrag: self.updateRange,
-      onRangeClick: self.onRangeClick
-    };
-    self.reactComponent = ReactDOM.render(
-      React.createElement(RangeSelector, options),
-      $mountLocation[0]
-    );
+    // options = {
+    //   // startLocation: startLocation, // or zero
+    //   // endLocation: endLocation,
+    //   startLocation: -250, // or zero
+    //   endLocation: -260,
+    //   startLocationDate: model.rangeState.startDate,
+    //   endLocationDate: model.rangeState.endDate,
+    //   timelineStartDateLimit: timelineStartDateLimit,
+    //   timelineEndDateLimit: timelineEndDateLimit,
+    //   max: self.getMaxWidth(),
+    //   startColor: '#40a9db',
+    //   endColor: '#295f92',
+    //   startTriangleColor: '#fff',
+    //   endTriangleColor: '#4b7aab',
+    //   rangeColor: '#45bdff',
+    //   rangeOpacity: 0.3,
+    //   pinWidth: 5,
+    //   height: 45,
+    //   onDrag: self.updateRange,
+    //   onRangeClick: self.onRangeClick
+    // };
+    // self.reactComponent = ReactDOM.render(
+    //   React.createElement(RangeSelector, options),
+    //   $mountLocation[0]
+    // );
   };
 
   /*
@@ -149,7 +160,7 @@ export function animationRangeSelect(models, config, ui) {
    */
   self.getLocationFromStringDate = function(date) {
     // return timeline.x(util.roundTimeTenMinute(date));
-    return -200;
+    // return -200;
   };
 
   /*
@@ -164,8 +175,8 @@ export function animationRangeSelect(models, config, ui) {
    */
   self.update = function() {
     // being called from timeline.config.js
-    var props = self.updateOptions();
-    self.reactComponent.setState(props);
+    // var props = self.updateOptions();
+    // self.reactComponent.setState(props);
   };
 
   /*
@@ -261,8 +272,10 @@ export function animationRangeSelect(models, config, ui) {
   self.updateRange = function(startLocation, EndLocation, TEST) {
     // var startDate = util.roundTimeTenMinute(timeline.x.invert(startLocation));
     // var endDate = util.roundTimeTenMinute(timeline.x.invert(EndLocation));
-    var startDate = new Date();
+    let selectedZoom = timeScaleFromNumberKey[models.date.selectedZoom];
+    var startDate = util.dateAdd(new Date(), selectedZoom, -7);
     var endDate = new Date();
+
     if (TEST) {
       startDate = new Date(startLocation);
       endDate = new Date(EndLocation);

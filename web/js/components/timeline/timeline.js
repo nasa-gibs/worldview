@@ -167,16 +167,6 @@ class Timeline extends React.Component {
               timeScaleChangeUnit={this.state.timeScaleChangeUnit}
             />
 
-            {/* custom interval selector */}
-            <CustomIntervalSelectorWidget
-              customIntervalValue={this.state.customIntervalValue}
-              customIntervalZoomLevel={this.state.customIntervalZoomLevel}
-              toggleCustomIntervalModal={this.toggleCustomIntervalModal}
-              customIntervalModalOpen={this.state.customIntervalModalOpen}
-              setIntervalChangeUnit={this.setIntervalChangeUnit}
-              hasSubdailyLayers={this.state.hasSubdailyLayers}
-            />
-
             <DateChangeArrows
               leftArrowDown={() => this.incrementDate(-1)}
               leftArrowUp={this.props.stopper}
@@ -212,6 +202,16 @@ class Timeline extends React.Component {
             animEndLocationDate={this.state.animEndLocationDate}
             isAnimationWidgetOpen={this.state.isAnimationWidgetOpen}
           />
+
+        {/* custom interval selector */}
+        <CustomIntervalSelectorWidget
+          customIntervalValue={this.state.customIntervalValue}
+          customIntervalZoomLevel={this.state.customIntervalZoomLevel}
+          toggleCustomIntervalModal={this.toggleCustomIntervalModal}
+          customIntervalModalOpen={this.state.customIntervalModalOpen}
+          setIntervalChangeUnit={this.setIntervalChangeUnit}
+          hasSubdailyLayers={this.state.hasSubdailyLayers}
+        />
         </div>
 
         {/* Zoom Level Change */}
@@ -226,9 +226,9 @@ class Timeline extends React.Component {
         {/* 🍔 Open/Close Chevron 🍔 */}
         <div id="timeline-hide" onClick={this.toggleHideTimeline}>
           {this.state.timelineHidden ?
-          <i className="fas fa-chevron-right wv-timeline-hide-arrow"></i>
+          <div className="wv-timeline-hide wv-timeline-hide-double-chevron-left"></div>
           :
-          <i className="fas fa-chevron-left wv-timeline-hide-arrow"></i>
+          <div className="wv-timeline-hide wv-timeline-hide-double-chevron-right"></div>
           }
         </div>
       </React.Fragment>

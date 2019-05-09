@@ -73,8 +73,10 @@ class CustomIntervalSelectorWidget extends PureComponent {
         id="wv-animation-widget-custom-interval"
         onKeyDown={this.handleKeyPress}
         className='wv-animation-widget-custom-interval'
-        style={{display: this.props.customIntervalModalOpen ? 'block' : 'none',
-                left: this.props.hasSubdailyLayers ? '-258px' : '-153px'}}
+        // style={{display: this.props.customIntervalModalOpen ? 'block' : 'none',
+        //         left: this.props.hasSubdailyLayers ? '-258px' : '-153px'}}
+        style={{display: this.props.customIntervalModalOpen ? 'block' : 'none'}}
+                // left: this.props.hasSubdailyLayers ? '-258px' : '-153px'}}
       >
 
       <div>Custom Interval Selector</div>
