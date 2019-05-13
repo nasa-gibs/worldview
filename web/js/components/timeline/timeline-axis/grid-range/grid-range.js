@@ -4,13 +4,13 @@ import moment from 'moment';
 import TileRect from './tile-rect';
 import TileText from './tile-text';
 
-//# PureComponent performs a shallow comparison of props and state - may not need shouldComponentUpdate
+// # PureComponent performs a shallow comparison of props and state - may not need shouldComponentUpdate
 class GridRange extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       // hoverLinePosition: 0
-    }
+    };
   }
 
   // showHover = (e, itemDate, nextDate, index) => {
@@ -53,7 +53,7 @@ class GridRange extends PureComponent {
           stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="63"
           transform={`translate(${this.state.hoverLinePosition + 1}, 0)`} shapeRendering="optimizeSpeed"/> */}
       </g>
-    )
+    );
   }
 }
 
@@ -84,7 +84,7 @@ const tileTextConditionOptions = {
     let timeScaleUnit = itemDateObject.years;
     return timeScaleUnit % 10 === 0;
   }
-}
+};
 
 class TileHolder extends PureComponent {
   render() {
@@ -94,28 +94,28 @@ class TileHolder extends PureComponent {
       <React.Fragment>
         {this.props.dateArray.map((item, index) => {
           return (
-            item.withinRange ?
-            <React.Fragment key={index}>
-              <TileRect
-                item={item}
-                index={index}
-                gridWidth={this.props.gridWidth}
-                showHover={this.props.showHover}
-              />
-              {tileTextCondition(item.dateObject) ?
-              <TileText
-                item={item}
-                index={index}
-                gridWidth={this.props.gridWidth}
-              />
-              : null }
-            </React.Fragment>
-            : null
-          )
+            item.withinRange
+              ? <React.Fragment key={index}>
+                <TileRect
+                  item={item}
+                  index={index}
+                  gridWidth={this.props.gridWidth}
+                  showHover={this.props.showHover}
+                />
+                {tileTextCondition(item.dateObject)
+                  ? <TileText
+                    item={item}
+                    index={index}
+                    gridWidth={this.props.gridWidth}
+                  />
+                  : null }
+              </React.Fragment>
+              : null
+          );
         }
         )}
       </React.Fragment>
-    )
+    );
   }
 }
 

@@ -10,7 +10,7 @@ class Dragger extends PureComponent {
         axis='x'
         onMouseDown={selectDragger.bind(this, draggerName)}
         onDrag={handleDragDragger.bind(this, draggerName)}
-        position={{ x: draggerPosition, y: -25 }}
+        position={{ x: draggerPosition - 12, y: -20 }}
         onStart={() => toggleShowDraggerTime(true)}
         onStop={() => toggleShowDraggerTime(false)}
         disabled={disabled}
@@ -19,7 +19,7 @@ class Dragger extends PureComponent {
           style={{ cursor: 'pointer', display: this.props.draggerVisible ? 'flex' : 'none' }}
           className='gridShell dragger' transform={`translate(${transformX}, 0)`}
         >
-          <polygon fill={disabled ? '#7a7a7a' : '#ccc'} stroke='#515151' strokeWidth='2px' points='50,25, 85,85, 15,85'></polygon>
+          <polygon fill={disabled ? '#7a7a7a' : '#ccc'} stroke='#333' strokeWidth='1px' points='60,20, 95,65, 25,65'></polygon>
           {compareModeActive
             ? <text
               fontSize='30px'
@@ -33,9 +33,9 @@ class Dragger extends PureComponent {
               {draggerLetter}
             </text>
             : <React.Fragment>
-              <rect pointerEvents="none" fill='#515151' width='4' height='20' x='41' y='55'></rect>
-              <rect pointerEvents="none" fill='#515151' width='4' height='20' x='48' y='55'></rect>
-              <rect pointerEvents="none" fill='#515151' width='4' height='20' x='55' y='55'></rect>
+              <rect pointerEvents="none" fill='#515151' width='3' height='20' x='52' y='39'></rect>
+              <rect pointerEvents="none" fill='#515151' width='3' height='20' x='58' y='39'></rect>
+              <rect pointerEvents="none" fill='#515151' width='3' height='20' x='64' y='39'></rect>
             </React.Fragment>
           }
         </g>

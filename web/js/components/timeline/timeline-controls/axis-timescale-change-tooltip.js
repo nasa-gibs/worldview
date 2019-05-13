@@ -24,7 +24,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             id="current-zoom"
             className={'zoom-btn zoom-level-display-text'}
           >
-            {timeUnitAbbreviations[this.props.timeScale]}
+            {/* {timeUnitAbbreviations[this.props.timeScale]} */}
+            {this.props.timeScale}
           </span>
           <div className="wv-zoom-tooltip"
             style={{ display: this.props.toolTipHovered ? 'block' : 'none' }}

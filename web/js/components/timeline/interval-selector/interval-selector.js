@@ -42,11 +42,13 @@ class CustomIntervalSelectorWidget extends PureComponent {
   }
 
   handleKeyPress = (e) => {
-    if (e.key == 'Enter') {
-      const value = this.state.intervalValue;
+    const value = this.state.intervalValue;
+    if (e.key === 'Enter') {
       if (value > 0) {
         this.setIntervalChangeUnit();
       }
+    } else if (e.key === 'Escape') {
+      this.props.toggleCustomIntervalModal();
     }
   }
 
@@ -58,6 +60,11 @@ class CustomIntervalSelectorWidget extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    // handle focus widget on opening
+    if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
+      this.customIntervalWidget.focus();
+    }
+    // update if higher state changed
     if (prevProps.customIntervalValue !== this.props.customIntervalValue
      || prevProps.zoomLevel !== this.props.zoomLevel) {
       this.setState({
@@ -73,14 +80,13 @@ class CustomIntervalSelectorWidget extends PureComponent {
         id="wv-animation-widget-custom-interval"
         onKeyDown={this.handleKeyPress}
         className='wv-animation-widget-custom-interval'
-        // style={{display: this.props.customIntervalModalOpen ? 'block' : 'none',
-        //         left: this.props.hasSubdailyLayers ? '-258px' : '-153px'}}
         style={{display: this.props.customIntervalModalOpen ? 'block' : 'none'}}
-                // left: this.props.hasSubdailyLayers ? '-258px' : '-153px'}}
+        tabIndex={0}
+        ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >
 
       <div>Custom Interval Selector</div>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '10px' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <div style={{display: 'flex', flexDirection: 'row' }}>
           <IntervalInput
             intervalValue={Number(this.state.intervalValue)}

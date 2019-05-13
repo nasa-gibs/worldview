@@ -19,6 +19,12 @@ class AxisTimeScaleChangeControls extends PureComponent {
   render() {
     return (
       <div className="zoom-level-change-arrows">
+        <AxisTimeScaleChangeTooltip
+          timeScale={this.props.timeScale}
+          toolTipHovered={this.props.toolTipHovered}
+          changeTimeScale={this.props.changeTimeScale}
+          hasSubdailyLayers={this.props.hasSubdailyLayers}
+        />
         <div
           onClick={this.onClickUp}
           className="date-arrows date-arrow-up"
@@ -27,12 +33,6 @@ class AxisTimeScaleChangeControls extends PureComponent {
             <path d="M 12.5,0 25,8 0,8 z" className="uparrow" />
           </svg>
         </div>
-        <AxisTimeScaleChangeTooltip
-          timeScale={this.props.timeScale}
-          toolTipHovered={this.props.toolTipHovered}
-          changeTimeScale={this.props.changeTimeScale}
-          hasSubdailyLayers={this.props.hasSubdailyLayers}
-        />
         <div
           onClick={this.onClickDown}
           className="date-arrows date-arrow-down"

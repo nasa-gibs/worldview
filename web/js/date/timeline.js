@@ -485,9 +485,9 @@ export function timeline(models, config, ui) {
     let animStartLocationDate = models.anim.rangeState.startDate;
     let animEndLocationDate = models.anim.rangeState.endDate;
     let isAnimationWidgetOpen = models.anim.rangeState.state === 'on';
-    console.log(animStartLocationDate, animEndLocationDate)
+    // console.log(animStartLocationDate, animEndLocationDate)
 
-    console.log(models.anim.rangeState.state)
+    // console.log(models.anim.rangeState.state)
 
     // get separate input props
     // TODO: combined props cleaner or too long?
@@ -627,9 +627,9 @@ export function timeline(models, config, ui) {
       subdaily = models.layers.hasSubDaily();
     }
 
-    // let subdaily = models.layers.hasSubDaily();
-    if (!subdaily && (models.date.customInterval > 3 || models.date.interval > 3)) {
-      setIntervalInput(1, 'day')
+    // handle state updating and resetting to DAY if in subdaily interval/zoom
+    if (!subdaily && (models.date.selectedZoom > 3 || models.date.customInterval > 3 || models.date.interval > 3)) {
+      setIntervalInput(1, 'day');
       self.reactComponent.setState({
         hasSubdailyLayers: subdaily
       }, changeTimeScale('day'));
