@@ -1,1 +1,1 @@
-<p></p>
+<p>Sun glint can be a curse or a blessing - researchers studying phytoplankton or ocean color often have parts of imagery that are obscured for them due to the sun glint, making it difficult to see what's happening in the water.</p>
