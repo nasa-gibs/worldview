@@ -1014,6 +1014,7 @@ export function mapui(models, config, store) {
     function onMouseMove(e) {
       var coords;
       var pixels;
+      const state = store.getState();
       if (compareMapUi && compareMapUi.dragging) return;
       // if mobile return
       if (util.browser.small) {
@@ -1044,10 +1045,9 @@ export function mapui(models, config, store) {
       }
       // Don't add data runners if we're on the events or data tabs, or if map is animating
       var isEventsTabActive =
-        typeof models.naturalEvents !== 'undefined' &&
-        models.naturalEvents.active;
+        typeof state.events !== 'undefined' && state.events.active;
       var isDataTabActive =
-        typeof models.data !== 'undefined' && models.data.active;
+        typeof state.data !== 'undefined' && state.data.active;
       var isMapAnimating =
         typeof models.anim !== 'undefined' && models.anim.rangeState.playing;
       if (isEventsTabActive || isDataTabActive || isMapAnimating) return;

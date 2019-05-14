@@ -2,7 +2,8 @@ import update from 'immutability-helper';
 import {
   each as lodashEach,
   find as lodashFind,
-  assign as lodashAssign
+  assign as lodashAssign,
+  isArray
 } from 'lodash';
 import {
   setCustom as setCustomSelector,

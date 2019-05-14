@@ -285,7 +285,7 @@ function mapStateToProps(state, ownProps) {
     index,
     layerGroupName
   } = ownProps;
-  const { palettes, config } = state;
+  const { palettes, config, map } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers.${layer.id}.palette.id`);
@@ -294,6 +294,7 @@ function mapStateToProps(state, ownProps) {
       ? getLegends(layer.id, layerGroupName, state)
       : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
+
   return {
     layer,
     isDisabled,
@@ -310,7 +311,8 @@ function mapStateToProps(state, ownProps) {
     hasPalette,
     getPalette: (layerId, index) => {
       return getPalette(layer.id, index, layerGroupName, state);
-    }
+    },
+    runningObject: map.runningDataObj[layer.id]
   };
 }
 

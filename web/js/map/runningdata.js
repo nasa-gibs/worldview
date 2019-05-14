@@ -2,6 +2,10 @@ import util from '../util/util';
 import lodashIsEqual from 'lodash/isEqual';
 import lodashIsEmpty from 'lodash/isEmpty';
 import { getPalette } from '../modules/palettes/selectors';
+import {
+  runningData as runningDataAction,
+  clearRunningData as clearRunningDataAction
+} from '../modules/map/actions';
 
 export function MapRunningData(models, compareUi, store) {
   var self;
@@ -14,7 +18,7 @@ export function MapRunningData(models, compareUi, store) {
   self.clearAll = function() {
     if (!lodashIsEmpty(dataObj)) {
       dataObj = {};
-      models.map.events.trigger('data-running', dataObj);
+      store.dispatch(clearRunningDataAction());
     }
   };
   /**
@@ -78,7 +82,7 @@ export function MapRunningData(models, compareUi, store) {
     });
     if (!lodashIsEqual(activeLayerObj, dataObj)) {
       dataObj = activeLayerObj;
-      models.map.events.trigger('data-running', dataObj);
+      store.dispatch(runningDataAction(dataObj));
     }
   };
   return self;

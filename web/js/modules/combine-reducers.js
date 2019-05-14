@@ -13,6 +13,7 @@ import {
   eventRequestResponse
 } from './natural-events/reducers';
 import tourReducer from './tour/reducers';
+import mapReducer from './map/reducers';
 import {
   notificationsRequest,
   notificationsReducer
@@ -82,6 +83,7 @@ const reducers = {
   data: dataDownloadReducer,
   palettes: paletteReducer,
   tour: tourReducer,
+  map: mapReducer,
   requestedEvents,
   requestedEventSources,
   requestedEventCategories,
