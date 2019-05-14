@@ -40,14 +40,14 @@ class GridRange extends PureComponent {
   }
 
   render() {
-    let gridWidth = this.props.gridWidth;
+    let { gridWidth, transformX, timeScale, dateArray, showHover } = this.props;
     return (
-      <g className="gridShell" transform={`translate(${this.props.transformX}, 0)`}>
+      <g className="gridShell" transform={`translate(${transformX}, 0)`}>
         <TileHolder
-          timeScale={this.props.timeScale}
-          dateArray={this.props.dateArray}
+          timeScale={timeScale}
+          dateArray={dateArray}
           gridWidth={gridWidth}
-          showHover={this.props.showHover}
+          showHover={showHover}
         />
         {/* <line className="svgLine" style={{display: this.props.showHoverLine ? 'block' : 'none'}}
           stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="63"
@@ -88,25 +88,25 @@ const tileTextConditionOptions = {
 
 class TileHolder extends PureComponent {
   render() {
-    let timeScale = this.props.timeScale;
+    let { gridWidth, timeScale, dateArray, showHover } = this.props;
     let tileTextCondition = tileTextConditionOptions[timeScale];
     return (
       <React.Fragment>
-        {this.props.dateArray.map((item, index) => {
+        {dateArray.map((item, index) => {
           return (
             item.withinRange
               ? <React.Fragment key={index}>
                 <TileRect
                   item={item}
                   index={index}
-                  gridWidth={this.props.gridWidth}
-                  showHover={this.props.showHover}
+                  gridWidth={gridWidth}
+                  showHover={showHover}
                 />
                 {tileTextCondition(item.dateObject)
                   ? <TileText
                     item={item}
                     index={index}
-                    gridWidth={this.props.gridWidth}
+                    gridWidth={gridWidth}
                   />
                   : null }
               </React.Fragment>

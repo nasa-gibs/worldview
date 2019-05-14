@@ -1,14 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-const timeUnitAbbreviations = {
-  year: 'year',
-  month: 'mon',
-  day: 'day',
-  hour: 'hour',
-  minute: 'min'
-};
-
 /*
  * Tooltip appears on hover with clickable timeScales based on subdaily availabilty
  *
@@ -24,7 +16,6 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             id="current-zoom"
             className={'zoom-btn zoom-level-display-text'}
           >
-            {/* {timeUnitAbbreviations[this.props.timeScale]} */}
             {this.props.timeScale}
           </span>
           <div className="wv-zoom-tooltip"

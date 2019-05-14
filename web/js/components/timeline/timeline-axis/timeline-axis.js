@@ -930,6 +930,7 @@ class TimelineAxis extends React.Component {
     requestAnimationFrame(() => {
       var deltaX = d.deltaX;
       let timeScale = this.props.timeScale;
+
       let options = timeScaleOptions[timeScale].timeAxis;
       let gridWidth = options.gridWidth;
 
@@ -949,33 +950,32 @@ class TimelineAxis extends React.Component {
       }
 
       // update draggerTime based on deltaX from state draggerTime
-      // TODO: test consistency throught timescales, currently seems off 0.5 on ocassion
-      // month appears to be off from large deltas, this makes sense since the current diffZeroValues false condition is comparing the next
-      // zero value vs the final
-      // ! OPTIONS
-      // sub conditional that tracks if delta is greater than gridwith?
-      // track final location with delta added
-
       let draggerTime = moment.utc(time);
       let draggerTimeValue = draggerTime.valueOf();
       // only need to calculate difference in time unit for varying timescales - month and year
+      let newDraggerTime;
       let diffZeroValues = options.scaleMs;
       if (!diffZeroValues) {
+        // calculate based on frontDate due to varying number of days per month and per year (leapyears)
         let frontDate = moment.utc(this.state.deque.peekFront().rawDate);
+        // ! -2 necessary from subtracting 2 from currentTransformX in updateScale ?
+        let draggerPositionRelativeToFrontDate = draggerWidth - 2 + draggerPosition - this.state.position - this.state.currentTransformX;
+        let gridWidthCoef = draggerPositionRelativeToFrontDate/gridWidth;
+        let draggerDateAdded = frontDate.clone().add((Math.floor(gridWidthCoef)), timeScale);
+        let daysCount;
+        if (timeScale === 'year') {
+          daysCount = draggerDateAdded.isLeapYear() ? 366 : 365;
+        } else if (timeScale === 'month') {
+          daysCount = draggerDateAdded.daysInMonth();
+        }
+        let gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
+        let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+        newDraggerTime = draggerDateAdded.clone().add(remainderMilliseconds);
 
-
-        let draggerTimeZero = draggerTime.clone().startOf(timeScale);
-        let draggerTimeNextZero = draggerTimeZero.clone().add(1, timeScale);
-
-        let draggerTimeZeroValue = draggerTimeZero.valueOf();
-        let draggerTimeNextZeroValue = draggerTimeNextZero.valueOf();
-
-        diffZeroValues = draggerTimeNextZeroValue - draggerTimeZeroValue;
-        console.log(deltaX)
+      } else {
+        let diffFactor = diffZeroValues / gridWidth;
+        newDraggerTime = moment.utc(draggerTimeValue + (diffFactor * deltaX));
       }
-      let diffFactor = diffZeroValues / gridWidth;
-      console.log(diffFactor)
-      let newDraggerTime = moment.utc(draggerTimeValue + (diffFactor * deltaX));
 
       if (newDraggerTime.isAfter(this.props.timelineEndDateLimit, timeScale) ||
           newDraggerTime.isBefore(this.props.timelineStartDateLimit, timeScale)) {
@@ -1160,29 +1160,73 @@ class TimelineAxis extends React.Component {
     if (deltaXStart !== 0 || deltaXEnd !== 0) {
       let diffZeroValues = timeScaleOptions[timeScale].timeAxis.scaleMs;
       // get startDate for diff calculation
-      let draggerTimeStart = moment.utc(this.props.animStartLocationDate);
-      // only need to calculate difference in time unit for varying timescales - month and year
-      if (!diffZeroValues) {
-        let draggerTimeStartZero = draggerTimeStart.clone().startOf(timeScale);
-        let draggerTimeStartNextZero = draggerTimeStartZero.clone().add(1, timeScale);
 
-        let draggerTimeStartZeroValue = draggerTimeStartZero.valueOf();
-        let draggerTimeStartNextZeroValue = draggerTimeStartNextZero.valueOf();
-
-        diffZeroValues = draggerTimeStartNextZeroValue - draggerTimeStartZeroValue;
+      let frontDate;
+      let diffFactor;
+      if (!diffZeroValues) { // month or year diffFactor is not static, so require more calculation based on front date
+        frontDate = moment.utc(this.state.deque.peekFront().rawDate);
+      } else {
+        diffFactor = diffZeroValues / gridWidth; // else known diffFactor used
       }
-      let diffFactor = diffZeroValues / gridWidth;
 
       if (deltaXStart !== 0) { // update new start date
-        let draggerTimeStartValue = draggerTimeStart.valueOf();
-        animationStartLocationDate = moment.utc(draggerTimeStartValue + (diffFactor * deltaXStart)).format();
+        if (!diffZeroValues) { // month or year
+          let startDraggerPositionRelativeToFrontDate = this.state.animationStartLocation - this.state.position - this.state.currentTransformX + deltaXStart;
+          let gridWidthCoef = startDraggerPositionRelativeToFrontDate/gridWidth;
+          let draggerDateAdded = frontDate.clone().add((Math.floor(gridWidthCoef)), timeScale);
+          let daysCount;
+          if (timeScale === 'year') {
+            daysCount = draggerDateAdded.isLeapYear() ? 366 : 365;
+          } else if (timeScale === 'month') {
+            daysCount = draggerDateAdded.daysInMonth();
+          }
+          let gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
+          let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+          animationStartLocationDate = draggerDateAdded.clone().add(remainderMilliseconds).format();
+
+        } else {
+          let draggerTimeStartValue = moment.utc(animationStartLocationDate).valueOf();
+          animationStartLocationDate = moment.utc(draggerTimeStartValue + (diffFactor * deltaXStart)).format();
+        }
       }
 
       if (deltaXEnd !== 0) { // update new end date
-        let draggerTimeEnd = moment.utc(this.props.animEndLocationDate);
-        let draggerTimeEndValue = draggerTimeEnd.valueOf();
-        animationEndLocationDate = moment.utc(draggerTimeEndValue + (diffFactor * deltaXEnd)).format();
+        if (!diffZeroValues) { // month or year
+          let endDraggerPositionRelativeToFrontDate = this.state.animationEndLocation - this.state.position - this.state.currentTransformX + deltaXEnd;
+          let gridWidthCoef = endDraggerPositionRelativeToFrontDate/gridWidth;
+          let draggerDateAdded = frontDate.clone().add((Math.floor(gridWidthCoef)), timeScale);
+          let daysCount;
+          if (timeScale === 'year') {
+            daysCount = draggerDateAdded.isLeapYear() ? 366 : 365;
+          } else if (timeScale === 'month') {
+            daysCount = draggerDateAdded.daysInMonth();
+          }
+          let gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
+          let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+          animationEndLocationDate = draggerDateAdded.clone().add(remainderMilliseconds).format();
+        } else {
+          let draggerTimeEndValue = moment.utc(animationEndLocationDate).valueOf();
+          animationEndLocationDate = moment.utc(draggerTimeEndValue + (diffFactor * deltaXEnd)).format();
+        }
       }
+    }
+
+    // prevent draggers to be dragger BEFORE start date limit
+    if (moment.utc(animationEndLocationDate).isBefore(this.props.timelineStartDateLimit, timeScale)) {
+      endLocation = this.state.animationEndLocation;
+      animationEndLocationDate = this.props.timelineStartDateLimit;
+    } else if (moment.utc(animationStartLocationDate).isBefore(this.props.timelineStartDateLimit, timeScale)) {
+      startLocation = this.state.animationStartLocation;
+      animationStartLocationDate = this.props.timelineStartDateLimit;
+    }
+
+    // prevent draggers to be dragger AFTER end date limit
+    if (moment.utc(animationEndLocationDate).isAfter(this.props.timelineEndDateLimit, timeScale)) {
+      endLocation = this.state.animationEndLocation;
+      animationEndLocationDate = this.props.timelineEndDateLimit;
+    } else if (moment.utc(animationStartLocationDate).isAfter(this.props.timelineEndDateLimit, timeScale)) {
+      startLocation = this.state.animationStartLocation;
+      animationStartLocationDate = this.props.timelineEndDateLimit;
     }
 
     // need props function to handle state update?!
@@ -1245,6 +1289,8 @@ class TimelineAxis extends React.Component {
       ? this.state.draggerPosition - (this.props.hasSubdailyLayers ? 64 : 8)
       : this.state.draggerPositionB - (this.props.hasSubdailyLayers ? 64 : 8);
     let hoverTimeLeftOffset = this.props.hasSubdailyLayers ? this.state.leftOffset - 113 : this.state.leftOffset - 57;
+    window.moment = moment;
+
     return (
       <React.Fragment>
       <div id="wv-timeline-axis"

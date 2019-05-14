@@ -12,7 +12,7 @@ button:focus {
   border: 1px solid #333;
   /* background: rgb(40, 40, 40);
   background: rgba(40, 40, 40, 0.9); */
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(40, 40, 40, 0.85);
   border-radius: 5px;
   display: flex;
   flex-flow: row nowrap;
