@@ -90,11 +90,12 @@ export function mapui(models, config, store) {
         const extent = lodashGet(action, 'payload.query.legacy.map.extent');
         const rotation =
           lodashGet(action, 'payload.query.legacy.map.rotation') || 0;
+        updateProjection();
         if (newState.v && !newState.e && extent) {
           flyToNewExtent(extent, rotation);
         }
         // if (newState.l || newState.l1 || newState.ca || newState.p) {
-        updateProjection();
+
         // ''}
         return;
       case layerConstants.REMOVE_LAYER:
