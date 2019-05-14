@@ -9,7 +9,6 @@ import { dataModel } from './map/data/model';
 import { projectionModel } from './projection/model';
 import { compareModel } from './compare/model';
 import { tourModel } from './tour/model';
-import naturalEventsModel from './map/natural-events/model';
 
 /**
  * Return initiated legacy models Object
@@ -48,9 +47,6 @@ export function combineModels(config) {
   }
   if (config.features.dataDownload) {
     models.data = dataModel(models, config);
-  }
-  if (config.features.naturalEvents) {
-    models.naturalEvents = naturalEventsModel(models, config);
   }
 
   return models;

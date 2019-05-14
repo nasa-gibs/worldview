@@ -5,6 +5,7 @@ import {
   parseInt as lodashParseInt,
   cloneDeep as lodashCloneDeep
 } from 'lodash';
+import { getMinValue, getMaxValue } from './util';
 import update from 'immutability-helper';
 
 /**
@@ -216,6 +217,25 @@ var updateLookup = function(layerId, palettesObj, state) {
   });
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
+
+export function findIndex(layerId, type, value, index, groupStr, state) {
+  index = index || 0;
+  var values = getPalette(layerId, index, groupStr, state).entries.values;
+  var result;
+  lodashEach(values, function(check, index) {
+    var min = getMinValue(check);
+    var max = getMaxValue(check);
+    if (type === 'min' && value === min) {
+      result = index;
+      return false;
+    }
+    if (type === 'max' && value === max) {
+      result = index;
+      return false;
+    }
+  });
+  return result;
+}
 export function setCustom(layerId, paletteId, index, groupName, state) {
   const { config, palettes } = state;
   if (!config.layers[layerId]) {

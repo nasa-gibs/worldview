@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Legend from './legend';
 import { Draggable } from 'react-beautiful-dnd';
 import util from '../../../util/util';
-import { isEmpty as lodashIsEmpty } from 'lodash';
+import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
 import { getPalette, getLegends } from '../../../modules/palettes/selectors';
 import { openCustomContent } from '../../../modules/modal/actions';
@@ -285,11 +285,12 @@ function mapStateToProps(state, ownProps) {
     index,
     layerGroupName
   } = ownProps;
-  const { palettes } = state;
+  const { palettes, config } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
+  const paletteName = lodashGet(config, `layers.${layer.id}.palette.id`);
   const legends =
-    hasPalette && renderedPalettes[layer.id]
+    hasPalette && renderedPalettes[paletteName]
       ? getLegends(layer.id, layerGroupName, state)
       : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
@@ -302,8 +303,8 @@ function mapStateToProps(state, ownProps) {
     names,
     index,
     isCustomPalette,
-    isLoading: palettes.isLoading[layer.id],
-    renderedPalette: renderedPalettes[layer.id],
+    isLoading: palettes.isLoading[paletteName],
+    renderedPalette: renderedPalettes[paletteName],
     layerGroupName,
     isMobile: state.browser.is.small,
     hasPalette,

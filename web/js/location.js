@@ -15,6 +15,7 @@ import {
 import { initialCompareState } from './modules/compare/reducers';
 import { resetLayers } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
+import { loadPalettes } from './modules/palettes/util';
 import util from './util/util';
 import update from 'immutability-helper';
 
@@ -54,6 +55,15 @@ export function mapLocationToState(state, location) {
         }
       });
     }
+    if (parameters.l1 || parameters.l) {
+      stateFromLocation = loadPalettes(
+        parameters,
+        lodashAssign({}, stateFromLocation, {
+          palettes: state.palettes,
+          config
+        })
+      );
+    }
     // one level deep merge
     for (var key in stateFromLocation) {
       const obj = lodashAssign({}, state[key], stateFromLocation[key]);
@@ -61,6 +71,7 @@ export function mapLocationToState(state, location) {
         [key]: { $set: obj }
       });
     }
+
     return update(state, { $merge: stateFromLocation });
   } else {
     const startTour = checkTourBuildTimestamp(state.config);

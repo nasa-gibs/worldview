@@ -19,14 +19,15 @@ export const defaultPaletteState = {
 };
 export function getInitialPaletteState(config) {
   const rendered = lodashGet(config, 'palettes.rendered') || {};
+  const custom = lodashGet(config, 'palettes.custom') || {};
   return lodashAssign({}, defaultPaletteState, {
-    rendered: rendered
+    rendered,
+    custom
   });
 }
 
 export function paletteReducer(state = defaultPaletteState, action) {
   const groupName = action.groupName || 'active';
-
   switch (action.type) {
     case REQUEST_PALETTE_START:
       return lodashAssign({}, state, {

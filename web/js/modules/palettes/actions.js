@@ -15,13 +15,14 @@ export function requestPalette(id) {
   return (dispatch, getState) => {
     const config = getState().config;
     var layer = config.layers[id];
-    const location = 'config/palettes/' + layer.palette.id + '.json';
+    const paletteID = layer.palette.id;
+    const location = 'config/palettes/' + paletteID + '.json';
     return requestAction(
       dispatch,
       REQUEST_PALETTE,
       location,
       'application/json',
-      id
+      paletteID
     );
   };
 }
@@ -29,7 +30,6 @@ export function requestPalette(id) {
 export function setRange(layerId, min, max, squash, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
-    console.log(state);
     const props = {
       min: min,
       max: max,
@@ -45,14 +45,16 @@ export function setRange(layerId, min, max, squash, index, groupName) {
     dispatch({
       type: SET_RANGE_AND_SQUASH,
       groupName: groupName,
-      palettes: newActivePalettesObj
+      activeString: groupName,
+      layerId,
+      palettes: newActivePalettesObj,
+      props
     });
   };
 }
 export function setCustom(layerId, paletteId, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
-    console.log(state.palettes.rendered);
     const newActivePalettesObj = setCustomSelector(
       layerId,
       paletteId,
@@ -65,6 +67,7 @@ export function setCustom(layerId, paletteId, index, groupName) {
       layerId: layerId,
       paletteId: paletteId,
       groupName: groupName,
+      activeString: groupName,
       palettes: newActivePalettesObj
     });
   };

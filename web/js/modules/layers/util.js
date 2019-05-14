@@ -4,10 +4,14 @@ import {
   isUndefined as lodashIsUndefined,
   remove as lodashRemove,
   findIndex as lodashFindIndex,
-  each as lodashEach
+  each as lodashEach,
+  isNaN as lodashIsNaN,
+  assign as lodashAssign,
+  isArray
 } from 'lodash';
 
 import { addLayer } from './selectors';
+import { getPaletteAttributeArray } from '../palettes/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
 
@@ -36,34 +40,19 @@ export function serializeLayers(currentLayers, state, groupName) {
         value: def.opacity
       });
     }
-    if (def.custom) {
-      let paletteDef = palettes[def.id];
-      if (paletteDef.custom) {
-        item.attributes.push({
-          id: 'palette',
-          value: paletteDef.custom
-        });
-      }
-      if (paletteDef.min) {
-        var minValue = paletteDef.entries.values[paletteDef.min];
-        item.attributes.push({
-          id: 'min',
-          value: minValue
-        });
-      }
-      if (paletteDef.max) {
-        var maxValue = paletteDef.entries.values[paletteDef.max];
-        item.attributes.push({
-          id: 'max',
-          value: maxValue
-        });
-      }
-      if (paletteDef.squash) {
-        item.attributes.push({
-          id: 'squash'
-        });
-      }
+
+    if (def.custom || def.min || def.max || def.min || def.squash) {
+      // If has palette attr
+      const paletteAttributeArray = getPaletteAttributeArray(
+        def.id,
+        palettes,
+        state
+      );
+      item.attributes = paletteAttributeArray.length
+        ? item.attributes.concat(paletteAttributeArray)
+        : item.attributes;
     }
+
     return util.appendAttributesForURL(item);
   });
 }
@@ -269,6 +258,7 @@ const createLayerArrayFromState = function(state, config) {
       lodashEachRight(state, function(layerDef) {
         let hidden = false;
         let opacity = 1.0;
+        let max, min, squash, custom;
         if (!config.layers[layerDef.id]) {
           console.warn('No such layer: ' + layerDef.id);
           return;
@@ -281,12 +271,68 @@ const createLayerArrayFromState = function(state, config) {
             opacity = util.clamp(parseFloat(attr.value), 0, 1);
             if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
           }
+          if (attr.id === 'max' && typeof attr.value === 'string') {
+            let maxArray = [];
+            let values = util.toArray(attr.value.split(';'));
+            lodashEach(values, function(value, index) {
+              if (value === '') {
+                maxArray.push(undefined);
+                return;
+              }
+              let maxValue = parseFloat(value);
+              if (lodashIsNaN(maxValue)) {
+                console.warn('Invalid max value: ' + value);
+              } else {
+                maxArray.push(maxValue);
+              }
+            });
+            max = maxArray.length ? maxArray : undefined;
+          }
+          if (attr.id === 'min' && typeof attr.value === 'string') {
+            let minArray = [];
+            let values = util.toArray(attr.value.split(';'));
+            lodashEach(values, function(value, index) {
+              if (value === '') {
+                minArray.push(undefined);
+                return;
+              }
+              let minValue = parseFloat(value);
+              if (lodashIsNaN(minValue)) {
+                console.warn('Invalid min value: ' + value);
+              } else {
+                minArray.push(minValue);
+              }
+            });
+            min = minArray.length ? minArray : undefined;
+          }
+          if (attr.id === 'squash') {
+            if (attr.value === true) {
+              squash = [true];
+            } else if (typeof attr.value === 'string') {
+              let squashArray = [];
+              let values = util.toArray(attr.value.split(';'));
+              lodashEach(values, function(value) {
+                squashArray.push(value === 'true');
+              });
+              squash = squashArray.length ? squashArray : undefined;
+            }
+          }
+          if (attr.id === 'palette') {
+            let values = util.toArray(attr.value.split(';'));
+            custom = values;
+          }
         });
         layerArray = addLayer(
           layerDef.id,
           {
-            hidden: hidden,
-            opacity: opacity
+            hidden,
+            opacity,
+            // only include palette attributes if Array.length condition
+            // is true: https://stackoverflow.com/a/40560953/4589331
+            ...(isArray(custom) && { custom }),
+            ...(isArray(min) && { min }),
+            ...(isArray(squash) && { squash }),
+            ...(isArray(max) && { max })
           },
           layerArray,
           config.layers

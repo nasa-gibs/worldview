@@ -47,9 +47,10 @@ class LayerSettings extends React.Component {
       setCustom,
       palettesTranslate,
       groupName,
-      setRange
+      setRange,
+      layer
     } = this.props;
-    const { layer, activeIndex } = this.state;
+    const { activeIndex } = this.state;
     let navElements = [];
     let paneElements = [];
     lodashEach(legends, (legend, i) => {
