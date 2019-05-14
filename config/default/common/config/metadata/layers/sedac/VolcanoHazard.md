@@ -5,14 +5,12 @@ Global Volcano Hazard Frequency and Distribution is a 2.5 minute gridded data se
 
 References: [doi:10.7927/H4BR8Q45](https://doi.org/10.7927/H4BR8Q45)
 
-
 ### Volcano Hazard: Mortality Risk
 The Volcano Hazard: Mortality Risk layer indicates the global volcano mortality risks and distribution from 1979 to 2000. The information displayed in Worldview/Global Imagery Browse Services (GIBS) reflects the decile within which the risk lies, ranging from low to high mortality risk: 1st to 10th decile.
 
 Global Volcano Mortality Risks and Distribution is a 2.5 minute grid representing global volcano mortality risks. The data set was constructed using historical hazard-specific mortality loss data from the Emergency Events Database (EM-DAT) maintained by the Centre for Research on the Epidemiology of Disasters (CRED), subnational year 2000 population estimates from Gridded Population of the World, Version 3 (GPWv3), and volcano hazard data from the Global Volcano Hazard Frequency and Distribution data set. Estimates were made as to the mortality numbers associated with volcano hazard. In turn, these mortality estimates were classified into deciles, 10 classes of an approximately equal number of grid cells of increasing mortality risk.
 
 References: [doi:10.7927/H4736NT2](https://doi.org/10.7927/H4736NT2)
-
 
 ### Volcano Hazard: Economic Risk
 The Volcano Hazard: Economic Risk layer indicates the the proportional economic impacts of global volcano hazard  from 1979 to 2000. The information displayed in Worldview/Global Imagery Browse Services (GIBS) reflects the decile within which the risk lies, ranging from low to high economic risk: 1st to 10th decile.
