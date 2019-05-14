@@ -86,7 +86,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
       >
 
       <div>Custom Interval Selector</div>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '25px' }}>
         <div style={{display: 'flex', flexDirection: 'row' }}>
           <IntervalInput
             intervalValue={Number(this.state.intervalValue)}

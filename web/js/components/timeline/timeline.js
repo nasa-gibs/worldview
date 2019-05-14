@@ -74,7 +74,7 @@ class Timeline extends React.Component {
   }
 
   // handle SELECT of LEFT/RIGHT interval selection
-  setTimeScaleIntervalChangeUnit = (intervalSelected, customSelected) => {
+  setTimeScaleIntervalChangeUnit = (intervalSelected, customSelected, openDialog) => {
     let intervalChangeAmt;
     if (intervalSelected === 'custom') {
       intervalSelected = this.state.customIntervalZoomLevel;
@@ -82,7 +82,7 @@ class Timeline extends React.Component {
     } else {
       intervalChangeAmt = 1;
     }
-    this.props.setSelectedInterval(intervalSelected, intervalChangeAmt, customSelected);
+    this.props.setSelectedInterval(intervalSelected, intervalChangeAmt, customSelected, openDialog);
   }
 
   // left/right arrows increment date

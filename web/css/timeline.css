@@ -462,7 +462,7 @@ g.plot rect.data-bar-invisible {
   /* display: none; */
   position: absolute;
   bottom: 100%;
-  border-bottom: 8px solid transparent;
+  /* border-bottom: 8px solid transparent; */
   z-index: 10;
 }
 

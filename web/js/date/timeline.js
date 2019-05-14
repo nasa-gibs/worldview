@@ -389,13 +389,13 @@ export function timeline(models, config, ui) {
   };
 
   // set selected interval either custom or standard delta of 1
-  var setSelectedInterval = (interval, intervalChangeAmt, customSelected) => {
+  var setSelectedInterval = (interval, intervalChangeAmt, customSelected, openDialog) => {
     models.date.setSelectedInterval(timeScaleToNumberKey[interval], customSelected);
     self.reactComponent.setState({
       timeScaleChangeUnit: interval,
       customSelected: customSelected,
       intervalChangeAmt: intervalChangeAmt,
-      customIntervalModalOpen: customSelected
+      customIntervalModalOpen: openDialog
     });
   };
 

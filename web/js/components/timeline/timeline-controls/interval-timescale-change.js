@@ -17,12 +17,12 @@ class TimeScaleIntervalChange extends Component {
     })
   }
 
-  handleClickZoom = (intervalSelected) => {
+  handleClickZoom = (intervalSelected, openDialog) => {
     // close tooltip
     // send props function to change timescale zoom level throughout app
     this.setState({
       toolTipHovered: false,
-    }, this.props.setTimeScaleIntervalChangeUnit(intervalSelected, intervalSelected === 'custom'));
+    }, this.props.setTimeScaleIntervalChangeUnit(intervalSelected, intervalSelected === 'custom', openDialog));
   }
 
   // set custom text for custom interval
@@ -106,9 +106,17 @@ class TimeScaleIntervalChange extends Component {
               <span
                 id="zoom-custom"
                 className="zoom-btn zoom-btn-inactive zoom-custom custom-interval-text"
+                style={{ display: this.state.customIntervalText === 'Custom' ? 'none' : 'block' }}
                 onClick={() => this.handleClickZoom('custom')}
               >
                 {this.state.customIntervalText}
+              </span>
+              <span
+                id="zoom-custom-static"
+                className="zoom-btn zoom-btn-inactive zoom-custom custom-interval-text"
+                onClick={() => this.handleClickZoom('custom', true)}
+              >
+                Custom
               </span>
             </div>
           </div>

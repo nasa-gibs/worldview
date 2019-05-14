@@ -102,7 +102,7 @@ line {
 
 form button, form input, form select {
   border: none;
-  outline: 1px solid black;
+  outline: thin solid black;
   width: 96px;
   text-align: center;
 }
@@ -162,7 +162,7 @@ form select {
   height: 24px;
   color: #7890cd;
   opacity: 1;
-  font-size: 18px;
+  font-size: 16px;
   background: transparent;
   border: 0;
   font-family: 'Roboto Mono', monospace;
@@ -182,7 +182,7 @@ form select {
   height: 40px;
   color: #7890cd;
   opacity: 1;
-  font-size: 18px;
+  font-size: 16px;
   background: transparent;
   border: 0;
   font-family: 'Roboto Mono', monospace;
@@ -197,10 +197,11 @@ form select {
 
 .interval-timescale-select select {
   padding: 0;
-  background: #212121;
+  /* background: #212121; */
+  background: transparent;
   color: #7890cd;
   height: 24px;
-  font-size: 18px;
+  font-size: 16px;
   width: 118px;
   border: thin solid #fff;
   /* margin-top: 1px; */
@@ -273,13 +274,14 @@ form select {
   width: 225px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  background: #212121;
+  /* background: #212121; */
+  background: rgba(40, 40, 40, 0.85);
   position: absolute;
   top: -58px;
   left: 0;
   display: none;
   color: #fff;
-  border-bottom: 1px solid #444;
+  border-bottom: thin solid #444;
 }
 
 .wv-animation-widget-custom-interval i.wv-close {
