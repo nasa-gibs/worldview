@@ -377,7 +377,8 @@ export function timeline(models, config, ui) {
   var setIntervalInput = (intervalValue, zoomLevel) => {
     models.date.setCustomInterval(intervalValue, timeScaleToNumberKey[zoomLevel]);
     let zoomCustomText = document.querySelector('#zoom-custom');
-    zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
+    // zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase().substr(0, 3)}`;
+    zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase()}`;
     // model.events.trigger('zoom-change');
     self.reactComponent.setState({
       timeScaleChangeUnit: zoomLevel,
