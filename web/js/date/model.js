@@ -198,18 +198,20 @@ export function dateModel(models, config, spec) {
         state.t1 = dateToStringForUrl(self.selectedB);
       }
     }
-    // custom interval delta and interval
+    // interval
     if (self.interval) {
       state.inti = self.interval.toString();
     }
-    if (self.customInterval) {
-      state.intci = self.customInterval.toString();
-    }
-    if (self.customDelta) {
-      state.intcd = self.customDelta.toString();
-    }
+    // only if custom selected, save custom interval and delta state
     if (self.customSelected) {
-      state.intcs = self.customSelected.toString();
+      if (self.customInterval) {
+        state.intci = self.customInterval.toString();
+      }
+      // if delta is 1, then it won't be saved since this would be a default
+      if (self.customDelta && self.customDelta > 1) {
+        state.intcs = self.customSelected.toString();
+        state.intcd = self.customDelta.toString();
+      }
     }
   };
 

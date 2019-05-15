@@ -6,7 +6,7 @@ class DateChangeArrows extends PureComponent {
       <div>
         {/* LEFT ARROW */}
         <div
-          className="button-action-group"
+          className={`button-action-group ${this.props.leftArrowDisabled ? 'button-disabled' : ''}`}
           id="left-arrow-group"
           title="Click and hold to animate backwards"
           onMouseDown={this.props.leftArrowDown}
@@ -22,7 +22,7 @@ class DateChangeArrows extends PureComponent {
 
         {/* RIGHT ARROW */}
         <div
-          className="button-action-group"
+          className={`button-action-group ${this.props.rightArrowDisabled ? 'button-disabled' : ''}`}
           id="right-arrow-group"
           title="Click and hold to animate forwards"
           onMouseDown={this.props.rightArrowDown}

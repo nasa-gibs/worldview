@@ -45,7 +45,9 @@ class Timeline extends React.Component {
       timelineHidden: false,
       parentOffset: '',
       timelineStartDateLimit: '',
-      timelineEndDateLimit: ''
+      timelineEndDateLimit: '',
+      leftArrowDisabled: '',
+      rightArrowDisabled: ''
     };
   }
 
@@ -91,6 +93,34 @@ class Timeline extends React.Component {
     this.props.incrementDate(Number(delta * multiplier), this.state.timeScaleChangeUnit)
   }
 
+  // checkLeftArrowDisabled
+  checkLeftArrowDisabled = () => {
+    let previousPastDateBasedOnIncrement;
+    if (this.state.draggerSelected === 'selected') {
+      previousPastDateBasedOnIncrement = moment.utc(this.state.dateFormatted).subtract(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
+    } else {
+      previousPastDateBasedOnIncrement = moment.utc(this.state.dateFormattedB).subtract(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
+    }
+    console.log(previousPastDateBasedOnIncrement.isSameOrBefore(this.state.timelineStartDateLimit))
+    this.setState({
+      leftArrowDisabled: previousPastDateBasedOnIncrement.isSameOrBefore(this.state.timelineStartDateLimit)
+    })
+  }
+
+  // checkRightArrowDisabled
+  checkRightArrowDisabled = () => {
+    let nextFutureDateBasedOnIncrement;
+    if (this.state.draggerSelected === 'selected') {
+      nextFutureDateBasedOnIncrement = moment.utc(this.state.dateFormatted).add(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
+    } else {
+      nextFutureDateBasedOnIncrement = moment.utc(this.state.dateFormattedB).add(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
+    }
+    console.log(nextFutureDateBasedOnIncrement.isSameOrAfter(this.state.timelineEndDateLimit))
+    this.setState({
+      rightArrowDisabled: nextFutureDateBasedOnIncrement.isSameOrAfter(this.state.timelineEndDateLimit)
+    })
+  }
+
   // open animation dialog
   clickAnimationButton = () => {
     this.props.clickAnimationButton();
@@ -131,7 +161,9 @@ class Timeline extends React.Component {
       timelineEndDateLimit: this.props.timelineEndDateLimit,
       animStartLocationDate: this.props.animStartLocationDate,
       animEndLocationDate: this.props.animEndLocationDate,
-      isAnimationWidgetOpen: this.props.isAnimationWidgetOpen
+      isAnimationWidgetOpen: this.props.isAnimationWidgetOpen,
+      leftArrowDisabled: this.checkLeftArrowDisabled(),
+      rightArrowDisabled: this.checkRightArrowDisabled()
     });
   }
 
@@ -139,8 +171,24 @@ class Timeline extends React.Component {
   //   return true;
   // }
 
-  // componentDidUpdate(prevProps, prevState) {
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.intervalChangeAmt !== prevState.intervalChangeAmt || this.state.timeScaleChangeUnit !== prevState.timeScaleChangeUnit) {
+      console.log('tester')
+      this.checkLeftArrowDisabled();
+      this.checkRightArrowDisabled();
+    }
+    if (this.state.draggerSelected === 'selected') {
+      if (this.state.dateFormatted !== prevState.dateFormatted) {
+        this.checkLeftArrowDisabled();
+        this.checkRightArrowDisabled();
+      }
+    } else if (this.state.draggerSelected === 'selectedB') {
+      if (this.state.dateFormattedB !== prevState.dateFormattedB) {
+        this.checkLeftArrowDisabled();
+        this.checkRightArrowDisabled();
+      }
+    }
+  }
 
   render() {
     // console.log(this.state.selectedDate, this.state.dateFormatted)
@@ -170,8 +218,10 @@ class Timeline extends React.Component {
             <DateChangeArrows
               leftArrowDown={() => this.incrementDate(-1)}
               leftArrowUp={this.props.stopper}
+              leftArrowDisabled={this.state.leftArrowDisabled}
               rightArrowDown={() => this.incrementDate(1)}
               rightArrowUp={this.props.stopper}
+              rightArrowDisabled={this.state.rightArrowDisabled}
             />
           </div>
 

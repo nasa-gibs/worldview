@@ -299,7 +299,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .date-arrows svg path {
-  fill: #444;
+  fill: #666;
 }
 
 #timeline-header .input-wrapper:hover .date-arrows:hover svg path {
@@ -437,6 +437,7 @@ g.plot rect.data-bar-invisible {
 #zoom-btn-container-axis .wv-zoom-tooltip {
   display: block;
   /* width: 80px; */
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding: 4px;
@@ -454,7 +455,7 @@ g.plot rect.data-bar-invisible {
   position: absolute;
   bottom: 100%;
   border-bottom: 8px solid transparent;
-  width: 150px;
+  width: 100px;
   z-index: 10;
 }
 
@@ -462,6 +463,7 @@ g.plot rect.data-bar-invisible {
   /* display: none; */
   position: absolute;
   bottom: 100%;
+  width: 75px;
   /* border-bottom: 8px solid transparent; */
   z-index: 10;
 }

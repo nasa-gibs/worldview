@@ -1157,6 +1157,7 @@ class TimelineAxis extends React.Component {
     let deltaXEnd = endLocation - this.state.animationEndLocation;
     let animationEndLocationDate = this.props.animEndLocationDate;
 
+    // if start or end dragger has moved
     if (deltaXStart !== 0 || deltaXEnd !== 0) {
       let diffZeroValues = timeScaleOptions[timeScale].timeAxis.scaleMs;
       // get startDate for diff calculation
@@ -1172,7 +1173,7 @@ class TimelineAxis extends React.Component {
       if (deltaXStart !== 0) { // update new start date
         if (!diffZeroValues) { // month or year
           let startDraggerPositionRelativeToFrontDate = this.state.animationStartLocation - this.state.position - this.state.currentTransformX + deltaXStart;
-          let gridWidthCoef = startDraggerPositionRelativeToFrontDate/gridWidth;
+          let gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
           let draggerDateAdded = frontDate.clone().add((Math.floor(gridWidthCoef)), timeScale);
           let daysCount;
           if (timeScale === 'year') {
@@ -1193,7 +1194,7 @@ class TimelineAxis extends React.Component {
       if (deltaXEnd !== 0) { // update new end date
         if (!diffZeroValues) { // month or year
           let endDraggerPositionRelativeToFrontDate = this.state.animationEndLocation - this.state.position - this.state.currentTransformX + deltaXEnd;
-          let gridWidthCoef = endDraggerPositionRelativeToFrontDate/gridWidth;
+          let gridWidthCoef = endDraggerPositionRelativeToFrontDate / gridWidth;
           let draggerDateAdded = frontDate.clone().add((Math.floor(gridWidthCoef)), timeScale);
           let daysCount;
           if (timeScale === 'year') {
@@ -1211,6 +1212,7 @@ class TimelineAxis extends React.Component {
       }
     }
 
+    // ! controlled within range-selection component using max props
     // prevent draggers to be dragger BEFORE start date limit
     if (moment.utc(animationEndLocationDate).isBefore(this.props.timelineStartDateLimit, timeScale)) {
       endLocation = this.state.animationEndLocation;
@@ -1223,7 +1225,7 @@ class TimelineAxis extends React.Component {
     // prevent draggers to be dragger AFTER end date limit
     if (moment.utc(animationEndLocationDate).isAfter(this.props.timelineEndDateLimit, timeScale)) {
       endLocation = this.state.animationEndLocation;
-      animationEndLocationDate = this.props.timelineEndDateLimit;
+      animationEndLocationDate = this.props.animEndLocationDate;
     } else if (moment.utc(animationStartLocationDate).isAfter(this.props.timelineEndDateLimit, timeScale)) {
       startLocation = this.state.animationStartLocation;
       animationStartLocationDate = this.props.timelineEndDateLimit;

@@ -87,6 +87,10 @@
   height: 10px;
 }
 
+.zoom-level-change-arrows .date-arrows {
+  height: 13px;
+}
+
 .wv-date-selector-widget .date-arrows svg, .date-arrows svg {
   vertical-align: top;
   display: block;
@@ -94,7 +98,7 @@
 }
 
 .wv-date-selector-widget .date-arrows svg path, .date-arrows svg path {
-  fill: #444;
+  fill: #666;
 }
 
 .wv-date-selector-widget .input-wrapper:hover .date-arrows:hover svg path, .date-arrows:hover svg path {
@@ -110,7 +114,8 @@
 }
 
 .wv-date-selector-widget .date-arrows:hover,
-.wv-date-selector-widget > .button-action-group:hover {
+.wv-date-selector-widget > .button-action-group:hover,
+.zoom-level-change-arrows .date-arrows:hover {
   background-color: #fff;
   cursor: pointer;
 }
