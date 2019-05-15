@@ -115,7 +115,7 @@ export function mapui(models, config, store) {
       case compareConstants.CHANGE_MODE:
         return reloadLayers();
       case CHANGE_PROJECTION:
-        return updateProjection(action.id);
+        return updateProjection();
       case paletteConstants.SET_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.CLEAR_CUSTOM:
