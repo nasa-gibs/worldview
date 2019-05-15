@@ -191,9 +191,9 @@ class TimelineAxis extends React.Component {
     let animationStartDraggerLocation;
     let animationEndDraggerLocation;
 
-    if (true || this.props.startLocationDate) {
-      animationStartDraggerLocation = Math.abs(frontDate.diff(this.props.animStartLocationDate, timeScale, true) * gridWidth);
-      animationEndDraggerLocation = Math.abs(frontDate.diff(this.props.animEndLocationDate, timeScale, true) * gridWidth);
+    if (this.props.animStartLocationDate) {
+      animationStartDraggerLocation = moment.utc(this.props.animStartLocationDate).diff(frontDate, timeScale, true) * gridWidth;
+      animationEndDraggerLocation = moment.utc(this.props.animEndLocationDate).diff(frontDate, timeScale, true) * gridWidth;
     }
 
     // get axis bounds

@@ -101,7 +101,6 @@ class Timeline extends React.Component {
     } else {
       previousPastDateBasedOnIncrement = moment.utc(this.state.dateFormattedB).subtract(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
     }
-    console.log(previousPastDateBasedOnIncrement.isSameOrBefore(this.state.timelineStartDateLimit))
     this.setState({
       leftArrowDisabled: previousPastDateBasedOnIncrement.isSameOrBefore(this.state.timelineStartDateLimit)
     })
@@ -115,7 +114,6 @@ class Timeline extends React.Component {
     } else {
       nextFutureDateBasedOnIncrement = moment.utc(this.state.dateFormattedB).add(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
     }
-    console.log(nextFutureDateBasedOnIncrement.isSameOrAfter(this.state.timelineEndDateLimit))
     this.setState({
       rightArrowDisabled: nextFutureDateBasedOnIncrement.isSameOrAfter(this.state.timelineEndDateLimit)
     })
@@ -172,11 +170,8 @@ class Timeline extends React.Component {
   // }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.intervalChangeAmt !== prevState.intervalChangeAmt || this.state.timeScaleChangeUnit !== prevState.timeScaleChangeUnit) {
-      this.checkLeftArrowDisabled();
-      this.checkRightArrowDisabled();
-    }
-    if ((this.state.draggerSelected === 'selected' && this.state.dateFormatted !== prevState.dateFormatted)
+    if ((this.state.intervalChangeAmt !== prevState.intervalChangeAmt || this.state.timeScaleChangeUnit !== prevState.timeScaleChangeUnit)
+     || (this.state.draggerSelected === 'selected' && this.state.dateFormatted !== prevState.dateFormatted)
      || (this.state.draggerSelected === 'selectedB' && this.state.dateFormattedB !== prevState.dateFormattedB)) {
         this.checkLeftArrowDisabled();
         this.checkRightArrowDisabled();
