@@ -173,20 +173,13 @@ class Timeline extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.intervalChangeAmt !== prevState.intervalChangeAmt || this.state.timeScaleChangeUnit !== prevState.timeScaleChangeUnit) {
-      console.log('tester')
       this.checkLeftArrowDisabled();
       this.checkRightArrowDisabled();
     }
-    if (this.state.draggerSelected === 'selected') {
-      if (this.state.dateFormatted !== prevState.dateFormatted) {
+    if ((this.state.draggerSelected === 'selected' && this.state.dateFormatted !== prevState.dateFormatted)
+     || (this.state.draggerSelected === 'selectedB' && this.state.dateFormattedB !== prevState.dateFormattedB)) {
         this.checkLeftArrowDisabled();
         this.checkRightArrowDisabled();
-      }
-    } else if (this.state.draggerSelected === 'selectedB') {
-      if (this.state.dateFormattedB !== prevState.dateFormattedB) {
-        this.checkLeftArrowDisabled();
-        this.checkRightArrowDisabled();
-      }
     }
   }
 
