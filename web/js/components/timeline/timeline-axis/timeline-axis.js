@@ -199,13 +199,14 @@ class TimelineAxis extends React.Component {
     // get axis bounds
     let timelineStartDateLimit = this.props.timelineStartDateLimit;
     let timelineEndDateLimit = this.props.timelineEndDateLimit;
-    let diff = hoverTime.diff(timelineEndDateLimit, timeScale);
-    let leftBound = (diff * gridWidth) + midPoint;
-    let rightBound = 5000;
+    let diffFromEndDateLimit = hoverTime.diff(timelineEndDateLimit, timeScale);
+    let diffFromStartDateLimit = hoverTime.diff(timelineStartDateLimit, timeScale);
+    let leftBound = (diffFromEndDateLimit * gridWidth) + midPoint;
+    let rightBound = (diffFromStartDateLimit * gridWidth) + midPoint;
 
     if (timeScale === 'year') {
-      leftBound = position;
-      rightBound = position;
+      leftBound = -position * 10;
+      rightBound = position * 10;
     }
 
     let currentTransformX = 0;
@@ -594,7 +595,10 @@ class TimelineAxis extends React.Component {
     // }
     // console.log(timelineStartDateLimit, timelineEndDateLimit)
 
-    let diff = time.diff(timelineEndDateLimit, timeScale);
+    // let diff = time.diff(timelineEndDateLimit, timeScale);
+
+    let diffFromEndDateLimit = time.diff(timelineEndDateLimit, timeScale);
+    let diffFromStartDateLimit = time.diff(timelineStartDateLimit, timeScale);
     // console.log(diff)
 
     // format to strings
@@ -668,12 +672,12 @@ class TimelineAxis extends React.Component {
     }
 
     // get axis bounds
-    let leftBound = (diff * gridWidth) + midPoint;
-    let rightBound = 5000;
+    let leftBound = (diffFromEndDateLimit * gridWidth) + midPoint;
+    let rightBound = (diffFromStartDateLimit * gridWidth) + midPoint;
 
     if (timeScale === 'year') {
-      leftBound = 0;
-      rightBound = 0;
+      leftBound = -midPoint * 10;
+      rightBound = midPoint * 10;
     }
 
     this.setState({
@@ -904,16 +908,29 @@ class TimelineAxis extends React.Component {
     if (d.x < midPoint || d.x > midPoint) {
       moved = true;
     }
-
-    let leftBound = (diff * gridWidth)
-    if (Math.abs(diff) < Math.floor(currentDateRangeLength / 2)) {
-      // console.log('hit')
-      leftBound = midPoint
-    }
+    // console.log(this.state.leftBound + d.x, d.x, d.x + midPoint)
+    // let leftBound = (diff * gridWidth)
+    // if (Math.abs(diff) < Math.floor(currentDateRangeLength / 2)) {
+    //   // console.log('hit')
+    //   leftBound = midPoint
+    // }
 
     // console.log(diff, leftBound, Math.floor(currentDateRangeLength / 2), ((diff * gridWidth)))
+
+    // console.log(midPoint, this.state.leftBound + (this.state.leftBound - d.x), this.state.leftBound - (this.state.leftBound + d.x))
+    // console.log(midPoint, d.x)
+
+    let leftBound = this.state.leftBound + (midPoint - d.x);
+    let rightBound = this.state.rightBound + (midPoint - d.x);
+
+    if (timeScale === 'year') {
+      leftBound = -midPoint * 10;
+      rightBound = midPoint * 10;
+    }
+
     this.setState({
       leftBound: leftBound,
+      rightBound: rightBound,
       moved: moved,
       position: midPoint,
       currentTransformX: this.state.currentTransformX + position,
@@ -1328,7 +1345,7 @@ class TimelineAxis extends React.Component {
           onStop={this.handleStopDrag.bind(this)}
           // bounds={{ left: this.getLeftAxisBound(), top: 0, bottom: 0, right: this.getRightAxisBound() }}
           // bounds={{left: -400, top: 0, bottom: 0, right: 0}}
-          // bounds={{left: this.state.leftBound, top: 0, bottom: 0, right: this.state.rightBound}}
+          bounds={{left: this.state.leftBound, top: 0, bottom: 0, right: this.state.rightBound}}
         >
         <g>
           <GridRange
