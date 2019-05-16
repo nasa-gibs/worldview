@@ -43,7 +43,7 @@ export function combineModels(config) {
     models.tour = tourModel(config);
   }
   if (config.features.animation) {
-    models.anim = animationModel(models, config);
+    // models.anim = animationModel(models, config);
   }
   if (config.features.dataDownload) {
     models.data = dataModel(models, config);

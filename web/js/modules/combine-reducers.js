@@ -25,6 +25,10 @@ import {
   layerReducer,
   getInitialState as getLayersInitialState
 } from './layers/reducers';
+import {
+  animationReducer,
+  getInitialState as getAnimationInitialState
+} from './animation/reducers';
 import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
 import dataDownloadReducer from './data/reducers';
 import { get as lodashGet } from 'lodash';
@@ -57,6 +61,7 @@ export function getInitialState(models, config, parameters) {
     config,
     models,
     legacy: models,
+    animation: getAnimationInitialState(config),
     proj: getProjInitialState(config),
     layers: getLayersInitialState(config),
     requestedEvents: eventRequestResponse(eventsIgnoreArray),
@@ -84,6 +89,7 @@ const reducers = {
   palettes: paletteReducer,
   tour: tourReducer,
   map: mapReducer,
+  animation: animationReducer,
   requestedEvents,
   requestedEventSources,
   requestedEventCategories,

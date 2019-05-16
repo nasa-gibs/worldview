@@ -21,12 +21,12 @@ class TimelineDraggerRange extends React.Component {
     };
   }
   /*
-  * Resize timeline dragger width
-  *
-  * @method checkWidth
-  *
-  * @return {void}
-  */
+   * Resize timeline dragger width
+   *
+   * @method checkWidth
+   *
+   * @return {void}
+   */
   checkWidth() {
     var start = this.props.startLocation;
     var end = this.props.endLocation;
@@ -65,19 +65,25 @@ class TimelineDraggerRange extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     // +/- {number} - change in x - set to 0 to 'stop' dragger movement - min/max of -55/55 to prevent overdrag
-    let deltaX = d.deltaX < -55 ? -55 : (d.deltaX > 55 ? 55 : d.deltaX);
+    let deltaX = d.deltaX < -55 ? -55 : d.deltaX > 55 ? 55 : d.deltaX;
     // +/- {number} - start position
     let deltaStart = d.x;
     let startLocationDate = new Date(this.props.startLocationDate);
     let endLocationDate = new Date(this.props.endLocationDate);
     let timelineEndDate = new Date(this.props.timelineEndDateLimit);
     // used to determine and buffer large monthly/yearly ranges
-    let startDateToEndDifference = this.dateDifferenceInDays(startLocationDate, endLocationDate);
+    let startDateToEndDifference = this.dateDifferenceInDays(
+      startLocationDate,
+      endLocationDate
+    );
     if (startDateToEndDifference > 100) {
       startDateToEndDifference = 300;
     }
     // difference between last date on timeline (current day/now) and end date dragger
-    let endDateToLimitDifference = Math.min(startDateToEndDifference, this.dateDifferenceInDays(endLocationDate, timelineEndDate));
+    let endDateToLimitDifference = Math.min(
+      startDateToEndDifference,
+      this.dateDifferenceInDays(endLocationDate, timelineEndDate)
+    );
     // match end date precise time units to dragging end date
     let timelineEndDateLimitMatch = new Date(
       timelineEndDate.getFullYear(),
@@ -98,8 +104,10 @@ class TimelineDraggerRange extends React.Component {
 
     // format dates to ISO for comparison
     endLocationDate = endLocationDate.toISOString().split('.')[0] + 'Z';
-    timelineEndDateLimitMatch = timelineEndDateLimitMatch.toISOString().split('.')[0] + 'Z';
-    timelineMaxDateBufferMatch = timelineMaxDateBufferMatch.toISOString().split('.')[0] + 'Z';
+    timelineEndDateLimitMatch =
+      timelineEndDateLimitMatch.toISOString().split('.')[0] + 'Z';
+    timelineMaxDateBufferMatch =
+      timelineMaxDateBufferMatch.toISOString().split('.')[0] + 'Z';
 
     // timeline dragger dragged into the future (to the right)
     if (deltaX > 0) {
@@ -116,7 +124,7 @@ class TimelineDraggerRange extends React.Component {
           if (this.props.endLocation > this.props.max.width - deltaX) {
             deltaX = 0;
           }
-        // end of timeline date is not within view - rely on dates
+          // end of timeline date is not within view - rely on dates
         } else {
           // use buffer to start slowing down allowed deltaX to prevent overdrag
           if (endLocationDate >= timelineMaxDateBufferMatch) {
@@ -124,11 +132,14 @@ class TimelineDraggerRange extends React.Component {
           }
         }
       }
-    // timeline dragger dragged into the past (to the left)
+      // timeline dragger dragged into the past (to the left)
     } else {
       if (this.props.max.start) {
         // timeline dragger dragged to min past of current viewable timeline
-        if (this.props.startLocation + deltaX - this.props.max.startOffset <= 0) {
+        if (
+          this.props.startLocation + deltaX - this.props.max.startOffset <=
+          0
+        ) {
           deltaX = 0;
         }
       }
@@ -137,30 +148,40 @@ class TimelineDraggerRange extends React.Component {
   }
 
   /*
-  * Utility function to caculate difference between two dates
-  * put cutoff date as dateA for min (dateA hours & minutes used for both), and dateB for max
-  *
-  * @method dateDifferenceInDays
-  *
-  * @return {number}
-  */
+   * Utility function to caculate difference between two dates
+   * put cutoff date as dateA for min (dateA hours & minutes used for both), and dateB for max
+   *
+   * @method dateDifferenceInDays
+   *
+   * @return {number}
+   */
   dateDifferenceInDays(dateA, dateB) {
     const msPerDay = 1000 * 60 * 60 * 24;
     // Discard the time and time-zone information.
-    const utc1 = Date.UTC(dateA.getFullYear(), dateA.getMonth(), dateA.getDate());
-    const utc2 = Date.UTC(dateB.getFullYear(), dateB.getMonth(), dateB.getDate(), dateA.getHours(), dateA.getMinutes());
+    const utc1 = Date.UTC(
+      dateA.getFullYear(),
+      dateA.getMonth(),
+      dateA.getDate()
+    );
+    const utc2 = Date.UTC(
+      dateB.getFullYear(),
+      dateB.getMonth(),
+      dateB.getDate(),
+      dateA.getHours(),
+      dateA.getMinutes()
+    );
 
     return Math.floor((utc2 - utc1) / msPerDay);
   }
 
   /*
-  * Handle dragging timeline and syncing start position of dragger range
-  * used in rect to return x
-  *
-  * @method handleStartPositionRestriction
-  *
-  * @return {number}
-  */
+   * Handle dragging timeline and syncing start position of dragger range
+   * used in rect to return x
+   *
+   * @method handleStartPositionRestriction
+   *
+   * @return {number}
+   */
   handleStartPositionRestriction() {
     // if startLocation is in the past prior to min past of current viewable timeline
     if (this.props.startLocation <= 0) {
@@ -171,23 +192,26 @@ class TimelineDraggerRange extends React.Component {
   }
 
   /*
-  * Handle click within dragger range for drag vs guitarpick click behavior
-  * used in rect as onClick
-  *
-  * @method handleDraggerClick
-  *
-  * @return {void}
-  */
+   * Handle click within dragger range for drag vs guitarpick click behavior
+   * used in rect as onClick
+   *
+   * @method handleDraggerClick
+   *
+   * @return {void}
+   */
   handleDraggerClick(e) {
     // compare start locations to check if range has been dragged vs. clicked
-    if (this.state.startLocation.toFixed(3) === this.state.previousStartLocation.toFixed(3)) {
+    if (
+      this.state.startLocation.toFixed(3) ===
+      this.state.previousStartLocation.toFixed(3)
+    ) {
       this.props.onClick(e);
     } else {
       this.setState({ previousStartLocation: this.state.startLocation });
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.checkWidth();
   }
 
@@ -199,9 +223,12 @@ class TimelineDraggerRange extends React.Component {
     });
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     // update state and checkWidth only on startLocation and/or endLocation changes
-    if (prevProps.startLocation !== this.props.startLocation || prevProps.endLocation !== this.props.endLocation) {
+    if (
+      prevProps.startLocation !== this.props.startLocation ||
+      prevProps.endLocation !== this.props.endLocation
+    ) {
       this.updateExtent(this.props);
       this.checkWidth();
     }
@@ -215,7 +242,7 @@ class TimelineDraggerRange extends React.Component {
         handle=".dragger-range"
         axis="x"
         position={null}
-        defaultPosition={{ x: 0, y: -16 }}
+        defaultPosition={{ x: 0, y: 0 }}
         onStop={this.props.onStop}
         onDrag={this.handleDrag.bind(this)}
       >
@@ -227,8 +254,9 @@ class TimelineDraggerRange extends React.Component {
             fillOpacity: this.props.opacity,
             cursor: 'pointer'
           }}
-          height={this.props.height}
-          className='dragger-range'
+          // height={this.props.height}
+          height={63}
+          className="dragger-range"
           id={this.props.draggerID}
           onClick={this.handleDraggerClick.bind(this)}
         />

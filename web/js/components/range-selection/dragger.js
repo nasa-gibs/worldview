@@ -41,17 +41,18 @@ class TimelineDragger extends React.Component {
       <React.Fragment>
         <rect
           width={this.props.width}
-          height={this.props.height}
+          // height={this.props.height}
+          height={40}
           style={{
             fill: this.props.color,
             visibility: visibility
           }}
         />
         {/*
-              * this polygon element builds a triangle
-              * based on the width and height of the
-              * rectangle element
-              */}
+         * this polygon element builds a triangle
+         * based on the width and height of the
+         * rectangle element
+         */}
         <polygon
           points={
             '0,0,' +
@@ -190,7 +191,7 @@ TimelineDragger.defaultProps = {
   color: '#fff',
   position: 0,
   visibility: 'visible',
-  yOffset: -16,
+  yOffset: 23,
   path: null,
   textColor: '#000'
 };

@@ -20,10 +20,10 @@ import { timelineCompare } from './date/compare-picks';
 import { layersActive } from './layers/active';
 import { mapui } from './map/ui';
 import { mapAnimate } from './map/animate';
-import { animationUi } from './animation/ui';
-import { animationWidget } from './animation/widget';
-import { animationRangeSelect } from './animation/range-select';
-import { animationGif } from './animation/gif';
+// import { animationUi } from './animation/ui';
+// import { animationWidget } from './animation/widget';
+// import { animationRangeSelect } from './animation/range-select';
+// import { animationGif } from './animation/gif';
 import { debugLayers } from './debug';
 import { dataUi } from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
@@ -68,11 +68,11 @@ export function combineUi(models, config, MapMouseEvents, store) {
     ui.timeline.input = timelineInput(models, config, ui, store);
     ui.timeline.config = timelineConfig(models, config, ui);
     if (config.features.animation) {
-      ui.anim = {};
-      ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-      ui.anim.widget = animationWidget(models, config, ui);
-      ui.anim.gif = animationGif(models, config, ui);
-      ui.anim.ui = animationUi(models, ui);
+      // ui.anim = {};
+      // ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
+      // ui.anim.widget = animationWidget(models, config, ui);
+      // ui.anim.gif = animationGif(models, config, ui);
+      // ui.anim.ui = animationUi(models, ui);
     }
     if (config.features.compare) {
       ui.timeline.compare = timelineCompare(models, config, ui);

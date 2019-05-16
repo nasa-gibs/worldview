@@ -22,6 +22,7 @@ import { updateLegacyInitComplete } from './modules/migration/actions';
 // import { screenResize } from './modules/browser/actions';
 import { calculateResponsiveState } from 'redux-responsive';
 import Tour from './containers/tour';
+import AnimationWidget from './containers/animation-widget';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -82,6 +83,7 @@ class App extends React.Component {
     this.onload();
   }
   render() {
+    const { config } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
@@ -179,7 +181,9 @@ class App extends React.Component {
             </div>
           </div>
           <div id="timeline-footer">
-            <div id="wv-animation-widet-case"> </div>
+            <div id="wv-animation-widet-case">
+              {config.features.animation ? <AnimationWidget /> : ''}
+            </div>
           </div>
           <div id="timeline-hide">
             <svg className="hamburger" width="10" height="9">

@@ -225,13 +225,13 @@ export function getParamObject(
     errors
   );
   if (config.features.animation) {
-    animationParamObject = getAnimationParameterSetup(
-      parameters,
-      config,
-      models,
-      legacyState,
-      errors
-    );
+    // animationParamObject = getAnimationParameterSetup(
+    //   parameters,
+    //   config,
+    //   models,
+    //   legacyState,
+    //   errors
+    // );
   }
   const dateParamObject = getDateParameterSetup(
     parameters,
@@ -243,7 +243,7 @@ export function getParamObject(
   const obj = lodashAssign(
     {},
     dateParamObject,
-    animationParamObject,
+    // animationParamObject,
     mapParamObject,
     getParameters(config, parameters)
   );
