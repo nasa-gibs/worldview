@@ -11,7 +11,6 @@ import dateCalc from './date-calc';
 import TimelineRangeSelector from '../../range-selection/range-selection';
 
 const draggerWidth = 49;
-const timeScales = [ 'year', 'month', 'day', 'hour', 'minute' ];
 
 const timeScaleToNumberKey = {
   'custom': 0,
@@ -147,7 +146,7 @@ class TimelineAxis extends React.Component {
 
     let pixelsToAdd = diffStartAndZeroed / diffFactor;
 
-    //! offset grids needed since each zoom in won't be centered
+    // offset grids needed since each zoom in won't be centered
     let offSetGrids = Math.floor(leftOffset / gridWidth);
     let offSetGridsDiff = offSetGrids - Math.floor(numberOfVisibleTiles / 2);
 
@@ -284,7 +283,7 @@ class TimelineAxis extends React.Component {
     let draggerPositionB = this.state.draggerPositionB + deltaX;
     let dragSentinelChangeNumber = this.state.dragSentinelChangeNumber;
     let dragSentinelCount = this.state.dragSentinelCount;
-    //# PRE/POST GRIDARRAY UPDATE NOT NECESSARY FOR YEAR SINCE ALL YEARS DISPLAYED
+    // PRE/POST GRIDARRAY UPDATE NOT NECESSARY FOR YEAR SINCE ALL YEARS ARE DISPLAYED
     if (timeScale === 'year') {
       this.setState({
         draggerPosition: draggerPosition,
@@ -549,12 +548,15 @@ class TimelineAxis extends React.Component {
       return
     }
     if (!this.state.moved) {
-      let draggerPosition = this.props.draggerSelected === 'selected' ? this.state.leftOffset - draggerWidth : this.state.draggerPosition;
-      let draggerPositionB = this.props.draggerSelected === 'selectedB' ? this.state.leftOffset - draggerWidth : this.state.draggerPositionB;
+      let { draggerSelected } = this.props;
+      let { leftOffset, hoverTime } = this.state;
+
+      let draggerPosition = draggerSelected === 'selected' ? leftOffset - draggerWidth : this.state.draggerPosition;
+      let draggerPositionB = draggerSelected === 'selectedB' ? leftOffset - draggerWidth : this.state.draggerPositionB;
 
       // is the other dragger visible after clicking and moving then new dragger ?
       let isCompareModeActive = this.props.compareModeActive;
-      let draggerB = this.props.draggerSelected === 'selectedB';
+      let draggerB = draggerSelected === 'selectedB';
 
       //get front and back dates
       let deque = this.state.deque;
@@ -569,9 +571,9 @@ class TimelineAxis extends React.Component {
           draggerPositionB: draggerPositionB,
           draggerVisible: draggerAVisible,
           draggerVisibleB: true,
-          draggerTimeStateB: this.state.hoverTime,
+          draggerTimeStateB: hoverTime,
           moved: false
-        }, this.props.updateDate(this.state.hoverTime, 'selectedB'));
+        }, this.props.updateDate(hoverTime, 'selectedB'));
       } else {
         // check DRAGGER B visibility
         let draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
@@ -580,9 +582,9 @@ class TimelineAxis extends React.Component {
           draggerPosition: draggerPosition,
           draggerVisible: true,
           draggerVisibleB: draggerBVisible,
-          draggerTimeState: this.state.hoverTime,
+          draggerTimeState: hoverTime,
           moved: false
-        }, this.props.updateDate(this.state.hoverTime, 'selected'));
+        }, this.props.updateDate(hoverTime, 'selected'));
       }
     }
   }
@@ -897,17 +899,16 @@ class TimelineAxis extends React.Component {
   // moved === false means an axis click
   handleStopDrag = (e, d) => {
     let timeScale = this.props.timeScale;
-    let options = timeScaleOptions[timeScale].timeAxis;
-    let gridWidth = options.gridWidth;
+    // let options = timeScaleOptions[timeScale].timeAxis;
+    // let gridWidth = options.gridWidth;
 
-    // let time = moment.utc(this.props.selectedDate);
-    let currentDateRangeLength = this.state.deque.length;
-    let midTileDate = moment.utc(this.state.deque.get(Math.floor(currentDateRangeLength / 2)).rawDate);
-    // console.log(midTileDate)
-    let time = moment.utc(new Date());
-    let timelineEndDateLimit = this.props.timelineEndDateLimit;
-    let diff = midTileDate.diff(timelineEndDateLimit, timeScale);
-
+    // // let time = moment.utc(this.props.selectedDate);
+    // let currentDateRangeLength = this.state.deque.length;
+    // let midTileDate = moment.utc(this.state.deque.get(Math.floor(currentDateRangeLength / 2)).rawDate);
+    // // console.log(midTileDate)
+    // let time = moment.utc(new Date());
+    // let timelineEndDateLimit = this.props.timelineEndDateLimit;
+    // let diff = midTileDate.diff(timelineEndDateLimit, timeScale);
 
     let midPoint = this.state.midPoint;
     let position = this.state.position - midPoint;
@@ -916,17 +917,6 @@ class TimelineAxis extends React.Component {
     if (d.x < midPoint || d.x > midPoint) {
       moved = true;
     }
-    // console.log(this.state.leftBound + d.x, d.x, d.x + midPoint)
-    // let leftBound = (diff * gridWidth)
-    // if (Math.abs(diff) < Math.floor(currentDateRangeLength / 2)) {
-    //   // console.log('hit')
-    //   leftBound = midPoint
-    // }
-
-    // console.log(diff, leftBound, Math.floor(currentDateRangeLength / 2), ((diff * gridWidth)))
-
-    // console.log(midPoint, this.state.leftBound + (this.state.leftBound - d.x), this.state.leftBound - (this.state.leftBound + d.x))
-    // console.log(midPoint, d.x)
 
     let leftBound = this.state.leftBound + (midPoint - d.x);
     let rightBound = this.state.rightBound + (midPoint - d.x);
@@ -1162,15 +1152,6 @@ class TimelineAxis extends React.Component {
     })
   }
 
-  //TODO: dynamic bounds to stop axis from dragging too far
-  getLeftAxisBound = () => {
-    return -200;
-  }
-
-  getRightAxisBound = () => {
-    return 200;
-  }
-
   // handle animation dragger drag change
   animationDraggerPositionUpdate = (startLocation, endLocation, stopDragging) => {
     let isDragging = stopDragging ? false : true;
@@ -1316,6 +1297,7 @@ class TimelineAxis extends React.Component {
       ? this.state.draggerPosition - (this.props.hasSubdailyLayers ? 64 : 8)
       : this.state.draggerPositionB - (this.props.hasSubdailyLayers ? 64 : 8);
     let hoverTimeLeftOffset = this.props.hasSubdailyLayers ? this.state.leftOffset - 113 : this.state.leftOffset - 57;
+    // ! WINDOW.MOMENT FOR DEV DEBUG ONLY
     window.moment = moment;
 
     return (
@@ -1333,7 +1315,6 @@ class TimelineAxis extends React.Component {
         width={this.props.axisWidth}
         height={70}
         viewBox={`0 0 ${this.props.axisWidth} 75`}
-        // style={{clipPath: 'url(#tester)'}} clipPath="url(#tester)"
         preserveAspectRatio="xMinYMin slice">
         <defs>
           {/* clip axis grid text */}
@@ -1351,13 +1332,10 @@ class TimelineAxis extends React.Component {
           onDrag={this.handleDrag.bind(this)}
           position={{ x: this.state.position, y: 0 }}
           onStop={this.handleStopDrag.bind(this)}
-          // bounds={{ left: this.getLeftAxisBound(), top: 0, bottom: 0, right: this.getRightAxisBound() }}
-          // bounds={{left: -400, top: 0, bottom: 0, right: 0}}
           bounds={{left: this.state.leftBound, top: 0, bottom: 0, right: this.state.rightBound}}
         >
         <g>
           <GridRange
-            // showHoverLine={this.state.showHoverLine}
             showHover={this.showHover}
             timeScale={this.props.timeScale}
             displayDate={this.displayDate}

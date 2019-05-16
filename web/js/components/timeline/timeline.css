@@ -40,7 +40,7 @@ html, body {
   height: 25px;
   line-height: 25px;
   white-space: nowrap;
-  /* transition: opacity 0.2s ease-in; */
+  /* transition: opacity 0.3s ease-in-out; */
 }
 
 .gridShell {
@@ -69,20 +69,6 @@ line {
 }
 
 /* DEVELOPMENT */
-
-/* form button, form input, form select {
-  border: none;
-  outline: thin solid black;
-  width: 96px;
-  text-align: center;
-}
-form button {
-  height: 30px;
-}
-form select {
-  text-align-last: center;
-  padding-left: 15px;
-} */
 
 #wv-animation-widget-custom-interval  select {
   text-align-last: center;

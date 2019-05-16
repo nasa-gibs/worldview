@@ -24,7 +24,7 @@ class Dragger extends PureComponent {
         disabled={disabled}
       >
         <g
-          style={{ cursor: 'pointer', display: draggerVisible ? 'flex' : 'none' }}
+          style={{ cursor: 'pointer', display: draggerVisible ? 'block' : 'none' }}
           className='gridShell dragger' transform={`translate(${transformX}, 0)`}
         >
           <polygon fill={disabled ? '#7a7a7a' : '#ccc'} stroke='#333' strokeWidth='1px' points='60,20, 95,65, 25,65'></polygon>
