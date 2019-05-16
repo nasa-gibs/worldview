@@ -1,62 +1,9 @@
 import React, { PureComponent } from 'react';
-import moment from 'moment';
-
+import PropTypes from 'prop-types';
 import TileRect from './tile-rect';
 import TileText from './tile-text';
 
-// # PureComponent performs a shallow comparison of props and state - may not need shouldComponentUpdate
-class GridRange extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      // hoverLinePosition: 0
-    };
-  }
-
-  // showHover = (e, itemDate, nextDate, index) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   e.persist();
-  //   requestAnimationFrame(() => {
-  //     let target = e.target;
-  //     let clientX = e.clientX;
-  //     let boundingClientRect = target.getBoundingClientRect();
-  //     let xHoverPositionInCurrentGrid = Math.floor(clientX) - Math.floor(boundingClientRect.left);
-  //     let gridWidth = this.props.gridWidth;
-
-  //     let currentDateValue = moment.utc(itemDate).valueOf();
-  //     let nextDateValue = moment.utc(nextDate).valueOf();
-  //     let diff = nextDateValue - currentDateValue;
-  //     let diffFactor = diff / gridWidth; // gridWidth
-  //     let displayDate = moment.utc(currentDateValue + (xHoverPositionInCurrentGrid * diffFactor)).format();
-  //     this.props.displayDate(displayDate, clientX);
-  //     this.setState({
-  //       hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid
-  //     })
-  //   })
-  // }
-
-  componentDidUpdate(prevProps, prevState) {
-  }
-
-  render() {
-    let { gridWidth, transformX, timeScale, dateArray, showHover } = this.props;
-    return (
-      <g className="gridShell" transform={`translate(${transformX}, 0)`}>
-        <TileHolder
-          timeScale={timeScale}
-          dateArray={dateArray}
-          gridWidth={gridWidth}
-          showHover={showHover}
-        />
-        {/* <line className="svgLine" style={{display: this.props.showHoverLine ? 'block' : 'none'}}
-          stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="63"
-          transform={`translate(${this.state.hoverLinePosition + 1}, 0)`} shapeRendering="optimizeSpeed"/> */}
-      </g>
-    );
-  }
-}
-
+// determine if text will be rendered
 const tileTextConditionOptions = {
   minute: (itemDateObject) => {
     let timeScaleUnit = itemDateObject.minutes;
@@ -86,37 +33,49 @@ const tileTextConditionOptions = {
   }
 };
 
-class TileHolder extends PureComponent {
+class GridRange extends PureComponent {
   render() {
-    let { gridWidth, timeScale, dateArray, showHover } = this.props;
+    let { gridWidth, transformX, timeScale, dateArray, showHover } = this.props;
     let tileTextCondition = tileTextConditionOptions[timeScale];
     return (
-      <React.Fragment>
-        {dateArray.map((item, index) => {
-          return (
-            item.withinRange
-              ? <React.Fragment key={index}>
-                <TileRect
-                  item={item}
-                  index={index}
-                  gridWidth={gridWidth}
-                  showHover={showHover}
-                />
-                {tileTextCondition(item.dateObject)
-                  ? <TileText
+      <g className="gridShell" transform={`translate(${transformX}, 0)`}>
+        <React.Fragment>
+          {dateArray.map((item, index) => {
+            return (
+              item.withinRange
+                ? <React.Fragment key={index}>
+                  <TileRect
                     item={item}
                     index={index}
                     gridWidth={gridWidth}
+                    showHover={showHover}
+                    timeScale={timeScale}
                   />
-                  : null }
-              </React.Fragment>
-              : null
-          );
-        }
-        )}
-      </React.Fragment>
+                  {tileTextCondition(item.dateObject)
+                    ? <TileText
+                      item={item}
+                      index={index}
+                      gridWidth={gridWidth}
+                    />
+                    : null }
+                </React.Fragment>
+                : null
+            );
+          }
+          )}
+        </React.Fragment>
+      </g>
     );
   }
 }
+
+GridRange.propTypes = {
+  dateArray: PropTypes.array,
+  displayDate: PropTypes.func,
+  gridWidth: PropTypes.number,
+  showHover: PropTypes.func,
+  timeScale: PropTypes.string,
+  transformX: PropTypes.number
+};
 
 export default GridRange;
