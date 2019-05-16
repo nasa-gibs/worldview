@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_Aura_Descending": {
+          "id":       "OrbitTracks_Aura_Descending",
+          "title":    "Orbit Tracks (Descending, Points, Aura)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_Aura_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_Aura_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

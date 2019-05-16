@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_Sentinel-5P_Ascending": {
+          "id":       "OrbitTracks_Sentinel-5P_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, Sentinel-5P)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_Sentinel-5P_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_Sentinel-5P_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}

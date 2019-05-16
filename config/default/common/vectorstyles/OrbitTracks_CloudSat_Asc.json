@@ -1,0 +1,61 @@
+{
+  "version": 8,
+  "name": "FIRMS",
+  "sources": {
+    "OrbitTracks_CloudSat_Asc": {
+      "type": "vector",
+      "tiles": [
+        "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_CloudSat_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "OrbitTracks_circle_default",
+      "source": "OrbitTracks_CloudSat_Asc",
+      "source-layer": "OrbitTracks_CloudSat_Asc_LL_20190515",
+      "type": "circle",
+      "paint": {
+        "circle-radius": [
+          "case",
+          ["==", ["get", "time"], "^[0-9][0-9]:[0-9][0,5]$"], "10",
+          ["==", ["get", "time"], "^[0-9][0-9]:[0-9][1,2,3,4,6,7,8,9]$"], "7.5",
+          "7.5"
+        ],
+        "circle-color": [
+          "case",
+          ["==", ["get", "time"], "^[0-9][0-9]:[0-9][0,5]$"], "rgba(178,223,138,1)",
+          ["==", ["get", "time"], "^[0-9][0-9]:[0-9][1,2,3,4,6,7,8,9]$"], "rgba(178,223,138,1)",
+          "rgba(255,255,255,0.4)"
+        ]
+      }
+    },
+    {
+      "id": "OrbitTracks_line_default",
+      "source": "OrbitTracks_CloudSat_Asc",
+      "source-layer": "OrbitTracks_CloudSat_Asc_LL_20190515",
+      "type": "line",
+      "paint": {
+        "circle-radius": {
+          "base": 2,
+          "stops": [[12, 1], [22, 10]]
+        },
+        "circle-color": [
+          "case",
+          ["<=", ["get", "FRP"], 50], "rgba(255,0,0,1)",
+          [
+            "all",
+            [">", ["get", "FRP"], 50],
+            ["<=", ["get", "FRP"], 75]
+          ], "rgba(255,128,0,1)",
+          [
+            "all",
+            [">", ["get", "FRP"], 75],
+            ["<=", ["get", "FRP"], 100]
+          ], "rgba(55,255,0,1)",
+          "rgba(255,255,255,0.4)"
+        ]
+      }
+    }
+  ]
+}

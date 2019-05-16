@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_CYGNSS_Ascending": {
+          "id":       "OrbitTracks_CYGNSS_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, CYGNSS)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_CYGNSS_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_CYGNSS_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}

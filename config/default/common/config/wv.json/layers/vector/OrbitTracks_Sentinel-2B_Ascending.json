@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_Sentinel-2B_Ascending": {
+          "id":       "OrbitTracks_Sentinel-2B_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, Sentinel-2B)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_Sentinel-2B_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_Sentinel-2B_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}

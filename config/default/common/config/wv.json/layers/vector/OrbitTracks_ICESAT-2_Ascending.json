@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_ICESAT-2_Ascending": {
+          "id":       "OrbitTracks_ICESAT-2_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, ICESAT-2)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_ICESAT-2_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_ICESAT-2_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}

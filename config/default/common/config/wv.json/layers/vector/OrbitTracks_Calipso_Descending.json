@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_Calipso_Descending": {
+          "id":       "OrbitTracks_Calipso_Descending",
+          "title":    "Orbit Tracks (Descending, Points, Calipso)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_Calipso_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_Calipso_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

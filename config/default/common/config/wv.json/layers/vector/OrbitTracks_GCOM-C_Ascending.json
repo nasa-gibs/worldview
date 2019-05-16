@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_GCOM-C_Ascending": {
+          "id":       "OrbitTracks_GCOM-C_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, GCOM-C)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_GCOM-C_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_GCOM-C_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}
