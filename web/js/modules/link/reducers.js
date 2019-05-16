@@ -2,7 +2,7 @@ import { REQUEST_SHORT_LINK, UPDATE_PERMALINK } from './constants';
 import { requestReducer } from '../core/reducers';
 import { assign as lodashAssign } from 'lodash';
 
-export const deafultLinkState = {
+const defaultLinkState = {
   queryString: ''
 };
 
@@ -10,7 +10,7 @@ export function shortLink(state = {}, action) {
   return requestReducer(REQUEST_SHORT_LINK, state, action);
 }
 
-export function linkReducer(state = deafultLinkState, action) {
+export function linkReducer(state = defaultLinkState, action) {
   switch (action.type) {
     case UPDATE_PERMALINK:
       return lodashAssign({}, state, {
