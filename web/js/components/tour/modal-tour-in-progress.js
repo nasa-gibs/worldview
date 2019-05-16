@@ -353,7 +353,7 @@ class ModalInProgress extends React.Component {
     // SET UI: Timeline Zoom Level
     if (currentState.z) {
       let zoomLevel = Number(currentState.z);
-      ui.timeline.config.zoom(zoomLevel);
+      ui.timeline.changeTimeScale(zoomLevel);
     }
 
     // SET UI: Animation
