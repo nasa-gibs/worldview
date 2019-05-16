@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_METOP-B_Ascending": {
+          "id":       "OrbitTracks_METOP-B_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, METOP-B)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_METOP-B_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_METOP-B_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}

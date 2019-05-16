@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_OCO-2_Ascending": {
+          "id":       "OrbitTracks_OCO-2_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, OCO-2)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_OCO-2_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_OCO-2_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}

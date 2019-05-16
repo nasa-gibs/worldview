@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_CloudSat_Ascending": {
+          "id":       "OrbitTracks_CloudSat_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, CloudSat)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_CloudSat_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_CloudSat_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}
