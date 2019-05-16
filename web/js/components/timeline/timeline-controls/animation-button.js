@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 class AnimationButton extends PureComponent {
   render() {
@@ -14,5 +15,9 @@ class AnimationButton extends PureComponent {
     );
   }
 }
+
+AnimationButton.propTypes = {
+  clickAnimationButton: PropTypes.func
+};
 
 export default AnimationButton;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TileRect from './tile-rect';
 import TileText from './tile-text';
 
-// determine if text will be rendered
+// determine if text will be rendered via itemDateObject param used with timeScale key
 const tileTextConditionOptions = {
   minute: (itemDateObject) => {
     let timeScaleUnit = itemDateObject.minutes;

@@ -4,11 +4,10 @@ import IntervalInput from './interval-input';
 import TimeScaleSelect from './timescale-select';
 
 /*
- * A react component, Builds a rather specific
- * interactive widget
+ * CustomIntervalSelectorWidget for Custom Interval Selector
+ * group. It is a parent component of this group.
  *
- * @class AnimationWidget
- * @extends React.Component
+ * @class CustomIntervalSelectorWidget
  */
 class CustomIntervalSelectorWidget extends PureComponent {
   constructor(props) {
@@ -60,27 +59,30 @@ class CustomIntervalSelectorWidget extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    let { customIntervalModalOpen, customIntervalValue, zoomLevel, customIntervalZoomLevel } = this.props;
     // handle focus widget on opening
-    if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
+    if (customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
       this.customIntervalWidget.focus();
     }
     // update if higher state changed
-    if (prevProps.customIntervalValue !== this.props.customIntervalValue
-     || prevProps.zoomLevel !== this.props.zoomLevel) {
+    if (customIntervalValue !== prevProps.customIntervalValue
+     || zoomLevel !== prevProps.zoomLevel) {
       this.setState({
-        intervalValue: this.props.customIntervalValue,
-        zoomLevel: this.props.customIntervalZoomLevel
+        intervalValue: customIntervalValue,
+        zoomLevel: customIntervalZoomLevel
       })
     }
   }
 
   render() {
+    let { customIntervalModalOpen, hasSubdailyLayers, toggleCustomIntervalModal } = this.props;
+    let { intervalValue, zoomLevel } = this.state;
     return (
       <div
         id="wv-animation-widget-custom-interval"
         onKeyDown={this.handleKeyPress}
         className='wv-animation-widget-custom-interval'
-        style={{display: this.props.customIntervalModalOpen ? 'block' : 'none'}}
+        style={{display: customIntervalModalOpen ? 'block' : 'none'}}
         tabIndex={0}
         ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >
@@ -89,18 +91,18 @@ class CustomIntervalSelectorWidget extends PureComponent {
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '25px' }}>
         <div style={{display: 'flex', flexDirection: 'row' }}>
           <IntervalInput
-            intervalValue={Number(this.state.intervalValue)}
+            intervalValue={Number(intervalValue)}
             changeInterval={this.changeInterval}
           />
           <TimeScaleSelect
-            hasSubdailyLayers={this.props.hasSubdailyLayers}
-            zoomLevel={this.state.zoomLevel}
+            hasSubdailyLayers={hasSubdailyLayers}
+            zoomLevel={zoomLevel}
             changeZoomLevel={this.changeZoomLevel}
           />
         </div>
       </div>
 
-      <i className="fa fa-times wv-close" onClick={this.props.toggleCustomIntervalModal}/>
+      <i className="fa fa-times wv-close" onClick={toggleCustomIntervalModal}/>
       </div>
     );
   }

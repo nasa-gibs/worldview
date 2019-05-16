@@ -28,7 +28,7 @@ export function timeline(models, config, ui) {
   let subdaily = models.layers.hasSubDaily();
   self.enabled = false;
   self.startDate = new Date(config.startDate);
-  self.parentOffset = (subdaily ? 404 : 310) + 10;
+  self.parentOffset = (subdaily ? 414 : 310) + 10;
 
   self.active = false;
   self.delay = 500;
@@ -157,6 +157,11 @@ export function timeline(models, config, ui) {
     }
   };
 
+  /**
+   *  Get Date Selector Input Props
+   *
+   * @return {void}
+   */
   var getInputProps = function() {
     var model = models.date;
     var min = model.minDate();
@@ -199,7 +204,7 @@ export function timeline(models, config, ui) {
     } else {
       hasSubDaily = models.layers.hasSubDaily();
     }
-    self.parentOffset = (hasSubDaily ? 404 : 310) + 10;
+    self.parentOffset = (hasSubDaily ? 414 : 310) + 10;
 
     self.width =
       // $(window).outerWidth(true) -
@@ -362,7 +367,7 @@ export function timeline(models, config, ui) {
     });
   };
 
-  // TEST updateRange
+  // updateRange of animation draggers
   var updateAnimationRange = (startDate, endDate) => {
     ui.anim.rangeselect.updateRange(startDate, endDate, true);
   };
@@ -434,8 +439,9 @@ export function timeline(models, config, ui) {
   };
 
   // change time scale
-  var changeTimeScale = (timeScale) => {
-    models.date.setSelectedZoom(timeScaleToNumberKey[timeScale]);
+  // timeScaleNumber is an integer 1 - 5
+  self.changeTimeScale = (timeScaleNumber) => {
+    models.date.setSelectedZoom(timeScaleNumber);
     updateTimeScaleState();
   };
 
@@ -515,7 +521,7 @@ export function timeline(models, config, ui) {
       stopper: stopper,
       clickAnimationButton: clickAnimationButton,
       toggleHideTimeline: self.toggle,
-      changeTimeScale: changeTimeScale,
+      changeTimeScale: self.changeTimeScale,
       intervalTimeScale: intervalSelected,
       intervalDelta: intervalDelta,
       setSelectedInterval: setSelectedInterval,
@@ -633,7 +639,7 @@ export function timeline(models, config, ui) {
       setIntervalInput(1, 'day');
       self.reactComponent.setState({
         hasSubdailyLayers: subdaily
-      }, changeTimeScale('day'));
+      }, self.changeTimeScale(3)); // default to day
     } else {
       self.reactComponent.setState({
         hasSubdailyLayers: subdaily

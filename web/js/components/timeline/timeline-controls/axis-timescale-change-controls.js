@@ -6,7 +6,7 @@ import AxisTimeScaleChangeTooltip from './axis-timescale-change-tooltip';
  * Up/down arrows for changing timeScale, also wrapper for tooltip
  *
  * @class AxisTimeScaleChangeControls
- * @extends React.Component
+ * @extends PureComponent
  */
 class AxisTimeScaleChangeControls extends PureComponent {
   onClickUp = () => {
@@ -17,13 +17,14 @@ class AxisTimeScaleChangeControls extends PureComponent {
     this.props.decrementTimeScale();
   }
   render() {
+    let { timeScale, toolTipHovered, changeTimeScale, hasSubdailyLayers } = this.props;
     return (
       <div className="zoom-level-change-arrows">
         <AxisTimeScaleChangeTooltip
-          timeScale={this.props.timeScale}
-          toolTipHovered={this.props.toolTipHovered}
-          changeTimeScale={this.props.changeTimeScale}
-          hasSubdailyLayers={this.props.hasSubdailyLayers}
+          timeScale={timeScale}
+          toolTipHovered={toolTipHovered}
+          changeTimeScale={changeTimeScale}
+          hasSubdailyLayers={hasSubdailyLayers}
         />
         <div
           onClick={this.onClickUp}

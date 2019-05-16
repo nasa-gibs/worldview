@@ -12,6 +12,16 @@ import TimelineRangeSelector from '../../range-selection/range-selection';
 
 const draggerWidth = 49;
 const timeScales = [ 'year', 'month', 'day', 'hour', 'minute' ];
+
+const timeScaleToNumberKey = {
+  'custom': 0,
+  'year': 1,
+  'month': 2,
+  'day': 3,
+  'hour': 4,
+  'minute': 5
+};
+
 const timeScaleOptions = {
   'minute': {
     timeAxis: {
@@ -83,12 +93,13 @@ class TimelineAxis extends React.Component {
   }
   //? how do position and transforms change between scale changes? lock into one line would be ideal
   updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange) => {
-    // console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff)
+    console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange)
     let maxDateTEMP = moment.utc(new Date());
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
     let axisWidth = axisWidthInput ? axisWidthInput : this.props.axisWidth;
     let leftOffset = leftOffsetFixedCoeff ? axisWidth * leftOffsetFixedCoeff : this.state.leftOffset;
+    console.log(this.state.leftOffset)
     if (leftOffset === 0) {
       leftOffset = axisWidth / 2;
     }
@@ -244,22 +255,19 @@ class TimelineAxis extends React.Component {
   // changes timeScale state
   wheelZoom = (e) => {
     // e.preventDefault(); //TODO: investigate treated as passive event error/warning when on
-    let arrayIndex = timeScales.indexOf(this.props.timeScale);
-    let maxIndex = this.props.hasSubdailyLayers ? 4 : 2;
+    let timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
+    let maxTimeScaleNumber = this.props.hasSubdailyLayers ? 5 : 3;
     if (e.deltaY > 0) { // wheel zoom out
-      if (arrayIndex > 0) {
-        let nextGreaterTimeScale = timeScales[arrayIndex - 1];
+      if (timeScaleNumber > 1) {
         this.setState({
           wheelZoom: true
-        }, this.props.changeTimescale(nextGreaterTimeScale))
+        }, this.props.changeTimeScale(timeScaleNumber - 1))
       }
     } else {
-      if (arrayIndex < maxIndex) { // wheel zoom in
-        let nextSmallerTimeScale = timeScales[arrayIndex + 1];
-        // this.props.changeTimescale(nextSmallerTimeScale);
+      if (timeScaleNumber < maxTimeScaleNumber) { // wheel zoom in
         this.setState({
           wheelZoom: true
-        }, this.props.changeTimescale(nextSmallerTimeScale))
+        }, this.props.changeTimeScale(timeScaleNumber + 1))
       }
     }
   }
@@ -763,7 +771,7 @@ class TimelineAxis extends React.Component {
       if (this.state.wheelZoom === true) {
         draggerDate = this.state.hoverTime;
       } else {
-        leftOffset = 0.5;
+        leftOffset = 0.75;
         if (this.props.draggerSelected === 'selected') {
           draggerDate = this.state.draggerTimeState;
         } else {
@@ -1398,7 +1406,7 @@ class TimelineAxis extends React.Component {
             draggerPosition={this.state.draggerPosition}
             draggerVisible={this.state.draggerVisible}
             transformX={this.state.currentTransformX}
-            parentPosition={this.state.position} />
+            />
           <Dragger
             toggleShowDraggerTime={this.toggleShowDraggerTime}
             handleDragDragger={this.handleDragDragger}
@@ -1409,7 +1417,7 @@ class TimelineAxis extends React.Component {
             draggerPosition={this.state.draggerPositionB}
             draggerVisible={this.state.draggerVisibleB}
             transformX={this.state.currentTransformX}
-            parentPosition={this.state.position} />
+            />
         </React.Fragment>
         :
         <React.Fragment>
@@ -1423,7 +1431,7 @@ class TimelineAxis extends React.Component {
             draggerPosition={this.state.draggerPositionB}
             draggerVisible={this.state.draggerVisibleB}
             transformX={this.state.currentTransformX}
-            parentPosition={this.state.position} />
+            />
           <Dragger
             toggleShowDraggerTime={this.toggleShowDraggerTime}
             handleDragDragger={this.handleDragDragger}
@@ -1434,7 +1442,7 @@ class TimelineAxis extends React.Component {
             draggerPosition={this.state.draggerPosition}
             draggerVisible={this.state.draggerVisible}
             transformX={this.state.currentTransformX}
-            parentPosition={this.state.position} />
+            />
         </React.Fragment>
       }
         </svg>

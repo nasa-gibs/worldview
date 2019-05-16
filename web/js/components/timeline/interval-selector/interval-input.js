@@ -2,14 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * A react component, is a draggable svg
- * group. It is a parent component that
- * rerenders when child elements are dragged
+ * Interval Input for Custom Interval Selector
+ * group. It is a child component.
  *
- * @class TimelineRangeSelector
+ * @class IntervalInput
  */
 const regex = /^[0-9\b]+$/;
-
 
 class IntervalInput extends PureComponent {
   onKeyInput = (e) => {

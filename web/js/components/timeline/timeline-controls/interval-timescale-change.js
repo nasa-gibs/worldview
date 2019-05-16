@@ -39,16 +39,19 @@ class TimeScaleIntervalChange extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    if (this.props.customIntervalValue && this.props.timeScaleChangeUnit) {
-      if (this.props.customSelected && this.props.customIntervalValue !== 1 && this.state.customIntervalText === 'Custom') {
+    let { customIntervalValue, timeScaleChangeUnit, customSelected } = this.props;
+    if (customIntervalValue && timeScaleChangeUnit) {
+      if (customSelected && customIntervalValue !== 1 && this.state.customIntervalText === 'Custom') {
         this.setCustomIntervalText();
-      } else if (this.props.customSelected && (this.props.customIntervalValue !== prevProps.customIntervalValue || this.props.timeScaleChangeUnit !== prevProps.timeScaleChangeUnit)) {
+      } else if (customSelected && (customIntervalValue !== prevProps.customIntervalValue || timeScaleChangeUnit !== prevProps.timeScaleChangeUnit)) {
         this.setCustomIntervalText();
       }
     }
   }
 
   render() {
+    let { customIntervalText, toolTipHovered } = this.state;
+    let { customSelected, timeScaleChangeUnit } = this.props;
     return (
       <React.Fragment>
         <div id="zoom-btn-container"
@@ -58,14 +61,14 @@ class TimeScaleIntervalChange extends Component {
           {/* timeScale display */}
           <span
             id="current-zoom"
-            className={`zoom-btn zoom-btn-active${this.props.customSelected ? ' custom-interval-text' : ''}`}
+            className={`zoom-btn zoom-btn-active${customSelected ? ' custom-interval-text' : ''}`}
           >
-            {this.props.customSelected ? this.state.customIntervalText : 1 + ' ' + this.props.timeScaleChangeUnit}
+            {customSelected ? customIntervalText : 1 + ' ' + timeScaleChangeUnit}
           </span>
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
           <div className="wv-tooltip"
-          style={{ display: this.state.toolTipHovered ? 'block' : 'none' }}
+          style={{ display: toolTipHovered ? 'block' : 'none' }}
           >
             <div id="timeline-zoom" className="timeline-zoom">
               <span
@@ -106,10 +109,10 @@ class TimeScaleIntervalChange extends Component {
               <span
                 id="zoom-custom"
                 className="zoom-btn zoom-btn-inactive zoom-custom custom-interval-text"
-                style={{ display: this.state.customIntervalText === 'Custom' ? 'none' : 'block' }}
+                style={{ display: customIntervalText === 'Custom' ? 'none' : 'block' }}
                 onClick={() => this.handleClickZoom('custom')}
               >
-                {this.state.customIntervalText}
+                {customIntervalText}
               </span>
               <span
                 id="zoom-custom-static"

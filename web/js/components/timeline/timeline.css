@@ -69,38 +69,8 @@ line {
 }
 
 /* DEVELOPMENT */
-.line {
-  top: 102px;
-  width: 2px;
-  height: 60px;
-  background: rgba(21,21,255,0.4);
-  position: absolute;
-  pointer-events: none;
-}
 
-.linered {
-  width: 3px;
-  height: 70px;
-  background: red;
-  position: absolute;
-  pointer-events: none;
-}
-
-.dateTempHolderTextBlock {
-  height: 90px;
-  width: 300px;
-  border: 2px solid;
-  text-align: center;
-  font-size: 24px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-}
-
-.tick {
-  margin-left: -1px;
-}
-
-form button, form input, form select {
+/* form button, form input, form select {
   border: none;
   outline: thin solid black;
   width: 96px;
@@ -112,15 +82,11 @@ form button {
 form select {
   text-align-last: center;
   padding-left: 15px;
-}
-.incrementButton {
-  width: 70px;
-  height: 99px;
-  font-weight: 700;
-}
-.changeZoomLevelButtons button {
-  background: dimgrey;
-  color: white;
+} */
+
+#wv-animation-widget-custom-interval  select {
+  text-align-last: center;
+  padding-left: 15px;
 }
 
 #timelineContainer > div:nth-child(1) > div.wv-date-selector-widget {

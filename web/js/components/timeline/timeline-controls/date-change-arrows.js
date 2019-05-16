@@ -1,16 +1,18 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 class DateChangeArrows extends PureComponent {
   render() {
+    let { leftArrowDisabled, leftArrowDown, leftArrowUp, rightArrowDisabled, rightArrowDown, rightArrowUp } = this.props;
     return (
       <div>
         {/* LEFT ARROW */}
         <div
-          className={`button-action-group ${this.props.leftArrowDisabled ? 'button-disabled' : ''}`}
+          className={`button-action-group ${leftArrowDisabled ? 'button-disabled' : ''}`}
           id="left-arrow-group"
           title="Click and hold to animate backwards"
-          onMouseDown={this.props.leftArrowDown}
-          onMouseUp={this.props.leftArrowUp}
+          onMouseDown={leftArrowDown}
+          onMouseUp={leftArrowUp}
         >
           <svg id="timeline-svg" width="24" height="30">
             <path
@@ -22,11 +24,11 @@ class DateChangeArrows extends PureComponent {
 
         {/* RIGHT ARROW */}
         <div
-          className={`button-action-group ${this.props.rightArrowDisabled ? 'button-disabled' : ''}`}
+          className={`button-action-group ${rightArrowDisabled ? 'button-disabled' : ''}`}
           id="right-arrow-group"
           title="Click and hold to animate forwards"
-          onMouseDown={this.props.rightArrowDown}
-          onMouseUp={this.props.rightArrowUp}
+          onMouseDown={rightArrowDown}
+          onMouseUp={rightArrowUp}
         >
           <svg width="24" height="30">
             <path
@@ -39,5 +41,14 @@ class DateChangeArrows extends PureComponent {
     );
   }
 }
+
+DateChangeArrows.propTypes = {
+  leftArrowDisabled: PropTypes.bool,
+  leftArrowDown: PropTypes.func,
+  leftArrowUp: PropTypes.func,
+  rightArrowDisabled: PropTypes.bool,
+  rightArrowDown: PropTypes.func,
+  rightArrowUp: PropTypes.func
+};
 
 export default DateChangeArrows;

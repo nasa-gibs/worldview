@@ -22,6 +22,24 @@ import AxisTimeScaleChange from './timeline-controls/axis-timescale-change';
 //   minute: 'min'
 // };
 
+const timeScaleFromNumberKey = {
+  '0': 'custom',
+  '1': 'year',
+  '2': 'month',
+  '3': 'day',
+  '4': 'hour',
+  '5': 'minute'
+};
+
+const timeScaleToNumberKey = {
+  'custom': '0',
+  'year': '1',
+  'month': '2',
+  'day': '3',
+  'hour': '4',
+  'minute': '5'
+};
+
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
@@ -64,9 +82,9 @@ class Timeline extends React.Component {
   }
 
   // Change the timescale parent state
-  changeTimescale = (timeScale) => {
-    if (this.state.timeScale !== timeScale) {
-      this.props.changeTimeScale(timeScale);
+  changeTimeScale = (timeScaleNumber) => {
+    if (this.state.timeScale !== timeScaleFromNumberKey[timeScaleNumber]) {
+      this.props.changeTimeScale(timeScaleNumber);
     }
   }
 
@@ -95,28 +113,44 @@ class Timeline extends React.Component {
 
   // checkLeftArrowDisabled
   checkLeftArrowDisabled = () => {
-    let previousPastDateBasedOnIncrement;
-    if (this.state.draggerSelected === 'selected') {
-      previousPastDateBasedOnIncrement = moment.utc(this.state.dateFormatted).subtract(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
-    } else {
-      previousPastDateBasedOnIncrement = moment.utc(this.state.dateFormattedB).subtract(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
+    let { draggerSelected,
+        dateFormatted,
+        dateFormattedB,
+        intervalChangeAmt,
+        timeScaleChangeUnit,
+        timelineStartDateLimit } = this.state;
+    let previousIncrementDate;
+    if (intervalChangeAmt && timeScaleChangeUnit) {
+      if (draggerSelected === 'selected') {
+        previousIncrementDate = moment.utc(dateFormatted).subtract(intervalChangeAmt, timeScaleChangeUnit);
+      } else {
+        previousIncrementDate = moment.utc(dateFormattedB).subtract(intervalChangeAmt, timeScaleChangeUnit);
+      }
+      this.setState({
+        leftArrowDisabled: previousIncrementDate.isSameOrBefore(timelineStartDateLimit)
+      })
     }
-    this.setState({
-      leftArrowDisabled: previousPastDateBasedOnIncrement.isSameOrBefore(this.state.timelineStartDateLimit)
-    })
   }
 
   // checkRightArrowDisabled
   checkRightArrowDisabled = () => {
-    let nextFutureDateBasedOnIncrement;
-    if (this.state.draggerSelected === 'selected') {
-      nextFutureDateBasedOnIncrement = moment.utc(this.state.dateFormatted).add(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
-    } else {
-      nextFutureDateBasedOnIncrement = moment.utc(this.state.dateFormattedB).add(this.state.intervalChangeAmt, this.state.timeScaleChangeUnit);
+    let { draggerSelected,
+      dateFormatted,
+      dateFormattedB,
+      intervalChangeAmt,
+      timeScaleChangeUnit,
+      timelineEndDateLimit } = this.state;
+    let nextIncrementDate;
+    if (intervalChangeAmt && timeScaleChangeUnit) {
+      if (draggerSelected === 'selected') {
+        nextIncrementDate = moment.utc(dateFormatted).add(intervalChangeAmt, timeScaleChangeUnit);
+      } else {
+        nextIncrementDate = moment.utc(dateFormattedB).add(intervalChangeAmt, timeScaleChangeUnit);
+      }
+      this.setState({
+        rightArrowDisabled: nextIncrementDate.isSameOrAfter(timelineEndDateLimit)
+      })
     }
-    this.setState({
-      rightArrowDisabled: nextFutureDateBasedOnIncrement.isSameOrAfter(this.state.timelineEndDateLimit)
-    })
   }
 
   // open animation dialog
@@ -170,9 +204,11 @@ class Timeline extends React.Component {
   // }
 
   componentDidUpdate(prevProps, prevState) {
-    if ((this.state.intervalChangeAmt !== prevState.intervalChangeAmt || this.state.timeScaleChangeUnit !== prevState.timeScaleChangeUnit)
-     || (this.state.draggerSelected === 'selected' && this.state.dateFormatted !== prevState.dateFormatted)
-     || (this.state.draggerSelected === 'selectedB' && this.state.dateFormattedB !== prevState.dateFormattedB)) {
+    let { intervalChangeAmt, timeScaleChangeUnit, draggerSelected, dateFormatted, dateFormattedB } = this.state;
+    if ((intervalChangeAmt !== prevState.intervalChangeAmt || timeScaleChangeUnit !== prevState.timeScaleChangeUnit)
+     || (draggerSelected === 'selected' && dateFormatted !== prevState.dateFormatted)
+     || (draggerSelected === 'selectedB' && dateFormattedB !== prevState.dateFormattedB)
+     || (draggerSelected !== prevState.draggerSelected)) {
         this.checkLeftArrowDisabled();
         this.checkRightArrowDisabled();
     }
@@ -228,7 +264,7 @@ class Timeline extends React.Component {
             updateDate={this.updateDate}
             hasSubdailyLayers={this.state.hasSubdailyLayers}
             parentOffset={this.state.parentOffset}
-            changeTimescale={this.changeTimescale}
+            changeTimeScale={this.changeTimeScale}
             compareModeActive={this.state.compareModeActive}
             draggerSelected={this.state.draggerSelected}
             onChangeSelectedDragger={this.props.onChangeSelectedDragger}
@@ -256,18 +292,18 @@ class Timeline extends React.Component {
         <div className="zoom-level-change" style={{ width: '75px', display: this.state.timelineHidden ? 'none' : 'block'}}>
           <AxisTimeScaleChange
           timeScale={this.state.timeScale}
-          changeTimescale={this.changeTimescale}
+          changeTimeScale={this.changeTimeScale}
           hasSubdailyLayers={this.state.hasSubdailyLayers}
           />
         </div>
 
         {/* 🍔 Open/Close Chevron 🍔 */}
         <div id="timeline-hide" onClick={this.toggleHideTimeline}>
-          {this.state.timelineHidden ?
-          <div className="wv-timeline-hide wv-timeline-hide-double-chevron-left"></div>
-          :
-          <div className="wv-timeline-hide wv-timeline-hide-double-chevron-right"></div>
-          }
+          {/* {this.state.timelineHidden ? */}
+          <div className={`wv-timeline-hide wv-timeline-hide-double-chevron-${this.state.timelineHidden ? 'left' : 'right'}`}></div>
+          {/* : */}
+          {/* <div className="wv-timeline-hide wv-timeline-hide-double-chevron-right"></div> */}
+          {/* } */}
         </div>
       </React.Fragment>
       :

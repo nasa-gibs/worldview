@@ -1,5 +1,12 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
+/*
+ * TimeScaleSelect for Custom Interval Selector
+ * group. It is a child component.
+ *
+ * @class TimeScaleSelect
+ */
 class TimeScaleSelect extends PureComponent {
   handleChangeZoomLevel = (e) => {
     let zoomLevel = e.target.value;
@@ -11,14 +18,15 @@ class TimeScaleSelect extends PureComponent {
   }
 
   render() {
+    let { zoomLevel, hasSubdailyLayers } = this.props;
     return (
       <form className="interval-timescale-select" onSubmit={this.handleSubmit}>
         <label>
-          <select value={this.props.zoomLevel} onChange={this.handleChangeZoomLevel}>
+          <select value={zoomLevel} onChange={this.handleChangeZoomLevel}>
             <option value="year">year</option>
             <option value="month">month</option>
             <option value="day">day</option>
-            {this.props.hasSubdailyLayers ?
+            {hasSubdailyLayers ?
             <React.Fragment>
               <option value="hour">hour</option>
               <option value="minute">minute</option>
@@ -32,5 +40,11 @@ class TimeScaleSelect extends PureComponent {
     );
   }
 }
+
+TimeScaleSelect.propTypes = {
+  changeZoomLevel: PropTypes.func,
+  zoomLevel: PropTypes.string,
+  hasSubdailyLayers: PropTypes.bool
+};
 
 export default TimeScaleSelect;
