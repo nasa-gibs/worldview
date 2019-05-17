@@ -23,6 +23,8 @@ import { updateLegacyInitComplete } from './modules/migration/actions';
 import { calculateResponsiveState } from 'redux-responsive';
 import Tour from './containers/tour';
 import AnimationWidget from './containers/animation-widget';
+import ErrorBoundary from './containers/error-boundary';
+import Debug from './components/util/debug';
 
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -193,6 +195,9 @@ class App extends React.Component {
         </section>
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         <Modal />
+        <ErrorBoundary>
+          <Debug parameters={this.props.parameters} />
+        </ErrorBoundary>
       </div>
     );
   }

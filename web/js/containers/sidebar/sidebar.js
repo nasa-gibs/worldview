@@ -13,7 +13,7 @@ import googleTagManager from 'googleTagManager';
 import { getCheckerboard, loadCustom } from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
 import { getLayers } from '../../modules/layers/selectors';
-
+import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
 import {
   changeTab,
@@ -140,61 +140,65 @@ class Sidebar extends React.Component {
     } = this.props;
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     return (
-      <section id="wv-sidebar">
-        <a
-          href="/"
-          title="Click to Reset Worldview to Defaults"
-          id="wv-logo"
-          ref={iconElement => (this.iconElement = iconElement)}
-          onWheel={wheelCallBack}
-        />
-        <CollapsedButton
-          isCollapsed={isCollapsed}
-          onclick={this.toggleSidebar.bind(this)}
-          numberOfLayers={numberOfLayers}
-        />
-        <div
-          id="productsHolder"
-          className="products-holder-case"
-          ref={el => {
-            this.sideBarCase = el;
-          }}
-          style={
-            isCollapsed
-              ? { maxHeight: '0' }
-              : { maxHeight: screenHeight + 'px' }
-          }
-          onWheel={wheelCallBack}
-        >
-          <NavCase
-            activeTab={activeTab}
-            onTabClick={onTabClick}
-            tabTypes={tabTypes}
-            toggleSidebar={this.toggleSidebar.bind(this)}
+      <ErrorBoundary>
+        <section id="wv-sidebar">
+          <a
+            href="/"
+            title="Click to Reset Worldview to Defaults"
+            id="wv-logo"
+            ref={iconElement => (this.iconElement = iconElement)}
+            onWheel={wheelCallBack}
           />
-          <TabContent activeTab={activeTab}>
-            <TabPane tabId="layers">
-              {this.getProductsToRender(activeTab, isCompareMode)}
-            </TabPane>
-            <TabPane tabId="events">
-              <Events
-                isActive={activeTab === 'events'}
-                height={subComponentHeight}
-              />
-            </TabPane>
-            <TabPane tabId="download">
-              <Data
-                isActive={activeTab === 'download'}
-                height={subComponentHeight}
-                tabTypes={tabTypes}
-              />
-            </TabPane>
-            <footer ref={footerElement => (this.footerElement = footerElement)}>
-              <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
-            </footer>
-          </TabContent>
-        </div>
-      </section>
+          <CollapsedButton
+            isCollapsed={isCollapsed}
+            onclick={this.toggleSidebar.bind(this)}
+            numberOfLayers={numberOfLayers}
+          />
+          <div
+            id="productsHolder"
+            className="products-holder-case"
+            ref={el => {
+              this.sideBarCase = el;
+            }}
+            style={
+              isCollapsed
+                ? { maxHeight: '0' }
+                : { maxHeight: screenHeight + 'px' }
+            }
+            onWheel={wheelCallBack}
+          >
+            <NavCase
+              activeTab={activeTab}
+              onTabClick={onTabClick}
+              tabTypes={tabTypes}
+              toggleSidebar={this.toggleSidebar.bind(this)}
+            />
+            <TabContent activeTab={activeTab}>
+              <TabPane tabId="layers">
+                {this.getProductsToRender(activeTab, isCompareMode)}
+              </TabPane>
+              <TabPane tabId="events">
+                <Events
+                  isActive={activeTab === 'events'}
+                  height={subComponentHeight}
+                />
+              </TabPane>
+              <TabPane tabId="download">
+                <Data
+                  isActive={activeTab === 'download'}
+                  height={subComponentHeight}
+                  tabTypes={tabTypes}
+                />
+              </TabPane>
+              <footer
+                ref={footerElement => (this.footerElement = footerElement)}
+              >
+                <FooterContent tabTypes={tabTypes} activeTab={activeTab} />
+              </footer>
+            </TabContent>
+          </div>
+        </section>
+      </ErrorBoundary>
     );
   }
 }

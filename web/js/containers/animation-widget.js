@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { without as lodashWithout } from 'lodash';
+import ErrorBoundary from './error-boundary';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
 import TimeSelector from '../components/date-selector/date-selector';
@@ -118,76 +119,82 @@ class AnimationWidget extends React.Component {
       onPushPause
     } = this.props;
     return (
-      <div
-        id="wv-animation-widget"
-        className={
-          'wv-animation-widget' + (hasSubdailyLayers ? ' subdaily' : '')
-        }
-      >
-        <AnimWidgetHeader
-          text={increment}
-          toolTipTextArray={incrementArray}
-          onClick={onZoomSelect}
-        />
-
-        <PlayButton playing={isPlaying} play={onPushPlay} pause={onPushPause} />
-        <LoopButton looping={looping} onLoop={this.onLoop.bind(this)} />
-        <div className="wv-slider-case">
-          <Slider
-            className="input-range"
-            step={0.5}
-            max={10}
-            min={0.5}
-            value={this.state.speed}
-            onChange={num => this.setState({ speed: num })}
-            handle={RangeHandle}
-            onBeforeChange={() => this.setState({ isSliding: true })}
-            onAfterChange={() => {
-              this.setState({ isSliding: false });
-              this.props.onSlide(this.state.speed);
-            }}
-          />
-          <span className="wv-slider-label">{sliderLabel}</span>
-        </div>
-
-        <a
-          href="javascript:void(null)"
-          title="Create Animated GIF"
-          className="wv-icon-case"
-          onClick={this.props.onPushGIF}
+      <ErrorBoundary>
+        <div
+          id="wv-animation-widget"
+          className={
+            'wv-animation-widget' + (hasSubdailyLayers ? ' subdaily' : '')
+          }
         >
-          <i
-            id="wv-animation-widget-file-video-icon"
-            className="fas fa-file-video wv-animation-widget-icon"
+          <AnimWidgetHeader
+            text={increment}
+            toolTipTextArray={incrementArray}
+            onClick={onZoomSelect}
           />
-        </a>
-        <div className="wv-anim-dates-case">
-          <TimeSelector
-            width="120"
-            height="30"
-            date={startDate}
-            id="start"
-            idSuffix="animation-widget-start"
-            onDateChange={this.onDateChange.bind(this)}
-            maxDate={endDate}
-            minDate={minDate}
-            hasSubdailyLayers={hasSubdailyLayers}
+
+          <PlayButton
+            playing={isPlaying}
+            play={onPushPlay}
+            pause={onPushPause}
           />
-          <div className="thru-label">To</div>
-          <TimeSelector
-            width="120"
-            height="30"
-            date={endDate}
-            id="end"
-            idSuffix="animation-widget-end"
-            onDateChange={this.onDateChange.bind(this)}
-            maxDate={maxDate}
-            minDate={startDate}
-            hasSubdailyLayers={hasSubdailyLayers}
-          />
+          <LoopButton looping={looping} onLoop={this.onLoop.bind(this)} />
+          <div className="wv-slider-case">
+            <Slider
+              className="input-range"
+              step={0.5}
+              max={10}
+              min={0.5}
+              value={this.state.speed}
+              onChange={num => this.setState({ speed: num })}
+              handle={RangeHandle}
+              onBeforeChange={() => this.setState({ isSliding: true })}
+              onAfterChange={() => {
+                this.setState({ isSliding: false });
+                this.props.onSlide(this.state.speed);
+              }}
+            />
+            <span className="wv-slider-label">{sliderLabel}</span>
+          </div>
+
+          <a
+            href="javascript:void(null)"
+            title="Create Animated GIF"
+            className="wv-icon-case"
+            onClick={this.props.onPushGIF}
+          >
+            <i
+              id="wv-animation-widget-file-video-icon"
+              className="fas fa-file-video wv-animation-widget-icon"
+            />
+          </a>
+          <div className="wv-anim-dates-case">
+            <TimeSelector
+              width="120"
+              height="30"
+              date={startDate}
+              id="start"
+              idSuffix="animation-widget-start"
+              onDateChange={this.onDateChange.bind(this)}
+              maxDate={endDate}
+              minDate={minDate}
+              hasSubdailyLayers={hasSubdailyLayers}
+            />
+            <div className="thru-label">To</div>
+            <TimeSelector
+              width="120"
+              height="30"
+              date={endDate}
+              id="end"
+              idSuffix="animation-widget-end"
+              onDateChange={this.onDateChange.bind(this)}
+              maxDate={maxDate}
+              minDate={startDate}
+              hasSubdailyLayers={hasSubdailyLayers}
+            />
+          </div>
+          <i className="fa fa-times wv-close" onClick={this.props.onClose} />
         </div>
-        <i className="fa fa-times wv-close" onClick={this.props.onClose} />
-      </div>
+      </ErrorBoundary>
     );
   }
 }

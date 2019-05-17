@@ -3,7 +3,6 @@ import { dateLabel } from './date/label';
 
 // compare
 // import { compareUi } from './compare/ui';
-import { alertUi } from './alert/ui';
 // Timeline
 import dateWheels from './date/wheels';
 import { timeline } from './date/timeline';
@@ -15,15 +14,9 @@ import { timelinePick } from './date/timeline-pick';
 import { timelinePan } from './date/timeline-pan';
 import { timelineInput } from './date/timeline-input';
 import { timelineCompare } from './date/compare-picks';
-// Tour
-// import { tourUi } from './tour/ui';
 import { layersActive } from './layers/active';
 import { mapui } from './map/ui';
 import { mapAnimate } from './map/animate';
-// import { animationUi } from './animation/ui';
-// import { animationWidget } from './animation/widget';
-// import { animationRangeSelect } from './animation/range-select';
-// import { animationGif } from './animation/gif';
 import { debugLayers } from './debug';
 import { dataUi } from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
@@ -42,7 +35,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
     // ui.alert = alertUi(ui, config);
     // ui.tour = tourUi(models, ui, config);
   }
-  ui.activeLayers = layersActive(models, ui, config);
+  // ui.activeLayers = layersActive(models, ui, config);
   // ui.addModal = layersModal(models, ui, config);
   // ui.layerSettingsModal = layersOptions(models, ui, config);
   // Test via a getter in the options object to see if the passive property is accessed

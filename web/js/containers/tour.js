@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import { endTour, selectStory, startTour } from '../modules/tour/actions';
 import { findIndex as lodashFindIndex, get as lodashGet } from 'lodash';
+import ErrorBoundary from './error-boundary';
 import update from 'immutability-helper';
 import { history } from '../main';
 import util from '../util/util';
@@ -222,56 +223,58 @@ class Tour extends React.Component {
         this.setState({ modalStart: true });
       }
       return (
-        <div>
-          {modalStart ? (
-            <TourStart
-              stories={stories}
-              storyOrder={storyOrder}
-              modalStart={modalStart}
-              toggleModalStart={this.toggleModalStart}
-              toggleModalInProgress={this.toggleModalInProgress}
-              toggleModalComplete={this.toggleModalComplete}
-              selectTour={this.selectTour.bind(this)}
-              showTourAlert={showTourAlert}
-              hideTour={hideTour}
-              showTour={showTour}
-              endTour={this.endTour.bind(this)}
-            />
-          ) : modalInProgress ? (
-            <TourInProgress
-              config={config}
-              models={models}
-              endTour={this.endTour.bind(this)}
-              modalInProgress={modalInProgress}
-              toggleModalStart={this.toggleModalStart}
-              toggleModalInProgress={this.toggleModalInProgress}
-              toggleModalComplete={this.toggleModalComplete}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-              currentStoryIndex={currentStoryIndex}
-              incrementStep={this.incrementStep}
-              decreaseStep={this.decreaseStep}
-              stories={stories}
-              currentStoryId={currentStoryId}
-              currentStory={currentStory}
-              showTourAlert={showTourAlert}
-              metaLoaded={metaLoaded}
-              isLoadingMeta={isLoadingMeta}
-              description={description}
-              processStepLink={processStepLink}
-            />
-          ) : (
-            <TourComplete
-              currentStory={currentStory}
-              modalComplete={modalComplete}
-              toggleModalStart={this.toggleModalStart}
-              toggleModalInProgress={this.toggleModalInProgress}
-              toggleModalComplete={this.toggleModalComplete}
-              resetTour={this.resetTour.bind(this)}
-              endTour={this.endTour.bind(this)}
-            />
-          )}
-        </div>
+        <ErrorBoundary>
+          <div>
+            {modalStart ? (
+              <TourStart
+                stories={stories}
+                storyOrder={storyOrder}
+                modalStart={modalStart}
+                toggleModalStart={this.toggleModalStart}
+                toggleModalInProgress={this.toggleModalInProgress}
+                toggleModalComplete={this.toggleModalComplete}
+                selectTour={this.selectTour.bind(this)}
+                showTourAlert={showTourAlert}
+                hideTour={hideTour}
+                showTour={showTour}
+                endTour={this.endTour.bind(this)}
+              />
+            ) : modalInProgress ? (
+              <TourInProgress
+                config={config}
+                models={models}
+                endTour={this.endTour.bind(this)}
+                modalInProgress={modalInProgress}
+                toggleModalStart={this.toggleModalStart}
+                toggleModalInProgress={this.toggleModalInProgress}
+                toggleModalComplete={this.toggleModalComplete}
+                currentStep={currentStep}
+                totalSteps={totalSteps}
+                currentStoryIndex={currentStoryIndex}
+                incrementStep={this.incrementStep}
+                decreaseStep={this.decreaseStep}
+                stories={stories}
+                currentStoryId={currentStoryId}
+                currentStory={currentStory}
+                showTourAlert={showTourAlert}
+                metaLoaded={metaLoaded}
+                isLoadingMeta={isLoadingMeta}
+                description={description}
+                processStepLink={processStepLink}
+              />
+            ) : (
+              <TourComplete
+                currentStory={currentStory}
+                modalComplete={modalComplete}
+                toggleModalStart={this.toggleModalStart}
+                toggleModalInProgress={this.toggleModalInProgress}
+                toggleModalComplete={this.toggleModalComplete}
+                resetTour={this.resetTour.bind(this)}
+                endTour={this.endTour.bind(this)}
+              />
+            )}
+          </div>
+        </ErrorBoundary>
       );
     } else {
       return null;

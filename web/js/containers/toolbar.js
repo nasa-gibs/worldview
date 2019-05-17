@@ -7,6 +7,7 @@ import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
 import ShareLinks from './share';
+import ErrorBoundary from './error-boundary';
 import {
   requestNotifications,
   setNotifications
@@ -89,62 +90,64 @@ class toolbarContainer extends Component {
       ? ' wv-status-' + notificationType
       : ' wv-status-hide';
     return (
-      <ButtonToolbar id="wv-toolbar" className={'wv-toolbar'}>
-        <Button
-          id="wv-link-button"
-          className="wv-toolbar-button"
-          title="Share this map"
-          onClick={() =>
-            openModal(
-              'TOOLBAR_SHARE_LINK',
-              CUSTOM_MODAL_PROPS['TOOLBAR_SHARE_LINK']
-            )
-          }
-        >
-          <i className="fas fa-share-square fa-2x" />
-        </Button>
-        {config.ui && config.ui.projections ? (
+      <ErrorBoundary>
+        <ButtonToolbar id="wv-toolbar" className={'wv-toolbar'}>
           <Button
-            id="wv-proj-button"
+            id="wv-link-button"
             className="wv-toolbar-button"
-            title="Switch projection"
+            title="Share this map"
             onClick={() =>
               openModal(
-                'TOOLBAR_PROJECTION',
-                CUSTOM_MODAL_PROPS['TOOLBAR_PROJECTION']
+                'TOOLBAR_SHARE_LINK',
+                CUSTOM_MODAL_PROPS['TOOLBAR_SHARE_LINK']
               )
             }
           >
-            <i className="fas fa-globe-asia fa-2x" />{' '}
+            <i className="fas fa-share-square fa-2x" />
           </Button>
-        ) : (
-          ''
-        )}
-        <Button
-          id="wv-image-button"
-          className="wv-toolbar-button"
-          title="Take a snapshot"
-          onClick={() =>
-            openModal(
-              'TOOLBAR_SNAPSHOT',
-              CUSTOM_MODAL_PROPS['TOOLBAR_SNAPSHOT']
-            )
-          }
-        >
-          <i className="fa fa-camera fa-2x" />{' '}
-        </Button>
-        <Button
-          id="wv-info-button"
-          title="Information"
-          className={'wv-toolbar-button' + notificationClass}
-          onClick={() =>
-            openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS['TOOLBAR_INFO'])
-          }
-          data-content={notificationContentNumber}
-        >
-          <i className="fa fa-info-circle fa-2x" />{' '}
-        </Button>
-      </ButtonToolbar>
+          {config.ui && config.ui.projections ? (
+            <Button
+              id="wv-proj-button"
+              className="wv-toolbar-button"
+              title="Switch projection"
+              onClick={() =>
+                openModal(
+                  'TOOLBAR_PROJECTION',
+                  CUSTOM_MODAL_PROPS['TOOLBAR_PROJECTION']
+                )
+              }
+            >
+              <i className="fas fa-globe-asia fa-2x" />{' '}
+            </Button>
+          ) : (
+            ''
+          )}
+          <Button
+            id="wv-image-button"
+            className="wv-toolbar-button"
+            title="Take a snapshot"
+            onClick={() =>
+              openModal(
+                'TOOLBAR_SNAPSHOT',
+                CUSTOM_MODAL_PROPS['TOOLBAR_SNAPSHOT']
+              )
+            }
+          >
+            <i className="fa fa-camera fa-2x" />{' '}
+          </Button>
+          <Button
+            id="wv-info-button"
+            title="Information"
+            className={'wv-toolbar-button' + notificationClass}
+            onClick={() =>
+              openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS['TOOLBAR_INFO'])
+            }
+            data-content={notificationContentNumber}
+          >
+            <i className="fa fa-info-circle fa-2x" />{' '}
+          </Button>
+        </ButtonToolbar>
+      </ErrorBoundary>
     );
   }
 }

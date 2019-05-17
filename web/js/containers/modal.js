@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 import { toLower as lodashToLower } from 'lodash';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { onToggle } from '../modules/modal/actions';
+import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
 
 class ModalContainer extends Component {
@@ -59,46 +60,50 @@ class ModalContainer extends Component {
       }
     };
     return (
-      <Modal
-        isOpen={isOpen}
-        toggle={toggleWithClose}
-        backdrop={backdrop && type !== 'selection'}
-        id={lowerCaseId}
-        className={
-          isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'
-        }
-        autoFocus={autoFocus || false}
-        style={style}
-        wrapClassName={wrapClassName + ' ' + lowerCaseId}
-        modalTransition={{ timeout: timeout || 100 }}
-      >
-        {CompletelyCustomModal ? (
-          <CompletelyCustomModal />
-        ) : (
-          <DetectOuterClick
-            onClick={toggleWithClose}
-            disabled={!isOpen || type === 'selection' || clickableBehindModal}
-          >
-            {headerComponent || headerText ? (
-              <ModalHeader toggle={toggleWithClose}>
-                {headerComponent ? <headerComponent /> : headerText || ''}
-              </ModalHeader>
-            ) : (
-              ''
-            )}
-            <ModalBody>
-              {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-              {BodyComponent ? (
-                <BodyComponent {...bodyComponentProps} />
-              ) : isTemplateModal ? (
-                this.getTemplateBody()
+      <ErrorBoundary>
+        <Modal
+          isOpen={isOpen}
+          toggle={toggleWithClose}
+          backdrop={backdrop && type !== 'selection'}
+          id={lowerCaseId}
+          className={
+            isTemplateModal
+              ? 'template-modal'
+              : modalClassName || 'default-modal'
+          }
+          autoFocus={autoFocus || false}
+          style={style}
+          wrapClassName={wrapClassName + ' ' + lowerCaseId}
+          modalTransition={{ timeout: timeout || 100 }}
+        >
+          {CompletelyCustomModal ? (
+            <CompletelyCustomModal />
+          ) : (
+            <DetectOuterClick
+              onClick={toggleWithClose}
+              disabled={!isOpen || type === 'selection' || clickableBehindModal}
+            >
+              {headerComponent || headerText ? (
+                <ModalHeader toggle={toggleWithClose}>
+                  {headerComponent ? <headerComponent /> : headerText || ''}
+                </ModalHeader>
               ) : (
-                bodyText || ''
+                ''
               )}
-            </ModalBody>
-          </DetectOuterClick>
-        )}
-      </Modal>
+              <ModalBody>
+                {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
+                {BodyComponent ? (
+                  <BodyComponent {...bodyComponentProps} />
+                ) : isTemplateModal ? (
+                  this.getTemplateBody()
+                ) : (
+                  bodyText || ''
+                )}
+              </ModalBody>
+            </DetectOuterClick>
+          )}
+        </Modal>
+      </ErrorBoundary>
     );
   }
 }

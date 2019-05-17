@@ -5,6 +5,7 @@ import Panel from '../components/image-download/panel';
 import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
 import { debounce } from 'lodash';
+import ErrorBoundary from './error-boundary';
 import * as olProj from 'ol/proj';
 
 import {
@@ -82,7 +83,7 @@ class ImageDownloadContainer extends Component {
       proj.selected.resolutions
     );
     return (
-      <React.Fragment>
+      <ErrorBoundary>
         <Panel
           projection={proj}
           fileTypes={fileTypes}
@@ -118,7 +119,7 @@ class ImageDownloadContainer extends Component {
           }}
           showCoordinates={true}
         />
-      </React.Fragment>
+      </ErrorBoundary>
     );
   }
 }
