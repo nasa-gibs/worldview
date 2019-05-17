@@ -3,19 +3,19 @@ import { encode } from './modules/link/util';
 // legacy crutches
 // import { getLayersParameterSetup } from './modules/layers/util';
 import { getDateParameterSetup } from './modules/date/util';
-import { getAnimationParameterSetup } from './modules/animation/util';
 import { checkTourBuildTimestamp } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
 import { eventParse, serializeEvent } from './modules/natural-events/util';
+import { mapLocationToCompareState } from './modules/compare/util';
+import { mapLocationToProjState } from './modules/projection/util';
 import {
-  layersParse11,
   layersParse12,
-  serializeLayers
+  serializeLayers,
+  mapLocationToLayerState
 } from './modules/layers/util';
-import { initialCompareState } from './modules/compare/reducers';
 import { resetLayers } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
-import { loadPalettes } from './modules/palettes/util';
+import { mapLocationToPaletteState } from './modules/palettes/util';
 import util from './util/util';
 import update from 'immutability-helper';
 
@@ -24,46 +24,26 @@ export function mapLocationToState(state, location) {
   if (location.search) {
     let parameters = util.fromQueryString(location.search);
     let stateFromLocation = location.query;
-    const projId = get(stateFromLocation, 'proj.id');
-    if (projId) {
-      let selected = get(state, `config.projections.${projId}`) || {};
-      stateFromLocation = update(stateFromLocation, {
-        proj: { selected: { $set: selected } }
-      });
-    }
-    if (parameters.ca !== undefined) {
-      stateFromLocation = update(stateFromLocation, {
-        compare: { active: { $set: true } }
-      });
-      if (!parameters.l1) {
-        stateFromLocation = update(stateFromLocation, {
-          layers: { activeB: { $set: stateFromLocation.layers.active } }
-        });
-      }
-    } else {
-      stateFromLocation = update(stateFromLocation, {
-        compare: { $set: initialCompareState }
-      });
-    }
-    // legacy layers permalink
-    if (state.parameters.product) {
-      stateFromLocation = update(stateFromLocation, {
-        layers: {
-          active: {
-            $set: layersParse11(state.parameters.product, config)
-          }
-        }
-      });
-    }
-    if (parameters.l1 || parameters.l) {
-      stateFromLocation = loadPalettes(
-        parameters,
-        lodashAssign({}, stateFromLocation, {
-          palettes: state.palettes,
-          config
-        })
-      );
-    }
+    stateFromLocation = mapLocationToProjState(
+      parameters,
+      stateFromLocation,
+      state
+    );
+    stateFromLocation = mapLocationToLayerState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+    stateFromLocation = mapLocationToCompareState(
+      parameters,
+      stateFromLocation
+    );
+    stateFromLocation = mapLocationToPaletteState(
+      parameters,
+      stateFromLocation,
+      state
+    );
     // one level deep merge
     for (var key in stateFromLocation) {
       const obj = lodashAssign({}, state[key], stateFromLocation[key]);
@@ -158,28 +138,12 @@ const getParameters = function(config, parameters) {
     },
     cm: {
       stateKey: 'compare.mode',
-      initialState: 'swipe',
-      options: {
-        parse: str => {
-          // if (parameters.ca !== undefined) {
-          return str;
-          // }
-          // return 'swipe';
-        }
-      }
+      initialState: 'swipe'
     },
     cv: {
       stateKey: 'compare.value',
       initialState: 50,
-      type: 'number',
-      options: {
-        parse: num => {
-          // if (parameters.ca !== undefined) {
-          return num;
-          // }
-          // return 50;
-        }
-      }
+      type: 'number'
     },
     tr: {
       stateKey: 'tour.selected',
@@ -215,8 +179,6 @@ export function getParamObject(
   legacyState,
   errors
 ) {
-  let animationParamObject = {};
-
   const mapParamObject = getMapParameterSetup(
     parameters,
     config,
@@ -224,15 +186,6 @@ export function getParamObject(
     legacyState,
     errors
   );
-  if (config.features.animation) {
-    // animationParamObject = getAnimationParameterSetup(
-    //   parameters,
-    //   config,
-    //   models,
-    //   legacyState,
-    //   errors
-    // );
-  }
   const dateParamObject = getDateParameterSetup(
     parameters,
     config,

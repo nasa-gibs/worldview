@@ -311,3 +311,20 @@ export function loadPalettes(permlinkState, state) {
   });
   return state;
 }
+export function mapLocationToPaletteState(
+  parameters,
+  stateFromLocation,
+  state,
+  config
+) {
+  if (parameters.l1 || parameters.l) {
+    stateFromLocation = loadPalettes(
+      parameters,
+      lodashAssign({}, stateFromLocation, {
+        palettes: state.palettes,
+        config
+      })
+    );
+  }
+  return stateFromLocation;
+}

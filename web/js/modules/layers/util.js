@@ -6,7 +6,6 @@ import {
   findIndex as lodashFindIndex,
   each as lodashEach,
   isNaN as lodashIsNaN,
-  assign as lodashAssign,
   isArray
 } from 'lodash';
 
@@ -375,4 +374,27 @@ export function validate(errors, config) {
       error(layerId, 'No configuration');
     }
   });
+}
+export function mapLocationToLayerState(
+  parameters,
+  stateFromLocation,
+  state,
+  config
+) {
+  if (!parameters.l1 && parameters.ca !== undefined) {
+    stateFromLocation = update(stateFromLocation, {
+      layers: { activeB: { $set: stateFromLocation.layers.active } }
+    });
+  }
+  // legacy layers permalink
+  if (state.parameters.product) {
+    stateFromLocation = update(stateFromLocation, {
+      layers: {
+        active: {
+          $set: layersParse11(state.parameters.product, config)
+        }
+      }
+    });
+  }
+  return stateFromLocation;
 }
