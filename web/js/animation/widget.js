@@ -7,9 +7,17 @@ import lodashIndexOf from 'lodash/indexOf';
 import util from '../util/util';
 
 export function animationWidget(models, config, ui) {
-  var zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
+  const timeScaleFromNumberKey = {
+    '0': 'custom',
+    '1': 'year',
+    '2': 'month',
+    '3': 'day',
+    '4': 'hour',
+    '5': 'minute'
+  };
+  var customText = models.date.customDelta && models.date.customInterval ? `${models.date.customDelta} ${timeScaleFromNumberKey[models.date.customInterval]}` : 'custom';
+  var zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
   var self = {};
-  var timeline = ui.timeline;
   var model = models.anim;
   var $timelineFooter;
   var $animateButton;
@@ -34,8 +42,8 @@ export function animationWidget(models, config, ui) {
       onPushPause: self.onPressPause,
       onPushGIF: self.onPressGIF,
       looping: model.rangeState.loop,
-      increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: lodashWithout(zooms, self.getIncrements()), // array of zooms without current zoom
+      increment: self.getIncrementText(), // config.currentZoom is a number: 1,2,3
+      incrementArray: lodashWithout(zooms, self.getIncrementText()), // array of zooms without current zoom
       onDateChange: self.dateUpdate,
       sliderLabel: 'Frames Per Second',
       sliderSpeed: model.rangeState.speed,
@@ -45,7 +53,7 @@ export function animationWidget(models, config, ui) {
       endDate: new Date(model.rangeState.endDate),
       minDate: models.date.minDate(),
       maxDate: models.date.maxDate(),
-      maxZoom: models.date.maxZoom,
+      hasSubdailyLayers: models.layers.hasSubDaily(),
       onClose: self.toggleAnimationWidget
     };
 
@@ -69,6 +77,7 @@ export function animationWidget(models, config, ui) {
     model.events.trigger('change');
     model.events.on('change', self.update);
     models.date.events.on('timeline-change', self.update);
+    models.date.events.on('custom-interval-update', self.update);
     if (models.data) {
       dataModel = models.data;
       dataModel.events.on('activate', function() {
@@ -152,10 +161,11 @@ export function animationWidget(models, config, ui) {
     self.reactComponent.setState({
       startDate: new Date(state.startDate),
       endDate: new Date(state.endDate),
-      maxZoom: models.date.maxZoom,
+      // maxZoom: models.date.maxZoom,
+      hasSubdailyLayers: models.layers.hasSubDaily(),
       playing: state.playing,
-      increment: self.getIncrements(), // config.currentZoom is a number: 1,2,3
-      incrementArray: lodashWithout(zooms, self.getIncrements()) // array of zooms without current zoom
+      increment: self.getIncrementText(), // config.currentZoom is a number: 1,2,3
+      incrementArray: lodashWithout(zooms, self.getIncrementText()) // array of zooms without current zoom
     });
   };
 
@@ -169,12 +179,30 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.getIncrements = function() {
-    if (models.date.maxZoom > 3) {
-      zooms = ['yearly', 'monthly', 'daily', '10-Minute'];
+    let customText = models.date.customDelta && models.date.customInterval ? `${models.date.customDelta} ${timeScaleFromNumberKey[models.date.customInterval]}` : 'custom';
+    if (models.layers.hasSubDaily()) {
+      zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
     } else {
-      zooms = ['yearly', 'monthly', 'daily'];
+      zooms = [customText, 'yearly', 'monthly', 'daily'];
     }
-    return zooms[timeline.config.currentZoom - 1];
+    let interval = models.date.interval ? models.date.interval : models.date.selectedZoom - 1;
+    return zooms[interval];
+  };
+
+  self.getIncrementText = function() {
+    let customText = models.date.customDelta && models.date.customInterval ? `${models.date.customDelta} ${timeScaleFromNumberKey[models.date.customInterval]}` : 'custom';
+    if (models.layers.hasSubDaily()) {
+      zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
+    } else {
+      zooms = [customText, 'yearly', 'monthly', 'daily'];
+    }
+
+    if (models.date.customSelected) {
+      return zooms[0];
+    } else {
+      let interval = models.date.interval ? models.date.interval : models.date.selectedZoom - 1;
+      return zooms[interval];
+    }
   };
 
   /*
@@ -191,9 +219,10 @@ export function animationWidget(models, config, ui) {
    * @returns {string} timeline interval
    *
    */
-  self.onZoomSelect = function(increment) {
+  self.onZoomSelect = function(increment) { // ? still want to change zoom level on select???
     var zoomLevel = lodashIndexOf(zooms, increment);
-    return timeline.config.zoom(zoomLevel + 1);
+    models.date.changeIncrement(zoomLevel);
+    models.date.events.trigger('interval-change');
   };
 
   /*
@@ -264,6 +293,9 @@ export function animationWidget(models, config, ui) {
     var dateModel = models.date;
     var currentDate = new Date(dateModel[dateModel.activeDate]);
     var interval = ui.anim.ui.getInterval();
+    if (interval === 'custom') {
+      interval = zooms[models.date.selectedZoom];
+    }
     if (dateModel.selectedZoom === 4) {
       intervalStep = 70;
     } else {
@@ -293,9 +325,8 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.onPressPlay = function() {
-    let zoomLevel = ui.anim.ui.getInterval();
-    if (zoomLevel !== 'minute') {
-      // zero out start/end date times
+    let hasSubDaily = models.layers.hasSubDaily();
+    if (!hasSubDaily) {
       self.setZeroDateTimes();
     }
     model.rangeState.playing = true;
@@ -403,12 +434,7 @@ export function animationWidget(models, config, ui) {
    *
    */
   self.onPressGIF = function() {
-    let zoomLevel = ui.anim.ui.getInterval();
     let looping = ui.anim.widget.reactComponent.state.looping;
-    if (zoomLevel !== 'minute') {
-      // zero out start/end date times
-      self.setZeroDateTimes();
-    }
 
     let increment = self.getIncrements();
     let frameSpeed = model.rangeState.speed;
@@ -441,7 +467,6 @@ export function animationWidget(models, config, ui) {
     let state = model.rangeState;
     let startDate = util.parseDateUTC(state.startDate);
     let endDate = util.parseDateUTC(state.endDate);
-
     util.clearTimeUTC(startDate);
     util.clearTimeUTC(endDate);
 

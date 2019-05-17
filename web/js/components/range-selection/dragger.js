@@ -41,7 +41,8 @@ class TimelineDragger extends React.Component {
       <React.Fragment>
         <rect
           width={this.props.width}
-          height={this.props.height}
+          // height={this.props.height}
+          height={40}
           style={{
             fill: this.props.color,
             visibility: visibility
@@ -190,7 +191,7 @@ TimelineDragger.defaultProps = {
   color: '#fff',
   position: 0,
   visibility: 'visible',
-  yOffset: -16,
+  yOffset: 23,
   path: null,
   textColor: '#000'
 };

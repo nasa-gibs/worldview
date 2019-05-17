@@ -17,19 +17,22 @@ class DateSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: props.date,
+      date: props.draggerSelected === 'selectedB' ? props.dateB : props.date,
       maxDate: props.maxDate,
       minDate: props.minDate,
       tab: null,
-      maxZoom: props.maxZoom
+      // maxZoom: props.maxZoom,
+      hasSubdailyLayers: props.hasSubdailyLayers
     };
   }
   componentWillReceiveProps(props) {
     this.setState({
-      date: props.date,
+      // date: props.draggerSelectedB ? props.dateB : props.date,
+      date: props.draggerSelected === 'selectedB' ? props.dateB : props.date,
       maxDate: props.maxDate,
       minDate: props.minDate,
-      maxZoom: props.maxZoom
+      // maxZoom: props.maxZoom,
+      hasSubdailyLayers: props.hasSubdailyLayers
     });
   }
   blur() {
@@ -41,7 +44,7 @@ class DateSelector extends React.Component {
   changeTab(index) {
     var nextTab = index;
     var maxTab;
-    if (this.state.maxZoom >= 4) {
+    if (this.state.hasSubdailyLayers) {
       maxTab = 5;
     } else {
       maxTab = 3;
@@ -61,14 +64,17 @@ class DateSelector extends React.Component {
       tab: nextTab
     });
   }
-  updateDate(date) {
+  updateDate(date, type, amt) {
+    // console.log(this.state.date)
     this.setState({
       date: date
     });
-    this.props.onDateChange(date, this.props.id);
+    // this.props.onDateChange(date, this.props.id, type, amt);
+    // # allows dragger change via main date selector, and id change via anim date selectors
+    this.props.onDateChange(date, this.props.draggerSelected || this.props.id);
   }
   renderSubdaily() {
-    if (this.state.maxZoom >= 4) {
+    if (this.props.hasSubdailyLayers) {
       return (
         <React.Fragment>
           <DateInputColumn
@@ -118,6 +124,8 @@ class DateSelector extends React.Component {
     }
   }
   render() {
+    // console.log(this.props.date)
+    // console.log(this.props.draggerSelected === 'selected')
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn
@@ -198,7 +206,8 @@ DateSelector.propTypes = {
   height: PropTypes.string,
   width: PropTypes.string,
   idSuffix: PropTypes.string,
-  fontSize: PropTypes.number
+  fontSize: PropTypes.number,
+  hasSubdailyLayers: PropTypes.bool
 };
 
 export default DateSelector;

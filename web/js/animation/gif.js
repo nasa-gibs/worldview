@@ -578,7 +578,7 @@ export function animationGif(models, config, ui) {
         delay: 1000 / interval
       });
       if (ui.anim.ui.getInterval() === 'minute') {
-        intervalAmount = 10;
+        intervalAmount = 15;
       } else {
         intervalAmount = 1;
       }

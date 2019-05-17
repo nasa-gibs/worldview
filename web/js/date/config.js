@@ -1135,6 +1135,7 @@ export function timelineConfig(models, config, ui) {
     });
     $('.zoom-btn-inactive').on('click', function(d) {
       var dataZoom = $(this).attr('data-zoom');
+      console.log(dataZoom)
       switch (dataZoom) {
         case '1':
           self.zoom(1);
@@ -1144,6 +1145,9 @@ export function timelineConfig(models, config, ui) {
           break;
         case '4':
           self.zoom(4);
+          break;
+        case 'custom':
+          // self.zoom(4);
           break;
         default:
           self.zoom(3);

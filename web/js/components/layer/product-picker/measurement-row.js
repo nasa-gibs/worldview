@@ -125,9 +125,9 @@ class LayerRow extends React.Component {
           var matches = regExp.exec(layer.title);
           orbitTitle = matches[1];
         }
-        OrbitSourceList.push(
-          this.renderOrbitListItem(orbitTitle, measurement, layer)
-        );
+        // OrbitSourceList.push(
+        //   this.renderOrbitListItem(orbitTitle, measurement, layer)
+        // );
       }
     });
     return (

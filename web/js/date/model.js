@@ -9,6 +9,17 @@ export function dateModel(models, config, spec) {
   self.selectedB = util.dateAdd(self.selected, 'day', -7);
   self.activeDate = 'selected';
 
+  // selected zoom level/timescale
+  self.selectedZoom = null;
+
+  // selected interval
+  self.interval = null;
+
+  // custom interval
+  self.customSelected = null; // boolean
+  self.customDelta = null; // number
+  self.customInterval = null;
+
   self.monthAbbr = [
     'JAN',
     'FEB',
@@ -24,6 +35,15 @@ export function dateModel(models, config, spec) {
     'DEC'
   ];
 
+  const timeScaleFromNumberKey = {
+    '0': 'custom',
+    '1': 'year',
+    '2': 'month',
+    '3': 'day',
+    '4': 'hour',
+    '5': 'minute'
+  };
+
   var init = function() {
     var initial = spec.initial || util.now();
     self.select(initial);
@@ -33,8 +53,39 @@ export function dateModel(models, config, spec) {
       self.select(util.dateAdd(self.selected, 'day', -7), 'selectedB');
     }
   };
+  // set selectedZoom level
+  self.setSelectedZoom = (zoomLevel) => {
+    self.selectedZoom = zoomLevel;
+    self.events.trigger('state-update');
+  };
+  // select increment from animation dialog
+  self.changeIncrement = (zoomLevel) => {
+    // if custom
+    if (zoomLevel === 0) {
+      self.customSelected = true;
+      // check for customInterval selection else default to current interval
+      self.interval = self.customInterval ? self.customInterval : self.interval;
+    } else {
+      self.customSelected = false;
+      self.interval = zoomLevel;
+    }
+  };
   self.setActiveDate = function(dateString) {
     self.activeDate = dateString;
+    self.events.trigger('state-update');
+  };
+  // set custom interval from panel
+  self.setCustomInterval = (delta, interval) => {
+    self.interval = interval;
+    self.customDelta = delta;
+    self.customInterval = interval;
+    self.events.trigger('state-update');
+    self.events.trigger('custom-interval-update');
+  };
+  // select interval from tooltip
+  self.setSelectedInterval = (interval, customSelected) => {
+    self.interval = interval;
+    self.customSelected = customSelected;
     self.events.trigger('state-update');
   };
   self.string = function() {
@@ -55,6 +106,10 @@ export function dateModel(models, config, spec) {
         self.events.trigger('select', date, selectionStr);
       }
       updated = true;
+    } else {
+      // necessary to handle 00:00:00 not triggering and saving as either the
+      // previous date of 23:00:00 or 01:00:00
+      self.events.trigger('select', date, selectionStr);
     }
     return updated;
   };
@@ -126,7 +181,7 @@ export function dateModel(models, config, spec) {
       date.toISOString().split('T')[0] +
       '-' +
       'T' +
-      self.selected
+      date
         .toISOString()
         .split('T')[1]
         .slice(0, -5) +
@@ -143,22 +198,65 @@ export function dateModel(models, config, spec) {
         state.t1 = dateToStringForUrl(self.selectedB);
       }
     }
+    // interval
+    if (self.interval) {
+      state.inti = self.interval.toString();
+    }
+    // only if custom selected, save custom interval and delta state
+    if (self.customSelected) {
+      if (self.customInterval) {
+        state.intci = self.customInterval.toString();
+      }
+      // if delta is 1, then it won't be saved since this would be a default
+      if (self.customDelta && self.customDelta > 1) {
+        state.intcs = self.customSelected.toString();
+        state.intcd = self.customDelta.toString();
+      }
+    }
   };
 
   self.load = function(state) {
+    // COMPARE ACTIVE? - A dragger/tab selected : state.ca === 'true', B is state.ca === 'false
     if (state.ca === 'false') {
       self.setActiveDate('selectedB');
     }
+    // TIME
     if (state.t) {
       self.select(state.t, 'selected');
     }
+    // TIMESCALE (ZOOM) - can't change in order to support older, established permalinks
     if (state.z) {
       self.selectedZoom = Number(state.z);
+    } else {
+      self.selectedZoom = 3;
     }
+    // TIME FOR DRAGGER B
     if (state.t1) {
       self.select(state.t1, 'selectedB');
     }
-    return self;
+    // # INTERVALS
+    // selected interval timescale
+    if (state.inti) {
+      self.interval = state.inti;
+    } else {
+      self.interval = 3;
+    }
+    // custom interval delta
+    if (state.intcd) {
+      self.customDelta = Number(state.intcd);
+    }
+    // custom interval timescale
+    if (state.intci) {
+      self.customInterval = Number(state.intci);
+    }
+    // interval custom selected
+    if (state.intcs) {
+      if (state.intcs === 'true') {
+        self.customSelected = true;
+      } else if (state.intcs === 'false') {
+        self.customSelected = false;
+      }
+    }
   };
   init();
   return self;

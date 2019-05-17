@@ -78,13 +78,13 @@ export function combineUi(models, config, MapMouseEvents) {
   }
   function timelineInit() {
     ui.timeline = timeline(models, config, ui);
-    ui.timeline.data = timelineData(models, config, ui);
-    ui.timeline.zoom = timelineZoom(models, config, ui);
-    ui.timeline.ticks = timelineTicks(models, config, ui);
-    ui.timeline.pick = timelinePick(models, config, ui);
-    ui.timeline.pan = timelinePan(models, config, ui);
-    ui.timeline.input = timelineInput(models, config, ui);
-    ui.timeline.config = timelineConfig(models, config, ui);
+    // ui.timeline.data = timelineData(models, config, ui);
+    // ui.timeline.zoom = timelineZoom(models, config, ui);
+    // ui.timeline.ticks = timelineTicks(models, config, ui);
+    // ui.timeline.pick = timelinePick(models, config, ui);
+    // ui.timeline.pan = timelinePan(models, config, ui);
+    // ui.timeline.input = timelineInput(models, config, ui);
+    // ui.timeline.config = timelineConfig(models, config, ui);
     if (config.features.animation) {
       ui.anim = {};
       ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
@@ -93,7 +93,7 @@ export function combineUi(models, config, MapMouseEvents) {
       ui.anim.ui = animationUi(models, ui);
     }
     if (config.features.compare) {
-      ui.timeline.compare = timelineCompare(models, config, ui);
+      // ui.timeline.compare = timelineCompare(models, config, ui);
     }
 
     ui.dateLabel = dateLabel(models);

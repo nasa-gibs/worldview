@@ -98,7 +98,7 @@ class TimelineRangeSelector extends React.Component {
    * @return {void}
    */
   onDragStop() {
-    this.props.onDrag(this.state.startLocation, this.state.endLocation);
+    this.props.onDrag(this.state.startLocation, this.state.endLocation, true);
     googleTagManager.pushEvent({
       'event': 'GIF_animation_dragger'
     });
@@ -138,7 +138,7 @@ class TimelineRangeSelector extends React.Component {
    */
   render() {
     return (
-      <svg id="wv-timeline-range-selector" className="wv-timeline-range-selector">
+      <svg id="wv-timeline-range-selector" className="wv-timeline-range-selector" onMouseEnter={this.props.onHover}>
         <DraggerRange
           opacity={this.props.rangeOpacity}
           startLocation={this.state.startLocation}
@@ -197,6 +197,7 @@ TimelineRangeSelector.propTypes = {
   pinWidth: PropTypes.number,
   height: PropTypes.number,
   onDrag: PropTypes.func,
+  onHover: PropTypes.func,
   onRangeClick: PropTypes.func,
   rangeOpacity: PropTypes.number,
   rangeColor: PropTypes.string,
