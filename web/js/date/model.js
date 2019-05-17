@@ -257,6 +257,7 @@ export function dateModel(models, config, spec) {
         self.customSelected = false;
       }
     }
+    return self;
   };
   init();
   return self;

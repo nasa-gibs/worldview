@@ -7,14 +7,14 @@ import { alertUi } from './alert/ui';
 // Timeline
 import dateWheels from './date/wheels';
 import { timeline } from './date/timeline';
-import { timelineData } from './date/timeline-data';
-import { timelineConfig } from './date/config';
-import { timelineZoom } from './date/timeline-zoom';
-import { timelineTicks } from './date/timeline-ticks';
-import { timelinePick } from './date/timeline-pick';
-import { timelinePan } from './date/timeline-pan';
-import { timelineInput } from './date/timeline-input';
-import { timelineCompare } from './date/compare-picks';
+// import { timelineData } from './date/timeline-data';
+// import { timelineConfig } from './date/config';
+// import { timelineZoom } from './date/timeline-zoom';
+// import { timelineTicks } from './date/timeline-ticks';
+// import { timelinePick } from './date/timeline-pick';
+// import { timelinePan } from './date/timeline-pan';
+// import { timelineInput } from './date/timeline-input';
+// import { timelineCompare } from './date/compare-picks';
 // Tour
 import { tourUi } from './tour/ui';
 import { layersModal } from './layers/modal';
@@ -105,6 +105,7 @@ export function combineUi(models, config, MapMouseEvents) {
     }
     ui.dateWheels = dateWheels(models, config);
   }
+
   // FIXME: Old hack
   $(window).resize(function() {
     if (util.browser.small) {

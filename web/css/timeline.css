@@ -10,8 +10,6 @@ button:focus {
 .timeline-inner {
   position: absolute;
   border: 1px solid #333;
-  /* background: rgb(40, 40, 40);
-  background: rgba(40, 40, 40, 0.9); */
   background: rgba(40, 40, 40, 0.85);
   border-radius: 5px;
   display: flex;
@@ -20,19 +18,6 @@ button:focus {
   margin-right: 10px;
   height: 67px;
   bottom: 10px;
-}
-
-#timeline-footer text {
-  /* font: 400 12px/125% 'Roboto Mono', monospace;
-  text-align: start;
-  letter-spacing: 0;
-  word-spacing: 0;
-  -webkit-writing-mode: lr-tb;
-  -ms-writing-mode: lr-tb;
-  writing-mode: lr-tb;
-  text-anchor: start;
-  fill-opacity: 1;
-  stroke: none; */
 }
 
 .x.axis .tick {
