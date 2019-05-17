@@ -11,6 +11,12 @@ import {
   setCustom as setCustomSelector,
   clearCustom as clearCustomSelector
 } from './selectors';
+
+/**
+ * Request palette using core request utility
+ *
+ * @param {String} id | Layer Id
+ */
 export function requestPalette(id) {
   return (dispatch, getState) => {
     const config = getState().config;
@@ -27,14 +33,15 @@ export function requestPalette(id) {
   };
 }
 
-export function setRange(layerId, min, max, squash, index, groupName) {
+/**
+ * @param {String} layerId
+ * @param {Object} props | contains min max and squash attributes
+ * @param {Number} index | Palette index value for multi-paletted layers
+ * @param {String} groupName | layer group string
+ */
+export function setRangeAndSquash(layerId, props, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
-    const props = {
-      min: min,
-      max: max,
-      squash: squash
-    };
     const newActivePalettesObj = setRangeSelector(
       layerId,
       props,
@@ -52,6 +59,14 @@ export function setRange(layerId, min, max, squash, index, groupName) {
     });
   };
 }
+/**
+ * Action to set custom palette
+ *
+ * @param {String} layerId
+ * @param {String} paletteId
+ * @param {Number} index | Palette index value for multi-paletted layers
+ * @param {String} groupName | layer group string
+ */
 export function setCustom(layerId, paletteId, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
@@ -72,6 +87,13 @@ export function setCustom(layerId, paletteId, index, groupName) {
     });
   };
 }
+/**
+ * Action to remove custom palette
+ *
+ * @param {String} layerId
+ * @param {Number} index | Palette index value for multi-paletted layers
+ * @param {String} groupName | layer group string
+ */
 export function clearCustom(layerId, index, groupName) {
   return (dispatch, getState) => {
     const { palettes } = getState();
@@ -88,6 +110,11 @@ export function clearCustom(layerId, index, groupName) {
     });
   };
 }
+/**
+ * Action signifying custom palettes have been loaded
+ *
+ * @param {Object} customs | Custom Palettes from Config
+ */
 export function loadedCustomPalettes(customs) {
   return {
     type: LOADED_CUSTOM_PALETTES,

@@ -18,7 +18,7 @@ import {
   getLegend
 } from '../../../modules/palettes/selectors';
 import {
-  setRange,
+  setRangeAndSquash,
   setCustom,
   clearCustom
 } from '../../../modules/palettes/actions';
@@ -251,8 +251,10 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = dispatch => ({
-  setRange: (layerId, min, max, isSquashed, index, groupName) => {
-    dispatch(setRange(layerId, min, max, isSquashed, index, groupName));
+  setRange: (layerId, min, max, squash, index, groupName) => {
+    dispatch(
+      setRangeAndSquash(layerId, { min, max, squash }, index, groupName)
+    );
   },
   setCustom: (layerId, paletteId, index, groupName) => {
     dispatch(setCustom(layerId, paletteId, index, groupName));

@@ -19,6 +19,12 @@ import { mapLocationToPaletteState } from './modules/palettes/util';
 import util from './util/util';
 import update from 'immutability-helper';
 
+/**
+ * Override state with information from location.search
+ * mapLocationToState
+ * @param {Object} state | Default state object
+ * @param {Object} location | Redux-location-state Location object
+ */
 export function mapLocationToState(state, location) {
   const config = state.config;
   if (location.search) {
@@ -42,16 +48,16 @@ export function mapLocationToState(state, location) {
     stateFromLocation = mapLocationToPaletteState(
       parameters,
       stateFromLocation,
-      state
+      state,
+      config
     );
-    // one level deep merge
+    // one level deep merge of newState with defaultState
     for (var key in stateFromLocation) {
       const obj = lodashAssign({}, state[key], stateFromLocation[key]);
       stateFromLocation = update(stateFromLocation, {
         [key]: { $set: obj }
       });
     }
-
     return update(state, { $merge: stateFromLocation });
   } else {
     const startTour = checkTourBuildTimestamp(state.config);

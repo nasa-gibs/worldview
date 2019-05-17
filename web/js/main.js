@@ -28,11 +28,16 @@ import { updateLegacyModule } from './modules/migration/actions';
 import { validate as layerValidate } from './layers/layers';
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
-
 export let history = createBrowserHistory();
+
 const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
+// Code for when version of redux dev-tools version stops crashing
+// const compose = isDebugMode
+//   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ latency: 0 }) ||
+//     defaultCompose
+//   : defaultCompose;
 let parameters = util.fromQueryString(location.search);
 let elapsed = util.elapsed;
 let errors = [];

@@ -196,6 +196,7 @@ PaletteSelect.propTypes = {
   getDefaultLegend: PropTypes.func,
   getCustomPalette: PropTypes.func,
   canvas: PropTypes.object,
+  groupName: PropTypes.string,
   checkerBoard: PropTypes.object,
   activePalette: PropTypes.string
 };
