@@ -648,7 +648,7 @@ export function timeline(models, config, ui) {
   };
 
   var onLayerUpdate = function() {
-    self.data.set();
+    // self.data.set();
     self.resize();
     ui.anim.widget.update();
     updateSubdailyState();

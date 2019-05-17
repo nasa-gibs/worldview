@@ -21,8 +21,8 @@ import { timelineData } from './date/timeline-data'; // remove
 // import { timelineTicks } from './date/timeline-ticks'; // replaced
 // import { timelinePick } from './date/timeline-pick'; // replaced
 // import { timelinePan } from './date/timeline-pan'; // replaced
-import { timelineInput } from './date/timeline-input';
-import { timelineCompare } from './date/compare-picks';
+// import { timelineInput } from './date/timeline-input';
+// import { timelineCompare } from './date/compare-picks';
 
 // Layers
 import {
@@ -374,7 +374,7 @@ class App extends React.Component {
 
       function timelineInit() {
         ui.timeline = timeline(models, config, ui);
-        ui.timeline.data = timelineData(models, config, ui);
+        // ui.timeline.data = timelineData(models, config, ui);
         // ui.timeline.zoom = timelineZoom(models, config, ui);
         // ui.timeline.ticks = timelineTicks(models, config, ui);
         // ui.timeline.pick = timelinePick(models, config, ui);
@@ -404,8 +404,6 @@ class App extends React.Component {
         // TODO: date wheels break now
         ui.dateWheels = dateWheels(models, config);
       }
-
-      console.log(ui)
 
       ui.rubberband = imageRubberband(models, ui, config);
       ui.image = imagePanel(models, ui, config);
