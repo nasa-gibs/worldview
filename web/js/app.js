@@ -94,6 +94,7 @@ class App extends React.Component {
           style={{ display: 'none' }}
         ></section>
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
+        <Modal />
       </div>
     );
   }

@@ -520,6 +520,7 @@ export function timeline(models, config, ui) {
   };
 
   // arguments passed as date (date object) and selectionStr ('selected' or 'selectedB')
+  // FROM LISTENER
   var updateReactTimelineDate = function(date, selectionStr) {
     let selectedDate = models.date.selected;
     let selectedDateB = models.date.selectedB;
@@ -538,6 +539,7 @@ export function timeline(models, config, ui) {
   };
 
   // Update status of subdaily layers being in sidebar
+  // child of FROM LISTENER
   var updateSubdailyState = function() {
     // check for compare mode
     let isCompareModeActive = models.compare.active;
@@ -563,12 +565,14 @@ export function timeline(models, config, ui) {
     }
   };
 
+  // layer update FROM LISTENER
   var onLayerUpdate = function() {
     self.resize();
     ui.anim.widget.update();
     updateSubdailyState();
   };
 
+  // animation date change FROM LISTENER
   var onAnimationDateChange = () => {
     let animationStartLocationDate = models.anim.rangeState.startDate;
     let animationEndLocationDate = models.anim.rangeState.endDate;
@@ -579,6 +583,7 @@ export function timeline(models, config, ui) {
     });
   };
 
+  // toggle animation widget FROM LISTENER
   var onAnimationWidgetToggle = () => {
     let animationStartLocationDate = models.anim.rangeState.startDate;
     let animationEndLocationDate = models.anim.rangeState.endDate;
@@ -591,6 +596,7 @@ export function timeline(models, config, ui) {
     });
   };
 
+  // initialization on load - CONTAINER ADDED TO DOM HERE
   var init = function() {
     models.layers.events.trigger('toggle-subdaily');
 
