@@ -20,14 +20,7 @@ import {
   changeEndDate
 } from '../modules/animation/actions';
 
-const timeScaleFromNumberKey = {
-  '0': 'custom',
-  '1': 'year',
-  '2': 'month',
-  '3': 'day',
-  '4': 'hour',
-  '5': 'minute'
-};
+import { timeScaleFromNumberKey } from '../modules/date/constants';
 
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;

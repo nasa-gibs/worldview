@@ -1,31 +1,41 @@
 import {
   UPDATE_ZOOM_LEVEL,
   CUSTOM_INTERVAL_CHANGE,
-  INTERVAL_CHANGE
+  INTERVAL_CHANGE,
+  SELECT_DATE
 } from './constants';
+import util from '../../util/util';
 import { assign as lodashAssign } from 'lodash';
 
 const defaultState = {
-  isCustomInterval: false,
-  zoomLevel: 3,
-  increment: 1
+  selectedZoom: 3,
+  interval: 1,
+  selected: util.now(),
+  selectedB: util.dateAdd(),
+  customSelected: false,
+  customDelta: null,
+  customInterval: null
 };
 
 export function timelineReducer(state = defaultState, action) {
   switch (action.type) {
     case UPDATE_ZOOM_LEVEL:
       return lodashAssign({}, state, {
-        zoomLevel: action.value
+        selectedZoom: action.value
       });
     case CUSTOM_INTERVAL_CHANGE:
       return lodashAssign({}, state, {
         customIncrement: action.value,
-        isCustomInterval: true
+        customSelected: true
       });
     case INTERVAL_CHANGE:
       return lodashAssign({}, state, {
-        increment: action.value,
-        isCustomInterval: false
+        interval: action.value,
+        customSelected: false
+      });
+    case SELECT_DATE:
+      return lodashAssign({}, state, {
+        [action.activeString]: action.value
       });
     default:
       return state;

@@ -67,7 +67,6 @@ export function layerReducer(state = initialState, action) {
       let layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });
-      console.log(layerGroupStr, layerIndex);
       return update(state, {
         [layerGroupStr]: {
           [layerIndex]: {

@@ -401,6 +401,31 @@ export function isRenderable(id, activeLayers, date, state) {
   );
   return !obscured;
 }
+
+export function lastDate(activeLayers, config) {
+  var endDate;
+  var layersDateRange = dateRange({}, activeLayers, config);
+  var today = util.today();
+  if (layersDateRange && layersDateRange.end > today) {
+    endDate = layersDateRange.end;
+  } else {
+    endDate = today;
+  }
+  return endDate;
+}
+
+export function lastDateTime(activeLayers, config) {
+  var endDate;
+  var layersDateRange = dateRange({}, activeLayers, config);
+  var now = util.now();
+  if (layersDateRange && layersDateRange.end > now) {
+    endDate = layersDateRange.end;
+  } else {
+    endDate = now;
+  }
+  return endDate;
+}
+
 export function getZotsForActiveLayers(config, models, ui) {
   // var zotObj = {};
   // var sources = config.sources;
