@@ -271,11 +271,6 @@ class Timeline extends React.Component {
       rightArrowDisabled: this.checkRightArrowDisabled()
     });
   };
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return true;
-  // }
-
   componentDidUpdate(prevProps, prevState) {
     let {
       intervalChangeAmt,
