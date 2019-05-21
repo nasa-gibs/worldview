@@ -199,13 +199,12 @@ class AnimationWidget extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { legacy, layers, compare, animation, models } = state;
+  const { legacy, layers, compare, animation, date } = state;
   const { startDate, endDate, speed, loop, isPlaying } = animation;
+  const { minDate, maxDate } = date;
   const activeStr = compare.activeString;
   const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
   const zoomObj = getZoomObject(legacy.date, hasSubdailyLayers);
-  const minDate = models.date.minDate();
-  const maxDate = models.date.maxDate();
 
   return {
     startDate,

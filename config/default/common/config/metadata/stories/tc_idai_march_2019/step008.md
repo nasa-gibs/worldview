@@ -1,0 +1,1 @@
+<p>Now let's look at the Cyclone Hazard: Frequency and Distribution layer. This layer shows that historically, this area has a low frequency of experiencing a cyclone. Clicking on the eye icon next to the Cyclone Hazard: Mortality Risk layer reveals that there is still a high risk of mortality from the effects of a storm in this region.</p>

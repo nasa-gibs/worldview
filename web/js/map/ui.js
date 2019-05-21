@@ -632,7 +632,8 @@ export function mapui(models, config, store) {
         id: def.id
       }
     });
-    if (!layer && layers[0].get('group')) {
+
+    if (!layer && layers.length && layers[0].get('group')) {
       let subGroup, olGroupLayer;
       lodashEach(layers, layerGroup => {
         if (layerGroup.get('group') === layerGroupStr) {

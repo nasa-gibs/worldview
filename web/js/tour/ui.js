@@ -54,30 +54,46 @@ export function tourUi(models, ui, config) {
       selectTour: self.selectTour,
       showTourAlert: ui.alert.showTourAlert,
       hideTour: self.hideTour,
-      showTour: self.showTour
+      showTour: self.showTour,
+      storageCheck: self.storageChecked()
     };
   };
 
+  self.storageChecked = function() {
+    if (!util.browser.localStorage) {
+      return false;
+    } else {
+      // Do the opposite of the results of checking the build timestamp / setting modalStart
+      // i.e. Checking hide means (true) not showing the start modal
+      if (self.checkBuildTimestamp() === true) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  };
+
   self.checkBuildTimestamp = function() {
-    var hideTour = localStorage.getItem('hideTour');
-
-    if (!util.browser.localStorage) return;
-
     // Don't start tour if coming in via a permalink
     if (window.location.search && !config.parameters.tour) {
       return false;
     }
+    // If there is no localStorage, always show the tour start modal
+    if (!util.browser.localStorage) return true;
+    let hideTour = localStorage.getItem('hideTour');
 
     if (hideTour && config.buildDate) {
       let buildDate = new Date(config.buildDate);
       let tourDate = new Date(hideTour);
+
       // Tour hidden when visiting fresh URL
       googleTagManager.pushEvent({
         event: 'tour_start_hidden',
         buildDate: buildDate,
         tourDate: tourDate
       });
-      if (buildDate > tourDate) {
+
+      if (config.buildDate > hideTour) {
         localStorage.removeItem('hideTour');
         return true;
       } else {
@@ -139,6 +155,7 @@ export function tourUi(models, ui, config) {
   };
 
   self.hideTour = function(e) {
+    if (!util.browser.localStorage) return;
     var hideTour = localStorage.getItem('hideTour');
 
     // Checkbox to "hide tour modal until a new story has been added" has been checked
@@ -146,13 +163,17 @@ export function tourUi(models, ui, config) {
       event: 'tour_hide_checked'
     });
 
-    if (!util.browser.localStorage) return;
     if (hideTour) return;
+    let date = new Date();
+    let dateUTC = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
+      date.getUTCDate(), date.getUTCHours(),
+      date.getUTCMinutes(), date.getUTCSeconds());
 
-    localStorage.setItem('hideTour', new Date());
+    localStorage.setItem('hideTour', dateUTC);
   };
 
   self.showTour = function(e) {
+    if (!util.browser.localStorage) return;
     var hideTour = localStorage.getItem('hideTour');
 
     // Checkbox to "hide tour modal until a new story has been added" has been checked
@@ -160,7 +181,6 @@ export function tourUi(models, ui, config) {
       event: 'tour_hide_unchecked'
     });
 
-    if (!util.browser.localStorage) return;
     if (!hideTour) return;
 
     localStorage.removeItem('hideTour');

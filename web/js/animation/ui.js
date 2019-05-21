@@ -10,7 +10,7 @@ export function animationUi(models, ui) {
   var animModel = models.anim;
   var queueLength;
   var queue = new Queue(5, Infinity);
-  var zooms = ['year', 'month', 'day', 'minute'];
+  var zooms = ['custom', 'year', 'month', 'day', 'hour', 'minute'];
   var preload = {};
   var preloadArray;
   var inQueue;
@@ -40,7 +40,8 @@ export function animationUi(models, ui) {
     }
     if (models.data) {
       models.data.events.on('activate', self.refreshState);
-      models.date.events.on('zoom-change', self.refreshState);
+      // models.date.events.on('zoom-change', self.refreshState);
+      models.date.events.on('interval-change', self.refreshState);
       models.date.events.on('select', self.dateChange);
     }
     if (ui.map) {
@@ -116,13 +117,19 @@ export function animationUi(models, ui) {
     endDate = util.parseDateUTC(state.endDate);
     startDate = util.parseDateUTC(state.startDate);
     // if not index+1 of 4 ('10-Minute'), zero out start/end times and resave
-    if (dateSelectedZoom < 4) {
-      let zeroDate = dateModel.selected;
-      util.clearTimeUTC(zeroDate);
-      util.clearTimeUTC(startDate);
-      dateModel.selected = zeroDate;
-    }
-    currentDate = dateModel.selected;
+
+    // # causes UTC zeroing of dates in date model - need to rework if this
+    // # functionality is still going to be used or handle zeroing out
+    // # at actual layer building only
+    // if (dateSelectedZoom < 4) {
+    //   let zeroDate = dateModel.selected;
+    //   debugger;
+    //   util.clearTimeUTC(zeroDate);
+    //   util.clearTimeUTC(startDate);
+    //   dateModel.selected = zeroDate;
+    // }
+    let activeDate = dateModel.activeDate; // determine if selected or selectedB
+    currentDate = dateModel[activeDate];
     if (currentDate > startDate && self.nextDate(currentDate) < endDate) {
       return util.toISOStringSeconds(self.nextDate(currentDate));
     }
@@ -184,7 +191,7 @@ export function animationUi(models, ui) {
    *
    */
   self.getInterval = function () {
-    return zooms[ui.timeline.config.currentZoom - 1];
+    return zooms[models.date.interval];
   };
 
   /*
@@ -199,12 +206,24 @@ export function animationUi(models, ui) {
    * @returns {object} JS Date
    *
    */
+
+  // # need to change subdaily argument for custom intervals - rework for all zoom levels presumably
   self.nextDate = function (date) {
-    if (models.date.selectedZoom === 4) {
-      return util.dateAdd(date, self.getInterval(), 10);
+    // console.log(date)
+    let customSelected = models.date.customSelected;
+    let interval;
+    let delta;
+    if (customSelected) {
+      interval = zooms[Number(models.date.customInterval)] || zooms[3];
+      if (interval === 'custom') {
+        interval = zooms[models.date.selectedZoom];
+      }
+      delta = models.date.customDelta || 1;
     } else {
-      return util.dateAdd(date, self.getInterval(), 1);
+      interval = self.getInterval();
+      delta = 1;
     }
+    return util.dateAdd(date, interval, delta);
   };
 
   /*
@@ -319,6 +338,7 @@ export function animationUi(models, ui) {
     var day = new Date(self.state.playIndex);
     var startDate = new Date(animModel.rangeState.startDate);
     var endDate = new Date(animModel.rangeState.endDate);
+    // console.log(startDate, endDate);
     var jsTestDate = new Date(testDate);
     while (i < queueLength) {
       if (self.nextDate(day) > endDate) {
@@ -368,6 +388,7 @@ export function animationUi(models, ui) {
     var currentDate;
     var startDate = util.parseDateUTC(animModel.rangeState.startDate);
     var endDate = util.parseDateUTC(animModel.rangeState.endDate);
+
     var lastToQueue;
     if (!animModel.rangeState.playing) {
       return self.refreshState();

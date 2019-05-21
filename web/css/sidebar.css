@@ -35,7 +35,6 @@
 }
 #productsHolder > .tab-content {
   background: rgba(40, 40, 40, 0.85);
-  margin-top: 10px;
   border: 1px solid #333;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;

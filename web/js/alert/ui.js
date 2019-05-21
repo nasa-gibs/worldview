@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TourAlert from '../components/alert/alert-tour';
+import util from '../util/util';
 
 export function alertUi(ui) {
   var self = {};
@@ -21,12 +22,13 @@ export function alertUi(ui) {
   };
 
   self.showTourAlert = function(e) {
+    if (!util.browser.localStorage) return;
     var hideTour = localStorage.getItem('hideTour');
     if (!hideTour) return;
 
     self.reactComponent.setState({
       visible: true,
-      message: 'To view these tours again. Click the \'Start Tour\' link in the "i" button menu above.'
+      message: 'To view these tours again, click the \'Explore Worldview\' link in the “i” menu.'
     });
 
     setTimeout(() => {

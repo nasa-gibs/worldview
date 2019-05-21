@@ -5,6 +5,7 @@ import json
 from optparse import OptionParser
 import os
 import sys
+import time
 from processTemporalLayer import process_temporal
 
 prog = os.path.basename(__file__)
@@ -156,14 +157,14 @@ for startingLayer in wv["defaults"]["startingLayers"]:
     else:
         startingLayers += [startingLayer]
 wv["defaults"]["startingLayers"] = startingLayers
-wv["buildDate"] = datetime.now().isoformat(" ")
+wv["buildDate"] = int(round(time.time() * 1000))
 
-for projection, projectionValue in wv["naturalEvents"]["layers"].iteritems():
-    for eventType, eventTypeLayerList in projectionValue.iteritems():
-        for layerObject in eventTypeLayerList:
-            if layerObject[0] not in wv["layers"]:
-                error("The %s layer in the Natural events %s %s config does not have a matching ID in the layer config" %
-                (layerObject[0], projection, eventType))
+# for projection, projectionValue in wv["naturalEvents"]["layers"].iteritems():
+#     for eventType, eventTypeLayerList in projectionValue.iteritems():
+#         for layerObject in eventTypeLayerList:
+#             if layerObject[0] not in wv["layers"]:
+#                 error("The %s layer in the Natural events %s %s config does not have a matching ID in the layer config" %
+#                 (layerObject[0], projection, eventType))
 
 for measurement in wv["measurements"].values():
     if "sources" not in measurement:

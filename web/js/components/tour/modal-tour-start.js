@@ -11,12 +11,13 @@ import {
 } from 'reactstrap';
 import TourIntro from './content-intro';
 import TourBoxes from './tour-boxes';
+import util from '../../util/util';
 
 class ModalStart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: localStorage.hideTour
+      checked: this.props.storageCheck
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -58,8 +59,7 @@ class ModalStart extends React.Component {
   // Handle the show/hide checkbox state
   handleCheck() {
     this.setState({
-      checked: !this.state.checked,
-      defaultChecked: !this.state.defaultChecked
+      checked: !this.state.checked
     });
     if (!this.state.checked) {
       this.props.hideTour();
@@ -92,6 +92,7 @@ class ModalStart extends React.Component {
             selectTour={this.props.selectTour}
           />
         </ModalBody>
+        {util.browser.localStorage &&
         <ModalFooter>
           <InputGroup>
             <InputGroupText className="w-100">
@@ -109,6 +110,7 @@ class ModalStart extends React.Component {
             </InputGroupText>
           </InputGroup>
         </ModalFooter>
+        }
       </Modal>
     );
   }
@@ -123,6 +125,7 @@ ModalStart.propTypes = {
   showTourAlert: PropTypes.func.isRequired,
   hideTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
+  storageCheck: PropTypes.bool.isRequired,
   className: PropTypes.string
 };
 

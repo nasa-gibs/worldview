@@ -18,6 +18,7 @@ export function timelineCompare(models, config, ui) {
   var parentSvg;
   var max;
   self.events = util.events();
+  // # this class puts a 0 OPACITY on the regular dragger
   if (models.compare.active) {
     $timeline.addClass('ab-active');
   }

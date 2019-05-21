@@ -25,6 +25,8 @@ export function timelineInput(models, config, ui, store) {
   var animator = null;
   var keyDown;
 
+  let animationInProcess = false;
+
   var $incrementBtn = $('#right-arrow-group');
   var $decrementBtn = $('#left-arrow-group');
 
@@ -57,22 +59,23 @@ export function timelineInput(models, config, ui, store) {
     store.subscribe(subscribeToStore);
     $incrementBtn
       .mousedown(function(e) {
+        console.log(self.delta, self.interval)
         e.preventDefault();
         switch (ui.timeline.config.currentZoom) {
           case 1:
-            animateByIncrement(1, 'year');
+            self.animateByIncrement(self.delta, 'year');
             break;
           case 2:
-            animateByIncrement(1, 'month');
+            self.animateByIncrement(self.delta, 'month');
             break;
           case 3:
-            animateByIncrement(1, 'day');
+            self.animateByIncrement(self.delta, 'day');
             break;
           case 4:
-            animateByIncrement(10, 'minute');
+            self.animateByIncrement(self.delta, 'minute');
             break;
           default:
-            animateByIncrement(1, 'day');
+            self.animateByIncrement(self.delta, 'day');
         }
       })
       .mouseup(stopper);
@@ -82,22 +85,23 @@ export function timelineInput(models, config, ui, store) {
         e.preventDefault();
         switch (ui.timeline.config.currentZoom) {
           case 1:
-            animateByIncrement(-1, 'year');
+            self.animateByIncrement(-self.delta, 'year');
             break;
           case 2:
-            animateByIncrement(-1, 'month');
+            self.animateByIncrement(-self.delta, 'month');
             break;
           case 3:
-            animateByIncrement(-1, 'day');
+            self.animateByIncrement(-self.delta, 'day');
             break;
           case 4:
-            animateByIncrement(-10, 'minute');
+            self.animateByIncrement(-self.delta, 'minute');
             break;
           default:
-            animateByIncrement(-1, 'day');
+            self.animateByIncrement(-self.delta, 'day');
         }
       })
       .mouseup(stopper);
+
     $(document)
       .mouseout(stopper)
       .keydown(function(event) {
@@ -108,32 +112,32 @@ export function timelineInput(models, config, ui, store) {
           case util.key.LEFT:
             switch (models.date.selectedZoom) {
               case 1:
-                animateByIncrement(-1, 'year');
+                self.animateByIncrement(-self.delta, 'year');
                 break;
               case 2:
-                animateByIncrement(-1, 'month');
+                self.animateByIncrement(-self.delta, 'month');
                 break;
               case 3:
-                animateByIncrement(-1, 'day');
+                self.animateByIncrement(-self.delta, 'day');
                 break;
               case 4:
-                animateByIncrement(-10, 'minute');
+                self.animateByIncrement(-self.delta, 'minute');
                 break;
             }
             break;
           case util.key.RIGHT:
             switch (models.date.selectedZoom) {
               case 1:
-                animateByIncrement(1, 'year');
+                self.animateByIncrement(self.delta, 'year');
                 break;
               case 2:
-                animateByIncrement(1, 'month');
+                self.animateByIncrement(self.delta, 'month');
                 break;
               case 3:
-                animateByIncrement(1, 'day');
+                self.animateByIncrement(self.delta, 'day');
                 break;
               case 4:
-                animateByIncrement(10, 'minute');
+                self.animateByIncrement(self.delta, 'minute');
                 break;
             }
             event.preventDefault();
@@ -209,13 +213,15 @@ export function timelineInput(models, config, ui, store) {
    *                  e.g. months,minutes, years, days
    * @return {void}
    */
-  var animateByIncrement = function(delta, increment) {
+  self.animateByIncrement = function(delta, increment) {
+    // console.log(delta, increment)
     var endTime = models.layers.lastDateTime();
     var endDate = models.layers.lastDate();
     self.delta = Math.abs(delta);
 
     function animate() {
       var nextTime = getNextTimeSelection(delta, increment);
+      // console.log(tl.data.start(), nextTime, endTime, increment)
       if (ui.timeline.config.currentZoom >= 4) {
         if (tl.data.start() <= nextTime && nextTime <= endTime) {
           models.date.add(increment, delta);
@@ -225,6 +231,7 @@ export function timelineInput(models, config, ui, store) {
           models.date.add(increment, delta);
         }
       }
+      animationInProcess = true;
       animator = setTimeout(animate, self.delay);
     }
     animate();
@@ -235,8 +242,13 @@ export function timelineInput(models, config, ui, store) {
    * @return {void}
    */
   var stopper = function() {
-    clearInterval(animator);
-    animator = 0;
+    if (animationInProcess) {
+      animationInProcess = false;
+      // # invokes when mouse over < > and date selector arrows/boxes
+      // # sticks on new timeline date selector
+      clearInterval(animator);
+      animator = 0;
+    }
   };
   /**
    * @param  {Number} delta Date and direction to change
@@ -293,7 +305,7 @@ export function timelineInput(models, config, ui, store) {
       $decrementBtn.removeClass('button-disabled');
     }
 
-    tl.pick.update();
+    // tl.pick.update();
   };
 
   var updateMaxZoom = function() {
@@ -306,7 +318,7 @@ export function timelineInput(models, config, ui, store) {
       document.getElementById('timeline-header').classList.remove('subdaily');
     }
     self.reactComponent.setState({ maxZoom: model.maxZoom });
-    model.events.trigger('update-timewheel');
+    // model.events.trigger('update-timewheel');
   };
 
   init();

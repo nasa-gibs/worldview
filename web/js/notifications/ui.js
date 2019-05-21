@@ -31,9 +31,7 @@ export function notificationsUi(models, config) {
    */
   var init = function () {
     var p;
-    if (!util.browser.localStorage) {
-      return;
-    }
+    if (!util.browser.localStorage) return;
     if (config.parameters.mockAlerts) {
       url = 'mock/notify_' + config.parameters.mockAlerts + '.json';
     }

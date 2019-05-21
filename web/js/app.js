@@ -12,6 +12,8 @@ import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
 
+import Test from './containers/test';
+
 // Other
 import Brand from './brand';
 
@@ -22,7 +24,7 @@ import { updateLegacyInitComplete } from './modules/migration/actions';
 // import { screenResize } from './modules/browser/actions';
 import { calculateResponsiveState } from 'redux-responsive';
 import Tour from './containers/tour';
-import AnimationWidget from './containers/animation-widget';
+// import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 
@@ -85,7 +87,7 @@ class App extends React.Component {
     this.onload();
   }
   render() {
-    const { config } = this.props;
+    //  const { config } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
@@ -99,101 +101,16 @@ class App extends React.Component {
         <div id="dlMap" />
 
         <div id="timewheels" style={{ display: 'none' }} />
-
+        <Test />
         <section
           id="timeline"
           className="timeline-inner clearfix"
           style={{ display: 'none' }}
-        >
-          <div id="timeline-header">
-            <div id="date-selector-main" />
-            <div id="zoom-buttons-group">
-              <div id="zoom-btn-container">
-                <span
-                  id="current-zoom"
-                  className="zoom-btn zoom-btn-active"
-                  data-zoom="3"
-                >
-                  Days
-                </span>
-                <div className="wv-tooltip">
-                  <div id="timeline-zoom" className="timeline-zoom">
-                    <span
-                      id="zoom-years"
-                      className="zoom-btn zoom-btn-inactive zoom-years"
-                      data-zoom="1"
-                    >
-                      Years
-                    </span>
-                    <span
-                      id="zoom-months"
-                      className="zoom-btn zoom-btn-inactive zoom-months"
-                      data-zoom="2"
-                    >
-                      Months
-                    </span>
-                    <span
-                      id="zoom-days"
-                      className="zoom-btn zoom-btn-inactive zoom-days"
-                      data-zoom="3"
-                    >
-                      Days
-                    </span>
-                    <span
-                      id="zoom-minutes"
-                      className="zoom-btn zoom-btn-inactive zoom-minutes"
-                      data-zoom="4"
-                    >
-                      Minutes
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="button-action-group"
-                id="left-arrow-group"
-                title="Click and hold to animate backwards"
-              >
-                <svg id="timeline-svg" width="24" height="30">
-                  <path
-                    d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                    className="arrow"
-                  />
-                </svg>
-              </div>
-              <div
-                className="button-action-group"
-                id="right-arrow-group"
-                title="Click and hold to animate forwards"
-              >
-                <svg width="24" height="30">
-                  <path
-                    d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                    className="arrow"
-                  />
-                </svg>
-              </div>
-            </div>
-            <div
-              className="button-action-group animate-button"
-              id="animate-button"
-              title="Set up animation"
-            >
-              <i id="wv-animate" className="fas fa-video wv-animate" />
-            </div>
-          </div>
-          <div id="timeline-footer">
-            <div id="wv-animation-widet-case">
-              {config.features.animation ? <AnimationWidget /> : ''}
-            </div>
-          </div>
-          <div id="timeline-hide">
-            <svg className="hamburger" width="10" height="9">
-              <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
-            </svg>
-          </div>
-        </section>
+        />
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
+        <div id="wv-animation-widet-case">
+          {/* {config.features.animation ? <AnimationWidget /> : ''} */}
+        </div>
         <Modal />
         <ErrorBoundary>
           <Debug parameters={this.props.parameters} />

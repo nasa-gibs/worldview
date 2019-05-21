@@ -47,6 +47,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     key = self.layerKey(def, options, state);
     proj = state.proj.selected;
     layer = cache.getItem(key);
+
     if (!layer) {
       // layer is not in the cache
       if (!date) date = options.date || models.date[models.date.activeDate];
@@ -60,6 +61,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
+
       if (def.type === 'wmts') {
         layer = createLayerWMTS(def, options, null, state);
         if (
@@ -137,28 +139,39 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     }
     var dateArray = def.availableDates || [];
     if (options.date) {
-      date = options.date;
+      if (def.period !== 'subdaily') {
+        date = util.clearTimeUTC(new Date(options.date.getTime()));
+      } else {
+        date = options.date;
+        // # possible to memoize third argument dateArray ?
+        date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
+      }
     } else {
-      date = models.date[models.date.activeDate];
+      // # mutation of models date causing overwrite issue for SUBDAILY vs NON-SUBDAILY
+      date = new Date(models.date[models.date.activeDate]);
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
+      } else {
+        date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
       }
     }
     // Perform extensive checks before finding closest date
     if (
       !options.precache &&
       (animRange && animRange.playing === false) &&
-      ((def.period === 'daily' && models.date.selectedZoom > 3) ||
-        (def.period === 'monthly' && models.date.selectedZoom >= 2) ||
-        (def.period === 'yearly' && models.date.selectedZoom >= 1))
+      models.date.selectedZoom !== 0 &&
+      ((def.period === 'daily' && models.date.selectedZoom < 3) ||
+        (def.period === 'monthly' && models.date.selectedZoom <= 2) ||
+        (def.period === 'yearly' && models.date.selectedZoom === 1))
     ) {
       date = util.prevDateInDateRange(def, date, dateArray);
 
       // Is current "rounded" previous date not in array of availableDates
       if (date && !dateArray.includes(date)) {
         // Then, update layer object with new array of dates
+        // # time complexity searching through array can be improved with object lookup
         def.availableDates = util.datesinDateRanges(def, date, true);
         date = util.prevDateInDateRange(def, date, dateArray);
       }
@@ -244,12 +257,18 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     }
 
     date = options.date || models.date[models.date.activeDate];
+    if (def.period === 'subdaily') {
+      date = self.closestDate(def, options);
+      // TODO: FIX +/- DATE OFFSETS TO GET UTC - SOURCE SINGLE STATE TRUTH
+      // date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+      date = new Date(date.getTime());
+    }
     if (day) {
       date = util.dateAdd(date, 'day', day);
     }
+
     urlParameters =
       '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-
     var sourceOptions = {
       url: source.url + urlParameters,
       layer: def.layer || def.id,

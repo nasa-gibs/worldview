@@ -10,8 +10,7 @@ button:focus {
 .timeline-inner {
   position: absolute;
   border: 1px solid #333;
-  background: rgb(40, 40, 40);
-  background: rgba(40, 40, 40, 0.9);
+  background: rgba(40, 40, 40, 0.85);
   border-radius: 5px;
   display: flex;
   flex-flow: row nowrap;
@@ -19,19 +18,6 @@ button:focus {
   margin-right: 10px;
   height: 67px;
   bottom: 10px;
-}
-
-#timeline-footer text {
-  font: 400 12px/125% 'Roboto Mono', monospace;
-  text-align: start;
-  letter-spacing: 0;
-  word-spacing: 0;
-  -webkit-writing-mode: lr-tb;
-  -ms-writing-mode: lr-tb;
-  writing-mode: lr-tb;
-  text-anchor: start;
-  fill-opacity: 1;
-  stroke: none;
 }
 
 .x.axis .tick {
@@ -143,7 +129,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header.subdaily {
-  width: 404px;
+  width: 414px;
 }
 
 #timeline-header .timeline-zoom,
@@ -151,11 +137,13 @@ g.plot rect.data-bar-invisible {
 #timeline-header .input-time-divider,
 #timeline-header .input-wrapper-minute,
 #timeline-header .input-time-zmark,
-#timeline-header .zoom-minutes {
+#timeline-header .zoom-minutes,
+#timeline-header .zoom-hours {
   display: none;
 }
 
-#timeline-header.subdaily .zoom-minutes {
+#timeline-header.subdaily .zoom-minutes,
+#timeline-header.subdaily .zoom-hours {
   display: block;
 }
 
@@ -259,13 +247,13 @@ g.plot rect.data-bar-invisible {
   width: 86px;
 }
 
-.button-action-group,
+/* .button-action-group,
 .date-arrows {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
+} */
 
 .button-action-group {
   height: 60px;
@@ -296,7 +284,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .date-arrows svg path {
-  fill: #444;
+  fill: #666;
 }
 
 #timeline-header .input-wrapper:hover .date-arrows:hover svg path {
@@ -392,10 +380,11 @@ g.plot rect.data-bar-invisible {
 #timeline-footer {
   border-left: 1px solid #666;
   border-right: 1px solid #666;
+  /* margin-right: 58px; */
 }
 
 #timeline-footer svg {
-  overflow: visible;
+  /* overflow: visible; */
 }
 
 #wv-rangeselector-case > .wv-timeline-range-selector {
@@ -429,9 +418,11 @@ g.plot rect.data-bar-invisible {
   stroke: #4682b4;
 }
 
-#timeline-header .timeline-zoom {
+#timeline-header .timeline-zoom,
+#zoom-btn-container-axis .wv-zoom-tooltip {
   display: block;
-  width: 80px;
+  /* width: 80px; */
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding: 4px;
@@ -439,16 +430,26 @@ g.plot rect.data-bar-invisible {
   border-radius: 3px;
 }
 
-#timeline-header #zoom-btn-container {
+#timeline-header #zoom-btn-container,
+#zoom-btn-container-axis {
   display: block;
 }
 
 #zoom-btn-container .wv-tooltip {
-  display: none;
+  /* display: none; */
   position: absolute;
   bottom: 100%;
   border-bottom: 8px solid transparent;
-  width: 100%;
+  width: 100px;
+  z-index: 10;
+}
+
+#zoom-btn-container-axis .wv-zoom-tooltip {
+  /* display: none; */
+  position: absolute;
+  bottom: 100%;
+  width: 75px;
+  /* border-bottom: 8px solid transparent; */
   z-index: 10;
 }
 

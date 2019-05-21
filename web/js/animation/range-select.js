@@ -1,17 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import RangeSelector from '../components/range-selection/range-selection';
-import d3 from 'd3';
+// import d3 from 'd3';
 import util from '../util/util';
+
+const timeScaleFromNumberKey = {
+  '0': 'custom',
+  '1': 'year',
+  '2': 'month',
+  '3': 'day',
+  '4': 'hour',
+  '5': 'minute'
+};
 
 export function animationRangeSelect(models, config, ui) {
   var self = {};
   var model;
-  var timeline = ui.timeline;
-  var $mountLocation = $('#wv-rangeselector-case');
+  // var timeline = ui.timeline;
+  // var $mountLocation = $('#wv-rangeselector-case');
   var $footer = $('#timeline-footer');
-  var $header = $('#timeline-header');
-  var $timeline = $('#timeline');
+  // var $header = $('#timeline-header');
+  // var $timeline = $('#timeline');
 
   // get timeline min/max date, zero out end date, and format to ISO
   var timelineStartDateLimit = config.startDate;
@@ -71,47 +80,54 @@ export function animationRangeSelect(models, config, ui) {
    *
    */
   self.render = function() {
-    var options;
+    // var options;
     var startLocation;
     var endLocation;
-    var pick = d3.select('#guitarpick');
-    var pickWidth = pick.node().getBoundingClientRect().width;
-    var animEndLocation =
-      d3.transform(pick.attr('transform')).translate[0] - pickWidth / 2; // getting guitar pick location
+    // TODO: Pull in new dragger pick
+    // var pick = d3.select('#guitarpick');
+    // var pickWidth = pick.node().getBoundingClientRect().width;
+    // var pickWidth = 50;
+    // var animEndLocation =
+    //   d3.transform(pick.attr('transform')).translate[0] - pickWidth / 2; // getting guitar pick location
+    // var animEndLocation = 300;
     if (model.rangeState.startDate) {
-      startLocation = self.getLocationFromStringDate(
-        model.rangeState.startDate
-      );
-      endLocation = self.getLocationFromStringDate(model.rangeState.endDate);
+      // startLocation = self.getLocationFromStringDate(
+      //   model.rangeState.startDate
+      // );
+      // endLocation = self.getLocationFromStringDate(model.rangeState.endDate);
     } else {
-      startLocation = animEndLocation - 100;
-      endLocation = animEndLocation;
+      // startLocation = animEndLocation - 100;
+      // endLocation = animEndLocation;
+      startLocation = 0;
+      endLocation = 0;
       self.updateRange(startLocation, endLocation);
     }
 
-    options = {
-      startLocation: startLocation, // or zero
-      endLocation: endLocation,
-      startLocationDate: model.rangeState.startDate,
-      endLocationDate: model.rangeState.endDate,
-      timelineStartDateLimit: timelineStartDateLimit,
-      timelineEndDateLimit: timelineEndDateLimit,
-      max: self.getMaxWidth(),
-      startColor: '#40a9db',
-      endColor: '#295f92',
-      startTriangleColor: '#fff',
-      endTriangleColor: '#4b7aab',
-      rangeColor: '#45bdff',
-      rangeOpacity: 0.3,
-      pinWidth: 5,
-      height: 45,
-      onDrag: self.updateRange,
-      onRangeClick: self.onRangeClick
-    };
-    self.reactComponent = ReactDOM.render(
-      React.createElement(RangeSelector, options),
-      $mountLocation[0]
-    );
+    // options = {
+    //   // startLocation: startLocation, // or zero
+    //   // endLocation: endLocation,
+    //   startLocation: -250, // or zero
+    //   endLocation: -260,
+    //   startLocationDate: model.rangeState.startDate,
+    //   endLocationDate: model.rangeState.endDate,
+    //   timelineStartDateLimit: timelineStartDateLimit,
+    //   timelineEndDateLimit: timelineEndDateLimit,
+    //   max: self.getMaxWidth(),
+    //   startColor: '#40a9db',
+    //   endColor: '#295f92',
+    //   startTriangleColor: '#fff',
+    //   endTriangleColor: '#4b7aab',
+    //   rangeColor: '#45bdff',
+    //   rangeOpacity: 0.3,
+    //   pinWidth: 5,
+    //   height: 45,
+    //   onDrag: self.updateRange,
+    //   onRangeClick: self.onRangeClick
+    // };
+    // self.reactComponent = ReactDOM.render(
+    //   React.createElement(RangeSelector, options),
+    //   $mountLocation[0]
+    // );
   };
 
   /*
@@ -123,13 +139,13 @@ export function animationRangeSelect(models, config, ui) {
    * @returns {number} OffsetX
    *
    */
-  self.getHeaderOffset = function() {
-    return (
-      $header.width() +
-      Number($timeline.css('left').replace('px', '')) +
-      Number($footer.css('margin-left').replace('px', ''))
-    );
-  };
+  // self.getHeaderOffset = function() {
+  //   return (
+  //     $header.width() +
+  //     Number($timeline.css('left').replace('px', '')) +
+  //     Number($footer.css('margin-left').replace('px', ''))
+  //   );
+  // };
 
   /*
    * calculates offset of date
@@ -143,7 +159,8 @@ export function animationRangeSelect(models, config, ui) {
    *
    */
   self.getLocationFromStringDate = function(date) {
-    return timeline.x(util.roundTimeTenMinute(date));
+    // return timeline.x(util.roundTimeTenMinute(date));
+    // return -200;
   };
 
   /*
@@ -158,8 +175,8 @@ export function animationRangeSelect(models, config, ui) {
    */
   self.update = function() {
     // being called from timeline.config.js
-    var props = self.updateOptions();
-    self.reactComponent.setState(props);
+    // var props = self.updateOptions();
+    // self.reactComponent.setState(props);
   };
 
   /*
@@ -171,29 +188,31 @@ export function animationRangeSelect(models, config, ui) {
    * @returns {object} maxWidth
    *
    */
-  self.getMaxWidth = function() {
-    // end of timeline
-    let $dataWidth = timeline.x(timeline.data.end());
-    // start of timeline
-    let $dataStart = timeline.x(timeline.data.start());
-    // default start/end false
-    let maxWidth = {
-      width: $footer.width(),
-      startOffset: $dataStart,
-      start: false,
-      end: false
-    };
-    // end of timeline in view
-    if (maxWidth.width > $dataWidth) {
-      maxWidth.width = $dataWidth;
-      maxWidth.end = true;
-    }
-    // start of timeline in view
-    if ($dataStart > 0) {
-      maxWidth.start = true;
-    }
-    return maxWidth;
-  };
+  // self.getMaxWidth = function() {
+  //   // end of timeline
+  //   // let $dataWidth = timeline.x(timeline.data.end());
+  //   let $dataWidth = 1556127454524;
+  //   // start of timeline
+  //   // let $dataStart = timeline.x(timeline.data.start());
+  //   let $dataStart = 1556129454524;
+  //   // default start/end false
+  //   let maxWidth = {
+  //     width: $footer.width(),
+  //     startOffset: $dataStart,
+  //     start: false,
+  //     end: false
+  //   };
+  //   // end of timeline in view
+  //   if (maxWidth.width > $dataWidth) {
+  //     maxWidth.width = $dataWidth;
+  //     maxWidth.end = true;
+  //   }
+  //   // start of timeline in view
+  //   if ($dataStart > 0) {
+  //     maxWidth.start = true;
+  //   }
+  //   return maxWidth;
+  // };
 
   /*
    * Gets prop updates
@@ -204,17 +223,17 @@ export function animationRangeSelect(models, config, ui) {
    * @returns {object} props
    *
    */
-  self.updateOptions = function() {
-    var state = model.rangeState;
-    var props = {};
-    props.startLocation = self.getLocationFromStringDate(state.startDate);
-    props.endLocation = self.getLocationFromStringDate(state.endDate);
-    props.startLocationDate = state.startDate;
-    props.endLocationDate = state.endDate;
-    props.max = self.getMaxWidth();
+  // self.updateOptions = function() {
+  //   var state = model.rangeState;
+  //   var props = {};
+  //   props.startLocation = self.getLocationFromStringDate(state.startDate);
+  //   props.endLocation = self.getLocationFromStringDate(state.endDate);
+  //   props.startLocationDate = state.startDate;
+  //   props.endLocationDate = state.endDate;
+  //   props.max = self.getMaxWidth();
 
-    return props;
-  };
+  //   return props;
+  // };
 
   /*
    * Handles click on widget:
@@ -229,12 +248,13 @@ export function animationRangeSelect(models, config, ui) {
    * @returns {object} props
    *
    */
-  self.onRangeClick = function(e) {
-    var headerOffset = self.getHeaderOffset();
-    var offsetX = e.pageX - headerOffset;
-    var date = timeline.x.invert(offsetX);
-    models.date.select(date);
-  };
+  // self.onRangeClick = function(e) {
+  //   var headerOffset = self.getHeaderOffset();
+  //   var offsetX = e.pageX - headerOffset;
+  //   // var date = timeline.x.invert(offsetX);
+  //   var date = new Date();
+  //   models.date.select(date);
+  // };
 
   /*
    * Updates start and end dates and triggers
@@ -249,9 +269,18 @@ export function animationRangeSelect(models, config, ui) {
    * @returns {object} props
    *
    */
-  self.updateRange = function(startLocation, EndLocation) {
-    var startDate = util.roundTimeTenMinute(timeline.x.invert(startLocation));
-    var endDate = util.roundTimeTenMinute(timeline.x.invert(EndLocation));
+  self.updateRange = function(startLocation, endLocation, inputDates) {
+    // var startDate = util.roundTimeTenMinute(timeline.x.invert(startLocation));
+    // var endDate = util.roundTimeTenMinute(timeline.x.invert(EndLocation));
+    let selectedZoom = timeScaleFromNumberKey[models.date.selectedZoom];
+    var startDate = util.dateAdd(new Date(), selectedZoom, -7);
+    var endDate = new Date();
+
+    if (inputDates) {
+      startDate = new Date(startLocation);
+      endDate = new Date(endLocation);
+    }
+
     var state = model.rangeState;
     state.startDate = util.toISOStringSeconds(startDate) || 0;
     // prevent endDate overdrag from occuring in monthly/yearly by setting to max date limit

@@ -121,11 +121,11 @@ class LayerRow extends React.Component {
         // The following complex if statement is a placeholder
         // for truncating the layer names, until the rest of
         // the interface is implemented
-        // if (layer.title.indexOf('(') !== -1) {
-        //   var regExp = /\(([^)]+)\)/;
-        //   var matches = regExp.exec(layer.title);
-        //   orbitTitle = matches[1];
-        // }
+        if (layer.title.indexOf('(') !== -1) {
+          var regExp = /\(([^)]+)\)/;
+          var matches = regExp.exec(layer.title);
+          orbitTitle = matches[1];
+        }
         // OrbitSourceList.push(
         //   this.renderOrbitListItem(orbitTitle, measurement, layer)
         // );

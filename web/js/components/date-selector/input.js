@@ -101,7 +101,7 @@ class DateInputColumn extends React.Component {
           break;
       }
       if (newDate) {
-        this.props.updateDate(newDate);
+        this.props.updateDate(newDate, this.props.type, null);
         if (entered) {
           if (shiftTab) {
             // shift-tabbed - move backward
@@ -119,21 +119,13 @@ class DateInputColumn extends React.Component {
     }
   }
   onClickUp() {
-    if (this.props.type === 'minute') {
-      this.rollDate(10);
-    } else {
-      this.rollDate(1);
-    }
+    this.rollDate(1);
     this.setState({
       valid: true
     });
   }
   onClickDown() {
-    if (this.props.type === 'minute') {
-      this.rollDate(-10);
-    } else {
-      this.rollDate(-1);
-    }
+    this.rollDate(-1);
     this.setState({
       valid: true
     });
@@ -187,6 +179,7 @@ class DateInputColumn extends React.Component {
 
   hourValidation(input) {
     var newDate;
+    console.log(input, this.validateDate(newDate));
     if (input >= 0 && input <= 23) {
       newDate = new Date(new Date(this.props.date).setUTCHours(input));
       return this.validateDate(newDate);
@@ -195,12 +188,15 @@ class DateInputColumn extends React.Component {
 
   minuteValidation(input) {
     var newDate;
-    var coeff = 1000 * 60 * 10;
+    // var coeff = 1000 * 60 * 10;
+    // console.log(input);
     if (input >= 0 && input <= 59) {
-      newDate = new Date(
-        Math.round(new Date(this.props.date).setUTCMinutes(input) / coeff) *
-          coeff
-      );
+      // newDate = new Date(
+      //   Math.round(new Date(this.props.date).setUTCMinutes(input) / coeff) *
+      //     coeff
+      // );
+      newDate = new Date(new Date(this.props.date).setUTCMinutes(input));
+      // console.log(newDate)
       return this.validateDate(newDate);
     }
   }
@@ -213,7 +209,7 @@ class DateInputColumn extends React.Component {
       this.props.minDate,
       this.props.maxDate
     );
-    this.props.updateDate(newDate);
+    this.props.updateDate(newDate, this.props.type, amt);
   }
   /**
    * Select all text on focus
