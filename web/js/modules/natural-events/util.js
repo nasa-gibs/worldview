@@ -21,7 +21,9 @@ export function getNaturalEventsParameterSetup(
           return loadedModel.active || false;
         },
         serialize: (currentItemState, currentState) => {
+
           const selected = get(currentState, 'legacy.naturalEvents.selected');
+          console.log(currentItemState, currentState, selected)
           if (!currentItemState) return false;
 
           return encode(selected);

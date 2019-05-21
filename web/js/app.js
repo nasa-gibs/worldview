@@ -11,6 +11,8 @@ import Toolbar from './containers/toolbar';
 // Modal
 import Modal from './containers/modal';
 
+import Test from './containers/test';
+
 // Other
 import Brand from './brand';
 
@@ -87,7 +89,7 @@ class App extends React.Component {
         <div id="dlMap" />
 
         <div id="timewheels" style={{ display: 'none' }} />
-
+        <Test />
         <section
           id="timeline"
           className="timeline-inner clearfix"

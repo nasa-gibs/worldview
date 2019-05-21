@@ -519,7 +519,7 @@ export function timeline(models, config, ui) {
     );
   };
 
-  // arguments passed as date (date object) and selectionStr ('selected' or 'selectedB')
+  // Update date within React component
   // FROM LISTENER
   var updateReactTimelineDate = function(date, selectionStr) {
     let selectedDate = models.date.selected;
