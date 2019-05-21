@@ -1,0 +1,24 @@
+{
+  "version": 8,
+  "name": "Orbit Tracks",
+  "sources": {
+    "OrbitTracks_CloudSat_Ascending": {
+      "type": "vector",
+      "tiles": [
+        "https://sit.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_CloudSat_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "default_style",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "7.5",
+        "circle-color": ["rgba(178,223,138,1)"]
+      }
+    }
+  ]
+}
