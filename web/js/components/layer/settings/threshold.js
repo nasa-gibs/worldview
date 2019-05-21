@@ -74,8 +74,14 @@ class ThresholdSelect extends React.Component {
     const { start, end, squashed } = this.state;
     const { index, min, max, legend } = this.props;
     const units = legend.units || '';
-    const startLabel = legend.tooltips[start] + ' ' + units;
-    const endLabel = legend.tooltips[end] + ' ' + units;
+    const startLabel =
+      start === 0 && legend.minLabel
+        ? legend.minLabel + ' ' + units
+        : legend.tooltips[start] + ' ' + units;
+    const endLabel =
+      end === legend.tooltips.length - 1 && legend.maxLabel
+        ? legend.maxLabel + ' ' + units
+        : legend.tooltips[end] + ' ' + units;
     return (
       <div className="layer-threshold-select settings-component">
         <h2 className="wv-header">Thresholds</h2>
