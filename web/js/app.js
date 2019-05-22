@@ -24,6 +24,7 @@ import { updateLegacyInitComplete } from './modules/migration/actions';
 // import { screenResize } from './modules/browser/actions';
 import { calculateResponsiveState } from 'redux-responsive';
 import Tour from './containers/tour';
+import Timeline from './containers/timeline/timeline';
 // import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
@@ -102,11 +103,7 @@ class App extends React.Component {
 
         <div id="timewheels" style={{ display: 'none' }} />
         <Test />
-        <section
-          id="timeline"
-          className="timeline-inner clearfix"
-          style={{ display: 'none' }}
-        />
+        <Timeline />
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         <div id="wv-animation-widet-case">
           {/* {config.features.animation ? <AnimationWidget /> : ''} */}

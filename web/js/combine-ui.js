@@ -3,7 +3,7 @@ import { dateLabel } from './date/label';
 
 // Timeline
 import dateWheels from './date/wheels';
-import { timeline } from './date/timeline';
+// import { timeline } from './date/timeline';
 import { mapui } from './map/ui';
 import { mapAnimate } from './map/animate';
 import { debugLayers } from './debug';
@@ -41,7 +41,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
     util.warn(e);
   }
   function timelineInit() {
-    ui.timeline = timeline(models, config, ui);
+    // ui.timeline = timeline(models, config, ui);
     // ui.timeline.data = timelineData(models, config, ui);
     // ui.timeline.zoom = timelineZoom(models, config, ui);
     // ui.timeline.ticks = timelineTicks(models, config, ui);

@@ -25,6 +25,7 @@ import {
   layerReducer,
   getInitialState as getLayersInitialState
 } from './layers/reducers';
+import { dateReducer } from './date/reducers';
 import {
   animationReducer,
   getInitialState as getAnimationInitialState
@@ -75,6 +76,7 @@ const reducers = {
   proj: projectionReducer,
   modal: modalReducer,
   legacy: legacyReducer,
+  date: dateReducer,
   feedback: feedbackReducer,
   notifications: notificationsReducer,
   config: defaultReducer,

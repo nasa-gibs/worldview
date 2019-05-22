@@ -11,13 +11,13 @@ const defaultState = {
   selectedZoom: 3,
   interval: 1,
   selected: util.now(),
-  selectedB: util.dateAdd(),
+  selectedB: util.dateAdd(util.now(), 'day', -7),
   customSelected: false,
-  customDelta: null,
-  customInterval: null
+  customDelta: 1,
+  customInterval: 1
 };
 
-export function timelineReducer(state = defaultState, action) {
+export function dateReducer(state = defaultState, action) {
   switch (action.type) {
     case UPDATE_ZOOM_LEVEL:
       return lodashAssign({}, state, {
@@ -25,7 +25,8 @@ export function timelineReducer(state = defaultState, action) {
       });
     case CUSTOM_INTERVAL_CHANGE:
       return lodashAssign({}, state, {
-        customIncrement: action.value,
+        customInterval: action.value,
+        customDelta: action.delta,
         customSelected: true
       });
     case INTERVAL_CHANGE:
