@@ -1,1 +1,1 @@
-<p>Sun glint here highlights a pattern in the water and clouds due to the direction of the prevailing wind and the island blocking that wind.</p>
+<p>Sunglint here enhances features in the water - it highlights patterns in the water and clouds occurring due to the direction of the prevailing wind and the islands blocking that wind.</p>
