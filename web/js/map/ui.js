@@ -33,6 +33,7 @@ import { mapCompare } from './compare/compare';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import {SELECT_DATE}  from '../modules/date/constants';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
 import * as paletteConstants from '../modules/palettes/constants';
@@ -123,6 +124,8 @@ export function mapui(models, config, store) {
         return updateLookup();
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
+      case SELECT_DATE:
+        updateDate();
     }
   };
   /*
@@ -142,7 +145,6 @@ export function mapui(models, config, store) {
     });
 
     store.subscribe(subscribeToStore);
-    models.date.events.on('select', updateDate);
     updateProjection(true);
   };
   const flyToNewExtent = function(extent, rotation) {
@@ -555,7 +557,8 @@ export function mapui(models, config, store) {
     const state = store.getState();
     const { compare } = state;
     const layerState = state.layers;
-    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
+    const activeLayerStr = compare.activeString;
+    const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
     var activeLayers = getLayers(
       layerState[activeLayerStr],
       {},
@@ -586,7 +589,7 @@ export function mapui(models, config, store) {
             index,
             createLayer(def, {
               group: activeLayerStr,
-              date: models.date[models.date.activeDate]
+              date: state.date[activeDate]
             })
           );
           compareMapUi.update(activeLayerStr);

@@ -385,7 +385,6 @@ function mapStateToProps(state) {
   }
   const dimensionsAndOffsetValues = getOffsetValues(screenWidth, hasSubDaily);
   const timelineEndDateLimit = endTime.toISOString();
-  console.log(date);
   return {
     hasSubdailyLayers,
     customSelected,

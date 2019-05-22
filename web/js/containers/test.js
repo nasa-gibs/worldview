@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 class Test extends Component {
   render() {
-    console.log(this.props);
     return (
       <div>
         <div>TEST 123</div>
@@ -13,10 +12,7 @@ class Test extends Component {
   }
 }
 function mapStateToProps(state) {
-  console.log(state);
-
-  return {
-  };
+  return {};
 }
 
 export default connect(

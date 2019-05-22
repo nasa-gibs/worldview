@@ -66,7 +66,9 @@ export function mapModel(models, config) {
    */
   self.load = function(state, errors) {
     if (state.v) {
-      var proj = models.proj.selected;
+      const projId = state.p ? state.p : 'geographic';
+      var proj = config.projections[projId];
+      console.log(proj);
       var extent = state.v;
       var maxExtent = proj.maxExtent;
 

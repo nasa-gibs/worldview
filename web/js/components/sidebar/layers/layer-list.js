@@ -166,11 +166,12 @@ function mapStateToProps(state, ownProps) {
     checkerBoardPattern,
     layerSplit
   } = ownProps;
-  const { proj } = state;
+  const { proj, compare } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
   const zoom = state.models.map.getZoom();
   const zots = getZotsForActiveLayers(layers, zoom) || {};
+  const activeDateString = compare.isCompareA ? 'selected' : 'selectedB';
   const activeLayers = state.layers[layerGroupName];
 
   return {
@@ -188,7 +189,7 @@ function mapStateToProps(state, ownProps) {
       return getTitles(state.config, layerId, proj, state);
     },
     available: id => {
-      const date = state.legacy.date['active'];
+      const date = state.date[activeDateString];
       return available(id, date, layers, state.config, state);
     }
   };

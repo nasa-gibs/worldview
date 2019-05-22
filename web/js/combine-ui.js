@@ -65,7 +65,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
   if (config.startDate) {
     if (!util.browser.small) {
       // If mobile device, do not build timeline
-      timelineInit();
+      // timelineInit();
     }
     ui.dateWheels = dateWheels(models, config);
   }

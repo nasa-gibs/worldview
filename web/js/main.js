@@ -33,7 +33,7 @@ export let history = createBrowserHistory();
 const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
-// Code for when version of redux dev-tools version stops crashing
+// Code for when version of redux dev-tools plugin stops crashing
 // const compose = isDebugMode
 //   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ latency: 0 }) ||
 //     defaultCompose
@@ -60,7 +60,7 @@ window.onload = () => {
       let requirements = [palettes.requirements(legacyState, config, true)];
       $.when
         .apply(null, requirements)
-        .then(() => util.wrap(render(config, parameters, legacyState))); // Wrap render up
+        .then(() => render(config, parameters, legacyState));
     })
     .fail(util.error);
 };

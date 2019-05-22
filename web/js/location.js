@@ -192,16 +192,16 @@ export function getParamObject(
     legacyState,
     errors
   );
-  const dateParamObject = getDateParameterSetup(
-    parameters,
-    config,
-    models,
-    legacyState,
-    errors
-  );
+  // const dateParamObject = getDateParameterSetup(
+  //   parameters,
+  //   config,
+  //   models,
+  //   legacyState,
+  //   errors
+  // );
   const obj = lodashAssign(
     {},
-    dateParamObject,
+    // dateParamObject,
     // animationParamObject,
     mapParamObject,
     getParameters(config, parameters)

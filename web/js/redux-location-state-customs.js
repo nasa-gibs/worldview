@@ -19,7 +19,6 @@ export function encode(value) {
   return encoded;
 }
 export function createParamsString(qp) {
-  console.log(qp)
   const paramArray = Object.keys(qp).reduce((prev, key) => {
     const keyString = key.toString();
     const valueString = qp[key].toString();
@@ -36,7 +35,6 @@ export function createParamsString(qp) {
 }
 
 export function stateToParams(initialState, currentState, location) {
-  console.log(initialState, currentState, location)
   const pathConfig = createObjectFromConfig(initialState, location);
   if (!pathConfig) {
     return { location: { ...location } };
