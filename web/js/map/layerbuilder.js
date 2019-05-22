@@ -40,6 +40,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    */
   self.createLayer = function(def, options) {
     const state = store.getState();
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var date, key, group, proj, layer, layerNext, layerPrior, attributes;
     options = options || {};
     group = options.group || null;
@@ -50,7 +51,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
 
     if (!layer) {
       // layer is not in the cache
-      if (!date) date = options.date || models.date[models.date.activeDate];
+      if (!date) date = options.date || state.date[activeDateStr];
       attributes = {
         id: def.id,
         key: key,
@@ -132,11 +133,9 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    * @return {object}         Closest date
    */
   self.closestDate = function(def, options) {
+    const state = store.getState();
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var date;
-    var animRange;
-    if (models.anim) {
-      animRange = models.anim.rangeState;
-    }
     var dateArray = def.availableDates || [];
     if (options.date) {
       if (def.period !== 'subdaily') {
@@ -144,27 +143,35 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       } else {
         date = options.date;
         // # possible to memoize third argument dateArray ?
-        date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
+        date = util.prevDateInDateRange(
+          def,
+          date,
+          util.datesinDateRanges(def, date, true)
+        );
       }
     } else {
       // # mutation of models date causing overwrite issue for SUBDAILY vs NON-SUBDAILY
-      date = new Date(models.date[models.date.activeDate]);
+      date = new Date(state.date[activeDateStr]);
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
       } else {
-        date = util.prevDateInDateRange(def, date, util.datesinDateRanges(def, date, true));
+        date = util.prevDateInDateRange(
+          def,
+          date,
+          util.datesinDateRanges(def, date, true)
+        );
       }
     }
     // Perform extensive checks before finding closest date
     if (
       !options.precache &&
-      (animRange && animRange.playing === false) &&
-      models.date.selectedZoom !== 0 &&
-      ((def.period === 'daily' && models.date.selectedZoom < 3) ||
-        (def.period === 'monthly' && models.date.selectedZoom <= 2) ||
-        (def.period === 'yearly' && models.date.selectedZoom === 1))
+      state.animation.playing === false &&
+      state.date.selectedZoom !== 0 &&
+      ((def.period === 'daily' && state.date.selectedZoom < 3) ||
+        (def.period === 'monthly' && state.date.selectedZoom <= 2) ||
+        (def.period === 'yearly' && state.date.selectedZoom === 1))
     ) {
       date = util.prevDateInDateRange(def, date, dateArray);
 
@@ -225,6 +232,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    * @returns {object} OpenLayers WMTS layer
    */
   var createLayerWMTS = function(def, options, day, state) {
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var proj, source, matrixSet, matrixIds, urlParameters, date, extent, start;
     proj = state.proj.selected;
     source = config.sources[def.source];
@@ -256,7 +264,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       }
     }
 
-    date = options.date || models.date[models.date.activeDate];
+    date = options.date || state.date[activeDateStr];
     if (def.period === 'subdaily') {
       date = self.closestDate(def, options);
       // TODO: FIX +/- DATE OFFSETS TO GET UTC - SOURCE SINGLE STATE TRUTH
@@ -311,9 +319,11 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    * @returns {object} OpenLayers Vector layer
    */
   var createLayerVector = function(def, options, day, state) {
-    const { proj } = state;
+    const { proj, compare } = state;
     var date, urlParameters, extent, source, matrixSet, matrixIds, start;
     const selectedProj = proj.selected;
+    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+
     source = config.sources[def.source];
     extent = selectedProj.maxExtent;
     start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
@@ -347,7 +357,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     var layerName = def.layer || def.id;
     var tms = def.matrixSet;
 
-    date = options.date || models.date[models.date.activeDate];
+    date = options.date || state.date[activeDateStr];
     if (day) {
       date = util.dateAdd(date, 'day', day);
     }
@@ -404,7 +414,8 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    * @returns {object} OpenLayers WMS layer
    */
   var createLayerWMS = function(def, options, day, state) {
-    const { proj } = state;
+    const { proj, compare } = state;
+    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const selectedProj = proj.selected;
     var source,
       urlParameters,
@@ -460,7 +471,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
 
     urlParameters = '';
 
-    date = options.date || models.date[models.date.activeDate];
+    date = options.date || state.date[activeDateStr];
     if (day) {
       date = util.dateAdd(date, 'day', day);
     }
@@ -496,6 +507,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     var key;
     var layers;
     const state = store.getState();
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     layers = state.layers[state.compare.activeString];
 
     for (var i = 0, len = layers.length; i < len; i++) {
@@ -504,7 +516,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
         key = self.layerKey(
           layer,
           {
-            date: models.date[models.date.activeDate]
+            date: state.date[activeDateStr]
           },
           state
         );
@@ -521,6 +533,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     var layers;
     var key;
     const state = store.getState();
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
 
     layers = state.layers[state.compare.activeString];
     for (var i = 0, len = layers.length; i < len; i++) {
@@ -529,7 +542,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
         key = self.layerKey(
           layer,
           {
-            date: models.date[models.date.activeDate]
+            date: state.date[activeDateStr]
           },
           state
         );

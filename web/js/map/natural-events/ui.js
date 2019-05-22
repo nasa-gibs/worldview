@@ -16,6 +16,7 @@ import {
   addLayer
 } from '../../modules/layers/actions';
 import { deselectEvent as deselectEventAction } from '../../modules/natural-events/actions';
+import { selectDate } from '../../modules/date/actions';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 
 const zoomLevelReference = {
@@ -23,7 +24,7 @@ const zoomLevelReference = {
   Volcanoes: 6
 };
 
-export default function naturalEventsUI(models, ui, config, store) {
+export default function naturalEventsUI(ui, config, store) {
   var self = {};
   var eventVisibilityAlert;
   var map;
@@ -272,7 +273,7 @@ export default function naturalEventsUI(models, ui, config, store) {
       if (isIdChange && !isSameCategory && !isInitialLoad) {
         activateLayersForCategory(event.categories[0].title);
       }
-      if (!isInitialLoad) models.date.select(util.parseDateUTC(date));
+      if (!isInitialLoad) store.dispatch(selectDate(util.parseDateUTC(date)));
       /* For Wildfires that didn't happen today, move the timeline forward a day
        * to improve the chance that the fire is visible.
        * NOTE: If the fire happened yesterday and the imagery isn't yet available
@@ -285,7 +286,7 @@ export default function naturalEventsUI(models, ui, config, store) {
           .toISOString()
           .split('T')[0];
         if (date !== today || date !== yesterday) {
-          models.date.select(util.dateAdd(util.parseDateUTC(date), 'day', 1));
+          store.dispatch(selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1)));
         }
       }
 

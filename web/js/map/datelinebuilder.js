@@ -5,6 +5,9 @@ import OlOverlay from 'ol/Overlay';
 import util from '../util/util';
 import DateLine from '../components/dateline/dateline';
 import LineText from '../components/dateline/text';
+import { CHANGE_STATE as COMPARE_CHANGE_STATE } from '../modules/compare/constants';
+import { SELECT_DATE } from '../modules/date/constants';
+import { CHANGE_PROJECTION } from '../modules/projection/constants';
 
 var map,
   overlay1,
@@ -17,7 +20,7 @@ var map,
   textRight,
   proj;
 
-export function mapDateLineBuilder(models, config) {
+export function mapDateLineBuilder(models, config, store) {
   var self = {};
   /*
    * Sets globals and event listeners
@@ -32,11 +35,28 @@ export function mapDateLineBuilder(models, config) {
    *
    * @returns {object} React Component
    */
+  /**
+   * Suscribe to redux store and listen for
+   * specific action types
+   */
+  const subscribeToStore = function() {
+    const state = store.getState();
+    const action = state.lastAction;
+    const selectedDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+    const date = state.date[selectedDateStr];
+    switch (action.type) {
+      case SELECT_DATE:
+      case COMPARE_CHANGE_STATE:
+        return updateDate(date);
+      case CHANGE_PROJECTION:
+        proj = action.id;
+    }
+  };
   self.init = function(Parent, olMap, date) {
     var dimensions;
     map = olMap;
     drawDatelines(map, date);
-    proj = models.proj.selected.id;
+    proj = store.getState().proj.id;
 
     Parent.events.on('moveend', function() {
       if (!isGeoProjection()) {
@@ -58,17 +78,7 @@ export function mapDateLineBuilder(models, config) {
       }
       updateLineVisibility(false);
     });
-    models.date.events.on('select', function() {
-      updateDate(new Date(models.date[models.date.activeDate]));
-    });
-    if (models.compare) {
-      models.compare.events.on('toggle', function() {
-        updateDate(new Date(models.date[models.date.activeDate]));
-      });
-    }
-    models.proj.events.on('select', function() {
-      proj = models.proj.selected.id;
-    });
+    store.subscribe(subscribeToStore);
   };
   var isGeoProjection = function() {
     if (proj === 'geographic') {
