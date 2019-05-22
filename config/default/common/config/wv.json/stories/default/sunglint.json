@@ -5,7 +5,7 @@
       "type": "default",
       "title": "Sunglint",
       "description": "When sunlight reflects off the surface of water at the same angle as the satellite sensor views it you get sunglint!",
-      "backgroundImage": "background.png",
+      "backgroundImage": "sunglint.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
       {
@@ -25,7 +25,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-02-10-T00%3A00%3A00Z&z=3&v=-172.66956795302013,-46.546875,24.450817953020135,53.015625"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-02-10-T00%3A00%3A00Z&z=3&v=-162.57730785821815,-32.18685220229665,-100.70230785821815,0.01627279770335477"
         },
         {
           "id": "002",
@@ -61,7 +61,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels,Reference_Features(hidden),Coastlines&t=2010-05-17-T00%3A00%3A00Z&z=3&t1=2019-02-03-T00%3A00%3A00Z&v=-92.58191273058523,26.656821071799857,-84.44324085558523,30.827231228049857&tr=sunglint"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels,Reference_Features(hidden),Coastlines&t=2010-05-17-T00%3A00%3A00Z&z=3&t1=2019-02-03-T00%3A00%3A00Z&v=-92.58191273058523,26.656821071799857,-84.44324085558523,30.827231228049857"
         },
         {
           "id": "006",
@@ -79,7 +79,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-05-05-T00%3A00%3A00Z&z=3&t1=2019-02-03-T00%3A00%3A00Z&v=-151.38731366007454,1.3985120348703468,-86.27793866007455,34.76179328487035&tr=sunglint"
+          "stepLink": "p=geographic&l=VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Reference_Labels(hidden),Reference_Features(hidden),Coastlines&t=2019-05-05-T00%3A00%3A00Z&z=3&t1=2019-02-03-T00%3A00%3A00Z&v=-151.38731366007454,1.3985120348703468,-86.27793866007455,34.76179328487035"
         }
       ]
     }
