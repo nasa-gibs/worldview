@@ -573,7 +573,7 @@ class TimelineAxis extends React.Component {
           draggerVisibleB: true,
           draggerTimeStateB: hoverTime,
           moved: false
-        }, this.props.updateDate(hoverTime, 'selectedB'));
+        }, this.props.changeDate(new Date(hoverTime), 'selectedB'));
       } else {
         // check DRAGGER B visibility
         let draggerDateActualB = moment.utc(this.state.draggerTimeStateB);
@@ -584,12 +584,13 @@ class TimelineAxis extends React.Component {
           draggerVisibleB: draggerBVisible,
           draggerTimeState: hoverTime,
           moved: false
-        }, this.props.updateDate(hoverTime, 'selected'));
+        }, this.props.changeDate(new Date(hoverTime), 'selected'));
       }
     }
   }
 
   componentDidMount() {
+    console.log(this.props);
     let axisWidth = this.props.axisWidth;
     let timeScale = this.props.timeScale;
     let timelineStartDateLimit = this.props.timelineStartDateLimit;
@@ -1089,7 +1090,7 @@ class TimelineAxis extends React.Component {
               draggerPosition: draggerPosition,
               draggerTimeState: newDraggerTime,
               moved: true,
-            }, this.props.updateDate(newDraggerTime, 'selected'));
+            }, this.props.changeDate(new Date(newDraggerTime), 'selected'));
           }
         } else {
           // prevent function invoke on dragger click, but no date change
@@ -1098,7 +1099,7 @@ class TimelineAxis extends React.Component {
               draggerPositionB: draggerPosition,
               draggerTimeStateB: newDraggerTime,
               moved: true,
-            }, this.props.updateDate(newDraggerTime, 'selectedB'));
+            }, this.props.changeDate(new Date(newDraggerTime), 'selectedB'));
           }
         }
       // }

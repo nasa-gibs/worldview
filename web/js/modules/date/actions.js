@@ -1,13 +1,14 @@
 import {
-  UPDATE_ZOOM_LEVEL,
-  CUSTOM_INTERVAL_CHANGE,
-  INTERVAL_CHANGE,
+  CHANGE_TIME_SCALE,
+  CHANGE_CUSTOM_INTERVAL,
+  CHANGE_INTERVAL,
+  // CHANGE_DELTA,
   SELECT_DATE
 } from './constants';
 
-export function updateZoomLevel(num) {
+export function changeTimeScale(num) {
   return {
-    type: UPDATE_ZOOM_LEVEL,
+    type: CHANGE_TIME_SCALE,
     value: num
   };
 }
@@ -23,16 +24,23 @@ export function selectDate(value) {
     });
   };
 }
-export function customIntervalChange(delta, customInterval) {
+export function changeCustomInterval(delta, customInterval) {
   return {
-    type: CUSTOM_INTERVAL_CHANGE,
+    type: CHANGE_CUSTOM_INTERVAL,
     customInterval,
     value: delta
   };
 }
-export function intervalChange(value) {
+export function selectInterval(delta, interval) {
   return {
-    type: INTERVAL_CHANGE,
-    value
+    type: CHANGE_INTERVAL,
+    value: interval,
+    delta: delta
   };
 }
+// export function selectDelta(delta) {
+//   return {
+//     type: CHANGE_DELTA,
+//     value: delta
+//   };
+// }

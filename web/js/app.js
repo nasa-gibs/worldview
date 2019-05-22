@@ -12,8 +12,6 @@ import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
 
-import Test from './containers/test';
-
 // Other
 import Brand from './brand';
 
@@ -102,7 +100,6 @@ class App extends React.Component {
         <div id="dlMap" />
 
         <div id="timewheels" style={{ display: 'none' }} />
-        <Test />
         <Timeline />
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         <div id="wv-animation-widet-case">

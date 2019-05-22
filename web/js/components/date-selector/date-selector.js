@@ -67,6 +67,7 @@ class DateSelector extends React.Component {
   updateDate(date, type, amt) {
     // this.props.onDateChange(date, this.props.id, type, amt);
     // # allows dragger change via main date selector, and id change via anim date selectors
+    console.log(date)
     this.props.onDateChange(date, this.props.id);
   }
   renderSubdaily() {

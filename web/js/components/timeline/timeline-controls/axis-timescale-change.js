@@ -67,6 +67,7 @@ class AxisTimeScaleChange extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     let { timeScale, hasSubdailyLayers, changeTimeScale } = this.props;
     return (
       timeScale ?

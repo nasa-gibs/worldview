@@ -85,31 +85,31 @@ export function timeline(models, config, ui) {
    *                  e.g. months,minutes, years, days
    * @return {Object} JS Date Object
    */
-  var getNextTimeSelection = function(delta, increment) {
-    var prevDate = model[model.activeDate];
-    switch (increment) {
-      case 'year':
-        return new Date(
-          new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta)
-        );
-      case 'month':
-        return new Date(
-          new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta)
-        );
-      case 'day':
-        return new Date(
-          new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta)
-        );
-      case 'hour':
-        return new Date(
-          new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta)
-        );
-      case 'minute':
-        return new Date(
-          new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta)
-        );
-    }
-  };
+  // var getNextTimeSelection = function(delta, increment) {
+  //   var prevDate = model[model.activeDate];
+  //   switch (increment) {
+  //     case 'year':
+  //       return new Date(
+  //         new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta)
+  //       );
+  //     case 'month':
+  //       return new Date(
+  //         new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta)
+  //       );
+  //     case 'day':
+  //       return new Date(
+  //         new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta)
+  //       );
+  //     case 'hour':
+  //       return new Date(
+  //         new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta)
+  //       );
+  //     case 'minute':
+  //       return new Date(
+  //         new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta)
+  //       );
+  //   }
+  // };
 
   /**
    * Add timeout to date change when buttons are being held so that
@@ -122,40 +122,40 @@ export function timeline(models, config, ui) {
    *                  e.g. months,minutes, years, days
    * @return {void}
    */
-  self.animateByIncrement = function(delta, increment) {
-    var endTime = models.layers.lastDateTime();
-    var endDate = models.layers.lastDate();
+  // self.animateByIncrement = function(delta, increment) {
+  //   var endTime = models.layers.lastDateTime();
+  //   var endDate = models.layers.lastDate();
 
-    let subdaily = models.layers.hasSubDaily();
-    function animate() {
-      var nextTime = getNextTimeSelection(delta, increment);
-      if (subdaily) {
-        if (self.startDate <= nextTime && nextTime <= endTime) {
-          models.date.add(increment, delta);
-        }
-      } else {
-        if (self.startDate <= nextTime && nextTime <= endDate) {
-          models.date.add(increment, delta);
-        }
-      }
-      animationInProcess = true;
-      animator = setTimeout(animate, self.delay);
-    }
-    animate();
-  };
+  //   let subdaily = models.layers.hasSubDaily();
+  //   function animate() {
+  //     var nextTime = getNextTimeSelection(delta, increment);
+  //     if (subdaily) {
+  //       if (self.startDate <= nextTime && nextTime <= endTime) {
+  //         models.date.add(increment, delta);
+  //       }
+  //     } else {
+  //       if (self.startDate <= nextTime && nextTime <= endDate) {
+  //         models.date.add(increment, delta);
+  //       }
+  //     }
+  //     animationInProcess = true;
+  //     animator = setTimeout(animate, self.delay);
+  //   }
+  //   animate();
+  // };
 
   /**
    *  Clear animateByIncrement's Timeout
    *
    * @return {void}
    */
-  var stopper = function() {
-    if (animationInProcess) {
-      animationInProcess = false;
-      clearInterval(animator);
-      animator = 0;
-    }
-  };
+  // var stopper = function() {
+  //   if (animationInProcess) {
+  //     animationInProcess = false;
+  //     clearInterval(animator);
+  //     animator = 0;
+  //   }
+  // };
 
   /**
    *  Get Date Selector Input Props
@@ -181,37 +181,37 @@ export function timeline(models, config, ui) {
   };
 
   // ? INPUT ABOVE
-  self.margin = {
-    top: 0,
-    right: 50,
-    bottom: 20,
-    left: 30
-  };
+  // self.margin = {
+  //   top: 0,
+  //   right: 50,
+  //   bottom: 20,
+  //   left: 30
+  // };
 
-  self.getWidth = function() {
-    // check for compare mode
-    let isCompareModeActive = models.compare.active;
+  // self.getWidth = function() {
+  //   // check for compare mode
+  //   let isCompareModeActive = models.compare.active;
 
-    // if compare mode is active, check for subdaily in either A or B
-    let hasSubDaily;
-    if (isCompareModeActive) {
-      hasSubDaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
-    } else {
-      hasSubDaily = models.layers.hasSubDaily();
-    }
-    self.parentOffset = (hasSubDaily ? 414 : 310) + 10;
+  //   // if compare mode is active, check for subdaily in either A or B
+  //   let hasSubDaily;
+  //   if (isCompareModeActive) {
+  //     hasSubDaily = models.layers.hasSubDaily('active') || models.layers.hasSubDaily('activeB');
+  //   } else {
+  //     hasSubDaily = models.layers.hasSubDaily();
+  //   }
+  //   self.parentOffset = (hasSubDaily ? 414 : 310) + 10;
 
-    self.width =
-      // $(window).outerWidth(true) -
-      window.innerWidth -
-      self.parentOffset -
-      20 -
-      20 -
-      self.margin.left -
-      self.margin.right +
-      28;
-    return self.width;
-  };
+  //   self.width =
+  //     // $(window).outerWidth(true) -
+  //     window.innerWidth -
+  //     self.parentOffset -
+  //     20 -
+  //     20 -
+  //     self.margin.left -
+  //     self.margin.right +
+  //     28;
+  //   return self.width;
+  // };
 
   self.height = 65 - self.margin.top - self.margin.bottom;
   // self.isCropped = true;
@@ -298,9 +298,9 @@ export function timeline(models, config, ui) {
     // }, 50);
   };
 
-  var incrementDate = (increment, timeScale) => {
-    self.animateByIncrement(increment, timeScale);
-  };
+  // var incrementDate = (increment, timeScale) => {
+  //   self.animateByIncrement(increment, timeScale);
+  // };
 
   // invoked when compare mode is toggled
   var onCompareModeToggle = () => {
@@ -356,63 +356,64 @@ export function timeline(models, config, ui) {
   };
 
   // update date in model
-  var updateDate = (date, selectionStr) => {
-    let updatedDate = new Date(date);
-    models.date.select(updatedDate, selectionStr);
-  };
+  // var updateDate = (date, selectionStr) => {
+  //   let updatedDate = new Date(date);
+  //   models.date.select(updatedDate, selectionStr);
+  // };
 
   // set custom interval
-  var setIntervalInput = (intervalValue, zoomLevel) => {
-    models.date.setCustomInterval(intervalValue, timeScaleToNumberKey[zoomLevel]);
-    let zoomCustomText = document.querySelector('#zoom-custom');
-    zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase()}`;
-    self.reactComponent.setState({
-      timeScaleChangeUnit: zoomLevel,
-      customIntervalValue: intervalValue,
-      customIntervalZoomLevel: zoomLevel,
-      intervalChangeAmt: intervalValue
-    });
-  };
+  // var setCustomIntervalInput = (intervalValue, zoomLevel) => {
+  //   models.date.setCustomInterval(intervalValue, timeScaleToNumberKey[zoomLevel]);
+  //   // ! needs to rely on props update
+  //   // let zoomCustomText = document.querySelector('#zoom-custom');
+  //   // zoomCustomText.textContent = `${intervalValue} ${zoomLevel.toUpperCase()}`;
+  //   self.reactComponent.setState({
+  //     timeScaleChangeUnit: zoomLevel,
+  //     customIntervalValue: intervalValue,
+  //     customIntervalZoomLevel: zoomLevel,
+  //     intervalChangeAmt: intervalValue
+  //   });
+  // };
 
   // set selected interval either custom or standard delta of 1
-  var setSelectedInterval = (interval, intervalChangeAmt, customSelected, customIntervalModalOpen) => {
-    models.date.setSelectedInterval(timeScaleToNumberKey[interval], customSelected);
-    self.reactComponent.setState({
-      timeScaleChangeUnit: interval,
-      customSelected: customSelected,
-      intervalChangeAmt: intervalChangeAmt,
-      customIntervalModalOpen: customIntervalModalOpen
-    });
-  };
+  // var setSelectedInterval = (interval, intervalChangeAmt, customSelected, customIntervalModalOpen) => {
+  //   models.date.setSelectedInterval(timeScaleToNumberKey[interval], customSelected);
+  //   self.reactComponent.setState({
+  //     timeScaleChangeUnit: interval,
+  //     customSelected: customSelected,
+  //     intervalChangeAmt: intervalChangeAmt,
+  //     customIntervalModalOpen: customIntervalModalOpen
+  //   });
+  // };
 
   // switch to selected interval
-  var changeToSelectedInterval = () => {
-    let customSelected = models.date.customSelected;
-    let timeScaleInterval = timeScaleFromNumberKey[models.date.interval];
-    let timeScaleChangeUnit = timeScaleFromNumberKey[models.date.customInterval];
-    let intervalChangeAmt = models.date.customDelta;
+  // var changeToSelectedInterval = () => {
+  //   let customSelected = models.date.customSelected;
+  //   let timeScaleInterval = timeScaleFromNumberKey[models.date.interval];
+  //   let timeScaleChangeUnit = timeScaleFromNumberKey[models.date.customInterval];
+  //   let intervalChangeAmt = models.date.customDelta;
 
-    if (customSelected) {
-      let customIntervalModalOpen = false;
-      if (!models.date.customDelta || !models.date.customInterval) {
-        customIntervalModalOpen = true;
-      }
-      self.reactComponent.setState({
-        timeScaleChangeUnit: timeScaleChangeUnit,
-        customIntervalValue: intervalChangeAmt,
-        intervalChangeAmt: intervalChangeAmt,
-        customIntervalModalOpen: customIntervalModalOpen,
-        customSelected: true
-      });
-    } else {
-      self.reactComponent.setState({
-        timeScaleChangeUnit: timeScaleInterval,
-        intervalChangeAmt: 1,
-        customIntervalModalOpen: false,
-        customSelected: false
-      });
-    }
-  };
+  //   if (customSelected) {
+  //     let customIntervalModalOpen = false;
+  //     if (!models.date.customDelta || !models.date.customInterval) {
+  //       customIntervalModalOpen = true;
+  //     }
+  //     self.reactComponent.setState({
+  //       timeScaleChangeUnit: timeScaleChangeUnit,
+  //       customIntervalValue: intervalChangeAmt,
+  //       intervalChangeAmt: intervalChangeAmt,
+  //       customIntervalModalOpen: customIntervalModalOpen,
+  //       customSelected: true
+  //     });
+  //   } else {
+  //     self.reactComponent.setState({
+  //       timeScaleChangeUnit: timeScaleInterval,
+  //       intervalChangeAmt: 1,
+  //       customIntervalModalOpen: false,
+  //       customSelected: false
+  //     });
+  //   }
+  // };
 
   // TODO: refactor how this is invoked
   var clickAnimationButton = () => {
@@ -420,18 +421,18 @@ export function timeline(models, config, ui) {
 
   // change time scale
   // timeScaleNumber is an integer 1 - 5
-  self.changeTimeScale = (timeScaleNumber) => {
-    models.date.setSelectedZoom(timeScaleNumber);
-    updateTimeScaleState();
-  };
+  // self.changeTimeScale = (timeScaleNumber) => {
+  //   models.date.setSelectedZoom(timeScaleNumber);
+  //   updateTimeScaleState();
+  // };
 
   // update timeline component with time scale
-  var updateTimeScaleState = () => {
-    let timeScale = timeScaleFromNumberKey[models.date.selectedZoom];
-    self.reactComponent.setState({
-      timeScale: timeScale
-    });
-  };
+  // var updateTimeScaleState = () => {
+  //   let timeScale = timeScaleFromNumberKey[models.date.selectedZoom];
+  //   self.reactComponent.setState({
+  //     timeScale: timeScale
+  //   });
+  // };
 
   var getInitialProps = () => {
     // check for compare mode and what dragger is active
@@ -492,7 +493,7 @@ export function timeline(models, config, ui) {
       timeScale: selectedTimeScale,
       incrementDate: incrementDate,
       updateDate: updateDate,
-      setIntervalInput: setIntervalInput,
+      setCustomIntervalInput: setCustomIntervalInput,
       dateFormatted: dateFormatted,
       dateFormattedB: dateFormattedB,
       stopper: stopper,
@@ -510,33 +511,33 @@ export function timeline(models, config, ui) {
     };
   };
 
-  var drawContainers = function() {
-    self.getWidth();
-    let initialProps = getInitialProps();
-    self.reactComponent = ReactDOM.render(
-      React.createElement(Timeline, initialProps),
-      document.getElementById('timeline')
-    );
-  };
+  // var drawContainers = function() {
+  //   self.getWidth();
+  //   let initialProps = getInitialProps();
+  //   self.reactComponent = ReactDOM.render(
+  //     React.createElement(Timeline, initialProps),
+  //     document.getElementById('timeline')
+  //   );
+  // };
 
   // Update date within React component
   // FROM LISTENER
-  var updateReactTimelineDate = function(date, selectionStr) {
-    let selectedDate = models.date.selected;
-    let selectedDateB = models.date.selectedB;
-    let draggerSelected = models.date.activeDate;
+  // var updateReactTimelineDate = function(date, selectionStr) {
+  //   let selectedDate = models.date.selected;
+  //   let selectedDateB = models.date.selectedB;
+  //   let draggerSelected = models.date.activeDate;
 
-    let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
-    let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
+  //   let dateFormatted = selectedDate ? new Date(selectedDate).toISOString() : '';
+  //   let dateFormattedB = selectedDateB ? new Date(selectedDateB).toISOString() : '';
 
-    self.reactComponent.setState({
-      selectedDate: selectedDate,
-      dateFormatted: dateFormatted,
-      draggerSelected: draggerSelected,
-      selectedDateB: selectedDateB,
-      dateFormattedB: dateFormattedB
-    });
-  };
+  //   self.reactComponent.setState({
+  //     selectedDate: selectedDate,
+  //     dateFormatted: dateFormatted,
+  //     draggerSelected: draggerSelected,
+  //     selectedDateB: selectedDateB,
+  //     dateFormattedB: dateFormattedB
+  //   });
+  // };
 
   // Update status of subdaily layers being in sidebar
   // child of FROM LISTENER
@@ -554,7 +555,7 @@ export function timeline(models, config, ui) {
 
     // handle state updating and resetting to DAY if in subdaily interval/zoom
     if (!subdaily && (models.date.selectedZoom > 3 || models.date.customInterval > 3 || models.date.interval > 3)) {
-      setIntervalInput(1, 'day');
+      setCustomIntervalInput(1, 'day');
       self.reactComponent.setState({
         hasSubdailyLayers: subdaily
       }, self.changeTimeScale(3)); // default to day
@@ -566,11 +567,11 @@ export function timeline(models, config, ui) {
   };
 
   // layer update FROM LISTENER
-  var onLayerUpdate = function() {
-    self.resize();
-    ui.anim.widget.update();
-    updateSubdailyState();
-  };
+  // var onLayerUpdate = function() {
+  //   self.resize();
+  //   ui.anim.widget.update();
+  //   updateSubdailyState();
+  // };
 
   // animation date change FROM LISTENER
   var onAnimationDateChange = () => {
