@@ -64,17 +64,26 @@ class Events extends React.Component {
       visibleEvents,
       sources,
       height,
-      deselectEvent
+      deselectEvent,
+      hasRequestError
     } = this.props;
-
+    const errorOrLoadingText = isLoading
+      ? 'Loading...'
+      : hasRequestError
+        ? 'There has been an ERROR retrieving events from the EONET events API'
+        : '';
     return (
       <Scrollbars style={{ maxHeight: height + 'px' }}>
         <div id="wv-events">
           <span
             className="events-loading-text"
-            style={isLoading ? { display: 'block' } : { display: 'none' }}
+            style={
+              isLoading || hasRequestError
+                ? { display: 'block' }
+                : { display: 'none' }
+            }
           >
-            Loading...
+            {errorOrLoadingText}
           </span>
           <div
             className="wv-eventslist sidebar-panel"
@@ -137,7 +146,10 @@ function mapStateToProps(state) {
     requestedEvents.isLoading ||
     requestedEventSources.isLoading ||
     requestedEventCategories.isLoading;
-
+  const hasRequestError =
+    requestedEvents.error ||
+    requestedEventSources.error ||
+    requestedEventCategories.error;
   let visibleEvents = {};
   const events = lodashGet(requestedEvents, 'response');
   const sources = lodashGet(requestedEventSources, 'response');
@@ -154,6 +166,7 @@ function mapStateToProps(state) {
     events,
     showAll,
     isLoading,
+    hasRequestError,
     sources,
     selected,
     visibleEvents,
@@ -173,5 +186,13 @@ Events.propTypes = {
   visibleEvents: PropTypes.object,
   height: PropTypes.number,
   deselectEvent: PropTypes.func,
-  tabTypes: PropTypes.object
+  tabTypes: PropTypes.object,
+  requestSources: PropTypes.object,
+  requestCategories: PropTypes.object,
+  requestEvents: PropTypes.object,
+  apiURL: PropTypes.string,
+  config: PropTypes.object,
+  showAll: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  selectEvent: PropTypes.func
 };

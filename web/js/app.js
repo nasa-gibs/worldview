@@ -103,7 +103,9 @@ class App extends React.Component {
 
         <div id="timewheels" style={{ display: 'none' }} />
         <Test />
-        <Timeline />
+        <ErrorBoundary>
+          <Timeline />
+        </ErrorBoundary>
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         <div id="wv-animation-widet-case">
           {/* {config.features.animation ? <AnimationWidget /> : ''} */}

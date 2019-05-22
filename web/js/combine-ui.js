@@ -40,40 +40,21 @@ export function combineUi(models, config, MapMouseEvents, store) {
   } catch (e) {
     util.warn(e);
   }
-  function timelineInit() {
-    // ui.timeline = timeline(models, config, ui);
-    // ui.timeline.data = timelineData(models, config, ui);
-    // ui.timeline.zoom = timelineZoom(models, config, ui);
-    // ui.timeline.ticks = timelineTicks(models, config, ui);
-    // ui.timeline.pick = timelinePick(models, config, ui);
-    // ui.timeline.pan = timelinePan(models, config, ui);
-    // ui.timeline.input = timelineInput(models, config, ui);
-    // ui.timeline.config = timelineConfig(models, config, ui);
-    if (config.features.animation) {
-      // ui.anim = {};
-      // ui.anim.rangeselect = animationRangeSelect(models, config, ui); // SETS STATE: NEEDS TO LOAD BEFORE ANIMATION WIDGET
-      // ui.anim.widget = animationWidget(models, config, ui);
-      // ui.anim.gif = animationGif(models, config, ui);
-      // ui.anim.ui = animationUi(models, ui);
-    }
-    if (config.features.compare) {
-      // ui.timeline.compare = timelineCompare(models, config, ui);
-    }
 
-    ui.dateLabel = dateLabel(models);
-  }
+  // ui.dateLabel = dateLabel(models);
+
   if (config.startDate) {
     if (!util.browser.small) {
       // If mobile device, do not build timeline
       // timelineInit();
     }
-    ui.dateWheels = dateWheels(models, config);
+    // ui.dateWheels = dateWheels(models, config);
   }
   if (config.features.dataDownload) {
-    ui.data = dataUi(models, store, ui, config);
+    ui.data = dataUi(store, ui, config);
   }
   if (config.features.naturalEvents) {
-    ui.naturalEvents = naturalEventsUI(models, ui, config, store);
+    ui.naturalEvents = naturalEventsUI(ui, config, store);
   }
   registerMapMouseHandlers(ui.map.proj, MapMouseEvents);
   // Sink all focus on inputs if click unhandled

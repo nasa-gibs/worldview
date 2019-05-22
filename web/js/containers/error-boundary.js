@@ -52,6 +52,6 @@ export default connect(
   mapDispatchToProps
 )(ErrorBoundary);
 ErrorBoundary.propTypes = {
-  children: PropTypes.array,
+  children: PropTypes.object,
   errorAlert: PropTypes.func
 };
