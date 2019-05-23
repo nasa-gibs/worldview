@@ -84,13 +84,13 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 function mapStateToProps(state, ownProps) {
-  const { layers, compare, legacy } = state;
+  const { layers, compare, date } = state;
   return {
     isCompareA: compare.isCompareA,
     layersA: getLayers(layers.active, { group: 'all', proj: 'all' }, state),
     layersB: getLayers(layers.activeB, { group: 'all', proj: 'all' }, state),
-    dateStringA: util.toISOStringDate(legacy.date.selected),
-    dateStringB: util.toISOStringDate(legacy.date.selectedB),
+    dateStringA: util.toISOStringDate(date.selected),
+    dateStringB: util.toISOStringDate(date.selectedB),
     isActive: compare.active,
     height: ownProps.height
   };

@@ -33,6 +33,7 @@ import { mapCompare } from './compare/compare';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
+import { SELECT_DATE } from '../modules/date/constants';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
 import * as paletteConstants from '../modules/palettes/constants';
@@ -50,7 +51,7 @@ export function mapui(models, config, store) {
   var animationDuration = 250;
   var self = {};
   var rotation = new MapRotate(self, models);
-  var dateline = mapDateLineBuilder(models, config);
+  var dateline = mapDateLineBuilder(models, config, store);
   var precache = mapPrecacheTile(models, config, cache, self);
   var compareMapUi = mapCompare(config, store);
   var dataRunner = (self.runningdata = new MapRunningData(
@@ -123,6 +124,8 @@ export function mapui(models, config, store) {
         return updateLookup();
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
+      case SELECT_DATE:
+        updateDate();
     }
   };
   /*
@@ -142,7 +145,6 @@ export function mapui(models, config, store) {
     });
 
     store.subscribe(subscribeToStore);
-    models.date.events.on('select', updateDate);
     updateProjection(true);
   };
   const flyToNewExtent = function(extent, rotation) {
@@ -333,7 +335,7 @@ export function mapui(models, config, store) {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
       lodashEach(stateArray, arr => {
-        map.addLayer(getCompareLayerGroup(arr, layers, proj.id));
+        map.addLayer(getCompareLayerGroup(arr, layers, proj.id, state));
       });
       compareMapUi.create(map, compareState.mode);
     }
@@ -343,7 +345,7 @@ export function mapui(models, config, store) {
    * Create a Layergroup given the date and layerGroups
    * @param {Array} arr | Array of date/layer group strings
    */
-  var getCompareLayerGroup = function(arr, layersState, projId) {
+  var getCompareLayerGroup = function(arr, layersState, projId, state) {
     return new OlLayerGroup({
       layers: getLayers(
         layersState[arr[0]],
@@ -359,7 +361,7 @@ export function mapui(models, config, store) {
         })
         .map(def => {
           return createLayer(def, {
-            date: models.date[arr[1]],
+            date: state.date[arr[1]],
             group: arr[0]
           });
         }),
@@ -381,14 +383,15 @@ export function mapui(models, config, store) {
     var renderable;
     var layers = self.selected.getLayers();
     var layersState = state.layers;
-    var activeGroupStr = state.compare.isCompareA ? 'active' : 'activeB';
+    var activeGroupStr = state.compare.activeString;
+    var activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var updateGraticules = function(defs, groupName) {
       lodashEach(defs, function(def) {
         if (isGraticule(def, state.proj.id)) {
           renderable = isRenderableLayer(
             def.id,
             layersState[activeGroupStr],
-            models.date[activeGroupStr],
+            state.date[activeDateStr],
             state
           );
           if (renderable) {
@@ -406,7 +409,7 @@ export function mapui(models, config, store) {
         renderable = isRenderableLayer(
           layer.wv.id,
           layersState[activeGroupStr],
-          models.date[activeGroupStr],
+          state.date[activeDateStr],
           state
         );
         layer.setVisible(renderable);
@@ -421,7 +424,7 @@ export function mapui(models, config, store) {
             renderable = isRenderableLayer(
               subLayer.wv.id,
               layersState[group],
-              models.date[layer.get('date')],
+              state.date[layer.get('date')],
               state
             );
             subLayer.setVisible(renderable);
@@ -479,7 +482,7 @@ export function mapui(models, config, store) {
     const { compare, layers, proj } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
-    date = date || models.date[activeDateStr];
+    date = date || state.date[activeDateStr];
     activeLayers = activeLayers || layers[activeLayerStr];
     var reverseLayers = lodashCloneDeep(activeLayers).reverse();
     var mapIndex = lodashFindIndex(reverseLayers, {
@@ -555,7 +558,8 @@ export function mapui(models, config, store) {
     const state = store.getState();
     const { compare } = state;
     const layerState = state.layers;
-    const activeLayerStr = compare.isCompareA ? 'active' : 'activeB';
+    const activeLayerStr = compare.activeString;
+    const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
     var activeLayers = getLayers(
       layerState[activeLayerStr],
       {},
@@ -586,7 +590,7 @@ export function mapui(models, config, store) {
             index,
             createLayer(def, {
               group: activeLayerStr,
-              date: models.date[models.date.activeDate]
+              date: state.date[activeDate]
             })
           );
           compareMapUi.update(activeLayerStr);
@@ -783,7 +787,10 @@ export function mapui(models, config, store) {
    * @returns {object} OpenLayers Map Object
    */
   var createMap = function(proj, dateSelected) {
-    dateSelected = dateSelected || models.date[models.date.activeDate];
+    const state = store.getState();
+    const { date, compare } = state;
+    const activeDate = compare.isCompareA ? 'selected' : 'selectedB';
+    dateSelected = dateSelected || date[activeDate];
     var id,
       $map,
       scaleMetric,

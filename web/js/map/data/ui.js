@@ -11,8 +11,9 @@ import { REL_DATA, REL_METADATA, REL_BROWSE, DATA_EXTS } from './cmr';
 import * as DATA_CONSTANTS from '../../modules/data/constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import { toggleGranule } from '../../modules/data/actions';
+import { SELECT_DATE } from '../../modules/date/constants';
 
-export function dataUi(models, store, ui, config) {
+export function dataUi(store, ui, config) {
   var queryActive = false;
   var mapController = null;
   var selectionListPanel = null;
@@ -36,6 +37,7 @@ export function dataUi(models, store, ui, config) {
   self.EVENT_QUERY_ERROR = 'queryError';
   self.selector = '#wv-data';
   self.id = 'wv-data';
+
   const subscribeToStore = function() {
     const state = store.getState();
     const action = state.lastAction;
@@ -47,6 +49,8 @@ export function dataUi(models, store, ui, config) {
       case DATA_CONSTANTS.DATA_GRANULE_SELECT:
       case DATA_CONSTANTS.DATA_GRANULE_UNSELECT:
         return updateSelection();
+      case SELECT_DATE:
+        return query();
     }
   };
   var query = function() {
@@ -119,7 +123,6 @@ export function dataUi(models, store, ui, config) {
       .on('queryResults', onQueryResults)
       .on('queryError', onQueryError)
       .on('queryTimeout', onQueryTimeout);
-    models.date.events.on('select', query);
   };
   self.onViewChange = function() {
     const state = store.getState();
