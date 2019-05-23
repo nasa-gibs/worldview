@@ -19,6 +19,7 @@ class TimeScaleSelect extends PureComponent {
 
   render() {
     let { zoomLevel, hasSubdailyLayers } = this.props;
+    console.log(this.props)
     return (
       <form className="interval-timescale-select" onSubmit={this.handleSubmit}>
         <label>

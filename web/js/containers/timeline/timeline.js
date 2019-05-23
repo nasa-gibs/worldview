@@ -33,9 +33,8 @@ class Timeline extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      leftArrowDisabled: this.checkLeftArrowDisabled(),
-      rightArrowDisabled: this.checkRightArrowDisabled(),
-      timelineHidden: false
+      timelineHidden: false,
+      customIntervalModalOpen: false
     };
     this.animator = 0;
   }
@@ -75,8 +74,6 @@ class Timeline extends React.Component {
 
     let animate = () => {
       var nextTime = getNextTimeSelection(delta, increment, selectedDate);
-      console.log(startDate, nextTime, endTime)
-      console.log(new Date(startDate) <= nextTime, nextTime <= endTime)
       if (hasSubdailyLayers) {
         // can we remove this logic?
         if (new Date(startDate) <= nextTime && nextTime <= endTime) {
@@ -87,24 +84,16 @@ class Timeline extends React.Component {
           changeDate(util.dateAdd(selectedDate, increment, delta));
         }
       }
-      let leftArrowDisabled = this.checkLeftArrowDisabled();
-      let rightArrowDisabled = this.checkRightArrowDisabled();
       this.animator = setTimeout(animate, ANIMATION_DELAY);
       this.setState({
-        animationInProcess: true,
-        leftArrowDisabled,
-        rightArrowDisabled
+        animationInProcess: true
       });
     };
     animate();
   }
 
-  changeDate = (date) => {
-    this.props.changeDate(date);
-  }
-
   // show/hide custom interval modal
-  toggleCustomIntervalModal() {
+  toggleCustomIntervalModal = () => {
     this.setState(prevState => ({
       customIntervalModalOpen: !prevState.customIntervalModalOpen
     }));
@@ -117,84 +106,38 @@ class Timeline extends React.Component {
 
   // handle SET of custom time scale panel
   changeCustomInterval = (delta, timeScale) => {
-    changeCustomInterval(delta, timeScale);
+    console.log(delta,timeScale)
+    this.props.changeCustomInterval(delta, Number(timeScaleToNumberKey[timeScale]));
   }
 
   // handle SELECT of LEFT/RIGHT interval selection
-  setTimeScaleIntervalChangeUnit = (intervalSelected) => {
+  setTimeScaleIntervalChangeUnit = (intervalSelected, customIntervalModalOpen) => {
     console.log(intervalSelected)
     let delta;
-    if (intervalSelected === 'custom') {
+    let customSelected = intervalSelected === 'custom';
+    if (customSelected) {
       intervalSelected = this.props.customIntervalZoomLevel;
       delta = this.props.customIntervalValue;
     } else {
-      intervalSelected = timeScaleToNumberKey[intervalSelected];
+      intervalSelected = Number(timeScaleToNumberKey[intervalSelected]);
       delta = 1;
     }
-    this.props.selectInterval(delta, intervalSelected);
+    this.props.selectInterval(delta, intervalSelected, customSelected);
+    if (customIntervalModalOpen) {
+      this.setState({
+        customIntervalModalOpen: customIntervalModalOpen
+      });
+    }
   }
 
   // left/right arrows increment date
   incrementDate = (multiplier) => {
+    console.log(this.props.customSelected)
     let delta = this.props.customSelected ? this.props.intervalChangeAmt : 1;
     this.animateByIncrement(
       Number(delta * multiplier),
       this.props.timeScaleChangeUnit
     );
-  }
-
-  // checkLeftArrowDisabled
-  checkLeftArrowDisabled() {
-    let {
-      draggerSelected,
-      dateFormatted,
-      dateFormattedB,
-      intervalChangeAmt,
-      timeScaleChangeUnit,
-      timelineStartDateLimit
-    } = this.props;
-    let previousIncrementDate;
-    if (intervalChangeAmt && timeScaleChangeUnit) {
-      if (draggerSelected === 'selected') {
-        previousIncrementDate = moment
-          .utc(dateFormatted)
-          .subtract(intervalChangeAmt, timeScaleChangeUnit);
-      } else {
-        previousIncrementDate = moment
-          .utc(dateFormattedB)
-          .subtract(intervalChangeAmt, timeScaleChangeUnit);
-      }
-      return previousIncrementDate.isSameOrBefore(
-        timelineStartDateLimit
-      );
-    }
-  }
-
-  // checkRightArrowDisabled
-  checkRightArrowDisabled() {
-    let {
-      draggerSelected,
-      dateFormatted,
-      dateFormattedB,
-      intervalChangeAmt,
-      timeScaleChangeUnit,
-      timelineEndDateLimit
-    } = this.props;
-    let nextIncrementDate;
-    if (intervalChangeAmt && timeScaleChangeUnit) {
-      if (draggerSelected === 'selected') {
-        nextIncrementDate = moment
-          .utc(dateFormatted)
-          .add(intervalChangeAmt, timeScaleChangeUnit);
-      } else {
-        nextIncrementDate = moment
-          .utc(dateFormattedB)
-          .add(intervalChangeAmt, timeScaleChangeUnit);
-      }
-      return nextIncrementDate.isSameOrAfter(
-        timelineEndDateLimit
-      );
-    }
   }
 
   // open animation dialog
@@ -217,6 +160,8 @@ class Timeline extends React.Component {
       dateFormattedB,
       hasSubdailyLayers,
       draggerSelected,
+      leftArrowDisabled,
+      rightArrowDisabled,
       customSelected,
       customIntervalValue,
       customIntervalZoomLevel,
@@ -236,7 +181,7 @@ class Timeline extends React.Component {
           <div id="date-selector-main">
             <DateSelector
               {...this.props}
-              onDateChange={this.changeDate}
+              onDateChange={this.props.changeDate}
               date={new Date(dateFormatted)}
               dateB={new Date(dateFormattedB)}
               hasSubdailyLayers={hasSubdailyLayers}
@@ -248,19 +193,19 @@ class Timeline extends React.Component {
               setTimeScaleIntervalChangeUnit={
                 this.setTimeScaleIntervalChangeUnit
               }
-              customIntervalZoomLevel={customIntervalZoomLevel}
+              customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
               customSelected={customSelected}
-              customIntervalValue={customIntervalValue}
+              customDelta={customIntervalValue}
               timeScaleChangeUnit={timeScaleChangeUnit}
             />
 
             <DateChangeArrows
               leftArrowDown={() => this.incrementDate(-1)}
               leftArrowUp={this.stopper.bind(this)}
-              leftArrowDisabled={this.state.leftArrowDisabled}
+              leftArrowDisabled={leftArrowDisabled}
               rightArrowDown={() => this.incrementDate(1)}
               rightArrowUp={this.stopper.bind(this)}
-              rightArrowDisabled={this.state.rightArrowDisabled}
+              rightArrowDisabled={rightArrowDisabled}
             />
           </div>
 
@@ -276,7 +221,7 @@ class Timeline extends React.Component {
             axisWidth={axisWidth}
             selectedDate={dateFormatted}
             selectedDateB={dateFormattedB}
-            changeDate={this.changeDate}
+            changeDate={this.props.changeDate}
             hasSubdailyLayers={hasSubdailyLayers}
             parentOffset={parentOffset}
             changeTimeScale={this.changeTimeScale}
@@ -286,7 +231,6 @@ class Timeline extends React.Component {
             }}
             timelineStartDateLimit={timelineStartDateLimit}
             timelineEndDateLimit={timelineEndDateLimit}
-            customIntervalModalOpen={this.state.customIntervalModalOpen}
             updateAnimationRange={() => {
             }}
             // animStartLocationDate={this.state.animStartLocationDate}
@@ -298,11 +242,11 @@ class Timeline extends React.Component {
 
           {/* custom interval selector */}
           <CustomIntervalSelectorWidget
-            customIntervalValue={customIntervalValue}
+            customDelta={customIntervalValue}
             customIntervalZoomLevel={customIntervalZoomLevel}
             toggleCustomIntervalModal={this.toggleCustomIntervalModal}
             customIntervalModalOpen={this.state.customIntervalModalOpen}
-            setIntervalChangeUnit={this.changeCustomInterval}
+            changeCustomInterval={this.changeCustomInterval}
             hasSubdailyLayers={hasSubdailyLayers}
           />
         </div>
@@ -342,6 +286,7 @@ function mapStateToProps(state) {
     selectedB,
     selectedZoom,
     interval,
+    delta,
     customInterval,
     customDelta
   } = date;
@@ -361,6 +306,28 @@ function mapStateToProps(state) {
   const dimensionsAndOffsetValues = getOffsetValues(screenWidth, hasSubdailyLayers);
   const timelineEndDateLimit = endTime.toISOString();
   // console.log(date, compare);
+
+  let selectedDate = isCompareA ? selected : selectedB;
+  let deltaChangeAmt = customSelected
+    ? customDelta
+    : delta;
+  let timeScaleChangeUnit = customSelected
+    ? timeScaleFromNumberKey[customInterval]
+    : timeScaleFromNumberKey[interval];
+  let timelineStartDateLimit = config.startDate;
+  let leftArrowDisabled = checkLeftArrowDisabled(
+    selectedDate,
+    deltaChangeAmt,
+    timeScaleChangeUnit,
+    timelineStartDateLimit
+  );
+  let rightArrowDisabled = checkRightArrowDisabled(
+    selectedDate,
+    deltaChangeAmt,
+    timeScaleChangeUnit,
+    timelineEndDateLimit
+  );
+
   return {
     draggerSelected: isCompareA ? 'selected' : 'selectedB', // ! will work for dragger?
     hasSubdailyLayers,
@@ -373,16 +340,16 @@ function mapStateToProps(state) {
     endTime,
     isAnimationWidgetOpen: animation.active,
     axisWidth: dimensionsAndOffsetValues.width,
-    selectedDate: isCompareA ? selected : selectedB,
+    selectedDate: selectedDate,
     timeScale: timeScaleFromNumberKey[selectedZoom.toString()],
-    timeScaleChangeUnit: customSelected
-      ? timeScaleFromNumberKey[customInterval]
-      : timeScaleFromNumberKey[interval],
+    timeScaleChangeUnit: timeScaleChangeUnit,
     customIntervalValue: customDelta,
     customIntervalZoomLevel: customInterval,
     intervalChangeAmt: interval,
     parentOffset: dimensionsAndOffsetValues.parentOffset,
-    timelineEndDateLimit
+    timelineEndDateLimit,
+    leftArrowDisabled,
+    rightArrowDisabled
   };
 }
 
@@ -400,8 +367,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(changeTimeScale(val));
   },
   // changes to non-custom timescale interval, sets customSelected to FALSE
-  selectInterval: (delta, timeScale) => {
-    dispatch(selectInterval(delta, timeScale));
+  selectInterval: (delta, timeScale, customSelected) => {
+    dispatch(selectInterval(delta, timeScale, customSelected));
   }
   // set currently selected delta - will always be 1 if !customSelected
   // selectDelta: val => {
@@ -424,15 +391,15 @@ Timeline.propTypes = {
   screenHeight: PropTypes.number
 };
 
-function getOffsetValues(innerWidth, hasSubDaily) {
+// get axisWidth and parentOffset for axis, footer, and leftoffset calculations
+const getOffsetValues = (innerWidth, hasSubDaily) => {
   const parentOffset = (hasSubDaily ? 414 : 310) + 10;
-
   const width =
     innerWidth - parentOffset - 20 - 20 - MARGIN.left - MARGIN.right + 28;
   return { width, parentOffset };
 }
 
-function getEndTime(layers, config) {
+const getEndTime = (layers, config) => {
   const endDateA = layersLastDateTime(layers['active'], config);
   const endDateB = layersLastDateTime(layers['activeB'], config);
   return endDateA > endDateB ? endDateA : endDateB;
@@ -443,7 +410,7 @@ function getEndTime(layers, config) {
  *                  e.g. months,minutes, years, days
  * @return {Object} JS Date Object
  */
-var getNextTimeSelection = function(delta, increment, prevDate) {
+const getNextTimeSelection = (delta, increment, prevDate) => {
   switch (increment) {
     case 'year':
       return new Date(
@@ -467,3 +434,23 @@ var getNextTimeSelection = function(delta, increment, prevDate) {
       );
   }
 };
+
+// check if left arrow should be disabled on predicted decrement
+const checkLeftArrowDisabled = (date, delta, timeScaleChangeUnit, timelineStartDateLimit) => {
+  let nextDecrementDate = moment
+    .utc(date)
+    .subtract(delta, timeScaleChangeUnit);
+  return nextDecrementDate.isSameOrBefore(
+    timelineStartDateLimit
+  );
+}
+
+// check if right arrow should be disabled on predicted increment
+const checkRightArrowDisabled = (date, delta, timeScaleChangeUnit, timelineEndDateLimit) => {
+  let nextIncrementDate = moment
+    .utc(date)
+    .add(delta, timeScaleChangeUnit);
+  return nextIncrementDate.isSameOrAfter(
+    timelineEndDateLimit
+  );
+}

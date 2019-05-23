@@ -10,11 +10,11 @@ import AxisTimeScaleChangeTooltip from './axis-timescale-change-tooltip';
  */
 class AxisTimeScaleChangeControls extends PureComponent {
   onClickUp = () => {
-    this.props.incrementTimeScale();
+    this.props.decrementTimeScale();
   }
 
   onClickDown = () => {
-    this.props.decrementTimeScale();
+    this.props.incrementTimeScale();
   }
   render() {
     let { timeScale, toolTipHovered, changeTimeScale, hasSubdailyLayers } = this.props;

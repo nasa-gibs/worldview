@@ -35,13 +35,14 @@ export function dateReducer(state = defaultState, action) {
       return lodashAssign({}, state, {
         interval: action.value,
         delta: action.delta,
-        customSelected: false
+        customSelected: action.customSelected
       });
     // case CHANGE_DELTA:
     //   return lodashAssign({}, state, {
     //     delta: action.value
     //   });
     case SELECT_DATE:
+      console.log(action.value)
       return lodashAssign({}, state, {
         [action.activeString]: action.value
       });

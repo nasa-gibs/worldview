@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import IntervalInput from './interval-input';
 import TimeScaleSelect from './timescale-select';
 
+import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../../modules/date/constants';
+
 /*
  * CustomIntervalSelectorWidget for Custom Interval Selector
  * group. It is a parent component of this group.
@@ -23,20 +25,20 @@ class CustomIntervalSelectorWidget extends PureComponent {
       intervalValue: value
     }, () => {
       if (value > 0 && value <= 1000) {
-        this.props.setIntervalChangeUnit(value, this.state.zoomLevel);
+        this.props.changeCustomInterval(value, this.state.zoomLevel);
       }
     });
   }
 
   changeZoomLevel = (zoomLevel) => {
     this.setState({
-      zoomLevel: zoomLevel
-    }, this.props.setIntervalChangeUnit(this.state.intervalValue, zoomLevel));
+      zoomLevel: timeScaleFromNumberKey[zoomLevel]
+    }, this.props.changeCustomInterval(this.state.intervalValue, zoomLevel));
   }
 
-  setIntervalChangeUnit = () => {
+  changeCustomInterval = () => {
     if (this.state.intervalValue > 0) {
-      this.props.setIntervalChangeUnit(this.state.intervalValue, this.state.zoomLevel);
+      this.props.changeCustomInterval(this.state.intervalValue, this.state.zoomLevel);
     }
   }
 
@@ -44,7 +46,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
     const value = this.state.intervalValue;
     if (e.key === 'Enter') {
       if (value > 0) {
-        this.setIntervalChangeUnit();
+        this.changeCustomInterval();
       }
     } else if (e.key === 'Escape') {
       this.props.toggleCustomIntervalModal();
@@ -53,23 +55,24 @@ class CustomIntervalSelectorWidget extends PureComponent {
 
   componentDidMount() {
     this.setState({
-      intervalValue: this.props.customIntervalValue,
-      zoomLevel: this.props.customIntervalZoomLevel
+      intervalValue: this.props.customDelta,
+      zoomLevel: timeScaleFromNumberKey[this.props.customIntervalZoomLevel]
     })
   }
 
   componentDidUpdate(prevProps) {
-    let { customIntervalModalOpen, customIntervalValue, zoomLevel, customIntervalZoomLevel } = this.props;
+    let { customIntervalModalOpen, customDelta, zoomLevel, customIntervalZoomLevel } = this.props;
     // handle focus widget on opening
     if (customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
       this.customIntervalWidget.focus();
     }
+    console.log(this.props)
     // update if higher state changed
-    if (customIntervalValue !== prevProps.customIntervalValue
+    if (customDelta !== prevProps.customDelta
      || zoomLevel !== prevProps.zoomLevel) {
       this.setState({
-        intervalValue: customIntervalValue,
-        zoomLevel: customIntervalZoomLevel
+        intervalValue: customDelta,
+        zoomLevel: timeScaleFromNumberKey[customIntervalZoomLevel]
       })
     }
   }
@@ -77,6 +80,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
   render() {
     let { customIntervalModalOpen, hasSubdailyLayers, toggleCustomIntervalModal } = this.props;
     let { intervalValue, zoomLevel } = this.state;
+    console.log(this.props, this.state)
     return (
       <div
         id="wv-animation-widget-custom-interval"
@@ -109,10 +113,10 @@ class CustomIntervalSelectorWidget extends PureComponent {
 }
 
 CustomIntervalSelectorWidget.propTypes = {
-  setIntervalChangeUnit: PropTypes.func,
+  changeCustomInterval: PropTypes.func,
   toggleCustomIntervalModal: PropTypes.func,
-  customIntervalValue: PropTypes.number,
-  customIntervalZoomLevel: PropTypes.string,
+  customDelta: PropTypes.number,
+  customIntervalZoomLevel: PropTypes.number,
   customIntervalModalOpen: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool
 };

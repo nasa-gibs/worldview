@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AxisTimeScaleChangeControls from './axis-timescale-change-controls';
 
@@ -18,7 +18,7 @@ const timeScaleToNumberKey = {
  * @class AxisTimeScaleChange
  * @extends React.Component
  */
-class AxisTimeScaleChange extends React.Component {
+class AxisTimeScaleChange extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,6 +51,7 @@ class AxisTimeScaleChange extends React.Component {
     })
   }
 
+  // ex: month(2) to day(3)
   incrementTimeScale = () => {
     let timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
     let maxTimeScaleNumber = this.props.hasSubdailyLayers ? 5 : 3;
@@ -59,6 +60,7 @@ class AxisTimeScaleChange extends React.Component {
     }
   }
 
+  // ex: day(3) to month(2)
   decrementTimeScale = () => {
     let timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
     if (timeScaleNumber > 1) {
@@ -67,7 +69,6 @@ class AxisTimeScaleChange extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     let { timeScale, hasSubdailyLayers, changeTimeScale } = this.props;
     return (
       timeScale ?

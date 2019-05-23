@@ -18,6 +18,7 @@ class TimeScaleIntervalChange extends Component {
   }
 
   handleClickZoom = (intervalSelected, openDialog) => {
+    console.log(intervalSelected)
     // close tooltip
     // send props function to change timescale zoom level throughout app
     this.setState({
@@ -28,22 +29,22 @@ class TimeScaleIntervalChange extends Component {
   // set custom text for custom interval
   setCustomIntervalText = () => {
     this.setState({
-      customIntervalText: this.props.customIntervalValue + ' ' + this.props.customIntervalZoomLevel
+      customIntervalText: this.props.customDelta + ' ' + this.props.customIntervalZoomLevel
     })
   }
 
   componentDidMount () {
-    if (this.props.customIntervalValue !== 1) {
+    if (this.props.customDelta !== 1) {
       this.setCustomIntervalText();
     }
   }
 
   componentDidUpdate (prevProps, prevState) {
-    let { customIntervalValue, timeScaleChangeUnit, customSelected } = this.props;
-    if (customIntervalValue && timeScaleChangeUnit) {
-      if (customSelected && customIntervalValue !== 1 && this.state.customIntervalText === 'Custom') {
+    let { customDelta, timeScaleChangeUnit, customSelected } = this.props;
+    if (customDelta && timeScaleChangeUnit) {
+      if (customSelected && customDelta !== 1 && this.state.customIntervalText === 'Custom') {
         this.setCustomIntervalText();
-      } else if (customSelected && (customIntervalValue !== prevProps.customIntervalValue || timeScaleChangeUnit !== prevProps.timeScaleChangeUnit)) {
+      } else if (customSelected && (customDelta !== prevProps.customDelta || timeScaleChangeUnit !== prevProps.timeScaleChangeUnit)) {
         this.setCustomIntervalText();
       }
     }
@@ -131,7 +132,7 @@ class TimeScaleIntervalChange extends Component {
 }
 
 TimeScaleIntervalChange.propTypes = {
-  customIntervalValue: PropTypes.number,
+  customDelta: PropTypes.number,
   customIntervalText: PropTypes.string,
   customSelected: PropTypes.bool,
   setTimeScaleIntervalChangeUnit: PropTypes.func,

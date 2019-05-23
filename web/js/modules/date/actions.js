@@ -25,17 +25,20 @@ export function selectDate(value) {
   };
 }
 export function changeCustomInterval(delta, customInterval) {
+  console.log(delta, customInterval)
   return {
     type: CHANGE_CUSTOM_INTERVAL,
-    customInterval,
-    value: delta
+    value: customInterval,
+    delta: delta
   };
 }
-export function selectInterval(delta, interval) {
+export function selectInterval(delta, interval, customSelected) {
+  console.log(delta, interval)
   return {
     type: CHANGE_INTERVAL,
     value: interval,
-    delta: delta
+    delta: delta,
+    customSelected
   };
 }
 // export function selectDelta(delta) {
