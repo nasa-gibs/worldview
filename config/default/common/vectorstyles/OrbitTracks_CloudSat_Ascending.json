@@ -14,10 +14,560 @@
       "id": "default_style",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "#ff0000",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "default_style",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
       "type": "circle",
       "paint": {
-        "circle-radius": "7.5",
-        "circle-color": ["rgba(178,223,138,1)"]
+        "circle-radius": "5",
+        "circle-color": "#ff0000"
+      }
+    },
+    {
+      "id": "yellow1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(204, 255, 51)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "yellow1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(204, 255, 51)"
+      }
+    },
+    {
+      "id": "yellow2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(248, 232, 35)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "yellow2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(248, 232, 35)"
+      }
+    },
+    {
+      "id": "orange1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(242, 135, 34)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "orange1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(242, 135, 34)"
+      }
+    },
+    {
+      "id": "orange2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(237, 209, 130)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "orange2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(237, 209, 130)"
+      }
+    },
+    {
+      "id": "orange3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(216, 186, 25)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "orange3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(216, 186, 25)"
+      }
+    },
+    {
+      "id": "red1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(177, 89, 40)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "red1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(177, 89, 40)"
+      }
+    },
+    {
+      "id": "red2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(196, 6, 41)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "red2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(196, 6, 41)"
+      }
+    },
+    {
+      "id": "red3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(255, 69, 0)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "red3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(255, 69, 0)"
+      }
+    },
+    {
+      "id": "pink1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(255, 51, 204)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "pink1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(255, 51, 204)"
+      }
+    },
+    {
+      "id": "pink2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(255, 204, 255)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "pink2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(255, 204, 255)"
+      }
+    },
+    {
+      "id": "pink3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(255, 196, 198)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "pink3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(255, 196, 198)"
+      }
+    },
+    {
+      "id": "pink4",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(219, 112, 147)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "pink4",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(219, 112, 147)"
+      }
+    },
+    {
+      "id": "pink5",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(255, 160, 122)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "pink5",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(255, 160, 122)"
+      }
+    },
+    {
+      "id": "purple1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(178, 144, 193)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "purple1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(178, 144, 193)"
+      }
+    },
+    {
+      "id": "purple2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(106, 61, 154)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "purple2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(106, 61, 154)"
+      }
+    },
+    {
+      "id": "purple3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(192, 88, 240)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "purple3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(192, 88, 240)"
+      }
+    },
+    {
+      "id": "blue1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(136, 177, 191)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "blue1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(136, 177, 191)"
+      }
+    },
+    {
+      "id": "blue2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(64, 244, 208)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "blue2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(64, 244, 208)"
+      }
+    },
+    {
+      "id": "blue3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(126, 151, 189)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "blue3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(126, 151, 189)"
+      }
+    },
+    {
+      "id": "blue4",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(102, 204, 204)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "blue4",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(102, 204, 204)"
+      }
+    },
+    {
+      "id": "blue5",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(25, 114, 243)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "blue5",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(25, 114, 243)"
+      }
+    },
+    {
+      "id": "blue6",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(21, 192, 230)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "blue6",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(21, 192, 230)"
+      }
+    },
+    {
+      "id": "brown1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(153, 153, 0)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "brown1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(153, 153, 0)"
+      }
+    },
+    {
+      "id": "brown2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(210, 136, 127)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "brown2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(210, 136, 127)"
+      }
+    },
+    {
+      "id": "green1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(22, 160, 133)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "green1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(22, 160, 133)"
+      }
+    },
+    {
+      "id": "green2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(55, 242, 34)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "green2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(55, 242, 34)"
+      }
+    },
+    {
+      "id": "green3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "line",
+      "paint": {
+        "line-color": "rgb(127, 196, 6)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "green3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "circle",
+      "paint": {
+        "circle-radius": "5",
+        "circle-color": "rgb(127, 196, 6)"
       }
     }
   ]
