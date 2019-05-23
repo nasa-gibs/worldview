@@ -84,7 +84,7 @@ const getParameters = function(config, parameters) {
     },
     t: {
       stateKey: 'date.selected',
-      initialState: now,
+      initialState: now, // ! now is not the same as default util.now() in the date.state due to invoking at different times
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,

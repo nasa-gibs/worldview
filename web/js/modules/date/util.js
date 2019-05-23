@@ -84,7 +84,7 @@ export function getActiveTime(state) {
   const activeStr = compare.isCompareA ? 'selected' : 'selectedB';
   return legacy.date[activeStr];
 }
-var tryCatchDate = function(str, initialState) {
+export function tryCatchDate(str, initialState) {
   try {
     return util.parseDateUTC(str);
   } catch (error) {
