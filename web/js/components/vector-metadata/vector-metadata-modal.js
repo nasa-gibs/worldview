@@ -7,7 +7,7 @@ export default class VectorMetaModal extends React.Component {
   render() {
     return (
       <Modal isOpen={this.props.metaModal} toggle={this.props.toggleMetaModal} className={'vector-modal'} backdrop={false} fade={false} keyboard={true}>
-        <ModalHeader toggle={this.props.toggleMetaModal} charCode="">{this.props.metaTitle}</ModalHeader>
+        <ModalHeader toggle={this.props.toggleMetaModal}>{this.props.metaTitle}</ModalHeader>
         <ModalBody>
           <VectorMetaTable metaFeatures={this.props.metaFeatures} metaLegend={this.props.metaLegend} />
         </ModalBody>

@@ -1,3 +1,17 @@
+.vector-modal .close {
+  opacity: 1;
+}
+
+.vector-modal .modal-title {
+  color: #fff;
+  font-weight: 800;
+}
+
 .vector-modal .modal-body {
   overflow-x: scroll;
+}
+
+.vector-modal .modal-body table th,
+.vector-modal .modal-body table td {
+  text-transform: capitalize;
 }

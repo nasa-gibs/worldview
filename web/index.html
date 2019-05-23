@@ -104,11 +104,12 @@ Licensed under the NASA Open Source Agreement, Version 1.3 (http://opensource.gs
   <div id="wv-alerts" class="wv-alerts"></div>
   <div id="wv-vector-metadata" class="wv-vector-metadata"></div>
   <div class="backdrop"></div>
-  <div style="position:absolute;display:block;bottom:250px;right:0;width:200px;height:158px;background-color:#fff;">
-    <input id="confidenceCheckbox"type="checkbox" name="confidenceColors" value="confidence"> Use Confidence Styles?<br>
-    <input id="frpCheckbox"type="checkbox" name="frpColors" value="frp"> Use FRP Styles?<br>
-    Filter by Confidence
+  <div style="position:absolute;display:block;bottom:250px;right:0;width:200px;height:358px;background-color:#fff;">
+    <strong><center>FIRMS Controls</center></strong><br>
+    <input id="confidenceCheckbox" type="checkbox" name="confidenceColors" value="confidence"> Use Confidence Styles?<br>
+    <input id="frpCheckbox" type="checkbox" name="frpColors" value="frp"> Use FRP Styles?<br><br>
     <section class="range-slider">
+      <center>Filter by Confidence</center>
       <span class="rangeValues"></span>
       <input id="confidenceMinFilter" value="0" min="0" max="100" step="1" type="range">
       <input id="confidenceMaxFilter" value="100" min="0" max="100" step="1" type="range">
@@ -116,6 +117,38 @@ Licensed under the NASA Open Source Agreement, Version 1.3 (http://opensource.gs
     <div class="slider-values">
       <label style="width:50%;float:left;display:inline-block;">min: <span id="confidenceMinFilterLabel">0</span></label>
       <label style="width:50%;float:left;display:inline-block;">max: <span id="confidenceMaxFilterLabel">100</span></label>
+    </div>
+    <hr>
+    <div class="orbit-track-controls" style="height:218px;overflow-y:scroll">
+      <strong><center>Orbit Track Controls</center></strong><br>
+      <input name="orbit-track-control" id="orbit-track-controls_default_style" type="checkbox" value="default_style">Default (Red)</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_yellow1" type="checkbox" value="yellow1">Yellow 1</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_yellow2" type="checkbox" value="yellow2">Yellow 2</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_orange1" type="checkbox" value="orange1">Orange 1</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_orange2" type="checkbox" value="orange2">Orange 2</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_orange3" type="checkbox" value="orange3">Orange 3</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_red1" type="checkbox" value="red1">Red 1</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_red2" type="checkbox" value="red2">Red 2</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_red3" type="checkbox" value="red3">Red 3</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_pink1" type="checkbox" value="pink1">Pink 1</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_pink2" type="checkbox" value="pink2">Pink 2</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_pink3" type="checkbox" value="pink3">Pink 3</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_pink4" type="checkbox" value="pink4">Pink 4</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_pink5" type="checkbox" value="pink5">Pink 5</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_purple1" type="checkbox" value="purple1">Purple 1</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_purple2" type="checkbox" value="purple2">Purple 2</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_purple3" type="checkbox" value="purple3">Purple 3</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_blue1" type="checkbox" value="blue1">Blue 1</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_blue2" type="checkbox" value="blue2">Blue 2</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_blue3" type="checkbox" value="blue3">Blue 3</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_blue4" type="checkbox" value="blue4">Blue 4</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_blue5" type="checkbox" value="blue5">Blue 5</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_blue6" type="checkbox" value="blue6">Blue 6</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_brown1" type="checkbox" value="brown1">Brown 1</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_brown2" type="checkbox" value="brown2">Brown 2</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_green1" type="checkbox" value="green1">Green 1</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_green2" type="checkbox" value="green2">Green 2</input><br>
+      <input name="orbit-track-control" id="orbit-track-controls_green3" type="checkbox" value="green3">Green 3</input><br>
     </div>
   </div>
 </body>
