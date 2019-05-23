@@ -2,7 +2,7 @@ import { assign as lodashAssign, get } from 'lodash';
 import { encode } from './modules/link/util';
 // legacy crutches
 // import { getLayersParameterSetup } from './modules/layers/util';
-import { getDateParameterSetup } from './modules/date/util';
+import { serializeDate, tryCatchDate } from './modules/date/util';
 import { checkTourBuildTimestamp } from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
 import { eventParse, serializeEvent } from './modules/natural-events/util';
@@ -76,10 +76,62 @@ export function mapLocationToState(state, location) {
 }
 
 const getParameters = function(config, parameters) {
+  const now = util.now();
   return {
     p: {
       stateKey: 'proj.id',
       initialState: 'geographic'
+    },
+    t: {
+      stateKey: 'date.selected',
+      initialState: now,
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        setAsEmptyItem: true,
+        serialize: (currentItemState, state) => {
+          const compareIsActive = get(state, 'compare.active');
+          const isCompareA = get(state, 'compare.isCompareA');
+          const dateB = get(state, 'date.selectedB');
+          return !compareIsActive && !isCompareA
+            ? serializeDate(dateB)
+            : !currentItemState
+              ? undefined
+              : serializeDate(currentItemState);
+        },
+        parse: str => {
+          return tryCatchDate(str, now);
+        }
+      }
+    },
+    t1: {
+      stateKey: 'legacy.date.selectedB',
+      initialState: util.dateAdd(now, 'day', -7),
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          const isActive = get(state, 'compare.active');
+          if (!isActive) return undefined;
+          return serializeDate(
+            currentItemState || util.dateAdd(now, 'day', -7)
+          );
+        },
+        parse: str => {
+          return tryCatchDate(str, util.dateAdd(now, 'day', -7));
+        }
+      }
+    },
+    z: {
+      stateKey: 'date.selectedZoom',
+      initialState: 3,
+      options: {
+        parse: str => {
+          return str ? Number(str) : 3;
+        },
+        serialize: val => {
+          return val.toString();
+        }
+      }
     },
     e: {
       stateKey: 'events',
