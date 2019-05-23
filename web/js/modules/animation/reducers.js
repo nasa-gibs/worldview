@@ -1,6 +1,7 @@
 import { assign as lodashAssign } from 'lodash';
 import util from '../../util/util';
 import {
+  OPEN_ANIMATION,
   EXIT_ANIMATION,
   PLAY_ANIMATION,
   STOP_ANIMATION,
@@ -25,6 +26,10 @@ export function getInitialState(config) {
 
 export function animationReducer(state = defaultState, action) {
   switch (action.type) {
+    case OPEN_ANIMATION:
+      return lodashAssign({}, state, {
+        isActive: true
+      });
     case EXIT_ANIMATION:
       return lodashAssign({}, state, {
         isActive: false

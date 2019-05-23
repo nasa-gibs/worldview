@@ -1,4 +1,5 @@
 import {
+  OPEN_ANIMATION,
   EXIT_ANIMATION,
   PLAY_ANIMATION,
   STOP_ANIMATION,
@@ -8,6 +9,11 @@ import {
   UPDATE_END_DATE
 } from './constants';
 
+export function onActivate() {
+  return {
+    type: OPEN_ANIMATION
+  };
+}
 export function onClose() {
   return {
     type: EXIT_ANIMATION

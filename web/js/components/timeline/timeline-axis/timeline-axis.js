@@ -1354,10 +1354,10 @@ class TimelineAxis extends React.Component {
           <TimelineRangeSelector
             startLocation={this.state.animationStartLocation}
             endLocation={this.state.animationEndLocation}
-            startLocationDate={this.props.animStartLocationDate}
-            endLocationDate={this.props.animEndLocationDate}
-            timelineStartDateLimit={this.props.timelineStartDateLimit}
-            timelineEndDateLimit={this.props.timelineEndDateLimit}
+            startLocationDate={moment.utc(this.props.animStartLocationDate).format()}
+            endLocationDate={moment.utc(this.props.animEndLocationDate).format()}
+            timelineStartDateLimit={moment.utc(this.props.timelineStartDateLimit).format()}
+            timelineEndDateLimit={moment.utc(this.props.timelineEndDateLimit).format()}
             max={{end: false, start: false, startOffset: -50, width: 50000}}
             pinWidth={5}
             height={45}

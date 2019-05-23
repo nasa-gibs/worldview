@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import ErrorBoundary from '../../containers/error-boundary';
 import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/interval-timescale-change';
 import '../../components/timeline/timeline.css';
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
@@ -9,6 +10,7 @@ import CustomIntervalSelectorWidget from '../../components/timeline/interval-sel
 import util from '../../util/util';
 import DateSelector from '../../components/date-selector/date-selector';
 import DateChangeArrows from '../../components/timeline/timeline-controls/date-change-arrows';
+import AnimationWidget from '../../containers/animation-widget';
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
@@ -18,7 +20,9 @@ import {
 } from '../../modules/layers/selectors';
 import { selectDate, changeTimeScale, selectInterval, changeCustomInterval } from '../../modules/date/actions';
 // import { selectDraggerState } from '../../modules/compare/actions';
+import { onActivate as openAnimation, onClose as closeAnimation }  from '../../modules/animation/actions';
 import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../modules/date/constants';
+import errorBoundary from '../error-boundary';
 
 const ANIMATION_DELAY = 500;
 
@@ -141,7 +145,12 @@ class Timeline extends React.Component {
   }
 
   // open animation dialog
-  clickAnimationButton() {
+  clickAnimationButton = () => {
+    if (this.props.isAnimationWidgetOpen) {
+      this.props.closeAnimation();
+    } else {
+      this.props.openAnimation();
+    }
     // Will be a setState({})
     // a deriveStateFromProps will be wanted with this one
   }
@@ -170,9 +179,13 @@ class Timeline extends React.Component {
       timelineEndDateLimit,
       timelineStartDateLimit,
       timeScaleChangeUnit,
-      parentOffset
+      parentOffset,
+      animStartLocationDate,
+      animEndLocationDate,
+      isAnimationWidgetOpen
     } = this.props;
     return dateFormatted ? (
+      <ErrorBoundary>
       <section id="timeline" className="timeline-inner clearfix">
         <div
           id="timeline-header"
@@ -214,7 +227,12 @@ class Timeline extends React.Component {
         <div id="timeline-footer"
           style={{ display: this.state.timelineHidden ? 'none' : 'block' }}
         >
-          <div id="wv-animation-widet-case"> </div>
+          <div id="wv-animation-widet-case">
+            { isAnimationWidgetOpen
+              ? <AnimationWidget />
+              : null
+            }
+          </div>
           {/* Timeline */}
           <TimelineAxis
             {...this.props}
@@ -233,11 +251,9 @@ class Timeline extends React.Component {
             timelineEndDateLimit={timelineEndDateLimit}
             updateAnimationRange={() => {
             }}
-            // animStartLocationDate={this.state.animStartLocationDate}
-            // animEndLocationDate={this.state.animEndLocationDate}
-            animStartLocationDate={dateFormatted}
-            animEndLocationDate={dateFormatted}
-            isAnimationWidgetOpen={this.state.isAnimationWidgetOpen}
+            animStartLocationDate={animStartLocationDate}
+            animEndLocationDate={animEndLocationDate}
+            isAnimationWidgetOpen={isAnimationWidgetOpen}
           />
 
           {/* custom interval selector */}
@@ -275,6 +291,7 @@ class Timeline extends React.Component {
           />
         </div>
       </section>
+      </ErrorBoundary>
     ) : null;
   }
 }
@@ -327,7 +344,7 @@ function mapStateToProps(state) {
     timeScaleChangeUnit,
     timelineEndDateLimit
   );
-
+console.log(animation.isActive, animation)
   return {
     draggerSelected: isCompareA ? 'selected' : 'selectedB', // ! will work for dragger?
     hasSubdailyLayers,
@@ -338,7 +355,9 @@ function mapStateToProps(state) {
     startDate: config.startDate,
     timelineStartDateLimit: config.startDate, // same as startDate
     endTime,
-    isAnimationWidgetOpen: animation.active,
+    isAnimationWidgetOpen: animation.isActive,
+    animStartLocationDate: animation.startDate,
+    animEndLocationDate: animation.endDate,
     axisWidth: dimensionsAndOffsetValues.width,
     selectedDate: selectedDate,
     timeScale: timeScaleFromNumberKey[selectedZoom.toString()],
@@ -369,7 +388,13 @@ const mapDispatchToProps = dispatch => ({
   // changes to non-custom timescale interval, sets customSelected to FALSE
   selectInterval: (delta, timeScale, customSelected) => {
     dispatch(selectInterval(delta, timeScale, customSelected));
-  }
+  },
+  openAnimation: () => {
+    dispatch(openAnimation());
+  },
+  closeAnimation: () => {
+    dispatch(closeAnimation());
+  },
   // set currently selected delta - will always be 1 if !customSelected
   // selectDelta: val => {
   //   dispatch(selectDelta(val));

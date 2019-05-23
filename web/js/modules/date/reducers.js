@@ -42,7 +42,6 @@ export function dateReducer(state = defaultState, action) {
     //     delta: action.value
     //   });
     case SELECT_DATE:
-      console.log(action.value)
       return lodashAssign({}, state, {
         [action.activeString]: action.value
       });
