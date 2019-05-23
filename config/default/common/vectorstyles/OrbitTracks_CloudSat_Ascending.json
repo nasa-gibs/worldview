@@ -31,6 +31,25 @@
       }
     },
     {
+      "id": "default_style",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "yellow1",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -48,6 +67,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(204, 255, 51)"
+      }
+    },
+    {
+      "id": "yellow1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -71,6 +109,25 @@
       }
     },
     {
+      "id": "yellow2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "orange1",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -88,6 +145,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(242, 135, 34)"
+      }
+    },
+    {
+      "id": "orange1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -111,6 +187,25 @@
       }
     },
     {
+      "id": "orange2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "orange3",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -128,6 +223,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(216, 186, 25)"
+      }
+    },
+    {
+      "id": "orange3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -151,6 +265,25 @@
       }
     },
     {
+      "id": "red1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "red2",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -168,6 +301,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(196, 6, 41)"
+      }
+    },
+    {
+      "id": "red2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -191,6 +343,25 @@
       }
     },
     {
+      "id": "red3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "pink1",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -208,6 +379,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(255, 51, 204)"
+      }
+    },
+    {
+      "id": "pink1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -231,6 +421,25 @@
       }
     },
     {
+      "id": "pink2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "pink3",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -248,6 +457,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(255, 196, 198)"
+      }
+    },
+    {
+      "id": "pink3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -271,6 +499,25 @@
       }
     },
     {
+      "id": "pink4",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "pink5",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -288,6 +535,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(255, 160, 122)"
+      }
+    },
+    {
+      "id": "pink5",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -311,6 +577,25 @@
       }
     },
     {
+      "id": "purple1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "purple2",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -328,6 +613,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(106, 61, 154)"
+      }
+    },
+    {
+      "id": "purple2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -351,6 +655,25 @@
       }
     },
     {
+      "id": "purple3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "blue1",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -368,6 +691,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(136, 177, 191)"
+      }
+    },
+    {
+      "id": "blue1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -391,6 +733,25 @@
       }
     },
     {
+      "id": "blue2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "blue3",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -408,6 +769,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(126, 151, 189)"
+      }
+    },
+    {
+      "id": "blue3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -431,6 +811,25 @@
       }
     },
     {
+      "id": "blue4",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "blue5",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -448,6 +847,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(25, 114, 243)"
+      }
+    },
+    {
+      "id": "blue5",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -471,6 +889,25 @@
       }
     },
     {
+      "id": "blue6",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "brown1",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -488,6 +925,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(153, 153, 0)"
+      }
+    },
+    {
+      "id": "brown1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -511,6 +967,25 @@
       }
     },
     {
+      "id": "brown2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "green1",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -528,6 +1003,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(22, 160, 133)"
+      }
+    },
+    {
+      "id": "green1",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     },
     {
@@ -551,6 +1045,25 @@
       }
     },
     {
+      "id": "green2",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "green3",
       "source": "OrbitTracks_CloudSat_Ascending",
       "source-layer": "OrbitTracks_CloudSat_Ascending",
@@ -568,6 +1081,25 @@
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(127, 196, 6)"
+      }
+    },
+    {
+      "id": "green3",
+      "source": "OrbitTracks_CloudSat_Ascending",
+      "source-layer": "OrbitTracks_CloudSat_Ascending",
+      "type": "symbol",
+      "layout": {
+        "text-field": ["get", "label"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.05,
+        "text-offset": [-2.5, 0]
+      },
+      "paint": {
+        "text-color": "#fff",
+        "text-halo-color": "#999",
+        "text-halo-width": 1
       }
     }
   ]
