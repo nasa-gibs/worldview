@@ -4,7 +4,7 @@
       "id": "sunglint",
       "type": "default",
       "title": "Sunglint",
-      "description": "When sunlight reflects off the surface of water at the same angle as the satellite sensor views it you get sunglint!",
+      "description": "What's that shining off the water's surface? it's sunglint!",
       "backgroundImage": "sunglint.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
