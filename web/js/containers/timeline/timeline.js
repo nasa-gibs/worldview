@@ -19,7 +19,7 @@ import {
   lastDate as layersLastDateTime
 } from '../../modules/layers/selectors';
 import { selectDate, changeTimeScale, selectInterval, changeCustomInterval } from '../../modules/date/actions';
-// import { selectDraggerState } from '../../modules/compare/actions';
+import { toggleActiveCompareState } from '../../modules/compare/actions';
 import { onActivate as openAnimation, onClose as closeAnimation }  from '../../modules/animation/actions';
 import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../modules/date/constants';
 import errorBoundary from '../error-boundary';
@@ -157,6 +157,11 @@ class Timeline extends React.Component {
       });
   }
 
+  // toggle selected dragger for comparison mode/focused date used in date selector
+  onChangeSelectedDragger = () => {
+    this.props.toggleActiveCompareState();
+  }
+
   render() {
     const {
       dateFormatted,
@@ -239,8 +244,7 @@ class Timeline extends React.Component {
             changeTimeScale={this.changeTimeScale}
             compareModeActive={compareModeActive}
             draggerSelected={draggerSelected}
-            onChangeSelectedDragger={() => {
-            }}
+            onChangeSelectedDragger={this.onChangeSelectedDragger.bind(this)}
             timelineStartDateLimit={timelineStartDateLimit}
             timelineEndDateLimit={timelineEndDateLimit}
             updateAnimationRange={() => {
@@ -381,6 +385,9 @@ const mapDispatchToProps = dispatch => ({
   closeAnimation: () => {
     dispatch(closeAnimation());
   },
+  toggleActiveCompareState: () => {
+    dispatch(toggleActiveCompareState());
+  }
   // set currently selected delta - will always be 1 if !customSelected
   // selectDelta: val => {
   //   dispatch(selectDelta(val));

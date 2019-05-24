@@ -18,7 +18,6 @@ class TimeScaleIntervalChange extends Component {
   }
 
   handleClickZoom = (intervalSelected, openDialog) => {
-    console.log(intervalSelected, openDialog)
     // close tooltip
     // send props function to change timescale zoom level throughout app
     this.setState({

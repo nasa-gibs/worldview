@@ -92,13 +92,13 @@ class TimelineAxis extends React.Component {
   }
   //? how do position and transforms change between scale changes? lock into one line would be ideal
   updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange) => {
-    console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange)
+    // console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange)
     let maxDateTEMP = moment.utc(new Date());
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
     let axisWidth = axisWidthInput ? axisWidthInput : this.props.axisWidth;
     let leftOffset = leftOffsetFixedCoeff ? axisWidth * leftOffsetFixedCoeff : this.state.leftOffset;
-    console.log(this.state.leftOffset)
+
     if (leftOffset === 0) {
       leftOffset = axisWidth / 2;
     }
