@@ -69,23 +69,31 @@ class AxisTimeScaleChange extends PureComponent {
   }
 
   render() {
-    let { timeScale, hasSubdailyLayers, changeTimeScale } = this.props;
+    let { timeScale, timelineHidden, hasSubdailyLayers, changeTimeScale } = this.props;
     return (
-      timeScale ?
       <div
-        onMouseEnter={() => this.toggleTooltipHover(true)}
-        onMouseLeave={() => this.toggleTooltipHover(false)}>
-        <AxisTimeScaleChangeControls
-          timeScale={timeScale}
-          hasSubdailyLayers={hasSubdailyLayers}
-          toolTipHovered={this.state.toolTipHovered}
-          changeTimeScale={changeTimeScale}
-          incrementTimeScale={this.incrementTimeScale}
-          decrementTimeScale={this.decrementTimeScale}
-        />
+        className="zoom-level-change"
+        style={{
+          display: timelineHidden ? 'none' : 'block'
+        }}
+      >
+      { timeScale ?
+        <div
+          onMouseEnter={() => this.toggleTooltipHover(true)}
+          onMouseLeave={() => this.toggleTooltipHover(false)}>
+          <AxisTimeScaleChangeControls
+            timeScale={timeScale}
+            hasSubdailyLayers={hasSubdailyLayers}
+            toolTipHovered={this.state.toolTipHovered}
+            changeTimeScale={changeTimeScale}
+            incrementTimeScale={this.incrementTimeScale}
+            decrementTimeScale={this.decrementTimeScale}
+          />
+        </div>
+        :
+        <div></div>
+      }
       </div>
-      :
-      <div></div>
     );
   }
 }

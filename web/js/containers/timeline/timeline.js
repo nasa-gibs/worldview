@@ -116,7 +116,6 @@ class Timeline extends React.Component {
 
   // handle SELECT of LEFT/RIGHT interval selection
   setTimeScaleIntervalChangeUnit = (intervalSelected, customIntervalModalOpen) => {
-    console.log(intervalSelected)
     let delta;
     let customSelected = intervalSelected === 'custom';
     if (customSelected) {
@@ -126,6 +125,7 @@ class Timeline extends React.Component {
       intervalSelected = Number(timeScaleToNumberKey[intervalSelected]);
       delta = 1;
     }
+    console.log(delta, intervalSelected, customSelected)
     this.props.selectInterval(delta, intervalSelected, customSelected);
     if (customIntervalModalOpen) {
       this.setState({
@@ -136,7 +136,6 @@ class Timeline extends React.Component {
 
   // left/right arrows increment date
   incrementDate = (multiplier) => {
-    console.log(this.props.customSelected)
     let delta = this.props.customSelected ? this.props.intervalChangeAmt : 1;
     this.animateByIncrement(
       Number(delta * multiplier),
@@ -268,19 +267,12 @@ class Timeline extends React.Component {
         </div>
 
         {/* Zoom Level Change */}
-        <div
-          className="zoom-level-change"
-          style={{
-            width: '75px',
-            display: this.state.timelineHidden ? 'none' : 'block'
-          }}
-        >
-          <AxisTimeScaleChange
-            timeScale={this.props.timeScale}
-            changeTimeScale={this.changeTimeScale}
-            hasSubdailyLayers={this.props.hasSubdailyLayers}
-          />
-        </div>
+        <AxisTimeScaleChange
+          timelineHidden={this.state.timelineHidden}
+          timeScale={this.props.timeScale}
+          changeTimeScale={this.changeTimeScale}
+          hasSubdailyLayers={this.props.hasSubdailyLayers}
+        />
 
         {/* 🍔 Open/Close Chevron 🍔 */}
         <div id="timeline-hide" onClick={this.toggleHideTimeline}>
@@ -344,7 +336,7 @@ function mapStateToProps(state) {
     timeScaleChangeUnit,
     timelineEndDateLimit
   );
-console.log(animation.isActive, animation)
+
   return {
     draggerSelected: isCompareA ? 'selected' : 'selectedB', // ! will work for dragger?
     hasSubdailyLayers,
@@ -364,7 +356,7 @@ console.log(animation.isActive, animation)
     timeScaleChangeUnit: timeScaleChangeUnit,
     customIntervalValue: customDelta,
     customIntervalZoomLevel: customInterval,
-    intervalChangeAmt: interval,
+    intervalChangeAmt: deltaChangeAmt,
     parentOffset: dimensionsAndOffsetValues.parentOffset,
     timelineEndDateLimit,
     leftArrowDisabled,

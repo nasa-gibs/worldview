@@ -18,7 +18,6 @@ class TimeScaleIntervalChange extends Component {
   }
 
   handleClickZoom = (intervalSelected, openDialog) => {
-    console.log(intervalSelected)
     // close tooltip
     // send props function to change timescale zoom level throughout app
     this.setState({
@@ -56,6 +55,7 @@ class TimeScaleIntervalChange extends Component {
     return (
       <React.Fragment>
         <div id="zoom-btn-container"
+        className="noselect"
         onMouseEnter={() => this.toggleTooltipHover(true)}
         onMouseLeave={() => this.toggleTooltipHover(false)}
         >

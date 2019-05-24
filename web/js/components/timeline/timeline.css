@@ -97,6 +97,10 @@ line {
   display: block;
 }
 
+.zoom-level-change {
+  width: 75px;
+}
+
 .zoom-level-change-arrows {
   user-select: none;
   background: transparent;
@@ -105,7 +109,6 @@ line {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   width: 55px;
-  /* padding-top: 7px; */
 }
 
 .interval-input {
