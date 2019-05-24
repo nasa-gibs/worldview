@@ -328,3 +328,33 @@ export function mapLocationToPaletteState(
   }
   return stateFromLocation;
 }
+// TODO replace without jQuery
+export function requirements(state, config, startup) {
+  var promises = [];
+  if (startup || !state.tr) {
+    config.palettes = {
+      rendered: {},
+      custom: {}
+    };
+  }
+  lodashEach(state.l, function(qsLayer) {
+    var layerId = qsLayer.id;
+    if (config.layers[layerId] && config.layers[layerId].palette) {
+      promises.push(loadRenderedPalette(config, layerId));
+    }
+    var custom = lodashFind(qsLayer.attributes, {
+      id: 'palette'
+    });
+    if (custom) {
+      promises.push(loadCustom(config));
+    }
+  });
+  if (promises.length > 0) {
+    var promise = $.Deferred();
+    $.when
+      .apply(null, promises)
+      .then(promise.resolve)
+      .fail(promise.reject);
+    return promise;
+  }
+}

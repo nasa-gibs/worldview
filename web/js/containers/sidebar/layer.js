@@ -1,22 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Legend from './legend';
+import Legend from '../../components/sidebar/legend';
 import { Draggable } from 'react-beautiful-dnd';
-import util from '../../../util/util';
+import util from '../../util/util';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
-import { getPalette, getLegends } from '../../../modules/palettes/selectors';
-import { openCustomContent } from '../../../modules/modal/actions';
-import LayerInfo from '../../layer/info/info';
-import LayerSettings from '../../layer/settings/settings';
-
+import { getPalette, getLegends } from '../../modules/palettes/selectors';
+import { openCustomContent } from '../../modules/modal/actions';
+import LayerInfo from '../../components/layer/info/info';
+import LayerSettings from '../../components/layer/settings/settings';
+import { requestPalette } from '../../modules/palettes/actions';
+import { connect } from 'react-redux';
 import {
   toggleVisibility,
   removeLayer,
   layerHover
-} from '../../../modules/layers/actions';
-import { requestPalette } from '../../../modules/palettes/actions';
-import { connect } from 'react-redux';
+} from '../../modules/layers/actions';
 
 const visibilityButtonClasses = 'hdanchor hide hideReg bank-item-img';
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -36,14 +35,6 @@ class Layer extends React.Component {
       isInProjection: isInProjection
     };
   }
-  // componentWillReceiveProps(props) {
-  //   if (props.zot !== this.state.zot) {
-  //     this.setState({ zot: props.zot });
-  //   }
-  //   if (props.isInProjection !== this.state.isInProjection) {
-  //     this.setState({ isInProjection: props.isInProjection });
-  //   }
-  // }
   getLegend() {
     const {
       layer,
@@ -251,6 +242,10 @@ Layer.defaultProps = {
   palette: {}
 };
 Layer.propTypes = {
+  renderedPalette: PropTypes.object,
+  requestPalette: PropTypes.func,
+  isCustomPalette: PropTypes.bool,
+  isLoading: PropTypes.bool,
   isVisible: PropTypes.bool,
   layerClasses: PropTypes.string,
   isDisabled: PropTypes.bool,

@@ -23,9 +23,9 @@ import Brand from './brand';
 import { combineModels } from './combine-models';
 import { parse } from './parse';
 import { combineUi } from './combine-ui';
-import palettes from './palettes/palettes';
+import { requirements as paletteRequirements } from './modules/palettes/util';
 import { updateLegacyModule } from './modules/migration/actions';
-import { validate as layerValidate } from './layers/layers';
+import { validate as layerValidate } from './modules/layers/util';
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
 export let history = createBrowserHistory();
@@ -57,7 +57,7 @@ window.onload = () => {
       elapsed('Config loaded', startTime, parameters);
       let legacyState = parse(parameters, config, errors);
       layerValidate(errors, config);
-      let requirements = [palettes.requirements(legacyState, config, true)];
+      let requirements = [paletteRequirements(legacyState, config, true)];
       $.when
         .apply(null, requirements)
         .then(() => render(config, parameters, legacyState));

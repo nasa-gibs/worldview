@@ -3,7 +3,7 @@ import lodashIsNaN from 'lodash/isNaN';
 import lodashParseInt from 'lodash/parseInt';
 import lodashSortBy from 'lodash/sortBy';
 import util from './util/util';
-import palettes from './palettes/palettes';
+import { loadCustom as loadCustomPalette } from './modules/palettes/util';
 
 export var debug = (function() {
   var parameters = util.fromQueryString(location.search);
@@ -133,7 +133,7 @@ export function debugLayers(ui, models, config) {
     }
     if (useDebugPanel[type]) {
       if (type === 'palettes') {
-        palettes.loadCustom(config).done(render);
+        loadCustomPalette(config).done(render);
       } else {
         render();
       }

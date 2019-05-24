@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import LayerList from '../../components/sidebar/layers/layer-list';
+import LayerList from './layer-list';
 import { getLayers } from '../../modules/layers/selectors';
 import Scrollbars from '../../components/util/scrollbar';
 
@@ -74,5 +74,7 @@ Products.propTypes = {
   baselayers: PropTypes.array,
   isActive: PropTypes.bool,
   layerGroupName: PropTypes.string,
-  height: PropTypes.number
+  height: PropTypes.number,
+  checkerBoardPattern: PropTypes.node,
+  layerSplit: PropTypes.object
 };

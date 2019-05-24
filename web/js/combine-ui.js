@@ -1,8 +1,8 @@
 import util from './util/util';
-import { dateLabel } from './date/label';
+// import { dateLabel } from './date/label';
 
 // Timeline
-import dateWheels from './date/wheels';
+// import dateWheels from './date/wheels';
 // import { timeline } from './date/timeline';
 import { mapui } from './map/ui';
 import { mapAnimate } from './map/animate';

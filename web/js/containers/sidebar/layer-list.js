@@ -8,9 +8,8 @@ import {
   getZotsForActiveLayers,
   getTitles,
   available
-} from '../../../modules/layers/selectors';
-// import { palettePromise } from '../../../modules/palettes/selectors';
-import { reorderLayers } from '../../../modules/layers/actions';
+} from '../../modules/layers/selectors';
+import { reorderLayers } from '../../modules/layers/actions';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -155,7 +154,8 @@ LayerList.propTypes = {
   layers: PropTypes.array,
   groupId: PropTypes.string,
   title: PropTypes.string,
-  layerGroupName: PropTypes.string
+  layerGroupName: PropTypes.string,
+  renderedPalettes: PropTypes.string
 };
 function mapStateToProps(state, ownProps) {
   const {

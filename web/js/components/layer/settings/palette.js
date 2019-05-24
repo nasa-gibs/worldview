@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashIndexOf from 'lodash/indexOf';
-import { drawPaletteOnCanvas } from '../../../palettes/util';
+import { drawPaletteOnCanvas } from '../../../modules/palettes/util';
 import util from '../../../util/util';
 import Scrollbar from '../../util/scrollbar';
 

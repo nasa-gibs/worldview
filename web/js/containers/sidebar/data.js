@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Products from '../../components/sidebar/data/product';
+import Products from '../../components/sidebar/product';
 import Scrollbars from '../../components/util/scrollbar';
 import { connect } from 'react-redux';
 import {

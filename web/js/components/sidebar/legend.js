@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import util from '../../../util/util';
-import { drawPaletteOnCanvas } from '../../../palettes/util';
+import util from '../../util/util';
+import { drawPaletteOnCanvas } from '../../modules/palettes/util';
 import lodashIsNumber from 'lodash/isNumber';
 
 class Legend extends React.Component {
