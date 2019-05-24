@@ -20,7 +20,9 @@ import util from './util/util';
 import update from 'immutability-helper';
 
 /**
- * Override state with information from location.search
+ * Override state with information from location.search when "REDUX-LOCATION-POP-ACTION"
+ * is dispatched
+ *
  * mapLocationToState
  * @param {Object} state | Default state object
  * @param {Object} location | Redux-location-state Location object
@@ -167,10 +169,7 @@ const getParameters = function(config, parameters) {
       type: 'array',
       options: {
         parse: permalink => {
-          //   if (parameters.ca !== undefined) {
           return layersParse12(permalink, config);
-          // }
-          // return [];
         },
         serializeNeedsGlobalState: true,
         serialize: (currentLayers, state) => {
@@ -244,17 +243,8 @@ export function getParamObject(
     legacyState,
     errors
   );
-  // const dateParamObject = getDateParameterSetup(
-  //   parameters,
-  //   config,
-  //   models,
-  //   legacyState,
-  //   errors
-  // );
   const obj = lodashAssign(
     {},
-    // dateParamObject,
-    // animationParamObject,
     mapParamObject,
     getParameters(config, parameters)
   );
