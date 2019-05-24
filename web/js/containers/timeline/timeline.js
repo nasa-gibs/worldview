@@ -110,8 +110,7 @@ class Timeline extends React.Component {
 
   // handle SET of custom time scale panel
   changeCustomInterval = (delta, timeScale) => {
-    console.log(delta,timeScale)
-    this.props.changeCustomInterval(delta, Number(timeScaleToNumberKey[timeScale]));
+    this.props.changeCustomInterval(Number(delta), Number(timeScale));
   }
 
   // handle SELECT of LEFT/RIGHT interval selection
@@ -125,13 +124,10 @@ class Timeline extends React.Component {
       intervalSelected = Number(timeScaleToNumberKey[intervalSelected]);
       delta = 1;
     }
-    console.log(delta, intervalSelected, customSelected)
     this.props.selectInterval(delta, intervalSelected, customSelected);
-    if (customIntervalModalOpen) {
-      this.setState({
-        customIntervalModalOpen: customIntervalModalOpen
-      });
-    }
+    this.setState({
+      customIntervalModalOpen: !!customIntervalModalOpen
+    });
   }
 
   // left/right arrows increment date
@@ -162,7 +158,6 @@ class Timeline extends React.Component {
   }
 
   render() {
-    // console.log(this.props, this.state)
     const {
       dateFormatted,
       dateFormattedB,
@@ -289,7 +284,7 @@ class Timeline extends React.Component {
 }
 function mapStateToProps(state) {
   const { config, compare, layers, browser, date, animation } = state;
-  const {
+  let {
     customSelected,
     selected,
     selectedB,
@@ -314,7 +309,6 @@ function mapStateToProps(state) {
   }
   const dimensionsAndOffsetValues = getOffsetValues(screenWidth, hasSubdailyLayers);
   const timelineEndDateLimit = endTime.toISOString();
-  // console.log(date, compare);
 
   let selectedDate = isCompareA ? selected : selectedB;
   let deltaChangeAmt = customSelected
