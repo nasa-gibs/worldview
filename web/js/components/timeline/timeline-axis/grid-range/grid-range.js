@@ -35,12 +35,12 @@ const tileTextConditionOptions = {
 
 class GridRange extends PureComponent {
   render() {
-    let { gridWidth, transformX, timeScale, dateArray, showHover } = this.props;
+    let { gridWidth, transformX, timeScale, timeRange, showHover } = this.props;
     let tileTextCondition = tileTextConditionOptions[timeScale];
     return (
       <g className="gridShell" transform={`translate(${transformX}, 0)`}>
         <React.Fragment>
-          {dateArray.map((item, index) => {
+          {timeRange.map((item, index) => {
             return (
               item.withinRange
                 ? <React.Fragment key={index}>
@@ -70,7 +70,7 @@ class GridRange extends PureComponent {
 }
 
 GridRange.propTypes = {
-  dateArray: PropTypes.array,
+  timeRange: PropTypes.array,
   displayDate: PropTypes.func,
   gridWidth: PropTypes.number,
   showHover: PropTypes.func,

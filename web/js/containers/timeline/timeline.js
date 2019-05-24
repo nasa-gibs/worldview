@@ -162,6 +162,12 @@ class Timeline extends React.Component {
     this.props.toggleActiveCompareState();
   }
 
+  // update range of animation draggers
+  updateAnimationRange = (startDate, endDate) => {
+    // ! PLACE HOLDER - OLD VERSION
+    // ui.anim.rangeselect.updateRange(startDate, endDate, true);
+  };
+
   render() {
     const {
       dateFormatted,
@@ -247,8 +253,7 @@ class Timeline extends React.Component {
             onChangeSelectedDragger={this.onChangeSelectedDragger.bind(this)}
             timelineStartDateLimit={timelineStartDateLimit}
             timelineEndDateLimit={timelineEndDateLimit}
-            updateAnimationRange={() => {
-            }}
+            updateAnimationRange={this.updateAnimationRange.bind(this)}
             animStartLocationDate={animStartLocationDate}
             animEndLocationDate={animEndLocationDate}
             isAnimationWidgetOpen={isAnimationWidgetOpen}

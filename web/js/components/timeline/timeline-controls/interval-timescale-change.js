@@ -125,7 +125,6 @@ class TimeScaleIntervalChange extends Component {
             </div>
           </div>
         </div>
-
       </React.Fragment>
     );
   }
