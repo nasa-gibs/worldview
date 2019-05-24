@@ -137,7 +137,6 @@ class TimelineRangeSelector extends React.Component {
    * @method render
    */
   render() {
-    console.log(this.props)
     return (
       <svg
         id="wv-timeline-range-selector"

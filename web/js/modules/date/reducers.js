@@ -15,8 +15,6 @@ const defaultState = {
   selected: util.now(),
   selectedB: util.dateAdd(util.now(), 'day', -7),
   customSelected: false,
-  // customDelta: 1,
-  // customInterval: 3
   customDelta: 1,
   customInterval: 3
 };
