@@ -40,7 +40,7 @@ class AxisTimeScaleChange extends PureComponent {
     }
     this.setState({
       toolTipHovered: isHovered
-    })
+    });
   }
 
   // ex: month(2) to day(3)
@@ -69,22 +69,21 @@ class AxisTimeScaleChange extends PureComponent {
           display: timelineHidden ? 'none' : 'block'
         }}
       >
-      { timeScale ?
-        <div
-          onMouseEnter={() => this.toggleTooltipHover(true)}
-          onMouseLeave={() => this.toggleTooltipHover(false)}>
-          <AxisTimeScaleChangeControls
-            timeScale={timeScale}
-            hasSubdailyLayers={hasSubdailyLayers}
-            toolTipHovered={this.state.toolTipHovered}
-            changeTimeScale={changeTimeScale}
-            incrementTimeScale={this.incrementTimeScale}
-            decrementTimeScale={this.decrementTimeScale}
-          />
-        </div>
-        :
-        <div></div>
-      }
+        { timeScale
+          ? <div
+            onMouseEnter={() => this.toggleTooltipHover(true)}
+            onMouseLeave={() => this.toggleTooltipHover(false)}>
+            <AxisTimeScaleChangeControls
+              timeScale={timeScale}
+              hasSubdailyLayers={hasSubdailyLayers}
+              toolTipHovered={this.state.toolTipHovered}
+              changeTimeScale={changeTimeScale}
+              incrementTimeScale={this.incrementTimeScale}
+              decrementTimeScale={this.decrementTimeScale}
+            />
+          </div>
+          : <div></div>
+        }
       </div>
     );
   }

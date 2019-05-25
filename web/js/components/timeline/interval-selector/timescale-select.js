@@ -26,13 +26,12 @@ class TimeScaleSelect extends PureComponent {
             <option value="year">year</option>
             <option value="month">month</option>
             <option value="day">day</option>
-            {hasSubdailyLayers ?
-            <React.Fragment>
-              <option value="hour">hour</option>
-              <option value="minute">minute</option>
-            </React.Fragment>
-            :
-              null
+            {hasSubdailyLayers
+              ? <React.Fragment>
+                <option value="hour">hour</option>
+                <option value="minute">minute</option>
+              </React.Fragment>
+              : null
             }
           </select>
         </label>

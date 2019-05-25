@@ -7,21 +7,21 @@ class TimeScaleIntervalChange extends Component {
     this.state = {
       toolTipHovered: false,
       customIntervalText: 'Custom'
-    }
+    };
   }
 
   // Toggle zoom select tooltip
   toggleTooltipHover = (isHovered) => {
     this.setState({
       toolTipHovered: isHovered
-    })
+    });
   }
 
   handleClickZoom = (intervalSelected, openDialog) => {
     // close tooltip
     // send props function to change timescale zoom level throughout app
     this.setState({
-      toolTipHovered: false,
+      toolTipHovered: false
     }, this.props.setTimeScaleIntervalChangeUnit(intervalSelected, openDialog));
   }
 
@@ -29,7 +29,7 @@ class TimeScaleIntervalChange extends Component {
   setCustomIntervalText = () => {
     this.setState({
       customIntervalText: this.props.customDelta + ' ' + this.props.customIntervalZoomLevel
-    })
+    });
   }
 
   componentDidMount () {
@@ -55,9 +55,9 @@ class TimeScaleIntervalChange extends Component {
     return (
       <React.Fragment>
         <div id="zoom-btn-container"
-        className="noselect"
-        onMouseEnter={() => this.toggleTooltipHover(true)}
-        onMouseLeave={() => this.toggleTooltipHover(false)}
+          className="noselect"
+          onMouseEnter={() => this.toggleTooltipHover(true)}
+          onMouseLeave={() => this.toggleTooltipHover(false)}
         >
           {/* timeScale display */}
           <span
@@ -69,7 +69,7 @@ class TimeScaleIntervalChange extends Component {
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
           <div className="wv-tooltip"
-          style={{ display: toolTipHovered ? 'block' : 'none' }}
+            style={{ display: toolTipHovered ? 'block' : 'none' }}
           >
             <div id="timeline-zoom" className="timeline-zoom">
               <span

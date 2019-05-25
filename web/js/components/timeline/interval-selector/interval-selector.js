@@ -13,9 +13,9 @@ import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../../modules/d
  */
 class CustomIntervalSelectorWidget extends PureComponent {
   changeInterval = (value) => {
-      if (value > 0 && value <= 1000) {
-        this.props.changeCustomInterval(value, this.props.customIntervalZoomLevel);
-      }
+    if (value > 0 && value <= 1000) {
+      this.props.changeCustomInterval(value, this.props.customIntervalZoomLevel);
+    }
   }
 
   changeZoomLevel = (zoomLevel) => {
@@ -32,14 +32,13 @@ class CustomIntervalSelectorWidget extends PureComponent {
     // } else if (e.key === 'Escape') {
     //   this.props.toggleCustomIntervalModal();
     // }
-
     if (e.key === 'Escape') {
       this.props.toggleCustomIntervalModal();
     }
   }
 
   componentDidUpdate(prevProps) {
-    let { customIntervalModalOpen, customDelta, zoomLevel, customIntervalZoomLevel } = this.props;
+    let { customIntervalModalOpen } = this.props;
     // handle focus widget on opening
     if (customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
       this.customIntervalWidget.focus();
@@ -53,33 +52,31 @@ class CustomIntervalSelectorWidget extends PureComponent {
       toggleCustomIntervalModal,
       customDelta,
       customIntervalZoomLevel
-     } = this.props;
+    } = this.props;
     return (
       <div
         id="wv-animation-widget-custom-interval"
         onKeyDown={this.handleKeyPress}
         className='wv-animation-widget-custom-interval'
-        style={{display: customIntervalModalOpen ? 'block' : 'none'}}
+        style={{ display: customIntervalModalOpen ? 'block' : 'none' }}
         tabIndex={0}
         ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >
-
-      <div>Custom Interval Selector</div>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '25px' }}>
-        <div style={{display: 'flex', flexDirection: 'row' }}>
-          <IntervalInput
-            intervalValue={customDelta}
-            changeInterval={this.changeInterval}
-          />
-          <TimeScaleSelect
-            hasSubdailyLayers={hasSubdailyLayers}
-            zoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
-            changeZoomLevel={this.changeZoomLevel}
-          />
+        <div>Custom Interval Selector</div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '25px' }}>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <IntervalInput
+              intervalValue={customDelta}
+              changeInterval={this.changeInterval}
+            />
+            <TimeScaleSelect
+              hasSubdailyLayers={hasSubdailyLayers}
+              zoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
+              changeZoomLevel={this.changeZoomLevel}
+            />
+          </div>
         </div>
-      </div>
-
-      <i className="fa fa-times wv-close" onClick={toggleCustomIntervalModal}/>
+        <i className="fa fa-times wv-close" onClick={toggleCustomIntervalModal}/>
       </div>
     );
   }

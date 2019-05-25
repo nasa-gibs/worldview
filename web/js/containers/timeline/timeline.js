@@ -20,9 +20,8 @@ import {
 } from '../../modules/layers/selectors';
 import { selectDate, changeTimeScale, selectInterval, changeCustomInterval } from '../../modules/date/actions';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
-import { onActivate as openAnimation, onClose as closeAnimation }  from '../../modules/animation/actions';
+import { onActivate as openAnimation, onClose as closeAnimation } from '../../modules/animation/actions';
 import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../modules/date/constants';
-import errorBoundary from '../error-boundary';
 
 const ANIMATION_DELAY = 500;
 
@@ -153,8 +152,8 @@ class Timeline extends React.Component {
   // toggle hide timeline
   toggleHideTimeline = () => {
     this.setState({
-        timelineHidden: !this.state.timelineHidden
-      });
+      timelineHidden: !this.state.timelineHidden
+    });
   }
 
   // toggle selected dragger for comparison mode/focused date used in date selector
@@ -191,102 +190,102 @@ class Timeline extends React.Component {
     } = this.props;
     return dateFormatted ? (
       <ErrorBoundary>
-      <section id="timeline" className="timeline-inner clearfix">
-        <div
-          id="timeline-header"
-          className={hasSubdailyLayers ? 'subdaily' : ''}
-        >
-          <div id="date-selector-main">
-            <DateSelector
-              {...this.props}
-              onDateChange={this.props.changeDate}
-              date={new Date(dateFormatted)}
-              dateB={new Date(dateFormattedB)}
-              hasSubdailyLayers={hasSubdailyLayers}
-              draggerSelected={draggerSelected}
-            />
-          </div>
-          <div id="zoom-buttons-group">
-            <TimeScaleIntervalChange
-              setTimeScaleIntervalChangeUnit={
-                this.setTimeScaleIntervalChangeUnit
-              }
-              customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
-              customSelected={customSelected}
-              customDelta={customIntervalValue}
-              timeScaleChangeUnit={timeScaleChangeUnit}
-            />
-
-            <DateChangeArrows
-              leftArrowDown={() => this.incrementDate(-1)}
-              leftArrowUp={this.stopper.bind(this)}
-              leftArrowDisabled={leftArrowDisabled}
-              rightArrowDown={() => this.incrementDate(1)}
-              rightArrowUp={this.stopper.bind(this)}
-              rightArrowDisabled={rightArrowDisabled}
-            />
-          </div>
-
-          <AnimationButton clickAnimationButton={this.clickAnimationButton} />
-        </div>
-        <div id="timeline-footer"
-          style={{ display: this.state.timelineHidden ? 'none' : 'block' }}
-        >
-          <div id="wv-animation-widet-case">
-            { isAnimationWidgetOpen
-              ? <AnimationWidget />
-              : null
-            }
-          </div>
-          {/* Timeline */}
-          <TimelineAxis
-            {...this.props}
-            axisWidth={axisWidth}
-            selectedDate={dateFormatted}
-            selectedDateB={dateFormattedB}
-            changeDate={this.props.changeDate}
-            hasSubdailyLayers={hasSubdailyLayers}
-            parentOffset={parentOffset}
-            changeTimeScale={this.changeTimeScale}
-            compareModeActive={compareModeActive}
-            draggerSelected={draggerSelected}
-            onChangeSelectedDragger={this.onChangeSelectedDragger.bind(this)}
-            timelineStartDateLimit={timelineStartDateLimit}
-            timelineEndDateLimit={timelineEndDateLimit}
-            updateAnimationRange={this.updateAnimationRange.bind(this)}
-            animStartLocationDate={animStartLocationDate}
-            animEndLocationDate={animEndLocationDate}
-            isAnimationWidgetOpen={isAnimationWidgetOpen}
-          />
-
-          {/* custom interval selector */}
-          <CustomIntervalSelectorWidget
-            customDelta={customIntervalValue}
-            customIntervalZoomLevel={customIntervalZoomLevel}
-            toggleCustomIntervalModal={this.toggleCustomIntervalModal}
-            customIntervalModalOpen={this.state.customIntervalModalOpen}
-            changeCustomInterval={this.changeCustomInterval}
-            hasSubdailyLayers={hasSubdailyLayers}
-          />
-        </div>
-
-        {/* Zoom Level Change */}
-        <AxisTimeScaleChange
-          timelineHidden={this.state.timelineHidden}
-          timeScale={this.props.timeScale}
-          changeTimeScale={this.changeTimeScale}
-          hasSubdailyLayers={this.props.hasSubdailyLayers}
-        />
-
-        {/* 🍔 Open/Close Chevron 🍔 */}
-        <div id="timeline-hide" onClick={this.toggleHideTimeline}>
+        <section id="timeline" className="timeline-inner clearfix">
           <div
-            className={`wv-timeline-hide wv-timeline-hide-double-chevron-${
-              this.state.timelineHidden ? 'left' : 'right'
-            }`}
+            id="timeline-header"
+            className={hasSubdailyLayers ? 'subdaily' : ''}
+          >
+            <div id="date-selector-main">
+              <DateSelector
+                {...this.props}
+                onDateChange={this.props.changeDate}
+                date={new Date(dateFormatted)}
+                dateB={new Date(dateFormattedB)}
+                hasSubdailyLayers={hasSubdailyLayers}
+                draggerSelected={draggerSelected}
+              />
+            </div>
+            <div id="zoom-buttons-group">
+              <TimeScaleIntervalChange
+                setTimeScaleIntervalChangeUnit={
+                  this.setTimeScaleIntervalChangeUnit
+                }
+                customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
+                customSelected={customSelected}
+                customDelta={customIntervalValue}
+                timeScaleChangeUnit={timeScaleChangeUnit}
+              />
+
+              <DateChangeArrows
+                leftArrowDown={() => this.incrementDate(-1)}
+                leftArrowUp={this.stopper.bind(this)}
+                leftArrowDisabled={leftArrowDisabled}
+                rightArrowDown={() => this.incrementDate(1)}
+                rightArrowUp={this.stopper.bind(this)}
+                rightArrowDisabled={rightArrowDisabled}
+              />
+            </div>
+
+            <AnimationButton clickAnimationButton={this.clickAnimationButton} />
+          </div>
+          <div id="timeline-footer"
+            style={{ display: this.state.timelineHidden ? 'none' : 'block' }}
+          >
+            <div id="wv-animation-widet-case">
+              { isAnimationWidgetOpen
+                ? <AnimationWidget />
+                : null
+              }
+            </div>
+            {/* Timeline */}
+            <TimelineAxis
+              {...this.props}
+              axisWidth={axisWidth}
+              selectedDate={dateFormatted}
+              selectedDateB={dateFormattedB}
+              changeDate={this.props.changeDate}
+              hasSubdailyLayers={hasSubdailyLayers}
+              parentOffset={parentOffset}
+              changeTimeScale={this.changeTimeScale}
+              compareModeActive={compareModeActive}
+              draggerSelected={draggerSelected}
+              onChangeSelectedDragger={this.onChangeSelectedDragger.bind(this)}
+              timelineStartDateLimit={timelineStartDateLimit}
+              timelineEndDateLimit={timelineEndDateLimit}
+              updateAnimationRange={this.updateAnimationRange.bind(this)}
+              animStartLocationDate={animStartLocationDate}
+              animEndLocationDate={animEndLocationDate}
+              isAnimationWidgetOpen={isAnimationWidgetOpen}
+            />
+
+            {/* custom interval selector */}
+            <CustomIntervalSelectorWidget
+              customDelta={customIntervalValue}
+              customIntervalZoomLevel={customIntervalZoomLevel}
+              toggleCustomIntervalModal={this.toggleCustomIntervalModal}
+              customIntervalModalOpen={this.state.customIntervalModalOpen}
+              changeCustomInterval={this.changeCustomInterval}
+              hasSubdailyLayers={hasSubdailyLayers}
+            />
+          </div>
+
+          {/* Zoom Level Change */}
+          <AxisTimeScaleChange
+            timelineHidden={this.state.timelineHidden}
+            timeScale={this.props.timeScale}
+            changeTimeScale={this.changeTimeScale}
+            hasSubdailyLayers={this.props.hasSubdailyLayers}
           />
-        </div>
-      </section>
+
+          {/* 🍔 Open/Close Chevron 🍔 */}
+          <div id="timeline-hide" onClick={this.toggleHideTimeline}>
+            <div
+              className={`wv-timeline-hide wv-timeline-hide-double-chevron-${
+                this.state.timelineHidden ? 'left' : 'right'
+              }`}
+            />
+          </div>
+        </section>
       </ErrorBoundary>
     ) : null;
   }
@@ -420,13 +419,13 @@ const getOffsetValues = (innerWidth, hasSubDaily) => {
   const width =
     innerWidth - parentOffset - 20 - 20 - MARGIN.left - MARGIN.right + 28;
   return { width, parentOffset };
-}
+};
 
 const getEndTime = (layers, config) => {
   const endDateA = layersLastDateTime(layers['active'], config);
   const endDateB = layersLastDateTime(layers['activeB'], config);
   return endDateA > endDateB ? endDateA : endDateB;
-}
+};
 /**
  * @param  {Number} delta Date and direction to change
  * @param  {Number} increment Zoom level of change
@@ -466,7 +465,7 @@ const checkLeftArrowDisabled = (date, delta, timeScaleChangeUnit, timelineStartD
   return nextDecrementDate.isSameOrBefore(
     timelineStartDateLimit
   );
-}
+};
 
 // check if right arrow should be disabled on predicted increment
 const checkRightArrowDisabled = (date, delta, timeScaleChangeUnit, timelineEndDateLimit) => {
@@ -476,4 +475,4 @@ const checkRightArrowDisabled = (date, delta, timeScaleChangeUnit, timelineEndDa
   return nextIncrementDate.isSameOrAfter(
     timelineEndDateLimit
   );
-}
+};
