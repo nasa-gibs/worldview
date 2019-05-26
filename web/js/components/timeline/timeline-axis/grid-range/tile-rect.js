@@ -57,18 +57,42 @@ const tileRectTimeScaleOptions = {
 };
 
 class TileRect extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.showHover = this.showHover.bind(this);
+  }
+
+  showHover = (e) => {
+    let { item, index } = this.props;
+    this.props.showHover(e, item.rawDate, item.rawNextDate, index);
+  }
+
   render() {
-    let { item, gridWidth, index, showHover, timeScale } = this.props;
+    let { item, gridWidth, index, timeScale } = this.props;
     let tileOptions = tileRectTimeScaleOptions[timeScale]();
     let lineLengthY = tileOptions.lineLengthY(item);
     let whiteLineStrokeWidth = lineLengthY !== 10 ? 2 : 1;
     return (
       <React.Fragment>
-        <g onMouseMove={(e) => showHover(e, item.rawDate, item.rawNextDate, index)}>
-          <rect className="grid" width={gridWidth} height={100} transform={`translate(${index * gridWidth}, 0)`} fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'} shapeRendering="optimizeSpeed"></rect>
-          <line stroke="black" strokeLinecap="round" strokeWidth="0.2" x1="0" x2="0" y1="0" y2={lineLengthY} transform={`translate(${index * gridWidth + 2.2}, 0)`} />
-          <line stroke="#555" strokeWidth={1} x1="0" x2={gridWidth} y1="46" y2="46" transform={`translate(${index * gridWidth + 1}, 0)`} shapeRendering="optimizeSpeed" />
-          <line stroke="white" strokeLinecap="round" strokeWidth={whiteLineStrokeWidth} x1="0" x2="0" y1="0" y2={lineLengthY} transform={`translate(${index * gridWidth + 1}, 0)`} />
+        <g onMouseMove={this.showHover}>
+          <rect className="grid" width={gridWidth} height={100}
+            transform={`translate(${index * gridWidth}, 0)`}
+            fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'}
+            shapeRendering="optimizeSpeed">
+          </rect>
+          <line stroke="black" strokeLinecap="round"
+            strokeWidth="0.2" x1="0" x2="0" y1="0" y2={lineLengthY}
+            transform={`translate(${index * gridWidth + 2.2}, 0)`}
+          />
+          <line stroke="#555" strokeWidth={1} x1="0" x2={gridWidth}
+            y1="46" y2="46"
+            transform={`translate(${index * gridWidth + 1}, 0)`}
+            shapeRendering="optimizeSpeed"
+          />
+          <line stroke="white" strokeLinecap="round"
+            strokeWidth={whiteLineStrokeWidth} x1="0" x2="0" y1="0" y2={lineLengthY}
+            transform={`translate(${index * gridWidth + 1}, 0)`}
+          />
         </g>
       </React.Fragment>
     );

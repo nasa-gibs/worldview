@@ -17,7 +17,6 @@ html, body {
 }
 
 .inner {
-  /* background: rgba(0, 0, 0, 0.5); */
   height: 64px;
   display: flex;
   flex-direction: row;
@@ -39,6 +38,7 @@ html, body {
   height: 25px;
   line-height: 25px;
   white-space: nowrap;
+  user-select: none;
   /* transition: opacity 0.3s ease-in-out; */
 }
 
@@ -68,11 +68,6 @@ line {
 }
 
 /* DEVELOPMENT */
-
-#wv-animation-widget-custom-interval  select {
-  text-align-last: center;
-  padding-left: 15px;
-}
 
 #timelineContainer > div:nth-child(1) > div.wv-date-selector-widget {
   background: #999;
@@ -128,10 +123,9 @@ line {
   padding: 0;
   text-align: center;
   border: thin solid #fff;
-  /* margin: 5px 0 5px 0; */
 }
 
-.interval-timescale-select {
+.interval-timescale-select-form-container {
   width: 100px;
   height: 40px;
   color: #7890cd;
@@ -145,20 +139,19 @@ line {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  /* padding: 15px; */
   text-align: center;
 }
 
-.interval-timescale-select select {
+.interval-timescale-select {
   padding: 0;
-  /* background: #212121; */
-  background: transparent;
+  background: rgba(40, 40, 40, 1);
   color: #7890cd;
   height: 24px;
   font-size: 16px;
   width: 118px;
   border: thin solid #fff;
-  /* margin-top: 1px; */
+  text-align-last: center;
+  padding-left: 15px;
 }
 
 .custom-interval-text {
@@ -166,9 +159,7 @@ line {
 }
 
 .wv-timeline-hide {
-  /* vertical-align: middle; */
   display: block;
-  /* margin: 26px 0 0 7px; */
   top: 18px;
   right: -5px;
   color: white;
@@ -228,7 +219,6 @@ line {
   width: 225px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  /* background: #212121; */
   background: rgba(40, 40, 40, 0.85);
   position: absolute;
   top: -58px;
@@ -253,8 +243,3 @@ line {
   display: inline-block;
   margin: 7px 0 0 10px;
 }
-
-/* DEMO DOM CLEANUP */
-/* #timeline-footer svg {
-  overflow: visible !important;
-} */

@@ -12,12 +12,16 @@ class AxisTimeScaleChangeControls extends PureComponent {
   onClickUp = () => {
     this.props.decrementTimeScale();
   }
-
   onClickDown = () => {
     this.props.incrementTimeScale();
   }
   render() {
-    let { timeScale, toolTipHovered, changeTimeScale, hasSubdailyLayers } = this.props;
+    let {
+      timeScale,
+      toolTipHovered,
+      changeTimeScale,
+      hasSubdailyLayers
+    } = this.props;
     return (
       <div className="zoom-level-change-arrows">
         <AxisTimeScaleChangeTooltip
@@ -43,7 +47,6 @@ class AxisTimeScaleChangeControls extends PureComponent {
           </svg>
         </div>
       </div>
-
     );
   }
 }

@@ -13,12 +13,12 @@ export const timeScaleFromNumberKey = {
   '5': 'minute'
 };
 export const timeScaleToNumberKey = {
-  custom: '0',
-  year: '1',
-  month: '2',
-  day: '3',
-  hour: '4',
-  minute: '5'
+  custom: 0,
+  year: 1,
+  month: 2,
+  day: 3,
+  hour: 4,
+  minute: 5
 };
 export const timeScaleOptions = {
   'minute': {

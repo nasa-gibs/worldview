@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 
 class DateChangeArrows extends PureComponent {
   render() {
-    let { leftArrowDisabled, leftArrowDown, leftArrowUp, rightArrowDisabled, rightArrowDown, rightArrowUp } = this.props;
+    let {
+      leftArrowDisabled,
+      leftArrowDown,
+      leftArrowUp,
+      rightArrowDisabled,
+      rightArrowDown,
+      rightArrowUp
+    } = this.props;
     return (
       <div>
         {/* LEFT ARROW */}

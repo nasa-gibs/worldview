@@ -39,6 +39,7 @@ class Timeline extends React.Component {
       timelineHidden: false,
       customIntervalModalOpen: false
     };
+    // left/right arrows
     this.animator = 0;
   }
   /**
@@ -46,7 +47,7 @@ class Timeline extends React.Component {
    *
    * @return {void}
    */
-  stopper() {
+  stopper = () => {
     if (this.state.animationInProcess) {
       clearInterval(this.animator);
       this.animator = 0;
@@ -129,11 +130,20 @@ class Timeline extends React.Component {
     });
   }
 
-  // left/right arrows increment date
-  incrementDate = (multiplier) => {
+  // right arrow increment date
+  incrementDate = () => {
     let delta = this.props.customSelected ? this.props.intervalChangeAmt : 1;
     this.animateByIncrement(
-      Number(delta * multiplier),
+      Number(delta),
+      this.props.timeScaleChangeUnit
+    );
+  }
+
+  // left arrow decrement date
+  decrementDate = () => {
+    let delta = this.props.customSelected ? this.props.intervalChangeAmt : 1;
+    this.animateByIncrement(
+      Number(delta * -1),
       this.props.timeScaleChangeUnit
     );
   }
@@ -217,11 +227,11 @@ class Timeline extends React.Component {
               />
 
               <DateChangeArrows
-                leftArrowDown={() => this.incrementDate(-1)}
-                leftArrowUp={this.stopper.bind(this)}
+                leftArrowDown={this.decrementDate}
+                leftArrowUp={this.stopper}
                 leftArrowDisabled={leftArrowDisabled}
-                rightArrowDown={() => this.incrementDate(1)}
-                rightArrowUp={this.stopper.bind(this)}
+                rightArrowDown={this.incrementDate}
+                rightArrowUp={this.stopper}
                 rightArrowDisabled={rightArrowDisabled}
               />
             </div>
@@ -249,10 +259,10 @@ class Timeline extends React.Component {
               changeTimeScale={this.changeTimeScale}
               compareModeActive={compareModeActive}
               draggerSelected={draggerSelected}
-              onChangeSelectedDragger={this.onChangeSelectedDragger.bind(this)}
+              onChangeSelectedDragger={this.onChangeSelectedDragger}
               timelineStartDateLimit={timelineStartDateLimit}
               timelineEndDateLimit={timelineEndDateLimit}
-              updateAnimationRange={this.updateAnimationRange.bind(this)}
+              updateAnimationRange={this.updateAnimationRange}
               animStartLocationDate={animStartLocationDate}
               animEndLocationDate={animEndLocationDate}
               isAnimationWidgetOpen={isAnimationWidgetOpen}
@@ -306,6 +316,23 @@ function mapStateToProps(state) {
   const { isCompareA, activeString } = compare;
   const compareModeActive = compare.active;
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+  customSelected = Boolean(customSelected);
+
+  // handle changing timescale and intervals if in subdaily state
+  // when removing all subdaily layers
+  // TODO: how to dynamically update store based on remove layer?
+  // if (!hasSubdailyLayers) {
+  //   if (selectedZoom > 3) {
+  //     selectedZoom = 3;
+  //   }
+  //   if (interval > 3) {
+  //     interval = 3;
+  //   }
+  //   if (customInterval > 3) {
+  //     customInterval = 3;
+  //   }
+  // }
+
   let endTime;
   if (compareModeActive) {
     hasSubdailyLayers =
@@ -392,10 +419,6 @@ const mapDispatchToProps = dispatch => ({
   toggleActiveCompareState: () => {
     dispatch(toggleActiveCompareState());
   }
-  // set currently selected delta - will always be 1 if !customSelected
-  // selectDelta: val => {
-  //   dispatch(selectDelta(val));
-  // }
 });
 
 export default connect(

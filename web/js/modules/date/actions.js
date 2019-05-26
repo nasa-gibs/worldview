@@ -36,7 +36,7 @@ export function selectInterval(delta, interval, customSelected) {
     type: CHANGE_INTERVAL,
     value: interval,
     delta: delta,
-    customSelected
+    customSelected: Boolean(customSelected)
   };
 }
 // export function selectDelta(delta) {

@@ -35,7 +35,13 @@ const tileTextConditionOptions = {
 
 class GridRange extends PureComponent {
   render() {
-    let { gridWidth, transformX, timeScale, timeRange, showHover } = this.props;
+    let {
+      gridWidth,
+      transformX,
+      timeScale,
+      timeRange,
+      showHover
+    } = this.props;
     let tileTextCondition = tileTextConditionOptions[timeScale];
     return (
       <g className="gridShell" transform={`translate(${transformX}, 0)`}>

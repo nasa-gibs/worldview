@@ -63,7 +63,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
         ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >
         <div>Custom Interval Selector</div>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '25px' }}>
+        <div style={{ height: '25px' }}>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <IntervalInput
               intervalValue={customDelta}
