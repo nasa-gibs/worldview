@@ -507,6 +507,19 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
             } else {
               styleFunction = stylefunction(layer, glStyle, 'default_style');
             }
+
+            // Filter time by 5 mins
+            layer.setStyle(function(feature, resolution) {
+              var minute;
+              var minutes = feature.get('label');
+              if (minutes) {
+                minute = minutes.split(':');
+              }
+              if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
+                console.log(feature);
+                return styleFunction(feature, resolution);
+              }
+            });
           }
         });
       });
