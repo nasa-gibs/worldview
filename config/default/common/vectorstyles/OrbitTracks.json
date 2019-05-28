@@ -346,7 +346,7 @@
       "source-layer": "OrbitTracks_Aqua_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(21, 192, 230)",
         "line-width": 2
       }
     },
@@ -357,7 +357,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(21, 192, 230)"
       }
     },
     {
@@ -385,7 +385,7 @@
       "source-layer": "OrbitTracks_Aqua_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(21, 192, 230)",
         "line-width": 2
       }
     },
@@ -396,7 +396,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(21, 192, 230)"
       }
     },
     {
@@ -424,7 +424,7 @@
       "source-layer": "OrbitTracks_Aura_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(192, 88, 240)",
         "line-width": 2
       }
     },
@@ -435,7 +435,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(192, 88, 240)"
       }
     },
     {
@@ -459,50 +459,11 @@
     },
     {
       "id": "default_style",
-      "source": "OrbitTracks_CloudSat_Ascending",
-      "source-layer": "OrbitTracks_CloudSat_Ascending",
-      "type": "line",
-      "paint": {
-        "line-color": "#ff0000",
-        "line-width": 2
-      }
-    },
-    {
-      "id": "default_style",
-      "source": "OrbitTracks_CloudSat_Ascending",
-      "source-layer": "OrbitTracks_CloudSat_Ascending",
-      "type": "circle",
-      "paint": {
-        "circle-radius": "5",
-        "circle-color": "#ff0000"
-      }
-    },
-    {
-      "id": "default_style",
-      "source": "OrbitTracks_CloudSat_Ascending",
-      "source-layer": "OrbitTracks_CloudSat_Ascending",
-      "type": "symbol",
-      "layout": {
-        "text-field": ["get", "label"],
-        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-        "text-size": 10,
-        "text-transform": "uppercase",
-        "text-letter-spacing": 0.05,
-        "text-offset": [-2.5, 0]
-      },
-      "paint": {
-        "text-color": "#fff",
-        "text-halo-color": "#999",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "default_style",
       "source": "OrbitTracks_Aura_Descending",
       "source-layer": "OrbitTracks_Aura_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(192, 88, 240)",
         "line-width": 2
       }
     },
@@ -513,7 +474,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(192, 88, 240)"
       }
     },
     {
@@ -541,7 +502,7 @@
       "source-layer": "OrbitTracks_Calipso_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(216, 186, 25)",
         "line-width": 2
       }
     },
@@ -552,7 +513,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(216, 186, 25)"
       }
     },
     {
@@ -580,7 +541,7 @@
       "source-layer": "OrbitTracks_Calipso_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(216, 186, 25)",
         "line-width": 2
       }
     },
@@ -591,7 +552,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(216, 186, 25)"
       }
     },
     {
@@ -619,7 +580,7 @@
       "source-layer": "OrbitTracks_CloudSat_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 0, 0)",
         "line-width": 2
       }
     },
@@ -630,7 +591,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 0, 0)"
       }
     },
     {
@@ -697,7 +658,7 @@
       "source-layer": "OrbitTracks_CYGNSS_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(248, 232, 35)",
         "line-width": 2
       }
     },
@@ -708,7 +669,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(248, 232, 35)"
       }
     },
     {
@@ -736,7 +697,7 @@
       "source-layer": "OrbitTracks_CYGNSS_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(248, 232, 35)",
         "line-width": 2
       }
     },
@@ -747,7 +708,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(248, 232, 35)"
       }
     },
     {
@@ -775,7 +736,7 @@
       "source-layer": "OrbitTracks_GCOM-C_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(25, 114, 243)",
         "line-width": 2
       }
     },
@@ -786,7 +747,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(25, 114, 243)"
       }
     },
     {
@@ -814,7 +775,7 @@
       "source-layer": "OrbitTracks_GCOM-C_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(25, 114, 243)",
         "line-width": 2
       }
     },
@@ -825,7 +786,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(25, 114, 243)"
       }
     },
     {
@@ -853,7 +814,7 @@
       "source-layer": "OrbitTracks_GCOM-W1_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(106, 61, 154)",
         "line-width": 2
       }
     },
@@ -864,7 +825,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(106, 61, 154)"
       }
     },
     {
@@ -892,7 +853,7 @@
       "source-layer": "OrbitTracks_GCOM-W1_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(106, 61, 154)",
         "line-width": 2
       }
     },
@@ -903,7 +864,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(106, 61, 154)"
       }
     },
     {
@@ -931,7 +892,7 @@
       "source-layer": "OrbitTracks_GOSAT-2_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(127, 196, 6)",
         "line-width": 2
       }
     },
@@ -942,7 +903,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(127, 196, 6)"
       }
     },
     {
@@ -970,7 +931,7 @@
       "source-layer": "OrbitTracks_GOSAT-2_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(127, 196, 6)",
         "line-width": 2
       }
     },
@@ -981,7 +942,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(127, 196, 6)"
       }
     },
     {
@@ -1009,7 +970,7 @@
       "source-layer": "OrbitTracks_GOSAT_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 160, 122)",
         "line-width": 2
       }
     },
@@ -1020,7 +981,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 160, 122)"
       }
     },
     {
@@ -1048,7 +1009,7 @@
       "source-layer": "OrbitTracks_GOSAT_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 160, 122)",
         "line-width": 2
       }
     },
@@ -1059,7 +1020,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 160, 122)"
       }
     },
     {
@@ -1087,7 +1048,7 @@
       "source-layer": "OrbitTracks_GPM_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(55, 242, 34)",
         "line-width": 2
       }
     },
@@ -1098,7 +1059,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(55, 242, 34)"
       }
     },
     {
@@ -1126,7 +1087,7 @@
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(55, 242, 34)",
         "line-width": 2
       }
     },
@@ -1137,7 +1098,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(55, 242, 34)"
       }
     },
     {
@@ -1165,7 +1126,7 @@
       "source-layer": "OrbitTracks_ICESAT-2_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(22, 160, 133)",
         "line-width": 2
       }
     },
@@ -1176,7 +1137,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(22, 160, 133)"
       }
     },
     {
@@ -1204,7 +1165,7 @@
       "source-layer": "OrbitTracks_ICESAT-2_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(22, 160, 133)",
         "line-width": 2
       }
     },
@@ -1215,7 +1176,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(22, 160, 133)"
       }
     },
     {
@@ -1243,7 +1204,7 @@
       "source-layer": "OrbitTracks_ISS_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(219, 112, 147)",
         "line-width": 2
       }
     },
@@ -1254,7 +1215,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(219, 112, 147)"
       }
     },
     {
@@ -1282,7 +1243,7 @@
       "source-layer": "OrbitTracks_ISS_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(219, 112, 147)",
         "line-width": 2
       }
     },
@@ -1293,7 +1254,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(219, 112, 147)"
       }
     },
     {
@@ -1321,7 +1282,7 @@
       "source-layer": "OrbitTracks_Landsat-7_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(102, 204, 204)",
         "line-width": 2
       }
     },
@@ -1332,7 +1293,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(102, 204, 204)"
       }
     },
     {
@@ -1360,7 +1321,7 @@
       "source-layer": "OrbitTracks_Landsat-7_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(102, 204, 204)",
         "line-width": 2
       }
     },
@@ -1371,7 +1332,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(102, 204, 204)"
       }
     },
     {
@@ -1399,7 +1360,7 @@
       "source-layer": "OrbitTracks_Landsat-8_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 69, 0)",
         "line-width": 2
       }
     },
@@ -1410,7 +1371,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 69, 0)"
       }
     },
     {
@@ -1438,7 +1399,7 @@
       "source-layer": "OrbitTracks_Landsat-8_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 69, 0)",
         "line-width": 2
       }
     },
@@ -1449,7 +1410,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 69, 0)"
       }
     },
     {
@@ -1477,7 +1438,7 @@
       "source-layer": "OrbitTracks_METOP-A_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(178, 144, 193)",
         "line-width": 2
       }
     },
@@ -1488,7 +1449,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(178, 144, 193)"
       }
     },
     {
@@ -1516,7 +1477,7 @@
       "source-layer": "OrbitTracks_METOP-A_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(178, 144, 193)",
         "line-width": 2
       }
     },
@@ -1527,7 +1488,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(178, 144, 193)"
       }
     },
     {
@@ -1555,7 +1516,7 @@
       "source-layer": "OrbitTracks_METOP-B_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 196, 198)",
         "line-width": 2
       }
     },
@@ -1566,7 +1527,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 196, 198)"
       }
     },
     {
@@ -1594,7 +1555,7 @@
       "source-layer": "OrbitTracks_METOP-B_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 196, 198)",
         "line-width": 2
       }
     },
@@ -1605,7 +1566,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 196, 198)"
       }
     },
     {
@@ -1633,7 +1594,7 @@
       "source-layer": "OrbitTracks_METOP-C_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(196, 6, 41)",
         "line-width": 2
       }
     },
@@ -1644,7 +1605,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(196, 6, 41)"
       }
     },
     {
@@ -1672,7 +1633,7 @@
       "source-layer": "OrbitTracks_METOP-C_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(196, 6, 41)",
         "line-width": 2
       }
     },
@@ -1683,7 +1644,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(196, 6, 41)"
       }
     },
     {
@@ -1711,7 +1672,7 @@
       "source-layer": "OrbitTracks_NOAA-20_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 204, 255)",
         "line-width": 2
       }
     },
@@ -1722,7 +1683,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 204, 255)"
       }
     },
     {
@@ -1750,7 +1711,7 @@
       "source-layer": "OrbitTracks_NOAA-20_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 204, 255)",
         "line-width": 2
       }
     },
@@ -1761,7 +1722,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 204, 255)"
       }
     },
     {
@@ -1789,7 +1750,7 @@
       "source-layer": "OrbitTracks_OCO-2_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(126, 151, 189)",
         "line-width": 2
       }
     },
@@ -1800,7 +1761,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(126, 151, 189)"
       }
     },
     {
@@ -1828,7 +1789,7 @@
       "source-layer": "OrbitTracks_OCO-2_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(126, 151, 189)",
         "line-width": 2
       }
     },
@@ -1839,7 +1800,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(126, 151, 189)"
       }
     },
     {
@@ -1867,7 +1828,7 @@
       "source-layer": "OrbitTracks_SAOCOM1-A_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(210, 136, 127)",
         "line-width": 2
       }
     },
@@ -1878,7 +1839,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(210, 136, 127)"
       }
     },
     {
@@ -1906,7 +1867,7 @@
       "source-layer": "OrbitTracks_SAOCOM1-A_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(210, 136, 127)",
         "line-width": 2
       }
     },
@@ -1917,7 +1878,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(210, 136, 127)"
       }
     },
     {
@@ -1945,7 +1906,7 @@
       "source-layer": "OrbitTracks_Sentinel-1A_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(237, 209, 130)",
         "line-width": 2
       }
     },
@@ -1956,7 +1917,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(237, 209, 130)"
       }
     },
     {
@@ -1984,7 +1945,7 @@
       "source-layer": "OrbitTracks_Sentinel-1A_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(237, 209, 130)",
         "line-width": 2
       }
     },
@@ -1995,7 +1956,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(237, 209, 130)"
       }
     },
     {
@@ -2023,7 +1984,7 @@
       "source-layer": "OrbitTracks_Sentinel-1B_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(136, 177, 191)",
         "line-width": 2
       }
     },
@@ -2034,7 +1995,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(136, 177, 191)"
       }
     },
     {
@@ -2062,7 +2023,7 @@
       "source-layer": "OrbitTracks_Sentinel-1B_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(136, 177, 191)",
         "line-width": 2
       }
     },
@@ -2073,7 +2034,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(136, 177, 191)"
       }
     },
     {
@@ -2101,7 +2062,7 @@
       "source-layer": "OrbitTracks_Sentinel-2A_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 51, 204)",
         "line-width": 2
       }
     },
@@ -2112,7 +2073,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 51, 204)"
       }
     },
     {
@@ -2140,7 +2101,7 @@
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(255, 51, 204)",
         "line-width": 2
       }
     },
@@ -2151,7 +2112,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(255, 51, 204)"
       }
     },
     {
@@ -2179,7 +2140,7 @@
       "source-layer": "OrbitTracks_Sentinel-2B_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(204, 255, 51)",
         "line-width": 2
       }
     },
@@ -2190,7 +2151,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(204, 255, 51)"
       }
     },
     {
@@ -2218,7 +2179,7 @@
       "source-layer": "OrbitTracks_Sentinel-2B_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(204, 255, 51)",
         "line-width": 2
       }
     },
@@ -2229,7 +2190,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(204, 255, 51)"
       }
     },
     {
@@ -2257,7 +2218,7 @@
       "source-layer": "OrbitTracks_Sentinel-5P_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(153, 153, 0)",
         "line-width": 2
       }
     },
@@ -2268,7 +2229,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(153, 153, 0)"
       }
     },
     {
@@ -2296,7 +2257,7 @@
       "source-layer": "OrbitTracks_Sentinel-5P_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(153, 153, 0)",
         "line-width": 2
       }
     },
@@ -2307,7 +2268,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(153, 153, 0)"
       }
     },
     {
@@ -2335,7 +2296,7 @@
       "source-layer": "OrbitTracks_SMAP_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(64, 244, 208)",
         "line-width": 2
       }
     },
@@ -2346,7 +2307,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(64, 244, 208)"
       }
     },
     {
@@ -2374,7 +2335,7 @@
       "source-layer": "OrbitTracks_SMAP_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(64, 244, 208)",
         "line-width": 2
       }
     },
@@ -2385,7 +2346,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(64, 244, 208)"
       }
     },
     {
@@ -2413,7 +2374,7 @@
       "source-layer": "OrbitTracks_Suomi_NPP_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(177, 89, 40)",
         "line-width": 2
       }
     },
@@ -2424,7 +2385,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(177, 89, 40)"
       }
     },
     {
@@ -2452,7 +2413,7 @@
       "source-layer": "OrbitTracks_Suomi_NPP_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(177, 89, 40)",
         "line-width": 2
       }
     },
@@ -2463,7 +2424,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(177, 89, 40)"
       }
     },
     {
@@ -2491,7 +2452,7 @@
       "source-layer": "OrbitTracks_Terra_Ascending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(242, 135, 34)",
         "line-width": 2
       }
     },
@@ -2502,7 +2463,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(242, 135, 34)"
       }
     },
     {
@@ -2530,7 +2491,7 @@
       "source-layer": "OrbitTracks_Terra_Descending",
       "type": "line",
       "paint": {
-        "line-color": "#ff0000",
+        "line-color": "rgb(242, 135, 34)",
         "line-width": 2
       }
     },
@@ -2541,7 +2502,7 @@
       "type": "circle",
       "paint": {
         "circle-radius": "5",
-        "circle-color": "#ff0000"
+        "circle-color": "rgb(242, 135, 34)"
       }
     },
     {
