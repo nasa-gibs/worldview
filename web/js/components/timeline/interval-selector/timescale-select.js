@@ -33,13 +33,13 @@ class TimeScaleSelect extends PureComponent {
             value={zoomLevel}
             onChange={this.handleChangeZoomLevel}
           >
-            <option value="year">year</option>
-            <option value="month">month</option>
-            <option value="day">day</option>
+            <option className="interval-timescale-select-option" value="year">year</option>
+            <option className="interval-timescale-select-option" value="month">month</option>
+            <option className="interval-timescale-select-option" value="day">day</option>
             {hasSubdailyLayers
               ? <React.Fragment>
-                <option value="hour">hour</option>
-                <option value="minute">minute</option>
+                <option className="interval-timescale-select-option" value="hour">hour</option>
+                <option className="interval-timescale-select-option" value="minute">minute</option>
               </React.Fragment>
               : null
             }

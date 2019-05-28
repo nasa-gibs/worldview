@@ -144,7 +144,7 @@ line {
 
 .interval-timescale-select {
   padding: 0;
-  background: rgba(40, 40, 40, 1);
+  background: transparent;
   color: #7890cd;
   height: 24px;
   font-size: 16px;
@@ -152,6 +152,10 @@ line {
   border: thin solid #fff;
   text-align-last: center;
   padding-left: 15px;
+}
+
+.interval-timescale-select-option {
+  background: rgb(40, 40, 40);
 }
 
 .custom-interval-text {
