@@ -10,7 +10,7 @@
             "layergroup": [
               "ceres"
             ],
-            "product":  "",
+            "product":  "CERES_EBAF-TOA",
             "inactive": true,
             "wrapadjacentdays": true
         }

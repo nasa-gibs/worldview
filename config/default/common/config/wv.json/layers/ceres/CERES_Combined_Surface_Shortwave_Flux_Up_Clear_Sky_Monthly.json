@@ -10,7 +10,7 @@
             "layergroup": [
               "ceres"
             ],
-            "product":  "",
+            "product":  "CER_SYN1deg-Month_Terra-Aqua-MODIS",
             "inactive": true,
             "wrapadjacentdays": true
         }

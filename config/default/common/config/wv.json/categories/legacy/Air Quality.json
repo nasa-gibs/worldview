@@ -13,13 +13,20 @@
                     "Corrected Reflectance",
                     "Dust",
                     "Fires and Thermal Anomalies",
+                    "Human Built-up And Settlement Extent",
                     "Land Surface Reflectance",
+                    "Methane",
                     "Nitric Acid",
                     "Nitrogen Dioxide",
                     "Nitrous Oxide",
                     "Ozone",
                     "Particulate Matter",
-                    "Sulfur Dioxide"
+                    "Population Density",
+                    "Radiance",
+                    "Settlements",
+                    "Sulfur Dioxide",
+                    "Urban Extents",
+                    "Volcano Hazard"
                 ]
             }
         }
