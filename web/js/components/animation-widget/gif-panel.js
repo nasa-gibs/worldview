@@ -36,47 +36,60 @@ export default class GifPanel extends React.Component {
     });
   }
   render() {
-    const { projId, lonlats } = this.props;
-    const { resolution } = this.props;
+    const {
+      projId,
+      lonlats,
+      startDate,
+      endDate,
+      onCheck,
+      checked
+    } = this.props;
+    const { resolution } = this.state;
     const dimensions = getDimensions(projId, lonlats, resolution);
     const height = dimensions.height;
     const width = dimensions.width;
     const requestSize = ((width * height * 24) / 8388608).toFixed(2);
     const valid = isFileSizeValid(requestSize, height, width);
     return (
-      <div className="animation-gif-dialog-wrapper">
-        <div className="gif-selector-case">
-          {this.props.firstLabel}
-          <SelectionList
-            id="gif-resolution"
-            optionArray={this.state.resolutions}
-            value={this.state.resolution}
-            optionName="resolution"
-            onChange={this.handleChange.bind(this)}
+      <div className="gif-dialog">
+        <div className="animation-gif-dialog-wrapper">
+          <div className="gif-selector-case">
+            {this.props.firstLabel}
+            <SelectionList
+              id="gif-resolution"
+              optionArray={this.state.resolutions}
+              value={this.state.resolution}
+              optionName="resolution"
+              onChange={this.handleChange.bind(this)}
+            />
+          </div>
+          <GifPanelGrid
+            width={width}
+            height={height}
+            requestSize={((width * height * 24) / 8388608).toFixed(2)}
+            maxGifSize={MAX_GIF_SIZE}
+            maxImageDimensionSize={MAX_IMAGE_DIMENSION_SIZE}
+            valid={valid}
+            onClick={this.props.onDownloadClick}
+            startDate={startDate}
+            endDate={endDate}
+            speed={this.state.speed}
+            increment={this.state.increment}
+          />
+          <Button
+            onClick={() => this.props.onClick(width, height)}
+            text="Create GIF"
+            valid={valid}
+          />
+          <Checkbox
+            id="wv-checkbox-gif"
+            classNames="wv-checkbox-gif"
+            title="Check box to remove dates from Animating GIF"
+            checked={checked}
+            onCheck={onCheck}
+            label="Include Date Stamps"
           />
         </div>
-        <GifPanelGrid
-          width={width}
-          height={height}
-          requestSize={((width * height * 24) / 8388608).toFixed(2)}
-          maxGifSize={MAX_GIF_SIZE}
-          maxImageDimensionSize={MAX_IMAGE_DIMENSION_SIZE}
-          valid={valid}
-          onClick={this.props.onDownloadClick}
-          startDate={this.state.startDate}
-          endDate={this.state.endDate}
-          speed={this.state.speed}
-          increment={this.state.increment}
-        />
-        <Button onClick={this.props.onClick} text="Create GIF" valid={valid} />
-        <Checkbox
-          id="wv-checkbox-gif"
-          classNames="wv-checkbox-gif"
-          title="Check box to remove dates from Animating GIF"
-          checked={this.props.checked}
-          onCheck={this.props.onCheck}
-          label="Include Date Stamps"
-        />
       </div>
     );
   }

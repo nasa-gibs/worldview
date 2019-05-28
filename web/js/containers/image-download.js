@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Panel from '../components/image-download/panel';
 import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
-import { debounce } from 'lodash';
 import ErrorBoundary from './error-boundary';
 import * as olProj from 'ol/proj';
 
@@ -15,7 +14,7 @@ import {
   getPixelFromPercentage
 } from '../modules/image-download/util';
 import util from '../util/util';
-
+import { getLayers } from '../modules/layers/selectors';
 import {
   resolutionsGeo,
   resolutionsPolar,
@@ -63,7 +62,8 @@ class ImageDownloadContainer extends Component {
       onClose,
       models,
       screenWidth,
-      screenHeight
+      screenHeight,
+      date
     } = this.props;
     const { boundaries } = this.state;
     const { x, y, x2, y2 } = boundaries;
@@ -91,7 +91,7 @@ class ImageDownloadContainer extends Component {
           resolutions={resolutions}
           lonlats={lonlats}
           resolution={resolution}
-          models={models}
+          date={date}
           url={url}
           crs={crs}
         />
@@ -102,7 +102,7 @@ class ImageDownloadContainer extends Component {
           maxWidth={screenWidth}
           width={getPercentageFromPixel(screenWidth, x2 - x)}
           height={getPercentageFromPixel(screenHeight, y2 - y)}
-          onChange={debounce(this.onBoundaryChange, 10)}
+          onChange={this.onBoundaryChange}
           onClose={onClose}
           bottomLeftStyle={{
             left: x,
@@ -126,9 +126,10 @@ class ImageDownloadContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { config, models, proj, browser } = state;
+  const { config, proj, browser, layers, compare, date } = state;
   const { screenWidth, screenHeight } = browser;
   const { map } = state.legacy;
+  const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -142,9 +143,19 @@ function mapStateToProps(state) {
     proj,
     url,
     map,
-    models,
     screenWidth,
-    screenHeight
+    screenHeight,
+    date: date[activeDateStr],
+    getLayers: () => {
+      return getLayers(
+        layers[compare.activeString],
+        {
+          reverse: true,
+          renderable: true
+        },
+        state
+      );
+    }
   };
 }
 const mapDispatchToProps = dispatch => ({

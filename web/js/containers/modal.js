@@ -9,12 +9,55 @@ import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
 
 class ModalContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      offsetTop: props.customProps.offsetTop,
+      offsetLeft: props.customProps.offsetLeft,
+      width: props.customProps.width
+    };
+    this.setOffsets = this.setOffsets.bind(this);
+  }
+  // static getDerivedStateFromProps(newProps, state) {
+  //   const customProps = newProps.customProps;
+  //   if (
+  //     customProps.width !== state.width ||
+  //     customProps.offsetLeft !== state.offsetLeft ||
+  //     customProps.offsetRight !== state.offsetRight
+  //   ) {
+  //     return {
+  //       width: customProps.width,
+  //       offsetLeft: customProps.offsetLeft,
+  //       offsetRight: customProps.offsetRight
+  //     };
+  //   } else return null;
+  // }
   getStyle(props) {
     return {
       left: props.offsetLeft,
       right: props.offsetRight,
-      width: props.width
+      top: props.offsetTop,
+      maxWidth: props.width
     };
+  }
+  setOffsets(boundaries) {
+    const { screenHeight, screenWidth, customProps } = this.props;
+    const { x, y, x2 } = boundaries;
+    const width = customProps.width;
+    const height = 280;
+    let left = x2 + 20;
+    let top = y - 20;
+    if (left + width > screenWidth && x - 20 - width > 0) {
+      left = x - 20 - width;
+    }
+    if (top + height > screenHeight) {
+      top = screenHeight - 20 - height;
+    }
+    this.setState({
+      offsetLeft: left,
+      offsetTop: top,
+      width
+    });
   }
   getTemplateBody() {
     const { bodyTemplate } = this.props;
@@ -48,9 +91,12 @@ class ModalContainer extends Component {
       onClose,
       CompletelyCustomModal,
       bodyComponentProps,
-      timeout
+      timeout,
+      dynamicOffsets
     } = newProps;
-    const style = this.getStyle(newProps);
+    const style = dynamicOffsets
+      ? this.getStyle(this.state)
+      : this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
     const toggleWithClose = () => {
@@ -93,7 +139,10 @@ class ModalContainer extends Component {
               <ModalBody>
                 {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
                 {BodyComponent ? (
-                  <BodyComponent {...bodyComponentProps} />
+                  <BodyComponent
+                    {...bodyComponentProps}
+                    onChangeLocation={this.setOffsets}
+                  />
                 ) : isTemplateModal ? (
                   this.getTemplateBody()
                 ) : (
@@ -133,6 +182,8 @@ function mapStateToProps(state) {
     isCustom,
     id,
     models,
+    screenWidth: state.browser.screenWidth,
+    screenHeight: state.browser.screenHeight,
     bodyTemplate,
     isTemplateModal,
     customProps
@@ -148,7 +199,9 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ModalContainer);
-
+ModalContainer.defaultProps = {
+  customProps: { width: 500, offsetTop: 0, offsetLeft: 0 }
+};
 ModalContainer.propTypes = {
   isCustom: PropTypes.bool,
   id: PropTypes.string,

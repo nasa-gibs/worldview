@@ -34,3 +34,6 @@
 .modal-dialog.light .modal-header .close:hover {
   color: #000;
 }
+.dynamic-modal.modal-dialog {
+  position: absolute
+}
