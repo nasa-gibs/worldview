@@ -19,6 +19,8 @@ import {
   changeStartDate,
   changeEndDate
 } from '../modules/animation/actions';
+import { openCustomContent } from '../modules/modal/actions';
+import GifContainer from './gif';
 
 import { timeScaleFromNumberKey } from '../modules/date/constants';
 
@@ -56,13 +58,18 @@ class AnimationWidget extends React.Component {
     super(props);
     this.state = {
       speed: props.speed,
-      isSliding: false
+      isSliding: false,
+      isGifActive: false
     };
+    this.onDateChange = this.onDateChange.bind(this);
   }
   static getDerivedStateFromProps(props, state) {
     if (props.speed !== state.speed && !state.isSliding) {
       return { speed: props.speed };
     } else return null;
+  }
+  toggleGIF() {
+    this.setState({ isGifActive: !this.state.isGifActive });
   }
   /*
    * Sets a new state to say whether or not
@@ -167,19 +174,20 @@ class AnimationWidget extends React.Component {
               date={startDate}
               id="start"
               idSuffix="animation-widget-start"
-              onDateChange={this.onDateChange.bind(this)}
+              onDateChange={this.onDateChange}
               maxDate={endDate}
               minDate={minDate}
               hasSubdailyLayers={hasSubdailyLayers}
             />
             <div className="thru-label">To</div>
+
             <TimeSelector
               width="120"
               height="30"
               date={endDate}
               id="end"
               idSuffix="animation-widget-end"
-              onDateChange={this.onDateChange.bind(this)}
+              onDateChange={this.onDateChange}
               maxDate={maxDate}
               minDate={startDate}
               hasSubdailyLayers={hasSubdailyLayers}
@@ -226,8 +234,18 @@ const mapDispatchToProps = dispatch => ({
   onPushLoop: () => {
     dispatch(toggleLooping());
   },
-  onPushGIF: () => {
-    // dispatch(onPushGIF());
+  onPushGIF: onToggle => {
+    const customProps = {
+      headerText: null,
+      type: 'toolbar',
+      modalClassName: 'toolbar-list-modal toolbar-modal',
+      backdrop: true,
+      bodyComponent: GifContainer,
+      wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
+      offsetRight: '40px',
+      toggle: onToggle
+    };
+    dispatch(openCustomContent('GIF_MODAL', customProps));
   },
   onSlide: num => {
     dispatch(changeFrameRate(num));

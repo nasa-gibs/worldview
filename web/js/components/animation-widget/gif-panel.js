@@ -4,6 +4,9 @@ import { GifPanelGrid } from './gif-panel-grid';
 import Button from '../util/button';
 import { Checkbox } from '../util/checkbox';
 import PropTypes from 'prop-types';
+import { getDimensions } from '../../modules/image-download/util';
+const MAX_GIF_SIZE = 250;
+const MAX_IMAGE_DIMENSION_SIZE = 8200;
 
 /*
  * A react component, Builds a rather specific
@@ -20,20 +23,26 @@ export default class GifPanel extends React.Component {
       imgWidth: props.imgWidth,
       speed: props.speed,
       resolutions: props.resolutions,
-      onSelectionChange: props.onSelectionChange,
       resolution: props.resolution,
       valid: props.valid,
       showDates: props.showDates,
       increment: props.increment
     };
+    this.handleChange = this.handleChange.bind(this);
   }
   handleChange(type, value) {
     this.setState({
       resolution: value
     });
-    this.props.onSelectionChange(value);
   }
   render() {
+    const { projId, lonlats } = this.props;
+    const { resolution } = this.props;
+    const dimensions = getDimensions(projId, lonlats, resolution);
+    const height = dimensions.height;
+    const width = dimensions.width;
+    const requestSize = ((width * height * 24) / 8388608).toFixed(2);
+    const valid = isFileSizeValid(requestSize, height, width);
     return (
       <div className="animation-gif-dialog-wrapper">
         <div className="gif-selector-case">
@@ -47,23 +56,19 @@ export default class GifPanel extends React.Component {
           />
         </div>
         <GifPanelGrid
-          width={this.state.imgWidth}
-          height={this.state.imgHeight}
-          requestSize={this.state.requestSize}
-          maxGifSize={this.props.maxGifSize}
-          maxImageDimensionSize={this.props.maxImageDimensionSize}
-          valid={this.state.valid}
+          width={width}
+          height={height}
+          requestSize={((width * height * 24) / 8388608).toFixed(2)}
+          maxGifSize={MAX_GIF_SIZE}
+          maxImageDimensionSize={MAX_IMAGE_DIMENSION_SIZE}
+          valid={valid}
           onClick={this.props.onDownloadClick}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
           speed={this.state.speed}
           increment={this.state.increment}
         />
-        <Button
-          onClick={this.props.onClick}
-          text="Create GIF"
-          valid={this.state.valid}
-        />
+        <Button onClick={this.props.onClick} text="Create GIF" valid={valid} />
         <Checkbox
           id="wv-checkbox-gif"
           classNames="wv-checkbox-gif"
@@ -102,4 +107,13 @@ GifPanel.propTypes = {
   speed: PropTypes.number,
   valid: PropTypes.bool,
   increment: PropTypes.string
+};
+const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
+  return (
+    requestSize < MAX_GIF_SIZE &&
+    imgHeight !== 0 &&
+    imgWidth !== 0 &&
+    imgHeight <= MAX_IMAGE_DIMENSION_SIZE &&
+    imgWidth <= MAX_IMAGE_DIMENSION_SIZE
+  );
 };

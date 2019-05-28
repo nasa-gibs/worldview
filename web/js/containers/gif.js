@@ -1,36 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Panel from '../components/image-download/panel';
-import Crop from '../components/util/image-crop';
-import { onToggle } from '../modules/modal/actions';
-import { debounce } from 'lodash';
-import ErrorBoundary from './error-boundary';
+import GifPanel from '../components/animation-widget/gif-panel';
+import util from '../util/util';
 import * as olProj from 'ol/proj';
-
+import { debounce as lodashDebounce } from 'lodash';
+import Crop from '../components/util/image-crop';
+import {
+  resolutionsGeo,
+  resolutionsPolar
+} from '../modules/image-download/constants';
 import {
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
   getPercentageFromPixel,
   getPixelFromPercentage
 } from '../modules/image-download/util';
-import util from '../util/util';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
-import {
-  resolutionsGeo,
-  resolutionsPolar,
-  fileTypesGeo,
-  fileTypesPolar
-} from '../modules/image-download/constants';
-
-const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
-
-class ImageDownloadContainer extends Component {
+class GIF extends Component {
   constructor(props) {
     super(props);
     const screenHeight = props.screenHeight;
     const screenWidth = props.screenWidth;
     this.state = {
+      isDownloaded: false,
+      isDownloadError: false,
+      showDates: true,
+      isValidSelection: true,
       boundaries: {
         x: screenWidth / 2 - 100,
         y: screenHeight / 2 - 100,
@@ -38,7 +35,6 @@ class ImageDownloadContainer extends Component {
         y2: screenHeight / 2 + 100
       }
     };
-    this.onBoundaryChange = this.onBoundaryChange.bind(this);
   }
   onBoundaryChange(boundaries) {
     const { screenWidth, screenHeight } = this.props;
@@ -57,44 +53,53 @@ class ImageDownloadContainer extends Component {
   }
   render() {
     const {
-      proj,
+      isActive,
+      increment,
+      animationSpeed,
       map,
-      url,
-      onClose,
-      models,
       screenWidth,
-      screenHeight
+      screenHeight,
+      proj,
+      onClose
     } = this.props;
-    const { boundaries } = this.state;
+    const {
+      isDownloaded,
+      isDownloadError,
+      boundaries,
+      showDates,
+      isValidSelection
+    } = this.state;
+    console.log('yolo');
     const { x, y, x2, y2 } = boundaries;
     const isGeoProjection = proj.id === 'geographic';
-    const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
       map.selectedMap
     );
-    const crs = proj.selected.crs;
+    const crs = proj.crs;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
-
     const resolution = imageUtilCalculateResolution(
       Math.round(map.getZoom()),
       isGeoProjection,
-      proj.selected.resolutions
+      proj.resolutions
     );
+
+    if (!isActive) return '';
+    // TODO if(isDownloaded) return <Down />
     return (
-      <ErrorBoundary>
-        <Panel
-          projection={proj}
-          fileTypes={fileTypes}
+      <Fragment>
+        <GifPanel
+          speed={animationSpeed}
           resolutions={resolutions}
-          lonlats={lonlats}
           resolution={resolution}
-          models={models}
-          url={url}
-          crs={crs}
+          showDates={showDates}
+          increment={increment}
+          projId={proj.id}
+          lonlats={lonlats}
         />
+
         <Crop
           x={getPercentageFromPixel(screenWidth, x)}
           y={getPercentageFromPixel(screenHeight, y)}
@@ -102,68 +107,39 @@ class ImageDownloadContainer extends Component {
           maxWidth={screenWidth}
           width={getPercentageFromPixel(screenWidth, x2 - x)}
           height={getPercentageFromPixel(screenHeight, y2 - y)}
-          onChange={debounce(this.onBoundaryChange, 10)}
+          onChange={lodashDebounce(this.onBoundaryChange.bind(this), 10)}
           onClose={onClose}
-          bottomLeftStyle={{
-            left: x,
-            top: y2 + 5,
-            width: x2 - x
-          }}
-          topRightStyle={{
-            left: x,
-            top: y - 20,
-            width: x2 - x
-          }}
           coordinates={{
             bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
             topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
           }}
-          showCoordinates={true}
+          showCoordinates={false}
         />
-      </ErrorBoundary>
+      </Fragment>
     );
   }
 }
 
-function mapStateToProps(state) {
-  const { config, models, proj, browser } = state;
+function mapStateToProps(state, ownProps) {
+  const { isActive, onClose, increment } = ownProps;
+  const { browser, proj, legacy, animation } = state;
   const { screenWidth, screenHeight } = browser;
-  const { map } = state.legacy;
-  let url = DEFAULT_URL;
-  if (config.features.imageDownload && config.features.imageDownload.url) {
-    url = config.features.imageDownload.url;
-  }
-  if ('imageDownload' in config.parameters) {
-    url = config.parameters.imageDownload;
-    util.warn('Redirecting image download to: ' + url);
-  }
-
   return {
-    proj,
-    url,
-    map,
-    models,
+    onClose,
     screenWidth,
-    screenHeight
+    screenHeight,
+    proj: proj.selected,
+    isActive: true,
+    increment,
+    map: legacy.map, // TODO replace with just map
+    onClose: () => {}
   };
 }
-const mapDispatchToProps = dispatch => ({
-  onClose: () => {
-    dispatch(onToggle());
-  }
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ImageDownloadContainer);
+)(GIF);
 
-ImageDownloadContainer.propTypes = {
-  proj: PropTypes.object.isRequired,
-  map: PropTypes.object.isRequired,
-  models: PropTypes.object.isRequired,
-  url: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-  screenWidth: PropTypes.number,
-  screenHeight: PropTypes.number
-};
+GIF.propTypes = {};

@@ -23,7 +23,6 @@ import { updateLegacyInitComplete } from './modules/migration/actions';
 import { calculateResponsiveState } from 'redux-responsive';
 import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
-// import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 
@@ -103,7 +102,7 @@ class App extends React.Component {
         <Timeline />
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         {/* <div id="wv-animation-widet-case"> */}
-          {/* {config.features.animation ? <AnimationWidget /> : ''} */}
+        {/* {config.features.animation ? <AnimationWidget /> : ''} */}
         {/* </div> */}
         <Modal />
         <ErrorBoundary>
