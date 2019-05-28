@@ -382,6 +382,9 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       var vectorStyles = config.vectorStyles.rendered;
       var vectorStyle = def.vectorStyle.id;
       var glStyle = vectorStyles[vectorStyle];
+      if (glStyle === undefined) {
+        glStyle = vectorStyles['OrbitTracks'];
+      }
       styleFunction = stylefunction(layer, glStyle, 'default_style');
 
       $(document).ready(function() {
@@ -516,7 +519,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
                 minute = minutes.split(':');
               }
               if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
-                console.log(feature);
                 return styleFunction(feature, resolution);
               }
             });
