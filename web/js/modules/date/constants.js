@@ -58,7 +58,7 @@ export const timeScaleOptions = {
     timeAxis: {
       scale: 'year',
       format: 'YYYY',
-      gridWidth: 12,
+      gridWidth: 18,
       scaleMs: null
       // scaleMs: 31536000000 - REFERENCE ONLY - 365 days
     }

@@ -2,6 +2,7 @@
 import moment from 'moment';
 import { timeScaleOptions } from '../../../modules/date/constants';
 
+// get range of times based on start/end dates and timescale
 export function getTimeRange(startDate, endDate, timeScale, timelineStartDateLimit, timelineEndDateLimit) {
   let dates = [];
   let { format } = timeScaleOptions[timeScale].timeAxis;
