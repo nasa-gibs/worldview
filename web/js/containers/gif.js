@@ -2,10 +2,11 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GifPanel from '../components/animation-widget/gif-panel';
-import GifStream from '@entryline/gifstream';
+import GifStream from '@entryline/gifstream'; // '../map/animation/gif-stream';
 import util from '../util/util';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
+
 import Crop from '../components/util/image-crop';
 import {
   resolutionsGeo,
@@ -17,7 +18,7 @@ import {
   getPercentageFromPixel,
   getPixelFromPercentage
 } from '../modules/image-download/util';
-import { Progress } from 'reactstrap';
+import { Progress, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { timeScaleFromNumberKey } from '../modules/date/constants';
 import { GifResults } from '../components/animation-widget/gif-post-creation';
 import { getImageArray } from '../modules/animation/selectors';
@@ -44,9 +45,16 @@ class GIF extends Component {
       downloadedObject: {},
       boundaries
     };
-    props.onChangeLocation(boundaries);
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
+  }
+  getStyle(props) {
+    return {
+      left: props.offsetLeft,
+      right: props.offsetRight,
+      top: props.offsetTop,
+      maxWidth: 342
+    };
   }
   renderSelectableBox() {
     const {
@@ -78,36 +86,47 @@ class GIF extends Component {
       proj.resolutions
     );
     return (
-      <Fragment>
-        <GifPanel
-          speed={speed}
-          resolutions={resolutions}
-          resolution={resolution}
-          showDates={showDates}
-          increment={increment}
-          projId={proj.id}
-          lonlats={lonlats}
-          startDate={startDate}
-          endDate={endDate}
-          onClick={this.createGIF.bind(this)}
-        />
+      <Modal
+        backdrop={false}
+        isOpen={true}
+        wrapClassName={'clickable-behind-modal toolbar_modal_outer'}
+        className={'gif-modal dynamic-modal'}
+        style={this.getStyle(this.state)}
+      >
+        {/* <DetectOuterClick onClick={onClose} disabled={true}> */}
+        <ModalHeader>Create An Animated GIF</ModalHeader>
+        <ModalBody>
+          <GifPanel
+            speed={speed}
+            resolutions={resolutions}
+            resolution={resolution}
+            showDates={showDates}
+            increment={increment}
+            projId={proj.id}
+            lonlats={lonlats}
+            startDate={startDate}
+            endDate={endDate}
+            onClick={this.createGIF.bind(this)}
+          />
 
-        <Crop
-          x={getPercentageFromPixel(screenWidth, x)}
-          y={getPercentageFromPixel(screenHeight, y)}
-          maxHeight={screenHeight}
-          maxWidth={screenWidth}
-          width={getPercentageFromPixel(screenWidth, x2 - x)}
-          height={getPercentageFromPixel(screenHeight, y2 - y)}
-          onChange={lodashDebounce(this.onBoundaryChange, 5)}
-          onClose={onClose}
-          coordinates={{
-            bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-            topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
-          }}
-          showCoordinates={false}
-        />
-      </Fragment>
+          <Crop
+            x={getPercentageFromPixel(screenWidth, x)}
+            y={getPercentageFromPixel(screenHeight, y)}
+            maxHeight={screenHeight}
+            maxWidth={screenWidth}
+            width={getPercentageFromPixel(screenWidth, x2 - x)}
+            height={getPercentageFromPixel(screenHeight, y2 - y)}
+            onChange={lodashDebounce(this.onBoundaryChange, 5)}
+            onClose={onClose}
+            coordinates={{
+              bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
+              topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
+            }}
+            showCoordinates={false}
+          />
+        </ModalBody>
+        {/* </DetectOuterClick> */}
+      </Modal>
     );
   }
   createGIF(width, height) {
@@ -129,6 +148,7 @@ class GIF extends Component {
         // won't be true if there are too mant frames
         return;
       }
+      console.log(imageArra);
       gifStream.createGIF(
         {
           gifWidth: width,
@@ -206,13 +226,24 @@ class GIF extends Component {
     });
   }
   onBoundaryChange(boundaries) {
-    const { screenWidth, screenHeight, onChangeLocation } = this.props;
+    const { screenWidth, screenHeight } = this.props;
     const x = getPixelFromPercentage(screenWidth, boundaries.x);
     const y = getPixelFromPercentage(screenHeight, boundaries.y);
     const x2 = x + getPixelFromPercentage(screenWidth, boundaries.width);
     const y2 = y + getPixelFromPercentage(screenHeight, boundaries.height);
-    onChangeLocation({ x, y, x2, y2 });
+    const width = 342;
+    const height = 280;
+    let left = x2 + 20;
+    let top = y - 20;
+    if (left + width > screenWidth && x - 20 - width > 0) {
+      left = x - 20 - width;
+    }
+    if (top + height > screenHeight) {
+      top = screenHeight - 20 - height;
+    }
     this.setState({
+      offsetLeft: left,
+      offsetTop: top,
       boundaries: {
         x: x,
         y: y,
@@ -222,16 +253,32 @@ class GIF extends Component {
     });
   }
   render() {
-    const { isActive, increment, speed, endDate, startDate } = this.props;
+    const {
+      increment,
+      speed,
+      endDate,
+      startDate,
+      screenHeight,
+      screenWidth
+    } = this.props;
     const {
       isDownloaded,
       isDownloading,
       progress,
-      downloadedObject
+      downloadedObject,
+      boundaries
     } = this.state;
 
-    if (!isActive) return '';
-    if (isDownloading) return <Progress value={progress} />;
+    if (isDownloading) {
+      return (
+        <Modal isOpen={true}>
+          <ModalHeader>Creating GIF</ModalHeader>
+          <ModalBody>
+            <Progress value={progress} />
+          </ModalBody>
+        </Modal>
+      );
+    }
     if (isDownloaded) {
       return (
         <GifResults
@@ -240,6 +287,9 @@ class GIF extends Component {
           startDate={startDate}
           endDate={endDate}
           increment={increment}
+          boundaries={boundaries}
+          screenWidth={screenWidth}
+          screenHeight={screenHeight}
         />
       );
     }

@@ -60,10 +60,10 @@ class ImageDownloadContainer extends Component {
       map,
       url,
       onClose,
-      models,
       screenWidth,
       screenHeight,
-      date
+      date,
+      getLayers
     } = this.props;
     const { boundaries } = this.state;
     const { x, y, x2, y2 } = boundaries;
@@ -94,6 +94,7 @@ class ImageDownloadContainer extends Component {
           date={date}
           url={url}
           crs={crs}
+          getLayers={getLayers}
         />
         <Crop
           x={getPercentageFromPixel(screenWidth, x)}

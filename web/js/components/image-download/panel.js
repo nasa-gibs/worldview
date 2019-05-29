@@ -36,12 +36,12 @@ export default class ImageResSelection extends React.Component {
     };
   }
   onDownload(imgWidth, imgHeight) {
-    const { getLayers, url, lonlats, crs, proj, date } = this.props;
+    const { getLayers, url, lonlats, crs, projection, date } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
     let time = new Date(date.getTime());
     time.setUTCHours(0, 0, 0, 0);
     let layerList = getLayers();
-    let layers = imageUtilGetLayers(layerList, proj.id);
+    let layers = imageUtilGetLayers(layerList, projection.id);
     let opacities = imageUtilGetLayerOpacities(layerList);
 
     let params = [

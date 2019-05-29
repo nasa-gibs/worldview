@@ -16,7 +16,6 @@ class ModalContainer extends Component {
       offsetLeft: props.customProps.offsetLeft,
       width: props.customProps.width
     };
-    this.setOffsets = this.setOffsets.bind(this);
   }
   // static getDerivedStateFromProps(newProps, state) {
   //   const customProps = newProps.customProps;
@@ -39,25 +38,6 @@ class ModalContainer extends Component {
       top: props.offsetTop,
       maxWidth: props.width
     };
-  }
-  setOffsets(boundaries) {
-    const { screenHeight, screenWidth, customProps } = this.props;
-    const { x, y, x2 } = boundaries;
-    const width = customProps.width;
-    const height = 280;
-    let left = x2 + 20;
-    let top = y - 20;
-    if (left + width > screenWidth && x - 20 - width > 0) {
-      left = x - 20 - width;
-    }
-    if (top + height > screenHeight) {
-      top = screenHeight - 20 - height;
-    }
-    this.setState({
-      offsetLeft: left,
-      offsetTop: top,
-      width
-    });
   }
   getTemplateBody() {
     const { bodyTemplate } = this.props;
@@ -91,12 +71,9 @@ class ModalContainer extends Component {
       onClose,
       CompletelyCustomModal,
       bodyComponentProps,
-      timeout,
-      dynamicOffsets
+      timeout
     } = newProps;
-    const style = dynamicOffsets
-      ? this.getStyle(this.state)
-      : this.getStyle(newProps);
+    const style = this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
     const toggleWithClose = () => {
@@ -123,7 +100,7 @@ class ModalContainer extends Component {
           modalTransition={{ timeout: timeout || 100 }}
         >
           {CompletelyCustomModal ? (
-            <CompletelyCustomModal />
+            <CompletelyCustomModal {...customProps} />
           ) : (
             <DetectOuterClick
               onClick={toggleWithClose}
@@ -139,10 +116,7 @@ class ModalContainer extends Component {
               <ModalBody>
                 {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
                 {BodyComponent ? (
-                  <BodyComponent
-                    {...bodyComponentProps}
-                    onChangeLocation={this.setOffsets}
-                  />
+                  <BodyComponent {...bodyComponentProps} />
                 ) : isTemplateModal ? (
                   this.getTemplateBody()
                 ) : (

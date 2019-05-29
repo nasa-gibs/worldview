@@ -118,7 +118,7 @@ class AnimationWidget extends React.Component {
       onPushPlay,
       onPushPause
     } = this.props;
-    if (this.state.isGifActive) return '';
+    if (this.state.isGifActive) return <GifContainer />;
     return (
       <ErrorBoundary>
         <div
@@ -163,7 +163,6 @@ class AnimationWidget extends React.Component {
             className="wv-icon-case"
             onClick={() => {
               this.toggleGIF();
-              this.props.onPushGIF(this.toggleGIF);
             }}
           >
             <i
@@ -238,20 +237,7 @@ const mapDispatchToProps = dispatch => ({
   onPushLoop: () => {
     dispatch(toggleLooping());
   },
-  onPushGIF: onToggle => {
-    const customProps = {
-      headerText: 'Create An Animated GIF',
-      backdrop: false,
-      wrapClassName: 'clickable-behind-modal toolbar_modal_outer',
-      width: 342,
-      type: 'selection',
-      dynamicOffsets: true,
-      modalClassName: 'gif-modal dynamic-modal',
-      bodyComponent: GifContainer,
-      toggle: onToggle
-    };
-    dispatch(openCustomContent('GIF_MODAL', customProps));
-  },
+
   onSlide: num => {
     dispatch(changeFrameRate(num));
   },
