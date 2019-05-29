@@ -1,4 +1,9 @@
-import { cloneDeep as lodashCloneDeep, get } from 'lodash';
+import {
+  cloneDeep as lodashCloneDeep,
+  get,
+  round as lodashRound
+} from 'lodash';
+import canvg from 'canvg-browser';
 
 export function getAnimationParameterSetup(
   parameters,
@@ -95,4 +100,59 @@ export function getAnimationParameterSetup(
       }
     }
   };
+}
+export function getStampProps(
+  stampWidthRatio,
+  breakPoint,
+  stampWidth,
+  dimensions,
+  width,
+  height
+) {
+  var dateStamp = {};
+  var stampHeight;
+  var stampHeightByImageWidth;
+  // Set Logo-stamp dimensions based upon smallest total image dimension
+  if (dimensions.w < breakPoint) {
+    stampHeight =
+      (width * 0.7) / stampWidthRatio < 60
+        ? (width * 0.7) / stampWidthRatio
+        : 60;
+    dateStamp.fontSize =
+      dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
+    dateStamp.align = 'left';
+    dateStamp.x = width * 0.01;
+    dateStamp.y = height - (dateStamp.fontSize + height * 0.01) - 4;
+  } else {
+    stampWidth = width * 0.4;
+    stampHeightByImageWidth = stampWidth / stampWidthRatio;
+    stampHeight =
+      stampHeightByImageWidth < 20
+        ? 20
+        : stampHeightByImageWidth > 60
+          ? 60
+          : stampHeightByImageWidth;
+    dateStamp.fontSize =
+      dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
+    dateStamp.y = height - (dateStamp.fontSize + height * 0.01) - 4;
+    dateStamp.x = width * 0.01;
+    dateStamp.align = 'left';
+  }
+  return { stampHeight: stampHeight, dateStamp: dateStamp };
+}
+export function svgToPng(svgURL, stampHeight) {
+  var newImage;
+  var canvasEl = document.createElement('canvas');
+  var canvgOptions = {
+    log: false,
+    ignoreMouse: true,
+    scaleHeight: stampHeight
+  };
+  canvg(canvasEl, svgURL, canvgOptions);
+  newImage = new Image();
+  newImage.src = canvasEl.toDataURL('image/png');
+  newImage.width = canvasEl.width;
+  newImage.height = canvasEl.height;
+
+  return newImage;
 }

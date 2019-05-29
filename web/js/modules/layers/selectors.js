@@ -12,6 +12,7 @@ import {
 } from 'lodash';
 
 import util from '../../util/util';
+import { compareAsc } from 'date-fns';
 export function hasMeasurementSource(current, config, projId) {
   var hasSource;
   lodashValues(current.sources).forEach(function(source) {
@@ -199,7 +200,7 @@ function forGroup(group, spec, activeLayers, state) {
     ) {
       return;
     }
-    if (spec.renderable && !isRenderable(def.id, activeLayers)) {
+    if (spec.renderable && !isRenderable(def.id, activeLayers, spec.date, state)) {
       return;
     }
     if (spec.visible && !def.visible) {
@@ -361,6 +362,8 @@ function moveBefore(sourceId, targetId, layers) {
   return layers;
 }
 export function isRenderable(id, activeLayers, date, state) {
+  const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+  date = date || state.date[activeDateStr];
   var def = lodashFind(activeLayers, {
     id: id
   });

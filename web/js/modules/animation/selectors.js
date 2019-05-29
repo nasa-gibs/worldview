@@ -21,21 +21,15 @@ import { timeScaleFromNumberKey } from '../date/constants';
  *
  */
 export function getImageArray(
-  gifComponentProps,
   gifComponentState,
+  gifComponentProps,
   dimensions,
   state
 ) {
-  const { proj, map, animation, layers, compare } = state;
+  const { proj, legacy, date, layers, compare } = state;
   const { startDate, endDate, url } = gifComponentProps;
   const { boundaries, showDates } = gifComponentState;
-  const {
-    customInterval,
-    interval,
-    customDelta,
-    delta,
-    customSelected
-  } = animation;
+  const { customInterval, interval, customDelta, delta, customSelected } = date;
   const activeString = compare.activeString;
   var a = [];
   var fromDate = new Date(startDate);
@@ -44,7 +38,10 @@ export function getImageArray(
   var j = 0;
   var src;
   var strDate;
-  var lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.selected);
+  var lonlats = imageUtilGetCoordsFromPixelValues(
+    boundaries,
+    legacy.map.selectedMap
+  );
   var layersArray;
   var opacities;
   let crs = proj.selected.crs;
@@ -113,7 +110,8 @@ var getProducts = function(layers, date, state) {
     layers,
     {
       reverse: true,
-      renderable: true
+      renderable: true,
+      date
     },
     state
   );

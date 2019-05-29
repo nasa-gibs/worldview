@@ -5,7 +5,7 @@ import GifPanel from '../components/animation-widget/gif-panel';
 import GifStream from '@entryline/gifstream';
 import util from '../util/util';
 import * as olProj from 'ol/proj';
-import { debounce as lodashDebounce } from 'lodash';
+import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
 import Crop from '../components/util/image-crop';
 import {
   resolutionsGeo,
@@ -19,7 +19,9 @@ import {
 } from '../modules/image-download/util';
 import { Progress } from 'reactstrap';
 import { timeScaleFromNumberKey } from '../modules/date/constants';
+import { GifResults } from '../components/animation-widget/gif-post-creation';
 import { getImageArray } from '../modules/animation/selectors';
+import { getStampProps, svgToPng } from '../modules/animation/util';
 
 const gifStream = new GifStream();
 
@@ -39,22 +41,90 @@ class GIF extends Component {
       isDownloadError: false,
       showDates: true,
       isValidSelection: true,
+      downloadedObject: {},
       boundaries
     };
     props.onChangeLocation(boundaries);
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
+    this.onGifProgress = this.onGifProgress.bind(this);
+  }
+  renderSelectableBox() {
+    const {
+      increment,
+      speed,
+      map,
+      screenWidth,
+      screenHeight,
+      proj,
+      onClose,
+      endDate,
+      startDate
+    } = this.props;
+    const { boundaries, showDates } = this.state;
+
+    const { x, y, x2, y2 } = boundaries;
+    const isGeoProjection = proj.id === 'geographic';
+    const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
+    const lonlats = imageUtilGetCoordsFromPixelValues(
+      boundaries,
+      map.selectedMap
+    );
+    const crs = proj.crs;
+    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
+    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
+    const resolution = imageUtilCalculateResolution(
+      Math.round(map.getZoom()),
+      isGeoProjection,
+      proj.resolutions
+    );
+    return (
+      <Fragment>
+        <GifPanel
+          speed={speed}
+          resolutions={resolutions}
+          resolution={resolution}
+          showDates={showDates}
+          increment={increment}
+          projId={proj.id}
+          lonlats={lonlats}
+          startDate={startDate}
+          endDate={endDate}
+          onClick={this.createGIF.bind(this)}
+        />
+
+        <Crop
+          x={getPercentageFromPixel(screenWidth, x)}
+          y={getPercentageFromPixel(screenHeight, y)}
+          maxHeight={screenHeight}
+          maxWidth={screenWidth}
+          width={getPercentageFromPixel(screenWidth, x2 - x)}
+          height={getPercentageFromPixel(screenHeight, y2 - y)}
+          onChange={lodashDebounce(this.onBoundaryChange, 5)}
+          onClose={onClose}
+          coordinates={{
+            bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
+            topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
+          }}
+          showCoordinates={false}
+        />
+      </Fragment>
+    );
   }
   createGIF(width, height) {
     const { getImageArray } = this.props;
-    var imageArra;
+    const { boundaries } = this.state;
+    const dimensions = {
+      w: boundaries.y2 - boundaries.y,
+      h: boundaries.x2 - boundaries.x
+    };
     var stampWidth;
     var build;
     var stampProps;
     var newImage;
     var breakPointOne = 300;
     var stampWidthRatio = 4.889;
-    build = function(stamp, dateStamp, stampHeight) {
-      imageArra = getImageArray(this.state, this.props, { width, height });
+    build = (stamp, dateStamp, stampHeight) => {
+      let imageArra = getImageArray(this.state, this.props, { width, height });
       if (!imageArra) {
         // won't be true if there are too mant frames
         return;
@@ -77,7 +147,7 @@ class GIF extends Component {
           fontColor: '#fff',
           fontWeight: '300',
           fontFamily: 'Open Sans, sans-serif',
-          progressCallback: onGifProgress,
+          progressCallback: this.onGifProgress,
           showFrameText: stampHeight > 20,
           extraLastFrameDelay: 1000,
           text: '',
@@ -87,19 +157,56 @@ class GIF extends Component {
           },
           pause: 1
         },
-        onGifComplete
+        obj => {
+          this.onGifComplete(obj, width, height);
+        }
       );
     };
-    stampProps = getStampProps(stampWidthRatio, breakPointOne, stampWidth);
+    stampProps = getStampProps(
+      stampWidthRatio,
+      breakPointOne,
+      stampWidth,
+      dimensions,
+      width,
+      height
+    );
     newImage = svgToPng(
       'brand/images/wv-logo-w-shadow.svg',
       stampProps.stampHeight
     );
 
     build(newImage, stampProps.dateStamp, stampProps.stampHeight);
+    this.setState({ isDownloading: true });
+  }
+  onGifComplete(obj, width, height) {
+    if (obj.error) {
+      this.setState({
+        isDownloadError: true,
+        isDownloading: false,
+        progress: 0,
+        downloadedObject: {}
+      });
+    } else {
+      this.setState({
+        isDownloaded: true,
+        progress: 0,
+        isDownloading: false,
+        downloadedObject: {
+          blob: obj.blob,
+          size: lodashRound((obj.blob.size / 1024) * 0.001, 2),
+          width,
+          height
+        }
+      });
+    }
+  }
+  onGifProgress(val) {
+    this.setState({
+      progress: val
+    });
   }
   onBoundaryChange(boundaries) {
-    const { screenWidth, screenHeight, onChangeLocation, width } = this.props;
+    const { screenWidth, screenHeight, onChangeLocation } = this.props;
     const x = getPixelFromPercentage(screenWidth, boundaries.x);
     const y = getPixelFromPercentage(screenHeight, boundaries.y);
     const x2 = x + getPixelFromPercentage(screenWidth, boundaries.width);
@@ -115,76 +222,28 @@ class GIF extends Component {
     });
   }
   render() {
-    const {
-      isActive,
-      increment,
-      speed,
-      map,
-      screenWidth,
-      screenHeight,
-      proj,
-      onClose,
-      endDate,
-      startDate
-    } = this.props;
+    const { isActive, increment, speed, endDate, startDate } = this.props;
     const {
       isDownloaded,
-      isDownloadError,
-      boundaries,
-      showDates,
       isDownloading,
-      progress
+      progress,
+      downloadedObject
     } = this.state;
 
-    const { x, y, x2, y2 } = boundaries;
-    const isGeoProjection = proj.id === 'geographic';
-    const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
-    const lonlats = imageUtilGetCoordsFromPixelValues(
-      boundaries,
-      map.selectedMap
-    );
-    const crs = proj.crs;
-    const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
-    const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
-    const resolution = imageUtilCalculateResolution(
-      Math.round(map.getZoom()),
-      isGeoProjection,
-      proj.resolutions
-    );
-
     if (!isActive) return '';
-    if (isDownloading) return <Progress now={progress} />;
-    return (
-      <Fragment>
-        <GifPanel
+    if (isDownloading) return <Progress value={progress} />;
+    if (isDownloaded) {
+      return (
+        <GifResults
           speed={speed}
-          resolutions={resolutions}
-          resolution={resolution}
-          showDates={showDates}
-          increment={increment}
-          projId={proj.id}
-          lonlats={lonlats}
+          gifObject={downloadedObject}
           startDate={startDate}
           endDate={endDate}
+          increment={increment}
         />
-
-        <Crop
-          x={getPercentageFromPixel(screenWidth, x)}
-          y={getPercentageFromPixel(screenHeight, y)}
-          maxHeight={screenHeight}
-          maxWidth={screenWidth}
-          width={getPercentageFromPixel(screenWidth, x2 - x)}
-          height={getPercentageFromPixel(screenHeight, y2 - y)}
-          onChange={lodashDebounce(this.onBoundaryChange, 5)}
-          onClose={onClose}
-          coordinates={{
-            bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
-            topRight: util.formatCoordinate([geolonlat2[0], geolonlat2[1]])
-          }}
-          showCoordinates={false}
-        />
-      </Fragment>
-    );
+      );
+    }
+    return this.renderSelectableBox();
   }
 }
 
@@ -210,7 +269,7 @@ function mapStateToProps(state, ownProps) {
     endDate: endDate.toISOString(),
     increment: `${increment} Between Frames`,
     speed,
-    map: legacy.map, // TODO replace with just map
+    map: legacy.map,
     url,
     getImageArray: (gifComponentProps, gifComponentState, dimensions) => {
       return getImageArray(
