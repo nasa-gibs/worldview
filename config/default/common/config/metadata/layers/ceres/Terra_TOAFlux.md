@@ -15,7 +15,7 @@ Data parameters:
 `WN_TOA_Total_Sky` - TOA Window-Region Flux, Monthly Means, All-Sky conditions  
 `WN_TOA_Clear_Sky` - TOA Window-Region Flux, Monthly Means, Clear-Sky conditions
 
-Data product: `CER_SYN1deg-Month_Terra-MODIS_Edition3A`
+Data product: `CER_SYN1deg-Month_Terra-MODIS_Edition4A`
 
 ### TOA Longwave | Shortwave | Net Flux (Monthly, Energy Balanced and Filled, All-Sky | Clear-Sky)
 Temporal Coverage: March 2000 - December 2016
@@ -40,7 +40,7 @@ Data parameters:
 `toa_net_all_mon` - TOA Net Flux, Monthly means, All-Sky conditions  
 `toa_net_clr_mon` - TOA Net Flux, Monthly means, Clear-Sky conditions  
 
-Data product: `CERES_EBAF-SFC_Edition2.8`
+Data product: `CERES_EBAF-SFC_Edition4.0`
 
 ### TOA CRE Longwave | Shortwave | Net Flux (Monthly, Energy Balanced and Filled)
 Temporal Coverage: March 2000 - December 2016
@@ -60,7 +60,7 @@ Data parameters:
 `toa_cre_sw_mon` - TOA CRE Shortwave Flux, Monthly Means  
 `toa_cre_net_mon` - TOA CRE Net Flux, Monthly Means  
 
-Data product: `CERES_EBAF-SFC_Edition2.8`
+Data product: `CERES_EBAF-SFC_Edition4.0`
 
 ### Incoming Solar Flux (Monthly, Energy Balanced and Filled)
 Temporal Coverage: March 2000 - December 2016
@@ -73,4 +73,4 @@ The Clouds and the Earth’s Radiant Energy System (CERES) instruments are a col
 
 The CERES Incoming Solar Flux (Monthly, Energy Balanced and Filled) layer is available from the CERES instruments on the Terra satellite. The sensor resolution is 1 degree, imagery resolution is 2 km, and the temporal resolution is monthly.
 
-Data product: `CERES_EBAF-SFC_Edition2.8`
+Data product: `CERES_EBAF-SFC_Edition4.0`

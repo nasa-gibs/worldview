@@ -1,0 +1,1 @@
+<p>Some data products don't include the sunglint areas. For example, this MODIS/Terra Aerosol Optical Depth layer uses two "Dark Target" algorithms that are not applied over sun glint ocean regions or bright (desert) land regions. Click on the "i" next to the layer to learn more about the Aerosol Optical Depth layer.</p>

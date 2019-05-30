@@ -11,7 +11,12 @@
                     "Aerosol Optical Depth",
                     "Dust",
                     "Corrected Reflectance",
-                    "Land Surface Reflectance"
+                    "Human Built-up And Settlement Extent",
+                    "Land Surface Reflectance",
+                    "Population Density",
+                    "Radiance",
+                    "Settlements",
+                    "Urban Extents"
 
                 ]
             }
