@@ -514,60 +514,60 @@
   font-size: 15px;
 }
 
-.wv-layers-options-dialog,
-.wv-layers-options-dialog .close {
+.layer-settings-modal,
+.layer-settings-modal .close {
   color: #fff;
 }
 
-.wv-layers-options-dialog .modal-content {
+.layer-settings-modal .modal-content {
   background: #282828;
   width: 300px;
 }
 
-.wv-layers-options-dialog .nav-item {
+.layer-settings-modal .nav-item {
   width: 100%;
   border: 1px solid transparent;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 
-.wv-layers-options-dialog .nav-item.dual {
+.layer-settings-modal .nav-item.dual {
   width: 136px;
 }
 
-.wv-layers-options-dialog .nav-item:hover {
+.layer-settings-modal .nav-item:hover {
   border: 1px solid #fff;
 }
 
-.wv-layers-options-dialog .nav-link {
+.layer-settings-modal .nav-link {
   border: none;
 }
 
-.wv-layers-options-dialog .nav-item.active {
+.layer-settings-modal .nav-item.active {
   background: #fff;
   border-color: #fff;
   color: #000;
 }
 
-.wv-layers-options-dialog .tab-content {
+.layer-settings-modal .tab-content {
   padding: 5px;
   background: #484848;
 }
 
-.wv-layers-options-dialog .settings-component {
+.layer-settings-modal .settings-component {
   margin-bottom: 14px;
   padding: 0 4px;
 }
 
-.wv-layers-options-dialog .tab-content .layer-threshold-select {
+.layer-settings-modal .tab-content .layer-threshold-select {
   margin-top: 10px;
 }
 
-.wv-layers-options-dialog .layer-threshold-select {
+.layer-settings-modal .layer-threshold-select {
   height: 58px;
 }
 
-.wv-layers-options-dialog .tab-content .wv-palette-selector {
+.layer-settings-modal .tab-content .wv-palette-selector {
   width: 266px;
 }
 
@@ -576,11 +576,11 @@
   margin-left: 6px;
 }
 
-.wv-layers-options-dialog .tab-content .noUi-target {
+.layer-settings-modal .tab-content .noUi-target {
   margin: 10px 18px;
 }
 
-.wv-layers-options-dialog .wv-header {
+.layer-settings-modal .wv-header {
   font-size: 14px;
   margin-bottom: 8px;
 }
@@ -589,7 +589,7 @@
   margin-top: 0;
 }
 
-.wv-layers-options-dialog .wv-header.wv-color-palette-label {
+.layer-settings-modal .wv-header.wv-color-palette-label {
   margin-bottom: 0.5em;
 }
 
@@ -597,29 +597,29 @@
   margin-left: 3px;
 }
 
-.wv-layers-options-dialog .wv-label {
+.layer-settings-modal .wv-label {
   color: #fff;
   width: 100%;
   position: relative;
 }
 
-.wv-layers-options-dialog .wv-label-opacity {
+.layer-settings-modal .wv-label-opacity {
   text-align: right;
 }
 
-.wv-layers-options-dialog .wv-label-range {
+.layer-settings-modal .wv-label-range {
   color: #fff;
 }
 
-.wv-layers-options-dialog .wv-label-range-min {
+.layer-settings-modal .wv-label-range-min {
   float: left;
 }
 
-.wv-layers-options-dialog .wv-label-range-max {
+.layer-settings-modal .wv-label-range-max {
   float: right;
 }
 
-.wv-layers-options-dialog .wv-palette-squash {
+.layer-settings-modal .wv-palette-squash {
   float: right;
   margin-top: -26px;
 }

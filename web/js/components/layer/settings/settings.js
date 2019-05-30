@@ -31,6 +31,8 @@ class LayerSettings extends React.Component {
       activeIndex: 0
     };
     this.canvas = document.createElement('canvas');
+    this.canvas.width = 120;
+    this.canvas.height = 10;
     this.checkerboard = getCheckerboard();
   }
   /**
