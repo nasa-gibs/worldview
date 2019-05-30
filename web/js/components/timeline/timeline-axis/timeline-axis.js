@@ -74,7 +74,7 @@ class TimelineAxis extends React.Component {
     let gridNumber = Math.floor(numberOfVisibleTiles * 1.5); // should get from state?
     let dragSentinelChangeNumber = gridWidth * (Math.floor(numberOfVisibleTiles * 0.25) + 1);
     if (timeScale === 'year') {
-      let endLimitYear = moment.utc(this.props.timelineEndDateLimit).year();
+      let endLimitYear = moment.utc(this.props.timelineEndDateLimit).year() + 1;
       let startLimitYear = moment.utc(this.props.timelineStartDateLimit).year();
       gridNumber = endLimitYear - startLimitYear;
       numberOfVisibleTiles = gridNumber;
