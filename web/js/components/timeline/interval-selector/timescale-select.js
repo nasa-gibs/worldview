@@ -18,22 +18,30 @@ class TimeScaleSelect extends PureComponent {
   }
 
   render() {
-    let { zoomLevel, hasSubdailyLayers } = this.props;
-    console.log(this.props)
+    let {
+      zoomLevel,
+      hasSubdailyLayers
+    } = this.props;
     return (
-      <form className="interval-timescale-select" onSubmit={this.handleSubmit}>
+      <form
+        className="interval-timescale-select-form-container"
+        onSubmit={this.handleSubmit}
+      >
         <label>
-          <select value={zoomLevel} onChange={this.handleChangeZoomLevel}>
-            <option value="year">year</option>
-            <option value="month">month</option>
-            <option value="day">day</option>
-            {hasSubdailyLayers ?
-            <React.Fragment>
-              <option value="hour">hour</option>
-              <option value="minute">minute</option>
-            </React.Fragment>
-            :
-              null
+          <select
+            className="interval-timescale-select"
+            value={zoomLevel}
+            onChange={this.handleChangeZoomLevel}
+          >
+            <option className="interval-timescale-select-option" value="year">year</option>
+            <option className="interval-timescale-select-option" value="month">month</option>
+            <option className="interval-timescale-select-option" value="day">day</option>
+            {hasSubdailyLayers
+              ? <React.Fragment>
+                <option className="interval-timescale-select-option" value="hour">hour</option>
+                <option className="interval-timescale-select-option" value="minute">minute</option>
+              </React.Fragment>
+              : null
             }
           </select>
         </label>

@@ -380,11 +380,6 @@ g.plot rect.data-bar-invisible {
 #timeline-footer {
   border-left: 1px solid #666;
   border-right: 1px solid #666;
-  /* margin-right: 58px; */
-}
-
-#timeline-footer svg {
-  /* overflow: visible; */
 }
 
 #wv-rangeselector-case > .wv-timeline-range-selector {
@@ -421,7 +416,6 @@ g.plot rect.data-bar-invisible {
 #timeline-header .timeline-zoom,
 #zoom-btn-container-axis .wv-zoom-tooltip {
   display: block;
-  /* width: 80px; */
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -436,7 +430,6 @@ g.plot rect.data-bar-invisible {
 }
 
 #zoom-btn-container .wv-tooltip {
-  /* display: none; */
   position: absolute;
   bottom: 100%;
   border-bottom: 8px solid transparent;
@@ -445,11 +438,9 @@ g.plot rect.data-bar-invisible {
 }
 
 #zoom-btn-container-axis .wv-zoom-tooltip {
-  /* display: none; */
   position: absolute;
   bottom: 100%;
   width: 75px;
-  /* border-bottom: 8px solid transparent; */
   z-index: 10;
 }
 

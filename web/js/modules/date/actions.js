@@ -25,7 +25,6 @@ export function selectDate(value) {
   };
 }
 export function changeCustomInterval(delta, customInterval) {
-  console.log(delta, customInterval)
   return {
     type: CHANGE_CUSTOM_INTERVAL,
     value: customInterval,
@@ -33,12 +32,11 @@ export function changeCustomInterval(delta, customInterval) {
   };
 }
 export function selectInterval(delta, interval, customSelected) {
-  console.log(delta, interval)
   return {
     type: CHANGE_INTERVAL,
     value: interval,
     delta: delta,
-    customSelected
+    customSelected: Boolean(customSelected)
   };
 }
 // export function selectDelta(delta) {

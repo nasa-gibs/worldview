@@ -7,29 +7,58 @@ class TimeScaleIntervalChange extends Component {
     this.state = {
       toolTipHovered: false,
       customIntervalText: 'Custom'
-    }
+    };
   }
 
-  // Toggle zoom select tooltip
-  toggleTooltipHover = (isHovered) => {
+  // Zoom select tooltip on
+  toolTipHoverOn = () => {
     this.setState({
-      toolTipHovered: isHovered
-    })
+      toolTipHovered: true
+    });
   }
 
-  handleClickZoom = (intervalSelected, openDialog) => {
-    // close tooltip
+  // Zoom select tooltip off
+  toolTipHoverOff = () => {
+    this.setState({
+      toolTipHovered: false
+    });
+  }
+
+  // handle click zoom of timescale intervals
+  handleClickZoom = (timescale, openDialog) => {
     // send props function to change timescale zoom level throughout app
     this.setState({
-      toolTipHovered: false,
-    }, this.props.setTimeScaleIntervalChangeUnit(intervalSelected, intervalSelected === 'custom', openDialog));
+      toolTipHovered: false
+    }, this.props.setTimeScaleIntervalChangeUnit(timescale, openDialog));
+  }
+  // individual linking timescale handlers
+  handleClickZoomYear = () => {
+    this.handleClickZoom('year');
+  }
+  handleClickZoomMonth = () => {
+    this.handleClickZoom('month');
+  }
+  handleClickZoomDay= () => {
+    this.handleClickZoom('day');
+  }
+  handleClickZoomHour = () => {
+    this.handleClickZoom('hour');
+  }
+  handleClickZoomMinute = () => {
+    this.handleClickZoom('minute');
+  }
+  handleClickZoomCustom = () => {
+    this.handleClickZoom('custom');
+  }
+  handleClickZoomCustomStatic = () => {
+    this.handleClickZoom('custom', true);
   }
 
   // set custom text for custom interval
   setCustomIntervalText = () => {
     this.setState({
       customIntervalText: this.props.customDelta + ' ' + this.props.customIntervalZoomLevel
-    })
+    });
   }
 
   componentDidMount () {
@@ -39,7 +68,11 @@ class TimeScaleIntervalChange extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    let { customDelta, timeScaleChangeUnit, customSelected } = this.props;
+    let {
+      customDelta,
+      timeScaleChangeUnit,
+      customSelected
+    } = this.props;
     if (customDelta && timeScaleChangeUnit) {
       if (customSelected && customDelta !== 1 && this.state.customIntervalText === 'Custom') {
         this.setCustomIntervalText();
@@ -50,14 +83,20 @@ class TimeScaleIntervalChange extends Component {
   }
 
   render() {
-    let { customIntervalText, toolTipHovered } = this.state;
-    let { customSelected, timeScaleChangeUnit } = this.props;
+    let {
+      customIntervalText,
+      toolTipHovered
+    } = this.state;
+    let {
+      customSelected,
+      timeScaleChangeUnit
+    } = this.props;
     return (
       <React.Fragment>
         <div id="zoom-btn-container"
-        className="noselect"
-        onMouseEnter={() => this.toggleTooltipHover(true)}
-        onMouseLeave={() => this.toggleTooltipHover(false)}
+          className="noselect"
+          onMouseEnter={this.toolTipHoverOn}
+          onMouseLeave={this.toolTipHoverOff}
         >
           {/* timeScale display */}
           <span
@@ -69,41 +108,41 @@ class TimeScaleIntervalChange extends Component {
 
           {/* hover timeScale unit dialog / entry point to Custom selector */}
           <div className="wv-tooltip"
-          style={{ display: toolTipHovered ? 'block' : 'none' }}
+            style={{ display: toolTipHovered ? 'block' : 'none' }}
           >
             <div id="timeline-zoom" className="timeline-zoom">
               <span
                 id="zoom-years"
                 className="zoom-btn zoom-btn-inactive zoom-years"
-                onClick={() => this.handleClickZoom('year')}
+                onClick={this.handleClickZoomYear}
               >
                 Year
               </span>
               <span
                 id="zoom-months"
                 className="zoom-btn zoom-btn-inactive zoom-months"
-                onClick={() => this.handleClickZoom('month')}
+                onClick={this.handleClickZoomMonth}
               >
                 Month
               </span>
               <span
                 id="zoom-days"
                 className="zoom-btn zoom-btn-inactive zoom-days"
-                onClick={() => this.handleClickZoom('day')}
+                onClick={this.handleClickZoomDay}
               >
                 Day
               </span>
               <span
                 id="zoom-hours"
                 className="zoom-btn zoom-btn-inactive zoom-hours"
-                onClick={() => this.handleClickZoom('hour')}
+                onClick={this.handleClickZoomHour}
               >
                 Hour
               </span>
               <span
                 id="zoom-minutes"
                 className="zoom-btn zoom-btn-inactive zoom-minutes"
-                onClick={() => this.handleClickZoom('minute')}
+                onClick={this.handleClickZoomMinute}
               >
                 Minute
               </span>
@@ -111,21 +150,20 @@ class TimeScaleIntervalChange extends Component {
                 id="zoom-custom"
                 className="zoom-btn zoom-btn-inactive zoom-custom custom-interval-text"
                 style={{ display: customIntervalText === 'Custom' ? 'none' : 'block' }}
-                onClick={() => this.handleClickZoom('custom')}
+                onClick={this.handleClickZoomCustom}
               >
                 {customIntervalText}
               </span>
               <span
                 id="zoom-custom-static"
                 className="zoom-btn zoom-btn-inactive zoom-custom custom-interval-text"
-                onClick={() => this.handleClickZoom('custom', true)}
+                onClick={this.handleClickZoomCustomStatic}
               >
                 Custom
               </span>
             </div>
           </div>
         </div>
-
       </React.Fragment>
     );
   }
@@ -136,6 +174,7 @@ TimeScaleIntervalChange.propTypes = {
   customIntervalText: PropTypes.string,
   customSelected: PropTypes.bool,
   setTimeScaleIntervalChangeUnit: PropTypes.func,
+  customIntervalZoomLevel: PropTypes.string,
   timeScaleChangeUnit: PropTypes.string
 };
 

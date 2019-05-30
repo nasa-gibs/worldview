@@ -17,24 +17,9 @@ class DateSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // date: props.draggerSelected === 'selectedB' ? props.dateB : props.date,
-      // maxDate: props.maxDate,
-      // minDate: props.minDate,
       tab: null
-      // maxZoom: props.maxZoom,
-      // hasSubdailyLayers: props.hasSubdailyLayers
     };
   }
-  // componentWillReceiveProps(props) {
-  //   this.setState({
-  //     // date: props.draggerSelectedB ? props.dateB : props.date,
-  //     // date: props.draggerSelected === 'selectedB' ? props.dateB : props.date,
-  //     maxDate: props.maxDate,
-  //     minDate: props.minDate,
-  //     // maxZoom: props.maxZoom,
-  //     hasSubdailyLayers: props.hasSubdailyLayers
-  //   });
-  // }
   blur() {
     this.setState({ tab: null });
   }
@@ -67,24 +52,24 @@ class DateSelector extends React.Component {
   updateDate(date, type, amt) {
     // this.props.onDateChange(date, this.props.id, type, amt);
     // # allows dragger change via main date selector, and id change via anim date selectors
-    console.log(date)
     this.props.onDateChange(date, this.props.id);
   }
   renderSubdaily() {
     if (this.props.hasSubdailyLayers) {
+      let date = this.props.draggerSelected === 'selectedB' ? this.props.dateB : this.props.date;
       return (
         <React.Fragment>
           <DateInputColumn
             step={1}
             startDate={new Date(2000)}
             today={new Date()}
-            date={this.props.date}
+            date={date}
             type="hour"
             inputId={this.props.idSuffix ? 'hour-' + this.props.idSuffix : ''}
             height={this.props.height}
             width={this.props.width}
             updateDate={this.updateDate.bind(this)}
-            value={util.pad(this.props.date.getUTCHours(), 2, '0')}
+            value={util.pad(date.getUTCHours(), 2, '0')}
             tabIndex={4}
             focused={this.state.tab === 4}
             setFocusedTab={this.setFocusedTab.bind(this)}
@@ -99,12 +84,12 @@ class DateSelector extends React.Component {
             step={10}
             startDate={new Date(2000)}
             today={new Date()}
-            date={this.props.date}
+            date={date}
             type="minute"
             height={this.props.height}
             width={this.props.width}
             updateDate={this.updateDate.bind(this)}
-            value={util.pad(this.props.date.getUTCMinutes(), 2, '0')}
+            value={util.pad(date.getUTCMinutes(), 2, '0')}
             inputId={this.props.idSuffix ? 'minute-' + this.props.idSuffix : ''}
             tabIndex={5}
             focused={this.state.tab === 5}
@@ -122,14 +107,15 @@ class DateSelector extends React.Component {
   }
   render() {
     const {
-      date,
       width,
       height,
       maxDate,
       minDate,
       fontSize,
-      idSuffix
+      idSuffix,
+      draggerSelected
     } = this.props;
+    let date = draggerSelected === 'selectedB' ? this.props.dateB : this.props.date;
     const tab = this.state;
     return (
       <div className="wv-date-selector-widget">

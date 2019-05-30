@@ -135,6 +135,54 @@ const getParameters = function(config, parameters) {
         }
       }
     },
+    ics: {
+      stateKey: 'date.customSelected',
+      initialState: false,
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          const customDelta = get(state, 'date.customDelta');
+          const customInterval = get(state, 'date.customInterval');
+          if (customDelta === 1 && customInterval === 3) {
+            return undefined;
+          }
+          return currentItemState.toString();
+        },
+        parse: val => {
+          return val.toString();
+        }
+      }
+    },
+    ici: {
+      stateKey: 'date.customInterval',
+      initialState: 3,
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          const isCustomSelected = get(state, 'date.customSelected');
+          if (!isCustomSelected) return undefined;
+          return currentItemState.toString();
+        },
+        parse: val => {
+          return val.toString();
+        }
+      }
+    },
+    icd: {
+      stateKey: 'date.customDelta',
+      initialState: 1,
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          const isCustomSelected = get(state, 'date.customSelected');
+          if (!isCustomSelected) return undefined;
+          return currentItemState.toString();
+        },
+        parse: val => {
+          return Number(val);
+        }
+      }
+    },
     e: {
       stateKey: 'events',
       type: 'object',

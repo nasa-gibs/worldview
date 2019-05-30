@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 
 // const axisScaleTextElement = {
 //   minute: (gridWidth, index, item) => {
@@ -65,7 +65,11 @@ const axisScaleTextElementWrapper = (gridWidth, index, item) => {
   let dateText = item.date;
   if (item.timeScale === 'hour') {
     let timeScaleUnit = item.dateObject.hours;
-    dateText = timeScaleUnit === 12 || timeScaleUnit === 6 || timeScaleUnit === 18 ? `${timeScaleUnit}:00` : item.date;
+    dateText = timeScaleUnit === 12 ||
+      timeScaleUnit === 6 ||
+      timeScaleUnit === 18
+      ? `${timeScaleUnit}:00`
+      : item.date;
   }
   let xOffsetAdded = 8;
   if (item.timeScale === 'month' || item.timeScale === 'year') {
@@ -74,7 +78,13 @@ const axisScaleTextElementWrapper = (gridWidth, index, item) => {
   return (
     <React.Fragment>
       <g>
-        <text className="gridText" x="0" y="42" fill={item.withinRange ? 'white' : ''} transform={`translate(${(index * gridWidth) + xOffsetAdded}, 20)`} textRendering="optimizeLegibility" clipPath="url(#textDisplay)">{dateText}</text>
+        <text className="gridText" x="0" y="42"
+          fill={item.withinRange ? 'white' : ''}
+          transform={`translate(${(index * gridWidth) + xOffsetAdded}, 20)`}
+          textRendering="optimizeLegibility" clipPath="url(#textDisplay)"
+        >
+          {dateText}
+        </text>
       </g>
     </React.Fragment>
   );

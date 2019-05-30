@@ -1,15 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AxisTimeScaleChangeControls from './axis-timescale-change-controls';
-
-const timeScaleToNumberKey = {
-  'custom': 0,
-  'year': 1,
-  'month': 2,
-  'day': 3,
-  'hour': 4,
-  'minute': 5
-};
+import { timeScaleToNumberKey } from '../../../modules/date/constants';
 
 /*
  * Parent element for timeScale change controls and tooltip
@@ -26,12 +18,27 @@ class AxisTimeScaleChange extends PureComponent {
     };
   }
 
-  // Toggle timeScale select tooltip
-  toggleTooltipHover = (isHovered) => {
-    // toggle visibility of map scales
+  // TimeScale select tooltip on
+  toolTipHoverOn = () => {
+    this.disableMapScales(true);
+    this.setState({
+      toolTipHovered: true
+    });
+  }
+
+  // TimeScale select tooltip off
+  toolTipHoverOff = () => {
+    this.disableMapScales(false);
+    this.setState({
+      toolTipHovered: false
+    });
+  }
+
+  // Toggle visibility of map scales
+  disableMapScales = (disable) => {
     let imperialMapScale = document.querySelectorAll('.wv-map-scale-imperial');
     let metricMapScale = document.querySelectorAll('.wv-map-scale-metric');
-    if (isHovered) {
+    if (disable) {
       for (let el of imperialMapScale) {
         el.style.display = 'none';
       }
@@ -46,9 +53,6 @@ class AxisTimeScaleChange extends PureComponent {
         el.style.display = 'block';
       }
     }
-    this.setState({
-      toolTipHovered: isHovered
-    })
   }
 
   // ex: month(2) to day(3)
@@ -69,7 +73,12 @@ class AxisTimeScaleChange extends PureComponent {
   }
 
   render() {
-    let { timeScale, timelineHidden, hasSubdailyLayers, changeTimeScale } = this.props;
+    let {
+      timeScale,
+      timelineHidden,
+      hasSubdailyLayers,
+      changeTimeScale
+    } = this.props;
     return (
       <div
         className="zoom-level-change"
@@ -77,22 +86,21 @@ class AxisTimeScaleChange extends PureComponent {
           display: timelineHidden ? 'none' : 'block'
         }}
       >
-      { timeScale ?
-        <div
-          onMouseEnter={() => this.toggleTooltipHover(true)}
-          onMouseLeave={() => this.toggleTooltipHover(false)}>
-          <AxisTimeScaleChangeControls
-            timeScale={timeScale}
-            hasSubdailyLayers={hasSubdailyLayers}
-            toolTipHovered={this.state.toolTipHovered}
-            changeTimeScale={changeTimeScale}
-            incrementTimeScale={this.incrementTimeScale}
-            decrementTimeScale={this.decrementTimeScale}
-          />
-        </div>
-        :
-        <div></div>
-      }
+        { timeScale
+          ? <div
+            onMouseEnter={this.toolTipHoverOn}
+            onMouseLeave={this.toolTipHoverOff}>
+            <AxisTimeScaleChangeControls
+              timeScale={timeScale}
+              hasSubdailyLayers={hasSubdailyLayers}
+              toolTipHovered={this.state.toolTipHovered}
+              changeTimeScale={changeTimeScale}
+              incrementTimeScale={this.incrementTimeScale}
+              decrementTimeScale={this.decrementTimeScale}
+            />
+          </div>
+          : <div></div>
+        }
       </div>
     );
   }
