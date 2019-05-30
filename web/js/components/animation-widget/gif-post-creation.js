@@ -32,11 +32,11 @@ export class GifResults extends Component {
       gifObject,
       boundaries,
       screenWidth,
-      screenHeight
+      screenHeight,
+      onClose
     } = this.props;
     const blob = gifObject.blob;
     const size = gifObject.size;
-    const height = gifObject.height;
     const blobURL = URL.createObjectURL(blob);
     var dlURL = util.format(
       'nasa-worldview-{1}-to-{2}.gif',
@@ -56,9 +56,10 @@ export class GifResults extends Component {
         isOpen={true}
         style={this.getStyle(imgElWidth, imgElHeight)}
         className={'dynamic-modal'}
+        toggle={onClose}
       >
         {/* <DetectOuterClick onClick={onClose} disabled={true}> */}
-        <ModalHeader>GIF Results</ModalHeader>
+        <ModalHeader toggle={onClose}>GIF Results</ModalHeader>
         <ModalBody>
           <div className="gif-results-dialog-case clearfix">
             <img src={blobURL} width={imgElWidth} height={imgElHeight} />
@@ -93,24 +94,26 @@ export class GifResults extends Component {
                 <div> {lodashCapitalize(increment)} </div>
               </div>
             </div>
-            <Button
-              text="Download"
-              id="download-gif-button"
-              className="download wv-button"
-              onClick={e => {
-                e.stopPropagation();
-                e.preventDefault();
-                FileSaver.saveAs(blob, dlURL);
-                googleTagManager.pushEvent({
-                  event: 'GIF_download',
-                  GIF: {
-                    downloadSize: size,
-                    increments: increment,
-                    frameSpeed: speed
-                  }
-                });
-              }}
-            />
+            <div style={{ paddingTop: 10 }}>
+              <Button
+                text="Download"
+                id="download-gif-button"
+                className="download wv-button"
+                onClick={e => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  FileSaver.saveAs(blob, dlURL);
+                  googleTagManager.pushEvent({
+                    event: 'GIF_download',
+                    GIF: {
+                      downloadSize: size,
+                      increments: increment,
+                      frameSpeed: speed
+                    }
+                  });
+                }}
+              />
+            </div>
           </div>
         </ModalBody>
       </Modal>

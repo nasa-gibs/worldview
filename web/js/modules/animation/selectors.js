@@ -4,8 +4,7 @@ import {
   imageUtilGetCoordsFromPixelValues,
   imageUtilGetLayerOpacities,
   bboxWMS13,
-  imageUtilGetLayers,
-  getDimensions
+  imageUtilGetLayers
 } from '../image-download/util';
 import { getLayers } from '../layers/selectors';
 import { timeScaleFromNumberKey } from '../date/constants';
@@ -72,8 +71,8 @@ export function getImageArray(
       `CRS=${crs}`,
       `LAYERS=${layersArray.join(',')}`,
       `FORMAT=${imgFormat}`,
-      `WIDTH=${height}`,
-      `HEIGHT=${width}`
+      `WIDTH=${width}`,
+      `HEIGHT=${height}`
     ];
     if (opacities.length > 0) {
       params.push(`OPACITIES=${opacities.join(',')}`);

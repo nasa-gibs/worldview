@@ -1,5 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Spinner from 'react-loader';
 import { connect } from 'react-redux';
 import GifPanel from '../components/animation-widget/gif-panel';
 import GifStream from '@entryline/gifstream'; // '../map/animation/gif-stream';
@@ -42,9 +43,13 @@ class GIF extends Component {
       isDownloadError: false,
       showDates: true,
       isValidSelection: true,
+      progress: 0,
       downloadedObject: {},
+      offsetLeft: boundaries.x2 + 20,
+      offsetTop: boundaries.y - 20,
       boundaries
     };
+    // set initial position of GIF panel
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
   }
@@ -92,9 +97,9 @@ class GIF extends Component {
         wrapClassName={'clickable-behind-modal toolbar_modal_outer'}
         className={'gif-modal dynamic-modal'}
         style={this.getStyle(this.state)}
+        toggle={onClose}
       >
-        {/* <DetectOuterClick onClick={onClose} disabled={true}> */}
-        <ModalHeader>Create An Animated GIF</ModalHeader>
+        <ModalHeader toggle={onClose}>Create An Animated GIF</ModalHeader>
         <ModalBody>
           <GifPanel
             speed={speed}
@@ -125,7 +130,6 @@ class GIF extends Component {
             showCoordinates={false}
           />
         </ModalBody>
-        {/* </DetectOuterClick> */}
       </Modal>
     );
   }
@@ -148,7 +152,6 @@ class GIF extends Component {
         // won't be true if there are too mant frames
         return;
       }
-      console.log(imageArra);
       gifStream.createGIF(
         {
           gifWidth: width,
@@ -259,7 +262,8 @@ class GIF extends Component {
       endDate,
       startDate,
       screenHeight,
-      screenWidth
+      screenWidth,
+      onClose
     } = this.props;
     const {
       isDownloaded,
@@ -270,11 +274,16 @@ class GIF extends Component {
     } = this.state;
 
     if (isDownloading) {
+      let headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
       return (
-        <Modal isOpen={true}>
-          <ModalHeader>Creating GIF</ModalHeader>
+        <Modal isOpen={true} toggle={onClose}>
+          <ModalHeader toggle={onClose}>{headerText}</ModalHeader>
           <ModalBody>
-            <Progress value={progress} />
+            <div style={{ minHeight: 50 }}>
+              <Spinner color={'#fff'} loaded={progress}>
+                <Progress value={progress} />
+              </Spinner>
+            </div>
           </ModalBody>
         </Modal>
       );
@@ -285,6 +294,7 @@ class GIF extends Component {
           speed={speed}
           gifObject={downloadedObject}
           startDate={startDate}
+          onClose={onClose}
           endDate={endDate}
           increment={increment}
           boundaries={boundaries}
@@ -329,7 +339,7 @@ function mapStateToProps(state, ownProps) {
         state
       );
     },
-    onClose: () => {}
+    onClose: ownProps.onClose
   };
 }
 const mapDispatchToProps = dispatch => ({});

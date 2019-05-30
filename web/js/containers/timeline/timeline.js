@@ -121,7 +121,6 @@ class Timeline extends React.Component {
 
   // handle SET of custom time scale panel
   changeCustomInterval = (delta, timeScale) => {
-    console.log(delta, timeScale);
     this.props.changeCustomInterval(
       delta,
       Number(timeScaleToNumberKey[timeScale])
@@ -142,7 +141,6 @@ class Timeline extends React.Component {
       intervalSelected = Number(timeScaleToNumberKey[intervalSelected]);
       delta = 1;
     }
-    console.log(delta, intervalSelected, customSelected);
     this.props.selectInterval(delta, intervalSelected, customSelected);
     if (customIntervalModalOpen) {
       this.setState({
