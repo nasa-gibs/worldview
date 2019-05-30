@@ -196,14 +196,14 @@ class TimelineAxis extends React.Component {
       draggerVisible,
       draggerPositionB: draggerPositionB - pixelsToAdd + position - this.state.draggerWidth,
       draggerVisibleB,
-      deque: deque,
+      deque,
       currentTimeRange: current.dates,
       transformX: -pixelsToAdd - 2,
       gridNumber,
       gridWidth,
-      numberOfVisibleTiles: numberOfVisibleTiles,
+      numberOfVisibleTiles,
       moved: false,
-      dragSentinelChangeNumber: dragSentinelChangeNumber,
+      dragSentinelChangeNumber,
       position,
       midPoint: position,
       dragSentinelCount: 0,
@@ -218,19 +218,20 @@ class TimelineAxis extends React.Component {
 
   // changes timeScale state
   wheelZoom = (e) => {
-    let timeScaleNumber = Number(timeScaleToNumberKey[this.props.timeScale]);
-    let maxTimeScaleNumber = this.props.hasSubdailyLayers ? 5 : 3;
+    let { timeScale, hasSubdailyLayers, changeTimeScale } = this.props;
+    let timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
+    let maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
     if (e.deltaY > 0) { // wheel zoom out
       if (timeScaleNumber > 1) {
         this.setState({
           wheelZoom: true
-        }, this.props.changeTimeScale(timeScaleNumber - 1));
+        }, changeTimeScale(timeScaleNumber - 1));
       }
     } else {
       if (timeScaleNumber < maxTimeScaleNumber) { // wheel zoom in
         this.setState({
           wheelZoom: true
-        }, this.props.changeTimeScale(timeScaleNumber + 1));
+        }, changeTimeScale(timeScaleNumber + 1));
       }
     }
   }
@@ -1194,7 +1195,7 @@ class TimelineAxis extends React.Component {
   }
 
   // update animation dragger helper function
-  getAnimationLocateDateUpdate = (diffZeroValues, diffFactor, deltaX, animationStartLocationDate, animationDraggerLocation, frontDate) => {
+  getAnimationLocateDateUpdate = (diffZeroValues, diffFactor, deltaX, animLocationDate, animDraggerLocation, frontDate) => {
     if (!diffZeroValues) { // month or year
       let {
         position,
@@ -1203,7 +1204,7 @@ class TimelineAxis extends React.Component {
       } = this.state;
       let { timeScale } = this.props;
 
-      let startDraggerPositionRelativeToFrontDate = animationDraggerLocation - position - transformX + deltaX;
+      let startDraggerPositionRelativeToFrontDate = animDraggerLocation - position - transformX + deltaX;
       let gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
       let draggerDateAdded = frontDate.clone().add((Math.floor(gridWidthCoef)), timeScale);
       let daysCount;
@@ -1216,7 +1217,7 @@ class TimelineAxis extends React.Component {
       let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
       return draggerDateAdded.clone().add(remainderMilliseconds).format();
     } else {
-      let draggerTimeStartValue = moment.utc(animationStartLocationDate).valueOf();
+      let draggerTimeStartValue = moment.utc(animLocationDate).valueOf();
       return moment.utc(draggerTimeStartValue + (diffFactor * deltaX)).format();
     }
   }

@@ -12,8 +12,10 @@ import DateSelector from '../../components/date-selector/date-selector';
 import DateChangeArrows from '../../components/timeline/timeline-controls/date-change-arrows';
 import AnimationWidget from '../../containers/animation-widget';
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
-
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
+
+import lodashDebounce from 'lodash/debounce';
+
 import {
   hasSubDaily,
   lastDate as layersLastDateTime
@@ -37,7 +39,8 @@ class Timeline extends React.Component {
     super(props);
     this.state = {
       timelineHidden: false,
-      customIntervalModalOpen: false
+      customIntervalModalOpen: false,
+      animationInProcess: false
     };
     // left/right arrows
     this.animator = 0;
@@ -48,13 +51,11 @@ class Timeline extends React.Component {
    * @return {void}
    */
   stopper = () => {
-    if (this.state.animationInProcess) {
-      clearInterval(this.animator);
-      this.animator = 0;
-      this.setState({
-        animationInProcess: false
-      });
-    }
+    clearInterval(this.animator);
+    this.animator = 0;
+    this.setState({
+      animationInProcess: false
+    });
   }
   /**
    * Add timeout to date change when buttons are being held so that
@@ -88,11 +89,13 @@ class Timeline extends React.Component {
           changeDate(util.dateAdd(selectedDate, increment, delta));
         }
       }
-      this.animator = setTimeout(animate, ANIMATION_DELAY);
-      this.setState({
-        animationInProcess: true
-      });
+      if (this.state.animationInProcess) {
+        this.animator = setInterval(() => animate, ANIMATION_DELAY);
+      }
     };
+    this.setState({
+      animationInProcess: true
+    });
     animate();
   }
 
@@ -177,6 +180,30 @@ class Timeline extends React.Component {
     // ui.anim.rangeselect.updateRange(startDate, endDate, true);
   };
 
+  // handles left/right arrow down to decrement/increment date
+  handleKeyDown = lodashDebounce((e) => {
+    if (e.keyCode === 37) {
+      this.decrementDate();
+      e.preventDefault();
+    } else if (e.keyCode === 39) {
+      this.incrementDate();
+      e.preventDefault();
+    }
+  }, 0, { leading: true, trailing: false })
+
+  // handles stopping change date in process and to allow faster key downs
+  handleKeyUp = (e) => {
+    if (e.keyCode === 37 || e.keyCode === 39) {
+      this.stopper();
+      e.preventDefault();
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener('keyup', this.handleKeyUp);
+  }
+
   render() {
     const {
       dateFormatted,
@@ -213,6 +240,8 @@ class Timeline extends React.Component {
                 dateB={new Date(dateFormattedB)}
                 hasSubdailyLayers={hasSubdailyLayers}
                 draggerSelected={draggerSelected}
+                maxDate={new Date(timelineEndDateLimit)}
+                minDate={new Date(timelineStartDateLimit)}
               />
             </div>
             <div id="zoom-buttons-group">
