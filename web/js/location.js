@@ -236,8 +236,10 @@ const getParameters = function(config, parameters) {
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
-        serialize: currentItemState => {
-          return serializeDate(currentItemState || nowMinusSevenDays);
+        serialize: (currentItemState) => {
+          return serializeDate(
+            currentItemState || nowMinusSevenDays
+          );
         },
         parse: str => {
           return tryCatchDate(str, nowMinusSevenDays);
@@ -250,8 +252,10 @@ const getParameters = function(config, parameters) {
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
-        serialize: currentItemState => {
-          return serializeDate(currentItemState || now);
+        serialize: (currentItemState) => {
+          return serializeDate(
+            currentItemState || now
+          );
         },
         parse: str => {
           return tryCatchDate(str, now);
