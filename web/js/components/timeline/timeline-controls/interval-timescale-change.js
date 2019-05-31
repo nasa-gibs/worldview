@@ -31,6 +31,7 @@ class TimeScaleIntervalChange extends Component {
       toolTipHovered: false
     }, this.props.setTimeScaleIntervalChangeUnit(timescale, openDialog));
   }
+
   // individual linking timescale handlers
   handleClickZoomYear = () => {
     this.handleClickZoom('year');
@@ -62,12 +63,12 @@ class TimeScaleIntervalChange extends Component {
   }
 
   componentDidMount () {
-    if (this.props.customDelta !== 1) {
+    if (this.props.customDelta !== 1 && this.props.customIntervalZoomLevel) {
       this.setCustomIntervalText();
     }
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate (prevProps) {
     let {
       customDelta,
       timeScaleChangeUnit,

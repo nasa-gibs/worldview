@@ -85,7 +85,6 @@ class App extends React.Component {
     this.onload();
   }
   render() {
-    //  const { config } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
@@ -101,9 +100,6 @@ class App extends React.Component {
         <div id="timewheels" style={{ display: 'none' }} />
         <Timeline />
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
-        {/* <div id="wv-animation-widet-case"> */}
-        {/* {config.features.animation ? <AnimationWidget /> : ''} */}
-        {/* </div> */}
         <Modal />
         <ErrorBoundary>
           <Debug parameters={this.props.parameters} />

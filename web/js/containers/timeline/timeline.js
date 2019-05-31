@@ -127,15 +127,16 @@ class Timeline extends React.Component {
     customIntervalModalOpen
   ) => {
     let delta;
+    let { customIntervalZoomLevel, customIntervalValue, selectInterval } = this.props;
     let customSelected = intervalSelected === 'custom';
-    if (customSelected) {
-      intervalSelected = this.props.customIntervalZoomLevel;
-      delta = this.props.customIntervalValue;
+    if (customSelected && customIntervalZoomLevel && customIntervalValue) {
+      intervalSelected = customIntervalZoomLevel;
+      delta = customIntervalValue;
     } else {
       intervalSelected = Number(timeScaleToNumberKey[intervalSelected]);
       delta = 1;
     }
-    this.props.selectInterval(delta, intervalSelected, customSelected);
+    selectInterval(delta, intervalSelected, customSelected);
     this.setState({
       customIntervalModalOpen: !!customIntervalModalOpen
     });
@@ -254,9 +255,7 @@ class Timeline extends React.Component {
             </div>
             <div id="zoom-buttons-group">
               <TimeScaleIntervalChange
-                setTimeScaleIntervalChangeUnit={
-                  this.setTimeScaleIntervalChangeUnit
-                }
+                setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
                 customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
                 customSelected={customSelected}
                 customDelta={customIntervalValue}
@@ -421,8 +420,8 @@ function mapStateToProps(state) {
     selectedDate: selectedDate,
     timeScale: timeScaleFromNumberKey[selectedZoom.toString()],
     timeScaleChangeUnit: timeScaleChangeUnit,
-    customIntervalValue: customDelta,
-    customIntervalZoomLevel: customInterval,
+    customIntervalValue: customDelta || 1,
+    customIntervalZoomLevel: customInterval || 3,
     intervalChangeAmt: deltaChangeAmt,
     parentOffset: dimensionsAndOffsetValues.parentOffset,
     timelineEndDateLimit,
@@ -436,7 +435,7 @@ const mapDispatchToProps = dispatch => ({
   changeDate: val => {
     dispatch(selectDate(val));
   },
-  // changes/sets custom delta and timescale interval, sets customSelected to TRUE
+  // changes/sets custom delta and timescale interval
   changeCustomInterval: (delta, timeScale) => {
     dispatch(changeCustomInterval(delta, timeScale));
   },
@@ -444,7 +443,7 @@ const mapDispatchToProps = dispatch => ({
   changeTimeScale: val => {
     dispatch(changeTimeScale(val));
   },
-  // changes to non-custom timescale interval, sets customSelected to FALSE
+  // changes to non-custom timescale interval, sets customSelected to TRUE/FALSE
   selectInterval: (delta, timeScale, customSelected) => {
     dispatch(selectInterval(delta, timeScale, customSelected));
   },
@@ -457,10 +456,10 @@ const mapDispatchToProps = dispatch => ({
   toggleActiveCompareState: () => {
     dispatch(toggleActiveCompareState());
   },
-  changeStartDate: (date) => {
+  changeStartDate: date => {
     dispatch(changeStartDate(date));
   },
-  changeEndDate: (date) => {
+  changeEndDate: date => {
     dispatch(changeEndDate(date));
   }
 });

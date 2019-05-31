@@ -12,12 +12,17 @@ const defaultState = {
   selectedZoom: 3,
   interval: 3,
   delta: 1,
-  selected: util.now(),
-  selectedB: util.dateAdd(util.now(), 'day', -7),
   customSelected: false,
-  customDelta: 1,
-  customInterval: 3
+  customDelta: undefined,
+  customInterval: undefined
 };
+
+export function getInitialState(config) {
+  return lodashAssign({}, defaultState, {
+    selected: config.now,
+    selectedB: util.dateAdd(config.now, 'day', -7)
+  });
+}
 
 export function dateReducer(state = defaultState, action) {
   switch (action.type) {

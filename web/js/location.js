@@ -78,7 +78,8 @@ export function mapLocationToState(state, location) {
 }
 
 const getParameters = function(config, parameters) {
-  const now = util.now();
+  const now = config.now;
+  const nowMinusSevenDays = util.dateAdd(config.now, 'day', -7);
   return {
     p: {
       stateKey: 'proj.id',
@@ -86,7 +87,7 @@ const getParameters = function(config, parameters) {
     },
     t: {
       stateKey: 'date.selected',
-      initialState: now, // ! now is not the same as default util.now() in the date.state due to invoking at different times
+      initialState: now,
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
@@ -95,11 +96,17 @@ const getParameters = function(config, parameters) {
           const compareIsActive = get(state, 'compare.active');
           const isCompareA = get(state, 'compare.isCompareA');
           const dateB = get(state, 'date.selectedB');
+          const nowString = util.toISOStringSeconds(now);
+
           return !compareIsActive && !isCompareA
-            ? serializeDate(dateB)
-            : !currentItemState
+            ? util.toISOStringSeconds(dateB) === nowString
               ? undefined
-              : serializeDate(currentItemState);
+              : serializeDate(dateB)
+            : util.toISOStringSeconds(currentItemState) === nowString
+              ? undefined
+              : !currentItemState
+                ? undefined
+                : serializeDate(currentItemState);
         },
         parse: str => {
           return tryCatchDate(str, now);
@@ -108,18 +115,18 @@ const getParameters = function(config, parameters) {
     },
     t1: {
       stateKey: 'legacy.date.selectedB',
-      initialState: util.dateAdd(now, 'day', -7),
+      initialState: nowMinusSevenDays,
       options: {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
           const isActive = get(state, 'compare.active');
           if (!isActive) return undefined;
           return serializeDate(
-            currentItemState || util.dateAdd(now, 'day', -7)
+            currentItemState || nowMinusSevenDays
           );
         },
         parse: str => {
-          return tryCatchDate(str, util.dateAdd(now, 'day', -7));
+          return tryCatchDate(str, nowMinusSevenDays);
         }
       }
     },
@@ -155,11 +162,10 @@ const getParameters = function(config, parameters) {
     },
     ici: {
       stateKey: 'date.customInterval',
-      initialState: 3,
+      initialState: undefined,
       options: {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
-          console.log(currentItemState, state)
           const isCustomSelected = get(state, 'date.customSelected');
           if (!isCustomSelected) return undefined;
           return currentItemState.toString();
@@ -171,7 +177,7 @@ const getParameters = function(config, parameters) {
     },
     icd: {
       stateKey: 'date.customDelta',
-      initialState: 1,
+      initialState: undefined,
       options: {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
@@ -184,19 +190,31 @@ const getParameters = function(config, parameters) {
         }
       }
     },
+    as: {
+      stateKey: 'animation.startDate',
+      initialState: nowMinusSevenDays,
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState) => {
+          return serializeDate(
+            currentItemState || nowMinusSevenDays
+          );
+        },
+        parse: str => {
+          return tryCatchDate(str, nowMinusSevenDays);
+        }
+      }
+    },
     ae: {
       stateKey: 'animation.endDate',
       initialState: now,
+      type: 'date',
       options: {
         serializeNeedsGlobalState: true,
-        serialize: (currentItemState, state) => {
-          console.log(currentItemState, state)
-
-          // startDate: util.dateAdd(new Date(), 'day', -7),
-          // endDate: new Date()
-
+        serialize: (currentItemState) => {
           return serializeDate(
-            currentItemState
+            currentItemState || now
           );
         },
         parse: str => {
@@ -204,21 +222,6 @@ const getParameters = function(config, parameters) {
         }
       }
     },
-    // ae: {
-    //   stateKey: 'animation.endDate',
-    //   initialState: undefined,
-    //   options: {
-    //     serializeNeedsGlobalState: true,
-    //     serialize: (currentItemState, state) => {
-    //       return serializeDate(
-    //         currentItemState
-    //       );
-    //     },
-    //     parse: str => {
-    //       return tryCatchDate(str, undefined);
-    //     }
-    //   }
-    // },
     e: {
       stateKey: 'events',
       type: 'object',
