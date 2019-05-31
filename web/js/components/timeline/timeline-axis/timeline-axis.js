@@ -1215,10 +1215,12 @@ class TimelineAxis extends React.Component {
       }
       let gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
       let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
-      return draggerDateAdded.clone().add(remainderMilliseconds).format();
+      let newLocationDate = draggerDateAdded.clone().add(remainderMilliseconds).format();
+      return new Date(newLocationDate);
     } else {
       let draggerTimeStartValue = moment.utc(animLocationDate).valueOf();
-      return moment.utc(draggerTimeStartValue + (diffFactor * deltaX)).format();
+      let newLocationDate = moment.utc(draggerTimeStartValue + (diffFactor * deltaX)).format();
+      return new Date(newLocationDate);
     }
   }
 
@@ -1306,7 +1308,6 @@ class TimelineAxis extends React.Component {
       animationEndLocation: endLocation,
       showHoverLine: false,
       showDraggerTime: false
-
     }, function() {
       this.props.updateAnimationRange(animationStartLocationDate, animationEndLocationDate);
     });

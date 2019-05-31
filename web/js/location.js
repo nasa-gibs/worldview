@@ -159,6 +159,7 @@ const getParameters = function(config, parameters) {
       options: {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
+          console.log(currentItemState, state)
           const isCustomSelected = get(state, 'date.customSelected');
           if (!isCustomSelected) return undefined;
           return currentItemState.toString();
@@ -183,6 +184,41 @@ const getParameters = function(config, parameters) {
         }
       }
     },
+    ae: {
+      stateKey: 'animation.endDate',
+      initialState: now,
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          console.log(currentItemState, state)
+
+          // startDate: util.dateAdd(new Date(), 'day', -7),
+          // endDate: new Date()
+
+          return serializeDate(
+            currentItemState
+          );
+        },
+        parse: str => {
+          return tryCatchDate(str, now);
+        }
+      }
+    },
+    // ae: {
+    //   stateKey: 'animation.endDate',
+    //   initialState: undefined,
+    //   options: {
+    //     serializeNeedsGlobalState: true,
+    //     serialize: (currentItemState, state) => {
+    //       return serializeDate(
+    //         currentItemState
+    //       );
+    //     },
+    //     parse: str => {
+    //       return tryCatchDate(str, undefined);
+    //     }
+    //   }
+    // },
     e: {
       stateKey: 'events',
       type: 'object',

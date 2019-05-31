@@ -15,13 +15,18 @@ const defaultState = {
   isActive: false,
   isPlaying: false,
   loop: false,
-  speed: 3
+  speed: 3,
+  startDate: util.dateAdd(new Date(), 'day', -7),
+  endDate: new Date()
 };
+// export function getInitialState(config) {
+//   return lodashAssign({}, defaultState, {
+//     startDate: util.dateAdd(new Date(), 'day', -7),
+//     endDate: new Date()
+//   });
+// }
 export function getInitialState(config) {
-  return lodashAssign({}, defaultState, {
-    startDate: util.dateAdd(new Date(), 'day', -7),
-    endDate: new Date()
-  });
+  return lodashAssign({}, defaultState);
 }
 
 export function animationReducer(state = defaultState, action) {

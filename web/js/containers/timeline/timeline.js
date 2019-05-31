@@ -22,7 +22,12 @@ import {
 } from '../../modules/layers/selectors';
 import { selectDate, changeTimeScale, selectInterval, changeCustomInterval } from '../../modules/date/actions';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
-import { onActivate as openAnimation, onClose as closeAnimation } from '../../modules/animation/actions';
+import {
+  onActivate as openAnimation,
+  onClose as closeAnimation,
+  changeStartDate,
+  changeEndDate
+} from '../../modules/animation/actions';
 import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../modules/date/constants';
 
 const ANIMATION_DELAY = 500;
@@ -179,8 +184,8 @@ class Timeline extends React.Component {
 
   // update range of animation draggers
   updateAnimationRange = (startDate, endDate) => {
-    // ! PLACE HOLDER - OLD VERSION
-    // ui.anim.rangeselect.updateRange(startDate, endDate, true);
+    this.props.changeStartDate(startDate);
+    this.props.changeEndDate(endDate);
   };
 
   // handles left/right arrow down to decrement/increment date
@@ -451,6 +456,12 @@ const mapDispatchToProps = dispatch => ({
   },
   toggleActiveCompareState: () => {
     dispatch(toggleActiveCompareState());
+  },
+  changeStartDate: (date) => {
+    dispatch(changeStartDate(date));
+  },
+  changeEndDate: (date) => {
+    dispatch(changeEndDate(date));
   }
 });
 

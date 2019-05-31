@@ -9,7 +9,7 @@ import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
 import AnimWidgetHeader from '../components/animation-widget/header';
 import googleTagManager from 'googleTagManager';
-import { hasSubDaily as hasSubDailySelector } from '../modules/layers/selectors';
+import { hasSubDaily as hasSubDailySelector, lastDate as layersLastDateTime } from '../modules/layers/selectors';
 import {
   play,
   onClose,
@@ -214,18 +214,26 @@ class AnimationWidget extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { layers, compare, animation, date, sidebar, modal } = state;
+  const { config, layers, compare, animation, date, sidebar, modal } = state;
   const { startDate, endDate, speed, loop, isPlaying, isActive } = animation;
-  const { minDate, maxDate } = date;
-  const activeStr = compare.activeString;
-  const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
+  const { activeString } = compare;
+  const hasSubdailyLayers = hasSubDailySelector(layers[activeString]);
   const zoomObj = getZoomObject(date, hasSubdailyLayers);
+  const compareModeActive = compare.active;
+
+  let minDate = new Date(config.startDate);
+  let maxDate;
+  if (compareModeActive) {
+    maxDate = getEndTime(layers, config);
+  } else {
+    maxDate = layersLastDateTime(layers[activeString], config);
+  }
 
   return {
     startDate,
     endDate,
-    // minDate,
-    // maxDate,
+    minDate,
+    maxDate,
     isActive:
       isActive &&
       sidebar.activeTab !== 'download' && // No Animation when data download is active
@@ -320,4 +328,10 @@ const getZoomObject = function(dateModel, hasSubDaily) {
     increment: headerText,
     array: lodashWithout(zooms, headerText)
   };
+};
+
+const getEndTime = (layers, config) => {
+  const endDateA = layersLastDateTime(layers['active'], config);
+  const endDateB = layersLastDateTime(layers['activeB'], config);
+  return endDateA > endDateB ? endDateA : endDateB;
 };
