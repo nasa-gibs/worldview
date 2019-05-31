@@ -2,8 +2,15 @@ import lodashIsEmpty from 'lodash/isEmpty';
 import Queue from 'promise-queue';
 import util from '../util/util';
 import uiIndicator from '../ui/indicator';
+import {
+  PLAY_ANIMATION,
+  TOGGLE_GIF,
+  UPDATE_START_DATE,
+  UPDATE_END_DATE
+} from '../../modules/animation/constants';
+import { changeEndDate } from '../../modules/animation/actions';
 
-export function animationUi(models, ui) {
+export function animationUi(models, ui, store) {
   var self = {};
   self.events = util.events();
   var dateModel = models.date;
@@ -16,6 +23,26 @@ export function animationUi(models, ui) {
   var inQueue;
   var pastDates;
   var loader;
+
+  const subscribeToStore = function() {
+    const state = store.getState();
+    const action = state.lastAction;
+    switch (action.type) {
+      case PLAY_ANIMATION:
+        return self.onPushedPlay();
+
+      case TOGGLE_GIF:
+      case UPDATE_START_DATE:
+      case UPDATE_END_DATE:
+      case modalConstants.OPEN_CUSTOM:
+      case modalConstants.OPEN_BASIC:
+      case layerConstants.REMOVE_LAYER:
+      case sidebarConstants.CHANGE_TAB:
+        return self.refreshState();
+      case SELECT_DATE:
+        return self.dateChange();
+    }
+  };
   /*
    * sets listeners
    *
@@ -26,8 +53,9 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.init = function () {
+  self.init = function() {
     self.refreshState();
+    store.subscribe(subscribeToStore);
     animModel.events.on('play', self.onPushedPlay);
     animModel.events.on('gif-click', self.refreshState);
     animModel.events.on('datechange', self.refreshState);
@@ -40,14 +68,12 @@ export function animationUi(models, ui) {
     }
     if (models.data) {
       models.data.events.on('activate', self.refreshState);
-      // models.date.events.on('zoom-change', self.refreshState);
       models.date.events.on('interval-change', self.refreshState);
       models.date.events.on('select', self.dateChange);
     }
     if (ui.map) {
       ui.map.events.on('added-layer', self.refreshState);
     }
-    // map.on('moveend', self.refreshState);
   };
 
   /*
@@ -61,7 +87,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.dateChange = function () {
+  self.dateChange = function() {
     if (!self.state.playing) {
       self.refreshState();
     }
@@ -78,7 +104,7 @@ export function animationUi(models, ui) {
    *
    */
 
-  self.refreshState = function () {
+  self.refreshState = function() {
     preloadArray = [];
     preload = {};
     pastDates = {};
@@ -106,7 +132,7 @@ export function animationUi(models, ui) {
    * @returns {string} ISO string Date
    *
    */
-  self.getStartDate = function () {
+  self.getStartDate = function() {
     // get index+1 of date zoom 'yearly', 'monthly', 'daily', '10-Minute'
     let dateSelectedZoom = models.date.selectedZoom || 1;
     var state;
@@ -146,7 +172,7 @@ export function animationUi(models, ui) {
    *
    */
 
-  self.onPushedPlay = function () {
+  self.onPushedPlay = function() {
     queueLength = self.setQueueLength();
     self.checkQueue(queueLength, self.state.playIndex);
     self.checkShouldPlay();
@@ -159,22 +185,22 @@ export function animationUi(models, ui) {
    *
    * @return {number}  The queueLength amount
    */
-  self.setQueueLength = function () {
+  self.setQueueLength = function() {
     var speed = animModel.rangeState.speed;
     switch (true) {
-      case (speed > 8 && speed <= 10):
+      case speed > 8 && speed <= 10:
         queueLength = 40;
         break;
-      case (speed > 7 && speed <= 8):
+      case speed > 7 && speed <= 8:
         queueLength = 32;
         break;
-      case (speed > 5 && speed <= 7):
+      case speed > 5 && speed <= 7:
         queueLength = 24;
         break;
-      case (speed > 3 && speed <= 5):
+      case speed > 3 && speed <= 5:
         queueLength = 16;
         break;
-      case (speed > 0 && speed <= 3):
+      case speed > 0 && speed <= 3:
         queueLength = 10;
         break;
     }
@@ -190,7 +216,7 @@ export function animationUi(models, ui) {
    * @returns {string} Zoom increment
    *
    */
-  self.getInterval = function () {
+  self.getInterval = function() {
     return zooms[models.date.interval];
   };
 
@@ -208,7 +234,7 @@ export function animationUi(models, ui) {
    */
 
   // # need to change subdaily argument for custom intervals - rework for all zoom levels presumably
-  self.nextDate = function (date) {
+  self.nextDate = function(date) {
     // console.log(date)
     let customSelected = models.date.customSelected;
     let interval;
@@ -238,18 +264,25 @@ export function animationUi(models, ui) {
    * @returns {object} JS Date
    *
    */
-  self.addDate = function (date) {
+  self.addDate = function(date) {
     self.addToInQueue(date);
-    queue.add(function () {
-      if (animModel.rangeState.state === 'on' && animModel.rangeState.playing) {
-        return ui.map.promiseDay(date);
-      } else {
-        self.clearCache();
-        uiIndicator.hide(loader);
-      }
-    })
-      .then(function (date) {
-        if (animModel.rangeState.state === 'on' && animModel.rangeState.playing) {
+    queue
+      .add(function() {
+        if (
+          animModel.rangeState.state === 'on' &&
+          animModel.rangeState.playing
+        ) {
+          return ui.map.promiseDay(date);
+        } else {
+          self.clearCache();
+          uiIndicator.hide(loader);
+        }
+      })
+      .then(function(date) {
+        if (
+          animModel.rangeState.state === 'on' &&
+          animModel.rangeState.playing
+        ) {
           self.addDateToCache(date);
           self.shiftCache();
           self.checkQueue(queueLength, self.state.playIndex);
@@ -270,7 +303,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.addToInQueue = function (date) {
+  self.addToInQueue = function(date) {
     var strDate = util.toISOStringSeconds(date);
     inQueue[strDate] = date;
     preloadArray.push(strDate);
@@ -289,7 +322,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.addDateToCache = function (date) {
+  self.addDateToCache = function(date) {
     var strDate = util.toISOStringSeconds(date);
     preload[strDate] = date;
     delete inQueue[strDate];
@@ -306,12 +339,14 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.shiftCache = function () {
+  self.shiftCache = function() {
     var key;
-    if (preload[preloadArray[0]] &&
-      util.objectLength(preload) > queueLength + (queueLength / 2) + 1 &&
+    if (
+      preload[preloadArray[0]] &&
+      util.objectLength(preload) > queueLength + queueLength / 2 + 1 &&
       pastDates[preloadArray[0]] &&
-      !self.isInToPlayGroup(preloadArray[0])) {
+      !self.isInToPlayGroup(preloadArray[0])
+    ) {
       key = preloadArray.shift();
       delete preload[key];
       delete pastDates[key];
@@ -332,7 +367,7 @@ export function animationUi(models, ui) {
    * @returns {boolean}
    *
    */
-  self.isInToPlayGroup = function (testDate) {
+  self.isInToPlayGroup = function(testDate) {
     var loop = animModel.rangeState.loop;
     var i = 0;
     var day = new Date(self.state.playIndex);
@@ -367,7 +402,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.clearCache = function () {
+  self.clearCache = function() {
     preload = {};
     preloadArray = [];
   };
@@ -384,7 +419,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.checkQueue = function (bufferLength, index) {
+  self.checkQueue = function(bufferLength, index) {
     var currentDate;
     var startDate = util.parseDateUTC(animModel.rangeState.startDate);
     var endDate = util.parseDateUTC(animModel.rangeState.endDate);
@@ -397,7 +432,12 @@ export function animationUi(models, ui) {
     lastToQueue = self.getLastBufferDateStr(currentDate, startDate, endDate);
     if (!preloadArray[0] && !inQueue[index]) {
       self.initialPreload(currentDate, startDate, endDate, lastToQueue);
-    } else if (!preload[lastToQueue] && !inQueue[lastToQueue] && !self.state.supportingCustomLayers) { // if last preload date doesn't exist
+    } else if (
+      !preload[lastToQueue] &&
+      !inQueue[lastToQueue] &&
+      !self.state.supportingCustomLayers
+    ) {
+      // if last preload date doesn't exist
       self.addItemToQueue(currentDate, startDate, endDate);
     } else if (self.state.supportingCustomLayers && preloadArray[0]) {
       self.customQueuer(currentDate, startDate, endDate);
@@ -414,7 +454,7 @@ export function animationUi(models, ui) {
    * @returns {boolean}
    *
    */
-  self.hasCustomLayers = function () {
+  self.hasCustomLayers = function() {
     var layer;
     var layers = models.layers.get();
 
@@ -441,7 +481,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.customQueuer = function (currentDate, startDate, endDate) {
+  self.customQueuer = function(currentDate, startDate, endDate) {
     var nextDateStr;
     var nextDate = self.nextDate(currentDate);
     if (nextDate > endDate) {
@@ -470,13 +510,14 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.initialPreload = function (currentDate, startDate, endDate, lastToQueue) {
+  self.initialPreload = function(currentDate, startDate, endDate, lastToQueue) {
     var day = currentDate;
     queueLength = self.getQueueLength(startDate, endDate);
-    if (queueLength <= 1) { // if only one frame will play just move to that date
+    if (queueLength <= 1) {
+      // if only one frame will play just move to that date
       dateModel.select(startDate);
       animModel.rangeState.playing = false;
-      setTimeout(function () {
+      setTimeout(function() {
         self.refreshState();
       }, 100);
       return;
@@ -488,7 +529,9 @@ export function animationUi(models, ui) {
         self.addDate(day);
         loader = uiIndicator.loading();
         return;
-      } else if (util.toISOStringSeconds(day) === util.toISOStringSeconds(currentDate)) {
+      } else if (
+        util.toISOStringSeconds(day) === util.toISOStringSeconds(currentDate)
+      ) {
         queueLength = i;
         loader = uiIndicator.loading();
         return;
@@ -511,7 +554,7 @@ export function animationUi(models, ui) {
    * @returns {number} new buffer length
    *
    */
-  self.getQueueLength = function (startDate, endDate) {
+  self.getQueueLength = function(startDate, endDate) {
     var day = startDate;
     var i = 0;
     while (i < queueLength) {
@@ -537,14 +580,16 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.addItemToQueue = function (currentDate, startDate, endDate) {
+  self.addItemToQueue = function(currentDate, startDate, endDate) {
     var nextDate = self.getNextBufferDate(currentDate, startDate, endDate);
     var nextDateStr = util.toISOStringSeconds(nextDate);
 
-    if (!inQueue[nextDateStr] &&
+    if (
+      !inQueue[nextDateStr] &&
       !preload[nextDateStr] &&
       nextDate <= endDate &&
-      nextDate >= startDate) {
+      nextDate >= startDate
+    ) {
       self.addDate(nextDate);
       self.checkQueue(queueLength, self.state.playIndex);
     }
@@ -564,7 +609,7 @@ export function animationUi(models, ui) {
    * @returns {object} JS Date
    *
    */
-  self.getNextBufferDate = function (currentDate, startDate, endDate) {
+  self.getNextBufferDate = function(currentDate, startDate, endDate) {
     var lastInBuffer = util.parseDateUTC(preloadArray[preloadArray.length - 1]);
     var nextDate = self.nextDate(lastInBuffer);
     if (lastInBuffer >= endDate || self.nextDate(lastInBuffer) > endDate) {
@@ -587,7 +632,7 @@ export function animationUi(models, ui) {
    * @returns {string} Date string
    *
    */
-  self.getLastBufferDateStr = function (currentDate, startDate, endDate) {
+  self.getLastBufferDateStr = function(currentDate, startDate, endDate) {
     var day = currentDate;
     var loop = animModel.rangeState.loop;
     var i = 1;
@@ -619,11 +664,16 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.checkShouldLoop = function (playIndexJSDate) {
+  self.checkShouldLoop = function(playIndexJSDate) {
     if (animModel.rangeState.loop) {
       self.shiftCache();
-      self.state.playIndex = util.toISOStringSeconds(self.setNewDate(playIndexJSDate, new Date(animModel.rangeState.startDate)));
-      setTimeout(function () {
+      self.state.playIndex = util.toISOStringSeconds(
+        self.setNewDate(
+          playIndexJSDate,
+          new Date(animModel.rangeState.startDate)
+        )
+      );
+      setTimeout(function() {
         self.checkShouldPlay();
         self.checkQueue(queueLength, self.state.playIndex);
       }, 1000);
@@ -645,7 +695,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.checkShouldPlay = function () {
+  self.checkShouldPlay = function() {
     var currentDate = util.parseDateUTC(self.state.playIndex);
     var endDate = util.parseDateUTC(animModel.rangeState.endDate);
     var startDate = util.parseDateUTC(animModel.rangeState.startDate);
@@ -657,9 +707,11 @@ export function animationUi(models, ui) {
       self.play(self.state.playIndex);
       return;
     }
-    if (self.state.supportingCustomLayers &&
+    if (
+      self.state.supportingCustomLayers &&
       preload[self.state.playIndex] &&
-      lodashIsEmpty(inQueue)) {
+      lodashIsEmpty(inQueue)
+    ) {
       self.play(self.state.playIndex);
       return;
     }
@@ -678,7 +730,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.play = function (index) {
+  self.play = function(index) {
     self.state.playing = true;
     uiIndicator.hide(loader);
     uiIndicator._hide(loader);
@@ -701,7 +753,7 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.setNewDate = function (date, newDate) {
+  self.setNewDate = function(date, newDate) {
     return newDate;
   };
 
@@ -716,12 +768,12 @@ export function animationUi(models, ui) {
    * @returns {void}
    *
    */
-  self.animate = function (index) {
+  self.animate = function(index) {
     var interval;
     var playIndex = index;
     var playIndexJSDate;
     var endDate = util.parseDateUTC(animModel.rangeState.endDate);
-    var player = function () {
+    var player = function() {
       self.shiftCache();
       self.checkQueue(queueLength, playIndex);
 
@@ -739,7 +791,8 @@ export function animationUi(models, ui) {
       if (!animModel.rangeState.playing || !preload[playIndex]) {
         clearInterval(interval);
         self.state.playing = false;
-        if (!preload[playIndex] && animModel.rangeState.playing) { // Still playing, add loader
+        if (!preload[playIndex] && animModel.rangeState.playing) {
+          // Still playing, add loader
           loader = uiIndicator.loading();
           self.shiftCache();
           self.checkQueue(queueLength, self.state.playIndex);
@@ -756,4 +809,4 @@ export function animationUi(models, ui) {
   };
   self.init();
   return self;
-};
+}

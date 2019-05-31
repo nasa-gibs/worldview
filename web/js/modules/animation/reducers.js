@@ -8,14 +8,16 @@ import {
   UPDATE_FRAME_RATE,
   TOGGLE_LOOPING,
   UPDATE_START_DATE,
-  UPDATE_END_DATE
+  UPDATE_END_DATE,
+  TOGGLE_GIF
 } from './constants';
 
 const defaultState = {
   isActive: false,
   isPlaying: false,
   loop: false,
-  speed: 3
+  speed: 3,
+  gifActive: false
 };
 export function getInitialState(config) {
   return lodashAssign({}, defaultState, {
@@ -28,15 +30,18 @@ export function animationReducer(state = defaultState, action) {
   switch (action.type) {
     case OPEN_ANIMATION:
       return lodashAssign({}, state, {
-        isActive: true
+        isActive: true,
+        gifActive: false
       });
     case EXIT_ANIMATION:
       return lodashAssign({}, state, {
-        isActive: false
+        isActive: false,
+        gifActive: false
       });
     case PLAY_ANIMATION:
       return lodashAssign({}, state, {
-        isPlaying: true
+        isPlaying: true,
+        gifActive: false
       });
     case STOP_ANIMATION:
       return lodashAssign({}, state, {
@@ -57,6 +62,10 @@ export function animationReducer(state = defaultState, action) {
     case TOGGLE_LOOPING:
       return lodashAssign({}, state, {
         loop: !state.loop
+      });
+    case TOGGLE_GIF:
+      return lodashAssign({}, state, {
+        gifActive: !state.gifActive
       });
     default:
       return state;

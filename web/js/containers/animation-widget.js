@@ -17,7 +17,8 @@ import {
   toggleLooping,
   changeFrameRate,
   changeStartDate,
-  changeEndDate
+  changeEndDate,
+  toggleComponentGifActive
 } from '../modules/animation/actions';
 import GifContainer from './gif';
 
@@ -66,9 +67,6 @@ class AnimationWidget extends React.Component {
     if (props.speed !== state.speed && !state.isSliding) {
       return { speed: props.speed };
     } else return null;
-  }
-  toggleGIF() {
-    this.setState({ isGifActive: !this.state.isGifActive });
   }
   /*
    * Sets a new state to say whether or not
@@ -252,7 +250,9 @@ const mapDispatchToProps = dispatch => ({
   onPushLoop: () => {
     dispatch(toggleLooping());
   },
-
+  toggleGif: () => {
+    dispatch(toggleComponentGifActive())
+  },
   onSlide: num => {
     dispatch(changeFrameRate(num));
   },
