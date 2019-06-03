@@ -3,7 +3,7 @@
         "Carbon Dioxide": {
             "id": "carbon-dioxide",
             "title":    "Carbon Dioxide",
-            "subtitle": "Aqua/AIRS+AMSU, OCO-2",
+            "subtitle": "Aqua/AIRS+AMSU, Aqua/AIRS, OCO-2",
             "sources": {
                 "Aqua/AIRS+AMSU": {
                     "id": "aqua-airs-amsu",
@@ -11,7 +11,16 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "AIRS_Carbon_Dioxide_AIRS_AMSU_Monthly"
+                        "AIRS_L3_Carbon_Dioxide_AIRS_AMSU_Monthly"
+                    ]
+                },
+                "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aura / AIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L3_Carbon_Dioxide_IR_Monthly"
                     ]
                 },
                 "OCO-2": {
