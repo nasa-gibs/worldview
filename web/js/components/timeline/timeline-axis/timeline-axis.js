@@ -1401,10 +1401,10 @@ class TimelineAxis extends React.Component {
     // TODO: componentize with smart update/calc - ex: dont update hover if only dragger updated
     // dragger and hover offsets, displays, and tooltips
     let draggerTimeLeftOffest = draggerSelected === 'selected'
-      ? draggerPosition - (hasSubdailyLayers ? 90 : 35)
-      : draggerPositionB - (hasSubdailyLayers ? 90 : 35);
+      ? draggerPosition - (hasSubdailyLayers ? 87 : 35)
+      : draggerPositionB - (hasSubdailyLayers ? 87 : 35);
 
-    let hoverTimeLeftOffset = hasSubdailyLayers ? leftOffset - 139 : leftOffset - 84;
+    let hoverTimeLeftOffset = hasSubdailyLayers ? leftOffset - 136 : leftOffset - 84;
 
     let draggerToolTip = showDraggerTime && draggerTimeState
       ? draggerSelected === 'selected'

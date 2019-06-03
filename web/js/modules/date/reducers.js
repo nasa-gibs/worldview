@@ -2,7 +2,6 @@ import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
-  // CHANGE_DELTA,
   SELECT_DATE
 } from './constants';
 import util from '../../util/util';
@@ -42,10 +41,6 @@ export function dateReducer(state = defaultState, action) {
         delta: action.delta,
         customSelected: action.customSelected
       });
-    // case CHANGE_DELTA:
-    //   return lodashAssign({}, state, {
-    //     delta: action.value
-    //   });
     case SELECT_DATE:
       return lodashAssign({}, state, {
         [action.activeString]: action.value

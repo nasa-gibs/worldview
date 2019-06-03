@@ -2,7 +2,6 @@ import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
-  // CHANGE_DELTA,
   SELECT_DATE
 } from './constants';
 
@@ -39,9 +38,3 @@ export function selectInterval(delta, interval, customSelected) {
     customSelected: Boolean(customSelected)
   };
 }
-// export function selectDelta(delta) {
-//   return {
-//     type: CHANGE_DELTA,
-//     value: delta
-//   };
-// }

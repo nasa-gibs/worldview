@@ -77,21 +77,20 @@ class Timeline extends React.Component {
     const {
       endTime,
       startDate,
-      selectedDate,
       hasSubdailyLayers,
       changeDate
     } = this.props;
 
     let animate = () => {
-      var nextTime = getNextTimeSelection(delta, increment, selectedDate);
+      var nextTime = getNextTimeSelection(delta, increment, this.props.selectedDate);
       if (hasSubdailyLayers) {
         // can we remove this logic?
         if (new Date(startDate) <= nextTime && nextTime <= endTime) {
-          changeDate(util.dateAdd(selectedDate, increment, delta));
+          changeDate(util.dateAdd(this.props.selectedDate, increment, delta));
         }
       } else {
         if (new Date(startDate) <= nextTime && nextTime <= endTime) {
-          changeDate(util.dateAdd(selectedDate, increment, delta));
+          changeDate(util.dateAdd(this.props.selectedDate, increment, delta));
         }
       }
       if (this.state.animationInProcess) {
@@ -354,20 +353,18 @@ function mapStateToProps(state) {
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
   customSelected = Boolean(customSelected);
 
-  // handle changing timescale and intervals if in subdaily state
-  // when removing all subdaily layers
-  // TODO: how to dynamically update store based on remove layer?
-  // if (!hasSubdailyLayers) {
-  //   if (selectedZoom > 3) {
-  //     selectedZoom = 3;
-  //   }
-  //   if (interval > 3) {
-  //     interval = 3;
-  //   }
-  //   if (customInterval > 3) {
-  //     customInterval = 3;
-  //   }
-  // }
+  // handle reset of timescale and intervals if not subdaily
+  if (!hasSubdailyLayers) {
+    if (selectedZoom > 3) {
+      selectedZoom = 3;
+    }
+    if (interval > 3) {
+      interval = 3;
+    }
+    if (customInterval > 3) {
+      customInterval = 3;
+    }
+  }
 
   let endTime;
   if (compareModeActive) {

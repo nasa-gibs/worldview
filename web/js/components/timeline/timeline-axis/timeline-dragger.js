@@ -61,7 +61,7 @@ class Dragger extends PureComponent {
             fill={disabled ? '#7a7a7a' : '#ccc'}
             stroke='#333'
             strokeWidth='1px'
-            points='60,20, 95,65, 25,65'>
+            points='60,20, 90,65, 30,65'>
           </polygon>
           {compareModeActive
             ? <text

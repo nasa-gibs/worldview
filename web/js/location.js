@@ -13,7 +13,7 @@ import {
   serializeLayers,
   mapLocationToLayerState
 } from './modules/layers/util';
-import { resetLayers } from './modules/layers/selectors';
+import { resetLayers, hasSubDaily } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import util from './util/util';
@@ -134,11 +134,21 @@ const getParameters = function(config, parameters) {
       stateKey: 'date.selectedZoom',
       initialState: 3,
       options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          let zoom = currentItemState;
+          // check if subdaily timescale zoom to determine if reset is needed
+          if (zoom > 3) {
+            let { layers, compare } = state;
+            let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            if (!hasSubdailyLayers) {
+              zoom = 3; // reset to day
+            }
+          }
+          return zoom === 3 ? undefined : zoom.toString();
+        },
         parse: str => {
           return str ? Number(str) : 3;
-        },
-        serialize: val => {
-          return val.toString();
         }
       }
     },
@@ -168,7 +178,16 @@ const getParameters = function(config, parameters) {
         serialize: (currentItemState, state) => {
           const isCustomSelected = get(state, 'date.customSelected');
           if (!isCustomSelected) return undefined;
-          return currentItemState.toString();
+          let customInterval = currentItemState;
+          // check if subdaily customInterval to determine if reset is needed
+          if (customInterval > 3) {
+            let { layers, compare } = state;
+            let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            if (!hasSubdailyLayers) {
+              customInterval = 3; // reset to day
+            }
+          }
+          return customInterval.toString();
         },
         parse: val => {
           return val.toString();
