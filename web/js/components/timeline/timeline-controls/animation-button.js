@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 
 class AnimationButton extends PureComponent {
   render() {
+    const className = 'button-action-group animate-button';
     return (
       <div
-        className="button-action-group animate-button"
+        className={
+          this.props.disabled ? 'wv-disabled-button ' + className : className
+        }
         id="animate-button"
         title="Set up animation"
         onClick={this.props.clickAnimationButton}

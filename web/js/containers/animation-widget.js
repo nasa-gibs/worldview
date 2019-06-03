@@ -1,6 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { without as lodashWithout } from 'lodash';
+import {
+  without as lodashWithout,
+  isEmpty as lodashIsEmpty,
+  get as lodashGet
+} from 'lodash';
 import ErrorBoundary from './error-boundary';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
@@ -9,7 +13,18 @@ import LoopButton from '../components/animation-widget/loop-button';
 import PlayButton from '../components/animation-widget/play-button';
 import AnimWidgetHeader from '../components/animation-widget/header';
 import googleTagManager from 'googleTagManager';
-import { hasSubDaily as hasSubDailySelector } from '../modules/layers/selectors';
+import PlayQueue from '../components/animation-widget/play-queue';
+
+import { promiseImageryForTime } from '../modules/map/util';
+import { selectDate } from '../modules/date/actions';
+import GifContainer from './gif';
+import { timeScaleFromNumberKey } from '../modules/date/constants';
+import { getQueueLength, getMaxQueueLength } from '../modules/animation/util';
+import {
+  hasSubDaily as hasSubDailySelector,
+  lastDate as layersLastDateTime,
+  getLayers
+} from '../modules/layers/selectors';
 import {
   play,
   onClose,
@@ -20,9 +35,6 @@ import {
   changeEndDate,
   toggleComponentGifActive
 } from '../modules/animation/actions';
-import GifContainer from './gif';
-
-import { timeScaleFromNumberKey } from '../modules/date/constants';
 
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;
@@ -114,7 +126,15 @@ class AnimationWidget extends React.Component {
       endDate,
       onPushPlay,
       onPushPause,
-      isActive
+      isActive,
+      interval,
+      delta,
+      layers,
+      hasCustomPalettes,
+      promiseImageryForTime,
+      map,
+      selectDate,
+      currentDate
     } = this.props;
     if (!isActive) {
       return '';
@@ -127,8 +147,39 @@ class AnimationWidget extends React.Component {
         />
       );
     } else {
+      const maxLength = getMaxQueueLength(this.state.speed);
+      const queueLength = getQueueLength(
+        startDate,
+        endDate,
+        this.state.speed,
+        interval,
+        delta
+      );
       return (
         <ErrorBoundary>
+          {isPlaying ? (
+            <PlayQueue
+              endDate={endDate}
+              loop={looping}
+              currentDate={currentDate}
+              canPreloadAll={queueLength <= maxLength}
+              startDate={startDate}
+              hasCustomPalettes={hasCustomPalettes}
+              map={map}
+              maxQueueLength={maxLength}
+              queueLength={queueLength}
+              layers={layers}
+              interval={interval}
+              delta={delta}
+              speed={this.state.speed}
+              selectDate={selectDate}
+              togglePlaying={onPushPause}
+              promiseImageryForTime={promiseImageryForTime}
+              onClose={onPushPause}
+            />
+          ) : (
+            ''
+          )}
           <div
             id="wv-animation-widget"
             className={
@@ -212,32 +263,58 @@ class AnimationWidget extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { layers, compare, animation, date, sidebar, modal } = state;
+  const {
+    layers,
+    compare,
+    animation,
+    date,
+    sidebar,
+    modal,
+    palettes,
+    config,
+    legacy
+  } = state;
   const { startDate, endDate, speed, loop, isPlaying, isActive } = animation;
-  const { minDate, maxDate } = date;
   const activeStr = compare.activeString;
+  const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
   const zoomObj = getZoomObject(date, hasSubdailyLayers);
-
+  let { customSelected, interval, delta, customInterval, customDelta } = date;
+  const hasCustomPalettes = !lodashIsEmpty(palettes[activeStr]);
   return {
     startDate,
     endDate,
-    // minDate,
-    // maxDate,
+    currentDate: date[activeDateStr],
+    minDate: config.startDate,
+    maxDate: layersLastDateTime(layers[activeStr], config),
     isActive:
       isActive &&
+      lodashGet(legacy, 'map.selectedMap.frameState_') &&
       sidebar.activeTab !== 'download' && // No Animation when data download is active
       !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'), // No Animation when Image download is open
     hasSubdailyLayers,
     incrementArray: zoomObj.array,
     increment: zoomObj.increment,
     sliderLabel: 'Frames Per Second',
+    layers: getLayers(layers[activeStr], {}, state),
     speed,
     isPlaying,
-    looping: loop
+    looping: loop,
+    delta: customSelected ? customDelta : delta,
+    interval: customSelected
+      ? timeScaleFromNumberKey[customInterval]
+      : timeScaleFromNumberKey[interval],
+    hasCustomPalettes,
+    map: legacy.map,
+    promiseImageryForTime: (date, layers) => {
+      return promiseImageryForTime(date, layers, state);
+    }
   };
 }
 const mapDispatchToProps = dispatch => ({
+  selectDate: val => {
+    dispatch(selectDate(val));
+  },
   onClose: () => {
     dispatch(onClose());
   },
@@ -251,7 +328,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(toggleLooping());
   },
   toggleGif: () => {
-    dispatch(toggleComponentGifActive())
+    dispatch(toggleComponentGifActive());
   },
   onSlide: num => {
     dispatch(changeFrameRate(num));

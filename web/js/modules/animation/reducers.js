@@ -67,6 +67,14 @@ export function animationReducer(state = defaultState, action) {
       return lodashAssign({}, state, {
         gifActive: !state.gifActive
       });
+    case 'KEY_PRESS_ACTION':
+      if (action.keyCode === 32 && state.isActive) {
+        return lodashAssign({}, state, {
+          isPlaying: !state.isPlaying
+        });
+      } else {
+        return state;
+      }
     default:
       return state;
   }

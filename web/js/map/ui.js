@@ -41,15 +41,15 @@ import {
   getLayers,
   isRenderable as isRenderableLayer
 } from '../modules/layers/selectors';
-import Cache from 'cachai';
+
 
 export function mapui(models, config, store) {
   var layerBuilder, createLayer;
   var id = 'wv-map';
   var selector = '#' + id;
-  var cache = new Cache(400); // Save layers from days visited
   var animationDuration = 250;
   var self = {};
+  var cache = models.map.cache;// Save layers from days visited
   var rotation = new MapRotate(self, models);
   var dateline = mapDateLineBuilder(models, config, store);
   var precache = mapPrecacheTile(models, config, cache, self);
@@ -178,7 +178,7 @@ export function mapui(models, config, store) {
     }
     self.selected = self.proj[proj.id];
     var map = self.selected;
-    models.map.updateMap(map);
+    models.map.updateMap(map, self);
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
@@ -906,7 +906,10 @@ export function mapui(models, config, store) {
         self.mapIsbeingZoomed = false;
       }, 200);
     });
-
+    const completeKey = map.on('rendercomplete', () => {
+      models.map.updateMap(self.selected, self);
+      map.unset(completeKey, true);
+    });
     // Clicking on a vector shows it's attributes in console.
     map.on('click', function(e) {
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {

@@ -4,6 +4,7 @@ import {
   round as lodashRound
 } from 'lodash';
 import canvg from 'canvg-browser';
+import util from '../../util/util';
 
 export function getAnimationParameterSetup(
   parameters,
@@ -196,12 +197,13 @@ export function getMaxQueueLength(speed) {
  * @returns {number} new buffer length
  *
  */
-export function getQueueLength(startDate, endDate, maxQueueLength) {
+export function getQueueLength(startDate, endDate, speed, interval, delta) {
   var day = startDate;
   var i = 0;
-  while (i < maxQueueLength) {
+  const maxQueueLength = getMaxQueueLength(speed);
+  while (i <= maxQueueLength) {
     i++;
-    day = self.nextDate(day);
+    day = util.dateAdd(day, interval, delta);
     if (day > endDate) {
       return i;
     }

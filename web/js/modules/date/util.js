@@ -1,5 +1,5 @@
 import util from '../../util/util';
-import { get } from 'lodash';
+import { get, each as lodashEach } from 'lodash';
 
 export function getDateParameterSetup(
   parameters,
@@ -91,4 +91,21 @@ export function tryCatchDate(str, initialState) {
     console.warn('Invalid date: ' + str);
     return initialState;
   }
-};
+}
+/**
+ * Checks the date provided against the active layers.
+ *
+ * @method getLayersActiveAtDate
+ * @param  {Array} layers
+ * @param  {object} date Date of data to be displayed on the map.
+ * @return {array}       An array of visible layers within the date.
+ */
+export function getLayersActiveAtDate(layers, date) {
+  var arra = [];
+  lodashEach(layers, function(layer) {
+    if (layer.visible && layer.startDate && new Date(layer.startDate > date)) {
+      arra.push(layer);
+    }
+  });
+  return arra;
+}

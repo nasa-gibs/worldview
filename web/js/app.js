@@ -83,9 +83,18 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.onload();
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+  handleKeyPress(event) {
+    this.props.keyPressAction(event.keyCode);
+  }
+  componentDidMount() {
+    document.addEventListener('keypress', this.handleKeyPress);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keypress', this.handleKeyPress);
   }
   render() {
-    //  const { config } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
@@ -101,9 +110,6 @@ class App extends React.Component {
         <div id="timewheels" style={{ display: 'none' }} />
         <Timeline />
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
-        {/* <div id="wv-animation-widet-case"> */}
-        {/* {config.features.animation ? <AnimationWidget /> : ''} */}
-        {/* </div> */}
         <Modal />
         <ErrorBoundary>
           <Debug parameters={this.props.parameters} />
@@ -169,6 +175,9 @@ const mapDispatchToProps = dispatch => ({
   updateLegacyInitComplete: () => {
     dispatch(updateLegacyInitComplete());
   },
+  keyPressAction: keyCode => {
+    dispatch({ type: 'KEY_PRESS_ACTION', keyCode });
+  },
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
   }
@@ -179,5 +188,6 @@ export default connect(
   mapDispatchToProps
 )(App);
 App.propTypes = {
-  mapMouseEvents: PropTypes.object
+  mapMouseEvents: PropTypes.object,
+  keyPressAction: PropTypes.func
 };

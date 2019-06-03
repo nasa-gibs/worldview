@@ -134,7 +134,8 @@ class AnimationWidget extends React.Component {
       <div
         id="wv-animation-widget"
         className={
-          'wv-animation-widget' + (this.state.hasSubdailyLayers ? ' subdaily' : '')
+          'wv-animation-widget' +
+          (this.state.hasSubdailyLayers ? ' subdaily' : '')
         }
       >
         <AnimWidgetHeader
