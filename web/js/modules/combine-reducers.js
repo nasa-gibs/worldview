@@ -30,6 +30,7 @@ import {
 } from './date/reducers';
 import { animationReducer } from './animation/reducers';
 import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
+import { vectorStyleReducer, getInitialVectorStyleState } from './vector-styles/reducers';
 import dataDownloadReducer from './data/reducers';
 import { get as lodashGet } from 'lodash';
 
@@ -79,7 +80,8 @@ export function getInitialState(models, config, parameters) {
     requestedEvents: eventRequestResponse(eventsIgnoreArray),
     requestedEventSources: eventRequestResponse(eventsIgnoreArray),
     requestedEventCategories: eventRequestResponse(eventsIgnoreArray),
-    palettes: getInitialPaletteState(config)
+    palettes: getInitialPaletteState(config),
+    vectorStyles: getInitialVectorStyleState(config)
   };
 }
 const defaultReducer = (state = {}) => state;
@@ -99,6 +101,7 @@ const reducers = {
   events: eventsReducer,
   data: dataDownloadReducer,
   palettes: paletteReducer,
+  vectorStyles: vectorStyleReducer,
   tour: tourReducer,
   map: mapReducer,
   animation: animationReducer,
