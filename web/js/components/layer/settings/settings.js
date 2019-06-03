@@ -4,6 +4,7 @@ import { each as lodashEach } from 'lodash';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { connect } from 'react-redux';
 import Palette from './palette';
+import VectorStyle from './vector-styles';
 import Opacity from './opacity';
 import Threshold from './threshold';
 import {
@@ -23,6 +24,10 @@ import {
   setCustom,
   clearCustom
 } from '../../../modules/palettes/actions';
+
+import {
+  getVectorStyle
+} from '../../../modules/vector-styles/selectors';
 import { setOpacity } from '../../../modules/layers/actions';
 
 class LayerSettings extends React.Component {
@@ -116,6 +121,11 @@ class LayerSettings extends React.Component {
               canvas={this.canvas}
               index={i}
               paletteOrder={paletteOrder}
+            />
+            <VectorStyle
+              activePalette={'default_style'}
+              layer={layer}
+              index={i}
             />
           </TabPane>
         );
@@ -250,6 +260,9 @@ function mapStateToProps(state, ownProps) {
     },
     getPalette: (layerId, index) => {
       return getPalette(layerId, index, groupName, state);
+    },
+    getVectorStyle: (layerId, index) => {
+      return getVectorStyle(layerId, index, groupName, state);
     }
   };
 }

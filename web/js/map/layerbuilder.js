@@ -1,5 +1,5 @@
 import util from '../util/util';
-import styles from '../styles/styles';
+import vectorStyles from '../modules/vector-styles/util';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -80,6 +80,12 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
           });
         }
       } else if (def.type === 'vector') {
+        // Add vector layer style to config.rendered object
+        console.log(config);
+        // if (config.layers[def.id] && config.layers[def.id].vectorStyle) {
+        //   vectorStyles.loadRenderedVectorStyle(config, def.id);
+        // }
+
         layer = createLayerVector(def, options, null, state);
         if (
           proj.id === 'geographic' &&
@@ -377,155 +383,155 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       source: sourceOptions
     });
 
-    if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
-      var styleFunction;
-      var vectorStyles = config.vectorStyles.rendered;
-      var vectorStyle = def.vectorStyle.id;
-      var glStyle = vectorStyles[vectorStyle];
-      if (glStyle === undefined) {
-        glStyle = vectorStyles['OrbitTracks'];
-      }
-      styleFunction = stylefunction(layer, glStyle, 'default_style');
+    // if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+    //   var styleFunction;
+    //   var vectorStyles = config.vectorStyles.rendered;
+    //   var vectorStyle = def.vectorStyle.id;
+    //   var glStyle = vectorStyles[vectorStyle];
+    //   if (glStyle === undefined) {
+    //     glStyle = vectorStyles['OrbitTracks'];
+    //   }
+    //   styleFunction = stylefunction(layer, glStyle, 'default_style');
 
-      $(document).ready(function() {
-        function getVals() {
-          // Get slider values
-          var parent = this.parentNode;
-          var slides = parent.getElementsByTagName('input');
-          var slide1 = parseFloat(slides[0].value);
-          var slide2 = parseFloat(slides[1].value);
-          // Neither slider will clip the other, so make sure we determine which is larger
-          if (slide1 > slide2) { var tmp = slide2; slide2 = slide1; slide1 = tmp; }
+    //   $(document).ready(function() {
+    //     function getVals() {
+    //       // Get slider values
+    //       var parent = this.parentNode;
+    //       var slides = parent.getElementsByTagName('input');
+    //       var slide1 = parseFloat(slides[0].value);
+    //       var slide2 = parseFloat(slides[1].value);
+    //       // Neither slider will clip the other, so make sure we determine which is larger
+    //       if (slide1 > slide2) { var tmp = slide2; slide2 = slide1; slide1 = tmp; }
 
-          var displayElement = parent.getElementsByClassName('rangeValues')[0];
-          displayElement.innerHTML = slide1 + ' - ' + slide2;
-        }
+    //       var displayElement = parent.getElementsByClassName('rangeValues')[0];
+    //       displayElement.innerHTML = slide1 + ' - ' + slide2;
+    //     }
 
-        window.onload = function() {
-          styleFunction = stylefunction(layer, glStyle, 'default_style');
-          // Initialize Sliders
-          var sliderSections = document.getElementsByClassName('range-slider');
-          for (var x = 0; x < sliderSections.length; x++) {
-            var sliders = sliderSections[x].getElementsByTagName('input');
-            for (var y = 0; y < sliders.length; y++) {
-              if (sliders[y].type === 'range') {
-                sliders[y].oninput = getVals;
-                // Manually trigger event first time to display values
-                sliders[y].oninput();
-              }
-            }
-          }
+    //     window.onload = function() {
+    //       styleFunction = stylefunction(layer, glStyle, 'default_style');
+    //       // Initialize Sliders
+    //       var sliderSections = document.getElementsByClassName('range-slider');
+    //       for (var x = 0; x < sliderSections.length; x++) {
+    //         var sliders = sliderSections[x].getElementsByTagName('input');
+    //         for (var y = 0; y < sliders.length; y++) {
+    //           if (sliders[y].type === 'range') {
+    //             sliders[y].oninput = getVals;
+    //             // Manually trigger event first time to display values
+    //             sliders[y].oninput();
+    //           }
+    //         }
+    //       }
 
-          let confidenceMinFilter = document.getElementById('confidenceMinFilter');
-          let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
+    //       let confidenceMinFilter = document.getElementById('confidenceMinFilter');
+    //       let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
 
-          document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
-          document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
-        };
+    //       document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
+    //       document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
+    //     };
 
-        // TODO: Add check for date change and re-apply
-        // TODO: Change this on chang to target the controls
-        $(document).on('change', function(e) {
-          glStyle = vectorStyles[vectorStyle];
-          if (glStyle.name === 'FIRMS') {
-            styleFunction = stylefunction(layer, glStyle, 'default_style');
+    //     // TODO: Add check for date change and re-apply
+    //     // TODO: Change this on chang to target the controls
+    //     $(document).on('change', function(e) {
+    //       glStyle = vectorStyles[vectorStyle];
+    //       if (glStyle.name === 'FIRMS') {
+    //         styleFunction = stylefunction(layer, glStyle, 'default_style');
 
-            // FIRMS Style based on Confidence / FRP
-            if (document.getElementById('frpCheckbox').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP');
-            } else if (document.getElementById('confidenceCheckbox').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence');
-            } else {
-              styleFunction = stylefunction(layer, glStyle, 'default_style');
-            }
+    //         // FIRMS Style based on Confidence / FRP
+    //         if (document.getElementById('frpCheckbox').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'MODIS_Fire_Points_FRP');
+    //         } else if (document.getElementById('confidenceCheckbox').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'MODIS_Fire_Points_Confidence');
+    //         } else {
+    //           styleFunction = stylefunction(layer, glStyle, 'default_style');
+    //         }
 
-            // FIRMS Filters
-            let confidenceMinFilter = document.getElementById('confidenceMinFilter');
-            let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
+    //         // FIRMS Filters
+    //         let confidenceMinFilter = document.getElementById('confidenceMinFilter');
+    //         let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
 
-            document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
-            document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
+    //         document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
+    //         document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
 
-            // Filter by a feature
-            layer.setStyle(function(feature, resolution) {
-              if (feature.get('CONFIDENCE') >= confidenceMinFilter.value && feature.get('CONFIDENCE') <= confidenceMaxFilter.value) {
-                return styleFunction(feature, resolution);
-              }
-            });
-          } else if (glStyle.name === 'Orbit Tracks') {
-            if (document.getElementById('orbit-track-controls_yellow1').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'yellow1');
-            } else if (document.getElementById('orbit-track-controls_yellow2').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'yellow2');
-            } else if (document.getElementById('orbit-track-controls_orange1').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'orange1');
-            } else if (document.getElementById('orbit-track-controls_orange2').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'orange2');
-            } else if (document.getElementById('orbit-track-controls_orange3').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'orange3');
-            } else if (document.getElementById('orbit-track-controls_red1').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'red1');
-            } else if (document.getElementById('orbit-track-controls_red2').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'red2');
-            } else if (document.getElementById('orbit-track-controls_red3').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'red3');
-            } else if (document.getElementById('orbit-track-controls_pink1').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'pink1');
-            } else if (document.getElementById('orbit-track-controls_pink2').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'pink2');
-            } else if (document.getElementById('orbit-track-controls_pink3').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'pink3');
-            } else if (document.getElementById('orbit-track-controls_pink4').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'pink4');
-            } else if (document.getElementById('orbit-track-controls_pink5').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'pink5');
-            } else if (document.getElementById('orbit-track-controls_purple1').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'purple1');
-            } else if (document.getElementById('orbit-track-controls_purple2').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'purple2');
-            } else if (document.getElementById('orbit-track-controls_purple3').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'purple3');
-            } else if (document.getElementById('orbit-track-controls_blue1').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'blue1');
-            } else if (document.getElementById('orbit-track-controls_blue2').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'blue2');
-            } else if (document.getElementById('orbit-track-controls_blue3').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'blue3');
-            } else if (document.getElementById('orbit-track-controls_blue4').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'blue4');
-            } else if (document.getElementById('orbit-track-controls_blue5').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'blue5');
-            } else if (document.getElementById('orbit-track-controls_blue6').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'blue6');
-            } else if (document.getElementById('orbit-track-controls_brown1').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'brown1');
-            } else if (document.getElementById('orbit-track-controls_brown2').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'brown2');
-            } else if (document.getElementById('orbit-track-controls_green1').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'green1');
-            } else if (document.getElementById('orbit-track-controls_green2').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'green2');
-            } else if (document.getElementById('orbit-track-controls_green3').checked === true) {
-              styleFunction = stylefunction(layer, glStyle, 'green3');
-            } else {
-              styleFunction = stylefunction(layer, glStyle, 'default_style');
-            }
+    //         // Filter by a feature
+    //         layer.setStyle(function(feature, resolution) {
+    //           if (feature.get('CONFIDENCE') >= confidenceMinFilter.value && feature.get('CONFIDENCE') <= confidenceMaxFilter.value) {
+    //             return styleFunction(feature, resolution);
+    //           }
+    //         });
+    //       } else if (glStyle.name === 'Orbit Tracks') {
+    //         if (document.getElementById('orbit-track-controls_yellow1').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'yellow1');
+    //         } else if (document.getElementById('orbit-track-controls_yellow2').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'yellow2');
+    //         } else if (document.getElementById('orbit-track-controls_orange1').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'orange1');
+    //         } else if (document.getElementById('orbit-track-controls_orange2').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'orange2');
+    //         } else if (document.getElementById('orbit-track-controls_orange3').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'orange3');
+    //         } else if (document.getElementById('orbit-track-controls_red1').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'red1');
+    //         } else if (document.getElementById('orbit-track-controls_red2').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'red2');
+    //         } else if (document.getElementById('orbit-track-controls_red3').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'red3');
+    //         } else if (document.getElementById('orbit-track-controls_pink1').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'pink1');
+    //         } else if (document.getElementById('orbit-track-controls_pink2').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'pink2');
+    //         } else if (document.getElementById('orbit-track-controls_pink3').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'pink3');
+    //         } else if (document.getElementById('orbit-track-controls_pink4').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'pink4');
+    //         } else if (document.getElementById('orbit-track-controls_pink5').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'pink5');
+    //         } else if (document.getElementById('orbit-track-controls_purple1').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'purple1');
+    //         } else if (document.getElementById('orbit-track-controls_purple2').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'purple2');
+    //         } else if (document.getElementById('orbit-track-controls_purple3').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'purple3');
+    //         } else if (document.getElementById('orbit-track-controls_blue1').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'blue1');
+    //         } else if (document.getElementById('orbit-track-controls_blue2').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'blue2');
+    //         } else if (document.getElementById('orbit-track-controls_blue3').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'blue3');
+    //         } else if (document.getElementById('orbit-track-controls_blue4').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'blue4');
+    //         } else if (document.getElementById('orbit-track-controls_blue5').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'blue5');
+    //         } else if (document.getElementById('orbit-track-controls_blue6').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'blue6');
+    //         } else if (document.getElementById('orbit-track-controls_brown1').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'brown1');
+    //         } else if (document.getElementById('orbit-track-controls_brown2').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'brown2');
+    //         } else if (document.getElementById('orbit-track-controls_green1').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'green1');
+    //         } else if (document.getElementById('orbit-track-controls_green2').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'green2');
+    //         } else if (document.getElementById('orbit-track-controls_green3').checked === true) {
+    //           styleFunction = stylefunction(layer, glStyle, 'green3');
+    //         } else {
+    //           styleFunction = stylefunction(layer, glStyle, 'default_style');
+    //         }
 
-            // Filter time by 5 mins
-            layer.setStyle(function(feature, resolution) {
-              var minute;
-              var minutes = feature.get('label');
-              if (minutes) {
-                minute = minutes.split(':');
-              }
-              if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
-                return styleFunction(feature, resolution);
-              }
-            });
-          }
-        });
-      });
-    }
+    //         // Filter time by 5 mins
+    //         layer.setStyle(function(feature, resolution) {
+    //           var minute;
+    //           var minutes = feature.get('label');
+    //           if (minutes) {
+    //             minute = minutes.split(':');
+    //           }
+    //           if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
+    //             return styleFunction(feature, resolution);
+    //           }
+    //         });
+    //       }
+    //     });
+    //   });
+    // }
 
     return layer;
   };

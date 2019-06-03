@@ -29,9 +29,9 @@ class VectorStyleSelect extends React.Component {
   }
   /**
    * Pass palette to model after selection
-   * @param {String} id | custom Palette Id
+   * @param {String} id | custom VectorStyle Id
    */
-  onChangePalette(id) {
+  onChangeVectorStyle(id) {
     const { layer, clearCustom, setCustom, index } = this.props;
 
     // Applying customs takes a while and
@@ -53,14 +53,14 @@ class VectorStyleSelect extends React.Component {
   customLegend(id) {
     const {
       getDefaultLegend,
-      getCustomPalette,
+      getCustomVectorStyle,
       layer,
       index
       // palettesTranslate
     } = this.props;
     const { activeVectorStyle } = this.state;
     var source = getDefaultLegend(layer.id, index);
-    var target = getCustomPalette(id);
+    var target = getCustomVectorStyle(id);
     var targetType =
       target.colors.length === 1 ? 'classification' : 'continuous';
 
@@ -77,7 +77,7 @@ class VectorStyleSelect extends React.Component {
   /**
    * Render classification customs when there is only one
    * Color in colormap
-   * @param {Object} palette | Palette object
+   * @param {Object} palette | VectorStyle object
    * @param {String} id | colormap Id
    * @param {String} description | Colormap name
    * @param {Boolean} isSelected | is this colormap active
@@ -95,7 +95,7 @@ class VectorStyleSelect extends React.Component {
           id={'wv-palette-radio-' + id}
           type="radio"
           name="wv-palette-radio"
-          onClick={() => this.onChangePalette(id)}
+          onClick={() => this.onChangeVectorStyle(id)}
         />
         <label htmlFor={'wv-palette-radio-' + id}>
           <span
@@ -142,7 +142,7 @@ VectorStyleSelect.propTypes = {
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
   getDefaultLegend: PropTypes.func,
-  getCustomPalette: PropTypes.func,
+  getCustomVectorStyle: PropTypes.func,
   canvas: PropTypes.object,
   checkerBoard: PropTypes.object,
   activeVectorStyle: PropTypes.string
