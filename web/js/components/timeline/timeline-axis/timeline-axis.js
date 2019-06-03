@@ -690,7 +690,7 @@ class TimelineAxis extends React.Component {
     let animationStartDraggerLocation;
     let animationEndDraggerLocation;
 
-    if (this.props.startLocationDate) {
+    if (this.props.animStartLocationDate) {
       animationStartDraggerLocation = Math.abs(frontDate.diff(this.props.animStartLocationDate, timeScale, true) * gridWidth);
       animationEndDraggerLocation = Math.abs(frontDate.diff(this.props.animEndLocationDate, timeScale, true) * gridWidth);
     }
@@ -1589,8 +1589,8 @@ class TimelineAxis extends React.Component {
 TimelineAxis.defaultProps = {
 };
 TimelineAxis.propTypes = {
-  animEndLocationDate: PropTypes.date,
-  animStartLocationDate: PropTypes.date,
+  animEndLocationDate: PropTypes.object,
+  animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
   changeDate: PropTypes.func,
   changeTimeScale: PropTypes.func,

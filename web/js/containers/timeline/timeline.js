@@ -473,7 +473,30 @@ Timeline.propTypes = {
   url: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   screenWidth: PropTypes.number,
-  screenHeight: PropTypes.number
+  screenHeight: PropTypes.number,
+  draggerSelected: PropTypes.string,
+  hasSubdailyLayers: PropTypes.bool,
+  customSelected: PropTypes.bool,
+  compareModeActive: PropTypes.bool,
+  dateFormatted: PropTypes.string,
+  dateFormattedB: PropTypes.string,
+  startDate: PropTypes.string,
+  timelineStartDateLimit: PropTypes.string,
+  endTime: PropTypes.object,
+  isAnimationWidgetOpen: PropTypes.bool,
+  animStartLocationDate: PropTypes.object,
+  animEndLocationDate: PropTypes.object,
+  axisWidth: PropTypes.number,
+  selectedDate: PropTypes.object,
+  timeScale: PropTypes.string,
+  timeScaleChangeUnit: PropTypes.string,
+  customIntervalValue: PropTypes.number,
+  customIntervalZoomLevel: PropTypes.number,
+  intervalChangeAmt: PropTypes.number,
+  parentOffset: PropTypes.number,
+  timelineEndDateLimit: PropTypes.string,
+  leftArrowDisabled: PropTypes.bool,
+  rightArrowDisabled: PropTypes.bool
 };
 
 // get axisWidth and parentOffset for axis, footer, and leftoffset calculations
