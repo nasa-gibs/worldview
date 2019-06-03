@@ -1,7 +1,10 @@
 import { round as lodashRound } from 'lodash';
 import canvg from 'canvg-browser';
 import util from '../../util/util';
+<<<<<<< HEAD
 import update from 'immutability-helper';
+=======
+>>>>>>> Add animation redux rendering #1623 #1622
 
 export function getStampProps(
   stampWidthRatio,

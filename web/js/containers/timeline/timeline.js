@@ -29,14 +29,26 @@ import {
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import {
   onActivate as openAnimation,
+<<<<<<< HEAD
   onClose as closeAnimation,
   changeStartDate,
   changeEndDate
 } from '../../modules/animation/actions';
+<<<<<<< HEAD
+=======
+import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../modules/date/constants';
+=======
+  onClose as closeAnimation
+} from '../../modules/animation/actions';
+>>>>>>> Add animation redux rendering #1623 #1622
 import {
   timeScaleFromNumberKey,
   timeScaleToNumberKey
 } from '../../modules/date/constants';
+<<<<<<< HEAD
+=======
+>>>>>>> Add animation redux rendering #1623 #1622
+>>>>>>> Add animation redux rendering #1623 #1622
 
 const ANIMATION_DELAY = 500;
 
@@ -241,8 +253,12 @@ class Timeline extends React.Component {
       animStartLocationDate,
       animEndLocationDate,
       isAnimationWidgetOpen,
+<<<<<<< HEAD
       animationDisabled,
       hideTimeline
+=======
+      animationDisabled
+>>>>>>> Add animation redux rendering #1623 #1622
     } = this.props;
     return dateFormatted ? (
       <ErrorBoundary>
@@ -265,12 +281,23 @@ class Timeline extends React.Component {
             </div>
             <div id="zoom-buttons-group">
               <TimeScaleIntervalChange
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
+                customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
+=======
+>>>>>>> Add animation redux rendering #1623 #1622
                 setTimeScaleIntervalChangeUnit={
                   this.setTimeScaleIntervalChangeUnit
                 }
                 customIntervalZoomLevel={
                   timeScaleFromNumberKey[customIntervalZoomLevel]
                 }
+<<<<<<< HEAD
+=======
+>>>>>>> Add animation redux rendering #1623 #1622
+>>>>>>> Add animation redux rendering #1623 #1622
                 customSelected={customSelected}
                 customDelta={customIntervalValue}
                 timeScaleChangeUnit={timeScaleChangeUnit}
@@ -293,10 +320,14 @@ class Timeline extends React.Component {
           </div>
           <div
             id="timeline-footer"
+<<<<<<< HEAD
             style={{
               display:
                 this.state.timelineHidden || hideTimeline ? 'none' : 'block'
             }}
+=======
+            style={{ display: this.state.timelineHidden ? 'none' : 'block' }}
+>>>>>>> Add animation redux rendering #1623 #1622
           >
             <div id="wv-animation-widet-case">
               {isAnimationWidgetOpen ? <AnimationWidget /> : null}
@@ -363,8 +394,12 @@ function mapStateToProps(state) {
     browser,
     date,
     animation,
+<<<<<<< HEAD
     sidebar,
     modal
+=======
+    sidebar
+>>>>>>> Add animation redux rendering #1623 #1622
   } = state;
   let {
     customSelected,
@@ -452,11 +487,16 @@ function mapStateToProps(state) {
     timelineEndDateLimit,
     leftArrowDisabled,
     rightArrowDisabled,
+<<<<<<< HEAD
     hideTimeline:
       (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
       !lodashGet(map, 'ui.selected.frameState_') ||
       sidebar.activeTab === 'download'
+=======
+    animationDisabled:
+      !legacy.map.selectedMap || !legacy.map.selectedMap.frameState_ || sidebar.activeTab === 'download'
+>>>>>>> Add animation redux rendering #1623 #1622
   };
 }
 
