@@ -5,7 +5,8 @@ import Deque from 'double-ended-queue';
 import moment from 'moment';
 
 import GridRange from './grid-range/grid-range';
-import Dragger from './timeline-dragger';
+import DateToolTip from './date-tooltips';
+import DraggerContainer from './dragger-container';
 
 import { getTimeRange } from './date-calc';
 import TimelineRangeSelector from '../../range-selection/range-selection';
@@ -968,7 +969,6 @@ class TimelineAxis extends React.Component {
     }
 
     this.setState({
-      showHoverLine: true,
       isTimelineDragging: false,
       leftBound,
       rightBound,
@@ -1170,7 +1170,6 @@ class TimelineAxis extends React.Component {
 
   // show hover line
   showHoverOn = (e) => {
-    // console.log(e.target, e.target.className.animVal)
     if (e.target.className.animVal === 'grid' && !this.state.showDraggerTime) {
       this.setState({
         showHoverLine: true
@@ -1398,30 +1397,6 @@ class TimelineAxis extends React.Component {
       hoverTime
     } = this.state;
 
-    // TODO: componentize with smart update/calc - ex: dont update hover if only dragger updated
-    // dragger and hover offsets, displays, and tooltips
-    let draggerTimeLeftOffest = draggerSelected === 'selected'
-      ? draggerPosition - (hasSubdailyLayers ? 87 : 35)
-      : draggerPositionB - (hasSubdailyLayers ? 87 : 35);
-
-    let hoverTimeLeftOffset = hasSubdailyLayers ? leftOffset - 136 : leftOffset - 84;
-
-    let draggerToolTip = showDraggerTime && draggerTimeState
-      ? draggerSelected === 'selected'
-        ? hasSubdailyLayers ? draggerTimeState.split('T').join(' ') : draggerTimeState.split('T')[0]
-        : hasSubdailyLayers ? draggerTimeStateB.split('T').join(' ') : draggerTimeStateB.split('T')[0]
-      : null;
-
-    let hoverToolTip = !showDraggerTime && hoverTime
-      ? hasSubdailyLayers ? hoverTime.split('T').join(' ') : hoverTime.split('T')[0]
-      : null;
-
-    let draggerToolTipDayOfYear = draggerSelected === 'selected' ? moment.utc(draggerTimeState).dayOfYear() : moment.utc(draggerTimeStateB).dayOfYear();
-    let hoverToolTipDayOfYear = moment.utc(hoverTime).dayOfYear();
-
-    let draggerToolTipDisplay = !isTimelineDragging && showDraggerTime && draggerTimeState && draggerTimeLeftOffest > -54 && draggerTimeLeftOffest < axisWidth - 54 ? 'block' : 'none';
-    let hoverToolTipDisplay = !isTimelineDragging && !showDraggerTime && showHoverLine ? 'block' : 'none';
-
     // ! WINDOW.MOMENT FOR DEV DEBUG ONLY
     window.moment = moment;
     return (
@@ -1502,84 +1477,37 @@ class TimelineAxis extends React.Component {
                 : null
               }
 
-              {draggerSelected === 'selectedB'
-                ? <React.Fragment>
-                  <Dragger
-                    toggleShowDraggerTime={this.toggleShowDraggerTime}
-                    handleDragDragger={this.handleDragDragger}
-                    selectDragger={this.selectDragger}
-                    compareModeActive={compareModeActive}
-                    disabled={true}
-                    draggerName='selected'
-                    draggerPosition={draggerPosition}
-                    draggerVisible={draggerVisible}
-                    transformX={transformX}
-                  />
-                  <Dragger
-                    toggleShowDraggerTime={this.toggleShowDraggerTime}
-                    handleDragDragger={this.handleDragDragger}
-                    selectDragger={this.selectDragger}
-                    compareModeActive={compareModeActive}
-                    disabled={false}
-                    draggerName='selectedB'
-                    draggerPosition={draggerPositionB}
-                    draggerVisible={draggerVisibleB}
-                    transformX={transformX}
-                  />
-                </React.Fragment>
-                : <React.Fragment>
-                  <Dragger
-                    toggleShowDraggerTime={this.toggleShowDraggerTime}
-                    handleDragDragger={this.handleDragDragger}
-                    selectDragger={this.selectDragger}
-                    compareModeActive={compareModeActive}
-                    disabled={true}
-                    draggerName='selectedB'
-                    draggerPosition={draggerPositionB}
-                    draggerVisible={draggerVisibleB}
-                    transformX={transformX}
-                  />
-                  <Dragger
-                    toggleShowDraggerTime={this.toggleShowDraggerTime}
-                    handleDragDragger={this.handleDragDragger}
-                    selectDragger={this.selectDragger}
-                    compareModeActive={compareModeActive}
-                    disabled={false}
-                    draggerName='selected'
-                    draggerPosition={draggerPosition}
-                    draggerVisible={draggerVisible}
-                    transformX={transformX}
-                  />
-                </React.Fragment>
-              }
+              <DraggerContainer
+                draggerSelected={draggerSelected}
+                transformX={transformX}
+                toggleShowDraggerTime={this.toggleShowDraggerTime}
+                handleDragDragger={this.handleDragDragger}
+                selectDragger={this.selectDragger}
+                compareModeActive={compareModeActive}
+                draggerPosition={draggerPosition}
+                draggerPositionB={draggerPositionB}
+                draggerVisible={draggerVisible}
+                draggerVisibleB={draggerVisibleB}
+              />
             </svg>
             : null }
 
-          {/* DRAGGER TIME */}
-          <div
-            className='dateToolTip'
-            style={{
-              transform: `translate(${draggerTimeLeftOffest}px, -100px)`,
-              display: draggerToolTipDisplay,
-              // opacity: showDraggerTime && draggerTimeState ? '1' : '0',
-              width: hasSubdailyLayers ? '270px' : '165px'
-            }}
-          >
-            { draggerToolTip } <span className="dateToolTip-dayOfYear">({ draggerToolTipDayOfYear })</span>
-          </div>
-
-          {/* HOVER TIME */}
-          <div
-            className='dateToolTip'
-            style={{
-              transform: `translate(${hoverTimeLeftOffset}px, -100px)`,
-              display: hoverToolTipDisplay,
-              // opacity: !showDraggerTime && showHoverLine ? '1' : '0',
-              width: hasSubdailyLayers ? '270px' : '165px'
-            }}
-          >
-            { hoverToolTip } <span className="dateToolTip-dayOfYear">({ hoverToolTipDayOfYear })</span>
-          </div>
+          {!isTimelineDragging
+            ? <DateToolTip
+              draggerSelected={draggerSelected}
+              draggerPosition={draggerPosition}
+              draggerPositionB={draggerPositionB}
+              hasSubdailyLayers={hasSubdailyLayers}
+              leftOffset={leftOffset}
+              showDraggerTime={showDraggerTime}
+              draggerTimeState={draggerTimeState}
+              draggerTimeStateB={draggerTimeStateB}
+              hoverTime={hoverTime}
+              showHoverLine={showHoverLine}
+              axisWidth={axisWidth}
+            />
+            : null
+          }
         </div>
       </React.Fragment>
     );

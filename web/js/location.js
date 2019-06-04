@@ -114,16 +114,21 @@ const getParameters = function(config, parameters) {
       }
     },
     t1: {
-      stateKey: 'legacy.date.selectedB',
+      stateKey: 'date.selectedB',
       initialState: nowMinusSevenDays,
+      type: 'date',
       options: {
         serializeNeedsGlobalState: true,
+        setAsEmptyItem: true,
         serialize: (currentItemState, state) => {
           const isActive = get(state, 'compare.active');
+          const nowMinusSevenDaysString = util.toISOStringSeconds(nowMinusSevenDays);
           if (!isActive) return undefined;
-          return serializeDate(
-            currentItemState || nowMinusSevenDays
-          );
+          return nowMinusSevenDaysString === util.toISOStringSeconds(currentItemState)
+            ? undefined
+            : serializeDate(
+              currentItemState || nowMinusSevenDays
+            );
         },
         parse: str => {
           return tryCatchDate(str, nowMinusSevenDays);
