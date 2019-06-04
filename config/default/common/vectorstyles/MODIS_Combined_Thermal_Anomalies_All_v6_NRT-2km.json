@@ -11,7 +11,7 @@
   },
   "layers": [
     {
-      "id": "MODIS_Fire_Points_Confidence",
+      "id": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km_MODIS_Fire_Points_Confidence",
       "source": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km",
       "type": "circle",
@@ -38,7 +38,7 @@
       }
     },
     {
-      "id": "MODIS_Fire_Points_FRP",
+      "id": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km_MODIS_Fire_Points_FRP",
       "source": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km",
       "type": "circle",
@@ -65,7 +65,7 @@
       }
     },
     {
-      "id": "default_style",
+      "id": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km",
       "source": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_All_v6_NRT-2km",
       "type": "circle",
