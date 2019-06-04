@@ -1,8 +1,10 @@
 import { findIndex as lodashFindIndex } from 'lodash';
 import {
   addLayer as addLayerSelector,
-  resetLayers as resetLayersSelector
+  resetLayers as resetLayersSelector,
+  getLayers as getLayersSelector
 } from './selectors';
+
 import {
   RESET_LAYERS,
   ADD_LAYER,
@@ -32,13 +34,21 @@ export function resetLayers(activeString) {
 export function addLayer(id, spec) {
   spec = spec || {};
   return (dispatch, getState) => {
-    const { layers, compare } = getState();
-    const activeString = compare.isCompareA ? 'active' : 'activeB';
+    const state = getState();
+    const { layers, compare } = state;
+
+    const activeString = compare.activeString;
+    const layerObj = getLayersSelector(
+      layers[activeString],
+      { group: 'all' },
+      state
+    );
     const newLayers = addLayerSelector(
       id,
       spec,
       layers[activeString],
-      layers.layerConfig
+      layers.layerConfig,
+      layerObj.overlays.length || 0
     );
 
     dispatch({

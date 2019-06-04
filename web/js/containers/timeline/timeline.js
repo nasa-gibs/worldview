@@ -238,7 +238,8 @@ class Timeline extends React.Component {
       animStartLocationDate,
       animEndLocationDate,
       isAnimationWidgetOpen,
-      animationDisabled
+      animationDisabled,
+      hideTimeline
     } = this.props;
     return dateFormatted ? (
       <ErrorBoundary>
@@ -285,7 +286,10 @@ class Timeline extends React.Component {
           </div>
           <div
             id="timeline-footer"
-            style={{ display: this.state.timelineHidden ? 'none' : 'block' }}
+            style={{
+              display:
+                this.state.timelineHidden || hideTimeline ? 'none' : 'block'
+            }}
           >
             <div id="wv-animation-widet-case">
               {isAnimationWidgetOpen ? <AnimationWidget /> : null}
@@ -352,7 +356,8 @@ function mapStateToProps(state) {
     browser,
     date,
     animation,
-    sidebar
+    sidebar,
+    modal
   } = state;
   let {
     customSelected,
@@ -441,8 +446,12 @@ function mapStateToProps(state) {
     timelineEndDateLimit,
     leftArrowDisabled,
     rightArrowDisabled,
+    hideTimeline:
+      (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
-      !legacy.map.selectedMap || !legacy.map.selectedMap.frameState_ || sidebar.activeTab === 'download'
+      !legacy.map.selectedMap ||
+      !legacy.map.selectedMap.frameState_ ||
+      sidebar.activeTab === 'download'
   };
 }
 

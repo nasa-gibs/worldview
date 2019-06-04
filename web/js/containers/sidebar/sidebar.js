@@ -203,7 +203,7 @@ class Sidebar extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { browser, sidebar, compare, layers, config, modal } = state;
+  const { browser, sidebar, compare, layers, config, modal, animation } = state;
   const { screenHeight } = browser;
   const { activeTab, isCollapsed } = sidebar;
   const { activeString } = compare;
@@ -218,7 +218,9 @@ function mapStateToProps(state) {
     isCompareMode: compare.active,
     numberOfLayers,
     isCollapsed:
-      isCollapsed || (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'), // Collapse when Image download is open,
+      isCollapsed ||
+      (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') ||
+      animation.gifActive, // Collapse when Image download / GIF is open,
     tabTypes,
     config
   };

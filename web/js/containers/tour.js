@@ -75,8 +75,13 @@ class Tour extends React.Component {
     });
     this.props.selectTour(currentStoryId);
     this.fetchMetadata(currentStory, 0);
+    const storyStep = currentStory.steps[0];
+    const transition = getTransitionAttr(
+      storyStep.transition.element,
+      storyStep.transition.action
+    );
     this.props.processStepLink(
-      currentStory.steps[0]['stepLink'] + '&tr=' + currentStoryId
+      storyStep['stepLink'] + '&tr=' + currentStoryId + transition
     );
   }
   fetchMetadata(currentStory, stepIndex) {
@@ -156,8 +161,16 @@ class Tour extends React.Component {
       let newStep = currentStep + 1;
       this.fetchMetadata(currentStory, currentStep);
       this.setState({ currentStep: newStep });
+      let storyStep = currentStory.steps[newStep - 1];
+      const transition = getTransitionAttr(
+        storyStep.transition.element,
+        storyStep.transition.action
+      );
       this.props.processStepLink(
-        currentStory.steps[newStep - 1]['stepLink'] + '&tr=' + currentStoryId
+        currentStory.steps[newStep - 1]['stepLink'] +
+          '&tr=' +
+          currentStoryId +
+          transition
       );
     }
     if (currentStep + 1 === totalSteps + 1) {
@@ -172,8 +185,16 @@ class Tour extends React.Component {
       let newStep = currentStep - 1;
       this.fetchMetadata(currentStory, newStep - 1);
       this.setState({ currentStep: newStep });
+      const storyStep = currentStory.steps[newStep - 1];
+      const transition = getTransitionAttr(
+        storyStep.transition.element,
+        storyStep.transition.action
+      );
       this.props.processStepLink(
-        currentStory.steps[newStep - 1]['stepLink'] + '&tr=' + currentStoryId
+        currentStory.steps[newStep - 1]['stepLink'] +
+          '&tr=' +
+          currentStoryId +
+          transition
       );
     } else {
       this.setState({
@@ -336,6 +357,12 @@ function mapStateToProps(state) {
     showTour
   };
 }
+const getTransitionAttr = function(el, action) {
+  if (el === 'animation' && action === 'play') {
+    return '&playanim=true';
+  }
+  return '';
+};
 const hideTour = function(e) {
   var hideTour = localStorage.getItem('hideTour');
   // Checkbox to "hide tour modal until a new story has been added" has been checked
