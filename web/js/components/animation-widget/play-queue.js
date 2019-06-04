@@ -205,7 +205,6 @@ class PlayAnimation extends React.Component {
    *
    */
   checkQueue(bufferLength, index) {
-<<<<<<< HEAD
     const {
       startDate,
       endDate,
@@ -214,20 +213,13 @@ class PlayAnimation extends React.Component {
       queueLength,
       maxQueueLength
     } = this.props;
-=======
-    const { startDate, endDate, hasCustomPalettes, canPreloadAll } = this.props;
->>>>>>> Add animation redux rendering #1623 #1622
     var currentDate = util.parseDateUTC(index);
     var lastToQueue = this.getLastBufferDateStr(
       currentDate,
       startDate,
       endDate
     );
-<<<<<<< HEAD
     var nextDate = this.nextDate(currentDate);
-=======
-
->>>>>>> Add animation redux rendering #1623 #1622
     if (!this.preloadedArray[0] && !this.inQueueObject[index]) {
       this.initialPreload(currentDate, startDate, endDate, lastToQueue);
     } else if (
@@ -238,16 +230,12 @@ class PlayAnimation extends React.Component {
     ) {
       // if last preload date doesn't exist
       this.addItemToQueue(currentDate, startDate, endDate);
-<<<<<<< HEAD
     } else if (
       hasCustomPalettes &&
       this.preloadedArray[0] &&
       !this.inQueueObject[nextDate] &&
       queueLength > maxQueueLength
     ) {
-=======
-    } else if (hasCustomPalettes && this.preloadedArray[0]) {
->>>>>>> Add animation redux rendering #1623 #1622
       this.customQueuer(currentDate, startDate, endDate);
     }
   }
@@ -264,10 +252,7 @@ class PlayAnimation extends React.Component {
   clearCache() {
     this.preloadObject = {};
     this.preloadedArray = [];
-<<<<<<< HEAD
     this.inQueueObject = {};
-=======
->>>>>>> Add animation redux rendering #1623 #1622
   }
 
   /*
@@ -308,21 +293,11 @@ class PlayAnimation extends React.Component {
     if (nextDate > endDate) {
       nextDate = startDate;
     }
-<<<<<<< HEAD
     nextDateStr = util.toISOStringSeconds(nextDate);
     if (
       !this.preloadObject[nextDateStr] &&
       !this.inQueueObject[nextDateStr] &&
       !this.state.isPlaying
-=======
-
-    nextDateStr = util.toISOStringSeconds(nextDate);
-
-    if (
-      !this.preloadedArray[nextDateStr] &&
-      !this.inQueueObject[nextDateStr] &&
-      !this.state.isplaying
->>>>>>> Add animation redux rendering #1623 #1622
     ) {
       this.clearCache();
       this.checkQueue(this.props.queueLength, this.currentPlayingDate);
@@ -384,14 +359,8 @@ class PlayAnimation extends React.Component {
    *
    */
   getNextBufferDate(currentDate, startDate, endDate) {
-<<<<<<< HEAD
     const strDate = this.preloadedArray[this.preloadedArray.length - 1];
     var lastInBuffer = util.parseDateUTC(strDate);
-=======
-    var lastInBuffer = util.parseDateUTC(
-      this.preloadedArray[this.preloadedArray.length - 1]
-    );
->>>>>>> Add animation redux rendering #1623 #1622
     var nextDate = this.nextDate(lastInBuffer);
     if (lastInBuffer >= endDate || nextDate > endDate) {
       return startDate;
@@ -458,66 +427,10 @@ class PlayAnimation extends React.Component {
         return true;
       }
       i++;
-<<<<<<< HEAD
-=======
     }
     return false;
   }
   /*
-   * Gets next date based on current
-   * increments
-   *
-   * @method nextDate
-   * @static
-   *
-   * @param date {object} JS date obj
-   *
-   * @returns {object} JS Date
-   *
-   */
-  addDate(date) {
-    const { layers, promiseImageryForTime } = this.props;
-    const activeLayers = getLayersActiveAtDate(layers, date);
-    const strDate = util.toISOStringSeconds(date);
-    if (this.inQueueObject[strDate] || this.preloadObject[strDate]) return;
-    this.addToInQueue(date);
-    this.queue
-      .add(function() {
-        return promiseImageryForTime(date, activeLayers);
-      })
-      .then(date => {
-        this.preloadObject[strDate] = date;
-        delete this.inQueueObject[strDate];
-        this.shiftCache();
-        this.checkQueue(this.queueLength, this.currentPlayingDate);
-        this.checkShouldPlay();
-      });
-  }
-  /*
-   * removes loader and starts the
-   * animation
-   *
-   * @method play
-   * @static
-   *
-   * @param index {string} date string
-   *
-   * @returns {void}
-   *
-   */
-  play(dateStr) {
-    const { togglePlaying } = this.props;
-    if (!this.state.isPlaying) this.setState({ isPlaying: true });
-
-    this.animate(dateStr);
-    if (document.hidden) {
-      togglePlaying();
->>>>>>> Add animation redux rendering #1623 #1622
-    }
-    return false;
-  }
-  /*
-<<<<<<< HEAD
    * Gets next date based on current
    * increments
    *
@@ -613,45 +526,6 @@ class PlayAnimation extends React.Component {
         clearInterval(this.interval);
         this.setState({ isPlaying: false });
       }
-=======
-   * function that loops through frames
-   * at a specified time interval
-   *
-   * @method animate
-   * @static
-   *
-   * @param index {string} Date string
-   * @returns {void}
-   *
-   */
-  animate(index) {
-    const { selectDate, endDate, queueLength, speed } = this.props;
-    var currentPlayingDate = index;
-    var currentPlayingDateJSDate;
-    var player = () => {
-      this.shiftCache();
-      this.checkQueue(queueLength, currentPlayingDate);
-      selectDate(util.parseDateUTC(currentPlayingDate));
-      this.pastDates[currentPlayingDate] = util.parseDateUTC(
-        currentPlayingDate
-      ); // played record
-      this.currentPlayingDate = currentPlayingDate;
-      currentPlayingDate = util.toISOStringSeconds(
-        this.nextDate(util.parseDateUTC(currentPlayingDate))
-      );
-      currentPlayingDateJSDate = util.parseDateUTC(currentPlayingDate);
-      if (currentPlayingDateJSDate > endDate) {
-        clearInterval(this.interval);
-        return this.checkShouldLoop(currentPlayingDateJSDate);
-      }
-      if (!this.preloadObject[currentPlayingDate]) {
-        clearInterval(this.interval);
-        this.setState({ isPlaying: false });
-        this.shiftCache();
-        return this.checkQueue(queueLength, this.currentPlayingDate);
-      }
-
->>>>>>> Add animation redux rendering #1623 #1622
       this.checkQueue(queueLength, this.currentPlayingDate);
       this.interval = setTimeout(player, 1000 / this.props.speed);
     };
