@@ -5,6 +5,7 @@ import {
 } from 'lodash';
 import canvg from 'canvg-browser';
 import util from '../../util/util';
+import update from 'immutability-helper';
 
 export function getAnimationParameterSetup(
   parameters,
@@ -209,4 +210,17 @@ export function getQueueLength(startDate, endDate, speed, interval, delta) {
     }
   }
   return i;
+}
+export function mapLocationToAnimationState(
+  parameters,
+  stateFromLocation,
+  state,
+  config
+) {
+  if (parameters.playanim && parameters.ab) {
+    stateFromLocation = update(stateFromLocation, {
+      animation: { isPlaying: { $set: true } }
+    });
+  }
+  return stateFromLocation;
 }

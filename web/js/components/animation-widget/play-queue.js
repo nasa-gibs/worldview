@@ -508,7 +508,6 @@ class PlayAnimation extends React.Component {
         this.shiftCache();
         return this.checkQueue(queueLength, this.currentPlayingDate);
       }
-
       this.checkQueue(queueLength, this.currentPlayingDate);
       this.interval = setTimeout(player, 1000 / this.props.speed);
     };

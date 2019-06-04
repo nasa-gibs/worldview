@@ -16,6 +16,7 @@ import {
 import { resetLayers } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
+import { mapLocationToAnimationState } from './modules/animation/util';
 import util from './util/util';
 import update from 'immutability-helper';
 
@@ -48,6 +49,12 @@ export function mapLocationToState(state, location) {
       stateFromLocation
     );
     stateFromLocation = mapLocationToPaletteState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+    stateFromLocation = mapLocationToAnimationState(
       parameters,
       stateFromLocation,
       state,
@@ -253,6 +260,46 @@ const getParameters = function(config, parameters) {
     tr: {
       stateKey: 'tour.selected',
       initialState: ''
+    },
+    al: {
+      stateKey: 'animation.loop',
+      initialState: false,
+      type: 'bool'
+    },
+    as: {
+      stateKey: 'animation.startDate',
+      initialState: util.dateAdd(now, 'day', -7),
+      type: 'date',
+      options: {
+        serialize: serializeDate,
+        parse: tryCatchDate
+      }
+    },
+    ae: {
+      stateKey: 'animation.endDate',
+      initialState: now,
+      type: 'date',
+      options: {
+        serialize: serializeDate,
+        parse: tryCatchDate
+      }
+    },
+    av: {
+      stateKey: 'animation.speed',
+      initialState: 3,
+      type: 'number'
+    },
+    ab: {
+      stateKey: 'animation.isActive',
+      initialState: false,
+      options: {
+        serialize: boo => {
+          return boo ? 'on' : undefined;
+        },
+        parse: str => {
+          return str === 'on';
+        }
+      }
     },
     download: {
       stateKey: 'data.selectedProduct',
