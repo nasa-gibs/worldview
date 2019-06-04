@@ -94,7 +94,7 @@ export function hasSubDaily(layers) {
   return false;
 }
 
-export function addLayer(id, spec, layers, layerConfig) {
+export function addLayer(id, spec, layers, layerConfig, overlayLength) {
   if (
     lodashFind(layers, {
       id: id
@@ -122,7 +122,7 @@ export function addLayer(id, spec, layers, layerConfig) {
   if (def.group === 'overlays') {
     layers.unshift(def);
   } else {
-    layers.splice(layers, 0, def);
+    layers.splice(overlayLength, 0, def);
   }
   return layers;
 }
