@@ -11,7 +11,7 @@ import util from '../../util/util';
 const browser = util.browser;
 export const defaultVectorStyleState = {
   rendered: {},
-  custom: {},
+  default: {},
   active: {},
   activeB: {},
   isLoading: {},

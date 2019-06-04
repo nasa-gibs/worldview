@@ -115,9 +115,9 @@ export function clearCustom(layerId, index, groupName) {
  *
  * @param {Object} customs | Custom VectorStyles from Config
  */
-export function loadedCustomVectorStyles(customs) {
+export function loadedDefaultVectorStyles(defaults) {
   return {
     type: LOADED_CUSTOM_VECTORSTYLES,
-    custom: customs
+    default: defaults
   };
 }

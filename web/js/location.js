@@ -18,6 +18,7 @@ import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
 import { mapLocationToSidebarState } from './modules/sidebar/util';
+import { mapLocationToVectorStyleState } from './modules/vector-styles/util';
 import util from './util/util';
 import update from 'immutability-helper';
 
@@ -63,6 +64,12 @@ export const mapLocationToState = (state, location) => {
       config
     );
     stateFromLocation = mapLocationToSidebarState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+    stateFromLocation = mapLocationToVectorStyleState(
       parameters,
       stateFromLocation,
       state,

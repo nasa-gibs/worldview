@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TourAlert from '../components/alert/alert-tour';
+import TourAlert from '../components/alert/alert';
 import util from '../util/util';
 
 export function alertUi(ui) {

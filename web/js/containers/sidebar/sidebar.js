@@ -10,8 +10,10 @@ import { TabContent, TabPane } from 'reactstrap';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import googleTagManager from 'googleTagManager';
-import { getCheckerboard, loadCustom } from '../../modules/palettes/util';
+import { getCheckerboard, loadCustom as loadCustomPalette } from '../../modules/palettes/util';
+import { loadDefault as loadDefaultVectorStyle } from '../../modules/vector-styles/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
+import { loadedDefaultVectorStyles } from '../../modules/vector-styles/actions';
 import { getLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
 import util from '../../util/util';
@@ -42,9 +44,13 @@ class Sidebar extends React.Component {
     super(props);
     this.state = { subComponentHeight: 700 };
     this.checkerBoardPattern = getCheckerboard();
-    const customPalettePromise = loadCustom(props.config);
+    const customPalettePromise = loadCustomPalette(props.config);
+    const defaultVectorStylePromise = loadDefaultVectorStyle(props.config);
     customPalettePromise.done(customs => {
       props.loadedCustomPalettes(customs);
+    });
+    defaultVectorStylePromise.done(defaults => {
+      props.loadedDefaultVectorStyles(defaults);
     });
   }
   componentDidMount() {
@@ -261,6 +267,9 @@ const mapDispatchToProps = dispatch => ({
   },
   loadedCustomPalettes: customs => {
     dispatch(loadedCustomPalettes(customs));
+  },
+  loadedDefaultVectorStyles: defaults => {
+    dispatch(loadedDefaultVectorStyles(defaults));
   }
 });
 
