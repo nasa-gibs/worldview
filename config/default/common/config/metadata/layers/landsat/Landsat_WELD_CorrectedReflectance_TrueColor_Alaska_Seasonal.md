@@ -2,4 +2,4 @@ The Top of Atmosphere (TOA) Reflectance (True Color, Alaska, Seasonal, Version 1
 
 The sensor resolution is 30 m, the imagery resolution is 250 m and the temporal availability is seasonal for December 2002 - November 2012 and split into 3 month intervals - December, January, February; March, April, May; June, July, August; September, October, November.
 
-References: [WELDAKSE: NASA Web-Enabled Landsat Data Alaska Seasonal V015](https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/weldakse_v015)
+References: [WELDAKSE: NASA Web-Enabled Landsat Data Alaska Seasonal V015](https://lpdaac.usgs.gov/products/weldaksev015/)
