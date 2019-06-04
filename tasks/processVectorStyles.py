@@ -10,10 +10,10 @@ prog = os.path.basename(__file__)
 base_dir = os.path.join(os.path.dirname(__file__), "..")
 version = "3.0.0"
 help_description = """\
-Converts vector styles to JSON files
+Converts vector data to JSON files
 """
 
-parser = OptionParser(usage="Usage: %s <config_file> <vectorstyles_input_dir> <output_dir>" % prog,
+parser = OptionParser(usage="Usage: %s <config_file> <vectordata_input_dir> <output_dir>" % prog,
                       version="%s version %s" % (prog, version),
                       epilog=help_description)
 
@@ -22,29 +22,33 @@ if len(args) != 3:
     parser.error("Invalid number of arguments")
 
 config_file = args[0]
-vectorstyles_input_dir = args[1]
+vectordata_input_dir = args[1]
 output_dir = args[2]
 
 with open(config_file) as fp:
     config = json.load(fp)
-skips = config.get("skipPalettes", [])
 
 def copy_file(file):
     input_file = os.path.join(root, file)
-    id = os.path.splitext(os.path.basename(input_file))[0]
-    if id in skips:
-        sys.stderr.write("%s:  WARN: [%s] %s\n" % (prog, input_file,
-                "Skipping"))
-        return
-
     if input_file.endswith('.json'):
+        response_data = {}
+        vector_layer_filename = file;
+        vector_layer_id = vector_layer_filename.split(".", 1)[0]
+        response_data["vectorStyles"] = {}
+        response_data["vectorStyles"][vector_layer_id] = {}
+        with open(input_file) as json_file:
+            initial_data = json.load(json_file)
+            for i in initial_data:
+                response_data["vectorStyles"][vector_layer_id][i] = initial_data[i]
+        with open(input_file, 'w') as json_file:
+            json.dump(response_data, json_file,indent=2)
         shutil.copy(input_file, output_dir)
 
 # Main
 file_count = 0
 error_count = 0
 
-for root, dirs, files in os.walk(vectorstyles_input_dir):
+for root, dirs, files in os.walk(vectordata_input_dir):
     for file in files:
         try:
             file_count += 1

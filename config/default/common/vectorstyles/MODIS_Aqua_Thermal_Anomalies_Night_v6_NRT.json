@@ -11,7 +11,7 @@
   },
   "layers": [
     {
-      "id": "MODIS_Fire_Points_Confidence",
+      "id": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT_MODIS_Fire_Points_Confidence",
       "source": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
       "type": "circle",
@@ -38,7 +38,7 @@
       }
     },
     {
-      "id": "MODIS_Fire_Points_FRP",
+      "id": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT_MODIS_Fire_Points_FRP",
       "source": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
       "type": "circle",
@@ -65,76 +65,9 @@
       }
     },
     {
-      "id": "default_style",
+      "id": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
       "source": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
-      "type": "circle",
-      "paint": {
-        "circle-radius": {
-          "base": 2,
-          "stops": [[12, 1], [22, 10]]
-        },
-        "circle-color": "#FF0000"
-      }
-    },
-    {
-      "id": "MODIS_Fire_Points_Confidence",
-      "source": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
-      "source-layer": "FIRMS_Aqua_N_LL_v6_NRT_20181226",
-      "type": "circle",
-      "paint": {
-        "circle-radius": {
-          "base": 2,
-          "stops": [[12, 1], [22, 10]]
-        },
-        "circle-color": [
-          "case",
-          ["<=", ["get", "CONFIDENCE"], 50], "rgba(255,0,0,1)",
-          [
-            "all",
-            [">", ["get", "CONFIDENCE"], 50],
-            ["<=", ["get", "CONFIDENCE"], 75]
-          ], "rgba(255,128,0,1)",
-          [
-            "all",
-            [">", ["get", "CONFIDENCE"], 75],
-            ["<=", ["get", "CONFIDENCE"], 100]
-          ], "rgba(55,255,0,1)",
-          "rgba(255,255,255,0.4)"
-        ]
-      }
-    },
-    {
-      "id": "MODIS_Fire_Points_FRP",
-      "source": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
-      "source-layer": "FIRMS_Aqua_N_LL_v6_NRT_20181226",
-      "type": "circle",
-      "paint": {
-        "circle-radius": {
-          "base": 2,
-          "stops": [[12, 1], [22, 10]]
-        },
-        "circle-color": [
-          "case",
-          ["<=", ["get", "FRP"], 50], "rgba(255,0,0,1)",
-          [
-            "all",
-            [">", ["get", "FRP"], 50],
-            ["<=", ["get", "FRP"], 75]
-          ], "rgba(255,128,0,1)",
-          [
-            "all",
-            [">", ["get", "FRP"], 75],
-            ["<=", ["get", "FRP"], 100]
-          ], "rgba(55,255,0,1)",
-          "rgba(255,255,255,0.4)"
-        ]
-      }
-    },
-    {
-      "id": "default_style",
-      "source": "MODIS_Aqua_Thermal_Anomalies_Night_v6_NRT",
-      "source-layer": "FIRMS_Aqua_N_LL_v6_NRT_20181226",
       "type": "circle",
       "paint": {
         "circle-radius": {

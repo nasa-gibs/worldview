@@ -235,34 +235,3 @@ export function mapLocationToVectorStyleState(
   }
   return stateFromLocation;
 }
-
-// TODO replace without jQuery
-export function requirements(state, config, startup) {
-  var promises = [];
-  if (startup || !state.tr) {
-    config.vectorStyles = {
-      rendered: {},
-      default: {}
-    };
-  }
-  lodashEach(state.l, function(qsLayer) {
-    var layerId = qsLayer.id;
-    if (config.layers[layerId] && config.layers[layerId].vectorStyle) {
-      promises.push(loadRenderedVectorStyle(config, layerId));
-    }
-    var defaultStyle = lodashFind(qsLayer.attributes, {
-      id: 'style'
-    });
-    if (defaultStyle) {
-      promises.push(loadDefault(config));
-    }
-  });
-  if (promises.length > 0) {
-    var promise = $.Deferred();
-    $.when
-      .apply(null, promises)
-      .then(promise.resolve)
-      .fail(promise.reject);
-    return promise;
-  }
-}

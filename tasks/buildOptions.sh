@@ -69,15 +69,26 @@ if [ -e "$BUILD_DIR/config.json" ] ; then
         "$BUILD_DIR/config/wv.json/_wmts" "$BUILD_DIR/colormaps"
 fi
 
-# Run processVectorStyles.py and move vectorstyles where we want them
+# # Run processVectorStyles.py and move vectorstyles where we want them
 if [ -e "$BUILD_DIR/vectorstyles" ] ; then
     mkdir -p "$BUILD_DIR"/config/vectorstyles
     if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
         cp -r "$BUILD_DIR"/gc/vectorstyles "$BUILD_DIR"/vectorstyles/gc
     fi
-    "$TASKS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+    "$TASKS_DIR/copyVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
         "$BUILD_DIR/vectorstyles" \
         "$BUILD_DIR/config/vectorstyles"
+fi
+
+# Run processVectorData.py and move vectordata where we want them
+if [ -e "$BUILD_DIR/vectorstyles" ] ; then
+    mkdir -p "$BUILD_DIR"/config/wv.json/vectorstyles
+    if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
+        cp -r "$BUILD_DIR"/gc/vectorstyles "$BUILD_DIR"
+    fi
+    "$TASKS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+        "$BUILD_DIR/vectorstyles" \
+        "$BUILD_DIR/config/wv.json/vectorstyles"
 fi
 
 # Run processVectorData.py and move vectordata where we want them

@@ -11,7 +11,6 @@ import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import googleTagManager from 'googleTagManager';
 import { getCheckerboard, loadCustom as loadCustomPalette } from '../../modules/palettes/util';
-import { loadDefault as loadDefaultVectorStyle } from '../../modules/vector-styles/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
 import { loadedDefaultVectorStyles } from '../../modules/vector-styles/actions';
 import { getLayers } from '../../modules/layers/selectors';
@@ -45,12 +44,8 @@ class Sidebar extends React.Component {
     this.state = { subComponentHeight: 700 };
     this.checkerBoardPattern = getCheckerboard();
     const customPalettePromise = loadCustomPalette(props.config);
-    const defaultVectorStylePromise = loadDefaultVectorStyle(props.config);
     customPalettePromise.done(customs => {
       props.loadedCustomPalettes(customs);
-    });
-    defaultVectorStylePromise.done(defaults => {
-      props.loadedDefaultVectorStyles(defaults);
     });
   }
   componentDidMount() {
