@@ -13,7 +13,7 @@ import {
   serializeLayers,
   mapLocationToLayerState
 } from './modules/layers/util';
-import { resetLayers } from './modules/layers/selectors';
+import { resetLayers, hasSubDaily } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import util from './util/util';
@@ -78,7 +78,8 @@ export function mapLocationToState(state, location) {
 }
 
 const getParameters = function(config, parameters) {
-  const now = util.now();
+  const now = config.now;
+  const nowMinusSevenDays = util.dateAdd(config.now, 'day', -7);
   return {
     p: {
       stateKey: 'proj.id',
@@ -86,7 +87,7 @@ const getParameters = function(config, parameters) {
     },
     t: {
       stateKey: 'date.selected',
-      initialState: now, // ! now is not the same as default util.now() in the date.state due to invoking at different times
+      initialState: now,
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
@@ -95,11 +96,17 @@ const getParameters = function(config, parameters) {
           const compareIsActive = get(state, 'compare.active');
           const isCompareA = get(state, 'compare.isCompareA');
           const dateB = get(state, 'date.selectedB');
+          const nowString = util.toISOStringSeconds(now);
+
           return !compareIsActive && !isCompareA
-            ? serializeDate(dateB)
-            : !currentItemState
+            ? util.toISOStringSeconds(dateB) === nowString
               ? undefined
-              : serializeDate(currentItemState);
+              : serializeDate(dateB)
+            : util.toISOStringSeconds(currentItemState) === nowString
+              ? undefined
+              : !currentItemState
+                ? undefined
+                : serializeDate(currentItemState);
         },
         parse: str => {
           return tryCatchDate(str, now);
@@ -107,19 +114,24 @@ const getParameters = function(config, parameters) {
       }
     },
     t1: {
-      stateKey: 'legacy.date.selectedB',
-      initialState: util.dateAdd(now, 'day', -7),
+      stateKey: 'date.selectedB',
+      initialState: nowMinusSevenDays,
+      type: 'date',
       options: {
         serializeNeedsGlobalState: true,
+        setAsEmptyItem: true,
         serialize: (currentItemState, state) => {
           const isActive = get(state, 'compare.active');
+          const nowMinusSevenDaysString = util.toISOStringSeconds(nowMinusSevenDays);
           if (!isActive) return undefined;
-          return serializeDate(
-            currentItemState || util.dateAdd(now, 'day', -7)
-          );
+          return nowMinusSevenDaysString === util.toISOStringSeconds(currentItemState)
+            ? undefined
+            : serializeDate(
+              currentItemState || nowMinusSevenDays
+            );
         },
         parse: str => {
-          return tryCatchDate(str, util.dateAdd(now, 'day', -7));
+          return tryCatchDate(str, nowMinusSevenDays);
         }
       }
     },
@@ -127,11 +139,21 @@ const getParameters = function(config, parameters) {
       stateKey: 'date.selectedZoom',
       initialState: 3,
       options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState, state) => {
+          let zoom = currentItemState;
+          // check if subdaily timescale zoom to determine if reset is needed
+          if (zoom > 3) {
+            let { layers, compare } = state;
+            let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            if (!hasSubdailyLayers) {
+              zoom = 3; // reset to day
+            }
+          }
+          return zoom === 3 ? undefined : zoom.toString();
+        },
         parse: str => {
           return str ? Number(str) : 3;
-        },
-        serialize: val => {
-          return val.toString();
         }
       }
     },
@@ -155,13 +177,22 @@ const getParameters = function(config, parameters) {
     },
     ici: {
       stateKey: 'date.customInterval',
-      initialState: 3,
+      initialState: undefined,
       options: {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
           const isCustomSelected = get(state, 'date.customSelected');
           if (!isCustomSelected) return undefined;
-          return currentItemState.toString();
+          let customInterval = currentItemState;
+          // check if subdaily customInterval to determine if reset is needed
+          if (customInterval > 3) {
+            let { layers, compare } = state;
+            let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            if (!hasSubdailyLayers) {
+              customInterval = 3; // reset to day
+            }
+          }
+          return customInterval.toString();
         },
         parse: val => {
           return val.toString();
@@ -170,7 +201,7 @@ const getParameters = function(config, parameters) {
     },
     icd: {
       stateKey: 'date.customDelta',
-      initialState: 1,
+      initialState: undefined,
       options: {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
@@ -180,6 +211,38 @@ const getParameters = function(config, parameters) {
         },
         parse: val => {
           return Number(val);
+        }
+      }
+    },
+    as: {
+      stateKey: 'animation.startDate',
+      initialState: nowMinusSevenDays,
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState) => {
+          return serializeDate(
+            currentItemState || nowMinusSevenDays
+          );
+        },
+        parse: str => {
+          return tryCatchDate(str, nowMinusSevenDays);
+        }
+      }
+    },
+    ae: {
+      stateKey: 'animation.endDate',
+      initialState: now,
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (currentItemState) => {
+          return serializeDate(
+            currentItemState || now
+          );
+        },
+        parse: str => {
+          return tryCatchDate(str, now);
         }
       }
     },

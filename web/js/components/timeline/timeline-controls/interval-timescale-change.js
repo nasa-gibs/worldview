@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+/*
+ * Change timescale interval (zoom level) by selecting from default timescales
+ * and custom (if available) in tooltip visible upon hover of current timescale
+ * above the LEFT/RIGHT increment arrows (ex: hover over '1 day' for example)
+ *
+ * @class TimeScaleIntervalChange
+ * @extends Component
+ */
 class TimeScaleIntervalChange extends Component {
   constructor(props) {
     super(props);
@@ -31,6 +39,7 @@ class TimeScaleIntervalChange extends Component {
       toolTipHovered: false
     }, this.props.setTimeScaleIntervalChangeUnit(timescale, openDialog));
   }
+
   // individual linking timescale handlers
   handleClickZoomYear = () => {
     this.handleClickZoom('year');
@@ -62,12 +71,12 @@ class TimeScaleIntervalChange extends Component {
   }
 
   componentDidMount () {
-    if (this.props.customDelta !== 1) {
+    if (this.props.customDelta !== 1 && this.props.customIntervalZoomLevel) {
       this.setCustomIntervalText();
     }
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate (prevProps) {
     let {
       customDelta,
       timeScaleChangeUnit,

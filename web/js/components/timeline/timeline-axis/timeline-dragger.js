@@ -2,6 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 
+/*
+ * Draggers used in default and A/B comparison
+ *
+ * @class Dragger
+ * @extends PureComponent
+ */
 class Dragger extends PureComponent {
   constructor(props) {
     super(props);
@@ -39,6 +45,7 @@ class Dragger extends PureComponent {
       compareModeActive,
       disabled
     } = this.props;
+
     return (
       <Draggable
         axis='x'
@@ -61,7 +68,7 @@ class Dragger extends PureComponent {
             fill={disabled ? '#7a7a7a' : '#ccc'}
             stroke='#333'
             strokeWidth='1px'
-            points='60,20, 95,65, 25,65'>
+            points='60,20, 90,65, 30,65'>
           </polygon>
           {compareModeActive
             ? <text

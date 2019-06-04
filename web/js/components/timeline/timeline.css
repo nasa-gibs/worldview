@@ -30,7 +30,7 @@ html, body {
   background: #212121;
   color: #fff;
   border: thin solid #666;
-  font-size: 18px;
+  font-size: 17px;
   font-family: 'Roboto Mono', monospace;
   text-align: center;
   border-radius: 5px;
@@ -39,7 +39,14 @@ html, body {
   line-height: 25px;
   white-space: nowrap;
   user-select: none;
+  padding-left: 2px;
   /* transition: opacity 0.3s ease-in-out; */
+}
+
+.dateToolTip-dayOfYear {
+  font-size: 14px;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .gridShell {

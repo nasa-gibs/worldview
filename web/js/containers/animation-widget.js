@@ -16,9 +16,9 @@ import googleTagManager from 'googleTagManager';
 import PlayQueue from '../components/animation-widget/play-queue';
 
 import { promiseImageryForTime } from '../modules/map/util';
-import { selectDate } from '../modules/date/actions';
+import { selectDate, selectInterval } from '../modules/date/actions';
 import GifContainer from './gif';
-import { timeScaleFromNumberKey } from '../modules/date/constants';
+import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../modules/date/constants';
 import { getQueueLength, getMaxQueueLength } from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
@@ -74,6 +74,7 @@ class AnimationWidget extends React.Component {
       isGifActive: false
     };
     this.onDateChange = this.onDateChange.bind(this);
+    this.onZoomSelect = this.onZoomSelect.bind(this);
   }
   static getDerivedStateFromProps(props, state) {
     if (props.speed !== state.speed && !state.isSliding) {
@@ -111,11 +112,31 @@ class AnimationWidget extends React.Component {
       onUpdateEndDate(date);
     }
   }
+  /*
+  * Changes selected default or custom interval in header and
+  * changes left/right date arrow increments
+  *
+  * @method onZoomSelect
+  *
+  * @param {string} zoom - clicked header string (ex: 'day', 'year', '12 day')
+  *  component
+  *
+  * @return {void}
+  */
+  onZoomSelect(zoom) {
+    let { customDelta, customInterval, onZoomSelect } = this.props;
+    let zoomToNumber = timeScaleToNumberKey[zoom]; // undefined if custom
+    if (zoomToNumber) {
+      onZoomSelect(1, zoomToNumber, false);
+    } else {
+      onZoomSelect(customDelta, customInterval, true);
+    }
+  }
+
   render() {
     const {
       hasSubdailyLayers,
       increment,
-      onZoomSelect,
       incrementArray,
       looping,
       isPlaying,
@@ -189,7 +210,7 @@ class AnimationWidget extends React.Component {
             <AnimWidgetHeader
               text={increment}
               toolTipTextArray={incrementArray}
-              onClick={onZoomSelect}
+              onClick={this.onZoomSelect}
             />
 
             <PlayButton
@@ -295,6 +316,8 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     incrementArray: zoomObj.array,
     increment: zoomObj.increment,
+    customDelta: zoomObj.customDelta,
+    customInterval: zoomObj.customInterval,
     sliderLabel: 'Frames Per Second',
     layers: getLayers(layers[activeStr], {}, state),
     speed,
@@ -333,8 +356,8 @@ const mapDispatchToProps = dispatch => ({
   onSlide: num => {
     dispatch(changeFrameRate(num));
   },
-  onZoomSelect: num => {
-    // dispatch(onZoomSelect(num));
+  onZoomSelect: (delta, zoom, customSelected) => {
+    dispatch(selectInterval(delta, zoom, customSelected));
   },
   onUpdateStartDate(date) {
     dispatch(changeStartDate(date));
@@ -381,9 +404,9 @@ const getZoomObject = function(dateModel, hasSubDaily) {
       }`
       : 'custom';
   if (hasSubDaily) {
-    zooms = [customText, 'yearly', 'monthly', 'daily', 'hourly', 'minutely'];
+    zooms = [customText, 'year', 'month', 'day', 'hour', 'minute'];
   } else {
-    zooms = [customText, 'yearly', 'monthly', 'daily'];
+    zooms = [customText, 'year', 'month', 'day'];
   }
   if (dateModel.customSelected) {
     headerText = zooms[0];
@@ -391,10 +414,18 @@ const getZoomObject = function(dateModel, hasSubDaily) {
     let interval = dateModel.interval
       ? dateModel.interval
       : dateModel.selectedZoom - 1;
-    headerText = zooms[interval];
+    headerText = '1 ' + zooms[interval];
   }
   return {
     increment: headerText,
-    array: lodashWithout(zooms, headerText)
+    array: lodashWithout(zooms, headerText),
+    customDelta: dateModel.customDelta,
+    customInterval: dateModel.customInterval
   };
+};
+
+const getEndTime = (layers, config) => {
+  const endDateA = layersLastDateTime(layers['active'], config);
+  const endDateB = layersLastDateTime(layers['activeB'], config);
+  return endDateA > endDateB ? endDateA : endDateB;
 };

@@ -25,7 +25,10 @@ import {
   layerReducer,
   getInitialState as getLayersInitialState
 } from './layers/reducers';
-import { dateReducer } from './date/reducers';
+import {
+  dateReducer,
+  getInitialState as getDateInitialState
+} from './date/reducers';
 import {
   animationReducer,
   getInitialState as getAnimationInitialState
@@ -62,6 +65,7 @@ export function getInitialState(models, config, parameters) {
     config,
     models,
     legacy: models,
+    date: getDateInitialState(config),
     animation: getAnimationInitialState(config),
     proj: getProjInitialState(config),
     layers: getLayersInitialState(config),

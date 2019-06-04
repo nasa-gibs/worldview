@@ -29,7 +29,9 @@ import {
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import {
   onActivate as openAnimation,
-  onClose as closeAnimation
+  onClose as closeAnimation,
+  changeStartDate,
+  changeEndDate
 } from '../../modules/animation/actions';
 import {
   timeScaleFromNumberKey,
@@ -83,21 +85,20 @@ class Timeline extends React.Component {
     const {
       endTime,
       startDate,
-      selectedDate,
       hasSubdailyLayers,
       changeDate
     } = this.props;
 
     let animate = () => {
-      var nextTime = getNextTimeSelection(delta, increment, selectedDate);
+      var nextTime = getNextTimeSelection(delta, increment, this.props.selectedDate);
       if (hasSubdailyLayers) {
         // can we remove this logic?
         if (new Date(startDate) <= nextTime && nextTime <= endTime) {
-          changeDate(util.dateAdd(selectedDate, increment, delta));
+          changeDate(util.dateAdd(this.props.selectedDate, increment, delta));
         }
       } else {
         if (new Date(startDate) <= nextTime && nextTime <= endTime) {
-          changeDate(util.dateAdd(selectedDate, increment, delta));
+          changeDate(util.dateAdd(this.props.selectedDate, increment, delta));
         }
       }
       if (this.state.animationInProcess) {
@@ -133,15 +134,16 @@ class Timeline extends React.Component {
     customIntervalModalOpen
   ) => {
     let delta;
+    let { customIntervalZoomLevel, customIntervalValue, selectInterval } = this.props;
     let customSelected = intervalSelected === 'custom';
-    if (customSelected) {
-      intervalSelected = this.props.customIntervalZoomLevel;
-      delta = this.props.customIntervalValue;
+    if (customSelected && customIntervalZoomLevel && customIntervalValue) {
+      intervalSelected = customIntervalZoomLevel;
+      delta = customIntervalValue;
     } else {
       intervalSelected = Number(timeScaleToNumberKey[intervalSelected]);
       delta = 1;
     }
-    this.props.selectInterval(delta, intervalSelected, customSelected);
+    selectInterval(delta, intervalSelected, customSelected);
     this.setState({
       customIntervalModalOpen: !!customIntervalModalOpen
     });
@@ -184,8 +186,8 @@ class Timeline extends React.Component {
 
   // update range of animation draggers
   updateAnimationRange = (startDate, endDate) => {
-    // ! PLACE HOLDER - OLD VERSION
-    // ui.anim.rangeselect.updateRange(startDate, endDate, true);
+    this.props.changeStartDate(startDate);
+    this.props.changeEndDate(endDate);
   };
 
   // handles left/right arrow down to decrement/increment date
@@ -259,12 +261,8 @@ class Timeline extends React.Component {
             </div>
             <div id="zoom-buttons-group">
               <TimeScaleIntervalChange
-                setTimeScaleIntervalChangeUnit={
-                  this.setTimeScaleIntervalChangeUnit
-                }
-                customIntervalZoomLevel={
-                  timeScaleFromNumberKey[customIntervalZoomLevel]
-                }
+                setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
+                customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
                 customSelected={customSelected}
                 customDelta={customIntervalValue}
                 timeScaleChangeUnit={timeScaleChangeUnit}
@@ -372,20 +370,18 @@ function mapStateToProps(state) {
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
   customSelected = Boolean(customSelected);
 
-  // handle changing timescale and intervals if in subdaily state
-  // when removing all subdaily layers
-  // TODO: how to dynamically update store based on remove layer?
-  // if (!hasSubdailyLayers) {
-  //   if (selectedZoom > 3) {
-  //     selectedZoom = 3;
-  //   }
-  //   if (interval > 3) {
-  //     interval = 3;
-  //   }
-  //   if (customInterval > 3) {
-  //     customInterval = 3;
-  //   }
-  // }
+  // handle reset of timescale and intervals if not subdaily
+  if (!hasSubdailyLayers) {
+    if (selectedZoom > 3) {
+      selectedZoom = 3;
+    }
+    if (interval > 3) {
+      interval = 3;
+    }
+    if (customInterval > 3) {
+      customInterval = 3;
+    }
+  }
 
   let endTime;
   if (compareModeActive) {
@@ -438,8 +434,8 @@ function mapStateToProps(state) {
     selectedDate: selectedDate,
     timeScale: timeScaleFromNumberKey[selectedZoom.toString()],
     timeScaleChangeUnit: timeScaleChangeUnit,
-    customIntervalValue: customDelta,
-    customIntervalZoomLevel: customInterval,
+    customIntervalValue: customDelta || 1,
+    customIntervalZoomLevel: customInterval || 3,
     intervalChangeAmt: deltaChangeAmt,
     parentOffset: dimensionsAndOffsetValues.parentOffset,
     timelineEndDateLimit,
@@ -455,7 +451,7 @@ const mapDispatchToProps = dispatch => ({
   changeDate: val => {
     dispatch(selectDate(val));
   },
-  // changes/sets custom delta and timescale interval, sets customSelected to TRUE
+  // changes/sets custom delta and timescale interval
   changeCustomInterval: (delta, timeScale) => {
     dispatch(changeCustomInterval(delta, timeScale));
   },
@@ -463,7 +459,7 @@ const mapDispatchToProps = dispatch => ({
   changeTimeScale: val => {
     dispatch(changeTimeScale(val));
   },
-  // changes to non-custom timescale interval, sets customSelected to FALSE
+  // changes to non-custom timescale interval, sets customSelected to TRUE/FALSE
   selectInterval: (delta, timeScale, customSelected) => {
     dispatch(selectInterval(delta, timeScale, customSelected));
   },
@@ -475,6 +471,12 @@ const mapDispatchToProps = dispatch => ({
   },
   toggleActiveCompareState: () => {
     dispatch(toggleActiveCompareState());
+  },
+  changeStartDate: date => {
+    dispatch(changeStartDate(date));
+  },
+  changeEndDate: date => {
+    dispatch(changeEndDate(date));
   }
 });
 
@@ -490,7 +492,30 @@ Timeline.propTypes = {
   url: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   screenWidth: PropTypes.number,
-  screenHeight: PropTypes.number
+  screenHeight: PropTypes.number,
+  draggerSelected: PropTypes.string,
+  hasSubdailyLayers: PropTypes.bool,
+  customSelected: PropTypes.bool,
+  compareModeActive: PropTypes.bool,
+  dateFormatted: PropTypes.string,
+  dateFormattedB: PropTypes.string,
+  startDate: PropTypes.string,
+  timelineStartDateLimit: PropTypes.string,
+  endTime: PropTypes.object,
+  isAnimationWidgetOpen: PropTypes.bool,
+  animStartLocationDate: PropTypes.object,
+  animEndLocationDate: PropTypes.object,
+  axisWidth: PropTypes.number,
+  selectedDate: PropTypes.object,
+  timeScale: PropTypes.string,
+  timeScaleChangeUnit: PropTypes.string,
+  customIntervalValue: PropTypes.number,
+  customIntervalZoomLevel: PropTypes.number,
+  intervalChangeAmt: PropTypes.number,
+  parentOffset: PropTypes.number,
+  timelineEndDateLimit: PropTypes.string,
+  leftArrowDisabled: PropTypes.bool,
+  rightArrowDisabled: PropTypes.bool
 };
 
 // get axisWidth and parentOffset for axis, footer, and leftoffset calculations

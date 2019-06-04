@@ -54,6 +54,7 @@ window.onload = () => {
   loadingIndicator.delayed(promise, 1000);
   promise
     .done(config => {
+      config.now = new Date();
       elapsed('Config loaded', startTime, parameters);
       let legacyState = parse(parameters, config, errors);
       layerValidate(errors, config);

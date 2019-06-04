@@ -5,7 +5,8 @@ import Deque from 'double-ended-queue';
 import moment from 'moment';
 
 import GridRange from './grid-range/grid-range';
-import Dragger from './timeline-dragger';
+import DateToolTip from './date-tooltips';
+import DraggerContainer from './dragger-container';
 
 import { getTimeRange } from './date-calc';
 import TimelineRangeSelector from '../../range-selection/range-selection';
@@ -273,8 +274,8 @@ class TimelineAxis extends React.Component {
         if (dragSentinelCount + deltaX > dragSentinelChangeNumber) {
           // handle over drag the necessitates multiple axis updates
           let overDrag = 0;
-          if (dragSentinelCount + deltaX > dragSentinelChangeNumber + dragSentinelChangeNumber) {
-            overDrag = Math.abs(dragSentinelCount + deltaX - dragSentinelChangeNumber - dragSentinelChangeNumber);
+          if (dragSentinelCount + deltaX > dragSentinelChangeNumber * 2) {
+            overDrag = Math.abs(dragSentinelCount + deltaX - dragSentinelChangeNumber * 2);
           }
           let { currentTimeRange,
             deque,
@@ -325,8 +326,8 @@ class TimelineAxis extends React.Component {
         if (dragSentinelCount + deltaX < -dragSentinelChangeNumber) {
           // handle over drag the necessitates multiple axis updates
           let overDrag = 0;
-          if (dragSentinelCount + deltaX < -dragSentinelChangeNumber - dragSentinelChangeNumber) {
-            overDrag = Math.abs(dragSentinelCount + deltaX - -dragSentinelChangeNumber - -dragSentinelChangeNumber);
+          if (dragSentinelCount + deltaX < -dragSentinelChangeNumber * 2) {
+            overDrag = Math.abs(dragSentinelCount + deltaX + dragSentinelChangeNumber * 2);
           }
           let { currentTimeRange,
             deque,
@@ -343,7 +344,7 @@ class TimelineAxis extends React.Component {
             overDrag
           );
 
-          let newDragSentinelCount = dragSentinelCount + deltaX - -dragSentinelChangeNumber + overDragGrids * gridWidth;
+          let newDragSentinelCount = dragSentinelCount + deltaX + dragSentinelChangeNumber + overDragGrids * gridWidth;
           this.setState(() => ({
             currentTimeRange,
             deque,
@@ -568,10 +569,8 @@ class TimelineAxis extends React.Component {
 
   // move dragger on axis click
   setLineTime = (e) => {
-    // console.log(e, this.state.hoverTime)
     e.preventDefault();
     e.stopPropagation();
-    // TODO: handle stop bubbling up to parent wv-timeline-axis to prevent invoking on clicking draggers
     if (e.target.className.animVal !== 'grid') {
       return;
     }
@@ -586,7 +585,7 @@ class TimelineAxis extends React.Component {
       let draggerPosition = draggerSelected === 'selected' ? leftOffset - draggerWidth : this.state.draggerPosition;
       let draggerPositionB = draggerSelected === 'selectedB' ? leftOffset - draggerWidth : this.state.draggerPositionB;
 
-      // is the other dragger visible after clicking and moving then new dragger ?
+      // check if the other dragger visible after clicking and moving then new dragger
       let isCompareModeActive = this.props.compareModeActive;
       let draggerB = draggerSelected === 'selectedB';
 
@@ -690,7 +689,7 @@ class TimelineAxis extends React.Component {
     let animationStartDraggerLocation;
     let animationEndDraggerLocation;
 
-    if (this.props.startLocationDate) {
+    if (this.props.animStartLocationDate) {
       animationStartDraggerLocation = Math.abs(frontDate.diff(this.props.animStartLocationDate, timeScale, true) * gridWidth);
       animationEndDraggerLocation = Math.abs(frontDate.diff(this.props.animEndLocationDate, timeScale, true) * gridWidth);
     }
@@ -734,7 +733,11 @@ class TimelineAxis extends React.Component {
    * check if selectedDate will be within acceptable visible axis width
    *
    * @param {String} selectedDate
-   * @return {Boolean} check for draggerB?
+   * @param {Boolean} draggerB - draggerB being checked?
+   * @returns {Object} output - return params used for dragger visibilty/updating axis
+   * @returns {Boolean} output.withinRange - within visible range
+   * @returns {Boolean} output.newDateInThePast - new date older?
+   * @returns {Number} output.newDraggerDiff - difference of new dragger from selected
    */
   checkDraggerMoveOrUpdateScale = (selectedDate, draggerB) => {
     let draggerTimeState;
@@ -968,7 +971,6 @@ class TimelineAxis extends React.Component {
     }
 
     this.setState({
-      showHoverLine: true,
       isTimelineDragging: false,
       leftBound,
       rightBound,
@@ -1170,7 +1172,6 @@ class TimelineAxis extends React.Component {
 
   // show hover line
   showHoverOn = (e) => {
-    // console.log(e.target, e.target.className.animVal)
     if (e.target.className.animVal === 'grid' && !this.state.showDraggerTime) {
       this.setState({
         showHoverLine: true
@@ -1215,10 +1216,12 @@ class TimelineAxis extends React.Component {
       }
       let gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
       let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
-      return draggerDateAdded.clone().add(remainderMilliseconds).format();
+      let newLocationDate = draggerDateAdded.clone().add(remainderMilliseconds).format();
+      return new Date(newLocationDate);
     } else {
       let draggerTimeStartValue = moment.utc(animLocationDate).valueOf();
-      return moment.utc(draggerTimeStartValue + (diffFactor * deltaX)).format();
+      let newLocationDate = moment.utc(draggerTimeStartValue + (diffFactor * deltaX)).format();
+      return new Date(newLocationDate);
     }
   }
 
@@ -1306,7 +1309,6 @@ class TimelineAxis extends React.Component {
       animationEndLocation: endLocation,
       showHoverLine: false,
       showDraggerTime: false
-
     }, function() {
       this.props.updateAnimationRange(animationStartLocationDate, animationEndLocationDate);
     });
@@ -1397,11 +1399,6 @@ class TimelineAxis extends React.Component {
       hoverTime
     } = this.state;
 
-    let draggerTimeLeftOffest = draggerSelected === 'selected'
-      ? draggerPosition - (hasSubdailyLayers ? 64 : 8)
-      : draggerPositionB - (hasSubdailyLayers ? 64 : 8);
-    let hoverTimeLeftOffset = hasSubdailyLayers ? leftOffset - 113 : leftOffset - 57;
-
     // ! WINDOW.MOMENT FOR DEV DEBUG ONLY
     window.moment = moment;
     return (
@@ -1482,92 +1479,37 @@ class TimelineAxis extends React.Component {
                 : null
               }
 
-              {draggerSelected === 'selectedB'
-                ? <React.Fragment>
-                  <Dragger
-                    toggleShowDraggerTime={this.toggleShowDraggerTime}
-                    handleDragDragger={this.handleDragDragger}
-                    selectDragger={this.selectDragger}
-                    compareModeActive={compareModeActive}
-                    disabled={true}
-                    draggerName='selected'
-                    draggerPosition={draggerPosition}
-                    draggerVisible={draggerVisible}
-                    transformX={transformX}
-                  />
-                  <Dragger
-                    toggleShowDraggerTime={this.toggleShowDraggerTime}
-                    handleDragDragger={this.handleDragDragger}
-                    selectDragger={this.selectDragger}
-                    compareModeActive={compareModeActive}
-                    disabled={false}
-                    draggerName='selectedB'
-                    draggerPosition={draggerPositionB}
-                    draggerVisible={draggerVisibleB}
-                    transformX={transformX}
-                  />
-                </React.Fragment>
-                : <React.Fragment>
-                  <Dragger
-                    toggleShowDraggerTime={this.toggleShowDraggerTime}
-                    handleDragDragger={this.handleDragDragger}
-                    selectDragger={this.selectDragger}
-                    compareModeActive={compareModeActive}
-                    disabled={true}
-                    draggerName='selectedB'
-                    draggerPosition={draggerPositionB}
-                    draggerVisible={draggerVisibleB}
-                    transformX={transformX}
-                  />
-                  <Dragger
-                    toggleShowDraggerTime={this.toggleShowDraggerTime}
-                    handleDragDragger={this.handleDragDragger}
-                    selectDragger={this.selectDragger}
-                    compareModeActive={compareModeActive}
-                    disabled={false}
-                    draggerName='selected'
-                    draggerPosition={draggerPosition}
-                    draggerVisible={draggerVisible}
-                    transformX={transformX}
-                  />
-                </React.Fragment>
-              }
+              <DraggerContainer
+                draggerSelected={draggerSelected}
+                transformX={transformX}
+                toggleShowDraggerTime={this.toggleShowDraggerTime}
+                handleDragDragger={this.handleDragDragger}
+                selectDragger={this.selectDragger}
+                compareModeActive={compareModeActive}
+                draggerPosition={draggerPosition}
+                draggerPositionB={draggerPositionB}
+                draggerVisible={draggerVisible}
+                draggerVisibleB={draggerVisibleB}
+              />
             </svg>
             : null }
 
-          {/* DRAGGER TIME */}
-          <div
-            className='dateToolTip'
-            style={{
-              transform: `translate(${draggerTimeLeftOffest}px, -100px)`,
-              display: !isTimelineDragging && showDraggerTime && draggerTimeState && draggerTimeLeftOffest > -54 && draggerTimeLeftOffest < axisWidth - 54 ? 'block' : 'none',
-              // opacity: showDraggerTime && draggerTimeState ? '1' : '0',
-              width: hasSubdailyLayers ? '220px' : '115px'
-            }}
-          >
-            { showDraggerTime && draggerTimeState
-              ? draggerSelected === 'selected'
-                ? hasSubdailyLayers ? draggerTimeState.split('T').join(' ') : draggerTimeState.split('T')[0]
-                : hasSubdailyLayers ? draggerTimeStateB.split('T').join(' ') : draggerTimeStateB.split('T')[0]
-              : null
-            }
-          </div>
-
-          {/* HOVER TIME */}
-          <div
-            className='dateToolTip'
-            style={{
-              transform: `translate(${hoverTimeLeftOffset}px, -100px)`,
-              display: !isTimelineDragging && !showDraggerTime && showHoverLine ? 'block' : 'none',
-              // opacity: !showDraggerTime && showHoverLine ? '1' : '0',
-              width: hasSubdailyLayers ? '220px' : '115px'
-            }}
-          >
-            { !showDraggerTime && hoverTime
-              ? hasSubdailyLayers ? hoverTime.split('T').join(' ') : hoverTime.split('T')[0]
-              : null
-            }
-          </div>
+          {!isTimelineDragging
+            ? <DateToolTip
+              draggerSelected={draggerSelected}
+              draggerPosition={draggerPosition}
+              draggerPositionB={draggerPositionB}
+              hasSubdailyLayers={hasSubdailyLayers}
+              leftOffset={leftOffset}
+              showDraggerTime={showDraggerTime}
+              draggerTimeState={draggerTimeState}
+              draggerTimeStateB={draggerTimeStateB}
+              hoverTime={hoverTime}
+              showHoverLine={showHoverLine}
+              axisWidth={axisWidth}
+            />
+            : null
+          }
         </div>
       </React.Fragment>
     );
@@ -1577,8 +1519,8 @@ class TimelineAxis extends React.Component {
 TimelineAxis.defaultProps = {
 };
 TimelineAxis.propTypes = {
-  animEndLocationDate: PropTypes.date,
-  animStartLocationDate: PropTypes.date,
+  animEndLocationDate: PropTypes.object,
+  animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
   changeDate: PropTypes.func,
   changeTimeScale: PropTypes.func,
