@@ -55,29 +55,6 @@ export function getRenderedVectorStyle(layerId, index, state) {
   return vectorStyle;
 }
 
-export function getLegends(layerId, groupName, state) {
-  var legends = [];
-  var count = getCount(layerId, state);
-  for (var i = 0; i < count; i++) {
-    legends.push(getLegend(layerId, i, groupName, state));
-  }
-  return legends;
-}
-/**
- * Gets the legend of a colormap
- *
- *
- * @method getLegend
- * @static
- * @param str {string} The ID of the layer
- * @param number {Number} The index of the colormap for this layer, default 0
- * object.
- * @return {object} object of the legend
- */
-export function getLegend(layerId, index, groupStr, state) {
-  var value = getVectorStyle(layerId, index, groupStr, state);
-  return value.legend || value.entries;
-}
 export function getCount(layerId, state) {
   const renderedVectorStyle = getRenderedVectorStyle(layerId, undefined, state);
   if (renderedVectorStyle && renderedVectorStyle.maps) {
@@ -85,21 +62,6 @@ export function getCount(layerId, state) {
   } else {
     return 0;
   }
-}
-/**
- * Gets the legend of a colormap
- *
- *
- * @method getDefaultLegend
- * @static
- * @param str {string} The ID of the layer
- * @param number {Number} The index of the colormap for this layer, default 0
- * object.
- * @return {object} object of the legend
- */
-export function getDefaultLegend(layerId, index, state) {
-  var vectorStyle = getRenderedVectorStyle(layerId, index, state);
-  return vectorStyle.legend || vectorStyle.entries || {};
 }
 
 export function getCustomVectorStyle(vectorStyleId, customsVectorStyleConfig) {

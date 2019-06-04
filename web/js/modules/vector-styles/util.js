@@ -5,7 +5,7 @@ import {
   assign as lodashAssign
 } from 'lodash';
 import {
-  setCustom as setCustomSelector,
+  setDefault as setDefaultSelector,
   getCount,
   setRange as setRangeSelector,
   findIndex as findVectorStyleExtremeIndex
@@ -17,13 +17,14 @@ export function loadRenderedVectorStyle(config, layerId) {
   return util.load.config(config.vectorStyles.rendered,
     layer.vectorStyle.id, 'config/vectorstyles/' + layer.vectorStyle.id + '.json');
 }
-// export function loadCustom(config) {
-//   return util.load.config(
-//     config.vectorStyles,
-//     'custom',
-//     'config/vectorStyles-custom.json'
-//   );
-// }
+export function loadDefault(config) {
+  console.log('vectorStyles.loadDefault');
+  return util.load.config(
+    config.vectorStyles.default,
+    'OrbitTracks',
+    'config/vectorstyles/OrbitTracks.json'
+  );
+}
 
 export function parseVectorStyles(state, errors, config) {
   if (state.vectorStyles) {
@@ -139,7 +140,7 @@ export function loadVectorStyles(permlinkState, state) {
       if (layerDef.custom) {
         lodashEach(layerDef.custom, function(value, index) {
           try {
-            let newVectorStyles = setCustomSelector(
+            let newVectorStyles = setDefaultSelector(
               layerId,
               value,
               index,
@@ -233,4 +234,35 @@ export function mapLocationToVectorStyleState(
     );
   }
   return stateFromLocation;
+}
+
+// TODO replace without jQuery
+export function requirements(state, config, startup) {
+  var promises = [];
+  if (startup || !state.tr) {
+    config.vectorStyles = {
+      rendered: {},
+      default: {}
+    };
+  }
+  lodashEach(state.l, function(qsLayer) {
+    var layerId = qsLayer.id;
+    if (config.layers[layerId] && config.layers[layerId].vectorStyle) {
+      promises.push(loadRenderedVectorStyle(config, layerId));
+    }
+    var defaultStyle = lodashFind(qsLayer.attributes, {
+      id: 'style'
+    });
+    if (defaultStyle) {
+      promises.push(loadDefault(config));
+    }
+  });
+  if (promises.length > 0) {
+    var promise = $.Deferred();
+    $.when
+      .apply(null, promises)
+      .then(promise.resolve)
+      .fail(promise.reject);
+    return promise;
+  }
 }

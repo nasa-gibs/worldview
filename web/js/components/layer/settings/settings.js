@@ -21,11 +21,12 @@ import {
 } from '../../../modules/palettes/selectors';
 import {
   setRangeAndSquash,
-  setCustom,
+  setCustom as setCustomPalette,
   clearCustom
 } from '../../../modules/palettes/actions';
 
 import {
+  getCustomVectorStyle,
   getVectorStyle
 } from '../../../modules/vector-styles/selectors';
 import { setOpacity } from '../../../modules/layers/actions';
@@ -52,7 +53,7 @@ class LayerSettings extends React.Component {
       paletteOrder,
       getDefaultLegend,
       getCustomPalette,
-      setCustom,
+      setCustomPalette,
       palettesTranslate,
       groupName,
       setRange,
@@ -109,7 +110,7 @@ class LayerSettings extends React.Component {
               ''
             )}
             <Palette
-              setCustom={setCustom}
+              setCustom={setCustomPalette}
               groupName={groupName}
               clearCustom={clearCustom}
               getDefaultLegend={getDefaultLegend}
@@ -121,11 +122,6 @@ class LayerSettings extends React.Component {
               canvas={this.canvas}
               index={i}
               paletteOrder={paletteOrder}
-            />
-            <VectorStyle
-              activePalette={'default_style'}
-              layer={layer}
-              index={i}
             />
           </TabPane>
         );
@@ -146,7 +142,7 @@ class LayerSettings extends React.Component {
    */
   renderCustoms() {
     const {
-      setCustom,
+      setCustomPalette,
       clearCustom,
       getDefaultLegend,
       getCustomPalette,
@@ -163,6 +159,7 @@ class LayerSettings extends React.Component {
     if (!legends) return '';
     const len = legends.length;
     const palette = getPalette(layer.id, 0);
+    const vectorStyle = getVectorStyle(layer.id, 0);
     const legend = getLegend(layer.id, 0);
     const max = palette.legend.colors.length - 1;
     const start = palette.min || 0;
@@ -192,7 +189,7 @@ class LayerSettings extends React.Component {
           ''
         )}
         <Palette
-          setCustom={setCustom}
+          setCustom={setCustomPalette}
           clearCustom={clearCustom}
           getDefaultLegend={getDefaultLegend}
           getCustomPalette={getCustomPalette}
@@ -204,6 +201,12 @@ class LayerSettings extends React.Component {
           groupName={groupName}
           index={0}
           paletteOrder={paletteOrder}
+        />
+        <VectorStyle
+          getCustomVectorStyle={getCustomVectorStyle}
+          activePalette={'default_style'}
+          layer={layer}
+          index={0}
         />
       </React.Fragment>
     );
@@ -272,8 +275,8 @@ const mapDispatchToProps = dispatch => ({
       setRangeAndSquash(layerId, { min, max, squash }, index, groupName)
     );
   },
-  setCustom: (layerId, paletteId, index, groupName) => {
-    dispatch(setCustom(layerId, paletteId, index, groupName));
+  setCustomPalette: (layerId, paletteId, index, groupName) => {
+    dispatch(setCustomPalette(layerId, paletteId, index, groupName));
   },
   clearCustom: (layerId, index, groupName) => {
     dispatch(clearCustom(layerId, index, groupName));
