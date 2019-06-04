@@ -274,8 +274,8 @@ class TimelineAxis extends React.Component {
         if (dragSentinelCount + deltaX > dragSentinelChangeNumber) {
           // handle over drag the necessitates multiple axis updates
           let overDrag = 0;
-          if (dragSentinelCount + deltaX > dragSentinelChangeNumber + dragSentinelChangeNumber) {
-            overDrag = Math.abs(dragSentinelCount + deltaX - dragSentinelChangeNumber - dragSentinelChangeNumber);
+          if (dragSentinelCount + deltaX > dragSentinelChangeNumber * 2) {
+            overDrag = Math.abs(dragSentinelCount + deltaX - dragSentinelChangeNumber * 2);
           }
           let { currentTimeRange,
             deque,
@@ -326,8 +326,8 @@ class TimelineAxis extends React.Component {
         if (dragSentinelCount + deltaX < -dragSentinelChangeNumber) {
           // handle over drag the necessitates multiple axis updates
           let overDrag = 0;
-          if (dragSentinelCount + deltaX < -dragSentinelChangeNumber - dragSentinelChangeNumber) {
-            overDrag = Math.abs(dragSentinelCount + deltaX - -dragSentinelChangeNumber - -dragSentinelChangeNumber);
+          if (dragSentinelCount + deltaX < -dragSentinelChangeNumber * 2) {
+            overDrag = Math.abs(dragSentinelCount + deltaX + dragSentinelChangeNumber * 2);
           }
           let { currentTimeRange,
             deque,
@@ -344,7 +344,7 @@ class TimelineAxis extends React.Component {
             overDrag
           );
 
-          let newDragSentinelCount = dragSentinelCount + deltaX - -dragSentinelChangeNumber + overDragGrids * gridWidth;
+          let newDragSentinelCount = dragSentinelCount + deltaX + dragSentinelChangeNumber + overDragGrids * gridWidth;
           this.setState(() => ({
             currentTimeRange,
             deque,
@@ -569,10 +569,8 @@ class TimelineAxis extends React.Component {
 
   // move dragger on axis click
   setLineTime = (e) => {
-    // console.log(e, this.state.hoverTime)
     e.preventDefault();
     e.stopPropagation();
-    // TODO: handle stop bubbling up to parent wv-timeline-axis to prevent invoking on clicking draggers
     if (e.target.className.animVal !== 'grid') {
       return;
     }
@@ -587,7 +585,7 @@ class TimelineAxis extends React.Component {
       let draggerPosition = draggerSelected === 'selected' ? leftOffset - draggerWidth : this.state.draggerPosition;
       let draggerPositionB = draggerSelected === 'selectedB' ? leftOffset - draggerWidth : this.state.draggerPositionB;
 
-      // is the other dragger visible after clicking and moving then new dragger ?
+      // check if the other dragger visible after clicking and moving then new dragger
       let isCompareModeActive = this.props.compareModeActive;
       let draggerB = draggerSelected === 'selectedB';
 
@@ -735,7 +733,11 @@ class TimelineAxis extends React.Component {
    * check if selectedDate will be within acceptable visible axis width
    *
    * @param {String} selectedDate
-   * @return {Boolean} check for draggerB?
+   * @param {Boolean} draggerB - draggerB being checked?
+   * @returns {Object} output - return params used for dragger visibilty/updating axis
+   * @returns {Boolean} output.withinRange - within visible range
+   * @returns {Boolean} output.newDateInThePast - new date older?
+   * @returns {Number} output.newDraggerDiff - difference of new dragger from selected
    */
   checkDraggerMoveOrUpdateScale = (selectedDate, draggerB) => {
     let draggerTimeState;
