@@ -134,18 +134,14 @@ class AnimationWidget extends React.Component {
       promiseImageryForTime,
       map,
       selectDate,
-      currentDate
+      currentDate,
+      toggleGif,
+      isGifActive
     } = this.props;
     if (!isActive) {
       return '';
-    } else if (this.state.isGifActive) {
-      return (
-        <GifContainer
-          onClose={() => {
-            this.setState({ isGifActive: false });
-          }}
-        />
-      );
+    } else if (isGifActive) {
+      return <GifContainer onClose={toggleGif} />;
     } else {
       const maxLength = getMaxQueueLength(this.state.speed);
       const queueLength = getQueueLength(
@@ -220,9 +216,7 @@ class AnimationWidget extends React.Component {
               href="javascript:void(null)"
               title="Create Animated GIF"
               className="wv-icon-case"
-              onClick={() => {
-                this.toggleGIF();
-              }}
+              onClick={toggleGif}
             >
               <i
                 id="wv-animation-widget-file-video-icon"
@@ -274,7 +268,15 @@ function mapStateToProps(state) {
     config,
     legacy
   } = state;
-  const { startDate, endDate, speed, loop, isPlaying, isActive } = animation;
+  const {
+    startDate,
+    endDate,
+    speed,
+    loop,
+    isPlaying,
+    isActive,
+    gifActive
+  } = animation;
   const activeStr = compare.activeString;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
@@ -308,7 +310,8 @@ function mapStateToProps(state) {
     map: legacy.map,
     promiseImageryForTime: (date, layers) => {
       return promiseImageryForTime(date, layers, state);
-    }
+    },
+    isGifActive: gifActive
   };
 }
 const mapDispatchToProps = dispatch => ({
