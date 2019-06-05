@@ -129,13 +129,14 @@ const getParameters = function(config, parameters) {
         setAsEmptyItem: true,
         serialize: (currentItemState, state) => {
           const isActive = get(state, 'compare.active');
-          const nowMinusSevenDaysString = util.toISOStringSeconds(nowMinusSevenDays);
+          const nowMinusSevenDaysString = util.toISOStringSeconds(
+            nowMinusSevenDays
+          );
           if (!isActive) return undefined;
-          return nowMinusSevenDaysString === util.toISOStringSeconds(currentItemState)
+          return nowMinusSevenDaysString ===
+            util.toISOStringSeconds(currentItemState)
             ? undefined
-            : serializeDate(
-              currentItemState || nowMinusSevenDays
-            );
+            : serializeDate(currentItemState || nowMinusSevenDays);
         },
         parse: str => {
           return tryCatchDate(str, nowMinusSevenDays);
@@ -227,10 +228,8 @@ const getParameters = function(config, parameters) {
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
-        serialize: (currentItemState) => {
-          return serializeDate(
-            currentItemState || nowMinusSevenDays
-          );
+        serialize: currentItemState => {
+          return serializeDate(currentItemState || nowMinusSevenDays);
         },
         parse: str => {
           return tryCatchDate(str, nowMinusSevenDays);
@@ -243,10 +242,8 @@ const getParameters = function(config, parameters) {
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
-        serialize: (currentItemState) => {
-          return serializeDate(
-            currentItemState || now
-          );
+        serialize: currentItemState => {
+          return serializeDate(currentItemState || now);
         },
         parse: str => {
           return tryCatchDate(str, now);
@@ -328,24 +325,6 @@ const getParameters = function(config, parameters) {
       stateKey: 'animation.loop',
       initialState: false,
       type: 'bool'
-    },
-    as: {
-      stateKey: 'animation.startDate',
-      initialState: util.dateAdd(now, 'day', -7),
-      type: 'date',
-      options: {
-        serialize: serializeDate,
-        parse: tryCatchDate
-      }
-    },
-    ae: {
-      stateKey: 'animation.endDate',
-      initialState: now,
-      type: 'date',
-      options: {
-        serialize: serializeDate,
-        parse: tryCatchDate
-      }
     },
     av: {
       stateKey: 'animation.speed',
