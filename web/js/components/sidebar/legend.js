@@ -215,7 +215,6 @@ class Legend extends React.Component {
         xOffset = this.state.width * percent;
       }
     }
-
     var min = legend.minLabel || legend.tooltips[0];
     var max = legend.maxLabel || legend.tooltips[toolTipLength];
     min = palette.min ? legend.tooltips[palette.min] : min;
@@ -398,7 +397,7 @@ Legend.defaultProps = {
   isRunningData: false,
   isHoveringLegend: false,
   isRunningDataEnabled: true,
-  width: 235,
+  width: 231,
   height: 12
 };
 Legend.propTypes = {

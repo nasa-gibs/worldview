@@ -177,12 +177,16 @@
 }
 
 .wv-palettes-colorbar {
-  width: 100%;
+  width: 231px;
   height: 12px;
   border: 1px solid #404040;
   margin-bottom: 13px;
+  max-width: 231px;
+  margin-left: 5px
 }
-
+.scrollbar-visible .wv-palettes-colorbar {
+  margin-left: 0
+}
 .wv-palettes-colorbar:hover {
   cursor: crosshair;
 }
