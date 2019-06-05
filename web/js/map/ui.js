@@ -584,7 +584,7 @@ export function mapui(models, config, store) {
       }
 
       if (compare && compare.active) {
-        if (layerGroup && layerGroup.length) {
+        if (layerGroup && layerGroup.getLayers().getArray().length) {
           let index = findLayerIndex(def, layerGroup);
           layerGroup.getLayers().setAt(
             index,
