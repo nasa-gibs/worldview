@@ -56,6 +56,8 @@ export default function naturalEventsUI(ui, config, store) {
         return onSidebarChange(action.activeTab);
       case EVENT_CONSTANTS.SELECT_EVENT:
         return self.selectEvent(action.id, action.date);
+      case EVENT_CONSTANTS.DESELECT_EVENT:
+        return self.deselectEvent();
       case EVENT_CONSTANTS.REQUEST_EVENTS_SUCCESS:
       case EVENT_CONSTANTS.REQUEST_SOURCES_SUCCESS:
       case EVENT_CONSTANTS.REQUEST_CATEGORIES_SUCCESS:
@@ -130,8 +132,8 @@ export default function naturalEventsUI(ui, config, store) {
     const state = store.getState();
     map = ui.map.selected;
     view = map.getView();
-    naturalEventMarkers = markers(ui, config);
-    naturalEventsTrack = track(ui, config);
+    naturalEventMarkers = markers(ui, store, map);
+    naturalEventsTrack = track(ui, store, map);
     // filter events within projection view extent
     self.filterEventList();
 
@@ -347,9 +349,10 @@ export default function naturalEventsUI(ui, config, store) {
    *
    * @param  {Boolean} showAll - show all available points in projection
    */
-  self.filterEventList = function(showAll) {
+  self.filterEventList = function() {
     const state = store.getState();
     const proj = state.proj;
+    const showAll = state.events.showAll;
     if (isLoading || !state.sidebar.activeTab === 'events') return;
     var hiddenEventsCounter = self.markers.length;
     var extent = view.calculateExtent();

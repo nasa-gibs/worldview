@@ -410,3 +410,8 @@
   display: list-item;
   margin: 2px 0 2px 20px;
 }
+.events-footer-case {
+  color: #fff;
+  padding-top: 5px;
+  border-top: 0.5px solid rgba(250, 250, 250, 0.5);
+}

@@ -28,7 +28,7 @@ import { selectEvent as selectEventAction } from '../../modules/natural-events/a
 const firstClusterObj = naturalEventsClusterCreateObject(); // Cluster before selected event
 const secondClusterObj = naturalEventsClusterCreateObject(); // Cluster after selected event
 
-export default function naturalEventsTrack(ui, store) {
+export default function naturalEventsTrack(ui, store, selectedMap) {
   var self = {};
   self.trackDetails = {};
   self.active = false;
@@ -105,7 +105,7 @@ export default function naturalEventsTrack(ui, store) {
         return onSidebarChange(action.activeTab);
       case CHANGE_PROJECTION:
         // update/remove track on projection change
-        if (self.trackDetails.id) return self.update(null, ui.map.selected);
+        if (self.trackDetails.id) return self.update(null, selectedMap);
     }
   };
   const onSidebarChange = function(tab) {

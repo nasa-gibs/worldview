@@ -5,7 +5,8 @@ import {
   SELECT_EVENT,
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
-  ONLY_SHOW_VISIBLE
+  ONLY_SHOW_VISIBLE,
+  TOGGLE_SHOW_ALL
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 import {
@@ -46,7 +47,7 @@ export const eventsReducerState = {
     date: null
   },
   active: false,
-  showAll: false
+  showAll: true
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
@@ -58,13 +59,21 @@ export function eventsReducer(state = eventsReducerState, action) {
           date: action.date
         }
       });
+
     case DESELECT_EVENT:
       return lodashAssign({}, state, {
-        selected: {}
+        selected: {
+          id: '',
+          date: null
+        }
       });
     case SHOW_ALL_EVENTS:
       return lodashAssign({}, state, {
         showAll: true
+      });
+    case TOGGLE_SHOW_ALL:
+      return lodashAssign({}, state, {
+        showAll: !state.showAll
       });
     case ONLY_SHOW_VISIBLE:
       return lodashAssign({}, state, {

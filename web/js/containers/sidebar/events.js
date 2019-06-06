@@ -57,7 +57,6 @@ class Events extends React.Component {
   render() {
     const {
       events,
-      showAll,
       isLoading,
       selectEvent,
       selected,
@@ -97,13 +96,15 @@ class Events extends React.Component {
                     event={event}
                     selectEvent={() => selectEvent(event.id, event.date)}
                     deselectEvent={deselectEvent}
+                    isSelected={
+                      selected.id === event.id && visibleEvents[event.id]
+                    }
                     selectedDate={
-                      selected.id === event.id &&
-                        (showAll || visibleEvents[event.id])
+                      selected.id === event.id && visibleEvents[event.id]
                         ? selected.date
                         : null
                     }
-                    isVisible={visibleEvents[event.id] || showAll}
+                    isVisible={visibleEvents[event.id]}
                     sources={sources}
                   />
                 ))
@@ -137,7 +138,8 @@ function mapStateToProps(state) {
     requestedEvents,
     requestedEventSources,
     requestedEventCategories,
-    config
+    config,
+    proj
   } = state;
   const { selected, showAll } = state.events;
 
@@ -154,11 +156,13 @@ function mapStateToProps(state) {
   const events = lodashGet(requestedEvents, 'response');
   const sources = lodashGet(requestedEventSources, 'response');
   if (events && state.legacy.map.extent) {
+    let extent = showAll ? proj.selected.maxExtent : state.legacy.map.extent;
     visibleEvents = getEventsWithinExtent(
       events,
       selected,
-      state.legacy.map.extent,
-      state
+      extent,
+      proj.selected,
+      showAll
     );
   }
 

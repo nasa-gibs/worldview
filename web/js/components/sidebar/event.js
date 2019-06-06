@@ -5,6 +5,10 @@ import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
 
 class Event extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
+  }
   /**
    * Return date list for selected event
    */
@@ -21,7 +25,10 @@ class Event extends React.Component {
             return (
               <li key={event.id + '-' + date} className="dates">
                 <a
-                  onClick={this.onClick.bind(this, date, null)}
+                  onClick={e => {
+                    e.stopPropagation();
+                    this.onClick(date);
+                  }}
                   className={
                     selectedDate === date
                       ? 'date item-selected active'
@@ -43,11 +50,15 @@ class Event extends React.Component {
    * @param {Boolean} isSelected | Is this event already selected
    * @param {Object} e | Event Object
    */
-  onClick(date, isSelected, e) {
-    e.preventDefault();
-    e.stopPropagation();
-    const { selectEvent, event, deselectEvent } = this.props;
-    if (isSelected) {
+  onClick(date) {
+    const {
+      selectEvent,
+      event,
+      deselectEvent,
+      isSelected,
+      selectedDate
+    } = this.props;
+    if (isSelected && (!date || date === selectedDate)) {
       deselectEvent();
     } else {
       selectEvent(event.id, date);
@@ -96,7 +107,7 @@ class Event extends React.Component {
     }
   }
   render() {
-    const { event, selectedDate, isVisible } = this.props;
+    const { event, isVisible, isSelected } = this.props;
     const eventDate = util.parseDateUTC(event.geometries[0].date);
     var dateString =
       util.giveWeekDay(eventDate) +
@@ -110,13 +121,16 @@ class Event extends React.Component {
     return (
       <li
         className={
-          selectedDate
+          isSelected
             ? 'item-selected selectorItem item item-visible'
             : isVisible
               ? 'selectorItem item'
               : 'selectorItem item hidden'
         }
-        onClick={this.onClick.bind(this, null, !!selectedDate)}
+        onClick={e => {
+          e.stopPropagation();
+          this.onClick();
+        }}
         id={'sidebar-event-' + util.encodeId(event.id)}
       >
         <i

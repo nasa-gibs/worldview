@@ -4,7 +4,7 @@ export function eventParse(state) {
   var values = state.split(',');
   var id = values[0] || '';
   var date = values[1] || '';
-  id = id.match(/^EONET_[0-9]+/i) ? values[0] : null;
+  id = id.match(/^EONET_[0-9]+/i) ? values[0] : '';
   date = date.match(/\d{4}-\d{2}-\d{2}/) ? values[1] : null;
   return {
     selected: {
@@ -12,7 +12,7 @@ export function eventParse(state) {
       date
     },
     active: true,
-    showAll: false
+    showAll: true
   };
 }
 export function serializeEvent(currentItemState) {

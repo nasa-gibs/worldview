@@ -5,7 +5,8 @@ import {
   SELECT_EVENT,
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
-  ONLY_SHOW_VISIBLE
+  ONLY_SHOW_VISIBLE,
+  TOGGLE_SHOW_ALL
 } from './constants';
 import { requestAction } from '../core/actions';
 
@@ -41,7 +42,6 @@ export function requestSources(location) {
 }
 
 export function selectEvent(id, date) {
-  console.log(id, date);
   return {
     type: SELECT_EVENT,
     id: id,
@@ -60,6 +60,11 @@ export function deselectEvent(id, date) {
 export function showAll() {
   return {
     type: SHOW_ALL_EVENTS
+  };
+}
+export function toggleListAll() {
+  return {
+    type: TOGGLE_SHOW_ALL
   };
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../components/util/button';
+import { Checkbox } from '../../components/util/checkbox';
 import ModeSelection from '../../components/sidebar/mode-selection';
 import googleTagManager from 'googleTagManager';
 import { get as lodashGet } from 'lodash';
@@ -12,25 +13,25 @@ import {
 } from '../../modules/data/selectors';
 import ProductPicker from '../../components/layer/product-picker/product-picker';
 import { openCustomContent } from '../../modules/modal/actions';
+import { toggleListAll } from '../../modules/natural-events/actions';
 import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
 
 class FooterContent extends React.Component {
   render() {
     const {
-      showListAllButton,
       isCompareActive,
       compareMode,
       isMobile,
-      events,
       activeTab,
-      filterEventList,
+      toggleListAll,
       onGetData,
       changeCompareMode,
       addLayers,
       toggleCompare,
       counts,
       dataSelectionSize,
-      compareFeature
+      compareFeature,
+      showAll
     } = this.props;
     if (activeTab === 'layers') {
       return (
@@ -71,27 +72,14 @@ class FooterContent extends React.Component {
       );
     } else if (activeTab === 'events') {
       return (
-        <div
-          className="events-footer-case"
-          style={
-            !showListAllButton || !events
-              ? { display: 'none' }
-              : { display: 'block' }
-          }
-        >
-          <p>Only selected events and events in current map view are listed</p>
-          <Button
+        <div className="events-footer-case">
+          <Checkbox
             className="red"
-            onClick={e => {
-              e.stopPropagation();
-              if (filterEventList) {
-                filterEventList(true);
-                googleTagManager.pushEvent({
-                  event: 'natural_events_list_all'
-                });
-              }
-            }}
+            id="events-footer-checkbox"
+            label="Only show events in current view"
+            onCheck={toggleListAll}
             text="List All"
+            checked={!showAll}
           />
         </div>
       );
@@ -142,6 +130,9 @@ const mapDispatchToProps = dispatch => ({
   onGetData: () => {
     dispatch({ type: DATA_GET_DATA_CLICK });
   },
+  toggleListAll: () => {
+    dispatch(toggleListAll());
+  },
   addLayers: () => {
     dispatch(
       openCustomContent('LAYER_PICKER_COMPONENT', {
@@ -159,7 +150,6 @@ function mapStateToProps(state, ownProps) {
   const { requestedEvents, config, layers, data, compare } = state;
   const { showAll } = state.events;
   const { selectedGranules } = data;
-  const showListAllButton = !showAll;
   const events = lodashGet(requestedEvents, 'response');
   const activeString = compare.isCompareA ? 'active' : 'activeB';
   const activeLayers = layers[activeString];
@@ -167,7 +157,7 @@ function mapStateToProps(state, ownProps) {
   const dataSelectionSize = getDataSelectionSize(selectedGranules);
 
   return {
-    showListAllButton,
+    showAll,
     activeTab,
     events,
     counts,

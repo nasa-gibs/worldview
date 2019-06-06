@@ -2,8 +2,13 @@ import { find as lodashFind, get as lodashGet } from 'lodash';
 import * as olProj from 'ol/proj';
 import * as olExtent from 'ol/extent';
 
-export function getEventsWithinExtent(loadedEvents, selected, extent, state) {
-  const selectedProj = lodashGet(state, 'proj.selected');
+export function getEventsWithinExtent(
+  loadedEvents,
+  selected,
+  extent,
+  selectedProj,
+  showAll
+) {
   var maxExtent = selectedProj.maxExtent;
   var visibleListEvents = {};
 
@@ -48,7 +53,14 @@ export function getEventsWithinExtent(loadedEvents, selected, extent, state) {
       olExtent.containsCoordinate(extent, coordinates) &&
       olExtent.containsCoordinate(maxExtent, coordinates);
 
-    if (isVisible || isSelectedEvent) {
+    if (isVisible) {
+      visibleListEvents[naturalEvent.id] = true;
+    } else if (
+      // Keep selected in event list if within proj limits
+      isSelectedEvent &&
+      olExtent.containsCoordinate(maxExtent, coordinates)
+    ) {
+      console.log(maxExtent, coordinates);
       visibleListEvents[naturalEvent.id] = true;
     }
   });

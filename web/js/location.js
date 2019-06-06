@@ -17,6 +17,7 @@ import { resetLayers, hasSubDaily } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
 import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
+import { mapLocationToSidebarState } from './modules/sidebar/util';
 import util from './util/util';
 import update from 'immutability-helper';
 
@@ -33,6 +34,7 @@ export function mapLocationToState(state, location) {
   if (location.search) {
     let parameters = util.fromQueryString(location.search);
     let stateFromLocation = location.query;
+
     stateFromLocation = mapLocationToProjState(
       parameters,
       stateFromLocation,
@@ -55,6 +57,12 @@ export function mapLocationToState(state, location) {
       config
     );
     stateFromLocation = mapLocationToAnimationState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+    stateFromLocation = mapLocationToSidebarState(
       parameters,
       stateFromLocation,
       state,
