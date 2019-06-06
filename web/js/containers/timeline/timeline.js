@@ -10,7 +10,7 @@ import CustomIntervalSelectorWidget from '../../components/timeline/interval-sel
 import util from '../../util/util';
 import DateSelector from '../../components/date-selector/date-selector';
 import DateChangeArrows from '../../components/timeline/timeline-controls/date-change-arrows';
-import AnimationWidget from '../animation-widget';
+
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 
@@ -21,6 +21,7 @@ import {
   lastDate as layersLastDateTime
 } from '../../modules/layers/selectors';
 import {
+  getPosition,
   selectDate,
   changeTimeScale,
   selectInterval,
@@ -29,26 +30,15 @@ import {
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import {
   onActivate as openAnimation,
-<<<<<<< HEAD
   onClose as closeAnimation,
+  changeStartAndEndDate,
   changeStartDate,
   changeEndDate
 } from '../../modules/animation/actions';
-<<<<<<< HEAD
-=======
-import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../modules/date/constants';
-=======
-  onClose as closeAnimation
-} from '../../modules/animation/actions';
->>>>>>> Add animation redux rendering #1623 #1622
 import {
   timeScaleFromNumberKey,
   timeScaleToNumberKey
 } from '../../modules/date/constants';
-<<<<<<< HEAD
-=======
->>>>>>> Add animation redux rendering #1623 #1622
->>>>>>> Add animation redux rendering #1623 #1622
 
 const ANIMATION_DELAY = 500;
 
@@ -199,12 +189,6 @@ class Timeline extends React.Component {
     this.props.toggleActiveCompareState();
   };
 
-  // update range of animation draggers
-  updateAnimationRange = (startDate, endDate) => {
-    this.props.changeStartDate(startDate);
-    this.props.changeEndDate(endDate);
-  };
-
   // handles left/right arrow down to decrement/increment date
   handleKeyDown = lodashDebounce(
     e => {
@@ -235,8 +219,8 @@ class Timeline extends React.Component {
 
   render() {
     const {
-      dateFormatted,
-      dateFormattedB,
+      dateA,
+      dateB,
       hasSubdailyLayers,
       draggerSelected,
       leftArrowDisabled,
@@ -253,14 +237,10 @@ class Timeline extends React.Component {
       animStartLocationDate,
       animEndLocationDate,
       isAnimationWidgetOpen,
-<<<<<<< HEAD
       animationDisabled,
       hideTimeline
-=======
-      animationDisabled
->>>>>>> Add animation redux rendering #1623 #1622
     } = this.props;
-    return dateFormatted ? (
+    return dateA ? (
       <ErrorBoundary>
         <section id="timeline" className="timeline-inner clearfix">
           <div
@@ -269,40 +249,24 @@ class Timeline extends React.Component {
           >
             <div id="date-selector-main">
               <DateSelector
-                {...this.props}
                 onDateChange={this.props.changeDate}
-                date={new Date(dateFormatted)}
-                dateB={new Date(dateFormattedB)}
+                date={new Date(dateA)}
+                dateB={new Date(dateB)}
                 hasSubdailyLayers={hasSubdailyLayers}
                 draggerSelected={draggerSelected}
                 maxDate={new Date(timelineEndDateLimit)}
                 minDate={new Date(timelineStartDateLimit)}
+                fontSize={24}
               />
             </div>
             <div id="zoom-buttons-group">
               <TimeScaleIntervalChange
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
                 setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
                 customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
-=======
->>>>>>> Add animation redux rendering #1623 #1622
-                setTimeScaleIntervalChangeUnit={
-                  this.setTimeScaleIntervalChangeUnit
-                }
-                customIntervalZoomLevel={
-                  timeScaleFromNumberKey[customIntervalZoomLevel]
-                }
-<<<<<<< HEAD
-=======
->>>>>>> Add animation redux rendering #1623 #1622
->>>>>>> Add animation redux rendering #1623 #1622
                 customSelected={customSelected}
                 customDelta={customIntervalValue}
                 timeScaleChangeUnit={timeScaleChangeUnit}
               />
-
               <DateChangeArrows
                 leftArrowDown={this.decrementDate}
                 leftArrowUp={this.stopper}
@@ -320,24 +284,17 @@ class Timeline extends React.Component {
           </div>
           <div
             id="timeline-footer"
-<<<<<<< HEAD
             style={{
               display:
                 this.state.timelineHidden || hideTimeline ? 'none' : 'block'
             }}
-=======
-            style={{ display: this.state.timelineHidden ? 'none' : 'block' }}
->>>>>>> Add animation redux rendering #1623 #1622
           >
-            <div id="wv-animation-widet-case">
-              {isAnimationWidgetOpen ? <AnimationWidget /> : null}
-            </div>
             {/* Timeline */}
             <TimelineAxis
               {...this.props}
               axisWidth={axisWidth}
-              selectedDate={dateFormatted}
-              selectedDateB={dateFormattedB}
+              dateA={dateA}
+              dateB={dateB}
               changeDate={this.props.changeDate}
               hasSubdailyLayers={hasSubdailyLayers}
               parentOffset={parentOffset}
@@ -347,10 +304,13 @@ class Timeline extends React.Component {
               onChangeSelectedDragger={this.onChangeSelectedDragger}
               timelineStartDateLimit={timelineStartDateLimit}
               timelineEndDateLimit={timelineEndDateLimit}
-              updateAnimationRange={this.updateAnimationRange}
+              changeAnimStartAndEndDate={this.props.changeStartAndEndDate}
+              changeAnimStartDate={this.props.changeStartDate}
+              changeAnimEndDate={this.props.changeEndDate}
               animStartLocationDate={animStartLocationDate}
               animEndLocationDate={animEndLocationDate}
               isAnimationWidgetOpen={isAnimationWidgetOpen}
+              getPosition={this.props.getPosition}
             />
 
             {/* custom interval selector */}
@@ -394,12 +354,8 @@ function mapStateToProps(state) {
     browser,
     date,
     animation,
-<<<<<<< HEAD
     sidebar,
     modal
-=======
-    sidebar
->>>>>>> Add animation redux rendering #1623 #1622
   } = state;
   let {
     customSelected,
@@ -439,6 +395,10 @@ function mapStateToProps(state) {
     hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
     endTime = layersLastDateTime(layers[activeString], config);
   }
+
+  // ! TEMP
+  endTime = config.now;
+
   const dimensionsAndOffsetValues = getOffsetValues(
     screenWidth,
     hasSubdailyLayers
@@ -468,8 +428,8 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     customSelected,
     compareModeActive,
-    dateFormatted: selected.toISOString(),
-    dateFormattedB: selectedB.toISOString(),
+    dateA: selected.toISOString(),
+    dateB: selectedB.toISOString(),
     startDate: config.startDate,
     timelineStartDateLimit: config.startDate, // same as startDate
     endTime,
@@ -487,20 +447,18 @@ function mapStateToProps(state) {
     timelineEndDateLimit,
     leftArrowDisabled,
     rightArrowDisabled,
-<<<<<<< HEAD
     hideTimeline:
       (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
       !lodashGet(map, 'ui.selected.frameState_') ||
       sidebar.activeTab === 'download'
-=======
-    animationDisabled:
-      !legacy.map.selectedMap || !legacy.map.selectedMap.frameState_ || sidebar.activeTab === 'download'
->>>>>>> Add animation redux rendering #1623 #1622
   };
 }
 
 const mapDispatchToProps = dispatch => ({
+  getPosition: val => {
+    dispatch(getPosition(val));
+  },
   // changes date of active dragger 'selected' or 'selectedB'
   changeDate: val => {
     dispatch(selectDate(val));
@@ -526,11 +484,17 @@ const mapDispatchToProps = dispatch => ({
   toggleActiveCompareState: () => {
     dispatch(toggleActiveCompareState());
   },
+  // update anim startDate
   changeStartDate: date => {
     dispatch(changeStartDate(date));
   },
+  // update anim endDate
   changeEndDate: date => {
     dispatch(changeEndDate(date));
+  },
+  // update anim startDate and endDate
+  changeStartAndEndDate: (startDate, endDate) => {
+    dispatch(changeStartAndEndDate(startDate, endDate));
   }
 });
 
@@ -546,8 +510,8 @@ Timeline.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   customSelected: PropTypes.bool,
   compareModeActive: PropTypes.bool,
-  dateFormatted: PropTypes.string,
-  dateFormattedB: PropTypes.string,
+  dateA: PropTypes.string,
+  dateB: PropTypes.string,
   startDate: PropTypes.string,
   timelineStartDateLimit: PropTypes.string,
   endTime: PropTypes.object,

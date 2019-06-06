@@ -21,8 +21,15 @@ class DateInputColumn extends React.Component {
       valid: true
     };
     this.inputs = [];
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.blur = this.blur.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
+    this.onClickUp = this.onClickUp.bind(this);
+    this.onClickDown = this.onClickDown.bind(this);
   }
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (this.props.focused) {
       this.inputs[this.props.tabIndex].focus();
     }
@@ -179,7 +186,6 @@ class DateInputColumn extends React.Component {
 
   hourValidation(input) {
     var newDate;
-    console.log(input, this.validateDate(newDate));
     if (input >= 0 && input <= 23) {
       newDate = new Date(new Date(this.props.date).setUTCHours(input));
       return this.validateDate(newDate);
@@ -188,15 +194,8 @@ class DateInputColumn extends React.Component {
 
   minuteValidation(input) {
     var newDate;
-    // var coeff = 1000 * 60 * 10;
-    // console.log(input);
     if (input >= 0 && input <= 59) {
-      // newDate = new Date(
-      //   Math.round(new Date(this.props.date).setUTCMinutes(input) / coeff) *
-      //     coeff
-      // );
       newDate = new Date(new Date(this.props.date).setUTCMinutes(input));
-      // console.log(newDate)
       return this.validateDate(newDate);
     }
   }
@@ -261,7 +260,7 @@ class DateInputColumn extends React.Component {
         style={this.state.valid ? {} : { borderColor: '#ff0000' }}
       >
         <div
-          onClick={this.onClickUp.bind(this)}
+          onClick={this.onClickUp}
           className="date-arrows date-arrow-up"
           data-interval={this.props.type}
         >
@@ -280,18 +279,18 @@ class DateInputColumn extends React.Component {
           id={this.props.inputId}
           value={this.state.value}
           tabIndex={this.props.tabIndex}
-          onKeyUp={this.onKeyUp.bind(this)}
-          onKeyDown={this.onKeyPress.bind(this) /* currently not working */}
-          onChange={this.onChange.bind(this)}
+          onKeyUp={this.onKeyUp}
+          onKeyDown={this.onKeyPress /* currently not working */}
+          onChange={this.onChange}
           style={
             this.props.fontSize ? { fontSize: this.props.fontSize + 'px' } : {}
           }
           step={this.props.step}
-          onBlur={this.blur.bind(this)}
-          onFocus={this.handleFocus.bind(this)}
+          onBlur={this.blur}
+          onFocus={this.handleFocus}
         />
         <div
-          onClick={this.onClickDown.bind(this)}
+          onClick={this.onClickDown}
           className="date-arrows date-arrow-down"
           data-interval={this.props.type}
         >
@@ -318,7 +317,6 @@ DateInputColumn.propTypes = {
   blur: PropTypes.func,
   setFocusedTab: PropTypes.func,
   changeTab: PropTypes.func,
-  height: PropTypes.string,
   inputId: PropTypes.string,
   fontSize: PropTypes.number
 };

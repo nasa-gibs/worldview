@@ -1,4 +1,5 @@
 import {
+  GET_TIMELINE_POSITION,
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
@@ -13,7 +14,8 @@ const defaultState = {
   delta: 1,
   customSelected: false,
   customDelta: undefined,
-  customInterval: undefined
+  customInterval: undefined,
+  position: 0
 };
 
 export function getInitialState(config) {
@@ -44,6 +46,10 @@ export function dateReducer(state = defaultState, action) {
     case SELECT_DATE:
       return lodashAssign({}, state, {
         [action.activeString]: action.value
+      });
+    case GET_TIMELINE_POSITION:
+      return lodashAssign({}, state, {
+        position: action.value
       });
     default:
       return state;

@@ -32,14 +32,13 @@ html, body {
   border: thin solid #666;
   font-size: 17px;
   font-family: 'Roboto Mono', monospace;
-  text-align: center;
   border-radius: 5px;
   width: 115px;
   height: 25px;
   line-height: 25px;
   white-space: nowrap;
   user-select: none;
-  padding-left: 2px;
+  padding-left: 8px;
   /* transition: opacity 0.3s ease-in-out; */
 }
 
@@ -223,6 +222,12 @@ line {
 
 .date-arrow-wrapper {
   width: 60px;
+}
+
+#wv-animation-widet-case {
+  position: absolute;
+  top: 90%;
+  left: 50%;
 }
 
 .wv-animation-widget-custom-interval {

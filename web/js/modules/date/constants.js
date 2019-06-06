@@ -2,6 +2,7 @@ export const CHANGE_CUSTOM_INTERVAL = 'DATE/CHANGE_CUSTOM_INTERVAL';
 export const CHANGE_INTERVAL = 'DATE/CHANGE_INTERVAL';
 export const CHANGE_TIME_SCALE = 'DATE/CHANGE_TIME_SCALE';
 export const SELECT_DATE = 'DATE/SELECT_DATE';
+export const GET_TIMELINE_POSITION = 'DATE/GET_TIMELINE_POSITION';
 
 export const timeScaleFromNumberKey = {
   '0': 'custom',

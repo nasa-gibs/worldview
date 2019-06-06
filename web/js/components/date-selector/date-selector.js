@@ -19,6 +19,10 @@ class DateSelector extends React.Component {
     this.state = {
       tab: null
     };
+    this.updateDate = this.updateDate.bind(this);
+    this.setFocusedTab = this.setFocusedTab.bind(this);
+    this.changeTab = this.changeTab.bind(this);
+    this.blur = this.blur.bind(this);
   }
   blur() {
     this.setState({ tab: null });
@@ -29,7 +33,7 @@ class DateSelector extends React.Component {
   changeTab(index) {
     var nextTab = index;
     var maxTab;
-    if (this.state.hasSubdailyLayers) {
+    if (this.props.hasSubdailyLayers) {
       maxTab = 5;
     } else {
       maxTab = 3;
@@ -49,9 +53,7 @@ class DateSelector extends React.Component {
       tab: nextTab
     });
   }
-  updateDate(date, type, amt) {
-    // this.props.onDateChange(date, this.props.id, type, amt);
-    // # allows dragger change via main date selector, and id change via anim date selectors
+  updateDate(date, type) {
     this.props.onDateChange(date, this.props.id);
   }
   renderSubdaily() {
@@ -62,42 +64,36 @@ class DateSelector extends React.Component {
           <DateInputColumn
             step={1}
             startDate={new Date(2000)}
-            today={new Date()}
             date={date}
             type="hour"
             inputId={this.props.idSuffix ? 'hour-' + this.props.idSuffix : ''}
-            height={this.props.height}
-            width={this.props.width}
-            updateDate={this.updateDate.bind(this)}
+            updateDate={this.updateDate}
             value={util.pad(date.getUTCHours(), 2, '0')}
             tabIndex={4}
             focused={this.state.tab === 4}
-            setFocusedTab={this.setFocusedTab.bind(this)}
-            changeTab={this.changeTab.bind(this)}
+            setFocusedTab={this.setFocusedTab}
+            changeTab={this.changeTab}
             maxDate={this.props.maxDate}
             minDate={this.props.minDate}
-            blur={this.blur.bind(this)}
+            blur={this.blur}
             fontSize={this.props.fontSize}
           />
           <div className="input-time-divider">:</div>
           <DateInputColumn
             step={10}
             startDate={new Date(2000)}
-            today={new Date()}
             date={date}
             type="minute"
-            height={this.props.height}
-            width={this.props.width}
-            updateDate={this.updateDate.bind(this)}
+            updateDate={this.updateDate}
             value={util.pad(date.getUTCMinutes(), 2, '0')}
             inputId={this.props.idSuffix ? 'minute-' + this.props.idSuffix : ''}
             tabIndex={5}
             focused={this.state.tab === 5}
-            setFocusedTab={this.setFocusedTab.bind(this)}
-            changeTab={this.changeTab.bind(this)}
+            setFocusedTab={this.setFocusedTab}
+            changeTab={this.changeTab}
             maxDate={this.props.maxDate}
             minDate={this.props.minDate}
-            blur={this.blur.bind(this)}
+            blur={this.blur}
             fontSize={this.props.fontSize}
           />
           <div className="input-time-zmark">Z</div>
@@ -107,8 +103,6 @@ class DateSelector extends React.Component {
   }
   render() {
     const {
-      width,
-      height,
       maxDate,
       minDate,
       fontSize,
@@ -116,67 +110,58 @@ class DateSelector extends React.Component {
       draggerSelected
     } = this.props;
     let date = draggerSelected === 'selectedB' ? this.props.dateB : this.props.date;
-    const tab = this.state;
+    const { tab } = this.state;
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn
           step={1}
           startDate={new Date(2000)}
-          today={new Date()}
           date={date}
           value={date.getUTCFullYear()}
           type="year"
-          height={height}
-          width={width}
-          updateDate={this.updateDate.bind(this)}
+          updateDate={this.updateDate}
           inputId={idSuffix ? 'year-' + idSuffix : ''}
           tabIndex={1}
           focused={tab === 1}
-          setFocusedTab={this.setFocusedTab.bind(this)}
-          changeTab={this.changeTab.bind(this)}
+          setFocusedTab={this.setFocusedTab}
+          changeTab={this.changeTab}
           maxDate={maxDate}
           minDate={minDate}
-          blur={this.blur.bind(this)}
+          blur={this.blur}
           fontSize={fontSize}
         />
         <DateInputColumn
           step={1}
           startDate={new Date(2000)}
-          today={new Date()}
           date={date}
           value={util.monthStringArray[date.getUTCMonth()]}
           type="month"
           inputId={idSuffix ? 'month-' + idSuffix : ''}
-          height={height}
-          width={width}
-          updateDate={this.updateDate.bind(this)}
+          updateDate={this.updateDate}
           tabIndex={2}
           focused={tab === 2}
-          setFocusedTab={this.setFocusedTab.bind(this)}
-          changeTab={this.changeTab.bind(this)}
+          setFocusedTab={this.setFocusedTab}
+          changeTab={this.changeTab}
           maxDate={maxDate}
           minDate={minDate}
-          blur={this.blur.bind(this)}
+          blur={this.blur}
           fontSize={fontSize}
         />
         <DateInputColumn
           step={1}
           startDate={new Date(2000)}
-          today={new Date()}
           date={date}
           type="day"
-          height={height}
-          width={width}
-          updateDate={this.updateDate.bind(this)}
+          updateDate={this.updateDate}
           value={util.pad(date.getUTCDate(), 2, '0')}
           tabIndex={3}
           inputId={idSuffix ? 'day-' + idSuffix : ''}
           focused={tab === 3}
-          setFocusedTab={this.setFocusedTab.bind(this)}
-          changeTab={this.changeTab.bind(this)}
+          setFocusedTab={this.setFocusedTab}
+          changeTab={this.changeTab}
           maxDate={maxDate}
           minDate={minDate}
-          blur={this.blur.bind(this)}
+          blur={this.blur}
           fontSize={fontSize}
         />
         {this.renderSubdaily()}

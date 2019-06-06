@@ -1,4 +1,5 @@
 import {
+  GET_TIMELINE_POSITION,
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
@@ -9,6 +10,12 @@ export function changeTimeScale(num) {
   return {
     type: CHANGE_TIME_SCALE,
     value: num
+  };
+}
+export function getPosition(value) {
+  return {
+    type: GET_TIMELINE_POSITION,
+    value
   };
 }
 export function selectDate(value) {

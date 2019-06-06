@@ -79,6 +79,7 @@ class AnimationWidget extends React.Component {
     };
     this.onDateChange = this.onDateChange.bind(this);
     this.onZoomSelect = this.onZoomSelect.bind(this);
+    this.onLoop = this.onLoop.bind(this);
   }
   static getDerivedStateFromProps(props, state) {
     if (props.speed !== state.speed && !state.isSliding) {
@@ -136,7 +137,6 @@ class AnimationWidget extends React.Component {
       onZoomSelect(customDelta, customInterval, true);
     }
   }
-
   render() {
     const {
       hasSubdailyLayers,
@@ -218,7 +218,7 @@ class AnimationWidget extends React.Component {
               play={onPushPlay}
               pause={onPushPause}
             />
-            <LoopButton looping={looping} onLoop={this.onLoop.bind(this)} />
+            <LoopButton looping={looping} onLoop={this.onLoop} />
             <div className="wv-slider-case">
               <Slider
                 className="input-range"
@@ -302,7 +302,7 @@ function mapStateToProps(state) {
     config,
     map
   } = state;
-  const {
+  let {
     startDate,
     endDate,
     speed,
@@ -317,12 +317,18 @@ function mapStateToProps(state) {
   const zoomObj = getZoomObject(date, hasSubdailyLayers);
   let { customSelected, interval, delta, customInterval, customDelta } = date;
   const hasCustomPalettes = !lodashIsEmpty(palettes[activeStr]);
+
+  // let minDate = new Date(config.startDate);
+  // let maxDate = layersLastDateTime(layers[activeStr], config);
+  let minDate = new Date(config.startDate);
+  let maxDate = config.now;
+
   return {
     startDate,
     endDate,
     currentDate: date[activeDateStr],
-    minDate: util.parseDateUTC(config.startDate),
-    maxDate: layersLastDateTime(layers[activeStr], config),
+    minDate: minDate,
+    maxDate: maxDate,
     isActive:
       isActive &&
       lodashGet(map, 'ui.selected.frameState_') &&
@@ -338,10 +344,10 @@ function mapStateToProps(state) {
     speed,
     isPlaying,
     looping: loop,
-    delta: customSelected ? customDelta : delta,
+    delta: customSelected ? customDelta : delta || 1,
     interval: customSelected
       ? timeScaleFromNumberKey[customInterval]
-      : timeScaleFromNumberKey[interval],
+      : timeScaleFromNumberKey[interval] || 'day',
     hasCustomPalettes,
     map,
     promiseImageryForTime: (date, layers) => {
@@ -453,9 +459,10 @@ const getZoomObject = function(dateModel, hasSubDaily) {
       : dateModel.selectedZoom - 1;
     headerText = '1 ' + zooms[interval];
   }
+  let array = lodashWithout(zooms, headerText);
   return {
     increment: headerText,
-    array: lodashWithout(zooms, headerText),
+    array: [...array],
     customDelta: dateModel.customDelta,
     customInterval: dateModel.customInterval
   };

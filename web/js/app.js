@@ -19,6 +19,7 @@ import Brand from './brand';
 import { calculateResponsiveState } from 'redux-responsive';
 import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
+import AnimationWidget from './containers/animation-widget';
 import ErrorBoundary from './containers/error-boundary';
 import Debug from './components/util/debug';
 
@@ -91,6 +92,7 @@ class App extends React.Component {
     document.removeEventListener('keypress', this.handleKeyPress);
   }
   render() {
+    let isAnimationWidgetActive = this.props.state.animation.isActive;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
@@ -105,6 +107,9 @@ class App extends React.Component {
 
         <div id="timewheels" style={{ display: 'none' }} />
         <Timeline />
+        <div id="wv-animation-widet-case">
+          { isAnimationWidgetActive ? <AnimationWidget /> : null }
+        </div>
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         <Modal />
         <ErrorBoundary>

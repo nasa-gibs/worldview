@@ -5,6 +5,7 @@ import {
   STOP_ANIMATION,
   UPDATE_FRAME_RATE,
   TOGGLE_LOOPING,
+  UPDATE_START_AND_END_DATE,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
   TOGGLE_GIF
@@ -39,6 +40,13 @@ export function changeFrameRate(num) {
   return {
     type: UPDATE_FRAME_RATE,
     value: num
+  };
+}
+export function changeStartAndEndDate(startDate, endDate) {
+  return {
+    type: UPDATE_START_AND_END_DATE,
+    startDate,
+    endDate
   };
 }
 export function changeStartDate(date) {

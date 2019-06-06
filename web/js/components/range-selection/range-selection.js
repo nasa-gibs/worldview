@@ -82,7 +82,7 @@ class TimelineRangeSelector extends React.Component {
         return;
       }
     }
-    this.props.onDrag(startX, endX);
+    this.props.onDrag(startX, endX, true);
 
     this.setState({
       startLocation: startX,
@@ -98,7 +98,7 @@ class TimelineRangeSelector extends React.Component {
    * @return {void}
    */
   onDragStop() {
-    this.props.onDrag(this.state.startLocation, this.state.endLocation, true);
+    this.props.onDrag(this.state.startLocation, this.state.endLocation, false);
     googleTagManager.pushEvent({
       event: 'GIF_animation_dragger'
     });
@@ -131,14 +131,14 @@ class TimelineRangeSelector extends React.Component {
       endLocation: this.state.endLocation + d,
       deltaStart: deltaStart
     });
-    this.props.onDrag(this.state.startLocation, this.state.endLocation);
+    this.props.onDrag(this.state.startLocation, this.state.endLocation, true);
   }
   /*
    * @method render
    */
   render() {
     return (
-      <svg
+      <g
         id="wv-timeline-range-selector"
         className="wv-timeline-range-selector"
         onMouseEnter={this.props.onHover}
@@ -188,7 +188,7 @@ class TimelineRangeSelector extends React.Component {
           backgroundColor={this.props.endTriangleColor}
           id="end"
         />
-      </svg>
+      </g>
     );
   }
 }

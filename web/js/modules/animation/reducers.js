@@ -7,6 +7,7 @@ import {
   STOP_ANIMATION,
   UPDATE_FRAME_RATE,
   TOGGLE_LOOPING,
+  UPDATE_START_AND_END_DATE,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
   TOGGLE_GIF
@@ -50,6 +51,11 @@ export function animationReducer(state = defaultState, action) {
     case UPDATE_FRAME_RATE:
       return lodashAssign({}, state, {
         speed: action.value
+      });
+    case UPDATE_START_AND_END_DATE:
+      return lodashAssign({}, state, {
+        startDate: action.startDate,
+        endDate: action.endDate
       });
     case UPDATE_START_DATE:
       return lodashAssign({}, state, {
