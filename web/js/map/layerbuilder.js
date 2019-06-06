@@ -271,7 +271,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       // date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
       date = new Date(date.getTime());
     }
-    if (day) {
+    if (day && (def.period !== 'subdaily')) {
       date = util.dateAdd(date, 'day', day);
     }
 
