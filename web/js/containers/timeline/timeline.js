@@ -82,15 +82,14 @@ class Timeline extends React.Component {
    * @return {void}
    */
   animateByIncrement = (delta, increment) => {
-    const {
-      endTime,
-      startDate,
-      hasSubdailyLayers,
-      changeDate
-    } = this.props;
+    const { endTime, startDate, hasSubdailyLayers, changeDate } = this.props;
 
     let animate = () => {
-      var nextTime = getNextTimeSelection(delta, increment, this.props.selectedDate);
+      var nextTime = getNextTimeSelection(
+        delta,
+        increment,
+        this.props.selectedDate
+      );
       if (hasSubdailyLayers) {
         // can we remove this logic?
         if (new Date(startDate) <= nextTime && nextTime <= endTime) {
@@ -134,7 +133,11 @@ class Timeline extends React.Component {
     customIntervalModalOpen
   ) => {
     let delta;
-    let { customIntervalZoomLevel, customIntervalValue, selectInterval } = this.props;
+    let {
+      customIntervalZoomLevel,
+      customIntervalValue,
+      selectInterval
+    } = this.props;
     let customSelected = intervalSelected === 'custom';
     if (customSelected && customIntervalZoomLevel && customIntervalValue) {
       intervalSelected = customIntervalZoomLevel;
@@ -262,8 +265,12 @@ class Timeline extends React.Component {
             </div>
             <div id="zoom-buttons-group">
               <TimeScaleIntervalChange
-                setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
-                customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
+                setTimeScaleIntervalChangeUnit={
+                  this.setTimeScaleIntervalChangeUnit
+                }
+                customIntervalZoomLevel={
+                  timeScaleFromNumberKey[customIntervalZoomLevel]
+                }
                 customSelected={customSelected}
                 customDelta={customIntervalValue}
                 timeScaleChangeUnit={timeScaleChangeUnit}
@@ -495,11 +502,6 @@ export default connect(
 )(Timeline);
 
 Timeline.propTypes = {
-  proj: PropTypes.object.isRequired,
-  map: PropTypes.object.isRequired,
-  models: PropTypes.object.isRequired,
-  url: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
   screenWidth: PropTypes.number,
   screenHeight: PropTypes.number,
   draggerSelected: PropTypes.string,

@@ -5,7 +5,7 @@ import LayerList from './layer-list';
 import { getLayers } from '../../modules/layers/selectors';
 import Scrollbars from '../../components/util/scrollbar';
 
-class Products extends React.Component {
+class Layers extends React.Component {
   render() {
     const {
       overlays,
@@ -67,14 +67,14 @@ const mapDispatchToProps = dispatch => ({});
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Products);
+)(Layers);
 
-Products.propTypes = {
+Layers.propTypes = {
   overlays: PropTypes.array,
   baselayers: PropTypes.array,
   isActive: PropTypes.bool,
   layerGroupName: PropTypes.string,
   height: PropTypes.number,
-  checkerBoardPattern: PropTypes.node,
-  layerSplit: PropTypes.object
+  checkerBoardPattern: PropTypes.object,
+  layerSplit: PropTypes.number
 };

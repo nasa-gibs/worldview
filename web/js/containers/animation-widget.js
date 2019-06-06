@@ -18,7 +18,10 @@ import PlayQueue from '../components/animation-widget/play-queue';
 import { promiseImageryForTime } from '../modules/map/util';
 import { selectDate, selectInterval } from '../modules/date/actions';
 import GifContainer from './gif';
-import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../modules/date/constants';
+import {
+  timeScaleFromNumberKey,
+  timeScaleToNumberKey
+} from '../modules/date/constants';
 import { getQueueLength, getMaxQueueLength } from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
@@ -35,6 +38,7 @@ import {
   changeEndDate,
   toggleComponentGifActive
 } from '../modules/animation/actions';
+import util from '../util/util';
 
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;
@@ -113,16 +117,16 @@ class AnimationWidget extends React.Component {
     }
   }
   /*
-  * Changes selected default or custom interval in header and
-  * changes left/right date arrow increments
-  *
-  * @method onZoomSelect
-  *
-  * @param {string} zoom - clicked header string (ex: 'day', 'year', '12 day')
-  *  component
-  *
-  * @return {void}
-  */
+   * Changes selected default or custom interval in header and
+   * changes left/right date arrow increments
+   *
+   * @method onZoomSelect
+   *
+   * @param {string} zoom - clicked header string (ex: 'day', 'year', '12 day')
+   *  component
+   *
+   * @return {void}
+   */
   onZoomSelect(zoom) {
     let { customDelta, customInterval, onZoomSelect } = this.props;
     let zoomToNumber = timeScaleToNumberKey[zoom]; // undefined if custom
@@ -157,7 +161,8 @@ class AnimationWidget extends React.Component {
       selectDate,
       currentDate,
       toggleGif,
-      isGifActive
+      isGifActive,
+      isCompareActive
     } = this.props;
     if (!isActive) {
       return '';
@@ -235,9 +240,18 @@ class AnimationWidget extends React.Component {
 
             <a
               href="javascript:void(null)"
-              title="Create Animated GIF"
-              className="wv-icon-case"
-              onClick={toggleGif}
+              title={
+                !isCompareActive
+                  ? 'Create Animated GIF'
+                  : 'Exit comparison mode to create GIF'
+              }
+              className={
+                isCompareActive ? 'wv-icon-case disabled' : 'wv-icon-case'
+              }
+              disabled={isCompareActive}
+              onClick={e => {
+                toggleGif(e, isCompareActive);
+              }}
             >
               <i
                 id="wv-animation-widget-file-video-icon"
@@ -308,7 +322,7 @@ function mapStateToProps(state) {
     startDate,
     endDate,
     currentDate: date[activeDateStr],
-    minDate: config.startDate,
+    minDate: util.parseDateUTC(config.startDate),
     maxDate: layersLastDateTime(layers[activeStr], config),
     isActive:
       isActive &&
@@ -334,7 +348,8 @@ function mapStateToProps(state) {
     promiseImageryForTime: (date, layers) => {
       return promiseImageryForTime(date, layers, state);
     },
-    isGifActive: gifActive
+    isGifActive: gifActive,
+    isCompareActive: compare.active
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -353,8 +368,8 @@ const mapDispatchToProps = dispatch => ({
   onPushLoop: () => {
     dispatch(toggleLooping());
   },
-  toggleGif: () => {
-    dispatch(toggleComponentGifActive());
+  toggleGif: (e, isCompareActive) => {
+    if (!isCompareActive) dispatch(toggleComponentGifActive());
   },
   onSlide: num => {
     dispatch(changeFrameRate(num));

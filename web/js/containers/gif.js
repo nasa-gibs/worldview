@@ -280,7 +280,7 @@ class GIF extends Component {
           <ModalHeader toggle={onClose}>{headerText}</ModalHeader>
           <ModalBody>
             <div style={{ minHeight: 50 }}>
-              <Spinner color={'#fff'} loaded={progress}>
+              <Spinner color={'#fff'} loaded={progress > 0}>
                 <Progress value={progress} />
               </Spinner>
             </div>

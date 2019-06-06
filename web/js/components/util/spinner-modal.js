@@ -41,12 +41,10 @@ export default class SpinnerModal extends React.Component {
 }
 
 SpinnerModal.defaultProps = {
-  headerText: 'Loading',
-  valid: true,
-  id: '',
-  style: null
+  headerText: 'Loading'
 };
 SpinnerModal.propTypes = {
   onClose: PropTypes.func,
-  headerText: PropTypes.string
+  headerText: PropTypes.string,
+  delay: PropTypes.number
 };

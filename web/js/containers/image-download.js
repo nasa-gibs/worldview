@@ -173,7 +173,6 @@ export default connect(
 ImageDownloadContainer.propTypes = {
   proj: PropTypes.object.isRequired,
   map: PropTypes.object.isRequired,
-  models: PropTypes.object.isRequired,
   url: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   screenWidth: PropTypes.number,
