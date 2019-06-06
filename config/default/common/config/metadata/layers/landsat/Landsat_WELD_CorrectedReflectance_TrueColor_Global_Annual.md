@@ -4,4 +4,4 @@ These images are called true color or natural color because the combination of w
 
 The sensor resolution is 30 m, the imagery resolution is 31.25 m and the temporal availability is annual for 2008 - 2010 where the annual composite is from the preceding year’s December through the current year’s November. For example, for the year 2008, the product includes data from December 1, 2007 through November 30, 2008.
 
-References: [Global Web-Enabled Landsat Data](http://globalmonitoring.sdstate.edu/projects/weldglobal/gweld.html); [Web-Enabled Landsat Data (WELD) Projects](https://landsat.usgs.gov/web-enabled-landsat-data-weld-projects)
+References: [Global Web-Enabled Landsat Data](http://globalmonitoring.sdstate.edu/projects/weldglobal/gweld.html)

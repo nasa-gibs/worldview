@@ -2,4 +2,4 @@ The Top of Atmosphere (TOA) Reflectance (True Color, Conterminous USA, Seasonal,
 
 The sensor resolution is 30 m, the imagery resolution is 250 m and the temporal availability is seasonal for December 2002 - November 2012 and split into 3 month intervals - December, January, February; March, April, May; June, July, August; September, October, November.
 
-References: [WELDUSSE: NASA Web-Enabled Landsat Data CONUS Seasonal V015](https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/weldusse_v015)
+References: [WELDUSSE: NASA Web-Enabled Landsat Data CONUS Seasonal V015](https://lpdaac.usgs.gov/products/weldussev015/)
