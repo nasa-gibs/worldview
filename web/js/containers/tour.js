@@ -6,6 +6,7 @@ import TourComplete from '../components/tour/modal-tour-complete';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import { endTour, selectStory, startTour } from '../modules/tour/actions';
+import { checkTourBuildTimestamp } from '../modules/tour/util';
 import { findIndex as lodashFindIndex, get as lodashGet } from 'lodash';
 import ErrorBoundary from './error-boundary';
 import update from 'immutability-helper';
@@ -251,6 +252,11 @@ class Tour extends React.Component {
                 stories={stories}
                 storyOrder={storyOrder}
                 modalStart={modalStart}
+                checked={
+                  util.browser.localStorage
+                    ? !!localStorage.getItem('hideTour')
+                    : false
+                }
                 toggleModalStart={this.toggleModalStart}
                 toggleModalInProgress={this.toggleModalInProgress}
                 toggleModalComplete={this.toggleModalComplete}

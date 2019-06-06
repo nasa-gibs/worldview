@@ -17,7 +17,7 @@ class ModalStart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checked: this.props.storageCheck
+      checked: this.props.checked
     };
 
     this.setWrapperRef = this.setWrapperRef.bind(this);
@@ -92,25 +92,25 @@ class ModalStart extends React.Component {
             selectTour={this.props.selectTour}
           />
         </ModalBody>
-        {util.browser.localStorage &&
-        <ModalFooter>
-          <InputGroup>
-            <InputGroupText className="w-100">
-              <Input
-                addon
-                type="checkbox"
-                className="float-right m-0"
-                defaultChecked={this.state.checked}
-                onChange={this.handleCheck}
-                aria-label="Hide this box until a new story has been added."
-              />
-              <span className="ml-2">
-                Do not show until a new story has been added.
-              </span>
-            </InputGroupText>
-          </InputGroup>
-        </ModalFooter>
-        }
+        {util.browser.localStorage && (
+          <ModalFooter>
+            <InputGroup>
+              <InputGroupText className="w-100">
+                <Input
+                  addon
+                  type="checkbox"
+                  className="float-right m-0"
+                  defaultChecked={this.state.checked}
+                  onChange={this.handleCheck}
+                  aria-label="Hide this box until a new story has been added."
+                />
+                <span className="ml-2">
+                  Do not show until a new story has been added.
+                </span>
+              </InputGroupText>
+            </InputGroup>
+          </ModalFooter>
+        )}
       </Modal>
     );
   }
@@ -125,7 +125,7 @@ ModalStart.propTypes = {
   showTourAlert: PropTypes.func.isRequired,
   hideTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
-  storageCheck: PropTypes.bool.isRequired,
+  checked: PropTypes.bool.isRequired,
   className: PropTypes.string
 };
 
