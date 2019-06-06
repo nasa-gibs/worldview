@@ -21,5 +21,9 @@ export function serializeEvent(currentItemState) {
   const eventsTabActive = currentItemState.active;
   return eventsTabActive && eventDate && eventId
     ? [eventId, eventDate].join(',')
-    : eventId || (eventsTabActive ? 'true' : undefined);
+    : eventId && eventsTabActive
+      ? eventId
+      : eventsTabActive
+        ? 'true'
+        : undefined;
 }
