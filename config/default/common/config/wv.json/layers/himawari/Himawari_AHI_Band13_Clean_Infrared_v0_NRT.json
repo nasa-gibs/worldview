@@ -11,7 +11,8 @@
             "Himawari"
           ],
           "inactive": true,
-          "period": "subdaily"
+          "period": "subdaily",
+          "wrapX": true
       }
   }
 }
