@@ -30,6 +30,13 @@ const getActiveTabs = function(config) {
     events: features.naturalEvents
   };
 };
+const resetWorldview = function(e) {
+  e.preventDefault();
+  if (window.location.search === '') return; // Nothing to reset
+  var msg =
+    'Do you want to reset Worldview to its defaults? You will lose your current state.';
+  if (confirm(msg)) document.location.href = '/';
+};
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
@@ -146,6 +153,7 @@ class Sidebar extends React.Component {
             href="/"
             title="Click to Reset Worldview to Defaults"
             id="wv-logo"
+            onClick={resetWorldview}
             ref={iconElement => (this.iconElement = iconElement)}
             onWheel={wheelCallBack}
           />
@@ -172,6 +180,7 @@ class Sidebar extends React.Component {
               onTabClick={onTabClick}
               tabTypes={tabTypes}
               toggleSidebar={this.toggleSidebar.bind(this)}
+              isCompareMode={isCompareMode}
             />
             <TabContent activeTab={activeTab}>
               <TabPane tabId="layers">

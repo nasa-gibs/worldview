@@ -63,11 +63,6 @@ export function combineUi(models, config, MapMouseEvents, store) {
       $('input').blur();
     }
   });
-  debugLayers(ui, models, config);
-  // Reset Worldview when clicking on logo
-  $(document).click(function(e) {
-    if (e.target.id === 'wv-logo') resetWorldview(e);
-  });
   document.activeElement.blur();
   $('input').blur();
 
@@ -88,10 +83,3 @@ function registerMapMouseHandlers(maps, events) {
     });
   });
 }
-var resetWorldview = function(e) {
-  e.preventDefault();
-  if (window.location.search === '') return; // Nothing to reset
-  var msg =
-    'Do you want to reset Worldview to its defaults? You will lose your current state.';
-  if (confirm(msg)) document.location.href = '/';
-};
