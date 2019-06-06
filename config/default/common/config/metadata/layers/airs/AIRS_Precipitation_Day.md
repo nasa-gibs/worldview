@@ -6,6 +6,6 @@ AIRS, the Atmospheric Infrared Sounder is a facility instrument aboard the secon
 
 The Atmospheric Infrared Sounder (AIRS) is an instrument on board the Aqua satellite. The AIRS Precipitation Estimate (AIRG2SSD) layer is a is a variable of the AIRS Level 2 Near Real Time Support Retrieval (AIRS) (AIR2SUP_NRT). The imagery resolution is 2 km and sensor resolution is 45 km. The temporal resolution is daily.
 
-References: [GES DISC - AIRS2SUP_NRT: AIRS/Aqua L2 Near Real Time (NRT) Support Retrieval (AIRS-only) V006](https://disc.gsfc.nasa.gov/datasets/AIRS2SUP_NRT_V006/summary?AIRS2SUP_NRT); [GES DISC - Near Real-Time Data](https://disc.gsfc.nasa.gov/information/glossary/5810f92b698c14087bab4c5f/near-real-time-data?page=1)
+References: [GES DISC - AIRS2SUP_NRT: AIRS/Aqua L2 Near Real Time (NRT) Support Retrieval (AIRS-only) V006](https://disc.gsfc.nasa.gov/datasets/AIRS2SUP_NRT_V006/summary?AIRS2SUP_NRT); [GES DISC - Near Real-Time Data](https://disc.gsfc.nasa.gov/information/glossary?title=Near%20Real-Time%20Data)
 
 Susskind, J., P. Piraino, L. Rokke, L. Iredell, and A. Mehta, 1997: Characteristics of the TOVS Pathfinder Path A Dataset. Bulletin of the American Meteorological Society, 78, 1449-1472. [doi:  10.1175/1520-0477(1997)078<1449:COTTPP>2.0.CO;2](https://doi.org/10.1175%2F1520-0477%281997%29078%3C1449%3ACOTTPP%3E2.0.CO%3B2).
