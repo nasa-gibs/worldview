@@ -39,7 +39,13 @@
   position: relative;
   border-radius: 5px;
 }
-
+.wv-icon-case.disabled {
+  cursor: default
+}
+.wv-animation-widget .wv-icon-case.disabled  .wv-animation-widget-icon{
+  color: rgba(255, 255, 255, 0.3);
+  opacity: 0.5;
+}
 .wv-animation-widget a .wv-animation-widget-icon {
   font-size: 23px;
   color: #fff;
