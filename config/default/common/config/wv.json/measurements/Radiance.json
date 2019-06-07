@@ -3,7 +3,7 @@
         "Radiance": {
             "id": "radiance",
             "title":    "Radiance",
-            "subtitle": "Terra/MISR, CALIPSO / WFC",
+            "subtitle": "Terra/MISR, CALIPSO/WFC",
             "sources": {
                 "Terra/MISR": {
                     "id": "terra-misr",
@@ -35,7 +35,7 @@
                 },
                     "CALISPO/WFC": {
                         "id": "calipso-wfc",
-                        "title": "CALIPSO / WFC",
+                        "title": "CALIPSO/WFC",
                         "description": "calipso/Radiance",
                         "image": "",
                         "settings": [

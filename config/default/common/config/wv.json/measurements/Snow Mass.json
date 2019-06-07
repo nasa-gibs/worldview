@@ -3,11 +3,11 @@
         "Snow Mass": {
             "id": "snow-mass",
             "title":    "Snow Mass",
-            "subtitle": "SMAP / Model Value-Added",
+            "subtitle": "SMAP/Model Value-Added",
             "sources": {
                 "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
-                    "title": "SMAP / Model Value-Added",
+                    "title": "SMAP/Model Value-Added",
                     "description": "smap/SnowMass",
                     "image": "",
                     "settings": [

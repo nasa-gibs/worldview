@@ -3,11 +3,11 @@
         "Land Cover": {
             "id": "land-cover",
             "title":    "Land Cover",
-            "subtitle": "Landsat / WELD, SEDAC",
+            "subtitle": "Landsat/WELD, SEDAC",
             "sources": {
                 "Landsat/WELD": {
                     "id": "landsat-weld",
-                    "title": "Landsat / WELD",
+                    "title": "Landsat/WELD",
                     "description": "landsat/LandCover",
                     "image": "",
                     "settings": [

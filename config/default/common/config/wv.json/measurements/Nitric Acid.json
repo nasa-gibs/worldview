@@ -3,11 +3,11 @@
         "Nitric Acid": {
             "id": "nitric-acid",
             "title":    "Nitric Acid",
-            "subtitle": "Aura / MLS",
+            "subtitle": "Aura/MLS",
             "sources": {
                 "Aura/MLS": {
                     "id": "aura-mls",
-                    "title": "Aura / MLS",
+                    "title": "Aura/MLS",
                     "description": "mls/NitricAcid",
                     "image": "",
                     "settings": [

@@ -3,11 +3,11 @@
         "Relative Humidity": {
             "id": "relative-humidity",
             "title":    "Relative Humidity",
-            "subtitle": "Aqua / AIRS, MERRA-2",
+            "subtitle": "Aqua/AIRS, MERRA-2",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
-                    "title": "Aqua / AIRS",
+                    "title": "Aqua/AIRS",
                     "description": "airs/RelativeHumidity",
                     "image": "",
                     "settings": [

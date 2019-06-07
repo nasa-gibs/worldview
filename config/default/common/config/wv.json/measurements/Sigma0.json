@@ -3,11 +3,11 @@
         "Sigma0": {
             "id": "sigma0",
             "title":    "Sigma0",
-            "subtitle": "SMAP / Radar",
+            "subtitle": "SMAP/Radar",
             "sources": {
                 "SMAP/Radar": {
                     "id": "smap-radar",
-                    "title": "SMAP / Radar",
+                    "title": "SMAP/Radar",
                     "description": "smap/Sigma0",
                     "image": "",
                     "settings": [

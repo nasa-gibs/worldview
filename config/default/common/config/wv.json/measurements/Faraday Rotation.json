@@ -3,11 +3,11 @@
         "Faraday Rotation": {
             "id": "faraday-rotation",
             "title":    "Faraday Rotation Angle",
-            "subtitle": "SMAP / Radiometer",
+            "subtitle": "SMAP/Radiometer",
             "sources": {
                 "SMAP/Radiometer": {
                     "id": "smap-radiometer",
-                    "title": "SMAP / Radiometer",
+                    "title": "SMAP/Radiometer",
                     "description": "smap/FaradayRotationAngle",
                     "image": "",
                     "settings": [

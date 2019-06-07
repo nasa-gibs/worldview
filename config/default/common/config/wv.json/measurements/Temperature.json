@@ -3,11 +3,11 @@
         "Temperature": {
             "id": "temperature",
             "title":    "Temperature",
-            "subtitle": "Aqua / AIRS, Aura / MLS, GLDAS, NLDAS, Daymet, MERRA-2",
+            "subtitle": "Aqua/AIRS, Aura/MLS, GLDAS, NLDAS, Daymet, MERRA-2",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
-                    "title": "Aqua / AIRS",
+                    "title": "Aqua/AIRS",
                     "description": "airs/Temperature",
                     "image": "",
                     "settings": [
@@ -37,7 +37,7 @@
                 },
                 "Aura/MLS": {
                     "id": "aura-mls",
-                    "title": "Aura / MLS",
+                    "title": "Aura/MLS",
                     "description": "mls/Temperature",
                     "image": "",
                     "settings": [

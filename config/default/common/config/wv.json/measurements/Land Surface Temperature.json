@@ -3,11 +3,11 @@
         "Land Surface Temperature": {
             "id": "land-surface-temperature",
             "title":    "Land Surface Temperature",
-            "subtitle": "Aqua / MODIS, Terra / MODIS, SEDAC",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, SEDAC",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
-                    "title": "Aqua / MODIS",
+                    "title": "Aqua/MODIS",
                     "description": "modis/LandSurfaceTemperature",
                     "image": "",
                     "settings": [
@@ -19,7 +19,7 @@
                 },
                 "Terra/MODIS": {
                     "id": "terra-modis",
-                    "title": "Terra / MODIS",
+                    "title": "Terra/MODIS",
                     "description": "modis/LandSurfaceTemperature",
                     "image": "",
                     "settings": [

@@ -3,11 +3,11 @@
         "Cloud Phase": {
             "id": "cloud-phase",
             "title":    "Cloud Phase",
-            "subtitle": "Aqua / MODIS, Terra / MODIS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
-                    "title": "Aqua / MODIS",
+                    "title": "Aqua/MODIS",
                     "description": "modis/CloudPhase",
                     "image": "",
                     "settings": [
@@ -20,7 +20,7 @@
                 },
                 "Terra/MODIS": {
                     "id": "terra-modis",
-                    "title": "Terra / MODIS",
+                    "title": "Terra/MODIS",
                     "description": "modis/CloudPhase",
                     "image": "",
                     "settings": [

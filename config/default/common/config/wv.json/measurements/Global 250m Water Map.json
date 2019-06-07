@@ -3,7 +3,7 @@
         "Global 250m Water Map": {
             "id": "global-250m-water-map",
             "title": "Global 250m Water Map",
-            "subtitle": "Terra / MODIS and SRTM",
+            "subtitle": "Terra/MODIS and SRTM",
             "sources": {
                 "Terra/MODIS and SRTM": {
                     "id": "terra-modis-srtm",

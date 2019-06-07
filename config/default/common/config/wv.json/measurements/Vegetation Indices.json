@@ -3,11 +3,11 @@
         "Vegetation Indices": {
             "id": "vegetation-indices",
             "title":    "Vegetation Indices",
-            "subtitle": "Terra / MODIS, Landsat/WELD, Terra/MISR",
+            "subtitle": "Terra/MODIS, Landsat/WELD, Terra/MISR",
             "sources": {
                 "Terra/MODIS": {
                     "id": "terra-modis",
-                    "title": "Terra / MODIS",
+                    "title": "Terra/MODIS",
                     "description": "modis/VegetationIndices",
                     "image": "",
                     "settings": [
