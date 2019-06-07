@@ -224,9 +224,9 @@ line {
   width: 60px;
 }
 
-#wv-animation-widet-case {
-  position: absolute;
-  top: 90%;
+#wv-animation-widget {
+  /* position: absolute; */
+  top: 60%;
   left: 50%;
 }
 
@@ -258,4 +258,10 @@ line {
 .wv-animation-widget-custom-interval > div {
   display: inline-block;
   margin: 7px 0 0 10px;
+}
+
+#wv-timeline-range-selector {
+  position: absolute;
+  bottom: -75px;
+  left: 320px;
 }

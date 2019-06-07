@@ -138,10 +138,14 @@ class TimelineRangeSelector extends React.Component {
    */
   render() {
     return (
-      <g
+      <svg
         id="wv-timeline-range-selector"
         className="wv-timeline-range-selector"
         onMouseEnter={this.props.onHover}
+        style={{
+          width: this.props.width,
+          left: this.props.parentOffset
+        }}
       >
         <DraggerRange
           opacity={this.props.rangeOpacity}
@@ -188,7 +192,7 @@ class TimelineRangeSelector extends React.Component {
           backgroundColor={this.props.endTriangleColor}
           id="end"
         />
-      </g>
+      </svg>
     );
   }
 }

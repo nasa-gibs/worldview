@@ -583,7 +583,9 @@ const checkLeftArrowDisabled = (
   timelineStartDateLimit
 ) => {
   let nextDecrementDate = moment.utc(date).subtract(delta, timeScaleChangeUnit);
-  return nextDecrementDate.isSameOrBefore(timelineStartDateLimit);
+  // let isSameOrBefore = nextDecrementDate.isSameOrBefore(timelineStartDateLimit);
+  let isSameOrBefore = new Date(nextDecrementDate) <= new Date(timelineStartDateLimit);
+  return isSameOrBefore;
 };
 
 // check if right arrow should be disabled on predicted increment
@@ -594,5 +596,7 @@ const checkRightArrowDisabled = (
   timelineEndDateLimit
 ) => {
   let nextIncrementDate = moment.utc(date).add(delta, timeScaleChangeUnit);
-  return nextIncrementDate.isSameOrAfter(timelineEndDateLimit);
+  // let isSameOrAfter = nextIncrementDate.isSameOrAfter(timelineEndDateLimit);
+  let isSameOrAfter = new Date(nextIncrementDate) >= new Date(timelineEndDateLimit);
+  return isSameOrAfter;
 };

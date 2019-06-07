@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+// import moment from 'moment';
+import { getDaysInYear } from '../date-util';
 
 /*
  * Date tooltip for hover and draggers
@@ -45,12 +46,14 @@ class DateToolTip extends PureComponent {
       }
       toolTipLeftOffest = position - (hasSubdailyLayers ? 87 : 35);
       toolTipDate = hasSubdailyLayers ? draggerTime.split('T').join(' ') : draggerTime.split('T')[0];
-      toolTipDayOfYear = moment.utc(draggerTime).dayOfYear();
+      // toolTipDayOfYear = moment.utc(draggerTime).dayOfYear();
+      toolTipDayOfYear = getDaysInYear(draggerTime);
       toolTipDisplay = toolTipLeftOffest > -54 && toolTipLeftOffest < axisWidth - 54 ? 'block' : 'none';
     } else if (showHoverToolTip) { // handle hover tooltip
       toolTipLeftOffest = hasSubdailyLayers ? leftOffset - 136 : leftOffset - 84;
       toolTipDate = hasSubdailyLayers ? hoverTime.split('T').join(' ') : hoverTime.split('T')[0];
-      toolTipDayOfYear = moment.utc(hoverTime).dayOfYear();
+      // toolTipDayOfYear = moment.utc(hoverTime).dayOfYear();
+      toolTipDayOfYear = getDaysInYear(hoverTime);
       toolTipDisplay = 'block';
     }
     return (
