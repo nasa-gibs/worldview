@@ -1,5 +1,4 @@
 import lodashFind from 'lodash/find';
-import lodashEach from 'lodash/each';
 import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
 
@@ -10,11 +9,7 @@ import util from '../../util/util';
 import { naturalEventsUtilGetEventById } from './util';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import * as EVENT_CONSTANTS from '../../modules/natural-events/constants';
-import { exists as layerExists } from '../../modules/layers/util';
-import {
-  toggleVisibility as setLayerVisibility,
-  addLayer
-} from '../../modules/layers/actions';
+import { activateLayersForEventCategory } from '../../modules/layers/actions';
 import { deselectEvent as deselectEventAction } from '../../modules/natural-events/actions';
 import { selectDate } from '../../modules/date/actions';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
@@ -24,7 +19,7 @@ const zoomLevelReference = {
   Volcanoes: 6
 };
 
-export default function naturalEventsUI(ui, config, store) {
+export default function naturalEventsUI(ui, config, store, models) {
   var self = {};
   var eventVisibilityAlert;
   var map;
@@ -272,10 +267,7 @@ export default function naturalEventsUI(ui, config, store) {
     self.markers = naturalEventMarkers.draw();
     zoomPromise.then(function() {
       self.selecting = true;
-      if (isIdChange && !isSameCategory && !isInitialLoad) {
-        activateLayersForCategory(event.categories[0].title);
-      }
-      if (!isInitialLoad) store.dispatch(selectDate(util.parseDateUTC(date)));
+
       /* For Wildfires that didn't happen today, move the timeline forward a day
        * to improve the chance that the fire is visible.
        * NOTE: If the fire happened yesterday and the imagery isn't yet available
@@ -288,9 +280,14 @@ export default function naturalEventsUI(ui, config, store) {
           .toISOString()
           .split('T')[0];
         if (date !== today || date !== yesterday) {
-          store.dispatch(selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1)));
+          store.dispatch(
+            selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1))
+          );
         }
-      }
+        if (isIdChange && !isSameCategory && !isInitialLoad) {
+          activateLayersForCategory(event.categories[0].title);
+        }
+      } else if (!isInitialLoad) store.dispatch(selectDate(util.parseDateUTC(date)));
 
       // Show event visiblity alert
       if (!eventVisibilityAlert) {
@@ -317,10 +314,8 @@ export default function naturalEventsUI(ui, config, store) {
       }
       naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
       self.selecting = false;
-      self.events.trigger('selection-done', self.selected);
+      models.map.events.trigger('update-layers'); // hack to update layers
     });
-
-    self.events.trigger('selected-event', self.selected);
   };
 
   self.deselectEvent = function() {
@@ -422,28 +417,13 @@ export default function naturalEventsUI(ui, config, store) {
 
   var activateLayersForCategory = function(category) {
     const state = store.getState();
-    const { layers, compare, proj } = state;
+    const { proj } = state;
     category = category || 'Default';
     let currentProjection = proj.selected.id;
     // Turn on the relevant layers for the event type based on projection and category
     var activeLayers = self.layers[currentProjection][category];
     if (!activeLayers) activeLayers = self.layers[currentProjection]['Default'];
-    // Turn off all layers in list first
-    lodashEach(layers[compare.activeString], function(layer) {
-      store.dispatch(setLayerVisibility(layer.id, false));
-    });
-    // Turn on or add new layers
-    lodashEach(activeLayers, function(layer) {
-      var id = layer[0];
-      var visible = layer[1];
-      if (layerExists(id, layers[compare.activeString])) {
-        store.dispatch(setLayerVisibility(id, visible));
-      } else {
-        addLayer(id, {
-          visible: visible
-        });
-      }
-    });
+    store.dispatch(activateLayersForEventCategory(activeLayers));
   };
 
   var zoomToEvent = function(event, date, rotation, isSameEventID) {

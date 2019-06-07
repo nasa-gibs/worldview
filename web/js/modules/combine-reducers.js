@@ -102,7 +102,7 @@ const reducers = {
   modalAboutPage,
   shortLink,
   notificationsRequest,
-  lastAction
+  lastAction: lastAction
 };
 
 export default combineReducers(reducers);

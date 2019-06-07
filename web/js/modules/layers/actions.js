@@ -1,8 +1,9 @@
-import { findIndex as lodashFindIndex } from 'lodash';
+import { findIndex as lodashFindIndex, each as lodashEach } from 'lodash';
 import {
   addLayer as addLayerSelector,
   resetLayers as resetLayersSelector,
-  getLayers as getLayersSelector
+  getLayers as getLayersSelector,
+  activateLayersForEventCategory as activateLayersForEventCategorySelector
 } from './selectors';
 
 import {
@@ -13,7 +14,8 @@ import {
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
   REMOVE_LAYER,
-  UPDATE_OPACITY
+  UPDATE_OPACITY,
+  ADD_LAYERS_FOR_EVENT
 } from './constants';
 
 export function resetLayers(activeString) {
@@ -27,6 +29,21 @@ export function resetLayers(activeString) {
     dispatch({
       type: RESET_LAYERS,
       activeString,
+      layers: newLayers
+    });
+  };
+}
+export function activateLayersForEventCategory(activeLayers) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const newLayers = activateLayersForEventCategorySelector(
+      activeLayers,
+      state
+    );
+
+    dispatch({
+      type: ADD_LAYERS_FOR_EVENT,
+      activeString: state.compare.activeString,
       layers: newLayers
     });
   };

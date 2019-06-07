@@ -6,7 +6,6 @@ import TourComplete from '../components/tour/modal-tour-complete';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
 import { endTour, selectStory, startTour } from '../modules/tour/actions';
-import { checkTourBuildTimestamp } from '../modules/tour/util';
 import { findIndex as lodashFindIndex, get as lodashGet } from 'lodash';
 import ErrorBoundary from './error-boundary';
 import update from 'immutability-helper';

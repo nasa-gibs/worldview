@@ -99,16 +99,6 @@ const render = (config, parameters, legacyState) => {
       responsiveStoreEnhancer
     )
   );
-  lodashEach(models, function(component, key) {
-    if (component.load && !component.loaded) {
-      component.load(legacyState, errors);
-    }
-    const dispatchUpdate = lodashDebounce(() => {
-      store.dispatch(updateLegacyModule(key, component));
-    }, 100);
-    // sync old and new state
-    component.events.any(dispatchUpdate);
-  });
   listenForHistoryChange(store, history);
   elapsed('Render', startTime, parameters);
 

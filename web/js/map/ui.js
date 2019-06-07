@@ -3,9 +3,7 @@ import lodashFindIndex from 'lodash/findIndex';
 import lodashEach from 'lodash/each';
 import lodashForOwn from 'lodash/forOwn';
 import lodashThrottle from 'lodash/throttle';
-import lodashCloneDeep from 'lodash/cloneDeep';
-import lodashFind from 'lodash/find';
-import { get as lodashGet } from 'lodash';
+import { get as lodashGet, debounce as lodashDebounce, cloneDeep as lodashCloneDeep, find as lodashFind} from 'lodash';
 import util from '../util/util';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
@@ -42,15 +40,14 @@ import {
   isRenderable as isRenderableLayer
 } from '../modules/layers/selectors';
 
-
-export function mapui(models, config, store) {
+export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
   var id = 'wv-map';
   var selector = '#' + id;
   var animationDuration = 250;
   var self = {};
   var cache = models.map.cache;// Save layers from days visited
-  var rotation = new MapRotate(self, models);
+  var rotation = new MapRotate(self, models, store);
   var dateline = mapDateLineBuilder(models, config, store);
   var precache = mapPrecacheTile(models, config, cache, self);
   var compareMapUi = mapCompare(config, store);
@@ -105,13 +102,12 @@ export function mapui(models, config, store) {
         return updateLayerVisibilities(action);
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
-      case layerConstants.REORDER_LAYER_GROUP:
-        return reloadLayers();
       case compareConstants.CHANGE_STATE:
         if (action.mode === 'spy') {
           return reloadLayers();
         }
         return;
+      case layerConstants.REORDER_LAYER_GROUP:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         return reloadLayers();
@@ -143,7 +139,7 @@ export function mapui(models, config, store) {
       var map = createMap(proj);
       self.proj[proj.id] = map;
     });
-
+    models.map.events.on('update-layers', reloadLayers);
     store.subscribe(subscribeToStore);
     updateProjection(true);
   };
@@ -178,13 +174,13 @@ export function mapui(models, config, store) {
     }
     self.selected = self.proj[proj.id];
     var map = self.selected;
-    models.map.updateMap(map, self);
+    store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self });
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
     if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
       let currentRotation = map.getView().getRotation();
-      models.map.rotation = currentRotation;
+      store.dispatch({ type: 'MAP/UPDATE_ROTATION', rotation: currentRotation });
       rotation.setResetButton(currentRotation);
     }
 
@@ -302,7 +298,7 @@ export function mapui(models, config, store) {
     const state = store.getState();
     const { layers, proj } = state;
     const compareState = state.compare;
-    var layerGroupStr = compareState.isCompareA ? 'active' : 'activeB';
+    var layerGroupStr = compareState.activeString;
     var activeLayers = layers[layerGroupStr];
 
     if (!config.features.compare || !compareState.active) {
@@ -771,7 +767,7 @@ export function mapui(models, config, store) {
     const map = self.selected;
     const view = map.getView();
     const extent = view.calculateExtent(map.getSize());
-    models.map.update(extent);
+    store.dispatch({ type: 'MAP/UPDATE_MAP_EXTENT', extent });
     triggerExtent();
   };
   /*
@@ -884,8 +880,8 @@ export function mapui(models, config, store) {
     }
 
     // Set event listeners for changes on the map view (when rotated, zoomed, panned)
-    map.getView().on('change:center', updateExtent);
-    map.getView().on('change:resolution', updateExtent);
+    map.getView().on('change:center', lodashDebounce(updateExtent, 300));
+    map.getView().on('change:resolution', lodashDebounce(updateExtent, 300));
     map.getView().on('change:rotation', lodashThrottle(onRotate, 300));
     map.on('pointerdrag', function() {
       self.mapIsbeingDragged = true;
@@ -906,10 +902,11 @@ export function mapui(models, config, store) {
         self.mapIsbeingZoomed = false;
       }, 200);
     });
-    const completeKey = map.on('rendercomplete', () => {
-      models.map.updateMap(self.selected, self);
-      map.unset(completeKey, true);
-    });
+    const onRenderComplete = () => {
+      store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self });
+      map.un('rendercomplete', onRenderComplete);
+    };
+    map.on('rendercomplete', onRenderComplete);
     // Clicking on a vector shows it's attributes in console.
     map.on('click', function(e) {
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
@@ -1064,7 +1061,7 @@ export function mapui(models, config, store) {
         typeof models.anim !== 'undefined' && models.anim.rangeState.playing;
       if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
 
-      dataRunner.newPoint(pixels, map);
+      if (!self.mapIsbeingDragged && !self.mapIsbeingZoomed) dataRunner.newPoint(pixels, map);
     }
     $(map.getViewport())
       .mouseout(function(e) {

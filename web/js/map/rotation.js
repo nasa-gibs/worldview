@@ -1,7 +1,7 @@
 import 'jquery-ui-bundle/jquery-ui';
 import util from '../util/util';
 
-export function MapRotate(ui, models, map) {
+export function MapRotate(ui, models, store) {
   this.evts = util.events();
   this.intervalId = null;
   var self = this;
@@ -75,6 +75,7 @@ export function MapRotate(ui, models, map) {
    * @returns {void}
    */
   this.setRotationEvents = function(map, id) {
+    const legacyState = store.getState().legacy;
     var dur = 500;
     var $leftButton = $('#wv-map-' + id + ' .wv-map-rotate-left');
     var $rightButton = $('#wv-map-' + id + ' .wv-map-rotate-right');
@@ -123,7 +124,7 @@ export function MapRotate(ui, models, map) {
 
     $resetButton
       .button({
-        label: Number(models.map.rotation * (180 / Math.PI)).toFixed()
+        label: Number(legacyState.map.rotation * (180 / Math.PI)).toFixed()
       })
       .mousedown(function() {
         // reset rotation
@@ -174,7 +175,7 @@ export function MapRotate(ui, models, map) {
 
     currentView = ui.selected.getView();
     radians = currentView.getRotation();
-    models.map.rotation = radians;
+    store.dispatch({ type: 'MAP/UPDATE_ROTATION', rotation: radians });
     self.setResetButton(radians);
 
     currentDeg = currentView.getRotation() * (180.0 / Math.PI);

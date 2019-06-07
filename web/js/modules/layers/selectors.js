@@ -10,9 +10,8 @@ import {
   indexOf as lodashIndexOf,
   findIndex as lodashFindIndex
 } from 'lodash';
-
+import update from 'immutability-helper';
 import util from '../../util/util';
-import { compareAsc } from 'date-fns';
 export function hasMeasurementSource(current, config, projId) {
   var hasSource;
   lodashValues(current.sources).forEach(function(source) {
@@ -107,7 +106,7 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength) {
   if (!def) {
     throw new Error('No such layer: ' + id);
   }
-  def.visible = true;
+  def.visible = spec.visible || true;
   def.min = spec.min || undefined;
   def.custom = spec.custom || undefined;
   def.max = spec.max || undefined;
@@ -200,7 +199,10 @@ function forGroup(group, spec, activeLayers, state) {
     ) {
       return;
     }
-    if (spec.renderable && !isRenderable(def.id, activeLayers, spec.date, state)) {
+    if (
+      spec.renderable &&
+      !isRenderable(def.id, activeLayers, spec.date, state)
+    ) {
       return;
     }
     if (spec.visible && !def.visible) {
@@ -428,7 +430,36 @@ export function lastDateTime(activeLayers, config) {
   }
   return endDate;
 }
-
+export function activateLayersForEventCategory(activeLayers, state) {
+  const { layers, compare } = state;
+  // Turn off all layers in list first
+  let newLayers = layers[compare.activeString];
+  lodashEach(newLayers, function(layer, index) {
+    newLayers = update(newLayers, {
+      [index]: { visible: { $set: false } }
+    });
+  });
+  // Turn on or add new layers
+  lodashEach(activeLayers, function(layer) {
+    var id = layer[0];
+    var visible = layer[1];
+    let index = lodashFindIndex(newLayers, { id });
+    if (index >= 0) {
+      newLayers = update(newLayers, {
+        [index]: { visible: { $set: visible } }
+      });
+    } else {
+      newLayers = addLayer(
+        id,
+        { visible },
+        newLayers,
+        layers.layerConfig,
+        getLayers(newLayers, { group: 'all' }, state).overlays.length
+      );
+    }
+  });
+  return newLayers;
+}
 export function getZotsForActiveLayers(config, models, ui) {
   // var zotObj = {};
   // var sources = config.sources;

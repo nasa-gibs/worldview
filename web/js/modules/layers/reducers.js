@@ -6,7 +6,8 @@ import {
   ON_LAYER_HOVER,
   TOGGLE_LAYER_VISIBILITY,
   REMOVE_LAYER,
-  UPDATE_OPACITY
+  UPDATE_OPACITY,
+  ADD_LAYERS_FOR_EVENT
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -40,7 +41,9 @@ export function getInitialState(config) {
 export function layerReducer(state = initialState, action) {
   const layerGroupStr = action.activeString;
   switch (action.type) {
-    case RESET_LAYERS || ADD_LAYER:
+    case RESET_LAYERS:
+    case ADD_LAYER:
+    case ADD_LAYERS_FOR_EVENT:
       return lodashAssign({}, state, {
         [layerGroupStr]: action.layers
       });

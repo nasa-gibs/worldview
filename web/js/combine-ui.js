@@ -1,12 +1,6 @@
 import util from './util/util';
-// import { dateLabel } from './date/label';
-
-// Timeline
-// import dateWheels from './date/wheels';
-// import { timeline } from './date/timeline';
 import { mapui } from './map/ui';
 import { mapAnimate } from './map/animate';
-import { debugLayers } from './debug';
 import { dataUi } from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
 
@@ -18,7 +12,7 @@ import naturalEventsUI from './map/natural-events/ui';
  */
 export function combineUi(models, config, MapMouseEvents, store) {
   let ui = {};
-  ui.map = mapui(models, config, store);
+  ui.map = mapui(models, config, store, ui);
   ui.map.animate = mapAnimate(config, ui, store);
   if (config.features.tour) {
     // ui.alert = alertUi(ui, config);
@@ -54,7 +48,7 @@ export function combineUi(models, config, MapMouseEvents, store) {
     ui.data = dataUi(store, ui, config);
   }
   if (config.features.naturalEvents) {
-    ui.naturalEvents = naturalEventsUI(ui, config, store);
+    ui.naturalEvents = naturalEventsUI(ui, config, store, models);
   }
   registerMapMouseHandlers(ui.map.proj, MapMouseEvents);
   // Sink all focus on inputs if click unhandled
