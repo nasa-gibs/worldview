@@ -2,7 +2,7 @@
     "products": {
         "AIRS2RET_NRT": {
             "name": "AIRS/Aqua L2 Near Real Time (NRT) Standard Physical Retrieval (AIRS-only) V006 (AIRS2RET_NRT)",
-            "handler": "List",
+            "handler": "MODISSwath",
             "query": {
                 "shortName": "AIRS2RET_NRT"
             }

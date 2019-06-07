@@ -2,7 +2,7 @@
     "products": {
         "AIRS2SUP_NRT": {
             "name": "AIRS/Aqua L2 Near Real Time (NRT) Support Retrieval (AIRS-only) V006 (AIRS2SUP_NRT)",
-            "handler": "List",
+            "handler": "MODISSwath",
             "query": {
                 "shortName": "AIRS2SUP_NRT"
             }
