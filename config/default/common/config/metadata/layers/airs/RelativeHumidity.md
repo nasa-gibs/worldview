@@ -9,3 +9,11 @@ References: [GES DISC - AIRS2RET_NRT: AIRS/Aqua L2 Near Real Time (NRT) Standard
 
 ### Surface Relative Humidity (Day | Night, Daily | Monthly)
 Temporal coverage: 1 September 2002 - present or most recent complete month
+
+### Relative Humidity (L2, 500 hPa, Day | Night)
+
+### Relative Humidity (L2, 700 hPa, Day | Night)
+
+### Relative Humidity (L2, 850 hPa, Day | Night)
+
+### Surface Relative Humidity (L2, Day | Night)
