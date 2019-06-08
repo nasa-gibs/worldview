@@ -211,7 +211,7 @@ const getParameters = function(config, parameters) {
           return customInterval.toString();
         },
         parse: val => {
-          return val.toString();
+          return Number(val);
         }
       }
     },
