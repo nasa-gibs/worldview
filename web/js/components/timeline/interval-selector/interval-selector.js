@@ -13,7 +13,7 @@ import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../../modules/d
  */
 class CustomIntervalSelectorWidget extends PureComponent {
   changeInterval = (value) => {
-    if (value > 0 && value <= 1000) {
+    if (value >= 0 && value <= 1000) {
       this.props.changeCustomInterval(value, this.props.customIntervalZoomLevel);
     }
   }
@@ -23,15 +23,6 @@ class CustomIntervalSelectorWidget extends PureComponent {
   }
 
   handleKeyPress = (e) => {
-    // const value = this.state.intervalValue;
-    // const value = this.props.customDelta;
-    // if (e.key === 'Enter') {
-    //   if (value > 0) {
-    //     this.changeCustomInterval();
-    //   }
-    // } else if (e.key === 'Escape') {
-    //   this.props.toggleCustomIntervalModal();
-    // }
     if (e.key === 'Escape') {
       this.props.toggleCustomIntervalModal();
     }
