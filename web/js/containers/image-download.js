@@ -72,7 +72,7 @@ class ImageDownloadContainer extends Component {
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
-      map.selectedMap
+      map.ui.selected
     );
     const crs = proj.selected.crs;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');

@@ -80,13 +80,13 @@ class GIF extends Component {
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
-      map.selectedMap
+      map.ui.selected
     );
     const crs = proj.crs;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
     const resolution = imageUtilCalculateResolution(
-      Math.round(map.getZoom()),
+      Math.round(map.ui.selected.getView().getZoom()),
       isGeoProjection,
       proj.resolutions
     );

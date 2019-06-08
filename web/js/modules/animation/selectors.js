@@ -39,7 +39,7 @@ export function getImageArray(
   var strDate;
   var lonlats = imageUtilGetCoordsFromPixelValues(
     boundaries,
-    legacy.map.selectedMap
+    legacy.map.ui.selected
   );
   var layersArray;
   var opacities;

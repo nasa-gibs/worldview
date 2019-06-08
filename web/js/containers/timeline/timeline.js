@@ -14,7 +14,7 @@ import AnimationWidget from '../animation-widget';
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 
-import lodashDebounce from 'lodash/debounce';
+import {debounce as lodashDebounce, get as lodashGet} from 'lodash';
 
 import {
   hasSubDaily,
@@ -428,7 +428,6 @@ function mapStateToProps(state) {
     timeScaleChangeUnit,
     timelineEndDateLimit
   );
-
   return {
     draggerSelected: isCompareA ? 'selected' : 'selectedB', // ! will work for dragger?
     hasSubdailyLayers,
@@ -456,8 +455,7 @@ function mapStateToProps(state) {
     hideTimeline:
       (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
-      !legacy.map.selectedMap ||
-      !legacy.map.selectedMap.frameState_ ||
+      !lodashGet(legacy, 'map.ui.selected.frameState_') ||
       sidebar.activeTab === 'download'
   };
 }
