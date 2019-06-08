@@ -28,9 +28,10 @@ export function getSelectionCounts(layers, selectedGranules) {
 export function getDataSelectionSize(selectedGranules) {
   var totalSize = 0;
   var sizeValid = true;
-  lodashEach(selectedGranules, function(index, granule) {
-    if (sizeValid && granule.granule_size) {
-      totalSize += parseFloat(granule.granule_size);
+  lodashEach(selectedGranules, function(granule, key) {
+    const size = granule.granule_size;
+    if (sizeValid && size) {
+      totalSize += parseFloat(size);
     } else {
       sizeValid = false;
     }
@@ -38,6 +39,7 @@ export function getDataSelectionSize(selectedGranules) {
   if (sizeValid) {
     return totalSize;
   }
+  return sizeValid ? totalSize : 0;
 }
 export function groupByProducts(config, dataProducts) {
   let products = {};

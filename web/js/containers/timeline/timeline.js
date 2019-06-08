@@ -14,7 +14,7 @@ import AnimationWidget from '../animation-widget';
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 
-import {debounce as lodashDebounce, get as lodashGet} from 'lodash';
+import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
 
 import {
   hasSubDaily,

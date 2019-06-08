@@ -433,7 +433,7 @@ var dataUiDownloadListPanel = function(config, store) {
 
   self.refresh = function() {
     const dataState = store.getState().data;
-    selection = reformatSelection();
+    selection = reformatSelection(dataState);
     $('#wv-data-selection').html(bodyText(selection));
     var bulkVisible =
       isBulkDownloadable() && lodashSize(dataState.selectedGranules) !== 0;
@@ -462,11 +462,11 @@ var dataUiDownloadListPanel = function(config, store) {
     return false;
   };
 
-  var reformatSelection = function() {
+  var reformatSelection = function(dataState) {
     var selection = {};
 
     urs = false;
-    $.each(dataStore.selectedGranules, function(key, granule) {
+    $.each(dataState.selectedGranules, function(key, granule) {
       if (granule.urs) {
         urs = true;
       }

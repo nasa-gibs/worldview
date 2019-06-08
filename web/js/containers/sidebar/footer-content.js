@@ -164,7 +164,8 @@ function mapStateToProps(state, ownProps) {
     dataSelectionSize,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
-    compareMode: compare.mode
+    compareMode: compare.mode,
+    toggleListAll
   };
 }
 export default connect(
@@ -173,7 +174,7 @@ export default connect(
 )(FooterContent);
 
 FooterContent.propTypes = {
-  showListAllButton: PropTypes.bool,
+  showAll: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   compareMode: PropTypes.string,
   isMobile: PropTypes.bool,
@@ -186,5 +187,6 @@ FooterContent.propTypes = {
   toggleCompare: PropTypes.func,
   counts: PropTypes.object,
   dataSelectionSize: PropTypes.number,
-  compareFeature: PropTypes.bool
+  compareFeature: PropTypes.bool,
+  toggleListAll: PropTypes.func
 };

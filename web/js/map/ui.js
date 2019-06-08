@@ -3,7 +3,6 @@ import lodashFindIndex from 'lodash/findIndex';
 import lodashEach from 'lodash/each';
 import lodashForOwn from 'lodash/forOwn';
 import lodashThrottle from 'lodash/throttle';
-import { get as lodashGet, debounce as lodashDebounce, cloneDeep as lodashCloneDeep, find as lodashFind} from 'lodash';
 import util from '../util/util';
 import OlMap from 'ol/Map';
 import OlView from 'ol/View';
@@ -39,6 +38,12 @@ import {
   getLayers,
   isRenderable as isRenderableLayer
 } from '../modules/layers/selectors';
+import {
+  get as lodashGet,
+  debounce as lodashDebounce,
+  cloneDeep as lodashCloneDeep,
+  find as lodashFind
+} from 'lodash';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;

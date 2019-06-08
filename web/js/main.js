@@ -5,7 +5,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
-import { each as lodashEach, debounce as lodashDebounce } from 'lodash';
 import { responsiveStoreEnhancer } from 'redux-responsive';
 import { getMiddleware } from './combine-middleware';
 import {
@@ -24,7 +23,6 @@ import { combineModels } from './combine-models';
 import { parse } from './parse';
 import { combineUi } from './combine-ui';
 import { requirements as paletteRequirements } from './modules/palettes/util';
-import { updateLegacyModule } from './modules/migration/actions';
 import { validate as layerValidate } from './modules/layers/util';
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
