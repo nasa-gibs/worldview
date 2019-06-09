@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 /*
@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
  * above the LEFT/RIGHT increment arrows (ex: hover over '1 day' for example)
  *
  * @class TimeScaleIntervalChange
- * @extends Component
+ * @extends PureComponent
  */
-class TimeScaleIntervalChange extends Component {
+class TimeScaleIntervalChange extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

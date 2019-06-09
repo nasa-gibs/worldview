@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import DateInputColumn from './input';
 import util from '../../util/util';
@@ -10,7 +10,7 @@ import util from '../../util/util';
  *
  * @class TimelineRangeSelector
  */
-class DateSelector extends React.Component {
+class DateSelector extends PureComponent {
   /*
    * @constructor
    */

@@ -15,6 +15,7 @@ import AnimationButton from '../../components/timeline/timeline-controls/animati
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 
 import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
+import { getISODateFormatted } from '../../components/timeline/date-util';
 
 import {
   hasSubDaily,
@@ -243,8 +244,7 @@ class Timeline extends React.Component {
     return dateA ? (
       <ErrorBoundary>
         <section id="timeline" className="timeline-inner clearfix">
-          <div
-            id="timeline-header"
+          <div id="timeline-header"
             className={hasSubdailyLayers ? 'subdaily' : ''}
           >
             <div id="date-selector-main">
@@ -276,14 +276,12 @@ class Timeline extends React.Component {
                 rightArrowDisabled={rightArrowDisabled}
               />
             </div>
-
             <AnimationButton
               disabled={animationDisabled}
               clickAnimationButton={this.clickAnimationButton}
             />
           </div>
-          <div
-            id="timeline-footer"
+          <div id="timeline-footer"
             style={{
               display:
                 this.state.timelineHidden || hideTimeline ? 'none' : 'block'
@@ -403,7 +401,7 @@ function mapStateToProps(state) {
     screenWidth,
     hasSubdailyLayers
   );
-  const timelineEndDateLimit = endTime.toISOString();
+  const timelineEndDateLimit = getISODateFormatted(endTime);
 
   let selectedDate = isCompareA ? selected : selectedB;
   let deltaChangeAmt = customSelected ? customDelta : delta;
@@ -428,8 +426,8 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     customSelected,
     compareModeActive,
-    dateA: selected.toISOString(),
-    dateB: selectedB.toISOString(),
+    dateA: getISODateFormatted(selected),
+    dateB: getISODateFormatted(selectedB),
     startDate: config.startDate,
     timelineStartDateLimit: config.startDate, // same as startDate
     endTime,
@@ -583,7 +581,6 @@ const checkLeftArrowDisabled = (
   timelineStartDateLimit
 ) => {
   let nextDecrementDate = moment.utc(date).subtract(delta, timeScaleChangeUnit);
-  // let isSameOrBefore = nextDecrementDate.isSameOrBefore(timelineStartDateLimit);
   let isSameOrBefore = new Date(nextDecrementDate) <= new Date(timelineStartDateLimit);
   return isSameOrBefore;
 };
@@ -596,7 +593,6 @@ const checkRightArrowDisabled = (
   timelineEndDateLimit
 ) => {
   let nextIncrementDate = moment.utc(date).add(delta, timeScaleChangeUnit);
-  // let isSameOrAfter = nextIncrementDate.isSameOrAfter(timelineEndDateLimit);
   let isSameOrAfter = new Date(nextIncrementDate) >= new Date(timelineEndDateLimit);
   return isSameOrAfter;
 };

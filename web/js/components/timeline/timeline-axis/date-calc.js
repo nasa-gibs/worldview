@@ -3,39 +3,45 @@ import moment from 'moment';
 import { timeScaleOptions } from '../../../modules/date/constants';
 import { getIsBetween, getISODateFormatted } from '../date-util';
 
-let dateLimitCache = {};
+// cache repeated startDateLimit/endDateLimit moment object construction
+let limitCache = {};
 
-// get range of times based on start/end dates and timescale
-export function getTimeRange(startDate, endDate, timeScale, timelineStartDateLimit, timelineEndDateLimit) {
-  let dates = [];
+/**
+ * get range of consecutive time units based on start/end dates and timescale
+ *
+ * @param {Object} startDate - moment date object - start of requested time range
+ * @param {Object} endDate - moment date object - end of requested time range
+ * @param {String} timeScale - timescale of time units (ex: 'day', 'month', etc.)
+ * @param {startDateLimit} startDateLimit - min date within timeline range
+ * @param {endDateLimit} endDateLimit - max date within timeline range
+ * @returns {Array} timeRange - consecutive time units based on range
+ */
+export function getTimeRange(startDate, endDate, timeScale, startDateLimit, endDateLimit) {
+  let timeRange = [];
   let { format } = timeScaleOptions[timeScale].timeAxis;
-  let startDateLimit;
-  let endDateLimit;
-  if (!dateLimitCache[timelineStartDateLimit]) {
-    startDateLimit = moment.utc(timelineStartDateLimit);
-    dateLimitCache[timelineStartDateLimit] = startDateLimit;
+
+  // min/max start/end limits
+  let startLimit;
+  let endLimit;
+  if (!limitCache[startDateLimit]) {
+    startLimit = moment.utc(startDateLimit);
+    limitCache[startDateLimit] = startLimit;
   } else {
-    startDateLimit = dateLimitCache[timelineStartDateLimit];
+    startLimit = limitCache[startDateLimit];
   }
-  if (!dateLimitCache[timelineEndDateLimit]) {
-    endDateLimit = moment.utc(timelineEndDateLimit);
-    dateLimitCache[timelineEndDateLimit] = endDateLimit;
+  if (!limitCache[endDateLimit]) {
+    endLimit = moment.utc(endDateLimit);
+    limitCache[endDateLimit] = endLimit;
   } else {
-    endDateLimit = dateLimitCache[timelineEndDateLimit];
+    endLimit = limitCache[endDateLimit];
   }
 
-  // let startDateLimit = moment.utc(timelineStartDateLimit);
-  // let endDateLimit = moment.utc(timelineEndDateLimit);
   while (startDate <= endDate) {
     let date = startDate.format(format);
-    // let rawDate = startDate.format();
     let rawDate = getISODateFormatted(startDate);
     let nextDate = startDate.clone().add(1, timeScale);
-    // let rawNextDate = nextDate.format();
     let rawNextDate = getISODateFormatted(nextDate);
-
-    // let withinRange = startDate.isBetween(startDateLimit, endDateLimit, null, '[]');
-    let withinRange = getIsBetween(startDate, startDateLimit, endDateLimit);
+    let withinRange = getIsBetween(startDate, startLimit, endLimit);
 
     let timeObject = {
       dateObject: startDate.toObject(),
@@ -46,12 +52,9 @@ export function getTimeRange(startDate, endDate, timeScale, timelineStartDateLim
       timeScale: timeScale,
       withinRange: withinRange
     };
-    dates.push(timeObject);
+    timeRange.push(timeObject);
     startDate = nextDate;
   }
-  let timeRange = {
-    dates: dates
-  };
 
   return timeRange;
 };

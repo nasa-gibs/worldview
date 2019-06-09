@@ -46,13 +46,11 @@ class DateToolTip extends PureComponent {
       }
       toolTipLeftOffest = position - (hasSubdailyLayers ? 87 : 35);
       toolTipDate = hasSubdailyLayers ? draggerTime.split('T').join(' ') : draggerTime.split('T')[0];
-      // toolTipDayOfYear = moment.utc(draggerTime).dayOfYear();
       toolTipDayOfYear = getDaysInYear(draggerTime);
       toolTipDisplay = position > -49 && position < axisWidth - 49 ? 'block' : 'none';
     } else if (showHoverToolTip) { // handle hover tooltip
       toolTipLeftOffest = hasSubdailyLayers ? leftOffset - 136 : leftOffset - 84;
       toolTipDate = hasSubdailyLayers ? hoverTime.split('T').join(' ') : hoverTime.split('T')[0];
-      // toolTipDayOfYear = moment.utc(hoverTime).dayOfYear();
       toolTipDayOfYear = getDaysInYear(hoverTime);
       toolTipDisplay = 'block';
     }
