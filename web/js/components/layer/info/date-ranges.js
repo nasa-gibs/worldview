@@ -237,25 +237,38 @@ export class DateRanges extends React.Component {
     return (
       <React.Fragment>
         <sup
+          className="layer-date-ranges-button"
           onClick={() => {
             this.setState({ showRanges: !showRanges });
           }}
         >
           *View Dates
         </sup>
-        <ListGroup style={style}>
-          {layer.dateRanges.map((dateRange, i) => (
-            <ListGroupItem key={i + layer.id + '-range-item'}>
-              {this.renderListItem(layer, dateRange, i)}
-            </ListGroupItem>
-          ))}
-        </ListGroup>
+        <div
+          style={style}
+          id="layer-date-range-list-wrap"
+          className="layer-date-wrap"
+        >
+          <div>
+            <p>Date Ranges:</p>
+          </div>
+          <ListGroup
+            className="layer-date-ranges"
+            id="layer-settings-date-range-list"
+          >
+            {layer.dateRanges.map((dateRange, i) => (
+              <ListGroupItem key={i + layer.id + '-range-item'}>
+                {this.renderListItem(layer, dateRange, i)}
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
       </React.Fragment>
     );
   }
 }
 const renderListGroupItem = function(range) {
-  return <ListGroupItem> {range} </ListGroupItem>;
+  return range;
 };
 
 DateRanges.propTypes = {

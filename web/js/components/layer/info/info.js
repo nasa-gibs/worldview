@@ -91,13 +91,13 @@ class LayerInfo extends React.Component {
                 ? ' - Present'
                 : ''}
           </span>
+
+          {hasLayerDateRange && dateRanges.overlap === false ? (
+            <DateRanges layer={layer} dateRanges={dateRanges} />
+          ) : (
+            ''
+          )}
         </div>
-        {hasLayerDateRange ? <p>Date Ranges:</p> : ''}
-        {hasLayerDateRange && dateRanges.overlap === false ? (
-          <DateRanges layer={layer} dateRanges={dateRanges} />
-        ) : (
-          ''
-        )}
         {metaData ? (
           <div
             id="layer-metadata"

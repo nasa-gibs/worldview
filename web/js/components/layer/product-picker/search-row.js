@@ -236,7 +236,7 @@ class LayerRow extends React.Component {
     return result;
   }
   getListItems(layer, firstDateRange) {
-    layer.dateRanges
+    return layer.dateRanges
       .slice(0)
       .reverse()
       .map(l => {

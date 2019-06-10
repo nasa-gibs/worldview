@@ -231,6 +231,7 @@
 .layer-date-wrap {
   background-color: #333;
   margin-right: 10px;
+  margin-top: 10px;
   padding: 10px;
 }
 
@@ -245,11 +246,13 @@
   list-style-type: disc;
   display: list-item;
   margin: 2px 0 6px 20px;
+  color: #bbb
 }
 
 .layer-date-range .layer-date-ranges-button,
 .layer-date-range .layer-date-ranges-button:not([href]):not([tabindex]) {
   color: #7bf;
+  cursor: pointer;
 }
 
 .layer-date-range .layer-date-ranges-button:hover,
@@ -349,6 +352,7 @@
 .layers-all .source-metadata a,
 .layers-all .source-metadata div,
 .layers-all .source-metadata p,
+.layer-description .layer-date-wrap p,
 .layers-all .source-metadata span,
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata a,
 .layer-modal-content .selected-category .ui-tabs-panel .source-metadata p,
