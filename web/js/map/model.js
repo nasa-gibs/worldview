@@ -4,7 +4,6 @@ import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import lodashClone from 'lodash/clone';
 import { intersects } from 'ol/extent';
-import Cache from 'cachai';
 
 export function mapModel(models, config) {
   var self = {};
@@ -12,7 +11,6 @@ export function mapModel(models, config) {
   self.extent = null;
   self.selectedMap = null;
   self.events = util.events();
-  self.cache = new Cache(400);
   self.ui = null;
   self.rotation = 0;
   const init = function() {

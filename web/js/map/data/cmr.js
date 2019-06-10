@@ -23,7 +23,7 @@ export function dataCmrClient(spec, store) {
   };
 
   var init = function() {
-    ns.ajax = util.ajaxCache();
+    ns.ajax = util.ajaxCache(100);
   };
 
   self.submit = function(parameters) {
@@ -57,7 +57,6 @@ export function dataCmrClient(spec, store) {
           59
         )
       );
-
       startTime = startTime.toISOString();
       endTime = endTime.toISOString();
       queryParameters.data.temporal = startTime + ',' + endTime;

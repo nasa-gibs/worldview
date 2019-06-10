@@ -118,11 +118,13 @@ export function dataUi(store, ui, config) {
     }
   };
   var init = function() {
+    const sidebarState = store.getState().sidebar;
     store.subscribe(subscribeToStore);
     self.events.on('query', onQuery)
       .on('queryResults', onQueryResults)
       .on('queryError', onQueryError)
       .on('queryTimeout', onQueryTimeout);
+    if (sidebarState.activeTab === 'download') onActivate();
   };
   self.onViewChange = function() {
     const state = store.getState();

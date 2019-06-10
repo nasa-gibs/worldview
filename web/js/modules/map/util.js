@@ -119,9 +119,9 @@ export function promiseImageryForTime(date, layers, state) {
   var pixelRatio;
   var promiseArray;
   const map = state.legacy.map;
-  var cache = map.cache;
+  var cache = map.ui.cache;
   var mapUi = map.ui;
-  var selectedMap = map.selectedMap;
+  var selectedMap = map.ui.selected;
   frameState = selectedMap.frameState_; // OL object describing the current map frame
 
   pixelRatio = frameState.pixelRatio;

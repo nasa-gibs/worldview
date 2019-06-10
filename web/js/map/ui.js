@@ -31,6 +31,7 @@ import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
+import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
 import * as paletteConstants from '../modules/palettes/constants';
@@ -51,7 +52,7 @@ export function mapui(models, config, store, ui) {
   var selector = '#' + id;
   var animationDuration = 250;
   var self = {};
-  var cache = models.map.cache;// Save layers from days visited
+  var cache;
   var rotation = new MapRotate(self, models, store);
   var dateline = mapDateLineBuilder(models, config, store);
   var precache = mapPrecacheTile(models, config, cache, self);
@@ -61,6 +62,7 @@ export function mapui(models, config, store, ui) {
     compareMapUi,
     store
   ));
+  cache = self.cache = new Cache(400);
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
   self.proj = {}; // One map for each projection

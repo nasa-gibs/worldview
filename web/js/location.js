@@ -366,7 +366,8 @@ const getParameters = function(config, parameters) {
           return id;
         },
         serialize: (currentItemState, state) => {
-          if (!state.sidebar.activeTab !== 'download') return undefined;
+          if (state.sidebar.activeTab !== 'download') return undefined;
+          console.log(encode(currentItemState));
           return encode(currentItemState);
         }
       }
