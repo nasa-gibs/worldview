@@ -47,9 +47,13 @@ export function dataUi(store, ui, config) {
       case DATA_CONSTANTS.DATA_GET_DATA_CLICK:
         return self.showDownloadList();
       case DATA_CONSTANTS.DATA_GRANULE_SELECT:
+        self.events.on('granuleSelect', action.granule);
+        return updateSelection();
       case DATA_CONSTANTS.DATA_GRANULE_UNSELECT:
+        self.events.on('granuleUnselect', action.granule);
         return updateSelection();
       case SELECT_DATE:
+      case DATA_CONSTANTS.SELECT_PRODUCT:
         return query();
     }
   };
@@ -206,7 +210,7 @@ export function dataUi(store, ui, config) {
       hasResults = false;
     }
     if (results.meta.showList && hasResults) {
-      selectionListPanel = dataUiSelectionListPanel(store, results);
+      selectionListPanel = dataUiSelectionListPanel(self, results, store);
       selectionListPanel.show();
     }
   };
@@ -746,13 +750,12 @@ var dataUiDownloadListPanel = function(config, store) {
   return self;
 };
 
-var dataUiSelectionListPanel = function(model, results) {
+var dataUiSelectionListPanel = function(dataUi, results, store) {
   var self = {};
   var granules = {};
   var $dialog;
-
   var init = function() {
-    model.events.on('granuleUnselect', onGranuleUnselect);
+    dataUi.events.on('granuleUnselect', onGranuleUnselect);
   };
 
   self.show = function() {
@@ -799,8 +802,9 @@ var dataUiSelectionListPanel = function(model, results) {
 
   var resultsText = function() {
     var elements = [];
+    const dataState = store.getState().data;
     $.each(results.granules, function(index, granule) {
-      var selected = model.isSelected(granule) ? "checked='true'" : '';
+      var selected = dataState.selectedGranules[granule.id] ? "checked='true'" : '';
       elements.push(
         '<tr>' +
           '<td>' +
@@ -828,12 +832,7 @@ var dataUiSelectionListPanel = function(model, results) {
 
   var toggleSelection = function() {
     var granule = granules[$(this).attr('value')];
-    var selected = $(this).prop('checked');
-    if (selected) {
-      model.selectGranule(granule);
-    } else {
-      model.unselectGranule(granule);
-    }
+    store.dispatch(toggleGranule(granule));
   };
 
   var onGranuleUnselect = function(granule) {

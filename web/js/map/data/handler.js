@@ -110,7 +110,7 @@ export function dataHandlerBase(config, store) {
             });
             return;
           }
-          var results = self._processResults(data);
+          var results = self._processResults(data, queriedProduct);
           self.events.trigger('results', results);
         } catch (error) {
           self.events.trigger('error', 'exception', error);
@@ -156,18 +156,18 @@ export function dataHandlerModisSwathMultiDay(config, store, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function(data, selectedProduct) {
     var results = {
       meta: {},
       granules: data
     };
 
     // var ns = dataResults;
-    var productConfig = config.products[dataState.selectedProduct];
+    var productConfig = config.products[selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(dataState.selectedProduct),
+      dataResultsTagProduct(selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
       dataResultsCollectPreferred(dataState.prefer),
@@ -233,24 +233,24 @@ export function dataHandlerCollectionList(config, store, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function(data, selectedProduct) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[data.selectedProduct];
+    var productConfig = config.products[selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
       dataResultsTagList(),
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsCollectVersions(),
       dataResultsVersionFilter(),
-      dataResultsProductLabel(config.products[data.selectedProduct].name)
+      dataResultsProductLabel(config.products[selectedProduct].name)
     ];
     return chain.process(results);
   };
@@ -344,18 +344,18 @@ export function dataHandlerList(config, store, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function(data, selectedProduct) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[data.selectedProduct];
+    var productConfig = config.products[selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
       dataResultsTagList(),
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
       dataResultsCollectPreferred(dataState.prefer),
@@ -405,18 +405,18 @@ export function dataHandlerDailyAMSRE(config, store, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function(data, selectedProduct) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[data.selectedProduct];
+    var productConfig = config.products[selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
       dataResultsTagList(),
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
@@ -475,7 +475,7 @@ export function dataHandlerModisGrid(config, store, spec) {
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(dataState.selectedProduct),
       dataResultsTagVersion(),
       dataResultsTagVersionRegex(productConfig.tagVersionRegex),
       dataResultsTagURS(productConfig.urs),
@@ -602,11 +602,11 @@ export function dataHandlerModisSwath(config, store, spec) {
       granules: data
     };
 
-    var productConfig = config.products[data.selectedProduct];
+    var productConfig = config.products[dataState.selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(dataState.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
       dataResultsCollectPreferred(dataState.prefer),
@@ -660,7 +660,7 @@ export function dataHandlerHalfOrbit(config, store, spec) {
     chain.processes = [
       dataResultsOfflineFilter(),
       dataResultsOrbitFilter(productConfig.orbit),
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(dataState.selectedProduct),
       dataResultsTagNRT(productConfig.nrt),
       dataResultsTagURS(productConfig.urs),
       dataResultsCollectPreferred(dataState.prefer),
@@ -712,17 +712,17 @@ export function dataHandlerVIIRSSwathDay(config, store) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function(data, selectedProduct) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[data.selectedProduct];
+    var productConfig = config.products[selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsGeometryFromCMR(),
       dataResultsTransform(projCrs),
@@ -775,17 +775,17 @@ export function dataHandlerVIIRSSwathNight(config, store) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function(data, selectedProduct) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var productConfig = config.products[data.selectedProduct];
+    var productConfig = config.products[selectedProduct];
     var chain = dataResultsChain();
     chain.processes = [
       dataResultsOfflineFilter(),
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(selectedProduct),
       dataResultsTagURS(productConfig.urs),
       dataResultsGeometryFromCMR(),
       dataResultsAntiMeridianMulti(spec.maxDistance),
@@ -823,16 +823,16 @@ export function dataHandlerWeldGranuleFootprints(config, store, spec) {
     return self.cmr.submit(queryOptions);
   };
 
-  self._processResults = function(data) {
+  self._processResults = function(data, selectedProduct) {
     var results = {
       meta: {},
       granules: data
     };
 
-    var chain = dataResultsChain();
+    var chain = dataResultsChain(selectedProduct);
     chain.processes = [
       dataResultsTagButtonScale(0.35), // standard button size is too big
-      dataResultsTagProduct(data.selectedProduct),
+      dataResultsTagProduct(selectedProduct),
       dataResultsTagVersion(),
       dataResultsGeometryFromCMR(),
       dataResultsDensify(),
