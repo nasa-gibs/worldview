@@ -1,5 +1,6 @@
 import 'jquery-ui-bundle/jquery-ui';
 import util from '../util/util';
+import { debounce } from 'lodash';
 
 export function MapRotate(ui, models, store) {
   this.evts = util.events();
@@ -161,7 +162,10 @@ export function MapRotate(ui, models, store) {
       }
     }
   };
-
+  this.dispatchRotation = function(radians) {
+    store.dispatch({ type: 'MAP/UPDATE_ROTATION', rotation: radians });
+  };
+  const debounceRotationDispatcher = debounce(this.dispatchRotation, 600);
   /*
    * Called as event listener when map is rotated. Update url to reflect rotation reset
    *
@@ -175,7 +179,8 @@ export function MapRotate(ui, models, store) {
 
     currentView = ui.selected.getView();
     radians = currentView.getRotation();
-    store.dispatch({ type: 'MAP/UPDATE_ROTATION', rotation: radians });
+    debounceRotationDispatcher(radians);
+    // this.dispatchRotation()
     self.setResetButton(radians);
 
     currentDeg = currentView.getRotation() * (180.0 / Math.PI);
