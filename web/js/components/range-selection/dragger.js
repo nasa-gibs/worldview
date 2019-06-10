@@ -42,7 +42,7 @@ class TimelineDragger extends PureComponent {
         <rect
           width={this.props.width}
           // height={this.props.height}
-          height={40}
+          height={52}
           style={{
             fill: this.props.color,
             visibility: visibility

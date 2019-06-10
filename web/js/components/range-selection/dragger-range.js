@@ -242,7 +242,7 @@ class TimelineDraggerRange extends PureComponent {
         handle=".dragger-range"
         axis="x"
         position={null}
-        defaultPosition={{ x: 0, y: 0 }}
+        defaultPosition={{ x: 0, y: 11 }}
         onStop={this.props.onStop}
         onDrag={this.handleDrag.bind(this)}
       >
@@ -255,7 +255,7 @@ class TimelineDraggerRange extends PureComponent {
             cursor: 'pointer'
           }}
           // height={this.props.height}
-          height={63}
+          height={64}
           className="dragger-range"
           id={this.props.draggerID}
           onClick={this.handleDraggerClick.bind(this)}

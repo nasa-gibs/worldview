@@ -226,7 +226,7 @@ line {
 
 #wv-animation-widget {
   /* position: absolute; */
-  top: 60%;
+  top: 70%;
   left: 50%;
 }
 
@@ -272,3 +272,12 @@ line {
   pointer-events: all;
 }
 
+.dragger-container {
+  pointer-events: none;
+  position: absolute;
+  bottom: -87px;
+}
+
+.dragger * {
+  pointer-events: all;
+}
