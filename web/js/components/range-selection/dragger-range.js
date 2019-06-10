@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 /*
@@ -7,7 +7,7 @@ import Draggable from 'react-draggable';
  *
  * @class TimelineDraggerRange
  */
-class TimelineDraggerRange extends React.Component {
+class TimelineDraggerRange extends PureComponent {
   /*
    * @constructor
    */
@@ -68,8 +68,8 @@ class TimelineDraggerRange extends React.Component {
     let deltaX = d.deltaX < -55 ? -55 : d.deltaX > 55 ? 55 : d.deltaX;
     // +/- {number} - start position
     let deltaStart = d.x;
-    let startLocationDate = new Date(this.props.startLocationDate);
-    let endLocationDate = new Date(this.props.endLocationDate);
+    let startLocationDate = this.props.startLocationDate;
+    let endLocationDate = this.props.endLocationDate;
     let timelineEndDate = new Date(this.props.timelineEndDateLimit);
     // used to determine and buffer large monthly/yearly ranges
     let startDateToEndDifference = this.dateDifferenceInDays(
@@ -269,8 +269,8 @@ TimelineDraggerRange.propTypes = {
   opacity: PropTypes.number,
   startLocation: PropTypes.number,
   endLocation: PropTypes.number,
-  startLocationDate: PropTypes.string,
-  endLocationDate: PropTypes.string,
+  startLocationDate: PropTypes.object,
+  endLocationDate: PropTypes.object,
   timelineStartDateLimit: PropTypes.string,
   timelineEndDateLimit: PropTypes.string,
   deltaStart: PropTypes.number,

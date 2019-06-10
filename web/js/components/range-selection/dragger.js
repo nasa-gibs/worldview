@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import lodashRound from 'lodash/round';
@@ -10,7 +10,7 @@ import lodashRound from 'lodash/round';
  * @class TimelineDragger
  * @extends React.Component
  */
-class TimelineDragger extends React.Component {
+class TimelineDragger extends PureComponent {
   /*
    * @constructor
    */

@@ -263,5 +263,12 @@ line {
 #wv-timeline-range-selector {
   position: absolute;
   bottom: -75px;
-  left: 320px;
+  /* left: 320px; */
+  overflow: hidden;
+  pointer-events: none;
 }
+
+#wv-timeline-range-selector * {
+  pointer-events: all;
+}
+

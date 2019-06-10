@@ -19,3 +19,17 @@ export const getDaysInYear = (date) => {
 export const getISODateFormatted = (date) => {
   return new Date(date).toISOString().split('.')[0] + 'Z';
 };
+
+// timeRange extension to pop NUM times
+export const removeBackMultipleInPlace = (timeRange, num) => {
+  for (let i = 0; i < num; i++) {
+    timeRange.pop();
+  }
+};
+
+// timeRange extension to shift NUM times
+export const removeFrontMultipleInPlace = (timeRange, num) => {
+  for (let i = 0; i < num; i++) {
+    timeRange.shift();
+  }
+};

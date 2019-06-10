@@ -6,6 +6,7 @@ import ErrorBoundary from '../../containers/error-boundary';
 import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/interval-timescale-change';
 import '../../components/timeline/timeline.css';
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
+import TimelineRangeSelector from '../../components/range-selection/range-selection';
 import CustomIntervalSelectorWidget from '../../components/timeline/interval-selector/interval-selector';
 import util from '../../util/util';
 import DateSelector from '../../components/date-selector/date-selector';
@@ -38,7 +39,8 @@ import {
 } from '../../modules/animation/actions';
 import {
   timeScaleFromNumberKey,
-  timeScaleToNumberKey
+  timeScaleToNumberKey,
+  timeScaleOptions
 } from '../../modules/date/constants';
 
 const ANIMATION_DELAY = 500;
@@ -56,11 +58,29 @@ class Timeline extends React.Component {
     this.state = {
       timelineHidden: false,
       customIntervalModalOpen: false,
-      animationInProcess: false
+      animationInProcess: false,
+      position: 0,
+      transformX: 0,
+      frontDate: '',
+      animationStartLocation: 0,
+      animationEndLocation: 0
     };
     // left/right arrows
     this.animator = 0;
   }
+
+  updateDynamicPositioning = (position, transformX, frontDate, animationStartLocation, animationEndLocation) => {
+    console.log(position, transformX, frontDate, animationStartLocation, animationEndLocation)
+
+    this.setState({
+      position,
+      transformX: transformX || this.state.transformX,
+      frontDate: frontDate || this.state.frontDate,
+      animationStartLocation: animationStartLocation || this.state.animationStartLocation,
+      animationEndLocation: animationEndLocation || this.state.animationEndLocation
+    });
+  }
+
   /**
    *  Clear animateByIncrement's Timeout
    *
@@ -213,6 +233,65 @@ class Timeline extends React.Component {
     }
   };
 
+
+
+
+
+  updateAnimationDateAndLocation = (animationStartLocationDate, animationEndLocationDate, animationStartLocation, animationEndLocation) => {
+    console.log(animationStartLocationDate)
+    this.setState({
+      animationStartLocation: animationStartLocation || this.state.animationStartLocation,
+      animationEndLocation: animationEndLocation || this.state.animationEndLocation
+    }, this.determineNecessaryAnimationDraggerUpdate(animationStartLocationDate, animationEndLocationDate));
+  }
+
+  determineNecessaryAnimationDraggerUpdate = (animationStartLocationDate, animationEndLocationDate) => {
+    let startChanged = this.props.animationStartLocationDate !== animationStartLocationDate;
+    let endChanged = this.props.animationEndLocationDate !== animationEndLocationDate;
+    if (startChanged) {
+      if (endChanged) {
+        this.props.changeStartAndEndDate(animationStartLocationDate, animationEndLocationDate);
+      } else {
+        this.props.changeStartDate(animationStartLocationDate);
+      }
+    } else {
+      if (endChanged) {
+        this.props.changeEndDate(animationEndLocationDate);
+      }
+    }
+  }
+
+  // handle animation dragger location update and state update
+  animationDraggerDateUpdate = (animationStartLocationDate, animationEndLocationDate) => {
+    let { position, transformX } = this.state;
+    let { timeScale } = this.props;
+
+    let options = timeScaleOptions[timeScale].timeAxis;
+    let gridWidth = options.gridWidth;
+
+    let frontDate = moment.utc(this.state.frontDate);
+    let startLocation = frontDate.diff(animationStartLocationDate, timeScale, true) * gridWidth;
+    let endLocation = frontDate.diff(animationEndLocationDate, timeScale, true) * gridWidth;
+    console.log(endLocation)
+    this.setState({
+      animationStartLocation: position - startLocation + transformX,
+      animationEndLocation: position - endLocation + transformX
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    let prevStartLocationDate = prevProps.animStartLocationDate;
+    let prevEndLocationDate = prevProps.animEndLocationDate;
+
+    let { animStartLocationDate, animEndLocationDate } = this.props;
+    // handle location update triggered from animation start/end date change from animation widget
+    if (prevStartLocationDate && prevEndLocationDate) {
+      if (prevStartLocationDate !== animStartLocationDate || prevEndLocationDate !== animEndLocationDate) {
+        this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
+      }
+    }
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
@@ -239,8 +318,10 @@ class Timeline extends React.Component {
       animEndLocationDate,
       isAnimationWidgetOpen,
       animationDisabled,
-      hideTimeline
+      hideTimeline,
+      timeScale
     } = this.props;
+    console.log(this.state.animationStartLocation)
     return dateA ? (
       <ErrorBoundary>
         <section id="timeline" className="timeline-inner clearfix">
@@ -289,7 +370,7 @@ class Timeline extends React.Component {
           >
             {/* Timeline */}
             <TimelineAxis
-              {...this.props}
+              // {...this.props}
               axisWidth={axisWidth}
               dateA={dateA}
               dateB={dateB}
@@ -302,14 +383,54 @@ class Timeline extends React.Component {
               onChangeSelectedDragger={this.onChangeSelectedDragger}
               timelineStartDateLimit={timelineStartDateLimit}
               timelineEndDateLimit={timelineEndDateLimit}
-              changeAnimStartAndEndDate={this.props.changeStartAndEndDate}
-              changeAnimStartDate={this.props.changeStartDate}
-              changeAnimEndDate={this.props.changeEndDate}
+              // changeAnimStartAndEndDate={this.props.changeStartAndEndDate}
+              // changeAnimStartAndEndDate={this.updateAnimationDateAndLocation}
+              // changeAnimStartDate={this.props.changeStartDate}
+              // changeAnimEndDate={this.props.changeEndDate}
               animStartLocationDate={animStartLocationDate}
               animEndLocationDate={animEndLocationDate}
               isAnimationWidgetOpen={isAnimationWidgetOpen}
-              getPosition={this.props.getPosition}
+
+
+              updateDynamicPositioning={this.updateDynamicPositioning}
+              position={this.state.position}
+              transformX={this.state.transformX}
+              frontDate={this.state.frontDate}
+              animationStartLocation={this.state.animationStartLocation}
+              animationEndLocation={this.state.animationEndLocation}
+              timeScale={timeScale}
             />
+
+            {isAnimationWidgetOpen
+              ? <TimelineRangeSelector
+                timeScale={timeScale}
+                startLocation={this.state.animationStartLocation}
+                endLocation={this.state.animationEndLocation}
+                startLocationDate={animStartLocationDate}
+                endLocationDate={animEndLocationDate}
+                timelineStartDateLimit={timelineStartDateLimit}
+                timelineEndDateLimit={timelineEndDateLimit}
+                updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
+                animationDraggerDateUpdate={this.animationDraggerDateUpdate}
+                max={{ end: false, start: false, startOffset: -50, width: 50000 }}
+                pinWidth={5}
+                height={45}
+                width={axisWidth}
+                transformX={this.state.transformX}
+                // onDrag={this.animationDraggerPositionUpdate}
+                // onHover={this.showHoverOff}
+                onDrag={() => console.log('animationDraggerPositionUpdate')}
+                onHover={() => console.log('showHoverOff')}
+                // onRangeClick={this.setLineTime}
+                onRangeClick={() => console.log('onRangeClick')}
+                rangeOpacity={0.3}
+                rangeColor={'#45bdff'}
+                startColor={'#40a9db'}
+                startTriangleColor={'#fff'}
+                endColor={'#295f92'}
+                endTriangleColor={'#4b7aab'} />
+              : null
+            }
 
             {/* custom interval selector */}
             <CustomIntervalSelectorWidget
