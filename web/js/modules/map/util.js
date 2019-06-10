@@ -50,12 +50,14 @@ export function getMapParameterSetup(
       stateKey: 'legacy.map.rotation',
       initialState: 0,
       options: {
+        serializeNeedsGlobalState: true,
         parse: state => {
           return !isNaN(state) ? state * (Math.PI / 180.0) : 0;
         },
         serialize: (currentItemState, currentState) => {
-          return models.map.rotation
-            ? (models.map.rotation * (180.0 / Math.PI)).toPrecision(6)
+          return currentItemState &&
+            currentState.proj.selected.id !== 'geographic'
+            ? (currentItemState * (180.0 / Math.PI)).toPrecision(6)
             : undefined;
         }
       }
