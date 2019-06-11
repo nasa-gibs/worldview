@@ -10,6 +10,19 @@
 .clickable-behind-modal .modal {
   position: inherit;
 }
+.draggable-modal .modal {
+  position: fixed;
+}
+.react-draggable.modal-dialog.vector-modal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: 0;
+  width: 500px;
+  height: 160px;
+}
 .template-modal.modal-dialog {
   max-width: 625px;
 }

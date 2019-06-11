@@ -4,9 +4,6 @@ import { mapAnimate } from './map/animate';
 import { dataUi } from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
 
-// Vector Metadata UI
-import { vectorMetaUi } from './vector-metadata/ui';
-
 /**
  *  Legacy UI Rendering
  * @param {Object} models | Legacy Models Object
@@ -42,7 +39,6 @@ export function combineUi(models, config, MapMouseEvents, store) {
   if (config.features.naturalEvents) {
     ui.naturalEvents = naturalEventsUI(ui, config, store, models);
   }
-  ui.vectorMeta = vectorMetaUi(models, ui, config);
   registerMapMouseHandlers(ui.map.proj, MapMouseEvents);
   // Sink all focus on inputs if click unhandled
   $(document).click(function(event) {
