@@ -23,7 +23,6 @@ export default class VectorMetaTable extends React.Component {
         </th>
       ));
     }
-    console.log(metaLegend);
     return (
       <Table striped bordered size="sm">
         <thead>

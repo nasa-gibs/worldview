@@ -31,6 +31,8 @@ import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
+import { openCustomContent } from '../modules/modal/actions';
+import VectorMetaTable from '../components/vector-metadata/vector-metadata-table';
 import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -915,10 +917,12 @@ export function mapui(models, config, store, ui) {
     map.on('rendercomplete', onRenderComplete);
     // Clicking on a vector shows it's attributes in console.
     map.on('click', function(e) {
-      var metaArray = [];
+      var metaTitle;
       var def;
+      var metaArray = [];
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
         def = layer.wv.def;
+        metaTitle = def.title;
         if (def.vectorData && def.vectorData.id) {
           let features = feature.getProperties();
           let vectorDataId = def.vectorData.id;
@@ -939,29 +943,29 @@ export function mapui(models, config, store, ui) {
 
       if (uniqueMeta.length) {
         let vectorPointMeta = uniqueMeta[0];
-        console.log(vectorPointMeta);
-
+        let vectorDataId = def.vectorData.id;
         let legend = vectorPointMeta.legend;
-
         // MVT Features table (Use legend object as tooltips)
         let features = vectorPointMeta.features;
-        console.log('-------------------');
-        console.log('title: ', def.title);
-        console.log('-------------------');
-        Object.entries(features).forEach(feature => {
-          let featureName = feature[0];
-          console.log(featureName);
-          Object.values(legend['mvt_properties']).forEach(property => {
-            if (property['Identifier'] === featureName) { console.log(property); }
-          });
-        });
-        console.log('-------------------');
-        Object.entries(features).forEach(feature => {
-          let featureData = feature[1];
-          console.log(featureData);
-        });
-        console.log('-------------------');
-      }
+
+        store.dispatch(openCustomContent('Vector' + vectorDataId,
+          {
+            headerText: metaTitle,
+            backdrop: false,
+            clickableBehindModal: true,
+            wrapClassName: 'clickable-behind-modal',
+            modalClassName: 'vector-modal',
+            bodyComponent: VectorMetaTable,
+            bodyComponentProps: {
+              metaTitle: metaTitle,
+              metaFeatures: features,
+              metaLegend: legend
+            },
+            offsetTop: (e.clientY + 10) + 'px',
+            offsetLeft: (e.clientX- 5) + 'px'
+          }
+        ));
+      };
     });
 
     return map;

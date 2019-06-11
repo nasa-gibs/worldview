@@ -7,6 +7,7 @@ import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
+import Draggable from 'react-draggable';
 
 class ModalContainer extends Component {
   constructor(props) {
@@ -97,49 +98,51 @@ class ModalContainer extends Component {
     }
     return (
       <ErrorBoundary>
-        <Modal
-          isOpen={isOpen}
-          toggle={toggleWithClose}
-          backdrop={backdrop && type !== 'selection'}
-          id={lowerCaseId}
-          size={size}
-          className={
-            isTemplateModal
-              ? 'template-modal'
-              : modalClassName || 'default-modal'
-          }
-          autoFocus={autoFocus || false}
-          style={style}
-          wrapClassName={wrapClassName + ' ' + lowerCaseId}
-          modalTransition={{ timeout: timeout || 100 }}
-        >
-          {CompletelyCustomModal ? (
-            <CompletelyCustomModal {...customProps} />
-          ) : (
-            <DetectOuterClick
-              onClick={toggleWithClose}
-              disabled={!isOpen || type === 'selection' || clickableBehindModal}
-            >
-              {headerComponent || headerText ? (
-                <ModalHeader toggle={toggleWithClose}>
-                  {headerComponent ? <headerComponent /> : headerText || ''}
-                </ModalHeader>
-              ) : (
-                ''
-              )}
-              <ModalBody>
-                {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-                {BodyComponent ? (
-                  <BodyComponent {...bodyComponentProps} />
-                ) : isTemplateModal ? (
-                  this.getTemplateBody()
+        <Draggable>
+          <Modal
+            isOpen={isOpen}
+            toggle={toggleWithClose}
+            backdrop={backdrop && type !== 'selection'}
+            id={lowerCaseId}
+            size={size}
+            className={
+              isTemplateModal
+                ? 'template-modal'
+                : modalClassName || 'default-modal'
+            }
+            autoFocus={autoFocus || false}
+            style={style}
+            wrapClassName={wrapClassName + ' ' + lowerCaseId}
+            modalTransition={{ timeout: timeout || 100 }}
+          >
+            {CompletelyCustomModal ? (
+              <CompletelyCustomModal {...customProps} />
+            ) : (
+              <DetectOuterClick
+                onClick={toggleWithClose}
+                disabled={!isOpen || type === 'selection' || clickableBehindModal}
+              >
+                {headerComponent || headerText ? (
+                  <ModalHeader toggle={toggleWithClose}>
+                    {headerComponent ? <headerComponent /> : headerText || ''}
+                  </ModalHeader>
                 ) : (
-                  bodyText || ''
+                  ''
                 )}
-              </ModalBody>
-            </DetectOuterClick>
-          )}
-        </Modal>
+                <ModalBody>
+                  {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
+                  {BodyComponent ? (
+                    <BodyComponent {...bodyComponentProps} />
+                  ) : isTemplateModal ? (
+                    this.getTemplateBody()
+                  ) : (
+                    bodyText || ''
+                  )}
+                </ModalBody>
+              </DetectOuterClick>
+            )}
+          </Modal>
+        </Draggable>
       </ErrorBoundary>
     );
   }
