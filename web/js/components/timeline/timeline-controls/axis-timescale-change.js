@@ -99,7 +99,7 @@ class AxisTimeScaleChange extends PureComponent {
               decrementTimeScale={this.decrementTimeScale}
             />
           </div>
-          : <div></div>
+          : null
         }
       </div>
     );

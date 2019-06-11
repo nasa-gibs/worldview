@@ -78,11 +78,12 @@ class TileRect extends PureComponent {
           <rect className="grid" width={gridWidth} height={100}
             transform={`translate(${index * gridWidth}, 0)`}
             fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'}
-            shapeRendering="optimizeSpeed">
-          </rect>
+            shapeRendering="optimizeSpeed"
+          />
           <line stroke="black" strokeLinecap="round"
             strokeWidth="0.2" x1="0" x2="0" y1="0" y2={lineLengthY}
             transform={`translate(${index * gridWidth + 2.2}, 0)`}
+            shapeRendering="optimizeSpeed"
           />
           <line stroke="#555" strokeWidth={1} x1="0" x2={gridWidth}
             y1="46" y2="46"
@@ -92,6 +93,7 @@ class TileRect extends PureComponent {
           <line stroke="white" strokeLinecap="round"
             strokeWidth={whiteLineStrokeWidth} x1="0" x2="0" y1="0" y2={lineLengthY}
             transform={`translate(${index * gridWidth + 1}, 0)`}
+            shapeRendering="optimizeSpeed"
           />
         </g>
       </React.Fragment>

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-// import moment from 'moment';
 import { getDaysInYear } from '../date-util';
 
 /*
@@ -63,7 +62,6 @@ class DateToolTip extends PureComponent {
               style={{
                 transform: `translate(${toolTipLeftOffest}px, -100px)`,
                 display: toolTipDisplay,
-                // opacity: showDraggerTime && draggerTimeState ? '1' : '0',
                 width: hasSubdailyLayers ? '270px' : '165px'
               }}
             >

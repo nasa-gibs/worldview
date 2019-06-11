@@ -10,12 +10,13 @@ import PropTypes from 'prop-types';
 class HoverLine extends PureComponent {
   render() {
     let {
+      width,
       isTimelineDragging,
       showHoverLine,
       hoverLinePosition
     } = this.props;
     return (
-      <React.Fragment>
+      <svg className='hover-line-container' width={width}>
         <line className='svgLine'
           style={{
             display: !isTimelineDragging && showHoverLine ? 'block' : 'none'
@@ -23,7 +24,7 @@ class HoverLine extends PureComponent {
           stroke='blue' strokeWidth='2' strokeOpacity='0.48' x1='0' x2='0' y1='0' y2='63'
           transform={`translate(${hoverLinePosition + 1}, 0)`} shapeRendering='optimizeSpeed'
         />
-      </React.Fragment>
+      </svg>
     );
   }
 }

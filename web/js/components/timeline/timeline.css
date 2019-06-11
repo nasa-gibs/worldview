@@ -39,7 +39,6 @@ html, body {
   white-space: nowrap;
   user-select: none;
   padding-left: 8px;
-  /* transition: opacity 0.3s ease-in-out; */
 }
 
 .dateToolTip-dayOfYear {
@@ -224,13 +223,7 @@ line {
   width: 60px;
 }
 
-#wv-animation-widget {
-  /* position: absolute; */
-  top: 70%;
-  left: 50%;
-}
-
-.wv-animation-widget-custom-interval {
+.wv-custom-interval-widget {
   height: 57px;
   width: 225px;
   border-top-left-radius: 8px;
@@ -244,26 +237,31 @@ line {
   border-bottom: thin solid #444;
 }
 
-.wv-animation-widget-custom-interval i.wv-close {
+.wv-custom-interval-widget i.wv-close {
   position: absolute;
   top: 5px;
   right: 5px;
 }
 
-.wv-animation-widget-custom-interval i.wv-close:hover {
+.wv-custom-interval-widget i.wv-close:hover {
   color: #999;
   cursor: pointer;
 }
 
-.wv-animation-widget-custom-interval > div {
+.wv-custom-interval-widget-header,
+.wv-custom-interval-widget-controls-container {
   display: inline-block;
   margin: 7px 0 0 10px;
+}
+
+.wv-custom-interval-widget-controls-container {
+  display: flex;
+  flex-direction: row;
 }
 
 #wv-timeline-range-selector {
   position: absolute;
   bottom: -75px;
-  /* left: 320px; */
   overflow: hidden;
   pointer-events: none;
 }
@@ -280,4 +278,13 @@ line {
 
 .dragger * {
   pointer-events: all;
+}
+
+.hover-line-container {
+  position: absolute;
+  bottom: -87px;
+  pointer-events: none;
+}
+
+.svgLine {
 }

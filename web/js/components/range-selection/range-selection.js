@@ -245,7 +245,13 @@ class TimelineRangeSelector extends React.Component {
     //   moved: !isDragging
     // }, this.animationUpdateWidget(animationStartLocationDate, animationEndLocationDate, animationStartLocation, animationEndLocation));
 
-    this.props.updateAnimationDateAndLocation(animationStartLocationDate, animationEndLocationDate, draggerStartLocation, draggerEndLocation);
+    this.props.updateAnimationDateAndLocation(
+      animationStartLocationDate,
+      animationEndLocationDate,
+      draggerStartLocation,
+      draggerEndLocation,
+      isDragging
+    );
   }
 
   // componentDidUpdate(prevProps) {
