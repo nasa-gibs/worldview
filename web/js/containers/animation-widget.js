@@ -183,6 +183,7 @@ class AnimationWidget extends React.Component {
             <PlayQueue
               endDate={endDate}
               loop={looping}
+              isPlaying={isPlaying}
               currentDate={currentDate}
               canPreloadAll={queueLength <= maxLength}
               startDate={startDate}
@@ -200,7 +201,7 @@ class AnimationWidget extends React.Component {
               onClose={onPushPause}
             />
           ) : (
-            ''
+            null
           )}
           <div
             id="wv-animation-widget"

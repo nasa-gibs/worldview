@@ -443,11 +443,14 @@ class PlayAnimation extends React.Component {
         return promiseImageryForTime(date, activeLayers);
       })
       .then(date => {
-        this.preloadObject[strDate] = date;
-        delete this.inQueueObject[strDate];
-        this.shiftCache();
-        this.checkQueue(this.queueLength, this.currentPlayingDate);
-        this.checkShouldPlay();
+        console.log('playing: ' + this.props.isPlaying);
+        if (this.props.isPlaying) {
+          this.preloadObject[strDate] = date;
+          delete this.inQueueObject[strDate];
+          this.shiftCache();
+          this.checkQueue(this.queueLength, this.currentPlayingDate);
+          this.checkShouldPlay();
+        }
       });
   }
   /*
@@ -507,6 +510,10 @@ class PlayAnimation extends React.Component {
         this.setState({ isPlaying: false });
         this.shiftCache();
         return this.checkQueue(queueLength, this.currentPlayingDate);
+      }
+      if (!this.props.isPlaying) {
+        clearInterval(this.interval);
+        this.setState({ isPlaying: false });
       }
       this.checkQueue(queueLength, this.currentPlayingDate);
       this.interval = setTimeout(player, 1000 / this.props.speed);
