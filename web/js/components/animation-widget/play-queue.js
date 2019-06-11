@@ -205,14 +205,21 @@ class PlayAnimation extends React.Component {
    *
    */
   checkQueue(bufferLength, index) {
-    const { startDate, endDate, hasCustomPalettes, canPreloadAll } = this.props;
+    const {
+      startDate,
+      endDate,
+      hasCustomPalettes,
+      canPreloadAll,
+      queueLength,
+      maxQueueLength
+    } = this.props;
     var currentDate = util.parseDateUTC(index);
     var lastToQueue = this.getLastBufferDateStr(
       currentDate,
       startDate,
       endDate
     );
-
+    var nextDate = this.nextDate(currentDate);
     if (!this.preloadedArray[0] && !this.inQueueObject[index]) {
       this.initialPreload(currentDate, startDate, endDate, lastToQueue);
     } else if (
@@ -223,7 +230,12 @@ class PlayAnimation extends React.Component {
     ) {
       // if last preload date doesn't exist
       this.addItemToQueue(currentDate, startDate, endDate);
-    } else if (hasCustomPalettes && this.preloadedArray[0]) {
+    } else if (
+      hasCustomPalettes &&
+      this.preloadedArray[0] &&
+      !this.inQueueObject[nextDate] &&
+      queueLength > maxQueueLength
+    ) {
       this.customQueuer(currentDate, startDate, endDate);
     }
   }
@@ -240,6 +252,7 @@ class PlayAnimation extends React.Component {
   clearCache() {
     this.preloadObject = {};
     this.preloadedArray = [];
+    this.inQueueObject = {};
   }
 
   /*
@@ -280,13 +293,11 @@ class PlayAnimation extends React.Component {
     if (nextDate > endDate) {
       nextDate = startDate;
     }
-
     nextDateStr = util.toISOStringSeconds(nextDate);
-
     if (
-      !this.preloadedArray[nextDateStr] &&
+      !this.preloadObject[nextDateStr] &&
       !this.inQueueObject[nextDateStr] &&
-      !this.state.isplaying
+      !this.state.isPlaying
     ) {
       this.clearCache();
       this.checkQueue(this.props.queueLength, this.currentPlayingDate);
@@ -348,9 +359,8 @@ class PlayAnimation extends React.Component {
    *
    */
   getNextBufferDate(currentDate, startDate, endDate) {
-    var lastInBuffer = util.parseDateUTC(
-      this.preloadedArray[this.preloadedArray.length - 1]
-    );
+    const strDate = this.preloadedArray[this.preloadedArray.length - 1];
+    var lastInBuffer = util.parseDateUTC(strDate);
     var nextDate = this.nextDate(lastInBuffer);
     if (lastInBuffer >= endDate || nextDate > endDate) {
       return startDate;
@@ -443,7 +453,6 @@ class PlayAnimation extends React.Component {
         return promiseImageryForTime(date, activeLayers);
       })
       .then(date => {
-        console.log('playing: ' + this.props.isPlaying);
         if (this.props.isPlaying) {
           this.preloadObject[strDate] = date;
           delete this.inQueueObject[strDate];
@@ -492,7 +501,9 @@ class PlayAnimation extends React.Component {
     var player = () => {
       this.shiftCache();
       this.checkQueue(queueLength, currentPlayingDate);
-      selectDate(util.parseDateUTC(currentPlayingDate));
+      if (this.props.isPlaying) {
+        selectDate(util.parseDateUTC(currentPlayingDate));
+      }
       this.pastDates[currentPlayingDate] = util.parseDateUTC(
         currentPlayingDate
       ); // played record
@@ -523,7 +534,7 @@ class PlayAnimation extends React.Component {
   renderSpinner() {
     const { onClose } = this.props;
     return (
-      <Modal isOpen={true} toggle={onClose}>
+      <Modal isOpen={true} toggle={onClose} size="sm" backdrop={false}>
         <ModalHeader toggle={onClose}> Preloading imagery </ModalHeader>
         <ModalBody>
           <div style={{ minHeight: 50 }}>

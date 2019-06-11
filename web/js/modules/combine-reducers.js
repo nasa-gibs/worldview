@@ -40,6 +40,7 @@ import { get as lodashGet } from 'lodash';
 function lastAction(state = null, action) {
   return action;
 }
+
 const responsiveStateReducer = createResponsiveStateReducer(
   {
     extraSmall: 500,
@@ -104,5 +105,11 @@ const reducers = {
   notificationsRequest,
   lastAction: lastAction
 };
+const appReducer = combineReducers(reducers);
+export default (state, action) => {
+  if (action.type === 'APP_RESET') {
+    state = undefined;
+  }
 
-export default combineReducers(reducers);
+  return appReducer(state, action);
+};

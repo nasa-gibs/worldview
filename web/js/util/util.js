@@ -792,6 +792,22 @@ export default (function (self) {
     // calculate differences in 3D Space
     return Math.sqrt(Math.pow((r1 - r2), 2) + Math.pow((g1 - g2), 2) + Math.pow((b1 - b2), 2));
   };
+  self.fetch = function(url, mimeType) {
+    return new Promise((resolve, reject) => {
+      return fetch(url)
+        .then(function(response) {
+          return mimeType === 'application/json'
+            ? response.json()
+            : response.text();
+        })
+        .then(function(data) {
+          resolve(data);
+        })
+        .catch(function(error) {
+          reject(error);
+        });
+    });
+  }
 
   /**
    * Submits an AJAX request or retreives the result from the cache.

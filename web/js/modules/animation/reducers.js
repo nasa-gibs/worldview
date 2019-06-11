@@ -53,11 +53,13 @@ export function animationReducer(state = defaultState, action) {
       });
     case UPDATE_START_DATE:
       return lodashAssign({}, state, {
-        startDate: action.value
+        startDate: action.value,
+        isPlaying: false
       });
     case UPDATE_END_DATE:
       return lodashAssign({}, state, {
-        endDate: action.value
+        endDate: action.value,
+        isPlaying: false
       });
     case TOGGLE_LOOPING:
       return lodashAssign({}, state, {
@@ -65,7 +67,8 @@ export function animationReducer(state = defaultState, action) {
       });
     case TOGGLE_GIF:
       return lodashAssign({}, state, {
-        gifActive: !state.gifActive
+        gifActive: !state.gifActive,
+        isPlaying: false
       });
     case 'KEY_PRESS_ACTION':
       if (action.keyCode === 32 && state.isActive) {

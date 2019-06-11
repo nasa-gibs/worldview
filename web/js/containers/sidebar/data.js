@@ -13,6 +13,7 @@ import { selectProduct } from '../../modules/data/actions';
 class Data extends React.Component {
   render() {
     const {
+      isActive,
       height,
       findProductToSelect,
       counts,
@@ -25,7 +26,7 @@ class Data extends React.Component {
     } = this.props;
     if (!tabTypes.download) return null;
     const dataArray = Object.entries(products);
-    if (dataArray.length > 0 && !selectedProduct) {
+    if (dataArray.length > 0 && !selectedProduct && isActive) {
       findProductToSelect(activeLayers);
     }
     return (
@@ -82,7 +83,7 @@ const mapDispatchToProps = dispatch => ({
 });
 function mapStateToProps(state, ownProps) {
   const { tabTypes } = ownProps;
-  const { layers, proj, data, config, compare } = state;
+  const { layers, proj, data, config, compare, sidebar } = state;
   const { selectedProduct, selectedGranules } = data;
   const activeString = compare.activeString;
   const activeLayers = layers[activeString];
@@ -98,7 +99,8 @@ function mapStateToProps(state, ownProps) {
     selectedProduct,
     products,
     tabTypes,
-    activeLayers
+    activeLayers,
+    isActive: sidebar.activeTab === 'download'
   };
 }
 export default connect(

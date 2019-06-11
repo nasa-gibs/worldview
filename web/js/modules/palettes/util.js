@@ -3,8 +3,10 @@ import {
   each as lodashEach,
   find as lodashFind,
   assign as lodashAssign,
+  isEmpty as lodashIsEmpty,
   isArray
 } from 'lodash';
+import { PALETTE_STRINGS_PERMALINK_ARRAY } from './constants';
 import {
   setCustom as setCustomSelector,
   getCount,
@@ -12,6 +14,8 @@ import {
   findIndex as findPaletteExtremeIndex
 } from './selectors';
 import util from '../../util/util';
+import Promise from 'bluebird';
+import { setFromArray } from 'ol/transform';
 
 export function getCheckerboard() {
   var size = 2;
@@ -328,33 +332,59 @@ export function mapLocationToPaletteState(
   }
   return stateFromLocation;
 }
-// TODO replace without jQuery
-export function requirements(state, config, startup) {
-  var promises = [];
-  if (startup || !state.tr) {
-    config.palettes = {
-      rendered: {},
-      custom: {}
-    };
-  }
-  lodashEach(state.l, function(qsLayer) {
-    var layerId = qsLayer.id;
-    if (config.layers[layerId] && config.layers[layerId].palette) {
-      promises.push(loadRenderedPalette(config, layerId));
-    }
-    var custom = lodashFind(qsLayer.attributes, {
-      id: 'palette'
+export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
+  let rendered = renderedPalettes || {};
+  customLoaded = customLoaded || false;
+  let preloadedCustom = false;
+  let requestArray = [];
+  let custom = {};
+  let loading = {};
+  if (layersArray) {
+    layersArray.forEach(obj => {
+      if (
+        obj &&
+        obj.palette &&
+        !renderedPalettes[obj.palette.id] &&
+        !loading[obj.palette.id]
+      ) {
+        const paletteId = obj.palette.id;
+        const location = 'config/palettes/' + paletteId + '.json';
+        const promise = util.fetch(location, 'application/json');
+        loading[paletteId] = true;
+        requestArray.push(promise);
+        promise.then(data => {
+          rendered[paletteId] = data;
+        });
+      }
+      if (obj.custom && !customLoaded && !preloadedCustom) {
+        let customPromise = util.fetch(
+          'config/palettes-custom.json',
+          'application/json'
+        );
+        preloadedCustom = true;
+        requestArray.push(customPromise);
+        customPromise.then(data => {
+          custom = data;
+        });
+      }
     });
-    if (custom) {
-      promises.push(loadCustom(config));
-    }
-  });
-  if (promises.length > 0) {
-    var promise = $.Deferred();
-    $.when
-      .apply(null, promises)
-      .then(promise.resolve)
-      .fail(promise.reject);
-    return promise;
+    return new Promise((resolve, reject) => {
+      Promise.all(requestArray)
+        .then(() => {
+          resolve({ custom, rendered });
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  } else {
+    return Promise.resolve({ custom, rendered });
   }
+}
+export function hasCustomTypePalette(str) {
+  let bool = false;
+  PALETTE_STRINGS_PERMALINK_ARRAY.forEach(element => {
+    if (str.includes(element)) bool = true;
+  });
+  return bool;
 }

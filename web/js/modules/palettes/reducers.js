@@ -4,7 +4,8 @@ import {
   SET_CUSTOM,
   REQUEST_PALETTE_START,
   SET_RANGE_AND_SQUASH,
-  LOADED_CUSTOM_PALETTES
+  LOADED_CUSTOM_PALETTES,
+  BULK_PALETTE_RENDERING_SUCCESS
 } from './constants';
 import update from 'immutability-helper';
 import util from '../../util/util';
@@ -34,6 +35,10 @@ export function paletteReducer(state = defaultPaletteState, action) {
         isLoading: update(state.isLoading, {
           [action.id]: { $set: true }
         })
+      });
+    case BULK_PALETTE_RENDERING_SUCCESS:
+      return lodashAssign({}, state, {
+        rendered: action.rendered
       });
     case REQUEST_PALETTE_SUCCESS:
       let isLoading = update(state.isLoading, { $unset: [action.id] });

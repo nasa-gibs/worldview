@@ -3,14 +3,22 @@ import PropTypes from 'prop-types';
 import TourStart from '../components/tour/modal-tour-start';
 import TourInProgress from '../components/tour/modal-tour-in-progress';
 import TourComplete from '../components/tour/modal-tour-complete';
+import {
+  preloadPalettes,
+  hasCustomTypePalette
+} from '../modules/palettes/util';
+import { BULK_PALETTE_RENDERING_SUCCESS } from '../modules/palettes/constants';
+import { stop as stopAnimation } from '../modules/animation/actions';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
+import { layersParse12 } from '../modules/layers/util';
 import { endTour, selectStory, startTour } from '../modules/tour/actions';
-import { findIndex as lodashFindIndex, get as lodashGet } from 'lodash';
+import { findIndex as lodashFindIndex, get as lodashGet, uniqBy } from 'lodash';
 import ErrorBoundary from './error-boundary';
 import update from 'immutability-helper';
 import { history } from '../main';
 import util from '../util/util';
+import { parse } from '../parse';
 
 const DEFAULT_STATE = {
   modalStart: true,
@@ -81,7 +89,9 @@ class Tour extends React.Component {
       storyStep.transition.action
     );
     this.props.processStepLink(
-      storyStep['stepLink'] + '&tr=' + currentStoryId + transition
+      storyStep['stepLink'] + '&tr=' + currentStoryId + transition,
+      this.props.config,
+      this.props.renderedPalettes
     );
   }
   fetchMetadata(currentStory, stepIndex) {
@@ -170,7 +180,9 @@ class Tour extends React.Component {
         currentStory.steps[newStep - 1]['stepLink'] +
           '&tr=' +
           currentStoryId +
-          transition
+          transition,
+        this.props.config,
+        this.props.renderedPalettes
       );
     }
     if (currentStep + 1 === totalSteps + 1) {
@@ -194,7 +206,9 @@ class Tour extends React.Component {
         currentStory.steps[newStep - 1]['stepLink'] +
           '&tr=' +
           currentStoryId +
-          transition
+          transition,
+        this.props.config,
+        this.props.renderedPalettes
       );
     } else {
       this.setState({
@@ -322,12 +336,34 @@ Tour.propTypes = {
   showTour: PropTypes.func.isRequired
 };
 const mapDispatchToProps = dispatch => ({
-  processStepLink: search => {
+  processStepLink: (search, config, rendered) => {
     search = search.split('/?').pop();
     const location = update(history.location, {
       search: { $set: search }
     });
-    dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
+    let parameters = util.fromQueryString(search);
+    let layers = [];
+    if (
+      (parameters.l && hasCustomTypePalette(parameters.l)) ||
+      (parameters.l1 && hasCustomTypePalette(parameters.l1))
+    ) {
+      layers = layersParse12(parameters.l, config);
+      if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
+        layers.push(layersParse12(parameters.l1, config));
+      }
+      layers = uniqBy(layers, 'id');
+      dispatch(stopAnimation());
+      preloadPalettes(layers, rendered, true).then(obj => {
+        dispatch({
+          type: BULK_PALETTE_RENDERING_SUCCESS,
+          rendered: obj.rendered
+        });
+        dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
+      });
+    } else {
+      console.log('promised_none');
+      dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
+    }
   },
   startTour: () => {
     dispatch(startTour());
@@ -345,7 +381,7 @@ const mapDispatchToProps = dispatch => ({
   hideTour: hideTour
 });
 function mapStateToProps(state) {
-  const { browser, config, tour } = state;
+  const { browser, config, tour, palettes } = state;
   const { screenWidth, screenHeight } = browser;
 
   return {
@@ -359,7 +395,8 @@ function mapStateToProps(state) {
     hideTour,
     screenWidth,
     screenHeight,
-    showTour
+    showTour,
+    renderedPalettes: palettes.rendered
   };
 }
 const getTransitionAttr = function(el, action) {

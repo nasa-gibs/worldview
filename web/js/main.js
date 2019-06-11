@@ -22,10 +22,14 @@ import Brand from './brand';
 import { combineModels } from './combine-models';
 import { parse } from './parse';
 import { combineUi } from './combine-ui';
-import { requirements as paletteRequirements } from './modules/palettes/util';
-import { validate as layerValidate } from './modules/layers/util';
+import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
+import {
+  validate as layerValidate,
+  layersParse12
+} from './modules/layers/util';
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
+import { uniqBy } from 'lodash';
 export let history = createBrowserHistory();
 
 const isDebugMode = typeof DEBUG !== 'undefined';
@@ -39,6 +43,7 @@ const startTime = new Date().getTime();
 let parameters = util.fromQueryString(location.search);
 let elapsed = util.elapsed;
 let errors = [];
+let loadCustoms = false;
 
 // Document ready function
 window.onload = () => {
@@ -53,13 +58,31 @@ window.onload = () => {
   promise
     .done(config => {
       config.now = new Date();
-      elapsed('Config loaded', startTime, parameters);
+      config.palettes = {
+        rendered: {},
+        custom: {}
+      };
+      elapsed('Config loaded', config.now, parameters);
+      let layers = [];
+      if (
+        (parameters.l && hasCustomTypePalette(parameters.l)) ||
+        (parameters.l1 && hasCustomTypePalette(parameters.l1))
+      ) {
+        layers = layersParse12(parameters.l, config);
+        if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
+          layers.push(layersParse12(parameters.l1, config));
+        }
+        layers = uniqBy(layers, 'id');
+      }
       let legacyState = parse(parameters, config, errors);
       layerValidate(errors, config);
-      let requirements = [paletteRequirements(legacyState, config, true)];
-      $.when
-        .apply(null, requirements)
-        .then(() => render(config, parameters, legacyState));
+      preloadPalettes(layers, {}, false).then(obj => {
+        config.palettes = {
+          custom: obj.custom,
+          rendered: obj.rendered
+        };
+        render(config, parameters, legacyState);
+      });
     })
     .fail(util.error);
 };
