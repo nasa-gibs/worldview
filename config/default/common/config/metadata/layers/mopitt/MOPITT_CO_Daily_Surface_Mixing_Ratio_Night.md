@@ -2,4 +2,4 @@ The MOPITT Carbon Monoxide (CO) (Daily, Night, Surface Mixing Ratio) layer shows
 
 The MOPITT Carbon Monoxide (Daily, Night, Surface Mixing Ratio) layer is available from the Measurements of Pollution in the Troposphere (MOPITT) instrument on the Terra satellite. The sensor resolution is 22 km at nadir, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [NCAR | UCAR: Measurements of Pollution in the Troposphere (MOPITT)](https://www2.acom.ucar.edu/mopitt); [NASA: MOPITT](https://terra.nasa.gov/about/terra-instruments/mopitt); [MOPITT Version 6 Product User's Guide](https://www2.acom.ucar.edu/sites/default/files/mopitt/v6_users_guide_201309.pdf); [MOPITT Version 5 Product User's Guide](https://www2.acom.ucar.edu/sites/default/files/mopitt/v5_users_guide_beta.pdf)
+References: [NCAR | UCAR: Measurements of Pollution in the Troposphere (MOPITT)](https://www2.acom.ucar.edu/mopitt); [NASA: MOPITT](https://terra.nasa.gov/about/terra-instruments/mopitt); [MOPITT Version 8 Product User's Guide](https://www2.acom.ucar.edu/sites/default/files/mopitt/v8_users_guide_201812.pdf)
