@@ -8,6 +8,7 @@ import Projection from './projection';
 import InfoList from './info';
 import ShareLinks from './share';
 import ErrorBoundary from './error-boundary';
+import { get as lodashGet } from 'lodash';
 import {
   requestNotifications,
   setNotifications
@@ -84,7 +85,8 @@ class toolbarContainer extends Component {
       openModal,
       notificationType,
       notificationContentNumber,
-      config
+      config,
+      isImageDownloadActive
     } = this.props;
     const notificationClass = notificationType
       ? ' wv-status-' + notificationType
@@ -124,7 +126,12 @@ class toolbarContainer extends Component {
           )}
           <Button
             id="wv-image-button"
-            className="wv-toolbar-button"
+            className={
+              isImageDownloadActive
+                ? 'wv-toolbar-button'
+                : 'wv-toolbar-button disabled'
+            }
+            disabled={!isImageDownloadActive}
             title="Take a snapshot"
             onClick={() =>
               openModal(
@@ -157,7 +164,8 @@ function mapStateToProps(state) {
   return {
     notificationType: type,
     notificationContentNumber: number,
-    config: state.config
+    config: state.config,
+    isImageDownloadActive: Boolean(lodashGet(state, 'legacy.map.ui.selected'))
   };
 }
 const mapDispatchToProps = dispatch => ({
