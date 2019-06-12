@@ -28,11 +28,9 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 class Layer extends React.Component {
   constructor(props) {
     super(props);
-    const { zot, index, isInProjection } = props;
+    const { index } = props;
     this.state = {
-      zot: zot,
-      index: index,
-      isInProjection: isInProjection
+      index: index
     };
   }
   getLegend() {
@@ -103,7 +101,6 @@ class Layer extends React.Component {
     }
   }
   render() {
-    const { zot, isInProjection } = this.state;
     const {
       layerGroupName,
       onRemoveClick,
@@ -118,7 +115,9 @@ class Layer extends React.Component {
       isMobile,
       index,
       onOptionsClick,
-      hasPalette
+      hasPalette,
+      zot,
+      isInProjection
     } = this.props;
 
     return (

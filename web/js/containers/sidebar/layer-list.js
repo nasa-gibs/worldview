@@ -175,14 +175,14 @@ function mapStateToProps(state, ownProps) {
     checkerBoardPattern,
     layerSplit
   } = ownProps;
-  const { proj, compare } = state;
+  const { proj, compare, config, legacy } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
-  const zoom = state.models.map.getZoom();
-  const zots = getZotsForActiveLayers(layers, zoom) || {};
   const activeDateString = compare.isCompareA ? 'selected' : 'selectedB';
   const activeLayers = state.layers[layerGroupName];
-
+  const zots = legacy.map.ui
+    ? getZotsForActiveLayers(config, proj, legacy.map, activeLayers)
+    : {};
   return {
     zots,
     layers,
