@@ -23,6 +23,21 @@ export default class VectorMetaTable extends React.Component {
         </th>
       ));
     }
+
+    // Object.entries(metaFeatures).forEach(feature => {
+    //   let featureName = feature[0];
+    //   console.log('featureName', featureName); // TITLE LINE
+    //   Object.values(metaLegend['mvt_properties']).forEach(property => {
+    //     if (property['Identifier'] === featureName) { console.log('property', property); } // TOOLTIP LINE
+    //   });
+    // });
+    // console.log('-------------------');
+    // Object.entries(metaFeatures).forEach(feature => {
+    //   let featureData = feature[1];
+    //   console.log('featureData', featureData); // DATA LINE (Should match table headings)
+    // });
+    // console.log('-------------------');
+
     return (
       <Table striped bordered size="sm">
         <thead>

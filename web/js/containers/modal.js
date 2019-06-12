@@ -15,7 +15,8 @@ class ModalContainer extends Component {
     this.state = {
       offsetTop: props.customProps.offsetTop,
       offsetLeft: props.customProps.offsetLeft,
-      width: props.customProps.width
+      width: props.customProps.width,
+      isDraggable: props.isDraggable
     };
   }
   // static getDerivedStateFromProps(newProps, state) {
@@ -51,6 +52,7 @@ class ModalContainer extends Component {
       />
     );
   }
+
   render() {
     const {
       isCustom,
@@ -80,6 +82,7 @@ class ModalContainer extends Component {
       CompletelyCustomModal,
       bodyComponentProps,
       timeout,
+      isDraggable,
       desktopOnly,
       size
     } = newProps;
@@ -93,12 +96,17 @@ class ModalContainer extends Component {
         onClose();
       }
     };
+    const DraggableWrap = ({ condition, wrapper, children }) =>
+      condition ? wrapper(children) : children;
     if (isMobile && isOpen && desktopOnly) {
       toggleWithClose();
     }
     return (
       <ErrorBoundary>
-        <Draggable>
+        <DraggableWrap
+          condition={isDraggable}
+          wrapper={children => <Draggable>{children}</Draggable>}
+        >
           <Modal
             isOpen={isOpen}
             toggle={toggleWithClose}
@@ -142,7 +150,7 @@ class ModalContainer extends Component {
               </DetectOuterClick>
             )}
           </Modal>
-        </Draggable>
+        </DraggableWrap>
       </ErrorBoundary>
     );
   }

@@ -915,11 +915,15 @@ export function mapui(models, config, store, ui) {
       map.un('rendercomplete', onRenderComplete);
     };
     map.on('rendercomplete', onRenderComplete);
-    // Clicking on a vector shows it's attributes in console.
     map.on('click', function(e) {
       var metaTitle;
       var def;
       var metaArray = [];
+      var uniqueMeta = metaArray
+        .map(e => e['layer'])
+        .map((e, i, final) => final.indexOf(e) === i && i)
+        .filter(e => metaArray[e]).map(e => metaArray[e]);
+
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
         def = layer.wv.def;
         metaTitle = def.title;
@@ -934,26 +938,18 @@ export function mapui(models, config, store, ui) {
           metaArray.push(obj);
         }
       });
-      const uniqueMeta = metaArray
-        .map(e => e['layer'])
-        // store the keys of the unique objects
-        .map((e, i, final) => final.indexOf(e) === i && i)
-        // eliminate the dead keys & store unique objects
-        .filter(e => metaArray[e]).map(e => metaArray[e]);
 
       if (uniqueMeta.length) {
         let vectorPointMeta = uniqueMeta[0];
         let vectorDataId = def.vectorData.id;
         let legend = vectorPointMeta.legend;
-        // MVT Features table (Use legend object as tooltips)
         let features = vectorPointMeta.features;
-
         store.dispatch(openCustomContent('Vector' + vectorDataId,
           {
             headerText: metaTitle,
             backdrop: false,
             clickableBehindModal: true,
-            wrapClassName: 'clickable-behind-modal',
+            wrapClassName: 'clickable-behind-modal vector-modal-wrap',
             modalClassName: 'vector-modal',
             bodyComponent: VectorMetaTable,
             bodyComponentProps: {
@@ -961,8 +957,9 @@ export function mapui(models, config, store, ui) {
               metaFeatures: features,
               metaLegend: legend
             },
-            offsetTop: (e.clientY + 10) + 'px',
-            offsetLeft: (e.clientX- 5) + 'px'
+            isDraggable: true
+            // offsetTop: e.clientY + 'px',
+            // offsetLeft: e.clientX + 'px'
           }
         ));
       };
