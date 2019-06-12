@@ -268,7 +268,9 @@ Layer.propTypes = {
   onRemoveClick: PropTypes.func,
   toggleVisibility: PropTypes.func,
   onInfoClick: PropTypes.func,
-  hover: PropTypes.func
+  hover: PropTypes.func,
+  onOptionsClick: PropTypes.func,
+  hasPalette: PropTypes.bool
 };
 function mapStateToProps(state, ownProps) {
   const {

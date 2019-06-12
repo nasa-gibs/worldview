@@ -349,4 +349,15 @@ export default connect(
   mapDispatchToProps
 )(GIF);
 
-GIF.propTypes = {};
+GIF.propTypes = {
+  increment: PropTypes.string,
+  speed: PropTypes.number,
+  map: PropTypes.object,
+  screenWidth: PropTypes.number,
+  screenHeight: PropTypes.number,
+  proj: PropTypes.object,
+  onClose: PropTypes.func,
+  endDate: PropTypes.string,
+  startDate: PropTypes.string,
+  getImageArray: PropTypes.func
+};

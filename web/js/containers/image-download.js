@@ -176,5 +176,7 @@ ImageDownloadContainer.propTypes = {
   url: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   screenWidth: PropTypes.number,
-  screenHeight: PropTypes.number
+  screenHeight: PropTypes.number,
+  date: PropTypes.object,
+  getLayers: PropTypes.func
 };

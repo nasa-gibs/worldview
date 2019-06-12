@@ -18,7 +18,6 @@ import ErrorBoundary from './error-boundary';
 import update from 'immutability-helper';
 import { history } from '../main';
 import util from '../util/util';
-import { parse } from '../parse';
 
 const DEFAULT_STATE = {
   modalStart: true,
@@ -322,19 +321,6 @@ class Tour extends React.Component {
   }
 }
 
-Tour.propTypes = {
-  config: PropTypes.object.isRequired,
-  stories: PropTypes.object.isRequired,
-  storyOrder: PropTypes.array.isRequired,
-  currentStep: PropTypes.number,
-  totalSteps: PropTypes.number,
-  currentStory: PropTypes.object,
-  currentStoryId: PropTypes.string,
-  selectTour: PropTypes.func.isRequired,
-  showTourAlert: PropTypes.func.isRequired,
-  hideTour: PropTypes.func.isRequired,
-  showTour: PropTypes.func.isRequired
-};
 const mapDispatchToProps = dispatch => ({
   processStepLink: (search, config, rendered) => {
     search = search.split('/?').pop();
@@ -343,6 +329,7 @@ const mapDispatchToProps = dispatch => ({
     });
     let parameters = util.fromQueryString(search);
     let layers = [];
+    dispatch(stopAnimation());
     if (
       (parameters.l && hasCustomTypePalette(parameters.l)) ||
       (parameters.l1 && hasCustomTypePalette(parameters.l1))
@@ -352,7 +339,7 @@ const mapDispatchToProps = dispatch => ({
         layers.push(layersParse12(parameters.l1, config));
       }
       layers = uniqBy(layers, 'id');
-      dispatch(stopAnimation());
+
       preloadPalettes(layers, rendered, true).then(obj => {
         dispatch({
           type: BULK_PALETTE_RENDERING_SUCCESS,
@@ -361,7 +348,6 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
       });
     } else {
-      console.log('promised_none');
       dispatch({ type: 'REDUX-LOCATION-POP-ACTION', payload: location });
     }
   },
@@ -434,3 +420,23 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Tour);
+Tour.propTypes = {
+  config: PropTypes.object.isRequired,
+  stories: PropTypes.object.isRequired,
+  storyOrder: PropTypes.array.isRequired,
+  currentStep: PropTypes.number,
+  totalSteps: PropTypes.number,
+  currentStory: PropTypes.object,
+  currentStoryId: PropTypes.string,
+  selectTour: PropTypes.func.isRequired,
+  showTourAlert: PropTypes.func.isRequired,
+  hideTour: PropTypes.func.isRequired,
+  showTour: PropTypes.func.isRequired,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
+  processStepLink: PropTypes.func,
+  isActive: PropTypes.bool,
+  endTour: PropTypes.func,
+  renderedPalettes: PropTypes.object,
+  startTour: PropTypes.func
+};

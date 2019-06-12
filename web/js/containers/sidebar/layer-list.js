@@ -155,7 +155,16 @@ LayerList.propTypes = {
   groupId: PropTypes.string,
   title: PropTypes.string,
   layerGroupName: PropTypes.string,
-  renderedPalettes: PropTypes.string
+  renderedPalettes: PropTypes.string,
+  runningLayers: PropTypes.object,
+  projId: PropTypes.string,
+  checkerBoardPattern: PropTypes.object,
+  getNames: PropTypes.func,
+  available: PropTypes.func,
+  zots: PropTypes.object,
+  reorderLayers: PropTypes.func,
+  layerSplit: PropTypes.number,
+  activeLayers: PropTypes.array
 };
 function mapStateToProps(state, ownProps) {
   const {

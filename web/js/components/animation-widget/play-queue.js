@@ -552,6 +552,24 @@ class PlayAnimation extends React.Component {
   }
 }
 
-PlayAnimation.propTypes = {};
+PlayAnimation.propTypes = {
+  queueLength: PropTypes.number.isRequired,
+  canPreloadAll: PropTypes.bool,
+  selectDate: PropTypes.func.isRequired,
+  endDate: PropTypes.object.isRequired,
+  speed: PropTypes.number.isRequired,
+  startDate: PropTypes.object.isRequired,
+  isPlaying: PropTypes.bool.isRequired,
+  interval: PropTypes.string,
+  delta: PropTypes.number,
+  togglePlaying: PropTypes.func.isRequired,
+  layers: PropTypes.array.isRequired,
+  promiseImageryForTime: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
+  loop: PropTypes.bool,
+  hasCustomPalettes: PropTypes.bool,
+  maxQueueLength: PropTypes.number,
+  currentDate: PropTypes.object
+};
 
 export default PlayAnimation;

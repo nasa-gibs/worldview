@@ -200,9 +200,7 @@ class AnimationWidget extends React.Component {
               promiseImageryForTime={promiseImageryForTime}
               onClose={onPushPause}
             />
-          ) : (
-            null
-          )}
+          ) : null}
           <div
             id="wv-animation-widget"
             className={
@@ -390,8 +388,14 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(AnimationWidget);
-
+RangeHandle.propTypes = {
+  value: PropTypes.number,
+  offset: PropTypes.number,
+  dragging: PropTypes.object
+};
 AnimationWidget.propTypes = {
+  onUpdateStartDate: PropTypes.func,
+  onUpdateEndDate: PropTypes.func,
   speed: PropTypes.number,
   looping: PropTypes.bool,
   startDate: PropTypes.object,
@@ -410,7 +414,21 @@ AnimationWidget.propTypes = {
   maxDate: PropTypes.object,
   hasSubdailyLayers: PropTypes.bool,
   onClose: PropTypes.func,
-  isPlaying: PropTypes.bool
+  isPlaying: PropTypes.bool,
+  isActive: PropTypes.bool,
+  interval: PropTypes.string,
+  delta: PropTypes.number,
+  layers: PropTypes.array,
+  hasCustomPalettes: PropTypes.bool,
+  promiseImageryForTime: PropTypes.func,
+  map: PropTypes.object,
+  selectDate: PropTypes.func,
+  currentDate: PropTypes.object,
+  toggleGif: PropTypes.func,
+  isGifActive: PropTypes.bool,
+  isCompareActive: PropTypes.bool,
+  customDelta: PropTypes.number,
+  customInterval: PropTypes.string
 };
 
 const getZoomObject = function(dateModel, hasSubDaily) {

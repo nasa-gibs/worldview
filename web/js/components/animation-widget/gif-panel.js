@@ -119,7 +119,11 @@ GifPanel.propTypes = {
   resolution: PropTypes.string,
   speed: PropTypes.number,
   valid: PropTypes.bool,
-  increment: PropTypes.string
+  increment: PropTypes.string,
+  projId: PropTypes.string,
+  lonlats: PropTypes.array,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string
 };
 const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
   return (

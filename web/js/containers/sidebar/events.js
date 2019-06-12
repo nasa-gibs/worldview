@@ -201,5 +201,6 @@ Events.propTypes = {
   config: PropTypes.object,
   showAll: PropTypes.bool,
   isLoading: PropTypes.bool,
-  selectEvent: PropTypes.func
+  selectEvent: PropTypes.func,
+  hasRequestError: PropTypes.bool
 };

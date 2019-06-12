@@ -209,7 +209,8 @@ class AnimationWidget extends React.Component {
 }
 RangeHandle.propTypes = {
   value: PropTypes.number,
-  offset: PropTypes.number
+  offset: PropTypes.number,
+  dragging: PropTypes.object
 };
 AnimationWidget.propTypes = {
   sliderSpeed: PropTypes.number,

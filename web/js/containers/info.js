@@ -174,5 +174,6 @@ InfoList.propTypes = {
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
   config: PropTypes.object,
-  models: PropTypes.object
+  models: PropTypes.object,
+  startTour: PropTypes.func
 };

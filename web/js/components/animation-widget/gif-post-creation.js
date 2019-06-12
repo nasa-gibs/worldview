@@ -127,5 +127,11 @@ GifResults.propTypes = {
   valid: PropTypes.bool,
   requestSize: PropTypes.number,
   fileSizeEstimate: PropTypes.number,
-  increment: PropTypes.string
+  increment: PropTypes.string,
+  gifObject: PropTypes.object,
+  boundaries: PropTypes.object,
+  screenWidth: PropTypes.number,
+  screenHeight: PropTypes.number,
+  onClose: PropTypes.func,
+  startDate: PropTypes.string
 };

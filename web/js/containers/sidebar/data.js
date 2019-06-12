@@ -66,7 +66,8 @@ Data.propTypes = {
   products: PropTypes.object,
   findProductToSelect: PropTypes.func,
   counts: PropTypes.object,
-  selectedProduct: PropTypes.string
+  selectedProduct: PropTypes.string,
+  isActive: PropTypes.bool
 };
 
 const mapDispatchToProps = dispatch => ({
