@@ -2,7 +2,7 @@ import { REQUEST_SHORT_LINK, UPDATE_PERMALINK } from './constants';
 import { requestReducer } from '../core/reducers';
 import { assign as lodashAssign } from 'lodash';
 
-const defaultLinkState = {
+export const defaultLinkState = {
   queryString: ''
 };
 

@@ -1,12 +1,12 @@
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 
-import { dateModel } from './date/model';
-import { layersModel } from './layers/model';
-import { mapModel } from './map/model';
-import { palettesModel } from './palettes/model';
-import { projectionModel } from './projection/model';
-import { compareModel } from './compare/model';
+// import { dateModel } from './date/model';
+// import { layersModel } from './layers/model';
+// import { mapModel } from './map/model';
+// import { palettesModel } from './palettes/model';
+// import { projectionModel } from './projection/model';
+// import { compareModel } from './compare/model';
 
 var fixtures = {
   red: 'ff0000ff',
@@ -158,21 +158,27 @@ fixtures.config = function() {
   };
 };
 
-fixtures.models = function(config) {
-  var models = {};
+// fixtures.models = function(config) {
+//   var models = {};
 
-  models.proj = projectionModel(config);
-  models.layers = layersModel(models, config);
-  models.palettes = palettesModel(models, config);
-  models.map = mapModel(models, config);
-  models.compare = compareModel(models, config);
-  models.date = dateModel(models, config);
-  return models;
-};
+//   models.proj = projectionModel(config);
+//   models.layers = layersModel(models, config);
+//   models.palettes = palettesModel(models, config);
+//   models.map = mapModel(models, config);
+//   models.compare = compareModel(models, config);
+//   models.date = dateModel(models, config);
+//   return models;
+// };
 
 export function registerProjections() {
-  proj4.defs('EPSG:3413', '+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
-  proj4.defs('EPSG:3031', '+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
+  proj4.defs(
+    'EPSG:3413',
+    '+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
+  );
+  proj4.defs(
+    'EPSG:3031',
+    '+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
+  );
   register(proj4);
 }
 

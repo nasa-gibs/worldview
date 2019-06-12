@@ -1,4 +1,4 @@
-import { linkReducer, deafultLinkState, shortLink } from './reducers';
+import { linkReducer, defaultLinkState, shortLink } from './reducers';
 import * as constants from './constants';
 import { defaultRequestState } from '../core/reducers';
 
@@ -32,9 +32,9 @@ describe('shortLink reducer', () => {
     });
   });
 });
-describe('notificationsReducer', () => {
+describe('linkReducer', () => {
   test('should return the initial state', () => {
-    expect(linkReducer(undefined, {})).toEqual(deafultLinkState);
+    expect(linkReducer(undefined, {})).toEqual(defaultLinkState);
   });
   test(
     constants.UPDATE_PERMALINK +

@@ -40,7 +40,7 @@ export function requestAction(
 export function startRequest(actionName, id) {
   return {
     type: `${actionName}_START`,
-    id: id
+    ...(!!id && { id })
   };
 }
 
@@ -48,7 +48,7 @@ export function fetchSuccess(actionName, response, id) {
   return {
     type: `${actionName}_SUCCESS`,
     response: response,
-    id: id
+    ...(!!id && { id })
   };
 }
 // export function fetchTimeout(actionName, error, id) {
@@ -61,6 +61,6 @@ export function fetchFailure(actionName, error, id) {
   return {
     type: `${actionName}_FAILURE`,
     error: error,
-    id: id
+    ...(!!id && { id })
   };
 }

@@ -3,11 +3,9 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 import * as actions from './actions';
 import * as constants from './constants';
-
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const ERROR_MESSAGE = 'There was an error';
-
 // throw new Error(ERROR_MESSAGE);
 describe('Short Link request action', () => {
   afterEach(() => {
