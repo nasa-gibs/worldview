@@ -20,10 +20,12 @@ class AxisTimeScaleChange extends PureComponent {
 
   // TimeScale select tooltip on
   toolTipHoverOn = () => {
-    this.disableMapScales(true);
-    this.setState({
-      toolTipHovered: true
-    });
+    if (!this.props.isDraggerDragging) { // in event of dragging off axis, prevent tooltip display
+      this.disableMapScales(true);
+      this.setState({
+        toolTipHovered: true
+      });
+    }
   }
 
   // TimeScale select tooltip off
@@ -109,7 +111,9 @@ class AxisTimeScaleChange extends PureComponent {
 AxisTimeScaleChange.propTypes = {
   timeScale: PropTypes.string,
   changeTimeScale: PropTypes.func,
-  hasSubdailyLayers: PropTypes.bool
+  hasSubdailyLayers: PropTypes.bool,
+  isDraggerDragging: PropTypes.bool,
+  timelineHidden: PropTypes.bool
 };
 
 export default AxisTimeScaleChange;

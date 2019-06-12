@@ -54,7 +54,6 @@ class DateSelector extends PureComponent {
     });
   }
   updateDate(date, type) {
-    console.log(date)
     this.props.onDateChange(date, this.props.id);
   }
   renderSubdaily() {

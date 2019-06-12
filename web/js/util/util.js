@@ -371,35 +371,19 @@ export default (function (self) {
   };
 
   /**
-   * Calculates percent of date between two other dates
+   * Round input time to one minute
    *
-   * @method getDatePercent
+   * @method roundTimeOneMinute
    * @static
-   * @param current {Date} current date
-   * @param start {Date} start date
-   * @param end {Date} end date
-   * @return {number} decimal percent
+   * @param time {Date} date
+   * @return {number} rounded date
    */
-  self.getDatePercent = function (current, start, end) {
-    return Math.round((current - start) / (end - start));
-  };
-
-  // # TODO: round vs. floor - getting next minute, but cutting off single minute coverage ex: 23:50-23:50
   self.roundTimeOneMinute = function (time) {
     var timeToReturn = new Date(time);
 
     timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
     timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
     timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes()));
-    return timeToReturn;
-  };
-
-  self.roundTimeTenMinute = function (time) {
-    var timeToReturn = new Date(time);
-
-    timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
-    timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
-    timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes() / 10) * 10);
     return timeToReturn;
   };
 
@@ -1230,7 +1214,6 @@ export default (function (self) {
    * @return {object}           The date object with normalized timeszone.
    */
   self.prevDateInDateRange = function (def, date, dateArray) {
-    // # NEED TO TRACE BACK AND USE UTC DATES ONLY? WILL REWRITE A LOT BUT WOULD BE CLEANER/MORE TESTABLE
     var currentDate = new Date(date.getTime());
     if (!dateArray) return date;
     if ((def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||

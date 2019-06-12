@@ -19,6 +19,9 @@ class TimelineDraggerRange extends PureComponent {
       endLocation: this.props.endLocation,
       previousStartLocation: this.props.startLocation
     };
+
+    this.handleDrag = this.handleDrag.bind(this);
+    this.handleDraggerClick = this.handleDraggerClick.bind(this);
   }
   /*
    * Resize timeline dragger width
@@ -200,13 +203,12 @@ class TimelineDraggerRange extends PureComponent {
    * @return {void}
    */
   handleDraggerClick(e) {
+    e.preventDefault();
     // compare start locations to check if range has been dragged vs. clicked
     if (
-      this.state.startLocation.toFixed(3) ===
+      this.state.startLocation.toFixed(3) !==
       this.state.previousStartLocation.toFixed(3)
     ) {
-      this.props.onClick(e);
-    } else {
       this.setState({ previousStartLocation: this.state.startLocation });
     }
   }
@@ -244,7 +246,7 @@ class TimelineDraggerRange extends PureComponent {
         position={null}
         defaultPosition={{ x: 0, y: 11 }}
         onStop={this.props.onStop}
-        onDrag={this.handleDrag.bind(this)}
+        onDrag={this.handleDrag}
       >
         <rect
           x={this.handleStartPositionRestriction()}
@@ -254,11 +256,10 @@ class TimelineDraggerRange extends PureComponent {
             fillOpacity: this.props.opacity,
             cursor: 'pointer'
           }}
-          // height={this.props.height}
-          height={64}
+          height={this.props.height}
           className="dragger-range"
           id={this.props.draggerID}
-          onClick={this.handleDraggerClick.bind(this)}
+          onClick={this.handleDraggerClick}
         />
       </Draggable>
     );
@@ -279,7 +280,6 @@ TimelineDraggerRange.propTypes = {
   width: PropTypes.number,
   color: PropTypes.string,
   draggerID: PropTypes.string,
-  onClick: PropTypes.func,
   onDrag: PropTypes.func,
   onStop: PropTypes.func,
   id: PropTypes.string

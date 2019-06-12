@@ -33,6 +33,11 @@ class DateInputColumn extends React.Component {
     if (this.props.focused) {
       this.inputs[this.props.tabIndex].focus();
     }
+    if (this.props.value !== prevProps.value) {
+      this.setState({
+        value: this.props.value
+      });
+    }
   }
   componentWillMount() {
     var size;
@@ -47,8 +52,10 @@ class DateInputColumn extends React.Component {
     }
     this.size = size;
   }
-  componentWillReceiveProps(props) {
-    this.setState({ value: props.value });
+  componentDidMount() {
+    this.setState({
+      value: this.props.value
+    });
   }
   onKeyPress(e) {
     var kc = e.keyCode;

@@ -22,6 +22,8 @@ class TimelineDragger extends PureComponent {
       textColor: props.textColor,
       max: props.max
     };
+
+    this.handleDrag = this.handleDrag.bind(this);
   }
   /**
    * Update state if position has changed
@@ -41,7 +43,6 @@ class TimelineDragger extends PureComponent {
       <React.Fragment>
         <rect
           width={this.props.width}
-          // height={this.props.height}
           height={52}
           style={{
             fill: this.props.color,
@@ -168,7 +169,7 @@ class TimelineDragger extends PureComponent {
     var visibility = this.getVisibility();
     return (
       <Draggable
-        onDrag={this.handleDrag.bind(this)}
+        onDrag={this.handleDrag}
         position={{ x: this.state.position, y: this.props.yOffset }}
         onStop={() => {
           this.props.onStop(this.props.id, this.state.position);

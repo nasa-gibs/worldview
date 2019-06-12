@@ -280,11 +280,12 @@ line {
   pointer-events: all;
 }
 
-.hover-line-container {
+.timeline-hover-line-container {
   position: absolute;
   bottom: -87px;
   pointer-events: none;
 }
 
-.svgLine {
+.timeline-hover-line {
+  display: 'block';
 }

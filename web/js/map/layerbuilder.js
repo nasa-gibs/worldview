@@ -142,7 +142,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
         date = util.clearTimeUTC(new Date(options.date.getTime()));
       } else {
         date = options.date;
-        // # possible to memoize third argument dateArray ?
         date = util.prevDateInDateRange(
           def,
           date,
@@ -150,7 +149,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
         );
       }
     } else {
-      // # mutation of models date causing overwrite issue for SUBDAILY vs NON-SUBDAILY
       date = new Date(state.date[activeDateStr]);
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
@@ -178,7 +176,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       // Is current "rounded" previous date not in array of availableDates
       if (date && !dateArray.includes(date)) {
         // Then, update layer object with new array of dates
-        // # time complexity searching through array can be improved with object lookup
         def.availableDates = util.datesinDateRanges(def, date, true);
         date = util.prevDateInDateRange(def, date, dateArray);
       }
@@ -267,8 +264,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     date = options.date || state.date[activeDateStr];
     if (def.period === 'subdaily') {
       date = self.closestDate(def, options);
-      // TODO: FIX +/- DATE OFFSETS TO GET UTC - SOURCE SINGLE STATE TRUTH
-      // date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
       date = new Date(date.getTime());
     }
     if (day && (def.period !== 'subdaily')) {
