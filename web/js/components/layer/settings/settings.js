@@ -15,7 +15,8 @@ import {
   getCustomPalette,
   getLegends,
   getPalette,
-  getLegend
+  getLegend,
+  isPaletteAllowed
 } from '../../../modules/palettes/selectors';
 import {
   setRangeAndSquash,
@@ -223,7 +224,7 @@ class LayerSettings extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const { config, palettes, compare } = state;
   const { supported, custom } = palettes;
   const groupName = compare.activeString;
@@ -232,7 +233,7 @@ function mapStateToProps(state) {
     paletteOrder: config.paletteOrder,
     groupName,
     customPalettesIsActive: !!config.features.customPalettes,
-    palettedAllowed: supported,
+    palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
     palettesTranslate,
     getDefaultLegend: (layerId, index) => {
       return getDefaultLegend(layerId, index, state);

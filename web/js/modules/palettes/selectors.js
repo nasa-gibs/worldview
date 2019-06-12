@@ -5,7 +5,7 @@ import {
   parseInt as lodashParseInt,
   cloneDeep as lodashCloneDeep
 } from 'lodash';
-import { getMinValue, getMaxValue } from './util';
+import { getMinValue, getMaxValue, isSupported } from './util';
 import update from 'immutability-helper';
 
 /**
@@ -340,3 +340,13 @@ var prepare = function(layerId, palettesObj, state) {
   });
   return newPalettes;
 };
+export function isPaletteAllowed(layerId, config) {
+  if (!isSupported()) {
+    return false;
+  }
+  let palette = config.layers[layerId].palette;
+  if (!palette || palette.immutable) {
+    return false;
+  }
+  return Boolean(config.layers[layerId].palette);
+}
