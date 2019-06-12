@@ -390,7 +390,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       displayElement.innerHTML = slide1 + ' - ' + slide2;
     }
 
-    console.log(config);
     // if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
     if (config.vectorStyles) {
       var styleFunction;
@@ -402,7 +401,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       // if (glStyle === undefined) {
       //   glStyle = vectorStyles[vectorStyle];
       // }
-      console.log(glStyle);
       styleFunction = stylefunction(layer, glStyle, layerName);
       if (glStyle.name === 'Orbit Tracks') {
         // Filter time by 5 mins
@@ -520,7 +518,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
           } else if (document.getElementById('orbit-track-controls_green2').checked === true) {
             styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'green2');
           } else if (document.getElementById('orbit-track-controls_green3').checked === true) {
-            console.log('this');
             styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'green3');
           } else {
             styleFunction = stylefunction(layer, glStyle, layerName);

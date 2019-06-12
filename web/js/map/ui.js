@@ -32,7 +32,7 @@ import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { openCustomContent } from '../modules/modal/actions';
-import VectorMetaTable from '../components/vector-metadata/vector-metadata-table';
+import VectorMetaTable from '../components/vector-metadata/table';
 import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
@@ -919,10 +919,6 @@ export function mapui(models, config, store, ui) {
       var metaTitle;
       var def;
       var metaArray = [];
-      var uniqueMeta = metaArray
-        .map(e => e['layer'])
-        .map((e, i, final) => final.indexOf(e) === i && i)
-        .filter(e => metaArray[e]).map(e => metaArray[e]);
 
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
         def = layer.wv.def;
@@ -938,6 +934,11 @@ export function mapui(models, config, store, ui) {
           metaArray.push(obj);
         }
       });
+
+      var uniqueMeta = metaArray
+        .map(e => e['layer'])
+        .map((e, i, final) => final.indexOf(e) === i && i)
+        .filter(e => metaArray[e]).map(e => metaArray[e]);
 
       if (uniqueMeta.length) {
         let vectorPointMeta = uniqueMeta[0];

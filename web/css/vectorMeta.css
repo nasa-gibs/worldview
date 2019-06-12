@@ -9,9 +9,37 @@
 
 .vector-modal .modal-body {
   overflow-x: scroll;
+  overflow-y: visible;
+  padding: 0;
+}
+
+.vector-modal .modal-body table {
+  margin: 0;
 }
 
 .vector-modal .modal-body table th,
 .vector-modal .modal-body table td {
   text-transform: capitalize;
+}
+
+.vector-modal .modal-body table th {
+  position: relative;
+}
+
+.vector-modal .vector-info-icon {
+  position: absolute;
+  font-size: 8px;
+  border: 1px solid #fff;
+  width: 13px;
+  height: 13px;
+  text-align: center;
+  border-radius: 50%;
+  padding-top: 1px;
+  margin-top: 0;
+  top: 0;
+  right: 0;
+}
+
+.vector-modal .vector-info-icon:hover {
+  cursor: pointer;
 }
