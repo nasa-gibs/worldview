@@ -4,7 +4,7 @@ The MOPITT Carbon Monoxide (Level 2, Daily, Day/Night, Total Column) layer shows
 
 MOPITT is an instrument flying on NASA's Earth Observing System Terra satellite, measuring tropospheric carbon monoxide (CO) on the global scale. MOPITT measurements enable scientists to analyze the distribution, transport, sources and sinks of CO, a trace gas produced by methane oxidation, fossil fuel consumption and biomass burning. MOPITT has been operational since March 2000. The sensor resolution is 22 km at nadir, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: [Measurements of Pollution in the Troposphere (MOPITT) Near real-time data - Earthdata](https://earthdata.nasa.gov/earth-observation-data/near-real-time/download-nrt-data/mopitt-nrt)
+References: [Earthdata - Measurements of Pollution in the Troposphere (MOPITT) Near real-time data](https://earthdata.nasa.gov/earth-observation-data/near-real-time/download-nrt-data/mopitt-nrt)
 
 ### Carbon Monoxide (Daily | Monthly, Day | Night, Surface Mixing Ratio)
 Temporal coverage: 1 March 2000 - present (Daily); March 2000 - present (Monthly)
@@ -20,4 +20,4 @@ The MOPITT Carbon Monoxide (CO), Total Column layer shows the amount of carbon m
 
 The MOPITT Carbon Monoxide, Total Column layer is available from the Measurements of Pollution in the Troposphere (MOPITT) instrument on the Terra satellite. The total column is calculated by integrating the retrieved mixing ratio profiles from the 9 standard MOPITT pressure levels, 900, 800, 700, 600, 500, 400, 300, 200, and 100 hPa and at the surface and are not retrieved independently. The sensor resolution is 22 km at nadir, imagery resolution is 2 km, and the temporal resolution is daily and monthly (with day and night layers).
 
-References: [NCAR | UCAR: Measurements of Pollution in the Troposphere (MOPITT)](https://www2.acom.ucar.edu/mopitt); [NASA: MOPITT](https://terra.nasa.gov/about/terra-instruments/mopitt); [MOPITT Version 8 Product User's Guide](https://www2.acom.ucar.edu/sites/default/files/mopitt/v8_users_guide_201812.pdf)
+References: [doi: 10.5067/TERRA/MOPITT/MOP03J\_L3.008](https://dx.doi.org/10.5067/TERRA/MOPITT/MOP03J_L3.008); [doi: 10.5067/TERRA/MOPITT/MOP03JM\_L3.008](https://dx.doi.org/10.5067/TERRA/MOPITT/MOP03JM_L3.008); [MOPITT Version 8 Product User's Guide](https://www2.acom.ucar.edu/sites/default/files/mopitt/v8_users_guide_201812.pdf); [NCAR|UCAR: Measurements of Pollution in the Troposphere (MOPITT)](https://www2.acom.ucar.edu/mopitt); [NASA: MOPITT](https://terra.nasa.gov/about/terra-instruments/mopitt)
