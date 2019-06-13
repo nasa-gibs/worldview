@@ -21,10 +21,15 @@ import {
   isPaletteAllowed
 } from '../../../modules/palettes/selectors';
 import {
-  setRangeAndSquash,
+  setThresholdRangeAndSquash,
   setCustomPalette,
   clearCustomPalette
 } from '../../../modules/palettes/actions';
+import {
+  setFilterRange,
+  setStyle,
+  clearStyle
+} from '../../../modules/vector-styles/actions';
 
 import {
   getVectorStyle
@@ -56,7 +61,7 @@ class LayerSettings extends React.Component {
       setCustomPalette,
       palettesTranslate,
       groupName,
-      setRange,
+      setThresholdRange,
       layer
     } = this.props;
     const { activeIndex } = this.state;
@@ -96,7 +101,7 @@ class LayerSettings extends React.Component {
             {legend.type !== 'classification' ? (
               <PaletteThreshold
                 legend={legend}
-                setRange={setRange}
+                setThresholdRange={setThresholdRange}
                 min={0}
                 max={max}
                 start={start}
@@ -150,7 +155,7 @@ class LayerSettings extends React.Component {
       getPaletteLegends,
       getPalette,
       getPaletteLegend,
-      setRange,
+      setThresholdRange,
       paletteOrder,
       groupName,
       layer
@@ -174,7 +179,7 @@ class LayerSettings extends React.Component {
         {legend.type !== 'classification' &&
           <PaletteThreshold
             legend={legend}
-            setRange={setRange}
+            setThresholdRange={setThresholdRange}
             min={0}
             max={max}
             start={start}
@@ -207,7 +212,7 @@ class LayerSettings extends React.Component {
    */
   renderVectorStyles() {
     const {
-      setRange,
+      setFilterRange,
       groupName,
       layer
     } = this.props;
@@ -221,7 +226,7 @@ class LayerSettings extends React.Component {
     return (
       <React.Fragment>
         <VectorFilter
-          setRange={setRange}
+          setFilterRange={setFilterRange}
           min={0}
           max={max}
           start={start}
@@ -231,6 +236,8 @@ class LayerSettings extends React.Component {
           index={0}
         />
         <VectorStyle
+          setStyle={''}
+          clearStyle={''}
           activeVectorStyle={'default_style'}
           layer={layer}
           index={0}
@@ -303,9 +310,14 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = dispatch => ({
-  setRange: (layerId, min, max, squash, index, groupName) => {
+  setThresholdRange: (layerId, min, max, squash, index, groupName) => {
     dispatch(
-      setRangeAndSquash(layerId, { min, max, squash }, index, groupName)
+      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)
+    );
+  },
+  setFilterRange: (layerId, min, max, squash, index, groupName) => {
+    dispatch(
+      setFilterRange(layerId, { min, max, squash }, index, groupName)
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
@@ -313,6 +325,12 @@ const mapDispatchToProps = dispatch => ({
   },
   clearCustomPalette: (layerId, index, groupName) => {
     dispatch(clearCustomPalette(layerId, index, groupName));
+  },
+  setStyle: (layerId, paletteId, index, groupName) => {
+    dispatch(setStyle(layerId, paletteId, index, groupName));
+  },
+  clearStyle: (layerId, index, groupName) => {
+    dispatch(clearStyle(layerId, index, groupName));
   },
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));

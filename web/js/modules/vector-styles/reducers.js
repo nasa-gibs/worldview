@@ -1,9 +1,9 @@
 import { assign as lodashAssign, get as lodashGet } from 'lodash';
 import {
   REQUEST_VECTORSTYLE_SUCCESS,
-  SET_CUSTOM,
+  SET_VECTORSTYLE,
   REQUEST_VECTORSTYLE_START,
-  SET_RANGE_AND_SQUASH,
+  SET_FILTER_RANGE,
   LOADED_CUSTOM_VECTORSTYLES
 } from './constants';
 import update from 'immutability-helper';
@@ -40,11 +40,11 @@ export function vectorStyleReducer(state = defaultVectorStyleState, action) {
         }),
         isLoading
       });
-    case SET_RANGE_AND_SQUASH:
+    case SET_FILTER_RANGE:
       return lodashAssign({}, state, {
         [groupName]: action.vectorStyles
       });
-    case SET_CUSTOM:
+    case SET_VECTORSTYLE:
       return lodashAssign({}, state, {
         [groupName]: action.vectorStyles
       });

@@ -18,10 +18,10 @@ class VectorStyleSelect extends React.Component {
   renderDefault() {
     const { layer, index, getDefaultLegend } = this.props;
     const { activeVectorStyle } = this.state;
-    const legend = getDefaultLegend(layer.id, index);
+    // const legend = getDefaultLegend(layer.id, index);
 
     return this.renderSelectorItemSingle(
-      legend,
+      undefined, // should pass vectorStyles here
       'default_style',
       'Default',
       activeVectorStyle === 'default_style'
@@ -32,16 +32,16 @@ class VectorStyleSelect extends React.Component {
    * @param {String} id | custom VectorStyle Id
    */
   onChangeVectorStyle(id) {
-    const { layer, clearCustomStyle, setCustom, index } = this.props;
+    const { layer, clearStyle, setStyle, index } = this.props;
 
     // Applying customs takes a while and
     // it looks more natural to make this async
     // instead of waiting
     setTimeout(function() {
       if (id === 'default_style') {
-        clearCustomStyle(layer.id, index);
+        clearStyle(layer.id, index);
       } else {
-        setCustom(layer.id, id, index);
+        setStyle(layer.id, id, index);
       }
     }, 0);
     this.setState({ activeVectorStyle: id });
@@ -83,9 +83,9 @@ class VectorStyleSelect extends React.Component {
    * @param {Boolean} isSelected | is this colormap active
    */
   renderSelectorItemSingle(vectorStyle, id, description, isSelected) {
-    const color = palette.classes
-      ? palette.classes.colors[0]
-      : palette.colors[0];
+    // const color = palette.classes
+    //   ? palette.classes.colors[0]
+    //   : palette.colors[0];
     const caseDefaultClassName =
       'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
@@ -100,7 +100,6 @@ class VectorStyleSelect extends React.Component {
         <label htmlFor={'wv-palette-radio-' + id}>
           <span
             className="wv-palettes-class"
-            style={{ backgroundColor: util.hexToRGB(color) }}
           >
             &nbsp;
           </span>
@@ -119,6 +118,7 @@ class VectorStyleSelect extends React.Component {
       >
         <h2 className="wv-header">Vector Style</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
+          {this.renderDefault()}
           {/* Output Color Selects Here */}
         </Scrollbar>
       </div>
@@ -128,8 +128,8 @@ class VectorStyleSelect extends React.Component {
 VectorStyleSelect.propTypes = {
   index: PropTypes.number,
   layer: PropTypes.object,
-  clearCustomStyle: PropTypes.func,
-  setCustom: PropTypes.func,
+  clearStyle: PropTypes.func,
+  setStyle: PropTypes.func,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
   getDefaultLegend: PropTypes.func,

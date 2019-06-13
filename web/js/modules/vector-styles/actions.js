@@ -1,9 +1,9 @@
 import { requestAction } from '../core/actions';
 import {
   REQUEST_VECTORSTYLE,
-  SET_RANGE_AND_SQUASH,
-  CLEAR_CUSTOM,
-  SET_CUSTOM,
+  SET_FILTER_RANGE,
+  CLEAR_VECTORSTYLE,
+  SET_VECTORSTYLE,
   LOADED_CUSTOM_VECTORSTYLES
 } from './constants';
 import {
@@ -39,7 +39,7 @@ export function requestVectorStyle(id) {
  * @param {Number} index | VectorStyle index value for multi-vectorStyled layers
  * @param {String} groupName | layer group string
  */
-export function setRangeAndSquash(layerId, props, index, groupName) {
+export function setFilterRange(layerId, props, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
     const newActiveVectorStylesObj = setRangeSelector(
@@ -50,7 +50,7 @@ export function setRangeAndSquash(layerId, props, index, groupName) {
       state
     );
     dispatch({
-      type: SET_RANGE_AND_SQUASH,
+      type: SET_FILTER_RANGE,
       groupName: groupName,
       activeString: groupName,
       layerId,
@@ -67,7 +67,7 @@ export function setRangeAndSquash(layerId, props, index, groupName) {
  * @param {Number} index | VectorStyle index value for multi-vectorStyled layers
  * @param {String} groupName | layer group string
  */
-export function setCustom(layerId, vectorStyleId, index, groupName) {
+export function setStyle(layerId, vectorStyleId, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
     const newActiveVectorStylesObj = setCustomSelector(
@@ -78,7 +78,7 @@ export function setCustom(layerId, vectorStyleId, index, groupName) {
       state
     );
     dispatch({
-      type: SET_CUSTOM,
+      type: SET_VECTORSTYLE,
       layerId: layerId,
       vectorStyleId: vectorStyleId,
       groupName: groupName,
@@ -94,7 +94,7 @@ export function setCustom(layerId, vectorStyleId, index, groupName) {
  * @param {Number} index | VectorStyle index value for multi-vectorStyled layers
  * @param {String} groupName | layer group string
  */
-export function clearCustomStyle(layerId, index, groupName) {
+export function clearStyle(layerId, index, groupName) {
   return (dispatch, getState) => {
     const { vectorStyles } = getState();
     const newActiveVectorStylesObj = clearCustomSelector(
@@ -104,7 +104,7 @@ export function clearCustomStyle(layerId, index, groupName) {
     );
 
     dispatch({
-      type: CLEAR_CUSTOM,
+      type: CLEAR_VECTORSTYLE,
       groupName: groupName,
       vectorStyles: newActiveVectorStylesObj
     });
