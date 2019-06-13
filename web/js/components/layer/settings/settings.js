@@ -27,7 +27,6 @@ import {
 } from '../../../modules/palettes/actions';
 
 import {
-  getCustomVectorStyle,
   getVectorStyle
 } from '../../../modules/vector-styles/selectors';
 import { setOpacity } from '../../../modules/layers/actions';
@@ -160,7 +159,6 @@ class LayerSettings extends React.Component {
     if (!legends) return '';
     const len = legends.length;
     const palette = getPalette(layer.id, 0);
-    const vectorStyle = getVectorStyle(layer.id, 0);
     const legend = getLegend(layer.id, 0);
     const max = palette.legend.colors.length - 1;
     const start = palette.min || 0;
@@ -173,7 +171,7 @@ class LayerSettings extends React.Component {
 
     return (
       <React.Fragment>
-        {legend.type !== 'classification' ? (
+        {legend.type !== 'classification' &&
           <PaletteThreshold
             legend={legend}
             setRange={setRange}
@@ -186,9 +184,7 @@ class LayerSettings extends React.Component {
             groupName={groupName}
             index={0}
           />
-        ) : (
-          ''
-        )}
+        }
         <Palette
           setCustom={setCustomPalette}
           clearCustom={clearCustom}
@@ -203,8 +199,28 @@ class LayerSettings extends React.Component {
           index={0}
           paletteOrder={paletteOrder}
         />
+      </React.Fragment>
+    );
+  }
+  /**
+   * Render Opacity, threshold, and custom palette options
+   */
+  renderVectorStyles() {
+    const {
+      setRange,
+      groupName,
+      layer
+    } = this.props;
+    // const vectorStyle = getVectorStyle(layer.id, 0);
+    const max = 100; // Placeholder
+    // const start = vectorStyle.min || 0;
+    const start = 0; // Placeholder
+    // const end = vectorStyle.max || max;
+    const end = max; // Placeholder
+
+    return (
+      <React.Fragment>
         <VectorThreshold
-          legend={legend}
           setRange={setRange}
           min={0}
           max={max}
@@ -212,12 +228,10 @@ class LayerSettings extends React.Component {
           groupName={groupName}
           end={end}
           layerId={layer.id}
-          squashed={!!palette.squash}
-          index={i}
+          index={0}
         />
         <VectorStyle
-          getCustomVectorStyle={getCustomVectorStyle}
-          activePalette={'default_style'}
+          activeVectorStyle={'default_style'}
           layer={layer}
           index={0}
         />
@@ -225,16 +239,22 @@ class LayerSettings extends React.Component {
     );
   }
   render() {
+    var renderCustomizations;
     const {
       setOpacity,
       customPalettesIsActive,
       layer,
       palettedAllowed
     } = this.props;
-    const customPalettes =
-      customPalettesIsActive && palettedAllowed && layer.palette
-        ? this.renderCustoms()
-        : '';
+
+    if (layer.type !== 'vector') {
+      renderCustomizations =
+        customPalettesIsActive && palettedAllowed && layer.palette
+          ? this.renderCustoms()
+          : '';
+    } else {
+      renderCustomizations = this.renderVectorStyles();
+    }
 
     if (!layer.id) return '';
     return (
@@ -244,7 +264,7 @@ class LayerSettings extends React.Component {
           setOpacity={setOpacity}
           layer={layer}
         />
-        {customPalettes}
+        {renderCustomizations}
       </React.Fragment>
     );
   }

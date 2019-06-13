@@ -396,7 +396,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       var vectorStyles = config.vectorStyles;
       var vectorStyle = def.vectorStyle.id;
       // var glStyle = vectorStyles[vectorStyle];
-      console.log(vectorStyle);
       var glStyle = vectorStyles[vectorStyle];
       // if (glStyle === undefined) {
       //   glStyle = vectorStyles[vectorStyle];

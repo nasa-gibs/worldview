@@ -110,8 +110,7 @@ class VectorStyleSelect extends React.Component {
     );
   }
   render() {
-    const { index, layer, paletteOrder } = this.props;
-    const recommended = layer.palette.recommended || [];
+    const { index } = this.props;
 
     return (
       <div
@@ -120,15 +119,7 @@ class VectorStyleSelect extends React.Component {
       >
         <h2 className="wv-header">Vector Style</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
-          {this.renderDefault()}
-          {paletteOrder.map(id => {
-            if (lodashIndexOf(recommended, id) < 0) {
-              var item = this.customLegend(id);
-              if (item) {
-                return item;
-              }
-            }
-          })}
+          {/* Output Color Selects Here */}
         </Scrollbar>
       </div>
     );
