@@ -11,28 +11,9 @@ class VectorThresholdSelect extends React.Component {
     this.state = {
       start: props.start,
       end: props.end,
-      squashed: props.squashed,
       activeDragger: 'start'
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
-  }
-  /**
-   * Apply squash
-   * @param {Boolean} boo
-   */
-  updateSquash(boo) {
-    const { setRange, layerId, index, groupName } = this.props;
-    const { start, end, squashed } = this.state;
-    const isSquashed = !squashed;
-    setRange(
-      layerId,
-      parseFloat(start),
-      parseFloat(end),
-      isSquashed,
-      index,
-      groupName
-    );
-    this.setState({ squashed: isSquashed });
   }
   /**
    * Update threshold values
@@ -65,26 +46,18 @@ class VectorThresholdSelect extends React.Component {
       layerId,
       parseFloat(newStart),
       parseFloat(newEnd),
-      this.state.squashed,
       index,
       groupName
     );
   }
   render() {
-    const { start, end, squashed } = this.state;
-    const { index, min, max, legend } = this.props;
-    const units = legend.units || '';
-    const startLabel =
-      start === 0 && legend.minLabel
-        ? legend.minLabel + ' ' + units
-        : legend.tooltips[start] + ' ' + units;
-    const endLabel =
-      end === legend.tooltips.length - 1 && legend.maxLabel
-        ? legend.maxLabel + ' ' + units
-        : legend.tooltips[end] + ' ' + units;
+    const { start, end } = this.state;
+    const { index, min, max } = this.props;
+    const startLabel = 0; // Placeholder
+    const endLabel = 100; // Placeholder
     return (
       <div className="layer-threshold-select settings-component">
-        <h2 className="wv-header">Thresholds</h2>
+        <h2 className="wv-header">Filters</h2>
         <div
           id={'wv-layer-options-threshold' + index}
           className="wv-layer-options-threshold"
@@ -115,10 +88,8 @@ VectorThresholdSelect.propTypes = {
   index: PropTypes.number,
   min: PropTypes.number,
   max: PropTypes.number,
-  legend: PropTypes.object,
   setRange: PropTypes.func,
   layerId: PropTypes.string,
-  squashed: PropTypes.bool,
   groupName: PropTypes.string
 };
 
