@@ -68,6 +68,7 @@ import '../css/sidebar.css';
 import '../css/layers.css';
 import '../css/scrollbar.css';
 import '../css/timeline.css';
+import './components/timeline/timeline.css';
 import '../css/anim.widget.css';
 import '../css/dateselector.css';
 import '../css/tooltip.css';
@@ -104,8 +105,6 @@ class App extends React.Component {
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <div id="dlMap" />
-
-        <div id="timewheels" style={{ display: 'none' }} />
         <Timeline />
         <div id="wv-animation-widet-case">
           { isAnimationWidgetActive ? <AnimationWidget /> : null }

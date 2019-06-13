@@ -11,17 +11,16 @@ html, body {
   bottom: -24px;
 }
 
-#wv-timeline-axis {
+.timeline-axis-container {
   height: 65px;
   border-top: 1.5px solid white;
 }
 
-.inner {
+.timeline-axis-svg {
   height: 64px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* border-top: 1.5px solid white; */
     /* -webkit-clip-path: url('#timelineBoundary');
   clip-path: url('#timelineBoundary'); */
 }
@@ -288,4 +287,48 @@ line {
 
 .timeline-hover-line {
   display: 'block';
+}
+
+/* Mobile date picker */
+.mobile-date-picker-select-btn {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  background: rgba(40, 40, 40, 0.85);
+  color: #fff;
+  border: thin solid #333;
+  font-size: 17px;
+  font-family: 'Open Sans', sans-serif;
+  padding: 3px;
+  border-radius: 5px;
+  line-height: 25px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.datepicker-header,
+.datepicker-navbar-btn {
+  font-weight: 700;
+}
+
+.datepicker.android-dark .datepicker-header {
+  color: #fff !important;
+  border-bottom: 2px solid #00457b !important;
+}
+
+.datepicker.android-dark .datepicker-wheel {
+  border-top: 2px solid #00457b !important;
+  border-bottom: 2px solid #00457b !important;
+}
+
+.datepicker.android-dark .datepicker-scroll li {
+  color: #fff !important;
+}
+
+.datepicker.android-dark .datepicker-scroll li.disabled {
+  color: rgb(88, 88, 88) !important;
+}
+
+.datepicker-navbar-btn:hover {
+  background: #fff;
 }

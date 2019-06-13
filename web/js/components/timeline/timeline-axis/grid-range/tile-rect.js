@@ -67,6 +67,13 @@ class TileRect extends PureComponent {
     this.props.showHover(e, item.rawDate, item.rawNextDate, index);
   }
 
+  showTouch = (e) => {
+    let { item, index } = this.props;
+    let touch = e.changedTouches[0];
+    console.log(e.type, touch.pageX, touch.pageY);
+    this.props.showHover(e, item.rawDate, item.rawNextDate, index);
+  }
+
   render() {
     let { item, gridWidth, index, timeScale } = this.props;
     let tileOptions = tileRectTimeScaleOptions[timeScale]();
