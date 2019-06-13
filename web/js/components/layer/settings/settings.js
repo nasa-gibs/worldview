@@ -7,7 +7,7 @@ import Opacity from './opacity';
 import Palette from './palette';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
-import VectorThreshold from './vector-threshold';
+import VectorFilter from './vector-filter';
 import {
   getCheckerboard,
   palettesTranslate
@@ -22,8 +22,8 @@ import {
 } from '../../../modules/palettes/selectors';
 import {
   setRangeAndSquash,
-  setCustom as setCustomPalette,
-  clearCustom
+  setCustomPalette,
+  clearCustomPalette
 } from '../../../modules/palettes/actions';
 
 import {
@@ -48,7 +48,7 @@ class LayerSettings extends React.Component {
    */
   renderMultiColormapCustoms(legends) {
     const {
-      clearCustom,
+      clearCustomPalette,
       getPalette,
       paletteOrder,
       getDefaultLegend,
@@ -110,9 +110,9 @@ class LayerSettings extends React.Component {
               ''
             )}
             <Palette
-              setCustom={setCustomPalette}
+              setCustomPalette={setCustomPalette}
               groupName={groupName}
-              clearCustom={clearCustom}
+              clearCustomPalette={clearCustomPalette}
               getDefaultLegend={getDefaultLegend}
               getCustomPalette={getCustomPalette}
               palettesTranslate={palettesTranslate}
@@ -140,10 +140,10 @@ class LayerSettings extends React.Component {
   /**
    * Render Opacity, threshold, and custom palette options
    */
-  renderCustoms() {
+  renderCustomPalettes() {
     const {
       setCustomPalette,
-      clearCustom,
+      clearCustomPalette,
       getDefaultLegend,
       getCustomPalette,
       palettesTranslate,
@@ -186,8 +186,8 @@ class LayerSettings extends React.Component {
           />
         }
         <Palette
-          setCustom={setCustomPalette}
-          clearCustom={clearCustom}
+          setCustomPalette={setCustomPalette}
+          clearCustom={clearCustomPalette}
           getDefaultLegend={getDefaultLegend}
           getCustomPalette={getCustomPalette}
           palettesTranslate={palettesTranslate}
@@ -220,7 +220,7 @@ class LayerSettings extends React.Component {
 
     return (
       <React.Fragment>
-        <VectorThreshold
+        <VectorFilter
           setRange={setRange}
           min={0}
           max={max}
@@ -250,7 +250,7 @@ class LayerSettings extends React.Component {
     if (layer.type !== 'vector') {
       renderCustomizations =
         customPalettesIsActive && palettedAllowed && layer.palette
-          ? this.renderCustoms()
+          ? this.renderCustomPalettes()
           : '';
     } else {
       renderCustomizations = this.renderVectorStyles();
@@ -311,8 +311,8 @@ const mapDispatchToProps = dispatch => ({
   setCustomPalette: (layerId, paletteId, index, groupName) => {
     dispatch(setCustomPalette(layerId, paletteId, index, groupName));
   },
-  clearCustom: (layerId, index, groupName) => {
-    dispatch(clearCustom(layerId, index, groupName));
+  clearCustomPalette: (layerId, index, groupName) => {
+    dispatch(clearCustomPalette(layerId, index, groupName));
   },
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));

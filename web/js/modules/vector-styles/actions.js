@@ -8,8 +8,8 @@ import {
 } from './constants';
 import {
   setRange as setRangeSelector,
-  setCustom as setCustomSelector,
-  clearCustom as clearCustomSelector
+  setCustomSelector,
+  clearCustomSelector
 } from './selectors';
 
 /**
@@ -94,7 +94,7 @@ export function setCustom(layerId, vectorStyleId, index, groupName) {
  * @param {Number} index | VectorStyle index value for multi-vectorStyled layers
  * @param {String} groupName | layer group string
  */
-export function clearCustom(layerId, index, groupName) {
+export function clearCustomStyle(layerId, index, groupName) {
   return (dispatch, getState) => {
     const { vectorStyles } = getState();
     const newActiveVectorStylesObj = clearCustomSelector(

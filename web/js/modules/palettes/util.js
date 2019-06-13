@@ -9,7 +9,7 @@ import {
 } from 'lodash';
 import { PALETTE_STRINGS_PERMALINK_ARRAY } from './constants';
 import {
-  setCustom as setCustomSelector,
+  setCustomSelector,
   getCount,
   setRange as setRangeSelector,
   findIndex as findPaletteExtremeIndex
