@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { each as lodashEach } from 'lodash';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { connect } from 'react-redux';
-import Palette from './palette';
-import VectorStyle from './vector-styles';
 import Opacity from './opacity';
-import Threshold from './threshold';
+import Palette from './palette';
+import VectorStyle from './vector-style';
+import PaletteThreshold from './palette-threshold';
+import VectorThreshold from './vector-threshold';
 import {
   getCheckerboard,
   palettesTranslate
@@ -94,7 +95,7 @@ class LayerSettings extends React.Component {
         paneItemEl = (
           <TabPane key={legend.id + 'pane'} tabId={i}>
             {legend.type !== 'classification' ? (
-              <Threshold
+              <PaletteThreshold
                 legend={legend}
                 setRange={setRange}
                 min={0}
@@ -173,7 +174,7 @@ class LayerSettings extends React.Component {
     return (
       <React.Fragment>
         {legend.type !== 'classification' ? (
-          <Threshold
+          <PaletteThreshold
             legend={legend}
             setRange={setRange}
             min={0}
@@ -201,6 +202,18 @@ class LayerSettings extends React.Component {
           groupName={groupName}
           index={0}
           paletteOrder={paletteOrder}
+        />
+        <VectorThreshold
+          legend={legend}
+          setRange={setRange}
+          min={0}
+          max={max}
+          start={start}
+          groupName={groupName}
+          end={end}
+          layerId={layer.id}
+          squashed={!!palette.squash}
+          index={i}
         />
         <VectorStyle
           getCustomVectorStyle={getCustomVectorStyle}
