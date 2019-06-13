@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Legend from '../../components/sidebar/legend';
+import PaletteLegend from '../../components/sidebar/paletteLegend';
 import { Draggable } from 'react-beautiful-dnd';
 import util from '../../util/util';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
-import { getPalette, getLegends } from '../../modules/palettes/selectors';
+import { getPalette, getPaletteLegends } from '../../modules/palettes/selectors';
 import { openCustomContent } from '../../modules/modal/actions';
 import LayerInfo from '../../components/layer/info/info';
 import LayerSettings from '../../components/layer/settings/settings';
@@ -33,11 +33,11 @@ class Layer extends React.Component {
       index: index
     };
   }
-  getLegend() {
+  getPaletteLegend() {
     const {
       layer,
       runningObject,
-      legends,
+      paletteLegends,
       checkerBoardPattern,
       getPalette,
       palette,
@@ -50,11 +50,11 @@ class Layer extends React.Component {
       let isRunningData = !!runningObject;
       let colorHex = isRunningData ? runningObject.hex : null;
       return (
-        <Legend
+        <PaletteLegend
           layer={layer}
           paletteId={palette.id}
           getPalette={getPalette}
-          legends={legends}
+          paletteLegends={paletteLegends}
           isCustomPalette={isCustomPalette}
           isRunningData={isRunningData}
           checkerBoardPattern={checkerBoardPattern}
@@ -219,7 +219,7 @@ class Layer extends React.Component {
                 </a>
                 <h4 title={name.title}>{names.title}</h4>
                 <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
-                {hasPalette ? this.getLegend() : ''}
+                {hasPalette ? this.getPaletteLegend() : ''}
               </div>
             </li>
           ) : (
@@ -281,9 +281,10 @@ function mapStateToProps(state, ownProps) {
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers.${layer.id}.palette.id`);
-  const legends =
+  const vectorStyleName = lodashGet(config, `layers.${layer.id}.vectorStyle.id`);
+  const paletteLegends =
     hasPalette && renderedPalettes[paletteName]
-      ? getLegends(layer.id, layerGroupName, state)
+      ? getPaletteLegends(layer.id, layerGroupName, state)
       : [];
   const isCustomPalette = hasPalette && palettes.custom[layer.id];
 
@@ -292,7 +293,7 @@ function mapStateToProps(state, ownProps) {
     isDisabled,
     isVisible,
     layerClasses,
-    legends,
+    paletteLegends,
     names,
     index,
     isCustomPalette,

@@ -69,8 +69,8 @@ export function MapRunningData(models, compareUi, store) {
     const state = store.getState();
     var activeLayerObj = {};
     map.forEachLayerAtPixel(coords, function(layer, data) {
-      var hex;
-      var legends;
+      var paletteHex;
+      var paletteLegends;
       var layerId;
       if (!layer.wv) {
         return;
@@ -81,9 +81,9 @@ export function MapRunningData(models, compareUi, store) {
         !lodashGet(layer, 'wv.def.disableHoverValue')
       ) {
         layerId = layer.wv.id;
-        legends = getPalette(layerId, undefined, undefined, state);
-        hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
-        activeLayerObj[layerId] = { legends: legends, hex: hex };
+        paletteLegends = getPalette(layerId, undefined, undefined, state);
+        paletteHex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
+        activeLayerObj[layerId] = { paletteLegends: paletteLegends, paletteHex: paletteHex };
       }
     });
     if (!lodashIsEqual(activeLayerObj, dataObj)) {

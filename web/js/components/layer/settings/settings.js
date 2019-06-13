@@ -15,7 +15,7 @@ import {
 import {
   getDefaultLegend,
   getCustomPalette,
-  getLegends,
+  getPaletteLegends,
   getPalette,
   getLegend,
   isPaletteAllowed
@@ -44,9 +44,9 @@ class LayerSettings extends React.Component {
   }
   /**
    * Render multicolormap layers inside a tab pane
-   * @param {object} legends | legend object
+   * @param {object} paletteLegends | legend object
    */
-  renderMultiColormapCustoms(legends) {
+  renderMultiColormapCustoms(paletteLegends) {
     const {
       clearCustomPalette,
       getPalette,
@@ -62,9 +62,9 @@ class LayerSettings extends React.Component {
     const { activeIndex } = this.state;
     let navElements = [];
     let paneElements = [];
-    lodashEach(legends, (legend, i) => {
+    lodashEach(paletteLegends, (legend, i) => {
       const activeClass = activeIndex === i ? 'active' : '';
-      const dualStr = legends.length === 2 ? ' dual' : '';
+      const dualStr = paletteLegends.length === 2 ? ' dual' : '';
       const navItemEl = (
         <NavItem
           key={legend.id + 'nav'}
@@ -147,24 +147,24 @@ class LayerSettings extends React.Component {
       getDefaultLegend,
       getCustomPalette,
       palettesTranslate,
-      getLegends,
+      getPaletteLegends,
       getPalette,
-      getLegend,
+      getPaletteLegend,
       setRange,
       paletteOrder,
       groupName,
       layer
     } = this.props;
-    const legends = getLegends(layer.id);
-    if (!legends) return '';
-    const len = legends.length;
+    const paletteLegends = getPaletteLegends(layer.id);
+    if (!paletteLegends) return '';
+    const len = paletteLegends.length;
     const palette = getPalette(layer.id, 0);
-    const legend = getLegend(layer.id, 0);
+    const legend = getPaletteLegend(layer.id, 0);
     const max = palette.legend.colors.length - 1;
     const start = palette.min || 0;
     const end = palette.max || max;
     if (len > 1) {
-      return this.renderMultiColormapCustoms(legends);
+      return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
       return '';
     }
@@ -287,12 +287,12 @@ function mapStateToProps(state, ownProps) {
     getCustomPalette: id => {
       return getCustomPalette(id, custom);
     },
-    getLegend: (layerId, index) => {
-      return getLegend(layerId, index, groupName, state);
+    getPaletteLegend: (layerId, index) => {
+      return getPaletteLegend(layerId, index, groupName, state);
     },
 
-    getLegends: layerId => {
-      return getLegends(layerId, groupName, state);
+    getPaletteLegends: layerId => {
+      return getPaletteLegends(layerId, groupName, state);
     },
     getPalette: (layerId, index) => {
       return getPalette(layerId, index, groupName, state);

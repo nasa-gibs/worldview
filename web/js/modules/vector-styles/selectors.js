@@ -24,16 +24,8 @@ export function getVectorStyle(layerId, index, groupStr, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   const renderedVectorStyle = lodashGet(
     state,
-    `vectorStyles.rendered.${layerId}.maps.${index}`
+    `vectorStyles.${layerId}.layers.${index}`
   );
-  const customVectorStyle = lodashGet(
-    state,
-    `vectorStyles.${groupStr}.${layerId}.maps.${index}`
-  );
-
-  if (customVectorStyle) {
-    return customVectorStyle;
-  }
   if (renderedVectorStyle) {
     return renderedVectorStyle;
   }
@@ -43,34 +35,34 @@ export function getVectorStyle(layerId, index, groupStr, state) {
 export function getRenderedVectorStyle(layerId, index, state) {
   const { config, vectorStyles } = state;
   var name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
-  var vectorStyle = vectorStyles.rendered[name];
+  var vectorStyle = vectorStyles[name];
   if (!vectorStyle) {
     throw new Error(name + ' Is not a rendered vectorStyle');
   }
-  if (!lodashIsUndefined(index)) {
-    if (vectorStyle.maps) {
-      vectorStyle = vectorStyle.maps[index];
-    }
-  }
+  // if (!lodashIsUndefined(index)) {
+  //   if (vectorStyle.layers) {
+  //     vectorStyle = vectorStyle.layers[index];
+  //   }
+  // }
   return vectorStyle;
 }
 
 export function getCount(layerId, state) {
   const renderedVectorStyle = getRenderedVectorStyle(layerId, undefined, state);
-  if (renderedVectorStyle && renderedVectorStyle.maps) {
-    return renderedVectorStyle.maps.length;
+  if (renderedVectorStyle && renderedVectorStyle.layers) {
+    return renderedVectorStyle.layers.length;
   } else {
     return 0;
   }
 }
 
-export function getCustomVectorStyle(vectorStyleId, customsVectorStyleConfig) {
-  var vectorStyle = customsVectorStyleConfig[vectorStyleId];
-  if (!vectorStyle) {
-    throw new Error('Invalid vectorStyle: ' + vectorStyleId);
-  }
-  return vectorStyle;
-}
+// export function getCustomVectorStyle(vectorStyleId, customsVectorStyleConfig) {
+//   var vectorStyle = customsVectorStyleConfig[vectorStyleId];
+//   if (!vectorStyle) {
+//     throw new Error('Invalid vectorStyle: ' + vectorStyleId);
+//   }
+//   return vectorStyle;
+// }
 var useLookup = function(layerId, vectorStylesObj, state) {
   var use = false;
   var active = vectorStylesObj[layerId].maps;
