@@ -198,7 +198,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   });
   return result;
 }
-export function setCustom(layerId, vectorStyleId, index, groupName, state) {
+export function setCustomSelector(layerId, vectorStyleId, index, groupName, state) {
   const { config, vectorStyles } = state;
   if (!config.layers[layerId]) {
     throw new Error('Invalid layer: ' + layerId);
@@ -273,7 +273,7 @@ export function setRange(layerId, props, index, vectorStyles, state) {
 
   return updateLookup(layerId, newVectorStyles, state);
 }
-export function clearCustom(layerId, index, vectorStyles) {
+export function clearCustomSelector(layerId, index, vectorStyles) {
   index = lodashIsUndefined(index) ? 0 : index;
   var active = vectorStyles[layerId];
   if (!active) {

@@ -9,8 +9,8 @@ import {
 import { forOwn as lodashForOwn } from 'lodash';
 import {
   setRange as setRangeSelector,
-  setCustom as setCustomSelector,
-  clearCustom as clearCustomSelector
+  setCustomSelector,
+  clearCustomSelector
 } from './selectors';
 /**
  * Request palette using core request utility
@@ -67,7 +67,7 @@ export function setRangeAndSquash(layerId, props, index, groupName) {
  * @param {Number} index | Palette index value for multi-paletted layers
  * @param {String} groupName | layer group string
  */
-export function setCustom(layerId, paletteId, index, groupName) {
+export function setCustomPalette(layerId, paletteId, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
     const newActivePalettesObj = setCustomSelector(
@@ -94,7 +94,7 @@ export function setCustom(layerId, paletteId, index, groupName) {
  * @param {Number} index | Palette index value for multi-paletted layers
  * @param {String} groupName | layer group string
  */
-export function clearCustom(layerId, index, groupName) {
+export function clearCustomPalette(layerId, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
     const { palettes } = state;

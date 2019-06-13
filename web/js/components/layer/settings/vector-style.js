@@ -32,14 +32,14 @@ class VectorStyleSelect extends React.Component {
    * @param {String} id | custom VectorStyle Id
    */
   onChangeVectorStyle(id) {
-    const { layer, clearCustom, setCustom, index } = this.props;
+    const { layer, clearCustomStyle, setCustom, index } = this.props;
 
     // Applying customs takes a while and
     // it looks more natural to make this async
     // instead of waiting
     setTimeout(function() {
       if (id === 'default_style') {
-        clearCustom(layer.id, index);
+        clearCustomStyle(layer.id, index);
       } else {
         setCustom(layer.id, id, index);
       }
@@ -128,7 +128,7 @@ class VectorStyleSelect extends React.Component {
 VectorStyleSelect.propTypes = {
   index: PropTypes.number,
   layer: PropTypes.object,
-  clearCustom: PropTypes.func,
+  clearCustomStyle: PropTypes.func,
   setCustom: PropTypes.func,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
 import { Range as RangeInput } from 'rc-slider';
 
-import { Checkbox } from '../../util/checkbox';
-
 class VectorThresholdSelect extends React.Component {
   constructor(props) {
     super(props);
@@ -16,10 +14,10 @@ class VectorThresholdSelect extends React.Component {
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
   }
   /**
-   * Update threshold values
+   * Update filter values
    * @param {Array} thresholdArray | Array of start/end indexs for colormap
    */
-  updateThreshold(thresholdArray) {
+  updateFilter(thresholdArray) {
     const { layerId, index, groupName } = this.props;
     const { start, end } = this.state;
 
@@ -66,7 +64,7 @@ class VectorThresholdSelect extends React.Component {
             defaultValue={[start, end]}
             min={min}
             max={max}
-            onChange={this.updateThreshold.bind(this)}
+            onChange={this.updateFilter.bind(this)}
           />
           <div className="wv-label">
             <span className="wv-label-range-min wv-label-range">
