@@ -1,7 +1,7 @@
 import { requestAction } from '../core/actions';
 import {
   REQUEST_PALETTE,
-  SET_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_AND_SQUASH,
   CLEAR_CUSTOM,
   SET_CUSTOM,
   LOADED_CUSTOM_PALETTES
@@ -39,7 +39,7 @@ export function requestPalette(id) {
  * @param {Number} index | Palette index value for multi-paletted layers
  * @param {String} groupName | layer group string
  */
-export function setRangeAndSquash(layerId, props, index, groupName) {
+export function setThresholdRangeAndSquash(layerId, props, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
     const newActivePalettesObj = setRangeSelector(
@@ -50,7 +50,7 @@ export function setRangeAndSquash(layerId, props, index, groupName) {
       state
     );
     dispatch({
-      type: SET_RANGE_AND_SQUASH,
+      type: SET_THRESHOLD_RANGE_AND_SQUASH,
       groupName: groupName,
       activeString: groupName,
       layerId,

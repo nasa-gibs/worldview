@@ -8,7 +8,7 @@ import {
   REQUEST_PALETTE_SUCCESS,
   SET_CUSTOM,
   REQUEST_PALETTE_START,
-  SET_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_AND_SQUASH,
   LOADED_CUSTOM_PALETTES,
   BULK_PALETTE_RENDERING_SUCCESS,
   CLEAR_CUSTOM
@@ -60,7 +60,7 @@ export function paletteReducer(state = defaultPaletteState, action) {
       return lodashAssign({}, state, {
         activeB: lodashCloneDeep(state.active)
       });
-    case SET_RANGE_AND_SQUASH:
+    case SET_THRESHOLD_RANGE_AND_SQUASH:
     case SET_CUSTOM:
     case CLEAR_CUSTOM:
       return lodashAssign({}, state, {

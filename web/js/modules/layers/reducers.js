@@ -14,6 +14,10 @@ import {
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
   SET_RANGE_AND_SQUASH
 } from '../palettes/constants';
+import {
+  SET_VECTORSTYLE,
+  SET_FILTER_RANGE
+} from '../vector-styles/constants';
 import { resetLayers } from './selectors';
 import {
   cloneDeep as lodashCloneDeep,
@@ -65,7 +69,7 @@ export function layerReducer(state = initialState, action) {
           [action.index]: { visible: { $set: action.visible } }
         }
       });
-    case SET_RANGE_AND_SQUASH:
+    case SET_THRESHOLD_RANGE_AND_SQUASH:
       let layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });
@@ -99,6 +103,30 @@ export function layerReducer(state = initialState, action) {
           [layerIndex]: {
             custom: {
               $set: [action.paletteId]
+            }
+          }
+        }
+      });
+    case SET_FILTER_RANGE:
+      layerIndex = lodashFindIndex(state[layerGroupStr], {
+        id: action.layerId
+      });
+      return update(state, {
+        [layerGroupStr]: {
+          [layerIndex]: {
+            $merge: action.props
+          }
+        }
+      });
+    case SET_VECTORSTYLE:
+      layerIndex = lodashFindIndex(state[layerGroupStr], {
+        id: action.layerId
+      });
+      return update(state, {
+        [layerGroupStr]: {
+          [layerIndex]: {
+            custom: {
+              $set: action.paletteId
             }
           }
         }

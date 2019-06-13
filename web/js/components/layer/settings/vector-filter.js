@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import lodashDebounce from 'lodash/debounce';
 import { Range as RangeInput } from 'rc-slider';
 
-class VectorThresholdSelect extends React.Component {
+class VectorFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,7 +11,7 @@ class VectorThresholdSelect extends React.Component {
       end: props.end,
       activeDragger: 'start'
     };
-    this.debounceSetRange = lodashDebounce(props.setRange, 300);
+    this.debounceSetRange = lodashDebounce(props.setFilterRange, 300);
   }
   /**
    * Update filter values
@@ -79,16 +79,16 @@ class VectorThresholdSelect extends React.Component {
     );
   }
 }
-VectorThresholdSelect.propTypes = {
+VectorFilter.propTypes = {
   start: PropTypes.number,
   end: PropTypes.number,
   onSlide: PropTypes.func,
   index: PropTypes.number,
   min: PropTypes.number,
   max: PropTypes.number,
-  setRange: PropTypes.func,
+  setFilterRange: PropTypes.func,
   layerId: PropTypes.string,
   groupName: PropTypes.string
 };
 
-export default VectorThresholdSelect;
+export default VectorFilter;
