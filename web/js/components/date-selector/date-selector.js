@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DateInputColumn from './input';
 import util from '../../util/util';
@@ -10,10 +10,7 @@ import util from '../../util/util';
  *
  * @class TimelineRangeSelector
  */
-class DateSelector extends PureComponent {
-  /*
-   * @constructor
-   */
+class DateSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,9 +53,29 @@ class DateSelector extends PureComponent {
   updateDate(date, type) {
     this.props.onDateChange(date, this.props.id);
   }
+  shouldComponentUpdate(prevProps, prevState) {
+    let {
+      date,
+      hasSubdailyLayers,
+      maxDate,
+      minDate
+    } = this.props;
+
+    let updateCheck = (
+      this.state.tab === prevState.tab &&
+      date.getTime() === prevProps.date.getTime() &&
+      hasSubdailyLayers === prevProps.hasSubdailyLayers &&
+      maxDate.getTime() === prevProps.maxDate.getTime() &&
+      minDate.getTime() === prevProps.minDate.getTime()
+    );
+    if (updateCheck) {
+      return false;
+    }
+    return true;
+  }
   renderSubdaily() {
+    const { date } = this.props;
     if (this.props.hasSubdailyLayers) {
-      let date = this.props.draggerSelected === 'selectedB' ? this.props.dateB : this.props.date;
       return (
         <React.Fragment>
           <DateInputColumn
@@ -103,19 +120,17 @@ class DateSelector extends PureComponent {
   }
   render() {
     const {
+      date,
       maxDate,
       minDate,
       fontSize,
-      idSuffix,
-      draggerSelected
+      idSuffix
     } = this.props;
-    let date = draggerSelected === 'selectedB' ? this.props.dateB : this.props.date;
     const { tab } = this.state;
     return (
       <div className="wv-date-selector-widget">
         <DateInputColumn
           step={1}
-          startDate={new Date(2000)}
           date={date}
           value={date.getUTCFullYear()}
           type="year"
@@ -132,7 +147,6 @@ class DateSelector extends PureComponent {
         />
         <DateInputColumn
           step={1}
-          startDate={new Date(2000)}
           date={date}
           value={util.monthStringArray[date.getUTCMonth()]}
           type="month"
@@ -149,7 +163,6 @@ class DateSelector extends PureComponent {
         />
         <DateInputColumn
           step={1}
-          startDate={new Date(2000)}
           date={date}
           type="day"
           updateDate={this.updateDate}

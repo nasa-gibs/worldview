@@ -454,6 +454,7 @@ class Timeline extends React.Component {
 
     // handle draggerTimeState updates if date changes
     if (this.props.dateA !== prevProps.dateA && this.props.dateA !== this.state.draggerTimeState) {
+      console.log(this.props.dateA ,prevProps.dateA ,this.state.draggerTimeState)
       this.setState({
         draggerTimeState: this.props.dateA
       });
@@ -502,7 +503,6 @@ class Timeline extends React.Component {
       timelineEndDateLimit,
       timelineStartDateLimit,
       timeScaleChangeUnit,
-      parentOffset,
       animStartLocationDate,
       animEndLocationDate,
       isAnimationWidgetOpen,
@@ -510,6 +510,7 @@ class Timeline extends React.Component {
       hideTimeline,
       timeScale
     } = this.props;
+    let selectedDate = draggerSelected === 'selected' ? this.state.draggerTimeState : this.state.draggerTimeStateB;
     return this.state.initialLoadComplete ? (
       <ErrorBoundary>
         <section id="timeline" className="timeline-inner clearfix">
@@ -518,12 +519,8 @@ class Timeline extends React.Component {
           >
             <div id="date-selector-main">
               <DateSelector
-                // onDateChange={this.props.changeDate}
                 onDateChange={this.changeDate}
-                // date={new Date(dateA)}
-                date={new Date(this.state.draggerTimeState)}
-                // dateB={new Date(dateB)}
-                dateB={new Date(this.state.draggerTimeStateB)}
+                date={new Date(selectedDate)}
                 hasSubdailyLayers={hasSubdailyLayers}
                 draggerSelected={draggerSelected}
                 maxDate={new Date(timelineEndDateLimit)}
@@ -561,31 +558,22 @@ class Timeline extends React.Component {
           >
             {/* Timeline */}
             <TimelineAxis
-
-            frontDate={this.state.frontDate}
-            backDate={this.state.backDate}
-              // {...this.props}
+              frontDate={this.state.frontDate}
+              backDate={this.state.backDate}
               isTimelineDragging={this.state.isTimelineDragging}
               moved={this.state.moved}
               axisWidth={axisWidth}
               dateA={dateA}
               dateB={dateB}
-              // changeDate={this.props.changeDate}
               hasSubdailyLayers={hasSubdailyLayers}
-              parentOffset={parentOffset}
               changeTimeScale={this.changeTimeScale}
               compareModeActive={compareModeActive}
               draggerSelected={draggerSelected}
               onChangeSelectedDragger={this.onChangeSelectedDragger}
               timelineStartDateLimit={timelineStartDateLimit}
               timelineEndDateLimit={timelineEndDateLimit}
-              // changeAnimStartAndEndDate={this.props.changeStartAndEndDate}
-              // changeAnimStartAndEndDate={this.updateAnimationDateAndLocation}
-              // changeAnimStartDate={this.props.changeStartDate}
-              // changeAnimEndDate={this.props.changeEndDate}
               animStartLocationDate={animStartLocationDate}
               animEndLocationDate={animEndLocationDate}
-              isAnimationWidgetOpen={isAnimationWidgetOpen}
               isAnimationDraggerDragging={this.state.isAnimationDraggerDragging}
               updateDraggerDatePosition={this.updateDraggerDatePosition}
               draggerTimeState={this.state.draggerTimeState}
@@ -602,15 +590,11 @@ class Timeline extends React.Component {
               animationStartLocation={this.state.animationStartLocation}
               animationEndLocation={this.state.animationEndLocation}
               timeScale={timeScale}
-              // displayDate={this.displayDate}
               showHoverOn={this.showHoverOn}
               showHoverOff={this.showHoverOff}
-              // toggleShowDraggerTime={this.toggleShowDraggerTime}
               showHover={this.showHover}
               leftOffset={this.state.leftOffset}
-              showDraggerTime={this.state.showDraggerTime}
               hoverTime={this.state.hoverTime}
-              showHoverLine={this.state.showHoverLine}
               isDraggerDragging={this.state.isDraggerDragging}
             />
 
@@ -664,8 +648,6 @@ class Timeline extends React.Component {
                 width={axisWidth}
                 setDraggerVisibility={this.setDraggerVisibility}
                 toggleShowDraggerTime={this.toggleShowDraggerTime}
-                // handleDragDragger={this.handleDragDragger}
-                // selectDragger={this.selectDragger}
                 onChangeSelectedDragger={this.onChangeSelectedDragger}
                 updateDraggerDatePosition={this.updateDraggerDatePosition}
                 compareModeActive={compareModeActive}

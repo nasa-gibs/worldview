@@ -116,7 +116,6 @@ class TimelineAxis extends Component {
     let draggerVisible = false;
     let isBetween = getIsBetween(draggerDateActual, frontDate, backDate);
     if (isBetween) {
-      console.log
       draggerPosition = Math.abs(frontDate.diff(draggerDateActual, timeScale, true) * gridWidth);
       if (this.props.compareModeActive || this.props.draggerSelected === 'selected') {
         draggerVisible = true;
@@ -960,7 +959,7 @@ class TimelineAxis extends Component {
         timeScale,
         compareModeActive,
         hasSubdailyLayers,
-        parentOffset,
+        // parentOffset,
         timelineEndDateLimit,
         transformX,
         frontDate,
@@ -975,7 +974,7 @@ class TimelineAxis extends Component {
         nextProps.timeScale === timeScale &&
         nextProps.compareModeActive === compareModeActive &&
         nextProps.hasSubdailyLayers === hasSubdailyLayers &&
-        nextProps.parentOffset === parentOffset &&
+        // nextProps.parentOffset === parentOffset &&
         nextProps.timelineEndDateLimit === timelineEndDateLimit &&
         nextProps.transformX === transformX &&
         nextProps.frontDate === frontDate &&
@@ -1106,8 +1105,7 @@ TimelineAxis.propTypes = {
   compareModeActive: PropTypes.bool,
   draggerSelected: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
-  onChangeSelectedDragger: PropTypes.func,
-  parentOffset: PropTypes.number,
+  // parentOffset: PropTypes.number,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   startDate: PropTypes.string,

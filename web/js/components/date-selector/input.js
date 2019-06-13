@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
 
@@ -9,10 +9,7 @@ import util from '../../util/util';
  *
  * @class TimelineRangeSelector
  */
-class DateInputColumn extends React.Component {
-  /*
-   * @constructor
-   */
+class DateInputColumn extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,14 +26,12 @@ class DateInputColumn extends React.Component {
     this.onClickUp = this.onClickUp.bind(this);
     this.onClickDown = this.onClickDown.bind(this);
   }
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.focused) {
       this.inputs[this.props.tabIndex].focus();
     }
     if (this.props.value !== prevProps.value) {
-      this.setState({
-        value: this.props.value
-      });
+      this.updateValue();
     }
   }
   componentWillMount() {
@@ -53,6 +48,10 @@ class DateInputColumn extends React.Component {
     this.size = size;
   }
   componentDidMount() {
+    this.updateValue();
+  }
+  // update input value
+  updateValue = () => {
     this.setState({
       value: this.props.value
     });
@@ -115,7 +114,7 @@ class DateInputColumn extends React.Component {
           break;
       }
       if (newDate) {
-        this.props.updateDate(newDate, this.props.type, null);
+        this.props.updateDate(newDate, this.props.type);
         if (entered) {
           if (shiftTab) {
             // shift-tabbed - move backward
