@@ -55,26 +55,26 @@ export function getRenderedPalette(layerId, index, state) {
   return lodashCloneDeep(palette);
 }
 
-export function getLegends(layerId, groupName, state) {
-  var legends = [];
+export function getPaletteLegends(layerId, groupName, state) {
+  var paletteLegends = [];
   var count = getCount(layerId, state);
   for (var i = 0; i < count; i++) {
-    legends.push(getLegend(layerId, i, groupName, state));
+    paletteLegends.push(getPaletteLegend(layerId, i, groupName, state));
   }
-  return legends;
+  return paletteLegends;
 }
 /**
  * Gets the legend of a colormap
  *
  *
- * @method getLegend
+ * @method getPaletteLegend
  * @static
  * @param str {string} The ID of the layer
  * @param number {Number} The index of the colormap for this layer, default 0
  * object.
  * @return {object} object of the legend
  */
-export function getLegend(layerId, index, groupStr, state) {
+export function getPaletteLegend(layerId, index, groupStr, state) {
   var value = getPalette(layerId, index, groupStr, state);
   return value.legend || value.entries;
 }

@@ -10,18 +10,15 @@ import update from 'immutability-helper';
 import util from '../../util/util';
 const browser = util.browser;
 export const defaultVectorStyleState = {
-  rendered: {},
-  default: {},
+  custom: {},
   active: {},
   activeB: {},
   isLoading: {},
   supported: !(browser.ie || !browser.webWorkers || !browser.cors)
 };
 export function getInitialVectorStyleState(config) {
-  const rendered = lodashGet(config, 'vectorStyles.rendered') || {};
-  const custom = lodashGet(config, 'vectorStyles.custom') || {};
+  const custom = lodashGet(config, 'vectorStyles') || {};
   return lodashAssign({}, defaultVectorStyleState, {
-    rendered,
     custom
   });
 }

@@ -50,29 +50,29 @@ class VectorStyleSelect extends React.Component {
    * Apply logic to render correct palette selection
    * @param {String} id | Legend Id
    */
-  customLegend(id) {
-    const {
-      getDefaultLegend,
-      getCustomVectorStyle,
-      layer,
-      index
-      // palettesTranslate
-    } = this.props;
-    const { activeVectorStyle } = this.state;
-    var source = getDefaultLegend(layer.id, index);
-    var target = getCustomVectorStyle(id);
-    var targetType =
-      target.colors.length === 1 ? 'classification' : 'continuous';
+  // customLegend(id) {
+  //   const {
+  //     getDefaultLegend,
+  //     getCustomVectorStyle,
+  //     layer,
+  //     index
+  //     // palettesTranslate
+  //   } = this.props;
+  //   const { activeVectorStyle } = this.state;
+  //   var source = getDefaultLegend(layer.id, index);
+  //   var target = getCustomVectorStyle(id);
+  //   var targetType =
+  //     target.colors.length === 1 ? 'classification' : 'continuous';
 
-    if (source.type === 'classification' && targetType === 'classification') {
-      return this.renderSelectorItemSingle(
-        target,
-        id,
-        target.name,
-        activeVectorStyle === target.id
-      );
-    }
-  }
+  //   if (source.type === 'classification' && targetType === 'classification') {
+  //     return this.renderSelectorItemSingle(
+  //       target,
+  //       id,
+  //       target.name,
+  //       activeVectorStyle === target.id
+  //     );
+  //   }
+  // }
 
   /**
    * Render classification customs when there is only one
@@ -82,7 +82,7 @@ class VectorStyleSelect extends React.Component {
    * @param {String} description | Colormap name
    * @param {Boolean} isSelected | is this colormap active
    */
-  renderSelectorItemSingle(palette, id, description, isSelected) {
+  renderSelectorItemSingle(vectorStyle, id, description, isSelected) {
     const color = palette.classes
       ? palette.classes.colors[0]
       : palette.colors[0];
@@ -133,7 +133,7 @@ VectorStyleSelect.propTypes = {
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
   getDefaultLegend: PropTypes.func,
-  getCustomVectorStyle: PropTypes.func,
+  // getCustomVectorStyle: PropTypes.func,
   canvas: PropTypes.object,
   checkerBoard: PropTypes.object,
   activeVectorStyle: PropTypes.string
