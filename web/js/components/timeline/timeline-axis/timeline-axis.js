@@ -10,7 +10,6 @@ import {
   timeScaleOptions,
   timeScaleToNumberKey
 } from '../../../modules/date/constants';
-
 import {
   getIsBetween,
   removeBackMultipleInPlace,
@@ -172,11 +171,6 @@ class TimelineAxis extends Component {
 
     draggerPosition = draggerPosition - pixelsToAdd + position - this.state.draggerWidth;
     draggerPositionB = draggerPositionB - pixelsToAdd + position - this.state.draggerWidth;
-
-    // let init = false;
-    // if (this.state.init === true) {
-    //   init = false
-    // }
 
     let updatePositioningArguments = {
       moved: false,
@@ -373,8 +367,7 @@ class TimelineAxis extends Component {
       axisWidth,
       compareModeActive,
       draggerTimeState,
-      draggerTimeStateB,
-      hasSubdailyLayers
+      draggerTimeStateB
     } = this.props;
 
     // update timescale axis focus
@@ -405,26 +398,6 @@ class TimelineAxis extends Component {
       this.updateScale(draggerDate, timeScale, axisWidth);
     }
 
-    // if (compareModeActive !== prevProps.compareModeActive) {
-    //   // TURN ON COMPARE MODE
-    //   if (compareModeActive) {
-    //     this.updateScale(draggerDate, timeScale, axisWidth);
-    //   } else {
-    //     // TURN OFF COMPARE MODE
-    //     if (draggerSelected === 'selected') {
-    //       this.props.setDraggerVisibility(true, false);
-    //       // this.setState({
-    //       //   draggerVisibleB: false
-    //       // });
-    //     } else {
-    //       this.props.setDraggerVisibility(false, true);
-    //       // this.setState({
-    //       //   draggerVisible: false
-    //       // });
-    //     }
-    //   }
-    // }
-
     // handle switching A/B dragger axis focus if switched from A/B sidebar tabs
     if (compareModeActive && (draggerSelected !== prevProps.draggerSelected)) {
       if (draggerSelected === 'selected') {
@@ -445,9 +418,7 @@ class TimelineAxis extends Component {
       if (draggerTimeState !== dateA) {
         // check if draggerCheck will be within acceptable visible axis width
         let draggerCheck = this.checkDraggerMoveOrUpdateScale(dateA);
-        if (draggerCheck.withinRange) {
-          // this.setDraggerToTime(dateA);
-        } else {
+        if (!draggerCheck.withinRange) {
           this.updateScaleWithOffset(dateA, timeScale, draggerCheck);
         }
       }
@@ -456,9 +427,7 @@ class TimelineAxis extends Component {
       if (draggerTimeStateB !== dateB) {
         // check if draggerCheck will be within acceptable visible axis width
         let draggerCheck = this.checkDraggerMoveOrUpdateScale(dateB, true);
-        if (draggerCheck.withinRange) {
-          // this.setDraggerToTime(dateB, true);
-        } else {
+        if (!draggerCheck.withinRange) {
           this.updateScaleWithOffset(dateB, timeScale, draggerCheck);
         }
       }
@@ -864,7 +833,6 @@ console.log(hoverTime)
         timeScale,
         compareModeActive,
         hasSubdailyLayers,
-        // parentOffset,
         timelineEndDateLimit,
         transformX,
         frontDate,
@@ -879,7 +847,6 @@ console.log(hoverTime)
         nextProps.timeScale === timeScale &&
         nextProps.compareModeActive === compareModeActive &&
         nextProps.hasSubdailyLayers === hasSubdailyLayers &&
-        // nextProps.parentOffset === parentOffset &&
         nextProps.timelineEndDateLimit === timelineEndDateLimit &&
         nextProps.transformX === transformX &&
         nextProps.frontDate === frontDate &&
@@ -887,41 +854,28 @@ console.log(hoverTime)
       );
 
       let {
-        // currentTimeRange,
         dragSentinelChangeNumber,
         dragSentinelCount,
         gridNumber,
         gridWidth,
-        // hoverLinePosition,
-        // hoverTime,
-        // isAnimationDraggerDragging,
-        // isDraggerDragging,
-        // isTimelineDragging,
         leftBound,
-        // leftOffset,
         midPoint,
-        // moved,
         numberOfVisibleTiles,
         rightBound,
-        // showDraggerTime,
-        // showHoverLine,
         wheelZoom
       } = this.state;
 
       let checkForStateUpdates = (
-        // currentTimeRange[0].rawDate === nextState.currentTimeRange[0].rawDate &&
         dragSentinelChangeNumber === nextState.dragSentinelChangeNumber &&
         dragSentinelCount === nextState.dragSentinelCount &&
         gridNumber === nextState.gridNumber &&
         gridWidth === nextState.gridWidth &&
         leftBound === nextState.leftBound &&
         midPoint === nextState.midPoint &&
-        // moved === nextState.moved &&
         numberOfVisibleTiles === nextState.numberOfVisibleTiles &&
         rightBound === nextState.rightBound &&
         wheelZoom === nextState.wheelZoom
       );
-
 
       if (checkForPropsUpdates && checkForStateUpdates) {
         return false;

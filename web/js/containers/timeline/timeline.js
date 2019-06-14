@@ -105,12 +105,12 @@ class Timeline extends React.Component {
   // display date based on hover grid tile
   displayDate = (date, leftOffset) => {
     console.log(date, leftOffset)
-    // requestAnimationFrame(() => {
-    this.setState({
-      hoverTime: date,
-      leftOffset: leftOffset - this.props.parentOffset // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
+    requestAnimationFrame(() => {
+      this.setState({
+        hoverTime: date,
+        leftOffset: leftOffset - this.props.parentOffset // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
+      });
     });
-    // });
   }
 
   // show hover line
