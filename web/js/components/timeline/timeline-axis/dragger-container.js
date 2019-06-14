@@ -11,7 +11,7 @@ import { timeScaleOptions } from '../../../modules/date/constants';
  * Dragger container used to conditionally render based on selected dragger
  * this is necessary for svg dragger z-index (ex: allow B to drag over A if B being dragged)
  *
- * @class Dragger
+ * @class DraggerContainer
  * @extends PureComponent
  */
 class DraggerContainer extends PureComponent {
@@ -22,7 +22,12 @@ class DraggerContainer extends PureComponent {
     };
   }
 
-  // select dragger 'selected' or 'selectedB'
+  /**
+  * @desc select dragger 'selected' or 'selectedB'
+  * @param {String} draggerName
+  * @param {Event} click event
+  * @returns {void}
+  */
   selectDragger = (draggerName, e) => {
     if (e) {
       e.stopPropagation();
@@ -33,7 +38,11 @@ class DraggerContainer extends PureComponent {
     }
   }
 
-  // move draggerTimeState to inputTime
+  /**
+  * @desc move draggerTimeState to inputTime
+  * @param {String} inputTime
+  * @returns {void}
+  */
   setDraggerPosition = (inputTime) => {
     let frontDate = this.props.frontDate;
     let backDate = this.props.backDate;
@@ -57,8 +66,13 @@ class DraggerContainer extends PureComponent {
     this.props.updateDraggerDatePosition(null, draggerName, newDraggerPosition, draggerVisible);
   }
 
-  // handle dragger dragging
-  handleDragDragger = (draggerName, e, d) => {
+  /**
+  * @desc handle dragger dragging
+  * @param {Event} mouse event
+  * @param {Object} draggable delta object
+  * @returns {void}
+  */
+  handleDragDragger = (e, d) => {
     if (e) {
       e.stopPropagation();
       e.preventDefault();
@@ -77,7 +91,7 @@ class DraggerContainer extends PureComponent {
       // let axisWidth = this.props.axisWidth;
       // let dragSentinelChangeNumber = this.state.dragSentinelChangeNumber;
       // let dragSentinelCount = this.state.dragSentinelCount;
-
+      let draggerName = this.props.draggerSelected;
       let time;
       let draggerPosition;
       let draggerASelected = draggerName === 'selected';
@@ -213,17 +227,17 @@ class DraggerContainer extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let { draggerTimeState, draggerTimeStateB, timeScale } = this.props;
+    let { draggerTimeState, draggerTimeStateB } = this.props;
     let { isDraggerDragging } = this.props;
     let { dateA, dateB, draggerSelected, compareModeActive } = this.props;
 
     // handle dragger visibility update on compare mode activate/deactivate
     if (compareModeActive !== prevProps.compareModeActive) {
-      // TURN ON COMPARE MODE
+      // turn on compare mode
       if (compareModeActive) {
         this.props.setDraggerVisibility(true, true);
       } else {
-        // TURN OFF COMPARE MODE
+        // turn off compare mode
         if (draggerSelected === 'selected') {
           this.props.setDraggerVisibility(true, false);
         } else {
@@ -235,13 +249,11 @@ class DraggerContainer extends PureComponent {
     if (!isDraggerDragging) {
       // handle A dragger change
       if (draggerTimeState !== prevProps.draggerTimeState) {
-        // this.setDraggerPosition(prevProps.draggerTimeState, draggerTimeState)
-        this.setDraggerPosition(draggerTimeState)
+        this.setDraggerPosition(draggerTimeState);
       }
       // handle B dragger change
       if (draggerTimeStateB !== prevProps.draggerTimeStateB) {
-        // this.setDraggerPosition(prevProps.draggerTimeStateB, draggerTimeStateB)
-        this.setDraggerPosition(draggerTimeStateB)
+        this.setDraggerPosition(draggerTimeStateB);
       }
     }
   }

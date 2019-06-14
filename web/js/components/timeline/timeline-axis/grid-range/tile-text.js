@@ -1,6 +1,12 @@
 import React from 'react';
 
-// Wrapper for TileText to determine what time unit to display
+/**
+* @desc Wrapper for TileText to determine what time unit to display
+* @param {Object} item
+* @param {Number} index
+* @param {Number} gridWidth
+* @returns {Object} svg text DOM object
+*/
 const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   let dateText = item.date;
   if (item.timeScale === 'hour') {

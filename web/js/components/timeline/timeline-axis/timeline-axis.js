@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import moment from 'moment';
+import util from '../../../util/util';
 
 import GridRange from './grid-range/grid-range';
 
@@ -37,7 +38,16 @@ class TimelineAxis extends Component {
     // axis click to set dragger
     this.setLineTime = this.setLineTime.bind(this);
   }
-  // main function to update axis scale, time range, grids tiles/text, draggerA/B positions, animation start/end draggers
+
+  /**
+  * @desc main function to update axis scale, time range, grids tiles/text, draggerA/B positions, animation start/end draggers
+  * @param {String} inputDate
+  * @param {String} timeScale
+  * @param {Number} axisWidthInput
+  * @param {Number} leftOffsetFixedCoeff
+  * @param {Boolean} hoverChange
+  * @returns {void}
+  */
   updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange) => {
     console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange)
     let maxDateTimelineEndDateLimit = this.props.timelineEndDateLimit;
@@ -202,9 +212,13 @@ class TimelineAxis extends Component {
     }, this.props.updatePositioning(updatePositioningArguments));
   }
 
-  // return date array of days based on:
-  // subtract - integer (negative numbers selects start date in the future)
-  // add - integer (negative numbers selects end date in the past)
+  /**
+  * @desc update dates in range based on dragging axis
+  * @param {Number} subtract - integer (negative numbers selects start date in the future)
+  * @param {Number} add - integer (negative numbers selects end date in the past)
+  * @param {string} inputDate
+  * @returns {Array} timeRangeArray - time range
+  */
   getTimeRangeArray = (subtract, add, inputDate) => {
     let {
       timelineEndDateLimit,
@@ -217,8 +231,6 @@ class TimelineAxis extends Component {
 
     if (timeScale === 'year') {
       dayZeroed = moment.utc(inputDate).startOf('year');
-      // let endLimitYear = moment.utc(timelineEndDateLimit).year() + 1;
-      // let startLimitYear = moment.utc(timelineStartDateLimit).year();
       let endLimitYear = new Date(timelineEndDateLimit).getUTCFullYear() + 1;
       let startLimitYear = new Date(timelineStartDateLimit).getUTCFullYear();
       startDate = dayZeroed.year(startLimitYear);
@@ -245,7 +257,22 @@ class TimelineAxis extends Component {
     return timeRangeArray;
   }
 
-  // update dates in range based on dragging axis
+  /**
+  * @desc update dates in range based on dragging axis
+  * @param {Number} position
+  * @param {Number} deltaX
+  * @param {Number} draggerPosition
+  * @param {Number} draggerPositionB
+  * @param {Number} overDrag
+  * @returns {Object} output - return new time range and dragger visibilty/updated position
+  * @returns {Array} output.currentTimeRange
+  * @returns {Number} output.transformX
+  * @returns {Boolean} output.draggerVisible
+  * @returns {Boolean} output.draggerVisibleB
+  * @returns {Number} output.overDragGrids
+  * @returns {Number} output.newDraggerPosition
+  * @returns {Number} output.newDraggerPositionB
+  */
   updateTimeRangeFromDrag = (position, deltaX, draggerPosition, draggerPositionB, overDrag) => {
     let {
       gridWidth,
@@ -262,7 +289,7 @@ class TimelineAxis extends Component {
       compareModeActive,
       draggerSelected
     } = this.props;
-
+    console.log(position, deltaX, draggerPosition, draggerPositionB, overDrag)
     numberOfVisibleTiles = Math.floor(numberOfVisibleTiles * 0.25);
     let overDragGrids = Math.ceil(overDrag / gridWidth);
     let timeRangeAdd;
@@ -273,6 +300,8 @@ class TimelineAxis extends Component {
       removeBackMultipleInPlace(currentTimeRange, numberOfVisibleTiles + 1 + overDragGrids);
       currentTimeRange.unshift(...timeRangeAdd);
       transform = transformX - (numberOfVisibleTiles + 1 + overDragGrids) * gridWidth;
+
+      console.log(timeRangeAdd, transform)
     } else { // dragging left - exposing future dates
       let lastDateInRange = currentTimeRange[currentTimeRange.length - 1].rawDate;
       timeRangeAdd = this.getTimeRangeArray(-1, numberOfVisibleTiles + 1 + overDragGrids, lastDateInRange);
@@ -330,7 +359,21 @@ class TimelineAxis extends Component {
     };
   }
 
-  // check dragger visibility and return newDraggerPosition if dragger initially false and now visible
+  /**
+  * @desc helper function used in updateTimeRangeFromDrag
+  * @desc check dragger visibility and calculate newDraggerPosition if dragger initially false and now visible
+  * @param {String} draggerTime
+  * @param {Boolean} draggerVisible
+  * @param {Number} newDraggerPosition
+  * @param {Object} sharedDraggerVisibilityParams
+  * @param {Object} sharedDraggerVisibilityParams.frontDate
+  * @param {String} sharedDraggerVisibilityParams.backDate
+  * @param {Number} sharedDraggerVisibilityParams.position
+  * @param {Number} sharedDraggerVisibilityParams.transform
+  * @returns {Object} output - return params used for dragger visibilty/updating dragger position
+  * @returns {Boolean} output.newDraggerPosition
+  * @returns {Boolean} output.isVisible - dragger within visible range
+  */
   checkDraggerVisibility = (draggerTime, draggerVisible, newDraggerPosition, { frontDate, backDate, position, transform }) => {
     let { gridWidth } = this.state;
     let { timeScale } = this.props;
@@ -435,8 +478,7 @@ class TimelineAxis extends Component {
   }
 
   /**
-   * check if selectedDate will be within acceptable visible axis width
-   *
+   * @desc check if selectedDate will be within acceptable visible axis width
    * @param {String} selectedDate
    * @param {Boolean} draggerB - draggerB being checked?
    * @returns {Object} output - return params used for dragger visibilty/updating axis
@@ -475,14 +517,38 @@ class TimelineAxis extends Component {
     };
   }
 
-  // update scale leftOffset helper
+  /**
+  * @desc helper used in componentDidUpdate
+  * @desc update scale leftOffset
+  * @param {String} date
+  * @param {String} timeScale
+  * @param {Object} draggerCheck
+  * @returns {void}
+  */
   updateScaleWithOffset = (date, timeScale, draggerCheck) => {
     let leftOffsetFixedCoeff = draggerCheck.newDraggerDiff > 5 ? 0.5 : draggerCheck.newDateInThePast ? 0.25 : 0.75;
     this.updateScale(date, timeScale, null, leftOffsetFixedCoeff);
   }
 
   // #### Drag/mouse handlers ####
-  // changes timeScale state
+  /**
+  * @desc show hover line - additional parent conditons required
+  * @param {Event} mouse event
+  * @returns {void}
+  */
+  showHoverOn = (e) => {
+    if (!this.props.isAnimationDraggerDragging && !this.props.isTimelineDragging) {
+      if (e.target.className.animVal === 'grid') {
+        this.props.showHoverOn();
+      }
+    }
+  }
+
+  /**
+  * @desc changes timeScale with wheel scroll
+  * @param {Event} wheel scroll event
+  * @returns {void}
+  */
   wheelZoom = (e) => {
     let { timeScale, hasSubdailyLayers, changeTimeScale } = this.props;
     let timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
@@ -502,14 +568,21 @@ class TimelineAxis extends Component {
     }
   }
 
-  // set mouseDown to handle over dragging range-select and triggering false axis click
+  /**
+  * @desc set mouseDown to handle over dragging range-select and triggering false axis click
+  * @returns {void}
+  */
   handleMouseDown = () => {
     this.setState({
       mouseDown: true
     });
   }
 
-  // move dragger on axis click
+  /**
+  * @desc move dragger on axis click
+  * @param {Event} mouse click event
+  * @returns {void}
+  */
   setLineTime = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -549,16 +622,26 @@ console.log(hoverTime)
     }
   }
 
-  // handle start drag of axis
-  handleStartDrag = () => {
-    this.setState({
-      isTimelineDragging: true
-    });
+  /**
+  * @desc handle start drag of axis sets dragging state
+  * @returns {void}
+  */
+  handleStartDrag = (e, d) => {
+    console.log(e, d)
+    // this.setState({
+    //   isTimelineDragging: true
+    // });
   }
 
-  // drag axis - will update date range if dragged into past/future past dragSentinelChangeNumber
+  /**
+  * @desc drag axis - will update date range if dragged into past/future past dragSentinelChangeNumber
+  * @param {Event} mouse event
+  * @param {Object} draggable delta object
+  * @returns {void}
+  */
   handleDrag = (e, d) => {
-    console.log(e, d)
+    console.log(util.browser.mobileAndTabletDevice)
+    // console.log(e, d, e.targetTouches, e.targetTouches[0])
     e.stopPropagation();
     e.preventDefault();
     let {
@@ -765,10 +848,14 @@ console.log(hoverTime)
     }
   }
 
-  // handle stop drag of axis
-  // moved === false means an axis click
+  /**
+  * @desc handle stop drag of axis. moved === false means an axis click
+  * @param {Event} mouse event
+  * @param {Object} draggable delta object
+  * @returns {void}
+  */
   handleStopDrag = (e, d) => {
-    console.log(e,d)
+    // console.log(e,d)
     let {
       midPoint,
       leftBound,
@@ -796,6 +883,7 @@ console.log(hoverTime)
     }
 
     transformX = transformX + position;
+    console.log(moved, midPoint, position, leftBound, rightBound, d.x, d)
     let updatePositioningArguments = {
       moved,
       isTimelineDragging: false,
@@ -899,9 +987,6 @@ console.log(hoverTime)
       rightBound
     } = this.state;
 
-    // ! WINDOW.MOMENT FOR DEV DEBUG ONLY
-    window.moment = moment;
-    // console.log(this.props)
     return (
       <React.Fragment>
         <div className='timeline-axis-container'
@@ -909,10 +994,11 @@ console.log(hoverTime)
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.setLineTime}
           onWheel={this.wheelZoom}
-          onMouseOver={this.props.showHoverOn}
+          onMouseOver={this.showHoverOn}
           onMouseLeave={this.props.showHoverOff}
-          onTouchStart={this.handleMouseDown}
-          onTouchEnd={this.setLineTime}
+          // onTouchMove={() => console.log('onTouchMove')}
+          // onTouchStart={this.handleMouseDown}
+          // onTouchEnd={() => console.log('onTouchEnd')}
         >
           {currentTimeRange
             ? <svg className='timeline-axis-svg'
@@ -933,12 +1019,13 @@ console.log(hoverTime)
               </defs>
               <Draggable
                 axis='x'
+                onTouchMove={() => console.log('onTouchMoveXXX')}
                 onDrag={this.handleDrag}
                 position={{ x: position, y: 0 }}
                 onStart={this.handleStartDrag}
                 onStop={this.handleStopDrag}
-                onTouchStart={this.handleStartDrag}
-                onTouchEnd={this.handleStopDrag}
+                // onTouchStart={this.handleStartDrag}
+                // onTouchEnd={this.handleStopDrag}
                 bounds={{ left: leftBound, top: 0, bottom: 0, right: rightBound }}
               >
                 <g>

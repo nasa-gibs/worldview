@@ -2,22 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import lodashDebounce from 'lodash/debounce';
+import util from '../../util/util';
+
 import ErrorBoundary from '../../containers/error-boundary';
-import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/interval-timescale-change';
-// import '../../components/timeline/timeline.css';
+import MobileDatePicker from '../../components/timeline/mobile-date-picker';
+
 import TimelineAxis from '../../components/timeline/timeline-axis/timeline-axis';
-import TimelineRangeSelector from '../../components/range-selection/range-selection';
+import TimeScaleIntervalChange from '../../components/timeline/timeline-controls/interval-timescale-change';
 import DraggerContainer from '../../components/timeline/timeline-axis/dragger-container';
 import HoverLine from '../../components/timeline/timeline-axis/hover-line';
 import DateToolTip from '../../components/timeline/timeline-axis/date-tooltips';
 import CustomIntervalSelectorWidget from '../../components/timeline/interval-selector/interval-selector';
-import util from '../../util/util';
+
 import DateSelector from '../../components/date-selector/date-selector';
-import MobileDatePicker from '../../components/timeline/mobile-date-picker';
 import DateChangeArrows from '../../components/timeline/timeline-controls/date-change-arrows';
 
 import AnimationButton from '../../components/timeline/timeline-controls/animation-button';
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
+import TimelineRangeSelector from '../../components/range-selection/range-selection';
 
 import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
 import {
@@ -50,13 +53,6 @@ import {
 } from '../../modules/date/constants';
 
 const ANIMATION_DELAY = 500;
-
-const MARGIN = {
-  top: 0,
-  right: 50,
-  bottom: 20,
-  left: 30
-};
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -102,7 +98,12 @@ class Timeline extends React.Component {
   }
 
   // ! HOVER TIME
-  // display date based on hover grid tile
+  /**
+  * @desc display date based on hover grid tile
+  * @param {String} date
+  * @param {Number} leftOffset
+  * @returns {void}
+  */
   displayDate = (date, leftOffset) => {
     console.log(date, leftOffset)
     requestAnimationFrame(() => {
@@ -113,21 +114,23 @@ class Timeline extends React.Component {
     });
   }
 
-  // show hover line
-  showHoverOn = (e) => {
-    console.log(e)
-    if (!this.state.isAnimationDraggerDragging && !this.state.showDraggerTime && !this.state.isTimelineDragging) {
-      if (e.target.className.animVal === 'grid') {
-        if (this.state.showHoverLine !== true) {
-          this.setState({
-            showHoverLine: true
-          });
-        }
-      }
+  /**
+  * @desc show hover line
+  * @param {Event} mouse event
+  * @returns {void}
+  */
+  showHoverOn = () => {
+    if (!this.state.showHoverLine && !this.state.showDraggerTime) {
+      this.setState({
+        showHoverLine: true
+      });
     }
   }
 
-  // hide hover line
+  /**
+  * @desc hide hover line
+  * @returns {void}
+  */
   showHoverOff = () => {
     if (this.state.showHoverLine === true) {
       this.setState({
@@ -136,7 +139,11 @@ class Timeline extends React.Component {
     }
   }
 
-  // toggle dragger time on/off
+  /**
+  * @desc toggle dragger time on/off
+  * @param {Boolean} toggleBoolean
+  * @returns {void}
+  */
   toggleShowDraggerTime = (toggleBoolean) => {
     this.setState({
       showDraggerTime: toggleBoolean,
@@ -145,7 +152,14 @@ class Timeline extends React.Component {
     });
   }
 
-  // handle svg blue line hover
+  /**
+  * @desc handle svg blue line axis hover
+  * @param {Event} mouse event
+  * @param {String} itemDate
+  * @param {String} nextDate
+  * @param {Number} index
+  * @returns {void}
+  */
   showHover = (e, itemDate, nextDate, index) => {
     console.log(e, e.type, itemDate, nextDate, index)
     e.preventDefault();
@@ -197,7 +211,23 @@ class Timeline extends React.Component {
     });
   }
 
-  // handles dynamic position changes from axis that affect dragger and range select
+  /**
+  * @desc handles dynamic position changes from axis that affect dragger and range select
+  * @param {Object} args
+  * @param {Boolean} moved
+  * @param {Boolean} isTimelineDragging
+  * @param {Number} position
+  * @param {Number} transformX
+  * @param {String} frontDate
+  * @param {String} backDate
+  * @param {Number} draggerPosition
+  * @param {Number} draggerPositionB
+  * @param {Boolean} draggerVisible
+  * @param {Boolean} draggerVisibleB
+  * @param {Number} animationStartLocation
+  * @param {Number} animationEndLocation
+  * @returns {void}
+  */
   updatePositioning = ({
     moved,
     isTimelineDragging,
@@ -233,10 +263,9 @@ class Timeline extends React.Component {
 
 >>>>>>> fix anim date inputs, continue large refactor and clean up
   /**
-   *  Clear animateByIncrement's Timeout
-   *
-   * @return {void}
-   */
+  * @desc stop animation from left/right arrows - clear animateByIncrement's timeout
+  * @returns {void}
+  */
   stopper = () => {
     clearInterval(this.animator);
     this.animator = 0;
@@ -245,14 +274,10 @@ class Timeline extends React.Component {
     });
   };
   /**
-   * Add timeout to date change when buttons are being held so that
-   * date changes don't happen too quickly
-   *
-   * @todo Create smart precaching so animation is smooth
-   *
-   * @param  {number} delta Amount of time to change
-   * @param  {String} increment Zoom level of timeline
-   *                  e.g. months,minutes, years, days
+   * @desc Add timeout to date change when buttons are being held so that
+   *       date changes don't happen too quickly
+   * @param  {Number} delta Amount of time to change
+   * @param  {String} increment Zoom level of timeline  e.g. months,minutes, years, days
    * @return {void}
    */
   animateByIncrement = (delta, increment) => {
@@ -276,99 +301,121 @@ class Timeline extends React.Component {
     animate();
   };
 
-  // show/hide custom interval modal
+  /**
+  * @desc show/hide custom interval modal
+  * @returns {void}
+  */
   toggleCustomIntervalModal = () => {
     this.setState(prevState => ({
       customIntervalModalOpen: !prevState.customIntervalModalOpen
     }));
   };
 
-  // Change the timescale parent state
-  changeTimeScale = timeScaleNumber => {
-    this.props.changeTimeScale(timeScaleNumber);
+  /**
+  * @desc Change the timescale parent state
+  * @param {Number} timeScaleNumber
+  * @returns {void}
+  */
+  changeTimeScale = (timeScale) => {
+    this.props.changeTimeScale(timeScale);
   };
 
-  // handle SET of custom time scale panel
+  /**
+  * @desc handle SET of custom time scale panel
+  * @param {Number} delta
+  * @param {Number} timeScale
+  * @returns {void}
+  */
   changeCustomInterval = (delta, timeScale) => {
-    this.props.changeCustomInterval(Number(delta), Number(timeScale));
+    this.props.changeCustomInterval(delta, timeScale);
   };
 
-  // handle SELECT of LEFT/RIGHT interval selection
-  setTimeScaleIntervalChangeUnit = (
-    intervalSelected,
-    customIntervalModalOpen
-  ) => {
+  /**
+  * @desc handle SELECT of LEFT/RIGHT interval selection
+  * @param {String} timeScale
+  * @param {Boolean} modalOpen - is custom interval modal open
+  * @returns {void}
+  */
+  setTimeScaleIntervalChangeUnit = (timeScale, modalOpen) => {
     let delta;
-    let {
-      customIntervalZoomLevel,
-      customIntervalValue,
-      selectInterval
-    } = this.props;
-    let customSelected = intervalSelected === 'custom';
+    let { customIntervalZoomLevel, customIntervalValue } = this.props;
+    let customSelected = timeScale === 'custom';
     if (customSelected && customIntervalZoomLevel && customIntervalValue) {
-      intervalSelected = customIntervalZoomLevel;
+      timeScale = customIntervalZoomLevel;
       delta = customIntervalValue;
     } else {
-      intervalSelected = Number(timeScaleToNumberKey[intervalSelected]);
+      timeScale = Number(timeScaleToNumberKey[timeScale]);
       delta = 1;
     }
-    selectInterval(delta, intervalSelected, customSelected);
+    this.props.selectInterval(delta, timeScale, customSelected);
     this.setState({
-      customIntervalModalOpen: !!customIntervalModalOpen
+      customIntervalModalOpen: modalOpen
     });
   };
 
-  // right arrow increment date
+  /**
+  * @desc right arrow increment date
+  * @returns {void}
+  */
   incrementDate = () => {
     let delta = this.props.customSelected ? this.props.intervalChangeAmt : 1;
     this.animateByIncrement(Number(delta), this.props.timeScaleChangeUnit);
   };
 
-  // left arrow decrement date
+  /**
+  * @desc left arrow decrement date
+  * @returns {void}
+  */
   decrementDate = () => {
     let delta = this.props.customSelected ? this.props.intervalChangeAmt : 1;
     this.animateByIncrement(Number(delta * -1), this.props.timeScaleChangeUnit);
   };
 
-  // open animation dialog
+  /**
+  * @desc open animation wdiget
+  * @returns {void}
+  */
   clickAnimationButton = () => {
     if (this.props.isAnimationWidgetOpen) {
       this.props.closeAnimation();
     } else {
       this.props.openAnimation();
     }
-    // Will be a setState({})
-    // a deriveStateFromProps will be wanted with this one
   };
 
-  // toggle hide timeline
+  /**
+  * @desc toggle hide timeline
+  * @returns {void}
+  */
   toggleHideTimeline = () => {
     this.setState({
       timelineHidden: !this.state.timelineHidden
     });
   };
 
-  // toggle selected dragger for comparison mode/focused date used in date selector
-  onChangeSelectedDragger = () => {
-    this.props.toggleActiveCompareState();
-  };
-
-  // handles left/right arrow down to decrement/increment date
-  handleKeyDown = lodashDebounce(
-    e => {
-      if (e.keyCode === 37) {
-        this.decrementDate();
-        e.preventDefault();
-      } else if (e.keyCode === 39) {
-        this.incrementDate();
-        e.preventDefault();
-      }
-    },
-    0,
-    { leading: true, trailing: false }
+  /**
+  * @desc handles left/right arrow down to decrement/increment date
+  * @param {Event} mouse event
+  * @returns {void}
+  */
+  handleKeyDown = lodashDebounce(e => {
+    if (e.keyCode === 37) {
+      this.decrementDate();
+      e.preventDefault();
+    } else if (e.keyCode === 39) {
+      this.incrementDate();
+      e.preventDefault();
+    }
+  },
+  0,
+  { leading: true, trailing: false }
   );
 
-  // handles stopping change date in process and to allow faster key downs
+  /**
+  * @desc handles stopping change date in process and to allow faster key downs
+  * @param {Event} mouse event
+  * @returns {void}
+  */
   handleKeyUp = e => {
     if (e.keyCode === 37 || e.keyCode === 39) {
       this.stopper();
@@ -376,36 +423,55 @@ class Timeline extends React.Component {
     }
   };
 
-  // handle animation date updates
-  updateAnimationDateAndLocation = (animationStartLocationDate, animationEndLocationDate, animationStartLocation, animationEndLocation, isDragging) => {
+  /**
+  * @desc handle animation date dragger updates
+  * @param {String} startDate
+  * @param {String} endDate
+  * @param {Number} startLocation
+  * @param {Number} endLocation
+  * @param {Boolean} isDragging
+  * @returns {void}
+  */
+  updateAnimationDateAndLocation = (startDate, endDate, startLocation, endLocation, isDragging) => {
     this.setState({
-      animationStartLocation: animationStartLocation || this.state.animationStartLocation,
-      animationEndLocation: animationEndLocation || this.state.animationEndLocation,
-      animationStartLocationDate: animationStartLocationDate,
-      animationEndLocationDate: animationEndLocationDate,
+      animationStartLocation: startLocation || this.state.animationStartLocation,
+      animationEndLocation: endLocation || this.state.animationEndLocation,
+      animationStartLocationDate: startDate,
+      animationEndLocationDate: endDate,
       isAnimationDraggerDragging: isDragging
     });
-    this.determineAnimationDraggerUpdate(animationStartLocationDate, animationEndLocationDate);
+    this.determineAnimationDraggerUpdate(startDate, endDate);
   }
 
-  determineAnimationDraggerUpdate = (animationStartLocationDate, animationEndLocationDate) => {
-    let startChanged = this.props.animationStartLocationDate !== animationStartLocationDate;
-    let endChanged = this.props.animationEndLocationDate !== animationEndLocationDate;
+  /**
+  * @desc handle animation date dragger updates of startDate, endDate, or both
+  * @param {String} startDate
+  * @param {String} endDate
+  * @returns {void}
+  */
+  determineAnimationDraggerUpdate = (startDate, endDate) => {
+    let startChanged = this.props.animationStartLocationDate !== startDate;
+    let endChanged = this.props.animationEndLocationDate !== endDate;
     if (startChanged) {
       if (endChanged) {
-        this.debounceOnUpdateStartAndEndDate(animationStartLocationDate, animationEndLocationDate);
+        this.debounceOnUpdateStartAndEndDate(startDate, endDate);
       } else {
-        this.debounceOnUpdateStartDate(animationStartLocationDate);
+        this.debounceOnUpdateStartDate(startDate);
       }
     } else {
       if (endChanged) {
-        this.debounceOnUpdateEndDate(animationEndLocationDate);
+        this.debounceOnUpdateEndDate(endDate);
       }
     }
   }
 
-  // handle animation dragger location update and state update
-  animationDraggerDateUpdate = (animationStartLocationDate, animationEndLocationDate) => {
+  /**
+  * @desc handle animation dragger location update and state update
+  * @param {String} startDate
+  * @param {String} endDate
+  * @returns {void}
+  */
+  animationDraggerDateUpdate = (startDate, endDate) => {
     let { position, transformX } = this.state;
     let { timeScale } = this.props;
 
@@ -413,19 +479,31 @@ class Timeline extends React.Component {
     let gridWidth = options.gridWidth;
 
     let frontDate = moment.utc(this.state.frontDate);
-    let startLocation = frontDate.diff(animationStartLocationDate, timeScale, true) * gridWidth;
-    let endLocation = frontDate.diff(animationEndLocationDate, timeScale, true) * gridWidth;
+    let startLocation = frontDate.diff(startDate, timeScale, true) * gridWidth;
+    let endLocation = frontDate.diff(endDate, timeScale, true) * gridWidth;
     this.setState({
       animationStartLocation: position - startLocation + transformX,
       animationEndLocation: position - endLocation + transformX,
-      animationStartLocationDate: animationStartLocationDate,
-      animationEndLocationDate: animationEndLocationDate
+      animationStartLocationDate: startDate,
+      animationEndLocationDate: endDate
     });
-    this.debounceOnUpdateStartAndEndDate(animationStartLocationDate, animationEndLocationDate);
+    this.debounceOnUpdateStartAndEndDate(startDate, endDate);
   }
 
   // ! DRAGGER
+  /**
+  * @desc update state dragger position and if new date, change store date
+  * @param {String} newDraggerDate
+  * @param {String} draggerSelected
+  * @param {Number} draggerPosition
+  * @param {Boolean} draggerVisible
+  * @param {Boolean} otherDraggerVisible
+  * @param {Boolean} moved
+  * @returns {void}
+  */
   updateDraggerDatePosition = (newDraggerDate, draggerSelected, draggerPosition, draggerVisible, otherDraggerVisible, moved) => {
+    console.log(this.state)
+    console.log(newDraggerDate, draggerSelected, draggerPosition, draggerVisible, otherDraggerVisible, moved)
     if (draggerSelected === 'selected') {
       this.setState({
         draggerPosition: draggerPosition || this.state.draggerPosition,
@@ -451,6 +529,12 @@ class Timeline extends React.Component {
     }
   }
 
+  /**
+  * @desc set dragger visibility
+  * @param {Boolean} draggerVisible
+  * @param {Boolean} draggerVisibleB
+  * @returns {void}
+  */
   setDraggerVisibility = (draggerVisible, draggerVisibleB) => {
     this.setState({
       draggerVisible,
@@ -500,6 +584,12 @@ class Timeline extends React.Component {
     });
   }
 
+  /**
+  * @desc change store date
+  * @param {String} date
+  * @param {String} draggerSelected
+  * @returns {void}
+  */
   changeDate = (date, draggerSelected = this.state.draggerSelected) => {
     this.debounceDateUpdate(new Date(date), draggerSelected);
   }
@@ -529,144 +619,14 @@ class Timeline extends React.Component {
     } = this.props;
     let selectedDate = draggerSelected === 'selected' ? this.state.draggerTimeState : this.state.draggerTimeStateB;
     return this.state.initialLoadComplete ? (
-      <ErrorBoundary>
-<<<<<<< HEAD
-        <section id="timeline" className="timeline-inner clearfix">
-          <div id="timeline-header"
-            className={hasSubdailyLayers ? 'subdaily' : ''}
-          >
-            <div id="date-selector-main">
-              <DateSelector
-                onDateChange={this.changeDate}
-                date={new Date(selectedDate)}
-                hasSubdailyLayers={hasSubdailyLayers}
-                draggerSelected={draggerSelected}
-                maxDate={new Date(timelineEndDateLimit)}
-                minDate={new Date(timelineStartDateLimit)}
-                fontSize={24}
-              />
-            </div>
-            <div id="zoom-buttons-group">
-              <TimeScaleIntervalChange
-                setTimeScaleIntervalChangeUnit={this.setTimeScaleIntervalChangeUnit}
-                customIntervalZoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
-                customSelected={customSelected}
-                customDelta={customIntervalValue}
-                timeScaleChangeUnit={timeScaleChangeUnit}
-              />
-              <DateChangeArrows
-                leftArrowDown={this.decrementDate}
-                leftArrowUp={this.stopper}
-                leftArrowDisabled={leftArrowDisabled}
-                rightArrowDown={this.incrementDate}
-                rightArrowUp={this.stopper}
-                rightArrowDisabled={rightArrowDisabled}
-              />
-            </div>
-            <AnimationButton
-              disabled={animationDisabled}
-              clickAnimationButton={this.clickAnimationButton}
-            />
-          </div>
-          <div id="timeline-footer"
-            style={{
-              display:
-                this.state.timelineHidden || hideTimeline ? 'none' : 'block'
-            }}
-          >
-            {/* Timeline */}
-            <TimelineAxis
-              frontDate={this.state.frontDate}
-              backDate={this.state.backDate}
-              isTimelineDragging={this.state.isTimelineDragging}
-              moved={this.state.moved}
-              axisWidth={axisWidth}
-              dateA={dateA}
-              dateB={dateB}
-              hasSubdailyLayers={hasSubdailyLayers}
-              changeTimeScale={this.changeTimeScale}
-              compareModeActive={compareModeActive}
-              draggerSelected={draggerSelected}
-              onChangeSelectedDragger={this.onChangeSelectedDragger}
-              timelineStartDateLimit={timelineStartDateLimit}
-              timelineEndDateLimit={timelineEndDateLimit}
-              animStartLocationDate={animStartLocationDate}
-              animEndLocationDate={animEndLocationDate}
-              isAnimationDraggerDragging={this.state.isAnimationDraggerDragging}
-              updateDraggerDatePosition={this.updateDraggerDatePosition}
-              draggerTimeState={this.state.draggerTimeState}
-              draggerTimeStateB={this.state.draggerTimeStateB}
-              // draggerTimeState={dateA}
-              // draggerTimeStateB={dateB}
-              draggerPosition={this.state.draggerPosition}
-              draggerPositionB={this.state.draggerPositionB}
-              draggerVisible={this.state.draggerVisible}
-              draggerVisibleB={this.state.draggerVisibleB}
-              transformX={this.state.transformX}
-              updatePositioning={this.updatePositioning}
-              position={this.state.position}
-              animationStartLocation={this.state.animationStartLocation}
-              animationEndLocation={this.state.animationEndLocation}
-              timeScale={timeScale}
-              showHoverOn={this.showHoverOn}
-              showHoverOff={this.showHoverOff}
-              showHover={this.showHover}
-              leftOffset={this.state.leftOffset}
-              hoverTime={this.state.hoverTime}
-              isDraggerDragging={this.state.isDraggerDragging}
-            />
-
-            <HoverLine
-              width={axisWidth}
-              isTimelineDragging={this.state.isTimelineDragging}
-              showHoverLine={this.state.showHoverLine}
-              hoverLinePosition={this.state.hoverLinePosition}
-            />
-
-            {isAnimationWidgetOpen
-              ? <TimelineRangeSelector
-                position={this.state.position}
-                frontDate={this.state.frontDate}
-                isAnimationDraggerDragging={this.state.isAnimationDraggerDragging}
-                timeScale={timeScale}
-                startLocation={this.state.animationStartLocation}
-                endLocation={this.state.animationEndLocation}
-                startLocationDate={this.state.animationStartLocationDate}
-                endLocationDate={this.state.animationEndLocationDate}
-                timelineStartDateLimit={timelineStartDateLimit}
-                timelineEndDateLimit={timelineEndDateLimit}
-                updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
-                animationDraggerDateUpdate={this.animationDraggerDateUpdate}
-                max={this.state.rangeSelectorMax}
-                pinWidth={5}
-                width={axisWidth}
-                transformX={this.state.transformX}
-                rangeOpacity={0.3}
-                rangeColor={'#45bdff'}
-                startColor={'#40a9db'}
-                startTriangleColor={'#fff'}
-                endColor={'#295f92'}
-                endTriangleColor={'#4b7aab'} />
-              : null
-            }
-<<<<<<< HEAD
-=======
-
->>>>>>> fix anim date inputs, continue large refactor and clean up
-            {this.state.frontDate
-              ? <DraggerContainer
-                position={this.state.position}
-                timelineStartDateLimit={timelineStartDateLimit}
-                timelineEndDateLimit={timelineEndDateLimit}
-                timeScale={timeScale}
-=======
+       <ErrorBoundary>
         {this.props.isSmallScreen
           ? <MobileDatePicker
             date={selectedDate}
             startDateLimit={timelineStartDateLimit}
             endDateLimit={timelineEndDateLimit}
             hasSubdailyLayers={this.props.hasSubdailyLayers}
-            changeDate={this.changeDate}
+            onDateChange={this.onDateChange}
           />
           : <section id="timeline" className="timeline-inner clearfix">
             <div id="timeline-header"
@@ -674,7 +634,7 @@ class Timeline extends React.Component {
             >
               <div id="date-selector-main">
                 <DateSelector
-                  onDateChange={this.changeDate}
+                  onDateChange={this.onDateChange}
                   date={new Date(selectedDate)}
                   hasSubdailyLayers={hasSubdailyLayers}
                   draggerSelected={draggerSelected}
@@ -713,7 +673,6 @@ class Timeline extends React.Component {
             >
               {/* Timeline */}
               <TimelineAxis
->>>>>>> add mobile date picker, WIP mobile and tablet drag handling
                 frontDate={this.state.frontDate}
                 backDate={this.state.backDate}
                 isTimelineDragging={this.state.isTimelineDragging}
@@ -725,7 +684,7 @@ class Timeline extends React.Component {
                 changeTimeScale={this.changeTimeScale}
                 compareModeActive={compareModeActive}
                 draggerSelected={draggerSelected}
-                onChangeSelectedDragger={this.onChangeSelectedDragger}
+                onChangeSelectedDragger={this.props.toggleActiveCompareState}
                 timelineStartDateLimit={timelineStartDateLimit}
                 timelineEndDateLimit={timelineEndDateLimit}
                 animStartLocationDate={animStartLocationDate}
@@ -752,11 +711,13 @@ class Timeline extends React.Component {
                 leftOffset={this.state.leftOffset}
                 hoverTime={this.state.hoverTime}
                 isDraggerDragging={this.state.isDraggerDragging}
+                parentOffset={this.props.parentOffset}
               />
 
               <HoverLine
                 width={axisWidth}
                 isTimelineDragging={this.state.isTimelineDragging}
+                isAnimationDraggerDragging={this.state.isAnimationDraggerDragging}
                 showHoverLine={this.state.showHoverLine}
                 hoverLinePosition={this.state.hoverLinePosition}
               />
@@ -801,7 +762,7 @@ class Timeline extends React.Component {
                   width={axisWidth}
                   setDraggerVisibility={this.setDraggerVisibility}
                   toggleShowDraggerTime={this.toggleShowDraggerTime}
-                  onChangeSelectedDragger={this.onChangeSelectedDragger}
+                  onChangeSelectedDragger={this.props.toggleActiveCompareState}
                   updateDraggerDatePosition={this.updateDraggerDatePosition}
                   compareModeActive={compareModeActive}
                   // draggerTimeState={dateA}
@@ -856,14 +817,14 @@ class Timeline extends React.Component {
             {/* 🍔 Open/Close Chevron 🍔 */}
             <div id="timeline-hide" onClick={this.toggleHideTimeline}>
               <div
-                className={`wv-timeline-hide wv-timeline-hide-double-chevron-${
+                clErrorBoundaryassName={`wv-timeline-hide wv-timeline-hide-double-chevron-${
                   this.state.timelineHidden ? 'left' : 'right'
                 }`}
               />
             </div>
           </section>
         }
-      </ErrorBoundary>
+      </>
     ) : null;
   }
 }
@@ -1058,8 +1019,7 @@ Timeline.propTypes = {
 // get axisWidth and parentOffset for axis, footer, and leftOffset calculations
 const getOffsetValues = (innerWidth, hasSubDaily) => {
   const parentOffset = (hasSubDaily ? 414 : 310) + 10;
-  const width =
-    innerWidth - parentOffset - 20 - 20 - MARGIN.left - MARGIN.right + 28;
+  const width = innerWidth - parentOffset - 92;
   return { width, parentOffset };
 };
 

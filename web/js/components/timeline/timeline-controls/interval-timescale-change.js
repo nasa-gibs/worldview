@@ -33,7 +33,7 @@ class TimeScaleIntervalChange extends PureComponent {
   }
 
   // handle click zoom of timescale intervals
-  handleClickZoom = (timescale, openDialog) => {
+  handleClickZoom = (timescale, openDialog = false) => {
     // send props function to change timescale zoom level throughout app
     this.setState({
       toolTipHovered: false

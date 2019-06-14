@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import TileRect from './tile-rect';
 import TileText from './tile-text';
 
-// determine if text will be rendered via itemDateObject param used with timeScale key
+/**
+* @desc object key used for TileText
+* @param {String} timeScale
+* @returns {Function} used to determine if text will be rendered
+*/
 const tileTextConditionOptions = {
   minute: (itemDateObject) => {
     let timeScaleUnit = itemDateObject.minutes;
@@ -49,7 +53,7 @@ class GridRange extends PureComponent {
           {timeRange.map((item, index) => {
             return (
               item.withinRange
-                ? <React.Fragment key={`${item.rawDate}${index}`}>
+                ? <React.Fragment key={index}>
                   <TileRect
                     item={item}
                     index={index}

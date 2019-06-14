@@ -1,6 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+/**
+* @desc object key used for TileRect
+* @param {String} timeScale
+* @returns {Function} used to determine if lineLengthY
+*/
 const tileRectTimeScaleOptions = {
   minute: function() {
     return {
@@ -62,11 +67,21 @@ class TileRect extends PureComponent {
     this.showHover = this.showHover.bind(this);
   }
 
+  /**
+  * @desc show hover used to display date and set hoverTime
+  * @param {Event} mouse event
+  * @returns {void}
+  */
   showHover = (e) => {
     let { item, index } = this.props;
     this.props.showHover(e, item.rawDate, item.rawNextDate, index);
   }
 
+  /**
+  * @desc show hover used to display date and set hoverTime
+  * @param {Event} touch event
+  * @returns {void}
+  */
   showTouch = (e) => {
     let { item, index } = this.props;
     let touch = e.changedTouches[0];
@@ -75,7 +90,12 @@ class TileRect extends PureComponent {
   }
 
   render() {
-    let { item, gridWidth, index, timeScale } = this.props;
+    let {
+      item,
+      gridWidth,
+      index,
+      timeScale
+    } = this.props;
     let tileOptions = tileRectTimeScaleOptions[timeScale]();
     let lineLengthY = tileOptions.lineLengthY(item);
     let whiteLineStrokeWidth = lineLengthY !== 10 ? 2 : 1;
@@ -112,7 +132,6 @@ TileRect.propTypes = {
   item: PropTypes.object,
   index: PropTypes.number,
   gridWidth: PropTypes.number,
-  draggerPosition: PropTypes.func,
   timeScale: PropTypes.string
 };
 
