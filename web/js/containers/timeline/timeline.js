@@ -601,13 +601,14 @@ class Timeline extends React.Component {
   */
   onDateChange = (date, draggerSelected = this.props.draggerSelected) => {
     let dateObj = new Date(date);
+    let dateISOFormatted = getISODateFormatted(date);
     if (draggerSelected === 'selected') { // dragger A
       this.setState({
-        draggerTimeState: dateObj.toISOString()
+        draggerTimeState: dateISOFormatted
       });
     } else { // dragger B
       this.setState({
-        draggerTimeStateB: dateObj.toISOString()
+        draggerTimeStateB: dateISOFormatted
       });
     }
     this.debounceDateUpdate(dateObj, draggerSelected);

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-mobile-datepicker';
 
+import { getISODateFormatted } from './date-util';
+
 // https://www.npmjs.com/package/react-mobile-datepicker
 // configs for date order, caption, and date step
 const defaultDateConfig = {
@@ -79,8 +81,8 @@ class MobileDatePicker extends Component {
       isOpen: false
     });
     // convert date back to local time
-    let date = this.convertToLocalDateObject(time).toISOString();
-    this.props.onDateChange(date);
+    let date = this.convertToLocalDateObject(time);
+    this.props.onDateChange(getISODateFormatted(date));
   }
 
   // used for init mount

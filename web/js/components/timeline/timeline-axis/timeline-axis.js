@@ -453,7 +453,7 @@ class TimelineAxis extends Component {
 
     if (!isDraggerDragging) {
       // handle A dragger change
-      if (draggerTimeState !== dateA) {
+      if (draggerTimeState !== dateA || prevProps.dateA !== dateA) {
         // check if draggerCheck will be within acceptable visible axis width
         let draggerCheck = this.checkDraggerMoveOrUpdateScale(dateA);
         if (!draggerCheck.withinRange) {
@@ -462,7 +462,7 @@ class TimelineAxis extends Component {
       }
 
       // handle B dragger change
-      if (draggerTimeStateB !== dateB) {
+      if (draggerTimeStateB !== dateB || prevProps.dateB !== dateB) {
         // check if draggerCheck will be within acceptable visible axis width
         let draggerCheck = this.checkDraggerMoveOrUpdateScale(dateB, true);
         if (!draggerCheck.withinRange) {
