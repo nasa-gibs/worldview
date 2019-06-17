@@ -15,12 +15,14 @@ import {
   getPaletteAttributeArray,
   parseLegacyPalettes
 } from '../palettes/util';
+import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
 
 export function serializeLayers(currentLayers, state, groupName) {
   const layers = currentLayers;
   const palettes = state.palettes[groupName];
+  const vectorStyles = state.vectorStyles[groupName];
   return layers.map((def, i) => {
     var item = {};
 
@@ -51,9 +53,19 @@ export function serializeLayers(currentLayers, state, groupName) {
         palettes,
         state
       );
-      item.attributes = paletteAttributeArray.length
-        ? item.attributes.concat(paletteAttributeArray)
-        : item.attributes;
+      const vectorStyleAttributeArray = getVectorStyleAttributeArray(
+        def.id,
+        vectorStyles,
+        state
+      );
+
+      if (paletteAttributeArray.length) {
+        item.attributes = item.attributes.concat(paletteAttributeArray);
+      } else if (vectorStyleAttributeArray.length) {
+        item.attributes = item.attributes.concat(vectorStyleAttributeArray);
+      } else {
+        item.attributes = item.attributes;
+      }
     }
 
     return util.appendAttributesForURL(item);
