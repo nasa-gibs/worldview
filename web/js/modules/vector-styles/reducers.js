@@ -1,20 +1,15 @@
 import { assign as lodashAssign, get as lodashGet } from 'lodash';
 import {
-  REQUEST_VECTORSTYLE_SUCCESS,
   SET_VECTORSTYLE,
-  REQUEST_VECTORSTYLE_START,
   SET_FILTER_RANGE,
   LOADED_CUSTOM_VECTORSTYLES
 } from './constants';
-import update from 'immutability-helper';
-import util from '../../util/util';
-const browser = util.browser;
+// import update from 'immutability-helper';
+// import util from '../../util/util';
 export const defaultVectorStyleState = {
   custom: {},
   active: {},
-  activeB: {},
-  isLoading: {},
-  supported: !(browser.ie || !browser.webWorkers || !browser.cors)
+  activeB: {}
 };
 export function getInitialVectorStyleState(config) {
   const custom = lodashGet(config, 'vectorStyles') || {};
@@ -26,20 +21,6 @@ export function getInitialVectorStyleState(config) {
 export function vectorStyleReducer(state = defaultVectorStyleState, action) {
   const groupName = action.groupName || 'active';
   switch (action.type) {
-    case REQUEST_VECTORSTYLE_START:
-      return lodashAssign({}, state, {
-        isLoading: update(state.isLoading, {
-          [action.id]: { $set: true }
-        })
-      });
-    case REQUEST_VECTORSTYLE_SUCCESS:
-      let isLoading = update(state.isLoading, { $unset: [action.id] });
-      return lodashAssign({}, state, {
-        rendered: lodashAssign({}, state.rendered, {
-          [action.id]: action.response
-        }),
-        isLoading
-      });
     case SET_FILTER_RANGE:
       return lodashAssign({}, state, {
         [groupName]: action.vectorStyles

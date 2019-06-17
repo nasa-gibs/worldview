@@ -126,7 +126,7 @@ export function layerReducer(state = initialState, action) {
         [layerGroupStr]: {
           [layerIndex]: {
             custom: {
-              $set: action.paletteId
+              $set: action.vectorStyleId
             }
           }
         }

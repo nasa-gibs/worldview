@@ -15,16 +15,15 @@ class VectorStyleSelect extends React.Component {
    * @param {String} id | custom VectorStyle Id
    */
   onChangeVectorStyle(id) {
-    const { layer, clearStyle, setStyle, index } = this.props;
-
+    const { layer, clearStyle, setStyle, groupName, index } = this.props;
     // Applying customs takes a while and
     // it looks more natural to make this async
     // instead of waiting
     setTimeout(function() {
-      if (id === layer) {
-        clearStyle(layer.id, index);
+      if (id === layer.id) {
+        clearStyle(layer.id, index, groupName);
       } else {
-        setStyle(layer.id, id, index);
+        setStyle(layer.id, id, index, groupName);
       }
     }, 0);
     this.setState({ activeVectorStyle: id });
@@ -125,7 +124,8 @@ VectorStyleSelect.propTypes = {
   canvas: PropTypes.object,
   checkerBoard: PropTypes.object,
   activeVectorStyle: PropTypes.string,
-  vectorStyles: PropTypes.object
+  vectorStyles: PropTypes.object,
+  groupName: PropTypes.string
 };
 
 export default VectorStyleSelect;

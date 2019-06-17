@@ -213,6 +213,8 @@ class LayerSettings extends React.Component {
   renderVectorStyles() {
     const {
       setFilterRange,
+      setStyle,
+      clearStyle,
       groupName,
       layer,
       vectorStyles

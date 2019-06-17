@@ -130,8 +130,7 @@ export function mapui(models, config, store, ui) {
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
-      case vectorStyleConstants.REQUEST_VECTORSTYLE_SUCCESS:
-        return updateLookup();
+        return reloadLayers();
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
       case SELECT_DATE:

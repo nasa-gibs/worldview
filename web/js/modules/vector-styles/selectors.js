@@ -2,7 +2,6 @@ import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
   each as lodashEach,
-  // parseInt as lodashParseInt,
   cloneDeep as lodashCloneDeep
 } from 'lodash';
 import { getMinValue, getMaxValue } from './util';
@@ -35,15 +34,15 @@ export function getVectorStyle(layerId, index, groupStr, state) {
 export function getRenderedVectorStyle(layerId, index, state) {
   const { config, vectorStyles } = state;
   var name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
-  var vectorStyle = vectorStyles[name];
+  var vectorStyle = vectorStyles.custom[name];
   if (!vectorStyle) {
     throw new Error(name + ' Is not a rendered vectorStyle');
   }
-  // if (!lodashIsUndefined(index)) {
-  //   if (vectorStyle.layers) {
-  //     vectorStyle = vectorStyle.layers[index];
-  //   }
-  // }
+  if (!lodashIsUndefined(index)) {
+    if (vectorStyle.layers) {
+      vectorStyle = vectorStyle.layers[index];
+    }
+  }
   return vectorStyle;
 }
 

@@ -1,5 +1,4 @@
 import util from '../util/util';
-import vectorStyles from '../modules/vector-styles/util';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -20,6 +19,10 @@ import {
   getKey as getPaletteKeys,
   getLookup as getPaletteLookup
 } from '../modules/palettes/selectors';
+import {
+  isActive as isVectorStyleActive,
+  getKey as getVectorStyleKeys
+} from '../modules/vector-styles/selectors';
 
 export function mapLayerBuilder(models, config, cache, mapUi, store) {
   var self = {};
@@ -197,7 +200,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     var date;
     var layerId = def.id;
     var projId = state.proj.id;
-    var palette = '';
+    var style = '';
     const activeGroupStr = options.group ? options.group : compare.activeString;
 
     // Don't key by time if this is a static layer--it is valid for
@@ -208,9 +211,12 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       );
     }
     if (isPaletteActive(def.id, activeGroupStr, state)) {
-      palette = getPaletteKeys(def.id, undefined, state);
+      style = getPaletteKeys(def.id, undefined, state);
     }
-    return [layerId, projId, date, palette, activeGroupStr].join(':');
+    if (isVectorStyleActive(def.id, activeGroupStr, state)) {
+      style = getVectorStyleKeys(def.id, undefined, state);
+    }
+    return [layerId, projId, date, style, activeGroupStr].join(':');
   };
   /**
    * Create a new WMTS Layer
