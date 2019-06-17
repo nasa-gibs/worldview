@@ -214,7 +214,8 @@ class LayerSettings extends React.Component {
     const {
       setFilterRange,
       groupName,
-      layer
+      layer,
+      vectorStyles
     } = this.props;
     // const vectorStyle = getVectorStyle(layer.id, 0);
     const max = 100; // Placeholder
@@ -236,11 +237,12 @@ class LayerSettings extends React.Component {
           index={0}
         />
         <VectorStyle
-          setStyle={''}
-          clearStyle={''}
-          activeVectorStyle={'default_style'}
+          setStyle={setStyle}
+          clearStyle={clearStyle}
+          activeVectorStyle={layer.id}
           layer={layer}
           index={0}
+          vectorStyles={vectorStyles}
         />
       </React.Fragment>
     );
@@ -306,7 +308,8 @@ function mapStateToProps(state, ownProps) {
     },
     getVectorStyle: (layerId, index) => {
       return getVectorStyle(layerId, index, groupName, state);
-    }
+    },
+    vectorStyles: config.vectorStyles
   };
 }
 const mapDispatchToProps = dispatch => ({

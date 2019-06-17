@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import lodashIndexOf from 'lodash/indexOf';
-import util from '../../../util/util';
 import Scrollbar from '../../util/scrollbar';
 
 class VectorStyleSelect extends React.Component {
@@ -13,21 +11,6 @@ class VectorStyleSelect extends React.Component {
   }
 
   /**
-   * Render default legend option
-   */
-  renderDefault() {
-    const { layer, index, getDefaultLegend } = this.props;
-    const { activeVectorStyle } = this.state;
-    // const legend = getDefaultLegend(layer.id, index);
-
-    return this.renderSelectorItemSingle(
-      undefined, // should pass vectorStyles here
-      'default_style',
-      'Default',
-      activeVectorStyle === 'default_style'
-    );
-  }
-  /**
    * Pass palette to model after selection
    * @param {String} id | custom VectorStyle Id
    */
@@ -38,7 +21,7 @@ class VectorStyleSelect extends React.Component {
     // it looks more natural to make this async
     // instead of waiting
     setTimeout(function() {
-      if (id === 'default_style') {
+      if (id === layer) {
         clearStyle(layer.id, index);
       } else {
         setStyle(layer.id, id, index);
@@ -50,29 +33,17 @@ class VectorStyleSelect extends React.Component {
    * Apply logic to render correct palette selection
    * @param {String} id | Legend Id
    */
-  // customLegend(id) {
-  //   const {
-  //     getDefaultLegend,
-  //     getCustomVectorStyle,
-  //     layer,
-  //     index
-  //     // palettesTranslate
-  //   } = this.props;
-  //   const { activeVectorStyle } = this.state;
-  //   var source = getDefaultLegend(layer.id, index);
-  //   var target = getCustomVectorStyle(id);
-  //   var targetType =
-  //     target.colors.length === 1 ? 'classification' : 'continuous';
+  customLegend(styleLayerObject) {
+    const { activeVectorStyle } = this.state;
+    var description = styleLayerObject['source-description'] || styleLayerObject.id;
 
-  //   if (source.type === 'classification' && targetType === 'classification') {
-  //     return this.renderSelectorItemSingle(
-  //       target,
-  //       id,
-  //       target.name,
-  //       activeVectorStyle === target.id
-  //     );
-  //   }
-  // }
+    return this.renderSelectorItemSingle(
+      styleLayerObject,
+      styleLayerObject.id,
+      description,
+      activeVectorStyle === styleLayerObject.id
+    );
+  }
 
   /**
    * Render classification customs when there is only one
@@ -83,9 +54,9 @@ class VectorStyleSelect extends React.Component {
    * @param {Boolean} isSelected | is this colormap active
    */
   renderSelectorItemSingle(vectorStyle, id, description, isSelected) {
-    // const color = palette.classes
-    //   ? palette.classes.colors[0]
-    //   : palette.colors[0];
+    const color = vectorStyle.paint
+      ? vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color']
+      : 'rgb(255, 255, 255)';
     const caseDefaultClassName =
       'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
@@ -100,6 +71,7 @@ class VectorStyleSelect extends React.Component {
         <label htmlFor={'wv-palette-radio-' + id}>
           <span
             className="wv-palettes-class"
+            style={{ backgroundColor: color }}
           >
             &nbsp;
           </span>
@@ -109,8 +81,17 @@ class VectorStyleSelect extends React.Component {
     );
   }
   render() {
-    const { index } = this.props;
+    const { index, vectorStyles, layer } = this.props;
+    var vectorStyleId = layer.vectorStyle.id;
+    var vectorStyle = vectorStyles[vectorStyleId];
+    var vectorStyleLayers = vectorStyle['layers'];
 
+    var uniqueStyleLayers = vectorStyleLayers.filter(function (a) {
+      if (!this[a.id]) {
+        this[a.id] = true;
+        return true;
+      }
+    }, Object.create(null));
     return (
       <div
         className="wv-palette-selector settings-component noselect"
@@ -118,8 +99,15 @@ class VectorStyleSelect extends React.Component {
       >
         <h2 className="wv-header">Vector Style</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
-          {this.renderDefault()}
-          {/* Output Color Selects Here */}
+          {uniqueStyleLayers.map(styleLayerObject => {
+            // console.log(styleLayerObject);
+            // if (lodashIndexOf(recommended, styleLayerObject) < 0) {
+            if (styleLayerObject && styleLayerObject) {
+              var item = this.customLegend(styleLayerObject);
+              return item;
+            }
+            // }
+          })}
         </Scrollbar>
       </div>
     );
@@ -133,10 +121,11 @@ VectorStyleSelect.propTypes = {
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
   getDefaultLegend: PropTypes.func,
-  // getCustomVectorStyle: PropTypes.func,
+  getCustomVectorStyle: PropTypes.func,
   canvas: PropTypes.object,
   checkerBoard: PropTypes.object,
-  activeVectorStyle: PropTypes.string
+  activeVectorStyle: PropTypes.string,
+  vectorStyles: PropTypes.object
 };
 
 export default VectorStyleSelect;
