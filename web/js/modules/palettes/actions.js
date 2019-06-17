@@ -96,16 +96,20 @@ export function setCustom(layerId, paletteId, index, groupName) {
  */
 export function clearCustom(layerId, index, groupName) {
   return (dispatch, getState) => {
-    const { palettes } = getState();
+    const state = getState();
+    const { palettes } = state;
     const newActivePalettesObj = clearCustomSelector(
       layerId,
       index,
-      palettes[groupName]
+      palettes[groupName],
+      state
     );
 
     dispatch({
       type: CLEAR_CUSTOM,
-      groupName: groupName,
+      groupName,
+      layerId,
+      activeString: groupName,
       palettes: newActivePalettesObj
     });
   };

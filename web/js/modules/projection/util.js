@@ -6,7 +6,6 @@ export function getProjInitialState(config) {
     config,
     `projections.${config.defaults.projection}`
   );
-  console.log('selected' + selected);
   return {
     id: selected ? selected.id : 'geographic',
     selected: selected || {}

@@ -3,7 +3,8 @@ import {
   each as lodashEach,
   find as lodashFind,
   assign as lodashAssign,
-  isEmpty as lodashIsEmpty,
+  get as lodashGet,
+  size as lodashSize,
   isArray
 } from 'lodash';
 import { PALETTE_STRINGS_PERMALINK_ARRAY } from './constants';
@@ -15,7 +16,6 @@ import {
 } from './selectors';
 import util from '../../util/util';
 import Promise from 'bluebird';
-import { setFromArray } from 'ol/transform';
 
 export function getCheckerboard() {
   var size = 2;
@@ -165,7 +165,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
   let attrArray = [];
   for (var i = 0; i < count; i++) {
     let paletteDef = palettes[layerId].maps[i];
-    let entryLength = paletteDef.entries.values.length;
+    let entryLength = lodashSize(lodashGet(paletteDef, 'entries.values')) || lodashSize(lodashGet(paletteDef, 'entries.colors'));
     let maxValue = paletteDef.max
       ? paletteDef.entries.values[paletteDef.max || entryLength]
       : undefined;

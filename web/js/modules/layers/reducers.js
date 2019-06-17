@@ -11,6 +11,7 @@ import {
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
+  CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
   SET_RANGE_AND_SQUASH
 } from '../palettes/constants';
 import { resetLayers } from './selectors';
@@ -77,6 +78,20 @@ export function layerReducer(state = initialState, action) {
           }
         }
       });
+    case CLEAR_CUSTOM_PALETTE:
+      layerIndex = lodashFindIndex(state[layerGroupStr], {
+        id: action.layerId
+      });
+
+      return update(state, {
+        [layerGroupStr]: {
+          [layerIndex]: {
+            custom: {
+              $set: undefined
+            }
+          }
+        }
+      });
     case SET_CUSTOM_PALETTE:
       layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
@@ -85,7 +100,7 @@ export function layerReducer(state = initialState, action) {
         [layerGroupStr]: {
           [layerIndex]: {
             custom: {
-              $set: action.paletteId
+              $set: [action.paletteId]
             }
           }
         }

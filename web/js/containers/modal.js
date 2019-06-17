@@ -132,7 +132,6 @@ class ModalContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { models } = state.legacy;
   const {
     bodyText,
     headerText,
@@ -155,9 +154,6 @@ function mapStateToProps(state) {
     headerText,
     isCustom,
     id,
-    models,
-    screenWidth: state.browser.screenWidth,
-    screenHeight: state.browser.screenHeight,
     bodyTemplate,
     isTemplateModal,
     customProps

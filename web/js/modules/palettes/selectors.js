@@ -112,7 +112,6 @@ export function getCustomPalette(paletteId, customsPaletteConfig) {
 var useLookup = function(layerId, palettesObj, state) {
   var use = false;
   var active = palettesObj[layerId].maps;
-
   lodashEach(active, function(palette, index) {
     if (palette.custom) {
       use = true;
@@ -245,8 +244,8 @@ export function setCustom(layerId, paletteId, index, groupName, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   var active = newPalettes[layerId];
   var palette = active.maps[index];
-  if (palette.custom === paletteId) {
-    return;
+  if (palette.custom === paletteId && palette.lookup) {
+    return newPalettes;
   }
   palette.custom = paletteId;
   return updateLookup(layerId, newPalettes, state);
@@ -311,7 +310,7 @@ export function setRange(layerId, props, index, palettes, state) {
 
   return updateLookup(layerId, newPalettes, state);
 }
-export function clearCustom(layerId, index, palettes) {
+export function clearCustom(layerId, index, palettes, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   var active = palettes[layerId];
   if (!active) {
@@ -321,7 +320,11 @@ export function clearCustom(layerId, index, palettes) {
   if (!palette.custom) {
     return palettes;
   }
-  return update(palettes, { layerId: { maps: { $unset: ['custom'] } } }); // remove custom key
+  delete palette.custom;
+  let newPalettes = update(palettes, {
+    [layerId]: { maps: { [index]: { $set: palette } } }
+  }); // remove custom key
+  return updateLookup(layerId, newPalettes, state);
 }
 var prepare = function(layerId, palettesObj, state) {
   var newPalettes = lodashCloneDeep(palettesObj);

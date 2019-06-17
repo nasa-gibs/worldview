@@ -5,7 +5,8 @@ import {
   REQUEST_PALETTE_START,
   SET_RANGE_AND_SQUASH,
   LOADED_CUSTOM_PALETTES,
-  BULK_PALETTE_RENDERING_SUCCESS
+  BULK_PALETTE_RENDERING_SUCCESS,
+  CLEAR_CUSTOM
 } from './constants';
 import update from 'immutability-helper';
 import util from '../../util/util';
@@ -52,13 +53,17 @@ export function paletteReducer(state = defaultPaletteState, action) {
       return lodashAssign({}, state, {
         [groupName]: action.palettes
       });
+    case CLEAR_CUSTOM:
+      return lodashAssign({}, state, {
+        [groupName]: action.palettes || {}
+      });
     case SET_CUSTOM:
       return lodashAssign({}, state, {
-        [groupName]: action.palettes
+        [groupName]: action.palettes || {}
       });
     case LOADED_CUSTOM_PALETTES:
       return lodashAssign({}, state, {
-        custom: action.custom
+        custom: action.custom || {}
       });
     default:
       return state;
