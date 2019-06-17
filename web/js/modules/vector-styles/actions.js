@@ -68,6 +68,7 @@ export function setFilterRange(layerId, props, index, groupName) {
  * @param {String} groupName | layer group string
  */
 export function setStyle(layerId, vectorStyleId, index, groupName) {
+  // console.log(layerId, vectorStyleId, index, groupName);
   return (dispatch, getState) => {
     const state = getState();
     const newActiveVectorStylesObj = setCustomSelector(
@@ -95,6 +96,7 @@ export function setStyle(layerId, vectorStyleId, index, groupName) {
  * @param {String} groupName | layer group string
  */
 export function clearStyle(layerId, index, groupName) {
+  console.log(layerId, index, groupName)
   return (dispatch, getState) => {
     const { vectorStyles } = getState();
     const newActiveVectorStylesObj = clearCustomSelector(

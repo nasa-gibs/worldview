@@ -2,7 +2,7 @@ import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
   each as lodashEach,
-  parseInt as lodashParseInt,
+  // parseInt as lodashParseInt,
   cloneDeep as lodashCloneDeep
 } from 'lodash';
 import { getMinValue, getMaxValue } from './util';
@@ -63,114 +63,114 @@ export function getCount(layerId, state) {
 //   }
 //   return vectorStyle;
 // }
-var useLookup = function(layerId, vectorStylesObj, state) {
-  var use = false;
-  var active = vectorStylesObj[layerId].maps;
+// var useLookup = function(layerId, vectorStylesObj, state) {
+//   var use = false;
+//   var active = vectorStylesObj[layerId].maps;
 
-  lodashEach(active, function(vectorStyle, index) {
-    if (vectorStyle.custom) {
-      use = true;
-      return false;
-    }
-    var rendered = getRenderedVectorStyle(layerId, index, state);
-    if (vectorStyle.type !== 'classification') {
-      if (vectorStyle.min <= 0) {
-        delete vectorStyle.min;
-      }
-      if (vectorStyle.max >= rendered.entries.values.length) {
-        delete vectorStyle.max;
-      }
-      if (!lodashIsUndefined(vectorStyle.min) || !lodashIsUndefined(vectorStyle.max)) {
-        use = true;
-        return false;
-      }
-    }
-  });
-  return use;
-};
+//   lodashEach(active, function(vectorStyle, index) {
+//     if (vectorStyle.custom) {
+//       use = true;
+//       return false;
+//     }
+//     var rendered = getRenderedVectorStyle(layerId, index, state);
+//     if (vectorStyle.type !== 'classification') {
+//       if (vectorStyle.min <= 0) {
+//         delete vectorStyle.min;
+//       }
+//       if (vectorStyle.max >= rendered.entries.values.length) {
+//         delete vectorStyle.max;
+//       }
+//       if (!lodashIsUndefined(vectorStyle.min) || !lodashIsUndefined(vectorStyle.max)) {
+//         use = true;
+//         return false;
+//       }
+//     }
+//   });
+//   return use;
+// };
 // Looks up options/colormaps/layer.xml colormap entry
 export function getLookup(layerId, groupstr, state) {
   groupstr = groupstr || state.compare.activeString;
   return state.vectorStyles[groupstr][layerId].lookup;
 }
-var updateLookup = function(layerId, vectorStylesObj, state) {
-  let newVectorStyles = vectorStylesObj;
-  if (!useLookup(layerId, newVectorStyles, state)) {
-    delete newVectorStyles[layerId];
-    return newVectorStyles;
-  }
-  var lookup = {};
-  var active = newVectorStyles[layerId].maps;
-  lodashEach(active, function(vectorStyle, index) {
-    var oldLegend = vectorStyle.legend;
-    var entries = vectorStyle.entries;
-    var legend = {
-      colors: [],
-      minLabel: oldLegend.minLabel,
-      maxLabel: oldLegend.maxLabel,
-      tooltips: oldLegend.tooltips,
-      units: oldLegend.units,
-      type: entries.type,
-      title: entries.title,
-      id: oldLegend.id
-    };
-    var source = entries.colors;
-    var target = vectorStyle.custom
-      ? getCustomVectorStyle(vectorStyle.custom, state.vectorStyles.custom).colors
-      : source;
+// var updateLookup = function(layerId, vectorStylesObj, state) {
+//   let newVectorStyles = vectorStylesObj;
+//   if (!useLookup(layerId, newVectorStyles, state)) {
+//     delete newVectorStyles[layerId];
+//     return newVectorStyles;
+//   }
+//   var lookup = {};
+//   var active = newVectorStyles[layerId].maps;
+//   lodashEach(active, function(vectorStyle, index) {
+//     var oldLegend = vectorStyle.legend;
+//     var entries = vectorStyle.entries;
+//     var legend = {
+//       colors: [],
+//       minLabel: oldLegend.minLabel,
+//       maxLabel: oldLegend.maxLabel,
+//       tooltips: oldLegend.tooltips,
+//       units: oldLegend.units,
+//       type: entries.type,
+//       title: entries.title,
+//       id: oldLegend.id
+//     };
+//     var source = entries.colors;
+//     var target = vectorStyle.custom
+//       ? getCustomVectorStyle(vectorStyle.custom, state.vectorStyles.custom).colors
+//       : source;
 
-    var min = vectorStyle.min || 0;
-    var max = vectorStyle.max || source.length;
+//     var min = vectorStyle.min || 0;
+//     var max = vectorStyle.max || source.length;
 
-    var sourceCount = source.length;
-    var targetCount = target.length;
-    lodashEach(source, function(color, index) {
-      var targetColor;
-      if (index < min || index > max) {
-        targetColor = '00000000';
-      } else {
-        var sourcePercent, targetIndex;
-        if (vectorStyle.squash) {
-          sourcePercent = (index - min) / (max - min);
-          if (index === max) {
-            sourcePercent = 1.0;
-          }
-          targetIndex = Math.floor(sourcePercent * targetCount);
-          if (targetIndex >= targetCount) {
-            targetIndex = targetCount - 1;
-          }
-        } else {
-          sourcePercent = index / sourceCount;
-          targetIndex = Math.floor(sourcePercent * targetCount);
-        }
-        targetColor = target[targetIndex];
-      }
-      legend.colors.push(targetColor);
-      var lookupSource =
-        lodashParseInt(color.substring(0, 2), 16) +
-        ',' +
-        lodashParseInt(color.substring(2, 4), 16) +
-        ',' +
-        lodashParseInt(color.substring(4, 6), 16) +
-        ',' +
-        lodashParseInt(color.substring(6, 8), 16);
-      var lookupTarget = {
-        r: lodashParseInt(targetColor.substring(0, 2), 16),
-        g: lodashParseInt(targetColor.substring(2, 4), 16),
-        b: lodashParseInt(targetColor.substring(4, 6), 16),
-        a: lodashParseInt(targetColor.substring(6, 8), 16)
-      };
-      lookup[lookupSource] = lookupTarget;
-    });
+//     var sourceCount = source.length;
+//     var targetCount = target.length;
+//     lodashEach(source, function(color, index) {
+//       var targetColor;
+//       if (index < min || index > max) {
+//         targetColor = '00000000';
+//       } else {
+//         var sourcePercent, targetIndex;
+//         if (vectorStyle.squash) {
+//           sourcePercent = (index - min) / (max - min);
+//           if (index === max) {
+//             sourcePercent = 1.0;
+//           }
+//           targetIndex = Math.floor(sourcePercent * targetCount);
+//           if (targetIndex >= targetCount) {
+//             targetIndex = targetCount - 1;
+//           }
+//         } else {
+//           sourcePercent = index / sourceCount;
+//           targetIndex = Math.floor(sourcePercent * targetCount);
+//         }
+//         targetColor = target[targetIndex];
+//       }
+//       legend.colors.push(targetColor);
+//       var lookupSource =
+//         lodashParseInt(color.substring(0, 2), 16) +
+//         ',' +
+//         lodashParseInt(color.substring(2, 4), 16) +
+//         ',' +
+//         lodashParseInt(color.substring(4, 6), 16) +
+//         ',' +
+//         lodashParseInt(color.substring(6, 8), 16);
+//       var lookupTarget = {
+//         r: lodashParseInt(targetColor.substring(0, 2), 16),
+//         g: lodashParseInt(targetColor.substring(2, 4), 16),
+//         b: lodashParseInt(targetColor.substring(4, 6), 16),
+//         a: lodashParseInt(targetColor.substring(6, 8), 16)
+//       };
+//       lookup[lookupSource] = lookupTarget;
+//     });
 
-    newVectorStyles = update(newVectorStyles, {
-      [layerId]: {
-        maps: { [index]: { legend: { $set: legend } } }
-      }
-    });
-  });
-  return update(newVectorStyles, { [layerId]: { lookup: { $set: lookup } } });
-};
+//     newVectorStyles = update(newVectorStyles, {
+//       [layerId]: {
+//         maps: { [index]: { legend: { $set: legend } } }
+//       }
+//     });
+//   });
+//   return update(newVectorStyles, { [layerId]: { lookup: { $set: lookup } } });
+// };
 
 export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
@@ -191,6 +191,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   return result;
 }
 export function setCustomSelector(layerId, vectorStyleId, index, groupName, state) {
+  console.log(layerId, vectorStyleId, index, groupName, state);
   const { config, vectorStyles } = state;
   if (!config.layers[layerId]) {
     throw new Error('Invalid layer: ' + layerId);
@@ -203,7 +204,7 @@ export function setCustomSelector(layerId, vectorStyleId, index, groupName, stat
     return;
   }
   vectorStyle.custom = vectorStyleId;
-  return updateLookup(layerId, newVectorStyles, state);
+  // return updateLookup(layerId, newVectorStyles, state);
 }
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
@@ -233,8 +234,8 @@ export function isActive(layerId, group, state) {
 export function setRange(layerId, props, index, vectorStyles, state) {
   let min = props.min;
   let max = props.max;
-  let squash = props.squash;
-  let newVectorStyles = prepare(layerId, vectorStyles, state);
+  // let squash = props.squash;
+  // let newVectorStyles = prepare(layerId, vectorStyles, state);
   index = lodashIsUndefined(index) ? 0 : index;
   if (min === 0) {
     min = undefined;
@@ -249,21 +250,21 @@ export function setRange(layerId, props, index, vectorStyles, state) {
   }
 
   // Merge custom vectorStyle props with correct colormap
-  newVectorStyles = update(newVectorStyles, {
-    [layerId]: {
-      maps: {
-        [index]: {
-          $merge: {
-            max,
-            min,
-            squash
-          }
-        }
-      }
-    }
-  });
+  // newVectorStyles = update(newVectorStyles, {
+  //   [layerId]: {
+  //     maps: {
+  //       [index]: {
+  //         $merge: {
+  //           max,
+  //           min,
+  //           squash
+  //         }
+  //       }
+  //     }
+  //   }
+  // });
 
-  return updateLookup(layerId, newVectorStyles, state);
+  // return updateLookup(layerId, newVectorStyles, state);
 }
 export function clearCustomSelector(layerId, index, vectorStyles) {
   index = lodashIsUndefined(index) ? 0 : index;

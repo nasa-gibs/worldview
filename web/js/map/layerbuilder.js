@@ -302,6 +302,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    * @returns {object} OpenLayers Vector layer
    */
   var createLayerVector = function(def, options, day, state) {
+    console.log(config);
     const { proj, compare } = state;
     var date, urlParameters, extent, source, matrixSet, matrixIds, start;
     const selectedProj = proj.selected;
