@@ -6,6 +6,7 @@ import {
 } from 'lodash';
 import { getMinValue, getMaxValue } from './util';
 import update from 'immutability-helper';
+import stylefunction from 'ol-mapbox-style/stylefunction';
 
 /**
  * Gets a single colormap (entries / legend combo)
@@ -190,7 +191,6 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   return result;
 }
 export function setCustomSelector(layerId, vectorStyleId, index, groupName, state) {
-  console.log(layerId, vectorStyleId, index, groupName, state);
   const { config, vectorStyles } = state;
   if (!config.layers[layerId]) {
     throw new Error('Invalid layer: ' + layerId);
@@ -205,6 +205,25 @@ export function setCustomSelector(layerId, vectorStyleId, index, groupName, stat
   vectorStyle.custom = vectorStyleId;
   // return updateLookup(layerId, newVectorStyles, state);
 }
+
+export function setStyleFunction(layer, glStyle, vectorStyleId) {
+  var styleFunction;
+  styleFunction = stylefunction(layer, glStyle, vectorStyleId);
+  if (glStyle.name === 'Orbit Tracks') {
+    // Filter time by 5 mins
+    layer.setStyle(function(feature, resolution) {
+      var minute;
+      var minutes = feature.get('label');
+      if (minutes) {
+        minute = minutes.split(':');
+      }
+      if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
+        return styleFunction(feature, resolution);
+      }
+    });
+  }
+}
+
 export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {

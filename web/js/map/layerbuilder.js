@@ -9,7 +9,7 @@ import MVT from 'ol/format/MVT';
 import LayerVectorTile from 'ol/layer/VectorTile';
 import SourceVectorTile from 'ol/source/VectorTile';
 // import { applyStyle } from 'ol-mapbox-style';
-import stylefunction from 'ol-mapbox-style/stylefunction';
+// import stylefunction from 'ol-mapbox-style/stylefunction';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
@@ -21,7 +21,8 @@ import {
 } from '../modules/palettes/selectors';
 import {
   isActive as isVectorStyleActive,
-  getKey as getVectorStyleKeys
+  getKey as getVectorStyleKeys,
+  setStyleFunction
 } from '../modules/vector-styles/selectors';
 
 export function mapLayerBuilder(models, config, cache, mapUi, store) {
@@ -308,7 +309,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
    * @returns {object} OpenLayers Vector layer
    */
   var createLayerVector = function(def, options, day, state) {
-    console.log(config);
     const { proj, compare } = state;
     var date, urlParameters, extent, source, matrixSet, matrixIds, start;
     const selectedProj = proj.selected;
@@ -401,26 +401,9 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     if (config.vectorStyles) {
       var styleFunction;
       var vectorStyles = config.vectorStyles;
-      var vectorStyle = def.vectorStyle.id;
-      // var glStyle = vectorStyles[vectorStyle];
-      var glStyle = vectorStyles[vectorStyle];
-      // if (glStyle === undefined) {
-      //   glStyle = vectorStyles[vectorStyle];
-      // }
-      styleFunction = stylefunction(layer, glStyle, layerName);
-      if (glStyle.name === 'Orbit Tracks') {
-        // Filter time by 5 mins
-        layer.setStyle(function(feature, resolution) {
-          var minute;
-          var minutes = feature.get('label');
-          if (minutes) {
-            minute = minutes.split(':');
-          }
-          if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
-            return styleFunction(feature, resolution);
-          }
-        });
-      }
+      var vectorStyleId = def.vectorStyle.id;
+      var glStyle = vectorStyles[vectorStyleId];
+      setStyleFunction(layer, glStyle, vectorStyleId);
 
       // Initialize Sliders
       var sliderSections = document.getElementsByClassName('range-slider');
@@ -444,17 +427,16 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       // TODO: Add check for date change and re-apply
       // TODO: Change this on chang to target the controls
       $(document).on('change', function(e) {
-        glStyle = vectorStyles[vectorStyle];
         if (glStyle.name === 'FIRMS') {
-          styleFunction = stylefunction(layer, glStyle, layerName);
+          setStyleFunction(layer, glStyle, vectorStyleId);
 
           // FIRMS Style based on Confidence / FRP
           if (document.getElementById('frpCheckbox').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'MODIS_Fire_Points_FRP');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'MODIS_Fire_Points_FRP');
           } else if (document.getElementById('confidenceCheckbox').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'MODIS_Fire_Points_Confidence');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'MODIS_Fire_Points_Confidence');
           } else {
-            styleFunction = stylefunction(layer, glStyle, layerName);
+            setStyleFunction(layer, glStyle, vectorStyleId);
           }
 
           // FIRMS Filters
@@ -472,74 +454,62 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
           });
         } else if (glStyle.name === 'Orbit Tracks') {
           if (document.getElementById('orbit-track-controls_yellow1').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'yellow1');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'yellow1');
           } else if (document.getElementById('orbit-track-controls_yellow2').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'yellow2');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'yellow2');
           } else if (document.getElementById('orbit-track-controls_orange1').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'orange1');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'orange1');
           } else if (document.getElementById('orbit-track-controls_orange2').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'orange2');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'orange2');
           } else if (document.getElementById('orbit-track-controls_orange3').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'orange3');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'orange3');
           } else if (document.getElementById('orbit-track-controls_red1').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'red1');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'red1');
           } else if (document.getElementById('orbit-track-controls_red2').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'red2');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'red2');
           } else if (document.getElementById('orbit-track-controls_red3').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'red3');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'red3');
           } else if (document.getElementById('orbit-track-controls_pink1').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'pink1');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'pink1');
           } else if (document.getElementById('orbit-track-controls_pink2').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'pink2');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'pink2');
           } else if (document.getElementById('orbit-track-controls_pink3').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'pink3');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'pink3');
           } else if (document.getElementById('orbit-track-controls_pink4').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'pink4');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'pink4');
           } else if (document.getElementById('orbit-track-controls_pink5').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'pink5');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'pink5');
           } else if (document.getElementById('orbit-track-controls_purple1').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'purple1');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'purple1');
           } else if (document.getElementById('orbit-track-controls_purple2').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'purple2');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'purple2');
           } else if (document.getElementById('orbit-track-controls_purple3').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'purple3');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'purple3');
           } else if (document.getElementById('orbit-track-controls_blue1').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'blue1');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'blue1');
           } else if (document.getElementById('orbit-track-controls_blue2').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'blue2');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'blue2');
           } else if (document.getElementById('orbit-track-controls_blue3').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'blue3');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'blue3');
           } else if (document.getElementById('orbit-track-controls_blue4').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'blue4');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'blue4');
           } else if (document.getElementById('orbit-track-controls_blue5').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'blue5');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'blue5');
           } else if (document.getElementById('orbit-track-controls_blue6').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'blue6');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'blue6');
           } else if (document.getElementById('orbit-track-controls_brown1').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'brown1');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'brown1');
           } else if (document.getElementById('orbit-track-controls_brown2').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'brown2');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'brown2');
           } else if (document.getElementById('orbit-track-controls_green1').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'green1');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'green1');
           } else if (document.getElementById('orbit-track-controls_green2').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'green2');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'green2');
           } else if (document.getElementById('orbit-track-controls_green3').checked === true) {
-            styleFunction = stylefunction(layer, glStyle, layerName + '_' + 'green3');
+            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'green3');
           } else {
-            styleFunction = stylefunction(layer, glStyle, layerName);
+            setStyleFunction(layer, glStyle, vectorStyleId);
           }
-
-          // Filter time by 5 mins
-          layer.setStyle(function(feature, resolution) {
-            var minute;
-            var minutes = feature.get('label');
-            if (minutes) {
-              minute = minutes.split(':');
-            }
-            if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
-              return styleFunction(feature, resolution);
-            }
-          });
         }
       });
     }
