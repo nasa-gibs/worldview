@@ -14,7 +14,7 @@
       "id": "OrbitTracks_Landsat-8_Descending",
       "source": "OrbitTracks_Landsat-8_Descending",
       "source-layer": "OrbitTracks_Landsat-8_Descending",
-      "source-description": "",
+      "source-description": "Default",
       "type": "line",
       "paint": {
         "line-color": "rgb(255, 69, 0)",
@@ -25,7 +25,7 @@
       "id": "OrbitTracks_Landsat-8_Descending",
       "source": "OrbitTracks_Landsat-8_Descending",
       "source-layer": "OrbitTracks_Landsat-8_Descending",
-      "source-description": "",
+      "source-description": "Default",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -36,7 +36,7 @@
       "id": "OrbitTracks_Landsat-8_Descending",
       "source": "OrbitTracks_Landsat-8_Descending",
       "source-layer": "OrbitTracks_Landsat-8_Descending",
-      "source-description": "",
+      "source-description": "Default",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],

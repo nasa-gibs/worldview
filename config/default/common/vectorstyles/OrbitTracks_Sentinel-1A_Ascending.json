@@ -14,7 +14,7 @@
       "id": "OrbitTracks_Sentinel-1A_Ascending",
       "source": "OrbitTracks_Sentinel-1A_Ascending",
       "source-layer": "OrbitTracks_Sentinel-1A_Ascending",
-      "source-description": "",
+      "source-description": "Default",
       "type": "line",
       "paint": {
         "line-color": "rgb(237, 209, 130)",
@@ -25,7 +25,7 @@
       "id": "OrbitTracks_Sentinel-1A_Ascending",
       "source": "OrbitTracks_Sentinel-1A_Ascending",
       "source-layer": "OrbitTracks_Sentinel-1A_Ascending",
-      "source-description": "",
+      "source-description": "Default",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -36,7 +36,7 @@
       "id": "OrbitTracks_Sentinel-1A_Ascending",
       "source": "OrbitTracks_Sentinel-1A_Ascending",
       "source-layer": "OrbitTracks_Sentinel-1A_Ascending",
-      "source-description": "",
+      "source-description": "Default",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
