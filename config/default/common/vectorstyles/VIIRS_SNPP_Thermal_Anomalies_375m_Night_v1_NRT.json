@@ -14,6 +14,7 @@
       "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT_MODIS_Fire_Points_Confidence",
       "source": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT",
       "source-layer": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT",
+      "source-description": "Confidence",
       "type": "circle",
       "paint": {
         "circle-radius": {
@@ -33,6 +34,7 @@
       "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT_MODIS_Fire_Points_FRP",
       "source": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT",
       "source-layer": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT",
+      "source-description": "FRP",
       "type": "circle",
       "paint": {
         "circle-radius": {
@@ -60,6 +62,7 @@
       "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT",
       "source": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT",
       "source-layer": "VIIRS_SNPP_Thermal_Anomalies_375m_Night_v1_NRT",
+      "source-description": "Default",
       "type": "circle",
       "paint": {
         "circle-radius": {

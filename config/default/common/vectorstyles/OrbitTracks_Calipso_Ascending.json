@@ -12,9 +12,9 @@
   "layers": [
     {
       "id": "OrbitTracks_Calipso_Ascending",
-      "source-description": "Default",
       "source": "OrbitTracks_Calipso_Ascending",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Default",
       "type": "line",
       "paint": {
         "line-color": "rgb(216, 186, 25)",
@@ -23,9 +23,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending",
-      "source-description": "Default",
       "source": "OrbitTracks_Calipso_Ascending",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Default",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -34,9 +34,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending",
-      "source-description": "Default",
       "source": "OrbitTracks_Calipso_Ascending",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Default",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -54,9 +54,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_yellow1",
-      "source-description": "yellow 1",
       "source": "OrbitTracks_Calipso_Ascending_yellow1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Yellow 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(204, 255, 51)",
@@ -65,9 +65,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_yellow1",
-      "source-description": "yellow 1",
       "source": "OrbitTracks_Calipso_Ascending_yellow1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Yellow 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -76,9 +76,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_yellow1",
-      "source-description": "yellow 1",
       "source": "OrbitTracks_Calipso_Ascending_yellow1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Yellow 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -96,9 +96,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_yellow2",
-      "source-description": "yellow 2",
       "source": "OrbitTracks_Calipso_Ascending_yellow2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Yellow 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(248, 232, 35)",
@@ -107,9 +107,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_yellow2",
-      "source-description": "yellow 2",
       "source": "OrbitTracks_Calipso_Ascending_yellow2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Yellow 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -118,9 +118,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_yellow2",
-      "source-description": "yellow 2",
       "source": "OrbitTracks_Calipso_Ascending_yellow2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Yellow 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -138,9 +138,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange1",
-      "source-description": "orange 1",
       "source": "OrbitTracks_Calipso_Ascending_orange1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(242, 135, 34)",
@@ -149,9 +149,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange1",
-      "source-description": "orange 1",
       "source": "OrbitTracks_Calipso_Ascending_orange1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -160,9 +160,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange1",
-      "source-description": "orange 1",
       "source": "OrbitTracks_Calipso_Ascending_orange1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -180,9 +180,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange2",
-      "source-description": "orange 2",
       "source": "OrbitTracks_Calipso_Ascending_orange2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(237, 209, 130)",
@@ -191,9 +191,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange2",
-      "source-description": "orange 2",
       "source": "OrbitTracks_Calipso_Ascending_orange2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -202,9 +202,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange2",
-      "source-description": "orange 2",
       "source": "OrbitTracks_Calipso_Ascending_orange2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -222,9 +222,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange3",
-      "source-description": "orange 3",
       "source": "OrbitTracks_Calipso_Ascending_orange3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 3",
       "type": "line",
       "paint": {
         "line-color": "rgb(216, 186, 25)",
@@ -233,9 +233,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange3",
-      "source-description": "orange 3",
       "source": "OrbitTracks_Calipso_Ascending_orange3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 3",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -244,9 +244,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_orange3",
-      "source-description": "orange 3",
       "source": "OrbitTracks_Calipso_Ascending_orange3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Orange 3",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -264,9 +264,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red1",
-      "source-description": "red 1",
       "source": "OrbitTracks_Calipso_Ascending_red1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(177, 89, 40)",
@@ -275,9 +275,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red1",
-      "source-description": "red 1",
       "source": "OrbitTracks_Calipso_Ascending_red1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -286,9 +286,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red1",
-      "source-description": "red 1",
       "source": "OrbitTracks_Calipso_Ascending_red1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -306,9 +306,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red2",
-      "source-description": "red 2",
       "source": "OrbitTracks_Calipso_Ascending_red2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(196, 6, 41)",
@@ -317,9 +317,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red2",
-      "source-description": "red 2",
       "source": "OrbitTracks_Calipso_Ascending_red2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -328,9 +328,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red2",
-      "source-description": "red 2",
       "source": "OrbitTracks_Calipso_Ascending_red2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -348,9 +348,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red3",
-      "source-description": "red 3",
       "source": "OrbitTracks_Calipso_Ascending_red3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 3",
       "type": "line",
       "paint": {
         "line-color": "rgb(255, 69, 0)",
@@ -359,9 +359,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red3",
-      "source-description": "red 3",
       "source": "OrbitTracks_Calipso_Ascending_red3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 3",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -370,9 +370,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_red3",
-      "source-description": "red 3",
       "source": "OrbitTracks_Calipso_Ascending_red3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Red 3",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -390,9 +390,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink1",
-      "source-description": "pink 1",
       "source": "OrbitTracks_Calipso_Ascending_pink1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(255, 51, 204)",
@@ -401,9 +401,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink1",
-      "source-description": "pink 1",
       "source": "OrbitTracks_Calipso_Ascending_pink1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -412,9 +412,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink1",
-      "source-description": "pink 1",
       "source": "OrbitTracks_Calipso_Ascending_pink1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -432,9 +432,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink2",
-      "source-description": "pink 2",
       "source": "OrbitTracks_Calipso_Ascending_pink2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(255, 204, 255)",
@@ -443,9 +443,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink2",
-      "source-description": "pink 2",
       "source": "OrbitTracks_Calipso_Ascending_pink2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -454,9 +454,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink2",
-      "source-description": "pink 2",
       "source": "OrbitTracks_Calipso_Ascending_pink2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -474,9 +474,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink3",
-      "source-description": "pink 3",
       "source": "OrbitTracks_Calipso_Ascending_pink3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 3",
       "type": "line",
       "paint": {
         "line-color": "rgb(255, 196, 198)",
@@ -485,9 +485,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink3",
-      "source-description": "pink 3",
       "source": "OrbitTracks_Calipso_Ascending_pink3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 3",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -496,9 +496,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink3",
-      "source-description": "pink 3",
       "source": "OrbitTracks_Calipso_Ascending_pink3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 3",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -516,9 +516,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink4",
-      "source-description": "pink 4",
       "source": "OrbitTracks_Calipso_Ascending_pink4",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 4",
       "type": "line",
       "paint": {
         "line-color": "rgb(219, 112, 147)",
@@ -527,9 +527,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink4",
-      "source-description": "pink 4",
       "source": "OrbitTracks_Calipso_Ascending_pink4",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 4",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -538,9 +538,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink4",
-      "source-description": "pink 4",
       "source": "OrbitTracks_Calipso_Ascending_pink4",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 4",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -558,9 +558,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink5",
-      "source-description": "pink 5",
       "source": "OrbitTracks_Calipso_Ascending_pink5",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 5",
       "type": "line",
       "paint": {
         "line-color": "rgb(255, 160, 122)",
@@ -569,9 +569,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink5",
-      "source-description": "pink 5",
       "source": "OrbitTracks_Calipso_Ascending_pink5",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 5",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -580,9 +580,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_pink5",
-      "source-description": "pink 5",
       "source": "OrbitTracks_Calipso_Ascending_pink5",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Pink 5",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -600,9 +600,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple1",
-      "source-description": "purple 1",
       "source": "OrbitTracks_Calipso_Ascending_purple1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(178, 144, 193)",
@@ -611,9 +611,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple1",
-      "source-description": "purple 1",
       "source": "OrbitTracks_Calipso_Ascending_purple1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -622,9 +622,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple1",
-      "source-description": "purple 1",
       "source": "OrbitTracks_Calipso_Ascending_purple1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -642,9 +642,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple2",
-      "source-description": "purple 2",
       "source": "OrbitTracks_Calipso_Ascending_purple2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(106, 61, 154)",
@@ -653,9 +653,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple2",
-      "source-description": "purple 2",
       "source": "OrbitTracks_Calipso_Ascending_purple2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -664,9 +664,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple2",
-      "source-description": "purple 2",
       "source": "OrbitTracks_Calipso_Ascending_purple2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -684,9 +684,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple3",
-      "source-description": "purple 3",
       "source": "OrbitTracks_Calipso_Ascending_purple3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 3",
       "type": "line",
       "paint": {
         "line-color": "rgb(192, 88, 240)",
@@ -695,9 +695,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple3",
-      "source-description": "purple 3",
       "source": "OrbitTracks_Calipso_Ascending_purple3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 3",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -706,9 +706,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_purple3",
-      "source-description": "purple 3",
       "source": "OrbitTracks_Calipso_Ascending_purple3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Purple 3",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -726,9 +726,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue1",
-      "source-description": "blue 1",
       "source": "OrbitTracks_Calipso_Ascending_blue1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(136, 177, 191)",
@@ -737,9 +737,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue1",
-      "source-description": "blue 1",
       "source": "OrbitTracks_Calipso_Ascending_blue1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -748,9 +748,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue1",
-      "source-description": "blue 1",
       "source": "OrbitTracks_Calipso_Ascending_blue1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -768,9 +768,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue2",
-      "source-description": "blue 2",
       "source": "OrbitTracks_Calipso_Ascending_blue2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(64, 244, 208)",
@@ -779,9 +779,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue2",
-      "source-description": "blue 2",
       "source": "OrbitTracks_Calipso_Ascending_blue2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -790,9 +790,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue2",
-      "source-description": "blue 2",
       "source": "OrbitTracks_Calipso_Ascending_blue2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -810,9 +810,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue3",
-      "source-description": "blue 3",
       "source": "OrbitTracks_Calipso_Ascending_blue3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 3",
       "type": "line",
       "paint": {
         "line-color": "rgb(126, 151, 189)",
@@ -821,9 +821,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue3",
-      "source-description": "blue 3",
       "source": "OrbitTracks_Calipso_Ascending_blue3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 3",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -832,9 +832,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue3",
-      "source-description": "blue 3",
       "source": "OrbitTracks_Calipso_Ascending_blue3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 3",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -852,9 +852,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue4",
-      "source-description": "blue 4",
       "source": "OrbitTracks_Calipso_Ascending_blue4",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 4",
       "type": "line",
       "paint": {
         "line-color": "rgb(102, 204, 204)",
@@ -863,9 +863,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue4",
-      "source-description": "blue 4",
       "source": "OrbitTracks_Calipso_Ascending_blue4",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 4",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -874,9 +874,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue4",
-      "source-description": "blue 4",
       "source": "OrbitTracks_Calipso_Ascending_blue4",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 4",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -894,9 +894,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue5",
-      "source-description": "blue 5",
       "source": "OrbitTracks_Calipso_Ascending_blue5",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 5",
       "type": "line",
       "paint": {
         "line-color": "rgb(25, 114, 243)",
@@ -905,9 +905,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue5",
-      "source-description": "blue 5",
       "source": "OrbitTracks_Calipso_Ascending_blue5",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 5",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -916,9 +916,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue5",
-      "source-description": "blue 5",
       "source": "OrbitTracks_Calipso_Ascending_blue5",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 5",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -936,9 +936,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue6",
-      "source-description": "blue 6",
       "source": "OrbitTracks_Calipso_Ascending_blue6",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 6",
       "type": "line",
       "paint": {
         "line-color": "rgb(21, 192, 230)",
@@ -947,9 +947,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue6",
-      "source-description": "blue 6",
       "source": "OrbitTracks_Calipso_Ascending_blue6",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 6",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -958,9 +958,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_blue6",
-      "source-description": "blue 6",
       "source": "OrbitTracks_Calipso_Ascending_blue6",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Blue 6",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -978,9 +978,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_brown1",
-      "source-description": "brown 1",
       "source": "OrbitTracks_Calipso_Ascending_brown1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Brown 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(153, 153, 0)",
@@ -989,9 +989,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_brown1",
-      "source-description": "brown 1",
       "source": "OrbitTracks_Calipso_Ascending_brown1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Brown 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -1000,9 +1000,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_brown1",
-      "source-description": "brown 1",
       "source": "OrbitTracks_Calipso_Ascending_brown1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Brown 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -1020,9 +1020,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_brown2",
-      "source-description": "brown 2",
       "source": "OrbitTracks_Calipso_Ascending_brown2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Brown 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(210, 136, 127)",
@@ -1031,9 +1031,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_brown2",
-      "source-description": "brown 2",
       "source": "OrbitTracks_Calipso_Ascending_brown2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Brown 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -1042,9 +1042,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_brown2",
-      "source-description": "brown 2",
       "source": "OrbitTracks_Calipso_Ascending_brown2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Brown 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -1062,9 +1062,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green1",
-      "source-description": "green 1",
       "source": "OrbitTracks_Calipso_Ascending_green1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(22, 160, 133)",
@@ -1073,9 +1073,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green1",
-      "source-description": "green 1",
       "source": "OrbitTracks_Calipso_Ascending_green1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -1084,9 +1084,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green1",
-      "source-description": "green 1",
       "source": "OrbitTracks_Calipso_Ascending_green1",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -1104,9 +1104,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green2",
-      "source-description": "green 2",
       "source": "OrbitTracks_Calipso_Ascending_green2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(55, 242, 34)",
@@ -1115,9 +1115,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green2",
-      "source-description": "green 2",
       "source": "OrbitTracks_Calipso_Ascending_green2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -1126,9 +1126,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green2",
-      "source-description": "green 2",
       "source": "OrbitTracks_Calipso_Ascending_green2",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -1146,9 +1146,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green3",
-      "source-description": "green 3",
       "source": "OrbitTracks_Calipso_Ascending_green3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 3",
       "type": "line",
       "paint": {
         "line-color": "rgb(127, 196, 6)",
@@ -1157,9 +1157,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green3",
-      "source-description": "green 3",
       "source": "OrbitTracks_Calipso_Ascending_green3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 3",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -1168,9 +1168,9 @@
     },
     {
       "id": "OrbitTracks_Calipso_Ascending_green3",
-      "source-description": "green 3",
       "source": "OrbitTracks_Calipso_Ascending_green3",
       "source-layer": "OrbitTracks_Calipso_Ascending",
+      "source-description": "Green 3",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
