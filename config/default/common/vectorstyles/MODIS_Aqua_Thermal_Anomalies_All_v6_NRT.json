@@ -14,6 +14,7 @@
       "id": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT_MODIS_Fire_Points_Confidence",
       "source": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
+      "source-description": "Confidence",
       "type": "circle",
       "paint": {
         "circle-radius": {
@@ -41,6 +42,7 @@
       "id": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT_MODIS_Fire_Points_FRP",
       "source": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
+      "source-description": "FRP",
       "type": "circle",
       "paint": {
         "circle-radius": {
@@ -68,6 +70,7 @@
       "id": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
       "source": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
       "source-layer": "MODIS_Aqua_Thermal_Anomalies_All_v6_NRT",
+      "source-description": "Default",
       "type": "circle",
       "paint": {
         "circle-radius": {

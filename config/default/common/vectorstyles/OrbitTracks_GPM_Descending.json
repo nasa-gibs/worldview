@@ -14,6 +14,7 @@
       "id": "OrbitTracks_GPM_Descending",
       "source": "OrbitTracks_GPM_Descending",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "",
       "type": "line",
       "paint": {
         "line-color": "rgb(55, 242, 34)",
@@ -24,6 +25,7 @@
       "id": "OrbitTracks_GPM_Descending",
       "source": "OrbitTracks_GPM_Descending",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -34,6 +36,7 @@
       "id": "OrbitTracks_GPM_Descending",
       "source": "OrbitTracks_GPM_Descending",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -54,6 +57,7 @@
       "source": "OrbitTracks_GPM_Descending_yellow1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Yellow 1",
       "paint": {
         "line-color": "rgb(204, 255, 51)",
         "line-width": 2
@@ -64,6 +68,7 @@
       "source": "OrbitTracks_GPM_Descending_yellow1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Yellow 1",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(204, 255, 51)"
@@ -74,6 +79,7 @@
       "source": "OrbitTracks_GPM_Descending_yellow1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Yellow 1",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -93,6 +99,7 @@
       "source": "OrbitTracks_GPM_Descending_yellow2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Yellow 2",
       "paint": {
         "line-color": "rgb(248, 232, 35)",
         "line-width": 2
@@ -103,6 +110,7 @@
       "source": "OrbitTracks_GPM_Descending_yellow2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Yellow 2",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(248, 232, 35)"
@@ -113,6 +121,7 @@
       "source": "OrbitTracks_GPM_Descending_yellow2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Yellow 2",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -132,6 +141,7 @@
       "source": "OrbitTracks_GPM_Descending_orange1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Orange 1",
       "paint": {
         "line-color": "rgb(242, 135, 34)",
         "line-width": 2
@@ -142,6 +152,7 @@
       "source": "OrbitTracks_GPM_Descending_orange1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Orange 1",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(242, 135, 34)"
@@ -152,6 +163,7 @@
       "source": "OrbitTracks_GPM_Descending_orange1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Orange 1",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -171,6 +183,7 @@
       "source": "OrbitTracks_GPM_Descending_orange2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Orange 2",
       "paint": {
         "line-color": "rgb(237, 209, 130)",
         "line-width": 2
@@ -181,6 +194,7 @@
       "source": "OrbitTracks_GPM_Descending_orange2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Orange 2",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(237, 209, 130)"
@@ -191,6 +205,7 @@
       "source": "OrbitTracks_GPM_Descending_orange2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Orange 2",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -210,6 +225,7 @@
       "source": "OrbitTracks_GPM_Descending_orange3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Orange 3",
       "paint": {
         "line-color": "rgb(216, 186, 25)",
         "line-width": 2
@@ -220,6 +236,7 @@
       "source": "OrbitTracks_GPM_Descending_orange3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Orange 3",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(216, 186, 25)"
@@ -230,6 +247,7 @@
       "source": "OrbitTracks_GPM_Descending_orange3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Orange 3",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -248,6 +266,7 @@
       "id": "OrbitTracks_GPM_Descending_red1",
       "source": "OrbitTracks_GPM_Descending_red1",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 1",
       "type": "line",
       "paint": {
         "line-color": "rgb(177, 89, 40)",
@@ -258,6 +277,7 @@
       "id": "OrbitTracks_GPM_Descending_red1",
       "source": "OrbitTracks_GPM_Descending_red1",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 1",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -268,6 +288,7 @@
       "id": "OrbitTracks_GPM_Descending_red1",
       "source": "OrbitTracks_GPM_Descending_red1",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 1",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -287,6 +308,7 @@
       "id": "OrbitTracks_GPM_Descending_red2",
       "source": "OrbitTracks_GPM_Descending_red2",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 2",
       "type": "line",
       "paint": {
         "line-color": "rgb(196, 6, 41)",
@@ -297,6 +319,7 @@
       "id": "OrbitTracks_GPM_Descending_red2",
       "source": "OrbitTracks_GPM_Descending_red2",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 2",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -307,6 +330,7 @@
       "id": "OrbitTracks_GPM_Descending_red2",
       "source": "OrbitTracks_GPM_Descending_red2",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 2",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -326,6 +350,7 @@
       "id": "OrbitTracks_GPM_Descending_red3",
       "source": "OrbitTracks_GPM_Descending_red3",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 3",
       "type": "line",
       "paint": {
         "line-color": "rgb(255, 69, 0)",
@@ -336,6 +361,7 @@
       "id": "OrbitTracks_GPM_Descending_red3",
       "source": "OrbitTracks_GPM_Descending_red3",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 3",
       "type": "circle",
       "paint": {
         "circle-radius": "5",
@@ -346,6 +372,7 @@
       "id": "OrbitTracks_GPM_Descending_red3",
       "source": "OrbitTracks_GPM_Descending_red3",
       "source-layer": "OrbitTracks_GPM_Descending",
+      "source-description": "Red 3",
       "type": "symbol",
       "layout": {
         "text-field": ["get", "label"],
@@ -366,6 +393,7 @@
       "source": "OrbitTracks_GPM_Descending_pink1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Pink 1",
       "paint": {
         "line-color": "rgb(255, 51, 204)",
         "line-width": 2
@@ -376,6 +404,7 @@
       "source": "OrbitTracks_GPM_Descending_pink1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Pink 1",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(255, 51, 204)"
@@ -386,6 +415,7 @@
       "source": "OrbitTracks_GPM_Descending_pink1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Pink 1",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -405,6 +435,7 @@
       "source": "OrbitTracks_GPM_Descending_pink2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Pink 2",
       "paint": {
         "line-color": "rgb(255, 204, 255)",
         "line-width": 2
@@ -415,6 +446,7 @@
       "source": "OrbitTracks_GPM_Descending_pink2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Pink 2",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(255, 204, 255)"
@@ -425,6 +457,7 @@
       "source": "OrbitTracks_GPM_Descending_pink2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Pink 2",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -444,6 +477,7 @@
       "source": "OrbitTracks_GPM_Descending_pink3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Pink 3",
       "paint": {
         "line-color": "rgb(255, 196, 198)",
         "line-width": 2
@@ -454,6 +488,7 @@
       "source": "OrbitTracks_GPM_Descending_pink3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Pink 3",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(255, 196, 198)"
@@ -464,6 +499,7 @@
       "source": "OrbitTracks_GPM_Descending_pink3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Pink 3",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -483,6 +519,7 @@
       "source": "OrbitTracks_GPM_Descending_pink4",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Pink 4",
       "paint": {
         "line-color": "rgb(219, 112, 147)",
         "line-width": 2
@@ -493,6 +530,7 @@
       "source": "OrbitTracks_GPM_Descending_pink4",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Pink 4",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(219, 112, 147)"
@@ -503,6 +541,7 @@
       "source": "OrbitTracks_GPM_Descending_pink4",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Pink 4",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -522,6 +561,7 @@
       "source": "OrbitTracks_GPM_Descending_pink5",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Pink 5",
       "paint": {
         "line-color": "rgb(255, 160, 122)",
         "line-width": 2
@@ -532,6 +572,7 @@
       "source": "OrbitTracks_GPM_Descending_pink5",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Pink 5",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(255, 160, 122)"
@@ -542,6 +583,7 @@
       "source": "OrbitTracks_GPM_Descending_pink5",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Pink 5",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -561,6 +603,7 @@
       "source": "OrbitTracks_GPM_Descending_purple1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Purple 1",
       "paint": {
         "line-color": "rgb(178, 144, 193)",
         "line-width": 2
@@ -571,6 +614,7 @@
       "source": "OrbitTracks_GPM_Descending_purple1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Purple 1",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(178, 144, 193)"
@@ -581,6 +625,7 @@
       "source": "OrbitTracks_GPM_Descending_purple1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Purple 1",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -600,6 +645,7 @@
       "source": "OrbitTracks_GPM_Descending_purple2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Purple 2",
       "paint": {
         "line-color": "rgb(106, 61, 154)",
         "line-width": 2
@@ -610,6 +656,7 @@
       "source": "OrbitTracks_GPM_Descending_purple2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Purple 2",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(106, 61, 154)"
@@ -620,6 +667,7 @@
       "source": "OrbitTracks_GPM_Descending_purple2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Purple 2",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -639,6 +687,7 @@
       "source": "OrbitTracks_GPM_Descending_purple3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Purple 3",
       "paint": {
         "line-color": "rgb(192, 88, 240)",
         "line-width": 2
@@ -649,6 +698,7 @@
       "source": "OrbitTracks_GPM_Descending_purple3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Purple 3",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(192, 88, 240)"
@@ -659,6 +709,7 @@
       "source": "OrbitTracks_GPM_Descending_purple3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Purple 3",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -678,6 +729,7 @@
       "source": "OrbitTracks_GPM_Descending_blue1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Blue 1",
       "paint": {
         "line-color": "rgb(136, 177, 191)",
         "line-width": 2
@@ -688,6 +740,7 @@
       "source": "OrbitTracks_GPM_Descending_blue1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Blue 1",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(136, 177, 191)"
@@ -698,6 +751,7 @@
       "source": "OrbitTracks_GPM_Descending_blue1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Blue 1",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -717,6 +771,7 @@
       "source": "OrbitTracks_GPM_Descending_blue2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Blue 2",
       "paint": {
         "line-color": "rgb(64, 244, 208)",
         "line-width": 2
@@ -727,6 +782,7 @@
       "source": "OrbitTracks_GPM_Descending_blue2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Blue 2",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(64, 244, 208)"
@@ -737,6 +793,7 @@
       "source": "OrbitTracks_GPM_Descending_blue2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Blue 2",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -756,6 +813,7 @@
       "source": "OrbitTracks_GPM_Descending_blue3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Blue 3",
       "paint": {
         "line-color": "rgb(126, 151, 189)",
         "line-width": 2
@@ -766,6 +824,7 @@
       "source": "OrbitTracks_GPM_Descending_blue3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Blue 3",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(126, 151, 189)"
@@ -776,6 +835,7 @@
       "source": "OrbitTracks_GPM_Descending_blue3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Blue 3",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -795,6 +855,7 @@
       "source": "OrbitTracks_GPM_Descending_blue4",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Blue 4",
       "paint": {
         "line-color": "rgb(102, 204, 204)",
         "line-width": 2
@@ -805,6 +866,7 @@
       "source": "OrbitTracks_GPM_Descending_blue4",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Blue 4",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(102, 204, 204)"
@@ -815,6 +877,7 @@
       "source": "OrbitTracks_GPM_Descending_blue4",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Blue 4",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -834,6 +897,7 @@
       "source": "OrbitTracks_GPM_Descending_blue5",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Blue 5",
       "paint": {
         "line-color": "rgb(25, 114, 243)",
         "line-width": 2
@@ -844,6 +908,7 @@
       "source": "OrbitTracks_GPM_Descending_blue5",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Blue 5",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(25, 114, 243)"
@@ -854,6 +919,7 @@
       "source": "OrbitTracks_GPM_Descending_blue5",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Blue 5",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -873,6 +939,7 @@
       "source": "OrbitTracks_GPM_Descending_blue6",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Blue 6",
       "paint": {
         "line-color": "rgb(21, 192, 230)",
         "line-width": 2
@@ -883,6 +950,7 @@
       "source": "OrbitTracks_GPM_Descending_blue6",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Blue 6",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(21, 192, 230)"
@@ -893,6 +961,7 @@
       "source": "OrbitTracks_GPM_Descending_blue6",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Blue 6",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -912,6 +981,7 @@
       "source": "OrbitTracks_GPM_Descending_brown1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Brown 1",
       "paint": {
         "line-color": "rgb(153, 153, 0)",
         "line-width": 2
@@ -922,6 +992,7 @@
       "source": "OrbitTracks_GPM_Descending_brown1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Brown 1",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(153, 153, 0)"
@@ -932,6 +1003,7 @@
       "source": "OrbitTracks_GPM_Descending_brown1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Brown 1",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -951,6 +1023,7 @@
       "source": "OrbitTracks_GPM_Descending_brown2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Brown 2",
       "paint": {
         "line-color": "rgb(210, 136, 127)",
         "line-width": 2
@@ -961,6 +1034,7 @@
       "source": "OrbitTracks_GPM_Descending_brown2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Brown 2",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(210, 136, 127)"
@@ -971,6 +1045,7 @@
       "source": "OrbitTracks_GPM_Descending_brown2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Brown 2",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -990,6 +1065,7 @@
       "source": "OrbitTracks_GPM_Descending_green1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Green 1",
       "paint": {
         "line-color": "rgb(22, 160, 133)",
         "line-width": 2
@@ -1000,6 +1076,7 @@
       "source": "OrbitTracks_GPM_Descending_green1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Green 1",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(22, 160, 133)"
@@ -1010,6 +1087,7 @@
       "source": "OrbitTracks_GPM_Descending_green1",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Green 1",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -1029,6 +1107,7 @@
       "source": "OrbitTracks_GPM_Descending_green2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Green 2",
       "paint": {
         "line-color": "rgb(55, 242, 34)",
         "line-width": 2
@@ -1039,6 +1118,7 @@
       "source": "OrbitTracks_GPM_Descending_green2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Green 2",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(55, 242, 34)"
@@ -1049,6 +1129,7 @@
       "source": "OrbitTracks_GPM_Descending_green2",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Green 2",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
@@ -1068,6 +1149,7 @@
       "source": "OrbitTracks_GPM_Descending_green3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "line",
+      "source-description": "Green 3",
       "paint": {
         "line-color": "rgb(127, 196, 6)",
         "line-width": 2
@@ -1078,6 +1160,7 @@
       "source": "OrbitTracks_GPM_Descending_green3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "circle",
+      "source-description": "Green 3",
       "paint": {
         "circle-radius": "5",
         "circle-color": "rgb(127, 196, 6)"
@@ -1088,6 +1171,7 @@
       "source": "OrbitTracks_GPM_Descending_green3",
       "source-layer": "OrbitTracks_GPM_Descending",
       "type": "symbol",
+      "source-description": "Green 3",
       "layout": {
         "text-field": ["get", "label"],
         "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
