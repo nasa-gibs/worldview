@@ -80,7 +80,7 @@ class MobileDatePicker extends Component {
     });
     // convert date back to local time
     let date = this.convertToLocalDateObject(time).toISOString();
-    this.props.changeDate(date);
+    this.props.onDateChange(date);
   }
 
   // used for init mount
@@ -150,7 +150,7 @@ class MobileDatePicker extends Component {
 }
 
 MobileDatePicker.propTypes = {
-  changeDate: PropTypes.func,
+  onDateChange: PropTypes.func,
   date: PropTypes.string,
   startDateLimit: PropTypes.string,
   endDateLimit: PropTypes.string,

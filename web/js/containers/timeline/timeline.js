@@ -200,7 +200,7 @@ class Timeline extends React.Component {
             leftOffset: clientX - this.props.parentOffset,
             hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid + transformX + position
           });
-          this.changeDate(displayDateFormat);
+          this.onDateChange(displayDateFormat);
         } else {
           this.displayDate(displayDateFormat, clientX);
           this.setState({
@@ -289,7 +289,7 @@ class Timeline extends React.Component {
     let animate = () => {
       var nextTime = getNextTimeSelection(delta, increment, this.props.selectedDate);
       if (new Date(startDate) <= nextTime && nextTime <= endTime) {
-        this.changeDate(util.dateAdd(this.props.selectedDate, increment, delta));
+        this.onDateChange(util.dateAdd(this.props.selectedDate, increment, delta));
       }
       if (this.state.animationInProcess) {
         this.animator = setInterval(() => animate, ANIMATION_DELAY);
@@ -513,7 +513,7 @@ class Timeline extends React.Component {
         moved: moved || this.state.moved
       });
       if (newDraggerDate) {
-        this.changeDate(newDraggerDate, 'selected');
+        this.onDateChange(newDraggerDate, 'selected');
       }
     } else {
       this.setState({
@@ -524,7 +524,7 @@ class Timeline extends React.Component {
         moved: moved || this.state.moved
       });
       if (newDraggerDate) {
-        this.changeDate(newDraggerDate, 'selectedB');
+        this.onDateChange(newDraggerDate, 'selectedB');
       }
     }
   }
@@ -542,11 +542,13 @@ class Timeline extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
+    // console.log(prevProps, prevState)
+    // console.log(this.props, this.state)
     let prevStartLocationDate = prevProps.animStartLocationDate;
     let prevEndLocationDate = prevProps.animEndLocationDate;
 
-    let { animStartLocationDate, animEndLocationDate } = this.props;
+    let { animStartLocationDate, animEndLocationDate, dateA, dateB, isAnimationWidgetOpen, customSelected, customIntervalValue, customIntervalZoomLevel } = this.props;
     // handle location update triggered from animation start/end date change from animation widget
     if (prevStartLocationDate && prevEndLocationDate) {
       if (prevStartLocationDate !== animStartLocationDate || prevEndLocationDate !== animEndLocationDate) {
@@ -555,14 +557,35 @@ class Timeline extends React.Component {
     }
 
     // handle draggerTimeState updates if date changes
-    if (this.props.dateA !== prevProps.dateA && this.props.dateA !== this.state.draggerTimeState) {
+    if (dateA !== prevProps.dateA && dateA !== this.state.draggerTimeState) {
       this.setState({
-        draggerTimeState: this.props.dateA
+        draggerTimeState: dateA
       });
     }
-    if (this.props.dateB !== prevProps.dateB && this.props.dateB !== this.state.draggerTimeStateB) {
+    if (dateB !== prevProps.dateB && dateB !== this.state.draggerTimeStateB) {
       this.setState({
-        draggerTimeStateB: this.props.dateB
+        draggerTimeStateB: dateB
+      });
+    }
+
+    // handle open/close custom interval panel if 'custom' selected in animation widget
+    // and no custom value has been initialized
+    if (isAnimationWidgetOpen &&
+       !prevProps.customSelected &&
+       customSelected &&
+       customIntervalValue === 1 &&
+       customIntervalZoomLevel === 3) {
+      this.setState({
+        customIntervalModalOpen: true
+      });
+    }
+    if (isAnimationWidgetOpen &&
+       prevProps.customSelected &&
+       !customSelected &&
+       customIntervalValue === 1 &&
+       customIntervalZoomLevel === 3) {
+      this.setState({
+        customIntervalModalOpen: false
       });
     }
   }
@@ -587,11 +610,21 @@ class Timeline extends React.Component {
   /**
   * @desc change store date
   * @param {String} date
-  * @param {String} draggerSelected
+  * @param {String} draggerSelected - default to props draggerSelected
   * @returns {void}
   */
-  changeDate = (date, draggerSelected = this.state.draggerSelected) => {
-    this.debounceDateUpdate(new Date(date), draggerSelected);
+  onDateChange = (date, draggerSelected = this.props.draggerSelected) => {
+    let dateObj = new Date(date);
+    if (draggerSelected === 'selected') { // dragger A
+      this.setState({
+        draggerTimeState: dateObj.toISOString()
+      });
+    } else { // dragger B
+      this.setState({
+        draggerTimeStateB: dateObj.toISOString()
+      });
+    }
+    this.debounceDateUpdate(dateObj, draggerSelected);
   }
 
   render() {
@@ -1019,7 +1052,7 @@ Timeline.propTypes = {
 // get axisWidth and parentOffset for axis, footer, and leftOffset calculations
 const getOffsetValues = (innerWidth, hasSubDaily) => {
   const parentOffset = (hasSubDaily ? 414 : 310) + 10;
-  const width = innerWidth - parentOffset - 92;
+  const width = innerWidth - parentOffset - 88;
   return { width, parentOffset };
 };
 
