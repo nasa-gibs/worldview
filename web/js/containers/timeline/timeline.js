@@ -105,7 +105,6 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   displayDate = (date, leftOffset) => {
-    console.log(date, leftOffset)
     requestAnimationFrame(() => {
       this.setState({
         hoverTime: date,
@@ -161,7 +160,6 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   showHover = (e, itemDate, nextDate, index) => {
-    console.log(e, e.type, itemDate, nextDate, index)
     e.preventDefault();
     e.stopPropagation();
     e.persist();
@@ -170,7 +168,11 @@ class Timeline extends React.Component {
         position,
         transformX
       } = this.state;
-      let { timeScale } = this.props;
+      let {
+        timeScale,
+        timelineStartDateLimit,
+        timelineEndDateLimit
+      } = this.props;
 
       let options = timeScaleOptions[timeScale].timeAxis;
       let gridWidth = options.gridWidth;
@@ -186,27 +188,13 @@ class Timeline extends React.Component {
       let diffFactor = diff / gridWidth;
       let displayDateValue = currentDateValue + xHoverPositionInCurrentGrid * diffFactor;
 
-      let isBetweenValidTimeline = getIsBetween(displayDateValue, this.props.timelineStartDateLimit, this.props.timelineEndDateLimit);
+      let isBetweenValidTimeline = getIsBetween(displayDateValue, timelineStartDateLimit, timelineEndDateLimit);
       if (isBetweenValidTimeline) {
         let displayDateFormat = getISODateFormatted(displayDateValue);
-        if (e.type === 'touchstart') {
-          // this.setState({
-          //   hoverTime: date,
-          //   leftOffset: leftOffset - this.props.parentOffset // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
-          // });
-          // this.displayDate(displayDateFormat, clientX);
-          this.setState({
-            hoverTime: displayDateFormat,
-            leftOffset: clientX - this.props.parentOffset,
-            hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid + transformX + position
-          });
-          this.onDateChange(displayDateFormat);
-        } else {
-          this.displayDate(displayDateFormat, clientX);
-          this.setState({
-            hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid + transformX + position
-          });
-        }
+        this.displayDate(displayDateFormat, clientX);
+        this.setState({
+          hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid + transformX + position
+        });
       }
     });
   }
@@ -502,8 +490,6 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   updateDraggerDatePosition = (newDraggerDate, draggerSelected, draggerPosition, draggerVisible, otherDraggerVisible, moved) => {
-    console.log(this.state)
-    console.log(newDraggerDate, draggerSelected, draggerPosition, draggerVisible, otherDraggerVisible, moved)
     if (draggerSelected === 'selected') {
       this.setState({
         draggerPosition: draggerPosition || this.state.draggerPosition,

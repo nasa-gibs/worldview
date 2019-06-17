@@ -90,7 +90,6 @@ class TimelineAxis extends Component {
     if (this.props.draggerSelected === 'selected') {
       draggerDateActual = hoverChange ? this.props.draggerTimeState : inputDate || this.props.draggerTimeState;
       draggerDateActualB = this.props.draggerTimeStateB;
-      console.log(draggerDateActual, draggerDateActualB, this.props)
     } else {
       draggerDateActual = this.props.draggerTimeState;
       draggerDateActualB = hoverChange ? this.props.draggerTimeStateB : inputDate || this.props.draggerTimeStateB;
@@ -140,7 +139,6 @@ class TimelineAxis extends Component {
         draggerVisibleB = true;
       }
     }
-    console.log(draggerVisible, draggerVisibleB, draggerPosition, draggerDateActual, frontDate.format(), backDate)
     let position;
     // axisWidthInput conditional in place to handle resize centering of position
     if (axisWidthInput) {
@@ -289,7 +287,6 @@ class TimelineAxis extends Component {
       compareModeActive,
       draggerSelected
     } = this.props;
-    console.log(position, deltaX, draggerPosition, draggerPositionB, overDrag)
     numberOfVisibleTiles = Math.floor(numberOfVisibleTiles * 0.25);
     let overDragGrids = Math.ceil(overDrag / gridWidth);
     let timeRangeAdd;
@@ -300,8 +297,6 @@ class TimelineAxis extends Component {
       removeBackMultipleInPlace(currentTimeRange, numberOfVisibleTiles + 1 + overDragGrids);
       currentTimeRange.unshift(...timeRangeAdd);
       transform = transformX - (numberOfVisibleTiles + 1 + overDragGrids) * gridWidth;
-
-      console.log(timeRangeAdd, transform)
     } else { // dragging left - exposing future dates
       let lastDateInRange = currentTimeRange[currentTimeRange.length - 1].rawDate;
       timeRangeAdd = this.getTimeRangeArray(-1, numberOfVisibleTiles + 1 + overDragGrids, lastDateInRange);
@@ -572,26 +567,24 @@ class TimelineAxis extends Component {
   * @desc set mouseDown to handle over dragging range-select and triggering false axis click
   * @returns {void}
   */
-  handleMouseDown = () => {
+  handleMouseDown = (e) => {
     this.setState({
       mouseDown: true
     });
   }
 
   /**
-  * @desc move dragger on axis click
+  * @desc move dragger on axis click - calculated based on hover
   * @param {Event} mouse click event
   * @returns {void}
   */
   setLineTime = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e)
     if (e.target.className.animVal !== 'grid') {
       return;
     }
-    console.log(!this.props.isAnimationDraggerDragging ,!this.props.moved ,this.state.mouseDown)
-    if (!this.props.isAnimationDraggerDragging && !this.props.moved && this.state.mouseDown) {
+    if (!this.props.isAnimationDraggerDragging && !this.props.moved && (this.state.mouseDown || e.type === 'touchend')) {
       let {
         currentTimeRange
       } = this.state;
@@ -602,7 +595,6 @@ class TimelineAxis extends Component {
         draggerTimeStateB,
         hoverTime
       } = this.props;
-console.log(hoverTime)
       // get front and back dates
       let frontDate = currentTimeRange[0].rawDate;
       let backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
@@ -623,11 +615,89 @@ console.log(hoverTime)
   }
 
   /**
+  * @desc move dragger on axis click - calculated based on pageX vs. hover used for mouse
+  * @param {Event} touch click event
+  * @returns {void}
+  */
+  setLineTimeTouch = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.target.className.animVal !== 'grid') {
+      return;
+    }
+    if (!this.props.isAnimationDraggerDragging && !this.props.moved) {
+      let {
+        currentTimeRange
+      } = this.state;
+      let {
+        compareModeActive,
+        draggerSelected,
+        draggerTimeState,
+        draggerTimeStateB,
+        timeScale,
+        position,
+        transformX,
+        parentOffset
+      } = this.props;
+      // get x coordinate for touch event
+      let touch = e.changedTouches[0];
+      let pageX = touch.pageX;
+
+      // front/back dates for calculating new date and checking if other dragger is visible
+      let frontDate = currentTimeRange[0].rawDate;
+      let backDate = currentTimeRange[currentTimeRange.length - 1].rawDate;
+
+      // timescale specific options
+      let options = timeScaleOptions[timeScale].timeAxis;
+      let gridWidth = options.gridWidth;
+      let diffZeroValues = options.scaleMs;
+
+      // calculate position of touch click relative to front date
+      let positionRelativeToFront = pageX - parentOffset - position - transformX - 2;
+
+      // determine approximate new dragger date and coefficient based on gridwidth
+      let gridWidthCoef = positionRelativeToFront / gridWidth;
+      let gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
+      let draggerDateAdded = moment.utc(frontDate).add((Math.floor(gridWidthCoef)), timeScale);
+
+      // get ms time value
+      let draggerDateAddedValue = new Date(draggerDateAdded).getTime();
+      let newDraggerTime;
+      if (!diffZeroValues) { // unknown scaleMs due to varying number of days per month and year (leapyears)
+        let daysCount;
+        if (timeScale === 'year') {
+          daysCount = draggerDateAdded.isLeapYear() ? 366 : 365;
+        } else if (timeScale === 'month') {
+          daysCount = draggerDateAdded.daysInMonth();
+        }
+        // days times milliseconds in day times remainder
+        let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+        newDraggerTime = Math.floor(draggerDateAddedValue + remainderMilliseconds);
+      } else { // known scaleMs (e.g. 86400000 for day)
+        newDraggerTime = draggerDateAddedValue + (diffZeroValues * gridWidthCoefRemainder);
+      }
+
+      // check other dragger visibilty on update
+      let otherDraggerVisible;
+      if (draggerSelected === 'selected') {
+        // check Dragger B visibility and then update Dragger A
+        otherDraggerVisible = compareModeActive && getIsBetween(draggerTimeStateB, frontDate, backDate);
+      } else {
+        // check Dragger A visibility and then update Dragger B
+        otherDraggerVisible = compareModeActive && getIsBetween(draggerTimeState, frontDate, backDate);
+      }
+      this.props.updateDraggerDatePosition(newDraggerTime, draggerSelected, null, true, otherDraggerVisible, false);
+      this.setState({
+        mouseDown: false
+      });
+    }
+  }
+
+  /**
   * @desc handle start drag of axis sets dragging state
   * @returns {void}
   */
   handleStartDrag = (e, d) => {
-    console.log(e, d)
     // this.setState({
     //   isTimelineDragging: true
     // });
@@ -640,8 +710,6 @@ console.log(hoverTime)
   * @returns {void}
   */
   handleDrag = (e, d) => {
-    console.log(util.browser.mobileAndTabletDevice)
-    // console.log(e, d, e.targetTouches, e.targetTouches[0])
     e.stopPropagation();
     e.preventDefault();
     let {
@@ -659,7 +727,6 @@ console.log(hoverTime)
     } = this.props;
 
     let deltaX = d.deltaX;
-    console.log(deltaX, d, dragSentinelCount + deltaX)
     position = position + deltaX;
     draggerPosition = draggerPosition + deltaX;
     draggerPositionB = draggerPositionB + deltaX;
@@ -855,7 +922,6 @@ console.log(hoverTime)
   * @returns {void}
   */
   handleStopDrag = (e, d) => {
-    // console.log(e,d)
     let {
       midPoint,
       leftBound,
@@ -883,7 +949,6 @@ console.log(hoverTime)
     }
 
     transformX = transformX + position;
-    console.log(moved, midPoint, position, leftBound, rightBound, d.x, d)
     let updatePositioningArguments = {
       moved,
       isTimelineDragging: false,
@@ -996,9 +1061,8 @@ console.log(hoverTime)
           onWheel={this.wheelZoom}
           onMouseOver={this.showHoverOn}
           onMouseLeave={this.props.showHoverOff}
-          // onTouchMove={() => console.log('onTouchMove')}
-          // onTouchStart={this.handleMouseDown}
-          // onTouchEnd={() => console.log('onTouchEnd')}
+          onTouchStart={this.handleMouseDown}
+          onTouchEnd={this.setLineTimeTouch}
         >
           {currentTimeRange
             ? <svg className='timeline-axis-svg'
@@ -1019,7 +1083,6 @@ console.log(hoverTime)
               </defs>
               <Draggable
                 axis='x'
-                onTouchMove={() => console.log('onTouchMoveXXX')}
                 onDrag={this.handleDrag}
                 position={{ x: position, y: 0 }}
                 onStart={this.handleStartDrag}
