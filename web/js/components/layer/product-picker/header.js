@@ -22,6 +22,11 @@ class ProductPickerHeader extends React.Component {
       inputValue: props.inputValue
     };
   }
+  componentDidMount(prevProps, prevState) {
+    setTimeout(() => {
+      if (this._input) this._input.focus();
+    }, 500);
+  }
   /**
    * Go back to original screen
    * @method revertToInitialScreen
@@ -92,6 +97,7 @@ class ProductPickerHeader extends React.Component {
           id="layers-search-input"
           value={this.state.inputValue}
           placeholder="Search"
+          innerRef={c => (this._input = c)}
           type="search"
           autoFocus={isAutoFocus}
         />
