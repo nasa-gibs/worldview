@@ -195,7 +195,7 @@ class AnimationWidget extends React.Component {
               maxQueueLength={maxLength}
               queueLength={queueLength}
               layers={layers}
-              interval={interval}
+              interval={interval || 'day'}
               delta={delta}
               speed={this.state.speed}
               selectDate={selectDate}
@@ -349,7 +349,7 @@ function mapStateToProps(state) {
     looping: loop,
     delta: customSelected ? customDelta : delta || 1,
     interval: customSelected
-      ? timeScaleFromNumberKey[customInterval]
+      ? timeScaleFromNumberKey[customInterval] || 'day'
       : timeScaleFromNumberKey[interval] || 'day',
     hasCustomPalettes,
     map,
@@ -466,7 +466,7 @@ const getZoomObject = function(dateModel, hasSubDaily) {
   return {
     increment: headerText,
     array: [...array],
-    customDelta: dateModel.customDelta,
-    customInterval: dateModel.customInterval
+    customDelta: dateModel.customDelta || 1,
+    customInterval: dateModel.customInterval || 3
   };
 };
