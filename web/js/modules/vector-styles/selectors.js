@@ -208,6 +208,7 @@ export function setCustomSelector(layerId, vectorStyleId, index, groupName, stat
 
 export function setStyleFunction(layer, glStyle, vectorStyleId) {
   var styleFunction;
+  // var olMap = lodashGet(state, 'legacy.map.ui.selected');
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
@@ -239,9 +240,6 @@ export function getKey(layerId, groupStr, state) {
   }
   if (def.max) {
     keys.push('max=' + def.max);
-  }
-  if (def.squash) {
-    keys.push('squash');
   }
   return keys.join(',');
 }
