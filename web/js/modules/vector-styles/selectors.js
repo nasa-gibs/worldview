@@ -206,9 +206,18 @@ export function setCustomSelector(layerId, vectorStyleId, index, groupName, stat
   // return updateLookup(layerId, newVectorStyles, state);
 }
 
-export function setStyleFunction(layer, glStyle, vectorStyleId) {
+export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
   var styleFunction;
-  // var olMap = lodashGet(state, 'legacy.map.ui.selected');
+  var layerId = def.id;
+  var glStyle = vectorStyles[layerId];
+  var olMap = lodashGet(state, 'legacy.map.ui.selected');
+  if (olMap) {
+    lodashEach(olMap.getLayers().getArray(), subLayer => {
+      if (subLayer.wv.id === layerId) {
+        layer = subLayer;
+      }
+    });
+  }
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins

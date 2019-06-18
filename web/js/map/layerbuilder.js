@@ -403,7 +403,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       var vectorStyles = config.vectorStyles;
       var vectorStyleId = def.vectorStyle.id;
       var glStyle = vectorStyles[vectorStyleId];
-      setStyleFunction(layer, glStyle, vectorStyleId);
+      setStyleFunction(def, vectorStyleId, vectorStyles, layer);
 
       // Initialize Sliders
       var sliderSections = document.getElementsByClassName('range-slider');
