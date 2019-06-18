@@ -310,7 +310,7 @@ export function setRange(layerId, props, index, palettes, state) {
 
   return updateLookup(layerId, newPalettes, state);
 }
-export function clearCustom(layerId, index, palettes, state) {
+export function clearCustomSelector(layerId, index, palettes, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   var active = palettes[layerId];
   if (!active) {

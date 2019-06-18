@@ -46,26 +46,28 @@ export function serializeLayers(currentLayers, state, groupName) {
       });
     }
 
-    if (def.custom || def.min || def.max || def.min || def.squash) {
-      // If has palette attr
+    if (def.palette && (def.custom || def.min || def.max || def.squash)) {
+      // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
         palettes,
         state
       );
+
+      item.attributes = paletteAttributeArray.length
+        ? item.attributes.concat(paletteAttributeArray)
+        : item.attributes;
+    } else if (def.vectorStyle && (def.custom || def.min || def.max)) {
+      // If layer has vectorStyle and vectorStyle attributes
       const vectorStyleAttributeArray = getVectorStyleAttributeArray(
         def.id,
         vectorStyles,
         state
       );
 
-      if (paletteAttributeArray.length) {
-        item.attributes = item.attributes.concat(paletteAttributeArray);
-      } else if (vectorStyleAttributeArray.length) {
-        item.attributes = item.attributes.concat(vectorStyleAttributeArray);
-      } else {
-        item.attributes = item.attributes;
-      }
+      item.attributes = vectorStyleAttributeArray.length
+        ? item.attributes.concat(vectorStyleAttributeArray)
+        : item.attributes;
     }
 
     return util.appendAttributesForURL(item);
