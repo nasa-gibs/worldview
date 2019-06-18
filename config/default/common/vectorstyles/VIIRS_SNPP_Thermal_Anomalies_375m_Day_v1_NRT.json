@@ -11,8 +11,22 @@
   },
   "layers": [
     {
-      "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT_MODIS_Fire_Points_Confidence",
+      "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
       "source": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
+      "source-layer": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
+      "source-description": "Default",
+      "type": "circle",
+      "paint": {
+        "circle-radius": {
+          "base": 2,
+          "stops": [[12, 1], [22, 10]]
+        },
+        "circle-color": "#FF0000"
+      }
+    },
+    {
+      "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT_MODIS_Fire_Points_Confidence",
+      "source": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT_MODIS_Fire_Points_Confidence",
       "source-layer": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
       "source-description": "Confidence",
       "type": "circle",
@@ -32,7 +46,7 @@
     },
     {
       "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT_MODIS_Fire_Points_FRP",
-      "source": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
+      "source": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT_MODIS_Fire_Points_FRP",
       "source-layer": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
       "source-description": "FRP",
       "type": "circle",
@@ -56,20 +70,6 @@
           ], "rgba(55,255,0,1)",
           "rgba(255,255,255,0.4)"
         ]
-      }
-    },
-    {
-      "id": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
-      "source": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
-      "source-layer": "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT",
-      "source-description": "Default",
-      "type": "circle",
-      "paint": {
-        "circle-radius": {
-          "base": 2,
-          "stops": [[12, 1], [22, 10]]
-        },
-        "circle-color": "#FF0000"
       }
     }
   ]
