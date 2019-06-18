@@ -430,15 +430,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
         if (glStyle.name === 'FIRMS') {
           setStyleFunction(layer, glStyle, vectorStyleId);
 
-          // FIRMS Style based on Confidence / FRP
-          if (document.getElementById('frpCheckbox').checked === true) {
-            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'MODIS_Fire_Points_FRP');
-          } else if (document.getElementById('confidenceCheckbox').checked === true) {
-            setStyleFunction(layer, glStyle, vectorStyleId + '_' + 'MODIS_Fire_Points_Confidence');
-          } else {
-            setStyleFunction(layer, glStyle, vectorStyleId);
-          }
-
           // FIRMS Filters
           let confidenceMinFilter = document.getElementById('confidenceMinFilter');
           let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
