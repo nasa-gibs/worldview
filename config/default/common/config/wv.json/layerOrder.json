@@ -432,6 +432,13 @@
         "OMI_Ozone_TOMS_Total_Column",
         "OMI_Nitrogen_Dioxide_Tropo_Column",
 
+        "OCO-2_Carbon_Dioxide_Total_Column_Average",
+        "OCO-2_Carbon_Dioxide_Global_Mean_Difference",
+        "OCO-2_Solar_Induced_Florescence_757nm",
+        "OCO-2_Solar_Induced_Florescence_771nm",
+        "OCO-2_Solar_Induced_Florescence_Blended",
+        "OCO-2_Water_Vapor_Total_Column_Average",       
+
         "MLS_CO_215hPa_Day",
         "MLS_CO_215hPa_Night",
         "MLS_HNO3_46hPa_Day",
