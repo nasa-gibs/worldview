@@ -110,51 +110,7 @@ export function getLeadingExtent() {
 
   return [minLon, minLat, maxLon, maxLat];
 }
-/*
- * @method promiseImageryForTime
- * @param  {object} time of data to be displayed on the map.
- * @return {object}      Promise.all
- */
-export function promiseImageryForTime(date, layers, state) {
-  var viewState;
-  var frameState;
-  var pixelRatio;
-  var promiseArray;
-  const map = state.legacy.map;
-  var cache = map.ui.cache;
-  var mapUi = map.ui;
-  var selectedMap = map.ui.selected;
-  frameState = selectedMap.frameState_; // OL object describing the current map frame
 
-  pixelRatio = frameState.pixelRatio;
-  viewState = frameState.viewState;
-  promiseArray = layers.map(function(def) {
-    var key;
-    var layer;
-
-    key = mapUi.layerKey(
-      def,
-      {
-        date: date
-      },
-      state
-    );
-    layer = cache.getItem(key);
-    if (layer) {
-      cache.removeItem(key);
-    }
-    layer = mapUi.createLayer(def, {
-      date: date,
-      precache: true
-    });
-    return promiseLayerGroup(layer, viewState, pixelRatio, selectedMap, def);
-  });
-  return new Promise(function(resolve) {
-    Promise.all(promiseArray).then(function() {
-      resolve(date);
-    });
-  });
-}
 /**
  * Once a layer's group of layers (prev, current, next day) are fulfilled,
  * a promise with an array of their fulfilled values is returned.
@@ -166,7 +122,7 @@ export function promiseImageryForTime(date, layers, state) {
  * @param  {object} map        _ol_Map_ object
  * @return {object}            Promise.all
  */
-var promiseLayerGroup = function(layer, viewState, pixelRatio, map, def) {
+export function promiseLayerGroup(layer, viewState, pixelRatio, map, def) {
   var extent;
   return new Promise(function(resolve, reject) {
     var layers, layerPromiseArray;
@@ -190,7 +146,7 @@ var promiseLayerGroup = function(layer, viewState, pixelRatio, map, def) {
       resolve('resolve layer group');
     });
   });
-};
+}
 /**
  * Calculate the current extent from the map's extent (boundaries) &
  * the viewport extent (boundaries).
@@ -201,7 +157,7 @@ var promiseLayerGroup = function(layer, viewState, pixelRatio, map, def) {
  * @return {array}                An extent array. Used to calculate
  * the extent for prev, next & current day
  */
-var calculateExtent = function(extent, viewportExtent) {
+export function calculateExtent(extent, viewportExtent) {
   if (extent[1] < -180) {
     // Previous day
     extent = getExtent(viewportExtent, extent);
@@ -220,7 +176,7 @@ var calculateExtent = function(extent, viewportExtent) {
     return null;
   }
   return extent;
-};
+}
 
 /**
  * Get the intersection of two extents.

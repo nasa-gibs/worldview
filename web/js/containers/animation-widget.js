@@ -15,7 +15,7 @@ import AnimWidgetHeader from '../components/animation-widget/header';
 import googleTagManager from 'googleTagManager';
 import PlayQueue from '../components/animation-widget/play-queue';
 
-import { promiseImageryForTime } from '../modules/map/util';
+import { promiseImageryForTime } from '../modules/map/selectors';
 import { selectDate, selectInterval } from '../modules/date/actions';
 import GifContainer from './gif';
 import {
