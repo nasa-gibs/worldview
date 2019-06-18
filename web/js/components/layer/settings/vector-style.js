@@ -14,19 +14,19 @@ class VectorStyleSelect extends React.Component {
    * Pass palette to model after selection
    * @param {String} id | custom VectorStyle Id
    */
-  onChangeVectorStyle(id) {
+  onChangeVectorStyle(vectorStyleId) {
     const { layer, clearStyle, setStyle, groupName, index } = this.props;
     // Applying customs takes a while and
     // it looks more natural to make this async
     // instead of waiting
     setTimeout(function() {
-      if (id === layer.id) {
-        clearStyle(layer.id, index, groupName);
+      if (vectorStyleId === layer.id) {
+        clearStyle(layer, vectorStyleId, index, groupName);
       } else {
-        setStyle(layer.id, id, index, groupName);
+        setStyle(layer, vectorStyleId, index, groupName);
       }
     }, 0);
-    this.setState({ activeVectorStyle: id });
+    this.setState({ activeVectorStyle: vectorStyleId });
   }
   /**
    * Apply logic to render correct palette selection
@@ -52,7 +52,7 @@ class VectorStyleSelect extends React.Component {
    * @param {String} description | Colormap name
    * @param {Boolean} isSelected | is this colormap active
    */
-  renderSelectorItemSingle(vectorStyle, id, description, isSelected) {
+  renderSelectorItemSingle(vectorStyle, vectorStyleId, description, isSelected) {
     const color = vectorStyle.paint
       ? vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color']
       : 'rgb(255, 255, 255)';
@@ -60,14 +60,14 @@ class VectorStyleSelect extends React.Component {
       'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
     const checkedClassName = isSelected ? 'checked' : '';
     return (
-      <div key={id} className={caseDefaultClassName + checkedClassName}>
+      <div key={vectorStyleId} className={caseDefaultClassName + checkedClassName}>
         <input
-          id={'wv-palette-radio-' + id}
+          id={'wv-palette-radio-' + vectorStyleId}
           type="radio"
           name="wv-palette-radio"
-          onClick={() => this.onChangeVectorStyle(id)}
+          onClick={() => this.onChangeVectorStyle(vectorStyleId)}
         />
-        <label htmlFor={'wv-palette-radio-' + id}>
+        <label htmlFor={'wv-palette-radio-' + vectorStyleId}>
           <span
             className="wv-palettes-class"
             style={{ backgroundColor: color }}
