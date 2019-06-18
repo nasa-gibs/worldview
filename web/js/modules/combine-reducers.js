@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import { createResponsiveStateReducer } from 'redux-responsive';
 import { modalReducer, modalAboutPage } from './modal/reducers';
-import legacyReducer from './migration/reducers';
 import feedbackReducer from './feedback/reducers';
 import projectionReducer from './projection/reducer';
 import { shortLink } from './link/reducers';
@@ -80,7 +79,6 @@ const defaultReducer = (state = {}) => state;
 const reducers = {
   proj: projectionReducer,
   modal: modalReducer,
-  legacy: legacyReducer,
   date: dateReducer,
   feedback: feedbackReducer,
   notifications: notificationsReducer,

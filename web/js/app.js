@@ -15,11 +15,7 @@ import Modal from './containers/modal';
 // Other
 import Brand from './brand';
 
-// Crutch between state systems
-import { updateLegacyInitComplete } from './modules/migration/actions';
-
 // actions
-// import { screenResize } from './modules/browser/actions';
 import { calculateResponsiveState } from 'redux-responsive';
 import Tour from './containers/tour';
 import Timeline from './containers/timeline/timeline';
@@ -156,14 +152,12 @@ class App extends React.Component {
       });
       self.props.screenResize(window);
       models.wv.events.trigger('startup');
-      self.props.updateLegacyInitComplete(); // notify state that legacy initiation has finished
     };
     util.wrap(main)();
   }
 }
 function mapStateToProps(state, ownProps) {
   return {
-    legacy: state.legacy,
     state: state,
     config: state.config,
     parameters: state.parameters,
@@ -172,9 +166,6 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = dispatch => ({
-  updateLegacyInitComplete: () => {
-    dispatch(updateLegacyInitComplete());
-  },
   keyPressAction: keyCode => {
     dispatch({ type: 'KEY_PRESS_ACTION', keyCode });
   },
