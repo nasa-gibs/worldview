@@ -43,8 +43,6 @@ const startTime = new Date().getTime();
 let parameters = util.fromQueryString(location.search);
 let elapsed = util.elapsed;
 let errors = [];
-let loadCustoms = false;
-
 // Document ready function
 window.onload = () => {
   if (!parameters.elapsed) {

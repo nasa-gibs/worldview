@@ -74,6 +74,16 @@ fixtures.config = function() {
           antarctic: {}
         }
       },
+      AMSRE_Brightness_Temp_89H_Night: {
+        id: 'AMSRE_Brightness_Temp_89H_Night',
+        title: 'Brightness Temperature (89H GHz B Scan, Night)',
+        subtitle: 'Aqua / AMSR-E',
+        description: 'amsre/AMSRE_Brightness_Temp_89H_Night',
+        group: 'overlays',
+        product: 'AE_L2A_NIGHT',
+        layergroup: ['amsre'],
+        inactive: true
+      },
       'terra-aod': {
         id: 'terra-aod',
         group: 'overlays',

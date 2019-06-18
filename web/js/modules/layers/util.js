@@ -163,6 +163,8 @@ export function dateOverlap(period, dateRanges) {
 }
 // Takes a layer id and returns a true or false value
 // if the layer exists in the active layer list
+//
+// LODASH Find() essentially does the same thing
 export function exists(layer, activeLayers) {
   var found = false;
   lodashEach(activeLayers, function(current) {
