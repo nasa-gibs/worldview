@@ -11,8 +11,22 @@
   },
   "layers": [
     {
-      "id": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT_MODIS_Fire_Points_Confidence",
+      "id": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
       "source": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
+      "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
+      "source-description": "Default",
+      "type": "circle",
+      "paint": {
+        "circle-radius": {
+          "base": 2,
+          "stops": [[12, 1], [22, 10]]
+        },
+        "circle-color": "#FF0000"
+      }
+    },
+    {
+      "id": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT_MODIS_Fire_Points_Confidence",
+      "source": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT_MODIS_Fire_Points_Confidence",
       "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
       "source-description": "Confidence",
       "type": "circle",
@@ -40,7 +54,7 @@
     },
     {
       "id": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT_MODIS_Fire_Points_FRP",
-      "source": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
+      "source": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT_MODIS_Fire_Points_FRP",
       "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
       "source-description": "FRP",
       "type": "circle",
@@ -64,20 +78,6 @@
           ], "rgba(55,255,0,1)",
           "rgba(255,255,255,0.4)"
         ]
-      }
-    },
-    {
-      "id": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
-      "source": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
-      "source-layer": "MODIS_Terra_Thermal_Anomalies_All_v6_NRT",
-      "source-description": "Default",
-      "type": "circle",
-      "paint": {
-        "circle-radius": {
-          "base": 2,
-          "stops": [[12, 1], [22, 10]]
-        },
-        "circle-color": "#FF0000"
       }
     }
   ]
