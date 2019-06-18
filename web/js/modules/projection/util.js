@@ -11,6 +11,14 @@ export function getProjInitialState(config) {
     selected: selected || {}
   };
 }
+/**
+ * Update 'proj.selected' object from config based
+ * on updated states `proj.id` value
+ *
+ * @param {Object} parameters | parameters parsed from permalink
+ * @param {Object} stateFromLocation | State derived from permalink parsers
+ * @param {Object} state | initial state before location POP action
+ */
 export function mapLocationToProjState(parameters, stateFromLocation, state) {
   const projId = lodashGet(stateFromLocation, 'proj.id');
   if (projId) {

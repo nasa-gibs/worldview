@@ -17,6 +17,10 @@ import {
 import util from '../../util/util';
 import Promise from 'bluebird';
 
+/**
+ * Create checkerboard canvas pattern object
+ * to use on background of legend colorbars
+ */
 export function getCheckerboard() {
   var size = 2;
   var canvas = document.createElement('canvas');
@@ -38,6 +42,7 @@ export function getCheckerboard() {
 
   return g.createPattern(canvas, 'repeat');
 }
+
 export function palettesTranslate(source, target) {
   var translation = [];
   lodashEach(source, function(color, index) {
@@ -117,6 +122,15 @@ export function getMinValue(v) {
 export function getMaxValue(v) {
   return v.length ? v[v.length - 1] : v;
 }
+/**
+ * Legacy palette parser
+ * &palettes=something no longer promoted
+ * but is still supported
+ *
+ * @param {Object} state
+ * @param {Object} errors
+ * @param {Object} config
+ */
 export function parsePalettes(state, errors, config) {
   if (state.palettes) {
     var parts = state.palettes.split('~');
@@ -155,6 +169,15 @@ export function isSupported() {
   var browser = util.browser;
   return !(browser.ie || !browser.webWorkers || !browser.cors);
 }
+/**
+ * Serialize palette info for layer
+ *
+ * @param {String} layerId
+ * @param {Object} palettes active|activeB palettes
+ * @param {Object} state
+ *
+ * @returns {Array}
+ */
 export function getPaletteAttributeArray(layerId, palettes, state) {
   const count = getCount(layerId, state);
   const DEFAULT_OBJ = { isActive: false, value: undefined };
@@ -165,7 +188,9 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
   let attrArray = [];
   for (var i = 0; i < count; i++) {
     let paletteDef = palettes[layerId].maps[i];
-    let entryLength = lodashSize(lodashGet(paletteDef, 'entries.values')) || lodashSize(lodashGet(paletteDef, 'entries.colors'));
+    let entryLength =
+      lodashSize(lodashGet(paletteDef, 'entries.values')) ||
+      lodashSize(lodashGet(paletteDef, 'entries.colors'));
     let maxValue = paletteDef.max
       ? paletteDef.entries.values[paletteDef.max || entryLength]
       : undefined;
@@ -216,6 +241,14 @@ const createPaletteAttributeObject = function(def, value, attrObj, count) {
     value: attrArray.join(';')
   });
 };
+
+/**
+ * Initiate palette from layer information that was derived from the
+ * permalink in the layerParser
+ *
+ * @param {Object} permlinkState | parameters parsed from permalink
+ * @param {Object} state
+ */
 export function loadPalettes(permlinkState, state) {
   var stateArray = [{ stateStr: 'l', groupStr: 'active' }];
   if (!isSupported()) {
@@ -332,6 +365,13 @@ export function mapLocationToPaletteState(
   }
   return stateFromLocation;
 }
+/**
+ * Request palettes before page load
+ * @param {Array} layersArray Array of active layers
+ * @param {Object} renderedPalettes
+ * @param {Boolean} customLoaded
+ * @returns {Promise}
+ */
 export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
   let rendered = renderedPalettes || {};
   customLoaded = customLoaded || false;

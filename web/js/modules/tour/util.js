@@ -1,8 +1,15 @@
 import googleTagManager from 'googleTagManager';
 import util from '../../util/util';
-
+/**
+ * Determine if tour should be shown based on
+ * user's browser and is 'hidestore' key is in localStorage
+ *
+ * @param {Object} config
+ *
+ * @returns {Boolean}
+ */
 export function checkTourBuildTimestamp(config) {
-  if (!util.browser.localStorage) return;
+  if (!util.browser.localStorage) return false;
   var hideTour = localStorage.getItem('hideTour');
 
   // Don't start tour if coming in via a permalink

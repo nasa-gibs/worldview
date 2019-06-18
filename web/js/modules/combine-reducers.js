@@ -40,6 +40,10 @@ function lastAction(state = null, action) {
   return action;
 }
 
+/**
+ * Access to page size so various resize listeners are
+ * no longer necessary
+ */
 const responsiveStateReducer = createResponsiveStateReducer(
   {
     extraSmall: 500,
@@ -55,6 +59,14 @@ const responsiveStateReducer = createResponsiveStateReducer(
     })
   }
 );
+/**
+ * Get initial module states based on config
+ * and parameters
+ *
+ * @param {Object} models | Legacy models
+ * @param {Object} config
+ * @param {Object} parameters | parameters parsed from permalink
+ */
 export function getInitialState(models, config, parameters) {
   const eventsIgnoreArray = {
     ignore: lodashGet(config, 'naturalEvents.skip') || []
@@ -64,7 +76,6 @@ export function getInitialState(models, config, parameters) {
     parameters,
     config,
     models,
-    legacy: models,
     date: getDateInitialState(config),
     animation: getAnimationInitialState(config),
     proj: getProjInitialState(config),
@@ -104,6 +115,9 @@ const reducers = {
   lastAction: lastAction
 };
 const appReducer = combineReducers(reducers);
+/**
+ * Top level reducer function w/ option to reset state
+ */
 export default (state, action) => {
   if (action.type === 'APP_RESET') {
     state = undefined;

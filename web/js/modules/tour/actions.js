@@ -1,4 +1,5 @@
 import { START, UPDATE_SELECTED, END_TOUR } from './constants';
+
 export function startTour() {
   return {
     type: START
