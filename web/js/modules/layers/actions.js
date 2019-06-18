@@ -119,10 +119,10 @@ export function removeLayer(id) {
     const index = lodashFindIndex(layers[activeString], {
       id: id
     });
-    const def = layers[activeString][index];
     if (index === -1) {
-      throw new Error('Invalid layer ID: ' + id);
+      return console.warn('Invalid layer ID: ' + id);
     }
+    const def = layers[activeString][index];
 
     dispatch({
       type: REMOVE_LAYER,
@@ -141,7 +141,7 @@ export function setOpacity(id, opacity) {
       id: id
     });
     if (index === -1) {
-      throw new Error('Invalid layer ID: ' + id);
+      return console.warn('Invalid layer ID: ' + id);
     }
 
     dispatch({

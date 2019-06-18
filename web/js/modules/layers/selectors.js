@@ -223,7 +223,6 @@ export function available(id, date, layers, config) {
     layers,
     config
   );
-
   if (range) {
     if (date < range.start || date > range.end) {
       return false;
@@ -244,7 +243,7 @@ export function replaceSubGroup(
     return pushToBottom(layerId, layers, layerSplit);
   }
 }
-function dateRange(spec, activeLayers, config) {
+export function dateRange(spec, activeLayers, config) {
   var layers = spec.layer
     ? [
       lodashFind(activeLayers, {
@@ -375,12 +374,15 @@ export function isRenderable(id, activeLayers, date, state) {
   if (!available(id, date, activeLayers, state.config)) {
     return false;
   }
+
   if (!def.visible || def.opacity === 0) {
     return false;
   }
+
   if (def.group === 'overlays') {
     return true;
   }
+
   var obscured = false;
   lodashEach(
     getLayers(

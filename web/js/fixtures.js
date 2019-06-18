@@ -82,6 +82,11 @@ fixtures.config = function() {
         group: 'overlays',
         product: 'AE_L2A_NIGHT',
         layergroup: ['amsre'],
+        projections: {
+          geographic: {},
+          arctic: {},
+          antarctic: {}
+        },
         inactive: true
       },
       'terra-aod': {
