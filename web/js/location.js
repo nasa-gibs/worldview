@@ -15,10 +15,7 @@ import {
 } from './modules/layers/util';
 import { resetLayers, hasSubDaily } from './modules/layers/selectors';
 import { eventsReducerState } from './modules/natural-events/reducers';
-import {
-  mapLocationToPaletteState,
-  preloadPalettes
-} from './modules/palettes/util';
+import { mapLocationToPaletteState } from './modules/palettes/util';
 import { mapLocationToAnimationState } from './modules/animation/util';
 import { mapLocationToSidebarState } from './modules/sidebar/util';
 import util from './util/util';

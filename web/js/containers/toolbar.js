@@ -165,7 +165,7 @@ function mapStateToProps(state) {
     notificationType: type,
     notificationContentNumber: number,
     config: state.config,
-    isImageDownloadActive: Boolean(lodashGet(state, 'legacy.map.ui.selected'))
+    isImageDownloadActive: Boolean(lodashGet(state, 'map.ui.selected'))
   };
 }
 const mapDispatchToProps = dispatch => ({

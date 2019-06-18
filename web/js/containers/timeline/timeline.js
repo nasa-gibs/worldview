@@ -358,7 +358,7 @@ function mapStateToProps(state) {
   const {
     config,
     compare,
-    legacy,
+    map,
     layers,
     browser,
     date,
@@ -455,7 +455,7 @@ function mapStateToProps(state) {
     hideTimeline:
       (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
-      !lodashGet(legacy, 'map.ui.selected.frameState_') ||
+      !lodashGet(map, 'ui.selected.frameState_') ||
       sidebar.activeTab === 'download'
   };
 }

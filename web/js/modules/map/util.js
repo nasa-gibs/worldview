@@ -19,7 +19,7 @@ export function getMapParameterSetup(
   const leadingExtent = getLeadingExtent();
   return {
     v: {
-      stateKey: 'legacy.map.extent',
+      stateKey: 'map.extent',
       initialState: leadingExtent,
       type: 'array',
       options: {
@@ -47,7 +47,7 @@ export function getMapParameterSetup(
       }
     },
     r: {
-      stateKey: 'legacy.map.rotation',
+      stateKey: 'map.rotation',
       initialState: 0,
       options: {
         serializeNeedsGlobalState: true,

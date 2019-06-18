@@ -308,7 +308,7 @@ class GIF extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { browser, proj, legacy, animation, date, config } = state;
+  const { browser, proj, animation, map, date, config } = state;
   const { speed, startDate, endDate } = animation;
   const { screenWidth, screenHeight } = browser;
   const { customSelected, interval, customInterval, customDelta } = date;
@@ -329,7 +329,7 @@ function mapStateToProps(state, ownProps) {
     endDate: endDate.toISOString(),
     increment: `${increment} Between Frames`,
     speed,
-    map: legacy.map,
+    map,
     url,
     getImageArray: (gifComponentProps, gifComponentState, dimensions) => {
       return getImageArray(

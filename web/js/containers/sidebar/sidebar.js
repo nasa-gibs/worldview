@@ -65,7 +65,7 @@ class Sidebar extends React.Component {
   updateDimensions() {
     const { subComponentHeight } = this.state;
     const { isMobile, screenHeight } = this.props;
-    if (!isMobile) {
+    if (!isMobile && this.iconElement) {
       let newHeight;
       let iconHeight = this.iconElement.clientHeight;
       let topOffset = Math.abs(this.iconElement.getBoundingClientRect().top);

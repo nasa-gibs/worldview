@@ -76,7 +76,7 @@ export function MapRotate(ui, models, store) {
    * @returns {void}
    */
   this.setRotationEvents = function(map, id) {
-    const legacyState = store.getState().legacy;
+    const mapState = store.getState().map;
     var dur = 500;
     var $leftButton = $('#wv-map-' + id + ' .wv-map-rotate-left');
     var $rightButton = $('#wv-map-' + id + ' .wv-map-rotate-right');
@@ -125,7 +125,7 @@ export function MapRotate(ui, models, store) {
 
     $resetButton
       .button({
-        label: Number(legacyState.map.rotation * (180 / Math.PI)).toFixed()
+        label: Number(mapState.rotation * (180 / Math.PI)).toFixed()
       })
       .mousedown(function() {
         // reset rotation

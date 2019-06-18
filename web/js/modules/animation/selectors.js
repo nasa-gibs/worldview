@@ -25,7 +25,7 @@ export function getImageArray(
   dimensions,
   state
 ) {
-  const { proj, legacy, date, layers, compare } = state;
+  const { proj, map, date, layers, compare } = state;
   const { startDate, endDate, url } = gifComponentProps;
   const { boundaries, showDates } = gifComponentState;
   const { customInterval, interval, customDelta, delta, customSelected } = date;
@@ -37,10 +37,7 @@ export function getImageArray(
   var j = 0;
   var src;
   var strDate;
-  var lonlats = imageUtilGetCoordsFromPixelValues(
-    boundaries,
-    legacy.map.ui.selected
-  );
+  var lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
   var layersArray;
   var opacities;
   let crs = proj.selected.crs;

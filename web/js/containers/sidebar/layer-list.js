@@ -10,6 +10,7 @@ import {
   available
 } from '../../modules/layers/selectors';
 import { reorderLayers } from '../../modules/layers/actions';
+import { get as lodashGet } from 'lodash';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -175,13 +176,13 @@ function mapStateToProps(state, ownProps) {
     checkerBoardPattern,
     layerSplit
   } = ownProps;
-  const { proj, compare, config, legacy } = state;
+  const { proj, compare, config, map } = state;
   const { runningLayers } = state.layers;
   const { id } = proj;
   const activeDateString = compare.isCompareA ? 'selected' : 'selectedB';
   const activeLayers = state.layers[layerGroupName];
-  const zots = legacy.map.ui
-    ? getZotsForActiveLayers(config, proj, legacy.map, activeLayers)
+  const zots = lodashGet(map, 'ui.selected')
+    ? getZotsForActiveLayers(config, proj, map, activeLayers)
     : {};
   return {
     zots,

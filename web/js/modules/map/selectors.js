@@ -9,7 +9,7 @@ export function promiseImageryForTime(date, layers, state) {
   var frameState;
   var pixelRatio;
   var promiseArray;
-  const map = state.legacy.map;
+  const map = state.map;
   var cache = map.ui.cache;
   var mapUi = map.ui;
   var selectedMap = map.ui.selected;

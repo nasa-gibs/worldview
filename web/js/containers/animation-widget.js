@@ -300,7 +300,7 @@ function mapStateToProps(state) {
     modal,
     palettes,
     config,
-    legacy
+    map
   } = state;
   const {
     startDate,
@@ -325,7 +325,7 @@ function mapStateToProps(state) {
     maxDate: layersLastDateTime(layers[activeStr], config),
     isActive:
       isActive &&
-      lodashGet(legacy, 'map.ui.selected.frameState_') &&
+      lodashGet(map, 'ui.selected.frameState_') &&
       sidebar.activeTab !== 'download' && // No Animation when data download is active
       !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'), // No Animation when Image download is open
     hasSubdailyLayers,
@@ -343,7 +343,7 @@ function mapStateToProps(state) {
       ? timeScaleFromNumberKey[customInterval]
       : timeScaleFromNumberKey[interval],
     hasCustomPalettes,
-    map: legacy.map,
+    map,
     promiseImageryForTime: (date, layers) => {
       return promiseImageryForTime(date, layers, state);
     },

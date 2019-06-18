@@ -127,9 +127,8 @@ class ImageDownloadContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { config, proj, browser, layers, compare, date } = state;
+  const { config, proj, browser, layers, compare, date, map } = state;
   const { screenWidth, screenHeight } = browser;
-  const { map } = state.legacy;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
