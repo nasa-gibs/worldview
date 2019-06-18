@@ -17,7 +17,7 @@ import {
   getCustomPalette,
   getPaletteLegends,
   getPalette,
-  getLegend,
+  getPaletteLegend,
   isPaletteAllowed
 } from '../../../modules/palettes/selectors';
 import {
@@ -192,7 +192,7 @@ class LayerSettings extends React.Component {
         }
         <Palette
           setCustomPalette={setCustomPalette}
-          clearCustom={clearCustomPalette}
+          clearCustomPalette={clearCustomPalette}
           getDefaultLegend={getDefaultLegend}
           getCustomPalette={getCustomPalette}
           palettesTranslate={palettesTranslate}

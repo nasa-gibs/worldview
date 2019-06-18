@@ -12,7 +12,7 @@ import {
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
-  SET_RANGE_AND_SQUASH
+  SET_THRESHOLD_RANGE_AND_SQUASH
 } from '../palettes/constants';
 import {
   SET_VECTORSTYLE,
