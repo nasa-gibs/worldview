@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "MODIS_Terra_SurfaceReflectance_Bands121_8Day": {
+            "id":       "MODIS_Terra_SurfaceReflectance_Bands121_8Day",
+            "title":    "Land Surface Reflectance (L3, 8-Day, Bands 1-2-1)",
+            "subtitle": "Terra / MODIS",
+            "description": "modis/terra/MODIS_Terra_SurfaceReflectance_Bands121_8Day",
+            "tags":     "aod",
+            "group":    "overlays",
+            "layergroup": [
+              "modis",
+              "modis_terra"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+            }
+        }
+    }

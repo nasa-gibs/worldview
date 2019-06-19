@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "MODIS_Terra_SurfaceReflectance_Bands143_Daily": {
+            "id":       "MODIS_Terra_SurfaceReflectance_Bands143_Daily",
+            "title":    "Land Surface Reflectance (L3, Daily, True Color)",
+            "subtitle": "Terra / MODIS",
+            "description": "modis/terra/MODIS_Terra_SurfaceReflectance_Bands143_Daily",
+            "tags":     "aod",
+            "group":    "overlays",
+            "layergroup": [
+              "modis",
+              "modis_terra"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+            }
+        }
+    }

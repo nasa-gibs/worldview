@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "MODIS_Aqua_NDVI_Monthly": {
+            "id":       "MODIS_Aqua_NDVI_Monthly",
+            "title":    "Vegetation Index (L3, Monthly)",
+            "subtitle": "Aqua / MODIS",
+            "description": "modis/aqua/MODIS_Aqua_NDVI_Monthly",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "modis",
+              "modis_aqua"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+            }
+        }
+    }
