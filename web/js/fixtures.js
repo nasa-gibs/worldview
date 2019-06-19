@@ -1,13 +1,6 @@
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 
-// import { dateModel } from './date/model';
-// import { layersModel } from './layers/model';
-// import { mapModel } from './map/model';
-// import { palettesModel } from './palettes/model';
-// import { projectionModel } from './projection/model';
-// import { compareModel } from './compare/model';
-
 var fixtures = {
   red: 'ff0000ff',
   light_red: 'fff0f0ff',
@@ -22,7 +15,8 @@ var fixtures = {
 fixtures.config = function() {
   return {
     defaults: {
-      projection: 'geographic'
+      projection: 'geographic',
+      startingLayers: [{ id: 'terra-cr' }, { id: 'aqua-cr', hidden: 'true' }]
     },
     projections: {
       geographic: {
@@ -172,18 +166,6 @@ fixtures.config = function() {
     }
   };
 };
-
-// fixtures.models = function(config) {
-//   var models = {};
-
-//   models.proj = projectionModel(config);
-//   models.layers = layersModel(models, config);
-//   models.palettes = palettesModel(models, config);
-//   models.map = mapModel(models, config);
-//   models.compare = compareModel(models, config);
-//   models.date = dateModel(models, config);
-//   return models;
-// };
 
 export function registerProjections() {
   proj4.defs(

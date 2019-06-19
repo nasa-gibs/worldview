@@ -44,6 +44,7 @@ export function layerReducer(state = initialState, action) {
   switch (action.type) {
     case RESET_LAYERS:
     case ADD_LAYER:
+    case REORDER_LAYER_GROUP:
     case ADD_LAYERS_FOR_EVENT:
       return lodashAssign({}, state, {
         [layerGroupStr]: action.layers
@@ -52,10 +53,6 @@ export function layerReducer(state = initialState, action) {
       if (state.hasSecondLayerGroup) return state;
       return lodashAssign({}, state, {
         activeB: lodashCloneDeep(state.active)
-      });
-    case REORDER_LAYER_GROUP:
-      return lodashAssign({}, state, {
-        [layerGroupStr]: action.layerArray
       });
     case ON_LAYER_HOVER:
       return lodashAssign({}, state, {

@@ -1,4 +1,4 @@
-import { findIndex as lodashFindIndex, each as lodashEach } from 'lodash';
+import { findIndex as lodashFindIndex } from 'lodash';
 import {
   addLayer as addLayerSelector,
   resetLayers as resetLayersSelector,
@@ -84,7 +84,7 @@ export function initSecondLayerGroup() {
 export function reorderLayers(layerArray) {
   return {
     type: REORDER_LAYER_GROUP,
-    layerArray: layerArray
+    layers: layerArray
   };
 }
 
