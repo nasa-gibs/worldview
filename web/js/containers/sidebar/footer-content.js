@@ -147,7 +147,7 @@ const mapDispatchToProps = dispatch => ({
 });
 function mapStateToProps(state, ownProps) {
   const { activeTab } = ownProps;
-  const { requestedEvents, config, layers, data, compare } = state;
+  const { requestedEvents, config, layers, data, compare, browser } = state;
   const { showAll } = state.events;
   const { selectedGranules } = data;
   const events = lodashGet(requestedEvents, 'response');
@@ -161,6 +161,7 @@ function mapStateToProps(state, ownProps) {
     activeTab,
     events,
     counts,
+    isMobile: browser.lessThan.medium,
     dataSelectionSize,
     compareFeature: config.features.compare,
     isCompareActive: compare.active,
