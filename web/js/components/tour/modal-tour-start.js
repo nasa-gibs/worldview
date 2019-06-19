@@ -126,7 +126,8 @@ ModalStart.propTypes = {
   hideTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
   checked: PropTypes.bool.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  endTour: PropTypes.func.isRequired
 };
 
 export default ModalStart;

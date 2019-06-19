@@ -1,4 +1,4 @@
-import { find as lodashFind, get as lodashGet } from 'lodash';
+import { find as lodashFind } from 'lodash';
 import * as olProj from 'ol/proj';
 import * as olExtent from 'ol/extent';
 

@@ -807,7 +807,7 @@ export default (function (self) {
           reject(error);
         });
     });
-  }
+  };
 
   /**
    * Submits an AJAX request or retreives the result from the cache.

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
-import util from '../../util/util';
 
 class ModalInProgress extends React.Component {
   constructor(props) {
@@ -72,24 +71,16 @@ class ModalInProgress extends React.Component {
 }
 
 ModalInProgress.propTypes = {
-  // models: PropTypes.object.isRequired,
-  // config: PropTypes.object.isRequired,
-  // ui: PropTypes.object.isRequired,
-  // modalInProgress: PropTypes.bool.isRequired,
-  // toggleModalInProgress: PropTypes.func.isRequired,
-  // currentStep: PropTypes.number.isRequired,
-  // totalSteps: PropTypes.number.isRequired,
-  // currentStoryIndex: PropTypes.number.isRequired,
-  // currentStory: PropTypes.object.isRequired,
-  // currentStoryId: PropTypes.string.isRequired,
-  // decreaseStep: PropTypes.func.isRequired,
-  // incrementStep: PropTypes.func.isRequired,
-  // showTourAlert: PropTypes.func.isRequired,
-  // restartTour: PropTypes.bool.isRequired,
-  // toggleRestartTour: PropTypes.func.isRequired,
-  // toggleMetaLoaded: PropTypes.func.isRequired,
-  // metaLoaded: PropTypes.bool.isRequired,
-  // className: PropTypes.string
+  currentStep: PropTypes.number.isRequired,
+  totalSteps: PropTypes.number.isRequired,
+  currentStory: PropTypes.object.isRequired,
+  decreaseStep: PropTypes.func.isRequired,
+  incrementStep: PropTypes.func.isRequired,
+  endTour: PropTypes.func.isRequired,
+  showTourAlert: PropTypes.func.isRequired,
+  modalInProgress: PropTypes.bool.isRequired,
+  className: PropTypes.string,
+  description: PropTypes.string
 };
 
 export default ModalInProgress;

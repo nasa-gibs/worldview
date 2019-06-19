@@ -226,7 +226,7 @@ class LayerSettings extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const { config, palettes, compare } = state;
-  const { supported, custom } = palettes;
+  const { custom } = palettes;
   const groupName = compare.activeString;
 
   return {

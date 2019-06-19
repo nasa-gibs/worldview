@@ -4,13 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 class ModalComplete extends React.Component {
   render() {
-    const {
-      currentStory,
-      modalComplete,
-      toggleModalComplete,
-      resetTour,
-      endTour
-    } = this.props;
+    const { currentStory, modalComplete, resetTour, endTour } = this.props;
     let readMoreLinks = currentStory.readMoreLinks;
     let list;
     if (
@@ -81,7 +75,8 @@ ModalComplete.propTypes = {
   currentStory: PropTypes.object.isRequired,
   toggleModalComplete: PropTypes.func.isRequired,
   resetTour: PropTypes.func.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  endTour: PropTypes.func.isRequired
 };
 
 export default ModalComplete;

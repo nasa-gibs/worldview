@@ -460,9 +460,3 @@ const getZoomObject = function(dateModel, hasSubDaily) {
     customInterval: dateModel.customInterval
   };
 };
-
-const getEndTime = (layers, config) => {
-  const endDateA = layersLastDateTime(layers['active'], config);
-  const endDateB = layersLastDateTime(layers['activeB'], config);
-  return endDateA > endDateB ? endDateA : endDateB;
-};
