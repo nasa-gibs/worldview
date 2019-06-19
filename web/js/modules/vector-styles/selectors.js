@@ -1,8 +1,8 @@
 import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
-  each as lodashEach,
-  cloneDeep as lodashCloneDeep
+  each as lodashEach
+  // cloneDeep as lodashCloneDeep
 } from 'lodash';
 import { getMinValue, getMaxValue } from './util';
 import update from 'immutability-helper';
@@ -73,17 +73,16 @@ export function getCount(layerId, state) {
 //       return false;
 //     }
 //     var rendered = getAllVectorStyles(layerId, index, state);
-//     if (vectorStyle.type !== 'classification') {
-//       if (vectorStyle.min <= 0) {
-//         delete vectorStyle.min;
-//       }
-//       if (vectorStyle.max >= rendered.entries.values.length) {
-//         delete vectorStyle.max;
-//       }
-//       if (!lodashIsUndefined(vectorStyle.min) || !lodashIsUndefined(vectorStyle.max)) {
-//         use = true;
-//         return false;
-//       }
+//     console.log(rendered);
+//     if (vectorStyle.min <= 0) {
+//       delete vectorStyle.min;
+//     }
+//     if (vectorStyle.max >= rendered.entries.values.length) {
+//       delete vectorStyle.max;
+//     }
+//     if (!lodashIsUndefined(vectorStyle.min) || !lodashIsUndefined(vectorStyle.max)) {
+//       use = true;
+//       return false;
 //     }
 //   });
 //   return use;
@@ -190,21 +189,23 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   });
   return result;
 }
-export function setCustomSelector(layerId, vectorStyleId, index, groupName, state) {
-  const { config, vectorStyles } = state;
-  if (!config.layers[layerId]) {
-    throw new Error('Invalid layer: ' + layerId);
-  }
-  let newVectorStyles = prepare(layerId, vectorStyles[groupName], state);
-  index = lodashIsUndefined(index) ? 0 : index;
-  var active = newVectorStyles[layerId];
-  var vectorStyle = active.maps[index];
-  if (vectorStyle.custom === vectorStyleId) {
-    return;
-  }
-  vectorStyle.custom = vectorStyleId;
-  // return updateLookup(layerId, newVectorStyles, state);
-}
+// export function setCustomSelector(def, vectorStyleId, vectorStyles, layer, state, groupName) {
+//   const { config } = state;
+//   if (!config.layers[def.id]) {
+//     throw new Error('Invalid layer: ' + def.id);
+//   }
+//   let newVectorStyles = prepare(def.id, vectorStyles[groupName], state);
+//   def = lodashIsUndefined(def) ? 0 : def;
+//   var active = newVectorStyles[def.id];
+//   var vectorStyle = active.maps[def];
+//   if (vectorStyle.custom === vectorStyleId) {
+//     return;
+//   }
+//   vectorStyle.custom = vectorStyleId;
+//   setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
+
+//   return updateLookup(def.id, newVectorStyles, state);
+// }
 
 export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
   var styleFunction;
@@ -232,7 +233,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
-  return glStyle;
+  return glStyle; // this is wrong
 }
 
 export function getKey(layerId, groupStr, state) {
@@ -306,20 +307,51 @@ export function clearCustomSelector(layerId, index, vectorStyles) {
   }
   return update(vectorStyles, { layerId: { maps: { $unset: ['custom'] } } }); // remove custom key
 }
-var prepare = function(layerId, vectorStylesObj, state) {
-  var newVectorStyles = lodashCloneDeep(vectorStylesObj);
-  if (!newVectorStyles[layerId]) newVectorStyles[layerId] = {};
-  var active = newVectorStyles[layerId];
-  active.maps = active.maps || [];
-  lodashEach(getAllVectorStyles(layerId, undefined, state).maps, function(
-    vectorStyle,
-    index
-  ) {
-    if (!active.maps[index]) {
-      newVectorStyles = update(newVectorStyles, {
-        [layerId]: { maps: { [index]: { $set: vectorStyle } } }
-      });
-    }
-  });
-  return newVectorStyles;
-};
+
+export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+  var styleFunction;
+  var layerId = def.id;
+  var glStyle = vectorStyles[layerId];
+  var olMap = lodashGet(state, 'legacy.map.ui.selected');
+  if (olMap) {
+    lodashEach(olMap.getLayers().getArray(), subLayer => {
+      if (subLayer.wv.id === layerId) {
+        layer = subLayer;
+      }
+    });
+  }
+
+  styleFunction = stylefunction(layer, glStyle, vectorStyleId);
+  if (glStyle.name === 'Orbit Tracks') {
+    // Filter time by 5 mins
+    layer.setStyle(function(feature, resolution) {
+      var minute;
+      var minutes = feature.get('label');
+      if (minutes) {
+        minute = minutes.split(':');
+      }
+      if ((minute && minute[1] % 5 === 0) || feature.type_ === 'LineString') {
+        return styleFunction(feature, resolution);
+      }
+    });
+  }
+  return update(vectorStyles, { layerId: { maps: { $unset: ['custom'] } } });
+}
+
+// var prepare = function(layerId, vectorStylesObj, state) {
+//   var newVectorStyles = lodashCloneDeep(vectorStylesObj);
+//   if (!newVectorStyles[layerId]) newVectorStyles[layerId] = {};
+//   var active = newVectorStyles[layerId];
+//   active.maps = active.maps || [];
+//   lodashEach(getAllVectorStyles(layerId, undefined, state).maps, function(
+//     vectorStyle,
+//     index
+//   ) {
+//     if (!active.maps[index]) {
+//       newVectorStyles = update(newVectorStyles, {
+//         [layerId]: { maps: { [index]: { $set: vectorStyle } } }
+//       });
+//     }
+//   });
+//   return newVectorStyles;
+// };

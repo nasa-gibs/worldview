@@ -335,6 +335,10 @@ const createLayerArrayFromState = function(state, config) {
             let values = util.toArray(attr.value.split(';'));
             custom = values;
           }
+          if (attr.id === 'vectorStyle') {
+            let values = util.toArray(attr.value.split(';'));
+            custom = values;
+          }
         });
         layerArray = addLayer(
           layerDef.id,
