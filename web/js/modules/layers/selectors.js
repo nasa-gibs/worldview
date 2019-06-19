@@ -324,7 +324,7 @@ export function dateRange(spec, activeLayers, config) {
     };
   }
 }
-function pushToBottom(id, layers, layerSplit) {
+export function pushToBottom(id, layers, layerSplit) {
   var oldIndex = lodashFindIndex(layers, {
     id: id
   });
@@ -341,7 +341,7 @@ function pushToBottom(id, layers, layerSplit) {
   return layers;
 }
 
-function moveBefore(sourceId, targetId, layers) {
+export function moveBefore(sourceId, targetId, layers) {
   var sourceIndex = lodashFindIndex(layers, {
     id: sourceId
   });

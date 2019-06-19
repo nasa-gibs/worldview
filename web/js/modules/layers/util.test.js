@@ -9,20 +9,47 @@ import fixtures from '../../fixtures';
 import { assign } from 'lodash';
 const config = fixtures.config();
 const LAYER_STRING =
-  'AMSRE_Brightness_Temp_89H_Night(opacity=0.54,palette=red_2,min=224,225,max=294,295,squash=true)';
+  'AMSRE_Brightness_Temp_89H_Night(hidden,opacity=0.54,palette=red_2,min=224,225,max=294,295,squash=true),mask';
 
-test('Layer parser, parses all complex layer attributes correctly', () => {
+test('Layer parser, retrieves correct number of layers from permalink string', () => {
+  const layers = layersParse12(LAYER_STRING, config);
+  expect(layers.length).toBe(2);
+});
+test('Layer parser, gets correct ID', () => {
   const layers = layersParse12(LAYER_STRING, config);
   const layer = layers[0];
-  expect(layers.length).toBe(1);
   expect(layer.id).toBe('AMSRE_Brightness_Temp_89H_Night');
+});
+test('Layer parser, gets correct custom palette id from permalink string', () => {
+  const layers = layersParse12(LAYER_STRING, config);
+  const layer = layers[0];
   expect(layer.custom[0]).toBe('red_2');
+});
+test('Layer parser, gets squashed boolean from permalink string', () => {
+  const layers = layersParse12(LAYER_STRING, config);
+  const layer = layers[0];
   expect(layer.squash[0]).toBe(true);
+});
+test('Layer parser, gets correct min value from permalink string', () => {
+  const layers = layersParse12(LAYER_STRING, config);
+  const layer = layers[0];
   expect(layer.min[0]).toBe(224);
+});
+test('Layer parser, gets correct max value from permalink string', () => {
+  const layers = layersParse12(LAYER_STRING, config);
+  const layer = layers[0];
   expect(layer.max[0]).toBe(294);
+});
+test('Layer parser, gets correct max value from permalink string', () => {
+  const layers = layersParse12(LAYER_STRING, config);
+  const layer = layers[0];
   expect(layer.opacity).toBe(0.54);
 });
-
+test('Layer parser, retrieves hidden layer from permalink string', () => {
+  const layers = layersParse12(LAYER_STRING, config);
+  const layer = layers[0];
+  expect(layer.opacity).toBe(0.54);
+});
 test('serialize layers and palettes', () => {
   let terraAodLayer = config.layers['terra-aod'];
   const paletteState = {
