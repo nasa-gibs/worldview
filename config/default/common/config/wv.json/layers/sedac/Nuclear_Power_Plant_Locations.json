@@ -1,10 +1,10 @@
 {
     "layers": {
-        "grand-v1-dams-rev01": {
-            "id":       "grand-v1-dams-rev01",
-            "title":    "Dams",
-            "subtitle": "SEDAC Global Reservoir and Dam Database (GRanD), v 1.1",
-            "description": "sedac/grand-v1-dams-rev01",
+        "Nuclear_Power_Plant_Locations": {
+            "id":       "Nuclear_Power_Plant_Locations",
+            "title":    "Power Plants, Nuclear",
+            "subtitle": "Population Exposure Estimates in Proximity to Nuclear Power Plants, Locations, v1",
+            "description": "sedac/Nuclear_Power_Plant_Locations",
             "group":    "overlays",
             "format":   "image/png",
             "tileSize": [512, 512],
@@ -12,7 +12,7 @@
             "layergroup": [
               "sedac"
             ],
-            "product":  "CIESIN_SEDAC_GRanD_DAMS",
+            "product":  "CIESIN_SEDAC_ENERGY_NPPL",
 
             "projections": {
                 "arctic": {
@@ -24,7 +24,7 @@
             },
 
             "palette": {
-                "id":           "grand-v1-dams-rev01",
+                "id":           "Nuclear_Power_Plant_Locations",
                 "immutable":    true
             },
             "wrapX": true

@@ -1,10 +1,10 @@
 {
     "layers": {
-        "energy-pop-exposure-nuclear-plants-locations_plants": {
-            "id":       "energy-pop-exposure-nuclear-plants-locations_plants",
-            "title":    "Power Plants, Nuclear",
-            "subtitle": "SEDAC Population Exposure Estimates in Proximity to Nuclear Power Plants, Locations, v1 (1956 – 2012)",
-            "description": "sedac/energy-pop-exposure-nuclear-plants-locations_plants",
+        "GRanD_Reservoirs": {
+            "id":       "GRanD_Reservoirs",
+            "title":    "Reservoirs",
+            "subtitle": "Global Reservoir and Dam Database (GRanD), v1.01",
+            "description": "sedac/GRanD_Reservoirs",
             "group":    "overlays",
             "format":   "image/png",
             "tileSize": [512, 512],
@@ -12,7 +12,7 @@
             "layergroup": [
               "sedac"
             ],
-            "product":  "CIESIN_SEDAC_ENERGY_NPPL",
+            "product":  "CIESIN_SEDAC_GRanD_RESERVOIRS",
 
             "projections": {
                 "arctic": {
@@ -24,7 +24,7 @@
             },
 
             "palette": {
-                "id":           "energy-pop-exposure-nuclear-plants-locations_plants",
+                "id":           "GRanD_Reservoirs",
                 "immutable":    true
             },
             "wrapX": true

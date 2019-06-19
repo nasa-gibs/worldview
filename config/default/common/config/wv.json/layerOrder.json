@@ -599,7 +599,6 @@
         "TRMM_Brightness_Temp_Asc",
         "TRMM_Brightness_Temp_Dsc",
 
-
         "OTD_High_Resolution_Full_Climatology_OTD_Raw_Flashes",
         "OTD_High_Resolution_Full_Climatology_OTD_Scaled_Flashes",
         "OTD_High_Resolution_Full_Climatology_OTD_Flash_Rate_Climatology",
@@ -744,10 +743,10 @@
         "ASTER_GDEM_Greyscale_Shaded_Relief",
         "SRTM_Color_Index",
 
-        "grand-v1-reservoirs-rev01",
-        "grand-v1-dams-rev01",
-        "energy-pop-exposure-nuclear-plants-locations_plants",
-        "grump-v1-settlement-points",
+        "GRanD_Reservoirs",
+        "GRanD_Dams",
+        "Nuclear_Power_Plant_Locations",
+        "GRUMP_Settlements",
         "NDH_Cyclone_Hazard_Frequency_Distribution_1980-2000",
         "NDH_Cyclone_Mortality_Risks_Distribution_2000",
         "NDH_Cyclone_Proportional_Economic_Loss_Risk_Deciles_2000",
