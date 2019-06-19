@@ -192,7 +192,7 @@ class AnimationWidget extends React.Component {
               maxQueueLength={maxLength}
               queueLength={queueLength}
               layers={layers}
-              interval={interval || 'day'}
+              interval={interval}
               delta={delta}
               speed={this.state.speed}
               selectDate={selectDate}
@@ -344,7 +344,7 @@ function mapStateToProps(state) {
     speed,
     isPlaying,
     looping: loop,
-    delta: customSelected ? customDelta : delta || 1,
+    delta: customSelected && customDelta ? customDelta : delta || 1,
     interval: customSelected
       ? timeScaleFromNumberKey[customInterval] || 'day'
       : timeScaleFromNumberKey[interval] || 'day',
