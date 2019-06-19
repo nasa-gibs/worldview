@@ -51,7 +51,7 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange) => {
-    console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange)
+    // console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange)
     let minDateTimelineStartDateLimit = this.props.timelineStartDateLimit;
     let maxDateTimelineEndDateLimit = this.props.timelineEndDateLimit;
     let options = timeScaleOptions[timeScale].timeAxis;

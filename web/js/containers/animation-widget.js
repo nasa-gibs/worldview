@@ -434,7 +434,7 @@ AnimationWidget.propTypes = {
   isGifActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   customDelta: PropTypes.number,
-  customInterval: PropTypes.string
+  customInterval: PropTypes.number
 };
 
 const getZoomObject = function(dateModel, hasSubDaily) {
