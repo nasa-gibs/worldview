@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import moment from 'moment';
-import util from '../../../util/util';
 
 import GridRange from './grid-range/grid-range';
 
@@ -33,10 +32,13 @@ class TimelineAxis extends Component {
     this.handleDrag = this.handleDrag.bind(this);
     this.handleStartDrag = this.handleStartDrag.bind(this);
     this.handleStopDrag = this.handleStopDrag.bind(this);
-    this.wheelZoom = this.wheelZoom.bind(this);
+    this.handleWheel = this.handleWheel.bind(this);
 
     // axis click to set dragger
     this.setLineTime = this.setLineTime.bind(this);
+
+    // wheel event timeout
+    this.wheelTimeout = 0;
   }
 
   /**
@@ -50,6 +52,7 @@ class TimelineAxis extends Component {
   */
   updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange) => {
     console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange)
+    let minDateTimelineStartDateLimit = this.props.timelineStartDateLimit;
     let maxDateTimelineEndDateLimit = this.props.timelineEndDateLimit;
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
@@ -72,12 +75,21 @@ class TimelineAxis extends Component {
 
     // Floating point issues need to be handled more cleanly
     let midPoint = -((gridWidth * gridNumber) / 2) + ((numberOfVisibleTiles / 2) * gridWidth);
-    let hoverTime = moment.utc(this.props.hoverTime);
+    // horizontal scroll will disable this, so use frontDate in that case
+    let hoverTime = moment.utc(this.props.hoverTime || this.props.frontDate);
 
-    if (hoverTime.isAfter(maxDateTimelineEndDateLimit)) {
-      hoverTime = maxDateTimelineEndDateLimit;
+    // handle timeline axis start/end limits
+    let isBeforeStart = new Date(hoverTime) <= new Date(minDateTimelineStartDateLimit);
+    if (isBeforeStart) {
+      hoverTime = moment.utc(minDateTimelineStartDateLimit);
+    } else {
+      let isAfterEnd = new Date(hoverTime) >= new Date(maxDateTimelineEndDateLimit);
+      if (isAfterEnd) {
+        hoverTime = moment.utc(maxDateTimelineEndDateLimit);
+      }
     }
 
+    // use input date or hoverTime
     hoverTime = inputDate ? moment.utc(inputDate) : hoverTime;
     let hoverTimeZero = hoverTime.clone().startOf(timeScale);
     if (timeScale === 'year') {
@@ -533,7 +545,7 @@ class TimelineAxis extends Component {
   */
   showHoverOn = (e) => {
     if (!this.props.isAnimationDraggerDragging && !this.props.isTimelineDragging) {
-      if (e.target.className.animVal === 'grid') {
+      if (e.target.className.animVal === 'axis-grid-rect') {
         this.props.showHoverOn();
       }
     }
@@ -541,24 +553,97 @@ class TimelineAxis extends Component {
 
   /**
   * @desc changes timeScale with wheel scroll
+  * y axis change - change timescale (e.g. from 'day' to 'month')
+  * x axis change - horizontal scroll multi-touch
   * @param {Event} wheel scroll event
   * @returns {void}
   */
-  wheelZoom = (e) => {
+  handleWheel(e) {
     let { timeScale, hasSubdailyLayers, changeTimeScale } = this.props;
     let timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
     let maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
-    if (e.deltaY > 0) { // wheel zoom out
-      if (timeScaleNumber > 1) {
-        this.setState({
-          wheelZoom: true
-        }, changeTimeScale(timeScaleNumber - 1));
+
+    // handle time scale change on y axis wheel event
+    if (e.deltaY !== 0) {
+      if (e.deltaY > 0) { // wheel zoom out
+        if (timeScaleNumber > 1) {
+          this.setState({
+            wheelZoom: true
+          }, changeTimeScale(timeScaleNumber - 1));
+        }
+      } else {
+        if (timeScaleNumber < maxTimeScaleNumber) { // wheel zoom in
+          this.setState({
+            wheelZoom: true
+          }, changeTimeScale(timeScaleNumber + 1));
+        }
       }
-    } else {
-      if (timeScaleNumber < maxTimeScaleNumber) { // wheel zoom in
-        this.setState({
-          wheelZoom: true
-        }, changeTimeScale(timeScaleNumber + 1));
+    }
+    // handle horizontal scroll on x axis wheel event
+    if (e.deltaX !== 0) {
+      this.handleStartDrag();
+      if (e.deltaX > 0) { // mutli-touch drag left
+        let scrollX = this.props.position - 100;
+        if (scrollX < this.state.leftBound) { // cancel drag if exceeds axis leftBound
+          clearTimeout(this.wheelTimeout);
+          let updatePositioningArguments = {
+            moved: false,
+            isTimelineDragging: false,
+            position: this.props.position,
+            transformX: this.props.transformX,
+            frontDate: this.props.frontDate,
+            backDate: this.props.backDate,
+            draggerPosition: this.props.draggerPosition,
+            draggerPositionB: this.props.draggerPositionB,
+            draggerVisible: this.props.draggerVisible,
+            draggerVisibleB: this.props.draggerVisibleB,
+            animationStartLocation: this.props.animationStartLocation,
+            animationEndLocation: this.props.animationEndLocation
+          };
+          let hoverTime = null;
+          this.props.updatePositioning(updatePositioningArguments, hoverTime);
+        } else {
+          let deltaObj = {
+            deltaX: -100,
+            x: scrollX
+          };
+          this.handleDrag(e, deltaObj);
+          clearTimeout(this.wheelTimeout);
+          this.wheelTimeout = setTimeout(() => {
+            this.handleStopDrag(null, deltaObj);
+          }, 100);
+        }
+      } else { // multi-touch drag right
+        let scrollX = this.props.position + 100;
+        if (scrollX > this.state.rightBound) { // cancel drag if exceeds axis rightBound
+          clearTimeout(this.wheelTimeout);
+          let updatePositioningArguments = {
+            moved: false,
+            isTimelineDragging: false,
+            position: this.props.position,
+            transformX: this.props.transformX,
+            frontDate: this.props.frontDate,
+            backDate: this.props.backDate,
+            draggerPosition: this.props.draggerPosition,
+            draggerPositionB: this.props.draggerPositionB,
+            draggerVisible: this.props.draggerVisible,
+            draggerVisibleB: this.props.draggerVisibleB,
+            animationStartLocation: this.props.animationStartLocation,
+            animationEndLocation: this.props.animationEndLocation
+          };
+          let hoverTime = null;
+          this.props.updatePositioning(updatePositioningArguments, hoverTime);
+        } else {
+          let deltaObj = {
+            deltaX: 100,
+            x: scrollX
+          };
+          this.handleDrag(e, deltaObj);
+          clearTimeout(this.wheelTimeout);
+          this.wheelTimeout = setTimeout(() => {
+            this.handleStopDrag(null, deltaObj);
+          }, 100);
+        }
       }
     }
   }
@@ -581,10 +666,12 @@ class TimelineAxis extends Component {
   setLineTime = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.target.className.animVal !== 'grid') {
+    if (e.target.className.animVal !== 'axis-grid-rect') {
       return;
     }
-    if (!this.props.isAnimationDraggerDragging && !this.props.moved && (this.state.mouseDown || e.type === 'touchend')) {
+    if (!this.props.isAnimationDraggerDragging &&
+        !this.props.moved &&
+        (this.state.mouseDown || e.type === 'touchend')) {
       let {
         currentTimeRange
       } = this.state;
@@ -622,7 +709,7 @@ class TimelineAxis extends Component {
   setLineTimeTouch = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.target.className.animVal !== 'grid') {
+    if (e.target.className.animVal !== 'axis-grid-rect') {
       return;
     }
     if (!this.props.isAnimationDraggerDragging && !this.props.moved) {
@@ -698,9 +785,21 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   handleStartDrag = (e, d) => {
-    // this.setState({
-    //   isTimelineDragging: true
-    // });
+    let updatePositioningArguments = {
+      moved: this.props.moved,
+      isTimelineDragging: true,
+      position: this.props.position,
+      transformX: this.props.transformX,
+      frontDate: this.props.frontDate,
+      backDate: this.props.backDate,
+      draggerPosition: this.props.draggerPosition,
+      draggerPositionB: this.props.draggerPositionB,
+      draggerVisible: this.props.draggerVisible,
+      draggerVisibleB: this.props.draggerVisibleB,
+      animationStartLocation: this.props.animationStartLocation,
+      animationEndLocation: this.props.animationEndLocation
+    };
+    this.props.updatePositioning(updatePositioningArguments);
   }
 
   /**
@@ -709,9 +808,11 @@ class TimelineAxis extends Component {
   * @param {Object} draggable delta object
   * @returns {void}
   */
-  handleDrag = (e, d) => {
+  handleDrag(e, d) {
     e.stopPropagation();
-    e.preventDefault();
+    if (e.type !== 'wheel') {
+      e.preventDefault();
+    }
     let {
       gridWidth,
       dragSentinelChangeNumber,
@@ -750,9 +851,6 @@ class TimelineAxis extends Component {
         animationStartLocation,
         animationEndLocation
       };
-      // this.setState({
-      //   dragSentinelCount: dragSentinelCount + deltaX
-      // }, this.props.updatePositioning(updatePositioningArguments));
       this.setState({
         dragSentinelCount: dragSentinelCount + deltaX
       });
@@ -798,10 +896,6 @@ class TimelineAxis extends Component {
             animationStartLocation,
             animationEndLocation
           };
-          // this.setState({
-          //   currentTimeRange,
-          //   dragSentinelCount: newDragSentinelCount
-          // }, this.props.updatePositioning(updatePositioningArguments));
           this.setState({
             currentTimeRange,
             dragSentinelCount: newDragSentinelCount
@@ -826,10 +920,6 @@ class TimelineAxis extends Component {
             animationStartLocation,
             animationEndLocation
           };
-
-          // this.setState({
-          //   dragSentinelCount: newDragSentinelCount
-          // }, this.props.updatePositioning(updatePositioningArguments));
           this.setState({
             dragSentinelCount: newDragSentinelCount
           });
@@ -875,10 +965,6 @@ class TimelineAxis extends Component {
             animationStartLocation,
             animationEndLocation
           };
-          // this.setState({
-          //   currentTimeRange,
-          //   dragSentinelCount: newDragSentinelCount
-          // }, this.props.updatePositioning(updatePositioningArguments));
           this.setState({
             currentTimeRange,
             dragSentinelCount: newDragSentinelCount
@@ -903,9 +989,6 @@ class TimelineAxis extends Component {
             animationStartLocation,
             animationEndLocation
           };
-          // this.setState({
-          //   dragSentinelCount: newDragSentinelCount
-          // }, this.props.updatePositioning(updatePositioningArguments));
           this.setState({
             dragSentinelCount: newDragSentinelCount
           });
@@ -916,7 +999,8 @@ class TimelineAxis extends Component {
   }
 
   /**
-  * @desc handle stop drag of axis. moved === false means an axis click
+  * @desc handle stop drag of axis.
+  * d.x === midpoint means an axis click and moved is false
   * @param {Event} mouse event
   * @param {Object} draggable delta object
   * @returns {void}
@@ -947,7 +1031,6 @@ class TimelineAxis extends Component {
       leftBound = -midPoint * 2;
       rightBound = midPoint * 2;
     }
-
     transformX = transformX + position;
     let updatePositioningArguments = {
       moved,
@@ -963,15 +1046,13 @@ class TimelineAxis extends Component {
       animationStartLocation: this.props.animationStartLocation,
       animationEndLocation: this.props.animationEndLocation
     };
-    // this.setState({
-    //   leftBound,
-    //   rightBound
-    // }, this.props.updatePositioning(updatePositioningArguments));
     this.setState({
       leftBound,
       rightBound
     });
-    this.props.updatePositioning(updatePositioningArguments);
+    // hoverTime conditional reset necessary for touchpad horizontal scroll gesture
+    let hoverTime = moved ? null : this.props.hoverTime;
+    this.props.updatePositioning(updatePositioningArguments, hoverTime);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -989,10 +1070,14 @@ class TimelineAxis extends Component {
         timelineEndDateLimit,
         transformX,
         frontDate,
-        backDate
+        backDate,
+        // animStartLocationDate,
+        // animEndLocationDate
       } = this.props;
 
       let checkForPropsUpdates = (
+        // nextProps.animStartLocationDate === animStartLocationDate &&
+        // nextProps.animEndLocationDate === animEndLocationDate &&
         nextProps.axisWidth === axisWidth &&
         nextProps.dateA === dateA &&
         nextProps.dateB === dateB &&
@@ -1058,7 +1143,7 @@ class TimelineAxis extends Component {
           style={{ width: `${axisWidth}px` }}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.setLineTime}
-          onWheel={this.wheelZoom}
+          onWheel={this.handleWheel}
           onMouseOver={this.showHoverOn}
           onMouseLeave={this.props.showHoverOff}
           onTouchStart={this.handleMouseDown}
@@ -1083,12 +1168,11 @@ class TimelineAxis extends Component {
               </defs>
               <Draggable
                 axis='x'
-                onDrag={this.handleDrag}
+                handle=".axis-grid-container"
                 position={{ x: position, y: 0 }}
+                onDrag={this.handleDrag}
                 onStart={this.handleStartDrag}
                 onStop={this.handleStopDrag}
-                // onTouchStart={this.handleStartDrag}
-                // onTouchEnd={this.handleStopDrag}
                 bounds={{ left: leftBound, top: 0, bottom: 0, right: rightBound }}
               >
                 <g>
@@ -1117,14 +1201,13 @@ TimelineAxis.propTypes = {
   compareModeActive: PropTypes.bool,
   draggerSelected: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
-  // parentOffset: PropTypes.number,
+  parentOffset: PropTypes.number,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   startDate: PropTypes.string,
   timeScale: PropTypes.string,
   timelineEndDateLimit: PropTypes.string,
-  timelineStartDateLimit: PropTypes.string,
-  // updateAnimationRange: PropTypes.func
+  timelineStartDateLimit: PropTypes.string
 };
 
 export default TimelineAxis;

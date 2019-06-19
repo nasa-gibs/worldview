@@ -58,14 +58,14 @@ class DateToolTip extends PureComponent {
         {
           (showDraggerToolTip) || (showHoverToolTip)
             ? <div
-              className='dateToolTip'
+              className='date-tooltip'
               style={{
                 transform: `translate(${toolTipLeftOffest}px, -100px)`,
                 display: toolTipDisplay,
                 width: hasSubdailyLayers ? '270px' : '165px'
               }}
             >
-              { toolTipDate } <span className="dateToolTip-dayOfYear">({ toolTipDayOfYear })</span>
+              { toolTipDate } <span className="date-tooltip-day">({ toolTipDayOfYear })</span>
             </div>
             : null
         }

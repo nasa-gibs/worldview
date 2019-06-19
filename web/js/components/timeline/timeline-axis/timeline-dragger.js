@@ -77,7 +77,7 @@ class Dragger extends PureComponent {
               cursor: 'pointer',
               display: draggerVisible ? 'block' : 'none'
             }}
-            className='gridShell dragger'
+            className='timeline-dragger dragger'
             transform={`translate(${transformX}, 0)`}
           >
             <polygon

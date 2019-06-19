@@ -1,16 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono:500');
 
-html, body {
-  overflow-x: hidden;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-#timelineContainer {
-  position: absolute;
-  bottom: -24px;
-}
-
 .timeline-axis-container {
   height: 65px;
   border-top: 1.5px solid white;
@@ -25,7 +15,7 @@ html, body {
   clip-path: url('#timelineBoundary'); */
 }
 
-.dateToolTip {
+.date-tooltip {
   background: #212121;
   color: #fff;
   border: thin solid #666;
@@ -40,25 +30,26 @@ html, body {
   padding-left: 8px;
 }
 
-.dateToolTip-dayOfYear {
+.date-tooltip-day {
   font-size: 14px;
   display: inline-block;
   vertical-align: top;
 }
 
-.gridShell {
+.axis-grid-container,
+.timeline-dragger {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.grid {
+.axis-grid-rect {
   color: white;
   font-size: 12px;
   height: 63px;
 }
 
-.gridText {
+.axis-grid-text {
   font-size: 18px;
   font-weight: 500;
   font-family: 'Roboto Mono', monospace;
@@ -67,15 +58,11 @@ html, body {
   user-select: none;
 }
 
-line {
+.axis-grid-line {
   pointer-events: none;
 }
 
 /* DEVELOPMENT */
-
-#timelineContainer > div:nth-child(1) > div.wv-date-selector-widget {
-  background: #999;
-}
 
 #zoom-btn-container-axis {
   margin-bottom: 5px;

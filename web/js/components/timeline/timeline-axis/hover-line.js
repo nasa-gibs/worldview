@@ -12,11 +12,14 @@ class HoverLine extends PureComponent {
     let {
       width,
       isTimelineDragging,
+      isAnimationDraggerDragging,
       showHoverLine,
       hoverLinePosition
     } = this.props;
+    // check for timeline/animation dragging and showhover handled by parent
+    let showHover = !isTimelineDragging && !isAnimationDraggerDragging && showHoverLine;
     return (
-      !isTimelineDragging && showHoverLine
+      showHover
         ? <svg className='timeline-hover-line-container' width={width}>
           <line className='timeline-hover-line'
             stroke='blue' strokeWidth='2' strokeOpacity='0.48' x1='0' x2='0' y1='0' y2='63'

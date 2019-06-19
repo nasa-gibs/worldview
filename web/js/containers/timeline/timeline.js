@@ -229,7 +229,7 @@ class Timeline extends React.Component {
     draggerVisibleB,
     animationStartLocation,
     animationEndLocation
-  }) => {
+  }, hoverTime = this.state.hoverTime) => {
     this.setState({
       moved,
       isTimelineDragging,
@@ -243,7 +243,8 @@ class Timeline extends React.Component {
       draggerVisible,
       draggerVisibleB,
       animationStartLocation,
-      animationEndLocation
+      animationEndLocation,
+      hoverTime: hoverTime
     });
   }
 <<<<<<< HEAD
@@ -469,6 +470,7 @@ class Timeline extends React.Component {
     let frontDate = moment.utc(this.state.frontDate);
     let startLocation = frontDate.diff(startDate, timeScale, true) * gridWidth;
     let endLocation = frontDate.diff(endDate, timeScale, true) * gridWidth;
+
     this.setState({
       animationStartLocation: position - startLocation + transformX,
       animationEndLocation: position - endLocation + transformX,
@@ -534,11 +536,40 @@ class Timeline extends React.Component {
     let prevStartLocationDate = prevProps.animStartLocationDate;
     let prevEndLocationDate = prevProps.animEndLocationDate;
 
-    let { animStartLocationDate, animEndLocationDate, dateA, dateB, isAnimationWidgetOpen, customSelected, customIntervalValue, customIntervalZoomLevel } = this.props;
+    let {
+      animStartLocationDate,
+      animEndLocationDate,
+      dateA,
+      dateB,
+      isAnimationWidgetOpen,
+      customSelected,
+      customIntervalValue,
+      customIntervalZoomLevel
+    } = this.props;
+
     // handle location update triggered from animation start/end date change from animation widget
-    if (prevStartLocationDate && prevEndLocationDate) {
-      if (prevStartLocationDate !== animStartLocationDate || prevEndLocationDate !== animEndLocationDate) {
-        this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
+    if (isAnimationWidgetOpen) {
+      if (prevStartLocationDate && prevEndLocationDate) {
+        if (prevStartLocationDate.getTime() !== animStartLocationDate.getTime() ||
+            prevEndLocationDate.getTime() !== animEndLocationDate.getTime() ||
+            prevState.frontDate !== this.state.frontDate) {
+          this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
+        }
+      }
+
+      // handle open/close custom interval panel if 'custom' selected in animation widget
+      // and no custom value has been initialized
+      if (customIntervalValue === 1 && customIntervalZoomLevel === 3) {
+        if (!prevProps.customSelected && customSelected) {
+          this.setState({
+            customIntervalModalOpen: true
+          });
+        }
+        if (prevProps.customSelected && !customSelected) {
+          this.setState({
+            customIntervalModalOpen: false
+          });
+        }
       }
     }
 
@@ -551,27 +582,6 @@ class Timeline extends React.Component {
     if (dateB !== prevProps.dateB && dateB !== this.state.draggerTimeStateB) {
       this.setState({
         draggerTimeStateB: dateB
-      });
-    }
-
-    // handle open/close custom interval panel if 'custom' selected in animation widget
-    // and no custom value has been initialized
-    if (isAnimationWidgetOpen &&
-       !prevProps.customSelected &&
-       customSelected &&
-       customIntervalValue === 1 &&
-       customIntervalZoomLevel === 3) {
-      this.setState({
-        customIntervalModalOpen: true
-      });
-    }
-    if (isAnimationWidgetOpen &&
-       prevProps.customSelected &&
-       !customSelected &&
-       customIntervalValue === 1 &&
-       customIntervalZoomLevel === 3) {
-      this.setState({
-        customIntervalModalOpen: false
       });
     }
   }

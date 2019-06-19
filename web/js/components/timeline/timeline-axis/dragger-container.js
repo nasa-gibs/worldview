@@ -44,10 +44,14 @@ class DraggerContainer extends PureComponent {
   * @returns {void}
   */
   setDraggerPosition = (inputTime) => {
-    let frontDate = this.props.frontDate;
-    let backDate = this.props.backDate;
-    let draggerB = this.props.draggerSelected === 'selectedB';
-    let draggerName = draggerB ? 'selectedB' : 'selected';
+    let {
+      timeScale,
+      position,
+      transformX,
+      frontDate,
+      backDate,
+      draggerSelected
+    } = this.props;
 
     let isBetween = getIsBetween(inputTime, frontDate, backDate);
 
@@ -57,13 +61,12 @@ class DraggerContainer extends PureComponent {
       draggerVisible = true;
     }
 
-    let timeScale = this.props.timeScale;
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
     let frontDateObj = moment.utc(frontDate);
     let pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
-    newDraggerPosition = pixelsToAddToDraggerNew + this.props.position - this.state.draggerWidth + this.props.transformX + 2;
-    this.props.updateDraggerDatePosition(null, draggerName, newDraggerPosition, draggerVisible);
+    newDraggerPosition = pixelsToAddToDraggerNew + position - this.state.draggerWidth + transformX + 2;
+    this.props.updateDraggerDatePosition(null, draggerSelected, newDraggerPosition, draggerVisible);
   }
 
   /**
@@ -78,43 +81,49 @@ class DraggerContainer extends PureComponent {
       e.preventDefault();
     }
 
-    // requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
       var deltaX = d.deltaX;
+      // if no movement, RETURN out of function
       if (deltaX === 0) {
         return false;
       }
-      let timeScale = this.props.timeScale;
+      let {
+        timeScale,
+        draggerSelected,
+        draggerTimeState,
+        draggerTimeStateB,
+        draggerPosition,
+        draggerPositionB,
+        frontDate,
+        position,
+        transformX,
+        timelineStartDateLimit,
+        timelineEndDateLimit
+      } = this.props;
 
+      // get timescale specific options for scaleMs and gridWidth
       let options = timeScaleOptions[timeScale].timeAxis;
       let gridWidth = options.gridWidth;
 
-      // let axisWidth = this.props.axisWidth;
-      // let dragSentinelChangeNumber = this.state.dragSentinelChangeNumber;
-      // let dragSentinelCount = this.state.dragSentinelCount;
-      let draggerName = this.props.draggerSelected;
-      let time;
-      let draggerPosition;
-      let draggerASelected = draggerName === 'selected';
-      if (draggerASelected) { // 'selected is 'A' dragger
-        draggerPosition = this.props.draggerPosition + deltaX;
-        time = this.props.draggerTimeState;
+      let draggerTime;
+      let newDraggerPosition;
+      let newDraggerTime;
+      if (draggerSelected === 'selected') { // 'selected is 'A' dragger
+        newDraggerPosition = draggerPosition + deltaX;
+        draggerTime = draggerTimeState;
       } else { // 'selectedB' is 'B' dragger
-        draggerPosition = this.props.draggerPositionB + deltaX;
-        time = this.props.draggerTimeStateB;
+        newDraggerPosition = draggerPositionB + deltaX;
+        draggerTime = draggerTimeStateB;
       }
 
       // update draggerTime based on deltaX from state draggerTime
-      let draggerTimeValue = new Date(time).getTime();
+      let draggerTimeValue = new Date(draggerTime).getTime();
 
       // only need to calculate difference in time unit for varying timescales - month and year
-      let newDraggerTime;
       let diffZeroValues = options.scaleMs;
       if (!diffZeroValues) {
         // calculate based on frontDate due to varying number of days per month and per year (leapyears)
-        let frontDate = this.props.frontDate;
-        // ! -2 necessary from subtracting 2 from transformX in updateScale ?
-        // let draggerPositionRelativeToFrontDate = this.state.draggerWidth - 2 + draggerPosition - this.state.position - this.state.transformX;
-        let draggerPositionRelativeToFrontDate = this.state.draggerWidth - 2 + draggerPosition - this.props.position - this.props.transformX;
+        let draggerPositionRelativeToFrontDate = this.state.draggerWidth - 2 + newDraggerPosition - position - transformX;
         let gridWidthCoef = draggerPositionRelativeToFrontDate / gridWidth;
         let draggerDateAdded = moment.utc(frontDate).add((Math.floor(gridWidthCoef)), timeScale);
 
@@ -132,104 +141,26 @@ class DraggerContainer extends PureComponent {
         newDraggerTime = draggerTimeValue + (diffFactor * deltaX);
       }
 
-      // check if new dragger date is within valid date range
-      let isBetweenValidTimeline = getIsBetween(newDraggerTime, this.props.timelineStartDateLimit, this.props.timelineEndDateLimit);
+      // check if new dragger date is within valid date range and format or RETURN out of function
+      let isBetweenValidTimeline = getIsBetween(newDraggerTime, timelineStartDateLimit, timelineEndDateLimit);
       if (isBetweenValidTimeline) {
         newDraggerTime = getISODateFormatted(newDraggerTime);
       } else {
         return false;
       }
 
-      // handle drag timeline
-      // // TODO: fix drag off current view - doesn't drag/update date of hover properly
-      // if (draggerPosition < -draggerWidth) { // # handle drag timeline towards PAST
-      //   // console.log('drag off view past', deltaX, (dragSentinelCount + deltaX), -dragSentinelChangeNumber)
-      //   let position = this.state.position - deltaX;
-
-      //   if ((dragSentinelCount + deltaX) < -dragSentinelChangeNumber) {
-      //     // console.log('drag off view past UNSHIFT TILES')
-      //     let overDrag = 0;
-      //     if ((dragSentinelCount + deltaX) < -dragSentinelChangeNumber - dragSentinelChangeNumber) {
-      //       overDrag = Math.abs((dragSentinelCount + deltaX) - -dragSentinelChangeNumber - -dragSentinelChangeNumber);
-      //     }
-      //     //# NEED TO PASS NEGATIVE OF DELTAX FOR UPDATE PANEL
-      //     let { currentTimeRange,
-      //                     deque,
-      //         transformX,
-      //           draggerVisible,
-      //           draggerVisibleB,
-      //             overDragGrids,
-      //         draggerPositionRevision } = this.updatePanelDateRange(position, timeScale, -deltaX, draggerPosition, overDrag);
-
-      //     this.setState({
-      //       currentTimeRange: currentTimeRange,
-      //       deque: deque,
-      //       transformX: transformX,
-      //       draggerPosition: -48,
-      //       moved: true,
-      //       position: position,
-      //       dragSentinelCount: (dragSentinelCount + deltaX) - -dragSentinelChangeNumber + (overDragGrids * gridWidth),
-      //     })
-      //   } else {
-      //     let newDragSentinelCount = dragSentinelCount > 0 ? (-dragSentinelChangeNumber + dragSentinelCount + deltaX) : dragSentinelCount + deltaX;
-
-      //     // NEGATIVE DELTAX
-      //     this.setState({
-      //       draggerPosition: -48,
-      //       moved: true,
-      //       position: position,
-      //       dragSentinelCount: newDragSentinelCount
-      //     })
-      //   }
-      // } else if (draggerPosition > axisWidth - draggerWidth) { // handle drag timeline towards FUTURE
-      //   // console.log('drag off view future', deltaX)
-      //   let position = this.state.position - deltaX;
-
-      //   if ((dragSentinelCount + deltaX) > dragSentinelChangeNumber) {
-
-      //     let overDrag = 0;
-      //     if ((dragSentinelCount + deltaX) > dragSentinelChangeNumber + dragSentinelChangeNumber) {
-      //       overDrag = Math.abs((dragSentinelCount + deltaX) - dragSentinelChangeNumber - dragSentinelChangeNumber);
-      //     }
-      //     //# NEED TO PASS NEGATIVE OF DELTAX FOR UPDATE PANEL
-      //     let { currentTimeRange,
-      //                       deque,
-      //           transformX,
-      //             draggerVisible,
-      //             draggerVisibleB,
-      //               overDragGrids,
-      //     draggerPositionRevision } = this.updatePanelDateRange(position, timeScale, -deltaX, draggerPosition, overDrag);
-
-      //     this.setState({
-      //       currentTimeRange: currentTimeRange,
-      //       deque: deque,
-      //       transformX: transformX,
-      //       draggerPosition: axisWidth - 50,
-      //       moved: true,
-      //       position: position,
-      //       dragSentinelCount: (dragSentinelCount + deltaX) - dragSentinelChangeNumber - (overDragGrids * gridWidth),
-      //     })
-
-      //   } else {
-      //     let newDragSentinelCount = dragSentinelCount < 0 ? (dragSentinelChangeNumber + dragSentinelCount + deltaX) : dragSentinelCount + deltaX;
-
-      //     // POSITIVE DELTAX
-      //     this.setState({
-      //       draggerPosition: axisWidth - 50,
-      //       moved: true,
-      //       position: position,
-      //       dragSentinelCount: newDragSentinelCount
-      //     })
-      //   }
-      // } else { // handle drag within axis view
-
-    this.props.updateDraggerDatePosition(newDraggerTime, draggerName, draggerPosition, null, null, true);
+      this.props.updateDraggerDatePosition(newDraggerTime, draggerSelected, newDraggerPosition, null, null, true);
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let { draggerTimeState, draggerTimeStateB } = this.props;
-    let { isDraggerDragging } = this.props;
-    let { dateA, dateB, draggerSelected, compareModeActive } = this.props;
+    let {
+      draggerTimeState,
+      draggerTimeStateB,
+      isDraggerDragging,
+      draggerSelected,
+      compareModeActive
+    } = this.props;
 
     // handle dragger visibility update on compare mode activate/deactivate
     if (compareModeActive !== prevProps.compareModeActive) {
@@ -258,43 +189,6 @@ class DraggerContainer extends PureComponent {
     }
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   let {
-  //     draggerTimeState,
-  //     draggerTimeStateB,
-  //     dateA,
-  //     dateB,
-  //     draggerSelected,
-  //     width,
-  //     transformX,
-  //     compareModeActive,
-  //     draggerPosition,
-  //     draggerPositionB,
-  //     draggerVisible,
-  //     draggerVisibleB
-  //   } = this.props;
-
-  //   let checkForPropsUpdates = (
-  //     nextProps.draggerTimeState === draggerTimeState &&
-  //     nextProps.draggerTimeStateB === draggerTimeStateB &&
-  //     nextProps.dateA === dateA &&
-  //     nextProps.dateB === dateB &&
-  //     nextProps.draggerSelected === draggerSelected &&
-  //     nextProps.width === width &&
-  //     nextProps.transformX === transformX &&
-  //     nextProps.compareModeActive === compareModeActive &&
-  //     nextProps.draggerPosition === draggerPosition &&
-  //     nextProps.draggerPositionB === draggerPositionB &&
-  //     nextProps.draggerVisible === draggerVisible &&
-  //     nextProps.draggerVisibleB === draggerVisibleB
-  //   );
-
-  //   if (checkForPropsUpdates) {
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
   render() {
     let {
       draggerSelected,
@@ -311,7 +205,9 @@ class DraggerContainer extends PureComponent {
     let sharedProps = {
       toggleShowDraggerTime,
       transformX,
-      compareModeActive
+      compareModeActive,
+      handleDragDragger: this.handleDragDragger,
+      selectDragger: this.selectDragger
     };
     return (
       draggerSelected === 'selectedB'
@@ -323,9 +219,6 @@ class DraggerContainer extends PureComponent {
               draggerName='selected'
               draggerPosition={draggerPosition}
               draggerVisible={draggerVisible}
-              handleDragDragger={this.handleDragDragger}
-              selectDragger={this.selectDragger}
-              toggleShowDraggerTime={toggleShowDraggerTime}
             />
             : null}
           <Dragger
@@ -334,9 +227,6 @@ class DraggerContainer extends PureComponent {
             draggerName='selectedB'
             draggerPosition={draggerPositionB}
             draggerVisible={draggerVisibleB}
-            handleDragDragger={this.handleDragDragger}
-            selectDragger={this.selectDragger}
-            toggleShowDraggerTime={toggleShowDraggerTime}
           />
         </svg>
         : <svg className="dragger-container" width={width}>
@@ -347,9 +237,6 @@ class DraggerContainer extends PureComponent {
               draggerName='selectedB'
               draggerPosition={draggerPositionB}
               draggerVisible={draggerVisibleB}
-              handleDragDragger={this.handleDragDragger}
-              selectDragger={this.selectDragger}
-              toggleShowDraggerTime={toggleShowDraggerTime}
             />
             : null}
           <Dragger
@@ -358,9 +245,6 @@ class DraggerContainer extends PureComponent {
             draggerName='selected'
             draggerPosition={draggerPosition}
             draggerVisible={draggerVisible}
-            handleDragDragger={this.handleDragDragger}
-            selectDragger={this.selectDragger}
-            toggleShowDraggerTime={toggleShowDraggerTime}
           />
         </svg>
     );
