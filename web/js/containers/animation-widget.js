@@ -38,10 +38,7 @@ import {
   changeEndDate,
   toggleComponentGifActive
 } from '../modules/animation/actions';
-<<<<<<< HEAD
 import util from '../util/util';
-=======
->>>>>>> rebase cleanup
 
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;
