@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import lodashDebounce from 'lodash/debounce';
 import util from '../../util/util';
 
 import ErrorBoundary from '../../containers/error-boundary';
