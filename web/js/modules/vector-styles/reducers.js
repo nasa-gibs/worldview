@@ -1,5 +1,6 @@
 import { assign as lodashAssign, get as lodashGet } from 'lodash';
 import {
+  CLEAR_VECTORSTYLE,
   SET_VECTORSTYLE,
   SET_FILTER_RANGE,
   LOADED_CUSTOM_VECTORSTYLES
@@ -24,6 +25,10 @@ export function vectorStyleReducer(state = defaultVectorStyleState, action) {
     case SET_FILTER_RANGE:
       return lodashAssign({}, state, {
         [groupName]: action.vectorStyles
+      });
+    case CLEAR_VECTORSTYLE:
+      return lodashAssign({}, state, {
+        [groupName]: action.vectorStyles || {}
       });
     case SET_VECTORSTYLE:
       return lodashAssign({}, state, {

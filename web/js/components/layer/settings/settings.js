@@ -225,7 +225,10 @@ class LayerSettings extends React.Component {
     const start = 0; // Placeholder
     // const end = vectorStyle.max || max;
     const end = max; // Placeholder
-
+    var customStyle;
+    if (layer.custom && layer.custom[0]) {
+      customStyle = layer.custom[0];
+    }
     return (
       <React.Fragment>
         <VectorFilter
@@ -241,7 +244,7 @@ class LayerSettings extends React.Component {
         <VectorStyle
           setStyle={setStyle}
           clearStyle={clearStyle}
-          activeVectorStyle={layer.id}
+          activeVectorStyle={customStyle || layer.id}
           layer={layer}
           index={0}
           groupName={groupName}

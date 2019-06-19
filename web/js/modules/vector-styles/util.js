@@ -49,24 +49,22 @@ export function loadVectorStyles(permlinkState, state) {
         var min = [];
         var max = [];
         var count = 0;
-        if (layerDef.custom) {
-          let vectorStyleId = layerDef.custom;
-          lodashEach(layerDef.custom, function(value, index) {
-            try {
-              let newVectorStyles = setStyleFunction(
-                layerDef,
-                vectorStyleId,
-                state.vectorStyles.custom,
-                stateObj.groupStr,
-                state
-              );
-              state = update(state, {
-                vectorStyles: { [stateObj.groupStr]: { $set: newVectorStyles } }
-              });
-            } catch (error) {
-              console.warn(' Invalid vectorStyle: ' + value);
-            }
-          });
+        if (layerDef.custom && layerDef.custom[0]) {
+          let vectorStyleId = layerDef.custom[0];
+          try {
+            let newVectorStyles = setStyleFunction(
+              layerDef,
+              vectorStyleId,
+              state.vectorStyles.custom,
+              stateObj.groupStr,
+              state
+            );
+            state = update(state, {
+              vectorStyles: { [stateObj.groupStr]: { $set: newVectorStyles } }
+            });
+          } catch (error) {
+            console.warn(' Invalid vectorStyle: ' + vectorStyleId);
+          }
         }
         if (layerDef.min) {
           lodashEach(layerDef.min, function(value, index) {

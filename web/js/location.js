@@ -75,6 +75,7 @@ export const mapLocationToState = (state, location) => {
       state,
       config
     );
+
     // one level deep merge of newState with defaultState
     for (var key in stateFromLocation) {
       const obj = lodashAssign({}, state[key], stateFromLocation[key]);
