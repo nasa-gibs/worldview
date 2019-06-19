@@ -37,7 +37,8 @@ export function animationReducer(state = defaultState, action) {
     case EXIT_ANIMATION:
       return lodashAssign({}, state, {
         isActive: false,
-        gifActive: false
+        gifActive: false,
+        isPlaying: false
       });
     case PLAY_ANIMATION:
       return lodashAssign({}, state, {

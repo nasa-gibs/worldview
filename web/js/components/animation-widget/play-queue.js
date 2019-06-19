@@ -29,7 +29,12 @@ class PlayAnimation extends React.Component {
     this.checkQueue(props.queueLength, this.currentPlayingDate);
     this.checkShouldPlay();
   }
+  componentDidMount() {
+    this.mounted = true;
+  }
+
   componentWillUnmount() {
+    this.mounted = false;
     if (this.interval) {
       clearInterval(this.interval);
     }
@@ -453,7 +458,7 @@ class PlayAnimation extends React.Component {
         return promiseImageryForTime(date, activeLayers);
       })
       .then(date => {
-        if (this.props.isPlaying) {
+        if (this.mounted) {
           this.preloadObject[strDate] = date;
           delete this.inQueueObject[strDate];
           this.shiftCache();
