@@ -263,8 +263,8 @@ const mapDispatchToProps = dispatch => ({
   loadedCustomPalettes: customs => {
     dispatch(loadedCustomPalettes(customs));
   },
-  loadedDefaultVectorStyles: defaults => {
-    dispatch(loadedDefaultVectorStyles(defaults));
+  loadedDefaultVectorStyles: customs => {
+    dispatch(loadedDefaultVectorStyles(customs));
   }
 });
 

@@ -22,7 +22,7 @@ import util from '../../util/util';
 export function serializeLayers(currentLayers, state, groupName) {
   const layers = currentLayers;
   const palettes = state.palettes[groupName];
-  const vectorStyles = state.vectorStyles[groupName];
+
   return layers.map((def, i) => {
     var item = {};
 
@@ -53,17 +53,12 @@ export function serializeLayers(currentLayers, state, groupName) {
         palettes,
         state
       );
-
       item.attributes = paletteAttributeArray.length
         ? item.attributes.concat(paletteAttributeArray)
         : item.attributes;
     } else if (def.vectorStyle && (def.custom || def.min || def.max)) {
       // If layer has vectorStyle and vectorStyle attributes
-      const vectorStyleAttributeArray = getVectorStyleAttributeArray(
-        def.id,
-        vectorStyles,
-        state
-      );
+      const vectorStyleAttributeArray = getVectorStyleAttributeArray(def);
 
       item.attributes = vectorStyleAttributeArray.length
         ? item.attributes.concat(vectorStyleAttributeArray)

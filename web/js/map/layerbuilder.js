@@ -399,10 +399,8 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
 
     // if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
     if (config.vectorStyles) {
-      var styleFunction;
       var vectorStyles = config.vectorStyles;
       var vectorStyleId = def.vectorStyle.id;
-      var glStyle = vectorStyles[vectorStyleId];
       setStyleFunction(def, vectorStyleId, vectorStyles, layer);
 
       // Initialize Sliders
@@ -426,25 +424,23 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
 
       // TODO: Add check for date change and re-apply
       // TODO: Change this on chang to target the controls
-      $(document).on('change', function(e) {
-        if (glStyle.name === 'FIRMS') {
-          setStyleFunction(layer, glStyle, vectorStyleId);
+      // $(document).on('change', function(e) {
+      //   if (glStyle.name === 'FIRMS') {
+      //     // FIRMS Filters
+      //     let confidenceMinFilter = document.getElementById('confidenceMinFilter');
+      //     let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
 
-          // FIRMS Filters
-          let confidenceMinFilter = document.getElementById('confidenceMinFilter');
-          let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
+      //     document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
+      //     document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
 
-          document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
-          document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
-
-          // Filter by a feature
-          layer.setStyle(function(feature, resolution) {
-            if (feature.get('CONFIDENCE') >= confidenceMinFilter.value && feature.get('CONFIDENCE') <= confidenceMaxFilter.value) {
-              return styleFunction(feature, resolution);
-            }
-          });
-        }
-      });
+      //     // Filter by a feature
+      //     layer.setStyle(function(feature, resolution) {
+      //       if (feature.get('CONFIDENCE') >= confidenceMinFilter.value && feature.get('CONFIDENCE') <= confidenceMaxFilter.value) {
+      //         return styleFunction(feature, resolution);
+      //       }
+      //     });
+      //   }
+      // });
     }
 
     return layer;

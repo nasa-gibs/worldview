@@ -15,15 +15,15 @@ class VectorStyleSelect extends React.Component {
    * @param {String} id | custom VectorStyle Id
    */
   onChangeVectorStyle(vectorStyleId) {
-    const { layer, clearStyle, setStyle, groupName, index } = this.props;
+    const { layer, clearStyle, setStyle, groupName } = this.props;
     // Applying customs takes a while and
     // it looks more natural to make this async
     // instead of waiting
     setTimeout(function() {
       if (vectorStyleId === layer.id) {
-        clearStyle(layer, vectorStyleId, index, groupName);
+        clearStyle(layer, vectorStyleId, groupName);
       } else {
-        setStyle(layer, vectorStyleId, index, groupName);
+        setStyle(layer, vectorStyleId, groupName);
       }
     }, 0);
     this.setState({ activeVectorStyle: vectorStyleId });
@@ -99,13 +99,10 @@ class VectorStyleSelect extends React.Component {
         <h2 className="wv-header">Vector Style</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
           {uniqueStyleLayers.map(styleLayerObject => {
-            // console.log(styleLayerObject);
-            // if (lodashIndexOf(recommended, styleLayerObject) < 0) {
             if (styleLayerObject && styleLayerObject) {
               var item = this.customLegend(styleLayerObject);
               return item;
             }
-            // }
           })}
         </Scrollbar>
       </div>

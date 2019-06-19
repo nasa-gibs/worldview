@@ -29,10 +29,10 @@ export function getVectorStyle(layerId, index, groupStr, state) {
   if (renderedVectorStyle) {
     return renderedVectorStyle;
   }
-  return getRenderedVectorStyle(layerId, index, state);
+  return getAllVectorStyles(layerId, index, state);
 }
 
-export function getRenderedVectorStyle(layerId, index, state) {
+export function getAllVectorStyles(layerId, index, state) {
   const { config, vectorStyles } = state;
   var name = lodashGet(config, `layers.${layerId}.vectorStyle.id`);
   var vectorStyle = vectorStyles.custom[name];
@@ -48,7 +48,7 @@ export function getRenderedVectorStyle(layerId, index, state) {
 }
 
 export function getCount(layerId, state) {
-  const renderedVectorStyle = getRenderedVectorStyle(layerId, undefined, state);
+  const renderedVectorStyle = getAllVectorStyles(layerId, undefined, state);
   if (renderedVectorStyle && renderedVectorStyle.layers) {
     return renderedVectorStyle.layers.length;
   } else {
@@ -72,7 +72,7 @@ export function getCount(layerId, state) {
 //       use = true;
 //       return false;
 //     }
-//     var rendered = getRenderedVectorStyle(layerId, index, state);
+//     var rendered = getAllVectorStyles(layerId, index, state);
 //     if (vectorStyle.type !== 'classification') {
 //       if (vectorStyle.min <= 0) {
 //         delete vectorStyle.min;
@@ -232,6 +232,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
+  return glStyle;
 }
 
 export function getKey(layerId, groupStr, state) {
@@ -254,7 +255,9 @@ export function getKey(layerId, groupStr, state) {
 }
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
-  return state.vectorStyles[group][layerId];
+  if (state.vectorStyles['custom'][layerId]) {
+    return state.vectorStyles[group][layerId];
+  }
 }
 export function setRange(layerId, props, index, vectorStyles, state) {
   let min = props.min;
@@ -308,7 +311,7 @@ var prepare = function(layerId, vectorStylesObj, state) {
   if (!newVectorStyles[layerId]) newVectorStyles[layerId] = {};
   var active = newVectorStyles[layerId];
   active.maps = active.maps || [];
-  lodashEach(getRenderedVectorStyle(layerId, undefined, state).maps, function(
+  lodashEach(getAllVectorStyles(layerId, undefined, state).maps, function(
     vectorStyle,
     index
   ) {

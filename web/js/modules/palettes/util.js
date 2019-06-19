@@ -258,86 +258,88 @@ export function loadPalettes(permlinkState, state) {
   }
   lodashEach(stateArray, stateObj => {
     lodashEach(state.layers[stateObj.groupStr], function(layerDef) {
-      var layerId = layerDef.id;
-      var min = [];
-      var max = [];
-      var squash = [];
-      var count = 0;
-      if (layerDef.custom) {
-        lodashEach(layerDef.custom, function(value, index) {
-          try {
-            let newPalettes = setCustomSelector(
+      if (layerDef.palette) {
+        var layerId = layerDef.id;
+        var min = [];
+        var max = [];
+        var squash = [];
+        var count = 0;
+        if (layerDef.custom) {
+          lodashEach(layerDef.custom, function(value, index) {
+            try {
+              let newPalettes = setCustomSelector(
+                layerId,
+                value,
+                index,
+                stateObj.groupStr,
+                state
+              );
+              state = update(state, {
+                palettes: { [stateObj.groupStr]: { $set: newPalettes } }
+              });
+            } catch (error) {
+              console.warn(' Invalid palette: ' + value);
+            }
+          });
+        }
+        if (layerDef.min) {
+          lodashEach(layerDef.min, function(value, index) {
+            try {
+              min.push(
+                findPaletteExtremeIndex(
+                  layerId,
+                  'min',
+                  value,
+                  index,
+                  stateObj.groupStr,
+                  state
+                )
+              );
+            } catch (error) {
+              console.warn('Unable to set min: ' + value);
+            }
+          });
+        }
+        if (layerDef.max) {
+          lodashEach(layerDef.max, function(value, index) {
+            try {
+              max.push(
+                findPaletteExtremeIndex(
+                  layerId,
+                  'max',
+                  value,
+                  index,
+                  stateObj.groupStr,
+                  state
+                )
+              );
+            } catch (error) {
+              console.warn('Unable to set max index: ' + value);
+            }
+          });
+        }
+        if (layerDef.squash) {
+          squash = layerDef.squash;
+        }
+
+        if (min.length > 0 || max.length > 0) {
+          count = getCount(layerId, state);
+          for (var i = 0; i < count; i++) {
+            var vmin = min.length > 0 ? min[i] : undefined;
+            var vmax = max.length > 0 ? max[i] : undefined;
+            var vsquash = squash.length > 0 ? squash[i] : undefined;
+            let props = { min: vmin, max: vmax, squash: vsquash };
+            let newPalettes = setRangeSelector(
               layerId,
-              value,
-              index,
-              stateObj.groupStr,
+              props,
+              i,
+              state.palettes[stateObj.groupStr],
               state
             );
             state = update(state, {
               palettes: { [stateObj.groupStr]: { $set: newPalettes } }
             });
-          } catch (error) {
-            console.warn(' Invalid palette: ' + value);
           }
-        });
-      }
-      if (layerDef.min) {
-        lodashEach(layerDef.min, function(value, index) {
-          try {
-            min.push(
-              findPaletteExtremeIndex(
-                layerId,
-                'min',
-                value,
-                index,
-                stateObj.groupStr,
-                state
-              )
-            );
-          } catch (error) {
-            console.warn('Unable to set min: ' + value);
-          }
-        });
-      }
-      if (layerDef.max) {
-        lodashEach(layerDef.max, function(value, index) {
-          try {
-            max.push(
-              findPaletteExtremeIndex(
-                layerId,
-                'max',
-                value,
-                index,
-                stateObj.groupStr,
-                state
-              )
-            );
-          } catch (error) {
-            console.warn('Unable to set max index: ' + value);
-          }
-        });
-      }
-      if (layerDef.squash) {
-        squash = layerDef.squash;
-      }
-
-      if (min.length > 0 || max.length > 0) {
-        count = getCount(layerId, state);
-        for (var i = 0; i < count; i++) {
-          var vmin = min.length > 0 ? min[i] : undefined;
-          var vmax = max.length > 0 ? max[i] : undefined;
-          var vsquash = squash.length > 0 ? squash[i] : undefined;
-          let props = { min: vmin, max: vmax, squash: vsquash };
-          let newPalettes = setRangeSelector(
-            layerId,
-            props,
-            i,
-            state.palettes[stateObj.groupStr],
-            state
-          );
-          state = update(state, {
-            palettes: { [stateObj.groupStr]: { $set: newPalettes } }
-          });
         }
       }
     });
