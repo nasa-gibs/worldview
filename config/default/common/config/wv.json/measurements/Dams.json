@@ -11,7 +11,7 @@
                     "description": "sedac/Dams",
                     "image": "",
                     "settings": [
-                        "grand-v1-dams-rev01"
+                        "GRanD_Dams"
                     ]
                 }
             }

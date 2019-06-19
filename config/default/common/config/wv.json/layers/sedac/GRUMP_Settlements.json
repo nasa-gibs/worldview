@@ -1,10 +1,10 @@
 {
     "layers": {
-        "grump-v1-settlement-points": {
-            "id":       "grump-v1-settlement-points",
+        "GRUMP_Settlements": {
+            "id":       "GRUMP_Settlements",
             "title":    "Settlements",
-            "subtitle": "SEDAC Global Rural-Urban Mapping Project (GRUMP), v1",
-            "description": "sedac/grump-v1-settlement-points",
+            "subtitle": "Global Rural-Urban Mapping Project (GRUMP), v1",
+            "description": "sedac/GRUMP_Settlements",
             "group":    "overlays",
             "format":   "image/png",
             "tileSize": [512, 512],
@@ -13,7 +13,7 @@
             "layergroup": [
               "sedac"
             ],
-            "product":  "CIESIN_SEDAC_GRUMPv1_STLMNT",
+            "product":  "CIESIN_SEDAC_GRUMPv1_STLMNT01",
 
             "projections": {
                 "arctic": {
@@ -25,7 +25,7 @@
             },
 
             "palette": {
-                "id":           "grump-v1-settlement-points",
+                "id":           "GRUMP_Settlements",
                 "immutable":    true
             },
             "wrapX": true
