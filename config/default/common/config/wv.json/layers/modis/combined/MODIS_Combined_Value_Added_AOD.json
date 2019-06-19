@@ -4,12 +4,12 @@
             "id":       "MODIS_Combined_Value_Added_AOD",
             "title":    "MODIS Combined Value-Added Aerosol Optical Depth",
             "subtitle": "Terra and Aqua / MODIS",
-            "description": "modis/MODIS_Combined_Value_Added_AOD",
+            "description": "modis/combined/MODIS_Combined_Value_Added_AOD",
             "tags":     "aod",
             "group":    "overlays",
             "layergroup": [
               "modis",
-              "modis_terra"
+              "modis_combined"
             ],
             "product":  "MCDAODHD",
             "wrapadjacentdays": true,

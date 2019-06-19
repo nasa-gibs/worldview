@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "MODIS_Aqua_Land_Surface_Temp_Daily_Day": {
+            "id":       "MODIS_Aqua_Land_Surface_Temp_Daily_Day",
+            "title":    "Land Surface Temperature (L3, Daily, Day)",
+            "subtitle": "Aqua / MODIS",
+            "description": "modis/aqua/MODIS_Aqua_Land_Surface_Temp_Daily_Day",
+            "tags":     "",
+            "group":    "overlays",
+            "layergroup": [
+              "modis",
+              "modis_aqua"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+            }
+        }
+    }

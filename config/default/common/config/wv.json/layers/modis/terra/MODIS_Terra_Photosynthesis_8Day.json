@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MODIS_Terra_Photosynthesis_8Day": {
+            "id":       "MODIS_Terra_Photosynthesis_8Day",
+            "title":    "Photosynthesis (L3, 8-Day)",
+            "subtitle": "Terra / MODIS",
+            "description": "modis/terra/MODIS_Terra_Photosynthesis_8Day",
+            "group":    "overlays",
+            "layergroup": [
+              "modis",
+              "modis_terra"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+        }
+    }
+}

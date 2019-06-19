@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "MODIS_Terra_Land_Water_Mask": {
+            "id":       "MODIS_Terra_Land_Water_Mask",
+            "title":    "Land/Water Mask (L3, Annual)",
+            "subtitle": "Terra / MODIS",
+            "description": "modis/terra/MODIS_Terra_Land_Water_Mask",
+            "group":    "overlays",
+            "layergroup": [
+              "modis",
+              "modis_terra"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+        }
+    }
+}
