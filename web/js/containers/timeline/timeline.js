@@ -22,7 +22,10 @@ import AnimationButton from '../../components/timeline/timeline-controls/animati
 import AxisTimeScaleChange from '../../components/timeline/timeline-controls/axis-timescale-change';
 import TimelineRangeSelector from '../../components/range-selection/range-selection';
 
-import { debounce as lodashDebounce, get as lodashGet } from 'lodash';
+import {
+  debounce as lodashDebounce,
+  get as lodashGet
+} from 'lodash';
 import {
   getIsBetween,
   getISODateFormatted
@@ -247,10 +250,6 @@ class Timeline extends React.Component {
       hoverTime: hoverTime
     });
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> fix anim date inputs, continue large refactor and clean up
   /**
   * @desc stop animation from left/right arrows - clear animateByIncrement's timeout
   * @returns {void}
@@ -649,7 +648,7 @@ class Timeline extends React.Component {
     } = this.props;
     let selectedDate = draggerSelected === 'selected' ? this.state.draggerTimeState : this.state.draggerTimeStateB;
     return this.state.initialLoadComplete ? (
-       <ErrorBoundary>
+      <ErrorBoundary>
         {this.props.isSmallScreen
           ? <MobileDatePicker
             date={selectedDate}
@@ -847,14 +846,14 @@ class Timeline extends React.Component {
             {/* 🍔 Open/Close Chevron 🍔 */}
             <div id="timeline-hide" onClick={this.toggleHideTimeline}>
               <div
-                clErrorBoundaryassName={`wv-timeline-hide wv-timeline-hide-double-chevron-${
+                className={`wv-timeline-hide wv-timeline-hide-double-chevron-${
                   this.state.timelineHidden ? 'left' : 'right'
                 }`}
               />
             </div>
           </section>
         }
-      </>
+      </ErrorBoundary>
     ) : null;
   }
 }
@@ -1009,7 +1008,7 @@ const mapDispatchToProps = dispatch => ({
   },
   // update anim startDate and endDate
   onUpdateStartAndEndDate: (startDate, endDate) => {
-    dispatch(changeStartAndEndDate(startDate, endDate))
+    dispatch(changeStartAndEndDate(startDate, endDate));
   }
 });
 
