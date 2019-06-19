@@ -6,8 +6,8 @@ import {
 } from './constants';
 import {
   setRange as setRangeSelector,
-  setStyleFunction,
-  clearCustomSelector
+  setStyleFunction
+  // clearCustomSelector
 } from './selectors';
 
 /**
@@ -44,7 +44,7 @@ export function setFilterRange(layerId, props, index, groupName) {
  * @param {Number} index | VectorStyle index value for multi-vectorStyled layers
  * @param {String} groupName | layer group string
  */
-export function setStyle(layer, vectorStyleId, index, groupName) {
+export function setStyle(layer, vectorStyleId, groupName) {
   return (dispatch, getState) => {
     const state = getState();
     const newActiveVectorStylesObj = setStyleFunction(
@@ -81,7 +81,6 @@ export function clearStyle(layer, vectorStyleId, index, groupName) {
       null,
       state
     );
-
     dispatch({
       type: CLEAR_VECTORSTYLE,
       groupName: groupName,

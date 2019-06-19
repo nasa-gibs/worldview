@@ -244,6 +244,7 @@ class LayerSettings extends React.Component {
           activeVectorStyle={layer.id}
           layer={layer}
           index={0}
+          groupName={groupName}
           vectorStyles={vectorStyles}
         />
       </React.Fragment>
@@ -331,11 +332,11 @@ const mapDispatchToProps = dispatch => ({
   clearCustomPalette: (layerId, index, groupName) => {
     dispatch(clearCustomPalette(layerId, index, groupName));
   },
-  setStyle: (layerId, paletteId, index, groupName) => {
-    dispatch(setStyle(layerId, paletteId, index, groupName));
+  setStyle: (layer, vectorStyleId, groupName) => {
+    dispatch(setStyle(layer, vectorStyleId, groupName));
   },
-  clearStyle: (layerId, index, groupName) => {
-    dispatch(clearStyle(layerId, index, groupName));
+  clearStyle: (layer, vectorStyleId, groupName) => {
+    dispatch(clearStyle(layer, vectorStyleId, groupName));
   },
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
