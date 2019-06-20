@@ -71,7 +71,7 @@ export function setStyle(layer, vectorStyleId, groupName) {
  * @param {Number} index | VectorStyle index value for multi-vectorStyled layers
  * @param {String} groupName | layer group string
  */
-export function clearStyle(layer, vectorStyleId, index, groupName) {
+export function clearStyle(layer, vectorStyleId, groupName) {
   return (dispatch, getState) => {
     const state = getState();
     const newActiveVectorStylesObj = setStyleFunction(
@@ -83,7 +83,10 @@ export function clearStyle(layer, vectorStyleId, index, groupName) {
     );
     dispatch({
       type: CLEAR_VECTORSTYLE,
+      layerId: layer.id,
+      vectorStyleId: vectorStyleId,
       groupName: groupName,
+      activeString: groupName,
       vectorStyles: newActiveVectorStylesObj
     });
   };

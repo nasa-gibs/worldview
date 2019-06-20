@@ -15,6 +15,7 @@ import {
   SET_THRESHOLD_RANGE_AND_SQUASH
 } from '../palettes/constants';
 import {
+  CLEAR_VECTORSTYLE,
   SET_VECTORSTYLE,
   SET_FILTER_RANGE
 } from '../vector-styles/constants';
@@ -115,6 +116,20 @@ export function layerReducer(state = initialState, action) {
         [layerGroupStr]: {
           [layerIndex]: {
             $merge: action.props
+          }
+        }
+      });
+    case CLEAR_VECTORSTYLE:
+      layerIndex = lodashFindIndex(state[layerGroupStr], {
+        id: action.layerId
+      });
+
+      return update(state, {
+        [layerGroupStr]: {
+          [layerIndex]: {
+            custom: {
+              $set: undefined
+            }
           }
         }
       });
