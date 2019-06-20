@@ -1,5 +1,4 @@
 import {
-  GET_TIMELINE_POSITION,
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
@@ -17,12 +16,6 @@ export function updateAppNow(date) {
   return {
     type: UPDATE_APP_NOW,
     value: date
-  };
-}
-export function getPosition(value) {
-  return {
-    type: GET_TIMELINE_POSITION,
-    value
   };
 }
 export function selectDate(value) {

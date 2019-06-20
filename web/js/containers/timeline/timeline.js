@@ -35,7 +35,6 @@ import {
   lastDate as layersLastDateTime
 } from '../../modules/layers/selectors';
 import {
-  getPosition,
   selectDate,
   changeTimeScale,
   selectInterval,
@@ -987,9 +986,6 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getPosition: val => {
-    dispatch(getPosition(val));
-  },
   // updates the relative application now to allow up to date coverage
   updateAppNow: date => {
     dispatch(updateAppNow(date));

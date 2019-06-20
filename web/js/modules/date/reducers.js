@@ -1,5 +1,4 @@
 import {
-  GET_TIMELINE_POSITION,
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
@@ -9,25 +8,24 @@ import {
 import util from '../../util/util';
 import { assign as lodashAssign } from 'lodash';
 
-const defaultState = {
+export const dateReducerState = {
   selectedZoom: 3,
   interval: 3,
   delta: 1,
   customSelected: false,
   customDelta: undefined,
-  customInterval: undefined,
-  position: 0
+  customInterval: undefined
 };
 
 export function getInitialState(config) {
-  return lodashAssign({}, defaultState, {
+  return lodashAssign({}, dateReducerState, {
     selected: config.pageLoadTime,
     selectedB: util.dateAdd(config.pageLoadTime, 'day', -7),
     appNow: config.pageLoadTime
   });
 }
 
-export function dateReducer(state = defaultState, action) {
+export function dateReducer(state = dateReducerState, action) {
   switch (action.type) {
     case CHANGE_TIME_SCALE:
       return lodashAssign({}, state, {
@@ -48,10 +46,6 @@ export function dateReducer(state = defaultState, action) {
     case SELECT_DATE:
       return lodashAssign({}, state, {
         [action.activeString]: action.value
-      });
-    case GET_TIMELINE_POSITION:
-      return lodashAssign({}, state, {
-        position: action.value
       });
     case UPDATE_APP_NOW:
       return lodashAssign({}, state, {
