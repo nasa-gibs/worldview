@@ -85,7 +85,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
     }
 
     # Colormap links
-    if "ows:Metadata" in gc_layer:
+    if "ows:Metadata" in gc_layer and gc_layer["ows:Metadata"] is not None:
         if "skipPalettes" in config and ident in config["skipPalettes"]:
             sys.stderr.write("%s: WARNING: Skipping palette for %s\n" % (
                 prog, ident))
