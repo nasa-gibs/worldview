@@ -4,6 +4,9 @@ import {
   each as lodashEach
   // cloneDeep as lodashCloneDeep
 } from 'lodash';
+import {
+  getLayers
+} from '../layers/selectors';
 import { getMinValue, getMaxValue } from './util';
 import update from 'immutability-helper';
 import stylefunction from 'ol-mapbox-style/stylefunction';
@@ -212,9 +215,53 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   var layerId = def.id;
   var glStyle = vectorStyles[layerId];
   var olMap = lodashGet(state, 'map.ui.selected');
+  var layerState = state.layers;
+  const activeLayerStr = state.compare.activeString;
+  var activeLayers = getLayers(
+    layerState[activeLayerStr],
+    {},
+    state
+  ).reverse();
+  var layerGroups;
+  var layerGroup;
+  if (state.compare && state.compare.active) {
+    layerGroups = olMap.getLayers().getArray();
+    if (layerGroups.length === 2) {
+      layerGroup =
+        layerGroups[0].get('group') === activeLayerStr
+          ? layerGroups[0]
+          : layerGroups[1].get('group') === activeLayerStr
+            ? layerGroups[1]
+            : null;
+    }
+  }
+  lodashEach(activeLayers, function(def) {
+    if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
+      return;
+    }
+
+    if (state.compare && state.compare.active) {
+      if (layerGroup && layerGroup.getLayers().getArray().length) {
+        lodashEach(layerGroup.getLayers().getArray(), subLayer => {
+          if (subLayer.wv && (subLayer.wv.id === layerId)) {
+            layer = subLayer;
+          }
+        });
+      }
+    } else {
+      lodashEach(layerGroups, subLayer => {
+        if (subLayer.wv && (subLayer.wv.id === layerId)) {
+          layer = subLayer;
+        }
+      });
+    }
+  });
+
   if (olMap) {
+    console.log(olMap);
     lodashEach(olMap.getLayers().getArray(), subLayer => {
-      if (subLayer.wv.id === layerId) {
+      console.log(subLayer);
+      if (subLayer.wv && (subLayer.wv.id === layerId)) {
         layer = subLayer;
       }
     });
