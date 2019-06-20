@@ -52,7 +52,8 @@ export function layerReducer(state = initialState, action) {
     case INIT_SECOND_LAYER_GROUP:
       if (state.hasSecondLayerGroup) return state;
       return lodashAssign({}, state, {
-        activeB: lodashCloneDeep(state.active)
+        activeB: lodashCloneDeep(state.active),
+        hasSecondLayerGroup: true
       });
     case ON_LAYER_HOVER:
       return lodashAssign({}, state, {
