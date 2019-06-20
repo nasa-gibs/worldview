@@ -69,7 +69,7 @@ def process_layer(layer):
                              prog, ident)
             global warning_count
             warning_count += 1
-        else:
+        elif layer["ows:Metadata"] is not None:
             for item in layer["ows:Metadata"]:
                 schema_version = item["@xlink:role"]
                 if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3":
