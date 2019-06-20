@@ -5,13 +5,13 @@
             "title":    "Fraction of Photosynthetically Active Radiation (L3, 8-Day)",
             "subtitle": "Aqua / MODIS",
             "description": "modis/aqua/MODIS_Aqua_FPAR_8Day",
-            "tags":     "aod",
+            "tags":     "fpar",
             "group":    "overlays",
             "layergroup": [
               "modis",
               "modis_aqua"
             ],
-            "product":  "",
+            "product":  "MYD15A2H",
             "wrapadjacentdays": true
             }
         }

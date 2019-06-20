@@ -5,12 +5,13 @@
             "title":    "Gross Primary Production (L3, 8-Day)",
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_Gross_Primary_Productivity_8Day",
+            "tags":     "gpp",
             "group":    "overlays",
             "layergroup": [
               "modis",
               "modis_terra"
             ],
-            "product":  "",
+            "product":  "MOD17A2H",
             "wrapadjacentdays": true
         }
     }

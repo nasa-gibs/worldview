@@ -6,12 +6,12 @@
             "subtitle": "Terra and Aqua / MODIS",
             "description": "modis/combined/MODIS_Combined_Nadir-BRDF_Daily",
             "tags":     "",
-            "group":    "overlays",
+            "group":    "baselayers",
             "layergroup": [
               "modis",
               "modis_combined"
             ],
-            "product":  "",
+            "product":  "MCD43A4",
             "wrapadjacentdays": true
         }
     }

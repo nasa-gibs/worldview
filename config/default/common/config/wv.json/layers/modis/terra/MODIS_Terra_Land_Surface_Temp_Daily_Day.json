@@ -5,12 +5,13 @@
             "title":    "Land Surface Temperature (L3, Daily, Day)",
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_Land_Surface_Temp_Daily_Day",
+            "tags":     "lst",
             "group":    "overlays",
             "layergroup": [
               "modis",
               "modis_terra"
             ],
-            "product":  "",
+            "product":  "MOD11A1",
             "wrapadjacentdays": true
         }
     }

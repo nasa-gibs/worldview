@@ -11,7 +11,7 @@
               "modis",
               "modis_combined"
             ],
-            "product":  "",
+            "product":  "MCD12Q1",
             "wrapadjacentdays": true
         }
     }

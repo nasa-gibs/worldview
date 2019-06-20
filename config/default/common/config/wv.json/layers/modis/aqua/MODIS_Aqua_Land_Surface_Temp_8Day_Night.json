@@ -5,13 +5,13 @@
             "title":    "Land Surface Temperature (L3, 8-Day, Night)",
             "subtitle": "Aqua / MODIS",
             "description": "modis/aqua/MODIS_Aqua_Land_Surface_Temp_8Day_Night",
-            "tags":     "",
+            "tags":     "lst",
             "group":    "overlays",
             "layergroup": [
               "modis",
               "modis_aqua"
             ],
-            "product":  "",
+            "product":  "MYD11A2",
             "wrapadjacentdays": true
             }
         }

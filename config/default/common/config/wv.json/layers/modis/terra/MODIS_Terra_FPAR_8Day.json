@@ -5,12 +5,13 @@
             "title":    "Fraction of Photosynthetically Active Radiation (L3, 8-Day)",
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_FPAR_8Day",
+            "tags":   "fpar",
             "group":    "overlays",
             "layergroup": [
               "modis",
               "modis_terra"
             ],
-            "product":  "",
+            "product":  "MOD15A2H",
             "wrapadjacentdays": true
         }
     }
