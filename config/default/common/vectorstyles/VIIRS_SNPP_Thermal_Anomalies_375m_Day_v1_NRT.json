@@ -5,7 +5,19 @@
     "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT": {
       "type": "vector",
       "tiles": [
-        "https://sit.gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT_MODIS_Fire_Points_Confidence": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    },
+    "VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT_MODIS_Fire_Points_FRP": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/VIIRS_SNPP_Thermal_Anomalies_375m_Day_v1_NRT/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     }
   },

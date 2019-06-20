@@ -397,10 +397,20 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       displayElement.innerHTML = slide1 + ' - ' + slide2;
     }
 
-    // if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
-    if (config.vectorStyles) {
+    if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
       var vectorStyles = config.vectorStyles;
-      var vectorStyleId = def.vectorStyle.id;
+      var vectorStyleId;
+      console.log(state);
+      // TODO: Change active to groupName
+      // TODO change `0` to actually loop through the active layers
+      // and find the one equal to layerName
+      if (state.layers.active[0].id === layerName && state.layers.active[0].custom) {
+        vectorStyleId = state.layers.active[0].custom;
+      } else {
+        vectorStyleId = def.vectorStyle.id;
+      }
+      // var vectorStyleId = def.vectorStyle.id;
+
       setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
 
       // Initialize Sliders
