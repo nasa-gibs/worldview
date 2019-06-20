@@ -211,7 +211,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   var styleFunction;
   var layerId = def.id;
   var glStyle = vectorStyles[layerId];
-  var olMap = lodashGet(state, 'legacy.map.ui.selected');
+  var olMap = lodashGet(state, 'map.ui.selected');
   if (olMap) {
     lodashEach(olMap.getLayers().getArray(), subLayer => {
       if (subLayer.wv.id === layerId) {
