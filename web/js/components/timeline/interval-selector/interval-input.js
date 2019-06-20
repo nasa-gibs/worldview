@@ -21,7 +21,7 @@ class IntervalInput extends PureComponent {
     let value = e.target.value;
     if (value === '' || regex.test(value)) {
       value = Number(value);
-      if (value <= 1000) {
+      if (value < 1000) {
         this.setValue(value);
       }
     }

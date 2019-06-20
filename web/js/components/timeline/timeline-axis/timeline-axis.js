@@ -183,7 +183,6 @@ class TimelineAxis extends Component {
     let leftBound = frontDate.diff(timelineEndDateLimit, timeScale) * gridWidth + (midPoint * 1.5) + axisWidth;
     let rightBound = (diffFromStartDateLimit * gridWidth) + (midPoint * 1.5);
     rightBound = rightBound < position ? position : rightBound;
-    // leftBound = leftBound < position ? position : leftBound;
 
     let transformX = -pixelsToAdd - 2;
     let animationStartLocation = animationStartDraggerLocation + position - pixelsToAdd - 2;
@@ -1070,14 +1069,10 @@ class TimelineAxis extends Component {
         timelineEndDateLimit,
         transformX,
         frontDate,
-        backDate,
-        // animStartLocationDate,
-        // animEndLocationDate
+        backDate
       } = this.props;
 
       let checkForPropsUpdates = (
-        // nextProps.animStartLocationDate === animStartLocationDate &&
-        // nextProps.animEndLocationDate === animEndLocationDate &&
         nextProps.axisWidth === axisWidth &&
         nextProps.dateA === dateA &&
         nextProps.dateB === dateB &&

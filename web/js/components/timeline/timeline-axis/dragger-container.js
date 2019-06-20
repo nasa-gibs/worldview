@@ -18,7 +18,9 @@ class DraggerContainer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      draggerWidth: 49
+      draggerWidth: 49,
+      draggerTimeState: '',
+      draggerTimeStateB: ''
     };
   }
 
@@ -66,6 +68,17 @@ class DraggerContainer extends PureComponent {
     let frontDateObj = moment.utc(frontDate);
     let pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
     newDraggerPosition = pixelsToAddToDraggerNew + position - this.state.draggerWidth + transformX + 2;
+
+    if (draggerSelected === 'selected') {
+      this.setState({
+        draggerTimeState: this.props.draggerTimeState
+      });
+    } else {
+      this.setState({
+        draggerTimeStateB: this.props.draggerTimeStateB
+      });
+    }
+
     this.props.updateDraggerDatePosition(null, draggerSelected, newDraggerPosition, draggerVisible);
   }
 
@@ -149,7 +162,23 @@ class DraggerContainer extends PureComponent {
         return false;
       }
 
+      if (draggerSelected === 'selected') {
+        this.setState({
+          draggerTimeState: newDraggerTime
+        });
+      } else {
+        this.setState({
+          draggerTimeStateB: newDraggerTime
+        });
+      }
       this.props.updateDraggerDatePosition(newDraggerTime, draggerSelected, newDraggerPosition, null, null, true);
+    });
+  }
+
+  componentDidMount() {
+    this.setState({
+      draggerTimeState: this.props.draggerTimeState,
+      draggerTimeStateB: this.props.draggerTimeStateB
     });
   }
 
@@ -179,11 +208,11 @@ class DraggerContainer extends PureComponent {
 
     if (!isDraggerDragging) {
       // handle A dragger change
-      if (draggerTimeState !== prevProps.draggerTimeState) {
+      if (draggerTimeState !== prevProps.draggerTimeState && draggerTimeState !== this.state.draggerTimeState) {
         this.setDraggerPosition(draggerTimeState);
       }
       // handle B dragger change
-      if (draggerTimeStateB !== prevProps.draggerTimeStateB) {
+      if (draggerTimeStateB !== prevProps.draggerTimeStateB && draggerTimeStateB !== this.state.draggerTimeStateB) {
         this.setDraggerPosition(draggerTimeStateB);
       }
     }
