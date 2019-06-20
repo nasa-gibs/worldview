@@ -224,49 +224,46 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
   ).reverse();
   var layerGroups;
   var layerGroup;
-  if (state.compare && state.compare.active) {
+  if (olMap) {
     layerGroups = olMap.getLayers().getArray();
-    if (layerGroups.length === 2) {
-      layerGroup =
-        layerGroups[0].get('group') === activeLayerStr
-          ? layerGroups[0]
-          : layerGroups[1].get('group') === activeLayerStr
-            ? layerGroups[1]
-            : null;
-    }
-  }
-  lodashEach(activeLayers, function(def) {
-    if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
-      return;
-    }
-
     if (state.compare && state.compare.active) {
-      if (layerGroup && layerGroup.getLayers().getArray().length) {
-        lodashEach(layerGroup.getLayers().getArray(), subLayer => {
+      if (layerGroups.length === 2) {
+        layerGroup =
+          layerGroups[0].get('group') === activeLayerStr
+            ? layerGroups[0]
+            : layerGroups[1].get('group') === activeLayerStr
+              ? layerGroups[1]
+              : null;
+      }
+    }
+    lodashEach(activeLayers, function(def) {
+      if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
+        return;
+      }
+
+      if (state.compare && state.compare.active) {
+        if (layerGroup && layerGroup.getLayers().getArray().length) {
+          lodashEach(layerGroup.getLayers().getArray(), subLayer => {
+            if (subLayer.wv && (subLayer.wv.id === layerId)) {
+              layer = subLayer;
+            }
+          });
+        }
+      } else {
+        lodashEach(layerGroups, subLayer => {
           if (subLayer.wv && (subLayer.wv.id === layerId)) {
             layer = subLayer;
           }
         });
       }
-    } else {
-      lodashEach(layerGroups, subLayer => {
-        if (subLayer.wv && (subLayer.wv.id === layerId)) {
-          layer = subLayer;
-        }
-      });
-    }
-  });
-
-  if (olMap) {
-    console.log(olMap);
-    lodashEach(olMap.getLayers().getArray(), subLayer => {
-      console.log(subLayer);
-      if (subLayer.wv && (subLayer.wv.id === layerId)) {
-        layer = subLayer;
-      }
     });
   }
+  console.log(layer)
+  console.log(layerId)
+  console.log(vectorStyles)
+  console.log(vectorStyleId)
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
+
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
     layer.setStyle(function(feature, resolution) {
