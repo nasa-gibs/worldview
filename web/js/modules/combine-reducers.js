@@ -77,7 +77,6 @@ export function getInitialState(models, config, parameters) {
     config,
     models,
     date: getDateInitialState(config),
-    animation: getAnimationInitialState(config),
     proj: getProjInitialState(config),
     layers: getLayersInitialState(config),
     requestedEvents: eventRequestResponse(eventsIgnoreArray),
