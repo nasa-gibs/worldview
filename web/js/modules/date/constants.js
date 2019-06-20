@@ -3,6 +3,7 @@ export const CHANGE_INTERVAL = 'DATE/CHANGE_INTERVAL';
 export const CHANGE_TIME_SCALE = 'DATE/CHANGE_TIME_SCALE';
 export const SELECT_DATE = 'DATE/SELECT_DATE';
 export const GET_TIMELINE_POSITION = 'DATE/GET_TIMELINE_POSITION';
+export const UPDATE_APP_NOW = 'DATE/UPDATE_APP_NOW';
 
 export const timeScaleFromNumberKey = {
   '0': 'custom',

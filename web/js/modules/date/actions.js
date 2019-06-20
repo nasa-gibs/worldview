@@ -3,13 +3,20 @@ import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
-  SELECT_DATE
+  SELECT_DATE,
+  UPDATE_APP_NOW
 } from './constants';
 
 export function changeTimeScale(num) {
   return {
     type: CHANGE_TIME_SCALE,
     value: num
+  };
+}
+export function updateAppNow(date) {
+  return {
+    type: UPDATE_APP_NOW,
+    value: date
   };
 }
 export function getPosition(value) {

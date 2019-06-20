@@ -55,12 +55,12 @@ window.onload = () => {
   loadingIndicator.delayed(promise, 1000);
   promise
     .done(config => {
-      config.now = new Date();
+      config.pageLoadTime = new Date();
       config.palettes = {
         rendered: {},
         custom: {}
       };
-      elapsed('Config loaded', config.now, parameters);
+      elapsed('Config loaded', config.pageLoadTime, parameters);
       let layers = [];
       if (
         (parameters.l && hasCustomTypePalette(parameters.l)) ||

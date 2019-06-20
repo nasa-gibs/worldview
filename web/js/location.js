@@ -93,8 +93,8 @@ export const mapLocationToState = (state, location) => {
 };
 
 const getParameters = function(config, parameters) {
-  const now = config.now;
-  const nowMinusSevenDays = util.dateAdd(config.now, 'day', -7);
+  const now = config.pageLoadTime;
+  const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
   return {
     p: {
       stateKey: 'proj.id',
@@ -111,13 +111,14 @@ const getParameters = function(config, parameters) {
           const compareIsActive = get(state, 'compare.active');
           const isCompareA = get(state, 'compare.isCompareA');
           const dateB = get(state, 'date.selectedB');
-          const nowString = util.toISOStringSeconds(now);
+          const appNow = get(state, 'date.appNow');
+          const appNowString = util.toISOStringSeconds(appNow);
 
           return !compareIsActive && !isCompareA
-            ? util.toISOStringSeconds(dateB) === nowString
+            ? util.toISOStringSeconds(dateB) === appNowString
               ? undefined
               : serializeDate(dateB)
-            : util.toISOStringSeconds(currentItemState) === nowString
+            : util.toISOStringSeconds(currentItemState) === appNowString
               ? undefined
               : !currentItemState
                 ? undefined
@@ -137,14 +138,16 @@ const getParameters = function(config, parameters) {
         setAsEmptyItem: true,
         serialize: (currentItemState, state) => {
           const isActive = get(state, 'compare.active');
-          const nowMinusSevenDaysString = util.toISOStringSeconds(
-            nowMinusSevenDays
+          const appNow = get(state, 'date.appNow');
+          const appNowMinusSevenDays = util.dateAdd(appNow, 'day', -7);
+          const appNowMinusSevenDaysString = util.toISOStringSeconds(
+            appNowMinusSevenDays
           );
           if (!isActive) return undefined;
-          return nowMinusSevenDaysString ===
+          return appNowMinusSevenDaysString ===
             util.toISOStringSeconds(currentItemState)
             ? undefined
-            : serializeDate(currentItemState || nowMinusSevenDays);
+            : serializeDate(currentItemState || appNowMinusSevenDays);
         },
         parse: str => {
           return tryCatchDate(str, nowMinusSevenDays);

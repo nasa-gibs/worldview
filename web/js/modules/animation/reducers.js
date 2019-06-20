@@ -22,8 +22,8 @@ const defaultState = {
 };
 export function getInitialState(config) {
   return lodashAssign({}, defaultState, {
-    startDate: util.dateAdd(config.now, 'day', -7),
-    endDate: config.now
+    startDate: util.dateAdd(config.pageLoadTime, 'day', -7),
+    endDate: config.pageLoadTime
   });
 }
 

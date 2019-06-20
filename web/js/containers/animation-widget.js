@@ -315,13 +315,13 @@ function mapStateToProps(state) {
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
   const zoomObj = getZoomObject(date, hasSubdailyLayers);
-  let { customSelected, interval, delta, customInterval, customDelta } = date;
+  let { customSelected, interval, delta, customInterval, customDelta, appNow } = date;
   const hasCustomPalettes = !lodashIsEmpty(palettes[activeStr]);
 
   // let minDate = new Date(config.startDate);
   // let maxDate = layersLastDateTime(layers[activeStr], config);
   let minDate = new Date(config.startDate);
-  let maxDate = config.now;
+  let maxDate = appNow;
 
   return {
     startDate,
