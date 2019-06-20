@@ -5,13 +5,13 @@
             "title":    "Land Surface Reflectance (L3, 8-Day, Bands 7-2-1)",
             "subtitle": "Aqua / MODIS",
             "description": "modis/aqua/MODIS_Aqua_SurfaceReflectance_Bands721_8Day",
-            "tags":     "aod",
-            "group":    "overlays",
+            "tags":     "lsr m11-i2-i1 721 false color",
+            "group":    "baselayers",
             "layergroup": [
               "modis",
               "modis_aqua"
             ],
-            "product":  "",
+            "product":  "MYD09A1",
             "wrapadjacentdays": true
             }
         }

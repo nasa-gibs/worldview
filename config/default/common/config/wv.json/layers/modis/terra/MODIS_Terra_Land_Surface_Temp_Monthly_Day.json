@@ -1,16 +1,17 @@
 {
     "layers": {
-        "MODIS_Terra_Land_Surface_Temp_Monthly_CMG_Day": {
-            "id":       "MODIS_Terra_Land_Surface_Temp_Monthly_CMG_Day",
+        "MODIS_Terra_Land_Surface_Temp_Monthly_Day": {
+            "id":       "MODIS_Terra_Land_Surface_Temp_Monthly_Day",
             "title":    "Land Surface Temperature (L3, Monthly, Day)",
             "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_Land_Surface_Temp_Monthly_CMG_Day",
+            "description": "modis/terra/MODIS_Terra_Land_Surface_Temp_Monthly_Day",
+            "tags":     "lst",
             "group":    "overlays",
             "layergroup": [
               "modis",
               "modis_terra"
             ],
-            "product":  "",
+            "product":  "MOD11C3",
             "wrapadjacentdays": true
         }
     }

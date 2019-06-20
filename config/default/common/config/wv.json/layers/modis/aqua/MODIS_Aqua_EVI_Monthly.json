@@ -5,13 +5,13 @@
             "title":    "Enhanced Vegetation Index (L3, Monthly)",
             "subtitle": "Aqua / MODIS",
             "description": "modis/aqua/MODIS_Aqua_EVI_Monthly",
-            "tags":     "aod",
+            "tags":     "",
             "group":    "overlays",
             "layergroup": [
               "modis",
               "modis_aqua"
             ],
-            "product":  "",
+            "product":  "MYD13A3",
             "wrapadjacentdays": true
             }
         }

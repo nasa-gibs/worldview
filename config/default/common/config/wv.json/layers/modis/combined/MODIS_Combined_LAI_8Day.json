@@ -11,7 +11,7 @@
               "modis",
               "modis_combined"
             ],
-            "product":  "",
+            "product":  "MCD15A2H",
             "wrapadjacentdays": true
         }
     }

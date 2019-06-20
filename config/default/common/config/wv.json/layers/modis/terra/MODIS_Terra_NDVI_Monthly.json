@@ -10,7 +10,7 @@
               "modis",
               "modis_terra"
             ],
-            "product":  "",
+            "product":  "MOD13A3",
             "wrapadjacentdays": true
         }
     }

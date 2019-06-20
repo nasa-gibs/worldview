@@ -5,12 +5,13 @@
             "title":    "Ice Surface Temperature (L3, Daily, Night)",
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_Ice_Surface_Temp_Daily_Night",
+            "tags":     "ist",
             "group":    "overlays",
             "layergroup": [
               "modis",
               "modis_terra"
             ],
-            "product":  "",
+            "product":  "MOD29P1N",
             "wrapadjacentdays": true
         }
     }

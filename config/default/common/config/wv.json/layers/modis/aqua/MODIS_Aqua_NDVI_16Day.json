@@ -11,7 +11,7 @@
               "modis",
               "modis_aqua"
             ],
-            "product":  "",
+            "product":  "MYD13Q1",
             "wrapadjacentdays": true
             }
         }
