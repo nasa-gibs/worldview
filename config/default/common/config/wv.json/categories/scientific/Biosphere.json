@@ -9,13 +9,16 @@
                 "measurements": [
                     "Amphibian Richness",
                     "Forests, Mangrove",
+                    "FPAR",
                     "Gross Primary Productivity",
                     "Heterotrophic Respiration",
                     "Human Footprint",
                     "Land Cover",
+                    "Leaf Area Index",
                     "Mammal Richness",
                     "Net Ecosystem CO2 Exchange",
                     "Solar Induced Chlorophyll Fluorescence",
+                    "Photosynthesis, Net",
                     "Vegetation Indices",
                     "Vegetation Light Use Efficiency"
                 ]

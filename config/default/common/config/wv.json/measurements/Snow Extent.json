@@ -1,0 +1,29 @@
+{
+    "measurements": {
+        "Snow Extent": {
+            "id": "snow-extent",
+            "title":    "Snow Extent",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
+            "sources": {
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
+                    "description": "modis/SnowExtent",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Aqua_L3_Snow_Extent_8Day"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/SnowExtent",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Terra_L3_Snow_Extent_8Day"
+                    ]
+                }
+            }
+        }
+    }
+}
