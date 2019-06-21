@@ -1,6 +1,7 @@
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
-
+import { initialState as initialLayerState } from './modules/layers/reducers';
+import { initialCompareState } from './modules/compare/reducers';
 var fixtures = {
   red: 'ff0000ff',
   light_red: 'fff0f0ff',
@@ -10,6 +11,61 @@ var fixtures = {
   blue: '0000ffff',
   light_blue: 'f0f0ffff',
   dark_blue: '000040'
+};
+fixtures.getState = function() {
+  return {
+    compare: initialCompareState,
+    config: fixtures.config(),
+    layers: initialLayerState,
+    palettes: {
+      active: {},
+      activeB: {},
+      rendered: {
+        'terra-aod': {
+          id: 'terra-aod',
+          maps: [
+            {
+              entries: {
+                type: 'scale',
+                colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                values: [0, 1, 2]
+              },
+              legend: {
+                tooltips: ['0', '1', '2'],
+                minLabel: '0',
+                maxLabel: '2'
+              }
+            }
+          ]
+        },
+        'aqua-aod': {
+          id: 'aqua-aod',
+          maps: [
+            {
+              entries: {
+                type: 'scale',
+                colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                values: [0, 1, 2]
+              },
+              legend: {
+                tooltips: ['0', '1', '2'],
+                minLabel: '0',
+                maxLabel: '2'
+              }
+            }
+          ]
+        }
+      },
+      custom: {
+        'blue-1': {
+          colors: [fixtures.light_blue, fixtures.blue, fixtures.dark_blue]
+        },
+        'red-1': {
+          colors: [fixtures.light_red, fixtures.red, fixtures.dark_red]
+        }
+      }
+    }
+  };
 };
 
 fixtures.config = function() {
