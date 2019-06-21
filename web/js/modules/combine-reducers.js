@@ -28,10 +28,7 @@ import {
   dateReducer,
   getInitialState as getDateInitialState
 } from './date/reducers';
-import {
-  animationReducer,
-  getInitialState as getAnimationInitialState
-} from './animation/reducers';
+import { animationReducer } from './animation/reducers';
 import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
 import dataDownloadReducer from './data/reducers';
 import { get as lodashGet } from 'lodash';

@@ -1070,14 +1070,10 @@ class TimelineAxis extends Component {
         timelineEndDateLimit,
         transformX,
         frontDate,
-        backDate,
-        // animStartLocationDate,
-        // animEndLocationDate
+        backDate
       } = this.props;
 
       let checkForPropsUpdates = (
-        // nextProps.animStartLocationDate === animStartLocationDate &&
-        // nextProps.animEndLocationDate === animEndLocationDate &&
         nextProps.axisWidth === axisWidth &&
         nextProps.dateA === dateA &&
         nextProps.dateB === dateB &&
