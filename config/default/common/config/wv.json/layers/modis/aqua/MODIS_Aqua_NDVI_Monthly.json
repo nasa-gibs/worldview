@@ -5,7 +5,7 @@
             "title":    "Vegetation Index (L3, Monthly)",
             "subtitle": "Aqua / MODIS",
             "description": "modis/aqua/MODIS_Aqua_NDVI_Monthly",
-            "tags":     "",
+            "tags":     "ndvi normalized difference vegetation index",
             "group":    "overlays",
             "layergroup": [
               "modis",
