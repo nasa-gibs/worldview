@@ -14,6 +14,10 @@
                         "MODIS_Aqua_SurfaceReflectance_Bands143",
                         "MODIS_Aqua_SurfaceReflectance_Bands121",
                         "MODIS_Aqua_SurfaceReflectance_Bands721",
+                        "MODIS_Aqua_L3_SurfaceReflectance_Bands143_Daily",
+                        "MODIS_Aqua_L3_SurfaceReflectance_Bands143_8Day",
+                        "MODIS_Aqua_L3_SurfaceReflectance_Bands121_8Day",
+                        "MODIS_Aqua_L3_SurfaceReflectance_Bands721_8Day",
                         "OrbitTracks_Aqua_Ascending"
                     ]
                 },
@@ -26,6 +30,10 @@
                         "MODIS_Terra_SurfaceReflectance_Bands143",
                         "MODIS_Terra_SurfaceReflectance_Bands121",
                         "MODIS_Terra_SurfaceReflectance_Bands721",
+                        "MODIS_Terra_L3_SurfaceReflectance_Bands143_Daily",
+                        "MODIS_Terra_L3_SurfaceReflectance_Bands143_8Day",
+                        "MODIS_Terra_L3_SurfaceReflectance_Bands121_8Day",
+                        "MODIS_Terra_L3_SurfaceReflectance_Bands721_8Day",
                         "OrbitTracks_Terra_Descending"
                     ]
                 }

@@ -12,8 +12,7 @@
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Sea_Ice",
-                        "OrbitTracks_Aqua_Ascending",
-                        "OrbitTracks_Aqua_Descending"
+                        "MODIS_Aqua_L3_Sea_Ice_Daily"
                     ]
                 },
                 "Terra/MODIS": {
@@ -23,8 +22,7 @@
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Sea_Ice",
-                        "OrbitTracks_Terra_Descending",
-                        "OrbitTracks_Terra_Ascending"
+                        "MODIS_Terra_L3_Sea_Ice_Daily"
                     ]
                 },
                 "Aqua/AMSR-E": {
