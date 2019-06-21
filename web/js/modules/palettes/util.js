@@ -1,10 +1,10 @@
 import update from 'immutability-helper';
 import {
   each as lodashEach,
-  find as lodashFind,
   assign as lodashAssign,
   get as lodashGet,
   size as lodashSize,
+  findIndex as lodashFindIndex,
   isArray
 } from 'lodash';
 import { PALETTE_STRINGS_PERMALINK_ARRAY } from './constants';
@@ -131,39 +131,35 @@ export function getMaxValue(v) {
  * @param {Object} errors
  * @param {Object} config
  */
-export function parsePalettes(state, errors, config) {
-  if (state.palettes) {
-    var parts = state.palettes.split('~');
-    lodashEach(parts, function(part) {
-      var items = part.split(',');
-      var layerId = items[0];
-      var paletteId = items[1];
-      if (!config.layers[layerId]) {
-        errors.push({
-          message: 'Invalid layer for palette ' + paletteId + ': ' + layerId
-        });
-      } else if (!config.layers[layerId].palette) {
-        errors.push({
-          message: 'Layer ' + layerId + ' does not ' + 'support palettes'
-        });
-      } else {
-        var layer = lodashFind(state.l, {
-          id: layerId
-        });
-        if (layer) {
-          layer.attributes.push({
-            id: 'palette',
-            value: paletteId
-          });
-        } else {
-          errors.push({
-            message: 'Layer ' + layerId + ' is not ' + 'active'
-          });
-        }
-      }
+export function parseLegacyPalettes(
+  parameters,
+  stateFromLocation,
+  state,
+  config
+) {
+  var parts = state.palettes.split('~');
+  parts.forEach(part => {
+    var items = part.split(',');
+    var layerId = items[0];
+    var paletteId = items[1];
+    var index = lodashFindIndex(stateFromLocation.layers.active, {
+      id: layerId
     });
-    delete state.palettes;
-  }
+    if (
+      index >= 0 &&
+      lodashGet(stateFromLocation, `layers.active.${index}`) &&
+      !lodashGet(stateFromLocation, `layers.active.${index}.custom`)
+    ) {
+      stateFromLocation = update(stateFromLocation, {
+        layers: {
+          active: {
+            [index]: { custom: { $set: paletteId } }
+          }
+        }
+      });
+    }
+  });
+  return stateFromLocation;
 }
 export function isSupported() {
   var browser = util.browser;
@@ -252,7 +248,7 @@ const createPaletteAttributeObject = function(def, value, attrObj, count) {
 export function loadPalettes(permlinkState, state) {
   var stateArray = [{ stateStr: 'l', groupStr: 'active' }];
   if (!isSupported()) {
-    return self;
+    return state;
   }
   if (permlinkState.l1) {
     stateArray = [

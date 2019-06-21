@@ -12,8 +12,10 @@ import {
 } from './constants';
 
 export function onActivate() {
-  return {
-    type: OPEN_ANIMATION
+  return (dispatch, getState) => {
+    const { compare, date } = getState();
+    const dateStr = compare.isCompareA ? 'selected' : 'selectedB';
+    dispatch({ type: OPEN_ANIMATION, date: date[dateStr] });
   };
 }
 export function onClose() {

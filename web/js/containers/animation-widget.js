@@ -25,7 +25,6 @@ import {
 import { getQueueLength, getMaxQueueLength } from '../modules/animation/util';
 import {
   hasSubDaily as hasSubDailySelector,
-  lastDate as layersLastDateTime,
   getLayers
 } from '../modules/layers/selectors';
 import {
@@ -38,7 +37,6 @@ import {
   changeEndDate,
   toggleComponentGifActive
 } from '../modules/animation/actions';
-import util from '../util/util';
 
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;

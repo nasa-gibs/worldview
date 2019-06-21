@@ -6,11 +6,15 @@ import {
   findIndex as lodashFindIndex,
   each as lodashEach,
   isNaN as lodashIsNaN,
+  get as lodashGet,
   isArray
 } from 'lodash';
 
 import { addLayer } from './selectors';
-import { getPaletteAttributeArray } from '../palettes/util';
+import {
+  getPaletteAttributeArray,
+  parseLegacyPalettes
+} from '../palettes/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
 
@@ -389,7 +393,7 @@ export function mapLocationToLayerState(
     });
   }
   // legacy layers permalink
-  if (state.parameters.product) {
+  if (parameters.product) {
     stateFromLocation = update(stateFromLocation, {
       layers: {
         active: {
@@ -397,6 +401,15 @@ export function mapLocationToLayerState(
         }
       }
     });
+  }
+  // legacy palettes permalink
+  if (parameters.palettes && lodashGet(stateFromLocation, 'layers.active')) {
+    stateFromLocation = parseLegacyPalettes(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
   }
   return stateFromLocation;
 }

@@ -513,7 +513,28 @@ class Timeline extends React.Component {
       draggerVisibleB
     });
   }
+  static getDerivedStateFromProps(props, currentState) {
+    // Update animation Date states when animation is initiated
+    if (!currentState.animationEndLocationDate && !currentState.animationStartLocationDate && props.animStartLocationDate && props.animEndLocationDate) {
+      let { position, transformX } = currentState;
+      let { timeScale } = props;
+      let startDate = props.animStartLocationDate;
+      let endDate = props.animEndLocationDate;
+      let options = timeScaleOptions[timeScale].timeAxis;
+      let gridWidth = options.gridWidth;
 
+      let frontDate = moment.utc(currentState.frontDate);
+      let startLocation = frontDate.diff(startDate, timeScale, true) * gridWidth;
+      let endLocation = frontDate.diff(endDate, timeScale, true) * gridWidth;
+      return {
+        animationStartLocationDate: props.animStartLocationDate,
+        animationEndLocationDate: props.animEndLocationDate,
+        animationStartLocation: position - startLocation + transformX,
+        animationEndLocation: position - endLocation + transformX
+      };
+    }
+    return null;
+  }
   componentDidUpdate(prevProps, prevState) {
     let prevStartLocationDate = prevProps.animStartLocationDate;
     let prevEndLocationDate = prevProps.animEndLocationDate;
@@ -554,7 +575,6 @@ class Timeline extends React.Component {
         }
       }
     }
-
     // handle draggerTimeState updates if date changes
     if (dateA !== prevProps.dateA && dateA !== this.state.draggerTimeState) {
       this.setState({
@@ -780,7 +800,11 @@ class Timeline extends React.Component {
                     hoverLinePosition={hoverLinePosition}
                   />
 
-                  {isAnimationWidgetOpen
+                  {isAnimationWidgetOpen &&
+                    this.state.animationStartLocation &&
+                    this.state.animationStartLocationDate &&
+                    this.state.animationEndLocation &&
+                    this.state.animationEndLocationDate
                     ? <TimelineRangeSelector
                       position={position}
                       frontDate={frontDate}

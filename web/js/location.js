@@ -239,10 +239,11 @@ const getParameters = function(config, parameters) {
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
-        serialize: (currentItemState) => {
-          return serializeDate(
-            currentItemState || nowMinusSevenDays
-          );
+        serialize: (currentItemState, state) => {
+          const isAnimActive = get(state, 'animation.isActive');
+          return isAnimActive
+            ? serializeDate(currentItemState || nowMinusSevenDays)
+            : undefined;
         },
         parse: str => {
           return tryCatchDate(str, nowMinusSevenDays);
@@ -255,10 +256,11 @@ const getParameters = function(config, parameters) {
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
-        serialize: (currentItemState) => {
-          return serializeDate(
-            currentItemState || now
-          );
+        serialize: (currentItemState, state) => {
+          const isAnimActive = get(state, 'animation.isActive');
+          return isAnimActive
+            ? serializeDate(currentItemState || now)
+            : undefined;
         },
         parse: str => {
           return tryCatchDate(str, now);
@@ -339,12 +341,26 @@ const getParameters = function(config, parameters) {
     al: {
       stateKey: 'animation.loop',
       initialState: false,
-      type: 'bool'
+      type: 'bool',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (boo, state) => {
+          const isAnimActive = get(state, 'animation.isActive');
+          return isAnimActive ? boo : undefined;
+        }
+      }
     },
     av: {
       stateKey: 'animation.speed',
       initialState: 3,
-      type: 'number'
+      type: 'number',
+      options: {
+        serializeNeedsGlobalState: true,
+        serialize: (num, state) => {
+          const isAnimActive = get(state, 'animation.isActive');
+          return isAnimActive ? num : undefined;
+        }
+      }
     },
     ab: {
       stateKey: 'animation.isActive',

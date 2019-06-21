@@ -527,7 +527,7 @@ class PlayAnimation extends React.Component {
         this.shiftCache();
         return this.checkQueue(queueLength, this.currentPlayingDate);
       }
-      if (!this.props.isPlaying) {
+      if (!this.props.isPlaying || !this.mounted) {
         clearInterval(this.interval);
         this.setState({ isPlaying: false });
       }
