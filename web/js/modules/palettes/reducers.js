@@ -1,4 +1,9 @@
-import { assign as lodashAssign, get as lodashGet } from 'lodash';
+import {
+  assign as lodashAssign,
+  get as lodashGet,
+  isEmpty,
+  cloneDeep as lodashCloneDeep
+} from 'lodash';
 import {
   REQUEST_PALETTE_SUCCESS,
   SET_CUSTOM,
@@ -8,6 +13,7 @@ import {
   BULK_PALETTE_RENDERING_SUCCESS,
   CLEAR_CUSTOM
 } from './constants';
+import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 import update from 'immutability-helper';
 import util from '../../util/util';
 const browser = util.browser;
@@ -48,6 +54,11 @@ export function paletteReducer(state = defaultPaletteState, action) {
           [action.id]: action.response
         }),
         isLoading
+      });
+    case INIT_SECOND_LAYER_GROUP:
+      if (!isEmpty(state.activeB)) return state;
+      return lodashAssign({}, state, {
+        activeB: lodashCloneDeep(state.active)
       });
     case SET_RANGE_AND_SQUASH:
       return lodashAssign({}, state, {
