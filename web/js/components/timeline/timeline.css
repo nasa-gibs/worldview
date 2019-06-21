@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:500');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300,500');
 
 .timeline-axis-container {
   height: 65px;
@@ -7,7 +7,6 @@
 }
 
 .timeline-axis-svg {
-  height: 64px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -22,7 +21,6 @@
   font-size: 17px;
   font-family: 'Roboto Mono', monospace;
   border-radius: 5px;
-  width: 115px;
   height: 25px;
   line-height: 25px;
   white-space: nowrap;
@@ -31,22 +29,10 @@
 }
 
 .date-tooltip-day {
+  position: relative;
+  bottom: 2px;
   font-size: 14px;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.axis-grid-container,
-.timeline-dragger {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.axis-grid-rect {
-  color: white;
-  font-size: 12px;
-  height: 63px;
+  font-weight: 300;
 }
 
 .axis-grid-text {
@@ -193,18 +179,6 @@
   background-position: -206px -63px;
 }
 
-.timeline-hamburger-date {
-  position: relative;
-  width: 20px;
-  left: 15px;
-  top: 5px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  font-size: 14px;
-  color: white;
-  background: rgba(40, 40, 40, 0.9);
-}
-
 .date-arrow-wrapper {
   width: 60px;
 }
@@ -247,7 +221,7 @@
 
 #wv-timeline-range-selector {
   position: absolute;
-  bottom: -75px;
+  bottom: 0;
   overflow: hidden;
   pointer-events: none;
 }
@@ -259,7 +233,7 @@
 .dragger-container {
   pointer-events: none;
   position: absolute;
-  bottom: -87px;
+  bottom: 0;
 }
 
 .dragger * {
@@ -267,13 +241,9 @@
 }
 
 .timeline-hover-line-container {
-  position: absolute;
-  bottom: -87px;
   pointer-events: none;
-}
-
-.timeline-hover-line {
-  display: 'block';
+  position: absolute;
+  bottom: 0;
 }
 
 /* Mobile date picker */

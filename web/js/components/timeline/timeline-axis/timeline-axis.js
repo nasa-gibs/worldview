@@ -832,7 +832,7 @@ class TimelineAxis extends Component {
     draggerPositionB = draggerPositionB + deltaX;
     animationStartLocation = animationStartLocation + deltaX;
     animationEndLocation = animationEndLocation + deltaX;
-    // PRE/POST GRIDARRAY UPDATE NOT NECESSARY FOR YEAR SINCE ALL YEARS ARE DISPLAYED
+    // update not necessary for year since all years are displayed
     if (timeScale === 'year') {
       let frontDate = this.state.currentTimeRange[0].rawDate;
       let backDate = this.state.currentTimeRange[this.state.currentTimeRange.length - 1].rawDate;
@@ -1148,7 +1148,7 @@ class TimelineAxis extends Component {
             ? <svg className='timeline-axis-svg'
               id='timeline-footer-svg'
               width={axisWidth}
-              height={70}
+              height={64}
               viewBox={`0 0 ${axisWidth} 75`}
               preserveAspectRatio='xMinYMin slice'>
               <defs>

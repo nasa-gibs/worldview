@@ -90,25 +90,21 @@ class TileRect extends PureComponent {
     return (
       <React.Fragment>
         <g onMouseMove={this.showHover}>
-          <rect className="axis-grid-rect" width={gridWidth} height={100}
+          <rect className="axis-grid-rect" width={gridWidth} height={65}
             transform={`translate(${index * gridWidth}, 0)`}
             fill={item.withinRange ? 'rgba(0,0,0,0)' : 'black'}
-            shapeRendering="optimizeSpeed"
           />
           <line className="axis-grid-line" stroke="black" strokeLinecap="round"
             strokeWidth="0.2" x1="0" x2="0" y1="0" y2={lineLengthY}
             transform={`translate(${index * gridWidth + 2.2}, 0)`}
-            shapeRendering="optimizeSpeed"
           />
           <line className="axis-grid-line" stroke="#555" strokeWidth={1} x1="0" x2={gridWidth}
             y1="46" y2="46"
             transform={`translate(${index * gridWidth + 1}, 0)`}
-            shapeRendering="optimizeSpeed"
           />
           <line className="axis-grid-line" stroke="white" strokeLinecap="round"
             strokeWidth={whiteLineStrokeWidth} x1="0" x2="0" y1="0" y2={lineLengthY}
             transform={`translate(${index * gridWidth + 1}, 0)`}
-            shapeRendering="optimizeSpeed"
           />
         </g>
       </React.Fragment>

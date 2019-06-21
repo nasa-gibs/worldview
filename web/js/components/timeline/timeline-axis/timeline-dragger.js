@@ -67,7 +67,7 @@ class Dragger extends PureComponent {
           axis='x'
           onMouseDown={this.selectDragger}
           onDrag={this.handleDragDragger}
-          position={{ x: draggerPosition - 12, y: -20 }}
+          position={{ x: draggerPosition - 12, y: 0 }}
           onStart={this.startShowDraggerTime}
           onStop={this.stopShowDraggerTime}
           disabled={disabled}

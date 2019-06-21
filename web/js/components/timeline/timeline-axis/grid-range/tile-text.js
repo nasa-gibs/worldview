@@ -26,7 +26,7 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
       <text className="axis-grid-text" x="0" y="42"
         fill={item.withinRange ? 'white' : ''}
         transform={`translate(${(index * gridWidth) + xOffsetAdded}, 20)`}
-        textRendering="optimizeSpeed" clipPath="url(#textDisplay)"
+        clipPath="url(#textDisplay)"
       >
         {dateText}
       </text>

@@ -240,7 +240,7 @@ class DraggerContainer extends PureComponent {
     };
     return (
       draggerSelected === 'selectedB'
-        ? <svg className="dragger-container" width={width}>
+        ? <svg className="dragger-container" width={width} height={83}>
           {compareModeActive
             ? <Dragger
               {...sharedProps}
@@ -258,7 +258,7 @@ class DraggerContainer extends PureComponent {
             draggerVisible={draggerVisibleB}
           />
         </svg>
-        : <svg className="dragger-container" width={width}>
+        : <svg className="dragger-container" width={width} height={83}>
           {compareModeActive
             ? <Dragger
               {...sharedProps}

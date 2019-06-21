@@ -263,8 +263,9 @@ class TimelineRangeSelector extends React.Component {
       <svg
         id="wv-timeline-range-selector"
         className="wv-timeline-range-selector"
+        width={this.props.width}
+        height={75}
         style={{
-          width: this.props.width,
           left: this.props.parentOffset
         }}
       >
