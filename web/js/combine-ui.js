@@ -34,16 +34,6 @@ export function combineUi(models, config, MapMouseEvents, store) {
   } catch (e) {
     util.warn(e);
   }
-
-  // ui.dateLabel = dateLabel(models);
-
-  if (config.startDate) {
-    if (!util.browser.small) {
-      // If mobile device, do not build timeline
-      // timelineInit();
-    }
-    // ui.dateWheels = dateWheels(models, config);
-  }
   if (config.features.dataDownload) {
     ui.data = dataUi(store, ui, config);
   }

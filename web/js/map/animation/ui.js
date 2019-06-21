@@ -133,8 +133,6 @@ export function animationUi(models, ui, store) {
    *
    */
   self.getStartDate = function() {
-    // get index+1 of date zoom 'yearly', 'monthly', 'daily', '10-Minute'
-    let dateSelectedZoom = models.date.selectedZoom || 1;
     var state;
     var endDate;
     var startDate;
@@ -142,18 +140,7 @@ export function animationUi(models, ui, store) {
     state = animModel.rangeState;
     endDate = util.parseDateUTC(state.endDate);
     startDate = util.parseDateUTC(state.startDate);
-    // if not index+1 of 4 ('10-Minute'), zero out start/end times and resave
 
-    // # causes UTC zeroing of dates in date model - need to rework if this
-    // # functionality is still going to be used or handle zeroing out
-    // # at actual layer building only
-    // if (dateSelectedZoom < 4) {
-    //   let zeroDate = dateModel.selected;
-    //   debugger;
-    //   util.clearTimeUTC(zeroDate);
-    //   util.clearTimeUTC(startDate);
-    //   dateModel.selected = zeroDate;
-    // }
     let activeDate = dateModel.activeDate; // determine if selected or selectedB
     currentDate = dateModel[activeDate];
     if (currentDate > startDate && self.nextDate(currentDate) < endDate) {
@@ -235,7 +222,6 @@ export function animationUi(models, ui, store) {
 
   // # need to change subdaily argument for custom intervals - rework for all zoom levels presumably
   self.nextDate = function(date) {
-    // console.log(date)
     let customSelected = models.date.customSelected;
     let interval;
     let delta;
