@@ -44,8 +44,8 @@ export function paletteReducer(state = defaultPaletteState, action) {
         })
       });
     case BULK_PALETTE_RENDERING_SUCCESS:
-      return lodashAssign({}, state, {
-        rendered: action.rendered
+      return update(state, {
+        rendered: { $merge: action.rendered || {} }
       });
     case REQUEST_PALETTE_SUCCESS:
       let isLoading = update(state.isLoading, { $unset: [action.id] });
@@ -61,14 +61,8 @@ export function paletteReducer(state = defaultPaletteState, action) {
         activeB: lodashCloneDeep(state.active)
       });
     case SET_RANGE_AND_SQUASH:
-      return lodashAssign({}, state, {
-        [groupName]: action.palettes
-      });
-    case CLEAR_CUSTOM:
-      return lodashAssign({}, state, {
-        [groupName]: action.palettes || {}
-      });
     case SET_CUSTOM:
+    case CLEAR_CUSTOM:
       return lodashAssign({}, state, {
         [groupName]: action.palettes || {}
       });
