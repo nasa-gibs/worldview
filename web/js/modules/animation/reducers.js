@@ -62,7 +62,8 @@ export function animationReducer(state = defaultState, action) {
     case UPDATE_START_AND_END_DATE:
       return lodashAssign({}, state, {
         startDate: action.startDate,
-        endDate: action.endDate
+        endDate: action.endDate,
+        isPlaying: false
       });
     case UPDATE_START_DATE:
       return lodashAssign({}, state, {
