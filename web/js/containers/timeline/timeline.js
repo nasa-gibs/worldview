@@ -78,7 +78,7 @@ class Timeline extends React.Component {
       draggerPositionB: 0,
       draggerVisible: true,
       draggerVisibleB: false,
-      moved: false,
+      hasMoved: false,
       hoverTime: '',
       hoverLinePosition: 0,
       showHoverLine: false,
@@ -208,7 +208,7 @@ class Timeline extends React.Component {
   /**
   * @desc handles dynamic position changes from axis that affect dragger and range select
   * @param {Object} args
-  * @param {Boolean} moved
+  * @param {Boolean} hasMoved
   * @param {Boolean} isTimelineDragging
   * @param {Number} position
   * @param {Number} transformX
@@ -223,7 +223,7 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   updatePositioning = ({
-    moved,
+    hasMoved,
     isTimelineDragging,
     position,
     transformX,
@@ -237,7 +237,7 @@ class Timeline extends React.Component {
     animationEndLocation
   }, hoverTime = this.state.hoverTime) => {
     this.setState({
-      moved,
+      hasMoved,
       isTimelineDragging,
       showHoverLine: false,
       position,
@@ -472,17 +472,17 @@ class Timeline extends React.Component {
   * @param {Number} draggerPosition
   * @param {Boolean} draggerVisible
   * @param {Boolean} otherDraggerVisible
-  * @param {Boolean} moved
+  * @param {Boolean} hasMoved
   * @returns {void}
   */
-  updateDraggerDatePosition = (newDate, draggerSelected, draggerPosition, draggerVisible, otherDraggerVisible, moved) => {
+  updateDraggerDatePosition = (newDate, draggerSelected, draggerPosition, draggerVisible, otherDraggerVisible, hasMoved) => {
     if (draggerSelected === 'selected') {
       this.setState({
         draggerPosition: draggerPosition || this.state.draggerPosition,
         draggerVisible: draggerVisible || this.state.draggerVisible,
         draggerVisibleB: otherDraggerVisible || this.state.draggerVisibleB,
         draggerTimeState: newDate || this.state.draggerTimeState,
-        moved: moved || this.state.moved
+        hasMoved: hasMoved || this.state.hasMoved
       });
       if (newDate) {
         this.onDateChange(newDate, 'selected');
@@ -493,7 +493,7 @@ class Timeline extends React.Component {
         draggerVisible: otherDraggerVisible || this.state.draggerVisible,
         draggerVisibleB: draggerVisible || this.state.draggerVisibleB,
         draggerTimeStateB: newDate || this.state.draggerTimeStateB,
-        moved: moved || this.state.moved
+        hasMoved: hasMoved || this.state.hasMoved
       });
       if (newDate) {
         this.onDateChange(newDate, 'selectedB');
@@ -650,7 +650,7 @@ class Timeline extends React.Component {
       customSelected,
       customIntervalValue,
       customIntervalZoomLevel,
-      compareModeActive,
+      isCompareModeActive,
       axisWidth,
       timelineEndDateLimit,
       timelineStartDateLimit,
@@ -692,7 +692,7 @@ class Timeline extends React.Component {
       showHoverLine,
       showDraggerTime,
       hoverLinePosition,
-      moved
+      hasMoved
     } = this.state;
     let selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
     return (
@@ -756,13 +756,13 @@ class Timeline extends React.Component {
                     frontDate={frontDate}
                     backDate={backDate}
                     isTimelineDragging={isTimelineDragging}
-                    moved={moved}
+                    hasMoved={hasMoved}
                     axisWidth={axisWidth}
                     dateA={dateA}
                     dateB={dateB}
                     hasSubdailyLayers={hasSubdailyLayers}
                     changeTimeScale={this.changeTimeScale}
-                    compareModeActive={compareModeActive}
+                    isCompareModeActive={isCompareModeActive}
                     draggerSelected={draggerSelected}
                     onChangeSelectedDragger={toggleActiveCompareState}
                     timelineStartDateLimit={timelineStartDateLimit}
@@ -846,7 +846,7 @@ class Timeline extends React.Component {
                       toggleShowDraggerTime={this.toggleShowDraggerTime}
                       onChangeSelectedDragger={toggleActiveCompareState}
                       updateDraggerDatePosition={this.updateDraggerDatePosition}
-                      compareModeActive={compareModeActive}
+                      isCompareModeActive={isCompareModeActive}
                       draggerTimeState={draggerTimeState}
                       draggerTimeStateB={draggerTimeStateB}
                       draggerPosition={draggerPosition}
@@ -935,7 +935,7 @@ function mapStateToProps(state) {
   } = date;
   const { screenWidth, lessThan } = browser;
   const { isCompareA, activeString } = compare;
-  const compareModeActive = compare.active;
+  const isCompareModeActive = compare.active;
   const isSmallScreen = lessThan.medium;
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
   customSelected = Boolean(customSelected);
@@ -954,7 +954,7 @@ function mapStateToProps(state) {
   }
 
   let endTime;
-  if (compareModeActive) {
+  if (isCompareModeActive) {
     hasSubdailyLayers =
       hasSubDaily(layers['active']) || hasSubDaily(layers['activeB']);
     endTime = getEndTime(layers, config);
@@ -993,7 +993,7 @@ function mapStateToProps(state) {
     draggerSelected: isCompareA ? 'selected' : 'selectedB', // ! will work for dragger?
     hasSubdailyLayers,
     customSelected,
-    compareModeActive,
+    isCompareModeActive,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
     startDate: config.startDate,
@@ -1076,7 +1076,7 @@ Timeline.propTypes = {
   draggerSelected: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
   customSelected: PropTypes.bool,
-  compareModeActive: PropTypes.bool,
+  isCompareModeActive: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   startDate: PropTypes.string,
