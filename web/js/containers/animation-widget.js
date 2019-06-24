@@ -298,7 +298,8 @@ function mapStateToProps(state) {
     modal,
     palettes,
     config,
-    map
+    map,
+    browser
   } = state;
   let {
     startDate,
@@ -329,6 +330,7 @@ function mapStateToProps(state) {
     maxDate: maxDate,
     isActive:
       isActive &&
+      browser.greaterThan.small &&
       lodashGet(map, 'ui.selected.frameState_') &&
       sidebar.activeTab !== 'download' && // No Animation when data download is active
       !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'), // No Animation when Image download is open

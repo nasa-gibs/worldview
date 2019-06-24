@@ -143,8 +143,11 @@ class Sidebar extends React.Component {
       isCollapsed,
       isCompareMode,
       activeTab,
-      tabTypes
+      tabTypes,
+      isMobile,
+      changeTab
     } = this.props;
+    if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
     return (
       <ErrorBoundary>
@@ -179,6 +182,7 @@ class Sidebar extends React.Component {
               activeTab={activeTab}
               onTabClick={onTabClick}
               tabTypes={tabTypes}
+              isMobile={isMobile}
               toggleSidebar={this.toggleSidebar.bind(this)}
               isCompareMode={isCompareMode}
             />
@@ -221,7 +225,7 @@ function mapStateToProps(state) {
 
   return {
     activeTab,
-    isMobile: browser.is.small,
+    isMobile: browser.lessThan.medium,
     hasLocalStorage: util.browser.localStorage,
     screenHeight: screenHeight,
     isCompareMode: compare.active,
@@ -235,6 +239,9 @@ function mapStateToProps(state) {
   };
 }
 const mapDispatchToProps = dispatch => ({
+  changeTab: str => {
+    dispatch(changeTab(str));
+  },
   onTabClick: str => {
     googleTagManager.pushEvent({
       event: str + '_tab'
@@ -278,5 +285,6 @@ Sidebar.propTypes = {
   collapseSidebar: PropTypes.func,
   collapseExpandToggle: PropTypes.func,
   loadedCustomPalettes: PropTypes.func,
-  config: PropTypes.object
+  config: PropTypes.object,
+  changeTab: PropTypes.func
 };

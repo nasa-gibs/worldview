@@ -33,6 +33,9 @@ class FooterContent extends React.Component {
       compareFeature,
       showAll
     } = this.props;
+    if (isCompareActive && isMobile) {
+      toggleCompare();
+    }
     if (activeTab === 'layers') {
       return (
         <React.Fragment>

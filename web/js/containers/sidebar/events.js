@@ -12,6 +12,7 @@ import {
 } from '../../modules/natural-events/actions';
 import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { get as lodashGet } from 'lodash';
+import { collapseSidebar } from '../../modules/sidebar/actions';
 
 class Events extends React.Component {
   constructor(props) {
@@ -64,7 +65,8 @@ class Events extends React.Component {
       sources,
       height,
       deselectEvent,
-      hasRequestError
+      hasRequestError,
+      isMobile
     } = this.props;
     const errorOrLoadingText = isLoading
       ? 'Loading...'
@@ -94,7 +96,9 @@ class Events extends React.Component {
                   <Event
                     key={event.id}
                     event={event}
-                    selectEvent={() => selectEvent(event.id, event.date)}
+                    selectEvent={() =>
+                      selectEvent(event.id, event.date, isMobile)
+                    }
                     deselectEvent={deselectEvent}
                     isSelected={
                       selected.id === event.id && visibleEvents[event.id]
@@ -117,8 +121,11 @@ class Events extends React.Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  selectEvent: (id, date) => {
+  selectEvent: (id, date, isMobile) => {
     dispatch(selectEvent(id, date));
+    if (isMobile) {
+      dispatch(collapseSidebar());
+    }
   },
   deselectEvent: (id, date) => {
     dispatch(deselectEvent());
@@ -139,7 +146,8 @@ function mapStateToProps(state) {
     requestedEventSources,
     requestedEventCategories,
     config,
-    proj
+    proj,
+    browser
   } = state;
   const { selected, showAll } = state.events;
 
@@ -176,7 +184,8 @@ function mapStateToProps(state) {
     selected,
     visibleEvents,
     apiURL,
-    config
+    config,
+    isMobile: browser.lessThan.medium
   };
 }
 export default connect(
@@ -203,5 +212,6 @@ Events.propTypes = {
   showAll: PropTypes.bool,
   isLoading: PropTypes.bool,
   selectEvent: PropTypes.func,
-  hasRequestError: PropTypes.bool
+  hasRequestError: PropTypes.bool,
+  isMobile: PropTypes.bool
 };
