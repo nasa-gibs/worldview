@@ -313,6 +313,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     var date, urlParameters, extent, source, matrixSet, matrixIds, start;
     const selectedProj = proj.selected;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+    const activeGroupStr = options.group ? options.group : compare.activeString;
 
     source = config.sources[def.source];
     extent = selectedProj.maxExtent;
@@ -387,16 +388,14 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
       var vectorStyles = config.vectorStyles;
       var vectorStyleId;
-      console.log(state);
-      // TODO: Change active to groupName
+
       // TODO change `0` to actually loop through the active layers
       // and find the one equal to layerName
-      if (state.layers.active[0].id === layerName && state.layers.active[0].custom) {
-        vectorStyleId = state.layers.active[0].custom;
+      if (state.layers[activeGroupStr] && state.layers[activeGroupStr][0].id === layerName && state.layers[activeGroupStr][0].custom) {
+        vectorStyleId = state.layers[activeGroupStr][0].custom;
       } else {
         vectorStyleId = def.vectorStyle.id;
       }
-      // var vectorStyleId = def.vectorStyle.id;
 
       setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
     }

@@ -258,9 +258,11 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
-  console.log(layer, glStyle, vectorStyleId);
+
+  // Apply mapbox-gl styles
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
 
+  // Filter Orbit Tracks
   if (glStyle.name === 'Orbit Tracks') {
     // Filter time by 5 mins
     layer.setStyle(function(feature, resolution) {
