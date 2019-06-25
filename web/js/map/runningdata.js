@@ -1,6 +1,9 @@
 import util from '../util/util';
-import lodashIsEqual from 'lodash/isEqual';
-import lodashIsEmpty from 'lodash/isEmpty';
+import {
+  get as lodashGet,
+  isEmpty as lodashIsEmpty,
+  isEqual as lodashIsEqual
+} from 'lodash';
 import { getPalette } from '../modules/palettes/selectors';
 import {
   runningData as runningDataAction,
@@ -73,7 +76,10 @@ export function MapRunningData(models, compareUi, store) {
         return;
       }
       if (!isFromActiveCompareRegion(map, coords, layer.wv)) return;
-      if (layer.wv.def.palette) {
+      if (
+        layer.wv.def.palette &&
+        !lodashGet(layer, 'wv.def.disableHoverValue')
+      ) {
         layerId = layer.wv.id;
         legends = getPalette(layerId, undefined, undefined, state);
         hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
