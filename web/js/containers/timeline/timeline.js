@@ -255,8 +255,79 @@ class Timeline extends React.Component {
   }
 
   /**
+  * @desc handles dynamic positioning update based on simple drag
+  * @param {Object} args
+  * @param {Boolean} hasMoved
+  * @param {Boolean} isTimelineDragging
+  * @param {Number} position
+  * @param {Number} draggerPosition
+  * @param {Number} draggerPositionB
+  * @param {Number} animationStartLocation
+  * @param {Number} animationEndLocation
+  * @returns {void}
+  */
+  updatePositioningOnSimpleDrag = ({
+    hasMoved,
+    isTimelineDragging,
+    position,
+    draggerPosition,
+    draggerPositionB,
+    animationStartLocation,
+    animationEndLocation
+  }) => {
+    this.setState({
+      hasMoved,
+      isTimelineDragging,
+      showHoverLine: false,
+      position,
+      draggerPosition,
+      draggerPositionB,
+      animationStartLocation,
+      animationEndLocation
+    });
+  }
+
+  /**
+  * @desc handles dynamic positioning update based on axis drag stop event
+  * @param {Object} args
+  * @param {Boolean} hasMoved
+  * @param {Boolean} isTimelineDragging
+  * @param {Number} position
+  * @param {Number} transformX
+  * @returns {void}
+  */
+  updatePositioningOnAxisStopDrag = ({
+    hasMoved,
+    isTimelineDragging,
+    position,
+    transformX
+  }, hoverTime = this.state.hoverTime) => {
+    this.setState({
+      hasMoved,
+      isTimelineDragging,
+      showHoverLine: false,
+      position,
+      transformX,
+      hoverTime
+    });
+  }
+
+  /**
+  * @desc update is timeline moved (drag timeline vs. click) and if timeline is dragging
+  * @param {Boolean} hasMoved
+  * @param {Boolean} isTimelineDragging
+  * @returns {void}
+  */
+  updateTimelineMoveAndDrag = (hasMoved, isTimelineDragging) => {
+    this.setState({
+      hasMoved,
+      isTimelineDragging
+    });
+  }
+
+  /**
   * @desc handle left/right arrow decrement/increment date
-  * @param {Number} signconstant - used to determine if decrement(-1) or increment(1)
+  * @param {Number} signconstant - used to determine if decrement (-1) or increment (1)
   * @returns {void}
   */
   handleArrowDateChange(signconstant) {
@@ -324,12 +395,13 @@ class Timeline extends React.Component {
 
   /**
   * @desc show/hide custom interval modal
+  * @param {Boolean} isOpen
   * @returns {void}
   */
-  toggleCustomIntervalModal = () => {
-    this.setState(prevState => ({
-      customIntervalModalOpen: !prevState.customIntervalModalOpen
-    }));
+  toggleCustomIntervalModal = (isOpen) => {
+    this.setState({
+      customIntervalModalOpen: isOpen
+    });
   };
 
   /**
@@ -369,13 +441,11 @@ class Timeline extends React.Component {
       delta = 1;
     }
     this.props.selectInterval(delta, timeScale, customSelected);
-    this.setState({
-      customIntervalModalOpen: modalOpen
-    });
+    this.toggleCustomIntervalModal(modalOpen);
   };
 
   /**
-  * @desc open animation wdiget
+  * @desc open animation widget
   * @returns {void}
   */
   clickAnimationButton = () => {
@@ -513,6 +583,7 @@ class Timeline extends React.Component {
       draggerVisibleB
     });
   }
+
   static getDerivedStateFromProps(props, currentState) {
     // Update animation Date states when animation is initiated
     if (!currentState.animationEndLocationDate && !currentState.animationStartLocationDate && props.animStartLocationDate && props.animEndLocationDate) {
@@ -535,6 +606,7 @@ class Timeline extends React.Component {
     }
     return null;
   }
+
   componentDidUpdate(prevProps, prevState) {
     let prevStartLocationDate = prevProps.animStartLocationDate;
     let prevEndLocationDate = prevProps.animEndLocationDate;
@@ -564,26 +636,36 @@ class Timeline extends React.Component {
       // and no custom value has been initialized
       if (customIntervalValue === 1 && customIntervalZoomLevel === 3) {
         if (!prevProps.customSelected && customSelected) {
-          this.setState({
-            customIntervalModalOpen: true
-          });
+          this.toggleCustomIntervalModal(true);
         }
         if (prevProps.customSelected && !customSelected) {
-          this.setState({
-            customIntervalModalOpen: false
-          });
+          this.toggleCustomIntervalModal(false);
         }
       }
     }
     // handle draggerTimeState updates if date changes
     if (dateA !== prevProps.dateA && dateA !== this.state.draggerTimeState) {
-      this.setState({
-        draggerTimeState: dateA
-      });
+      this.updateDraggerTimeState(dateA, false);
     }
     if (dateB !== prevProps.dateB && dateB !== this.state.draggerTimeStateB) {
+      this.updateDraggerTimeState(dateB, true);
+    }
+  }
+
+  /**
+  * @desc update dragger time state
+  * @param {String} date
+  * @param {Boolean} is dragger B selected to update
+  * @returns {void}
+  */
+  updateDraggerTimeState = (date, isDraggerB) => {
+    if (isDraggerB) {
       this.setState({
-        draggerTimeStateB: dateB
+        draggerTimeStateB: date
+      });
+    } else {
+      this.setState({
+        draggerTimeState: date
       });
     }
   }
@@ -779,6 +861,9 @@ class Timeline extends React.Component {
                     draggerVisibleB={draggerVisibleB}
                     transformX={transformX}
                     updatePositioning={this.updatePositioning}
+                    updateTimelineMoveAndDrag={this.updateTimelineMoveAndDrag}
+                    updatePositioningOnSimpleDrag={this.updatePositioningOnSimpleDrag}
+                    updatePositioningOnAxisStopDrag={this.updatePositioningOnAxisStopDrag}
                     position={position}
                     animationStartLocation={animationStartLocation}
                     animationEndLocation={animationEndLocation}
@@ -1051,15 +1136,15 @@ const mapDispatchToProps = dispatch => ({
   toggleActiveCompareState: () => {
     dispatch(toggleActiveCompareState());
   },
-  // update anim startDate
+  // update animation startDate
   onUpdateStartDate: date => {
     dispatch(changeStartDate(date));
   },
-  // update anim endDate
+  // update animation endDate
   onUpdateEndDate: date => {
     dispatch(changeEndDate(date));
   },
-  // update anim startDate and endDate
+  // update animation startDate and endDate
   onUpdateStartAndEndDate: (startDate, endDate) => {
     dispatch(changeStartAndEndDate(startDate, endDate));
   }
@@ -1100,7 +1185,13 @@ Timeline.propTypes = {
   hideTimeline: PropTypes.bool,
   isSmallScreen: PropTypes.bool,
   toggleActiveCompareState: PropTypes.func,
-  changeDate: PropTypes.func
+  changeDate: PropTypes.func,
+  changeTimeScale: PropTypes.func,
+  selectInterval: PropTypes.func,
+  changeCustomInterval: PropTypes.func,
+  closeAnimation: PropTypes.func,
+  openAnimation: PropTypes.func,
+  updateAppNow: PropTypes.func
 };
 
 // get axisWidth and parentOffset for axis, footer, and leftOffset calculations
@@ -1118,7 +1209,7 @@ const getEndTime = (layers, config) => {
 /**
  * @param  {Number} delta Date and direction to change
  * @param  {Number} increment Zoom level of change
- *                  e.g. months,minutes, years, days
+ *                  e.g. months, minutes, years, days
  * @return {Object} JS Date Object
  */
 const getNextTimeSelection = (delta, increment, prevDate) => {

@@ -176,6 +176,10 @@ class DraggerContainer extends PureComponent {
   }
 
   componentDidMount() {
+    this.setInitDraggerTimeStates();
+  }
+
+  setInitDraggerTimeStates = () => {
     this.setState({
       draggerTimeState: this.props.draggerTimeState,
       draggerTimeStateB: this.props.draggerTimeStateB
