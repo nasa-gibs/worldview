@@ -211,19 +211,13 @@ class LayerSettings extends React.Component {
    */
   renderVectorStyles() {
     const {
-      setFilterRange,
+
       setStyle,
       clearStyle,
       groupName,
       layer,
       vectorStyles
     } = this.props;
-    // const vectorStyle = getVectorStyle(layer.id, 0);
-    const max = 100; // Placeholder
-    // const start = vectorStyle.min || 0;
-    const start = 0; // Placeholder
-    // const end = vectorStyle.max || max;
-    const end = max; // Placeholder
     var customStyle;
     if (layer.custom && layer.custom[0]) {
       customStyle = layer.custom[0];

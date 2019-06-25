@@ -1,13 +1,11 @@
 import {
   SET_FILTER_RANGE,
   CLEAR_VECTORSTYLE,
-  SET_VECTORSTYLE,
-  LOADED_CUSTOM_VECTORSTYLES
+  SET_VECTORSTYLE
 } from './constants';
 import {
   setRange as setRangeSelector,
   setStyleFunction
-  // clearCustomSelector
 } from './selectors';
 
 /**
@@ -89,16 +87,5 @@ export function clearStyle(layer, vectorStyleId, groupName) {
       activeString: groupName,
       vectorStyles: newActiveVectorStylesObj
     });
-  };
-}
-/**
- * Action signifying custom vectorStyles have been loaded
- *
- * @param {Object} customs | Custom VectorStyles from Config
- */
-export function loadedDefaultVectorStyles(customs) {
-  return {
-    type: LOADED_CUSTOM_VECTORSTYLES,
-    custom: customs
   };
 }

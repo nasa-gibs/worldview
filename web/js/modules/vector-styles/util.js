@@ -1,7 +1,6 @@
 import update from 'immutability-helper';
 import {
   each as lodashEach,
-  // find as lodashFind,
   assign as lodashAssign
 } from 'lodash';
 import {
@@ -10,7 +9,6 @@ import {
   setRange as setRangeSelector,
   findIndex as findVectorStyleExtremeIndex
 } from './selectors';
-// import util from '../../util/util';
 
 export function getVectorStyleAttributeArray(layer) {
   var isCustomActive = false;
@@ -27,13 +25,13 @@ export function getVectorStyleAttributeArray(layer) {
   [styleObj, minObj, maxObj].forEach(obj => {
     if (obj.isActive) {
       attrArray.push({
-        id: obj.key === 'custom' ? 'vectorStyle' : obj.key,
+        id: obj.key === 'custom' ? 'style' : obj.key,
         value: obj.value
       });
     } else {
       if (obj.isActive) {
         attrArray.push({
-          id: obj.key === 'custom' ? 'vectorStyle' : obj.key,
+          id: obj.key === 'custom' ? 'style' : obj.key,
           value: ''
         });
       }
@@ -56,6 +54,7 @@ export function loadVectorStyles(permlinkState, state) {
         var min = [];
         var max = [];
         var count = 0;
+        // TODO this try block never works
         if (layerDef.custom && layerDef.custom[0]) {
           let vectorStyleId = layerDef.custom[0];
           try {

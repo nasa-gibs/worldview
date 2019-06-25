@@ -11,7 +11,7 @@ class VectorStyleSelect extends React.Component {
   }
 
   /**
-   * Pass palette to model after selection
+   * Pass vector style to model after selection
    * @param {String} id | custom VectorStyle Id
    */
   onChangeVectorStyle(vectorStyleId) {
@@ -29,7 +29,7 @@ class VectorStyleSelect extends React.Component {
     this.setState({ activeVectorStyle: vectorStyleId });
   }
   /**
-   * Apply logic to render correct palette selection
+   * Apply logic to render correct vectorStyle selection
    * @param {String} id | Legend Id
    */
   customLegend(styleLayerObject) {
@@ -47,7 +47,7 @@ class VectorStyleSelect extends React.Component {
   /**
    * Render classification customs when there is only one
    * Color in colormap
-   * @param {Object} palette | VectorStyle object
+   * @param {Object} vectorStyle | VectorStyle object
    * @param {String} id | colormap Id
    * @param {String} description | Colormap name
    * @param {Boolean} isSelected | is this colormap active

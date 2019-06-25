@@ -281,7 +281,6 @@ function mapStateToProps(state, ownProps) {
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
   const paletteName = lodashGet(config, `layers.${layer.id}.palette.id`);
-  const vectorStyleName = lodashGet(config, `layers.${layer.id}.vectorStyle.id`);
   const paletteLegends =
     hasPalette && renderedPalettes[paletteName]
       ? getPaletteLegends(layer.id, layerGroupName, state)
