@@ -1,10 +1,10 @@
 {
     "layers": {
-        "MODIS_Aqua_Snow_Cover_Monthly_Average_Pct": {
-            "id":       "MODIS_Aqua_Snow_Cover_Monthly_Average_Pct",
+        "MODIS_Aqua_L3_Snow_Cover_Monthly_Average_Pct": {
+            "id":       "MODIS_Aqua_L3_Snow_Cover_Monthly_Average_Pct",
             "title":    "Days with Snow Cover (L3, Monthly, Average Percent)",
             "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Snow_Cover_Monthly_Average_Pct",
+            "description": "modis/aqua/MODIS_Aqua_L3_Snow_Cover_Monthly_Average_Pct",
             "tags":     "",
             "group":    "overlays",
             "layergroup": [

@@ -1,10 +1,10 @@
 {
     "layers": {
-        "MODIS_Combined_Albedo_Daily": {
-            "id":       "MODIS_Combined_Albedo_Daily",
+        "MODIS_Combined_L3_Albedo_Daily": {
+            "id":       "MODIS_Combined_L3_Albedo_Daily",
             "title":    "Albedo (L3, Daily)",
             "subtitle": "Terra and Aqua / MODIS",
-            "description": "modis/combined/MODIS_Combined_Albedo_Daily",
+            "description": "modis/combined/MODIS_Combined_L3_Albedo_Daily",
             "tags":     "",
             "group":    "overlays",
             "layergroup": [

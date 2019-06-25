@@ -1,10 +1,10 @@
 {
     "layers": {
-        "MODIS_Aqua_Sea_Ice_Daily": {
-            "id":       "MODIS_Aqua_Sea_Ice_Daily",
+        "MODIS_Aqua_L3_Sea_Ice_Daily": {
+            "id":       "MODIS_Aqua_L3_Sea_Ice_Daily",
             "title":    "Sea Ice Extent (L3, Daily)",
             "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_Sea_Ice_Daily",
+            "description": "modis/aqua/MODIS_Aqua_L3_Sea_Ice_Daily",
             "tags":     "",
             "group":    "overlays",
             "layergroup": [

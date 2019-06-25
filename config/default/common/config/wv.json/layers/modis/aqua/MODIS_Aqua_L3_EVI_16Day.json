@@ -1,10 +1,10 @@
 {
     "layers": {
-        "MODIS_Aqua_EVI_16Day": {
-            "id":       "MODIS_Aqua_EVI_16Day",
+        "MODIS_Aqua_L3_EVI_16Day": {
+            "id":       "MODIS_Aqua_L3_EVI_16Day",
             "title":    "Enhanced Vegetation Index (L3, 16-Day)",
             "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_EVI_16Day",
+            "description": "modis/aqua/MODIS_Aqua_L3_EVI_16Day",
             "tags":     "",
             "group":    "overlays",
             "layergroup": [
