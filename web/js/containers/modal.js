@@ -51,7 +51,14 @@ class ModalContainer extends Component {
     );
   }
   render() {
-    const { isCustom, id, isOpen, isTemplateModal, customProps } = this.props;
+    const {
+      isCustom,
+      id,
+      isOpen,
+      isTemplateModal,
+      customProps,
+      isMobile
+    } = this.props;
     // Populate props from custom obj
     const newProps =
       isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
@@ -71,8 +78,10 @@ class ModalContainer extends Component {
       onClose,
       CompletelyCustomModal,
       bodyComponentProps,
-      timeout
+      timeout,
+      desktopOnly
     } = newProps;
+
     const style = this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
@@ -82,6 +91,9 @@ class ModalContainer extends Component {
         onClose();
       }
     };
+    if (isMobile && isOpen && desktopOnly) {
+      toggleWithClose();
+    }
     return (
       <ErrorBoundary>
         <Modal
@@ -154,6 +166,7 @@ function mapStateToProps(state) {
     headerText,
     isCustom,
     id,
+    isMobile: state.browser.lessThan.medium,
     bodyTemplate,
     isTemplateModal,
     customProps
