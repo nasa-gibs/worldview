@@ -1,10 +1,10 @@
 {
     "layers": {
-        "MODIS_Terra_Snow_Cover_Monthly_Average_Pct": {
-            "id":       "MODIS_Terra_Snow_Cover_Monthly_Average_Pct",
+        "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct": {
+            "id":       "MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
             "title":    "Days with Snow Cover (L3, Monthly, Average Percent)",
             "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_Snow_Cover_Monthly_Average_Pct",
+            "description": "modis/terra/MODIS_Terra_L3_Snow_Cover_Monthly_Average_Pct",
             "group":    "overlays",
             "layergroup": [
               "modis",

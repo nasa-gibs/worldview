@@ -1,10 +1,10 @@
 {
     "layers": {
-        "MODIS_Terra_NDVI_16Day": {
-            "id":       "MODIS_Terra_NDVI_16Day",
+        "MODIS_Terra_L3_NDVI_16Day": {
+            "id":       "MODIS_Terra_L3_NDVI_16Day",
             "title":    "Vegetation Index (L3, 16-Day)",
             "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_NDVI_16Day",
+            "description": "modis/terra/MODIS_Terra_L3_NDVI_16Day",
             "group":    "overlays",
             "tags":     "ndvi normalized difference vegetation index",
             "layergroup": [
