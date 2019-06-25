@@ -258,7 +258,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
-
+  console.log(layer, glStyle, vectorStyleId);
   styleFunction = stylefunction(layer, glStyle, vectorStyleId);
 
   if (glStyle.name === 'Orbit Tracks') {
