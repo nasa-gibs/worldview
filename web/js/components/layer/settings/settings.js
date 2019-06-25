@@ -7,7 +7,6 @@ import Opacity from './opacity';
 import Palette from './palette';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
-import VectorFilter from './vector-filter';
 import {
   getCheckerboard,
   palettesTranslate
@@ -231,16 +230,6 @@ class LayerSettings extends React.Component {
     }
     return (
       <React.Fragment>
-        <VectorFilter
-          setFilterRange={setFilterRange}
-          min={0}
-          max={max}
-          start={start}
-          groupName={groupName}
-          end={end}
-          layerId={layer.id}
-          index={0}
-        />
         <VectorStyle
           setStyle={setStyle}
           clearStyle={clearStyle}

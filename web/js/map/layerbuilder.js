@@ -384,19 +384,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       source: sourceOptions
     });
 
-    function getVals() {
-      // Get slider values
-      var parent = this.parentNode;
-      var slides = parent.getElementsByTagName('input');
-      var slide1 = parseFloat(slides[0].value);
-      var slide2 = parseFloat(slides[1].value);
-      // Neither slider will clip the other, so make sure we determine which is larger
-      if (slide1 > slide2) { var tmp = slide2; slide2 = slide1; slide1 = tmp; }
-
-      var displayElement = parent.getElementsByClassName('rangeValues')[0];
-      displayElement.innerHTML = slide1 + ' - ' + slide2;
-    }
-
     if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
       var vectorStyles = config.vectorStyles;
       var vectorStyleId;
@@ -412,45 +399,6 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       // var vectorStyleId = def.vectorStyle.id;
 
       setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
-
-      // Initialize Sliders
-      var sliderSections = document.getElementsByClassName('range-slider');
-      for (var x = 0; x < sliderSections.length; x++) {
-        var sliders = sliderSections[x].getElementsByTagName('input');
-        for (var y = 0; y < sliders.length; y++) {
-          if (sliders[y].type === 'range') {
-            sliders[y].oninput = getVals;
-            // Manually trigger event first time to display values
-            sliders[y].oninput();
-          }
-        }
-      }
-
-      let confidenceMinFilter = document.getElementById('confidenceMinFilter');
-      let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
-
-      document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
-      document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
-
-      // TODO: Add check for date change and re-apply
-      // TODO: Change this on chang to target the controls
-      // $(document).on('change', function(e) {
-      //   if (glStyle.name === 'FIRMS') {
-      //     // FIRMS Filters
-      //     let confidenceMinFilter = document.getElementById('confidenceMinFilter');
-      //     let confidenceMaxFilter = document.getElementById('confidenceMaxFilter');
-
-      //     document.getElementById('confidenceMinFilterLabel').innerHTML = confidenceMinFilter.value;
-      //     document.getElementById('confidenceMaxFilterLabel').innerHTML = confidenceMaxFilter.value;
-
-      //     // Filter by a feature
-      //     layer.setStyle(function(feature, resolution) {
-      //       if (feature.get('CONFIDENCE') >= confidenceMinFilter.value && feature.get('CONFIDENCE') <= confidenceMaxFilter.value) {
-      //         return styleFunction(feature, resolution);
-      //       }
-      //     });
-      //   }
-      // });
     }
 
     return layer;
