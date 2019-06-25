@@ -74,7 +74,7 @@ class Sidebar extends React.Component {
       let basePadding = 110;
       newHeight =
         screenHeight -
-        (iconHeight + topOffset + tabHeight + basePadding + footerHeight);
+        (iconHeight + topOffset + tabHeight + basePadding + footerHeight) - 10;
       // Issue #1415: This was checking for subComponentHeight !== newHeight.
       // Sometimes it would get stuck in a loop in which the newHeight
       // would vary by a single pixel on each render. Hack fix is to
