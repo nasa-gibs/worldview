@@ -28,10 +28,13 @@ class CustomIntervalSelectorWidget extends PureComponent {
     }
   }
 
+  closeCustomIntervalModal = () => {
+    this.props.toggleCustomIntervalModal(false);
+  }
+
   componentDidUpdate(prevProps) {
-    let { customIntervalModalOpen } = this.props;
     // handle focus widget on opening
-    if (customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
+    if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
       this.customIntervalWidget.focus();
     }
   }
@@ -40,7 +43,6 @@ class CustomIntervalSelectorWidget extends PureComponent {
     let {
       customIntervalModalOpen,
       hasSubdailyLayers,
-      toggleCustomIntervalModal,
       customDelta,
       customIntervalZoomLevel
     } = this.props;
@@ -64,7 +66,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
             changeZoomLevel={this.changeZoomLevel}
           />
         </div>
-        <i className="fa fa-times wv-close" onClick={toggleCustomIntervalModal}/>
+        <i className="fa fa-times wv-close" onClick={this.closeCustomIntervalModal}/>
       </div>
     );
   }
