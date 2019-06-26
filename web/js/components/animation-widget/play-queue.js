@@ -52,19 +52,6 @@ class PlayAnimation extends React.Component {
    */
   getStartDate() {
     const { endDate, startDate, currentDate } = this.props;
-
-    // if not index+1 of 4 ('10-Minute'), zero out start/end times and resave
-
-    // # causes UTC zeroing of dates in date model - need to rework if this
-    // # functionality is still going to be used or handle zeroing out
-    // # at actual layer building only
-    // if (dateSelectedZoom < 4) {
-    //   let zeroDate = dateModel.selected;
-    //   debugger;
-    //   util.clearTimeUTC(zeroDate);
-    //   util.clearTimeUTC(startDate);
-    //   dateModel.selected = zeroDate;
-    // }
     if (currentDate > startDate && this.nextDate(currentDate) < endDate) {
       return util.toISOStringSeconds(this.nextDate(currentDate));
     }
@@ -273,7 +260,6 @@ class PlayAnimation extends React.Component {
    *
    */
 
-  // # need to change subdaily argument for custom intervals - rework for all zoom levels presumably
   nextDate(date) {
     const { interval, delta } = this.props;
     return util.dateAdd(date, interval, delta);

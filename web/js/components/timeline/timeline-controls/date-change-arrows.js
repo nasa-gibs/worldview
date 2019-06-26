@@ -56,6 +56,7 @@ class DateChangeArrows extends PureComponent {
           title="Click and hold to animate backwards"
           onMouseDown={this.leftArrowDown}
           onMouseUp={this.leftArrowUp}
+          onMouseLeave={this.leftArrowUp}
         >
           <svg id="timeline-svg" width="24" height="30">
             <path
@@ -72,6 +73,7 @@ class DateChangeArrows extends PureComponent {
           title="Click and hold to animate forwards"
           onMouseDown={this.rightArrowDown}
           onMouseUp={this.rightArrowUp}
+          onMouseLeave={this.rightArrowUp}
         >
           <svg width="24" height="30">
             <path

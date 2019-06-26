@@ -650,6 +650,17 @@ class Timeline extends React.Component {
     if (dateB !== prevProps.dateB && dateB !== this.state.draggerTimeStateB) {
       this.updateDraggerTimeState(dateB, true);
     }
+
+    // on tour page change, will update interval to selectedzoom if differs
+    // (e.g., 'month' zoom will default to 'month' interval)
+    // TODO: investigate how to handle this page update better - this limits functionality when in tour mode
+    if (this.props.isTourActive) {
+      if (this.props.timeScale !== prevProps.timeScale && prevProps.timeScaleChangeUnit !== this.props.timeScale) {
+        if (this.props.timeScale !== this.props.timeScaleChangeUnit && !this.props.customSelected) {
+          this.props.selectInterval(this.props.deltaChangeAmt, timeScaleToNumberKey[this.props.timeScale], false);
+        }
+      }
+    }
   }
 
   /**
@@ -683,6 +694,11 @@ class Timeline extends React.Component {
     // update application relative every 10 minutes from component mount
     this.appNowUpdateInterval = setInterval(() => this.props.updateAppNow(new Date()), 600000);
     this.setInitialState();
+
+    // update interval selectedzoom level as default
+    if (this.props.timeScale !== this.props.timeScaleChangeUnit && !this.props.customSelected) {
+      this.props.selectInterval(this.props.deltaChangeAmt, timeScaleToNumberKey[this.props.timeScale], false);
+    }
   }
 
   componentWillUnmount() {
@@ -840,8 +856,10 @@ class Timeline extends React.Component {
                     isTimelineDragging={isTimelineDragging}
                     hasMoved={hasMoved}
                     axisWidth={axisWidth}
-                    dateA={dateA}
-                    dateB={dateB}
+                    // dateA={dateA}
+                    // dateB={dateB}
+                    dateA={draggerTimeState}
+                    dateB={draggerTimeStateB}
                     hasSubdailyLayers={hasSubdailyLayers}
                     changeTimeScale={this.changeTimeScale}
                     isCompareModeActive={isCompareModeActive}
@@ -1005,7 +1023,8 @@ function mapStateToProps(state) {
     date,
     animation,
     sidebar,
-    modal
+    modal,
+    tour
   } = state;
   let {
     customSelected,
@@ -1074,6 +1093,7 @@ function mapStateToProps(state) {
     timelineEndDateLimit
   );
   return {
+    isTourActive: tour.active,
     isSmallScreen,
     draggerSelected: isCompareA ? 'selected' : 'selectedB', // ! will work for dragger?
     hasSubdailyLayers,
@@ -1191,7 +1211,11 @@ Timeline.propTypes = {
   changeCustomInterval: PropTypes.func,
   closeAnimation: PropTypes.func,
   openAnimation: PropTypes.func,
-  updateAppNow: PropTypes.func
+  updateAppNow: PropTypes.func,
+  onUpdateStartDate: PropTypes.func,
+  onUpdateEndDate: PropTypes.func,
+  onUpdateStartAndEndDate: PropTypes.func,
+  isTourActive: PropTypes.bool
 };
 
 // get axisWidth and parentOffset for axis, footer, and leftOffset calculations
