@@ -739,8 +739,6 @@ class Timeline extends React.Component {
 
   render() {
     const {
-      dateA,
-      dateB,
       hasSubdailyLayers,
       draggerSelected,
       leftArrowDisabled,
@@ -856,10 +854,6 @@ class Timeline extends React.Component {
                     isTimelineDragging={isTimelineDragging}
                     hasMoved={hasMoved}
                     axisWidth={axisWidth}
-                    // dateA={dateA}
-                    // dateB={dateB}
-                    dateA={draggerTimeState}
-                    dateB={draggerTimeStateB}
                     hasSubdailyLayers={hasSubdailyLayers}
                     changeTimeScale={this.changeTimeScale}
                     isCompareModeActive={isCompareModeActive}
