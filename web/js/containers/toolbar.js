@@ -54,7 +54,8 @@ const CUSTOM_MODAL_PROPS = {
     type: 'selection',
     offsetRight: '70px',
     modalClassName: 'toolbar-snapshot-modal toolbar-modal toolbar-medium-modal',
-    bodyComponent: ImageDownload
+    bodyComponent: ImageDownload,
+    desktopOnly: true
   }
 };
 class toolbarContainer extends Component {

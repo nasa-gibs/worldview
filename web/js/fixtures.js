@@ -2,6 +2,7 @@ import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 import { initialState as initialLayerState } from './modules/layers/reducers';
 import { initialCompareState } from './modules/compare/reducers';
+import { getInitialState as getInitialDateState } from './modules/date/reducers';
 var fixtures = {
   red: 'ff0000ff',
   light_red: 'fff0f0ff',
@@ -17,6 +18,7 @@ fixtures.getState = function() {
     compare: initialCompareState,
     config: fixtures.config(),
     layers: initialLayerState,
+    date: getInitialDateState(fixtures.config()),
     palettes: {
       active: {},
       activeB: {},
@@ -70,6 +72,7 @@ fixtures.getState = function() {
 
 fixtures.config = function() {
   return {
+    now: new Date(),
     defaults: {
       projection: 'geographic',
       startingLayers: [{ id: 'terra-cr' }, { id: 'aqua-cr', hidden: 'true' }]
@@ -175,6 +178,55 @@ fixtures.config = function() {
       compare: true
     },
     palettes: {
+      lookups: {
+        'terra-aod': {
+          'min-1': {
+            '0,255,0,255': { r: 0, g: 0, b: 0, a: 0 },
+            '255,255,0,255': { r: 255, g: 255, b: 0, a: 255 },
+            '255,0,0,255': { r: 255, g: 0, b: 0, a: 255 }
+          },
+          'red-1': {
+            '0,255,0,255': {
+              a: 255,
+              b: 240,
+              g: 240,
+              r: 255
+            },
+            '255,0,0,255': {
+              a: 255,
+              b: 0,
+              g: 0,
+              r: 64
+            },
+            '255,255,0,255': {
+              a: 255,
+              b: 0,
+              g: 0,
+              r: 255
+            }
+          },
+          'max-1-squashed': {
+            '0,255,0,255': {
+              a: 255,
+              b: 0,
+              g: 255,
+              r: 0
+            },
+            '255,0,0,255': {
+              a: 0,
+              b: 0,
+              g: 0,
+              r: 0
+            },
+            '255,255,0,255': {
+              a: 255,
+              b: 0,
+              g: 0,
+              r: 255
+            }
+          }
+        }
+      },
       rendered: {
         'terra-aod': {
           id: 'terra-aod',

@@ -53,6 +53,15 @@ class GIF extends Component {
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
   }
+  componentDidMount() {
+    this.mounted = true;
+  }
+  componentWillUnmount() {
+    this.mounted = false;
+    if (this.state.isDownloading) {
+      gifStream.cancel();
+    }
+  }
   getStyle(props) {
     return {
       left: props.offsetLeft,
@@ -148,10 +157,8 @@ class GIF extends Component {
     var stampWidthRatio = 4.889;
     build = (stamp, dateStamp, stampHeight) => {
       let imageArra = getImageArray(this.state, this.props, { width, height });
-      if (!imageArra) {
-        // won't be true if there are too mant frames
-        return;
-      }
+      if (!imageArra) return; // won't be true if there are too mant frames
+
       gifStream.createGIF(
         {
           gifWidth: width,
@@ -209,6 +216,14 @@ class GIF extends Component {
         progress: 0,
         downloadedObject: {}
       });
+    } else if (obj.cancelled) {
+      if (this.mounted) {
+        this.setState({
+          isDownloading: false,
+          progress: 0,
+          downloadedObject: {}
+        });
+      }
     } else {
       this.setState({
         isDownloaded: true,
@@ -324,7 +339,7 @@ function mapStateToProps(state, ownProps) {
     screenWidth,
     screenHeight,
     proj: proj.selected,
-    isActive: true,
+    isActive: animation.gifActive,
     startDate: startDate.toISOString(),
     endDate: endDate.toISOString(),
     increment: `${increment} Between Frames`,
@@ -359,5 +374,6 @@ GIF.propTypes = {
   onClose: PropTypes.func,
   endDate: PropTypes.string,
   startDate: PropTypes.string,
-  getImageArray: PropTypes.func
+  getImageArray: PropTypes.func,
+  isActive: PropTypes.bool
 };

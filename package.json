@@ -156,7 +156,7 @@
     "yargs": "^11.0.0"
   },
   "dependencies": {
-    "@entryline/gifstream": "^1.1.0",
+    "@entryline/gifstream": "entryLine/gifstream#cancel-feature",
     "@fortawesome/fontawesome-free": "^5.5.0",
     "bluebird": "3.4.6",
     "bootstrap": "4.1.x",
