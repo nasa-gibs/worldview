@@ -30,7 +30,7 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra / MODIS",
-                    "description": "modis/Fires_ThermalAnomalies",
+                    "description": "modis/combined/Fires_ThermalAnomalies",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_Thermal_Anomalies_All"

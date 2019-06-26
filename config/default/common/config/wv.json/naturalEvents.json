@@ -142,7 +142,10 @@
                 ["VIIRS_SNPP_CorrectedReflectance_TrueColor", true],
                 ["MODIS_Aqua_CorrectedReflectance_TrueColor", false],
                 ["MODIS_Terra_CorrectedReflectance_TrueColor", false],
-                ["IMERG_Rain_Rate", true]
+                ["GMI_Rain_Rate_Dsc", false],
+                ["GMI_Rain_Rate_Asc", false],
+                ["AMSR2_Surface_Rain_Rate_Night", false],
+                ["AMSR2_Surface_Rain_Rate_Day", false]
             ],
             "Snow": [
                 ["Reference_Features", true],

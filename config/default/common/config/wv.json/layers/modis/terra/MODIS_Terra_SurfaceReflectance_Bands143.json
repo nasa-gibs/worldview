@@ -5,7 +5,7 @@
             "title":    "Land Surface Reflectance (True Color)",
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_SurfaceReflectance_Bands143",
-            "tags":     "lsr",
+            "tags":     "lsr 143 true color",
             "group":    "baselayers",
             "layergroup": [
               "modis",

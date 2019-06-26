@@ -17,10 +17,14 @@
                         "AIRS_Temperature_700hPa_Night",
                         "AIRS_Temperature_850hPa_Day",
                         "AIRS_Temperature_850hPa_Night",
-                        "AIRS_Surface_Air_Temperature_Daily_Day",
-                        "AIRS_Surface_Air_Temperature_Daily_Night",
-                        "AIRS_Surface_Air_Temperature_Monthly_Day",
-                        "AIRS_Surface_Air_Temperature_Monthly_Night",
+                        "AIRS_L3_Surface_Air_Temperature_Daily_Day",
+                        "AIRS_L3_Surface_Air_Temperature_Daily_Night",
+                        "AIRS_L3_Surface_Air_Temperature_Monthly_Day",
+                        "AIRS_L3_Surface_Air_Temperature_Monthly_Night",
+                        "AIRS_L3_Surface_Skin_Temperature_Daily_Day",
+                        "AIRS_L3_Surface_Skin_Temperature_Daily_Night",
+                        "AIRS_L3_Surface_Skin_Temperature_Monthly_Day",
+                        "AIRS_L3_Surface_Skin_Temperature_Monthly_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]

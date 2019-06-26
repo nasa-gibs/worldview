@@ -11,7 +11,7 @@
                     "description": "sedac/PowerPlants_Nuclear",
                     "image": "",
                     "settings": [
-                        "energy-pop-exposure-nuclear-plants-locations_plants"
+                        "Nuclear_Power_Plant_Locations"
                     ]
                 }
             }

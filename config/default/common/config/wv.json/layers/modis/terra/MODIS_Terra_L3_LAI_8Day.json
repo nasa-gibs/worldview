@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "MODIS_Terra_L3_LAI_8Day": {
+            "id":       "MODIS_Terra_L3_LAI_8Day",
+            "title":    "Leaf Area Index (L3, 8-Day)",
+            "subtitle": "Terra / MODIS",
+            "description": "modis/terra/MODIS_Terra_L3_LAI_8Day",
+            "tags":   "lai",
+            "group":    "overlays",
+            "layergroup": [
+              "modis",
+              "modis_terra"
+            ],
+            "product":  "MOD15A2H",
+            "wrapadjacentdays": true
+        }
+    }
+}
