@@ -195,7 +195,7 @@ class TimelineDraggerRange extends PureComponent {
   }
 
   /*
-   * Handle click within dragger range for drag vs guitarpick click behavior
+   * Handle click within dragger range for drag vs timeline dragger click behavior
    * used in rect as onClick
    *
    * @method handleDraggerClick

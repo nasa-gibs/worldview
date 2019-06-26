@@ -991,7 +991,7 @@ class Timeline extends React.Component {
                   hasSubdailyLayers={hasSubdailyLayers}
                 />
 
-                {/* 🍔 Open/Close Chevron 🍔 */}
+                {/* Open/Close Chevron */}
                 <div id="timeline-hide" onClick={this.toggleHideTimeline}>
                   <div
                     className={`wv-timeline-hide wv-timeline-hide-double-chevron-${

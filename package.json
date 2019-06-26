@@ -200,10 +200,8 @@
     "whatwg-fetch": "^3.0.0"
   },
   "browser": {
-    "d3": "./web/ext/d3/d3.js",
     "gifwriter": "./web/ext/gifwriter/gifwriter.js",
     "neuquant": "./web/ext/neuquant/neuquant.js",
-    "mobiscroll": "./web/ext/mobiscroll-2.6.0/mobiscroll.js",
     "jquery-jcrop": "./node_modules/jquery-jcrop/js/jquery.Jcrop.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   },
@@ -212,8 +210,7 @@
       "./test-env.js"
     ],
     "moduleDirectories": [
-      "node_modules",
-      "./web/ext/d3"
+      "node_modules"
     ],
     "moduleNameMapper": {
       "^googleTagManager$": "<rootDir>/web/js/components/util/google-tag-manager.js"
