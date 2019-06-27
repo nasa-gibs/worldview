@@ -1,0 +1,23 @@
+{
+    "measurements": {
+        "Solar Induced Chlorophyll Fluorescence": {
+            "id": "solar-induced-chlorophyll-fluorescence",
+            "title":    "Solar Induced Chlorophyll Fluorescence",
+            "subtitle": "OCO-2",
+            "sources": {
+                "OCO-2": {
+                    "id": "oco-2",
+                    "title": "OCO-2",
+                    "description": "oco2/SolarInducedFluorescence",
+                    "image": "",
+                    "settings": [
+                        "OCO-2_Solar_Induced_Florescence_771nm",
+                        "OCO-2_Solar_Induced_Florescence_757nm",
+                        "OCO-2_Solar_Induced_Florescence_Blended",
+                        "OrbitTracks_OCO-2_Ascending"
+                    ]
+                }
+            }
+        }
+    }
+}

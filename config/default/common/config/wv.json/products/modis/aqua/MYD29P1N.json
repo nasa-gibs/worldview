@@ -1,0 +1,11 @@
+{
+    "products": {
+        "MYD29P1N": {
+            "name": "MODIS/Aqua Sea Ice Extent Daily L3 Global 1km EASE-Grid Night V006",
+            "handler": "List",
+            "query": {
+                "shortName": "MYD29P1N"
+            }
+        }
+    }
+}

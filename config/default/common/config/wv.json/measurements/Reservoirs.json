@@ -11,7 +11,7 @@
                     "description": "sedac/Reservoirs",
                     "image": "",
                     "settings": [
-                        "grand-v1-reservoirs-rev01"
+                        "GRanD_Reservoirs"
                     ]
                 }
             }

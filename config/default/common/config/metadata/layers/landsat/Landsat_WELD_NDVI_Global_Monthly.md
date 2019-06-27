@@ -2,4 +2,4 @@ The Surface Normalized Difference Vegetation Index (NDVI) (NBAR, Global, Monthly
 
 The sensor resolution is 30 m, the imagery resolution is 31.25 m and the temporal availability is monthly for December 2008 - November 2011.
 
-References: [Global Web-Enabled Landsat Data](http://globalmonitoring.sdstate.edu/projects/weldglobal/gweld.html); [Web-Enabled Landsat Data (WELD) Projects](https://landsat.usgs.gov/web-enabled-landsat-data-weld-projects)
+References: [Global Web-Enabled Landsat Data](http://globalmonitoring.sdstate.edu/projects/weldglobal/gweld.html)

@@ -50,7 +50,7 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/Aerosol_Combined",
+                    "description": "modis/combined/Aerosol_Combined",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_Value_Added_AOD"

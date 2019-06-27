@@ -7,6 +7,7 @@
                 "image": "land-surface.jpg",
                 "description": "",
                 "measurements": [
+                    "Albedo",
                     "Blue Marble",
                     "Corrected Reflectance",
                     "DHR Reflectance",
@@ -21,6 +22,7 @@
                     "Land Surface Reflectance",
                     "Land Surface Temperature",
                     "Radiance",
+                    "Solar Induced Chlorophyll Fluorescence",
                     "Soil Moisture",
                     "Soil Temperature",
                     "Surface Albedo",

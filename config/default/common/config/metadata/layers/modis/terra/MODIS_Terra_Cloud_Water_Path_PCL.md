@@ -4,5 +4,4 @@ The MODIS Cloud Water Path layers available are: (1) the MODIS Cloud Water Path 
 
 The MODIS Cloud Water Path layers are available from both the Terra (MOD06) and Aqua (MYD06) satellites for daytime overpasses. The sensor/algorithm resolution is 1 km, imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [MODIS Atmosphere - ATBD MOD06](http://modis-atmos.gsfc.nasa.gov/_docs/MOD06_ATBD_2013_03_06.pdf); [NCAR|UCAR Climate Date Guide: Cloud Water Path](https://climatedataguide.ucar.edu/climate-data/liquid-water-path-overview)
-; [GES DISC: Cloud Water Path](https://disc.gsfc.nasa.gov/information/glossary/581a48315fa71421a68e642d/cloud-water-path)
+References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud); [NCAR|UCAR Climate Date Guide: Cloud Water Path](https://climatedataguide.ucar.edu/climate-data/liquid-water-path-overview); [GES DISC: Cloud Water Path](https://disc.gsfc.nasa.gov/information/glossary?title=Cloud%20Water%20Path)

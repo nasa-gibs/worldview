@@ -2,4 +2,4 @@ The Top of Atmosphere (TOA) Reflectance (True Color, Alaska, Monthly, Version 1.
 
 The sensor resolution is 30 m, the imagery resolution is 250 m and the temporal availability is monthly for December 2002 - November 2012.
 
-References: [WELDAKMO: NASA Web-Enabled Landsat Data Alaska Monthly V015](https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/weldakmo_v015)
+References: [WELDAKMO: NASA Web-Enabled Landsat Data Alaska Monthly V015](https://lpdaac.usgs.gov/products/weldakmov015/)
