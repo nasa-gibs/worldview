@@ -5,7 +5,7 @@
   min-height: 40px;
   cursor: pointer;
   padding: 0;
-  border: none
+  border: none;
 }
 .wv-alert div {
   display: inline-block;
@@ -13,14 +13,13 @@
 }
 .wv-alert div:hover {
   display: inline-block;
-	background: #dddddd;
-	color: #333333;
+  background-color: #ddd;
+  color: #333;
 }
 .wv-alert i {
   color: #d54e21;
   margin-right: 10px;
   font-size: 1.4em;
-
 }
 .wv-alert i.exit {
   color: #fff;
@@ -28,5 +27,5 @@
   font-size: 1.4em;
 }
 .wv-alert div:hover .exit {
-	color: #333333;
+  color: #333;
 }
