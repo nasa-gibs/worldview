@@ -203,7 +203,8 @@ export function dataCmrMockClient(suffix, store) {
   };
 
   var adjustResults = function(parameters, data) {
-    var day = getActiveTime(state);
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+    var day = state.date[activeDateStr];
     // Mock data was retrieved for Aug 6, 2013
     var resultsDay = new Date(Date.UTC(2013, 7, 6));
     var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);

@@ -72,7 +72,7 @@ export function dataHandlerBase(config, store) {
     var ns = self;
     if (!ns.cmr) {
       if (config.parameters.mockCMR) {
-        ns.cmr = dataCmrMockClient(config.parameters.mockCMR);
+        ns.cmr = dataCmrMockClient(config.parameters.mockCMR, store);
       } else {
         ns.cmr = dataCmrClient({
           timeout: config.parameters.timeoutCMR
