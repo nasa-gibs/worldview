@@ -8,13 +8,13 @@
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km_MODIS_Fire_Points_Confidence": {
+    "Confidence": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km_MODIS_Fire_Points_FRP": {
+    "FRP": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
@@ -37,8 +37,8 @@
       }
     },
     {
-      "id": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km_MODIS_Fire_Points_Confidence",
-      "source": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km_MODIS_Fire_Points_Confidence",
+      "id": "Confidence",
+      "source": "Confidence",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km",
       "source-description": "Confidence",
       "type": "circle",
@@ -65,8 +65,8 @@
       }
     },
     {
-      "id": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km_MODIS_Fire_Points_FRP",
-      "source": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km_MODIS_Fire_Points_FRP",
+      "id": "FRP",
+      "source": "FRP",
       "source-layer": "MODIS_Combined_Thermal_Anomalies_Night_v6_NRT-2km",
       "source-description": "FRP",
       "type": "circle",

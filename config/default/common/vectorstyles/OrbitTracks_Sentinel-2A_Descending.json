@@ -8,163 +8,163 @@
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_yellow1": {
+    "yellow1": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_yellow2": {
+    "yellow2": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_orange1": {
+    "orange1": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_orange2": {
+    "orange2": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_orange3": {
+    "orange3": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_red1": {
+    "red1": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_red2": {
+    "red2": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_red3": {
+    "red3": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_pink1": {
+    "pink1": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_pink2": {
+    "pink2": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_pink3": {
+    "pink3": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_pink4": {
+    "pink4": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_pink5": {
+    "pink5": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_purple1": {
+    "purple1": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_purple2": {
+    "purple2": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_purple3": {
+    "purple3": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_blue1": {
+    "blue1": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_blue2": {
+    "blue2": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_blue3": {
+    "blue3": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_blue4": {
+    "blue4": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_blue5": {
+    "blue5": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_blue6": {
+    "blue6": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_brown1": {
+    "brown1": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_brown2": {
+    "brown2": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_green1": {
+    "green1": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_green2": {
+    "green2": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
       ]
     },
-    "OrbitTracks_Sentinel-2A_Descending_green3": {
+    "green3": {
       "type": "vector",
       "tiles": [
         "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Sentinel-2A_Descending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
@@ -215,8 +215,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_yellow1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_yellow1",
+      "id": "yellow1",
+      "source": "yellow1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Yellow 1",
       "type": "line",
@@ -226,8 +226,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_yellow1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_yellow1",
+      "id": "yellow1",
+      "source": "yellow1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Yellow 1",
       "type": "circle",
@@ -237,8 +237,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_yellow1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_yellow1",
+      "id": "yellow1",
+      "source": "yellow1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Yellow 1",
       "type": "symbol",
@@ -257,8 +257,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_yellow2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_yellow2",
+      "id": "yellow2",
+      "source": "yellow2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Yellow 2",
       "type": "line",
@@ -268,8 +268,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_yellow2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_yellow2",
+      "id": "yellow2",
+      "source": "yellow2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Yellow 2",
       "type": "circle",
@@ -279,8 +279,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_yellow2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_yellow2",
+      "id": "yellow2",
+      "source": "yellow2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Yellow 2",
       "type": "symbol",
@@ -299,8 +299,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange1",
+      "id": "orange1",
+      "source": "orange1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 1",
       "type": "line",
@@ -310,8 +310,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange1",
+      "id": "orange1",
+      "source": "orange1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 1",
       "type": "circle",
@@ -321,8 +321,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange1",
+      "id": "orange1",
+      "source": "orange1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 1",
       "type": "symbol",
@@ -341,8 +341,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange2",
+      "id": "orange2",
+      "source": "orange2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 2",
       "type": "line",
@@ -352,8 +352,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange2",
+      "id": "orange2",
+      "source": "orange2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 2",
       "type": "circle",
@@ -363,8 +363,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange2",
+      "id": "orange2",
+      "source": "orange2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 2",
       "type": "symbol",
@@ -383,8 +383,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange3",
+      "id": "orange3",
+      "source": "orange3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 3",
       "type": "line",
@@ -394,8 +394,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange3",
+      "id": "orange3",
+      "source": "orange3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 3",
       "type": "circle",
@@ -405,8 +405,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_orange3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_orange3",
+      "id": "orange3",
+      "source": "orange3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Orange 3",
       "type": "symbol",
@@ -425,8 +425,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red1",
+      "id": "red1",
+      "source": "red1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 1",
       "type": "line",
@@ -436,8 +436,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red1",
+      "id": "red1",
+      "source": "red1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 1",
       "type": "circle",
@@ -447,8 +447,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red1",
+      "id": "red1",
+      "source": "red1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 1",
       "type": "symbol",
@@ -467,8 +467,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red2",
+      "id": "red2",
+      "source": "red2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 2",
       "type": "line",
@@ -478,8 +478,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red2",
+      "id": "red2",
+      "source": "red2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 2",
       "type": "circle",
@@ -489,8 +489,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red2",
+      "id": "red2",
+      "source": "red2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 2",
       "type": "symbol",
@@ -509,8 +509,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red3",
+      "id": "red3",
+      "source": "red3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 3",
       "type": "line",
@@ -520,8 +520,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red3",
+      "id": "red3",
+      "source": "red3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 3",
       "type": "circle",
@@ -531,8 +531,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_red3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_red3",
+      "id": "red3",
+      "source": "red3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Red 3",
       "type": "symbol",
@@ -551,8 +551,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink1",
+      "id": "pink1",
+      "source": "pink1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 1",
       "type": "line",
@@ -562,8 +562,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink1",
+      "id": "pink1",
+      "source": "pink1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 1",
       "type": "circle",
@@ -573,8 +573,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink1",
+      "id": "pink1",
+      "source": "pink1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 1",
       "type": "symbol",
@@ -593,8 +593,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink2",
+      "id": "pink2",
+      "source": "pink2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 2",
       "type": "line",
@@ -604,8 +604,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink2",
+      "id": "pink2",
+      "source": "pink2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 2",
       "type": "circle",
@@ -615,8 +615,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink2",
+      "id": "pink2",
+      "source": "pink2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 2",
       "type": "symbol",
@@ -635,8 +635,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink3",
+      "id": "pink3",
+      "source": "pink3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 3",
       "type": "line",
@@ -646,8 +646,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink3",
+      "id": "pink3",
+      "source": "pink3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 3",
       "type": "circle",
@@ -657,8 +657,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink3",
+      "id": "pink3",
+      "source": "pink3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 3",
       "type": "symbol",
@@ -677,8 +677,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink4",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink4",
+      "id": "pink4",
+      "source": "pink4",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 4",
       "type": "line",
@@ -688,8 +688,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink4",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink4",
+      "id": "pink4",
+      "source": "pink4",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 4",
       "type": "circle",
@@ -699,8 +699,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink4",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink4",
+      "id": "pink4",
+      "source": "pink4",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 4",
       "type": "symbol",
@@ -719,8 +719,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink5",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink5",
+      "id": "pink5",
+      "source": "pink5",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 5",
       "type": "line",
@@ -730,8 +730,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink5",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink5",
+      "id": "pink5",
+      "source": "pink5",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 5",
       "type": "circle",
@@ -741,8 +741,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_pink5",
-      "source": "OrbitTracks_Sentinel-2A_Descending_pink5",
+      "id": "pink5",
+      "source": "pink5",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Pink 5",
       "type": "symbol",
@@ -761,8 +761,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple1",
+      "id": "purple1",
+      "source": "purple1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 1",
       "type": "line",
@@ -772,8 +772,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple1",
+      "id": "purple1",
+      "source": "purple1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 1",
       "type": "circle",
@@ -783,8 +783,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple1",
+      "id": "purple1",
+      "source": "purple1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 1",
       "type": "symbol",
@@ -803,8 +803,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple2",
+      "id": "purple2",
+      "source": "purple2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 2",
       "type": "line",
@@ -814,8 +814,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple2",
+      "id": "purple2",
+      "source": "purple2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 2",
       "type": "circle",
@@ -825,8 +825,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple2",
+      "id": "purple2",
+      "source": "purple2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 2",
       "type": "symbol",
@@ -845,8 +845,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple3",
+      "id": "purple3",
+      "source": "purple3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 3",
       "type": "line",
@@ -856,8 +856,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple3",
+      "id": "purple3",
+      "source": "purple3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 3",
       "type": "circle",
@@ -867,8 +867,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_purple3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_purple3",
+      "id": "purple3",
+      "source": "purple3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Purple 3",
       "type": "symbol",
@@ -887,8 +887,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue1",
+      "id": "blue1",
+      "source": "blue1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 1",
       "type": "line",
@@ -898,8 +898,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue1",
+      "id": "blue1",
+      "source": "blue1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 1",
       "type": "circle",
@@ -909,8 +909,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue1",
+      "id": "blue1",
+      "source": "blue1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 1",
       "type": "symbol",
@@ -929,8 +929,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue2",
+      "id": "blue2",
+      "source": "blue2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 2",
       "type": "line",
@@ -940,8 +940,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue2",
+      "id": "blue2",
+      "source": "blue2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 2",
       "type": "circle",
@@ -951,8 +951,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue2",
+      "id": "blue2",
+      "source": "blue2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 2",
       "type": "symbol",
@@ -971,8 +971,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue3",
+      "id": "blue3",
+      "source": "blue3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 3",
       "type": "line",
@@ -982,8 +982,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue3",
+      "id": "blue3",
+      "source": "blue3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 3",
       "type": "circle",
@@ -993,8 +993,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue3",
+      "id": "blue3",
+      "source": "blue3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 3",
       "type": "symbol",
@@ -1013,8 +1013,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue4",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue4",
+      "id": "blue4",
+      "source": "blue4",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 4",
       "type": "line",
@@ -1024,8 +1024,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue4",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue4",
+      "id": "blue4",
+      "source": "blue4",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 4",
       "type": "circle",
@@ -1035,8 +1035,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue4",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue4",
+      "id": "blue4",
+      "source": "blue4",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 4",
       "type": "symbol",
@@ -1055,8 +1055,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue5",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue5",
+      "id": "blue5",
+      "source": "blue5",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 5",
       "type": "line",
@@ -1066,8 +1066,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue5",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue5",
+      "id": "blue5",
+      "source": "blue5",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 5",
       "type": "circle",
@@ -1077,8 +1077,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue5",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue5",
+      "id": "blue5",
+      "source": "blue5",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 5",
       "type": "symbol",
@@ -1097,8 +1097,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue6",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue6",
+      "id": "blue6",
+      "source": "blue6",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 6",
       "type": "line",
@@ -1108,8 +1108,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue6",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue6",
+      "id": "blue6",
+      "source": "blue6",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 6",
       "type": "circle",
@@ -1119,8 +1119,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_blue6",
-      "source": "OrbitTracks_Sentinel-2A_Descending_blue6",
+      "id": "blue6",
+      "source": "blue6",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Blue 6",
       "type": "symbol",
@@ -1139,8 +1139,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_brown1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_brown1",
+      "id": "brown1",
+      "source": "brown1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Brown 1",
       "type": "line",
@@ -1150,8 +1150,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_brown1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_brown1",
+      "id": "brown1",
+      "source": "brown1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Brown 1",
       "type": "circle",
@@ -1161,8 +1161,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_brown1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_brown1",
+      "id": "brown1",
+      "source": "brown1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Brown 1",
       "type": "symbol",
@@ -1181,8 +1181,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_brown2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_brown2",
+      "id": "brown2",
+      "source": "brown2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Brown 2",
       "type": "line",
@@ -1192,8 +1192,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_brown2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_brown2",
+      "id": "brown2",
+      "source": "brown2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Brown 2",
       "type": "circle",
@@ -1203,8 +1203,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_brown2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_brown2",
+      "id": "brown2",
+      "source": "brown2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Brown 2",
       "type": "symbol",
@@ -1223,8 +1223,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green1",
+      "id": "green1",
+      "source": "green1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 1",
       "type": "line",
@@ -1234,8 +1234,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green1",
+      "id": "green1",
+      "source": "green1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 1",
       "type": "circle",
@@ -1245,8 +1245,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green1",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green1",
+      "id": "green1",
+      "source": "green1",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 1",
       "type": "symbol",
@@ -1265,8 +1265,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green2",
+      "id": "green2",
+      "source": "green2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 2",
       "type": "line",
@@ -1276,8 +1276,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green2",
+      "id": "green2",
+      "source": "green2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 2",
       "type": "circle",
@@ -1287,8 +1287,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green2",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green2",
+      "id": "green2",
+      "source": "green2",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 2",
       "type": "symbol",
@@ -1307,8 +1307,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green3",
+      "id": "green3",
+      "source": "green3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 3",
       "type": "line",
@@ -1318,8 +1318,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green3",
+      "id": "green3",
+      "source": "green3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 3",
       "type": "circle",
@@ -1329,8 +1329,8 @@
       }
     },
     {
-      "id": "OrbitTracks_Sentinel-2A_Descending_green3",
-      "source": "OrbitTracks_Sentinel-2A_Descending_green3",
+      "id": "green3",
+      "source": "green3",
       "source-layer": "OrbitTracks_Sentinel-2A_Descending",
       "source-description": "Green 3",
       "type": "symbol",
