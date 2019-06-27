@@ -5,10 +5,24 @@ import { getLayers } from '../../modules/layers/selectors';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import util from '../../util/util';
 import { connect } from 'react-redux';
+import AlertUtil from '../../components/util/alert';
+import { compareAlertModalBody } from '../../components/compare/alert';
+import { openCustomContent } from '../../modules/modal/actions';
 
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 const tabHeight = 32;
 class CompareCase extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAlert: props.showAlert
+    };
+    this.dismissAlert = this.dismissAlert.bind(this);
+  }
+  dismissAlert() {
+    localStorage.setItem('dismissedCompareAlert', true);
+    this.setState({ showAlert: false });
+  }
   render() {
     const {
       isActive,
@@ -18,12 +32,25 @@ class CompareCase extends React.Component {
       isCompareA,
       height,
       layersA,
-      layersB
+      layersB,
+      openAlertModal
     } = this.props;
+
     const outerClass = 'layer-container sidebar-panel';
     const tabClasses = 'ab-tab';
     return (
       <div className={isActive ? '' : 'hidden '}>
+        {this.state.showAlert ? (
+          <AlertUtil
+            isOpen={true}
+            onClick={openAlertModal}
+            onDismiss={this.dismissAlert}
+            message="You are now in comparison mode"
+          />
+        ) : (
+          ''
+        )}
+        }
         <div className={outerClass}>
           <div className="ab-tabs-case">
             <Nav tabs>
@@ -81,10 +108,27 @@ class CompareCase extends React.Component {
 const mapDispatchToProps = dispatch => ({
   toggleActiveCompareState: () => {
     dispatch(toggleActiveCompareState());
+  },
+  openAlertModal: () => {
+    dispatch(
+      openCustomContent('compare_mode_info', {
+        headerText: 'You are now in comparison mode',
+        backdrop: false,
+        size: 'lg',
+        wrapClassName: 'clickable-behind-modal',
+        bodyComponent: compareAlertModalBody,
+        desktopOnly: true
+      })
+    );
   }
 });
 function mapStateToProps(state, ownProps) {
-  const { layers, compare, date } = state;
+  const { layers, compare, date, browser } = state;
+  const showAlert =
+    util.browser.localStorage &&
+    browser.greaterThan.small &&
+    !localStorage.getItem('dismissedCompareAlert');
+
   return {
     isCompareA: compare.isCompareA,
     layersA: getLayers(layers.active, { group: 'all', proj: 'all' }, state),
@@ -92,7 +136,8 @@ function mapStateToProps(state, ownProps) {
     dateStringA: util.toISOStringDate(date.selected),
     dateStringB: util.toISOStringDate(date.selectedB),
     isActive: compare.active,
-    height: ownProps.height
+    height: ownProps.height,
+    showAlert
   };
 }
 CompareCase.propTypes = {
@@ -103,7 +148,9 @@ CompareCase.propTypes = {
   isCompareA: PropTypes.bool,
   height: PropTypes.number,
   layersA: PropTypes.object,
-  layersB: PropTypes.object
+  layersB: PropTypes.object,
+  showAlert: PropTypes.bool,
+  openAlertModal: PropTypes.func
 };
 export default connect(
   mapStateToProps,

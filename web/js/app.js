@@ -41,6 +41,7 @@ import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import 'react-image-crop/dist/ReactCrop.css';
 // App CSS
 import '../css/fonts.css';
+import '../css/alert.css';
 import '../css/reset.css';
 import '../css/compare.css';
 import '../css/jquery-ui-override.css';
@@ -107,7 +108,7 @@ class App extends React.Component {
         <div id="dlMap" />
         <Timeline />
         <div id="wv-animation-widet-case">
-          { isAnimationWidgetActive ? <AnimationWidget /> : null }
+          {isAnimationWidgetActive ? <AnimationWidget /> : null}
         </div>
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         <Modal />

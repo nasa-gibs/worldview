@@ -325,13 +325,6 @@
   border-radius: 0;
 }
 
-.wv-alert {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40px;
-}
-
 .notify-alert .ui-dialog-content div::after {
   pointer-events: none;
   transform: translateY(50%);
