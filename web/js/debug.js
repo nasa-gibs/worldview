@@ -15,14 +15,7 @@ export var debug = (function() {
         self.loadDelay(delay);
       } catch (error) {
         console.warn('Invalid load delay: ' + delay);
-        return;
       }
-    }
-
-    if (parameters.showError) {
-      $(function() {
-        util.error();
-      });
     }
   };
 
