@@ -954,6 +954,7 @@ export function mapui(models, config, store, ui) {
             headerText: metaTitle,
             backdrop: false,
             clickableBehindModal: true,
+            desktopOnly: true,
             wrapClassName: 'clickable-behind-modal vector-modal-wrap',
             modalClassName: 'vector-modal',
             bodyComponent: VectorMetaTable,
