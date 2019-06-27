@@ -3,7 +3,6 @@ import { mapui } from './map/ui';
 import { mapAnimate } from './map/animate';
 import { dataUi } from './map/data/ui';
 import naturalEventsUI from './map/natural-events/ui';
-
 /**
  *  Legacy UI Rendering
  * @param {Object} models | Legacy Models Object
@@ -12,16 +11,15 @@ import naturalEventsUI from './map/natural-events/ui';
  */
 export function combineUi(models, config, MapMouseEvents, store) {
   let ui = {};
+  ui.events = util.events();
+  const subscribeToStore = function() {
+    const state = store.getState();
+    const action = state.lastAction;
+    return ui.events.trigger('last-action', action);
+  };
+  store.subscribe(subscribeToStore);
   ui.map = mapui(models, config, store, ui);
   ui.map.animate = mapAnimate(config, ui, store);
-  if (config.features.tour) {
-    // ui.alert = alertUi(ui, config);
-    // ui.tour = tourUi(models, ui, config);
-  }
-  // ui.activeLayers = layersActive(models, ui, config);
-  // ui.addModal = layersModal(models, ui, config);
-  // ui.layerSettingsModal = layersOptions(models, ui, config);
-  // Test via a getter in the options object to see if the passive property is accessed
   ui.supportsPassive = false;
   try {
     var opts = Object.defineProperty({}, 'passive', {

@@ -20,7 +20,7 @@ var map,
   textRight,
   proj;
 
-export function mapDateLineBuilder(models, config, store) {
+export function mapDateLineBuilder(models, config, store, ui) {
   var self = {};
   /*
    * Sets globals and event listeners
@@ -39,14 +39,13 @@ export function mapDateLineBuilder(models, config, store) {
    * Suscribe to redux store and listen for
    * specific action types
    */
-  const subscribeToStore = function() {
-    const state = store.getState();
-    const action = state.lastAction;
-    const selectedDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    const date = state.date[selectedDateStr];
+  const subscribeToStore = function(action) {
     switch (action.type) {
       case SELECT_DATE:
       case COMPARE_CHANGE_STATE:
+        let state = store.getState();
+        let selectedDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+        let date = state.date[selectedDateStr];
         return updateDate(date);
       case CHANGE_PROJECTION:
         proj = action.id;
@@ -78,7 +77,7 @@ export function mapDateLineBuilder(models, config, store) {
       }
       updateLineVisibility(false);
     });
-    store.subscribe(subscribeToStore);
+    ui.events.on('last-action', subscribeToStore);
   };
   var isGeoProjection = function() {
     if (proj === 'geographic') {

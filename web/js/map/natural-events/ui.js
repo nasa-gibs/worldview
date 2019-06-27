@@ -36,10 +36,9 @@ export default function naturalEventsUI(ui, config, store, models) {
    * Suscribe to redux store and listen for
    * specific action types
    */
-  const subscribeToStore = function() {
+  const subscribeToStore = function(action) {
     const state = store.getState();
     const events = state.events;
-    const action = state.lastAction;
     const {
       requestedEvents,
       requestedEventSources,
@@ -118,7 +117,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     }
   };
   // get events for projection change
-  const onProjChange = function(e) {
+  const onProjChange = function(id) {
     const state = store.getState();
     map = ui.map.selected;
     view = map.getView();
@@ -211,7 +210,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     map = ui.map.selected;
     // Display loading information for user feedback on slow network
     view = map.getView();
-    store.subscribe(subscribeToStore);
+    ui.events.on('last-action', subscribeToStore);
   };
   var getZoomPromise = function(
     event,
