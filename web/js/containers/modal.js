@@ -79,7 +79,8 @@ class ModalContainer extends Component {
       CompletelyCustomModal,
       bodyComponentProps,
       timeout,
-      desktopOnly
+      desktopOnly,
+      size
     } = newProps;
 
     const style = this.getStyle(newProps);
@@ -101,6 +102,7 @@ class ModalContainer extends Component {
           toggle={toggleWithClose}
           backdrop={backdrop && type !== 'selection'}
           id={lowerCaseId}
+          size={size}
           className={
             isTemplateModal
               ? 'template-modal'

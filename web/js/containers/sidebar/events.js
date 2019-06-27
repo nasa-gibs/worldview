@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Event from '../../components/sidebar/event';
 import Scrollbars from '../../components/util/scrollbar';
 import { connect } from 'react-redux';
+import AlertUtil from '../../components/util/alert';
+import { openCustomContent } from '../../modules/modal/actions';
 import {
   requestEvents,
   requestCategories,
@@ -10,14 +12,21 @@ import {
   selectEvent,
   deselectEvent
 } from '../../modules/natural-events/actions';
+import util from '../../util/util';
+import { EventsAlertModalBody } from '../../components/events/alert-body';
 import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { get as lodashGet } from 'lodash';
 import { collapseSidebar } from '../../modules/sidebar/actions';
+import { selectDate } from '../../modules/date/actions';
 
 class Events extends React.Component {
   constructor(props) {
     super(props);
     this.initRequests();
+    this.state = {
+      showAlert: !localStorage.getItem('dismissedEventVisibilityAlert')
+    };
+    this.dismissAlert = this.dismissAlert.bind(this);
   }
   initRequests() {
     const {
@@ -32,16 +41,16 @@ class Events extends React.Component {
     let categoryRequestURL = apiURL + '/categories';
     let sourceRequestURL = apiURL + '/sources';
 
-    const mockEvents = lodashGet(config, 'config.parameters.mockEvents');
-    const mockCategories = lodashGet(
-      config,
-      'config.parameters.mockCategories'
-    );
-    const mockSources = lodashGet(config, 'config.parameters.mockSources');
+    const mockEvents = lodashGet(config, 'parameters.mockEvents');
+    const mockCategories = lodashGet(config, 'parameters.mockCategories');
+    const mockSources = lodashGet(config, 'parameters.mockSources');
 
     if (mockEvents) {
       console.warn('Using mock events data: ' + mockEvents);
-      eventsRequestURL = 'mock/events_data.json-' + mockEvents;
+      eventsRequestURL =
+        mockEvents === 'true'
+          ? 'mock/events_data.json'
+          : 'mock/events_data.json-' + mockEvents;
     }
     if (mockCategories) {
       console.warn('Using mock categories data: ' + mockCategories);
@@ -55,6 +64,10 @@ class Events extends React.Component {
     requestCategories(categoryRequestURL);
     requestSources(sourceRequestURL);
   }
+  dismissAlert() {
+    localStorage.setItem('dismissedEventVisibilityAlert', true);
+    this.setState({ showAlert: false });
+  }
   render() {
     const {
       events,
@@ -66,7 +79,10 @@ class Events extends React.Component {
       height,
       deselectEvent,
       hasRequestError,
-      isMobile
+      isMobile,
+      openAlertModal,
+      showAlert,
+      selectedDate
     } = this.props;
     const errorOrLoadingText = isLoading
       ? 'Loading...'
@@ -74,58 +90,84 @@ class Events extends React.Component {
         ? 'There has been an ERROR retrieving events from the EONET events API'
         : '';
     return (
-      <Scrollbars style={{ maxHeight: height + 'px' }}>
-        <div id="wv-events">
-          <span
-            className="events-loading-text"
-            style={
-              isLoading || hasRequestError
-                ? { display: 'block' }
-                : { display: 'none' }
-            }
-          >
-            {errorOrLoadingText}
-          </span>
-          <div
-            className="wv-eventslist sidebar-panel"
-            style={events ? { display: 'block' } : { display: 'none' }}
-          >
-            <ul id="wv-eventscontent" className="content map-item-list">
-              {events && sources
-                ? events.map(event => (
-                  <Event
-                    key={event.id}
-                    event={event}
-                    selectEvent={() =>
-                      selectEvent(event.id, event.date, isMobile)
-                    }
-                    deselectEvent={deselectEvent}
-                    isSelected={
-                      selected.id === event.id && visibleEvents[event.id]
-                    }
-                    selectedDate={
-                      selected.id === event.id && visibleEvents[event.id]
-                        ? selected.date
-                        : null
-                    }
-                    isVisible={visibleEvents[event.id]}
-                    sources={sources}
-                  />
-                ))
-                : ''}
-            </ul>
+      <React.Fragment>
+        {showAlert && this.state.showAlert ? (
+          <AlertUtil
+            isOpen={true}
+            onClick={openAlertModal}
+            onDismiss={this.dismissAlert}
+            message="Events may not be visible at all times."
+          />
+        ) : (
+          ''
+        )}
+        <Scrollbars style={{ maxHeight: height + 'px' }}>
+          <div id="wv-events">
+            <span
+              className="events-loading-text"
+              style={
+                isLoading || hasRequestError
+                  ? { display: 'block' }
+                  : { display: 'none' }
+              }
+            >
+              {errorOrLoadingText}
+            </span>
+
+            <div
+              className="wv-eventslist sidebar-panel"
+              style={events ? { display: 'block' } : { display: 'none' }}
+            >
+              <ul id="wv-eventscontent" className="content map-item-list">
+                {events && sources
+                  ? events.map(event => (
+                    <Event
+                      showAlert={showAlert}
+                      key={event.id}
+                      event={event}
+                      selectEvent={(id, date) =>
+                        selectEvent(id, date, isMobile)
+                      }
+                      deselectEvent={deselectEvent}
+                      isSelected={
+                        selected.id === event.id && visibleEvents[event.id]
+                      }
+                      selectedDate={selectedDate}
+                      isVisible={visibleEvents[event.id]}
+                      sources={sources}
+                    />
+                  ))
+                  : ''}
+              </ul>
+            </div>
           </div>
-        </div>
-      </Scrollbars>
+        </Scrollbars>
+      </React.Fragment>
     );
   }
 }
 const mapDispatchToProps = dispatch => ({
-  selectEvent: (id, date, isMobile) => {
-    dispatch(selectEvent(id, date));
+  selectEvent: (id, dateStr, isMobile) => {
+    dispatch(selectEvent(id, dateStr));
     if (isMobile) {
       dispatch(collapseSidebar());
     }
+    if (dateStr) {
+      console.log(dateStr);
+      dispatch(selectDate(new Date(dateStr)));
+    }
+  },
+  openAlertModal: () => {
+    dispatch(
+      openCustomContent('event_visibility_info', {
+        headerText: 'Events may not be visible at all times.',
+        backdrop: false,
+        size: 'lg',
+        wrapClassName: 'clickable-behind-modal',
+        bodyComponent: EventsAlertModalBody,
+        desktopOnly: true
+      })
+    );
   },
   deselectEvent: (id, date) => {
     dispatch(deselectEvent());
@@ -147,10 +189,13 @@ function mapStateToProps(state) {
     requestedEventCategories,
     config,
     proj,
-    browser
+    browser,
+    sidebar,
+    date,
+    compare
   } = state;
   const { selected, showAll } = state.events;
-
+  const activeDatestr = compare.isCompareA ? 'selected' : 'selectedB';
   const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoading =
     requestedEvents.isLoading ||
@@ -175,6 +220,13 @@ function mapStateToProps(state) {
     );
   }
 
+  const showAlert = Boolean(
+    util.browser.localStorage &&
+      selected.id &&
+      sidebar.activeTab === 'events' &&
+      browser.greaterThan.small &&
+      !localStorage.getItem('dismissedEventVisibilityAlert')
+  );
   return {
     events,
     showAll,
@@ -185,7 +237,9 @@ function mapStateToProps(state) {
     visibleEvents,
     apiURL,
     config,
-    isMobile: browser.lessThan.medium
+    isMobile: browser.lessThan.medium,
+    showAlert,
+    selectedDate: date[activeDatestr].toISOString().split('T')[0]
   };
 }
 export default connect(
@@ -213,5 +267,7 @@ Events.propTypes = {
   isLoading: PropTypes.bool,
   selectEvent: PropTypes.func,
   hasRequestError: PropTypes.bool,
-  isMobile: PropTypes.bool
+  isMobile: PropTypes.bool,
+  showAlert: PropTypes.bool,
+  openAlertModal: PropTypes.func
 };
