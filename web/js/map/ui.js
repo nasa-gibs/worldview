@@ -298,7 +298,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var reloadLayers = function(map) {
+  var reloadLayers = self.reloadLayers = function(map) {
     map = map || self.selected;
     const state = store.getState();
     const { layers, proj } = state;
@@ -554,7 +554,7 @@ export function mapui(models, config, store, ui) {
    *
    * @returns {void}
    */
-  var updateDate = function() {
+  var updateDate = self.updateDate = function() {
     const state = store.getState();
     const { compare } = state;
     const layerState = state.layers;

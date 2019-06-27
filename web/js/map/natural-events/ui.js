@@ -283,9 +283,14 @@ export default function naturalEventsUI(ui, config, store, models) {
           activateLayersForCategory(event.categories[0].title);
         }
       } else if (!isInitialLoad) store.dispatch(selectDate(util.parseDateUTC(date)));
-      naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
       self.selecting = false;
-      models.map.events.trigger('update-layers'); // hack to update layers
+      // hack to update layers
+      if (isIdChange) {
+        ui.map.reloadLayers();
+      } else {
+        ui.map.updateDate();
+      }
+      naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
     });
   };
 

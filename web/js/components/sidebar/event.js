@@ -13,12 +13,12 @@ class Event extends React.Component {
    * Return date list for selected event
    */
   getDateLists() {
-    const { event, selectedDate } = this.props;
+    const { event, isSelected, selectedDate } = this.props;
     if (event.geometries.length > 1) {
       return (
         <ul
           className="dates"
-          style={!selectedDate ? { display: 'none' } : { display: 'block' }}
+          style={!isSelected ? { display: 'none' } : { display: 'block' }}
         >
           {event.geometries.map((geometry, index) => {
             var date = geometry.date.split('T')[0];
@@ -74,8 +74,8 @@ class Event extends React.Component {
    * Return reference list for an event
    */
   getReferenceList() {
-    const { sources, event, selectedDate } = this.props;
-    if (!selectedDate) return;
+    const { sources, event, isSelected } = this.props;
+    if (!isSelected) return;
 
     const references = Array.isArray(event.sources)
       ? event.sources

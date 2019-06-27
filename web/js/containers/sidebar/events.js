@@ -17,6 +17,7 @@ import { EventsAlertModalBody } from '../../components/events/alert-body';
 import { getEventsWithinExtent } from '../../modules/natural-events/selectors';
 import { get as lodashGet } from 'lodash';
 import { collapseSidebar } from '../../modules/sidebar/actions';
+import { selectDate } from '../../modules/date/actions';
 
 class Events extends React.Component {
   constructor(props) {
@@ -40,16 +41,16 @@ class Events extends React.Component {
     let categoryRequestURL = apiURL + '/categories';
     let sourceRequestURL = apiURL + '/sources';
 
-    const mockEvents = lodashGet(config, 'config.parameters.mockEvents');
-    const mockCategories = lodashGet(
-      config,
-      'config.parameters.mockCategories'
-    );
-    const mockSources = lodashGet(config, 'config.parameters.mockSources');
+    const mockEvents = lodashGet(config, 'parameters.mockEvents');
+    const mockCategories = lodashGet(config, 'parameters.mockCategories');
+    const mockSources = lodashGet(config, 'parameters.mockSources');
 
     if (mockEvents) {
       console.warn('Using mock events data: ' + mockEvents);
-      eventsRequestURL = 'mock/events_data.json-' + mockEvents;
+      eventsRequestURL =
+        mockEvents === 'true'
+          ? 'mock/events_data.json'
+          : 'mock/events_data.json-' + mockEvents;
     }
     if (mockCategories) {
       console.warn('Using mock categories data: ' + mockCategories);
@@ -80,7 +81,8 @@ class Events extends React.Component {
       hasRequestError,
       isMobile,
       openAlertModal,
-      showAlert
+      showAlert,
+      selectedDate
     } = this.props;
     const errorOrLoadingText = isLoading
       ? 'Loading...'
@@ -123,18 +125,14 @@ class Events extends React.Component {
                       showAlert={showAlert}
                       key={event.id}
                       event={event}
-                      selectEvent={() =>
-                        selectEvent(event.id, event.date, isMobile)
+                      selectEvent={(id, date) =>
+                        selectEvent(id, date, isMobile)
                       }
                       deselectEvent={deselectEvent}
                       isSelected={
                         selected.id === event.id && visibleEvents[event.id]
                       }
-                      selectedDate={
-                        selected.id === event.id && visibleEvents[event.id]
-                          ? selected.date
-                          : null
-                      }
+                      selectedDate={selectedDate}
                       isVisible={visibleEvents[event.id]}
                       sources={sources}
                     />
@@ -149,10 +147,14 @@ class Events extends React.Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  selectEvent: (id, date, isMobile) => {
-    dispatch(selectEvent(id, date));
+  selectEvent: (id, dateStr, isMobile) => {
+    dispatch(selectEvent(id, dateStr));
     if (isMobile) {
       dispatch(collapseSidebar());
+    }
+    if (dateStr) {
+      console.log(dateStr);
+      dispatch(selectDate(new Date(dateStr)));
     }
   },
   openAlertModal: () => {
@@ -188,10 +190,12 @@ function mapStateToProps(state) {
     config,
     proj,
     browser,
-    sidebar
+    sidebar,
+    date,
+    compare
   } = state;
   const { selected, showAll } = state.events;
-
+  const activeDatestr = compare.isCompareA ? 'selected' : 'selectedB';
   const apiURL = lodashGet(state, 'config.features.naturalEvents.host');
   const isLoading =
     requestedEvents.isLoading ||
@@ -216,13 +220,13 @@ function mapStateToProps(state) {
     );
   }
 
-  const showAlert =
+  const showAlert = Boolean(
     util.browser.localStorage &&
-    selected.id &&
-    sidebar.activeTab === 'events' &&
-    browser.greaterThan.small &&
-    !localStorage.getItem('dismissedEventVisibilityAlert');
-
+      selected.id &&
+      sidebar.activeTab === 'events' &&
+      browser.greaterThan.small &&
+      !localStorage.getItem('dismissedEventVisibilityAlert')
+  );
   return {
     events,
     showAll,
@@ -234,7 +238,8 @@ function mapStateToProps(state) {
     apiURL,
     config,
     isMobile: browser.lessThan.medium,
-    showAlert
+    showAlert,
+    selectedDate: date[activeDatestr].toISOString().split('T')[0]
   };
 }
 export default connect(
