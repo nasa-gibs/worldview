@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class compareAlertModalBody extends React.Component {
+export class CompareAlertModalBody extends React.Component {
   render() {
     return (
       <div className="compare-dialog">

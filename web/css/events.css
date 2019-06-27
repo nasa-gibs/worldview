@@ -393,12 +393,12 @@
   line-height: 40px;
 }
 
-.wv-dialog ul {
+.event-alert-modal-body ul {
   padding-left: 20px;
   margin: 10px 0;
 }
 
-.wv-dialog ul li {
+.event-alert-modal-body ul li {
   list-style-type: disc;
   display: list-item;
   margin: 2px 0 2px 20px;

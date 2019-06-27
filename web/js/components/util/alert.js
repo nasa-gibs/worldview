@@ -26,6 +26,7 @@ export default class AlertComponent extends React.Component {
                 ''
               )}
               {this.props.message}
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Read More...
             </span>
           </div>
           <div className="close-alert" onClick={this.props.onDismiss}>

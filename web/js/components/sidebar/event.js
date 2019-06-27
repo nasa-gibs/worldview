@@ -76,6 +76,7 @@ class Event extends React.Component {
   getReferenceList() {
     const { sources, event, selectedDate } = this.props;
     if (!selectedDate) return;
+
     const references = Array.isArray(event.sources)
       ? event.sources
       : [event.sources];
@@ -156,7 +157,8 @@ Event.propTypes = {
   isVisible: PropTypes.bool,
   deselectEvent: PropTypes.func,
   selectEvent: PropTypes.func,
-  sources: PropTypes.array
+  sources: PropTypes.array,
+  isSelected: PropTypes.bool
 };
 
 export default Event;

@@ -6,10 +6,10 @@ import { toggleActiveCompareState } from '../../modules/compare/actions';
 import util from '../../util/util';
 import { connect } from 'react-redux';
 import AlertUtil from '../../components/util/alert';
-import { compareAlertModalBody } from '../../components/compare/alert';
+import { CompareAlertModalBody } from '../../components/compare/alert';
 import { openCustomContent } from '../../modules/modal/actions';
-
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+
 const tabHeight = 32;
 class CompareCase extends React.Component {
   constructor(props) {
@@ -116,7 +116,7 @@ const mapDispatchToProps = dispatch => ({
         backdrop: false,
         size: 'lg',
         wrapClassName: 'clickable-behind-modal',
-        bodyComponent: compareAlertModalBody,
+        bodyComponent: CompareAlertModalBody,
         desktopOnly: true
       })
     );
