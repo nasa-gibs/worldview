@@ -1,0 +1,11 @@
+{
+    "products": {
+        "OCO2_L2_Lite_SIF": {
+            "name": "OCO-2 Level 2 bias-corrected solar-induced fluorescence and other select fields from the IMAP-DOAS algorithm aggregated as daily files, Retrospective processing V8r",
+            "handler": "List",
+            "query": {
+                "shortName": "OCO2_L2_Lite_SIF"
+            }
+        }
+    }
+}

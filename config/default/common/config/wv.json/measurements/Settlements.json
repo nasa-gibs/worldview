@@ -11,7 +11,7 @@
                     "description": "sedac/Settlements",
                     "image": "",
                     "settings": [
-                        "grump-v1-settlement-points"
+                        "GRUMP_Settlements"
                     ]
                 }
             }

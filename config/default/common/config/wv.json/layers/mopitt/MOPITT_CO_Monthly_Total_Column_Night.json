@@ -11,7 +11,8 @@
               "mopitt"
             ],
             "product":  "MOP03JM",
-            "wrapadjacentdays": true
+            "wrapadjacentdays": true,
+            "inactive": true
         }
     }
 }

@@ -1061,8 +1061,7 @@ export function mapui(models, config, store, ui) {
         typeof state.events !== 'undefined' && state.events.active;
       var isDataTabActive =
         typeof state.data !== 'undefined' && state.data.active;
-      var isMapAnimating =
-        typeof models.anim !== 'undefined' && models.anim.rangeState.playing;
+      var isMapAnimating = state.animation.isPlaying;
       if (isEventsTabActive || isDataTabActive || isMapAnimating) return;
 
       if (!self.mapIsbeingDragged && !self.mapIsbeingZoomed) dataRunner.newPoint(pixels, map);

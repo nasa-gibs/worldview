@@ -1,4 +1,4 @@
-###Sea Ice Concentration (12 km)
+### Sea Ice Concentration (12 km)
 Temporal coverage: 2 July 2012 - present
 
 The Advanced Microwave Scanning Radiometer-E/Advanced Microwave Scanning Radiometer-2 (AMSR-E/AMSR2) unified “Sea Ice Concentration (12 km)” layer displays the percent of sea ice concentration in the polar regions as a daily composite of the AMSR2 1:30 a.m. ascending and 1:30 p.m. descending half-orbit passes, at a spatial resolution of 12 km.
@@ -11,7 +11,7 @@ This product uses the JAXA AMSR2 Level-1R input TBs which are calibrated (unifie
 
 References: [AMSR-E/AMSR2 Unified L3 Daily 12.5 km Brightness Temperatures, Sea Ice Concentration, Motion & Snow Depth Polar Grids, Version 1](https://nsidc.org/data/AU_SI12/)
 
-###Sea Ice Concentration (25 km)
+### Sea Ice Concentration (25 km)
 Temporal coverage: 2 July 2012 - present
 
 The Advanced Microwave Scanning Radiometer-E/Advanced Microwave Scanning Radiometer-2 (AMSR-E/AMSR2) unified “Sea Ice Concentration (25 km)” layer displays the percent of sea ice concentration in the polar regions as a daily composite of the AMSR2 1:30 a.m. ascending and 1:30 p.m. descending half-orbit passes, at a spatial resolution of 25 km.

@@ -3,8 +3,26 @@
         "Gross Primary Productivity": {
             "id": "gross-primary-productivity",
             "title":    "Gross Primary Productivity",
-            "subtitle": "SMAP / Model Value-Added",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, SMAP / Model Value-Added",
             "sources": {
+                "Aqua/MODIS": {
+                      "id": "aqua-modis",
+                      "title": "Aqua/MODIS",
+                      "description": "modis/GrossPrimaryProduction",
+                      "image": "",
+                      "settings": [
+  			                  "MODIS_Aqua_L3_Gross_Primary_Productivity_8Day"
+                      ]
+                  },
+                "Terra/MODIS": {
+                      "id": "terra-modis",
+                      "title": "Terra/MODIS",
+                      "description": "modis/GrossPrimaryProduction",
+                      "image": "",
+                      "settings": [
+      			                "MODIS_Terra_L3_Gross_Primary_Productivity_8Day"
+                          ]
+                      },
                 "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
                     "title": "SMAP / Model Value-Added",

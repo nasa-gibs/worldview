@@ -13,10 +13,10 @@
                     "settings": [
                         "AIRS_CO_Total_Column_Day",
                         "AIRS_CO_Total_Column_Night",
-                        "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Daily_Day",
-                        "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Daily_Night",
-                        "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Monthly_Day",
-                        "AIRS_Carbon_Monoxide_Volume_Mixing_Ratio_Monthly_Night",
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day",
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night",
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Day",
+                        "AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Monthly_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]

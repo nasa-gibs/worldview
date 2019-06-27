@@ -2,4 +2,4 @@ The Top of Atmosphere (TOA) Reflectance (True Color, Conterminous USA (CONUS), M
 
 The sensor resolution is 30 m, the imagery resolution is 250 m and the temporal availability is monthly for December 2002 - November 2012.
 
-References: [WELDUSMO: NASA Web-Enabled Landsat Data CONUS Monthly V015](https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/weldusmo_v015)
+References: [WELDUSMO: NASA Web-Enabled Landsat Data CONUS Monthly V015](https://lpdaac.usgs.gov/products/weldusmov015/)
