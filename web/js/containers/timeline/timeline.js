@@ -770,7 +770,7 @@ class Timeline extends React.Component {
                 hoverLinePosition={this.state.hoverLinePosition}
               />
 
-              {isAnimationWidgetOpen && this.state.animationStartLocation && this.state.animationStartLocationDate && this.state.animationEndLocation && this.state.animationEndLocationDate
+              {isAnimationWidgetOpen && !animationDisabled && this.state.animationStartLocation && this.state.animationStartLocationDate && this.state.animationEndLocation && this.state.animationEndLocationDate
                 ? <TimelineRangeSelector
                   position={this.state.position}
                   frontDate={this.state.frontDate}
@@ -984,7 +984,8 @@ function mapStateToProps(state) {
       (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
       !lodashGet(map, 'ui.selected.frameState_') ||
-      sidebar.activeTab === 'download'
+      sidebar.activeTab === 'download' ||
+      compare.active
   };
 }
 
