@@ -505,7 +505,7 @@ class TimelineAxis extends Component {
       if (draggerTimeState !== dateA || prevProps.dateA !== dateA) {
         if (prevProps.dateA === draggerTimeState) {
           // handle tour url date change
-          if (isTourActive) {
+          if (isTourActive && !this.props.isAnimationPlaying) {
             this.updateScale(dateA, timeScale, null, 0.5);
           } else {
             // handle animation dragger update

@@ -627,7 +627,7 @@ class Timeline extends React.Component {
       if (prevStartLocationDate && prevEndLocationDate) {
         if (prevStartLocationDate.getTime() !== animStartLocationDate.getTime() ||
             prevEndLocationDate.getTime() !== animEndLocationDate.getTime() ||
-            prevState.frontDate !== this.state.frontDate) {
+            (prevState.frontDate !== this.state.frontDate && !this.props.isAnimationPlaying)) {
           this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
         }
       }
@@ -757,6 +757,7 @@ class Timeline extends React.Component {
       customSelected,
       customIntervalValue,
       customIntervalZoomLevel,
+      isAnimationPlaying,
       isCompareModeActive,
       axisWidth,
       timelineEndDateLimit,
@@ -861,6 +862,7 @@ class Timeline extends React.Component {
                 >
                   {/* Axis */}
                   <TimelineAxis
+                    isAnimationPlaying={isAnimationPlaying}
                     isTourActive={isTourActive}
                     frontDate={frontDate}
                     backDate={backDate}
@@ -1131,7 +1133,8 @@ function mapStateToProps(state) {
       (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
       !lodashGet(map, 'ui.selected.frameState_') ||
-      sidebar.activeTab === 'download'
+      sidebar.activeTab === 'download',
+    isAnimationPlaying: animation.isPlaying
   };
 }
 
@@ -1224,7 +1227,8 @@ Timeline.propTypes = {
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
   onUpdateStartAndEndDate: PropTypes.func,
-  isTourActive: PropTypes.bool
+  isTourActive: PropTypes.bool,
+  isAnimationPlaying: PropTypes.bool
 };
 
 // get axisWidth and parentOffset for axis, footer, and leftOffset calculations

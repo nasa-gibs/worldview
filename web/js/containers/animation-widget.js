@@ -317,8 +317,6 @@ function mapStateToProps(state) {
   let { customSelected, interval, delta, customInterval, customDelta, appNow } = date;
   const hasCustomPalettes = !lodashIsEmpty(palettes[activeStr]);
 
-  // let minDate = new Date(config.startDate);
-  // let maxDate = layersLastDateTime(layers[activeStr], config);
   let minDate = new Date(config.startDate);
   let maxDate = appNow;
 
