@@ -11,11 +11,16 @@ import {
   TOGGLE_GIF
 } from './constants';
 
+import {
+  timeScaleFromNumberKey
+} from '../date/constants';
+
 export function onActivate() {
   return (dispatch, getState) => {
     const { compare, date } = getState();
     const dateStr = compare.isCompareA ? 'selected' : 'selectedB';
-    dispatch({ type: OPEN_ANIMATION, date: date[dateStr] });
+    const interval = timeScaleFromNumberKey[date.interval];
+    dispatch({ type: OPEN_ANIMATION, date: date[dateStr], interval: interval });
   };
 }
 export function onClose() {

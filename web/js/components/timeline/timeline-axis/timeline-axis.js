@@ -51,7 +51,6 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange) => {
-    // console.log(inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange)
     let {
       timelineStartDateLimit,
       timelineEndDateLimit
@@ -443,18 +442,18 @@ class TimelineAxis extends Component {
     this.updateScale(time, timeScale, axisWidth, 0.80);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     let {
+      dateA,
+      dateB,
       draggerSelected,
       isDraggerDragging,
-      isTimelineDragging,
-      isCompareModeActive,
       timeScale,
       axisWidth,
+      isCompareModeActive,
       draggerTimeState,
       draggerTimeStateB,
-      draggerPosition,
-      draggerPositionB
+      isTourActive
     } = this.props;
 
     // update timescale axis focus
@@ -488,46 +487,60 @@ class TimelineAxis extends Component {
     // handle switching A/B dragger axis focus if switched from A/B sidebar tabs
     if (isCompareModeActive && (draggerSelected !== prevProps.draggerSelected)) {
       if (draggerSelected === 'selected') {
-        let draggerCheck = this.checkDraggerMoveOrUpdateScale(draggerTimeState);
+        let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateA);
         if (!draggerCheck.withinRange) {
-          this.updateScaleWithOffset(draggerTimeState, timeScale, draggerCheck);
+          this.updateScaleWithOffset(dateA, timeScale, draggerCheck);
         }
       } else {
-        let draggerCheck = this.checkDraggerMoveOrUpdateScale(draggerTimeStateB, true);
+        let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateB, true);
         if (!draggerCheck.withinRange) {
-          this.updateScaleWithOffset(draggerTimeStateB, timeScale, draggerCheck);
+          this.updateScaleWithOffset(dateB, timeScale, draggerCheck);
         }
       }
     }
 
-    if (!isTimelineDragging && !isDraggerDragging) {
-      if (prevProps.draggerTimeState === draggerTimeState &&
-        prevProps.draggerPosition !== draggerPosition) {
-        let draggerCheck = this.checkDraggerMoveOrUpdateScale(draggerPosition, draggerTimeState, prevProps.draggerTimeState);
-        if (!draggerCheck.withinRange) {
-          this.updateScaleWithOffset(draggerTimeState, timeScale, draggerCheck);
-        }
-      } else if (prevProps.draggerTimeStateB === draggerTimeStateB &&
-        prevProps.draggerPositionB !== draggerPositionB) {
-        let draggerCheck = this.checkDraggerMoveOrUpdateScale(draggerPositionB, draggerTimeStateB, prevProps.draggerTimeStateB);
-        if (!draggerCheck.withinRange) {
-          this.updateScaleWithOffset(draggerTimeStateB, timeScale, draggerCheck);
-        }
-      } else {
+    // handle dragger and potential axis updates
+    if (!isDraggerDragging) {
       // handle A dragger change
-        if (prevProps.draggerTimeState !== draggerTimeState) {
+      if (draggerTimeState !== dateA || prevProps.dateA !== dateA) {
+        if (prevProps.dateA === draggerTimeState) {
+          // handle tour url date change
+          if (isTourActive) {
+            this.updateScale(dateA, timeScale, null, 0.5);
+          } else {
+            // handle animation dragger update
+            let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateA);
+            if (!draggerCheck.withinRange) {
+              this.updateScaleWithOffset(dateA, timeScale, draggerCheck);
+            }
+          }
+        } else {
           // check if draggerCheck will be within acceptable visible axis width
-          let draggerCheck = this.checkDraggerMoveOrUpdateScale(draggerPosition, draggerTimeState, prevProps.draggerTimeState);
+          let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateA);
           if (!draggerCheck.withinRange) {
-            this.updateScaleWithOffset(draggerTimeState, timeScale, draggerCheck);
+            this.updateScaleWithOffset(dateA, timeScale, draggerCheck);
           }
         }
-        // handle B dragger change
-        if (prevProps.draggerTimeStateB !== draggerTimeStateB) {
+      }
+
+      // handle B dragger change
+      if (draggerTimeStateB !== dateB || prevProps.dateB !== dateB) {
+        if (prevProps.dateB === draggerTimeStateB) {
+          // handle tour url date change
+          if (isTourActive) {
+            this.updateScale(dateB, timeScale, null, 0.5);
+          } else {
+            // handle animation dragger update
+            let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateB, true);
+            if (!draggerCheck.withinRange) {
+              this.updateScaleWithOffset(dateB, timeScale, draggerCheck);
+            }
+          }
+        } else {
           // check if draggerCheck will be within acceptable visible axis width
-          let draggerCheck = this.checkDraggerMoveOrUpdateScale(draggerPositionB, draggerTimeStateB, prevProps.draggerTimeStateB);
+          let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateB, true);
           if (!draggerCheck.withinRange) {
-            this.updateScaleWithOffset(draggerTimeStateB, timeScale, draggerCheck);
+            this.updateScaleWithOffset(dateB, timeScale, draggerCheck);
           }
         }
       }
@@ -536,30 +549,43 @@ class TimelineAxis extends Component {
 
   /**
    * @desc check if selectedDate will be within acceptable visible axis width
-   * @param {Number} draggerPosition
-   * @param {String} selectedDate
    * @param {String} previousDate
+   * @param {Boolean} draggerB - draggerB being checked?
    * @returns {Object} output - return params used for dragger visibilty/updating axis
    * @returns {Boolean} output.withinRange - within visible range
    * @returns {Boolean} output.newDateInThePast - new date older?
    * @returns {Number} output.newDraggerDiff - difference of new dragger from selected
    */
-  checkDraggerMoveOrUpdateScale = (draggerPosition, selectedDate, previousDate) => {
+  checkDraggerMoveOrUpdateScale = (previousDate, draggerB) => {
     const {
+      draggerTimeState,
+      draggerTimeStateB,
+      draggerPosition,
+      draggerPositionB,
       timeScale,
       axisWidth
     } = this.props;
+    let selectedDraggerTimeState;
+    let selectedDraggerPosition;
+
+    if (draggerB) {
+      selectedDraggerTimeState = draggerTimeStateB;
+      selectedDraggerPosition = draggerPositionB;
+    } else {
+      selectedDraggerTimeState = draggerTimeState;
+      selectedDraggerPosition = draggerPosition;
+    }
 
     let selectedDateMoment = moment.utc(previousDate);
-    let draggerDateMoment = moment.utc(selectedDate);
+    let draggerDateMoment = moment.utc(selectedDraggerTimeState);
 
     let newDraggerDiff = draggerDateMoment.diff(selectedDateMoment, timeScale, true);
     let newDateInThePast = draggerDateMoment < selectedDateMoment;
 
     let leftEdgeOfVisibleAxis = -26;
     let rightEdgeOfVisibleAxis = axisWidth - 80;
-    let newDraggerWithinRangeCheck = draggerPosition <= rightEdgeOfVisibleAxis &&
-                                     draggerPosition >= leftEdgeOfVisibleAxis;
+    let newDraggerWithinRangeCheck = selectedDraggerPosition <= rightEdgeOfVisibleAxis &&
+                                     selectedDraggerPosition >= leftEdgeOfVisibleAxis;
 
     return {
       withinRange: newDraggerWithinRangeCheck,
@@ -1048,10 +1074,6 @@ class TimelineAxis extends Component {
     } else {
       let {
         axisWidth,
-        draggerTimeState,
-        draggerTimeStateB,
-        draggerPosition,
-        draggerPositionB,
         draggerSelected,
         timeScale,
         isCompareModeActive,
@@ -1060,16 +1082,16 @@ class TimelineAxis extends Component {
         transformX,
         frontDate,
         backDate,
-        position
+        position,
+        dateA,
+        dateB
       } = this.props;
 
       let checkForPropsUpdates = (
         nextProps.axisWidth === axisWidth &&
         nextProps.position === position &&
-        nextProps.draggerTimeState === draggerTimeState &&
-        nextProps.draggerTimeStateB === draggerTimeStateB &&
-        nextProps.draggerPosition === draggerPosition &&
-        nextProps.draggerPositionB === draggerPositionB &&
+        nextProps.dateA === dateA &&
+        nextProps.dateB === dateB &&
         nextProps.draggerSelected === draggerSelected &&
         nextProps.timeScale === timeScale &&
         nextProps.isCompareModeActive === isCompareModeActive &&
@@ -1183,6 +1205,8 @@ class TimelineAxis extends Component {
 }
 
 TimelineAxis.propTypes = {
+  dateA: PropTypes.string,
+  dateB: PropTypes.string,
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
   axisWidth: PropTypes.number,
@@ -1220,7 +1244,8 @@ TimelineAxis.propTypes = {
   isDraggerDragging: PropTypes.bool,
   isAnimationDraggerDragging: PropTypes.bool,
   isTimelineDragging: PropTypes.bool,
-  hasMoved: PropTypes.bool
+  hasMoved: PropTypes.bool,
+  isTourActive: PropTypes.bool
 };
 
 export default TimelineAxis;

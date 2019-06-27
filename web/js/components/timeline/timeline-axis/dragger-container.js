@@ -52,7 +52,10 @@ class DraggerContainer extends PureComponent {
       transformX,
       frontDate,
       backDate,
-      draggerSelected
+      draggerSelected,
+      draggerTimeState,
+      draggerTimeStateB,
+      updateDraggerDatePosition
     } = this.props;
 
     let isBetween = getIsBetween(inputTime, frontDate, backDate);
@@ -69,17 +72,10 @@ class DraggerContainer extends PureComponent {
     let pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
     newDraggerPosition = pixelsToAddToDraggerNew + position - this.state.draggerWidth + transformX + 2;
 
-    if (draggerSelected === 'selected') {
-      this.setState({
-        draggerTimeState: this.props.draggerTimeState
-      });
-    } else {
-      this.setState({
-        draggerTimeStateB: this.props.draggerTimeStateB
-      });
-    }
-
-    this.props.updateDraggerDatePosition(null, draggerSelected, newDraggerPosition, draggerVisible);
+    let newDraggerTime = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
+    this.updateLocalDraggerTimeStates(draggerSelected, newDraggerTime);
+    // update parent dragger positioning
+    updateDraggerDatePosition(null, draggerSelected, newDraggerPosition, draggerVisible);
   }
 
   /**
@@ -111,7 +107,8 @@ class DraggerContainer extends PureComponent {
         position,
         transformX,
         timelineStartDateLimit,
-        timelineEndDateLimit
+        timelineEndDateLimit,
+        updateDraggerDatePosition
       } = this.props;
 
       // get timescale specific options for scaleMs and gridWidth
@@ -162,16 +159,34 @@ class DraggerContainer extends PureComponent {
         return false;
       }
 
-      if (draggerSelected === 'selected') {
-        this.setState({
-          draggerTimeState: newDraggerTime
-        });
-      } else {
-        this.setState({
-          draggerTimeStateB: newDraggerTime
-        });
-      }
-      this.props.updateDraggerDatePosition(newDraggerTime, draggerSelected, newDraggerPosition, null, null, true);
+      this.updateLocalDraggerTimeStates(draggerSelected, newDraggerTime);
+      // update parent dragger positioning
+      updateDraggerDatePosition(newDraggerTime, draggerSelected, newDraggerPosition, null, null, true);
+    });
+  }
+
+  // helper dragger time state update
+  updateLocalDraggerTimeStates = (draggerSelected, newDraggerTime) => {
+    if (draggerSelected === 'selected') {
+      this.setState({
+        draggerTimeState: newDraggerTime
+      });
+    } else {
+      this.setState({
+        draggerTimeStateB: newDraggerTime
+      });
+    }
+  }
+
+  // init locla state time setting
+  setInitDraggerTimeStates = () => {
+    let {
+      draggerTimeState,
+      draggerTimeStateB
+    } = this.props;
+    this.setState({
+      draggerTimeState,
+      draggerTimeStateB
     });
   }
 
@@ -179,44 +194,40 @@ class DraggerContainer extends PureComponent {
     this.setInitDraggerTimeStates();
   }
 
-  setInitDraggerTimeStates = () => {
-    this.setState({
-      draggerTimeState: this.props.draggerTimeState,
-      draggerTimeStateB: this.props.draggerTimeStateB
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     let {
       draggerTimeState,
       draggerTimeStateB,
       isDraggerDragging,
       draggerSelected,
-      compareModeActive
+      compareModeActive,
+      setDraggerVisibility
     } = this.props;
 
     // handle dragger visibility update on compare mode activate/deactivate
     if (compareModeActive !== prevProps.compareModeActive) {
       // turn on compare mode
       if (compareModeActive) {
-        this.props.setDraggerVisibility(true, true);
+        setDraggerVisibility(true, true);
       } else {
         // turn off compare mode
         if (draggerSelected === 'selected') {
-          this.props.setDraggerVisibility(true, false);
+          setDraggerVisibility(true, false);
         } else {
-          this.props.setDraggerVisibility(false, true);
+          setDraggerVisibility(false, true);
         }
       }
     }
 
     if (!isDraggerDragging) {
       // handle A dragger change
-      if (draggerTimeState !== prevProps.draggerTimeState && draggerTimeState !== this.state.draggerTimeState) {
+      if (draggerTimeState !== prevProps.draggerTimeState &&
+          draggerTimeState !== this.state.draggerTimeState) {
         this.setDraggerPosition(draggerTimeState);
       }
       // handle B dragger change
-      if (draggerTimeStateB !== prevProps.draggerTimeStateB && draggerTimeStateB !== this.state.draggerTimeStateB) {
+      if (draggerTimeStateB !== prevProps.draggerTimeStateB &&
+          draggerTimeStateB !== this.state.draggerTimeStateB) {
         this.setDraggerPosition(draggerTimeStateB);
       }
     }

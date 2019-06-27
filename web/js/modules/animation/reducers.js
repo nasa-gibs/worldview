@@ -20,7 +20,8 @@ const defaultState = {
   speed: 3,
   gifActive: false,
   startDate: undefined,
-  endDate: undefined
+  endDate: undefined,
+  beenActivated: false
 };
 export function getInitialState(config) {
   return lodashAssign({}, defaultState, {
@@ -35,10 +36,11 @@ export function animationReducer(state = defaultState, action) {
       return lodashAssign({}, state, {
         isActive: true,
         gifActive: false,
-        startDate: state.startDate
-          ? state.startDate
-          : util.dateAdd(action.date, 'day', -7),
-        endDate: state.endDate ? state.endDate : action.date
+        startDate: !state.beenActivated ? util.dateAdd(action.date, action.interval, -7)
+          : state.startDate,
+        endDate: !state.beenActivated ? action.date
+          : state.endDate,
+        beenActivated: true
       });
     case EXIT_ANIMATION:
       return lodashAssign({}, state, {

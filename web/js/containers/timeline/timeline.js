@@ -643,7 +643,6 @@ class Timeline extends React.Component {
         }
       }
     }
-    // handle draggerTimeState updates if date changes
     if (dateA !== prevProps.dateA && dateA !== this.state.draggerTimeState) {
       this.updateDraggerTimeState(dateA, false);
     }
@@ -681,23 +680,31 @@ class Timeline extends React.Component {
     }
   }
 
-  // prevent default react synthetic event passive event listener
-  // that allows browser resize/zoom on certain wheel events
-  preventBrowserZoom = (e) => {
-    e.preventDefault();
-  }
-
   componentDidMount() {
+    let {
+      timeScale,
+      timeScaleChangeUnit,
+      deltaChangeAmt,
+      customSelected,
+      updateAppNow,
+      selectInterval
+    } = this.props;
+
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
-    document.querySelector('.timeline-container').addEventListener('wheel', this.preventBrowserZoom, { passive: false });
+    // prevent default react synthetic event passive event listener
+    // that allows browser resize/zoom on certain wheel events
+    document.querySelector('.timeline-container').addEventListener('wheel', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
     // update application relative every 10 minutes from component mount
-    this.appNowUpdateInterval = setInterval(() => this.props.updateAppNow(new Date()), 600000);
+    this.appNowUpdateInterval = setInterval(() => updateAppNow(new Date()), 600000);
     this.setInitialState();
 
     // update interval selectedzoom level as default
-    if (this.props.timeScale !== this.props.timeScaleChangeUnit && !this.props.customSelected) {
-      this.props.selectInterval(this.props.deltaChangeAmt, timeScaleToNumberKey[this.props.timeScale], false);
+    if (timeScale !== timeScaleChangeUnit && !customSelected) {
+      selectInterval(deltaChangeAmt, timeScaleToNumberKey[timeScale], false);
     }
   }
 
@@ -706,12 +713,14 @@ class Timeline extends React.Component {
   }
 
   setInitialState = () => {
+    let {
+      dateA,
+      dateB
+    } = this.props;
     this.setState({
-      animationStartLocationDate: this.props.animStartLocationDate,
-      animationEndLocationDate: this.props.animEndLocationDate,
-      draggerTimeState: this.props.dateA,
-      draggerTimeStateB: this.props.dateB,
-      hoverTime: this.props.dateA,
+      draggerTimeState: dateA,
+      draggerTimeStateB: dateB,
+      hoverTime: dateA,
       initialLoadComplete: true
     });
   }
@@ -739,6 +748,8 @@ class Timeline extends React.Component {
 
   render() {
     const {
+      dateA,
+      dateB,
       hasSubdailyLayers,
       draggerSelected,
       leftArrowDisabled,
@@ -759,7 +770,8 @@ class Timeline extends React.Component {
       timeScale,
       isSmallScreen,
       toggleActiveCompareState,
-      parentOffset
+      parentOffset,
+      isTourActive
     } = this.props;
     let {
       initialLoadComplete,
@@ -849,6 +861,7 @@ class Timeline extends React.Component {
                 >
                   {/* Axis */}
                   <TimelineAxis
+                    isTourActive={isTourActive}
                     frontDate={frontDate}
                     backDate={backDate}
                     isTimelineDragging={isTimelineDragging}
@@ -865,6 +878,8 @@ class Timeline extends React.Component {
                     animEndLocationDate={animEndLocationDate}
                     isAnimationDraggerDragging={isAnimationDraggerDragging}
                     updateDraggerDatePosition={this.updateDraggerDatePosition}
+                    dateA={dateA}
+                    dateB={dateB}
                     draggerTimeState={draggerTimeState}
                     draggerTimeStateB={draggerTimeStateB}
                     draggerPosition={draggerPosition}
