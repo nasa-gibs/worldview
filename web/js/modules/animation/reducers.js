@@ -37,7 +37,7 @@ export function animationReducer(state = defaultState, action) {
         gifActive: false,
         startDate: state.startDate
           ? state.startDate
-          : util.dateAdd(action.date, action.interval, -7),
+          : util.dateAdd(action.date, 'day', -7),
         endDate: state.endDate
           ? state.endDate
           : action.date
