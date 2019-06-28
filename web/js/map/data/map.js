@@ -14,7 +14,7 @@ import { find as lodashFind, each as lodashEach } from 'lodash';
 
 import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map';
 
-export function dataMap(store, maps, dataUi) {
+export function dataMap(store, maps, dataUi, ui) {
   var self = {};
 
   var map = null;
@@ -27,17 +27,14 @@ export function dataMap(store, maps, dataUi) {
   var swathLayer = null;
   var hovering = null;
   var selectedFeatures = null;
-  const subscribeToStore = function() {
-    const state = store.getState();
-    const action = state.lastAction;
-
+  const subscribeToStore = function(action) {
     switch (action.type) {
       case CHANGE_PROJECTION:
         return updateProjection(action.id);
     }
   };
   var init = function() {
-    self.unSubscribe = store.subscribe(subscribeToStore);
+    ui.events.on('last-action', subscribeToStore);
     dataUi.events
       .on('activate', updateProjection)
       .on('query', clear)
@@ -204,9 +201,6 @@ export function dataMap(store, maps, dataUi) {
     selectedFeatures = [];
     $(maps.selected.getViewport()).off('mousemove', hoverCheck);
     $(maps.selected.getViewport()).off('click', clickCheck);
-    if (self.unSubscribe) {
-      self.unSubscribe(); // unSubscribe redux listeners
-    }
   };
   self.dispose = dispose;
 

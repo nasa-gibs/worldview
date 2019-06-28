@@ -55,7 +55,9 @@ window.onload = () => {
   loadingIndicator.delayed(promise, 1000);
   promise
     .done(config => {
-      config.pageLoadTime = new Date();
+      config.pageLoadTime = parameters.now
+        ? util.parseDateUTC(parameters.now) || new Date()
+        : new Date();
       config.palettes = {
         rendered: {},
         custom: {}

@@ -915,6 +915,7 @@ class Timeline extends React.Component {
                   />
 
                   {isAnimationWidgetOpen &&
+                    !animationDisabled &&
                     this.state.animationStartLocation &&
                     this.state.animationStartLocationDate &&
                     this.state.animationEndLocation &&
@@ -1133,7 +1134,8 @@ function mapStateToProps(state) {
       (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
       !lodashGet(map, 'ui.selected.frameState_') ||
-      sidebar.activeTab === 'download',
+      sidebar.activeTab === 'download' ||
+      compare.active,
     isAnimationPlaying: animation.isPlaying
   };
 }

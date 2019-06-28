@@ -1,5 +1,4 @@
 import util from '../../util/util';
-import { getActiveTime } from '../../modules/data/util';
 import OlGeomPolygon from 'ol/geom/Polygon';
 export const REL_DATA = 'http://esipfed.org/ns/fedsearch/1.1/data#';
 export const REL_METADATA = 'http://esipfed.org/ns/fedsearch/1.1/metadata#';
@@ -203,7 +202,8 @@ export function dataCmrMockClient(suffix, store) {
   };
 
   var adjustResults = function(parameters, data) {
-    var day = getActiveTime(state);
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+    var day = state.date[activeDateStr];
     // Mock data was retrieved for Aug 6, 2013
     var resultsDay = new Date(Date.UTC(2013, 7, 6));
     var diffDays = (day - resultsDay) / (1000 * 60 * 60 * 24);

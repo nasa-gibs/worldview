@@ -38,9 +38,7 @@ export function dataUi(store, ui, config) {
   self.selector = '#wv-data';
   self.id = 'wv-data';
 
-  const subscribeToStore = function() {
-    const state = store.getState();
-    const action = state.lastAction;
+  const subscribeToStore = function(action) {
     switch (action.type) {
       case CHANGE_SIDEBAR_TAB:
         return action.activeTab === 'download' ? onActivate() : mapController ? onDeactivate() : '';
@@ -123,7 +121,7 @@ export function dataUi(store, ui, config) {
   };
   var init = function() {
     const sidebarState = store.getState().sidebar;
-    store.subscribe(subscribeToStore);
+    ui.events.on('last-action', subscribeToStore);
     self.events.on('query', onQuery)
       .on('queryResults', onQueryResults)
       .on('queryError', onQueryError)
@@ -167,7 +165,7 @@ export function dataUi(store, ui, config) {
     self.active = true;
     self.events.trigger('activate');
     if (!mapController) {
-      mapController = dataMap(store, maps, self);
+      mapController = dataMap(store, maps, self, ui);
     }
     query();
   };

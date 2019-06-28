@@ -54,7 +54,7 @@ export function mapui(models, config, store, ui) {
   var self = {};
   var cache;
   var rotation = new MapRotate(self, models, store);
-  var dateline = mapDateLineBuilder(models, config, store);
+  var dateline = mapDateLineBuilder(models, config, store, ui);
   var precache = mapPrecacheTile(models, config, cache, self);
   var compareMapUi = mapCompare(config, store);
   var dataRunner = (self.runningdata = new MapRunningData(
@@ -83,9 +83,7 @@ export function mapui(models, config, store, ui) {
    * Suscribe to redux store and listen for
    * specific action types
    */
-  const subscribeToStore = function() {
-    const state = store.getState();
-    const action = state.lastAction;
+  const subscribeToStore = function(action) {
     switch (action.type) {
       case layerConstants.ADD_LAYER:
         let def = lodashFind(action.layers, { id: action.id });
@@ -145,7 +143,7 @@ export function mapui(models, config, store, ui) {
       self.proj[proj.id] = map;
     });
     models.map.events.on('update-layers', reloadLayers);
-    store.subscribe(subscribeToStore);
+    ui.events.on('last-action', subscribeToStore);
     updateProjection(true);
   };
   const flyToNewExtent = function(extent, rotation) {

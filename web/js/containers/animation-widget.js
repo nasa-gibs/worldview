@@ -331,6 +331,7 @@ function mapStateToProps(state) {
       browser.greaterThan.small &&
       lodashGet(map, 'ui.selected.frameState_') &&
       sidebar.activeTab !== 'download' && // No Animation when data download is active
+      !compare.active &&
       !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'), // No Animation when Image download is open
     hasSubdailyLayers,
     incrementArray: zoomObj.array,
