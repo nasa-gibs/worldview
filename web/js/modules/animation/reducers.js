@@ -13,7 +13,7 @@ import {
   TOGGLE_GIF
 } from './constants';
 
-const defaultState = {
+export const defaultState = {
   isActive: false,
   isPlaying: false,
   loop: false,
