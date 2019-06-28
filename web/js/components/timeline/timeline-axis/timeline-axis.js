@@ -48,9 +48,10 @@ class TimelineAxis extends Component {
   * @param {Number} axisWidthInput
   * @param {Number} leftOffsetFixedCoeff
   * @param {Boolean} hoverChange
+  * @param {String} previousTimeScale - limited use for hover timeScale change
   * @returns {void}
   */
-  updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange) => {
+  updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange, previousTimeScale) => {
     let {
       timelineStartDateLimit,
       timelineEndDateLimit
@@ -130,10 +131,24 @@ class TimelineAxis extends Component {
 
     // offset grids needed since each zoom in won't be centered
     let offSetGrids = Math.floor(leftOffset / gridWidth);
+    let offSetHalved = Math.floor(gridNumber / 2);
     let offSetGridsDiff = offSetGrids - Math.floor(numberOfVisibleTiles / 2);
 
-    let gridsToSubtract = Math.floor(gridNumber / 2) + offSetGridsDiff;
-    let gridsToAdd = Math.floor(gridNumber / 2) - offSetGridsDiff;
+    let gridsToSubtract = offSetHalved + offSetGridsDiff;
+    let gridsToAdd = offSetHalved - offSetGridsDiff;
+
+    // determine if changing timeScale from greater to lesser (e.g., 'year' to 'month')
+    let greaterToLesserTimescale = timeScale && previousTimeScale
+      ? timeScaleToNumberKey[timeScale] < timeScaleToNumberKey[previousTimeScale]
+      : null;
+    if (greaterToLesserTimescale) {
+      // determine how far hoverTime date is from end to compensate for bounds correction
+      let hoverTimeToEndDateLimit = moment.utc(timelineEndDateLimit).diff(hoverTime, timeScale);
+      if (hoverTimeToEndDateLimit < offSetHalved) {
+        gridsToSubtract = gridsToSubtract + (offSetHalved - hoverTimeToEndDateLimit) - offSetGrids;
+        gridsToAdd = gridsToAdd - (offSetHalved - hoverTimeToEndDateLimit) + offSetGrids;
+      }
+    }
 
     let timeRange = this.getTimeRangeArray(gridsToSubtract, gridsToAdd, hoverTime);
 
@@ -470,7 +485,7 @@ class TimelineAxis extends Component {
           draggerDate = draggerTimeStateB;
         }
       }
-      this.updateScale(draggerDate, timeScale, null, leftOffset, true);
+      this.updateScale(draggerDate, timeScale, null, leftOffset, true, prevProps.timeScale);
     }
 
     // update axis on browser width change
