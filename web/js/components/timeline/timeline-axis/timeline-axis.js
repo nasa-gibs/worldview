@@ -681,7 +681,7 @@ class TimelineAxis extends Component {
           clearTimeout(this.wheelTimeout);
           this.wheelTimeout = setTimeout(() => {
             this.handleStopDrag(null, deltaObj, true);
-          }, 100);
+          }, 50);
         }
       } else { // multi-touch drag right
         let scrollX = this.props.position + 100;
@@ -697,7 +697,7 @@ class TimelineAxis extends Component {
           clearTimeout(this.wheelTimeout);
           this.wheelTimeout = setTimeout(() => {
             this.handleStopDrag(null, deltaObj, true);
-          }, 100);
+          }, 50);
         }
       }
     }
@@ -709,9 +709,17 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   handleMouseDown = (e) => {
+    let clientX;
+    if (e.type === 'touchstart') {
+      let touch = e.changedTouches[0];
+      clientX = touch.pageX;
+    } else {
+      clientX = e.clientX;
+    }
+
     this.setState({
       mouseDown: true,
-      clientXOnDrag: e.clientX
+      clientXOnDrag: clientX
     });
   }
 
@@ -726,7 +734,9 @@ class TimelineAxis extends Component {
     if (e.target.className.animVal !== 'axis-grid-rect') {
       return;
     }
-    if (e.clientX === this.state.clientXOnDrag &&
+    let clientX = e.clientX;
+    if (!this.props.isTimelineDragging &&
+        clientX === this.state.clientXOnDrag &&
         !this.props.isAnimationDraggerDragging &&
         !this.props.hasMoved &&
         (this.state.mouseDown || e.type === 'touchend')) {
@@ -770,7 +780,12 @@ class TimelineAxis extends Component {
     if (e.target.className.animVal !== 'axis-grid-rect') {
       return;
     }
-    if (!this.props.isAnimationDraggerDragging && !this.props.hasMoved) {
+    let touch = e.changedTouches[0];
+    let clientX = touch.pageX;
+    if (!this.props.isTimelineDragging &&
+        !this.props.isAnimationDraggerDragging &&
+        clientX === this.state.clientXOnDrag &&
+        !this.props.hasMoved) {
       let {
         currentTimeRange
       } = this.state;
@@ -843,7 +858,9 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   handleStartDrag = (e, d) => {
-    this.props.updateTimelineMoveAndDrag(this.props.hasMoved, true);
+    if (!this.props.isTimelineDragging) {
+      this.props.updateTimelineMoveAndDrag(this.props.hasMoved, true);
+    }
   }
 
   /**
@@ -1260,7 +1277,8 @@ TimelineAxis.propTypes = {
   isAnimationDraggerDragging: PropTypes.bool,
   isTimelineDragging: PropTypes.bool,
   hasMoved: PropTypes.bool,
-  isTourActive: PropTypes.bool
+  isTourActive: PropTypes.bool,
+  isAnimationPlaying: PropTypes.bool
 };
 
 export default TimelineAxis;

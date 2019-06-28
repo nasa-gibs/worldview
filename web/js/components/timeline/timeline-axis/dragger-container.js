@@ -200,14 +200,14 @@ class DraggerContainer extends PureComponent {
       draggerTimeStateB,
       isDraggerDragging,
       draggerSelected,
-      compareModeActive,
+      isCompareModeActive,
       setDraggerVisibility
     } = this.props;
 
     // handle dragger visibility update on compare mode activate/deactivate
-    if (compareModeActive !== prevProps.compareModeActive) {
+    if (isCompareModeActive !== prevProps.isCompareModeActive) {
       // turn on compare mode
-      if (compareModeActive) {
+      if (isCompareModeActive) {
         setDraggerVisibility(true, true);
       } else {
         // turn off compare mode
@@ -239,7 +239,7 @@ class DraggerContainer extends PureComponent {
       toggleShowDraggerTime,
       width,
       transformX,
-      compareModeActive,
+      isCompareModeActive,
       draggerPosition,
       draggerPositionB,
       draggerVisible,
@@ -249,14 +249,14 @@ class DraggerContainer extends PureComponent {
     let sharedProps = {
       toggleShowDraggerTime,
       transformX,
-      compareModeActive,
+      isCompareModeActive,
       handleDragDragger: this.handleDragDragger,
       selectDragger: this.selectDragger
     };
     return (
       draggerSelected === 'selectedB'
         ? <svg className="dragger-container" width={width} height={83}>
-          {compareModeActive
+          {isCompareModeActive
             ? <Dragger
               {...sharedProps}
               disabled={true}
@@ -274,7 +274,7 @@ class DraggerContainer extends PureComponent {
           />
         </svg>
         : <svg className="dragger-container" width={width} height={83}>
-          {compareModeActive
+          {isCompareModeActive
             ? <Dragger
               {...sharedProps}
               disabled={true}
@@ -296,7 +296,7 @@ class DraggerContainer extends PureComponent {
 }
 
 DraggerContainer.propTypes = {
-  compareModeActive: PropTypes.bool,
+  isCompareModeActive: PropTypes.bool,
   disabled: PropTypes.bool,
   draggerName: PropTypes.string,
   draggerPosition: PropTypes.number,
