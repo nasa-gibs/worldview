@@ -387,20 +387,15 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       var vectorStyles = config.vectorStyles;
       var vectorStyleId;
 
+      vectorStyleId = def.vectorStyle.id;
       if (state.layers[activeGroupStr]) {
         let layers = state.layers[activeGroupStr];
         layers.forEach(layer => {
-          console.log(layer);
           if (layer.id === layerName && layer.custom) {
             vectorStyleId = layer.custom;
-          } else {
-            vectorStyleId = def.vectorStyle.id;
           }
         });
-      } else {
-        vectorStyleId = def.vectorStyle.id;
       }
-
       setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
     }
 
