@@ -23,6 +23,9 @@ module.exports = {
   swipeDragger: '.ab-swipe-line .ab-swipe-dragger',
   compareButton: '#compare-toggle-button',
 
+  // timeline
+  dragger: '.timeline-dragger',
+
   // layers
   infoButton: '.wv-layers-info',
   optionsButton: '.wv-layers-options',

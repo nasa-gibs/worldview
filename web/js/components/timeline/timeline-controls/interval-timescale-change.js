@@ -109,7 +109,7 @@ class TimeScaleIntervalChange extends PureComponent {
         >
           {/* timeScale display */}
           <span
-            id="current-zoom"
+            id="current-interval"
             className={`zoom-btn zoom-btn-active${customSelected ? ' custom-interval-text' : ''}`}
           >
             {customSelected ? customIntervalText : 1 + ' ' + timeScaleChangeUnit}

@@ -581,7 +581,7 @@ button:focus {
   bottom: 0;
 }
 
-.dragger * {
+.timeline-dragger * {
   pointer-events: all;
 }
 

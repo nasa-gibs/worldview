@@ -58,7 +58,7 @@ class Dragger extends PureComponent {
       draggerPosition,
       draggerVisible,
       draggerName,
-      compareModeActive,
+      isCompareModeActive,
       disabled
     } = this.props;
     return (
@@ -77,7 +77,7 @@ class Dragger extends PureComponent {
               cursor: 'pointer',
               display: draggerVisible ? 'block' : 'none'
             }}
-            className='timeline-dragger dragger'
+            className={`timeline-dragger dragger${draggerName === 'selected' ? 'A' : 'B'}`}
             transform={`translate(${transformX}, 0)`}
           >
             <polygon
@@ -86,7 +86,7 @@ class Dragger extends PureComponent {
               strokeWidth='1px'
               points='60,20, 90,65, 30,65'>
             </polygon>
-            {compareModeActive
+            {isCompareModeActive
               ? <text
                 fontSize='30px'
                 fontWeight='400'
@@ -116,7 +116,7 @@ class Dragger extends PureComponent {
 }
 
 Dragger.propTypes = {
-  compareModeActive: PropTypes.bool,
+  isCompareModeActive: PropTypes.bool,
   disabled: PropTypes.bool,
   draggerName: PropTypes.string,
   draggerPosition: PropTypes.number,
