@@ -66,6 +66,114 @@ fixtures.getState = function() {
           colors: [fixtures.light_red, fixtures.red, fixtures.dark_red]
         }
       }
+    },
+    vectorStyles: {
+      custom: {
+        OrbitTracks_Aura_Ascending: {
+          'version': 8,
+          'name': 'Orbit Tracks',
+          'sources': {
+            'OrbitTracks_Aqua_Ascending': {
+              'type': 'vector',
+              'tiles': [
+                'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
+              ]
+            },
+            'yellow1': {
+              'type': 'vector',
+              'tiles': [
+                'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
+              ]
+            }
+          },
+          'layers': [
+            {
+              'id': 'OrbitTracks_Aqua_Ascending',
+              'source': 'OrbitTracks_Aqua_Ascending',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Default',
+              'type': 'line',
+              'paint': {
+                'line-color': 'rgb(21, 192, 230)',
+                'line-width': 2
+              }
+            },
+            {
+              'id': 'OrbitTracks_Aqua_Ascending',
+              'source': 'OrbitTracks_Aqua_Ascending',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Default',
+              'type': 'circle',
+              'paint': {
+                'circle-radius': '5',
+                'circle-color': 'rgb(21, 192, 230)'
+              }
+            },
+            {
+              'id': 'OrbitTracks_Aqua_Ascending',
+              'source': 'OrbitTracks_Aqua_Ascending',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Default',
+              'type': 'symbol',
+              'layout': {
+                'text-field': ['get', 'label'],
+                'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+                'text-size': 10,
+                'text-transform': 'uppercase',
+                'text-letter-spacing': 0.05,
+                'text-offset': [-2.5, 0]
+              },
+              'paint': {
+                'text-color': '#fff',
+                'text-halo-color': '#999',
+                'text-halo-width': 1
+              }
+            },
+            {
+              'id': 'yellow1',
+              'source': 'yellow1',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Yellow 1',
+              'type': 'line',
+              'paint': {
+                'line-color': 'rgb(204, 255, 51)',
+                'line-width': 2
+              }
+            },
+            {
+              'id': 'yellow1',
+              'source': 'yellow1',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Yellow 1',
+              'type': 'circle',
+              'paint': {
+                'circle-radius': '5',
+                'circle-color': 'rgb(204, 255, 51)'
+              }
+            },
+            {
+              'id': 'yellow1',
+              'source': 'yellow1',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Yellow 1',
+              'type': 'symbol',
+              'layout': {
+                'text-field': ['get', 'label'],
+                'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+                'text-size': 10,
+                'text-transform': 'uppercase',
+                'text-letter-spacing': 0.05,
+                'text-offset': [-2.5, 0]
+              },
+              'paint': {
+                'text-color': '#fff',
+                'text-halo-color': '#999',
+                'text-halo-width': 1
+              }
+            }
+          ]
+        }
+      }
     }
   };
 };
@@ -172,6 +280,23 @@ fixtures.config = function() {
         projections: {
           geographic: {}
         }
+      },
+      OrbitTracks_Aqua_Ascending: {
+        id: 'OrbitTracks_Aqua_Ascending',
+        title: 'Orbit Tracks (Ascending, Points, Aqua)',
+        subtitle: '',
+        description: 'vector/OrbitTracks_Aqua_Ascending',
+        type: 'vector',
+        tags: 'vector vectors',
+        group: 'overlays',
+        layergroup: [
+          'vector'
+        ],
+        inactive: true,
+        vectorStyle: {
+          id: 'OrbitTracks_Aqua_Ascending'
+        },
+        period: 'daily'
       }
     },
     features: {
@@ -270,6 +395,169 @@ fixtures.config = function() {
         'red-1': {
           colors: [fixtures.light_red, fixtures.red, fixtures.dark_red]
         }
+      }
+    },
+    vectorData: {
+      OrbitTracks: {
+        id: 'Orbit_Tracks',
+        mvt_properties: [
+          {
+            Function: 'Style',
+            Description: 'Up/Down/Both',
+            IsOptional: 'False',
+            Title: 'Direction of travel',
+            DataType: 'string',
+            ValueList: [
+              'Ascending',
+              'Descending',
+              'Transitional'
+            ],
+            Identifier: 'direction'
+          },
+          {
+            Function: 'Describe',
+            Description: 'The datetime, in UTC.',
+            IsOptional: 'False',
+            Title: 'Datetime',
+            DataType: 'datetime',
+            Identifier: 'datetime'
+          },
+          {
+            Function: 'Describe',
+            Description: 'Was it day or night?',
+            IsOptional: 'False',
+            Title: 'Day/Night Flag',
+            DataType: 'string',
+            ValueList: [
+              'Day',
+              'Night',
+              'Both'
+            ],
+            Identifier: 'day_night'
+          },
+          {
+            Function: 'Describe',
+            Description: 'Just an ID',
+            IsOptional: 'False',
+            Title: 'Identifier',
+            DataType: 'int',
+            Identifier: 'id'
+          },
+          {
+            Function: 'Identify',
+            Description: 'Default time (hh:mm:ss).',
+            IsOptional: 'False',
+            Title: 'Label for default display',
+            DataType: 'string',
+            Identifier: 'label'
+          }
+        ]
+      }
+    },
+    vectorStyles: {
+      OrbitTracks_Aura_Ascending: {
+        'version': 8,
+        'name': 'Orbit Tracks',
+        'sources': {
+          'OrbitTracks_Aqua_Ascending': {
+            'type': 'vector',
+            'tiles': [
+              'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
+            ]
+          },
+          'yellow1': {
+            'type': 'vector',
+            'tiles': [
+              'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
+            ]
+          }
+        },
+        'layers': [
+          {
+            'id': 'OrbitTracks_Aqua_Ascending',
+            'source': 'OrbitTracks_Aqua_Ascending',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Default',
+            'type': 'line',
+            'paint': {
+              'line-color': 'rgb(21, 192, 230)',
+              'line-width': 2
+            }
+          },
+          {
+            'id': 'OrbitTracks_Aqua_Ascending',
+            'source': 'OrbitTracks_Aqua_Ascending',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Default',
+            'type': 'circle',
+            'paint': {
+              'circle-radius': '5',
+              'circle-color': 'rgb(21, 192, 230)'
+            }
+          },
+          {
+            'id': 'OrbitTracks_Aqua_Ascending',
+            'source': 'OrbitTracks_Aqua_Ascending',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Default',
+            'type': 'symbol',
+            'layout': {
+              'text-field': ['get', 'label'],
+              'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+              'text-size': 10,
+              'text-transform': 'uppercase',
+              'text-letter-spacing': 0.05,
+              'text-offset': [-2.5, 0]
+            },
+            'paint': {
+              'text-color': '#fff',
+              'text-halo-color': '#999',
+              'text-halo-width': 1
+            }
+          },
+          {
+            'id': 'yellow1',
+            'source': 'yellow1',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Yellow 1',
+            'type': 'line',
+            'paint': {
+              'line-color': 'rgb(204, 255, 51)',
+              'line-width': 2
+            }
+          },
+          {
+            'id': 'yellow1',
+            'source': 'yellow1',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Yellow 1',
+            'type': 'circle',
+            'paint': {
+              'circle-radius': '5',
+              'circle-color': 'rgb(204, 255, 51)'
+            }
+          },
+          {
+            'id': 'yellow1',
+            'source': 'yellow1',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Yellow 1',
+            'type': 'symbol',
+            'layout': {
+              'text-field': ['get', 'label'],
+              'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+              'text-size': 10,
+              'text-transform': 'uppercase',
+              'text-letter-spacing': 0.05,
+              'text-offset': [-2.5, 0]
+            },
+            'paint': {
+              'text-color': '#fff',
+              'text-halo-color': '#999',
+              'text-halo-width': 1
+            }
+          }
+        ]
       }
     }
   };
