@@ -412,7 +412,8 @@ Legend.propTypes = {
   height: PropTypes.number,
   isRunningData: PropTypes.bool,
   isHoveringCanvas: PropTypes.bool,
-  colorHex: PropTypes.string
+  colorHex: PropTypes.string,
+  isCustomPalette: PropTypes.bool
 };
 
 export default Legend;

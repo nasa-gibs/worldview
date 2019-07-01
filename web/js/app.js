@@ -181,6 +181,8 @@ export default connect(
   mapDispatchToProps
 )(App);
 App.propTypes = {
+  state: PropTypes.object,
+  parameters: PropTypes.object,
   mapMouseEvents: PropTypes.object,
   keyPressAction: PropTypes.func
 };

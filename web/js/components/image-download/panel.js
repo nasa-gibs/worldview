@@ -204,5 +204,7 @@ ImageResSelection.propTypes = {
   secondLabel: PropTypes.string,
   fileTypeOptions: PropTypes.bool,
   url: PropTypes.string,
-  crs: PropTypes.string
+  crs: PropTypes.string,
+  getLayers: PropTypes.func,
+  date: PropTypes.object
 };

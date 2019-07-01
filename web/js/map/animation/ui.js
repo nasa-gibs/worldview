@@ -8,7 +8,10 @@ import {
   UPDATE_START_DATE,
   UPDATE_END_DATE
 } from '../../modules/animation/constants';
-import { changeEndDate } from '../../modules/animation/actions';
+import { SELECT_DATE } from '../../modules/date/constants';
+import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
+import { REMOVE_LAYER } from '../../modules/layers/constants';
+import { OPEN_BASIC, OPEN_CUSTOM } from '../../modules/modal/constants';
 
 export function animationUi(models, ui, store) {
   var self = {};
@@ -34,10 +37,10 @@ export function animationUi(models, ui, store) {
       case TOGGLE_GIF:
       case UPDATE_START_DATE:
       case UPDATE_END_DATE:
-      case modalConstants.OPEN_CUSTOM:
-      case modalConstants.OPEN_BASIC:
-      case layerConstants.REMOVE_LAYER:
-      case sidebarConstants.CHANGE_TAB:
+      case OPEN_CUSTOM:
+      case OPEN_BASIC:
+      case REMOVE_LAYER:
+      case CHANGE_SIDEBAR_TAB:
         return self.refreshState();
       case SELECT_DATE:
         return self.dateChange();

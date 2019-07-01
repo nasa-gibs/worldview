@@ -1260,7 +1260,8 @@ TimelineAxis.propTypes = {
   isAnimationDraggerDragging: PropTypes.bool,
   isTimelineDragging: PropTypes.bool,
   hasMoved: PropTypes.bool,
-  isTourActive: PropTypes.bool
+  isTourActive: PropTypes.bool,
+  isAnimationPlaying: PropTypes.bool
 };
 
 export default TimelineAxis;

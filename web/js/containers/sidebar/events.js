@@ -269,5 +269,6 @@ Events.propTypes = {
   hasRequestError: PropTypes.bool,
   isMobile: PropTypes.bool,
   showAlert: PropTypes.bool,
-  openAlertModal: PropTypes.func
+  openAlertModal: PropTypes.func,
+  selectedDate: PropTypes.string
 };

@@ -196,5 +196,6 @@ toolbarContainer.propTypes = {
   notificationType: PropTypes.string,
   notificationContentNumber: PropTypes.number,
   requestNotifications: PropTypes.func,
-  config: PropTypes.object
+  config: PropTypes.object,
+  isImageDownloadActive: PropTypes.bool
 };

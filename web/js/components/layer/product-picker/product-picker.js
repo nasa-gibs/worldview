@@ -251,7 +251,7 @@ ProductPicker.propTypes = {
   hasMeasurementSetting: PropTypes.func,
   filterProjections: PropTypes.func,
   filterSearch: PropTypes.func,
-  onToggleModal: PropTypes.func,
+  onToggle: PropTypes.func,
   category: PropTypes.object
 };
 

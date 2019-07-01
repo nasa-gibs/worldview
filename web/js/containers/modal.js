@@ -193,5 +193,6 @@ ModalContainer.propTypes = {
   bodyTemplate: PropTypes.object,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
-  customProps: PropTypes.object
+  customProps: PropTypes.object,
+  isMobile: PropTypes.bool
 };
