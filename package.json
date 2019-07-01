@@ -123,7 +123,7 @@
     "precss": "^3.1.2",
     "rc-slider": "8.6.3",
     "react-test-renderer": "^16.5.2",
-    "redux-location-state": "Benjaki2/redux-location-state#update-parse-helper",
+    "redux-location-state": "nasa-gibs/redux-location-state#update-parse-helper",
     "redux-logger": "^3.0.6",
     "redux-mock-store": "^1.5.3",
     "run-script-os": "^1.0.7",
@@ -144,7 +144,7 @@
     "yargs": "^11.0.0"
   },
   "dependencies": {
-    "@entryline/gifstream": "entryLine/gifstream#cancel-feature",
+    "@entryline/gifstream": "^1.2.0",
     "@fortawesome/fontawesome-free": "^5.5.0",
     "bluebird": "3.4.6",
     "bootstrap": "4.1.x",
