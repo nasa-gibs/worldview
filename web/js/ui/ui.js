@@ -1,6 +1,6 @@
 import 'jquery-ui-bundle/jquery-ui';
 import loadingIndicator from './indicator';
-import uiInfo from './info';
+import { uiInfo } from './info';
 
 export default (function(self) {
   // Export other ui methods

@@ -1,4 +1,4 @@
-import { RUNNING_DATA, CLEAR_RUNNING_DATA } from './constants';
+import { RUNNING_DATA, CLEAR_RUNNING_DATA, CLEAR_ROTATE } from './constants';
 
 export function runningData(payload) {
   return {
@@ -10,5 +10,11 @@ export function runningData(payload) {
 export function clearRunningData() {
   return {
     type: CLEAR_RUNNING_DATA
+  };
+}
+
+export function clearRotate() {
+  return {
+    type: CLEAR_ROTATE
   };
 }

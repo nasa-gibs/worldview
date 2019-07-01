@@ -45,6 +45,7 @@ import {
   cloneDeep as lodashCloneDeep,
   find as lodashFind
 } from 'lodash';
+import { CLEAR_ROTATE } from '../modules/map/constants';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -88,14 +89,16 @@ export function mapui(models, config, store, ui) {
       case layerConstants.ADD_LAYER:
         let def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);
+      case CLEAR_ROTATE:
+        return rotation.reset(self.selected);
       case LOCATION_POP_ACTION:
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(action, 'payload.query.map.extent');
-        const rotation =
+        const rotate =
           lodashGet(action, 'payload.query.map.rotation') || 0;
         updateProjection();
         if (newState.v && !newState.e && extent) {
-          flyToNewExtent(extent, rotation);
+          flyToNewExtent(extent, rotate);
         }
         // ''}
         return;
@@ -119,7 +122,7 @@ export function mapui(models, config, store, ui) {
       case paletteConstants.SET_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.CLEAR_CUSTOM:
-      case paletteConstants.REQUEST_PALETTE_SUCESS:
+      case paletteConstants.REQUEST_PALETTE_SUCCESS:
         return updateLookup();
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
@@ -999,8 +1002,8 @@ export function mapui(models, config, store, ui) {
     });
     onZoomChange();
   };
-  var onRotate = function() {
-    rotation.updateRotation();
+  var onRotate = function(val) {
+    rotation.updateRotation(val);
     updateExtent();
   };
   /*

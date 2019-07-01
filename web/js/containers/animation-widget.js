@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   without as lodashWithout,
-  isEmpty as lodashIsEmpty,
+  find as lodashFind,
   get as lodashGet
 } from 'lodash';
 import ErrorBoundary from './error-boundary';
@@ -14,7 +14,7 @@ import PlayButton from '../components/animation-widget/play-button';
 import AnimWidgetHeader from '../components/animation-widget/header';
 import googleTagManager from 'googleTagManager';
 import PlayQueue from '../components/animation-widget/play-queue';
-
+import { Notify } from '../components/image-download/notify';
 import { promiseImageryForTime } from '../modules/map/selectors';
 import { selectDate, selectInterval } from '../modules/date/actions';
 import GifContainer from './gif';
@@ -37,6 +37,12 @@ import {
   changeEndDate,
   toggleComponentGifActive
 } from '../modules/animation/actions';
+import { notificationWarnings } from '../modules/image-download/constants';
+import { onToggle, openCustomContent } from '../modules/modal/actions';
+import { clearCustoms } from '../modules/palettes/actions';
+import { clearRotate } from '../modules/map/actions';
+import { clearGraticule } from '../modules/layers/actions';
+import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;
@@ -78,11 +84,47 @@ class AnimationWidget extends React.Component {
     this.onDateChange = this.onDateChange.bind(this);
     this.onZoomSelect = this.onZoomSelect.bind(this);
     this.onLoop = this.onLoop.bind(this);
+    this.openGif = this.openGif.bind(this);
   }
   static getDerivedStateFromProps(props, state) {
     if (props.speed !== state.speed && !state.isSliding) {
       return { speed: props.speed };
     } else return null;
+  }
+  getPromise(bool, type, action, title) {
+    const { notify } = this.props;
+    if (bool) {
+      return notify(type, action);
+    } else {
+      return Promise.resolve(type);
+    }
+  }
+  openGif() {
+    const {
+      toggleGif,
+      hasCustomPalettes,
+      isRotated,
+      hasGraticule
+    } = this.props;
+    this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice').then(
+      () => {
+        this.getPromise(
+          isRotated,
+          'rotate',
+          clearRotate,
+          'Reset rotation'
+        ).then(() => {
+          this.getPromise(
+            hasGraticule,
+            'graticule',
+            clearGraticule,
+            'Remove Graticule?'
+          ).then(() => {
+            toggleGif();
+          });
+        });
+      }
+    );
   }
   /*
    * Sets a new state to say whether or not
@@ -246,9 +288,7 @@ class AnimationWidget extends React.Component {
                 isCompareActive ? 'wv-icon-case disabled' : 'wv-icon-case'
               }
               disabled={isCompareActive}
-              onClick={e => {
-                toggleGif(e, isCompareActive);
-              }}
+              onClick={this.openGif}
             >
               <i
                 id="wv-animation-widget-file-video-icon"
@@ -299,6 +339,7 @@ function mapStateToProps(state) {
     palettes,
     config,
     map,
+    proj,
     browser
   } = state;
   let {
@@ -314,9 +355,23 @@ function mapStateToProps(state) {
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
   const zoomObj = getZoomObject(date, hasSubdailyLayers);
-  let { customSelected, interval, delta, customInterval, customDelta, appNow } = date;
-  const hasCustomPalettes = !lodashIsEmpty(palettes[activeStr]);
-
+  let {
+    customSelected,
+    interval,
+    delta,
+    customInterval,
+    customDelta,
+    appNow
+  } = date;
+  const activeLayersForProj = getLayers(
+    layers[activeStr],
+    { proj: proj.id },
+    state
+  );
+  const hasCustomPalettes = hasCustomPaletteInActiveProjection(
+    activeLayersForProj,
+    palettes[activeStr]
+  );
   let minDate = new Date(config.startDate);
   let maxDate = appNow;
 
@@ -353,12 +408,41 @@ function mapStateToProps(state) {
       return promiseImageryForTime(date, layers, state);
     },
     isGifActive: gifActive,
-    isCompareActive: compare.active
+    isCompareActive: compare.active,
+    isRotated: Boolean(map.rotation !== 0),
+    hasGraticule: Boolean(
+      lodashGet(
+        lodashFind(layers[activeStr], { id: 'Graticule' }) || {},
+        'visible'
+      )
+    )
   };
 }
 const mapDispatchToProps = dispatch => ({
   selectDate: val => {
     dispatch(selectDate(val));
+  },
+  notify: (type, action, title) => {
+    return new Promise((resolve, reject, cancel) => {
+      const bodyComponentProps = {
+        bodyText: notificationWarnings[type],
+        cancel: () => {
+          dispatch(onToggle());
+        },
+        accept: () => {
+          dispatch(action());
+          dispatch(onToggle());
+          resolve();
+        }
+      };
+      dispatch(
+        openCustomContent('image_download_notify_' + type, {
+          headerText: 'Notify',
+          bodyComponent: Notify,
+          bodyComponentProps
+        })
+      );
+    });
   },
   onClose: () => {
     dispatch(onClose());
@@ -372,8 +456,8 @@ const mapDispatchToProps = dispatch => ({
   onPushLoop: () => {
     dispatch(toggleLooping());
   },
-  toggleGif: (e, isCompareActive) => {
-    if (!isCompareActive) dispatch(toggleComponentGifActive());
+  toggleGif: () => {
+    dispatch(toggleComponentGifActive());
   },
   onSlide: num => {
     dispatch(changeFrameRate(num));
@@ -405,6 +489,7 @@ AnimationWidget.propTypes = {
   delta: PropTypes.number,
   endDate: PropTypes.object,
   hasCustomPalettes: PropTypes.bool,
+  hasGraticule: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   increment: PropTypes.string,
   incrementArray: PropTypes.array,
@@ -413,11 +498,13 @@ AnimationWidget.propTypes = {
   isCompareActive: PropTypes.bool,
   isGifActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
+  isRotated: PropTypes.bool,
   layers: PropTypes.array,
   looping: PropTypes.bool,
   map: PropTypes.object,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
+  notify: PropTypes.func,
   onClose: PropTypes.func,
   onDateChange: PropTypes.func,
   onPushLoop: PropTypes.func,

@@ -64,7 +64,8 @@ export function paletteReducer(state = defaultPaletteState, action) {
     case SET_CUSTOM:
     case CLEAR_CUSTOM:
       return lodashAssign({}, state, {
-        [groupName]: action.palettes || {}
+        [groupName]: action.palettes || {},
+        rendered: action.rendered || state.rendered // only CLEAR_CUSTOM provides rendered
       });
     case LOADED_CUSTOM_PALETTES:
       return lodashAssign({}, state, {

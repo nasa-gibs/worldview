@@ -63,6 +63,14 @@ export function MapRotate(ui, models, store) {
       .append($resetButton)
       .append($rotateRightButton);
   };
+  self.reset = function(map) {
+    if (self.intervalId) clearInterval(self.intervalId); // stop repeating rotation on mobile
+    map.getView().animate({
+      duration: 500,
+      rotation: 0
+    });
+    self.setResetButton(0);
+  };
   /*
    * Applies Jquery click events to rotation-widget
    *

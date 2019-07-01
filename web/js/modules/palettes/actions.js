@@ -6,11 +6,13 @@ import {
   SET_CUSTOM,
   LOADED_CUSTOM_PALETTES
 } from './constants';
+import { forOwn as lodashForOwn } from 'lodash';
 import {
   setRange as setRangeSelector,
   setCustom as setCustomSelector,
   clearCustom as clearCustomSelector
 } from './selectors';
+import update from 'immutability-helper';
 
 /**
  * Request palette using core request utility
@@ -110,7 +112,36 @@ export function clearCustom(layerId, index, groupName) {
       groupName,
       layerId,
       activeString: groupName,
-      palettes: newActivePalettesObj
+      palettes: newActivePalettesObj,
+      rendered: update(palettes.rendered, {
+        [layerId]: { maps: { [index]: { custom: { $set: undefined } } } }
+      })
+    });
+  };
+}
+/**
+ * Action to remove custom palettes
+ *
+ * @param {String} layerId
+ * @param {Number} index | Palette index value for multi-paletted layers
+ * @param {String} groupName | layer group string
+ */
+export function clearCustoms() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { palettes, compare } = state;
+    const groupName = compare.activeString;
+    const activePalettes = palettes[groupName];
+    const props = { squash: undefined, min: undefined, max: undefined };
+    lodashForOwn(activePalettes, function(value, key) {
+      activePalettes[key].maps.forEach((colormap, index) => {
+        if (colormap.custom) {
+          dispatch(clearCustom(key, index, groupName));
+        }
+        if (colormap.max || colormap.min || colormap.squash) {
+          dispatch(setRangeAndSquash(key, props, index, groupName));
+        }
+      });
     });
   };
 }

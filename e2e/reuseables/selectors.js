@@ -7,7 +7,7 @@ module.exports = {
   gifPreviewFrameRateValue: '.gif-download-grid .grid-child:nth-child(6) span',
   gifPreviewEndResolutionSelector: '.gif-selector-case #gif-resolution',
   gifPreviewEndResolutionOption250: '#gif-resolution option[value="1"]',
-  gifDownloadIcon: '.jcrop-holder .fa-download',
+  gifDownloadIcon: '.animation-gif-dialog-wrapper .wv-button.gray',
   gifDownloadButton: '.animation-gif-dialog-wrapper .wv-button',
   gifResults: '.gif-results-dialog-case img',
   gifResultsCloseButton: '.wv-gif-results button.ui-dialog-titlebar-close',

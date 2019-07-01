@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ButtonToolbar, Button } from 'reactstrap';
-import { openCustomContent } from '../modules/modal/actions';
+import { openCustomContent, onToggle } from '../modules/modal/actions';
 import ImageDownload from './image-download';
 import Projection from './projection';
 import InfoList from './info';
 import ShareLinks from './share';
 import ErrorBoundary from './error-boundary';
-import { get as lodashGet } from 'lodash';
+import { get as lodashGet, find as lodashFind } from 'lodash';
 import {
   requestNotifications,
   setNotifications
@@ -17,7 +17,15 @@ import {
   STATUS_REQUEST_URL,
   REQUEST_NOTIFICATIONS
 } from '../modules/notifications/constants';
-
+import { clearCustoms } from '../modules/palettes/actions';
+import { clearRotate } from '../modules/map/actions';
+import { clearGraticule } from '../modules/layers/actions';
+import { notificationWarnings } from '../modules/image-download/constants';
+import { Notify } from '../components/image-download/notify';
+import Promise from 'bluebird';
+import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
+import { getLayers } from '../modules/layers/selectors';
+Promise.config({ cancellation: true });
 const CUSTOM_MODAL_PROPS = {
   TOOLBAR_PROJECTION: {
     headerText: null,
@@ -62,6 +70,40 @@ class toolbarContainer extends Component {
   constructor(props) {
     super(props);
     this.requestNotifications();
+    this.openImageDownload = this.openImageDownload.bind(this);
+  }
+  getPromise(bool, type, action, title) {
+    const { notify } = this.props;
+    if (bool) {
+      return notify(type, action);
+    } else {
+      return Promise.resolve(type);
+    }
+  }
+  openImageDownload() {
+    const { openModal, hasCustomPalette, isRotated, hasGraticule } = this.props;
+    this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice').then(
+      () => {
+        this.getPromise(
+          isRotated,
+          'rotate',
+          clearRotate,
+          'Reset rotation'
+        ).then(() => {
+          this.getPromise(
+            hasGraticule,
+            'graticule',
+            clearGraticule,
+            'Remove Graticule?'
+          ).then(() => {
+            openModal(
+              'TOOLBAR_SNAPSHOT',
+              CUSTOM_MODAL_PROPS['TOOLBAR_SNAPSHOT']
+            );
+          });
+        });
+      }
+    );
   }
   requestNotifications() {
     const { config, requestNotifications } = this.props;
@@ -134,12 +176,7 @@ class toolbarContainer extends Component {
             }
             disabled={!isImageDownloadActive}
             title="Take a snapshot"
-            onClick={() =>
-              openModal(
-                'TOOLBAR_SNAPSHOT',
-                CUSTOM_MODAL_PROPS['TOOLBAR_SNAPSHOT']
-              )
-            }
+            onClick={this.openImageDownload}
           >
             <i className="fa fa-camera fa-2x" />{' '}
           </Button>
@@ -160,18 +197,58 @@ class toolbarContainer extends Component {
   }
 }
 function mapStateToProps(state) {
-  const { number, type } = state.notifications;
-
+  const { notifications, palettes, compare, map, layers, proj } = state;
+  const { number, type } = notifications;
+  const activeString = compare.activeString;
+  const activeLayersForProj = getLayers(
+    layers[activeString],
+    { proj: proj.id },
+    state
+  );
   return {
     notificationType: type,
     notificationContentNumber: number,
     config: state.config,
-    isImageDownloadActive: Boolean(lodashGet(state, 'map.ui.selected'))
+    isImageDownloadActive: Boolean(
+      lodashGet(state, 'map.ui.selected') && !compare.active
+    ),
+    hasCustomPalette: hasCustomPaletteInActiveProjection(
+      activeLayersForProj,
+      palettes[activeString]
+    ),
+    isRotated: Boolean(map.rotation !== 0),
+    hasGraticule: Boolean(
+      lodashGet(
+        lodashFind(layers[activeString], { id: 'Graticule' }) || {},
+        'visible'
+      )
+    )
   };
 }
 const mapDispatchToProps = dispatch => ({
   openModal: (key, customParams) => {
     dispatch(openCustomContent(key, customParams));
+  },
+  notify: (type, action, title) => {
+    return new Promise((resolve, reject, cancel) => {
+      const bodyComponentProps = {
+        bodyText: notificationWarnings[type],
+        cancel: () => {
+          dispatch(onToggle());
+        },
+        accept: () => {
+          dispatch(action());
+          resolve();
+        }
+      };
+      dispatch(
+        openCustomContent('image_download_notify_' + type, {
+          headerText: 'Notify',
+          bodyComponent: Notify,
+          bodyComponentProps
+        })
+      );
+    });
   },
   requestNotifications: location => {
     const promise = dispatch(
@@ -193,7 +270,10 @@ export default connect(
 
 toolbarContainer.propTypes = {
   config: PropTypes.object,
+  hasCustomPalette: PropTypes.bool,
+  hasGraticule: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
+  isRotated: PropTypes.bool,
   notificationContentNumber: PropTypes.number,
   notificationType: PropTypes.string,
   openModal: PropTypes.func,

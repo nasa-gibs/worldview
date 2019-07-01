@@ -3,7 +3,6 @@ import configureMockStore from 'redux-mock-store';
 import {
   toggleActiveCompareState,
   toggleCompareOnOff,
-  deactivateCompare,
   setValue,
   changeMode
 } from './actions';
@@ -31,15 +30,6 @@ test(
       type: CONSTANTS.CHANGE_STATE
     };
     expect(toggleActiveCompareState()).toEqual(expectedAction);
-  }
-);
-test(
-  'deactivateCompare returns ' + CONSTANTS.DEACTIVATE + ' action type',
-  () => {
-    const expectedAction = {
-      type: CONSTANTS.DEACTIVATE
-    };
-    expect(deactivateCompare()).toEqual(expectedAction);
   }
 );
 test(

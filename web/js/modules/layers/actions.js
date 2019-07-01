@@ -76,6 +76,11 @@ export function addLayer(id, spec) {
     });
   };
 }
+export function clearGraticule() {
+  return (dispatch, getState) => {
+    dispatch(toggleVisibility('Graticule', false));
+  };
+}
 export function initSecondLayerGroup() {
   return {
     type: INIT_SECOND_LAYER_GROUP

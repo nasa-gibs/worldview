@@ -417,6 +417,17 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
     return Promise.resolve({ custom, rendered });
   }
 }
+export function hasCustomPaletteInActiveProjection(
+  activeLayers,
+  activePalettes
+) {
+  for (let i = 0, len = activeLayers.length; i < len; i++) {
+    if (activePalettes[activeLayers[i].id]) {
+      return true;
+    }
+  }
+  return false;
+}
 export function hasCustomTypePalette(str) {
   let bool = false;
   PALETTE_STRINGS_PERMALINK_ARRAY.forEach(element => {

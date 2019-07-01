@@ -2,8 +2,6 @@ import { initSecondLayerGroup } from '../layers/actions';
 import {
   CHANGE_STATE,
   TOGGLE_ON_OFF,
-  ACTIVATE,
-  DEACTIVATE,
   CHANGE_VALUE,
   CHANGE_MODE
 } from './constants';
@@ -21,18 +19,6 @@ export function toggleCompareOnOff() {
     dispatch({
       type: TOGGLE_ON_OFF
     });
-  };
-}
-
-export function activateCompare(isActive) {
-  return {
-    type: ACTIVATE
-  };
-}
-
-export function deactivateCompare(str) {
-  return {
-    type: DEACTIVATE
   };
 }
 export function setValue(num) {
