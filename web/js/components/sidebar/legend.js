@@ -394,26 +394,26 @@ class Legend extends React.Component {
   }
 }
 Legend.defaultProps = {
-  isRunningData: false,
+  height: 12,
   isHoveringLegend: false,
+  isRunningData: false,
   isRunningDataEnabled: true,
-  width: 231,
-  height: 12
+  width: 231
 };
 Legend.propTypes = {
-  paletteId: PropTypes.string,
-  layer: PropTypes.object,
   checkerBoardPattern: PropTypes.object,
-  isHoveringLegend: PropTypes.bool,
-  isRunningDataEnabled: PropTypes.bool,
-  getPalette: PropTypes.func,
-  legends: PropTypes.array,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  isRunningData: PropTypes.bool,
-  isHoveringCanvas: PropTypes.bool,
   colorHex: PropTypes.string,
-  isCustomPalette: PropTypes.bool
+  getPalette: PropTypes.func,
+  height: PropTypes.number,
+  isCustomPalette: PropTypes.bool,
+  isHoveringCanvas: PropTypes.bool,
+  isHoveringLegend: PropTypes.bool,
+  isRunningData: PropTypes.bool,
+  isRunningDataEnabled: PropTypes.bool,
+  layer: PropTypes.object,
+  legends: PropTypes.array,
+  paletteId: PropTypes.string,
+  width: PropTypes.number
 };
 
 export default Legend;

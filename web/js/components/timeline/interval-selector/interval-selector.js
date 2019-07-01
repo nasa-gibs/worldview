@@ -74,11 +74,11 @@ class CustomIntervalSelectorWidget extends PureComponent {
 
 CustomIntervalSelectorWidget.propTypes = {
   changeCustomInterval: PropTypes.func,
-  toggleCustomIntervalModal: PropTypes.func,
   customDelta: PropTypes.number,
-  customIntervalZoomLevel: PropTypes.number,
   customIntervalModalOpen: PropTypes.bool,
-  hasSubdailyLayers: PropTypes.bool
+  customIntervalZoomLevel: PropTypes.number,
+  hasSubdailyLayers: PropTypes.bool,
+  toggleCustomIntervalModal: PropTypes.func
 };
 
 export default CustomIntervalSelectorWidget;

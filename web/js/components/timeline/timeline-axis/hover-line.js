@@ -32,9 +32,9 @@ class HoverLine extends PureComponent {
 }
 
 HoverLine.propTypes = {
+  hoverLinePosition: PropTypes.number,
   isTimelineDragging: PropTypes.bool,
-  showHoverLine: PropTypes.bool,
-  hoverLinePosition: PropTypes.number
+  showHoverLine: PropTypes.bool
 };
 
 export default HoverLine;

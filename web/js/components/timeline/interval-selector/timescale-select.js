@@ -50,8 +50,8 @@ class TimeScaleSelect extends PureComponent {
 
 TimeScaleSelect.propTypes = {
   changeZoomLevel: PropTypes.func,
-  zoomLevel: PropTypes.string,
-  hasSubdailyLayers: PropTypes.bool
+  hasSubdailyLayers: PropTypes.bool,
+  zoomLevel: PropTypes.string
 };
 
 export default TimeScaleSelect;

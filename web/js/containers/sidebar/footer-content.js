@@ -178,19 +178,18 @@ export default connect(
 )(FooterContent);
 
 FooterContent.propTypes = {
-  showAll: PropTypes.bool,
-  isCompareActive: PropTypes.bool,
-  compareMode: PropTypes.string,
-  isMobile: PropTypes.bool,
-  events: PropTypes.array,
   activeTab: PropTypes.string,
-  filterEventList: PropTypes.func,
-  onGetData: PropTypes.func,
-  changeCompareMode: PropTypes.func,
   addLayers: PropTypes.func,
-  toggleCompare: PropTypes.func,
+  changeCompareMode: PropTypes.func,
+  compareFeature: PropTypes.bool,
+  compareMode: PropTypes.string,
   counts: PropTypes.object,
   dataSelectionSize: PropTypes.number,
-  compareFeature: PropTypes.bool,
+  events: PropTypes.array,
+  isCompareActive: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  onGetData: PropTypes.func,
+  showAll: PropTypes.bool,
+  toggleCompare: PropTypes.func,
   toggleListAll: PropTypes.func
 };

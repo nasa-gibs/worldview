@@ -41,9 +41,9 @@ class Steps extends React.Component {
 
 Steps.propTypes = {
   currentStep: PropTypes.number.isRequired,
-  totalSteps: PropTypes.number.isRequired,
   decreaseStep: PropTypes.func.isRequired,
-  incrementStep: PropTypes.func.isRequired
+  incrementStep: PropTypes.func.isRequired,
+  totalSteps: PropTypes.number.isRequired
 };
 
 export default Steps;

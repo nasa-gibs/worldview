@@ -72,10 +72,10 @@ export default class ResolutionTable extends React.Component {
   }
 }
 ResolutionTable.propTypes = {
-  height: PropTypes.number,
-  width: PropTypes.number,
-  valid: PropTypes.bool,
-  onClick: PropTypes.func,
   fileSize: PropTypes.string,
-  maxImageSize: PropTypes.string
+  height: PropTypes.number,
+  maxImageSize: PropTypes.string,
+  onClick: PropTypes.func,
+  valid: PropTypes.bool,
+  width: PropTypes.number
 };

@@ -224,35 +224,32 @@ class ProductPicker extends React.Component {
 }
 
 ProductPicker.defaultProps = {
-  listType: 'category',
-  category: null
+  category: null,
+  listType: 'category'
 };
 ProductPicker.propTypes = {
-  listType: PropTypes.string,
-  categories: PropTypes.array,
-  measurements: PropTypes.object,
-  drawMeasurements: PropTypes.func,
-  hasMeasurementSource: PropTypes.func,
-  toggleModal: PropTypes.func,
-  addLayer: PropTypes.func,
-  removeLayer: PropTypes.func,
   activeLayers: PropTypes.array,
-  filteredRows: PropTypes.array,
-  height: PropTypes.number,
-  expandedMeasurements: PropTypes.object,
-  activeMeasurementIndex: PropTypes.number,
-  selectedProjection: PropTypes.string,
-  modalView: PropTypes.string,
-  categoryConfig: PropTypes.object,
-  measurementConfig: PropTypes.object,
-  layerConfig: PropTypes.object,
+  addLayer: PropTypes.func,
   allLayers: PropTypes.array,
-  width: PropTypes.number,
-  hasMeasurementSetting: PropTypes.func,
+  categories: PropTypes.array,
+  category: PropTypes.object,
+  categoryConfig: PropTypes.object,
+  drawMeasurements: PropTypes.func,
+  filteredRows: PropTypes.array,
   filterProjections: PropTypes.func,
   filterSearch: PropTypes.func,
+  hasMeasurementSetting: PropTypes.func,
+  hasMeasurementSource: PropTypes.func,
+  height: PropTypes.number,
+  layerConfig: PropTypes.object,
+  listType: PropTypes.string,
+  measurementConfig: PropTypes.object,
+  measurements: PropTypes.object,
+  modalView: PropTypes.string,
   onToggle: PropTypes.func,
-  category: PropTypes.object
+  removeLayer: PropTypes.func,
+  selectedProjection: PropTypes.string,
+  width: PropTypes.number
 };
 
 const mapDispatchToProps = dispatch => ({

@@ -42,10 +42,10 @@ AlertComponent.defaultProps = {
   title: ''
 };
 AlertComponent.propTypes = {
+  iconClassName: PropTypes.string,
   isOpen: PropTypes.bool,
-  onDismiss: PropTypes.func,
-  onClick: PropTypes.func,
   message: PropTypes.string,
-  title: PropTypes.string,
-  iconClassName: PropTypes.string
+  onClick: PropTypes.func,
+  onDismiss: PropTypes.func,
+  title: PropTypes.string
 };

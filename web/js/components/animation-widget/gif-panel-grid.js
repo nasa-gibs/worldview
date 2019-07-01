@@ -80,15 +80,14 @@ export class GifPanelGrid extends React.Component {
   }
 }
 GifPanelGrid.propTypes = {
-  width: PropTypes.number,
+  endDate: PropTypes.string,
   height: PropTypes.number,
+  increment: PropTypes.string,
   maxGifSize: PropTypes.number,
   maxImageDimensionSize: PropTypes.number,
-  startDate: PropTypes.string,
-  endDate: PropTypes.string,
-  speed: PropTypes.number,
-  valid: PropTypes.bool,
   requestSize: PropTypes.string,
-  fileSizeEstimate: PropTypes.number,
-  increment: PropTypes.string
+  speed: PropTypes.number,
+  startDate: PropTypes.string,
+  valid: PropTypes.bool,
+  width: PropTypes.number
 };

@@ -62,9 +62,8 @@ OpacitySlider.defaultProps = {
   value: 50
 };
 OpacitySlider.propTypes = {
-  value: PropTypes.number,
   onSlide: PropTypes.func,
-  onSlideEnd: PropTypes.func
+  value: PropTypes.number
 };
 
 export default OpacitySlider;

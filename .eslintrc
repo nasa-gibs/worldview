@@ -62,7 +62,12 @@
         "react/no-danger": "warn",
         "react/prop-types": "warn",
         "react/no-did-update-set-state": "warn",
-        "react/no-render-return-value": "warn"
+        "react/no-render-return-value": "warn",
+        "react/sort-prop-types": ["warn", {
+          "ignoreCase": true,
+          "requiredFirst": true,
+          "sortShapeProp": true
+        }]
       }
     }
   ]

@@ -187,18 +187,18 @@ class PaletteSelect extends React.Component {
   }
 }
 PaletteSelect.propTypes = {
+  activePalette: PropTypes.string,
+  canvas: PropTypes.object,
+  checkerBoard: PropTypes.object,
+  clearCustom: PropTypes.func,
+  getCustomPalette: PropTypes.func,
+  getDefaultLegend: PropTypes.func,
+  groupName: PropTypes.string,
   index: PropTypes.number,
   layer: PropTypes.object,
-  clearCustom: PropTypes.func,
-  setCustom: PropTypes.func,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
-  getDefaultLegend: PropTypes.func,
-  getCustomPalette: PropTypes.func,
-  canvas: PropTypes.object,
-  groupName: PropTypes.string,
-  checkerBoard: PropTypes.object,
-  activePalette: PropTypes.string
+  setCustom: PropTypes.func
 };
 
 export default PaletteSelect;

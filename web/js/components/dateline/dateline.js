@@ -129,21 +129,21 @@ Line.defaultProps = {
 };
 
 Line.propTypes = {
-  dashArray: PropTypes.string,
-  opacity: PropTypes.string,
-  width: PropTypes.string,
-  strokeWidth: PropTypes.string,
+  classes: PropTypes.string,
   color: PropTypes.string,
+  dashArray: PropTypes.string,
   height: PropTypes.number,
-  lineX: PropTypes.number,
-  lineOver: PropTypes.func,
+  id: PropTypes.string,
   lineOut: PropTypes.func,
+  lineOver: PropTypes.func,
+  lineX: PropTypes.number,
+  opacity: PropTypes.string,
+  overlay: PropTypes.object,
+  strokeWidth: PropTypes.string,
+  style: PropTypes.object,
   svgStyle: PropTypes.object,
   tooltip: PropTypes.object,
-  overlay: PropTypes.object,
-  style: PropTypes.object,
-  id: PropTypes.string,
-  classes: PropTypes.string
+  width: PropTypes.string
 };
 
 export default Line;

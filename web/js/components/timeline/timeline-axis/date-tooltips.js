@@ -75,18 +75,17 @@ class DateToolTip extends PureComponent {
 }
 
 DateToolTip.propTypes = {
-  draggerSelected: PropTypes.string,
+  axisWidth: PropTypes.number,
   draggerPosition: PropTypes.number,
   draggerPositionB: PropTypes.number,
-  hasSubdailyLayers: PropTypes.bool,
-  leftOffset: PropTypes.number,
-  showDraggerTime: PropTypes.bool,
+  draggerSelected: PropTypes.string,
   draggerTimeState: PropTypes.string,
   draggerTimeStateB: PropTypes.string,
+  hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
-  isTimelineDragging: PropTypes.bool,
-  showHoverLine: PropTypes.bool,
-  axisWidth: PropTypes.number
+  leftOffset: PropTypes.number,
+  showDraggerTime: PropTypes.bool,
+  showHoverLine: PropTypes.bool
 };
 
 export default DateToolTip;

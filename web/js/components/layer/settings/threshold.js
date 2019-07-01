@@ -120,17 +120,16 @@ class ThresholdSelect extends React.Component {
   }
 }
 ThresholdSelect.propTypes = {
-  start: PropTypes.number,
   end: PropTypes.number,
-  onSlide: PropTypes.func,
+  groupName: PropTypes.string,
   index: PropTypes.number,
-  min: PropTypes.number,
-  max: PropTypes.number,
-  legend: PropTypes.object,
-  setRange: PropTypes.func,
   layerId: PropTypes.string,
+  legend: PropTypes.object,
+  max: PropTypes.number,
+  min: PropTypes.number,
+  setRange: PropTypes.func,
   squashed: PropTypes.bool,
-  groupName: PropTypes.string
+  start: PropTypes.number
 };
 
 export default ThresholdSelect;

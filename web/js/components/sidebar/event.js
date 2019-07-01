@@ -152,13 +152,13 @@ class Event extends React.Component {
   }
 }
 Event.propTypes = {
-  event: PropTypes.object,
-  selectedDate: PropTypes.string,
-  isVisible: PropTypes.bool,
   deselectEvent: PropTypes.func,
+  event: PropTypes.object,
+  isSelected: PropTypes.bool,
+  isVisible: PropTypes.bool,
+  selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
-  sources: PropTypes.array,
-  isSelected: PropTypes.bool
+  sources: PropTypes.array
 };
 
 export default Event;

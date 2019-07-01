@@ -22,8 +22,8 @@ class animWidgetHeader extends React.Component {
 }
 
 animWidgetHeader.propTypes = {
-  text: PropTypes.string,
   onClick: PropTypes.func,
+  text: PropTypes.string,
   toolTipTextArray: PropTypes.array
 };
 

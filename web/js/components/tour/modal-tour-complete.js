@@ -71,12 +71,11 @@ class ModalComplete extends React.Component {
 }
 
 ModalComplete.propTypes = {
-  modalComplete: PropTypes.bool.isRequired,
   currentStory: PropTypes.object.isRequired,
-  toggleModalComplete: PropTypes.func.isRequired,
+  endTour: PropTypes.func.isRequired,
+  modalComplete: PropTypes.bool.isRequired,
   resetTour: PropTypes.func.isRequired,
-  className: PropTypes.string,
-  endTour: PropTypes.func.isRequired
+  className: PropTypes.string
 };
 
 export default ModalComplete;

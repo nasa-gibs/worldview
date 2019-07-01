@@ -80,9 +80,9 @@ class GridRange extends PureComponent {
 }
 
 GridRange.propTypes = {
-  timeRange: PropTypes.array,
   gridWidth: PropTypes.number,
   showHover: PropTypes.func,
+  timeRange: PropTypes.array,
   timeScale: PropTypes.string,
   transformX: PropTypes.number
 };

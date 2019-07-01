@@ -67,15 +67,15 @@ class Pick extends React.Component {
 }
 
 Pick.propTypes = {
-  position: PropTypes.number,
-  height: PropTypes.number,
-  width: PropTypes.number,
-  path: PropTypes.string,
-  visibility: PropTypes.string,
   color: PropTypes.string,
+  height: PropTypes.number,
+  max: PropTypes.number,
+  path: PropTypes.string,
+  position: PropTypes.number,
   text: PropTypes.string,
-  yOffset: PropTypes.number,
-  max: PropTypes.number
+  visibility: PropTypes.string,
+  width: PropTypes.number,
+  yOffset: PropTypes.number
 };
 
 export default Pick;

@@ -52,12 +52,12 @@ class AxisTimeScaleChangeControls extends PureComponent {
 }
 
 AxisTimeScaleChangeControls.propTypes = {
-  timeScale: PropTypes.string,
   changeTimeScale: PropTypes.func,
-  incrementTimeScale: PropTypes.func,
   decrementTimeScale: PropTypes.func,
-  toolTipHovered: PropTypes.bool,
-  hasSubdailyLayers: PropTypes.bool
+  hasSubdailyLayers: PropTypes.bool,
+  incrementTimeScale: PropTypes.func,
+  timeScale: PropTypes.string,
+  toolTipHovered: PropTypes.bool
 };
 
 export default AxisTimeScaleChangeControls;

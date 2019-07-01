@@ -31,10 +31,9 @@ export default class Selector extends React.Component {
 };
 
 Selector.propTypes = {
-  onChange: PropTypes.func,
   id: PropTypes.string,
-  value: PropTypes.string,
-  checked: PropTypes.bool,
+  onChange: PropTypes.func,
   optionArray: PropTypes.object,
-  optionName: PropTypes.string
+  optionName: PropTypes.string,
+  value: PropTypes.string
 };

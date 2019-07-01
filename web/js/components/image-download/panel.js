@@ -175,36 +175,35 @@ export default class ImageResSelection extends React.Component {
 }
 
 ImageResSelection.defaultProps = {
+  fileType: 'image/jpeg',
+  fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
-  secondLabel: 'Format',
-  width: '0',
   height: '0',
   imageSize: '0',
-  maxImageSize: '250 MB',
   isWorldfile: 'false',
+  maxImageSize: '250 MB',
   resolution: '1',
-  worldFileOptions: true,
-  fileTypeOptions: true,
-  fileType: 'image/jpeg'
+  secondLabel: 'Format',
+  width: '0',
+  worldFileOptions: true
 };
 ImageResSelection.propTypes = {
-  resolutions: PropTypes.object,
-  fileType: PropTypes.string,
-  fileTypes: PropTypes.object,
+  crs: PropTypes.string,
+  date: PropTypes.object,
   fileSize: PropTypes.string,
+  fileType: PropTypes.string,
+  fileTypeOptions: PropTypes.bool,
+  fileTypes: PropTypes.object,
+  firstLabel: PropTypes.string,
+  getLayers: PropTypes.func,
+  isWorldfile: PropTypes.string,
+  lonlats: PropTypes.array,
+  maxImageSize: PropTypes.string,
   projection: PropTypes.object,
   resolution: PropTypes.string,
-  valid: PropTypes.bool,
-  lonlats: PropTypes.array,
-  isWorldfile: PropTypes.string,
-  onDownloadClick: PropTypes.func,
-  firstLabel: PropTypes.string,
-  maxImageSize: PropTypes.string,
-  worldFileOptions: PropTypes.bool,
+  resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
-  fileTypeOptions: PropTypes.bool,
   url: PropTypes.string,
-  crs: PropTypes.string,
-  getLayers: PropTypes.func,
-  date: PropTypes.object
+  valid: PropTypes.bool,
+  worldFileOptions: PropTypes.bool
 };

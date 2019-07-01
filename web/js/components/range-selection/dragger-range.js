@@ -267,22 +267,21 @@ class TimelineDraggerRange extends PureComponent {
 }
 
 TimelineDraggerRange.propTypes = {
-  opacity: PropTypes.number,
-  startLocation: PropTypes.number,
-  endLocation: PropTypes.number,
-  startLocationDate: PropTypes.object,
-  endLocationDate: PropTypes.object,
-  timelineStartDateLimit: PropTypes.string,
-  timelineEndDateLimit: PropTypes.string,
-  deltaStart: PropTypes.number,
-  max: PropTypes.object,
-  height: PropTypes.number,
-  width: PropTypes.number,
   color: PropTypes.string,
+  deltaStart: PropTypes.number,
   draggerID: PropTypes.string,
+  endLocation: PropTypes.number,
+  endLocationDate: PropTypes.object,
+  height: PropTypes.number,
+  id: PropTypes.string,
+  max: PropTypes.object,
   onDrag: PropTypes.func,
   onStop: PropTypes.func,
-  id: PropTypes.string
+  opacity: PropTypes.number,
+  startLocation: PropTypes.number,
+  startLocationDate: PropTypes.object,
+  timelineEndDateLimit: PropTypes.string,
+  width: PropTypes.number
 };
 
 export default TimelineDraggerRange;

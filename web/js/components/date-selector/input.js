@@ -310,21 +310,20 @@ class DateInputColumn extends Component {
 }
 
 DateInputColumn.propTypes = {
-  value: PropTypes.node,
+  blur: PropTypes.func,
+  changeTab: PropTypes.func,
+  date: PropTypes.object,
   focused: PropTypes.bool,
-  tabIndex: PropTypes.number,
+  fontSize: PropTypes.number,
+  inputId: PropTypes.string,
+  maxDate: PropTypes.object,
+  minDate: PropTypes.object,
+  setFocusedTab: PropTypes.func,
   step: PropTypes.number,
+  tabIndex: PropTypes.number,
   type: PropTypes.string,
   updateDate: PropTypes.func,
-  date: PropTypes.object,
-  minDate: PropTypes.object,
-  maxDate: PropTypes.object,
-  maxZoom: PropTypes.number,
-  blur: PropTypes.func,
-  setFocusedTab: PropTypes.func,
-  changeTab: PropTypes.func,
-  inputId: PropTypes.string,
-  fontSize: PropTypes.number
+  value: PropTypes.node
 };
 
 export default DateInputColumn;

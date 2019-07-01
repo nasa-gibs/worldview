@@ -188,11 +188,11 @@ ModalContainer.defaultProps = {
   customProps: { width: 500, offsetTop: 0, offsetLeft: 0 }
 };
 ModalContainer.propTypes = {
-  isCustom: PropTypes.bool,
-  id: PropTypes.string,
   bodyTemplate: PropTypes.object,
-  isOpen: PropTypes.bool,
-  isTemplateModal: PropTypes.bool,
   customProps: PropTypes.object,
-  isMobile: PropTypes.bool
+  id: PropTypes.string,
+  isCustom: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  isOpen: PropTypes.bool,
+  isTemplateModal: PropTypes.bool
 };

@@ -166,14 +166,12 @@ export default connect(
 )(InfoList);
 
 InfoList.propTypes = {
-  openModal: PropTypes.func,
-  notificationsRequest: PropTypes.object,
-  sendFeedback: PropTypes.func,
-  feedbackIsInitiated: PropTypes.bool,
   aboutClick: PropTypes.func,
+  config: PropTypes.object,
+  feedbackIsInitiated: PropTypes.bool,
+  models: PropTypes.object,
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
-  config: PropTypes.object,
-  models: PropTypes.object,
+  sendFeedback: PropTypes.func,
   startTour: PropTypes.func
 };

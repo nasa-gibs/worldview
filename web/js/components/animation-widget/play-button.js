@@ -22,9 +22,9 @@ class PlayButton extends React.Component {
 }
 
 PlayButton.propTypes = {
-  playing: PropTypes.bool,
   pause: PropTypes.func,
-  play: PropTypes.func
+  play: PropTypes.func,
+  playing: PropTypes.bool
 };
 
 export default PlayButton;

@@ -349,19 +349,19 @@ class LayerRow extends React.Component {
   }
 }
 LayerRow.propTypes = {
+  activeLayers: PropTypes.array,
+  addLayer: PropTypes.func,
+  category: PropTypes.object,
+  getSourceMetadata: PropTypes.func,
+  hasMeasurementSetting: PropTypes.func,
+  id: PropTypes.string,
+  isSelected: PropTypes.bool,
   layerConfig: PropTypes.object,
   measurement: PropTypes.object,
-  activeLayers: PropTypes.array,
-  category: PropTypes.object,
-  updateSelectedMeasurement: PropTypes.func,
-  id: PropTypes.string,
-  hasMeasurementSetting: PropTypes.func,
-  sourceMetadata: PropTypes.object,
-  getSourceMetadata: PropTypes.func,
+  projection: PropTypes.string,
   removeLayer: PropTypes.func,
-  addLayer: PropTypes.func,
-  isSelected: PropTypes.bool,
-  projection: PropTypes.string
+  sourceMetadata: PropTypes.object,
+  updateSelectedMeasurement: PropTypes.func
 };
 
 export default LayerRow;

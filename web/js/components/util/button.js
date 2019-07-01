@@ -31,15 +31,15 @@ export default class Button extends React.Component {
 
 Button.defaultProps = {
   className: 'gray',
-  valid: true,
   id: '',
-  style: null
+  style: null,
+  valid: true
 };
 Button.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.string,
   onClick: PropTypes.func,
   style: PropTypes.object,
-  id: PropTypes.string,
-  valid: PropTypes.bool,
-  className: PropTypes.string,
-  text: PropTypes.string
+  text: PropTypes.string,
+  valid: PropTypes.bool
 };

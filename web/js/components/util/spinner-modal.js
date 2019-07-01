@@ -44,7 +44,7 @@ SpinnerModal.defaultProps = {
   headerText: 'Loading'
 };
 SpinnerModal.propTypes = {
-  onClose: PropTypes.func,
+  delay: PropTypes.number,
   headerText: PropTypes.string,
-  delay: PropTypes.number
+  onClose: PropTypes.func
 };

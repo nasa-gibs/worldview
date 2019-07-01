@@ -122,16 +122,13 @@ export class GifResults extends Component {
 }
 
 GifResults.propTypes = {
-  endDate: PropTypes.string,
-  speed: PropTypes.number,
-  valid: PropTypes.bool,
-  requestSize: PropTypes.number,
-  fileSizeEstimate: PropTypes.number,
-  increment: PropTypes.string,
-  gifObject: PropTypes.object,
   boundaries: PropTypes.object,
-  screenWidth: PropTypes.number,
-  screenHeight: PropTypes.number,
+  endDate: PropTypes.string,
+  gifObject: PropTypes.object,
+  increment: PropTypes.string,
   onClose: PropTypes.func,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
+  speed: PropTypes.number,
   startDate: PropTypes.string
 };

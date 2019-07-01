@@ -192,10 +192,10 @@ export default connect(
 )(toolbarContainer);
 
 toolbarContainer.propTypes = {
-  openModal: PropTypes.func,
-  notificationType: PropTypes.string,
-  notificationContentNumber: PropTypes.number,
-  requestNotifications: PropTypes.func,
   config: PropTypes.object,
-  isImageDownloadActive: PropTypes.bool
+  isImageDownloadActive: PropTypes.bool,
+  notificationContentNumber: PropTypes.number,
+  notificationType: PropTypes.string,
+  openModal: PropTypes.func,
+  requestNotifications: PropTypes.func
 };

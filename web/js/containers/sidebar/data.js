@@ -55,19 +55,18 @@ class Data extends React.Component {
   }
 }
 Data.propTypes = {
-  height: PropTypes.number,
-  data: PropTypes.object,
-  getCounts: PropTypes.func,
-  showUnavailableReason: PropTypes.func,
-  selected: PropTypes.string,
-  selectProduct: PropTypes.func,
-  tabTypes: PropTypes.object,
   activeLayers: PropTypes.array,
-  products: PropTypes.object,
-  findProductToSelect: PropTypes.func,
   counts: PropTypes.object,
+  data: PropTypes.object,
+  findProductToSelect: PropTypes.func,
+  height: PropTypes.number,
+  isActive: PropTypes.bool,
+  products: PropTypes.object,
+  selected: PropTypes.string,
   selectedProduct: PropTypes.string,
-  isActive: PropTypes.bool
+  selectProduct: PropTypes.func,
+  showUnavailableReason: PropTypes.func,
+  tabTypes: PropTypes.object
 };
 
 const mapDispatchToProps = dispatch => ({

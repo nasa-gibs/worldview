@@ -187,16 +187,13 @@ DateSelector.defaultProps = {
 };
 DateSelector.propTypes = {
   date: PropTypes.object,
+  fontSize: PropTypes.number,
+  hasSubdailyLayers: PropTypes.bool,
+  id: PropTypes.string,
+  idSuffix: PropTypes.string,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
-  maxZoom: PropTypes.number,
-  onDateChange: PropTypes.func,
-  id: PropTypes.string,
-  height: PropTypes.string,
-  width: PropTypes.string,
-  idSuffix: PropTypes.string,
-  fontSize: PropTypes.number,
-  hasSubdailyLayers: PropTypes.bool
+  onDateChange: PropTypes.func
 };
 
 export default DateSelector;

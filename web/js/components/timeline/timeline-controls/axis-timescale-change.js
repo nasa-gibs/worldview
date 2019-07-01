@@ -109,11 +109,11 @@ class AxisTimeScaleChange extends PureComponent {
 }
 
 AxisTimeScaleChange.propTypes = {
-  timeScale: PropTypes.string,
   changeTimeScale: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
-  timelineHidden: PropTypes.bool
+  timelineHidden: PropTypes.bool,
+  timeScale: PropTypes.string
 };
 
 export default AxisTimeScaleChange;

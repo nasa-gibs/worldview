@@ -276,30 +276,29 @@ export default connect(
 )(LayerSettings);
 
 LayerSettings.defaultProps = {
-  palettedAllowed: false,
-  layer: { id: null, name: null },
   isOpen: false,
+  layer: { id: null, name: null },
+  palettedAllowed: false,
   title: null
 };
 LayerSettings.propTypes = {
-  index: PropTypes.number,
-  setOpacity: PropTypes.func,
-  clearCustom: PropTypes.func,
-  getPalette: PropTypes.func,
-  paletteOrder: PropTypes.array,
-  getDefaultLegend: PropTypes.func,
-  getCustomPalette: PropTypes.func,
-  getLegends: PropTypes.func,
-  getLegend: PropTypes.func,
-  setCustom: PropTypes.func,
   canvas: PropTypes.object,
-  palettesTranslate: PropTypes.func,
-  setRange: PropTypes.func,
+  clearCustom: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
-  close: PropTypes.func,
+  getCustomPalette: PropTypes.func,
+  getDefaultLegend: PropTypes.func,
+  getLegend: PropTypes.func,
+  getLegends: PropTypes.func,
+  getPalette: PropTypes.func,
+  groupName: PropTypes.string,
+  index: PropTypes.number,
   isOpen: PropTypes.bool,
-  palettedAllowed: PropTypes.bool,
   layer: PropTypes.object,
-  title: PropTypes.string,
-  groupName: PropTypes.string
+  palettedAllowed: PropTypes.bool,
+  paletteOrder: PropTypes.array,
+  palettesTranslate: PropTypes.func,
+  setCustom: PropTypes.func,
+  setOpacity: PropTypes.func,
+  setRange: PropTypes.func,
+  title: PropTypes.string
 };

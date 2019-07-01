@@ -104,9 +104,9 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
 }
 
 AxisTimeScaleChangeTooltip.propTypes = {
-  timeScale: PropTypes.string,
   changeTimeScale: PropTypes.func,
-  hasSubdailyLayers: PropTypes.bool
+  hasSubdailyLayers: PropTypes.bool,
+  timeScale: PropTypes.string
 };
 
 export default AxisTimeScaleChangeTooltip;

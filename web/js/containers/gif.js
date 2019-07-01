@@ -365,15 +365,15 @@ export default connect(
 )(GIF);
 
 GIF.propTypes = {
-  increment: PropTypes.string,
-  speed: PropTypes.number,
-  map: PropTypes.object,
-  screenWidth: PropTypes.number,
-  screenHeight: PropTypes.number,
-  proj: PropTypes.object,
-  onClose: PropTypes.func,
   endDate: PropTypes.string,
-  startDate: PropTypes.string,
   getImageArray: PropTypes.func,
-  isActive: PropTypes.bool
+  increment: PropTypes.string,
+  isActive: PropTypes.bool,
+  map: PropTypes.object,
+  onClose: PropTypes.func,
+  proj: PropTypes.object,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
+  speed: PropTypes.number,
+  startDate: PropTypes.string
 };

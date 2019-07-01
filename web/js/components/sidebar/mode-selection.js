@@ -56,8 +56,8 @@ class ModeSelection extends React.Component {
 }
 ModeSelection.propTypes = {
   isActive: PropTypes.bool,
-  selected: PropTypes.string,
-  onclick: PropTypes.func
+  onclick: PropTypes.func,
+  selected: PropTypes.string
 };
 
 export default ModeSelection;

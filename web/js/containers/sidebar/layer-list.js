@@ -152,20 +152,20 @@ class LayerList extends React.Component {
   }
 }
 LayerList.propTypes = {
-  layers: PropTypes.array,
-  groupId: PropTypes.string,
-  title: PropTypes.string,
-  layerGroupName: PropTypes.string,
-  renderedPalettes: PropTypes.string,
-  runningLayers: PropTypes.object,
-  projId: PropTypes.string,
+  activeLayers: PropTypes.array,
+  available: PropTypes.func,
   checkerBoardPattern: PropTypes.object,
   getNames: PropTypes.func,
-  available: PropTypes.func,
-  zots: PropTypes.object,
-  reorderLayers: PropTypes.func,
+  groupId: PropTypes.string,
+  layerGroupName: PropTypes.string,
+  layers: PropTypes.array,
   layerSplit: PropTypes.number,
-  activeLayers: PropTypes.array
+  projId: PropTypes.string,
+  renderedPalettes: PropTypes.string,
+  reorderLayers: PropTypes.func,
+  runningLayers: PropTypes.object,
+  title: PropTypes.string,
+  zots: PropTypes.object
 };
 function mapStateToProps(state, ownProps) {
   const {

@@ -70,11 +70,11 @@ export default connect(
 )(Layers);
 
 Layers.propTypes = {
-  overlays: PropTypes.array,
   baselayers: PropTypes.array,
+  checkerBoardPattern: PropTypes.object,
+  height: PropTypes.number,
   isActive: PropTypes.bool,
   layerGroupName: PropTypes.string,
-  height: PropTypes.number,
-  checkerBoardPattern: PropTypes.object,
-  layerSplit: PropTypes.number
+  layerSplit: PropTypes.number,
+  overlays: PropTypes.array
 };

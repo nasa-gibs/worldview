@@ -170,12 +170,12 @@ export default connect(
 )(ImageDownloadContainer);
 
 ImageDownloadContainer.propTypes = {
-  proj: PropTypes.object.isRequired,
   map: PropTypes.object.isRequired,
-  url: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  screenWidth: PropTypes.number,
-  screenHeight: PropTypes.number,
+  proj: PropTypes.object.isRequired,
+  url: PropTypes.string.isRequired,
   date: PropTypes.object,
-  getLayers: PropTypes.func
+  getLayers: PropTypes.func,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number
 };

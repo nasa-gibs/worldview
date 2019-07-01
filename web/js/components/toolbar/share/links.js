@@ -44,10 +44,6 @@ class ShareLinks extends React.Component {
 }
 
 ShareLinks.propTypes = {
-  fbLink: PropTypes.string,
-  twLink: PropTypes.string,
-  rdLink: PropTypes.string,
-  emailLink: PropTypes.string,
   onClick: PropTypes.func
 };
 

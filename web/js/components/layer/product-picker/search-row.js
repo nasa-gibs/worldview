@@ -504,14 +504,14 @@ class LayerRow extends React.Component {
   }
 }
 LayerRow.propTypes = {
-  layer: PropTypes.object,
+  isDateRangesExpanded: PropTypes.bool,
   isEnabled: PropTypes.bool,
   isMetadataExpanded: PropTypes.bool,
-  isDateRangesExpanded: PropTypes.bool,
-  onState: PropTypes.func,
+  layer: PropTypes.object,
   offState: PropTypes.func,
-  toggleMetadataExpansion: PropTypes.func,
-  toggleDateRangesExpansion: PropTypes.func
+  onState: PropTypes.func,
+  toggleDateRangesExpansion: PropTypes.func,
+  toggleMetadataExpansion: PropTypes.func
 };
 
 export default LayerRow;

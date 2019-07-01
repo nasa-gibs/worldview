@@ -116,12 +116,12 @@ class Dragger extends PureComponent {
 }
 
 Dragger.propTypes = {
-  isCompareModeActive: PropTypes.bool,
   disabled: PropTypes.bool,
   draggerName: PropTypes.string,
   draggerPosition: PropTypes.number,
   draggerVisible: PropTypes.bool,
   handleDragDragger: PropTypes.func,
+  isCompareModeActive: PropTypes.bool,
   selectDragger: PropTypes.func,
   toggleShowDraggerTime: PropTypes.func,
   transformX: PropTypes.number

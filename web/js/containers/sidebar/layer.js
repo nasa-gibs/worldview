@@ -237,39 +237,35 @@ class Layer extends React.Component {
 }
 
 Layer.defaultProps = {
-  renderedLegend: false,
-  palette: {}
+  palette: {},
+  renderedLegend: false
 };
 Layer.propTypes = {
+  checkerBoardPattern: PropTypes.object,
+  getPalette: PropTypes.func,
+  hasPalette: PropTypes.bool,
+  hover: PropTypes.func,
+  index: PropTypes.number,
+  isCustomPalette: PropTypes.bool,
+  isDisabled: PropTypes.bool,
+  isInProjection: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  isVisible: PropTypes.bool,
+  layer: PropTypes.object,
+  layerClasses: PropTypes.string,
+  layerGroupName: PropTypes.string,
+  legends: PropTypes.array,
+  names: PropTypes.object,
+  onInfoClick: PropTypes.func,
+  onOptionsClick: PropTypes.func,
+  onRemoveClick: PropTypes.func,
+  palette: PropTypes.object,
   renderedPalette: PropTypes.object,
   requestPalette: PropTypes.func,
-  isCustomPalette: PropTypes.bool,
-  isLoading: PropTypes.bool,
-  isVisible: PropTypes.bool,
-  layerClasses: PropTypes.string,
-  isDisabled: PropTypes.bool,
-  getPalette: PropTypes.func,
-  updateLayer: PropTypes.func,
-  layer: PropTypes.object,
-  layerGroupName: PropTypes.string,
-  zoomLevel: PropTypes.number,
-  zoomLimit: PropTypes.number,
-  names: PropTypes.object,
-  onAddClick: PropTypes.func,
-  isMobile: PropTypes.bool,
-  palette: PropTypes.object,
   runningObject: PropTypes.object,
-  legends: PropTypes.array,
-  index: PropTypes.number,
-  checkerBoardPattern: PropTypes.object,
-  isInProjection: PropTypes.bool,
-  zot: PropTypes.number,
-  onRemoveClick: PropTypes.func,
   toggleVisibility: PropTypes.func,
-  onInfoClick: PropTypes.func,
-  hover: PropTypes.func,
-  onOptionsClick: PropTypes.func,
-  hasPalette: PropTypes.bool
+  zot: PropTypes.number
 };
 function mapStateToProps(state, ownProps) {
   const {

@@ -141,16 +141,16 @@ function mapStateToProps(state, ownProps) {
   };
 }
 CompareCase.propTypes = {
-  isActive: PropTypes.bool,
   dateStringA: PropTypes.string,
   dateStringB: PropTypes.string,
-  toggleActiveCompareState: PropTypes.func,
-  isCompareA: PropTypes.bool,
   height: PropTypes.number,
+  isActive: PropTypes.bool,
+  isCompareA: PropTypes.bool,
   layersA: PropTypes.object,
   layersB: PropTypes.object,
+  openAlertModal: PropTypes.func,
   showAlert: PropTypes.bool,
-  openAlertModal: PropTypes.func
+  toggleActiveCompareState: PropTypes.func
 };
 export default connect(
   mapStateToProps,

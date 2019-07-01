@@ -186,35 +186,32 @@ class TimelineDragger extends PureComponent {
   }
 }
 TimelineDragger.defaultProps = {
-  visible: true,
-  height: 45,
-  width: 5,
   color: '#fff',
-  position: 0,
-  visibility: 'visible',
-  yOffset: 23,
+  height: 45,
   path: null,
-  textColor: '#000'
+  position: 0,
+  textColor: '#000',
+  visibility: 'visible',
+  visible: true,
+  width: 5,
+  yOffset: 23
 };
 
 TimelineDragger.propTypes = {
-  opacity: PropTypes.number,
-  max: PropTypes.number,
-  height: PropTypes.number,
-  onDrag: PropTypes.func,
-  onClick: PropTypes.func,
-  color: PropTypes.string,
-  position: PropTypes.number,
-  id: PropTypes.string,
-  onStop: PropTypes.func,
-  width: PropTypes.number,
   backgroundColor: PropTypes.string,
+  color: PropTypes.string,
   draggerID: PropTypes.string,
-  yOffset: PropTypes.number,
+  height: PropTypes.number,
+  id: PropTypes.string,
+  max: PropTypes.number,
+  onDrag: PropTypes.func,
+  onStop: PropTypes.func,
   path: PropTypes.string,
-  textColor: PropTypes.string,
+  position: PropTypes.number,
   text: PropTypes.string,
-  onMouseDown: PropTypes.func
+  textColor: PropTypes.string,
+  width: PropTypes.number,
+  yOffset: PropTypes.number
 };
 
 export default TimelineDragger;

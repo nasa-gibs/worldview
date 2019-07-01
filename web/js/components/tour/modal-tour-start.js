@@ -117,17 +117,17 @@ class ModalStart extends React.Component {
 }
 
 ModalStart.propTypes = {
+  checked: PropTypes.bool.isRequired,
+  endTour: PropTypes.func.isRequired,
+  hideTour: PropTypes.func.isRequired,
+  modalStart: PropTypes.bool.isRequired,
+  selectTour: PropTypes.func.isRequired,
+  showTour: PropTypes.func.isRequired,
+  showTourAlert: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
-  modalStart: PropTypes.bool.isRequired,
   toggleModalStart: PropTypes.func.isRequired,
-  selectTour: PropTypes.func.isRequired,
-  showTourAlert: PropTypes.func.isRequired,
-  hideTour: PropTypes.func.isRequired,
-  showTour: PropTypes.func.isRequired,
-  checked: PropTypes.bool.isRequired,
-  className: PropTypes.string,
-  endTour: PropTypes.func.isRequired
+  className: PropTypes.string
 };
 
 export default ModalStart;

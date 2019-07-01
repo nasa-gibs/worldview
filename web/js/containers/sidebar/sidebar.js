@@ -272,19 +272,18 @@ Sidebar.defaultProps = {
   visibleEvents: {}
 };
 Sidebar.propTypes = {
-  isMobile: PropTypes.bool,
-  tabTypes: PropTypes.object,
-  hasLocalStorage: PropTypes.bool,
-  screenHeight: PropTypes.number,
-  screenWidth: PropTypes.number,
-  onTabClick: PropTypes.func,
-  numberOfLayers: PropTypes.number,
   activeTab: PropTypes.string,
+  changeTab: PropTypes.func,
+  collapseExpandToggle: PropTypes.func,
+  collapseSidebar: PropTypes.func,
+  config: PropTypes.object,
+  hasLocalStorage: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
-  collapseSidebar: PropTypes.func,
-  collapseExpandToggle: PropTypes.func,
+  isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
-  config: PropTypes.object,
-  changeTab: PropTypes.func
+  numberOfLayers: PropTypes.number,
+  onTabClick: PropTypes.func,
+  screenHeight: PropTypes.number,
+  tabTypes: PropTypes.object
 };

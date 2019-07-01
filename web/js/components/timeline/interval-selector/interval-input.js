@@ -80,8 +80,8 @@ class IntervalInput extends PureComponent {
 }
 
 IntervalInput.propTypes = {
-  intervalValue: PropTypes.number,
-  changeInterval: PropTypes.func
+  changeInterval: PropTypes.func,
+  intervalValue: PropTypes.number
 };
 
 export default IntervalInput;

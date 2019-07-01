@@ -208,30 +208,30 @@ class AnimationWidget extends React.Component {
   }
 }
 RangeHandle.propTypes = {
-  value: PropTypes.number,
+  dragging: PropTypes.object,
   offset: PropTypes.number,
-  dragging: PropTypes.object
+  value: PropTypes.number
 };
 AnimationWidget.propTypes = {
-  sliderSpeed: PropTypes.number,
-  looping: PropTypes.bool,
-  startDate: PropTypes.object,
   endDate: PropTypes.object,
+  hasSubdailyLayers: PropTypes.bool,
   header: PropTypes.element,
-  incrementArray: PropTypes.array,
   increment: PropTypes.string,
-  onSlide: PropTypes.func,
-  onPushPlay: PropTypes.func,
-  onPushPause: PropTypes.func,
-  onPushLoop: PropTypes.func,
+  incrementArray: PropTypes.array,
+  looping: PropTypes.bool,
+  maxDate: PropTypes.object,
+  minDate: PropTypes.object,
+  onClose: PropTypes.func,
   onDateChange: PropTypes.func,
+  onPushGIF: PropTypes.func,
+  onPushLoop: PropTypes.func,
+  onPushPause: PropTypes.func,
+  onPushPlay: PropTypes.func,
+  onSlide: PropTypes.func,
   onZoomSelect: PropTypes.func,
   sliderLabel: PropTypes.string,
-  onPushGIF: PropTypes.func,
-  minDate: PropTypes.object,
-  maxDate: PropTypes.object,
-  hasSubdailyLayers: PropTypes.bool,
-  onClose: PropTypes.func
+  sliderSpeed: PropTypes.number,
+  startDate: PropTypes.object
 };
 
 export default AnimationWidget;

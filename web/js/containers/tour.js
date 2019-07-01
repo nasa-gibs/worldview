@@ -422,21 +422,21 @@ export default connect(
 )(Tour);
 Tour.propTypes = {
   config: PropTypes.object.isRequired,
+  hideTour: PropTypes.func.isRequired,
+  selectTour: PropTypes.func.isRequired,
+  showTour: PropTypes.func.isRequired,
+  showTourAlert: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
   storyOrder: PropTypes.array.isRequired,
   currentStep: PropTypes.number,
-  totalSteps: PropTypes.number,
   currentStory: PropTypes.object,
   currentStoryId: PropTypes.string,
-  selectTour: PropTypes.func.isRequired,
-  showTourAlert: PropTypes.func.isRequired,
-  hideTour: PropTypes.func.isRequired,
-  showTour: PropTypes.func.isRequired,
+  endTour: PropTypes.func,
+  isActive: PropTypes.bool,
+  processStepLink: PropTypes.func,
+  renderedPalettes: PropTypes.object,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
-  processStepLink: PropTypes.func,
-  isActive: PropTypes.bool,
-  endTour: PropTypes.func,
-  renderedPalettes: PropTypes.object,
-  startTour: PropTypes.func
+  startTour: PropTypes.func,
+  totalSteps: PropTypes.number
 };
