@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, ModalFooter } from 'reactstrap';
 
 export class Notify extends React.Component {
@@ -21,3 +22,9 @@ export class Notify extends React.Component {
     );
   }
 }
+
+Notify.propTypes = {
+  accept: PropTypes.func,
+  bodyText: PropTypes.string,
+  cancel: PropTypes.func
+};
