@@ -317,6 +317,7 @@ class TimelineRangeSelector extends React.Component {
 
 TimelineRangeSelector.propTypes = {
   axisWidth: PropTypes.number,
+  endColor: PropTypes.string,
   endLocation: PropTypes.number,
   endLocationDate: PropTypes.object,
   endTriangleColor: PropTypes.string,
