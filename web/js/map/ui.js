@@ -964,8 +964,6 @@ export function mapui(models, config, store, ui) {
               metaLegend: legend
             },
             isDraggable: true
-            // offsetTop: e.clientY + 'px',
-            // offsetLeft: e.clientX + 'px'
           }
         ));
       };

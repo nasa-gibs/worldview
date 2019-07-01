@@ -369,7 +369,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       url: source.url + urlParameters,
       layer: layerName,
       format: new MVT(),
-      projection: 'EPSG:4326',
+      matrixSet: tms,
       tileGrid: new OlTileGridTileGrid({
         extent: extent,
         origin: start,
