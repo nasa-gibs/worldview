@@ -276,6 +276,7 @@ toolbarContainer.propTypes = {
   isRotated: PropTypes.bool,
   notificationContentNumber: PropTypes.number,
   notificationType: PropTypes.string,
+  notify: PropTypes.bool,
   openModal: PropTypes.func,
   requestNotifications: PropTypes.func
 };
