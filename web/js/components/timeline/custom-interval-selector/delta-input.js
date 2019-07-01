@@ -2,14 +2,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * Interval Input for Custom Interval Selector
+ * Delta Input for Custom Interval Selector
  * group. It is a child component.
  *
- * @class IntervalInput
+ * @class DeltaInput
  */
 const regex = /^[0-9\b]+$/;
 
-class IntervalInput extends PureComponent {
+class DeltaInput extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,7 +51,7 @@ class IntervalInput extends PureComponent {
     if (value >= 1 && value < 1000) {
       this.setState({
         valid: true
-      }, this.props.changeInterval(value));
+      }, this.props.changeDelta(value));
     } else {
       this.setState({
         valid: false
@@ -64,13 +64,17 @@ class IntervalInput extends PureComponent {
     });
   }
   componentDidMount() {
-    this.setValue(this.props.intervalValue);
+    this.setValue(this.props.deltaValue);
   }
   render() {
+    let {
+      value,
+      valid
+    } = this.state;
     return (
-      <input className="interval-input" type="text"
-        style={this.state.valid ? {} : { borderColor: '#ff0000' }}
-        min="1" step="1" value={this.state.value}
+      <input className="custom-interval-delta-input" type="text"
+        style={valid ? {} : { borderColor: '#ff0000' }}
+        min="1" step="1" value={value}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyPress}
@@ -79,9 +83,9 @@ class IntervalInput extends PureComponent {
   }
 }
 
-IntervalInput.propTypes = {
-  changeInterval: PropTypes.func,
-  intervalValue: PropTypes.number
+DeltaInput.propTypes = {
+  changeDelta: PropTypes.func,
+  deltaValue: PropTypes.number
 };
 
-export default IntervalInput;
+export default DeltaInput;

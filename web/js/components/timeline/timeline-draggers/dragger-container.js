@@ -237,7 +237,7 @@ class DraggerContainer extends PureComponent {
     let {
       draggerSelected,
       toggleShowDraggerTime,
-      width,
+      axisWidth,
       transformX,
       isCompareModeActive,
       draggerPosition,
@@ -255,7 +255,7 @@ class DraggerContainer extends PureComponent {
     };
     return (
       draggerSelected === 'selectedB'
-        ? <svg className="dragger-container" width={width} height={83}>
+        ? <svg className="dragger-container" width={axisWidth} height={83}>
           {isCompareModeActive
             ? <Dragger
               {...sharedProps}
@@ -273,7 +273,7 @@ class DraggerContainer extends PureComponent {
             draggerVisible={draggerVisibleB}
           />
         </svg>
-        : <svg className="dragger-container" width={width} height={83}>
+        : <svg className="dragger-container" width={axisWidth} height={83}>
           {isCompareModeActive
             ? <Dragger
               {...sharedProps}
@@ -299,12 +299,16 @@ DraggerContainer.propTypes = {
   disabled: PropTypes.bool,
   draggerName: PropTypes.string,
   draggerPosition: PropTypes.number,
+  draggerPositionB: PropTypes.number,
+  draggerSelected: PropTypes.string,
+  draggerTimeState: PropTypes.string,
+  draggerTimeStateB: PropTypes.string,
   draggerVisible: PropTypes.bool,
   handleDragDragger: PropTypes.func,
   isCompareModeActive: PropTypes.bool,
   selectDragger: PropTypes.func,
   toggleShowDraggerTime: PropTypes.func,
-  transformX: PropTypes.number
+  updateDraggerDatePosition: PropTypes.func
 };
 
 export default DraggerContainer;

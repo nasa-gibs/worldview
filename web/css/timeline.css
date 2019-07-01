@@ -349,7 +349,7 @@ button:focus {
 }
 
 /* Interval selector */
-.wv-custom-interval-widget {
+.custom-interval-widget {
   height: 57px;
   width: 225px;
   border-top-left-radius: 8px;
@@ -363,29 +363,29 @@ button:focus {
   border-bottom: thin solid #444;
 }
 
-.wv-custom-interval-widget i.wv-close {
+.custom-interval-widget i.wv-close {
   position: absolute;
   top: 5px;
   right: 5px;
 }
 
-.wv-custom-interval-widget i.wv-close:hover {
+.custom-interval-widget i.wv-close:hover {
   color: #999;
   cursor: pointer;
 }
 
-.wv-custom-interval-widget-header,
-.wv-custom-interval-widget-controls-container {
+.custom-interval-widget-header,
+.custom-interval-widget-controls-container {
   display: inline-block;
   margin: 7px 0 0 10px;
 }
 
-.wv-custom-interval-widget-controls-container {
+.custom-interval-widget-controls-container {
   display: flex;
   flex-direction: row;
 }
 
-.interval-input {
+.custom-interval-delta-input {
   width: 80px;
   height: 24px;
   color: #7890cd;
@@ -403,7 +403,7 @@ button:focus {
   border: thin solid #fff;
 }
 
-.interval-timescale-select-form-container {
+.custom-interval-timescale-select-form-container {
   width: 100px;
   height: 40px;
   color: #7890cd;
@@ -420,7 +420,7 @@ button:focus {
   text-align: center;
 }
 
-.interval-timescale-select {
+.custom-interval-timescale-select {
   padding: 0;
   background: transparent;
   color: #7890cd;
@@ -432,7 +432,7 @@ button:focus {
   padding-left: 15px;
 }
 
-.interval-timescale-select-option {
+.custom-interval-timescale-select-option {
   background: rgb(40, 40, 40);
 }
 
@@ -585,7 +585,7 @@ button:focus {
   pointer-events: all;
 }
 
-.timeline-hover-line-container {
+.axis-hover-line-container {
   pointer-events: none;
   position: absolute;
   bottom: 0;

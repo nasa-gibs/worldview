@@ -20,6 +20,7 @@ class AnimationButton extends PureComponent {
 }
 
 AnimationButton.propTypes = {
+  disabled: PropTypes.bool,
   clickAnimationButton: PropTypes.func
 };
 

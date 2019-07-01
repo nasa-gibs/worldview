@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import IntervalInput from './interval-input';
-import TimeScaleSelect from './timescale-select';
-
-import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../../modules/date/constants';
+import DeltaInput from './delta-input';
+import TimeScaleSelect from './interval-select';
+import {
+  timeScaleFromNumberKey,
+  timeScaleToNumberKey
+} from '../../../modules/date/constants';
 
 /*
  * CustomIntervalSelectorWidget for Custom Interval Selector
@@ -12,7 +14,7 @@ import { timeScaleFromNumberKey, timeScaleToNumberKey } from '../../../modules/d
  * @class CustomIntervalSelectorWidget
  */
 class CustomIntervalSelectorWidget extends PureComponent {
-  changeInterval = (value) => {
+  changeDelta = (value) => {
     if (value >= 0 && value <= 1000) {
       this.props.changeCustomInterval(value, this.props.customIntervalZoomLevel);
     }
@@ -49,16 +51,16 @@ class CustomIntervalSelectorWidget extends PureComponent {
     return (
       <div
         onKeyDown={this.handleKeyPress}
-        className='wv-custom-interval-widget'
+        className="custom-interval-widget"
         style={{ display: customIntervalModalOpen ? 'block' : 'none' }}
         tabIndex={0}
         ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >
-        <h3 className="wv-custom-interval-widget-header">Custom Interval Selector</h3>
-        <div className="wv-custom-interval-widget-controls-container">
-          <IntervalInput
-            intervalValue={customDelta}
-            changeInterval={this.changeInterval}
+        <h3 className="custom-interval-widget-header">Custom Interval Selector</h3>
+        <div className="custom-interval-widget-controls-container">
+          <DeltaInput
+            deltaValue={customDelta}
+            changeDelta={this.changeDelta}
           />
           <TimeScaleSelect
             hasSubdailyLayers={hasSubdailyLayers}

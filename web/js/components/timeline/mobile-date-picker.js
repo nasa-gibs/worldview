@@ -87,10 +87,15 @@ class MobileDatePicker extends Component {
 
   // used for init mount
   setInitDates = () => {
+    let {
+      date,
+      startDateLimit,
+      endDateLimit
+    } = this.props;
     this.setState({
-      time: this.convertToUTCDateObject(this.props.date),
-      minDate: this.convertToUTCDateObject(this.props.startDateLimit),
-      maxDate: this.convertToUTCDateObject(this.props.endDateLimit)
+      time: this.convertToUTCDateObject(date),
+      minDate: this.convertToUTCDateObject(startDateLimit),
+      maxDate: this.convertToUTCDateObject(endDateLimit)
     });
   }
 
