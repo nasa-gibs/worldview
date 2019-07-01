@@ -14,7 +14,8 @@ export const dateReducerState = {
   delta: 1,
   customSelected: false,
   customDelta: undefined,
-  customInterval: undefined
+  customInterval: undefined,
+  testNow: undefined
 };
 
 export function getInitialState(config) {

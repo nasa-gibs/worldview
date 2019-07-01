@@ -95,7 +95,6 @@ export const mapLocationToState = (state, location) => {
 const getParameters = function(config, parameters) {
   const now = config.pageLoadTime;
   const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
-  let TEST_NOW = '';
   return {
     p: {
       stateKey: 'proj.id',
@@ -108,11 +107,12 @@ const getParameters = function(config, parameters) {
       options: {
         serializeNeedsGlobalState: false,
         setAsEmptyItem: true,
-        serialize: () => {
-          return TEST_NOW || undefined;
+        serialize: (currentItemState) => {
+          return currentItemState
+            ? util.toISOStringSeconds(currentItemState)
+            : undefined;
         },
         parse: str => {
-          TEST_NOW = str;
           return tryCatchDate(str, now);
         }
       }
