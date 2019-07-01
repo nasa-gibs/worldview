@@ -132,7 +132,6 @@ export function mapui(models, config, store, ui) {
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
       case SELECT_DATE:
-        reloadLayers();
         updateDate();
     }
   };
