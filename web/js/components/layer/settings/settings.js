@@ -211,7 +211,6 @@ class LayerSettings extends React.Component {
    */
   renderVectorStyles() {
     const {
-
       setStyle,
       clearStyle,
       groupName,
@@ -307,9 +306,9 @@ const mapDispatchToProps = dispatch => ({
       setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)
     );
   },
-  setFilterRange: (layerId, min, max, squash, index, groupName) => {
+  setFilterRange: (layerId, min, max, index, groupName) => {
     dispatch(
-      setFilterRange(layerId, { min, max, squash }, index, groupName)
+      setFilterRange(layerId, { min, max }, index, groupName)
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
