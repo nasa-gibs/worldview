@@ -1282,7 +1282,7 @@ const checkLeftArrowDisabled = (
   timelineStartDateLimit
 ) => {
   let nextDecrementDate = moment.utc(date).subtract(delta, timeScaleChangeUnit);
-  let isSameOrBefore = new Date(nextDecrementDate) <= new Date(timelineStartDateLimit);
+  let isSameOrBefore = new Date(nextDecrementDate.format()) < new Date(timelineStartDateLimit);
   return isSameOrBefore;
 };
 
@@ -1294,6 +1294,6 @@ const checkRightArrowDisabled = (
   timelineEndDateLimit
 ) => {
   let nextIncrementDate = moment.utc(date).add(delta, timeScaleChangeUnit);
-  let isSameOrAfter = new Date(nextIncrementDate) >= new Date(timelineEndDateLimit);
+  let isSameOrAfter = new Date(nextIncrementDate.format()) > new Date(timelineEndDateLimit);
   return isSameOrAfter;
 };
