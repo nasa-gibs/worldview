@@ -135,7 +135,7 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, state)
       }
     });
   }
-  return glStyle; // this is wrong
+  return vectorStyleId;
 }
 
 export function getKey(layerId, groupStr, state) {
