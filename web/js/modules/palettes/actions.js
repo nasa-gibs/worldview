@@ -131,10 +131,10 @@ export function clearCustoms() {
     lodashForOwn(activePalettes, function(value, key) {
       activePalettes[key].maps.forEach((colormap, index) => {
         if (colormap.custom) {
-          dispatch(clearCustom(key, index, groupName));
+          dispatch(clearCustomPalette(key, index, groupName));
         }
         if (colormap.max || colormap.min || colormap.squash) {
-          dispatch(setRangeAndSquash(key, props, index, groupName));
+          dispatch(setThresholdRangeAndSquash(key, props, index, groupName));
         }
       });
     });
