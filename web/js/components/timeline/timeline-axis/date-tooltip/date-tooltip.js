@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { getDaysInYear } from '../date-util';
+import { getDaysInYear } from '../../date-util';
 
 /*
  * Date tooltip for hover and draggers
@@ -58,7 +58,7 @@ class DateToolTip extends PureComponent {
         {
           (showDraggerToolTip) || (showHoverToolTip)
             ? <div
-              className='date-tooltip'
+              className="date-tooltip"
               style={{
                 transform: `translate(${toolTipLeftOffest}px, -100px)`,
                 display: toolTipDisplay,
@@ -75,18 +75,17 @@ class DateToolTip extends PureComponent {
 }
 
 DateToolTip.propTypes = {
-  draggerSelected: PropTypes.string,
+  axisWidth: PropTypes.number,
+  leftOffset: PropTypes.number,
+  hoverTime: PropTypes.string,
   draggerPosition: PropTypes.number,
   draggerPositionB: PropTypes.number,
-  hasSubdailyLayers: PropTypes.bool,
-  leftOffset: PropTypes.number,
-  showDraggerTime: PropTypes.bool,
+  draggerSelected: PropTypes.string,
   draggerTimeState: PropTypes.string,
   draggerTimeStateB: PropTypes.string,
-  hoverTime: PropTypes.string,
-  isTimelineDragging: PropTypes.bool,
-  showHoverLine: PropTypes.bool,
-  axisWidth: PropTypes.number
+  hasSubdailyLayers: PropTypes.bool,
+  showDraggerTime: PropTypes.bool,
+  showHoverLine: PropTypes.bool
 };
 
 export default DateToolTip;

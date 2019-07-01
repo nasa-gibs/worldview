@@ -179,12 +179,11 @@ class TimeScaleIntervalChange extends PureComponent {
 }
 
 TimeScaleIntervalChange.propTypes = {
+  timeScaleChangeUnit: PropTypes.string,
   customDelta: PropTypes.number,
-  customIntervalText: PropTypes.string,
-  customSelected: PropTypes.bool,
-  setTimeScaleIntervalChangeUnit: PropTypes.func,
   customIntervalZoomLevel: PropTypes.string,
-  timeScaleChangeUnit: PropTypes.string
+  customSelected: PropTypes.bool,
+  setTimeScaleIntervalChangeUnit: PropTypes.func
 };
 
 export default TimeScaleIntervalChange;

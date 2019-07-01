@@ -263,11 +263,8 @@ class TimelineRangeSelector extends React.Component {
       <svg
         id="wv-timeline-range-selector"
         className="wv-timeline-range-selector"
-        width={this.props.width}
+        width={this.props.axisWidth}
         height={75}
-        style={{
-          left: this.props.parentOffset
-        }}
       >
         <DraggerRange
           opacity={this.props.rangeOpacity}
@@ -319,28 +316,26 @@ class TimelineRangeSelector extends React.Component {
 }
 
 TimelineRangeSelector.propTypes = {
-  updateAnimationDateAndLocation: PropTypes.func,
-  width: PropTypes.number,
-  parentOffset: PropTypes.number,
-  timeScale: PropTypes.string,
-  frontDate: PropTypes.string,
+  axisWidth: PropTypes.number,
   position: PropTypes.number,
   transformX: PropTypes.number,
+  timeScale: PropTypes.string,
+  frontDate: PropTypes.string,
+  timelineStartDateLimit: PropTypes.string,
+  timelineEndDateLimit: PropTypes.string,
   startLocation: PropTypes.number,
   endLocation: PropTypes.number,
   startLocationDate: PropTypes.object,
   endLocationDate: PropTypes.object,
-  timelineStartDateLimit: PropTypes.string,
-  timelineEndDateLimit: PropTypes.string,
   max: PropTypes.object,
   pinWidth: PropTypes.number,
-  onDrag: PropTypes.func,
   rangeOpacity: PropTypes.number,
   rangeColor: PropTypes.string,
   startColor: PropTypes.string,
   startTriangleColor: PropTypes.string,
   endColor: PropTypes.string,
-  endTriangleColor: PropTypes.string
+  endTriangleColor: PropTypes.string,
+  updateAnimationDateAndLocation: PropTypes.func
 };
 
 export default TimelineRangeSelector;

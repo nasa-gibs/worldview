@@ -416,13 +416,13 @@ class TimelineAxis extends Component {
   * @param {Boolean} draggerVisible
   * @param {Number} newDraggerPosition
   * @param {Object} sharedDraggerVisibilityParams
-  * @param {Object} sharedDraggerVisibilityParams.frontDate
-  * @param {String} sharedDraggerVisibilityParams.backDate
-  * @param {Number} sharedDraggerVisibilityParams.position
-  * @param {Number} sharedDraggerVisibilityParams.transform
+    * @param {Object} sharedDraggerVisibilityParams.frontDate
+    * @param {String} sharedDraggerVisibilityParams.backDate
+    * @param {Number} sharedDraggerVisibilityParams.position
+    * @param {Number} sharedDraggerVisibilityParams.transform
   * @returns {Object} output - return params used for dragger visibilty/updating dragger position
-  * @returns {Boolean} output.newDraggerPosition
-  * @returns {Boolean} output.isVisible - dragger within visible range
+    * @returns {Boolean} output.newDraggerPosition
+    * @returns {Boolean} output.isVisible - dragger within visible range
   */
   checkDraggerVisibility = (draggerTime, draggerVisible, newDraggerPosition, { frontDate, backDate, position, transform }) => {
     let { gridWidth } = this.state;
@@ -1170,47 +1170,47 @@ class TimelineAxis extends Component {
       axisWidth,
       timeScale,
       position,
-      transformX
+      transformX,
+      showHover,
+      showHoverOff
     } = this.props;
-
     let {
       currentTimeRange,
       gridWidth,
       leftBound,
       rightBound
     } = this.state;
-
     return (
       <React.Fragment>
-        <div className='timeline-axis-container'
+        <div className="timeline-axis-container"
           style={{ width: `${axisWidth}px` }}
           onMouseDown={this.handleMouseDown}
           onMouseUp={this.setLineTime}
           onWheel={this.handleWheel}
           onMouseOver={this.showHoverOn}
-          onMouseLeave={this.props.showHoverOff}
+          onMouseLeave={showHoverOff}
           onTouchStart={this.handleMouseDown}
           onTouchEnd={this.setLineTimeTouch}
         >
           {currentTimeRange
-            ? <svg className='timeline-axis-svg'
-              id='timeline-footer-svg'
+            ? <svg className="timeline-axis-svg"
+              id="timeline-footer-svg"
               width={axisWidth}
               height={64}
               viewBox={`0 0 ${axisWidth} 64`}
-              preserveAspectRatio='xMinYMin slice'>
+              preserveAspectRatio="xMinYMin slice">
               <defs>
                 {/* clip axis grid text */}
-                <clipPath id='textDisplay'>
-                  <rect width='200' height='64' />
+                <clipPath id="textDisplay">
+                  <rect width="200" height="64" />
                 </clipPath>
                 {/* clip axis grid overflow */}
-                <clipPath id='timelineBoundary'>
+                <clipPath id="timelineBoundary">
                   <rect width={axisWidth} height={64}></rect>
                 </clipPath>
               </defs>
               <Draggable
-                axis='x'
+                axis="x"
                 handle=".axis-grid-container"
                 position={{ x: position, y: 0 }}
                 onDrag={this.handleDrag}
@@ -1220,7 +1220,7 @@ class TimelineAxis extends Component {
               >
                 <g>
                   <GridRange
-                    showHover={this.props.showHover}
+                    showHover={showHover}
                     timeScale={timeScale}
                     gridWidth={gridWidth}
                     timeRange={currentTimeRange}
@@ -1237,11 +1237,21 @@ class TimelineAxis extends Component {
 }
 
 TimelineAxis.propTypes = {
+  axisWidth: PropTypes.number,
+  position: PropTypes.number,
+  transformX: PropTypes.number,
+  hoverTime: PropTypes.string,
+  frontDate: PropTypes.string,
+  backDate: PropTypes.string,
+  timeScale: PropTypes.string,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
-  axisWidth: PropTypes.number,
+  animationStartLocation: PropTypes.number,
+  animationEndLocation: PropTypes.number,
+  timelineEndDateLimit: PropTypes.string,
+  timelineStartDateLimit: PropTypes.string,
   changeTimeScale: PropTypes.func,
   updateDraggerDatePosition: PropTypes.func,
   showHover: PropTypes.func,
@@ -1251,34 +1261,23 @@ TimelineAxis.propTypes = {
   updatePositioningOnSimpleDrag: PropTypes.func,
   updatePositioningOnAxisStopDrag: PropTypes.func,
   updateTimelineMoveAndDrag: PropTypes.func,
-  isCompareModeActive: PropTypes.bool,
   draggerSelected: PropTypes.string,
-  hasSubdailyLayers: PropTypes.bool,
   parentOffset: PropTypes.number,
   leftOffset: PropTypes.number,
   draggerPosition: PropTypes.number,
   draggerPositionB: PropTypes.number,
-  draggerVisible: PropTypes.bool,
-  draggerVisibleB: PropTypes.bool,
-  animationStartLocation: PropTypes.number,
-  animationEndLocation: PropTypes.number,
-  position: PropTypes.number,
-  transformX: PropTypes.number,
-  hoverTime: PropTypes.string,
   draggerTimeState: PropTypes.string,
   draggerTimeStateB: PropTypes.string,
-  frontDate: PropTypes.string,
-  backDate: PropTypes.string,
-  startDate: PropTypes.string,
-  timeScale: PropTypes.string,
-  timelineEndDateLimit: PropTypes.string,
-  timelineStartDateLimit: PropTypes.string,
+  draggerVisible: PropTypes.bool,
+  draggerVisibleB: PropTypes.bool,
+  hasSubdailyLayers: PropTypes.bool,
+  isCompareModeActive: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   isAnimationDraggerDragging: PropTypes.bool,
   isTimelineDragging: PropTypes.bool,
-  hasMoved: PropTypes.bool,
   isTourActive: PropTypes.bool,
-  isAnimationPlaying: PropTypes.bool
+  isAnimationPlaying: PropTypes.bool,
+  hasMoved: PropTypes.bool
 };
 
 export default TimelineAxis;

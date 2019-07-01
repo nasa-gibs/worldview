@@ -36,6 +36,7 @@ export function getTimeRange(startDate, endDate, timeScale, startDateLimit, endD
     endLimit = limitCache[endDateLimit];
   }
 
+  // build date/time array based on given start/end range
   while (startDate <= endDate) {
     let date = startDate.format(format);
     let rawDate = getISODateFormatted(startDate);

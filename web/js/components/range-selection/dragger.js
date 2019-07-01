@@ -198,7 +198,6 @@ TimelineDragger.defaultProps = {
 };
 
 TimelineDragger.propTypes = {
-  opacity: PropTypes.number,
   max: PropTypes.number,
   height: PropTypes.number,
   onDrag: PropTypes.func,
@@ -213,8 +212,7 @@ TimelineDragger.propTypes = {
   yOffset: PropTypes.number,
   path: PropTypes.string,
   textColor: PropTypes.string,
-  text: PropTypes.string,
-  onMouseDown: PropTypes.func
+  text: PropTypes.string
 };
 
 export default TimelineDragger;
