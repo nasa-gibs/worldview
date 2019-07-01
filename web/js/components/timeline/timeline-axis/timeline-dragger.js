@@ -77,7 +77,7 @@ class Dragger extends PureComponent {
               cursor: 'pointer',
               display: draggerVisible ? 'block' : 'none'
             }}
-            className='timeline-dragger dragger'
+            className={`timeline-dragger dragger${draggerName === 'selected' ? 'A' : 'B'}`}
             transform={`translate(${transformX}, 0)`}
           >
             <polygon
