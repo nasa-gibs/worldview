@@ -110,19 +110,13 @@ class VectorStyleSelect extends React.Component {
 }
 
 VectorStyleSelect.propTypes = {
+  activeVectorStyle: PropTypes.string,
+  clearStyle: PropTypes.func,
+  groupName: PropTypes.string,
   index: PropTypes.number,
   layer: PropTypes.object,
-  clearStyle: PropTypes.func,
   setStyle: PropTypes.func,
-  paletteOrder: PropTypes.array,
-  palettesTranslate: PropTypes.func,
-  getDefaultLegend: PropTypes.func,
-  getCustomVectorStyle: PropTypes.func,
-  canvas: PropTypes.object,
-  checkerBoard: PropTypes.object,
-  activeVectorStyle: PropTypes.string,
-  vectorStyles: PropTypes.object,
-  groupName: PropTypes.string
+  vectorStyles: PropTypes.object
 };
 
 export default VectorStyleSelect;
