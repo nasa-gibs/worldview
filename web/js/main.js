@@ -1,5 +1,4 @@
 /* global DEBUG */
-import 'babel-polyfill'; // Needed for worldview-components in IE and older browsers
 import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';

@@ -176,7 +176,7 @@ module.exports = {
               ident: 'postcss',
               plugins: () => [
                 postcssPresetEnv({
-                  browsers: [
+                  browserslist: [
                     'last 5 versions',
                     'not ie < 11',
                     'not edge < 15',
