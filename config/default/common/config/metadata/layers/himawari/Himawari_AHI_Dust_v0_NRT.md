@@ -1,1 +1,0 @@
-Dust (AHI, Himawari) Description
