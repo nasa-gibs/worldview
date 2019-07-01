@@ -80,15 +80,14 @@ class VectorFilter extends React.Component {
   }
 }
 VectorFilter.propTypes = {
-  start: PropTypes.number,
   end: PropTypes.number,
-  onSlide: PropTypes.func,
+  groupName: PropTypes.string,
   index: PropTypes.number,
-  min: PropTypes.number,
-  max: PropTypes.number,
-  setFilterRange: PropTypes.func,
   layerId: PropTypes.string,
-  groupName: PropTypes.string
+  max: PropTypes.number,
+  min: PropTypes.number,
+  setFilterRange: PropTypes.func,
+  start: PropTypes.number
 };
 
 export default VectorFilter;

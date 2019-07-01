@@ -341,13 +341,15 @@ LayerSettings.defaultProps = {
 };
 LayerSettings.propTypes = {
   canvas: PropTypes.object,
-  clearCustom: PropTypes.func,
+  clearCustomPalette: PropTypes.func,
+  clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
-  getLegend: PropTypes.func,
-  getLegends: PropTypes.func,
   getPalette: PropTypes.func,
+  getPaletteLegend: PropTypes.func,
+  getPaletteLegends: PropTypes.func,
+  getVectorStyle: PropTypes.func,
   groupName: PropTypes.string,
   index: PropTypes.number,
   isOpen: PropTypes.bool,
@@ -355,8 +357,11 @@ LayerSettings.propTypes = {
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
-  setCustom: PropTypes.func,
+  setCustomPalette: PropTypes.func,
+  setFilterRange: PropTypes.func,
   setOpacity: PropTypes.func,
-  setRange: PropTypes.func,
-  title: PropTypes.string
+  setStyle: PropTypes.func,
+  setThresholdRange: PropTypes.func,
+  title: PropTypes.string,
+  vectorStyles: PropTypes.object
 };

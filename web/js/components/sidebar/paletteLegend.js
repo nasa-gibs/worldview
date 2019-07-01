@@ -401,19 +401,19 @@ PaletteLegend.defaultProps = {
   height: 12
 };
 PaletteLegend.propTypes = {
-  paletteId: PropTypes.string,
-  layer: PropTypes.object,
   checkerBoardPattern: PropTypes.object,
-  isHoveringLegend: PropTypes.bool,
-  isRunningDataEnabled: PropTypes.bool,
-  getPalette: PropTypes.func,
-  paletteLegends: PropTypes.array,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  isRunningData: PropTypes.bool,
-  isHoveringCanvas: PropTypes.bool,
   colorHex: PropTypes.string,
-  isCustomPalette: PropTypes.bool
+  getPalette: PropTypes.func,
+  height: PropTypes.number,
+  isCustomPalette: PropTypes.bool,
+  isHoveringCanvas: PropTypes.bool,
+  isHoveringLegend: PropTypes.bool,
+  isRunningData: PropTypes.bool,
+  isRunningDataEnabled: PropTypes.bool,
+  layer: PropTypes.object,
+  paletteId: PropTypes.string,
+  paletteLegends: PropTypes.array,
+  width: PropTypes.number
 };
 
 export default PaletteLegend;

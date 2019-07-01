@@ -190,7 +190,7 @@ PaletteSelect.propTypes = {
   activePalette: PropTypes.string,
   canvas: PropTypes.object,
   checkerBoard: PropTypes.object,
-  clearCustom: PropTypes.func,
+  clearCustomPalette: PropTypes.func,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
   groupName: PropTypes.string,
@@ -198,7 +198,7 @@ PaletteSelect.propTypes = {
   layer: PropTypes.object,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
-  setCustom: PropTypes.func
+  setCustomPalette: PropTypes.func
 };
 
 export default PaletteSelect;

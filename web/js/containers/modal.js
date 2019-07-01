@@ -203,6 +203,7 @@ ModalContainer.propTypes = {
   customProps: PropTypes.object,
   id: PropTypes.string,
   isCustom: PropTypes.bool,
+  isDraggable: PropTypes.bool,
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool
