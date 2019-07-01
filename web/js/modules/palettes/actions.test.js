@@ -3,9 +3,9 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 import {
   requestPalette,
-  setRangeAndSquash,
-  setCustom,
-  clearCustom
+  setThresholdRangeAndSquash,
+  setCustomPalette,
+  clearCustomPalette
 } from './actions';
 import { addLayer } from '../layers/selectors';
 import { assign, cloneDeep } from 'lodash';
@@ -13,7 +13,7 @@ import {
   REQUEST_PALETTE_START,
   REQUEST_PALETTE_SUCCESS,
   REQUEST_PALETTE_FAILURE,
-  SET_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_AND_SQUASH,
   SET_CUSTOM,
   CLEAR_CUSTOM
 } from './constants';
@@ -81,12 +81,12 @@ describe('Test lookup actions', () => {
   afterEach(() => {
     fetchMock.restore();
   });
-  test('test ' + setRangeAndSquash + ' action with min equal to 1', () => {
+  test('test ' + setThresholdRangeAndSquash + ' action with min equal to 1', () => {
     const store = mockStore(stateWithLayers);
-    store.dispatch(setRangeAndSquash('terra-aod', { min: 1 }, 0, 'active'));
+    store.dispatch(setThresholdRangeAndSquash('terra-aod', { min: 1 }, 0, 'active'));
     const response = store.getActions()[0];
 
-    expect(response.type).toEqual(SET_RANGE_AND_SQUASH);
+    expect(response.type).toEqual(SET_THRESHOLD_RANGE_AND_SQUASH);
     expect(response.props).toEqual({ min: 1 });
     expect(response.groupName).toEqual('active');
     expect(response.layerId).toEqual('terra-aod');
@@ -103,14 +103,14 @@ describe('Test lookup actions', () => {
       config.palettes.lookups['terra-aod']['min-1']
     );
   });
-  test('test ' + setRangeAndSquash + ' action with squash and max', () => {
+  test('test ' + setThresholdRangeAndSquash + ' action with squash and max', () => {
     const store = mockStore(stateWithLayers);
     store.dispatch(
-      setRangeAndSquash('terra-aod', { max: 1, squash: true }, 0, 'active')
+      setThresholdRangeAndSquash('terra-aod', { max: 1, squash: true }, 0, 'active')
     );
     const response = store.getActions()[0];
 
-    expect(response.type).toEqual(SET_RANGE_AND_SQUASH);
+    expect(response.type).toEqual(SET_THRESHOLD_RANGE_AND_SQUASH);
     expect(response.props).toEqual({ max: 1, squash: true });
     expect(response.groupName).toEqual('active');
     expect(response.layerId).toEqual('terra-aod');
@@ -126,10 +126,10 @@ describe('Test lookup actions', () => {
       config.palettes.lookups['terra-aod']['max-1-squashed']
     );
   });
-  test('test ' + setCustom + ' action with red-1 fixture palette', () => {
+  test('test ' + setCustomPalette + ' action with red-1 fixture palette', () => {
     const expectedLegendColors = config.palettes.custom['red-1'].colors;
     const store = mockStore(stateWithLayers);
-    store.dispatch(setCustom('terra-aod', 'red-1', 0, 'active'));
+    store.dispatch(setCustomPalette('terra-aod', 'red-1', 0, 'active'));
     const response = store.getActions()[0];
 
     expect(response.type).toEqual(SET_CUSTOM);
@@ -145,7 +145,7 @@ describe('Test lookup actions', () => {
       config.palettes.lookups['terra-aod']['red-1']
     );
   });
-  test('test ' + clearCustom + ' action when no threshold applied', () => {
+  test('test ' + clearCustomPalette + ' action when no threshold applied', () => {
     let terraAOD = assign({}, config.palettes.rendered['terra-aod']);
     terraAOD = update(terraAOD, {
       lookup: { $set: config.palettes.lookups['terra-aod']['red-1'] }
@@ -175,7 +175,7 @@ describe('Test lookup actions', () => {
     });
 
     const store = mockStore(customPalatteState);
-    store.dispatch(clearCustom('terra-aod', 0, 'active'));
+    store.dispatch(clearCustomPalette('terra-aod', 0, 'active'));
     const response = store.getActions()[0];
     expect(response.type).toEqual(CLEAR_CUSTOM);
     expect(previousPaletteObject.maps[0].custom).toEqual('red-1');
@@ -185,7 +185,7 @@ describe('Test lookup actions', () => {
     expect(response.activeString).toEqual('active');
   });
   test(
-    'test ' + clearCustom + ' action with threshold and squash applied',
+    'test ' + clearCustomPalette + ' action with threshold and squash applied',
     () => {
       let terraAOD = assign({}, config.palettes.rendered['terra-aod']);
       terraAOD = update(terraAOD, {
@@ -230,7 +230,7 @@ describe('Test lookup actions', () => {
       });
 
       const store = mockStore(customPalatteState);
-      store.dispatch(clearCustom('terra-aod', 0, 'active'));
+      store.dispatch(clearCustomPalette('terra-aod', 0, 'active'));
       const response = store.getActions()[0];
       expect(response.type).toEqual(CLEAR_CUSTOM);
       expect(previousPaletteObject.lookup).toBeDefined();

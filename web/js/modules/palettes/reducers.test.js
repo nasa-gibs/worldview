@@ -1,7 +1,7 @@
 import { getInitialPaletteState, paletteReducer } from './reducers';
 import fixtures from '../../fixtures';
 import {
-  SET_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_AND_SQUASH,
   CLEAR_CUSTOM,
   SET_CUSTOM,
   REQUEST_PALETTE_START,
@@ -13,10 +13,10 @@ import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 
 const config = fixtures.config();
 
-test('SET_RANGE_AND_SQUASH action updates active palette Object', () => {
+test('SET_THRESHOLD_RANGE_AND_SQUASH action updates active palette Object', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const response = paletteReducer(initialPaletteState, {
-    type: SET_RANGE_AND_SQUASH,
+    type: SET_THRESHOLD_RANGE_AND_SQUASH,
     layerId: 'terra-aod',
     groupName: 'active',
     palettes: { 'terra-aod': config.palettes.rendered['terra-aod'] }

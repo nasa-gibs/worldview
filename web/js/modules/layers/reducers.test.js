@@ -4,7 +4,7 @@ import * as CONSTANTS from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
-  SET_RANGE_AND_SQUASH
+  SET_THRESHOLD_RANGE_AND_SQUASH
 } from '../palettes/constants';
 import update from 'immutability-helper';
 
@@ -82,9 +82,9 @@ describe('layer Reducer tests', () => {
     expect(initalState.active[1].visible).toBeTruthy();
     expect(response.active[1].visible).toBeFalsy();
   });
-  test('SET_RANGE_AND_SQUASH action updates palette-related props', () => {
+  test('SET_THRESHOLD_RANGE_AND_SQUASH action updates palette-related props', () => {
     const response = layerReducer(initalState, {
-      type: SET_RANGE_AND_SQUASH,
+      type: SET_THRESHOLD_RANGE_AND_SQUASH,
       props: { squash: true, min: 0.3 },
       layerId: 'terra-cr',
       activeString: 'active'
