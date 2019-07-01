@@ -74,7 +74,8 @@ class Sidebar extends React.Component {
       let basePadding = 110;
       newHeight =
         screenHeight -
-        (iconHeight + topOffset + tabHeight + basePadding + footerHeight) - 10;
+        (iconHeight + topOffset + tabHeight + basePadding + footerHeight) -
+        10;
       // Issue #1415: This was checking for subComponentHeight !== newHeight.
       // Sometimes it would get stuck in a loop in which the newHeight
       // would vary by a single pixel on each render. Hack fix is to
@@ -127,7 +128,7 @@ class Sidebar extends React.Component {
         <Layers
           height={subComponentHeight}
           isActive={activeTab === 'layers'}
-          layerGroupName="active"
+          layerGroupName={this.props.activeString}
           checkerBoardPattern={this.checkerBoardPattern}
         />
       );
@@ -229,6 +230,7 @@ function mapStateToProps(state) {
     hasLocalStorage: util.browser.localStorage,
     screenHeight: screenHeight,
     isCompareMode: compare.active,
+    activeString,
     numberOfLayers,
     isCollapsed:
       isCollapsed ||
@@ -272,6 +274,7 @@ Sidebar.defaultProps = {
   visibleEvents: {}
 };
 Sidebar.propTypes = {
+  activeString: PropTypes.string,
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
   collapseExpandToggle: PropTypes.func,

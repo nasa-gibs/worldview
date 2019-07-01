@@ -18,3 +18,4 @@ export const PALETTE_STRINGS_PERMALINK_ARRAY = [
   'min',
   'max'
 ];
+export const CUSTOM_PALETTE_TYPE_ARRAY = ['custom', 'squash', 'min', 'max'];

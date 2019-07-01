@@ -306,7 +306,7 @@ const getParameters = function(config, parameters) {
           const compareIsActive = get(state, 'compare.active');
           const isCompareA = get(state, 'compare.isCompareA');
           const activeLayersB = get(state, 'layers.activeB');
-          return !isCompareA && compareIsActive
+          return !isCompareA && !compareIsActive
             ? serializeLayers(activeLayersB, state, 'activeB')
             : serializeLayers(currentLayers, state, 'active');
         }

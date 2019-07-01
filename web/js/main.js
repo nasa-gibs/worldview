@@ -29,6 +29,7 @@ import {
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
 import { uniqBy } from 'lodash';
+import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
 export let history = createBrowserHistory();
 
 const isDebugMode = typeof DEBUG !== 'undefined';
@@ -61,17 +62,27 @@ window.onload = () => {
         rendered: {},
         custom: {}
       };
-      elapsed('Config loaded', config.pageLoadTime, parameters);
+      elapsed('Config loaded', config.now, parameters);
+      // Determine which layers need to be preloaded
       let layers = [];
       if (
         (parameters.l && hasCustomTypePalette(parameters.l)) ||
         (parameters.l1 && hasCustomTypePalette(parameters.l1))
       ) {
-        layers = layersParse12(parameters.l, config);
-        if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
-          layers.push(layersParse12(parameters.l1, config));
+        if (parameters.l && hasCustomTypePalette(parameters.l)) {
+          layers.push(...layersParse12(parameters.l, config));
         }
-        layers = uniqBy(layers, 'id');
+
+        if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
+          layers.push(...layersParse12(parameters.l1, config));
+        }
+        layers = uniqBy(layers, layer => {
+          let str = '';
+          CUSTOM_PALETTE_TYPE_ARRAY.forEach(element => {
+            str += layer[element] ? layer[element][0] : '';
+          });
+          return layer.id + str;
+        });
       }
       let legacyState = parse(parameters, config, errors);
       layerValidate(errors, config);

@@ -33,7 +33,8 @@ class CompareCase extends React.Component {
       height,
       layersA,
       layersB,
-      openAlertModal
+      openAlertModal,
+      checkerBoardPattern
     } = this.props;
 
     const outerClass = 'layer-container sidebar-panel';
@@ -88,6 +89,7 @@ class CompareCase extends React.Component {
                   activeOverlays={layersA}
                   layerGroupName="active"
                   height={height - tabHeight}
+                  checkerBoardPattern={checkerBoardPattern}
                 />
               </TabPane>
               <TabPane tabId="2">
@@ -96,6 +98,7 @@ class CompareCase extends React.Component {
                   activeOverlays={layersB}
                   layerGroupName="activeB"
                   height={height - tabHeight}
+                  checkerBoardPattern={checkerBoardPattern}
                 />
               </TabPane>
             </TabContent>
@@ -141,6 +144,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 CompareCase.propTypes = {
+  checkerBoardPattern: PropTypes.object,
   dateStringA: PropTypes.string,
   dateStringB: PropTypes.string,
   height: PropTypes.number,

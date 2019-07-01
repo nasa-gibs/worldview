@@ -12,8 +12,6 @@ import {
   setCustom as setCustomSelector,
   clearCustom as clearCustomSelector
 } from './selectors';
-import update from 'immutability-helper';
-
 /**
  * Request palette using core request utility
  *
@@ -112,10 +110,7 @@ export function clearCustom(layerId, index, groupName) {
       groupName,
       layerId,
       activeString: groupName,
-      palettes: newActivePalettesObj,
-      rendered: update(palettes.rendered, {
-        [layerId]: { maps: { [index]: { custom: { $set: undefined } } } }
-      })
+      palettes: newActivePalettesObj
     });
   };
 }

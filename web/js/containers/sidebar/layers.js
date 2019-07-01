@@ -47,10 +47,8 @@ class Layers extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const { layers, proj } = state;
-  const { activeString } = layers;
   const { isActive, layerGroupName, height, checkerBoardPattern } = ownProps;
-  const group = layerGroupName;
-  const componentLayers = layers[group] || layers[activeString];
+  const componentLayers = layers[layerGroupName];
   const layerObj = getLayers(componentLayers, { proj: proj.id, group: 'all' });
 
   return {

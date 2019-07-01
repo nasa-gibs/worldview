@@ -52,7 +52,7 @@ export function getRenderedPalette(layerId, index, state) {
       palette = palette.maps[index];
     }
   }
-  return palette;
+  return lodashCloneDeep(palette);
 }
 
 export function getLegends(layerId, groupName, state) {
