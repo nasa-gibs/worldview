@@ -6,8 +6,7 @@ module.exports = {
     dataTab: '#download-sidebar-tab',
     yearlyResolutionTooltip: '#zoom-years',
     timelineSetToYears: '#current-zoom.zoom-years',
-    modalCloseButton:
-      '.ui-dialog.ui-draggable.ui-resizable .ui-dialog-titlebar-close',
+    modalCloseButton: '.modal-header .close',
     notificationDismissButton: '.ui-dialog.notify-alert .fa-times',
     overlayLayerItems: '#overlays li',
     resolutionTooltip: '#zoom-btn-container',

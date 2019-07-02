@@ -3,9 +3,11 @@ const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
 const TIME_LIMIT = 20000;
 const aerosolLayer = '#active-MODIS_Terra_Aerosol';
-const AodOptionsPanelBody = '#wv-options-body-MODIS_Terra_Aerosol';
-const AodOptionsPanelHeader = '#wv-options-header-MODIS_Terra_Aerosol';
-const AodInfoPanel = '.wv-info-panel-MODIS_Terra_Aerosol';
+const AodOptionsPanelBody =
+  '#layer_options_modal-modis_terra_aerosol .modal-body';
+const AodOptionsPanelHeader =
+  '#layer_options_modal-modis_terra_aerosol .modal-header';
+const AodInfoPanel = '.layer_info_modal-modis_terra_aerosol';
 const correctedReflectanceBLayer =
   '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
 const correctedReflectanceOptionsPanelHeader =
@@ -26,9 +28,10 @@ module.exports = {
       client.expect.element(AodOptionsPanelBody).to.not.be.present;
       client.click(aerosolLayer + ' .wv-layers-options');
       client.waitForElementVisible(
-        '#wv-layers-options-dialog',
+        '.layer-settings-modal',
         TIME_LIMIT,
         function() {
+          client.pause(1000);
           client
             .useCss()
             .assert.containsText(
@@ -44,9 +47,10 @@ module.exports = {
     });
   },
   'Layer info dialog works in A|B mode': function(client) {
+    client.click(AodOptionsPanelHeader + ' .close').pause(1000);
     client.click(aerosolLayer + ' .wv-layers-info');
     client.waitForElementVisible(
-      AodInfoPanel + ' .layer-metadata',
+      AodInfoPanel + ' .layer-description',
       TIME_LIMIT,
       function() {
         client
@@ -59,6 +63,7 @@ module.exports = {
     );
   },
   'expect clicking A|B button to close options dialog': function(client) {
+    client.click(AodInfoPanel + ' .close').pause(1000);
     client.click(localSelectors.compareButton);
     client.waitForElementVisible(aerosolLayer, TIME_LIMIT, function() {
       client.expect.element(AodOptionsPanelBody).to.not.be.present;
@@ -80,6 +85,7 @@ module.exports = {
     });
   },
   'Layer info dialog works after exiting A|B mode': function(client) {
+    client.click(AodOptionsPanelHeader + ' .close').pause(1000);
     client.click(aerosolLayer + ' .wv-layers-info');
     client.waitForElementVisible(
       AodInfoPanel + ' .layer-metadata',
@@ -97,8 +103,12 @@ module.exports = {
   'expect reactivating A|B to close options dialog and activate B state': function(
     client
   ) {
+    client.click(AodInfoPanel + ' .close').pause(1000);
+    client.click(aerosolLayer + ' .wv-layers-options').pause(1000);
+    client.click(AodOptionsPanelHeader + ' .close').pause(1000);
     client.click(localSelectors.compareButton);
     client.waitForElementVisible(aerosolLayer, TIME_LIMIT, function() {
+      client.pause(1000);
       client.expect.element(AodOptionsPanelBody).to.not.be.present;
       client.click(localSelectors.bTab);
     });
@@ -111,7 +121,7 @@ module.exports = {
         client.expect.element(AodOptionsPanelBody).to.not.be.present;
         client.click(correctedReflectanceBLayer + ' .wv-layers-options');
         client.waitForElementVisible(
-          '#wv-layers-options-dialog',
+          '.layer-settings-modal',
           TIME_LIMIT,
           function() {
             client
@@ -131,6 +141,7 @@ module.exports = {
     );
   },
   'Layer info dialog works after clicking into B mode': function(client) {
+    client.click(AodOptionsPanelHeader + ' .close').pause(1000);
     client.click(correctedReflectanceBLayer + ' .wv-layers-info');
     client.waitForElementVisible(
       correctedReflectanceInfoPanel + ' .layer-metadata',

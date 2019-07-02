@@ -2,11 +2,9 @@ const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
 const TIME_LIMIT = 30000; // Sometimes takes a while to generate GIFs
-const askDialog = '.wv-dialog-ask';
-const paletteDialogOkButton =
-  '.gif-palette-warning .ui-dialog-buttonset > .ui-button:nth-child(2)';
-const rotationDialogOkButton =
-  '.gif-rotation-warning .ui-dialog-buttonset > .ui-button:nth-child(2)';
+const askDialog = '.modal-body .notify';
+const paletteDialogOkButton = '#image_download_notify_palette .accept-notify';
+const rotationDialogOkButton = '#image_download_notify_rotate .accept-notify';
 const articeRotationResetButton = '#wv-map-arctic .wv-map-reset-rotation';
 
 module.exports = {
@@ -22,14 +20,17 @@ module.exports = {
         TIME_LIMIT,
         function() {
           client.click(localSelectors.createGifIcon).pause(1000);
-          client.click(localSelectors.gifDownloadIcon).pause(1000);
           client.expect.element(askDialog).to.be.present;
-          client.useCss().click(paletteDialogOkButton);
+          client
+            .useCss()
+            .click(paletteDialogOkButton)
+            .pause(1000);
+          client.click(localSelectors.createGifButton).pause(1000);
           client.waitForElementVisible(
             localSelectors.gifResults,
             TIME_LIMIT,
             function() {
-              client.click(localSelectors.gifResultsCloseButton);
+              client.click(client.globals.selectors.modalCloseButton);
               client.expect.element(localSelectors.gifResults).to.not.be
                 .present;
               client.waitForElementVisible(
@@ -51,9 +52,7 @@ module.exports = {
       TIME_LIMIT,
       function() {
         client.click(localSelectors.createGifIcon).pause(1000);
-        client.click(localSelectors.gifDownloadIcon).pause(1000);
         client.useCss().assert.containsText(articeRotationResetButton, '-18');
-        client.expect.element(askDialog).to.be.present;
         client
           .useCss()
           .click(rotationDialogOkButton)

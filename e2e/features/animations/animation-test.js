@@ -60,10 +60,10 @@ module.exports = {
       function(el) {
         client
           .useCss()
-          .moveToElement(globalSelectors.resolutionTooltip, 1, 1)
-          .click(globalSelectors.yearlyResolutionTooltip);
+          .moveToElement('.wv-animation-widget-header .wv-tooltip-case', 1, 1)
+          .click('.wv-tooltip-case #year');
         client.pause(1000);
-        client.expect.element(globalSelectors.timelineSetToYears).to.be.present;
+        client.useCss().assert.containsText('#current-interval', '1 YEAR');
       }
     );
   },
