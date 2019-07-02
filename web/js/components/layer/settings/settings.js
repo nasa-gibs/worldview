@@ -100,7 +100,7 @@ class LayerSettings extends React.Component {
             {legend.type !== 'classification' ? (
               <PaletteThreshold
                 legend={legend}
-                setThresholdRange={setThresholdRange}
+                setRange={setThresholdRange}
                 min={0}
                 max={max}
                 start={start}
@@ -178,7 +178,7 @@ class LayerSettings extends React.Component {
         {legend.type !== 'classification' &&
           <PaletteThreshold
             legend={legend}
-            setThresholdRange={setThresholdRange}
+            setRange={setThresholdRange}
             min={0}
             max={max}
             start={start}
