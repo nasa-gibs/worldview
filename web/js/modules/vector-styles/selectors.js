@@ -2,7 +2,6 @@ import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
   each as lodashEach
-  // cloneDeep as lodashCloneDeep
 } from 'lodash';
 import {
   getLayers
