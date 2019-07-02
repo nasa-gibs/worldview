@@ -439,6 +439,8 @@ const mapDispatchToProps = dispatch => ({
         openCustomContent('image_download_notify_' + type, {
           headerText: 'Notify',
           bodyComponent: Notify,
+          size: 'sm',
+          modalClassName: 'notify',
           bodyComponentProps
         })
       );

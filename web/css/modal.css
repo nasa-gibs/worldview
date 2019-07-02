@@ -4,7 +4,8 @@
   background: #282828;
   color: #eee;
 }
-.modal-dialog .close, .modal-body pre {
+.modal-dialog .close,
+.modal-body pre {
   color: #eee;
 }
 .clickable-behind-modal .modal {
@@ -48,4 +49,7 @@
 }
 .dynamic-modal.modal-dialog {
   position: absolute;
+}
+.notify .modal-footer {
+  border: none;
 }

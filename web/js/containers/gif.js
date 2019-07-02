@@ -291,7 +291,11 @@ class GIF extends Component {
     if (isDownloading) {
       let headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
       return (
-        <Modal isOpen={true} toggle={onClose}>
+        <Modal
+          isOpen={true}
+          toggle={onClose}
+          size={progress === 0 ? 'sm' : 'md'}
+        >
           <ModalHeader toggle={onClose}>{headerText}</ModalHeader>
           <ModalBody>
             <div style={{ minHeight: 50 }}>

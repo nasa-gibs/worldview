@@ -129,7 +129,8 @@ class toolbarContainer extends Component {
       notificationType,
       notificationContentNumber,
       config,
-      isImageDownloadActive
+      isImageDownloadActive,
+      isCompareActive
     } = this.props;
     const notificationClass = notificationType
       ? ' wv-status-' + notificationType
@@ -175,7 +176,13 @@ class toolbarContainer extends Component {
                 : 'wv-toolbar-button disabled'
             }
             disabled={!isImageDownloadActive}
-            title="Take a snapshot"
+            title={
+              isCompareActive
+                ? 'You must exit comparison mode to use the snapshot feature'
+                : isImageDownloadActive
+                  ? 'You must exit data download mode to use the snapshot feature'
+                  : 'Take a snapshot'
+            }
             onClick={this.openImageDownload}
           >
             <i className="fa fa-camera fa-2x" />{' '}
@@ -205,13 +212,15 @@ function mapStateToProps(state) {
     { proj: proj.id },
     state
   );
+  const isCompareActive = compare.active;
   return {
     notificationType: type,
     notificationContentNumber: number,
     config: state.config,
     isImageDownloadActive: Boolean(
-      lodashGet(state, 'map.ui.selected') && !compare.active
+      lodashGet(state, 'map.ui.selected') && !isCompareActive
     ),
+    isCompareActive,
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       activeLayersForProj,
       palettes[activeString]
@@ -245,6 +254,8 @@ const mapDispatchToProps = dispatch => ({
         openCustomContent('image_download_notify_' + type, {
           headerText: 'Notify',
           bodyComponent: Notify,
+          size: 'sm',
+          modalClassName: 'notify',
           bodyComponentProps
         })
       );
@@ -272,6 +283,7 @@ toolbarContainer.propTypes = {
   config: PropTypes.object,
   hasCustomPalette: PropTypes.bool,
   hasGraticule: PropTypes.bool,
+  isCompareActive: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
   isRotated: PropTypes.bool,
   notificationContentNumber: PropTypes.number,
