@@ -2,13 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class AnimationWidget
+ * @class Debug
  * @extends React.Component
  */
-export default class debug extends React.Component {
+export default class Debug extends React.Component {
   render() {
     if (this.props.parameters.showError) {
       throw new Error('this is a test error');
@@ -17,6 +14,6 @@ export default class debug extends React.Component {
   }
 }
 
-debug.propTypes = {
+Debug.propTypes = {
   parameters: PropTypes.object
 };

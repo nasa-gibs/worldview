@@ -4,10 +4,7 @@ import Spinner from 'react-loader';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 
 /*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class AnimationWidget
+ * @class SpinnerModal
  * @extends React.Component
  */
 export default class SpinnerModal extends React.Component {

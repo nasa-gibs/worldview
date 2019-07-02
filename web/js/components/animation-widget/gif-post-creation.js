@@ -58,7 +58,6 @@ export class GifResults extends Component {
         className={'dynamic-modal'}
         toggle={onClose}
       >
-        {/* <DetectOuterClick onClick={onClose} disabled={true}> */}
         <ModalHeader toggle={onClose}>GIF Results</ModalHeader>
         <ModalBody>
           <div className="gif-results-dialog-case clearfix">

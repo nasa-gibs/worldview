@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class AnimationWidget
+ * @class Button
  * @extends React.Component
  */
 export default class Button extends React.Component {

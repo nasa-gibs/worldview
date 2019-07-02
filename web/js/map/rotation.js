@@ -188,7 +188,6 @@ export function MapRotate(ui, models, store) {
     currentView = ui.selected.getView();
     radians = currentView.getRotation();
     debounceRotationDispatcher(radians);
-    // this.dispatchRotation()
     self.setResetButton(radians);
 
     currentDeg = currentView.getRotation() * (180.0 / Math.PI);

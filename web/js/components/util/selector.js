@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * A react component, Builds a rather specific
- * interactive widget
  *
- * @class AnimationWidget
+ * @class Selector
  * @extends React.Component
  */
 export default class Selector extends React.Component {
@@ -21,14 +19,22 @@ export default class Selector extends React.Component {
   }
   render() {
     return (
-      <select value={this.props.value} id={this.props.id} onChange={this.handleChange.bind(this)} >
+      <select
+        value={this.props.value}
+        id={this.props.id}
+        onChange={this.handleChange.bind(this)}
+      >
         {this.props.optionArray.values.map((dataEl, i) => {
-          return <option key={dataEl.value + '-' + i} value={ dataEl.value } >{ dataEl.text }</option>;
+          return (
+            <option key={dataEl.value + '-' + i} value={dataEl.value}>
+              {dataEl.text}
+            </option>
+          );
         })}
       </select>
     );
   }
-};
+}
 
 Selector.propTypes = {
   id: PropTypes.string,
