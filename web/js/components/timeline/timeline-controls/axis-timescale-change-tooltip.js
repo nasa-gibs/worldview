@@ -9,50 +9,51 @@ import PropTypes from 'prop-types';
  */
 class AxisTimeScaleChangeTooltip extends PureComponent {
   // Handle change axis timescale
-  changeTimeScale = (timeScale) => {
+  changeTimeScale = timeScale => {
     this.props.changeTimeScale(timeScale);
-  }
+  };
   // Individual linking timescale handlers
   changeTimeScaleYear = () => {
     this.changeTimeScale(1);
-  }
+  };
   changeTimeScaleMonth = () => {
     this.changeTimeScale(2);
-  }
+  };
   changeTimeScaleDay = () => {
     this.changeTimeScale(3);
-  }
+  };
   changeTimeScaleHour = () => {
     this.changeTimeScale(4);
-  }
+  };
   changeTimeScaleMinute = () => {
     this.changeTimeScale(5);
-  }
+  };
 
   render() {
-    let {
-      timeScale,
-      toolTipHovered,
-      hasSubdailyLayers
-    } = this.props;
+    let { timeScale, toolTipHovered, hasSubdailyLayers } = this.props;
     return (
       <React.Fragment>
         <div id="zoom-btn-container-axis">
           <span
             id="current-zoom"
-            className={'zoom-btn zoom-level-display-text'}
+            className={
+              'zoom-btn zoom-level-display-text zoom-' + timeScale.toLowerCase()
+            }
           >
             {timeScale}
           </span>
-          <div className="wv-zoom-tooltip"
+          <div
+            className="wv-zoom-tooltip"
             style={{ display: toolTipHovered ? 'block' : 'none' }}
           >
             <div id="timeline-zoom" className="timeline-zoom">
-              <label style={{
-                textDecoration: 'underline',
-                paddingBottom: '4px',
-                color: '#fff'
-              }}>
+              <label
+                style={{
+                  textDecoration: 'underline',
+                  paddingBottom: '4px',
+                  color: '#fff'
+                }}
+              >
                 TIMESCALE
               </label>
               <span
@@ -76,8 +77,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
               >
                 DAY
               </span>
-              {hasSubdailyLayers
-                ? <React.Fragment>
+              {hasSubdailyLayers ? (
+                <React.Fragment>
                   <span
                     id="zoom-hours"
                     className="zoom-btn zoom-btn-inactive zoom-hours"
@@ -93,8 +94,7 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
                     MINUTE
                   </span>
                 </React.Fragment>
-                : null
-              }
+              ) : null}
             </div>
           </div>
         </div>

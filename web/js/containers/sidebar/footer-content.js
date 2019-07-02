@@ -154,7 +154,7 @@ function mapStateToProps(state, ownProps) {
   const { showAll } = state.events;
   const { selectedGranules } = data;
   const events = lodashGet(requestedEvents, 'response');
-  const activeString = compare.isCompareA ? 'active' : 'activeB';
+  const activeString = compare.activeString;
   const activeLayers = layers[activeString];
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const dataSelectionSize = getDataSelectionSize(selectedGranules);
