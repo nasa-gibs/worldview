@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class AnimationWidget
+ * @class Button
  * @extends React.Component
  */
 export default class Button extends React.Component {
@@ -31,15 +28,15 @@ export default class Button extends React.Component {
 
 Button.defaultProps = {
   className: 'gray',
-  valid: true,
   id: '',
-  style: null
+  style: null,
+  valid: true
 };
 Button.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.string,
   onClick: PropTypes.func,
   style: PropTypes.object,
-  id: PropTypes.string,
-  valid: PropTypes.bool,
-  className: PropTypes.string,
-  text: PropTypes.string
+  text: PropTypes.string,
+  valid: PropTypes.bool
 };

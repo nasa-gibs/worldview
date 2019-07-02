@@ -109,12 +109,12 @@ class NavCase extends React.Component {
   }
 }
 NavCase.propTypes = {
+  activeTab: PropTypes.string,
+  isCompareMode: PropTypes.bool,
   isMobile: PropTypes.bool,
   onTabClick: PropTypes.func,
-  activeTab: PropTypes.string,
-  toggleSidebar: PropTypes.func,
   tabTypes: PropTypes.object,
-  isCompareMode: PropTypes.bool
+  toggleSidebar: PropTypes.func
 };
 
 export default NavCase;

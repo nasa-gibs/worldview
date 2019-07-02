@@ -2,7 +2,7 @@ import { Swipe } from './swipe';
 import { Opacity } from './opacity';
 import { Spy } from './spy';
 import util from '../../util/util';
-
+import { setValue } from '../../modules/compare/actions';
 const TOUCH_EVENT = {
   type: 'touch',
   start: 'touchstart',
@@ -15,7 +15,7 @@ const MOUSE_EVENT = {
   move: 'mousemove',
   end: 'mouseup'
 };
-export function mapCompare(models, config) {
+export function mapCompare(config, store) {
   var self = {};
   var comparison = null;
   var mode = 'swipe';
@@ -26,7 +26,9 @@ export function mapCompare(models, config) {
   self.spy = Spy;
   self.active = false;
   self.dragging = false;
-  self.EventTypeObject = util.browser.mobileAndTabletDevice ? TOUCH_EVENT : MOUSE_EVENT;
+  self.EventTypeObject = util.browser.mobileAndTabletDevice
+    ? TOUCH_EVENT
+    : MOUSE_EVENT;
 
   var init = function() {
     self.events
@@ -35,12 +37,13 @@ export function mapCompare(models, config) {
       })
       .on('moveend', value => {
         self.dragging = false;
-        models.compare.setValue(value);
+        store.dispatch(setValue(value));
       });
   };
   self.update = function(group) {
+    const state = store.getState();
     if (comparison) {
-      comparison.update(models.compare.isCompareA, group);
+      comparison.update(state.compare.isCompareA, group);
     }
   };
   /**
@@ -49,36 +52,37 @@ export function mapCompare(models, config) {
    * @param {String} compareMode | Active compare mode
    */
   self.create = function(map, compareMode) {
-    if (compareMode === mode && comparison && proj === models.proj.selected) {
-      comparison.update(models.compare.isCompareA);
+    const state = store.getState();
+    if (compareMode === mode && comparison && proj === state.proj.selected) {
+      comparison.update(state.compare.isCompareA);
     } else if (comparison) {
       mode = compareMode;
       self.destroy();
       comparison = new self[compareMode](
         map,
-        models.compare.isCompareA,
+        state.compare.isCompareA,
         self.events,
         self.EventTypeObject,
-        models.compare.value || null
+        state.compare.value || null
       ); // e.g. new self.swipe()
     } else {
       mode = compareMode;
       comparison = new self[compareMode](
         map,
-        models.compare.isCompareA,
+        state.compare.isCompareA,
         self.events,
         self.EventTypeObject,
-        models.compare.value || null
+        state.compare.value || null
       ); // e.g. new self.swipe()
     }
     self.active = true;
-    proj = models.proj.selected;
+    proj = state.proj.selected;
   };
   /**
    * Return offset value (for running-data use)
    */
   self.getOffset = function() {
-    if (mode === 'swipe') {
+    if (mode === 'swipe' && comparison) {
       return comparison.getSwipeOffset();
     } else {
       return null;
@@ -89,7 +93,7 @@ export function mapCompare(models, config) {
    */
   self.destroy = function() {
     comparison.destroy();
-    models.compare.setValue(null); // Remove Value from state
+    store.dispatch(setValue(50)); // set Value to default
     comparison = null;
     self.active = false;
   };

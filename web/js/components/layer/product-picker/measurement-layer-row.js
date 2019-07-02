@@ -49,13 +49,13 @@ MeasurementLayerRow.defaultProps = {
   checked: false
 };
 MeasurementLayerRow.propTypes = {
-  onClick: PropTypes.func,
-  measurementId: PropTypes.string,
-  layerId: PropTypes.string,
-  title: PropTypes.string,
-  removeLayer: PropTypes.func,
   addLayer: PropTypes.func,
-  checked: PropTypes.bool
+  checked: PropTypes.bool,
+  layerId: PropTypes.string,
+  measurementId: PropTypes.string,
+  onClick: PropTypes.func,
+  removeLayer: PropTypes.func,
+  title: PropTypes.string
 };
 
 export default MeasurementLayerRow;

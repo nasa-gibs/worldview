@@ -88,24 +88,24 @@ export default class Crop extends React.Component {
   }
 }
 Crop.defaultProps = {
-  x: 20,
-  y: 10,
-  width: 30,
   height: 10,
   maxHeight: window.innerWidth,
-  maxWidth: window.innerHeight
+  maxWidth: window.innerHeight,
+  width: 30,
+  x: 20,
+  y: 10
 };
 Crop.propTypes = {
-  x: PropTypes.number,
-  y: PropTypes.number,
-  width: PropTypes.number,
-  height: PropTypes.number,
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  coordinates: PropTypes.object,
-  topRightStyle: PropTypes.object,
   bottomLeftStyle: PropTypes.object,
-  maxWidth: PropTypes.number,
+  coordinates: PropTypes.object,
+  height: PropTypes.number,
   maxHeight: PropTypes.number,
-  showCoordinates: PropTypes.bool
+  maxWidth: PropTypes.number,
+  showCoordinates: PropTypes.bool,
+  topRightStyle: PropTypes.object,
+  width: PropTypes.number,
+  x: PropTypes.number,
+  y: PropTypes.number
 };

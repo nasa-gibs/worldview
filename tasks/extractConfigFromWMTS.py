@@ -52,7 +52,7 @@ total_warning_count = 0
 total_error_count = 0
 
 json_options = {}
-json_options["indent"] = 4
+json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
 
 class SkipException(Exception):
@@ -84,6 +84,21 @@ def process_layer(gc_layer, wv_layers, colormaps):
         }
     }
 
+    # Vector data links
+    if "ows:Metadata" in gc_layer:
+        for item in gc_layer["ows:Metadata"]:
+            if "@xlink:role" not in item:
+                raise KeyError("No xlink:role")
+            schema_version = item["@xlink:role"]
+
+            if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0":
+                vector_data_link = item["@xlink:href"]
+                vector_data_file = os.path.basename(vector_data_link)
+                vector_data_id = os.path.splitext(vector_data_file)[0]
+                wv_layer["vectorData"] = {
+                    "id": vector_data_id
+                }
+
     # Colormap links
     if "ows:Metadata" in gc_layer:
         if "skipPalettes" in config and ident in config["skipPalettes"]:
@@ -103,6 +118,13 @@ def process_layer(gc_layer, wv_layers, colormaps):
                     colormap_id = os.path.splitext(colormap_file)[0]
                     wv_layer["palette"] = {
                         "id": colormap_id
+                    }
+                elif schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0":
+                    vectorstyle_link = item["@xlink:href"]
+                    vectorstyle_file = os.path.basename(vectorstyle_link)
+                    vectorstyle_id = os.path.splitext(vectorstyle_file)[0]
+                    wv_layer["vectorStyle"] = {
+                        "id": vectorstyle_id
                     }
 
 def process_entry(entry, colormaps):

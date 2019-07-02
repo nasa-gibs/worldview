@@ -52,10 +52,10 @@ class CategoryList extends React.Component {
 
 CategoryList.propTypes = {
   categories: PropTypes.array,
-  measurementConfig: PropTypes.object,
+  categoryType: PropTypes.string,
   drawMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  categoryType: PropTypes.string,
+  measurementConfig: PropTypes.object,
   width: PropTypes.number
 };
 

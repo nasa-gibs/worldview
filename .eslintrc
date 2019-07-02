@@ -6,7 +6,7 @@
     "jquery": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2019,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
@@ -14,6 +14,7 @@
   },
   "plugins": ["react", "jest"],
   "extends": ["standard", "plugin:react/recommended"],
+  "parser": "babel-eslint",
   "rules": {
     "semi": ["error", "always"],
     "space-before-function-paren": "off",
@@ -61,7 +62,12 @@
         "react/no-danger": "warn",
         "react/prop-types": "warn",
         "react/no-did-update-set-state": "warn",
-        "react/no-render-return-value": "warn"
+        "react/no-render-return-value": "warn",
+        "react/sort-prop-types": ["warn", {
+          "ignoreCase": true,
+          "requiredFirst": true,
+          "sortShapeProp": true
+        }]
       }
     }
   ]

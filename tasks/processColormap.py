@@ -220,7 +220,7 @@ def process_file(file):
         "maps": maps
     }
     json_options = {}
-    json_options["indent"] = 4
+    json_options["indent"] = 2
     json_options["separators"] = (',', ': ')
 
     output_file = os.path.join(output_dir, id + ".json")

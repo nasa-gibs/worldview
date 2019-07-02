@@ -325,13 +325,6 @@
   border-radius: 0;
 }
 
-.wv-alert {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40px;
-}
-
 .notify-alert .ui-dialog-content div::after {
   pointer-events: none;
   transform: translateY(50%);
@@ -400,13 +393,18 @@
   line-height: 40px;
 }
 
-.wv-dialog ul {
+.event-alert-modal-body ul {
   padding-left: 20px;
   margin: 10px 0;
 }
 
-.wv-dialog ul li {
+.event-alert-modal-body ul li {
   list-style-type: disc;
   display: list-item;
   margin: 2px 0 2px 20px;
+}
+.events-footer-case {
+  color: #fff;
+  padding-top: 5px;
+  border-top: 0.5px solid rgba(250, 250, 250, 0.5);
 }

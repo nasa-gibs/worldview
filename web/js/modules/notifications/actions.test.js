@@ -6,7 +6,6 @@ import * as constants from './constants';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const ERROR_MESSAGE = 'There was an error';
-
 describe('Notification fetch action', () => {
   afterEach(() => {
     fetchMock.restore();

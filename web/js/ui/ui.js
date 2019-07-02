@@ -1,13 +1,11 @@
 import 'jquery-ui-bundle/jquery-ui';
 import loadingIndicator from './indicator';
-import uiInfo from './info';
-import mouse from './mouse';
+import { uiInfo } from './info';
 
 export default (function(self) {
   // Export other ui methods
   self.loadingIndicator = loadingIndicator;
   self.info = uiInfo;
-  self.mouse = mouse;
   /**
    * General error handler.
    *

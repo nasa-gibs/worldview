@@ -208,7 +208,9 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = dispatch => ({
   requestShortLink: (location, signal) => {
-    return dispatch(requestShortLink(location, 'application/json', signal));
+    return dispatch(
+      requestShortLink(location, 'application/json', null, signal)
+    );
   }
 });
 
@@ -218,9 +220,8 @@ export default connect(
 )(ShareLinkContainer);
 
 ShareLinkContainer.propTypes = {
-  projection: PropTypes.string,
+  mock: PropTypes.string,
   queryString: PropTypes.string,
   requestShortLink: PropTypes.func,
-  shortLink: PropTypes.object,
-  mock: PropTypes.string
+  shortLink: PropTypes.object
 };

@@ -11,11 +11,12 @@ var mapCase;
 var listenerObj;
 var percentSwipe = null;
 const SWIPE_PADDING = 30;
+var dragging = false;
 
 export class Swipe {
   constructor(
     olMap,
-    isAactive,
+    isActive,
     compareEvents,
     eventListenerStringObj,
     valueOverride
@@ -192,6 +193,10 @@ var addLineOverlay = function(map) {
 
 var dragLine = function(listenerObj, lineCaseEl, map) {
   function move(evt) {
+    if (!dragging) {
+      dragging = true;
+      events.trigger('movestart');
+    }
     var windowWidth = util.browser.dimensions[0];
     if (listenerObj.type === 'default') evt.preventDefault();
     evt.stopPropagation();
@@ -214,6 +219,7 @@ var dragLine = function(listenerObj, lineCaseEl, map) {
     map.render();
   }
   function end(evt) {
+    dragging = false;
     events.trigger(
       'moveend',
       lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0)

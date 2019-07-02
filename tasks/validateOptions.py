@@ -100,6 +100,14 @@ for layer_id in wv["layers"].keys():
                 palette_id + ".json")):
             error("[%s] Unknown palette: %s" % (layer_id, palette_id))
             del layer["palette"]
+    if "vectorStyle" in layer and "id" not in layer["vectorStyle"]:
+        error("[%s] No vectorStyle definition" % (layer_id))
+    elif "vectorStyle" in layer:
+        vector_style_id = layer["vectorStyle"]["id"]
+        if not os.path.exists(os.path.join(config_dir, "vectorstyles",
+                vector_style_id + ".json")):
+            error("[%s] Unknown vector style: %s" % (layer_id, vector_style_id))
+            del layer["vectorStyle"]
     if "group" not in layer and opt.get("warnOnUnexpectedLayer"):
         error("[%s] Possible unexpected layer, no group defined" % layer_id)
         remove_layer(wv, layer_id)
@@ -181,7 +189,7 @@ print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
         warning_count, remove_count)
 
 json_options = {}
-json_options["indent"] = 4
+json_options["indent"] = 2
 json_options["separators"] = (',', ': ')
 
 with open(main_config_file, "w") as fp:

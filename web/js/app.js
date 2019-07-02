@@ -8,14 +8,21 @@ import util from './util/util';
 import OlCoordinates from './components/map/ol-coordinates';
 // Toolbar
 import Toolbar from './containers/toolbar';
+import Sidebar from './containers/sidebar/sidebar';
 // Modal
 import Modal from './containers/modal';
 
 // Other
 import Brand from './brand';
 
-// Crutch between state systems
-import { updateLegacyInitComplete } from './modules/migration/actions';
+// actions
+import { calculateResponsiveState } from 'redux-responsive';
+import Tour from './containers/tour';
+import Timeline from './containers/timeline/timeline';
+import AnimationWidget from './containers/animation-widget';
+import ErrorBoundary from './containers/error-boundary';
+import Debug from './components/util/debug';
+
 // Dependency CSS
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../../node_modules/jquery-ui-bundle/jquery-ui.structure.css';
@@ -25,7 +32,6 @@ import '../../node_modules/icheck/skins/square/red.css';
 import '../../node_modules/icheck/skins/line/red.css';
 import '../../node_modules/jscrollpane/style/jquery.jscrollpane.css';
 import '../../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css';
-import '../ext/mobiscroll-2.6.0/mobiscroll.css';
 import '../../node_modules/jquery-jcrop/css/jquery.Jcrop.css';
 import '../../node_modules/ol/ol.css';
 import '../../node_modules/rc-slider/dist/rc-slider.css';
@@ -34,6 +40,7 @@ import '../../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import 'react-image-crop/dist/ReactCrop.css';
 // App CSS
 import '../css/fonts.css';
+import '../css/alert.css';
 import '../css/reset.css';
 import '../css/compare.css';
 import '../css/jquery-ui-override.css';
@@ -50,7 +57,6 @@ import '../css/palettes.css';
 import '../css/image.css';
 import '../css/debug.css';
 import '../css/projection.css';
-import '../css/date.css';
 import '../css/menuPicker.css';
 import '../css/tour.css';
 import '../css/products.css';
@@ -67,120 +73,46 @@ import '../css/tooltip.css';
 import '../css/mobile.css';
 import '../css/modal.css';
 import '../css/list.css';
+import '../css/vectorMeta.css';
 import '../pages/css/document.css';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.onload();
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+  handleKeyPress(event) {
+    this.props.keyPressAction(event.keyCode);
+  }
+  componentDidMount() {
+    document.addEventListener('keypress', this.handleKeyPress);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keypress', this.handleKeyPress);
   }
   render() {
+    let isAnimationWidgetActive = this.props.state.animation.isActive;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
-        <section id="wv-sidebar" />
+        <Sidebar />
+        <Tour />
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
         <div id="wv-map" className="wv-map" />
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <div id="dlMap" />
-
-        <div id="timewheels" style={{ display: 'none' }} />
-
-        <section
-          id="timeline"
-          className="timeline-inner clearfix"
-          style={{ display: 'none' }}
-        >
-          <div id="timeline-header">
-            <div id="date-selector-main" />
-            <div id="zoom-buttons-group">
-              <div id="zoom-btn-container">
-                <span
-                  id="current-zoom"
-                  className="zoom-btn zoom-btn-active"
-                  data-zoom="3"
-                >
-                  Days
-                </span>
-                <div className="wv-tooltip">
-                  <div id="timeline-zoom" className="timeline-zoom">
-                    <span
-                      id="zoom-years"
-                      className="zoom-btn zoom-btn-inactive zoom-years"
-                      data-zoom="1"
-                    >
-                      Years
-                    </span>
-                    <span
-                      id="zoom-months"
-                      className="zoom-btn zoom-btn-inactive zoom-months"
-                      data-zoom="2"
-                    >
-                      Months
-                    </span>
-                    <span
-                      id="zoom-days"
-                      className="zoom-btn zoom-btn-inactive zoom-days"
-                      data-zoom="3"
-                    >
-                      Days
-                    </span>
-                    <span
-                      id="zoom-minutes"
-                      className="zoom-btn zoom-btn-inactive zoom-minutes"
-                      data-zoom="4"
-                    >
-                      Minutes
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="button-action-group"
-                id="left-arrow-group"
-                title="Click and hold to animate backwards"
-              >
-                <svg id="timeline-svg" width="24" height="30">
-                  <path
-                    d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                    className="arrow"
-                  />
-                </svg>
-              </div>
-              <div
-                className="button-action-group"
-                id="right-arrow-group"
-                title="Click and hold to animate forwards"
-              >
-                <svg width="24" height="30">
-                  <path
-                    d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
-                    className="arrow"
-                  />
-                </svg>
-              </div>
-            </div>
-            <div
-              className="button-action-group animate-button"
-              id="animate-button"
-              title="Set up animation"
-            >
-              <i id="wv-animate" className="fas fa-video wv-animate" />
-            </div>
-          </div>
-          <div id="timeline-footer">
-            <div id="wv-animation-widet-case"> </div>
-          </div>
-          <div id="timeline-hide">
-            <svg className="hamburger" width="10" height="9">
-              <path d="M 0,0 0,1 10,1 10,0 0,0 z M 0,4 0,5 10,5 10,4 0,4 z M 0,8 0,9 10,9 10,8 0,8 z" />
-            </svg>
-          </div>
-        </section>
+        <Timeline />
+        <div id="wv-animation-widet-case">
+          {isAnimationWidgetActive ? <AnimationWidget /> : null}
+        </div>
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         <Modal />
+        <ErrorBoundary>
+          <Debug parameters={this.props.parameters} />
+        </ErrorBoundary>
       </div>
     );
   }
@@ -205,8 +137,6 @@ class App extends React.Component {
       if (config.features.googleTagManager) {
         googleTagManager.init(config.features.googleTagManager.id); // Insert google tag manager
       }
-      document.activeElement.blur();
-      $('input').blur();
 
       // Console notifications
       if (Brand.release()) {
@@ -220,16 +150,17 @@ class App extends React.Component {
       } else {
         console.warn('Development version');
       }
-
+      window.addEventListener('resize', () => {
+        self.props.screenResize(window);
+      });
+      self.props.screenResize(window);
       models.wv.events.trigger('startup');
-      self.props.updateLegacyInitComplete(); // notify state that legacy initiation has finished
     };
     util.wrap(main)();
   }
 }
 function mapStateToProps(state, ownProps) {
   return {
-    legacy: state.legacy,
     state: state,
     config: state.config,
     parameters: state.parameters,
@@ -238,8 +169,11 @@ function mapStateToProps(state, ownProps) {
   };
 }
 const mapDispatchToProps = dispatch => ({
-  updateLegacyInitComplete: () => {
-    dispatch(updateLegacyInitComplete());
+  keyPressAction: keyCode => {
+    dispatch({ type: 'KEY_PRESS_ACTION', keyCode });
+  },
+  screenResize: (width, height) => {
+    dispatch(calculateResponsiveState(window));
   }
 });
 
@@ -248,5 +182,8 @@ export default connect(
   mapDispatchToProps
 )(App);
 App.propTypes = {
-  mapMouseEvents: PropTypes.object
+  keyPressAction: PropTypes.func,
+  mapMouseEvents: PropTypes.object,
+  parameters: PropTypes.object,
+  state: PropTypes.object
 };

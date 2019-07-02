@@ -3,19 +3,26 @@ import PropTypes from 'prop-types';
 import LayerList from './list';
 import CategoryList from './category-list';
 import ProductPickerHeader from './header';
-import lodashValues from 'lodash/values';
+import {
+  toLower as lodashToLower,
+  values as lodashValues,
+  each as lodashEach,
+  includes as lodashIncludes
+} from 'lodash';
 import Scrollbars from '../../util/scrollbar';
 import googleTagManager from 'googleTagManager';
 import lodashDebounce from 'lodash/debounce';
-
+import { connect } from 'react-redux';
+import { addLayer, removeLayer } from '../../../modules/layers/actions';
 import {
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Nav,
-  NavItem,
-  NavLink
-} from 'reactstrap';
+  getLayersForProjection,
+  getTitles,
+  hasMeasurementSetting,
+  hasMeasurementSource
+} from '../../../modules/layers/selectors';
+import { onToggle } from '../../../modules/modal/actions';
+
+import { ModalBody, ModalHeader, Nav, NavItem, NavLink } from 'reactstrap';
 
 /*
  * A scrollable list of layers
@@ -27,30 +34,13 @@ class ProductPicker extends React.Component {
     super(props);
     this.state = {
       listType: props.listType,
-      isOpen: props.isOpen,
       categoryType: Object.keys(props.categoryConfig)[0],
-      height: props.height,
-      width: props.width,
       category: props.category,
-      activeLayers: props.activeLayers,
-      allLayers: props.allLayers,
       selectedMeasurement: null,
       filteredRows: props.filteredRows,
-      selectedProjection: props.selectedProjection,
       inputValue: ''
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
-  }
-  /**
-   * Update modal visibility
-   * @function toggle
-   */
-  toggle() {
-    const val = !this.state.isOpen;
-    this.setState({
-      isOpen: val
-    });
-    this.props.onToggleModal(val);
   }
   /**
    * Either filter layers with search object or
@@ -59,10 +49,8 @@ class ProductPicker extends React.Component {
    * @param e | onChange event object
    */
   runSearch(value) {
-    const { filterProjections, filterSearch } = this.props;
-    const { allLayers } = this.state;
+    const { filterProjections, filterSearch, allLayers } = this.props;
     let val = value.toLowerCase();
-
     if (val.length === 0) {
       this.setState({
         filteredRows: [],
@@ -131,13 +119,9 @@ class ProductPicker extends React.Component {
   }
   render() {
     const {
-      isOpen,
-      activeLayers,
-      selectedProjection,
       filteredRows,
       listType,
       categoryType,
-      height,
       category,
       inputValue,
       width,
@@ -145,26 +129,24 @@ class ProductPicker extends React.Component {
     } = this.state;
     const {
       categoryConfig,
+      selectedProjection,
+      activeLayers,
       measurementConfig,
       hasMeasurementSource,
       removeLayer,
       addLayer,
       hasMeasurementSetting,
       layerConfig,
-      modalView
+      modalView,
+      height,
+      onToggle
     } = this.props;
     const isCategoryDisplay =
       listType === 'category' && selectedProjection === 'geographic';
 
     return (
-      <Modal
-        isOpen={isOpen}
-        toggle={this.toggle.bind(this)}
-        backdrop={true}
-        className="custom-layer-dialog light"
-        autoFocus={false}
-      >
-        <ModalHeader toggle={this.toggle.bind(this)}>
+      <React.Fragment>
+        <ModalHeader toggle={onToggle}>
           <ProductPickerHeader
             selectedProjection={selectedProjection}
             listType={listType}
@@ -236,43 +218,117 @@ class ProductPicker extends React.Component {
             </Scrollbars>
           </div>
         </ModalBody>
-      </Modal>
+      </React.Fragment>
     );
   }
 }
 
 ProductPicker.defaultProps = {
-  listType: 'category',
-  isOpen: false,
-  category: null
+  category: null,
+  listType: 'category'
 };
 ProductPicker.propTypes = {
-  listType: PropTypes.string,
-  categories: PropTypes.array,
-  measurements: PropTypes.object,
-  drawMeasurements: PropTypes.func,
-  hasMeasurementSource: PropTypes.func,
-  isOpen: PropTypes.bool,
-  toggleModal: PropTypes.func,
-  addLayer: PropTypes.func,
-  removeLayer: PropTypes.func,
   activeLayers: PropTypes.array,
-  filteredRows: PropTypes.array,
-  height: PropTypes.number,
-  expandedMeasurements: PropTypes.object,
-  activeMeasurementIndex: PropTypes.number,
-  selectedProjection: PropTypes.string,
-  modalView: PropTypes.string,
-  categoryConfig: PropTypes.object,
-  measurementConfig: PropTypes.object,
-  layerConfig: PropTypes.object,
+  addLayer: PropTypes.func,
   allLayers: PropTypes.array,
-  width: PropTypes.number,
-  hasMeasurementSetting: PropTypes.func,
+  categories: PropTypes.array,
+  category: PropTypes.object,
+  categoryConfig: PropTypes.object,
+  drawMeasurements: PropTypes.func,
+  filteredRows: PropTypes.array,
   filterProjections: PropTypes.func,
   filterSearch: PropTypes.func,
-  onToggleModal: PropTypes.func,
-  category: PropTypes.object
+  hasMeasurementSetting: PropTypes.func,
+  hasMeasurementSource: PropTypes.func,
+  height: PropTypes.number,
+  layerConfig: PropTypes.object,
+  listType: PropTypes.string,
+  measurementConfig: PropTypes.object,
+  measurements: PropTypes.object,
+  modalView: PropTypes.string,
+  onToggle: PropTypes.func,
+  removeLayer: PropTypes.func,
+  selectedProjection: PropTypes.string,
+  width: PropTypes.number
 };
 
-export default ProductPicker;
+const mapDispatchToProps = dispatch => ({
+  addLayer: id => {
+    dispatch(addLayer(id));
+  },
+  removeLayer: id => {
+    dispatch(removeLayer(id));
+  },
+  onToggle: () => {
+    dispatch(onToggle());
+  }
+});
+function mapStateToProps(state, ownProps) {
+  const { config, browser, proj, layers, compare } = state;
+  const { screenWidth, screenHeight } = browser;
+  const activeString = compare.isCompareA ? 'active' : 'activeB';
+  const height = screenHeight - 100;
+  const width = getModalWidth(screenWidth);
+  const allLayers = getLayersForProjection(config, proj.id);
+  const activeLayers = layers[activeString];
+
+  return {
+    categoryConfig: config.categories,
+    measurementConfig: config.measurements,
+    layerConfig: config.layers,
+    height,
+    width,
+    allLayers,
+    filteredRows: allLayers,
+    activeLayers,
+    selectedProjection: proj.id,
+    filterProjections: layer => {
+      return !layer.projections[proj.id];
+    },
+    hasMeasurementSetting: (current, source) => {
+      return hasMeasurementSetting(current, source, config, proj.id);
+    },
+    filterSearch: (layer, val, terms) => {
+      return filterSearch(layer, val, terms, config, proj.id);
+    },
+    hasMeasurementSource: current => {
+      return hasMeasurementSource(current, config, proj.id);
+    }
+  };
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductPicker);
+
+const getModalWidth = function(width) {
+  var availableWidth = width - width * 0.15;
+  var gridItemWidth = 310;
+  let sizeMultiplier = Math.floor(availableWidth / gridItemWidth);
+  if (sizeMultiplier < 1) {
+    sizeMultiplier = 1;
+  }
+  if (sizeMultiplier > 3) {
+    sizeMultiplier = 3;
+  }
+  const gutterSpace = (sizeMultiplier - 1) * 10;
+  const modalPadding = 26;
+  return gridItemWidth * sizeMultiplier + gutterSpace + modalPadding;
+};
+
+// Takes the terms and returns true if the layer isnt part of search
+const filterSearch = function(layer, val, terms, config, projId) {
+  if (!val) return false;
+  var filtered = false;
+
+  var names = getTitles(config, layer.id, projId);
+  lodashEach(terms, function(term, index) {
+    filtered =
+      !lodashIncludes(lodashToLower(names.title), term) &&
+      !lodashIncludes(lodashToLower(names.subtitle), term) &&
+      !lodashIncludes(lodashToLower(names.tags), term) &&
+      !lodashIncludes(lodashToLower(config.layers[layer.id].id), term);
+    if (filtered) return false;
+  });
+  return filtered;
+};

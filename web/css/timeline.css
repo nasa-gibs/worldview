@@ -10,8 +10,7 @@ button:focus {
 .timeline-inner {
   position: absolute;
   border: 1px solid #333;
-  background: rgb(40, 40, 40);
-  background: rgba(40, 40, 40, 0.9);
+  background: rgba(40, 40, 40, 0.85);
   border-radius: 5px;
   display: flex;
   flex-flow: row nowrap;
@@ -21,121 +20,6 @@ button:focus {
   bottom: 10px;
 }
 
-#timeline-footer text {
-  font: 400 12px/125% 'Roboto Mono', monospace;
-  text-align: start;
-  letter-spacing: 0;
-  word-spacing: 0;
-  -webkit-writing-mode: lr-tb;
-  -ms-writing-mode: lr-tb;
-  writing-mode: lr-tb;
-  text-anchor: start;
-  fill-opacity: 1;
-  stroke: none;
-}
-
-.x.axis .tick {
-  cursor: pointer;
-}
-
-.x.axis .tick text {
-  fill: #fff;
-  text-transform: uppercase;
-}
-
-.x.axis > .tick circle {
-  fill: #fff;
-}
-
-.x.axis > g.tick rect {
-  fill: #e2e2e2;
-  fill-opacity: 0;
-}
-
-.x.axis > g.tick rect.boundarytick-background.bg-hover,
-.x.axis > g.tick:hover rect.boundarytick-background {
-  fill: #fff;
-  fill-opacity: 1;
-}
-
-.x.axis > g.tick.tick-labeled-disabled:hover rect.boundarytick-background {
-  fill-opacity: 0;
-}
-
-.x.axis > g.tick.tick-labeled-disabled {
-  cursor: default;
-}
-
-.x.axis > g.tick.label-only text {
-  cursor: default;
-}
-
-.x.axis > g.tick rect.normaltick-background:hover {
-  fill-opacity: 0.3;
-  fill: #fff;
-}
-
-.x.axis > g.tick text.hover-tick-label {
-  fill: #1a1a1a;
-  pointer-events: none;
-}
-
-.x.axis > g.tick > text > .sub-label {
-  fill: #555;
-}
-
-.x.axis > g.tick:hover > text > .sub-label {
-  fill: #1a1a1a;
-}
-
-.x.axis > .tick > line {
-  fill: none;
-  stroke: #9b9b9b;
-  stroke-width: 1;
-  stroke-linecap: butt;
-  stroke-linejoin: miter;
-  stroke-miterlimit: 4;
-  stroke-opacity: 1;
-  stroke-dasharray: 2, 4;
-  stroke-dashoffset: 0;
-}
-
-.x.axis > .tick-labeled > line {
-  stroke-width: 1;
-  stroke-dasharray: none;
-  stroke: #fff;
-  stroke-linecap: butt;
-  stroke-linejoin: miter;
-  stroke-miterlimit: 4;
-}
-
-.x.axis > .tick > line.tick-hour,
-.x.axis > .tick > line.tick-week {
-  stroke: #cfcfcf;
-  stroke-width: 1;
-  stroke-dasharray: 0;
-}
-
-.x.axis > .tick > line.tick-hour {
-  stroke-width: 2;
-}
-
-g.plot rect.data-bar {
-  fill: #4e5e87;
-  stroke: transparent;
-  stroke-width: 1px;
-  pointer-events: none;
-}
-
-g.plot rect.data-bar-hovered {
-  stroke: #999;
-}
-
-g.plot rect.data-bar-invisible {
-  fill: #777;
-  fill-opacity: 0.5;
-}
-
 #timeline-header {
   margin-top: 2px;
   min-width: 310px;
@@ -143,7 +27,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header.subdaily {
-  width: 404px;
+  width: 414px;
 }
 
 #timeline-header .timeline-zoom,
@@ -151,11 +35,13 @@ g.plot rect.data-bar-invisible {
 #timeline-header .input-time-divider,
 #timeline-header .input-wrapper-minute,
 #timeline-header .input-time-zmark,
-#timeline-header .zoom-minutes {
+#timeline-header .zoom-minutes,
+#timeline-header .zoom-hours {
   display: none;
 }
 
-#timeline-header.subdaily .zoom-minutes {
+#timeline-header.subdaily .zoom-minutes,
+#timeline-header.subdaily .zoom-hours {
   display: block;
 }
 
@@ -259,14 +145,6 @@ g.plot rect.data-bar-invisible {
   width: 86px;
 }
 
-.button-action-group,
-.date-arrows {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
 .button-action-group {
   height: 60px;
   width: 40px;
@@ -278,10 +156,8 @@ g.plot rect.data-bar-invisible {
   fill: #fff;
 }
 
-#timeline-header .date-arrows-wrapper {
-  vertical-align: middle;
-  visibility: hidden;
-  display: inline-block;
+.date-arrow-wrapper {
+  width: 60px;
 }
 
 #timeline-header .date-arrows {
@@ -296,7 +172,7 @@ g.plot rect.data-bar-invisible {
 }
 
 #timeline-header .date-arrows svg path {
-  fill: #444;
+  fill: #666;
 }
 
 #timeline-header .input-wrapper:hover .date-arrows:hover svg path {
@@ -394,8 +270,15 @@ g.plot rect.data-bar-invisible {
   border-right: 1px solid #666;
 }
 
-#timeline-footer svg {
-  overflow: visible;
+#wv-timeline-range-selector {
+  position: absolute;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#wv-timeline-range-selector * {
+  pointer-events: all;
 }
 
 #wv-rangeselector-case > .wv-timeline-range-selector {
@@ -406,32 +289,161 @@ g.plot rect.data-bar-invisible {
   visibility: visible;
 }
 
-/* Timeline svg classes */
-.x.axis line,
-.x.axis path {
-  fill: none;
-  stroke: #fff;
-  shape-rendering: crispEdges;
+/* Axis */
+.timeline-axis-container {
+  height: 65px;
+  border-top: 1.5px solid #fff;
 }
 
-.y.axis line,
-.y.axis path {
-  fill: none;
-  stroke: none;
+.timeline-axis-svg {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.x.axis path {
+.axis-grid-text {
+  font-size: 18px;
+  font-weight: 500;
+  font-family: 'Roboto Mono', monospace;
+  color: #fff;
+  pointer-events: none;
+  user-select: none;
+}
+
+.axis-grid-line {
+  pointer-events: none;
+}
+
+/* Zoom button container */
+#zoom-btn-container-axis {
+  margin-bottom: 5px;
+}
+
+.zoom-level-display-text {
+  color: #fff;
+  font-family: 'Roboto Mono', monospace;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.2em;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  text-transform: uppercase;
+  margin: 4px 0;
+  display: block;
+}
+
+.zoom-level-change {
+  width: 75px;
+}
+
+.zoom-level-change-arrows {
+  user-select: none;
+  background: transparent;
+  border: thin solid transparent;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: 55px;
+}
+
+/* Interval selector */
+.custom-interval-widget {
+  height: 57px;
+  width: 225px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background: rgba(40, 40, 40, 0.85);
+  position: absolute;
+  top: -58px;
+  left: 0;
   display: none;
+  color: #fff;
+  border-bottom: thin solid #444;
 }
 
-.x.axis .selection {
-  display: block;
-  stroke: #4682b4;
+.custom-interval-widget i.wv-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
-#timeline-header .timeline-zoom {
-  display: block;
+.custom-interval-widget i.wv-close:hover {
+  color: #999;
+  cursor: pointer;
+}
+
+.custom-interval-widget-header,
+.custom-interval-widget-controls-container {
+  display: inline-block;
+  margin: 7px 0 0 10px;
+}
+
+.custom-interval-widget-controls-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.custom-interval-delta-input {
   width: 80px;
+  height: 24px;
+  color: #7890cd;
+  opacity: 1;
+  font-size: 16px;
+  background: transparent;
+  font-family: 'Roboto Mono', monospace;
+  line-height: 1.2em;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 0;
+  text-align: center;
+  border: thin solid #fff;
+}
+
+.custom-interval-timescale-select-form-container {
+  width: 100px;
+  height: 40px;
+  color: #7890cd;
+  opacity: 1;
+  font-size: 16px;
+  background: transparent;
+  border: 0;
+  font-family: 'Roboto Mono', monospace;
+  line-height: 1.2em;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  text-align: center;
+}
+
+.custom-interval-timescale-select {
+  padding: 0;
+  background: transparent;
+  color: #7890cd;
+  height: 24px;
+  font-size: 16px;
+  width: 118px;
+  border: thin solid #fff;
+  text-align-last: center;
+  padding-left: 15px;
+}
+
+.custom-interval-timescale-select-option {
+  background: rgb(40, 40, 40);
+}
+
+.custom-interval-text {
+  color: #7890cd !important;
+}
+
+#timeline-header .timeline-zoom,
+#zoom-btn-container-axis .wv-zoom-tooltip {
+  display: block;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding: 4px;
@@ -439,16 +451,23 @@ g.plot rect.data-bar-invisible {
   border-radius: 3px;
 }
 
-#timeline-header #zoom-btn-container {
+#timeline-header #zoom-btn-container,
+#zoom-btn-container-axis {
   display: block;
 }
 
 #zoom-btn-container .wv-tooltip {
-  display: none;
   position: absolute;
   bottom: 100%;
   border-bottom: 8px solid transparent;
-  width: 100%;
+  width: 100px;
+  z-index: 10;
+}
+
+#zoom-btn-container-axis .wv-zoom-tooltip {
+  position: absolute;
+  bottom: 100%;
+  width: 75px;
   z-index: 10;
 }
 
@@ -516,51 +535,62 @@ g.plot rect.data-bar-invisible {
   background-color: #fff;
 }
 
-#guitarpick {
-  cursor: pointer;
-  -webkit-clip-path: url('#guitarpick-boundary');
-  clip-path: url('#guitarpick-boundary');
+#timeline-hide:hover .wv-timeline-hide-double-chevron-left,
+#timeline-hide:hover .wv-timeline-hide-double-chevron-right,
+.wv-timeline-hide-double-chevron-left:hover,
+.wv-timeline-hide-double-chevron-right:hover {
+  background-position: -206px -63px;
 }
 
-#guitarpick path {
-  fill: #ccc;
-  fill-opacity: 1;
-  stroke: #515151;
-  stroke-width: 1;
-  stroke-opacity: 1;
-}
-
-#guitarpick rect {
-  fill: #515151;
-  fill-opacity: 1;
-  stroke: none;
-}
-
-#guitarpick.pick-clicked path,
-#guitarpick:hover path {
-  fill: #5e676f;
-  stroke: #999;
-}
-
-#guitarpick.pick-clicked rect,
-#guitarpick:hover rect,
-#guitarpick:hover {
-  fill: #999;
-}
-
-#timeline-hide .hamburger {
-  vertical-align: middle;
+.wv-timeline-hide {
   display: block;
-  margin: 26px auto 0;
+  top: 18px;
+  right: -5px;
+  color: #fff;
+  cursor: pointer;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  user-select: none;
+  height: 30px;
+  width: 30px;
 }
 
-#timeline-hide .hamburger path {
-  fill: #fff;
+.wv-timeline-hide-double-chevron-left {
+  position: absolute;
+  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
+  border-radius: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: 0;
+  transform: rotate(90deg);
 }
 
-#timeline-hide:hover .hamburger path {
-  fill: #1a1a1a;
+.wv-timeline-hide-double-chevron-right {
+  position: absolute;
+  background: url('../images/icon-sprite.svg') -206px -3px no-repeat;
+  border-radius: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: 0;
+  transform: rotate(270deg);
 }
+
+.dragger-container {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+}
+
+.timeline-dragger * {
+  pointer-events: all;
+}
+
+.axis-hover-line-container {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+}
+
 #timeline-footer .ab-group-case text {
   font-size: 20px;
 }
@@ -599,6 +629,47 @@ g.plot rect.data-bar-invisible {
 .ab-active .ab-group-case {
   display: block;
 }
-.ab-active #guitarpick {
-  opacity: 0;
+
+/* Mobile date picker */
+.mobile-date-picker-select-btn {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  background: rgba(40, 40, 40, 0.85);
+  color: #fff;
+  border: thin solid #333;
+  font-size: 17px;
+  font-family: 'Open Sans', sans-serif;
+  padding: 3px;
+  border-radius: 5px;
+  line-height: 25px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.datepicker-header,
+.datepicker-navbar-btn {
+  font-weight: 700;
+}
+
+.datepicker.android-dark .datepicker-header {
+  color: #fff !important;
+  border-bottom: 2px solid #00457b !important;
+}
+
+.datepicker.android-dark .datepicker-wheel {
+  border-top: 2px solid #00457b !important;
+  border-bottom: 2px solid #00457b !important;
+}
+
+.datepicker.android-dark .datepicker-scroll li {
+  color: #fff !important;
+}
+
+.datepicker.android-dark .datepicker-scroll li.disabled {
+  color: rgb(88, 88, 88) !important;
+}
+
+.datepicker-navbar-btn:hover {
+  background: #fff;
 }

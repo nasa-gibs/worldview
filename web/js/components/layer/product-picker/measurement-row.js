@@ -70,6 +70,7 @@ class LayerRow extends React.Component {
     let OrbitSourceList = [];
     let LayerSouceList = [];
     let orbitTitle = '';
+
     source.settings.forEach(setting => {
       const layer = layerConfig[setting];
       if (
@@ -116,7 +117,7 @@ class LayerRow extends React.Component {
             />
           );
         }
-      } else if (layer.title.indexOf('Orbital Track') !== -1) {
+      } else if (layer && layer.title && layer.title.indexOf('Orbital Track') !== -1) {
         // The following complex if statement is a placeholder
         // for truncating the layer names, until the rest of
         // the interface is implemented
@@ -125,9 +126,6 @@ class LayerRow extends React.Component {
           var matches = regExp.exec(layer.title);
           orbitTitle = matches[1];
         }
-        OrbitSourceList.push(
-          this.renderOrbitListItem(orbitTitle, measurement, layer)
-        );
       }
     });
     return (
@@ -207,7 +205,7 @@ class LayerRow extends React.Component {
         );
       } else {
         getSourceMetadata(source);
-        return <div>loading Metadata </div>;
+        return <div className="text-white">loading Metadata </div>;
       }
     }
   }
@@ -274,27 +272,27 @@ class LayerRow extends React.Component {
       <Nav vertical className="source-tabs col-md-3 col-sm-12">
         {sources
           .sort((a, b) => a.title.localeCompare(b.title))
-          .map(
-            (source, index) => {
-              if (hasMeasurementSetting(measurement, source)) {
-                // only set minValidIndex once to find init active tab/content
-                if (minValidIndex < 0) {
-                  minValidIndex = index;
-                }
-                // if activeSourceIndex is less than first valid index, make minValidIndex active tab
-                validActiveIndex = minValidIndex > activeSourceIndex ? minValidIndex : activeSourceIndex;
-                return this.renderSourceTabs(
-                  measurement,
-                  source,
-                  index,
-                  validActiveIndex
-                );
-              } else {
-                return '';
+          .map((source, index) => {
+            if (hasMeasurementSetting(measurement, source)) {
+              // only set minValidIndex once to find init active tab/content
+              if (minValidIndex < 0) {
+                minValidIndex = index;
               }
+              // if activeSourceIndex is less than first valid index, make minValidIndex active tab
+              validActiveIndex =
+                minValidIndex > activeSourceIndex
+                  ? minValidIndex
+                  : activeSourceIndex;
+              return this.renderSourceTabs(
+                measurement,
+                source,
+                index,
+                validActiveIndex
+              );
+            } else {
+              return '';
             }
-          )
-        }
+          })}
       </Nav>
     );
 
@@ -348,19 +346,19 @@ class LayerRow extends React.Component {
   }
 }
 LayerRow.propTypes = {
+  activeLayers: PropTypes.array,
+  addLayer: PropTypes.func,
+  category: PropTypes.object,
+  getSourceMetadata: PropTypes.func,
+  hasMeasurementSetting: PropTypes.func,
+  id: PropTypes.string,
+  isSelected: PropTypes.bool,
   layerConfig: PropTypes.object,
   measurement: PropTypes.object,
-  activeLayers: PropTypes.array,
-  category: PropTypes.object,
-  updateSelectedMeasurement: PropTypes.func,
-  id: PropTypes.string,
-  hasMeasurementSetting: PropTypes.func,
-  sourceMetadata: PropTypes.object,
-  getSourceMetadata: PropTypes.func,
+  projection: PropTypes.string,
   removeLayer: PropTypes.func,
-  addLayer: PropTypes.func,
-  isSelected: PropTypes.bool,
-  projection: PropTypes.string
+  sourceMetadata: PropTypes.object,
+  updateSelectedMeasurement: PropTypes.func
 };
 
 export default LayerRow;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lodashIndexOf from 'lodash/indexOf';
-import { drawPaletteOnCanvas } from '../../../palettes/util';
+import { drawPaletteOnCanvas } from '../../../modules/palettes/util';
 import util from '../../../util/util';
 import Scrollbar from '../../util/scrollbar';
 
@@ -40,18 +40,16 @@ class PaletteSelect extends React.Component {
    * @param {String} id | custom Palette Id
    */
   onChangePalette(id) {
-    const { layer, clearCustom, setCustom, index } = this.props;
+    const { layer, clearCustomPalette, setCustomPalette, groupName, index } = this.props;
 
     // Applying customs takes a while and
     // it looks more natural to make this async
     // instead of waiting
-    setTimeout(function() {
-      if (id === '__default') {
-        clearCustom(layer.id, index);
-      } else {
-        setCustom(layer.id, id, index);
-      }
-    }, 0);
+    if (id === '__default') {
+      clearCustomPalette(layer.id, index, groupName);
+    } else {
+      setCustomPalette(layer.id, id, index, groupName);
+    }
     this.setState({ activePalette: id });
   }
   /**
@@ -189,17 +187,18 @@ class PaletteSelect extends React.Component {
   }
 }
 PaletteSelect.propTypes = {
-  index: PropTypes.number,
-  layer: PropTypes.object,
-  clearCustom: PropTypes.func,
-  setCustom: PropTypes.func,
-  paletteOrder: PropTypes.array,
-  palettesTranslate: PropTypes.func,
-  getDefaultLegend: PropTypes.func,
-  getCustomPalette: PropTypes.func,
+  activePalette: PropTypes.string,
   canvas: PropTypes.object,
   checkerBoard: PropTypes.object,
-  activePalette: PropTypes.string
+  clearCustomPalette: PropTypes.func,
+  getCustomPalette: PropTypes.func,
+  getDefaultLegend: PropTypes.func,
+  groupName: PropTypes.string,
+  index: PropTypes.number,
+  layer: PropTypes.object,
+  paletteOrder: PropTypes.array,
+  palettesTranslate: PropTypes.func,
+  setCustomPalette: PropTypes.func
 };
 
 export default PaletteSelect;

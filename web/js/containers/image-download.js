@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Panel from '../components/image-download/panel';
 import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
-import { debounce } from 'lodash';
+import ErrorBoundary from './error-boundary';
 import * as olProj from 'ol/proj';
 
 import {
@@ -14,7 +14,7 @@ import {
   getPixelFromPercentage
 } from '../modules/image-download/util';
 import util from '../util/util';
-
+import { getLayers } from '../modules/layers/selectors';
 import {
   resolutionsGeo,
   resolutionsPolar,
@@ -37,6 +37,7 @@ class ImageDownloadContainer extends Component {
         y2: screenHeight / 2 + 100
       }
     };
+    this.onBoundaryChange = this.onBoundaryChange.bind(this);
   }
   onBoundaryChange(boundaries) {
     const { screenWidth, screenHeight } = this.props;
@@ -59,9 +60,10 @@ class ImageDownloadContainer extends Component {
       map,
       url,
       onClose,
-      models,
       screenWidth,
-      screenHeight
+      screenHeight,
+      date,
+      getLayers
     } = this.props;
     const { boundaries } = this.state;
     const { x, y, x2, y2 } = boundaries;
@@ -70,28 +72,29 @@ class ImageDownloadContainer extends Component {
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
-      map.selectedMap
+      map.ui.selected
     );
     const crs = proj.selected.crs;
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
     const resolution = imageUtilCalculateResolution(
-      Math.round(map.getZoom()),
+      Math.round(map.ui.selected.getView().getZoom()),
       isGeoProjection,
       proj.selected.resolutions
     );
     return (
-      <React.Fragment>
+      <ErrorBoundary>
         <Panel
           projection={proj}
           fileTypes={fileTypes}
           resolutions={resolutions}
           lonlats={lonlats}
           resolution={resolution}
-          models={models}
+          date={date}
           url={url}
           crs={crs}
+          getLayers={getLayers}
         />
         <Crop
           x={getPercentageFromPixel(screenWidth, x)}
@@ -100,7 +103,7 @@ class ImageDownloadContainer extends Component {
           maxWidth={screenWidth}
           width={getPercentageFromPixel(screenWidth, x2 - x)}
           height={getPercentageFromPixel(screenHeight, y2 - y)}
-          onChange={debounce(this.onBoundaryChange.bind(this), 10)}
+          onChange={this.onBoundaryChange}
           onClose={onClose}
           bottomLeftStyle={{
             left: x,
@@ -118,15 +121,15 @@ class ImageDownloadContainer extends Component {
           }}
           showCoordinates={true}
         />
-      </React.Fragment>
+      </ErrorBoundary>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { config, models, proj, browser } = state;
+  const { config, proj, browser, layers, compare, date, map } = state;
   const { screenWidth, screenHeight } = browser;
-  const { map } = state.legacy;
+  const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -140,9 +143,19 @@ function mapStateToProps(state) {
     proj,
     url,
     map,
-    models,
     screenWidth,
-    screenHeight
+    screenHeight,
+    date: date[activeDateStr],
+    getLayers: () => {
+      return getLayers(
+        layers[compare.activeString],
+        {
+          reverse: true,
+          renderable: true
+        },
+        state
+      );
+    }
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -157,11 +170,12 @@ export default connect(
 )(ImageDownloadContainer);
 
 ImageDownloadContainer.propTypes = {
-  proj: PropTypes.object.isRequired,
   map: PropTypes.object.isRequired,
-  models: PropTypes.object.isRequired,
-  url: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  screenWidth: PropTypes.number,
-  screenHeight: PropTypes.number
+  proj: PropTypes.object.isRequired,
+  url: PropTypes.string.isRequired,
+  date: PropTypes.object,
+  getLayers: PropTypes.func,
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number
 };

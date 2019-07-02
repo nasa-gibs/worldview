@@ -197,27 +197,27 @@ class LayerList extends React.Component {
   }
 }
 LayerList.defaultProps = {
-  listType: 'search',
+  activeMeasurementIndex: 0,
   expandedMeasurements: {},
-  activeMeasurementIndex: 0
+  listType: 'search'
 };
 LayerList.propTypes = {
-  addLayer: PropTypes.func,
-  removeLayer: PropTypes.func,
   activeLayers: PropTypes.array,
-  filteredRows: PropTypes.array,
-  listType: PropTypes.string,
-  expandedMeasurements: PropTypes.object,
   activeMeasurementIndex: PropTypes.number,
-  selectedProjection: PropTypes.string,
-  hasMeasurementSource: PropTypes.func,
-  selectedMeasurement: PropTypes.string,
-  hasMeasurementSetting: PropTypes.func,
-  updateSelectedMeasurement: PropTypes.func,
-  measurementConfig: PropTypes.object,
-  layerConfig: PropTypes.object,
+  addLayer: PropTypes.func,
   category: PropTypes.object,
-  categoryConfig: PropTypes.object
+  categoryConfig: PropTypes.object,
+  expandedMeasurements: PropTypes.object,
+  filteredRows: PropTypes.array,
+  hasMeasurementSetting: PropTypes.func,
+  hasMeasurementSource: PropTypes.func,
+  layerConfig: PropTypes.object,
+  listType: PropTypes.string,
+  measurementConfig: PropTypes.object,
+  removeLayer: PropTypes.func,
+  selectedMeasurement: PropTypes.string,
+  selectedProjection: PropTypes.string,
+  updateSelectedMeasurement: PropTypes.func
 };
 
 export default LayerList;

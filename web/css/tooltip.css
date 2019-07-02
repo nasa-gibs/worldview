@@ -46,3 +46,26 @@
 .wv-tooltip-case .wv-tooltip ul li + li {
   margin-top: 5px;
 }
+
+/* Timeline Tooltip */
+.date-tooltip {
+  background: #212121;
+  color: #fff;
+  border: thin solid #666;
+  font-size: 17px;
+  font-family: 'Roboto Mono', monospace;
+  border-radius: 5px;
+  height: 25px;
+  line-height: 25px;
+  white-space: nowrap;
+  user-select: none;
+  padding-left: 8px;
+}
+
+.date-tooltip-day {
+  position: relative;
+  bottom: 2px;
+  font-size: 14px;
+  font-family: "Lucida Console", monospace;
+  font-weight: 300;
+}

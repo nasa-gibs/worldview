@@ -11,7 +11,7 @@ const postcssPresetEnv = require('postcss-preset-env');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 // environment dev flag
 const devMode = process.env.NODE_ENV !== 'production';
 
@@ -27,7 +27,8 @@ const pluginSystem = [
     filename: 'wv.css'
   }),
   new WriteFilePlugin(),
-  new CopyWebpackPlugin([{ from: 'web/images', to: 'images' }])
+  new CopyWebpackPlugin([{ from: 'web/images', to: 'images' }]),
+  new MomentLocalesPlugin()
 ];
 
 /* Conditional Plugin Management */
@@ -175,7 +176,7 @@ module.exports = {
               ident: 'postcss',
               plugins: () => [
                 postcssPresetEnv({
-                  browsers: [
+                  browserslist: [
                     'last 5 versions',
                     'not ie < 11',
                     'not edge < 15',
@@ -240,5 +241,6 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  node: { fs: 'empty' }
 };

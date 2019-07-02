@@ -12,38 +12,47 @@ import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import { lookupFactory } from '../ol/lookupimagetile';
+import {
+  isActive as isPaletteActive,
+  getKey as getPaletteKeys,
+  getLookup as getPaletteLookup
+} from '../modules/palettes/selectors';
+import {
+  isActive as isVectorStyleActive,
+  getKey as getVectorStyleKeys,
+  setStyleFunction
+} from '../modules/vector-styles/selectors';
 
-export function mapLayerBuilder(models, config, cache, mapUi) {
+export function mapLayerBuilder(models, config, cache, mapUi, store) {
   var self = {};
   self.init = function(Parent) {
     self.extentLayers = [];
     mapUi.events.on('selecting', hideWrap);
     mapUi.events.on('selectiondone', showWrap);
   };
-  /*
+  /**
    * Create a new OpenLayers Layer
    *
    * @method createLayer
    * @static
-   *
    * @param {object} def - Layer Specs
-   *
    * @param {object} options - Layer options
-   *
-   *
    * @returns {object} OpenLayers layer
    */
   self.createLayer = function(def, options) {
+    const state = store.getState();
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var date, key, group, proj, layer, layerNext, layerPrior, attributes;
     options = options || {};
     group = options.group || null;
     date = self.closestDate(def, options);
-    key = self.layerKey(def, options, group);
-    proj = models.proj.selected;
+    key = self.layerKey(def, options, state);
+    proj = state.proj.selected;
     layer = cache.getItem(key);
+
     if (!layer) {
       // layer is not in the cache
-      if (!date) date = options.date || models.date[models.date.activeDate];
+      if (!date) date = options.date || state.date[activeDateStr];
       attributes = {
         id: def.id,
         key: key,
@@ -54,11 +63,15 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
+
       if (def.type === 'wmts') {
-        layer = createLayerWMTS(def, options);
-        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
-          layerNext = createLayerWMTS(def, options, 1);
-          layerPrior = createLayerWMTS(def, options, -1);
+        layer = createLayerWMTS(def, options, null, state);
+        if (
+          proj.id === 'geographic' &&
+          (def.wrapadjacentdays === true || def.wrapX)
+        ) {
+          layerNext = createLayerWMTS(def, options, 1, state);
+          layerPrior = createLayerWMTS(def, options, -1, state);
 
           layer.wv = attributes;
           layerPrior.wv = attributes;
@@ -69,10 +82,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
           });
         }
       } else if (def.type === 'vector') {
-        layer = createLayerVector(def, options, null);
-        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
-          layerNext = createLayerVector(def, options, 1);
-          layerPrior = createLayerVector(def, options, -1);
+        layer = createLayerVector(def, options, null, state);
+        if (
+          proj.id === 'geographic' &&
+          (def.wrapadjacentdays === true || def.wrapX)
+        ) {
+          layerNext = createLayerVector(def, options, 1, state);
+          layerPrior = createLayerVector(def, options, -1, state);
 
           layer.wv = attributes;
           layerPrior.wv = attributes;
@@ -83,10 +99,13 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
           });
         }
       } else if (def.type === 'wms') {
-        layer = createLayerWMS(def, options);
-        if (proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX)) {
-          layerNext = createLayerWMS(def, options, 1);
-          layerPrior = createLayerWMS(def, options, -1);
+        layer = createLayerWMS(def, options, null, state);
+        if (
+          proj.id === 'geographic' &&
+          (def.wrapadjacentdays === true || def.wrapX)
+        ) {
+          layerNext = createLayerWMS(def, options, 1, state);
+          layerPrior = createLayerWMS(def, options, -1, state);
 
           layer.wv = attributes;
           layerPrior.wv = attributes;
@@ -115,29 +134,43 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
    * @return {object}         Closest date
    */
   self.closestDate = function(def, options) {
+    const state = store.getState();
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var date;
-    var animRange;
-    if (models.anim) {
-      animRange = models.anim.rangeState;
-    }
     var dateArray = def.availableDates || [];
     if (options.date) {
-      date = options.date;
+      if (def.period !== 'subdaily') {
+        date = util.clearTimeUTC(new Date(options.date.getTime()));
+      } else {
+        date = options.date;
+        date = util.prevDateInDateRange(
+          def,
+          date,
+          util.datesinDateRanges(def, date, true)
+        );
+      }
     } else {
-      date = models.date[models.date.activeDate];
+      date = new Date(state.date[activeDateStr]);
       // If this not a subdaily layer, truncate the selected time to
       // UTC midnight
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
+      } else {
+        date = util.prevDateInDateRange(
+          def,
+          date,
+          util.datesinDateRanges(def, date, true)
+        );
       }
     }
     // Perform extensive checks before finding closest date
     if (
       !options.precache &&
-      (animRange && animRange.playing === false) &&
-      ((def.period === 'daily' && models.date.selectedZoom > 3) ||
-        (def.period === 'monthly' && models.date.selectedZoom >= 2) ||
-        (def.period === 'yearly' && models.date.selectedZoom >= 1))
+      state.animation.playing === false &&
+      state.date.selectedZoom !== 0 &&
+      ((def.period === 'daily' && state.date.selectedZoom < 3) ||
+        (def.period === 'monthly' && state.date.selectedZoom <= 2) ||
+        (def.period === 'yearly' && state.date.selectedZoom === 1))
     ) {
       date = util.prevDateInDateRange(def, date, dateArray);
 
@@ -151,25 +184,24 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     return date;
   };
 
-  /*
+  /**
    * Create a layer key
    *
    * @function layerKey
    * @static
-   *
    * @param {Object} def - Layer properties
    * @param {number} options - Layer options
    * @param {boolean} precache
-   *
    * @returns {object} layer key Object
    */
-  self.layerKey = function(def, options) {
+  self.layerKey = function(def, options, state) {
+    const { compare } = state;
     var date;
-    var layerGroupStr;
     var layerId = def.id;
-    var projId = models.proj.selected.id;
-    var palette = '';
-    layerGroupStr = options.group ? options.group : models.layers.activeLayers;
+    var projId = state.proj.id;
+    var style = '';
+    const activeGroupStr = options.group ? options.group : compare.activeString;
+
     // Don't key by time if this is a static layer--it is valid for
     // every date.
     if (def.period) {
@@ -177,27 +209,26 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         util.roundTimeOneMinute(self.closestDate(def, options))
       );
     }
-    if (models.palettes.isActive(def.id)) {
-      palette = models.palettes.key(def.id);
+    if (isPaletteActive(def.id, activeGroupStr, state)) {
+      style = getPaletteKeys(def.id, undefined, state);
     }
-    return [layerId, projId, date, palette, layerGroupStr].join(':');
+    if (isVectorStyleActive(def.id, activeGroupStr, state)) {
+      style = getVectorStyleKeys(def.id, undefined, state);
+    }
+    return [layerId, projId, date, style, activeGroupStr].join(':');
   };
-  /*
+  /**
    * Create a new WMTS Layer
-   *
    * @method createLayerWMTS
    * @static
-   *
    * @param {object} def - Layer Specs
-   *
    * @param {object} options - Layer options
-   *
-   *
    * @returns {object} OpenLayers WMTS layer
    */
-  var createLayerWMTS = function(def, options, day) {
+  var createLayerWMTS = function(def, options, day, state) {
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var proj, source, matrixSet, matrixIds, urlParameters, date, extent, start;
-    proj = models.proj.selected;
+    proj = state.proj.selected;
     source = config.sources[def.source];
     extent = proj.maxExtent;
     start = [proj.maxExtent[0], proj.maxExtent[3]];
@@ -227,13 +258,17 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       }
     }
 
-    date = options.date || models.date[models.date.activeDate];
-    if (day) {
+    date = options.date || state.date[activeDateStr];
+    if (def.period === 'subdaily') {
+      date = self.closestDate(def, options);
+      date = new Date(date.getTime());
+    }
+    if (day && (def.period !== 'subdaily')) {
       date = util.dateAdd(date, 'day', day);
     }
+
     urlParameters =
       '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-
     var sourceOptions = {
       url: source.url + urlParameters,
       layer: def.layer || def.id,
@@ -251,8 +286,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       wrapX: false,
       style: typeof def.style === 'undefined' ? 'default' : def.style
     };
-    if (models.palettes.isActive(def.id, options.group)) {
-      var lookup = models.palettes.getLookup(def.id, options.group);
+    if (isPaletteActive(def.id, options.group, state)) {
+      var lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     return new OlLayerTile({
@@ -262,25 +297,25 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     });
   };
 
-  /*
+  /**
    * Create a new Vector Layer
    *
    * @method createLayerVector
    * @static
-   *
    * @param {object} def - Layer Specs
-   *
    * @param {object} options - Layer options
-   *
-   *
    * @returns {object} OpenLayers Vector layer
    */
-  var createLayerVector = function(def, options, day) {
-    var date, urlParameters, proj, extent, source, matrixSet, matrixIds, start;
-    proj = models.proj.selected;
+  var createLayerVector = function(def, options, day, state) {
+    const { proj, compare } = state;
+    var date, urlParameters, extent, source, matrixSet, matrixIds, start;
+    const selectedProj = proj.selected;
+    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+    const activeGroupStr = options.group ? options.group : compare.activeString;
+
     source = config.sources[def.source];
-    extent = proj.maxExtent;
-    start = [proj.maxExtent[0], proj.maxExtent[3]];
+    extent = selectedProj.maxExtent;
+    start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
 
     if (!source) {
       throw new Error(def.id + ': Invalid source: ' + def.source);
@@ -311,7 +346,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var layerName = def.layer || def.id;
     var tms = def.matrixSet;
 
-    date = options.date || models.date[models.date.activeDate];
+    date = options.date || state.date[activeDateStr];
     if (day) {
       date = util.dateAdd(date, 'day', day);
     }
@@ -333,7 +368,6 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var sourceOptions = new SourceVectorTile({
       url: source.url + urlParameters,
       layer: layerName,
-      crossOrigin: 'anonymous',
       format: new MVT(),
       matrixSet: tms,
       tileGrid: new OlTileGridTileGrid({
@@ -345,31 +379,43 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     });
 
     var layer = new LayerVectorTile({
-      renderMode: 'image',
-      preload: 1,
       extent: extent,
       source: sourceOptions
     });
 
+    if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+      var vectorStyles = config.vectorStyles;
+      var vectorStyleId;
+
+      vectorStyleId = def.vectorStyle.id;
+      if (state.layers[activeGroupStr]) {
+        let layers = state.layers[activeGroupStr];
+        layers.forEach(layer => {
+          if (layer.id === layerName && layer.custom) {
+            vectorStyleId = layer.custom;
+          }
+        });
+      }
+      setStyleFunction(def, vectorStyleId, vectorStyles, layer, state);
+    }
+
     return layer;
   };
 
-  /*
+  /**
    * Create a new WMS Layer
    *
    * @method createLayerWMTS
    * @static
-   *
    * @param {object} def - Layer Specs
-   *
    * @param {object} options - Layer options
-   *
-   *
    * @returns {object} OpenLayers WMS layer
    */
-  var createLayerWMS = function(def, options, day) {
-    var proj,
-      source,
+  var createLayerWMS = function(def, options, day, state) {
+    const { proj, compare } = state;
+    const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+    const selectedProj = proj.selected;
+    var source,
       urlParameters,
       transparent,
       date,
@@ -377,17 +423,17 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
       start,
       res,
       parameters;
-    proj = models.proj.selected;
+
     source = config.sources[def.source];
-    extent = proj.maxExtent;
-    start = [proj.maxExtent[0], proj.maxExtent[3]];
-    res = proj.resolutions;
+    extent = selectedProj.maxExtent;
+    start = [selectedProj.maxExtent[0], selectedProj.maxExtent[3]];
+    res = selectedProj.resolutions;
     if (!source) {
       throw new Error(def.id + ': Invalid source: ' + def.source);
     }
 
     transparent = def.format === 'image/png';
-    if (proj.id === 'geographic') {
+    if (selectedProj.id === 'geographic') {
       res = [
         0.28125,
         0.140625,
@@ -423,7 +469,7 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
 
     urlParameters = '';
 
-    date = options.date || models.date[models.date.activeDate];
+    date = options.date || state.date[activeDateStr];
     if (day) {
       date = util.dateAdd(date, 'day', day);
     }
@@ -443,9 +489,8 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
         resolutions: res
       })
     };
-
-    if (models.palettes.isActive(def.id, options.group)) {
-      var lookup = models.palettes.getLookup(def.id, options.group);
+    if (isPaletteActive(def.id, options.group, state)) {
+      var lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     var layer = new OlLayerTile({
@@ -459,15 +504,20 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var layer;
     var key;
     var layers;
-
-    layers = models.layers[models.layers.activeLayers];
+    const state = store.getState();
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+    layers = state.layers[state.compare.activeString];
 
     for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
       if ((layer.wrapadjacentdays || layer.wrapX) && layer.visible) {
-        key = self.layerKey(layer, {
-          date: models.date[models.date.activeDate]
-        });
+        key = self.layerKey(
+          layer,
+          {
+            date: state.date[activeDateStr]
+          },
+          state
+        );
         layer = cache.getItem(key);
         if (!layer) {
           throw new Error(`no such layer in cache: ${key}`);
@@ -480,14 +530,20 @@ export function mapLayerBuilder(models, config, cache, mapUi) {
     var layer;
     var layers;
     var key;
+    const state = store.getState();
+    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
 
-    layers = models.layers[models.layers.activeLayers];
+    layers = state.layers[state.compare.activeString];
     for (var i = 0, len = layers.length; i < len; i++) {
       layer = layers[i];
       if ((layer.wrapadjacentdays || layer.wrapX) && layer.visible) {
-        key = self.layerKey(layer, {
-          date: models.date[models.date.activeDate]
-        });
+        key = self.layerKey(
+          layer,
+          {
+            date: state.date[activeDateStr]
+          },
+          state
+        );
         layer = cache.getItem(key);
         layer.setExtent([-250, -90, 250, 90]);
       }

@@ -101,18 +101,18 @@ LineText.defaultProps = {
 };
 
 LineText.propTypes = {
-  textOpacity: PropTypes.number,
-  rectOpacity: PropTypes.number,
-  width: PropTypes.string,
   color: PropTypes.string,
-  textY: PropTypes.number,
-  fill: PropTypes.string,
   dateLeft: PropTypes.string,
   dateRight: PropTypes.string,
-  textWidth: PropTypes.number,
-  textHeight: PropTypes.number,
+  fill: PropTypes.string,
   recRadius: PropTypes.number,
-  svgStyle: PropTypes.object
+  rectOpacity: PropTypes.number,
+  svgStyle: PropTypes.object,
+  textHeight: PropTypes.number,
+  textOpacity: PropTypes.number,
+  textWidth: PropTypes.number,
+  textY: PropTypes.number,
+  width: PropTypes.string
 };
 
 export default LineText;

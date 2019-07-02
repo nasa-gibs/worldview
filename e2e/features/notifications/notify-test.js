@@ -10,7 +10,6 @@ const exclamationListItem = '#wv-info-menu li.exclamation-circle';
 const alertContentHightlighted = '.wv-notify-modal .alert';
 const outageContentHightlighted = '.wv-notify-modal .outage';
 const messageContentHightlighted = '.wv-notify-modal .message';
-const notifyModal = '.wv-notify-modal';
 
 module.exports = {
   'No visible notifications with mockAlert parameter set to no_types': function(

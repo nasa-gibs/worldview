@@ -47,11 +47,11 @@ class Coordinates extends React.Component {
 }
 
 Coordinates.propTypes = {
+  onFormatChange: PropTypes.func.isRequired,
+  crs: PropTypes.string,
   format: PropTypes.string,
   latitude: PropTypes.number,
-  longitude: PropTypes.number,
-  crs: PropTypes.string,
-  onFormatChange: PropTypes.func.isRequired
+  longitude: PropTypes.number
 };
 
 export default Coordinates;

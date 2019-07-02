@@ -116,10 +116,10 @@ var interestCssName = function(name) {
 };
 Category.propTypes = {
   category: PropTypes.object,
-  measurementConfig: PropTypes.object,
+  categoryType: PropTypes.string,
   drawMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  categoryType: PropTypes.string
+  measurementConfig: PropTypes.object
 };
 
 export default Category;

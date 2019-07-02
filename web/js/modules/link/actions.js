@@ -9,6 +9,13 @@ export function updatePermalink(queryString) {
 }
 export function requestShortLink(location, type, signal) {
   return dispatch => {
-    return requestAction(dispatch, REQUEST_SHORT_LINK, location, type, signal);
+    return requestAction(
+      dispatch,
+      REQUEST_SHORT_LINK,
+      location,
+      type,
+      null, // id
+      signal
+    );
   };
 }

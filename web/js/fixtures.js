@@ -1,13 +1,8 @@
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
-
-import { dateModel } from './date/model';
-import { layersModel } from './layers/model';
-import { mapModel } from './map/model';
-import { palettesModel } from './palettes/model';
-import { projectionModel } from './projection/model';
-import { compareModel } from './compare/model';
-
+import { initialState as initialLayerState } from './modules/layers/reducers';
+import { initialCompareState } from './modules/compare/reducers';
+import { getInitialState as getInitialDateState } from './modules/date/reducers';
 var fixtures = {
   red: 'ff0000ff',
   light_red: 'fff0f0ff',
@@ -18,11 +13,177 @@ var fixtures = {
   light_blue: 'f0f0ffff',
   dark_blue: '000040'
 };
+fixtures.getState = function() {
+  return {
+    compare: initialCompareState,
+    config: fixtures.config(),
+    layers: initialLayerState,
+    date: getInitialDateState(fixtures.config()),
+    palettes: {
+      active: {},
+      activeB: {},
+      rendered: {
+        'terra-aod': {
+          id: 'terra-aod',
+          maps: [
+            {
+              entries: {
+                type: 'scale',
+                colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                values: [0, 1, 2]
+              },
+              legend: {
+                tooltips: ['0', '1', '2'],
+                minLabel: '0',
+                maxLabel: '2'
+              }
+            }
+          ]
+        },
+        'aqua-aod': {
+          id: 'aqua-aod',
+          maps: [
+            {
+              entries: {
+                type: 'scale',
+                colors: [fixtures.green, fixtures.yellow, fixtures.red],
+                values: [0, 1, 2]
+              },
+              legend: {
+                tooltips: ['0', '1', '2'],
+                minLabel: '0',
+                maxLabel: '2'
+              }
+            }
+          ]
+        }
+      },
+      custom: {
+        'blue-1': {
+          colors: [fixtures.light_blue, fixtures.blue, fixtures.dark_blue]
+        },
+        'red-1': {
+          colors: [fixtures.light_red, fixtures.red, fixtures.dark_red]
+        }
+      }
+    },
+    vectorStyles: {
+      custom: {
+        OrbitTracks_Aura_Ascending: {
+          'version': 8,
+          'name': 'Orbit Tracks',
+          'sources': {
+            'OrbitTracks_Aqua_Ascending': {
+              'type': 'vector',
+              'tiles': [
+                'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
+              ]
+            },
+            'yellow1': {
+              'type': 'vector',
+              'tiles': [
+                'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
+              ]
+            }
+          },
+          'layers': [
+            {
+              'id': 'OrbitTracks_Aqua_Ascending',
+              'source': 'OrbitTracks_Aqua_Ascending',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Default',
+              'type': 'line',
+              'paint': {
+                'line-color': 'rgb(21, 192, 230)',
+                'line-width': 2
+              }
+            },
+            {
+              'id': 'OrbitTracks_Aqua_Ascending',
+              'source': 'OrbitTracks_Aqua_Ascending',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Default',
+              'type': 'circle',
+              'paint': {
+                'circle-radius': '5',
+                'circle-color': 'rgb(21, 192, 230)'
+              }
+            },
+            {
+              'id': 'OrbitTracks_Aqua_Ascending',
+              'source': 'OrbitTracks_Aqua_Ascending',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Default',
+              'type': 'symbol',
+              'layout': {
+                'text-field': ['get', 'label'],
+                'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+                'text-size': 10,
+                'text-transform': 'uppercase',
+                'text-letter-spacing': 0.05,
+                'text-offset': [-2.5, 0]
+              },
+              'paint': {
+                'text-color': '#fff',
+                'text-halo-color': '#999',
+                'text-halo-width': 1
+              }
+            },
+            {
+              'id': 'yellow1',
+              'source': 'yellow1',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Yellow 1',
+              'type': 'line',
+              'paint': {
+                'line-color': 'rgb(204, 255, 51)',
+                'line-width': 2
+              }
+            },
+            {
+              'id': 'yellow1',
+              'source': 'yellow1',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Yellow 1',
+              'type': 'circle',
+              'paint': {
+                'circle-radius': '5',
+                'circle-color': 'rgb(204, 255, 51)'
+              }
+            },
+            {
+              'id': 'yellow1',
+              'source': 'yellow1',
+              'source-layer': 'OrbitTracks_Aqua_Ascending',
+              'source-description': 'Yellow 1',
+              'type': 'symbol',
+              'layout': {
+                'text-field': ['get', 'label'],
+                'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+                'text-size': 10,
+                'text-transform': 'uppercase',
+                'text-letter-spacing': 0.05,
+                'text-offset': [-2.5, 0]
+              },
+              'paint': {
+                'text-color': '#fff',
+                'text-halo-color': '#999',
+                'text-halo-width': 1
+              }
+            }
+          ]
+        }
+      }
+    }
+  };
+};
 
 fixtures.config = function() {
   return {
+    now: new Date(),
     defaults: {
-      projection: 'geographic'
+      projection: 'geographic',
+      startingLayers: [{ id: 'terra-cr' }, { id: 'aqua-cr', hidden: 'true' }]
     },
     projections: {
       geographic: {
@@ -74,6 +235,21 @@ fixtures.config = function() {
           antarctic: {}
         }
       },
+      AMSRE_Brightness_Temp_89H_Night: {
+        id: 'AMSRE_Brightness_Temp_89H_Night',
+        title: 'Brightness Temperature (89H GHz B Scan, Night)',
+        subtitle: 'Aqua / AMSR-E',
+        description: 'amsre/AMSRE_Brightness_Temp_89H_Night',
+        group: 'overlays',
+        product: 'AE_L2A_NIGHT',
+        layergroup: ['amsre'],
+        projections: {
+          geographic: {},
+          arctic: {},
+          antarctic: {}
+        },
+        inactive: true
+      },
       'terra-aod': {
         id: 'terra-aod',
         group: 'overlays',
@@ -104,12 +280,78 @@ fixtures.config = function() {
         projections: {
           geographic: {}
         }
+      },
+      OrbitTracks_Aqua_Ascending: {
+        id: 'OrbitTracks_Aqua_Ascending',
+        title: 'Orbit Tracks (Ascending, Points, Aqua)',
+        subtitle: '',
+        description: 'vector/OrbitTracks_Aqua_Ascending',
+        type: 'vector',
+        tags: 'vector vectors',
+        group: 'overlays',
+        layergroup: [
+          'vector'
+        ],
+        inactive: true,
+        vectorStyle: {
+          id: 'OrbitTracks_Aqua_Ascending'
+        },
+        period: 'daily'
       }
     },
     features: {
       compare: true
     },
     palettes: {
+      lookups: {
+        'terra-aod': {
+          'min-1': {
+            '0,255,0,255': { r: 0, g: 0, b: 0, a: 0 },
+            '255,255,0,255': { r: 255, g: 255, b: 0, a: 255 },
+            '255,0,0,255': { r: 255, g: 0, b: 0, a: 255 }
+          },
+          'red-1': {
+            '0,255,0,255': {
+              a: 255,
+              b: 240,
+              g: 240,
+              r: 255
+            },
+            '255,0,0,255': {
+              a: 255,
+              b: 0,
+              g: 0,
+              r: 64
+            },
+            '255,255,0,255': {
+              a: 255,
+              b: 0,
+              g: 0,
+              r: 255
+            }
+          },
+          'max-1-squashed': {
+            '0,255,0,255': {
+              a: 255,
+              b: 0,
+              g: 255,
+              r: 0
+            },
+            '255,0,0,255': {
+              a: 0,
+              b: 0,
+              g: 0,
+              r: 0
+            },
+            '255,255,0,255': {
+              a: 255,
+              b: 0,
+              g: 0,
+              r: 255
+            }
+          }
+        }
+      },
       rendered: {
         'terra-aod': {
           id: 'terra-aod',
@@ -154,25 +396,182 @@ fixtures.config = function() {
           colors: [fixtures.light_red, fixtures.red, fixtures.dark_red]
         }
       }
+    },
+    vectorData: {
+      OrbitTracks: {
+        id: 'Orbit_Tracks',
+        mvt_properties: [
+          {
+            Function: 'Style',
+            Description: 'Up/Down/Both',
+            IsOptional: 'False',
+            Title: 'Direction of travel',
+            DataType: 'string',
+            ValueList: [
+              'Ascending',
+              'Descending',
+              'Transitional'
+            ],
+            Identifier: 'direction'
+          },
+          {
+            Function: 'Describe',
+            Description: 'The datetime, in UTC.',
+            IsOptional: 'False',
+            Title: 'Datetime',
+            DataType: 'datetime',
+            Identifier: 'datetime'
+          },
+          {
+            Function: 'Describe',
+            Description: 'Was it day or night?',
+            IsOptional: 'False',
+            Title: 'Day/Night Flag',
+            DataType: 'string',
+            ValueList: [
+              'Day',
+              'Night',
+              'Both'
+            ],
+            Identifier: 'day_night'
+          },
+          {
+            Function: 'Describe',
+            Description: 'Just an ID',
+            IsOptional: 'False',
+            Title: 'Identifier',
+            DataType: 'int',
+            Identifier: 'id'
+          },
+          {
+            Function: 'Identify',
+            Description: 'Default time (hh:mm:ss).',
+            IsOptional: 'False',
+            Title: 'Label for default display',
+            DataType: 'string',
+            Identifier: 'label'
+          }
+        ]
+      }
+    },
+    vectorStyles: {
+      OrbitTracks_Aura_Ascending: {
+        'version': 8,
+        'name': 'Orbit Tracks',
+        'sources': {
+          'OrbitTracks_Aqua_Ascending': {
+            'type': 'vector',
+            'tiles': [
+              'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
+            ]
+          },
+          'yellow1': {
+            'type': 'vector',
+            'tiles': [
+              'https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/OrbitTracks_Aqua_Ascending/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt'
+            ]
+          }
+        },
+        'layers': [
+          {
+            'id': 'OrbitTracks_Aqua_Ascending',
+            'source': 'OrbitTracks_Aqua_Ascending',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Default',
+            'type': 'line',
+            'paint': {
+              'line-color': 'rgb(21, 192, 230)',
+              'line-width': 2
+            }
+          },
+          {
+            'id': 'OrbitTracks_Aqua_Ascending',
+            'source': 'OrbitTracks_Aqua_Ascending',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Default',
+            'type': 'circle',
+            'paint': {
+              'circle-radius': '5',
+              'circle-color': 'rgb(21, 192, 230)'
+            }
+          },
+          {
+            'id': 'OrbitTracks_Aqua_Ascending',
+            'source': 'OrbitTracks_Aqua_Ascending',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Default',
+            'type': 'symbol',
+            'layout': {
+              'text-field': ['get', 'label'],
+              'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+              'text-size': 10,
+              'text-transform': 'uppercase',
+              'text-letter-spacing': 0.05,
+              'text-offset': [-2.5, 0]
+            },
+            'paint': {
+              'text-color': '#fff',
+              'text-halo-color': '#999',
+              'text-halo-width': 1
+            }
+          },
+          {
+            'id': 'yellow1',
+            'source': 'yellow1',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Yellow 1',
+            'type': 'line',
+            'paint': {
+              'line-color': 'rgb(204, 255, 51)',
+              'line-width': 2
+            }
+          },
+          {
+            'id': 'yellow1',
+            'source': 'yellow1',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Yellow 1',
+            'type': 'circle',
+            'paint': {
+              'circle-radius': '5',
+              'circle-color': 'rgb(204, 255, 51)'
+            }
+          },
+          {
+            'id': 'yellow1',
+            'source': 'yellow1',
+            'source-layer': 'OrbitTracks_Aqua_Ascending',
+            'source-description': 'Yellow 1',
+            'type': 'symbol',
+            'layout': {
+              'text-field': ['get', 'label'],
+              'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+              'text-size': 10,
+              'text-transform': 'uppercase',
+              'text-letter-spacing': 0.05,
+              'text-offset': [-2.5, 0]
+            },
+            'paint': {
+              'text-color': '#fff',
+              'text-halo-color': '#999',
+              'text-halo-width': 1
+            }
+          }
+        ]
+      }
     }
   };
 };
 
-fixtures.models = function(config) {
-  var models = {};
-
-  models.proj = projectionModel(config);
-  models.layers = layersModel(models, config);
-  models.palettes = palettesModel(models, config);
-  models.map = mapModel(models, config);
-  models.compare = compareModel(models, config);
-  models.date = dateModel(models, config);
-  return models;
-};
-
 export function registerProjections() {
-  proj4.defs('EPSG:3413', '+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
-  proj4.defs('EPSG:3031', '+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs');
+  proj4.defs(
+    'EPSG:3413',
+    '+title=WGS 84 / NSIDC Sea Ice Polar Stereographic North +proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
+  );
+  proj4.defs(
+    'EPSG:3031',
+    '+title=WGS 84 / Antarctic Polar Stereographic +proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
+  );
   register(proj4);
 }
 

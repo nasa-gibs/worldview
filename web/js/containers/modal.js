@@ -5,14 +5,40 @@ import update from 'immutability-helper';
 import { toLower as lodashToLower } from 'lodash';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { onToggle } from '../modules/modal/actions';
+import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
+import Draggable from 'react-draggable';
 
 class ModalContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      offsetTop: props.customProps.offsetTop,
+      offsetLeft: props.customProps.offsetLeft,
+      width: props.customProps.width,
+      isDraggable: props.isDraggable
+    };
+  }
+  // static getDerivedStateFromProps(newProps, state) {
+  //   const customProps = newProps.customProps;
+  //   if (
+  //     customProps.width !== state.width ||
+  //     customProps.offsetLeft !== state.offsetLeft ||
+  //     customProps.offsetRight !== state.offsetRight
+  //   ) {
+  //     return {
+  //       width: customProps.width,
+  //       offsetLeft: customProps.offsetLeft,
+  //       offsetRight: customProps.offsetRight
+  //     };
+  //   } else return null;
+  // }
   getStyle(props) {
     return {
       left: props.offsetLeft,
       right: props.offsetRight,
-      width: props.width
+      top: props.offsetTop,
+      maxWidth: props.width
     };
   }
   getTemplateBody() {
@@ -26,8 +52,16 @@ class ModalContainer extends Component {
       />
     );
   }
+
   render() {
-    const { isCustom, id, isOpen, isTemplateModal, customProps } = this.props;
+    const {
+      isCustom,
+      id,
+      isOpen,
+      isTemplateModal,
+      customProps,
+      isMobile
+    } = this.props;
     // Populate props from custom obj
     const newProps =
       isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
@@ -44,8 +78,15 @@ class ModalContainer extends Component {
       wrapClassName,
       clickableBehindModal,
       bodyComponent,
-      onClose
+      onClose,
+      CompletelyCustomModal,
+      bodyComponentProps,
+      timeout,
+      isDraggable,
+      desktopOnly,
+      size
     } = newProps;
+
     const style = this.getStyle(newProps);
     const lowerCaseId = lodashToLower(id);
     const BodyComponent = bodyComponent || '';
@@ -55,48 +96,67 @@ class ModalContainer extends Component {
         onClose();
       }
     };
+    const DraggableWrap = ({ condition, wrapper, children }) =>
+      condition ? wrapper(children) : children;
+    if (isMobile && isOpen && desktopOnly) {
+      toggleWithClose();
+    }
     return (
-      <Modal
-        isOpen={isOpen}
-        toggle={toggleWithClose}
-        backdrop={backdrop && type !== 'selection'}
-        id={lowerCaseId}
-        className={
-          isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'
-        }
-        autoFocus={autoFocus || false}
-        style={style}
-        wrapClassName={wrapClassName + ' ' + lowerCaseId}
-      >
-        <DetectOuterClick
-          onClick={toggleWithClose}
-          disabled={!isOpen || type === 'selection' || clickableBehindModal}
+      <ErrorBoundary>
+        <DraggableWrap
+          condition={isDraggable}
+          wrapper={children => <Draggable>{children}</Draggable>}
         >
-          {headerComponent || headerText ? (
-            <ModalHeader toggle={toggleWithClose}>
-              {headerComponent ? <headerComponent /> : headerText || ''}
-            </ModalHeader>
-          ) : (
-            ''
-          )}
-          <ModalBody>
-            {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-            {BodyComponent ? (
-              <BodyComponent />
-            ) : isTemplateModal ? (
-              this.getTemplateBody()
+          <Modal
+            isOpen={isOpen}
+            toggle={toggleWithClose}
+            backdrop={backdrop && type !== 'selection'}
+            id={lowerCaseId}
+            size={size}
+            className={
+              isTemplateModal
+                ? 'template-modal'
+                : modalClassName || 'default-modal'
+            }
+            autoFocus={autoFocus || false}
+            style={style}
+            wrapClassName={wrapClassName + ' ' + lowerCaseId}
+            modalTransition={{ timeout: timeout || 100 }}
+          >
+            {CompletelyCustomModal ? (
+              <CompletelyCustomModal {...customProps} />
             ) : (
-              bodyText || ''
+              <DetectOuterClick
+                onClick={toggleWithClose}
+                disabled={!isOpen || type === 'selection' || clickableBehindModal}
+              >
+                {headerComponent || headerText ? (
+                  <ModalHeader toggle={toggleWithClose}>
+                    {headerComponent ? <headerComponent /> : headerText || ''}
+                  </ModalHeader>
+                ) : (
+                  ''
+                )}
+                <ModalBody>
+                  {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
+                  {BodyComponent ? (
+                    <BodyComponent {...bodyComponentProps} />
+                  ) : isTemplateModal ? (
+                    this.getTemplateBody()
+                  ) : (
+                    bodyText || ''
+                  )}
+                </ModalBody>
+              </DetectOuterClick>
             )}
-          </ModalBody>
-        </DetectOuterClick>
-      </Modal>
+          </Modal>
+        </DraggableWrap>
+      </ErrorBoundary>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { models } = state.legacy;
   const {
     bodyText,
     headerText,
@@ -119,7 +179,7 @@ function mapStateToProps(state) {
     headerText,
     isCustom,
     id,
-    models,
+    isMobile: state.browser.lessThan.medium,
     bodyTemplate,
     isTemplateModal,
     customProps
@@ -135,12 +195,16 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(ModalContainer);
-
+ModalContainer.defaultProps = {
+  customProps: { width: 500, offsetTop: 0, offsetLeft: 0 }
+};
 ModalContainer.propTypes = {
-  isCustom: PropTypes.bool,
-  id: PropTypes.string,
   bodyTemplate: PropTypes.object,
+  customProps: PropTypes.object,
+  id: PropTypes.string,
+  isCustom: PropTypes.bool,
+  isDraggable: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
-  isTemplateModal: PropTypes.bool,
-  customProps: PropTypes.object
+  isTemplateModal: PropTypes.bool
 };

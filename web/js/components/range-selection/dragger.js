@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import lodashRound from 'lodash/round';
@@ -10,7 +10,7 @@ import lodashRound from 'lodash/round';
  * @class TimelineDragger
  * @extends React.Component
  */
-class TimelineDragger extends React.Component {
+class TimelineDragger extends PureComponent {
   /*
    * @constructor
    */
@@ -22,6 +22,8 @@ class TimelineDragger extends React.Component {
       textColor: props.textColor,
       max: props.max
     };
+
+    this.handleDrag = this.handleDrag.bind(this);
   }
   /**
    * Update state if position has changed
@@ -41,17 +43,17 @@ class TimelineDragger extends React.Component {
       <React.Fragment>
         <rect
           width={this.props.width}
-          height={this.props.height}
+          height={52}
           style={{
             fill: this.props.color,
             visibility: visibility
           }}
         />
         {/*
-              * this polygon element builds a triangle
-              * based on the width and height of the
-              * rectangle element
-              */}
+         * this polygon element builds a triangle
+         * based on the width and height of the
+         * rectangle element
+         */}
         <polygon
           points={
             '0,0,' +
@@ -167,7 +169,7 @@ class TimelineDragger extends React.Component {
     var visibility = this.getVisibility();
     return (
       <Draggable
-        onDrag={this.handleDrag.bind(this)}
+        onDrag={this.handleDrag}
         position={{ x: this.state.position, y: this.props.yOffset }}
         onStop={() => {
           this.props.onStop(this.props.id, this.state.position);
@@ -184,35 +186,32 @@ class TimelineDragger extends React.Component {
   }
 }
 TimelineDragger.defaultProps = {
-  visible: true,
-  height: 45,
-  width: 5,
   color: '#fff',
-  position: 0,
-  visibility: 'visible',
-  yOffset: -16,
+  height: 45,
   path: null,
-  textColor: '#000'
+  position: 0,
+  textColor: '#000',
+  visibility: 'visible',
+  visible: true,
+  width: 5,
+  yOffset: 23
 };
 
 TimelineDragger.propTypes = {
-  opacity: PropTypes.number,
-  max: PropTypes.number,
-  height: PropTypes.number,
-  onDrag: PropTypes.func,
-  onClick: PropTypes.func,
-  color: PropTypes.string,
-  position: PropTypes.number,
-  id: PropTypes.string,
-  onStop: PropTypes.func,
-  width: PropTypes.number,
   backgroundColor: PropTypes.string,
+  color: PropTypes.string,
   draggerID: PropTypes.string,
-  yOffset: PropTypes.number,
+  height: PropTypes.number,
+  id: PropTypes.string,
+  max: PropTypes.number,
+  onDrag: PropTypes.func,
+  onStop: PropTypes.func,
   path: PropTypes.string,
-  textColor: PropTypes.string,
+  position: PropTypes.number,
   text: PropTypes.string,
-  onMouseDown: PropTypes.func
+  textColor: PropTypes.string,
+  width: PropTypes.number,
+  yOffset: PropTypes.number
 };
 
 export default TimelineDragger;

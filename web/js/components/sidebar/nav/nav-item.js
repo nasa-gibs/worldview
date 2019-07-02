@@ -39,15 +39,15 @@ class CustomNavItem extends React.Component {
 }
 
 CustomNavItem.propTypes = {
-  isMobile: PropTypes.bool,
-  shouldHideInMobile: PropTypes.bool,
-  isDisabled: PropTypes.bool,
-  title: PropTypes.string,
   className: PropTypes.string,
-  onTabClick: PropTypes.func,
-  id: PropTypes.string,
   iconClassName: PropTypes.string,
-  text: PropTypes.string
+  id: PropTypes.string,
+  isDisabled: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  onTabClick: PropTypes.func,
+  shouldHideInMobile: PropTypes.bool,
+  text: PropTypes.string,
+  title: PropTypes.string
 };
 
 export default CustomNavItem;

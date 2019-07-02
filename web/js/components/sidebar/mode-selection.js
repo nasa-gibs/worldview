@@ -15,11 +15,8 @@ class ModeSelection extends React.Component {
       this.setState({ selected: newProp.selected });
     }
   }
-  onclick(mode) {
-    this.props.onclick(mode);
-  }
   render() {
-    const { isActive, selected } = this.props;
+    const { isActive, selected, onclick } = this.props;
     return (
       <div
         id="wv-ab-mode-selection-case"
@@ -32,7 +29,7 @@ class ModeSelection extends React.Component {
             id="compare-swipe-button"
             className="compare-button compare-swipe-button"
             disabled={selected === 'swipe'}
-            onClick={this.onclick.bind(this, 'swipe')}
+            onClick={() => onclick('swipe')}
           >
             Swipe
           </Button>
@@ -40,7 +37,7 @@ class ModeSelection extends React.Component {
             id="compare-opacity-button"
             className="compare-button compare-opacity-button"
             disabled={selected === 'opacity'}
-            onClick={this.onclick.bind(this, 'opacity')}
+            onClick={() => onclick('opacity')}
           >
             Opacity
           </Button>
@@ -48,7 +45,7 @@ class ModeSelection extends React.Component {
             id="compare-spy-button"
             className="compare-button compare-spy-button"
             disabled={selected === 'spy'}
-            onClick={this.onclick.bind(this, 'spy')}
+            onClick={() => onclick('spy')}
           >
             Spy
           </Button>
@@ -59,8 +56,8 @@ class ModeSelection extends React.Component {
 }
 ModeSelection.propTypes = {
   isActive: PropTypes.bool,
-  selected: PropTypes.string,
-  onclick: PropTypes.func
+  onclick: PropTypes.func,
+  selected: PropTypes.string
 };
 
 export default ModeSelection;

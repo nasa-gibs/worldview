@@ -1,7 +1,8 @@
 import 'jquery-ui-bundle/jquery-ui';
 import util from '../util/util';
+import { debounce } from 'lodash';
 
-export function MapRotate(ui, models, map) {
+export function MapRotate(ui, models, store) {
   this.evts = util.events();
   this.intervalId = null;
   var self = this;
@@ -62,6 +63,14 @@ export function MapRotate(ui, models, map) {
       .append($resetButton)
       .append($rotateRightButton);
   };
+  self.reset = function(map) {
+    if (self.intervalId) clearInterval(self.intervalId); // stop repeating rotation on mobile
+    map.getView().animate({
+      duration: 500,
+      rotation: 0
+    });
+    self.setResetButton(0);
+  };
   /*
    * Applies Jquery click events to rotation-widget
    *
@@ -75,6 +84,7 @@ export function MapRotate(ui, models, map) {
    * @returns {void}
    */
   this.setRotationEvents = function(map, id) {
+    const mapState = store.getState().map;
     var dur = 500;
     var $leftButton = $('#wv-map-' + id + ' .wv-map-rotate-left');
     var $rightButton = $('#wv-map-' + id + ' .wv-map-rotate-right');
@@ -123,7 +133,7 @@ export function MapRotate(ui, models, map) {
 
     $resetButton
       .button({
-        label: Number(models.map.rotation * (180 / Math.PI)).toFixed()
+        label: Number(mapState.rotation * (180 / Math.PI)).toFixed()
       })
       .mousedown(function() {
         // reset rotation
@@ -160,7 +170,10 @@ export function MapRotate(ui, models, map) {
       }
     }
   };
-
+  this.dispatchRotation = function(radians) {
+    store.dispatch({ type: 'MAP/UPDATE_ROTATION', rotation: radians });
+  };
+  const debounceRotationDispatcher = debounce(this.dispatchRotation, 600);
   /*
    * Called as event listener when map is rotated. Update url to reflect rotation reset
    *
@@ -174,7 +187,7 @@ export function MapRotate(ui, models, map) {
 
     currentView = ui.selected.getView();
     radians = currentView.getRotation();
-    models.map.rotation = radians;
+    debounceRotationDispatcher(radians);
     self.setResetButton(radians);
 
     currentDeg = currentView.getRotation() * (180.0 / Math.PI);

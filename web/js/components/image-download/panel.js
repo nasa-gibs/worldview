@@ -36,16 +36,12 @@ export default class ImageResSelection extends React.Component {
     };
   }
   onDownload(imgWidth, imgHeight) {
-    const { models, url, lonlats, crs } = this.props;
+    const { getLayers, url, lonlats, crs, projection, date } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
-    let time = new Date(models.date[models.date.activeDate].getTime());
+    let time = new Date(date.getTime());
     time.setUTCHours(0, 0, 0, 0);
-
-    let layerList = models.layers.get({
-      reverse: true,
-      renderable: true
-    });
-    let layers = imageUtilGetLayers(layerList, models.proj.selected.id);
+    let layerList = getLayers();
+    let layers = imageUtilGetLayers(layerList, projection.id);
     let opacities = imageUtilGetLayerOpacities(layerList);
 
     let params = [
@@ -179,35 +175,35 @@ export default class ImageResSelection extends React.Component {
 }
 
 ImageResSelection.defaultProps = {
+  fileType: 'image/jpeg',
+  fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
-  secondLabel: 'Format',
-  width: '0',
   height: '0',
   imageSize: '0',
-  maxImageSize: '250 MB',
   isWorldfile: 'false',
+  maxImageSize: '250 MB',
   resolution: '1',
-  worldFileOptions: true,
-  fileTypeOptions: true,
-  fileType: 'image/jpeg'
+  secondLabel: 'Format',
+  width: '0',
+  worldFileOptions: true
 };
 ImageResSelection.propTypes = {
-  resolutions: PropTypes.object,
-  fileType: PropTypes.string,
-  fileTypes: PropTypes.object,
+  crs: PropTypes.string,
+  date: PropTypes.object,
   fileSize: PropTypes.string,
+  fileType: PropTypes.string,
+  fileTypeOptions: PropTypes.bool,
+  fileTypes: PropTypes.object,
+  firstLabel: PropTypes.string,
+  getLayers: PropTypes.func,
+  isWorldfile: PropTypes.string,
+  lonlats: PropTypes.array,
+  maxImageSize: PropTypes.string,
   projection: PropTypes.object,
   resolution: PropTypes.string,
-  valid: PropTypes.bool,
-  lonlats: PropTypes.array,
-  isWorldfile: PropTypes.string,
-  onDownloadClick: PropTypes.func,
-  firstLabel: PropTypes.string,
-  maxImageSize: PropTypes.string,
-  worldFileOptions: PropTypes.bool,
+  resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
-  fileTypeOptions: PropTypes.bool,
-  models: PropTypes.object,
   url: PropTypes.string,
-  crs: PropTypes.string
+  valid: PropTypes.bool,
+  worldFileOptions: PropTypes.bool
 };

@@ -44,7 +44,7 @@ class AnimationWidget extends React.Component {
       looping: props.looping,
       startDate: props.startDate,
       endDate: props.endDate,
-      maxZoom: props.maxZoom,
+      hasSubdailyLayers: props.hasSubdailyLayers,
       header: props.header,
       incrementArray: props.incrementArray,
       increment: props.increment
@@ -134,7 +134,8 @@ class AnimationWidget extends React.Component {
       <div
         id="wv-animation-widget"
         className={
-          'wv-animation-widget' + (this.state.maxZoom >= 4 ? ' subdaily' : '')
+          'wv-animation-widget' +
+          (this.state.hasSubdailyLayers ? ' subdaily' : '')
         }
       >
         <AnimWidgetHeader
@@ -186,7 +187,7 @@ class AnimationWidget extends React.Component {
             onDateChange={this.onDateChange.bind(this)}
             maxDate={this.state.endDate}
             minDate={this.props.minDate}
-            maxZoom={this.state.maxZoom}
+            hasSubdailyLayers={this.state.hasSubdailyLayers}
           />
           <div className="thru-label">To</div>
           <TimeSelector
@@ -198,7 +199,7 @@ class AnimationWidget extends React.Component {
             onDateChange={this.onDateChange.bind(this)}
             maxDate={this.props.maxDate}
             minDate={this.state.startDate}
-            maxZoom={this.state.maxZoom}
+            hasSubdailyLayers={this.state.hasSubdailyLayers}
           />
         </div>
         <i className="fa fa-times wv-close" onClick={this.props.onClose} />
@@ -207,29 +208,30 @@ class AnimationWidget extends React.Component {
   }
 }
 RangeHandle.propTypes = {
-  value: PropTypes.number,
-  offset: PropTypes.number
+  dragging: PropTypes.object,
+  offset: PropTypes.number,
+  value: PropTypes.number
 };
 AnimationWidget.propTypes = {
-  sliderSpeed: PropTypes.number,
-  looping: PropTypes.bool,
-  startDate: PropTypes.object,
   endDate: PropTypes.object,
+  hasSubdailyLayers: PropTypes.bool,
   header: PropTypes.element,
-  incrementArray: PropTypes.array,
   increment: PropTypes.string,
-  onSlide: PropTypes.func,
-  onPushPlay: PropTypes.func,
-  onPushPause: PropTypes.func,
-  onPushLoop: PropTypes.func,
+  incrementArray: PropTypes.array,
+  looping: PropTypes.bool,
+  maxDate: PropTypes.object,
+  minDate: PropTypes.object,
+  onClose: PropTypes.func,
   onDateChange: PropTypes.func,
+  onPushGIF: PropTypes.func,
+  onPushLoop: PropTypes.func,
+  onPushPause: PropTypes.func,
+  onPushPlay: PropTypes.func,
+  onSlide: PropTypes.func,
   onZoomSelect: PropTypes.func,
   sliderLabel: PropTypes.string,
-  onPushGIF: PropTypes.func,
-  minDate: PropTypes.object,
-  maxDate: PropTypes.object,
-  maxZoom: PropTypes.number,
-  onClose: PropTypes.func
+  sliderSpeed: PropTypes.number,
+  startDate: PropTypes.object
 };
 
 export default AnimationWidget;

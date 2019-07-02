@@ -1,55 +1,74 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import lodashEach from 'lodash/each';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink
-} from 'reactstrap';
-
-import Palette from './palette';
+import { each as lodashEach } from 'lodash';
+import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { connect } from 'react-redux';
 import Opacity from './opacity';
-import Threshold from './threshold';
+import Palette from './palette';
+import VectorStyle from './vector-style';
+import PaletteThreshold from './palette-threshold';
+import {
+  getCheckerboard,
+  palettesTranslate
+} from '../../../modules/palettes/util';
+import {
+  getDefaultLegend,
+  getCustomPalette,
+  getPaletteLegends,
+  getPalette,
+  getPaletteLegend,
+  isPaletteAllowed
+} from '../../../modules/palettes/selectors';
+import {
+  setThresholdRangeAndSquash,
+  setCustomPalette,
+  clearCustomPalette
+} from '../../../modules/palettes/actions';
+import {
+  setFilterRange,
+  setStyle,
+  clearStyle
+} from '../../../modules/vector-styles/actions';
+
+import {
+  getVectorStyle
+} from '../../../modules/vector-styles/selectors';
+import { setOpacity } from '../../../modules/layers/actions';
 
 class LayerSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeIndex: 0,
-      isOpen: props.isOpen,
-      palettedAllowed: props.palettedAllowed,
-      layer: props.layer,
-      title: props.title
+      activeIndex: 0
     };
+    this.canvas = document.createElement('canvas');
+    this.canvas.width = 120;
+    this.canvas.height = 10;
+    this.checkerboard = getCheckerboard();
   }
   /**
    * Render multicolormap layers inside a tab pane
-   * @param {object} legends | legend object
+   * @param {object} paletteLegends | legend object
    */
-  renderMultiColormapCustoms(legends) {
+  renderMultiColormapCustoms(paletteLegends) {
     const {
-      clearCustom,
+      clearCustomPalette,
       getPalette,
       paletteOrder,
       getDefaultLegend,
       getCustomPalette,
-      setCustom,
-      canvas,
+      setCustomPalette,
       palettesTranslate,
-      setRange,
-      checkerboard
+      groupName,
+      setThresholdRange,
+      layer
     } = this.props;
-    const { layer, activeIndex } = this.state;
+    const { activeIndex } = this.state;
     let navElements = [];
     let paneElements = [];
-    lodashEach(legends, (legend, i) => {
+    lodashEach(paletteLegends, (legend, i) => {
       const activeClass = activeIndex === i ? 'active' : '';
-      const dualStr = legends.length === 2 ? ' dual' : '';
+      const dualStr = paletteLegends.length === 2 ? ' dual' : '';
       const navItemEl = (
         <NavItem
           key={legend.id + 'nav'}
@@ -79,12 +98,13 @@ class LayerSettings extends React.Component {
         paneItemEl = (
           <TabPane key={legend.id + 'pane'} tabId={i}>
             {legend.type !== 'classification' ? (
-              <Threshold
+              <PaletteThreshold
                 legend={legend}
-                setRange={setRange}
+                setRange={setThresholdRange}
                 min={0}
                 max={max}
                 start={start}
+                groupName={groupName}
                 end={end}
                 layerId={layer.id}
                 squashed={!!palette.squash}
@@ -94,15 +114,16 @@ class LayerSettings extends React.Component {
               ''
             )}
             <Palette
-              setCustom={setCustom}
-              clearCustom={clearCustom}
+              setCustomPalette={setCustomPalette}
+              groupName={groupName}
+              clearCustomPalette={clearCustomPalette}
               getDefaultLegend={getDefaultLegend}
               getCustomPalette={getCustomPalette}
               palettesTranslate={palettesTranslate}
               activePalette={palette.custom || '__default'}
-              checkerboard={checkerboard}
+              checkerboard={this.checkerboard}
               layer={layer}
-              canvas={canvas}
+              canvas={this.canvas}
               index={i}
               paletteOrder={paletteOrder}
             />
@@ -123,133 +144,224 @@ class LayerSettings extends React.Component {
   /**
    * Render Opacity, threshold, and custom palette options
    */
-  renderCustoms() {
+  renderCustomPalettes() {
     const {
-      setCustom,
-      clearCustom,
+      setCustomPalette,
+      clearCustomPalette,
       getDefaultLegend,
       getCustomPalette,
       palettesTranslate,
-      getLegends,
+      getPaletteLegends,
       getPalette,
-      getLegend,
-      setRange,
-      canvas,
-      checkerboard,
-      paletteOrder
+      getPaletteLegend,
+      setThresholdRange,
+      paletteOrder,
+      groupName,
+      layer
     } = this.props;
-    const { layer } = this.state;
-    const legends = getLegends(layer.id);
-    if (!legends) return '';
-    const len = legends.length;
+    const paletteLegends = getPaletteLegends(layer.id);
+    if (!paletteLegends) return '';
+    const len = paletteLegends.length;
     const palette = getPalette(layer.id, 0);
-    const legend = getLegend(layer.id, 0);
+    const legend = getPaletteLegend(layer.id, 0);
     const max = palette.legend.colors.length - 1;
     const start = palette.min || 0;
     const end = palette.max || max;
     if (len > 1) {
-      return this.renderMultiColormapCustoms(legends);
+      return this.renderMultiColormapCustoms(paletteLegends);
     } else if (legend.type === 'classification' && legend.colors.length > 1) {
       return '';
     }
 
     return (
       <React.Fragment>
-        {legend.type !== 'classification' ? (
-          <Threshold
+        {legend.type !== 'classification' &&
+          <PaletteThreshold
             legend={legend}
-            setRange={setRange}
+            setRange={setThresholdRange}
             min={0}
             max={max}
             start={start}
             layerId={layer.id}
             end={end}
             squashed={!!palette.squash}
+            groupName={groupName}
             index={0}
           />
-        ) : (
-          ''
-        )}
+        }
         <Palette
-          setCustom={setCustom}
-          clearCustom={clearCustom}
+          setCustomPalette={setCustomPalette}
+          clearCustomPalette={clearCustomPalette}
           getDefaultLegend={getDefaultLegend}
           getCustomPalette={getCustomPalette}
           palettesTranslate={palettesTranslate}
           activePalette={palette.custom || '__default'}
-          checkerboard={checkerboard}
+          checkerboard={this.checkerboard}
           layer={layer}
-          canvas={canvas}
+          canvas={this.canvas}
+          groupName={groupName}
           index={0}
           paletteOrder={paletteOrder}
         />
       </React.Fragment>
     );
   }
-  render() {
-    const { setOpacity, customPalettesIsActive, close } = this.props;
-    const { isOpen, layer, palettedAllowed } = this.state;
-
-    const customPalettes =
-      customPalettesIsActive && palettedAllowed ? this.renderCustoms() : '';
+  /**
+   * Render Opacity, threshold, and custom palette options
+   */
+  renderVectorStyles() {
+    const {
+      setStyle,
+      clearStyle,
+      groupName,
+      layer,
+      vectorStyles
+    } = this.props;
+    var customStyle;
+    if (layer.custom && layer.custom[0]) {
+      customStyle = layer.custom[0];
+    }
     return (
-      <Modal
-        id="wv-layers-options-dialog"
-        className="wv-layers-options-dialog"
-        modalClassName="layer-settings-modal"
-        isOpen={isOpen}
-        toggle={close}
-        backdrop={false}
-        modalTransition={{ timeout: 150 }}
-      >
-        {layer.id ? (
-          <React.Fragment>
-            <ModalHeader id={'wv-options-header-' + layer.id} toggle={close}>
-              {layer.title}
-            </ModalHeader>
-            <ModalBody id={'wv-options-body-' + layer.id}>
-              <Opacity
-                start={Math.ceil(layer.opacity * 100)}
-                setOpacity={setOpacity}
-                layer={layer}
-              />
-              {customPalettes}
-            </ModalBody>
-          </React.Fragment>
-        ) : (
-          ''
-        )}
-      </Modal>
+      <React.Fragment>
+        <VectorStyle
+          setStyle={setStyle}
+          clearStyle={clearStyle}
+          activeVectorStyle={customStyle || layer.id}
+          layer={layer}
+          index={0}
+          groupName={groupName}
+          vectorStyles={vectorStyles}
+        />
+      </React.Fragment>
+    );
+  }
+  render() {
+    var renderCustomizations;
+    const {
+      setOpacity,
+      customPalettesIsActive,
+      layer,
+      palettedAllowed
+    } = this.props;
+
+    if (layer.type !== 'vector') {
+      renderCustomizations =
+        customPalettesIsActive && palettedAllowed && layer.palette
+          ? this.renderCustomPalettes()
+          : '';
+    } else {
+      renderCustomizations = this.renderVectorStyles();
+    }
+
+    if (!layer.id) return '';
+    return (
+      <React.Fragment>
+        <Opacity
+          start={Math.ceil(layer.opacity * 100)}
+          setOpacity={setOpacity}
+          layer={layer}
+        />
+        {renderCustomizations}
+      </React.Fragment>
     );
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  const { config, palettes, compare } = state;
+  const { custom } = palettes;
+  const groupName = compare.activeString;
+
+  return {
+    paletteOrder: config.paletteOrder,
+    groupName,
+    customPalettesIsActive: !!config.features.customPalettes,
+    palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
+    palettesTranslate,
+    getDefaultLegend: (layerId, index) => {
+      return getDefaultLegend(layerId, index, state);
+    },
+    getCustomPalette: id => {
+      return getCustomPalette(id, custom);
+    },
+    getPaletteLegend: (layerId, index) => {
+      return getPaletteLegend(layerId, index, groupName, state);
+    },
+
+    getPaletteLegends: layerId => {
+      return getPaletteLegends(layerId, groupName, state);
+    },
+    getPalette: (layerId, index) => {
+      return getPalette(layerId, index, groupName, state);
+    },
+    getVectorStyle: (layerId, index) => {
+      return getVectorStyle(layerId, index, groupName, state);
+    },
+    vectorStyles: config.vectorStyles
+  };
+}
+const mapDispatchToProps = dispatch => ({
+  setThresholdRange: (layerId, min, max, squash, index, groupName) => {
+    dispatch(
+      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)
+    );
+  },
+  setFilterRange: (layerId, min, max, index, groupName) => {
+    dispatch(
+      setFilterRange(layerId, { min, max }, index, groupName)
+    );
+  },
+  setCustomPalette: (layerId, paletteId, index, groupName) => {
+    dispatch(setCustomPalette(layerId, paletteId, index, groupName));
+  },
+  clearCustomPalette: (layerId, index, groupName) => {
+    dispatch(clearCustomPalette(layerId, index, groupName));
+  },
+  setStyle: (layer, vectorStyleId, groupName) => {
+    dispatch(setStyle(layer, vectorStyleId, groupName));
+  },
+  clearStyle: (layer, vectorStyleId, groupName) => {
+    dispatch(clearStyle(layer, vectorStyleId, groupName));
+  },
+  setOpacity: (id, opacity) => {
+    dispatch(setOpacity(id, opacity));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LayerSettings);
+
 LayerSettings.defaultProps = {
-  palettedAllowed: false,
-  layer: { id: null, name: null },
   isOpen: false,
+  layer: { id: null, name: null },
+  palettedAllowed: false,
   title: null
 };
 LayerSettings.propTypes = {
-  index: PropTypes.number,
-  setOpacity: PropTypes.func,
-  clearCustom: PropTypes.func,
-  getPalette: PropTypes.func,
-  paletteOrder: PropTypes.array,
-  getDefaultLegend: PropTypes.func,
-  getCustomPalette: PropTypes.func,
-  getLegends: PropTypes.func,
-  getLegend: PropTypes.func,
-  setCustom: PropTypes.func,
   canvas: PropTypes.object,
-  palettesTranslate: PropTypes.func,
-  setRange: PropTypes.func,
-  checkerboard: PropTypes.object,
+  clearCustomPalette: PropTypes.func,
+  clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
-  close: PropTypes.func,
+  getCustomPalette: PropTypes.func,
+  getDefaultLegend: PropTypes.func,
+  getPalette: PropTypes.func,
+  getPaletteLegend: PropTypes.func,
+  getPaletteLegends: PropTypes.func,
+  getVectorStyle: PropTypes.func,
+  groupName: PropTypes.string,
+  index: PropTypes.number,
   isOpen: PropTypes.bool,
-  palettedAllowed: PropTypes.bool,
   layer: PropTypes.object,
-  title: PropTypes.string
+  palettedAllowed: PropTypes.bool,
+  paletteOrder: PropTypes.array,
+  palettesTranslate: PropTypes.func,
+  setCustomPalette: PropTypes.func,
+  setFilterRange: PropTypes.func,
+  setOpacity: PropTypes.func,
+  setStyle: PropTypes.func,
+  setThresholdRange: PropTypes.func,
+  title: PropTypes.string,
+  vectorStyles: PropTypes.object
 };
-
-export default LayerSettings;

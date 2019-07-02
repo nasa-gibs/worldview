@@ -7,7 +7,7 @@ module.exports = {
   gifPreviewFrameRateValue: '.gif-download-grid .grid-child:nth-child(6) span',
   gifPreviewEndResolutionSelector: '.gif-selector-case #gif-resolution',
   gifPreviewEndResolutionOption250: '#gif-resolution option[value="1"]',
-  gifDownloadIcon: '.jcrop-holder .fa-download',
+  gifDownloadIcon: '.animation-gif-dialog-wrapper .wv-button.gray',
   gifDownloadButton: '.animation-gif-dialog-wrapper .wv-button',
   gifResults: '.gif-results-dialog-case img',
   gifResultsCloseButton: '.wv-gif-results button.ui-dialog-titlebar-close',
@@ -22,6 +22,9 @@ module.exports = {
   bTab: '.ab-tabs-case .ab-tab.second-tab',
   swipeDragger: '.ab-swipe-line .ab-swipe-dragger',
   compareButton: '#compare-toggle-button',
+
+  // timeline
+  dragger: '.timeline-dragger',
 
   // layers
   infoButton: '.wv-layers-info',

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import googleTagManager from 'googleTagManager';
 import {
   requestTemplate,
   renderTemplate,
@@ -12,6 +13,7 @@ import { onClickFeedback } from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
 
 import { initFeedback } from '../modules/feedback/actions';
+import { startTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
 import Notifications from '../containers/notifications';
@@ -44,7 +46,7 @@ class InfoList extends Component {
       aboutClick,
       notifications,
       config,
-      models
+      startTour
     } = this.props;
     let arr = [
       {
@@ -88,7 +90,10 @@ class InfoList extends Component {
         iconClass: 'ui-icon fa fa-truck fa-fw',
         id: 'start_tour_info_item',
         onClick: () => {
-          models.tour.events.trigger('start-tour');
+          startTour();
+          googleTagManager.pushEvent({
+            event: 'tour_start_button'
+          });
         }
       };
       arr.splice(1, 0, exploreWorlviewObj);
@@ -136,6 +141,9 @@ const mapDispatchToProps = dispatch => ({
       })
     );
   },
+  startTour: () => {
+    dispatch(startTour());
+  },
   aboutClick: () => {
     if (util.browser.small) {
       window.open('pages/about.html?v=@BUILD_NONCE@', '_blank');
@@ -158,13 +166,12 @@ export default connect(
 )(InfoList);
 
 InfoList.propTypes = {
-  openModal: PropTypes.func,
-  notificationsRequest: PropTypes.object,
-  sendFeedback: PropTypes.func,
-  feedbackIsInitiated: PropTypes.bool,
   aboutClick: PropTypes.func,
+  config: PropTypes.object,
+  feedbackIsInitiated: PropTypes.bool,
+  models: PropTypes.object,
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,
-  config: PropTypes.object,
-  models: PropTypes.object
+  sendFeedback: PropTypes.func,
+  startTour: PropTypes.func
 };

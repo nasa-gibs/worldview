@@ -53,9 +53,9 @@ class Tooltip extends React.Component {
 }
 
 Tooltip.propTypes = {
-  onClick: PropTypes.func,
+  dataArray: PropTypes.array.isRequired,
   text: PropTypes.string.isRequired,
-  dataArray: PropTypes.array.isRequired
+  onClick: PropTypes.func
 };
 
 export default Tooltip;

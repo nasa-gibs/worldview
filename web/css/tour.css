@@ -47,7 +47,6 @@
 .tour-start .modal {
   overflow-y: auto;
   height: 830px;
-  width: 500px;
   margin-left: auto;
   margin-right: auto;
   top: 20px;
@@ -219,14 +218,14 @@
 
 /* .tour-in-progress */
 .tour-in-progress .modal {
-  left: auto;
-  top: auto;
-  bottom: 154px;
   overflow: visible;
 }
 
 .tour-in-progress .modal-dialog {
-  max-width: 248px;
+  position: absolute;
+  width: 248px;
+  right: 0;
+  bottom: 154px;
 }
 
 .tour-in-progress .modal.fade .modal-dialog {
@@ -745,10 +744,6 @@
   }
 
   /* .tour-start */
-  .tour-start .modal {
-    width: 635px;
-  }
-
   .tour-start .modal-dialog {
     max-width: 618px;
   }

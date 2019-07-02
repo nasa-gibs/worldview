@@ -1,11 +1,10 @@
 /* global DEBUG */
-import 'babel-polyfill'; // Needed for worldview-components in IE and older browsers
 import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import { each as lodashEach, debounce as lodashDebounce } from 'lodash';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { responsiveStoreEnhancer } from 'redux-responsive';
 import { getMiddleware } from './combine-middleware';
 import {
   createReduxLocationActions,
@@ -22,21 +21,28 @@ import Brand from './brand';
 import { combineModels } from './combine-models';
 import { parse } from './parse';
 import { combineUi } from './combine-ui';
-import palettes from './palettes/palettes';
-import { updateLegacyModule } from './modules/migration/actions';
-import { validate as layerValidate } from './layers/layers';
+import { preloadPalettes, hasCustomTypePalette } from './modules/palettes/util';
+import {
+  validate as layerValidate,
+  layersParse12
+} from './modules/layers/util';
 import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
-import { changeProjection } from './modules/projection/actions';
+import { uniqBy } from 'lodash';
+import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
+export let history = createBrowserHistory();
 
-export const history = createBrowserHistory();
 const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
 const startTime = new Date().getTime();
+// Code for when version of redux dev-tools plugin stops crashing
+// const compose = isDebugMode
+//   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ latency: 0 }) ||
+//     defaultCompose
+//   : defaultCompose;
 let parameters = util.fromQueryString(location.search);
 let elapsed = util.elapsed;
 let errors = [];
-
 // Document ready function
 window.onload = () => {
   if (!parameters.elapsed) {
@@ -49,13 +55,44 @@ window.onload = () => {
   loadingIndicator.delayed(promise, 1000);
   promise
     .done(config => {
-      elapsed('Config loaded', startTime, parameters);
+      config.pageLoadTime = parameters.now
+        ? util.parseDateUTC(parameters.now) || new Date()
+        : new Date();
+      config.palettes = {
+        rendered: {},
+        custom: {}
+      };
+      elapsed('Config loaded', config.now, parameters);
+      // Determine which layers need to be preloaded
+      let layers = [];
+      if (
+        (parameters.l && hasCustomTypePalette(parameters.l)) ||
+        (parameters.l1 && hasCustomTypePalette(parameters.l1))
+      ) {
+        if (parameters.l && hasCustomTypePalette(parameters.l)) {
+          layers.push(...layersParse12(parameters.l, config));
+        }
+
+        if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
+          layers.push(...layersParse12(parameters.l1, config));
+        }
+        layers = uniqBy(layers, layer => {
+          let str = '';
+          CUSTOM_PALETTE_TYPE_ARRAY.forEach(element => {
+            str += layer[element] ? layer[element][0] : '';
+          });
+          return layer.id + str;
+        });
+      }
       let legacyState = parse(parameters, config, errors);
       layerValidate(errors, config);
-      let requirements = [palettes.requirements(legacyState, config, true)];
-      $.when
-        .apply(null, requirements)
-        .then(() => util.wrap(render(config, parameters, legacyState))); // Wrap render up
+      preloadPalettes(layers, {}, false).then(obj => {
+        config.palettes = {
+          custom: obj.custom,
+          rendered: obj.rendered
+        };
+        render(config, parameters, legacyState);
+      });
     })
     .fail(util.error);
 };
@@ -88,25 +125,11 @@ const render = (config, parameters, legacyState) => {
   const store = createStore(
     reducersWithLocation,
     getInitialState(models, config, parameters),
-    applyMiddleware(...middleware)
+    compose(
+      applyMiddleware(...middleware),
+      responsiveStoreEnhancer
+    )
   );
-  lodashEach(models, function(component, key) {
-    if (component.load && !component.loaded) {
-      component.load(legacyState, errors);
-    }
-    const dispatchUpdate = lodashDebounce(() => {
-      store.dispatch(updateLegacyModule(key, component));
-    }, 100);
-    // sync old and new state
-    component.events.any(dispatchUpdate);
-  });
-  // Big HACKY sync up of proj state
-  models.proj.events.on('select', (projObj, id) => {
-    const state = store.getState();
-    if (state.proj.id !== id) {
-      store.dispatch(changeProjection(id, config));
-    }
-  });
   listenForHistoryChange(store, history);
   elapsed('Render', startTime, parameters);
 
@@ -119,6 +142,6 @@ const render = (config, parameters, legacyState) => {
     document.getElementById('app')
   );
 
-  combineUi(models, config, mouseMoveEvents); // Legacy UI
+  combineUi(models, config, mouseMoveEvents, store); // Legacy UI
   util.errorReport(errors);
 };

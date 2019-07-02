@@ -19,9 +19,9 @@ class TourBoxes extends React.Component {
 }
 
 TourBoxes.propTypes = {
+  selectTour: PropTypes.func.isRequired,
   stories: PropTypes.object.isRequired,
-  storyOrder: PropTypes.array.isRequired,
-  selectTour: PropTypes.func.isRequired
+  storyOrder: PropTypes.array.isRequired
 };
 
 export default TourBoxes;

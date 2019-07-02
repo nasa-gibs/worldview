@@ -1,8 +1,16 @@
 import util from '../util/util';
-import lodashIsEqual from 'lodash/isEqual';
-import lodashIsEmpty from 'lodash/isEmpty';
+import {
+  get as lodashGet,
+  isEmpty as lodashIsEmpty,
+  isEqual as lodashIsEqual
+} from 'lodash';
+import { getPalette } from '../modules/palettes/selectors';
+import {
+  runningData as runningDataAction,
+  clearRunningData as clearRunningDataAction
+} from '../modules/map/actions';
 
-export function MapRunningData(models, compareUi) {
+export function MapRunningData(models, compareUi, store) {
   var self;
 
   self = this;
@@ -13,7 +21,7 @@ export function MapRunningData(models, compareUi) {
   self.clearAll = function() {
     if (!lodashIsEmpty(dataObj)) {
       dataObj = {};
-      models.map.events.trigger('data-running', dataObj);
+      store.dispatch(clearRunningDataAction());
     }
   };
   /**
@@ -24,7 +32,7 @@ export function MapRunningData(models, compareUi) {
    * @param {Object} layerAttributes | Layer Properties
    */
   var isFromActiveCompareRegion = function(map, coords, layerAttributes) {
-    var compareModel = models.compare;
+    var compareModel = store.getState().compare;
     if (compareModel && compareModel.active) {
       if (compareModel.mode !== 'swipe') {
         return false;
@@ -58,27 +66,29 @@ export function MapRunningData(models, compareUi) {
    *
    */
   self.newPoint = function(coords, map) {
+    const state = store.getState();
     var activeLayerObj = {};
-
     map.forEachLayerAtPixel(coords, function(layer, data) {
-      var hex;
-      var legends;
+      var paletteHex;
+      var paletteLegends;
       var layerId;
-
       if (!layer.wv) {
         return;
       }
       if (!isFromActiveCompareRegion(map, coords, layer.wv)) return;
-      if (layer.wv.def.palette) {
+      if (
+        layer.wv.def.palette &&
+        !lodashGet(layer, 'wv.def.disableHoverValue')
+      ) {
         layerId = layer.wv.id;
-        legends = models.palettes.getLegends(layerId);
-        hex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
-        activeLayerObj[layerId] = { legends: legends, hex: hex };
+        paletteLegends = getPalette(layerId, undefined, undefined, state);
+        paletteHex = util.rgbaToHex(data[0], data[1], data[2], data[3]);
+        activeLayerObj[layerId] = { paletteLegends: paletteLegends, paletteHex: paletteHex };
       }
     });
     if (!lodashIsEqual(activeLayerObj, dataObj)) {
       dataObj = activeLayerObj;
-      models.map.events.trigger('data-running', dataObj);
+      store.dispatch(runningDataAction(dataObj));
     }
   };
   return self;

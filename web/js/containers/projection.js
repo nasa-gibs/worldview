@@ -39,8 +39,7 @@ const getInfoArray = function(projArray) {
 };
 class ProjectionList extends Component {
   updateProjection(id) {
-    const { updateProjection, models, config, onCloseModal } = this.props;
-    models.proj.select(id); // migration crutch
+    const { updateProjection, config, onCloseModal } = this.props;
     updateProjection(id, config);
     onCloseModal();
     googleTagManager.pushEvent({
@@ -74,7 +73,7 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateProjection: (id, config) => {
-    dispatch(changeProjection(id, config));
+    dispatch(changeProjection(id));
   },
   onCloseModal: () => {
     dispatch(onToggle());
@@ -87,11 +86,10 @@ export default connect(
 )(ProjectionList);
 
 ProjectionList.propTypes = {
-  openModal: PropTypes.func,
-  updateProjection: PropTypes.func,
-  models: PropTypes.object,
-  projection: PropTypes.string,
   config: PropTypes.object,
+  models: PropTypes.object,
   onCloseModal: PropTypes.func,
-  projectionArray: PropTypes.array
+  projection: PropTypes.string,
+  projectionArray: PropTypes.array,
+  updateProjection: PropTypes.func
 };

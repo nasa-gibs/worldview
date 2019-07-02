@@ -11,6 +11,7 @@ export function mapModel(models, config) {
   self.extent = null;
   self.selectedMap = null;
   self.events = util.events();
+  self.ui = null;
   self.rotation = 0;
   const init = function() {
     if (!config.projections) {
@@ -45,8 +46,9 @@ export function mapModel(models, config) {
     self.events.trigger('update', extent);
   };
   // Give other components access to zoom Level
-  self.updateMap = function(map) {
+  self.updateMap = function(map, ui) {
     self.selectedMap = map;
+    self.ui = ui;
     self.events.trigger('update-map');
   };
   self.getZoom = function() {
@@ -66,7 +68,8 @@ export function mapModel(models, config) {
    */
   self.load = function(state, errors) {
     if (state.v) {
-      var proj = models.proj.selected;
+      const projId = state.p ? state.p : 'geographic';
+      var proj = config.projections[projId];
       var extent = state.v;
       var maxExtent = proj.maxExtent;
 

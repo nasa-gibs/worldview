@@ -53,10 +53,10 @@ List.defaultProps = {
   size: 'medium'
 };
 List.propTypes = {
-  list: PropTypes.array,
-  listClass: PropTypes.string,
   active: PropTypes.string,
   disabled: PropTypes.bool,
+  list: PropTypes.array,
+  listClass: PropTypes.string,
   onClick: PropTypes.func,
   size: PropTypes.string
 };

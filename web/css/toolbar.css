@@ -23,6 +23,9 @@
   background-color: #fff;
   color: #1a1a1a;
 }
+.wv-toolbar .wv-toolbar-button.disabled {
+  pointer-events: none;
+}
 
 /* toolbar modal styles */
 .toolbar-list-modal,
@@ -56,7 +59,7 @@
 .toolbar_modal_outer .modal.fade .modal-dialog {
   -webkit-transform: translate(0, 25%);
   transform: translate(0, 25%);
-  transition: transform 0.3s ease-out, -webkit-transform  0.3s ease-out;
+  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
 }
 .toolbar_modal_outer .modal.fade.show .modal-dialog {
   -webkit-transform: translate(0, 0);
