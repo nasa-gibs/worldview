@@ -82,7 +82,7 @@ class LayerInfo extends React.Component {
           </span>
           <span id={layerId + '-endDate'} className="layer-date-end">
             {layer.startDate && layer.endDate
-              ? this.configureDate(
+              ? ' - ' + this.configureDate(
                 layer.period,
                 layer.endDate,
                 layer.dateRanges
