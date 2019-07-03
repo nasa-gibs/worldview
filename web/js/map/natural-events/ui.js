@@ -278,11 +278,11 @@ export default function naturalEventsUI(ui, config, store, models) {
             selectDate(util.dateAdd(util.parseDateUTC(date), 'day', 1))
           );
         }
-        if (isIdChange && !isSameCategory && !isInitialLoad) {
-          activateLayersForCategory(event.categories[0].title);
-        }
       } else if (!isInitialLoad) store.dispatch(selectDate(util.parseDateUTC(date)));
       self.selecting = false;
+      if (isIdChange && !isSameCategory && !isInitialLoad) {
+        activateLayersForCategory(event.categories[0].title);
+      }
       // hack to update layers
       if (isIdChange) {
         ui.map.reloadLayers();
