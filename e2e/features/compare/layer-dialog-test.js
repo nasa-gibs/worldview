@@ -11,11 +11,11 @@ const AodInfoPanel = '.layer_info_modal-modis_terra_aerosol';
 const correctedReflectanceBLayer =
   '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor';
 const correctedReflectanceOptionsPanelHeader =
-  '#wv-options-header-MODIS_Terra_CorrectedReflectance_TrueColor';
+  '#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-header';
 const correctedReflectanceOptionsPanelBody =
-  '#wv-options-body-MODIS_Terra_CorrectedReflectance_TrueColor';
+  '#layer_options_modal-modis_terra_correctedreflectance_truecolor .modal-body';
 const correctedReflectanceInfoPanel =
-  '.wv-info-panel-MODIS_Terra_CorrectedReflectance_TrueColor';
+  '#layer_info_modal-modis_terra_correctedreflectance_truecolor';
 
 module.exports = {
   before: function(client) {
@@ -88,7 +88,7 @@ module.exports = {
     client.click(AodOptionsPanelHeader + ' .close').pause(1000);
     client.click(aerosolLayer + ' .wv-layers-info');
     client.waitForElementVisible(
-      AodInfoPanel + ' .layer-metadata',
+      AodInfoPanel + ' .layer-description',
       TIME_LIMIT,
       function() {
         client
@@ -141,7 +141,9 @@ module.exports = {
     );
   },
   'Layer info dialog works after clicking into B mode': function(client) {
-    client.click(AodOptionsPanelHeader + ' .close').pause(1000);
+    client
+      .click(correctedReflectanceOptionsPanelHeader + ' .close')
+      .pause(1000);
     client.click(correctedReflectanceBLayer + ' .wv-layers-info');
     client.waitForElementVisible(
       correctedReflectanceInfoPanel + ' .layer-metadata',
