@@ -915,6 +915,7 @@ export function mapui(models, config, store, ui) {
     const onRenderComplete = () => {
       store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self, rotation: self.selected.getView().getRotation() });
       map.un('rendercomplete', onRenderComplete);
+      if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
     map.on('click', function(e) {

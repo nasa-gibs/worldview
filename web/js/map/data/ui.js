@@ -12,6 +12,7 @@ import * as DATA_CONSTANTS from '../../modules/data/constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import { toggleGranule } from '../../modules/data/actions';
 import { SELECT_DATE } from '../../modules/date/constants';
+import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
 
 export function dataUi(store, ui, config) {
   var queryActive = false;
@@ -35,11 +36,13 @@ export function dataUi(store, ui, config) {
   self.EVENT_QUERY_RESULTS = 'queryResults';
   self.EVENT_QUERY_CANCEL = 'queryCancel';
   self.EVENT_QUERY_ERROR = 'queryError';
+  self.EVENT_QUERY_TIMEOUT = 'queryTimeout';
   self.selector = '#wv-data';
   self.id = 'wv-data';
 
   const subscribeToStore = function(action) {
     switch (action.type) {
+      case LOCATION_POP_ACTION:
       case CHANGE_SIDEBAR_TAB:
         return action.activeTab === 'download' ? onActivate() : mapController ? onDeactivate() : '';
       case DATA_CONSTANTS.DATA_GET_DATA_CLICK:
@@ -120,29 +123,31 @@ export function dataUi(store, ui, config) {
     }
   };
   var init = function() {
-    const sidebarState = store.getState().sidebar;
     ui.events.on('last-action', subscribeToStore);
+    ui.map.events.on('extent', self.onViewChange);
     self.events.on('query', onQuery)
-      .on('queryResults', onQueryResults)
+      .on('queryResults', (results) => {
+        onQueryResults(results);
+        self.onViewChange(results);
+      })
       .on('queryError', onQueryError)
       .on('queryTimeout', onQueryTimeout);
-    if (sidebarState.activeTab === 'download') onActivate();
   };
-  self.onViewChange = function() {
+  self.onViewChange = function(results) {
+    results = results || lastResults;
     const state = store.getState();
     var map = ui.map.selected;
-
-    if (!state.data.active || queryActive || !lastResults) {
+    if (!state.data.active || queryActive || !results) {
       return;
     }
-    if (lastResults.granules.length === 0) {
+    if (results.granules.length === 0) {
       return;
     }
     var hasCentroids = false;
     var inView = false;
     var extent = map.getView().calculateExtent(map.getSize());
     var crs = state.proj.selected.crs;
-    lodashEach(lastResults.granules, function(granule) {
+    lodashEach(results.granules, function(granule) {
       if (granule.centroid && granule.centroid[crs]) {
         hasCentroids = true;
         if (olExtent.intersects(extent, granule.centroid[crs].getExtent())) {
@@ -161,7 +166,7 @@ export function dataUi(store, ui, config) {
       downloadListPanel.refresh();
     }
   };
-  var onActivate = function() {
+  var onActivate = self.onActivate = function() {
     self.active = true;
     self.events.trigger('activate');
     if (!mapController) {
