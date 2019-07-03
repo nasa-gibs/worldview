@@ -350,13 +350,13 @@ button:focus {
 
 /* Interval selector */
 .custom-interval-widget {
-  height: 57px;
+  height: 54px;
   width: 225px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   background: rgba(40, 40, 40, 0.85);
   position: absolute;
-  top: -58px;
+  top: -54px;
   left: 0;
   display: none;
   color: #fff;
