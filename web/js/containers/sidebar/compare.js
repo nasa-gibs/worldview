@@ -51,7 +51,6 @@ class CompareCase extends React.Component {
         ) : (
           ''
         )}
-        }
         <div className={outerClass}>
           <div className="ab-tabs-case">
             <Nav tabs>
