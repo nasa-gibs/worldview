@@ -124,7 +124,6 @@ class ProductPicker extends React.Component {
       categoryType,
       category,
       inputValue,
-      width,
       selectedMeasurement
     } = this.state;
     const {
@@ -139,6 +138,7 @@ class ProductPicker extends React.Component {
       layerConfig,
       modalView,
       height,
+      width,
       onToggle
     } = this.props;
     const isCategoryDisplay =
