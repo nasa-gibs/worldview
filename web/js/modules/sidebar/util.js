@@ -29,6 +29,13 @@ export function mapLocationToSidebarState(
     stateFromLocation = update(stateFromLocation, {
       sidebar: { $set: sidebarState }
     });
+  } else {
+    let sidebarState = lodashAssign({}, state.sidebar, {
+      activeTab: 'layers'
+    });
+    stateFromLocation = update(stateFromLocation, {
+      sidebar: { $set: sidebarState }
+    });
   }
   return stateFromLocation;
 }

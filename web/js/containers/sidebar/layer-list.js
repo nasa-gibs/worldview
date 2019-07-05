@@ -195,8 +195,8 @@ function mapStateToProps(state, ownProps) {
     projId: id,
     checkerBoardPattern,
     layerSplit,
-    getNames: (layerId, proj) => {
-      return getTitles(state.config, layerId, proj, state);
+    getNames: layerId => {
+      return getTitles(state.config, layerId, id);
     },
     available: id => {
       const date = state.date[activeDateString];

@@ -48,7 +48,7 @@ class Layer extends React.Component {
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
       let isRunningData = !!runningObject;
-      let colorHex = isRunningData ? runningObject.hex : null;
+      let colorHex = isRunningData ? runningObject.paletteHex : null;
       return (
         <PaletteLegend
           layer={layer}
