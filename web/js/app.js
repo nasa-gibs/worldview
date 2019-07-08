@@ -92,12 +92,13 @@ class App extends React.Component {
     document.removeEventListener('keypress', this.handleKeyPress);
   }
   render() {
-    let isAnimationWidgetActive = this.props.state.animation.isActive;
+    const { isAnimationWidgetActive, isTourActive } = this.props;
+
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
         <Sidebar />
-        <Tour />
+        {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
         <div id="wv-map" className="wv-map" />
@@ -162,6 +163,8 @@ class App extends React.Component {
 function mapStateToProps(state, ownProps) {
   return {
     state: state,
+    isAnimationWidgetActive: state.animation.isActive,
+    isTourActive: state.tour.active,
     config: state.config,
     parameters: state.parameters,
     models: ownProps.models,
@@ -182,6 +185,8 @@ export default connect(
   mapDispatchToProps
 )(App);
 App.propTypes = {
+  isAnimationWidgetActive: PropTypes.bool,
+  isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
   mapMouseEvents: PropTypes.object,
   parameters: PropTypes.object,
