@@ -233,7 +233,8 @@ class Tour extends React.Component {
       screenHeight,
       screenWidth,
       processStepLink,
-      isActive
+      isActive,
+      endTour
     } = this.props;
     const {
       modalInProgress,
