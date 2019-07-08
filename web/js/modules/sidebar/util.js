@@ -1,5 +1,5 @@
 import update from 'immutability-helper';
-import { assign as lodashAssign } from 'lodash';
+import { assign as lodashAssign, get } from 'lodash';
 
 /**
  * Update sidebar state when location-pop action occurs
@@ -22,7 +22,7 @@ export function mapLocationToSidebarState(
     stateFromLocation = update(stateFromLocation, {
       sidebar: { $set: sidebarState }
     });
-  } else if (parameters.download) {
+  } else if (get(stateFromLocation, 'data.active')) {
     let sidebarState = lodashAssign({}, state.sidebar, {
       activeTab: 'download'
     });

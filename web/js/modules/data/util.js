@@ -7,11 +7,29 @@ import update from 'immutability-helper';
  * @param {Object} state | initial state before location POP action
  * @param {Object} config
  */
-export function mapLocationToDataState(parameters, stateFromLocation) {
+export function mapLocationToDataState(
+  parameters,
+  stateFromLocation,
+  state,
+  config
+) {
   if (parameters.download) {
-    stateFromLocation = update(stateFromLocation, {
-      data: { active: { $set: true } }
-    });
+    const productId = parameters.download;
+    if (productId) {
+      if (!config.products[productId]) {
+        console.warn('No such product: ' + productId);
+        stateFromLocation = update(stateFromLocation, {
+          data: { selectedProduct: { $set: '' } }
+        });
+        stateFromLocation = update(stateFromLocation, {
+          data: { active: { $set: false } }
+        });
+      } else {
+        stateFromLocation = update(stateFromLocation, {
+          data: { active: { $set: true } }
+        });
+      }
+    }
   } else {
     stateFromLocation = update(stateFromLocation, {
       data: { active: { $set: false } }

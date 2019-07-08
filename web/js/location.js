@@ -53,7 +53,9 @@ export const mapLocationToState = (state, location) => {
     );
     stateFromLocation = mapLocationToDataState(
       parameters,
-      stateFromLocation
+      stateFromLocation,
+      state,
+      config
     );
     stateFromLocation = mapLocationToPaletteState(
       parameters,
