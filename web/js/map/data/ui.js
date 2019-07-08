@@ -1,5 +1,6 @@
 import lodashSize from 'lodash/size';
 import lodashEach from 'lodash/each';
+import lodashFind from 'lodash/find';
 import googleTagManager from 'googleTagManager';
 import * as olExtent from 'ol/extent';
 import { dataHandlerGetByName } from './handler';
@@ -13,6 +14,9 @@ import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constant
 import { toggleGranule } from '../../modules/data/actions';
 import { SELECT_DATE } from '../../modules/date/constants';
 import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
+import { getLayers } from '../../modules/layers/selectors';
+import { getDataProductsFromActiveLayers } from '../../modules/data/selectors';
+import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 
 export function dataUi(store, ui, config) {
   var queryActive = false;
@@ -53,10 +57,33 @@ export function dataUi(store, ui, config) {
       case DATA_CONSTANTS.DATA_GRANULE_UNSELECT:
         self.events.on('granuleUnselect', action.granule);
         return updateSelection();
+      case LAYER_CONSTANTS.REMOVE_LAYER:
+      case LAYER_CONSTANTS.RESET_LAYERS:
+      case LAYER_CONSTANTS.ADD_LAYER:
+      case LAYER_CONSTANTS.REORDER_LAYER_GROUP:
+      case LAYER_CONSTANTS.ADD_LAYERS_FOR_EVENT:
+        return updateLayers();
       case SELECT_DATE:
       case DATA_CONSTANTS.SELECT_PRODUCT:
         return query();
     }
+  };
+  var updateLayers = function() {
+    const state = store.getState();
+    const { layers, compare, proj, data } = state;
+    const activeString = compare.activeString;
+    const activeLayers = getLayers(layers[activeString], { proj: proj.id }, state);
+
+    // If a layer was removed and the product no longer exists,
+    // remove any selected items in that product
+    // FIXME: This is a hack for now and should be cleaned up when
+    // everything changes to models.
+    var products = getDataProductsFromActiveLayers(activeLayers, config, proj.id);
+    lodashEach(data.selectedGranules, function(selected) {
+      if (!products[selected.product] && !lodashFind(activeLayers, { product: selected.product })) {
+        store.dispatch(toggleGranule(selected));
+      }
+    });
   };
   var query = function() {
     const state = store.getState();

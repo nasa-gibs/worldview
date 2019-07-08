@@ -17,6 +17,7 @@ import {
   UPDATE_OPACITY,
   ADD_LAYERS_FOR_EVENT
 } from './constants';
+import { selectProduct } from '../data/actions';
 
 export function resetLayers(activeString) {
   return (dispatch, getState) => {
@@ -119,7 +120,7 @@ export function toggleVisibility(id, visible) {
 }
 export function removeLayer(id) {
   return (dispatch, getState) => {
-    const { layers, compare } = getState();
+    const { layers, compare, data } = getState();
     const activeString = compare.activeString;
     const index = lodashFindIndex(layers[activeString], {
       id: id
@@ -127,8 +128,11 @@ export function removeLayer(id) {
     if (index === -1) {
       return console.warn('Invalid layer ID: ' + id);
     }
-    const def = layers[activeString][index];
 
+    const def = layers[activeString][index];
+    if (def.product && def.product === data.selectedProduct) {
+      dispatch(selectProduct('')); // Clear selected Data product
+    }
     dispatch({
       type: REMOVE_LAYER,
       id,
