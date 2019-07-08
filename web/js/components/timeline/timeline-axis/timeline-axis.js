@@ -53,6 +53,12 @@ class TimelineAxis extends Component {
   */
   updateScale = (inputDate, timeScale, axisWidthInput, leftOffsetFixedCoeff, hoverChange, previousTimeScale) => {
     let {
+      dateA,
+      dateB,
+      draggerSelected,
+      draggerTimeState,
+      draggerTimeStateB,
+      isCompareModeActive,
       timelineStartDateLimit,
       timelineEndDateLimit
     } = this.props;
@@ -105,16 +111,20 @@ class TimelineAxis extends Component {
 
     let draggerTime;
     let draggerTimeB;
-    if (this.props.draggerSelected === 'selected') {
+    if (draggerSelected === 'selected') {
       draggerTime = hoverChange
-        ? this.props.draggerTimeState
-        : inputDate || this.props.draggerTimeState;
-      draggerTimeB = this.props.draggerTimeStateB;
+        ? draggerTimeState
+        : isCompareModeActive
+          ? dateA
+          : inputDate || draggerTimeState;
+      draggerTimeB = isCompareModeActive ? dateB : draggerTimeStateB;
     } else {
-      draggerTime = this.props.draggerTimeState;
+      draggerTime = isCompareModeActive ? dateA : draggerTimeState;
       draggerTimeB = hoverChange
-        ? this.props.draggerTimeStateB
-        : inputDate || this.props.draggerTimeStateB;
+        ? draggerTimeStateB
+        : isCompareModeActive
+          ? dateB
+          : inputDate || draggerTimeStateB;
     }
 
     // value of hover time, hover time time unit zeroed, hover time next unit time unit zeroed
@@ -162,7 +172,7 @@ class TimelineAxis extends Component {
     let isBetween = getIsBetween(draggerTime, frontDate, backDate);
     if (isBetween) {
       draggerPosition = Math.abs(frontDate.diff(draggerTime, timeScale, true) * gridWidth);
-      if (this.props.isCompareModeActive || this.props.draggerSelected === 'selected') {
+      if (isCompareModeActive || draggerSelected === 'selected') {
         draggerVisible = true;
       }
     }
@@ -172,7 +182,7 @@ class TimelineAxis extends Component {
     let isBetweenB = getIsBetween(draggerTimeB, frontDate, backDate);
     if (isBetweenB) {
       draggerPositionB = Math.abs(frontDate.diff(draggerTimeB, timeScale, true) * gridWidth);
-      if (this.props.isCompareModeActive || this.props.draggerSelected === 'selectedB') {
+      if (isCompareModeActive || draggerSelected === 'selectedB') {
         draggerVisibleB = true;
       }
     }
@@ -517,45 +527,49 @@ class TimelineAxis extends Component {
     // handle dragger and potential axis updates
     if (!isDraggerDragging) {
       // handle A dragger change
-      if (draggerTimeState !== dateA || prevProps.dateA !== dateA) {
-        if (prevProps.dateA === draggerTimeState) {
-          // handle tour url date change
-          if (isTourActive && !this.props.isAnimationPlaying) {
-            this.updateScale(dateA, timeScale, null, 0.5);
+      if (draggerSelected === 'selected' || isCompareModeActive) {
+        if (draggerTimeState !== dateA || prevProps.dateA !== dateA) {
+          if (prevProps.dateA === draggerTimeState) {
+            // handle tour url date change
+            if (isTourActive && !this.props.isAnimationPlaying) {
+              this.updateScale(dateA, timeScale, null, 0.5);
+            } else {
+              // handle animation dragger update
+              let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateA);
+              if (!draggerCheck.withinRange) {
+                this.updateScaleWithOffset(dateA, timeScale, draggerCheck);
+              }
+            }
           } else {
-            // handle animation dragger update
+            // check if draggerCheck will be within acceptable visible axis width
             let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateA);
             if (!draggerCheck.withinRange) {
               this.updateScaleWithOffset(dateA, timeScale, draggerCheck);
             }
           }
-        } else {
-          // check if draggerCheck will be within acceptable visible axis width
-          let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateA);
-          if (!draggerCheck.withinRange) {
-            this.updateScaleWithOffset(dateA, timeScale, draggerCheck);
-          }
         }
       }
 
       // handle B dragger change
-      if (draggerTimeStateB !== dateB || prevProps.dateB !== dateB) {
-        if (prevProps.dateB === draggerTimeStateB) {
-          // handle tour url date change
-          if (isTourActive) {
-            this.updateScale(dateB, timeScale, null, 0.5);
+      if (draggerSelected === 'selectedB' || isCompareModeActive) {
+        if (draggerTimeStateB !== dateB || prevProps.dateB !== dateB) {
+          if (prevProps.dateB === draggerTimeStateB) {
+            // handle tour url date change
+            if (isTourActive && !this.props.isAnimationPlaying) {
+              this.updateScale(dateB, timeScale, null, 0.5);
+            } else {
+              // handle animation dragger update
+              let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateB, true);
+              if (!draggerCheck.withinRange) {
+                this.updateScaleWithOffset(dateB, timeScale, draggerCheck);
+              }
+            }
           } else {
-            // handle animation dragger update
+            // check if draggerCheck will be within acceptable visible axis width
             let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateB, true);
             if (!draggerCheck.withinRange) {
               this.updateScaleWithOffset(dateB, timeScale, draggerCheck);
             }
-          }
-        } else {
-          // check if draggerCheck will be within acceptable visible axis width
-          let draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateB, true);
-          if (!draggerCheck.withinRange) {
-            this.updateScaleWithOffset(dateB, timeScale, draggerCheck);
           }
         }
       }

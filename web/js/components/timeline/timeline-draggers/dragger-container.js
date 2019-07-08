@@ -196,11 +196,14 @@ class DraggerContainer extends PureComponent {
 
   componentDidUpdate(prevProps) {
     let {
+      dateA,
+      dateB,
       draggerTimeState,
       draggerTimeStateB,
       isDraggerDragging,
       draggerSelected,
       isCompareModeActive,
+      isAnimationPlaying,
       setDraggerVisibility
     } = this.props;
 
@@ -223,12 +226,22 @@ class DraggerContainer extends PureComponent {
       // handle A dragger change
       if (draggerTimeState !== prevProps.draggerTimeState &&
           draggerTimeState !== this.state.draggerTimeState) {
-        this.setDraggerPosition(draggerTimeState);
+        if (!isAnimationPlaying &&
+            dateA === draggerTimeState) {
+          this.updateLocalDraggerTimeStates('selected', draggerTimeState);
+        } else {
+          this.setDraggerPosition(draggerTimeState);
+        }
       }
       // handle B dragger change
       if (draggerTimeStateB !== prevProps.draggerTimeStateB &&
           draggerTimeStateB !== this.state.draggerTimeStateB) {
-        this.setDraggerPosition(draggerTimeStateB);
+        if (!isAnimationPlaying &&
+            dateB === draggerTimeStateB) {
+          this.updateLocalDraggerTimeStates('selectedB', draggerTimeStateB);
+        } else {
+          this.setDraggerPosition(draggerTimeStateB);
+        }
       }
     }
   }
