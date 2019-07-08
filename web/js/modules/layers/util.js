@@ -10,7 +10,7 @@ import {
   isArray
 } from 'lodash';
 
-import { addLayer } from './selectors';
+import { addLayer, resetLayers } from './selectors';
 import {
   getPaletteAttributeArray,
   parseLegacyPalettes
@@ -224,46 +224,52 @@ export function layersParse11(str, config) {
 
 // Permalink version 1.2
 export function layersParse12(stateObj, config) {
-  var parts;
-  var str = stateObj;
-  // Split by layer definitions (commas not in parens)
-  var layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
-  var lstates = [];
-  lodashEach(layerDefs, function(layerDef) {
-    // Get the text before any paren or comma
-    var layerId = layerDef.match(/[^(,]+/)[0];
-    if (config.redirects && config.redirects.layers) {
-      layerId = config.redirects.layers[layerId] || layerId;
-    }
-    var lstate = {
-      id: layerId,
-      attributes: []
-    };
-    // Everything inside parens
-    var arrayAttr = layerDef.match(/\(.*\)/);
-    if (arrayAttr) {
-      // Get single match and remove parens
-      var strAttr = arrayAttr[0].replace(/[()]/g, '');
-      // Key value pairs
-      var kvps = strAttr.split(',');
-      lodashEach(kvps, function(kvp) {
-        parts = kvp.split('=');
-        if (parts.length === 1) {
-          lstate.attributes.push({
-            id: parts[0],
-            value: true
-          });
-        } else {
-          lstate.attributes.push({
-            id: parts[0],
-            value: parts[1]
-          });
-        }
-      });
-    }
-    lstates.push(lstate);
-  });
-  return createLayerArrayFromState(lstates, config);
+  try {
+    var parts;
+    var str = stateObj;
+    // Split by layer definitions (commas not in parens)
+    var layerDefs = str.match(/[^(,]+(\([^)]*\))?,?/g);
+    var lstates = [];
+    lodashEach(layerDefs, function(layerDef) {
+      // Get the text before any paren or comma
+      var layerId = layerDef.match(/[^(,]+/)[0];
+      if (config.redirects && config.redirects.layers) {
+        layerId = config.redirects.layers[layerId] || layerId;
+      }
+      var lstate = {
+        id: layerId,
+        attributes: []
+      };
+      // Everything inside parens
+      var arrayAttr = layerDef.match(/\(.*\)/);
+      if (arrayAttr) {
+        // Get single match and remove parens
+        var strAttr = arrayAttr[0].replace(/[()]/g, '');
+        // Key value pairs
+        var kvps = strAttr.split(',');
+        lodashEach(kvps, function(kvp) {
+          parts = kvp.split('=');
+          if (parts.length === 1) {
+            lstate.attributes.push({
+              id: parts[0],
+              value: true
+            });
+          } else {
+            lstate.attributes.push({
+              id: parts[0],
+              value: parts[1]
+            });
+          }
+        });
+      }
+      lstates.push(lstate);
+    });
+    return createLayerArrayFromState(lstates, config);
+  } catch (e) {
+    console.warn('Error Parsing layers: ' + e);
+    console.log('reverting to default layers');
+    return resetLayers(config.defaults.startingLayers, config.layers);
+  }
 }
 const createLayerArrayFromState = function(state, config) {
   let layerArray = [];
