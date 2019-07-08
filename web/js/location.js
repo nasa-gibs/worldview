@@ -3,7 +3,10 @@ import { encode } from './modules/link/util';
 // legacy crutches
 // import { getLayersParameterSetup } from './modules/layers/util';
 import { serializeDate, tryCatchDate } from './modules/date/util';
-import { checkTourBuildTimestamp } from './modules/tour/util';
+import {
+  checkTourBuildTimestamp,
+  mapLocationToTourState
+} from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
 import { eventParse, serializeEvent } from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
@@ -70,6 +73,12 @@ export const mapLocationToState = (state, location) => {
       config
     );
     stateFromLocation = mapLocationToSidebarState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+    stateFromLocation = mapLocationToTourState(
       parameters,
       stateFromLocation,
       state,

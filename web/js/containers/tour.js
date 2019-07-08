@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import TourStart from '../components/tour/modal-tour-start';
 import TourInProgress from '../components/tour/modal-tour-in-progress';
 import TourComplete from '../components/tour/modal-tour-complete';
+import AlertUtil from '../components/util/alert';
+
 import {
   preloadPalettes,
   hasCustomTypePalette
@@ -37,14 +39,16 @@ class Tour extends React.Component {
     const storyOrder = props.storyOrder;
     const stories = props.stories;
     const currentStoryIndex =
-      lodashFindIndex(storyOrder, { id: props.currentStoryId }) || null;
+      lodashFindIndex(storyOrder, id => {
+        return id === props.currentStoryId;
+      }) || null;
     const currentStory =
       currentStoryIndex >= 0 ? stories[props.currentStoryId] : {};
     const steps = lodashGet(currentStory, 'steps') || [];
-
     this.state = {
-      modalStart: true,
-      modalInProgress: false,
+      modalStart: !props.currentStoryId,
+      showSupportAlert: props.currentStoryId && currentStoryIndex === -1,
+      modalInProgress: currentStoryIndex !== -1,
       modalComplete: false,
       currentStep: currentStoryIndex !== -1 ? 1 : 0,
       totalSteps: steps.length,
@@ -60,6 +64,7 @@ class Tour extends React.Component {
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
+    if (currentStory && currentStoryIndex !== -1) this.fetchMetadata(currentStory, 0);
   }
   toggleModalStart(e) {
     e.preventDefault();
@@ -222,6 +227,19 @@ class Tour extends React.Component {
     this.setState(DEFAULT_STATE);
     this.props.endTour();
   }
+  renderSupportAlert() {
+    return (
+      <AlertUtil
+        isOpen={true}
+        timeout={10000}
+        onDismiss={() => {
+          this.props.endTour();
+        }}
+        iconClassName=' '
+        message='Sorry, this tour is no longer supported.'
+      />
+    );
+  }
   render() {
     const {
       stories,
@@ -248,10 +266,14 @@ class Tour extends React.Component {
       modalStart,
       currentStoryIndex,
       description,
-      isLoadingMeta
+      isLoadingMeta,
+      showSupportAlert
     } = this.state;
     if (screenWidth < 740 || screenHeight < 450) {
       endTour();
+    }
+    if (showSupportAlert) {
+      return this.renderSupportAlert();
     }
     if (stories && isActive) {
       if (!modalStart && !modalInProgress && !modalComplete) {
