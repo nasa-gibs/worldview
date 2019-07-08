@@ -3,7 +3,7 @@
         "Reference Map": {
             "id": "reference-map",
             "title":    "Reference Map",
-            "subtitle": "OpenStreetMap.org",
+            "subtitle": "OpenStreetMap.org, Terra/MODIS",
             "multichoice": true,
             "sources": {
                 "OpenStreetMap.org": {
@@ -17,6 +17,15 @@
                         "Coastlines",
                         "Land_Mask",
                         "Land_Water_Map"
+                    ]
+                },
+                "Terra/MODIS": {
+                    "id": "terra-modis",
+                    "title": "Terra/MODIS",
+                    "description": "modis/LandWaterMask",
+                    "image": "",
+                    "settings": [
+                      "MODIS_Terra_L3_Land_Water_Mask"
                     ]
                 }
             }
