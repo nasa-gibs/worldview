@@ -167,7 +167,16 @@ const getParameters = function(config, parameters) {
                 : serializeDate(currentItemState);
         },
         parse: str => {
-          return tryCatchDate(str, now);
+          let time = tryCatchDate(str, now);
+          if (time instanceof Date) {
+            let startDate = new Date(config.startDate);
+            if (time < startDate) {
+              time = startDate;
+            } else if (time > now) {
+              time = now;
+            }
+          }
+          return time;
         }
       }
     },
