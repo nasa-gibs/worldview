@@ -955,6 +955,8 @@ class Timeline extends React.Component {
                       timelineEndDateLimit={timelineEndDateLimit}
                       frontDate={frontDate}
                       backDate={backDate}
+                      dateA={dateA}
+                      dateB={dateB}
                       draggerSelected={draggerSelected}
                       draggerTimeState={draggerTimeState}
                       draggerTimeStateB={draggerTimeStateB}
@@ -968,6 +970,7 @@ class Timeline extends React.Component {
                       updateDraggerDatePosition={this.updateDraggerDatePosition}
                       isCompareModeActive={isCompareModeActive}
                       isDraggerDragging={isDraggerDragging}
+                      isAnimationPlaying={isAnimationPlaying}
                     />
                     : null }
 
@@ -1106,7 +1109,7 @@ function mapStateToProps(state) {
   return {
     isTourActive: tour.active,
     isSmallScreen,
-    draggerSelected: isCompareA ? 'selected' : 'selectedB', // ! will work for dragger?
+    draggerSelected: isCompareA ? 'selected' : 'selectedB',
     hasSubdailyLayers,
     customSelected,
     isCompareModeActive,
