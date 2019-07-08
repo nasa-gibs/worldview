@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ModalFooter } from 'reactstrap';
-
+import { ModalFooter } from 'reactstrap';
+import Button from '../util/button';
 export class Notify extends React.Component {
   render() {
     const { bodyText, cancel, accept } = this.props;
@@ -11,12 +11,8 @@ export class Notify extends React.Component {
           <p>{bodyText}</p>
         </div>
         <ModalFooter>
-          <Button color="primary" onClick={cancel}>
-            Cancel
-          </Button>{' '}
-          <Button color="#fff" onClick={accept}>
-            OK
-          </Button>
+          <Button className="cancel-notify" text="Cancel" onClick={cancel} />
+          <Button className="accept-notify" text="OK" onClick={accept} />
         </ModalFooter>
       </React.Fragment>
     );

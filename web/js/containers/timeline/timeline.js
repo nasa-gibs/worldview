@@ -774,7 +774,8 @@ class Timeline extends React.Component {
       isSmallScreen,
       toggleActiveCompareState,
       parentOffset,
-      isTourActive
+      isTourActive,
+      isDataDownload
     } = this.props;
     let {
       initialLoadComplete,
@@ -853,6 +854,7 @@ class Timeline extends React.Component {
                   <AnimationButton
                     clickAnimationButton={this.clickAnimationButton}
                     disabled={animationDisabled}
+                    title={isCompareModeActive ? 'Animation feature is deactivated when Compare feature is active' : isDataDownload ? 'Animation feature is deactivated when Data Download feature is active' : ''}
                   />
                 </div>
 
@@ -1138,6 +1140,7 @@ function mapStateToProps(state) {
       !lodashGet(map, 'ui.selected.frameState_') ||
       sidebar.activeTab === 'download' ||
       compare.active,
+    isDataDownload: sidebar.activeTab === 'download',
     isAnimationPlaying: animation.isPlaying
   };
 }
@@ -1213,6 +1216,7 @@ Timeline.propTypes = {
   isAnimationPlaying: PropTypes.bool,
   isAnimationWidgetOpen: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
+  isDataDownload: PropTypes.bool,
   isSmallScreen: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,

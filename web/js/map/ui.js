@@ -185,13 +185,12 @@ export function mapui(models, config, store, ui) {
     }
     self.selected = self.proj[proj.id];
     var map = self.selected;
-    store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self });
+    let currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? map.getView().getRotation() : 0;
+    store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self, rotation: currentRotation });
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
     if (proj.id !== 'geographic' && proj.id !== 'webmerc') {
-      let currentRotation = map.getView().getRotation();
-      store.dispatch({ type: 'MAP/UPDATE_ROTATION', rotation: currentRotation });
       rotation.setResetButton(currentRotation);
     }
 
@@ -914,8 +913,9 @@ export function mapui(models, config, store, ui) {
       }, 200);
     });
     const onRenderComplete = () => {
-      store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self });
+      store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self, rotation: self.selected.getView().getRotation() });
       map.un('rendercomplete', onRenderComplete);
+      if (store.getState().data.active) ui.data.onActivate();
     };
     map.on('rendercomplete', onRenderComplete);
     map.on('click', function(e) {

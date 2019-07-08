@@ -10,7 +10,6 @@ module.exports = {
   gifDownloadIcon: '.animation-gif-dialog-wrapper .wv-button.gray',
   gifDownloadButton: '.animation-gif-dialog-wrapper .wv-button',
   gifResults: '.gif-results-dialog-case img',
-  gifResultsCloseButton: '.wv-gif-results button.ui-dialog-titlebar-close',
   animationWidget: '#wv-animation-widget',
   animationButton: '#animate-button',
 

@@ -43,10 +43,9 @@ module.exports = {
     client.click(ImageDownloadButton);
     client.pause(100);
     client.expect.element('#wv-image-resolution').to.not.be.present;
-    client.expect.element(ImageDownloadButton + ' #wv-image-button-check').to
-      .not.be.enabled;
+    client.assert.cssClassPresent(ImageDownloadButton, 'disabled');
     client.assert.attributeContains(
-      ImageDownloadButton + ' label',
+      ImageDownloadButton,
       'title',
       'You must exit comparison mode to use the snapshot feature'
     );
@@ -119,18 +118,22 @@ module.exports = {
     client.click('#closeactiveBMODIS_Aqua_CorrectedReflectance_TrueColor');
     client.pause(1000);
     client.click(localSelectors.compareButton);
-    client.waitForElementVisible('#guitarpick', TIME_LIMIT, function() {
-      client.expect.element('#activeB-Coastlines').to.be.visible;
-      client.expect.element(
-        '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor'
-      ).to.be.visible;
-      client.expect.element(
-        '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor'
-      ).to.not.be.present;
-      client.expect.element(
-        '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor'
-      ).to.not.be.present;
-    });
+    client.waitForElementNotPresent(
+      '.timeline-dragger.draggerA',
+      TIME_LIMIT,
+      function() {
+        client.expect.element('#activeB-Coastlines').to.be.visible;
+        client.expect.element(
+          '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor'
+        ).to.be.visible;
+        client.expect.element(
+          '#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor'
+        ).to.not.be.present;
+        client.expect.element(
+          '#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor'
+        ).to.not.be.present;
+      }
+    );
   },
   after: function(client) {
     client.end();

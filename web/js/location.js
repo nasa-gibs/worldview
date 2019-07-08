@@ -20,6 +20,7 @@ import { mapLocationToAnimationState } from './modules/animation/util';
 import { mapLocationToSidebarState } from './modules/sidebar/util';
 import util from './util/util';
 import update from 'immutability-helper';
+import { mapLocationToDataState } from './modules/data/util';
 
 /**
  * Override state with information from location.search when "REDUX-LOCATION-POP-ACTION"
@@ -47,6 +48,10 @@ export const mapLocationToState = (state, location) => {
       config
     );
     stateFromLocation = mapLocationToCompareState(
+      parameters,
+      stateFromLocation
+    );
+    stateFromLocation = mapLocationToDataState(
       parameters,
       stateFromLocation
     );
@@ -108,7 +113,7 @@ const getParameters = function(config, parameters) {
       options: {
         serializeNeedsGlobalState: false,
         setAsEmptyItem: true,
-        serialize: (currentItemState) => {
+        serialize: currentItemState => {
           return currentItemState
             ? util.toISOStringSeconds(currentItemState)
             : undefined;

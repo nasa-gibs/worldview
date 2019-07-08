@@ -30,7 +30,9 @@ export function dataMap(store, maps, dataUi, ui) {
   const subscribeToStore = function(action) {
     switch (action.type) {
       case CHANGE_PROJECTION:
-        return updateProjection(action.id);
+        return updateProjection();
+      case 'MAP/UPDATE_MAP_UI':
+        map = maps.selected;
     }
   };
   var init = function() {

@@ -27,7 +27,10 @@ export default function mapReducer(state = INITIAL_STATE, action) {
     case UPDATE_MAP_EXTENT:
       return update(state, { extent: { $set: action.extent } });
     case UPDATE_MAP_UI:
-      return update(state, { ui: { $set: action.ui } });
+      return lodashAssign({}, state, {
+        ui: action.ui,
+        rotation: action.rotation
+      });
     case UPDATE_MAP_ROTATION:
       return update(state, { rotation: { $set: action.rotation } });
     default:

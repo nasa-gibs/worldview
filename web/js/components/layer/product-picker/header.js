@@ -31,7 +31,8 @@ class ProductPickerHeader extends React.Component {
    * Go back to original screen
    * @method revertToInitialScreen
    */
-  revertToInitialScreen() {
+  revertToInitialScreen(e) {
+    e.preventDefault();
     this.props.updateListState('category');
     this.setState({ inputValue: '' });
   }
@@ -41,15 +42,8 @@ class ProductPickerHeader extends React.Component {
   }
   render() {
     const isAutoFocus = !util.browser.touchDevice;
-    const {
-      modalView,
-      selectedProjection,
-      listType,
-      category,
-      width
-    } = this.props;
+    const { selectedProjection, listType, category, width } = this.props;
     const isBreadCrumb =
-      !modalView &&
       selectedProjection === 'geographic' &&
       listType !== 'category' &&
       width > 650;
