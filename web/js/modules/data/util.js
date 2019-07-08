@@ -1,4 +1,5 @@
 import update from 'immutability-helper';
+import { find as lodashFind, get as lodashGet } from 'lodash';
 /**
  * Update sidebar state when location-pop action occurs
  *
@@ -16,7 +17,16 @@ export function mapLocationToDataState(
   if (parameters.download) {
     const productId = parameters.download;
     if (productId) {
-      if (!config.products[productId]) {
+      const activeString =
+        lodashGet(stateFromLocation, 'compare.activeString') ||
+        lodashGet(state, 'compare.activeString');
+      const activeLayers =
+        lodashGet(stateFromLocation, `layers.${activeString}`) ||
+        lodashGet(state, `layers.${activeString}`);
+      if (
+        !config.products[productId] ||
+        !lodashFind(activeLayers, { product: productId })
+      ) {
         console.warn('No such product: ' + productId);
         stateFromLocation = update(stateFromLocation, {
           data: { selectedProduct: { $set: '' } }
