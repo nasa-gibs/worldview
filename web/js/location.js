@@ -101,6 +101,11 @@ export const mapLocationToState = (state, location) => {
 const getParameters = function(config, parameters) {
   const now = config.pageLoadTime;
   const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
+  // If at the beginning of the day, wait on the previous day until GIBS
+  // catches up (about three hours)
+  let initialDate = now.getUTCHours() < 3
+    ? new Date(now).setUTCDate(now.getUTCDate() - 1)
+    : now;
   return {
     p: {
       stateKey: 'proj.id',
@@ -125,7 +130,7 @@ const getParameters = function(config, parameters) {
     },
     t: {
       stateKey: 'date.selected',
-      initialState: now,
+      initialState: new Date(initialDate),
       type: 'date',
       options: {
         serializeNeedsGlobalState: true,
