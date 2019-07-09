@@ -10,7 +10,8 @@ import {
   UPDATE_START_AND_END_DATE,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
-  TOGGLE_GIF
+  TOGGLE_GIF,
+  KEY_PRESS_ACTION
 } from './constants';
 
 export const defaultState = {
@@ -84,7 +85,7 @@ export function animationReducer(state = defaultState, action) {
         gifActive: !state.gifActive,
         isPlaying: false
       });
-    case 'ANIMATION_KEY_PRESS_ACTION':
+    case KEY_PRESS_ACTION:
       if (action.keyCode === 32 && state.isActive) {
         return lodashAssign({}, state, {
           isPlaying: !state.isPlaying

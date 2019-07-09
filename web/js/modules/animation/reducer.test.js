@@ -86,7 +86,7 @@ test('TOGGLE_GIF action toggles gifActive bool value', () => {
 test('KEY_PRESS_ACTION action toggles isPlaying bool when animation is active', () => {
   let updatedState = update(defaultState, { isActive: { $set: true } });
   const response = animationReducer(updatedState, {
-    type: 'KEY_PRESS_ACTION',
+    type: CONSTANTS.KEY_PRESS_ACTION,
     keyCode: 32
   });
   expect(updatedState.isPlaying).toBeFalsy();
@@ -94,7 +94,7 @@ test('KEY_PRESS_ACTION action toggles isPlaying bool when animation is active', 
 });
 test('KEY_PRESS_ACTION action does not toggle isPlaying bool when animation is inActive', () => {
   const response = animationReducer(defaultState, {
-    type: 'KEY_PRESS_ACTION',
+    type: CONSTANTS.KEY_PRESS_ACTION,
     keyCode: 32
   });
   expect(defaultState.isPlaying).toBeFalsy();
