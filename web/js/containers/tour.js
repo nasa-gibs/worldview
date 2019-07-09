@@ -21,18 +21,6 @@ import update from 'immutability-helper';
 import { history } from '../main';
 import util from '../util/util';
 
-const DEFAULT_STATE = {
-  modalStart: true,
-  modalInProgress: false,
-  modalComplete: false,
-  currentStep: 0,
-  totalSteps: 0,
-  metaLoaded: false,
-  isLoadingMeta: false,
-  currentStory: {},
-  currentStoryId: '',
-  currentStoryIndex: -1
-};
 class Tour extends React.Component {
   constructor(props) {
     super(props);
@@ -48,6 +36,7 @@ class Tour extends React.Component {
     this.state = {
       modalStart: !props.currentStoryId,
       showSupportAlert: props.currentStoryId && currentStoryIndex === -1,
+      showDisabledAlert: false,
       modalInProgress: currentStoryIndex !== -1,
       modalComplete: false,
       currentStep: currentStoryIndex !== -1 ? 1 : 0,
@@ -56,7 +45,8 @@ class Tour extends React.Component {
       isLoadingMeta: false,
       currentStory,
       currentStoryId: props.currentStoryId,
-      currentStoryIndex: currentStoryIndex
+      currentStoryIndex: currentStoryIndex,
+      tourEnded: false
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
@@ -224,19 +214,31 @@ class Tour extends React.Component {
   }
   endTour(e) {
     e.preventDefault();
-    this.setState(DEFAULT_STATE);
-    this.props.endTour();
+    if (!this.state.showDisabledAlert) {
+      this.props.endTour();
+    } else {
+      this.setState({ tourEnded: true });
+    }
   }
   renderSupportAlert() {
     return (
       <AlertUtil
         isOpen={true}
         timeout={10000}
-        onDismiss={() => {
-          this.props.endTour();
-        }}
+        onDismiss={this.props.endTour}
         iconClassName=' '
         message='Sorry, this tour is no longer supported.'
+      />
+    );
+  }
+  renderDisableAlert() {
+    return (
+      <AlertUtil
+        isOpen={true}
+        timeout={10000}
+        onDismiss={this.props.endTour}
+        iconClassName=' '
+        message="To view these tours again, click the 'Explore Worldview' link in the “i” menu."
       />
     );
   }
@@ -267,11 +269,15 @@ class Tour extends React.Component {
       currentStoryIndex,
       description,
       isLoadingMeta,
-      showSupportAlert
+      showSupportAlert,
+      showDisabledAlert,
+      tourEnded
     } = this.state;
     if (screenWidth < 740 || screenHeight < 450) {
       endTour();
     }
+    if (showDisabledAlert && tourEnded) return this.renderDisableAlert();
+
     if (showSupportAlert) {
       return this.renderSupportAlert();
     }
@@ -297,8 +303,14 @@ class Tour extends React.Component {
                 toggleModalComplete={this.toggleModalComplete}
                 selectTour={this.selectTour.bind(this)}
                 showTourAlert={showTourAlert}
-                hideTour={hideTour}
-                showTour={showTour}
+                hideTour={() => {
+                  hideTour();
+                  this.setState({ showDisabledAlert: true });
+                }}
+                showTour={() => {
+                  showTour();
+                  this.setState({ showDisabledAlert: false });
+                }}
                 endTour={this.endTour.bind(this)}
               />
             ) : modalInProgress ? (
