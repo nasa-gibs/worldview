@@ -49,6 +49,7 @@ import {
   find as lodashFind
 } from 'lodash';
 import { CLEAR_ROTATE } from '../modules/map/constants';
+import { getLeadingExtent } from '../modules/map/util';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -211,7 +212,7 @@ export function mapui(models, config, store, ui) {
       if (models.map.extent) {
         extent = models.map.extent;
       } else if (!models.map.extent && projId === 'geographic') {
-        extent = models.map.getLeadingExtent();
+        extent = getLeadingExtent(config.pageLoadTime);
       }
       if (extent) {
         map.getView().fit(extent, {

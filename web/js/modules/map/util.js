@@ -1,4 +1,3 @@
-import util from '../../util/util';
 import { encode } from '../link/util';
 import * as olExtent from 'ol/extent';
 import {
@@ -16,7 +15,7 @@ export function getMapParameterSetup(
   errors
 ) {
   models.map.load(legacyState, errors);
-  const leadingExtent = getLeadingExtent();
+  const leadingExtent = getLeadingExtent(config.pageLoadTime);
   return {
     v: {
       stateKey: 'map.extent',
@@ -91,8 +90,23 @@ export function mapIsExtentValid(extent) {
   });
   return valid;
 }
-export function getLeadingExtent() {
-  var curHour = util.now().getUTCHours();
+/*
+ * Set default extent according to time of day:
+ *
+ * at 00:00 UTC, start at far eastern edge of
+ * map: "20.6015625,-46.546875,179.9296875,53.015625"
+ *
+ * at 23:00 UTC, start at far western edge of map:
+ * "-179.9296875,-46.546875,-20.6015625,53.015625"
+ *
+ * @method getLeadingExtent
+ * @static
+ * @param {Object} Time
+ *
+ * @returns {object} Extent Array
+ */
+export function getLeadingExtent(loadtime) {
+  var curHour = loadtime.getUTCHours();
 
   // For earlier hours when data is still being filled in, force a far eastern perspective
   if (curHour < 3) {
