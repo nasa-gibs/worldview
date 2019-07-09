@@ -70,18 +70,24 @@ export function mapModel(models, config) {
     if (state.v) {
       const projId = state.p ? state.p : 'geographic';
       var proj = config.projections[projId];
-      var extent = state.v;
-      var maxExtent = proj.maxExtent;
+      if (proj) {
+        var extent = state.v;
+        var maxExtent = proj.maxExtent;
 
-      if (proj.id === 'geographic') {
-        proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
-      }
-      if (intersects(extent, maxExtent)) {
-        self.extent = state.v;
+        if (proj.id === 'geographic') {
+          proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
+        }
+        if (intersects(extent, maxExtent)) {
+          self.extent = state.v;
+        } else {
+          self.extent = lodashClone(proj.maxExtent);
+          errors.push({
+            message: 'Extent outside of range'
+          });
+        }
       } else {
-        self.extent = lodashClone(proj.maxExtent);
         errors.push({
-          message: 'Extent outside of range'
+          message: 'Projection does not exist'
         });
       }
     }

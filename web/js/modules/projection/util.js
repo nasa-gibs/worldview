@@ -11,6 +11,10 @@ export function getProjInitialState(config) {
     selected: selected || {}
   };
 }
+export function parseProjection(str, config) {
+  const exists = !!lodashGet(config, `projections.${str}`);
+  return exists ? str : 'geographic';
+}
 /**
  * Update 'proj.selected' object from config based
  * on updated states `proj.id` value
