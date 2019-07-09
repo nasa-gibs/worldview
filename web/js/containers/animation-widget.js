@@ -5,6 +5,7 @@ import {
   find as lodashFind,
   get as lodashGet
 } from 'lodash';
+import util from '../util/util';
 import ErrorBoundary from './error-boundary';
 import PropTypes from 'prop-types';
 import Slider, { Handle } from 'rc-slider';
@@ -35,6 +36,7 @@ import {
   changeFrameRate,
   changeStartDate,
   changeEndDate,
+  changeStartAndEndDate,
   toggleComponentGifActive
 } from '../modules/animation/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
@@ -177,6 +179,24 @@ class AnimationWidget extends React.Component {
       onZoomSelect(customDelta, customInterval, true);
     }
   }
+
+  /*
+   * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
+   * update global store startDate, endDate, and isPlaying
+   *
+   * @method onPushPlay
+   *
+   * @return {void}
+   */
+  onPushPlay = () => {
+    const { onUpdateStartAndEndDate, onPushPlay } = this.props;
+    // zero start and end dates to UTC 00:00:00
+    let startDate = util.clearTimeUTC(this.props.startDate);
+    let endDate = util.clearTimeUTC(this.props.endDate);
+    onUpdateStartAndEndDate(startDate, endDate);
+    onPushPlay();
+  }
+
   render() {
     const {
       hasSubdailyLayers,
@@ -189,7 +209,6 @@ class AnimationWidget extends React.Component {
       sliderLabel,
       startDate,
       endDate,
-      onPushPlay,
       onPushPause,
       isActive,
       interval,
@@ -255,7 +274,7 @@ class AnimationWidget extends React.Component {
 
             <PlayButton
               playing={isPlaying}
-              play={onPushPlay}
+              play={this.onPushPlay}
               pause={onPushPause}
             />
             <LoopButton looping={looping} onLoop={this.onLoop} />
@@ -472,6 +491,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onUpdateEndDate(date) {
     dispatch(changeEndDate(date));
+  },
+  onUpdateStartAndEndDate: (startDate, endDate) => {
+    dispatch(changeStartAndEndDate(startDate, endDate));
   }
 });
 
@@ -514,6 +536,7 @@ AnimationWidget.propTypes = {
   onPushPlay: PropTypes.func,
   onSlide: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
+  onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
   onZoomSelect: PropTypes.func,
   promiseImageryForTime: PropTypes.func,

@@ -511,12 +511,12 @@ class Timeline extends React.Component {
   }
 
   /**
-  * @desc handle animation dragger location update and state update
+  * @desc handle animation dragger location and date state update
   * @param {String} startDate
   * @param {String} endDate
   * @returns {void}
   */
-  animationDraggerDateUpdate = (startDate, endDate) => {
+  animationDraggerDateUpdateLocal = (startDate, endDate) => {
     let { position, transformX } = this.state;
     let { timeScale } = this.props;
 
@@ -533,6 +533,16 @@ class Timeline extends React.Component {
       animationStartLocationDate: startDate,
       animationEndLocationDate: endDate
     });
+  }
+
+  /**
+  * @desc handle animation dragger location and date state update and global date update
+  * @param {String} startDate
+  * @param {String} endDate
+  * @returns {void}
+  */
+  animationDraggerDateUpdate = (startDate, endDate) => {
+    this.animationDraggerDateUpdateLocal(startDate, endDate);
     this.debounceOnUpdateStartAndEndDate(startDate, endDate);
   }
 
@@ -623,6 +633,11 @@ class Timeline extends React.Component {
       customIntervalValue,
       customIntervalZoomLevel
     } = this.props;
+
+    // handle update animation positioning and local state from play button zeroing
+    if (!prevProps.isAnimationPlaying && this.props.isAnimationPlaying) {
+      this.animationDraggerDateUpdateLocal(animStartLocationDate, animEndLocationDate);
+    }
 
     // handle location update triggered from animation start/end date change from animation widget
     if (isAnimationWidgetOpen) {
