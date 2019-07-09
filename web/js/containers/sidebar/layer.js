@@ -5,7 +5,10 @@ import { Draggable } from 'react-beautiful-dnd';
 import util from '../../util/util';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import googleTagManager from 'googleTagManager';
-import { getPalette, getPaletteLegends } from '../../modules/palettes/selectors';
+import {
+  getPalette,
+  getPaletteLegends
+} from '../../modules/palettes/selectors';
 import { openCustomContent } from '../../modules/modal/actions';
 import LayerInfo from '../../components/layer/info/info';
 import LayerSettings from '../../components/layer/settings/settings';
@@ -299,7 +302,7 @@ function mapStateToProps(state, ownProps) {
     isLoading: palettes.isLoading[paletteName],
     renderedPalette: renderedPalettes[paletteName],
     layerGroupName,
-    isMobile: state.browser.is.small,
+    isMobile: state.browser.lessThan.medium,
     hasPalette,
     getPalette: (layerId, index) => {
       return getPalette(layer.id, index, layerGroupName, state);
@@ -324,7 +327,8 @@ const mapDispatchToProps = dispatch => ({
         headerText: title || 'Layer Options',
         backdrop: false,
         bodyComponent: LayerSettings,
-        modalClassName: 'layer-settings-modal',
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: ' layer-info-settings-modal layer-settings-modal',
         timeout: 150,
         bodyComponentProps: {
           layer: layer
@@ -341,7 +345,8 @@ const mapDispatchToProps = dispatch => ({
         headerText: title || 'Layer Description',
         backdrop: false,
         bodyComponent: LayerInfo,
-        modalClassName: 'layer-info-modal',
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: ' layer-info-settings-modal layer-info-modal ',
         timeout: 150,
         bodyComponentProps: {
           layer: layer

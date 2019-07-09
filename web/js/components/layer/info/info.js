@@ -69,35 +69,40 @@ class LayerInfo extends React.Component {
       : [];
     return (
       <div id="layer-description" className="layer-description">
-        <div id="layer-date-range" className="layer-date-range">
-          <span id={layerId + '-startDate'} className="layer-date-start">
-            {layer.startDate
-              ? 'Temporal coverage: ' +
-                this.configureDate(
-                  layer.period,
-                  layer.startDate,
-                  layer.dateRanges
-                )
-              : ''}
-          </span>
-          <span id={layerId + '-endDate'} className="layer-date-end">
-            {layer.startDate && layer.endDate
-              ? ' - ' + this.configureDate(
-                layer.period,
-                layer.endDate,
-                layer.dateRanges
-              )
-              : layer.startDate
-                ? ' - Present'
+        {layer.startDate || layer.endDate ? (
+          <div id="layer-date-range" className="layer-date-range">
+            <span id={layerId + '-startDate'} className="layer-date-start">
+              {layer.startDate
+                ? 'Temporal coverage: ' +
+                  this.configureDate(
+                    layer.period,
+                    layer.startDate,
+                    layer.dateRanges
+                  )
                 : ''}
-          </span>
+            </span>
+            <span id={layerId + '-endDate'} className="layer-date-end">
+              {layer.startDate && layer.endDate
+                ? ' - ' +
+                  this.configureDate(
+                    layer.period,
+                    layer.endDate,
+                    layer.dateRanges
+                  )
+                : layer.startDate
+                  ? ' - Present'
+                  : ''}
+            </span>
 
-          {hasLayerDateRange && dateRanges.overlap === false ? (
-            <DateRanges layer={layer} dateRanges={dateRanges} />
-          ) : (
-            ''
-          )}
-        </div>
+            {hasLayerDateRange && dateRanges.overlap === false ? (
+              <DateRanges layer={layer} dateRanges={dateRanges} />
+            ) : (
+              ''
+            )}
+          </div>
+        ) : (
+          ''
+        )}
         {metaData ? (
           <div
             id="layer-metadata"
