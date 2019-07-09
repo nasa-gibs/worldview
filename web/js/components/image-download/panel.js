@@ -81,6 +81,7 @@ export default class ImageResSelection extends React.Component {
     this.setState({ debugUrl: dlURL });
   }
   handleChange(type, value) {
+    const { onPanelChange } = this.props;
     if (type === 'resolution') {
       this.setState({
         resolution: value
@@ -94,6 +95,7 @@ export default class ImageResSelection extends React.Component {
         fileType: value
       });
     }
+    onPanelChange(type, value);
   }
   _renderFileTypeSelect() {
     if (this.props.fileTypeOptions) {
@@ -199,6 +201,7 @@ ImageResSelection.propTypes = {
   isWorldfile: PropTypes.string,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,
+  onPanelChange: PropTypes.func,
   projection: PropTypes.object,
   resolution: PropTypes.string,
   resolutions: PropTypes.object,

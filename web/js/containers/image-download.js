@@ -6,7 +6,7 @@ import Crop from '../components/util/image-crop';
 import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import * as olProj from 'ol/proj';
-
+import { debounce as lodashDebounce } from 'lodash';
 import {
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
@@ -21,6 +21,10 @@ import {
   fileTypesGeo,
   fileTypesPolar
 } from '../modules/image-download/constants';
+import {
+  onPanelChange,
+  updateBoundaries
+} from '../modules/image-download/actions';
 
 const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 
@@ -29,14 +33,22 @@ class ImageDownloadContainer extends Component {
     super(props);
     const screenHeight = props.screenHeight;
     const screenWidth = props.screenWidth;
+    const boundaryProps = props.boundaries;
     this.state = {
+      fileType: props.fileType,
+      resolution: props.resolution,
+      isWorldfile: props.isWorldfile,
       boundaries: {
-        x: screenWidth / 2 - 100,
-        y: screenHeight / 2 - 100,
-        x2: screenWidth / 2 + 100,
-        y2: screenHeight / 2 + 100
+        x: boundaryProps.x || screenWidth / 2 - 100,
+        y: boundaryProps.y || screenHeight / 2 - 100,
+        x2: boundaryProps.x2 || screenWidth / 2 + 100,
+        y2: boundaryProps.y2 || screenHeight / 2 + 100
       }
     };
+    this.debounceBoundaryUpdate = lodashDebounce(
+      this.props.onBoundaryChange,
+      200
+    );
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
   }
   onBoundaryChange(boundaries) {
@@ -45,14 +57,17 @@ class ImageDownloadContainer extends Component {
     const y = getPixelFromPercentage(screenHeight, boundaries.y);
     const x2 = x + getPixelFromPercentage(screenWidth, boundaries.width);
     const y2 = y + getPixelFromPercentage(screenHeight, boundaries.height);
+    const newBoundaries = {
+      x: x,
+      y: y,
+      x2: x2,
+      y2: y2
+    };
+
     this.setState({
-      boundaries: {
-        x: x,
-        y: y,
-        x2: x2,
-        y2: y2
-      }
+      boundaries: newBoundaries
     });
+    this.debounceBoundaryUpdate(newBoundaries);
   }
   render() {
     const {
@@ -63,9 +78,10 @@ class ImageDownloadContainer extends Component {
       screenWidth,
       screenHeight,
       date,
-      getLayers
+      getLayers,
+      onPanelChange
     } = this.props;
-    const { boundaries } = this.state;
+    const { boundaries, resolution, isWorldfile, fileType } = this.state;
     const { x, y, x2, y2 } = boundaries;
     const isGeoProjection = proj.id === 'geographic';
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
@@ -78,23 +94,28 @@ class ImageDownloadContainer extends Component {
     const geolonlat1 = olProj.transform(lonlats[0], crs, 'EPSG:4326');
     const geolonlat2 = olProj.transform(lonlats[1], crs, 'EPSG:4326');
 
-    const resolution = imageUtilCalculateResolution(
-      Math.round(map.ui.selected.getView().getZoom()),
-      isGeoProjection,
-      proj.selected.resolutions
-    );
+    const newResolution =
+      resolution ||
+      imageUtilCalculateResolution(
+        Math.round(map.ui.selected.getView().getZoom()),
+        isGeoProjection,
+        proj.selected.resolutions
+      );
     return (
       <ErrorBoundary>
         <Panel
           projection={proj}
           fileTypes={fileTypes}
+          fileType={fileType}
           resolutions={resolutions}
           lonlats={lonlats}
-          resolution={resolution}
+          resolution={newResolution}
+          isWorldfile={isWorldfile}
           date={date}
           url={url}
           crs={crs}
           getLayers={getLayers}
+          onPanelChange={onPanelChange}
         />
         <Crop
           x={getPercentageFromPixel(screenWidth, x)}
@@ -127,7 +148,17 @@ class ImageDownloadContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { config, proj, browser, layers, compare, date, map } = state;
+  const {
+    config,
+    proj,
+    browser,
+    layers,
+    compare,
+    date,
+    map,
+    imageDownload
+  } = state;
+  const { isWorldfile, fileType, resolution, boundaries } = imageDownload;
   const { screenWidth, screenHeight } = browser;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   let url = DEFAULT_URL;
@@ -145,6 +176,10 @@ function mapStateToProps(state) {
     map,
     screenWidth,
     screenHeight,
+    isWorldfile,
+    fileType,
+    resolution,
+    boundaries,
     date: date[activeDateStr],
     getLayers: () => {
       return getLayers(
@@ -161,6 +196,12 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   onClose: () => {
     dispatch(onToggle());
+  },
+  onPanelChange: (type, value) => {
+    dispatch(onPanelChange(type, value));
+  },
+  onBoundaryChange: obj => {
+    dispatch(updateBoundaries(obj));
   }
 });
 
@@ -169,13 +210,23 @@ export default connect(
   mapDispatchToProps
 )(ImageDownloadContainer);
 
+ImageDownloadContainer.defualtProps = {
+  fileType: 'image/jpeg'
+};
 ImageDownloadContainer.propTypes = {
+  fileType: PropTypes.string.isRequired,
   map: PropTypes.object.isRequired,
+  onBoundaryChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  onPanelChange: PropTypes.func.isRequired,
   proj: PropTypes.object.isRequired,
   url: PropTypes.string.isRequired,
+  boundaries: PropTypes.object,
   date: PropTypes.object,
   getLayers: PropTypes.func,
+  isWorldfile: PropTypes.bool,
+  resolution: PropTypes.string,
   screenHeight: PropTypes.number,
-  screenWidth: PropTypes.number
+  screenWidth: PropTypes.number,
+  worldfile: PropTypes.bool
 };
