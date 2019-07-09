@@ -38,9 +38,7 @@ export function animationReducer(state = defaultState, action) {
         startDate: state.startDate
           ? state.startDate
           : util.dateAdd(action.date, 'day', -7),
-        endDate: state.endDate
-          ? state.endDate
-          : action.date
+        endDate: state.endDate ? state.endDate : action.date
       });
     case EXIT_ANIMATION:
       return lodashAssign({}, state, {
@@ -86,7 +84,7 @@ export function animationReducer(state = defaultState, action) {
         gifActive: !state.gifActive,
         isPlaying: false
       });
-    case 'KEY_PRESS_ACTION':
+    case 'ANIMATION_KEY_PRESS_ACTION':
       if (action.keyCode === 32 && state.isActive) {
         return lodashAssign({}, state, {
           isPlaying: !state.isPlaying

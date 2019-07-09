@@ -75,6 +75,7 @@ import '../css/modal.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
 import '../pages/css/document.css';
+import { keyPress } from './modules/key-press/actions';
 
 class App extends React.Component {
   constructor(props) {
@@ -173,7 +174,7 @@ function mapStateToProps(state, ownProps) {
 }
 const mapDispatchToProps = dispatch => ({
   keyPressAction: keyCode => {
-    dispatch({ type: 'KEY_PRESS_ACTION', keyCode });
+    dispatch(keyPress(keyCode));
   },
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
