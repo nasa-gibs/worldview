@@ -83,7 +83,7 @@
     "chromedriver": "^2.46.0",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.2",
-    "core-js": "^2.5.7",
+    "core-js": "^2.6.9",
     "cross-env": "^5.2.0",
     "css-hot-loader": "^1.4.1",
     "css-loader": "^1.0.0",
