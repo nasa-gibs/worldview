@@ -23,12 +23,42 @@ import {
   setStyleFunction
 } from '../modules/vector-styles/selectors';
 
-export function mapLayerBuilder(models, config, cache, mapUi, store) {
+import {
+  OPEN_CUSTOM as OPEN_CUSTOM_MODAL,
+  CLOSE as CLOSE_MODAL,
+  TOGGLE as TOGGLE_MODAL
+} from '../modules/modal/constants';
+import { TOGGLE_GIF, EXIT_ANIMATION } from '../modules/animation/constants';
+export function mapLayerBuilder(models, config, cache, ui, store) {
   var self = {};
-  self.init = function(Parent) {
+  self.hidingWrap = false;
+
+  const subscribeToStore = function(action) {
+    switch (action.type) {
+      case TOGGLE_MODAL:
+      case CLOSE_MODAL:
+        if (self.hidingWrap) {
+          return showWrap();
+        }
+        return;
+      case OPEN_CUSTOM_MODAL:
+        if (action.key === 'TOOLBAR_SNAPSHOT') {
+          return hideWrap();
+        }
+        return;
+      case TOGGLE_GIF:
+      case EXIT_ANIMATION:
+        const active = store.getState().animation.gifActive;
+        if (active) {
+          return hideWrap();
+        } else if (self.hidingWrap) {
+          return showWrap();
+        }
+    }
+  };
+  self.init = function() {
     self.extentLayers = [];
-    mapUi.events.on('selecting', hideWrap);
-    mapUi.events.on('selectiondone', showWrap);
+    ui.events.on('last-action', subscribeToStore);
   };
   /**
    * Create a new OpenLayers Layer
@@ -263,7 +293,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
       date = self.closestDate(def, options);
       date = new Date(date.getTime());
     }
-    if (day && (def.period !== 'subdaily')) {
+    if (day && def.period !== 'subdaily') {
       date = util.dateAdd(date, 'day', day);
     }
 
@@ -506,6 +536,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
     var layers;
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+
     layers = state.layers[state.compare.activeString];
 
     for (var i = 0, len = layers.length; i < len; i++) {
@@ -525,6 +556,7 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
         layer.setExtent([-180, -90, 180, 90]);
       }
     }
+    self.hidingWrap = true;
   };
   var showWrap = function() {
     var layer;
@@ -548,7 +580,8 @@ export function mapLayerBuilder(models, config, cache, mapUi, store) {
         layer.setExtent([-250, -90, 250, 90]);
       }
     }
+    self.hidingWrap = false;
   };
-  self.init(mapUi);
+  self.init();
   return self;
 }

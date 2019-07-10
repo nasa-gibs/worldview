@@ -77,7 +77,7 @@ export function mapui(models, config, store, ui) {
     models,
     config,
     cache,
-    self,
+    ui,
     store
   );
   self.layerKey = layerBuilder.layerKey;
