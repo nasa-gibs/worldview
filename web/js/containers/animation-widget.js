@@ -181,7 +181,6 @@ class AnimationWidget extends React.Component {
   }
 
   /*
-   * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
    * update global store startDate, endDate, and isPlaying
    *
    * @method onPushPlay
@@ -189,12 +188,49 @@ class AnimationWidget extends React.Component {
    * @return {void}
    */
   onPushPlay = () => {
-    const { onUpdateStartAndEndDate, onPushPlay } = this.props;
-    // zero start and end dates to UTC 00:00:00
-    let startDate = util.clearTimeUTC(this.props.startDate);
-    let endDate = util.clearTimeUTC(this.props.endDate);
+    const {
+      onUpdateStartAndEndDate,
+      onPushPlay
+    } = this.props;
+    const {
+      startDate,
+      endDate
+    } = this.zeroDates();
     onUpdateStartAndEndDate(startDate, endDate);
     onPushPlay();
+  }
+
+  /*
+   * Zeroes start and end animation dates to UTC 00:00:00 for predictable animation range
+   * subdaily intervals retain hours and minutes
+   *
+   * @method zeroDates
+   *
+   * @return {Object}
+    * @param {Object} JS Date - startDate
+    * @param {Object} JS Date - endDate
+   */
+  zeroDates = () => {
+    let {
+      interval,
+      startDate,
+      endDate
+    } = this.props;
+    if (interval === 'minute' || interval === 'hour') {
+      // for subdaily, zero start and end dates to UTC XX:YY:00:00
+      startDate.setUTCSeconds(0);
+      startDate.setUTCMilliseconds(0);
+      endDate.setUTCSeconds(0);
+      endDate.setUTCMilliseconds(0);
+    } else {
+      // for nonsubdaily, zero start and end dates to UTC 00:00:00:00
+      startDate = util.clearTimeUTC(startDate);
+      endDate = util.clearTimeUTC(endDate);
+    }
+    return {
+      startDate,
+      endDate
+    };
   }
 
   render() {
