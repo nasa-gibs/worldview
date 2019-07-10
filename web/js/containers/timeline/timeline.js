@@ -628,14 +628,21 @@ class Timeline extends React.Component {
       animEndLocationDate,
       dateA,
       dateB,
+      isAnimationPlaying,
       isAnimationWidgetOpen,
+      isGifActive,
+      isTourActive,
       customSelected,
       customIntervalValue,
-      customIntervalZoomLevel
+      customIntervalZoomLevel,
+      timeScale,
+      timeScaleChangeUnit,
+      deltaChangeAmt
     } = this.props;
 
-    // handle update animation positioning and local state from play button zeroing
-    if (!prevProps.isAnimationPlaying && this.props.isAnimationPlaying) {
+    // handle update animation positioning and local state from play button/gif creation
+    if ((!prevProps.isAnimationPlaying && isAnimationPlaying) ||
+        (!prevProps.isGifActive && isGifActive)) {
       this.animationDraggerDateUpdateLocal(animStartLocationDate, animEndLocationDate);
     }
 
@@ -644,7 +651,7 @@ class Timeline extends React.Component {
       if (prevStartLocationDate && prevEndLocationDate) {
         if (prevStartLocationDate.getTime() !== animStartLocationDate.getTime() ||
             prevEndLocationDate.getTime() !== animEndLocationDate.getTime() ||
-            (prevState.frontDate !== this.state.frontDate && !this.props.isAnimationPlaying)) {
+            (prevState.frontDate !== this.state.frontDate && !isAnimationPlaying)) {
           this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
         }
       }
@@ -670,10 +677,10 @@ class Timeline extends React.Component {
     // on tour page change, will update interval to selectedzoom if differs
     // (e.g., 'month' zoom will default to 'month' interval)
     // TODO: investigate how to handle this page update better - this limits functionality when in tour mode
-    if (this.props.isTourActive) {
-      if (this.props.timeScale !== prevProps.timeScale && prevProps.timeScaleChangeUnit !== this.props.timeScale) {
-        if (this.props.timeScale !== this.props.timeScaleChangeUnit && !this.props.customSelected) {
-          this.props.selectInterval(this.props.deltaChangeAmt, timeScaleToNumberKey[this.props.timeScale], false);
+    if (isTourActive) {
+      if (timeScale !== prevProps.timeScale && prevProps.timeScaleChangeUnit !== timeScale) {
+        if (timeScale !== timeScaleChangeUnit && !customSelected) {
+          this.props.selectInterval(deltaChangeAmt, timeScaleToNumberKey[timeScale], false);
         }
       }
     }
@@ -1153,7 +1160,8 @@ function mapStateToProps(state) {
       sidebar.activeTab === 'download' ||
       compare.active,
     isDataDownload: sidebar.activeTab === 'download',
-    isAnimationPlaying: animation.isPlaying
+    isAnimationPlaying: animation.isPlaying,
+    isGifActive: animation.gifActive
   };
 }
 
@@ -1229,6 +1237,7 @@ Timeline.propTypes = {
   isAnimationWidgetOpen: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
   isDataDownload: PropTypes.bool,
+  isGifActive: PropTypes.bool,
   isSmallScreen: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,

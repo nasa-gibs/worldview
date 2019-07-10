@@ -104,10 +104,16 @@ class AnimationWidget extends React.Component {
   openGif() {
     const {
       toggleGif,
+      onUpdateStartAndEndDate,
       hasCustomPalettes,
       isRotated,
       hasGraticule
     } = this.props;
+    const {
+      startDate,
+      endDate
+    } = this.zeroDates();
+
     this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice').then(
       () => {
         this.getPromise(
@@ -122,6 +128,8 @@ class AnimationWidget extends React.Component {
             clearGraticule,
             'Remove Graticule?'
           ).then(() => {
+            onUpdateStartAndEndDate(startDate, endDate);
+          }).then(() => {
             toggleGif();
           });
         });
