@@ -3,7 +3,9 @@ import * as olExtent from 'ol/extent';
 import {
   each as lodashEach,
   isUndefined as lodashIsUndefined,
-  map as lodashMap
+  map as lodashMap,
+  get as lodashGet,
+  isEqual as lodashIsEqual
 } from 'lodash';
 import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 import Promise from 'bluebird';
@@ -23,6 +25,7 @@ export function getMapParameterSetup(
       type: 'array',
       options: {
         delimiter: ',',
+        serializeNeedsGlobalState: true,
         parse: state => {
           var extent = lodashMap(state.split(','), function(str) {
             return parseFloat(str);
@@ -38,9 +41,16 @@ export function getMapParameterSetup(
           }
         },
         serialize: (currentItemState, currentState) => {
+          const rendered = lodashGet(currentState, 'map.rendered');
+          if (!rendered) return undefined;
+          const actualLeadingExtent = lodashGet(
+            currentState,
+            'map.leadingExtent'
+          );
           const extent = mapIsExtentValid(currentItemState)
             ? currentItemState
             : leadingExtent;
+          if (lodashIsEqual(actualLeadingExtent, extent)) return undefined;
           return encode(extent);
         }
       }
