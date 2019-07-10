@@ -10,7 +10,10 @@ import { TabContent, TabPane } from 'reactstrap';
 import CollapsedButton from '../../components/sidebar/collapsed-button';
 import NavCase from '../../components/sidebar/nav/nav-case';
 import googleTagManager from 'googleTagManager';
-import { getCheckerboard, loadCustom as loadCustomPalette } from '../../modules/palettes/util';
+import {
+  getCheckerboard,
+  loadCustom as loadCustomPalette
+} from '../../modules/palettes/util';
 import { loadedCustomPalettes } from '../../modules/palettes/actions';
 import { getLayers } from '../../modules/layers/selectors';
 import ErrorBoundary from '../error-boundary';
@@ -102,8 +105,16 @@ class Sidebar extends React.Component {
     }
   }
   toggleSidebar() {
-    const { isCollapsed, collapseExpandToggle, hasLocalStorage } = this.props;
+    const {
+      isCollapsed,
+      collapseExpandToggle,
+      hasLocalStorage,
+      isMobile
+    } = this.props;
     var isNowCollapsed = !isCollapsed;
+    if (isMobile) {
+      return collapseExpandToggle();
+    }
     googleTagManager.pushEvent({
       event: 'sidebar_chevron'
     });
@@ -219,23 +230,24 @@ class Sidebar extends React.Component {
 function mapStateToProps(state) {
   const { browser, sidebar, compare, layers, config, modal, animation } = state;
   const { screenHeight } = browser;
-  const { activeTab, isCollapsed } = sidebar;
+  const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
   const numberOfLayers = getLayers(layers[activeString], {}, state).length;
   const tabTypes = getActiveTabs(config);
-
+  const isMobile = browser.lessThan.medium;
   return {
     activeTab,
-    isMobile: browser.lessThan.medium,
+    isMobile,
     hasLocalStorage: util.browser.localStorage,
     screenHeight: screenHeight,
     isCompareMode: compare.active,
     activeString,
     numberOfLayers,
-    isCollapsed:
-      isCollapsed ||
-      (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') ||
-      animation.gifActive, // Collapse when Image download / GIF is open,
+    isCollapsed: isMobile
+      ? mobileCollapsed
+      : isCollapsed ||
+        (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') ||
+        animation.gifActive, // Collapse when Image download / GIF is open,
     tabTypes,
     config
   };

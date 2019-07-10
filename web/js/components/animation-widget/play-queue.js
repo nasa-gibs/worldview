@@ -493,7 +493,6 @@ class PlayAnimation extends React.Component {
       if (!this.mounted) return clearInterval(this.interval);
       this.shiftCache();
       this.checkQueue(queueLength, currentPlayingDate);
-
       if (this.props.isPlaying) {
         selectDate(util.parseDateUTC(currentPlayingDate));
       }
