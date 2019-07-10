@@ -929,6 +929,8 @@ export function mapui(models, config, store, ui) {
     };
     map.on('rendercomplete', onRenderComplete);
     map.on('click', function(e) {
+      const { data } = store.getState();
+      if (data.active) return;
       var metaTitle;
       var def;
       var metaArray = [];
