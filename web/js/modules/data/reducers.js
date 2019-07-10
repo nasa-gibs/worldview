@@ -4,10 +4,12 @@ import {
   DATA_GRANULE_UNSELECT
 } from './constants';
 import { assign as lodashAssign } from 'lodash';
+import { CHANGE_TAB } from '../sidebar/constants';
 export const defaultDataState = {
   selectedProduct: '',
   selectedGranules: {},
-  prefer: 'science'
+  prefer: 'science',
+  active: false
 };
 export default function dataDownloadReducer(state = defaultDataState, action) {
   switch (action.type) {
@@ -19,6 +21,10 @@ export default function dataDownloadReducer(state = defaultDataState, action) {
     case DATA_GRANULE_UNSELECT:
       return lodashAssign({}, state, {
         selectedGranules: action.selectedGranules
+      });
+    case CHANGE_TAB:
+      return lodashAssign({}, state, {
+        active: action.activeTab === 'download'
       });
     default:
       return state;

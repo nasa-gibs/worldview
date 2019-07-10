@@ -52,10 +52,10 @@ export function dataUi(store, ui, config) {
       case DATA_CONSTANTS.DATA_GET_DATA_CLICK:
         return self.showDownloadList();
       case DATA_CONSTANTS.DATA_GRANULE_SELECT:
-        self.events.on('granuleSelect', action.granule);
+        self.events.trigger('granuleSelect', action.granule);
         return updateSelection();
       case DATA_CONSTANTS.DATA_GRANULE_UNSELECT:
-        self.events.on('granuleUnselect', action.granule);
+        self.events.trigger('granuleUnselect', action.granule);
         return updateSelection();
       case LAYER_CONSTANTS.REMOVE_LAYER:
       case LAYER_CONSTANTS.RESET_LAYERS:
