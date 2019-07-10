@@ -3,11 +3,17 @@ import { encode } from './modules/link/util';
 // legacy crutches
 // import { getLayersParameterSetup } from './modules/layers/util';
 import { serializeDate, tryCatchDate } from './modules/date/util';
-import { checkTourBuildTimestamp } from './modules/tour/util';
+import {
+  checkTourBuildTimestamp,
+  mapLocationToTourState
+} from './modules/tour/util';
 import { getMapParameterSetup } from './modules/map/util';
 import { eventParse, serializeEvent } from './modules/natural-events/util';
 import { mapLocationToCompareState } from './modules/compare/util';
-import { mapLocationToProjState } from './modules/projection/util';
+import {
+  mapLocationToProjState,
+  parseProjection
+} from './modules/projection/util';
 import {
   layersParse12,
   serializeLayers,
@@ -53,7 +59,9 @@ export const mapLocationToState = (state, location) => {
     );
     stateFromLocation = mapLocationToDataState(
       parameters,
-      stateFromLocation
+      stateFromLocation,
+      state,
+      config
     );
     stateFromLocation = mapLocationToPaletteState(
       parameters,
@@ -68,6 +76,12 @@ export const mapLocationToState = (state, location) => {
       config
     );
     stateFromLocation = mapLocationToSidebarState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+    stateFromLocation = mapLocationToTourState(
       parameters,
       stateFromLocation,
       state,
@@ -104,7 +118,12 @@ const getParameters = function(config, parameters) {
   return {
     p: {
       stateKey: 'proj.id',
-      initialState: 'geographic'
+      initialState: 'geographic',
+      options: {
+        parse: str => {
+          return parseProjection(str, config);
+        }
+      }
     },
     now: {
       stateKey: 'date.testNow',

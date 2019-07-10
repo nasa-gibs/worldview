@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import TourStart from '../components/tour/modal-tour-start';
 import TourInProgress from '../components/tour/modal-tour-in-progress';
 import TourComplete from '../components/tour/modal-tour-complete';
+import AlertUtil from '../components/util/alert';
+
 import {
   preloadPalettes,
   hasCustomTypePalette
@@ -19,32 +21,23 @@ import update from 'immutability-helper';
 import { history } from '../main';
 import util from '../util/util';
 
-const DEFAULT_STATE = {
-  modalStart: true,
-  modalInProgress: false,
-  modalComplete: false,
-  currentStep: 0,
-  totalSteps: 0,
-  metaLoaded: false,
-  isLoadingMeta: false,
-  currentStory: {},
-  currentStoryId: '',
-  currentStoryIndex: -1
-};
 class Tour extends React.Component {
   constructor(props) {
     super(props);
     const storyOrder = props.storyOrder;
     const stories = props.stories;
     const currentStoryIndex =
-      lodashFindIndex(storyOrder, { id: props.currentStoryId }) || null;
+      lodashFindIndex(storyOrder, id => {
+        return id === props.currentStoryId;
+      }) || null;
     const currentStory =
       currentStoryIndex >= 0 ? stories[props.currentStoryId] : {};
     const steps = lodashGet(currentStory, 'steps') || [];
-
     this.state = {
-      modalStart: true,
-      modalInProgress: false,
+      modalStart: !props.currentStoryId,
+      showSupportAlert: props.currentStoryId && currentStoryIndex === -1,
+      showDisabledAlert: false,
+      modalInProgress: currentStoryIndex !== -1,
       modalComplete: false,
       currentStep: currentStoryIndex !== -1 ? 1 : 0,
       totalSteps: steps.length,
@@ -52,7 +45,8 @@ class Tour extends React.Component {
       isLoadingMeta: false,
       currentStory,
       currentStoryId: props.currentStoryId,
-      currentStoryIndex: currentStoryIndex
+      currentStoryIndex: currentStoryIndex,
+      tourEnded: false
     };
 
     this.toggleModalStart = this.toggleModalStart.bind(this);
@@ -60,6 +54,7 @@ class Tour extends React.Component {
     this.toggleModalComplete = this.toggleModalComplete.bind(this);
     this.incrementStep = this.incrementStep.bind(this);
     this.decreaseStep = this.decreaseStep.bind(this);
+    if (currentStory && currentStoryIndex !== -1) this.fetchMetadata(currentStory, 0);
   }
   toggleModalStart(e) {
     e.preventDefault();
@@ -219,8 +214,33 @@ class Tour extends React.Component {
   }
   endTour(e) {
     e.preventDefault();
-    this.setState(DEFAULT_STATE);
-    this.props.endTour();
+    if (!this.state.showDisabledAlert) {
+      this.props.endTour();
+    } else {
+      this.setState({ tourEnded: true });
+    }
+  }
+  renderSupportAlert() {
+    return (
+      <AlertUtil
+        isOpen={true}
+        timeout={10000}
+        onDismiss={this.props.endTour}
+        iconClassName=' '
+        message='Sorry, this tour is no longer supported.'
+      />
+    );
+  }
+  renderDisableAlert() {
+    return (
+      <AlertUtil
+        isOpen={true}
+        timeout={10000}
+        onDismiss={this.props.endTour}
+        iconClassName=' '
+        message="To view these tours again, click the 'Explore Worldview' link in the “i” menu."
+      />
+    );
   }
   render() {
     const {
@@ -233,7 +253,8 @@ class Tour extends React.Component {
       screenHeight,
       screenWidth,
       processStepLink,
-      isActive
+      isActive,
+      endTour
     } = this.props;
     const {
       modalInProgress,
@@ -247,10 +268,18 @@ class Tour extends React.Component {
       modalStart,
       currentStoryIndex,
       description,
-      isLoadingMeta
+      isLoadingMeta,
+      showSupportAlert,
+      showDisabledAlert,
+      tourEnded
     } = this.state;
     if (screenWidth < 740 || screenHeight < 450) {
       endTour();
+    }
+    if (showDisabledAlert && tourEnded) return this.renderDisableAlert();
+
+    if (showSupportAlert) {
+      return this.renderSupportAlert();
     }
     if (stories && isActive) {
       if (!modalStart && !modalInProgress && !modalComplete) {
@@ -274,8 +303,14 @@ class Tour extends React.Component {
                 toggleModalComplete={this.toggleModalComplete}
                 selectTour={this.selectTour.bind(this)}
                 showTourAlert={showTourAlert}
-                hideTour={hideTour}
-                showTour={showTour}
+                hideTour={() => {
+                  hideTour();
+                  this.setState({ showDisabledAlert: true });
+                }}
+                showTour={() => {
+                  showTour();
+                  this.setState({ showDisabledAlert: false });
+                }}
                 endTour={this.endTour.bind(this)}
               />
             ) : modalInProgress ? (

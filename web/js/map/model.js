@@ -70,18 +70,24 @@ export function mapModel(models, config) {
     if (state.v) {
       const projId = state.p ? state.p : 'geographic';
       var proj = config.projections[projId];
-      var extent = state.v;
-      var maxExtent = proj.maxExtent;
+      if (proj) {
+        var extent = state.v;
+        var maxExtent = proj.maxExtent;
 
-      if (proj.id === 'geographic') {
-        proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
-      }
-      if (intersects(extent, maxExtent)) {
-        self.extent = state.v;
+        if (proj.id === 'geographic') {
+          proj.wrapExtent = maxExtent = [-250, -90, 250, 90];
+        }
+        if (intersects(extent, maxExtent)) {
+          self.extent = state.v;
+        } else {
+          self.extent = lodashClone(proj.maxExtent);
+          errors.push({
+            message: 'Extent outside of range'
+          });
+        }
       } else {
-        self.extent = lodashClone(proj.maxExtent);
         errors.push({
-          message: 'Extent outside of range'
+          message: 'Projection does not exist'
         });
       }
     }
@@ -118,40 +124,6 @@ export function mapModel(models, config) {
     } // convert from radians to degrees
   };
 
-  /*
-   * Set default extent according to time of day:
-   *
-   * at 00:00 UTC, start at far eastern edge of
-   * map: "20.6015625,-46.546875,179.9296875,53.015625"
-   *
-   * at 23:00 UTC, start at far western edge of map:
-   * "-179.9296875,-46.546875,-20.6015625,53.015625"
-   *
-   * @method getLeadingExtent
-   * @static
-   *
-   *
-   * @returns {object} Extent Array
-   */
-  self.getLeadingExtent = function() {
-    var curHour = util.now().getUTCHours();
-
-    // For earlier hours when data is still being filled in, force a far eastern perspective
-    if (curHour < 3) {
-      curHour = 23;
-    } else if (curHour < 9) {
-      curHour = 0;
-    }
-
-    // Compute east/west bounds
-    var minLon = 20.6015625 + curHour * (-200.53125 / 23.0);
-    var maxLon = minLon + 159.328125;
-
-    var minLat = -46.546875;
-    var maxLat = 53.015625;
-
-    return [minLon, minLat, maxLon, maxLat];
-  };
   init();
   return self;
 }

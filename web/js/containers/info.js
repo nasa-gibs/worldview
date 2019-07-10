@@ -13,7 +13,7 @@ import { onClickFeedback } from '../modules/feedback/util';
 import { addToLocalStorage } from '../modules/notifications/util';
 
 import { initFeedback } from '../modules/feedback/actions';
-import { startTour } from '../modules/tour/actions';
+import { startTour, endTour } from '../modules/tour/actions';
 import { notificationsSeen } from '../modules/notifications/actions';
 import util from '../util/util';
 import Notifications from '../containers/notifications';
@@ -46,7 +46,8 @@ class InfoList extends Component {
       aboutClick,
       notifications,
       config,
-      startTour
+      startTour,
+      isTourActive
     } = this.props;
     let arr = [
       {
@@ -90,7 +91,7 @@ class InfoList extends Component {
         iconClass: 'ui-icon fa fa-truck fa-fw',
         id: 'start_tour_info_item',
         onClick: () => {
-          startTour();
+          startTour(isTourActive);
           googleTagManager.pushEvent({
             event: 'tour_start_button'
           });
@@ -115,6 +116,7 @@ function mapStateToProps(state) {
 
   return {
     feedbackIsInitiated: isInitiated,
+    isTourActive: state.tour.active,
     notifications: state.notifications,
     config: state.config,
     models: state.models
@@ -141,8 +143,15 @@ const mapDispatchToProps = dispatch => ({
       })
     );
   },
-  startTour: () => {
-    dispatch(startTour());
+  startTour: isTourActive => {
+    if (isTourActive) {
+      dispatch(endTour());
+      setTimeout(() => {
+        dispatch(startTour());
+      }, 100);
+    } else {
+      dispatch(startTour());
+    }
   },
   aboutClick: () => {
     if (util.browser.small) {
@@ -169,6 +178,7 @@ InfoList.propTypes = {
   aboutClick: PropTypes.func,
   config: PropTypes.object,
   feedbackIsInitiated: PropTypes.bool,
+  isTourActive: PropTypes.bool,
   models: PropTypes.object,
   notificationClick: PropTypes.func,
   notifications: PropTypes.object,

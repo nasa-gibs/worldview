@@ -30,9 +30,13 @@ import {
 } from './date/reducers';
 import { animationReducer } from './animation/reducers';
 import { paletteReducer, getInitialPaletteState } from './palettes/reducers';
-import { vectorStyleReducer, getInitialVectorStyleState } from './vector-styles/reducers';
+import {
+  vectorStyleReducer,
+  getInitialVectorStyleState
+} from './vector-styles/reducers';
 import dataDownloadReducer from './data/reducers';
 import { get as lodashGet } from 'lodash';
+import { imageDownloadReducer } from './image-download/reducers';
 
 function lastAction(state = null, action) {
   return action;
@@ -105,6 +109,7 @@ const reducers = {
   tour: tourReducer,
   map: mapReducer,
   animation: animationReducer,
+  imageDownload: imageDownloadReducer,
   requestedEvents,
   requestedEventSources,
   requestedEventCategories,

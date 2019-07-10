@@ -4,14 +4,18 @@ import {
   CLEAR_RUNNING_DATA,
   UPDATE_MAP_EXTENT,
   UPDATE_MAP_UI,
-  UPDATE_MAP_ROTATION
+  UPDATE_MAP_ROTATION,
+  RENDERED,
+  FITTED_TO_LEADING_EXTENT
 } from './constants';
 import update from 'immutability-helper';
 const INITIAL_STATE = {
   runningDataObj: {},
   ui: { selected: null },
   rotation: 0,
-  extent: []
+  extent: [],
+  rendered: false,
+  leadingExtent: []
 };
 
 export default function mapReducer(state = INITIAL_STATE, action) {
@@ -33,6 +37,14 @@ export default function mapReducer(state = INITIAL_STATE, action) {
       });
     case UPDATE_MAP_ROTATION:
       return update(state, { rotation: { $set: action.rotation } });
+    case RENDERED:
+      return lodashAssign({}, state, {
+        rendered: true
+      });
+    case FITTED_TO_LEADING_EXTENT:
+      return lodashAssign({}, state, {
+        leadingExtent: action.extent
+      });
     default:
       return state;
   }

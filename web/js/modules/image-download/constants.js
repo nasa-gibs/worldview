@@ -1,3 +1,8 @@
+export const UPDATE_BOUNDARIES = 'IMAGE-DOWNLOAD/UPDATE_BOUNDARIES';
+export const UPDATE_FILE_TYPE = 'IMAGE-DOWNLOAD/UPDATE_FILE_TYPE';
+export const UPDATE_WORLDFILE = 'IMAGE-DOWNLOAD/UPDATE_WORLDFILE';
+export const UPDATE_RESOLUTION = 'IMAGE-DOWNLOAD/UPDATE_RESOLUTION';
+
 export const resolutionsGeo = {
   values: [
     { value: '0.125', text: '30m' },

@@ -175,50 +175,69 @@ export function isSupported() {
  * @returns {Array}
  */
 export function getPaletteAttributeArray(layerId, palettes, state) {
-  const count = getCount(layerId, state);
-  const DEFAULT_OBJ = { isActive: false, value: undefined };
-  let palObj = lodashAssign({}, { key: 'custom', array: [] }, DEFAULT_OBJ);
-  let minObj = lodashAssign({}, { key: 'min', array: [] }, DEFAULT_OBJ);
-  let maxObj = lodashAssign({}, { key: 'max', array: [] }, DEFAULT_OBJ);
-  let squashObj = lodashAssign({}, { key: 'squash', array: [] }, DEFAULT_OBJ);
-  let attrArray = [];
-  for (var i = 0; i < count; i++) {
-    let paletteDef = palettes[layerId].maps[i];
-    let entryLength =
-      lodashSize(lodashGet(paletteDef, 'entries.values')) ||
-      lodashSize(lodashGet(paletteDef, 'entries.colors'));
-    let maxValue = paletteDef.max
-      ? paletteDef.entries.values[paletteDef.max || entryLength]
-      : undefined;
-    let minValue = paletteDef.min
-      ? paletteDef.entries.values[paletteDef.min || 0]
-      : undefined;
-    palObj = createPaletteAttributeObject(
-      paletteDef,
-      paletteDef.custom,
-      palObj,
-      count
-    );
-    maxObj = createPaletteAttributeObject(paletteDef, maxValue, maxObj, count);
-    minObj = createPaletteAttributeObject(paletteDef, minValue, minObj, count);
+  try {
+    const count = getCount(layerId, state);
+    const DEFAULT_OBJ = { isActive: false, value: undefined };
+    let palObj = lodashAssign({}, { key: 'custom', array: [] }, DEFAULT_OBJ);
+    let minObj = lodashAssign({}, { key: 'min', array: [] }, DEFAULT_OBJ);
+    let maxObj = lodashAssign({}, { key: 'max', array: [] }, DEFAULT_OBJ);
+    let squashObj = lodashAssign({}, { key: 'squash', array: [] }, DEFAULT_OBJ);
+    let attrArray = [];
+    for (var i = 0; i < count; i++) {
+      if (!palettes[layerId].maps[i]) {
+        console.warn('NO PALETTE');
+      }
+      let paletteDef = palettes[layerId].maps[i];
+      let entryLength =
+        lodashSize(lodashGet(paletteDef, 'entries.values')) ||
+        lodashSize(lodashGet(paletteDef, 'entries.colors'));
+      let maxValue = paletteDef.max
+        ? paletteDef.entries.values[paletteDef.max || entryLength]
+        : undefined;
+      let minValue = paletteDef.min
+        ? paletteDef.entries.values[paletteDef.min || 0]
+        : undefined;
+      palObj = createPaletteAttributeObject(
+        paletteDef,
+        paletteDef.custom,
+        palObj,
+        count
+      );
+      maxObj = createPaletteAttributeObject(
+        paletteDef,
+        maxValue,
+        maxObj,
+        count
+      );
+      minObj = createPaletteAttributeObject(
+        paletteDef,
+        minValue,
+        minObj,
+        count
+      );
 
-    squashObj = createPaletteAttributeObject(
-      paletteDef,
-      true,
-      squashObj,
-      count
-    );
-  }
-
-  [palObj, minObj, maxObj, squashObj].forEach(obj => {
-    if (obj.isActive) {
-      attrArray.push({
-        id: obj.key === 'custom' ? 'palette' : obj.key,
-        value: obj.value
-      });
+      squashObj = createPaletteAttributeObject(
+        paletteDef,
+        true,
+        squashObj,
+        count
+      );
     }
-  });
-  return attrArray;
+
+    [palObj, minObj, maxObj, squashObj].forEach(obj => {
+      if (obj.isActive) {
+        attrArray.push({
+          id: obj.key === 'custom' ? 'palette' : obj.key,
+          value: obj.value
+        });
+      }
+    });
+
+    return attrArray;
+  } catch (e) {
+    console.warn('Error parsing palette: ' + e);
+    return [];
+  }
 }
 const createPaletteAttributeObject = function(def, value, attrObj, count) {
   const key = attrObj.key;

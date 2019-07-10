@@ -10,6 +10,22 @@ import { Portal } from 'react-portal';
  * @extends React.Component
  */
 export default class AlertComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    if (props.timeout && props.onDismiss) {
+      this.timeout = setTimeout(() => {
+        props.onDismiss();
+      }, props.timeout);
+    }
+  }
+  componentDidMount() {
+    this.mounted = true;
+  }
+  componentWillUnmount() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+  }
   render() {
     return (
       <Portal node={document && document.getElementById('wv-content')}>
@@ -26,7 +42,9 @@ export default class AlertComponent extends React.Component {
                 ''
               )}
               {this.props.message}
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Read More...
+              {this.props.onClick
+                ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Read More...'
+                : null}
             </span>
           </div>
           <div className="close-alert" onClick={this.props.onDismiss}>
@@ -47,5 +65,6 @@ AlertComponent.propTypes = {
   message: PropTypes.string,
   onClick: PropTypes.func,
   onDismiss: PropTypes.func,
+  timeout: PropTypes.number,
   title: PropTypes.string
 };

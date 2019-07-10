@@ -75,6 +75,7 @@ import '../css/modal.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
 import '../pages/css/document.css';
+import { keyPress } from './modules/key-press/actions';
 
 class App extends React.Component {
   constructor(props) {
@@ -92,12 +93,13 @@ class App extends React.Component {
     document.removeEventListener('keypress', this.handleKeyPress);
   }
   render() {
-    let isAnimationWidgetActive = this.props.state.animation.isActive;
+    const { isAnimationWidgetActive, isTourActive } = this.props;
+
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
         <Sidebar />
-        <Tour />
+        {isTourActive ? <Tour /> : null}
         <div id="layer-modal" className="layer-modal" />
         <div id="layer-settings-modal" />
         <div id="wv-map" className="wv-map" />
@@ -162,6 +164,8 @@ class App extends React.Component {
 function mapStateToProps(state, ownProps) {
   return {
     state: state,
+    isAnimationWidgetActive: state.animation.isActive,
+    isTourActive: state.tour.active,
     config: state.config,
     parameters: state.parameters,
     models: ownProps.models,
@@ -170,7 +174,7 @@ function mapStateToProps(state, ownProps) {
 }
 const mapDispatchToProps = dispatch => ({
   keyPressAction: keyCode => {
-    dispatch({ type: 'KEY_PRESS_ACTION', keyCode });
+    dispatch(keyPress(keyCode));
   },
   screenResize: (width, height) => {
     dispatch(calculateResponsiveState(window));
@@ -182,6 +186,8 @@ export default connect(
   mapDispatchToProps
 )(App);
 App.propTypes = {
+  isAnimationWidgetActive: PropTypes.bool,
+  isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
   mapMouseEvents: PropTypes.object,
   parameters: PropTypes.object,

@@ -48,7 +48,8 @@ import {
   cloneDeep as lodashCloneDeep,
   find as lodashFind
 } from 'lodash';
-import { CLEAR_ROTATE } from '../modules/map/constants';
+import { CLEAR_ROTATE, RENDERED, UPDATE_MAP_UI, FITTED_TO_LEADING_EXTENT } from '../modules/map/constants';
+import { getLeadingExtent } from '../modules/map/util';
 
 export function mapui(models, config, store, ui) {
   var layerBuilder, createLayer;
@@ -186,7 +187,7 @@ export function mapui(models, config, store, ui) {
     self.selected = self.proj[proj.id];
     var map = self.selected;
     let currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? map.getView().getRotation() : 0;
-    store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self, rotation: currentRotation });
+    store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: currentRotation });
     reloadLayers();
 
     // Update the rotation buttons if polar projection to display correct value
@@ -208,14 +209,22 @@ export function mapui(models, config, store, ui) {
     if (start) {
       var projId = proj.selected.id;
       var extent = null;
+      var callback = null;
       if (models.map.extent) {
         extent = models.map.extent;
       } else if (!models.map.extent && projId === 'geographic') {
-        extent = models.map.getLeadingExtent();
+        extent = getLeadingExtent(config.pageLoadTime);
+        callback = () => {
+          const map = self.selected;
+          const view = map.getView();
+          const extent = view.calculateExtent(map.getSize());
+          store.dispatch({ type: FITTED_TO_LEADING_EXTENT, extent });
+        };
       }
       if (extent) {
         map.getView().fit(extent, {
-          constrainResolution: false
+          constrainResolution: false,
+          callback
         });
       }
     }
@@ -913,7 +922,8 @@ export function mapui(models, config, store, ui) {
       }, 200);
     });
     const onRenderComplete = () => {
-      store.dispatch({ type: 'MAP/UPDATE_MAP_UI', ui: self, rotation: self.selected.getView().getRotation() });
+      store.dispatch({ type: RENDERED });
+      store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: self.selected.getView().getRotation() });
       map.un('rendercomplete', onRenderComplete);
       if (store.getState().data.active) ui.data.onActivate();
     };
