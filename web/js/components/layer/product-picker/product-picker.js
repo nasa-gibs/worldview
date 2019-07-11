@@ -139,6 +139,7 @@ class ProductPicker extends React.Component {
       modalView,
       height,
       width,
+      isMobile,
       onToggle
     } = this.props;
     const isCategoryDisplay =
@@ -151,6 +152,7 @@ class ProductPicker extends React.Component {
             selectedProjection={selectedProjection}
             listType={listType}
             inputValue={inputValue}
+            isMobile={isMobile}
             category={category}
             modalView={modalView}
             width={width}
@@ -241,6 +243,7 @@ ProductPicker.propTypes = {
   hasMeasurementSetting: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
   height: PropTypes.number,
+  isMobile: PropTypes.bool,
   layerConfig: PropTypes.object,
   listType: PropTypes.string,
   measurementConfig: PropTypes.object,
@@ -282,6 +285,7 @@ function mapStateToProps(state, ownProps) {
     filteredRows: allLayers,
     activeLayers,
     selectedProjection: proj.id,
+    isMobile: browser.lessThan.medium,
     filterProjections: layer => {
       return !layer.projections[proj.id];
     },
