@@ -112,7 +112,7 @@ export function mapui(models, config, store, ui) {
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
-        if (action.mode === 'spy') {
+        if (store.getState().compare.mode === 'spy') {
           return reloadLayers();
         }
         return;
