@@ -23,7 +23,14 @@
   background-color: #fff;
   color: #1a1a1a;
 }
-.wv-toolbar .wv-toolbar-button.disabled {
+.wv-toolbar .wv-toolbar-button.disabled:hover {
+  background-color: rgba(40, 40, 40, 0.85);
+  color: #eee;
+}
+.wv-toolbar .btn.disabled {
+  pointer-events: auto;
+}
+.wv-toolbar .btn.disabled:hover i {
   pointer-events: none;
 }
 
