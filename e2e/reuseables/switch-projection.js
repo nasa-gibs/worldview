@@ -5,9 +5,9 @@ module.exports = {
   switchProjection: function(client, proj) {
     const c = client;
     c.click('#wv-proj-button');
-    c.waitForElementVisible(`#wv-proj-menu li[data-proj="${proj}"]`, TIME_LIMIT);
+    c.waitForElementVisible(`#change-${proj}-button`, TIME_LIMIT);
     c.pause(500);
-    c.click(`#wv-proj-menu li[data-proj="${proj}"]`);
+    c.click(`#change-${proj}-button`);
     c.waitForElementVisible(`#wv-map-${proj}`, TIME_LIMIT);
   }
 };

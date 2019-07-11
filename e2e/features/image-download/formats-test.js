@@ -22,9 +22,14 @@ module.exports = {
     bookmark(c, startParams);
     openImageDownloadPanel(c);
     clickDownload(c);
-    c.expect.element('#wv-image-download-url').to.have.attribute('url')
+    c.pause(2000);
+    c.expect
+      .element('#wv-image-download-url')
+      .to.have.attribute('url')
       .and.to.contain('FORMAT=image/jpeg');
-    c.expect.element('#wv-image-download-url').to.have.attribute('url')
+    c.expect
+      .element('#wv-image-download-url')
+      .to.have.attribute('url')
       .and.not.to.contain('WORLDFILE');
     closeImageDownloadPanel(c);
   },
@@ -33,7 +38,10 @@ module.exports = {
     openImageDownloadPanel(c);
     c.click('#wv-image-worldfile option[value="true"]');
     clickDownload(c);
-    c.expect.element('#wv-image-download-url').to.have.attribute('url')
+    c.pause(2000);
+    c.expect
+      .element('#wv-image-download-url')
+      .to.have.attribute('url')
       .and.to.contain('WORLDFILE=true');
     c.click('#wv-image-worldfile option[value="false"]');
     closeImageDownloadPanel(c);
@@ -43,7 +51,9 @@ module.exports = {
     openImageDownloadPanel(c);
     c.click('#wv-image-format option[value="image/png"]');
     clickDownload(c);
-    c.expect.element('#wv-image-download-url').to.have.attribute('url')
+    c.expect
+      .element('#wv-image-download-url')
+      .to.have.attribute('url')
       .contain('FORMAT=image/png');
     closeImageDownloadPanel(c);
   },
@@ -52,7 +62,9 @@ module.exports = {
     switchProjection(c, 'arctic');
     openImageDownloadPanel(c);
     clickDownload(c);
-    c.expect.element('#wv-image-download-url').to.have.attribute('url')
+    c.expect
+      .element('#wv-image-download-url')
+      .to.have.attribute('url')
       .contain('FORMAT=image/png');
     closeImageDownloadPanel(c);
   },
@@ -60,10 +72,17 @@ module.exports = {
   'Switch to geographic, select KMZ, switch to arctic, is PNG': function(c) {
     switchProjection(c, 'geographic');
     openImageDownloadPanel(c);
-    c.click('#wv-image-format option[value="application/vnd.google-earth.kmz"]');
+    c.click(
+      '#wv-image-format option[value="application/vnd.google-earth.kmz"]'
+    );
     closeImageDownloadPanel(c);
     switchProjection(c, 'arctic');
-    c.expect.element('#wv-image-download-url').to.have.attribute('url')
-      .contain('FORMAT=image/png');
+    openImageDownloadPanel(c);
+    c.pause(500);
+    clickDownload(c);
+    c.expect
+      .element('#wv-image-download-url')
+      .to.have.attribute('url')
+      .contain('FORMAT=image/jpeg');
   }
 };

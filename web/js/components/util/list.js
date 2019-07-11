@@ -26,6 +26,7 @@ export default class List extends React.Component {
               key={item.key || item.id || ''}
               tag={tagType}
               active={isActive}
+              id={item.id || ''}
               className={className + ' ' + size + '-item'}
               href={item.href ? item.href : 'false'}
               onClick={
