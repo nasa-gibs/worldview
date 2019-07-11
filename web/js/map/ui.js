@@ -125,7 +125,6 @@ export function mapui(models, config, store, ui) {
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.CLEAR_CUSTOM:
-      case paletteConstants.REQUEST_PALETTE_SUCCESS:
         return updateLookup();
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
