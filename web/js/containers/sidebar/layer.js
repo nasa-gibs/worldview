@@ -9,7 +9,7 @@ import {
   getPalette,
   getPaletteLegends
 } from '../../modules/palettes/selectors';
-import { openCustomContent } from '../../modules/modal/actions';
+import { toggleCustomContent } from '../../modules/modal/actions';
 import LayerInfo from '../../components/layer/info/info';
 import LayerSettings from '../../components/layer/settings/settings';
 import { requestPalette } from '../../modules/palettes/actions';
@@ -102,6 +102,11 @@ class Layer extends React.Component {
     } else {
       return 'No data on selected date for this layer';
     }
+  }
+  stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
+    e.preventDefault();
   }
   render() {
     const {
@@ -207,6 +212,7 @@ class Layer extends React.Component {
                   className={
                     isMobile ? 'hidden wv-layers-options' : 'wv-layers-options'
                   }
+                  onMouseDown={this.stopPropagation}
                   onClick={() => onOptionsClick(layer, names.title)}
                 >
                   <i className="fas fa-sliders-h wv-layers-options-icon" />
@@ -216,6 +222,7 @@ class Layer extends React.Component {
                   className={
                     isMobile ? 'hidden wv-layers-info' : 'wv-layers-info'
                   }
+                  onMouseDown={this.stopPropagation}
                   onClick={() => onInfoClick(layer, names.title)}
                 >
                   <i className="fa fa-info wv-layers-info-icon" />
@@ -322,8 +329,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(removeLayer(id));
   },
   onOptionsClick: (layer, title) => {
+    const key = 'LAYER_OPTIONS_MODAL' + '-' + layer.id;
     dispatch(
-      openCustomContent('LAYER_OPTIONS_MODAL' + '-' + layer.id, {
+      toggleCustomContent(key, {
         headerText: title || 'Layer Options',
         backdrop: false,
         bodyComponent: LayerSettings,
@@ -337,11 +345,12 @@ const mapDispatchToProps = dispatch => ({
     );
   },
   onInfoClick: (layer, title) => {
+    const key = 'LAYER_INFO_MODAL' + '-' + layer.id;
     googleTagManager.pushEvent({
       event: 'sidebar_layer_info'
     });
     dispatch(
-      openCustomContent('LAYER_INFO_MODAL' + '-' + layer.id, {
+      toggleCustomContent(key, {
         headerText: title || 'Layer Description',
         backdrop: false,
         bodyComponent: LayerInfo,
