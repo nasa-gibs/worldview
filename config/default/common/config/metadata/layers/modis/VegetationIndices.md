@@ -15,3 +15,15 @@ The MODIS rolling 8-day EVI layer is available as a near real-time, rolling 8-da
 
 References:
 [NASA Earth Observatory - Measuring Vegetation](http://earthobservatory.nasa.gov/Features/MeasuringVegetation/measuring_vegetation_4.php); [NASA Earthdata - New Vegetation Indices and Surface Reflectance Products Available from LANCE](https://earthdata.nasa.gov/earth-observation-data/near-real-time/new-vegetation-indices-and-surface-reflectance-products-available-from-lance); [NASA NEO - Vegetation Index](https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MOD_NDVI_M)
+
+### MODIS (Terra/Aqua) Vegetation Index (Level 3, 16-Day)
+Temporal coverage: 4 March 2000 - present (Terra); July 2002 - present (Aqua)
+
+### MODIS (Terra/Aqua) Vegetation Index (Level 3, Monthly)
+Temporal coverage: February 2000 - present (Terra); July 2002 - present (Aqua)
+
+### MODIS (Terra/Aqua) Enhanced Vegetation Index (Level 3, 16-Day)
+Temporal coverage: 4 March 2000 - present (Terra); 3 July 2002 - present (Aqua)
+
+### MODIS (Terra/Aqua) Enhanced Vegetation Index (Level 3, Monthly)
+Temporal coverage: February 2000 - present (Terra); July 2002 - present (Aqua)
