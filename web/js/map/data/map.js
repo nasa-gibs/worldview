@@ -9,7 +9,6 @@ import OlGeomLineString from 'ol/geom/LineString';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlFeature from 'ol/Feature';
 import { toggleGranule } from '../../modules/data/actions';
-import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 import { find as lodashFind, each as lodashEach } from 'lodash';
 
 import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map';
