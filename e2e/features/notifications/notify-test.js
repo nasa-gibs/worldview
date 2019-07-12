@@ -2,22 +2,25 @@ const TIME_LIMIT = 30000;
 const mockParam = '?mockAlerts=';
 // Selectors
 const infoButton = '#wv-info-button';
-const infoButtonLabel = '#wv-info-button label';
-const infoMenu = '#wv-info-menu';
-const giftListItem = '#wv-info-menu li.gift';
-const boltListItem = '#wv-info-menu li.bolt';
-const exclamationListItem = '#wv-info-menu li.exclamation-circle';
-const alertContentHightlighted = '.wv-notify-modal .alert';
-const outageContentHightlighted = '.wv-notify-modal .outage';
-const messageContentHightlighted = '.wv-notify-modal .message';
+const infoButtonIcon = '#wv-info-button i';
+const infoMenu = '#toolbar_info';
+const giftListItem = '#toolbar_info li.gift';
+const boltListItem = '#toolbar_info li.bolt';
+const exclamationListItem = '#notifications_info_item .fa-exclamation-circle';
+const alertContentHightlighted =
+  '#notification_list_modal .alert-notification-item';
+const outageContentHightlighted =
+  '#notification_list_modal .outage-notification-item';
+const messageContentHightlighted =
+  '#notification_list_modal .message-notification-item';
 
 module.exports = {
   'No visible notifications with mockAlert parameter set to no_types': function(
     client
   ) {
     client.url(client.globals.url + mockParam + 'no_types');
-    client.waitForElementVisible(infoButtonLabel, TIME_LIMIT, () => {
-      client.useCss().click(infoButtonLabel);
+    client.waitForElementVisible(infoButtonIcon, TIME_LIMIT, () => {
+      client.useCss().click(infoButtonIcon);
       client.pause(2000);
       client
         .useCss()
@@ -31,18 +34,18 @@ module.exports = {
     client
   ) {
     client.url(client.globals.url + mockParam + 'all_types');
-    client.waitForElementVisible(infoButtonLabel, TIME_LIMIT, () => {
+    client.waitForElementVisible(infoButtonIcon, TIME_LIMIT, () => {
       client.expect.element(infoButton + '.wv-status-outage').to.be.present;
-      client.useCss().click(infoButtonLabel);
+      client.useCss().click(infoButtonIcon);
       client.pause(2000);
       client.useCss().assert.containsText(infoMenu, 'Notifications');
       client.expect.element(exclamationListItem).to.be.present;
     });
   },
-  'Both alert, outage, and message content is highlighted and found in modal': function(
+  'alert, outage, and message content is highlighted and found in modal': function(
     client
   ) {
-    client.useCss().click(exclamationListItem + ' a');
+    client.useCss().click(exclamationListItem);
     client.waitForElementVisible(outageContentHightlighted, TIME_LIMIT, () => {
       client
         .useCss()
@@ -67,8 +70,11 @@ module.exports = {
   'Verify that the user is only alerted if he has not already stored all items in localStorage': function(
     client
   ) {
-    client.url(client.globals.url + mockParam + 'all_types');
-    client.waitForElementVisible(infoButtonLabel, TIME_LIMIT, () => {
+    client
+      .useCss()
+      .click('#notification_list_modal .close')
+      .pause(500);
+    client.waitForElementVisible(infoButtonIcon, TIME_LIMIT, () => {
       client.expect.element(infoButton + '.wv-status-hide').to.be.present;
     });
   },
