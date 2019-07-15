@@ -42,14 +42,17 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         }
         return;
       case OPEN_CUSTOM_MODAL:
-        if (action.key === 'TOOLBAR_SNAPSHOT') {
+        if (
+          action.key === 'TOOLBAR_SNAPSHOT' &&
+          store.getState().proj.id === 'geographic'
+        ) {
           return hideWrap();
         }
         return;
       case TOGGLE_GIF:
       case EXIT_ANIMATION:
         const active = store.getState().animation.gifActive;
-        if (active) {
+        if (active && store.getState().proj.id === 'geographic') {
           return hideWrap();
         } else if (self.hidingWrap) {
           return showWrap();
