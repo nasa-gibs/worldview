@@ -4,7 +4,7 @@
             "id":       "MODIS_Terra_L3_Net_Photosynthesis_8Day",
             "title":    "Net Photosynthesis (L3, 8-Day)",
             "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_L3_Net_Photosynthesis_8Day",
+            "description": "modis/terra/MODIS_Terra_L4_Net_Photosynthesis_8Day",
             "group":    "overlays",
             "layergroup": [
               "modis",
