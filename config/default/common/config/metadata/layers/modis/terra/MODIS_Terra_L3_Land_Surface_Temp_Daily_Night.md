@@ -1,0 +1,3 @@
+The MOD11A1 Version 6 product provides daily per-pixel Land Surface Temperature and Emissivity (LST&E) with 1 kilometer (km) spatial resolution in a 1,200 by 1,200 km grid. The pixel temperature value is derived from the Terra MODIS LST&E swath product. Above 30 degrees latitude, some pixels may have multiple observations where the criteria for clear-sky are met. When this occurs, the pixel value is a result of the average of all qualifying observations. The Land Surface Temperature layer is a representation of nighttime LST.
+
+Reference: [LP DAAC - MOD11A1 Version 6](https://doi.org/10.5067/MODIS/MOD11A1.006)

@@ -4,7 +4,7 @@
             "id":       "MODIS_Combined_L3_FPAR_4Day",
             "title":    "Fraction of Photosynthetically Active Radiation (L3, 4-Day)",
             "subtitle": "Terra and Aqua / MODIS",
-            "description": "modis/combined/MODIS_Combined_L3_FPAR_4Day",
+            "description": "modis/combined/MODIS_Combined_L4_FPAR_4Day",
             "tags":     "fpar",
             "group":    "overlays",
             "layergroup": [
