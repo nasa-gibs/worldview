@@ -253,11 +253,18 @@ button:focus {
 
 #timeline-header .animate-button.wv-disabled-button {
   cursor: auto;
-  pointer-events: none;
+  pointer-events: auto;
 }
-
+#timeline-header .animate-button.wv-disabled-button:hover {
+  background-color: transparent;
+}
+#timeline-header .animate-button.wv-disabled-button:hover .wv-animate {
+  opacity: 0.5;
+  color: #fff;
+}
 #timeline-header .animate-button.wv-disabled-button .wv-animate {
   opacity: 0.5;
+  pointer-events: none;
 }
 
 #timeline-header,

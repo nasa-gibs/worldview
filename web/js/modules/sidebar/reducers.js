@@ -2,7 +2,10 @@ import {
   CHANGE_TAB,
   TOGGLE_COLLAPSE,
   COLLAPSE_SIDEBAR,
-  EXPAND_SIDEBAR
+  EXPAND_SIDEBAR,
+  TOGGLE_MOBILE_COLLAPSE,
+  MOBILE_COLLAPSE_SIDEBAR,
+  MOBILE_EXPAND_SIDEBAR
 } from './constants';
 import { assign as lodashAssign } from 'lodash';
 import util from '../../util/util';
@@ -11,9 +14,10 @@ const wasCallapseRequested = util.browser.localStorage
   ? localStorage.getItem('sidebarState') === 'collapsed'
   : false;
 export const sidebarState = {
-  isCollapsed: util.browser.small ? true : wasCallapseRequested || false,
+  isCollapsed: wasCallapseRequested || false,
   wasCallapseRequested: wasCallapseRequested,
-  activeTab: 'layers'
+  activeTab: 'layers',
+  mobileCollapsed: true
 };
 
 export default function sidebarReducer(state = sidebarState, action) {
@@ -29,6 +33,18 @@ export default function sidebarReducer(state = sidebarState, action) {
     case COLLAPSE_SIDEBAR:
       return lodashAssign({}, state, {
         isCollapsed: true
+      });
+    case TOGGLE_MOBILE_COLLAPSE:
+      return lodashAssign({}, state, {
+        mobileCollapsed: !state.mobileCollapsed
+      });
+    case MOBILE_COLLAPSE_SIDEBAR:
+      return lodashAssign({}, state, {
+        mobileCollapsed: true
+      });
+    case MOBILE_EXPAND_SIDEBAR:
+      return lodashAssign({}, state, {
+        mobileCollapsed: false
       });
     case EXPAND_SIDEBAR:
       return lodashAssign({}, state, {

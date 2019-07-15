@@ -28,8 +28,8 @@ module.exports = {
   // layers
   infoButton: '.wv-layers-info',
   optionsButton: '.wv-layers-options',
-  infoDialog: '[aria-describedby="wv-layers-info-dialog"]',
-  optionsDialog: '#wv-layers-options-dialog',
+  infoDialog: '.layer-info-settings-modal',
+  optionsDialog: '.layer-info-settings-modal',
   layersSearchField: 'input#layers-search-input',
   // layersAll: '#layers-all',
   layersAll: '.layers-all-layer',

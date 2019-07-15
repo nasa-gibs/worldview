@@ -9,6 +9,43 @@ import {
   findAvailableProduct
 } from '../../modules/data/selectors';
 import { selectProduct } from '../../modules/data/actions';
+import { openCustomContent } from '../../modules/modal/actions';
+
+const CustomBodyModalContent = () => {
+  return (
+    <React.Fragment>
+      <h3 className="wv-data-unavailable-header">
+        Why are these layers not available for downloading?
+      </h3>
+      <p>
+        Some layers in Worldview do not have corresponding source data products
+        available for download. These include National Boundaries, Orbit Tracks,
+        Earth at Night, and MODIS Corrected Reflectance products.
+        <br />
+        <br />
+        For a downloadable product similar to MODIS Corrected Reflectance,
+        please try the MODIS Land Surface Reflectance layers available in
+        Worldview. If you would like to generate MODIS Corrected Reflectance
+        imagery yourself, please see the following document:{' '}
+        <a
+          style={{ overflowWrap: 'break-word' }}
+          href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf"
+          target="_blank"
+        >
+          https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf
+        </a>
+        <br />
+        <br />
+        If you would like to download only an image, please use the "camera"
+        icon in the upper right.
+        <br />
+        <br /> Data download will not work for "Terra and Aqua" Fires, select
+        Terra only Fires and/or Aqua only Fires to download the associated data
+        files.
+      </p>
+    </React.Fragment>
+  );
+};
 
 class Data extends React.Component {
   render() {
@@ -70,6 +107,15 @@ Data.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
+  showUnavailableReason: () => {
+    dispatch(
+      openCustomContent('data_download_no_data_notify', {
+        headerText: 'Notify',
+        bodyComponent: CustomBodyModalContent,
+        size: 'lg'
+      })
+    );
+  },
   findProductToSelect: products => {
     const newSelection = findAvailableProduct(products);
 

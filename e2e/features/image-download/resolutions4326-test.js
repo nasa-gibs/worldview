@@ -23,79 +23,71 @@ module.exports = {
   'In geographic, top two zoom levels are 10km': function(c) {
     bookmark(c, startParams);
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="40"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="40"]').to.be.selected;
     closeImageDownloadPanel(c);
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="40"]')
-      .to.be.selected;
+
+    c.expect.element('#wv-image-resolution option[value="40"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
   'Next zoom is 5km': function(c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="20"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="20"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
   'Next two zooms are 1km': function(c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="4"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="4"]').to.be.selected;
     closeImageDownloadPanel(c);
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="4"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="4"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
   'Next zoom is 500m': function(c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="2"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="2"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
   'Next two zooms are 250m': function(c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="1"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="1"]').to.be.selected;
     closeImageDownloadPanel(c);
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="1"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="1"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
   'Next zoom is 125m': function(c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="0.5"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="0.5"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
   'Next zoom is 60m': function(c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="0.25"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="0.25"]').to.be
+      .selected;
     closeImageDownloadPanel(c);
   },
 
   'Next zoom is 30m': function(c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="0.125"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="0.125"]').to.be
+      .selected;
     closeImageDownloadPanel(c);
   },
 
@@ -105,15 +97,15 @@ module.exports = {
       zoomIn(c, 'geographic');
     }
     openImageDownloadPanel(c);
-    c.expect.element('#wv-image-resolution option[value="0.125"]')
-      .to.be.selected;
+    c.expect.element('#wv-image-resolution option[value="0.125"]').to.be
+      .selected;
     closeImageDownloadPanel(c);
   },
 
   'Click download': function(c) {
     openImageDownloadPanel(c);
     clickDownload(c);
-    c.getAttribute('#wv-image-download-url', 'url', (result) => {
+    c.getAttribute('#wv-image-download-url', 'url', result => {
       // See if the bounding box here is reasonable. Should be centered
       // on 0,0 and not be wider than 0.1 degrees
       const matcher = /BBOX=([^,]+),([^,]+),([^,]+),([^&]+)/;
@@ -128,5 +120,4 @@ module.exports = {
       c.assert.ok(lon1 > 0 && lon1 < 0.1);
     });
   }
-
 };

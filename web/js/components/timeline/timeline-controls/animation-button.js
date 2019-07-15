@@ -9,11 +9,11 @@ class AnimationButton extends PureComponent {
         className={
           this.props.disabled ? 'wv-disabled-button ' + className : className
         }
-        id="animate-button"
         title={this.props.title ? this.props.title : 'Set up animation'}
-        onClick={this.props.clickAnimationButton}
       >
-        <i id="wv-animate" className="fas fa-video wv-animate" />
+        <div id="animate-button" onClick={this.props.clickAnimationButton}>
+          <i className="fas fa-video wv-animate" />
+        </div>
       </div>
     );
   }

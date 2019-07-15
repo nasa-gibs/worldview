@@ -5,7 +5,7 @@ const skipTour = require('../../reuseables/skip-tour.js');
 const combinedAodSettingsButton =
   '#active-MODIS_Combined_Value_Added_AOD .wv-layers-options';
 const terraAodSettingsButton = '#active-MODIS_Terra_Aerosol .wv-layers-options';
-const terraAodSettingsDialog = '#wv-options-body-MODIS_Terra_Aerosol';
+const terraAodSettingsDialog = '#layer_options_modal-modis_terra_aerosol';
 const thresholdMinLabel = '#wv-layer-options-threshold0 .wv-label-range-min';
 const activeBluePaletteCheckbox =
   '.wv-palette-selector-row.checked #wv-palette-radio-blue_2';

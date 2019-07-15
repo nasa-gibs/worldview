@@ -9,7 +9,6 @@ import OlGeomLineString from 'ol/geom/LineString';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlFeature from 'ol/Feature';
 import { toggleGranule } from '../../modules/data/actions';
-import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 import { find as lodashFind, each as lodashEach } from 'lodash';
 
 import { CRS_WGS_84, mapToPolys, mapDistanceX } from '../map';
@@ -27,16 +26,7 @@ export function dataMap(store, maps, dataUi, ui) {
   var swathLayer = null;
   var hovering = null;
   var selectedFeatures = null;
-  const subscribeToStore = function(action) {
-    switch (action.type) {
-      case CHANGE_PROJECTION:
-        return updateProjection();
-      case 'MAP/UPDATE_MAP_UI':
-        map = maps.selected;
-    }
-  };
   var init = function() {
-    ui.events.on('last-action', subscribeToStore);
     dataUi.events
       .on('activate', updateProjection)
       .on('query', clear)
@@ -183,11 +173,11 @@ export function dataMap(store, maps, dataUi, ui) {
   };
 
   var create = function() {
-    createSelectionLayer();
     createGridLayer();
     createSwathLayer();
     createButtonLayer();
     createHoverLayer();
+    createSelectionLayer();
     $(maps.selected.getViewport()).on('mousemove', hoverCheck);
     $(maps.selected.getViewport()).on('click', clickCheck);
   };
@@ -304,7 +294,6 @@ export function dataMap(store, maps, dataUi, ui) {
     granule.feature.changed();
     var select = new OlFeature(granule.geometry[projCrs]);
     select.granule = granule;
-    // granule.selectedFeature = select;
     selectionLayer.getSource().addFeature(select);
     selectedFeatures[granule.id] = select;
   };

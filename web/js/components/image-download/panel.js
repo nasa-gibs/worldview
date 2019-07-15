@@ -198,7 +198,7 @@ ImageResSelection.propTypes = {
   fileTypes: PropTypes.object,
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
-  isWorldfile: PropTypes.string,
+  isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,
   onPanelChange: PropTypes.func,

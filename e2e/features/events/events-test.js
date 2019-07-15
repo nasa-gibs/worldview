@@ -26,12 +26,14 @@ module.exports = {
       '#sidebar-event-EONET_3931',
       TIME_LIMIT,
       function() {
-        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Night').to.not.be
-          .present;
-        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day').to.not.be
-          .present;
-        client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.not.be.present;
-        client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to.not.be.present;
+        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Night')
+          .to.not.be.present;
+        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day')
+          .to.not.be.present;
+        client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.not
+          .be.present;
+        client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to
+          .not.be.present;
       }
     );
   },
@@ -43,10 +45,12 @@ module.exports = {
       '#active-VIIRS_SNPP_Thermal_Anomalies_375m_Night',
       TIME_LIMIT,
       function() {
-        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day').to.be
+        client.expect.element('#active-VIIRS_SNPP_Thermal_Anomalies_375m_Day')
+          .to.be.present;
+        client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.be
           .present;
-        client.expect.element('#active-MODIS_Aqua_Thermal_Anomalies_All').to.be.present;
-        client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to.be.present;
+        client.expect.element('#active-MODIS_Terra_Thermal_Anomalies_All').to.be
+          .present;
       }
     );
   },
@@ -55,7 +59,7 @@ module.exports = {
   ) {
     client.url(client.globals.url + localQuerystrings.mockEvents);
     client.waitForElementVisible(listOfEvents, TIME_LIMIT, function() {
-      client.assert.elementCountEquals(eventIcons, 7);
+      client.assert.elementCountEquals(eventIcons, 9);
     });
   },
   'On events tab click events list is loaded': function(client) {
@@ -90,7 +94,6 @@ module.exports = {
     client.assert
       .urlParameterEquals('l', true)
       .assert.urlParameterEquals('t', true)
-      .assert.urlParameterEquals('z', true)
       .assert.urlParameterEquals('v', true)
       .assert.urlParameterEquals('e', true);
   },
@@ -114,12 +117,14 @@ module.exports = {
 
     client.click(globalSelectors.notifyMessage).pause(2000);
     client.assert.containsText(
-      '.wv-data-unavailable-header',
+      '#event_visibility_info .wv-data-unavailable-header',
       'Why can’t I see an event?'
     );
+    client.click('#event_visibility_info .close').pause(2000);
+    client.expect.element('#event_visibility_info').to.not.be.present;
     client.click(globalSelectors.notificationDismissButton).pause(2000);
     client.expect.element(globalSelectors.notificationDismissButton).to.not.be
-      .visible;
+      .present;
   },
   'Clicking selected event deselects event': function(client) {
     client.click(selectedFirstEvent).pause(500);

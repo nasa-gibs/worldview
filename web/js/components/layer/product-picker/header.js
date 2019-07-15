@@ -22,9 +22,9 @@ class ProductPickerHeader extends React.Component {
       inputValue: props.inputValue
     };
   }
-  componentDidMount(prevProps, prevState) {
+  componentDidMount() {
     setTimeout(() => {
-      if (this._input) this._input.focus();
+      if (this._input && !this.props.isMobile) this._input.focus();
     }, 500);
   }
   /**
@@ -103,6 +103,7 @@ class ProductPickerHeader extends React.Component {
 ProductPickerHeader.propTypes = {
   category: PropTypes.object,
   inputValue: PropTypes.string,
+  isMobile: PropTypes.bool,
   listType: PropTypes.string,
   modalView: PropTypes.string,
   runSearch: PropTypes.func,

@@ -179,7 +179,7 @@ class toolbarContainer extends Component {
             title={
               isCompareActive
                 ? 'You must exit comparison mode to use the snapshot feature'
-                : isImageDownloadActive
+                : !isImageDownloadActive
                   ? 'You must exit data download mode to use the snapshot feature'
                   : 'Take a snapshot'
             }
@@ -204,7 +204,7 @@ class toolbarContainer extends Component {
   }
 }
 function mapStateToProps(state) {
-  const { notifications, palettes, compare, map, layers, proj } = state;
+  const { notifications, palettes, compare, map, layers, proj, data } = state;
   const { number, type } = notifications;
   const activeString = compare.activeString;
   const activeLayersForProj = getLayers(
@@ -213,12 +213,15 @@ function mapStateToProps(state) {
     state
   );
   const isCompareActive = compare.active;
+  const isDataDownloadActive = data.active;
   return {
     notificationType: type,
     notificationContentNumber: number,
     config: state.config,
     isImageDownloadActive: Boolean(
-      lodashGet(state, 'map.ui.selected') && !isCompareActive
+      lodashGet(state, 'map.ui.selected') &&
+        !isCompareActive &&
+        !isDataDownloadActive
     ),
     isCompareActive,
     hasCustomPalette: hasCustomPaletteInActiveProjection(

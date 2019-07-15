@@ -17,6 +17,7 @@ import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
 import { getLayers } from '../../modules/layers/selectors';
 import { getDataProductsFromActiveLayers } from '../../modules/data/selectors';
 import * as LAYER_CONSTANTS from '../../modules/layers/constants';
+import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 
 export function dataUi(store, ui, config) {
   var queryActive = false;
@@ -46,6 +47,8 @@ export function dataUi(store, ui, config) {
 
   const subscribeToStore = function(action) {
     switch (action.type) {
+      case CHANGE_PROJECTION:
+        return changeProjection();
       case LOCATION_POP_ACTION:
       case CHANGE_SIDEBAR_TAB:
         return action.activeTab === 'download' ? onActivate() : mapController ? onDeactivate() : '';
@@ -67,6 +70,11 @@ export function dataUi(store, ui, config) {
       case DATA_CONSTANTS.SELECT_PRODUCT:
         return query();
     }
+  };
+  var changeProjection = function() {
+    updateLayers();
+    query();
+    self.events.trigger('projectionUpdate');
   };
   var updateLayers = function() {
     const state = store.getState();

@@ -1,5 +1,11 @@
 import util from '../../util/util';
-import { OPEN_BASIC, OPEN_CUSTOM, TOGGLE, RENDER_TEMPLATE } from './constants';
+import {
+  OPEN_BASIC,
+  OPEN_CUSTOM,
+  TOGGLE,
+  RENDER_TEMPLATE,
+  CLOSE
+} from './constants';
 import { requestAction } from '../core/actions';
 
 export function openBasicContent(modalHeader, bodyText) {
@@ -17,6 +23,25 @@ export function openCustomContent(key, params) {
     customProps: params
   };
 }
+export function toggleCustomContent(key, params) {
+  return (dispatch, getState) => {
+    const modalState = getState().modal;
+    const { id, isOpen } = modalState;
+    console.log(key, id, isOpen);
+    if (id === key && isOpen) {
+      dispatch({
+        type: CLOSE
+      });
+    } else {
+      dispatch({
+        type: OPEN_CUSTOM,
+        key,
+        customProps: params
+      });
+    }
+  };
+}
+
 export function renderTemplate(headerText, template) {
   return {
     type: RENDER_TEMPLATE,

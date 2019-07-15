@@ -42,9 +42,11 @@ export default class AlertComponent extends React.Component {
                 ''
               )}
               {this.props.message}
-              {this.props.onClick
-                ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Read More...'
-                : null}
+              {this.props.onClick ? (
+                <span>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Read More...
+                </span>
+              ) : null}
             </span>
           </div>
           <div className="close-alert" onClick={this.props.onDismiss}>

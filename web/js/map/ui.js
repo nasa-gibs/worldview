@@ -77,7 +77,7 @@ export function mapui(models, config, store, ui) {
     models,
     config,
     cache,
-    self,
+    ui,
     store
   );
   self.layerKey = layerBuilder.layerKey;
@@ -112,7 +112,7 @@ export function mapui(models, config, store, ui) {
       case layerConstants.UPDATE_OPACITY:
         return updateOpacity(action);
       case compareConstants.CHANGE_STATE:
-        if (action.mode === 'spy') {
+        if (store.getState().compare.mode === 'spy') {
           return reloadLayers();
         }
         return;
@@ -125,7 +125,6 @@ export function mapui(models, config, store, ui) {
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.CLEAR_CUSTOM:
-      case paletteConstants.REQUEST_PALETTE_SUCCESS:
         return updateLookup();
       case vectorStyleConstants.SET_FILTER_RANGE:
       case vectorStyleConstants.SET_VECTORSTYLE:
