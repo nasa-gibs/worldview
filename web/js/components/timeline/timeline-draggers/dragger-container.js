@@ -52,18 +52,30 @@ class DraggerContainer extends PureComponent {
       transformX,
       frontDate,
       backDate,
+      draggerPosition,
+      draggerPositionB,
       draggerSelected,
       draggerTimeState,
       draggerTimeStateB,
+      timelineEndDateLimit,
       updateDraggerDatePosition
     } = this.props;
 
     let isBetween = getIsBetween(inputTime, frontDate, backDate);
-
     let draggerVisible = false;
-    let newDraggerPosition;
     if (isBetween) {
       draggerVisible = true;
+    }
+
+    let oldDraggerPosition;
+    let newDraggerPosition;
+    let newDraggerTime;
+    if (draggerSelected === 'selected') {
+      oldDraggerPosition = draggerPosition;
+      newDraggerTime = draggerTimeState;
+    } else {
+      oldDraggerPosition = draggerPositionB;
+      newDraggerTime = draggerTimeStateB;
     }
 
     let options = timeScaleOptions[timeScale].timeAxis;
@@ -72,7 +84,17 @@ class DraggerContainer extends PureComponent {
     let pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
     newDraggerPosition = pixelsToAddToDraggerNew + position - this.state.draggerWidth + transformX + 2;
 
-    let newDraggerTime = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
+    // determine max timelineEndDate position for dragger
+    let endDateLimitPositionFromFront = Math.abs(frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth);
+    let endDatePosition = endDateLimitPositionFromFront + position - this.state.draggerWidth + transformX + 2;
+
+    // checks to prevent positioning outside of valid timeline range
+    let isBeforeFrontDate = new Date(inputTime) < new Date(frontDate);
+    let isAfterBackDate = new Date(inputTime) > new Date(backDate);
+    if (newDraggerPosition > endDatePosition || isBeforeFrontDate || isAfterBackDate) {
+      newDraggerPosition = oldDraggerPosition;
+    }
+
     this.updateLocalDraggerTimeStates(draggerSelected, newDraggerTime);
     // update parent dragger positioning
     updateDraggerDatePosition(null, draggerSelected, newDraggerPosition, draggerVisible);
@@ -309,18 +331,29 @@ class DraggerContainer extends PureComponent {
 }
 
 DraggerContainer.propTypes = {
-  disabled: PropTypes.bool,
-  draggerName: PropTypes.string,
+  axisWidth: PropTypes.number,
+  backDate: PropTypes.string,
+  dateA: PropTypes.string,
+  dateB: PropTypes.string,
   draggerPosition: PropTypes.number,
   draggerPositionB: PropTypes.number,
   draggerSelected: PropTypes.string,
   draggerTimeState: PropTypes.string,
   draggerTimeStateB: PropTypes.string,
   draggerVisible: PropTypes.bool,
-  handleDragDragger: PropTypes.func,
+  draggerVisibleB: PropTypes.bool,
+  frontDate: PropTypes.string,
+  isAnimationPlaying: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
-  selectDragger: PropTypes.func,
+  isDraggerDragging: PropTypes.bool,
+  onChangeSelectedDragger: PropTypes.func,
+  position: PropTypes.number,
+  setDraggerVisibility: PropTypes.func,
+  timelineEndDateLimit: PropTypes.string,
+  timelineStartDateLimit: PropTypes.string,
+  timeScale: PropTypes.string,
   toggleShowDraggerTime: PropTypes.func,
+  transformX: PropTypes.number,
   updateDraggerDatePosition: PropTypes.func
 };
 

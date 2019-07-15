@@ -517,15 +517,19 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   animationDraggerDateUpdateLocal = (startDate, endDate) => {
-    let { position, transformX } = this.state;
+    let {
+      frontDate,
+      position,
+      transformX
+    } = this.state;
     let { timeScale } = this.props;
 
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
 
-    let frontDate = moment.utc(this.state.frontDate);
-    let startLocation = frontDate.diff(startDate, timeScale, true) * gridWidth;
-    let endLocation = frontDate.diff(endDate, timeScale, true) * gridWidth;
+    let frontDateObj = moment.utc(frontDate);
+    let startLocation = frontDateObj.diff(startDate, timeScale, true) * gridWidth;
+    let endLocation = frontDateObj.diff(endDate, timeScale, true) * gridWidth;
 
     this.setState({
       animationStartLocation: position - startLocation + transformX,
@@ -542,8 +546,19 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   animationDraggerDateUpdate = (startDate, endDate) => {
+    const {
+      animStartLocationDate,
+      animEndLocationDate
+    } = this.props;
+    // update local state location and date
     this.animationDraggerDateUpdateLocal(startDate, endDate);
-    this.debounceOnUpdateStartAndEndDate(startDate, endDate);
+
+    // update global state date if changed
+    const didStartDateChange = startDate.getTime() !== animStartLocationDate.getTime();
+    const didEndDateChange = endDate.getTime() !== animEndLocationDate.getTime();
+    if (didStartDateChange || didEndDateChange) {
+      this.debounceOnUpdateStartAndEndDate(startDate, endDate);
+    }
   }
 
   // DRAGGER
@@ -641,17 +656,19 @@ class Timeline extends React.Component {
     } = this.props;
 
     // handle update animation positioning and local state from play button/gif creation
-    if ((!prevProps.isAnimationPlaying && isAnimationPlaying) ||
-        (!prevProps.isGifActive && isGifActive)) {
+    const didAnimationTurnOn = !prevProps.isAnimationPlaying && isAnimationPlaying;
+    const didGifTurnOn = !prevProps.isGifActive && isGifActive;
+    if (didAnimationTurnOn || didGifTurnOn) {
       this.animationDraggerDateUpdateLocal(animStartLocationDate, animEndLocationDate);
     }
 
     // handle location update triggered from animation start/end date change from animation widget
     if (isAnimationWidgetOpen) {
       if (prevStartLocationDate && prevEndLocationDate) {
-        if (prevStartLocationDate.getTime() !== animStartLocationDate.getTime() ||
-            prevEndLocationDate.getTime() !== animEndLocationDate.getTime() ||
-            (prevState.frontDate !== this.state.frontDate && !isAnimationPlaying)) {
+        const animStartDateChanged = prevStartLocationDate.getTime() !== animStartLocationDate.getTime();
+        const animEndDateChanged = prevEndLocationDate.getTime() !== animEndLocationDate.getTime();
+        const frontDateChanged = prevState.frontDate !== this.state.frontDate;
+        if (animStartDateChanged || animEndDateChanged || frontDateChanged) {
           this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
         }
       }
