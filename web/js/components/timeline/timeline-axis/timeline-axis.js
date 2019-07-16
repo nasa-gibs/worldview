@@ -762,11 +762,7 @@ class TimelineAxis extends Component {
       return;
     }
     let clientX = e.clientX;
-    if (!this.props.isTimelineDragging &&
-        clientX === this.state.clientXOnDrag &&
-        !this.props.isAnimationDraggerDragging &&
-        !this.props.hasMoved &&
-        (this.state.mouseDown || e.type === 'touchend')) {
+    if (clientX === this.state.clientXOnDrag) {
       let {
         currentTimeRange
       } = this.state;
@@ -809,10 +805,7 @@ class TimelineAxis extends Component {
     }
     let touch = e.changedTouches[0];
     let clientX = touch.pageX;
-    if (!this.props.isTimelineDragging &&
-        !this.props.isAnimationDraggerDragging &&
-        clientX === this.state.clientXOnDrag &&
-        !this.props.hasMoved) {
+    if (clientX === this.state.clientXOnDrag) {
       let {
         currentTimeRange
       } = this.state;
