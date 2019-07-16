@@ -230,7 +230,8 @@ class DraggerContainer extends PureComponent {
     } = this.props;
 
     // handle dragger visibility update on compare mode activate/deactivate
-    if (isCompareModeActive !== prevProps.isCompareModeActive) {
+    const hasCompareModeChanged = isCompareModeActive !== prevProps.isCompareModeActive;
+    if (hasCompareModeChanged) {
       // turn on compare mode
       if (isCompareModeActive) {
         setDraggerVisibility(true, true);
@@ -246,20 +247,24 @@ class DraggerContainer extends PureComponent {
 
     if (!isDraggerDragging) {
       // handle A dragger change
-      if (draggerTimeState !== prevProps.draggerTimeState &&
-          draggerTimeState !== this.state.draggerTimeState) {
-        if (!isAnimationPlaying &&
-            dateA === draggerTimeState) {
+      let propsTimeStateChanged = draggerTimeState !== prevProps.draggerTimeState;
+      let localTimeStateChanged = draggerTimeState !== this.state.draggerTimeState;
+      if (propsTimeStateChanged && localTimeStateChanged) {
+        let propsDateSameAsDraggerTimeState = dateA === draggerTimeState;
+        let propsDateChanged = dateA !== prevProps.dateA;
+        if (!isAnimationPlaying && propsDateSameAsDraggerTimeState && propsDateChanged) {
           this.updateLocalDraggerTimeStates('selected', draggerTimeState);
         } else {
           this.setDraggerPosition(draggerTimeState);
         }
       }
       // handle B dragger change
-      if (draggerTimeStateB !== prevProps.draggerTimeStateB &&
-          draggerTimeStateB !== this.state.draggerTimeStateB) {
-        if (!isAnimationPlaying &&
-            dateB === draggerTimeStateB) {
+      let propsTimeStateBChanged = draggerTimeStateB !== prevProps.draggerTimeStateB;
+      let localTimeStateBChanged = draggerTimeStateB !== this.state.draggerTimeStateB;
+      if (propsTimeStateBChanged && localTimeStateBChanged) {
+        let propsDateBSameAsDraggerTimeState = dateB === draggerTimeStateB;
+        let propsDateBChanged = dateB !== prevProps.dateB;
+        if (!isAnimationPlaying && propsDateBSameAsDraggerTimeState && propsDateBChanged) {
           this.updateLocalDraggerTimeStates('selectedB', draggerTimeStateB);
         } else {
           this.setDraggerPosition(draggerTimeStateB);
