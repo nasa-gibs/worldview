@@ -846,6 +846,7 @@ class Timeline extends React.Component {
       hasMoved
     } = this.state;
     let selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
+    let isTimelineHidden = timelineHidden || hideTimeline;
     return (
       <div className="timeline-container">
         {initialLoadComplete
@@ -900,7 +901,7 @@ class Timeline extends React.Component {
                 <div id="timeline-footer"
                   style={{
                     display:
-                      timelineHidden || hideTimeline ? 'none' : 'block'
+                      isTimelineHidden ? 'none' : 'block'
                   }}
                 >
                   {/* Axis */}
@@ -1049,14 +1050,14 @@ class Timeline extends React.Component {
                   changeTimeScale={this.changeTimeScale}
                   isDraggerDragging={isDraggerDragging}
                   hasSubdailyLayers={hasSubdailyLayers}
-                  timelineHidden={timelineHidden}
+                  timelineHidden={isTimelineHidden}
                 />
 
                 {/* Open/Close Chevron */}
                 <div id="timeline-hide" onClick={this.toggleHideTimeline}>
                   <div
                     className={`wv-timeline-hide wv-timeline-hide-double-chevron-${
-                      timelineHidden ? 'left' : 'right'
+                      isTimelineHidden ? 'left' : 'right'
                     }`}
                   />
                 </div>
