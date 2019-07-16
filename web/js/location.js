@@ -2,7 +2,7 @@ import { assign as lodashAssign, get } from 'lodash';
 import { encode } from './modules/link/util';
 // legacy crutches
 // import { getLayersParameterSetup } from './modules/layers/util';
-import { serializeDate, tryCatchDate } from './modules/date/util';
+import { serializeDate, tryCatchDate, mapLocationToDateState } from './modules/date/util';
 import {
   checkTourBuildTimestamp,
   mapLocationToTourState
@@ -41,7 +41,11 @@ export const mapLocationToState = (state, location) => {
   if (location.search) {
     let parameters = util.fromQueryString(location.search);
     let stateFromLocation = location.query;
-
+    stateFromLocation = mapLocationToDateState(
+      parameters,
+      stateFromLocation,
+      state
+    );
     stateFromLocation = mapLocationToProjState(
       parameters,
       stateFromLocation,

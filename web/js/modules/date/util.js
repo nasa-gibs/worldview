@@ -1,5 +1,6 @@
 import util from '../../util/util';
-import { each as lodashEach } from 'lodash';
+import { each as lodashEach, get } from 'lodash';
+import update from 'immutability-helper';
 
 export function serializeDate(date) {
   return (
@@ -42,4 +43,22 @@ export function getLayersActiveAtDate(layers, date) {
     }
   });
   return arra;
+}
+export function mapLocationToDateState(
+  parameters,
+  stateFromLocation,
+  state,
+  config
+) {
+  const appNow = get(state, 'date.appNow');
+  // legacy time permalink
+  if (parameters.time && !parameters.t && appNow) {
+    const date = tryCatchDate(parameters.time, appNow);
+    stateFromLocation = update(stateFromLocation, {
+      date: {
+        selected: { $set: date }
+      }
+    });
+  }
+  return stateFromLocation;
 }
