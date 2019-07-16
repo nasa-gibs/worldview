@@ -69,4 +69,4 @@ To run tests for both browsers in sequence: `npm run e2e`.
 | `showError` | boolean | *`true` or `false`* | If any value is specified, an error dialog will be shown on startup. |
 | `showSubdaily` | boolean | *`true` or `false`* | If any value is specified, the hour input, minute input and "minutes" timeline zoom option will be shown. |
 | `notificationURL` | string | `https://testing.url.com` | Overrides the notification URL found in the features.json configuration file. |
-| `imageDownload` | sgtring | `https://wvs.earthdata.nasa.gov/api/v1/snapshot` | Overrides the image download URL
+| `imageDownload` | string | `https://wvs.earthdata.nasa.gov/api/v1/snapshot` | Overrides the image download URL
