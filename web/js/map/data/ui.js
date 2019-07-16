@@ -420,8 +420,6 @@ var dataUiBulkDownloadPage = (function() {
 })();
 
 var dataUiDownloadListPanel = function(config, store) {
-  const state = store.getState();
-  const dataStore = state.data;
   var NOTICE =
     "<div id='wv-data-selection-notice'>" +
     "<i class='icon fa fa-info-circle fa-3x'></i>" +
@@ -769,9 +767,8 @@ var dataUiDownloadListPanel = function(config, store) {
 
   var removeGranule = function() {
     var id = $(this).attr('data-granule');
-    let state = store.getState();
-    let dataStore = state.data;
-    store.dispatch(toggleGranule(dataStore.selectedGranules[id]));
+    const dataState = store.getState().data;
+    store.dispatch(toggleGranule(dataState.selectedGranules[id]));
     onHoverOut.apply(this);
   };
 
