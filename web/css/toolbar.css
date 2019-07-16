@@ -45,6 +45,10 @@
   top: 48px;
 }
 
+.toolbar-list-modal a:hover {
+  text-decoration: none;
+}
+
 .toolbar-list-modal,
 .toolbar-list-modal .modal-content {
   width: 150px;
