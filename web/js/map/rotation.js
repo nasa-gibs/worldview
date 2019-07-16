@@ -173,7 +173,7 @@ export function MapRotate(ui, models, store) {
   this.dispatchRotation = function(radians) {
     store.dispatch({ type: 'MAP/UPDATE_ROTATION', rotation: radians });
   };
-  const debounceRotationDispatcher = debounce(this.dispatchRotation, 600);
+  const debounceRotationDispatcher = debounce(this.dispatchRotation, 100);
   /*
    * Called as event listener when map is rotated. Update url to reflect rotation reset
    *
