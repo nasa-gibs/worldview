@@ -769,6 +769,8 @@ var dataUiDownloadListPanel = function(config, store) {
 
   var removeGranule = function() {
     var id = $(this).attr('data-granule');
+    let state = store.getState();
+    let dataStore = state.data;
     store.dispatch(toggleGranule(dataStore.selectedGranules[id]));
     onHoverOut.apply(this);
   };
