@@ -218,11 +218,11 @@
 
 /* .tour-in-progress */
 .tour-in-progress .modal {
-  left: unset;
+  left: auto;
   right: 10px;
-  top: unset;
+  top: auto;
   width: 248px;
-  bottom: 180px;
+  bottom: 275px;
   height: 200px;
   overflow: visible;
 }
@@ -781,7 +781,7 @@
 
 @media (max-height: 712px) {
   .tour-in-progress .modal-content {
-    height: 250px;
+    height: 275px;
   }
 }
 
