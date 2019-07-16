@@ -6,10 +6,12 @@ import { connect } from 'react-redux';
 import {
   getSelectionCounts,
   getDataProductsFromActiveLayers,
-  findAvailableProduct
+  findAvailableProduct,
+  doesSelectedExist
 } from '../../modules/data/selectors';
 import { selectProduct } from '../../modules/data/actions';
 import { openCustomContent } from '../../modules/modal/actions';
+import { getLayers } from '../../modules/layers/selectors';
 
 const CustomBodyModalContent = () => {
   return (
@@ -64,7 +66,10 @@ class Data extends React.Component {
     if (!tabTypes.download) return null;
     const dataArray = Object.entries(products);
     if (dataArray.length > 0 && !selectedProduct && isActive) {
-      findProductToSelect(activeLayers);
+      findProductToSelect(activeLayers, selectedProduct);
+    }
+    if (selectedProduct && !doesSelectedExist(activeLayers, selectedProduct)) {
+      findProductToSelect(activeLayers, selectedProduct);
     }
     return (
       <Scrollbars style={{ maxHeight: height + 'px' }}>
@@ -106,7 +111,7 @@ Data.propTypes = {
   tabTypes: PropTypes.object
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   showUnavailableReason: () => {
     dispatch(
       openCustomContent('data_download_no_data_notify', {
@@ -116,7 +121,7 @@ const mapDispatchToProps = dispatch => ({
       })
     );
   },
-  findProductToSelect: products => {
+  findProductToSelect: (products, selectedProduct) => {
     const newSelection = findAvailableProduct(products);
 
     if (newSelection) {
@@ -132,7 +137,7 @@ function mapStateToProps(state, ownProps) {
   const { layers, proj, data, config, compare, sidebar } = state;
   const { selectedProduct, selectedGranules } = data;
   const activeString = compare.activeString;
-  const activeLayers = layers[activeString];
+  const activeLayers = getLayers(layers[activeString], { proj: proj.id });
   const counts = getSelectionCounts(activeLayers, selectedGranules);
   const products = getDataProductsFromActiveLayers(
     activeLayers,

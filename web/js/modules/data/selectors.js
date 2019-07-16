@@ -84,6 +84,13 @@ export function groupByProducts(config, dataProducts) {
   }
   return results;
 }
+export function doesSelectedExist(activeLayers, selectedId) {
+  let exists = false;
+  lodashEach(activeLayers, function(layer) {
+    if (layer.product === selectedId) exists = true;
+  });
+  return exists;
+}
 export function getDataProductsFromActiveLayers(layers, config, projId) {
   let dataProducts = [];
   lodashEach(layers, function(layer) {

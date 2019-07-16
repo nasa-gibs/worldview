@@ -15,7 +15,7 @@ import { toggleGranule } from '../../modules/data/actions';
 import { SELECT_DATE } from '../../modules/date/constants';
 import { LOCATION_POP_ACTION } from '../../redux-location-state-customs';
 import { getLayers } from '../../modules/layers/selectors';
-import { getDataProductsFromActiveLayers } from '../../modules/data/selectors';
+import { getDataProductsFromActiveLayers, doesSelectedExist } from '../../modules/data/selectors';
 import * as LAYER_CONSTANTS from '../../modules/layers/constants';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 
@@ -88,7 +88,7 @@ export function dataUi(store, ui, config) {
     // everything changes to models.
     var products = getDataProductsFromActiveLayers(activeLayers, config, proj.id);
     lodashEach(data.selectedGranules, function(selected) {
-      if (!products[selected.product] && !lodashFind(activeLayers, { product: selected.product })) {
+      if (!products[selected.product] && !lodashFind(layers[activeString], { product: selected.product })) {
         store.dispatch(toggleGranule(selected));
       }
     });
@@ -96,10 +96,14 @@ export function dataUi(store, ui, config) {
   var query = function() {
     const state = store.getState();
     const dataState = state.data;
+    const { compare, layers, proj } = state;
+    const activeLayers = getLayers(layers[compare.activeString], { proj: proj.id });
+
     if (state.sidebar.activeTab !== 'download') {
       return;
     }
-    if (!dataState.selectedProduct) {
+
+    if (!dataState.selectedProduct || (dataState.selectedProduct && !doesSelectedExist(activeLayers, dataState.selectedProduct))) {
       self.events.trigger(self.EVENT_QUERY_RESULTS, {
         meta: {},
         granules: []
