@@ -742,10 +742,10 @@ var dataUiDownloadListPanel = function(config, store) {
       "<div class='bulk dd-collapse'>" +
       '<h5>Bulk Download</h5>' +
       "<ul class='BulkDownload'>" +
-      "<li><a class='wget' href='#'>List of Links</a>: " +
+      "<li><a class='wget' href='javascript:void(null)'>List of Links</a>: " +
       'for wget or download managers that accept a list of ' +
       'URLs</li>' +
-      "<li><a class='curl' href='#'>List of cURL Commands</a>: " +
+      "<li><a class='curl' href='javascript:void(null)'>List of cURL Commands</a>: " +
       'can be copied and pasted to ' +
       'a terminal window to download using cURL.</li>' +
       '</ul>' +
