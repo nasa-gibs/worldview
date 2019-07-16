@@ -30,17 +30,15 @@ const CUSTOM_MODAL_PROPS = {
   TOOLBAR_PROJECTION: {
     headerText: null,
     type: 'toolbar',
-    modalClassName: 'toolbar-list-modal toolbar-modal',
+    modalClassName: 'toolbar-list-modal toolbar-projeciton-modal toolbar-modal',
     backdrop: true,
     bodyComponent: Projection,
-    wrapClassName: 'toolbar_modal_outer toolbar_modal_outer',
-    offsetRight: '40px'
+    wrapClassName: 'toolbar_modal_outer toolbar_modal_outer'
   },
   TOOLBAR_SHARE_LINK: {
     headerText: 'Copy Link to Share',
     type: 'toolbar',
     backdrop: false,
-    offsetRight: '198px',
     modalClassName: 'toolbar-share-modal toolbar-modal toolbar-medium-modal',
     clickableBehindModal: true,
     wrapClassName: 'clickable-behind-modal toolbar_modal_outer',
@@ -50,8 +48,7 @@ const CUSTOM_MODAL_PROPS = {
     headerText: null,
     backdrop: false,
     type: 'toolbar',
-    modalClassName: 'toolbar-list-modal toolbar-modal',
-    offsetRight: '10px',
+    modalClassName: 'toolbar-list-modal toolbar-info-modal toolbar-modal',
     bodyComponent: InfoList,
     wrapClassName: 'toolbar_modal_outer toolbar_modal_outer'
   },
@@ -60,7 +57,6 @@ const CUSTOM_MODAL_PROPS = {
     backdrop: false,
     wrapClassName: 'clickable-behind-modal toolbar_modal_outer',
     type: 'selection',
-    offsetRight: '70px',
     modalClassName: 'toolbar-snapshot-modal toolbar-modal toolbar-medium-modal',
     bodyComponent: ImageDownload,
     desktopOnly: true
