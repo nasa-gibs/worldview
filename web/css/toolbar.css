@@ -99,7 +99,7 @@
 }
 
 /* Projection modal */
-.toolbar-projeciton-modal {
+.toolbar-projection-modal {
   right: 66px;
 }
 
@@ -132,7 +132,7 @@
     right: 16px;
   }
 
-  .toolbar-projeciton-modal {
+  .toolbar-projection-modal {
     right: 72px;
   }
 
@@ -149,7 +149,7 @@
 }
 
 @media (min-width: 740px) {
-  .toolbar-projeciton-modal {
+  .toolbar-projection-modal {
     right: 45px;
   }
 

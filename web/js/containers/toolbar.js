@@ -30,7 +30,7 @@ const CUSTOM_MODAL_PROPS = {
   TOOLBAR_PROJECTION: {
     headerText: null,
     type: 'toolbar',
-    modalClassName: 'toolbar-list-modal toolbar-projeciton-modal toolbar-modal',
+    modalClassName: 'toolbar-list-modal toolbar-projection-modal toolbar-modal',
     backdrop: true,
     bodyComponent: Projection,
     wrapClassName: 'toolbar_modal_outer toolbar_modal_outer'
