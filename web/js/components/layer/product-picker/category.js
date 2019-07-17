@@ -16,7 +16,7 @@ class Category extends React.Component {
       categoryType
     } = this.props;
     const bgImage = category.image
-      ? 'images/wv.layers/categories/' + category.image
+      ? 'images/layers/categories/' + category.image
       : '';
     const categoryBgImage = bgImage
       ? {
