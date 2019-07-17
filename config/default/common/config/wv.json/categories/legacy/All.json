@@ -46,7 +46,6 @@
                   "Forests, Mangrove",
                   "Freeze/Thaw",
                   "Frozen Area",
-                  "Global 250m Water Map",
                   "Global Digital Elevation Map",
                   "Gross Primary Productivity",
                   "Heterotrophic Respiration",
@@ -113,6 +112,7 @@
                   "Vegetation Indices",
                   "Vegetation Light Use Efficiency",
                   "Volcano Hazard",
+                  "Water Bodies",
                   "Water Vapor",
                   "Wind Speed"
                 ]

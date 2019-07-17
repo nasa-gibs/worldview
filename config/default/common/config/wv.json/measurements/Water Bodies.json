@@ -1,0 +1,38 @@
+{
+    "measurements": {
+        "Water Bodies": {
+            "id": "water-bodies",
+            "title": "Water Bodies",
+            "subtitle": "Terra/MODIS, Terra/MODIS and SRTM, SEDAC",
+            "sources": {
+              "Terra/MODIS": {
+                  "id": "terra-modis",
+                  "title": "Terra/MODIS",
+                  "description": "modis/LandWaterMask",
+                  "image": "",
+                  "settings": [
+                    "MODIS_Terra_L3_Land_Water_Mask"
+                  ]
+              },
+                "Terra/MODIS and SRTM": {
+                    "id": "terra-modis-srtm",
+                    "title": "Terra/MODIS and SRTM",
+                    "description": "modis/WaterMask",
+                    "image": "",
+                    "settings": [
+                        "MODIS_Water_Mask"
+                    ]
+                },
+                "SEDAC": {
+                    "id": "sedac",
+                    "title": "SEDAC",
+                    "description": "sedac/Reservoirs",
+                    "image": "",
+                    "settings": [
+                        "GRanD_Reservoirs"
+                    ]
+                }
+            }
+        }
+    }
+}
