@@ -31,3 +31,11 @@ export function getVectorStyleAttributeArray(layer) {
   });
   return attrArray;
 }
+
+export function getMinValue(v) {
+  return v.length ? v[0] : v;
+}
+
+export function getMaxValue(v) {
+  return v.length ? v[v.length - 1] : v;
+}
