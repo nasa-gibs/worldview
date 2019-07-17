@@ -12,7 +12,7 @@ Temporal coverage: 26 February 2000 - present (Terra); July 2002 - present (Aqua
 
 The MOD11A1/MYD11A1 Version 6 product provides daily per-pixel Land Surface Temperature and Emissivity (LST&E) with 1 kilometer (km) spatial resolution in a 1,200 by 1,200 km grid. The pixel temperature value is derived from the Terra/Aqua MODIS LST&E swath product. Above 30 degrees latitude, some pixels may have multiple observations where the criteria for clear-sky are met. When this occurs, the pixel value is a result of the average of all qualifying observations. The Land Surface Temperature Day layer is a representation of daytime LST; and the Land Surface Temperature Night layer is a representation of nighttime LST
 
-Reference: [LP DAAC - MOD11A1 Version 6](LP DAAC MOD11A1 Version 6); [LP DAAC - MYD11A1 Version 6](https://doi.org/10.5067/MODIS/MYD11A1.006)
+Reference: [LP DAAC - MOD11A1 Version 6](https://doi.org/10.5067/MODIS/MOD11A1.006); [LP DAAC - MYD11A1 Version 6](https://doi.org/10.5067/MODIS/MYD11A1.006)
 
 ### MODIS (Terra/Aqua) Land Surface Temperature (Level 3, 8-Day, Day | Night)
 Temporal coverage: 26 February 2000 - present (Terra); July 2002 - present (Aqua)

@@ -13,7 +13,6 @@
                     "Chlorophyll A",
                     "Dams",
                     "Earth at Night",
-                    "Global 250m Water Map",
                     "Global Digital Elevation Map",
                     "Latitude-Longitude Lines",
                     "Orbital Track",
@@ -24,7 +23,8 @@
                     "Reservoirs",
                     "Sea Surface Temperature",
                     "Settlements",
-                    "Urban Extents"
+                    "Urban Extents",
+                    "Water Bodies"
                 ]
             }
         }
