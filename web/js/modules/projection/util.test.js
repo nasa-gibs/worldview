@@ -1,5 +1,7 @@
 import { mapLocationToProjState, getProjInitialState } from './util';
-
+import fixtures from '../../fixtures';
+import update from 'immutability-helper';
+const state = fixtures.getState();
 const proj = {
   id: 'some-test-projection'
 };
@@ -41,6 +43,27 @@ test('mapLocationToProjState: Update proj:id key onload', () => {
   const stateFromLocation = {
     proj: proj
   };
-  const newState = mapLocationToProjState(null, stateFromLocation, state);
+  const newState = mapLocationToProjState({}, stateFromLocation, state);
   expect(newState.proj.id).toBe('some-test-projection');
+});
+
+test('legacy switch parameter for projection', () => {
+  let param = {
+    switch: 'some-test-projection'
+  };
+  let stateFromLocation = {
+    proj: proj
+  };
+  const localState = update(state, {
+    config: {
+      $set: config
+    }
+  });
+  const newStateFromLocation = mapLocationToProjState(
+    param,
+    stateFromLocation,
+    localState
+  );
+  expect(newStateFromLocation.proj.id).toBe('some-test-projection');
+  expect(newStateFromLocation.proj.selected.id).toBe('some-test-projection');
 });

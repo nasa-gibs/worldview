@@ -137,7 +137,7 @@ export function parseLegacyPalettes(
   state,
   config
 ) {
-  var parts = state.palettes.split('~');
+  var parts = parameters.palettes.split('~');
   parts.forEach(part => {
     var items = part.split(',');
     var layerId = items[0];
@@ -378,6 +378,15 @@ export function mapLocationToPaletteState(
         palettes: state.palettes,
         config
       })
+    );
+  }
+  // legacy palettes permalink
+  if (parameters.palettes && lodashGet(stateFromLocation, 'layers.active')) {
+    stateFromLocation = parseLegacyPalettes(
+      parameters,
+      stateFromLocation,
+      state,
+      config
     );
   }
   return stateFromLocation;

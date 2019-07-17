@@ -54,11 +54,13 @@ export function mapLocationToDateState(
   // legacy time permalink
   if (parameters.time && !parameters.t && appNow) {
     const date = tryCatchDate(parameters.time, appNow);
-    stateFromLocation = update(stateFromLocation, {
-      date: {
-        selected: { $set: date }
-      }
-    });
+    if (date && date !== appNow) {
+      stateFromLocation = update(stateFromLocation, {
+        date: {
+          selected: { $set: date }
+        }
+      });
+    }
   }
   return stateFromLocation;
 }
