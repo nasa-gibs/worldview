@@ -1,6 +1,10 @@
 import update from 'immutability-helper';
 import { layersParse12 } from '../layers/util';
-import { hasCustomTypePalette, loadPalettes } from './util';
+import {
+  hasCustomTypePalette,
+  loadPalettes,
+  mapLocationToPaletteState
+} from './util';
 import util from '../../util/util';
 import fixtures from '../../fixtures';
 const state = fixtures.getState();
@@ -34,4 +38,70 @@ test('loadPalettes func updates state with correct palette attributes', () => {
   expect(colorMap.min).toEqual(1);
   expect(colorMap.custom).toEqual('red-1');
   expect(colorMap.squash).toEqual(true);
+});
+describe('permalink 1.1', () => {
+  test('parses palette for valid layer', () => {
+    let parameters = {
+      l: 'terra-aod',
+      palettes: 'terra-aod,blue-1'
+    };
+    let stateFromLocation = update(state, {
+      layers: { active: { $set: layersParse12(parameters.l, config) } }
+    });
+
+    stateFromLocation = mapLocationToPaletteState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+    const layer = stateFromLocation.layers.active[0];
+    expect(layer.id).toBe('terra-aod');
+    expect(layer.custom).toBe('blue-1');
+  });
+
+  test('parses palette for two valid layers', () => {
+    let parameters = {
+      l: 'terra-aod,aqua-aod',
+      palettes: 'terra-aod,blue-1~aqua-aod,red-1'
+    };
+    let stateFromLocation = update(state, {
+      layers: { active: { $set: layersParse12(parameters.l, config) } }
+    });
+    stateFromLocation = mapLocationToPaletteState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+
+    const layer1 = stateFromLocation.layers.active[0];
+    const layer2 = stateFromLocation.layers.active[1];
+    expect(layer1.id).toBe('terra-aod');
+    expect(layer1.custom).toBe('blue-1');
+
+    expect(layer2.id).toBe('aqua-aod');
+    expect(layer2.custom).toBe('red-1');
+  });
+
+  test('disregard palettes value if palette assigned to a layer that is not active', () => {
+    var parameters = {
+      l: 'terra-aod',
+      palettes: 'aqua-aod,red-1'
+    };
+    let stateFromLocation = update(state, {
+      layers: { active: { $set: layersParse12(parameters.l, config) } }
+    });
+    stateFromLocation = mapLocationToPaletteState(
+      parameters,
+      stateFromLocation,
+      state,
+      config
+    );
+    const layer = stateFromLocation.layers.active[0];
+
+    expect(layer.id).toBe('terra-aod');
+    expect(layer.custom).toBeUndefined();
+    expect(stateFromLocation.layers.active.length).toBe(1);
+  });
 });

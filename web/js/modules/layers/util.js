@@ -6,15 +6,11 @@ import {
   findIndex as lodashFindIndex,
   each as lodashEach,
   isNaN as lodashIsNaN,
-  get as lodashGet,
   isArray
 } from 'lodash';
 
 import { addLayer, resetLayers } from './selectors';
-import {
-  getPaletteAttributeArray,
-  parseLegacyPalettes
-} from '../palettes/util';
+import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
@@ -412,23 +408,14 @@ export function mapLocationToLayerState(
     });
   }
   // legacy layers permalink
-  if (parameters.product) {
+  if (parameters.products && !parameters.l) {
     stateFromLocation = update(stateFromLocation, {
       layers: {
         active: {
-          $set: layersParse11(state.parameters.product, config)
+          $set: layersParse11(parameters.products, config)
         }
       }
     });
-  }
-  // legacy palettes permalink
-  if (parameters.palettes && lodashGet(stateFromLocation, 'layers.active')) {
-    stateFromLocation = parseLegacyPalettes(
-      parameters,
-      stateFromLocation,
-      state,
-      config
-    );
   }
   return stateFromLocation;
 }

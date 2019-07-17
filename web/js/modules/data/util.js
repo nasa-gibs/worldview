@@ -14,29 +14,32 @@ export function mapLocationToDataState(
   state,
   config
 ) {
-  if (parameters.download) {
-    const productId = parameters.download;
-    if (productId) {
-      const activeString =
-        lodashGet(stateFromLocation, 'compare.activeString') ||
-        lodashGet(state, 'compare.activeString');
-      const activeLayers =
-        lodashGet(stateFromLocation, `layers.${activeString}`) ||
-        lodashGet(state, `layers.${activeString}`);
-      if (
-        !config.products[productId] ||
-        !lodashFind(activeLayers, { product: productId })
-      ) {
-        console.warn('No such product: ' + productId);
+  const productId = parameters.download || parameters.dataDownload;
+  if (productId) {
+    const activeString =
+      lodashGet(stateFromLocation, 'compare.activeString') ||
+      lodashGet(state, 'compare.activeString');
+    const activeLayers =
+      lodashGet(stateFromLocation, `layers.${activeString}`) ||
+      lodashGet(state, `layers.${activeString}`);
+    if (
+      !config.products[productId] ||
+      !lodashFind(activeLayers, { product: productId })
+    ) {
+      console.warn('No such product: ' + productId);
+      stateFromLocation = update(stateFromLocation, {
+        data: { selectedProduct: { $set: '' } }
+      });
+      stateFromLocation = update(stateFromLocation, {
+        data: { active: { $set: false } }
+      });
+    } else {
+      stateFromLocation = update(stateFromLocation, {
+        data: { active: { $set: true } }
+      });
+      if (parameters.dataDownload && !parameters.download) {
         stateFromLocation = update(stateFromLocation, {
-          data: { selectedProduct: { $set: '' } }
-        });
-        stateFromLocation = update(stateFromLocation, {
-          data: { active: { $set: false } }
-        });
-      } else {
-        stateFromLocation = update(stateFromLocation, {
-          data: { active: { $set: true } }
+          data: { selectedProduct: { $set: productId } }
         });
       }
     }
