@@ -65,7 +65,6 @@
   -webkit-transform: translate(0, 0);
 }
 
-.tour-complete .modal-dialog .modal-content,
 .tour-start .modal-dialog .modal-content {
   background-color: #eee;
   border: 0;
@@ -599,7 +598,8 @@
   -webkit-transform: translate(0, 0);
 }
 
-.tour-complete .modal-content {
+.tour-complete .modal-dialog .modal-content {
+  background-color: #fff;
   border: 0;
   border-radius: 0;
 }
