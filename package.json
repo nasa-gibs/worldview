@@ -57,7 +57,6 @@
     "python": "run-script-os",
     "python:darwin:linux": "bash -c 'tasks/pythonInstall.sh linux'",
     "python:win32": "bash -c 'tasks/pythonInstall.sh'",
-    "report": "node e2e/create-report.js",
     "start": "node ./tasks/start.js",
     "test": "run-script-os",
     "test:win32": "npm run test:unit && npm run lint",
@@ -191,9 +190,7 @@
     "whatwg-fetch": "^3.0.0"
   },
   "browser": {
-    "gifwriter": "./web/ext/gifwriter/gifwriter.js",
     "neuquant": "./web/ext/neuquant/neuquant.js",
-    "jquery-jcrop": "./node_modules/jquery-jcrop/js/jquery.Jcrop.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   },
   "browserslist": [
