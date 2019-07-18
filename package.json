@@ -190,7 +190,6 @@
     "whatwg-fetch": "^3.0.0"
   },
   "browser": {
-    "neuquant": "./web/ext/neuquant/neuquant.js",
     "jquery": "./node_modules/jquery/dist/jquery.js"
   },
   "browserslist": [
