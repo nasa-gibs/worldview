@@ -372,12 +372,17 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   handleKeyDown = (e) => {
-    if (e.keyCode === 37) {
-      e.preventDefault();
-      this.throttleDecrementDate();
-    } else if (e.keyCode === 39) {
-      e.preventDefault();
-      this.throttleIncrementDate();
+    // prevent left/right arrows changing date within inputs
+    if (e.target.tagName !== 'INPUT') {
+      // left arrow
+      if (e.keyCode === 37) {
+        e.preventDefault();
+        this.throttleDecrementDate();
+      // right arrow
+      } else if (e.keyCode === 39) {
+        e.preventDefault();
+        this.throttleIncrementDate();
+      }
     }
   };
   /**
@@ -386,9 +391,11 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   handleKeyUp = (e) => {
+    // left arrow
     if (e.keyCode === 37) {
       e.preventDefault();
       this.stopLeftArrow();
+    // right arrow
     } else if (e.keyCode === 39) {
       e.preventDefault();
       this.stopRightArrow();
