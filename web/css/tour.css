@@ -775,24 +775,38 @@
 }
 
 @media (max-height: 776px) {
+  .tour-in-progress .modal {
+    bottom: 278px;
+  }
   .tour-in-progress .modal-content {
     height: 300px;
   }
 }
 
 @media (max-height: 712px) {
+  .tour-in-progress .modal {
+    bottom: 278px;
+  }
   .tour-in-progress .modal-content {
-    height: 275px;
+    height: 250px;
   }
 }
 
 @media (max-height: 665px) {
+  .tour-in-progress .modal {
+    bottom: 228px;
+  }
+
   .tour-in-progress .modal-content {
     height: 200px;
   }
 }
 
 @media (min-height: 450px) {
+  .tour-in-progress .modal {
+    bottom: `78px;
+  }
+
   .tour {
     display: block;
   }
