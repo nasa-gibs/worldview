@@ -785,7 +785,7 @@
 
 @media (max-height: 712px) {
   .tour-in-progress .modal {
-    bottom: 278px;
+    bottom: 232px;
   }
   .tour-in-progress .modal-content {
     height: 250px;
@@ -794,7 +794,7 @@
 
 @media (max-height: 665px) {
   .tour-in-progress .modal {
-    bottom: 228px;
+    bottom: 178px;
   }
 
   .tour-in-progress .modal-content {
@@ -803,10 +803,6 @@
 }
 
 @media (min-height: 450px) {
-  .tour-in-progress .modal {
-    bottom: 78px;
-  }
-
   .tour {
     display: block;
   }
