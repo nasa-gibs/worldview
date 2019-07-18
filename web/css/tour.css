@@ -219,10 +219,10 @@
 /* .tour-in-progress */
 .tour-in-progress .modal {
   left: auto;
-  right: 10px;
+  right: 0;
   top: auto;
   width: 248px;
-  bottom: 275px;
+  bottom: 333px;
   height: 200px;
   overflow: visible;
 }
@@ -247,11 +247,12 @@
   -webkit-transform: translate(0, 0);
 }
 
-.tour-in-progress .modal-content {
+.tour-in-progress .modal-dialog .modal-content {
   min-width: 248px;
   max-height: 357px;
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 8px 0 0 8px;
+  border: none;
 }
 
 .tour-in-progress .modal-header {
