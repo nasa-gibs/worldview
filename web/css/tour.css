@@ -804,7 +804,7 @@
 
 @media (min-height: 450px) {
   .tour-in-progress .modal {
-    bottom: `78px;
+    bottom: 78px;
   }
 
   .tour {
