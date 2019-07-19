@@ -12,6 +12,8 @@
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Thermal_Anomalies_All",
+                        "MODIS_Aqua_Thermal_Anomalies_Day",
+                        "MODIS_Aqua_Thermal_Anomalies_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]
@@ -23,6 +25,8 @@
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Thermal_Anomalies_All",
+                        "MODIS_Terra_Thermal_Anomalies_Day",
+                        "MODIS_Terra_Thermal_Anomalies_Night",
                         "OrbitTracks_Terra_Ascending",
                         "OrbitTracks_Terra_Descending"
                     ]
@@ -43,7 +47,7 @@
                     "image": "",
                     "settings": [
                       	"VIIRS_SNPP_Thermal_Anomalies_375m_Day",
-	                    "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
+	                      "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
                         "OrbitTracks_Suomi_NPP_Ascending",
                         "OrbitTracks_Suomi_NPP_Descending"
                     ]
