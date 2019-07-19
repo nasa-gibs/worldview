@@ -6,7 +6,7 @@ const showdown = require('showdown');
 const shell = require('shelljs');
 
 console.log('Converting markdown to html');
-let converter = new showdown.Converter();
+let converter = new showdown.Converter({ openLinksInNewWindow: true });
 
 let configFiles = glob.sync('build/options/config/metadata/**/*.md');
 for (let configFile of configFiles) {
