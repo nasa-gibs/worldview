@@ -4,7 +4,7 @@
             "id":       "MODIS_Combined_L3_LAI_4Day",
             "title":    "Leaf Area Index (L3, 4-Day)",
             "subtitle": "Terra and Aqua / MODIS",
-            "description": "modis/combined/MODIS_Combined_L3_LAI_4Day",
+            "description": "modis/combined/MODIS_Combined_L4_LAI_4Day",
             "tags":     "",
             "group":    "overlays",
             "layergroup": [
