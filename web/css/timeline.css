@@ -326,6 +326,10 @@ button:focus {
   margin-bottom: 5px;
 }
 
+#zoom-btn-container-axis:hover {
+  cursor: pointer;
+}
+
 .zoom-level-display-text {
   color: #fff;
   font-family: 'Roboto Mono', monospace;
