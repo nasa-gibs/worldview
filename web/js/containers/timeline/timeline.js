@@ -997,8 +997,6 @@ class Timeline extends React.Component {
                       timelineEndDateLimit={timelineEndDateLimit}
                       frontDate={frontDate}
                       backDate={backDate}
-                      dateA={dateA}
-                      dateB={dateB}
                       draggerSelected={draggerSelected}
                       draggerTimeState={draggerTimeState}
                       draggerTimeStateB={draggerTimeStateB}

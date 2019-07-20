@@ -18,9 +18,7 @@ class DraggerContainer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      draggerWidth: 49,
-      draggerTimeState: '',
-      draggerTimeStateB: ''
+      draggerWidth: 49
     };
   }
 
@@ -43,9 +41,10 @@ class DraggerContainer extends PureComponent {
   /**
   * @desc move draggerTimeState to inputTime
   * @param {String} inputTime
+  * @param {Boolean} isDraggerB
   * @returns {void}
   */
-  setDraggerPosition = (inputTime) => {
+  setDraggerPosition = (inputTime, isDraggerB) => {
     let {
       timeScale,
       position,
@@ -54,9 +53,6 @@ class DraggerContainer extends PureComponent {
       backDate,
       draggerPosition,
       draggerPositionB,
-      draggerSelected,
-      draggerTimeState,
-      draggerTimeStateB,
       timelineEndDateLimit,
       updateDraggerDatePosition
     } = this.props;
@@ -69,13 +65,13 @@ class DraggerContainer extends PureComponent {
 
     let oldDraggerPosition;
     let newDraggerPosition;
-    let newDraggerTime;
-    if (draggerSelected === 'selected') {
-      oldDraggerPosition = draggerPosition;
-      newDraggerTime = draggerTimeState;
-    } else {
+    let draggerSelected;
+    if (isDraggerB) {
       oldDraggerPosition = draggerPositionB;
-      newDraggerTime = draggerTimeStateB;
+      draggerSelected = 'selectedB';
+    } else {
+      oldDraggerPosition = draggerPosition;
+      draggerSelected = 'selected';
     }
 
     let options = timeScaleOptions[timeScale].timeAxis;
@@ -95,7 +91,6 @@ class DraggerContainer extends PureComponent {
       newDraggerPosition = oldDraggerPosition;
     }
 
-    this.updateLocalDraggerTimeStates(draggerSelected, newDraggerTime);
     // update parent dragger positioning
     updateDraggerDatePosition(null, draggerSelected, newDraggerPosition, draggerVisible);
   }
@@ -148,7 +143,7 @@ class DraggerContainer extends PureComponent {
         draggerTime = draggerTimeStateB;
       }
 
-      // update draggerTime based on deltaX from state draggerTime
+      // update draggerTime based on deltaX draggerTime
       let draggerTimeValue = new Date(draggerTime).getTime();
 
       // only need to calculate difference in time unit for varying timescales - month and year
@@ -181,51 +176,18 @@ class DraggerContainer extends PureComponent {
         return false;
       }
 
-      this.updateLocalDraggerTimeStates(draggerSelected, newDraggerTime);
       // update parent dragger positioning
       updateDraggerDatePosition(newDraggerTime, draggerSelected, newDraggerPosition, null, null, true);
     });
   }
 
-  // helper dragger time state update
-  updateLocalDraggerTimeStates = (draggerSelected, newDraggerTime) => {
-    if (draggerSelected === 'selected') {
-      this.setState({
-        draggerTimeState: newDraggerTime
-      });
-    } else {
-      this.setState({
-        draggerTimeStateB: newDraggerTime
-      });
-    }
-  }
-
-  // init locla state time setting
-  setInitDraggerTimeStates = () => {
-    let {
-      draggerTimeState,
-      draggerTimeStateB
-    } = this.props;
-    this.setState({
-      draggerTimeState,
-      draggerTimeStateB
-    });
-  }
-
-  componentDidMount() {
-    this.setInitDraggerTimeStates();
-  }
-
   componentDidUpdate(prevProps) {
     let {
-      dateA,
-      dateB,
       draggerTimeState,
       draggerTimeStateB,
       isDraggerDragging,
       draggerSelected,
       isCompareModeActive,
-      isAnimationPlaying,
       setDraggerVisibility
     } = this.props;
 
@@ -248,27 +210,13 @@ class DraggerContainer extends PureComponent {
     if (!isDraggerDragging) {
       // handle A dragger change
       let propsTimeStateChanged = draggerTimeState !== prevProps.draggerTimeState;
-      let localTimeStateChanged = draggerTimeState !== this.state.draggerTimeState;
-      if (propsTimeStateChanged && localTimeStateChanged) {
-        let propsDateSameAsDraggerTimeState = dateA === draggerTimeState;
-        let propsDateChanged = dateA !== prevProps.dateA;
-        if (!isAnimationPlaying && propsDateSameAsDraggerTimeState && propsDateChanged) {
-          this.updateLocalDraggerTimeStates('selected', draggerTimeState);
-        } else {
-          this.setDraggerPosition(draggerTimeState);
-        }
+      if (propsTimeStateChanged && (isCompareModeActive || draggerSelected === 'selected')) {
+        this.setDraggerPosition(draggerTimeState, false);
       }
       // handle B dragger change
       let propsTimeStateBChanged = draggerTimeStateB !== prevProps.draggerTimeStateB;
-      let localTimeStateBChanged = draggerTimeStateB !== this.state.draggerTimeStateB;
-      if (propsTimeStateBChanged && localTimeStateBChanged) {
-        let propsDateBSameAsDraggerTimeState = dateB === draggerTimeStateB;
-        let propsDateBChanged = dateB !== prevProps.dateB;
-        if (!isAnimationPlaying && propsDateBSameAsDraggerTimeState && propsDateBChanged) {
-          this.updateLocalDraggerTimeStates('selectedB', draggerTimeStateB);
-        } else {
-          this.setDraggerPosition(draggerTimeStateB);
-        }
+      if (propsTimeStateBChanged && (isCompareModeActive || draggerSelected === 'selectedB')) {
+        this.setDraggerPosition(draggerTimeStateB, true);
       }
     }
   }
@@ -338,8 +286,6 @@ class DraggerContainer extends PureComponent {
 DraggerContainer.propTypes = {
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
-  dateA: PropTypes.string,
-  dateB: PropTypes.string,
   draggerPosition: PropTypes.number,
   draggerPositionB: PropTypes.number,
   draggerSelected: PropTypes.string,
