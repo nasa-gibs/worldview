@@ -47,16 +47,23 @@ class InfoList extends Component {
       notifications,
       config,
       startTour,
-      isTourActive
+      isTourActive,
+      isMobile
     } = this.props;
+    const feedbackAction = isMobile
+      ? { href: 'mailto:@MAIL@?subject=Feedback for @LONG_NAME@ tool' }
+      : {
+        onClick: () => {
+          sendFeedback(feedbackIsInitiated);
+        }
+      };
+    console.log(feedbackAction);
     let arr = [
       {
         text: 'Send feedback',
         iconClass: 'ui-icon fa fa-envelope fa-fw',
         id: 'send_feedback_info_item',
-        onClick: () => {
-          sendFeedback(feedbackIsInitiated);
-        }
+        ...feedbackAction
       },
       {
         text: 'Source Code',
@@ -119,7 +126,8 @@ function mapStateToProps(state) {
     isTourActive: state.tour.active,
     notifications: state.notifications,
     config: state.config,
-    models: state.models
+    models: state.models,
+    isMobile: state.browser.lessThan.medium
   };
 }
 const mapDispatchToProps = dispatch => ({
