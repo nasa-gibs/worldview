@@ -5,13 +5,11 @@ import update from 'immutability-helper';
 const now = new Date();
 const then = util.dateAdd(now, 'day', -7);
 
-test('OPEN_ANIMATION action updates start and end dates', () => {
+test('OPEN_ANIMATION action updates active state', () => {
   const response = animationReducer(defaultState, {
-    type: CONSTANTS.OPEN_ANIMATION,
-    date: now
+    type: CONSTANTS.OPEN_ANIMATION
   });
-  expect(response.startDate).toEqual(then);
-  expect(response.endDate).toEqual(now);
+
   expect(response.isActive).toEqual(true);
 });
 

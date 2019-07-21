@@ -125,8 +125,13 @@ test(
     const mockStore = configureMockStore(middlewares);
     const store = mockStore(state);
     store.dispatch(onActivate());
-    const response = store.getActions()[0];
-    expect(response.type).toEqual(constants.OPEN_ANIMATION);
-    expect(response.date).toEqual(state.date.selected);
+    const response1 = store.getActions()[0];
+    const response2 = store.getActions()[1];
+    expect(response1.type).toEqual(constants.UPDATE_START_AND_END_DATE);
+    expect(response1.endDate).toEqual(state.date.selected);
+    expect(response1.startDate).toEqual(
+      util.dateAdd(state.date.selected, 'day', -7)
+    );
+    expect(response2.type).toEqual(constants.OPEN_ANIMATION);
   }
 );

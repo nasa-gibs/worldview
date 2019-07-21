@@ -35,11 +35,7 @@ export function animationReducer(state = defaultState, action) {
     case OPEN_ANIMATION:
       return lodashAssign({}, state, {
         isActive: true,
-        gifActive: false,
-        startDate: state.startDate
-          ? state.startDate
-          : util.dateAdd(action.date, 'day', -7),
-        endDate: state.endDate ? state.endDate : action.date
+        gifActive: false
       });
     case EXIT_ANIMATION:
       return lodashAssign({}, state, {
