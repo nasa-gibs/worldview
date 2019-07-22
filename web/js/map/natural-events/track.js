@@ -628,7 +628,7 @@ function getClusterPointEl(proj, cluster, map, pointClusterObj, callback) {
     positioning: 'center-center',
     element: overlayEl,
     stopEvent: false,
-    id: clusterId
+    id: clusterId + properties.startDate + properties.endDate
   });
 }
 function addOverlayIfIsVisible(map, overlay) {
