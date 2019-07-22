@@ -50,11 +50,13 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
               ui.naturalEvents.eventsData,
               selectedEvent.id
             );
-            debounceTrackUpdate(event, selectedEvent.date, map, () =>
+            debounceTrackUpdate(event, selectedEvent.date, map, (id, date) => {
+              id = id || selectedEvent.id;
+              date = date || selectedEvent.date;
               store.dispatch(
-                selectEventAction(selectedEvent.id, selectedEvent.date)
-              )
-            );
+                selectEventAction(id, date)
+              );
+            });
           }
         }
       }
@@ -291,6 +293,7 @@ var naturalEventsTrackPoint = function(
   overlayEl.dataset.id = eventID;
   overlayEl.id = 'track-marker-case-' + date;
   overlayEl.onclick = function() {
+    console.log('SELECTED DATE:', date);
     callback(eventID, date);
   };
   textEl.appendChild(content);
