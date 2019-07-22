@@ -90,7 +90,7 @@ class Timeline extends React.Component {
       rangeSelectorMax: { end: false, start: false, startOffset: -50, width: 50000 }
     };
     // left/right arrows
-    this.debounceDateUpdate = lodashDebounce(this.props.changeDate, 50);
+    this.debounceDateUpdate = lodashDebounce(this.props.changeDate, 8);
     this.throttleDecrementDate = lodashThrottle(this.handleArrowDateChange.bind(this, -1), ANIMATION_DELAY, { leading: true, trailing: false });
     this.throttleIncrementDate = lodashThrottle(this.handleArrowDateChange.bind(this, 1), ANIMATION_DELAY, { leading: true, trailing: false });
 
