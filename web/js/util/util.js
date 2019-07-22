@@ -437,12 +437,13 @@ export default (function (self) {
     return newDate;
   };
 
-  self.getNumberOfDays = function(start, end, interval) {
+  self.getNumberOfDays = function(start, end, interval, increment) {
+    increment = increment || 1;
     var i = 1;
     var currentDate = start;
     while (currentDate < end) {
       i++;
-      currentDate = self.dateAdd(currentDate, interval, 1);
+      currentDate = self.dateAdd(currentDate, interval, increment);
     }
     return i;
   };

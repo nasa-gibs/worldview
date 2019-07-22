@@ -80,7 +80,8 @@ class GIF extends Component {
       proj,
       onClose,
       endDate,
-      startDate
+      startDate,
+      numberOfFrames
     } = this.props;
     const { boundaries, showDates } = this.state;
 
@@ -121,6 +122,7 @@ class GIF extends Component {
             startDate={startDate}
             endDate={endDate}
             onClick={this.createGIF.bind(this)}
+            numberOfFrames={numberOfFrames}
           />
 
           <Crop
@@ -350,6 +352,14 @@ function mapStateToProps(state, ownProps) {
     speed,
     map,
     url,
+    numberOfFrames: util.getNumberOfDays(
+      startDate,
+      endDate,
+      customSelected
+        ? timeScaleFromNumberKey[customInterval]
+        : timeScaleFromNumberKey[interval],
+      customSelected ? customDelta : 1
+    ),
     getImageArray: (gifComponentProps, gifComponentState, dimensions) => {
       return getImageArray(
         gifComponentProps,
@@ -374,6 +384,7 @@ GIF.propTypes = {
   increment: PropTypes.string,
   isActive: PropTypes.bool,
   map: PropTypes.object,
+  numberOfFrames: PropTypes.number,
   onClose: PropTypes.func,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
