@@ -28,7 +28,8 @@ export default class List extends React.Component {
               active={isActive}
               id={item.id || ''}
               className={className + ' ' + size + '-item'}
-              href={item.href ? item.href : 'false'}
+              href={item.href ? item.href : undefined}
+              target={item.href ? '_blank' : undefined}
               onClick={
                 item.onClick
                   ? item.onClick
