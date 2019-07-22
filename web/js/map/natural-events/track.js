@@ -44,20 +44,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
         if (self.trackDetails.id) {
           addPointOverlays(map, self.trackDetails.pointArray);
         } else {
-          let selectedEvent = ui.naturalEvents.selected;
-          if (selectedEvent.date) {
-            let event = naturalEventsUtilGetEventById(
-              ui.naturalEvents.eventsData,
-              selectedEvent.id
-            );
-            debounceTrackUpdate(event, selectedEvent.date, map, (id, date) => {
-              id = id || selectedEvent.id;
-              date = date || selectedEvent.date;
-              store.dispatch(
-                selectEventAction(id, date)
-              );
-            });
-          }
+          debounceTrackUpdate();
         }
       }
     });
@@ -95,6 +82,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
       }
     });
   };
+
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -113,18 +101,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
   const onSidebarChange = function(tab) {
     const map = ui.map.selected;
     if (tab === 'events') {
-      let selectedEvent = ui.naturalEvents.selected;
-      if (selectedEvent.date) {
-        let event = naturalEventsUtilGetEventById(
-          ui.naturalEvents.eventsData,
-          selectedEvent.id
-        );
-        self.update(event, map, selectedEvent.date, () =>
-          store.dispatch(
-            selectEventAction(selectedEvent.id, selectedEvent.date)
-          )
-        );
-      }
+      debounceTrackUpdate();
     } else {
       if (self.trackDetails.id) self.update(null, map);
     }
@@ -208,9 +185,24 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
     }
     self.trackDetails = newTrackDetails;
   };
+
   var debounceTrackUpdate = lodashDebounce(
-    (event, selectedDate, map, selectEventCallback) => {
-      self.update(event, map, selectedDate, selectEventCallback);
+    () => {
+      const selectedEvent = ui.naturalEvents.selected;
+      const map = ui.map.selected;
+
+      if (!selectedEvent || !selectedEvent.date) {
+        return;
+      }
+      let event = naturalEventsUtilGetEventById(
+        ui.naturalEvents.eventsData,
+        selectedEvent.id
+      );
+      self.update(event, map, selectedEvent.date, (id, date) => {
+        store.dispatch(
+          selectEventAction(id, date)
+        );
+      });
     },
     250
   );
@@ -293,7 +285,6 @@ var naturalEventsTrackPoint = function(
   overlayEl.dataset.id = eventID;
   overlayEl.id = 'track-marker-case-' + date;
   overlayEl.onclick = function() {
-    console.log('SELECTED DATE:', date);
     callback(eventID, date);
   };
   textEl.appendChild(content);
