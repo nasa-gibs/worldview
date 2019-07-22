@@ -19,17 +19,17 @@ export function onActivate() {
     const activeDate = date[dateStr];
     if (!animation.startDate || !animation.endDate) {
       const sevenDaysBefore = util.dateAdd(activeDate, 'day', -7);
-      const severDaysAfter = util.dateAdd(activeDate, 'day', 7);
+      const sevenDaysAfter = util.dateAdd(activeDate, 'day', 7);
       const startDate = animation.startDate
         ? animation.startDate
-        : date.appNow < severDaysAfter
+        : date.appNow < sevenDaysAfter
           ? sevenDaysBefore
           : activeDate;
       const endDate = animation.endDate
         ? animation.endDate
-        : date.appNow < severDaysAfter
+        : date.appNow < sevenDaysAfter
           ? activeDate
-          : severDaysAfter;
+          : sevenDaysAfter;
       dispatch({ type: UPDATE_START_AND_END_DATE, startDate, endDate });
     }
     dispatch({ type: OPEN_ANIMATION });
