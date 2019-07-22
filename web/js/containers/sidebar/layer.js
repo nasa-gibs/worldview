@@ -47,7 +47,8 @@ class Layer extends React.Component {
       renderedPalette,
       requestPalette,
       isCustomPalette,
-      isLoading
+      isLoading,
+      isMobile
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
       let isRunningData = !!runningObject;
@@ -62,6 +63,7 @@ class Layer extends React.Component {
           isRunningData={isRunningData}
           checkerBoardPattern={checkerBoardPattern}
           colorHex={colorHex}
+          isMobile={isMobile}
         />
       );
     } else if (!isLoading) {

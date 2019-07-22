@@ -134,7 +134,7 @@
 
 .wv-palettes-panel .wv-running-bar::after,
 .wv-palettes-panel .wv-running-bar::before {
-  content: "";
+  content: '';
   position: absolute;
   width: 0;
   height: 0;
@@ -184,6 +184,15 @@
   max-width: 231px;
   margin-left: 5px;
 }
+@media (max-width: 740px) {
+  .wv-palettes-colorbar {
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
 .scrollbar-visible .wv-palettes-colorbar {
   margin-left: 0;
 }

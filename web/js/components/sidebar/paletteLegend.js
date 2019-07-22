@@ -202,7 +202,7 @@ class PaletteLegend extends React.Component {
    * @param {Boolean} isMoreThanOneColorBar
    */
   renderScale(legend, index, isMoreThanOneColorBar) {
-    const { layer, width, getPalette } = this.props;
+    const { layer, width, getPalette, isMobile } = this.props;
     const { isRunningData, colorHex, isHoveringLegend } = this.state;
     const palette = getPalette(layer.id, index);
     var percent, textWidth, xOffset, legendObj;
@@ -242,12 +242,13 @@ class PaletteLegend extends React.Component {
             width={width}
             height={12}
             ref={this['canvas_' + index]}
-            onMouseEnter={this.onMouseEnter.bind(this)}
-            onMouseLeave={this.hideValue.bind(this)}
-            onMouseMove={this.onHoverColorbar.bind(
-              this,
-              this['canvas_' + index]
-            )}
+            onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
+            onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
+            onMouseMove={
+              !isMobile
+                ? this.onHoverColorbar.bind(this, this['canvas_' + index])
+                : null
+            }
           />
           <div
             className="wv-running-bar"
@@ -408,6 +409,7 @@ PaletteLegend.propTypes = {
   isCustomPalette: PropTypes.bool,
   isHoveringCanvas: PropTypes.bool,
   isHoveringLegend: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
   isRunningDataEnabled: PropTypes.bool,
   layer: PropTypes.object,
