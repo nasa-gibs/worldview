@@ -57,7 +57,6 @@ class InfoList extends Component {
           sendFeedback(feedbackIsInitiated);
         }
       };
-    console.log(feedbackAction);
     let arr = [
       {
         text: 'Send feedback',
@@ -186,6 +185,7 @@ InfoList.propTypes = {
   aboutClick: PropTypes.func,
   config: PropTypes.object,
   feedbackIsInitiated: PropTypes.bool,
+  isMobile: PropTypes.bool,
   isTourActive: PropTypes.bool,
   models: PropTypes.object,
   notificationClick: PropTypes.func,
