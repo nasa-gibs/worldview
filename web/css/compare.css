@@ -5,6 +5,11 @@
   top: 0;
   width: 1px;
   background: #fff;
+  cursor: move;
+  cursor: grab;
+  user-select: none;
+}
+.ab-swipe-line:active {
   cursor: grabbing;
 }
 .ab-swipe-dragger {
