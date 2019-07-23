@@ -76,6 +76,11 @@ export default function naturalEventsUI(ui, config, store, models) {
         return !isLoading ? onProjChange(action.id) : '';
     }
   };
+
+  /**
+   * Handle when switching to/from the 'Events' tab in the sidebar
+   * @param {*} tab
+   */
   const onSidebarChange = function(tab) {
     const proj = store.getState().proj;
     if (tab === 'events') {
@@ -116,7 +121,11 @@ export default function naturalEventsUI(ui, config, store, models) {
       naturalEventMarkers.remove(self.markers);
     }
   };
-  // get events for projection change
+
+  /**
+   * Handle when the projection changes
+   * @param {*} id
+   */
   const onProjChange = function(id) {
     const state = store.getState();
     map = ui.map.selected;
@@ -127,7 +136,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     self.filterEventList();
 
     // handle list filter on map move
-    ui.map.selected.on('moveend', function(e) {
+    map.on('moveend', function(e) {
       self.filterEventList();
     });
 
@@ -161,12 +170,12 @@ export default function naturalEventsUI(ui, config, store, models) {
           self.filterEventList();
         } else {
           let event = naturalEventsUtilGetEventById(
-            state.requestedEventSources.response,
+            self.eventsData,
             self.selected.id
           );
           naturalEventsTrack.update(
             event,
-            ui.map.selected,
+            map,
             self.selected.date,
             self.selectEvent
           );
@@ -225,26 +234,31 @@ export default function naturalEventsUI(ui, config, store, models) {
       })
       : zoomToEvent(event, date, rotation, isIdChange);
   };
+
+  /**
+   * Select an event
+   * @param {*} id
+   * @param {*} date
+   * @param {*} rotation
+   * @param {*} isInitialLoad
+   */
   self.selectEvent = function(id, date, rotation, isInitialLoad) {
     var isIdChange = !self.selected || self.selected.id !== id;
     var prevId = self.selected.id ? self.selected.id : false;
-    var prevEvent = prevId
-      ? naturalEventsUtilGetEventById(self.eventsData, prevId)
-      : false;
+    var prevEvent = prevId && naturalEventsUtilGetEventById(self.eventsData, prevId);
     var prevCategory = prevEvent ? prevEvent.categories[0].title : false;
-
-    // Store selected id and date in model
-    self.selected = { id: id };
     var event = naturalEventsUtilGetEventById(self.eventsData, id);
+    var category = event && event.categories[0].title;
+    var isSameCategory = category === prevCategory;
     if (!event) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
     }
+    self.selected = {
+      id,
+      date: date || self.getDefaultEventDate(event)
+    };
 
-    var category = event.categories[0].title;
-    var isSameCategory = category === prevCategory;
-
-    date = date || self.getDefaultEventDate(event);
     const zoomPromise = getZoomPromise(
       event,
       date,
@@ -252,14 +266,12 @@ export default function naturalEventsUI(ui, config, store, models) {
       !isIdChange,
       isInitialLoad
     );
-    self.selected.date = date;
-
     // highlightEventInList(id, date);
     // Remove previously stored markers
     naturalEventMarkers.remove(self.markers);
     // Store markers so the can be referenced later
     self.markers = naturalEventMarkers.draw();
-    zoomPromise.then(function() {
+    zoomPromise.then(() => {
       self.selecting = true;
 
       /* For Wildfires that didn't happen today, move the timeline forward a day
