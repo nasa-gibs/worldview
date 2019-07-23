@@ -1,11 +1,11 @@
 {
     "layers": {
-        "MODIS_Combined_L3_LAI_4Day": {
-            "id":       "MODIS_Combined_L3_LAI_4Day",
-            "title":    "Leaf Area Index (L3, 4-Day)",
+        "MODIS_Combined_L4_FPAR_4Day": {
+            "id":       "MODIS_Combined_L4_FPAR_4Day",
+            "title":    "Fraction of Photosynthetically Active Radiation (L4, 4-Day)",
             "subtitle": "Terra and Aqua / MODIS",
-            "description": "modis/combined/MODIS_Combined_L4_LAI_4Day",
-            "tags":     "",
+            "description": "modis/combined/MODIS_Combined_L4_FPAR_4Day",
+            "tags":     "fpar",
             "group":    "overlays",
             "layergroup": [
               "modis",
