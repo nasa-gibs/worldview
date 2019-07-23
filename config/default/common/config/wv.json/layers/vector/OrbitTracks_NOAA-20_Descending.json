@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_NOAA-20_Descending": {
+          "id":       "OrbitTracks_NOAA-20_Descending",
+          "title":    "Orbit Tracks (Descending, Points, NOAA-20)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_NOAA-20_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_NOAA-20_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

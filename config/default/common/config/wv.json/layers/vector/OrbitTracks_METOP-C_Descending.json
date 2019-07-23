@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_METOP-C_Descending": {
+          "id":       "OrbitTracks_METOP-C_Descending",
+          "title":    "Orbit Tracks (Descending, Points, METOP-C)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_METOP-C_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_METOP-C_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

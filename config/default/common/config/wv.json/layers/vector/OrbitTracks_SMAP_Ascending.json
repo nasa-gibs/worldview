@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_SMAP_Ascending": {
+          "id":       "OrbitTracks_SMAP_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, SMAP)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_SMAP_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_SMAP_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}

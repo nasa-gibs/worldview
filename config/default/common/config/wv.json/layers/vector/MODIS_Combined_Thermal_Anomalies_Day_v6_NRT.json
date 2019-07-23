@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "MODIS_Combined_Thermal_Anomalies_Day_v6_NRT": {
+          "id":       "MODIS_Combined_Thermal_Anomalies_Day_v6_NRT",
+          "title":    "Thermal Anomalies and Fires (Day, v6.0, Near Real-Time, MODIS, Aqua+Terra)",
+          "subtitle": "",
+          "description": "vector/MODIS_Combined_Thermal_Anomalies_Day_v6_NRT",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "MODIS_Combined_Thermal_Anomalies_Day_v6_NRT"
+          },
+          "period": "daily"
+      }
+  }
+}

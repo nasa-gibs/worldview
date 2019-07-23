@@ -1,0 +1,18 @@
+{
+  "layers": {
+      "Himawari_AHI_Band13_Clean_Infrared_v0_NRT": {
+          "id":       "Himawari_AHI_Band13_Clean_Infrared_v0_NRT",
+          "title":    "Clean Infrared (10.3 µm, Band 13, AHI, Himawari)",
+          "subtitle":    "Himawari / AHI",
+          "description": "himawari/Himawari_AHI_Band13_Clean_Infrared_v0_NRT",
+          "tags":     "Himawari subdaily",
+          "group":    "overlays",
+          "layergroup": [
+            "Himawari"
+          ],
+          "inactive": true,
+          "period": "subdaily",
+          "wrapX": true
+      }
+  }
+}

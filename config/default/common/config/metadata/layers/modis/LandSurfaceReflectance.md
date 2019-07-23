@@ -38,6 +38,7 @@ The MODIS Land Surface Reflectance product is available from both the Terra (MOD
 The MODIS Corrected Reflectance algorithm utilizes MODIS Level 1B data (the calibrated, geolocated radiances). It is not a standard, science quality product. The purpose of this algorithm is to provide natural-looking images by removing gross atmospheric effects, such as Rayleigh scattering, from MODIS visible bands 1-7. The algorithm was developed by the original MODIS Rapid Response team to address the needs of the fire monitoring community who want to see smoke. Corrected Reflectance shows smoke more clearly than the standard Surface Reflectance product. In contrast, the MODIS Land Surface Reflectance product (MOD09) is a more complete atmospheric correction algorithm that includes aerosol correction, and is designed to derive land surface properties. In clear atmospheric conditions the Corrected Reflectance product is very similar to the MOD09 product, but they depart from each other in presence of aerosols. If you wish to perform a complete atmospheric correction, please do not use the Corrected Reflectance algorithm. An additional difference is that the Land Surface Reflectance product is only tuned for calculating the reflectance over land surfaces.
 
 References: [MODAPS - MOD09](https://modaps.modaps.eosdis.nasa.gov/services/about/products/c6-nrt/MOD09.html);[MODAPS - MYD09](https://modaps.modaps.eosdis.nasa.gov/services/about/products/c6-nrt/MYD09.html); [NASA Earthdata - Creating Reprojected True Color MODIS Images: A Tutorial](https://earthdata.nasa.gov/files/MODIS_True_Color.pdf)
+<<<<<<< HEAD
 
 ### MODIS (Terra/Aqua) Land Surface Reflectance (Level 2G, Daily, True Color)
 Temporal coverage: 24 February 2000 - present (Terra); July 2002 - present (Aqua)
@@ -66,3 +67,5 @@ Temporal coverage: 26 February 2000 - present (Terra); July 2002 - present (Aqua
 The MOD09Q1/MYD09Q1 Version 6 product provides an estimate of the surface spectral reflectance of Terra/Aqua Moderate Resolution Imaging Spectroradiometer (MODIS) Bands 1 and 2, corrected for atmospheric conditions such as gasses, aerosols, and Rayleigh scattering. Provided along with the 250 meter (m) surface reflectance bands are two quality layers. For each pixel, a value is selected from all the acquisitions within the 8-day composite period. The criteria for the pixel choice include cloud and solar zenith. When several acquisitions meet the criteria the pixel with the minimum channel 3 (blue) value is used.  
 
 References: [LP DAAC MOD09Q1 Version 6](https://lpdaac.usgs.gov/products/mod09q1v006/); [LP DAAC MYD09Q1 Version 6](https://lpdaac.usgs.gov/products/myd09q1v006/)
+=======
+>>>>>>> Add orbit track endpoints

@@ -1,0 +1,18 @@
+{
+    "layers": {
+        "GOES-West_ABI_Band7_Upper_Level_Water_Vapor_v0_NRT": {
+            "id":       "GOES-West_ABI_Band7_Upper_Level_Water_Vapor_v0_NRT",
+            "title":    "Upper-Level Water Vapor (6.2 µm, Band 8, ABI, GOES-West)",
+            "subtitle":    "GOES-West / ABI",
+            "description": "goes/GOES-West_ABI_Band7_Upper_Level_Water_Vapor_v0_NRT",
+            "tags":     "GOES subdaily",
+            "group":    "overlays",
+            "layergroup": [
+              "GOES"
+            ],
+            "inactive": true,
+            "period": "subdaily",
+            "wrapX": true
+        }
+    }
+}

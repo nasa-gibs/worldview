@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_GOSAT-2_Descending": {
+          "id":       "OrbitTracks_GOSAT-2_Descending",
+          "title":    "Orbit Tracks (Descending, Points, GOSAT-2)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_GOSAT-2_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_GOSAT-2_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

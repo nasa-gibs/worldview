@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_Landsat-7_Descending": {
+          "id":       "OrbitTracks_Landsat-7_Descending",
+          "title":    "Orbit Tracks (Descending, Points, Landsat-7)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_Landsat-7_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_Landsat-7_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

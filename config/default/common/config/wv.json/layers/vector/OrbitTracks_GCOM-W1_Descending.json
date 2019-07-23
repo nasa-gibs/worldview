@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_GCOM-W1_Descending": {
+          "id":       "OrbitTracks_GCOM-W1_Descending",
+          "title":    "Orbit Tracks (Descending, Points, GCOM-W1)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_GCOM-W1_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_GCOM-W1_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

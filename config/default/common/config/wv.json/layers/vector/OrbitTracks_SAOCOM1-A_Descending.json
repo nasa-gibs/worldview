@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_SAOCOM1-A_Descending": {
+          "id":       "OrbitTracks_SAOCOM1-A_Descending",
+          "title":    "Orbit Tracks (Descending, Points, SAOCOM1-A)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_SAOCOM1-A_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_SAOCOM1-A_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

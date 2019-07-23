@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_Aqua_Descending": {
+          "id":       "OrbitTracks_Aqua_Descending",
+          "title":    "Orbit Tracks (Descending, Points, Aqua)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_Aqua_Descending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_Aqua_Descending"
+          },
+          "period": "daily"
+      }
+  }
+}

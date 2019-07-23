@@ -11,7 +11,6 @@
               "modis_terra"
             ],
             "product":  "MOD44W",
-            "inactive": true,
             "wrapadjacentdays": true
         }
     }

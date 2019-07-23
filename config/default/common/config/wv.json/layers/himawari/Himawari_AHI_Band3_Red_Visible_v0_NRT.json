@@ -1,0 +1,18 @@
+{
+  "layers": {
+      "Himawari_AHI_Band3_Red_Visible_v0_NRT": {
+          "id":       "Himawari_AHI_Band3_Red_Visible_v0_NRT",
+          "title":    "Red Visible (0.64 µm, Band 2, AHI, Himawari)",
+          "subtitle":    "Himawari",
+          "description": "himawari/Himawari_AHI_Band3_Red_Visible_v0_NRT",
+          "tags":     "Himawari subdaily",
+          "group":    "overlays",
+          "layergroup": [
+            "Himawari"
+          ],
+          "inactive": true,
+          "period": "subdaily",
+          "wrapX": true
+      }
+  }
+}

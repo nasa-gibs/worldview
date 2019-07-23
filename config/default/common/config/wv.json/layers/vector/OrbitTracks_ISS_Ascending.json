@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "OrbitTracks_ISS_Ascending": {
+          "id":       "OrbitTracks_ISS_Ascending",
+          "title":    "Orbit Tracks (Ascending, Points, ISS)",
+          "subtitle": "",
+          "description": "vector/OrbitTracks_ISS_Ascending",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "OrbitTracks_ISS_Ascending"
+          },
+          "period": "daily"
+      }
+  }
+}
