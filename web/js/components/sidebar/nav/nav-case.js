@@ -10,14 +10,15 @@ class NavCase extends React.Component {
       isMobile,
       isCompareMode,
       onTabClick,
-      activeTab
+      activeTab,
+      isDataDisabled
     } = this.props;
     if (tabTypes.download) {
       return (
         <CustomNavItem
           isMobile={isMobile}
           shouldHideInMobile={true}
-          isDisabled={!!isCompareMode}
+          isDisabled={!!isCompareMode || isDataDisabled}
           onTabClick={onTabClick}
           text="Data"
           id="download"
@@ -111,6 +112,7 @@ class NavCase extends React.Component {
 NavCase.propTypes = {
   activeTab: PropTypes.string,
   isCompareMode: PropTypes.bool,
+  isDataDisabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   onTabClick: PropTypes.func,
   tabTypes: PropTypes.object,
