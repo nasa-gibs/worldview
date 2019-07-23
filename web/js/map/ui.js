@@ -38,6 +38,7 @@ import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
 import * as paletteConstants from '../modules/palettes/constants';
 import * as vectorStyleConstants from '../modules/vector-styles/constants';
+import { setStyleFunction } from '../modules/vector-styles/selectors';
 import {
   getLayers,
   isRenderable as isRenderableLayer
@@ -592,6 +593,8 @@ export function mapui(models, config, store, ui) {
       }
     }
     lodashEach(activeLayers, function(def) {
+      const layerName = def.layer || def.id;
+
       if (!['subdaily', 'daily', 'monthly', 'yearly'].includes(def.period)) {
         return;
       }
@@ -611,6 +614,21 @@ export function mapui(models, config, store, ui) {
       } else {
         let index = findLayerIndex(def);
         self.selected.getLayers().setAt(index, createLayer(def));
+      }
+      if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
+        var vectorStyles = config.vectorStyles;
+        var vectorStyleId;
+
+        vectorStyleId = def.vectorStyle.id;
+        if (state.layers[activeLayerStr]) {
+          let layers = state.layers[activeLayerStr];
+          layers.forEach(layer => {
+            if (layer.id === layerName && layer.custom) {
+              vectorStyleId = layer.custom;
+            }
+          });
+        }
+        setStyleFunction(def, vectorStyleId, vectorStyles, null, state);
       }
     });
     updateLayerVisibilities();
