@@ -11,7 +11,7 @@
                       "description": "modis/GrossPrimaryProduction",
                       "image": "",
                       "settings": [
-  			                  "MODIS_Aqua_L3_Gross_Primary_Productivity_8Day"
+  			                  "MODIS_Aqua_L4_Gross_Primary_Productivity_8Day"
                       ]
                   },
                 "Terra/MODIS": {
@@ -20,7 +20,7 @@
                       "description": "modis/GrossPrimaryProduction",
                       "image": "",
                       "settings": [
-      			                "MODIS_Terra_L3_Gross_Primary_Productivity_8Day"
+      			                "MODIS_Terra_L4_Gross_Primary_Productivity_8Day"
                           ]
                       },
                 "SMAP/Model Value-Added": {

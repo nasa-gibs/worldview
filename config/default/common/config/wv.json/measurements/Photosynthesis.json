@@ -11,7 +11,7 @@
                     "description": "modis/NetPhotosynthesis",
                     "image": "",
                     "settings": [
-                        "MODIS_Aqua_L3_Net_Photosynthesis_8Day"
+                        "MODIS_Aqua_L4_Net_Photosynthesis_8Day"
                     ]
                 },
                 "Terra/MODIS": {
@@ -20,7 +20,7 @@
                     "description": "modis/NetPhotosynthesis",
                     "image": "",
                     "settings": [
-                        "MODIS_Terra_L3_Net_Photosynthesis_8Day"
+                        "MODIS_Terra_L4_Net_Photosynthesis_8Day"
                     ]
                 }
             }
