@@ -10,12 +10,29 @@ import {
   UPDATE_END_DATE,
   TOGGLE_GIF
 } from './constants';
+import util from '../../util/util';
 
 export function onActivate() {
   return (dispatch, getState) => {
-    const { compare, date } = getState();
+    const { compare, date, animation } = getState();
     const dateStr = compare.isCompareA ? 'selected' : 'selectedB';
-    dispatch({ type: OPEN_ANIMATION, date: date[dateStr] });
+    const activeDate = date[dateStr];
+    if (!animation.startDate || !animation.endDate) {
+      const sevenDaysBefore = util.dateAdd(activeDate, 'day', -7);
+      const sevenDaysAfter = util.dateAdd(activeDate, 'day', 7);
+      const startDate = animation.startDate
+        ? animation.startDate
+        : date.appNow < sevenDaysAfter
+          ? sevenDaysBefore
+          : activeDate;
+      const endDate = animation.endDate
+        ? animation.endDate
+        : date.appNow < sevenDaysAfter
+          ? activeDate
+          : sevenDaysAfter;
+      dispatch({ type: UPDATE_START_AND_END_DATE, startDate, endDate });
+    }
+    dispatch({ type: OPEN_ANIMATION });
   };
 }
 export function onClose() {

@@ -1,4 +1,4 @@
-import { round as lodashRound } from 'lodash';
+import { round as lodashRound, get as lodashGet } from 'lodash';
 import canvg from 'canvg-browser';
 import util from '../../util/util';
 import update from 'immutability-helper';
@@ -117,9 +117,21 @@ export function mapLocationToAnimationState(
   state,
   config
 ) {
+  const startDate = lodashGet(stateFromLocation, 'animation.startDate');
+  const endDate = lodashGet(stateFromLocation, 'animation.endDate');
   if (parameters.playanim && parameters.ab) {
     stateFromLocation = update(stateFromLocation, {
       animation: { isPlaying: { $set: true } }
+    });
+  } else if (!parameters.ae || (!parameters.as && (!!endDate || !!startDate))) {
+    // wipe anim start & end dates on tour change
+
+    stateFromLocation = update(stateFromLocation, {
+      animation: { endDate: { $set: undefined } }
+    });
+
+    stateFromLocation = update(stateFromLocation, {
+      animation: { startDate: { $set: undefined } }
     });
   }
   return stateFromLocation;
