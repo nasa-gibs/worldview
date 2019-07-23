@@ -35,22 +35,6 @@ export default class GifPanel extends React.Component {
       resolution: value
     });
   }
-  // calulateFileSize(numDays, imgWidth, imgHeight) {
-  //   var conversionFactor;
-  //   const { lonlats, projId } = this.props;
-  //   const { resolution } = this.state;
-  //   const lonlat1 = lonlats[0];
-  //   const lonlat2 = lonlats[1];
-  //   conversionFactor = imageUtilGetConversionFactor(projId);
-  //   imgWidth = Math.round(
-  //     Math.abs(lonlat2[0] - lonlat1[0]) / conversionFactor / Number(resolution)
-  //   );
-  //   imgHeight = Math.round(
-  //     Math.abs(lonlat2[1] - lonlat1[1]) / conversionFactor / Number(resolution)
-  //   );
-
-  //   return ((imgWidth * imgHeight * 24) / 8388608).toFixed(2) * numDays;
-  // }
   render() {
     const {
       projId,
