@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ShareLinks from '../components/toolbar/share/links';
+import googleTagManager from 'googleTagManager';
 import { getSharelink, openPromisedSocial } from '../modules/link/util';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Checkbox } from '../components/util/checkbox';
@@ -65,6 +66,9 @@ class ShareLinkContainer extends Component {
     const { shortLinkKey, isShort, queryString } = this.state;
     if (!isShort && shortLinkKey !== queryString) {
       this.getShortLink();
+      googleTagManager.pushEvent({
+        event: 'social_link_shorten'
+      });
       this.setState({
         shortLinkKey: queryString,
         isShort: !isShort
@@ -82,6 +86,10 @@ class ShareLinkContainer extends Component {
   }
   onLinkClick(type) {
     const permalink = this.getPermalink();
+    googleTagManager.pushEvent({
+      event: 'social_share_platform',
+      social_type: type
+    });
     // If a short link can be generated, replace the full link.
     if (type === 'twitter' || type === 'email') {
       let promise = this.getShortLink();

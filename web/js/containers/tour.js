@@ -83,6 +83,9 @@ class Tour extends React.Component {
       storyStep.transition.action
     );
     this.props.processStepLink(
+      currentStoryId,
+      1,
+      currentStory.steps.length,
       storyStep['stepLink'] + '&tr=' + currentStoryId + transition,
       this.props.config,
       this.props.renderedPalettes
@@ -171,6 +174,9 @@ class Tour extends React.Component {
         storyStep.transition.action
       );
       this.props.processStepLink(
+        currentStoryId,
+        newStep,
+        currentStory.steps.length,
         currentStory.steps[newStep - 1]['stepLink'] +
           '&tr=' +
           currentStoryId +
@@ -197,6 +203,9 @@ class Tour extends React.Component {
         storyStep.transition.action
       );
       this.props.processStepLink(
+        currentStoryId,
+        newStep,
+        currentStory.steps.length,
         currentStory.steps[newStep - 1]['stepLink'] +
           '&tr=' +
           currentStoryId +
@@ -252,7 +261,6 @@ class Tour extends React.Component {
       config,
       screenHeight,
       screenWidth,
-      processStepLink,
       isActive,
       endTour
     } = this.props;
@@ -334,7 +342,6 @@ class Tour extends React.Component {
                 metaLoaded={metaLoaded}
                 isLoadingMeta={isLoadingMeta}
                 description={description}
-                processStepLink={processStepLink}
               />
             ) : (
               <TourComplete
@@ -357,13 +364,24 @@ class Tour extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  processStepLink: (search, config, rendered) => {
+  processStepLink: (currentStoryId, currentStep, totalSteps, search, config, rendered) => {
     search = search.split('/?').pop();
     const location = update(history.location, {
       search: { $set: search }
     });
     let parameters = util.fromQueryString(search);
     let layers = [];
+
+    // Record selected story's id, current steps, and total steps to analytics
+    googleTagManager.pushEvent({
+      'event': 'tour_selected_story',
+      'story': {
+        'id': currentStoryId,
+        'selectedStep': currentStep,
+        'totalSteps': totalSteps
+      }
+    });
+
     dispatch(stopAnimation());
     if (
       (parameters.l && hasCustomTypePalette(parameters.l)) ||
