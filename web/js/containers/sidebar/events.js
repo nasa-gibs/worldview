@@ -85,7 +85,7 @@ class Events extends React.Component {
       showAlert,
       selectedDate
     } = this.props;
-    if (selected.id && !visibleWithinMapExtent[selected.id]) {
+    if (selected.id && !visibleWithinMapExtent[selected.id] && events && events.length) {
       deselectEvent();
     }
     const errorOrLoadingText = isLoading

@@ -171,6 +171,10 @@ export default function naturalEventsUI(ui, config, store, models) {
           self.deselectEvent();
           self.filterEventList();
         }
+        if (self.selected.date) {
+          var event = naturalEventsUtilGetEventById(self.eventsData, self.selected.id);
+          naturalEventsTrack.update(event, self.selected.date, self.selectEvent);
+        };
       }
     }
   };
