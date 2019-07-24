@@ -58,21 +58,21 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
               </label>
               <span
                 id="zoom-years"
-                className="zoom-btn zoom-btn-inactive zoom-years"
+                className="zoom-btn zoom-years"
                 onClick={this.changeTimeScaleYear}
               >
                 YEAR
               </span>
               <span
                 id="zoom-months"
-                className="zoom-btn zoom-btn-inactive zoom-months"
+                className="zoom-btn zoom-months"
                 onClick={this.changeTimeScaleMonth}
               >
                 MONTH
               </span>
               <span
                 id="zoom-days"
-                className="zoom-btn zoom-btn-inactive zoom-days"
+                className="zoom-btn zoom-days"
                 onClick={this.changeTimeScaleDay}
               >
                 DAY
@@ -81,14 +81,14 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
                 <React.Fragment>
                   <span
                     id="zoom-hours"
-                    className="zoom-btn zoom-btn-inactive zoom-hours"
+                    className="zoom-btn zoom-hours"
                     onClick={this.changeTimeScaleHour}
                   >
                     HOUR
                   </span>
                   <span
                     id="zoom-minutes"
-                    className="zoom-btn zoom-btn-inactive zoom-minutes"
+                    className="zoom-btn zoom-minutes"
                     onClick={this.changeTimeScaleMinute}
                   >
                     MINUTE
