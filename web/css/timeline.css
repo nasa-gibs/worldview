@@ -30,7 +30,7 @@ button:focus {
   width: 414px;
 }
 
-#timeline-header .timeline-zoom,
+#timeline-header .timeline-interval,
 #timeline-header .input-wrapper-hour,
 #timeline-header .input-time-divider,
 #timeline-header .input-wrapper-minute,
@@ -45,7 +45,7 @@ button:focus {
   display: block;
 }
 
-#timeline-header.subdaily .timeline-zoom,
+#timeline-header.subdaily .timeline-interval,
 #timeline-header.subdaily .input-wrapper-hour,
 #timeline-header.subdaily .input-time-divider,
 #timeline-header.subdaily .input-wrapper-minute,
@@ -450,7 +450,7 @@ button:focus {
   color: #7890cd !important;
 }
 
-#timeline-header .timeline-zoom,
+#timeline-header .timeline-interval,
 #zoom-btn-container-axis .wv-zoom-tooltip {
   display: block;
   width: 100%;
@@ -461,12 +461,12 @@ button:focus {
   border-radius: 3px;
 }
 
-#timeline-header #zoom-btn-container,
+#timeline-header #timeline-interval-btn-container,
 #zoom-btn-container-axis {
   display: block;
 }
 
-#zoom-btn-container .wv-tooltip {
+#timeline-interval-btn-container .wv-tooltip {
   position: absolute;
   bottom: 100%;
   border-bottom: 8px solid transparent;
@@ -474,14 +474,16 @@ button:focus {
   z-index: 10;
 }
 
-#zoom-btn-container-axis .wv-zoom-tooltip {
+#zoom-btn-container-axis .wv-zoom-tooltip,
+#timeline-interval-btn-container .wv-zoom-tooltip {
   position: absolute;
   bottom: 100%;
   width: 75px;
   z-index: 10;
 }
 
-#zoom-btn-container .wv-tooltip::after {
+#zoom-btn-container-axis .wv-tooltip::after,
+#timeline-interval-btn-container .wv-tooltip::after {
   position: absolute;
   top: 100%;
   left: 15%;
@@ -492,7 +494,8 @@ button:focus {
   border-left: 5px solid transparent;
 }
 
-.zoom-btn-active {
+.zoom-btn-active,
+.interval-btn-active {
   width: 100%;
   color: #ccc;
   font-size: 12px;
@@ -506,12 +509,13 @@ button:focus {
   margin-top: -2px;
 }
 
-.zoom-btn-active:hover {
+.zoom-btn-active:hover,
+.interval-btn-active:hover {
   background-color: #fff;
   color: #1a1a1a;
 }
 
-.timeline-zoom .zoom-btn {
+.zoom-btn, .interval-btn {
   display: block;
   clear: both;
   cursor: pointer;
@@ -524,7 +528,7 @@ button:focus {
   padding: 2px 0;
 }
 
-.timeline-zoom .zoom-btn:hover {
+.zoom-btn:hover, .interval-btn:hover {
   background-color: #fff;
   color: #1a1a1a;
 }

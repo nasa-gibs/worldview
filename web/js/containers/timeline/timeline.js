@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import googleTagManager from 'googleTagManager';
 import util from '../../util/util';
 
 import ErrorBoundary from '../../containers/error-boundary';
@@ -461,6 +462,9 @@ class Timeline extends React.Component {
     if (this.props.isAnimationWidgetOpen) {
       this.props.closeAnimation();
     } else {
+      googleTagManager.pushEvent({
+        event: 'GIF_setup_animation_button'
+      });
       this.props.openAnimation();
     }
   };
@@ -888,6 +892,7 @@ class Timeline extends React.Component {
                       customSelected={customSelected}
                       customDelta={customIntervalValue}
                       timeScaleChangeUnit={timeScaleChangeUnit}
+                      hasSubdailyLayers={hasSubdailyLayers}
                     />
                     <DateChangeArrows
                       leftArrowDown={this.throttleDecrementDate}

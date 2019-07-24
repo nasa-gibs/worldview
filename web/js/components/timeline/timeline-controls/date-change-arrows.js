@@ -58,7 +58,7 @@ class DateChangeArrows extends PureComponent {
           onMouseUp={this.leftArrowUp}
           onMouseLeave={this.leftArrowUp}
         >
-          <svg id="timeline-svg" width="24" height="30">
+          <svg width="24" height="30">
             <path
               d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z"
               className="arrow"

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 /*
- * Change timescale interval (zoom level) by selecting from default timescales
+ * Change timescale interval (time unit) by selecting from default timescales
  * and custom (if available) in tooltip visible upon hover of current timescale
  * above the LEFT/RIGHT increment arrows (ex: hover over '1 day' for example)
  *
@@ -18,49 +18,49 @@ class TimeScaleIntervalChange extends PureComponent {
     };
   }
 
-  // Zoom select tooltip on
+  // Interval select tooltip on
   toolTipHoverOn = () => {
     this.setState({
       toolTipHovered: true
     });
   }
 
-  // Zoom select tooltip off
+  // Interval select tooltip off
   toolTipHoverOff = () => {
     this.setState({
       toolTipHovered: false
     });
   }
 
-  // handle click zoom of timescale intervals
-  handleClickZoom = (timescale, openDialog = false) => {
-    // send props function to change timescale zoom level throughout app
+  // handle click of timescale intervals
+  handleClickInterval = (timescale, openDialog = false) => {
+    // send props function to change timescale interval throughout app
     this.setState({
       toolTipHovered: false
     }, this.props.setTimeScaleIntervalChangeUnit(timescale, openDialog));
   }
 
   // individual linking timescale handlers
-  handleClickZoomYear = () => {
-    this.handleClickZoom('year');
+  handleClickIntervalYear = () => {
+    this.handleClickInterval('year');
   }
-  handleClickZoomMonth = () => {
-    this.handleClickZoom('month');
+  handleClickIntervalMonth = () => {
+    this.handleClickInterval('month');
   }
-  handleClickZoomDay= () => {
-    this.handleClickZoom('day');
+  handleClickIntervalDay= () => {
+    this.handleClickInterval('day');
   }
-  handleClickZoomHour = () => {
-    this.handleClickZoom('hour');
+  handleClickIntervalHour = () => {
+    this.handleClickInterval('hour');
   }
-  handleClickZoomMinute = () => {
-    this.handleClickZoom('minute');
+  handleClickIntervalMinute = () => {
+    this.handleClickInterval('minute');
   }
-  handleClickZoomCustom = () => {
-    this.handleClickZoom('custom');
+  handleClickIntervalCustom = () => {
+    this.handleClickInterval('custom');
   }
-  handleClickZoomCustomStatic = () => {
-    this.handleClickZoom('custom', true);
+  handleClickIntervalCustomStatic = () => {
+    this.handleClickInterval('custom', true);
   }
 
   // set custom text for custom interval
@@ -82,10 +82,10 @@ class TimeScaleIntervalChange extends PureComponent {
       timeScaleChangeUnit,
       customSelected
     } = this.props;
-    if (customDelta && timeScaleChangeUnit) {
-      if (customSelected && customDelta !== 1 && this.state.customIntervalText === 'Custom') {
-        this.setCustomIntervalText();
-      } else if (customSelected && (customDelta !== prevProps.customDelta || timeScaleChangeUnit !== prevProps.timeScaleChangeUnit)) {
+    if (customSelected && customDelta && timeScaleChangeUnit) {
+      const didCustomDeltaChange = customDelta !== prevProps.customDelta;
+      const didTimeScaleChangeUnitChange = timeScaleChangeUnit !== prevProps.timeScaleChangeUnit;
+      if (didCustomDeltaChange || didTimeScaleChangeUnitChange) {
         this.setCustomIntervalText();
       }
     }
@@ -98,11 +98,12 @@ class TimeScaleIntervalChange extends PureComponent {
     } = this.state;
     let {
       customSelected,
+      hasSubdailyLayers,
       timeScaleChangeUnit
     } = this.props;
     return (
       <React.Fragment>
-        <div id="zoom-btn-container"
+        <div id="timeline-interval-btn-container"
           className="noselect"
           onMouseEnter={this.toolTipHoverOn}
           onMouseLeave={this.toolTipHoverOff}
@@ -110,7 +111,7 @@ class TimeScaleIntervalChange extends PureComponent {
           {/* timeScale display */}
           <span
             id="current-interval"
-            className={`zoom-btn zoom-btn-active${customSelected ? ' custom-interval-text' : ''}`}
+            className={`interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''}`}
           >
             {customSelected ? customIntervalText : 1 + ' ' + timeScaleChangeUnit}
           </span>
@@ -119,54 +120,58 @@ class TimeScaleIntervalChange extends PureComponent {
           <div className="wv-tooltip"
             style={{ display: toolTipHovered ? 'block' : 'none' }}
           >
-            <div id="timeline-zoom" className="timeline-zoom">
+            <div id="timeline-interval" className="timeline-interval">
               <span
-                id="zoom-years"
-                className="zoom-btn zoom-btn-inactive zoom-years"
-                onClick={this.handleClickZoomYear}
+                id="interval-years"
+                className="interval-btn interval-years"
+                onClick={this.handleClickIntervalYear}
               >
                 Year
               </span>
               <span
-                id="zoom-months"
-                className="zoom-btn zoom-btn-inactive zoom-months"
-                onClick={this.handleClickZoomMonth}
+                id="interval-months"
+                className="interval-btn interval-months"
+                onClick={this.handleClickIntervalMonth}
               >
                 Month
               </span>
               <span
-                id="zoom-days"
-                className="zoom-btn zoom-btn-inactive zoom-days"
-                onClick={this.handleClickZoomDay}
+                id="interval-days"
+                className="interval-btn interval-days"
+                onClick={this.handleClickIntervalDay}
               >
                 Day
               </span>
+              {hasSubdailyLayers ? (
+                <React.Fragment>
+                  <span
+                    id="interval-hours"
+                    className="interval-btn interval-hours"
+                    onClick={this.handleClickIntervalHour}
+                  >
+                    Hour
+                  </span>
+                  <span
+                    id="interval-minutes"
+                    className="interval-btn interval-minutes"
+                    onClick={this.handleClickIntervalMinute}
+                  >
+                    Minute
+                  </span>
+                </React.Fragment>
+              ) : null}
               <span
-                id="zoom-hours"
-                className="zoom-btn zoom-btn-inactive zoom-hours"
-                onClick={this.handleClickZoomHour}
-              >
-                Hour
-              </span>
-              <span
-                id="zoom-minutes"
-                className="zoom-btn zoom-btn-inactive zoom-minutes"
-                onClick={this.handleClickZoomMinute}
-              >
-                Minute
-              </span>
-              <span
-                id="zoom-custom"
-                className="zoom-btn zoom-btn-inactive zoom-custom custom-interval-text"
+                id="interval-custom"
+                className="interval-btn interval-custom custom-interval-text"
                 style={{ display: customIntervalText === 'Custom' ? 'none' : 'block' }}
-                onClick={this.handleClickZoomCustom}
+                onClick={this.handleClickIntervalCustom}
               >
                 {customIntervalText}
               </span>
               <span
-                id="zoom-custom-static"
-                className="zoom-btn zoom-btn-inactive zoom-custom custom-interval-text"
-                onClick={this.handleClickZoomCustomStatic}
+                id="interval-custom-static"
+                className="interval-btn interval-custom custom-interval-text"
+                onClick={this.handleClickIntervalCustomStatic}
               >
                 Custom
               </span>
@@ -182,6 +187,7 @@ TimeScaleIntervalChange.propTypes = {
   customDelta: PropTypes.number,
   customIntervalZoomLevel: PropTypes.string,
   customSelected: PropTypes.bool,
+  hasSubdailyLayers: PropTypes.bool,
   setTimeScaleIntervalChangeUnit: PropTypes.func,
   timeScaleChangeUnit: PropTypes.string
 };
