@@ -250,14 +250,13 @@ export default function naturalEventsUI(ui, config, store, models) {
     var event = naturalEventsUtilGetEventById(self.eventsData, id);
     var category = event && event.categories[0].title;
     var isSameCategory = category === prevCategory;
+
     if (!event) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
     }
-    self.selected = {
-      id,
-      date: date || self.getDefaultEventDate(event)
-    };
+    date = date || self.getDefaultEventDate(event);
+    self.selected = { id, date };
 
     const zoomPromise = getZoomPromise(
       event,
@@ -279,7 +278,7 @@ export default function naturalEventsUI(ui, config, store, models) {
        * NOTE: If the fire happened yesterday and the imagery isn't yet available
        * for today, this may not help.
        */
-      if (event.categories[0].title === 'Wildfires' && !isInitialLoad) {
+      if (category === 'Wildfires' && !isInitialLoad) {
         var now = new Date();
         var today = now.toISOString().split('T')[0];
         var yesterday = new Date(now.setDate(now.getDate() - 1))
@@ -293,7 +292,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       } else if (!isInitialLoad) store.dispatch(selectDate(util.parseDateUTC(date)));
       self.selecting = false;
       if (isIdChange && !isSameCategory && !isInitialLoad) {
-        activateLayersForCategory(event.categories[0].title);
+        activateLayersForCategory(category);
       }
       // hack to update layers
       if (isIdChange) {
