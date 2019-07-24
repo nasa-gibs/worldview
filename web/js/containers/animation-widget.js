@@ -130,6 +130,9 @@ class AnimationWidget extends React.Component {
           ).then(() => {
             onUpdateStartAndEndDate(startDate, endDate);
           }).then(() => {
+            googleTagManager.pushEvent({
+              event: 'GIF_create_animated_button'
+            });
             toggleGif();
           });
         });
@@ -158,9 +161,6 @@ class AnimationWidget extends React.Component {
   }
   onDateChange(date, id) {
     const { onUpdateStartDate, onUpdateEndDate } = this.props;
-    googleTagManager.pushEvent({
-      event: 'GIF_animation_date_case'
-    });
     if (id === 'start') {
       onUpdateStartDate(date);
     } else {

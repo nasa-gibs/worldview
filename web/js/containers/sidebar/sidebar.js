@@ -38,7 +38,12 @@ const resetWorldview = function(e) {
   if (window.location.search === '') return; // Nothing to reset
   var msg =
     'Do you want to reset Worldview to its defaults? You will lose your current state.';
-  if (confirm(msg)) document.location.href = '/';
+  if (confirm(msg)) {
+    googleTagManager.pushEvent({
+      event: 'logo_page_reset'
+    });
+    document.location.href = '/';
+  }
 };
 class Sidebar extends React.Component {
   constructor(props) {

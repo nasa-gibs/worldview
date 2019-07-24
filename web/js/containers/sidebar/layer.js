@@ -332,6 +332,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onOptionsClick: (layer, title) => {
     const key = 'LAYER_OPTIONS_MODAL' + '-' + layer.id;
+    googleTagManager.pushEvent({
+      event: 'sidebar_layer_options'
+    });
     dispatch(
       toggleCustomContent(key, {
         headerText: title || 'Layer Options',
