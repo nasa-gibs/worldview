@@ -27,7 +27,6 @@ export function toggleCustomContent(key, params) {
   return (dispatch, getState) => {
     const modalState = getState().modal;
     const { id, isOpen } = modalState;
-    console.log(key, id, isOpen);
     if (id === key && isOpen) {
       dispatch({
         type: CLOSE
