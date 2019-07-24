@@ -92,13 +92,14 @@ module.exports = {
                 localSelectors.gifPreviewFrameRateValue,
                 '3 Frames Per Second'
               );
+            client.useCss().assert.containsText('.gif-max-size', '8200px');
             client.assert.ok('#wv-checkbox-gif'); // checkbox is checked
             client
-              .click(localSelectors.gifPreviewEndResolutionOption250)
+              .click(localSelectors.gifPreviewEndResolutionOption500)
               .pause(1000);
             client.assert.value(
               localSelectors.gifPreviewEndResolutionSelector,
-              '1'
+              '2'
             );
             client.expect.element(localSelectors.gifDownloadButton).to.not.be
               .enabled;

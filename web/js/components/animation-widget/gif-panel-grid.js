@@ -85,7 +85,7 @@ GifPanelGrid.propTypes = {
   increment: PropTypes.string,
   maxGifSize: PropTypes.number,
   maxImageDimensionSize: PropTypes.number,
-  requestSize: PropTypes.string,
+  requestSize: PropTypes.number,
   speed: PropTypes.number,
   startDate: PropTypes.string,
   valid: PropTypes.bool,

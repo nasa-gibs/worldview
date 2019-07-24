@@ -183,7 +183,7 @@ ImageResSelection.defaultProps = {
   height: '0',
   imageSize: '0',
   isWorldfile: 'false',
-  maxImageSize: '250 MB',
+  maxImageSize: '8200px x 8200px',
   resolution: '1',
   secondLabel: 'Format',
   width: '0',
