@@ -946,14 +946,13 @@ export function mapui(models, config, store, ui) {
     };
     map.on('rendercomplete', onRenderComplete);
     map.on('click', function(e) {
-      const { data } = store.getState();
-      if (data.active) return;
       var metaTitle;
       var def;
       var metaArray = [];
 
       map.forEachFeatureAtPixel(e.pixel, function(feature, layer) {
-        def = layer.wv.def;
+        def = lodashGet(layer, 'wv.def');
+        if (!def) return;
         metaTitle = def.title;
         if (def.vectorData && def.vectorData.id) {
           let features = feature.getProperties();
