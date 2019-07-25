@@ -55,25 +55,28 @@ class TimelineAxis extends Component {
     let {
       dateA,
       dateB,
+      axisWidth,
+      hoverTime,
+      leftOffset,
       draggerSelected,
       draggerTimeState,
       draggerTimeStateB,
       isCompareModeActive,
+      animStartLocationDate,
+      animEndLocationDate,
       timelineStartDateLimit,
       timelineEndDateLimit
     } = this.props;
     let options = timeScaleOptions[timeScale].timeAxis;
     let gridWidth = options.gridWidth;
-    let axisWidth = axisWidthInput || this.props.axisWidth;
-    let leftOffset = leftOffsetFixedCoeff
-      ? axisWidth * leftOffsetFixedCoeff
-      : this.props.leftOffset;
+    let timelineAxisWidth = axisWidthInput || axisWidth;
+    let hoverLeftOffset = leftOffsetFixedCoeff
+      ? timelineAxisWidth * leftOffsetFixedCoeff
+      : leftOffset === 0
+        ? timelineAxisWidth * 0.80
+        : leftOffset;
 
-    if (leftOffset === 0) {
-      leftOffset = axisWidth * 0.80;
-    }
-
-    let numberOfVisibleTiles = Number((axisWidth / gridWidth).toFixed(8));
+    let numberOfVisibleTiles = Number((timelineAxisWidth / gridWidth).toFixed(8));
     let gridNumber = Math.floor(numberOfVisibleTiles * 1.5);
     let dragSentinelChangeNumber = gridWidth * (Math.floor(numberOfVisibleTiles * 0.25) + 1);
     if (timeScale === 'year') {
@@ -87,7 +90,7 @@ class TimelineAxis extends Component {
     let midPoint = numberOfVisibleTiles / 2 * gridWidth - gridWidth * gridNumber / 2;
 
     // horizontal scroll will disable this, so use frontDate in that case
-    let hoverTimeString = this.props.hoverTime || this.props.frontDate;
+    let hoverTimeString = hoverTime || this.props.draggerTimeState;
 
     // handle timeline axis start/end limits
     let isBeforeStart = new Date(hoverTimeString) <= new Date(timelineStartDateLimit);
@@ -101,14 +104,14 @@ class TimelineAxis extends Component {
     }
 
     // use input date or hoverTime
-    let hoverTime = inputDate ? moment.utc(inputDate) : moment.utc(hoverTimeString);
-
-    let hoverTimeZero = hoverTime.clone().startOf(timeScale);
+    let hoverTimeDate = inputDate ? moment.utc(inputDate) : moment.utc(hoverTimeString);
+    let hoverTimeZero = hoverTimeDate.clone().startOf(timeScale);
     if (timeScale === 'year') {
       hoverTimeZero = moment.utc(timelineStartDateLimit);
     }
     let hoverTimeNextZero = hoverTimeZero.clone().add(1, timeScale);
 
+    // conditionally determine dragger times
     let draggerTime;
     let draggerTimeB;
     if (draggerSelected === 'selected') {
@@ -128,22 +131,20 @@ class TimelineAxis extends Component {
     }
 
     // value of hover time, hover time time unit zeroed, hover time next unit time unit zeroed
-    let hoverTimeValue = hoverTime.valueOf();
+    let hoverTimeValue = hoverTimeDate.valueOf();
     let hoverTimeZeroValue = hoverTimeZero.valueOf();
     let hoverTimeNextZeroValue = hoverTimeNextZero.valueOf();
 
+    // individual pixelsToAdd based on time offset (e.g., get 04:38:00 based on 04:00:00)
     let diffZeroValues = hoverTimeNextZeroValue - hoverTimeZeroValue;
     let diffFactor = diffZeroValues / gridWidth;
     let diffStartAndZeroed = hoverTimeValue - hoverTimeZeroValue;
-
-    // individual grid offset based on time (e.g., get 04:38:00 based on 04:00:00)
     let pixelsToAdd = diffStartAndZeroed / diffFactor;
 
     // offset grids needed since each zoom in won't be centered
-    let offSetGrids = Math.floor(leftOffset / gridWidth);
+    let offSetGrids = Math.floor(hoverLeftOffset / gridWidth);
     let offSetHalved = Math.floor(gridNumber / 2);
     let offSetGridsDiff = offSetGrids - Math.floor(numberOfVisibleTiles / 2);
-
     let gridsToSubtract = offSetHalved + offSetGridsDiff;
     let gridsToAdd = offSetHalved - offSetGridsDiff;
 
@@ -153,15 +154,15 @@ class TimelineAxis extends Component {
       : null;
     if (greaterToLesserTimescale) {
       // determine how far hoverTime date is from end to compensate for bounds correction
-      let hoverTimeToEndDateLimit = moment.utc(timelineEndDateLimit).diff(hoverTime, timeScale);
+      let hoverTimeToEndDateLimit = moment.utc(timelineEndDateLimit).diff(hoverTimeDate, timeScale);
       if (hoverTimeToEndDateLimit < offSetHalved) {
         gridsToSubtract = gridsToSubtract + (offSetHalved - hoverTimeToEndDateLimit) - offSetGrids;
         gridsToAdd = gridsToAdd - (offSetHalved - hoverTimeToEndDateLimit) + offSetGrids;
       }
     }
 
-    let timeRange = this.getTimeRangeArray(gridsToSubtract, gridsToAdd, hoverTime);
-
+    // build time range array
+    let timeRange = this.getTimeRangeArray(gridsToSubtract, gridsToAdd, hoverTimeDate);
     // get front and back dates
     let frontDate = moment.utc(timeRange[0].rawDate);
     let backDate = timeRange[timeRange.length - 1].rawDate;
@@ -176,7 +177,6 @@ class TimelineAxis extends Component {
         draggerVisible = true;
       }
     }
-
     let draggerPositionB = 0;
     let draggerVisibleB = false;
     let isBetweenB = getIsBetween(draggerTimeB, frontDate, backDate);
@@ -190,23 +190,22 @@ class TimelineAxis extends Component {
     // update animation draggers
     let animationStartDraggerLocation = 0;
     let animationEndDraggerLocation = 0;
-
-    if (this.props.animStartLocationDate) {
-      animationStartDraggerLocation = moment.utc(this.props.animStartLocationDate).diff(frontDate, timeScale, true) * gridWidth;
-      animationEndDraggerLocation = moment.utc(this.props.animEndLocationDate).diff(frontDate, timeScale, true) * gridWidth;
+    if (animStartLocationDate) {
+      animationStartDraggerLocation = moment.utc(animStartLocationDate).diff(frontDate, timeScale, true) * gridWidth;
+      animationEndDraggerLocation = moment.utc(animEndLocationDate).diff(frontDate, timeScale, true) * gridWidth;
     }
 
-    // get position
+    // get axis position
     let position;
     // axisWidthInput conditional in place to handle resize centering of position
     if (axisWidthInput) {
       position = midPoint;
     } else {
       if (timeScale === 'year') {
-        position = 0 + axisWidth / 2 + (leftOffset - axisWidth / 2);
+        position = timelineAxisWidth / 2 + (hoverLeftOffset - timelineAxisWidth / 2);
       } else {
         // - (offSetGridsDiff * gridWidth) to compensate off center zooming repositioning
-        position = midPoint - (axisWidth / 2 - leftOffset).toFixed(10) - offSetGridsDiff * gridWidth;
+        position = midPoint - (timelineAxisWidth / 2 - hoverLeftOffset).toFixed(10) - offSetGridsDiff * gridWidth;
         if (gridNumber % 2 !== 0) { // handle odd number gridNumber grid offset
           position += gridWidth / 2;
         }
@@ -214,13 +213,13 @@ class TimelineAxis extends Component {
     }
 
     // get axis bounds
-    let diffFromStartDateLimit = hoverTime.diff(timelineStartDateLimit, timeScale);
-    let leftBound = frontDate.diff(timelineEndDateLimit, timeScale) * gridWidth + (midPoint * 1.5) + axisWidth;
-    let rightBound = diffFromStartDateLimit * gridWidth + midPoint * 1.5 + axisWidth * 0.25;
-
+    let diffFromStartDateLimit = hoverTimeDate.diff(timelineStartDateLimit, timeScale);
+    let diffFromEndDateLimit = frontDate.diff(timelineEndDateLimit, timeScale);
+    let leftBound = diffFromEndDateLimit * gridWidth + midPoint + timelineAxisWidth;
+    let rightBound = diffFromStartDateLimit * gridWidth + midPoint * 1.5 + timelineAxisWidth * 0.25;
     if (timeScale === 'year') {
-      leftBound = frontDate.diff(timelineEndDateLimit, timeScale) * gridWidth + pixelsToAdd + 2 + axisWidth * 0.80;
-      rightBound = axisWidth * 0.25 + pixelsToAdd + 2;
+      leftBound = diffFromEndDateLimit * gridWidth + pixelsToAdd + 2 + timelineAxisWidth * 0.80;
+      rightBound = timelineAxisWidth * 0.25 + pixelsToAdd + 2;
     }
 
     // handle position being set beyond bounds due to edge dates not precisely scaling to other timescales
@@ -238,10 +237,9 @@ class TimelineAxis extends Component {
     }
 
     // update transform and dragger positioning based on calulated offsets
-    let transformX = -pixelsToAdd - 2 + boundsDiff;
+    let transformX = boundsDiff - pixelsToAdd - 2;
     let animationStartLocation = animationStartDraggerLocation + position + transformX;
     let animationEndLocation = animationEndDraggerLocation + position + transformX;
-
     draggerPosition = draggerPosition - pixelsToAdd + position - this.state.draggerWidth + boundsDiff;
     draggerPositionB = draggerPositionB - pixelsToAdd + position - this.state.draggerWidth + boundsDiff;
 
@@ -268,11 +266,11 @@ class TimelineAxis extends Component {
       numberOfVisibleTiles,
       dragSentinelChangeNumber,
       midPoint: position,
-      dragSentinelCount: 0,
+      dragSentinelCount: boundsDiff,
       leftBound,
       rightBound,
       wheelZoom: false
-    }, this.props.updatePositioning(updatePositioningArguments, timeScale === 'year' ? this.props.hoverTime : hoverTimeString));
+    }, this.props.updatePositioning(updatePositioningArguments, timeScale === 'year' ? hoverTime : hoverTimeString));
   }
 
   /**
@@ -342,7 +340,6 @@ class TimelineAxis extends Component {
       currentTimeRange,
       numberOfVisibleTiles
     } = this.state;
-
     let {
       transformX,
       draggerVisible,
@@ -617,12 +614,13 @@ class TimelineAxis extends Component {
 
     let selectedDateMoment = moment.utc(previousDate);
     let draggerDateMoment = moment.utc(selectedDraggerTimeState);
+    let draggerDateFormat = draggerDateMoment.format();
 
     let newDraggerDiff = draggerDateMoment.diff(selectedDateMoment, timeScale, true);
     let newDateInThePast = draggerDateMoment < selectedDateMoment;
 
-    let isBeforeFrontDate = new Date(draggerDateMoment.format()) < new Date(frontDate);
-    let isAfterBackDate = new Date(draggerDateMoment.format()) > new Date(backDate);
+    let isBeforeFrontDate = new Date(draggerDateFormat) < new Date(frontDate);
+    let isAfterBackDate = new Date(draggerDateFormat) > new Date(backDate);
 
     let leftEdgeOfVisibleAxis = -26;
     let rightEdgeOfVisibleAxis = axisWidth - 80;
@@ -656,9 +654,10 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   showHoverOn = (e) => {
-    if (!this.props.isAnimationDraggerDragging && !this.props.isTimelineDragging) {
+    const { isAnimationDraggerDragging, isTimelineDragging, showHoverOn } = this.props;
+    if (!isAnimationDraggerDragging && !isTimelineDragging) {
       if (e.target.className.animVal === 'axis-grid-rect') {
-        this.props.showHoverOn();
+        showHoverOn();
       }
     }
   }
@@ -671,9 +670,16 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   handleWheel(e) {
-    let { timeScale, hasSubdailyLayers, changeTimeScale } = this.props;
-    let timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
-    let maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
+    const {
+      position,
+      timeScale,
+      updateTimelineMoveAndDrag,
+      hasSubdailyLayers,
+      changeTimeScale
+    } = this.props;
+    const { leftBound, rightBound } = this.state;
+    const timeScaleNumber = Number(timeScaleToNumberKey[timeScale]);
+    const maxTimeScaleNumber = hasSubdailyLayers ? 5 : 3;
 
     // handle time scale change on y axis wheel event
     if (e.deltaY !== 0) {
@@ -695,10 +701,10 @@ class TimelineAxis extends Component {
     if (e.deltaX !== 0) {
       this.handleStartDrag();
       if (e.deltaX > 0) { // mutli-touch drag left
-        let scrollX = this.props.position - 100;
-        if (scrollX < this.state.leftBound) { // cancel drag if exceeds axis leftBound
+        let scrollX = position - 100;
+        if (scrollX < leftBound) { // cancel drag if exceeds axis leftBound
           clearTimeout(this.wheelTimeout);
-          this.props.updateTimelineMoveAndDrag(false, false);
+          updateTimelineMoveAndDrag(false, false);
         } else {
           let deltaObj = {
             deltaX: -100,
@@ -711,10 +717,10 @@ class TimelineAxis extends Component {
           }, 50);
         }
       } else { // multi-touch drag right
-        let scrollX = this.props.position + 100;
-        if (scrollX > this.state.rightBound) { // cancel drag if exceeds axis rightBound
+        let scrollX = position + 100;
+        if (scrollX > rightBound) { // cancel drag if exceeds axis rightBound
           clearTimeout(this.wheelTimeout);
-          this.props.updateTimelineMoveAndDrag(false, false);
+          updateTimelineMoveAndDrag(false, false);
         } else {
           let deltaObj = {
             deltaX: 100,
@@ -743,7 +749,6 @@ class TimelineAxis extends Component {
     } else {
       clientX = e.clientX;
     }
-
     this.setState({
       mouseDown: true,
       clientXOnDrag: clientX
@@ -877,9 +882,14 @@ class TimelineAxis extends Component {
   * @desc handle start drag of axis sets dragging state
   * @returns {void}
   */
-  handleStartDrag = (e, d) => {
-    if (!this.props.isTimelineDragging) {
-      this.props.updateTimelineMoveAndDrag(this.props.hasMoved, true);
+  handleStartDrag = () => {
+    const {
+      hasMoved,
+      isTimelineDragging,
+      updateTimelineMoveAndDrag
+    } = this.props;
+    if (!isTimelineDragging) {
+      updateTimelineMoveAndDrag(hasMoved, true);
     }
   }
 
@@ -1087,7 +1097,9 @@ class TimelineAxis extends Component {
     } = this.state;
     let {
       position,
-      transformX
+      hoverTime,
+      transformX,
+      updatePositioningOnAxisStopDrag
     } = this.props;
 
     position = position - midPoint;
@@ -1116,8 +1128,8 @@ class TimelineAxis extends Component {
       wheelZoom: !!wheelZoom
     });
     // hoverTime conditional reset necessary for touchpad horizontal scroll gesture
-    let hoverTime = hasMoved ? null : this.props.hoverTime;
-    this.props.updatePositioningOnAxisStopDrag(updatePositioningArguments, hoverTime);
+    let hoverTimeDate = hasMoved ? null : hoverTime;
+    updatePositioningOnAxisStopDrag(updatePositioningArguments, hoverTimeDate);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
