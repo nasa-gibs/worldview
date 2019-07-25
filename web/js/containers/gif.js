@@ -122,6 +122,7 @@ class GIF extends Component {
             startDate={startDate}
             endDate={endDate}
             onClick={this.createGIF.bind(this)}
+            onCheck={this.toggleShowDates.bind(this)}
             numberOfFrames={numberOfFrames}
           />
 
@@ -143,6 +144,10 @@ class GIF extends Component {
         </ModalBody>
       </Modal>
     );
+  }
+  toggleShowDates() {
+    const { showDates } = this.state;
+    this.setState({ showDates: !showDates });
   }
   createGIF(width, height) {
     const { getImageArray } = this.props;
