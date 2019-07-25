@@ -25,7 +25,7 @@ export function getImageArray(
   dimensions,
   state
 ) {
-  const { proj, map, date, layers, compare } = state;
+  const { animation, proj, map, date, layers, compare } = state;
   const { startDate, endDate, url } = gifComponentProps;
   const { boundaries, showDates } = gifComponentState;
   const { customInterval, interval, customDelta, delta, customSelected } = date;
@@ -81,7 +81,7 @@ export function getImageArray(
     a.push({
       src: src,
       text: showDates ? strDate : '',
-      delay: 1000 / interval
+      delay: 1000 / animation.speed
     });
     current = util.dateAdd(current, increment, intervalAmount);
     if (j > 40) {
