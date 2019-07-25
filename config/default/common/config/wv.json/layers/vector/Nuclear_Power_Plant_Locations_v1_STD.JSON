@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "Nuclear_Power_Plant_Locations_v1_STD": {
+          "id":       "Nuclear_Power_Plant_Locations_v1_STD",
+          "title":    "Power Plants, Nuclear (Population Exposure Estimates in Proximity to Nuclear Power Plants, Locations, v1, Standard)",
+          "subtitle": "",
+          "description": "vector/Nuclear_Power_Plant_Locations_v1_STD",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "Nuclear_Power_Plant_Locations_v1_STD"
+          },
+          "period": "daily"
+      }
+  }
+}

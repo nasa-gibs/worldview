@@ -1,0 +1,21 @@
+{
+  "layers": {
+      "GRanD_Reservoirs_v1.01_STD": {
+          "id":       "GRanD_Reservoirs_v1.01_STD",
+          "title":    "Reservoirs (Global Reservoir and Dam Database, v1.01, Standard)",
+          "subtitle": "",
+          "description": "vector/GRanD_Reservoirs_v1.01_STD",
+          "type":     "vector",
+          "tags":     "vector vectors",
+          "group":    "overlays",
+          "layergroup": [
+            "vector"
+          ],
+          "inactive": true,
+          "vectorStyle": {
+            "id": "GRanD_Reservoirs_v1.01_STD"
+          },
+          "period": "daily"
+      }
+  }
+}
