@@ -172,13 +172,13 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
         callback
       );
       selectedMap.addLayer(newTrackDetails.track);
-      self.active = true;
     }
+    self.active = true;
     self.trackDetails = newTrackDetails;
   };
 
   var debounceTrackUpdate = lodashDebounce(() => {
-    const selectedEvent = store.getState().events.selected;
+    const selectedEvent = ui.naturalEvents.selected;
 
     if (!selectedEvent.id || !selectedEvent.date) {
       return;
