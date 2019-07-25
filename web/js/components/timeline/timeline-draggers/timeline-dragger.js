@@ -11,6 +11,10 @@ import Draggable from 'react-draggable';
 class Dragger extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      isHoveredDragging: false,
+      isHoveredDrag: false
+    };
 
     this.selectDragger = this.selectDragger.bind(this);
     this.handleDragDragger = this.handleDragDragger.bind(this);
@@ -34,6 +38,9 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   handleDragDragger = (e, d) => {
+    this.setState({
+      isHoveredDragging: true
+    });
     this.props.handleDragDragger(e, d);
   };
 
@@ -50,17 +57,57 @@ class Dragger extends PureComponent {
   * @returns {void}
   */
   stopShowDraggerTime = () => {
+    this.setState({
+      isHoveredDragging: false
+    });
     this.props.toggleShowDraggerTime(false);
   };
 
+  /**
+  * @desc Handle dragger hover mouseEnter for background color fill
+  * @returns {void}
+  */
+  handleHoverMouseEnter = () => {
+    this.setState({
+      isHoveredDrag: true
+    });
+  };
+
+  /**
+  * @desc Handle dragger hover mouseLeave for background color fill
+  * @returns {void}
+  */
+  handleHoverMouseLeave = () => {
+    this.setState({
+      isHoveredDrag: false
+    });
+  };
+
   render() {
-    let { transformX,
+    let {
+      transformX,
       draggerPosition,
       draggerVisible,
       draggerName,
       isCompareModeActive,
       disabled
     } = this.props;
+    let {
+      isHoveredDrag,
+      isHoveredDragging
+    } = this.state;
+    // handle isHovered that may include a mouse up event while not hovered over dragger
+    const isHovered = !isHoveredDrag && !isHoveredDragging ? false : isHoveredDrag || isHoveredDragging;
+    // handle fill for hover vs non-hover and slightly different A/B draggers
+    const draggerFill = disabled
+      ? isHovered
+        ? '#8e8e8e'
+        : '#666666'
+      : isHovered
+        ? isCompareModeActive
+          ? '#a3a3a3'
+          : '#8e8e8e'
+        : '#ccc';
     return (
       draggerVisible
         ? <Draggable
@@ -79,10 +126,12 @@ class Dragger extends PureComponent {
             }}
             className={`timeline-dragger dragger${draggerName === 'selected' ? 'A' : 'B'}`}
             transform={`translate(${transformX}, 0)`}
+            onMouseEnter={this.handleHoverMouseEnter}
+            onMouseLeave={this.handleHoverMouseLeave}
           >
             <polygon
-              fill={disabled ? '#7a7a7a' : '#ccc'}
-              stroke='#333'
+              fill={draggerFill}
+              stroke={isHovered ? '#ccc' : '#333'}
               strokeWidth='1px'
               points='60,20, 90,65, 30,65'>
             </polygon>
@@ -100,11 +149,11 @@ class Dragger extends PureComponent {
               </text>
               : <React.Fragment>
                 <rect
-                  pointerEvents='none' fill='#515151'
+                  pointerEvents='none' fill={isHovered ? '#ccc' : '#515151'}
                   width='3' height='20' x='52' y='39'></rect>
-                <rect pointerEvents='none' fill='#515151'
+                <rect pointerEvents='none' fill={isHovered ? '#ccc' : '#515151'}
                   width='3' height='20' x='58' y='39'></rect>
-                <rect pointerEvents='none' fill='#515151'
+                <rect pointerEvents='none' fill={isHovered ? '#ccc' : '#515151'}
                   width='3' height='20' x='64' y='39'></rect>
               </React.Fragment>
             }
