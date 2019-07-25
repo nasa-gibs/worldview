@@ -1,7 +1,6 @@
-import lodashFind from 'lodash/find';
 import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
-
+import { forOwn as lodashForOwn, find as lodashFind } from 'lodash';
 import markers from './markers';
 import track from './track';
 import wvui from '../../ui/ui';
@@ -31,7 +30,8 @@ export default function naturalEventsUI(ui, config, store, models) {
   self.selected = {};
   self.selecting = false;
   var naturalEventMarkers = markers(ui, store);
-  var naturalEventsTrack = track(ui, store);
+  var naturalEventsTracks = {};
+  var naturalEventsTrack;
   /**
    * Suscribe to redux store and listen for
    * specific action types
@@ -120,6 +120,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     } else {
       naturalEventMarkers.remove(self.markers);
     }
+    naturalEventsTrack.onSidebarChange(tab);
   };
 
   /**
@@ -131,7 +132,8 @@ export default function naturalEventsUI(ui, config, store, models) {
     map = ui.map.selected;
     view = map.getView();
     naturalEventMarkers = markers(ui, store, map);
-    naturalEventsTrack = track(ui, store, map);
+    if (naturalEventsTrack.trackDetails.id) naturalEventsTrack.update(null);
+    naturalEventsTrack = naturalEventsTracks[id];
     // filter events within projection view extent
     self.filterEventList();
 
@@ -168,18 +170,11 @@ export default function naturalEventsUI(ui, config, store, models) {
         if (!findSelectedInProjection) {
           self.deselectEvent();
           self.filterEventList();
-        } else {
-          let event = naturalEventsUtilGetEventById(
-            self.eventsData,
-            self.selected.id
-          );
-          naturalEventsTrack.update(
-            event,
-            map,
-            self.selected.date,
-            self.selectEvent
-          );
         }
+        if (self.selected.date) {
+          var event = naturalEventsUtilGetEventById(self.eventsData, self.selected.id);
+          naturalEventsTrack.update(event, self.selected.date, self.selectEvent);
+        };
       }
     }
   };
@@ -217,6 +212,10 @@ export default function naturalEventsUI(ui, config, store, models) {
   };
   var init = function() {
     map = ui.map.selected;
+    lodashForOwn(ui.map.proj, (projMap, key) => {
+      naturalEventsTracks[key] = track(ui, store, projMap);
+    });
+    naturalEventsTrack = naturalEventsTracks[store.getState().proj.id];
     // Display loading information for user feedback on slow network
     view = map.getView();
     ui.events.on('last-action', subscribeToStore);
@@ -254,9 +253,10 @@ export default function naturalEventsUI(ui, config, store, models) {
       wvui.notify('The event with an id of ' + id + ' is no longer active.');
       return;
     }
+    date = date || self.getDefaultEventDate(event);
     self.selected = {
       id,
-      date: date || self.getDefaultEventDate(event)
+      date: date
     };
 
     const zoomPromise = getZoomPromise(
@@ -301,7 +301,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       } else {
         ui.map.updateDate();
       }
-      naturalEventsTrack.update(event, ui.map.selected, date, self.selectEvent);
+      naturalEventsTrack.update(event, date, self.selectEvent);
     });
   };
 
@@ -309,7 +309,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     self.selected = {};
     naturalEventMarkers.remove(self.markers);
     self.markers = naturalEventMarkers.draw();
-    naturalEventsTrack.update(null, ui.map.selected);
+    naturalEventsTrack.update(null);
     store.dispatch(deselectEventAction);
     self.events.trigger('change');
   };

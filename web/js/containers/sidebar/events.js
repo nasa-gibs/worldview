@@ -74,6 +74,7 @@ class Events extends React.Component {
       isLoading,
       selectEvent,
       selected,
+      visibleWithinMapExtent,
       visibleEvents,
       sources,
       height,
@@ -84,6 +85,9 @@ class Events extends React.Component {
       showAlert,
       selectedDate
     } = this.props;
+    if (selected.id && !visibleWithinMapExtent[selected.id] && events && events.length) {
+      deselectEvent();
+    }
     const errorOrLoadingText = isLoading
       ? 'Loading...'
       : hasRequestError
@@ -153,7 +157,6 @@ const mapDispatchToProps = dispatch => ({
       dispatch(collapseSidebar());
     }
     if (dateStr) {
-      console.log(dateStr);
       dispatch(selectDate(new Date(dateStr)));
     }
   },
@@ -209,7 +212,15 @@ function mapStateToProps(state) {
   const events = lodashGet(requestedEvents, 'response');
   const sources = lodashGet(requestedEventSources, 'response');
   const mapExtent = lodashGet(state, 'map.extent');
+  let visibleWithinMapExtent = {};
   if (events && mapExtent) {
+    visibleWithinMapExtent = getEventsWithinExtent(
+      events,
+      selected,
+      proj.selected.maxExtent,
+      proj.selected,
+      true
+    );
     let extent = showAll ? proj.selected.maxExtent : mapExtent;
     visibleEvents = getEventsWithinExtent(
       events,
@@ -234,6 +245,7 @@ function mapStateToProps(state) {
     hasRequestError,
     sources,
     selected,
+    visibleWithinMapExtent,
     visibleEvents,
     apiURL,
     config,
@@ -267,5 +279,6 @@ Events.propTypes = {
   showAlert: PropTypes.bool,
   showAll: PropTypes.bool,
   sources: PropTypes.array,
-  visibleEvents: PropTypes.object
+  visibleEvents: PropTypes.object,
+  visibleWithinMapExtent: PropTypes.object
 };

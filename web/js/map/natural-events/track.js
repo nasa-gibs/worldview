@@ -7,8 +7,6 @@ import OlStyleStyle from 'ol/style/Style';
 import * as olExtent from 'ol/extent';
 import OlGeomMultiLineString from 'ol/geom/MultiLineString';
 import * as olProj from 'ol/proj';
-import { CHANGE_PROJECTION } from '../../modules/projection/constants';
-import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import {
   find as lodashFind,
   each as lodashEach,
@@ -32,27 +30,24 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
   var self = {};
   self.trackDetails = {};
   self.active = false;
-
   /**
    * @return {void}
    */
   var init = function() {
-    const map = ui.map.selected;
-    store.subscribe(subscribeToStore);
-    map.on('moveend', function(e) {
+    selectedMap.on('moveend', function(e) {
       if (self.active) {
         if (self.trackDetails.id) {
-          addPointOverlays(map, self.trackDetails.pointArray);
+          addPointOverlays(selectedMap, self.trackDetails.pointArray);
         } else {
           debounceTrackUpdate();
         }
       }
     });
     // reset track on change to resolution or rotation
-    map.getView().on('propertychange', function(e) {
+    selectedMap.getView().on('propertychange', function(e) {
       if (e.key === 'resolution' || e.key === 'rotation') {
         self.trackDetails = self.trackDetails.id
-          ? self.removeTrack(map, self.trackDetails)
+          ? self.removeTrack(selectedMap, self.trackDetails)
           : {};
       } else if (e.key === 'center') {
         if (self.active) {
@@ -76,34 +71,18 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
             isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
           }
           if (isNewTarget) {
-            removeOldPoints(map, self.trackDetails.pointArray);
+            removeOldPoints(selectedMap, self.trackDetails.pointArray);
           }
         }
       }
     });
   };
 
-  /**
-   * Suscribe to redux store and listen for
-   * specific action types
-   */
-  const subscribeToStore = function() {
-    const state = store.getState();
-    const action = state.lastAction;
-    switch (action.type) {
-      case CHANGE_SIDEBAR_TAB:
-        return onSidebarChange(action.activeTab);
-      case CHANGE_PROJECTION:
-        // update/remove track on projection change
-        if (self.trackDetails.id) return self.update(null, selectedMap);
-    }
-  };
-  const onSidebarChange = function(tab) {
-    const map = ui.map.selected;
+  self.onSidebarChange = function(tab) {
     if (tab === 'events') {
       debounceTrackUpdate();
     } else {
-      if (self.trackDetails.id) self.update(null, map);
+      if (self.trackDetails.id) self.update(null);
     }
   };
   /**
@@ -129,7 +108,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
    * @param  {Function} callback event change callback
    * @return {[type]}
    */
-  self.update = function(event, map, selectedDate, callback) {
+  self.update = function(event, selectedDate, callback) {
     const proj = store.getState().proj;
     var newTrackDetails;
     var trackDetails = self.trackDetails;
@@ -137,7 +116,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
       // If track exists remove it.
       // Else return empty Object
       newTrackDetails = trackDetails.id
-        ? self.removeTrack(map, trackDetails)
+        ? self.removeTrack(selectedMap, trackDetails)
         : {};
       self.active = false;
     } else if (trackDetails.id) {
@@ -151,15 +130,15 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
           // If New Date is in cluster
           // build new track
           if (isClusteredSelection) {
-            newTrackDetails = self.removeTrack(map, trackDetails);
+            newTrackDetails = self.removeTrack(selectedMap, trackDetails);
             newTrackDetails = createTrack(
               proj,
               event,
-              map,
+              selectedMap,
               selectedDate,
               callback
             );
-            map.addLayer(newTrackDetails.track);
+            selectedMap.addLayer(newTrackDetails.track);
           } else {
             newTrackDetails = trackDetails;
             updateSelection(selectedDate);
@@ -172,40 +151,46 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
         }
       } else {
         // Remove old DOM Elements
-        newTrackDetails = self.removeTrack(map, trackDetails);
-        newTrackDetails = createTrack(proj, event, map, selectedDate, callback);
-        map.addLayer(newTrackDetails.track);
+        newTrackDetails = self.removeTrack(selectedMap, trackDetails);
+        newTrackDetails = createTrack(
+          proj,
+          event,
+          selectedMap,
+          selectedDate,
+          callback
+        );
+        selectedMap.addLayer(newTrackDetails.track);
       }
     } else {
       // If no track element currenlty exists,
       // but there is a multiday event, build a new track
-      newTrackDetails = createTrack(proj, event, map, selectedDate, callback);
-      map.addLayer(newTrackDetails.track);
-      self.active = true;
+      newTrackDetails = createTrack(
+        proj,
+        event,
+        selectedMap,
+        selectedDate,
+        callback
+      );
+      selectedMap.addLayer(newTrackDetails.track);
     }
+    self.active = true;
     self.trackDetails = newTrackDetails;
   };
 
-  var debounceTrackUpdate = lodashDebounce(
-    () => {
-      const selectedEvent = ui.naturalEvents.selected;
-      const map = ui.map.selected;
+  var debounceTrackUpdate = lodashDebounce(() => {
+    const selectedEvent = ui.naturalEvents.selected;
 
-      if (!selectedEvent || !selectedEvent.date) {
-        return;
-      }
-      let event = naturalEventsUtilGetEventById(
-        ui.naturalEvents.eventsData,
-        selectedEvent.id
-      );
-      self.update(event, map, selectedEvent.date, (id, date) => {
-        store.dispatch(
-          selectEventAction(id, date)
-        );
-      });
-    },
-    250
-  );
+    if (!selectedEvent.id || !selectedEvent.date) {
+      return;
+    }
+    let event = naturalEventsUtilGetEventById(
+      ui.naturalEvents.eventsData,
+      selectedEvent.id
+    );
+    self.update(event, selectedEvent.date, (id, date) => {
+      store.dispatch(selectEventAction(id, date));
+    });
+  }, 250);
 
   init();
   return self;
@@ -350,6 +335,7 @@ var createTrack = function(proj, eventObj, map, selectedDate, callback) {
     proj.selected.id === 'geographic'
       ? [-250, -90, 250, 90]
       : [-180, -90, 180, 90];
+
   const selectedCoords = lodashFind(eventObj.geometries, function(geometry) {
     return geometry.date.split('T')[0] === selectedDate;
   }).coordinates;
