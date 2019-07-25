@@ -42,7 +42,7 @@ export default class GifPanel extends React.Component {
       startDate,
       endDate,
       onCheck,
-      checked,
+      showDates,
       numberOfFrames
     } = this.props;
     const { resolution } = this.state;
@@ -87,7 +87,7 @@ export default class GifPanel extends React.Component {
             id="wv-checkbox-gif"
             classNames="wv-checkbox-gif"
             title="Check box to remove dates from Animating GIF"
-            checked={checked}
+            checked={showDates}
             onCheck={onCheck}
             label="Include Date Stamps"
           />
