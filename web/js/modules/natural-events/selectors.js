@@ -60,7 +60,6 @@ export function getEventsWithinExtent(
       isSelectedEvent &&
       olExtent.containsCoordinate(maxExtent, coordinates)
     ) {
-      console.log(maxExtent, coordinates);
       visibleListEvents[naturalEvent.id] = true;
     }
   });

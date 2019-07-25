@@ -19,11 +19,35 @@ References:
 ### MODIS (Terra/Aqua) Vegetation Index (Level 3, 16-Day)
 Temporal coverage: 4 March 2000 - present (Terra); July 2002 - present (Aqua)
 
+The Terra/Aqua Moderate Resolution Imaging Spectroradiometer (MODIS) Vegetation Indices (MOD13Q1/MYD13Q1) Version 6 data are generated every 16 days at 250 meter (m) spatial resolution as a Level 3 product. The MOD13Q1/MYD13Q1 product provides Normalized Difference Vegetation Index (NDVI) which is referred to as the continuity index to the existing National Oceanic and Atmospheric Administration-Advanced Very High Resolution Radiometer (NOAA-AVHRR) derived NDVI. The algorithm chooses the best available pixel value from all the acquisitions from the 16-day period. The criteria used is low clouds, low view angle, and the highest NDVI value.
+
+Reference: [LP DAAC - MOD13Q1 Version 6](https://doi.org/10.5067/MODIS/MOD13Q1.006); [LP DAAC - MYD13Q1 Version 6](https://doi.org/10.5067/MODIS/MYD13Q1.006)
+
 ### MODIS (Terra/Aqua) Vegetation Index (Level 3, Monthly)
 Temporal coverage: February 2000 - present (Terra); July 2002 - present (Aqua)
+
+The Terra/Aqua Moderate Resolution Imaging Spectroradiometer (MODIS) Vegetation Indices (MOD13A3/MYD13A3) Version 6 data are provided monthly at 1 kilometer (km) spatial resolution as a gridded Level 3 product in the sinusoidal projection. In generating this monthly product, the algorithm ingests all the Terra/Aqua MODIS Vegetation Indices 16-day products that overlap the month and employs a weighted temporal average.
+
+The MODIS Normalized Difference Vegetation Index (NDVI) complements NOAA's Advanced Very High Resolution Radiometer (AVHRR) NDVI products and provides continuity for time series historical applications. The MODIS NDVI product is computed from surface reflectances corrected for molecular scattering, ozone absorption, and aerosols.
+
+Vegetation indices are used for global monitoring of vegetation conditions and are used in products displaying land cover and land cover changes. These data may be used as input for modeling global biogeochemical and hydrologic processes as well as global and regional climate. Additional applications include characterizing land surface biophysical properties and processes, such as primary production and land cover conversion.
+
+Reference: Reference: [LP DAAC - MOD13A3 Version 6](https://doi.org/10.5067/MODIS/MOD13A3.006); [LP DAAC - MYD13A3 Version 6](https://doi.org/10.5067/MODIS/MYD13A3.006)
 
 ### MODIS (Terra/Aqua) Enhanced Vegetation Index (Level 3, 16-Day)
 Temporal coverage: 4 March 2000 - present (Terra); 3 July 2002 - present (Aqua)
 
+The Terra/Aqua Moderate Resolution Imaging Spectroradiometer (MODIS) Vegetation Indices (MOD13Q1/MYD13Q1) Version 6 data are generated every 16 days at 250 meter (m) spatial resolution as a Level 3 product. The MOD13Q1/MYD13Q1 product provides the Enhanced Vegetation Index (EVI), which has improved sensitivity over high biomass regions. The algorithm chooses the best available pixel value from all the acquisitions from the 16-day period. The criteria used is low clouds, low view angle, and the highest EVI value.
+
+Reference: [LP DAAC - MOD13Q1 Version 6](https://doi.org/10.5067/MODIS/MOD13Q1.006); [LP DAAC - MYD13Q1 Version 6](https://doi.org/10.5067/MODIS/MYD13Q1.006)
+
 ### MODIS (Terra/Aqua) Enhanced Vegetation Index (Level 3, Monthly)
 Temporal coverage: February 2000 - present (Terra); July 2002 - present (Aqua)
+
+The Terra/Aqua Moderate Resolution Imaging Spectroradiometer (MODIS) Vegetation Indices (MOD13A3/MYD13A3) Version 6 data are provided monthly at 1 kilometer (km) spatial resolution as a gridded Level 3 product in the sinusoidal projection. In generating this monthly product, the algorithm ingests all the Terra/Aqua MODIS Vegetation Indices 16-day products that overlap the month and employs a weighted temporal average.
+
+The Enhanced Vegetation Index (EVI) minimizes canopy background variations and maintains sensitivity over dense vegetation conditions. The EVI uses the blue band to remove residual atmosphere contamination caused by smoke and sub-pixel thin clouds. The MODIS EVI product is computed from surface reflectances corrected for molecular scattering, ozone absorption, and aerosols.
+
+Vegetation indices are used for global monitoring of vegetation conditions and are used in products displaying land cover and land cover changes. These data may be used as input for modeling global biogeochemical and hydrologic processes as well as global and regional climate. Additional applications include characterizing land surface biophysical properties and processes, such as primary production and land cover conversion.
+
+Reference: [LP DAAC - MOD13A3 Version 6](https://doi.org/10.5067/MODIS/MOD13A3.006); [LP DAAC - MYD13A3 Version 6](https://doi.org/10.5067/MODIS/MYD13A3.006)

@@ -1,11 +1,11 @@
 {
     "layers": {
-        "MODIS_Aqua_L3_FPAR_8Day": {
-            "id":       "MODIS_Aqua_L3_FPAR_8Day",
-            "title":    "Fraction of Photosynthetically Active Radiation (L3, 8-Day)",
+        "MODIS_Aqua_L4_LAI_8Day": {
+            "id":       "MODIS_Aqua_L4_LAI_8Day",
+            "title":    "Leaf Area Index (L4, 8-Day)",
             "subtitle": "Aqua / MODIS",
-            "description": "modis/aqua/MODIS_Aqua_L3_FPAR_8Day",
-            "tags":     "fpar",
+            "description": "modis/aqua/MODIS_Aqua_L4_LAI_8Day",
+            "tags":     "lai",
             "group":    "overlays",
             "layergroup": [
               "modis",

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dragger from './dragger.js';
 import DraggerRange from './dragger-range.js';
-import googleTagManager from 'googleTagManager';
 
 import moment from 'moment';
 import { timeScaleOptions } from '../../modules/date/constants';
@@ -92,9 +91,6 @@ class TimelineRangeSelector extends React.Component {
    */
   onDragStop() {
     this.animationDraggerPositionUpdate(this.state.startLocation, this.state.endLocation, false);
-    googleTagManager.pushEvent({
-      event: 'GIF_animation_dragger'
-    });
   }
   /*
    * Update state based on distance range was dragged

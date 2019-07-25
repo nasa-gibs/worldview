@@ -17,13 +17,32 @@ import { toggleListAll } from '../../modules/natural-events/actions';
 import { DATA_GET_DATA_CLICK } from '../../modules/data/constants';
 
 class FooterContent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggleListAll = this.toggleListAll.bind(this);
+  }
+  toggleListAll() {
+    const {
+      toggleListAll,
+      showAll
+    } = this.props;
+    toggleListAll();
+    if (showAll) {
+      googleTagManager.pushEvent({
+        event: 'natural_events_current_view_only'
+      });
+    } else {
+      googleTagManager.pushEvent({
+        event: 'natural_events_show_all'
+      });
+    }
+  }
   render() {
     const {
       isCompareActive,
       compareMode,
       isMobile,
       activeTab,
-      toggleListAll,
       onGetData,
       changeCompareMode,
       addLayers,
@@ -80,7 +99,7 @@ class FooterContent extends React.Component {
             className="red"
             id="events-footer-checkbox"
             label="Only show events in current view"
-            onCheck={toggleListAll}
+            onCheck={this.toggleListAll}
             text="List All"
             checked={!showAll}
           />

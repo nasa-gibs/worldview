@@ -9,13 +9,13 @@
                 "measurements": [
                     "Corrected Reflectance",
                     "Brightness Temperature",
-                    "Global 250m Water Map",
                     "Land Surface Reflectance",
                     "Radiance",
                     "Sea Ice",
                     "Sea Ice Brightness Temperature",
                     "Sea Surface Currents",
                     "Sea Surface Temperature",
+                    "Water Bodies",
                     "Wind Speed"
                 ]
             }

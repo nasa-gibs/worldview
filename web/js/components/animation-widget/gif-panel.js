@@ -42,13 +42,15 @@ export default class GifPanel extends React.Component {
       startDate,
       endDate,
       onCheck,
-      checked
+      checked,
+      numberOfFrames
     } = this.props;
     const { resolution } = this.state;
     const dimensions = getDimensions(projId, lonlats, resolution);
     const height = dimensions.height;
     const width = dimensions.width;
-    const requestSize = ((width * height * 24) / 8388608).toFixed(2);
+    const requestSize =
+      ((width * height * 24) / 8388608).toFixed(2) * numberOfFrames;
     const valid = isFileSizeValid(requestSize, height, width);
     return (
       <div className="gif-dialog">
@@ -66,7 +68,7 @@ export default class GifPanel extends React.Component {
           <GifPanelGrid
             width={width}
             height={height}
-            requestSize={((width * height * 24) / 8388608).toFixed(2)}
+            requestSize={requestSize}
             maxGifSize={MAX_GIF_SIZE}
             maxImageDimensionSize={MAX_IMAGE_DIMENSION_SIZE}
             valid={valid}
@@ -111,6 +113,7 @@ GifPanel.propTypes = {
   lonlats: PropTypes.array,
   maxGifSize: PropTypes.number,
   maxImageDimensionSize: PropTypes.number,
+  numberOfFrames: PropTypes.number,
   onCheck: PropTypes.func,
   onClick: PropTypes.func,
   onDownloadClick: PropTypes.func,

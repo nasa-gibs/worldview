@@ -6,7 +6,7 @@
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_L3_SurfaceReflectance_Bands721_8Day",
             "tags":     "lsr m11-i2-i1 721 false color",
-            "group":    "baselayerss",
+            "group":    "baselayers",
             "layergroup": [
               "modis",
               "modis_terra"

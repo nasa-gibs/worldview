@@ -257,6 +257,12 @@ ProductPicker.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   addLayer: id => {
+    googleTagManager.pushEvent({
+      'event': 'layer_added',
+      'layers': {
+        'id': id
+      }
+    });
     dispatch(addLayer(id));
   },
   removeLayer: id => {

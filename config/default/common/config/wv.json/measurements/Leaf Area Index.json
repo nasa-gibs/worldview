@@ -11,7 +11,7 @@
                     "description": "modis/LeafAreaIndex",
                     "image": "",
                     "settings": [
-                        "MODIS_Aqua_L3_LAI_8Day"
+                        "MODIS_Aqua_L4_LAI_8Day"
                     ]
                 },
                 "Terra/MODIS": {
@@ -20,17 +20,17 @@
                     "description": "modis/LeafAreaIndex",
                     "image": "",
                     "settings": [
-                        "MODIS_Terra_L3_LAI_8Day"
+                        "MODIS_Terra_L4_LAI_8Day"
                     ]
                 },
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/LeafAreaIndex",
+                    "description": "modis/combined/LeafAreaIndex",
                     "image": "",
                     "settings": [
-                        "MODIS_Combined_L3_LAI_4Day",
-                        "MODIS_Combined_L3_LAI_8Day"
+                        "MODIS_Combined_L4_LAI_4Day",
+                        "MODIS_Combined_L4_LAI_8Day"
                     ]
                 }
             }

@@ -14,7 +14,16 @@ import util from '../../util/util';
 import googleTagManager from 'googleTagManager';
 
 const MAX_DIMENSION_SIZE = 8200;
-
+const RESOLUTION_KEY = {
+  '0.125': '30m',
+  '0.25': '60m',
+  '0.5': '125m',
+  '1': '250m',
+  '2': '500m',
+  '4': '1km',
+  '20': '5km',
+  '40': '10km'
+};
 /*
  * A react component, Builds a rather specific
  * interactive widget
@@ -73,7 +82,7 @@ export default class ImageResSelection extends React.Component {
         activeCount: layers.length
       },
       image: {
-        resolution: resolution,
+        resolution: RESOLUTION_KEY[resolution],
         format: fileType,
         worldfile: isWorldfile
       }
@@ -183,7 +192,7 @@ ImageResSelection.defaultProps = {
   height: '0',
   imageSize: '0',
   isWorldfile: 'false',
-  maxImageSize: '250 MB',
+  maxImageSize: '8200px x 8200px',
   resolution: '1',
   secondLabel: 'Format',
   width: '0',

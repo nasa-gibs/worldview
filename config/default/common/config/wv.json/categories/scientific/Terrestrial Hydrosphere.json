@@ -16,7 +16,8 @@
                     "Snow Depth",
                     "Snow Mass",
                     "Snow Water Equivalent",
-                    "Soil Moisture"
+                    "Soil Moisture",
+                    "Water Bodies"
                 ]
             }
         }

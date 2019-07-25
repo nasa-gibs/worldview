@@ -20,7 +20,6 @@
                     "Dams",
                     "Flood Hazard",
                     "Forests, Mangrove",
-                    "Global 250m Water Map",
                     "Human Built-up And Settlement Extent",
                     "Impervious Surface",
                     "Land Cover",
@@ -36,6 +35,7 @@
                     "Snow Water Equivalent",
                     "Urban Extents",
                     "Urban Expansion",
+                    "Water Bodies",
                     "Water Vapor"
                 ]
             }
