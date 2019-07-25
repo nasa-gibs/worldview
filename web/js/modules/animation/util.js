@@ -123,7 +123,10 @@ export function mapLocationToAnimationState(
     stateFromLocation = update(stateFromLocation, {
       animation: { isPlaying: { $set: true } }
     });
-  } else if (!parameters.ae || (!parameters.as && (!!endDate || !!startDate))) {
+  } else if (
+    parameters.ab !== 'on' &&
+    (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
+  ) {
     // wipe anim start & end dates on tour change
 
     stateFromLocation = update(stateFromLocation, {
