@@ -399,7 +399,7 @@ button:focus {
 .custom-interval-delta-input {
   width: 80px;
   height: 24px;
-  color: #7890cd;
+  color: #fff;
   opacity: 1;
   font-size: 16px;
   background: transparent;
@@ -416,7 +416,7 @@ button:focus {
 
 .custom-interval-timescale-select-form-container {
   width: 100px;
-  color: #7890cd;
+  color: #fff;
   opacity: 1;
   font-size: 16px;
   background: transparent;
@@ -433,7 +433,7 @@ button:focus {
 .custom-interval-timescale-select {
   padding: 0;
   background: transparent;
-  color: #7890cd;
+  color: #fff;
   height: 24px;
   font-size: 16px;
   width: 118px;
@@ -446,8 +446,9 @@ button:focus {
   background: rgb(40, 40, 40);
 }
 
-.custom-interval-text {
-  color: #7890cd !important;
+#current-interval {
+  white-space: nowrap;
+  padding-right: 6px;
 }
 
 #timeline-header .timeline-interval,
