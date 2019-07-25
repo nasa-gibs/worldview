@@ -22,7 +22,7 @@ class AxisHoverLine extends PureComponent {
       showHover
         ? <svg className="axis-hover-line-container" width={axisWidth} height={63}>
           <line className="axis-hover-line"
-            stroke="blue" strokeWidth="2" strokeOpacity="0.48" x1="0" x2="0" y1="0" y2="63"
+            stroke="#0f51c0" strokeWidth="2" x1="0" x2="0" y1="0" y2="63"
             transform={`translate(${hoverLinePosition + 1}, 0)`}
           />
         </svg>
