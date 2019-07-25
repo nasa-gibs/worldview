@@ -9,7 +9,7 @@ import { naturalEventsUtilGetEventById } from './util';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../../modules/sidebar/constants';
 import * as EVENT_CONSTANTS from '../../modules/natural-events/constants';
 import { activateLayersForEventCategory } from '../../modules/layers/actions';
-import { deselectEvent as deselectEventAction } from '../../modules/natural-events/actions';
+import { deselectEvent as deselectEventAction, selected as selectedAction } from '../../modules/natural-events/actions';
 import { selectDate } from '../../modules/date/actions';
 import { CHANGE_PROJECTION } from '../../modules/projection/constants';
 
@@ -302,6 +302,7 @@ export default function naturalEventsUI(ui, config, store, models) {
         ui.map.updateDate();
       }
       naturalEventsTrack.update(event, date, self.selectEvent);
+      store.dispatch(selectedAction());
     });
   };
 

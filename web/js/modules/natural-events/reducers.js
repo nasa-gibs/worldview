@@ -6,7 +6,8 @@ import {
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE,
-  TOGGLE_SHOW_ALL
+  TOGGLE_SHOW_ALL,
+  FINISHED_ANIMATING_TO_EVENT
 } from './constants';
 import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
 import {
@@ -47,7 +48,8 @@ export const eventsReducerState = {
     date: null
   },
   active: false,
-  showAll: true
+  showAll: true,
+  isAnimatingToEvent: false
 };
 
 export function eventsReducer(state = eventsReducerState, action) {
@@ -57,7 +59,8 @@ export function eventsReducer(state = eventsReducerState, action) {
         selected: {
           id: action.id,
           date: action.date
-        }
+        },
+        isAnimatingToEvent: true
       });
 
     case DESELECT_EVENT:
@@ -84,6 +87,10 @@ export function eventsReducer(state = eventsReducerState, action) {
       if (isActive === state.active) return state;
       return lodashAssign({}, state, {
         active: isActive
+      });
+    case FINISHED_ANIMATING_TO_EVENT:
+      return lodashAssign({}, state, {
+        isAnimatingToEvent: false
       });
     default:
       return state;

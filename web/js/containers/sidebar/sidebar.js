@@ -162,7 +162,8 @@ class Sidebar extends React.Component {
       activeTab,
       tabTypes,
       isMobile,
-      changeTab
+      changeTab,
+      isDataDisabled
     } = this.props;
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
@@ -202,6 +203,7 @@ class Sidebar extends React.Component {
               isMobile={isMobile}
               toggleSidebar={this.toggleSidebar.bind(this)}
               isCompareMode={isCompareMode}
+              isDataDisabled={isDataDisabled}
             />
             <TabContent activeTab={activeTab}>
               <TabPane tabId="layers">
@@ -233,7 +235,16 @@ class Sidebar extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { browser, sidebar, compare, layers, config, modal, animation } = state;
+  const {
+    browser,
+    sidebar,
+    compare,
+    layers,
+    config,
+    modal,
+    animation,
+    events
+  } = state;
   const { screenHeight } = browser;
   const { activeTab, isCollapsed, mobileCollapsed } = sidebar;
   const { activeString } = compare;
@@ -248,6 +259,7 @@ function mapStateToProps(state) {
     isCompareMode: compare.active,
     activeString,
     numberOfLayers,
+    isDataDisabled: events.isAnimatingToEvent,
     isCollapsed: isMobile
       ? mobileCollapsed
       : isCollapsed ||
@@ -300,6 +312,7 @@ Sidebar.propTypes = {
   hasLocalStorage: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
+  isDataDisabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
   numberOfLayers: PropTypes.number,

@@ -6,7 +6,8 @@ import {
   DESELECT_EVENT,
   SHOW_ALL_EVENTS,
   ONLY_SHOW_VISIBLE,
-  TOGGLE_SHOW_ALL
+  TOGGLE_SHOW_ALL,
+  FINISHED_ANIMATING_TO_EVENT
 } from './constants';
 import { requestAction } from '../core/actions';
 
@@ -71,5 +72,10 @@ export function toggleListAll() {
 export function onlyShowVisible() {
   return {
     type: ONLY_SHOW_VISIBLE
+  };
+}
+export function selected() {
+  return {
+    type: FINISHED_ANIMATING_TO_EVENT
   };
 }
