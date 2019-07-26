@@ -643,7 +643,13 @@ class TimelineAxis extends Component {
   * @returns {void}
   */
   updateScaleWithOffset = (date, timeScale, draggerCheck) => {
-    let leftOffsetFixedCoeff = draggerCheck.newDraggerDiff > 5 ? 0.5 : draggerCheck.newDateInThePast ? 0.25 : 0.75;
+    let leftOffsetFixedCoeff = draggerCheck.newDraggerDiff > 5
+      ? 0.5
+      : draggerCheck.newDateInThePast
+        ? !draggerCheck.withinRange
+          ? 0.5
+          : 0.25
+        : 0.75;
     this.updateScale(date, timeScale, null, leftOffsetFixedCoeff);
   }
 
