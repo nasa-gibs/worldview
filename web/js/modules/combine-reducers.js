@@ -35,8 +35,9 @@ import {
   getInitialVectorStyleState
 } from './vector-styles/reducers';
 import dataDownloadReducer from './data/reducers';
-import { get as lodashGet } from 'lodash';
+import { get as lodashGet, assign as lodashAssign } from 'lodash';
 import { imageDownloadReducer } from './image-download/reducers';
+import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
 function lastAction(state = null, action) {
   return action;
@@ -88,6 +89,13 @@ export function getInitialState(models, config, parameters) {
     vectorStyles: getInitialVectorStyleState(config)
   };
 }
+const locationReducer = (state = { key: '' }, action) => {
+  if (action.type === LOCATION_POP_ACTION) {
+    return lodashAssign({}, state, { key: action.payload.key });
+  } else {
+    return state;
+  }
+};
 const defaultReducer = (state = {}) => state;
 const reducers = {
   proj: projectionReducer,
@@ -116,7 +124,8 @@ const reducers = {
   modalAboutPage,
   shortLink,
   notificationsRequest,
-  lastAction: lastAction
+  lastAction: lastAction,
+  location: locationReducer
 };
 const appReducer = combineReducers(reducers);
 /**

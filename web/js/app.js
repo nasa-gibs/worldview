@@ -93,8 +93,7 @@ class App extends React.Component {
     document.removeEventListener('keypress', this.handleKeyPress);
   }
   render() {
-    const { isAnimationWidgetActive, isTourActive } = this.props;
-
+    const { isAnimationWidgetActive, isTourActive, locationKey } = this.props;
     return (
       <div className="wv-content" id="wv-content" data-role="content">
         <Toolbar />
@@ -106,7 +105,7 @@ class App extends React.Component {
         <div id="eventsHolder" />
         <div id="imagedownload" />
         <div id="dlMap" />
-        <Timeline />
+        <Timeline key={locationKey || '1'} />
         <div id="wv-animation-widet-case">
           {isAnimationWidgetActive ? <AnimationWidget /> : null}
         </div>
@@ -166,10 +165,12 @@ function mapStateToProps(state, ownProps) {
     state: state,
     isAnimationWidgetActive: state.animation.isActive,
     isTourActive: state.tour.active,
+    tour: state.tour,
     config: state.config,
     parameters: state.parameters,
     models: ownProps.models,
-    mapMouseEvents: ownProps.mapMouseEvents
+    mapMouseEvents: ownProps.mapMouseEvents,
+    locationKey: state.location.key
   };
 }
 const mapDispatchToProps = dispatch => ({
@@ -189,6 +190,7 @@ App.propTypes = {
   isAnimationWidgetActive: PropTypes.bool,
   isTourActive: PropTypes.bool,
   keyPressAction: PropTypes.func,
+  locationKey: PropTypes.string,
   mapMouseEvents: PropTypes.object,
   parameters: PropTypes.object,
   state: PropTypes.object
