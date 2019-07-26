@@ -455,6 +455,7 @@
 
 .tour-in-progress .modal-body ul {
   padding-left: 16px;
+  line-height: 16px;
 }
 
 .tour-in-progress .modal-body li {
