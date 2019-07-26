@@ -12,6 +12,7 @@ import {
   changeEndDate,
   changeStartAndEndDate,
   changeFrameRate,
+  changeCropBounds,
   onActivate
 } from './actions';
 import fixtures from '../../fixtures';
@@ -133,5 +134,18 @@ test(
       util.dateAdd(state.date.selected, 'day', -7)
     );
     expect(response2.type).toEqual(constants.OPEN_ANIMATION);
+  }
+);
+
+test(
+  'changeBoundary action returns ' + constants.UPDATE_CROP_BOUNDS + ' action type and current bounds value',
+  () => {
+    const mockStore = configureMockStore(middlewares);
+    const store = mockStore(state);
+    const mockBounds = { x: 1, y: 1, x2: 2, y2: 2 };
+    store.dispatch(changeCropBounds(mockBounds));
+    const response = store.getActions()[0];
+    expect(response.type).toEqual(constants.UPDATE_CROP_BOUNDS);
+    expect(response.value).toEqual(mockBounds);
   }
 );
