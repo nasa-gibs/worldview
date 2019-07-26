@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Spinner from 'react-loader';
 import { connect } from 'react-redux';
 import GifPanel from '../components/animation-widget/gif-panel';
-import GifStream from '@entryline/gifstream'; // '../map/animation/gif-stream';
+import GifStream from '@entryline/gifstream';
 import util from '../util/util';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
@@ -39,6 +39,10 @@ class GIF extends Component {
       x2: screenWidth / 2 + 100,
       y2: screenHeight / 2 + 100
     };
+    const {
+      offsetLeft,
+      offsetTop
+    } = this.getModalOffsets(boundaries);
     this.state = {
       isDownloaded: false,
       isDownloadError: false,
@@ -46,11 +50,10 @@ class GIF extends Component {
       isValidSelection: true,
       progress: 0,
       downloadedObject: {},
-      offsetLeft: boundaries.x2 + 20,
-      offsetTop: boundaries.y - 20,
+      offsetLeft,
+      offsetTop,
       boundaries
     };
-    // set initial position of GIF panel
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
   }
@@ -63,11 +66,11 @@ class GIF extends Component {
       gifStream.cancel();
     }
   }
-  getStyle(props) {
+  getStyle(state) {
     return {
-      left: props.offsetLeft,
-      right: props.offsetRight,
-      top: props.offsetTop,
+      left: state.offsetLeft,
+      right: state.offsetRight,
+      top: state.offsetTop,
       maxWidth: 342
     };
   }
@@ -250,15 +253,11 @@ class GIF extends Component {
       progress: val
     });
   }
-  onBoundaryChange(boundaries) {
-    const { screenWidth, screenHeight, onBoundaryChange } = this.props;
-    const x = getPixelFromPercentage(screenWidth, boundaries.x);
-    const y = getPixelFromPercentage(screenHeight, boundaries.y);
-    const x2 = x + getPixelFromPercentage(screenWidth, boundaries.width);
-    const y2 = y + getPixelFromPercentage(screenHeight, boundaries.height);
+  getModalOffsets(boundaries) {
+    const { screenWidth, screenHeight } = this.props;
+    const { x, y, x2 } = boundaries;
     const width = 342;
     const height = 280;
-    const bounds = { x, y, x2, y2 };
     let left = x2 + 20;
     let top = y - 20;
     if (left + width > screenWidth && x - 20 - width > 0) {
@@ -267,11 +266,28 @@ class GIF extends Component {
     if (top + height > screenHeight) {
       top = screenHeight - 20 - height;
     }
-    onBoundaryChange(bounds);
-    this.setState({
+    return {
       offsetLeft: left,
-      offsetTop: top,
-      boundaries: bounds
+      offsetTop: top
+    };
+  }
+  onBoundaryChange(cropBounds) {
+    const {
+      screenWidth,
+      screenHeight,
+      onBoundaryChange
+    } = this.props;
+    const x = getPixelFromPercentage(screenWidth, cropBounds.x);
+    const y = getPixelFromPercentage(screenHeight, cropBounds.y);
+    const x2 = x + getPixelFromPercentage(screenWidth, cropBounds.width);
+    const y2 = y + getPixelFromPercentage(screenHeight, cropBounds.height);
+    const boundaries = { x, y, x2, y2 };
+    const { offsetLeft, offsetTop } = this.getModalOffsets(boundaries);
+    onBoundaryChange(boundaries);
+    this.setState({
+      offsetLeft,
+      offsetTop,
+      boundaries
     });
   }
   render() {
