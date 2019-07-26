@@ -10,6 +10,7 @@ import {
   UPDATE_START_AND_END_DATE,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
+  UPDATE_CROP_BOUNDS,
   TOGGLE_GIF,
   KEY_PRESS_ACTION
 } from './constants';
@@ -21,7 +22,8 @@ export const defaultState = {
   speed: 3,
   gifActive: false,
   startDate: undefined,
-  endDate: undefined
+  endDate: undefined,
+  boundares: undefined
 };
 export function getInitialState(config) {
   return lodashAssign({}, defaultState, {
@@ -71,6 +73,10 @@ export function animationReducer(state = defaultState, action) {
       return lodashAssign({}, state, {
         endDate: action.value,
         isPlaying: false
+      });
+    case UPDATE_CROP_BOUNDS:
+      return lodashAssign({}, state, {
+        boundaries: action.value
       });
     case TOGGLE_LOOPING:
       return lodashAssign({}, state, {
