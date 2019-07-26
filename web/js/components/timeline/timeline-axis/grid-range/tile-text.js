@@ -8,7 +8,16 @@ import React from 'react';
 * @returns {Object} svg text DOM object
 */
 const axisScaleTextElementWrapper = (item, index, gridWidth) => {
-  let dateText = item.date;
+  let dateText;
+  let dateTextYear;
+  // TODO: may need to expand for subdaily to differentiate time units
+  if (item.timeScale === 'day') {
+    let dateSplit = item.date.split(' ');
+    dateText = dateSplit[0];
+    dateTextYear = dateSplit[1];
+  } else {
+    dateText = item.date;
+  }
   if (item.timeScale === 'hour') {
     let timeScaleUnit = item.dateObject.hours;
     dateText = timeScaleUnit === 12 ||
@@ -30,6 +39,16 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
       >
         {dateText}
       </text>
+      {item.timeScale === 'day'
+        ? <text className="axis-grid-text axis-grid-text-year" x="0" y="42"
+          fill={item.withinRange ? '#cccccc' : ''}
+          transform={`translate(${(index * gridWidth) + xOffsetAdded + 40}, 20)`}
+          clipPath="url(#textDisplay)"
+        >
+          {dateTextYear}
+        </text>
+        : null
+      }
     </React.Fragment>
   );
 };

@@ -310,11 +310,13 @@ button:focus {
 
 .axis-grid-text {
   font-size: 18px;
-  font-weight: 500;
   font-family: 'Roboto Mono', monospace;
-  color: #fff;
   pointer-events: none;
   user-select: none;
+}
+
+.axis-grid-text-year {
+  font-size: 16px;
 }
 
 .axis-grid-line {
