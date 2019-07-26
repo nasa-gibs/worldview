@@ -8,6 +8,7 @@ import {
   UPDATE_START_AND_END_DATE,
   UPDATE_START_DATE,
   UPDATE_END_DATE,
+  UPDATE_CROP_BOUNDS,
   TOGGLE_GIF
 } from './constants';
 import util from '../../util/util';
@@ -78,6 +79,12 @@ export function changeEndDate(date) {
   return {
     type: UPDATE_END_DATE,
     value: date
+  };
+}
+export function changeCropBounds(bounds) {
+  return {
+    type: UPDATE_CROP_BOUNDS,
+    value: bounds
   };
 }
 export function toggleComponentGifActive() {

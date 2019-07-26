@@ -24,6 +24,7 @@ import { timeScaleFromNumberKey } from '../modules/date/constants';
 import { GifResults } from '../components/animation-widget/gif-post-creation';
 import { getImageArray } from '../modules/animation/selectors';
 import { getStampProps, svgToPng } from '../modules/animation/util';
+import { changeCropBounds } from '../modules/animation/actions';
 
 const gifStream = new GifStream();
 
@@ -32,7 +33,7 @@ class GIF extends Component {
     super(props);
     const screenHeight = props.screenHeight;
     const screenWidth = props.screenWidth;
-    const boundaries = {
+    const boundaries = props.boundaries || {
       x: screenWidth / 2 - 100,
       y: screenHeight / 2 - 100,
       x2: screenWidth / 2 + 100,
@@ -84,7 +85,6 @@ class GIF extends Component {
       numberOfFrames
     } = this.props;
     const { boundaries, showDates } = this.state;
-
     const { x, y, x2, y2 } = boundaries;
     const isGeoProjection = proj.id === 'geographic';
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
@@ -163,14 +163,14 @@ class GIF extends Component {
     var breakPointOne = 300;
     var stampWidthRatio = 4.889;
     build = (stamp, dateStamp, stampHeight) => {
-      let imageArra = getImageArray(this.state, this.props, { width, height });
-      if (!imageArra) return; // won't be true if there are too mant frames
+      let imageArray = getImageArray(this.state, this.props, { width, height });
+      if (!imageArray) return; // won't be true if there are too many frames
 
       gifStream.createGIF(
         {
           gifWidth: width,
           gifHeight: height,
-          images: imageArra,
+          images: imageArray,
           waterMarkXCoordinate: stampHeight * 0.01, // Margin based on GIF Height
           waterMarkYCoordinate: stampHeight * 0.01, // Margin based on GIF Height
           waterMarkHeight: stamp.height,
@@ -251,13 +251,14 @@ class GIF extends Component {
     });
   }
   onBoundaryChange(boundaries) {
-    const { screenWidth, screenHeight } = this.props;
+    const { screenWidth, screenHeight, onBoundaryChange } = this.props;
     const x = getPixelFromPercentage(screenWidth, boundaries.x);
     const y = getPixelFromPercentage(screenHeight, boundaries.y);
     const x2 = x + getPixelFromPercentage(screenWidth, boundaries.width);
     const y2 = y + getPixelFromPercentage(screenHeight, boundaries.height);
     const width = 342;
     const height = 280;
+    const bounds = { x, y, x2, y2 };
     let left = x2 + 20;
     let top = y - 20;
     if (left + width > screenWidth && x - 20 - width > 0) {
@@ -266,15 +267,11 @@ class GIF extends Component {
     if (top + height > screenHeight) {
       top = screenHeight - 20 - height;
     }
+    onBoundaryChange(bounds);
     this.setState({
       offsetLeft: left,
       offsetTop: top,
-      boundaries: {
-        x: x,
-        y: y,
-        x2: x2,
-        y2: y2
-      }
+      boundaries: bounds
     });
   }
   render() {
@@ -335,7 +332,7 @@ class GIF extends Component {
 
 function mapStateToProps(state, ownProps) {
   const { browser, proj, animation, map, date, config } = state;
-  const { speed, startDate, endDate } = animation;
+  const { speed, startDate, endDate, boundaries } = animation;
   const { screenWidth, screenHeight } = browser;
   const { customSelected, interval, customInterval, customDelta } = date;
   let increment = customSelected
@@ -349,6 +346,7 @@ function mapStateToProps(state, ownProps) {
   return {
     screenWidth,
     screenHeight,
+    boundaries,
     proj: proj.selected,
     isActive: animation.gifActive,
     startDate: startDate.toISOString(),
@@ -376,7 +374,11 @@ function mapStateToProps(state, ownProps) {
     onClose: ownProps.onClose
   };
 }
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  onBoundaryChange: (bounds) => {
+    dispatch(changeCropBounds(bounds));
+  }
+});
 
 export default connect(
   mapStateToProps,
@@ -384,12 +386,14 @@ export default connect(
 )(GIF);
 
 GIF.propTypes = {
+  boundaries: PropTypes.object,
   endDate: PropTypes.string,
   getImageArray: PropTypes.func,
   increment: PropTypes.string,
   isActive: PropTypes.bool,
   map: PropTypes.object,
   numberOfFrames: PropTypes.number,
+  onBoundaryChange: PropTypes.func,
   onClose: PropTypes.func,
   proj: PropTypes.object,
   screenHeight: PropTypes.number,
