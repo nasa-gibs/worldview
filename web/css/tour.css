@@ -459,6 +459,7 @@
 
 .tour-in-progress .modal-body li {
   margin-bottom: 4px;
+  line-height: 16px;
 }
 
 .tour-in-progress .modal-body strong {
