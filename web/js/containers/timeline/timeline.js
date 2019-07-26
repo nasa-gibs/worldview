@@ -374,7 +374,7 @@ class Timeline extends React.Component {
   */
   handleKeyDown = (e) => {
     // prevent left/right arrows changing date within inputs
-    if (e.target.tagName !== 'INPUT' && !e.ctrlKey && !e.metaKey) {
+    if (e.target.tagName !== 'INPUT' && !e.ctrlKey && !e.metaKey && !this.state.isTimelineDragging) {
       // left arrow
       if (e.keyCode === 37) {
         e.preventDefault();
