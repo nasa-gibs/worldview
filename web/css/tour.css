@@ -443,12 +443,22 @@
   text-decoration: underline;
 }
 
-.tour-in-progress .default .modal-body a {
+.tour-in-progress .default .modal-body a,
+.tour-in-progress .wildfire .modal-body a {
   color: #7bf;
   font-weight: 400;
 }
-.tour-in-progress .default .modal-body a:hover {
+.tour-in-progress .default .modal-body a:hover,
+.tour-in-progress .wildfire .modal-body a:hover {
   color: #9df;
+}
+
+.tour-in-progress .modal-body ul {
+  padding-left: 16px;
+}
+
+.tour-in-progress .modal-body li {
+  margin-bottom: 4px;
 }
 
 .tour-in-progress .modal-body strong {
