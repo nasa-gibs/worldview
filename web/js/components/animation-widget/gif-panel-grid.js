@@ -9,18 +9,19 @@ import PropTypes from 'prop-types';
  */
 export class GifPanelGrid extends React.Component {
   renderImageSize() {
-    var size = this.props.requestSize;
+    const { requestSize } = this.props;
+    const roundedSize = requestSize.toFixed(2);
     if (!this.props.valid) {
       return (
         <div id="gif-size" className="gif-size gif-size-invalid grid-child">
           <i className="fa fa-times fa-fw" />
-          <span>{this.props.maxGifSize + ' MB' + '~' + size + ' MB'}</span>
+          <span>{this.props.maxGifSize + ' MB' + '~' + roundedSize + ' MB'}</span>
         </div>
       );
     } else {
       return (
         <div id="gif-size" className="gif-size grid-child">
-          <span>{this.props.maxGifSize + ' MB / ~' + size + ' MB'} </span>
+          <span>{this.props.maxGifSize + ' MB / ~' + roundedSize + ' MB'} </span>
         </div>
       );
     }
