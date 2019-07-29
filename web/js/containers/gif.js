@@ -255,16 +255,25 @@ class GIF extends Component {
   }
   getModalOffsets(boundaries) {
     const { screenWidth, screenHeight } = this.props;
-    const { x, y, x2 } = boundaries;
+    const { x, y, x2, y2 } = boundaries;
     const width = 342;
     const height = 280;
-    let left = x2 + 20;
-    let top = y - 20;
-    if (left + width > screenWidth && x - 20 - width > 0) {
-      left = x - 20 - width;
+    const padding = 20;
+    let left = x2 + padding;
+    let top = y - padding;
+    if (left + width > screenWidth && x - padding - width > 0) {
+      left = x - padding - width;
+    }
+    if (left + width > screenWidth && x - padding - width < 0) {
+      left = left - width - padding;
+      if (y < height) {
+        top = y2;
+      } else {
+        top = y - padding - height;
+      }
     }
     if (top + height > screenHeight) {
-      top = screenHeight - 20 - height;
+      top = screenHeight - padding - height;
     }
     return {
       offsetLeft: left,
