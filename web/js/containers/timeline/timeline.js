@@ -59,7 +59,8 @@ import {
 const ANIMATION_DELAY = 500;
 const preventDefaultFunc = (e) => {
   e.preventDefault();
-}
+};
+
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
