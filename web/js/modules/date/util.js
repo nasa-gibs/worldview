@@ -1,6 +1,7 @@
 import util from '../../util/util';
 import { each as lodashEach, get } from 'lodash';
 import update from 'immutability-helper';
+import { timeScaleFromNumberKey, timeScaleToNumberKey } from './constants';
 
 export function serializeDate(date) {
   return (
@@ -51,7 +52,18 @@ export function mapLocationToDateState(
   config
 ) {
   const appNow = get(state, 'date.appNow');
+  const interval =
+    get(stateFromLocation, 'date.interval') || get(state, 'date.interval');
+  const selectedZoom =
+    get(stateFromLocation, 'date.selectedZoom') ||
+    get(state, 'date.selectedZoom');
+  const isCustom =
+    get(stateFromLocation, 'date.customSelected') ||
+    get(state, 'date.customSelected');
+  const timeScaleChangeUnit = timeScaleFromNumberKey[interval];
+  const timeScale = timeScaleFromNumberKey[selectedZoom.toString()];
   // legacy time permalink
+
   if (parameters.time && !parameters.t && appNow) {
     const date = tryCatchDate(parameters.time, appNow);
     if (date && date !== appNow) {
@@ -61,6 +73,19 @@ export function mapLocationToDateState(
         }
       });
     }
+  }
+  // update interval selectedzoom level as default interval
+  if (timeScale !== timeScaleChangeUnit && !isCustom) {
+    const defaultValues = {
+      interval: timeScaleToNumberKey[timeScale],
+      delta: 1,
+      customSelected: false
+    };
+    stateFromLocation = update(stateFromLocation, {
+      date: {
+        $merge: defaultValues
+      }
+    });
   }
   return stateFromLocation;
 }

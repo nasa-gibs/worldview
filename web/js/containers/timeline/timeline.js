@@ -57,6 +57,9 @@ import {
 } from '../../modules/date/constants';
 
 const ANIMATION_DELAY = 500;
+const preventDefaultFunc = (e) => {
+  e.preventDefault();
+};
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -657,13 +660,9 @@ class Timeline extends React.Component {
       isAnimationPlaying,
       isAnimationWidgetOpen,
       isGifActive,
-      isTourActive,
       customSelected,
       customIntervalValue,
-      customIntervalZoomLevel,
-      timeScale,
-      timeScaleChangeUnit,
-      deltaChangeAmt
+      customIntervalZoomLevel
     } = this.props;
 
     // handle update animation positioning and local state from play button/gif creation
@@ -701,17 +700,6 @@ class Timeline extends React.Component {
     if (dateB !== prevProps.dateB && dateB !== this.state.draggerTimeStateB) {
       this.updateDraggerTimeState(dateB, true);
     }
-
-    // on tour page change, will update interval to selectedzoom if differs
-    // (e.g., 'month' zoom will default to 'month' interval)
-    // TODO: investigate how to handle this page update better - this limits functionality when in tour mode
-    if (isTourActive) {
-      if (timeScale !== prevProps.timeScale && prevProps.timeScaleChangeUnit !== timeScale) {
-        if (timeScale !== timeScaleChangeUnit && !customSelected) {
-          this.props.selectInterval(deltaChangeAmt, timeScaleToNumberKey[timeScale], false);
-        }
-      }
-    }
   }
 
   /**
@@ -733,35 +721,24 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    let {
-      timeScale,
-      timeScaleChangeUnit,
-      deltaChangeAmt,
-      customSelected,
-      updateAppNow,
-      selectInterval
-    } = this.props;
+    let { updateAppNow } = this.props;
 
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     // prevent default react synthetic event passive event listener
     // that allows browser resize/zoom on certain wheel events
-    document.querySelector('.timeline-container').addEventListener('wheel', (e) => {
-      e.preventDefault();
-    }, { passive: false });
+    document.querySelector('.timeline-container').addEventListener('wheel', preventDefaultFunc, { passive: false });
 
     // update application relative every 10 minutes from component mount
     this.appNowUpdateInterval = setInterval(() => updateAppNow(new Date()), 600000);
     this.setInitialState();
-
-    // update interval selectedzoom level as default
-    if (timeScale !== timeScaleChangeUnit && !customSelected) {
-      selectInterval(deltaChangeAmt, timeScaleToNumberKey[timeScale], false);
-    }
   }
 
   componentWillUnmount() {
-    clearInterval(this.appNowUpdateInterval);
+    if (this.appNowUpdateInterval) clearInterval(this.appNowUpdateInterval);
+    document.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('keyup', this.handleKeyUp);
+    document.querySelector('.timeline-container').removeEventListener('wheel', preventDefaultFunc);
   }
 
   setInitialState = () => {
