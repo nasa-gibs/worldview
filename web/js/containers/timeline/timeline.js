@@ -57,7 +57,9 @@ import {
 } from '../../modules/date/constants';
 
 const ANIMATION_DELAY = 500;
-
+const preventDefaultFunc = (e) => {
+  e.preventDefault();
+}
 class Timeline extends React.Component {
   constructor(props) {
     super(props);
@@ -724,9 +726,7 @@ class Timeline extends React.Component {
     document.addEventListener('keyup', this.handleKeyUp);
     // prevent default react synthetic event passive event listener
     // that allows browser resize/zoom on certain wheel events
-    document.querySelector('.timeline-container').addEventListener('wheel', (e) => {
-      e.preventDefault();
-    }, { passive: false });
+    document.querySelector('.timeline-container').addEventListener('wheel', preventDefaultFunc, { passive: false });
 
     // update application relative every 10 minutes from component mount
     this.appNowUpdateInterval = setInterval(() => updateAppNow(new Date()), 600000);
@@ -734,7 +734,10 @@ class Timeline extends React.Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.appNowUpdateInterval);
+    if (this.appNowUpdateInterval) clearInterval(this.appNowUpdateInterval);
+    document.removeEventListener('keydown', this.handleKeyDown);
+    document.removeEventListener('keyup', this.handleKeyUp);
+    document.querySelector('.timeline-container').removeEventListener('wheel', preventDefaultFunc);
   }
 
   setInitialState = () => {
