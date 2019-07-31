@@ -1,6 +1,6 @@
 # [Worldview](https://worldview.earthdata.nasa.gov)
 
-[![Worldview Screenshot](screenshot.png)](https://worldview.earthdata.nasa.gov)
+[![Worldview Screenshot](/web/images/preview.png)](https://worldview.earthdata.nasa.gov)
 
 [![Build Status](https://api.travis-ci.org/nasa-gibs/worldview.svg?branch=master)](https://travis-ci.org/nasa-gibs/worldview)
 
