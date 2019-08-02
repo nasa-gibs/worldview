@@ -17,6 +17,10 @@ matrix:
   - os: osx
     language: node_js
     node_js: '8.15.1' # latest stable Node.js release
+    before_install:
+    - brew install cairo
+    - brew install pkg-config
+    - pkg-config --atleast-version=1.12.2 cairo
   - os: windows
     language: node_js
     node_js: '8.15.1'
