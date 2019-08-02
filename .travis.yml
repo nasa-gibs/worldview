@@ -40,7 +40,6 @@ matrix:
     node_js: '8.15.1'
     before_install:
       - python -m ensurepip
-      - python -m pip install --upgrade pip
       - pip install virtualenv
       - virtualenv $HOME/venv
       - source $HOME/venv/Scripts/activate
@@ -54,7 +53,6 @@ matrix:
     node_js: lts/* # latest LTS Node.js release
     before_install:
       - python -m ensurepip
-      - python -m pip install --upgrade pip
       - pip install virtualenv
       - virtualenv $HOME/venv
       - source $HOME/venv/Scripts/activate
