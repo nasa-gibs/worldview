@@ -4,10 +4,16 @@ matrix:
     dist: trusty
     language: node_js
     node_js: '8.15.1'
+    before_install:
+    - sudo apt-get update
+    - sudo apt-get install -y libgif-dev
   - os: linux
     dist: trusty
     language: node_js
     node_js: lts/* # latest LTS Node.js release
+    before_install:
+    - sudo apt-get update
+    - sudo apt-get install -y libgif-dev
   - os: osx
     language: node_js
     node_js: '8.15.1' # latest stable Node.js release
@@ -15,14 +21,11 @@ matrix:
     language: node_js
     node_js: '8.15.1'
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y libgif-dev
-
 cache:
   directories:
     - node_modules
     - .python
+
 install: npm install
 
 script: npm test
