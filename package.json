@@ -81,7 +81,7 @@
     "cheerio": "^1.0.0-rc.2",
     "chromedriver": "^2.46.0",
     "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.5.2",
+    "copy-webpack-plugin": "^5.0.4",
     "core-js": "^2.6.9",
     "cross-env": "^5.2.0",
     "css-hot-loader": "^1.4.1",
