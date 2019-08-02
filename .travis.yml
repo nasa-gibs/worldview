@@ -5,27 +5,33 @@ matrix:
     language: node_js
     node_js: '8.15.1'
     before_install:
-    - sudo apt-get update
-    - sudo apt-get install -y libgif-dev
+      - sudo apt-get update
+      - sudo apt-get install -y libgif-dev
   - os: linux
     dist: trusty
     language: node_js
     node_js: lts/* # latest LTS Node.js release
     before_install:
-    - sudo apt-get update
-    - sudo apt-get install -y libgif-dev
+      - sudo apt-get update
+      - sudo apt-get install -y libgif-dev
   - os: osx
     language: node_js
     node_js: '8.15.1' # latest stable Node.js release
     before_install:
-    - brew install pkg-config cairo pango libpng jpeg giflib librsvg
+      - brew install pkg-config cairo pango libpng jpeg giflib librsvg
+    before_cache:
+      - brew cleanup
+    cache:
+      directories:
+        - $HOME/Library/Caches/Homebrew
   - os: windows
     language: node_js
     node_js: '8.15.1'
     before_install:
-    - curl -o gtk.zip "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip"
-    - unzip gtk.zip -d "C:\GTK"
-    - rm -f gtk.zip
+      - curl -o gtk.zip "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip"
+      - mkdir c:/GTK
+      - unzip gtk.zip -d "c:\GTK"
+      - rm -f gtk.zip
 
 cache:
   directories:
