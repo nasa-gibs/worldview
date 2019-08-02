@@ -174,6 +174,7 @@ class ShareLinkContainer extends Component {
             />
 
             <CopyToClipboard
+              options={{ format: 'text/plain' }}
               text={value}
               onCopy={() => {
                 this.setState({ tooltipOpen: true });
