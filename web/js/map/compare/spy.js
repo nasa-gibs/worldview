@@ -35,6 +35,7 @@ export class Spy {
       this.create(isBInside);
     } else {
       var mapLayers = this.map.getLayers().getArray();
+      console.log(mapLayers);
       applyEventsToBaseLayers(
         mapLayers[0],
         this.map,
@@ -116,66 +117,59 @@ export class Spy {
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */
-var applyReverseLayerListeners = function(layer) {
-  layer.on('postcompose', inverseClip);
+var applyReverseLayerListeners = function (layer) {
+  layer.on('postrender', inverseClip);
   bottomLayers.push(layer);
 };
 /**
  * Add listeners for layer clipping
  * @param {Object} layer | Ol Layer object
  */
-var applyLayerListeners = function(layer) {
-  layer.on('precompose', clip);
-  layer.on('postcompose', restore);
+var applyLayerListeners = function (layer) {
+  layer.on('prerender', clip);
+  layer.on('postrender', restore);
   topLayers.push(layer);
 };
 /**
  * Clip everything but the circle
  * @param {Object} event | Event object
  */
-var inverseClip = function(event) {
+var inverseClip = function (event) {
   var ctx = event.context;
-  var pixelRatio = event.frameState.pixelRatio;
-  ctx.save();
-  ctx.beginPath();
+
   if (mousePosition) {
     // only show a circle around the mouse
-    const x = mousePosition[0];
-    const y = mousePosition[1];
-    ctx.arc(
-      x * pixelRatio,
-      y * pixelRatio,
-      radius * pixelRatio,
-      0,
-      2 * Math.PI
-    );
-    ctx.rect(ctx.canvas.width, ctx.canvas.height, -ctx.canvas.width, 0);
+    ctx.beginPath();
+    ctx.globalCompositeOperation = 'destination-out';
+    let x = mousePosition[0];
+    let y = mousePosition[1];
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
     ctx.fill();
   }
 };
 /**
  * Clip the circle of a layer so users can see through
  */
-var clip = function(event) {
+var clip = function (event) {
   var ctx = event.context;
-  var pixelRatio = event.frameState.pixelRatio;
   ctx.save();
   ctx.beginPath();
+
   if (mousePosition) {
     // only show a circle around the mouse
-    const x = mousePosition[0];
-    const y = mousePosition[1];
-    const pixelRadius = radius * pixelRatio;
+    let x = mousePosition[0];
+    let y = mousePosition[1];
+    let pixelRadius = radius;
 
-    ctx.arc(x * pixelRatio, y * pixelRatio, pixelRadius, 0, 2 * Math.PI);
+    ctx.arc(x, y, pixelRadius, 0, 2 * Math.PI);
 
-    ctx.lineWidth = 4 * pixelRatio;
+    ctx.lineWidth = 4;
     ctx.strokeStyle = 'rgba(0,0,0,0.4)';
     ctx.stroke();
   }
   ctx.clip();
 };
-var restore = function(event) {
+var restore = function (event) {
   var ctx = event.context;
   ctx.restore();
 };
@@ -183,20 +177,20 @@ var restore = function(event) {
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
  */
-var removeListenersFromLayers = function(layers) {
+var removeListenersFromLayers = function (layers) {
   lodashEach(layers, layer => {
-    layer.un('precompose', clip);
-    layer.un('postcompose', restore);
+    layer.un('prerender', clip);
+    layer.un('postrender', restore);
   });
 };
 /**
  * Remove all listeners from layer group
  * @param {Array} layers | Layer group
  */
-var removeInverseListenersFromLayers = function(layers) {
+var removeInverseListenersFromLayers = function (layers) {
   lodashEach(layers, layer => {
-    layer.un('precompose', inverseClip);
-    layer.un('postcompose', restore);
+    layer.un('prerender', inverseClip);
+    layer.un('postrender', restore);
   });
 };
 /**
@@ -205,7 +199,7 @@ var removeInverseListenersFromLayers = function(layers) {
  * @param {Object} map | OL Map Object
  * @param {Function} callback | Function that will apply event listeners to layer
  */
-var applyEventsToBaseLayers = function(layer, map, callback) {
+var applyEventsToBaseLayers = function (layer, map, callback) {
   var layers = layer.get('layers');
   if (layers) {
     lodashEach(layers.getArray(), layer => {

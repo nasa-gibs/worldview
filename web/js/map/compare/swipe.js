@@ -135,7 +135,7 @@ export class Swipe {
  * Add Swiper
  * @param {Object} map | OL map object
  */
-var addLineOverlay = function(map) {
+var addLineOverlay = function (map) {
   var lineCaseEl = document.createElement('div');
   var draggerEl = document.createElement('div');
   var draggerCircleEl = document.createElement('div');
@@ -198,7 +198,7 @@ var addLineOverlay = function(map) {
   return lineCaseEl;
 };
 
-var dragLine = function(listenerObj, lineCaseEl, map) {
+var dragLine = function (listenerObj, lineCaseEl, map) {
   function move(evt) {
     if (!dragging) {
       dragging = true;
@@ -242,7 +242,7 @@ var dragLine = function(listenerObj, lineCaseEl, map) {
  * Add listeners for layer clipping
  * @param {Object} layer | Ol Layer object
  */
-var applyLayerListeners = function(layer) {
+var applyLayerListeners = function (layer) {
   layer.on('precompose', this.clip);
   layer.on('postcompose', restore);
   bottomLayers.push(layer);
@@ -252,13 +252,13 @@ var applyLayerListeners = function(layer) {
  * the other layergroup in cases where the layergroups layer opacity is < 100%
  * @param {Object} layer | Ol Layer object
  */
-var applyReverseLayerListeners = function(layer) {
+var applyReverseLayerListeners = function (layer) {
   layer.on('precompose', this.reverseClip);
   layer.on('postcompose', restore);
   topLayers.push(layer);
 };
 
-var restore = function(event) {
+var restore = function (event) {
   var ctx = event.context;
   ctx.restore();
 };

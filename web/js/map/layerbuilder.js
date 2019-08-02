@@ -2,6 +2,8 @@
 import util from '../util/util';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
+import OlStroke from 'ol/style/Stroke';
+import OlGraticule from 'ol/layer/Graticule';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
@@ -31,7 +33,7 @@ import {
 export function mapLayerBuilder(models, config, cache, ui, store) {
   const self = {};
 
-  self.init = function() {
+  self.init = function () {
     self.extentLayers = [];
   };
 
@@ -83,7 +85,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers layer
    */
-  self.createLayer = function(def, options) {
+  self.createLayer = function (def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     options = options || {};
@@ -125,6 +127,17 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         case 'wms':
           layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
           break;
+        case 'graticule':
+          layer = new OlGraticule({
+            // the style to use for the lines, optional.
+            strokeStyle: new OlStroke({
+              color: 'rgb(255, 255, 255)',
+              width: 2,
+              lineDash: [0.5, 4]
+            }),
+            showLabels: true
+          });
+          break;
         default:
           throw new Error('Unknown layer type: ' + def.type);
       }
@@ -143,7 +156,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  self.getRequestDates = function(def, options) {
+  self.getRequestDates = function (def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     const stateCurrentDate = new Date(state.date[activeDateStr]);
@@ -203,7 +216,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {boolean} precache
    * @returns {object} layer key Object
    */
-  self.layerKey = function(def, options, state) {
+  self.layerKey = function (def, options, state) {
     const { compare } = state;
     var date;
     var layerId = def.id;
@@ -291,7 +304,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers WMTS layer
    */
-  const createLayerWMTS = function(def, options, day, state) {
+  const createLayerWMTS = function (def, options, day, state) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     const proj = state.proj.selected;
     const source = config.sources[def.source];
@@ -354,7 +367,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers Vector layer
    */
-  const createLayerVector = function(def, options, day, state) {
+  const createLayerVector = function (def, options, day, state) {
     const { proj, compare } = state;
     var date, urlParameters, extent, source, matrixSet, matrixIds, start;
     const selectedProj = proj.selected;
@@ -374,7 +387,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     if (typeof def.matrixIds === 'undefined') {
       matrixIds = [];
-      lodashEach(matrixSet.resolutions, function(resolution, index) {
+      lodashEach(matrixSet.resolutions, function (resolution, index) {
         matrixIds.push(index);
       });
     } else {
@@ -459,7 +472,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers WMS layer
    */
-  const createLayerWMS = function(def, options, day, state) {
+  const createLayerWMS = function (def, options, day, state) {
     const { proj, compare } = state;
     const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const selectedProj = proj.selected;
