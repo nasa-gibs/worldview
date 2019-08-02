@@ -1,6 +1,27 @@
 language: node_js
 node_js:
-- '8.15.1'
+- '8.8.1'
+- lts/* # latest LTS Node.js release
+- node # latest stable Node.js release
+
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    language: node_js
+    node_js: '8.8.1'
+  - os: linux
+    dist: trusty
+    language: node_js
+    node_js: 'lts/*'
+  - os: linux
+    dist: trusty
+    language: node_js
+    node_js: 'node'
+  - os: windows
+    dist: trusty
+    language: node_js
+    node_js: '8.8.1'
 
 before_install:
   - sudo apt-get update
