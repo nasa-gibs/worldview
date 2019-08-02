@@ -29,7 +29,7 @@ matrix:
     node_js: '8.15.1'
     before_install:
       - choco install python2
-      - python -m pip
+      - python -m ensurepip
       - curl -o gtk.zip "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L
       - mkdir c:/GTK
       - unzip gtk.zip -d "c:/GTK"
