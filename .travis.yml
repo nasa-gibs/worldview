@@ -16,7 +16,17 @@ matrix:
       - sudo apt-get install -y libgif-dev
   - os: osx
     language: node_js
-    node_js: '8.15.1' # latest stable Node.js release
+    node_js: '8.15.1'
+    before_install:
+      - HOMEBREW_NO_AUTO_UPDATE=1 brew install pkg-config cairo libffi
+    before_cache:
+      - brew cleanup
+    cache:
+      directories:
+        - $HOME/Library/Caches/Homebrew
+  - os: osx
+    language: node_js
+    node_js: lts/* # latest LTS Node.js release
     before_install:
       - HOMEBREW_NO_AUTO_UPDATE=1 brew install pkg-config cairo libffi
     before_cache:
@@ -30,7 +40,7 @@ matrix:
     before_install:
       - choco install python2
       - python -m ensurepip
-      - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+      - curl -o get-pip.py https://bootstrap.pypa.io/get-pip.py -O -J -L
       - python get-pip.py
       - rm -f get-pip.py
       - curl -o gtk.zip "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L
