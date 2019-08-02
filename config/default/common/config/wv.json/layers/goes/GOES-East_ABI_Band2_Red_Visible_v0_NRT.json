@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "GOES-East_ABI_Band2_Red_Visible_v0_NRT": {
+            "id":       "GOES-East_ABI_Band2_Red_Visible_v0_NRT",
+            "title":    "Red Visible (0.64 µm, Band 2, ABI, GOES-East)",
+            "subtitle":    "GOES-East",
+            "description": "goes/GOES-East_ABI_Band2_Red_Visible_v0_NRT",
+            "tags":     "GOES subdaily",
+            "group":    "overlays",
+            "layergroup": [
+              "GOES"
+            ],
+            "inactive": true,
+            "period": "subdaily"
+        }
+    }
+}
