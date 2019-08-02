@@ -18,7 +18,7 @@ matrix:
     language: node_js
     node_js: '8.15.1' # latest stable Node.js release
     before_install:
-      - HOMEBREW_NO_AUTO_UPDATE=1 bbrew install pkg-config cairo libffi
+      - HOMEBREW_NO_AUTO_UPDATE=1 brew install pkg-config cairo libffi
     before_cache:
       - brew cleanup
     cache:
