@@ -135,7 +135,7 @@
     "stylelint": "^10.1.0",
     "tar": "^4.4.4",
     "uglify-js": "^3.4.0",
-    "uglifyjs-webpack-plugin": "^1.2.7",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^1.0.1",
     "webpack": "^4.38.0",
     "webpack-bundle-analyzer": "^3.3.2",
