@@ -79,7 +79,7 @@
     "browserstack-local": "^1.3.0",
     "canvas": "^1.6.11",
     "cheerio": "^1.0.0-rc.2",
-    "chromedriver": "^2.46.0",
+    "chromedriver": "^76.0.0",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^5.0.4",
     "core-js": "^2.6.9",
