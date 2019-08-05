@@ -18,7 +18,7 @@ import {
 } from 'redux-location-state';
 import { mapLocationToState, getParamObject } from './location';
 import { stateToParams } from './redux-location-state-customs';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import reducers, { getInitialState } from './modules/combine-reducers';
 import App from './app';
 import util from './util/util';
