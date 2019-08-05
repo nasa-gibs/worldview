@@ -68,6 +68,16 @@ class Events extends React.Component {
     localStorage.setItem('dismissedEventVisibilityAlert', true);
     this.setState({ showAlert: false });
   }
+  // find event index for scrollBarVerticalTop focus on selected event
+  findIndex = (events, selectedId) => {
+    for (let i = 0; i < events.length; i++) {
+      let currentIndex = events[i];
+      if (currentIndex.id === selectedId) {
+        return i;
+      }
+    }
+    return null;
+  }
   render() {
     const {
       events,
@@ -93,6 +103,15 @@ class Events extends React.Component {
       : hasRequestError
         ? 'There has been an ERROR retrieving events from the EONET events API'
         : '';
+
+    let scrollBarVerticalTop = 0;
+    if (events && selected.id) {
+      let index = this.findIndex(events, selected.id);
+      // 12 === li total top/bottom padding
+      // 32.2 === li height (varies slightly, Chrome 100% browser zoom height used)
+      scrollBarVerticalTop = index ? index * (12 + 32.2) : 0;
+    }
+
     return (
       <React.Fragment>
         {showAlert && this.state.showAlert ? (
@@ -105,7 +124,10 @@ class Events extends React.Component {
         ) : (
           ''
         )}
-        <Scrollbars style={{ maxHeight: height + 'px' }}>
+        <Scrollbars
+          style={{ maxHeight: height + 'px' }}
+          scrollBarVerticalTop={ scrollBarVerticalTop }
+        >
           <div id="wv-events">
             <span
               className="events-loading-text"

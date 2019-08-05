@@ -15,6 +15,11 @@ export default class SimpleBar extends React.Component {
   }
   componentDidUpdate() {
     this.updateBoolean();
+    // scroll to vertical axis point - note: 0 would be no scroll
+    let verticalTop = Math.floor(this.props.scrollBarVerticalTop);
+    if (verticalTop !== 0) {
+      this.content.scrollTop = verticalTop;
+    }
   }
   /**
    * Use offsetHeight to determine if scrollbar should be visible
@@ -46,5 +51,10 @@ export default class SimpleBar extends React.Component {
 
 SimpleBar.propTypes = {
   children: PropTypes.node,
+  scrollBarVerticalTop: PropTypes.number,
   style: PropTypes.object
+};
+
+SimpleBar.defaultProps = {
+  scrollBarVerticalTop: 0
 };
