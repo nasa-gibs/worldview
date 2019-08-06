@@ -356,6 +356,19 @@ export default (function (self) {
   };
 
   /**
+   * Converts a time into an ISO string without seconds.
+   *
+   * @method toISOStringMinutes
+   * @static
+   * @param  {Date} date the date to convert
+   * @return {string} ISO string in the form of `YYYY-MM-DDThh:mmZ`.
+   */
+  self.toISOStringMinutes = function (date) {
+    const parts = date.toISOString().split(':');
+    return parts[0] + ':' + parts[1] + 'Z';
+  };
+
+  /**
    * Converts a time into a HH:MM string
    *
    * @method toHourMinutes
