@@ -236,6 +236,7 @@
 
         "IMERG_Rain_Rate",
         "IMERG_Snow_Rate",
+        "IMERG_Precipitation_Rate",
 
         "GMI_Brightness_Temp_Asc",
         "GMI_Brightness_Temp_Dsc",
