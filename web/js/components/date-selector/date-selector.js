@@ -56,7 +56,7 @@ class DateSelector extends Component {
   shouldComponentUpdate(prevProps, prevState) {
     let {
       date,
-      hasSubdailyLayers,
+      subDailyMode,
       maxDate,
       minDate
     } = this.props;
@@ -64,59 +64,61 @@ class DateSelector extends Component {
     let updateCheck = (
       this.state.tab === prevState.tab &&
       date.getTime() === prevProps.date.getTime() &&
-      hasSubdailyLayers === prevProps.hasSubdailyLayers &&
+      subDailyMode === prevProps.subDailyMode &&
       maxDate.getTime() === prevProps.maxDate.getTime() &&
       minDate.getTime() === prevProps.minDate.getTime()
     );
-    if (updateCheck) {
-      return false;
-    }
-    return true;
+    return !updateCheck;
   }
   renderSubdaily() {
-    const { date } = this.props;
-    if (this.props.hasSubdailyLayers) {
-      return (
-        <React.Fragment>
-          <DateInputColumn
-            step={1}
-            startDate={new Date(2000)}
-            date={date}
-            type="hour"
-            inputId={this.props.idSuffix ? 'hour-' + this.props.idSuffix : ''}
-            updateDate={this.updateDate}
-            value={util.pad(date.getUTCHours(), 2, '0')}
-            tabIndex={4}
-            focused={this.state.tab === 4}
-            setFocusedTab={this.setFocusedTab}
-            changeTab={this.changeTab}
-            maxDate={this.props.maxDate}
-            minDate={this.props.minDate}
-            blur={this.blur}
-            fontSize={this.props.fontSize}
-          />
-          <div className="input-time-divider">:</div>
-          <DateInputColumn
-            step={10}
-            startDate={new Date(2000)}
-            date={date}
-            type="minute"
-            updateDate={this.updateDate}
-            value={util.pad(date.getUTCMinutes(), 2, '0')}
-            inputId={this.props.idSuffix ? 'minute-' + this.props.idSuffix : ''}
-            tabIndex={5}
-            focused={this.state.tab === 5}
-            setFocusedTab={this.setFocusedTab}
-            changeTab={this.changeTab}
-            maxDate={this.props.maxDate}
-            minDate={this.props.minDate}
-            blur={this.blur}
-            fontSize={this.props.fontSize}
-          />
-          <div className="input-time-zmark">Z</div>
-        </React.Fragment>
-      );
-    }
+    const {
+      date,
+      idSuffix,
+      fontSize,
+      minDate,
+      maxDate,
+      subDailyMode
+    } = this.props;
+    return subDailyMode && (
+      <React.Fragment>
+        <DateInputColumn
+          step={1}
+          startDate={new Date(2000)}
+          date={date}
+          type="hour"
+          inputId={idSuffix ? 'hour-' + idSuffix : ''}
+          updateDate={this.updateDate}
+          value={util.pad(date.getUTCHours(), 2, '0')}
+          tabIndex={4}
+          focused={this.state.tab === 4}
+          setFocusedTab={this.setFocusedTab}
+          changeTab={this.changeTab}
+          maxDate={maxDate}
+          minDate={minDate}
+          blur={this.blur}
+          fontSize={fontSize}
+        />
+        <div className="input-time-divider">:</div>
+        <DateInputColumn
+          step={10}
+          startDate={new Date(2000)}
+          date={date}
+          type="minute"
+          updateDate={this.updateDate}
+          value={util.pad(date.getUTCMinutes(), 2, '0')}
+          inputId={idSuffix ? 'minute-' + idSuffix : ''}
+          tabIndex={5}
+          focused={this.state.tab === 5}
+          setFocusedTab={this.setFocusedTab}
+          changeTab={this.changeTab}
+          maxDate={maxDate}
+          minDate={minDate}
+          blur={this.blur}
+          fontSize={fontSize}
+        />
+        <div className="input-time-zmark">Z</div>
+      </React.Fragment>
+    );
   }
   render() {
     const {
@@ -193,7 +195,8 @@ DateSelector.propTypes = {
   idSuffix: PropTypes.string,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
-  onDateChange: PropTypes.func
+  onDateChange: PropTypes.func,
+  subDailyMode: PropTypes.bool
 };
 
 export default DateSelector;
