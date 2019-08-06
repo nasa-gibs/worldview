@@ -1,6 +1,8 @@
 
 # Testing
 
+Run the entire test suite using `npm test`
+
 ## Linting
 
 To check code against the project's style guides, use `npm run lint`.
@@ -8,12 +10,15 @@ Use `npm run lint:css` or `npm run lint:js` to check CSS or JS files separately.
 
 ## Unit Tests
 
-Unit tests are run using the BusterJS test runner. To run unit tests, run
-`npm test`. Make sure to run `npm run getcapabilities` and
+Unit tests are run using the Jest testing framework. Unit tests ran as part of the main testing suite, i.e. `npm test`.
+Use `npm test:unit` to run unit tests individually.
+_Note:_ Make sure to run `npm run getcapabilities` and
 `npm run build:config` first to build the configuration.
 
-To test against a different time zone, run `npm run test:unit:tz`. This
-currently doesn't work in Windows.
+To test against a different time zone, run `npm run test:unit:tz`. _Note:_ This currently doesn't work in Windows.
+
+To view the unit test code coverage, run `npm test:coverage`.
+Use `npm run test:unit:coverage` or `npm run test:unit:tz:coverage` to run coverage tests individually.
 
 ## End-to-end Tests
 End to end tests are integrated into our CI and are required to pass before a submission is accepted. New features should be accompanied by End to End tests to cover any new functionality you add.
