@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
@@ -17,7 +17,7 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const devMode = process.env.NODE_ENV !== 'production';
 
 const pluginSystem = [
-  new CleanWebpackPlugin(['web/build']),
+  new CleanWebpackPlugin({ cleanAfterEveryBuildPatterns: ['web/build'] }),
   new HtmlWebpackPlugin({
     hash: true,
     title: 'Worldview',
