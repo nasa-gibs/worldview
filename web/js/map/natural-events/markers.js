@@ -11,6 +11,7 @@ import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
+import util from '../../util/util';
 
 export default function markers(ui, store) {
   var self = {};
@@ -127,22 +128,24 @@ export default function markers(ui, store) {
             ui.supportsPassive ? { passive: true } : false
           );
         });
-
-        pinEl.addEventListener(
-          'click',
-          function(e) {
-            if (willSelect && !isSelected) {
-              store.dispatch(selectEventAction(event.id, date));
-              googleTagManager.pushEvent({
-                event: 'natural_event_selected',
-                natural_events: {
-                  category: category.title
-                }
-              });
-            }
-          },
-          ui.supportsPassive ? { passive: true } : false
-        );
+        ['touchend', 'click'].forEach(function(type) {
+          pinEl.addEventListener(
+            type,
+            function(e) {
+              if (willSelect && !isSelected) {
+                e.stopPropagation();
+                store.dispatch(selectEventAction(event.id, date));
+                googleTagManager.pushEvent({
+                  event: 'natural_event_selected',
+                  natural_events: {
+                    category: category.title
+                  }
+                });
+              }
+            },
+            ui.supportsPassive ? { passive: true } : false
+          );
+        });
       }
       // empty objects (i.e., markers not within projection range) are not pushed to collection
       if (lodashIsEmpty(marker) !== true) {
