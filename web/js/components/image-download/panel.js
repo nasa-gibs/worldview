@@ -55,7 +55,7 @@ export default class ImageResSelection extends React.Component {
 
     let params = [
       'REQUEST=GetSnapshot',
-      `TIME=${util.toISOStringDate(time)}`,
+      `TIME=${util.toISOStringSeconds(time)}`,
       `BBOX=${bboxWMS13(lonlats, crs)}`,
       `CRS=${crs}`,
       `LAYERS=${layers.join(',')}`,
