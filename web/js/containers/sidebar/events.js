@@ -68,16 +68,6 @@ class Events extends React.Component {
     localStorage.setItem('dismissedEventVisibilityAlert', true);
     this.setState({ showAlert: false });
   }
-  // find event index for scrollBarVerticalTop focus on selected event
-  findIndex = (events, selectedId) => {
-    for (let i = 0; i < events.length; i++) {
-      let currentIndex = events[i];
-      if (currentIndex.id === selectedId) {
-        return i;
-      }
-    }
-    return null;
-  }
   render() {
     const {
       events,
@@ -105,8 +95,9 @@ class Events extends React.Component {
         : '';
 
     let scrollBarVerticalTop = 0;
-    if (events && selected.id) {
-      let index = this.findIndex(events, selected.id);
+    if (visibleEvents && selected.id) {
+      // find index for scrollBarVerticalTop calculation on selected event
+      let index = Object.keys(visibleEvents).indexOf(selected.id);
       // 12 === li total top/bottom padding
       // 32.2 === li height (varies slightly, Chrome 100% browser zoom height used)
       scrollBarVerticalTop = index ? index * (12 + 32.2) : 0;
