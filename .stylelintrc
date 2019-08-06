@@ -24,7 +24,7 @@
     "media-feature-name-no-unknown": true,
     "at-rule-no-unknown": true,
     "comment-no-empty": true,
-    "max-nesting-depth": [1, {
+    "max-nesting-depth": [5, {
       ignore: "blockless-at-rules"
     }],
     "no-duplicate-selectors": true,

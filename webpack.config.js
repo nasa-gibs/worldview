@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
+const postcssNesting = require('postcss-nesting');
 
 // production optimizations
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -183,7 +184,8 @@ module.exports = {
                     'not edge < 15',
                     '> 2%'
                   ]
-                })
+                }),
+                postcssNesting()
               ]
             }
           },
