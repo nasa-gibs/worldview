@@ -53,6 +53,7 @@ matrix:
     cache:
       directories:
         - c:/GTK
+        - $HOME/venv
   - os: windows
     language: node_js
     python: '2.7.16'
@@ -72,6 +73,7 @@ matrix:
     cache:
       directories:
         - c:/GTK
+        - $HOME/venv
 
 cache:
   directories:
