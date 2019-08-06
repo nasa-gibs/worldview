@@ -113,12 +113,14 @@ module.exports = {
       new OptimizeCSSAssetsPlugin({
         cssProcessor: cssnano,
         cssProcessorOptions: {
-          discardComments: {
-            removeAll: true
-          },
-          map: {
-            inline: false
-          }
+          preset: ['default', {
+            discardComments: {
+              removeAll: true
+            },
+            map: {
+              inline: false
+            }
+          }]
         }
       })
     ]
