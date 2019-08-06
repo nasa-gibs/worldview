@@ -12,7 +12,8 @@
                   "image": "",
                   "settings": [
                       "IMERG_Rain_Rate",
-                      "IMERG_Snow_Rate"
+                      "IMERG_Snow_Rate",
+                      "IMERG_Precipitation_Rate"
                   ]
               },
                 "GPM/GMI": {
