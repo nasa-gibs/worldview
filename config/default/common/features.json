@@ -15,7 +15,7 @@
             "releases": "https://github.com/nasa-gibs/worldview/releases"
         },
         "imageDownload": {
-            "url": "https://wvs.earthdata.nasa.gov/api/v1/snapshot"
+            "url": "http://localhost:3002/api/v1-gibs-uat/snapshot"
         },
         "naturalEvents": {
             "host": "https://eonet.sci.gsfc.nasa.gov/api/v2.1"

@@ -1,6 +1,6 @@
 {
     "layerOrder": [
-        "GOES-East_ABI_Air_Mass_v0_NRT",
+        "GOES-East_ABI_Air_Mass",
         "GOES-East_ABI_Band2_Red_Visible_v0_NRT",
         "GOES-East_ABI_Band13_Clean_Infrared_v0_NRT",
         "GOES-East_ABI_Band7_Thermal_v0_NRT",
