@@ -115,7 +115,7 @@
     "npm-watch": "^0.3.0",
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "postcss-cli": "^4.1.1",
-    "postcss-import": "^11.0.0",
+    "postcss-import": "^12.0.1",
     "postcss-less": "^3.1.0",
     "postcss-loader": "^2.1.6",
     "postcss-preset-env": "^6.6.0",
