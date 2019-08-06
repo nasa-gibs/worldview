@@ -11,7 +11,6 @@ import OlGeomPolygon from 'ol/geom/Polygon';
 import * as olProj from 'ol/proj';
 import googleTagManager from 'googleTagManager';
 import { selectEvent as selectEventAction } from '../../modules/natural-events/actions';
-import util from '../../util/util';
 
 export default function markers(ui, store) {
   var self = {};
