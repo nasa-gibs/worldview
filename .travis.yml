@@ -50,6 +50,9 @@ matrix:
       - mkdir c:/GTK
       - unzip gtk.zip -d "c:/GTK"
       - rm -f gtk.zip
+    cache:
+      directories:
+        - c:/GTK
   - os: windows
     language: node_js
     python: '2.7.16'
@@ -66,13 +69,16 @@ matrix:
       - mkdir c:/GTK
       - unzip gtk.zip -d "c:/GTK"
       - rm -f gtk.zip
-
+    cache:
+      directories:
+        - c:/GTK
 
 cache:
   directories:
-    - node_modules
     - .python
+  npm: true
+  pip: true
 
-install: npm ci
+install: npm install
 
 script: npm test
