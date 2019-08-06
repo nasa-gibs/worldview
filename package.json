@@ -168,7 +168,7 @@
     "ol-mapbox-style": "4.3.1",
     "perfect-scrollbar": "^0.8.1",
     "proj4": "2.3.3",
-    "promise-queue": "2.2.3",
+    "promise-queue": "2.2.5",
     "react": "16.8.x",
     "react-beautiful-dnd": "^9.0.2",
     "react-copy-to-clipboard": "^5.0.1",
