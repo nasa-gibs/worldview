@@ -46,11 +46,11 @@ matrix:
       - pip install virtualenv
       - virtualenv $HOME/venv
       - source $HOME/venv/Scripts/activate
-      - DIRECTORY="c:/GTK"
-      - if [ ! -d "$DIRECTORY" ]; then curl -o gtk.zip "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
-      - if [ ! -d "$DIRECTORY" ]; then mkdir c:/GTK; fi
-      - if [ ! -d "$DIRECTORY" ]; then unzip gtk.zip -d "c:/GTK"; fi
-      - if [ ! -d "$DIRECTORY" ]; then rm -f gtk.zip; fi
+      - DIR="c:/GTK"
+      - if [ ! -d "$(ls -A $DIR)" ]; then curl -o gtk.zip "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
+      - if [ ! -d "$(ls -A $DIR)" ]; then mkdir c:/GTK; fi
+      - if [ ! -d "$(ls -A $DIR)" ]; then unzip gtk.zip -d "c:/GTK"; fi
+      - if [ ! -d "$(ls -A $DIR)" ]; then rm -f gtk.zip; fi
     cache:
       directories:
         - c:/GTK
@@ -67,11 +67,11 @@ matrix:
       - pip install virtualenv
       - virtualenv $HOME/venv
       - source $HOME/venv/Scripts/activate
-      - DIRECTORY="c:/GTK"
-      - if [ ! -d "$DIRECTORY" ]; then curl -o gtk.zip "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
-      - if [ ! -d "$DIRECTORY" ]; then mkdir c:/GTK; fi
-      - if [ ! -d "$DIRECTORY" ]; then unzip gtk.zip -d "c:/GTK"; fi
-      - if [ ! -d "$DIRECTORY" ]; then rm -f gtk.zip; fi
+      - DIR="c:/GTK"
+      - if [ ! -d "$(ls -A $DIR)" ]; then curl -o gtk.zip "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
+      - if [ ! -d "$(ls -A $DIR)" ]; then mkdir c:/GTK; fi
+      - if [ ! -d "$(ls -A $DIR)" ]; then unzip gtk.zip -d "c:/GTK"; fi
+      - if [ ! -d "$(ls -A $DIR)" ]; then rm -f gtk.zip; fi
     cache:
       directories:
         - c:/GTK
