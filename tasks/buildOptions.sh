@@ -8,13 +8,16 @@ SRC_DIR="$BASE/config/default"
 OPT_DIR="$BASE/config/default"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
+PYTHON_SCRIPTS_DIR="$TASKS_DIR/python2.7"
 
 # If there is an active directory, use instead of defaults
 if [ -d "$BASE/config/active" ]; then
     SRC_DIR="$BASE/config/active"
     OPT_DIR="$BASE/config/active"
 fi
-
+if command -v python3 &>/dev/null; then
+    PYTHON_SCRIPTS_DIR="$TASKS_DIR/python3"
+fi
 # If $IGNORE_ERRORS is true, don't fail on errors
 [ "$IGNORE_ERRORS" ] || set -e
 
@@ -38,7 +41,7 @@ PATH=.python/bin:.python/Scripts:${PATH}
 if [ "$FETCH_GC" ] ; then
     rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
     rm -rf "$OPT_DIR/$OPT_SUBDIR/colormaps/gc/*"
-    "$TASKS_DIR/getCapabilities.py" "$OPT_DIR/$OPT_SUBDIR/config.json" "$OPT_DIR/$OPT_SUBDIR/gc"
+    "$PYTHON_SCRIPTS_DIR/getCapabilities.py" "$OPT_DIR/$OPT_SUBDIR/config.json" "$OPT_DIR/$OPT_SUBDIR/gc"
     exit 0
 fi
 
@@ -65,7 +68,7 @@ fi
 
 # Run extractConfigFromWMTS.py script with config.json
 if [ -e "$BUILD_DIR/config.json" ] ; then
-    "$TASKS_DIR/extractConfigFromWMTS.py" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
+    "$PYTHON_SCRIPTS_DIR/extractConfigFromWMTS.py" "$BUILD_DIR/config.json" "$BUILD_DIR/gc" \
         "$BUILD_DIR/config/wv.json/_wmts" "$BUILD_DIR/colormaps"
 fi
 
@@ -75,7 +78,7 @@ if [ -e "$BUILD_DIR/vectorstyles" ] ; then
     if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
         cp -r "$BUILD_DIR"/gc/vectorstyles "$BUILD_DIR"/vectorstyles/gc
     fi
-    "$TASKS_DIR/copyVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+    "$PYTHON_SCRIPTS_DIR/copyVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
         "$BUILD_DIR/vectorstyles" \
         "$BUILD_DIR/config/vectorstyles"
 fi
@@ -86,7 +89,7 @@ if [ -e "$BUILD_DIR/vectorstyles" ] ; then
     if [ -d "$BUILD_DIR"/gc/vectorstyles ] ; then
         cp -r "$BUILD_DIR"/gc/vectorstyles "$BUILD_DIR"
     fi
-    "$TASKS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+    "$PYTHON_SCRIPTS_DIR/processVectorStyles.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
         "$BUILD_DIR/vectorstyles" \
         "$BUILD_DIR/config/wv.json/vectorstyles"
 fi
@@ -97,7 +100,7 @@ if [ -e "$BUILD_DIR/vectordata" ] ; then
     if [ -d "$BUILD_DIR"/gc/vectordata ] ; then
         cp -r "$BUILD_DIR"/gc/vectordata "$BUILD_DIR"
     fi
-    "$TASKS_DIR/processVectorData.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+    "$PYTHON_SCRIPTS_DIR/processVectorData.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
         "$BUILD_DIR/vectordata" \
         "$BUILD_DIR/config/wv.json/vectordata"
 fi
@@ -108,7 +111,7 @@ if [ -e "$BUILD_DIR/colormaps" ] ; then
     if [ -d "$BUILD_DIR"/gc/colormaps ] ; then
         cp -r "$BUILD_DIR"/gc/colormaps "$BUILD_DIR"/colormaps/gc
     fi
-    "$TASKS_DIR/processColormap.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
+    "$PYTHON_SCRIPTS_DIR/processColormap.py" "$OPT_DIR/$OPT_SUBDIR/config.json" \
             "$BUILD_DIR/colormaps" \
             "$BUILD_DIR/config/palettes"
 fi
@@ -118,7 +121,7 @@ configs=$(ls "$BUILD_DIR/config")
 for config in $configs; do
     case $config in
         *.json)
-            "$TASKS_DIR/mergeConfig.py" "$BUILD_DIR/config/$config" \
+            "$PYTHON_SCRIPTS_DIR/mergeConfig.py" "$BUILD_DIR/config/$config" \
                  "$DEST_DIR/config/$config"
              ;;
          *)
@@ -132,6 +135,6 @@ cp -r "$BUILD_DIR/brand" "$DEST_DIR"
 cp "$BUILD_DIR/brand.json" "$DEST_DIR"
 
 # Validate the options build
-"$TASKS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"
+"$PYTHON_SCRIPTS_DIR/validateOptions.py" "$BUILD_DIR/config.json" "$DEST_DIR/config"
 
 exit 0
