@@ -222,7 +222,7 @@ button:focus {
     pointer-events: none;
   }
 
-  &.button-action-group svg path {
+  & .button-action-group svg path {
     fill: #fff;
   }
 }
