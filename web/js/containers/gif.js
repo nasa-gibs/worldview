@@ -160,12 +160,12 @@ class GIF extends Component {
       h: boundaries.x2 - boundaries.x
     };
     var stampWidth;
-    var build;
     var stampProps;
     var newImage;
     var breakPointOne = 300;
     var stampWidthRatio = 4.889;
-    build = (stamp, dateStamp, stampHeight) => {
+
+    const build = (stamp, dateStamp, stampHeight) => {
       let imageArray = getImageArray(this.state, this.props, { width, height });
       if (!imageArray) return; // won't be true if there are too many frames
 
@@ -374,8 +374,8 @@ function mapStateToProps(state, ownProps) {
     boundaries,
     proj: proj.selected,
     isActive: animation.gifActive,
-    startDate: startDate.toISOString(),
-    endDate: endDate.toISOString(),
+    startDate: util.toISOStringMinutes(startDate),
+    endDate: util.toISOStringMinutes(endDate),
     increment: `${increment} Between Frames`,
     speed,
     map,

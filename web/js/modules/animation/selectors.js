@@ -43,15 +43,17 @@ export function getImageArray(
   let crs = proj.selected.crs;
   let imgFormat = 'image/jpeg';
   var products = getProducts(layers[activeString], fromDate, state);
-  var intervalAmount = customSelected ? customDelta : delta;
+  const useDelta = customSelected && customDelta ? customDelta : delta;
+  const useInterval = customSelected ? customInterval : interval;
   let increment = customSelected
     ? timeScaleFromNumberKey[customInterval]
     : timeScaleFromNumberKey[interval];
   const height = dimensions.height;
   const width = dimensions.width;
+
   while (current <= toDate) {
     j++;
-    if (state.date.maxZoom > 3) {
+    if (useInterval > 3) {
       strDate = util.toISOStringSeconds(current);
     } else {
       strDate = util.toISOStringDate(current);
@@ -63,7 +65,7 @@ export function getImageArray(
 
     let params = [
       'REQUEST=GetSnapshot',
-      `TIME=${util.toISOStringDate(current)}`,
+      `TIME=${util.toISOStringSeconds(current)}`,
       `BBOX=${bboxWMS13(lonlats, crs)}`,
       `CRS=${crs}`,
       `LAYERS=${layersArray.join(',')}`,
@@ -83,7 +85,7 @@ export function getImageArray(
       text: showDates ? strDate : '',
       delay: 1000 / animation.speed
     });
-    current = util.dateAdd(current, increment, intervalAmount);
+    current = util.dateAdd(current, increment, useDelta);
     if (j > 40) {
       // too many frames
       return false;

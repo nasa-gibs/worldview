@@ -858,7 +858,7 @@ class Timeline extends React.Component {
                       onDateChange={this.onDateChange}
                       maxDate={new Date(timelineEndDateLimit)}
                       minDate={new Date(timelineStartDateLimit)}
-                      hasSubdailyLayers={hasSubdailyLayers}
+                      subDailyMode={hasSubdailyLayers}
                       fontSize={24}
                     />
                   </div>

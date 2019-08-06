@@ -84,7 +84,7 @@ class AnimationWidget extends React.Component {
       isGifActive: false
     };
     this.onDateChange = this.onDateChange.bind(this);
-    this.onZoomSelect = this.onZoomSelect.bind(this);
+    this.onIntervalSelect = this.onIntervalSelect.bind(this);
     this.onLoop = this.onLoop.bind(this);
     this.openGif = this.openGif.bind(this);
   }
@@ -171,20 +171,20 @@ class AnimationWidget extends React.Component {
    * Changes selected default or custom interval in header and
    * changes left/right date arrow increments
    *
-   * @method onZoomSelect
+   * @method onIntervalSelect
    *
    * @param {string} zoom - clicked header string (ex: 'day', 'year', '12 day')
    *  component
    *
    * @return {void}
    */
-  onZoomSelect(zoom) {
-    let { customDelta, customInterval, onZoomSelect } = this.props;
+  onIntervalSelect(zoom) {
+    let { customDelta, customInterval, onIntervalSelect } = this.props;
     let zoomToNumber = timeScaleToNumberKey[zoom]; // undefined if custom
     if (zoomToNumber) {
-      onZoomSelect(1, zoomToNumber, false);
+      onIntervalSelect(1, zoomToNumber, false);
     } else {
-      onZoomSelect(customDelta, customInterval, true);
+      onIntervalSelect(customDelta, customInterval, true);
     }
   }
 
@@ -220,11 +220,11 @@ class AnimationWidget extends React.Component {
    */
   zeroDates = () => {
     let {
-      interval,
+      subDailyMode,
       startDate,
       endDate
     } = this.props;
-    if (interval === 'minute' || interval === 'hour') {
+    if (subDailyMode) {
       // for subdaily, zero start and end dates to UTC XX:YY:00:00
       startDate.setUTCSeconds(0);
       startDate.setUTCMilliseconds(0);
@@ -243,7 +243,6 @@ class AnimationWidget extends React.Component {
 
   render() {
     const {
-      hasSubdailyLayers,
       increment,
       incrementArray,
       looping,
@@ -265,7 +264,8 @@ class AnimationWidget extends React.Component {
       currentDate,
       toggleGif,
       isGifActive,
-      isCompareActive
+      isCompareActive,
+      subDailyMode
     } = this.props;
     if (!isActive) {
       return '';
@@ -280,6 +280,7 @@ class AnimationWidget extends React.Component {
         interval,
         delta
       );
+
       return (
         <ErrorBoundary>
           {isPlaying ? (
@@ -307,13 +308,13 @@ class AnimationWidget extends React.Component {
           <div
             id="wv-animation-widget"
             className={
-              'wv-animation-widget' + (hasSubdailyLayers ? ' subdaily' : '')
+              'wv-animation-widget' + (subDailyMode ? ' subdaily' : '')
             }
           >
             <AnimWidgetHeader
               text={increment}
               toolTipTextArray={incrementArray}
-              onClick={this.onZoomSelect}
+              onClick={this.onIntervalSelect}
             />
 
             <PlayButton
@@ -360,28 +361,28 @@ class AnimationWidget extends React.Component {
             </a>
             <div className="wv-anim-dates-case">
               <TimeSelector
+                id="start"
+                idSuffix="animation-widget-start"
                 width="120"
                 height="30"
                 date={startDate}
-                id="start"
-                idSuffix="animation-widget-start"
                 onDateChange={this.onDateChange}
                 maxDate={endDate}
                 minDate={minDate}
-                hasSubdailyLayers={hasSubdailyLayers}
+                subDailyMode={subDailyMode}
               />
               <div className="thru-label">To</div>
 
               <TimeSelector
+                id="end"
+                idSuffix="animation-widget-end"
                 width="120"
                 height="30"
                 date={endDate}
-                id="end"
-                idSuffix="animation-widget-end"
                 onDateChange={this.onDateChange}
                 maxDate={maxDate}
                 minDate={startDate}
-                hasSubdailyLayers={hasSubdailyLayers}
+                subDailyMode={subDailyMode}
               />
             </div>
             <i className="fa fa-times wv-close" onClick={this.props.onClose} />
@@ -435,15 +436,18 @@ function mapStateToProps(state) {
     activeLayersForProj,
     palettes[activeStr]
   );
-  let minDate = new Date(config.startDate);
-  let maxDate = appNow;
+  const useInterval = customSelected ? customInterval : interval;
+  const subDailyInterval = useInterval > 3;
+  const subDailyMode = subDailyInterval && hasSubdailyLayers;
+  const minDate = new Date(config.startDate);
+  const maxDate = appNow;
 
   return {
     startDate,
     endDate,
     currentDate: date[activeDateStr],
-    minDate: minDate,
-    maxDate: maxDate,
+    minDate,
+    maxDate,
     isActive:
       isActive &&
       browser.greaterThan.small &&
@@ -451,7 +455,7 @@ function mapStateToProps(state) {
       sidebar.activeTab !== 'download' && // No Animation when data download is active
       !compare.active &&
       !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'), // No Animation when Image download is open
-    hasSubdailyLayers,
+    subDailyMode,
     incrementArray: zoomObj.array,
     increment: zoomObj.increment,
     customDelta: zoomObj.customDelta,
@@ -462,9 +466,7 @@ function mapStateToProps(state) {
     isPlaying,
     looping: loop,
     delta: customSelected && customDelta ? customDelta : delta || 1,
-    interval: customSelected
-      ? timeScaleFromNumberKey[customInterval] || 'day'
-      : timeScaleFromNumberKey[interval] || 'day',
+    interval: timeScaleFromNumberKey[useInterval] || 'day',
     hasCustomPalettes,
     map,
     promiseImageryForTime: (date, layers) => {
@@ -527,7 +529,7 @@ const mapDispatchToProps = dispatch => ({
   onSlide: num => {
     dispatch(changeFrameRate(num));
   },
-  onZoomSelect: (delta, zoom, customSelected) => {
+  onIntervalSelect: (delta, zoom, customSelected) => {
     dispatch(selectInterval(delta, zoom, customSelected));
   },
   onUpdateStartDate(date) {
@@ -558,7 +560,6 @@ AnimationWidget.propTypes = {
   endDate: PropTypes.object,
   hasCustomPalettes: PropTypes.bool,
   hasGraticule: PropTypes.bool,
-  hasSubdailyLayers: PropTypes.bool,
   increment: PropTypes.string,
   incrementArray: PropTypes.array,
   interval: PropTypes.string,
@@ -575,6 +576,7 @@ AnimationWidget.propTypes = {
   notify: PropTypes.func,
   onClose: PropTypes.func,
   onDateChange: PropTypes.func,
+  onIntervalSelect: PropTypes.func,
   onPushLoop: PropTypes.func,
   onPushPause: PropTypes.func,
   onPushPlay: PropTypes.func,
@@ -582,12 +584,12 @@ AnimationWidget.propTypes = {
   onUpdateEndDate: PropTypes.func,
   onUpdateStartAndEndDate: PropTypes.func,
   onUpdateStartDate: PropTypes.func,
-  onZoomSelect: PropTypes.func,
   promiseImageryForTime: PropTypes.func,
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
   speed: PropTypes.number,
   startDate: PropTypes.object,
+  subDailyMode: PropTypes.bool,
   toggleGif: PropTypes.func
 };
 
