@@ -1,7 +1,7 @@
 
 # Testing
 
-Run the entire test suite using `npm test`
+Run the entire test suite using `npm test`.
 
 ## Linting
 
