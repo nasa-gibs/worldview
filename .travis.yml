@@ -41,8 +41,7 @@ matrix:
     before_install:
       - GTKDIR="c:/GTK"
       - GTKFILE="$HOME/GTK_TEMP/gtk.zip"
-      - PYDIR="c:/Python27"
-      - if [ ! -d "$PYDIR" ] || [ ! "$(ls -A $PYDIR)" ]; then choco install python2; fi
+      - choco install python2
       - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
       - python -m ensurepip
       - pip install virtualenv
@@ -66,8 +65,7 @@ matrix:
     before_install:
       - GTKDIR="c:/GTK"
       - GTKFILE="$HOME/GTK_TEMP/gtk.zip"
-      - PYDIR="c:/Python27"
-      - if [ ! -d "$PYDIR" ] || [ ! "$(ls -A $PYDIR)" ]; then choco install python2; fi
+      - choco install python2
       - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
       - python -m ensurepip
       - pip install virtualenv
