@@ -35,7 +35,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
    */
   var init = function() {
     selectedMap.on('moveend', function(e) {
-      if (self.active) {
+      if (self.active && store.getState().events.active) {
         if (self.trackDetails.id) {
           addPointOverlays(selectedMap, self.trackDetails.pointArray);
         } else {
