@@ -19,40 +19,34 @@ class CustomIntervalSelectorWidget extends PureComponent {
       this.props.changeCustomInterval(value, this.props.customIntervalZoomLevel);
     }
   }
-
   changeZoomLevel = (zoomLevel) => {
     this.props.changeCustomInterval(this.props.customDelta, timeScaleToNumberKey[zoomLevel]);
   }
-
   handleKeyPress = (e) => {
     if (e.key === 'Escape') {
       this.props.toggleCustomIntervalModal();
     }
   }
-
   closeCustomIntervalModal = () => {
     this.props.toggleCustomIntervalModal(false);
   }
-
   componentDidUpdate(prevProps) {
     // handle focus widget on opening
     if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
       this.customIntervalWidget.focus();
     }
   }
-
   render() {
     let {
       customIntervalModalOpen,
-      hasSubdailyLayers,
+      subDailyMode,
       customDelta,
       customIntervalZoomLevel
     } = this.props;
-    return (
+    return customIntervalModalOpen && (
       <div
         onKeyDown={this.handleKeyPress}
         className="custom-interval-widget"
-        style={{ display: customIntervalModalOpen ? 'block' : 'none' }}
         tabIndex={0}
         ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >
@@ -63,7 +57,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
             changeDelta={this.changeDelta}
           />
           <TimeScaleSelect
-            hasSubdailyLayers={hasSubdailyLayers}
+            subDailyMode={subDailyMode}
             zoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
             changeZoomLevel={this.changeZoomLevel}
           />
@@ -79,7 +73,7 @@ CustomIntervalSelectorWidget.propTypes = {
   customDelta: PropTypes.number,
   customIntervalModalOpen: PropTypes.bool,
   customIntervalZoomLevel: PropTypes.number,
-  hasSubdailyLayers: PropTypes.bool,
+  subDailyMode: PropTypes.bool,
   toggleCustomIntervalModal: PropTypes.func
 };
 

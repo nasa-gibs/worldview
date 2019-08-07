@@ -247,10 +247,10 @@ const getParameters = function(config, parameters) {
           if (customDelta === 1 && customInterval === 3) {
             return undefined;
           }
-          return currentItemState.toString();
+          return currentItemState === 'true';
         },
         parse: val => {
-          return val.toString();
+          return val === 'true';
         }
       }
     },
