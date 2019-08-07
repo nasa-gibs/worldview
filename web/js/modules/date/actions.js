@@ -34,14 +34,14 @@ export function changeCustomInterval(delta, customInterval) {
   return {
     type: CHANGE_CUSTOM_INTERVAL,
     value: customInterval,
-    delta: delta
+    delta
   };
 }
 export function selectInterval(delta, interval, customSelected) {
   return {
     type: CHANGE_INTERVAL,
     value: interval,
-    delta: delta,
-    customSelected: Boolean(customSelected)
+    delta,
+    customSelected
   };
 }

@@ -9,6 +9,11 @@
   bottom: 125px;
   left: 50%;
   color: #fff;
+
+  & .custom-interval-widget {
+    top: -61px;
+    left: 48px;
+  }
 }
 
 .wv-animation-widget.subdaily {
@@ -29,6 +34,20 @@
   text-align: center;
   margin-bottom: 7px;
   text-transform: capitalize;
+
+  & .interval-btn-container,
+  & .interval-btn.interval-btn-active {
+    color: #ce4c21;
+    display: inline;
+  }
+  & .wv-tooltip {
+    bottom: 120px;
+    left: 44%;
+    position: absolute;
+    border-bottom: 8px solid transparent;
+    width: 100px;
+    z-index: 10;
+  }
 }
 
 .wv-animation-widget .wv-icon-case {
