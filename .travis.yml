@@ -46,14 +46,14 @@ matrix:
       - virtualenv $HOME/venv
       - source $HOME/venv/Scripts/activate
       - DIR="c:/GTK"
-      - FILE="./temp/gtk.zip"
+      - FILE="$HOME/GTK_TEMP/gtk.zip"
       - if [ ! -f "$FILE" ]; then curl -o $FILE "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
       - if [ ! -d "$DIR" ]; then mkdir $DIR; fi
       - if [ ! "$(ls -A $DIR)" ]; then unzip $FILE -d $DIR; fi
     cache:
       directories:
         - c:/GTK
-        - ./temp
+        - $HOME/GTK_TEMP
         - $HOME/venv
   - os: windows
     language: node_js
@@ -67,14 +67,14 @@ matrix:
       - virtualenv $HOME/venv
       - source $HOME/venv/Scripts/activate
       - DIR="c:/GTK"
-      - FILE="./temp/gtk.zip"
+      - FILE="$HOME/GTK_TEMP/gtk.zip"
       - if [ ! -f "$FILE" ]; then curl -o $FILE "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
       - if [ ! -d "$DIR" ]; then mkdir $DIR; fi
       - if [ ! "$(ls -A $DIR)" ]; then unzip $FILE -d $DIR; fi
     cache:
       directories:
         - c:/GTK
-        - ./temp
+        - $HOME/GTK_TEMP
         - $HOME/venv
 
 cache:
