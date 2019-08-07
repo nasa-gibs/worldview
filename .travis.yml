@@ -79,6 +79,7 @@ matrix:
 
 cache:
   directories:
+    - node_modules
     - .python
   npm: true
   pip: true
