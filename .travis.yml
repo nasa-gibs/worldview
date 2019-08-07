@@ -45,6 +45,9 @@ matrix:
       - if [ ! -d "$PYDIR" ] || [ ! "$(ls -A $PYDIR)" ]; then choco install python2; fi
       - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
       - python -m ensurepip
+      - pip install virtualenv
+      - virtualenv $HOME/venv
+      - source $HOME/venv/Scripts/activate
       - if [ ! -f "$GTKFILE" ]; then curl -o $GTKFILE "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
       - if [ ! -d "$GTKDIR" ]; then mkdir $GTKDIR; fi
       - if [ ! "$(ls -A $GTKDIR)" ]; then unzip $GTKFILE -d $GTKDIR; fi
@@ -52,6 +55,7 @@ matrix:
       directories:
         - c:/GTK
         - $HOME/GTK_TEMP
+        - $HOME/venv
         - $HOME/.node-gyp
         - c:/Python27
         - c:/Python27/Scripts
@@ -66,6 +70,9 @@ matrix:
       - if [ ! -d "$PYDIR" ] || [ ! "$(ls -A $PYDIR)" ]; then choco install python2; fi
       - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
       - python -m ensurepip
+      - pip install virtualenv
+      - virtualenv $HOME/venv
+      - source $HOME/venv/Scripts/activate
       - if [ ! -f "$GTKFILE" ]; then curl -o $GTKFILE "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
       - if [ ! -d "$GTKDIR" ]; then mkdir $GTKDIR; fi
       - if [ ! "$(ls -A $GTKDIR)" ]; then unzip $GTKFILE -d $GTKDIR; fi
@@ -73,6 +80,7 @@ matrix:
       directories:
         - c:/GTK
         - $HOME/GTK_TEMP
+        - $HOME/venv
         - $HOME/.node-gyp
         - c:/Python27
         - c:/Python27/Scripts
