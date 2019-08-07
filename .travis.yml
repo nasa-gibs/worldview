@@ -42,9 +42,6 @@ matrix:
       - choco install python2
       - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
       - python -m ensurepip
-      - pip install virtualenv
-      - virtualenv $HOME/venv
-      - source $HOME/venv/Scripts/activate
       - DIR="c:/GTK"
       - FILE="$HOME/GTK_TEMP/gtk.zip"
       - if [ ! -f "$FILE" ]; then curl -o $FILE "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
@@ -63,9 +60,6 @@ matrix:
       - choco install python2
       - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
       - python -m ensurepip
-      - pip install virtualenv
-      - virtualenv $HOME/venv
-      - source $HOME/venv/Scripts/activate
       - DIR="c:/GTK"
       - FILE="$HOME/GTK_TEMP/gtk.zip"
       - if [ ! -f "$FILE" ]; then curl -o $FILE "http://ftp.gnome.org/pub/GNOME/binaries/win64/gtk+/2.22/gtk+-bundle_2.22.1-20101229_win64.zip" -O -J -L; fi
