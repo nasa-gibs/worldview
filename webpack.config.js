@@ -79,8 +79,7 @@ module.exports = {
     hot: true,
     watchContentBase: true, // watch index.html changes
     port: 3000,
-    host: '0.0.0.0',
-    writeToDisk: true
+    host: '0.0.0.0'
   },
   output: {
     filename: outputFileName,

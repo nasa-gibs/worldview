@@ -64,8 +64,8 @@
     "test:unit": "npx jest",
     "test:unit:tz": "TZ=Australia/Sydney npx jest",
     "updateconfig": "run-s getcapabilities build:config",
-    "watch": "cross-env NODE_ENV=development webpack-dev-server",
-    "watch:debug": "cross-env DEBUG=true NODE_ENV=development webpack-dev-server",
+    "watch": "node ./tasks/watchclean.js && cross-env NODE_ENV=development webpack-dev-server",
+    "watch:debug": "node ./tasks/watchclean.js && cross-env DEBUG=true NODE_ENV=development webpack-dev-server",
     "upload": "node tasks/upload.js"
   },
   "devDependencies": {

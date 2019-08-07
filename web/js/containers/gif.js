@@ -30,7 +30,7 @@ const gifStream = new GifStream();
 
 class GIF extends Component {
   constructor(props) {
-    super(props); // another test at a different time
+    super(props);
     const screenHeight = props.screenHeight;
     const screenWidth = props.screenWidth;
     const boundaries = props.boundaries || {
