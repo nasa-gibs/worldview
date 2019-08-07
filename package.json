@@ -96,7 +96,7 @@
     "eslint-plugin-react": "^5.2.2",
     "eslint-plugin-standard": "^3.0.1",
     "expose-loader": "^0.7.5",
-    "express": "4.15.2",
+    "express": "^4.17.1",
     "fetch-mock": "^7.3.9",
     "file-loader": "^1.1.11",
     "geckodriver": "^1.12.0",
