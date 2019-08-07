@@ -27,7 +27,11 @@ module.exports = {
     },
     chrome: {
       desiredCapabilities: {
-        browserName: 'chrome'
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          w3c: false,
+          prefs: { 'profile.managed_default_content_settings.notifications': 1 }
+        }
       }
     },
     firefox: {

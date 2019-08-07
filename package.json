@@ -111,7 +111,7 @@
     "mini-css-extract-plugin": "^0.4.1",
     "moment": "^2.19.3",
     "moment-locales-webpack-plugin": "^1.0.7",
-    "nightwatch": "^0.9.16",
+    "nightwatch": "^1.1.13",
     "node-fetch": "^2.1.2",
     "node-sass": "^4.9.2",
     "node-ssh": "^5.1.1",
