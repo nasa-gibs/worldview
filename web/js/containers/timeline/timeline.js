@@ -446,6 +446,7 @@ class Timeline extends React.Component {
     let delta;
     let { customIntervalZoomLevel, customIntervalValue } = this.props;
     let customSelected = timeScale === 'custom';
+
     if (customSelected && customIntervalZoomLevel && customIntervalValue) {
       timeScale = customIntervalZoomLevel;
       delta = customIntervalValue;
@@ -659,10 +660,7 @@ class Timeline extends React.Component {
       dateB,
       isAnimationPlaying,
       isAnimationWidgetOpen,
-      isGifActive,
-      customSelected,
-      customIntervalValue,
-      customIntervalZoomLevel
+      isGifActive
     } = this.props;
 
     // handle update animation positioning and local state from play button/gif creation
@@ -682,18 +680,8 @@ class Timeline extends React.Component {
           this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
         }
       }
-
-      // handle open/close custom interval panel if 'custom' selected in animation widget
-      // and no custom value has been initialized
-      if (customIntervalValue === 1 && customIntervalZoomLevel === 3) {
-        if (!prevProps.customSelected && customSelected) {
-          this.toggleCustomIntervalModal(true);
-        }
-        if (prevProps.customSelected && !customSelected) {
-          this.toggleCustomIntervalModal(false);
-        }
-      }
     }
+
     if (dateA !== prevProps.dateA && dateA !== this.state.draggerTimeState) {
       this.updateDraggerTimeState(dateA, false);
     }
@@ -835,6 +823,7 @@ class Timeline extends React.Component {
     } = this.state;
     let selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
     let isTimelineHidden = timelineHidden || hideTimeline;
+    const chevronDirection = isTimelineHidden ? 'left' : 'right';
     return (
       <div className="timeline-container">
         {initialLoadComplete
@@ -869,7 +858,7 @@ class Timeline extends React.Component {
                       customSelected={customSelected}
                       customDelta={customIntervalValue}
                       timeScaleChangeUnit={timeScaleChangeUnit}
-                      hasSubdailyLayers={hasSubdailyLayers}
+                      subDailyMode={hasSubdailyLayers}
                     />
                     <DateChangeArrows
                       leftArrowDown={this.throttleDecrementDate}
@@ -1043,9 +1032,7 @@ class Timeline extends React.Component {
                 {/* Open/Close Chevron */}
                 <div id="timeline-hide" onClick={this.toggleHideTimeline}>
                   <div
-                    className={`wv-timeline-hide wv-timeline-hide-double-chevron-${
-                      isTimelineHidden ? 'left' : 'right'
-                    }`}
+                    className={'wv-timeline-hide wv-timeline-hide-double-chevron-' + chevronDirection}
                   />
                 </div>
               </section>
@@ -1056,6 +1043,7 @@ class Timeline extends React.Component {
     );
   }
 }
+
 function mapStateToProps(state) {
   const {
     config,
@@ -1085,7 +1073,6 @@ function mapStateToProps(state) {
   const isCompareModeActive = compare.active;
   const isSmallScreen = lessThan.medium;
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
-  customSelected = Boolean(customSelected);
 
   // handle reset of timescale and intervals if not subdaily
   if (!hasSubdailyLayers) {
@@ -1102,8 +1089,7 @@ function mapStateToProps(state) {
 
   let endTime;
   if (isCompareModeActive) {
-    hasSubdailyLayers =
-      hasSubDaily(layers['active']) || hasSubDaily(layers['activeB']);
+    hasSubdailyLayers = hasSubDaily(layers['active']) || hasSubDaily(layers['activeB']);
     endTime = getEndTime(layers, config);
   } else {
     hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
