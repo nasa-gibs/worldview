@@ -11,8 +11,8 @@ const requestCheck = async (urls) => {
     STATUSCODE: {}
   };
   for (let i = 0; i < urls.length; i++) {
-    let linkName = Object.keys(urls[i])[0];
-    let url = Object.values(urls[i])[0];
+    const linkName = Object.keys(urls[i])[0];
+    const url = Object.values(urls[i])[0];
 
     // Skip for mailto email links
     if (url[0] !== 'h') {
@@ -20,7 +20,7 @@ const requestCheck = async (urls) => {
     }
     await fetch(url, { timeout: 10000 })
       .then(async (res) => {
-        let statusCode = await res.status;
+        const statusCode = await res.status;
         if (!parsedUrls['STATUSCODE'][statusCode]) {
           parsedUrls['STATUSCODE'][statusCode] = [];
         }
@@ -43,7 +43,7 @@ URL STATUSCODE RESULTS:
 ${'-'.repeat(66)}
   ERRORS: \x1b[31m${checkStatus['ERROR'].length}\x1b[0m
   STATUSCODE:`);
-  for (let code in checkStatus['STATUSCODE']) {
+  for (const code in checkStatus['STATUSCODE']) {
     let preColor = '\x1b[33m';
     if (code === '200') {
       preColor = '\x1b[32m';

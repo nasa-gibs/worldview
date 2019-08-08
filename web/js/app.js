@@ -83,15 +83,19 @@ class App extends React.Component {
     this.onload();
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
+
   handleKeyPress(event) {
     this.props.keyPressAction(event.keyCode);
   }
+
   componentDidMount() {
     document.addEventListener('keypress', this.handleKeyPress);
   }
+
   componentWillUnmount() {
     document.removeEventListener('keypress', this.handleKeyPress);
   }
+
   render() {
     const { isAnimationWidgetActive, isTourActive, locationKey } = this.props;
     return (

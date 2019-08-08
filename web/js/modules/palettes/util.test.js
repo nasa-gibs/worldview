@@ -41,7 +41,7 @@ test('loadPalettes func updates state with correct palette attributes', () => {
 });
 describe('permalink 1.1', () => {
   test('parses palette for valid layer', () => {
-    let parameters = {
+    const parameters = {
       l: 'terra-aod',
       palettes: 'terra-aod,blue-1'
     };
@@ -61,7 +61,7 @@ describe('permalink 1.1', () => {
   });
 
   test('parses palette for two valid layers', () => {
-    let parameters = {
+    const parameters = {
       l: 'terra-aod,aqua-aod',
       palettes: 'terra-aod,blue-1~aqua-aod,red-1'
     };

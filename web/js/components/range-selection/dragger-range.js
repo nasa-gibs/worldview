@@ -23,6 +23,7 @@ class TimelineDraggerRange extends PureComponent {
     this.handleDrag = this.handleDrag.bind(this);
     this.handleDraggerClick = this.handleDraggerClick.bind(this);
   }
+
   /*
    * Resize timeline dragger width
    *
@@ -51,6 +52,7 @@ class TimelineDraggerRange extends PureComponent {
       startLocation: start
     });
   }
+
   /*
    * When the component is dragged,
    * this function passes the id
@@ -70,10 +72,10 @@ class TimelineDraggerRange extends PureComponent {
     // +/- {number} - change in x - set to 0 to 'stop' dragger movement - min/max of -55/55 to prevent overdrag
     let deltaX = d.deltaX < -55 ? -55 : d.deltaX > 55 ? 55 : d.deltaX;
     // +/- {number} - start position
-    let deltaStart = d.x;
-    let startLocationDate = this.props.startLocationDate;
+    const deltaStart = d.x;
+    const startLocationDate = this.props.startLocationDate;
     let endLocationDate = this.props.endLocationDate;
-    let timelineEndDate = new Date(this.props.timelineEndDateLimit);
+    const timelineEndDate = new Date(this.props.timelineEndDateLimit);
     // used to determine and buffer large monthly/yearly ranges
     let startDateToEndDifference = this.dateDifferenceInDays(
       startLocationDate,
@@ -83,7 +85,7 @@ class TimelineDraggerRange extends PureComponent {
       startDateToEndDifference = 300;
     }
     // difference between last date on timeline (current day/now) and end date dragger
-    let endDateToLimitDifference = Math.min(
+    const endDateToLimitDifference = Math.min(
       startDateToEndDifference,
       this.dateDifferenceInDays(endLocationDate, timelineEndDate)
     );
@@ -235,6 +237,7 @@ class TimelineDraggerRange extends PureComponent {
       this.checkWidth();
     }
   }
+
   /*
    * @method render
    */

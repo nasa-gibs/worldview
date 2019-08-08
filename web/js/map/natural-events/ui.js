@@ -95,7 +95,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       }
       // check if selected event is in changed projection
       if (self.selected.id) {
-        let findSelectedInProjection = lodashFind(self.markers, function(
+        const findSelectedInProjection = lodashFind(self.markers, function(
           marker
         ) {
           if (marker.pin) {
@@ -150,7 +150,7 @@ export default function naturalEventsUI(ui, config, store, models) {
       self.filterEventList();
       // check if selected event is in changed projection
       if (self.selected.id) {
-        let findSelectedInProjection = lodashFind(self.markers, function(
+        const findSelectedInProjection = lodashFind(self.markers, function(
           marker
         ) {
           if (marker.pin) {
@@ -359,10 +359,10 @@ export default function naturalEventsUI(ui, config, store, models) {
       if (proj.selected.id !== 'geographic') {
         // check for polygon geometries for targeted projection coordinate transform
         if (geometry.type === 'Polygon') {
-          let coordinatesTransform = coordinates[0].map(coordinate => {
+          const coordinatesTransform = coordinates[0].map(coordinate => {
             return olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs);
           });
-          let geomExtent = olExtent.boundingExtent(coordinatesTransform);
+          const geomExtent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(geomExtent);
         } else {
           // if normal geometries, transform given lon/lat array
@@ -374,7 +374,7 @@ export default function naturalEventsUI(ui, config, store, models) {
         }
       } else {
         if (geometry.type === 'Polygon') {
-          let geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
+          const geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
           coordinates = olExtent.getCenter(geomExtent);
         }
       }
@@ -407,7 +407,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     const state = store.getState();
     const { proj } = state;
     category = category || 'Default';
-    let currentProjection = proj.selected.id;
+    const currentProjection = proj.selected.id;
     // Turn on the relevant layers for the event type based on projection and category
     var activeLayers = self.layers[currentProjection][category];
     if (!activeLayers) activeLayers = self.layers[currentProjection]['Default'];

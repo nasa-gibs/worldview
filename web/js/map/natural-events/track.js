@@ -57,15 +57,15 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
           if (e.target) {
             const valueCheck = val =>
               typeof val === 'number' ? val.toFixed(6) : 0;
-            let oldValues = e.oldValue.map(val => valueCheck(val));
-            let targetValues = e.target.values_.center.map(val =>
+            const oldValues = e.oldValue.map(val => valueCheck(val));
+            const targetValues = e.target.values_.center.map(val =>
               valueCheck(val)
             );
 
-            let oldLon = oldValues[0];
-            let oldLat = oldValues[1];
-            let targetLon = targetValues[0];
-            let targetLat = targetValues[1];
+            const oldLon = oldValues[0];
+            const oldLat = oldValues[1];
+            const targetLon = targetValues[0];
+            const targetLat = targetValues[1];
 
             // compare oldValues and target values
             isNewTarget = oldLon !== targetLon || oldLat !== targetLat;
@@ -124,7 +124,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
         // If same Track but different selection
         // Just update classNames
         if (trackDetails.selectedDate !== selectedDate) {
-          let isClusteredSelection = !document.getElementById(
+          const isClusteredSelection = !document.getElementById(
             'track-marker-' + selectedDate
           );
           // If New Date is in cluster
@@ -183,7 +183,7 @@ export default function naturalEventsTrack(ui, store, selectedMap) {
     if (!selectedEvent.id || !selectedEvent.date) {
       return;
     }
-    let event = naturalEventsUtilGetEventById(
+    const event = naturalEventsUtilGetEventById(
       ui.naturalEvents.eventsData,
       selectedEvent.id
     );
@@ -511,10 +511,10 @@ var addPoints = function(proj, clusters, map, selectedDate, callback) {
   var trackArray = [];
   lodashEach(clusters, function(clusterPoint, index) {
     let point;
-    let date =
+    const date =
       clusterPoint.properties.date || clusterPoint.properties.startDate;
-    let isSelected = selectedDate === date;
-    let pointClusterObj =
+    const isSelected = selectedDate === date;
+    const pointClusterObj =
       new Date(date) > new Date(selectedDate)
         ? firstClusterObj
         : secondClusterObj;
@@ -536,8 +536,8 @@ var addPoints = function(proj, clusters, map, selectedDate, callback) {
         );
       }
 
-      let lineSegmentArray = [prevCoordinates, nextCoordinates];
-      let arrowOverlay = createArrows(lineSegmentArray, map);
+      const lineSegmentArray = [prevCoordinates, nextCoordinates];
+      const arrowOverlay = createArrows(lineSegmentArray, map);
       overlays.push(arrowOverlay);
       trackArray.push(lineSegmentArray);
       addOverlayIfIsVisible(map, arrowOverlay);

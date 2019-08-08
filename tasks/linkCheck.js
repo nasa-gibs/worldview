@@ -19,18 +19,18 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // Make get requests with URLs with node-fetch to check status codes and organize by errors and codes
 const organizeURLStatus = async (scrapedUrls) => {
-  let timeEstimate = (scrapedUrls.length * 1000 / 60000).toFixed(0);
+  const timeEstimate = (scrapedUrls.length * 1000 / 60000).toFixed(0);
   makeLine(`Checking url status codes will take approximately ${timeEstimate} minutes...`);
   // Initiate status code check
-  let results = await getUrlStatusCodeCollection(scrapedUrls);
+  const results = await getUrlStatusCodeCollection(scrapedUrls);
   // Wait for URLs to be analyzed then stringify and save to JSON file
-  let stringified = await JSON.stringify(results, null, 2);
-  let now = new Date();
+  const stringified = await JSON.stringify(results, null, 2);
+  const now = new Date();
 
   // Check for 'results' directory or make new one
   fs.existsSync('./tasks/link-check/results') || fs.mkdirSync('./tasks/link-check/results');
 
-  let fileName = `./tasks/link-check/results/WV-link-check-${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}.json`;
+  const fileName = `./tasks/link-check/results/WV-link-check-${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}.json`;
   fs.writeFile(fileName, stringified, 'utf8', function() {
     makeLine(`Results file created: ${fileName}`);
     process.exit();
@@ -40,9 +40,9 @@ const organizeURLStatus = async (scrapedUrls) => {
 const main = async () => {
   makeLine('Starting by collecting urls to check...');
   // get natural event urls
-  let naturalEventsUrls = await getNaturalEventsUrls();
+  const naturalEventsUrls = await getNaturalEventsUrls();
   // get metadata layers and about page urls
-  let htmlUrls = await getHtmlUrls();
+  const htmlUrls = await getHtmlUrls();
   organizeURLStatus(htmlUrls.concat(naturalEventsUrls));
 };
 

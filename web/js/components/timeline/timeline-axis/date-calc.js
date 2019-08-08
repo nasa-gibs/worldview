@@ -4,7 +4,7 @@ import { timeScaleOptions } from '../../../modules/date/constants';
 import { getIsBetween, getISODateFormatted } from '../date-util';
 
 // cache repeated startDateLimit/endDateLimit moment object construction
-let limitCache = {};
+const limitCache = {};
 
 /**
  * get range of consecutive time units based on start/end dates and timescale
@@ -17,8 +17,8 @@ let limitCache = {};
  * @returns {Array} timeRange - consecutive time units based on range
  */
 export function getTimeRange(startDate, endDate, timeScale, startDateLimit, endDateLimit) {
-  let timeRange = [];
-  let { format } = timeScaleOptions[timeScale].timeAxis;
+  const timeRange = [];
+  const { format } = timeScaleOptions[timeScale].timeAxis;
 
   // min/max start/end limits
   let startLimit;
@@ -38,13 +38,13 @@ export function getTimeRange(startDate, endDate, timeScale, startDateLimit, endD
 
   // build date/time array based on given start/end range
   while (startDate <= endDate) {
-    let date = startDate.format(format);
-    let rawDate = getISODateFormatted(startDate);
-    let nextDate = startDate.clone().add(1, timeScale);
-    let rawNextDate = getISODateFormatted(nextDate);
-    let withinRange = getIsBetween(startDate, startLimit, endLimit);
+    const date = startDate.format(format);
+    const rawDate = getISODateFormatted(startDate);
+    const nextDate = startDate.clone().add(1, timeScale);
+    const rawNextDate = getISODateFormatted(nextDate);
+    const withinRange = getIsBetween(startDate, startLimit, endLimit);
 
-    let timeObject = {
+    const timeObject = {
       dateObject: startDate.toObject(),
       date: date.toUpperCase(),
       dayOfWeek: startDate.day(),

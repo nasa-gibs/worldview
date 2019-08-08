@@ -18,14 +18,17 @@ export default class AlertComponent extends React.Component {
       }, props.timeout);
     }
   }
+
   componentDidMount() {
     this.mounted = true;
   }
+
   componentWillUnmount() {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
   }
+
   render() {
     return (
       <Portal node={document && document.getElementById('wv-content')}>

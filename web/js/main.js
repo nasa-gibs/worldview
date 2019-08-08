@@ -36,7 +36,7 @@ import { polyfill } from './polyfill';
 import { debugConfig } from './debug';
 import { uniqBy } from 'lodash';
 import { CUSTOM_PALETTE_TYPE_ARRAY } from './modules/palettes/constants';
-export let history = createBrowserHistory();
+export const history = createBrowserHistory();
 
 const isDebugMode = typeof DEBUG !== 'undefined';
 const configURI = Brand.url('config/wv.json');
@@ -46,9 +46,9 @@ const startTime = new Date().getTime();
 //   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ latency: 0 }) ||
 //     defaultCompose
 //   : defaultCompose;
-let parameters = util.fromQueryString(location.search);
+const parameters = util.fromQueryString(location.search);
 let elapsed = util.elapsed;
-let errors = [];
+const errors = [];
 // Document ready function
 window.onload = () => {
   if (!parameters.elapsed) {
@@ -90,7 +90,7 @@ window.onload = () => {
           return layer.id + str;
         });
       }
-      let legacyState = parse(parameters, config, errors);
+      const legacyState = parse(parameters, config, errors);
       layerValidate(errors, config);
       preloadPalettes(layers, {}, false).then(obj => {
         config.palettes = {
@@ -106,7 +106,7 @@ window.onload = () => {
 const render = (config, parameters, legacyState) => {
   config.parameters = parameters;
   debugConfig(config);
-  let models = combineModels(config, legacyState); // Get legacy models
+  const models = combineModels(config, legacyState); // Get legacy models
 
   // Get Permalink parse/serializers
   const paramSetup = getParamObject(
@@ -139,7 +139,7 @@ const render = (config, parameters, legacyState) => {
   listenForHistoryChange(store, history);
   elapsed('Render', startTime, parameters);
 
-  let mouseMoveEvents = util.events();
+  const mouseMoveEvents = util.events();
 
   ReactDOM.render(
     <Provider store={store}>

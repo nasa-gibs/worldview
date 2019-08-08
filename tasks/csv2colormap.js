@@ -17,20 +17,20 @@ if (process.argv.length !== 4 + 2) {
   process.exit(1);
 }
 
-let [id, name, csvFile, jsonFile] = process.argv.slice(2);
-let file = fs.readFileSync(csvFile, 'utf8');
-let lines = file.split('\n');
-let colors = [];
-for (let line of lines) {
+const [id, name, csvFile, jsonFile] = process.argv.slice(2);
+const file = fs.readFileSync(csvFile, 'utf8');
+const lines = file.split('\n');
+const colors = [];
+for (const line of lines) {
   if (line.trim().length === 0) {
     continue;
   }
-  let [r, g, b] = line.split(',');
-  let color = `${hex(r)}${hex(g)}${hex(b)}ff`;
+  const [r, g, b] = line.split(',');
+  const color = `${hex(r)}${hex(g)}${hex(b)}ff`;
   colors.push(color);
 }
 
-let colormap = {
+const colormap = {
   [id]: {
     id,
     name: name,

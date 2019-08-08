@@ -14,7 +14,8 @@ class PaletteLegend extends React.Component {
       width: this.props.width
     };
   }
-  componentWillReceiveProps(props) {
+
+  UNSAFE_componentWillReceiveProps(props) {
     let setState = false;
     if (props.isRunningData !== this.state.isRunningData) {
       setState = true;
@@ -29,12 +30,15 @@ class PaletteLegend extends React.Component {
       });
     }
   }
+
   componentDidMount() {
     this.updateCanvas();
   }
+
   componentDidUpdate() {
     this.updateCanvas();
   }
+
   /**
    * Get percent of selected point position in parent
    */
@@ -50,6 +54,7 @@ class PaletteLegend extends React.Component {
       return lodashIsNumber(index / len) ? index / len : 0;
     }
   }
+
   /**
    * OnMouseMove get correct canvas Data
    * @param {Object} canvas | Element
@@ -68,6 +73,7 @@ class PaletteLegend extends React.Component {
       colorHex: hex
     });
   }
+
   /**
    * On Mouse Enter update State
    * @param {*} e
@@ -80,6 +86,7 @@ class PaletteLegend extends React.Component {
       isHoveringLegend: true
     });
   }
+
   /**
    * Find wanted legend object from Hex
    * @param {Object} legend
@@ -100,6 +107,7 @@ class PaletteLegend extends React.Component {
     }
     return null;
   }
+
   /**
    * Update state on MouseOut
    */
@@ -111,6 +119,7 @@ class PaletteLegend extends React.Component {
       isHoveringLegend: false
     });
   }
+
   /**
    * Style Canvas bases on updates to legend or canvas-width
    */
@@ -119,9 +128,9 @@ class PaletteLegend extends React.Component {
 
     paletteLegends.forEach((colorMap, index) => {
       if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
-        let ctxStr = 'canvas_' + index;
+        const ctxStr = 'canvas_' + index;
         if (this[ctxStr]) {
-          let newWidth = this[ctxStr].current.getBoundingClientRect().width;
+          const newWidth = this[ctxStr].current.getBoundingClientRect().width;
           if (newWidth !== this.state.width) {
             // If scrollbar appears canvas width changes.
             // This value is needed for calculating running data offsets
@@ -138,6 +147,7 @@ class PaletteLegend extends React.Component {
       }
     });
   }
+
   /**
    * Redraw canvas with selected colormap
    * @param {*} ctxStr | String of wanted cavnas
@@ -159,6 +169,7 @@ class PaletteLegend extends React.Component {
       });
     }
   }
+
   /**
    * @param {Number} index | Selected label Index
    * @param {Number} boxWidth | Width of Each label box
@@ -180,6 +191,7 @@ class PaletteLegend extends React.Component {
       textAlign: 'left'
     };
   }
+
   /**
    * @param {Number} xOffset | X px Location of running-data
    * @param {Number} textWidth | px width of text calculated with canvas
@@ -195,6 +207,7 @@ class PaletteLegend extends React.Component {
     }
     return { left: xOffset - halfTextWidth + 'px' };
   }
+
   /**
    * Render scale-type paletteLegends
    * @param {Object} legend
@@ -273,6 +286,7 @@ class PaletteLegend extends React.Component {
       </div>
     );
   }
+
   /**
    * Update label & Location on Mousemove
    * @param {String} color | Hex
@@ -283,6 +297,7 @@ class PaletteLegend extends React.Component {
     e.stopPropagation();
     this.setState({ colorHex: color });
   }
+
   /**
    * Render a legend of class type
    * @param {Object} legend | Legend Object
@@ -360,6 +375,7 @@ class PaletteLegend extends React.Component {
       </div>
     );
   }
+
   /**
    * Loop through colormaps and render correct legend type
    */
@@ -374,6 +390,7 @@ class PaletteLegend extends React.Component {
       }
     });
   }
+
   render() {
     const { paletteId, layer, isCustomPalette } = this.props;
     const { isHoveringLegend } = this.state;

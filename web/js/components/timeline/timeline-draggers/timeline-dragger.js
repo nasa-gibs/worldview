@@ -84,7 +84,7 @@ class Dragger extends PureComponent {
   };
 
   render() {
-    let {
+    const {
       transformX,
       draggerPosition,
       draggerVisible,
@@ -92,7 +92,7 @@ class Dragger extends PureComponent {
       isCompareModeActive,
       disabled
     } = this.props;
-    let {
+    const {
       isHoveredDrag,
       isHoveredDragging
     } = this.state;

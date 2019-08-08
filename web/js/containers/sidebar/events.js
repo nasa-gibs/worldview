@@ -28,6 +28,7 @@ class Events extends React.Component {
     };
     this.dismissAlert = this.dismissAlert.bind(this);
   }
+
   initRequests() {
     const {
       requestSources,
@@ -64,10 +65,12 @@ class Events extends React.Component {
     requestCategories(categoryRequestURL);
     requestSources(sourceRequestURL);
   }
+
   dismissAlert() {
     localStorage.setItem('dismissedEventVisibilityAlert', true);
     this.setState({ showAlert: false });
   }
+
   render() {
     const {
       events,
@@ -234,7 +237,7 @@ function mapStateToProps(state) {
       proj.selected,
       true
     );
-    let extent = showAll ? proj.selected.maxExtent : mapExtent;
+    const extent = showAll ? proj.selected.maxExtent : mapExtent;
     visibleEvents = getEventsWithinExtent(
       events,
       selected,

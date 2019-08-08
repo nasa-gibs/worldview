@@ -26,15 +26,15 @@ class OlCoordinates extends React.Component {
   }
 
   mouseMove(event, map, crs) {
-    let pixels = map.getEventPixel(event);
-    let coord = map.getCoordinateFromPixel(pixels);
+    const pixels = map.getEventPixel(event);
+    const coord = map.getCoordinateFromPixel(pixels);
     if (!coord) {
       this.clearCoord();
       return;
     }
 
-    let pcoord = transform(coord, crs, 'EPSG:4326');
-    let [lon, lat] = pcoord;
+    const pcoord = transform(coord, crs, 'EPSG:4326');
+    const [lon, lat] = pcoord;
     if (lon < -180 || lon > 180 || lat < -90 || lat > 90) {
       this.clearCoord();
       return;
@@ -51,7 +51,7 @@ class OlCoordinates extends React.Component {
 
   mouseOut(event) {
     if (event.relatedTarget && event.relatedTarget.classList) {
-      let cl = event.relatedTarget.classList;
+      const cl = event.relatedTarget.classList;
       // Ignore when the mouse goes over the coordinate display. Clearing
       // the coordinates in this situation causes a flicker.
       if (cl.contains('map-coord')) {

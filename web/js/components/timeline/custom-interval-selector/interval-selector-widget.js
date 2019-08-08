@@ -36,7 +36,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
     }
   }
   render() {
-    let {
+    const {
       customIntervalModalOpen,
       hasSubdailyLayers,
       customDelta,

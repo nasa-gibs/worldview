@@ -55,11 +55,12 @@ class Sidebar extends React.Component {
       props.loadedCustomPalettes(customs);
     });
   }
+
   componentDidMount() {
     this.updateDimensions();
     // prevent browserzooming in safari
     if (util.browser.safari) {
-      let onGestureCallback = e => {
+      const onGestureCallback = e => {
         e.preventDefault();
         e.stopPropagation();
       };
@@ -67,20 +68,21 @@ class Sidebar extends React.Component {
       this.sideBarCase.addEventListener('gesturestart', onGestureCallback);
     }
   }
+
   componentDidUpdate() {
     this.updateDimensions();
   }
+
   updateDimensions() {
     const { subComponentHeight } = this.state;
     const { isMobile, screenHeight } = this.props;
     if (!isMobile && this.iconElement) {
-      let newHeight;
-      let iconHeight = this.iconElement.clientHeight;
-      let topOffset = Math.abs(this.iconElement.getBoundingClientRect().top);
-      let footerHeight = this.footerElement.clientHeight;
-      let tabHeight = 32;
-      let basePadding = 110;
-      newHeight =
+      const iconHeight = this.iconElement.clientHeight;
+      const topOffset = Math.abs(this.iconElement.getBoundingClientRect().top);
+      const footerHeight = this.footerElement.clientHeight;
+      const tabHeight = 32;
+      const basePadding = 110;
+      const newHeight =
         screenHeight -
         (iconHeight + topOffset + tabHeight + basePadding + footerHeight) -
         10;
@@ -93,22 +95,23 @@ class Sidebar extends React.Component {
         this.setState({ subComponentHeight: newHeight });
       }
     } else {
-      let newHeight;
-      let tabHeight = 32;
-      let footerHeight = this.footerElement.clientHeight;
-      newHeight = screenHeight - (tabHeight + footerHeight);
+      const tabHeight = 32;
+      const footerHeight = this.footerElement.clientHeight;
+      const newHeight = screenHeight - (tabHeight + footerHeight);
       // See note above
       if (Math.abs(subComponentHeight - newHeight) > 1) {
         this.setState({ subComponentHeight: newHeight });
       }
     }
   }
+
   selectEvent(id, date) {
     this.state.selectEvent(id, date);
     if (this.props.isMobile) {
       this.props.collapseSidebar();
     }
   }
+
   toggleSidebar() {
     const {
       isCollapsed,
@@ -124,11 +127,12 @@ class Sidebar extends React.Component {
       event: 'sidebar_chevron'
     });
     if (hasLocalStorage) {
-      let storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
+      const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
       localStorage.setItem('sidebarState', storageValue);
     }
     collapseExpandToggle();
   }
+
   getProductsToRender(activeTab, isCompareMode) {
     const { subComponentHeight } = this.state;
     if (isCompareMode) {

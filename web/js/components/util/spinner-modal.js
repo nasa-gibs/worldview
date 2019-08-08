@@ -19,6 +19,7 @@ export default class SpinnerModal extends React.Component {
       }, props.delay);
     }
   }
+
   render() {
     const { headerText, onClose, delay } = this.props;
     if (delay && !this.state.metDelay) return '';

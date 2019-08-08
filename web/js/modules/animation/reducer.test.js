@@ -82,7 +82,7 @@ test('TOGGLE_GIF action toggles gifActive bool value', () => {
 });
 
 test('KEY_PRESS_ACTION action toggles isPlaying bool when animation is active', () => {
-  let updatedState = update(defaultState, { isActive: { $set: true } });
+  const updatedState = update(defaultState, { isActive: { $set: true } });
   const response = animationReducer(updatedState, {
     type: CONSTANTS.KEY_PRESS_ACTION,
     keyCode: 32

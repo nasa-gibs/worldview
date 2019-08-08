@@ -15,6 +15,7 @@ class MeasurementLayerRow extends React.Component {
       checked: props.checked
     };
   }
+
   onClick() {
     const { removeLayer, addLayer, layerId } = this.props;
     const checked = !this.state.checked;
@@ -25,6 +26,7 @@ class MeasurementLayerRow extends React.Component {
       addLayer(layerId);
     }
   }
+
   render() {
     const { layerId, measurementId, title } = this.props;
     const { checked } = this.state;

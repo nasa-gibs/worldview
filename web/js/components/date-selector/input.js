@@ -26,6 +26,7 @@ class DateInputColumn extends Component {
     this.onClickUp = this.onClickUp.bind(this);
     this.onClickDown = this.onClickDown.bind(this);
   }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.props.focused) {
       this.inputs[this.props.tabIndex].focus();
@@ -34,7 +35,8 @@ class DateInputColumn extends Component {
       this.updateValue();
     }
   }
-  componentWillMount() {
+
+  UNSAFE_componentWillMount() {
     var size;
     var type;
     type = this.props.type;
@@ -47,15 +49,18 @@ class DateInputColumn extends Component {
     }
     this.size = size;
   }
+
   componentDidMount() {
     this.updateValue();
   }
+
   // update input value
   updateValue = () => {
     this.setState({
       value: this.props.value
     });
   }
+
   onKeyPress(e) {
     var kc = e.keyCode;
     if (
@@ -67,6 +72,7 @@ class DateInputColumn extends Component {
       e.stopPropagation();
     }
   }
+
   onKeyUp(e) {
     var keyCode = e.keyCode;
     var value = e.target.value;
@@ -131,18 +137,21 @@ class DateInputColumn extends Component {
       }
     }
   }
+
   onClickUp() {
     this.rollDate(1);
     this.setState({
       valid: true
     });
   }
+
   onClickDown() {
     this.rollDate(-1);
     this.setState({
       valid: true
     });
   }
+
   yearValidation(input) {
     var newDate;
     if (input > 1000 && input < 9999) {
@@ -162,8 +171,7 @@ class DateInputColumn extends Component {
         return this.validateDate(newDate);
       }
     } else {
-      let realMonth;
-      realMonth = util.stringInArray(util.monthStringArray, input);
+      const realMonth = util.stringInArray(util.monthStringArray, input);
       if (realMonth !== false) {
         newDate = new Date(new Date(this.props.date).setUTCMonth(realMonth));
         return this.validateDate(newDate);
@@ -216,6 +224,7 @@ class DateInputColumn extends Component {
     );
     this.props.updateDate(newDate, this.props.type, amt);
   }
+
   /**
    * Select all text on focus
    * https://stackoverflow.com/a/40261505/4589331
@@ -226,6 +235,7 @@ class DateInputColumn extends Component {
     this.setState({ selected: true });
     this.props.setFocusedTab(this.props.tabIndex);
   }
+
   blur() {
     this.setState({
       value: this.props.value,
@@ -235,17 +245,21 @@ class DateInputColumn extends Component {
 
     this.props.blur();
   }
+
   onChange(e) {
     this.setState({
       value: e.target.value.toUpperCase()
     });
   }
+
   nextTab() {
     this.props.changeTab(this.props.tabIndex + 1);
   }
+
   previousTab() {
     this.props.changeTab(this.props.tabIndex - 1);
   }
+
   validateDate(date) {
     if (date > this.props.minDate && date <= this.props.maxDate) {
       this.setState({
@@ -255,6 +269,7 @@ class DateInputColumn extends Component {
     }
     return false;
   }
+
   render() {
     return (
       <div

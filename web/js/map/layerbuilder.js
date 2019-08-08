@@ -388,7 +388,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
       vectorStyleId = def.vectorStyle.id;
       if (state.layers[activeGroupStr]) {
-        let layers = state.layers[activeGroupStr];
+        const layers = state.layers[activeGroupStr];
         layers.forEach(layer => {
           if (layer.id === layerName && layer.custom) {
             vectorStyleId = layer.custom;

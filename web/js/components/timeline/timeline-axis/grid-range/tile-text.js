@@ -12,14 +12,14 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   let dateTextYear;
   // TODO: may need to expand for subdaily to differentiate time units
   if (item.timeScale === 'day') {
-    let dateSplit = item.date.split(' ');
+    const dateSplit = item.date.split(' ');
     dateText = dateSplit[0];
     dateTextYear = dateSplit[1];
   } else {
     dateText = item.date;
   }
   if (item.timeScale === 'hour') {
-    let timeScaleUnit = item.dateObject.hours;
+    const timeScaleUnit = item.dateObject.hours;
     dateText = timeScaleUnit === 12 ||
       timeScaleUnit === 6 ||
       timeScaleUnit === 18

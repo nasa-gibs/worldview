@@ -15,12 +15,18 @@
   "plugins": ["react", "jest"],
   "extends": ["standard", "plugin:react/recommended"],
   "parser": "babel-eslint",
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "semi": ["error", "always"],
     "space-before-function-paren": "off",
     "object-curly-spacing": ["error", "always"],
     "quotes": [2, "single", { "avoidEscape": true }]
   },
+
   "overrides": [
     {
       "files": ["web/**/*.js", "test/**/*.js"],
@@ -37,7 +43,10 @@
         "operator-linebreak": "error",
         "comma-dangle": "error",
         "no-use-before-define": "error",
-        "camelcase": "error",
+        "camelcase": ["error", {
+          "allow": ["^UNSAFE_"],
+          "properties": "never"
+        }],
         "no-extend-native": "error",
         "one-var": "error",
         "no-extra-parens": "error",
@@ -67,7 +76,8 @@
           "ignoreCase": true,
           "requiredFirst": true,
           "sortShapeProp": true
-        }]
+        }],
+        "react/no-string-refs": "warn"
       }
     }
   ]

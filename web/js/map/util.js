@@ -29,7 +29,7 @@ export function getActiveLayerGroup(map, layerGroupString) {
   var group = null;
   var array = map.getLayers().getArray();
   for (var i = 0, len = array.length; i < len; i++) {
-    let layerGroup = array[i];
+    const layerGroup = array[i];
     if (layerGroup.get('group') === layerGroupString) {
       group = layerGroup;
       break;

@@ -10,7 +10,7 @@ import { getDaysInYear } from '../../date-util';
  */
 class DateToolTip extends PureComponent {
   render() {
-    let {
+    const {
       draggerSelected,
       draggerPosition,
       draggerPositionB,
@@ -24,8 +24,8 @@ class DateToolTip extends PureComponent {
       axisWidth
     } = this.props;
     // checks for dragger and hover handled by parent
-    let showDraggerToolTip = !!(showDraggerTime && draggerTimeState);
-    let showHoverToolTip = !!(showHoverLine && hoverTime);
+    const showDraggerToolTip = !!(showDraggerTime && draggerTimeState);
+    const showHoverToolTip = !!(showHoverLine && hoverTime);
 
     let toolTipLeftOffest;
     let toolTipDate;

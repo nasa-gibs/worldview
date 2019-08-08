@@ -21,12 +21,15 @@ class DateSelector extends Component {
     this.changeTab = this.changeTab.bind(this);
     this.blur = this.blur.bind(this);
   }
+
   blur() {
     this.setState({ tab: null });
   }
+
   setFocusedTab(tab) {
     this.setState({ tab: tab });
   }
+
   changeTab(index) {
     var nextTab = index;
     var maxTab;
@@ -50,18 +53,20 @@ class DateSelector extends Component {
       tab: nextTab
     });
   }
+
   updateDate(date, type) {
     this.props.onDateChange(date, this.props.id);
   }
+
   shouldComponentUpdate(prevProps, prevState) {
-    let {
+    const {
       date,
       subDailyMode,
       maxDate,
       minDate
     } = this.props;
 
-    let updateCheck = (
+    const updateCheck = (
       this.state.tab === prevState.tab &&
       date.getTime() === prevProps.date.getTime() &&
       subDailyMode === prevProps.subDailyMode &&
@@ -70,6 +75,7 @@ class DateSelector extends Component {
     );
     return !updateCheck;
   }
+
   renderSubdaily() {
     const {
       date,
@@ -120,6 +126,7 @@ class DateSelector extends Component {
       </React.Fragment>
     );
   }
+
   render() {
     const {
       date,

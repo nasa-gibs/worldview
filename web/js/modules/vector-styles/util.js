@@ -9,10 +9,10 @@ export function getVectorStyleAttributeArray(layer) {
   if (layer.custom) { isCustomActive = true; }
   if (layer.min) { isMinActive = true; }
   if (layer.max) { isMaxActive = true; }
-  let styleObj = lodashAssign({}, { key: 'custom', value: layer.custom, isActive: isCustomActive });
-  let minObj = lodashAssign({}, { key: 'min', value: layer.min, isActive: isMinActive });
-  let maxObj = lodashAssign({}, { key: 'max', value: layer.max, isActive: isMaxActive });
-  let attrArray = [];
+  const styleObj = lodashAssign({}, { key: 'custom', value: layer.custom, isActive: isCustomActive });
+  const minObj = lodashAssign({}, { key: 'min', value: layer.min, isActive: isMinActive });
+  const maxObj = lodashAssign({}, { key: 'max', value: layer.max, isActive: isMaxActive });
+  const attrArray = [];
 
   [styleObj, minObj, maxObj].forEach(obj => {
     if (obj.isActive) {

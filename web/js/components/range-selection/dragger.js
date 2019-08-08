@@ -25,11 +25,12 @@ class TimelineDragger extends PureComponent {
 
     this.handleDrag = this.handleDrag.bind(this);
   }
+
   /**
    * Update state if position has changed
    * @param {object} props
    */
-  componentWillReceiveProps(props) {
+  UNSAFE_componentWillReceiveProps(props) {
     const { position, max } = this.state;
     if (props.position !== position) {
       this.setState({ position: props.position });
@@ -38,6 +39,7 @@ class TimelineDragger extends PureComponent {
       this.setState({ max: props.max });
     }
   }
+
   getDefaultDragger(visibility) {
     return (
       <React.Fragment>
@@ -82,6 +84,7 @@ class TimelineDragger extends PureComponent {
       </React.Fragment>
     );
   }
+
   /**
    * Get custom path object which is a
    * guitar pick in this case
@@ -109,6 +112,7 @@ class TimelineDragger extends PureComponent {
       </React.Fragment>
     );
   }
+
   /**
    * Return visibility style string
    */
@@ -119,6 +123,7 @@ class TimelineDragger extends PureComponent {
     }
     return visibility;
   }
+
   /**
    * Return text el to show over dragger
    * @param {number} x | x offset
@@ -143,6 +148,7 @@ class TimelineDragger extends PureComponent {
       );
     }
   }
+
   /*
    * When the component is dragged,
    * this function passes the id

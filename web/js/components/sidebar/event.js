@@ -9,6 +9,7 @@ class Event extends React.Component {
     super(props);
     this.onClick = this.onClick.bind(this);
   }
+
   /**
    * Return date list for selected event
    */
@@ -44,6 +45,7 @@ class Event extends React.Component {
       );
     }
   }
+
   /**
    *
    * @param {String} date | Date of event clicked
@@ -70,6 +72,7 @@ class Event extends React.Component {
       });
     }
   }
+
   /**
    * Return reference list for an event
    */
@@ -107,6 +110,7 @@ class Event extends React.Component {
       });
     }
   }
+
   render() {
     const { event, isVisible, isSelected } = this.props;
     const eventDate = util.parseDateUTC(event.geometries[0].date);

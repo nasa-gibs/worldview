@@ -48,7 +48,7 @@ export function paletteReducer(state = defaultPaletteState, action) {
         rendered: { $merge: action.rendered || {} }
       });
     case REQUEST_PALETTE_SUCCESS:
-      let isLoading = update(state.isLoading, { $unset: [action.id] });
+      const isLoading = update(state.isLoading, { $unset: [action.id] });
       return lodashAssign({}, state, {
         rendered: lodashAssign({}, state.rendered, {
           [action.id]: action.response
