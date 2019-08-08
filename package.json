@@ -137,7 +137,7 @@
     "tar": "^4.4.4",
     "uglify-js": "^3.4.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "url-loader": "^1.0.1",
+    "url-loader": "^2.1.0",
     "webpack": "^4.39.1",
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.3.5",
