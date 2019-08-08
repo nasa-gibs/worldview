@@ -2,9 +2,9 @@ const environments = require('./environments.js');
 const glob = require('glob');
 const files = glob.sync('./e2e/features/**/*-test.js');
 const nightwatchConfig = {
-  output_folder: 'e2e/reports',
-  globals_path: 'e2e/globals.js',
-  custom_assertions_path: ['e2e/custom-assertions'],
+  output_folder: './e2e/reports',
+  globals_path: './globals.js',
+  custom_assertions_path: ['./e2e/custom-assertions'],
   src_folders: files,
   selenium: {
     start_process: false,
