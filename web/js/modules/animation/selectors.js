@@ -3,6 +3,7 @@ import util from '../../util/util';
 import {
   imageUtilGetCoordsFromPixelValues,
   imageUtilGetLayerOpacities,
+  imageUtilGetLayerWrap,
   bboxWMS13,
   imageUtilGetLayers
 } from '../image-download/util';
@@ -30,20 +31,21 @@ export function getImageArray(
   const { boundaries, showDates } = gifComponentState;
   const { customInterval, interval, customDelta, delta, customSelected } = date;
   const activeString = compare.activeString;
-  var a = [];
-  var fromDate = new Date(startDate);
-  var toDate = new Date(endDate);
-  var current = fromDate;
-  var j = 0;
-  var src;
-  var strDate;
-  var lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
-  var layersArray;
-  var opacities;
+  let a = [];
+  let fromDate = new Date(startDate);
+  let toDate = new Date(endDate);
+  let current = fromDate;
+  let j = 0;
+  let src;
+  let strDate;
+  let lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
+  let layersArray;
+  let layerWraps;
+  let opacities;
   let crs = proj.selected.crs;
   let imgFormat = 'image/jpeg';
-  var products = getProducts(layers[activeString], fromDate, state);
-  var intervalAmount = customSelected ? customDelta : delta;
+  let products = getProducts(layers[activeString], fromDate, state);
+  let intervalAmount = customSelected ? customDelta : delta;
   let increment = customSelected
     ? timeScaleFromNumberKey[customInterval]
     : timeScaleFromNumberKey[interval];
@@ -59,6 +61,7 @@ export function getImageArray(
     products = getProducts(layers[activeString], current, state);
 
     layersArray = imageUtilGetLayers(products, proj.id);
+    layerWraps = imageUtilGetLayerWrap(products);
     opacities = imageUtilGetLayerOpacities(products);
 
     let params = [
@@ -67,6 +70,7 @@ export function getImageArray(
       `BBOX=${bboxWMS13(lonlats, crs)}`,
       `CRS=${crs}`,
       `LAYERS=${layersArray.join(',')}`,
+      `WRAP=${layerWraps.join(',')}`,
       `FORMAT=${imgFormat}`,
       `WIDTH=${width}`,
       `HEIGHT=${height}`

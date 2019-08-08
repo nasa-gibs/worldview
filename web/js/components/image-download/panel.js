@@ -67,9 +67,6 @@ export default class ImageResSelection extends React.Component {
       `HEIGHT=${imgHeight}`
     ];
 
-    console.log(layerList);
-    console.log(layerWraps);
-
     if (opacities.length > 0) {
       params.push(`OPACITIES=${opacities.join(',')}`);
     }
