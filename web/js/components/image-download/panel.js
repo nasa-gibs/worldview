@@ -4,6 +4,7 @@ import {
   getDimensions,
   imageUtilGetLayers,
   imageUtilGetLayerOpacities,
+  imageUtilGetLayerWrap,
   bboxWMS13
 } from '../../modules/image-download/util';
 
@@ -50,6 +51,7 @@ export default class ImageResSelection extends React.Component {
     let time = new Date(date.getTime());
     time.setUTCHours(0, 0, 0, 0);
     let layerList = getLayers();
+    let layerWraps = imageUtilGetLayerWrap(layerList);
     let layers = imageUtilGetLayers(layerList, projection.id);
     let opacities = imageUtilGetLayerOpacities(layerList);
 
@@ -59,10 +61,15 @@ export default class ImageResSelection extends React.Component {
       `BBOX=${bboxWMS13(lonlats, crs)}`,
       `CRS=${crs}`,
       `LAYERS=${layers.join(',')}`,
+      `WRAP=${layerWraps.join(',')}`,
       `FORMAT=${fileType}`,
       `WIDTH=${imgWidth}`,
       `HEIGHT=${imgHeight}`
     ];
+
+    console.log(layerList);
+    console.log(layerWraps);
+
     if (opacities.length > 0) {
       params.push(`OPACITIES=${opacities.join(',')}`);
     }
