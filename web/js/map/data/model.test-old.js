@@ -4,7 +4,7 @@ import { layersModel } from '../layers/model';
 import { dateModel } from '../date/model';
 
 function fixture() {
-  let config = {
+  const config = {
     products: {
       product1: {}
     },
@@ -20,7 +20,7 @@ function fixture() {
     }
   };
 
-  let models = {};
+  const models = {};
   models.proj = projectionModel(config);
   models.proj.selected = { id: 'geographic' };
   models.layers = layersModel(models, config);
@@ -32,52 +32,52 @@ function fixture() {
 };
 
 test('does not save state when not active', () => {
-  let models = fixture();
+  const models = fixture();
   models.data.selectProduct('product1');
-  let state = {};
+  const state = {};
   models.data.save(state);
   expect(state.download).toBeFalsy();
 });
 
 test('saves state', () => {
-  let models = fixture();
+  const models = fixture();
   models.data.active = true;
   models.data.selectedProduct = 'product1';
-  let state = {};
+  const state = {};
   models.data.save(state);
   expect(state.download).toBe('product1');
 });
 
 test('subscribed for startup event when data download in load state', () => {
-  let models = fixture();
-  let eventsOn = jest.fn();
+  const models = fixture();
+  const eventsOn = jest.fn();
   models.wv = {
     events: {
       on: eventsOn
     }
   };
-  let state = {
+  const state = {
     download: 'product1'
   };
-  let errors = [];
+  const errors = [];
   models.data.load(state, errors);
   expect(errors).toHaveLength(0);
   expect(eventsOn.mock.calls[0][0]).toBe('startup');
 });
 
 test('error product is in state when no active layer is found', () => {
-  let models = fixture();
-  let eventsOn = jest.fn();
+  const models = fixture();
+  const eventsOn = jest.fn();
   models.wv = {
     events: {
       on: eventsOn
     }
   };
   models.layers.remove('layer1');
-  let state = {
+  const state = {
     download: 'product1'
   };
-  let errors = [];
+  const errors = [];
   models.data.load(state, errors);
   expect(errors).toHaveLength(1);
   expect(eventsOn).toHaveBeenCalledTimes(0);

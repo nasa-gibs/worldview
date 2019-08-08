@@ -47,6 +47,7 @@ class ProjectionList extends Component {
       projection: id
     });
   }
+
   render() {
     const { projection, projectionArray } = this.props;
     return (

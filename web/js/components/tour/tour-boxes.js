@@ -9,7 +9,7 @@ class TourBoxes extends React.Component {
       <div className="tour-box-container">
         <div className="tour-box-row">
           {storyOrder.slice(0, 9).map(function(storyId, i) {
-            let story = stories[storyId];
+            const story = stories[storyId];
             return (<TourBox key={i} index={i} story={story} storyId={story.id} title={story.title} description={story.description} backgroundImage={story.backgroundImage} backgroundImageHover={story.backgroundImageHover} selectTour={selectTour} className={'tour-box ' + story.type}/>);
           })}
         </div>

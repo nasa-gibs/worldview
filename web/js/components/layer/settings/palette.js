@@ -12,6 +12,7 @@ class PaletteSelect extends React.Component {
       activePalette: props.activePalette
     };
   }
+
   /**
    * Render default legend option
    */
@@ -35,6 +36,7 @@ class PaletteSelect extends React.Component {
       );
     }
   }
+
   /**
    * Pass palette to model after selection
    * @param {String} id | custom Palette Id
@@ -52,6 +54,7 @@ class PaletteSelect extends React.Component {
     }
     this.setState({ activePalette: id });
   }
+
   /**
    * Apply logic to render correct palette selection
    * @param {String} id | Legend Id
@@ -91,6 +94,7 @@ class PaletteSelect extends React.Component {
       );
     }
   }
+
   /**
    * Render customs palette options
    * @param {Object} palette | Palette object
@@ -126,6 +130,7 @@ class PaletteSelect extends React.Component {
       </div>
     );
   }
+
   /**
    * Render classification customs when there is only one
    * Color in colormap
@@ -161,6 +166,7 @@ class PaletteSelect extends React.Component {
       </div>
     );
   }
+
   render() {
     const { index, layer, paletteOrder } = this.props;
     const recommended = layer.palette.recommended || [];

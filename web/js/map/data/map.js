@@ -303,7 +303,7 @@ export function dataMap(store, maps, dataUi, ui) {
       return;
     }
     granule.feature.changed();
-    let toRemove = selectedFeatures[granule.id];
+    const toRemove = selectedFeatures[granule.id];
     if (toRemove) {
       selectionLayer.getSource().removeFeature(toRemove);
       delete selectedFeatures[granule.id];

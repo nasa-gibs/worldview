@@ -31,19 +31,19 @@ export function getImageArray(
   const { boundaries, showDates } = gifComponentState;
   const { customInterval, interval, customDelta, delta, customSelected } = date;
   const activeString = compare.activeString;
-  let a = [];
-  let fromDate = new Date(startDate);
-  let toDate = new Date(endDate);
+  const a = [];
+  const fromDate = new Date(startDate);
+  const toDate = new Date(endDate);
   let current = fromDate;
   let j = 0;
   let src;
   let strDate;
-  let lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
+  const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
   let layersArray;
   let layerWraps;
   let opacities;
-  let crs = proj.selected.crs;
-  let imgFormat = 'image/jpeg';
+  const crs = proj.selected.crs;
+  const imgFormat = 'image/jpeg';
   let products = getProducts(layers[activeString], fromDate, state);
   const useDelta = customSelected && customDelta ? customDelta : delta;
   const useInterval = customSelected ? customInterval : interval;
@@ -66,7 +66,7 @@ export function getImageArray(
     layerWraps = imageUtilGetLayerWrap(products);
     opacities = imageUtilGetLayerOpacities(products);
 
-    let params = [
+    const params = [
       'REQUEST=GetSnapshot',
       `TIME=${util.toISOStringSeconds(current)}`,
       `BBOX=${bboxWMS13(lonlats, crs)}`,
@@ -81,7 +81,7 @@ export function getImageArray(
       params.push(`OPACITIES=${opacities.join(',')}`);
     }
 
-    let dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
+    const dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
 
     src = util.format(dlURL, strDate);
     a.push({
@@ -107,7 +107,7 @@ export function getImageArray(
  *
  */
 var getProducts = function(layers, date, state) {
-  let layersArray = [];
+  const layersArray = [];
   var products = getLayers(
     layers,
     {
@@ -118,7 +118,7 @@ var getProducts = function(layers, date, state) {
     state
   );
   lodashEach(products, function(layer) {
-    let layerDate = new Date(date);
+    const layerDate = new Date(date);
     if (layer.endDate) {
       if (layerDate > new Date(layer.endDate)) return;
     }

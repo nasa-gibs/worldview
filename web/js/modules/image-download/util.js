@@ -101,7 +101,7 @@ export function imageUtilGetLayers(products, proj) {
  *
  */
 export function imageUtilGetLayerOpacities(layers) {
-  let opacities = [];
+  const opacities = [];
   let found = false;
   layers.forEach(layer => {
     let opacity = '';

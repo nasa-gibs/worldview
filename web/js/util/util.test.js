@@ -9,7 +9,7 @@ test('repeat', () => {
 });
 
 describe('fromQueryString', () => {
-  let tests = [
+  const tests = [
     { qs: '', obj: {}, name: 'zero' },
     { qs: '?foo=a&bar=b', obj: { foo: 'a', bar: 'b' }, name: 'two' },
     { qs: 'foo=a&bar=b', obj: { foo: 'a', bar: 'b' }, name: 'no leading ?' },
@@ -24,7 +24,7 @@ describe('fromQueryString', () => {
 });
 
 describe('toQueryString', () => {
-  let tests = [
+  const tests = [
     { qs: '', obj: {}, name: 'zero' },
     { qs: '?foo=a&bar=b', obj: { foo: 'a', bar: 'b' }, name: 'two' },
     { qs: '?foo=image%2Fjpeg', obj: { foo: 'image/jpeg' }, name: 'encodes' },
@@ -39,7 +39,7 @@ describe('toQueryString', () => {
 });
 
 describe('parseDateUTC', () => {
-  let tests = [{
+  const tests = [{
     str: '2013-03-15T11:22:33Z',
     date: new Date(Date.UTC(2013, 2, 15, 11, 22, 33)),
     name: 'timestamp'
@@ -68,34 +68,34 @@ describe('parseDateUTC', () => {
 });
 
 test('toJulianDate', () => {
-  let d = new Date(Date.UTC(2013, 0, 15));
+  const d = new Date(Date.UTC(2013, 0, 15));
   expect(util.toJulianDate(d)).toBe('2013015');
 });
 
 test('toISOStringDate', () => {
-  let d = new Date(Date.UTC(2013, 0, 15));
+  const d = new Date(Date.UTC(2013, 0, 15));
   expect(util.toISOStringDate(d)).toBe('2013-01-15');
 });
 
 test('toISOStringSeconds', () => {
-  let d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
+  const d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
   expect(util.toISOStringSeconds(d)).toBe('2013-01-15T11:22:33Z');
 });
 
 test('toHourMinutes', () => {
-  let d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
+  const d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33));
   expect(util.toHourMinutes(d)).toBe('11:22');
 });
 
 test('toCompactTimestamp', () => {
-  let d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
+  const d = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
   expect(util.toCompactTimestamp(d)).toBe('20130115112233444');
 });
 
 describe('fromCompactTimestamp', () => {
   test('parses timestamp', () => {
-    let answer = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
-    let result = util.fromCompactTimestamp('20130115112233444');
+    const answer = new Date(Date.UTC(2013, 0, 15, 11, 22, 33, 444));
+    const result = util.fromCompactTimestamp('20130115112233444');
     expect(answer.getTime()).toEqual(result.getTime());
   });
 
@@ -116,7 +116,7 @@ test('clearTimeUTC', () => {
 });
 
 describe('dateAdd', () => {
-  let tests = [
+  const tests = [
     { part: 'day', fn: 'getUTCDate', answer: 5 },
     { part: 'month', fn: 'getUTCMonth', answer: 5 },
     { part: 'year', fn: 'getUTCFullYear', answer: 2015 },
@@ -125,9 +125,9 @@ describe('dateAdd', () => {
 
   tests.forEach((t) => {
     test(t.part, () => {
-      let d = new Date(Date.UTC(2011, 1, 1));
+      const d = new Date(Date.UTC(2011, 1, 1));
       if (t.answer) {
-        let result = util.dateAdd(d, t.part, 4);
+        const result = util.dateAdd(d, t.part, 4);
         expect(result[t.fn]()).toBe(t.answer);
       } else {
         expect(() => util.dateAdd(d, t.part, 1)).toThrow();
@@ -149,7 +149,7 @@ describe('daysInMonth', () => {
 });
 
 describe('daysInYear', () => {
-  let tests = [
+  const tests = [
     { date: Date.UTC(2015, 5, 26), doy: '177', name: '2015 jun 26 => 177' },
     { date: Date.UTC(2015, 0, 1), doy: '001', name: 'first of year' },
     { date: Date.UTC(2015, 11, 31), doy: '365', name: 'last day of year' },
@@ -157,14 +157,14 @@ describe('daysInYear', () => {
   ];
   tests.forEach((t) => {
     test(t.name, () => {
-      let d = new Date(t.date);
+      const d = new Date(t.date);
       expect(util.daysInYear(d)).toBe(t.doy);
     });
   });
 });
 
 describe('clamp', () => {
-  let tests = [
+  const tests = [
     { v: 15, min: 10, max: 20, answer: 15, name: 'middle' },
     { v: 8, min: 10, max: 20, answer: 10, name: 'min' },
     { v: 22, min: 10, max: 20, answer: 20, name: 'max' }
@@ -178,7 +178,7 @@ describe('clamp', () => {
 });
 
 describe('roll', () => {
-  let tests = [
+  const tests = [
     { v: 15, min: 10, max: 20, answer: 15, name: 'middle' },
     { v: 8, min: 10, max: 20, answer: 19, name: 'min' },
     { v: 22, min: 10, max: 20, answer: 11, name: 'max' }
@@ -192,7 +192,7 @@ describe('roll', () => {
 });
 
 describe('rollDate', () => {
-  let tests = [{
+  const tests = [{
     name: 'day up',
     d: new Date(Date.UTC(2014, 1, 15)),
     period: { value: 1, unit: 'day' },
@@ -325,14 +325,14 @@ describe('rollDate', () => {
 
   tests.forEach((t) => {
     test(t.name, () => {
-      let result = util.rollDate(t.d, t.period.unit, t.period.value, t.minDate, t.maxDate);
+      const result = util.rollDate(t.d, t.period.unit, t.period.value, t.minDate, t.maxDate);
       expect(result).toEqual(t.answer);
     });
   });
 });
 
 describe('formatDMS', () => {
-  let tests = [{
+  const tests = [{
     name: 'zero',
     dd: [0, 0],
     str: [' 0°00\'00"N', '  0°00\'00"E']
@@ -352,8 +352,8 @@ describe('formatDMS', () => {
 
   tests.forEach((t) => {
     test(t.name, () => {
-      let lat = util.formatDMS(t.dd[0], 'latitude');
-      let lon = util.formatDMS(t.dd[1], 'longitude');
+      const lat = util.formatDMS(t.dd[0], 'latitude');
+      const lon = util.formatDMS(t.dd[1], 'longitude');
       expect(lat).toBe(t.str[0]);
       expect(lon).toBe(t.str[1]);
     });
@@ -361,7 +361,7 @@ describe('formatDMS', () => {
 });
 
 describe('formatDM', () => {
-  let tests = [{
+  const tests = [{
     name: 'zero',
     dd: [0, 0],
     str: [' 0°00.000\'N', '  0°00.000\'E']
@@ -381,8 +381,8 @@ describe('formatDM', () => {
 
   tests.forEach((t) => {
     test(t.name, () => {
-      let lat = util.formatDM(t.dd[0], 'latitude');
-      let lon = util.formatDM(t.dd[1], 'longitude');
+      const lat = util.formatDM(t.dd[0], 'latitude');
+      const lon = util.formatDM(t.dd[1], 'longitude');
       expect(lat).toBe(t.str[0]);
       expect(lon).toBe(t.str[1]);
     });
@@ -390,7 +390,7 @@ describe('formatDM', () => {
 });
 
 describe('encodeId/decodeId', () => {
-  let tests = [
+  const tests = [
     { decoded: '', encoded: '' },
     { decoded: 'foo', encoded: 'foo' },
     { decoded: 'really.', encoded: 'really__2E__' },

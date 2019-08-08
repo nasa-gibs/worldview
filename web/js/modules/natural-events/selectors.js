@@ -28,10 +28,10 @@ export function getEventsWithinExtent(
     if (selectedProj.id !== 'geographic') {
       // check for polygon geometries for targeted projection coordinate transform
       if (geometry.type === 'Polygon') {
-        let coordinatesTransform = coordinates[0].map(coordinate => {
+        const coordinatesTransform = coordinates[0].map(coordinate => {
           return olProj.transform(coordinate, 'EPSG:4326', selectedProj.crs);
         });
-        let geomExtent = olExtent.boundingExtent(coordinatesTransform);
+        const geomExtent = olExtent.boundingExtent(coordinatesTransform);
         coordinates = olExtent.getCenter(geomExtent);
       } else {
         // if normal geometries, transform given lon/lat array
@@ -43,7 +43,7 @@ export function getEventsWithinExtent(
       }
     } else {
       if (geometry.type === 'Polygon') {
-        let geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
+        const geomExtent = olExtent.boundingExtent(geometry.coordinates[0]);
         coordinates = olExtent.getCenter(geomExtent);
       }
     }

@@ -24,8 +24,8 @@ try {
   console.log('Connecting localhost to Browserstack...');
   Nightwatch.bs_local = bs_local = new browserstack.Local();
   bs_local.start({
-    'key': process.env.BROWSERSTACK_ACCESS_KEY,
-    'force': 'true' // if you want to kill existing ports
+    key: process.env.BROWSERSTACK_ACCESS_KEY,
+    force: 'true' // if you want to kill existing ports
   }, function (error) {
     if (error) throw new Error(error);
 

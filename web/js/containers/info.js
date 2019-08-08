@@ -39,6 +39,7 @@ class InfoList extends Component {
       }
     };
   }
+
   getListArray() {
     const {
       sendFeedback,
@@ -57,7 +58,7 @@ class InfoList extends Component {
           sendFeedback(feedbackIsInitiated);
         }
       };
-    let arr = [
+    const arr = [
       {
         text: 'Send feedback',
         iconClass: 'ui-icon fa fa-envelope fa-fw',
@@ -106,11 +107,12 @@ class InfoList extends Component {
       arr.splice(1, 0, exploreWorlviewObj);
     }
     if (notifications.isActive) {
-      let obj = this.getNotificationListItem();
+      const obj = this.getNotificationListItem();
       arr.splice(4, 0, obj);
     }
     return arr;
   }
+
   render() {
     const infoArray = this.getListArray();
     return <IconList list={infoArray} size="small" />;

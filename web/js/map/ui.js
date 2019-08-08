@@ -92,7 +92,7 @@ export function mapui(models, config, store, ui) {
   const subscribeToStore = function(action) {
     switch (action.type) {
       case layerConstants.ADD_LAYER:
-        let def = lodashFind(action.layers, { id: action.id });
+        const def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);
       case CLEAR_ROTATE:
         return rotation.reset(self.selected);
@@ -156,11 +156,11 @@ export function mapui(models, config, store, ui) {
     updateProjection(true);
   };
   const flyToNewExtent = function(extent, rotation) {
-    let coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
-    let coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
-    let coordinates = [coordinateX, coordinateY];
-    let resolution = self.selected.getView().getResolutionForExtent(extent);
-    let zoom = self.selected.getView().getZoomForResolution(resolution);
+    const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
+    const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
+    const coordinates = [coordinateX, coordinateY];
+    const resolution = self.selected.getView().getResolutionForExtent(extent);
+    const zoom = self.selected.getView().getZoomForResolution(resolution);
     // Animate to extent, zoom & rotate:
     // Don't animate when an event is selected (Event selection already animates)
     return self.animate.fly(coordinates, zoom, rotation);
@@ -186,7 +186,7 @@ export function mapui(models, config, store, ui) {
     }
     self.selected = self.proj[proj.id];
     var map = self.selected;
-    let currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? map.getView().getRotation() : 0;
+    const currentRotation = proj.id !== 'geographic' && proj.id !== 'webmerc' ? map.getView().getRotation() : 0;
     store.dispatch({ type: UPDATE_MAP_UI, ui: self, rotation: currentRotation });
     reloadLayers();
 
@@ -324,7 +324,7 @@ export function mapui(models, config, store, ui) {
         compareMapUi.destroy();
       }
       clearLayers(map);
-      let defs = getLayers(
+      const defs = getLayers(
         activeLayers,
         {
           reverse: true
@@ -339,7 +339,7 @@ export function mapui(models, config, store, ui) {
         }
       });
     } else {
-      let stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
+      const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       clearLayers(map);
       if (
         compareState &&
@@ -427,12 +427,10 @@ export function mapui(models, config, store, ui) {
           state
         );
         layer.setVisible(renderable);
-        let defs = getLayers(layersState[activeGroupStr], {}, state);
+        const defs = getLayers(layersState[activeGroupStr], {}, state);
         updateGraticules(defs);
         // If in A|B layer-group will have a 'group' string
       } else if (group) {
-        let defs;
-
         lodashEach(layer.getLayers().getArray(), subLayer => {
           if (subLayer.wv) {
             renderable = isRenderableLayer(
@@ -445,7 +443,7 @@ export function mapui(models, config, store, ui) {
           }
         });
         layer.setVisible(true);
-        defs = getLayers(layersState[group], {}, state);
+        const defs = getLayers(layersState[group], {}, state);
         updateGraticules(defs, group);
       }
     });
@@ -471,11 +469,11 @@ export function mapui(models, config, store, ui) {
     });
 
     if (isGraticule(def, proj.id)) {
-      let strokeStyle = self['graticule-' + activeStr + '-style'];
+      const strokeStyle = self['graticule-' + activeStr + '-style'];
       strokeStyle.setColor('rgba(255, 255, 255,' + action.opacity + ')');
       self.selected.render();
     } else {
-      let layer = findLayer(def, activeStr);
+      const layer = findLayer(def, activeStr);
       layer.setOpacity(action.opacity);
       updateLayerVisibilities();
     }
@@ -511,11 +509,11 @@ export function mapui(models, config, store, ui) {
       if (firstLayer && firstLayer.get('group')) {
         // Find which map layer-group is the active LayerGroup
         // and add layer to layerGroup in correct location
-        let activelayer =
+        const activelayer =
           firstLayer.get('group') === activeLayerStr
             ? firstLayer
             : mapLayers[1];
-        let newLayer = createLayer(def, {
+        const newLayer = createLayer(def, {
           date: date,
           group: activeLayerStr
         });
@@ -550,7 +548,7 @@ export function mapui(models, config, store, ui) {
     } else {
       var layer = findLayer(def, activeLayerStr);
       if (compare && compare.active) {
-        let layerGroup = getActiveLayerGroup(self.selected, activeLayerStr);
+        const layerGroup = getActiveLayerGroup(self.selected, activeLayerStr);
         if (layerGroup) layerGroup.getLayers().remove(layer);
       } else {
         self.selected.removeLayer(layer);
@@ -601,7 +599,7 @@ export function mapui(models, config, store, ui) {
 
       if (compare && compare.active) {
         if (layerGroup && layerGroup.getLayers().getArray().length) {
-          let index = findLayerIndex(def, layerGroup);
+          const index = findLayerIndex(def, layerGroup);
           layerGroup.getLayers().setAt(
             index,
             createLayer(def, {
@@ -612,7 +610,7 @@ export function mapui(models, config, store, ui) {
           compareMapUi.update(activeLayerStr);
         }
       } else {
-        let index = findLayerIndex(def);
+        const index = findLayerIndex(def);
         self.selected.getLayers().setAt(index, createLayer(def));
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
@@ -621,7 +619,7 @@ export function mapui(models, config, store, ui) {
 
         vectorStyleId = def.vectorStyle.id;
         if (state.layers[activeLayerStr]) {
-          let layers = state.layers[activeLayerStr];
+          const layers = state.layers[activeLayerStr];
           layers.forEach(layer => {
             if (layer.id === layerName && layer.custom) {
               vectorStyleId = layer.custom;
@@ -669,13 +667,13 @@ export function mapui(models, config, store, ui) {
     });
 
     if (!layer && layers.length && layers[0].get('group')) {
-      let subGroup, olGroupLayer;
+      let olGroupLayer;
       lodashEach(layers, layerGroup => {
         if (layerGroup.get('group') === layerGroupStr) {
           olGroupLayer = layerGroup;
         }
       });
-      subGroup = olGroupLayer.getLayers().getArray();
+      const subGroup = olGroupLayer.getLayers().getArray();
       layer = lodashFind(subGroup, {
         wv: {
           id: def.id
@@ -955,12 +953,12 @@ export function mapui(models, config, store, ui) {
         if (!def) return;
         metaTitle = def.title;
         if (def.vectorData && def.vectorData.id) {
-          let features = feature.getProperties();
-          let vectorDataId = def.vectorData.id;
-          let data = config.vectorData[vectorDataId];
-          let obj = {
-            'legend': data,
-            'features': features
+          const features = feature.getProperties();
+          const vectorDataId = def.vectorData.id;
+          const data = config.vectorData[vectorDataId];
+          const obj = {
+            legend: data,
+            features: features
           };
           metaArray.push(obj);
         }
@@ -972,10 +970,10 @@ export function mapui(models, config, store, ui) {
         .filter(e => metaArray[e]).map(e => metaArray[e]);
 
       if (uniqueMeta.length) {
-        let vectorPointMeta = uniqueMeta[0];
-        let vectorDataId = def.vectorData.id;
-        let legend = vectorPointMeta.legend;
-        let features = vectorPointMeta.features;
+        const vectorPointMeta = uniqueMeta[0];
+        const vectorDataId = def.vectorData.id;
+        const legend = vectorPointMeta.legend;
+        const features = vectorPointMeta.features;
         store.dispatch(openCustomContent('Vector' + vectorDataId,
           {
             headerText: metaTitle,

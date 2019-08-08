@@ -17,7 +17,7 @@ const nightwatchConfig = {
     'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
     'browserstack.local': true,
     'browserstack.debug': true,
-    'build': 'nightwatch-browserstack',
+    build: 'nightwatch-browserstack',
     applicationCacheEnabled: false,
     webStorageEnabled: false,
     marionette: true
@@ -26,7 +26,7 @@ const nightwatchConfig = {
     default: {},
     browserstack: {
       desiredCapabilities: {
-        'browser': 'chrome'
+        browser: 'chrome'
       }
     },
     chrome: {

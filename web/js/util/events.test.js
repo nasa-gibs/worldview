@@ -1,9 +1,9 @@
 import { events } from './events';
 
 test('triggers an event', () => {
-  let e = events();
-  let listener1 = jest.fn();
-  let listener2 = jest.fn();
+  const e = events();
+  const listener1 = jest.fn();
+  const listener2 = jest.fn();
   e.on('test', listener1);
   e.on('test', listener2);
   e.trigger('test', 'a', 2);
@@ -12,13 +12,13 @@ test('triggers an event', () => {
 });
 
 test('null listener', () => {
-  let e = events();
+  const e = events();
   expect(() => e.on('foo')).toThrow();
 });
 
 test('removes listener', () => {
-  let e = events();
-  let listener = jest.fn();
+  const e = events();
+  const listener = jest.fn();
   e.on('test', listener);
   e.trigger('test');
   e.off('test', listener);
@@ -27,8 +27,8 @@ test('removes listener', () => {
 });
 
 test('any listener called on any event', () => {
-  let e = events();
-  let listener = jest.fn();
+  const e = events();
+  const listener = jest.fn();
   e.on('event1', listener);
   e.on('event2', listener);
   e.trigger('event1');

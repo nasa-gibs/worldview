@@ -23,6 +23,7 @@ export class GifResults extends Component {
       width: width < screenWidth ? width : screenWidth
     };
   }
+
   render() {
     const {
       speed,
@@ -102,7 +103,7 @@ export class GifResults extends Component {
                   e.stopPropagation();
                   e.preventDefault();
                   FileSaver.saveAs(blob, dlURL);
-                  let sizeRange = size < 5
+                  const sizeRange = size < 5
                     ? '<5MB'
                     : size >= 5 && size <= 25
                       ? '5MB-25MB'

@@ -39,6 +39,7 @@ class ShareLinkContainer extends Component {
       queryString: history.location.search || ''
     };
   }
+
   componentDidMount() {
     this.unlisten = history.listen((location, action) => {
       const newString = location.search;
@@ -56,12 +57,14 @@ class ShareLinkContainer extends Component {
   componentWillUnmount() {
     if (this.unlisten) this.unlisten();
   }
+
   getShortLink() {
     const { requestShortLink, mock } = this.props;
     const link = this.getPermalink();
     const location = getShortenRequestString(mock, link);
     return requestShortLink(location);
   }
+
   onToggleShorten() {
     const { shortLinkKey, isShort, queryString } = this.state;
     if (!isShort && shortLinkKey !== queryString) {
@@ -77,13 +80,15 @@ class ShareLinkContainer extends Component {
       this.setState({ isShort: !isShort });
     }
   }
+
   getPermalink() {
     const { queryString } = this.state;
-    let url = window.location.href;
+    const url = window.location.href;
     let prefix = url.split('?')[0];
     prefix = prefix !== null && prefix !== undefined ? prefix : url;
     return !queryString ? prefix : prefix + queryString;
   }
+
   onLinkClick(type) {
     const permalink = this.getPermalink();
     googleTagManager.pushEvent({
@@ -92,7 +97,7 @@ class ShareLinkContainer extends Component {
     });
     // If a short link can be generated, replace the full link.
     if (type === 'twitter' || type === 'email') {
-      let promise = this.getShortLink();
+      const promise = this.getShortLink();
       let win = window;
       if (type === 'twitter') {
         win = window.open('', '_blank');
@@ -110,15 +115,17 @@ class ShareLinkContainer extends Component {
           console.warn('Unable to shorten URL, full link generated.');
         });
     } else {
-      let href = getSharelink(type, permalink);
+      const href = getSharelink(type, permalink);
       window.open(href, '_blank');
     }
   }
+
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.shortLink.error && prevState.isShort) {
       return { isShort: false, showErrorTooltip: true };
     } else return null;
   }
+
   renderToolTips() {
     const { showErrorTooltip, tooltipOpen } = this.state;
     if (showErrorTooltip) {
@@ -145,6 +152,7 @@ class ShareLinkContainer extends Component {
       </React.Fragment>
     );
   }
+
   render() {
     const { shortLink } = this.props;
     const { isShort } = this.state;

@@ -14,6 +14,7 @@ export class Spy {
     this.map = olMap;
     this.create(isBInside);
   }
+
   /**
    * Init spy
    * @param {Boolean} isBInside | B is the spy value -- true|false
@@ -23,6 +24,7 @@ export class Spy {
     this.isBInside = isBInside;
     this.update(isBInside);
   }
+
   /**
    * Update spy
    * @param {Boolean} isBInside | B is the spy value -- true|false
@@ -41,6 +43,7 @@ export class Spy {
       applyEventsToBaseLayers(mapLayers[1], this.map, applyLayerListeners);
     }
   }
+
   /**
    * Remove all nodes and listeners
    */
@@ -51,6 +54,7 @@ export class Spy {
     removeListenersFromLayers(topLayers);
     removeInverseListenersFromLayers(bottomLayers);
   }
+
   /**
    * On mouse move update spy location
    * @param {Object} e | mousemove event object
@@ -64,6 +68,7 @@ export class Spy {
     label.style.left = mousePosition[0] + offSetXandY - 5 + 'px';
     this.map.render();
   }
+
   /**
    * Hide spy stuff when mouse is not hovering map
    * @param {Object} e | mouseleave event object
@@ -73,6 +78,7 @@ export class Spy {
     label.style.display = 'none';
     this.map.render();
   }
+
   /**
    * Show spy stuff when mouse is not hovering map
    * @param {Object} e | mouseenter event object
@@ -82,6 +88,7 @@ export class Spy {
     label.style.display = 'block';
     this.map.render();
   }
+
   /**
    * Add Correct listeners for layer clipping based on whether
    * B or A should be the spy
@@ -133,8 +140,8 @@ var inverseClip = function(event) {
   ctx.beginPath();
   if (mousePosition) {
     // only show a circle around the mouse
-    let x = mousePosition[0];
-    let y = mousePosition[1];
+    const x = mousePosition[0];
+    const y = mousePosition[1];
     ctx.arc(
       x * pixelRatio,
       y * pixelRatio,
@@ -156,9 +163,9 @@ var clip = function(event) {
   ctx.beginPath();
   if (mousePosition) {
     // only show a circle around the mouse
-    let x = mousePosition[0];
-    let y = mousePosition[1];
-    let pixelRadius = radius * pixelRatio;
+    const x = mousePosition[0];
+    const y = mousePosition[1];
+    const pixelRadius = radius * pixelRatio;
 
     ctx.arc(x * pixelRatio, y * pixelRatio, pixelRadius, 0, 2 * Math.PI);
 

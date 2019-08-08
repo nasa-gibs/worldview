@@ -5,7 +5,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 class ModalComplete extends React.Component {
   render() {
     const { currentStory, modalComplete, resetTour, endTour } = this.props;
-    let readMoreLinks = currentStory.readMoreLinks;
+    const readMoreLinks = currentStory.readMoreLinks;
     let list;
     if (
       readMoreLinks &&
@@ -17,7 +17,7 @@ class ModalComplete extends React.Component {
           <ul>
             {readMoreLinks.map((linkId, i) => (
               <li key={i} index={i}>
-                <a href={linkId.link} target="_blank">
+                <a href={linkId.link} target="_blank" rel="noopener noreferrer">
                   {linkId.title}
                 </a>
               </li>
@@ -42,8 +42,8 @@ class ModalComplete extends React.Component {
           <ModalBody>
             <p>
               You have now completed a story in Worldview. To view more stories,
-              click the "More Stories" button below to explore more events
-              within the app. Click the "Exit Tutorial" button or close this
+              click the &ldquo;More Stories&rdquo; button below to explore more events
+              within the app. Click the &ldquo;Exit Tutorial&rdquo; button or close this
               window to start using Worldview on your own.
             </p>
             {list}

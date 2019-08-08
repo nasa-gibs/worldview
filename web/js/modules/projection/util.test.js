@@ -14,7 +14,7 @@ const config = {
   }
 };
 test('getProjInitialState with given projeciton', () => {
-  let response = {
+  const response = {
     id: 'some-test-projection',
     selected: proj
   };
@@ -23,10 +23,10 @@ test('getProjInitialState with given projeciton', () => {
   expect(initialState.selected.id).toBe(response.selected.id);
 });
 test('Default proj should be geographic', () => {
-  let emptyConfig = {
+  const emptyConfig = {
     defaults: {}
   };
-  let response = {
+  const response = {
     id: 'geographic',
     selected: {}
   };
@@ -48,10 +48,10 @@ test('mapLocationToProjState: Update proj:id key onload', () => {
 });
 
 test('legacy switch parameter for projection', () => {
-  let param = {
+  const param = {
     switch: 'some-test-projection'
   };
-  let stateFromLocation = {
+  const stateFromLocation = {
     proj: proj
   };
   const localState = update(state, {

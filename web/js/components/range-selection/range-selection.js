@@ -28,6 +28,7 @@ class TimelineRangeSelector extends React.Component {
     this.onItemDrag = this.onItemDrag.bind(this);
     this.onDragStop = this.onDragStop.bind(this);
   }
+
   /*
    * When a child component is dragged,
    * this function is called to determine
@@ -81,6 +82,7 @@ class TimelineRangeSelector extends React.Component {
     });
     this.animationDraggerPositionUpdate(startX, endX, true);
   }
+
   /*
    * Send callback with new locations on
    * Drag Stop
@@ -92,6 +94,7 @@ class TimelineRangeSelector extends React.Component {
   onDragStop() {
     this.animationDraggerPositionUpdate(this.state.startLocation, this.state.endLocation, false);
   }
+
   /*
    * Update state based on distance range was dragged
    *
@@ -103,8 +106,8 @@ class TimelineRangeSelector extends React.Component {
    * @return {void}
    */
   onRangeDrag(d, deltaStart) {
-    let startLocation = this.state.startLocation + d;
-    let endLocation = this.state.endLocation + d;
+    const startLocation = this.state.startLocation + d;
+    const endLocation = this.state.endLocation + d;
     this.setState({
       startLocation: startLocation,
       endLocation: endLocation,
@@ -116,40 +119,40 @@ class TimelineRangeSelector extends React.Component {
   // update animation dragger helper function
   getAnimationLocateDateUpdate = (animLocationDate, animDraggerLocation, deltaX, { diffZeroValues, diffFactor }) => {
     if (!diffZeroValues) { // month or year
-      let {
+      const {
         timeScale,
         position,
         transformX
       } = this.props;
 
-      let options = timeScaleOptions[timeScale].timeAxis;
-      let gridWidth = options.gridWidth;
+      const options = timeScaleOptions[timeScale].timeAxis;
+      const gridWidth = options.gridWidth;
 
-      let startDraggerPositionRelativeToFrontDate = animDraggerLocation - position - transformX + deltaX;
-      let gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
-      let draggerDateAdded = moment.utc(this.props.frontDate).add((Math.floor(gridWidthCoef)), timeScale);
-      let draggerDateAddedValue = draggerDateAdded.valueOf();
+      const startDraggerPositionRelativeToFrontDate = animDraggerLocation - position - transformX + deltaX;
+      const gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
+      const draggerDateAdded = moment.utc(this.props.frontDate).add((Math.floor(gridWidthCoef)), timeScale);
+      const draggerDateAddedValue = draggerDateAdded.valueOf();
       let daysCount;
       if (timeScale === 'year') {
         daysCount = draggerDateAdded.isLeapYear() ? 366 : 365;
       } else if (timeScale === 'month') {
         daysCount = draggerDateAdded.daysInMonth();
       }
-      let gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
-      let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
-      let newLocationDate = draggerDateAddedValue + remainderMilliseconds;
+      const gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
+      const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+      const newLocationDate = draggerDateAddedValue + remainderMilliseconds;
 
       return new Date(newLocationDate);
     } else {
-      let draggerTimeStartValue = new Date(animLocationDate).getTime();
-      let newLocationDate = draggerTimeStartValue + (diffFactor * deltaX);
+      const draggerTimeStartValue = new Date(animLocationDate).getTime();
+      const newLocationDate = draggerTimeStartValue + (diffFactor * deltaX);
       return new Date(newLocationDate);
     }
   }
 
   // handle animation dragger drag change
   animationDraggerPositionUpdate = (draggerStartLocation, draggerEndLocation, isDragging) => {
-    let {
+    const {
       timelineStartDateLimit,
       timelineEndDateLimit,
       startLocationDate,
@@ -157,28 +160,28 @@ class TimelineRangeSelector extends React.Component {
       timeScale
     } = this.props;
 
-    let {
+    const {
       startLocation,
       endLocation
     } = this.state;
 
     // calculate new start and end positions
-    let deltaXStart = draggerStartLocation - startLocation;
+    const deltaXStart = draggerStartLocation - startLocation;
     let animationStartLocationDate = startLocationDate;
-    let deltaXEnd = draggerEndLocation - endLocation;
+    const deltaXEnd = draggerEndLocation - endLocation;
     let animationEndLocationDate = endLocationDate;
 
-    let options = timeScaleOptions[timeScale].timeAxis;
+    const options = timeScaleOptions[timeScale].timeAxis;
     // if start or end dragger has moved
     if (deltaXStart !== 0 || deltaXEnd !== 0) {
-      let diffZeroValues = options.scaleMs;
+      const diffZeroValues = options.scaleMs;
       // get startDate for diff calculation
       let diffFactor;
       if (diffZeroValues) { // month or year diffFactor is not static, so require calculation based on front date
         diffFactor = diffZeroValues / options.gridWidth; // else known diffFactor used
       }
 
-      let sharedAnimLocationUpdateParams = {
+      const sharedAnimLocationUpdateParams = {
         diffZeroValues,
         diffFactor
       };
@@ -201,10 +204,10 @@ class TimelineRangeSelector extends React.Component {
       }
     }
 
-    let startDateLimit = new Date(timelineStartDateLimit);
-    let endDateLimit = new Date(timelineEndDateLimit);
-    let startDate = new Date(animationStartLocationDate);
-    let endDate = new Date(animationEndLocationDate);
+    const startDateLimit = new Date(timelineStartDateLimit);
+    const endDateLimit = new Date(timelineEndDateLimit);
+    const startDate = new Date(animationStartLocationDate);
+    const endDate = new Date(animationEndLocationDate);
 
     // prevent draggers to be dragger BEFORE start date limit
     if (endDate < startDateLimit) {
@@ -245,7 +248,7 @@ class TimelineRangeSelector extends React.Component {
   }
 
   componentDidUpdate() {
-    let { startLocation, endLocation } = this.props;
+    const { startLocation, endLocation } = this.props;
     if (startLocation !== this.state.startLocation || endLocation !== this.state.endLocation) {
       this.updateLocation();
     }

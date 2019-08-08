@@ -95,11 +95,13 @@ class AnimationWidget extends React.Component {
     this.onLoop = this.onLoop.bind(this);
     this.openGif = this.openGif.bind(this);
   }
+
   static getDerivedStateFromProps(props, state) {
     if (props.speed !== state.speed && !state.isSliding) {
       return { speed: props.speed };
     } else return null;
   }
+
   getPromise(bool, type, action, title) {
     const { notify } = this.props;
     if (bool) {
@@ -108,6 +110,7 @@ class AnimationWidget extends React.Component {
       return Promise.resolve(type);
     }
   }
+
   openGif() {
     const {
       toggleGif,
@@ -146,6 +149,7 @@ class AnimationWidget extends React.Component {
       }
     );
   }
+
   /*
    * Sets a new state to say whether or not
    * the animation should loop
@@ -166,6 +170,7 @@ class AnimationWidget extends React.Component {
     }
     this.props.onPushLoop(loop);
   }
+
   onDateChange(date, id) {
     const { onUpdateStartDate, onUpdateEndDate } = this.props;
     if (id === 'start') {
@@ -174,6 +179,7 @@ class AnimationWidget extends React.Component {
       onUpdateEndDate(date);
     }
   }
+
   /*
    * Changes selected default or custom interval in header and
    * changes left/right date arrow increments
@@ -185,6 +191,7 @@ class AnimationWidget extends React.Component {
    *
    * @return {void}
    */
+    let delta;
   onIntervalSelect(timeScale, modalOpen) {
     let delta;
     let { customInterval, customDelta } = this.props;

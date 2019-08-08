@@ -2,8 +2,8 @@ import { mapParser } from './map';
 
 describe('permalink 1.1', () => {
   test('parses state', () => {
-    let errors = [];
-    let state = {
+    const errors = [];
+    const state = {
       map: '0,1,2,3'
     };
     mapParser(state, errors);
@@ -15,8 +15,8 @@ describe('permalink 1.1', () => {
 
 describe('permalink 1.2', () => {
   test('parses state', () => {
-    let errors = [];
-    let state = {
+    const errors = [];
+    const state = {
       v: '0,1,2,3'
     };
     mapParser(state, errors);
@@ -26,8 +26,8 @@ describe('permalink 1.2', () => {
   });
 
   test('error on invalid extent', () => {
-    let errors = [];
-    let state = {
+    const errors = [];
+    const state = {
       map: '0,1,x,3'
     };
     mapParser(state, errors);

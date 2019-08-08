@@ -12,11 +12,13 @@ class AxisTimeScaleChangeControls extends PureComponent {
   onClickUp = () => {
     this.props.decrementTimeScale();
   }
+
   onClickDown = () => {
     this.props.incrementTimeScale();
   }
+
   render() {
-    let {
+    const {
       timeScale,
       toolTipHovered,
       changeTimeScale,

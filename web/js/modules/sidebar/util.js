@@ -16,21 +16,21 @@ export function mapLocationToSidebarState(
   config
 ) {
   if (parameters.e) {
-    let sidebarState = lodashAssign({}, state.sidebar, {
+    const sidebarState = lodashAssign({}, state.sidebar, {
       activeTab: 'events'
     });
     stateFromLocation = update(stateFromLocation, {
       sidebar: { $set: sidebarState }
     });
   } else if (get(stateFromLocation, 'data.active')) {
-    let sidebarState = lodashAssign({}, state.sidebar, {
+    const sidebarState = lodashAssign({}, state.sidebar, {
       activeTab: 'download'
     });
     stateFromLocation = update(stateFromLocation, {
       sidebar: { $set: sidebarState }
     });
   } else {
-    let sidebarState = lodashAssign({}, state.sidebar, {
+    const sidebarState = lodashAssign({}, state.sidebar, {
       activeTab: 'layers'
     });
     stateFromLocation = update(stateFromLocation, {

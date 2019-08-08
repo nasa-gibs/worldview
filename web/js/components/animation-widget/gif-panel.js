@@ -30,11 +30,13 @@ export default class GifPanel extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
   }
+
   handleChange(type, value) {
     this.setState({
       resolution: value
     });
   }
+
   render() {
     const {
       projId,

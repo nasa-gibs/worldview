@@ -13,13 +13,15 @@ export class Checkbox extends React.Component {
       checked: props.checked
     };
   }
-  componentWillReceiveProps(nextProps) {
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.state.checked !== nextProps.checked) {
       this.setState({
         checked: nextProps.checked
       });
     }
   }
+
   onClick(e) {
     const { onClick } = this.props;
     if (onClick) {
@@ -27,6 +29,7 @@ export class Checkbox extends React.Component {
       onClick(e);
     }
   }
+
   handleChange(e) {
     const { onCheck } = this.props;
     const boo = !this.state.checked;
@@ -35,6 +38,7 @@ export class Checkbox extends React.Component {
     });
     if (onCheck) onCheck(boo);
   }
+
   render() {
     const { checked } = this.state;
     const { isRound, color, classNames, id, name, title, label } = this.props;

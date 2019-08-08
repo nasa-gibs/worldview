@@ -24,6 +24,7 @@ class ModalInProgress extends React.Component {
       this.props.endTour();
     }
   }
+
   componentDidUpdate() {
     if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
   }

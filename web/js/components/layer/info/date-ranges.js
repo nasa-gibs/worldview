@@ -10,6 +10,7 @@ export class DateRanges extends React.Component {
       showRanges: false
     };
   }
+
   renderYearlyListItem(
     dateRange,
     index,
@@ -48,6 +49,7 @@ export class DateRanges extends React.Component {
       return rangeStartDate + ' - ' + rangeEndDate;
     }
   }
+
   renderMonthlyListItem(
     dateRange,
     index,
@@ -89,6 +91,7 @@ export class DateRanges extends React.Component {
       return rangeStartDate + ' - ' + rangeEndDate;
     }
   }
+
   renderDailyListItem(
     dateRange,
     index,
@@ -143,6 +146,7 @@ export class DateRanges extends React.Component {
       return rangeStartDate + ' - ' + rangeEndDate;
     }
   }
+
   renderSubdailyListItem(
     dateRange,
     index,
@@ -184,9 +188,10 @@ export class DateRanges extends React.Component {
     }
     return rangeStartDate + ' - ' + rangeEndDate;
   }
+
   renderListItem(layer, dateRange, index) {
-    let rangeStartDate = util.parseDate(dateRange.startDate);
-    let rangeEndDate = util.parseDate(dateRange.endDate);
+    const rangeStartDate = util.parseDate(dateRange.startDate);
+    const rangeEndDate = util.parseDate(dateRange.endDate);
     const firstDateRange = index === 0;
     switch (layer.period) {
       case 'yearly':

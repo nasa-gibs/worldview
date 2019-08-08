@@ -46,6 +46,7 @@ class LayerSettings extends React.Component {
     this.canvas.height = 10;
     this.checkerboard = getCheckerboard();
   }
+
   /**
    * Render multicolormap layers inside a tab pane
    * @param {object} paletteLegends | legend object
@@ -64,8 +65,8 @@ class LayerSettings extends React.Component {
       layer
     } = this.props;
     const { activeIndex } = this.state;
-    let navElements = [];
-    let paneElements = [];
+    const navElements = [];
+    const paneElements = [];
     lodashEach(paletteLegends, (legend, i) => {
       const activeClass = activeIndex === i ? 'active' : '';
       const dualStr = paletteLegends.length === 2 ? ' dual' : '';
@@ -79,10 +80,10 @@ class LayerSettings extends React.Component {
           </NavLink>
         </NavItem>
       );
-      let palette = getPalette(layer.id, i);
-      let max = legend.colors.length - 1;
-      let start = palette.min || 0;
-      let end = palette.max || max;
+      const palette = getPalette(layer.id, i);
+      const max = legend.colors.length - 1;
+      const start = palette.min || 0;
+      const end = palette.max || max;
       let paneItemEl;
       if (
         legend.type !== 'continuous' &&
@@ -141,6 +142,7 @@ class LayerSettings extends React.Component {
       </React.Fragment>
     );
   }
+
   /**
    * Render Opacity, threshold, and custom palette options
    */
@@ -206,6 +208,7 @@ class LayerSettings extends React.Component {
       </React.Fragment>
     );
   }
+
   /**
    * Render Opacity, threshold, and custom palette options
    */
@@ -235,6 +238,7 @@ class LayerSettings extends React.Component {
       </React.Fragment>
     );
   }
+
   render() {
     var renderCustomizations;
     const {

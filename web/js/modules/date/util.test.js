@@ -4,7 +4,7 @@ const state = fixtures.getState();
 
 test('parses date 1.1', () => {
   const d = new Date(Date.UTC(2013, 0, 5));
-  let param = {
+  const param = {
     time: '2013-01-05'
   };
   let stateFromLocation = {
@@ -15,15 +15,15 @@ test('parses date 1.1', () => {
   expect(stateFromLocation.date.selected).toMatchObject(d);
 });
 test('parses valid date: 1.2', () => {
-  let d = new Date(Date.UTC(2013, 0, 5));
-  let param = {
+  const d = new Date(Date.UTC(2013, 0, 5));
+  const param = {
     t: '2013-01-05'
   };
-  let date = tryCatchDate(param.t, state.date.appNow);
+  const date = tryCatchDate(param.t, state.date.appNow);
   expect(date).toEqual(d);
 });
 test('If date is invalid, uses pageLoad Time', () => {
-  let param = {
+  const param = {
     time: 'X'
   };
   let stateFromLocation = {

@@ -8,19 +8,23 @@ class Tooltip extends React.Component {
       hovered: false
     };
   }
+
   mouseOver() {
     this.setState({
       hovered: true
     });
   }
+
   mouseOut() {
     this.setState({
       hovered: false
     });
   }
+
   onClick(str) {
     this.props.onClick(str);
   }
+
   render() {
     return (
       <div

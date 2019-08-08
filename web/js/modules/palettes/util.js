@@ -182,19 +182,19 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     let minObj = lodashAssign({}, { key: 'min', array: [] }, DEFAULT_OBJ);
     let maxObj = lodashAssign({}, { key: 'max', array: [] }, DEFAULT_OBJ);
     let squashObj = lodashAssign({}, { key: 'squash', array: [] }, DEFAULT_OBJ);
-    let attrArray = [];
+    const attrArray = [];
     for (var i = 0; i < count; i++) {
       if (!palettes[layerId].maps[i]) {
         console.warn('NO PALETTE');
       }
-      let paletteDef = palettes[layerId].maps[i];
-      let entryLength =
+      const paletteDef = palettes[layerId].maps[i];
+      const entryLength =
         lodashSize(lodashGet(paletteDef, 'entries.values')) ||
         lodashSize(lodashGet(paletteDef, 'entries.colors'));
-      let maxValue = paletteDef.max
+      const maxValue = paletteDef.max
         ? paletteDef.entries.values[paletteDef.max || entryLength]
         : undefined;
-      let minValue = paletteDef.min
+      const minValue = paletteDef.min
         ? paletteDef.entries.values[paletteDef.min || 0]
         : undefined;
       palObj = createPaletteAttributeObject(
@@ -286,7 +286,7 @@ export function loadPalettes(permlinkState, state) {
         if (layerDef.custom) {
           lodashEach(layerDef.custom, function(value, index) {
             try {
-              let newPalettes = setCustomSelector(
+              const newPalettes = setCustomSelector(
                 layerId,
                 value,
                 index,
@@ -347,8 +347,8 @@ export function loadPalettes(permlinkState, state) {
             var vmin = min.length > 0 ? min[i] : undefined;
             var vmax = max.length > 0 ? max[i] : undefined;
             var vsquash = squash.length > 0 ? squash[i] : undefined;
-            let props = { min: vmin, max: vmax, squash: vsquash };
-            let newPalettes = setRangeSelector(
+            const props = { min: vmin, max: vmax, squash: vsquash };
+            const newPalettes = setRangeSelector(
               layerId,
               props,
               i,
@@ -399,12 +399,12 @@ export function mapLocationToPaletteState(
  * @returns {Promise}
  */
 export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
-  let rendered = renderedPalettes || {};
+  const rendered = renderedPalettes || {};
   customLoaded = customLoaded || false;
   let preloadedCustom = false;
-  let requestArray = [];
+  const requestArray = [];
   let custom = {};
-  let loading = {};
+  const loading = {};
   if (layersArray) {
     layersArray.forEach(obj => {
       if (
@@ -423,7 +423,7 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
         });
       }
       if (obj.custom && !customLoaded && !preloadedCustom) {
-        let customPromise = util.fetch(
+        const customPromise = util.fetch(
           'config/palettes-custom.json',
           'application/json'
         );

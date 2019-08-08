@@ -42,6 +42,7 @@ class ProductPicker extends React.Component {
     };
     this.runSearch = lodashDebounce(this.runSearch, 300);
   }
+
   /**
    * Either filter layers with search object or
    * revert to initial state
@@ -50,7 +51,7 @@ class ProductPicker extends React.Component {
    */
   runSearch(value) {
     const { filterProjections, filterSearch, allLayers } = this.props;
-    let val = value.toLowerCase();
+    const val = value.toLowerCase();
     if (val.length === 0) {
       this.setState({
         filteredRows: [],
@@ -58,8 +59,8 @@ class ProductPicker extends React.Component {
         inputValue: ''
       });
     } else {
-      let terms = val.split(/ +/);
-      let filteredRows = allLayers.filter(function(layer) {
+      const terms = val.split(/ +/);
+      const filteredRows = allLayers.filter(function(layer) {
         return !(filterProjections(layer) || filterSearch(layer, val, terms));
       });
       this.setState({
@@ -69,6 +70,7 @@ class ProductPicker extends React.Component {
       });
     }
   }
+
   /**
    * Draw measurement list when category is clicked
    * @function drawMeasurements
@@ -100,6 +102,7 @@ class ProductPicker extends React.Component {
       this.setState({ selectedMeasurement: null });
     }
   }
+
   /**
    * Update category type in which to sort
    * e.g. Hazards and disasters or science
@@ -117,6 +120,7 @@ class ProductPicker extends React.Component {
       }
     });
   }
+
   render() {
     const {
       filteredRows,
@@ -258,9 +262,9 @@ ProductPicker.propTypes = {
 const mapDispatchToProps = dispatch => ({
   addLayer: id => {
     googleTagManager.pushEvent({
-      'event': 'layer_added',
-      'layers': {
-        'id': id
+      event: 'layer_added',
+      layers: {
+        id: id
       }
     });
     dispatch(addLayer(id));

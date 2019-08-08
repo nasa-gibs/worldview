@@ -7,17 +7,17 @@ import { getISODateFormatted } from './date-util';
 // https://www.npmjs.com/package/react-mobile-datepicker
 // configs for date order, caption, and date step
 const defaultDateConfig = {
-  'year': {
+  year: {
     format: 'YYYY',
     caption: 'Year',
     step: 1
   },
-  'month': {
+  month: {
     format: 'MM',
     caption: 'Month',
     step: 1
   },
-  'date': {
+  date: {
     format: 'DD',
     caption: 'Day',
     step: 1
@@ -25,27 +25,27 @@ const defaultDateConfig = {
 };
 
 const subDailyDateConfig = {
-  'year': {
+  year: {
     format: 'YYYY',
     caption: 'Year',
     step: 1
   },
-  'month': {
+  month: {
     format: 'MM',
     caption: 'Mon',
     step: 1
   },
-  'date': {
+  date: {
     format: 'DD',
     caption: 'Day',
     step: 1
   },
-  'hour': {
+  hour: {
     format: 'hh',
     caption: 'Hour',
     step: 1
   },
-  'minute': {
+  minute: {
     format: 'mm',
     caption: 'Min',
     step: 1
@@ -81,13 +81,13 @@ class MobileDatePicker extends Component {
       isOpen: false
     });
     // convert date back to local time
-    let date = this.convertToLocalDateObject(time);
+    const date = this.convertToLocalDateObject(time);
     this.props.onDateChange(getISODateFormatted(date));
   }
 
   // used for init mount
   setInitDates = () => {
-    let {
+    const {
       date,
       startDateLimit,
       endDateLimit
@@ -101,14 +101,14 @@ class MobileDatePicker extends Component {
 
   // change to UTC offset time for date picker controls
   convertToUTCDateObject = (dateString) => {
-    let date = new Date(dateString);
-    let dateUTC = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+    const date = new Date(dateString);
+    const dateUTC = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
     return dateUTC;
   }
 
   // change to offset time used in parent component date setting functions
   convertToLocalDateObject = (date) => {
-    let dateLocal = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+    const dateLocal = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
     return dateLocal;
   }
 
@@ -117,18 +117,18 @@ class MobileDatePicker extends Component {
   }
 
   render() {
-    let {
+    const {
       time,
       minDate,
       maxDate,
       isOpen
     } = this.state;
-    let {
+    const {
       date,
       hasSubdailyLayers
     } = this.props;
     // display date as '2000-10-28' for default or '2000-10-28 20:28Z' for subdaily
-    let displayDate = hasSubdailyLayers ? date.split('T').join(' ').split(':', 2).join(':') + 'Z' : date.split('T')[0];
+    const displayDate = hasSubdailyLayers ? date.split('T').join(' ').split(':', 2).join(':') + 'Z' : date.split('T')[0];
     return (
       time
         ? <React.Fragment>

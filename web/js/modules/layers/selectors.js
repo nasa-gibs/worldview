@@ -446,7 +446,7 @@ export function activateLayersForEventCategory(activeLayers, state) {
   lodashEach(activeLayers, function(layer) {
     var id = layer[0];
     var visible = layer[1];
-    let index = lodashFindIndex(newLayers, { id });
+    const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
       newLayers = update(newLayers, {
         [index]: { visible: { $set: visible } }
@@ -470,7 +470,7 @@ export function getZotsForActiveLayers(config, projection, map, activeLayers) {
   var zoom = map.ui.selected.getView().getZoom();
   lodashEach(activeLayers, layer => {
     if (layer.projections[proj]) {
-      let overZoomValue = getZoomLevel(layer, zoom, proj, sources);
+      const overZoomValue = getZoomLevel(layer, zoom, proj, sources);
       if (overZoomValue) {
         zotObj[layer.id] = { value: overZoomValue };
       }

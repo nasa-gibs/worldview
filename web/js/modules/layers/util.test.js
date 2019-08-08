@@ -79,7 +79,7 @@ test('Layer parser, retrieves hidden vector layer from permalink string', () => 
   expect(layer.opacity).toBe(0.46);
 });
 test('serialize layers and palettes', () => {
-  let terraAodLayer = config.layers['terra-aod'];
+  const terraAodLayer = config.layers['terra-aod'];
   const paletteState = {
     palettes: {
       active: { 'terra-aod': config.palettes.rendered['terra-aod'] },
@@ -103,7 +103,7 @@ test('removeLayer util function', () => {
 });
 
 test('toggleVisibility util function', () => {
-  let terraCrLayer = config.layers['terra-cr'];
+  const terraCrLayer = config.layers['terra-cr'];
   terraCrLayer.visible = false;
   const layers = [config.layers['terra-aod'], terraCrLayer];
   const newLayers = toggleVisibility('terra-cr', layers);
@@ -118,10 +118,10 @@ describe('permalink 1.0', () => {
     };
   });
   test('supports old style period delimiters', () => {
-    let parameters = {
+    const parameters = {
       products: 'baselayers.terra-cr~overlays.terra-aod.aqua-aod'
     };
-    let stateFromLocation = mapLocationToLayerState(
+    const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
@@ -145,11 +145,11 @@ describe('permalink 1.1', () => {
   });
 
   test('parses only one baselayer', () => {
-    let parameters = {
+    const parameters = {
       products: 'baselayers,terra-cr'
     };
 
-    let stateFromLocation = mapLocationToLayerState(
+    const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
@@ -158,10 +158,10 @@ describe('permalink 1.1', () => {
     expect(stateFromLocation.layers.active[0].id).toBe('terra-cr');
   });
   test('parses only one overlay', () => {
-    let parameters = {
+    const parameters = {
       products: 'overlays,terra-aod'
     };
-    let stateFromLocation = mapLocationToLayerState(
+    const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
@@ -171,10 +171,10 @@ describe('permalink 1.1', () => {
     expect(stateFromLocation.layers.active[0].id).toBe('terra-aod');
   });
   test('parses multiple layers', () => {
-    let parameters = {
+    const parameters = {
       products: 'baselayers,terra-cr~overlays,terra-aod,aqua-aod'
     };
-    let stateFromLocation = mapLocationToLayerState(
+    const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
@@ -186,10 +186,10 @@ describe('permalink 1.1', () => {
     expect(activeLayers.find(x => x.id === 'aqua-aod')).toBeTruthy();
   });
   test('empty layer list', () => {
-    let parameters = {
+    const parameters = {
       products: 'baselayers~overlays'
     };
-    let stateFromLocation = mapLocationToLayerState(
+    const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
@@ -199,10 +199,10 @@ describe('permalink 1.1', () => {
     expect(activeLayers).toHaveLength(0);
   });
   test('skips invalid layers and records an error', () => {
-    let parameters = {
+    const parameters = {
       products: 'baselayers,terra-cr~overlays,layerx,aqua-aod'
     };
-    let stateFromLocation = mapLocationToLayerState(
+    const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
@@ -213,10 +213,10 @@ describe('permalink 1.1', () => {
     expect(activeLayers.find(x => x.id === 'aqua-aod')).toBeTruthy();
   });
   test('no layers if no groups found', () => {
-    let parameters = {
+    const parameters = {
       products: 'layerx,layery'
     };
-    let stateFromLocation = mapLocationToLayerState(
+    const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
@@ -226,10 +226,10 @@ describe('permalink 1.1', () => {
     expect(activeLayers).toHaveLength(0);
   });
   test('hidden layers', () => {
-    let parameters = {
+    const parameters = {
       products: 'baselayers,!terra-cr'
     };
-    let stateFromLocation = mapLocationToLayerState(
+    const stateFromLocation = mapLocationToLayerState(
       parameters,
       defaultStateFromLocation,
       globalState,
