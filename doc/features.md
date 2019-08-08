@@ -6,7 +6,16 @@ CGI files. Next, enable these features in your configuration file.
 
 ## Natural Events
 
-This feature provides natural events queried by Earth Observatory Natural Event Tracker (EONET) by default. To enable, edit `options/common/features.json` and set `"naturalEvents": true`.
+This feature provides natural events queried by Earth Observatory Natural Event Tracker (EONET) by default. To enable, edit `options/common/features.json` and set:
+
+```
+"naturalEvents": {
+    "host": "[host_url_here]"
+}
+```
+
+to disable, set:
+`"naturalEvents": false`
 
 ## Data Download
 
