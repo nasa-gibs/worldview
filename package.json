@@ -175,7 +175,7 @@
     "proj4": "2.3.3",
     "promise-queue": "2.2.5",
     "react": "16.8.x",
-    "react-beautiful-dnd": "^9.0.2",
+    "react-beautiful-dnd": "^11.0.5",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.3.0",
     "react-draggable": "^3.0.5",
