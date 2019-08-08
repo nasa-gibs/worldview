@@ -154,6 +154,7 @@ class Sidebar extends React.Component {
   render() {
     const { subComponentHeight } = this.state;
     const {
+      config,
       onTabClick,
       numberOfLayers,
       screenHeight,
@@ -167,6 +168,8 @@ class Sidebar extends React.Component {
     } = this.props;
     if (isMobile && activeTab === 'download') changeTab('layers');
     const wheelCallBack = util.browser.chrome ? util.preventPinch : null;
+    const naturalEventsFeatureActive = config.features.naturalEvents;
+    const dataDownloadFeatureActive = config.features.dataDownload;
     return (
       <ErrorBoundary>
         <section id="wv-sidebar">
@@ -210,17 +213,23 @@ class Sidebar extends React.Component {
                 {this.getProductsToRender(activeTab, isCompareMode)}
               </TabPane>
               <TabPane tabId="events">
-                <Events
-                  isActive={activeTab === 'events'}
-                  height={subComponentHeight}
-                />
+                {naturalEventsFeatureActive
+                  ? <Events
+                    isActive={activeTab === 'events'}
+                    height={subComponentHeight}
+                  />
+                  : null
+                }
               </TabPane>
               <TabPane tabId="download">
-                <Data
-                  isActive={activeTab === 'download'}
-                  height={subComponentHeight}
-                  tabTypes={tabTypes}
-                />
+                {dataDownloadFeatureActive
+                  ? <Data
+                    isActive={activeTab === 'download'}
+                    height={subComponentHeight}
+                    tabTypes={tabTypes}
+                  />
+                  : null
+                }
               </TabPane>
               <footer
                 ref={footerElement => (this.footerElement = footerElement)}
