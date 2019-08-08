@@ -1,8 +1,12 @@
 # Optional Features
 
-These features require CGI scripts to execute on your server. In order for them
+Some of these features require CGI scripts to execute on your server. In order for them
 to function, make sure your server is configured to allow the execution of
 CGI files. Next, enable these features in your configuration file.
+
+## Natural Events
+
+This feature provides natural events queried by Earth Observatory Natural Event Tracker (EONET) by default. To enable, edit `options/common/features.json` and set `"naturalEvents": true`.
 
 ## Data Download
 
