@@ -119,6 +119,18 @@ export function imageUtilGetLayerOpacities(layers) {
   return opacities;
 }
 
+export function imageUtilGetLayerWrap(layers) {
+  return layers.map(layer => {
+    if (layer.wrapX) {
+      return 'x';
+    }
+    if (layer.wrapadjacentdays) {
+      return 'day';
+    }
+    return 'none';
+  }) || [];
+}
+
 export function imageUtilEstimateResolution(resolution, isGeoProjection) {
   return isGeoProjection
     ? resolution / POLAR_ESTIMATION_CONSTANT
