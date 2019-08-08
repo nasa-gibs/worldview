@@ -17,7 +17,7 @@ _Note:_ Make sure to run `npm run getcapabilities` and
 
 To test against a different time zone, run `npm run test:unit:tz`. _Note:_ This currently doesn't work in Windows.
 
-To view the unit test code coverage, run `npm test:coverage`.
+To view the unit test code coverage, run `npm run test:coverage`.
 Use `npm run test:unit:coverage` or `npm run test:unit:tz:coverage` to run coverage tests individually.
 
 ## End-to-end Tests
