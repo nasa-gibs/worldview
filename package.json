@@ -102,7 +102,7 @@
     "expose-loader": "^0.7.5",
     "express": "4.15.2",
     "fetch-mock": "^7.3.9",
-    "file-loader": "^1.1.11",
+    "file-loader": "^4.2.0",
     "geckodriver": "^1.12.0",
     "glob": "^7.1.2",
     "html-loader": "^0.5.5",
