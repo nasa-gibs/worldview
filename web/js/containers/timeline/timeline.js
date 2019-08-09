@@ -1016,7 +1016,7 @@ class Timeline extends React.Component {
                     toggleCustomIntervalModal={this.toggleCustomIntervalModal}
                     customIntervalModalOpen={customIntervalModalOpen}
                     changeCustomInterval={this.changeCustomInterval}
-                    hasSubdailyLayers={hasSubdailyLayers}
+                    subDailyMode={hasSubdailyLayers}
                   />
                 </div>
 
