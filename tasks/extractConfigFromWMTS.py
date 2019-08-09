@@ -85,7 +85,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
     }
 
     # Vector data links
-    if "ows:Metadata" in gc_layer:
+    if "ows:Metadata" in gc_layer and gc_layer["ows:Metadata"] is not None:
         for item in gc_layer["ows:Metadata"]:
             if "@xlink:role" not in item:
                 raise KeyError("No xlink:role")
