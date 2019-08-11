@@ -8,6 +8,7 @@ const nightwatchConfig = {
   src_folders: files,
   selenium: {
     start_process: false,
+    check_process_delay: 5000,
     host: 'hub-cloud.browserstack.com',
     port: 80
   },
