@@ -52,7 +52,7 @@ with open(config_file) as fp:
     config = json.load(fp)
 
 def process_vector_data(layer):
-    if "ows:Metadata" in layer:
+    if "ows:Metadata" in layer and layer["ows:Metadata"] is not None:
         for item in layer["ows:Metadata"]:
             schema_version = item["@xlink:role"]
             if schema_version == "http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0":
