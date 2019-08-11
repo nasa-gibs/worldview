@@ -10,9 +10,8 @@ matrix:
         - sudo apt-get install -y libgif-dev
     - os: linux
       dist: xenial
-      language: node_js
+      language: node_js # nvm is automatically updated to the latest version at build time
       python: '3.7.1'
-      node_js: lts/* # latest LTS Node.js release
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libgif-dev
