@@ -80,9 +80,6 @@ def replace_duplicates(duplicates, tooltip_list, entries):
                 value = entry['@value']
                 value = value.split(',')
                 if(len(value) > 1):
-                    print('len(value) > 1')
-                    print(value[0])
-                    print(value[1])
                     value[0] = value[0].replace("[", "")
                     min_list += [value[0]] # adds value to min array
                     # get max
@@ -90,8 +87,6 @@ def replace_duplicates(duplicates, tooltip_list, entries):
                     max_list += [value[1]] # adds value to max array
                     # add index
                 else:
-                    print('else')
-                    print(value)
                     min_list += [value[0]] # adds value to min array
                     max_list += [value[0]] # adds value to max array
                 index_list += [index]
