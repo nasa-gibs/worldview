@@ -177,7 +177,7 @@
     "react": "16.8.x",
     "react-beautiful-dnd": "^11.0.5",
     "react-copy-to-clipboard": "^5.0.1",
-    "react-dom": "^16.3.0",
+    "react-dom": "^16.9.0",
     "react-draggable": "^3.0.5",
     "react-image-crop": "^6.0.11",
     "react-loader": "^2.4.5",
