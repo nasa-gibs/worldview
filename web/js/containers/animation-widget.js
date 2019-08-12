@@ -344,7 +344,7 @@ class AnimationWidget extends React.Component {
                customSelected={customSelected}
                customDelta={customDelta}
                timeScaleChangeUnit={interval}
-               subDailyMode={hasSubdailyLayers}
+               hasSubdailyLayers={hasSubdailyLayers}
              />
              {' Increments'}
            </div>
@@ -423,7 +423,7 @@ class AnimationWidget extends React.Component {
              toggleCustomIntervalModal={this.toggleCustomIntervalModal}
              customIntervalModalOpen={customIntervalModalOpen}
              changeCustomInterval={this.changeCustomInterval}
-             subDailyMode={hasSubdailyLayers}
+             hasSubdailyLayers={hasSubdailyLayers}
            />
          </div>
        </ErrorBoundary>

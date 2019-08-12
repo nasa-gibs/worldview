@@ -858,7 +858,7 @@ class Timeline extends React.Component {
                       customSelected={customSelected}
                       customDelta={customIntervalValue}
                       timeScaleChangeUnit={timeScaleChangeUnit}
-                      subDailyMode={hasSubdailyLayers}
+                      hasSubdailyLayers={hasSubdailyLayers}
                     />
                     <DateChangeArrows
                       leftArrowDown={this.throttleDecrementDate}
@@ -1016,7 +1016,7 @@ class Timeline extends React.Component {
                     toggleCustomIntervalModal={this.toggleCustomIntervalModal}
                     customIntervalModalOpen={customIntervalModalOpen}
                     changeCustomInterval={this.changeCustomInterval}
-                    subDailyMode={hasSubdailyLayers}
+                    hasSubdailyLayers={hasSubdailyLayers}
                   />
                 </div>
 
