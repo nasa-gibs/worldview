@@ -6,6 +6,8 @@ import {
   timeScaleFromNumberKey,
   timeScaleToNumberKey
 } from '../../../modules/date/constants';
+import { toggleCustomModal } from '../../../modules/date/actions';
+import { connect } from 'react-redux';
 
 /*
  * CustomIntervalSelectorWidget for Custom Interval Selector
@@ -27,9 +29,6 @@ class CustomIntervalSelectorWidget extends PureComponent {
       this.props.toggleCustomIntervalModal();
     }
   }
-  closeCustomIntervalModal = () => {
-    this.props.toggleCustomIntervalModal(false);
-  }
   componentDidUpdate(prevProps) {
     // handle focus widget on opening
     if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
@@ -41,7 +40,8 @@ class CustomIntervalSelectorWidget extends PureComponent {
       customIntervalModalOpen,
       hasSubdailyLayers,
       customDelta,
-      customIntervalZoomLevel
+      customIntervalZoomLevel,
+      closeModal
     } = this.props;
     return customIntervalModalOpen && (
       <div
@@ -62,11 +62,22 @@ class CustomIntervalSelectorWidget extends PureComponent {
             changeZoomLevel={this.changeZoomLevel}
           />
         </div>
-        <i className="fa fa-times wv-close" onClick={this.closeCustomIntervalModal}/>
+        <i className="fa fa-times wv-close" onClick={closeModal}/>
       </div>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  closeModal: () => {
+    dispatch(toggleCustomModal(false, undefined));
+  }
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(CustomIntervalSelectorWidget);
 
 CustomIntervalSelectorWidget.propTypes = {
   changeCustomInterval: PropTypes.func,
@@ -76,5 +87,3 @@ CustomIntervalSelectorWidget.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   toggleCustomIntervalModal: PropTypes.func
 };
-
-export default CustomIntervalSelectorWidget;

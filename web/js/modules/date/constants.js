@@ -3,6 +3,7 @@ export const CHANGE_INTERVAL = 'DATE/CHANGE_INTERVAL';
 export const CHANGE_TIME_SCALE = 'DATE/CHANGE_TIME_SCALE';
 export const SELECT_DATE = 'DATE/SELECT_DATE';
 export const UPDATE_APP_NOW = 'DATE/UPDATE_APP_NOW';
+export const TOGGLE_CUSTOM_MODAL = 'DATE/TOGGLE_CUSTOM_MODAL';
 
 export const timeScaleFromNumberKey = {
   '0': 'custom',
@@ -63,4 +64,8 @@ export const timeScaleOptions = {
       // scaleMs: 31536000000 - REFERENCE ONLY - 365 days
     }
   }
+};
+export const customModalType = {
+  TIMELINE: 'timeline',
+  ANIMATION: 'animation'
 };

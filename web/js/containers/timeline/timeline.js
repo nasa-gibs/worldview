@@ -40,7 +40,8 @@ import {
   changeTimeScale,
   selectInterval,
   changeCustomInterval,
-  updateAppNow
+  updateAppNow,
+  toggleCustomModal
 } from '../../modules/date/actions';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import {
@@ -53,7 +54,8 @@ import {
 import {
   timeScaleFromNumberKey,
   timeScaleToNumberKey,
-  timeScaleOptions
+  timeScaleOptions,
+  customModalType
 } from '../../modules/date/constants';
 
 const ANIMATION_DELAY = 500;
@@ -90,7 +92,6 @@ class Timeline extends React.Component {
       initialLoadComplete: false,
       timelineHidden: false,
       hasMoved: false,
-      customIntervalModalOpen: false,
       rangeSelectorMax: { end: false, start: false, startOffset: -50, width: 50000 }
     };
     // left/right arrows
@@ -412,9 +413,8 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   toggleCustomIntervalModal = (isOpen) => {
-    this.setState({
-      customIntervalModalOpen: isOpen
-    });
+    const { toggleCustomModal } = this.props;
+    toggleCustomModal(isOpen, customModalType.TIMELINE);
   };
 
   /**
@@ -790,7 +790,8 @@ class Timeline extends React.Component {
       toggleActiveCompareState,
       parentOffset,
       isTourActive,
-      isDataDownload
+      isDataDownload,
+      timelineCustomModalOpen
     } = this.props;
     let {
       initialLoadComplete,
@@ -815,7 +816,6 @@ class Timeline extends React.Component {
       isTimelineDragging,
       isDraggerDragging,
       isAnimationDraggerDragging,
-      customIntervalModalOpen,
       showHoverLine,
       showDraggerTime,
       hoverLinePosition,
@@ -1013,9 +1013,8 @@ class Timeline extends React.Component {
                   <CustomIntervalSelectorWidget
                     customDelta={customIntervalValue}
                     customIntervalZoomLevel={customIntervalZoomLevel}
-                    toggleCustomIntervalModal={this.toggleCustomIntervalModal}
-                    customIntervalModalOpen={customIntervalModalOpen}
                     changeCustomInterval={this.changeCustomInterval}
+                    customIntervalModalOpen={timelineCustomModalOpen}
                     hasSubdailyLayers={hasSubdailyLayers}
                   />
                 </div>
@@ -1066,7 +1065,8 @@ function mapStateToProps(state) {
     delta,
     customInterval,
     customDelta,
-    appNow
+    appNow,
+    timelineCustomModalOpen
   } = date;
   const { screenWidth, lessThan } = browser;
   const { isCompareA, activeString } = compare;
@@ -1155,7 +1155,8 @@ function mapStateToProps(state) {
       compare.active,
     isDataDownload: sidebar.activeTab === 'download',
     isAnimationPlaying: animation.isPlaying,
-    isGifActive: animation.gifActive
+    isGifActive: animation.gifActive,
+    timelineCustomModalOpen
   };
 }
 
@@ -1179,6 +1180,9 @@ const mapDispatchToProps = dispatch => ({
   // changes to non-custom timescale interval, sets customSelected to TRUE/FALSE
   selectInterval: (delta, timeScale, customSelected) => {
     dispatch(selectInterval(delta, timeScale, customSelected));
+  },
+  toggleCustomModal: (open, toggleBy) => {
+    dispatch(toggleCustomModal(open, toggleBy));
   },
   openAnimation: () => {
     dispatch(openAnimation());
@@ -1245,11 +1249,13 @@ Timeline.propTypes = {
   selectedDate: PropTypes.object,
   selectInterval: PropTypes.func,
   startDate: PropTypes.string,
+  timelineCustomModalOpen: PropTypes.bool,
   timelineEndDateLimit: PropTypes.string,
   timelineStartDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
   timeScaleChangeUnit: PropTypes.string,
   toggleActiveCompareState: PropTypes.func,
+  toggleCustomModal: PropTypes.func,
   updateAppNow: PropTypes.func
 };
 

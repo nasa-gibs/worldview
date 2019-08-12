@@ -3,7 +3,8 @@ import {
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
-  UPDATE_APP_NOW
+  UPDATE_APP_NOW,
+  TOGGLE_CUSTOM_MODAL
 } from './constants';
 
 export function changeTimeScale(num) {
@@ -43,5 +44,12 @@ export function selectInterval(delta, interval, customSelected) {
     value: interval,
     delta,
     customSelected
+  };
+}
+export function toggleCustomModal(open, toggleBy) {
+  return {
+    type: TOGGLE_CUSTOM_MODAL,
+    value: open,
+    toggleBy
   };
 }
