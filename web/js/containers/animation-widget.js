@@ -17,11 +17,17 @@ import CustomIntervalSelectorWidget from '../components/timeline/custom-interval
 import PlayQueue from '../components/animation-widget/play-queue';
 import { Notify } from '../components/image-download/notify';
 import { promiseImageryForTime } from '../modules/map/selectors';
-import { selectDate, selectInterval, changeCustomInterval } from '../modules/date/actions';
 import GifContainer from './gif';
 import {
+  selectDate,
+  selectInterval,
+  changeCustomInterval,
+  toggleCustomModal
+} from '../modules/date/actions';
+import {
   timeScaleFromNumberKey,
-  timeScaleToNumberKey
+  timeScaleToNumberKey,
+  customModalType
 } from '../modules/date/constants';
 import { getQueueLength, getMaxQueueLength } from '../modules/animation/util';
 import {
@@ -246,15 +252,14 @@ class AnimationWidget extends React.Component {
     };
   }
   /**
-   * @desc Toggle showing the custom interval modal
-   * @param {Boolean} isOpen
-   * @returns {void}
-   */
-  toggleCustomIntervalModal = (isOpen) => {
-    this.setState({
-      customIntervalModalOpen: isOpen
-    });
-  };
+  * @desc show/hide custom interval modal
+  * @param {Boolean} isOpen
+  * @returns {void}
+  */
+ toggleCustomIntervalModal = (isOpen) => {
+   const { toggleCustomModal } = this.props;
+   toggleCustomModal(isOpen, customModalType.ANIMATION);
+ };
   /**
   * @desc handle SET of custom time scale panel
   * @param {Number} delta
@@ -266,7 +271,6 @@ class AnimationWidget extends React.Component {
  };
 
  render() {
-   const { customIntervalModalOpen } = this.state;
    const {
      looping,
      isPlaying,
@@ -292,6 +296,7 @@ class AnimationWidget extends React.Component {
      customSelected,
      customDelta,
      customInterval,
+     animationCustomModalOpen,
      hasSubdailyLayers
    } = this.props;
    if (!isActive) {
@@ -420,8 +425,7 @@ class AnimationWidget extends React.Component {
            <CustomIntervalSelectorWidget
              customDelta={customDelta}
              customIntervalZoomLevel={customInterval}
-             toggleCustomIntervalModal={this.toggleCustomIntervalModal}
-             customIntervalModalOpen={customIntervalModalOpen}
+             customIntervalModalOpen={animationCustomModalOpen}
              changeCustomInterval={this.changeCustomInterval}
              hasSubdailyLayers={hasSubdailyLayers}
            />
@@ -446,7 +450,15 @@ function mapStateToProps(state) {
     browser
   } = state;
   let { startDate, endDate, speed, loop, isPlaying, isActive, gifActive } = animation;
-  let { customSelected, interval, delta, customInterval, customDelta, appNow } = date;
+  let {
+    customSelected,
+    interval,
+    delta,
+    customInterval,
+    customDelta,
+    appNow,
+    animationCustomModalOpen
+  } = date;
   const activeStr = compare.activeString;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
   const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
@@ -477,6 +489,7 @@ function mapStateToProps(state) {
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
 
   return {
+    animationCustomModalOpen,
     customSelected,
     startDate,
     endDate,
@@ -554,6 +567,9 @@ const mapDispatchToProps = dispatch => ({
   toggleGif: () => {
     dispatch(toggleComponentGifActive());
   },
+  toggleCustomModal: (open, toggleBy) => {
+    dispatch(toggleCustomModal(open, toggleBy));
+  },
   onSlide: num => {
     dispatch(changeFrameRate(num));
   },
@@ -585,6 +601,7 @@ RangeHandle.propTypes = {
   value: PropTypes.number
 };
 AnimationWidget.propTypes = {
+  animationCustomModalOpen: PropTypes.bool,
   changeCustomInterval: PropTypes.func,
   currentDate: PropTypes.object,
   customDelta: PropTypes.number,
@@ -623,5 +640,6 @@ AnimationWidget.propTypes = {
   speed: PropTypes.number,
   startDate: PropTypes.object,
   subDailyMode: PropTypes.bool,
+  toggleCustomModal: PropTypes.func,
   toggleGif: PropTypes.func
 };
