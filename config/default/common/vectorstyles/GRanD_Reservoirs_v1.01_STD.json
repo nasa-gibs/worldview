@@ -1,0 +1,24 @@
+{
+  "version": 8,
+  "name": "SEDAC",
+  "sources": {
+    "GRanD_Reservoirs_v1.01_STD": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/GRanD_Reservoirs_v1.01_STD/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "GRanD_Reservoirs_v1.01_STD",
+      "source": "GRanD_Reservoirs_v1.01_STD",
+      "source-layer": "GRanD_Reservoirs_v1.01_STD",
+      "source-description": "Default",
+      "type": "fill",
+      "paint": {
+        "fill-color": "#004DA8"
+      }
+    }
+  ]
+}
