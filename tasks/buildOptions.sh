@@ -9,13 +9,15 @@ OPT_DIR="$BASE/config/default"
 BUILD_DIR="$BASE/build/options-build"
 DEST_DIR="$BASE/build/options"
 PYTHON_SCRIPTS_DIR="$TASKS_DIR/python2.7"
+PYTHON_VERSION="$(python -V 2>&1)"
+
 
 # If there is an active directory, use instead of defaults
 if [ -d "$BASE/config/active" ]; then
     SRC_DIR="$BASE/config/active"
     OPT_DIR="$BASE/config/active"
 fi
-if command -v python3 &>/dev/null; then
+if [command -v python3 &>/dev/null] || [[ $PYTHON_VERSION = *"Python 3"* ]]; then
     PYTHON_SCRIPTS_DIR="$TASKS_DIR/python3"
 fi
 # If $IGNORE_ERRORS is true, don't fail on errors

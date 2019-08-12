@@ -1,7 +1,8 @@
 #!/bin/bash
 # Install python dependencies
+PYTHON_VERSION="$(python -V 2>&1)"
 if [ $1 = "linux" ]; then
-  if command -v python3 &>/dev/null; then
+  if [command -v python3 &>/dev/null] || [[ $PYTHON_VERSION = *"Python 3"* ]]; then
     echo "Installing virtualenv with python3"
     python3 -m pip install --user virtualenv
     python3 -m virtualenv .python
@@ -20,7 +21,7 @@ if [ $1 = "linux" ]; then
   fi
 else
   # If is a window machine use virtualenv
-    if command -v python3 &>/dev/null; then
+    if [command -v python3 &>/dev/null] || [[ $PYTHON_VERSION = *"Python 3"* ]]; then
       virtualenv .python
       PATH=.python/Scripts:${PATH} pip install -r requirements.txt
     else
