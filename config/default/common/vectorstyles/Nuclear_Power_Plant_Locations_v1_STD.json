@@ -1,0 +1,28 @@
+{
+  "version": 8,
+  "name": "SEDAC",
+  "sources": {
+    "Nuclear_Power_Plant_Locations_v1_STD": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/nrt/Nuclear_Power_Plant_Locations_v1_STD/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "Nuclear_Power_Plant_Locations_v1_STD",
+      "source": "Nuclear_Power_Plant_Locations_v1_STD",
+      "source-layer": "Nuclear_Power_Plant_Locations_v1_STD",
+      "source-description": "Default",
+      "type": "circle",
+      "paint": {
+        "circle-radius": {
+          "base": 2,
+          "stops": [[12, 1], [22, 10]]
+        },
+        "circle-color": "#A52A2A"
+      }
+    }
+  ]
+}
