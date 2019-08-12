@@ -21,7 +21,7 @@
           "base": 2,
           "stops": [[12, 1], [22, 10]]
         },
-        "circle-color": "#A52A2A"
+        "circle-color": "rgb(165, 42, 42)"
       }
     }
   ]
