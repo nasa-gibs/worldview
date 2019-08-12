@@ -66,6 +66,23 @@ module.exports = {
       }
     );
   },
+  'Opening custom interval widget': function(client) {
+    client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
+    client.waitForElementVisible(
+      localSelectors.animationButton,
+      TIME_LIMIT,
+      function(el) {
+        client
+          .useCss()
+          .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
+          .click('.wv-animation-widget-header #timeline-interval #interval-custom-static');
+        client.pause(1000);
+        client.useCss().assert.elementPresent('#wv-animation-widget .custom-interval-widget');
+        client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', 'CUSTOM');
+        client.useCss().assert.containsText('#timeline #current-interval', 'CUSTOM');
+      }
+    );
+  },
   after: function(client) {
     client.end();
   }
