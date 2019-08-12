@@ -98,7 +98,7 @@ class TimeScaleIntervalChange extends PureComponent {
     } = this.state;
     let {
       customSelected,
-      subDailyMode,
+      hasSubdailyLayers,
       timeScaleChangeUnit
     } = this.props;
     return (
@@ -142,7 +142,7 @@ class TimeScaleIntervalChange extends PureComponent {
               >
                 Day
               </span>
-              {subDailyMode ? (
+              {hasSubdailyLayers ? (
                 <React.Fragment>
                   <span
                     id="interval-hours"
@@ -187,8 +187,8 @@ TimeScaleIntervalChange.propTypes = {
   customDelta: PropTypes.number,
   customIntervalZoomLevel: PropTypes.string,
   customSelected: PropTypes.bool,
+  hasSubdailyLayers: PropTypes.bool,
   setTimeScaleIntervalChangeUnit: PropTypes.func,
-  subDailyMode: PropTypes.bool,
   timeScaleChangeUnit: PropTypes.string
 };
 

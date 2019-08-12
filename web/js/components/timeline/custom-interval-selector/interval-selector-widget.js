@@ -39,7 +39,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
   render() {
     let {
       customIntervalModalOpen,
-      subDailyMode,
+      hasSubdailyLayers,
       customDelta,
       customIntervalZoomLevel
     } = this.props;
@@ -57,7 +57,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
             changeDelta={this.changeDelta}
           />
           <TimeScaleSelect
-            subDailyMode={subDailyMode}
+            hasSubdailyLayers={hasSubdailyLayers}
             zoomLevel={timeScaleFromNumberKey[customIntervalZoomLevel]}
             changeZoomLevel={this.changeZoomLevel}
           />
@@ -73,7 +73,7 @@ CustomIntervalSelectorWidget.propTypes = {
   customDelta: PropTypes.number,
   customIntervalModalOpen: PropTypes.bool,
   customIntervalZoomLevel: PropTypes.number,
-  subDailyMode: PropTypes.bool,
+  hasSubdailyLayers: PropTypes.bool,
   toggleCustomIntervalModal: PropTypes.func
 };
 
