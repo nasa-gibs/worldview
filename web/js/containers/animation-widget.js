@@ -459,9 +459,6 @@ function mapStateToProps(state) {
     activeLayersForProj,
     palettes[activeStr]
   );
-  const useInterval = customSelected ? customInterval : interval;
-  const subDailyInterval = useInterval > 3;
-  const subDailyMode = subDailyInterval && hasSubdailyLayers;
   const minDate = new Date(config.startDate);
   const maxDate = appNow;
   const animationIsActive = isActive &&
@@ -470,6 +467,14 @@ function mapStateToProps(state) {
     sidebar.activeTab !== 'download' && // No Animation when data download is active
     !compare.active &&
     !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'); // No Animation when Image download is open
+
+  if (!hasSubdailyLayers) {
+    interval = interval > 3 ? 3 : interval;
+    customInterval = customInterval > 3 ? 3 : customInterval;
+  }
+  const useInterval = customSelected ? customInterval : interval;
+  const subDailyInterval = useInterval > 3;
+  const subDailyMode = subDailyInterval && hasSubdailyLayers;
 
   return {
     customSelected,
