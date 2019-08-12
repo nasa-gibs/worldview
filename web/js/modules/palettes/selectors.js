@@ -24,11 +24,11 @@ export function getPalette(layerId, index, groupStr, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   const renderedPalette = lodashGet(
     state,
-    `palettes.rendered.${layerId}.maps.${index}`
+    `palettes.rendered['${layerId}'].maps[${index}]`
   );
   const customPalette = lodashGet(
     state,
-    `palettes.${groupStr}.${layerId}.maps.${index}`
+    `palettes['${groupStr}']['${layerId}'].maps[${index}]`
   );
 
   if (customPalette) {
@@ -42,7 +42,7 @@ export function getPalette(layerId, index, groupStr, state) {
 
 export function getRenderedPalette(layerId, index, state) {
   const { config, palettes } = state;
-  var name = lodashGet(config, `layers.${layerId}.palette.id`);
+  var name = lodashGet(config, `layers['${layerId}'].palette.id`);
   var palette = palettes.rendered[name];
   if (!palette) {
     throw new Error(name + ' Is not a rendered palette');

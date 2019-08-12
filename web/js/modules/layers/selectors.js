@@ -326,11 +326,12 @@ export function dateRange(spec, activeLayers, config) {
   }
 }
 export function pushToBottom(id, layers, layerSplit) {
+  let decodedId = util.decodeId(id);
   var oldIndex = lodashFindIndex(layers, {
-    id: id
+    id: decodedId
   });
   if (oldIndex < 0) {
-    throw new Error('Layer is not active: ' + id);
+    throw new Error('Layer is not active: ' + decodedId);
   }
   var def = layers[oldIndex];
   layers.splice(oldIndex, 1);
@@ -343,11 +344,12 @@ export function pushToBottom(id, layers, layerSplit) {
 }
 
 export function moveBefore(sourceId, targetId, layers) {
+  let decodedId = util.decodeId(sourceId);
   var sourceIndex = lodashFindIndex(layers, {
-    id: sourceId
+    id: decodedId
   });
   if (sourceIndex < 0) {
-    throw new Error('Layer is not active: ' + sourceId);
+    throw new Error('Layer is not active: ' + decodedId);
   }
   var sourceDef = layers[sourceIndex];
   var targetIndex = lodashFindIndex(layers, {
