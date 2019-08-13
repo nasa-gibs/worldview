@@ -2,7 +2,7 @@
 
 const shell = require('shelljs');
 
-let dirs = [
+const dirs = [
   'web/build'
 ];
 
