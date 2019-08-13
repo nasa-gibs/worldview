@@ -326,7 +326,7 @@ export function dateRange(spec, activeLayers, config) {
   }
 }
 export function pushToBottom(id, layers, layerSplit) {
-  let decodedId = util.decodeId(id);
+  const decodedId = util.decodeId(id);
   var oldIndex = lodashFindIndex(layers, {
     id: decodedId
   });
@@ -344,7 +344,7 @@ export function pushToBottom(id, layers, layerSplit) {
 }
 
 export function moveBefore(sourceId, targetId, layers) {
-  let decodedId = util.decodeId(sourceId);
+  const decodedId = util.decodeId(sourceId);
   var sourceIndex = lodashFindIndex(layers, {
     id: decodedId
   });
