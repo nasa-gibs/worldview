@@ -42,13 +42,13 @@ export function getDataSelectionSize(selectedGranules) {
   return sizeValid ? totalSize : 0;
 }
 export function groupByProducts(config, dataProducts) {
-  let products = {};
+  const products = {};
   // If no products have been defined in the configuration, return
   // the empty object.
   if (!config.products) {
     return products;
   }
-  for (let layer of dataProducts) {
+  for (const layer of dataProducts) {
     // If products is a list, use it. If a single item, convert to a list.
     // If no products are defined, add it to the no product group.
     let productIds = util.toArray(layer.product);

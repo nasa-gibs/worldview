@@ -448,8 +448,8 @@ class Timeline extends React.Component {
   */
   setTimeScaleIntervalChangeUnit = (timeScale, modalOpen) => {
     let delta;
-    let { customIntervalZoomLevel, customIntervalValue } = this.props;
-    let customSelected = timeScale === 'custom';
+    const { customIntervalZoomLevel, customIntervalValue } = this.props;
+    const customSelected = timeScale === 'custom';
 
     if (customSelected && customIntervalZoomLevel && customIntervalValue) {
       timeScale = customIntervalZoomLevel;
@@ -825,8 +825,8 @@ class Timeline extends React.Component {
       hoverLinePosition,
       hasMoved
     } = this.state;
-    let selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
-    let isTimelineHidden = timelineHidden || hideTimeline;
+    const selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
+    const isTimelineHidden = timelineHidden || hideTimeline;
     const chevronDirection = isTimelineHidden ? 'left' : 'right';
     return (
       <div className="timeline-container">
