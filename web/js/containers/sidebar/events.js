@@ -100,7 +100,7 @@ class Events extends React.Component {
     let scrollBarVerticalTop = 0;
     if (visibleEvents && selected.id) {
       // find index for scrollBarVerticalTop calculation on selected event
-      let index = Object.keys(visibleEvents).indexOf(selected.id);
+      const index = Object.keys(visibleEvents).indexOf(selected.id);
       // 12 === li total top/bottom padding
       // 32.2 === li height (varies slightly, Chrome 100% browser zoom height used)
       scrollBarVerticalTop = index ? index * (12 + 32.2) : 0;
