@@ -80,7 +80,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
-    "browserstack-capabilities": "^0.4.0",
+    "browserstack-capabilities": "^0.7.0",
     "browserstack-local": "^1.3.0",
     "canvas": "^1.6.11",
     "cheerio": "^1.0.0-rc.2",
