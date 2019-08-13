@@ -36,8 +36,7 @@ class Layer extends React.Component {
       index: index
     };
   }
-
-  getPaletteLegend() {
+  getPaletteLegend = () => {
     const {
       layer,
       runningObject,
@@ -71,8 +70,7 @@ class Layer extends React.Component {
       requestPalette(layer.id);
     }
   }
-
-  getDisabledTitle(layer) {
+  getDisabledTitle = (layer) => {
     var startDate, endDate;
     if (layer.startDate && layer.endDate) {
       startDate = util.parseDate(layer.startDate);
@@ -107,8 +105,7 @@ class Layer extends React.Component {
       return 'No data on selected date for this layer';
     }
   }
-
-  stopPropagation(e) {
+  stopPropagation = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
     e.preventDefault();
@@ -296,7 +293,7 @@ function mapStateToProps(state, ownProps) {
   const { palettes, config, map } = state;
   const hasPalette = !lodashIsEmpty(layer.palette);
   const renderedPalettes = palettes.rendered;
-  const paletteName = lodashGet(config, `layers.${layer.id}.palette.id`);
+  const paletteName = lodashGet(config, `layers['${layer.id}'].palette.id`);
   const paletteLegends =
     hasPalette && renderedPalettes[paletteName]
       ? getPaletteLegends(layer.id, layerGroupName, state)
@@ -372,8 +369,8 @@ const mapDispatchToProps = dispatch => ({
       })
     );
   },
-  requestPalette(id) {
-    return dispatch(requestPalette(id));
+  requestPalette: (id) => {
+    dispatch(requestPalette(id));
   }
 });
 export default connect(
