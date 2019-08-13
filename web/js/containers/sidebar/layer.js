@@ -36,6 +36,7 @@ class Layer extends React.Component {
       index: index
     };
   }
+
   getPaletteLegend = () => {
     const {
       layer,
@@ -70,6 +71,7 @@ class Layer extends React.Component {
       requestPalette(layer.id);
     }
   }
+
   getDisabledTitle = (layer) => {
     var startDate, endDate;
     if (layer.startDate && layer.endDate) {
@@ -105,6 +107,7 @@ class Layer extends React.Component {
       return 'No data on selected date for this layer';
     }
   }
+
   stopPropagation = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
