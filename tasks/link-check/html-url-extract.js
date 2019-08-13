@@ -5,15 +5,15 @@ const fs = require('fs');
 // create collection of HTML file addresses from directory
 const walk = (dir) => {
   let results = [];
-  let list = fs.readdirSync(dir);
+  const list = fs.readdirSync(dir);
   list.forEach(function(file) {
     file = dir + '/' + file;
-    let stat = fs.statSync(file);
+    const stat = fs.statSync(file);
     if (stat && stat.isDirectory()) {
       /* Recurse into a subdirectory */
       results = results.concat(walk(file));
     } else {
-      let fileType = file.split('.').pop();
+      const fileType = file.split('.').pop();
       if (fileType === 'html') {
         results.push(file);
       }
@@ -29,14 +29,14 @@ const getUrls = (htmlArray) => {
   const scrapedHTML = [];
 
   for (let i = 0; i < htmlArray.length; i++) {
-    let $ = cheerio.load(fs.readFileSync(htmlArray[i]));
-    let links = $('a');
+    const $ = cheerio.load(fs.readFileSync(htmlArray[i]));
+    const links = $('a');
 
     // create url object:
     // { 'AIRS - The AIRS instrument suite physical retrievals': 'http://airs.jpl.nasa.gov/data/physical_retrievals' }
     $(links).each(function(i, link) {
-      let linkRel = $(link).text() || 'EMPTY';
-      let linkHref = $(link).attr('href');
+      const linkRel = $(link).text() || 'EMPTY';
+      const linkHref = $(link).attr('href');
 
       if (trackDoubles[linkRel] !== linkHref) {
         scrapedHTML.push({ [linkRel]: linkHref });

@@ -25,6 +25,7 @@ export default class Crop extends React.Component {
       }
     };
   }
+
   renderCoords() {
     const { coordinates, topRightStyle, bottomLeftStyle } = this.props;
     if (bottomLeftStyle.width < 50) {
@@ -49,6 +50,7 @@ export default class Crop extends React.Component {
       </React.Fragment>
     );
   }
+
   render() {
     const {
       onClose,

@@ -30,8 +30,9 @@ export default class ResolutionTable extends React.Component {
       );
     }
   }
+
   render() {
-    let imageSize = this.renderImageSize();
+    const imageSize = this.renderImageSize();
     const { width, height, onClick, valid } = this.props;
     return (
       <div className="wv-image-download-grid">

@@ -12,25 +12,30 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
   changeTimeScale = timeScale => {
     this.props.changeTimeScale(timeScale);
   };
+
   // Individual linking timescale handlers
   changeTimeScaleYear = () => {
     this.changeTimeScale(1);
   };
+
   changeTimeScaleMonth = () => {
     this.changeTimeScale(2);
   };
+
   changeTimeScaleDay = () => {
     this.changeTimeScale(3);
   };
+
   changeTimeScaleHour = () => {
     this.changeTimeScale(4);
   };
+
   changeTimeScaleMinute = () => {
     this.changeTimeScale(5);
   };
 
   render() {
-    let { timeScale, toolTipHovered, hasSubdailyLayers } = this.props;
+    const { timeScale, toolTipHovered, hasSubdailyLayers } = this.props;
     return (
       <React.Fragment>
         <div id="zoom-btn-container-axis">

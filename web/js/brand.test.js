@@ -1,6 +1,6 @@
 import brand from './brand';
 
-let unmocked = {};
+const unmocked = {};
 
 beforeAll(() => {
   unmocked.VERSION = brand.VERSION;

@@ -51,8 +51,8 @@ class Layer extends React.Component {
       isMobile
     } = this.props;
     if (!lodashIsEmpty(renderedPalette)) {
-      let isRunningData = !!runningObject;
-      let colorHex = isRunningData ? runningObject.paletteHex : null;
+      const isRunningData = !!runningObject;
+      const colorHex = isRunningData ? runningObject.paletteHex : null;
       return (
         <PaletteLegend
           layer={layer}
@@ -110,6 +110,7 @@ class Layer extends React.Component {
     e.stopPropagation();
     e.preventDefault();
   }
+
   render() {
     const {
       layerGroupName,

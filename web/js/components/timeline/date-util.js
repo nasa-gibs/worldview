@@ -1,8 +1,8 @@
 // return boolean based on is dateChecking is between front and back dates
 export const getIsBetween = (date, frontDate, backDate) => {
-  let dateValue = new Date(date).getTime();
-  let frontDateValue = new Date(frontDate).getTime();
-  let backDateValue = new Date(backDate).getTime();
+  const dateValue = new Date(date).getTime();
+  const frontDateValue = new Date(frontDate).getTime();
+  const backDateValue = new Date(backDate).getTime();
   return dateValue >= frontDateValue && dateValue <= backDateValue;
 };
 

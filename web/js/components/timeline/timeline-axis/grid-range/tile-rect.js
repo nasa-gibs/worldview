@@ -10,8 +10,8 @@ const tileRectTimeScaleOptions = {
   minute: function() {
     return {
       lineLengthY: (item) => {
-        let timeScaleUnit = item.dateObject.minutes;
-        let lineLengthY = timeScaleUnit === 0 ||
+        const timeScaleUnit = item.dateObject.minutes;
+        const lineLengthY = timeScaleUnit === 0 ||
             timeScaleUnit === 15 ||
             timeScaleUnit === 30 ||
             timeScaleUnit === 45 ? 62 : timeScaleUnit % 5 === 0 ? 20 : 10;
@@ -22,8 +22,8 @@ const tileRectTimeScaleOptions = {
   hour: function() {
     return {
       lineLengthY: (item) => {
-        let timeScaleUnit = item.dateObject.hours;
-        let lineLengthY = timeScaleUnit === 0 ? 62
+        const timeScaleUnit = item.dateObject.hours;
+        const lineLengthY = timeScaleUnit === 0 ? 62
           : timeScaleUnit === 6 ||
             timeScaleUnit === 12 ||
             timeScaleUnit === 18 ? 22 : 10;
@@ -34,9 +34,9 @@ const tileRectTimeScaleOptions = {
   day: function() {
     return {
       lineLengthY: (item) => {
-        let timeScaleUnit = item.dateObject.date;
-        let dayOfWeek = item.dayOfWeek;
-        let lineLengthY = timeScaleUnit === 1 ? 62 : dayOfWeek === 0 ? 22 : 10;
+        const timeScaleUnit = item.dateObject.date;
+        const dayOfWeek = item.dayOfWeek;
+        const lineLengthY = timeScaleUnit === 1 ? 62 : dayOfWeek === 0 ? 22 : 10;
         return lineLengthY;
       }
     };
@@ -44,8 +44,8 @@ const tileRectTimeScaleOptions = {
   month: function() {
     return {
       lineLengthY: (item) => {
-        let timeScaleUnit = item.dateObject.months;
-        let lineLengthY = timeScaleUnit === 0 ? 62 : timeScaleUnit % 3 === 0 ? 22 : 10;
+        const timeScaleUnit = item.dateObject.months;
+        const lineLengthY = timeScaleUnit === 0 ? 62 : timeScaleUnit % 3 === 0 ? 22 : 10;
         return lineLengthY;
       }
     };
@@ -53,8 +53,8 @@ const tileRectTimeScaleOptions = {
   year: function() {
     return {
       lineLengthY: (item) => {
-        let timeScaleUnit = item.dateObject.years;
-        let lineLengthY = timeScaleUnit % 10 === 0 ? 62 : timeScaleUnit % 5 === 0 ? 22 : 10;
+        const timeScaleUnit = item.dateObject.years;
+        const lineLengthY = timeScaleUnit % 10 === 0 ? 62 : timeScaleUnit % 5 === 0 ? 22 : 10;
         return lineLengthY;
       }
     };
@@ -73,20 +73,20 @@ class TileRect extends PureComponent {
   * @returns {void}
   */
   showHover = (e) => {
-    let { item, index } = this.props;
+    const { item, index } = this.props;
     this.props.showHover(e, item.rawDate, item.rawNextDate, index);
   }
 
   render() {
-    let {
+    const {
       item,
       gridWidth,
       index,
       timeScale
     } = this.props;
-    let tileOptions = tileRectTimeScaleOptions[timeScale]();
-    let lineLengthY = tileOptions.lineLengthY(item);
-    let whiteLineStrokeWidth = lineLengthY !== 10 ? 2 : 1;
+    const tileOptions = tileRectTimeScaleOptions[timeScale]();
+    const lineLengthY = tileOptions.lineLengthY(item);
+    const whiteLineStrokeWidth = lineLengthY !== 10 ? 2 : 1;
     return (
       <React.Fragment>
         <g onMouseMove={this.showHover}>

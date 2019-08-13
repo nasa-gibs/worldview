@@ -19,6 +19,7 @@ class ModalContainer extends Component {
       isDraggable: props.isDraggable
     };
   }
+
   // static getDerivedStateFromProps(newProps, state) {
   //   const customProps = newProps.customProps;
   //   if (
@@ -41,6 +42,7 @@ class ModalContainer extends Component {
       maxWidth: props.width
     };
   }
+
   getTemplateBody() {
     const { bodyTemplate } = this.props;
     return bodyTemplate.isLoading ? (

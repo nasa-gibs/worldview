@@ -8,19 +8,22 @@ export default class SimpleBar extends React.Component {
       needsScrollBar: false
     };
   }
+
   componentDidMount() {
     const element = this.caseEl;
     this.scrollBar = new ScrollBar(element);
     this.content = this.scrollBar.getScrollElement();
   }
+
   componentDidUpdate() {
     this.updateBoolean();
     // scroll to vertical axis point - note: 0 would be no scroll
-    let verticalTop = Math.floor(this.props.scrollBarVerticalTop);
+    const verticalTop = Math.floor(this.props.scrollBarVerticalTop);
     if (verticalTop !== 0) {
       this.content.scrollTop = verticalTop;
     }
   }
+
   /**
    * Use offsetHeight to determine if scrollbar should be visible
    * https://stackoverflow.com/a/42026562/4589331
@@ -32,6 +35,7 @@ export default class SimpleBar extends React.Component {
       this.setState({ needsScrollBar: hasOverflowingChildren });
     }
   }
+
   render() {
     return (
       <div

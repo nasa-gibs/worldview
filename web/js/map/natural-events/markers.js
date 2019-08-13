@@ -42,10 +42,10 @@ export default function markers(ui, store) {
       if (proj.selected.id !== 'geographic') {
         // check for polygon geometries
         if (geometry.type === 'Polygon') {
-          let coordinatesTransform = coordinates[0].map(coordinate => {
+          const coordinatesTransform = coordinates[0].map(coordinate => {
             return olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs);
           });
-          let extent = olExtent.boundingExtent(coordinatesTransform);
+          const extent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(extent);
           if (isSelected) {
             marker.boundingBox = createBoundingBox(coordinatesTransform);
@@ -61,7 +61,7 @@ export default function markers(ui, store) {
         }
       } else {
         if (geometry.type === 'Polygon') {
-          let extent = olExtent.boundingExtent(geometry.coordinates[0]);
+          const extent = olExtent.boundingExtent(geometry.coordinates[0]);
           coordinates = olExtent.getCenter(extent);
           if (isSelected) {
             marker.boundingBox = createBoundingBox(geometry.coordinates);
@@ -89,8 +89,8 @@ export default function markers(ui, store) {
         : { title: 'Default', slug: 'default' };
 
       // get maxExtent of current projection and check if marker is within range
-      let maxExtent = proj.selected.maxExtent;
-      let maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
+      const maxExtent = proj.selected.maxExtent;
+      const maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
       // only create marker if within projection extent range
       if (maxExtentCheck) {
         marker.pin = createPin(event.id, category, isSelected);

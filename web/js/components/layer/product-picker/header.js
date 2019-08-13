@@ -22,11 +22,13 @@ class ProductPickerHeader extends React.Component {
       inputValue: props.inputValue
     };
   }
+
   componentDidMount() {
     setTimeout(() => {
       if (this._input && !this.props.isMobile) this._input.focus();
     }, 500);
   }
+
   /**
    * Go back to original screen
    * @method revertToInitialScreen
@@ -36,10 +38,12 @@ class ProductPickerHeader extends React.Component {
     this.props.updateListState('category');
     this.setState({ inputValue: '' });
   }
+
   handleChange(e) {
     this.props.runSearch(e.target.value);
     this.setState({ inputValue: e.target.value });
   }
+
   render() {
     const isAutoFocus = !util.browser.touchDevice;
     const { selectedProjection, listType, category, width } = this.props;

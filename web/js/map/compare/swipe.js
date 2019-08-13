@@ -33,6 +33,7 @@ export class Swipe {
       }
     });
   }
+
   create() {
     line = addLineOverlay(this.map);
     this.update();
@@ -57,6 +58,7 @@ export class Swipe {
       callback.call(this, layer);
     }
   }
+
   update(isCompareA, groupName) {
     var mapLayers = this.map.getLayers().getArray();
     if (!groupName) {
@@ -68,6 +70,7 @@ export class Swipe {
       this.applyEventsToBaseLayers(mapLayers[1], applyLayerListeners);
     }
   }
+
   /**
    * Clip the top layer at the right xOffset
    * @param {Object} event | OL Precompose event object
@@ -81,6 +84,7 @@ export class Swipe {
     ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);
     ctx.clip();
   }
+
   /**
    * Clip the reverse so users don't see this layerGroup when the other
    * Layer group is transparent
@@ -95,6 +99,7 @@ export class Swipe {
     ctx.rect(0, 0, ctx.canvas.width - width, ctx.canvas.height);
     ctx.clip();
   }
+
   destroy() {
     mapCase.removeChild(line);
     this.removeListenersFromLayers(topLayers);
@@ -102,6 +107,7 @@ export class Swipe {
     topLayers = [];
     bottomLayers = [];
   }
+
   /**
    * Remove all listeners from layer group
    * @param {Array} layers | Layer group
@@ -112,6 +118,7 @@ export class Swipe {
       layer.un('postcompose', restore);
     });
   }
+
   /**
    * Remove all listeners from layer group
    * @param {Array} layers | Layer group

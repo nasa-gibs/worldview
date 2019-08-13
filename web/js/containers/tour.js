@@ -56,12 +56,14 @@ class Tour extends React.Component {
     this.decreaseStep = this.decreaseStep.bind(this);
     if (currentStory && currentStoryIndex !== -1) this.fetchMetadata(currentStory, 0);
   }
+
   toggleModalStart(e) {
     e.preventDefault();
     this.setState({
       modalStart: !this.state.modalStart
     });
   }
+
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     if (e) e.preventDefault();
     this.setState({
@@ -91,6 +93,7 @@ class Tour extends React.Component {
       this.props.renderedPalettes
     );
   }
+
   fetchMetadata(currentStory, stepIndex) {
     var description = currentStory.steps[stepIndex]['description'];
     var { origin, pathname } = window.location;
@@ -106,10 +109,10 @@ class Tour extends React.Component {
     fetch(uri)
       .then(res => (res.ok ? res.text() : errorMessage))
       .then(body => {
-        let isMetadataSnippet = !body.match(
+        const isMetadataSnippet = !body.match(
           /<(head|body|html|style|script)[^>]*>/i
         );
-        let description = isMetadataSnippet ? body : errorMessage;
+        const description = isMetadataSnippet ? body : errorMessage;
         this.setState({
           description: description,
           isLoadingMeta: false,
@@ -120,6 +123,7 @@ class Tour extends React.Component {
         this.setState({ description: error, isLoadingMeta: false })
       );
   }
+
   resetTour(e) {
     if (e) e.preventDefault();
     // Tour startup modal shown by clicking "More Stories" button at end of story
@@ -135,6 +139,7 @@ class Tour extends React.Component {
       currentStep: 0
     });
   }
+
   toggleModalInProgress(e) {
     e.preventDefault();
     this.setState({
@@ -156,6 +161,7 @@ class Tour extends React.Component {
       }
     });
   }
+
   incrementStep(e) {
     const {
       currentStep,
@@ -165,10 +171,10 @@ class Tour extends React.Component {
     } = this.state;
 
     if (currentStep + 1 <= totalSteps) {
-      let newStep = currentStep + 1;
+      const newStep = currentStep + 1;
       this.fetchMetadata(currentStory, currentStep);
       this.setState({ currentStep: newStep });
-      let storyStep = currentStory.steps[newStep - 1];
+      const storyStep = currentStory.steps[newStep - 1];
       const transition = getTransitionAttr(
         storyStep.transition.element,
         storyStep.transition.action
@@ -194,7 +200,7 @@ class Tour extends React.Component {
   decreaseStep(e) {
     const { currentStep, currentStory, currentStoryId } = this.state;
     if (currentStep - 1 >= 1) {
-      let newStep = currentStep - 1;
+      const newStep = currentStep - 1;
       this.fetchMetadata(currentStory, newStep - 1);
       this.setState({ currentStep: newStep });
       const storyStep = currentStory.steps[newStep - 1];
@@ -221,6 +227,7 @@ class Tour extends React.Component {
       });
     }
   }
+
   endTour(e) {
     e.preventDefault();
     if (!this.state.showDisabledAlert) {
@@ -229,6 +236,7 @@ class Tour extends React.Component {
       this.setState({ tourEnded: true });
     }
   }
+
   renderSupportAlert() {
     return (
       <AlertUtil
@@ -240,6 +248,7 @@ class Tour extends React.Component {
       />
     );
   }
+
   renderDisableAlert() {
     return (
       <AlertUtil
@@ -251,6 +260,7 @@ class Tour extends React.Component {
       />
     );
   }
+
   render() {
     const {
       stories,
@@ -369,16 +379,16 @@ const mapDispatchToProps = dispatch => ({
     const location = update(history.location, {
       search: { $set: search }
     });
-    let parameters = util.fromQueryString(search);
+    const parameters = util.fromQueryString(search);
     let layers = [];
 
     // Record selected story's id, current steps, and total steps to analytics
     googleTagManager.pushEvent({
-      'event': 'tour_selected_story',
-      'story': {
-        'id': currentStoryId,
-        'selectedStep': currentStep,
-        'totalSteps': totalSteps
+      event: 'tour_selected_story',
+      story: {
+        id: currentStoryId,
+        selectedStep: currentStep,
+        totalSteps: totalSteps
       }
     });
 

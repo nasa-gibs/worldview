@@ -47,7 +47,7 @@
         "func-call-spacing": "warn",
         "no-return-assign": "warn",
         "no-sequences": "warn",
-        "no-unused-expressions": "false",
+        "no-unused-expressions": "off",
         "no-useless-call": "warn",
         "no-trailing-spaces": "warn",
         "standard/computed-property-even-spacing": "warn",

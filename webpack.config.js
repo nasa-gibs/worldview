@@ -53,8 +53,15 @@ if (process.env.DEBUG === 'true') {
 }
 
 // handle testing entry point and output file name
-let entryPoint = './web/js/main.js';
-let outputFileName = 'wv.js';
+
+const entryPoint = './web/js/main.js';
+const outputFileName = 'wv.js';
+/*
+if (process.env.TESTING_MODE === 'true') {
+  entryPoint = './test/main.js';
+  outputFileName = 'wv-test-bundle.js';
+}
+*/
 
 module.exports = {
   resolve: {

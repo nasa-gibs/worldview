@@ -13,6 +13,7 @@ class VectorFilter extends React.Component {
     };
     this.debounceSetRange = lodashDebounce(props.setFilterRange, 300);
   }
+
   /**
    * Update filter values
    * @param {Array} thresholdArray | Array of start/end indexs for colormap
@@ -48,6 +49,7 @@ class VectorFilter extends React.Component {
       groupName
     );
   }
+
   render() {
     const { start, end } = this.state;
     const { index, min, max } = this.props;

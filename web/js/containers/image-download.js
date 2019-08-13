@@ -51,6 +51,7 @@ class ImageDownloadContainer extends Component {
     );
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
   }
+
   onBoundaryChange(boundaries) {
     const { screenWidth, screenHeight } = this.props;
     const x = getPixelFromPercentage(screenWidth, boundaries.x);
@@ -69,6 +70,7 @@ class ImageDownloadContainer extends Component {
     });
     this.debounceBoundaryUpdate(newBoundaries);
   }
+
   render() {
     const {
       proj,

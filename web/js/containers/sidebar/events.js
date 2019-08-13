@@ -28,6 +28,7 @@ class Events extends React.Component {
     };
     this.dismissAlert = this.dismissAlert.bind(this);
   }
+
   initRequests() {
     const {
       requestSources,
@@ -64,10 +65,12 @@ class Events extends React.Component {
     requestCategories(categoryRequestURL);
     requestSources(sourceRequestURL);
   }
+
   dismissAlert() {
     localStorage.setItem('dismissedEventVisibilityAlert', true);
     this.setState({ showAlert: false });
   }
+
   render() {
     const {
       events,
@@ -97,7 +100,7 @@ class Events extends React.Component {
     let scrollBarVerticalTop = 0;
     if (visibleEvents && selected.id) {
       // find index for scrollBarVerticalTop calculation on selected event
-      let index = Object.keys(visibleEvents).indexOf(selected.id);
+      const index = Object.keys(visibleEvents).indexOf(selected.id);
       // 12 === li total top/bottom padding
       // 32.2 === li height (varies slightly, Chrome 100% browser zoom height used)
       scrollBarVerticalTop = index ? index * (12 + 32.2) : 0;
@@ -234,7 +237,7 @@ function mapStateToProps(state) {
       proj.selected,
       true
     );
-    let extent = showAll ? proj.selected.maxExtent : mapExtent;
+    const extent = showAll ? proj.selected.maxExtent : mapExtent;
     visibleEvents = getEventsWithinExtent(
       events,
       selected,

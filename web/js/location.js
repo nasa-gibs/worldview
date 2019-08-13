@@ -39,7 +39,7 @@ import { mapLocationToDataState } from './modules/data/util';
 export const mapLocationToState = (state, location) => {
   const config = state.config;
   if (location.search) {
-    let parameters = util.fromQueryString(location.search);
+    const parameters = util.fromQueryString(location.search);
     let stateFromLocation = location.query;
     stateFromLocation = mapLocationToDateState(
       parameters,
@@ -121,7 +121,7 @@ const getParameters = function(config, parameters) {
   const nowMinusSevenDays = util.dateAdd(config.pageLoadTime, 'day', -7);
   // If at the beginning of the day, wait on the previous day until GIBS
   // catches up (about three hours)
-  let initialDate = now.getUTCHours() < 3
+  const initialDate = now.getUTCHours() < 3
     ? new Date(now).setUTCDate(now.getUTCDate() - 1)
     : now;
   return {
@@ -178,7 +178,7 @@ const getParameters = function(config, parameters) {
         parse: str => {
           let time = tryCatchDate(str, now);
           if (time instanceof Date) {
-            let startDate = new Date(config.startDate);
+            const startDate = new Date(config.startDate);
             if (time < startDate) {
               time = startDate;
             } else if (time > now) {
@@ -223,8 +223,8 @@ const getParameters = function(config, parameters) {
           let zoom = currentItemState;
           // check if subdaily timescale zoom to determine if reset is needed
           if (zoom > 3) {
-            let { layers, compare } = state;
-            let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            const { layers, compare } = state;
+            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
             if (!hasSubdailyLayers) {
               zoom = 3; // reset to day
             }
@@ -247,10 +247,10 @@ const getParameters = function(config, parameters) {
           if (customDelta === 1 && customInterval === 3) {
             return undefined;
           }
-          return currentItemState.toString();
+          return currentItemState;
         },
         parse: val => {
-          return val.toString();
+          return val === 'true';
         }
       }
     },
@@ -265,8 +265,8 @@ const getParameters = function(config, parameters) {
           let customInterval = currentItemState;
           // check if subdaily customInterval to determine if reset is needed
           if (customInterval > 3) {
-            let { layers, compare } = state;
-            let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
+            const { layers, compare } = state;
+            const hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
             if (!hasSubdailyLayers) {
               customInterval = 3; // reset to day
             }

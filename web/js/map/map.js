@@ -141,7 +141,7 @@ export function getLayerByName(map, name) {
   var layers = map.getLayers()
     .getArray();
   return lodashFind(layers, {
-    'wvname': name
+    wvname: name
   });
 };
 

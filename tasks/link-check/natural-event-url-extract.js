@@ -6,9 +6,9 @@ const sleeper = (ms) => (x) => new Promise(resolve => setTimeout(() => resolve(x
 // helper function to find target key in nested object
 const findProp = async (obj, keys, out) => {
   let i;
-  let proto = Object.prototype;
-  let ts = proto.toString;
-  let hasOwn = proto.hasOwnProperty.bind(obj);
+  const proto = Object.prototype;
+  const ts = proto.toString;
+  const hasOwn = proto.hasOwnProperty.bind(obj);
 
   if (ts.call(out) !== '[object Array]') {
     out = [];
@@ -17,7 +17,7 @@ const findProp = async (obj, keys, out) => {
     if (hasOwn(i)) {
       if (keys.includes(i)) {
         // handle different title formats from EONET
-        let title = obj['title'] ? obj['title'] : obj['id'];
+        const title = obj['title'] ? obj['title'] : obj['id'];
         if (title) {
           out.push({ [title]: obj[i] });
         }
@@ -35,15 +35,15 @@ const scrapeLinks = async (htmlLinks) => {
   const addedUrls = [];
 
   for (let i = 0; i < htmlLinks.length; i++) {
-    let htmlLink = htmlLinks[i];
+    const htmlLink = htmlLinks[i];
     await fetch(htmlLink)
       .then(async (res) => {
-        let status = await res.json();
-        let urls = await findProp(status, ['url', 'link', 'source']);
+        const status = await res.json();
+        const urls = await findProp(status, ['url', 'link', 'source']);
         for (let j = 0; j < urls.length; j++) {
-          let url = urls[j];
-          let linkRel = Object.keys(url)[0];
-          let linkHref = Object.values(url)[0];
+          const url = urls[j];
+          const linkRel = Object.keys(url)[0];
+          const linkHref = Object.values(url)[0];
 
           if (trackDoubles[linkRel] !== linkHref) {
             addedUrls.push({ [linkRel]: linkHref });

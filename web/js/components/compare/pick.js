@@ -12,6 +12,7 @@ class Pick extends React.Component {
       max: props.max
     };
   }
+
   /**
    * Return visibility style string
    */
@@ -22,6 +23,7 @@ class Pick extends React.Component {
     }
     return visibility;
   }
+
   /**
    * Return text el to show over dragger
    * @param {number} x | x offset
@@ -45,6 +47,7 @@ class Pick extends React.Component {
       );
     }
   }
+
   render() {
     var visibility = this.getVisibility();
     const { yOffset, path, width, height } = this.props;

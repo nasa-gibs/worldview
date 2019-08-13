@@ -68,6 +68,7 @@ class toolbarContainer extends Component {
     this.requestNotifications();
     this.openImageDownload = this.openImageDownload.bind(this);
   }
+
   getPromise(bool, type, action, title) {
     const { notify } = this.props;
     if (bool) {
@@ -76,6 +77,7 @@ class toolbarContainer extends Component {
       return Promise.resolve(type);
     }
   }
+
   openImageDownload() {
     const { openModal, hasCustomPalette, isRotated, hasGraticule } = this.props;
     this.getPromise(hasCustomPalette, 'palette', clearCustoms, 'Notice').then(
@@ -101,6 +103,7 @@ class toolbarContainer extends Component {
       }
     );
   }
+
   requestNotifications() {
     const { config, requestNotifications } = this.props;
     if (config.features.notification) {
@@ -119,6 +122,7 @@ class toolbarContainer extends Component {
       requestNotifications(notificationURL);
     }
   }
+
   render() {
     const {
       openModal,

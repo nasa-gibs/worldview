@@ -40,6 +40,7 @@ class NavCase extends React.Component {
       );
     }
   }
+
   renderEvents() {
     const {
       tabTypes,
@@ -75,6 +76,7 @@ class NavCase extends React.Component {
       );
     }
   }
+
   render() {
     const { isMobile, onTabClick, activeTab, toggleSidebar } = this.props;
 

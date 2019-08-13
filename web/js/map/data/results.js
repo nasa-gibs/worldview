@@ -797,7 +797,7 @@ export function dataResultsTimeFilter(spec) {
   self.name = 'TimeFilter';
 
   var init = function() {
-    let zeroedTime = spec.time.setUTCHours(0);
+    const zeroedTime = spec.time.setUTCHours(0);
     westZone = new Date(zeroedTime).setUTCMinutes(spec.westZone);
     eastZone = new Date(zeroedTime).setUTCMinutes(spec.eastZone);
     maxDistance = spec.maxDistance;

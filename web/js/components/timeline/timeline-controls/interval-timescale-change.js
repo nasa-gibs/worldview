@@ -44,21 +44,27 @@ class TimeScaleIntervalChange extends PureComponent {
   handleClickIntervalYear = () => {
     this.handleClickInterval('year');
   }
+
   handleClickIntervalMonth = () => {
     this.handleClickInterval('month');
   }
+
   handleClickIntervalDay= () => {
     this.handleClickInterval('day');
   }
+
   handleClickIntervalHour = () => {
     this.handleClickInterval('hour');
   }
+
   handleClickIntervalMinute = () => {
     this.handleClickInterval('minute');
   }
+
   handleClickIntervalCustom = () => {
     this.handleClickInterval('custom');
   }
+
   handleClickIntervalCustomStatic = () => {
     this.handleClickInterval('custom', true);
   }
@@ -77,7 +83,7 @@ class TimeScaleIntervalChange extends PureComponent {
   }
 
   componentDidUpdate (prevProps) {
-    let {
+    const {
       customDelta,
       timeScaleChangeUnit,
       customSelected
@@ -92,11 +98,11 @@ class TimeScaleIntervalChange extends PureComponent {
   }
 
   render() {
-    let {
+    const {
       customIntervalText,
       toolTipHovered
     } = this.state;
-    let {
+    const {
       customSelected,
       hasSubdailyLayers,
       timeScaleChangeUnit
@@ -104,7 +110,7 @@ class TimeScaleIntervalChange extends PureComponent {
     return (
       <React.Fragment>
         <div id="timeline-interval-btn-container"
-          className="noselect"
+          className="interval-btn-container noselect"
           onMouseEnter={this.toolTipHoverOn}
           onMouseLeave={this.toolTipHoverOff}
         >

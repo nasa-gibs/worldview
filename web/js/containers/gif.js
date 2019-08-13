@@ -57,15 +57,18 @@ class GIF extends Component {
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
   }
+
   componentDidMount() {
     this.mounted = true;
   }
+
   componentWillUnmount() {
     this.mounted = false;
     if (this.state.isDownloading) {
       gifStream.cancel();
     }
   }
+
   getStyle(state) {
     return {
       left: state.offsetLeft,
@@ -74,6 +77,7 @@ class GIF extends Component {
       maxWidth: 342
     };
   }
+
   renderSelectableBox() {
     const {
       increment,
@@ -148,10 +152,12 @@ class GIF extends Component {
       </Modal>
     );
   }
+
   toggleShowDates() {
     const { showDates } = this.state;
     this.setState({ showDates: !showDates });
   }
+
   createGIF(width, height) {
     const { getImageArray } = this.props;
     const { boundaries } = this.state;
@@ -160,13 +166,13 @@ class GIF extends Component {
       h: boundaries.x2 - boundaries.x
     };
     var stampWidth;
-    var build;
     var stampProps;
     var newImage;
     var breakPointOne = 300;
     var stampWidthRatio = 4.889;
-    build = (stamp, dateStamp, stampHeight) => {
-      let imageArray = getImageArray(this.state, this.props, { width, height });
+
+    const build = (stamp, dateStamp, stampHeight) => {
+      const imageArray = getImageArray(this.state, this.props, { width, height });
       if (!imageArray) return; // won't be true if there are too many frames
 
       gifStream.createGIF(
@@ -218,6 +224,7 @@ class GIF extends Component {
     build(newImage, stampProps.dateStamp, stampProps.stampHeight);
     this.setState({ isDownloading: true });
   }
+
   onGifComplete(obj, width, height) {
     if (obj.error) {
       this.setState({
@@ -248,11 +255,13 @@ class GIF extends Component {
       });
     }
   }
+
   onGifProgress(val) {
     this.setState({
       progress: val
     });
   }
+
   getModalOffsets(boundaries) {
     const { screenWidth, screenHeight } = this.props;
     const { x, y, x2, y2 } = boundaries;
@@ -280,6 +289,7 @@ class GIF extends Component {
       offsetTop: top
     };
   }
+
   onBoundaryChange(cropBounds) {
     const {
       screenWidth,
@@ -299,6 +309,7 @@ class GIF extends Component {
       boundaries
     });
   }
+
   render() {
     const {
       increment,
@@ -318,7 +329,7 @@ class GIF extends Component {
     } = this.state;
 
     if (isDownloading) {
-      let headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
+      const headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
       return (
         <Modal
           isOpen={true}
@@ -360,7 +371,7 @@ function mapStateToProps(state, ownProps) {
   const { speed, startDate, endDate, boundaries } = animation;
   const { screenWidth, screenHeight } = browser;
   const { customSelected, interval, customInterval, customDelta } = date;
-  let increment = customSelected
+  const increment = customSelected
     ? `${customDelta} ${timeScaleFromNumberKey[customInterval]}`
     : `1 ${timeScaleFromNumberKey[interval]}`;
   let url = 'http://localhost:3002/api/v1/snapshot';
@@ -374,8 +385,8 @@ function mapStateToProps(state, ownProps) {
     boundaries,
     proj: proj.selected,
     isActive: animation.gifActive,
-    startDate: startDate.toISOString(),
-    endDate: endDate.toISOString(),
+    startDate: util.toISOStringMinutes(startDate),
+    endDate: util.toISOStringMinutes(endDate),
     increment: `${increment} Between Frames`,
     speed,
     map,

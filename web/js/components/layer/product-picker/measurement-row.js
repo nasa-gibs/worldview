@@ -39,7 +39,7 @@ class LayerRow extends React.Component {
     this.setState({ isMetadataExpanded: !this.state.isMetadataExpanded });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { isEnabled, isMetadataExpanded, isDateRangesExpanded } = this.state;
     if (
       nextProps.checked !== isEnabled ||
@@ -53,6 +53,7 @@ class LayerRow extends React.Component {
       });
     }
   }
+
   /**
    * Render orbits and layer selections for
    * selected source
@@ -67,8 +68,8 @@ class LayerRow extends React.Component {
       addLayer
     } = this.props;
     const { projection } = this.state;
-    let OrbitSourceList = [];
-    let LayerSouceList = [];
+    const OrbitSourceList = [];
+    const LayerSouceList = [];
     let orbitTitle = '';
 
     source.settings.forEach(setting => {
@@ -153,6 +154,7 @@ class LayerRow extends React.Component {
       </div>
     );
   }
+
   /**
    * Toggle layer
    * @param {String} id | Layer ID
@@ -165,6 +167,7 @@ class LayerRow extends React.Component {
       addLayer(id);
     }
   }
+
   /**
    * Request metadata if row is active and
    * hide metadata when too many chars
@@ -176,9 +179,9 @@ class LayerRow extends React.Component {
     // Simple test to see if theres a link to some metadata
     if (source.description) {
       if (sourceMetadata[source.description]) {
-        let data = sourceMetadata[source.description].data;
-        let doesMetaDataNeedExpander = data.length >= 1000;
-        let isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
+        const data = sourceMetadata[source.description].data;
+        const doesMetaDataNeedExpander = data.length >= 1000;
+        const isMetaVisible = isMetadataExpanded || !doesMetaDataNeedExpander;
         return (
           <div>
             <div
@@ -209,6 +212,7 @@ class LayerRow extends React.Component {
       }
     }
   }
+
   /**
    * Render measurement content for selected source in
    * `TabPane`
@@ -228,6 +232,7 @@ class LayerRow extends React.Component {
       </TabContent>
     );
   }
+
   /**
    * Render Possible sources for measurement
    * @param {Object} measurement | Measurement Object
@@ -252,10 +257,12 @@ class LayerRow extends React.Component {
       </NavItem>
     );
   }
+
   toggleRowExpansion() {
     const { isSelected } = this.state;
     this.setState({ isSelected: !isSelected });
   }
+
   /**
    * Render content when Active
    */
@@ -310,6 +317,7 @@ class LayerRow extends React.Component {
       </div>
     );
   }
+
   render() {
     const {
       measurement,

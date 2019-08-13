@@ -15,6 +15,10 @@
                         "MODIS_Aqua_Cloud_Effective_Radius_PCL",
                         "MODIS_Aqua_Cloud_Effective_Radius_37",
                         "MODIS_Aqua_Cloud_Effective_Radius_37_PCL",
+                        "MODIS_Aqua_Cloud_Effective_Radius_16",
+                        "MODIS_Aqua_Cloud_Effective_Radius_1621",
+                        "MODIS_Aqua_Cloud_Effective_Radius_16_PCL",
+                        "MODIS_Aqua_Cloud_Effective_Radius_PCL_1621",
                         "OrbitTracks_Aqua_Ascending"
                     ]
                 },
@@ -28,6 +32,10 @@
                         "MODIS_Terra_Cloud_Effective_Radius_PCL",
                         "MODIS_Terra_Cloud_Effective_Radius_37",
                         "MODIS_Terra_Cloud_Effective_Radius_37_PCL",
+                        "MODIS_Terra_Cloud_Effective_Radius_16",
+                        "MODIS_Terra_Cloud_Effective_Radius_1621",
+                        "MODIS_Terra_Cloud_Effective_Radius_16_PCL",
+                        "MODIS_Terra_Cloud_Effective_Radius_PCL_1621",
                         "OrbitTracks_Terra_Descending"
                     ]
 

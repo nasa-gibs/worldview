@@ -12,8 +12,8 @@ shell.mkdir('-p', 'build/worldview');
 shell.cp('-rf', 'web/*', 'build/worldview');
 
 console.log('Branding');
-let brand = require('../build/worldview/brand/brand.json');
-let applyTo = [
+const brand = require('../build/worldview/brand/brand.json');
+const applyTo = [
   'build/worldview/index.html',
   'build/worldview/build/wv.js',
   'build/worldview/build/wv.css.map',
@@ -21,15 +21,15 @@ let applyTo = [
 ];
 
 // Build date shown in the About box
-let buildTimestamp = moment.utc().format('MMMM DD, YYYY [-] HH:mm [UTC]');
+const buildTimestamp = moment.utc().format('MMMM DD, YYYY [-] HH:mm [UTC]');
 
 // Append to all URI references for cache busting
-let buildNonce = moment.utc().format('YYYYMMDDHHmmssSSS');
+const buildNonce = moment.utc().format('YYYYMMDDHHmmssSSS');
 
-let officialName = brand.officialName || brand.name;
-let longName = brand.longName || brand.name;
-let shortName = brand.shortName || brand.name;
-let email = brand.email || 'support@example.com';
+const officialName = brand.officialName || brand.name;
+const longName = brand.longName || brand.name;
+const shortName = brand.shortName || brand.name;
+const email = brand.email || 'support@example.com';
 
 shell.sed('-i', /@OFFICIAL_NAME@/g, officialName, applyTo);
 shell.sed('-i', /@LONG_NAME@/g, longName, applyTo);
@@ -39,7 +39,7 @@ shell.sed('-i', /@BUILD_NONCE/g, buildNonce, applyTo);
 shell.sed('-i', /@BUILD_TIMESTAMP@/g, buildTimestamp, applyTo);
 shell.sed('-i', /@BUILD_VERSION@/g, pkg.version, applyTo);
 
-let dist = 'dist/worldview.tar.gz';
+const dist = 'dist/worldview.tar.gz';
 console.log(`Creating distribution: ${dist}`);
 shell.mkdir('-p', 'dist');
 tar.c({

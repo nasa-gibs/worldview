@@ -48,11 +48,9 @@ module.exports = {
     );
   },
   /**
-   * Changing the resolution to a selection with too high of a resolution
-   * disables downloading the GIF
+   * Changing animation time interval
    */
-  'Changing animation time resolution': function(client) {
-    const globalSelectors = client.globals.selectors;
+  'Changing animation time interval': function(client) {
     client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
     client.waitForElementVisible(
       localSelectors.animationButton,
@@ -60,10 +58,28 @@ module.exports = {
       function(el) {
         client
           .useCss()
-          .moveToElement('.wv-animation-widget-header .wv-tooltip-case', 1, 1)
-          .click('.wv-tooltip-case #year');
+          .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
+          .click('.wv-animation-widget-header #timeline-interval #interval-years');
         client.pause(1000);
-        client.useCss().assert.containsText('#current-interval', '1 YEAR');
+        client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', '1 YEAR');
+        client.useCss().assert.containsText('#timeline #current-interval', '1 YEAR');
+      }
+    );
+  },
+  'Opening custom interval widget': function(client) {
+    client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
+    client.waitForElementVisible(
+      localSelectors.animationButton,
+      TIME_LIMIT,
+      function(el) {
+        client
+          .useCss()
+          .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
+          .click('.wv-animation-widget-header #timeline-interval #interval-custom-static');
+        client.pause(1000);
+        client.useCss().assert.elementPresent('#wv-animation-widget .custom-interval-widget');
+        client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', 'CUSTOM');
+        client.useCss().assert.containsText('#timeline #current-interval', 'CUSTOM');
       }
     );
   },

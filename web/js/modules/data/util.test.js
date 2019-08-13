@@ -16,9 +16,9 @@ beforeEach(() => {
   };
 });
 test('parses state, 1.1', () => {
-  let parameters = { dataDownload: 'product1' };
+  const parameters = { dataDownload: 'product1' };
 
-  let stateFromLocation = mapLocationToDataState(
+  const stateFromLocation = mapLocationToDataState(
     parameters,
     defaultStateFromLocation,
     globalState,

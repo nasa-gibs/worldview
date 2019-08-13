@@ -1,6 +1,6 @@
 import browser from './browser';
 
-let unmocked = {};
+const unmocked = {};
 
 beforeAll(() => {
   unmocked.navigator = browser.tests.navigator;
@@ -18,7 +18,7 @@ afterEach(() => {
 });
 
 describe('browser', () => {
-  let tests = [{
+  const tests = [{
     name: 'safari',
     fn: 'safari',
     answer: true,
@@ -75,7 +75,7 @@ test('no local storage', () => {
 });
 
 describe('device sizes', () => {
-  let tests = [
+  const tests = [
     { size: [1000, 1000], small: false, constrained: false, name: 'large' },
     { size: [200, 200], small: true, constrained: true, name: 'small' },
     { size: [1000, 300], small: false, constrained: true, name: 'constrained' }
