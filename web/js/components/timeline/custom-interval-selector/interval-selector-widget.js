@@ -26,7 +26,7 @@ class CustomIntervalSelectorWidget extends PureComponent {
   }
   handleKeyPress = (e) => {
     if (e.key === 'Escape') {
-      this.props.toggleCustomIntervalModal();
+      this.props.closeModal();
     }
   }
   componentDidUpdate(prevProps) {
