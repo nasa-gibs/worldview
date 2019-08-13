@@ -21,20 +21,24 @@ class CustomIntervalSelectorWidget extends PureComponent {
       this.props.changeCustomInterval(value, this.props.customIntervalZoomLevel);
     }
   }
+
   changeZoomLevel = (zoomLevel) => {
     this.props.changeCustomInterval(this.props.customDelta, timeScaleToNumberKey[zoomLevel]);
   }
-  handleKeyPress = (e) => {
+
+  handleKeyPress= (e) => {
     if (e.key === 'Escape') {
       this.props.closeModal();
     }
   }
+
   componentDidUpdate(prevProps) {
     // handle focus widget on opening
     if (this.props.customIntervalModalOpen && !prevProps.customIntervalModalOpen) {
       this.customIntervalWidget.focus();
     }
   }
+
   render() {
     const {
       customIntervalModalOpen,
@@ -81,6 +85,7 @@ export default connect(
 
 CustomIntervalSelectorWidget.propTypes = {
   changeCustomInterval: PropTypes.func,
+  closeModal: PropTypes.func,
   customDelta: PropTypes.number,
   customIntervalModalOpen: PropTypes.bool,
   customIntervalZoomLevel: PropTypes.number,

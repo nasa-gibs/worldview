@@ -47,7 +47,7 @@ export function getImageArray(
   let products = getProducts(layers[activeString], fromDate, state);
   const useDelta = customSelected && customDelta ? customDelta : delta;
   const useInterval = customSelected ? customInterval : interval;
-  let increment = customSelected
+  const increment = customSelected
     ? timeScaleFromNumberKey[customInterval]
     : timeScaleFromNumberKey[interval];
   const height = dimensions.height;

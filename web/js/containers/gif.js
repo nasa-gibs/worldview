@@ -172,7 +172,7 @@ class GIF extends Component {
     var stampWidthRatio = 4.889;
 
     const build = (stamp, dateStamp, stampHeight) => {
-      let imageArray = getImageArray(this.state, this.props, { width, height });
+      const imageArray = getImageArray(this.state, this.props, { width, height });
       if (!imageArray) return; // won't be true if there are too many frames
 
       gifStream.createGIF(
