@@ -33,7 +33,7 @@ def copy_file(file):
     if input_file.endswith('.json'):
         response_data = {}
         vector_layer_filename = file;
-        vector_layer_id = vector_layer_filename.split(".", 1)[0]
+        vector_layer_id = vector_layer_filename.split(".json", 1)[0]
         response_data["vectorData"] = {}
         response_data["vectorData"][vector_layer_id] = {}
         with open(input_file) as json_file:
