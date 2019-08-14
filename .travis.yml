@@ -8,14 +8,6 @@ matrix:
       before_install:
         - sudo apt-get update
         - sudo apt-get install -y libgif-dev
-    - os: linux
-      dist: xenial
-      language: node_js
-      node_js: '8.15.1'
-      python: '2.7.16'
-      before_install:
-        - sudo apt-get update
-        - sudo apt-get install -y libgif-dev
     - os: osx
       language: node_js
       node_js: '8.15.1'
@@ -67,8 +59,8 @@ matrix:
       before_install:
         - GTKDIR="c:/GTK"
         - GTKFILE="$HOME/GTK_TEMP/gtk.zip"
-        - choco install python2
-        - export PATH="/c/Python27:/c/Python27/Scripts:$PATH"
+        - choco install python3
+        - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
         - python -m ensurepip
         - pip install virtualenv
         - virtualenv $HOME/venv
@@ -82,8 +74,8 @@ matrix:
           - $HOME/GTK_TEMP
           - $HOME/venv
           - $HOME/.node-gyp
-          - c:/Python27
-          - c:/Python27/Scripts
+          - c:/Python37
+          - c:/Python37/Scripts
 
 cache:
   directories:
