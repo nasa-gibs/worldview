@@ -9,7 +9,7 @@ import { CHANGE_PROJECTION } from '../projection/constants';
 import { assign as lodashAssign, find as lodashFind } from 'lodash';
 export const defaultState = {
   fileType: 'image/jpeg',
-  boundaries: {},
+  boundaries: undefined,
   isWorldfile: false,
   resolution: ''
 };
