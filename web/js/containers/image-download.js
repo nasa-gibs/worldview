@@ -9,9 +9,7 @@ import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce } from 'lodash';
 import {
   imageUtilCalculateResolution,
-  imageUtilGetCoordsFromPixelValues,
-  getPercentageFromPixel,
-  getPixelFromPercentage
+  imageUtilGetCoordsFromPixelValues
 } from '../modules/image-download/util';
 import util from '../util/util';
 import { getLayers } from '../modules/layers/selectors';
@@ -33,16 +31,15 @@ class ImageDownloadContainer extends Component {
     super(props);
     const screenHeight = props.screenHeight;
     const screenWidth = props.screenWidth;
-    const boundaryProps = props.boundaries;
     this.state = {
       fileType: props.fileType,
       resolution: props.resolution,
       isWorldfile: props.isWorldfile,
-      boundaries: {
-        x: boundaryProps.x || screenWidth / 2 - 100,
-        y: boundaryProps.y || screenHeight / 2 - 100,
-        x2: boundaryProps.x2 || screenWidth / 2 + 100,
-        y2: boundaryProps.y2 || screenHeight / 2 + 100
+      boundaries: props.boundaries || {
+        x: screenWidth / 2 - 100,
+        y: screenHeight / 2 - 100,
+        x2: screenWidth / 2 + 100,
+        y2: screenHeight / 2 + 100
       }
     };
     this.debounceBoundaryUpdate = lodashDebounce(
@@ -53,21 +50,15 @@ class ImageDownloadContainer extends Component {
   }
 
   onBoundaryChange(boundaries) {
-    const { screenWidth, screenHeight } = this.props;
-    const x = getPixelFromPercentage(screenWidth, boundaries.x);
-    const y = getPixelFromPercentage(screenHeight, boundaries.y);
-    const x2 = x + getPixelFromPercentage(screenWidth, boundaries.width);
-    const y2 = y + getPixelFromPercentage(screenHeight, boundaries.height);
+    const { x, y, width, height } = boundaries;
     const newBoundaries = {
-      x: x,
-      y: y,
-      x2: x2,
-      y2: y2
+      x,
+      y,
+      x2: x + width,
+      y2: y + height
     };
 
-    this.setState({
-      boundaries: newBoundaries
-    });
+    this.setState({ boundaries: newBoundaries });
     this.debounceBoundaryUpdate(newBoundaries);
   }
 
@@ -120,12 +111,12 @@ class ImageDownloadContainer extends Component {
           onPanelChange={onPanelChange}
         />
         <Crop
-          x={getPercentageFromPixel(screenWidth, x)}
-          y={getPercentageFromPixel(screenHeight, y)}
+          x={x}
+          y={y}
+          width={x2 - x}
+          height={y2 - y}
           maxHeight={screenHeight}
           maxWidth={screenWidth}
-          width={getPercentageFromPixel(screenWidth, x2 - x)}
-          height={getPercentageFromPixel(screenHeight, y2 - y)}
           onChange={this.onBoundaryChange}
           onClose={onClose}
           bottomLeftStyle={{

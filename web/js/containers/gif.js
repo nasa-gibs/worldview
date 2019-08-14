@@ -15,9 +15,7 @@ import {
 } from '../modules/image-download/constants';
 import {
   imageUtilCalculateResolution,
-  imageUtilGetCoordsFromPixelValues,
-  getPercentageFromPixel,
-  getPixelFromPercentage
+  imageUtilGetCoordsFromPixelValues
 } from '../modules/image-download/util';
 import { Progress, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { timeScaleFromNumberKey } from '../modules/date/constants';
@@ -134,12 +132,12 @@ class GIF extends Component {
           />
 
           <Crop
-            x={getPercentageFromPixel(screenWidth, x)}
-            y={getPercentageFromPixel(screenHeight, y)}
+            x={x}
+            y={y}
+            width={x2 - x}
+            height={y2 - y}
             maxHeight={screenHeight}
             maxWidth={screenWidth}
-            width={getPercentageFromPixel(screenWidth, x2 - x)}
-            height={getPercentageFromPixel(screenHeight, y2 - y)}
             onChange={lodashDebounce(this.onBoundaryChange, 5)}
             onClose={onClose}
             coordinates={{
@@ -291,22 +289,20 @@ class GIF extends Component {
   }
 
   onBoundaryChange(cropBounds) {
-    const {
-      screenWidth,
-      screenHeight,
-      onBoundaryChange
-    } = this.props;
-    const x = getPixelFromPercentage(screenWidth, cropBounds.x);
-    const y = getPixelFromPercentage(screenHeight, cropBounds.y);
-    const x2 = x + getPixelFromPercentage(screenWidth, cropBounds.width);
-    const y2 = y + getPixelFromPercentage(screenHeight, cropBounds.height);
-    const boundaries = { x, y, x2, y2 };
-    const { offsetLeft, offsetTop } = this.getModalOffsets(boundaries);
-    onBoundaryChange(boundaries);
+    const { onBoundaryChange } = this.props;
+    const { x, y, width, height } = cropBounds;
+    const newBoundaries = {
+      x,
+      y,
+      x2: x + width,
+      y2: y + height
+    };
+    const { offsetLeft, offsetTop } = this.getModalOffsets(newBoundaries);
+    onBoundaryChange(newBoundaries);
     this.setState({
       offsetLeft,
       offsetTop,
-      boundaries
+      boundaries: newBoundaries
     });
   }
 
