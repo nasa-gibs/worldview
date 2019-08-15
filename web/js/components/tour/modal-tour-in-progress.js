@@ -4,10 +4,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 
 class ModalInProgress extends React.Component {
-  constructor(props) {
-    super(props);
-
-  }
   componentDidUpdate() {
     if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
   }

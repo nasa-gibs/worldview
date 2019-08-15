@@ -38,7 +38,6 @@ class ModalStart extends React.Component {
     this.wrapperRef = node;
   }
 
-
   // Use custom clickOutside function since we contained the clickable area with
   // CSS to have a cleaner looking scrollbar
   handleClickOutside(e) {
