@@ -22,8 +22,7 @@ export function updateAppNow(date) {
 }
 export function initSecondDate() {
   return {
-    type: INIT_SECOND_DATE,
-
+    type: INIT_SECOND_DATE
   };
 }
 export function selectDate(value) {
