@@ -18,6 +18,9 @@ export function mapLocationToCompareState(parameters, stateFromLocation) {
     stateFromLocation = update(stateFromLocation, {
       compare: { $set: initialCompareState }
     });
+    stateFromLocation = update(stateFromLocation, {
+      layers: { hasSecondLayerGroup: { $set: false } }
+    });
   }
   return stateFromLocation;
 }
