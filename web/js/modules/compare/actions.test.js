@@ -9,6 +9,7 @@ import {
 import thunk from 'redux-thunk';
 import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 import fixtures from '../../fixtures';
+import { INIT_SECOND_DATE } from '../date/constants';
 const middlewares = [thunk];
 const state = fixtures.getState();
 
@@ -18,9 +19,11 @@ test('toggleCompareOnOff dispactches two actions', () => {
   store.dispatch(toggleCompareOnOff());
   const firstResponse = store.getActions()[0];
   const secondResponse = store.getActions()[1];
+  const thirdResponse = store.getActions()[2];
 
   expect(firstResponse.type).toEqual(INIT_SECOND_LAYER_GROUP);
-  expect(secondResponse.type).toEqual(CONSTANTS.TOGGLE_ON_OFF);
+  expect(secondResponse.type).toEqual(INIT_SECOND_DATE);
+  expect(thirdResponse.type).toEqual(CONSTANTS.TOGGLE_ON_OFF);
 });
 
 test(

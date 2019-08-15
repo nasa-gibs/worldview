@@ -39,7 +39,7 @@ export function dateReducer(state = dateReducerState, action) {
       });
     case INIT_SECOND_DATE:
       return lodashAssign({}, state, {
-        selectedB: util.dateAdd(state.selected, 'day', -7),
+        selectedB: util.dateAdd(state.selected, 'day', -7)
       });
     case CHANGE_CUSTOM_INTERVAL:
       return lodashAssign({}, state, {
