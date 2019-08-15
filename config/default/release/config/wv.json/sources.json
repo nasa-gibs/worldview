@@ -1,22 +1,22 @@
 {
     "sources": {
         "GIBS:arctic": {
-            "url": "https://cache1-sit.gibs.earthdata.nasa.gov/wmts/epsg3413/std/wmts.cgi"
+            "url": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg3413/std/wmts.cgi"
         },
         "GIBS:antarctic": {
-            "url": "https://cache1-sit.gibs.earthdata.nasa.gov/wmts/epsg3031/std/wmts.cgi"
+            "url": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg3031/std/wmts.cgi"
         },
         "GIBS:geographic": {
-            "url": "https://cache1-sit.gibs.earthdata.nasa.gov/wmts/epsg4326/std/wmts.cgi"
+            "url": "https://uat.gibs.earthdata.nasa.gov/wmts/epsg4326/std/wmts.cgi"
         },
         "GIBS:wms": {
-            "url": "https://cache1-sit.gibs.earthdata.nasa.gov/wms/epsg4326/std/wms.cgi"
+            "url": "https://uat.gibs.earthdata.nasa.gov/wms/epsg4326/std/wms.cgi"
         },
         "GIBS:wms:arctic": {
-            "url": "https://cache1-sit.gibs.earthdata.nasa.gov/wms/epsg3413/std/wms.cgi"
+            "url": "https://uat.gibs.earthdata.nasa.gov/wms/epsg3413/std/wms.cgi"
         },
         "GIBS:wms:antarctic": {
-            "url": "https://cache1-sit.gibs.earthdata.nasa.gov/wms/epsg3031/std/wms.cgi"
+            "url": "https://uat.gibs.earthdata.nasa.gov/wms/epsg3031/std/wms.cgi"
         },
         "WDPA:wms": {
             "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
