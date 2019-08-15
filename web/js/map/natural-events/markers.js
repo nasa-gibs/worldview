@@ -93,7 +93,7 @@ export default function markers(ui, store) {
       const maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
       // only create marker if within projection extent range
       if (maxExtentCheck) {
-        marker.pin = createPin(event.id, category, isSelected);
+        marker.pin = createPin(event.id, category, isSelected, event.title);
         marker.pin.setPosition(coordinates);
         map.addOverlay(marker.pin);
 
@@ -174,13 +174,13 @@ export default function markers(ui, store) {
     });
   };
 
-  var createPin = function(id, category, isSelected) {
+  var createPin = function(id, category, isSelected, title) {
     var overlayEl = document.createElement('div');
     var icon = document.createElement('i');
     overlayEl.className = 'marker';
     if (isSelected) overlayEl.classList.add('marker-selected');
     icon.className = 'event-icon event-icon-' + category.slug;
-    icon.title = category.title;
+    icon.title = title || category.title;
     overlayEl.appendChild(icon);
     return new OlOverlay({
       element: overlayEl,
