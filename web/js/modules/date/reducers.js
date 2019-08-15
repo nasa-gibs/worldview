@@ -5,7 +5,8 @@ import {
   SELECT_DATE,
   UPDATE_APP_NOW,
   TOGGLE_CUSTOM_MODAL,
-  customModalType
+  customModalType,
+  INIT_SECOND_DATE
 } from './constants';
 import util from '../../util/util';
 import { assign as lodashAssign } from 'lodash';
@@ -35,6 +36,10 @@ export function dateReducer(state = dateReducerState, action) {
     case CHANGE_TIME_SCALE:
       return lodashAssign({}, state, {
         selectedZoom: action.value
+      });
+    case INIT_SECOND_DATE:
+      return lodashAssign({}, state, {
+        selectedB: util.dateAdd(state.selected, 'day', -7),
       });
     case CHANGE_CUSTOM_INTERVAL:
       return lodashAssign({}, state, {

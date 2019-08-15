@@ -4,7 +4,7 @@ export const CHANGE_TIME_SCALE = 'DATE/CHANGE_TIME_SCALE';
 export const SELECT_DATE = 'DATE/SELECT_DATE';
 export const UPDATE_APP_NOW = 'DATE/UPDATE_APP_NOW';
 export const TOGGLE_CUSTOM_MODAL = 'DATE/TOGGLE_CUSTOM_MODAL';
-
+export const INIT_SECOND_DATE = 'DATE/INIT_SECOND_DATE';
 export const timeScaleFromNumberKey = {
   0: 'custom',
   1: 'year',
