@@ -11,15 +11,12 @@ export function mapLocationToCompareState(parameters, stateFromLocation) {
         compare: { activeString: { $set: 'activeB' } }
       });
       stateFromLocation = update(stateFromLocation, {
-        layers: { hasSecondLayerGroup: { $set: true } }
+        compare: { bStatesInitiated: { $set: true } }
       });
     }
   } else {
     stateFromLocation = update(stateFromLocation, {
       compare: { $set: initialCompareState }
-    });
-    stateFromLocation = update(stateFromLocation, {
-      layers: { hasSecondLayerGroup: { $set: false } }
     });
   }
   return stateFromLocation;
