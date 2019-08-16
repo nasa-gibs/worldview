@@ -1188,6 +1188,10 @@ export default (function (self) {
           dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate() + dateInterval, 0, 0, 0));
         }
       } else if (def.period === 'subdaily') {
+        const minDateMinutes = minDate.getUTCMinutes();
+        // only check an hour into past for min date
+        const hourBeforeCurrentDate = new Date(currentDate.setMinutes(minDateMinutes) - (currentDate.getTimezoneOffset() * 60000) - (60 * 60000));
+        minDate = hourBeforeCurrentDate < minDate ? minDate : hourBeforeCurrentDate;
         // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
         if (!containRange) {
           minuteDifference = self.minuteDiff(minDate, maxMinuteDate);
