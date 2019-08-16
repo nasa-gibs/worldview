@@ -1,4 +1,3 @@
-
 import lodashFindIndex from 'lodash/findIndex';
 import lodashEach from 'lodash/each';
 import lodashForOwn from 'lodash/forOwn';
@@ -38,6 +37,7 @@ import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
 import * as paletteConstants from '../modules/palettes/constants';
 import * as vectorStyleConstants from '../modules/vector-styles/constants';
+import * as measureConstants from '../modules/measure/constants';
 import { setStyleFunction } from '../modules/vector-styles/selectors';
 import {
   getLayers,
@@ -133,7 +133,15 @@ export function mapui(models, config, store, ui) {
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
       case SELECT_DATE:
-        updateDate();
+        return updateDate();
+      case measureConstants.MEASURE_DISTANCE:
+        console.log('distance!');
+        return;
+      case measureConstants.MEASURE_AREA:
+        console.log('area!');
+        return;
+      case measureConstants.CLEAR_MEASUREMENTS:
+        console.log('clear!');
     }
   };
   /*

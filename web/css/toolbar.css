@@ -6,7 +6,7 @@
   border-radius: 0;
 }
 
-.wv-toolbar .wv-toolbar-button {
+.wv-toolbar-button {
   font-size: 14.3px;
   display: inline-block;
   margin: 0 0 0 4px;
@@ -14,21 +14,18 @@
   border: 1px solid #333;
   padding: 5.72px 14.3px;
   border-radius: 5px;
-}
-
-.wv-toolbar-button:focus {
-  box-shadow: none;
-  -webkit-box-shadow: none;
-}
-
-.wv-toolbar .wv-toolbar-button:hover {
-  background-color: #fff;
-  color: #1a1a1a;
-}
-
-.wv-toolbar .wv-toolbar-button.disabled:hover {
-  background-color: rgba(40, 40, 40, 0.85);
-  color: #eee;
+  &:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+  &:hover {
+    background-color: #eee;
+    color: #1a1a1a;
+  }
+  &.disabled:hover {
+    background-color: rgba(40, 40, 40, 0.85);
+    color: #eee;
+  }
 }
 
 .wv-toolbar .btn.disabled {
