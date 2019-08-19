@@ -73,6 +73,7 @@ import '../css/dateselector.css';
 import '../css/tooltip.css';
 import '../css/mobile.css';
 import '../css/modal.css';
+import '../css/measure.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
 import '../pages/css/document.css';

@@ -46,17 +46,3 @@
   cursor: not-allowed;
 }
 
-.wv-measure-button {
-  position: absolute;
-  bottom: 180px;
-  right: 10px;
-  padding: 6px 10px;
-}
-.modal-dialog.toolbar-modal.measure-tool-modal {
-  top: unset;
-  right: 70px;
-  bottom: 157px;
-  & .modal-body {
-    padding: 0;
-  }
-}
