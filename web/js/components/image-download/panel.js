@@ -50,12 +50,13 @@ export default class ImageResSelection extends React.Component {
     const { getLayers, url, lonlats, crs, projection, date } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
     const time = new Date(date.getTime());
-    time.setUTCHours(0, 0, 0, 0);
+    if (!this.props.hasSubdailyLayers) {
+      time.setUTCHours(0, 0, 0, 0);
+    }
     const layerList = getLayers();
     const layerWraps = imageUtilGetLayerWrap(layerList);
     const layers = imageUtilGetLayers(layerList, projection.id);
     const opacities = imageUtilGetLayerOpacities(layerList);
-
     const params = [
       'REQUEST=GetSnapshot',
       `TIME=${util.toISOStringSeconds(time)}`,
@@ -216,6 +217,7 @@ ImageResSelection.propTypes = {
   fileTypes: PropTypes.object,
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
+  hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,
