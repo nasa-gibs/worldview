@@ -59,8 +59,13 @@ class Tour extends React.Component {
 
   toggleModalStart(e) {
     e.preventDefault();
+    const toggleModal = !this.state.modalStart;
+    // if closing modal
+    if (!toggleModal) {
+      this.props.endTour();
+    }
     this.setState({
-      modalStart: !this.state.modalStart
+      modalStart: toggleModal
     });
   }
 
