@@ -26,6 +26,7 @@ import { MapRunningData } from './runningdata';
 import { mapPrecacheTile } from './precachetile';
 import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import { mapCompare } from './compare/compare';
+import { measure } from './measure/measure';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
@@ -135,13 +136,13 @@ export function mapui(models, config, store, ui) {
       case SELECT_DATE:
         return updateDate();
       case measureConstants.MEASURE_DISTANCE:
-        console.log('distance!');
+        self.selected.measureTool.initMeasurement('distance');
         return;
       case measureConstants.MEASURE_AREA:
-        console.log('area!');
+        self.selected.measureTool.initMeasurement('area');
         return;
       case measureConstants.CLEAR_MEASUREMENTS:
-        console.log('clear!');
+        self.selected.measureTool.clearMeasurements();
     }
   };
   /*
@@ -157,6 +158,7 @@ export function mapui(models, config, store, ui) {
     // it is possible that config.projections somehow becomes array-like.
     lodashForOwn(config.projections, function(proj) {
       var map = createMap(proj);
+      map.measureTool = measure(map);
       self.proj[proj.id] = map;
     });
     models.map.events.on('update-layers', reloadLayers);
