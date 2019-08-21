@@ -29,6 +29,10 @@
   margin-left: 10px;
 }
 
+ul.BulkDownload li a.link {
+  color: #7bf;
+}
+
 #wv-data-selection h3 {
   font-size: 16px;
   line-height: 16px;

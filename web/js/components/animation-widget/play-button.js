@@ -9,7 +9,6 @@ class PlayButton extends React.Component {
   render() {
     return (
       <a
-        href="javascript:void(null)"
         title={this.props.playing ? 'Pause video' : 'Play video'}
         className="wv-anim-play-case wv-icon-case"
         onClick={this.props.playing ? this.props.pause : this.props.play}
