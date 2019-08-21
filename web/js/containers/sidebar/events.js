@@ -24,7 +24,7 @@ class Events extends React.Component {
     super(props);
     this.initRequests();
     this.state = {
-      showAlert: !localStorage.getItem('dismissedEventVisibilityAlert')
+      showAlert: util.browser.localStorage && !localStorage.getItem('dismissedEventVisibilityAlert')
     };
     this.dismissAlert = this.dismissAlert.bind(this);
   }
