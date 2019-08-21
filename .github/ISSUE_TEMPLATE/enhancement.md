@@ -5,10 +5,10 @@ labels: enhancement
 
 ---
 
-**Is your enhancement related to a problem? Please describe.**
+**What existing feature could be improved?**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
-**Describe the solution you'd like**
+**Describe the improvement you'd like**
 A clear and concise description of what you want to happen.
 
 **Describe alternatives you've considered**
