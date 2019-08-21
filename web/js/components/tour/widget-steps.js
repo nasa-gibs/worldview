@@ -6,7 +6,6 @@ class Steps extends React.Component {
     return (
       <div className="step-container">
         <a
-          href="javascript:void(0);"
           className={'step-previous'}
           aria-label="Previous"
           onClick={this.props.decreaseStep}
@@ -20,7 +19,6 @@ class Steps extends React.Component {
           </p>
         </div>
         <a
-          href="javascript:void(0);"
           className="step-next"
           aria-label="Next"
           onClick={this.props.incrementStep}

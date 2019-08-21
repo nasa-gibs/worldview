@@ -9,7 +9,6 @@ class LoopButton extends React.Component {
   render() {
     return (
       <a
-        href="javascript:void(null)"
         title={this.props.looping ? 'Stop Loop' : 'Loop video'}
         className={
           this.props.looping

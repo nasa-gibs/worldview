@@ -389,7 +389,6 @@ class AnimationWidget extends React.Component {
               <span className="wv-slider-label">{sliderLabel}</span>
             </div>
             <a
-              href="javascript:void(null)"
               title={
                 !isCompareActive
                   ? 'Create Animated GIF'
