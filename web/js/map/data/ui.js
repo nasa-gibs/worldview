@@ -743,7 +743,7 @@ var dataUiDownloadListPanel = function(config, store) {
       "<li><a class='link wget'>List of Links</a>: " +
       'for wget or download managers that accept a list of ' +
       'URLs</li>' +
-      "<li><a class='link curl''>List of cURL Commands</a>: " +
+      "<li><a class='link curl'>List of cURL Commands</a>: " +
       'can be copied and pasted to ' +
       'a terminal window to download using cURL.</li>' +
       '</ul>' +
