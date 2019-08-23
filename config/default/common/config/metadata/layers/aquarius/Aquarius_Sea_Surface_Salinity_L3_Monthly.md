@@ -5,4 +5,4 @@ Aquarius was a NASA pathfinder mission providing routine, global remotely sensed
 References:
 Lee, T., G. Lagerloef, M.M. Gierach, H.-Y. Kao, S. Yueh, and K. Dohan (2012), Aquarius reveals salinity structure of tropical instability waves, Geophys. Res. Lett., 39, L12610, doi: [10.1029/2012GL052232](http://dx.doi.org/10.1029/2012GL052232).
 
-NASA Aquarius project. 2017. Aquarius Official Release Level 3 Sea Surface Salinity Standard Mapped Image Monthly Data V5.0. Ver. 4.0. PO.DAAC,	CA,	USA. doi: [10.5067/AQR50-3SMCS](http://dx.doi.org/10.5067/AQR50-3SMCS).
+NASA Aquarius project. 2017. Aquarius Official Release Level 3 Sea Surface Salinity Standard Mapped Image Monthly Data V5.0. Ver. 4.0. PO.DAAC, CA, USA. doi: [10.5067/AQR50-3SMCS](http://dx.doi.org/10.5067/AQR50-3SMCS).

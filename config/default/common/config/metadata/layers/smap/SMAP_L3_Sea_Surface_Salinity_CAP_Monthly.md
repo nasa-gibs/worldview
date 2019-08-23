@@ -4,4 +4,4 @@ While the NASA SMAP (Soil Moisture Active Passive) mission was designed principa
 
 References:  Fore, A.G, S.H. Yueh, W. Tang, B.W. Stiles, and A.K. Hayashi (2016). Combined Active/Passive Retrievals of Ocean Vector Wind and Sea Surface Salinity With SMAP. IEEE TRANSACTIONS ON GEOSCIENCE AND REMOTE SENSING, VOL. 54, NO. 12. p.7396-7404. doi: [10.1109/TGRS.2016.2601486](https://dx.doi.org/10.1109/TGRS.2016.2601486)
 
-NASA Salinity Continuity Project. 2019. JPL SMAP Level 3 CAP Sea Surface Salinity Standard Mapped Image 8-Day Running Mean V4.2 Validated Dataset. Ver. 4.2. PO.DAAC, CA, USA.. doi: [10.5067/SMP42-3TPCS](https://dx.doi.org/10.5067/SMP42-3TPCS)
+NASA Salinity Continuity Project. 2019. JPL SMAP Level 3 CAP Sea Surface Salinity Standard Mapped Image 8-Day Running Mean V4.2 Validated Dataset. Ver. 4.2. PO.DAAC, CA, USA. doi: [10.5067/SMP42-3TPCS](https://dx.doi.org/10.5067/SMP42-3TPCS)
