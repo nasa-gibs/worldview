@@ -13,6 +13,14 @@
   }
 }
 
+.measure-unit-toggle {
+  border-bottom: 1px solid #ccc;
+  padding: 5px 5px 5px 27px;
+  & .custom-control-label {
+    margin-left: 34px;
+  }
+}
+
 /* TODO selector name is too generic */
 .tooltip {
   position: relative;
