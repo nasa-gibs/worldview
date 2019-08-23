@@ -10,7 +10,7 @@
       "layergroup": [
         "smap"
       ],
-      "product": "SMAP_JPL_L3_SSS_CAP_MONTHLY_V3",
+      "product": "SMAP_JPL_L3_SSS_CAP_MONTHLY_V42",
       "wrapadjacentdays": true
     }
   }
