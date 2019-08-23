@@ -503,6 +503,10 @@
 }
 
 /* Layer Options */
+.layer-info-wrap {
+  position: fixed;
+}
+
 .layer-info-settings-modal {
   margin-left: auto;
   margin-right: auto;

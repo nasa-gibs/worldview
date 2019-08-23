@@ -363,8 +363,8 @@ const mapDispatchToProps = dispatch => ({
         headerText: title || 'Layer Description',
         backdrop: false,
         bodyComponent: LayerInfo,
-        wrapClassName: 'clickable-behind-modal',
-        modalClassName: ' layer-info-settings-modal layer-info-modal ',
+        wrapClassName: 'clickable-behind-modal layer-info-wrap',
+        modalClassName: ' layer-info-settings-modal ',
         timeout: 150,
         bodyComponentProps: {
           layer: layer
