@@ -39,11 +39,18 @@ class MeasureMenu extends Component {
 
   render() {
     return (
-      <IconList
-        list={OPTIONS_ARRAY}
-        onClick={this.dispatchAction.bind(this)}
-        size="small"
-      />
+      <>
+        <div className="measure-unit-toggle custom-control custom-switch">
+          <label htmlFor="unit-toggle">km</label>
+          <input id="unit-toggle" className="custom-control-input" type="checkbox"/>
+          <label className="custom-control-label" htmlFor="unit-toggle">mi</label>
+        </div>
+        <IconList
+          list={OPTIONS_ARRAY}
+          onClick={this.dispatchAction.bind(this)}
+          size="small"
+        />
+      </>
     );
   }
 }
