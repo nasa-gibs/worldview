@@ -2,6 +2,6 @@ The Advanced Microwave Scanning Radiometer-E/Advanced Microwave Scanning Radiome
 
 The AMSR2 instrument is a conically scanning passive microwave radiometer. This instrument senses microwave radiation for twelve channels and six frequencies ranging from 6.9 GHz to 89 GHz on board the Japan Aerospace Exploration Agency (JAXA) Global Change Observation Mission – Water 1 (GCOM-W1) satellite.
 
-This product uses the JAXA AMSR2 Level-1R input TBs which are calibrated (unified) across the JAXA AMSR-E and AMSR2 Level-1R products. Source data for this layer provides Southern Hemisphere data that utilizes a different, older algorithm and browse imagery is not currently available. The most recent near real-time images (generated from AU\_DySno\_NRT_R01) are replaced with data from the standard product (AU_DySno) as it becomes available.
+This product uses the JAXA AMSR2 Level-1R input TBs which are calibrated (unified) across the JAXA AMSR-E and AMSR2 Level-1R products. Source data for this layer provides Southern Hemisphere data that utilizes a different, older algorithm and browse imagery is not currently available. The most recent near real-time images (generated from `AU_DySno_NRT_R01`) are replaced with data from the standard product (`AU_DySno`) as it becomes available.
 
-References: AU_DySno_NRT_R01 DOI: [10.5067/AMSRU/AU\_DySno\_NRT_R01](https://dx.doi.org/10.5067/AMSRU/AU_DySno_NRT_R01), AU_DySno DOI: [10.5067/8AE2ILXB5SM6](https://dx.doi.org/10.5067/8AE2ILXB5SM6)
+References: `AU_DySno_NRT_R01` DOI: [10.5067/AMSRU/AU\_DySno\_NRT_R01](https://dx.doi.org/10.5067/AMSRU/AU_DySno_NRT_R01), `AU_DySno` DOI: [10.5067/8AE2ILXB5SM6](https://dx.doi.org/10.5067/8AE2ILXB5SM6)
