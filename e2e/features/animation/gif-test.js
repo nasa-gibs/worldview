@@ -108,6 +108,30 @@ module.exports = {
       }
     );
   },
+  'GIF download is disabled when too many frames would be requested with standard interval': function(
+    client
+  ) {
+    client.url(client.globals.url + localQuerystrings.animationTooManyFrames);
+    client.waitForElementVisible(
+      localSelectors.animationWidget,
+      TIME_LIMIT,
+      function() {
+        client.useCss().assert.cssClassPresent('#create-gif-button', 'disabled');
+      }
+    );
+  },
+  'GIF download is disabled when too many frames would be requested with custom interval': function(
+    client
+  ) {
+    client.url(client.globals.url + localQuerystrings.animationTooManyFramesCustomInterval);
+    client.waitForElementVisible(
+      localSelectors.animationWidget,
+      TIME_LIMIT,
+      function() {
+        client.useCss().assert.cssClassPresent('#create-gif-button', 'disabled');
+      }
+    );
+  },
   after: function(client) {
     client.end();
   }
