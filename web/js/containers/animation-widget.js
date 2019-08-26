@@ -51,6 +51,7 @@ import { clearCustoms } from '../modules/palettes/actions';
 import { clearRotate } from '../modules/map/actions';
 import { clearGraticule } from '../modules/layers/actions';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
+import { Tooltip } from 'reactstrap';
 
 const RangeHandle = props => {
   const { value, offset, dragging, ...restProps } = props;
@@ -74,6 +75,7 @@ const RangeHandle = props => {
     </React.Fragment>
   );
 };
+
 /*
  * A react component, Builds a rather specific
  * interactive widget
@@ -117,12 +119,17 @@ class AnimationWidget extends React.Component {
       onUpdateStartAndEndDate,
       hasCustomPalettes,
       isRotated,
-      hasGraticule
+      hasGraticule,
+      numberOfFrames
     } = this.props;
     const {
       startDate,
       endDate
     } = this.zeroDates();
+
+    if (numberOfFrames >= 40) {
+      return;
+    }
 
     this.getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice').then(
       () => {
@@ -281,6 +288,23 @@ class AnimationWidget extends React.Component {
     this.props.changeCustomInterval(delta, timeScale);
   };
 
+  renderToolTip() {
+    const { numberOfFrames } = this.props;
+    const elemExists = document.querySelector('#create-gif-button');
+    const showTooltip = elemExists && numberOfFrames >= 40;
+    return (
+      <>
+        <Tooltip
+          placement="right"
+          isOpen={showTooltip}
+          target="create-gif-button">
+          Too many frames were selected. <br/>
+          Please request less than 40 frames if you would like to generate a GIF.
+        </Tooltip>
+      </>
+    );
+  }
+
   render() {
     const {
       looping,
@@ -300,13 +324,13 @@ class AnimationWidget extends React.Component {
       currentDate,
       toggleGif,
       isGifActive,
-      isCompareActive,
       subDailyMode,
       delta,
       interval,
       customSelected,
       customDelta,
       customInterval,
+      numberOfFrames,
       animationCustomModalOpen,
       hasSubdailyLayers
     } = this.props;
@@ -323,6 +347,7 @@ class AnimationWidget extends React.Component {
         interval,
         delta
       );
+      const gifDisabled = numberOfFrames >= 40;
 
       return (
         <ErrorBoundary>
@@ -389,15 +414,11 @@ class AnimationWidget extends React.Component {
               <span className="wv-slider-label">{sliderLabel}</span>
             </div>
             <a
-              title={
-                !isCompareActive
-                  ? 'Create Animated GIF'
-                  : 'Exit comparison mode to create GIF'
-              }
+              id="create-gif-button"
+              title={!gifDisabled ? 'Create Animated GIF' : ''}
               className={
-                isCompareActive ? 'wv-icon-case disabled' : 'wv-icon-case'
+                gifDisabled ? 'wv-icon-case disabled' : 'wv-icon-case'
               }
-              disabled={isCompareActive}
               onClick={this.openGif}
             >
               <i
@@ -405,6 +426,7 @@ class AnimationWidget extends React.Component {
                 className="fas fa-file-video wv-animation-widget-icon"
               />
             </a>
+            {this.renderToolTip()}
             <div className="wv-anim-dates-case">
               <TimeSelector
                 id="start"
@@ -494,9 +516,15 @@ function mapStateToProps(state) {
     interval = interval > 3 ? 3 : interval;
     customInterval = customInterval > 3 ? 3 : customInterval;
   }
-  const useInterval = customSelected ? customInterval : interval;
+  const useInterval = customSelected ? customInterval || 3 : interval;
   const subDailyInterval = useInterval > 3;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
+  const numberOfFrames = util.getNumberOfDays(
+    startDate,
+    endDate,
+    timeScaleFromNumberKey[useInterval],
+    customSelected && customDelta ? customDelta : delta
+  );
 
   return {
     animationCustomModalOpen,
@@ -513,6 +541,7 @@ function mapStateToProps(state) {
     interval: timeScaleFromNumberKey[useInterval] || 'day',
     customDelta: customDelta || 1,
     customInterval: customInterval || 3,
+    numberOfFrames,
     sliderLabel: 'Frames Per Second',
     layers: getLayers(layers[activeStr], {}, state),
     speed,
@@ -634,6 +663,7 @@ AnimationWidget.propTypes = {
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   notify: PropTypes.func,
+  numberOfFrames: PropTypes.number,
   onClose: PropTypes.func,
   onDateChange: PropTypes.func,
   onIntervalSelect: PropTypes.func,
