@@ -113,7 +113,7 @@ The `config/wv.json/layerOrder.json` file must be updated to include the new lay
 - **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 - **description**: Point to a markdown file within the metadata folder to provide a layer description.
 - **wrapX**: Wrap the layer across the anti-meridian.
-- **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when east of the line and the next day when west of the line.
+- **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
 
 To display a color palette legend, a *palette* object should exist with the following properties:
 
