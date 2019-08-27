@@ -188,7 +188,7 @@
     "react-mobile-datepicker": "^4.0.1",
     "react-portal": "^4.2.0",
     "react-redux": "^6.0.0",
-    "reactstrap": "^8.0.0",
+    "reactstrap": "^8.0.1",
     "redux": "^4.0.1",
     "redux-responsive": "^4.3.8",
     "redux-thunk": "^2.3.0",
