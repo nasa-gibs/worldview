@@ -48,9 +48,6 @@ export class Opacity {
     this.mapCase = document.getElementById('wv-map');
     const Props = {
       onSlide: this.oninput.bind(this),
-      onSlideEnd: value => {
-        this.compareEvents.trigger('moveend', value);
-      },
       value: value
     };
     this.mapCase.appendChild(this.sliderCase);
@@ -68,5 +65,6 @@ export class Opacity {
     convertedValue = value / 100;
     this.firstLayer.setOpacity(1 - convertedValue);
     this.secondLayer.setOpacity(convertedValue);
+    this.compareEvents.trigger('moveend', value)
   }
 }
