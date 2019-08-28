@@ -5,7 +5,6 @@ import json
 from optparse import OptionParser
 import os
 import sys
-import urllib2 as urllib
 import xmltodict
 import isodate
 from processTemporalLayer import process_temporal
@@ -61,7 +60,7 @@ class SkipException(Exception):
 def process_layer(gc_layer, wv_layers, colormaps):
     ident = gc_layer["ows:Identifier"]
     if ident in skip:
-        print "%s: skipping" % ident
+        print("%s: skipping" % ident)
         raise SkipException(ident)
 
     wv_layers[ident] = {}
@@ -197,7 +196,7 @@ def process_entry(entry, colormaps):
         zoom_levels = len(gc_matrix_set["TileMatrix"])
         resolutions = []
         max_resolution = entry["maxResolution"]
-        for zoom in xrange(0, zoom_levels):
+        for zoom in range(0, zoom_levels):
             resolutions = resolutions + [max_resolution / (2 ** zoom)]
         wv_matrix_sets[ident] = {
             "id": ident,
@@ -218,8 +217,8 @@ def process_entry(entry, colormaps):
     output_file = os.path.join(output_dir, entry["to"])
     with open(output_file, "w") as fp:
         json.dump(wv, fp, **json_options)
-    print "%s: %d error(s), %d warning(s), %d layers for %s" % (prog,
-            error_count, warning_count, layer_count, entry["source"])
+    print("%s: %d error(s), %d warning(s), %d layers for %s" % (prog,
+            error_count, warning_count, layer_count, entry["source"]))
     return [error_count, warning_count, layer_count]
 
 
@@ -231,8 +230,8 @@ for entry in entries:
     total_warning_count += warning_count
     total_layer_count += layer_count
 
-print "%s: %d error(s), %d warning(s), %d layers" % (prog, total_error_count,
-        total_warning_count, total_layer_count)
+print("%s: %d error(s), %d warning(s), %d layers" % (prog, total_error_count,
+        total_warning_count, total_layer_count))
 
 if total_error_count > 0:
     sys.exit(1)

@@ -25,7 +25,6 @@ if len(args) != 3:
 config_file = args[0]
 input_dir = args[1]
 output_dir = args[2]
-
 with open(config_file) as fp:
     config = json.load(fp)
 skips = config.get("skipPalettes", [])
@@ -63,7 +62,7 @@ def get_extreme(extreme_list, extreme):
 # indexes that need to be replace.
 def apply_tooltip(tooltip, tooltip_list, index_list):
     for index in index_list:
-        tooltip_list[index] = tooltip.decode("utf-8") # make unicode
+        tooltip_list[index] = tooltip
     return tooltip_list
 
 # to combines data values of corresponding
@@ -74,10 +73,11 @@ def replace_duplicates(duplicates, tooltip_list, entries):
         min_list = []
         max_list = []
         index_list = []
+
         for index, entry in enumerate(entries):
             if(color == entry["@rgb"]):
                 # get min
-                value = entry['@value'].encode('ascii','ignore')
+                value = entry['@value']
                 value = value.split(',')
                 if(len(value) > 1):
                     value[0] = value[0].replace("[", "")
@@ -90,6 +90,7 @@ def replace_duplicates(duplicates, tooltip_list, entries):
                     min_list += [value[0]] # adds value to min array
                     max_list += [value[0]] # adds value to max array
                 index_list += [index]
+
         # get max and min values
         max_value = get_extreme(max_list, "max")
         min_value = get_extreme(min_list, "min")
@@ -110,12 +111,14 @@ def replace_duplicates(duplicates, tooltip_list, entries):
 
         tooltip_list =  apply_tooltip(tooltip, tooltip_list, index_list)
 
+
     return tooltip_list
 
 def process_entries(colormap):
     entries = to_list(colormap["Entries"]["ColorMapEntry"])
 
     transparent_map = "true"
+
     for entry in entries:
         if entry["@transparent"] == "false":
             transparent_map = "false"
@@ -142,7 +145,6 @@ def process_entries(colormap):
         if a == 0:
             continue
         colors += [color_format.format(int(r), int(g), int(b), a)]
-
         if "@tooltip" not in legend:
             raise KeyError("No tooltips in legend")
         tooltip = legend["@tooltip"]
@@ -151,7 +153,6 @@ def process_entries(colormap):
                 if (map_type == "continuous") or (map_type == "discrete"):
                     matches += [entry["@rgb"]]
         tooltips += [tooltip]
-
         if (map_type == "continuous") or (map_type == "discrete"):
             items = re.sub(r"[\(\)\[\]]", "", entry["@value"]).split(",")
             try:
@@ -240,7 +241,7 @@ for root, dirs, files in os.walk(input_dir):
             sys.stderr.write("%s: ERROR: [%s] %s\n" % (prog, file, str(e)))
             error_count += 1
 
-print "%s: %d error(s), %d file(s)" % (prog, error_count, file_count)
+print("%s: %d error(s), %d file(s)" % (prog, error_count, file_count))
 
 if error_count > 0:
     sys.exit(1)

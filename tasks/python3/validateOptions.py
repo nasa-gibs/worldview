@@ -69,7 +69,7 @@ if tolerant:
 
 start_date = datetime.max
 
-for layer_id in wv["layers"].keys():
+for layer_id in list(wv["layers"].keys()):
     layer = wv["layers"][layer_id]
     if layer_id != layer["id"]:
         error("[%s] layer id does not match id of %s" % (layer_id, layer["id"]))
@@ -115,7 +115,7 @@ for layer_id in wv["layers"].keys():
     elif "group" not in layer:
         remove_layer(wv, layer_id)
         continue
-    for proj_id in layer["projections"].keys():
+    for proj_id in list(layer["projections"].keys()):
         projection = layer["projections"][proj_id]
         if "matrixSet" in projection:
             source = projection["source"]
@@ -167,17 +167,17 @@ for startingLayer in wv["defaults"]["startingLayers"]:
 wv["defaults"]["startingLayers"] = startingLayers
 wv["buildDate"] = int(round(time.time() * 1000))
 
-for projection, projectionValue in wv["naturalEvents"]["layers"].iteritems():
-    for eventType, eventTypeLayerList in projectionValue.iteritems():
+for projection, projectionValue in wv["naturalEvents"]["layers"].items():
+    for eventType, eventTypeLayerList in projectionValue.items():
         for layerObject in eventTypeLayerList:
             if layerObject[0] not in wv["layers"]:
                 error("The %s layer in the Natural events %s %s config does not have a matching ID in the layer config" %
                 (layerObject[0], projection, eventType))
 
-for measurement in wv["measurements"].values():
+for measurement in list(wv["measurements"].values()):
     if "sources" not in measurement:
         continue
-    for source in measurement["sources"].values():
+    for source in list(measurement["sources"].values()):
         if "settings" not in source:
             continue
         for setting in source["settings"]:
@@ -185,8 +185,8 @@ for measurement in wv["measurements"].values():
                 error("In measurement %s, source %s, layer not found: %s" %
                     (measurement["id"], source["id"], setting))
 
-print "%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
-        warning_count, remove_count)
+print("%s: %d error(s), %d warning(s), %d removed" % (prog, error_count,
+        warning_count, remove_count))
 
 json_options = {}
 json_options["indent"] = 2

@@ -26,7 +26,7 @@ def dict_merge(target, *args):
   obj = args[0]
   if not isinstance(obj, dict):
     return obj
-  for k, v in obj.iteritems():
+  for k, v in obj.items():
     if k in target and isinstance(target[k], dict):
       dict_merge(target[k], v)
     else:
@@ -70,5 +70,5 @@ json_options["separators"] = (',', ': ')
 with open(output_file, "w") as fp:
     json.dump(conf, fp, **json_options)
 
-print "%s: %s file(s) merged into %s" % (prog, file_count,
-    os.path.basename(output_file))
+print("%s: %s file(s) merged into %s" % (prog, file_count,
+    os.path.basename(output_file)))

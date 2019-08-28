@@ -87,19 +87,19 @@ def process_layer(layer):
 
 def process_remote(entry):
     url = entry["from"]
-    print "%s: %s" % (prog, url)
+    print("%s: %s" % (prog, url))
     response = http.request('GET', url)
     contents = response.data
     output_file = os.path.join(output_dir, entry["to"])
 
     # Write GetCapabilities responses to XML files
     with open(output_file, "w") as fp:
-        fp.write(contents)
+        fp.write(contents.decode('utf-8'))
     gc = xmltodict.parse(contents)
 
     # Find all colormaps and vectorstyles in GetCapabilities responses and store them in memory
     if gc["Capabilities"]["Contents"] is None:
-        print('error: %s: no layers' % url)
+        print(('error: %s: no layers' % url))
         return
 
     try:
@@ -112,22 +112,22 @@ def process_remote(entry):
                 process_vector_data(layer)
 
     except Exception as e:
-        print('error: %s: %s' % (url, str(e)))
-        print(str(traceback.format_exc()))
+        print(('error: %s: %s' % (url, str(e))))
+        print((str(traceback.format_exc())))
 
 # Fetch every colormap from the API and write response to file system
 def process_colormaps():
-    print "%s: Fetching %d colormaps" % (prog, len(colormaps))
+    print("%s: Fetching %d colormaps" % (prog, len(colormaps)))
     sys.stdout.flush()
     if not os.path.exists(colormaps_dir):
         os.makedirs(colormaps_dir)
-    for link in colormaps.values():
+    for link in list(colormaps.values()):
         try:
             response = http.request("GET", link)
             contents = response.data
             output_file = os.path.join(colormaps_dir, os.path.basename(link))
             with open(output_file, "w") as fp:
-                fp.write(contents)
+                fp.write(contents.decode('utf-8'))
         except Exception as e:
             sys.stderr.write("%s:   WARN: Unable to fetch %s: %s\n" %
                 (prog, link, str(e)))
@@ -136,18 +136,18 @@ def process_colormaps():
 
 # Fetch every vectorstyle from the API and write response to file system
 def process_vectorstyles():
-    print "%s: Fetching %d vectorstyles" % (prog, len(vectorstyles))
+    print("%s: Fetching %d vectorstyles" % (prog, len(vectorstyles)))
     sys.stdout.flush()
     if not os.path.exists(vectorstyles_dir):
         os.makedirs(vectorstyles_dir)
-    for link in vectorstyles.values():
+    for link in list(vectorstyles.values()):
         try:
             response = http.request("GET", link)
             contents = response.data
             if link.endswith('.json'):
                 output_file = os.path.join(vectorstyles_dir, os.path.basename(link))
             with open(output_file, "w") as fp:
-                fp.write(contents)
+                fp.write(contents.decode('utf-8'))
         except Exception as e:
             sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
                 (prog, link, str(e)))
@@ -156,18 +156,18 @@ def process_vectorstyles():
 
 # Fetch every vectordata from the API and write response to file system
 def process_vectordata():
-    print "%s: Fetching %d vectordata" % (prog, len(vectordata))
+    print("%s: Fetching %d vectordata" % (prog, len(vectordata)))
     sys.stdout.flush()
     if not os.path.exists(vectordata_dir):
         os.makedirs(vectordata_dir)
-    for link in vectordata.values():
+    for link in list(vectordata.values()):
         try:
             response = http.request("GET", link)
             contents = response.data
             if link.endswith('.json'):
                 output_file = os.path.join(vectordata_dir, os.path.basename(link))
             with open(output_file, "w") as fp:
-                fp.write(contents)
+                fp.write(contents.decode('utf-8'))
         except Exception as e:
             sys.stderr.write("%s:   WARN: Unable to fetch %s: %s" %
                 (prog, link, str(e)))
@@ -194,7 +194,7 @@ if "wv-options-fetch" in config:
     if vectordata:
         process_vectordata()
 
-print "%s: %d error(s), %d remote(s)" % (prog, error_count, remote_count)
+print("%s: %d error(s), %d remote(s)" % (prog, error_count, remote_count))
 
 if error_count > 0:
     sys.exit(1)
