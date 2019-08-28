@@ -1060,6 +1060,13 @@ export default (function (self) {
     return formatted;
   };
 
+  /**
+   * Insert commas for numbers larger than 999
+   */
+  self.formatNumber = function (num) {
+
+  };
+
   self.toArray = function (value) {
     if (!value) {
       return [];
