@@ -1,6 +1,6 @@
 .wv-measure-button {
   position: absolute;
-  bottom: 180px;
+  bottom: 128px;
   right: 10px;
   padding: 6px 10px;
 }
@@ -16,34 +16,46 @@
 .measure-unit-toggle {
   border-bottom: 1px solid #ccc;
   padding: 5px 5px 5px 27px;
+  & .custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #fff;
+  }
   & .custom-control-label {
     margin-left: 34px;
+    &::before {
+      background-color: #0a0;
+    }
+    &::after {
+      background-color: #fff;
+    }
   }
 }
 
 /* TODO selector name is too generic */
-.tooltip {
+.tooltip-measure {
   position: relative;
-  background: rgba(0, 0, 0, 0.5);
+  background: #000;
   border-radius: 4px;
   color: #fff;
-  padding: 4px 8px;
-  opacity: 0.75;
+  padding: 6px 10px;
+  opacity: 0.9;
   white-space: nowrap;
 }
-.tooltip-measure {
-  opacity: 1;
-  font-weight: 600;
+.tooltip-active {
+  opacity: 0.75;
+  font-weight: 500;
+  font-size: 16px;
 }
 .tooltip-static {
-  background-color: #fc3;
-  color: #000;
-  border: 1px solid #fff;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 16px;
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
   opacity: 0.9;
+  background-color: #d54e21;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-.tooltip-measure::before,
+.tooltip-active::before,
 .tooltip-static::before {
   border-top: 6px solid rgba(0, 0, 0, 0.5);
   border-right: 6px solid transparent;
@@ -55,5 +67,5 @@
   left: 50%;
 }
 .tooltip-static::before {
-  border-top-color: #fc3;
+  border-top-color: #d54e21;
 }

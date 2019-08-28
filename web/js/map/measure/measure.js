@@ -7,7 +7,7 @@ import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 
-export function measure (map) {
+export function measure (map, projection) {
   const self = {};
   let draw;
   let sketch;
@@ -17,8 +17,6 @@ export function measure (map) {
   let measureTooltip;
   let allMeasureTooltips = [];
   let drawChangeListener;
-  const continuePolygonMsg = 'Click to continue drawing <br/> Double-click to complete.';
-  const continueLineMsg = 'Click to continue drawing <br/> Double-click to complete.';
   const source = new VectorSource();
   const vector = getVectorLayer(source);
 
@@ -29,16 +27,10 @@ export function measure (map) {
     if (evt.dragging) {
       return;
     }
-    let helpMsg = 'Click to start drawing';
+    const helpMsg = !sketch
+      ? 'Click to start drawing.'
+      : 'Click to continue drawing. <br/> Double-click to complete.';
 
-    if (sketch) {
-      const geom = (sketch.getGeometry());
-      if (geom instanceof Polygon) {
-        helpMsg = continuePolygonMsg;
-      } else if (geom instanceof LineString) {
-        helpMsg = continueLineMsg;
-      }
-    }
     helpTooltipElement.innerHTML = helpMsg;
     helpTooltip.setPosition(evt.coordinate);
     helpTooltipElement.classList.remove('hidden');
@@ -49,10 +41,10 @@ export function measure (map) {
       helpTooltipElement.parentNode.removeChild(helpTooltipElement);
     }
     helpTooltipElement = document.createElement('div');
-    helpTooltipElement.className = 'tooltip hidden';
+    helpTooltipElement.className = 'tooltip-measure hidden';
     helpTooltip = new Overlay({
       element: helpTooltipElement,
-      offset: [15, 0],
+      offset: [15, 15],
       positioning: 'center-left'
     });
     map.addOverlay(helpTooltip);
@@ -63,7 +55,7 @@ export function measure (map) {
       measureTooltipElement.parentNode.removeChild(measureTooltipElement);
     }
     measureTooltipElement = document.createElement('div');
-    measureTooltipElement.className = 'tooltip tooltip-measure';
+    measureTooltipElement.className = 'tooltip-measure tooltip-active';
     measureTooltip = new Overlay({
       element: measureTooltipElement,
       offset: [0, -15],
@@ -80,10 +72,10 @@ export function measure (map) {
       const geom = evt.target;
       let output;
       if (geom instanceof Polygon) {
-        output = formatArea(geom);
+        output = formatArea(geom, projection);
         tooltipCoord = geom.getInteriorPoint().getCoordinates();
       } else if (geom instanceof LineString) {
-        output = formatLength(geom);
+        output = formatLength(geom, projection);
         tooltipCoord = geom.getLastCoordinate();
       }
       measureTooltipElement.innerHTML = output;
@@ -92,7 +84,7 @@ export function measure (map) {
   };
 
   function drawEndCallback () {
-    measureTooltipElement.className = 'tooltip tooltip-static';
+    measureTooltipElement.className = 'tooltip-measure tooltip-static';
     measureTooltip.setOffset([0, -7]);
     sketch = null;
     measureTooltipElement = null;
@@ -135,21 +127,21 @@ export function measure (map) {
   return self;
 }
 
-const formatLength = (line) => {
-  const length = getLength(line);
+const formatLength = (line, projection) => {
+  const length = getLength(line, { projection });
   if (length > 100) {
-    return (Math.round(length / 1000 * 100) / 100) + ' ' + 'km';
+    return (Math.round(length / 1000 * 100) / 100).toLocaleString() + ' ' + 'km';
   } else {
-    return (Math.round(length * 100) / 100) + ' ' + 'm';
+    return (Math.round(length * 100) / 100).toLocaleString() + ' ' + 'm';
   }
 };
 
-const formatArea = (polygon) => {
-  const area = getArea(polygon);
+const formatArea = (polygon, projection) => {
+  const area = getArea(polygon, { projection });
   if (area > 10000) {
-    return `${(Math.round(area / 1000000 * 100) / 100)} km<sup>2</sup>`;
+    return `${(Math.round(area / 1000000 * 100) / 100).toLocaleString()} km<sup>2</sup>`;
   } else {
-    return `${Math.round(area * 100) / 100} m<sup>2</sup>`;
+    return `${(Math.round(area * 100) / 100).toLocaleString()} m<sup>2</sup>`;
   }
 };
 
@@ -158,17 +150,12 @@ const getVectorLayer = (source) => {
     source,
     style: new Style({
       fill: new Fill({
-        color: 'rgba(255, 255, 255, 0.2)'
+        color: 'rgba(213, 78, 33, 0.1)'
       }),
       stroke: new Stroke({
-        color: '#ffcc33',
-        width: 2
-      }),
-      image: new CircleStyle({
-        radius: 7,
-        fill: new Fill({
-          color: '#ffcc33'
-        })
+        color: '#d54e21',
+        lineJoin: 'round',
+        width: 3
       })
     })
   });
@@ -180,15 +167,16 @@ const getDraw = (source, type) => {
     type,
     style: new Style({
       fill: new Fill({
-        color: 'rgba(255, 255, 255, 0.2)'
+        color: 'rgba(213, 78, 33, 0.1)'
       }),
       stroke: new Stroke({
-        color: 'rgba(0, 0, 0, 0.5)',
+        color: 'rgba(213, 78, 33, 1)',
         lineDash: [10, 10],
-        width: 2
+        lineJoin: 'round',
+        width: 4
       }),
       image: new CircleStyle({
-        radius: 5,
+        radius: 7,
         stroke: new Stroke({
           color: 'rgba(0, 0, 0, 0.7)'
         }),

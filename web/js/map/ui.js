@@ -158,7 +158,7 @@ export function mapui(models, config, store, ui) {
     // it is possible that config.projections somehow becomes array-like.
     lodashForOwn(config.projections, function(proj) {
       var map = createMap(proj);
-      map.measureTool = measure(map);
+      map.measureTool = measure(map, proj.crs);
       self.proj[proj.id] = map;
     });
     models.map.events.on('update-layers', reloadLayers);
