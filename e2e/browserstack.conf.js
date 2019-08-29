@@ -2,12 +2,13 @@ const environments = require('./environments.js');
 const glob = require('glob');
 const files = glob.sync('./e2e/features/**/*-test.js');
 const nightwatchConfig = {
-  output_folder: 'e2e/reports',
-  globals_path: 'e2e/globals.js',
-  custom_assertions_path: ['e2e/custom-assertions'],
+  output_folder: './e2e/reports',
+  globals_path: './globals.js',
+  custom_assertions_path: ['./e2e/custom-assertions'],
   src_folders: files,
   selenium: {
     start_process: false,
+    check_process_delay: 5000,
     host: 'hub-cloud.browserstack.com',
     port: 80
   },
@@ -16,7 +17,7 @@ const nightwatchConfig = {
     'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
     'browserstack.local': true,
     'browserstack.debug': true,
-    'build': 'nightwatch-browserstack',
+    build: 'nightwatch-browserstack',
     applicationCacheEnabled: false,
     webStorageEnabled: false,
     marionette: true
@@ -25,7 +26,7 @@ const nightwatchConfig = {
     default: {},
     browserstack: {
       desiredCapabilities: {
-        'browser': 'chrome'
+        browser: 'chrome'
       }
     },
     chrome: {

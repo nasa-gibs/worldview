@@ -45,8 +45,8 @@ export function checkTourBuildTimestamp(config) {
   }
 
   if (hideTour && config.buildDate) {
-    let buildDate = new Date(config.buildDate);
-    let tourDate = new Date(hideTour);
+    const buildDate = new Date(config.buildDate);
+    const tourDate = new Date(hideTour);
     // Tour hidden when visiting fresh URL
     googleTagManager.pushEvent({
       event: 'tour_start_hidden',

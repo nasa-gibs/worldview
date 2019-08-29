@@ -4,26 +4,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Steps from './widget-steps';
 
 class ModalInProgress extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.escFunction = this.escFunction.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.escFunction, false);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.escFunction, false);
-  }
-
-  // Use custom escFunction since tabIndex prevents escape key use on loading WV
-  escFunction(e) {
-    if (e.keyCode === 27 && this.props.modalInProgress) {
-      this.props.endTour();
-    }
-  }
   componentDidUpdate() {
     if (this.refs.stepContent) this.refs.stepContent.parentNode.scrollTop = 0;
   }

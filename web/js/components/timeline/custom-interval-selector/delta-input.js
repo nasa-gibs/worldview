@@ -17,6 +17,7 @@ class DeltaInput extends PureComponent {
       valid: true
     };
   }
+
   onKeyInput = (e) => {
     let value = e.target.value;
     if (value === '' || regex.test(value)) {
@@ -26,6 +27,7 @@ class DeltaInput extends PureComponent {
       }
     }
   }
+
   handleKeyPress = (e) => {
     let value = this.state.value;
     if (value === '' || regex.test(value)) {
@@ -43,11 +45,13 @@ class DeltaInput extends PureComponent {
       }
     }
   }
+
   handleFocus = (e) => {
     e.target.select();
   }
+
   handleBlur = () => {
-    let { value } = this.state;
+    const { value } = this.state;
     if (value >= 1 && value < 1000) {
       this.setState({
         valid: true
@@ -58,16 +62,19 @@ class DeltaInput extends PureComponent {
       });
     }
   }
+
   setValue = (value) => {
     this.setState({
       value: value
     });
   }
+
   componentDidMount() {
     this.setValue(this.props.deltaValue);
   }
+
   render() {
-    let {
+    const {
       value,
       valid
     } = this.state;

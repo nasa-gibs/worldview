@@ -9,6 +9,7 @@ class DateChangeArrows extends PureComponent {
     this.leftInterval = 0;
     this.rightInterval = 0;
   }
+
   /**
   * @desc repeatedly call while mouse down - decrement date
   * @returns {void}
@@ -17,6 +18,7 @@ class DateChangeArrows extends PureComponent {
     this.props.leftArrowDown();
     this.leftInterval = setTimeout(this.leftArrowDown, ANIMATION_DELAY);
   }
+
   /**
   * @desc repeatedly call while mouse down - decrement date
   * @returns {void}
@@ -25,6 +27,7 @@ class DateChangeArrows extends PureComponent {
     this.props.rightArrowDown();
     this.rightInterval = setTimeout(this.rightArrowDown, ANIMATION_DELAY);
   }
+
   /**
   * @desc stop animation from left arrow - clear timeout invocation
   * @returns {void}
@@ -33,6 +36,7 @@ class DateChangeArrows extends PureComponent {
     clearTimeout(this.leftInterval);
     this.props.leftArrowUp();
   }
+
   /**
   * @desc stop animation from right arrow - clear timeout invocation
   * @returns {void}
@@ -43,7 +47,7 @@ class DateChangeArrows extends PureComponent {
   }
 
   render() {
-    let {
+    const {
       leftArrowDisabled,
       rightArrowDisabled
     } = this.props;

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
  */
 class TimeScaleSelect extends PureComponent {
   handleChangeZoomLevel = (e) => {
-    let zoomLevel = e.target.value;
+    const zoomLevel = e.target.value;
     this.props.changeZoomLevel(zoomLevel);
   }
 
@@ -18,7 +18,7 @@ class TimeScaleSelect extends PureComponent {
   }
 
   render() {
-    let {
+    const {
       zoomLevel,
       hasSubdailyLayers
     } = this.props;

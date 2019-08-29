@@ -24,10 +24,11 @@ class Events extends React.Component {
     super(props);
     this.initRequests();
     this.state = {
-      showAlert: !localStorage.getItem('dismissedEventVisibilityAlert')
+      showAlert: util.browser.localStorage && !localStorage.getItem('dismissedEventVisibilityAlert')
     };
     this.dismissAlert = this.dismissAlert.bind(this);
   }
+
   initRequests() {
     const {
       requestSources,
@@ -64,10 +65,12 @@ class Events extends React.Component {
     requestCategories(categoryRequestURL);
     requestSources(sourceRequestURL);
   }
+
   dismissAlert() {
     localStorage.setItem('dismissedEventVisibilityAlert', true);
     this.setState({ showAlert: false });
   }
+
   render() {
     const {
       events,
@@ -93,6 +96,16 @@ class Events extends React.Component {
       : hasRequestError
         ? 'There has been an ERROR retrieving events from the EONET events API'
         : '';
+
+    let scrollBarVerticalTop = 0;
+    if (visibleEvents && selected.id) {
+      // find index for scrollBarVerticalTop calculation on selected event
+      const index = Object.keys(visibleEvents).indexOf(selected.id);
+      // 12 === li total top/bottom padding
+      // 32.2 === li height (varies slightly, Chrome 100% browser zoom height used)
+      scrollBarVerticalTop = index ? index * (12 + 32.2) : 0;
+    }
+
     return (
       <React.Fragment>
         {showAlert && this.state.showAlert ? (
@@ -105,7 +118,10 @@ class Events extends React.Component {
         ) : (
           ''
         )}
-        <Scrollbars style={{ maxHeight: height + 'px' }}>
+        <Scrollbars
+          style={{ maxHeight: height + 'px' }}
+          scrollBarVerticalTop={ scrollBarVerticalTop }
+        >
           <div id="wv-events">
             <span
               className="events-loading-text"
@@ -221,7 +237,7 @@ function mapStateToProps(state) {
       proj.selected,
       true
     );
-    let extent = showAll ? proj.selected.maxExtent : mapExtent;
+    const extent = showAll ? proj.selected.maxExtent : mapExtent;
     visibleEvents = getEventsWithinExtent(
       events,
       selected,

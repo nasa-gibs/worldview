@@ -40,7 +40,8 @@ import {
   changeTimeScale,
   selectInterval,
   changeCustomInterval,
-  updateAppNow
+  updateAppNow,
+  toggleCustomModal
 } from '../../modules/date/actions';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import {
@@ -53,7 +54,8 @@ import {
 import {
   timeScaleFromNumberKey,
   timeScaleToNumberKey,
-  timeScaleOptions
+  timeScaleOptions,
+  customModalType
 } from '../../modules/date/constants';
 
 const ANIMATION_DELAY = 500;
@@ -90,7 +92,6 @@ class Timeline extends React.Component {
       initialLoadComplete: false,
       timelineHidden: false,
       hasMoved: false,
-      customIntervalModalOpen: false,
       rangeSelectorMax: { end: false, start: false, startOffset: -50, width: 50000 }
     };
     // left/right arrows
@@ -174,33 +175,33 @@ class Timeline extends React.Component {
     e.stopPropagation();
     e.persist();
     requestAnimationFrame(() => {
-      let {
+      const {
         position,
         transformX
       } = this.state;
-      let {
+      const {
         timeScale,
         timelineStartDateLimit,
         timelineEndDateLimit
       } = this.props;
 
-      let options = timeScaleOptions[timeScale].timeAxis;
-      let gridWidth = options.gridWidth;
+      const options = timeScaleOptions[timeScale].timeAxis;
+      const gridWidth = options.gridWidth;
 
-      let target = e.target;
-      let clientX = e.clientX;
-      let boundingClientRect = target.getBoundingClientRect();
-      let xHoverPositionInCurrentGrid = Math.floor(clientX) - Math.floor(boundingClientRect.left);
+      const target = e.target;
+      const clientX = e.clientX;
+      const boundingClientRect = target.getBoundingClientRect();
+      const xHoverPositionInCurrentGrid = Math.floor(clientX) - Math.floor(boundingClientRect.left);
 
-      let currentDateValue = new Date(itemDate).getTime();
-      let nextDateValue = new Date(nextDate).getTime();
-      let diff = nextDateValue - currentDateValue;
-      let diffFactor = diff / gridWidth;
-      let displayDateValue = currentDateValue + xHoverPositionInCurrentGrid * diffFactor;
+      const currentDateValue = new Date(itemDate).getTime();
+      const nextDateValue = new Date(nextDate).getTime();
+      const diff = nextDateValue - currentDateValue;
+      const diffFactor = diff / gridWidth;
+      const displayDateValue = currentDateValue + xHoverPositionInCurrentGrid * diffFactor;
 
-      let isBetweenValidTimeline = getIsBetween(displayDateValue, timelineStartDateLimit, timelineEndDateLimit);
+      const isBetweenValidTimeline = getIsBetween(displayDateValue, timelineStartDateLimit, timelineEndDateLimit);
       if (isBetweenValidTimeline) {
-        let displayDateFormat = getISODateFormatted(displayDateValue);
+        const displayDateFormat = getISODateFormatted(displayDateValue);
         this.displayDate(displayDateFormat, clientX);
         this.setState({
           hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid + transformX + position
@@ -347,7 +348,7 @@ class Timeline extends React.Component {
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
-    let timeScale = timeScaleChangeUnit;
+    const timeScale = timeScaleChangeUnit;
     if (timeScale) { // undefined custom will not allow arrow change
       delta = Number(delta * signconstant); // determine if negative or positive change
       var nextTime = getNextTimeSelection(delta, timeScale, selectedDate);
@@ -355,7 +356,8 @@ class Timeline extends React.Component {
         this.onDateChange(util.dateAdd(selectedDate, timeScale, delta));
       }
     }
-  };
+  }
+  ;
   /**
   * @desc stop animation from left arrows - clear throttle invocation
   * @returns {void}
@@ -363,6 +365,7 @@ class Timeline extends React.Component {
   stopLeftArrow = () => {
     this.throttleDecrementDate.cancel();
   }
+
   /**
   * @desc stop animation from right arrows - clear throttle invocation
   * @returns {void}
@@ -370,6 +373,7 @@ class Timeline extends React.Component {
   stopRightArrow = () => {
     this.throttleIncrementDate.cancel();
   }
+
   /**
   * @desc handles left/right arrow down to decrement/increment date
   * @param {Event} mouse event
@@ -389,6 +393,7 @@ class Timeline extends React.Component {
       }
     }
   };
+
   /**
   * @desc handles stopping change date in process and to allow faster key downs
   * @param {Event} mouse event
@@ -412,9 +417,8 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   toggleCustomIntervalModal = (isOpen) => {
-    this.setState({
-      customIntervalModalOpen: isOpen
-    });
+    const { toggleCustomModal } = this.props;
+    toggleCustomModal(isOpen, customModalType.TIMELINE);
   };
 
   /**
@@ -444,8 +448,9 @@ class Timeline extends React.Component {
   */
   setTimeScaleIntervalChangeUnit = (timeScale, modalOpen) => {
     let delta;
-    let { customIntervalZoomLevel, customIntervalValue } = this.props;
-    let customSelected = timeScale === 'custom';
+    const { customIntervalZoomLevel, customIntervalValue } = this.props;
+    const customSelected = timeScale === 'custom';
+
     if (customSelected && customIntervalZoomLevel && customIntervalValue) {
       timeScale = customIntervalZoomLevel;
       delta = customIntervalValue;
@@ -509,8 +514,8 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   determineAnimationDraggerUpdate = (startDate, endDate) => {
-    let startChanged = this.props.animStartLocationDate !== startDate;
-    let endChanged = this.props.animEndLocationDate !== endDate;
+    const startChanged = this.props.animStartLocationDate !== startDate;
+    const endChanged = this.props.animEndLocationDate !== endDate;
     if (startChanged) {
       if (endChanged) {
         this.debounceOnUpdateStartAndEndDate(startDate, endDate);
@@ -531,19 +536,19 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   animationDraggerDateUpdateLocal = (startDate, endDate) => {
-    let {
+    const {
       frontDate,
       position,
       transformX
     } = this.state;
-    let { timeScale } = this.props;
+    const { timeScale } = this.props;
 
-    let options = timeScaleOptions[timeScale].timeAxis;
-    let gridWidth = options.gridWidth;
+    const options = timeScaleOptions[timeScale].timeAxis;
+    const gridWidth = options.gridWidth;
 
-    let frontDateObj = moment.utc(frontDate);
-    let startLocation = frontDateObj.diff(startDate, timeScale, true) * gridWidth;
-    let endLocation = frontDateObj.diff(endDate, timeScale, true) * gridWidth;
+    const frontDateObj = moment.utc(frontDate);
+    const startLocation = frontDateObj.diff(startDate, timeScale, true) * gridWidth;
+    const endLocation = frontDateObj.diff(endDate, timeScale, true) * gridWidth;
 
     this.setState({
       animationStartLocation: position - startLocation + transformX,
@@ -628,16 +633,16 @@ class Timeline extends React.Component {
   static getDerivedStateFromProps(props, currentState) {
     // Update animation Date states when animation is initiated
     if (!currentState.animationEndLocationDate && !currentState.animationStartLocationDate && props.animStartLocationDate && props.animEndLocationDate) {
-      let { position, transformX } = currentState;
-      let { timeScale } = props;
-      let startDate = props.animStartLocationDate;
-      let endDate = props.animEndLocationDate;
-      let options = timeScaleOptions[timeScale].timeAxis;
-      let gridWidth = options.gridWidth;
+      const { position, transformX } = currentState;
+      const { timeScale } = props;
+      const startDate = props.animStartLocationDate;
+      const endDate = props.animEndLocationDate;
+      const options = timeScaleOptions[timeScale].timeAxis;
+      const gridWidth = options.gridWidth;
 
-      let frontDate = moment.utc(currentState.frontDate);
-      let startLocation = frontDate.diff(startDate, timeScale, true) * gridWidth;
-      let endLocation = frontDate.diff(endDate, timeScale, true) * gridWidth;
+      const frontDate = moment.utc(currentState.frontDate);
+      const startLocation = frontDate.diff(startDate, timeScale, true) * gridWidth;
+      const endLocation = frontDate.diff(endDate, timeScale, true) * gridWidth;
       return {
         animationStartLocationDate: props.animStartLocationDate,
         animationEndLocationDate: props.animEndLocationDate,
@@ -649,20 +654,17 @@ class Timeline extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    let prevStartLocationDate = prevProps.animStartLocationDate;
-    let prevEndLocationDate = prevProps.animEndLocationDate;
+    const prevStartLocationDate = prevProps.animStartLocationDate;
+    const prevEndLocationDate = prevProps.animEndLocationDate;
 
-    let {
+    const {
       animStartLocationDate,
       animEndLocationDate,
       dateA,
       dateB,
       isAnimationPlaying,
       isAnimationWidgetOpen,
-      isGifActive,
-      customSelected,
-      customIntervalValue,
-      customIntervalZoomLevel
+      isGifActive
     } = this.props;
 
     // handle update animation positioning and local state from play button/gif creation
@@ -682,18 +684,8 @@ class Timeline extends React.Component {
           this.animationDraggerDateUpdate(animStartLocationDate, animEndLocationDate);
         }
       }
-
-      // handle open/close custom interval panel if 'custom' selected in animation widget
-      // and no custom value has been initialized
-      if (customIntervalValue === 1 && customIntervalZoomLevel === 3) {
-        if (!prevProps.customSelected && customSelected) {
-          this.toggleCustomIntervalModal(true);
-        }
-        if (prevProps.customSelected && !customSelected) {
-          this.toggleCustomIntervalModal(false);
-        }
-      }
     }
+
     if (dateA !== prevProps.dateA && dateA !== this.state.draggerTimeState) {
       this.updateDraggerTimeState(dateA, false);
     }
@@ -721,7 +713,7 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    let { updateAppNow } = this.props;
+    const { updateAppNow } = this.props;
 
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
@@ -742,7 +734,7 @@ class Timeline extends React.Component {
   }
 
   setInitialState = () => {
-    let {
+    const {
       dateA,
       dateB
     } = this.props;
@@ -761,8 +753,8 @@ class Timeline extends React.Component {
   * @returns {void}
   */
   onDateChange = (date, draggerSelected = this.props.draggerSelected) => {
-    let dateObj = new Date(date);
-    let dateISOFormatted = getISODateFormatted(date);
+    const dateObj = new Date(date);
+    const dateISOFormatted = getISODateFormatted(date);
     if (draggerSelected === 'selected') { // dragger A
       this.setState({
         draggerTimeState: dateISOFormatted
@@ -802,9 +794,10 @@ class Timeline extends React.Component {
       toggleActiveCompareState,
       parentOffset,
       isTourActive,
-      isDataDownload
+      isDataDownload,
+      timelineCustomModalOpen
     } = this.props;
-    let {
+    const {
       initialLoadComplete,
       timelineHidden,
       draggerTimeState,
@@ -827,14 +820,14 @@ class Timeline extends React.Component {
       isTimelineDragging,
       isDraggerDragging,
       isAnimationDraggerDragging,
-      customIntervalModalOpen,
       showHoverLine,
       showDraggerTime,
       hoverLinePosition,
       hasMoved
     } = this.state;
-    let selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
-    let isTimelineHidden = timelineHidden || hideTimeline;
+    const selectedDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
+    const isTimelineHidden = timelineHidden || hideTimeline;
+    const chevronDirection = isTimelineHidden ? 'left' : 'right';
     return (
       <div className="timeline-container">
         {initialLoadComplete
@@ -858,7 +851,7 @@ class Timeline extends React.Component {
                       onDateChange={this.onDateChange}
                       maxDate={new Date(timelineEndDateLimit)}
                       minDate={new Date(timelineStartDateLimit)}
-                      hasSubdailyLayers={hasSubdailyLayers}
+                      subDailyMode={hasSubdailyLayers}
                       fontSize={24}
                     />
                   </div>
@@ -1024,9 +1017,8 @@ class Timeline extends React.Component {
                   <CustomIntervalSelectorWidget
                     customDelta={customIntervalValue}
                     customIntervalZoomLevel={customIntervalZoomLevel}
-                    toggleCustomIntervalModal={this.toggleCustomIntervalModal}
-                    customIntervalModalOpen={customIntervalModalOpen}
                     changeCustomInterval={this.changeCustomInterval}
+                    customIntervalModalOpen={timelineCustomModalOpen}
                     hasSubdailyLayers={hasSubdailyLayers}
                   />
                 </div>
@@ -1043,9 +1035,7 @@ class Timeline extends React.Component {
                 {/* Open/Close Chevron */}
                 <div id="timeline-hide" onClick={this.toggleHideTimeline}>
                   <div
-                    className={`wv-timeline-hide wv-timeline-hide-double-chevron-${
-                      isTimelineHidden ? 'left' : 'right'
-                    }`}
+                    className={'wv-timeline-hide wv-timeline-hide-double-chevron-' + chevronDirection}
                   />
                 </div>
               </section>
@@ -1056,6 +1046,7 @@ class Timeline extends React.Component {
     );
   }
 }
+
 function mapStateToProps(state) {
   const {
     config,
@@ -1078,14 +1069,14 @@ function mapStateToProps(state) {
     delta,
     customInterval,
     customDelta,
-    appNow
+    appNow,
+    timelineCustomModalOpen
   } = date;
   const { screenWidth, lessThan } = browser;
   const { isCompareA, activeString } = compare;
   const isCompareModeActive = compare.active;
   const isSmallScreen = lessThan.medium;
   let hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
-  customSelected = Boolean(customSelected);
 
   // handle reset of timescale and intervals if not subdaily
   if (!hasSubdailyLayers) {
@@ -1102,8 +1093,7 @@ function mapStateToProps(state) {
 
   let endTime;
   if (isCompareModeActive) {
-    hasSubdailyLayers =
-      hasSubDaily(layers['active']) || hasSubDaily(layers['activeB']);
+    hasSubdailyLayers = hasSubDaily(layers['active']) || hasSubDaily(layers['activeB']);
     endTime = getEndTime(layers, config);
   } else {
     hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
@@ -1117,19 +1107,19 @@ function mapStateToProps(state) {
   );
   const timelineEndDateLimit = getISODateFormatted(endTime);
 
-  let selectedDate = isCompareA ? selected : selectedB;
-  let deltaChangeAmt = customSelected ? customDelta : delta;
-  let timeScaleChangeUnit = customSelected
+  const selectedDate = isCompareA ? selected : selectedB;
+  const deltaChangeAmt = customSelected ? customDelta : delta;
+  const timeScaleChangeUnit = customSelected
     ? timeScaleFromNumberKey[customInterval]
     : timeScaleFromNumberKey[interval];
-  let timelineStartDateLimit = config.startDate;
-  let leftArrowDisabled = checkLeftArrowDisabled(
+  const timelineStartDateLimit = config.startDate;
+  const leftArrowDisabled = checkLeftArrowDisabled(
     selectedDate,
     deltaChangeAmt,
     timeScaleChangeUnit,
     timelineStartDateLimit
   );
-  let rightArrowDisabled = checkRightArrowDisabled(
+  const rightArrowDisabled = checkRightArrowDisabled(
     selectedDate,
     deltaChangeAmt,
     timeScaleChangeUnit,
@@ -1169,7 +1159,8 @@ function mapStateToProps(state) {
       compare.active,
     isDataDownload: sidebar.activeTab === 'download',
     isAnimationPlaying: animation.isPlaying,
-    isGifActive: animation.gifActive
+    isGifActive: animation.gifActive,
+    timelineCustomModalOpen
   };
 }
 
@@ -1193,6 +1184,9 @@ const mapDispatchToProps = dispatch => ({
   // changes to non-custom timescale interval, sets customSelected to TRUE/FALSE
   selectInterval: (delta, timeScale, customSelected) => {
     dispatch(selectInterval(delta, timeScale, customSelected));
+  },
+  toggleCustomModal: (open, toggleBy) => {
+    dispatch(toggleCustomModal(open, toggleBy));
   },
   openAnimation: () => {
     dispatch(openAnimation());
@@ -1259,11 +1253,13 @@ Timeline.propTypes = {
   selectedDate: PropTypes.object,
   selectInterval: PropTypes.func,
   startDate: PropTypes.string,
+  timelineCustomModalOpen: PropTypes.bool,
   timelineEndDateLimit: PropTypes.string,
   timelineStartDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
   timeScaleChangeUnit: PropTypes.string,
   toggleActiveCompareState: PropTypes.func,
+  toggleCustomModal: PropTypes.func,
   updateAppNow: PropTypes.func
 };
 
@@ -1317,8 +1313,8 @@ const checkLeftArrowDisabled = (
   timeScaleChangeUnit,
   timelineStartDateLimit
 ) => {
-  let nextDecrementDate = moment.utc(date).subtract(delta, timeScaleChangeUnit);
-  let isSameOrBefore = new Date(nextDecrementDate.format()) < new Date(timelineStartDateLimit);
+  const nextDecrementDate = moment.utc(date).subtract(delta, timeScaleChangeUnit);
+  const isSameOrBefore = new Date(nextDecrementDate.format()) < new Date(timelineStartDateLimit);
   return isSameOrBefore;
 };
 
@@ -1329,7 +1325,7 @@ const checkRightArrowDisabled = (
   timeScaleChangeUnit,
   timelineEndDateLimit
 ) => {
-  let nextIncrementDate = moment.utc(date).add(delta, timeScaleChangeUnit);
-  let isSameOrAfter = new Date(nextIncrementDate.format()) > new Date(timelineEndDateLimit);
+  const nextIncrementDate = moment.utc(date).add(delta, timeScaleChangeUnit);
+  const isSameOrAfter = new Date(nextIncrementDate.format()) > new Date(timelineEndDateLimit);
   return isSameOrAfter;
 };

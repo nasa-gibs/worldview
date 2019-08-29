@@ -14,9 +14,11 @@ export default class Selector extends React.Component {
       value: props.value
     };
   }
+
   handleChange(event) {
     this.props.onChange(this.props.optionName, event.target.value);
   }
+
   render() {
     return (
       <select

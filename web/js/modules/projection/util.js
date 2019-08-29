@@ -26,15 +26,15 @@ export function parseProjection(str, config) {
 export function mapLocationToProjState(parameters, stateFromLocation, state) {
   const projId = lodashGet(stateFromLocation, 'proj.id');
   if (parameters.p) {
-    let selected = lodashGet(state, `config.projections.${projId}`);
+    const selected = lodashGet(state, `config.projections.${projId}`);
     if (selected) {
       stateFromLocation = update(stateFromLocation, {
         proj: { selected: { $set: selected } }
       });
     }
   } else if (parameters.switch) {
-    let id = parameters.switch;
-    let selected = lodashGet(state, `config.projections.${id}`);
+    const id = parameters.switch;
+    const selected = lodashGet(state, `config.projections.${id}`);
     if (selected) {
       const newProjState = { id, selected };
 

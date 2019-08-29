@@ -288,14 +288,14 @@ const createLayerArrayFromState = function(state, config) {
             if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
           }
           if (attr.id === 'max' && typeof attr.value === 'string') {
-            let maxArray = [];
-            let values = util.toArray(attr.value.split(';'));
+            const maxArray = [];
+            const values = util.toArray(attr.value.split(';'));
             lodashEach(values, function(value, index) {
               if (value === '') {
                 maxArray.push(undefined);
                 return;
               }
-              let maxValue = parseFloat(value);
+              const maxValue = parseFloat(value);
               if (lodashIsNaN(maxValue)) {
                 console.warn('Invalid max value: ' + value);
               } else {
@@ -305,14 +305,14 @@ const createLayerArrayFromState = function(state, config) {
             max = maxArray.length ? maxArray : undefined;
           }
           if (attr.id === 'min' && typeof attr.value === 'string') {
-            let minArray = [];
-            let values = util.toArray(attr.value.split(';'));
+            const minArray = [];
+            const values = util.toArray(attr.value.split(';'));
             lodashEach(values, function(value, index) {
               if (value === '') {
                 minArray.push(undefined);
                 return;
               }
-              let minValue = parseFloat(value);
+              const minValue = parseFloat(value);
               if (lodashIsNaN(minValue)) {
                 console.warn('Invalid min value: ' + value);
               } else {
@@ -325,8 +325,8 @@ const createLayerArrayFromState = function(state, config) {
             if (attr.value === true) {
               squash = [true];
             } else if (typeof attr.value === 'string') {
-              let squashArray = [];
-              let values = util.toArray(attr.value.split(';'));
+              const squashArray = [];
+              const values = util.toArray(attr.value.split(';'));
               lodashEach(values, function(value) {
                 squashArray.push(value === 'true');
               });
@@ -334,11 +334,11 @@ const createLayerArrayFromState = function(state, config) {
             }
           }
           if (attr.id === 'palette') {
-            let values = util.toArray(attr.value.split(';'));
+            const values = util.toArray(attr.value.split(';'));
             custom = values;
           }
           if (attr.id === 'style') {
-            let values = util.toArray(attr.value.split(';'));
+            const values = util.toArray(attr.value.split(';'));
             custom = values;
           }
         });

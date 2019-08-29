@@ -4,6 +4,7 @@ import {
   getDimensions,
   imageUtilGetLayers,
   imageUtilGetLayerOpacities,
+  imageUtilGetLayerWrap,
   bboxWMS13
 } from '../../modules/image-download/util';
 
@@ -15,14 +16,14 @@ import googleTagManager from 'googleTagManager';
 
 const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
-  '0.125': '30m',
-  '0.25': '60m',
-  '0.5': '125m',
-  '1': '250m',
-  '2': '500m',
-  '4': '1km',
-  '20': '5km',
-  '40': '10km'
+  0.125: '30m',
+  0.25: '60m',
+  0.5: '125m',
+  1: '250m',
+  2: '500m',
+  4: '1km',
+  20: '5km',
+  40: '10km'
 };
 /*
  * A react component, Builds a rather specific
@@ -44,32 +45,37 @@ export default class ImageResSelection extends React.Component {
       debugUrl: ''
     };
   }
+
   onDownload(imgWidth, imgHeight) {
     const { getLayers, url, lonlats, crs, projection, date } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
-    let time = new Date(date.getTime());
-    time.setUTCHours(0, 0, 0, 0);
-    let layerList = getLayers();
-    let layers = imageUtilGetLayers(layerList, projection.id);
-    let opacities = imageUtilGetLayerOpacities(layerList);
-
-    let params = [
+    const time = new Date(date.getTime());
+    if (!this.props.hasSubdailyLayers) {
+      time.setUTCHours(0, 0, 0, 0);
+    }
+    const layerList = getLayers();
+    const layerWraps = imageUtilGetLayerWrap(layerList);
+    const layers = imageUtilGetLayers(layerList, projection.id);
+    const opacities = imageUtilGetLayerOpacities(layerList);
+    const params = [
       'REQUEST=GetSnapshot',
-      `TIME=${util.toISOStringDate(time)}`,
+      `TIME=${util.toISOStringSeconds(time)}`,
       `BBOX=${bboxWMS13(lonlats, crs)}`,
       `CRS=${crs}`,
       `LAYERS=${layers.join(',')}`,
+      `WRAP=${layerWraps.join(',')}`,
       `FORMAT=${fileType}`,
       `WIDTH=${imgWidth}`,
       `HEIGHT=${imgHeight}`
     ];
+
     if (opacities.length > 0) {
       params.push(`OPACITIES=${opacities.join(',')}`);
     }
     if (isWorldfile === 'true') {
       params.push('WORLDFILE=true');
     }
-    let dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
+    const dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
     if (url) {
       util.metrics('lc=' + encodeURIComponent(dlURL));
       window.open(dlURL, '_blank');
@@ -89,6 +95,7 @@ export default class ImageResSelection extends React.Component {
     });
     this.setState({ debugUrl: dlURL });
   }
+
   handleChange(type, value) {
     const { onPanelChange } = this.props;
     if (type === 'resolution') {
@@ -106,6 +113,7 @@ export default class ImageResSelection extends React.Component {
     }
     onPanelChange(type, value);
   }
+
   _renderFileTypeSelect() {
     if (this.props.fileTypeOptions) {
       return (
@@ -122,6 +130,7 @@ export default class ImageResSelection extends React.Component {
       );
     }
   }
+
   _renderWorldfileSelect() {
     if (this.props.worldFileOptions) {
       return (
@@ -145,6 +154,7 @@ export default class ImageResSelection extends React.Component {
       );
     }
   }
+
   render() {
     const { projection, lonlats, resolutions, maxImageSize } = this.props;
     const { resolution, debugUrl } = this.state;
@@ -207,6 +217,7 @@ ImageResSelection.propTypes = {
   fileTypes: PropTypes.object,
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
+  hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   maxImageSize: PropTypes.string,

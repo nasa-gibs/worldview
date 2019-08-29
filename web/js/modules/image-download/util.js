@@ -101,7 +101,7 @@ export function imageUtilGetLayers(products, proj) {
  *
  */
 export function imageUtilGetLayerOpacities(layers) {
-  let opacities = [];
+  const opacities = [];
   let found = false;
   layers.forEach(layer => {
     let opacity = '';
@@ -117,6 +117,18 @@ export function imageUtilGetLayerOpacities(layers) {
     return [];
   }
   return opacities;
+}
+
+export function imageUtilGetLayerWrap(layers) {
+  return layers.map(layer => {
+    if (layer.wrapX) {
+      return 'x';
+    }
+    if (layer.wrapadjacentdays) {
+      return 'day';
+    }
+    return 'none';
+  }) || [];
 }
 
 export function imageUtilEstimateResolution(resolution, isGeoProjection) {

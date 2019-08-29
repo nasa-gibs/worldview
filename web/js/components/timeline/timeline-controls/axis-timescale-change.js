@@ -38,20 +38,20 @@ class AxisTimeScaleChange extends PureComponent {
 
   // Toggle visibility of map scales
   disableMapScales = (disable) => {
-    let imperialMapScale = document.querySelectorAll('.wv-map-scale-imperial');
-    let metricMapScale = document.querySelectorAll('.wv-map-scale-metric');
+    const imperialMapScale = document.querySelectorAll('.wv-map-scale-imperial');
+    const metricMapScale = document.querySelectorAll('.wv-map-scale-metric');
     if (disable) {
-      for (let el of imperialMapScale) {
+      for (const el of imperialMapScale) {
         el.style.display = 'none';
       }
-      for (let el of metricMapScale) {
+      for (const el of metricMapScale) {
         el.style.display = 'none';
       }
     } else {
-      for (let el of imperialMapScale) {
+      for (const el of imperialMapScale) {
         el.style.display = 'block';
       }
-      for (let el of metricMapScale) {
+      for (const el of metricMapScale) {
         el.style.display = 'block';
       }
     }
@@ -59,8 +59,8 @@ class AxisTimeScaleChange extends PureComponent {
 
   // ex: month(2) to day(3)
   incrementTimeScale = () => {
-    let timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
-    let maxTimeScaleNumber = this.props.hasSubdailyLayers ? 5 : 3;
+    const timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
+    const maxTimeScaleNumber = this.props.hasSubdailyLayers ? 5 : 3;
     if (timeScaleNumber < maxTimeScaleNumber) {
       this.props.changeTimeScale(timeScaleNumber + 1);
     }
@@ -68,14 +68,14 @@ class AxisTimeScaleChange extends PureComponent {
 
   // ex: day(3) to month(2)
   decrementTimeScale = () => {
-    let timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
+    const timeScaleNumber = timeScaleToNumberKey[this.props.timeScale];
     if (timeScaleNumber > 1) {
       this.props.changeTimeScale(timeScaleNumber - 1);
     }
   }
 
   render() {
-    let {
+    const {
       timeScale,
       timelineHidden,
       hasSubdailyLayers,

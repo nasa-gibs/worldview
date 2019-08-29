@@ -3,14 +3,15 @@ export const CHANGE_INTERVAL = 'DATE/CHANGE_INTERVAL';
 export const CHANGE_TIME_SCALE = 'DATE/CHANGE_TIME_SCALE';
 export const SELECT_DATE = 'DATE/SELECT_DATE';
 export const UPDATE_APP_NOW = 'DATE/UPDATE_APP_NOW';
-
+export const TOGGLE_CUSTOM_MODAL = 'DATE/TOGGLE_CUSTOM_MODAL';
+export const INIT_SECOND_DATE = 'DATE/INIT_SECOND_DATE';
 export const timeScaleFromNumberKey = {
-  '0': 'custom',
-  '1': 'year',
-  '2': 'month',
-  '3': 'day',
-  '4': 'hour',
-  '5': 'minute'
+  0: 'custom',
+  1: 'year',
+  2: 'month',
+  3: 'day',
+  4: 'hour',
+  5: 'minute'
 };
 export const timeScaleToNumberKey = {
   custom: 0,
@@ -21,7 +22,7 @@ export const timeScaleToNumberKey = {
   minute: 5
 };
 export const timeScaleOptions = {
-  'minute': {
+  minute: {
     timeAxis: {
       scale: 'minute',
       format: 'HH:mm',
@@ -29,7 +30,7 @@ export const timeScaleOptions = {
       scaleMs: 60000
     }
   },
-  'hour': {
+  hour: {
     timeAxis: {
       scale: 'hour',
       format: 'MMM D',
@@ -37,7 +38,7 @@ export const timeScaleOptions = {
       scaleMs: 3600000
     }
   },
-  'day': {
+  day: {
     timeAxis: {
       scale: 'day',
       format: 'MMM YYYY',
@@ -45,7 +46,7 @@ export const timeScaleOptions = {
       scaleMs: 86400000
     }
   },
-  'month': {
+  month: {
     timeAxis: {
       scale: 'month',
       format: 'YYYY',
@@ -54,7 +55,7 @@ export const timeScaleOptions = {
       // scaleMs: 2678400000 - REFERENCE ONLY - 31 days
     }
   },
-  'year': {
+  year: {
     timeAxis: {
       scale: 'year',
       format: 'YYYY',
@@ -63,4 +64,8 @@ export const timeScaleOptions = {
       // scaleMs: 31536000000 - REFERENCE ONLY - 365 days
     }
   }
+};
+export const customModalType = {
+  TIMELINE: 'timeline',
+  ANIMATION: 'animation'
 };

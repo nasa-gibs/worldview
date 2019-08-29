@@ -9,7 +9,7 @@ import { CHANGE_PROJECTION } from '../projection/constants';
 import { assign as lodashAssign, find as lodashFind } from 'lodash';
 export const defaultState = {
   fileType: 'image/jpeg',
-  boundaries: {},
+  boundaries: undefined,
   isWorldfile: false,
   resolution: ''
 };
@@ -33,7 +33,7 @@ export function imageDownloadReducer(state = defaultState, action) {
         resolution: action.value
       });
     case CHANGE_PROJECTION:
-      let fileType =
+      const fileType =
         action.selected !== 'geographic' &&
         !lodashFind(fileTypesPolar.values, { value: state.fileType })
           ? 'image/jpeg'

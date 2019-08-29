@@ -797,8 +797,9 @@ export function dataResultsTimeFilter(spec) {
   self.name = 'TimeFilter';
 
   var init = function() {
-    westZone = new Date(spec.time.getTime()).setUTCMinutes(spec.westZone);
-    eastZone = new Date(spec.time.getTime()).setUTCMinutes(spec.eastZone);
+    const zeroedTime = spec.time.setUTCHours(0);
+    westZone = new Date(zeroedTime).setUTCMinutes(spec.westZone);
+    eastZone = new Date(zeroedTime).setUTCMinutes(spec.eastZone);
     maxDistance = spec.maxDistance;
     timeOffset = spec.timeOffset || 0;
   };
@@ -849,7 +850,7 @@ export function dataResultsTimeLabel(time) {
     }
 
     var diff = Math.floor(
-      (timeStart.getTime() - time.getTime()) / (1000 * 60 * 60 * 24)
+      (timeStart.getTime() - time.setUTCHours(0)) / (1000 * 60 * 60 * 24)
     );
 
     var suffix = '';

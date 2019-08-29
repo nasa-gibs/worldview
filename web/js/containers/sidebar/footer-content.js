@@ -21,6 +21,7 @@ class FooterContent extends React.Component {
     super(props);
     this.toggleListAll = this.toggleListAll.bind(this);
   }
+
   toggleListAll() {
     const {
       toggleListAll,
@@ -37,6 +38,7 @@ class FooterContent extends React.Component {
       });
     }
   }
+
   render() {
     const {
       isCompareActive,

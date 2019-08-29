@@ -24,11 +24,11 @@ export function getPalette(layerId, index, groupStr, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   const renderedPalette = lodashGet(
     state,
-    `palettes.rendered.${layerId}.maps.${index}`
+    `palettes.rendered['${layerId}'].maps[${index}]`
   );
   const customPalette = lodashGet(
     state,
-    `palettes.${groupStr}.${layerId}.maps.${index}`
+    `palettes['${groupStr}']['${layerId}'].maps[${index}]`
   );
 
   if (customPalette) {
@@ -42,7 +42,7 @@ export function getPalette(layerId, index, groupStr, state) {
 
 export function getRenderedPalette(layerId, index, state) {
   const { config, palettes } = state;
-  var name = lodashGet(config, `layers.${layerId}.palette.id`);
+  var name = lodashGet(config, `layers['${layerId}'].palette.id`);
   var palette = palettes.rendered[name];
   if (!palette) {
     throw new Error(name + ' Is not a rendered palette');
@@ -240,7 +240,7 @@ export function setCustomSelector(layerId, paletteId, index, groupName, state) {
   if (!config.layers[layerId]) {
     throw new Error('Invalid layer: ' + layerId);
   }
-  let newPalettes = prepare(layerId, palettes[groupName], state);
+  const newPalettes = prepare(layerId, palettes[groupName], state);
   index = lodashIsUndefined(index) ? 0 : index;
   var active = newPalettes[layerId];
   var palette = active.maps[index];
@@ -278,7 +278,7 @@ export function isActive(layerId, group, state) {
 export function setRange(layerId, props, index, palettes, state) {
   let min = props.min;
   let max = props.max;
-  let squash = props.squash;
+  const squash = props.squash;
   let newPalettes = prepare(layerId, palettes, state);
   index = lodashIsUndefined(index) ? 0 : index;
   if (min === 0) {
@@ -321,7 +321,7 @@ export function clearCustomSelector(layerId, index, palettes, state) {
     return palettes;
   }
   delete palette.custom;
-  let newPalettes = update(palettes, {
+  const newPalettes = update(palettes, {
     [layerId]: { maps: { [index]: { $set: palette } } }
   }); // remove custom key
   return updateLookup(layerId, newPalettes, state);
@@ -347,7 +347,7 @@ export function isPaletteAllowed(layerId, config) {
   if (!isSupported()) {
     return false;
   }
-  let palette = config.layers[layerId].palette;
+  const palette = config.layers[layerId].palette;
   if (!palette || palette.immutable) {
     return false;
   }

@@ -9,12 +9,13 @@ import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce } from 'lodash';
 import {
   imageUtilCalculateResolution,
-  imageUtilGetCoordsFromPixelValues,
-  getPercentageFromPixel,
-  getPixelFromPercentage
+  imageUtilGetCoordsFromPixelValues
 } from '../modules/image-download/util';
 import util from '../util/util';
-import { getLayers } from '../modules/layers/selectors';
+import {
+  hasSubDaily as hasSubDailySelector,
+  getLayers
+} from '../modules/layers/selectors';
 import {
   resolutionsGeo,
   resolutionsPolar,
@@ -33,16 +34,15 @@ class ImageDownloadContainer extends Component {
     super(props);
     const screenHeight = props.screenHeight;
     const screenWidth = props.screenWidth;
-    const boundaryProps = props.boundaries;
     this.state = {
       fileType: props.fileType,
       resolution: props.resolution,
       isWorldfile: props.isWorldfile,
-      boundaries: {
-        x: boundaryProps.x || screenWidth / 2 - 100,
-        y: boundaryProps.y || screenHeight / 2 - 100,
-        x2: boundaryProps.x2 || screenWidth / 2 + 100,
-        y2: boundaryProps.y2 || screenHeight / 2 + 100
+      boundaries: props.boundaries || {
+        x: screenWidth / 2 - 100,
+        y: screenHeight / 2 - 100,
+        x2: screenWidth / 2 + 100,
+        y2: screenHeight / 2 + 100
       }
     };
     this.debounceBoundaryUpdate = lodashDebounce(
@@ -51,24 +51,20 @@ class ImageDownloadContainer extends Component {
     );
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
   }
+
   onBoundaryChange(boundaries) {
-    const { screenWidth, screenHeight } = this.props;
-    const x = getPixelFromPercentage(screenWidth, boundaries.x);
-    const y = getPixelFromPercentage(screenHeight, boundaries.y);
-    const x2 = x + getPixelFromPercentage(screenWidth, boundaries.width);
-    const y2 = y + getPixelFromPercentage(screenHeight, boundaries.height);
+    const { x, y, width, height } = boundaries;
     const newBoundaries = {
-      x: x,
-      y: y,
-      x2: x2,
-      y2: y2
+      x,
+      y,
+      x2: x + width,
+      y2: y + height
     };
 
-    this.setState({
-      boundaries: newBoundaries
-    });
+    this.setState({ boundaries: newBoundaries });
     this.debounceBoundaryUpdate(newBoundaries);
   }
+
   render() {
     const {
       proj,
@@ -79,6 +75,7 @@ class ImageDownloadContainer extends Component {
       screenHeight,
       date,
       getLayers,
+      hasSubdailyLayers,
       onPanelChange
     } = this.props;
     const { boundaries, resolution, isWorldfile, fileType } = this.state;
@@ -111,6 +108,7 @@ class ImageDownloadContainer extends Component {
           lonlats={lonlats}
           resolution={newResolution}
           isWorldfile={isWorldfile}
+          hasSubdailyLayers={hasSubdailyLayers}
           date={date}
           url={url}
           crs={crs}
@@ -118,12 +116,12 @@ class ImageDownloadContainer extends Component {
           onPanelChange={onPanelChange}
         />
         <Crop
-          x={getPercentageFromPixel(screenWidth, x)}
-          y={getPercentageFromPixel(screenHeight, y)}
+          x={x}
+          y={y}
+          width={x2 - x}
+          height={y2 - y}
           maxHeight={screenHeight}
           maxWidth={screenWidth}
-          width={getPercentageFromPixel(screenWidth, x2 - x)}
-          height={getPercentageFromPixel(screenHeight, y2 - y)}
           onChange={this.onBoundaryChange}
           onClose={onClose}
           bottomLeftStyle={{
@@ -161,6 +159,8 @@ function mapStateToProps(state) {
   const { isWorldfile, fileType, resolution, boundaries } = imageDownload;
   const { screenWidth, screenHeight } = browser;
   const activeDateStr = compare.isCompareA ? 'selected' : 'selectedB';
+  const activeStr = compare.activeString;
+  const hasSubdailyLayers = hasSubDailySelector(layers[activeStr]);
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -180,6 +180,7 @@ function mapStateToProps(state) {
     fileType,
     resolution,
     boundaries,
+    hasSubdailyLayers,
     date: date[activeDateStr],
     getLayers: () => {
       return getLayers(
@@ -224,6 +225,7 @@ ImageDownloadContainer.propTypes = {
   boundaries: PropTypes.object,
   date: PropTypes.object,
   getLayers: PropTypes.func,
+  hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   resolution: PropTypes.string,
   screenHeight: PropTypes.number,

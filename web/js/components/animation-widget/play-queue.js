@@ -29,6 +29,7 @@ class PlayAnimation extends React.Component {
     this.checkQueue(props.queueLength, this.currentPlayingDate);
     this.checkShouldPlay();
   }
+
   componentDidMount() {
     this.mounted = true;
   }
@@ -39,6 +40,7 @@ class PlayAnimation extends React.Component {
       clearInterval(this.interval);
     }
   }
+
   /*
    * Determines whether to start at
    * current date or to start at the
@@ -57,6 +59,7 @@ class PlayAnimation extends React.Component {
     }
     return util.toISOStringSeconds(startDate);
   }
+
   /*
    * Gets the last date that should be added
    * to the queuer
@@ -121,6 +124,7 @@ class PlayAnimation extends React.Component {
       }
     }
   }
+
   /*
    * Gets the last date that should be added
    * to the queuer
@@ -158,6 +162,7 @@ class PlayAnimation extends React.Component {
     }
     this.shiftCache();
   };
+
   /*
    * Gets the last date that should be added
    * to the queuer
@@ -184,6 +189,7 @@ class PlayAnimation extends React.Component {
       togglePlaying();
     }
   }
+
   /*
    * Determines what dates should
    * be queued
@@ -231,6 +237,7 @@ class PlayAnimation extends React.Component {
       this.customQueuer(currentDate, startDate, endDate);
     }
   }
+
   /*
    * Clears precache
    *
@@ -264,6 +271,7 @@ class PlayAnimation extends React.Component {
     const { interval, delta } = this.props;
     return util.dateAdd(date, interval, delta);
   }
+
   /*
    * Custom date queuer created for
    * custom colormaps
@@ -294,6 +302,7 @@ class PlayAnimation extends React.Component {
       this.checkQueue(this.props.queueLength, this.currentPlayingDate);
     }
   }
+
   /*
    * Add date to loading Queue
    * obj
@@ -311,6 +320,7 @@ class PlayAnimation extends React.Component {
     this.inQueueObject[strDate] = date;
     this.preloadedArray.push(strDate);
   }
+
   /*
    * removes item from cache after it has
    * been played and quelimit reached
@@ -332,11 +342,12 @@ class PlayAnimation extends React.Component {
       !this.isInToPlayGroup(this.preloadedArray[0]) &&
       !canPreloadAll
     ) {
-      let key = this.preloadedArray.shift();
+      const key = this.preloadedArray.shift();
       delete this.preloadObject[key];
       delete this.pastDates[key];
     }
   }
+
   /*
    *
    * @method getNextBufferDate
@@ -358,6 +369,7 @@ class PlayAnimation extends React.Component {
     }
     return nextDate;
   }
+
   /*
    * Verifies that date is
    * valid and adds it to queuer
@@ -386,6 +398,7 @@ class PlayAnimation extends React.Component {
       this.checkQueue(queueLength, this.currentPlayingDate);
     }
   }
+
   /*
    * checks if this date is in array of
    * dates that need to play in future
@@ -421,6 +434,7 @@ class PlayAnimation extends React.Component {
     }
     return false;
   }
+
   /*
    * Gets next date based on current
    * increments
@@ -453,6 +467,7 @@ class PlayAnimation extends React.Component {
         }
       });
   }
+
   /*
    * removes loader and starts the
    * animation
@@ -474,6 +489,7 @@ class PlayAnimation extends React.Component {
       togglePlaying();
     }
   }
+
   /*
    * function that loops through frames
    * at a specified time interval
@@ -523,6 +539,7 @@ class PlayAnimation extends React.Component {
     };
     this.interval = setTimeout(player, speed);
   }
+
   renderSpinner() {
     const { onClose } = this.props;
     return (
@@ -538,6 +555,7 @@ class PlayAnimation extends React.Component {
       </Modal>
     );
   }
+
   render() {
     const { isPlaying } = this.state;
     return !isPlaying ? this.renderSpinner() : '';

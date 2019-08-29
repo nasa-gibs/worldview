@@ -27,13 +27,36 @@ module.exports = {
     },
     chrome: {
       desiredCapabilities: {
-        browserName: 'chrome'
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          w3c: false,
+          prefs: { 'profile.managed_default_content_settings.notifications': 1 }
+        }
+      }
+    },
+    chromeHeadless: {
+      desiredCapabilities: {
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          w3c: false,
+          prefs: { 'profile.managed_default_content_settings.notifications': 1 },
+          args: ['headless', 'no-sandbox', 'disable-gpu']
+        }
       }
     },
     firefox: {
       desiredCapabilities: {
         browserName: 'firefox',
         javascriptEnabled: true
+      }
+    },
+    firefoxHeadless: {
+      desiredCapabilities: {
+        browserName: 'firefox',
+        javascriptEnabled: true,
+        'moz:firefoxOptions': {
+          args: ['--headless']
+        }
       }
     }
   }

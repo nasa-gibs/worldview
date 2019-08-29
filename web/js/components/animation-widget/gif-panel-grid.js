@@ -26,8 +26,9 @@ export class GifPanelGrid extends React.Component {
       );
     }
   }
+
   render() {
-    let imageSize = this.renderImageSize();
+    const imageSize = this.renderImageSize();
     return (
       <div className="gif-download-grid">
         <div className="grid-child label">

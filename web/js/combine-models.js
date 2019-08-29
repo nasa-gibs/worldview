@@ -6,7 +6,7 @@ import { mapModel } from './map/model';
  * @param {Object} config
  */
 export function combineModels(config) {
-  let models = {
+  const models = {
     wv: {
       events: util.events()
     }

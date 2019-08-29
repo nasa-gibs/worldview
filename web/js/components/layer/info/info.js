@@ -12,6 +12,7 @@ class LayerInfo extends React.Component {
     };
     this.getSourceMetadata(props.layer);
   }
+
   getSourceMetadata(layer) {
     if (layer.description) {
       util
@@ -30,6 +31,7 @@ class LayerInfo extends React.Component {
         });
     }
   }
+
   configureDate(period, layerDate, dateRanges) {
     let date = util.parseDate(layerDate);
     if (period === 'subdaily') {

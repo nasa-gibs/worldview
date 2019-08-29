@@ -14,7 +14,7 @@ function error(msg) {
   process.exit(1);
 };
 
-let argv = yargs
+const argv = yargs
   .usage('$0 [options] <name>')
   .option('d', {
     alias: 'dist',
@@ -66,11 +66,11 @@ if (argv.help) {
   process.exit(0);
 }
 
-let baseDir = path.join(__dirname, '..');
-let distDir = path.join(baseDir, 'dist');
-let worldview = 'worldview.tar.gz';
-let distWorldview = path.join(distDir, worldview);
-let configFile = path.join(os.homedir(), '.worldview', 'upload.config');
+const baseDir = path.join(__dirname, '..');
+const distDir = path.join(baseDir, 'dist');
+const worldview = 'worldview.tar.gz';
+const distWorldview = path.join(distDir, worldview);
+const configFile = path.join(os.homedir(), '.worldview', 'upload.config');
 
 let configData = '{}';
 try {
@@ -86,10 +86,10 @@ try {
   error(`${configFile}:\n${err}`);
 }
 
-let host = argv.host || config.host;
-let root = argv.root || config.root;
-let username = argv.user || config.user || os.userInfo().username;
-let key = argv.key || config.key || path.join(os.homedir(), '.ssh', 'id_rsa');
+const host = argv.host || config.host;
+const root = argv.root || config.root;
+const username = argv.user || config.user || os.userInfo().username;
+const key = argv.key || config.key || path.join(os.homedir(), '.ssh', 'id_rsa');
 
 if (!host) {
   error('host not found in config file or command line');
@@ -101,7 +101,7 @@ if (!username) {
   error('user not found in config file or command line');
 }
 
-let name = argv._[0];
+const name = argv._[0];
 if (!name) {
   error('name is required');
 }
@@ -132,8 +132,8 @@ async function upload() {
 };
 
 if (!argv.dist) {
-  let cmd = 'npm run build';
-  let options = {};
+  const cmd = 'npm run build';
+  const options = {};
   if (argv.env) {
     options.env = { ...process.env, CONFIG_ENV: argv.env };
   }

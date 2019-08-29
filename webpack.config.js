@@ -1,11 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WriteFilePlugin = require('write-file-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
+const postcssNesting = require('postcss-nesting');
 
 // production optimizations
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -14,9 +14,10 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 // environment dev flag
 const devMode = process.env.NODE_ENV !== 'production';
+const isDevServer = process.argv[1].indexOf('webpack-dev-server') !== -1;
 
 const pluginSystem = [
-  new CleanWebpackPlugin(['web/build']),
+  new CleanWebpackPlugin(),
   new HtmlWebpackPlugin({
     hash: true,
     title: 'Worldview',
@@ -27,13 +28,12 @@ const pluginSystem = [
     filename: 'wv.css'
   }),
   new WriteFilePlugin(),
-  new CopyWebpackPlugin([{ from: 'web/images', to: 'images' }]),
   new MomentLocalesPlugin()
 ];
 
 /* Conditional Plugin Management */
 // add hot module replacement
-if (devMode) {
+if (isDevServer) {
   pluginSystem.push(
     new webpack.HotModuleReplacementPlugin(), // use path to module for development performance
     new webpack.NamedModulesPlugin()
@@ -53,8 +53,9 @@ if (process.env.DEBUG === 'true') {
 }
 
 // handle testing entry point and output file name
-let entryPoint = './web/js/main.js';
-let outputFileName = 'wv.js';
+
+const entryPoint = './web/js/main.js';
+const outputFileName = 'wv.js';
 /*
 if (process.env.TESTING_MODE === 'true') {
   entryPoint = './test/main.js';
@@ -113,12 +114,14 @@ module.exports = {
       new OptimizeCSSAssetsPlugin({
         cssProcessor: cssnano,
         cssProcessorOptions: {
-          discardComments: {
-            removeAll: true
-          },
-          map: {
-            inline: false
-          }
+          preset: ['default', {
+            discardComments: {
+              removeAll: true
+            },
+            map: {
+              inline: false
+            }
+          }]
         }
       })
     ]
@@ -165,7 +168,6 @@ module.exports = {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              minimize: true,
               sourceMap: true
             }
           },
@@ -182,7 +184,8 @@ module.exports = {
                     'not edge < 15',
                     '> 2%'
                   ]
-                })
+                }),
+                postcssNesting()
               ]
             }
           },

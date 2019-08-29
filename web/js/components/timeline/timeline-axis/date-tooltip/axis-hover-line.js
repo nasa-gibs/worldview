@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
  */
 class AxisHoverLine extends PureComponent {
   render() {
-    let {
+    const {
       axisWidth,
       isTimelineDragging,
       isAnimationDraggerDragging,
@@ -17,7 +17,7 @@ class AxisHoverLine extends PureComponent {
       hoverLinePosition
     } = this.props;
     // check for timeline/animation dragging and showhover handled by parent
-    let showHover = !isTimelineDragging && !isAnimationDraggerDragging && showHoverLine;
+    const showHover = !isTimelineDragging && !isAnimationDraggerDragging && showHoverLine;
     return (
       showHover
         ? <svg className="axis-hover-line-container" width={axisWidth} height={63}>

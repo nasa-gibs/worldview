@@ -9,6 +9,7 @@ class OpacitySelect extends React.Component {
       value: props.start
     };
   }
+
   render() {
     const { layer, setOpacity, start } = this.props;
     return (

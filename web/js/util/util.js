@@ -236,7 +236,7 @@ export default (function (self) {
   self.appendAttributesForURL = function (item) {
     if (lodashIsObject(item)) {
       let part = item.id || '';
-      let attributes = [];
+      const attributes = [];
       if (item.attributes && item.attributes.length > 0) {
         lodashEach(item.attributes, function(attribute) {
           if (attribute.value) {
@@ -353,6 +353,19 @@ export default (function (self) {
    */
   self.toISOStringSeconds = function (date) {
     return date.toISOString().split('.')[0] + 'Z';
+  };
+
+  /**
+   * Converts a time into an ISO string without seconds.
+   *
+   * @method toISOStringMinutes
+   * @static
+   * @param  {Date} date the date to convert
+   * @return {string} ISO string in the form of `YYYY-MM-DDThh:mmZ`.
+   */
+  self.toISOStringMinutes = function (date) {
+    const parts = date.toISOString().split(':');
+    return parts[0] + ':' + parts[1] + 'Z';
   };
 
   /**
@@ -952,7 +965,7 @@ export default (function (self) {
   // Converts an encoded identifier back to its original value.
   self.decodeId = function(str) {
     return str.replace(/__[0-9A-Fa-f]{2}__/g, (match) => {
-      let charCode = Number.parseInt(match.substring(2, 4), 16);
+      const charCode = Number.parseInt(match.substring(2, 4), 16);
       return String.fromCharCode(charCode);
     });
   };
@@ -981,21 +994,21 @@ export default (function (self) {
       width = 2;
       signs = 'NS';
     }
-    let sign = (value >= 0) ? signs[0] : signs[1];
+    const sign = (value >= 0) ? signs[0] : signs[1];
     value = Math.abs(value);
 
-    let degrees = Math.floor(value);
-    let minutes = Math.floor((value * 60) - (degrees * 60));
-    let fminutes = (value * 60) - (degrees * 60);
-    let seconds = Math.floor((value * 3600) - (degrees * 3600) - (minutes * 60));
+    const degrees = Math.floor(value);
+    const minutes = Math.floor((value * 60) - (degrees * 60));
+    const fminutes = (value * 60) - (degrees * 60);
+    const seconds = Math.floor((value * 3600) - (degrees * 3600) - (minutes * 60));
 
     if (withSeconds) {
-      let sdegrees = self.pad(degrees, width, ' ');
-      let sminutes = self.pad(minutes, 2, '0');
-      let sseconds = self.pad(seconds, 2, '0');
+      const sdegrees = self.pad(degrees, width, ' ');
+      const sminutes = self.pad(minutes, 2, '0');
+      const sseconds = self.pad(seconds, 2, '0');
       return sdegrees + '°' + sminutes + '\'' + sseconds + '"' + sign;
     } else {
-      let sdegrees = self.pad(degrees, width, ' ');
+      const sdegrees = self.pad(degrees, width, ' ');
       // toFixed rounds and to prevent seeing 60.000, get it out to
       // four digits and then chop off the last one
       let sminutes = self.pad(fminutes.toFixed(4), 7, '0');
@@ -1175,6 +1188,16 @@ export default (function (self) {
           dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate() + dateInterval, 0, 0, 0));
         }
       } else if (def.period === 'subdaily') {
+        const currentDateOffset = currentDate.getTimezoneOffset() * 60000;
+        const minDateMinutes = minDate.getUTCMinutes();
+        // only check an hour into past for min date
+        const hourBeforeCurrentDate = new Date(currentDate.setMinutes(minDateMinutes) - currentDateOffset - (60 * 60000));
+        minDate = hourBeforeCurrentDate < minDate ? minDate : hourBeforeCurrentDate;
+        // only check an hour into future for max date
+        const hourAfterCurrentDate = new Date(currentDate.setMinutes(minDateMinutes) - currentDateOffset + (60 * 60000));
+        maxMinuteDate = hourAfterCurrentDate > maxMinuteDate ? maxMinuteDate : hourAfterCurrentDate;
+
+        currentDate = new Date(currentDate.getTime() - currentDateOffset);
         // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
         if (!containRange) {
           minuteDifference = self.minuteDiff(minDate, maxMinuteDate);
@@ -1184,7 +1207,7 @@ export default (function (self) {
         }
         // Create array of all possible request dates by saying for interval++ <= dayDifference
         for (dateInterval = 0; dateInterval <= (minuteDifference + 1); dateInterval += interval) {
-          let newDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours(), minDate.getUTCMinutes() + dateInterval, 0);
+          const newDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours(), minDate.getUTCMinutes() + dateInterval, 0);
           dateArray.push(newDate);
         }
       }

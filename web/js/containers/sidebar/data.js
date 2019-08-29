@@ -33,15 +33,16 @@ const CustomBodyModalContent = () => {
           style={{ overflowWrap: 'break-word' }}
           href="https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf"
           target="_blank"
+          rel="noopener noreferrer"
         >
           https://earthdata.nasa.gov/sites/default/files/field/document/MODIS_True_Color.pdf
         </a>
         <br />
         <br />
-        If you would like to download only an image, please use the "camera"
+        If you would like to download only an image, please use the &ldquo;camera&rdquo;
         icon in the upper right.
         <br />
-        <br /> Data download will not work for "Terra and Aqua" Fires, select
+        <br /> Data download will not work for &ldquo;Terra and Aqua&rdquo; Fires, select
         Terra only Fires and/or Aqua only Fires to download the associated data
         files.
       </p>

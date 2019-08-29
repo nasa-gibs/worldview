@@ -3,10 +3,10 @@ import renderer from 'react-test-renderer';
 import Coordinates from './coordinates';
 
 describe('formats', () => {
-  let formats = ['latlon-dd', 'latlon-dm', 'latlon-dms'];
-  for (let format of formats) {
+  const formats = ['latlon-dd', 'latlon-dm', 'latlon-dms'];
+  for (const format of formats) {
     test(`coordinate in ${format} format`, () => {
-      let component = renderer.create(<Coordinates
+      const component = renderer.create(<Coordinates
         format={format}
         latitude={0}
         longitude={0}
@@ -19,8 +19,8 @@ describe('formats', () => {
 });
 
 test('change format from latlon-dd to latlon-dm', () => {
-  let callback = jest.fn();
-  let component = renderer.create(<Coordinates
+  const callback = jest.fn();
+  const component = renderer.create(<Coordinates
     format='latlon-dd'
     latitude={0}
     longitude={0}
@@ -28,7 +28,7 @@ test('change format from latlon-dd to latlon-dm', () => {
     onFormatChange={callback}
   />);
 
-  let tree = component.toJSON();
+  const tree = component.toJSON();
   tree.props.onClick();
   expect(callback).toBeCalledWith('latlon-dm');
 });

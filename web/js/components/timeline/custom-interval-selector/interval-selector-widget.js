@@ -6,6 +6,8 @@ import {
   timeScaleFromNumberKey,
   timeScaleToNumberKey
 } from '../../../modules/date/constants';
+import { toggleCustomModal } from '../../../modules/date/actions';
+import { connect } from 'react-redux';
 
 /*
  * CustomIntervalSelectorWidget for Custom Interval Selector
@@ -24,14 +26,10 @@ class CustomIntervalSelectorWidget extends PureComponent {
     this.props.changeCustomInterval(this.props.customDelta, timeScaleToNumberKey[zoomLevel]);
   }
 
-  handleKeyPress = (e) => {
+  handleKeyPress= (e) => {
     if (e.key === 'Escape') {
-      this.props.toggleCustomIntervalModal();
+      this.props.closeModal();
     }
-  }
-
-  closeCustomIntervalModal = () => {
-    this.props.toggleCustomIntervalModal(false);
   }
 
   componentDidUpdate(prevProps) {
@@ -42,17 +40,17 @@ class CustomIntervalSelectorWidget extends PureComponent {
   }
 
   render() {
-    let {
+    const {
       customIntervalModalOpen,
       hasSubdailyLayers,
       customDelta,
-      customIntervalZoomLevel
+      customIntervalZoomLevel,
+      closeModal
     } = this.props;
-    return (
+    return customIntervalModalOpen && (
       <div
         onKeyDown={this.handleKeyPress}
         className="custom-interval-widget"
-        style={{ display: customIntervalModalOpen ? 'block' : 'none' }}
         tabIndex={0}
         ref={(customIntervalWidget) => { this.customIntervalWidget = customIntervalWidget; }}
       >
@@ -68,19 +66,29 @@ class CustomIntervalSelectorWidget extends PureComponent {
             changeZoomLevel={this.changeZoomLevel}
           />
         </div>
-        <i className="fa fa-times wv-close" onClick={this.closeCustomIntervalModal}/>
+        <i className="fa fa-times wv-close" onClick={closeModal}/>
       </div>
     );
   }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+  closeModal: () => {
+    dispatch(toggleCustomModal(false, undefined));
+  }
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(CustomIntervalSelectorWidget);
+
 CustomIntervalSelectorWidget.propTypes = {
   changeCustomInterval: PropTypes.func,
+  closeModal: PropTypes.func,
   customDelta: PropTypes.number,
   customIntervalModalOpen: PropTypes.bool,
   customIntervalZoomLevel: PropTypes.number,
   hasSubdailyLayers: PropTypes.bool,
   toggleCustomIntervalModal: PropTypes.func
 };
-
-export default CustomIntervalSelectorWidget;

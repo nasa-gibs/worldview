@@ -1,7 +1,7 @@
 import jQuery from 'jquery';
 import indicator from './indicator';
 
-let unmocked = {};
+const unmocked = {};
 
 beforeAll(() => {
   unmocked._show = indicator._show;
@@ -20,7 +20,7 @@ afterEach(() => {
 test('delayed indicator shown', (done) => {
   indicator._show = jest.fn();
   indicator.hide = jest.fn();
-  let promise = jQuery.Deferred();
+  const promise = jQuery.Deferred();
   indicator.delayed(promise, 10);
   setTimeout(function () {
     promise.resolve();
@@ -33,7 +33,7 @@ test('delayed indicator shown', (done) => {
 test('delayed indicator not shown', (done) => {
   indicator._show = jest.fn();
   indicator.hide = jest.fn();
-  let promise = jQuery.Deferred();
+  const promise = jQuery.Deferred();
   indicator.delayed(promise, 1000);
   setTimeout(function () {
     promise.resolve();
@@ -48,7 +48,7 @@ test('pop message', () => {
   indicator._hide = jest.fn();
 
   indicator.show('Bottom');
-  let id = indicator.show('Top');
+  const id = indicator.show('Top');
   indicator.hide(id);
 
   expect(indicator.active).toHaveLength(1);
@@ -59,7 +59,7 @@ test('remove bottom message', () => {
   indicator._show = jest.fn();
   indicator._hide = jest.fn();
 
-  let id = indicator.show('Bottom');
+  const id = indicator.show('Bottom');
   indicator.show('Top');
   indicator.hide(id);
 
@@ -71,7 +71,7 @@ test('hide group', () => {
   indicator._show = jest.fn();
   indicator._hide = jest.fn();
 
-  let indicators = {
+  const indicators = {
     two: null,
     three: null
   };

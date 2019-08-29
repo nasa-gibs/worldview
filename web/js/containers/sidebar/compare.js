@@ -19,10 +19,12 @@ class CompareCase extends React.Component {
     };
     this.dismissAlert = this.dismissAlert.bind(this);
   }
+
   dismissAlert() {
     localStorage.setItem('dismissedCompareAlert', true);
     this.setState({ showAlert: false });
   }
+
   render() {
     const {
       isActive,

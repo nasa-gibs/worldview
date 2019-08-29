@@ -23,45 +23,11 @@ import {
   setStyleFunction
 } from '../modules/vector-styles/selectors';
 
-import {
-  OPEN_CUSTOM as OPEN_CUSTOM_MODAL,
-  CLOSE as CLOSE_MODAL,
-  TOGGLE as TOGGLE_MODAL
-} from '../modules/modal/constants';
-import { TOGGLE_GIF, EXIT_ANIMATION } from '../modules/animation/constants';
 export function mapLayerBuilder(models, config, cache, ui, store) {
   var self = {};
-  self.hidingWrap = false;
 
-  const subscribeToStore = function(action) {
-    switch (action.type) {
-      case TOGGLE_MODAL:
-      case CLOSE_MODAL:
-        if (self.hidingWrap) {
-          return showWrap();
-        }
-        return;
-      case OPEN_CUSTOM_MODAL:
-        if (
-          action.key === 'TOOLBAR_SNAPSHOT' &&
-          store.getState().proj.id === 'geographic'
-        ) {
-          return hideWrap();
-        }
-        return;
-      case TOGGLE_GIF:
-      case EXIT_ANIMATION:
-        const active = store.getState().animation.gifActive;
-        if (active && store.getState().proj.id === 'geographic') {
-          return hideWrap();
-        } else if (self.hidingWrap) {
-          return showWrap();
-        }
-    }
-  };
   self.init = function() {
     self.extentLayers = [];
-    ui.events.on('last-action', subscribeToStore);
   };
   /**
    * Create a new OpenLayers Layer
@@ -422,7 +388,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
       vectorStyleId = def.vectorStyle.id;
       if (state.layers[activeGroupStr]) {
-        let layers = state.layers[activeGroupStr];
+        const layers = state.layers[activeGroupStr];
         layers.forEach(layer => {
           if (layer.id === layerName && layer.custom) {
             vectorStyleId = layer.custom;
@@ -533,58 +499,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     });
     return layer;
   };
-  var hideWrap = function() {
-    var layer;
-    var key;
-    var layers;
-    const state = store.getState();
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
 
-    layers = state.layers[state.compare.activeString];
-
-    for (var i = 0, len = layers.length; i < len; i++) {
-      layer = layers[i];
-      if ((layer.wrapadjacentdays || layer.wrapX) && layer.visible) {
-        key = self.layerKey(
-          layer,
-          {
-            date: state.date[activeDateStr]
-          },
-          state
-        );
-        layer = cache.getItem(key);
-        if (!layer) {
-          throw new Error(`no such layer in cache: ${key}`);
-        }
-        layer.setExtent([-180, -90, 180, 90]);
-      }
-    }
-    self.hidingWrap = true;
-  };
-  var showWrap = function() {
-    var layer;
-    var layers;
-    var key;
-    const state = store.getState();
-    const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-
-    layers = state.layers[state.compare.activeString];
-    for (var i = 0, len = layers.length; i < len; i++) {
-      layer = layers[i];
-      if ((layer.wrapadjacentdays || layer.wrapX) && layer.visible) {
-        key = self.layerKey(
-          layer,
-          {
-            date: state.date[activeDateStr]
-          },
-          state
-        );
-        layer = cache.getItem(key);
-        layer.setExtent([-250, -90, 250, 90]);
-      }
-    }
-    self.hidingWrap = false;
-  };
   self.init();
   return self;
 }

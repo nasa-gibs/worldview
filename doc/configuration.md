@@ -112,7 +112,8 @@ The `config/wv.json/layerOrder.json` file must be updated to include the new lay
 - **daynight**: Classify a layer as day or night. This information will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 - **track**: Classify a layer's track direction. This will usually be either ascending or descending and will be displayed within the title of the layer in the Measurement / Sources add modal view if provided.
 - **description**: Point to a markdown file within the metadata folder to provide a layer description.
-- **wrapadjacentdays**, **wrapX**: Wrap the layer across the anti-meridian.
+- **wrapX**: Wrap the layer across the anti-meridian.
+- **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
 
 To display a color palette legend, a *palette* object should exist with the following properties:
 
@@ -156,7 +157,7 @@ To display a color palette legend, a *palette* object should exist with the foll
 ```
 
 ### Creating Custom Vector Styles
-Vector layers created from the Global Imagery Browse Services (GIBS) will have a default style.json file associated with the layer defined in the GIBS WMTS GetCapabilities document. The vector style JSON file follows the [mapbox-gl-js style spec](https://docs.mapbox.com/mapbox-gl-js/style-spec/). The layey's default style will be extracted from the GetCapabilities document and assigned to it's associated layer on build. 
+Vector layers created from the Global Imagery Browse Services (GIBS) will have a default style.json file associated with the layer defined in the GIBS WMTS GetCapabilities document. The vector style JSON file follows the [mapbox-gl-js style spec](https://docs.mapbox.com/mapbox-gl-js/style-spec/). The layey's default style will be extracted from the GetCapabilities document and assigned to it's associated layer on build.
 
 To display a custom vector layer style & legend, a *vectorStyle* object should exist with the following properties:
 
@@ -391,7 +392,7 @@ The minimum set of required properties are as follows:
 
 To display story steps in the in-progress modal, a **steps** object should exist with the following properties:
 - **description**: points to a metadata markdown file located in `config/default/common/config/metadata/stories/`_`[story_id]`_`/`
-- **stepLink**: The URL parameters of a linked Worldview instance seperated by an `&` symbol (i.e. `p=geographic&t1=2018-12-30`)   
+- **stepLink**: The URL parameters of a linked Worldview instance seperated by an `&` symbol (i.e. `p=geographic&t1=2018-12-30`)
 Optional **steps** parameter:
 - **transition**: Advanced Configuration. An object containing an **element** and a custom **action**. These transistions occur between changing steps; these require custom code to target the element and an action to action upon that element.
 i.e. the following code will play the animation if the animation widget is present.
@@ -418,7 +419,7 @@ The `config/wv.json/storyOrder.json` file must be updated to include the new sto
 To display read more links on the end of story modal, a *readMoreLinks* object should exist with the following properties:
 
 - **title**: The name of the link being displayed.
-- **link**: The url of the link being displayed. 
+- **link**: The url of the link being displayed.
 
 ### Full Example
 

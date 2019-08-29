@@ -42,10 +42,10 @@ export default function markers(ui, store) {
       if (proj.selected.id !== 'geographic') {
         // check for polygon geometries
         if (geometry.type === 'Polygon') {
-          let coordinatesTransform = coordinates[0].map(coordinate => {
+          const coordinatesTransform = coordinates[0].map(coordinate => {
             return olProj.transform(coordinate, 'EPSG:4326', proj.selected.crs);
           });
-          let extent = olExtent.boundingExtent(coordinatesTransform);
+          const extent = olExtent.boundingExtent(coordinatesTransform);
           coordinates = olExtent.getCenter(extent);
           if (isSelected) {
             marker.boundingBox = createBoundingBox(coordinatesTransform);
@@ -61,7 +61,7 @@ export default function markers(ui, store) {
         }
       } else {
         if (geometry.type === 'Polygon') {
-          let extent = olExtent.boundingExtent(geometry.coordinates[0]);
+          const extent = olExtent.boundingExtent(geometry.coordinates[0]);
           coordinates = olExtent.getCenter(extent);
           if (isSelected) {
             marker.boundingBox = createBoundingBox(geometry.coordinates);
@@ -89,11 +89,11 @@ export default function markers(ui, store) {
         : { title: 'Default', slug: 'default' };
 
       // get maxExtent of current projection and check if marker is within range
-      let maxExtent = proj.selected.maxExtent;
-      let maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
+      const maxExtent = proj.selected.maxExtent;
+      const maxExtentCheck = olExtent.containsCoordinate(maxExtent, coordinates);
       // only create marker if within projection extent range
       if (maxExtentCheck) {
-        marker.pin = createPin(event.id, category, isSelected);
+        marker.pin = createPin(event.id, category, isSelected, event.title);
         marker.pin.setPosition(coordinates);
         map.addOverlay(marker.pin);
 
@@ -127,22 +127,24 @@ export default function markers(ui, store) {
             ui.supportsPassive ? { passive: true } : false
           );
         });
-
-        pinEl.addEventListener(
-          'click',
-          function(e) {
-            if (willSelect && !isSelected) {
-              store.dispatch(selectEventAction(event.id, date));
-              googleTagManager.pushEvent({
-                event: 'natural_event_selected',
-                natural_events: {
-                  category: category.title
-                }
-              });
-            }
-          },
-          ui.supportsPassive ? { passive: true } : false
-        );
+        ['touchend', 'click'].forEach(function(type) {
+          pinEl.addEventListener(
+            type,
+            function(e) {
+              if (willSelect && !isSelected) {
+                e.stopPropagation();
+                store.dispatch(selectEventAction(event.id, date));
+                googleTagManager.pushEvent({
+                  event: 'natural_event_selected',
+                  natural_events: {
+                    category: category.title
+                  }
+                });
+              }
+            },
+            ui.supportsPassive ? { passive: true } : false
+          );
+        });
       }
       // empty objects (i.e., markers not within projection range) are not pushed to collection
       if (lodashIsEmpty(marker) !== true) {
@@ -172,13 +174,13 @@ export default function markers(ui, store) {
     });
   };
 
-  var createPin = function(id, category, isSelected) {
+  var createPin = function(id, category, isSelected, title) {
     var overlayEl = document.createElement('div');
     var icon = document.createElement('i');
     overlayEl.className = 'marker';
     if (isSelected) overlayEl.classList.add('marker-selected');
     icon.className = 'event-icon event-icon-' + category.slug;
-    icon.title = category.title;
+    icon.title = title || category.title;
     overlayEl.appendChild(icon);
     return new OlOverlay({
       element: overlayEl,

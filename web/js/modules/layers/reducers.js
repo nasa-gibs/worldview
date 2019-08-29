@@ -33,8 +33,7 @@ export const initialState = {
   layersConfig: {},
   hoveredLayer: '',
   layerConfig: {},
-  startingLayers: [],
-  hasSecondLayerGroup: false
+  startingLayers: []
 };
 export function getInitialState(config) {
   return lodashAssign({}, initialState, {
@@ -55,10 +54,8 @@ export function layerReducer(state = initialState, action) {
         [layerGroupStr]: action.layers
       });
     case INIT_SECOND_LAYER_GROUP:
-      if (state.hasSecondLayerGroup) return state;
       return lodashAssign({}, state, {
-        activeB: lodashCloneDeep(state.active),
-        hasSecondLayerGroup: true
+        activeB: lodashCloneDeep(state.active)
       });
     case ON_LAYER_HOVER:
       return lodashAssign({}, state, {

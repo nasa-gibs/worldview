@@ -10,7 +10,8 @@ export const initialCompareState = {
   isCompareA: true,
   mode: 'swipe',
   value: 50,
-  activeString: 'active'
+  activeString: 'active',
+  bStatesInitiated: false
 };
 export function compareReducer(state = initialCompareState, action) {
   switch (action.type) {

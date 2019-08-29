@@ -37,7 +37,7 @@ export function MapRunningData(models, compareUi, store) {
       if (compareModel.mode !== 'swipe') {
         return false;
       } else {
-        let swipeOffset = Math.floor(compareUi.getOffset());
+        const swipeOffset = Math.floor(compareUi.getOffset());
 
         if (compareModel.isCompareA) {
           if (coords[0] > swipeOffset || layerAttributes.group !== 'active') {

@@ -38,7 +38,7 @@ module.exports = {
     client
   ) {
     // December 31, 2022 no results
-    let queryString =
+    const queryString =
       '?now=2022-12-31T12&p=geographic&l=MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Coastlines&t=2022-12-31&v=-91.125,-53.3671875,82.40625,59.8359375&download=MOD04_L2';
     client.url(client.globals.url + queryString);
 
@@ -90,7 +90,7 @@ module.exports = {
     client
   ) {
     // zoomed in so no data in view
-    let queryString =
+    const queryString =
       '?p=geographic&l=MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Coastlines&t=2013-08-15&v=-115.09722044197,32.076037619082,-112.11113645759,34.018420431582&download=MOD04_L2';
     client.url(client.globals.url + queryString);
 
@@ -135,7 +135,7 @@ module.exports = {
     client
   ) {
     // query timeout
-    let queryString =
+    const queryString =
       '?timeoutCMR=100&p=geographic&l=MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Coastlines&t=2013-09-29&v=-170.64093281444,-59.218903407221,20.468442185558,65.093596592779';
     client.url(client.globals.url + queryString);
 

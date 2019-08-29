@@ -21,11 +21,13 @@ class LayerList extends React.Component {
       selectedProjection: props.selectedProjection
     };
   }
+
   toggleMeasurementExpansion(measurementId) {
     var { expandedMeasurements } = this.state;
     if (expandedMeasurements.measurementId) {
     }
   }
+
   /*
    * Toggles expansion of metadata for a layer given that layer's ID and makes
    * an AJAX request for the metadata if it's missing
@@ -67,17 +69,19 @@ class LayerList extends React.Component {
       }
     }
   }
+
   getSourceMetadata(source) {
     if (source.description) {
       util.get('config/metadata/layers/' + source.description + '.html').then(data => {
         if (data) {
-          let sourceMetadata = this.state.sourceMetadata;
+          const sourceMetadata = this.state.sourceMetadata;
           sourceMetadata[source.description] = { data: data };
           this.setState({ sourceMetaData: sourceMetadata });
         }
       });
     }
   }
+
   /*
    * Toggles expansion of date ranges for a layer given that layer's ID
    *
@@ -99,6 +103,7 @@ class LayerList extends React.Component {
       this.setState({ expandedDateRangesLayers: expandedDateRangesLayers });
     }
   }
+
   renderCategoryList() {
     const {
       expandedMeasurements,
@@ -156,6 +161,7 @@ class LayerList extends React.Component {
       </div>
     );
   }
+
   renderSearchList(filteredRows) {
     const { expandedMetadataLayers, expandedDateRangesLayers } = this.state;
     var { addLayer, removeLayer, activeLayers } = this.props;
@@ -182,6 +188,7 @@ class LayerList extends React.Component {
       })
     );
   }
+
   render() {
     const { filteredRows, listType } = this.props;
     return (
@@ -192,6 +199,7 @@ class LayerList extends React.Component {
       </div>
     );
   }
+
   _setListRef(ref) {
     this._layerList = ref;
   }

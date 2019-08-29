@@ -3,7 +3,9 @@ import {
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
-  UPDATE_APP_NOW
+  UPDATE_APP_NOW,
+  TOGGLE_CUSTOM_MODAL,
+  INIT_SECOND_DATE
 } from './constants';
 
 export function changeTimeScale(num) {
@@ -16,6 +18,11 @@ export function updateAppNow(date) {
   return {
     type: UPDATE_APP_NOW,
     value: date
+  };
+}
+export function initSecondDate() {
+  return {
+    type: INIT_SECOND_DATE
   };
 }
 export function selectDate(value) {
@@ -34,14 +41,21 @@ export function changeCustomInterval(delta, customInterval) {
   return {
     type: CHANGE_CUSTOM_INTERVAL,
     value: customInterval,
-    delta: delta
+    delta
   };
 }
 export function selectInterval(delta, interval, customSelected) {
   return {
     type: CHANGE_INTERVAL,
     value: interval,
-    delta: delta,
-    customSelected: Boolean(customSelected)
+    delta,
+    customSelected
+  };
+}
+export function toggleCustomModal(open, toggleBy) {
+  return {
+    type: TOGGLE_CUSTOM_MODAL,
+    value: open,
+    toggleBy
   };
 }

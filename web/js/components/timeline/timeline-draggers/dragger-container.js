@@ -45,7 +45,7 @@ class DraggerContainer extends PureComponent {
   * @returns {void}
   */
   setDraggerPosition = (inputTime, isDraggerB) => {
-    let {
+    const {
       timeScale,
       position,
       transformX,
@@ -57,7 +57,7 @@ class DraggerContainer extends PureComponent {
       updateDraggerDatePosition
     } = this.props;
 
-    let isBetween = getIsBetween(inputTime, frontDate, backDate);
+    const isBetween = getIsBetween(inputTime, frontDate, backDate);
     let draggerVisible = false;
     if (isBetween) {
       draggerVisible = true;
@@ -74,19 +74,19 @@ class DraggerContainer extends PureComponent {
       draggerSelected = 'selected';
     }
 
-    let options = timeScaleOptions[timeScale].timeAxis;
-    let gridWidth = options.gridWidth;
-    let frontDateObj = moment.utc(frontDate);
-    let pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
+    const options = timeScaleOptions[timeScale].timeAxis;
+    const gridWidth = options.gridWidth;
+    const frontDateObj = moment.utc(frontDate);
+    const pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
     newDraggerPosition = pixelsToAddToDraggerNew + position - this.state.draggerWidth + transformX + 2;
 
     // determine max timelineEndDate position for dragger
-    let endDateLimitPositionFromFront = Math.abs(frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth);
-    let endDatePosition = endDateLimitPositionFromFront + position - this.state.draggerWidth + transformX + 2;
+    const endDateLimitPositionFromFront = Math.abs(frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth);
+    const endDatePosition = endDateLimitPositionFromFront + position - this.state.draggerWidth + transformX + 2;
 
     // checks to prevent positioning outside of valid timeline range
-    let isBeforeFrontDate = new Date(inputTime) < new Date(frontDate);
-    let isAfterBackDate = new Date(inputTime) > new Date(backDate);
+    const isBeforeFrontDate = new Date(inputTime) < new Date(frontDate);
+    const isAfterBackDate = new Date(inputTime) > new Date(backDate);
     if (newDraggerPosition > endDatePosition || isBeforeFrontDate || isAfterBackDate) {
       newDraggerPosition = oldDraggerPosition;
     }
@@ -113,7 +113,7 @@ class DraggerContainer extends PureComponent {
       if (deltaX === 0) {
         return false;
       }
-      let {
+      const {
         timeScale,
         draggerSelected,
         draggerTimeState,
@@ -129,8 +129,8 @@ class DraggerContainer extends PureComponent {
       } = this.props;
 
       // get timescale specific options for scaleMs and gridWidth
-      let options = timeScaleOptions[timeScale].timeAxis;
-      let gridWidth = options.gridWidth;
+      const options = timeScaleOptions[timeScale].timeAxis;
+      const gridWidth = options.gridWidth;
 
       let draggerTime;
       let newDraggerPosition;
@@ -144,15 +144,15 @@ class DraggerContainer extends PureComponent {
       }
 
       // update draggerTime based on deltaX draggerTime
-      let draggerTimeValue = new Date(draggerTime).getTime();
+      const draggerTimeValue = new Date(draggerTime).getTime();
 
       // only need to calculate difference in time unit for varying timescales - month and year
-      let diffZeroValues = options.scaleMs;
+      const diffZeroValues = options.scaleMs;
       if (!diffZeroValues) {
         // calculate based on frontDate due to varying number of days per month and per year (leapyears)
-        let draggerPositionRelativeToFrontDate = this.state.draggerWidth - 2 + newDraggerPosition - position - transformX;
-        let gridWidthCoef = draggerPositionRelativeToFrontDate / gridWidth;
-        let draggerDateAdded = moment.utc(frontDate).add((Math.floor(gridWidthCoef)), timeScale);
+        const draggerPositionRelativeToFrontDate = this.state.draggerWidth - 2 + newDraggerPosition - position - transformX;
+        const gridWidthCoef = draggerPositionRelativeToFrontDate / gridWidth;
+        const draggerDateAdded = moment.utc(frontDate).add((Math.floor(gridWidthCoef)), timeScale);
 
         let daysCount;
         if (timeScale === 'year') {
@@ -160,16 +160,16 @@ class DraggerContainer extends PureComponent {
         } else if (timeScale === 'month') {
           daysCount = draggerDateAdded.daysInMonth();
         }
-        let gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
-        let remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
+        const gridWidthCoefRemainder = gridWidthCoef - Math.floor(gridWidthCoef);
+        const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefRemainder;
         newDraggerTime = draggerDateAdded.add(remainderMilliseconds);
       } else {
-        let diffFactor = diffZeroValues / gridWidth;
+        const diffFactor = diffZeroValues / gridWidth;
         newDraggerTime = draggerTimeValue + (diffFactor * deltaX);
       }
 
       // check if new dragger date is within valid date range and format or RETURN out of function
-      let isBetweenValidTimeline = getIsBetween(newDraggerTime, timelineStartDateLimit, timelineEndDateLimit);
+      const isBetweenValidTimeline = getIsBetween(newDraggerTime, timelineStartDateLimit, timelineEndDateLimit);
       if (isBetweenValidTimeline) {
         newDraggerTime = getISODateFormatted(newDraggerTime);
       } else {
@@ -182,7 +182,7 @@ class DraggerContainer extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    let {
+    const {
       draggerTimeState,
       draggerTimeStateB,
       isDraggerDragging,
@@ -209,12 +209,12 @@ class DraggerContainer extends PureComponent {
 
     if (!isDraggerDragging) {
       // handle A dragger change
-      let propsTimeStateChanged = draggerTimeState !== prevProps.draggerTimeState;
+      const propsTimeStateChanged = draggerTimeState !== prevProps.draggerTimeState;
       if (propsTimeStateChanged && (isCompareModeActive || draggerSelected === 'selected')) {
         this.setDraggerPosition(draggerTimeState, false);
       }
       // handle B dragger change
-      let propsTimeStateBChanged = draggerTimeStateB !== prevProps.draggerTimeStateB;
+      const propsTimeStateBChanged = draggerTimeStateB !== prevProps.draggerTimeStateB;
       if (propsTimeStateBChanged && (isCompareModeActive || draggerSelected === 'selectedB')) {
         this.setDraggerPosition(draggerTimeStateB, true);
       }
@@ -222,7 +222,7 @@ class DraggerContainer extends PureComponent {
   }
 
   render() {
-    let {
+    const {
       draggerSelected,
       toggleShowDraggerTime,
       axisWidth,
@@ -234,7 +234,7 @@ class DraggerContainer extends PureComponent {
       draggerVisibleB
     } = this.props;
 
-    let sharedProps = {
+    const sharedProps = {
       toggleShowDraggerTime,
       transformX,
       isCompareModeActive,

@@ -22,6 +22,8 @@ var map,
 
 export function mapDateLineBuilder(models, config, store, ui) {
   var self = {};
+  // formatted YYYY-MM-DD (e.g., 2019-06-25) for checking daily change for dateline
+  self.date = {};
   /*
    * Sets globals and event listeners
    *
@@ -43,10 +45,14 @@ export function mapDateLineBuilder(models, config, store, ui) {
     switch (action.type) {
       case SELECT_DATE:
       case COMPARE_CHANGE_STATE:
-        let state = store.getState();
-        let selectedDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-        let date = state.date[selectedDateStr];
-        return updateDate(date);
+        const state = store.getState();
+        const selectedDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+        const date = state.date[selectedDateStr];
+        const isNewDay = compareDateStrings(date);
+        if (isNewDay) {
+          return updateDate(date);
+        }
+        break;
       case CHANGE_PROJECTION:
         proj = action.id;
     }
@@ -55,6 +61,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
     var dimensions;
     map = olMap;
     drawDatelines(map, date);
+    self.date = date.toISOString().split('T')[0];
     proj = store.getState().proj.id;
 
     Parent.events.on('moveend', function() {
@@ -385,6 +392,27 @@ export function mapDateLineBuilder(models, config, store, ui) {
     });
     overlay.setPosition(coordinate);
     return overlay;
+  };
+
+  /*
+   * Check if YYYY-MM-DD changed or a subdaily drag occurred
+   *  to determine if new date lines are needed
+   *
+   * @method compareDateStrings
+   * @private
+   *
+   * @param {object} date
+   *
+   * @sets {string} self.date - if new date
+   * @returns {boolean}
+   */
+  const compareDateStrings = (date) => {
+    const dateString = date.toISOString().split('T')[0];
+    if (dateString !== self.date) {
+      self.date = dateString;
+      return true;
+    }
+    return false;
   };
 
   return self;

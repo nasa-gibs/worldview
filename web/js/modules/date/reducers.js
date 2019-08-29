@@ -3,7 +3,10 @@ import {
   CHANGE_CUSTOM_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
-  UPDATE_APP_NOW
+  UPDATE_APP_NOW,
+  TOGGLE_CUSTOM_MODAL,
+  customModalType,
+  INIT_SECOND_DATE
 } from './constants';
 import util from '../../util/util';
 import { assign as lodashAssign } from 'lodash';
@@ -15,6 +18,8 @@ export const dateReducerState = {
   customSelected: false,
   customDelta: undefined,
   customInterval: undefined,
+  timelineCustomModalOpen: false,
+  animationCustomModalOpen: false,
   testNow: undefined
 };
 
@@ -32,6 +37,10 @@ export function dateReducer(state = dateReducerState, action) {
       return lodashAssign({}, state, {
         selectedZoom: action.value
       });
+    case INIT_SECOND_DATE:
+      return lodashAssign({}, state, {
+        selectedB: util.dateAdd(state.selected, 'day', -7)
+      });
     case CHANGE_CUSTOM_INTERVAL:
       return lodashAssign({}, state, {
         customInterval: action.value,
@@ -47,6 +56,13 @@ export function dateReducer(state = dateReducerState, action) {
     case SELECT_DATE:
       return lodashAssign({}, state, {
         [action.activeString]: action.value
+      });
+    case TOGGLE_CUSTOM_MODAL:
+      const timelineToggle = action.toggleBy === customModalType.TIMELINE;
+      const animationToggle = action.toggleBy === customModalType.ANIMATION;
+      return lodashAssign({}, state, {
+        timelineCustomModalOpen: animationToggle ? false : action.value,
+        animationCustomModalOpen: timelineToggle ? false : action.value
       });
     case UPDATE_APP_NOW:
       return lodashAssign({}, state, {

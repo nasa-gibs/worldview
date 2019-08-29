@@ -1,3 +1,4 @@
+import util from '../../util/util';
 /**
  * Categorizes the returned array
  * @function separateByType
@@ -54,6 +55,9 @@ var orderByDate = function(obj) {
  * @returns {Boolean}
  */
 export function localStorageValueMatches(property, value) {
+  if (!util.browser.localStorage) {
+    return false;
+  }
   var oldValue = localStorage.getItem(property);
   return new Date(value) <= new Date(oldValue);
 }
@@ -107,6 +111,9 @@ export function getCount(sortedNotifications) {
   return messageCount + outageCount + alertCount;
 }
 export function addToLocalStorage(obj) {
+  if (!util.browser.localStorage) {
+    return;
+  }
   const message = obj.messages[0];
   const outage = obj.outages[0];
   const alert = obj.alerts[0];
@@ -130,6 +137,9 @@ export function addToLocalStorage(obj) {
  * @returns {Number} count - number of unseen messages in LocalStorage
  */
 export function getNumberOfTypeNotSeen(type, arra) {
+  if (!util.browser.localStorage) {
+    return arra.length;
+  }
   var storageItem = localStorage.getItem(type);
   var count, len;
 
@@ -163,7 +173,7 @@ var objectAlreadySeen = function(obj) {
   type = obj.notification_type;
   idString = obj.created_at.toString();
   fieldValueMatches = false;
-  fieldExists = !!localStorage.getItem(type);
+  fieldExists = util.browser.localStorage && !!localStorage.getItem(type);
 
   if (fieldExists) {
     fieldValueMatches = localStorageValueMatches(type, idString);

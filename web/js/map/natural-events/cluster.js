@@ -79,7 +79,7 @@ export function naturalEventsClusterPointToGeoJSON(id, coordinates, date) {
  * @return {void}
  */
 export function naturalEventsClusterSort(clusterArray) {
-  let newArray = clusterArray.sort(function(a, b) {
+  const newArray = clusterArray.sort(function(a, b) {
     var firstDate = a.properties.date || a.properties.startDate;
     var secondDate = b.properties.date || b.properties.startDate;
 

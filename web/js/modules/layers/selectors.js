@@ -326,11 +326,12 @@ export function dateRange(spec, activeLayers, config) {
   }
 }
 export function pushToBottom(id, layers, layerSplit) {
+  const decodedId = util.decodeId(id);
   var oldIndex = lodashFindIndex(layers, {
-    id: id
+    id: decodedId
   });
   if (oldIndex < 0) {
-    throw new Error('Layer is not active: ' + id);
+    throw new Error('Layer is not active: ' + decodedId);
   }
   var def = layers[oldIndex];
   layers.splice(oldIndex, 1);
@@ -343,11 +344,12 @@ export function pushToBottom(id, layers, layerSplit) {
 }
 
 export function moveBefore(sourceId, targetId, layers) {
+  const decodedId = util.decodeId(sourceId);
   var sourceIndex = lodashFindIndex(layers, {
-    id: sourceId
+    id: decodedId
   });
   if (sourceIndex < 0) {
-    throw new Error('Layer is not active: ' + sourceId);
+    throw new Error('Layer is not active: ' + decodedId);
   }
   var sourceDef = layers[sourceIndex];
   var targetIndex = lodashFindIndex(layers, {
@@ -446,7 +448,7 @@ export function activateLayersForEventCategory(activeLayers, state) {
   lodashEach(activeLayers, function(layer) {
     var id = layer[0];
     var visible = layer[1];
-    let index = lodashFindIndex(newLayers, { id });
+    const index = lodashFindIndex(newLayers, { id });
     if (index >= 0) {
       newLayers = update(newLayers, {
         [index]: { visible: { $set: visible } }
@@ -470,7 +472,7 @@ export function getZotsForActiveLayers(config, projection, map, activeLayers) {
   var zoom = map.ui.selected.getView().getZoom();
   lodashEach(activeLayers, layer => {
     if (layer.projections[proj]) {
-      let overZoomValue = getZoomLevel(layer, zoom, proj, sources);
+      const overZoomValue = getZoomLevel(layer, zoom, proj, sources);
       if (overZoomValue) {
         zotObj[layer.id] = { value: overZoomValue };
       }

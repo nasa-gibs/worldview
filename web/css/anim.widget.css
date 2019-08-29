@@ -1,7 +1,7 @@
 .wv-animation-widget {
-  width: 330px;
+  width: 334px;
   border-radius: 8px;
-  height: 125px;
+  height: 134px;
   background: #212121;
   position: absolute;
   transform: translateX(-50%);
@@ -9,44 +9,90 @@
   bottom: 125px;
   left: 50%;
   color: #fff;
+  & .wv-animation-widget-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    & .interval-btn-container,
+    & .interval-btn.interval-btn-active {
+      color: #ce4c21;
+      display: inline;
+    }
+    & .wv-tooltip {
+      bottom: 128px;
+      left: 44%;
+      position: absolute;
+      border-bottom: 8px solid transparent;
+      width: 100px;
+      z-index: 10;
+    }
+  }
+  & > a,
+  & > div {
+    display: inline-block;
+    margin: 7px 0 0 10px;
+  }
+  & .custom-interval-widget {
+    top: -61px;
+    left: 48px;
+  }
+  & .wv-icon-case {
+    display: inline-block;
+    height: 35px;
+    width: 42px;
+    background: #295f92;
+    position: relative;
+    border-radius: 5px;
+    &.disabled {
+      cursor: not-allowed;
+      & .wv-animation-widget-icon {
+        color: rgba(255, 255, 255, 0.3);
+        opacity: 0.5;
+      }
+    }
+  }
+  &.subdaily {
+    width: 460px;
+    & .input-range {
+      width: 278px;
+    }
+    & .custom-interval-widget {
+      left: 113px;
+    }
+  }
+  & .wv-slider-case {
+    padding-right: 3px;
+    padding-left: 3px;
+  }
+  & .thru-label {
+    position: absolute;
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+    color: #fff;
+    left: 50%;
+    text-align: center;
+    bottom: 16px;
+    z-index: 0;
+  }
+  & .input-range {
+    cursor: pointer;
+    height: 13px;
+    position: relative;
+    width: 152px;
+  }
+  & i.wv-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    &:hover {
+      color: #999;
+      cursor: pointer;
+    }
+  }
 }
 
-.wv-animation-widget.subdaily {
-  width: 460px;
-}
-.wv-animation-widget .wv-slider-case {
-  padding-right: 3px;
-  padding-left: 3px;
-}
-.wv-animation-widget > a,
-.wv-animation-widget > div {
-  display: inline-block;
-  margin: 7px 0 0 10px;
-}
-
-.wv-animation-widget .wv-animation-widget-header {
-  display: block;
-  text-align: center;
-  margin-bottom: 7px;
-  text-transform: capitalize;
-}
-
-.wv-animation-widget .wv-icon-case {
-  display: inline-block;
-  height: 35px;
-  width: 42px;
-  background: #295f92;
-  position: relative;
-  border-radius: 5px;
-}
-.wv-icon-case.disabled {
-  cursor: default;
-}
-.wv-animation-widget .wv-icon-case.disabled .wv-animation-widget-icon {
-  color: rgba(255, 255, 255, 0.3);
-  opacity: 0.5;
-}
-.wv-animation-widget a .wv-animation-widget-icon {
+a .wv-animation-widget-icon {
   font-size: 23px;
   color: #fff;
   position: absolute;
@@ -54,19 +100,18 @@
   -webkit-transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
-}
-
-.wv-animation-widget a .wv-animation-widget-icon:hover {
-  color: #fff;
-  opacity: 0.5;
-}
-.wv-animation-widget a .wv-animation-widget-icon.fa-file-video {
-  font-size: 29px;
-}
-.wv-animation-widget a .wv-animation-widget-icon.fa-retweet {
-  font-size: 31px;
-  color: #212121;
-  opacity: 0.7;
+  &:hover {
+    color: #fff;
+    opacity: 0.5;
+  }
+  &.fa-file-video {
+    font-size: 29px;
+  }
+  &.fa-retweet {
+    font-size: 31px;
+    color: #212121;
+    opacity: 0.7;
+  }
 }
 
 .wv-animation-widget .active .wv-animation-widget-icon.fa-retweet {
@@ -90,17 +135,6 @@
   width: 100%;
   position: relative;
   margin: 0;
-}
-
-.wv-animation-widget .thru-label {
-  position: absolute;
-  transform: translate(-50%, 0);
-  -webkit-transform: translate(-50%, 0);
-  color: #fff;
-  left: 50%;
-  text-align: center;
-  bottom: 16px;
-  z-index: 0;
 }
 
 .wv-animation-widget .wv-date-selector-widget {
@@ -174,17 +208,6 @@
 .wv-anim-active .wv-animation-widget,
 .wv-anim-active #wv-rangeselector-case {
   display: block;
-}
-
-.wv-animation-widget i.wv-close {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-}
-
-.wv-animation-widget i.wv-close:hover {
-  color: #999;
-  cursor: pointer;
 }
 
 .gif-dialog {
@@ -304,15 +327,4 @@
   cursor: default;
   color: transparent;
   pointer-events: none;
-}
-
-.wv-animation-widget .input-range {
-  cursor: pointer;
-  height: 13px;
-  position: relative;
-  width: 152px;
-}
-
-.wv-animation-widget.subdaily .input-range {
-  width: 224px;
 }

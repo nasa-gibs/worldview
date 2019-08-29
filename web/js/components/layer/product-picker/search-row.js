@@ -235,13 +235,14 @@ class LayerRow extends React.Component {
     // return the final results
     return result;
   }
+
   getListItems(layer, firstDateRange) {
     return layer.dateRanges
       .slice(0)
       .reverse()
       .map(l => {
-        let startDate = util.parseDate(l.startDate);
-        let endDate = util.parseDate(l.endDate);
+        const startDate = util.parseDate(l.startDate);
+        const endDate = util.parseDate(l.endDate);
         let listItemStartDate;
         let listItemEndDate;
 
@@ -366,7 +367,7 @@ class LayerRow extends React.Component {
           }
         } else if (layer.period) {
           if (l.dateInterval === '1' && l.startDate === l.endDate) {
-            let listItemStartDate =
+            const listItemStartDate =
               startDate.getDate() +
               ' ' +
               util.giveMonth(startDate) +
@@ -379,7 +380,7 @@ class LayerRow extends React.Component {
               </ListGroupItem>
             );
           } else {
-            let listItemStartDate =
+            const listItemStartDate =
               startDate.getDate() +
               ' ' +
               util.giveMonth(startDate) +
@@ -420,7 +421,8 @@ class LayerRow extends React.Component {
         }
       });
   }
-  componentWillReceiveProps(nextProps) {
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       checked: nextProps.isEnabled,
       isMetadataExpanded: nextProps.isMetadataExpanded,
@@ -436,7 +438,7 @@ class LayerRow extends React.Component {
     var listItems;
     var headerClass = 'layers-all-header has-checkbox';
     if (layer.dateRanges && layer.dateRanges.length > 1) {
-      let firstDateRange = true;
+      const firstDateRange = true;
 
       var dateRanges = this.dateOverlap(layer.period, layer.dateRanges);
 

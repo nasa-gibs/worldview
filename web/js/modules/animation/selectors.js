@@ -3,6 +3,7 @@ import util from '../../util/util';
 import {
   imageUtilGetCoordsFromPixelValues,
   imageUtilGetLayerOpacities,
+  imageUtilGetLayerWrap,
   bboxWMS13,
   imageUtilGetLayers
 } from '../image-download/util';
@@ -30,28 +31,31 @@ export function getImageArray(
   const { boundaries, showDates } = gifComponentState;
   const { customInterval, interval, customDelta, delta, customSelected } = date;
   const activeString = compare.activeString;
-  var a = [];
-  var fromDate = new Date(startDate);
-  var toDate = new Date(endDate);
-  var current = fromDate;
-  var j = 0;
-  var src;
-  var strDate;
-  var lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
-  var layersArray;
-  var opacities;
-  let crs = proj.selected.crs;
-  let imgFormat = 'image/jpeg';
-  var products = getProducts(layers[activeString], fromDate, state);
-  var intervalAmount = customSelected ? customDelta : delta;
-  let increment = customSelected
+  const a = [];
+  const fromDate = new Date(startDate);
+  const toDate = new Date(endDate);
+  let current = fromDate;
+  let j = 0;
+  let src;
+  let strDate;
+  const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
+  let layersArray;
+  let layerWraps;
+  let opacities;
+  const crs = proj.selected.crs;
+  const imgFormat = 'image/jpeg';
+  let products = getProducts(layers[activeString], fromDate, state);
+  const useDelta = customSelected && customDelta ? customDelta : delta;
+  const useInterval = customSelected ? customInterval : interval;
+  const increment = customSelected
     ? timeScaleFromNumberKey[customInterval]
     : timeScaleFromNumberKey[interval];
   const height = dimensions.height;
   const width = dimensions.width;
+
   while (current <= toDate) {
     j++;
-    if (state.date.maxZoom > 3) {
+    if (useInterval > 3) {
       strDate = util.toISOStringSeconds(current);
     } else {
       strDate = util.toISOStringDate(current);
@@ -59,14 +63,16 @@ export function getImageArray(
     products = getProducts(layers[activeString], current, state);
 
     layersArray = imageUtilGetLayers(products, proj.id);
+    layerWraps = imageUtilGetLayerWrap(products);
     opacities = imageUtilGetLayerOpacities(products);
 
-    let params = [
+    const params = [
       'REQUEST=GetSnapshot',
-      `TIME=${util.toISOStringDate(current)}`,
+      `TIME=${util.toISOStringSeconds(current)}`,
       `BBOX=${bboxWMS13(lonlats, crs)}`,
       `CRS=${crs}`,
       `LAYERS=${layersArray.join(',')}`,
+      `WRAP=${layerWraps.join(',')}`,
       `FORMAT=${imgFormat}`,
       `WIDTH=${width}`,
       `HEIGHT=${height}`
@@ -75,7 +81,7 @@ export function getImageArray(
       params.push(`OPACITIES=${opacities.join(',')}`);
     }
 
-    let dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
+    const dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
 
     src = util.format(dlURL, strDate);
     a.push({
@@ -83,7 +89,7 @@ export function getImageArray(
       text: showDates ? strDate : '',
       delay: 1000 / animation.speed
     });
-    current = util.dateAdd(current, increment, intervalAmount);
+    current = util.dateAdd(current, increment, useDelta);
     if (j > 40) {
       // too many frames
       return false;
@@ -101,7 +107,7 @@ export function getImageArray(
  *
  */
 var getProducts = function(layers, date, state) {
-  let layersArray = [];
+  const layersArray = [];
   var products = getLayers(
     layers,
     {
@@ -112,7 +118,7 @@ var getProducts = function(layers, date, state) {
     state
   );
   lodashEach(products, function(layer) {
-    let layerDate = new Date(date);
+    const layerDate = new Date(date);
     if (layer.endDate) {
       if (layerDate > new Date(layer.endDate)) return;
     }

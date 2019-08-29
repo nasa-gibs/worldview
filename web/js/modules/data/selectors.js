@@ -12,15 +12,15 @@ const NO_PRODUCT = {
 // in the form of product_id = count.
 export function getSelectionCounts(layers, selectedGranules) {
   var counts = {};
-  for (let layer of layers) {
+  for (const layer of layers) {
     if (layer.product) {
-      let products = util.toArray(layer.product);
-      for (let product of products) {
+      const products = util.toArray(layer.product);
+      for (const product of products) {
         counts[product] = 0;
       }
     }
   }
-  for (let granule of Object.values(selectedGranules)) {
+  for (const granule of Object.values(selectedGranules)) {
     counts[granule.product]++;
   }
   return counts;
@@ -42,15 +42,20 @@ export function getDataSelectionSize(selectedGranules) {
   return sizeValid ? totalSize : 0;
 }
 export function groupByProducts(config, dataProducts) {
-  let products = {};
-  for (let layer of dataProducts) {
+  const products = {};
+  // If no products have been defined in the configuration, return
+  // the empty object.
+  if (!config.products) {
+    return products;
+  }
+  for (const layer of dataProducts) {
     // If products is a list, use it. If a single item, convert to a list.
     // If no products are defined, add it to the no product group.
     let productIds = util.toArray(layer.product);
     if (productIds.length === 0) {
       productIds = [NO_PRODUCT_ID];
     }
-    for (let productId of productIds) {
+    for (const productId of productIds) {
       var product = config.products[productId] || NO_PRODUCT;
       if (!products[productId]) {
         products[productId] = {
@@ -92,7 +97,7 @@ export function doesSelectedExist(activeLayers, selectedId) {
   return exists;
 }
 export function getDataProductsFromActiveLayers(layers, config, projId) {
-  let dataProducts = [];
+  const dataProducts = [];
   lodashEach(layers, function(layer) {
     var id = layer.id;
     var names = getTitles(config, layer.id, projId);
