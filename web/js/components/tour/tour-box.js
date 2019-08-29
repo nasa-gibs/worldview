@@ -42,8 +42,13 @@ class TourBox extends React.Component {
   }
 
   render() {
+    let floatBox = '';
+    if (this.props.storyOrder.length - (this.props.index + 1) === 0 ||
+      this.props.storyOrder.length - (this.props.index + 2) === 0) {
+      floatBox = ' tour-box-float';
+    }
     return (
-      <a href="#" style={this.state.styles} onMouseOver={(e) => this.onMouseOver(e)} onMouseOut={(e) => this.onMouseOut(e)} className={this.props.className} onClick={(e) => this.props.selectTour(e, this.props.story, this.props.index, this.props.storyId)}>
+      <a href="#" style={this.state.styles} onMouseOver={(e) => this.onMouseOver(e)} onMouseOut={(e) => this.onMouseOut(e)} className={this.props.className + floatBox} onClick={(e) => this.props.selectTour(e, this.props.story, this.props.index, this.props.storyId)}>
         <div className="tour-box-content">
           <div className="tour-box-header">
             <h3 className="tour-box-title">{this.props.title}</h3>
@@ -66,6 +71,7 @@ TourBox.propTypes = {
   backgroundImageHover: PropTypes.string,
   className: PropTypes.string,
   description: PropTypes.string,
+  storyOrder: PropTypes.array,
   title: PropTypes.string
 };
 
