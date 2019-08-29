@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onToggle } from '../../modules/modal/actions';
-import { measureDistance, measureArea, clearMeasurements } from '../../modules/measure/actions';
+import {
+  measureDistance,
+  measureArea,
+  clearMeasurements,
+  changeUnitOfMeasure
+} from '../../modules/measure/actions';
 import IconList from '../util/list';
 // import googleTagManager from 'googleTagManager';
 
@@ -37,12 +42,23 @@ class MeasureMenu extends Component {
     // });
   }
 
+  unitToggle(evt) {
+    const { dispatchAction } = this.props;
+    const { checked } = evt.target;
+    const value = checked ? 'mi' : 'km';
+    dispatchAction(changeUnitOfMeasure, value);
+  }
+
   render() {
     return (
       <>
         <div className="measure-unit-toggle custom-control custom-switch">
           <label htmlFor="unit-toggle">km</label>
-          <input id="unit-toggle" className="custom-control-input" type="checkbox"/>
+          <input
+            id="unit-toggle"
+            className="custom-control-input"
+            type="checkbox"
+            onChange={this.unitToggle.bind(this)}/>
           <label className="custom-control-label" htmlFor="unit-toggle">mi</label>
         </div>
         <IconList
@@ -56,8 +72,8 @@ class MeasureMenu extends Component {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  dispatchAction: (action) => {
-    dispatch(action());
+  dispatchAction: (action, value) => {
+    dispatch(action(value));
   },
   onCloseModal: () => {
     dispatch(onToggle());

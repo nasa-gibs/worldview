@@ -66,7 +66,7 @@ export function measure (map, projection) {
   }
 
   function drawStartCallback (evt) {
-    let tooltipCoord; // = evt.coordinate;
+    let tooltipCoord;
     sketch = evt.feature;
     drawChangeListener = sketch.getGeometry().on('change', (evt) => {
       const geom = evt.target;
@@ -114,6 +114,10 @@ export function measure (map, projection) {
     addInteraction(type);
   };
 
+  self.changeUnitOfMeasure = (unit) => {
+    console.log(unit);
+  };
+
   self.clearMeasurements = () => {
     allMeasureTooltips.forEach(tooltip => {
       map.removeOverlay(tooltip);
@@ -126,6 +130,14 @@ export function measure (map, projection) {
 
   return self;
 }
+
+const convertKmToMiles = (km) => km * 0.62137;
+
+const convertSquareKmToMiles = (squareKm) => squareKm * 0.38610;
+
+const convertMilesToKm = (miles) => miles / 0.62137;
+
+const convertSquareMilesToKm = (squareMiles) => squareMiles / 0.38610;
 
 const formatLength = (line, projection) => {
   const length = getLength(line, { projection });
@@ -153,7 +165,7 @@ const getVectorLayer = (source) => {
         color: 'rgba(213, 78, 33, 0.1)'
       }),
       stroke: new Stroke({
-        color: '#d54e21',
+        color: 'rgba(255, 100, 6, 1)',
         lineJoin: 'round',
         width: 3
       })
@@ -170,8 +182,8 @@ const getDraw = (source, type) => {
         color: 'rgba(213, 78, 33, 0.1)'
       }),
       stroke: new Stroke({
-        color: 'rgba(213, 78, 33, 1)',
-        lineDash: [10, 10],
+        color: 'rgba(255, 100, 6, 1)',
+        lineDash: [10, 20],
         lineJoin: 'round',
         width: 4
       }),
@@ -181,7 +193,7 @@ const getDraw = (source, type) => {
           color: 'rgba(0, 0, 0, 0.7)'
         }),
         fill: new Fill({
-          color: 'rgba(255, 255, 255, 0.2)'
+          color: 'rgba(255, 255, 255, 0.3)'
         })
       })
     })

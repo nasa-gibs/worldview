@@ -2,8 +2,7 @@ import { assign as lodashAssign } from 'lodash';
 import {
   MEASURE_DISTANCE,
   MEASURE_AREA,
-  ADD_DISTANCE_MEASUREMENT,
-  ADD_AREA_MEASUREMENT,
+  CHANGE_UNIT_OF_MEASURE,
   CLEAR_MEASUREMENTS
 } from './constants';
 
@@ -18,14 +17,8 @@ export function measureReducer(state = INITIAL_STATE, action) {
       return state;
     case MEASURE_DISTANCE:
       return state;
-    case ADD_DISTANCE_MEASUREMENT:
-      return lodashAssign({}, state, {
-        distanceMeasurements: action.value
-      });
-    case ADD_AREA_MEASUREMENT:
-      return lodashAssign({}, state, {
-        areaMeasurements: action.value
-      });
+    case CHANGE_UNIT_OF_MEASURE:
+      return state;
     case CLEAR_MEASUREMENTS:
       return lodashAssign({}, state, INITIAL_STATE);
     default:

@@ -136,10 +136,13 @@ export function mapui(models, config, store, ui) {
       case SELECT_DATE:
         return updateDate();
       case measureConstants.MEASURE_DISTANCE:
-        self.selected.measureTool.initMeasurement('distance');
+        self.selected.measureTool.initMeasurement(action.value);
         return;
       case measureConstants.MEASURE_AREA:
-        self.selected.measureTool.initMeasurement('area');
+        self.selected.measureTool.initMeasurement(action.value);
+        return;
+      case measureConstants.CHANGE_UNIT_OF_MEASURE:
+        self.selected.measureTool.changeUnitOfMeasure(action.value);
         return;
       case measureConstants.CLEAR_MEASUREMENTS:
         self.selected.measureTool.clearMeasurements();
