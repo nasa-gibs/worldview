@@ -1,31 +1,26 @@
 import {
   MEASURE_DISTANCE,
   MEASURE_AREA,
-  ADD_DISTANCE_MEASUREMENT,
-  ADD_AREA_MEASUREMENT,
+  CHANGE_UNIT_OF_MEASURE,
   CLEAR_MEASUREMENTS
 } from './constants';
 
 export function measureDistance() {
   return {
-    type: MEASURE_DISTANCE
+    type: MEASURE_DISTANCE,
+    value: 'distance'
   };
 }
 export function measureArea() {
   return {
-    type: MEASURE_AREA
+    type: MEASURE_AREA,
+    value: 'area'
   };
 }
-export function addDistanceMeasurement(measurement) {
+export function changeUnitOfMeasure(unit) {
   return {
-    type: ADD_DISTANCE_MEASUREMENT,
-    value: measurement
-  };
-}
-export function addAreaMeasurement(measurement) {
-  return {
-    type: ADD_AREA_MEASUREMENT,
-    value: measurement
+    type: CHANGE_UNIT_OF_MEASURE,
+    value: unit
   };
 }
 export function clearMeasurements() {
