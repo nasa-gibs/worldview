@@ -12,6 +12,18 @@ matrix:
         - python --version
         - python3 --version
         - nvm install 8.15.1
+    - os: linux
+      dist: xenial
+      language: python
+      node_js: 'lts/*'
+      python: '3.7'
+      sudo: required
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get install -y libgif-dev
+        - python --version
+        - python3 --version
+        - nvm install lts/*
     - os: osx
       language: node_js
       node_js: '8.15.1'
