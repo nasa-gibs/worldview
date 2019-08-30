@@ -8,4 +8,4 @@ The Atmospheric Infrared Sounder (AIRS) is an instrument on board the Aqua satel
 
 References: [GES DISC - AIRS2SUP_NRT: AIRS/Aqua L2 Near Real Time (NRT) Support Retrieval (AIRS-only) V006](https://disc.gsfc.nasa.gov/datasets/AIRS2SUP_NRT_V006/summary?AIRS2SUP_NRT); [GES DISC - Near Real-Time Data](https://disc.gsfc.nasa.gov/information/glossary?title=Near%20Real-Time%20Data)
 
-Susskind, J., P. Piraino, L. Rokke, L. Iredell, and A. Mehta, 1997: Characteristics of the TOVS Pathfinder Path A Dataset. Bulletin of the American Meteorological Society, 78, 1449-1472. [doi:  10.1175/1520-0477(1997)078<1449:COTTPP>2.0.CO;2](https://doi.org/10.1175%2F1520-0477%281997%29078%3C1449%3ACOTTPP%3E2.0.CO%3B2).
+Susskind, J., P. Piraino, L. Rokke, L. Iredell, and A. Mehta, 1997: Characteristics of the TOVS Pathfinder Path A Dataset. Bulletin of the American Meteorological Society, 78, 1449-1472. [doi: 10.1175/1520-0477(1997)078<1449:COTTPP>2.0.CO;2](https://doi.org/10.1175%2F1520-0477%281997%29078%3C1449%3ACOTTPP%3E2.0.CO%3B2).

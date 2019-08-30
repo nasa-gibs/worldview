@@ -2,4 +2,4 @@ The Particulate Matter < 2.5µm, 2001-2010 layer and the Particulate Matter < 2.
 
 The goal of this layer is to provide an annual global surface of concentrations (micrograms per cubic meter) of mineral dust and sea-salt filtered fine particulate matter of 2.5 micrometers or smaller (PM2.5) for large-scale health and environmental research.
 
-References: DOI: [10.7927/H4ZK5DQS](https://doi.org/10.7927/H4ZK5DQS)
+References: [doi: 10.7927/H4ZK5DQS](https://doi.org/10.7927/H4ZK5DQS)
