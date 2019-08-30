@@ -65,6 +65,6 @@ export class Opacity {
     convertedValue = value / 100;
     this.firstLayer.setOpacity(1 - convertedValue);
     this.secondLayer.setOpacity(convertedValue);
-    this.compareEvents.trigger('moveend', value)
+    this.compareEvents.trigger('moveend', value);
   }
 }
