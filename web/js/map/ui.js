@@ -818,7 +818,7 @@ export function mapui(models, config, store, ui) {
 
   const measureArea = () => {
     const proj = self.selected.getView().getProjection().getCode();
-    measureTools[proj].initMeasurement('distance');
+    measureTools[proj].initMeasurement('area');
   };
 
   const clearMeasurements = () => {
