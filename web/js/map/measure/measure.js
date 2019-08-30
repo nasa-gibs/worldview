@@ -7,8 +7,11 @@ import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 
-export function measure (map, projection) {
+export function measure (map) {
   const self = {};
+  const source = new VectorSource();
+  const vector = getVectorLayer(source);
+  const projection = map.getView().getProjection().getCode();
   let draw;
   let sketch;
   let helpTooltipElement;
@@ -17,8 +20,6 @@ export function measure (map, projection) {
   let measureTooltip;
   let allMeasureTooltips = [];
   let drawChangeListener;
-  const source = new VectorSource();
-  const vector = getVectorLayer(source);
 
   /**
    * Handle pointer move.
@@ -114,7 +115,7 @@ export function measure (map, projection) {
     addInteraction(type);
   };
 
-  self.changeUnitOfMeasure = (unit) => {
+  self.toggleUnits = (unit) => {
     console.log(unit);
   };
 
