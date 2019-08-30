@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onToggle } from '../../modules/modal/actions';
-import {
-  measureDistance,
-  measureArea,
-  clearMeasurements,
-  changeUnitOfMeasure
-} from '../../modules/measure/actions';
 import IconList from '../util/list';
 // import googleTagManager from 'googleTagManager';
 
@@ -16,37 +10,34 @@ const OPTIONS_ARRAY = [
     text: 'Measure distance',
     iconClass: 'ui-icon icon-large fa - fa-fw',
     id: 'measure-distance-button',
-    key: measureDistance
+    key: 'measure-distance'
   },
   {
     text: 'Measure area',
     iconClass: 'ui-icon icon-large fa - fa-fw',
     id: 'measure-area-button',
-    key: measureArea
+    key: 'measure-area'
   },
   {
     text: 'Clear Measurements',
     iconClass: 'ui-icon icon-large fa - fa-fw',
     id: 'clear-measurements-button',
-    key: clearMeasurements
+    key: 'measure-clear'
   }
 ];
 
 class MeasureMenu extends Component {
-  dispatchAction(action) {
-    const { dispatchAction, onCloseModal } = this.props;
-    dispatchAction(action);
+  triggerEvent(eventName) {
+    const { map, onCloseModal } = this.props;
+    map.ui.events.trigger(eventName);
     onCloseModal();
-    // googleTagManager.pushEvent({
-    //   event: 'measure_tool'
-    // });
   }
 
   unitToggle(evt) {
-    const { dispatchAction } = this.props;
+    const { map } = this.props;
     const { checked } = evt.target;
     const value = checked ? 'mi' : 'km';
-    dispatchAction(changeUnitOfMeasure, value);
+    map.ui.events.trigger('measure-toggle-units', value);
   }
 
   render() {
@@ -63,7 +54,7 @@ class MeasureMenu extends Component {
         </div>
         <IconList
           list={OPTIONS_ARRAY}
-          onClick={this.dispatchAction.bind(this)}
+          onClick={this.triggerEvent.bind(this)}
           size="small"
         />
       </>
@@ -71,21 +62,20 @@ class MeasureMenu extends Component {
   }
 }
 
+const mapStateToProps = (state, ownProps) => ({ map: state.map });
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  dispatchAction: (action, value) => {
-    dispatch(action(value));
-  },
   onCloseModal: () => {
     dispatch(onToggle());
   }
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(MeasureMenu);
 
 MeasureMenu.propTypes = {
   dispatchAction: PropTypes.func,
+  map: PropTypes.object,
   onCloseModal: PropTypes.func
 };

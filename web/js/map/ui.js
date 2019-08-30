@@ -38,7 +38,6 @@ import * as layerConstants from '../modules/layers/constants';
 import * as compareConstants from '../modules/compare/constants';
 import * as paletteConstants from '../modules/palettes/constants';
 import * as vectorStyleConstants from '../modules/vector-styles/constants';
-import * as measureConstants from '../modules/measure/constants';
 import { setStyleFunction } from '../modules/vector-styles/selectors';
 import {
   getLayers,
@@ -64,6 +63,7 @@ export function mapui(models, config, store, ui) {
   var dateline = mapDateLineBuilder(models, config, store, ui);
   var precache = mapPrecacheTile(models, config, cache, self);
   var compareMapUi = mapCompare(config, store);
+  var measureTools = {};
   var dataRunner = (self.runningdata = new MapRunningData(
     models,
     compareMapUi,
@@ -135,19 +135,9 @@ export function mapui(models, config, store, ui) {
         return onResize();
       case SELECT_DATE:
         return updateDate();
-      case measureConstants.MEASURE_DISTANCE:
-        self.selected.measureTool.initMeasurement(action.value);
-        return;
-      case measureConstants.MEASURE_AREA:
-        self.selected.measureTool.initMeasurement(action.value);
-        return;
-      case measureConstants.CHANGE_UNIT_OF_MEASURE:
-        self.selected.measureTool.changeUnitOfMeasure(action.value);
-        return;
-      case measureConstants.CLEAR_MEASUREMENTS:
-        self.selected.measureTool.clearMeasurements();
     }
   };
+
   /*
    * Sets up map listeners
    *
@@ -161,13 +151,17 @@ export function mapui(models, config, store, ui) {
     // it is possible that config.projections somehow becomes array-like.
     lodashForOwn(config.projections, function(proj) {
       var map = createMap(proj);
-      map.measureTool = measure(map, proj.crs);
       self.proj[proj.id] = map;
     });
-    models.map.events.on('update-layers', reloadLayers);
+    self.events.on('update-layers', reloadLayers);
+    self.events.on('measure-clear', clearMeasurements);
+    self.events.on('measure-distance', measureDistance);
+    self.events.on('measure-area', measureArea);
+    self.events.on('measure-toggle-units', toggleMeasurementUnits);
     ui.events.on('last-action', subscribeToStore);
     updateProjection(true);
   };
+
   const flyToNewExtent = function(extent, rotation) {
     const coordinateX = extent[0] + (extent[2] - extent[0]) / 2;
     const coordinateY = extent[1] + (extent[3] - extent[1]) / 2;
@@ -816,6 +810,27 @@ export function mapui(models, config, store, ui) {
     store.dispatch({ type: 'MAP/UPDATE_MAP_EXTENT', extent });
     triggerExtent();
   };
+
+  const measureDistance = () => {
+    const proj = self.selected.getView().getProjection().getCode();
+    measureTools[proj].initMeasurement('distance');
+  };
+
+  const measureArea = () => {
+    const proj = self.selected.getView().getProjection().getCode();
+    measureTools[proj].initMeasurement('distance');
+  };
+
+  const clearMeasurements = () => {
+    const proj = self.selected.getView().getProjection().getCode();
+    measureTools[proj].clearMeasurements();
+  };
+
+  const toggleMeasurementUnits = (units) => {
+    const proj = self.selected.getView().getProjection().getCode();
+    measureTools[proj].toggleUnits(units);
+  };
+
   /*
    * Updates the extents of OpenLayers map
    *
@@ -1006,6 +1021,7 @@ export function mapui(models, config, store, ui) {
         ));
       };
     });
+    measureTools[proj.crs] = measure(map);
 
     return map;
   };
