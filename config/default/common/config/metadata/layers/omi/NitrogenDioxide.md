@@ -5,4 +5,4 @@ The OMI Nitrogen Dioxide (NO2) tropospheric parameter displays the tropospheric 
 
 The Ozone Monitoring Instrument (OMI) Level-3 NO2 (OMNO2d) product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km and sensor/algorithm resolution where pixel level data of good quality are binned and "averaged" into 0.25 x 0.25 degree global grids.
 
-References: [OMNO2d README](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMNO2d.003/doc/README.OMNO2.pdf); DOI: [10.5067/Aura/OMI/DATA3007](https://disc.gsfc.nasa.gov/datacollection/OMNO2d_V003.html)
+References: [OMNO2d README](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMNO2d.003/doc/README.OMNO2.pdf); [doi: 10.5067/Aura/OMI/DATA3007](https://disc.gsfc.nasa.gov/datacollection/OMNO2d_V003.html)

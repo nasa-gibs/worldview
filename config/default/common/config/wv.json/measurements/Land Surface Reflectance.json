@@ -3,7 +3,7 @@
         "Land Surface Reflectance": {
             "id": "land-surface-reflectance",
             "title":    "Land Surface Reflectance",
-            "subtitle": "Aqua / MODIS, Terra / MODIS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",

@@ -4,7 +4,7 @@ The GLDAS Total Precipitation Rate is a science variable that indicates the inte
 
 The GLDAS Total Precipitation Rate data are in 1.0 degree resolution and the imagery resolution is 2 km, and the temporal resolution is monthly.
 
-References: [DOI: 10.5067/QN80TO7ZHFJZ](https://disc.gsfc.nasa.gov/datacollection/GLDAS_NOAH10_M_2.0.html);
+References: [doi: 10.5067/QN80TO7ZHFJZ](https://disc.gsfc.nasa.gov/datacollection/GLDAS_NOAH10_M_2.0.html);
 [GLDAS Version 2 (GLDAS-2) README](https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/README_GLDAS2.pdf)
 
 Rodell, M., P. R. Houser, U. Jambor, J. Gottschalck, K. Mitchell, C.-J. Meng, K. Arsenault, B. Cosgrove, J. Radakovich, M. Bosilovich, J. K. Entin, J. P. Walker, D. Lohmann, and D. Toll, The Global Land Data Assimilation System, Bull. Amer. Meteor. Soc., 85(3): 381-394, 2004, [doi: 10.1175/BAMS-85-3-381](https://doi.org/10.1175/BAMS-85-3-381).

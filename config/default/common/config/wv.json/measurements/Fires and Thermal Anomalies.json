@@ -3,7 +3,7 @@
         "Fires and Thermal Anomalies": {
             "id": "fires-thermal-anomalies",
             "title":    "Fires and Thermal Anomalies",
-            "subtitle": "Aqua / MODIS, Terra / MODIS, Aqua and Terra / MODIS, Suomi NPP / VIIRS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Suomi NPP/VIIRS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",

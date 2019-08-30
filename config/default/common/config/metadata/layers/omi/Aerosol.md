@@ -15,7 +15,7 @@ The OMI Aerosol Optical Depth (Absorbing, Near-UV, 388.0 nm) is one of the param
 
 The OMAERUVd product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km and sensor/algorithm resolution of 1.0 x 1.0 degrees.
 
-References: [OMAERUVd README](http://acdisc.gsfc.nasa.gov/data/Aura_OMI_Level3/OMAERUVd.003/doc/OMAERUVd_OSIPS_README_V003.doc); DOI: [10.5067/Aura/OMI/DATA3003](https://disc.gsfc.nasa.gov/datacollection/OMAERUVd_V003.html)
+References: [OMAERUVd README](http://acdisc.gsfc.nasa.gov/data/Aura_OMI_Level3/OMAERUVd.003/doc/OMAERUVd_OSIPS_README_V003.doc); [doi: 10.5067/Aura/OMI/DATA3003](https://disc.gsfc.nasa.gov/datacollection/OMAERUVd_V003.html)
 
 ### Aerosol Optical Depth (Absorbing, Multi-Wavelength, 388.0 nm)
 Temporal Coverage: 1 October 2004 - Present
@@ -24,4 +24,4 @@ The OMI Aerosol Optical Depth (Absorbing, Multi-Wavelength, 388.0 nm) is one of 
 
 The OMAEROe product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km and sensor/algorithm resolution of 0.25 x 0.25 degrees.
 
-References: [OMAEROe README](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMAEROe.003/doc/OMAEROe_OSIPS_README_V003.doc); DOI: [10.5067/Aura/OMI/DATA3004](https://disc.gsfc.nasa.gov/datacollection/OMAEROe_V003.html)
+References: [OMAEROe README](https://acdisc.gesdisc.eosdis.nasa.gov/data/Aura_OMI_Level3/OMAEROe.003/doc/OMAEROe_OSIPS_README_V003.doc); [doi: 10.5067/Aura/OMI/DATA3004](https://disc.gsfc.nasa.gov/datacollection/OMAEROe_V003.html)

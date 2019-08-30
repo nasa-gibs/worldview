@@ -3,7 +3,7 @@
         "Vegetation Indices": {
             "id": "vegetation-indices",
             "title":    "Vegetation Indices",
-            "subtitle": "Aqua/MODIS, Terra / MODIS, Landsat/WELD, Terra/MISR",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Landsat/WELD, Terra/MISR",
             "sources": {
                   "Aqua/MODIS": {
                       "id": "aqua-modis",

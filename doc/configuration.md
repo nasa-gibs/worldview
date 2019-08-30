@@ -255,7 +255,7 @@ Vector layers created from the Global Imagery Browse Services (GIBS) will have a
 
 ## Adding Layers to Worldview and the Product Picker
 
-New layers in the Global Imagery Browse Services (GIBS) can be added to Worldview via the options repository using the following instructions.
+New layers in the Global Imagery Browse Services (GIBS) can be added to Worldview using the following instructions.
 
 First, layers must be added to `config/wv.json/layers` and `config/wv.json/layerOrder.json`. Then they must be added to the `config/wv.json/measurements` and `config/wv.json/categories` folders so that they will be categorized in the Product Picker. Lastly, if the layers have descriptions these can be added in `config/metadata` and if they are available in the Common Metadata Repository (CMR), data download may be enabled for those layers.
 
@@ -269,7 +269,7 @@ First, layers must be added to `config/wv.json/layers` and `config/wv.json/layer
 - Add to Layer Order
   - Add to `config/wv.json/layerOrder.json`.
 - Add layer to Image Download
-  - *Contact GIBS team to add layers to Image Download*
+  - *Worldview Snapshots Team adds layers to Image Download*
 - Add Layer descriptions/metadata, if it exists
   - Create .md file in `config/metadata`. The *description* (i.e. layer description/metadata) identifier has to be added to the corresponding measurement JSON file.
 - Add Data Download for product, if it exists
