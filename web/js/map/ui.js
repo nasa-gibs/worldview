@@ -69,6 +69,9 @@ export function mapui(models, config, store, ui) {
     compareMapUi,
     store
   ));
+  var doubleClickZoom = new OlInteractionDoubleClickZoom({
+    duration: animationDuration
+  });
   cache = self.cache = new Cache(400);
   self.mapIsbeingDragged = false;
   self.mapIsbeingZoomed = false;
@@ -158,6 +161,12 @@ export function mapui(models, config, store, ui) {
     self.events.on('measure-distance', measureDistance);
     self.events.on('measure-area', measureArea);
     self.events.on('measure-toggle-units', toggleMeasurementUnits);
+    self.events.on('disable-click-zoom', () => {
+      self.selected.removeInteraction(doubleClickZoom);
+    });
+    self.events.on('enable-click-zoom', () => {
+      self.selected.addInteraction(doubleClickZoom);
+    });
     ui.events.on('last-action', subscribeToStore);
     updateProjection(true);
   };
@@ -900,9 +909,7 @@ export function mapui(models, config, store, ui) {
       logo: false,
       controls: [scaleMetric, scaleImperial],
       interactions: [
-        new OlInteractionDoubleClickZoom({
-          duration: animationDuration
-        }),
+        doubleClickZoom,
         new OlInteractionDragPan({
           kinetic: new OlKinetic(-0.005, 0.05, 100)
         }),
@@ -1021,7 +1028,7 @@ export function mapui(models, config, store, ui) {
         ));
       };
     });
-    measureTools[proj.crs] = measure(map);
+    measureTools[proj.crs] = measure(map, self.events);
 
     return map;
   };

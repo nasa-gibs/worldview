@@ -13,7 +13,7 @@ const mile = 5280;
 const metersToFeet = (meters) => meters * 3.28084;
 const squareMetersToFeet = (squareMeters) => squareMeters * 10.76391;
 
-export function measure (map) {
+export function measure (map, mapUiEvents) {
   let draw;
   let sketch;
   let helpTooltipElement;
@@ -124,6 +124,7 @@ export function measure (map) {
 
   function drawStartCallback (evt) {
     let tooltipCoord;
+    mapUiEvents.trigger('disable-click-zoom');
     sketch = evt.feature;
     drawChangeListener = sketch.getGeometry().on('change', (evt) => {
       const geom = evt.target;
@@ -138,6 +139,9 @@ export function measure (map) {
   };
 
   function drawEndCallback (evt) {
+    setTimeout(() => {
+      mapUiEvents.trigger('enable-click-zoom');
+    });
     const featureGeom = evt.feature.getGeometry();
     allGeometries[featureGeom.ol_uid] = featureGeom;
     measureTooltipElement.className = 'tooltip-measure tooltip-static';
