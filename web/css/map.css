@@ -94,7 +94,7 @@
 .wv-map-scale-metric {
   position: absolute;
   z-index: 10;
-  right: 80px;
+  right: 75px;
   color: #fff;
   background-color: rgba(40, 40, 40, 0.85);
   text-shadow: -1px -1px 0 #000,
