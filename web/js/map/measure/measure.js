@@ -15,9 +15,10 @@ export function measure (map) {
   let helpTooltip;
   let measureTooltipElement;
   let measureTooltip;
-  let allMeasureTooltips = [];
   let drawChangeListener;
   let vector;
+  let allMeasureTooltips = {};
+  let allGeometries = {};
   const self = {};
   const source = new VectorSource();
   const projection = map.getView().getProjection().getCode();
@@ -49,18 +50,20 @@ export function measure (map) {
     map.addOverlay(helpTooltip);
   }
 
-  function createMeasureTooltip() {
-    if (measureTooltipElement) {
-      measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+  function createMeasureTooltip(geom) {
+    if (!measureTooltipElement) {
+      measureTooltipElement = document.createElement('div');
+      measureTooltipElement.className = 'tooltip-measure tooltip-active';
+      measureTooltip = new Overlay({
+        element: measureTooltipElement,
+        offset: [0, -15],
+        positioning: 'bottom-center'
+      });
     }
-    measureTooltipElement = document.createElement('div');
-    measureTooltipElement.className = 'tooltip-measure tooltip-active';
-    measureTooltip = new Overlay({
-      element: measureTooltipElement,
-      offset: [0, -15],
-      positioning: 'bottom-center'
-    });
-    allMeasureTooltips.push(measureTooltip);
+
+    if (geom) {
+      allMeasureTooltips[geom.ol_uid] = measureTooltip;
+    }
     map.addOverlay(measureTooltip);
   }
 
@@ -82,15 +85,20 @@ export function measure (map) {
     });
   };
 
-  function drawEndCallback () {
+  function drawEndCallback (evt) {
+    const featureGeom = evt.feature.getGeometry();
+    allGeometries[featureGeom.ol_uid] = featureGeom;
     measureTooltipElement.className = 'tooltip-measure tooltip-static';
     measureTooltip.setOffset([0, -7]);
+    createMeasureTooltip(featureGeom);
     sketch = null;
     measureTooltipElement = null;
-    createMeasureTooltip();
     map.removeOverlay(helpTooltip);
     map.removeInteraction(draw);
     unByKey(drawChangeListener);
+
+    console.log(allGeometries);
+    console.log(allMeasureTooltips);
   };
 
   function getVectorLayer () {
@@ -223,14 +231,16 @@ export function measure (map) {
   };
 
   self.toggleUnits = (unit) => {
-    console.log(unit);
+    console.log(source);
+    console.log(allMeasureTooltips);
   };
 
   self.clearMeasurements = () => {
-    allMeasureTooltips.forEach(tooltip => {
-      map.removeOverlay(tooltip);
-    });
-    allMeasureTooltips = [];
+    for (const id in allMeasureTooltips) {
+      map.removeOverlay(allMeasureTooltips[id]);
+    }
+    allMeasureTooltips = {};
+    allGeometries = {};
     map.removeInteraction(draw);
     if (vector) {
       vector.getSource().clear();
