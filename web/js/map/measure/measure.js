@@ -2,7 +2,7 @@ import { unByKey } from 'ol/Observable';
 import Overlay from 'ol/Overlay';
 import { getArea, getLength } from 'ol/sphere';
 import { MultiLineString, LineString, Polygon } from 'ol/geom';
-import Draw from 'ol/interaction/Draw';
+import { Draw } from 'ol/interaction/';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
@@ -232,10 +232,10 @@ export function measure (map, mapUiEvents) {
   function setMeasurement(geometry, element) {
     let measurement;
     if (geometry instanceof Polygon) {
-      measurement = formatArea(geometry);
+      measurement = getFormattedArea(geometry);
     }
     if (geometry instanceof LineString) {
-      measurement = formatLength(geometry);
+      measurement = getFormattedLength(geometry);
     }
     element.innerHTML = measurement;
   }
@@ -256,7 +256,7 @@ export function measure (map, mapUiEvents) {
    * @param {*} line
    * @return {String} - The formatted distance measurement
    */
-  const formatLength = (line) => {
+  const getFormattedLength = (line) => {
     const metricLength = getLength(line, { projection });
     if (unitOfMeasure === 'km') {
       return metricLength > 100
@@ -276,7 +276,7 @@ export function measure (map, mapUiEvents) {
    * @param {*} polygon
    * @return {String} - The formatted area measurement
    */
-  const formatArea = (polygon) => {
+  const getFormattedArea = (polygon) => {
     const metricArea = getArea(polygon, { projection });
     if (unitOfMeasure === 'km') {
       return metricArea > 10000
@@ -323,6 +323,7 @@ export function measure (map, mapUiEvents) {
       const geomForTooltip = allGeometries[id];
       const tooltipElement = allMeasureTooltips[id].element.children[0];
       tooltipElement.innerHtml = setMeasurement(geomForTooltip, tooltipElement);
+      allMeasureTooltips[id].setOffset([0, -7]);
     }
   };
 
