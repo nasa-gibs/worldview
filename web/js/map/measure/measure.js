@@ -8,6 +8,11 @@ import { Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import arc from 'arc';
 
+const kilometer = 1000;
+const mile = 5280;
+const metersToFeet = (meters) => meters * 3.28084;
+const squareMetersToFeet = (squareMeters) => squareMeters * 10.76391;
+
 export function measure (map) {
   let draw;
   let sketch;
@@ -19,6 +24,7 @@ export function measure (map) {
   let vector;
   let allMeasureTooltips = {};
   let allGeometries = {};
+  let unitOfMeasure = 'km';
   const self = {};
   const source = new VectorSource();
   const projection = map.getView().getProjection().getCode();
@@ -72,15 +78,12 @@ export function measure (map) {
     sketch = evt.feature;
     drawChangeListener = sketch.getGeometry().on('change', (evt) => {
       const geom = evt.target;
-      let output;
       if (geom instanceof Polygon) {
-        output = formatArea(geom, projection);
         tooltipCoord = geom.getInteriorPoint().getCoordinates();
       } else if (geom instanceof LineString) {
-        output = formatLength(geom, projection);
         tooltipCoord = geom.getLastCoordinate();
       }
-      measureTooltipElement.innerHTML = output;
+      setMeasurement(geom, measureTooltipElement);
       measureTooltip.setPosition(tooltipCoord);
     });
   };
@@ -225,14 +228,72 @@ export function measure (map) {
     draw.on('drawend', drawEndCallback, this);
   }
 
+  function setMeasurement(geometry, element) {
+    let measurement;
+    if (geometry instanceof Polygon) {
+      measurement = formatArea(geometry);
+    }
+    if (geometry instanceof LineString) {
+      measurement = formatLength(geometry);
+    }
+    element.innerHTML = measurement;
+  }
+
+  const roundAndLocale = (measurement, factor) => {
+    factor = factor || 1;
+    return (Math.round(measurement / factor * 100) / 100).toLocaleString();
+  };
+
+  /**
+   *
+   * @param {*} polygon
+   */
+  const formatLength = (line) => {
+    const metricLength = getLength(line, { projection });
+    if (unitOfMeasure === 'km') {
+      return metricLength > 100
+        ? `${roundAndLocale(metricLength, kilometer)} km`
+        : `${roundAndLocale(metricLength)} m`;
+    }
+    if (unitOfMeasure === 'mi') {
+      const imperialLength = metersToFeet(metricLength);
+      return imperialLength > (mile / 4)
+        ? `${roundAndLocale(imperialLength, mile)} mi`
+        : `${roundAndLocale(imperialLength)} ft`;
+    }
+  };
+
+  /**
+   *
+   * @param {*} polygon
+   */
+  const formatArea = (polygon) => {
+    const metricArea = getArea(polygon, { projection });
+    if (unitOfMeasure === 'km') {
+      return metricArea > 10000
+        ? `${roundAndLocale(metricArea, 1000000)} km<sup>2</sup>`
+        : `${roundAndLocale(metricArea)} m<sup>2</sup>`;
+    }
+    if (unitOfMeasure === 'mi') {
+      const imperialArea = squareMetersToFeet(metricArea);
+      return imperialArea > (27878400 / 8)
+        ? `${roundAndLocale(imperialArea, 27878400)} mi<sup>2</sup>`
+        : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
+    }
+  };
+
   self.initMeasurement = (measureType) => {
     map.on('pointermove', pointerMoveHandler);
     addInteraction(measureType);
   };
 
   self.toggleUnits = (unit) => {
-    console.log(source);
-    console.log(allMeasureTooltips);
+    unitOfMeasure = unit;
+    for (const id in allMeasureTooltips) {
+      const geomForTooltip = allGeometries[id];
+      const tooltipElement = allMeasureTooltips[id].element.children[0];
+      tooltipElement.innerHtml = setMeasurement(geomForTooltip, tooltipElement);
+    }
   };
 
   self.clearMeasurements = () => {
@@ -251,29 +312,3 @@ export function measure (map) {
 
   return self;
 }
-
-// const convertKmToMiles = (km) => km * 0.62137;
-
-// const convertSquareKmToMiles = (squareKm) => squareKm * 0.38610;
-
-// const convertMilesToKm = (miles) => miles / 0.62137;
-
-// const convertSquareMilesToKm = (squareMiles) => squareMiles / 0.38610;
-
-const formatLength = (line, projection) => {
-  const length = getLength(line, { projection });
-  if (length > 100) {
-    return (Math.round(length / 1000 * 100) / 100).toLocaleString() + ' ' + 'km';
-  } else {
-    return (Math.round(length * 100) / 100).toLocaleString() + ' ' + 'm';
-  }
-};
-
-const formatArea = (polygon, projection) => {
-  const area = getArea(polygon, { projection });
-  if (area > 10000) {
-    return `${(Math.round(area / 1000000 * 100) / 100).toLocaleString()} km<sup>2</sup>`;
-  } else {
-    return `${(Math.round(area * 100) / 100).toLocaleString()} m<sup>2</sup>`;
-  }
-};
