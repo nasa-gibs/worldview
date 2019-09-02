@@ -1,7 +1,7 @@
 import { unByKey } from 'ol/Observable';
 import Overlay from 'ol/Overlay';
 import { getArea, getLength } from 'ol/sphere';
-import { MultiLineString, LineString, Polygon, MultiPoint } from 'ol/geom';
+import { MultiLineString, LineString, Polygon } from 'ol/geom';
 import Draw from 'ol/interaction/Draw';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
@@ -20,7 +20,8 @@ export function measure (map) {
   let vector;
   const self = {};
   const source = new VectorSource();
-  const projection = map.getView().getProjection();
+  const projection = map.getView().getProjection().getCode();
+  const referenceProjection = 'EPSG:4326';
 
   function pointerMoveHandler (evt) {
     if (evt.dragging) {
@@ -70,10 +71,10 @@ export function measure (map) {
       const geom = evt.target;
       let output;
       if (geom instanceof Polygon) {
-        output = formatArea(geom, projection.getCode());
+        output = formatArea(geom, projection);
         tooltipCoord = geom.getInteriorPoint().getCoordinates();
       } else if (geom instanceof LineString) {
-        output = formatLength(geom, projection.getCode());
+        output = formatLength(geom, projection);
         tooltipCoord = geom.getLastCoordinate();
       }
       measureTooltipElement.innerHTML = output;
@@ -92,7 +93,7 @@ export function measure (map) {
     unByKey(drawChangeListener);
   };
 
-  function getVectorLayer (type) {
+  function getVectorLayer () {
     return new VectorLayer({
       source,
       style: new Style({
@@ -104,7 +105,7 @@ export function measure (map) {
           lineJoin: 'round',
           width: 3
         }),
-        geometry: transformGeometry(type)
+        geometry: styleGeometryFn
       })
     });
   }
@@ -131,9 +132,21 @@ export function measure (map) {
           fill: new Fill({
             color: 'rgba(255, 255, 255, 0.3)'
           })
-        })
+        }),
+        geometry: styleGeometryFn
       })
     });
+  };
+
+  const styleGeometryFn = (feature) => {
+    const geometry = feature.getGeometry();
+    if (geometry instanceof LineString) {
+      return transformLineStringArc(geometry);
+    }
+    if (geometry instanceof Polygon) {
+      return transformPolygonArc(geometry);
+    }
+    return geometry;
   };
 
   /**
@@ -142,7 +155,8 @@ export function measure (map) {
    */
   function transformLineStringArc (geom) {
     const coords = [];
-    geom.forEachSegment((segStart, segEnd) => {
+    const transformedGeom = geom.clone().transform(projection, referenceProjection);
+    transformedGeom.forEachSegment((segStart, segEnd) => {
       const start = {
         x: segStart[0],
         y: segStart[1]
@@ -152,17 +166,18 @@ export function measure (map) {
         y: segEnd[1]
       };
       const arcGen = new arc.GreatCircle(start, end);
-      const arcline = arcGen.Arc(25, {});
+      const arcline = arcGen.Arc(25, { offset: 10 });
       arcline.geometries.forEach((arcGeom) => {
         coords.push(arcGeom.coords);
       });
     });
-    return new MultiLineString(coords);
+    return new MultiLineString(coords).transform(referenceProjection, projection);
   };
 
   function transformPolygonArc (geom) {
     let coords = [];
-    const polyCoords = geom.getCoordinates()[0];
+    const transformedGeom = geom.clone().transform(projection, referenceProjection);
+    const polyCoords = transformedGeom.getCoordinates()[0];
     for (let i = 0; i < polyCoords.length - 1; i++) {
       const start = {
         x: polyCoords[i][0],
@@ -173,31 +188,13 @@ export function measure (map) {
         y: polyCoords[i + 1][1]
       };
       const arcGen = new arc.GreatCircle(start, end);
-      const arcline = arcGen.Arc(25, {});
+      const arcline = arcGen.Arc(25, { offset: 10 });
       arcline.geometries.forEach((arcGeom) => {
         coords = coords.concat(arcGeom.coords);
       });
     }
-    const poly = new Polygon(coords);
-    return poly;
+    return new Polygon([coords]).transform(referenceProjection, projection);
   };
-
-  /**
-   *
-   * @param {*} feature
-   */
-  function transformGeometry (type) {
-    return (feature) => {
-      const geometry = feature.getGeometry();
-      if (geometry instanceof LineString && type === 'LineString') {
-        return transformLineStringArc(geometry);
-      }
-      if (geometry instanceof Polygon && type === 'Polygon') {
-        return transformPolygonArc(geometry);
-      }
-      return geometry;
-    };
-  }
 
   /**
     * Add the map interactionn
@@ -205,9 +202,14 @@ export function measure (map) {
     */
   function addInteraction(measureType) {
     const type = (measureType === 'area' ? 'Polygon' : 'LineString');
+    if (draw) {
+      map.removeInteraction(draw);
+    }
     draw = getDraw(type);
-    vector = getVectorLayer(type);
-    vector.setMap(map);
+    if (!vector) {
+      vector = getVectorLayer();
+      vector.setMap(map);
+    }
     map.addInteraction(draw);
     createMeasureTooltip();
     createHelpTooltip();
@@ -230,8 +232,11 @@ export function measure (map) {
     });
     allMeasureTooltips = [];
     map.removeInteraction(draw);
-    vector.getSource().clear();
-    vector.setMap(null);
+    if (vector) {
+      vector.getSource().clear();
+      vector.setMap(null);
+      vector = null;
+    }
   };
 
   return self;
