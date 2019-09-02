@@ -29,6 +29,55 @@ export function measure (map) {
   const source = new VectorSource();
   const projection = map.getView().getProjection().getCode();
   const referenceProjection = 'EPSG:4326';
+  const areaBgFill = new Fill({
+    color: 'rgba(213, 78, 33, 0.1)'
+  });
+  const solidBlackLineStroke = new Stroke({
+    color: 'rgba(0, 0, 0, 1)',
+    lineJoin: 'round',
+    width: 5
+  });
+  // const solidOrange = 'rgba(255, 100, 6, 1)';
+  const vectorStyles = [
+    new Style({
+      fill: areaBgFill,
+      stroke: solidBlackLineStroke,
+      geometry: styleGeometryFn
+    }),
+    new Style({
+      stroke: new Stroke({
+        color: '#fff',
+        lineJoin: 'round',
+        width: 2
+      }),
+      geometry: styleGeometryFn
+    })
+  ];
+  const drawStyles = [
+    new Style({
+      fill: areaBgFill,
+      stroke: solidBlackLineStroke,
+      geometry: styleGeometryFn
+    }),
+    new Style({
+      stroke: new Stroke({
+        color: '#fff',
+        lineDash: [10, 20],
+        lineJoin: 'round',
+        width: 2
+      }),
+      image: new CircleStyle({
+        radius: 7,
+        stroke: new Stroke({
+          color: 'rgba(0, 0, 0, 0.7)'
+        }),
+        fill: new Fill({
+          color: 'rgba(255, 255, 255, 0.3)'
+        })
+      }),
+      geometry: styleGeometryFn
+    })
+  ];
 
   function pointerMoveHandler (evt) {
     if (evt.dragging) {
@@ -99,57 +148,14 @@ export function measure (map) {
     map.removeOverlay(helpTooltip);
     map.removeInteraction(draw);
     unByKey(drawChangeListener);
-
-    console.log(allGeometries);
-    console.log(allMeasureTooltips);
   };
 
-  function getVectorLayer () {
-    return new VectorLayer({
-      source,
-      style: new Style({
-        fill: new Fill({
-          color: 'rgba(213, 78, 33, 0.1)'
-        }),
-        stroke: new Stroke({
-          color: 'rgba(255, 100, 6, 1)',
-          lineJoin: 'round',
-          width: 3
-        }),
-        geometry: styleGeometryFn
-      })
-    });
-  }
-
-  function getDraw (type) {
-    return new Draw({
-      source,
-      type,
-      style: new Style({
-        fill: new Fill({
-          color: 'rgba(213, 78, 33, 0.1)'
-        }),
-        stroke: new Stroke({
-          color: 'rgba(255, 100, 6, 1)',
-          lineDash: [10, 20],
-          lineJoin: 'round',
-          width: 4
-        }),
-        image: new CircleStyle({
-          radius: 7,
-          stroke: new Stroke({
-            color: 'rgba(0, 0, 0, 0.7)'
-          }),
-          fill: new Fill({
-            color: 'rgba(255, 255, 255, 0.3)'
-          })
-        }),
-        geometry: styleGeometryFn
-      })
-    });
-  };
-
-  const styleGeometryFn = (feature) => {
+  /**
+   * Call the appropriate transform function to add great circle arcs to
+   * lines and polygon edges.  Otherwise pass through unaffected.
+   * @param {*} feature
+   */
+  function styleGeometryFn (feature) {
     const geometry = feature.getGeometry();
     if (geometry instanceof LineString) {
       return transformLineStringArc(geometry);
@@ -161,8 +167,9 @@ export function measure (map) {
   };
 
   /**
-   *
-   * @param {*} feature
+   * Transforms a LineString of two points to a MultiLineString of multiple points
+   * applying a great circle arc transformation
+   * @param {*} geom - the geometry object to apply great circle arc transformation to
    */
   function transformLineStringArc (geom) {
     const coords = [];
@@ -185,6 +192,11 @@ export function measure (map) {
     return new MultiLineString(coords).transform(referenceProjection, projection);
   };
 
+  /**
+   * Transforms a Polygon to one with addiitonal points on each edge to account for
+   * great circle arc
+   * @param {*} geom - the geometry object to apply great circle arc transformation to
+   */
   function transformPolygonArc (geom) {
     let coords = [];
     const transformedGeom = geom.clone().transform(projection, referenceProjection);
@@ -208,26 +220,11 @@ export function measure (map) {
   };
 
   /**
-    * Add the map interactionn
-    * @param {String} measureType
-    */
-  function addInteraction(measureType) {
-    const type = (measureType === 'area' ? 'Polygon' : 'LineString');
-    if (draw) {
-      map.removeInteraction(draw);
-    }
-    draw = getDraw(type);
-    if (!vector) {
-      vector = getVectorLayer();
-      vector.setMap(map);
-    }
-    map.addInteraction(draw);
-    createMeasureTooltip();
-    createHelpTooltip();
-    draw.on('drawstart', drawStartCallback, this);
-    draw.on('drawend', drawEndCallback, this);
-  }
-
+   * Set the innerHTML of the given tooltip element to the formatted length/area
+   * measruement of the given geometry
+   * @param {*} geometry
+   * @param {*} element
+   */
   function setMeasurement(geometry, element) {
     let measurement;
     if (geometry instanceof Polygon) {
@@ -239,6 +236,12 @@ export function measure (map) {
     element.innerHTML = measurement;
   }
 
+  /**
+   * Convert and format raw measurements to two decimal points
+   * @param {*} measurement
+   * @param {*} factor
+   * @return {String} - The measurement, converted based on factor and locale
+   */
   const roundAndLocale = (measurement, factor) => {
     factor = factor || 1;
     return (Math.round(measurement / factor * 100) / 100).toLocaleString();
@@ -246,7 +249,8 @@ export function measure (map) {
 
   /**
    *
-   * @param {*} polygon
+   * @param {*} line
+   * @return {String} - The formatted distance measurement
    */
   const formatLength = (line) => {
     const metricLength = getLength(line, { projection });
@@ -266,6 +270,7 @@ export function measure (map) {
   /**
    *
    * @param {*} polygon
+   * @return {String} - The formatted area measurement
    */
   const formatArea = (polygon) => {
     const metricArea = getArea(polygon, { projection });
@@ -282,11 +287,32 @@ export function measure (map) {
     }
   };
 
+  /**
+   * Initiate a measurement interaction of the given measureType ('distance' or 'area')
+   * @param {String} measureType
+   */
   self.initMeasurement = (measureType) => {
+    const type = (measureType === 'area' ? 'Polygon' : 'LineString');
     map.on('pointermove', pointerMoveHandler);
-    addInteraction(measureType);
+    if (draw) {
+      map.removeInteraction(draw);
+    }
+    draw = new Draw({ source, type, style: drawStyles });
+    if (!vector) {
+      vector = new VectorLayer({ source, style: vectorStyles });
+      vector.setMap(map);
+    }
+    map.addInteraction(draw);
+    createMeasureTooltip();
+    createHelpTooltip();
+    draw.on('drawstart', drawStartCallback, this);
+    draw.on('drawend', drawEndCallback, this);
   };
 
+  /**
+   * Convert unit of measurement on all existing measurments and those created after
+   * @param {String} unit - Unit of measurement: 'km' or 'mi'
+   */
   self.toggleUnits = (unit) => {
     unitOfMeasure = unit;
     for (const id in allMeasureTooltips) {
@@ -296,6 +322,9 @@ export function measure (map) {
     }
   };
 
+  /**
+   * Clear all existing measurements on the associated map
+   */
   self.clearMeasurements = () => {
     for (const id in allMeasureTooltips) {
       map.removeOverlay(allMeasureTooltips[id]);

@@ -6,25 +6,27 @@
 }
 .modal-dialog.toolbar-modal.measure-tool-modal {
   top: unset;
-  right: 70px;
-  bottom: 157px;
+  right: 10px;
+  bottom: 151px;
   & .modal-body {
     padding: 0;
   }
 }
 
 .measure-unit-toggle {
-  border-bottom: 1px solid #ccc;
-  padding: 5px 5px 5px 27px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 5px 6px 27px;
   & .custom-control-input:checked ~ .custom-control-label::before {
     border-color: #fff;
   }
   & .custom-control-label {
     margin-left: 34px;
     &::before {
-      background-color: #0a0;
+      background-color: #007bff;
+      top: 1px;
     }
     &::after {
+      top: 3px;
       background-color: #fff;
     }
   }
@@ -37,11 +39,11 @@
   border-radius: 4px;
   color: #fff;
   padding: 6px 10px;
-  opacity: 0.9;
   white-space: nowrap;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 .tooltip-active {
-  opacity: 0.75;
   font-weight: 500;
   font-size: 16px;
 }
@@ -50,14 +52,11 @@
   font-size: 16px;
   color: #fff;
   text-shadow: 1px 1px 1px #000;
-  opacity: 0.9;
-  background-color: #d54e21;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  background-color: #000;
 }
 .tooltip-active::before,
 .tooltip-static::before {
-  border-top: 6px solid rgba(0, 0, 0, 0.5);
+  border-top: 6px solid rgba(0, 0, 0, 1);
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
   content: "";
@@ -67,5 +66,5 @@
   left: 50%;
 }
 .tooltip-static::before {
-  border-top-color: #d54e21;
+  border-top-color: #000;
 }

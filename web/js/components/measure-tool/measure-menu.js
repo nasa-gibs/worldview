@@ -8,19 +8,19 @@ import IconList from '../util/list';
 const OPTIONS_ARRAY = [
   {
     text: 'Measure distance',
-    iconClass: 'ui-icon icon-large fa - fa-fw',
+    iconClass: 'ui-icon icon-large fa fa-ruler fa-fw',
     id: 'measure-distance-button',
     key: 'measure-distance'
   },
   {
     text: 'Measure area',
-    iconClass: 'ui-icon icon-large fa - fa-fw',
+    iconClass: 'ui-icon icon-large fa fa-ruler-combined fa-fw',
     id: 'measure-area-button',
     key: 'measure-area'
   },
   {
-    text: 'Clear Measurements',
-    iconClass: 'ui-icon icon-large fa - fa-fw',
+    text: 'Remove Measurements',
+    iconClass: 'ui-icon icon-large fa fa-trash fa-fw',
     id: 'clear-measurements-button',
     key: 'measure-clear'
   }
