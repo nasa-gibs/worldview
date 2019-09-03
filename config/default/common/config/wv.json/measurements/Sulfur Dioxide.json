@@ -8,11 +8,13 @@
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
                     "title": "Aqua / AIRS",
-                    "description": "airs/SO2_Index",
+                    "description": "airs/SO2",
                     "image": "",
                     "settings": [
                         "AIRS_Prata_SO2_Index_Day",
                         "AIRS_Prata_SO2_Index_Night",
+                        "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Day",
+                        "AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]
