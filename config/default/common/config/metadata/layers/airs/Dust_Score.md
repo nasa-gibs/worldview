@@ -6,3 +6,5 @@ The AIRS Dust Score (Ocean, Day | Night) layer indicates the level of atmospheri
 The Atmospheric Infrared Sounder (AIRS) is an instrument on board the Aqua satellite. The AIRS Dust Score science parameter is a parameter of the AIRS Level 1B Infrared quality assurance subset (AIRIBQAP_NRT). The imagery resolution is 2 km, sensor resolution is 45 km and the temporal resolution is daily.
 
 References: [GES DISC - AIRIBQAP_NRT: AIRS/Aqua L1B Near Real Time (NRT) Infrared (IR) quality assurance subset V005](https://disc.gsfc.nasa.gov/datasets/AIRIBQAP_NRT_V005/summary?AIRIBQAP_NRT); [GES DISC - Near Real-Time Data](https://disc.gsfc.nasa.gov/information/glossary?title=Near%20Real-Time%20Data); [New Featured Article on AIRS Dust Score](https://disc.gsfc.nasa.gov/information/news?title=New%20Featured%20Article%20on%20AIRS%20Dust%20Score); [April dust storm surges through China from the Taklimakan Desert](https://disc.gsfc.nasa.gov/information/news?title=April%20dust%20storm%20surges%20through%20China%20from%20the%20Taklimakan%20Desert)
+
+### Dust Score (L2, Day | Night)

@@ -3,8 +3,20 @@
         "Cloud Top Height": {
             "id": "cloud-top-height",
             "title":    "Cloud Top Height",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Terra/MISR",
+            "subtitle": "Aqua/AIRS, Aqua/MODIS, Terra/MODIS, Terra/MISR",
             "sources": {
+              "Aqua/AIRS": {
+                    "id": "aqua-airs",
+                    "title": "Aqua/AIRS",
+                    "description": "airs/CloudTopHeight",
+                    "image": "",
+                    "settings": [
+                        "AIRS_L2_Cloud_Top_Height_Day",
+                        "AIRS_L2_Cloud_Top_Height_Night",
+                        "OrbitTracks_Aqua_Ascending",
+                        "OrbitTracks_Aqua_Descending"
+                    ]
+                },
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",

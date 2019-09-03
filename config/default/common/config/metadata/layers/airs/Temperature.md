@@ -12,3 +12,11 @@ Temporal coverage: 1 September 2002 - present or most recent complete month
 
 ### Surface Skin Temperature (Day | Night, Daily | Monthly)
 Temporal coverage: 1 September 2002 - present or most recent complete month
+
+### Surface Skin Temperature (L2, Day | Night)
+
+### Temperature (L2, 500 hPa, Day | Night)
+
+### Temperature (L2, 700 hPa, Day | Night)
+
+### Temperature (L2, 850 hPa, Day | Night)
