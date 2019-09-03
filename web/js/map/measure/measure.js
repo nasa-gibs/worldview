@@ -21,6 +21,8 @@ export function measure (map, mapUiEvents) {
   let measureTooltipElement;
   let measureTooltip;
   let drawChangeListener;
+  let pointerMoveListener;
+  let rightClickListener;
   let vector;
   let allMeasureTooltips = {};
   let allGeometries = {};
@@ -84,12 +86,25 @@ export function measure (map, mapUiEvents) {
       return;
     }
     const helpMsg = !sketch
-      ? 'Click to start drawing.'
-      : 'Click to continue drawing. <br/> Double-click to complete.';
+      ? 'Click to start drawing. <br/> Right-click to cancel.'
+      : 'Click to continue drawing. <br/> Right-click to cancel. <br/> Double-click to complete.';
     helpTooltipElement.innerHTML = helpMsg;
     helpTooltip.setPosition(evt.coordinate);
     helpTooltipElement.classList.remove('hidden');
   };
+
+  function terminateDraw() {
+    setTimeout(() => {
+      mapUiEvents.trigger('enable-click-zoom');
+    }, 250);
+    sketch = null;
+    measureTooltipElement = null;
+    map.removeOverlay(helpTooltip);
+    map.removeInteraction(draw);
+    unByKey(drawChangeListener);
+    unByKey(pointerMoveListener);
+    unByKey(rightClickListener);
+  }
 
   function createHelpTooltip() {
     if (helpTooltipElement) {
@@ -139,19 +154,12 @@ export function measure (map, mapUiEvents) {
   };
 
   function drawEndCallback (evt) {
-    setTimeout(() => {
-      mapUiEvents.trigger('enable-click-zoom');
-    });
     const featureGeom = evt.feature.getGeometry();
     allGeometries[featureGeom.ol_uid] = featureGeom;
     measureTooltipElement.className = 'tooltip-measure tooltip-static';
     measureTooltip.setOffset([0, -7]);
     createMeasureTooltip(featureGeom);
-    sketch = null;
-    measureTooltipElement = null;
-    map.removeOverlay(helpTooltip);
-    map.removeInteraction(draw);
-    unByKey(drawChangeListener);
+    terminateDraw();
   };
 
   /**
@@ -297,7 +305,6 @@ export function measure (map, mapUiEvents) {
    */
   self.initMeasurement = (measureType) => {
     const type = (measureType === 'area' ? 'Polygon' : 'LineString');
-    map.on('pointermove', pointerMoveHandler);
     if (draw) {
       map.removeInteraction(draw);
     }
@@ -311,6 +318,12 @@ export function measure (map, mapUiEvents) {
     createHelpTooltip();
     draw.on('drawstart', drawStartCallback, this);
     draw.on('drawend', drawEndCallback, this);
+    pointerMoveListener = map.on('pointermove', pointerMoveHandler);
+    rightClickListener = map.on('contextmenu', (evt) => {
+      evt.preventDefault();
+      terminateDraw();
+      map.removeOverlay(measureTooltip);
+    });
   };
 
   /**
@@ -336,7 +349,8 @@ export function measure (map, mapUiEvents) {
     }
     allMeasureTooltips = {};
     allGeometries = {};
-    map.removeInteraction(draw);
+    terminateDraw();
+    map.removeOverlay(measureTooltip);
     if (vector) {
       vector.getSource().clear();
       vector.setMap(null);
