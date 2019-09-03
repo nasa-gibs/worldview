@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
+import { changeUnits } from '../../modules/measure/actions';
 // import googleTagManager from 'googleTagManager';
 
 const OPTIONS_ARRAY = [
@@ -27,6 +28,13 @@ const OPTIONS_ARRAY = [
 ];
 
 class MeasureMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      units: props.units
+    };
+  }
+
   triggerEvent(eventName) {
     const { map, onCloseModal } = this.props;
     map.ui.events.trigger(eventName);
@@ -34,10 +42,9 @@ class MeasureMenu extends Component {
   }
 
   unitToggle(evt) {
-    const { map } = this.props;
     const { checked } = evt.target;
-    const value = checked ? 'mi' : 'km';
-    map.ui.events.trigger('measure-toggle-units', value);
+    const units = checked ? 'mi' : 'km';
+    this.props.toggleUnits(units);
   }
 
   render() {
@@ -49,7 +56,8 @@ class MeasureMenu extends Component {
             id="unit-toggle"
             className="custom-control-input"
             type="checkbox"
-            onChange={this.unitToggle.bind(this)}/>
+            onChange={this.unitToggle.bind(this)}
+            defaultChecked={this.state.units === 'mi'}/>
           <label className="custom-control-label" htmlFor="unit-toggle">mi</label>
         </div>
         <IconList
@@ -62,8 +70,14 @@ class MeasureMenu extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({ map: state.map });
+const mapStateToProps = (state, ownProps) => ({
+  map: state.map,
+  units: state.measure.units
+});
 const mapDispatchToProps = (dispatch, ownProps) => ({
+  toggleUnits: (units) => {
+    dispatch(changeUnits(units));
+  },
   onCloseModal: () => {
     dispatch(onToggle());
   }
@@ -75,7 +89,8 @@ export default connect(
 )(MeasureMenu);
 
 MeasureMenu.propTypes = {
-  dispatchAction: PropTypes.func,
   map: PropTypes.object,
-  onCloseModal: PropTypes.func
+  onCloseModal: PropTypes.func,
+  toggleUnits: PropTypes.func,
+  units: PropTypes.string
 };

@@ -32,6 +32,7 @@ import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { openCustomContent } from '../modules/modal/actions';
+import { CHANGE_UNITS } from '../modules/measure/constants';
 import VectorMetaTable from '../components/vector-metadata/table';
 import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
@@ -136,6 +137,8 @@ export function mapui(models, config, store, ui) {
       case vectorStyleConstants.CLEAR_VECTORSTYLE:
       case CALCULATE_RESPONSIVE_STATE:
         return onResize();
+      case CHANGE_UNITS:
+        return toggleMeasurementUnits(action.value);
       case SELECT_DATE:
         return updateDate();
     }
@@ -160,7 +163,6 @@ export function mapui(models, config, store, ui) {
     self.events.on('measure-clear', clearMeasurements);
     self.events.on('measure-distance', measureDistance);
     self.events.on('measure-area', measureArea);
-    self.events.on('measure-toggle-units', toggleMeasurementUnits);
     self.events.on('disable-click-zoom', () => {
       self.selected.removeInteraction(doubleClickZoom);
     });
@@ -836,8 +838,9 @@ export function mapui(models, config, store, ui) {
   };
 
   const toggleMeasurementUnits = (units) => {
-    const proj = self.selected.getView().getProjection().getCode();
-    measureTools[proj].toggleUnits(units);
+    for (const proj in measureTools) {
+      measureTools[proj].toggleUnits(units);
+    }
   };
 
   /*
