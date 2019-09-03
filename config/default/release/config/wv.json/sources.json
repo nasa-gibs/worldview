@@ -19,7 +19,7 @@
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg3031/best/wms.cgi"
         },
         "WDPA:wms": {
-            "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+            "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
         }
     }
 }
