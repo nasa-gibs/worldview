@@ -37,7 +37,7 @@ import {
 import dataDownloadReducer from './data/reducers';
 import { get as lodashGet, assign as lodashAssign } from 'lodash';
 import { imageDownloadReducer } from './image-download/reducers';
-import { measureReducer } from './measure/reducers';
+import measureReducer from './measure/reducers';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 
 function lastAction(state = null, action) {
