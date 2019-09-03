@@ -11,6 +11,9 @@
   & .modal-body {
     padding: 0;
   }
+  & .form-check-label {
+    margin-left: 24px;
+  }
 }
 
 .measure-unit-toggle {
