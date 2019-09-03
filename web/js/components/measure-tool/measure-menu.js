@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
-import { changeUnits } from '../../modules/measure/actions';
+import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
+import { FormGroup, Label, Input } from 'reactstrap';
 // import googleTagManager from 'googleTagManager';
 
 const OPTIONS_ARRAY = [
@@ -31,7 +32,8 @@ class MeasureMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      units: props.units
+      units: props.units,
+      useGreatCircleMeasurements: props.useGreatCircleMeasurements
     };
   }
 
@@ -44,12 +46,29 @@ class MeasureMenu extends Component {
   unitToggle(evt) {
     const { checked } = evt.target;
     const units = checked ? 'mi' : 'km';
-    this.props.toggleUnits(units);
+    this.props.onToggleUnits(units);
+  }
+
+  useGreatCircle(evt) {
+    const { checked } = evt.target;
+    this.props.onToggleUseGreatCircle(checked);
   }
 
   render() {
     return (
       <>
+        <FormGroup check>
+          <Label check>
+            <Input
+              id="great-circle-toggle"
+              type="checkbox"
+              onChange={this.useGreatCircle.bind(this)}
+              defaultChecked={this.state.useGreatCircleMeasurements}
+            />
+            {' '} Great circle? <i className="fas fa-info-circle"></i>
+          </Label>
+        </FormGroup>
+
         <div className="measure-unit-toggle custom-control custom-switch">
           <label htmlFor="unit-toggle">km</label>
           <input
@@ -72,11 +91,15 @@ class MeasureMenu extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
   map: state.map,
-  units: state.measure.units
+  units: state.measure.units,
+  useGreatCircleMeasurements: state.measure.useGreatCircleMeasurements
 });
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  toggleUnits: (units) => {
+  onToggleUnits: (units) => {
     dispatch(changeUnits(units));
+  },
+  onToggleUseGreatCircle: (value) => {
+    dispatch(useGreatCircle(value));
   },
   onCloseModal: () => {
     dispatch(onToggle());
@@ -91,6 +114,8 @@ export default connect(
 MeasureMenu.propTypes = {
   map: PropTypes.object,
   onCloseModal: PropTypes.func,
-  toggleUnits: PropTypes.func,
-  units: PropTypes.string
+  onToggleUnits: PropTypes.func,
+  onToggleUseGreatCircle: PropTypes.func,
+  units: PropTypes.string,
+  useGreatCircleMeasurements: PropTypes.bool
 };

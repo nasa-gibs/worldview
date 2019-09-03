@@ -1,5 +1,9 @@
 .wv-checkbox {
   position: relative;
+  & input[type="checkbox"] {
+    margin: 3px 1px;
+    vertical-align: middle;
+  }
 }
 .wv-checkbox input {
   position: absolute;

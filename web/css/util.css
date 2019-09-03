@@ -208,8 +208,3 @@ button[data-tooltip] {
   display: table;
   clear: both;
 }
-
-input[type="checkbox"] {
-  margin: 3px 1px;
-  vertical-align: middle;
-}

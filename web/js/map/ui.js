@@ -26,13 +26,13 @@ import { MapRunningData } from './runningdata';
 import { mapPrecacheTile } from './precachetile';
 import { mapUtilZoomAction, getActiveLayerGroup } from './util';
 import { mapCompare } from './compare/compare';
-import { measure } from './measure/measure';
+import { measure } from './measure/ui';
 import { CALCULATE_RESPONSIVE_STATE } from 'redux-responsive';
 import { LOCATION_POP_ACTION } from '../redux-location-state-customs';
 import { CHANGE_PROJECTION } from '../modules/projection/constants';
 import { SELECT_DATE } from '../modules/date/constants';
 import { openCustomContent } from '../modules/modal/actions';
-import { CHANGE_UNITS } from '../modules/measure/constants';
+import { CHANGE_UNITS, USE_GREAT_CIRCLE } from '../modules/measure/constants';
 import VectorMetaTable from '../components/vector-metadata/table';
 import Cache from 'cachai';
 import * as layerConstants from '../modules/layers/constants';
@@ -139,6 +139,8 @@ export function mapui(models, config, store, ui) {
         return onResize();
       case CHANGE_UNITS:
         return toggleMeasurementUnits(action.value);
+      case USE_GREAT_CIRCLE:
+        return useGreatCircleMeasurements(action.value);
       case SELECT_DATE:
         return updateDate();
     }
@@ -839,7 +841,13 @@ export function mapui(models, config, store, ui) {
 
   const toggleMeasurementUnits = (units) => {
     for (const proj in measureTools) {
-      measureTools[proj].toggleUnits(units);
+      measureTools[proj].changeUnits(units);
+    }
+  };
+
+  const useGreatCircleMeasurements = (value) => {
+    for (const proj in measureTools) {
+      measureTools[proj].useGreatCircleMeasurements(value);
     }
   };
 

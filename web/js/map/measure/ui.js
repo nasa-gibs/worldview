@@ -1,17 +1,21 @@
 import { unByKey } from 'ol/Observable';
 import Overlay from 'ol/Overlay';
 import { getArea, getLength } from 'ol/sphere';
-import { MultiLineString, LineString, Polygon } from 'ol/geom';
+import { LineString, Polygon } from 'ol/geom';
 import { Draw } from 'ol/interaction/';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
-import arc from 'arc';
-
-const kilometer = 1000;
-const mile = 5280;
-const metersToFeet = (meters) => meters * 3.28084;
-const squareMetersToFeet = (squareMeters) => squareMeters * 10.76391;
+import {
+  ftPerMile,
+  metersPerkilometer,
+  metersToFeet,
+  squareMetersToFeet,
+  roundAndLocale,
+  transformLineStringArc,
+  transformPolygonArc,
+  getRhumbLineDistance
+} from './util.js';
 
 export function measure (map, mapUiEvents) {
   let draw;
@@ -27,10 +31,10 @@ export function measure (map, mapUiEvents) {
   let allMeasureTooltips = {};
   let allGeometries = {};
   let unitOfMeasure = 'km';
+  let useGreatCircle = false;
   const self = {};
   const source = new VectorSource();
   const projection = map.getView().getProjection().getCode();
-  const referenceProjection = 'EPSG:4326';
   const areaBgFill = new Fill({
     color: 'rgba(213, 78, 33, 0.1)'
   });
@@ -155,6 +159,8 @@ export function measure (map, mapUiEvents) {
 
   function drawEndCallback (evt) {
     const featureGeom = evt.feature.getGeometry();
+    // const metricLength = getLength(featureGeom, { projection });
+    // const geomLength = featureGeom.getLength();
     allGeometries[featureGeom.ol_uid] = featureGeom;
     measureTooltipElement.className = 'tooltip-measure tooltip-static';
     measureTooltip.setOffset([0, -7]);
@@ -169,66 +175,16 @@ export function measure (map, mapUiEvents) {
    */
   function styleGeometryFn (feature) {
     const geometry = feature.getGeometry();
+    if (!useGreatCircle) {
+      return geometry;
+    }
     if (geometry instanceof LineString) {
-      return transformLineStringArc(geometry);
+      return transformLineStringArc(geometry, projection);
     }
     if (geometry instanceof Polygon) {
-      return transformPolygonArc(geometry);
+      return transformPolygonArc(geometry, projection);
     }
     return geometry;
-  };
-
-  /**
-   * Transforms a LineString of two points to a MultiLineString of multiple points
-   * applying a great circle arc transformation
-   * @param {*} geom - the geometry object to apply great circle arc transformation to
-   */
-  function transformLineStringArc (geom) {
-    const coords = [];
-    const transformedGeom = geom.clone().transform(projection, referenceProjection);
-    transformedGeom.forEachSegment((segStart, segEnd) => {
-      const start = {
-        x: segStart[0],
-        y: segStart[1]
-      };
-      const end = {
-        x: segEnd[0],
-        y: segEnd[1]
-      };
-      const arcGen = new arc.GreatCircle(start, end);
-      const arcline = arcGen.Arc(25, { offset: 10 });
-      arcline.geometries.forEach((arcGeom) => {
-        coords.push(arcGeom.coords);
-      });
-    });
-    return new MultiLineString(coords).transform(referenceProjection, projection);
-  };
-
-  /**
-   * Transforms a Polygon to one with addiitonal points on each edge to account for
-   * great circle arc
-   * @param {*} geom - the geometry object to apply great circle arc transformation to
-   */
-  function transformPolygonArc (geom) {
-    let coords = [];
-    const transformedGeom = geom.clone().transform(projection, referenceProjection);
-    const polyCoords = transformedGeom.getCoordinates()[0];
-    for (let i = 0; i < polyCoords.length - 1; i++) {
-      const start = {
-        x: polyCoords[i][0],
-        y: polyCoords[i][1]
-      };
-      const end = {
-        x: polyCoords[i + 1][0],
-        y: polyCoords[i + 1][1]
-      };
-      const arcGen = new arc.GreatCircle(start, end);
-      const arcline = arcGen.Arc(25, { offset: 10 });
-      arcline.geometries.forEach((arcGeom) => {
-        coords = coords.concat(arcGeom.coords);
-      });
-    }
-    return new Polygon([coords]).transform(referenceProjection, projection);
   };
 
   /**
@@ -249,32 +205,21 @@ export function measure (map, mapUiEvents) {
   }
 
   /**
-   * Convert and format raw measurements to two decimal points
-   * @param {*} measurement
-   * @param {*} factor
-   * @return {String} - The measurement, converted based on factor and locale
-   */
-  const roundAndLocale = (measurement, factor) => {
-    factor = factor || 1;
-    return (Math.round(measurement / factor * 100) / 100).toLocaleString();
-  };
-
-  /**
    *
    * @param {*} line
    * @return {String} - The formatted distance measurement
    */
   const getFormattedLength = (line) => {
-    const metricLength = getLength(line, { projection });
+    const metricLength = useGreatCircle ? getLength(line, { projection }) : getRhumbLineDistance(line);
     if (unitOfMeasure === 'km') {
       return metricLength > 100
-        ? `${roundAndLocale(metricLength, kilometer)} km`
+        ? `${roundAndLocale(metricLength, metersPerkilometer)} km`
         : `${roundAndLocale(metricLength)} m`;
     }
     if (unitOfMeasure === 'mi') {
       const imperialLength = metersToFeet(metricLength);
-      return imperialLength > (mile / 4)
-        ? `${roundAndLocale(imperialLength, mile)} mi`
+      return imperialLength > (ftPerMile / 4)
+        ? `${roundAndLocale(imperialLength, ftPerMile)} mi`
         : `${roundAndLocale(imperialLength)} ft`;
     }
   };
@@ -285,19 +230,35 @@ export function measure (map, mapUiEvents) {
    * @return {String} - The formatted area measurement
    */
   const getFormattedArea = (polygon) => {
+    const sqFtPerSqMile = 27878400;
+    const sqMeterPerKilometer = 1000000;
     const metricArea = getArea(polygon, { projection });
     if (unitOfMeasure === 'km') {
       return metricArea > 10000
-        ? `${roundAndLocale(metricArea, 1000000)} km<sup>2</sup>`
+        ? `${roundAndLocale(metricArea, sqMeterPerKilometer)} km<sup>2</sup>`
         : `${roundAndLocale(metricArea)} m<sup>2</sup>`;
     }
     if (unitOfMeasure === 'mi') {
       const imperialArea = squareMetersToFeet(metricArea);
-      return imperialArea > (27878400 / 8)
-        ? `${roundAndLocale(imperialArea, 27878400)} mi<sup>2</sup>`
+      return imperialArea > (sqFtPerSqMile / 8)
+        ? `${roundAndLocale(imperialArea, sqFtPerSqMile)} mi<sup>2</sup>`
         : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
     }
   };
+
+  /**
+   * Go through every tooltip and recalculate the measurement based on
+   * current settings of unit of measurement and great circle
+   */
+  function recalculateAllMeasurements () {
+    for (const id in allMeasureTooltips) {
+      const geomForTooltip = allGeometries[id];
+      const tooltipElement = allMeasureTooltips[id].element.children[0];
+      tooltipElement.innerHtml = setMeasurement(geomForTooltip, tooltipElement);
+      geomForTooltip.changed();
+      allMeasureTooltips[id].setOffset([0, -7]);
+    }
+  }
 
   /**
    * Initiate a measurement interaction of the given measureType ('distance' or 'area')
@@ -330,14 +291,14 @@ export function measure (map, mapUiEvents) {
    * Convert unit of measurement on all existing measurments and those created after
    * @param {String} unit - Unit of measurement: 'km' or 'mi'
    */
-  self.toggleUnits = (unit) => {
+  self.changeUnits = (unit) => {
     unitOfMeasure = unit;
-    for (const id in allMeasureTooltips) {
-      const geomForTooltip = allGeometries[id];
-      const tooltipElement = allMeasureTooltips[id].element.children[0];
-      tooltipElement.innerHtml = setMeasurement(geomForTooltip, tooltipElement);
-      allMeasureTooltips[id].setOffset([0, -7]);
-    }
+    recalculateAllMeasurements();
+  };
+
+  self.useGreatCircleMeasurements = (value) => {
+    useGreatCircle = value;
+    recalculateAllMeasurements();
   };
 
   /**
