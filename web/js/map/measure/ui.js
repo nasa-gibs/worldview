@@ -1,20 +1,15 @@
 import { unByKey } from 'ol/Observable';
 import Overlay from 'ol/Overlay';
-import { getArea, getLength } from 'ol/sphere';
 import { LineString, Polygon } from 'ol/geom';
 import { Draw } from 'ol/interaction/';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import {
-  ftPerMile,
-  metersPerkilometer,
-  metersToFeet,
-  squareMetersToFeet,
-  roundAndLocale,
   transformLineStringArc,
   transformPolygonArc,
-  getRhumbLineDistance
+  getFormattedLength,
+  getFormattedArea
 } from './util.js';
 
 export function measure (map, mapUiEvents) {
@@ -43,7 +38,6 @@ export function measure (map, mapUiEvents) {
     lineJoin: 'round',
     width: 5
   });
-  // const solidOrange = 'rgba(255, 100, 6, 1)';
   const vectorStyles = [
     new Style({
       fill: areaBgFill,
@@ -152,15 +146,13 @@ export function measure (map, mapUiEvents) {
       } else if (geom instanceof LineString) {
         tooltipCoord = geom.getLastCoordinate();
       }
-      setMeasurement(geom, measureTooltipElement);
+      setMeasurementTooltip(geom, measureTooltipElement);
       measureTooltip.setPosition(tooltipCoord);
     });
   };
 
   function drawEndCallback (evt) {
     const featureGeom = evt.feature.getGeometry();
-    // const metricLength = getLength(featureGeom, { projection });
-    // const geomLength = featureGeom.getLength();
     allGeometries[featureGeom.ol_uid] = featureGeom;
     measureTooltipElement.className = 'tooltip-measure tooltip-static';
     measureTooltip.setOffset([0, -7]);
@@ -193,58 +185,16 @@ export function measure (map, mapUiEvents) {
    * @param {*} geometry
    * @param {*} element
    */
-  function setMeasurement(geometry, element) {
+  function setMeasurementTooltip(geometry, element) {
     let measurement;
     if (geometry instanceof Polygon) {
-      measurement = getFormattedArea(geometry);
+      measurement = getFormattedArea(geometry, projection, unitOfMeasure, useGreatCircle);
     }
     if (geometry instanceof LineString) {
-      measurement = getFormattedLength(geometry);
+      measurement = getFormattedLength(geometry, projection, unitOfMeasure, useGreatCircle);
     }
     element.innerHTML = measurement;
   }
-
-  /**
-   *
-   * @param {*} line
-   * @return {String} - The formatted distance measurement
-   */
-  const getFormattedLength = (line) => {
-    const metricLength = useGreatCircle ? getLength(line, { projection }) : getRhumbLineDistance(line);
-    if (unitOfMeasure === 'km') {
-      return metricLength > 100
-        ? `${roundAndLocale(metricLength, metersPerkilometer)} km`
-        : `${roundAndLocale(metricLength)} m`;
-    }
-    if (unitOfMeasure === 'mi') {
-      const imperialLength = metersToFeet(metricLength);
-      return imperialLength > (ftPerMile / 4)
-        ? `${roundAndLocale(imperialLength, ftPerMile)} mi`
-        : `${roundAndLocale(imperialLength)} ft`;
-    }
-  };
-
-  /**
-   *
-   * @param {*} polygon
-   * @return {String} - The formatted area measurement
-   */
-  const getFormattedArea = (polygon) => {
-    const sqFtPerSqMile = 27878400;
-    const sqMeterPerKilometer = 1000000;
-    const metricArea = getArea(polygon, { projection });
-    if (unitOfMeasure === 'km') {
-      return metricArea > 10000
-        ? `${roundAndLocale(metricArea, sqMeterPerKilometer)} km<sup>2</sup>`
-        : `${roundAndLocale(metricArea)} m<sup>2</sup>`;
-    }
-    if (unitOfMeasure === 'mi') {
-      const imperialArea = squareMetersToFeet(metricArea);
-      return imperialArea > (sqFtPerSqMile / 8)
-        ? `${roundAndLocale(imperialArea, sqFtPerSqMile)} mi<sup>2</sup>`
-        : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
-    }
-  };
 
   /**
    * Go through every tooltip and recalculate the measurement based on
@@ -254,7 +204,7 @@ export function measure (map, mapUiEvents) {
     for (const id in allMeasureTooltips) {
       const geomForTooltip = allGeometries[id];
       const tooltipElement = allMeasureTooltips[id].element.children[0];
-      tooltipElement.innerHtml = setMeasurement(geomForTooltip, tooltipElement);
+      tooltipElement.innerHtml = setMeasurementTooltip(geomForTooltip, tooltipElement);
       geomForTooltip.changed();
       allMeasureTooltips[id].setOffset([0, -7]);
     }
@@ -296,6 +246,9 @@ export function measure (map, mapUiEvents) {
     recalculateAllMeasurements();
   };
 
+  /**
+   * 
+   */
   self.useGreatCircleMeasurements = (value) => {
     useGreatCircle = value;
     recalculateAllMeasurements();
