@@ -1,16 +1,20 @@
-import { MultiLineString, Polygon } from 'ol/geom';
-import { getArea, getLength } from 'ol/sphere';
+import { MultiLineString as OlGeomMultiLineString, Polygon as OlGeomPolygon } from 'ol/geom';
+import { getArea as OlSphereGetArea, getLength as OlSphereGetLength } from 'ol/sphere';
+import {
+  area as TurfArea,
+  polygon as TurfPolygon,
+  rhumbDistance as TurfRhumbDistance,
+  point as TurfPoint
+} from '@turf/turf';
 import arc from 'arc';
 
-const equatorialRadiusMeters = 6378137;
 const referenceProjection = 'EPSG:4326';
-const metersPerkilometer = 1000;
+const metersPerKilometer = 1000;
 const ftPerMile = 5280;
 const sqFtPerSqMile = 27878400;
 const sqMeterPerKilometer = 1000000;
 const metersToFeet = (meters) => meters * 3.28084;
 const squareMetersToFeet = (sqMeters) => sqMeters * 10.76391;
-const toRadians = (degrees) => degrees * (Math.PI / 180);
 
 const getArcLine = (p1, p2) => {
 // The number of additional coordinate points to add to a LineString when
@@ -36,7 +40,7 @@ export function transformLineStringArc (geom, projection) {
       coords.push(arcGeom.coords);
     });
   });
-  return new MultiLineString(coords).transform(referenceProjection, projection);
+  return new OlGeomMultiLineString(coords).transform(referenceProjection, projection);
 };
 
 /**
@@ -54,7 +58,7 @@ export function transformPolygonArc (geom, projection) {
       coords = coords.concat(arcGeom.coords);
     });
   }
-  return new Polygon([coords]).transform(referenceProjection, projection);
+  return new OlGeomPolygon([coords]).transform(referenceProjection, projection);
 };
 
 /**
@@ -64,12 +68,12 @@ export function transformPolygonArc (geom, projection) {
    */
 export function getFormattedLength(line, projection, unitOfMeasure, useGreatCircle) {
   const metricLength = useGreatCircle
-    ? getLength(line, { projection })
+    ? OlSphereGetLength(line, { projection })
     : getRhumbLineDistance(line);
 
   if (unitOfMeasure === 'km') {
     return metricLength > 100
-      ? `${roundAndLocale(metricLength, metersPerkilometer)} km`
+      ? `${roundAndLocale(metricLength, metersPerKilometer)} km`
       : `${roundAndLocale(metricLength)} m`;
   }
   if (unitOfMeasure === 'mi') {
@@ -87,8 +91,8 @@ export function getFormattedLength(line, projection, unitOfMeasure, useGreatCirc
    */
 export function getFormattedArea(polygon, projection, unitOfMeasure, useGreatCircle) {
   const metricArea = useGreatCircle
-    ? getArea(polygon, { projection })
-    : getRhumbLineArea(polygon);
+    ? OlSphereGetArea(polygon, { projection })
+    : getRhumbLineArea(polygon, projection);
 
   if (unitOfMeasure === 'km') {
     return metricArea > 10000
@@ -107,24 +111,25 @@ export function getFormattedArea(polygon, projection, unitOfMeasure, useGreatCir
  *
  */
 export function getRhumbLineDistance(lineString) {
-  const c1 = lineString.getFirstCoordinate();
-  const c2 = lineString.getLastCoordinate();
-  const lat1 = toRadians(c1[1]);
-  const lat2 = toRadians(c2[1]);
-  const dLat = lat2 - lat1;
-  const dPsi = Math.log(Math.tan(Math.PI / 4 + lat2 / 2) / Math.tan(Math.PI / 4 + lat1 / 2));
-  let dLon = toRadians(c2[0] - c1[0]);
-  // E-W course becomes ill-conditioned with 0/0
-  const q = Math.abs(dPsi) > 10e-12 ? dLat / dPsi : Math.cos(lat1);
-  // if dLon over 180 degrees take shorter rhumb across anti-meridian:
-  if (Math.abs(dLon) > Math.PI) {
-    dLon = dLon > 0 ? -(2 * Math.PI - dLon) : (2 * Math.PI + dLon);
-  }
-  return Math.sqrt(dLat * dLat + q * q * dLon * dLon) * equatorialRadiusMeters;
+  const p1 = TurfPoint(lineString.getFirstCoordinate());
+  const p2 = TurfPoint(lineString.getLastCoordinate());
+  return TurfRhumbDistance(p1, p2);
 };
 
-export function getRhumbLineArea(polygon) {
-  return 10000000;
+/**
+ *
+ */
+export function getRhumbLineArea(polygon, projection) {
+  let transformedPoly = polygon;
+  if (projection !== referenceProjection) {
+    transformedPoly = polygon.clone().transform(projection, referenceProjection);
+  }
+  const coords = polygon.getCoordinates()[0];
+  if (coords.length < 4) {
+    return 0;
+  }
+  const poly = TurfPolygon(transformedPoly.getCoordinates());
+  return TurfArea(poly);
 }
 
 /**
