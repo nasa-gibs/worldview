@@ -113,7 +113,7 @@ export function getFormattedArea(polygon, projection, unitOfMeasure, useGreatCir
 export function getRhumbLineDistance(lineString) {
   const p1 = TurfPoint(lineString.getFirstCoordinate());
   const p2 = TurfPoint(lineString.getLastCoordinate());
-  return TurfRhumbDistance(p1, p2);
+  return TurfRhumbDistance(p1, p2) * metersPerKilometer;
 };
 
 /**
