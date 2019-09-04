@@ -9,9 +9,9 @@ Interactive interface for browsing full-resolution, global satellite imagery
 ## Background
 
 This app from NASA's [EOSDIS](https://earthdata.nasa.gov/) provides the
-capability to interactively browse over 800 global, full-resolution satellite
+capability to interactively browse over 900 global, full-resolution satellite
 imagery layers on desktop and mobile devices. Many of the imagery layers are
-updated within three hours of observation, showing the entire Earth as it is
+updated daily and are within three hours of observation - showing the entire Earth as it is
 "right now". This supports time-critical applications such as wildfire
 management, air quality measurements, and flood monitoring. Some satellite
 imagery layers span almost 30 years, providing a long term view of our dynamic
