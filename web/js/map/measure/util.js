@@ -1,35 +1,38 @@
 import { MultiLineString, Polygon } from 'ol/geom';
+import { getArea, getLength } from 'ol/sphere';
 import arc from 'arc';
 
 const equatorialRadiusMeters = 6378137;
 const referenceProjection = 'EPSG:4326';
+const metersPerkilometer = 1000;
+const ftPerMile = 5280;
+const sqFtPerSqMile = 27878400;
+const sqMeterPerKilometer = 1000000;
+const metersToFeet = (meters) => meters * 3.28084;
+const squareMetersToFeet = (sqMeters) => sqMeters * 10.76391;
 const toRadians = (degrees) => degrees * (Math.PI / 180);
 
-export const metersPerkilometer = 1000;
-export const ftPerMile = 5280;
-export const metersToFeet = (meters) => meters * 3.28084;
-export const squareMetersToFeet = (sqMeters) => sqMeters * 10.76391;
+const getArcLine = (p1, p2) => {
+// The number of additional coordinate points to add to a LineString when
+// converting it to conform to a great circle arc.
+  const arcLineResolution = 50;
+  const start = { x: p1[0], y: p1[1] };
+  const end = { x: p2[0], y: p2[1] };
+  const arcGen = new arc.GreatCircle(start, end);
+  return arcGen.Arc(arcLineResolution, { offset: 10 });
+};
 
 /**
-   * Transforms a LineString of two points to a MultiLineString of multiple points
-   * applying a great circle arc transformation
-   * @param {*} geom - the geometry object to apply great circle arc transformation to
-   */
+ * Transforms a LineString of two points to a MultiLineString of multiple points
+ * applying a great circle arc transformation
+ * @param {*} geom - the geometry object to apply great circle arc transformation to
+ */
 export function transformLineStringArc (geom, projection) {
   const coords = [];
   const transformedGeom = geom.clone().transform(projection, referenceProjection);
+
   transformedGeom.forEachSegment((segStart, segEnd) => {
-    const start = {
-      x: segStart[0],
-      y: segStart[1]
-    };
-    const end = {
-      x: segEnd[0],
-      y: segEnd[1]
-    };
-    const arcGen = new arc.GreatCircle(start, end);
-    const arcline = arcGen.Arc(25, { offset: 10 });
-    arcline.geometries.forEach((arcGeom) => {
+    getArcLine(segStart, segEnd).geometries.forEach((arcGeom) => {
       coords.push(arcGeom.coords);
     });
   });
@@ -37,30 +40,67 @@ export function transformLineStringArc (geom, projection) {
 };
 
 /**
-   * Transforms a Polygon to one with addiitonal points on each edge to account for
-   * great circle arc
-   * @param {*} geom - the geometry object to apply great circle arc transformation to
-   */
+ * Transforms a Polygon into one with addiitonal points on each edge to account for
+ * great circle arc
+ * @param {*} geom - the geometry object to apply great circle arc transformation to
+ */
 export function transformPolygonArc (geom, projection) {
   let coords = [];
   const transformedGeom = geom.clone().transform(projection, referenceProjection);
   const polyCoords = transformedGeom.getCoordinates()[0];
   for (let i = 0; i < polyCoords.length - 1; i++) {
-    const start = {
-      x: polyCoords[i][0],
-      y: polyCoords[i][1]
-    };
-    const end = {
-      x: polyCoords[i + 1][0],
-      y: polyCoords[i + 1][1]
-    };
-    const arcGen = new arc.GreatCircle(start, end);
-    const arcline = arcGen.Arc(25, { offset: 10 });
-    arcline.geometries.forEach((arcGeom) => {
+    const arcLine = getArcLine(polyCoords[i], polyCoords[i + 1]);
+    arcLine.geometries.forEach((arcGeom) => {
       coords = coords.concat(arcGeom.coords);
     });
   }
   return new Polygon([coords]).transform(referenceProjection, projection);
+};
+
+/**
+   *
+   * @param {*} line
+   * @return {String} - The formatted distance measurement
+   */
+export function getFormattedLength(line, projection, unitOfMeasure, useGreatCircle) {
+  const metricLength = useGreatCircle
+    ? getLength(line, { projection })
+    : getRhumbLineDistance(line);
+
+  if (unitOfMeasure === 'km') {
+    return metricLength > 100
+      ? `${roundAndLocale(metricLength, metersPerkilometer)} km`
+      : `${roundAndLocale(metricLength)} m`;
+  }
+  if (unitOfMeasure === 'mi') {
+    const imperialLength = metersToFeet(metricLength);
+    return imperialLength > (ftPerMile / 4)
+      ? `${roundAndLocale(imperialLength, ftPerMile)} mi`
+      : `${roundAndLocale(imperialLength)} ft`;
+  }
+};
+
+/**
+   *
+   * @param {*} polygon
+   * @return {String} - The formatted area measurement
+   */
+export function getFormattedArea(polygon, projection, unitOfMeasure, useGreatCircle) {
+  const metricArea = useGreatCircle
+    ? getArea(polygon, { projection })
+    : getRhumbLineArea(polygon);
+
+  if (unitOfMeasure === 'km') {
+    return metricArea > 10000
+      ? `${roundAndLocale(metricArea, sqMeterPerKilometer)} km<sup>2</sup>`
+      : `${roundAndLocale(metricArea)} m<sup>2</sup>`;
+  }
+  if (unitOfMeasure === 'mi') {
+    const imperialArea = squareMetersToFeet(metricArea);
+    return imperialArea > (sqFtPerSqMile / 8)
+      ? `${roundAndLocale(imperialArea, sqFtPerSqMile)} mi<sup>2</sup>`
+      : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
+  }
 };
 
 /**
@@ -83,12 +123,16 @@ export function getRhumbLineDistance(lineString) {
   return Math.sqrt(dLat * dLat + q * q * dLon * dLon) * equatorialRadiusMeters;
 };
 
+export function getRhumbLineArea(polygon) {
+  return 10000000;
+}
+
 /**
-   * Convert and format raw measurements to two decimal points
-   * @param {*} measurement
-   * @param {*} factor
-   * @return {String} - The measurement, converted based on factor and locale
-   */
+ * Convert and format raw measurements to two decimal points
+ * @param {*} measurement
+ * @param {*} factor
+ * @return {String} - The measurement, converted based on factor and locale
+ */
 export function roundAndLocale (measurement, factor) {
   factor = factor || 1;
   return (Math.round(measurement / factor * 100) / 100).toLocaleString();
