@@ -5,6 +5,7 @@ import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
 import { FormGroup, Label, Input } from 'reactstrap';
+import AlertUtil from '../util/alert';
 // import googleTagManager from 'googleTagManager';
 
 const OPTIONS_ARRAY = [
@@ -55,8 +56,18 @@ class MeasureMenu extends Component {
   }
 
   render() {
+    const { clickType } = this.props;
+    const isMobile = clickType === 'touchstart';
     return (
       <>
+        {isMobile && <AlertUtil
+          isOpen={true}
+          timeout={15000}
+          iconClassName=' '
+          title='Measure Tool'
+          message='Tap to add a point.  Double tap to complete.'
+        />}
+
         <FormGroup check>
           <Label check>
             <Input
@@ -89,11 +100,15 @@ class MeasureMenu extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  map: state.map,
-  units: state.measure.units,
-  useGreatCircleMeasurements: state.measure.useGreatCircleMeasurements
-});
+const mapStateToProps = (state, ownProps) => {
+  return {
+    clickType: state.modal.customProps.clickType,
+    isMobile: state.browser.lessThan.medium,
+    map: state.map,
+    units: state.measure.units,
+    useGreatCircleMeasurements: state.measure.useGreatCircleMeasurements
+  };
+};
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onToggleUnits: (units) => {
     dispatch(changeUnits(units));
@@ -112,6 +127,7 @@ export default connect(
 )(MeasureMenu);
 
 MeasureMenu.propTypes = {
+  clickType: PropTypes.string,
   map: PropTypes.object,
   onCloseModal: PropTypes.func,
   onToggleUnits: PropTypes.func,
