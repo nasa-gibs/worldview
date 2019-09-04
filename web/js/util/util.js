@@ -22,7 +22,7 @@ import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
 import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
 import lastDayOfYear from 'date-fns/last_day_of_year';
 
-export default (function(self) {
+export default (function (self) {
   var canvas = null;
 
   // Export other util methods
@@ -58,7 +58,7 @@ export default (function(self) {
     }
   };
 
-  self.repeat = function(value, length) {
+  self.repeat = function (value, length) {
     var result = '';
     for (var i = 0; i < length; i++) {
       result += value;
@@ -66,7 +66,7 @@ export default (function(self) {
     return result;
   };
 
-  self.pad = function(value, width, padding) {
+  self.pad = function (value, width, padding) {
     value = '' + value;
     if (value.length < width) {
       var add = width - value.length;
@@ -74,7 +74,7 @@ export default (function(self) {
     }
     return value;
   };
-  self.preventPinch = function(e) {
+  self.preventPinch = function (e) {
     if (e.deltaY && !Number.isInteger(e.deltaY)) {
       e.stopPropagation();
       e.preventDefault();
@@ -100,7 +100,7 @@ export default (function(self) {
    * object.
    * @return {object} object representation of the query string.
    */
-  self.fromQueryString = function(queryString) {
+  self.fromQueryString = function (queryString) {
     if (!queryString) {
       return {};
     }
@@ -117,7 +117,7 @@ export default (function(self) {
     }
     return result;
   };
-  self.elapsed = function(message, startTime, parameters) {
+  self.elapsed = function (message, startTime, parameters) {
     if (parameters && !parameters.elapsed) return;
     var t = new Date().getTime() - startTime;
     console.log(t, message);
@@ -144,12 +144,12 @@ export default (function(self) {
    *     "format=image/png"
    * @return {String} converted query string
    */
-  self.toQueryString = function(kvps, exceptions) {
+  self.toQueryString = function (kvps, exceptions) {
     exceptions = exceptions || {};
     var parts = [];
-    lodashEach(kvps, function(value, key) {
+    lodashEach(kvps, function (value, key) {
       var part = key + '=' + encodeURIComponent(value);
-      lodashEach(exceptions, function(exception) {
+      lodashEach(exceptions, function (exception) {
         var regexp = new RegExp(exception, 'ig');
         var decoded = decodeURIComponent(exception);
         part = part.replace(regexp, decoded);
@@ -173,7 +173,7 @@ export default (function(self) {
    * @return {Date} converted string as a datetime object, throws an
    * exception if the string is invalid.
    */
-  self.parseTimestampUTC = function(str) {
+  self.parseTimestampUTC = function (str) {
     return self.parseDateUTC(str);
   };
 
@@ -187,7 +187,7 @@ export default (function(self) {
    * @return y {Number} Y value on canvas
    * @return {Object} Canvas image data.
    */
-  self.getCanvasPixelData = function(canvas, x, y) {
+  self.getCanvasPixelData = function (canvas, x, y) {
     var context = canvas.getContext('2d');
     return context.getImageData(x, y, 1, 1)
       .data;
@@ -203,7 +203,7 @@ export default (function(self) {
    * the string is invalid
    */
   // NOTE: Older Safari doesn't like Date.parse
-  self.parseDateUTC = function(dateAsString) {
+  self.parseDateUTC = function (dateAsString) {
     var dateTimeArr = dateAsString.split(/T/);
 
     var yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
@@ -233,12 +233,12 @@ export default (function(self) {
     }
     return date;
   };
-  self.appendAttributesForURL = function(item) {
+  self.appendAttributesForURL = function (item) {
     if (lodashIsObject(item)) {
       let part = item.id || '';
       const attributes = [];
       if (item.attributes && item.attributes.length > 0) {
-        lodashEach(item.attributes, function(attribute) {
+        lodashEach(item.attributes, function (attribute) {
           if (attribute.value) {
             attributes.push(attribute.id + '=' + attribute.value);
           } else {
@@ -256,7 +256,7 @@ export default (function(self) {
    * Test if is valid Date
    * @param {Object} d | Date object
    */
-  self.isValidDate = function(d) {
+  self.isValidDate = function (d) {
     return d instanceof Date && !isNaN(d);
   };
   /**
@@ -268,7 +268,7 @@ export default (function(self) {
    * @return {Date} converted string as a non UTC date object, throws an exception if
    * the string is invalid
    */
-  self.parseDate = function(dateAsString) {
+  self.parseDate = function (dateAsString) {
     var dateTimeArr = dateAsString.split(/T/);
 
     var yyyymmdd = dateTimeArr[0].split(/[\s-]+/);
@@ -307,7 +307,7 @@ export default (function(self) {
    *
    * @see http://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
    */
-  self.getTextWidth = function(text, font) {
+  self.getTextWidth = function (text, font) {
     // re-use canvas object for better performance
     canvas = canvas || document.createElement('canvas');
     var context = canvas.getContext('2d');
@@ -323,7 +323,7 @@ export default (function(self) {
    * @param  {Date} date {Date} the date to convert
    * @return {string} Julian date string in the form of `YYYYDDD`
    */
-  self.toJulianDate = function(date) {
+  self.toJulianDate = function (date) {
     var jStart, jDate;
     jStart = self.parseDateUTC(date.getUTCFullYear() + '-01-01');
     jDate = '00' + (1 + Math.ceil((date.getTime() - jStart) / 86400000));
@@ -338,7 +338,7 @@ export default (function(self) {
    * @param date {Date} the date to convert
    * @return {string} ISO string in the form of ``YYYY-MM-DD``.
    */
-  self.toISOStringDate = function(date) {
+  self.toISOStringDate = function (date) {
     return date.toISOString()
       .split('T')[0];
   };
@@ -351,7 +351,7 @@ export default (function(self) {
    * @param  {Date} date the date to convert
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
-  self.toISOStringSeconds = function(date) {
+  self.toISOStringSeconds = function (date) {
     return date.toISOString().split('.')[0] + 'Z';
   };
 
@@ -363,7 +363,7 @@ export default (function(self) {
    * @param  {Date} date the date to convert
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mmZ`.
    */
-  self.toISOStringMinutes = function(date) {
+  self.toISOStringMinutes = function (date) {
     const parts = date.toISOString().split(':');
     return parts[0] + ':' + parts[1] + 'Z';
   };
@@ -376,7 +376,7 @@ export default (function(self) {
    * @param date {Date} the date to convert
    * @return {string} ISO string in the form of HH:MM`.
    */
-  self.toHourMinutes = function(date) {
+  self.toHourMinutes = function (date) {
     var time = date.toISOString()
       .split('T')[1];
     var parts = time.split('.')[0].split(':');
@@ -391,7 +391,7 @@ export default (function(self) {
    * @param time {Date} date
    * @return {number} rounded date
    */
-  self.roundTimeOneMinute = function(time) {
+  self.roundTimeOneMinute = function (time) {
     var timeToReturn = new Date(time);
 
     timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
@@ -409,7 +409,7 @@ export default (function(self) {
    * to zero.
    * @return {Date} the date object
    */
-  self.clearTimeUTC = function(date) {
+  self.clearTimeUTC = function (date) {
     date.setUTCHours(0);
     date.setUTCMinutes(0);
     date.setUTCSeconds(0);
@@ -418,7 +418,7 @@ export default (function(self) {
     return date;
   };
 
-  self.dateAdd = function(date, interval, amount) {
+  self.dateAdd = function (date, interval, amount) {
     var month, maxDay, year;
     var newDate = new Date(date);
     switch (interval) {
@@ -450,7 +450,7 @@ export default (function(self) {
     return newDate;
   };
 
-  self.getNumberOfDays = function(start, end, interval, increment) {
+  self.getNumberOfDays = function (start, end, interval, increment) {
     increment = increment || 1;
     var i = 1;
     var currentDate = start;
@@ -461,7 +461,7 @@ export default (function(self) {
     return i;
   };
 
-  self.daysInMonth = function(d) {
+  self.daysInMonth = function (d) {
     var year;
     var month;
     if (d.getUTCFullYear) {
@@ -475,14 +475,14 @@ export default (function(self) {
     return lastDay.getUTCDate();
   };
 
-  self.daysInYear = function(date) {
+  self.daysInYear = function (date) {
     var jStart, jDate;
     jStart = self.parseDateUTC(date.getUTCFullYear() + '-01-01');
     jDate = '00' + (Math.ceil((date.getTime() - jStart) / 86400000) + 1);
     return (jDate).substr((jDate.length) - 3);
   };
 
-  self.objectLength = function(obj) {
+  self.objectLength = function (obj) {
     return Object.keys(obj)
       .length;
   };
@@ -495,7 +495,7 @@ export default (function(self) {
    * @param date {Date} date object of which to determine week day
    * @return {String} the full name of the day of the week
    */
-  self.giveWeekDay = function(d) {
+  self.giveWeekDay = function (d) {
     var day = [
       'Sunday',
       'Monday',
@@ -517,7 +517,7 @@ export default (function(self) {
    * @param date {Date} date object of which to determine the Month name
    * @return {String} the full name of the month
    */
-  self.giveMonth = function(d) {
+  self.giveMonth = function (d) {
     var month = [
       'January',
       'February',
@@ -536,7 +536,7 @@ export default (function(self) {
     return month[d.getUTCMonth()];
   };
 
-  self.clamp = function(val, min, max) {
+  self.clamp = function (val, min, max) {
     if (val < min) {
       return min;
     }
@@ -546,7 +546,7 @@ export default (function(self) {
     return val;
   };
 
-  self.roll = function(val, min, max) {
+  self.roll = function (val, min, max) {
     if (val < min) {
       return max - (min - val) + 1;
     }
@@ -556,15 +556,15 @@ export default (function(self) {
     return val;
   };
 
-  self.minDate = function() {
+  self.minDate = function () {
     return new Date(Date.UTC(1000, 0, 1, 0, 0));
   };
 
-  self.maxDate = function() {
+  self.maxDate = function () {
     return new Date(Date.UTC(3000, 11, 30, 23, 59));
   };
 
-  self.rollRange = function(date, interval, minDate, maxDate) {
+  self.rollRange = function (date, interval, minDate, maxDate) {
     var year = date.getUTCFullYear();
     var month = date.getUTCMonth();
     var first, last;
@@ -616,7 +616,7 @@ export default (function(self) {
     };
   };
 
-  self.rollDate = function(date, interval, amount, minDate, maxDate) {
+  self.rollDate = function (date, interval, amount, minDate, maxDate) {
     minDate = minDate || self.minDate();
     maxDate = maxDate || self.maxDate();
     var range = self.rollRange(date, interval, minDate, maxDate);
@@ -669,7 +669,7 @@ export default (function(self) {
    * @return {String} string representation in the form of
    * ``YYYYMMDDHHMMSSsss``
    */
-  self.toCompactTimestamp = function(date) {
+  self.toCompactTimestamp = function (date) {
     return date.toISOString()
       .replace(/[-:TZ.]/g, '');
   };
@@ -683,7 +683,7 @@ export default (function(self) {
    * ``YYYYMMDDHHMMSSsss``.
    * @return {Date} the converted date object.
    */
-  self.fromCompactTimestamp = function(str) {
+  self.fromCompactTimestamp = function (str) {
     var v = str.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})/);
     if (lodashIsNull(v)) {
       throw new Error('Invalid timestamp:' + str);
@@ -706,13 +706,13 @@ export default (function(self) {
    * @static
    * @return {Date} The current time or an overriden value.
    */
-  var now = function() {
+  var now = function () {
     return new Date();
   };
 
   self.now = now;
 
-  self.resetNow = function() {
+  self.resetNow = function () {
     self.now = now;
   };
 
@@ -725,7 +725,7 @@ export default (function(self) {
    * @return {Date} The current time with the UTC hours, minutes, and seconds
    * fields set to zero or an overriden value.
    */
-  self.today = function() {
+  self.today = function () {
     return self.now();
   };
 
@@ -741,7 +741,7 @@ export default (function(self) {
    * @param {string} message Message to display to the end user.
    * @param {Exception} cause The exception object that caused the error
    */
-  self.error = function(message, cause) {
+  self.error = function (message, cause) {
     wvui.error(message, cause);
   };
 
@@ -755,16 +755,16 @@ export default (function(self) {
    * @param {object*} messages Messages to display to the end user.
    */
   self.warn = (console && console.warn && console.warn.bind)
-    ? console.warn.bind(console) : function() {};
+    ? console.warn.bind(console) : function () { };
 
-  self.hexToRGB = function(str) {
+  self.hexToRGB = function (str) {
     return 'rgb(' +
       parseInt(str.substring(0, 2), 16) + ',' +
       parseInt(str.substring(2, 4), 16) + ',' +
       parseInt(str.substring(4, 6), 16) + ')';
   };
 
-  self.hexToRGBA = function(str) {
+  self.hexToRGBA = function (str) {
     return 'rgba(' +
       parseInt(str.substring(0, 2), 16) + ',' +
       parseInt(str.substring(2, 4), 16) + ',' +
@@ -772,7 +772,7 @@ export default (function(self) {
       parseInt(str.substring(6, 8), 16) + ')';
   };
 
-  self.rgbaToHex = function(r, g, b) {
+  self.rgbaToHex = function (r, g, b) {
     function hex(c) {
       var strHex = c.toString(16);
       return strHex.length === 1 ? '0' + strHex : strHex;
@@ -780,7 +780,7 @@ export default (function(self) {
     return hex(r) + hex(g) + hex(b) + 'ff';
   };
 
-  self.hexColorDelta = function(hex1, hex2) {
+  self.hexColorDelta = function (hex1, hex2) {
     var r1 = parseInt(hex1.substring(0, 2), 16);
     var g1 = parseInt(hex1.substring(2, 4), 16);
     var b1 = parseInt(hex1.substring(4, 6), 16);
@@ -790,18 +790,18 @@ export default (function(self) {
     // calculate differences in 3D Space
     return Math.sqrt(Math.pow((r1 - r2), 2) + Math.pow((g1 - g2), 2) + Math.pow((b1 - b2), 2));
   };
-  self.fetch = function(url, mimeType) {
+  self.fetch = function (url, mimeType) {
     return new Promise((resolve, reject) => {
       return fetch(url)
-        .then(function(response) {
+        .then(function (response) {
           return mimeType === 'application/json'
             ? response.json()
             : response.text();
         })
-        .then(function(data) {
+        .then(function (data) {
           resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           reject(error);
         });
     });
@@ -817,7 +817,7 @@ export default (function(self) {
    * @param {Object} [spec.options] options to pass to jscache on setItem.
    *
    */
-  self.ajaxCache = function(spec) {
+  self.ajaxCache = function (spec) {
     spec = spec || {};
     var size = spec.size || null;
     var options = spec.options || {};
@@ -835,7 +835,7 @@ export default (function(self) {
        * when the query returns, or resolves immedately if the results
        * are cached.
        */
-      submit: function(parameters) {
+      submit: function (parameters) {
         var key = 'url=' + parameters.url;
         if (parameters.data) {
           key += '&query=' + $.param(parameters.data, true);
@@ -848,7 +848,7 @@ export default (function(self) {
             .promise();
         } else {
           var promise = $.ajax(parameters);
-          promise.done(function(results) {
+          promise.done(function (results) {
             cache.setItem(key, results, options);
           });
           return promise;
@@ -856,9 +856,9 @@ export default (function(self) {
       }
     };
   };
-  self.errorReport = function(errors) {
+  self.errorReport = function (errors) {
     var layersRemoved = 0;
-    lodashEach(errors, function(error) {
+    lodashEach(errors, function (error) {
       var cause = error.cause ? ': ' + error.cause : '';
       self.warn(error.message + cause);
       if (error.layerRemoved) {
@@ -873,8 +873,8 @@ export default (function(self) {
    * @param {function} func the function to wrap
    * @return the function wrapped in a try/catch block.
    */
-  self.wrap = function(func) {
-    return function() {
+  self.wrap = function (func) {
+    return function () {
       try {
         return func.apply(func, arguments);
       } catch (error) {
@@ -891,14 +891,14 @@ export default (function(self) {
    * @param {url} func the function to wrap
    * @return {object} Promise
    */
-  self.get = function(url) {
+  self.get = function (url) {
     // Return a new promise.
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       // Do the usual XHR stuff
       var req = new XMLHttpRequest();
       req.open('GET', url);
 
-      req.onload = function() {
+      req.onload = function () {
         // This is called even on 404 etc
         // so check the status
         if (req.status === 200) {
@@ -911,7 +911,7 @@ export default (function(self) {
         }
       };
       // Handle network errors
-      req.onerror = function() {
+      req.onerror = function () {
         reject(Error('Network Error'));
       };
       // Make the request
@@ -920,20 +920,20 @@ export default (function(self) {
   };
 
   // FIXME: Should be replaced with $.when
-  self.ajaxJoin = function(calls) {
+  self.ajaxJoin = function (calls) {
     var completed = 0;
     var result = {};
     var deferred = $.Deferred();
 
-    $.each(calls, function(index, call) {
-      call.promise.done(function(data) {
+    $.each(calls, function (index, call) {
+      call.promise.done(function (data) {
         result[call.item] = data;
         completed += 1;
         if (completed === calls.length) {
           deferred.resolve(result);
         }
       })
-        .fail(function(jqXHR, textStatus, errorThrown) {
+        .fail(function (jqXHR, textStatus, errorThrown) {
           deferred.reject(jqXHR, textStatus, errorThrown);
         });
     });
@@ -956,21 +956,21 @@ export default (function(self) {
   // The original plan was to escape the special characters but that
   // became confusing as element attributes would need one escape character
   // but the selector would need two (\. vs \\.)
-  self.encodeId = function(str) {
+  self.encodeId = function (str) {
     return str.replace(/[.:]/g, (match) => {
       return '__' + match.charCodeAt(0).toString(16).toUpperCase() + '__';
     });
   };
 
   // Converts an encoded identifier back to its original value.
-  self.decodeId = function(str) {
+  self.decodeId = function (str) {
     return str.replace(/__[0-9A-Fa-f]{2}__/g, (match) => {
       const charCode = Number.parseInt(match.substring(2, 4), 16);
       return String.fromCharCode(charCode);
     });
   };
 
-  self.metrics = function() {
+  self.metrics = function () {
     if (window.ntptEventTag) {
       ntptEventTag.apply(null, arguments);
     } else {
@@ -1020,7 +1020,7 @@ export default (function(self) {
   self.formatDMS = (value, type) => formatDegrees(value, type, true);
   self.formatDM = (value, type) => formatDegrees(value, type, false);
 
-  self.setCoordinateFormat = function(type) {
+  self.setCoordinateFormat = function (type) {
     if (!browser.localStorage) return;
     if (type !== 'latlon-dd' && type !== 'latlon-dms' && type !== 'latlon-dm') {
       throw new Error('Invalid coordinate format: ' + type);
@@ -1028,12 +1028,12 @@ export default (function(self) {
     localStorage.setItem('coordinateFormat', type);
   };
 
-  self.getCoordinateFormat = function() {
+  self.getCoordinateFormat = function () {
     if (!browser.localStorage) return 'latlon-dd';
     return localStorage.getItem('coordinateFormat') || 'latlon-dd';
   };
 
-  self.formatCoordinate = function(coord, format) {
+  self.formatCoordinate = function (coord, format) {
     var type = format || self.getCoordinateFormat();
     if (type === 'latlon-dms') {
       return self.formatDMS(coord[1], 'latitude') + ', ' +
@@ -1051,7 +1051,7 @@ export default (function(self) {
   // arguments array contains all args passed. String must be formatted
   // so that first replacement starts with "{1}"
   // usage example: wv.util.format("{1}{2}",'World','view')
-  self.format = function() {
+  self.format = function () {
     var formatted = arguments[0];
     for (var i = 1; i < arguments.length; i++) {
       var regexp = new RegExp('\\{' + i + '\\}', 'gi');
@@ -1060,7 +1060,7 @@ export default (function(self) {
     return formatted;
   };
 
-  self.toArray = function(value) {
+  self.toArray = function (value) {
     if (!value) {
       return [];
     }
@@ -1071,14 +1071,14 @@ export default (function(self) {
   };
 
   // Returns the number of months between two dates
-  self.yearDiff = function(startDate, endDate) {
+  self.yearDiff = function (startDate, endDate) {
     var year1 = startDate.getFullYear();
     var year2 = endDate.getFullYear();
     return year2 - year1;
   };
 
   // Returns the number of months between two dates
-  self.monthDiff = function(startDate, endDate) {
+  self.monthDiff = function (startDate, endDate) {
     var year1 = startDate.getFullYear();
     var year2 = endDate.getFullYear();
     var month1 = startDate.getMonth();
@@ -1091,7 +1091,7 @@ export default (function(self) {
     return numberOfMonths;
   };
 
-  self.dayDiff = function(startDate, endDate) {
+  self.dayDiff = function (startDate, endDate) {
     var date1 = new Date(startDate);
     var date2 = new Date(endDate);
     var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -1099,7 +1099,7 @@ export default (function(self) {
     return dayDiff;
   };
 
-  self.minuteDiff = function(startDate, endDate) {
+  self.minuteDiff = function (startDate, endDate) {
     var date1 = new Date(startDate);
     var date2 = new Date(endDate);
     var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -1117,10 +1117,10 @@ export default (function(self) {
    *                                If false, only return the dates from the range the current date falls in.
    * @return {array}                An array of dates with normalized timezones
    */
-  self.datesinDateRanges = function(def, date, containRange) {
+  self.datesinDateRanges = function (def, date, containRange) {
     var dateArray = [];
     var currentDate = new Date(date.getTime());
-    lodashEach(def.dateRanges, function(dateRange) {
+    lodashEach(def.dateRanges, function (dateRange) {
       var yearDifference;
       var monthDifference;
       var dayDifference;
@@ -1220,7 +1220,7 @@ export default (function(self) {
    * @param {String} value | String to return index of
    * @return {Number}
    */
-  self.stringInArray = function(arra, value) {
+  self.stringInArray = function (arra, value) {
     for (var i = 0, len = arra.length; i < len; i++) {
       if (arra[i] === value) {
         return i;
@@ -1237,15 +1237,15 @@ export default (function(self) {
    * @param  {array} dateArray  An array of dates
    * @return {object}           The date object with normalized timeszone.
    */
-  self.prevDateInDateRange = function(def, date, dateArray) {
+  self.prevDateInDateRange = function (def, date, dateArray) {
     var currentDate = new Date(date.getTime());
     if (!dateArray) return date;
     if ((def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
-        (def.period === 'yearly' && ((currentDate.getDate() === 1 &&
-          currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) return date;
+      (def.period === 'yearly' && ((currentDate.getDate() === 1 &&
+        currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) return date;
     // Return an array of the closest available dates within the range
     var closestAvailableDates = [];
-    lodashEach(dateArray, function(rangeDate) {
+    lodashEach(dateArray, function (rangeDate) {
       if (isBefore(rangeDate, currentDate) || isEqual(rangeDate, currentDate)) {
         closestAvailableDates.push(rangeDate);
       }
@@ -1265,7 +1265,7 @@ export default (function(self) {
    * @param  {array} comment seperated list of objects
    * @return {bool}
    */
-  self.objectsHaveSameKeys = function(...objects) {
+  self.objectsHaveSameKeys = function (...objects) {
     const allKeys = objects.reduce((keys, object) => keys.concat(Object.keys(object)), []);
     const union = new Set(allKeys);
     return objects.every(object => union.size === Object.keys(object).length);
