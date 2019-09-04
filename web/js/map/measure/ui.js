@@ -247,7 +247,7 @@ export function measure (map, mapUiEvents) {
   };
 
   /**
-   * 
+   *
    */
   self.useGreatCircleMeasurements = (value) => {
     useGreatCircle = value;
