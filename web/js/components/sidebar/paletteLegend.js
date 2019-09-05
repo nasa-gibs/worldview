@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
 import { drawPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
-import lodashIsEqual from 'lodash/isEqual';
 import lodashIsNumber from 'lodash/isNumber';
 
 class PaletteLegend extends React.Component {
@@ -137,7 +136,7 @@ class PaletteLegend extends React.Component {
             // This value is needed for calculating running data offsets
             this.setState({ width: newWidth });
           }
-          let ctx = this[ctxStr].current.getContext('2d');
+          const ctx = this[ctxStr].current.getContext('2d');
           drawPaletteOnCanvas(
             ctx,
             checkerBoardPattern,
@@ -254,8 +253,8 @@ class PaletteLegend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-            ''
-          )}
+          ''
+        )}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
@@ -375,8 +374,8 @@ class PaletteLegend extends React.Component {
                     )}
                 </div>
               ) : (
-                  ''
-                )}
+                ''
+              )}
             </React.Fragment>
           );
         })}

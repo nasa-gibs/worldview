@@ -99,8 +99,6 @@ export function drawTicksOnCanvas(ctx, legend, width, height) {
       ctx.stroke();
       ctx.closePath();
     });
-
-
   }
 }
 export function lookup(sourcePalette, targetPalette) {
