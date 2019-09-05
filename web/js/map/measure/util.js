@@ -69,7 +69,7 @@ export function transformPolygonArc (geom, projection) {
 export function getFormattedLength(line, projection, unitOfMeasure, useGreatCircle) {
   const metricLength = useGreatCircle
     ? OlSphereGetLength(line, { projection })
-    : getRhumbLineDistance(line);
+    : getRhumbLineDistance(line, projection);
 
   if (unitOfMeasure === 'km') {
     return metricLength > 100
@@ -110,9 +110,13 @@ export function getFormattedArea(polygon, projection, unitOfMeasure, useGreatCir
 /**
  *
  */
-export function getRhumbLineDistance(lineString) {
-  const p1 = TurfPoint(lineString.getFirstCoordinate());
-  const p2 = TurfPoint(lineString.getLastCoordinate());
+export function getRhumbLineDistance(lineString, projection) {
+  let transformedLine = lineString;
+  if (projection !== referenceProjection) {
+    transformedLine = lineString.clone().transform(projection, referenceProjection);
+  }
+  const p1 = TurfPoint(transformedLine.getFirstCoordinate());
+  const p2 = TurfPoint(transformedLine.getLastCoordinate());
   return TurfRhumbDistance(p1, p2) * metersPerKilometer;
 };
 

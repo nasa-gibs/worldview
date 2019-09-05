@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import React, { Component } from 'react';
 import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
-import { FormGroup, Label, Input } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Tooltip } from 'reactstrap';
 import AlertUtil from '../util/alert';
 // import googleTagManager from 'googleTagManager';
 
@@ -33,9 +33,11 @@ class MeasureMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tooltipOpen: false,
       units: props.units,
       useGreatCircleMeasurements: props.useGreatCircleMeasurements
     };
+    this.tooltipToggle = this.tooltipToggle.bind(this);
   }
 
   triggerEvent(eventName) {
@@ -55,6 +57,12 @@ class MeasureMenu extends Component {
     this.props.onToggleUseGreatCircle(checked);
   }
 
+  tooltipToggle() {
+    this.setState({
+      tooltipOpen: !this.state.tooltipOpen
+    });
+  }
+
   render() {
     const { clickType } = this.props;
     const isMobile = clickType === 'touchstart';
@@ -68,28 +76,38 @@ class MeasureMenu extends Component {
           message='Tap to add a point.  Double tap to complete.'
         />}
 
-        <FormGroup check>
-          <Label check>
-            <Input
-              id="great-circle-toggle"
+        <Form>
+          <FormGroup check>
+            <Label check>
+              <Input
+                id="great-circle-toggle"
+                type="checkbox"
+                onChange={this.useGreatCircle.bind(this)}
+                defaultChecked={this.state.useGreatCircleMeasurements}
+              />
+              {' '} Use Great circle <i id="great-circle-info" className="fas fa-info-circle"></i>
+            </Label>
+            <Tooltip
+              placement="top"
+              isOpen={this.state.tooltipOpen}
+              target="great-circle-info"
+              toggle={this.tooltipToggle}>
+              If enabled, lines will be drawn as great circle arcs which represent
+              the shortest real world distance between two points.
+            </Tooltip>
+          </FormGroup>
+          <div className="measure-unit-toggle custom-control custom-switch">
+            <label htmlFor="unit-toggle">km</label>
+            <input
+              id="unit-toggle"
+              className="custom-control-input"
               type="checkbox"
-              onChange={this.useGreatCircle.bind(this)}
-              defaultChecked={this.state.useGreatCircleMeasurements}
-            />
-            {' '} Great circle? <i className="fas fa-info-circle"></i>
-          </Label>
-        </FormGroup>
+              onChange={this.unitToggle.bind(this)}
+              defaultChecked={this.state.units === 'mi'}/>
+            <label className="custom-control-label" htmlFor="unit-toggle">mi</label>
+          </div>
+        </Form>
 
-        <div className="measure-unit-toggle custom-control custom-switch">
-          <label htmlFor="unit-toggle">km</label>
-          <input
-            id="unit-toggle"
-            className="custom-control-input"
-            type="checkbox"
-            onChange={this.unitToggle.bind(this)}
-            defaultChecked={this.state.units === 'mi'}/>
-          <label className="custom-control-label" htmlFor="unit-toggle">mi</label>
-        </div>
         <IconList
           list={OPTIONS_ARRAY}
           onClick={this.triggerEvent.bind(this)}
@@ -132,6 +150,7 @@ MeasureMenu.propTypes = {
   onCloseModal: PropTypes.func,
   onToggleUnits: PropTypes.func,
   onToggleUseGreatCircle: PropTypes.func,
+
   units: PropTypes.string,
   useGreatCircleMeasurements: PropTypes.bool
 };

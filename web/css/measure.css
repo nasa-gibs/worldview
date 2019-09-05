@@ -9,10 +9,19 @@
   right: 10px;
   bottom: 151px;
   & .modal-body {
-    padding: 0;
-  }
-  & .form-check-label {
-    margin-left: 24px;
+    padding: 5px 0 0;
+    & div {
+      padding: 0 5px 8px 10px;
+      & .form-check-label {
+        margin-left: 24px;
+      }
+      & i {
+        margin-left: 5px;
+      }
+      & .form-check-input {
+        margin: 0 0 0 -20px;
+      }
+    }
   }
 }
 
