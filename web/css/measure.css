@@ -4,6 +4,7 @@
   right: 10px;
   padding: 6px 10px;
 }
+
 .modal-dialog.toolbar-modal.measure-tool-modal {
   top: unset;
   right: 10px;
@@ -22,6 +23,16 @@
         margin: 0 0 0 -20px;
       }
     }
+  }
+}
+
+@media (max-width: 740px) {
+  .wv-measure-button {
+    bottom: 10px;
+  }
+  .modal-dialog.toolbar-modal.measure-tool-modal {
+    bottom: 55px;
+    margin: 0;
   }
 }
 

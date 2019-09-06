@@ -5,7 +5,7 @@ import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
 import { Form, FormGroup, Label, Input, Tooltip } from 'reactstrap';
-import AlertUtil from '../util/alert';
+// import AlertUtil from '../util/alert';
 // import googleTagManager from 'googleTagManager';
 
 const OPTIONS_ARRAY = [
@@ -33,8 +33,8 @@ class MeasureMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showAlert: false,
       tooltipOpen: false,
-      units: props.units,
       useGreatCircleMeasurements: props.useGreatCircleMeasurements
     };
     this.tooltipToggle = this.tooltipToggle.bind(this);
@@ -43,6 +43,11 @@ class MeasureMenu extends Component {
   triggerEvent(eventName) {
     const { map, onCloseModal } = this.props;
     map.ui.events.trigger(eventName);
+    if (eventName !== 'measure-clear') {
+      this.setState({
+        showAlert: true
+      });
+    }
     onCloseModal();
   }
 
@@ -64,17 +69,19 @@ class MeasureMenu extends Component {
   }
 
   render() {
-    const { clickType } = this.props;
-    const isMobile = clickType === 'touchstart';
+    // // const { clickType } = this.props;
+    // // const { showAlert } = this.state;
+    // const isMobile = true; // clickType === 'touchend';
+
     return (
       <>
-        {isMobile && <AlertUtil
+        {/* {isMobile && <AlertUtil
           isOpen={true}
           timeout={15000}
           iconClassName=' '
           title='Measure Tool'
           message='Tap to add a point.  Double tap to complete.'
-        />}
+        />} */}
 
         <Form>
           <FormGroup check>
@@ -83,9 +90,9 @@ class MeasureMenu extends Component {
                 id="great-circle-toggle"
                 type="checkbox"
                 onChange={this.useGreatCircle.bind(this)}
-                defaultChecked={this.state.useGreatCircleMeasurements}
+                defaultChecked={this.props.useGreatCircleMeasurements}
               />
-              {' '} Use Great circle <i id="great-circle-info" className="fas fa-info-circle"></i>
+              {' '} Use Great Circle <i id="great-circle-info" className="fas fa-info-circle"></i>
             </Label>
             <Tooltip
               placement="top"
@@ -97,14 +104,15 @@ class MeasureMenu extends Component {
             </Tooltip>
           </FormGroup>
           <div className="measure-unit-toggle custom-control custom-switch">
-            <label htmlFor="unit-toggle">km</label>
             <input
               id="unit-toggle"
               className="custom-control-input"
               type="checkbox"
               onChange={this.unitToggle.bind(this)}
-              defaultChecked={this.state.units === 'mi'}/>
-            <label className="custom-control-label" htmlFor="unit-toggle">mi</label>
+              defaultChecked={this.props.units === 'mi'}/>
+            <label className="custom-control-label" htmlFor="unit-toggle">
+              {this.props.units}
+            </label>
           </div>
         </Form>
 
