@@ -84,7 +84,8 @@ export function drawTicksOnCanvas(ctx, legend, width, height) {
   const colors = legend.colors;
   const bins = colors.length;
   const binWidth = width / bins;
-  const yValue = height * 0.70;
+  const yValue = parseFloat(height * 0.70);
+  const yValue2 = parseFloat(height * 0.3);
   const drawWidth = Math.ceil(binWidth);
   const halfWidth = drawWidth / 2;
   if (ticks && ticks.length > 0) {
@@ -92,10 +93,19 @@ export function drawTicksOnCanvas(ctx, legend, width, height) {
       const start = binWidth * tick;
       const midpoint = Math.floor((start + halfWidth)) + 0.5; // https://stackoverflow.com/a/8696641/4589331
       ctx.beginPath();
-      ctx.strokeStyle = invertColor(util.hexToRGB(legend.colors[tick], true), { black: '#333333', white: '#c0c0c0' });
+      // ctx.strokeStyle = invertColor(util.hexToRGB(legend.colors[tick], true), { black: '#333333', white: '#c0c0c0' });
+      ctx.strokeStyle = '#000'
       ctx.lineWidth = 0.8;
-      ctx.moveTo(midpoint, parseFloat(yValue));
-      ctx.lineTo(midpoint, parseFloat(height));
+      ctx.moveTo(midpoint, yValue);
+      ctx.lineTo(midpoint, height);
+      ctx.stroke();
+      ctx.closePath();
+      ctx.beginPath();
+      // ctx.strokeStyle = invertColor(util.hexToRGB(legend.colors[tick], true), { black: '#333333', white: '#c0c0c0' });
+      ctx.strokeStyle = '#fff'
+      ctx.lineWidth = 0.8;
+      ctx.moveTo(midpoint, 0);
+      ctx.lineTo(midpoint, yValue2);
       ctx.stroke();
       ctx.closePath();
     });
