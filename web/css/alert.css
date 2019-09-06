@@ -6,6 +6,7 @@
   cursor: pointer;
   padding: 0;
   border: none;
+  z-index: 100;
 }
 .wv-alert div {
   display: inline-block;

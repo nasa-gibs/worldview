@@ -14,6 +14,9 @@ module.exports = {
   animationWidget: '#wv-animation-widget',
   animationButton: '#animate-button',
 
+  // sidebar
+  sidebarContainer: '#productsHolder',
+
   // compare
   swipeButton: '#compare-swipe-button',
   opacityButton: '#compare-opacity-button',
@@ -22,6 +25,16 @@ module.exports = {
   bTab: '.ab-tabs-case .ab-tab.second-tab',
   swipeDragger: '.ab-swipe-line .ab-swipe-dragger',
   compareButton: '#compare-toggle-button',
+
+  // measure
+  measureBtn: '#wv-measure-button',
+  measureMenu: '#measure_menu',
+  measureDistanceBtn: '#measure-distance-button',
+  measureAreaBtn: '#measure-area-button',
+  clearMeasurementsBtn: '#clear-measurements-button',
+  unitOfMeasureToggle: '.measure-unit-toggle .custom-control-label',
+  greatCircleToggle: '#great-circle-toggle',
+  measurementTooltip: '.tooltip-measure.tooltip-static',
 
   // timeline
   dragger: '.timeline-dragger',
