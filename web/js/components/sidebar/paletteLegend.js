@@ -253,14 +253,14 @@ class PaletteLegend extends React.Component {
         {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
         ) : (
-          ''
-        )}
+            ''
+          )}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
             id={layer.id + '-' + legend.id + index + 'colorbar'}
             width={width}
-            height={12}
+            height={24}
             ref={this['canvas_' + index]}
             onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
             onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
@@ -374,8 +374,8 @@ class PaletteLegend extends React.Component {
                     )}
                 </div>
               ) : (
-                ''
-              )}
+                  ''
+                )}
             </React.Fragment>
           );
         })}
