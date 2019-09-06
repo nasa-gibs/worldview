@@ -255,6 +255,7 @@ function mapStateToProps(state) {
     layers,
     config,
     modal,
+    measure,
     animation,
     events
   } = state;
@@ -263,7 +264,10 @@ function mapStateToProps(state) {
   const { activeString } = compare;
   const numberOfLayers = getLayers(layers[activeString], {}, state).length;
   const tabTypes = getActiveTabs(config);
+  const snapshotModalOpen = (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT');
   const isMobile = browser.lessThan.medium;
+  // Collapse when Image download / GIF /  is open or measure tool active
+  const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
   return {
     activeTab,
     isMobile,
@@ -273,11 +277,7 @@ function mapStateToProps(state) {
     activeString,
     numberOfLayers,
     isDataDisabled: events.isAnimatingToEvent,
-    isCollapsed: isMobile
-      ? mobileCollapsed
-      : isCollapsed ||
-        (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') ||
-        animation.gifActive, // Collapse when Image download / GIF is open,
+    isCollapsed: isMobile ? mobileCollapsed : (isCollapsed || shouldBeCollapsed),
     tabTypes,
     config
   };

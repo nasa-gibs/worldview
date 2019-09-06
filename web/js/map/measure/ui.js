@@ -11,8 +11,9 @@ import {
   getFormattedLength,
   getFormattedArea
 } from './util.js';
+import { toggleMeasureActive } from '../../modules/measure/actions';
 
-export function measure (map, mapUiEvents) {
+export function measure (map, mapUiEvents, store) {
   let draw;
   let sketch;
   let helpTooltipElement;
@@ -97,6 +98,8 @@ export function measure (map, mapUiEvents) {
     }, 250);
     sketch = null;
     measureTooltipElement = null;
+    store.dispatch(toggleMeasureActive(false));
+
     map.removeOverlay(helpTooltip);
     map.removeInteraction(draw);
     unByKey(drawChangeListener);
@@ -227,6 +230,8 @@ export function measure (map, mapUiEvents) {
     map.addInteraction(draw);
     createMeasureTooltip();
     createHelpTooltip();
+    store.dispatch(toggleMeasureActive(true));
+
     draw.on('drawstart', drawStartCallback, this);
     draw.on('drawend', drawEndCallback, this);
     pointerMoveListener = map.on('pointermove', pointerMoveHandler);

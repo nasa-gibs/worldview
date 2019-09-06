@@ -5,6 +5,7 @@ import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
 import { Form, FormGroup, Label, Input, Tooltip } from 'reactstrap';
+import { collapseSidebar } from '../../modules/sidebar/actions';
 // import AlertUtil from '../util/alert';
 // import googleTagManager from 'googleTagManager';
 
@@ -43,11 +44,6 @@ class MeasureMenu extends Component {
   triggerEvent(eventName) {
     const { map, onCloseModal } = this.props;
     map.ui.events.trigger(eventName);
-    if (eventName !== 'measure-clear') {
-      this.setState({
-        showAlert: true
-      });
-    }
     onCloseModal();
   }
 
@@ -142,7 +138,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onToggleUseGreatCircle: (value) => {
     dispatch(useGreatCircle(value));
   },
-  onCloseModal: () => {
+  onCloseModal: (eventName) => {
     dispatch(onToggle());
   }
 });

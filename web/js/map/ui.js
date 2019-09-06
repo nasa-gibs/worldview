@@ -1039,7 +1039,7 @@ export function mapui(models, config, store, ui) {
         ));
       };
     });
-    measureTools[proj.crs] = measure(map, self.events);
+    measureTools[proj.crs] = measure(map, self.events, store);
 
     return map;
   };
