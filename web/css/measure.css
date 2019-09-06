@@ -10,9 +10,9 @@
   right: 10px;
   bottom: 151px;
   & .modal-body {
-    padding: 5px 0 0;
+    padding: 8px 0 0;
     & div {
-      padding: 0 5px 8px 10px;
+      padding: 0 5px 10px 10px;
       & .form-check-label {
         margin-left: 24px;
       }
@@ -43,7 +43,7 @@
     border-color: #fff;
   }
   & .custom-control-label {
-    margin-left: 34px;
+    margin-left: 30px;
     &::before {
       background-color: #007bff;
       top: 1px;

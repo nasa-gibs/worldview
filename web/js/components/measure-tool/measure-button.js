@@ -12,7 +12,7 @@ const MEASURE_MENU_PROPS = {
   modalClassName: 'measure-tool-modal toolbar-modal',
   backdrop: false,
   bodyComponent: MeasureMenu,
-  clickType: null,
+  touchDevice: false,
   wrapClassName: 'toolbar_modal_outer'
 };
 
@@ -32,12 +32,13 @@ class MeasureButton extends React.Component {
 
   onButtonClick (evt) {
     const { openModal } = this.props;
-    MEASURE_MENU_PROPS.clickType = evt.type;
+    const isTouchDevice = evt.type === 'touchend';
     evt.stopPropagation();
     evt.preventDefault();
+    MEASURE_MENU_PROPS.touchDevice = isTouchDevice;
     openModal('MEASURE_MENU', MEASURE_MENU_PROPS);
     this.setState({
-      isTouchDevice: evt.type === 'touchend',
+      isTouchDevice,
       showAlert: true
     });
   }
@@ -76,8 +77,7 @@ class MeasureButton extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    isActive: state.measure.isActive,
-    browser: state.browser
+    isActive: state.measure.isActive
   };
 };
 const mapDispatchToProps = dispatch => ({
@@ -92,7 +92,6 @@ export default connect(
 )(MeasureButton);
 
 MeasureButton.propTypes = {
-  browser: PropTypes.object,
   isActive: PropTypes.bool,
   openModal: PropTypes.func
 };
