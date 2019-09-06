@@ -16,13 +16,11 @@ import { toggleMeasureActive } from '../../modules/measure/actions';
 export function measure (map, mapUiEvents, store) {
   let draw;
   let sketch;
-  let helpTooltipElement;
-  let helpTooltip;
   let measureTooltipElement;
   let measureTooltip;
   let drawChangeListener;
-  let pointerMoveListener;
   let rightClickListener;
+  let twoFingerTouchListener;
   let vector;
   let allMeasureTooltips = {};
   let allGeometries = {};
@@ -80,45 +78,17 @@ export function measure (map, mapUiEvents, store) {
     })
   ];
 
-  function pointerMoveHandler (evt) {
-    if (evt.dragging) {
-      return;
-    }
-    const helpMsg = !sketch
-      ? 'Click to start drawing. <br/> Right-click to cancel.'
-      : 'Click to continue drawing. <br/> Right-click to cancel. <br/> Double-click to complete.';
-    helpTooltipElement.innerHTML = helpMsg;
-    helpTooltip.setPosition(evt.coordinate);
-    helpTooltipElement.classList.remove('hidden');
-  };
-
   function terminateDraw() {
     setTimeout(() => {
       mapUiEvents.trigger('enable-click-zoom');
-    }, 250);
+    }, 500);
     sketch = null;
     measureTooltipElement = null;
     store.dispatch(toggleMeasureActive(false));
-
-    map.removeOverlay(helpTooltip);
     map.removeInteraction(draw);
     unByKey(drawChangeListener);
-    unByKey(pointerMoveListener);
     unByKey(rightClickListener);
-  }
-
-  function createHelpTooltip() {
-    if (helpTooltipElement) {
-      helpTooltipElement.parentNode.removeChild(helpTooltipElement);
-    }
-    helpTooltipElement = document.createElement('div');
-    helpTooltipElement.className = 'tooltip-measure hidden';
-    helpTooltip = new Overlay({
-      element: helpTooltipElement,
-      offset: [15, 15],
-      positioning: 'center-left'
-    });
-    map.addOverlay(helpTooltip);
+    unByKey(twoFingerTouchListener);
   }
 
   function createMeasureTooltip(geom) {
@@ -229,16 +199,23 @@ export function measure (map, mapUiEvents, store) {
     }
     map.addInteraction(draw);
     createMeasureTooltip();
-    createHelpTooltip();
     store.dispatch(toggleMeasureActive(true));
 
     draw.on('drawstart', drawStartCallback, this);
     draw.on('drawend', drawEndCallback, this);
-    pointerMoveListener = map.on('pointermove', pointerMoveHandler);
     rightClickListener = map.on('contextmenu', (evt) => {
       evt.preventDefault();
       terminateDraw();
       map.removeOverlay(measureTooltip);
+    });
+
+    // TODO get this working
+    twoFingerTouchListener = map.on('touchstart', (evt) => {
+      if (evt.touches > 1) {
+        evt.preventDefault();
+        terminateDraw();
+        map.removeOverlay(measureTooltip);
+      }
     });
   };
 
@@ -252,7 +229,7 @@ export function measure (map, mapUiEvents, store) {
   };
 
   /**
-   *
+   * Convert all measurements to use great circle arcs
    */
   self.useGreatCircleMeasurements = (value) => {
     useGreatCircle = value;

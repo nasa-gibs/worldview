@@ -5,8 +5,6 @@ import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
 import { Form, FormGroup, Label, Input, Tooltip } from 'reactstrap';
-import { collapseSidebar } from '../../modules/sidebar/actions';
-// import AlertUtil from '../util/alert';
 // import googleTagManager from 'googleTagManager';
 
 const OPTIONS_ARRAY = [
@@ -71,14 +69,6 @@ class MeasureMenu extends Component {
 
     return (
       <>
-        {/* {isMobile && <AlertUtil
-          isOpen={true}
-          timeout={15000}
-          iconClassName=' '
-          title='Measure Tool'
-          message='Tap to add a point.  Double tap to complete.'
-        />} */}
-
         <Form>
           <FormGroup check>
             <Label check>
