@@ -76,8 +76,9 @@ class MeasureMenu extends Component {
                 onChange={this.useGreatCircle.bind(this)}
                 defaultChecked={this.props.useGreatCircleMeasurements}
               />
-              {' '} Use Great Circle <i id="great-circle-info" className="fas fa-info-circle"></i>
+              {' '} Use Great Circle
             </Label>
+            <i id="great-circle-info" className="fas fa-info-circle"></i>
             <Tooltip
               placement="top"
               isOpen={this.state.tooltipOpen}
@@ -99,7 +100,6 @@ class MeasureMenu extends Component {
             </label>
           </div>
         </Form>
-
         <IconList
           list={OPTIONS_ARRAY}
           onClick={this.triggerEvent.bind(this)}
