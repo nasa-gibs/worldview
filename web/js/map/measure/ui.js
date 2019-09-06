@@ -1,10 +1,18 @@
-import { unByKey } from 'ol/Observable';
+import { unByKey as OlObservableUnByKey } from 'ol/Observable';
 import Overlay from 'ol/Overlay';
-import { LineString, Polygon } from 'ol/geom';
-import { Draw } from 'ol/interaction/';
-import { Vector as VectorLayer } from 'ol/layer';
-import { Vector as VectorSource } from 'ol/source';
-import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
+import {
+  LineString as OlLineString,
+  Polygon as OlGeomPolygon
+} from 'ol/geom';
+import { Draw as OlInteractionDraw } from 'ol/interaction/';
+import { Vector as OlVectorLayer } from 'ol/layer';
+import { Vector as OlVectorSource } from 'ol/source';
+import {
+  Circle as OlStyleCircle,
+  Fill as OlStyleFill,
+  Stroke as OlStyleStroke,
+  Style as OlStyle
+} from 'ol/style';
 import {
   transformLineStringArc,
   transformPolygonArc,
@@ -27,24 +35,24 @@ export function measure (map, mapUiEvents, store) {
   let unitOfMeasure = 'km';
   let useGreatCircle = false;
   const self = {};
-  const source = new VectorSource();
+  const source = new OlVectorSource();
   const projection = map.getView().getProjection().getCode();
-  const areaBgFill = new Fill({
+  const areaBgFill = new OlStyleFill({
     color: 'rgba(213, 78, 33, 0.1)'
   });
-  const solidBlackLineStroke = new Stroke({
+  const solidBlackLineStroke = new OlStyleStroke({
     color: 'rgba(0, 0, 0, 1)',
     lineJoin: 'round',
     width: 5
   });
   const vectorStyles = [
-    new Style({
+    new OlStyle({
       fill: areaBgFill,
       stroke: solidBlackLineStroke,
       geometry: styleGeometryFn
     }),
-    new Style({
-      stroke: new Stroke({
+    new OlStyle({
+      stroke: new OlStyleStroke({
         color: '#fff',
         lineJoin: 'round',
         width: 2
@@ -53,24 +61,24 @@ export function measure (map, mapUiEvents, store) {
     })
   ];
   const drawStyles = [
-    new Style({
+    new OlStyle({
       fill: areaBgFill,
       stroke: solidBlackLineStroke,
       geometry: styleGeometryFn
     }),
-    new Style({
-      stroke: new Stroke({
+    new OlStyle({
+      stroke: new OlStyleStroke({
         color: '#fff',
         lineDash: [10, 20],
         lineJoin: 'round',
         width: 2
       }),
-      image: new CircleStyle({
+      image: new OlStyleCircle({
         radius: 7,
-        stroke: new Stroke({
+        stroke: new OlStyleStroke({
           color: 'rgba(0, 0, 0, 0.7)'
         }),
-        fill: new Fill({
+        fill: new OlStyleFill({
           color: 'rgba(255, 255, 255, 0.3)'
         })
       }),
@@ -86,9 +94,9 @@ export function measure (map, mapUiEvents, store) {
     measureTooltipElement = null;
     store.dispatch(toggleMeasureActive(false));
     map.removeInteraction(draw);
-    unByKey(drawChangeListener);
-    unByKey(rightClickListener);
-    unByKey(twoFingerTouchListener);
+    OlObservableUnByKey(drawChangeListener);
+    OlObservableUnByKey(rightClickListener);
+    OlObservableUnByKey(twoFingerTouchListener);
   }
 
   function createMeasureTooltip(geom) {
@@ -114,9 +122,9 @@ export function measure (map, mapUiEvents, store) {
     sketch = evt.feature;
     drawChangeListener = sketch.getGeometry().on('change', (evt) => {
       const geom = evt.target;
-      if (geom instanceof Polygon) {
+      if (geom instanceof OlGeomPolygon) {
         tooltipCoord = geom.getInteriorPoint().getCoordinates();
-      } else if (geom instanceof LineString) {
+      } else if (geom instanceof OlLineString) {
         tooltipCoord = geom.getLastCoordinate();
       }
       setMeasurementTooltip(geom, measureTooltipElement);
@@ -143,10 +151,10 @@ export function measure (map, mapUiEvents, store) {
     if (!useGreatCircle) {
       return geometry;
     }
-    if (geometry instanceof LineString) {
+    if (geometry instanceof OlLineString) {
       return transformLineStringArc(geometry, projection);
     }
-    if (geometry instanceof Polygon) {
+    if (geometry instanceof OlGeomPolygon) {
       return transformPolygonArc(geometry, projection);
     }
     return geometry;
@@ -160,10 +168,10 @@ export function measure (map, mapUiEvents, store) {
    */
   function setMeasurementTooltip(geometry, element) {
     let measurement;
-    if (geometry instanceof Polygon) {
+    if (geometry instanceof OlGeomPolygon) {
       measurement = getFormattedArea(geometry, projection, unitOfMeasure, useGreatCircle);
     }
-    if (geometry instanceof LineString) {
+    if (geometry instanceof OlLineString) {
       measurement = getFormattedLength(geometry, projection, unitOfMeasure, useGreatCircle);
     }
     element.innerHTML = measurement;
@@ -192,9 +200,9 @@ export function measure (map, mapUiEvents, store) {
     if (draw) {
       map.removeInteraction(draw);
     }
-    draw = new Draw({ source, type, style: drawStyles });
+    draw = new OlInteractionDraw({ source, type, style: drawStyles });
     if (!vector) {
-      vector = new VectorLayer({ source, style: vectorStyles });
+      vector = new OlVectorLayer({ source, style: vectorStyles });
       vector.setMap(map);
     }
     map.addInteraction(draw);
