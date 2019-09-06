@@ -63,10 +63,8 @@ class MeasureMenu extends Component {
   }
 
   render() {
-    // // const { clickType } = this.props;
-    // // const { showAlert } = this.state;
-    // const isMobile = true; // clickType === 'touchend';
-
+    const { isTouchDevice } = this.props;
+    const listSize = isTouchDevice ? 'medium' : 'small';
     return (
       <>
         <Form>
@@ -105,7 +103,7 @@ class MeasureMenu extends Component {
         <IconList
           list={OPTIONS_ARRAY}
           onClick={this.triggerEvent.bind(this)}
-          size="small"
+          size={listSize}
         />
       </>
     );
@@ -114,8 +112,7 @@ class MeasureMenu extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    clickType: state.modal.customProps.clickType,
-    isMobile: state.browser.lessThan.medium,
+    isTouchDevice: state.modal.customProps.touchDevice,
     map: state.map,
     units: state.measure.units,
     useGreatCircleMeasurements: state.measure.useGreatCircleMeasurements
@@ -139,12 +136,11 @@ export default connect(
 )(MeasureMenu);
 
 MeasureMenu.propTypes = {
-  clickType: PropTypes.string,
+  isTouchDevice: PropTypes.bool,
   map: PropTypes.object,
   onCloseModal: PropTypes.func,
   onToggleUnits: PropTypes.func,
   onToggleUseGreatCircle: PropTypes.func,
-
   units: PropTypes.string,
   useGreatCircleMeasurements: PropTypes.bool
 };
