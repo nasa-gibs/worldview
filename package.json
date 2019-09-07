@@ -181,7 +181,7 @@
     "react-beautiful-dnd": "^11.0.5",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.9.0",
-    "react-draggable": "^3.0.5",
+    "react-draggable": "^4.0.0",
     "react-image-crop": "^8.2.1",
     "react-loader": "^2.4.5",
     "react-masonry-component": "^6.2.1",
