@@ -12,25 +12,32 @@ import {
   TOGGLE_GIF
 } from './constants';
 import util from '../../util/util';
+import { timeScaleFromNumberKey } from '../date/constants';
 
 export function onActivate() {
   return (dispatch, getState) => {
     const { compare, date, animation } = getState();
+    const { customSelected, customDelta, delta, customInterval, interval } = date;
     const dateStr = compare.isCompareA ? 'selected' : 'selectedB';
     const activeDate = date[dateStr];
     if (!animation.startDate || !animation.endDate) {
-      const sevenDaysBefore = util.dateAdd(activeDate, 'day', -7);
-      const sevenDaysAfter = util.dateAdd(activeDate, 'day', 7);
+      const timeScaleChangeUnit = customSelected
+        ? timeScaleFromNumberKey[customInterval]
+        : timeScaleFromNumberKey[interval];
+      const deltaChangeAmt = customSelected ? customDelta : delta;
+      const sevenFrameDelta = 7 * deltaChangeAmt;
+      const sevenFramesBefore = util.dateAdd(activeDate, timeScaleChangeUnit, -(sevenFrameDelta));
+      const sevenFramesAfter = util.dateAdd(activeDate, timeScaleChangeUnit, sevenFrameDelta);
       const startDate = animation.startDate
         ? animation.startDate
-        : date.appNow < sevenDaysAfter
-          ? sevenDaysBefore
+        : date.appNow < sevenFramesAfter
+          ? sevenFramesBefore
           : activeDate;
       const endDate = animation.endDate
         ? animation.endDate
-        : date.appNow < sevenDaysAfter
+        : date.appNow < sevenFramesAfter
           ? activeDate
-          : sevenDaysAfter;
+          : sevenFramesAfter;
       dispatch({ type: UPDATE_START_AND_END_DATE, startDate, endDate });
     }
     dispatch({ type: OPEN_ANIMATION });
