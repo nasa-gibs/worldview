@@ -78,9 +78,9 @@ export function drawPaletteOnCanvas(
 
     colors.forEach((color, i) => {
       ctx.fillStyle = util.hexToRGBA(color);
-      ctx.fillRect(Math.floor((binWidth * i) + 1), barHeight - 2, drawWidth, barHeight);
+      ctx.fillRect(Math.floor((binWidth * i) + 1), barHeight - 5, drawWidth, barHeight);
     });
-    ctx.rect(2 - (thickness), (10) - (thickness), width - 3 + (thickness * 2), (barHeight) + (thickness * 2));
+    ctx.rect(2 - (thickness), (7) - (thickness), width - 3 + (thickness * 2), (barHeight) + (thickness * 2));
     ctx.stroke();
   }
 
@@ -95,26 +95,17 @@ export function drawTicksOnCanvas(ctx, legend, width, height) {
   const drawWidth = Math.ceil(binWidth);
   const halfWidth = drawWidth / 2;
   if (ticks && ticks.length > 0 && bins > 12) {
+    ctx.beginPath();
     ticks.forEach(tick => {
       const start = binWidth * tick;
       const midpoint = Math.floor((start + halfWidth)) + 0.5; // https://stackoverflow.com/a/8696641/4589331
-      ctx.beginPath();
-      // ctx.strokeStyle = invertColor(util.hexToRGB(legend.colors[tick], true), { black: '#333333', white: '#c0c0c0' });
-      // ctx.strokeStyle = '#000'
-      // ctx.lineWidth = 0.8;
-      // ctx.moveTo(midpoint, yValue);
-      // ctx.lineTo(midpoint, height);
-      // ctx.stroke();
-      // ctx.closePath();
-      // ctx.beginPath();
-      // ctx.strokeStyle = invertColor(util.hexToRGB(legend.colors[tick], true), { black: '#333333', white: '#c0c0c0' });
       ctx.strokeStyle = '#000'
       ctx.lineWidth = 0.8;
-      ctx.moveTo(midpoint, 3);
-      ctx.lineTo(midpoint, 10);
-      ctx.stroke();
-      ctx.closePath();
+      ctx.moveTo(midpoint, 24 - 4);
+      ctx.lineTo(midpoint, 23);
     });
+    ctx.stroke();
+    ctx.closePath();
   }
 }
 export function lookup(sourcePalette, targetPalette) {
