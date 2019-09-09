@@ -156,13 +156,14 @@ export default class ImageResSelection extends React.Component {
   }
 
   render() {
-    const { projection, lonlats, resolutions, maxImageSize } = this.props;
+    const { getLayers, projection, lonlats, resolutions, maxImageSize } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
     const height = dimensions.height;
     const width = dimensions.width;
     const filetypeSelect = this._renderFileTypeSelect();
     const worldfileSelect = this._renderWorldfileSelect();
+    const layerList = getLayers();
     return (
       <div className="wv-re-pick-wrapper wv-image">
         <div
@@ -187,7 +188,8 @@ export default class ImageResSelection extends React.Component {
           height={height}
           fileSize={((width * height * 24) / 8388608).toFixed(2)}
           maxImageSize={maxImageSize}
-          valid={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+          validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+          validLayers={layerList.length > 0}
           onClick={this.onDownload.bind(this)}
         />
       </div>
