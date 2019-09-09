@@ -25,19 +25,19 @@ export function onActivate() {
         ? timeScaleFromNumberKey[customInterval]
         : timeScaleFromNumberKey[interval];
       const deltaChangeAmt = customSelected ? customDelta : delta;
-      const sevenFrameDelta = 7 * deltaChangeAmt;
-      const sevenFramesBefore = util.dateAdd(activeDate, timeScaleChangeUnit, -(sevenFrameDelta));
-      const sevenFramesAfter = util.dateAdd(activeDate, timeScaleChangeUnit, sevenFrameDelta);
+      const tenFrameDelta = 10 * deltaChangeAmt;
+      const tenFramesBefore = util.dateAdd(activeDate, timeScaleChangeUnit, -(tenFrameDelta));
+      const tenFramesAfter = util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
       const startDate = animation.startDate
         ? animation.startDate
-        : date.appNow < sevenFramesAfter
-          ? sevenFramesBefore
+        : date.appNow < tenFramesAfter
+          ? tenFramesBefore
           : activeDate;
       const endDate = animation.endDate
         ? animation.endDate
-        : date.appNow < sevenFramesAfter
+        : date.appNow < tenFramesAfter
           ? activeDate
-          : sevenFramesAfter;
+          : tenFramesAfter;
       dispatch({ type: UPDATE_START_AND_END_DATE, startDate, endDate });
     }
     dispatch({ type: OPEN_ANIMATION });
