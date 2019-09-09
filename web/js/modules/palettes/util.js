@@ -94,7 +94,7 @@ export function drawTicksOnCanvas(ctx, legend, width, height) {
   const yValue2 = parseFloat(12 * 0.3);
   const drawWidth = Math.ceil(binWidth);
   const halfWidth = drawWidth / 2;
-  if (ticks && ticks.length > 0) {
+  if (ticks && ticks.length > 0 && bins > 12) {
     ticks.forEach(tick => {
       const start = binWidth * tick;
       const midpoint = Math.floor((start + halfWidth)) + 0.5; // https://stackoverflow.com/a/8696641/4589331
