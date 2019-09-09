@@ -7,10 +7,10 @@ The Atmospheric Infrared Sounder (AIRS) is an instrument on board the Aqua satel
 
 References: [GES DISC - AIRS2RET_NRT: AIRS/Aqua L2 Near Real Time (NRT) Standard Physical Retrieval (AIRS-only) V006](https://disc.gsfc.nasa.gov/datasets/AIRS2RET_NRT_V006/summary?AIRS2RET_NRT); [GES DISC - Near Real-Time Data](https://disc.gsfc.nasa.gov/information/glossary?title=Near%20Real-Time%20Data); [NOAA National Weather Service - Radiosonde Observations](https://www.weather.gov/upperair/factsheet); [AIRS - The AIRS instrument suite physical retrievals](http://airs.jpl.nasa.gov/data/physical_retrievals)
 
-### Surface Air Temperature (Day | Night, Daily | Monthly)
+### Surface Air Temperature (L3, Day | Night, Daily | Monthly)
 Temporal coverage: 1 September 2002 - present or most recent complete month
 
-### Surface Skin Temperature (Day | Night, Daily | Monthly)
+### Surface Skin Temperature (L3, Day | Night, Daily | Monthly)
 Temporal coverage: 1 September 2002 - present or most recent complete month
 
 ### Surface Skin Temperature (L2, Day | Night)

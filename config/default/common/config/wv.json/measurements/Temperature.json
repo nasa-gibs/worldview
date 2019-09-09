@@ -11,12 +11,6 @@
                     "description": "airs/Temperature",
                     "image": "",
                     "settings": [
-                        "AIRS_Temperature_500hPa_Day",
-                        "AIRS_Temperature_500hPa_Night",
-                        "AIRS_Temperature_700hPa_Day",
-                        "AIRS_Temperature_700hPa_Night",
-                        "AIRS_Temperature_850hPa_Day",
-                        "AIRS_Temperature_850hPa_Night",
                         "AIRS_L2_Temperature_500hPa_Day",
                         "AIRS_L2_Temperature_500hPa_Night",
                         "AIRS_L2_Temperature_700hPa_Day",
