@@ -116,7 +116,7 @@
     "nightwatch": "^1.2.2",
     "node-fetch": "^2.1.2",
     "node-sass": "^4.9.2",
-    "node-ssh": "^5.1.1",
+    "node-ssh": "^6.0.0",
     "npm-run-all": "^4.1.1",
     "npm-watch": "^0.3.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
