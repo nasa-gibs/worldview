@@ -72,44 +72,29 @@ module.exports = {
       client.waitForElementVisible(measurementTooltip, TIME_LIMIT);
     });
   },
-  'Toggling unit of measure updates the measurement value': function(client) {
-    client.useCss().click(measureBtn);
-    client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
-      client.useCss().click(unitOfMeasureToggle, () => {
-        client.elements('css selector', measurementTooltip, (result) => {
-          result.value.forEach((element) => {
-            client.elementIdText(element.ELEMENT, (elResult) => {
-              const pass = elResult.value.includes('mi');
-              client.assert.ok(pass);
-            });
-          });
-        });
+  'Toggling unit of measure updates the measurement value': async function(client) {
+    client.click(measureBtn);
+    await client.waitForElementVisible(measureMenu, TIME_LIMIT);
+    await client.click(unitOfMeasureToggle);
+    const tooltips = await client.elements('css selector', measurementTooltip);
+    tooltips.value.forEach((element) => {
+      client.elementIdText(element.ELEMENT, (elResult) => {
+        const pass = elResult.value.includes('mi');
+        client.assert.ok(pass);
       });
     });
   },
-  'Toggling great circle updates the measurement value': function(client) {
-    let originalValues = [];
-    client.elements('css selector', measurementTooltip, (result) => {
-      originalValues = result.value.map((element) => {
-        client.elementIdText(element.ELEMENT, (elResult) => {
-          originalValues.push(elResult.value);
-        });
-      });
-    });
-    console.log('*****');
-    console.log(originalValues);
+  'Toggling great circle changes the measurement value': async function(client) {
+    const measureTooltips = await client.elements('css selector', measurementTooltip);
+    const elPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
+    const initMeasureValues = await Promise.all(elPromises).then(elem => elem.map(el => el.value));
 
-    client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
-
-      // client.useCss().click(greatCircleToggle, () => {
-      //   client.elements('css selector', measurementTooltip, (result) => {
-      //     result.value.forEach((element) => {
-      //       client.elementIdText(element.ELEMENT, (elResult) => {
-      //         const pass = elResult.value.includes('mi');
-      //       });
-      //     });
-      //   });
-      // });
+    await client.click(greatCircleToggle);
+    const updatedElPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
+    const updatedValues = await Promise.all(updatedElPromises).then(elem => elem.map(el => el.value));
+    updatedValues.forEach((value, index) => {
+      const prevValue = initMeasureValues[index];
+      client.assert.ok(value !== prevValue);
     });
   },
   'Clearing a measurements removes all tooltips': function(client) {
