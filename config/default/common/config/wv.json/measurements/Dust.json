@@ -13,8 +13,6 @@
                     "settings": [
                         "AIRS_L2_Dust_Score_Day",
                         "AIRS_L2_Dust_Score_Night",
-                        "AIRS_Dust_Score_Ocean_Day",
-                        "AIRS_Dust_Score_Ocean_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]

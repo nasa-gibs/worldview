@@ -2,7 +2,7 @@
     "layers": {
         "AIRS_L3_Surface_Air_Temperature_Monthly_Night": {
             "id":       "AIRS_L3_Surface_Air_Temperature_Monthly_Night",
-            "title":    "Surface Air Temperature (Night, Monthly)",
+            "title":    "Surface Air Temperature (L3, Night, Monthly)",
             "subtitle": "Aqua / AIRS",
             "description": "airs/AIRS_L3_Surface_Air_Temperature_Monthly_Night",
             "tags":     "",
