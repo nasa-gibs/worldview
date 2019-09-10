@@ -338,10 +338,10 @@ test('date range with one layer', () => {
   state = getDateRangesTestState(state);
   const layers = addLayer('historical_1', {}, [], state.config.layers);
   const range = dateRange({}, layers, state.config);
-  expect(range.start.getTime()).toEqual(
-    new Date(Date.UTC(2000, 0, 1)).getTime()
-  );
-  expect(range.end.getTime()).toEqual(new Date(Date.UTC(2010, 0, 1)).getTime());
+  const expectedStartTime = new Date(Date.UTC(2000, 0, 1)).getTime();
+  const expectedEndTime = new Date(Date.UTC(2010, 0, 1, 0, 0, 59)).getTime();
+  expect(range.start.getTime()).toEqual(expectedStartTime);
+  expect(range.end.getTime()).toEqual(expectedEndTime);
 });
 
 test('date range with two layers', () => {
@@ -350,10 +350,10 @@ test('date range with two layers', () => {
   let layers = addLayer('historical_1', {}, [], state.config.layers);
   layers = addLayer('historical_2', {}, layers, state.config.layers);
   const range = dateRange({}, layers, state.config);
-  expect(range.start.getTime()).toEqual(
-    new Date(Date.UTC(2000, 0, 1)).getTime()
-  );
-  expect(range.end.getTime()).toEqual(new Date(Date.UTC(2010, 0, 1)).getTime());
+  const expectedStartTime = new Date(Date.UTC(2000, 0, 1)).getTime();
+  const expectedEndTime = new Date(Date.UTC(2010, 0, 1, 0, 0, 59)).getTime();
+  expect(range.start.getTime()).toEqual(expectedStartTime);
+  expect(range.end.getTime()).toEqual(expectedEndTime);
 });
 
 test('end of date range is today if no end date', () => {
@@ -361,10 +361,10 @@ test('end of date range is today if no end date', () => {
   state = getDateRangesTestState(state);
   const layers = addLayer('active_1', {}, [], state.config.layers);
   const range = dateRange({}, layers, state.config);
-  expect(range.start.getTime()).toEqual(
-    new Date(Date.UTC(2005, 0, 1)).getTime()
-  );
-  expect(range.end.getTime()).toEqual(new Date(Date.UTC(2010, 0, 1)).getTime());
+  const expectedStartTime = new Date(Date.UTC(2005, 0, 1)).getTime();
+  const expectedEndTime = new Date(Date.UTC(2010, 0, 1, 0, 0, 59)).getTime();
+  expect(range.start.getTime()).toEqual(expectedStartTime);
+  expect(range.end.getTime()).toEqual(expectedEndTime);
 });
 
 test('no date range with static', () => {
