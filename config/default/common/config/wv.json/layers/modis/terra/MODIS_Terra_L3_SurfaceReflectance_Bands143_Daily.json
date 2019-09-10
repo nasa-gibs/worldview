@@ -2,7 +2,7 @@
     "layers": {
         "MODIS_Terra_L3_SurfaceReflectance_Bands143_Daily": {
             "id":       "MODIS_Terra_L3_SurfaceReflectance_Bands143_Daily",
-            "title":    "Land Surface Reflectance (L3, Daily, True Color)",
+            "title":    "Land Surface Reflectance (L2G, Daily, True Color)",
             "subtitle": "Terra / MODIS",
             "description": "modis/terra/MODIS_Terra_L3_SurfaceReflectance_Bands143_Daily",
             "tags":     "lsr 143 true color",
