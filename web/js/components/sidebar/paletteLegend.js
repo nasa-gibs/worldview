@@ -99,7 +99,7 @@ class PaletteLegend extends React.Component {
       if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
         // If the two colors are close
         return {
-          label: legend.tooltips[i] + ' ' + units,
+          label: units ? legend.tooltips[i] + ' ' + units : legend.tooltips[i],
           len: len,
           index: i
         };
@@ -212,7 +212,7 @@ class PaletteLegend extends React.Component {
     } else if (xOffset + halfTextWidth > width) {
       return { right: '0' };
     }
-    return { left: xOffset - halfTextWidth + 'px' };
+    return { left: Math.floor(xOffset - halfTextWidth) + 'px' };
   }
 
   /**
@@ -231,7 +231,7 @@ class PaletteLegend extends React.Component {
       legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
-        textWidth = util.getTextWidth(legendObj.label, 'Lucida Sans');
+        textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
         xOffset = Math.floor(this.state.width * percent);
       }
     }

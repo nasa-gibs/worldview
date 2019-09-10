@@ -51,7 +51,7 @@
 .wv-palettes-title,
 .wv-running-category-label,
 .wv-running-label {
-  font-size: 0.7em;
+  font-size: 10px;
   bottom: 0;
   width: auto;
 }
@@ -77,7 +77,7 @@
 .layer-hidden .wv-running-category-label,
 .layer-hidden .wv-running-label {
   color: #999;
-  font-size: 0.7em;
+  font-size: 10px;
 }
 
 .wv-palettes-title {
