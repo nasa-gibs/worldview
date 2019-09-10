@@ -342,22 +342,22 @@ class Timeline extends React.Component {
       customSelected,
       deltaChangeAmt,
       timeScaleChangeUnit,
-      endTime,
-      startDate,
-      selectedDate
+      selectedDate,
+      rightArrowDisabled,
+      leftArrowDisabled
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
-    const timeScale = timeScaleChangeUnit;
-    if (timeScale) { // undefined custom will not allow arrow change
-      delta = Number(delta * signconstant); // determine if negative or positive change
-      var nextTime = getNextTimeSelection(delta, timeScale, selectedDate);
-      if (new Date(startDate) <= nextTime && nextTime <= endTime) {
-        this.onDateChange(util.dateAdd(selectedDate, timeScale, delta));
-      }
+    if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
+      return;
     }
-  }
-  ;
+    delta = Number(delta * signconstant); // determine if negative or positive change
+    const disabled = signconstant > 0 ? rightArrowDisabled : leftArrowDisabled;
+    if (!disabled) {
+      this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate));
+    }
+  };
+
   /**
   * @desc stop animation from left arrows - clear throttle invocation
   * @returns {void}
@@ -695,6 +695,18 @@ class Timeline extends React.Component {
   }
 
   /**
+   * Compare minute values of appNow and current time.
+   * Update appNow when there is a change.
+   */
+  checkAndUpdateAppNow() {
+    const { appNow, updateAppNow } = this.props;
+    const currentTime = new Date();
+    if (currentTime.getMinutes() !== appNow.getMinutes()) {
+      updateAppNow(currentTime);
+    }
+  }
+
+  /**
   * @desc update dragger time state
   * @param {String} date
   * @param {Boolean} is dragger B selected to update
@@ -713,16 +725,15 @@ class Timeline extends React.Component {
   }
 
   componentDidMount() {
-    const { updateAppNow } = this.props;
-
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     // prevent default react synthetic event passive event listener
     // that allows browser resize/zoom on certain wheel events
     document.querySelector('.timeline-container').addEventListener('wheel', preventDefaultFunc, { passive: false });
 
-    // update application relative every 10 minutes from component mount
-    this.appNowUpdateInterval = setInterval(() => updateAppNow(new Date()), 600000);
+    this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
+    // Check every 5 seconds to see if we need to update appNow
+    this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 5000);
     this.setInitialState();
   }
 
@@ -1126,6 +1137,7 @@ function mapStateToProps(state) {
     timelineEndDateLimit
   );
   return {
+    appNow,
     isTourActive: tour.active,
     isSmallScreen,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
@@ -1220,6 +1232,7 @@ Timeline.propTypes = {
   animationDisabled: PropTypes.bool,
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
+  appNow: PropTypes.object,
   axisWidth: PropTypes.number,
   changeCustomInterval: PropTypes.func,
   changeDate: PropTypes.func,
@@ -1325,7 +1338,8 @@ const checkRightArrowDisabled = (
   timeScaleChangeUnit,
   timelineEndDateLimit
 ) => {
-  const nextIncrementDate = moment.utc(date).add(delta, timeScaleChangeUnit);
-  const isSameOrAfter = new Date(nextIncrementDate.format()) > new Date(timelineEndDateLimit);
-  return isSameOrAfter;
+  const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
+  const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
+  const endOfTimelineDate = new Date(timelineEndDateLimit);
+  return nextIncrementDate > endOfTimelineDate;
 };
