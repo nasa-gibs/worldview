@@ -28,7 +28,7 @@ Liquid water on the ground will be very dark since it absorbs in the red and the
 ### MODIS (Terra/Aqua) Land Surface Reflectance (Bands 1, 2, 1)
 Temporal Coverage: 24 February 2000 - present (Terra); 3 July 2002 - present (Aqua)
 
-False Color: Red= Band 1, Green = Band 2, Blue = Band 1
+False Color: Red = Band 1, Green = Band 2, Blue = Band 1
 
 Vegetation is very reflective in the near infrared (Band 2), and absorbent in Band 1. Assigning band 2 to green means even the smallest hint of vegetation will appear bright green in the image. Liquid water on the ground will be very dark since it absorbs in the red and the SWIR and sediments in water appear pink. This band combination is good for identifying vegetation changes, drought and floods.
 
@@ -39,14 +39,30 @@ The MODIS Corrected Reflectance algorithm utilizes MODIS Level 1B data (the cali
 
 References: [MODAPS - MOD09](https://modaps.modaps.eosdis.nasa.gov/services/about/products/c6-nrt/MOD09.html);[MODAPS - MYD09](https://modaps.modaps.eosdis.nasa.gov/services/about/products/c6-nrt/MYD09.html); [NASA Earthdata - Creating Reprojected True Color MODIS Images: A Tutorial](https://earthdata.nasa.gov/files/MODIS_True_Color.pdf)
 
-### MODIS (Aqua/Terra) Land Surface Reflectance (Level 3, Daily, True Color)
+### MODIS (Terra/Aqua) Land Surface Reflectance (Level 2G, Daily, True Color)
 Temporal coverage: 24 February 2000 - present (Terra); July 2002 - present (Aqua)
 
-### MODIS (Aqua/Terra) Land Surface Reflectance (Level 3, 8-Day, True Color)
+The MOD09GA/MYD09GA Version 6 product provides an estimate of the surface spectral reflectance of Terra/Aqua Moderate Resolution Imaging Spectroradiometer (MODIS) Bands 1 through 7, corrected for atmospheric conditions such as gasses, aerosols, and Rayleigh scattering. Provided along with the 500 meter (m) surface reflectance, observation, and quality bands are a set of ten 1 kilometer (km) observation bands and geolocation flags. The reflectance layers from the MOD09GA are used as the source data for many of the MODIS land products.  
+
+References: [LP DAAC MOD09GA Version 6](https://lpdaac.usgs.gov/products/mod09gav006/); [LP DAAC MYD09GA Version 6](https://lpdaac.usgs.gov/products/myd09gav006/)
+
+### MODIS (Terra/Aqua) Land Surface Reflectance (Level 3, 8-Day, True Color)
 Temporal coverage: 26 February 2000 - present (Terra); July 2002 - present (Aqua)
 
-### MODIS (Aqua/Terra) Land Surface Reflectance (Level 3, 8-Day, Bands 7-2-1)
+The Moderate Resolution Imaging Spectroradiometer (MODIS) Terra MOD09A1/Aqua MYD09A1 Version 6 product provides an estimate of the surface spectral reflectance of Aqua MODIS Bands 1 through 7 corrected for atmospheric conditions such as gasses, aerosols, and Rayleigh scattering. Along with the seven 500 meter (m) reflectance bands are a quality layer and four observation bands. For each pixel, a value is selected from all the acquisitions within the 8-day composite period. The criteria for the pixel choice include cloud and solar zenith. When several acquisitions meet the criteria the pixel with the minimum channel 3 (blue) value is used.
+
+References: [LP DAAC MOD09A1 Version 6](https://lpdaac.usgs.gov/products/mod09a1v006/); [LP DAAC MYD09A1 Version 6](https://lpdaac.usgs.gov/products/myd09a1v006/)
+
+### MODIS (Terra/Aqua) Land Surface Reflectance (Level 3, 8-Day, Bands 7-2-1)
 Temporal coverage: 26 February 2000 - present (Terra); July 2002 - present (Aqua)
 
-### MODIS (Aqua/Terra) Land Surface Reflectance (Level 3, 8-Day, Bands 1-2-1)
+The Moderate Resolution Imaging Spectroradiometer (MODIS) Terra MOD09A1/Aqua MYD09A1 Version 6 product provides an estimate of the surface spectral reflectance of Terra MODIS Bands 1 through 7 corrected for atmospheric conditions such as gasses, aerosols, and Rayleigh scattering. Along with the seven 500 meter (m) reflectance bands are two quality layers and four observation bands. For each pixel, a value is selected from all the acquisitions within the 8-day composite period. The criteria for the pixel choice include cloud and solar zenith. When several acquisitions meet the criteria the pixel with the minimum channel 3 (blue) value is used.  
+
+References: [LP DAAC MOD09A1 Version 6](https://lpdaac.usgs.gov/products/mod09a1v006/); [LP DAAC MYD09A1 Version 6](https://lpdaac.usgs.gov/products/myd09a1v006/)
+
+### MODIS (Terra/Aqua) Land Surface Reflectance (Level 3, 8-Day, Bands 1-2-1)
 Temporal coverage: 26 February 2000 - present (Terra); July 2002 - present (Aqua)
+
+The MOD09Q1/MYD09Q1 Version 6 product provides an estimate of the surface spectral reflectance of Terra/Aqua Moderate Resolution Imaging Spectroradiometer (MODIS) Bands 1 and 2, corrected for atmospheric conditions such as gasses, aerosols, and Rayleigh scattering. Provided along with the 250 meter (m) surface reflectance bands are two quality layers. For each pixel, a value is selected from all the acquisitions within the 8-day composite period. The criteria for the pixel choice include cloud and solar zenith. When several acquisitions meet the criteria the pixel with the minimum channel 3 (blue) value is used.  
+
+References: [LP DAAC MOD09Q1 Version 6](https://lpdaac.usgs.gov/products/mod09q1v006/); [LP DAAC MYD09Q1 Version 6](https://lpdaac.usgs.gov/products/myd09q1v006/)
