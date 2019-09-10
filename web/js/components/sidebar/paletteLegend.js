@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
-import { drawPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
+import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
 import lodashIsNumber from 'lodash/isNumber';
 
 class PaletteLegend extends React.Component {
@@ -137,7 +137,7 @@ class PaletteLegend extends React.Component {
             this.setState({ width: newWidth });
           }
           const ctx = this[ctxStr].current.getContext('2d');
-          drawPaletteOnCanvas(
+          drawSidebarPaletteOnCanvas(
             ctx,
             checkerBoardPattern,
             colorMap.colors,

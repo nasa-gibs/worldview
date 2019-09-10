@@ -15,7 +15,6 @@ import {
   findIndex as findPaletteExtremeIndex
 } from './selectors';
 import util from '../../util/util';
-import invertColor from 'invert-color';
 import Promise from 'bluebird';
 
 /**
@@ -63,12 +62,40 @@ export function drawPaletteOnCanvas(
   ctx,
   checkerBoardPattern,
   colors,
-  width
+  width,
+  height
 ) {
   ctx.fillStyle = checkerBoardPattern;
   ctx.fillRect(0, 0, width, height);
+
+  if (colors) {
+    var bins = colors.length;
+    var binWidth = width / bins;
+    var drawWidth = Math.ceil(binWidth);
+    colors.forEach((color, i) => {
+      ctx.fillStyle = util.hexToRGBA(color);
+      ctx.fillRect(Math.floor(binWidth * i), 0, drawWidth, height);
+    });
+  }
+}
+/**
+ * Redraw canvas with selected colormap
+ * @param {String} ctxStr | String of wanted cavnas
+ * @param {Object} checkerBoardPattern | Background for canvas threshold
+ * @param {Array} colors | array of color values
+ */
+export function drawSidebarPaletteOnCanvas(
+  ctx,
+  checkerBoardPattern,
+  colors,
+  width
+) {
   const height = 24;
   const barHeight = 12;
+  const colorbarStartY = barHeight - 5;
+  ctx.fillStyle = checkerBoardPattern;
+  ctx.fillRect(1, colorbarStartY, width - 1, barHeight);
+
   if (colors) {
     var bins = colors.length;
     var binWidth = (width - 2) / bins;
@@ -78,12 +105,11 @@ export function drawPaletteOnCanvas(
 
     colors.forEach((color, i) => {
       ctx.fillStyle = util.hexToRGBA(color);
-      ctx.fillRect(Math.floor((binWidth * i) + 1), barHeight - 5, drawWidth, barHeight);
+      ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, barHeight);
     });
-    ctx.rect(2 - (thickness), (7) - (thickness), width - 3 + (thickness * 2), (barHeight) + (thickness * 2));
+    ctx.rect(2 - (thickness), (colorbarStartY) - (thickness), width - 3 + (thickness * 2), (barHeight) + (thickness * 2));
     ctx.stroke();
   }
-
 }
 export function drawTicksOnCanvas(ctx, legend, width, height) {
   const ticks = legend.ticks;
@@ -94,7 +120,7 @@ export function drawTicksOnCanvas(ctx, legend, width, height) {
   const yValue2 = parseFloat(12 * 0.3);
   const drawWidth = Math.ceil(binWidth);
   const halfWidth = drawWidth / 2;
-  if (ticks && ticks.length > 0 && bins > 12) {
+  if (ticks && ticks.length > 0 && bins > 100) {
     ctx.beginPath();
     ticks.forEach(tick => {
       const start = binWidth * tick;
