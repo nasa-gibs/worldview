@@ -58,8 +58,8 @@ describe('Open, play, stop, close and toggle actions', () => {
   );
   test(
     'toggleComponentGifActive action returns ' +
-      constants.TOGGLE_GIF +
-      ' action type',
+    constants.TOGGLE_GIF +
+    ' action type',
     () => {
       const expectedAction = {
         type: constants.TOGGLE_GIF
@@ -73,8 +73,8 @@ describe('Animation Datechange actions', () => {
   const then = util.dateAdd(now, 'day', -7);
   test(
     'changeStartDate action returns ' +
-      constants.UPDATE_START_DATE +
-      ' action type and current date as value',
+    constants.UPDATE_START_DATE +
+    ' action type and current date as value',
     () => {
       const expectedAction = {
         type: constants.UPDATE_START_DATE,
@@ -87,8 +87,8 @@ describe('Animation Datechange actions', () => {
   );
   test(
     'changeEndDate action returns ' +
-      constants.UPDATE_END_DATE +
-      ' action type and current date as value',
+    constants.UPDATE_END_DATE +
+    ' action type and current date as value',
     () => {
       const response = changeEndDate(now);
       expect(response.type).toEqual(constants.UPDATE_END_DATE);
@@ -97,8 +97,8 @@ describe('Animation Datechange actions', () => {
   );
   test(
     'changeStartAndEndDate action returns ' +
-      constants.UPDATE_START_AND_END_DATE +
-      ' action type and current date as value',
+    constants.UPDATE_START_AND_END_DATE +
+    ' action type and current date as value',
     () => {
       const response = changeStartAndEndDate(then, now);
       expect(response.type).toEqual(constants.UPDATE_START_AND_END_DATE);
@@ -110,8 +110,8 @@ describe('Animation Datechange actions', () => {
 
 test(
   'changeFrameRate action returns ' +
-    constants.UPDATE_FRAME_RATE +
-    ' action type and number value',
+  constants.UPDATE_FRAME_RATE +
+  ' action type and number value',
   () => {
     const response = changeFrameRate(2);
     expect(response.type).toEqual(constants.UPDATE_FRAME_RATE);
@@ -120,8 +120,8 @@ test(
 );
 test(
   'onActivate action returns ' +
-    constants.OPEN_ANIMATION +
-    ' action type and current dateValue',
+  constants.OPEN_ANIMATION +
+  ' action type and current dateValue',
   () => {
     const mockStore = configureMockStore(middlewares);
     const store = mockStore(state);
@@ -131,7 +131,7 @@ test(
     expect(response1.type).toEqual(constants.UPDATE_START_AND_END_DATE);
     expect(response1.endDate).toEqual(state.date.selected);
     expect(response1.startDate).toEqual(
-      util.dateAdd(state.date.selected, 'day', -7)
+      util.dateAdd(state.date.selected, 'day', -10)
     );
     expect(response2.type).toEqual(constants.OPEN_ANIMATION);
   }
