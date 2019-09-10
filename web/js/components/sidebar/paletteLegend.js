@@ -232,7 +232,7 @@ class PaletteLegend extends React.Component {
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, 'Lucida Sans');
-        xOffset = this.state.width * percent;
+        xOffset = Math.floor(this.state.width * percent);
       }
     }
     var min = legend.minLabel || legend.tooltips[0];
@@ -274,7 +274,7 @@ class PaletteLegend extends React.Component {
             className="wv-running-bar"
             style={{
               top: 7,
-              left: isHoveringLegend ? 0 : xOffset + 1,
+              left: isHoveringLegend ? 0 : xOffset + 0.5,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden'
             }}
           />
