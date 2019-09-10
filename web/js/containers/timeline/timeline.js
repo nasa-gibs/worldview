@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
-import util from '../../util/util';
 
 import ErrorBoundary from '../../containers/error-boundary';
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
