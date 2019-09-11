@@ -263,8 +263,8 @@ var promiseTileLayer = function(layer, extent, viewState, pixelRatio) {
               resolve();
             }
           } else {
-            reject(new Error('No response at this URL'));
-            // resolve();// some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
+            console.error('No response for tile request ' + layer.wv.key);
+            resolve(); // some gibs data is not accurate and rejecting this will break the animation if tile doesn't exist
           }
           this.un('tileloadend', loader); // remove event listeners from memory
           this.un('tileloaderror', loader);
