@@ -15,12 +15,6 @@ import browser from './browser';
 import { events } from './events';
 import load from './load';
 import Cache from 'cachai';
-import closestTo from 'date-fns/closest_to';
-import isBefore from 'date-fns/is_before';
-import isEqual from 'date-fns/is_equal';
-import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
-import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
-import lastDayOfYear from 'date-fns/last_day_of_year';
 
 export default (function(self) {
   var canvas = null;
@@ -1108,113 +1102,6 @@ export default (function(self) {
   };
 
   /**
-   * Return an array of dates based on the dateRange the current date falls in.
-   *
-   * @method datesinDateRanges
-   * @param  {object} def           A layer object
-   * @param  {object} date          A date object
-   * @param  {boolean} containRange If true, return dates from all ranges.
-   *                                If false, only return the dates from the range the current date falls in.
-   * @return {array}                An array of dates with normalized timezones
-   */
-  self.datesinDateRanges = function(def, date, containRange) {
-    var dateArray = [];
-    var currentDate = new Date(date.getTime());
-    lodashEach(def.dateRanges, function(dateRange) {
-      var yearDifference;
-      var monthDifference;
-      var dayDifference;
-      var minuteDifference;
-      var maxYearDate;
-      var maxMonthDate;
-      var maxDayDate;
-      var maxMinuteDate;
-      let dateInterval = dateRange.dateInterval;
-      let minDate = new Date(dateRange.startDate);
-      let maxDate = new Date(dateRange.endDate);
-      // Offset timezone
-      minDate = new Date(minDate.getTime() - (minDate.getTimezoneOffset() * 60000));
-      maxDate = new Date(maxDate.getTime() - (maxDate.getTimezoneOffset() * 60000));
-
-      // check/add subdaily interval for maxMinuteDate
-      let interval = 1;
-      if (def.period === 'subdaily') {
-        if (def.dateRanges && def.dateRanges[0] && def.dateRanges[0].dateInterval) {
-          interval = Number(def.dateRanges[0].dateInterval);
-        }
-      }
-
-      maxYearDate = new Date(maxDate.getUTCFullYear() + 1, maxDate.getUTCMonth(), maxDate.getUTCDate());
-      maxMonthDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth() + 1, maxDate.getUTCDate());
-      maxDayDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth(), maxDate.getUTCDate() + 1);
-      maxMinuteDate = new Date(maxDate.getUTCFullYear(), maxDate.getUTCMonth(), maxDate.getUTCDate(), maxDate.getUTCHours(), maxDate.getUTCMinutes() + interval);
-
-      if (def.period === 'yearly') {
-        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
-        if (!containRange) {
-          yearDifference = self.yearDiff(minDate, maxYearDate);
-        } else if (currentDate >= minDate && currentDate <= maxYearDate) {
-          // Find the yearDifference of the endDate vs startDate
-          yearDifference = self.yearDiff(minDate, maxYearDate);
-        }
-
-        // Create array of all possible request dates by saying for interval++ <= yearDifference
-        for (dateInterval = 0; dateInterval <= (yearDifference + 1); dateInterval++) {
-          dateArray.push(new Date(minDate.getUTCFullYear() + dateInterval, minDate.getUTCMonth(), minDate.getUTCDate(), 0, 0, 0));
-        }
-      } else if (def.period === 'monthly') {
-        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
-        if (!containRange) {
-          monthDifference = self.monthDiff(minDate, maxMonthDate);
-        } else if (currentDate >= minDate && currentDate <= maxMonthDate) {
-          // Find the monthDifference of the endDate vs startDate
-          monthDifference = self.monthDiff(minDate, maxMonthDate);
-        }
-
-        // Create array of all possible request dates by saying for interval++ <= monthDifference
-        for (dateInterval = 0; dateInterval <= (monthDifference + 1); dateInterval++) {
-          dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth() + dateInterval, minDate.getUTCDate(), 0, 0, 0));
-        }
-      } else if (def.period === 'daily') {
-        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
-        if (!containRange) {
-          dayDifference = self.dayDiff(minDate, maxDayDate);
-        } else if (currentDate >= minDate && currentDate <= maxDayDate) {
-          // Find the dayDifference of the endDate vs startDate
-          dayDifference = self.dayDiff(minDate, maxDayDate);
-        }
-        // Create array of all possible request dates by saying for interval++ <= dayDifference
-        for (dateInterval = 0; dateInterval <= (dayDifference + 1); dateInterval++) {
-          dateArray.push(new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate() + dateInterval, 0, 0, 0));
-        }
-      } else if (def.period === 'subdaily') {
-        const currentDateOffset = currentDate.getTimezoneOffset() * 60000;
-        const minDateMinutes = minDate.getUTCMinutes();
-        // only check an hour into past for min date
-        const hourBeforeCurrentDate = new Date(currentDate.setMinutes(minDateMinutes) - currentDateOffset - (60 * 60000));
-        minDate = hourBeforeCurrentDate < minDate ? minDate : hourBeforeCurrentDate;
-        // only check an hour into future for max date
-        const hourAfterCurrentDate = new Date(currentDate.setMinutes(minDateMinutes) - currentDateOffset + (60 * 60000));
-        maxMinuteDate = hourAfterCurrentDate > maxMinuteDate ? maxMinuteDate : hourAfterCurrentDate;
-
-        currentDate = new Date(currentDate.getTime() - currentDateOffset);
-        // if containgeRange is true, check if date is between current dateRange.startDate && dateRange.endDate
-        if (!containRange) {
-          minuteDifference = self.minuteDiff(minDate, maxMinuteDate);
-        } else if (currentDate >= minDate && currentDate <= maxMinuteDate) {
-          // Find the dayDifference of the endDate vs startDate
-          minuteDifference = self.minuteDiff(minDate, maxMinuteDate);
-        }
-        // Create array of all possible request dates by saying for interval++ <= dayDifference
-        for (dateInterval = 0; dateInterval <= (minuteDifference + 1); dateInterval += interval) {
-          const newDate = new Date(minDate.getUTCFullYear(), minDate.getUTCMonth(), minDate.getUTCDate(), minDate.getUTCHours(), minDate.getUTCMinutes() + dateInterval, 0);
-          dateArray.push(newDate);
-        }
-      }
-    });
-    return dateArray;
-  };
-  /**
    * Find index value of string in array
    * @param {Array} arra | Array of strings
    * @param {String} value | String to return index of
@@ -1227,36 +1114,6 @@ export default (function(self) {
       }
     }
     return false;
-  };
-
-  /**
-   * Find the closest previous date from an array of dates
-   *
-   * @param  {object} def       A layer definition
-   * @param  {object} date      A date to compare against the array of dates
-   * @param  {array} dateArray  An array of dates
-   * @return {object}           The date object with normalized timeszone.
-   */
-  self.prevDateInDateRange = function(def, date, dateArray) {
-    var currentDate = new Date(date.getTime());
-    if (!dateArray) return date;
-    if ((def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
-      (def.period === 'yearly' && ((currentDate.getDate() === 1 &&
-        currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) return date;
-    // Return an array of the closest available dates within the range
-    var closestAvailableDates = [];
-    lodashEach(dateArray, function(rangeDate) {
-      if (isBefore(rangeDate, currentDate) || isEqual(rangeDate, currentDate)) {
-        closestAvailableDates.push(rangeDate);
-      }
-    });
-    // Find the closest dates within the current array
-    var closestDate = closestTo(currentDate, closestAvailableDates);
-    if (closestDate) {
-      return new Date(closestDate.getTime());
-    } else {
-      return date;
-    }
   };
 
   /**
