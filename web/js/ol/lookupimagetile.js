@@ -52,7 +52,7 @@ LookupImageTile.prototype.load = function() {
 };
 
 export function lookupFactory(lookup, sourceOptions) {
-  return function (tileCoord, state, src, crossOrigin, tileLoadFunction) {
+  return function(tileCoord, state, src, crossOrigin, tileLoadFunction) {
     return new LookupImageTile(lookup, tileCoord, state, src,
       crossOrigin, tileLoadFunction, sourceOptions);
   };

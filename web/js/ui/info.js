@@ -3,7 +3,7 @@ import wvui from './ui';
 import util from '../util/util';
 import { feedbackUi } from '../feedback';
 
-export function uiInfo (ui, config) {
+export function uiInfo(ui, config) {
   var feedbackDialog = feedbackUi();
   var selector = '#wv-info-button';
   var $button = $('<input />')
@@ -26,7 +26,7 @@ export function uiInfo (ui, config) {
     text: false
   });
 
-  $button.click(function (event) {
+  $button.click(function(event) {
     event.stopPropagation();
     wvui.close();
     var checked = $('#wv-info-button-check')
@@ -36,7 +36,7 @@ export function uiInfo (ui, config) {
     }
   });
 
-  var show = function () {
+  var show = function() {
     var $menu = wvui.getMenu()
       .attr('id', 'wv-info-menu');
     var $alerts;
@@ -74,7 +74,7 @@ export function uiInfo (ui, config) {
     });
     $menuItems.hide();
 
-    $about.click(function () {
+    $about.click(function() {
       if (util.browser.small) {
         window.open('pages/about.html?v=@BUILD_NONCE@', '_blank');
       } else {
@@ -95,16 +95,16 @@ export function uiInfo (ui, config) {
           .addClass('wv-opaque');
       }
     });
-    $source.click(function (e) {
+    $source.click(function(e) {
       window.open('https://github.com/nasa-gibs/worldview', '_blank');
     });
 
-    $feedback.click(function (event) {
+    $feedback.click(function(event) {
       event.preventDefault();
       feedbackDialog.showFeedback();
     });
 
-    $tour.click(function () {
+    $tour.click(function() {
       ui.tour.startTour();
     });
 
@@ -116,7 +116,7 @@ export function uiInfo (ui, config) {
       direction: 'up'
     });
 
-    var clickOut = function (event) {
+    var clickOut = function(event) {
       if ($button.parent()
         .has(event.target)
         .length > 0) {
@@ -133,7 +133,7 @@ export function uiInfo (ui, config) {
         .off('click', clickOut)
         .off('touchstart', clickOut);
     };
-    $menuItems.on('touchstart', function (event) {
+    $menuItems.on('touchstart', function(event) {
       event.stopPropagation();
     });
     $('html')

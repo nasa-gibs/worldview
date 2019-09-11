@@ -76,13 +76,13 @@ class TimeScaleIntervalChange extends PureComponent {
     });
   }
 
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.customDelta !== 1 && this.props.customIntervalZoomLevel) {
       this.setCustomIntervalText();
     }
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     const {
       customDelta,
       timeScaleChangeUnit,

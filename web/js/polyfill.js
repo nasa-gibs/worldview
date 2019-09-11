@@ -7,22 +7,22 @@
 
 /* eslint-disable no-extend-native */
 
-export function polyfill () {
+export function polyfill() {
   /*
    * Date.toISOString
    *
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
    */
   if (!Date.prototype.toISOString) {
-    (function () {
-      function pad (number) {
+    (function() {
+      function pad(number) {
         if (number < 10) {
           return '0' + number;
         }
         return number;
       }
 
-      Date.prototype.toISOString = function () {
+      Date.prototype.toISOString = function() {
         return this.getUTCFullYear() +
           '-' + pad(this.getUTCMonth() + 1) +
           '-' + pad(this.getUTCDate()) +
@@ -41,12 +41,12 @@ export function polyfill () {
    * console
    */
   if (!window.console) {
-    (function () {
+    (function() {
       window.console = {
-        log: function () {},
-        warn: function () {},
-        info: function () {},
-        error: function () {}
+        log: function() {},
+        warn: function() {},
+        info: function() {},
+        error: function() {}
       };
     })();
   }
@@ -54,8 +54,8 @@ export function polyfill () {
   /*
    * Get rid of address bar on iphone/ipod
    */
-  (function () {
-    var execute = function () {
+  (function() {
+    var execute = function() {
       window.scrollTo(0, 0);
       if (document.body) {
         document.body.style.height = '100%';
@@ -73,7 +73,7 @@ export function polyfill () {
   /*
    * Hide the URL bar
    */
-  (function () {
+  (function() {
     window.scrollTo(0, 0);
   })();
 
@@ -83,8 +83,8 @@ export function polyfill () {
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/contains
    */
   if (!('contains' in String.prototype)) {
-    (function () {
-      String.prototype.contains = function (str, startIndex) {
+    (function() {
+      String.prototype.contains = function(str, startIndex) {
         return String.prototype.indexOf.call(this, str,
           startIndex) !== -1;
       };
@@ -97,12 +97,12 @@ export function polyfill () {
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
    */
   if (!String.prototype.startsWith) {
-    (function () {
+    (function() {
       Object.defineProperty(String.prototype, 'startsWith', {
         enumerable: false,
         configurable: false,
         writable: false,
-        value: function (searchString, position) {
+        value: function(searchString, position) {
           position = position || 0;
           return this.indexOf(searchString, position) === position;
         }
@@ -116,12 +116,12 @@ export function polyfill () {
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith
    */
   if (!String.prototype.endsWith) {
-    (function () {
+    (function() {
       Object.defineProperty(String.prototype, 'endsWith', {
         enumerable: false,
         configurable: false,
         writable: false,
-        value: function (searchString, position) {
+        value: function(searchString, position) {
           position = position || this.length;
           position = position - searchString.length;
           var lastIndex = this.lastIndexOf(searchString);
@@ -134,7 +134,7 @@ export function polyfill () {
   /*
    * Mobile device quirks.  This section is mostly overwriting things that jquery.mobile is adding
    */
-  (function () {
+  (function() {
     if (navigator.userAgent.match(/Android/i) ||
       navigator.userAgent.match(/webOS/i) ||
       navigator.userAgent.match(/iPhone/i) ||
@@ -147,7 +147,7 @@ export function polyfill () {
     }
 
     if (navigator.userAgent.indexOf('iPhone') !== -1 || navigator.userAgent.indexOf('Android') !== -1) {
-      addEventListener('load', function () {
+      addEventListener('load', function() {
         if (mobile) {
           $('.layerPicker a[href=\'#DataDownload\']')
             .hide();
@@ -157,14 +157,14 @@ export function polyfill () {
         $('#app, .ui-mobile, .ui-mobile .ui-page')
           .css('min-height', 0);
       }, false);
-      addEventListener('orientationchange', function () {
+      addEventListener('orientationchange', function() {
         window.scrollTo(0, 1);
         setHeight();
       }, false);
     }
 
     // Set the div height
-    function setHeight ($body) {
+    function setHeight($body) {
       if (navigator.userAgent.match(/(iPad|iPhone|iPod touch);.*CPU.*OS 6_\d/i)) {
         var newHeight = $(window)
           .height();
