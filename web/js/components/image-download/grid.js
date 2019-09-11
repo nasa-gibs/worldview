@@ -12,7 +12,7 @@ import Button from '../util/button';
 export default class ResolutionTable extends React.Component {
   renderImageSize() {
     var size = this.props.fileSize;
-    if (!this.props.valid) {
+    if (!this.props.validSize) {
       return (
         <div
           id="wv-image-size"
@@ -33,7 +33,7 @@ export default class ResolutionTable extends React.Component {
 
   render() {
     const imageSize = this.renderImageSize();
-    const { width, height, onClick, valid } = this.props;
+    const { width, height, maxImageSize, onClick, validLayers, validSize } = this.props;
     return (
       <div className="wv-image-download-grid">
         <div className="grid-child grid-head">
@@ -45,12 +45,12 @@ export default class ResolutionTable extends React.Component {
         {imageSize}
         <div
           className={
-            this.props.valid
+            validSize
               ? 'grid-child wv-image-max-size'
               : 'grid-child wv-image-max-size wv-image-size-invalid'
           }
         >
-          <span>{this.props.maxImageSize}</span>
+          <span>{maxImageSize}</span>
         </div>
         <div
           className="grid-child wv-image-dimensions"
@@ -65,7 +65,7 @@ export default class ResolutionTable extends React.Component {
             onClick={() => {
               onClick(width, height);
             }}
-            valid={valid}
+            valid={validSize && validLayers}
           />
         </div>
       </div>
@@ -77,6 +77,7 @@ ResolutionTable.propTypes = {
   height: PropTypes.number,
   maxImageSize: PropTypes.string,
   onClick: PropTypes.func,
-  valid: PropTypes.bool,
+  validLayers: PropTypes.bool,
+  validSize: PropTypes.bool,
   width: PropTypes.number
 };
