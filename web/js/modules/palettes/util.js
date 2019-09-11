@@ -90,7 +90,6 @@ export function drawSidebarPaletteOnCanvas(
   colors,
   width
 ) {
-  const height = 24;
   const barHeight = 12;
   const colorbarStartY = barHeight - 5;
   ctx.fillStyle = checkerBoardPattern;
@@ -111,13 +110,12 @@ export function drawSidebarPaletteOnCanvas(
     ctx.stroke();
   }
 }
-export function drawTicksOnCanvas(ctx, legend, width, height) {
+export function drawTicksOnCanvas(ctx, legend, width) {
+  const canvasHeight = 24;
   const ticks = legend.ticks;
   const colors = legend.colors;
   const bins = colors.length;
   const binWidth = width / bins;
-  const yValue = parseFloat(height * 0.70);
-  const yValue2 = parseFloat(12 * 0.3);
   const drawWidth = Math.ceil(binWidth);
   const halfWidth = drawWidth / 2;
   if (ticks && ticks.length > 0 && bins > 100) {
@@ -125,10 +123,10 @@ export function drawTicksOnCanvas(ctx, legend, width, height) {
     ticks.forEach(tick => {
       const start = binWidth * tick;
       const midpoint = Math.floor((start + halfWidth)) + 0.5; // https://stackoverflow.com/a/8696641/4589331
-      ctx.strokeStyle = '#000'
+      ctx.strokeStyle = '#000';
       ctx.lineWidth = 0.8;
-      ctx.moveTo(midpoint, 24 - 4);
-      ctx.lineTo(midpoint, 23);
+      ctx.moveTo(midpoint, canvasHeight - 4);
+      ctx.lineTo(midpoint, canvasHeight - 1);
     });
     ctx.stroke();
     ctx.closePath();
