@@ -5,6 +5,7 @@ import { Button } from 'reactstrap';
 import MeasureMenu from './measure-menu';
 import { openCustomContent } from '../../modules/modal/actions';
 import AlertUtil from '../util/alert';
+import googleTagManager from 'googleTagManager';
 
 const MEASURE_MENU_PROPS = {
   headerText: null,
@@ -40,6 +41,9 @@ class MeasureButton extends React.Component {
     this.setState({
       isTouchDevice,
       showAlert: true
+    });
+    googleTagManager.pushEvent({
+      event: 'measure_tool_activated'
     });
   }
 
