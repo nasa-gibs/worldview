@@ -44,6 +44,7 @@ import {
   getLayers,
   isRenderable as isRenderableLayer
 } from '../modules/layers/selectors';
+import { datesinDateRanges } from '../modules/layers/util';
 import {
   get as lodashGet,
   debounce as lodashDebounce,
@@ -527,7 +528,7 @@ export function mapui(models, config, store, ui) {
     if (isGraticule(def, proj.id)) {
       addGraticule(def.opacity, activeLayerStr);
     } else {
-      def.availableDates = util.datesinDateRanges(def, date, true);
+      def.availableDates = datesinDateRanges(def, date);
       if (firstLayer && firstLayer.get('group')) {
         // Find which map layer-group is the active LayerGroup
         // and add layer to layerGroup in correct location

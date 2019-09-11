@@ -22,6 +22,7 @@ import {
   getKey as getVectorStyleKeys,
   setStyleFunction
 } from '../modules/vector-styles/selectors';
+import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
 
 export function mapLayerBuilder(models, config, cache, ui, store) {
   var self = {};
@@ -122,6 +123,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       layer.setVisible(false);
     }
     layer.setOpacity(def.opacity || 1.0);
+    console.log(layer.getProperties().source.urls[0]);
     return layer;
   };
 
@@ -135,34 +137,28 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.closestDate = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    var date;
-    var dateArray = def.availableDates || [];
+    let date;
+    const dateArray = def.availableDates || [];
+    let rangeOfDates;
+
     if (options.date) {
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(new Date(options.date.getTime()));
       } else {
         date = options.date;
-        date = util.prevDateInDateRange(
-          def,
-          date,
-          util.datesinDateRanges(def, date, true)
-        );
+        rangeOfDates = datesinDateRanges(def, date);
+        date = prevDateInDateRange(def, date, rangeOfDates);
       }
     } else {
       date = new Date(state.date[activeDateStr]);
-      // If this not a subdaily layer, truncate the selected time to
-      // UTC midnight
       if (def.period !== 'subdaily') {
         date = util.clearTimeUTC(date);
       } else {
-        date = util.prevDateInDateRange(
-          def,
-          date,
-          util.datesinDateRanges(def, date, true)
-        );
+        rangeOfDates = datesinDateRanges(def, date);
+        date = prevDateInDateRange(def, date, rangeOfDates);
       }
     }
-    // Perform extensive checks before finding closest date
+
     if (
       !options.precache &&
       state.animation.playing === false &&
@@ -171,13 +167,13 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         (def.period === 'monthly' && state.date.selectedZoom <= 2) ||
         (def.period === 'yearly' && state.date.selectedZoom === 1))
     ) {
-      date = util.prevDateInDateRange(def, date, dateArray);
+      date = prevDateInDateRange(def, date, dateArray);
 
       // Is current "rounded" previous date not in array of availableDates
       if (date && !dateArray.includes(date)) {
         // Then, update layer object with new array of dates
-        def.availableDates = util.datesinDateRanges(def, date, true);
-        date = util.prevDateInDateRange(def, date, dateArray);
+        def.availableDates = datesinDateRanges(def, date);
+        date = prevDateInDateRange(def, date, dateArray);
       }
     }
     return date;
