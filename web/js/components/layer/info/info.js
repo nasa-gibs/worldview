@@ -5,7 +5,6 @@ import { DateRanges } from './date-ranges';
 import util from '../../../util/util';
 import Scrollbars from '../../util/scrollbar';
 
-
 class LayerInfo extends React.Component {
   constructor(props) {
     super(props);
@@ -101,12 +100,12 @@ class LayerInfo extends React.Component {
             {hasLayerDateRange && dateRanges.overlap === false ? (
               <DateRanges layer={layer} dateRanges={dateRanges} />
             ) : (
-                ''
-              )}
+              ''
+            )}
           </div>
         ) : (
-            ''
-          )}
+          ''
+        )}
         {metaData ? (
           <Scrollbars style={{ maxHeight: screenHeight - 200 + 'px' }}>
             <div
@@ -117,10 +116,10 @@ class LayerInfo extends React.Component {
           </Scrollbars >
 
         ) : (
-            <div id="layer-metadata" className="layer-metadata">
-              <p>Loading MetaData...</p>
-            </div>
-          )}
+          <div id="layer-metadata" className="layer-metadata">
+            <p>Loading MetaData...</p>
+          </div>
+        )}
       </div>
     );
   }

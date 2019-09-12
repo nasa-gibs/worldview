@@ -48,11 +48,11 @@ class ModalContainer extends Component {
     return bodyTemplate.isLoading ? (
       <span> Loading </span>
     ) : (
-        <div
-          id="template-content"
-          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-        />
-      );
+      <div
+        id="template-content"
+        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+      />
+    );
   }
 
   render() {
@@ -129,29 +129,29 @@ class ModalContainer extends Component {
             {CompletelyCustomModal ? (
               <CompletelyCustomModal {...customProps} />
             ) : (
-                <DetectOuterClick
-                  onClick={toggleWithClose}
-                  disabled={!isOpen || type === 'selection' || clickableBehindModal}
-                >
-                  {headerComponent || headerText ? (
-                    <ModalHeader toggle={toggleWithClose}>
-                      {headerComponent ? <headerComponent /> : headerText || ''}
-                    </ModalHeader>
+              <DetectOuterClick
+                onClick={toggleWithClose}
+                disabled={!isOpen || type === 'selection' || clickableBehindModal}
+              >
+                {headerComponent || headerText ? (
+                  <ModalHeader toggle={toggleWithClose}>
+                    {headerComponent ? <headerComponent /> : headerText || ''}
+                  </ModalHeader>
+                ) : (
+                  ''
+                )}
+                <ModalBody>
+                  {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
+                  {BodyComponent ? (
+                    <BodyComponent {...bodyComponentProps} screenHeight={screenHeight} />
+                  ) : isTemplateModal ? (
+                    this.getTemplateBody()
                   ) : (
-                      ''
-                    )}
-                  <ModalBody>
-                    {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-                    {BodyComponent ? (
-                      <BodyComponent {...bodyComponentProps} screenHeight={screenHeight} />
-                    ) : isTemplateModal ? (
-                      this.getTemplateBody()
-                    ) : (
-                          bodyText || ''
-                        )}
-                  </ModalBody>
-                </DetectOuterClick>
-              )}
+                    bodyText || ''
+                  )}
+                </ModalBody>
+              </DetectOuterClick>
+            )}
           </Modal>
         </DraggableWrap>
       </ErrorBoundary>

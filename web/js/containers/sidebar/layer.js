@@ -239,13 +239,13 @@ class Layer extends React.Component {
               </div>
             </li>
           ) : (
-              <li
-                className="layer-list-placeholder"
-                ref={provided.innerRef}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-              />
-            );
+            <li
+              className="layer-list-placeholder"
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+            />
+          );
         }}
       </Draggable>
     );
