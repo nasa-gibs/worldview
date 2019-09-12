@@ -48,11 +48,11 @@ class ModalContainer extends Component {
     return bodyTemplate.isLoading ? (
       <span> Loading </span>
     ) : (
-      <div
-        id="template-content"
-        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-      />
-    );
+        <div
+          id="template-content"
+          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+        />
+      );
   }
 
   render() {
@@ -62,7 +62,8 @@ class ModalContainer extends Component {
       isOpen,
       isTemplateModal,
       customProps,
-      isMobile
+      isMobile,
+      screenHeight
     } = this.props;
     // Populate props from custom obj
     const newProps =
@@ -128,29 +129,29 @@ class ModalContainer extends Component {
             {CompletelyCustomModal ? (
               <CompletelyCustomModal {...customProps} />
             ) : (
-              <DetectOuterClick
-                onClick={toggleWithClose}
-                disabled={!isOpen || type === 'selection' || clickableBehindModal}
-              >
-                {headerComponent || headerText ? (
-                  <ModalHeader toggle={toggleWithClose}>
-                    {headerComponent ? <headerComponent /> : headerText || ''}
-                  </ModalHeader>
-                ) : (
-                  ''
-                )}
-                <ModalBody>
-                  {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
-                  {BodyComponent ? (
-                    <BodyComponent {...bodyComponentProps} />
-                  ) : isTemplateModal ? (
-                    this.getTemplateBody()
+                <DetectOuterClick
+                  onClick={toggleWithClose}
+                  disabled={!isOpen || type === 'selection' || clickableBehindModal}
+                >
+                  {headerComponent || headerText ? (
+                    <ModalHeader toggle={toggleWithClose}>
+                      {headerComponent ? <headerComponent /> : headerText || ''}
+                    </ModalHeader>
                   ) : (
-                    bodyText || ''
-                  )}
-                </ModalBody>
-              </DetectOuterClick>
-            )}
+                      ''
+                    )}
+                  <ModalBody>
+                    {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
+                    {BodyComponent ? (
+                      <BodyComponent {...bodyComponentProps} screenHeight={screenHeight} />
+                    ) : isTemplateModal ? (
+                      this.getTemplateBody()
+                    ) : (
+                          bodyText || ''
+                        )}
+                  </ModalBody>
+                </DetectOuterClick>
+              )}
           </Modal>
         </DraggableWrap>
       </ErrorBoundary>
@@ -182,6 +183,7 @@ function mapStateToProps(state) {
     isCustom,
     id,
     isMobile: state.browser.lessThan.medium,
+    screenHeight: state.browser.screenHeight,
     bodyTemplate,
     isTemplateModal,
     customProps

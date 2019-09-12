@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
 import { DateRanges } from './date-ranges';
 import util from '../../../util/util';
+import Scrollbars from '../../util/scrollbar';
+
 
 class LayerInfo extends React.Component {
   constructor(props) {
@@ -62,7 +64,7 @@ class LayerInfo extends React.Component {
   }
 
   render() {
-    const { layer } = this.props;
+    const { layer, screenHeight } = this.props;
     const { metaData } = this.state;
     const layerId = layer.id;
     const hasLayerDateRange = layer.dateRanges && layer.dateRanges.length > 1;
@@ -76,21 +78,21 @@ class LayerInfo extends React.Component {
             <span id={layerId + '-startDate'} className="layer-date-start">
               {layer.startDate
                 ? 'Temporal coverage: ' +
-                  this.configureDate(
-                    layer.period,
-                    layer.startDate,
-                    layer.dateRanges
-                  )
+                this.configureDate(
+                  layer.period,
+                  layer.startDate,
+                  layer.dateRanges
+                )
                 : ''}
             </span>
             <span id={layerId + '-endDate'} className="layer-date-end">
               {layer.startDate && layer.endDate
                 ? ' - ' +
-                  this.configureDate(
-                    layer.period,
-                    layer.endDate,
-                    layer.dateRanges
-                  )
+                this.configureDate(
+                  layer.period,
+                  layer.endDate,
+                  layer.dateRanges
+                )
                 : layer.startDate
                   ? ' - Present'
                   : ''}
@@ -99,23 +101,26 @@ class LayerInfo extends React.Component {
             {hasLayerDateRange && dateRanges.overlap === false ? (
               <DateRanges layer={layer} dateRanges={dateRanges} />
             ) : (
-              ''
-            )}
+                ''
+              )}
           </div>
         ) : (
-          ''
-        )}
+            ''
+          )}
         {metaData ? (
-          <div
-            id="layer-metadata"
-            className="layer-metadata"
-            dangerouslySetInnerHTML={{ __html: metaData }}
-          />
+          <Scrollbars style={{ maxHeight: screenHeight - 200 + 'px' }}>
+            <div
+              id="layer-metadata"
+              className="layer-metadata"
+              dangerouslySetInnerHTML={{ __html: metaData }}
+            />
+          </Scrollbars >
+
         ) : (
-          <div id="layer-metadata" className="layer-metadata">
-            <p>Loading MetaData...</p>
-          </div>
-        )}
+            <div id="layer-metadata" className="layer-metadata">
+              <p>Loading MetaData...</p>
+            </div>
+          )}
       </div>
     );
   }
