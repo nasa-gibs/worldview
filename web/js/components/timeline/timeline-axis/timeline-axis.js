@@ -500,7 +500,7 @@ class TimelineAxis extends Component {
 
     // update scale if end time limit has changed (e.g. time has elapsed since the app was started)
     if (timelineEndDateLimit !== prevProps.timelineEndDateLimit) {
-      this.updateScale(draggerDate, timeScale, null, 0.8, true);
+      this.updateScale(draggerDate, timeScale, null, null, true);
     }
 
     // handle switching A/B dragger axis focus if switched from A/B sidebar tabs

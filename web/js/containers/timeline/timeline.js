@@ -694,18 +694,6 @@ class Timeline extends React.Component {
   }
 
   /**
-   * Compare minute values of appNow and current time.
-   * Update appNow when there is a change.
-   */
-  checkAndUpdateAppNow() {
-    const { appNow, updateAppNow } = this.props;
-    const currentTime = new Date();
-    if (currentTime.getMinutes() !== appNow.getMinutes()) {
-      updateAppNow(currentTime);
-    }
-  }
-
-  /**
   * @desc update dragger time state
   * @param {String} date
   * @param {Boolean} is dragger B selected to update
@@ -723,6 +711,36 @@ class Timeline extends React.Component {
     }
   }
 
+  /**
+   *
+   */
+  checkAndUpdateAppNow() {
+    const { updateAppNow } = this.props;
+    const self = this;
+    const ensureCanUpdate = function () {
+      return new Promise(function(resolve, reject) {
+        (function waitForSafeUpdate() {
+          const {
+            isTimelineDragging,
+            isDraggerDragging,
+            isAnimationDraggerDragging,
+            isAnimationPlaying
+          } = self.state;
+          const userIsInteracting = isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
+          const canUpdate = !userIsInteracting && !isAnimationPlaying;
+          if (canUpdate) {
+            return resolve();
+          }
+          setTimeout(waitForSafeUpdate, 1000);
+        })();
+      });
+    };
+
+    ensureCanUpdate().then(() => {
+      updateAppNow(new Date());
+    });
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
@@ -731,8 +749,7 @@ class Timeline extends React.Component {
     document.querySelector('.timeline-container').addEventListener('wheel', preventDefaultFunc, { passive: false });
 
     this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
-    // Check every 5 seconds to see if we need to update appNow
-    this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 5000);
+    this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 15);
     this.setInitialState();
   }
 
