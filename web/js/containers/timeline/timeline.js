@@ -85,8 +85,9 @@ class Timeline extends React.Component {
       hoverLinePosition: 0,
       showHoverLine: false,
       showDraggerTime: false,
-      isDraggerDragging: false,
       isAnimationDraggerDragging: false,
+      isArrowDown: false,
+      isDraggerDragging: false,
       isTimelineDragging: false,
       initialLoadComplete: false,
       timelineHidden: false,
@@ -94,9 +95,18 @@ class Timeline extends React.Component {
       rangeSelectorMax: { end: false, start: false, startOffset: -50, width: 50000 }
     };
     // left/right arrows
+    const throttleSettings = { leading: true, trailing: false };
     this.debounceDateUpdate = lodashDebounce(this.props.changeDate, 8);
-    this.throttleDecrementDate = lodashThrottle(this.handleArrowDateChange.bind(this, -1), ANIMATION_DELAY, { leading: true, trailing: false });
-    this.throttleIncrementDate = lodashThrottle(this.handleArrowDateChange.bind(this, 1), ANIMATION_DELAY, { leading: true, trailing: false });
+    this.throttleDecrementDate = lodashThrottle(
+      this.handleArrowDateChange.bind(this, -1),
+      ANIMATION_DELAY,
+      throttleSettings
+    );
+    this.throttleIncrementDate = lodashThrottle(
+      this.handleArrowDateChange.bind(this, 1),
+      ANIMATION_DELAY,
+      throttleSettings
+    );
 
     // animation dragger updates
     this.debounceOnUpdateStartDate = lodashDebounce(this.props.onUpdateStartDate, 30);
@@ -355,6 +365,7 @@ class Timeline extends React.Component {
     if (!disabled) {
       this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate));
     }
+    this.setState({ isArrowDown: true });
   };
 
   /**
@@ -363,6 +374,7 @@ class Timeline extends React.Component {
   */
   stopLeftArrow = () => {
     this.throttleDecrementDate.cancel();
+    this.setState({ isArrowDown: false });
   }
 
   /**
@@ -371,6 +383,7 @@ class Timeline extends React.Component {
   */
   stopRightArrow = () => {
     this.throttleIncrementDate.cancel();
+    this.setState({ isArrowDown: false });
   }
 
   /**
@@ -712,7 +725,8 @@ class Timeline extends React.Component {
   }
 
   /**
-   *
+   * Make sure user is not currently interacting with the timeline/dragger/scale/etc,
+   * then update appNow to current time.
    */
   checkAndUpdateAppNow() {
     const { updateAppNow } = this.props;
@@ -721,14 +735,14 @@ class Timeline extends React.Component {
       return new Promise(function(resolve, reject) {
         (function waitForSafeUpdate() {
           const {
+            isArrowDown,
             isTimelineDragging,
             isDraggerDragging,
-            isAnimationDraggerDragging,
-            isAnimationPlaying
+            isAnimationDraggerDragging
           } = self.state;
-          const userIsInteracting = isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
-          const canUpdate = !userIsInteracting && !isAnimationPlaying;
-          if (canUpdate) {
+          const { isAnimationPlaying } = self.props;
+          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
+          if (userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
           setTimeout(waitForSafeUpdate, 1000);
