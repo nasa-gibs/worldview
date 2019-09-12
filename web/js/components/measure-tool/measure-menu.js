@@ -5,7 +5,6 @@ import { onToggle } from '../../modules/modal/actions';
 import IconList from '../util/list';
 import { changeUnits, useGreatCircle } from '../../modules/measure/actions';
 import { Form, FormGroup, Label, Input, Tooltip } from 'reactstrap';
-// import googleTagManager from 'googleTagManager';
 
 const OPTIONS_ARRAY = [
   {
