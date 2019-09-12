@@ -742,7 +742,7 @@ class Timeline extends React.Component {
           } = self.state;
           const { isAnimationPlaying } = self.props;
           const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
-          if (userIsInteracting && !isAnimationPlaying) {
+          if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
           setTimeout(waitForSafeUpdate, 1000);
