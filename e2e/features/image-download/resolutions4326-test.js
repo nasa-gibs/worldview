@@ -1,7 +1,6 @@
 const { zoomIn } = require('../../reuseables/zoom');
 const { bookmark } = require('../../reuseables/bookmark');
-const { loadAndSkipTour } = require('../../reuseables/skip-tour');
-const TIME_LIMIT = 10000;
+const { normalizeViewport } = require('../../reuseables/normalize-viewport');
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
@@ -20,11 +19,9 @@ module.exports = {
   after: function (client) {
     client.end();
   },
-  before: function (client) {
-    loadAndSkipTour(client, TIME_LIMIT);
-  },
 
   'In geographic, top two zoom levels are 10km': function (c) {
+    normalizeViewport(c, 1024, 768)
     bookmark(c, startParams);
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="40"]').to.be.selected;
