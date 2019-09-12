@@ -156,7 +156,7 @@
     "@fortawesome/fontawesome-free": "^5.10.1",
     "@turf/turf": "^5.1.6",
     "arc": "^0.1.1",
-    "bluebird": "3.4.6",
+    "bluebird": "3.5.5",
     "bootstrap": "4.3.1",
     "cachai": "^1.0.2",
     "canvg-browser": "^1.0.0",
