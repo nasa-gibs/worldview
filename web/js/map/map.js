@@ -31,7 +31,7 @@ export function mapParser(state, errors) {
     delete state.map;
   }
   if (state.v) {
-    var extent = lodashMap(state.v.split(','), function (str) {
+    var extent = lodashMap(state.v.split(','), function(str) {
       return parseFloat(str);
     });
     var valid = mapIsExtentValid(extent);
@@ -65,7 +65,7 @@ export function mapIsExtentValid(extent) {
   if (extent.toArray) {
     extent = extent.toArray();
   }
-  lodashEach(extent, function (value) {
+  lodashEach(extent, function(value) {
     if (isNaN(value)) {
       valid = false;
       return false;

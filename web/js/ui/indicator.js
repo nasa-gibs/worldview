@@ -5,7 +5,7 @@ import lodashRemove from 'lodash/remove';
 import lodashIsEmpty from 'lodash/isEmpty';
 import lodashLast from 'lodash/last';
 
-export default (function () {
+export default (function() {
   var self = {};
 
   var $indicator;
@@ -14,7 +14,7 @@ export default (function () {
 
   self.active = [];
 
-  var init = function () {
+  var init = function() {
     $indicator = $('<div></div>')
       .attr('id', 'indicator');
     $icon = $('<img />');
@@ -27,7 +27,7 @@ export default (function () {
       .append($indicator);
   };
 
-  self.show = function (message, icon) {
+  self.show = function(message, icon) {
     self._show(message, icon);
     var id = lodashUniqueId();
     self.active.push({
@@ -38,11 +38,11 @@ export default (function () {
     return id;
   };
 
-  self.hide = function (hides) {
+  self.hide = function(hides) {
     if (lodashIsString(hides)) {
       hides = [hides];
     }
-    lodashEach(hides, function (id) {
+    lodashEach(hides, function(id) {
       lodashRemove(self.active, {
         id: id
       });
@@ -55,12 +55,12 @@ export default (function () {
     }
   };
 
-  self.replace = function (hides, message, icon) {
+  self.replace = function(hides, message, icon) {
     self.hide(hides);
     return self.show(message, icon);
   };
 
-  self._show = function (message, icon) {
+  self._show = function(message, icon) {
     if (!$indicator) {
       init();
     }
@@ -77,40 +77,40 @@ export default (function () {
     $indicator.show();
   };
 
-  self._hide = function () {
+  self._hide = function() {
     if ($indicator) {
       $indicator.hide();
     }
   };
 
-  self.searching = function (hides) {
+  self.searching = function(hides) {
     if (hides) {
       self.hide(hides);
     }
     return self.show('Searching for Data', 'images/activity.gif');
   };
 
-  self.loading = function (hides) {
+  self.loading = function(hides) {
     if (hides) {
       self.hide(hides);
     }
     return self.show('Loading', 'images/activity.gif');
   };
 
-  self.noData = function (hides) {
+  self.noData = function(hides) {
     if (hides) {
       self.hide(hides);
     }
     return self.show('No Data Available', 'images/red-x.svg');
   };
 
-  self.delayed = function (promise, delay) {
+  self.delayed = function(promise, delay) {
     delay = delay || 1000;
     var id;
-    var timeout = setTimeout(function () {
+    var timeout = setTimeout(function() {
       id = self.loading();
     }, delay);
-    promise.always(function () {
+    promise.always(function() {
       clearTimeout(timeout);
       if (id) {
         self.hide(id);

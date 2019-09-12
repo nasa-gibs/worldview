@@ -12,8 +12,14 @@
       "jsx": true
     }
   },
-  "plugins": ["react", "jest"],
-  "extends": ["standard", "plugin:react/recommended"],
+  "plugins": [
+    "react",
+    "jest"
+  ],
+  "extends": [
+    "standard",
+    "plugin:react/recommended"
+  ],
   "parser": "babel-eslint",
   "settings": {
     "react": {
@@ -21,15 +27,29 @@
     }
   },
   "rules": {
-    "semi": ["error", "always"],
+    "semi": [
+      "error",
+      "always"
+    ],
     "space-before-function-paren": "off",
-    "object-curly-spacing": ["error", "always"],
-    "quotes": [2, "single", { "avoidEscape": true }]
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      2,
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ]
   },
-
   "overrides": [
     {
-      "files": ["web/**/*.js", "test/**/*.js"],
+      "files": [
+        "web/**/*.js",
+        "test/**/*.js"
+      ],
       "rules": {
         "no-octal": "error",
         "no-unused-vars": "error",
@@ -43,10 +63,15 @@
         "operator-linebreak": "error",
         "comma-dangle": "error",
         "no-use-before-define": "error",
-        "camelcase": ["error", {
-          "allow": ["^UNSAFE_"],
-          "properties": "never"
-        }],
+        "camelcase": [
+          "error",
+          {
+            "allow": [
+              "^UNSAFE_"
+            ],
+            "properties": "never"
+          }
+        ],
         "no-extend-native": "error",
         "one-var": "error",
         "no-extra-parens": "error",
@@ -65,18 +90,28 @@
         "no-useless-call": "error",
         "no-trailing-spaces": "error",
         "standard/computed-property-even-spacing": "error",
+        "space-before-function-paren": [
+          "error",
+          "never"
+        ],
         "wrap-iife": "error",
         "new-cap": "error",
-        "semi": ["error", "always"],
+        "semi": [
+          "error",
+          "always"
+        ],
         "react/no-danger": "warn",
         "react/prop-types": "warn",
         "react/no-did-update-set-state": "warn",
         "react/no-render-return-value": "warn",
-        "react/sort-prop-types": ["warn", {
-          "ignoreCase": true,
-          "requiredFirst": true,
-          "sortShapeProp": true
-        }],
+        "react/sort-prop-types": [
+          "warn",
+          {
+            "ignoreCase": true,
+            "requiredFirst": true,
+            "sortShapeProp": true
+          }
+        ],
         "react/no-string-refs": "warn"
       }
     }

@@ -14,7 +14,7 @@ L.Polyline = {
 };
 
 L.Polygon = {
-  extend: function () {},
+  extend: function() {},
   prototype: {}
 };
 
@@ -40,22 +40,22 @@ L.EditToolbar = {
 
 L.Draw = {
   Polygon: {
-    extend: function () {}
+    extend: function() {}
   }
 };
 
 L.Edit = {
   Poly: {
-    extend: function () {}
+    extend: function() {}
   }
 };
 
 L.Util = {
-  isArray: function (value) {
+  isArray: function(value) {
     return value.constructor === Array;
   }
 };
-function LatLng (lat, lng) {
+function LatLng(lat, lng) {
   if (lat.lat) {
     var latlng = lat;
     this.lat = latlng.lat;
@@ -67,7 +67,7 @@ function LatLng (lat, lng) {
 }
 
 L.LatLng = LatLng;
-L.latLng = function (lat, lng) {
+L.latLng = function(lat, lng) {
   return new L.LatLng(lat, lng);
 };
 edsc.Coordinate = edscCoordinate(L);
