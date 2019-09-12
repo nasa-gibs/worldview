@@ -1,6 +1,7 @@
 const { zoomIn } = require('../../reuseables/zoom');
 const { bookmark } = require('../../reuseables/bookmark');
-
+const { loadAndSkipTour } = require('../../reuseables/skip-tour');
+const TIME_LIMIT = 10000;
 const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
@@ -16,11 +17,14 @@ const startParams = [
 ];
 
 module.exports = {
-  after: function(client) {
+  after: function (client) {
     client.end();
   },
+  before: function (client) {
+    loadAndSkipTour(client, TIME_LIMIT);
+  },
 
-  'In geographic, top two zoom levels are 10km': function(c) {
+  'In geographic, top two zoom levels are 10km': function (c) {
     bookmark(c, startParams);
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="40"]').to.be.selected;
@@ -32,14 +36,14 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Next zoom is 5km': function(c) {
+  'Next zoom is 5km': function (c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="20"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
-  'Next two zooms are 1km': function(c) {
+  'Next two zooms are 1km': function (c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="4"]').to.be.selected;
@@ -50,14 +54,14 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Next zoom is 500m': function(c) {
+  'Next zoom is 500m': function (c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="2"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
-  'Next two zooms are 250m': function(c) {
+  'Next two zooms are 250m': function (c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="1"]').to.be.selected;
@@ -68,14 +72,14 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Next zoom is 125m': function(c) {
+  'Next zoom is 125m': function (c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="0.5"]').to.be.selected;
     closeImageDownloadPanel(c);
   },
 
-  'Next zoom is 60m': function(c) {
+  'Next zoom is 60m': function (c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="0.25"]').to.be
@@ -83,7 +87,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Next zoom is 30m': function(c) {
+  'Next zoom is 30m': function (c) {
     zoomIn(c, 'geographic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="0.125"]').to.be
@@ -91,7 +95,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Last zoom level is 30m': function(c) {
+  'Last zoom level is 30m': function (c) {
     // mash the zoom button a bunch of times and see if it changes
     for (let i = 0; i < 5; i++) {
       zoomIn(c, 'geographic');
@@ -102,7 +106,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Click download': function(c) {
+  'Click download': function (c) {
     openImageDownloadPanel(c);
     clickDownload(c);
     c.getAttribute('#wv-image-download-url', 'url', result => {
