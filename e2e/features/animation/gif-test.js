@@ -8,17 +8,17 @@ const rotationDialogOkButton = '#image_download_notify_rotate .accept-notify';
 const articeRotationResetButton = '#wv-map-arctic .wv-map-reset-rotation';
 
 module.exports = {
-  before: function(client) {
+  before: function (client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
-  'Downloading GIF when custom colormap is activated': function(client) {
-    if (client.options.desiredCapabilities.browser !== 'ie') {
+  'Downloading GIF when custom colormap is activated': function (client) {
+    if (client.options.desiredCapabilities.browserName !== 'ie') {
       // Custom colormaps down exist in IE
       client.url(client.globals.url + localQuerystrings.activeCustomColormap);
       client.waitForElementVisible(
         localSelectors.animationWidget,
         TIME_LIMIT,
-        function() {
+        function () {
           client.click(localSelectors.createGifIcon).pause(1000);
           client.expect.element(askDialog).to.be.present;
           client
@@ -29,7 +29,7 @@ module.exports = {
           client.waitForElementVisible(
             localSelectors.gifResults,
             TIME_LIMIT,
-            function() {
+            function () {
               client.click(client.globals.selectors.modalCloseButton);
               client.expect.element(localSelectors.gifResults).to.not.be
                 .present;
@@ -43,14 +43,14 @@ module.exports = {
       );
     }
   },
-  'Downloading GIF when polar projection is rotated': function(client) {
+  'Downloading GIF when polar projection is rotated': function (client) {
     client.url(
       client.globals.url + localQuerystrings.animationProjectionRotated
     );
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
-      function() {
+      function () {
         client.click(localSelectors.createGifIcon).pause(1000);
         client.useCss().assert.containsText(articeRotationResetButton, '-18');
         client
@@ -61,19 +61,19 @@ module.exports = {
       }
     );
   },
-  'GIF selection preview is Accurate and selections that are too high disable GIF download': function(
+  'GIF selection preview is Accurate and selections that are too high disable GIF download': function (
     client
   ) {
     client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
-      function() {
+      function () {
         client.click(localSelectors.createGifIcon).pause(1000);
         client.waitForElementVisible(
           localSelectors.createGifButton,
           TIME_LIMIT,
-          function() {
+          function () {
             client
               .useCss()
               .assert.containsText(
@@ -108,31 +108,31 @@ module.exports = {
       }
     );
   },
-  'GIF download is disabled when too many frames would be requested with standard interval': function(
+  'GIF download is disabled when too many frames would be requested with standard interval': function (
     client
   ) {
     client.url(client.globals.url + localQuerystrings.animationTooManyFrames);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
-      function() {
+      function () {
         client.useCss().assert.cssClassPresent('#create-gif-button', 'disabled');
       }
     );
   },
-  'GIF download is disabled when too many frames would be requested with custom interval': function(
+  'GIF download is disabled when too many frames would be requested with custom interval': function (
     client
   ) {
     client.url(client.globals.url + localQuerystrings.animationTooManyFramesCustomInterval);
     client.waitForElementVisible(
       localSelectors.animationWidget,
       TIME_LIMIT,
-      function() {
+      function () {
         client.useCss().assert.cssClassPresent('#create-gif-button', 'disabled');
       }
     );
   },
-  after: function(client) {
+  after: function (client) {
     client.end();
   }
 };
