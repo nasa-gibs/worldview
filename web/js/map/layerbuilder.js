@@ -130,7 +130,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   /**
    * For subdaily layers, round the time down to nearest interval.
    * NOTE: Assumes intervals are the same for all ranges!
-   * @param {*} date
+   * @param {object} def
+   * @param {date} date
+   * @return {date}
    */
   const nearestInterval = function(def, date) {
     const dateInterval = lodashGet(def, 'dateRanges[0].dateInterval');
