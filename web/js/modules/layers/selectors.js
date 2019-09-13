@@ -277,7 +277,7 @@ export function dateRange(spec, activeLayers, config) {
   var range = false;
   var maxDates = [];
 
-  // Use the minute ceiling of the currne titme so that we don't run into an issue where
+  // Use the minute ceiling of the current time so that we don't run into an issue where
   // seconds value of current appNow time is greater than a layer's available time range
   const minuteCeilingCurrentTime = util.now().setSeconds(59);
 
