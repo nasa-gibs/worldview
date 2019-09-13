@@ -11,6 +11,7 @@ import SourceVectorTile from 'ol/source/VectorTile';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
+import lodashGet from 'lodash/get';
 import { lookupFactory } from '../ol/lookupimagetile';
 import {
   isActive as isPaletteActive,
@@ -123,8 +124,27 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       layer.setVisible(false);
     }
     layer.setOpacity(def.opacity || 1.0);
-    console.log(layer.getProperties().source.urls[0]);
     return layer;
+  };
+
+  /**
+   * For subdaily layers, round the time down to nearest interval.
+   * NOTE: Assumes intervals are the same for all ranges!
+   * @param {*} date
+   */
+  const nearestInterval = function(def, date) {
+    const dateInterval = lodashGet(def, 'dateRanges[0].dateInterval');
+    const interval = Number(dateInterval);
+    const remainder = date.getMinutes() % interval;
+    const newMinutes = date.getMinutes() - remainder;
+    const newDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      newMinutes
+    );
+    return newDate;
   };
 
   /**
@@ -137,43 +157,34 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.closestDate = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    let date;
     const dateArray = def.availableDates || [];
-    let rangeOfDates;
+    let date = options.date || new Date(state.date[activeDateStr]);
+    const zoomGreaterThanEqPeriod = (def.period === 'daily' && state.date.selectedZoom >= 3) ||
+                                  (def.period === 'monthly' && state.date.selectedZoom >= 2) ||
+                                  (def.period === 'yearly' && state.date.selectedZoom >= 1);
 
-    if (options.date) {
-      if (def.period !== 'subdaily') {
-        date = util.clearTimeUTC(new Date(options.date.getTime()));
-      } else {
-        date = options.date;
-        rangeOfDates = datesinDateRanges(def, date);
-        date = prevDateInDateRange(def, date, rangeOfDates);
-      }
+    if (def.period === 'subdaily') {
+      date = nearestInterval(def, date);
     } else {
-      date = new Date(state.date[activeDateStr]);
-      if (def.period !== 'subdaily') {
-        date = util.clearTimeUTC(date);
-      } else {
-        rangeOfDates = datesinDateRanges(def, date);
-        date = prevDateInDateRange(def, date, rangeOfDates);
-      }
+      date = options.date
+        ? util.clearTimeUTC(new Date(date.getTime()))
+        : util.clearTimeUTC(date);
     }
 
     if (
       !options.precache &&
-      state.animation.playing === false &&
+      state.animation.isPlaying === false &&
       state.date.selectedZoom !== 0 &&
-      ((def.period === 'daily' && state.date.selectedZoom < 3) ||
-        (def.period === 'monthly' && state.date.selectedZoom <= 2) ||
-        (def.period === 'yearly' && state.date.selectedZoom === 1))
+      zoomGreaterThanEqPeriod
     ) {
       date = prevDateInDateRange(def, date, dateArray);
+      // Is current "rounded" previous date in the array of available dates
+      const dateInArray = dateArray.some((arrDate) => date.getTime() === arrDate.getTime());
 
-      // Is current "rounded" previous date not in array of availableDates
-      if (date && !dateArray.includes(date)) {
+      if (date && !dateInArray) {
         // Then, update layer object with new array of dates
         def.availableDates = datesinDateRanges(def, date);
-        date = prevDateInDateRange(def, date, dateArray);
+        date = prevDateInDateRange(def, date, def.availableDates);
       }
     }
     return date;

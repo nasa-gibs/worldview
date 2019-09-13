@@ -6,7 +6,6 @@ import {
   findIndex as lodashFindIndex,
   each as lodashEach,
   isNaN as lodashIsNaN,
-  get as lodashGet,
   isArray
 } from 'lodash';
 
@@ -30,7 +29,7 @@ import lastDayOfYear from 'date-fns/last_day_of_year';
    * @param  {array} dateArray  An array of dates
    * @return {object}           The date object with normalized timeszone.
    */
-export function prevDateInDateRange (def, date, dateArray) {
+export function prevDateInDateRange(def, date, dateArray) {
   const closestAvailableDates = [];
   const currentDate = new Date(date.getTime());
 
@@ -63,15 +62,14 @@ export function datesinDateRanges(def, date) {
   let currentDate = new Date(date.getTime());
 
   lodashEach(def.dateRanges, (dateRange) => {
+    const { dateInterval } = dateRange;
     let yearDifference;
     let monthDifference;
     let dayDifference;
     let minuteDifference;
-    let dateInterval = dateRange.dateInterval;
     let minDate = new Date(dateRange.startDate);
     let maxDate = new Date(dateRange.endDate);
     // Offset timezone
-    // TODO isn't this doubling the offset??
     minDate = new Date(minDate.getTime() - (minDate.getTimezoneOffset() * 60000));
     maxDate = new Date(maxDate.getTime() - (maxDate.getTimezoneOffset() * 60000));
 
@@ -85,39 +83,35 @@ export function datesinDateRanges(def, date) {
     const minDay = minDate.getUTCDate();
     const minMinutes = minDate.getUTCMinutes();
 
-    // check/add subdaily interval for maxMinuteDate
-    let interval = 1;
-    if (def.period === 'subdaily') {
-      interval = Number(lodashGet(def, 'dateRanges[0].dateInterval'));
-    }
     const maxYearDate = new Date(maxYear + 1, maxMonth, maxDay);
     const maxMonthDate = new Date(maxYear, maxMonth + 1, maxDay);
     const maxDayDate = new Date(maxYear, maxMonth, maxDay + 1);
-    let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + interval);
+    let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + dateInterval);
 
+    let i;
     // Yearly layers
     if (def.period === 'yearly') {
       if (currentDate >= minDate && currentDate <= maxYearDate) {
-        yearDifference = self.yearDiff(minDate, maxYearDate);
+        yearDifference = util.yearDiff(minDate, maxYearDate);
       }
-      for (dateInterval = 0; dateInterval <= (yearDifference + 1); dateInterval++) {
-        dateArray.push(new Date(minYear + dateInterval, minMonth, minDay, 0, 0, 0));
+      for (i = 0; i <= (yearDifference + 1); i++) {
+        dateArray.push(new Date(minYear + dateInterval, minMonth, minDay));
       }
     // Monthly layers
     } else if (def.period === 'monthly') {
       if (currentDate >= minDate && currentDate <= maxMonthDate) {
         monthDifference = util.monthDiff(minDate, maxMonthDate);
       }
-      for (dateInterval = 0; dateInterval <= (monthDifference + 1); dateInterval++) {
-        dateArray.push(new Date(minYear, minMonth + dateInterval, minDay, 0, 0, 0));
+      for (i = 0; i <= (monthDifference + 1); i++) {
+        dateArray.push(new Date(minYear, minMonth + i, minDay));
       }
     // Daily layers
     } else if (def.period === 'daily') {
       if (currentDate >= minDate && currentDate <= maxDayDate) {
         dayDifference = util.dayDiff(minDate, maxDayDate);
       }
-      for (dateInterval = 0; dateInterval <= (dayDifference + 1); dateInterval++) {
-        dateArray.push(new Date(minYear, minMonth, minDay + dateInterval, 0, 0, 0));
+      for (i = 0; i <= (dayDifference + 1); i++) {
+        dateArray.push(new Date(minYear, minMonth, minDay + i));
       }
     // Subdaily layers
     } else if (def.period === 'subdaily') {
@@ -132,14 +126,15 @@ export function datesinDateRanges(def, date) {
       if (currentDate >= minDate && currentDate <= maxMinuteDate) {
         minuteDifference = util.minuteDiff(minDate, maxMinuteDate);
       }
-      for (dateInterval = 0; dateInterval <= (minuteDifference + 1); dateInterval += interval) {
+      for (i = 0; i <= (minuteDifference + 1); i += dateInterval) {
         dateArray.push(
           new Date(
             minDate.getUTCFullYear(),
             minDate.getUTCMonth(),
             minDate.getUTCDate(),
             minDate.getUTCHours(),
-            minDate.getUTCMinutes() + dateInterval, 0
+            minDate.getUTCMinutes() + i,
+            0
           )
         );
       }
