@@ -399,6 +399,7 @@ export function mapui(models, config, store, ui) {
     var layersState = state.layers;
     var activeGroupStr = state.compare.activeString;
     var activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
+    console.log(layers)
     var updateGraticules = function(defs, groupName) {
       lodashEach(defs, function(def) {
         if (isGraticule(def, state.proj.id)) {
@@ -418,6 +419,7 @@ export function mapui(models, config, store, ui) {
     };
     layers.forEach(function(layer) {
       var group = layer.get('group');
+      console.log(group)
       // Not in A|B
       if (layer.wv) {
         renderable = isRenderableLayer(
@@ -610,8 +612,16 @@ export function mapui(models, config, store, ui) {
           compareMapUi.update(activeLayerStr);
         }
       } else {
-        const index = findLayerIndex(def);
+        layerGroups = self.selected.getLayers().getArray();
+        console.log(layerGroups)
+
+        let index = findLayerIndex(def);
+        if (index === -1) {
+          index = 1;
+        }
         self.selected.getLayers().setAt(index, createLayer(def));
+        let post = self.selected.getLayers().getArray();
+        console.log(post);
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         var vectorStyles = config.vectorStyles;
@@ -698,11 +708,26 @@ export function mapui(models, config, store, ui) {
     layerGroup = layerGroup || self.selected;
     var layers = layerGroup.getLayers().getArray();
 
+    // layerGroup instanceof ol.layer.Group
+    console.log(layers, def.id)
+
     var index = lodashFindIndex(layers, {
       wv: {
         id: def.id
       }
     });
+
+    console.log(index)
+    if (index === -1) {
+      for (const layerIndex in layers) {
+        const name = layers[layerIndex].constructor.name;
+        console.log(name, layerIndex);
+        if (name === 'LayerGroup') {
+          console.log(layers[layerIndex])
+          return layerIndex;
+        }
+      }
+    }
     return index;
   };
 

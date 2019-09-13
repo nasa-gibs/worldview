@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-East_ABI_Daytime_Microphysics_v0_NRT": {
-            "id":       "GOES-East_ABI_Daytime_Microphysics_v0_NRT",
+        "GOES-East_ABI_Daytime_Microphysics": {
+            "id":       "GOES-East_ABI_Daytime_Microphysics",
             "title":    "Daytime Microphysics (ABI, GOES-East)",
             "subtitle":    "GOES-East / ABI",
-            "description": "goes/GOES-East_ABI_Daytime_Microphysics_v0_NRT",
+            "description": "goes/GOES-East_ABI_Daytime_Microphysics",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [

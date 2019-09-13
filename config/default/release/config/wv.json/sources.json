@@ -6,6 +6,12 @@
         "GIBS:antarctic": {
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg3031/best/wmts.cgi"
         },
+        "GIBS:arctic:nrt": {
+            "url": "https://sit.gibs.earthdata.nasa.gov/wmts/epsg3413/nrt/wmts.cgi"
+        },
+        "GIBS:antarctic:nrt": {
+            "url": "https://sit.gibs.earthdata.nasa.gov/wmts/epsg3031/nrt/wmts.cgi"
+        },
         "GIBS:geographic": {
             "url": "https://gibs-{a-c}.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi"
         },

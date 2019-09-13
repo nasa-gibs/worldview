@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-West_ABI_Band7_Upper_Level_Water_Vapor_v0_NRT": {
-            "id":       "GOES-West_ABI_Band7_Upper_Level_Water_Vapor_v0_NRT",
-            "title":    "Upper-Level Water Vapor (6.2 µm, Band 8, ABI, GOES-West)",
+        "GOES-West_ABI_Band13_Clean_Infrared": {
+            "id":       "GOES-West_ABI_Band13_Clean_Infrared",
+            "title":    "Clean Infrared (10.3 µm, Band 13, ABI, GOES-West)",
             "subtitle":    "GOES-West / ABI",
-            "description": "goes/GOES-West_ABI_Band7_Upper_Level_Water_Vapor_v0_NRT",
+            "description": "goes/GOES-West_ABI_Band13_Clean_Infrared",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [

@@ -1,5 +1,4 @@
 import util from '../util/util';
-import OlCollection from 'ol/Collection';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -48,10 +47,10 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     group = options.group || null;
     date = self.closestDate(def, options);
     key = self.layerKey(def, options, state);
+    console.log(key)
     proj = state.proj.selected;
     layer = cache.getItem(key);
-    const isGranule = !!(def.tags && def.tags.contains('granule'));
-    let granuleLayer;
+    console.log(cache, layer)
 
     if (!layer) {
       // layer is not in the cache
@@ -67,30 +66,59 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
+        const layerGroupEntries = [];
+        // layer = createLayerWMTS(def, options, null, state);
         const createdLayer = createLayerWMTS(def, options, null, state);
+        layerGroupEntries[0] = createdLayer;
 
         // TODO: if granule, add date to granuleLayers object
         // TODO: zIndex may be applied here later as options passed to create layer(above)
 
         // TODO: need to move away from new cache using object and use the currently
         // TODO: implemented cache
+        const isGranule = def.tags && def.tags.contains('granule');
         if (isGranule) {
           const dateISO = date.toISOString();
           if (self.granuleLayers[def.id] === undefined) {
-            self.granuleLayers[def.id] = {
-              dates: {
-                [dateISO]: key
-              }
+            self.granuleLayers[def.id] = [date];
+            self.granuleLayers[def.id].dates = {
+              [dateISO]: createdLayer
             };
           } else {
             if (self.granuleLayers[def.id].dates[dateISO] === undefined) {
-              self.granuleLayers[def.id].dates[dateISO] = key;
+              self.granuleLayers[def.id].push(date);
+              self.granuleLayers[def.id].dates[dateISO] = createdLayer;
             }
           }
-          granuleLayer = createdLayer;
+
+          const granuleArrayDates = self.granuleLayers[def.id];
+          console.log(granuleArrayDates)
+          for (const granuleDate of granuleArrayDates) {
+            // don't show future granule dates
+            const isPastDate = granuleDate > date;
+            const dateISO = granuleDate.toISOString();
+            console.log(isPastDate, granuleDate !== date)
+            if (granuleDate !== date && !isPastDate) {
+              // add to layer group
+              const layer = self.granuleLayers[def.id].dates[dateISO];
+              layerGroupEntries.push(layer);
+            }
+          }
         }
 
-        layer = createdLayer;
+        // let op = {
+        //   date: new Date('Tue Jan 01 2019 16:24:03 GMT-0500 (Eastern Standard Time)')
+        // }
+        // let layer1 = createLayerWMTS(def, op, null, state, -1);
+        // let layer2 = createLayerWMTS(def, options, null, state, -2);
+        // let layer3 = createLayerWMTS(def, options, null, state, -3);
+
+        // layer = new OlLayerGroup({
+        //   layers: [layer, layer1, layer2, layer3]
+        // });
+        layer = new OlLayerGroup({
+          layers: layerGroupEntries
+        });
         if (
           proj.id === 'geographic' &&
           (def.wrapadjacentdays === true || def.wrapX)
@@ -143,56 +171,13 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       } else {
         throw new Error('Unknown layer type: ' + def.type);
       }
+      console.log('HIT')
       layer.wv = attributes;
       cache.setItem(key, layer);
       layer.setVisible(false);
     }
-    if (isGranule) {
-      const granuleArrayDates = Object.keys(self.granuleLayers[def.id].dates);
-      console.log(granuleArrayDates, !granuleLayer, granuleArrayDates.length > 1)
-      if (granuleArrayDates.length > 1) {
-    // if (isGranule) {
-      console.log('compile layergroup', self.granuleLayers)
-      let layerGroupEntries = [];
-      // const granuleArrayDates = Object.keys(self.granuleLayers[def.id].dates);
-      for (const granuleDate of granuleArrayDates) {
-        console.log(granuleDate)
-        // don't show future granule dates
-        const isPastDate = new Date(granuleDate) > date;
-        if (granuleDate === date.toISOString()) {
-          const layerCacheKey = self.granuleLayers[def.id].dates[granuleDate];
-          const layerCache = cache.getItem(layerCacheKey);
-          if (layerCache) {
-            layerGroupEntries.push(layerCache);
-          } else {
-            layerGroupEntries.push(layer);
-          }
-        } else {
-          if (!isPastDate) {
-            // add to layer group
-            const layerCacheKey = self.granuleLayers[def.id].dates[granuleDate];
-            const layer = cache.getItem(layerCacheKey);
-            layerGroupEntries.push(layer);
-          }
-        }
-      }
-      let col = new OlCollection(layerGroupEntries)
-      layer = new OlLayerGroup({
-        layers: col
-      });
-      layer.set('group', 'active');
-    } else {
-      layer = new OlLayerGroup({
-        layers: [layer]
-      });
-      // TODO: need to set group
-      layer.set('group', 'active');
-    }
-  }
     layer.setOpacity(def.opacity || 1.0);
-
-    console.log(isGranule, layer.type);
-    console.log(layer, layer.getLayersArray())
+    console.log(layer)
     // TileLayer
     return layer;
   };
@@ -296,7 +281,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers WMTS layer
    */
-  var createLayerWMTS = function(def, options, day, state) {
+  var createLayerWMTS = function(def, options, day, state, zIndex) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var proj, source, matrixSet, matrixIds, urlParameters, date, extent, start;
     proj = state.proj.selected;
@@ -361,13 +346,12 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       var lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
-    let olTile = new OlLayerTile({
+    return new OlLayerTile({
       preload: Infinity,
       extent: extent,
-      source: new OlSourceWMTS(sourceOptions)
+      source: new OlSourceWMTS(sourceOptions),
+      zIndex: zIndex
     });
-    console.log(olTile, extent);
-    return olTile;
   };
 
   /**

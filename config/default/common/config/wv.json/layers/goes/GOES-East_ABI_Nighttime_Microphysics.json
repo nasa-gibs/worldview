@@ -1,10 +1,10 @@
 {
     "layers": {
-        "GOES-East_ABI_Nighttime_Microphysics_v0_NRT": {
-            "id":       "GOES-East_ABI_Nighttime_Microphysics_v0_NRT",
+        "GOES-East_ABI_Nighttime_Microphysics": {
+            "id":       "GOES-East_ABI_Nighttime_Microphysics",
             "title":    "Nighttime Microphysics (ABI, GOES-East)",
             "subtitle":    "GOES-East / ABI",
-            "description": "goes/GOES-East_ABI_Nighttime_Microphysics_v0_NRT",
+            "description": "goes/GOES-East_ABI_Nighttime_Microphysics",
             "tags":     "GOES subdaily",
             "group":    "overlays",
             "layergroup": [
