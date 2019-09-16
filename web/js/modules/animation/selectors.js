@@ -2,10 +2,7 @@ import { each as lodashEach } from 'lodash';
 import util from '../../util/util';
 import {
   imageUtilGetCoordsFromPixelValues,
-  imageUtilGetLayerOpacities,
-  imageUtilGetLayerWrap,
-  bboxWMS13,
-  imageUtilGetLayers
+  getDownloadUrl
 } from '../image-download/util';
 import { getLayers } from '../layers/selectors';
 import { timeScaleFromNumberKey } from '../date/constants';
@@ -38,20 +35,12 @@ export function getImageArray(
   let j = 0;
   let src;
   let strDate;
-  const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
-  let layersArray;
-  let layerWraps;
-  let opacities;
-  const crs = proj.selected.crs;
-  const imgFormat = 'image/jpeg';
-  let products = getProducts(layers[activeString], fromDate, state);
+  let products;
   const useDelta = customSelected && customDelta ? customDelta : delta;
   const useInterval = customSelected ? customInterval : interval;
   const increment = customSelected
     ? timeScaleFromNumberKey[customInterval]
     : timeScaleFromNumberKey[interval];
-  const height = dimensions.height;
-  const width = dimensions.width;
 
   while (current <= toDate) {
     j++;
@@ -62,26 +51,8 @@ export function getImageArray(
     }
     products = getProducts(layers[activeString], current, state);
 
-    layersArray = imageUtilGetLayers(products, proj.id);
-    layerWraps = imageUtilGetLayerWrap(products);
-    opacities = imageUtilGetLayerOpacities(products);
-
-    const params = [
-      'REQUEST=GetSnapshot',
-      `TIME=${util.toISOStringSeconds(current)}`,
-      `BBOX=${bboxWMS13(lonlats, crs)}`,
-      `CRS=${crs}`,
-      `LAYERS=${layersArray.join(',')}`,
-      `WRAP=${layerWraps.join(',')}`,
-      `FORMAT=${imgFormat}`,
-      `WIDTH=${width}`,
-      `HEIGHT=${height}`
-    ];
-    if (opacities.length > 0) {
-      params.push(`OPACITIES=${opacities.join(',')}`);
-    }
-
-    const dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
+    const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
+    const dlURL = getDownloadUrl(url, proj, products, lonlats, dimensions, current);
 
     src = util.format(dlURL, strDate);
     a.push({
