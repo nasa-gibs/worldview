@@ -1,5 +1,4 @@
 import util from '../util/util';
-import OlCollection from 'ol/Collection';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -12,6 +11,7 @@ import SourceVectorTile from 'ol/source/VectorTile';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
+import Cache from 'cachai';
 import { lookupFactory } from '../ol/lookupimagetile';
 import {
   isActive as isPaletteActive,
@@ -30,7 +30,33 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.init = function() {
     self.extentLayers = [];
     self.granuleLayers = {};
+    // granule cache since clearingLayers/reordering layers may require many granule requests
+    // and the parent 'cache' is cleared on reload/reorder
+    self.granuleCache = new Cache(400);
   };
+
+  /**
+   * Find index for date string to add to sorted array of date strings
+   *
+   * @method getIndexForSortedInsert
+   * @static
+   * @param {object} array - array of dates (already sorted)
+   * @param {string} date - date string ISO format
+   * @returns {number} index
+   */
+  const getIndexForSortedInsert = (array, date) => {
+    const newDate = new Date(date);
+    const len = array.length;
+    if (new Date(array[0]) > newDate) {
+      return 0;
+    }
+    let i = 1;
+    while (i < len && !(new Date(array[i]) > newDate && new Date(array[i - 1]) <= newDate)) {
+      i = i + 1;
+    }
+    return i;
+  };
+
   /**
    * Create a new OpenLayers Layer
    *
@@ -49,9 +75,12 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     date = self.closestDate(def, options);
     key = self.layerKey(def, options, state);
     proj = state.proj.selected;
-    layer = cache.getItem(key);
     const isGranule = !!(def.tags && def.tags.contains('granule'));
-    let granuleLayer;
+    if (isGranule) {
+      layer = self.granuleCache.getItem(key);
+    } else {
+      layer = cache.getItem(key);
+    }
 
     if (!layer) {
       // layer is not in the cache
@@ -68,28 +97,25 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       lodashMerge(def, def.projections[proj.id]);
       if (def.type === 'wmts') {
         const createdLayer = createLayerWMTS(def, options, null, state);
-
-        // TODO: if granule, add date to granuleLayers object
-        // TODO: zIndex may be applied here later as options passed to create layer(above)
-
-        // TODO: need to move away from new cache using object and use the currently
-        // TODO: implemented cache
         if (isGranule) {
           const dateISO = date.toISOString();
+          // add to granule layer date table
           if (self.granuleLayers[def.id] === undefined) {
             self.granuleLayers[def.id] = {
+              sortedDates: [dateISO],
               dates: {
                 [dateISO]: key
               }
             };
           } else {
             if (self.granuleLayers[def.id].dates[dateISO] === undefined) {
+              // add new dateISO to granule layer object and to sorted array by finding insert index O(n)
+              const dateArray = [...self.granuleLayers[def.id].sortedDates];
+              self.granuleLayers[def.id].sortedDates.splice(getIndexForSortedInsert(dateArray, dateISO), 0, dateISO);
               self.granuleLayers[def.id].dates[dateISO] = key;
             }
           }
-          granuleLayer = createdLayer;
         }
-
         layer = createdLayer;
         if (
           proj.id === 'geographic' &&
@@ -144,56 +170,63 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         throw new Error('Unknown layer type: ' + def.type);
       }
       layer.wv = attributes;
-      cache.setItem(key, layer);
+      if (isGranule) {
+        self.granuleCache.setItem(key, layer);
+      } else {
+        cache.setItem(key, layer);
+      }
       layer.setVisible(false);
     }
+    // ? assuming full day coverage at 6 minutes, 240 layer tiles per layer group day
+    // ? is this acceptable? how to test max? is there a max? (not documented at least)
+
+    // ! granule dates may become too large a collection for multiple days,
+    // ! an early optimization would be to set a higher key of UTC date (2019-05-02)
+    // ! and add dates to each respective date
     if (isGranule) {
-      const granuleArrayDates = Object.keys(self.granuleLayers[def.id].dates);
-      console.log(granuleArrayDates, !granuleLayer, granuleArrayDates.length > 1)
-      if (granuleArrayDates.length > 1) {
-    // if (isGranule) {
-      console.log('compile layergroup', self.granuleLayers)
-      let layerGroupEntries = [];
-      // const granuleArrayDates = Object.keys(self.granuleLayers[def.id].dates);
-      for (const granuleDate of granuleArrayDates) {
-        console.log(granuleDate)
-        // don't show future granule dates
-        const isPastDate = new Date(granuleDate) > date;
-        if (granuleDate === date.toISOString()) {
-          const layerCacheKey = self.granuleLayers[def.id].dates[granuleDate];
-          const layerCache = cache.getItem(layerCacheKey);
-          if (layerCache) {
-            layerGroupEntries.push(layerCache);
-          } else {
-            layerGroupEntries.push(layer);
-          }
-        } else {
-          if (!isPastDate) {
-            // add to layer group
+      const sortedDateCollection = self.granuleLayers[def.id].sortedDates;
+      if (sortedDateCollection.length > 1) {
+        const layerGroupEntries = [];
+        for (const granuleDate of sortedDateCollection) {
+          // don't show future granule dates
+          const isPastDate = new Date(granuleDate) < date;
+          // if granule for current date time
+          if (granuleDate === date.toISOString()) {
+            // check for layer in granuleCache
             const layerCacheKey = self.granuleLayers[def.id].dates[granuleDate];
-            const layer = cache.getItem(layerCacheKey);
-            layerGroupEntries.push(layer);
+            const layerCache = self.granuleCache.getItem(layerCacheKey);
+            if (layerCache) {
+              layerGroupEntries.push(layerCache);
+            } else {
+              layerGroupEntries.push(layer);
+            }
+          } else {
+            if (isPastDate) {
+              // add to layer group
+              const layerCacheKey = self.granuleLayers[def.id].dates[granuleDate];
+              const layer = self.granuleCache.getItem(layerCacheKey);
+              layerGroupEntries.push(layer);
+            }
           }
         }
+        // console.log(layerGroupEntries)
+        layer = new OlLayerGroup({
+          layers: layerGroupEntries
+        });
+        layer.set('group', 'active');
+      } else {
+        // initial single layer in layer group
+        layer = new OlLayerGroup({
+          layers: [layer]
+        });
+        // TODO: need to set group for granules
+        // name to include 1) def.id 2) active or activeB 3) granule specific prefix
+        // rough example: 'granule-active-VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT'
+        layer.set('group', 'active');
       }
-      let col = new OlCollection(layerGroupEntries)
-      layer = new OlLayerGroup({
-        layers: col
-      });
-      layer.set('group', 'active');
-    } else {
-      layer = new OlLayerGroup({
-        layers: [layer]
-      });
-      // TODO: need to set group
-      layer.set('group', 'active');
     }
-  }
     layer.setOpacity(def.opacity || 1.0);
-
-    console.log(isGranule, layer.type);
-    console.log(layer, layer.getLayersArray())
-    // TileLayer
+    // TileLayer or LayerGroup
     return layer;
   };
 
@@ -361,12 +394,11 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       var lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
-    let olTile = new OlLayerTile({
+    const olTile = new OlLayerTile({
       preload: Infinity,
       extent: extent,
       source: new OlSourceWMTS(sourceOptions)
     });
-    console.log(olTile, extent);
     return olTile;
   };
 

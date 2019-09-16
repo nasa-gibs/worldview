@@ -475,8 +475,23 @@ export function mapui(models, config, store, ui) {
       strokeStyle.setColor('rgba(255, 255, 255,' + action.opacity + ')');
       self.selected.render();
     } else {
-      const layer = findLayer(def, activeStr);
-      layer.setOpacity(action.opacity);
+      const isGranule = !!(def.tags && def.tags.contains('granule'));
+      if (isGranule) {
+        var layersCollection = self.selected.getLayers().getArray();
+        for (const layerIndex in layersCollection) {
+          const name = layersCollection[layerIndex].constructor.name;
+          if (name === 'LayerGroup') {
+            const layerGroup = layersCollection[layerIndex];
+            const layerGroupCollection = layerGroup.getLayers().getArray();
+            if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
+              layerGroup.setOpacity(action.opacity);
+            }
+          }
+        }
+      } else {
+        const layer = findLayer(def, activeStr);
+        layer.setOpacity(action.opacity);
+      }
       updateLayerVisibilities();
     }
   };
@@ -613,15 +628,16 @@ export function mapui(models, config, store, ui) {
         }
       } else {
         layerGroups = self.selected.getLayers().getArray();
-        console.log(layerGroups)
+        // console.log(layerGroups)
 
-        let index = findLayerIndex(def);
-        if (index === -1) {
-          index = 1;
-        }
+        const index = findLayerIndex(def);
+        // console.log(index)
+        // if (index === -1) {
+        //   index = 1;
+        // }
         self.selected.getLayers().setAt(index, createLayer(def));
-        let post = self.selected.getLayers().getArray();
-        console.log(post);
+        // let post = self.selected.getLayers().getArray();
+        // console.log(post);
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         var vectorStyles = config.vectorStyles;
@@ -676,14 +692,18 @@ export function mapui(models, config, store, ui) {
       }
     });
 
+    console.log(def, layers, layer, layerGroupStr)
+
     if (!layer && layers.length && layers[0].get('group')) {
       let olGroupLayer;
       lodashEach(layers, layerGroup => {
         if (layerGroup.get('group') === layerGroupStr) {
           olGroupLayer = layerGroup;
+          console.log(olGroupLayer)
         }
       });
       const subGroup = olGroupLayer.getLayers().getArray();
+      console.log(subGroup)
       layer = lodashFind(subGroup, {
         wv: {
           id: def.id
@@ -708,27 +728,26 @@ export function mapui(models, config, store, ui) {
     layerGroup = layerGroup || self.selected;
     var layers = layerGroup.getLayers().getArray();
 
-    // layerGroup instanceof ol.layer.Group
-    console.log(layers, def.id)
-
-    var index = lodashFindIndex(layers, {
-      wv: {
-        id: def.id
-      }
-    });
-
-    console.log(index)
-    if (index === -1) {
+    const isGranule = !!(def.tags && def.tags.contains('granule'));
+    if (isGranule) {
       for (const layerIndex in layers) {
         const name = layers[layerIndex].constructor.name;
-        console.log(name, layerIndex);
         if (name === 'LayerGroup') {
-          console.log(layers[layerIndex])
-          return layerIndex;
+          const layerGroup = layers[layerIndex];
+          const layerGroupCollection = layerGroup.getLayers().getArray();
+          if (layerGroupCollection[0].wv && def.id === layerGroupCollection[0].wv.id) {
+            return layerIndex;
+          }
         }
       }
+    } else {
+      var index = lodashFindIndex(layers, {
+        wv: {
+          id: def.id
+        }
+      });
+      return index;
     }
-    return index;
   };
 
   /*
