@@ -2,10 +2,7 @@ import React from 'react';
 import {
   imageSizeValid,
   getDimensions,
-  imageUtilGetLayers,
-  imageUtilGetLayerOpacities,
-  imageUtilGetLayerWrap,
-  bboxWMS13
+  getDownloadUrl
 } from '../../modules/image-download/util';
 
 import SelectionList from '../util/selector';
@@ -46,36 +43,22 @@ export default class ImageResSelection extends React.Component {
     };
   }
 
-  onDownload(imgWidth, imgHeight) {
-    const { getLayers, url, lonlats, crs, projection, date } = this.props;
+  onDownload(width, height) {
+    const { getLayers, url, lonlats, projection, date } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
     const time = new Date(date.getTime());
-    if (!this.props.hasSubdailyLayers) {
-      time.setUTCHours(0, 0, 0, 0);
-    }
-    const layerList = getLayers();
-    const layerWraps = imageUtilGetLayerWrap(layerList);
-    const layers = imageUtilGetLayers(layerList, projection.id);
-    const opacities = imageUtilGetLayerOpacities(layerList);
-    const params = [
-      'REQUEST=GetSnapshot',
-      `TIME=${util.toISOStringSeconds(time)}`,
-      `BBOX=${bboxWMS13(lonlats, crs)}`,
-      `CRS=${crs}`,
-      `LAYERS=${layers.join(',')}`,
-      `WRAP=${layerWraps.join(',')}`,
-      `FORMAT=${fileType}`,
-      `WIDTH=${imgWidth}`,
-      `HEIGHT=${imgHeight}`
-    ];
 
-    if (opacities.length > 0) {
-      params.push(`OPACITIES=${opacities.join(',')}`);
-    }
-    if (isWorldfile === 'true') {
-      params.push('WORLDFILE=true');
-    }
-    const dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
+    const layerList = getLayers();
+    const dlURL = getDownloadUrl(
+      url,
+      projection,
+      layerList,
+      lonlats,
+      { width, height },
+      time,
+      isWorldfile
+    );
+
     if (url) {
       util.metrics('lc=' + encodeURIComponent(dlURL));
       window.open(dlURL, '_blank');
@@ -85,7 +68,7 @@ export default class ImageResSelection extends React.Component {
     googleTagManager.pushEvent({
       event: 'image_download',
       layers: {
-        activeCount: layers.length
+        activeCount: layerList.length
       },
       image: {
         resolution: RESOLUTION_KEY[resolution],

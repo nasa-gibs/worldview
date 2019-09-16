@@ -1,7 +1,42 @@
 import lodashEach from 'lodash/each';
+import util from '../../util/util';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
+
+export function getDownloadUrl(url, proj, layers, lonlats, dimensions, dateTime, isWorldfile) {
+  const { crs } = proj.selected;
+  const layersArray = imageUtilGetLayers(layers, proj.id);
+  const layerWraps = imageUtilGetLayerWrap(layers);
+  const opacities = imageUtilGetLayerOpacities(layers);
+  const imgFormat = 'image/jpeg';
+  const { height, width } = dimensions;
+
+  // TODO get real value
+  const hasSubdailyLayers = false;
+  if (!hasSubdailyLayers) {
+    dateTime.setUTCHours(0, 0, 0, 0);
+  }
+
+  const params = [
+    'REQUEST=GetSnapshot',
+    `TIME=${util.toISOStringSeconds(dateTime)}`,
+    `BBOX=${bboxWMS13(lonlats, crs)}`,
+    `CRS=${crs}`,
+    `LAYERS=${layersArray.join(',')}`,
+    `WRAP=${layerWraps.join(',')}`,
+    `FORMAT=${imgFormat}`,
+    `WIDTH=${width}`,
+    `HEIGHT=${height}`
+  ];
+  if (opacities.length > 0) {
+    params.push(`OPACITIES=${opacities.join(',')}`);
+  }
+  if (isWorldfile === 'true') {
+    params.push('WORLDFILE=true');
+  }
+  return url + '?' + params.join('&') + `&ts=${Date.now()}`;
+}
 
 /*
  * Estimate appropriate Resolution based on zoom
