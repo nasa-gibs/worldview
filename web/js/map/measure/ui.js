@@ -21,7 +21,7 @@ import {
 } from './util.js';
 import { toggleMeasureActive } from '../../modules/measure/actions';
 
-export function measure (map, mapUiEvents, store) {
+export function measure(map, mapUiEvents, store) {
   let draw;
   let sketch;
   let measureTooltipElement;
@@ -116,7 +116,7 @@ export function measure (map, mapUiEvents, store) {
     map.addOverlay(measureTooltip);
   }
 
-  function drawStartCallback (evt) {
+  function drawStartCallback(evt) {
     let tooltipCoord;
     mapUiEvents.trigger('disable-click-zoom');
     sketch = evt.feature;
@@ -132,7 +132,7 @@ export function measure (map, mapUiEvents, store) {
     });
   };
 
-  function drawEndCallback (evt) {
+  function drawEndCallback(evt) {
     const featureGeom = evt.feature.getGeometry();
     allGeometries[featureGeom.ol_uid] = featureGeom;
     measureTooltipElement.className = 'tooltip-measure tooltip-static';
@@ -146,7 +146,7 @@ export function measure (map, mapUiEvents, store) {
    * lines and polygon edges.  Otherwise pass through unaffected.
    * @param {*} feature
    */
-  function styleGeometryFn (feature) {
+  function styleGeometryFn(feature) {
     const geometry = feature.getGeometry();
     if (!useGreatCircle) {
       return geometry;
@@ -181,7 +181,7 @@ export function measure (map, mapUiEvents, store) {
    * Go through every tooltip and recalculate the measurement based on
    * current settings of unit of measurement and great circle
    */
-  function recalculateAllMeasurements () {
+  function recalculateAllMeasurements() {
     for (const id in allMeasureTooltips) {
       const geomForTooltip = allGeometries[id];
       const tooltipElement = allMeasureTooltips[id].element.children[0];

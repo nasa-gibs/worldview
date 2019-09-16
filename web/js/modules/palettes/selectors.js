@@ -154,6 +154,7 @@ var updateLookup = function(layerId, palettesObj, state) {
       minLabel: oldLegend.minLabel,
       maxLabel: oldLegend.maxLabel,
       tooltips: oldLegend.tooltips,
+      ticks: oldLegend.ticks,
       units: oldLegend.units,
       type: entries.type,
       title: entries.title,

@@ -51,7 +51,7 @@
 .wv-palettes-title,
 .wv-running-category-label,
 .wv-running-label {
-  font-size: 0.7em;
+  font-size: 10px;
   bottom: 0;
   width: auto;
 }
@@ -77,7 +77,7 @@
 .layer-hidden .wv-running-category-label,
 .layer-hidden .wv-running-label {
   color: #999;
-  font-size: 0.7em;
+  font-size: 10px;
 }
 
 .wv-palettes-title {
@@ -143,19 +143,18 @@
 }
 
 .wv-palettes-panel .wv-running-bar::before {
-  top: 6px;
-  left: -5px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5.5px solid #000;
+  top: -1px;
+  left: -4.25px;
+  border-left: 5.5px solid transparent;
+  border-right: 5.5px solid transparent;
+  border-top: 5.5px solid #000;
 }
 
 .wv-palettes-panel .wv-running-bar::after {
-  top: 7px;
-  left: -4px;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-bottom: 4px solid #dedede;
+  left: -3.25px;
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+  border-top: 4px solid #dedede;
 }
 
 .wv-palettes-legend.wv-running .wv-palettes-max,
@@ -178,8 +177,7 @@
 
 .wv-palettes-colorbar {
   width: 231px;
-  height: 12px;
-  border: 1px solid #404040;
+  height: 24px;
   margin-bottom: 13px;
   max-width: 231px;
   margin-left: 5px;

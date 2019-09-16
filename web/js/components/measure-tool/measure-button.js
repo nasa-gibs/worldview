@@ -31,7 +31,7 @@ class MeasureButton extends React.Component {
     this.dismissAlert = this.dismissAlert.bind(this);
   }
 
-  onButtonClick (evt) {
+  onButtonClick(evt) {
     const { openModal } = this.props;
     const isTouchDevice = evt.type === 'touchend';
     evt.stopPropagation();

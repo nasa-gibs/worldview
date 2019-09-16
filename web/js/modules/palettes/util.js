@@ -78,6 +78,60 @@ export function drawPaletteOnCanvas(
     });
   }
 }
+/**
+ * Redraw canvas with selected colormap
+ * @param {String} ctxStr | String of wanted cavnas
+ * @param {Object} checkerBoardPattern | Background for canvas threshold
+ * @param {Array} colors | array of color values
+ */
+export function drawSidebarPaletteOnCanvas(
+  ctx,
+  checkerBoardPattern,
+  colors,
+  width
+) {
+  const barHeight = 12;
+  const colorbarStartY = barHeight - 5;
+  ctx.fillStyle = checkerBoardPattern;
+  ctx.fillRect(1, colorbarStartY, width - 1, barHeight);
+
+  if (colors) {
+    var bins = colors.length;
+    var binWidth = (width - 2) / bins;
+    var drawWidth = Math.ceil(binWidth);
+    var thickness = 0.5;
+    ctx.strokeStyle = '#000';
+
+    colors.forEach((color, i) => {
+      ctx.fillStyle = util.hexToRGBA(color);
+      ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, barHeight);
+    });
+    ctx.rect(2 - (thickness), (colorbarStartY) - (thickness), width - 3 + (thickness * 2), (barHeight) + (thickness * 2));
+    ctx.stroke();
+  }
+}
+export function drawTicksOnCanvas(ctx, legend, width) {
+  const canvasHeight = 24;
+  const ticks = legend.ticks;
+  const colors = legend.colors;
+  const bins = colors.length;
+  const binWidth = width / bins;
+  const drawWidth = Math.ceil(binWidth);
+  const halfWidth = drawWidth / 2;
+  if (ticks && ticks.length > 0 && bins > 100) {
+    ctx.beginPath();
+    ticks.forEach(tick => {
+      const start = binWidth * tick;
+      const midpoint = Math.floor((start + halfWidth)) + 0.5; // https://stackoverflow.com/a/8696641/4589331
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 0.8;
+      ctx.moveTo(midpoint, canvasHeight - 4);
+      ctx.lineTo(midpoint, canvasHeight - 1);
+    });
+    ctx.stroke();
+    ctx.closePath();
+  }
+}
 export function lookup(sourcePalette, targetPalette) {
   var lookup = {};
   lodashEach(sourcePalette.colors, function(sourceColor, index) {

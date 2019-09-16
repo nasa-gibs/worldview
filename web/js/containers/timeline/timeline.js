@@ -731,7 +731,7 @@ class Timeline extends React.Component {
   checkAndUpdateAppNow() {
     const { updateAppNow } = this.props;
     const self = this;
-    const ensureCanUpdate = function () {
+    const ensureCanUpdate = function() {
       return new Promise(function(resolve, reject) {
         (function waitForSafeUpdate() {
           const {

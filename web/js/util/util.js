@@ -755,7 +755,7 @@ export default (function(self) {
    * @param {object*} messages Messages to display to the end user.
    */
   self.warn = (console && console.warn && console.warn.bind)
-    ? console.warn.bind(console) : function() {};
+    ? console.warn.bind(console) : function() { };
 
   self.hexToRGB = function(str) {
     return 'rgb(' +
@@ -1241,8 +1241,8 @@ export default (function(self) {
     var currentDate = new Date(date.getTime());
     if (!dateArray) return date;
     if ((def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
-        (def.period === 'yearly' && ((currentDate.getDate() === 1 &&
-          currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) return date;
+      (def.period === 'yearly' && ((currentDate.getDate() === 1 &&
+        currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) return date;
     // Return an array of the closest available dates within the range
     var closestAvailableDates = [];
     lodashEach(dateArray, function(rangeDate) {

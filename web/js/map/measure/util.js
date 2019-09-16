@@ -31,7 +31,7 @@ const getArcLine = (p1, p2) => {
  * applying a great circle arc transformation
  * @param {*} geom - the geometry object to apply great circle arc transformation to
  */
-export function transformLineStringArc (geom, projection) {
+export function transformLineStringArc(geom, projection) {
   const coords = [];
   const transformedGeom = geom.clone().transform(projection, referenceProjection);
 
@@ -48,7 +48,7 @@ export function transformLineStringArc (geom, projection) {
  * great circle arc
  * @param {*} geom - the geometry object to apply great circle arc transformation to
  */
-export function transformPolygonArc (geom, projection) {
+export function transformPolygonArc(geom, projection) {
   let coords = [];
   const transformedGeom = geom.clone().transform(projection, referenceProjection);
   const polyCoords = transformedGeom.getCoordinates()[0];
@@ -146,7 +146,7 @@ export function getRhumbLineArea(polygon, projection) {
  * @param {*} factor
  * @return {String} - The measurement, converted based on factor and locale
  */
-export function roundAndLocale (measurement, factor) {
+export function roundAndLocale(measurement, factor) {
   factor = factor || 1;
   return (Math.round(measurement / factor * 100) / 100).toLocaleString();
 };
