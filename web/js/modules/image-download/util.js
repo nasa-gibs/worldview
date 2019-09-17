@@ -13,7 +13,7 @@ const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
  * @param {Date} dateTime - current application dateTime
  * @returns {Date}
  */
-const getLatestIntervalTime = function(layerDefs, dateTime) {
+export function getLatestIntervalTime(layerDefs, dateTime) {
   const subDailyDefs = layerDefs.filter((def) => def.period === 'subdaily') || [];
   const defsSortedByInterval = subDailyDefs.sort((defA, defB) => {
     const intervalA = Number(lodashGet(defA, 'dateRanges[0].dateInterval'));
