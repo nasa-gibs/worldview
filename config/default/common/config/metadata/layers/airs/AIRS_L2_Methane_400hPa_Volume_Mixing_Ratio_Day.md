@@ -1,5 +1,5 @@
 #### Description
-Air temperature in units of kelvin at the 700 hPa pressure level, approximately 3000 meters (10,000 feet) above sea level. Roughly one third of the mass of Earth's atmosphere is found between Earth's surface and this level. This level reflects wind patterns that steer individual thunderstorms, so it is often used by meteorologists for predicting thunderstorm motion and intensification.
+Atmospheric methane in units of parts per billion by volume at the 400 hPa pressure level, approximately 7200 meters (24,000 feet) above sea level. Methane is emitted during the production and transport of coal, natural gas, and oil. Methane emissions also result from livestock and other agricultural practices, and by the decay of organic waste. Wildfires also contribute to methane emissions. Methane concentration is higher in the northern hemisphere because most sources (both natural and human) are located on land. Known sources of methane are predominantly located near Earth's surface, but with vertical atmospheric mixing and methane's approximate 9-year lifetime it is considered to be a well-mixed gas (meaning the concentration of methane is taken to be constant with respect to height within the troposphere). Methane concentrations can vary seasonally.
 
 #### Image Resolution
 Nominal equatorial image resolution 31.25 km/pixel
@@ -8,8 +8,8 @@ Nominal equatorial image resolution 31.25 km/pixel
 Image initially produced with NRT data. Science quality image replaces NRT when available.  
 Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)  
 Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)  
-Field name: `TAirStd`; pressure level at element 5  
-Resolution: 45 km/pixel at nadir
+Field name: `CH4VMRLevStd`; pressure level at element 8  
+Resolution: 45 km/pixel at nadir  
 
 #### Coverage
 Spatial Coverage: Global  

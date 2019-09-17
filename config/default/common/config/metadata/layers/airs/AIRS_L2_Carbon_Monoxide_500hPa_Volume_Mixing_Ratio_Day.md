@@ -1,5 +1,5 @@
 #### Description
-Air temperature in units of kelvin at the 700 hPa pressure level, approximately 3000 meters (10,000 feet) above sea level. Roughly one third of the mass of Earth's atmosphere is found between Earth's surface and this level. This level reflects wind patterns that steer individual thunderstorms, so it is often used by meteorologists for predicting thunderstorm motion and intensification.
+Carbon monoxide in units of parts per billion by volume at the 500 hPa pressure level, approximately 5500 meters (18,000 feet) above sea level. The 500 hPa pressure level is near the divide between upper and lower halves of atmospheric mass and is often referred to as a steering level. Many midlatitude weather systems between this level and Earth's surface move in roughly the same direction as winds at the 500 hPa level. Carbon monoxide is a pollutant that can persist in the atmosphere for roughly one month and be transported large distances, and it plays a role in both air pollution and climate change. Carbon monoxide is produced in the incomplete combustion of carbon-containing fuels such as gasoline, natural gas, oil, coal, and wood. Humans contribute large quantities of carbon monoxide, mostly as a result of automobile emissions. Natural sources include volcanoes and wildfires. Carbon monoxide is the most abundant pollutant (by mass) in Earth’s atmosphere.
 
 #### Image Resolution
 Nominal equatorial image resolution 31.25 km/pixel
@@ -8,7 +8,7 @@ Nominal equatorial image resolution 31.25 km/pixel
 Image initially produced with NRT data. Science quality image replaces NRT when available.  
 Near Real-Time Product: `AIRS2RET_NRT` (AIRS-Only Level 2 Near Real-Time Product)  
 Science Quality Product: `AIRS2RET` (AIRS-Only Level 2 Standard Product)  
-Field name: `TAirStd`; pressure level at element 5  
+Field name: `COVMRLevStd`; pressure level is at element 7  
 Resolution: 45 km/pixel at nadir
 
 #### Coverage
