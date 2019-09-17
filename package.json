@@ -94,7 +94,7 @@
     "css-loader": "^3.2.0",
     "cssnano": "^4.1.10",
     "eslint": "^6.1.0",
-    "eslint-config-standard": "^13.0.1",
+    "eslint-config-standard": "^14.0.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^22.15.0",
     "eslint-plugin-node": "^10.0.0",
