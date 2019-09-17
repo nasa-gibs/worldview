@@ -53,10 +53,10 @@ module.exports = {
     client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       client.useCss().click(measureDistanceBtn);
       client.pause(300);
-      client.waitForElementVisible('.wv-alert', TIME_LIMIT)
+      client.waitForElementVisible('.wv-alert', TIME_LIMIT);
       client.moveToElement('#wv-map-geographic', 300, 100)
         .mouseButtonClick(0);
-      client.pause(300)
+      client.pause(300);
       client.moveToElement('#wv-map-geographic', 250, 100)
         .mouseButtonClick(0)
         .mouseButtonClick(0)
@@ -83,14 +83,12 @@ module.exports = {
   },
   'Toggling unit of measure updates the measurement value': async function (client) {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
-
       client.click(measureBtn);
       await client.waitForElementVisible(measureMenu, TIME_LIMIT);
       await client.click(unitOfMeasureToggle);
       const tooltips = await client.elements('css selector', measurementTooltip);
       tooltips.value.forEach((element) => {
         client.elementIdText(element.ELEMENT, (elResult) => {
-
           const pass = elResult.value.includes('mi');
           client.assert.ok(pass);
         });
@@ -99,7 +97,6 @@ module.exports = {
   },
   'Toggling great circle changes the measurement value': async function (client) {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
-
       const measureTooltips = await client.elements('css selector', measurementTooltip);
       const elPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
       const initMeasureValues = await Promise.all(elPromises).then(elem => elem.map(el => el.value));
@@ -115,7 +112,6 @@ module.exports = {
   },
   'Clearing a measurements removes all tooltips': function (client) {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
-
       client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
         client.useCss().click(clearMeasurementsBtn);
         client.expect.elements(measurementTooltip).count.to.equal(0);
