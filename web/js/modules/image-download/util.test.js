@@ -225,8 +225,5 @@ test('Download URL', () => {
     '&WRAP=day' +
     '&FORMAT=image/jpeg' +
     '&WIDTH=300&HEIGHT=300';
-
-  console.log(dlURL);
-  console.log(expectedURL);
   expect(dlURL.includes(expectedURL)).toBe(true);
 });
