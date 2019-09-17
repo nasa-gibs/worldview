@@ -15,12 +15,13 @@ export const initialCompareState = {
 };
 export function compareReducer(state = initialCompareState, action) {
   switch (action.type) {
-    case CHANGE_STATE:
+    case CHANGE_STATE: {
       const newIsCompareA = !state.isCompareA;
       return lodashAssign({}, state, {
         isCompareA: newIsCompareA,
         activeString: newIsCompareA ? 'active' : 'activeB'
       });
+    }
     case TOGGLE_ON_OFF:
       return lodashAssign({}, state, {
         active: !state.active

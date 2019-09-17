@@ -96,7 +96,7 @@ class toolbarContainer extends Component {
           ).then(() => {
             openModal(
               'TOOLBAR_SNAPSHOT',
-              CUSTOM_MODAL_PROPS['TOOLBAR_SNAPSHOT']
+              CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT
             );
           });
         });
@@ -145,7 +145,7 @@ class toolbarContainer extends Component {
             onClick={() =>
               openModal(
                 'TOOLBAR_SHARE_LINK',
-                CUSTOM_MODAL_PROPS['TOOLBAR_SHARE_LINK']
+                CUSTOM_MODAL_PROPS.TOOLBAR_SHARE_LINK
               )
             }
           >
@@ -159,7 +159,7 @@ class toolbarContainer extends Component {
               onClick={() =>
                 openModal(
                   'TOOLBAR_PROJECTION',
-                  CUSTOM_MODAL_PROPS['TOOLBAR_PROJECTION']
+                  CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION
                 )
               }
             >
@@ -192,7 +192,7 @@ class toolbarContainer extends Component {
             title="Information"
             className={'wv-toolbar-button' + notificationClass}
             onClick={() =>
-              openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS['TOOLBAR_INFO'])
+              openModal('TOOLBAR_INFO', CUSTOM_MODAL_PROPS.TOOLBAR_INFO)
             }
             data-content={notificationContentNumber}
           >

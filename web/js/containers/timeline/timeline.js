@@ -1134,7 +1134,7 @@ function mapStateToProps(state) {
 
   let endTime;
   if (isCompareModeActive) {
-    hasSubdailyLayers = hasSubDaily(layers['active']) || hasSubDaily(layers['activeB']);
+    hasSubdailyLayers = hasSubDaily(layers.active) || hasSubDaily(layers.activeB);
     endTime = getEndTime(layers, config);
   } else {
     hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
@@ -1314,8 +1314,8 @@ const getOffsetValues = (innerWidth, hasSubDaily) => {
 };
 
 const getEndTime = (layers, config) => {
-  const endDateA = layersLastDateTime(layers['active'], config);
-  const endDateB = layersLastDateTime(layers['activeB'], config);
+  const endDateA = layersLastDateTime(layers.active, config);
+  const endDateB = layersLastDateTime(layers.activeB, config);
   return endDateA > endDateB ? endDateA : endDateB;
 };
 /**

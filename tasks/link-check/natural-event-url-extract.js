@@ -17,7 +17,7 @@ const findProp = async (obj, keys, out) => {
     if (hasOwn(i)) {
       if (keys.includes(i)) {
         // handle different title formats from EONET
-        const title = obj['title'] ? obj['title'] : obj['id'];
+        const title = obj.title ? obj.title : obj.id;
         if (title) {
           out.push({ [title]: obj[i] });
         }
