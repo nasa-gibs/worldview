@@ -1,6 +1,7 @@
 const environments = require('./environments.js');
 const glob = require('glob');
 const files = glob.sync('./e2e/features/**/*-test.js');
+
 const nightwatchConfig = {
   output_folder: './e2e/reports',
   globals_path: './globals.js',
@@ -8,7 +9,6 @@ const nightwatchConfig = {
   src_folders: files,
   selenium: {
     start_process: false,
-    check_process_delay: 5000,
     host: 'hub-cloud.browserstack.com',
     port: 80
   },
@@ -17,10 +17,11 @@ const nightwatchConfig = {
     'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY,
     'browserstack.local': true,
     'browserstack.debug': true,
+    'browserstack.localIdentifier': ('wvtester19234' + process.env.BROWSERSTACK_USER).replace(/[^a-zA-Z0-9]/g, ''),
     build: 'nightwatch-browserstack',
     applicationCacheEnabled: false,
     webStorageEnabled: false,
-    marionette: true
+    "marionette": true
   },
   test_settings: {
     default: {},
@@ -33,14 +34,13 @@ const nightwatchConfig = {
       desiredCapabilities: {
         browser: 'chrome',
         marionette: true,
-        'browserstack.selenium_version': '2.53.0'
+        'browserstack.selenium_version': '3.5.2'
       }
     },
     safari: {
       desiredCapabilities: {
         browser: 'safari',
-        'browserstack.selenium_version': '3.5.2',
-        'browserstack.safari.driver': '2.45'
+        'browserstack.selenium_version': '3.5.2'
       }
     },
     firefox: {
@@ -50,7 +50,7 @@ const nightwatchConfig = {
         browserName: 'firefox',
         javascriptEnabled: true,
         'browserstack.selenium_version': '3.10.0',
-        'browserstack.geckodriver': '0.19.0'
+        'browserstack.geckodriver': '0.24.0'
       }
     },
     ie: {
