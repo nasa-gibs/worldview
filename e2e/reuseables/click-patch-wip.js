@@ -1,6 +1,5 @@
 module.exports = {
   customMouseEvent: function (client, selector, offsetX, offsetY, eventType) {
-    console.log(selector, offsetX, offsetY, eventType)
     eventType = eventType || "dblclick";
     client.execute(function (obj) {
       var { eventType, selector, offsetX, offsetY } = obj;
@@ -61,7 +60,6 @@ module.exports = {
       }
       return simulate(el, eventType, { pointerX: offsetX, pointerY: offsetY });
     }, [{ eventType: eventType, selector: selector, offsetX: offsetX, offsetY: offsetY }], function (result) {
-      console.log(result)
     })
   }
 };
