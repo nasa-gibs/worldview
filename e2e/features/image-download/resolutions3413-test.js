@@ -17,11 +17,11 @@ const startParams = [
 ];
 
 module.exports = {
-  after: function (client) {
+  after: function(client) {
     client.end();
   },
 
-  'In the arctic, top zoom levels is 5km': function (c) {
+  'In the arctic, top zoom levels is 5km': function(c) {
     normalizeViewport(c, 1024, 768);
     bookmark(c, startParams);
     openImageDownloadPanel(c);
@@ -30,7 +30,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Next two zooms are 1km': function (c) {
+  'Next two zooms are 1km': function(c) {
     zoomIn(c, 'arctic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="4"]')
@@ -43,7 +43,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Next zoom is 500m': function (c) {
+  'Next zoom is 500m': function(c) {
     zoomIn(c, 'arctic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="2"]')
@@ -51,7 +51,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Next zoom is 250m': function (c) {
+  'Next zoom is 250m': function(c) {
     zoomIn(c, 'arctic');
     openImageDownloadPanel(c);
     c.expect.element('#wv-image-resolution option[value="1"]')
@@ -64,7 +64,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Last zoom level is 250m': function (c) {
+  'Last zoom level is 250m': function(c) {
     // mash the zoom button a bunch of times and see if it changes
     for (let i = 0; i < 5; i++) {
       zoomIn(c, 'arctic');
@@ -75,7 +75,7 @@ module.exports = {
     closeImageDownloadPanel(c);
   },
 
-  'Click download': function (c) {
+  'Click download': function(c) {
     openImageDownloadPanel(c);
     clickDownload(c);
     c.getAttribute('#wv-image-download-url', 'url', (result) => {

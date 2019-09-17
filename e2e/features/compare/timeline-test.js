@@ -8,19 +8,19 @@ const dateSelectorMonthInput = '#date-selector-main .input-wrapper-month input';
 const TIME_LIMIT = 20000;
 
 module.exports = {
-  before: function (client) {
+  before: function(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   // load A|B and verify that it is active
-  'A|B is loaded': function (client) {
+  'A|B is loaded': function(client) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
     client.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
   },
-  'Verify that A|B draggers are visible': function (client) {
+  'Verify that A|B draggers are visible': function(client) {
     client.expect.element(draggerA).to.be.visible;
     client.expect.element(draggerB).to.be.visible;
   },
-  'Dragging active dragger updates date': function (client) {
+  'Dragging active dragger updates date': function(client) {
     client.assert.attributeContains(dateSelectorDayInput, 'value', '17');
     client.assert.attributeContains(dateSelectorMonthInput, 'value', 'AUG');
 
@@ -31,14 +31,14 @@ module.exports = {
       .moveToElement(draggerB, 100, 30)
       .mouseButtonUp(0)
       .pause(2000);
-    client.getValue(dateSelectorDayInput, function (dayResult) {
-      client.getValue(dateSelectorMonthInput, function (monthResult) {
+    client.getValue(dateSelectorDayInput, function(dayResult) {
+      client.getValue(dateSelectorMonthInput, function(monthResult) {
         var result = monthResult.value.concat(dayResult.value);
         this.assert.notEqual('AUG17', result);
       });
     });
   },
-  'Clicking inactive dragger updates active state': function (client) {
+  'Clicking inactive dragger updates active state': function(client) {
     client.assert.cssClassPresent(localSelectors.aTab, 'active');
     client
       .useCss()
@@ -49,12 +49,12 @@ module.exports = {
     client.waitForElementVisible(
       '#activeB-Reference_Features',
       TIME_LIMIT,
-      function () {
+      function() {
         client.assert.attributeContains(dateSelectorDayInput, 'value', '16');
       }
     );
   },
-  'Dragging B dragger updates date in label': function (client) {
+  'Dragging B dragger updates date in label': function(client) {
     client.useCss().assert.containsText(localSelectors.bTab, '2018-08-16');
     client
       .useCss()
@@ -63,16 +63,16 @@ module.exports = {
       .moveToElement(draggerA, -100, 0)
       .mouseButtonUp(0)
       .pause(2000);
-    client.getText(localSelectors.bTab, function (result) {
+    client.getText(localSelectors.bTab, function(result) {
       this.assert.notEqual('B: 2018-08-16', result.value);
     });
   },
-  'Deactivate A|B is no longer active': function (client) {
+  'Deactivate A|B is no longer active': function(client) {
     client.click(localSelectors.compareButton);
     client.waitForElementNotPresent(
       localSelectors.bTab,
       TIME_LIMIT,
-      function () {
+      function() {
         client
           .useCss()
           .assert.containsText(
@@ -84,7 +84,7 @@ module.exports = {
       }
     );
   },
-  after: function (client) {
+  after: function(client) {
     client.end();
   }
 };

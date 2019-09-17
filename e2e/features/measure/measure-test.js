@@ -16,15 +16,15 @@ const {
 } = localSelectors;
 
 module.exports = {
-  before: function (client) {
+  before: function(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
-  'Clicking the measure button opens the menu': function (client) {
+  'Clicking the measure button opens the menu': function(client) {
     client.expect.element(measureMenu).to.not.be.present;
     client.useCss().click(measureBtn);
     client.waitForElementVisible(measureMenu, TIME_LIMIT);
   },
-  'Initiating a measurement causes an alert to show and sidebar to collapse': function (client) {
+  'Initiating a measurement causes an alert to show and sidebar to collapse': function(client) {
     client.useCss().click(measureDistanceBtn);
     client.waitForElementVisible('.wv-alert', TIME_LIMIT);
     client.useCss().assert.elementPresent(sidebarContainer);
@@ -33,7 +33,7 @@ module.exports = {
       'max-height',
       '0px');
   },
-  'Cancelling a measurement causes an alert to disappear and sidebar to expand': function (client) {
+  'Cancelling a measurement causes an alert to disappear and sidebar to expand': function(client) {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // right click doesn't work in firefox
       client.useCss().click(measureBtn);
       client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
@@ -48,7 +48,7 @@ module.exports = {
       });
     }
   },
-  'Creating a distance measurement causes a tooltip to show': function (client) {
+  'Creating a distance measurement causes a tooltip to show': function(client) {
     client.useCss().click(measureBtn);
     client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       client.useCss().click(measureDistanceBtn);
@@ -64,7 +64,7 @@ module.exports = {
       client.waitForElementVisible(measurementTooltip, TIME_LIMIT);
     });
   },
-  'Creating a area measurement causes a tooltip to show': function (client) {
+  'Creating a area measurement causes a tooltip to show': function(client) {
     client.useCss().click(measureBtn);
     client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
       client.useCss().click(measureAreaBtn);
@@ -81,7 +81,7 @@ module.exports = {
       client.waitForElementVisible(measurementTooltip, TIME_LIMIT);
     });
   },
-  'Toggling unit of measure updates the measurement value': async function (client) {
+  'Toggling unit of measure updates the measurement value': async function(client) {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
       client.click(measureBtn);
       await client.waitForElementVisible(measureMenu, TIME_LIMIT);
@@ -95,7 +95,7 @@ module.exports = {
       });
     }
   },
-  'Toggling great circle changes the measurement value': async function (client) {
+  'Toggling great circle changes the measurement value': async function(client) {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
       const measureTooltips = await client.elements('css selector', measurementTooltip);
       const elPromises = measureTooltips.value.map(el => client.elementIdText(el.ELEMENT, res => res.value));
@@ -110,7 +110,7 @@ module.exports = {
       });
     }
   },
-  'Clearing a measurements removes all tooltips': function (client) {
+  'Clearing a measurements removes all tooltips': function(client) {
     if (client.options.desiredCapabilities.browserName !== 'firefox') { // client.elements() returns different values for firefox
       client.waitForElementVisible(measureMenu, TIME_LIMIT, (el) => {
         client.useCss().click(clearMeasurementsBtn);
@@ -118,7 +118,7 @@ module.exports = {
       });
     }
   },
-  after: function (client) {
+  after: function(client) {
     client.end();
   }
 };

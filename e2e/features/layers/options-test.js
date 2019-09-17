@@ -13,15 +13,15 @@ const activeDefaultPaletteCheckbox =
   '.wv-palette-selector-row.checked #wv-palette-radio-__default';
 const opacityLabel = '.layer-opacity-select .wv-label';
 module.exports = {
-  before: function (client) {
+  before: function(client) {
     skipTour.loadAndSkipTour(client, TIME_LIMIT);
   },
-  'Verify that settings button opens settings modal': function (client) {
+  'Verify that settings button opens settings modal': function(client) {
     client.url(client.globals.url + customsSquashedQuerystring);
     client.waitForElementVisible(
       combinedAodSettingsButton,
       TIME_LIMIT,
-      function (e) {
+      function(e) {
         if (client.options.desiredCapabilities.browser !== 'ie') {
           client.expect.element(thresholdMinLabel).to.not.be.present;
           client.click(combinedAodSettingsButton).pause(1000);
@@ -30,13 +30,13 @@ module.exports = {
       }
     );
   },
-  'Verify that custom blue custom palette is checked': function (client) {
+  'Verify that custom blue custom palette is checked': function(client) {
     if (client.options.desiredCapabilities.browser !== 'ie') {
       client.expect.element(activeDefaultPaletteCheckbox).to.not.be.present;
       client.expect.element(activeBluePaletteCheckbox).to.be.present;
     }
   },
-  'Verify that threshold and opacity components update when different layer setting button clicked': function (
+  'Verify that threshold and opacity components update when different layer setting button clicked': function(
     client
   ) {
     if (client.options.desiredCapabilities.browser !== 'ie') {
@@ -46,14 +46,14 @@ module.exports = {
       client.waitForElementPresent(
         terraAodSettingsDialog,
         TIME_LIMIT,
-        function () {
+        function() {
           client.useCss().assert.containsText(thresholdMinLabel, '< 0.0');
           client.useCss().assert.containsText(opacityLabel, '100%');
         }
       );
     }
   },
-  'Verify that default palette is now checked': function (client) {
+  'Verify that default palette is now checked': function(client) {
     if (client.options.desiredCapabilities.browser !== 'ie') {
       client.expect.element(activeBluePaletteCheckbox).to.not.be.present;
       client.expect.element(activeDefaultPaletteCheckbox).to.be.present;

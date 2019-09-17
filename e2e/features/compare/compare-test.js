@@ -15,15 +15,15 @@ const collapsedToggleButton =
 
 const TIME_LIMIT = 20000;
 module.exports = {
-  before: function (client) {
+  before: function(client) {
     reuseables.loadAndSkipTour(client, TIME_LIMIT);
   },
   // load A|B and verify that it is active
-  'A|B is loaded': function (client) {
+  'A|B is loaded': function(client) {
     client.url(client.globals.url + localQuerystrings.swipeAndAIsActive);
     client.waitForElementVisible(localSelectors.swipeDragger, TIME_LIMIT);
   },
-  'Animation, image download, data-download, and events are disabled when in A|B': function (
+  'Animation, image download, data-download, and events are disabled when in A|B': function(
     client
   ) {
     // Verify Animation widget can't be clicked
@@ -75,7 +75,7 @@ module.exports = {
       'You must exit comparison mode to download data'
     );
   },
-  'Removing layer removes correct layer from correct layer group': function (
+  'Removing layer removes correct layer from correct layer group': function(
     client
   ) {
     client.expect.element(ModisTruecolorLayerA).to.be.visible;
@@ -89,12 +89,12 @@ module.exports = {
   /**
    * B state can layer list collapse
    */
-  'Collapse layer list with B state and test label shows correct number of layers': function (
+  'Collapse layer list with B state and test label shows correct number of layers': function(
     client
   ) {
     client.url(client.globals.url + localQuerystrings.spyAndBIsActive);
 
-    client.waitForElementVisible(toggleButton, TIME_LIMIT, function () {
+    client.waitForElementVisible(toggleButton, TIME_LIMIT, function() {
       client.expect.element(collapsedToggleButton).to.not.be.visible;
       client.click(toggleButton);
       client.pause(100);
@@ -110,7 +110,7 @@ module.exports = {
    * Remove some layers from active state B and then toggle out of A|B mode to verify
    * that layer-sidebar inherits B state layers
    */
-  'If you exit A|B with B selection active, the active state will then be the B state': function (
+  'If you exit A|B with B selection active, the active state will then be the B state': function(
     client
   ) {
     client.expect.element('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor')
@@ -126,7 +126,7 @@ module.exports = {
     client.waitForElementNotPresent(
       '.timeline-dragger.draggerA',
       TIME_LIMIT,
-      function () {
+      function() {
         client.expect.element('#activeB-Coastlines').to.be.visible;
         client.expect.element(
           '#activeB-MODIS_Terra_CorrectedReflectance_TrueColor'
@@ -140,7 +140,7 @@ module.exports = {
       }
     );
   },
-  after: function (client) {
+  after: function(client) {
     client.end();
   }
 };
