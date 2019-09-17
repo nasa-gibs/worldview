@@ -57,6 +57,18 @@ json_options["separators"] = (',', ': ')
 class SkipException(Exception):
     pass
 
+def process_matrix_set_limits(matrix_set_limits):
+    limitsList = [];
+    for set_limit in matrix_set_limits:
+        limitsList.append({
+            "tileMatrix": set_limit["TileMatrix"],
+            "minTileRow": set_limit["MinTileRow"],
+            "maxTileRow": set_limit["MaxTileRow"],
+            "minTileCol": set_limit["MinTileCol"],
+            "maxTileCol": set_limit["MaxTileCol"]
+        })
+    return limitsList
+
 def process_layer(gc_layer, wv_layers, colormaps):
     ident = gc_layer["ows:Identifier"]
     if ident in skip:
@@ -75,11 +87,15 @@ def process_layer(gc_layer, wv_layers, colormaps):
         if dimension["ows:Identifier"] == "Time":
             wv_layer = process_temporal(wv_layer, dimension["Value"])
     # Extract matrix set
-    matrixSet = gc_layer["TileMatrixSetLink"]["TileMatrixSet"]
+    matrixSetLink = gc_layer["TileMatrixSetLink"]
+    matrixSet = matrixSetLink["TileMatrixSet"]
+    matrixSetLimits = matrixSetLink["TileMatrixSetLimits"]["TileMatrixLimits"]
+
     wv_layer["projections"] = {
         entry["projection"]: {
             "source": entry["source"],
-            "matrixSet": matrixSet
+            "matrixSet": matrixSet,
+            "matrixSetLimits": process_matrix_set_limits(matrixSetLimits)
         }
     }
 
