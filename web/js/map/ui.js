@@ -96,12 +96,13 @@ export function mapui(models, config, store, ui) {
    */
   const subscribeToStore = function(action) {
     switch (action.type) {
-      case layerConstants.ADD_LAYER:
+      case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);
+      }
       case CLEAR_ROTATE:
         return rotation.reset(self.selected);
-      case LOCATION_POP_ACTION:
+      case LOCATION_POP_ACTION: {
         const newState = util.fromQueryString(action.payload.search);
         const extent = lodashGet(action, 'payload.query.map.extent');
         const rotate =
@@ -111,6 +112,7 @@ export function mapui(models, config, store, ui) {
           flyToNewExtent(extent, rotate);
         }
         return;
+      }
       case layerConstants.REMOVE_LAYER:
         return removeLayer(action);
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
@@ -1011,7 +1013,7 @@ export function mapui(models, config, store, ui) {
       });
 
       var uniqueMeta = metaArray
-        .map(e => e['layer'])
+        .map(e => e.layer)
         .map((e, i, final) => final.indexOf(e) === i && i)
         .filter(e => metaArray[e]).map(e => metaArray[e]);
 

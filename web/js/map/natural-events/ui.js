@@ -410,7 +410,7 @@ export default function naturalEventsUI(ui, config, store, models) {
     const currentProjection = proj.selected.id;
     // Turn on the relevant layers for the event type based on projection and category
     var activeLayers = self.layers[currentProjection][category];
-    if (!activeLayers) activeLayers = self.layers[currentProjection]['Default'];
+    if (!activeLayers) activeLayers = self.layers[currentProjection].Default;
     store.dispatch(activateLayersForEventCategory(activeLayers));
   };
 

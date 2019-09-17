@@ -125,7 +125,7 @@ class LayerList extends React.Component {
       categoryConfig
     } = this.props;
 
-    const categoryToUse = category || categoryConfig['All'];
+    const categoryToUse = category || categoryConfig.All;
     return (
       <div id={categoryToUse.id + '-list'}>
         {categoryToUse.measurements.map((measurement, index) => {

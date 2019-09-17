@@ -57,13 +57,14 @@ export function dateReducer(state = dateReducerState, action) {
       return lodashAssign({}, state, {
         [action.activeString]: action.value
       });
-    case TOGGLE_CUSTOM_MODAL:
+    case TOGGLE_CUSTOM_MODAL: {
       const timelineToggle = action.toggleBy === customModalType.TIMELINE;
       const animationToggle = action.toggleBy === customModalType.ANIMATION;
       return lodashAssign({}, state, {
         timelineCustomModalOpen: animationToggle ? false : action.value,
         animationCustomModalOpen: timelineToggle ? false : action.value
       });
+    }
     case UPDATE_APP_NOW:
       return lodashAssign({}, state, {
         appNow: action.value

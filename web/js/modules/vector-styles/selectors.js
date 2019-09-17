@@ -162,7 +162,7 @@ export function getKey(layerId, groupStr, state) {
 }
 export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
-  if (state.vectorStyles['custom'][layerId]) {
+  if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
   }
 }

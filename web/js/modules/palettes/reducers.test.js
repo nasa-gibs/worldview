@@ -58,8 +58,8 @@ test('INIT_SECOND_LAYER_GROUP action updates active palette Object', () => {
     groupName: 'active',
     palettes: { 'terra-aod': config.palettes.rendered['terra-aod'] }
   });
-  expect(previousState.activeB['test']).toBeUndefined();
-  expect(response.activeB['test']).toEqual('tests');
+  expect(previousState.activeB.test).toBeUndefined();
+  expect(response.activeB.test).toEqual('tests');
 });
 test('REQUEST_PALETTE_START action updates active palette Object', () => {
   const initialPaletteState = getInitialPaletteState(config);
@@ -67,8 +67,8 @@ test('REQUEST_PALETTE_START action updates active palette Object', () => {
     type: REQUEST_PALETTE_START,
     id: 'test'
   });
-  expect(initialPaletteState.isLoading['test']).toBeUndefined();
-  expect(response.isLoading['test']).toBeTruthy();
+  expect(initialPaletteState.isLoading.test).toBeUndefined();
+  expect(response.isLoading.test).toBeTruthy();
 });
 test('REQUEST_PALETTE_SUCCESS action updates active palette Object', () => {
   const initialPaletteState = getInitialPaletteState(config);
@@ -77,8 +77,8 @@ test('REQUEST_PALETTE_SUCCESS action updates active palette Object', () => {
     id: 'test',
     response: 'test-response'
   });
-  expect(initialPaletteState.rendered['test']).toBeUndefined();
-  expect(response.rendered['test']).toEqual('test-response');
+  expect(initialPaletteState.rendered.test).toBeUndefined();
+  expect(response.rendered.test).toEqual('test-response');
 });
 
 test('BULK_PALETTE_RENDERING_SUCCESS action merges rendered palettes with new palettes from action', () => {

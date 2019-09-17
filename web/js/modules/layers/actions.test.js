@@ -9,7 +9,7 @@ const config = fixtures.config();
 function getState(layers) {
   return {
     config,
-    proj: { id: 'geographic', selected: config.projections['geographic'] },
+    proj: { id: 'geographic', selected: config.projections.geographic },
     layers: {
       active: layers
     },

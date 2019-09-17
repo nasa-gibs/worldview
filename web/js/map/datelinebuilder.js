@@ -44,7 +44,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
   const subscribeToStore = function(action) {
     switch (action.type) {
       case SELECT_DATE:
-      case COMPARE_CHANGE_STATE:
+      case COMPARE_CHANGE_STATE: {
         const state = store.getState();
         const selectedDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
         const date = state.date[selectedDateStr];
@@ -53,6 +53,7 @@ export function mapDateLineBuilder(models, config, store, ui) {
           return updateDate(date);
         }
         break;
+      }
       case CHANGE_PROJECTION:
         proj = action.id;
     }

@@ -93,14 +93,14 @@ class Tour extends React.Component {
       currentStoryId,
       1,
       currentStory.steps.length,
-      storyStep['stepLink'] + '&tr=' + currentStoryId + transition,
+      storyStep.stepLink + '&tr=' + currentStoryId + transition,
       this.props.config,
       this.props.renderedPalettes
     );
   }
 
   fetchMetadata(currentStory, stepIndex) {
-    var description = currentStory.steps[stepIndex]['description'];
+    var description = currentStory.steps[stepIndex].description;
     var { origin, pathname } = window.location;
     var errorMessage = '<p>There was an error loading this description.</p>';
     var uri = `${origin}${pathname}config/metadata/stories/${
@@ -188,7 +188,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        currentStory.steps[newStep - 1]['stepLink'] +
+        currentStory.steps[newStep - 1].stepLink +
           '&tr=' +
           currentStoryId +
           transition,
@@ -217,7 +217,7 @@ class Tour extends React.Component {
         currentStoryId,
         newStep,
         currentStory.steps.length,
-        currentStory.steps[newStep - 1]['stepLink'] +
+        currentStory.steps[newStep - 1].stepLink +
           '&tr=' +
           currentStoryId +
           transition,

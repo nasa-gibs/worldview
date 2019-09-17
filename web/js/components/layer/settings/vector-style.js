@@ -82,7 +82,7 @@ class VectorStyleSelect extends React.Component {
     const { index, vectorStyles, layer } = this.props;
     var vectorStyleId = layer.vectorStyle.id;
     var vectorStyle = vectorStyles[vectorStyleId];
-    var vectorStyleLayers = vectorStyle['layers'];
+    var vectorStyleLayers = vectorStyle.layers;
 
     var uniqueStyleLayers = vectorStyleLayers.filter(function(a) {
       if (!this[a.id]) {

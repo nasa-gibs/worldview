@@ -76,11 +76,11 @@ environments.forEach(e => {
 // Merge common_capabilities with each test_settings key
 for (var i in nightwatchConfig.test_settings) {
   var config = nightwatchConfig.test_settings[i];
-  config['selenium_host'] = nightwatchConfig.selenium.host;
-  config['selenium_port'] = nightwatchConfig.selenium.port;
-  config['desiredCapabilities'] = config['desiredCapabilities'] || {};
+  config.selenium_host = nightwatchConfig.selenium.host;
+  config.selenium_port = nightwatchConfig.selenium.port;
+  config.desiredCapabilities = config.desiredCapabilities || {};
   for (var j in nightwatchConfig.common_capabilities) {
-    config['desiredCapabilities'][j] = config['desiredCapabilities'][j] || nightwatchConfig.common_capabilities[j];
+    config.desiredCapabilities[j] = config.desiredCapabilities[j] || nightwatchConfig.common_capabilities[j];
   }
 }
 module.exports = nightwatchConfig;
