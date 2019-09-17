@@ -26,7 +26,7 @@ module.exports = {
 
     client
       .useCss()
-      .moveToElement(draggerA, 30, 30)
+      .moveToElement(draggerA, 15, 15)
       .mouseButtonDown(0)
       .moveToElement(draggerB, 100, 30)
       .mouseButtonUp(0)
