@@ -11,7 +11,6 @@ import SourceVectorTile from 'ol/source/VectorTile';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
-import lodashGet from 'lodash/get';
 import { lookupFactory } from '../ol/lookupimagetile';
 import {
   isActive as isPaletteActive,
@@ -23,7 +22,11 @@ import {
   getKey as getVectorStyleKeys,
   setStyleFunction
 } from '../modules/vector-styles/selectors';
-import { datesinDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import {
+  nearestInterval,
+  datesinDateRanges,
+  prevDateInDateRange
+} from '../modules/layers/util';
 
 export function mapLayerBuilder(models, config, cache, ui, store) {
   var self = {};
@@ -125,28 +128,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     layer.setOpacity(def.opacity || 1.0);
     return layer;
-  };
-
-  /**
-   * For subdaily layers, round the time down to nearest interval.
-   * NOTE: Assumes intervals are the same for all ranges!
-   * @param {object} def
-   * @param {date} date
-   * @return {date}
-   */
-  const nearestInterval = function(def, date) {
-    const dateInterval = lodashGet(def, 'dateRanges[0].dateInterval');
-    const interval = Number(dateInterval);
-    const remainder = date.getMinutes() % interval;
-    const newMinutes = date.getMinutes() - remainder;
-    const newDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      date.getHours(),
-      newMinutes
-    );
-    return newDate;
   };
 
   /**
