@@ -21,7 +21,7 @@ const nightwatchConfig = {
     build: 'nightwatch-browserstack',
     applicationCacheEnabled: false,
     webStorageEnabled: false,
-    "marionette": true
+    marionette: true
   },
   test_settings: {
     default: {},

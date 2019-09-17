@@ -48,7 +48,7 @@ try {
               // Code to stop browserstack local after end of parallel test
               process.exit();
             }
-          })
+          });
         }).catch(err => {
           console.error(err);
           process.exit();
