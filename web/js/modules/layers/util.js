@@ -1,4 +1,5 @@
 import {
+  get as lodashGet,
   cloneDeep as lodashCloneDeep,
   eachRight as lodashEachRight,
   isUndefined as lodashIsUndefined,
@@ -20,6 +21,28 @@ import isEqual from 'date-fns/is_equal';
 import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
 import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
 import lastDayOfYear from 'date-fns/last_day_of_year';
+
+/**
+   * For subdaily layers, round the time down to nearest interval.
+   * NOTE: Assumes intervals are the same for all ranges!
+   * @param {object} def
+   * @param {date} date
+   * @return {date}
+   */
+export function nearestInterval(def, date) {
+  const dateInterval = lodashGet(def, 'dateRanges[0].dateInterval');
+  const interval = Number(dateInterval);
+  const remainder = date.getMinutes() % interval;
+  const newMinutes = date.getMinutes() - remainder;
+  const newDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours(),
+    newMinutes
+  );
+  return newDate;
+};
 
 /**
    * Find the closest previous date from an array of dates
