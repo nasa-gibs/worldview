@@ -1,5 +1,7 @@
+/* eslint-disable import/no-duplicates */
 import util from '../util/util';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
+import { createFromCapabilitiesMatrixSet } from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
@@ -206,6 +208,38 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     return [layerId, projId, date, style, activeGroupStr].join(':');
   };
+
+  /**
+   *
+   * @param {*} def
+   * @param {*} matrixSet
+   * @param {*} extent
+   * @param {*} start
+   */
+  const getTileGridWMTS = (def, matrixSet, extent, start) => {
+    let wmtsTileGrid;
+    const matrixIds = def.matrixIds || matrixSet.resolutions.map((set, index) => index);
+
+    if (def.matrixSetLimits) {
+      const rawMatrixSet = {};
+      rawMatrixSet.Identifier = matrixSet.raw['ows:Identifier'];
+      rawMatrixSet.SupportedCRS = matrixSet.raw['ows:SupportedCRS'];
+      rawMatrixSet.TileMatrix = matrixSet.raw.TileMatrix.map((matrix) => {
+        matrix.Identifier = matrix['ows:Identifier'];
+        return matrix;
+      });
+      wmtsTileGrid = createFromCapabilitiesMatrixSet(rawMatrixSet, extent, def.matrixSetLimits);
+    } else {
+      wmtsTileGrid = new OlTileGridWMTS({
+        origin: start,
+        resolutions: matrixSet.resolutions,
+        matrixIds: matrixIds,
+        tileSize: matrixSet.tileSize[0]
+      });
+    }
+    return wmtsTileGrid;
+  };
+
   /**
    * Create a new WMTS Layer
    * @method createLayerWMTS
@@ -216,25 +250,16 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    */
   var createLayerWMTS = function(def, options, day, state) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    var proj, source, matrixSet, matrixIds, urlParameters, date, extent, start;
-    proj = state.proj.selected;
-    source = config.sources[def.source];
-    extent = proj.maxExtent;
-    start = [proj.maxExtent[0], proj.maxExtent[3]];
+    const proj = state.proj.selected;
+    const source = config.sources[def.source];
+    let extent = proj.maxExtent;
+    let start = [proj.maxExtent[0], proj.maxExtent[3]];
     if (!source) {
       throw new Error(def.id + ': Invalid source: ' + def.source);
     }
-    matrixSet = source.matrixSets[def.matrixSet];
+    const matrixSet = source.matrixSets[def.matrixSet];
     if (!matrixSet) {
       throw new Error(def.id + ': Undefined matrix set: ' + def.matrixSet);
-    }
-    if (typeof def.matrixIds === 'undefined') {
-      matrixIds = [];
-      lodashEach(matrixSet.resolutions, function(resolution, index) {
-        matrixIds.push(index);
-      });
-    } else {
-      matrixIds = def.matrixIds;
     }
 
     if (day) {
@@ -247,7 +272,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       }
     }
 
-    date = options.date || state.date[activeDateStr];
+    let date = options.date || state.date[activeDateStr];
     if (def.period === 'subdaily') {
       date = self.closestDate(def, options);
       date = new Date(date.getTime());
@@ -256,9 +281,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       date = util.dateAdd(date, 'day', day);
     }
 
-    urlParameters =
-      '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
-    var sourceOptions = {
+    const urlParameters = '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
+    const sourceOptions = {
       url: source.url + urlParameters,
       layer: def.layer || def.id,
       cacheSize: 4096,
@@ -266,12 +290,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       format: def.format,
       transition: 0,
       matrixSet: matrixSet.id,
-      tileGrid: new OlTileGridWMTS({
-        origin: start,
-        resolutions: matrixSet.resolutions,
-        matrixIds: matrixIds,
-        tileSize: matrixSet.tileSize[0]
-      }),
+      tileGrid: getTileGridWMTS(def, matrixSet, extent, start),
       wrapX: false,
       style: typeof def.style === 'undefined' ? 'default' : def.style
     };
