@@ -36,12 +36,12 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
  * @param {Date} dateTime
  * @param {Boolean} isWorldfile
  */
-export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, isWorldfile) {
+export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile) {
   const { crs } = proj.selected;
   const layersArray = imageUtilGetLayers(layerDefs, proj.id);
   const layerWraps = imageUtilGetLayerWrap(layerDefs);
   const opacities = imageUtilGetLayerOpacities(layerDefs);
-  const imgFormat = 'image/jpeg';
+  const imgFormat = fileType || 'image/jpeg';
   const { height, width } = dimensions;
   const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
   const params = [

@@ -56,6 +56,7 @@ export default class ImageResSelection extends React.Component {
       lonlats,
       { width, height },
       time,
+      fileType,
       isWorldfile
     );
 
@@ -87,7 +88,7 @@ export default class ImageResSelection extends React.Component {
       });
     } else if (type === 'worldfile') {
       this.setState({
-        isWorldfile: value
+        isWorldfile: Boolean(Number(value))
       });
     } else {
       this.setState({
@@ -128,8 +129,8 @@ export default class ImageResSelection extends React.Component {
               value={this.state.isWorldfile}
               onChange={e => this.handleChange('worldfile', e.target.value)}
             >
-              <option value={false}>No</option>
-              <option value={true}>Yes</option>
+              <option value={0}>No</option>
+              <option value={1}>Yes</option>
             </select>
           )}
           Worldfile (.zip)
