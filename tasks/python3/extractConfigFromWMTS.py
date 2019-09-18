@@ -86,7 +86,7 @@ def process_layer(gc_layer, wv_layers, colormaps):
     }
 
     if "TileMatrixSetLimits" in matrixSetLink and matrixSetLink["TileMatrixSetLimits"] is not None:
-        matrixSetLimits = matrixSetLink["TileMatrixSetLimits"]
+        matrixSetLimits = matrixSetLink["TileMatrixSetLimits"]["TileMatrixLimits"]
         wv_layer["projections"][entry["projection"]]["matrixSetLimits"] = matrixSetLimits
 
     # Vector data links
