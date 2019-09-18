@@ -5,9 +5,9 @@
             "title":    "Carbon Monoxide (L2, 500 hPa, Night)",
             "subtitle": "Aqua / AIRS",
             "description": "airs/AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Night",
-            "tags":     "",
+            "tags":     "CO",
             "group":    "overlays",
-            "product":  "AIRS2RET_NRT",
+            "product":  "AIRS2RET",
             "wrapadjacentdays": true,
 
             "layergroup": [

@@ -7,7 +7,7 @@
             "description": "airs/AIRS_L2_Dust_Score_Night",
             "tags":     "",
             "group":    "overlays",
-            "product":  "AIRS2SUP_NRT",
+            "product":  "AIRS2SUP",
 
              "layergroup": [
               "airs"

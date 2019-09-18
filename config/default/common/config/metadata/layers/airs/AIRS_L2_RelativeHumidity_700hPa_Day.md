@@ -2,7 +2,7 @@
 Relative humidity of the air in units of percent at the 700 hPa pressure level, approximately 3000 meters (10,000 feet) above sea level. Relative humidity is the ratio of the amount of water vapor in air to the total amount of water vapor the air can hold at specified temperature and pressure. Warm air can hold more water vapor than cold air, so the same amount of water vapor results in higher relative humidity in cool air than in warm air. AIRS relative humidity is derived from AIRS temperature and water vapor and is calculated as the fraction of retrieved humidity mixing ratio and temperature-dependent saturation mixing ratios. Roughly one third of the mass of Earth's atmosphere is found between the surface and this level. This level reflects wind patterns that steer individual thunderstorms, so it is often used by meteorologists for predicting thunderstorm motion and intensification.
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel
+Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  

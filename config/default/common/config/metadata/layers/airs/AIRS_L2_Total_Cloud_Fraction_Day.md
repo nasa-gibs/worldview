@@ -2,7 +2,7 @@
 Total Cloud Fraction is the product of cloud fractional coverage and cloud infrared emissivity. Low fraction can indicate either small, highly emissive clouds or more extensive but less emissive clouds. While AIRS can sense up to two cloud decks in a column of atmosphere, this plot shows the cloud fraction of all cloud decks present.
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel
+Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  
