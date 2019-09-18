@@ -297,6 +297,7 @@ export function mapui(models, config, store, ui) {
     lodashEach(activeLayers, function(mapLayer) {
       map.removeLayer(mapLayer);
     });
+    console.log(self)
     removeGraticule('active');
     removeGraticule('activeB');
     cache.clear();
@@ -419,7 +420,11 @@ export function mapui(models, config, store, ui) {
     };
     layers.forEach(function(layer) {
       var group = layer.get('group');
-      console.log(group)
+
+      // if (group === 'granule') {
+      //   group = 'active'
+      // }
+      console.log(group, activeGroupStr, activeDateStr, layer, layersState)
       // Not in A|B
       if (layer.wv) {
         renderable = isRenderableLayer(
@@ -437,7 +442,7 @@ export function mapui(models, config, store, ui) {
           if (subLayer.wv) {
             renderable = isRenderableLayer(
               subLayer.wv.id,
-              layersState[group],
+              layersState[activeGroupStr],
               state.date[layer.get('date')],
               state
             );
@@ -445,7 +450,7 @@ export function mapui(models, config, store, ui) {
           }
         });
         layer.setVisible(true);
-        const defs = getLayers(layersState[group], {}, state);
+        const defs = getLayers(layersState[activeGroupStr], {}, state);
         updateGraticules(defs, group);
       }
     });
@@ -523,7 +528,7 @@ export function mapui(models, config, store, ui) {
       addGraticule(def.opacity, activeLayerStr);
     } else {
       def.availableDates = util.datesinDateRanges(def, date, true);
-      if (firstLayer && firstLayer.get('group')) {
+      if (firstLayer && firstLayer.get('group') && firstLayer.get('group') !== 'granule') {
         // Find which map layer-group is the active LayerGroup
         // and add layer to layerGroup in correct location
         const activelayer =
@@ -627,17 +632,9 @@ export function mapui(models, config, store, ui) {
           compareMapUi.update(activeLayerStr);
         }
       } else {
-        layerGroups = self.selected.getLayers().getArray();
-        // console.log(layerGroups)
-
+        // layerGroups = self.selected.getLayers().getArray();
         const index = findLayerIndex(def);
-        // console.log(index)
-        // if (index === -1) {
-        //   index = 1;
-        // }
         self.selected.getLayers().setAt(index, createLayer(def));
-        // let post = self.selected.getLayers().getArray();
-        // console.log(post);
       }
       if (config.vectorStyles && def.vectorStyle && def.vectorStyle.id) {
         var vectorStyles = config.vectorStyles;
@@ -697,7 +694,9 @@ export function mapui(models, config, store, ui) {
     if (!layer && layers.length && layers[0].get('group')) {
       let olGroupLayer;
       lodashEach(layers, layerGroup => {
-        if (layerGroup.get('group') === layerGroupStr) {
+        // if (layerGroup.get('group') === layerGroupStr) {
+          console.log(layerGroup.get('group'), layerGroup.get('layerId'), def.id)
+        if (layerGroup.get('layerId') === def.id) {
           olGroupLayer = layerGroup;
           console.log(olGroupLayer)
         }
@@ -932,7 +931,8 @@ export function mapui(models, config, store, ui) {
           duration: animationDuration
         })
       ],
-      loadTilesWhileAnimating: true
+      loadTilesWhileAnimating: true,
+      loadTilesWhileInteracting: true
     });
     map.wv = {
       small: false,
