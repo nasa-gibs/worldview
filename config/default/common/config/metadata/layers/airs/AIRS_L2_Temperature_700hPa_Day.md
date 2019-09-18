@@ -2,7 +2,7 @@
 Air temperature in units of kelvin at the 700 hPa pressure level, approximately 3000 meters (10,000 feet) above sea level. Roughly one third of the mass of Earth's atmosphere is found between Earth's surface and this level. This level reflects wind patterns that steer individual thunderstorms, so it is often used by meteorologists for predicting thunderstorm motion and intensification.
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel
+Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  

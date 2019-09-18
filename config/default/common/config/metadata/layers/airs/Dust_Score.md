@@ -5,7 +5,7 @@ Temporal coverage: 30 August 2002 - Present
 Dust score is determined from multiple tests that compare radiances in select AIRS spectral channels. Radiances measured in channels that are sensitive to dust are compared to radiances measured in channels that are not sensitive to dust. The differences between several pairs of channels are represented as a dust score. Higher scores indicate more certainty that dust is present. Dust is probable when the score is above 380. AIRS dust can also be a proxy for volcanic ash. Dust products derived from AIRS observations can indicate the possibility of volcanic activity, but more detailed analysis is required to confirm the presence of volcanic clouds or estimate the composition and quantity of materials in the clouds.
 
 #### Image Resolution
-Nominal equatorial image resolution 31.25 km/pixel
+Nominal equatorial image resolution 31.25 km/pixel; imagery displayed in Worldview/Global Imagery Browse Services (GIBS) is 2 km.
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.  

@@ -5,9 +5,9 @@
             "title":    "Methane (L2, 400 hPa, Night)",
             "subtitle": "Aqua / AIRS",
             "description": "airs/AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Night",
-            "tags":     "",
+            "tags":     "CH4",
             "group":    "overlays",
-            "product":  "AIRS2RET_NRT",
+            "product":  "AIRS2RET",
             "wrapadjacentdays": true,
 
             "layergroup": [

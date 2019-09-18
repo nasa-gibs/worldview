@@ -7,7 +7,7 @@
             "description": "airs/AIRS_L2_RelativeHumidity_850hPa_Day",
             "tags":     "",
             "group":    "overlays",
-            "product":  "AIRS2RET_NRT",
+            "product":  "AIRS2RET",
 
              "layergroup": [
               "airs"
