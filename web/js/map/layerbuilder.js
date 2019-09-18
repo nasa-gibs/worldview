@@ -222,10 +222,26 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
     if (def.matrixSetLimits) {
       const rawMatrixSet = {};
+      def.matrixSetLimits.forEach((matrix) => {
+        for (const key in matrix) {
+          if (key !== 'Identifier') {
+            matrix[key] = Number(matrix[key]);
+          }
+        }
+      });
+
       rawMatrixSet.Identifier = matrixSet.raw['ows:Identifier'];
       rawMatrixSet.SupportedCRS = matrixSet.raw['ows:SupportedCRS'];
       rawMatrixSet.TileMatrix = matrixSet.raw.TileMatrix.map((matrix) => {
         matrix.Identifier = matrix['ows:Identifier'];
+        for (const key in matrix) {
+          if (key !== 'Identifier' && key !== 'ows:Identifier') {
+            matrix[key] = Number(matrix[key]);
+          }
+          if (key === 'TopLeftCorner') {
+            matrix[key] = [-180, 90];
+          }
+        }
         return matrix;
       });
       wmtsTileGrid = createFromCapabilitiesMatrixSet(rawMatrixSet, extent, def.matrixSetLimits);
