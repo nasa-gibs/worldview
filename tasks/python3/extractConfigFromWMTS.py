@@ -57,18 +57,6 @@ json_options["separators"] = (',', ': ')
 class SkipException(Exception):
     pass
 
-def process_matrix_set_limits(matrix_set_limits):
-    limitsList = [];
-    for set_limit in matrix_set_limits:
-        limitsList.append({
-            "tileMatrix": set_limit["TileMatrix"],
-            "minTileRow": set_limit["MinTileRow"],
-            "maxTileRow": set_limit["MaxTileRow"],
-            "minTileCol": set_limit["MinTileCol"],
-            "maxTileCol": set_limit["MaxTileCol"]
-        })
-    return limitsList
-
 def process_layer(gc_layer, wv_layers, colormaps):
     ident = gc_layer["ows:Identifier"]
     if ident in skip:
@@ -89,15 +77,17 @@ def process_layer(gc_layer, wv_layers, colormaps):
     # Extract matrix set
     matrixSetLink = gc_layer["TileMatrixSetLink"]
     matrixSet = matrixSetLink["TileMatrixSet"]
-    matrixSetLimits = matrixSetLink["TileMatrixSetLimits"]["TileMatrixLimits"]
 
     wv_layer["projections"] = {
         entry["projection"]: {
             "source": entry["source"],
             "matrixSet": matrixSet,
-            "matrixSetLimits": process_matrix_set_limits(matrixSetLimits)
         }
     }
+
+    if "TileMatrixSetLimits" in matrixSetLink and matrixSetLink["TileMatrixSetLimits"] is not None:
+        matrixSetLimits = matrixSetLink["TileMatrixSetLimits"]
+        wv_layer["projections"][entry["projection"]]["matrixSetLimits"] = matrixSetLimits
 
     # Vector data links
     if "ows:Metadata" in gc_layer and gc_layer["ows:Metadata"] is not None:
@@ -214,6 +204,7 @@ def process_entry(entry, colormaps):
         max_resolution = entry["maxResolution"]
         for zoom in range(0, zoom_levels):
             resolutions = resolutions + [max_resolution / (2 ** zoom)]
+
         wv_matrix_sets[ident] = {
             "id": ident,
             "maxResolution": max_resolution,
@@ -221,7 +212,8 @@ def process_entry(entry, colormaps):
             "tileSize": [
                 int(gc_matrix_set["TileMatrix"][0]["TileWidth"]),
                 int(gc_matrix_set["TileMatrix"][0]["TileHeight"])
-            ]
+            ],
+            "raw": gc_matrix_set
         }
 
     if(type(gc_contents["TileMatrixSet"]) is OrderedDict):
