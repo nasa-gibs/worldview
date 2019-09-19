@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "GOES-West_ABI_Band2_Red_Visible": {
+            "id":       "GOES-West_ABI_Band2_Red_Visible",
+            "title":    "Red Visible (0.64 µm, Band 2)",
+            "subtitle": "GOES-West/ABI",
+            "description": "goes/GOES-West_ABI_Band2_Red_Visible",
+            "group":    "overlays",
+            "tags":     "geostationary geo",
+            "layergroup": [
+              "goes"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+        }
+    }
+}
