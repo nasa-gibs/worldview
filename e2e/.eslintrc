@@ -12,13 +12,20 @@
   },
   "extends": "standard",
   "rules": {
-    "semi": ["error", "always"],
-    "space-before-function-paren": "off",
-    "object-curly-spacing": ["warn", "always"],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ],
   },
   "overrides": [
     {
-      "files": [ "*.js"],
+      "files": [
+        "*.js"
+      ],
       "rules": {
         "no-octal": "warn",
         "no-unused-vars": "warn",
@@ -51,6 +58,10 @@
         "no-useless-call": "warn",
         "no-trailing-spaces": "warn",
         "standard/computed-property-even-spacing": "warn",
+        "space-before-function-paren": [
+          "error",
+          "never"
+        ],
         "wrap-iife": "warn",
         "new-cap": "warn"
       }

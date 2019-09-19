@@ -7,9 +7,9 @@ const createCapabilities = bsCapabilities(
 
 const capabilities = createCapabilities([{
   browser: 'firefox',
-  browser_version: ['59.0'],
-  os: ['Windows'],
-  os_version: ['10']
+  browser_version: ['69.0'],
+  os: ['Windows', 'OS X'],
+  os_version: ['10', 'Mojave']
 }, {
   browser: 'safari',
   browser_version: ['11.1'],
@@ -17,9 +17,9 @@ const capabilities = createCapabilities([{
   os_version: ['High Sierra']
 }, {
   browser: 'chrome',
-  browser_version: ['66.0'],
+  browser_version: ['76.0'],
   os: ['Windows', 'OS X'],
-  os_version: ['10', 'Sierra']
+  os_version: ['10', 'Mojave']
 }, {
   browser: 'ie',
   browser_version: ['11.0'],
