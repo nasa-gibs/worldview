@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
-import { drawPaletteOnCanvas } from '../../modules/palettes/util';
+import { drawSidebarPaletteOnCanvas, drawTicksOnCanvas } from '../../modules/palettes/util';
 import lodashIsNumber from 'lodash/isNumber';
 
 class PaletteLegend extends React.Component {
@@ -99,7 +99,7 @@ class PaletteLegend extends React.Component {
       if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
         // If the two colors are close
         return {
-          label: legend.tooltips[i] + ' ' + units,
+          label: units ? legend.tooltips[i] + ' ' + units : legend.tooltips[i],
           len: len,
           index: i
         };
@@ -136,10 +136,17 @@ class PaletteLegend extends React.Component {
             // This value is needed for calculating running data offsets
             this.setState({ width: newWidth });
           }
-          drawPaletteOnCanvas(
-            this[ctxStr].current.getContext('2d'),
+          const ctx = this[ctxStr].current.getContext('2d');
+          drawSidebarPaletteOnCanvas(
+            ctx,
             checkerBoardPattern,
             colorMap.colors,
+            width,
+            height
+          );
+          drawTicksOnCanvas(
+            ctx,
+            colorMap,
             width,
             height
           );
@@ -205,7 +212,7 @@ class PaletteLegend extends React.Component {
     } else if (xOffset + halfTextWidth > width) {
       return { right: '0' };
     }
-    return { left: xOffset - halfTextWidth + 'px' };
+    return { left: Math.floor(xOffset - halfTextWidth) + 'px' };
   }
 
   /**
@@ -224,8 +231,8 @@ class PaletteLegend extends React.Component {
       legendObj = this.getLegendObject(legend, colorHex, 5); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
-        textWidth = util.getTextWidth(legendObj.label, 'Lucida Sans');
-        xOffset = this.state.width * percent;
+        textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
+        xOffset = Math.floor(this.state.width * percent);
       }
     }
     var min = legend.minLabel || legend.tooltips[0];
@@ -253,7 +260,7 @@ class PaletteLegend extends React.Component {
             className="wv-palettes-colorbar"
             id={layer.id + '-' + legend.id + index + 'colorbar'}
             width={width}
-            height={12}
+            height={24}
             ref={this['canvas_' + index]}
             onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
             onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
@@ -266,7 +273,8 @@ class PaletteLegend extends React.Component {
           <div
             className="wv-running-bar"
             style={{
-              left: isHoveringLegend ? 0 : xOffset,
+              top: 7,
+              left: isHoveringLegend ? 0 : xOffset + 0.5,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden'
             }}
           />
@@ -347,9 +355,9 @@ class PaletteLegend extends React.Component {
               {isEndOfRow ? (
                 <div className="wv-running-category-label-case">
                   {isRunningData &&
-                  legendObj &&
-                  (legendObj.index >= rowEndIndex && // legend is in this row
-                    legendObj.index <= index) ? (
+                    legendObj &&
+                    (legendObj.index >= rowEndIndex && // legend is in this row
+                      legendObj.index <= index) ? (
                       <span
                         className="wv-running-category-label"
                         style={this.getClassLabelStyle(

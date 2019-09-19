@@ -82,12 +82,13 @@ export function eventsReducer(state = eventsReducerState, action) {
       return lodashAssign({}, state, {
         showAll: false
       });
-    case CHANGE_SIDEBAR_TAB:
+    case CHANGE_SIDEBAR_TAB: {
       const isActive = action.activeTab === 'events';
       if (isActive === state.active) return state;
       return lodashAssign({}, state, {
         active: isActive
       });
+    }
     case FINISHED_ANIMATING_TO_EVENT:
       return lodashAssign({}, state, {
         isAnimatingToEvent: false
@@ -116,7 +117,7 @@ export function eventsRequestReducer(actionName, state, action) {
         isLoading: true,
         response: null
       });
-    case SUCCESS:
+    case SUCCESS: {
       const key =
         actionName === REQUEST_EVENTS
           ? 'events'
@@ -131,6 +132,7 @@ export function eventsRequestReducer(actionName, state, action) {
           actionName === REQUEST_EVENTS ? sortEvents(filtered) : filtered,
         isLoading: false
       });
+    }
     case FAILURE:
       return eventRequestResponse({
         response: null,

@@ -3,7 +3,7 @@
         "Reference Map": {
             "id": "reference-map",
             "title":    "Reference Map",
-            "subtitle": "OpenStreetMap.org",
+            "subtitle": "OpenStreetMap.org, WDPA",
             "multichoice": true,
             "sources": {
                 "OpenStreetMap.org": {
@@ -17,8 +17,18 @@
                         "Coastlines",
                         "Land_Mask",
                         "Land_Water_Map"
+
                     ]
-                }
+                },
+                  "WDPA": {
+                      "id": "wdpa",
+                      "title": "WDPA",
+                      "description": "wdpa/ProtectedAreas",
+                      "image": "",
+                      "settings": [
+                          "World_Database_on_Protected_Areas"
+                      ]
+                  }
             }
         }
     }

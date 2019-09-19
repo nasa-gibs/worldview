@@ -67,8 +67,8 @@ export function layerReducer(state = initialState, action) {
           [action.index]: { visible: { $set: action.visible } }
         }
       });
-    case SET_THRESHOLD_RANGE_AND_SQUASH:
-      let layerIndex = lodashFindIndex(state[layerGroupStr], {
+    case SET_THRESHOLD_RANGE_AND_SQUASH: {
+      const layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });
       return update(state, {
@@ -78,8 +78,9 @@ export function layerReducer(state = initialState, action) {
           }
         }
       });
-    case CLEAR_CUSTOM_PALETTE:
-      layerIndex = lodashFindIndex(state[layerGroupStr], {
+    }
+    case CLEAR_CUSTOM_PALETTE: {
+      const layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });
 
@@ -92,8 +93,9 @@ export function layerReducer(state = initialState, action) {
           }
         }
       });
-    case SET_CUSTOM_PALETTE:
-      layerIndex = lodashFindIndex(state[layerGroupStr], {
+    }
+    case SET_CUSTOM_PALETTE: {
+      const layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });
       return update(state, {
@@ -105,8 +107,9 @@ export function layerReducer(state = initialState, action) {
           }
         }
       });
-    case SET_FILTER_RANGE:
-      layerIndex = lodashFindIndex(state[layerGroupStr], {
+    }
+    case SET_FILTER_RANGE: {
+      const layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });
       return update(state, {
@@ -116,8 +119,9 @@ export function layerReducer(state = initialState, action) {
           }
         }
       });
-    case CLEAR_VECTORSTYLE:
-      layerIndex = lodashFindIndex(state[layerGroupStr], {
+    }
+    case CLEAR_VECTORSTYLE: {
+      const layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });
 
@@ -130,8 +134,9 @@ export function layerReducer(state = initialState, action) {
           }
         }
       });
-    case SET_VECTORSTYLE:
-      layerIndex = lodashFindIndex(state[layerGroupStr], {
+    }
+    case SET_VECTORSTYLE: {
+      const layerIndex = lodashFindIndex(state[layerGroupStr], {
         id: action.layerId
       });
       return update(state, {
@@ -143,6 +148,7 @@ export function layerReducer(state = initialState, action) {
           }
         }
       });
+    }
     case REMOVE_LAYER:
       return update(state, {
         [layerGroupStr]: { $splice: [[action.index, 1]] }

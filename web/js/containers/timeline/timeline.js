@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import googleTagManager from 'googleTagManager';
-import util from '../../util/util';
 
 import ErrorBoundary from '../../containers/error-boundary';
 import MobileDatePicker from '../../components/timeline/mobile-date-picker';
@@ -86,8 +85,9 @@ class Timeline extends React.Component {
       hoverLinePosition: 0,
       showHoverLine: false,
       showDraggerTime: false,
-      isDraggerDragging: false,
       isAnimationDraggerDragging: false,
+      isArrowDown: false,
+      isDraggerDragging: false,
       isTimelineDragging: false,
       initialLoadComplete: false,
       timelineHidden: false,
@@ -95,9 +95,18 @@ class Timeline extends React.Component {
       rangeSelectorMax: { end: false, start: false, startOffset: -50, width: 50000 }
     };
     // left/right arrows
+    const throttleSettings = { leading: true, trailing: false };
     this.debounceDateUpdate = lodashDebounce(this.props.changeDate, 8);
-    this.throttleDecrementDate = lodashThrottle(this.handleArrowDateChange.bind(this, -1), ANIMATION_DELAY, { leading: true, trailing: false });
-    this.throttleIncrementDate = lodashThrottle(this.handleArrowDateChange.bind(this, 1), ANIMATION_DELAY, { leading: true, trailing: false });
+    this.throttleDecrementDate = lodashThrottle(
+      this.handleArrowDateChange.bind(this, -1),
+      ANIMATION_DELAY,
+      throttleSettings
+    );
+    this.throttleIncrementDate = lodashThrottle(
+      this.handleArrowDateChange.bind(this, 1),
+      ANIMATION_DELAY,
+      throttleSettings
+    );
 
     // animation dragger updates
     this.debounceOnUpdateStartDate = lodashDebounce(this.props.onUpdateStartDate, 30);
@@ -342,28 +351,30 @@ class Timeline extends React.Component {
       customSelected,
       deltaChangeAmt,
       timeScaleChangeUnit,
-      endTime,
-      startDate,
-      selectedDate
+      selectedDate,
+      rightArrowDisabled,
+      leftArrowDisabled
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
-    const timeScale = timeScaleChangeUnit;
-    if (timeScale) { // undefined custom will not allow arrow change
-      delta = Number(delta * signconstant); // determine if negative or positive change
-      var nextTime = getNextTimeSelection(delta, timeScale, selectedDate);
-      if (new Date(startDate) <= nextTime && nextTime <= endTime) {
-        this.onDateChange(util.dateAdd(selectedDate, timeScale, delta));
-      }
+    if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
+      return;
     }
-  }
-  ;
+    delta = Number(delta * signconstant); // determine if negative or positive change
+    const disabled = signconstant > 0 ? rightArrowDisabled : leftArrowDisabled;
+    if (!disabled) {
+      this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate));
+    }
+    this.setState({ isArrowDown: true });
+  };
+
   /**
   * @desc stop animation from left arrows - clear throttle invocation
   * @returns {void}
   */
   stopLeftArrow = () => {
     this.throttleDecrementDate.cancel();
+    this.setState({ isArrowDown: false });
   }
 
   /**
@@ -372,6 +383,7 @@ class Timeline extends React.Component {
   */
   stopRightArrow = () => {
     this.throttleIncrementDate.cancel();
+    this.setState({ isArrowDown: false });
   }
 
   /**
@@ -712,17 +724,46 @@ class Timeline extends React.Component {
     }
   }
 
-  componentDidMount() {
+  /**
+   * Make sure user is not currently interacting with the timeline/dragger/scale/etc,
+   * then update appNow to current time.
+   */
+  checkAndUpdateAppNow() {
     const { updateAppNow } = this.props;
+    const self = this;
+    const ensureCanUpdate = function() {
+      return new Promise(function(resolve, reject) {
+        (function waitForSafeUpdate() {
+          const {
+            isArrowDown,
+            isTimelineDragging,
+            isDraggerDragging,
+            isAnimationDraggerDragging
+          } = self.state;
+          const { isAnimationPlaying } = self.props;
+          const userIsInteracting = isArrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
+          if (!userIsInteracting && !isAnimationPlaying) {
+            return resolve();
+          }
+          setTimeout(waitForSafeUpdate, 1000);
+        })();
+      });
+    };
 
+    ensureCanUpdate().then(() => {
+      updateAppNow(new Date());
+    });
+  }
+
+  componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     // prevent default react synthetic event passive event listener
     // that allows browser resize/zoom on certain wheel events
     document.querySelector('.timeline-container').addEventListener('wheel', preventDefaultFunc, { passive: false });
 
-    // update application relative every 10 minutes from component mount
-    this.appNowUpdateInterval = setInterval(() => updateAppNow(new Date()), 600000);
+    this.checkAndUpdateAppNow = this.checkAndUpdateAppNow.bind(this);
+    this.appNowUpdateInterval = setInterval(this.checkAndUpdateAppNow, 60000 * 15);
     this.setInitialState();
   }
 
@@ -1093,7 +1134,7 @@ function mapStateToProps(state) {
 
   let endTime;
   if (isCompareModeActive) {
-    hasSubdailyLayers = hasSubDaily(layers['active']) || hasSubDaily(layers['activeB']);
+    hasSubdailyLayers = hasSubDaily(layers.active) || hasSubDaily(layers.activeB);
     endTime = getEndTime(layers, config);
   } else {
     hasSubdailyLayers = hasSubDaily(layers[compare.activeString]);
@@ -1126,6 +1167,7 @@ function mapStateToProps(state) {
     timelineEndDateLimit
   );
   return {
+    appNow,
     isTourActive: tour.active,
     isSmallScreen,
     draggerSelected: isCompareA ? 'selected' : 'selectedB',
@@ -1220,6 +1262,7 @@ Timeline.propTypes = {
   animationDisabled: PropTypes.bool,
   animEndLocationDate: PropTypes.object,
   animStartLocationDate: PropTypes.object,
+  appNow: PropTypes.object,
   axisWidth: PropTypes.number,
   changeCustomInterval: PropTypes.func,
   changeDate: PropTypes.func,
@@ -1271,8 +1314,8 @@ const getOffsetValues = (innerWidth, hasSubDaily) => {
 };
 
 const getEndTime = (layers, config) => {
-  const endDateA = layersLastDateTime(layers['active'], config);
-  const endDateB = layersLastDateTime(layers['activeB'], config);
+  const endDateA = layersLastDateTime(layers.active, config);
+  const endDateB = layersLastDateTime(layers.activeB, config);
   return endDateA > endDateB ? endDateA : endDateB;
 };
 /**
@@ -1325,7 +1368,8 @@ const checkRightArrowDisabled = (
   timeScaleChangeUnit,
   timelineEndDateLimit
 ) => {
-  const nextIncrementDate = moment.utc(date).add(delta, timeScaleChangeUnit);
-  const isSameOrAfter = new Date(nextIncrementDate.format()) > new Date(timelineEndDateLimit);
-  return isSameOrAfter;
+  const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
+  const nextIncrementDate = new Date(nextIncMoment.seconds(0).format());
+  const endOfTimelineDate = new Date(timelineEndDateLimit);
+  return nextIncrementDate > endOfTimelineDate;
 };

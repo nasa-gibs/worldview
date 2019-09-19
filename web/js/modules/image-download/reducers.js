@@ -32,13 +32,14 @@ export function imageDownloadReducer(state = defaultState, action) {
       return lodashAssign({}, state, {
         resolution: action.value
       });
-    case CHANGE_PROJECTION:
+    case CHANGE_PROJECTION: {
       const fileType =
         action.selected !== 'geographic' &&
         !lodashFind(fileTypesPolar.values, { value: state.fileType })
           ? 'image/jpeg'
           : state.fileType;
       return lodashAssign({}, defaultState, { fileType });
+    }
     default:
       return state;
   }

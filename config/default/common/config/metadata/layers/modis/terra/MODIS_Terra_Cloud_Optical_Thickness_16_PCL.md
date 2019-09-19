@@ -1,18 +1,1 @@
-{
-    "layers": {
-        "MODIS_Terra_Cloud_Optical_Thickness_16_PCL": {
-            "id":       "MODIS_Terra_Cloud_Optical_Thickness_16_PCL",
-            "title":    "Cloud Optical Thickness (1.6 microns, PCL)",
-            "subtitle": "Terra / MODIS",
-            "description": "modis/terra/MODIS_Terra_Cloud_Optical_Thickness_16_PCL",
-            "group":    "overlays",
-            "layergroup": [
-              "modis",
-              "modis_terra"
-            ],
-            "product":  "MOD06_L2",
-            "wrapadjacentdays": true
-
-            }
-        }
-    }
+References: [MODIS Atmosphere - Cloud (06_L2)](https://modis-atmos.gsfc.nasa.gov/products/cloud)

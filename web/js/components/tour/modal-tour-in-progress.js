@@ -19,13 +19,13 @@ class ModalInProgress extends React.Component {
           onClosed={this.props.showTourAlert}
           wrapClassName="tour tour-in-progress"
           className={
-            this.props.className + ' ' + this.props.currentStory['type']
+            this.props.className + ' ' + this.props.currentStory.type
           }
           backdrop={false}
           keyboard={false}
         >
           <ModalHeader toggle={this.props.endTour} charCode="">
-            {this.props.currentStory['title']}
+            {this.props.currentStory.title}
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>
           <ModalBody>

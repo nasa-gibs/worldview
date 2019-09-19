@@ -1,0 +1,3 @@
+The Moderate Resolution Imaging Spectroradiometer (MODIS) Aqua MYD09A1 Version 6 product provides an estimate of the surface spectral reflectance of Aqua MODIS Bands 1 through 7 corrected for atmospheric conditions such as gasses, aerosols, and Rayleigh scattering. Along with the seven 500 meter (m) reflectance bands are a quality layer and four observation bands. For each pixel, a value is selected from all the acquisitions within the 8-day composite period. The criteria for the pixel choice include cloud and solar zenith. When several acquisitions meet the criteria the pixel with the minimum channel 3 (blue) value is used.
+
+Reference: [LP DAAC - MYD09A1 Version 6](https://lpdaac.usgs.gov/products/myd09a1v006/)

@@ -476,35 +476,31 @@ class TimelineAxis extends Component {
       isAnimationPlaying,
       isCompareModeActive,
       draggerTimeState,
-      draggerTimeStateB
+      draggerTimeStateB,
+      timelineEndDateLimit
     } = this.props;
+
+    let draggerDate = draggerSelected === 'selected' ? draggerTimeState : draggerTimeStateB;
 
     // update timescale axis focus
     if (timeScale !== prevProps.timeScale) {
-      let draggerDate;
       let leftOffset;
       if (this.state.wheelZoom === true) {
         draggerDate = hoverTime;
       } else {
         leftOffset = 0.80;
-        if (draggerSelected === 'selected') {
-          draggerDate = draggerTimeState;
-        } else {
-          draggerDate = draggerTimeStateB;
-        }
       }
       this.updateScale(draggerDate, timeScale, null, leftOffset, true, prevProps.timeScale);
     }
 
     // update axis on browser width change
     if (axisWidth !== prevProps.axisWidth) {
-      let draggerDate;
-      if (draggerSelected === 'selected') {
-        draggerDate = draggerTimeState;
-      } else {
-        draggerDate = draggerTimeStateB;
-      }
       this.updateScale(draggerDate, timeScale, axisWidth, 0.80);
+    }
+
+    // update scale if end time limit has changed (e.g. time has elapsed since the app was started)
+    if (timelineEndDateLimit !== prevProps.timelineEndDateLimit) {
+      this.updateScale(draggerDate, timeScale, null, null, true);
     }
 
     // handle switching A/B dragger axis focus if switched from A/B sidebar tabs

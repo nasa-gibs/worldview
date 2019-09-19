@@ -46,18 +46,13 @@
 /* .tour-start */
 .tour-start .modal {
   overflow-y: auto;
-  height: 830px;
   margin-left: auto;
   margin-right: auto;
-  top: 20px;
-  bottom: 20px;
 }
 
 .tour-start .modal-dialog {
   overflow-y: initial;
   border: 1px solid #333;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 .tour-start .modal.fade .modal-dialog {
@@ -117,7 +112,6 @@
 .tour-start .tour-box-row {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
 }
 
 .tour-start .tour-box {
@@ -772,6 +766,10 @@
   .tour-start .modal-body .tour-box {
     flex: none;
     width: 200px;
+  }
+
+  .tour-start .modal-body .tour-box-float {
+    margin: 4px 4px 0 0;
   }
 
   /* .tour-complete */

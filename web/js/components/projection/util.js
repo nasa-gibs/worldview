@@ -1,8 +1,8 @@
 export function parse(state, errors, config) {
   // Permalink version 1.0 - 1.1
-  if (state['switch']) {
-    state.p = state['switch'];
-    delete state['switch'];
+  if (state.switch) {
+    state.p = state.switch;
+    delete state.switch;
   }
   var projId = state.p;
   if (projId) {

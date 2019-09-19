@@ -12,6 +12,7 @@ import {
 } from 'lodash';
 import update from 'immutability-helper';
 import util from '../../util/util';
+
 export function hasMeasurementSource(current, config, projId) {
   var hasSource;
   lodashValues(current.sources).forEach(function(source) {
@@ -21,6 +22,7 @@ export function hasMeasurementSource(current, config, projId) {
   });
   return hasSource;
 }
+
 /**
  * var hasMeasurementSetting - Checks the (current) measurement's source
  *  for a setting and returns true if present.
@@ -53,6 +55,7 @@ export function hasMeasurementSetting(current, source, config, projId) {
   });
   return hasSetting;
 }
+
 export function getLayersForProjection(config, projection) {
   var filteredRows = lodashValues(config.layers)
     .filter(function(layer) {
@@ -72,11 +75,13 @@ export function getLayersForProjection(config, projection) {
     return lodashIndexOf(config.layerOrder, layer.id);
   });
 }
+
 var decodeHtml = function(html) {
   var txt = document.createElement('textarea');
   txt.innerHTML = html;
   return txt.value;
 };
+
 /**
  * See if an array of layers has a subdaily
  * product in it
@@ -126,6 +131,7 @@ export function addLayer(id, spec, layers, layerConfig, overlayLength) {
   }
   return layers;
 }
+
 export function resetLayers(startingLayers, layerConfig) {
   let layers = [];
   if (startingLayers) {
@@ -135,6 +141,7 @@ export function resetLayers(startingLayers, layerConfig) {
   }
   return layers;
 }
+
 export function getTitles(config, layerId, projId) {
   try {
     var title, subtitle, tags;
@@ -161,6 +168,7 @@ export function getTitles(config, layerId, projId) {
     throw new Error(`error in layer ${layerId}: ${err}`);
   }
 }
+
 export function getLayers(layers, spec, state) {
   spec = spec || {};
   var baselayers = forGroup('baselayers', spec, layers, state);
@@ -182,6 +190,7 @@ export function getLayers(layers, spec, state) {
   }
   return baselayers.concat(overlays);
 }
+
 function forGroup(group, spec, activeLayers, state) {
   spec = spec || {};
   var projId = spec.proj || state.proj.id;
@@ -216,21 +225,22 @@ function forGroup(group, spec, activeLayers, state) {
   }
   return results;
 }
+
+/**
+ * Determine if a given layer is available
+ * @param {*} id
+ * @param {*} date
+ * @param {*} layers
+ * @param {*} config
+ */
 export function available(id, date, layers, config) {
-  var range = dateRange(
-    {
-      layer: id
-    },
-    layers,
-    config
-  );
-  if (range) {
-    if (date < range.start || date > range.end) {
-      return false;
-    }
+  const range = dateRange({ layer: id }, layers, config);
+  if (range && (date < range.start || date > range.end)) {
+    return false;
   }
   return true;
 }
+
 export function replaceSubGroup(
   layerId,
   nextLayerId,
@@ -244,17 +254,18 @@ export function replaceSubGroup(
     return pushToBottom(layerId, layers, layerSplit);
   }
 }
+
+/**
+ * Determine date range for layers
+ * @param {*} spec
+ * @param {*} activeLayers
+ * @param {*} config
+ */
 export function dateRange(spec, activeLayers, config) {
   var layers = spec.layer
-    ? [
-      lodashFind(activeLayers, {
-        id: spec.layer
-      })
-    ]
+    ? [lodashFind(activeLayers, { id: spec.layer })]
     : activeLayers;
-  var ignoreRange =
-    config.parameters &&
-    (config.parameters.debugGIBS || config.parameters.ignoreDateRange);
+  var ignoreRange = config.parameters && (config.parameters.debugGIBS || config.parameters.ignoreDateRange);
   if (ignoreRange) {
     return {
       start: new Date(Date.UTC(1970, 0, 1)),
@@ -265,6 +276,11 @@ export function dateRange(spec, activeLayers, config) {
   var max = 0;
   var range = false;
   var maxDates = [];
+
+  // Use the minute ceiling of the current time so that we don't run into an issue where
+  // seconds value of current appNow time is greater than a layer's available time range
+  const minuteCeilingCurrentTime = util.now().setSeconds(59);
+
   lodashEach(layers, function(def) {
     if (def) {
       if (def.startDate) {
@@ -285,7 +301,7 @@ export function dateRange(spec, activeLayers, config) {
         maxDates.push(new Date(max));
       } else if (def.endDate) {
         range = true;
-        max = util.now().getTime();
+        max = minuteCeilingCurrentTime;
         maxDates.push(new Date(max));
       }
       // If there is a start date but no end date, this is a
@@ -308,14 +324,15 @@ export function dateRange(spec, activeLayers, config) {
           maxDates.push(new Date(max));
         }
       } else if (def.startDate && !def.endDate) {
-        max = util.now().getTime();
+        max = minuteCeilingCurrentTime;
         maxDates.push(new Date(max));
       }
     }
   });
+
   if (range) {
     if (max === 0) {
-      max = util.now().getTime();
+      max = minuteCeilingCurrentTime;
       maxDates.push(max);
     }
     var maxDate = Math.max.apply(max, maxDates);
@@ -325,6 +342,7 @@ export function dateRange(spec, activeLayers, config) {
     };
   }
 }
+
 export function pushToBottom(id, layers, layerSplit) {
   const decodedId = util.decodeId(id);
   var oldIndex = lodashFindIndex(layers, {
@@ -365,6 +383,7 @@ export function moveBefore(sourceId, targetId, layers) {
   layers.splice(sourceIndex, 1);
   return layers;
 }
+
 export function isRenderable(id, activeLayers, date, state) {
   const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
   date = date || state.date[activeDateStr];
@@ -435,6 +454,7 @@ export function lastDateTime(activeLayers, config) {
   }
   return endDate;
 }
+
 export function activateLayersForEventCategory(activeLayers, state) {
   const { layers, compare } = state;
   // Turn off all layers in list first
@@ -465,6 +485,7 @@ export function activateLayersForEventCategory(activeLayers, state) {
   });
   return newLayers;
 }
+
 export function getZotsForActiveLayers(config, projection, map, activeLayers) {
   var zotObj = {};
   var sources = config.sources;
@@ -480,6 +501,7 @@ export function getZotsForActiveLayers(config, projection, map, activeLayers) {
   });
   return zotObj;
 }
+
 function getZoomLevel(layer, zoom, proj, sources) {
   // Account for offset between the map's top zoom level and the
   // lowest-resolution TileMatrix in polar layers

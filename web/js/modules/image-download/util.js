@@ -1,7 +1,68 @@
 import lodashEach from 'lodash/each';
+import lodashGet from 'lodash/get';
+import util from '../../util/util';
+import { nearestInterval } from '../layers/util';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
+
+/**
+ * Get a date time snapped to the interval of the layer with the shortest interval.
+ * This should give us the snapped time closest to the current app time.
+ * @param {Object} layerDefs - layer definitions for all visible layers
+ * @param {Date} dateTime - current application dateTime
+ * @returns {Date}
+ */
+export function getLatestIntervalTime(layerDefs, dateTime) {
+  const subDailyDefs = layerDefs.filter((def) => def.period === 'subdaily') || [];
+  const defsSortedByInterval = subDailyDefs.sort((defA, defB) => {
+    const intervalA = Number(lodashGet(defA, 'dateRanges[0].dateInterval'));
+    const intervalB = Number(lodashGet(defB, 'dateRanges[0].dateInterval'));
+    return intervalA - intervalB;
+  });
+
+  return subDailyDefs.length
+    ? nearestInterval(defsSortedByInterval[0], dateTime)
+    : new Date(dateTime.setUTCHours(0, 0, 0, 0));
+};
+
+/**
+ * Get the snapshots URL to download an image
+ * @param {String} url
+ * @param {Object} proj
+ * @param {Array} layers
+ * @param {Object} lonlats
+ * @param {Object} dimensions
+ * @param {Date} dateTime
+ * @param {Boolean} isWorldfile
+ */
+export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTime, fileType, isWorldfile) {
+  const { crs } = proj.selected;
+  const layersArray = imageUtilGetLayers(layerDefs, proj.id);
+  const layerWraps = imageUtilGetLayerWrap(layerDefs);
+  const opacities = imageUtilGetLayerOpacities(layerDefs);
+  const imgFormat = fileType || 'image/jpeg';
+  const { height, width } = dimensions;
+  const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
+  const params = [
+    'REQUEST=GetSnapshot',
+    `TIME=${util.toISOStringSeconds(snappedDateTime)}`,
+    `BBOX=${bboxWMS13(lonlats, crs)}`,
+    `CRS=${crs}`,
+    `LAYERS=${layersArray.join(',')}`,
+    `WRAP=${layerWraps.join(',')}`,
+    `FORMAT=${imgFormat}`,
+    `WIDTH=${width}`,
+    `HEIGHT=${height}`
+  ];
+  if (opacities.length > 0) {
+    params.push(`OPACITIES=${opacities.join(',')}`);
+  }
+  if (isWorldfile === 'true') {
+    params.push('WORLDFILE=true');
+  }
+  return url + '?' + params.join('&') + `&ts=${Date.now()}`;
+}
 
 /*
  * Estimate appropriate Resolution based on zoom

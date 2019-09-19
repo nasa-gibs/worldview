@@ -918,6 +918,7 @@
         "MODIS_Water_Mask",
         "MODIS_Terra_Data_No_Data",
         "MODIS_Aqua_Data_No_Data",
+        "World_Database_on_Protected_Areas",
 
         "OrbitTracks_Aqua_Ascending",
         "OrbitTracks_Aqua_Descending",

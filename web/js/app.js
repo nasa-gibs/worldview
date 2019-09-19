@@ -14,6 +14,7 @@ import Modal from './containers/modal';
 
 // Other
 import Brand from './brand';
+import MeasureButton from './components/measure-tool/measure-button';
 
 // actions
 import { calculateResponsiveState } from 'redux-responsive';
@@ -72,6 +73,7 @@ import '../css/dateselector.css';
 import '../css/tooltip.css';
 import '../css/mobile.css';
 import '../css/modal.css';
+import '../css/measure.css';
 import '../css/list.css';
 import '../css/vectorMeta.css';
 import '../pages/css/document.css';
@@ -113,6 +115,7 @@ class App extends React.Component {
         <div id="wv-animation-widet-case">
           {isAnimationWidgetActive ? <AnimationWidget /> : null}
         </div>
+        <MeasureButton />
         <OlCoordinates mouseEvents={this.props.mapMouseEvents} />
         <Modal />
         <ErrorBoundary>

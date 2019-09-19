@@ -2,10 +2,7 @@ import React from 'react';
 import {
   imageSizeValid,
   getDimensions,
-  imageUtilGetLayers,
-  imageUtilGetLayerOpacities,
-  imageUtilGetLayerWrap,
-  bboxWMS13
+  getDownloadUrl
 } from '../../modules/image-download/util';
 
 import SelectionList from '../util/selector';
@@ -46,36 +43,23 @@ export default class ImageResSelection extends React.Component {
     };
   }
 
-  onDownload(imgWidth, imgHeight) {
-    const { getLayers, url, lonlats, crs, projection, date } = this.props;
+  onDownload(width, height) {
+    const { getLayers, url, lonlats, projection, date } = this.props;
     const { fileType, isWorldfile, resolution } = this.state;
     const time = new Date(date.getTime());
-    if (!this.props.hasSubdailyLayers) {
-      time.setUTCHours(0, 0, 0, 0);
-    }
-    const layerList = getLayers();
-    const layerWraps = imageUtilGetLayerWrap(layerList);
-    const layers = imageUtilGetLayers(layerList, projection.id);
-    const opacities = imageUtilGetLayerOpacities(layerList);
-    const params = [
-      'REQUEST=GetSnapshot',
-      `TIME=${util.toISOStringSeconds(time)}`,
-      `BBOX=${bboxWMS13(lonlats, crs)}`,
-      `CRS=${crs}`,
-      `LAYERS=${layers.join(',')}`,
-      `WRAP=${layerWraps.join(',')}`,
-      `FORMAT=${fileType}`,
-      `WIDTH=${imgWidth}`,
-      `HEIGHT=${imgHeight}`
-    ];
 
-    if (opacities.length > 0) {
-      params.push(`OPACITIES=${opacities.join(',')}`);
-    }
-    if (isWorldfile === 'true') {
-      params.push('WORLDFILE=true');
-    }
-    const dlURL = url + '?' + params.join('&') + `&ts=${Date.now()}`;
+    const layerList = getLayers();
+    const dlURL = getDownloadUrl(
+      url,
+      projection,
+      layerList,
+      lonlats,
+      { width, height },
+      time,
+      fileType,
+      isWorldfile
+    );
+
     if (url) {
       util.metrics('lc=' + encodeURIComponent(dlURL));
       window.open(dlURL, '_blank');
@@ -85,7 +69,7 @@ export default class ImageResSelection extends React.Component {
     googleTagManager.pushEvent({
       event: 'image_download',
       layers: {
-        activeCount: layers.length
+        activeCount: layerList.length
       },
       image: {
         resolution: RESOLUTION_KEY[resolution],
@@ -104,7 +88,7 @@ export default class ImageResSelection extends React.Component {
       });
     } else if (type === 'worldfile') {
       this.setState({
-        isWorldfile: value
+        isWorldfile: Boolean(Number(value))
       });
     } else {
       this.setState({
@@ -145,8 +129,8 @@ export default class ImageResSelection extends React.Component {
               value={this.state.isWorldfile}
               onChange={e => this.handleChange('worldfile', e.target.value)}
             >
-              <option value={false}>No</option>
-              <option value={true}>Yes</option>
+              <option value={0}>No</option>
+              <option value={1}>Yes</option>
             </select>
           )}
           Worldfile (.zip)
@@ -156,13 +140,14 @@ export default class ImageResSelection extends React.Component {
   }
 
   render() {
-    const { projection, lonlats, resolutions, maxImageSize } = this.props;
+    const { getLayers, projection, lonlats, resolutions, maxImageSize } = this.props;
     const { resolution, debugUrl } = this.state;
     const dimensions = getDimensions(projection.id, lonlats, resolution);
     const height = dimensions.height;
     const width = dimensions.width;
     const filetypeSelect = this._renderFileTypeSelect();
     const worldfileSelect = this._renderWorldfileSelect();
+    const layerList = getLayers();
     return (
       <div className="wv-re-pick-wrapper wv-image">
         <div
@@ -187,7 +172,8 @@ export default class ImageResSelection extends React.Component {
           height={height}
           fileSize={((width * height * 24) / 8388608).toFixed(2)}
           maxImageSize={maxImageSize}
-          valid={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+          validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+          validLayers={layerList.length > 0}
           onClick={this.onDownload.bind(this)}
         />
       </div>

@@ -47,7 +47,7 @@ export function paletteReducer(state = defaultPaletteState, action) {
       return update(state, {
         rendered: { $merge: action.rendered || {} }
       });
-    case REQUEST_PALETTE_SUCCESS:
+    case REQUEST_PALETTE_SUCCESS: {
       const isLoading = update(state.isLoading, { $unset: [action.id] });
       return lodashAssign({}, state, {
         rendered: lodashAssign({}, state.rendered, {
@@ -55,6 +55,7 @@ export function paletteReducer(state = defaultPaletteState, action) {
         }),
         isLoading
       });
+    }
     case INIT_SECOND_LAYER_GROUP:
       if (!isEmpty(state.activeB)) return state;
       return lodashAssign({}, state, {

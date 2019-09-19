@@ -2,4 +2,4 @@ The CYGNSS/DDMI Ocean Surface Wind Speed (L3, 0.2x0.2 Degree Grid, Daily) layer 
 
 The CYGNSS constellation includes 8 spacecraft observatories, in which one day will nominally contain data from 6 out of 8 CYGNSS observatories. Data latency ranges from 24 hours to 6 days from the last available observation. The data imagery here is provided by the CYGNSS Version 2.1 Level 3 Science Data Record. Daily coverage is constrained to the global tropical oceans and basins within the 40 degree north and south latitude band.
 
-References: Dataset DOI:[10.5067/CYGNS-L3X21](https://podaac.jpl.nasa.gov/dataset/CYGNSS_L3_V2.1)
+References: Dataset doi:[10.5067/CYGNS-L3X21](https://podaac.jpl.nasa.gov/dataset/CYGNSS_L3_V2.1)

@@ -1,4 +1,5 @@
 import {
+  get as lodashGet,
   cloneDeep as lodashCloneDeep,
   eachRight as lodashEachRight,
   isUndefined as lodashIsUndefined,
@@ -14,6 +15,156 @@ import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import update from 'immutability-helper';
 import util from '../../util/util';
+import closestTo from 'date-fns/closest_to';
+import isBefore from 'date-fns/is_before';
+import isEqual from 'date-fns/is_equal';
+import isFirstDayOfMonth from 'date-fns/is_first_day_of_month';
+import isLastDayOfMonth from 'date-fns/is_last_day_of_month';
+import lastDayOfYear from 'date-fns/last_day_of_year';
+
+/**
+   * For subdaily layers, round the time down to nearest interval.
+   * NOTE: Assumes intervals are the same for all ranges!
+   * @param {object} def
+   * @param {date} date
+   * @return {date}
+   */
+export function nearestInterval(def, date) {
+  const dateInterval = lodashGet(def, 'dateRanges[0].dateInterval');
+  const interval = Number(dateInterval);
+  const remainder = date.getMinutes() % interval;
+  const newMinutes = date.getMinutes() - remainder;
+  const newDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours(),
+    newMinutes
+  );
+  return newDate;
+};
+
+/**
+   * Find the closest previous date from an array of dates
+   *
+   * @param  {object} def       A layer definition
+   * @param  {object} date      A date to compare against the array of dates
+   * @param  {array} dateArray  An array of dates
+   * @return {object}           The date object with normalized timeszone.
+   */
+export function prevDateInDateRange(def, date, dateArray) {
+  const closestAvailableDates = [];
+  const currentDate = new Date(date.getTime());
+
+  if (!dateArray ||
+      (def.period === 'monthly' && (isFirstDayOfMonth(currentDate) || isLastDayOfMonth(currentDate))) ||
+      (def.period === 'yearly' && ((currentDate.getDate() === 1 && currentDate.getMonth() === 0) || (currentDate === lastDayOfYear(currentDate))))) {
+    return date;
+  }
+
+  lodashEach(dateArray, (rangeDate) => {
+    if (isBefore(rangeDate, currentDate) || isEqual(rangeDate, currentDate)) {
+      closestAvailableDates.push(rangeDate);
+    }
+  });
+
+  const closestDate = closestTo(currentDate, closestAvailableDates);
+  return closestDate ? new Date(closestDate.getTime()) : date;
+};
+
+/**
+   * Return an array of dates based on the dateRange the current date falls in.
+   *
+   * @method datesinDateRanges
+   * @param  {object} def           A layer object
+   * @param  {object} date          A date object
+   * @return {array}                An array of dates with normalized timezones
+   */
+export function datesinDateRanges(def, date) {
+  const dateArray = [];
+  let currentDate = new Date(date.getTime());
+
+  lodashEach(def.dateRanges, (dateRange) => {
+    const { dateInterval } = dateRange;
+    let yearDifference;
+    let monthDifference;
+    let dayDifference;
+    let minuteDifference;
+    let minDate = new Date(dateRange.startDate);
+    let maxDate = new Date(dateRange.endDate);
+    // Offset timezone
+    minDate = new Date(minDate.getTime() - (minDate.getTimezoneOffset() * 60000));
+    maxDate = new Date(maxDate.getTime() - (maxDate.getTimezoneOffset() * 60000));
+
+    const maxYear = maxDate.getUTCFullYear();
+    const maxMonth = maxDate.getUTCMonth();
+    const maxDay = maxDate.getUTCDate();
+    const maxHours = maxDate.getUTCHours();
+    const maxMinutes = maxDate.getUTCMinutes();
+    const minYear = minDate.getUTCFullYear();
+    const minMonth = minDate.getUTCMonth();
+    const minDay = minDate.getUTCDate();
+    const minMinutes = minDate.getUTCMinutes();
+
+    const maxYearDate = new Date(maxYear + 1, maxMonth, maxDay);
+    const maxMonthDate = new Date(maxYear, maxMonth + 1, maxDay);
+    const maxDayDate = new Date(maxYear, maxMonth, maxDay + 1);
+    let maxMinuteDate = new Date(maxYear, maxMonth, maxDay, maxHours, maxMinutes + dateInterval);
+
+    let i;
+    // Yearly layers
+    if (def.period === 'yearly') {
+      if (currentDate >= minDate && currentDate <= maxYearDate) {
+        yearDifference = util.yearDiff(minDate, maxYearDate);
+      }
+      for (i = 0; i <= (yearDifference + 1); i++) {
+        dateArray.push(new Date(minYear + dateInterval, minMonth, minDay));
+      }
+    // Monthly layers
+    } else if (def.period === 'monthly') {
+      if (currentDate >= minDate && currentDate <= maxMonthDate) {
+        monthDifference = util.monthDiff(minDate, maxMonthDate);
+      }
+      for (i = 0; i <= (monthDifference + 1); i++) {
+        dateArray.push(new Date(minYear, minMonth + i, minDay));
+      }
+    // Daily layers
+    } else if (def.period === 'daily') {
+      if (currentDate >= minDate && currentDate <= maxDayDate) {
+        dayDifference = util.dayDiff(minDate, maxDayDate);
+      }
+      for (i = 0; i <= (dayDifference + 1); i++) {
+        dateArray.push(new Date(minYear, minMonth, minDay + i));
+      }
+    // Subdaily layers
+    } else if (def.period === 'subdaily') {
+      const currentDateOffset = currentDate.getTimezoneOffset() * 60000;
+      const hourBeforeCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset - (60 * 60000));
+      const hourAfterCurrentDate = new Date(currentDate.setMinutes(minMinutes) - currentDateOffset + (60 * 60000));
+
+      minDate = hourBeforeCurrentDate < minDate ? minDate : hourBeforeCurrentDate;
+      maxMinuteDate = hourAfterCurrentDate > maxMinuteDate ? maxMinuteDate : hourAfterCurrentDate;
+
+      currentDate = new Date(currentDate.getTime() - currentDateOffset);
+      if (currentDate >= minDate && currentDate <= maxMinuteDate) {
+        minuteDifference = util.minuteDiff(minDate, maxMinuteDate);
+      }
+      for (i = 0; i <= (minuteDifference + 1); i += dateInterval) {
+        dateArray.push(
+          new Date(
+            minDate.getUTCFullYear(),
+            minDate.getUTCMonth(),
+            minDate.getUTCDate(),
+            minDate.getUTCHours(),
+            minDate.getUTCMinutes() + i,
+            0
+          )
+        );
+      }
+    }
+  });
+  return dateArray;
+};
 
 export function serializeLayers(currentLayers, state, groupName) {
   const layers = currentLayers;

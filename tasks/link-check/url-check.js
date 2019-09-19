@@ -21,14 +21,14 @@ const requestCheck = async (urls) => {
     await fetch(url, { timeout: 10000 })
       .then(async (res) => {
         const statusCode = await res.status;
-        if (!parsedUrls['STATUSCODE'][statusCode]) {
-          parsedUrls['STATUSCODE'][statusCode] = [];
+        if (!parsedUrls.STATUSCODE[statusCode]) {
+          parsedUrls.STATUSCODE[statusCode] = [];
         }
-        parsedUrls['STATUSCODE'][statusCode].push({ [linkName]: url });
+        parsedUrls.STATUSCODE[statusCode].push({ [linkName]: url });
       })
       .then(sleeper(500))
       .catch((err) => { // eslint-disable-line handle-callback-err
-        parsedUrls['ERROR'].push({ [linkName]: url });
+        parsedUrls.ERROR.push({ [linkName]: url });
       });
   }
   return parsedUrls;
@@ -41,16 +41,16 @@ const getURLStatusCodeCollection = async function(urls) {
   console.log(`
 URL STATUSCODE RESULTS:
 ${'-'.repeat(66)}
-  ERRORS: \x1b[31m${checkStatus['ERROR'].length}\x1b[0m
+  ERRORS: \x1b[31m${checkStatus.ERROR.length}\x1b[0m
   STATUSCODE:`);
-  for (const code in checkStatus['STATUSCODE']) {
+  for (const code in checkStatus.STATUSCODE) {
     let preColor = '\x1b[33m';
     if (code === '200') {
       preColor = '\x1b[32m';
     } else if (Number(code) >= 400) {
       preColor = '\x1b[31m';
     }
-    console.log(`    ${code}: ${preColor + checkStatus['STATUSCODE'][code].length}\x1b[0m`);
+    console.log(`    ${code}: ${preColor + checkStatus.STATUSCODE[code].length}\x1b[0m`);
   }
   return checkStatus;
 };

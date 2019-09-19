@@ -23,9 +23,9 @@ export default class VectorMetaTable extends React.Component {
     ) {
       header = Object.entries(metaFeatures).map(([featureId, i], x) => {
         var tooltipDescription;
-        Object.values(metaLegend['mvt_properties']).forEach(property => {
-          if (property && property['Description'] && (property['Identifier'].toLowerCase() === featureId.toLowerCase())) {
-            tooltipDescription = property['Description'];
+        Object.values(metaLegend.mvt_properties).forEach(property => {
+          if (property && property.Description && (property.Identifier.toLowerCase() === featureId.toLowerCase())) {
+            tooltipDescription = property.Description;
           }
         });
         return (

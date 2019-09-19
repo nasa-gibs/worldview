@@ -3,7 +3,7 @@ import lodashIndexOf from 'lodash/indexOf';
  * @class wv.brand
  * @static
  */
-export default (function () {
+export default (function() {
   var self = {};
 
   /**
@@ -54,11 +54,11 @@ export default (function () {
    * @return true if the build script has populated the VERSION field,
    * otherwise returns false.
    */
-  self.release = function () {
+  self.release = function() {
     return self.VERSION[0] !== '@';
   };
 
-  self.url = function (base) {
+  self.url = function(base) {
     var joiner = (lodashIndexOf(base, '?') < 0) ? '?' : '&';
     return base + joiner + 'v=' + self.BUILD_NONCE;
   };

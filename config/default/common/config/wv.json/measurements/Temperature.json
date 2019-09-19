@@ -3,7 +3,7 @@
         "Temperature": {
             "id": "temperature",
             "title":    "Temperature",
-            "subtitle": "Aqua / AIRS, Aura / MLS, GLDAS, NLDAS, Daymet, MERRA-2",
+            "subtitle": "Aqua/AIRS, Aura/MLS, GLDAS, NLDAS, Daymet, MERRA-2",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
