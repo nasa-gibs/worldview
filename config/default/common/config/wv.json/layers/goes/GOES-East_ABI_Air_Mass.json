@@ -1,0 +1,17 @@
+{
+    "layers": {
+        "GOES-East_ABI_Air_Mass": {
+            "id":       "GOES-East_ABI_Air_Mass",
+            "title":    "Air Mass",
+            "subtitle": "GOES-East/ABI",
+            "description": "goes/GOES-East_ABI_Air_Mass",
+            "group":    "overlays",
+            "tags":     "geostationary geo",
+            "layergroup": [
+              "goes"
+            ],
+            "product":  "",
+            "wrapadjacentdays": true
+        }
+    }
+}
