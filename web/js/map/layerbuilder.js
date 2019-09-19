@@ -88,6 +88,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         // save to cache and push
         self.granuleCache.setItem(granuleISOKey, createdLayer);
         createdLayer.setVisible(false);
+        // can set opacity for individual granules here and still control group opacity
+        // from the sidebar
+        // createdLayer.setOpacity(0.2);
         resolve(createdLayer);
       });
       granuleLayers.push(layerPromise);
@@ -162,7 +165,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
             // ! TEST USING 20 FOR INIT LOAD SEEMS UI FRIENDLY
             // ! 100 + and it's noticeably slower to blocking
-            const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * 2)))
+            const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * 20)))
             // console.log(date, startDateForGranuleDay2)
 
             // add dates to granuleDayTimes array
@@ -275,7 +278,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           // console.log(granuleDate)
           // don't show future granule dates
           const isPastDate = new Date(granuleDate) < date;
-          const startDateForGranuleDay = new Date(date.getTime() - (60000 * (6 * 2)));
+          const startDateForGranuleDay = new Date(date.getTime() - (60000 * (6 * 20)));
           const isGreaterThanTwentyPrevious = startDateForGranuleDay > new Date(granuleDate);
           // if granule for current date time
           if (granuleDate === date.toISOString().split('.')[0] + 'Z') {
