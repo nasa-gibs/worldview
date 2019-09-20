@@ -87,7 +87,16 @@ def process_layer(gc_layer, wv_layers, colormaps):
 
     if "TileMatrixSetLimits" in matrixSetLink and matrixSetLink["TileMatrixSetLimits"] is not None:
         matrixSetLimits = matrixSetLink["TileMatrixSetLimits"]["TileMatrixLimits"]
-        wv_layer["projections"][entry["projection"]]["matrixSetLimits"] = matrixSetLimits
+        mappedSetLimits = []
+        for setLimit in matrixSetLimits:
+            mappedSetLimits.append({
+                "TileMatrix": setLimit["TileMatrix"],
+                "MinTileRow": int(setLimit["MinTileRow"]),
+                "MaxTileRow": int(setLimit["MaxTileRow"]),
+                "MinTileCol": int(setLimit["MinTileCol"]),
+                "MaxTileCol": int(setLimit["MaxTileCol"]),
+            })
+        wv_layer["projections"][entry["projection"]]["matrixSetLimits"] = mappedSetLimits;
 
     # Vector data links
     if "ows:Metadata" in gc_layer and gc_layer["ows:Metadata"] is not None:
@@ -198,8 +207,9 @@ def process_entry(entry, colormaps):
                         ident, str(e)))
 
     def process_matrix_set(gc_matrix_set):
+        tileMatrixArr = gc_matrix_set["TileMatrix"]
         ident = gc_matrix_set["ows:Identifier"]
-        zoom_levels = len(gc_matrix_set["TileMatrix"])
+        zoom_levels = len(tileMatrixArr)
         resolutions = []
         max_resolution = entry["maxResolution"]
         for zoom in range(0, zoom_levels):
@@ -210,10 +220,10 @@ def process_entry(entry, colormaps):
             "maxResolution": max_resolution,
             "resolutions": resolutions,
             "tileSize": [
-                int(gc_matrix_set["TileMatrix"][0]["TileWidth"]),
-                int(gc_matrix_set["TileMatrix"][0]["TileHeight"])
+                int(tileMatrixArr[0]["TileWidth"]),
+                int(tileMatrixArr[0]["TileHeight"])
             ],
-            "raw": gc_matrix_set
+            "tileMatrices": tileMatrixArr
         }
 
     if(type(gc_contents["TileMatrixSet"]) is OrderedDict):
