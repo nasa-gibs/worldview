@@ -1,7 +1,6 @@
 /* eslint-disable import/no-duplicates */
 import util from '../util/util';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
-import { createFromCapabilitiesMatrixSet } from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlLayerGroup from 'ol/layer/Group';
