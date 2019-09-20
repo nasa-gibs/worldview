@@ -210,76 +210,48 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   };
 
   /**
-   *
-   * @param {*} matrixSet
-   * @param {*} matrixSetLimits
+   * Determine the extent based on TileMatrixSetLimits defined in GetCapabilities response
+   * @param {*} matrixSet - from GetCapabilities
+   * @param {*} matrixSetLimits - from GetCapabilities
+   * @param {*} day
+   * @param {*} proj - current projection
    */
-  const calcExtentFromLimits = (matrixSet, matrixSetLimits) => {
+  const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day, proj) => {
+    let extent = proj.maxExtent;
+    let start = [extent[0], extent[3]];
+
+    if (day) {
+      if (day === 1) {
+        extent = [-250, -90, -180, 90];
+        start = [-540, 90];
+      } else {
+        extent = [180, -90, 250, 90];
+        start = [180, 90];
+      }
+    }
+
+    if (!matrixSetLimits) {
+      return { start, extent };
+    }
     const resolutionLen = matrixSet.resolutions.length;
     const setlimitsLen = matrixSetLimits.length;
+
     if (setlimitsLen !== resolutionLen) {
       console.error('Mismatching levels of matrix set and matrix set limits!');
-      return [-180, -90, 180, 90];
+      return { start, extent };
     }
+
     const resolution = matrixSet.resolutions[resolutionLen - 1];
     const minSetLimits = matrixSetLimits[resolutionLen - 1];
     const pixelWidth = matrixSet.tileSize[0] * resolution;
     const pixelHeight = matrixSet.tileSize[1] * resolution;
-    const minX = -180 + (minSetLimits.MinTileCol * pixelWidth);
-    const minY = 90 - (minSetLimits.MinTileRow * pixelHeight);
-    const maxX = -180 + ((minSetLimits.MaxTileCol + 1) * pixelWidth);
-    const maxY = 90 - ((minSetLimits.MaxTileRow + 1) * pixelHeight);
-
-    console.log(minX, minY, maxX, maxY);
-    return [minX, maxY, maxX, minY];
-  };
-
-  /**
-   *
-   * @param {*} def
-   * @param {*} matrixSet
-   * @param {*} extent
-   * @param {*} start
-   */
-  const getTileGridWMTS = (def, matrixSet, start) => {
-    let wmtsTileGrid;
-
-    if (def.matrixSetLimits) {
-      const rawMatrixSet = {};
-      def.matrixSetLimits.forEach((matrix) => {
-        for (const key in matrix) {
-          if (key !== 'TileMatrix') {
-            matrix[key] = Number(matrix[key]);
-          }
-        }
-      });
-      rawMatrixSet.Identifier = matrixSet.raw['ows:Identifier'];
-      rawMatrixSet.SupportedCRS = matrixSet.raw['ows:SupportedCRS'];
-      rawMatrixSet.TileMatrix = matrixSet.raw.TileMatrix.map((matrix) => {
-        matrix.Identifier = matrix['ows:Identifier'];
-        for (const key in matrix) {
-          if (key !== 'Identifier' && key !== 'ows:Identifier') {
-            matrix[key] = Number(matrix[key]);
-          }
-          if (key === 'TopLeftCorner') {
-            matrix[key] = [-180, 90];
-          }
-        }
-        return matrix;
-      });
-
-      const extent = calcExtentFromLimits(matrixSet, def.matrixSetLimits);
-      wmtsTileGrid = createFromCapabilitiesMatrixSet(rawMatrixSet, extent, def.matrixSetLimits);
-    } else {
-      const matrixIds = def.matrixIds || matrixSet.resolutions.map((set, index) => index);
-      wmtsTileGrid = new OlTileGridWMTS({
-        origin: start,
-        resolutions: matrixSet.resolutions,
-        matrixIds: matrixIds,
-        tileSize: matrixSet.tileSize[0]
-      });
-    }
-    return wmtsTileGrid;
+    const minX = extent[0] + (Number(minSetLimits.MinTileCol) * pixelWidth);
+    const minY = extent[3] - (Number(minSetLimits.MinTileRow) * pixelHeight);
+    const maxX = extent[0] + ((Number(minSetLimits.MaxTileCol) + 1) * pixelWidth);
+    const maxY = extent[3] - ((Number(minSetLimits.MaxTileRow) + 1) * pixelHeight);
+    console.log(minX, maxY, maxX, minY);
+    extent = [minX, maxY, maxX, minY];
+    return { start, extent };
   };
 
   /**
@@ -294,24 +266,12 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     const proj = state.proj.selected;
     const source = config.sources[def.source];
-    let extent = proj.maxExtent;
-    let start = [proj.maxExtent[0], proj.maxExtent[3]];
     if (!source) {
       throw new Error(def.id + ': Invalid source: ' + def.source);
     }
     const matrixSet = source.matrixSets[def.matrixSet];
     if (!matrixSet) {
       throw new Error(def.id + ': Undefined matrix set: ' + def.matrixSet);
-    }
-
-    if (day) {
-      if (day === 1) {
-        extent = [-250, -90, -180, 90];
-        start = [-540, 90];
-      } else {
-        extent = [180, -90, 250, 90];
-        start = [180, 90];
-      }
     }
 
     let date = options.date || state.date[activeDateStr];
@@ -323,6 +283,21 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       date = util.dateAdd(date, 'day', day);
     }
 
+    const { start, extent } = calcExtentsFromLimits(matrixSet, def.matrixSetLimits, day, proj);
+    const sizes = matrixSet.raw['TileMatrix'].map((matrix) => [
+      Number(matrix['MatrixWidth']),
+      -Number(matrix['MatrixHeight'])
+    ]);
+
+    const tileGrid = new OlTileGridWMTS({
+      origin: start,
+      extent,
+      sizes,
+      resolutions: matrixSet.resolutions,
+      matrixIds: def.matrixIds || matrixSet.resolutions.map((set, index) => index),
+      tileSize: matrixSet.tileSize[0]
+    });
+
     const urlParameters = '?TIME=' + util.toISOStringSeconds(util.roundTimeOneMinute(date));
     const sourceOptions = {
       url: source.url + urlParameters,
@@ -332,7 +307,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       format: def.format,
       transition: 0,
       matrixSet: matrixSet.id,
-      tileGrid: getTileGridWMTS(def, matrixSet, start),
+      tileGrid: tileGrid,
       wrapX: false,
       style: typeof def.style === 'undefined' ? 'default' : def.style
     };
