@@ -219,7 +219,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day, proj) => {
     let extent = proj.maxExtent;
     let origin = [extent[0], extent[3]];
-
     if (day && day === 1) {
       extent = [-250, -90, -180, 90];
       origin = [-540, 90];
@@ -232,7 +231,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     }
     const resolutionLen = matrixSet.resolutions.length;
     const setlimitsLen = matrixSetLimits.length;
-
     if (setlimitsLen !== resolutionLen) {
       console.error('Mismatching levels of matrix set and matrix set limits!');
       return { origin, extent };
@@ -245,9 +243,11 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const minY = extent[3] - (minSetLimits.minTileRow * pixelHeight);
     const maxX = extent[0] + ((minSetLimits.maxTileCol + 1) * pixelWidth);
     const maxY = extent[3] - ((minSetLimits.maxTileRow + 1) * pixelHeight);
-    console.log(minX, maxY, maxX, minY);
-    extent = [minX, maxY, maxX, minY];
-    return { origin, extent };
+
+    return {
+      origin,
+      extent: [minX, maxY, maxX, minY]
+    };
   };
 
   /**
