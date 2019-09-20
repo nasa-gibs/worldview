@@ -211,25 +211,48 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
   /**
    *
+   * @param {*} matrixSet
+   * @param {*} matrixSetLimits
+   */
+  const calcExtentFromLimits = (matrixSet, matrixSetLimits) => {
+    const resolutionLen = matrixSet.resolutions.length;
+    const setlimitsLen = matrixSetLimits.length;
+    if (setlimitsLen !== resolutionLen) {
+      console.error('Mismatching levels of matrix set and matrix set limits!');
+      return [-180, -90, 180, 90];
+    }
+    const resolution = matrixSet.resolutions[resolutionLen - 1];
+    const minSetLimits = matrixSetLimits[resolutionLen - 1];
+    const pixelWidth = matrixSet.tileSize[0] * resolution;
+    const pixelHeight = matrixSet.tileSize[1] * resolution;
+    const minX = -180 + (minSetLimits.MinTileCol * pixelWidth);
+    const minY = 90 - (minSetLimits.MinTileRow * pixelHeight);
+    const maxX = -180 + ((minSetLimits.MaxTileCol + 1) * pixelWidth);
+    const maxY = 90 - ((minSetLimits.MaxTileRow + 1) * pixelHeight);
+
+    console.log(minX, minY, maxX, maxY);
+    return [minX, maxY, maxX, minY];
+  };
+
+  /**
+   *
    * @param {*} def
    * @param {*} matrixSet
    * @param {*} extent
    * @param {*} start
    */
-  const getTileGridWMTS = (def, matrixSet, extent, start) => {
+  const getTileGridWMTS = (def, matrixSet, start) => {
     let wmtsTileGrid;
-    const matrixIds = def.matrixIds || matrixSet.resolutions.map((set, index) => index);
 
     if (def.matrixSetLimits) {
       const rawMatrixSet = {};
       def.matrixSetLimits.forEach((matrix) => {
         for (const key in matrix) {
-          if (key !== 'Identifier') {
+          if (key !== 'TileMatrix') {
             matrix[key] = Number(matrix[key]);
           }
         }
       });
-
       rawMatrixSet.Identifier = matrixSet.raw['ows:Identifier'];
       rawMatrixSet.SupportedCRS = matrixSet.raw['ows:SupportedCRS'];
       rawMatrixSet.TileMatrix = matrixSet.raw.TileMatrix.map((matrix) => {
@@ -244,8 +267,11 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         }
         return matrix;
       });
+
+      const extent = calcExtentFromLimits(matrixSet, def.matrixSetLimits);
       wmtsTileGrid = createFromCapabilitiesMatrixSet(rawMatrixSet, extent, def.matrixSetLimits);
     } else {
+      const matrixIds = def.matrixIds || matrixSet.resolutions.map((set, index) => index);
       wmtsTileGrid = new OlTileGridWMTS({
         origin: start,
         resolutions: matrixSet.resolutions,
@@ -306,7 +332,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       format: def.format,
       transition: 0,
       matrixSet: matrixSet.id,
-      tileGrid: getTileGridWMTS(def, matrixSet, extent, start),
+      tileGrid: getTileGridWMTS(def, matrixSet, start),
       wrapX: false,
       style: typeof def.style === 'undefined' ? 'default' : def.style
     };
