@@ -90,11 +90,11 @@ def process_layer(gc_layer, wv_layers, colormaps):
         mappedSetLimits = []
         for setLimit in matrixSetLimits:
             mappedSetLimits.append({
-                "TileMatrix": setLimit["TileMatrix"],
-                "MinTileRow": int(setLimit["MinTileRow"]),
-                "MaxTileRow": int(setLimit["MaxTileRow"]),
-                "MinTileCol": int(setLimit["MinTileCol"]),
-                "MaxTileCol": int(setLimit["MaxTileCol"]),
+                "tileMatrix": setLimit["TileMatrix"],
+                "minTileRow": int(setLimit["MinTileRow"]),
+                "maxTileRow": int(setLimit["MaxTileRow"]),
+                "minTileCol": int(setLimit["MinTileCol"]),
+                "maxTileCol": int(setLimit["MaxTileCol"]),
             })
         wv_layer["projections"][entry["projection"]]["matrixSetLimits"] = mappedSetLimits;
 
@@ -211,9 +211,18 @@ def process_entry(entry, colormaps):
         ident = gc_matrix_set["ows:Identifier"]
         zoom_levels = len(tileMatrixArr)
         resolutions = []
+        formattedTileMatrixArr = []
         max_resolution = entry["maxResolution"]
         for zoom in range(0, zoom_levels):
             resolutions = resolutions + [max_resolution / (2 ** zoom)]
+
+        # We are assuming that width/heights are the same for every matrix and excluding
+        # the "TileWidth", "TileHeight" properties here
+        for tileMatrix in tileMatrixArr:
+            formattedTileMatrixArr.append({
+                "matrixWidth": int(tileMatrix["MatrixWidth"]),
+                "matrixHeight": int(tileMatrix["MatrixHeight"]),
+            })
 
         wv_matrix_sets[ident] = {
             "id": ident,
@@ -223,7 +232,7 @@ def process_entry(entry, colormaps):
                 int(tileMatrixArr[0]["TileWidth"]),
                 int(tileMatrixArr[0]["TileHeight"])
             ],
-            "tileMatrices": tileMatrixArr
+            "tileMatrices": formattedTileMatrixArr
         }
 
     if(type(gc_contents["TileMatrixSet"]) is OrderedDict):
