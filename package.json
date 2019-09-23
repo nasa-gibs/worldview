@@ -153,7 +153,7 @@
   },
   "dependencies": {
     "@entryline/gifstream": "^1.2.0",
-    "@fortawesome/fontawesome-free": "^5.10.1",
+    "@fortawesome/fontawesome-free": "^5.11.2",
     "@turf/turf": "^5.1.6",
     "arc": "^0.1.1",
     "bluebird": "3.5.5",
