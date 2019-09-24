@@ -127,7 +127,7 @@
     "postcss-nesting": "^7.0.1",
     "postcss-preset-env": "^6.6.0",
     "postcss-url": "^7.2.1",
-    "precss": "^3.1.2",
+    "precss": "^4.0.0",
     "rc-slider": "8.7.1",
     "react-test-renderer": "^16.9.0",
     "redux-location-state": "nasa-gibs/redux-location-state#update-parse-helper",
