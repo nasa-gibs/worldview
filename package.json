@@ -140,7 +140,7 @@
     "shelljs": "^0.8.2",
     "showdown": "^1.8.6",
     "stylelint": "^10.1.0",
-    "tar": "^4.4.4",
+    "tar": "^4.4.12",
     "uglify-js": "^3.4.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^2.1.0",
