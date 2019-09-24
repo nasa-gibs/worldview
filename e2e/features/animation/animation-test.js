@@ -15,6 +15,24 @@ module.exports = {
     client.useCss().click(localSelectors.animationButton);
     client.waitForElementVisible(localSelectors.animationWidget, TIME_LIMIT);
   },
+  'Opening custom interval widget': function(client) {
+    client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
+    client.waitForElementVisible(
+      localSelectors.animationButton,
+      TIME_LIMIT,
+      function(el) {
+        client
+          .useCss()
+          .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
+          .waitForElementVisible('.wv-animation-widget-header .timeline-interval .interval-years', 2000)
+          .click('.wv-animation-widget-header .timeline-interval #interval-custom-static');
+        client.pause(1000);
+        client.useCss().assert.elementPresent('#wv-animation-widget .custom-interval-widget');
+        client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', 'CUSTOM');
+        client.useCss().assert.containsText('#timeline #current-interval', 'CUSTOM');
+      }
+    );
+  },
   /**
    * Moving the range selector updates the selected range
    * in the animation widget date selector
@@ -47,11 +65,17 @@ module.exports = {
       }
     );
   },
+
   /**
    * Changing animation time interval
    */
   'Changing animation time interval': function(client) {
-    client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
+    // Can't use moveToElement twice with same elements
+    // because of selenium catching.
+    // Loading a different Url fixed the problem
+    // https://github.com/SeleniumHQ/selenium/issues/4724#issuecomment-330862710
+    reuseables.loadAndSkipTour(client, TIME_LIMIT);
+    client.useCss().click(localSelectors.animationButton);
     client.waitForElementVisible(
       localSelectors.animationButton,
       TIME_LIMIT,
@@ -59,27 +83,11 @@ module.exports = {
         client
           .useCss()
           .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
+          .waitForElementVisible('.wv-animation-widget-header .timeline-interval .interval-years', 2000)
           .click('.wv-animation-widget-header #timeline-interval #interval-years');
         client.pause(1000);
         client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', '1 YEAR');
         client.useCss().assert.containsText('#timeline #current-interval', '1 YEAR');
-      }
-    );
-  },
-  'Opening custom interval widget': function(client) {
-    client.url(client.globals.url + localQuerystrings.activeAnimationWidget);
-    client.waitForElementVisible(
-      localSelectors.animationButton,
-      TIME_LIMIT,
-      function(el) {
-        client
-          .useCss()
-          .moveToElement('.wv-animation-widget-header #timeline-interval-btn-container #current-interval', 1, 1)
-          .click('.wv-animation-widget-header #timeline-interval #interval-custom-static');
-        client.pause(1000);
-        client.useCss().assert.elementPresent('#wv-animation-widget .custom-interval-widget');
-        client.useCss().assert.containsText('.wv-animation-widget-header #current-interval', 'CUSTOM');
-        client.useCss().assert.containsText('#timeline #current-interval', 'CUSTOM');
       }
     );
   },

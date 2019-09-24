@@ -1,7 +1,7 @@
 const reuseables = require('../../reuseables/skip-tour.js');
 const localSelectors = require('../../reuseables/selectors.js');
 const localQuerystrings = require('../../reuseables/querystrings.js');
-const animationButton = '#timeline-header #animate-button';
+const animationButtonCase = '#timeline-header .animate-button';
 const ImageDownloadButton = '#wv-image-button';
 const eventsTabButton = '#events-sidebar-tab';
 const dataDownloadTabButton = '#download-sidebar-tab';
@@ -33,9 +33,9 @@ module.exports = {
     client.pause(100);
     client.expect.element('#wv-animation-widget').to.not.be.visible;
     */
-    client.assert.cssClassPresent(animationButton, 'wv-disabled-button');
+    client.assert.cssClassPresent(animationButtonCase, 'wv-disabled-button');
     client.assert.attributeContains(
-      animationButton,
+      animationButtonCase,
       'title',
       'Animation feature is deactivated when Compare feature is active'
     );
@@ -50,8 +50,10 @@ module.exports = {
       'You must exit comparison mode to use the snapshot feature'
     );
     // Verify events can't be clicked
-    client.click(eventsTabButton);
-    client.pause(100);
+    client
+      .moveToElement(eventsTabButton, 1, 1)
+      .mouseButtonDown(0)
+      .pause(100);
     client.expect.element('#wv-eventscontent').to.not.be.visible;
     client.assert.cssClassPresent(eventsTabButton, 'disabled');
     client.assert.attributeContains(
@@ -60,7 +62,10 @@ module.exports = {
       'You must exit comparison mode to use the natural events feature'
     );
     // Verify Data Download can't be clicked
-    client.click(dataDownloadTabButton);
+    client
+      .moveToElement(dataDownloadTabButton, 1, 1)
+      .mouseButtonDown(0)
+      .pause(100);
     client.pause(100);
     client.expect.element('#wv-datacontent').to.not.be.visible;
     client.assert.cssClassPresent(dataDownloadTabButton, 'disabled');

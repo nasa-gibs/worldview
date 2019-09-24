@@ -62,7 +62,8 @@ class ModalContainer extends Component {
       isOpen,
       isTemplateModal,
       customProps,
-      isMobile
+      isMobile,
+      screenHeight
     } = this.props;
     // Populate props from custom obj
     const newProps =
@@ -142,7 +143,7 @@ class ModalContainer extends Component {
                 <ModalBody>
                   {bodyHeader ? <h3>{bodyHeader}</h3> : ''}
                   {BodyComponent ? (
-                    <BodyComponent {...bodyComponentProps} />
+                    <BodyComponent {...bodyComponentProps} screenHeight={screenHeight} />
                   ) : isTemplateModal ? (
                     this.getTemplateBody()
                   ) : (
@@ -182,6 +183,7 @@ function mapStateToProps(state) {
     isCustom,
     id,
     isMobile: state.browser.lessThan.medium,
+    screenHeight: state.browser.screenHeight,
     bodyTemplate,
     isTemplateModal,
     customProps

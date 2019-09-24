@@ -197,8 +197,8 @@ class Layer extends React.Component {
                 title={
                   zot
                     ? 'Layer is overzoomed by ' +
-                      zot.toString() +
-                      'x its maximum zoom level'
+                    zot.toString() +
+                    'x its maximum zoom level'
                     : ''
                 }
               >
@@ -363,8 +363,8 @@ const mapDispatchToProps = dispatch => ({
         headerText: title || 'Layer Description',
         backdrop: false,
         bodyComponent: LayerInfo,
-        wrapClassName: 'clickable-behind-modal layer-info-wrap',
-        modalClassName: ' layer-info-settings-modal ',
+        wrapClassName: 'clickable-behind-modal',
+        modalClassName: ' layer-info-settings-modal layer-info-modal',
         timeout: 150,
         bodyComponentProps: {
           layer: layer

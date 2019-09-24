@@ -47,7 +47,7 @@ module.exports = {
         terraAodSettingsDialog,
         TIME_LIMIT,
         function() {
-          client.useCss().assert.containsText(thresholdMinLabel, '< 0.000');
+          client.useCss().assert.containsText(thresholdMinLabel, '< 0.0');
           client.useCss().assert.containsText(opacityLabel, '100%');
         }
       );
