@@ -118,16 +118,18 @@ export default class ImageResSelection extends React.Component {
 
   _renderWorldfileSelect() {
     if (this.props.worldFileOptions) {
+      const value = this.state.isWorldfile ? 1 : 0;
+
       return (
         <div className="wv-image-header">
           {this.state.fileType === 'image/kmz' ? (
             <select disabled>
-              <option value={false}>No</option>
+              <option value={0}>No</option>
             </select>
           ) : (
             <select
               id="wv-image-worldfile"
-              value={this.state.isWorldfile}
+              value={value}
               onChange={e => this.handleChange('worldfile', e.target.value)}
             >
               <option value={0}>No</option>
