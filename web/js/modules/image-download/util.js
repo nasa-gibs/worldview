@@ -58,7 +58,7 @@ export function getDownloadUrl(url, proj, layerDefs, lonlats, dimensions, dateTi
   if (opacities.length > 0) {
     params.push(`OPACITIES=${opacities.join(',')}`);
   }
-  if (isWorldfile === 'true') {
+  if (isWorldfile) {
     params.push('WORLDFILE=true');
   }
   return url + '?' + params.join('&') + `&ts=${Date.now()}`;
