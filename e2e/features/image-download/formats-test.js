@@ -36,14 +36,14 @@ module.exports = {
 
   'Add a worldfile': function(c) {
     openImageDownloadPanel(c);
-    c.click('#wv-image-worldfile option[value="true"]');
+    c.click('#wv-image-worldfile option[value="1"]');
     clickDownload(c);
     c.pause(2000);
     c.expect
       .element('#wv-image-download-url')
       .to.have.attribute('url')
       .and.to.contain('WORLDFILE=true');
-    c.click('#wv-image-worldfile option[value="false"]');
+    c.click('#wv-image-worldfile option[value="0"]');
     closeImageDownloadPanel(c);
   },
 

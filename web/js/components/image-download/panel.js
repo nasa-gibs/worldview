@@ -87,8 +87,9 @@ export default class ImageResSelection extends React.Component {
         resolution: value
       });
     } else if (type === 'worldfile') {
+      value = Boolean(Number(value));
       this.setState({
-        isWorldfile: Boolean(Number(value))
+        isWorldfile: value
       });
     } else {
       this.setState({
