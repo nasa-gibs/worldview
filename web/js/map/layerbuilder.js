@@ -34,6 +34,46 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.init = function() {
     self.extentLayers = [];
   };
+
+  /**
+   * Return a layer, or layergroup, created with the supplied function
+   * @param {*} createLayerFunc
+   * @param {*} def
+   * @param {*} options
+   * @param {*} attributes
+   * @param {*} wrapLayer
+   */
+  const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
+    const state = store.getState();
+    const layer = createLayerFunc(def, options, null, state);
+    if (!wrapLayer) {
+      return layer;
+    }
+    const layerNext = createLayerFunc(def, options, 1, state);
+    const layerPrior = createLayerFunc(def, options, -1, state);
+    layer.wv = layerPrior.wv = layerNext.wv = attributes;
+    return new OlLayerGroup({
+      layers: [layer, layerNext, layerPrior]
+    });
+  };
+
+  /**
+   * For subdaily layers, if the layer date is within 30 minutes of current
+   * time, set expiration to ten minutes from now
+   */
+  const getCacheOptions = (period, date, state) => {
+    const tenMin = 10 * 60000;
+    const thirtyMin = 30 * 60000;
+    const now = new Date().getTime();
+    const recentTime = Math.abs(now - date.getTime()) < thirtyMin;
+    if (period !== 'subdaily' || !recentTime) {
+      return {};
+    }
+    return {
+      expirationAbsolute: new Date(now + tenMin)
+    };
+  };
+
   /**
    * Create a new OpenLayers Layer
    *
@@ -46,84 +86,44 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   self.createLayer = function(def, options) {
     const state = store.getState();
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    var date, key, group, proj, layer, layerNext, layerPrior, attributes;
     options = options || {};
-    group = options.group || null;
-    date = self.closestDate(def, options);
-    key = self.layerKey(def, options, state);
-    proj = state.proj.selected;
-    layer = cache.getItem(key);
+    const group = options.group || null;
+    let date = self.closestDate(def, options);
+    const key = self.layerKey(def, options, state);
+    const proj = state.proj.selected;
+    let layer = cache.getItem(key);
 
     if (!layer) {
       // layer is not in the cache
       if (!date) date = options.date || state.date[activeDateStr];
-      attributes = {
+      const cacheOptions = getCacheOptions(def.period, date, state);
+      const attributes = {
         id: def.id,
-        key: key,
-        date: date,
+        key,
+        date,
         proj: proj.id,
-        def: def,
-        group: group
+        def,
+        group
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, def.projections[proj.id]);
 
-      if (def.type === 'wmts') {
-        layer = createLayerWMTS(def, options, null, state);
-        if (
-          proj.id === 'geographic' &&
-          (def.wrapadjacentdays === true || def.wrapX)
-        ) {
-          layerNext = createLayerWMTS(def, options, 1, state);
-          layerPrior = createLayerWMTS(def, options, -1, state);
-
-          layer.wv = attributes;
-          layerPrior.wv = attributes;
-          layerNext.wv = attributes;
-
-          layer = new OlLayerGroup({
-            layers: [layer, layerNext, layerPrior]
-          });
-        }
-      } else if (def.type === 'vector') {
-        layer = createLayerVector(def, options, null, state);
-        if (
-          proj.id === 'geographic' &&
-          (def.wrapadjacentdays === true || def.wrapX)
-        ) {
-          layerNext = createLayerVector(def, options, 1, state);
-          layerPrior = createLayerVector(def, options, -1, state);
-
-          layer.wv = attributes;
-          layerPrior.wv = attributes;
-          layerNext.wv = attributes;
-
-          layer = new OlLayerGroup({
-            layers: [layer, layerNext, layerPrior]
-          });
-        }
-      } else if (def.type === 'wms') {
-        layer = createLayerWMS(def, options, null, state);
-        if (
-          proj.id === 'geographic' &&
-          (def.wrapadjacentdays === true || def.wrapX)
-        ) {
-          layerNext = createLayerWMS(def, options, 1, state);
-          layerPrior = createLayerWMS(def, options, -1, state);
-
-          layer.wv = attributes;
-          layerPrior.wv = attributes;
-          layerNext.wv = attributes;
-
-          layer = new OlLayerGroup({
-            layers: [layer, layerNext, layerPrior]
-          });
-        }
-      } else {
-        throw new Error('Unknown layer type: ' + def.type);
+      const wrapLayer = proj.id === 'geographic' && (def.wrapadjacentdays === true || def.wrapX);
+      switch (def.type) {
+        case 'wmts':
+          layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'vector':
+          layer = getLayer(createLayerVector, def, options, attributes, wrapLayer);
+          break;
+        case 'wms':
+          layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+          break;
+        default:
+          throw new Error('Unknown layer type: ' + def.type);
       }
       layer.wv = attributes;
-      cache.setItem(key, layer);
+      cache.setItem(key, layer, cacheOptions);
       layer.setVisible(false);
     }
     layer.setOpacity(def.opacity || 1.0);
