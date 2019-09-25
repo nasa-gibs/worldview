@@ -216,36 +216,47 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @param {*} proj - current projection
    */
   const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day, proj) => {
-    let extent = proj.maxExtent;
-    let origin = [extent[0], extent[3]];
-    if (day && day === 1) {
-      extent = [-250, -90, -180, 90];
-      origin = [-540, 90];
-    } else if (day) {
-      extent = [180, -90, 250, 90];
-      origin = [180, 90];
+    let extent, origin;
+    const daySetLimits = [];
+
+    switch (day) {
+      case 1:
+        extent = [-250, -90, -180, 90];
+        origin = [-540, 90];
+        break;
+      case -1:
+        extent = [180, -90, 250, 90];
+        origin = [180, 90];
+        break;
+      default:
+        extent = proj.maxExtent;
+        origin = [extent[0], extent[3]];
+        break;
     }
-    if (!matrixSetLimits) {
-      return { origin, extent };
-    }
+
     const resolutionLen = matrixSet.resolutions.length;
-    const setlimitsLen = matrixSetLimits.length;
-    if (setlimitsLen !== resolutionLen) {
-      console.error('Mismatching levels of matrix set and matrix set limits!');
+    const setlimitsLen = matrixSetLimits && matrixSetLimits.length;
+
+    // If number of set limits doens't match sets, we are assuming this product
+    // crosses the antimeridian and don't have a reliable way to calculate a single
+    // extent based on multiple set limits.
+    if (!matrixSetLimits || setlimitsLen !== resolutionLen) {
       return { origin, extent };
     }
-    const resolution = matrixSet.resolutions[resolutionLen - 1];
-    const minSetLimits = matrixSetLimits[resolutionLen - 1];
-    const pixelWidth = matrixSet.tileSize[0] * resolution;
-    const pixelHeight = matrixSet.tileSize[1] * resolution;
-    const minX = extent[0] + (minSetLimits.minTileCol * pixelWidth);
-    const minY = extent[3] - (minSetLimits.minTileRow * pixelHeight);
-    const maxX = extent[0] + ((minSetLimits.maxTileCol + 1) * pixelWidth);
-    const maxY = extent[3] - ((minSetLimits.maxTileRow + 1) * pixelHeight);
+
+    const limitIndex = resolutionLen - 1;
+    const resolution = matrixSet.resolutions[limitIndex];
+    const setLimits = day ? daySetLimits[limitIndex] : matrixSetLimits[limitIndex];
+    const tileWidth = matrixSet.tileSize[0] * resolution;
+    const tileHeight = matrixSet.tileSize[1] * resolution;
+    const minX = extent[0] + (setLimits.minTileCol * tileWidth);
+    const minY = extent[3] - ((setLimits.maxTileRow + 1) * tileHeight);
+    const maxX = extent[0] + ((setLimits.maxTileCol + 1) * tileWidth);
+    const maxY = extent[3] - (setLimits.minTileRow * tileHeight);
 
     return {
       origin,
-      extent: [minX, maxY, maxX, minY]
+      extent: [minX, minY, maxX, maxY]
     };
   };
 
