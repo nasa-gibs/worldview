@@ -1,15 +1,3 @@
-Dust and sand storms occur when strong winds pick up dust and sand from areas of dry, bare soils and lift the dust into the atmosphere.These are common meterological hazards in arid and semi-arid regions like deserts
+Commonly occurring in arid and semi-arid regions like deserts, sand and dust storms occur when strong winds pick up dust and sand from areas with dry, bare soils, lift the dust into the atmosphere, and transports the dust many, many kilometers away. Main sources of the dust are Northern Africa, the Arabian Peninsula, Central Asia and China. Areas like Australia, America and South Africa have minor contributions, yet are still important. Providing a general idea of where the major dust contributors are, this Dust Surface Mass Concentration layer from the Modern-Era Retrospective analysis for Research and Applications, Version 2 (MERRA-2) is displaying the dust surface mass concentrations for February 2019. MERRA-2 is a long-term global reanalysis to assimilate space-based observations of aerosols and represent their interactions with other physical processes in the climate system.
 
-https://public.wmo.int/en/our-mandate/focus-areas/environment/SDS
-https://earthobservatory.nasa.gov/images/145091/dust-storm-in-hokkaido
-https://earthobservatory.nasa.gov/images/92212/powerful-dust-storms-in-western-asia
-https://earthobservatory.nasa.gov/images/91907/vast-dust-storms-in-the-sahara
-https://earthobservatory.nasa.gov/images/144813/storm-system-stirs-up-dust
-https://earthobservatory.nasa.gov/images/145050/dust-swirls-over-asia
-https://earthobservatory.nasa.gov/images/91698/dust-storm-over-the-mediterranean-sea
-https://earthobservatory.nasa.gov/images/91267/connecting-the-dots-between-dust-phytoplankton-and-ice-cores
-https://earthobservatory.nasa.gov/images/91303/dust-coats-copper-river-valley
-https://earthobservatory.nasa.gov/images/92064/dust-storm-in-saudi-arabia
-https://earthobservatory.nasa.gov/images/4574/dust-storm-in-afghanistan
-
-https://earthobservatory.nasa.gov/images/40201/australian-dust-over-the-pacific-ocean
+References: [World Meteorological Organization: Sand and Dust Storms](https://public.wmo.int/en/our-mandate/focus-areas/environment/SDS); [Global Modeling and Assimilation Office: Modern-Era Retrospective analysis for Research and Applications, Version 2](https://gmao.gsfc.nasa.gov/reanalysis/MERRA-2/)
