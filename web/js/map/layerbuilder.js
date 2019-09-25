@@ -29,12 +29,20 @@ import {
   prevDateInDateRange
 } from '../modules/layers/util';
 
+// number of granules to request in the past including current time
+const GRANULE_COUNT = 20;
+
 export function mapLayerBuilder(models, config, cache, ui, store) {
   var self = {};
 
   self.init = function() {
     self.extentLayers = [];
-    self.granuleLayers = {};
+    self.granuleLayers = {
+      isInitGranuleLoaded: {
+        active: false,
+        activeB: false
+      }
+    };
     // granule cache since clearingLayers/reordering layers may require many granule requests
     // and the parent 'cache' is cleared on reload/reorder
     self.granuleCache = new Cache(400);
@@ -65,32 +73,35 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
   // TODO: need to fix blocking of app while requesting layer tiles
   // TODO: is entire day the best strategy or just 20,50,100 last granules?
   /**
-   * Create collection of granule TileLayers for entire day
+   * Create collection of granule TileLayers from range of granule times
    *
-   * @method getIndexForSortedInsert
+   * @method createGranuleDayLayers
    * @static
-   * @param {object} array - array of dates (already sorted)
-   * @param {string} date - date string ISO format
-   * @returns {number} index
+   * @param {array} granuleDayTimes - array of dates (already sorted)
+   * @param {object} def - Layer specs
+   * @param {object} proj - Layer projection
+   * @param {object} state - App state
+   * @param {object} attributes - Layer specs
+   * @returns {array} collection of OpenLayers TileLayers
    */
   const createGranuleDayLayers = (granuleDayTimes, def, proj, state, attributes) => {
-    const granuleLayers = [];
-    for (let i = 0; i < granuleDayTimes.length; i++) {
-      const granuleDateISO = granuleDayTimes[i];
-      const tempGroup = 'granule';
-      // let group = options.group || state.compare.activeDateStr;
-      const granuleISOKey = `${def.id}:${proj.id}:${granuleDateISO}::${tempGroup}`;
-      self.granuleLayers[def.id].dates[granuleDateISO] = granuleISOKey;
+    // console.log(attributes.group, state.compare.activeDateStr)
+    const granuleLayers = granuleDayTimes.map(function(granuleDateISO) {
+      const group = attributes.group || state.compare.activeDateStr;
+      const granuleISOKey = `${def.id}:${proj.id}:${granuleDateISO}::${group}`;
+      self.granuleLayers[def.id][group].dates[granuleDateISO] = granuleISOKey;
 
       const granuleISODateType = new Date(granuleDateISO);
       const dateOption = { date: granuleISODateType };
       const layerPromise = new Promise((resolve) => {
         const createdLayer = createLayerWMTS(def, dateOption, null, state);
+
         // update attributes
         attributes.key = granuleISOKey;
         attributes.date = granuleISODateType;
         createdLayer.wv = attributes;
         // save to cache and push
+        // console.log(granuleISOKey)
         self.granuleCache.setItem(granuleISOKey, createdLayer);
         createdLayer.setVisible(false);
         // can set opacity for individual granules here and still control group opacity
@@ -98,8 +109,9 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         // createdLayer.setOpacity(0.2);
         resolve(createdLayer);
       });
-      granuleLayers.push(layerPromise);
-    }
+      return layerPromise;
+    });
+    // console.log(granuleLayers);
     return new Promise(resolve => {
       return Promise.all(granuleLayers).then((results) => {
         resolve(results);
@@ -121,12 +133,13 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     const activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
     var date, key, group, proj, layer, layerNext, layerPrior, attributes;
     options = options || {};
-    group = options.group || null;
+    group = options.group || 'active';
+    const isActive = group === 'active';
+    const activeKey = isActive ? 'active' : 'activeB';
     date = self.closestDate(def, options);
     key = self.layerKey(def, options, state);
     proj = state.proj.selected;
     const isGranule = !!(def.tags && def.tags.contains('granule'));
-    let isInitGranuleLoad = false;
     if (isGranule) {
       layer = self.granuleCache.getItem(key);
     } else {
@@ -150,12 +163,14 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         let createdLayer = createLayerWMTS(def, options, null, state);
         if (isGranule) {
           const dateISO = date.toISOString().split('.')[0] + 'Z';
-
           // add to granule layer date table
-          if (self.granuleLayers[def.id] === undefined) {
+          // TODO: second part of conditional necessary for comparison mode granule loading last 20
+          // TODO: or whatever GRANULE_COUNT is set at. May want to optimize this logic
+
+          // ! activeB not getting hit since past dates are already in self.granuleLayers[def.id]
+          if (self.granuleLayers[def.id] === undefined || self.granuleLayers.isInitGranuleLoaded[group] === false) {
             // flag initial load of granule
-            // TODO: is this necessary for every day?
-            isInitGranuleLoad = true;
+            self.granuleLayers.isInitGranuleLoaded[group] = true;
             // get start date based on 00:00 UTC or defined start date
             const startDate = def.startDate;
             const zeroStartDate = new Date(startDate).setUTCHours(0, 0, 0, 0);
@@ -170,8 +185,8 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
 
             // ! TEST USING 20 FOR INIT LOAD SEEMS UI FRIENDLY
             // ! 100 + and it's noticeably slower to blocking
-            const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * 20)))
-            // console.log(date, startDateForGranuleDay2)
+            const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * GRANULE_COUNT)));
+            // console.log(date, startDateForGranuleDay)
 
             // add dates to granuleDayTimes array
             const minuteDifference = util.minuteDiff(startDateForGranuleDay, date);
@@ -186,20 +201,36 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
               ).toISOString().split('.')[0] + 'Z';
               granuleDayTimes.push(granuleTime);
             }
-
-            self.granuleLayers[def.id] = {
-              sortedDates: granuleDayTimes,
-              dates: {}
-            };
+            // console.log(granuleDayTimes)
+            if (self.granuleLayers[def.id] === undefined) {
+              const activeGranuleDayTimes = isActive ? granuleDayTimes : [];
+              const activeBGranuleDayTimes = !isActive ? granuleDayTimes : [];
+              self.granuleLayers[def.id] = {
+                active: {
+                  sortedDates: activeGranuleDayTimes,
+                  dates: {}
+                },
+                activeB: {
+                  sortedDates: activeBGranuleDayTimes,
+                  dates: {}
+                }
+              };
+            } else {
+              // add sorted dates to granule layer store
+              const dateArray = [...self.granuleLayers[def.id][activeKey].sortedDates];
+              lodashEach(granuleDayTimes, function(granuleDayTime) {
+                dateArray.splice(getIndexForSortedInsert(dateArray, granuleDayTime), 0, granuleDayTime);
+              });
+              self.granuleLayers[def.id][activeKey].sortedDates = dateArray;
+            }
 
             createdLayer = createGranuleDayLayers(granuleDayTimes, def, proj, state, attributes);
-            // console.log(createdLayer)
           } else {
-            if (self.granuleLayers[def.id].dates[dateISO] === undefined) {
+            if (self.granuleLayers[def.id][activeKey].dates[dateISO] === undefined) {
               // add new dateISO to granule layer object and to sorted array by finding insert index O(n)
-              const dateArray = [...self.granuleLayers[def.id].sortedDates];
-              self.granuleLayers[def.id].sortedDates.splice(getIndexForSortedInsert(dateArray, dateISO), 0, dateISO);
-              self.granuleLayers[def.id].dates[dateISO] = key;
+              const dateArray = [...self.granuleLayers[def.id][activeKey].sortedDates];
+              self.granuleLayers[def.id][activeKey].sortedDates.splice(getIndexForSortedInsert(dateArray, dateISO), 0, dateISO);
+              self.granuleLayers[def.id][activeKey].dates[dateISO] = key;
             }
           }
         }
@@ -257,13 +288,17 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       } else {
         throw new Error('Unknown layer type: ' + def.type);
       }
-      if (!isInitGranuleLoad) {
-        layer.wv = attributes;
-        if (isGranule) {
+      if (isGranule) {
+        // console.log(key, layer)
+        const inCache = self.granuleCache.getItem(key);
+        if (!inCache) {
+          layer.wv = attributes;
           self.granuleCache.setItem(key, layer);
-        } else {
-          cache.setItem(key, layer);
+          layer.setVisible(false);
         }
+      } else {
+        layer.wv = attributes;
+        cache.setItem(key, layer);
         layer.setVisible(false);
       }
     }
@@ -274,42 +309,48 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     // ! an early optimization would be to set a higher key of UTC date (2019-05-02)
     // ! and add dates to each respective date
     if (isGranule) {
-      const sortedDateCollection = self.granuleLayers[def.id].sortedDates;
+      const sortedDateCollection = self.granuleLayers[def.id][activeKey].sortedDates;
+      const includedDates = [];
+      self.granuleLayers[def.id][activeKey].order = sortedDateCollection;
       // console.log(layer)
-      // console.log(sortedDateCollection)
+      console.log(sortedDateCollection)
       if (sortedDateCollection.length > 1) {
         const layerGroupEntries = [];
         for (const granuleDate of sortedDateCollection) {
-          // console.log(granuleDate)
           // don't show future granule dates
           const isPastDate = new Date(granuleDate) < date;
-          const startDateForGranuleDay = new Date(date.getTime() - (60000 * (6 * 20)));
+          const dateInterval = Number(def.dateRanges[0].dateInterval);
+          const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * GRANULE_COUNT)));
           const isGreaterThanTwentyPrevious = startDateForGranuleDay > new Date(granuleDate);
+
           // if granule for current date time
           if (granuleDate === date.toISOString().split('.')[0] + 'Z') {
             // check for layer in granuleCache
-            const layerCacheKey = self.granuleLayers[def.id].dates[granuleDate];
+            const layerCacheKey = self.granuleLayers[def.id][activeKey].dates[granuleDate];
             const layerCache = self.granuleCache.getItem(layerCacheKey);
             if (layerCache) {
               layerGroupEntries.push(layerCache);
+              includedDates.unshift(granuleDate);
             } else {
               layerGroupEntries.push(layer);
+              includedDates.unshift(granuleDate);
             }
           } else {
             if (isPastDate && !isGreaterThanTwentyPrevious) {
               // add to layer group
-              const layerCacheKey = self.granuleLayers[def.id].dates[granuleDate];
+              const layerCacheKey = self.granuleLayers[def.id][activeKey].dates[granuleDate];
               const layer = self.granuleCache.getItem(layerCacheKey);
               layerGroupEntries.push(layer);
+              includedDates.unshift(granuleDate);
             }
           }
         }
-        console.log(layerGroupEntries.length)
+        // console.log(layerGroupEntries, layerGroupEntries.length);
         layer = new OlLayerGroup({
           layers: layerGroupEntries
         });
-        layer.set('group', 'granule');
-        layer.set('layerId', def.id);
+        layer.set('granule', true);
+        layer.set('layerId', `${def.id}-${activeKey}`);
       } else {
         // initial single layer in layer group
         layer = new OlLayerGroup({
@@ -318,13 +359,15 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         // TODO: need to set group for granules
         // name to include 1) def.id 2) active or activeB 3) granule specific prefix
         // rough example: 'granule-active-VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT'
-        layer.set('group', 'granule');
-        layer.set('layerId', def.id);
+        layer.set('granule', true);
+        layer.set('layerId', `${def.id}-${activeKey}`);
       }
+      self.granuleLayers[def.id][activeKey].order = includedDates;
+      console.log(includedDates)
     }
     layer.setOpacity(def.opacity || 1.0);
     // TileLayer or LayerGroup
-    console.log(layer)
+    // console.log(layer);
     return layer;
   };
 
@@ -477,10 +520,23 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       var lookup = getPaletteLookup(def.id, options.group, state);
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
+    const sourceWMTS = new OlSourceWMTS(sourceOptions);
+    sourceWMTS.on('tileloadend', function() {
+      console.log('tileloadend');
+      return 'tileloadend';
+    });
+
+    // ! conditionally set extent for tile here if granule and cmr data is available
+    // const isGranule = !!(def.tags && def.tags.contains('granule'));
+    // if (isGranule) {
+    // extent = [-4194304, -4194304, -2216892, 4194304]
+    // }
+
     return new OlLayerTile({
       preload: Infinity,
       extent: extent,
-      source: new OlSourceWMTS(sourceOptions)
+      // source: new OlSourceWMTS(sourceOptions)
+      source: sourceWMTS
     });
   };
 

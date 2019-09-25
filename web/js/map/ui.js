@@ -320,7 +320,6 @@ export function mapui(models, config, store, ui) {
     lodashEach(activeLayers, function(mapLayer) {
       map.removeLayer(mapLayer);
     });
-    console.log(self)
     removeGraticule('active');
     removeGraticule('activeB');
     cache.clear();
@@ -337,6 +336,7 @@ export function mapui(models, config, store, ui) {
    * @returns {void}
    */
   var reloadLayers = self.reloadLayers = function(map) {
+    console.log(self)
     map = map || self.selected;
     const state = store.getState();
     const { layers, proj } = state;
@@ -356,10 +356,16 @@ export function mapui(models, config, store, ui) {
         state
       );
       lodashEach(defs, function(def) {
+        console.log(def, layerGroupStr)
         if (isGraticule(def, proj.id)) {
           addGraticule(def.opacity, layerGroupStr);
         } else {
           map.addLayer(createLayer(def));
+          const isGranule = !!(def.tags && def.tags.contains('granule'));
+          if (isGranule) {
+            // array of active granule dates (0 index equals top granule tile layer)
+            console.log(self.layerBuilder.granuleLayers[def.id][layerGroupStr].order)
+          }
         }
       });
     } else {
@@ -384,6 +390,7 @@ export function mapui(models, config, store, ui) {
    * @param {Array} arr | Array of date/layer group strings
    */
   var getCompareLayerGroup = function(arr, layersState, projId, state) {
+    console.log(arr, layersState, projId, state)
     return new OlLayerGroup({
       layers: getLayers(
         layersState[arr[0]],
@@ -398,6 +405,7 @@ export function mapui(models, config, store, ui) {
           return true;
         })
         .map(def => {
+          const isGranule = !!(def.tags && def.tags.contains('granule'));
           return createLayer(def, {
             date: state.date[arr[1]],
             group: arr[0]
@@ -423,7 +431,6 @@ export function mapui(models, config, store, ui) {
     var layersState = state.layers;
     var activeGroupStr = state.compare.activeString;
     var activeDateStr = state.compare.isCompareA ? 'selected' : 'selectedB';
-    console.log(layers)
     var updateGraticules = function(defs, groupName) {
       lodashEach(defs, function(def) {
         if (isGraticule(def, state.proj.id)) {
@@ -442,12 +449,11 @@ export function mapui(models, config, store, ui) {
       });
     };
     layers.forEach(function(layer) {
+      // console.log(state.date, layer)
       var group = layer.get('group');
+      var granule = layer.get('granule');
 
-      // if (group === 'granule') {
-      //   group = 'active'
-      // }
-      console.log(group, activeGroupStr, activeDateStr, layer, layersState)
+      console.log(group, activeGroupStr, granule, activeDateStr, layer, layersState)
       // Not in A|B
       if (layer.wv) {
         renderable = isRenderableLayer(
@@ -456,25 +462,81 @@ export function mapui(models, config, store, ui) {
           state.date[activeDateStr],
           state
         );
+        console.log(layer.wv, renderable)
         layer.setVisible(renderable);
         const defs = getLayers(layersState[activeGroupStr], {}, state);
         updateGraticules(defs);
         // If in A|B layer-group will have a 'group' string
-      } else if (group) {
+      } else if (group || granule) {
+        // console.log(layer, layer.getLayers(), layer.getLayers().getArray())
+        console.log(layer.getLayers().getArray())
         lodashEach(layer.getLayers().getArray(), subLayer => {
+          // console.log(subLayer)
+          const subLayerGranule = subLayer.get('granule');
+          console.log(subLayerGranule)
+          // console.log(subLayerGranule)
+          if (subLayerGranule) {
+            // console.log(subLayer)
+            // TileLayers within granule LayerGroup
+            lodashEach(subLayer.getLayers().getArray(), granuleSubLayer => {
+              // console.log(granuleSubLayer)
+              if (granuleSubLayer.wv) {
+                const granuleSubLayerGroup = granuleSubLayer.wv.group;
+                // console.log(granuleSubLayer.wv)
+                renderable = isRenderableLayer(
+                  granuleSubLayer.wv.id,
+                  // TODO : SPY MODE BROKEN - swipe and opactiy and hide/show work
+                  // layersState[activeGroupStr],
+                  // layersState[group],
+                  layersState[granuleSubLayerGroup],
+                  // state.date[layer.get('date')],
+                  state.date[granuleSubLayer.get('date')],
+                  state
+                );
+                console.log(granuleSubLayerGroup, renderable)
+                granuleSubLayer.setVisible(renderable);
+              }
+            });
+            subLayer.setVisible(true);
+            // subLayer.setVisible(false);
+          }
+
           if (subLayer.wv) {
+            const subGroup = subLayer.wv.group;
             renderable = isRenderableLayer(
               subLayer.wv.id,
-              layersState[activeGroupStr],
-              state.date[layer.get('date')],
+              // layersState[activeGroupStr],
+              // TODO: group undefined in non-compare mode
+              // layersState[group || activeGroupStr],
+              layersState[subGroup],
+              // state.date[layer.get('date')],
+              state.date[subLayer.get('date')],
               state
             );
             subLayer.setVisible(renderable);
+            // console.log(self)
+            // console.log(subLayer.wv, subLayer, subGroup, group, activeGroupStr, renderable)
+            // if (group) {
+            //   subLayer.setVisible(renderable);
+            // } else {
+            //   console.log(subLayer.wv, subLayer, subGroup, group, activeGroupStr, renderable)
+            //   console.log(state.compare.active)
+            //   if (!state.compare.active) {
+            //     console.log(subLayer)
+            //     subLayer.setVisible(false);
+            //   } else {
+            //     subLayer.setVisible(true);
+            //   }
+            // }
           }
         });
+        // console.log(group, activeGroupStr)
+        // console.log(layer)
+        console.log(group, activeGroupStr, granule, activeDateStr, layer, layersState)
         layer.setVisible(true);
+        // const defs = getLayers(layersState[group], {}, state);
         const defs = getLayers(layersState[activeGroupStr], {}, state);
-        updateGraticules(defs, group);
+        updateGraticules(defs, activeGroupStr);
       }
     });
   };
@@ -551,7 +613,7 @@ export function mapui(models, config, store, ui) {
       addGraticule(def.opacity, activeLayerStr);
     } else {
       def.availableDates = datesinDateRanges(def, date, true);
-      if (firstLayer && firstLayer.get('group') && firstLayer.get('group') !== 'granule') {
+      if (firstLayer && firstLayer.get('group') && firstLayer.get('granule') !== true) {
         // Find which map layer-group is the active LayerGroup
         // and add layer to layerGroup in correct location
         const activelayer =
@@ -712,20 +774,14 @@ export function mapui(models, config, store, ui) {
       }
     });
 
-    console.log(def, layers, layer, layerGroupStr)
-
-    if (!layer && layers.length && layers[0].get('group')) {
+    if (!layer && layers.length && layers[0].get('granule')) {
       let olGroupLayer;
       lodashEach(layers, layerGroup => {
-        // if (layerGroup.get('group') === layerGroupStr) {
-          console.log(layerGroup.get('group'), layerGroup.get('layerId'), def.id)
-        if (layerGroup.get('layerId') === def.id) {
+        if (layerGroup.get('layerId') === `${def.id}-${layerGroupStr}`) {
           olGroupLayer = layerGroup;
-          console.log(olGroupLayer)
         }
       });
       const subGroup = olGroupLayer.getLayers().getArray();
-      console.log(subGroup)
       layer = lodashFind(subGroup, {
         wv: {
           id: def.id
