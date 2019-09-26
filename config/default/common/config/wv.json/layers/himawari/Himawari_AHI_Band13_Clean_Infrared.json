@@ -2,7 +2,7 @@
     "layers": {
         "Himawari_AHI_Band13_Clean_Infrared": {
             "id":       "Himawari_AHI_Band13_Clean_Infrared",
-            "title":    "Clean Infrared (10.3 µm, Band 13)",
+            "title":    "Clean Infrared (10.3 µm, Band 13, 10 minute)",
             "subtitle": "Himawari/AHI",
             "description": "himawari/Himawari_AHI_Band13_Clean_Infrared",
             "group":    "overlays",

@@ -2,7 +2,7 @@
     "layers": {
         "GOES-East_ABI_Band2_Red_Visible": {
             "id":       "GOES-East_ABI_Band2_Red_Visible",
-            "title":    "Red Visible (0.64 µm, Band 2)",
+            "title":    "Red Visible (0.64 µm, Band 2, 10 minute)",
             "subtitle": "GOES-East/ABI",
             "description": "goes/GOES-East_ABI_Band2_Red_Visible",
             "group":    "overlays",
