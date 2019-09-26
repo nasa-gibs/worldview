@@ -2,7 +2,7 @@
     "layers": {
         "Himawari_AHI_Band3_Red_Visible": {
             "id":       "Himawari_AHI_Band3_Red_Visible",
-            "title":    "Red Visible (0.64 µm, Band 3)",
+            "title":    "Red Visible (0.64 µm, Band 3, 10 minute)",
             "subtitle": "Himawari/AHI",
             "description": "himawari/Himawari_AHI_Band3_Red_Visible",
             "group":    "overlays",
