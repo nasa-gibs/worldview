@@ -47,7 +47,8 @@ class ProductPickerHeader extends React.Component {
   render() {
     const isAutoFocus = !util.browser.touchDevice;
     const { selectedProjection, listType, category, width } = this.props;
-    const isBreadCrumb =
+    const categoryId = category && category.id;
+    const isBreadCrumb = categoryId !== 'featured-all' &&
       selectedProjection === 'geographic' &&
       listType !== 'category' &&
       width > 650;

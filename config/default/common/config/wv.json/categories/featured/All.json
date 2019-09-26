@@ -1,0 +1,15 @@
+{
+  "categories": {
+      "featured": {
+          "All": {
+              "title": "All",
+              "placement": "first",
+              "id": "featured-all",
+              "description": "",
+              "measurements": [
+                "Geostationary"
+              ]
+          }
+      }
+  }
+}
