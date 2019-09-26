@@ -166,6 +166,7 @@
 
 .layers-all {
   height: 100%;
+  margin-top: -5px;
 }
 
 .layers-all .layers-all-layer {
