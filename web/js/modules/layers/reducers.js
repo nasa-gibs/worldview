@@ -7,7 +7,8 @@ import {
   TOGGLE_LAYER_VISIBILITY,
   REMOVE_LAYER,
   UPDATE_OPACITY,
-  ADD_LAYERS_FOR_EVENT
+  ADD_LAYERS_FOR_EVENT,
+  ADD_GRANULE_LAYER_DATES
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -33,7 +34,8 @@ export const initialState = {
   layersConfig: {},
   hoveredLayer: '',
   layerConfig: {},
-  startingLayers: []
+  startingLayers: [],
+  granuleLayers: { active: [], activeB: [] }
 };
 export function getInitialState(config) {
   return lodashAssign({}, initialState, {
@@ -152,6 +154,16 @@ export function layerReducer(state = initialState, action) {
     case REMOVE_LAYER:
       return update(state, {
         [layerGroupStr]: { $splice: [[action.index, 1]] }
+      });
+    case ADD_GRANULE_LAYER_DATES:
+      return update(state, {
+        granuleLayers: {
+          [action.activeKey]: {
+            [action.id]: {
+              $set: action.dates
+            }
+          }
+        }
       });
     case UPDATE_OPACITY:
       return update(state, {

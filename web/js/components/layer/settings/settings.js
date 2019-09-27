@@ -7,6 +7,7 @@ import Opacity from './opacity';
 import Palette from './palette';
 import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
+import GranuleLayerDateList from './granule-list';
 import {
   getCheckerboard,
   palettesTranslate
@@ -33,7 +34,10 @@ import {
 import {
   getVectorStyle
 } from '../../../modules/vector-styles/selectors';
-import { setOpacity } from '../../../modules/layers/actions';
+import {
+  addGranuleLayerDates,
+  setOpacity
+} from '../../../modules/layers/actions';
 
 class LayerSettings extends React.Component {
   constructor(props) {
@@ -245,7 +249,9 @@ class LayerSettings extends React.Component {
       setOpacity,
       customPalettesIsActive,
       layer,
-      palettedAllowed
+      palettedAllowed,
+      granuleLayerDates,
+      addGranuleLayerDates
     } = this.props;
 
     if (layer.type !== 'vector') {
@@ -265,6 +271,12 @@ class LayerSettings extends React.Component {
           setOpacity={setOpacity}
           layer={layer}
         />
+        {granuleLayerDates
+          ? <GranuleLayerDateList
+            def={layer}
+            granuleDates={granuleLayerDates}
+            addGranuleLayerDates={addGranuleLayerDates}
+          /> : null}
         {renderCustomizations}
       </React.Fragment>
     );
@@ -272,11 +284,12 @@ class LayerSettings extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { config, palettes, compare } = state;
+  const { config, palettes, compare, layers } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
 
   return {
+    granuleLayerDates: layers.granuleLayers[groupName][ownProps.layer.id],
     paletteOrder: config.paletteOrder,
     groupName,
     customPalettesIsActive: !!config.features.customPalettes,
@@ -329,6 +342,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setOpacity: (id, opacity) => {
     dispatch(setOpacity(id, opacity));
+  },
+  addGranuleLayerDates: (dates, id) => {
+    dispatch(addGranuleLayerDates(dates, id));
   }
 });
 
@@ -344,6 +360,7 @@ LayerSettings.defaultProps = {
   title: null
 };
 LayerSettings.propTypes = {
+  addGranuleLayerDates: PropTypes.func,
   canvas: PropTypes.object,
   clearCustomPalette: PropTypes.func,
   clearStyle: PropTypes.func,
@@ -354,6 +371,7 @@ LayerSettings.propTypes = {
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
   getVectorStyle: PropTypes.func,
+  granuleLayerDates: PropTypes.array,
   groupName: PropTypes.string,
   index: PropTypes.number,
   isOpen: PropTypes.bool,

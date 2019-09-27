@@ -15,7 +15,8 @@ import {
   TOGGLE_LAYER_VISIBILITY,
   REMOVE_LAYER,
   UPDATE_OPACITY,
-  ADD_LAYERS_FOR_EVENT
+  ADD_LAYERS_FOR_EVENT,
+  ADD_GRANULE_LAYER_DATES
 } from './constants';
 import { selectProduct } from '../data/actions';
 
@@ -139,6 +140,18 @@ export function removeLayer(id) {
       index,
       activeString,
       def
+    });
+  };
+}
+export function addGranuleLayerDates(dates, id) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    const activeString = compare.activeString;
+    dispatch({
+      type: ADD_GRANULE_LAYER_DATES,
+      id,
+      activeKey: activeString,
+      dates
     });
   };
 }
