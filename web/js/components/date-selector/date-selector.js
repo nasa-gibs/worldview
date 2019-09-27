@@ -33,7 +33,7 @@ class DateSelector extends Component {
   changeTab(index) {
     var nextTab = index;
     var maxTab;
-    if (this.props.hasSubdailyLayers) {
+    if (this.props.subDailyMode) {
       maxTab = 5;
     } else {
       maxTab = 3;
@@ -197,7 +197,6 @@ DateSelector.defaultProps = {
 DateSelector.propTypes = {
   date: PropTypes.object,
   fontSize: PropTypes.number,
-  hasSubdailyLayers: PropTypes.bool,
   id: PropTypes.string,
   idSuffix: PropTypes.string,
   maxDate: PropTypes.object,
