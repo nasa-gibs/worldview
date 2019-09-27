@@ -28,7 +28,9 @@ import {
   datesinDateRanges,
   prevDateInDateRange
 } from '../modules/layers/util';
+import { ADD_GRANULE_LAYER_DATES } from '../modules/layers/constants';
 
+// TODO: temp granule count, maybe move to parent func?
 // number of granules to request in the past including current time
 const GRANULE_COUNT = 20;
 
@@ -70,8 +72,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     return i;
   };
 
-  // TODO: need to fix blocking of app while requesting layer tiles
-  // TODO: is entire day the best strategy or just 20,50,100 last granules?
+  // TODO: need to investigate blocking of app resources while requesting layer tiles
   /**
    * Create collection of granule TileLayers from range of granule times
    *
@@ -85,7 +86,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
    * @returns {array} collection of OpenLayers TileLayers
    */
   const createGranuleDayLayers = (granuleDayTimes, def, proj, state, attributes) => {
-    // console.log(attributes.group, state.compare.activeDateStr)
     const granuleLayers = granuleDayTimes.map(function(granuleDateISO) {
       const group = attributes.group || state.compare.activeDateStr;
       const granuleISOKey = `${def.id}:${proj.id}:${granuleDateISO}::${group}`;
@@ -101,17 +101,14 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         attributes.date = granuleISODateType;
         createdLayer.wv = attributes;
         // save to cache and push
-        // console.log(granuleISOKey)
         self.granuleCache.setItem(granuleISOKey, createdLayer);
         createdLayer.setVisible(false);
-        // can set opacity for individual granules here and still control group opacity
-        // from the sidebar
+        // can set opacity for individual granules here and still control group opacity from the sidebar
         // createdLayer.setOpacity(0.2);
         resolve(createdLayer);
       });
       return layerPromise;
     });
-    // console.log(granuleLayers);
     return new Promise(resolve => {
       return Promise.all(granuleLayers).then((results) => {
         resolve(results);
@@ -167,14 +164,13 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
           // TODO: second part of conditional necessary for comparison mode granule loading last 20
           // TODO: or whatever GRANULE_COUNT is set at. May want to optimize this logic
 
-          // ! activeB not getting hit since past dates are already in self.granuleLayers[def.id]
           if (self.granuleLayers[def.id] === undefined || self.granuleLayers.isInitGranuleLoaded[group] === false) {
             // flag initial load of granule
             self.granuleLayers.isInitGranuleLoaded[group] = true;
             // get start date based on 00:00 UTC or defined start date
-            const startDate = def.startDate;
-            const zeroStartDate = new Date(startDate).setUTCHours(0, 0, 0, 0);
-            const zeroedStartDate = new Date(zeroStartDate);
+            // const startDate = def.startDate;
+            // const zeroStartDate = new Date(startDate).setUTCHours(0, 0, 0, 0);
+            // const zeroedStartDate = new Date(zeroStartDate);
             // const startDateForGranuleDay = zeroedStartDate < new Date(startDate)
             //   ? zeroedStartDate
             //   : new Date(startDate);
@@ -186,7 +182,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
             // ! TEST USING 20 FOR INIT LOAD SEEMS UI FRIENDLY
             // ! 100 + and it's noticeably slower to blocking
             const startDateForGranuleDay = new Date(date.getTime() - (60000 * (dateInterval * GRANULE_COUNT)));
-            // console.log(date, startDateForGranuleDay)
 
             // add dates to granuleDayTimes array
             const minuteDifference = util.minuteDiff(startDateForGranuleDay, date);
@@ -223,7 +218,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
               });
               self.granuleLayers[def.id][activeKey].sortedDates = dateArray;
             }
-
             createdLayer = createGranuleDayLayers(granuleDayTimes, def, proj, state, attributes);
           } else {
             if (self.granuleLayers[def.id][activeKey].dates[dateISO] === undefined) {
@@ -312,8 +306,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       const sortedDateCollection = self.granuleLayers[def.id][activeKey].sortedDates;
       const includedDates = [];
       self.granuleLayers[def.id][activeKey].order = sortedDateCollection;
-      // console.log(layer)
-      console.log(sortedDateCollection)
+      // console.log(sortedDateCollection)
       if (sortedDateCollection.length > 1) {
         const layerGroupEntries = [];
         for (const granuleDate of sortedDateCollection) {
@@ -345,7 +338,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
             }
           }
         }
-        // console.log(layerGroupEntries, layerGroupEntries.length);
         layer = new OlLayerGroup({
           layers: layerGroupEntries
         });
@@ -356,18 +348,15 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
         layer = new OlLayerGroup({
           layers: [layer]
         });
-        // TODO: need to set group for granules
-        // name to include 1) def.id 2) active or activeB 3) granule specific prefix
-        // rough example: 'granule-active-VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11_Granule_v1_NRT'
         layer.set('granule', true);
         layer.set('layerId', `${def.id}-${activeKey}`);
       }
       self.granuleLayers[def.id][activeKey].order = includedDates;
-      console.log(includedDates)
+      // TODO: tie into store and send updated (reordered) dates back to UI -> layerBuilder
+      store.dispatch({ type: ADD_GRANULE_LAYER_DATES, dates: includedDates, id: def.id, activeKey: activeKey });
     }
     layer.setOpacity(def.opacity || 1.0);
     // TileLayer or LayerGroup
-    // console.log(layer);
     return layer;
   };
 
@@ -521,6 +510,7 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
       sourceOptions.tileClass = lookupFactory(lookup, sourceOptions);
     }
     const sourceWMTS = new OlSourceWMTS(sourceOptions);
+    // ! test of 'tileloadend'
     sourceWMTS.on('tileloadend', function() {
       console.log('tileloadend');
       return 'tileloadend';
@@ -535,7 +525,6 @@ export function mapLayerBuilder(models, config, cache, ui, store) {
     return new OlLayerTile({
       preload: Infinity,
       extent: extent,
-      // source: new OlSourceWMTS(sourceOptions)
       source: sourceWMTS
     });
   };

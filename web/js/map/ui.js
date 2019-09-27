@@ -97,6 +97,10 @@ export function mapui(models, config, store, ui) {
    */
   const subscribeToStore = function(action) {
     switch (action.type) {
+      case layerConstants.ADD_GRANULE_LAYER_DATES: {
+        // TODO: add update granule function tied into - reloadLayers AND createLayer - use options for updated granule date array
+        return;
+      }
       case layerConstants.ADD_LAYER: {
         const def = lodashFind(action.layers, { id: action.id });
         return addLayer(def);
@@ -336,7 +340,6 @@ export function mapui(models, config, store, ui) {
    * @returns {void}
    */
   var reloadLayers = self.reloadLayers = function(map) {
-    console.log(self)
     map = map || self.selected;
     const state = store.getState();
     const { layers, proj } = state;
@@ -356,16 +359,14 @@ export function mapui(models, config, store, ui) {
         state
       );
       lodashEach(defs, function(def) {
-        console.log(def, layerGroupStr)
         if (isGraticule(def, proj.id)) {
           addGraticule(def.opacity, layerGroupStr);
         } else {
           map.addLayer(createLayer(def));
-          const isGranule = !!(def.tags && def.tags.contains('granule'));
-          if (isGranule) {
-            // array of active granule dates (0 index equals top granule tile layer)
-            console.log(self.layerBuilder.granuleLayers[def.id][layerGroupStr].order)
-          }
+          // const isGranule = !!(def.tags && def.tags.contains('granule'));
+          // if (isGranule) {
+          // TODO: create granule list used in layer settings - add logic for update here?
+          // }
         }
       });
     } else {
@@ -390,7 +391,6 @@ export function mapui(models, config, store, ui) {
    * @param {Array} arr | Array of date/layer group strings
    */
   var getCompareLayerGroup = function(arr, layersState, projId, state) {
-    console.log(arr, layersState, projId, state)
     return new OlLayerGroup({
       layers: getLayers(
         layersState[arr[0]],
@@ -405,7 +405,6 @@ export function mapui(models, config, store, ui) {
           return true;
         })
         .map(def => {
-          const isGranule = !!(def.tags && def.tags.contains('granule'));
           return createLayer(def, {
             date: state.date[arr[1]],
             group: arr[0]
@@ -449,11 +448,9 @@ export function mapui(models, config, store, ui) {
       });
     };
     layers.forEach(function(layer) {
-      // console.log(state.date, layer)
       var group = layer.get('group');
       var granule = layer.get('granule');
 
-      console.log(group, activeGroupStr, granule, activeDateStr, layer, layersState)
       // Not in A|B
       if (layer.wv) {
         renderable = isRenderableLayer(
@@ -462,77 +459,46 @@ export function mapui(models, config, store, ui) {
           state.date[activeDateStr],
           state
         );
-        console.log(layer.wv, renderable)
         layer.setVisible(renderable);
         const defs = getLayers(layersState[activeGroupStr], {}, state);
         updateGraticules(defs);
         // If in A|B layer-group will have a 'group' string
       } else if (group || granule) {
-        // console.log(layer, layer.getLayers(), layer.getLayers().getArray())
-        console.log(layer.getLayers().getArray())
         lodashEach(layer.getLayers().getArray(), subLayer => {
-          // console.log(subLayer)
           const subLayerGranule = subLayer.get('granule');
-          console.log(subLayerGranule)
-          // console.log(subLayerGranule)
           if (subLayerGranule) {
-            // console.log(subLayer)
             // TileLayers within granule LayerGroup
             lodashEach(subLayer.getLayers().getArray(), granuleSubLayer => {
-              // console.log(granuleSubLayer)
               if (granuleSubLayer.wv) {
                 const granuleSubLayerGroup = granuleSubLayer.wv.group;
-                // console.log(granuleSubLayer.wv)
                 renderable = isRenderableLayer(
                   granuleSubLayer.wv.id,
                   // TODO : SPY MODE BROKEN - swipe and opactiy and hide/show work
                   // layersState[activeGroupStr],
                   // layersState[group],
                   layersState[granuleSubLayerGroup],
-                  // state.date[layer.get('date')],
                   state.date[granuleSubLayer.get('date')],
                   state
                 );
-                console.log(granuleSubLayerGroup, renderable)
                 granuleSubLayer.setVisible(renderable);
               }
             });
             subLayer.setVisible(true);
-            // subLayer.setVisible(false);
           }
 
           if (subLayer.wv) {
             const subGroup = subLayer.wv.group;
             renderable = isRenderableLayer(
               subLayer.wv.id,
-              // layersState[activeGroupStr],
               // TODO: group undefined in non-compare mode
               // layersState[group || activeGroupStr],
               layersState[subGroup],
-              // state.date[layer.get('date')],
               state.date[subLayer.get('date')],
               state
             );
             subLayer.setVisible(renderable);
-            // console.log(self)
-            // console.log(subLayer.wv, subLayer, subGroup, group, activeGroupStr, renderable)
-            // if (group) {
-            //   subLayer.setVisible(renderable);
-            // } else {
-            //   console.log(subLayer.wv, subLayer, subGroup, group, activeGroupStr, renderable)
-            //   console.log(state.compare.active)
-            //   if (!state.compare.active) {
-            //     console.log(subLayer)
-            //     subLayer.setVisible(false);
-            //   } else {
-            //     subLayer.setVisible(true);
-            //   }
-            // }
           }
         });
-        // console.log(group, activeGroupStr)
-        // console.log(layer)
-        console.log(group, activeGroupStr, granule, activeDateStr, layer, layersState)
         layer.setVisible(true);
         // const defs = getLayers(layersState[group], {}, state);
         const defs = getLayers(layersState[activeGroupStr], {}, state);
