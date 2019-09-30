@@ -1,10 +1,10 @@
 {
     "products": {
-        "MOD10A2": {
-            "name": "MODIS/Terra Snow Cover 8-Day L3 Global 500m SIN Grid V006",
+        "MYD10A2": {
+            "name": "MODIS/Aqua Snow Cover 8-Day L3 Global 500m SIN Grid V006",
             "handler": "MODISGrid",
             "query": {
-                "shortName": "MOD10A2"
+                "shortName": "MYD10A2"
             },
             "nrt": {
                 "by": "value",
