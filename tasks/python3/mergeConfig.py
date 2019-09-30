@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from copy import deepcopy
+from util import dict_merge
 from optparse import OptionParser
 import os
 import sys
@@ -12,27 +12,6 @@ version = "2.0.0"
 help_description = """\
 Concatenates all configuration items a directory into one configuration file.
 """
-
-# dict_merge from
-# http://blog.impressiver.com/post/31434674390/deep-merge-multiple-python-dicts
-def dict_merge(target, *args):
-  # Merge multiple dicts
-  if len(args) > 1:
-    for obj in args:
-      dict_merge(target, obj)
-    return target
-
-  # Recursively merge dicts and set non-dict values
-  obj = args[0]
-  if not isinstance(obj, dict):
-    return obj
-  for k, v in obj.items():
-    if k in target and isinstance(target[k], dict):
-      dict_merge(target[k], v)
-    else:
-      target[k] = deepcopy(v)
-  return target
-
 
 # MAIN
 parser = OptionParser(usage="Usage: %s <input_dir> <output_file>" % prog,
