@@ -3,11 +3,11 @@
         "Geostationary": {
             "id": "geostationary",
             "title":    "Geostationary",
-            "subtitle": "GOES-East, GOES-West, Himawari-8",
+            "subtitle": "GOES East, GOES West, Himawari-8",
             "sources": {
                 "GOES-East": {
                     "id": "goes-east",
-                    "title": "GOES-East",
+                    "title": "GOES East",
                     "description": "goes/goes-east",
                     "image": "",
                     "settings": [
@@ -18,7 +18,7 @@
                   },
                 "GOES-West": {
                     "id": "goes-west",
-                    "title": "GOES-West",
+                    "title": "GOES West",
                     "description": "goes/goes-west",
                     "image": "",
                     "settings": [
